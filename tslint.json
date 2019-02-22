@@ -1,10 +1,19 @@
 {
-    "defaultSeverity": "error",
+    "defaultSeverity": "warning",
     "extends": [
-        "tslint:recommended"
+        "tslint:recommended",
+        "tslint-react"
     ],
     "jsRules": {},
-    "rules": {},
+    "rules": {
+        "no-implicit-dependencies": [true, "dev"]
+    },
     "rulesDirectory": [],
-    "quotemark": [true, "single", "jsx-double"],
+    "linterOptions": {
+        "exclude": [
+            "config/**/*.js",
+            "node_modules/**/*.ts",
+            "src/serviceWorker.ts"
+        ]
+    }
 }
