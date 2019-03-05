@@ -8,7 +8,7 @@
     "portMappings": [{
       "protocol": "tcp",
       "containerPort": 5000,
-      "hostPort": 5000
+      "hostPort": 0
     }],
     "dockerLabels": {},
     "essential": true,
