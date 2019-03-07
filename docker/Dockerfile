@@ -13,7 +13,7 @@ COPY tsconfig.json .
 COPY tslint.json .
 
 # install dependencies 
-RUN npm install
+RUN yarn install
 
 # build the app
 RUN yarn build
@@ -22,7 +22,7 @@ RUN yarn build
 EXPOSE 5000
 
 # install serve
-RUN npm install -g serve
+RUN yarn global add serve
 
 # launch cmd
 CMD serve -s build -p 5000
