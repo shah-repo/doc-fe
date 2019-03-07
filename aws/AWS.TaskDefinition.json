@@ -1,30 +1,29 @@
 {
   "taskRoleArn": "arn:aws:iam::817083319299:role/shifamed-task-role",
-  "containerDefinitions": [{
-    "name": "doc-fe-container",
-    "image": "817083319299.dkr.ecr.us-west-2.amazonaws.com/doc-fe-ecr",
-    "memoryReservation": 64,
-    "environment": [
-      {
-        "name": "REACT_APP_API_ENDPOINT",
-        "value": "http://ecs-alb-doc-develop-64846187.us-west-2.elb.amazonaws.com/api"
-      }
-    ],
-    "logConfiguration": {
-      "logDriver": "awslogs",
-      "options": {
-        "awslogs-region": "us-west-2",
-        "awslogs-stream-prefix": "doc-fe",
-        "awslogs-group": "/ecs-develop"
-      }
-    },
-    "portMappings": [{
-      "protocol": "tcp",
-      "containerPort": 5000,
-      "hostPort": 0
-    }],
-    "dockerLabels": {},
-    "essential": true,
-    "volumesFrom": []
-  }]
+  "containerDefinitions": [
+    {
+      "name": "doc-fe-container",
+      "image": "817083319299.dkr.ecr.us-west-2.amazonaws.com/doc-fe-ecr",
+      "memoryReservation": 64,
+      "environment": [],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-region": "us-west-2",
+          "awslogs-stream-prefix": "doc-fe",
+          "awslogs-group": "/ecs-develop"
+        }
+      },
+      "portMappings": [
+        {
+          "protocol": "tcp",
+          "containerPort": 5000,
+          "hostPort": 0
+        }
+      ],
+      "dockerLabels": {},
+      "essential": true,
+      "volumesFrom": []
+    }
+  ]
 }
