@@ -2,6 +2,13 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Environment variables
+
+```bash
+REACT_APP_API_ENDPOINT='https://yourdomain.com'
+REACT_APP_REFRESH_TOKEN_VALIDITY_DAYS="30"
+```
+
 ## Available Scripts
 
 In the project directory, you can run:

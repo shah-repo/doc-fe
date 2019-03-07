@@ -1,0 +1,16 @@
+{
+  "login.title": "Sign in",
+  "login.email": "Email address",
+  "login.password": "Password",
+  "login.button": "Sign in",
+
+  "header.title": "Enlil",
+  "header.welcome": "Welcome, {email}",
+  "header.logout": "Logout",
+
+  "validators.required": "Required",
+  "validators.email": "Invalid email address",
+
+  "errors.tokenRefresh": "Token refresh failed",
+  "errors.userNotLoggedIn": "User is not logged in"
+}

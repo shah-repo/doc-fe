@@ -1,22 +1,14 @@
 import { applyMiddleware, createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension/developmentOnly";
-import { persistReducer, persistStore } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+import { persistStore } from "redux-persist";
 import thunk from "redux-thunk";
+import apiMiddleware from "./middlewares/api";
 import reducers from "./reducers";
 
-const persistConfig = {
-  key: "root",
-  storage,
-  whitelist: [],
-};
-
-const persistedReducer = persistReducer(persistConfig, reducers);
-
-const middlewares = [thunk];
+const middlewares = [apiMiddleware, thunk];
 
 const store = createStore(
-  persistedReducer,
+  reducers,
   {},
   composeWithDevTools(applyMiddleware(...middlewares)),
 );
