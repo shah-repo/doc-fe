@@ -1,6 +1,7 @@
 FROM node:10-alpine
 LABEL Name=shifamed_frontend Version=0.0.1
 
+ARG REACT_APP_API_ENDPOINT
 ENV NPM_CONFIG_LOGLEVEL warn
 
 RUN mkdir -pv /usr/src/app

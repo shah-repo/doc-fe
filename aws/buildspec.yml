@@ -14,7 +14,8 @@ phases:
   build:
     commands: 
       - echo Build started on `date`
-      - docker build -f ./docker/Dockerfile -t $LOCAL_REPOSITORY_URI:latest .
+      - export REACT_APP_API_ENDPOINT=http://ecs-alb-doc-develop-64846187.us-west-2.elb.amazonaws.com/api
+      - docker build -f ./docker/Dockerfile --build-arg REACT_APP_API_ENDPOINT=$REACT_APP_API_ENDPOINT -t $LOCAL_REPOSITORY_URI:latest .
       - docker tag $LOCAL_REPOSITORY_URI $REMOTE_REPOSITORY_URI:latest
       - echo Retaging completed on `date`
       - echo Pushing the Docker images...
