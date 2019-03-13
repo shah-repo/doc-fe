@@ -8,24 +8,19 @@ phases:
       - $(aws ecr get-login --no-include-email --region us-west-2)
       - echo $REMOTE_REPOSITORY_URI
       - echo $LOCAL_REPOSITORY_URI
-      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - IMAGE_TAG=${COMMIT_HASH:=latest}
       - echo "${ECS_CLUSTER_NAME}"
       - echo "${ECS_SERVICE_NAME}"
       - echo "${ECS_TASK_NAME}"
   build:
     commands: 
       - echo Build started on `date`
-      - docker build -f ./docker/Dockerfile -t $LOCAL_REPOSITORY_URI:latest
+      - export REACT_APP_API_ENDPOINT=http://ecs-alb-doc-develop-64846187.us-west-2.elb.amazonaws.com/api
+      - docker build -f ./docker/Dockerfile --build-arg REACT_APP_API_ENDPOINT=$REACT_APP_API_ENDPOINT -t $LOCAL_REPOSITORY_URI:latest .
       - docker tag $LOCAL_REPOSITORY_URI $REMOTE_REPOSITORY_URI:latest
-      - docker tag $LOCAL_REPOSITORY_URI $REMOTE_REPOSITORY_URI:$IMAGE_TAG
       - echo Retaging completed on `date`
-  post_build:
-    commands:
       - echo Pushing the Docker images...
       - docker push $REMOTE_REPOSITORY_URI:latest
-      - docker push $REMOTE_REPOSITORY_URI:$IMAGE_TAG
       - echo Updating Task Definition
-      - export TASK_VERSION=$(aws ecs register-task-definition --family "${ECS_TASK_NAME}" --cli-input-json file://AWS.TaskDefinition.json | jq --raw-output '.taskDefinition.revision')
+      - export TASK_VERSION=$(aws ecs register-task-definition --family "${ECS_TASK_NAME}" --cli-input-json file://aws/AWS.TaskDefinition.json | jq --raw-output '.taskDefinition.revision')
       - echo "Registered ECS Task Definition:" "${TASK_VERSION}"
       - aws ecs update-service --cluster "${ECS_CLUSTER_NAME}" --service "${ECS_SERVICE_NAME}" --task-definition "${ECS_TASK_NAME}:${TASK_VERSION}"

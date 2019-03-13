@@ -1,6 +1,7 @@
 FROM node:10-alpine
 LABEL Name=shifamed_frontend Version=0.0.1
 
+ARG REACT_APP_API_ENDPOINT
 ENV NPM_CONFIG_LOGLEVEL warn
 
 RUN mkdir -pv /usr/src/app
@@ -13,7 +14,7 @@ COPY tsconfig.json .
 COPY tslint.json .
 
 # install dependencies 
-RUN npm install
+RUN yarn install
 
 # build the app
 RUN yarn build
@@ -22,7 +23,7 @@ RUN yarn build
 EXPOSE 5000
 
 # install serve
-RUN npm install -g serve
+RUN yarn global add serve
 
 # launch cmd
 CMD serve -s build -p 5000
