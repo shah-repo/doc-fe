@@ -3,12 +3,12 @@
   "containerDefinitions": [{
     "name": "doc-fe-container",
     "image": "817083319299.dkr.ecr.us-west-2.amazonaws.com/doc-fe-ecr",
-    "memoryReservation": 200,
+    "memoryReservation": 64,
     "environment": [],
     "portMappings": [{
       "protocol": "tcp",
       "containerPort": 5000,
-      "hostPort": 5000
+      "hostPort": 0
     }],
     "dockerLabels": {},
     "essential": true,
