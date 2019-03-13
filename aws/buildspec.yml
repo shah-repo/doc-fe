@@ -7,20 +7,25 @@ phases:
       - aws --version
       - $(aws ecr get-login --no-include-email --region us-west-2)
       - echo $REMOTE_REPOSITORY_URI
-      - echo $LOCAL_REPOSITORY_URI
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
       - echo "${ECS_CLUSTER_NAME}"
       - echo "${ECS_SERVICE_NAME}"
       - echo "${ECS_TASK_NAME}"
+      - echo "${CONTAINER_NAME}"
   build:
     commands: 
       - echo Build started on `date`
       - export REACT_APP_API_ENDPOINT=http://ecs-alb-doc-develop-64846187.us-west-2.elb.amazonaws.com/api
-      - docker build -f ./docker/Dockerfile --build-arg REACT_APP_API_ENDPOINT=$REACT_APP_API_ENDPOINT -t $LOCAL_REPOSITORY_URI:latest .
-      - docker tag $LOCAL_REPOSITORY_URI $REMOTE_REPOSITORY_URI:latest
-      - echo Retaging completed on `date`
+      - docker build -f ./docker/Dockerfile --build-arg REACT_APP_API_ENDPOINT=$REACT_APP_API_ENDPOINT -t "$REMOTE_REPOSITORY_URI:$IMAGE_TAG" .
       - echo Pushing the Docker images...
-      - docker push $REMOTE_REPOSITORY_URI:latest
+      - docker push $REMOTE_REPOSITORY_URI:$IMAGE_TAG
       - echo Updating Task Definition
-      - export TASK_VERSION=$(aws ecs register-task-definition --family "${ECS_TASK_NAME}" --cli-input-json file://aws/AWS.TaskDefinition.json | jq --raw-output '.taskDefinition.revision')
+      - python ./aws/main.py "${CONTAINER_NAME}" "$REMOTE_REPOSITORY_URI:$IMAGE_TAG"
+      - export TASK_VERSION=$(aws ecs register-task-definition --family "${ECS_TASK_NAME}" --cli-input-json file://aws/AWS.TaskDefinition.New.json | jq --raw-output '.taskDefinition.revision')
       - echo "Registered ECS Task Definition:" "${TASK_VERSION}"
       - aws ecs update-service --cluster "${ECS_CLUSTER_NAME}" --service "${ECS_SERVICE_NAME}" --task-definition "${ECS_TASK_NAME}:${TASK_VERSION}"
+  post_build:
+    commands:
+      - chmod a+x ./aws/updateGitStatuses.sh
+      - ./aws/updateGitStatuses.sh "$CODEBUILD_BUILD_SUCCEEDING" "${GH_OWNER}" "${GH_REPO}" "${GH_TOKEN}" "$CODEBUILD_RESOLVED_SOURCE_VERSION" "${TARGET_URL}" "$CODEBUILD_BUILD_ID"
