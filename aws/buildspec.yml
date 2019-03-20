@@ -22,7 +22,7 @@ phases:
       - docker push $REMOTE_REPOSITORY_URI:$IMAGE_TAG
       - echo Updating Task Definition
       - python ./aws/main.py "${CONTAINER_NAME}" "$REMOTE_REPOSITORY_URI:$IMAGE_TAG"
-      - export TASK_VERSION=$(aws ecs register-task-definition --family "${ECS_TASK_NAME}" --cli-input-json file://aws/AWS.TaskDefinition.New.json | jq --raw-output '.taskDefinition.revision')
+      - export TASK_VERSION=$(aws ecs register-task-definition --family "${ECS_TASK_NAME}" --cli-input-json file://aws/AWS.TaskDefinition.json | jq --raw-output '.taskDefinition.revision')
       - echo "Registered ECS Task Definition:" "${TASK_VERSION}"
       - aws ecs update-service --cluster "${ECS_CLUSTER_NAME}" --service "${ECS_SERVICE_NAME}" --task-definition "${ECS_TASK_NAME}:${TASK_VERSION}"
   post_build:
