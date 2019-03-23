@@ -15,7 +15,6 @@ if [[ -z "$STATE" && -z "$GH_OWNER" && -z "$GH_REPO" && -z "$GH_TOKEN" && -z "$C
 	exit 1
 fi
 
-
 echo "Job Id: ${JOB_ID}"
 echo "State: ${STATE}"
 echo "Owner: ${GH_OWNER}"
@@ -28,17 +27,6 @@ if [ "$STATE" = 0 ]; then
 else 
 	STATE_STRING="success"
 fi 
-
-#CMD="curl -X 'POST' 'https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/statuses/${COMMIT_HASH}' \
-#		  -H 'Authorization: token <token>' \
-#		  -H 'Content-Type: application/json' \
-#		  -d $'{ 
-#		    	\"target_url\": \"${TARGET_URL}\",
-#		    	\"state\": \"${STATE_STRING}\",
-#		  		\"description\": \"From ${GH_REPO} codepipeline on AWS\",
-#		  		\"context\": \"aws/codepipeline/${JOB_ID}\"
-#			  }'"
-#echo "$CMD"
 
 RESPONSE=$(curl -X "POST" "https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/statuses/${COMMIT_HASH}" \
 		  		-H "Authorization: token ${GH_TOKEN}" \
