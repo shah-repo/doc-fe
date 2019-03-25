@@ -1,13 +1,16 @@
 import { Action, Dispatch } from "redux";
 
+export type ApiActionMethod = "get" | "post" | "put" | "patch" | "delete";
+
 export interface ApiAction<Response = any, Body = any> extends Action {
   type: string;
-  method: "get" | "post" | "put" | "patch" | "delete";
+  method: ApiActionMethod;
   url: string;
   data?: Body;
   params?: any;
   includeAuthorization?: boolean;
   asyncType?: string;
+  contentType?: string;
   onSuccess: (data: Response, dispatch: Dispatch) => void;
   onFailure: (error: any,  dispatch: Dispatch) => void;
   onCompleted: (dispatch: Dispatch) => void;

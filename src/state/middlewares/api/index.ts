@@ -44,14 +44,16 @@ const apiMiddleware: Middleware =
             method: action.method,
             params: action.params,
             url: action.url,
+            headers: {},
           };
+
+          if (action.contentType) {
+            requestConfig.headers["Content-Type"] = action.contentType;
+          }
 
           if (action.includeAuthorization) {
             await refreshTokenOperation(dispatch, getState());
-
-            requestConfig.headers = {
-              authorization: getState().auth.tokens.id.value,
-            };
+            requestConfig.headers.Authorization = getState().auth.tokens.id.value;
           }
 
           const { data } = await apiClient.request(requestConfig);

@@ -1,59 +1,27 @@
 import {
-  FormControl,
-  FormHelperText,
   Input as MuiInput,
-  InputLabel,
 } from "@material-ui/core";
-import { FormControlProps } from "@material-ui/core/FormControl";
 import { InputProps as MuiInputProps } from "@material-ui/core/Input";
-import { Field as FormikField, FieldConfig, FieldProps } from "formik";
+import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
-import { Translation } from "../../../translations/types";
-import Message from "../../Message";
+import Field, { FieldOwnProps } from "./Field";
 
-interface InputBaseProps {
-  label?: Translation;
+interface InputOwnProps extends FieldOwnProps {
   inputProps?: MuiInputProps;
-  formControlProps?: FormControlProps;
 }
 
-interface InputProps extends InputBaseProps, FieldProps {}
+type InputPropsWithFormik = InputOwnProps & FormikFieldProps;
 
-const Input: React.FunctionComponent<InputProps> = ({
-  field,
-  form: { touched, errors },
-  inputProps,
-  formControlProps,
-  label,
-}) => {
-  const error = errors[field.name];
-  const shouldDisplayError = Boolean(touched[field.name] && error);
-
-  const LabelComponent = label && (
-    <InputLabel htmlFor={field.name}>
-      <Message id={label} />
-    </InputLabel>
-  );
-
-  const ErrorComponent = shouldDisplayError && (
-    <FormHelperText>
-      <Message id={String(error)} />
-    </FormHelperText>
-  );
-
+const Input: React.FunctionComponent<InputPropsWithFormik> = ({ inputProps, ...fieldProps }) => {
   return (
-    <FormControl margin="normal" required={true} fullWidth={true} error={shouldDisplayError} {...formControlProps}>
-      {LabelComponent}
-      <MuiInput {...field} {...inputProps} />
-      {ErrorComponent}
-    </FormControl>
+    <Field {...fieldProps}>
+      <MuiInput {...fieldProps.field} {...inputProps} />
+    </Field>
   );
 };
 
-interface InputFieldProps extends InputBaseProps, FieldConfig {}
+type InputFieldProps = InputOwnProps & FieldConfig;
 
-const InputField: React.FunctionComponent<InputFieldProps> = (props) => {
-  return <FormikField component={Input} {...props} />;
-};
+const InputField: React.FunctionComponent<InputFieldProps> = (props) => <FormikField component={Input} {...props} />;
 
 export default InputField;

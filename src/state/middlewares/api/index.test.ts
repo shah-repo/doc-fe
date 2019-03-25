@@ -111,7 +111,7 @@ describe("api middleware test", () => {
     });
 
     it("sets Authorization in request headers", () => {
-      expect(requestConfig.headers).toMatchObject({ authorization: ID_TOKEN });
+      expect(requestConfig.headers).toMatchObject({ Authorization: ID_TOKEN });
     });
 
     it("correctly configured axios requst", () => {
@@ -121,7 +121,7 @@ describe("api middleware test", () => {
         params: action.params,
         url: `${Config.ApiEndpoint}${action.url}`,
         headers: expect.objectContaining({
-          authorization: ID_TOKEN,
+          Authorization: ID_TOKEN,
         }),
       });
     });
@@ -150,11 +150,6 @@ describe("api middleware test", () => {
       expect(onFailure).not.toHaveBeenCalled();
     });
   });
-
-  interface FailTests {
-    url: string;
-    errorMessage: string;
-  }
 
   describe("when call fails", () => {
     const onSuccess = jest.fn();
@@ -249,5 +244,14 @@ describe("api middleware test", () => {
     await invoke(apiAction({ url: "/test", includeAuthorization: false }));
 
     expect(store.dispatch).toHaveBeenCalledTimes(0);
+  });
+
+  it("sets correct content type", async () => {
+    requestConfig = {};
+    ({ store, next, invoke, defaultState } = middlewareMockStore(api));
+
+    await invoke(apiAction({ url: "/test", includeAuthorization: false, contentType: "multipart/form-data" }));
+
+    expect(requestConfig.headers["Content-Type"]).toEqual("multipart/form-data");
   });
 });

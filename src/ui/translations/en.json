@@ -1,4 +1,6 @@
 {
+  "translation.unknown": "",
+  
   "login.title": "Sign in",
   "login.email": "Email address",
   "login.password": "Password",
@@ -12,5 +14,33 @@
   "validators.email": "Invalid email address",
 
   "errors.tokenRefresh": "Token refresh failed",
-  "errors.userNotLoggedIn": "User is not logged in"
+  "errors.userNotLoggedIn": "User is not logged in",
+  "errors.fetch.tryAgain": "Try again",
+
+  "fields.select.none": "None",
+
+  "dashboard.reviews": "Documents to review",
+  "dashboard.noReviews": "No documents to review",
+  "dashboard.noDocuments": "No documents",
+  "dashboard.createDocument": "Create document",
+  "dashboard.table.title": "Title",
+  "dashboard.table.type": "Type",
+  "dashboard.table.owner": "Owner",
+  "dashboard.table.state": "State",
+  "dashboard.table.actions": "Actions",
+  "dashboard.table.editAction": "Edit",
+  "dashboard.table.cloneAction": "Clone",
+
+  "document.title": "Document title",
+  "document.type": "Document type",
+  "document.save": "Save",
+  "document.approver": "Approvers",
+  "document.emptyData": "No data",
+  "document.form.title": "Document: {name}",
+  "document.files": "Attachments",
+  "document.file.title": "Upload file",
+  "document.file.select": "Select file",
+  "document.file.upload": "Upload",
+  "document.file.cancel": "Cancel",
+  "document.file.selectText": "Click to select file..."
 }
