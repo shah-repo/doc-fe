@@ -2,8 +2,8 @@
   "taskRoleArn": "arn:aws:iam::817083319299:role/shifamed-task-role",
   "containerDefinitions": [
     {
-      "name": "doc-fe-container",
-      "image": "817083319299.dkr.ecr.us-west-2.amazonaws.com/doc-fe-ecr",
+      "name": "<container_name>",
+      "image": "<container_image>",
       "memoryReservation": 64,
       "environment": [],
       "logConfiguration": {
