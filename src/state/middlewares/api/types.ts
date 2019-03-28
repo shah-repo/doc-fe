@@ -1,6 +1,6 @@
 export interface AsyncActionErrorResponse {
   data: {
-    error: string | string[];
+    message: string | string[];
   };
 }
 

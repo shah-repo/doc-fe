@@ -30,11 +30,11 @@ describe("api middleware test", () => {
   };
 
   const mockResponseError = {
-    error: ["error1", "error2"],
+    message: ["error1", "error2"],
   };
 
   const mockResponseErrorString = {
-    error: "error",
+    message: "error",
   };
 
   beforeAll(() => {
@@ -194,7 +194,7 @@ describe("api middleware test", () => {
         type: asyncType,
         payload: {
           status: AsyncStatus.Error,
-          message: mockResponseError.error.join("; "),
+          message: mockResponseError.message.join("; "),
         },
       };
 
@@ -202,7 +202,7 @@ describe("api middleware test", () => {
     });
 
     it("calls onFailure handler", () => {
-      expect(onFailure).toHaveBeenCalledWith(mockResponseError.error.join("; "), store.dispatch);
+      expect(onFailure).toHaveBeenCalledWith(mockResponseError.message.join("; "), store.dispatch);
     });
 
     it("calls onCompleted handler", () => {
@@ -230,11 +230,11 @@ describe("api middleware test", () => {
       type: asyncType,
       payload: {
         status: AsyncStatus.Error,
-        message: mockResponseErrorString.error,
+        message: mockResponseErrorString.message,
       },
     };
 
-    expect(onFailure).toHaveBeenCalledWith(mockResponseErrorString.error, store.dispatch);
+    expect(onFailure).toHaveBeenCalledWith(mockResponseErrorString.message, store.dispatch);
     expect(store.dispatch).toHaveBeenLastCalledWith(expectedAction);
   });
 

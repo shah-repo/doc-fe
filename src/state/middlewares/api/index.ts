@@ -64,8 +64,8 @@ const apiMiddleware: Middleware =
           let responseMessage: string = "";
 
           if (exception.response) {
-            const { data: { error } } = exception.response as AsyncActionErrorResponse;
-            responseMessage = (Array.isArray(error)) ? error.join("; ") : error;
+            const { data: { message } } = exception.response as AsyncActionErrorResponse;
+            responseMessage = (Array.isArray(message)) ? message.join("; ") : message;
           }
 
           const errorMessage: string = responseMessage || exception.message;
