@@ -27,4 +27,8 @@ export default (theme: Theme) =>
       cursor: "pointer",
       borderBottom: `1px solid ${theme.palette.grey[400]}`,
     },
+    actions: {
+      textAlign: "right",
+      width: "100%",
+    },
   });

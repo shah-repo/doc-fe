@@ -1,5 +1,5 @@
 import {  IconButton, Paper, WithStyles, withStyles } from "@material-ui/core";
-import { Edit, FileCopy, HowToVote } from "@material-ui/icons";
+import { Edit, FileCopy, OpenInNew } from "@material-ui/icons";
 import React from "react";
 import {
   AutoSizer,
@@ -46,11 +46,11 @@ const DocumentTable: React.FunctionComponent<DocumentTableProps> = ({
     const canClone = canCloneDocument(document);
 
     return (
-      <React.Fragment>
+      <div className={classes.actions}>
         {canEdit && <IconButton onClick={editDocument(document.id)}><Edit /></IconButton>}
         {canClone && <IconButton onClick={cloneDocument(document.id)}><FileCopy /></IconButton>}
-        {<IconButton onClick={previewDocument(document.id)}><HowToVote /></IconButton>}
-      </React.Fragment>
+        {<IconButton onClick={previewDocument(document.id)}><OpenInNew /></IconButton>}
+      </div>
     );
   };
 
@@ -72,6 +72,11 @@ const DocumentTable: React.FunctionComponent<DocumentTableProps> = ({
     );
   };
 
+  const actionsColumn = renderColumn("actions", "dashboard.table.actions", {
+    cellRenderer: actionsColumnCellRenderer,
+    headerClassName: classes.actions,
+  });
+
   const tableRenderer = ({ height, width }: Size) => {
     return (
       <Table
@@ -88,7 +93,7 @@ const DocumentTable: React.FunctionComponent<DocumentTableProps> = ({
         {renderColumn("type", "dashboard.table.type", { width: 50 })}
         {renderColumn("owner", "dashboard.table.owner", { flexGrow: 2 })}
         {renderColumn("state", "dashboard.table.state", { width: 50 })}
-        {renderColumn("actions", "dashboard.table.actions", { cellRenderer: actionsColumnCellRenderer })}
+        {actionsColumn}
       </Table>
     );
   };
