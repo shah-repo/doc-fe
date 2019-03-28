@@ -1,7 +1,7 @@
 import { withStyles, WithStyles } from "@material-ui/core/styles";
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-import { DOCUMENT_CREATE_URL, DOCUMENT_UPDATE_URL, HOME_URL } from "../constants/urls";
+import { DOCUMENT_CREATE_URL, DOCUMENT_ROOT_URL, HOME_URL } from "../constants/urls";
 import DashboardContainer from "../dashboard/Dashboard.container";
 import DocumentContainer from "../documents/Document.container";
 import DocumentCreateContainer from "../documents/DocumentCreate.container";
@@ -16,7 +16,7 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => (
     <Switch>
       <Route path={HOME_URL} exact={true} component={DashboardContainer} />
       <Route path={DOCUMENT_CREATE_URL} exact={true} component={DocumentCreateContainer} />
-      <Route path={DOCUMENT_UPDATE_URL} exact={true} component={DocumentContainer} />
+      <Route path={DOCUMENT_ROOT_URL} component={DocumentContainer} />
       <Redirect to={{ pathname: HOME_URL }} />
     </Switch>
   </div>

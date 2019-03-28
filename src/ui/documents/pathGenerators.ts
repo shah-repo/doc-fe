@@ -1,11 +1,15 @@
 import { generatePath } from "react-router-dom";
-import { DOCUMENT_UPDATE_URL } from "../constants/urls";
+import { DOCUMENT_CLONE_URL, DOCUMENT_PREVIEW_URL, DOCUMENT_UPDATE_URL } from "../constants/urls";
 import { DocumentRouteParams } from "./types";
 
-export const generateDocumentEditPath = (documentId: string) => {
-  const documentRouteParams: DocumentRouteParams = {
-    documentId,
-  };
+const generateDocumentPath = (path: string, routeParams: DocumentRouteParams) =>
+  generatePath(path, { ...routeParams });
 
-  return generatePath(DOCUMENT_UPDATE_URL, { ...documentRouteParams });
-};
+export const generateDocumentEditPath = (documentId: string) =>
+  generateDocumentPath(DOCUMENT_UPDATE_URL, { documentId });
+
+export const generateDocumentPreviewPath = (documentId: string) =>
+  generateDocumentPath(DOCUMENT_PREVIEW_URL, { documentId });
+
+export const generateDocumentClonePath = (documentId: string) =>
+  generateDocumentPath(DOCUMENT_CLONE_URL, { documentId });

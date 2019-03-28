@@ -9,6 +9,8 @@ export type DashboardPresenterParentProps = DashboardContainerStateProps & Dashb
 
 export interface DocumentActionProps {
   editDocument: (documentId: string) => () => void;
+  previewDocument: (documentId: string) => () => void;
+  cloneDocument: (documentId: string) => () => void;
 }
 
 export interface DocumentListItem {

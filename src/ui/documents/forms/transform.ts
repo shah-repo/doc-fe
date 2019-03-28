@@ -3,7 +3,6 @@ import { Attachment, DocumentFormValues } from "./types";
 
 export const toDocumentFormValues = (document: Document): DocumentFormValues => {
   const values: DocumentFormValues = {
-    id: document.id,
     name: document.name,
     type: document.type,
     approvers: document.approvals.map((approval) => approval.approver.email),

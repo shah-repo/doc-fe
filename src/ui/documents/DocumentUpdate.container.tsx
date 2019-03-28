@@ -3,13 +3,14 @@ import React from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { authSelectors } from "../../state/ducks/auth";
-import { Document, documentsActions, documentsSelectors, DocumentStatus } from "../../state/ducks/documents";
+import { Document, documentsActions, documentsSelectors } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
-import { HOME_URL } from "../constants/urls";
 import DocumentForm from "./forms/DocumentForm.container";
 import { toDocumentEditRequestBody, toDocumentFormValues } from "./forms/transform";
 import { DocumentFormValues } from "./forms/types";
+import { canEditDocument } from "./helpers";
+import { generateDocumentPreviewPath } from "./pathGenerators";
 
 interface StateProps {
   formAsyncState: AsyncState;
@@ -24,24 +25,21 @@ interface OwnProps {
   document: Document;
 }
 
-type DocumentUpdateContainerProps = OwnProps & DispatchProps & StateProps;
+export type DocumentUpdateContainerProps = OwnProps & DispatchProps & StateProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   formAsyncState: documentsSelectors.getSaveAsyncState(state),
   currentUserEmail: authSelectors.currentUserEmail(state),
 });
 
-const DocumentUpdateContainer: React.FunctionComponent<DocumentUpdateContainerProps> = ({
+export const DocumentUpdateContainer: React.FunctionComponent<DocumentUpdateContainerProps> = ({
   save,
   formAsyncState,
   document,
   currentUserEmail,
 }) => {
-  const isInDraft = document.status === DocumentStatus.Draft;
-  const isCurrentUserOwner = document.owner.email === currentUserEmail;
-
-  if (!isInDraft || !isCurrentUserOwner) {
-    return <Redirect to={HOME_URL} />;
+  if (!canEditDocument(document, currentUserEmail)) {
+    return <Redirect to={generateDocumentPreviewPath(document.id)} />;
   }
 
   const onSubmit = (values: DocumentFormValues, actions: FormikActions<DocumentFormValues>) => {
@@ -50,7 +48,12 @@ const DocumentUpdateContainer: React.FunctionComponent<DocumentUpdateContainerPr
   };
 
   return (
-    <DocumentForm asyncState={formAsyncState} onSubmit={onSubmit} initialValues={toDocumentFormValues(document)} />
+    <DocumentForm
+      documentId={document.id}
+      asyncState={formAsyncState}
+      onSubmit={onSubmit}
+      initialValues={toDocumentFormValues(document)}
+    />
   );
 };
 

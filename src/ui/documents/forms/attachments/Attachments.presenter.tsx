@@ -13,9 +13,9 @@ import { Formik, FormikActions, FormikProps } from "formik";
 import React from "react";
 import { AsyncState } from "../../../../state/types";
 import Text from "../../../components/Text";
+import FileCard from "../../cards/FileCard";
 import { Attachment, FileUploadFormValues } from "../types";
 import styles from "./Attachments.styles";
-import FileCard from "./FileCard";
 import FileUploadForm from "./FileUploadForm";
 
 interface Props extends WithStyles<typeof styles> {

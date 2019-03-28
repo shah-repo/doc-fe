@@ -16,7 +16,7 @@ const DashboardPresenter: React.FunctionComponent<DashboardPresenterProps> = ({
   currentUserEmail,
   loadDocumentsAsyncState, loadDocuments, documents,
   loadDocumentsToReviewAsyncState, loadDocumentsToReview, documentsToReview,
-  editDocument,
+  editDocument, previewDocument, cloneDocument,
 }) => {
   return (
     <Grid container={true} className={classes.root} spacing={24}>
@@ -29,7 +29,13 @@ const DashboardPresenter: React.FunctionComponent<DashboardPresenterProps> = ({
           </RouterLink>
         </div>
         <AsyncGate asyncAction={loadDocuments} asyncState={loadDocumentsAsyncState} startActionOnMount={true}>
-          <DocumentTable documents={documents} currentUserEmail={currentUserEmail} editDocument={editDocument} />
+          <DocumentTable
+            documents={documents}
+            currentUserEmail={currentUserEmail}
+            editDocument={editDocument}
+            previewDocument={previewDocument}
+            cloneDocument={cloneDocument}
+          />
         </AsyncGate>
       </Grid>
       <Grid item={true} xs={12} md={3} className={classes.item}>

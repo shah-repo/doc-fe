@@ -42,5 +42,13 @@
   "document.file.select": "Select file",
   "document.file.upload": "Upload",
   "document.file.cancel": "Cancel",
-  "document.file.selectText": "Click to select file..."
+  "document.file.selectText": "Click to select file...",
+  "document.action.confirm": "Confirm",
+  "document.action.cancel": "Cancel",
+  "document.action.title": "Enter password to proceed",
+  "document.action.password": "Password",
+  "document.action.approve": "Approve",
+  "document.action.reject": "Reject",
+  "document.action.to_review": "Send to review",
+  "document.action.withdraw": "Withdraw"
 }

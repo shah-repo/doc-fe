@@ -10,8 +10,9 @@ import {
   Table,
   TableCellProps,
 } from "react-virtualized";
-import { Document, DocumentStatus } from "../../state/ducks/documents";
+import { Document } from "../../state/ducks/documents";
 import Text from "../components/Text";
+import { canCloneDocument, canEditDocument } from "../documents/helpers";
 import { Translation } from "../translations/types";
 import styles from "./DocumentTable.styles";
 import {
@@ -25,7 +26,7 @@ interface DocumentTableProps extends DocumentActionProps, WithStyles<typeof styl
 }
 
 const DocumentTable: React.FunctionComponent<DocumentTableProps> = ({
-  classes, documents, currentUserEmail, editDocument,
+  classes, documents, currentUserEmail, editDocument, previewDocument, cloneDocument,
 }) => {
   const rowGetter = ({ index }: Index): DocumentListItem => {
     const document = documents[index];
@@ -39,17 +40,16 @@ const DocumentTable: React.FunctionComponent<DocumentTableProps> = ({
     };
   };
 
-  const actionsColumnCellRenderer = ({ rowData }: TableCellProps): React.ReactNode => {
-    const documentItem = rowData as DocumentListItem;
-    const canEdit = currentUserEmail === documentItem.owner && documentItem.state === DocumentStatus.Draft;
-    // const canClone =
-    //   documentItem.state === DocumentStatus.Approved || documentItem.state === DocumentStatus.Withdrawn;
+  const actionsColumnCellRenderer = ({ rowIndex }: TableCellProps): React.ReactNode => {
+    const document = documents[rowIndex];
+    const canEdit = canEditDocument(document, currentUserEmail);
+    const canClone = canCloneDocument(document);
 
     return (
       <React.Fragment>
-        {canEdit && <IconButton onClick={editDocument(documentItem.id)}><Edit /></IconButton>}
-        {/* {canClone && <IconButton><FileCopy /></IconButton>} */}
-        {/* {<IconButton><HowToVote /></IconButton>} */}
+        {canEdit && <IconButton onClick={editDocument(document.id)}><Edit /></IconButton>}
+        {canClone && <IconButton onClick={cloneDocument(document.id)}><FileCopy /></IconButton>}
+        {<IconButton onClick={previewDocument(document.id)}><HowToVote /></IconButton>}
       </React.Fragment>
     );
   };
@@ -88,7 +88,7 @@ const DocumentTable: React.FunctionComponent<DocumentTableProps> = ({
         {renderColumn("type", "dashboard.table.type", { width: 50 })}
         {renderColumn("owner", "dashboard.table.owner", { flexGrow: 2 })}
         {renderColumn("state", "dashboard.table.state", { width: 50 })}
-        {renderColumn("state", "dashboard.table.actions", { cellRenderer: actionsColumnCellRenderer })}
+        {renderColumn("actions", "dashboard.table.actions", { cellRenderer: actionsColumnCellRenderer })}
       </Table>
     );
   };

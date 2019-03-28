@@ -4,7 +4,7 @@ import { DOCUMENT_SET, DOCUMENTS_LIST, DOCUMENTS_TO_REVIEW_LIST } from "./consta
 export enum DocumentStatus {
   Draft = "DRAFT",
   InReview = "IN_REVIEW",
-  Withdrawn = "CLOSED",
+  Withdrawn = "WITHDRAWN",
   Approved = "APPROVED",
   Rejected = "REJECTED",
 }
@@ -65,3 +65,9 @@ export interface DocumentsByIdState {
 
 export type DocumentsAllIdsState = string[];
 export type DocumentsReviewIdsState = string[];
+
+export type DocumentTransition = "approve" | "reject" | "to_review" | "withdraw";
+
+export interface DocumentTransitionRequestBody {
+  password: string;
+}

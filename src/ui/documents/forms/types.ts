@@ -7,9 +7,12 @@ export interface FileUploadFormValues {
 }
 
 export interface DocumentFormValues {
-  id?: string;
   name: string;
   type: string;
   approvers: string[];
   attachments: Attachment[];
+}
+
+export interface PasswordFormValues {
+  password: string;
 }

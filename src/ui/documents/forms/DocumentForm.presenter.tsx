@@ -10,6 +10,7 @@ import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
 import SubmitButton from "../../components/forms/SubmitButton";
 import Text from "../../components/Text";
+import DocumentTransitionDialogContainer from "../dialogs/DocumentTransitionDialog.container";
 import AttachmentsContainer from "./attachments/Attachments.container";
 import DocumentApprovers from "./DocumentApprovers";
 import styles from "./DocumentForm.styles";
@@ -17,11 +18,27 @@ import { DocumentFormValues } from "./types.js";
 
 interface Props extends WithStyles<typeof styles>, FormikProps<DocumentFormValues> {
   asyncState: AsyncState;
+  documentId?: string;
 }
 
-const DocumentFormPresenter: React.FunctionComponent<Props> = ({ asyncState, values, classes }) => {
+const DocumentFormPresenter: React.FunctionComponent<Props> = ({ asyncState, values, classes, documentId, dirty }) => {
   const renderApprovers = (props: FieldArrayRenderProps) => <DocumentApprovers {...props} />;
   const renderAttachments = (props: FieldArrayRenderProps) => <AttachmentsContainer {...props} />;
+  const renderSendToReviewButton = () => {
+    if (!documentId) {
+      return null;
+    }
+
+    return (
+      <div className={classes.reviewButton}>
+        <DocumentTransitionDialogContainer
+          transition="to_review"
+          documentId={documentId}
+          buttonProps={{ disabled: dirty, color: "secondary" }}
+        />
+      </div>
+    );
+  };
 
   return (
     <div className={classes.container}>
@@ -48,6 +65,7 @@ const DocumentFormPresenter: React.FunctionComponent<Props> = ({ asyncState, val
         <FieldArray name="attachments" render={renderAttachments} />
         <SubmitButton asyncState={asyncState} label="document.save" />
       </Form>
+      {renderSendToReviewButton()}
     </div>
   );
 };

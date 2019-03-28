@@ -18,6 +18,8 @@ import {
   DocumentListAction,
   DocumentSetAction,
   DocumentsToReviewListAction,
+  DocumentTransition,
+  DocumentTransitionRequestBody,
 } from "./types";
 
 const documentsList = (documents: Document[]): DocumentListAction => ({
@@ -87,6 +89,25 @@ const save = (id: string, body: DocumentEditRequestBody): ApiAction<Document, Do
   },
 });
 
+const applyTransition = (
+  id: string,
+  body: DocumentTransitionRequestBody,
+  transition: DocumentTransition,
+  successHandler: CallbackHandler<string>,
+  errorHandler: CallbackHandler<string>,
+): ApiAction<any, DocumentTransitionRequestBody> => apiAction({
+  url: `${DOCUMENTS_ROOT_URL}/${id}/${transition}`,
+  method: "post",
+  data: body,
+  onSuccess: (d, dispatch) => {
+    dispatch(load(id));
+    successHandler.execute(id);
+  },
+  onFailure: (message) => {
+    errorHandler.execute(message);
+  },
+});
+
 export default {
   documentsList,
   documentsToReviewList,
@@ -96,5 +117,6 @@ export default {
   loadReviewList,
   create,
   save,
+  applyTransition,
   resetDocumentSaveAsyncStatus,
 };

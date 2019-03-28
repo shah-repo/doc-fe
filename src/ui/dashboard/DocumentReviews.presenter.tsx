@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Document } from "../../state/ducks/documents";
 import Text from "../components/Text";
-import { generateDocumentEditPath } from "../documents/pathGenerators";
+import { generateDocumentPreviewPath } from "../documents/pathGenerators";
 import styles from "./DocumentReviews.styles";
 
 interface Props extends WithStyles<typeof styles> {
@@ -13,7 +13,7 @@ interface Props extends WithStyles<typeof styles> {
 const DocumentReviews: React.FunctionComponent<Props> = ({ classes, documentsToReview }) => {
   const reviews = documentsToReview.map((document: Document) => {
     return (
-      <Link key={document.id} className={classes.link} to={generateDocumentEditPath(document.id)}>
+      <Link key={document.id} className={classes.link} to={generateDocumentPreviewPath(document.id)}>
         {document.name}
       </Link>
     );

@@ -5,7 +5,11 @@ import { authSelectors } from "../../state/ducks/auth";
 import { Document, documentsActions, documentsSelectors } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
-import { generateDocumentEditPath } from "../documents/pathGenerators";
+import {
+  generateDocumentClonePath,
+  generateDocumentEditPath,
+  generateDocumentPreviewPath,
+} from "../documents/pathGenerators";
 import DashboardPresenter from "./Dashboard.presenter";
 
 export interface StateProps {
@@ -39,6 +43,8 @@ const DashboardContainer: React.FunctionComponent<DashboardContainerProps> = ({
   currentUserEmail, history,
 }) => {
   const editDocument = (documentId: string) => () => history.push(generateDocumentEditPath(documentId));
+  const previewDocument = (documentId: string) => () => history.push(generateDocumentPreviewPath(documentId));
+  const cloneDocument = (documentId: string) => () => history.push(generateDocumentClonePath(documentId));
 
   return (
     <DashboardPresenter
@@ -50,6 +56,8 @@ const DashboardContainer: React.FunctionComponent<DashboardContainerProps> = ({
       documentsToReview={documentsToReview}
       currentUserEmail={currentUserEmail}
       editDocument={editDocument}
+      previewDocument={previewDocument}
+      cloneDocument={cloneDocument}
     />
   );
 };

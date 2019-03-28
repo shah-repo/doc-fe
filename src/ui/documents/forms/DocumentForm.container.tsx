@@ -12,6 +12,7 @@ interface DispatchProps {
 }
 
 interface OwnProps {
+  documentId?: string;
   initialValues: DocumentFormValues;
   asyncState: AsyncState;
   onSubmit: (values: DocumentFormValues, actions: FormikActions<DocumentFormValues>) => void;
@@ -20,11 +21,11 @@ interface OwnProps {
 type Props = OwnProps & DispatchProps;
 
 const DocumentFormContainer: React.FunctionComponent<Props> =
-  ({ resetFormAsyncState, onSubmit, initialValues, asyncState }) => {
+  ({ resetFormAsyncState, onSubmit, initialValues, asyncState, documentId }) => {
     useState(() => resetFormAsyncState());
 
     const render = (props: FormikProps<DocumentFormValues>) => (
-      <DocumentFormPresenter {...props} asyncState={asyncState} />
+      <DocumentFormPresenter {...props} asyncState={asyncState} documentId={documentId} />
     );
 
     return (
