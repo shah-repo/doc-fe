@@ -1,4 +1,5 @@
 import { Action, Dispatch } from "redux";
+import CallbackHandler from "../common/callbackHandler";
 
 export type ApiActionMethod = "get" | "post" | "put" | "patch" | "delete";
 
@@ -35,3 +36,8 @@ export interface AsyncActionPayload {
 export type AsyncReducerState = AsyncActionPayload;
 export type AsyncState = AsyncReducerState;
 export type AsyncAction = ActionWithPayload<AsyncActionPayload>;
+
+export interface Handlers<S = any, E = string> {
+  successHandler: CallbackHandler<S>;
+  errorHandler: CallbackHandler<E>;
+}

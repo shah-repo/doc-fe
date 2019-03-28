@@ -6,11 +6,12 @@ import {
   IconButton,
   Typography,
 } from "@material-ui/core";
-import { CloudDownload, Delete } from "@material-ui/icons";
+import { Delete } from "@material-ui/icons";
 import React from "react";
 import { Attachment } from "../../../state/ducks/attachments";
+import DownloadButtonContainer from "./DownloadButton.container";
 
-interface FileCardProps {
+export interface FileCardProps {
   removeAttachment?: () => void;
   attachment: Attachment;
 }
@@ -19,12 +20,6 @@ const FileCard: React.FunctionComponent<FileCardProps> = ({ removeAttachment, at
   const removeButton = removeAttachment && (
     <IconButton aria-label="Delete" onClick={removeAttachment}>
       <Delete fontSize="small" />
-    </IconButton>
-  );
-
-  const downloadButton = (
-    <IconButton aria-label="Download" disabled={true}>
-      <CloudDownload fontSize="small" />
     </IconButton>
   );
 
@@ -41,7 +36,7 @@ const FileCard: React.FunctionComponent<FileCardProps> = ({ removeAttachment, at
         </CardContent>
         <CardActions>
           {removeButton}
-          {downloadButton}
+          <DownloadButtonContainer attachmentId={attachment.id} />
         </CardActions>
       </Card>
     </Grid>

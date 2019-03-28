@@ -12,11 +12,11 @@ interface Props extends WithStyles<typeof styles> {
 
 const DocumentReviews: React.FunctionComponent<Props> = ({ classes, documentsToReview }) => {
   const reviews = documentsToReview.map((document: Document) => (
-    <ListItem button={true} key={document.id} divider={true}>
-      <Link className={classes.link} to={generateDocumentPreviewPath(document.id)}>
+    <Link key={document.id} className={classes.link} to={generateDocumentPreviewPath(document.id)}>
+      <ListItem button={true} divider={true}>
         <ListItemText primary={document.name} secondary={document.type} />
-      </Link>
-    </ListItem>
+      </ListItem>
+    </Link>
   ));
 
   const noReviews = reviews.length === 0 && (

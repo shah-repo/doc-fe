@@ -5,4 +5,8 @@ export interface Attachment {
   s3link: string;
 }
 
+export interface AttachmentDownloadResponse {
+  url: string;
+}
+
 export type AttachmentState = Attachment;
