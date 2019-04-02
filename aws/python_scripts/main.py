@@ -11,7 +11,9 @@ if len(sys.argv) >= 3:
                 containerDefinition['name']  = name
                 containerDefinition['image'] = image
         print(data)
+        taskDefinition.close()
         with open('./aws/AWS.TaskDefinition.json', 'w') as taskDefinitionOut:
             json.dump(data, taskDefinitionOut)
+            taskDefinitionOut.close()
 else:
     print('input error.')

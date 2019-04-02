@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-STATE="${CODEBUILD_BUILD_SUCCEEDING}"
+STATE="$1"
 GH_OWNER="${GH_OWNER}" 
 GH_REPO="${GH_REPO}"
 GH_TOKEN="${GH_TOKEN}"
@@ -9,6 +9,7 @@ COMMIT_HASH="${CODEBUILD_RESOLVED_SOURCE_VERSION}"
 TARGET_URL="${TARGET_URL}"
 JOB_ID="${CODEBUILD_BUILD_ID}"
 STATE_STRING="success"
+TEST_DESC="$2"
 
 if [[ -z "$STATE" && -z "$GH_OWNER" && -z "$GH_REPO" && -z "$GH_TOKEN" && -z "$COMMIT_HASH" && -z "$TARGET_URL" && -z "$JOB_ID" ]]; then
 	echo "Required variables are not set."
@@ -34,7 +35,7 @@ RESPONSE=$(curl -X "POST" "https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/s
 		  		-d $"{ 
 		    			\"target_url\": \"${TARGET_URL}\",
 		    			\"state\": \"${STATE_STRING}\",
-		  				\"description\": \"From ${GH_REPO} codepipeline on AWS\",
-		  				\"context\": \"aws/codepipeline/${JOB_ID}\"
+		  				\"description\": \"From ${GH_REPO} codepipeline on AWS - ${TEST_DESC}\",
+		  				\"context\": \"${TEST_DESC}\"
 			  		}")
 echo "$RESPONSE"
