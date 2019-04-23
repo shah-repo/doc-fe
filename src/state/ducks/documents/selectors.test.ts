@@ -23,7 +23,6 @@ describe("document selectors tests", () => {
     state.documents.allIds = allIds;
     state.documents.byId = byId;
     state.documents.reviewIds = reviewIds;
-    state.documents.saveAsyncInfo = getAsyncState();
     state.documents.loadAsyncInfo = getAsyncState();
     state.documents.loadListAsyncInfo = getAsyncState();
     state.documents.loadReviewListAsyncInfo = getAsyncState();
@@ -41,10 +40,6 @@ describe("document selectors tests", () => {
 
   it("getDocument", () => {
     expect(selectors.getDocument(state, documents[0].id)).toEqual(documents[0]);
-  });
-
-  it("getSaveAsyncState", () => {
-    expect(selectors.getSaveAsyncState(state)).toBe(state.documents.saveAsyncInfo);
   });
 
   it("getLoadAsyncState", () => {

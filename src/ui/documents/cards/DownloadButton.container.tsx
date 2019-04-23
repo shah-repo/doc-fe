@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { attachmentsActions } from "../../../state/ducks/attachments";
+import { AttachmentDownloadResponse, attachmentsActions } from "../../../state/ducks/attachments";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncStatus } from "../../../state/types";
 import useAsync from "../../hooks/useAsync";
@@ -18,8 +18,8 @@ export type DownloadButtonContainerProps = DispatchProps & OwnProps;
 
 export const DownloadButtonContainer: React.FunctionComponent<DownloadButtonContainerProps> =
   ({ download, attachmentId }) => {
-    const async = useAsync<string>({
-      onSuccess: (url) => window.open(url, "_parent"),
+    const async = useAsync<AttachmentDownloadResponse>({
+      onSuccess: (downloadInfo) => window.open(downloadInfo!.url, "_parent"),
     });
     const onClick = () => async.start(download, attachmentId, async);
     const isLoading = async.asyncState.status === AsyncStatus.Active;

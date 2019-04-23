@@ -42,7 +42,7 @@ describe("DownloadButtonContainer tests", () => {
     expect(parameters[0]).toEqual(attachmentId);
     expect(parameters[1]).toBeDefined();
 
-    (parameters[1] as Async).successHandler.execute("123");
+    (parameters[1] as Async).successHandler.execute({ url: "123" });
 
     expect(window.open).toHaveBeenCalledWith("123", "_parent");
   });

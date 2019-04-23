@@ -2,7 +2,7 @@ import { mount } from "enzyme";
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { AsyncStatus } from "../../state/types";
-import useAsync, { Async } from "./useAsync";
+import useAsync, { Async, ASYNC_DEFAULT_STATE } from "./useAsync";
 
 describe("useAsync hook tests", () => {
   let async: Async;
@@ -19,10 +19,7 @@ describe("useAsync hook tests", () => {
   });
 
   it("has initial state", () => {
-    expect(async.asyncState).toEqual({
-      status: AsyncStatus.Idle,
-      message: "",
-    });
+    expect(async.asyncState).toEqual(ASYNC_DEFAULT_STATE);
   });
 
   it("calls action and has active state", () => {
@@ -60,5 +57,14 @@ describe("useAsync hook tests", () => {
       status: AsyncStatus.Error,
       message: "ERROR",
     });
+  });
+
+  it("resets state", () => {
+    act(() => {
+      async.errorHandler.execute("ERROR");
+      async.reset();
+    });
+
+    expect(async.asyncState).toEqual(ASYNC_DEFAULT_STATE);
   });
 });

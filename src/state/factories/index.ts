@@ -1,5 +1,5 @@
 import { CALL_API } from "../middlewares/api";
-import { ApiAction, AsyncAction, AsyncStatus } from "../types";
+import { ApiAction, AsyncAction, AsyncStatus, Handlers } from "../types";
 
 export const apiAction =
   <R, B>(apiDefinition: Partial<ApiAction<R, B>>): ApiAction<R, B> => {
@@ -24,3 +24,28 @@ export const resetAsyncStateAction = (type: string): AsyncAction => ({
     message: "",
   },
 });
+
+interface ApiDefinitionWithCallbacks<R, B> extends Partial<ApiAction<R, B>> {
+  handlers: Handlers<R>;
+}
+
+export const apiActionWithCallbacks = <R, B>(apiDefinition: ApiDefinitionWithCallbacks<R, B>):
+  ApiAction<R, B> => {
+    const action = apiAction(apiDefinition);
+    const onSuccess = action.onSuccess;
+    const onFailure = action.onFailure;
+
+    const handlers = apiDefinition.handlers;
+
+    action.onSuccess = (data, dispatch) => {
+      onSuccess(data, dispatch);
+      handlers.successHandler.execute(data);
+    };
+
+    action.onFailure = (message, dispatch) => {
+      onFailure(message, dispatch);
+      handlers.errorHandler.execute(message);
+    };
+
+    return action;
+  };

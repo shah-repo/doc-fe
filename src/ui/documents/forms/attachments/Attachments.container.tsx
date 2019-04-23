@@ -1,10 +1,10 @@
-import { FieldArrayRenderProps, FormikActions, FormikProps } from "formik";
-import React, { useState } from "react";
+import { FieldArrayRenderProps, FormikProps } from "formik";
+import React from "react";
 import { connect } from "react-redux";
-import { attachmentsActions, attachmentsSelectors } from "../../../../state/ducks/attachments";
+import { attachmentsActions } from "../../../../state/ducks/attachments";
 import { ApplicationState } from "../../../../state/reducers";
-import { AsyncState } from "../../../../state/types";
-import useCallbackHandler from "../../../hooks/useCallbackHandler";
+import useAsync from "../../../hooks/useAsync";
+import useDialog from "../../../hooks/useDialog";
 import { Attachment, DocumentFormValues, FileUploadFormValues } from "../types";
 import AttachmentsPresenter from "./Attachments.presenter";
 
@@ -12,58 +12,45 @@ interface OwnProps extends FieldArrayRenderProps {
   form: FormikProps<DocumentFormValues>;
 }
 
-interface StateProps {
-  uploadAsyncStatus: AsyncState;
-}
-
 interface DispatchProps {
   upload: typeof attachmentsActions.upload;
-  resetUploadAsyncState: typeof attachmentsActions.resetUploadAsyncState;
 }
 
-type Props = OwnProps & DispatchProps & StateProps;
+type Props = OwnProps & DispatchProps;
 
-const mapStateToProps = (state: ApplicationState): StateProps => ({
-  uploadAsyncStatus: attachmentsSelectors.attachmentUploadAsyncStatus(state),
-});
+const Attachments: React.FunctionComponent<Props> = ({ form, remove, push, upload }) => {
+  const dialog = useDialog();
+  const async = useAsync<Attachment>({
+    onSuccess: (attachment?: Attachment) => {
+      push(attachment);
+      dialog.close();
+    },
+  });
 
-const Attachments: React.FunctionComponent<Props> = ({
-  form, remove, push, upload, uploadAsyncStatus, resetUploadAsyncState,
-}) => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const openDialog = () => {
-    resetUploadAsyncState();
-    setIsDialogOpen(true);
+    async.reset();
+    dialog.open();
   };
-  const closeDialog = () => setIsDialogOpen(false);
-
-  const attachmentUploaded = (attachment: Attachment) => {
-    push(attachment);
-    closeDialog();
-  };
-  const uploadHandler = useCallbackHandler<Attachment>(attachmentUploaded);
 
   const removeAttachment = (index: number) => () => remove(index);
 
-  const onSubmit = (values: FileUploadFormValues, actions: FormikActions<FileUploadFormValues>) => {
-    upload(values.file as File, uploadHandler);
-    actions.setSubmitting(false);
+  const onSubmit = (values: FileUploadFormValues) => {
+    async.start(upload, values.file as File, async);
   };
 
   return (
     <AttachmentsPresenter
       attachments={form.values.attachments}
       removeAttachment={removeAttachment}
-      isDialogOpen={isDialogOpen}
+      isDialogOpen={dialog.isOpen}
       openDialog={openDialog}
-      closeDialog={closeDialog}
+      closeDialog={dialog.close}
       onSubmit={onSubmit}
-      uploadAsyncStatus={uploadAsyncStatus}
+      uploadAsyncStatus={async.asyncState}
     />
   );
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
+export default connect<{}, DispatchProps, OwnProps, ApplicationState>(null, {
   upload: attachmentsActions.upload,
-  resetUploadAsyncState: attachmentsActions.resetUploadAsyncState,
 })(Attachments);

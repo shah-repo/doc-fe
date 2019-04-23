@@ -2,14 +2,13 @@ import moment from "moment";
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 import Config from "../../../config";
-import { apiAction, resetAsyncStateAction } from "../../factories";
+import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApplicationState } from "../../reducers";
-import { ApiAction } from "../../types";
+import { ApiAction, Handlers } from "../../types";
 import {
   AUTH_TOKENS,
   AUTH_TOKENS_REFRESH_THRESHOLD_SECONDS,
   AUTH_USER,
-  LOGIN_FORM_ASYNC_STATUS,
   LOGIN_URL,
   LOGOUT_URL,
   LOGOUT_USER,
@@ -59,18 +58,18 @@ const logoutUser = (): LogoutUserAction => ({
   type: LOGOUT_USER,
 });
 
-const login = (loginValues: LoginRequestBody): ApiAction<AuthResponse, LoginRequestBody> => apiAction({
-  url: LOGIN_URL,
-  method: "post",
-  data: loginValues,
-  includeAuthorization: false,
-  asyncType: LOGIN_FORM_ASYNC_STATUS,
-  onSuccess: (data, dispatch) => {
-    dispatch(authUser({ email: loginValues.email }));
-    dispatch(authTokens(data));
-    dispatch(resetAsyncStateAction(LOGIN_FORM_ASYNC_STATUS));
-  },
-});
+const login = (loginValues: LoginRequestBody, handlers: Handlers):
+  ApiAction<AuthResponse, LoginRequestBody> => apiActionWithCallbacks({
+    url: LOGIN_URL,
+    method: "post",
+    data: loginValues,
+    includeAuthorization: false,
+    onSuccess: (data, dispatch) => {
+      dispatch(authUser({ email: loginValues.email }));
+      dispatch(authTokens(data));
+    },
+    handlers,
+  });
 
 const logout = (): ThunkAction<void, ApplicationState, any, AnyAction> => (dispatch, getState) => {
   const action: ApiAction<any, LogoutRequestBody> = apiAction({

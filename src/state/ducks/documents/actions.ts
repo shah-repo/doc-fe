@@ -1,9 +1,7 @@
-import CallbackHandler from "../../../common/callbackHandler";
-import { apiAction, resetAsyncStateAction } from "../../factories";
-import { ActionWithPayload, ApiAction, ApiActionMethod, AsyncActionPayload } from "../../types";
+import { apiAction, apiActionWithCallbacks } from "../../factories";
+import { ApiAction, Handlers } from "../../types";
 import {
   DOCUMENT_GET_ASYNC,
-  DOCUMENT_SAVE_ASYNC,
   DOCUMENT_SET,
   DOCUMENTS_LIST,
   DOCUMENTS_LIST_ASYNC,
@@ -20,6 +18,7 @@ import {
   DocumentsToReviewListAction,
   DocumentTransition,
   DocumentTransitionRequestBody,
+  DocumentTransitionResponse,
 } from "./types";
 
 const documentsList = (documents: Document[]): DocumentListAction => ({
@@ -64,48 +63,41 @@ const load = (id: string): ApiAction<Document> => apiAction({
   },
 });
 
-const resetDocumentSaveAsyncStatus = (): ActionWithPayload<AsyncActionPayload> =>
-  resetAsyncStateAction(DOCUMENT_SAVE_ASYNC);
-
-const create = (body: DocumentEditRequestBody, successHandler: CallbackHandler<Document>):
-  ApiAction<Document, DocumentEditRequestBody> => apiAction({
+const create = (body: DocumentEditRequestBody, handlers: Handlers<Document>):
+  ApiAction<Document, DocumentEditRequestBody> => apiActionWithCallbacks({
     url: DOCUMENTS_ROOT_URL,
     method: "post",
     data: body,
-    asyncType: DOCUMENT_SAVE_ASYNC,
     onSuccess: (document, dispatch) => {
       dispatch(documentSet(document));
-      successHandler.execute(document);
     },
+    handlers,
   });
 
-const save = (id: string, body: DocumentEditRequestBody): ApiAction<Document, DocumentEditRequestBody> => apiAction({
-  url: `${DOCUMENTS_ROOT_URL}/${id}`,
-  method: "patch",
-  data: body,
-  asyncType: DOCUMENT_SAVE_ASYNC,
-  onSuccess: (document, dispatch) => {
-    dispatch(documentSet(document));
-  },
-});
+const save = (id: string, body: DocumentEditRequestBody, handlers: Handlers<Document>):
+  ApiAction<Document, DocumentEditRequestBody> => apiActionWithCallbacks({
+    url: `${DOCUMENTS_ROOT_URL}/${id}`,
+    method: "patch",
+    data: body,
+    onSuccess: (document, dispatch) => {
+      dispatch(documentSet(document));
+    },
+    handlers,
+  });
 
 const applyTransition = (
   id: string,
   body: DocumentTransitionRequestBody,
   transition: DocumentTransition,
-  successHandler: CallbackHandler<string>,
-  errorHandler: CallbackHandler<string>,
-): ApiAction<any, DocumentTransitionRequestBody> => apiAction({
+  handlers: Handlers<DocumentTransitionResponse>,
+): ApiAction<DocumentTransitionResponse, DocumentTransitionRequestBody> => apiActionWithCallbacks({
   url: `${DOCUMENTS_ROOT_URL}/${id}/${transition}`,
   method: "post",
   data: body,
   onSuccess: (d, dispatch) => {
     dispatch(load(id));
-    successHandler.execute(id);
   },
-  onFailure: (message) => {
-    errorHandler.execute(message);
-  },
+  handlers,
 });
 
 export default {
@@ -118,5 +110,4 @@ export default {
   create,
   save,
   applyTransition,
-  resetDocumentSaveAsyncStatus,
 };

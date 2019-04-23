@@ -1,10 +1,10 @@
 import _ from "lodash";
 import { getCallbackHandler } from "../../../common/tests/factories";
-import { resetAsyncStateAction } from "../../factories";
+import { Handlers } from "../../types";
 import actions from "./actions";
-import { DOCUMENT_SAVE_ASYNC, DOCUMENTS_ROOT_URL, DOCUMENTS_TO_REVIEW_URL } from "./constants";
+import { DOCUMENTS_ROOT_URL, DOCUMENTS_TO_REVIEW_URL } from "./constants";
 import { getDocument, getDocumentEditRequestBody } from "./tests/factories";
-import { Document, DocumentEditRequestBody, DocumentTransitionRequestBody } from "./types";
+import { Document, DocumentEditRequestBody, DocumentTransitionRequestBody, DocumentTransitionResponse } from "./types";
 
 describe("documents actions tests", () => {
   describe("loadList tests", () => {
@@ -55,17 +55,12 @@ describe("documents actions tests", () => {
     });
   });
 
-  describe("resetDocumentSaveAsyncStatus action tests", async () => {
-    const action = actions.resetDocumentSaveAsyncStatus();
-
-    it("calls resetAsyncStateAction", () => {
-      expect(action).toEqual(resetAsyncStateAction(DOCUMENT_SAVE_ASYNC));
-    });
-  });
-
   describe("create tests", () => {
-    const successHandler = getCallbackHandler<Document>();
-    const action = actions.create(body, successHandler);
+    const handlers: Handlers<Document> = {
+      successHandler: getCallbackHandler<Document>(),
+      errorHandler: getCallbackHandler<string>(),
+    };
+    const action = actions.create(body, handlers);
 
     it("calls POST on DOCUMENTS_ROOT_URL", () => {
       expect(action.url).toBe(DOCUMENTS_ROOT_URL);
@@ -77,12 +72,16 @@ describe("documents actions tests", () => {
       action.onSuccess(document, dispatch);
 
       expect(dispatch).toHaveBeenCalledWith(actions.documentSet(document));
-      expect(successHandler.execute).toHaveBeenCalledWith(document);
+      expect(handlers.successHandler.execute).toHaveBeenCalledWith(document);
     });
   });
 
   describe("save tests", () => {
-    const action = actions.save(document.id, body);
+    const handlers: Handlers<Document> = {
+      successHandler: getCallbackHandler<Document>(),
+      errorHandler: getCallbackHandler<string>(),
+    };
+    const action = actions.save(document.id, body, handlers);
 
     it("calls PATCH on DOCUMENTS_ROOT_URL/id", () => {
       expect(action.url).toBe(`${DOCUMENTS_ROOT_URL}/${document.id}`);
@@ -97,8 +96,11 @@ describe("documents actions tests", () => {
   });
 
   describe("applyTransition tests", () => {
-    const successHandler = getCallbackHandler<string>();
-    const errorHandler = getCallbackHandler<string>();
+    const handlers = {
+      successHandler: getCallbackHandler<DocumentTransitionResponse>(),
+      errorHandler: getCallbackHandler<string>(),
+    };
+
     const transitionBody: DocumentTransitionRequestBody = {
       password: "PASS",
     };
@@ -107,8 +109,7 @@ describe("documents actions tests", () => {
       document.id,
       transitionBody,
       "approve",
-      successHandler,
-      errorHandler,
+      handlers,
     );
 
     it("calls POST on DOCUMENTS_ROOT_URL/id/approve", () => {
@@ -125,14 +126,14 @@ describe("documents actions tests", () => {
         url: expectedLoadAction.url,
         method: expectedLoadAction.method,
       }));
-      expect(successHandler.execute).toHaveBeenCalledWith(document.id);
+      expect(handlers.successHandler.execute).toHaveBeenCalledWith(expect.objectContaining({ id: document.id }));
     });
 
     it("calls error handler on error", () => {
       const dispatch = jest.fn();
       action.onFailure("ERROR", dispatch);
 
-      expect(errorHandler.execute).toHaveBeenCalledWith("ERROR");
+      expect(handlers.errorHandler.execute).toHaveBeenCalledWith("ERROR");
     });
   });
 });

@@ -3,7 +3,6 @@ import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
 import {
   DOCUMENT_GET_ASYNC,
-  DOCUMENT_SAVE_ASYNC,
   DOCUMENT_SET,
   DOCUMENTS_LIST,
   DOCUMENTS_LIST_ASYNC,
@@ -61,7 +60,6 @@ export default combineReducers({
   loadListAsyncInfo: asyncReducer(DOCUMENTS_LIST_ASYNC),
   loadReviewListAsyncInfo: asyncReducer(DOCUMENTS_TO_REVIEW_LIST_ASYNC),
   loadAsyncInfo: asyncReducer(DOCUMENT_GET_ASYNC),
-  saveAsyncInfo: asyncReducer(DOCUMENT_SAVE_ASYNC),
   byId,
   allIds,
   reviewIds,

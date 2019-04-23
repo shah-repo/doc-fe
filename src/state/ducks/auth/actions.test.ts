@@ -1,12 +1,12 @@
 import moment from "moment";
+import { getCallbackHandler } from "../../../common/tests/factories";
 import Config from "../../../config";
-import { resetAsyncStateAction } from "../../factories";
 import initialStoreState from "../../tests/helpers/initialStoreState";
+import { Handlers } from "../../types";
 import authActions from "./actions";
 import {
   AUTH_TOKENS,
   AUTH_TOKENS_REFRESH_THRESHOLD_SECONDS,
-  LOGIN_FORM_ASYNC_STATUS,
   LOGIN_URL,
   LOGOUT_URL,
 } from "./constants";
@@ -81,6 +81,10 @@ describe("login action tests", async () => {
     email: "dino@codecons.com",
     password: "very secret",
   };
+  const handlers: Handlers = {
+    successHandler: getCallbackHandler<{}>(),
+    errorHandler: getCallbackHandler<string>(),
+  };
 
   const data: AuthResponse = {
     IdToken: "TOKEN",
@@ -89,7 +93,7 @@ describe("login action tests", async () => {
     ExpiresIn: 3600,
   };
 
-  const action = authActions.login(loginValues);
+  const action = authActions.login(loginValues, handlers);
 
   it("dispatches actions onSuccess", () => {
     const dispatch = jest.fn();
@@ -100,7 +104,6 @@ describe("login action tests", async () => {
     expect(dispatch.mock.calls[1][0]).toMatchObject({
       type: AUTH_TOKENS,
     });
-    expect(dispatch.mock.calls[2][0]).toEqual(resetAsyncStateAction(LOGIN_FORM_ASYNC_STATUS));
   });
 
   it("calls POST on LOGIN_URL", () => {

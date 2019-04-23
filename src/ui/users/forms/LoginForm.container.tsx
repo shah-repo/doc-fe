@@ -1,30 +1,23 @@
-import { Formik, FormikActions, FormikConfig, FormikProps, FormikValues } from "formik";
+import { Formik, FormikProps } from "formik";
 import * as React from "react";
 import { connect } from "react-redux";
-import { authActions, authSelectors } from "../../../state/ducks/auth";
+import { authActions } from "../../../state/ducks/auth";
 import { ApplicationState } from "../../../state/reducers";
-import { AsyncState } from "../../../state/types";
+import useAsync from "../../hooks/useAsync";
 import { LoginFormValues } from "../types";
 import LoginFormPresenter from "./LoginForm.presenter";
-
-interface StateProps {
-  asyncStatus: AsyncState;
-}
 
 interface DispatchProps {
   login: typeof authActions.login;
 }
 
-type Props = DispatchProps & StateProps;
+type LoginFormContainerProps = DispatchProps;
 
-const mapStateToProps = (state: ApplicationState): StateProps => ({
-  asyncStatus: authSelectors.loginFormAsyncStatus(state),
-});
+const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({ login }) => {
+  const async = useAsync();
 
-const LoginFormContainer: React.FunctionComponent<Props> = ({ asyncStatus, login }) => {
-  const onSubmit = (values: LoginFormValues, actions: FormikActions<LoginFormValues>): void => {
-    actions.setSubmitting(false);
-    login(values);
+  const onSubmit = (values: LoginFormValues): void => {
+    async.start(login, values, async);
   };
 
   const initialValues: LoginFormValues = {
@@ -33,7 +26,7 @@ const LoginFormContainer: React.FunctionComponent<Props> = ({ asyncStatus, login
   };
 
   const render = (props: FormikProps<LoginFormValues>) => (
-    <LoginFormPresenter {...props} asyncState={asyncStatus} />
+    <LoginFormPresenter {...props} asyncState={async.asyncState} />
   );
 
   return (
@@ -45,6 +38,6 @@ const LoginFormContainer: React.FunctionComponent<Props> = ({ asyncStatus, login
   );
 };
 
-export default connect<StateProps, DispatchProps, {}, ApplicationState>(mapStateToProps, {
+export default connect<{}, DispatchProps, {}, ApplicationState>(null, {
   login: authActions.login,
 })(LoginFormContainer);

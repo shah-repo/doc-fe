@@ -3,15 +3,13 @@ import faker from "faker";
 import React from "react";
 import { DocumentStatus } from "../../state/ducks/documents";
 import { getDocument, getUser } from "../../state/ducks/documents/tests/factories";
-import { AsyncStatus } from "../../state/types";
-import getFormikActions from "../tests/helpers/getFormikActions";
+import { ASYNC_DEFAULT_STATE } from "../hooks/useAsync";
 import {
   DocumentUpdateContainer,
   DocumentUpdateContainerProps,
 } from "./DocumentUpdate.container";
 import DocumentFormContainer from "./forms/DocumentForm.container";
 import { toDocumentEditRequestBody, toDocumentFormValues } from "./forms/transform";
-import { DocumentFormValues } from "./forms/types";
 import { generateDocumentPreviewPath } from "./pathGenerators";
 
 describe("DocumentUpdateContainer tests", () => {
@@ -25,10 +23,6 @@ describe("DocumentUpdateContainer tests", () => {
   });
 
   const defaultProps: DocumentUpdateContainerProps = {
-    formAsyncState: {
-      status: AsyncStatus.Idle,
-      message: "",
-    },
     save: jest.fn(),
     currentUserEmail,
     document,
@@ -44,16 +38,15 @@ describe("DocumentUpdateContainer tests", () => {
 
     const form = wrapper.find(DocumentFormContainer);
     const values = toDocumentFormValues(document);
-    const actions = getFormikActions<DocumentFormValues>();
 
-    form.prop("onSubmit")(values, actions);
+    form.prop("onSubmit")(values);
 
     expect(save).toHaveBeenCalledTimes(1);
     expect(save).toHaveBeenCalledWith(
       document.id,
       toDocumentEditRequestBody(values),
+      expect.anything(),
     );
-    expect(actions.setSubmitting).toHaveBeenCalledWith(false);
   });
 
   it("sets props", () => {
@@ -61,7 +54,7 @@ describe("DocumentUpdateContainer tests", () => {
     const form = wrapper.find(DocumentFormContainer);
 
     expect(form.prop("initialValues")).toEqual(toDocumentFormValues(document));
-    expect(form.prop("asyncState")).toEqual(defaultProps.formAsyncState);
+    expect(form.prop("asyncState")).toEqual(ASYNC_DEFAULT_STATE);
     expect(form.prop("documentId")).toEqual(document.id);
   });
 

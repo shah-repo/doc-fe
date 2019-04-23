@@ -71,3 +71,7 @@ export type DocumentTransition = "approve" | "reject" | "to_review" | "withdraw"
 export interface DocumentTransitionRequestBody {
   password: string;
 }
+
+export interface DocumentTransitionResponse {
+  id: string;
+}

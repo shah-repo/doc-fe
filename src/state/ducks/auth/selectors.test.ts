@@ -1,7 +1,6 @@
 import _ from "lodash";
 import { ApplicationState } from "../../reducers";
 import initialStoreState from "../../tests/helpers/initialStoreState";
-import { AsyncState, AsyncStatus } from "../../types";
 import authSelectors from "./selectors";
 
 describe("auth selectors tests", () => {
@@ -26,18 +25,6 @@ describe("auth selectors tests", () => {
     it("it returns email address", () => {
       state.auth.user.email = "dino@codecons.com";
       expect(authSelectors.currentUserEmail(state)).toEqual("dino@codecons.com");
-    });
-  });
-
-  describe("loginFormAsyncStatus selector tests", () => {
-    it("returns async status", () => {
-      const asyncState: AsyncState = {
-        status: AsyncStatus.Active,
-        message: "Runnin'",
-      };
-      state.auth.loginFormAsyncStatus = asyncState;
-
-      expect(authSelectors.loginFormAsyncStatus(state)).toEqual(asyncState);
     });
   });
 

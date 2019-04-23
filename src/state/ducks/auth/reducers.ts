@@ -1,6 +1,5 @@
 import { combineReducers } from "redux";
-import asyncReducer from "../../reducers/asyncReducer";
-import { AUTH_TOKENS, AUTH_USER, LOGIN_FORM_ASYNC_STATUS, LOGOUT_USER } from "./constants";
+import { AUTH_TOKENS, AUTH_USER, LOGOUT_USER } from "./constants";
 import { AuthTokensAction, AuthUserAction, LogoutUserAction, TokensState, UserState } from "./types";
 
 export const TOKENS_DEFAULT_STATE: TokensState = {
@@ -40,7 +39,6 @@ export const user = (state: UserState = USER_DEFAULT_STATE, action: AuthUserActi
 };
 
 const reducer = combineReducers({
-  loginFormAsyncStatus: asyncReducer(LOGIN_FORM_ASYNC_STATUS),
   tokens,
   user,
 });
