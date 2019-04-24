@@ -22,7 +22,7 @@ python3 ./aws/python_scripts/testResultProcessor.py
 
 DTD="${DTD}" # deploy to dev
 CODEBRANCH="${CODEBUILD_GIT_BRANCH}"
-if [ "$CODEBRANCH" == "develop" ] || [ "$DTD" == "1" ]; then
+#if [ "$CODEBRANCH" == "develop" ] || [ "$DTD" == "1" ]; then
 	echo "Updating service started on `date`"
 	# Upadate Task Definition 
 	echo Updating Task Definition
@@ -30,4 +30,4 @@ if [ "$CODEBRANCH" == "develop" ] || [ "$DTD" == "1" ]; then
 	export TASK_VERSION=$(aws ecs register-task-definition --family "${ECS_TASK_NAME}" --cli-input-json file://aws/AWS.TaskDefinition.json | jq --raw-output '.taskDefinition.revision')
 	echo "Registered ECS Task Definition:" "${TASK_VERSION}"
 	aws ecs update-service --cluster "${ECS_CLUSTER_NAME}" --service "${ECS_SERVICE_NAME}" --task-definition "${ECS_TASK_NAME}:${TASK_VERSION}"
-fi
+#fi
