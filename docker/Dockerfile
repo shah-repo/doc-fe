@@ -27,4 +27,4 @@ EXPOSE 5000
 RUN yarn global add serve
 
 # launch cmd
-CMD "serve -s build -p 5000"
+CMD serve -s build -p 5000
