@@ -7,7 +7,7 @@ chmod a+x ./aws/bash_scripts/install.sh
 
 # Build & Push Image
 echo "Build started on `date`"
-export REACT_APP_API_ENDPOINT=$(python3 ./aws/python_scripts/getSecretValue.py 2>&1)
+export REACT_APP_API_ENDPOINT=$(python3 ./aws/python_scripts/getSecretValue.py shifamed/doc-fe/dev/env/vars REACT_APP_API_ENDPOINT 2>&1)
 echo "Endpoint: $REACT_APP_API_ENDPOINT"
 docker build -f ./docker/Dockerfile --build-arg REACT_APP_API_ENDPOINT="${REACT_APP_API_ENDPOINT}" -t "${REMOTE_REPOSITORY_URI}:${IMAGE_TAG}" .
 echo Pushing the Docker images...
