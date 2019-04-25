@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+echo "Branch: $GH_BRANCH"
+
 echo "Installing dependencies started on `date`"
 chmod a+x ./aws/bash_scripts/install.sh
 ./aws/bash_scripts/install.sh
@@ -22,10 +24,13 @@ docker run --rm \
 python3 ./aws/python_scripts/testResultProcessor.py
 
 # Deploy
-echo "Updating service started on `date`"
-# Upadate Task Definition 
-echo Updating Task Definition
-python3 ./aws/python_scripts/main.py "${CONTAINER_NAME}" "$REMOTE_REPOSITORY_URI:$IMAGE_TAG" "dev"
-export TASK_VERSION=$(aws ecs register-task-definition --family "${ECS_TASK_NAME}" --cli-input-json file://aws/AWS.TaskDefinition.json | jq --raw-output '.taskDefinition.revision')
-echo "Registered ECS Task Definition:" "${TASK_VERSION}"
-aws ecs update-service --cluster "${ECS_CLUSTER_NAME}" --service "${ECS_SERVICE_NAME}" --task-definition "${ECS_TASK_NAME}:${TASK_VERSION}"
+DTD="${DTD}" # deploy to dev
+if [ "$GH_BRANCH" == "develop" ] || [ "$DTD" == "1" ]; then
+	echo "Updating service started on `date`"
+	# Upadate Task Definition 
+	echo Updating Task Definition
+	python3 ./aws/python_scripts/main.py "${CONTAINER_NAME}" "$REMOTE_REPOSITORY_URI:$IMAGE_TAG" "dev"
+	export TASK_VERSION=$(aws ecs register-task-definition --family "${ECS_TASK_NAME}" --cli-input-json file://aws/AWS.TaskDefinition.json | jq --raw-output '.taskDefinition.revision')
+	echo "Registered ECS Task Definition:" "${TASK_VERSION}"
+	aws ecs update-service --cluster "${ECS_CLUSTER_NAME}" --service "${ECS_SERVICE_NAME}" --task-definition "${ECS_TASK_NAME}:${TASK_VERSION}"
+fi
