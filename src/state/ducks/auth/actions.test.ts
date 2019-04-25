@@ -8,9 +8,17 @@ import {
   AUTH_TOKENS,
   AUTH_TOKENS_REFRESH_THRESHOLD_SECONDS,
   LOGIN_URL,
+  LOGIN_WITH_CODE_URL,
   LOGOUT_URL,
 } from "./constants";
-import { AuthResponse, AuthTokensAction, AuthTokensPayload, LoginRequestBody } from "./types";
+import {
+  AuthResponse,
+  AuthTokensAction,
+  AuthTokensPayload,
+  AuthWithCodeResponse,
+  LoginRequestBody,
+  LoginWithCodeRequestBody,
+} from "./types";
 
 describe("authTokens action tests", () => {
   const ACCESS_TOKEN = "access token";
@@ -108,6 +116,51 @@ describe("login action tests", async () => {
 
   it("calls POST on LOGIN_URL", () => {
     expect(action.url).toBe(LOGIN_URL);
+    expect(action.method).toBe("post");
+  });
+});
+
+describe("loginWithCode action tests", async () => {
+  const loginValues: LoginWithCodeRequestBody = {
+    code: "TOP SECRET!",
+  };
+
+  const handlers: Handlers = {
+    successHandler: getCallbackHandler<{}>(),
+    errorHandler: getCallbackHandler<string>(),
+  };
+
+  const response: AuthWithCodeResponse = {
+    IdToken: "TOKEN",
+    AccessToken: "ACCESS",
+    RefreshToken: "REFRESH",
+    ExpiresIn: 3600,
+    email: "dino@codecons.com",
+  };
+
+  const action = authActions.loginWithCode(loginValues, handlers);
+
+  it("dispatches actions onSuccess", () => {
+    const dispatch = jest.fn();
+
+    action.onSuccess(response, dispatch);
+
+    expect(dispatch.mock.calls[0][0]).toEqual(authActions.authUser({ email: response.email }));
+    expect(dispatch.mock.calls[1][0]).toMatchObject({
+      type: AUTH_TOKENS,
+    });
+  });
+
+  it("dispatches actions onFailure", () => {
+    const dispatch = jest.fn();
+
+    action.onFailure("ERROR", dispatch);
+
+    expect(dispatch).toHaveBeenCalledWith(authActions.logoutUser());
+  });
+
+  it("calls POST on LOGIN_WITH_CODE_URL", () => {
+    expect(action.url).toBe(LOGIN_WITH_CODE_URL);
     expect(action.method).toBe("post");
   });
 });

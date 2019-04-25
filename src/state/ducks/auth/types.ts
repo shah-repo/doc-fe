@@ -5,6 +5,10 @@ export interface LoginRequestBody {
   password: string;
 }
 
+export interface LoginWithCodeRequestBody {
+  code: string;
+}
+
 export interface LogoutRequestBody {
   AccessToken: string;
 }
@@ -14,6 +18,10 @@ export interface AuthResponse {
   RefreshToken?: string;
   ExpiresIn: number;
   IdToken: string;
+}
+
+export interface AuthWithCodeResponse extends AuthResponse {
+  email: string;
 }
 
 export interface Token {

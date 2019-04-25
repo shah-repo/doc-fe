@@ -18,9 +18,9 @@ interface DispatchProps {
   applyTransition: typeof documentsActions.applyTransition;
 }
 
-type Props = OwnProps & DispatchProps;
+export type DocumentTransitionDialogContainerProps = OwnProps & DispatchProps;
 
-const DocumentTransitionDialogContainer: React.FunctionComponent<Props> = ({
+export const DocumentTransitionDialogContainer: React.FunctionComponent<DocumentTransitionDialogContainerProps> = ({
   documentId, applyTransition, transition, buttonProps,
 }) => {
   const dialog = useDialog();

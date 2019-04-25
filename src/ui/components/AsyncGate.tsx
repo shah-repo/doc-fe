@@ -40,19 +40,22 @@ const AsyncGate: React.FunctionComponent<Props> = ({
   }
 
   if (asyncState.status === AsyncStatus.Error) {
+    const button = asyncAction && (
+      <Button
+        variant="outlined"
+        onClick={runAsyncAction}
+        className={classes.tryAgainButton}
+      >
+        <Text translation="errors.fetch.tryAgain" />
+      </Button>
+    );
+
     return (
       <div className={classes.errorContainer}>
         <Typography variant="body1" color="error">
           {asyncState.message}
         </Typography>
-        <Button
-          hidden={!asyncAction}
-          variant="outlined"
-          onClick={runAsyncAction}
-          className={classes.tryAgainButton}
-        >
-          <Text translation="errors.fetch.tryAgain" />
-        </Button>
+        {button}
       </div>
     );
   }

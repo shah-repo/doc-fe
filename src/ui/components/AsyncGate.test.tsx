@@ -72,6 +72,17 @@ describe("AsyncGate component unit tests", () => {
     expect(wrapper.text()).toContain(message);
   });
 
+  it("does not render button if asyncAction is not defined", () => {
+    const wrapper: ReactWrapper = getWrapper(getProps({
+      asyncState: {
+        status: AsyncStatus.Error,
+        message: "ERR",
+      },
+    }));
+
+    expect(wrapper.find(Button)).toHaveLength(0);
+  });
+
   it("calls async action on error button click", () => {
     const asyncAction = jest.fn();
     const wrapper: ReactWrapper = getWrapper(getProps({

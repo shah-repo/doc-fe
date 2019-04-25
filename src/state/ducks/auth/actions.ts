@@ -10,12 +10,22 @@ import {
   AUTH_TOKENS_REFRESH_THRESHOLD_SECONDS,
   AUTH_USER,
   LOGIN_URL,
+  LOGIN_WITH_CODE_URL,
   LOGOUT_URL,
   LOGOUT_USER,
 } from "./constants";
 import authSelectors from "./selectors";
 import {
-  AuthResponse, AuthTokensAction, AuthUserAction, LoginRequestBody, LogoutRequestBody, LogoutUserAction, Tokens, User,
+  AuthResponse,
+  AuthTokensAction,
+  AuthUserAction,
+  AuthWithCodeResponse,
+  LoginRequestBody,
+  LoginWithCodeRequestBody,
+  LogoutRequestBody,
+  LogoutUserAction,
+  Tokens,
+  User,
 } from "./types";
 
 const authTokens = (authResponse: AuthResponse): AuthTokensAction => {
@@ -71,6 +81,22 @@ const login = (loginValues: LoginRequestBody, handlers: Handlers):
     handlers,
   });
 
+const loginWithCode = (loginValues: LoginWithCodeRequestBody, handlers: Handlers):
+  ApiAction<AuthWithCodeResponse, LoginWithCodeRequestBody> => apiActionWithCallbacks({
+    url: LOGIN_WITH_CODE_URL,
+    method: "post",
+    data: loginValues,
+    includeAuthorization: false,
+    onSuccess: (response, dispatch) => {
+      dispatch(authUser({ email: response.email }));
+      dispatch(authTokens(response));
+    },
+    onFailure: (m, dispatch) => {
+      dispatch(logoutUser());
+    },
+    handlers,
+  });
+
 const logout = (): ThunkAction<void, ApplicationState, any, AnyAction> => (dispatch, getState) => {
   const action: ApiAction<any, LogoutRequestBody> = apiAction({
     url: LOGOUT_URL,
@@ -90,4 +116,5 @@ export default {
   logoutUser,
   login,
   logout,
+  loginWithCode,
 };

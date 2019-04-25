@@ -1,5 +1,7 @@
 export const HOME_URL = "/";
 export const LOGIN_URL = "/login";
+export const LOGIN_WITH_CODE_URL = "/auth/tokens";
+
 export const DOCUMENT_CREATE_URL = "/document/create";
 
 export const DOCUMENT_ROOT_URL = "/document/:documentId";

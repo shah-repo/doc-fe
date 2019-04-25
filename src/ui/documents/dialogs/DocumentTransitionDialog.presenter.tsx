@@ -16,8 +16,8 @@ import PasswordForm from "../forms/PasswordForm";
 import { PasswordFormValues } from "../forms/types";
 import styles from "./DocumentTransitionDialog.styles";
 
-interface Props extends WithStyles<typeof styles> {
-  onSubmit: (values: PasswordFormValues, actions: FormikActions<PasswordFormValues>) => void;
+export interface DocumentTransitionDialogPresenterProps {
+  onSubmit: (values: PasswordFormValues) => void;
   closeDialog: () => void;
   openDialog: () => void;
   isDialogOpen: boolean;
@@ -25,6 +25,8 @@ interface Props extends WithStyles<typeof styles> {
   buttonProps?: ButtonProps;
   transition: DocumentTransition;
 }
+
+type Props = DocumentTransitionDialogPresenterProps & WithStyles<typeof styles>;
 
 const DocumentTransitionDialogPresenter: React.FunctionComponent<Props> =
   ({ classes, onSubmit, closeDialog, openDialog, isDialogOpen, asyncState, buttonProps, transition }) => {
