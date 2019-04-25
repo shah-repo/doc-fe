@@ -7,7 +7,7 @@ chmod a+x ./aws/bash_scripts/install.sh
 
 # Build & Push Image
 echo "Build started on `date`"
-export REACT_APP_API_ENDPOINT=https://develop.enlil4mfp.io/api
+export REACT_APP_API_ENDPOINT=https://api.develop.enlil4mfp.io/api
 docker build -f ./docker/Dockerfile --build-arg REACT_APP_API_ENDPOINT="${REACT_APP_API_ENDPOINT}" -t "${REMOTE_REPOSITORY_URI}:${IMAGE_TAG}" .
 echo Pushing the Docker images...
 docker push "${REMOTE_REPOSITORY_URI}:${IMAGE_TAG}"
