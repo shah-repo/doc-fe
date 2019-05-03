@@ -3,7 +3,7 @@ set -e
 
 BUILD_ENV="dev"
 REACT_APP_API_ENDPOINT="https://api.develop.enlil4mfp.io/api"
-if [ "$GH_BRANCH" == "master" ] && [ "$DTD" != "1" ]; then 
+if [ "$GH_BRANCH" == "master" ] && [ "$DTD" != "true" ]; then 
 	BUILD_ENV="prod"
 	REACT_APP_API_ENDPOINT="https://api.develop.enlil4mfp.io/api" # once prod environment is available this will be changed
 fi
@@ -33,7 +33,7 @@ docker run --rm \
 python3 ./aws/python_scripts/testResultProcessor.py
 
 # Deploy
-if ([ "$GH_BRANCH" == "develop" ] || [ "$DTD" == "1" ]) && [ "$NO_DEPLOY" == "0" ]; then
+if ([ "$GH_BRANCH" == "develop" ] || [ "$DTD" == "true" ]) && [ "$NO_DEPLOY" == "false" ]; then
 	echo "Updating service started on `date`"
 	# Upadate Task Definition 
 	echo Updating Task Definition
