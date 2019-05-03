@@ -7,18 +7,22 @@ import DocumentContainer from "../documents/Document.container";
 import DocumentCreateContainer from "../documents/DocumentCreate.container";
 import HeaderContainer from "./Header.container";
 import styles from "./Layout.styles";
+import Navigation from "./Navigation";
 
 type Props = WithStyles<typeof styles>;
 
 const Layout: React.FunctionComponent<Props> = ({ classes }) => (
   <div className={classes.layout}>
     <HeaderContainer />
-    <Switch>
-      <Route path={HOME_URL} exact={true} component={DashboardContainer} />
-      <Route path={DOCUMENT_CREATE_URL} exact={true} component={DocumentCreateContainer} />
-      <Route path={DOCUMENT_ROOT_URL} component={DocumentContainer} />
-      <Redirect to={{ pathname: HOME_URL }} />
-    </Switch>
+    <Navigation />
+    <div className={classes.content}>
+      <Switch>
+        <Route path={HOME_URL} exact={true} component={DashboardContainer} />
+        <Route path={DOCUMENT_CREATE_URL} exact={true} component={DocumentCreateContainer} />
+        <Route path={DOCUMENT_ROOT_URL} component={DocumentContainer} />
+        <Redirect to={{ pathname: HOME_URL }} />
+      </Switch>
+    </div>
   </div>
 );
 

@@ -15,9 +15,9 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 const Header: React.FunctionComponent<Props> = ({ classes, onLogout, email }) => (
-  <AppBar position="static" color="default" className={classes.appBar}>
+  <AppBar position="static" color="primary" className={classes.appBar}>
     <Toolbar>
-      <Typography variant="h6" color="inherit" noWrap={true} className={classes.toolbarTitle}>
+      <Typography variant="h6" noWrap={true} className={classes.toolbarTitle}>
         <Link to={HOME_URL} className={classes.headerLink}>
           <Text translation="header.title" />
         </Link>

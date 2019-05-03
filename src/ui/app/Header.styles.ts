@@ -3,16 +3,17 @@ import { createStyles, Theme } from "@material-ui/core";
 export default (theme: Theme) =>
   createStyles({
     appBar: {
-      position: "relative",
+      position: "absolute",
+      zIndex: 9999,
     },
     toolbarTitle: {
       flex: 1,
     },
     headerLink: {
       "textDecoration": "none",
-      "color": theme.palette.grey[900],
+      "color": theme.palette.common.white,
       "&:hover": {
-        color: theme.palette.primary.main,
+        color: theme.palette.secondary.light,
       },
     },
   });

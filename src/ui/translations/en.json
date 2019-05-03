@@ -10,6 +10,10 @@
   "header.welcome": "Welcome, {email}",
   "header.logout": "Logout",
 
+  "navigation.dashboard": "Dashboard",
+  "navigation.documents": "Documents",
+  "navigation.createDocument": "Create document",
+
   "validators.required": "Required",
   "validators.email": "Invalid email address",
 
