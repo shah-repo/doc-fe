@@ -11,6 +11,7 @@ fi
 echo "Branch: $GH_BRANCH"
 echo "Endpoint: $REACT_APP_API_ENDPOINT"
 echo "Deploy to dev: $DTD"
+echo "No deploy: $NO_DEPLOY"
 
 echo "Installing dependencies started on `date`"
 chmod a+x ./aws/bash_scripts/install.sh
@@ -32,7 +33,7 @@ docker run --rm \
 python3 ./aws/python_scripts/testResultProcessor.py
 
 # Deploy
-if [ "$GH_BRANCH" == "develop" ] || [ "$DTD" == "1" ]; then
+if ([ "$GH_BRANCH" == "develop" ] || [ "$DTD" == "1" ]) && [ "$NO_DEPLOY" == "0" ]; then
 	echo "Updating service started on `date`"
 	# Upadate Task Definition 
 	echo Updating Task Definition
