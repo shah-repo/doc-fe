@@ -1,13 +1,12 @@
 #!/bin/bash
 set -e
 
-DTD="${DTD}" # deploy to dev
 BUILD_ENV="dev"
 REACT_APP_API_ENDPOINT="https://api.develop.enlil4mfp.io/api"
 if [ "$GH_BRANCH" == "master" ] && [ "$DTD" != "1" ]; then 
 	BUILD_ENV="prod"
 	REACT_APP_API_ENDPOINT="https://api.develop.enlil4mfp.io/api" # once prod environment is available this will be changed
-if
+fi
 
 echo "Branch: $GH_BRANCH"
 echo "Endpoint: $REACT_APP_API_ENDPOINT"
