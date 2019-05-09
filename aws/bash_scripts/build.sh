@@ -2,10 +2,8 @@
 set -e
 
 BUILD_ENV="dev"
-REACT_APP_API_ENDPOINT="https://api.develop.enlil4mfp.io/api"
 if [ "$GH_BRANCH" == "master" ] && [ "$DTD" != "true" ]; then 
 	BUILD_ENV="prod"
-	REACT_APP_API_ENDPOINT="https://api.develop.enlil4mfp.io/api" # once prod environment is available this will be changed
 fi
 
 echo "Branch: $GH_BRANCH"
@@ -19,7 +17,7 @@ chmod a+x ./aws/bash_scripts/install.sh
 
 # Build & Push Image
 echo "Build started on `date`"
-# export REACT_APP_API_ENDPOINT=$(python3 ./aws/python_scripts/getSecretValue.py shifamed/doc-fe/${BUILD_ENV}/env/vars REACT_APP_API_ENDPOINT 2>&1)
+export REACT_APP_API_ENDPOINT=$(python3 ./aws/python_scripts/getEnvValue.py ${BUILD_ENV} REACT_APP_API_ENDPOINT 2>&1)
 docker build -f ./docker/Dockerfile --build-arg REACT_APP_API_ENDPOINT="${REACT_APP_API_ENDPOINT}" -t "${REMOTE_REPOSITORY_URI}:${IMAGE_TAG}" .
 echo Pushing the Docker images...
 docker push "${REMOTE_REPOSITORY_URI}:${IMAGE_TAG}"
