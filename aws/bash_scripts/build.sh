@@ -31,7 +31,7 @@ docker run --rm \
 python3 ./aws/python_scripts/testResultProcessor.py
 
 # Deploy
-if ([ "$GH_BRANCH" == "develop" ] || [ "$DTD" == "true" ]) && [ "$NO_DEPLOY" == "false" ]; then
+if [ "$DTD" == "true" ] && [ "$NO_DEPLOY" == "false" ]; then
 	echo "Updating service started on `date`"
 	# Upadate Task Definition 
 	echo Updating Task Definition
