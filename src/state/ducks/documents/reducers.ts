@@ -21,13 +21,22 @@ import {
 
 type DocumentActions = DocumentListAction | DocumentSetAction | DocumentsToReviewListAction;
 
+const extendDocument = (document: Document): Document => (
+  { owner: {}, approvals: [], attachments: [], ...document }
+)
+
+const keyByDocumentIdReducer = (acc: DocumentsByIdState, document: Document): DocumentsByIdState =>(
+  { ...acc, [document.id]: extendDocument(document) }
+);
+
 export const byId = (state: DocumentsByIdState = {}, action: DocumentActions): DocumentsByIdState => {
   switch (action.type) {
     case DOCUMENTS_LIST:
     case DOCUMENTS_TO_REVIEW_LIST:
-      return { ...state, ...(_.keyBy<Document>(action.payload, (document) => document.id)) };
+      return action.payload.reduce(keyByDocumentIdReducer, state);
+      // return { ...state, ...(_.keyBy<Document>(action.payload, (document) => document.id)) };
     case DOCUMENT_SET:
-      return { ...state, [action.payload.id]: action.payload };
+      return { ...state, [action.payload.id]: extendDocument(action.payload) };
     default:
       return state;
   }
