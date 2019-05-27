@@ -9,3 +9,5 @@ export const DOCUMENT_ROOT_URL = `${DOCUMENTS_LIST_URL}/:documentId`;
 export const DOCUMENT_UPDATE_URL = `${DOCUMENT_ROOT_URL}/update`;
 export const DOCUMENT_PREVIEW_URL = `${DOCUMENT_ROOT_URL}/preview`;
 export const DOCUMENT_CLONE_URL = `${DOCUMENT_ROOT_URL}/clone`;
+
+export const SIGNUP_URL = "/signup";
