@@ -5,7 +5,24 @@
       "name": "<container_name>",
       "image": "<container_image>",
       "memoryReservation": 64,
-      "environment": [],
+      "environment": [
+        {
+          "name": "REACT_APP_AWS_COGNITO_CLIENT_ID",
+          "value": ""
+        },
+        {
+          "name": "REACT_APP_FRONTEND_URL",
+          "value": ""
+        },
+        {
+          "name": "REACT_APP_SIGNUP_DOMAIN_URL",
+          "value": ""
+        },
+        {
+          "name": "REACT_APP_API_ENDPOINT",
+          "value": ""
+        }
+      ],
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
