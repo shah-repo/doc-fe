@@ -18,7 +18,17 @@ chmod a+x ./aws/bash_scripts/install.sh
 # Build & Push Image
 echo "Build started on `date`"
 export REACT_APP_API_ENDPOINT=$(python3 ./aws/python_scripts/getEnvValue.py ${BUILD_ENV} REACT_APP_API_ENDPOINT 2>&1)
-docker build -f ./docker/Dockerfile --build-arg REACT_APP_API_ENDPOINT="${REACT_APP_API_ENDPOINT}" -t "${REMOTE_REPOSITORY_URI}:${IMAGE_TAG}" .
+export REACT_APP_AWS_COGNITO_CLIENT_ID=$(python3 ./aws/python_scripts/getEnvValue.py ${BUILD_ENV} REACT_APP_AWS_COGNITO_CLIENT_ID 2>&1)
+export REACT_APP_FRONTEND_URL=$(python3 ./aws/python_scripts/getEnvValue.py ${BUILD_ENV} REACT_APP_FRONTEND_URL 2>&1)
+export REACT_APP_SIGNUP_DOMAIN_URL=$(python3 ./aws/python_scripts/getEnvValue.py ${BUILD_ENV} REACT_APP_SIGNUP_DOMAIN_URL 2>&1)
+
+docker build -f ./docker/Dockerfile \
+--build-arg REACT_APP_API_ENDPOINT="${REACT_APP_API_ENDPOINT}" \
+--build-arg REACT_APP_AWS_COGNITO_CLIENT_ID="${REACT_APP_AWS_COGNITO_CLIENT_ID}" \
+--build-arg REACT_APP_FRONTEND_URL="${REACT_APP_FRONTEND_URL}" \
+--build-arg REACT_APP_SIGNUP_DOMAIN_URL="${REACT_APP_SIGNUP_DOMAIN_URL}" \
+-t "${REMOTE_REPOSITORY_URI}:${IMAGE_TAG}" .
+
 echo Pushing the Docker images...
 docker push "${REMOTE_REPOSITORY_URI}:${IMAGE_TAG}"
 
