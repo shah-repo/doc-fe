@@ -13,8 +13,10 @@
   "navigation.dashboard": "Dashboard",
   "navigation.documents": "Documents",
   "navigation.createDocument": "Create document",
+  "navigation.createChangeRequest": "Create change request",
 
   "validators.required": "Required",
+  "validators.requiredAtLeastOne": "At least one input required",
   "validators.email": "Invalid email address",
 
   "errors.tokenRefresh": "Token refresh failed",
@@ -22,6 +24,18 @@
   "errors.fetch.tryAgain": "Try again",
 
   "fields.select.none": "None",
+
+  "changeRequest.title": "Document - Change Request",
+  "changeRequest.state": "State",
+  "changeRequest.assessmentForm.description": "Description",
+  "changeRequest.assessmentForm.justifications": "Justifications",
+  "changeRequest.assessmentForm.assessments": "Assessments",
+  "changeRequest.assessmentForm.implementationPlan": "Implementation Plan",
+  "changeRequest.assessmentForm.trainingRequired": "Training Required",
+  "changeRequest.assessmentForm.targetDate": "Target Date",
+  "changeRequest.assessmentForm.approver": "Approver",
+  "changeRequest.assessmentForm.error.descriptionOrAttachment": "Please provide description or attach file",
+  "changeRequest.assessmentForm.selectApprover": "Select approver",
 
   "dashboard.reviews": "Documents to review",
   "dashboard.noReviews": "No documents to review",
@@ -54,5 +68,14 @@
   "document.action.approve": "Approve",
   "document.action.reject": "Reject",
   "document.action.to_review": "Send to review",
-  "document.action.withdraw": "Withdraw"
+  "document.action.withdraw": "Withdraw",
+  
+  "transition.action.confirm": "Confirm",
+  "transition.action.cancel": "Cancel",
+  "transition.action.title": "Enter password to proceed",
+  "transition.action.password": "Password",
+  "transition.action.approve": "Approve",
+  "transition.action.reject": "Reject",
+  "transition.action.to_review": "Send to review",
+  "transition.action.withdraw": "Withdraw"
 }

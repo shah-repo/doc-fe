@@ -10,4 +10,11 @@ export const DOCUMENT_UPDATE_URL = `${DOCUMENT_ROOT_URL}/update`;
 export const DOCUMENT_PREVIEW_URL = `${DOCUMENT_ROOT_URL}/preview`;
 export const DOCUMENT_CLONE_URL = `${DOCUMENT_ROOT_URL}/clone`;
 
+export const CHANGE_REQUEST_CREATE_URL = "/change_request/create";
+
+export const CHANGE_REQUEST_LIST_URL = "/change_request";
+export const CHANGE_REQUEST_ROOT_URL = `${CHANGE_REQUEST_LIST_URL}/:changeRequestId`;
+export const CHANGE_REQUEST_UPDATE_URL = `${CHANGE_REQUEST_ROOT_URL}/update`;
+export const CHANGE_REQUEST_PREVIEW_URL = `${CHANGE_REQUEST_ROOT_URL}/preview`;
+
 export const SIGNUP_URL = "/signup";

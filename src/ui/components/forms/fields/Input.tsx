@@ -15,7 +15,7 @@ type InputPropsWithFormik = InputOwnProps & FormikFieldProps;
 const Input: React.FunctionComponent<InputPropsWithFormik> = ({ inputProps, ...fieldProps }) => {
   return (
     <Field {...fieldProps}>
-      <MuiInput {...fieldProps.field} {...inputProps} />
+      <MuiInput required={false} {...fieldProps.field} {...inputProps} />
     </Field>
   );
 };

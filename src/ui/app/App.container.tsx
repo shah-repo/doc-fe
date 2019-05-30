@@ -4,6 +4,8 @@ import localeEn from "react-intl/locale-data/en";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import "react-virtualized/styles.css";
+import "react-datepicker/dist/react-datepicker.css";
+import "./app.css";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistor, store } from "../../state/store";
 import messagesEn from "../translations/en.json";
