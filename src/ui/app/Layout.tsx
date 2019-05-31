@@ -7,12 +7,14 @@ import {
   HOME_URL,
   CHANGE_REQUEST_CREATE_URL,
   CHANGE_REQUEST_ROOT_URL,
+  CHANGE_REQUEST_LIST_URL,
 } from "../constants/urls";
 import DashboardContainer from "../dashboard/Dashboard.container";
 import DocumentContainer from "../documents/Document.container";
 import DocumentCreateContainer from "../documents/DocumentCreate.container";
 import ChangeRequestContainer from "../changeRequest/ChangeRequest.container";
 import ChangeRequestCreateContainer from "../changeRequest/ChangeRequestCreate.container";
+import ChangeRequestListContainer from "../changeRequest/ChangeRequestList.container";
 import HeaderContainer from "./Header.container";
 import styles from "./Layout.styles";
 import Navigation from "./Navigation";
@@ -30,6 +32,7 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => (
         <Route path={DOCUMENT_ROOT_URL} component={DocumentContainer} />
         <Route path={CHANGE_REQUEST_CREATE_URL} exact={true} component={ChangeRequestCreateContainer} />
         <Route path={CHANGE_REQUEST_ROOT_URL} component={ChangeRequestContainer} />
+        <Route path={CHANGE_REQUEST_LIST_URL} exact={true} component={ChangeRequestListContainer} />
         <Redirect to={{ pathname: HOME_URL }} />
       </Switch>
     </div>

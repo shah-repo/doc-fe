@@ -6,7 +6,7 @@ import { withStyles, WithStyles } from "@material-ui/core/styles";
 import { Dashboard } from "@material-ui/icons";
 import React from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { DOCUMENT_CREATE_URL, HOME_URL, CHANGE_REQUEST_CREATE_URL } from "../constants/urls";
+import { DOCUMENT_CREATE_URL, HOME_URL, CHANGE_REQUEST_CREATE_URL, CHANGE_REQUEST_LIST_URL } from "../constants/urls";
 import styles from "./Navigation.styles";
 import NavigationLinkContainer from "./NavigationLink.container";
 
@@ -30,6 +30,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({ classes, locatio
         childrenUrls={[
           { url: DOCUMENT_CREATE_URL, text: "navigation.createDocument" },
           { url: CHANGE_REQUEST_CREATE_URL, text: "navigation.createChangeRequest" },
+          { url: CHANGE_REQUEST_LIST_URL, text: "navigation.changeRequestList" },
         ]}
       />
     </List>

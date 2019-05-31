@@ -14,6 +14,7 @@
   "navigation.documents": "Documents",
   "navigation.createDocument": "Create document",
   "navigation.createChangeRequest": "Create change request",
+  "navigation.changeRequestList": "Change request list",
 
   "validators.required": "Required",
   "validators.requiredAtLeastOne": "At least one input required",
@@ -36,6 +37,12 @@
   "changeRequest.assessmentForm.approver": "Approver",
   "changeRequest.assessmentForm.error.descriptionOrAttachment": "Please provide description or attach file",
   "changeRequest.assessmentForm.selectApprover": "Select approver",
+  "changeRequest.table.description": "Description",
+  "changeRequest.table.owner": "Owner",
+  "changeRequest.table.state": "State",
+  "changeRequest.table.actions": "Actions",
+  "changeRequest.table.editAction": "Edit",
+  "changeRequest.table.noChangeRequests": "No change requests",
 
   "dashboard.reviews": "Documents to review",
   "dashboard.noReviews": "No documents to review",
