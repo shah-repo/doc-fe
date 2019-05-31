@@ -1,4 +1,5 @@
 import { Attachment as AttachmentInterface } from "../../../state/ducks/attachments";
+import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 
 export type Attachment = AttachmentInterface;
 
@@ -29,7 +30,7 @@ export interface ChangeRequestFormValues {
   assessment: Assessment;
   implementationPlan: ImplementationPlan;
   effectiveDate?: Date;
-  approvals: any[];
+  approvals: OptionType[];
   documentRevisions: any[];
 }
 

@@ -5,6 +5,7 @@ import * as React from "react";
 import Field, { FieldOwnProps } from "../Field";
 import AutocompleteComponents from './AutocompleteComponents';
 import { OptionType } from './types';
+import { ValueType } from 'react-select/lib/types';
 
 interface AutocompleteOwnProps extends FieldOwnProps {
   autocompleteProps: SelectComponentsProps;
@@ -14,7 +15,7 @@ interface AutocompleteOwnProps extends FieldOwnProps {
 type AutocompletePropsWithFormik = AutocompleteOwnProps & FormikFieldProps;
 
 const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({ autocompleteProps, options, ...fieldProps }) => {
-  const onChange = (value: any) => fieldProps.form.setFieldValue(fieldProps.field.name, value);
+  const onChange = (value: ValueType<OptionType>) => fieldProps.form.setFieldValue(fieldProps.field.name, value);
 
   return (
     <Field {...fieldProps}>
