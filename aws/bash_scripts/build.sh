@@ -5,14 +5,14 @@ ENV=$1
 DTD=$2
 EXECUTE_TEST=1
 
-# Login to AWS
-aws ecr get-login --no-include-email --region "${AWS_DEFAULT_REGION}" | bash
-
 # Install Dependencies
 echo "Installing dependencies started on `date`"
 
 chmod a+x ./aws/bash_scripts/install.sh
 ./aws/bash_scripts/install.sh
+
+# Login to AWS
+aws ecr get-login --no-include-email --region "${AWS_DEFAULT_REGION}" | bash
 
 # Build & Push Image
 echo "Build started on `date`"
