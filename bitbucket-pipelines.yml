@@ -39,7 +39,7 @@ pipelines:
 #      - step: *DEPLOY_TO_PRODUCTION
 options:
   docker: true
-  max-time: 20
+  max-time: 10m
 definitions:
   services:
     docker:
