@@ -16,13 +16,10 @@ import { OptionType } from "../components/forms/fields/Autocomplete/types";
 
 interface StateProps {
   currentUserEmail: string;
-  loadApproversAsyncState: AsyncState;
-  availableApprovers: OptionType[];
 }
 
 interface DispatchProps {
   save: typeof changeRequestsActions.save;
-  loadAvailableApprovers: typeof changeRequestsActions.loadAvailableApprovers;
 }
 
 interface OwnProps {
@@ -32,22 +29,15 @@ interface OwnProps {
 export type ChangeRequestUpdateContainerProps = OwnProps & DispatchProps & StateProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
-  loadApproversAsyncState: changeRequestsSelectors.getLoadApproversAsyncState(state),
   currentUserEmail: authSelectors.currentUserEmail(state),
-  availableApprovers: changeRequestsSelectors.getApproversListForAssessmentForm(state),
 });
 
 export const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateContainerProps> = ({
   save,
   changeRequest,
   currentUserEmail,
-  loadApproversAsyncState,
-  loadAvailableApprovers,
-  availableApprovers,
 }) => {
   const async = useAsync<ChangeRequest>();
-  const loadApproversAction = () => loadAvailableApprovers(changeRequest.id);
-  
   if (!canEditChangeRequest(changeRequest, currentUserEmail)) {
     return <Redirect to={generateChangeRequestPreviewPath(changeRequest.id)} />;
   }
@@ -57,19 +47,15 @@ export const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequest
   };
 
   return (
-    <AsyncGate asyncState={loadApproversAsyncState} asyncAction={loadApproversAction} startActionOnMount={true}>
-      <AssessmentForm
-        changeRequestId={changeRequest.id}
-        asyncState={async.asyncState}
-        onSubmit={onSubmit}
-        initialValues={toChangeRequestFormValues(changeRequest)}
-        availableApprovers={availableApprovers}
-      />
-    </AsyncGate>
+    <AssessmentForm
+      changeRequestId={changeRequest.id}
+      asyncState={async.asyncState}
+      onSubmit={onSubmit}
+      initialValues={toChangeRequestFormValues(changeRequest)}
+    />
   );
 };
 
 export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
   save: changeRequestsActions.save,
-  loadAvailableApprovers: changeRequestsActions.loadAvailableApprovers,
 })(ChangeRequestUpdateContainer);

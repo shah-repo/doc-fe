@@ -82,10 +82,10 @@ describe("change requests actions tests", () => {
   });
 
   describe("load available approvers", () => {
-    const action = actions.loadAvailableApprovers(changeRequest.id);
+    const action = actions.loadAvailableApprovers();
 
     it("calls GET on CHANGE_REQUEST_ROOT_URL/id/available_approvers", () => {
-      expect(action.url).toBe(`${CHANGE_REQUEST_ROOT_URL}/${changeRequest.id}/available_approvers`);
+      expect(action.url).toBe(`${CHANGE_REQUEST_ROOT_URL}/available_approvers`);
       expect(action.method).toBe("get");
     });
 

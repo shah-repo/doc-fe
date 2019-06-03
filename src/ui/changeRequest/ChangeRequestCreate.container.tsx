@@ -29,7 +29,7 @@ export const DEFAULT_INITIAL_VALUES = {
 };
 
 export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequestCreateContainerProps> =
-  ({ create, history, changeRequest }) => {
+  ({ create, history }) => {
     const async = useAsync<ChangeRequest>({
       onSuccess: (createdChangeRequest?) => {
         history.push(generateChangeRequestEditPath(createdChangeRequest!.id));
@@ -45,7 +45,6 @@ export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequest
         initialValues={DEFAULT_INITIAL_VALUES}
         onSubmit={onSubmitAssessment}
         asyncState={async.asyncState}
-        availableApprovers={[]}
       />
     );
   };

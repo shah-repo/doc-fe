@@ -55,8 +55,8 @@ const availableApproversList = (availableApprovers: ChangeRequestAvailableApprov
   payload: availableApprovers,
 });
 
-const loadAvailableApprovers = (id: string): ApiAction<ChangeRequestAvailableApproversResponse> => apiAction({
-  url: `${CHANGE_REQUEST_ROOT_URL}/${id}/available_approvers`,
+const loadAvailableApprovers = (): ApiAction<ChangeRequestAvailableApproversResponse> => apiAction({
+  url: `${CHANGE_REQUEST_ROOT_URL}/available_approvers`,
   method: "get",
   asyncType: CHANGE_REQUEST_GET_APPROVERS_ASYNC,
   onSuccess: (approvers, dispatch) => {
