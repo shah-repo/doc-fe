@@ -14,7 +14,7 @@ pipelines:
     deploy_to_development: &DEPLOY_TO_DEVELOPMENT
       name: Deploy to Development
       image: python:3   
-      deployment: test
+      deployment: development
       services:
         - docker
       caches:
