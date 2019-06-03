@@ -6,7 +6,7 @@ DTD=$2
 EXECUTE_TEST=1
 
 # Login to AWS
-aws ecr get-login --no-include-email --region "$AWS_REGION" | bash
+aws ecr get-login --no-include-email --region "${AWS_DEFAULT_REGION}" | bash
 
 # Install Dependencies
 echo "Installing dependencies started on `date`"
