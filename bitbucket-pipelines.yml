@@ -1,0 +1,42 @@
+pipelines:
+  const:
+    tests: &TESTS
+      name: Run tests
+      image: python:3  
+      services:
+        - docker
+      caches:
+        - docker
+      script:
+        - chmod a+x ./aws/bash_scripts/build.sh
+        - ./aws/bash_scripts/build.sh "dev" "false"
+
+    deploy_to_development: &DEPLOY_TO_DEVELOPMENT
+      name: Deploy to Development
+      image: python:3   
+      deployment: test
+      services:
+        - docker
+      caches:
+        - docker
+      script:
+        - chmod a+x ./aws/bash_scripts/build.sh
+        - ./aws/bash_scripts/build.sh "dev" "false"
+
+  default:
+      - step: *TESTS
+  tags:
+    deploy-to-dev:
+      - step: *DEPLOY_TO_DEVELOPMENT
+  branches:
+#    master:
+#      - step: *DEPLOY_TO_DEVELOPMENT
+    infrastructure:
+      - step: *DEPLOY_TO_DEVELOPMENT
+#    stable:
+#      - step: *DEPLOY_TO_STAGING
+#    release:
+#      - step: *DEPLOY_TO_PRODUCTION
+options:
+  docker: true
+  max-time: 20
