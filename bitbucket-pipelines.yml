@@ -19,6 +19,8 @@ pipelines:
         - docker
       caches:
         - docker
+        - python:3
+        - node:10-alpine
       script:
         - chmod a+x ./aws/bash_scripts/build.sh
         - ./aws/bash_scripts/build.sh "dev" "false"
