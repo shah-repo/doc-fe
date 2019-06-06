@@ -17,6 +17,9 @@ COPY package.json .
 COPY tsconfig.json .
 COPY tslint.json .
 COPY yarn.lock .
+COPY aws/bash_scripts/runTests.sh runTests.sh
+
+RUN chmod a+x runTests.sh
 
 # install dependencies 
 RUN yarn install
