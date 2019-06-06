@@ -3,7 +3,6 @@ set -e
 
 ENV=$1
 DTD=$2
-EXECUTE_TEST=1
 
 # Install Dependencies
 echo "Installing dependencies started on `date`"
@@ -40,8 +39,6 @@ docker push "${IMAGE_NAME}"
 # Execute & Process Test Results
 echo "Test execution started on `date`"
 
-#--mount type=bind,source="${BITBUCKET_CLONE_DIR}/aws",target="/aws" \
-
 docker run --rm \
 --name "${ECS_TASK_NAME}_test" \
 -v="${BITBUCKET_CLONE_DIR}/aws:/aws" \
@@ -55,7 +52,7 @@ echo "Test Result = ${TEST_RESULT}"
 echo "Test Result Status = ${TEST_RESULT_STATUS}"
 
 # Deploy
-if [ "$DTD" == "true" ]; then
+if [ "$DTD" == "true" ] && [ "$TEST_RESULT_STATUS" == "1" ]; then
 	echo "Updating service started on `date`"
 	
 	# Upadate Task Definition 
