@@ -2,7 +2,7 @@ import sys
 import json
 import os.path
 
-if len(sys.argv) >= 4:
+if len(sys.argv) >= 3:
     filePath = sys.argv[1]
     returnInteger = sys.argv[2]
     if not os.path.isfile(filePath):
@@ -15,7 +15,4 @@ if len(sys.argv) >= 4:
             data = file.read()
             print(data)
 else:
-    if returnInteger == "1": 
-        print('0')
-    else:
-        print('Missing arguments.')
+    print('Missing arguments.')
