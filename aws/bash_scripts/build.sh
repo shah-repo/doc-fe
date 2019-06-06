@@ -40,9 +40,11 @@ docker push "${IMAGE_NAME}"
 # Execute & Process Test Results
 echo "Test execution started on `date`"
 
+#--mount type=bind,source="${BITBUCKET_CLONE_DIR}/aws",target="/aws" \
+
 docker run --rm \
 --name "${ECS_TASK_NAME}_test" \
---mount type=bind,source="${BITBUCKET_CLONE_DIR}/aws",target="/aws" \
+-v="${BITBUCKET_CLONE_DIR}/aws:/aws" \
 "${IMAGE_NAME}" yarn test --outputFile "/aws/result.json" --json --no-watch
 
 python3 ./aws/python_scripts/testResultProcessor.py
