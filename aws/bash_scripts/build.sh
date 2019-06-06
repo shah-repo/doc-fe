@@ -45,7 +45,7 @@ echo "Test execution started on `date`"
 docker run --rm \
 --name "${ECS_TASK_NAME}_test" \
 -v="${BITBUCKET_CLONE_DIR}/aws:/aws" \
-"${IMAGE_NAME}" yarn test --outputFile "/aws/result.json" --json --no-watch
+"${IMAGE_NAME}" yarn test --outputFile "/aws/result.json" --json --no-watch --reporters="jest-junit"
 
 python3 ./aws/python_scripts/testResultProcessor.py
 
