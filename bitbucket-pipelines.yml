@@ -1,8 +1,9 @@
 pipelines:
   const:
-    tests: &TESTS
-      name: Run tests
+    tests: &RUN_TESTS
+      name: Tesing
       image: python:3  
+      deployment: Testing
       services:
         - docker
       caches:
@@ -14,29 +15,37 @@ pipelines:
     deploy_to_development: &DEPLOY_TO_DEVELOPMENT
       name: Deploy to Development
       image: python:3   
-      deployment: development
+      deployment: Development
       services:
         - docker
       caches:
         - docker
       script:
         - chmod a+x ./aws/bash_scripts/build.sh
-        - ./aws/bash_scripts/build.sh "dev" "false"
+        - ./aws/bash_scripts/build.sh "dev" "true"
+
+    # deploy_to_development: &DEPLOY_TO_PRODUCTION
+    #   name: Deploy to Production
+    #   image: python:3   
+    #   deployment: Production
+    #   services:
+    #     - docker
+    #   caches:
+    #     - docker
+    #   script:
+    #     - chmod a+x ./aws/bash_scripts/build.sh
+    #     - ./aws/bash_scripts/build.sh "dev" "true"
 
   default:
-      - step: *TESTS
+      - step: *RUN_TESTS
   tags:
     deploy-to-dev:
       - step: *DEPLOY_TO_DEVELOPMENT
   branches:
-#    master:
-#      - step: *DEPLOY_TO_DEVELOPMENT
-    infrastructure:
+    # master:
+    #   - step: *DEPLOY_TO_PRODUCTION
+    develop:
       - step: *DEPLOY_TO_DEVELOPMENT
-#    stable:
-#      - step: *DEPLOY_TO_STAGING
-#    release:
-#      - step: *DEPLOY_TO_PRODUCTION
 options:
   docker: true
   max-time: 30
