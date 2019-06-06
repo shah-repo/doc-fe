@@ -20,6 +20,7 @@ COPY yarn.lock .
 
 # install dependencies 
 RUN yarn install
+RUN yarn add jest-junit
 
 # build the app
 RUN yarn build
