@@ -1,0 +1,55 @@
+pipelines:
+  const:
+    tests: &RUN_TESTS
+      name: Tesing
+      image: python:3  
+      deployment: Testing
+      services:
+        - docker
+      caches:
+        - docker
+      script:
+        - chmod a+x ./aws/bash_scripts/build.sh
+        - ./aws/bash_scripts/build.sh "dev" "false"
+
+    deploy_to_development: &DEPLOY_TO_DEVELOPMENT
+      name: Deploy to Development
+      image: python:3   
+      deployment: Development
+      services:
+        - docker
+      caches:
+        - docker
+      script:
+        - chmod a+x ./aws/bash_scripts/build.sh
+        - ./aws/bash_scripts/build.sh "dev" "true"
+
+    # deploy_to_development: &DEPLOY_TO_PRODUCTION
+    #   name: Deploy to Production
+    #   image: python:3   
+    #   deployment: Production
+    #   services:
+    #     - docker
+    #   caches:
+    #     - docker
+    #   script:
+    #     - chmod a+x ./aws/bash_scripts/build.sh
+    #     - ./aws/bash_scripts/build.sh "dev" "true"
+
+  default:
+      - step: *RUN_TESTS
+  tags:
+    deploy-to-dev:
+      - step: *DEPLOY_TO_DEVELOPMENT
+  branches:
+    # master:
+    #   - step: *DEPLOY_TO_PRODUCTION
+    develop:
+      - step: *DEPLOY_TO_DEVELOPMENT
+options:
+  docker: true
+  max-time: 30
+definitions:
+  services:
+    docker:
+      memory: 2048
