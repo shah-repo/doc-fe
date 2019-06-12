@@ -18,10 +18,10 @@ export default (theme: Theme) =>
       fontSize: theme.typography.fontSize,
     },
     flexContainer: {
-      display: "flex",
       alignItems: "center",
       boxSizing: "border-box",
       margin: 0,
+      marginRight: 20,
     },
     tableRow: {
       cursor: "pointer",

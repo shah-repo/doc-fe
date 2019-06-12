@@ -7,6 +7,7 @@ export enum ApprovalStatus {
 export interface User {
   id: string;
   email: string;
+  name: string;
 }
 export interface Approval {
   id: string;

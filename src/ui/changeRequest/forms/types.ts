@@ -24,6 +24,7 @@ export interface ImplementationPlan {
   description?: string;
   attachments: Attachment[];
 }
+
 export interface ChangeRequestFormValues {
   description: string;
   justifications: Justifications;
@@ -31,7 +32,7 @@ export interface ChangeRequestFormValues {
   implementationPlan: ImplementationPlan;
   effectiveDate?: Date;
   approvals: OptionType[];
-  documentRevisions: any[];
+  documentRevisions: string[];
 }
 
 export interface PasswordFormValues {

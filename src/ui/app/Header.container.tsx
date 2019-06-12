@@ -6,6 +6,7 @@ import HeaderPresenter from "./Header.presenter";
 
 interface StateProps {
   email: string;
+  name: string;
 }
 
 interface DispatchProps {
@@ -16,10 +17,11 @@ type Props = StateProps & DispatchProps;
 
 const mapStateToProps = (state: ApplicationState) => ({
   email: authSelectors.currentUserEmail(state),
+  name: authSelectors.currentUserName(state),
 });
 
-const HeaderContainer: React.FunctionComponent<Props> = ({ email, logout }) =>
-  <HeaderPresenter email={email} onLogout={logout} />;
+const HeaderContainer: React.FunctionComponent<Props> = ({ email, logout, name }) =>
+  <HeaderPresenter email={email} name={name} onLogout={logout} />;
 
 export default connect<StateProps, DispatchProps, {}, ApplicationState>(mapStateToProps, {
   logout: authActions.logout,

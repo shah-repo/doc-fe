@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
 import { ChangeRequest, changeRequestsActions } from "../../state/ducks/changeRequest";
@@ -6,8 +6,8 @@ import { ApplicationState } from "../../state/reducers";
 import useAsync from "../hooks/useAsync";
 import { toChangeRequestEditRequestBody } from "./forms/transform";
 import { ChangeRequestFormValues } from "./forms/types";
-import AssessmentFormContainer from "./forms/AssessmentForm.container";
 import { generateChangeRequestEditPath } from "./pathGenerators";
+import ChangeRequestFormContainer from "./forms/ChangeRequestForm.container";
 
 interface DispatchProps {
   create: typeof changeRequestsActions.create;
@@ -19,7 +19,7 @@ interface OwnProps extends RouteComponentProps {
 
 export type ChangeRequestCreateContainerProps = OwnProps & DispatchProps;
 
-export const DEFAULT_INITIAL_VALUES = {
+export const DEFAULT_INITIAL_VALUES: ChangeRequestFormValues = {
   description: '',
   justifications: { description: '', attachments: [] },
   assessment: { description: '', attachments: [] },
@@ -41,10 +41,10 @@ export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequest
     };
 
     return (
-      <AssessmentFormContainer
+      <ChangeRequestFormContainer
         initialValues={DEFAULT_INITIAL_VALUES}
-        onSubmit={onSubmitAssessment}
         asyncState={async.asyncState}
+        onSubmit={onSubmitAssessment}
       />
     );
   };

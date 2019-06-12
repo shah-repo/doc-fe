@@ -1,14 +1,14 @@
 import { Formik, FormikActions, FormikProps, FormikErrors } from "formik";
 import React from "react";
 import _ from 'lodash';
-import { AsyncState } from "../../../state/types";
+import { AsyncState } from "../../../../state/types";
 import AssessmentFormPresenter from "./AssessmentForm.presenter";
-import { ChangeRequestFormValues } from "./types";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
+import { ChangeRequestFormValues } from "../types";
+import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
+import { changeRequestsActions, changeRequestsSelectors } from "../../../../state/ducks/changeRequest";
 import { connect } from "react-redux";
-import { ApplicationState } from "../../../state/reducers";
-import AsyncGate from "../../components/AsyncGate";
+import { ApplicationState } from "../../../../state/reducers";
+import AsyncGate from "../../../components/AsyncGate";
 
 interface StateProps {
   loadApproversAsyncState: AsyncState;
@@ -19,7 +19,6 @@ interface DispatchProps {
   loadAvailableApprovers: typeof changeRequestsActions.loadAvailableApprovers;
 }
 interface OwnProps {
-  changeRequestId?: string;
   initialValues: ChangeRequestFormValues;
   asyncState: AsyncState;
   onSubmit: (values: ChangeRequestFormValues, actions: FormikActions<ChangeRequestFormValues>) => void;
@@ -53,9 +52,9 @@ const validate = (values: ChangeRequestFormValues) => {
 }
 
 const AssessmentFormContainer: React.FunctionComponent<AssessmentFormContainerProps> =
-  ({ onSubmit, initialValues, asyncState, changeRequestId, availableApprovers, loadApproversAsyncState, loadAvailableApprovers }) => {
+  ({ onSubmit, initialValues, asyncState, availableApprovers, loadApproversAsyncState, loadAvailableApprovers }) => {
     const render = (props: FormikProps<ChangeRequestFormValues>) => (
-      <AssessmentFormPresenter {...props} asyncState={asyncState} changeRequestId={changeRequestId} availableApprovers={availableApprovers} />
+      <AssessmentFormPresenter {...props} asyncState={asyncState} availableApprovers={availableApprovers} />
     );
 
     return (

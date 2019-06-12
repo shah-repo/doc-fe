@@ -28,6 +28,7 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
         <ListItemText
           primaryTypographyProps={{ variant: isChild ? "caption" : "subtitle1" }}
           primary={<Text translation={text} />}
+          className={classes.item}
         />
         {ActionIcon}
       </NavLink>

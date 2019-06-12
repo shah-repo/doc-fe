@@ -34,7 +34,7 @@ const ChangeRequestTable: React.FunctionComponent<ChangeRequestTableProps> = ({
     return {
       id: changeRequest.id,
       description: changeRequest.description,
-      owner: changeRequest.owner.email,
+      owner: changeRequest.owner.name,
       state: changeRequest.state,
     };
   };
@@ -86,7 +86,7 @@ const ChangeRequestTable: React.FunctionComponent<ChangeRequestTableProps> = ({
         rowClassName={`${classes.tableRow} ${classes.flexContainer}`}
         rowGetter={rowGetter}
       >
-        {renderColumn("description", "changeRequest.table.description", { width: 50 })}
+        {renderColumn("description", "changeRequest.table.description", { flexGrow: 5 })}
         {renderColumn("owner", "changeRequest.table.owner", { flexGrow: 2 })}
         {renderColumn("state", "changeRequest.table.state", { width: 50 })}
         {actionsColumn}

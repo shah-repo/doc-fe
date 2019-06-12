@@ -17,4 +17,11 @@ export const CHANGE_REQUEST_ROOT_URL = `${CHANGE_REQUEST_LIST_URL}/:changeReques
 export const CHANGE_REQUEST_UPDATE_URL = `${CHANGE_REQUEST_ROOT_URL}/update`;
 export const CHANGE_REQUEST_PREVIEW_URL = `${CHANGE_REQUEST_ROOT_URL}/preview`;
 
+export const DOCUMENT_REVISION_CREATE_URL = "/document_revision/create";
+
+export const DOCUMENT_REVISION_LIST_URL = "/document_revision";
+export const DOCUMENT_REVISION_ROOT_URL = `${DOCUMENT_REVISION_LIST_URL}/:documentRevisionId`;
+export const DOCUMENT_REVISION_UPDATE_URL = `${DOCUMENT_REVISION_ROOT_URL}/update`;
+export const DOCUMENT_REVISION_PREVIEW_URL = `${DOCUMENT_REVISION_ROOT_URL}/preview`;
+
 export const SIGNUP_URL = "/signup";

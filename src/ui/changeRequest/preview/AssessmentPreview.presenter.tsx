@@ -2,21 +2,21 @@ import { Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
 import { ButtonProps } from "@material-ui/core/Button";
 import moment from "moment";
 import React from "react";
-import { Attachment } from "../../state/ducks/attachments";
-import { ChangeRequest, ChangeRequestTransition } from "../../state/ducks/changeRequest";
-import FileCard from "../components/cards/FileCard";
-import ChangeRequestTransitionDialogContainer from "./dialogs/ChangeRequestTransitionDialog.container";
-import styles from "./ChangeRequestPreview.styles";
-import Text from "../components/Text";
+import { Attachment } from "../../../state/ducks/attachments";
+import { ChangeRequest, ChangeRequestTransition } from "../../../state/ducks/changeRequest";
+import FileCard from "../../components/cards/FileCard";
+import ChangeRequestTransitionDialogContainer from "../dialogs/ChangeRequestTransitionDialog.container";
+import styles from "../ChangeRequestPreview.styles";
+import Text from "../../components/Text";
 
-interface ChangeRequestPreviewPresenterProps extends WithStyles<typeof styles> {
+interface AssessmentPreviewPresenterProps extends WithStyles<typeof styles> {
   changeRequest: ChangeRequest;
   canSendToReview: boolean;
   canWithdraw: boolean;
   canApproveOrReject: boolean;
 }
 
-const ChangeRequestPreviewPresenter: React.FunctionComponent<ChangeRequestPreviewPresenterProps> =
+const AssessmentPreviewPresenter: React.FunctionComponent<AssessmentPreviewPresenterProps> =
   ({ classes, changeRequest, canApproveOrReject, canSendToReview, canWithdraw }) => {
     const renderButton = (condition: boolean, transition: ChangeRequestTransition, buttonProps?: ButtonProps) =>
       condition && (
@@ -30,7 +30,7 @@ const ChangeRequestPreviewPresenter: React.FunctionComponent<ChangeRequestPrevie
     const approvals = changeRequest.approvals.map((approval, index) => (
       <Grid container={true} key={index}>
         <Grid item={true} xs={3}>
-          <Typography>{index + 1}. <strong>{approval.approver.email}</strong></Typography>
+          <Typography>{index + 1}. <strong>{approval.approver.name}</strong></Typography>
         </Grid>
         <Grid item={true} xs={3}>
         <Typography>{approval.status}</Typography>
@@ -78,6 +78,9 @@ const ChangeRequestPreviewPresenter: React.FunctionComponent<ChangeRequestPrevie
             {changeRequest.justifications.description}
           </Typography>
         </Grid>
+        <Grid item={true} xs={12}>
+          {renderAttachments(changeRequest.justifications.attachments)}
+        </Grid>
         <Grid item={true} xs={2}>
           <Typography variant="h5">
             <Text translation="changeRequest.assessmentForm.assessments" />
@@ -88,6 +91,9 @@ const ChangeRequestPreviewPresenter: React.FunctionComponent<ChangeRequestPrevie
             {changeRequest.assessment.description}
           </Typography>
         </Grid>
+        <Grid item={true} xs={12}>
+          {renderAttachments(changeRequest.assessment.attachments)}
+        </Grid>
         <Grid item={true} xs={2}>
           <Typography variant="h5">
             <Text translation="changeRequest.assessmentForm.implementationPlan" />
@@ -97,6 +103,9 @@ const ChangeRequestPreviewPresenter: React.FunctionComponent<ChangeRequestPrevie
           <Typography variant="h5">
             {changeRequest.implementationPlan.description}
           </Typography>
+        </Grid>
+        <Grid item={true} xs={12}>
+          {renderAttachments(changeRequest.implementationPlan.attachments)}
         </Grid>
         <Grid item={true} xs={12}>
           {approvals}
@@ -113,4 +122,4 @@ const ChangeRequestPreviewPresenter: React.FunctionComponent<ChangeRequestPrevie
     );
   };
 
-export default withStyles(styles)(ChangeRequestPreviewPresenter);
+export default withStyles(styles)(AssessmentPreviewPresenter);

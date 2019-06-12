@@ -19,4 +19,7 @@ export default (theme: Theme) =>
     linkButton: {
       padding: 0,
     },
+    item: {
+      padding: 0,
+    },
   });

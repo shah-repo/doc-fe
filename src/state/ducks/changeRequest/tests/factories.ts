@@ -1,5 +1,6 @@
 import faker from "faker";
 import { ChangeRequest, ChangeRequestStatus, ChangeRequestEditRequestBody, ChangeRequestAvailableApprovers } from "../types";
+import { getUser } from "../../common/tests/factories";
 
 const createNestedObject = () => (
   {
@@ -18,7 +19,7 @@ export const getChangeRequest = (changeRequest: Partial<ChangeRequest> = {}): Ch
   justifications: createNestedObject(),
   effectiveDate: faker.date.future(undefined, '2019-05-31'),
   approvals: [],
-  owner: { id: faker.random.uuid(), email: 'test@email.com' },
+  owner: getUser({ id: faker.random.uuid(), email: 'test@email.com' }),
   documentRevisions: [],
   ...changeRequest,
 });
@@ -37,5 +38,6 @@ export const getChangeRequestEditRequestBody = (body: Partial<ChangeRequestEditR
 export const getApprover = (approver: Partial<ChangeRequestAvailableApprovers> = {}): ChangeRequestAvailableApprovers => ({
   id: faker.random.uuid(),
   email: faker.internet.email(),
+  name: faker.name.firstName(),
   ...approver,
 });

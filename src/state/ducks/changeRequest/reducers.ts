@@ -66,7 +66,7 @@ export const approversAllIds = (state: ChangeRequestsApproversAllIdsState = [], 
 export default combineReducers({
   loadListAsyncInfo: asyncReducer(CHANGE_REQUEST_LIST_ASYNC),
   loadAsyncInfo: asyncReducer(CHANGE_REQUEST_GET_ASYNC),
-  loadApproversAsyncInfo: asyncReducer(CHANGE_REQUEST_GET_ASYNC),
+  loadApproversAsyncInfo: asyncReducer(CHANGE_REQUEST_GET_APPROVERS_ASYNC),
   byId,
   allIds,
   approversById,

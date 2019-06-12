@@ -1,6 +1,6 @@
 import { Attachment } from "../attachments";
 import { Approval, User } from "../common";
-import { CHANGE_REQUEST_SET, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS } from "./constants";
+import { CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET } from "./constants";
 
 export enum ChangeRequestStatus {
   Draft = "DRAFT",
@@ -44,14 +44,26 @@ export interface Approver {
   email: string;
 }
 
+export interface DocumentRevisionRequestBody {
+  id: string;
+}
+
+export interface EditRequestBodyAttachment {
+  id: string;
+}
+
+export interface EditRequestBodyNestedObject {
+  description?: string;
+  attachments: EditRequestBodyAttachment[];
+}
 export interface ChangeRequestEditRequestBody {
   description: string;
-  assessment: Assessment;
-  implementationPlan: ImplementationPlan;
-  justifications: Justifications;
+  assessment: EditRequestBodyNestedObject;
+  implementationPlan: EditRequestBodyNestedObject;
+  justifications: EditRequestBodyNestedObject;
   effectiveDate?: Date;
   approvals: Approver[];
-  documentRevisions: any[];
+  documentRevisions: DocumentRevisionRequestBody[];
 }
 
 export interface ChangeRequestSetAction {
@@ -83,6 +95,7 @@ export interface ChangeRequestTransitionResponse {
 export interface ChangeRequestAvailableApprovers {
   id: string;
   email: string;
+  name: string;
 }
 
 export interface ChangeRequestAvailableApproversResponse {
