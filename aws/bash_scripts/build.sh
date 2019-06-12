@@ -19,6 +19,9 @@ echo "Build started on `date`"
 COMMIT_HASH="${BITBUCKET_COMMIT::7}"
 export IMAGE_NAME="${REPOSITORY_URL}:${COMMIT_HASH}"
 
+chmod a+x ./aws/bash_scripts/status.sh
+./aws/bash_scripts/status.sh
+
 SCRIPT=./aws/python_scripts/getEnvValue.py
 export REACT_APP_API_ENDPOINT="REACT_APP_API_ENDPOINT"
 export REACT_APP_AWS_COGNITO_CLIENT_ID="REACT_APP_AWS_COGNITO_CLIENT_ID"
