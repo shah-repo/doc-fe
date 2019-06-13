@@ -1,14 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
 import { authSelectors } from "../../state/ducks/auth";
-import { ChangeRequest, changeRequestsActions, changeRequestsSelectors } from "../../state/ducks/changeRequest";
 import { ApplicationState } from "../../state/reducers";
 import useAsync from "../hooks/useAsync";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { documentRevisionsActions, DocumentRevision } from "../../state/ducks/documentRevisions";
 import { DocumentRevisionFormValues } from "./forms/types";
 import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
+import DocumentRevisionPreviewPresenter from "./DocumentRevisionPreview.presenter";
+import { canEditDocumentRevision } from "./helpers";
 
 interface StateProps {
   currentUserEmail: string;
@@ -31,7 +31,12 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 export const DocumentRevisionUpdateContainer: React.FunctionComponent<DocumentRevisionUpdateContainerProps> = ({
   save,
   documentRevision,
+  currentUserEmail,
 }) => {
+  if (!canEditDocumentRevision(documentRevision, currentUserEmail)) {
+    return <DocumentRevisionPreviewPresenter documentRevision={documentRevision} />;
+  }
+
   const async = useAsync<DocumentRevision>();
 
   const onSubmit = (values: DocumentRevisionFormValues) => {
