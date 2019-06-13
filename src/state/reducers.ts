@@ -5,6 +5,7 @@ import auth from "./ducks/auth";
 import documents from "./ducks/documents";
 import changeRequests from "./ducks/changeRequest";
 import documentRevisions from "./ducks/documentRevisions";
+import { LOGOUT_USER } from "./ducks/auth/constants";
 
 const authPersistConfig = {
   key: "auth",
@@ -12,12 +13,20 @@ const authPersistConfig = {
   whitelist: ["tokens", "user"],
 };
 
-const rootReducer = combineReducers({
+const appReducer = combineReducers({
   auth: persistReducer(authPersistConfig, auth),
   documents,
   changeRequests,
   documentRevisions,
 });
+
+const rootReducer = (state: any, action: any) => {
+  if (action.type === LOGOUT_USER) {
+    state = undefined
+  }
+
+  return appReducer(state, action)
+}
 
 export type ApplicationState = ReturnType<typeof rootReducer>;
 export default rootReducer;
