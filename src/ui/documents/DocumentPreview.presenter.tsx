@@ -45,7 +45,7 @@ const DocumentPreviewPresenter: React.FunctionComponent<DocumentPreviewPresenter
     ));
 
     return (
-      <Grid container={true} className={classes.container} spacing={24}>
+      <Grid container={true} className={classes.container} spacing={8}>
         <Grid item={true} xs={12}>
           <Typography variant="h4">
             {document.name}
@@ -65,7 +65,7 @@ const DocumentPreviewPresenter: React.FunctionComponent<DocumentPreviewPresenter
           {approvals}
         </Grid>
         <Grid item={true} xs={12}>
-          <Grid container={true} spacing={24}>
+          <Grid container={true} spacing={8}>
             {attachments}
           </Grid>
         </Grid>

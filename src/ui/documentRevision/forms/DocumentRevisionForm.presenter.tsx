@@ -30,8 +30,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const renderAttachments = (props: FieldArrayRenderProps) => <AttachmentsContainer {...props} />;
 
-  const onTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const type = event.target.value;
+  const onTypeChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
+    const type = event.target.value as string;
     const docIdGen = documentRevisionIdMask(type, revisionTypeCount(type));
     handleChange(event);
     setFieldValue("documentId", docIdGen);

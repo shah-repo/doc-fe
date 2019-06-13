@@ -3,8 +3,8 @@ import { createStyles, Theme } from "@material-ui/core";
 export default (theme: Theme) =>
   createStyles({
     container: {
-      marginTop: theme.spacing.unit * 3,
-      marginBottom: theme.spacing.unit * 3,
+      marginTop: theme.spacing(3),
+      marginBottom: theme.spacing(3),
     },
     title: {
       display: "flex",
@@ -12,7 +12,7 @@ export default (theme: Theme) =>
       justifyContent: "space-between",
     },
     content: {
-      marginTop: theme.spacing.unit * 2,
+      marginTop: theme.spacing(2),
       clear: "both",
     },
   });

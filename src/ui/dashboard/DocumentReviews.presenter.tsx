@@ -30,7 +30,7 @@ const DocumentReviews: React.FunctionComponent<Props> = ({ classes, documentsToR
       <Typography variant="h6" className={classes.title}>
         <Text translation="dashboard.reviews" />
       </Typography>
-      {reviews.length > 0 && <List component="nav">{reviews}</List>}
+      {reviews.length > 0 && <List>{reviews}</List>}
       {noReviews}
     </Paper>
   );

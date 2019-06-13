@@ -15,7 +15,7 @@ export default (theme: Theme) =>
     link: {
       display: "flex",
       textDecoration: "none",
-      padding: theme.spacing.unit,
+      padding: theme.spacing(1),
       flex: 1,
     },
     activeLink: {
