@@ -15,7 +15,7 @@ const getChangeRequestsList = createSelector(
 
 const getApproversListForAssessmentForm = createSelector(
   approversAllIds, approversById,
-  (ids, approvers): OptionType[] => ids.map((id) => ({ value: id, label: approvers[id].email })),
+  (ids, approvers): OptionType[] => ids.map((id) => ({ value: approvers[id].email, label: approvers[id].name })),
 );
 
 const getChangeRequest = (state: ApplicationState, changeRequestId: string) => byId(state)[changeRequestId];

@@ -9,7 +9,7 @@ import {
   ChangeRequestPreviewContainer,
   ChangeRequestPreviewContainerProps,
 } from "./ChangeRequestPreview.container";
-import ChangeRequestPreviewPresenter from "./ChangeRequestPreview.presenter";
+import AssessmentPreviewPresenter from "./preview/AssessmentPreview.presenter";
 
 describe("ChangeRequestPreviewContainer tests", () => {
   const currentUserEmail = faker.internet.email();
@@ -25,7 +25,7 @@ describe("ChangeRequestPreviewContainer tests", () => {
 
   const getPresenter = (props: Partial<ChangeRequestPreviewContainerProps>) => shallow(
     <ChangeRequestPreviewContainer {...defaultProps} {...props} />,
-  ).find(ChangeRequestPreviewPresenter);
+  ).find(AssessmentPreviewPresenter);
 
   it("sets changeRequest prop", () => {
     const presenter = getPresenter({});

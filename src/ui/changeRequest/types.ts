@@ -1,4 +1,4 @@
-import { ChangeRequestStatus } from '../../state/ducks/changeRequest';
+import { ChangeRequestStatus } from "../../state/ducks/changeRequest";
 
 export interface ChangeRequestRouteParams {
   changeRequestId: string;

@@ -9,9 +9,10 @@ import {
   ChangeRequestUpdateContainer,
   ChangeRequestUpdateContainerProps,
 } from "./ChangeRequestUpdate.container";
-import AssessmentFormContainer from "./forms/AssessmentForm.container";
+import AssessmentFormContainer from "./forms/assessmentForm/AssessmentForm.container";
 import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "./forms/transform";
 import { generateChangeRequestPreviewPath } from "./pathGenerators";
+import ChangeRequestFormContainer from "./forms/ChangeRequestForm.container";
 
 describe("ChangeRequestUpdateContainer tests", () => {
   const currentUserEmail = faker.internet.email();
@@ -37,7 +38,7 @@ describe("ChangeRequestUpdateContainer tests", () => {
     const save = jest.fn();
     const wrapper = getWrapper({ save });
 
-    const form = wrapper.find(AssessmentFormContainer);
+    const form = wrapper.find(ChangeRequestFormContainer);
     const values = toChangeRequestFormValues(changeRequest);
 
     form.prop("onSubmit")(values);
@@ -52,11 +53,10 @@ describe("ChangeRequestUpdateContainer tests", () => {
 
   it("sets props", () => {
     const wrapper = getWrapper({});
-    const form = wrapper.find(AssessmentFormContainer);
+    const form = wrapper.find(ChangeRequestFormContainer);
 
     expect(form.prop("initialValues")).toEqual(toChangeRequestFormValues(changeRequest));
     expect(form.prop("asyncState")).toEqual(ASYNC_DEFAULT_STATE);
-    expect(form.prop("changeRequestId")).toEqual(changeRequest.id);
   });
 
   it("redirects when cannot edit change request", () => {

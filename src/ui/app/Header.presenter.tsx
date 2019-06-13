@@ -11,10 +11,11 @@ import styles from "./Header.styles";
 
 interface Props extends WithStyles<typeof styles> {
   email: string;
+  name: string;
   onLogout: () => void;
 }
 
-const Header: React.FunctionComponent<Props> = ({ classes, onLogout, email }) => (
+const Header: React.FunctionComponent<Props> = ({ classes, onLogout, name }) => (
   <AppBar position="static" color="primary" className={classes.appBar}>
     <Toolbar>
       <Typography variant="h6" noWrap={true} className={classes.toolbarTitle}>
@@ -23,7 +24,7 @@ const Header: React.FunctionComponent<Props> = ({ classes, onLogout, email }) =>
         </Link>
       </Typography>
       <Typography variant="caption" color="inherit" noWrap={true}>
-        <Text translation="header.welcome" values={{ email }} />
+        <Text translation="header.welcome" values={{ name }} />
       </Typography>
       <Button color="secondary" variant="text" onClick={onLogout}>
         <Text translation="header.logout" />

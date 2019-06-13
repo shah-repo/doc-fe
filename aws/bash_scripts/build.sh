@@ -19,6 +19,9 @@ echo "Build started on `date`"
 COMMIT_HASH="${BITBUCKET_COMMIT::7}"
 export IMAGE_NAME="${REPOSITORY_URL}:${COMMIT_HASH}"
 
+chmod a+x ./aws/bash_scripts/status.sh
+./aws/bash_scripts/status.sh
+
 SCRIPT=./aws/python_scripts/getEnvValue.py
 export REACT_APP_API_ENDPOINT="REACT_APP_API_ENDPOINT"
 export REACT_APP_AWS_COGNITO_CLIENT_ID="REACT_APP_AWS_COGNITO_CLIENT_ID"
@@ -31,10 +34,6 @@ docker build -f ./docker/Dockerfile \
 --build-arg $REACT_APP_FRONTEND_URL=$(python3 $SCRIPT $ENV $REACT_APP_FRONTEND_URL 2>&1) \
 --build-arg $REACT_APP_SIGNUP_DOMAIN_URL=$(python3 $SCRIPT $ENV $REACT_APP_SIGNUP_DOMAIN_URL 2>&1) \
 -t "${IMAGE_NAME}" .
-
-echo Pushing the Docker images...
-
-docker push "${IMAGE_NAME}"
 
 # Execute & Process Test Results
 echo "Test execution started on `date`"
@@ -53,6 +52,10 @@ echo "Test Result Status = ${TEST_RESULT_STATUS}"
 
 # Deploy
 if [ "$DTD" == "true" ] && [ "$TEST_RESULT_STATUS" == "1" ]; then
+	echo Pushing the Docker images...
+
+	docker push "${IMAGE_NAME}"
+
 	echo "Updating service started on `date`"
 	
 	# Upadate Task Definition 

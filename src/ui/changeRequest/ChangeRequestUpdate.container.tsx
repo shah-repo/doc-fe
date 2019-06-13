@@ -5,14 +5,12 @@ import { authSelectors } from "../../state/ducks/auth";
 import { ChangeRequest, changeRequestsActions, changeRequestsSelectors } from "../../state/ducks/changeRequest";
 import { ApplicationState } from "../../state/reducers";
 import useAsync from "../hooks/useAsync";
-import AssessmentForm from "./forms/AssessmentForm.container";
+import AssessmentForm from "./forms/assessmentForm/AssessmentForm.container";
 import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "./forms/transform";
 import { ChangeRequestFormValues } from "./forms/types";
 import { canEditChangeRequest } from "./helpers";
 import { generateChangeRequestPreviewPath } from "./pathGenerators";
-import AsyncGate from "../components/AsyncGate";
-import { AsyncState } from "../../state/types";
-import { OptionType } from "../components/forms/fields/Autocomplete/types";
+import ChangeRequestFormContainer from "./forms/ChangeRequestForm.container";
 
 interface StateProps {
   currentUserEmail: string;
@@ -47,8 +45,7 @@ export const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequest
   };
 
   return (
-    <AssessmentForm
-      changeRequestId={changeRequest.id}
+    <ChangeRequestFormContainer
       asyncState={async.asyncState}
       onSubmit={onSubmit}
       initialValues={toChangeRequestFormValues(changeRequest)}

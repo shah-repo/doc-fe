@@ -1,25 +1,25 @@
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import {
+  CHANGE_REQUEST_GET_APPROVERS_ASYNC,
   CHANGE_REQUEST_GET_ASYNC,
-  CHANGE_REQUEST_SET,
   CHANGE_REQUEST_LIST,
+  CHANGE_REQUEST_LIST_APPROVERS,
   CHANGE_REQUEST_LIST_ASYNC,
   CHANGE_REQUEST_ROOT_URL,
-  CHANGE_REQUEST_LIST_APPROVERS,
-  CHANGE_REQUEST_GET_APPROVERS_ASYNC,
+  CHANGE_REQUEST_SET,
 } from "./constants";
 import {
   ChangeRequest,
-  ChangeRequestEditRequestBody,
-  ChangeRequestSetAction,
-  ChangeRequestListAction,
-  ChangeRequestTransitionRequestBody,
-  ChangeRequestTransitionResponse,
-  ChangeRequestTransition,
-  ChangeRequestListApproversAction,
   ChangeRequestAvailableApprovers,
   ChangeRequestAvailableApproversResponse,
+  ChangeRequestEditRequestBody,
+  ChangeRequestListAction,
+  ChangeRequestListApproversAction,
+  ChangeRequestSetAction,
+  ChangeRequestTransition,
+  ChangeRequestTransitionRequestBody,
+  ChangeRequestTransitionResponse,
 } from "./types";
 
 const changeRequestsList = (changeRequests: ChangeRequest[]): ChangeRequestListAction => ({

@@ -37,6 +37,7 @@ export interface Tokens {
 
 export interface User {
   email: string;
+  name: string;
 }
 
 export type AuthUserPayload = User;
@@ -62,4 +63,5 @@ export interface LogoutUserAction {
 export type TokensState = Required<Tokens>;
 export interface UserState {
   email: string;
+  name: string;
 }

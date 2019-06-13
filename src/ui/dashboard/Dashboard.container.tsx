@@ -45,21 +45,21 @@ const DashboardContainer: React.FunctionComponent<DashboardContainerProps> = ({
   const editDocument = (documentId: string) => () => history.push(generateDocumentEditPath(documentId));
   const previewDocument = (documentId: string) => () => history.push(generateDocumentPreviewPath(documentId));
   const cloneDocument = (documentId: string) => () => history.push(generateDocumentClonePath(documentId));
-
-  return (
-    <DashboardPresenter
-      loadDocuments={loadDocuments}
-      loadDocumentsAsyncState={loadDocumentsAsyncState}
-      loadDocumentsToReview={loadDocumentsToReview}
-      loadDocumentsToReviewAsyncState={loadDocumentsToReviewAsyncState}
-      documents={documents}
-      documentsToReview={documentsToReview}
-      currentUserEmail={currentUserEmail}
-      editDocument={editDocument}
-      previewDocument={previewDocument}
-      cloneDocument={cloneDocument}
-    />
-  );
+  return null;
+  // return (
+  //   <DashboardPresenter
+  //     loadDocuments={loadDocuments}
+  //     loadDocumentsAsyncState={loadDocumentsAsyncState}
+  //     loadDocumentsToReview={loadDocumentsToReview}
+  //     loadDocumentsToReviewAsyncState={loadDocumentsToReviewAsyncState}
+  //     documents={documents}
+  //     documentsToReview={documentsToReview}
+  //     currentUserEmail={currentUserEmail}
+  //     editDocument={editDocument}
+  //     previewDocument={previewDocument}
+  //     cloneDocument={cloneDocument}
+  //   />
+  // );
 };
 
 export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {

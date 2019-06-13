@@ -5,8 +5,8 @@ import { ChangeRequestFormValues } from "./types";
 type NestedObject = Assessment | Justifications | ImplementationPlan;
 
 const createNestedObject = (value: NestedObject) => ({
-  description: value['description'],
-  attachments: value['attachments'],
+  description: value.description,
+  attachments: value.attachments,
 })
 
 export const toChangeRequestFormValues = (changeRequest: ChangeRequest): ChangeRequestFormValues => {
@@ -15,23 +15,28 @@ export const toChangeRequestFormValues = (changeRequest: ChangeRequest): ChangeR
     assessment: createNestedObject(changeRequest.assessment),
     justifications: createNestedObject(changeRequest.justifications),
     implementationPlan: createNestedObject(changeRequest.implementationPlan),
-    approvals: changeRequest.approvals.map((approval) => ({ label: approval.approver.email, value: approval.approver.email })),
+    approvals: changeRequest.approvals.map((approval) => ({ label: approval.approver.name, value: approval.approver.email })),
     effectiveDate: changeRequest.effectiveDate && moment.utc(changeRequest.effectiveDate).startOf('day').toDate(),
-    documentRevisions: changeRequest.documentRevisions,
+    documentRevisions: changeRequest.documentRevisions.map((documentRevision) => documentRevision.id ),
   };
 
   return values;
 };
 
+const createNestedObjectForRequestBody = (value: NestedObject) => ({
+  description: value.description,
+  attachments: value.attachments.map((attachment) => ({ id: attachment.id })),
+})
+
 export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues): ChangeRequestEditRequestBody => {
   const changeRequestEditRequestBody: ChangeRequestEditRequestBody = {
     description: values.description,
-    assessment: values.assessment,
-    implementationPlan: values.implementationPlan,
-    justifications: values.justifications,
-    approvals: values.approvals.map((approver): Approver => ({ email: approver.label })),
+    assessment: createNestedObjectForRequestBody(values.assessment),
+    implementationPlan: createNestedObjectForRequestBody(values.implementationPlan),
+    justifications: createNestedObjectForRequestBody(values.justifications),
+    approvals: values.approvals.map((approver): Approver => ({ email: approver.value })),
     effectiveDate: values.effectiveDate && moment.utc(values.effectiveDate).startOf('day').toDate(),
-    documentRevisions: values.documentRevisions,
+    documentRevisions: values.documentRevisions.map((documentRevisionId) => ({ id: documentRevisionId })),
   };
 
   return changeRequestEditRequestBody;

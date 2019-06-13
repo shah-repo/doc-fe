@@ -10,9 +10,9 @@ import {
   ChangeRequestCreateContainer,
   ChangeRequestCreateContainerProps,
 } from "./ChangeRequestCreate.container";
-import AssessmentFormContainer from "./forms/AssessmentForm.container";
 import { toChangeRequestEditRequestBody } from "./forms/transform";
 import { generateChangeRequestEditPath } from "./pathGenerators";
+import ChangeRequestFormContainer from "./forms/ChangeRequestForm.container";
 
 describe("ChangeRequestCreateContainer tests", () => {
   const defaultProps: ChangeRequestCreateContainerProps = {
@@ -29,7 +29,7 @@ describe("ChangeRequestCreateContainer tests", () => {
     const routeComponentProps = getRouteComponentProps();
     const wrapper = getWrapper({ ...routeComponentProps, create });
 
-    const form = wrapper.find(AssessmentFormContainer);
+    const form = wrapper.find(ChangeRequestFormContainer);
     const values = DEFAULT_INITIAL_VALUES;
 
     form.prop("onSubmit")(values);
@@ -48,14 +48,14 @@ describe("ChangeRequestCreateContainer tests", () => {
 
   it("sets default initialValues", () => {
     const wrapper = getWrapper({});
-    const form = wrapper.find(AssessmentFormContainer);
+    const form = wrapper.find(ChangeRequestFormContainer);
 
     expect(form.prop("initialValues")).toEqual(DEFAULT_INITIAL_VALUES);
   });
 
   it("sets asyncState", () => {
     const wrapper = getWrapper({});
-    const form = wrapper.find(AssessmentFormContainer);
+    const form = wrapper.find(ChangeRequestFormContainer);
 
     expect(form.prop("asyncState")).toEqual(ASYNC_DEFAULT_STATE);
   });

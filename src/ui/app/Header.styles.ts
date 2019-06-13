@@ -4,7 +4,7 @@ export default (theme: Theme) =>
   createStyles({
     appBar: {
       position: "absolute",
-      zIndex: 9999,
+      zIndex: 1299,
     },
     toolbarTitle: {
       flex: 1,

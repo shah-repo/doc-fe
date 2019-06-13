@@ -8,6 +8,10 @@ const currentUserEmail = (state: ApplicationState): string => {
   return state.auth.user.email;
 };
 
+const currentUserName = (state: ApplicationState): string => {
+  return state.auth.user.name;
+};
+
 const accessToken = (state: ApplicationState): string => {
   return state.auth.tokens.access.value;
 };
@@ -16,4 +20,5 @@ export default {
   isAuthenticated,
   currentUserEmail,
   accessToken,
+  currentUserName,
 };

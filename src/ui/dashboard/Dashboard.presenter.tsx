@@ -3,7 +3,7 @@ import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import AsyncGate from "../components/AsyncGate";
 import Text from "../components/Text";
-import { DOCUMENT_CREATE_URL } from "../constants/urls";
+import { DOCUMENT_REVISION_CREATE_URL } from "../constants/urls";
 import styles from "./Dashboard.styles";
 import DocumentReviews from "./DocumentReviews.presenter";
 import DocumentTable from "./DocumentTable.presenter";
@@ -22,7 +22,7 @@ const DashboardPresenter: React.FunctionComponent<DashboardPresenterProps> = ({
     <Grid container={true} className={classes.root} spacing={24}>
       <Grid item={true} xs={12} md={9} className={classes.item}>
         <div className={classes.buttons}>
-          <RouterLink to={DOCUMENT_CREATE_URL} className={classes.createDocumentLink}>
+          <RouterLink to={DOCUMENT_REVISION_CREATE_URL} className={classes.createDocumentLink}>
             <Button variant="contained" color="primary">
               <Text translation="dashboard.createDocument" />
             </Button>

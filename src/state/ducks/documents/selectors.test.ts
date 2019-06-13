@@ -2,7 +2,6 @@ import _ from "lodash";
 import { ApplicationState } from "../../reducers";
 import { getAsyncState } from "../../tests/factories";
 import initialStoreState from "../../tests/helpers/initialStoreState";
-import { AsyncState, AsyncStatus } from "../../types";
 import selectors from "./selectors";
 import { getDocument } from "./tests/factories";
 import { DocumentsAllIdsState, DocumentsByIdState, DocumentsReviewIdsState } from "./types";
@@ -16,7 +15,6 @@ describe("document selectors tests", () => {
     [documents[1].id]: documents[1],
   };
   const reviewIds: DocumentsReviewIdsState = [documents[1].id];
-  const asyncState: AsyncState = getAsyncState();
 
   beforeAll(() => {
     state = _.cloneDeep(initialStoreState);

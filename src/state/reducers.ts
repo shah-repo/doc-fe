@@ -4,6 +4,7 @@ import storage from "redux-persist/lib/storage";
 import auth from "./ducks/auth";
 import documents from "./ducks/documents";
 import changeRequests from "./ducks/changeRequest";
+import documentRevisions from "./ducks/documentRevisions";
 
 const authPersistConfig = {
   key: "auth",
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   auth: persistReducer(authPersistConfig, auth),
   documents,
   changeRequests,
+  documentRevisions,
 });
 
 export type ApplicationState = ReturnType<typeof rootReducer>;
