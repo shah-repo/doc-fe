@@ -1,3 +1,4 @@
+import { TableColumnActionType } from "../../../ui/components/table/columns/types";
 import { Attachment } from "../attachments";
 import { DOCUMENT_SET, DOCUMENTS_LIST, DOCUMENTS_TO_REVIEW_LIST } from "./constants";
 
@@ -35,6 +36,7 @@ export interface Document {
   owner: User;
   approvals: Approval[];
   attachments: Attachment[];
+  actions: TableColumnActionType[];
 }
 
 export interface DocumentEditRequestBody {
