@@ -11,6 +11,6 @@ export default (theme: Theme) =>
     },
     cancelButton: {
       float: "right",
-      marginRight: theme.spacing.unit,
+      marginRight: theme.spacing(1),
     },
   });

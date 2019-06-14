@@ -10,9 +10,9 @@ export default (theme: Theme) =>
       alignContent: "center",
     },
     actionButtons: {
-      marginTop: theme.spacing.unit * 3,
+      marginTop: theme.spacing(3),
       borderTop: `1px solid ${theme.palette.grey[600]}`,
-      paddingTop: theme.spacing.unit * 3,
+      paddingTop: theme.spacing(3),
       textAlign: "center",
     },
   });

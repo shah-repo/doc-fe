@@ -20,7 +20,6 @@ import { generateDocumentRevisionEditPath } from "./pathGenerators";
 interface StateProps {
   loadAsyncState: AsyncState;
   documentRevisions: DocumentRevision[];
-  currentUserEmail: string;
 }
 
 interface DispatchProps {
@@ -33,7 +32,6 @@ interface OwnProps extends RouteComponentProps {}
 export type DocumentRevisionCreateContainerProps = OwnProps & DispatchProps & StateProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
-  currentUserEmail: authSelectors.currentUserEmail(state),
   loadAsyncState: documentRevisionsSelectors.getLoadListAsyncState(state),
   documentRevisions: documentRevisionsSelectors.getDocumentRevisionsList(state),
 });
@@ -51,7 +49,6 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   history,
   loadDocumentRevisions,
   loadAsyncState,
-  currentUserEmail,
   documentRevisions,
 }) => {
 

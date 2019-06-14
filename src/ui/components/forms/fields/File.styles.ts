@@ -8,7 +8,7 @@ export default (theme: Theme) =>
       alignItems: "center",
       borderRadius: theme.shape.borderRadius,
       border: `1px solid ${theme.palette.grey[500]}`,
-      padding: theme.spacing.unit,
+      padding: theme.spacing(1),
     },
     text: {
       flex: 3,

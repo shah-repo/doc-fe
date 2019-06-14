@@ -25,7 +25,7 @@ const File: React.FunctionComponent<FileProps> = ({ classes, ...fieldProps }) =>
         <Typography className={classes.text}>
           {fileName || <Text translation="document.file.selectText" />}
         </Typography>
-        <Button variant="text" component="span" className={classes.button}>
+        <Button variant="text" className={classes.button}>
           <Text translation="document.file.select" />
         </Button>
       </label>

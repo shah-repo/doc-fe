@@ -8,6 +8,6 @@ export default (theme: Theme) =>
       display: "inline-block",
     },
     button: {
-      margin: theme.spacing.unit,
+      margin: theme.spacing(1),
     },
   });

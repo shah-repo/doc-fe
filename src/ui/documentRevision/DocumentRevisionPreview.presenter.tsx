@@ -20,7 +20,7 @@ const DocumentRevisionPreviewPresenter: React.FunctionComponent<DocumentRevision
     ));
 
     return (
-      <Grid container={true} className={classes.container} spacing={24}>
+      <Grid container={true} className={classes.container} spacing={8}>
         <Grid item={true} xs={2}>
           <Typography variant="h6">
             <Text translation="common.documentId" />
@@ -72,7 +72,7 @@ const DocumentRevisionPreviewPresenter: React.FunctionComponent<DocumentRevision
           </Typography>
         </Grid>
         <Grid item={true} xs={12}>
-          <Grid container={true} spacing={24}>
+          <Grid container={true} spacing={8}>
             {attachments}
           </Grid>
         </Grid>

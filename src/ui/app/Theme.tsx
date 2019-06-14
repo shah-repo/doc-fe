@@ -1,11 +1,8 @@
-import { createMuiTheme, CssBaseline, MuiThemeProvider } from "@material-ui/core";
+import { CssBaseline  } from "@material-ui/core";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import * as React from "react";
 
-const theme = createMuiTheme({
-  typography: {
-    useNextVariants: true,
-  },
-});
+const theme = createMuiTheme();
 
 const Theme: React.FunctionComponent = ({ children }) => (
   <MuiThemeProvider theme={theme}>
