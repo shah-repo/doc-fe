@@ -1,4 +1,4 @@
-import { Paper } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import React from "react";
 import {
   AutoSizer,
@@ -26,16 +26,20 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
     return data[index];
   };
 
+  const rowClassName = ({ index }: Index) => {
+    return (index % 2 === 0) ? classes.cellRowEven : classes.cellRowOdd;
+  };
+
   const tableRenderer = ({ height, width }: Size) => {
     return (
       <Table
-        width={height}
-        height={width}
+        width={width}
+        height={height}
         headerHeight={50}
         rowHeight={50}
         rowCount={data.length}
         className={classes.table}
-        rowClassName={classes.cellRow}
+        rowClassName={rowClassName}
         headerClassName={classes.headerRow}
         rowGetter={rowGetter}
         noRowsRenderer={noRowsRenderer}
@@ -54,8 +58,8 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
   };
 
   return (
-    <Paper className={classes.root}>
+    <Box className={classes.root}>
       {bodyRenderer()}
-    </Paper>
+    </Box>
   );
 };
