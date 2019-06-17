@@ -79,7 +79,7 @@ export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFo
   }
 
   return (
-    <Grid container={true} spacing={8}>
+    <Grid container={true}>
       <Grid item={true} xs={2}>
         <DocumentRevisionControlContainer
           doneAddingDocuments={doneAddingDocuments}

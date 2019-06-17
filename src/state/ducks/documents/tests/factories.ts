@@ -15,6 +15,7 @@ export const getDocument = (document: Partial<Document> = {}): Document => ({
   approvals: [],
   owner: getUser(),
   status: DocumentStatus.Draft,
+  actions: [],
   ...document,
 });
 
