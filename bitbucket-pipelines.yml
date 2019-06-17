@@ -3,7 +3,6 @@ pipelines:
     tests: &RUN_TESTS
       name: Tesing
       image: python:3  
-      deployment: Testing
       services:
         - docker
       caches:

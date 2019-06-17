@@ -50,6 +50,11 @@ TEST_RESULT_STATUS=$(python3 ./aws/python_scripts/getResult.py "./aws/test_resul
 echo "Test Result = ${TEST_RESULT}"
 echo "Test Result Status = ${TEST_RESULT_STATUS}"
 
+# fails if tests are not successful
+if [ "$TEST_RESULT_STATUS" == "0" ]; then
+	exit 1
+fi
+
 # Deploy
 if [ "$DTD" == "true" ] && [ "$TEST_RESULT_STATUS" == "1" ]; then
 	echo Pushing the Docker images...
