@@ -54,7 +54,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
 
     const async = useAsync<DocumentRevision>({
       onSuccess: (createdDocumentRevision?) => {
-        history.push(generateDocumentRevisionEditPath(createdDocumentRevision!.id));
+        history.push(generateDocumentRevisionEditPath(createdDocumentRevision!.id, createdDocumentRevision!.document.id));
       },
     });
 

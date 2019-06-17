@@ -4,40 +4,54 @@ import { authSelectors } from "../../state/ducks/auth";
 import { ApplicationState } from "../../state/reducers";
 import useAsync from "../hooks/useAsync";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
-import { documentRevisionsActions, DocumentRevision } from "../../state/ducks/documentRevisions";
-import { DocumentRevisionFormValues } from "./forms/types";
-import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
-import DocumentRevisionPreviewPresenter from "./DocumentRevisionPreview.presenter";
-import { canEditDocumentRevision } from "./helpers";
+import { documentRevisionsActions, documentRevisionsSelectors, DocumentRevision } from "../../state/ducks/documentRevisions";
+import AsyncGate from "../components/AsyncGate";
+import DocumentRevisionListContainer from "./DocumentRevisionList.container";
+import { AsyncState } from "../../state/types";
 
 interface StateProps {
   currentUserEmail: string;
+  loadDocumentAsyncState: AsyncState;
+  documentRevisions: DocumentRevision[];
 }
 
 interface DispatchProps {
-  save: typeof documentRevisionsActions.save;
+  loadDocument: typeof documentRevisionsActions.loadDocument;
 }
 
 interface OwnProps {
-  parentDocumentId: string;
+  documentId: string;
+  documentRevisionId: string | null;
 }
 
-export type DocumentRevisionManagerContainerProps = OwnProps & DispatchProps & StateProps;
+export type DocumentRevisionManagerContainerProps = OwnProps & DispatchProps & StateProps ;
 
-const mapStateToProps = (state: ApplicationState): StateProps => ({
+const getDocumentRevisions = documentRevisionsSelectors.makeGetDocumentRevisions();
+const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
+  loadDocumentAsyncState: documentRevisionsSelectors.getLoadDocumentAsyncState(state),
+  documentRevisions: getDocumentRevisions(state, props.documentId),
 });
 
 export const DocumentRevisionManagerContainer: React.FunctionComponent<DocumentRevisionManagerContainerProps> = ({
-  save,
-  currentUserEmail,
+  currentUserEmail, loadDocumentAsyncState, loadDocument,
+  documentId, documentRevisionId, documentRevisions
 }) => {
-  console.log('Manager');
+  const loadDocumentAction = () => loadDocument(documentId);
+
+  console.log(documentRevisions);
+
   return (
-    <div>Manager</div>
+    <div>
+      <AsyncGate asyncState={loadDocumentAsyncState} asyncAction={loadDocumentAction} startActionOnMount={true}>
+        <DocumentRevisionListContainer documentRevisions={documentRevisions} />
+      </AsyncGate>
+      <br/>
+      {documentRevisionId}
+    </div>
   );
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
-  save: documentRevisionsActions.save,
+export default connect<StateProps, {}, OwnProps, ApplicationState>(mapStateToProps, {
+  loadDocument: documentRevisionsActions.loadDocument,
 })(DocumentRevisionManagerContainer);

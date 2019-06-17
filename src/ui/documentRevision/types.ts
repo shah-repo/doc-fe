@@ -2,12 +2,12 @@ import { DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 
 export interface DocumentRevisionRouteParams {
   documentRevisionId: string;
-  parentDocumentId?: string;
+  documentId: string;
 }
 
 export interface DocumentRevisionActionProps {
-  editDocumentRevision: (documentRevisionId: string) => () => void;
-  previewDocumentRevision: (documentRevisionId: string) => () => void;
+  editDocumentRevision: (documentRevisionId: string, documentId: string) => () => void;
+  previewDocumentRevision: (documentRevisionId: string, documentId: string) => () => void;
 }
 
 export interface DocumentRevisionListItem {

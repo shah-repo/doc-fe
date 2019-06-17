@@ -37,8 +37,10 @@ const DocumentRevisionContainer: React.FunctionComponent<DocumentRevisionContain
   documentRevisions,
 }) => {
   const loadAction = () => loadDocumentRevisions();
-  const editDocumentRevision = (documentRevisionId: string) => () => history.push(generateDocumentRevisionEditPath(documentRevisionId));
-  const previewDocumentRevision = (documentRevisionId: string) => () => history.push(generateDocumentRevisionPreviewPath(documentRevisionId));
+  const editDocumentRevision = (documentRevisionId: string, documentId: string) =>
+    () => history.push(generateDocumentRevisionEditPath(documentRevisionId, documentId));
+  const previewDocumentRevision = (documentRevisionId: string, documentId: string) =>
+    () => history.push(generateDocumentRevisionPreviewPath(documentRevisionId, documentId));
 
   return (
     <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>
