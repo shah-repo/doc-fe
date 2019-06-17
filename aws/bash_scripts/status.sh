@@ -9,7 +9,7 @@ cat >> $FILE <<EOF
 "Commit Hash": "$BITBUCKET_COMMIT",
 "Build Number": "$BITBUCKET_BUILD_NUMBER",
 "ECR Image": "$IMAGE_NAME",
-"Date": "$BITBUCKET_REPO_FULL_NAME"
+"Date": "$DATE"
 }
 EOF
 
