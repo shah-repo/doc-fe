@@ -56,7 +56,7 @@ if [ "$TEST_RESULT_STATUS" == "0" ]; then
 fi
 
 # Deploy
-if [ "$DTD" == "true" ] && [ "$TEST_RESULT_STATUS" == "1" ]; then
+# if [ "$DTD" == "true" ] && [ "$TEST_RESULT_STATUS" == "1" ]; then
 	# Login to AWS
 	aws ecr get-login --no-include-email --region "${AWS_DEFAULT_REGION}" | bash
 
@@ -76,4 +76,4 @@ if [ "$DTD" == "true" ] && [ "$TEST_RESULT_STATUS" == "1" ]; then
 	echo "Registered ECS Task Definition:" "${TASK_VERSION}"
 	
 	aws ecs update-service --cluster "${ECS_CLUSTER_NAME}" --service "${ECS_SERVICE_NAME}" --task-definition "${ECS_TASK_NAME}:${TASK_VERSION}"
-fi
+#fi
