@@ -1,5 +1,7 @@
 DATE=`date '+%Y-%m-%d %H:%M:%S %Z %z'`
-cat >> "./src/data/buildInfo.json" <<EOF 
+FILE="./src/data/buildInfo.json"
+rm -rf $FILE
+cat >> $FILE <<EOF 
 {
 "Repository": "$BITBUCKET_REPO_FULL_NAME",
 "Branch": "$BITBUCKET_BRANCH",
@@ -11,4 +13,4 @@ cat >> "./src/data/buildInfo.json" <<EOF
 }
 EOF
 
-cat "./src/data/buildInfo.json"
+cat $FILE
