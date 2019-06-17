@@ -47,7 +47,7 @@ const AssessmentPreviewPresenter: React.FunctionComponent<AssessmentPreviewPrese
       ));
 
     return (
-      <Grid container={true} className={classes.container} spacing={24}>
+      <Grid container={true} className={classes.container} spacing={8}>
         <Grid item={true} xs={2}>
           <Typography variant="h5">
             <Text translation="changeRequest.state" />

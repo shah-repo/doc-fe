@@ -57,7 +57,7 @@ export const ChangeRequestPreviewContainer: React.FunctionComponent<ChangeReques
   const selectAssessmentForm = () => setSelectedDocumentRevision(null);
 
   return (
-    <Grid container={true} spacing={24}>
+    <Grid container={true} spacing={8}>
       <Grid item={true} xs={2}>
         <DocumentRevisionControlPreviewPresenter
           documentsInChangeRequest={changeRequest.documentRevisions}

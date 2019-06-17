@@ -7,6 +7,7 @@ export default (theme: Theme) =>
       flexGrow: 1,
       minHeight: 0,
       padding: "20px",
+      height: "100%",
       [theme.breakpoints.down("xs")]: {
         height: "100%",
         minHeight: "200px",

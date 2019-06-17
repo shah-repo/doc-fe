@@ -19,7 +19,7 @@ const DashboardPresenter: React.FunctionComponent<DashboardPresenterProps> = ({
   editDocument, previewDocument, cloneDocument,
 }) => {
   return (
-    <Grid container={true} className={classes.root} spacing={24}>
+    <Grid container={true} className={classes.root} spacing={8}>
       <Grid item={true} xs={12} md={9} className={classes.item}>
         <div className={classes.buttons}>
           <RouterLink to={DOCUMENT_REVISION_CREATE_URL} className={classes.createDocumentLink}>

@@ -3,9 +3,13 @@ import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
 import { Dashboard } from "@material-ui/icons";
 import React from "react";
+import { Link } from "react-router-dom";
 import { RouteComponentProps, withRouter } from "react-router-dom";
+import Text from "../components/Text";
 import {
   CHANGE_REQUEST_CREATE_URL,
   CHANGE_REQUEST_LIST_URL,
@@ -25,7 +29,13 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({ classes, locatio
     classes={{ paper: classes.drawerPaper }}
     anchor="left"
   >
-    <div className={classes.toolbar} />
+    <Toolbar className={classes.toolbar}>
+      <Typography variant="h6"  className={classes.toolbarTitle}>
+        <Link to={HOME_URL} className={classes.headerLink}>
+          <Text translation="header.title" />
+        </Link>
+      </Typography>
+    </ Toolbar>
     <Divider />
     <List>
       <NavigationLinkContainer

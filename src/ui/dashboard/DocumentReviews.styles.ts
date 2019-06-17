@@ -11,9 +11,9 @@ export default (theme: Theme) =>
       textDecoration: "none",
     },
     title: {
-      margin: theme.spacing.unit * 2,
+      margin: theme.spacing(2),
     },
     noReviews: {
-      margin: theme.spacing.unit * 2,
+      margin: theme.spacing(2),
     },
   });

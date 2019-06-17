@@ -18,14 +18,14 @@ export default (theme: Theme) =>
       justifyContent: "center",
       display: "flex",
       flexDirection: "column",
-      padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+      padding: theme.spacing(2, 3, 3),
     },
     avatar: {
       backgroundColor: theme.palette.secondary.main,
-      margin: theme.spacing.unit,
+      margin: theme.spacing(1),
     },
     form: {
-      marginTop: theme.spacing.unit,
+      marginTop: theme.spacing(1),
       width: "100%", // Fix IE 11 issue.
     },
   });

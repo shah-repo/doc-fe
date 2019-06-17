@@ -11,17 +11,18 @@ export default (theme: Theme) =>
     drawerPaper: {
       width: DRAWER_WIDTH,
     },
-    toolbar: theme.mixins.toolbar,
-    link: {
-      display: "flex",
-      textDecoration: "none",
-      padding: theme.spacing.unit,
+    toolbar: {
+      backgroundColor: "#c20811",
+    },
+    toolbarTitle: {
       flex: 1,
+      textAlign: "center",
     },
-    activeLink: {
-      backgroundColor: theme.palette.grey[300],
-    },
-    linkButton: {
-      padding: 0,
+    headerLink: {
+      "textDecoration": "none",
+      "color": theme.palette.common.white,
+      "&:hover": {
+        color: theme.palette.secondary.light,
+      },
     },
   });
