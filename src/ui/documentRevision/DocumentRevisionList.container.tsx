@@ -1,19 +1,32 @@
 import React from "react";
 import { DocumentRevision } from "../../state/ducks/documentRevisions";
+import { NavLink } from "react-router-dom";
+import { generateDocumentRevisionVersionPath } from "./pathGenerators";
 
 interface OwnProps {
   documentRevisions: DocumentRevision[];
+  documentId: string;
 }
 
 export type DocumentRevisionListContainerProps = OwnProps;
 
 export const DocumentRevisionListContainer: React.FunctionComponent<DocumentRevisionListContainerProps> = ({
-  documentRevisions,
+  documentRevisions, documentId,
 }) => {
   return (
-    <div>
-      {documentRevisions.map((revision) => revision.id)}
-    </div>
+    <React.Fragment>
+      {documentRevisions.map((documentRevision) => (
+        <NavLink
+          to={generateDocumentRevisionVersionPath(documentRevision.id, documentId)}
+          key={documentRevision.id}
+          activeStyle={{ color: 'gray' }}
+        >
+          <div>
+            Version - {documentRevision.revision}
+          </div>
+        </NavLink>
+      ))}
+    </React.Fragment>
   );
 };
 
