@@ -2,9 +2,9 @@ import _ from "lodash";
 import { getCallbackHandler } from "../../../common/tests/factories";
 import { Handlers } from "../../types";
 import actions from "./actions";
-import { DOCUMENT_REVISION_ROOT_URL } from "./constants";
-import { getDocumentRevision, getDocumentRevisionEditRequestBody } from "./tests/factories";
-import { DocumentRevision, DocumentRevisionEditRequestBody } from "./types";
+import { DOCUMENT_REVISION_ROOT_URL, DOCUMENT_ROOT_URL } from "./constants";
+import { getDocumentRevision, getDocumentRevisionEditRequestBody, getDocument } from "./tests/factories";
+import { DocumentRevision, DocumentRevisionEditRequestBody, Document } from "./types";
 
 describe("documents actions tests", () => {
   describe("loadList tests", () => {
@@ -24,6 +24,7 @@ describe("documents actions tests", () => {
 
   const documentRevision: DocumentRevision = getDocumentRevision();
   const body: DocumentRevisionEditRequestBody = getDocumentRevisionEditRequestBody();
+  const document: Document = getDocument();
 
   describe("load tests", () => {
     const action = actions.load(documentRevision.id);
@@ -56,6 +57,21 @@ describe("documents actions tests", () => {
       const dispatch = jest.fn();
       action.onSuccess(documentRevision, dispatch);
       expect(dispatch).toHaveBeenCalledWith(actions.documentRevisionSet(documentRevision));
+    });
+  });
+
+  describe("load document tests", () => {
+    const action = actions.loadDocument(documentRevision.document.id);
+
+    it("calls GET on DOCUMENT_ROOT_URL/id", () => {
+      expect(action.url).toBe(`${DOCUMENT_ROOT_URL}/${documentRevision.document.id}`);
+      expect(action.method).toBe("get");
+    });
+
+    it("calls dispatch with documentSet action on success", () => {
+      const dispatch = jest.fn();
+      action.onSuccess(document, dispatch);
+      expect(dispatch).toHaveBeenCalledWith(actions.documentSet(document));
     });
   });
 });

@@ -91,4 +91,5 @@ export default {
   save,
   create,
   loadDocument,
+  documentSet,
 };

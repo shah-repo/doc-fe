@@ -1,6 +1,6 @@
 import faker from "faker";
 import { getUser } from "../../common/tests/factories";
-import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus } from "../types";
+import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, Document } from "../types";
 
 export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> = {}): DocumentRevision => ({
   id: faker.random.uuid(),
@@ -22,4 +22,11 @@ export const getDocumentRevisionEditRequestBody = (body: Partial<DocumentRevisio
   attachments: [],
   type: faker.lorem.word(),
   ...body,
+});
+
+export const getDocument = (document: Partial<Document> = {}): Document => ({
+  id: faker.random.uuid(),
+  typeCount: faker.random.number(),
+  documentRevisions: [getDocumentRevision()],
+  ...document,
 });
