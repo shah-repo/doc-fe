@@ -12,6 +12,7 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
   description: faker.lorem.sentence(),
   document: { id: faker.random.uuid(), typeCount: faker.random.number(10) },
   type: faker.lorem.word(),
+  released: faker.date.future(undefined, '2019-05-31'),
   ...documentRevision,
 });
 

@@ -29,6 +29,7 @@ export interface DocumentRevision {
   status: DocumentRevisionStatus;
   document: DocumentRevisionDocument;
   type: string;
+  released: Date;
 }
 
 export interface DocumentRevisionEditRequestBody {

@@ -37,7 +37,7 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<DocumentR
   const loadDocumentAction = () => loadDocument(documentId);
 
   return (
-    <Grid container={true} spacing={24}>
+    <Grid container={true} spacing={10}>
       <Grid item={true} xs={2}>
         <AsyncGate asyncState={loadDocumentAsyncState} asyncAction={loadDocumentAction} startActionOnMount={true}>
           <DocumentRevisionListContainer documentRevisions={documentRevisions} documentId={documentId} />
