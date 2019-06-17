@@ -18,7 +18,6 @@ COPY tsconfig.json .
 COPY tslint.json .
 COPY yarn.lock .
 COPY aws/bash_scripts/runTests.sh runTests.sh
-COPY public/status.html ./public/status.html
 
 RUN chmod a+x runTests.sh
 

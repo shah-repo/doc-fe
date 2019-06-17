@@ -1,5 +1,6 @@
 import React from "react";
 import { Redirect, RouteComponentProps } from "react-router-dom";
+import StatusPresenter from "../../status/Status.presenter";
 import { LOGIN_URL } from "../../constants/urls";
 
 export interface PrivateRoutePresenterProps extends Pick<RouteComponentProps, "location"> {
@@ -9,6 +10,10 @@ export interface PrivateRoutePresenterProps extends Pick<RouteComponentProps, "l
 
 const PrivateRoutePresenter: React.FunctionComponent<PrivateRoutePresenterProps> =
   ({ component: Component, isAuthenticated, ...rest }) => {
+    if (rest.location.pathname == "/status") {
+      return <StatusPresenter {...rest} />;
+    }
+
     if (isAuthenticated) {
       return <Component {...rest} />;
     }
