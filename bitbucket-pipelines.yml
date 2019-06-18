@@ -51,7 +51,7 @@ pipelines:
 options:
   docker: true
   max-time: 50
-definitions:
-  services:
-    docker:
-      memory: 4096
+# definitions:
+#   services:
+#     docker:
+#       memory: 4096
