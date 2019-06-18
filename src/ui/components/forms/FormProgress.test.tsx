@@ -13,7 +13,7 @@ describe("FormProgress component unit tests", () => {
     expect(getWrapper({ asyncState: {
       status: AsyncStatus.Idle,
       message: "",
-    }}).text()).toBeNull();
+    }}).text()).toBe("");
   });
 
   it("displays LinearProgress when active", () => {

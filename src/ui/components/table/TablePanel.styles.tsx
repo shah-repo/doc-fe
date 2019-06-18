@@ -14,6 +14,9 @@ export const styles = makeStyles((theme: Theme) =>
     headerRow: {
       margin: "0!important",
     },
+    cellRow: {
+      paddingRight: "0!important",
+    },
     cellRowEven: {
       backgroundColor: "#e8e9ed",
     },
