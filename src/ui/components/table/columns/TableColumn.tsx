@@ -7,7 +7,11 @@ import {
   StyledTableCell,
   StyledTableHeader,
 } from "./TableColumn.styles";
-import { TableColumnActionType, TableColumnProps } from "./types";
+import {
+  TableCellTypeRenderer,
+  TableColumnActionType,
+  TableColumnProps,
+} from "./types";
 
 type Props<T> = TableColumnProps<T>;
 
@@ -46,7 +50,11 @@ export function TableColumn<T>({
   };
 
   const cellTypeRenderer = (cellData: any, rowData: T) => {
-    switch (cellType) {
+    let type = cellType;
+    if (cellType as TableCellTypeRenderer<T>) {
+      type = (cellType as TableCellTypeRenderer<T>)(rowData);
+    }
+    switch (type) {
       case "LINK": return cellLinkType(cellData, rowData);
       case "ACTION": return cellActionType(cellData, rowData);
       default: return cellData;
