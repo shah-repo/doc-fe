@@ -57,6 +57,9 @@ fi
 
 # Deploy
 if [ "$DTD" == "true" ] && [ "$TEST_RESULT_STATUS" == "1" ]; then
+	# Login to AWS
+	aws ecr get-login --no-include-email --region "${AWS_DEFAULT_REGION}" | bash
+
 	echo Pushing the Docker images...
 
 	docker push "${IMAGE_NAME}"
