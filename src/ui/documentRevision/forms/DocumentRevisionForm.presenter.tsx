@@ -1,4 +1,4 @@
-import { withStyles, WithStyles } from "@material-ui/core";
+import { withStyles, WithStyles, Typography } from "@material-ui/core";
 import { FieldArray, FieldArrayRenderProps, Form, FormikProps } from "formik";
 import React, { ChangeEvent } from "react";
 import documentTypes from "../../../data/documentTypes.json";
@@ -84,6 +84,12 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           }}
           options={availableReferences}
         />
+        <Typography variant="h6" >
+          <Text translation="documentRevision.form.referencedBy" />
+        </Typography>
+        <div>
+          {initialValues.referencedBy.map((reference) => reference.name)}
+        </div>
         <FieldArray name="attachments" render={renderAttachments} />
         <SubmitButton asyncState={asyncState} label="common.save" />
       </Form>
