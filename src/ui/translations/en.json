@@ -12,11 +12,13 @@
 
   "navigation.dashboard": "Dashboard",
   "navigation.documents": "Documents",
+  "navigation.document.list": "Document List",
   "navigation.createDocument": "Create document",
   "navigation.createDocumentRevision": "Create document revision",
   "navigation.createChangeRequest": "Create change request",
   "navigation.changeRequestList": "Change request list",
   "navigation.documentRevisionList": "Document revisions",
+  "navigation.change.request.open": "Open Change Requests",
 
   "validators.required": "Required",
   "validators.requiredAtLeastOne": "At least one input required",
@@ -59,6 +61,12 @@
   "changeRequest.documentRevisionTable.actions": "Actions",
   "changeRequest.documentRevisionTable.add": "Add",
   "changeRequest.documentRevisionTable.noDocumentRevisions": "No document revisions",
+  "change.request.list.crId": "CR ID",
+  "change.request.list.description": "Description",
+  "change.request.list.owner": "Owner",
+  "change.request.list.state": "State",
+  "change.request.list.noRows": "No document revisions",
+  "change.request.create": "Create a change request",
 
   "common.name": "Name",
   "common.description": "Description",

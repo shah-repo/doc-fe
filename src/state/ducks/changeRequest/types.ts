@@ -4,10 +4,12 @@ import { CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET 
 
 export enum ChangeRequestStatus {
   Draft = "DRAFT",
+  Submitted = "SUBMITTED",
   InReview = "IN_REVIEW",
   Withdrawn = "WITHDRAWN",
   Approved = "APPROVED",
   Rejected = "REJECTED",
+  Closed = "CLOSED",
 }
 
 export interface Justifications {
@@ -27,10 +29,12 @@ export interface ImplementationPlan {
   description?: string;
   attachments: Attachment[];
 }
+
 export interface ChangeRequest {
   id: string;
-  state: ChangeRequestStatus;
+  crId?: string;
   description: string;
+  state: ChangeRequestStatus;
   assessment: Assessment;
   implementationPlan: ImplementationPlan;
   justifications: Justifications;
@@ -111,4 +115,8 @@ export type ChangeRequestsApproversAllIdsState = string[];
 export interface ChangeRequestListApproversAction {
   type: typeof CHANGE_REQUEST_LIST_APPROVERS;
   payload: ChangeRequestAvailableApprovers[];
+}
+
+export interface ChangeRequestProps {
+  changeRequests: ChangeRequest[];
 }
