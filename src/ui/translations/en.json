@@ -108,6 +108,10 @@
   "document.action.to_review": "Send to review",
   "document.action.withdraw": "Withdraw",
 
+  "documentRevision.version": "Version",
+  "documentRevision.owner": "Owner",
+  "documentRevision.released": "Released",
+
   "transition.action.confirm": "Confirm",
   "transition.action.cancel": "Cancel",
   "transition.action.title": "Enter password to proceed",

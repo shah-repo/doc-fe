@@ -5,7 +5,7 @@ import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors 
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
-import { generateDocumentRevisionEditPath, generateDocumentRevisionPreviewPath } from "./pathGenerators";
+import { generateDocumentRevisionVersionPath } from "./pathGenerators";
 import DocumentRevisionTable from './DocumentRevisionTable.presenter';
 import { authSelectors } from "../../state/ducks/auth";
 
@@ -37,8 +37,10 @@ const DocumentRevisionContainer: React.FunctionComponent<DocumentRevisionContain
   documentRevisions,
 }) => {
   const loadAction = () => loadDocumentRevisions();
-  const editDocumentRevision = (documentRevisionId: string) => () => history.push(generateDocumentRevisionEditPath(documentRevisionId));
-  const previewDocumentRevision = (documentRevisionId: string) => () => history.push(generateDocumentRevisionPreviewPath(documentRevisionId));
+  const editDocumentRevision = (documentRevisionId: string, documentId: string) =>
+    () => history.push(generateDocumentRevisionVersionPath(documentRevisionId, documentId));
+  const previewDocumentRevision = (documentRevisionId: string, documentId: string) =>
+    () => history.push(generateDocumentRevisionVersionPath(documentRevisionId, documentId));
 
   return (
     <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>

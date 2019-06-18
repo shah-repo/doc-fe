@@ -16,6 +16,7 @@ import styles from "./DocumentRevisionTable.styles";
 import {
   DocumentRevisionListItem,
 } from "./types";
+import { documentRevisionIdMask } from "../../documentRevision/helpers";
 
 interface DocumentRevisionTableProps extends WithStyles<typeof styles> {
   documentRevisionsToShow: DocumentRevision[];
@@ -27,15 +28,13 @@ const DocumentRevisionTable: React.FunctionComponent<DocumentRevisionTableProps>
 }) => {
   const rowGetter = ({ index }: Index): DocumentRevisionListItem => {
     const documentRevision = documentRevisionsToShow[index];
-    const versionNumber = `000${documentRevision.document.typeCount}`;
-    const version = `${documentRevision.type}${versionNumber.substr(versionNumber.length - 4)}`
 
     return {
       id: documentRevision.id,
       name: documentRevision.name,
       owner: documentRevision.owner.name,
       state: documentRevision.status,
-      version,
+      version: documentRevisionIdMask(documentRevision.type, documentRevision.document.typeCount),
     };
   };
 

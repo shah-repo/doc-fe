@@ -8,14 +8,16 @@ import {
 } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
-import AsyncGate from "../components/AsyncGate";
 import {
   DOCUMENT_REVISION_PREVIEW_URL,
   DOCUMENT_REVISION_UPDATE_URL,
+  DOCUMENT_REVISION_DETAILS_URL,
+  DOCUMENT_REVISION_VERSION_URL,
 } from "../constants/urls";
 import DocumentRevisionPreviewContainer from "./DocumentRevisionPreview.presenter";
 import DocumentRevisionUpdateContainer from "./DocumentRevisionUpdate.container";
 import { DocumentRevisionRouteParams } from "./types";
+import DocumentRevisionManagerContainer from "./DocumentRevisionsManager.container";
 
 interface StateProps {
   loadAsyncState: AsyncState;
@@ -32,7 +34,7 @@ type DocumentRevisionContainerProps = OwnProps & DispatchProps & StateProps;
 
 const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps => ({
   loadAsyncState: documentRevisionsSelectors.getLoadAsyncState(state),
-  documentRevision: documentRevisionsSelectors.getDocumentRevision(state, props.match.params.documentRevisionId),
+  documentRevision: documentRevisionsSelectors.getDocumentRevision(state, props.match.params.documentRevisionId), // documentRevisionId unreachable in nested switch
 });
 
 const DocumentRevisionContainer: React.FunctionComponent<DocumentRevisionContainerProps> = ({
@@ -41,18 +43,25 @@ const DocumentRevisionContainer: React.FunctionComponent<DocumentRevisionContain
   match,
   documentRevision,
 }) => {
-  const documentRevisionId = match.params.documentRevisionId;
-  const loadAction = () => load(documentRevisionId);
-  const renderDocumentRevisionUpdateContainer = () => <DocumentRevisionUpdateContainer documentRevision={documentRevision} />;
-  const renderDocumentRevisionPreviewContainer = () => <DocumentRevisionPreviewContainer documentRevision={documentRevision} />;
+  const documentId = match.params.documentId;
+  const renderWrapper = (props: any) => {
+    const documentRevisionId = props.match.params.documentRevisionId;
+    
+    return (
+      <props.component documentRevisionId={documentRevisionId} documentId={documentId} />
+    )
+  }
+  const renderDocumentRevisionUpdateContainer = (props: any) => renderWrapper({ component: DocumentRevisionUpdateContainer, ...props});
+  const renderDocumentRevisionPreviewContainer = (props: any) => renderWrapper({ component: DocumentRevisionPreviewContainer, ...props});
+  const renderDocumentRevisionManagerContainer = (props: any) => renderWrapper({ component: DocumentRevisionManagerContainer, ...props});
 
   return (
-    <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>
       <Switch>
         <Route path={DOCUMENT_REVISION_UPDATE_URL} exact={true} render={renderDocumentRevisionUpdateContainer} />
         <Route path={DOCUMENT_REVISION_PREVIEW_URL} exact={true} render={renderDocumentRevisionPreviewContainer} />
+        <Route path={DOCUMENT_REVISION_VERSION_URL} exact={true} render={renderDocumentRevisionManagerContainer} />
+        <Route path={DOCUMENT_REVISION_DETAILS_URL} exact={true} render={renderDocumentRevisionManagerContainer} />
       </Switch>
-    </AsyncGate>
   );
 };
 

@@ -14,6 +14,7 @@ import {
   DOCUMENT_REVISION_ROOT_URL,
   DOCUMENT_ROOT_URL,
   HOME_URL,
+  DOCUMENT_REVISION_DETAILS_URL,
 } from "../constants/urls";
 import DashboardContainer from "../dashboard/Dashboard.container";
 import DocumentRevisionContainer from "../documentRevision/DocumentRevision.container";
@@ -23,6 +24,7 @@ import DocumentContainer from "../documents/Document.container";
 import HeaderContainer from "./Header.container";
 import styles from "./Layout.styles";
 import Navigation from "./Navigation";
+import { DocumentRevisionManagerContainer } from "../documentRevision/DocumentRevisionsManager.container";
 
 type Props = WithStyles<typeof styles>;
 

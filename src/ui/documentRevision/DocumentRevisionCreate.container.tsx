@@ -15,7 +15,7 @@ import useAsync from "../hooks/useAsync";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { toDocumentRevisionEditRequestBody } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
-import { generateDocumentRevisionEditPath } from "./pathGenerators";
+import { generateDocumentRevisionVersionPath } from "./pathGenerators";
 
 interface StateProps {
   loadAsyncState: AsyncState;
@@ -54,7 +54,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
 
     const async = useAsync<DocumentRevision>({
       onSuccess: (createdDocumentRevision?) => {
-        history.push(generateDocumentRevisionEditPath(createdDocumentRevision!.id));
+        history.push(generateDocumentRevisionVersionPath(createdDocumentRevision!.id, createdDocumentRevision!.document.id));
       },
     });
 
