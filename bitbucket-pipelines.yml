@@ -1,10 +1,12 @@
 options:
   size: 2x
+  docker: true
 
 pipelines:
   const:
     tests: &RUN_TESTS
       name: Tesing
+      size: 2x
       image: python:3  
       services:
         - docker
@@ -16,6 +18,7 @@ pipelines:
 
     deploy_to_development: &DEPLOY_TO_DEVELOPMENT
       name: Deploy to Development
+      size: 2x
       image: python:3   
       deployment: Development
       services:
@@ -39,27 +42,16 @@ pipelines:
     #     - ./aws/bash_scripts/build.sh "dev" "true"
 
   default:
-      - step: 
-          size: 2x
-          script: 
-            - *RUN_TESTS
+      - step: *RUN_TESTS
   tags:
     deploy-to-dev:
-      - step: 
-          size: 2x
-          script: 
-            - *DEPLOY_TO_DEVELOPMENT
+      - step: *DEPLOY_TO_DEVELOPMENT
   branches:
     # master:
     #   - step: *DEPLOY_TO_PRODUCTION
     develop:
-      - step: 
-          size: 2x
-          script: 
-            - *DEPLOY_TO_DEVELOPMENT
-options:
-  docker: true
-  max-time: 50
+      - step: *DEPLOY_TO_DEVELOPMENT
+      
 definitions:
   services:
     docker:
