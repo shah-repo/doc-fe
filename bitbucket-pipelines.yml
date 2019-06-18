@@ -1,3 +1,6 @@
+options:
+  size: 2x
+
 pipelines:
   const:
     tests: &RUN_TESTS
@@ -47,8 +50,8 @@ pipelines:
       - step: *DEPLOY_TO_DEVELOPMENT
 options:
   docker: true
-  max-time: 30
+  max-time: 50
 definitions:
   services:
     docker:
-      memory: 2048
+      memory: 1024

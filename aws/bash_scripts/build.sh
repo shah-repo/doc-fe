@@ -16,7 +16,7 @@ chmod a+x "${BASH_SCRIPTS_DIR}/install.sh"
 "${BASH_SCRIPTS_DIR}/install.sh"
 
 # Login to AWS
-aws ecr get-login --no-include-email --region "${AWS_DEFAULT_REGION}"
+aws ecr get-login --no-include-email --region "${AWS_DEFAULT_REGION}" | bash
 
 # Build & Push Image
 echo "Build started on `date`"
