@@ -117,6 +117,10 @@ export interface ChangeRequestListApproversAction {
   payload: ChangeRequestAvailableApprovers[];
 }
 
-export interface ChangeRequestProps {
+export interface ChangeRequestsProps {
   changeRequests: ChangeRequest[];
+}
+
+export interface ChangeRequestProps {
+  changeRequest: ChangeRequest;
 }
