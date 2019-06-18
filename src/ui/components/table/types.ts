@@ -1,12 +1,12 @@
-import {
-  AutoSizer,
-  Index,
-  Size,
-  Table,
-  TableProps,
-} from "react-virtualized";
 import { Translation } from "../../translations/types";
-import { TableColumnProps } from "./columns/types";
+import { TableColumnActionType, TableColumnProps } from "./columns/types";
+
+export type TableSelectionRenderer<T> = (props: TableSelectionProps<T>) => () => any;
+
+export interface TableSelectionProps<T>  {
+  rowData: T;
+  actionType?: TableColumnActionType;
+}
 
 export interface TablePanelProps<T> {
   data: T[];

@@ -1,5 +1,4 @@
 import { Box } from "@material-ui/core";
-import clsx from "clsx";
 import React from "react";
 import {
   AutoSizer,
@@ -29,8 +28,8 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
 
   const rowClassName = ({ index }: Index) => {
     return (index % 2 === 0) ?
-      clsx(classes.cellRow, classes.cellRowEven) :
-      clsx(classes.cellRow, classes.cellRowOdd);
+    `${classes.cellRow} ${classes.cellRowEven}` :
+    `${classes.cellRow} ${classes.cellRowOdd}`;
   };
 
   const tableRenderer = ({ height, width }: Size) => {
