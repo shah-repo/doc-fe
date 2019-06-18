@@ -61,7 +61,12 @@ export interface LogoutUserAction {
 }
 
 export type TokensState = Required<Tokens>;
+
 export interface UserState {
   email: string;
   name: string;
+}
+
+export interface AuthProps {
+  currentUserEmail: string;
 }
