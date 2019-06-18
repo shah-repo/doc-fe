@@ -18,7 +18,7 @@ export const StyledTableCell = withStyles((theme) => ({
     display: "flex",
     flex: 1,
     margin: theme.spacing(0),
-    cursor: "initial",
+    cursor: "inherited",
     border: "none",
   },
 }))(TableCell);
