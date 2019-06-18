@@ -7,6 +7,9 @@ export enum DocumentRevisionStatus {
   Withdrawn = "WITHDRAWN",
   Approved = "APPROVED",
   Rejected = "REJECTED",
+  Released = "RELEASED",
+  Deprecated = "DEPRECATED",
+  Obsolete = "OBSOLETE",
 }
 
 export interface DocumentRevisionDocument {
@@ -17,6 +20,11 @@ export interface Document {
   id: string;
   typeCount: number;
   documentRevisions: DocumentRevision[];
+}
+
+export interface Reference {
+  id: string;
+  name: string;
 }
 
 export interface DocumentRevision {
@@ -30,6 +38,12 @@ export interface DocumentRevision {
   document: DocumentRevisionDocument;
   type: string;
   released: Date;
+  referenceTo: Reference[];
+  referencedBy: Reference[];
+}
+
+export interface ReferenceToEditRequest {
+  id: string;
 }
 
 export interface DocumentRevisionEditRequestBody {
@@ -37,6 +51,7 @@ export interface DocumentRevisionEditRequestBody {
   description: string;
   attachments: Attachment[];
   type?: string;
+  referenceTo: ReferenceToEditRequest[];
 }
 
 export interface DocumentRevisionSetAction {

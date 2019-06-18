@@ -13,6 +13,8 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
   document: { id: faker.random.uuid(), typeCount: faker.random.number(10) },
   type: faker.lorem.word(),
   released: faker.date.future(undefined, '2019-05-31'),
+  referenceTo: [],
+  referencedBy: [],
   ...documentRevision,
 });
 
@@ -21,6 +23,7 @@ export const getDocumentRevisionEditRequestBody = (body: Partial<DocumentRevisio
   description: faker.lorem.sentence(),
   attachments: [],
   type: faker.lorem.word(),
+  referenceTo: [],
   ...body,
 });
 

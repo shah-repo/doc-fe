@@ -42,6 +42,8 @@ export const DEFAULT_INITIAL_VALUES = {
   description: "",
   attachments: [],
   type: "",
+  referenceTo: [],
+  referencedBy: [],
 };
 
 export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionCreateContainerProps> = ({

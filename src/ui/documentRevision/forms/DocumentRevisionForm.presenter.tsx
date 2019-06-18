@@ -14,10 +14,14 @@ import AttachmentsContainer from "../../documents/forms/attachments/Attachments.
 import { documentRevisionIdMask } from "../helpers";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
+import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
+import Text from "../../components/Text";
+import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
 
 interface Props extends WithStyles<typeof styles>, FormikProps<DocumentRevisionFormValues> {
   asyncState: AsyncState;
   documentRevisions?: DocumentRevision[];
+  availableReferences: OptionType[];
 }
 
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
@@ -27,6 +31,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   handleChange,
   setFieldValue,
   documentRevisions,
+  availableReferences,
 }) => {
   const renderAttachments = (props: FieldArrayRenderProps) => <AttachmentsContainer {...props} />;
 
@@ -69,6 +74,15 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         <InputField
           name="documentId"
           inputProps={{ id: "documentId", disabled: true, placeholder: "Document ID" }}
+        />
+        <AutcompleteField
+          name="referenceTo"
+          autocompleteProps={{
+            id: "referenceTo",
+            isMulti: true,
+            placeholder: <Text translation="documentRevision.form.references" />
+          }}
+          options={availableReferences}
         />
         <FieldArray name="attachments" render={renderAttachments} />
         <SubmitButton asyncState={asyncState} label="common.save" />

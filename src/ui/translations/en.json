@@ -111,6 +111,7 @@
   "documentRevision.version": "Version",
   "documentRevision.owner": "Owner",
   "documentRevision.released": "Released",
+  "documentRevision.form.references": "References",
 
   "transition.action.confirm": "Confirm",
   "transition.action.cancel": "Cancel",
