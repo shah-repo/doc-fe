@@ -4,21 +4,33 @@ import { Link as RouterLink } from "react-router-dom";
 import { ChangeRequest } from "../../state/ducks/changeRequest";
 import { TableColumnProps } from "../components/table/columns/types";
 import { TablePanel } from "../components/table/TablePanel";
+import { TableSelectionProps } from "../components/table/types";
 import Text from "../components/Text";
 import { CHANGE_REQUEST_CREATE_URL } from "../constants/urls";
 import styles from "./List.styles";
-import { ChangeRequestUserProps } from "./utils/types";
+import { canEditChangeRequest } from "./utils/helpers";
+import { ChangeRequestsUserProps } from "./utils/types";
 
-type Props = ChangeRequestUserProps & WithStyles<typeof styles>;
+type Props = ChangeRequestsUserProps & WithStyles<typeof styles>;
 
 const ListPresenter: React.FunctionComponent<Props> = ({
   classes,
   changeRequests,
   currentUserEmail,
-  previewChangeRequest,
+  editChangeRequest,
 }) => {
 
   const ChangeRequestList = TablePanel<ChangeRequest>();
+
+  const stateCellTypeRenderer = (rowData: ChangeRequest) => {
+    const changeRequest = rowData;
+    const canEdit = canEditChangeRequest({changeRequest, currentUserEmail});
+    return (canEdit) ? "LINK" : "BASE";
+  };
+
+  const onStateSelect = ({ rowData }: TableSelectionProps<ChangeRequest>) => () => {
+    return editChangeRequest(rowData.id);
+  };
 
   const columns: Array<TableColumnProps<ChangeRequest>> = [
     {
@@ -45,6 +57,8 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "state",
       label: "change.request.list.state",
+      cellType: stateCellTypeRenderer,
+      onSelect: onStateSelect,
       columnOptions: { width: 80 },
     },
   ];
@@ -56,16 +70,16 @@ const ListPresenter: React.FunctionComponent<Props> = ({
           <Button variant="contained" color="primary" className={classes.button}>
             <Text translation="change.request.create" />
           </Button>
-      </RouterLink>
-    </Grid>
-    <Grid item={true} className={classes.item}>
-    <ChangeRequestList
+        </RouterLink>
+      </Grid>
+      <Grid item={true} className={classes.item}>
+        <ChangeRequestList
           data={changeRequests}
           columns={columns}
           noRowsTranslation="change.request.list.noRows"
-      />
+        />
+      </Grid>
     </Grid>
-  </Grid>
   );
 };
 
