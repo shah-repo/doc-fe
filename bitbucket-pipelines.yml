@@ -39,19 +39,25 @@ pipelines:
     #     - ./aws/bash_scripts/build.sh "dev" "true"
 
   default:
-      - step: *RUN_TESTS
+      - step: 
+          size: 2x
+          script: *RUN_TESTS
   tags:
     deploy-to-dev:
-      - step: *DEPLOY_TO_DEVELOPMENT
+      - step: 
+          size: 2x
+          script: *DEPLOY_TO_DEVELOPMENT
   branches:
     # master:
     #   - step: *DEPLOY_TO_PRODUCTION
     develop:
-      - step: *DEPLOY_TO_DEVELOPMENT
+      - step: 
+          size: 2x
+          script: *DEPLOY_TO_DEVELOPMENT
 options:
   docker: true
   max-time: 50
-# definitions:
-#   services:
-#     docker:
-#       memory: 4096
+definitions:
+  services:
+    docker:
+      memory: 2048
