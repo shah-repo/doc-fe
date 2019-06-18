@@ -45,7 +45,6 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({ classes, locatio
         currentPath={location.pathname}
         childrenUrls={[
           { url: CHANGE_REQUEST_CREATE_URL, text: "navigation.createChangeRequest" },
-          { url: CHANGE_REQUEST_LIST_URL, text: "navigation.changeRequestList" },
         ]}
       />
       <NavigationLinkContainer
@@ -55,6 +54,15 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({ classes, locatio
         currentPath={location.pathname}
         childrenUrls={[
           { url: DOCUMENT_REVISION_CREATE_URL, text: "navigation.createDocumentRevision" },
+        ]}
+      />
+      <NavigationLinkContainer
+        url={DOCUMENT_REVISION_LIST_URL}
+        text="navigation.document.list"
+        Icon={Dashboard}
+        currentPath={location.pathname}
+        childrenUrls={[
+          { url: CHANGE_REQUEST_LIST_URL, text: "navigation.change.request.open" },
         ]}
       />
     </List>
