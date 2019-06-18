@@ -7,13 +7,16 @@ def loadEnvVarsFrom(path):
     env.read_env(path, recurse=False)
     return env
 
-if len(sys.argv) >= 3:
+if len(sys.argv) >= 4:
     env = sys.argv[1]
-    key = sys.argv[2]
+    directory = sys.argv[2]
+    key = sys.argv[3]
 
-    path = "./aws/environments/%s.env" % env
-    env_vars = loadEnvVarsFrom(path)
+    path = "%s/%s.env" % (directory, env)
+    #env_vars = loadEnvVarsFrom(path)
+    env = Env()
+    env.read_env(path, recurse=False)
 
-    print(env_vars(key))
+    print(env.str(key))
 else:
     print('input error.')

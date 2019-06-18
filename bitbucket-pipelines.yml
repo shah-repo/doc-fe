@@ -1,7 +1,12 @@
+options:
+  size: 2x
+  docker: true
+
 pipelines:
   const:
     tests: &RUN_TESTS
       name: Tesing
+      size: 2x
       image: python:3  
       services:
         - docker
@@ -13,6 +18,7 @@ pipelines:
 
     deploy_to_development: &DEPLOY_TO_DEVELOPMENT
       name: Deploy to Development
+      size: 2x
       image: python:3   
       deployment: Development
       services:
@@ -45,9 +51,7 @@ pipelines:
     #   - step: *DEPLOY_TO_PRODUCTION
     develop:
       - step: *DEPLOY_TO_DEVELOPMENT
-options:
-  docker: true
-  max-time: 30
+      
 definitions:
   services:
     docker:
