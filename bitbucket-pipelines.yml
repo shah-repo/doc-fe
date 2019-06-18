@@ -41,19 +41,22 @@ pipelines:
   default:
       - step: 
           size: 2x
-          script: *RUN_TESTS
+          script: 
+            - *RUN_TESTS
   tags:
     deploy-to-dev:
       - step: 
           size: 2x
-          script: *DEPLOY_TO_DEVELOPMENT
+          script: 
+            - *DEPLOY_TO_DEVELOPMENT
   branches:
     # master:
     #   - step: *DEPLOY_TO_PRODUCTION
     develop:
       - step: 
           size: 2x
-          script: *DEPLOY_TO_DEVELOPMENT
+          script: 
+            - *DEPLOY_TO_DEVELOPMENT
 options:
   docker: true
   max-time: 50
