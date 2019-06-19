@@ -7,14 +7,14 @@ pipelines:
     tests: &RUN_TESTS
       name: Tesing
       size: 2x
-      image: python:3  
+      image: node:10 
       services:
         - docker
       caches:
         - docker
       script:
-        - chmod a+x ./aws/bash_scripts/build.sh
-        - ./aws/bash_scripts/build.sh "dev" "false"
+        - chmod a+x ./aws/bash_scripts/runTests.sh
+        - ./aws/bash_scripts/runTests.sh
 
     deploy_to_development: &DEPLOY_TO_DEVELOPMENT
       name: Deploy to Development
@@ -45,11 +45,16 @@ pipelines:
       - step: *RUN_TESTS
   tags:
     deploy-to-dev:
+      - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEVELOPMENT
   branches:
     # master:
     #   - step: *DEPLOY_TO_PRODUCTION
     develop:
+      - step: *RUN_TESTS
+      - step: *DEPLOY_TO_DEVELOPMENT
+    infrastructure:
+      - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEVELOPMENT
       
 definitions:
