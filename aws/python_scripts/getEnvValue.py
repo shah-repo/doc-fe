@@ -13,10 +13,8 @@ if len(sys.argv) >= 4:
     key = sys.argv[3]
 
     path = "%s/%s.env" % (directory, env)
-    #env_vars = loadEnvVarsFrom(path)
-    env = Env()
-    env.read_env(path, recurse=False)
+    env_vars = loadEnvVarsFrom(path)
 
-    print(env.str(key))
+    print(env_vars.str(key))
 else:
     print('input error.')
