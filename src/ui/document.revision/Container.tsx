@@ -8,8 +8,8 @@ import {
 import { ApplicationState } from "../../state/reducers";
 import AsyncGate from "../components/AsyncGate";
 import {
-  DOCUMENT_PREVIEW_URL,
-  DOCUMENT_UPDATE_URL,
+  DOCUMENT_REVISION_PREVIEW_URL,
+  DOCUMENT_REVISION_UPDATE_URL,
 } from "../constants/urls";
 import PreviewContainer from "../documentRevision/DocumentRevisionPreview.presenter";
 import UpdateContainer from "../documentRevision/DocumentRevisionUpdate.container";
@@ -48,8 +48,8 @@ const Container: React.FunctionComponent<Props> = ({
       startActionOnMount={true}
     >
       <Switch>
-        <Route path={DOCUMENT_UPDATE_URL} exact={true} render={renderUpdateContainer} />
-        <Route path={DOCUMENT_PREVIEW_URL} exact={true} render={renderPreviewContainer} />
+        <Route path={DOCUMENT_REVISION_UPDATE_URL} exact={true} render={renderUpdateContainer} />
+        <Route path={DOCUMENT_REVISION_PREVIEW_URL} exact={true} render={renderPreviewContainer} />
       </Switch>
     </AsyncGate>
   );
