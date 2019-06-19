@@ -17,6 +17,9 @@ import {
   DocumentRevisionsListAction,
   DocumentSetAction,
   Document,
+  DocumentRevisionTransitionRequestBody,
+  DocumentRevisionTransition,
+  DocumentRevisionTransitionResponse,
 } from "./types";
 
 const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentRevisionsListAction => ({
@@ -83,6 +86,21 @@ const loadDocument = (id: string): ApiAction<Document> => apiAction({
   },
 });
 
+const applyTransition = (
+  id: string,
+  body: DocumentRevisionTransitionRequestBody,
+  transition: DocumentRevisionTransition,
+  handlers: Handlers<DocumentRevisionTransitionResponse>,
+): ApiAction<DocumentRevisionTransitionResponse, DocumentRevisionTransitionRequestBody> => apiActionWithCallbacks({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/${id}/${transition}`,
+  method: "post",
+  data: body,
+  onSuccess: (d, dispatch) => {
+    dispatch(load(id));
+  },
+  handlers,
+});
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
@@ -92,4 +110,5 @@ export default {
   create,
   loadDocument,
   documentSet,
+  applyTransition,
 };
