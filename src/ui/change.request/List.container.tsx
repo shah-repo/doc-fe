@@ -6,7 +6,7 @@ import { changeRequestsActions, changeRequestsSelectors } from "../../state/duck
 import { ApplicationState } from "../../state/reducers";
 import AsyncGate from "../components/AsyncGate";
 import ListPresenter from "./List.presenter";
-import { changeRequestPreviewPath } from "./utils/paths";
+import { changeRequestEditPath } from "./utils/paths";
 import { ListDispatchProps, ListStateProps } from "./utils/types";
 
 type DispatchProps = ListDispatchProps;
@@ -28,14 +28,14 @@ const ListContainer: React.FunctionComponent<Props> = ({
   changeRequests,
 }) => {
   const loadAction = () => loadChangeRequests();
-  const preview = (changeRequestId: string) => () => history.push(changeRequestPreviewPath(changeRequestId));
+  const edit = (changeRequestId: string) => history.push(changeRequestEditPath(changeRequestId));
 
   return (
     <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>
       <ListPresenter
         changeRequests={changeRequests}
         currentUserEmail={currentUserEmail}
-        previewChangeRequest={preview}
+        editChangeRequest={edit}
       />
     </AsyncGate>
   );

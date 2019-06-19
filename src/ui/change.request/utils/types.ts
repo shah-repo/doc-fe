@@ -1,30 +1,40 @@
+import { RouteComponentProps } from "react-router-dom";
 import { AuthProps } from "../../../state/ducks/auth/types";
 import {
-  ChangeRequest,
   ChangeRequestProps,
   changeRequestsActions,
+  ChangeRequestsProps,
 } from "../../../state/ducks/changeRequest";
 import { AsyncState } from "../../../state/types";
 
+// Container
+export type ContainerStateProps = LoadAsyncState & ChangeRequestProps;
+export type ContainerOwnProps = RouteComponentProps<RouteParams>;
+
+export interface ContainerDispatchProps {
+  load: typeof changeRequestsActions.load;
+}
+
 // List
 export type ListProps = ActionProps;
-export interface ListStateProps {
-  loadAsyncState: AsyncState;
-  changeRequests: ChangeRequest[];
-  currentUserEmail: string;
-}
+export type ListStateProps = ChangeRequestsProps & LoadAsyncState & AuthProps;
 
 export interface ListDispatchProps {
   loadChangeRequests: typeof changeRequestsActions.loadList;
 }
 
 // Common
-export type ChangeRequestUserProps = ChangeRequestProps & ActionProps & AuthProps;
+export type ChangeRequestsUserProps = ChangeRequestsProps & ActionProps & AuthProps;
+export type ChangeRequestUserProps = ChangeRequestProps & AuthProps;
 
 export interface RouteParams {
   changeRequestId: string;
 }
 
 export interface ActionProps {
-  previewChangeRequest: (changeRequestId: string) => () => void;
+  editChangeRequest: (changeRequestId: string) => void;
+}
+
+interface LoadAsyncState {
+  loadAsyncState: AsyncState;
 }
