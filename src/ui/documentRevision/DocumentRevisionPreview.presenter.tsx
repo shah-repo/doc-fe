@@ -6,14 +6,24 @@ import FileCard from "../components/cards/FileCard";
 import Text from "../components/Text";
 import styles from "./DocumentRevisionPreview.styles";
 import { documentRevisionIdMask } from "./helpers";
+import PendingSubmissionDialogContainer from "./dialogs/PendingSubmissionDialog.container";
 
 interface DocumentRevisionPreviewPresenterProps extends WithStyles<typeof styles> {
   documentRevision: DocumentRevision | null;
+  canSubmitDocument: boolean | null;
 }
 
 const DocumentRevisionPreviewPresenter: React.FunctionComponent<DocumentRevisionPreviewPresenterProps> =
-  ({ classes, documentRevision }) => {
+  ({ classes, documentRevision, canSubmitDocument }) => {
     if (!documentRevision) { return null; }
+    const renderPendingSubmissionButton = () => {
+      return (
+        canSubmitDocument && <PendingSubmissionDialogContainer
+          transition="pending_submission"
+          documentRevisionId={documentRevision.id}
+        />
+      )
+    }
 
     const attachments = (documentRevision.attachments || []).map((attachment: Attachment, index: number) => (
       <FileCard key={index} attachment={attachment} />
@@ -91,6 +101,9 @@ const DocumentRevisionPreviewPresenter: React.FunctionComponent<DocumentRevision
           <Grid container={true} spacing={8}>
             {attachments}
           </Grid>
+        </Grid>
+        <Grid>
+          {renderPendingSubmissionButton()}
         </Grid>
       </Grid>
     );

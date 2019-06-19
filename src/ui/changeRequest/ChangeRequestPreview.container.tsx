@@ -9,6 +9,7 @@ import AssessmentPreviewPresenter from "./preview/AssessmentPreview.presenter";
 import DocumentRevisionControlPreviewPresenter from "./documentRevision/DocumentRevisionControlPreview.presenter";
 import { DocumentRevision } from "../../state/ducks/documentRevisions";
 import DocumentRevisionPreviewPresenter from "../documentRevision/DocumentRevisionPreview.presenter";
+import { canSubmitDocumentRevision } from "../documentRevision/helpers";
 
 interface StateProps {
   currentUserEmail: string;
@@ -41,6 +42,9 @@ export const ChangeRequestPreviewContainer: React.FunctionComponent<ChangeReques
     changeRequest.state === ChangeRequestStatus.InReview &&
     (currentUserApproval as Approval).status === ApprovalStatus.Pending;
 
+
+  const canSubmitDocument = selectedDocumentRevision && canSubmitDocumentRevision(selectedDocumentRevision, currentUserEmail);
+
   const renderAssessmentPreview = () => (
     <AssessmentPreviewPresenter
       canSendToReview={canSendToReview}
@@ -50,7 +54,7 @@ export const ChangeRequestPreviewContainer: React.FunctionComponent<ChangeReques
     />
   );
   const renderDocumentRevision = () => (
-    <DocumentRevisionPreviewPresenter documentRevision={selectedDocumentRevision} />
+    <DocumentRevisionPreviewPresenter documentRevision={selectedDocumentRevision} canSubmitDocument={canSubmitDocument} />
   );
 
   const selectDocumentRevision = (documentRevision: DocumentRevision) => setSelectedDocumentRevision(documentRevision)
