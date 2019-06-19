@@ -1,4 +1,4 @@
-import { Link, TableCell } from "@material-ui/core";
+import { Link, TableCell, Theme, Tooltip } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 
 export const StyledTableHeader = withStyles((theme) => ({
@@ -29,3 +29,9 @@ export const StyledCellLink = withStyles((theme) => ({
     cursor: "pointer",
   },
 }))(Link);
+
+export const StyledTooltip = withStyles((theme: Theme) => ({
+  tooltip: {
+    fontSize: "13px",
+  },
+}))(Tooltip);
