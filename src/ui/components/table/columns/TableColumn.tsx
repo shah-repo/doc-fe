@@ -6,10 +6,11 @@ import {
   StyledCellLink,
   StyledTableCell,
   StyledTableHeader,
+  StyledTooltip,
 } from "./TableColumn.styles";
 import {
+  TableCellProps,
   TableCellTypeRenderer,
-  TableColumnActionType,
   TableColumnProps,
 } from "./types";
 
@@ -21,21 +22,29 @@ export function TableColumn<T>({
   cellType,
   columnOptions,
   cellOptions,
+  hoverDataInfo = false,
   onSelect,
 }: Props<T>) {
 
-  const cellLinkType = (cellData: any, rowData: any) => {
+  const handleClick = ({rowData}: TableCellProps<T>) => (e: React.MouseEvent<HTMLElement>) => {
+    if (onSelect) {
+      onSelect({rowData})();
+      e.stopPropagation();
+    }
+  };
+
+  const cellLinkType = ({cellData, rowData}: TableCellProps<T>) => {
     return (
       <StyledCellLink
         variant="subtitle2"
-        onClick={onSelect && onSelect({rowData})}
+        onClick={handleClick({cellData, rowData})}
       >
         {cellData}
       </StyledCellLink>
     );
   };
 
-  const cellActionType = (cellData: TableColumnActionType[], rowData: T) => {
+  const cellActionType = ({cellData, rowData}: TableCellProps<T>) => {
     return cellData.map((actionType) => {
       const ActionColumn = TableColumnAction<T>();
       return (
@@ -55,8 +64,8 @@ export function TableColumn<T>({
       type = (cellType as TableCellTypeRenderer<T>)(rowData);
     }
     switch (type) {
-      case "LINK": return cellLinkType(cellData, rowData);
-      case "ACTION": return cellActionType(cellData, rowData);
+      case "LINK": return cellLinkType({cellData, rowData});
+      case "ACTION": return cellActionType({cellData, rowData});
       default: return cellData;
     }
   };
@@ -72,7 +81,7 @@ export function TableColumn<T>({
     );
   };
 
-  const cellRenderer = ({ cellData , rowData }: any) => {
+  const cellRenderer = ({ cellData, rowData }: any) => {
     return (
       <StyledTableCell
         component="div"
@@ -80,7 +89,9 @@ export function TableColumn<T>({
         align={"left"}
         {... cellOptions}
       >
-        {cellTypeRenderer(cellData, rowData)}
+        <StyledTooltip disableHoverListener={!hoverDataInfo} title={cellData}>
+          <div>{cellTypeRenderer(cellData, rowData)}</div>
+        </StyledTooltip>
       </StyledTableCell>
     );
   };
