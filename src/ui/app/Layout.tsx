@@ -24,7 +24,6 @@ import DocumentContainer from "../documents/Document.container";
 import HeaderContainer from "./Header.container";
 import styles from "./Layout.styles";
 import Navigation from "./Navigation";
-import { DocumentRevisionManagerContainer } from "../documentRevision/DocumentRevisionsManager.container";
 
 type Props = WithStyles<typeof styles>;
 

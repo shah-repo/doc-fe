@@ -19,6 +19,14 @@ const DocumentRevisionPreviewPresenter: React.FunctionComponent<DocumentRevision
       <FileCard key={index} attachment={attachment} />
     ));
 
+    const referencedBy = documentRevision.referencedBy.map((reference, index) => (
+      <Grid container={true} key={index}>
+        <Grid item={true} xs={3}>
+          <Typography>{index + 1}. <strong>{reference.name}</strong></Typography>
+        </Grid>
+      </Grid>
+    ));
+
     return (
       <Grid container={true} className={classes.container} spacing={8}>
         <Grid item={true} xs={2}>
@@ -70,6 +78,14 @@ const DocumentRevisionPreviewPresenter: React.FunctionComponent<DocumentRevision
           <Typography variant="h6">
             {documentRevision.name}
           </Typography>
+        </Grid>
+        <Grid item={true} xs={2}>
+          <Typography variant="h6">
+            <Text translation="documentRevision.form.referencedBy" />
+          </Typography>
+        </Grid>
+        <Grid item={true} xs={10}>
+          {documentRevision.referencedBy.map((reference, index) => reference.name )}
         </Grid>
         <Grid item={true} xs={12}>
           <Grid container={true} spacing={8}>

@@ -2,6 +2,9 @@ import { createSelector } from "reselect";
 import _ from 'lodash';
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
+import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
+import { documentRevisionIdMask } from "../../../ui/documentRevision/helpers";
+import { DocumentRevisionStatus } from "./types";
 
 const allIds = (state: ApplicationState) => state.documentRevisions.allIds;
 const byId = (state: ApplicationState) => state.documentRevisions.byId;
@@ -23,6 +26,18 @@ const makeGetDocumentRevisions = () => {
   )
 }
 
+const allowedStates = [DocumentRevisionStatus.Released, DocumentRevisionStatus.Deprecated, DocumentRevisionStatus.Obsolete];
+const getAvailableReferences = createSelector(
+  allIds, byId,
+  (ids, docRevs): OptionType[] => (
+    ids
+    .filter((id) => allowedStates.indexOf(docRevs[id].status) > -1)
+    .map((id) => ({
+      value: id,
+      label: `${documentRevisionIdMask(docRevs[id].type, docRevs[id].document.typeCount)} - ${docRevs[id].revision} - ${docRevs[id].name}`
+  }))),
+);
+
 const getLoadAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadAsyncInfo;
 const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadListAsyncInfo;
 const getLoadDocumentAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadDocumentAsyncInfo;
@@ -37,4 +52,5 @@ export default {
   getDocument,
   getDocumentRevisions,
   makeGetDocumentRevisions,
+  getAvailableReferences,
 };
