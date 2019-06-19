@@ -8,6 +8,7 @@ import FileCard from "../../components/cards/FileCard";
 import ChangeRequestTransitionDialogContainer from "../dialogs/ChangeRequestTransitionDialog.container";
 import styles from "../ChangeRequestPreview.styles";
 import Text from "../../components/Text";
+import AssessmentFormControlsContainer from "../forms/assessmentForm/AssessmentFormControls.container";
 
 interface AssessmentPreviewPresenterProps extends WithStyles<typeof styles> {
   changeRequest: ChangeRequest;
@@ -18,15 +19,6 @@ interface AssessmentPreviewPresenterProps extends WithStyles<typeof styles> {
 
 const AssessmentPreviewPresenter: React.FunctionComponent<AssessmentPreviewPresenterProps> =
   ({ classes, changeRequest, canApproveOrReject, canSendToReview, canWithdraw }) => {
-    const renderButton = (condition: boolean, transition: ChangeRequestTransition, buttonProps?: ButtonProps) =>
-      condition && (
-        <ChangeRequestTransitionDialogContainer
-          transition={transition}
-          changeRequestId={changeRequest.id}
-          buttonProps={buttonProps}
-        />
-      );
-
     const approvals = changeRequest.approvals.map((approval, index) => (
       <Grid container={true} key={index}>
         <Grid item={true} xs={3}>
@@ -112,10 +104,7 @@ const AssessmentPreviewPresenter: React.FunctionComponent<AssessmentPreviewPrese
         </Grid>
         <Grid item={true} xs={12}>
           <div className={classes.actionButtons}>
-            {renderButton(canSendToReview, "to_review")}
-            {renderButton(canWithdraw, "withdraw")}
-            {renderButton(canApproveOrReject, "reject", { color: "secondary" })}
-            {renderButton(canApproveOrReject, "approve")}
+            <AssessmentFormControlsContainer changeRequest={changeRequest} />
           </div>
         </Grid>
       </Grid>

@@ -7,7 +7,7 @@ import {
   WithStyles,
 } from "@material-ui/core";
 import { ButtonProps } from "@material-ui/core/Button";
-import { Formik, FormikActions, FormikProps } from "formik";
+import { Formik, FormikProps } from "formik";
 import React from "react";
 import { Transition } from "./types";
 import { AsyncState } from "../../../state/types";
@@ -24,12 +24,13 @@ export interface TransitionDialogProps {
   asyncState: AsyncState;
   buttonProps?: ButtonProps;
   transition: Transition;
+  label: string;
 }
 
 type Props = TransitionDialogProps & WithStyles<typeof styles>;
 
 const TransitionDialog: React.FunctionComponent<Props> =
-  ({ classes, onSubmit, closeDialog, openDialog, isDialogOpen, asyncState, buttonProps, transition }) => {
+  ({ classes, onSubmit, closeDialog, openDialog, isDialogOpen, asyncState, buttonProps, transition, label }) => {
     const renderForm = (props: FormikProps<any>) => (
       <PasswordForm {...props} asyncState={asyncState} cancel={closeDialog} />
     );
@@ -46,7 +47,7 @@ const TransitionDialog: React.FunctionComponent<Props> =
           onClick={openDialog}
           {...buttonProps}
         >
-          <Text message={`transition.action.${transition}`} />
+          <Text message={label} />
         </Button>
         <Dialog
           disableEscapeKeyDown={true}

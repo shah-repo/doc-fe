@@ -5,13 +5,14 @@ import { changeRequestsActions, changeRequestsSelectors } from "../../state/duck
 import { ApplicationState } from "../../state/reducers";
 import ChangeRequestUpdateContainer from "../changeRequest/ChangeRequestUpdate.container";
 import AsyncGate from "../components/AsyncGate";
-import { CHANGE_REQUEST_UPDATE_URL } from "../constants/urls";
+import { CHANGE_REQUEST_UPDATE_URL, CHANGE_REQUEST_PREVIEW_URL } from "../constants/urls";
 
 import {
   ContainerDispatchProps,
   ContainerOwnProps,
   ContainerStateProps,
 } from "./utils/types";
+import ChangeRequestPreviewContainer from "../changeRequest/ChangeRequestPreview.container";
 
 type DispatchProps = ContainerDispatchProps;
 type StateProps = ContainerStateProps;
@@ -32,11 +33,13 @@ const Container: React.FunctionComponent<Props> = ({
   const changeRequestId = match.params.changeRequestId;
   const loadAction = () => load(changeRequestId);
   const renderUpdateContainer = () => <ChangeRequestUpdateContainer changeRequest={changeRequest} />;
+  const renderChangeRequestPreviewContainer = () => <ChangeRequestPreviewContainer changeRequest={changeRequest} />;
 
   return (
     <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>
       <Switch>
         <Route path={CHANGE_REQUEST_UPDATE_URL} exact={true} render={renderUpdateContainer} />
+        <Route path={CHANGE_REQUEST_PREVIEW_URL} exact={true} render={renderChangeRequestPreviewContainer} />
       </Switch>
     </AsyncGate>
   );

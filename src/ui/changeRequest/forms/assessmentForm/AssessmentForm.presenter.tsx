@@ -4,11 +4,10 @@ import React from "react";
 import { AsyncState } from "../../../../state/types";
 import InputField from "../../../components/forms/fields/Input";
 import DatePickerField from "../../../components/forms/fields/DatePicker";
-import { required, validator, requiredAtLeastOne } from "../../../components/forms/fields/validators";
+import { required, validator } from "../../../components/forms/fields/validators";
 import AutcompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";
-import SubmitButton from "../../../components/forms/SubmitButton";
 import Text from "../../../components/Text";
 import { ChangeRequestFormValues } from "../types.js";
 import AssessmentFormJustifications from './AssessmentFormJustifications';
@@ -16,14 +15,17 @@ import AssessmentFormAssessments from './AssessmentFormAssessments';
 import AssessmentFormImplementationPlan from './AssessmentFormImplementationPlan';
 import styles from './AssessmentForm.styles';
 import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
+import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
+import { ChangeRequest } from "../../../../state/ducks/changeRequest";
+import SubmitButton from "../../../components/forms/SubmitButton";
 
 interface Props extends WithStyles<typeof styles>, FormikProps<ChangeRequestFormValues> {
   asyncState: AsyncState;
-  changeRequestId?: string;
-  availableApprovers: OptionType[],
+  changeRequest?: ChangeRequest;
+  availableApprovers: OptionType[];
 }
 
-const AssessmentFormPresenter: React.FunctionComponent<Props> = ({ asyncState, availableApprovers, classes }) => {
+const AssessmentFormPresenter: React.FunctionComponent<Props> = ({ asyncState, availableApprovers, classes, changeRequest }) => {
   const renderJustifications = (props: FieldProps<ChangeRequestFormValues>) => <AssessmentFormJustifications {...props} />;
   const renderAssessments = (props: FieldProps<ChangeRequestFormValues>) => <AssessmentFormAssessments {...props} />;
   const renderimplementationPlan = (props: FieldProps<ChangeRequestFormValues>) => <AssessmentFormImplementationPlan {...props} />;
@@ -57,6 +59,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({ asyncState, a
           options={availableApprovers}
         />
         <SubmitButton asyncState={asyncState} label="document.save" />
+        <AssessmentFormControlsContainer changeRequest={changeRequest} />
       </Form>
     </div>
   );

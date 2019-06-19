@@ -5,7 +5,7 @@ import { AsyncState } from "../../../../state/types";
 import AssessmentFormPresenter from "./AssessmentForm.presenter";
 import { ChangeRequestFormValues } from "../types";
 import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
-import { changeRequestsActions, changeRequestsSelectors } from "../../../../state/ducks/changeRequest";
+import { changeRequestsActions, changeRequestsSelectors, ChangeRequest } from "../../../../state/ducks/changeRequest";
 import { connect } from "react-redux";
 import { ApplicationState } from "../../../../state/reducers";
 import AsyncGate from "../../../components/AsyncGate";
@@ -22,6 +22,7 @@ interface OwnProps {
   initialValues: ChangeRequestFormValues;
   asyncState: AsyncState;
   onSubmit: (values: ChangeRequestFormValues, actions: FormikActions<ChangeRequestFormValues>) => void;
+  changeRequest?: ChangeRequest;
 }
 
 type AssessmentFormContainerProps = StateProps & DispatchProps & OwnProps;
@@ -52,9 +53,9 @@ const validate = (values: ChangeRequestFormValues) => {
 }
 
 const AssessmentFormContainer: React.FunctionComponent<AssessmentFormContainerProps> =
-  ({ onSubmit, initialValues, asyncState, availableApprovers, loadApproversAsyncState, loadAvailableApprovers }) => {
+  ({ onSubmit, initialValues, asyncState, availableApprovers, loadApproversAsyncState, loadAvailableApprovers, changeRequest }) => {
     const render = (props: FormikProps<ChangeRequestFormValues>) => (
-      <AssessmentFormPresenter {...props} asyncState={asyncState} availableApprovers={availableApprovers} />
+      <AssessmentFormPresenter {...props} asyncState={asyncState} availableApprovers={availableApprovers} changeRequest={changeRequest} />
     );
 
     return (

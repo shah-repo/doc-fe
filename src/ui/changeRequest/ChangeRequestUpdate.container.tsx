@@ -49,6 +49,7 @@ export const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequest
       asyncState={async.asyncState}
       onSubmit={onSubmit}
       initialValues={toChangeRequestFormValues(changeRequest)}
+      changeRequest={changeRequest}
     />
   );
 };
