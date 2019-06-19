@@ -30,21 +30,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   availableReferences, dirty,
 }) => {
   const renderAttachments = (props: FieldArrayRenderProps) => <AttachmentsContainer {...props} />;
-  const renderProcessButton = () => {
-    if (!initialValues.id) {
-      return null;
-    }
-
-    return (
-      <div className={classes.reviewButton}>
-        <PendingSubmissionDialogContainer
-          transition="pending_submission"
-          documentRevisionId={initialValues.id}
-          buttonProps={{ disabled: dirty, color: "secondary" }}
-        />
-      </div>
-    );
-  };
 
   const onTypeChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
     const type = event.target.value as string;
@@ -108,7 +93,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         </div>
         <FieldArray name="attachments" render={renderAttachments} />
         <SubmitButton asyncState={asyncState} label="common.save" />
-        {renderProcessButton()}
       </Form>
     </div>
   );

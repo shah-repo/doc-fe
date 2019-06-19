@@ -10,6 +10,7 @@ export enum DocumentRevisionStatus {
   Released = "RELEASED",
   Deprecated = "DEPRECATED",
   Obsolete = "OBSOLETE",
+  PendingChange = "PENDING_CHANGE",
 }
 
 export interface DocumentRevisionDocument {

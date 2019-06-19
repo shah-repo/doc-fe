@@ -9,7 +9,7 @@ import AsyncGate from "../components/AsyncGate";
 import DocumentRevisionListContainer from "./DocumentRevisionList.container";
 import { AsyncState } from "../../state/types";
 import DocumentRevisionPreviewPresenter from "./DocumentRevisionPreview.presenter";
-import { canEditDocumentRevision } from "./helpers";
+import { canEditDocumentRevision, canSubmitDocumentRevision } from "./helpers";
 import DocumentRevisionUpdateContainer from "./DocumentRevisionUpdate.container";
 
 interface StateProps {
@@ -40,11 +40,12 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
 }) => {
   const loadDocumentRevisionAction = () => loadDocumentRevision(documentRevisionId);
   const canEdit = documentRevision && canEditDocumentRevision(documentRevision, currentUserEmail);
+  const canSubmit = documentRevision && canSubmitDocumentRevision(documentRevision, currentUserEmail);
 
   return (
     <AsyncGate asyncState={loadDocumentRevisionAsyncState} asyncAction={loadDocumentRevisionAction} startActionOnMount={true}>
       {canEdit && <DocumentRevisionUpdateContainer documentRevision={documentRevision} />}
-      {!canEdit && <DocumentRevisionPreviewPresenter documentRevision={documentRevision} />}
+      {!canEdit && <DocumentRevisionPreviewPresenter documentRevision={documentRevision} canSubmitDocument={canSubmit} />}
     </AsyncGate>
   );
 };
