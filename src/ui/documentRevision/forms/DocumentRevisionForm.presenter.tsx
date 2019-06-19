@@ -84,9 +84,14 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           }}
           options={availableReferences}
         />
-        <Typography variant="h6" >
-          <Text translation="documentRevision.form.referencedBy" />
-        </Typography>
+        {
+          initialValues.referencedBy.length > 0
+          && (
+            <Typography variant="h6" >
+              <Text translation="documentRevision.form.referencedBy" />
+            </Typography>
+          )
+        }
         <div>
           {initialValues.referencedBy.map((reference) => reference.name)}
         </div>
