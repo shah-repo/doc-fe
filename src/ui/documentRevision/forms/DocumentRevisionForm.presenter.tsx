@@ -1,4 +1,4 @@
-import { withStyles, WithStyles, Typography } from "@material-ui/core";
+import { withStyles, WithStyles, Typography, Button } from "@material-ui/core";
 import { FieldArray, FieldArrayRenderProps, Form, FormikProps } from "formik";
 import React, { ChangeEvent } from "react";
 import documentTypes from "../../../data/documentTypes.json";
@@ -17,6 +17,7 @@ import { DocumentRevisionFormValues } from "./types";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import Text from "../../components/Text";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
+import PendingSubmissionDialogContainer from "../dialogs/PendingSubmissionDialog.container";
 
 interface Props extends WithStyles<typeof styles>, FormikProps<DocumentRevisionFormValues> {
   asyncState: AsyncState;
@@ -25,15 +26,25 @@ interface Props extends WithStyles<typeof styles>, FormikProps<DocumentRevisionF
 }
 
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
-  asyncState,
-  classes,
-  initialValues,
-  handleChange,
-  setFieldValue,
-  documentRevisions,
-  availableReferences,
+  asyncState, classes, initialValues, handleChange, setFieldValue, documentRevisions,
+  availableReferences, dirty,
 }) => {
   const renderAttachments = (props: FieldArrayRenderProps) => <AttachmentsContainer {...props} />;
+  const renderProcessButton = () => {
+    if (!initialValues.id) {
+      return null;
+    }
+
+    return (
+      <div className={classes.reviewButton}>
+        <PendingSubmissionDialogContainer
+          transition="pending_submission"
+          documentRevisionId={initialValues.id}
+          buttonProps={{ disabled: dirty, color: "secondary" }}
+        />
+      </div>
+    );
+  };
 
   const onTypeChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
     const type = event.target.value as string;
@@ -97,6 +108,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         </div>
         <FieldArray name="attachments" render={renderAttachments} />
         <SubmitButton asyncState={asyncState} label="common.save" />
+        {renderProcessButton()}
       </Form>
     </div>
   );

@@ -113,6 +113,7 @@
   "documentRevision.released": "Released",
   "documentRevision.form.references": "References",
   "documentRevision.form.referencedBy": "Referenced by",
+  "documentRevision.form.processChange": "Process change",
 
   "transition.action.confirm": "Confirm",
   "transition.action.cancel": "Cancel",
@@ -121,5 +122,6 @@
   "transition.action.approve": "Approve",
   "transition.action.reject": "Reject",
   "transition.action.to_review": "Send to review",
-  "transition.action.withdraw": "Withdraw"
+  "transition.action.withdraw": "Withdraw",
+  "transition.action.pending_submission": "Pending submission"
 }

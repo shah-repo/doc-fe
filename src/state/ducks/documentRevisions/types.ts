@@ -78,3 +78,13 @@ export interface DocumentByIdState {
 }
 
 export type DocumentRevisionsAllIdsState = string[];
+
+export type DocumentRevisionTransition = "pending_submission";
+
+export interface DocumentRevisionTransitionRequestBody {
+  password: string;
+}
+
+export interface DocumentRevisionTransitionResponse {
+  id: string;
+}
