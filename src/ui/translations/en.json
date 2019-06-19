@@ -30,6 +30,8 @@
 
   "fields.select.none": "None",
 
+  "table.column.actions": "Actions",
+
   "changeRequest.title": "Document - Change Request",
   "changeRequest.state": "State",
   "changeRequest.assessmentForm.description": "Description",
@@ -65,7 +67,7 @@
   "change.request.list.description": "Description",
   "change.request.list.owner": "Owner",
   "change.request.list.state": "State",
-  "change.request.list.noRows": "No document revisions",
+  "change.request.list.noRows": "No change requests",
   "change.request.create": "Create a change request",
 
   "common.name": "Name",
@@ -115,5 +117,16 @@
   "transition.action.approve": "Approve",
   "transition.action.reject": "Reject",
   "transition.action.to_review": "Send to review",
-  "transition.action.withdraw": "Withdraw"
+  "transition.action.withdraw": "Withdraw",
+
+  "document.revision.list.docId": "DOC ID",
+  "document.revision.list.revision": "Revision",
+  "document.revision.list.description": "Description",
+  "document.revision.list.name": "Document title",
+  "document.revision.list.owner": "Owner",
+  "document.revision.list.state": "Status",
+  "document.revision.list.type": "Type",
+  "document.revision.list.version": "Released version",
+  "document.revision.list.noRows": "No document revisions",
+  "document.revision.create": "Create a document"
 }

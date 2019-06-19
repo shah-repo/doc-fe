@@ -16,9 +16,9 @@ import {
   HOME_URL,
 } from "../constants/urls";
 import DashboardContainer from "../dashboard/Dashboard.container";
-import DocumentRevisionContainer from "../documentRevision/DocumentRevision.container";
+import DocumentRevisionContainer from "../document.revision/Container";
+import DocumentRevisionTableContainer from "../document.revision/List.container";
 import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisionCreate.container";
-import DocumentRevisionTableContainer from "../documentRevision/DocumentRevisionTable.container";
 import DocumentContainer from "../documents/Document.container";
 import HeaderContainer from "./Header.container";
 import styles from "./Layout.styles";
