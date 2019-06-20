@@ -2,6 +2,7 @@ import { Box } from "@material-ui/core";
 import React from "react";
 import {
   AutoSizer,
+  CellMeasurerCache,
   Index,
   Size,
   Table,
@@ -17,6 +18,7 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
   data,
   columns,
   noRowsTranslation,
+  cellMeasure = false,
   onSelect,
 }) => {
 
@@ -34,13 +36,20 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
     `${classes.row} ${classes.rowOdd}`;
   };
 
+  const measurerCache = new CellMeasurerCache({
+    fixedWidth: true,
+    fixedHeight: !cellMeasure,
+    minHeight: 50,
+  });
+
   const tableRenderer = ({ height, width }: Size) => {
     return (
       <Table
         width={width}
         height={height}
         headerHeight={50}
-        rowHeight={50}
+        rowHeight={measurerCache.rowHeight}
+        deferredMeasurementCache={measurerCache}
         rowCount={data.length}
         className={classes.table}
         rowClassName={rowClassName}
@@ -49,7 +58,7 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
         noRowsRenderer={noRowsRenderer}
         onRowClick={onSelect && (({rowData}) => onSelect({rowData})())}
       >
-        {columns.map((item) => TableColumn<T>(item))}
+        {columns.map((item) => TableColumn<T>(item, {measurerCache}))}
       </Table>
     );
   };

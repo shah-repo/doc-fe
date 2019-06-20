@@ -12,11 +12,12 @@ export interface TablePanelProps<T> {
   data: T[];
   columns: Array<TableColumnProps<T>>;
   noRowsTranslation: Translation;
+  cellMeasure?: boolean;
   onSelect?: TableSelectionRenderer<T>;
 }
 
 // CSS
 export interface TableStyleProps {
-  isSelectable: boolean;
-  backgroundCellColor?: string;
+  isSelectable?: boolean;
+  hasFixedHeight?: boolean;
 }
