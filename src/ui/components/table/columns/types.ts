@@ -1,5 +1,5 @@
 import { TableCellProps } from "@material-ui/core/TableCell";
-import { ColumnProps } from "react-virtualized";
+import { CellMeasurerCache, ColumnProps } from "react-virtualized";
 import { Translation } from "../../../translations/types";
 import { TableSelectionRenderer } from "../types";
 
@@ -20,10 +20,15 @@ export interface TableColumnProps<T> {
   cellOptions?: Partial<TableCellProps>;
   hoverDataInfo?: boolean;
   onSelect?: TableSelectionRenderer<T>;
+
 }
 
 export interface TableColumnActionProps<T> {
   actionType: TableColumnActionType;
   rowData: T;
   onSelect?: TableSelectionRenderer<T>;
+}
+
+export interface InnerTableColumnProps {
+  measurerCache: CellMeasurerCache;
 }
