@@ -38,6 +38,7 @@
   "changeRequest.assessmentForm.justifications": "Justifications",
   "changeRequest.assessmentForm.assessments": "Assessments",
   "changeRequest.assessmentForm.implementationPlan": "Implementation Plan",
+  "changeRequest.assessmentForm.addTask": "Add Task",
   "changeRequest.assessmentForm.trainingRequired": "Training Required",
   "changeRequest.assessmentForm.targetDate": "Target Date",
   "changeRequest.assessmentForm.approver": "Approver",

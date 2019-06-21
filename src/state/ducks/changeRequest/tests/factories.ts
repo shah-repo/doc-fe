@@ -10,12 +10,20 @@ const createNestedObject = () => (
   }
 )
 
+const createImplementationPlan = () => (
+  {
+    id: faker.random.uuid(),
+    implementationPlanTasks: [],
+    attachments: [],
+  }
+)
+
 export const getChangeRequest = (changeRequest: Partial<ChangeRequest> = {}): ChangeRequest => ({
   id: faker.random.uuid(),
   state: ChangeRequestStatus.Draft,
   description: faker.lorem.sentence(),
   assessment: createNestedObject(),
-  implementationPlan: createNestedObject(),
+  implementationPlan: createImplementationPlan(),
   justifications: createNestedObject(),
   effectiveDate: faker.date.future(undefined, '2019-05-31'),
   approvals: [],

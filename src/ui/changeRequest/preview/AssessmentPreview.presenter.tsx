@@ -91,11 +91,6 @@ const AssessmentPreviewPresenter: React.FunctionComponent<AssessmentPreviewPrese
             <Text translation="changeRequest.assessmentForm.implementationPlan" />
           </Typography>
         </Grid>
-        <Grid item={true} xs={10}>
-          <Typography variant="h5">
-            {changeRequest.implementationPlan.description}
-          </Typography>
-        </Grid>
         <Grid item={true} xs={12}>
           {renderAttachments(changeRequest.implementationPlan.attachments)}
         </Grid>
