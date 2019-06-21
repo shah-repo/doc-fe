@@ -38,8 +38,8 @@ const ListContainer: React.FunctionComponent<Props> = ({
   history,
 }) => {
   const loadAction = () => loadDocumentRevisions();
-  const edit = (documentRevisionId: string) => history.push(documentEditPath(documentRevisionId));
-  const preview = (documentRevisionId: string) => history.push(documentPreviewPath(documentRevisionId));
+  const edit = (documentRevisionId: string, documentId: string) => history.push(documentEditPath(documentRevisionId, documentId));
+  const preview = (documentRevisionId: string, documentId: string) => history.push(documentPreviewPath(documentRevisionId, documentId));
 
   return (
     <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>

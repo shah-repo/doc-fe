@@ -1,5 +1,6 @@
 import { Attachment } from "../attachments";
 import { DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
+import { User } from "../common";
 
 export enum DocumentRevisionStatus {
   Draft = "DRAFT",
@@ -38,7 +39,7 @@ export interface DocumentRevision {
   revision: string;
   name: string;
   description: string;
-  owner: any;
+  owner: User;
   attachments: Attachment[];
   status: DocumentRevisionStatus;
   document: DocumentRevisionDocument;

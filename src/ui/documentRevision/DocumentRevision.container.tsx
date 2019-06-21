@@ -9,13 +9,9 @@ import {
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
 import {
-  DOCUMENT_REVISION_PREVIEW_URL,
-  DOCUMENT_REVISION_UPDATE_URL,
   DOCUMENT_REVISION_DETAILS_URL,
   DOCUMENT_REVISION_VERSION_URL,
 } from "../constants/urls";
-import DocumentRevisionPreviewContainer from "./DocumentRevisionPreview.presenter";
-import DocumentRevisionUpdateContainer from "./DocumentRevisionUpdate.container";
 import { DocumentRevisionRouteParams } from "./types";
 import DocumentRevisionManagerContainer from "./DocumentRevisionsManager.container";
 
@@ -38,10 +34,7 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 });
 
 const DocumentRevisionContainer: React.FunctionComponent<DocumentRevisionContainerProps> = ({
-  load,
-  loadAsyncState,
   match,
-  documentRevision,
 }) => {
   const documentId = match.params.documentId;
   const renderWrapper = (props: any) => {
@@ -51,14 +44,10 @@ const DocumentRevisionContainer: React.FunctionComponent<DocumentRevisionContain
       <props.component documentRevisionId={documentRevisionId} documentId={documentId} />
     )
   }
-  const renderDocumentRevisionUpdateContainer = (props: any) => renderWrapper({ component: DocumentRevisionUpdateContainer, ...props});
-  const renderDocumentRevisionPreviewContainer = (props: any) => renderWrapper({ component: DocumentRevisionPreviewContainer, ...props});
   const renderDocumentRevisionManagerContainer = (props: any) => renderWrapper({ component: DocumentRevisionManagerContainer, ...props});
 
   return (
       <Switch>
-        <Route path={DOCUMENT_REVISION_UPDATE_URL} exact={true} render={renderDocumentRevisionUpdateContainer} />
-        <Route path={DOCUMENT_REVISION_PREVIEW_URL} exact={true} render={renderDocumentRevisionPreviewContainer} />
         <Route path={DOCUMENT_REVISION_VERSION_URL} exact={true} render={renderDocumentRevisionManagerContainer} />
         <Route path={DOCUMENT_REVISION_DETAILS_URL} exact={true} render={renderDocumentRevisionManagerContainer} />
       </Switch>
