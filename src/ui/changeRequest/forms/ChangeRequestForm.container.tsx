@@ -8,6 +8,7 @@ import { AsyncState } from '../../../state/types';
 import { DocumentRevisionsByIdState, documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
 import DocumentRevisionUpdateContainer from '../../documentRevision/DocumentRevisionUpdate.container';
 import { ApplicationState } from '../../../state/reducers';
+import { ChangeRequest } from '../../../state/ducks/changeRequest';
 
 interface StateProps {
   documentRevisionsById: DocumentRevisionsByIdState;
@@ -16,6 +17,7 @@ interface OwnProps {
   initialValues: ChangeRequestFormValues;
   onSubmit: (values: ChangeRequestFormValues) => void;
   asyncState: AsyncState;
+  changeRequest?: ChangeRequest;
 }
 
 type ChangeRequestFormContainerProps = OwnProps & StateProps;
@@ -25,7 +27,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 });
 
 export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFormContainerProps> = ({
-  onSubmit, asyncState, initialValues, documentRevisionsById,
+  onSubmit, asyncState, initialValues, documentRevisionsById, changeRequest,
 }) => {
   const [initialValuesState, setInitialValuesState] = useState<ChangeRequestFormValues>(initialValues);
   const [selectedDocumentRevision, setSelectedDocumentRevision] = useState<string | null>(null);
@@ -53,7 +55,6 @@ export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFo
     setSelectedDocumentRevision(null);
   }
 
-
   const renderAssessmentForm = () => {
     if (selectedDocumentRevision) {
       return null;
@@ -64,6 +65,7 @@ export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFo
         initialValues={initialValuesState}
         onSubmit={onSubmit}
         asyncState={asyncState}
+        changeRequest={changeRequest}
       />
     )
   }
