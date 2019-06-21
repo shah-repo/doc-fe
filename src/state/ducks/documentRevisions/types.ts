@@ -19,11 +19,11 @@ export enum DocumentRevisionStatus {
 
 export interface DocumentRevisionDocument {
   id: string;
-  typeCount: number;
+  ordinalNumber: number;
 }
 export interface Document {
   id: string;
-  typeCount: number;
+  ordinalNumber: number;
   documentRevisions: DocumentRevision[];
 }
 

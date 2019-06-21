@@ -33,14 +33,13 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   const onTypeChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
     const type = event.target.value as string;
-    const docIdGen = documentRevisionIdMask(type, revisionTypeCount(type));
+    const docIdGen = documentRevisionIdMask(type, revisionOrdinalNumber(type));
     handleChange(event);
     setFieldValue("documentId", docIdGen);
   };
 
-  const revisionTypeCount = (type: string) => {
-    const revisions = (documentRevisions || []).filter( (p) => p.type.includes(type));
-    return (revisions.length + 1);
+  const revisionOrdinalNumber = (type: string) => {
+    return (documentRevisions || []).length + 1;
   };
 
   return (

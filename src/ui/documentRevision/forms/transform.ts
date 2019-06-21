@@ -6,7 +6,7 @@ import { DocumentRevisionFormValues } from "./types";
 export const toDocumentRevisionFormValues = (documentRevision: DocumentRevision): DocumentRevisionFormValues => {
   const values: DocumentRevisionFormValues = {
     id: documentRevision.id,
-    documentId: documentRevisionIdMask(documentRevision.type, documentRevision.document.typeCount),
+    documentId: documentRevisionIdMask(documentRevision.type, documentRevision.document.ordinalNumber),
     description: documentRevision.description,
     name: documentRevision.name,
     attachments: documentRevision.attachments,

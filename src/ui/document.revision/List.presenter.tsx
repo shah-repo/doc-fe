@@ -43,7 +43,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       key: "docId",
       label: "document.revision.list.docId",
       columnOptions: {
-        cellDataGetter: ({ rowData }) => documentRevisionIdMask(rowData.type, rowData.document.typeCount),
+        cellDataGetter: ({ rowData }) => documentRevisionIdMask(rowData.type, rowData.document.ordinalNumber),
         width: 150,
       },
     },

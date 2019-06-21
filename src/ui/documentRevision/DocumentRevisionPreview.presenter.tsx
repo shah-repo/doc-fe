@@ -46,7 +46,7 @@ const DocumentRevisionPreviewPresenter: React.FunctionComponent<DocumentRevision
         </Grid>
         <Grid item={true} xs={10}>
           <Typography variant="h6">
-            {documentRevisionIdMask(documentRevision.type, documentRevision.document.typeCount)}
+            {documentRevisionIdMask(documentRevision.type, documentRevision.document.ordinalNumber)}
           </Typography>
         </Grid>
         <Grid item={true} xs={2}>
