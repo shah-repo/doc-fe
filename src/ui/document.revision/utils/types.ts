@@ -31,9 +31,10 @@ export type DocumentRevisionsUserProps = DocumentRevisionsProps & ActionProps & 
 
 export interface RouteParams {
   documentRevisionId: string;
+  documentId: string;
 }
 
 export interface ActionProps {
-  editDocumentRevision: (documentId: string) => void;
-  previewDocumentRevision: (documentId: string) => void;
+  editDocumentRevision: (documentRevisionId: string, documentId: string) => void;
+  previewDocumentRevision: (documentRevisionId: string, documentId: string) => void;
 }

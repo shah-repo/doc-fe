@@ -1,15 +1,17 @@
 import { generatePath } from "react-router-dom";
 import {
-  DOCUMENT_REVISION_PREVIEW_URL,
-  DOCUMENT_REVISION_UPDATE_URL,
+  DOCUMENT_REVISION_VERSION_URL,
 } from "../../constants/urls";
 import { RouteParams } from "./types";
 
 const documentPath = (path: string, routeParams: RouteParams) =>
   generatePath(path, { ...routeParams });
 
-export const documentEditPath = (documentRevisionId: string) =>
-  documentPath(DOCUMENT_REVISION_UPDATE_URL, { documentRevisionId });
+export const documentEditPath = (documentRevisionId: string, documentId: string) =>
+documentPath(DOCUMENT_REVISION_VERSION_URL, { documentRevisionId, documentId });
 
-export const documentPreviewPath = (documentRevisionId: string) =>
-  documentPath(DOCUMENT_REVISION_PREVIEW_URL, { documentRevisionId });
+export const documentPreviewPath = (documentRevisionId: string, documentId: string) =>
+documentPath(DOCUMENT_REVISION_VERSION_URL, { documentRevisionId, documentId });
+
+export const documentVersionPath = (documentRevisionId: string, documentId: string) =>
+documentPath(DOCUMENT_REVISION_VERSION_URL, { documentRevisionId, documentId });

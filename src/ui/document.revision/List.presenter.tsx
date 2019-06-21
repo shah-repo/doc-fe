@@ -31,11 +31,11 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   };
 
   const onStateSelect = ({rowData}: TableSelectionProps<DocumentRevision>) => () => {
-    return editDocumentRevision(rowData.id);
+    return editDocumentRevision(rowData.id, rowData.document.id);
   };
 
   const onRowSelect = ({rowData}: TableSelectionProps<DocumentRevision>) => () => {
-    return previewDocumentRevision(rowData.id);
+    return previewDocumentRevision(rowData.id, rowData.document.id);
   };
 
   const columns: Array<TableColumnProps<DocumentRevision>> = [

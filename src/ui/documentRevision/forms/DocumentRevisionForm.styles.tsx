@@ -9,4 +9,10 @@ export default (theme: Theme) =>
       width: "100%",
       paddingBottom: theme.spacing(3),
     },
+    reviewButton: {
+      marginTop: theme.spacing(3),
+      borderTop: `1px solid ${theme.palette.grey[600]}`,
+      paddingTop: theme.spacing(3),
+      textAlign: "center",
+    },
   });

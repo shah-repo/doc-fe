@@ -14,6 +14,7 @@ import {
   DOCUMENT_REVISION_ROOT_URL,
   DOCUMENT_ROOT_URL,
   HOME_URL,
+  DOCUMENT_REVISION_DETAILS_URL,
 } from "../constants/urls";
 import DashboardContainer from "../dashboard/Dashboard.container";
 import DocumentRevisionContainer from "../document.revision/Container";

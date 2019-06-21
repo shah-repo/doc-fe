@@ -1,5 +1,6 @@
 import { Attachment } from "../attachments";
-import { DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET } from "./constants";
+import { DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
+import { User } from "../common";
 
 export enum DocumentRevisionStatus {
   Draft = "DRAFT",
@@ -7,15 +8,28 @@ export enum DocumentRevisionStatus {
   PendingSubmission = "PENDING_SUBMISSION",
   Submitted = "SUBMITTED",
   InReview = "IN_REVIEW",
-  Implementation = "IMPLEMENTATION",
+  Withdrawn = "WITHDRAWN",
+  Approved = "APPROVED",
+  Rejected = "REJECTED",
   Released = "RELEASED",
   Deprecated = "DEPRECATED",
   Obsolete = "OBSOLETE",
+  Implementation = "IMPLEMENTATION",
 }
 
 export interface DocumentRevisionDocument {
   id: string;
   typeCount: number;
+}
+export interface Document {
+  id: string;
+  typeCount: number;
+  documentRevisions: DocumentRevision[];
+}
+
+export interface Reference {
+  id: string;
+  name: string;
 }
 
 export interface DocumentRevision {
@@ -25,11 +39,18 @@ export interface DocumentRevision {
   revision: string;
   name: string;
   description: string;
-  owner: any;
+  owner: User;
   attachments: Attachment[];
   status: DocumentRevisionStatus;
   document: DocumentRevisionDocument;
   type: string;
+  released: Date;
+  referenceTo: Reference[];
+  referencedBy: Reference[];
+}
+
+export interface ReferenceToEditRequest {
+  id: string;
 }
 
 export interface DocumentRevisionEditRequestBody {
@@ -37,11 +58,17 @@ export interface DocumentRevisionEditRequestBody {
   description: string;
   attachments: Attachment[];
   type?: string;
+  referenceTo: ReferenceToEditRequest[];
 }
 
 export interface DocumentRevisionSetAction {
   type: typeof DOCUMENT_REVISION_SET;
   payload: DocumentRevision;
+}
+
+export interface DocumentSetAction {
+  type: typeof DOCUMENT_SET;
+  payload: Document;
 }
 
 export interface DocumentRevisionsListAction {
@@ -53,6 +80,9 @@ export interface DocumentRevisionsByIdState {
   [key: string]: DocumentRevision;
 }
 
+export interface DocumentByIdState {
+  [key: string]: Document;
+}
 export interface DocumentRevisionProps {
   documentRevision: DocumentRevision;
 }
@@ -62,3 +92,13 @@ export interface DocumentRevisionsProps {
 }
 
 export type DocumentRevisionsAllIdsState = string[];
+
+export type DocumentRevisionTransition = "pending_submission";
+
+export interface DocumentRevisionTransitionRequestBody {
+  password: string;
+}
+
+export interface DocumentRevisionTransitionResponse {
+  id: string;
+}
