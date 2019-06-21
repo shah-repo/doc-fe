@@ -26,6 +26,7 @@ export interface ImplementationPlan {
 }
 
 export interface ChangeRequestFormValues {
+  id?: string;
   description: string;
   justifications: Justifications;
   assessment: Assessment;

@@ -39,6 +39,7 @@ const ChangeRequestContainer: React.FunctionComponent<ChangeRequestContainerProp
   const renderChangeRequestUpdateContainer = () => <ChangeRequestUpdateContainer changeRequest={changeRequest} />;
   const renderChangeRequestPreviewContainer = () => <ChangeRequestPreviewContainer changeRequest={changeRequest} />;
 
+  console.log('routing');
   return (
     <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>
       <Switch>

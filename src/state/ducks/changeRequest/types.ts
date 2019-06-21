@@ -86,7 +86,7 @@ export interface ChangeRequestsByIdState {
 
 export type ChangeRequestsAllIdsState = string[];
 
-export type ChangeRequestTransition = "approve" | "reject" | "to_review" | "withdraw";
+export type ChangeRequestTransition = "approve" | "reject" | "to_review" | "withdrawn" | "submitted" | "in_review" | "closed";
 
 export interface ChangeRequestTransitionRequestBody {
   password: string;

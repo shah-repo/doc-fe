@@ -69,6 +69,12 @@
   "change.request.list.state": "State",
   "change.request.list.noRows": "No change requests",
   "change.request.create": "Create a change request",
+  "changeRequest.transition.submitted": "Submit change request",
+  "changeRequest.transition.withdrawn": "Withdraw submission",
+  "changeRequest.transition.approve": "Approve submission",
+  "changeRequest.transition.reject": "Reject submission",
+  "changeRequest.transition.closed": "Close",
+  "changeRequest.transition.in_review": "Send to review",
 
   "common.name": "Name",
   "common.description": "Description",
