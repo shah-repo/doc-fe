@@ -6,12 +6,20 @@ import {
   DOCUMENT_REVISION_LIST_ASYNC,
   DOCUMENT_REVISION_ROOT_URL,
   DOCUMENT_REVISION_SET,
+  DOCUMENT_GET_ASYNC,
+  DOCUMENT_SET,
+  DOCUMENT_ROOT_URL,
 } from "./constants";
 import {
   DocumentRevision,
   DocumentRevisionEditRequestBody,
   DocumentRevisionSetAction,
   DocumentRevisionsListAction,
+  DocumentSetAction,
+  Document,
+  DocumentRevisionTransitionRequestBody,
+  DocumentRevisionTransition,
+  DocumentRevisionTransitionResponse,
 } from "./types";
 
 const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentRevisionsListAction => ({
@@ -37,8 +45,8 @@ const load = (id: string): ApiAction<DocumentRevision> => apiAction({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
   method: "get",
   asyncType: DOCUMENT_REVISION_GET_ASYNC,
-  onSuccess: (changeRequest, dispatch) => {
-    dispatch(documentRevisionSet(changeRequest));
+  onSuccess: (documentRevision, dispatch) => {
+    dispatch(documentRevisionSet(documentRevision));
   },
 });
 
@@ -64,6 +72,35 @@ const create = (body: DocumentRevisionEditRequestBody, handlers: Handlers<Docume
     handlers,
   });
 
+const documentSet = (document: Document): DocumentSetAction => ({
+  type: DOCUMENT_SET,
+  payload: document,
+});
+
+const loadDocument = (id: string): ApiAction<Document> => apiAction({
+  url: `${DOCUMENT_ROOT_URL}/${id}`,
+  method: "get",
+  asyncType: DOCUMENT_GET_ASYNC,
+  onSuccess: (document, dispatch) => {
+    dispatch(documentSet(document));
+  },
+});
+
+const applyTransition = (
+  id: string,
+  body: DocumentRevisionTransitionRequestBody,
+  transition: DocumentRevisionTransition,
+  handlers: Handlers<DocumentRevisionTransitionResponse>,
+): ApiAction<DocumentRevisionTransitionResponse, DocumentRevisionTransitionRequestBody> => apiActionWithCallbacks({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/${id}/${transition}`,
+  method: "post",
+  data: body,
+  onSuccess: (d, dispatch) => {
+    dispatch(load(id));
+  },
+  handlers,
+});
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
@@ -71,4 +108,7 @@ export default {
   load,
   save,
   create,
+  loadDocument,
+  documentSet,
+  applyTransition,
 };

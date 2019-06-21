@@ -117,6 +117,13 @@
   "document.action.to_review": "Send to review",
   "document.action.withdraw": "Withdraw",
 
+  "documentRevision.version": "Version",
+  "documentRevision.owner": "Owner",
+  "documentRevision.released": "Released",
+  "documentRevision.form.references": "References",
+  "documentRevision.form.referencedBy": "Referenced by",
+  "documentRevision.form.processChange": "Process change",
+
   "transition.action.confirm": "Confirm",
   "transition.action.cancel": "Cancel",
   "transition.action.title": "Enter password to proceed",
@@ -125,6 +132,7 @@
   "transition.action.reject": "Reject",
   "transition.action.to_review": "Send to review",
   "transition.action.withdraw": "Withdraw",
+  "transition.action.pending_submission": "Pending submission",
 
   "document.revision.list.docId": "DOC ID",
   "document.revision.list.revision": "Revision",

@@ -6,6 +6,8 @@ import {
   DOCUMENT_REVISION_SET,
   DOCUMENT_REVISION_LIST,
   DOCUMENT_REVISION_LIST_ASYNC,
+  DOCUMENT_SET,
+  DOCUMENT_GET_ASYNC,
 } from "./constants";
 import {
   DocumentRevision,
@@ -13,6 +15,8 @@ import {
   DocumentRevisionsAllIdsState,
   DocumentRevisionsByIdState,
   DocumentRevisionSetAction,
+  DocumentSetAction,
+  DocumentByIdState,
 } from "./types";
 
 type DocumentRevisionActions = DocumentRevisionsListAction | DocumentRevisionSetAction;
@@ -39,9 +43,20 @@ export const allIds = (state: DocumentRevisionsAllIdsState = [], action: Documen
   }
 };
 
+export const documentsById = (state: DocumentByIdState = {}, action: DocumentSetAction): DocumentByIdState => {
+  switch (action.type) {
+    case DOCUMENT_SET:
+      return { ...state, [action.payload.id]: action.payload };
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   loadListAsyncInfo: asyncReducer(DOCUMENT_REVISION_LIST_ASYNC),
   loadAsyncInfo: asyncReducer(DOCUMENT_REVISION_GET_ASYNC),
+  loadDocumentAsyncInfo: asyncReducer(DOCUMENT_GET_ASYNC),
   byId,
   allIds,
+  documentsById,
 });
