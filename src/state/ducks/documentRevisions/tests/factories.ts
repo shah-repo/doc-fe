@@ -4,6 +4,7 @@ import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStat
 
 export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> = {}): DocumentRevision => ({
   id: faker.random.uuid(),
+  version: faker.random.number(10),
   revision: faker.lorem.word(),
   owner: getUser(),
   status: DocumentRevisionStatus.Draft,

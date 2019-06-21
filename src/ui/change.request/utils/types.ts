@@ -5,7 +5,7 @@ import {
   changeRequestsActions,
   ChangeRequestsProps,
 } from "../../../state/ducks/changeRequest";
-import { AsyncState } from "../../../state/types";
+import { LoadAsyncState } from "../../../state/types";
 
 // Container
 export type ContainerStateProps = LoadAsyncState & ChangeRequestProps;
@@ -33,8 +33,4 @@ export interface RouteParams {
 
 export interface ActionProps {
   editChangeRequest: (changeRequestId: string) => void;
-}
-
-interface LoadAsyncState {
-  loadAsyncState: AsyncState;
 }

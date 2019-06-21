@@ -3,10 +3,14 @@ import { DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET } from "./constants";
 
 export enum DocumentRevisionStatus {
   Draft = "DRAFT",
+  PendingChange = "PENDING_CHANGE",
+  PendingSubmission = "PENDING_SUBMISSION",
+  Submitted = "SUBMITTED",
   InReview = "IN_REVIEW",
-  Withdrawn = "WITHDRAWN",
-  Approved = "APPROVED",
-  Rejected = "REJECTED",
+  Implementation = "IMPLEMENTATION",
+  Released = "RELEASED",
+  Deprecated = "DEPRECATED",
+  Obsolete = "OBSOLETE",
 }
 
 export interface DocumentRevisionDocument {
@@ -16,6 +20,8 @@ export interface DocumentRevisionDocument {
 
 export interface DocumentRevision {
   id: string;
+  docId?: string;
+  version: number;
   revision: string;
   name: string;
   description: string;
@@ -45,6 +51,14 @@ export interface DocumentRevisionsListAction {
 
 export interface DocumentRevisionsByIdState {
   [key: string]: DocumentRevision;
+}
+
+export interface DocumentRevisionProps {
+  documentRevision: DocumentRevision;
+}
+
+export interface DocumentRevisionsProps {
+  documentRevisions: DocumentRevision[];
 }
 
 export type DocumentRevisionsAllIdsState = string[];
