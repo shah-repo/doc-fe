@@ -1,41 +1,50 @@
 import React from "react";
-import { Column } from "react-virtualized";
+import { CellMeasurer, CellMeasurerCache, Column, TableCellProps as ColumnProps } from "react-virtualized";
 import Text from "../../Text";
 import TableColumnAction from "./TableColumn.actions";
 import {
   StyledCellLink,
   StyledTableCell,
   StyledTableHeader,
+  StyledTooltip,
 } from "./TableColumn.styles";
 import {
+  InnerTableColumnProps,
+  TableCellProps,
   TableCellTypeRenderer,
-  TableColumnActionType,
   TableColumnProps,
 } from "./types";
 
 type Props<T> = TableColumnProps<T>;
+type InnerProps = InnerTableColumnProps;
 
-export function TableColumn<T>({
-  key,
-  label,
-  cellType,
-  columnOptions,
-  cellOptions,
-  onSelect,
-}: Props<T>) {
+export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
 
-  const cellLinkType = (cellData: any, rowData: any) => {
+  const { key, label, cellType, columnOptions, cellOptions, hoverDataInfo = false, onSelect } = props;
+  const { measurerCache } = innerProps;
+
+  measurerCache.clearAll();
+  const cellWhiteSpace = () => (measurerCache.hasFixedHeight()) ? "nowrap" : "initial";
+
+  const handleClick = ({rowData}: TableCellProps<T>) => (e: React.MouseEvent<HTMLElement>) => {
+    if (onSelect) {
+      onSelect({rowData})();
+      e.stopPropagation();
+    }
+  };
+
+  const cellLinkType = ({cellData, rowData}: TableCellProps<T>) => {
     return (
       <StyledCellLink
         variant="subtitle2"
-        onClick={onSelect && onSelect({rowData})}
+        onClick={handleClick({cellData, rowData})}
       >
         {cellData}
       </StyledCellLink>
     );
   };
 
-  const cellActionType = (cellData: TableColumnActionType[], rowData: T) => {
+  const cellActionType = ({cellData, rowData}: TableCellProps<T>) => {
     return cellData.map((actionType) => {
       const ActionColumn = TableColumnAction<T>();
       return (
@@ -49,16 +58,32 @@ export function TableColumn<T>({
     });
   };
 
-  const cellTypeRenderer = (cellData: any, rowData: T) => {
+  const cellTypeRenderer = ({ cellData, rowData }: ColumnProps) => {
     let type = cellType;
     if (cellType as TableCellTypeRenderer<T>) {
       type = (cellType as TableCellTypeRenderer<T>)(rowData);
     }
     switch (type) {
-      case "LINK": return cellLinkType(cellData, rowData);
-      case "ACTION": return cellActionType(cellData, rowData);
+      case "LINK": return cellLinkType({cellData, rowData});
+      case "ACTION": return cellActionType({cellData, rowData});
       default: return cellData;
     }
+  };
+
+  const cellMeasurer = ({ parent, dataKey, rowIndex, columnIndex, ... other }: any) => {
+    return (
+      <CellMeasurer
+        key={dataKey}
+        cache={measurerCache!}
+        rowIndex={rowIndex}
+        columnIndex={columnIndex}
+        parent={parent}
+      >
+        <div style={{whiteSpace: cellWhiteSpace(), padding: "5px 0"}}>
+          {cellTypeRenderer(other)}
+        </div>
+      </CellMeasurer>
+    );
   };
 
   const headerRenderer = () => {
@@ -72,7 +97,7 @@ export function TableColumn<T>({
     );
   };
 
-  const cellRenderer = ({ cellData , rowData }: any) => {
+  const cellRenderer = (columnProps: ColumnProps) => {
     return (
       <StyledTableCell
         component="div"
@@ -80,7 +105,12 @@ export function TableColumn<T>({
         align={"left"}
         {... cellOptions}
       >
-        {cellTypeRenderer(cellData, rowData)}
+        <StyledTooltip
+          disableHoverListener={!hoverDataInfo}
+          title={columnProps.cellData || ""}
+        >
+          <div>{cellMeasurer(columnProps)}</div>
+        </StyledTooltip>
       </StyledTableCell>
     );
   };

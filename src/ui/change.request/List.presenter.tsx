@@ -77,6 +77,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
           data={changeRequests}
           columns={columns}
           noRowsTranslation="change.request.list.noRows"
+          cellMeasure={true}
         />
       </Grid>
     </Grid>

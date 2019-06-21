@@ -37,6 +37,10 @@ export type AsyncReducerState = AsyncActionPayload;
 export type AsyncState = AsyncReducerState;
 export type AsyncAction = ActionWithPayload<AsyncActionPayload>;
 
+export interface LoadAsyncState {
+  loadAsyncState: AsyncState;
+}
+
 export interface Handlers<S = any, E = string> {
   successHandler: CallbackHandler<S>;
   errorHandler: CallbackHandler<E>;

@@ -49,15 +49,6 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({ classes, locatio
       />
       <NavigationLinkContainer
         url={DOCUMENT_REVISION_LIST_URL}
-        text="navigation.documentRevisionList"
-        Icon={Dashboard}
-        currentPath={location.pathname}
-        childrenUrls={[
-          { url: DOCUMENT_REVISION_CREATE_URL, text: "navigation.createDocumentRevision" },
-        ]}
-      />
-      <NavigationLinkContainer
-        url={DOCUMENT_REVISION_LIST_URL}
         text="navigation.document.list"
         Icon={Dashboard}
         currentPath={location.pathname}
