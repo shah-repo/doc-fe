@@ -21,10 +21,10 @@ export interface Assessment {
 }
 
 export interface ImplementationPlanTask {
-  id: string;
+  id?: string;
   title: string;
   description: string;
-  dueDate: Date;
+  dueDate: Date | null;
   assigned: User[];
 }
 

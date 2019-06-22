@@ -1,19 +1,53 @@
-import { FieldArrayRenderProps, FieldProps, FieldArray } from "formik";
-import { Button } from "@material-ui/core";
+import { FieldArrayRenderProps } from "formik";
 import React from "react";
-import Text from "../../../../components/Text";
+import TaskForm from './TaskForm';
+import TaskFormDialog from "./TaskFormDialog";
+import useDialog from "../../../../hooks/useDialog";
+import { ImplementationPlanTask } from "../../types";
 
 interface Props extends FieldArrayRenderProps {}
 
-const Container: React.FunctionComponent<Props> = () => {
+const Tasks: React.FunctionComponent<Props> = ({
+  push, pop, form,
+}) => {
+  const dialog = useDialog();
+
+  const openDialog = () => {
+    dialog.open();
+  };
+
+  const onSubmit = (values: ImplementationPlanTask) => {
+    dialog.close();
+    push(values);
+  };
+
+  const tasks = form.values.implementationPlan.implementationPlanTasks;
+  const numberOfTasks = tasks.length;
+  const renderAddButton = () => (
+    <TaskFormDialog
+      openDialog={openDialog}
+      isDialogOpen={dialog.isOpen}
+      closeDialog={dialog.close}
+      onSubmit={onSubmit}
+    />
+  )
+
+  if (numberOfTasks === 0) {
+    return renderAddButton();
+  }
 
   return (
     <div>
-      <Button>
-        <Text message="changeRequest.assessmentForm.addTask" />
-      </Button>
+      {
+        tasks.map((task: ImplementationPlanTask, index: number) => {
+          return (
+            <div key={index} >{task.description}</div>
+          );
+        })
+      }
+      {renderAddButton()}
     </div>
   );
 };
 
-export default Container;
+export default Tasks;

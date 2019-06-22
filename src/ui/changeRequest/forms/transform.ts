@@ -36,6 +36,7 @@ const createNestedObjectForRequestBody = (value: NestedObject) => ({
 })
 
 export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues): ChangeRequestEditRequestBody => {
+  console.log(values);
   const changeRequestEditRequestBody: ChangeRequestEditRequestBody = {
     description: values.description,
     assessment: createNestedObjectForRequestBody(values.assessment),
