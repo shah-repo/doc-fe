@@ -24,7 +24,7 @@ export interface ImplementationPlanTask {
   id?: string;
   title: string;
   description: string;
-  dueDate: Date | null;
+  dueDate?: Date;
   assigned: User[];
 }
 

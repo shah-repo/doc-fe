@@ -1,4 +1,4 @@
-import { FieldArrayRenderProps, FieldProps, FieldArray } from "formik";
+import { FieldArrayRenderProps, FieldProps, FieldArray, ErrorMessage } from "formik";
 import { Typography, Button } from "@material-ui/core";
 import React from "react";
 import Text from "../../../../components/Text";
@@ -14,6 +14,9 @@ const Container: React.FunctionComponent<Props> = () => {
 
   return (
     <React.Fragment>
+      <span style={{ color: 'red' }}>
+        <ErrorMessage name="implementationPlan" />
+      </span>
       <Typography>
         <Text message="changeRequest.assessmentForm.implementationPlan" />
       </Typography>

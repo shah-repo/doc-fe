@@ -11,7 +11,7 @@ import Text from "../../../../components/Text";
 import { ImplementationPlanTask } from "../../types";
 import TaskForm from "./TaskForm";
 
-export interface TransitionDialogProps {
+export interface OwnProps {
   onSubmit: (values: ImplementationPlanTask) => void;
   closeDialog: () => void;
   openDialog: () => void;
@@ -19,16 +19,15 @@ export interface TransitionDialogProps {
   buttonProps?: ButtonProps;
 }
 
-type Props = TransitionDialogProps;
+type TaskFormDialogProps = OwnProps;
 
 const INITIAL_VALUES = {
   title: "",
   description: "",
-  dueDate: null,
   assigned: [],
 };
 
-const TaskFormDialog: React.FunctionComponent<Props> =
+export const TaskFormDialog: React.FunctionComponent<TaskFormDialogProps> =
   ({ onSubmit, closeDialog, openDialog, isDialogOpen, buttonProps }) => {
     const renderForm = (props: FormikProps<any>) => (
       <TaskForm cancel={closeDialog} />

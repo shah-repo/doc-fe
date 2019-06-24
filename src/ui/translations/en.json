@@ -43,6 +43,7 @@
   "changeRequest.assessmentForm.targetDate": "Target Date",
   "changeRequest.assessmentForm.approver": "Approver",
   "changeRequest.assessmentForm.error.descriptionOrAttachment": "Please provide description or attach file",
+  "changeRequest.assessmentForm.error.taskOrAttachment": "Please provide a task or attachment",
   "changeRequest.assessmentForm.selectApprover": "Select approver",
   "changeRequest.table.description": "Description",
   "changeRequest.table.owner": "Owner",
@@ -77,11 +78,14 @@
   "changeRequest.transition.closed": "Close",
   "changeRequest.transition.in_review": "Send to review",
 
+  "common.assignedTo": "Assigned to",
+  "common.dueDate": "Due date",
   "common.name": "Name",
   "common.description": "Description",
   "common.state": "State",
   "common.save": "Save",
   "common.type": "Type",
+  "common.title": "Title",
   "common.documentId": "Document ID",
 
   "dashboard.reviews": "Documents to review",

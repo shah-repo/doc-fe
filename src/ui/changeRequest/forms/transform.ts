@@ -36,11 +36,10 @@ const createNestedObjectForRequestBody = (value: NestedObject) => ({
 })
 
 export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues): ChangeRequestEditRequestBody => {
-  console.log(values);
   const changeRequestEditRequestBody: ChangeRequestEditRequestBody = {
     description: values.description,
     assessment: createNestedObjectForRequestBody(values.assessment),
-    implementationPlan: createNestedObjectForRequestBody(values.implementationPlan),
+    implementationPlan: values.implementationPlan,
     justifications: createNestedObjectForRequestBody(values.justifications),
     approvals: values.approvals.map((approver): Approver => ({ email: approver.value })),
     effectiveDate: values.effectiveDate && moment.utc(values.effectiveDate).startOf('day').toDate(),
