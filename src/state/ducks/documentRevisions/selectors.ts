@@ -34,7 +34,7 @@ const getAvailableReferences = createSelector(
     .filter((id) => allowedStates.indexOf(docRevs[id].status) > -1)
     .map((id) => ({
       value: id,
-      label: `${documentRevisionIdMask(docRevs[id].type, docRevs[id].document.typeCount)} - ${docRevs[id].revision} - ${docRevs[id].name}`
+      label: `${documentRevisionIdMask(docRevs[id].type, docRevs[id].document.ordinalNumber)} - ${docRevs[id].revision} - ${docRevs[id].name}`
   }))),
 );
 

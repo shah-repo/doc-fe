@@ -34,7 +34,7 @@ const DocumentRevisionTable: React.FunctionComponent<DocumentRevisionTableProps>
       name: documentRevision.name,
       owner: documentRevision.owner.name,
       state: documentRevision.status,
-      version: documentRevisionIdMask(documentRevision.type, documentRevision.document.typeCount),
+      version: documentRevisionIdMask(documentRevision.type, documentRevision.document.ordinalNumber),
     };
   };
 
