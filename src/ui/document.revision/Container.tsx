@@ -6,19 +6,17 @@ import {
   documentRevisionsSelectors,
 } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
-import AsyncGate from "../components/AsyncGate";
 import {
-  DOCUMENT_REVISION_PREVIEW_URL,
-  DOCUMENT_REVISION_UPDATE_URL,
+  DOCUMENT_REVISION_VERSION_URL,
+  DOCUMENT_REVISION_DETAILS_URL,
 } from "../constants/urls";
-import PreviewContainer from "../documentRevision/DocumentRevisionPreview.presenter";
-import UpdateContainer from "../documentRevision/DocumentRevisionUpdate.container";
 import {
   ContainerDispatchProps,
   ContainerOwnProps,
   ContainerProps,
   ContainerStateProps,
 } from "./utils/types";
+import DocumentRevisionManagerContainer from "../documentRevision/DocumentRevisionsManager.container";
 
 type DispatchProps = ContainerDispatchProps;
 type StateProps = ContainerStateProps;
@@ -31,27 +29,23 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 });
 
 const Container: React.FunctionComponent<Props> = ({
-  load,
-  loadAsyncState,
   match,
-  documentRevision,
 }) => {
-  const documentRevisionId = match.params.documentRevisionId;
-  const loadAction = () => load(documentRevisionId);
-  const renderUpdateContainer = () => <UpdateContainer documentRevision={documentRevision} />;
-  const renderPreviewContainer = () => <PreviewContainer documentRevision={documentRevision} />;
+  const documentId = match.params.documentId;
+  const renderWrapper = (props: any) => {
+    const documentRevisionId = props.match.params.documentRevisionId;
+    
+    return (
+      <props.component documentRevisionId={documentRevisionId} documentId={documentId} />
+    )
+  }
+  const renderDocumentRevisionManagerContainer = (props: any) => renderWrapper({ component: DocumentRevisionManagerContainer, ...props});
 
   return (
-    <AsyncGate
-      asyncState={loadAsyncState}
-      asyncAction={loadAction}
-      startActionOnMount={true}
-    >
-      <Switch>
-        <Route path={DOCUMENT_REVISION_UPDATE_URL} exact={true} render={renderUpdateContainer} />
-        <Route path={DOCUMENT_REVISION_PREVIEW_URL} exact={true} render={renderPreviewContainer} />
-      </Switch>
-    </AsyncGate>
+    <Switch>
+      <Route path={DOCUMENT_REVISION_VERSION_URL} exact={true} render={renderDocumentRevisionManagerContainer} />
+      <Route path={DOCUMENT_REVISION_DETAILS_URL} exact={true} render={renderDocumentRevisionManagerContainer} />
+    </Switch>
   );
 };
 

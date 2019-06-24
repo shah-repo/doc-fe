@@ -1,7 +1,7 @@
-import { DOCUMENT_REVISION_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC } from "./constants";
-import { allIds, byId } from "./reducers";
-import { getDocumentRevision } from "./tests/factories";
-import { DocumentRevision, DocumentRevisionsListAction, DocumentRevisionSetAction } from "./types";
+import { DOCUMENT_REVISION_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_SET } from "./constants";
+import { allIds, byId, documentsById } from "./reducers";
+import { getDocumentRevision, getDocument } from "./tests/factories";
+import { DocumentRevision, DocumentRevisionsListAction, DocumentRevisionSetAction, DocumentSetAction } from "./types";
 
 describe("document revisions reducers tests", () => {
   const documentRevisionList: DocumentRevision[] = [
@@ -9,6 +9,7 @@ describe("document revisions reducers tests", () => {
     getDocumentRevision(),
   ];
   const documentRevision = getDocumentRevision();
+  const document = getDocument();
 
   const documentRevisionListAction: DocumentRevisionsListAction = {
     type: DOCUMENT_REVISION_LIST,
@@ -18,6 +19,11 @@ describe("document revisions reducers tests", () => {
   const documentRevisionSetAction: DocumentRevisionSetAction = {
     type: DOCUMENT_REVISION_SET,
     payload: documentRevision,
+  };
+
+  const documentSetAction: DocumentSetAction = {
+    type: DOCUMENT_SET,
+    payload: document,
   };
 
   describe("byId reducer tests", () => {
@@ -63,6 +69,20 @@ describe("document revisions reducers tests", () => {
         ...initialState,
         documentRevision.id,
       ]);
+    });
+  });
+
+  describe("documentsById reducer tests", () => {
+    const initialDocument = getDocument();
+    const initialState = {
+      [initialDocument.id]: initialDocument,
+    };
+
+    it("sets new document on DOCUMENT_SET action", () => {
+      expect(documentsById(initialState, documentSetAction)).toEqual({
+        ...initialState,
+        [document.id]: document,
+      });
     });
   });
 });

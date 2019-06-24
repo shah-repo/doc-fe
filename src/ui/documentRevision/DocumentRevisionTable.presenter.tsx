@@ -30,12 +30,9 @@ const DocumentRevisionTable: React.FunctionComponent<DocumentRevisionTableProps>
 }) => {
   const rowGetter = ({ index }: Index): DocumentRevisionListItem => {
     const documentRevision = documentRevisions[index];
-    const idStr = "" + documentRevision.document.typeCount;
-    const pad = "0000";
-    const idMask = pad.substring(0, pad.length - idStr.length) + idStr;
 
     return {
-      id: documentRevisionIdMask(documentRevision.type, documentRevision.document.typeCount),
+      id: documentRevisionIdMask(documentRevision.type, documentRevision.document.ordinalNumber),
       revision: documentRevision.revision,
       description: documentRevision.description,
       name: documentRevision.name,
@@ -51,8 +48,8 @@ const DocumentRevisionTable: React.FunctionComponent<DocumentRevisionTableProps>
 
     return (
       <div className={classes.actions}>
-        {canEdit && <IconButton onClick={editDocumentRevision(documentRevision.id)}><Edit /></IconButton>}
-        {<IconButton onClick={previewDocumentRevision(documentRevision.id)}><OpenInNew /></IconButton>}
+        {canEdit && <IconButton onClick={editDocumentRevision(documentRevision.id, documentRevision.document.id)}><Edit /></IconButton>}
+        {<IconButton onClick={previewDocumentRevision(documentRevision.id, documentRevision.document.id)}><OpenInNew /></IconButton>}
       </div>
     );
   };

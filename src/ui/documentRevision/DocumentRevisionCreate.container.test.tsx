@@ -9,8 +9,8 @@ import {
   DocumentRevisionCreateContainerProps,
 } from "./DocumentRevisionCreate.container";
 import DocumentRevisionFormContainer from "./forms/DocumentRevisionForm.container";
-import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
-import { generateDocumentRevisionEditPath } from "./pathGenerators";
+import { toDocumentRevisionEditRequestBody } from "./forms/transform";
+import { generateDocumentRevisionVersionPath } from "./pathGenerators";
 import { getDocumentRevision } from "../../state/ducks/documentRevisions/tests/factories";
 import { DocumentRevision } from "../../state/ducks/documentRevisions";
 import { getAsyncState } from "../../state/tests/factories";
@@ -48,7 +48,9 @@ describe("DocumentRevisionCreateContainer tests", () => {
     const documentRevision = getDocumentRevision();
     (createParameters[1].successHandler as CallbackHandler<DocumentRevision>).execute(documentRevision);
 
-    expect(routeComponentProps.history.push).toHaveBeenCalledWith(generateDocumentRevisionEditPath(documentRevision.id));
+    expect(routeComponentProps.history.push).toHaveBeenCalledWith(
+      generateDocumentRevisionVersionPath(documentRevision.id, documentRevision.document.id)
+      );
   });
 
   it("sets default initialValues", () => {
