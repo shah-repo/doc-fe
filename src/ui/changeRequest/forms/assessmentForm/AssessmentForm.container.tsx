@@ -48,7 +48,7 @@ const validate = (values: ChangeRequestFormValues) => {
   }
   
   if (implementationPlan.implementationPlanTasks.length === 0 && implementationPlan.attachments.length === 0) {
-    _.set(errors, 'implementationPlan', <Text translation={taskOrAttachment} />);
+    _.set(errors, 'implementationPlan.implementationPlanTasks', <Text translation={taskOrAttachment} />);
   }
 
   return errors;

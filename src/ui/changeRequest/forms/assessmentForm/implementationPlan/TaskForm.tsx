@@ -1,5 +1,5 @@
 import { Form, Formik } from "formik";
-import { Button } from "@material-ui/core";
+import { Button, makeStyles, createStyles } from "@material-ui/core";
 import React from "react";
 import InputField from "../../../../components/forms/fields/Input";
 import { validator, required, requiredAtLeastOne } from "../../../../components/forms/fields/validators";
@@ -25,9 +25,23 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
   availableAssignees: changeRequestsSelectors.getAssignessList(state),
 });
 
+export const styles = makeStyles(() =>
+  createStyles({
+    submitBtn: {
+      float: 'right',
+      clear: 'right',
+    },
+    cancelBtn: {
+      float: 'right',
+    },
+  },
+));
+
 export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
   cancel, availableAssignees
 }) => {
+  const classes = styles();
+
   return (
     <Form>
       <InputField
@@ -61,7 +75,7 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
       <Button
         type="submit"
         color="primary"
-        style={{ float: 'right', clear: 'right' }}
+        className={classes.submitBtn}
       >
         <Text translation="transition.action.confirm" />
       </Button>
@@ -69,7 +83,7 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
         variant="text"
         color="secondary"
         onClick={cancel}
-        style={{ float: 'right' }}
+        className={classes.cancelBtn}
       >
         <Text translation="transition.action.cancel" />
       </Button>

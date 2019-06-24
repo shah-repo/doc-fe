@@ -87,6 +87,7 @@
   "common.type": "Type",
   "common.title": "Title",
   "common.documentId": "Document ID",
+  "common.remove": "Remove",
 
   "dashboard.reviews": "Documents to review",
   "dashboard.noReviews": "No documents to review",

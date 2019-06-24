@@ -47,7 +47,7 @@ const Tasks: React.FunctionComponent<Props> = ({
       {
         tasks.map((task: ImplementationPlanTask, index: number) => {
           return (
-            <TaskPresenter key={index} task={task} removeTask={removeTask} />
+            <TaskPresenter key={index} task={task} removeTask={removeTask} index={index} />
           );
         })
       }
