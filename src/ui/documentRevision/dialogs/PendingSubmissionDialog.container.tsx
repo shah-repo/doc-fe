@@ -47,6 +47,7 @@ export const PendingSubmissionDialogContainer: React.FunctionComponent<PendingSu
       asyncState={async.asyncState}
       buttonProps={buttonProps}
       transition={transition}
+      label="transition.action.pending_submission"
     />
   );
 };
