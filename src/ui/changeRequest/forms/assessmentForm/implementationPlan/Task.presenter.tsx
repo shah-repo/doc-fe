@@ -4,7 +4,7 @@ import { ImplementationPlanTask } from "../../types";
 import Text from "../../../../components/Text";
 import Date from "../../../../components/Date";
 
-interface Props {
+export interface Props {
   task: ImplementationPlanTask;
   removeTask: (index: number) => () => void;
   index: number;
@@ -31,7 +31,7 @@ export const styles = makeStyles(() =>
   },
 ));
 
-const TaskPresenter: React.FunctionComponent<Props> = ({
+export const TaskPresenter: React.FunctionComponent<Props> = ({
   task, removeTask, index
 }) => {
   const classes = styles();

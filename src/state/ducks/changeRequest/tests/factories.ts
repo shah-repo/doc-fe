@@ -1,5 +1,5 @@
 import faker from "faker";
-import { ChangeRequest, ChangeRequestStatus, ChangeRequestEditRequestBody, ChangeRequestAvailableApprovers } from "../types";
+import { ChangeRequest, ChangeRequestStatus, ChangeRequestEditRequestBody, ChangeRequestAvailableApprovers, ImplementationPlanTask } from "../types";
 import { getUser } from "../../common/tests/factories";
 
 const createNestedObject = () => (

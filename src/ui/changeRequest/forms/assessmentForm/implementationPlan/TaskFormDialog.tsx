@@ -21,7 +21,7 @@ export interface OwnProps {
   buttonProps?: ButtonProps;
 }
 
-type TaskFormDialogProps = OwnProps;
+export type TaskFormDialogProps = OwnProps;
 
 const INITIAL_VALUES = {
   title: "",
