@@ -3,7 +3,7 @@ import { getCallbackHandler } from "../../../common/tests/factories";
 import { Handlers } from "../../types";
 import actions from "./actions";
 import { CHANGE_REQUEST_ROOT_URL } from "./constants";
-import { getChangeRequest, getChangeRequestEditRequestBody, getApprover } from "./tests/factories";
+import { getChangeRequest, getChangeRequestEditRequestBody, getApprover, getAudit } from "./tests/factories";
 import {
   ChangeRequest,
   ChangeRequestEditRequestBody,
@@ -137,6 +137,23 @@ describe("change requests actions tests", () => {
       action.onFailure("ERROR", dispatch);
 
       expect(handlers.errorHandler.execute).toHaveBeenCalledWith("ERROR");
+    });
+  });
+
+  describe("load audit tests", () => {
+    const action = actions.loadAudit(changeRequest.id);
+
+    it("calls GET on CHANGE_REQUEST_ROOT_URL/id/audit", () => {
+      expect(action.url).toBe(`${CHANGE_REQUEST_ROOT_URL}/${changeRequest.id}/audit`);
+      expect(action.method).toBe("get");
+    });
+
+    it("calls dispatch with auditSet action on success", () => {
+      const dispatch = jest.fn();
+      const audit = [getAudit()];
+      const payload = { id: changeRequest.id, audit };
+      action.onSuccess(audit, dispatch);
+      expect(dispatch).toHaveBeenCalledWith(actions.auditSet(payload));
     });
   });
 });

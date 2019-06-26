@@ -7,6 +7,7 @@ import { Approval, User } from "../../../state/ducks/common";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import Text from "../../components/Text";
 import Date from "../../components/Date";
+import { styles } from "./Audit.presenter.styles";
 
 interface OwnProps {
   audit: Audit[];
@@ -17,6 +18,7 @@ export type AuditPresenterProps = OwnProps;
 export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   audit,
 }) => {
+  const classes = styles();
   const [isOpen, setOpen] = React.useState(false);
 
   const toggleList = () => setOpen(!isOpen);
@@ -46,12 +48,9 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       return (
         <div
           key={index}
-          style={{
-            borderBottom: '1px solid lightgray',
-            marginBottom: 20,
-          }}
+          className={classes.changeContainer}
         >
-          <div style={{ marginBottom: 10 }}>
+          <div className={classes.dateContainer}>
             <Date value={change.timestamp} />
           </div>
           <div>
@@ -67,12 +66,12 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   )
 
   return (
-    <div style={{ marginLeft: 50 }}>
-      <IconButton onClick={toggleList} style={{ width: "100%", borderRadius: 0, justifyContent: 'end' }}>
+    <div className={classes.container}>
+      <IconButton onClick={toggleList} classes={{ root: classes.collapsableButton }}>
         <Text translation="changeRequest.audit.crHistory" />
         {renderExpandIcon()}
       </IconButton>
-      <div style={{ maxHeight: 700, overflowY: 'auto' }}>
+      <div className={classes.collapsableContainer}>
         <Collapse in={isOpen} timeout="auto" unmountOnExit={true}>
           <List>
             {renderChange()}
