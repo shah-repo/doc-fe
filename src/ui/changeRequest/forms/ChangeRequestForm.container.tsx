@@ -92,9 +92,12 @@ export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFo
           selectedDocumentRevision={selectedDocumentRevision}
         />
       </Grid>
-      <Grid item={true} xs={10}>
+      <Grid item={true} xs={7}>
         {renderAssessmentForm()}
         {renderDocumentRevisionForm()}
+      </Grid>
+      <Grid item={true} xs={2}>
+        <div>History</div>
       </Grid>
     </Grid>
   );
