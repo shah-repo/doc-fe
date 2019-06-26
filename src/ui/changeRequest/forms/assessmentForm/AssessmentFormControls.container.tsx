@@ -46,7 +46,7 @@ const AssessmentFormControlsContainer: React.FunctionComponent<AssessmentFormCon
 
   const isCurrentUserOwner = changeRequest.owner.email === currentUserEmail;
   const isCurrentUserDocControl = true;
-  const canWithdraw = isCurrentUserOwner && changeRequest.state !== ChangeRequestStatus.Closed;
+  const canWithdraw = isCurrentUserOwner && changeRequest.state !== ChangeRequestStatus.Closed && changeRequest.state !== ChangeRequestStatus.Draft;
   const canSubmit = isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.Draft;
   const canSendToReview = isCurrentUserDocControl && changeRequest.state === ChangeRequestStatus.Submitted;
   const canClose = isCurrentUserOwner
