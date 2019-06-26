@@ -9,6 +9,7 @@ import {
   CHANGE_REQUEST_GET_APPROVERS_ASYNC,
   CHANGE_REQUEST_LIST_APPROVERS,
   CHANGE_REQUEST_AUDIT_SET,
+  CHANGE_REQUEST_GET_AUDIT_ASYNC,
 } from "./constants";
 import {
   ChangeRequest,
@@ -91,6 +92,7 @@ export default combineReducers({
   loadListAsyncInfo: asyncReducer(CHANGE_REQUEST_LIST_ASYNC),
   loadAsyncInfo: asyncReducer(CHANGE_REQUEST_GET_ASYNC),
   loadApproversAsyncInfo: asyncReducer(CHANGE_REQUEST_GET_APPROVERS_ASYNC),
+  loadAuditAsyncInfo: asyncReducer(CHANGE_REQUEST_GET_AUDIT_ASYNC),
   byId,
   allIds,
   approversById,

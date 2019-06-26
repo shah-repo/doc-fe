@@ -26,6 +26,7 @@ const getAudit = (state: ApplicationState, changeRequestId: string) => auditsByC
 const getLoadAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadAsyncInfo;
 const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadListAsyncInfo;
 const getLoadApproversAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadApproversAsyncInfo;
+const getLoadAuditAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadAuditAsyncInfo;
 
 export default {
   getChangeRequestsList,
@@ -34,4 +35,6 @@ export default {
   getLoadListAsyncState,
   getLoadApproversAsyncState,
   getApproversListForAssessmentForm,
+  getLoadAuditAsyncState,
+  getAudit,
 };

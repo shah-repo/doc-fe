@@ -1,6 +1,7 @@
 import { Attachment } from "../attachments";
 import { Approval, User } from "../common";
 import { CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET, CHANGE_REQUEST_AUDIT_SET } from "./constants";
+import { DocumentRevision } from "../documentRevisions";
 
 export enum ChangeRequestStatus {
   Draft = "DRAFT",
@@ -128,7 +129,7 @@ export interface ChangeRequestProps {
 export interface Audit {
   field: string;
   type: string;
-  nextValue: string;
+  nextValue: string | User | Attachment | Approval | DocumentRevision;
   timestamp: string;
   groupId: string;
   owner: User;
