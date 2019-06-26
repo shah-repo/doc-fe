@@ -83,6 +83,7 @@
   "changeRequest.audit.attachments.ARRAY_DELETED": "Attachment removed",
   "changeRequest.audit.justifications.description.STRING_EDITED": "Justification description changed",
   "changeRequest.audit.approvals.ARRAY_NEW": "New approver added",
+  "changeRequest.audit.crHistory": "CR History",
 
   "common.name": "Name",
   "common.description": "Description",
