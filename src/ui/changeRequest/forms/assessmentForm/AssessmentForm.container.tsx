@@ -9,6 +9,7 @@ import { changeRequestsActions, changeRequestsSelectors, ChangeRequest } from ".
 import { connect } from "react-redux";
 import { ApplicationState } from "../../../../state/reducers";
 import AsyncGate from "../../../components/AsyncGate";
+import Text from "../../../components/Text";
 
 interface StateProps {
   loadApproversAsyncState: AsyncState;
@@ -36,6 +37,7 @@ const validate = (values: ChangeRequestFormValues) => {
   let errors: FormikErrors<any> = {};
   const { assessment, justifications, implementationPlan } = values;
   const descriptionOrAttachment = "changeRequest.assessmentForm.error.descriptionOrAttachment";
+  const taskOrAttachment = "changeRequest.assessmentForm.error.taskOrAttachment";
 
   if (!assessment.description && assessment.attachments.length === 0) {
     _.set(errors, 'assessment.description', descriptionOrAttachment);
@@ -45,8 +47,8 @@ const validate = (values: ChangeRequestFormValues) => {
     _.set(errors, 'justifications.description', descriptionOrAttachment);
   }
   
-  if (!implementationPlan.description && implementationPlan.attachments.length === 0) {
-    _.set(errors, 'implementationPlan.description', descriptionOrAttachment);
+  if (implementationPlan.implementationPlanTasks.length === 0 && implementationPlan.attachments.length === 0) {
+    _.set(errors, 'implementationPlan.implementationPlanTasks', <Text translation={taskOrAttachment} />);
   }
 
   return errors;

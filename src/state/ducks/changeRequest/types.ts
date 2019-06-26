@@ -25,9 +25,17 @@ export interface Assessment {
   attachments: Attachment[];
 }
 
+export interface ImplementationPlanTask {
+  id: string;
+  title: string;
+  description: string;
+  dueDate?: Date;
+  assigned: Approval[];
+}
+
 export interface ImplementationPlan {
   id?: string;
-  description?: string;
+  implementationPlanTasks: ImplementationPlanTask[];
   attachments: Attachment[];
 }
 
