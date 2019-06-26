@@ -2,19 +2,26 @@ import moment from 'moment';
 import { ChangeRequestEditRequestBody, ChangeRequest, Assessment, Justifications, ImplementationPlan, Approver } from "../../../state/ducks/changeRequest";
 import { ChangeRequestFormValues } from "./types";
 
-type NestedObject = Assessment | Justifications | ImplementationPlan;
+type NestedObject = Assessment | Justifications;
 
 const createNestedObject = (value: NestedObject) => ({
   description: value.description,
   attachments: value.attachments,
 })
 
+const createImplementationPlan = (value: ImplementationPlan) => (
+  {
+    implementationPlanTasks: [],
+    attachments: [],
+  }
+)
+
 export const toChangeRequestFormValues = (changeRequest: ChangeRequest): ChangeRequestFormValues => {
   const values: ChangeRequestFormValues = {
     description: changeRequest.description,
     assessment: createNestedObject(changeRequest.assessment),
     justifications: createNestedObject(changeRequest.justifications),
-    implementationPlan: createNestedObject(changeRequest.implementationPlan),
+    implementationPlan: createImplementationPlan(changeRequest.implementationPlan),
     approvals: changeRequest.approvals.map((approval) => ({ label: approval.approver.name, value: approval.approver.email })),
     effectiveDate: changeRequest.effectiveDate && moment.utc(changeRequest.effectiveDate).startOf('day').toDate(),
     documentRevisions: changeRequest.documentRevisions.map((documentRevision) => documentRevision.id ),
@@ -32,7 +39,7 @@ export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues):
   const changeRequestEditRequestBody: ChangeRequestEditRequestBody = {
     description: values.description,
     assessment: createNestedObjectForRequestBody(values.assessment),
-    implementationPlan: createNestedObjectForRequestBody(values.implementationPlan),
+    implementationPlan: values.implementationPlan,
     justifications: createNestedObjectForRequestBody(values.justifications),
     approvals: values.approvals.map((approver): Approver => ({ email: approver.value })),
     effectiveDate: values.effectiveDate && moment.utc(values.effectiveDate).startOf('day').toDate(),

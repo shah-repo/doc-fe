@@ -1,5 +1,6 @@
 import { Attachment as AttachmentInterface } from "../../../state/ducks/attachments";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
+import { User } from "../../../state/ducks/common";
 
 export type Attachment = AttachmentInterface;
 
@@ -19,9 +20,17 @@ export interface Assessment {
   attachments: Attachment[];
 }
 
+export interface ImplementationPlanTask {
+  id?: string;
+  title: string;
+  description: string;
+  dueDate?: Date;
+  assigned: User[];
+}
+
 export interface ImplementationPlan {
   id?: string;
-  description?: string;
+  implementationPlanTasks: ImplementationPlanTask[];
   attachments: Attachment[];
 }
 

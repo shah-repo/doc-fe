@@ -12,7 +12,7 @@ import Text from "../../../components/Text";
 import { ChangeRequestFormValues } from "../types.js";
 import AssessmentFormJustifications from './AssessmentFormJustifications';
 import AssessmentFormAssessments from './AssessmentFormAssessments';
-import AssessmentFormImplementationPlan from './AssessmentFormImplementationPlan';
+import AssessmentFormImplementationPlan from './implementationPlan/Container';
 import styles from './AssessmentForm.styles';
 import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";

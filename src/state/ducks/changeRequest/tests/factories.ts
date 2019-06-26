@@ -1,5 +1,5 @@
 import faker from "faker";
-import { ChangeRequest, ChangeRequestStatus, ChangeRequestEditRequestBody, ChangeRequestAvailableApprovers } from "../types";
+import { ChangeRequest, ChangeRequestStatus, ChangeRequestEditRequestBody, ChangeRequestAvailableApprovers, ImplementationPlanTask } from "../types";
 import { getUser } from "../../common/tests/factories";
 
 const createNestedObject = () => (
@@ -10,12 +10,20 @@ const createNestedObject = () => (
   }
 )
 
+const createImplementationPlan = () => (
+  {
+    id: faker.random.uuid(),
+    implementationPlanTasks: [],
+    attachments: [],
+  }
+)
+
 export const getChangeRequest = (changeRequest: Partial<ChangeRequest> = {}): ChangeRequest => ({
   id: faker.random.uuid(),
   state: ChangeRequestStatus.Draft,
   description: faker.lorem.sentence(),
   assessment: createNestedObject(),
-  implementationPlan: createNestedObject(),
+  implementationPlan: createImplementationPlan(),
   justifications: createNestedObject(),
   effectiveDate: faker.date.future(undefined, '2019-05-31'),
   approvals: [],
