@@ -1,8 +1,8 @@
-import { Form, Formik } from "formik";
+import { Form } from "formik";
 import { Button, makeStyles, createStyles } from "@material-ui/core";
 import React from "react";
 import InputField from "../../../../components/forms/fields/Input";
-import { validator, required, requiredAtLeastOne } from "../../../../components/forms/fields/validators";
+import { validator, required } from "../../../../components/forms/fields/validators";
 import Text from "../../../../components/Text";
 import AutocompleteField from "../../../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../../../components/forms/fields/Autocomplete/types";
@@ -61,10 +61,9 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
         autocompleteProps={{
           id: "assigned",
           placeholder: <Text translation="common.assignedTo" />,
-          isMulti: true,
         }}
         options={availableAssignees}
-        validate={validator(requiredAtLeastOne)}
+        validate={validator(required)}
       />
       <DatePickerField
         name="dueDate"

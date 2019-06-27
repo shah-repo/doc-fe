@@ -10,11 +10,11 @@ import { ButtonProps } from "@material-ui/core/Button";
 import { Formik, FormikProps } from "formik";
 import React from "react";
 import Text from "../../../../components/Text";
-import { ImplementationPlanTask } from "../../types";
+import { ImplementationPlanTaskForm } from "../../types";
 import TaskForm from "./TaskForm";
 
 export interface OwnProps {
-  onSubmit: (values: ImplementationPlanTask) => void;
+  onSubmit: (values: ImplementationPlanTaskForm) => void;
   closeDialog: () => void;
   openDialog: () => void;
   isDialogOpen: boolean;
@@ -26,7 +26,6 @@ export type TaskFormDialogProps = OwnProps;
 const INITIAL_VALUES = {
   title: "",
   description: "",
-  assigned: [],
 };
 
 const styles = makeStyles(() =>
