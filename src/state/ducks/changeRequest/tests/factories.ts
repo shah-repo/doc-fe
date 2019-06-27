@@ -1,5 +1,5 @@
 import faker from "faker";
-import { ChangeRequest, ChangeRequestStatus, ChangeRequestEditRequestBody, ChangeRequestAvailableApprovers, ImplementationPlanTask } from "../types";
+import { ChangeRequest, ChangeRequestStatus, ChangeRequestEditRequestBody, ChangeRequestAvailableApprovers, Audit } from "../types";
 import { getUser } from "../../common/tests/factories";
 
 const createNestedObject = () => (
@@ -48,4 +48,14 @@ export const getApprover = (approver: Partial<ChangeRequestAvailableApprovers> =
   email: faker.internet.email(),
   name: faker.name.firstName(),
   ...approver,
+});
+
+export const getAudit = (audit: Partial<Audit> = {}): Audit => ({
+  type: faker.lorem.word(),
+  field: faker.lorem.word(),
+  nextValue: faker.lorem.sentence(),
+  groupId: faker.random.uuid(),
+  timestamp: faker.date.recent().toString(),
+  owner: getUser(),
+  ...audit,
 });

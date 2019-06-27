@@ -3,7 +3,7 @@ import { ApplicationState } from "../../reducers";
 import { getAsyncState } from "../../tests/factories";
 import initialStoreState from "../../tests/helpers/initialStoreState";
 import selectors from "./selectors";
-import { getChangeRequest, getApprover } from "./tests/factories";
+import { getChangeRequest, getApprover, getAudit } from "./tests/factories";
 import { ChangeRequestsAllIdsState, ChangeRequestsByIdState, ChangeRequestsApproversAllIdsState, ChangeRequestsApproversByIdState } from "./types";
 
 describe("change requests selectors tests", () => {
@@ -20,6 +20,10 @@ describe("change requests selectors tests", () => {
     [approvers[0].id]: approvers[0],
     [approvers[1].id]: approvers[1],
   };
+  const audit = [getAudit(), getAudit()];
+  const auditsByCRId = {
+    [changeRequests[0].id]: audit,
+  }
 
   beforeAll(() => {
     state = _.cloneDeep(initialStoreState);
@@ -27,9 +31,11 @@ describe("change requests selectors tests", () => {
     state.changeRequests.byId = byId;
     state.changeRequests.approversAllIds = approversAllIds;
     state.changeRequests.approversById = approversById;
+    state.changeRequests.auditsByCRId = auditsByCRId;
     state.changeRequests.loadAsyncInfo = getAsyncState();
     state.changeRequests.loadListAsyncInfo = getAsyncState();
     state.changeRequests.loadApproversAsyncInfo = getAsyncState();
+    state.changeRequests.loadAuditAsyncInfo = getAsyncState();
   });
 
   it("getChangeRequestsList", () => {
@@ -58,5 +64,13 @@ describe("change requests selectors tests", () => {
 
   it("getLoadApproversAsyncState", () => {
     expect(selectors.getLoadApproversAsyncState(state)).toBe(state.changeRequests.loadApproversAsyncInfo);
+  });
+
+  it("getAudit", () => {
+    expect(selectors.getAudit(state, changeRequests[0].id)).toBe(audit);
+  });
+
+  it("getLoadAuditAsyncState", () => {
+    expect(selectors.getLoadAuditAsyncState(state)).toBe(state.changeRequests.loadAuditAsyncInfo);
   });
 });

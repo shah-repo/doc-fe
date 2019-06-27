@@ -9,6 +9,7 @@ import { DocumentRevisionsByIdState, documentRevisionsSelectors } from '../../..
 import DocumentRevisionUpdateContainer from '../../documentRevision/DocumentRevisionUpdate.container';
 import { ApplicationState } from '../../../state/reducers';
 import { ChangeRequest } from '../../../state/ducks/changeRequest';
+import AuditContainer from '../components/Audit.container';
 
 interface StateProps {
   documentRevisionsById: DocumentRevisionsByIdState;
@@ -47,19 +48,11 @@ export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFo
     })
   }
 
-  const selectDocumentRevision = (documentRevisionId: string) => {
-    setSelectedDocumentRevision(documentRevisionId)
-  }
+  const selectDocumentRevision = (documentRevisionId: string) => setSelectedDocumentRevision(documentRevisionId);
 
-  const selectAssessmentForm = () => {
-    setSelectedDocumentRevision(null);
-  }
+  const selectAssessmentForm = () => setSelectedDocumentRevision(null);
 
   const renderAssessmentForm = () => {
-    if (selectedDocumentRevision) {
-      return null;
-    }
-
     return (
       <AssessmentFormContainer
         initialValues={initialValuesState}
@@ -80,6 +73,14 @@ export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFo
     )
   }
 
+  const renderCRAudit = () => {
+    if (!changeRequest) {
+      return null;
+    }
+
+    return <AuditContainer changeRequestId={changeRequest.id} />
+  }
+
   return (
     <Grid container={true}>
       <Grid item={true} xs={2}>
@@ -92,9 +93,12 @@ export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFo
           selectedDocumentRevision={selectedDocumentRevision}
         />
       </Grid>
-      <Grid item={true} xs={10}>
-        {renderAssessmentForm()}
+      <Grid item={true} xs={7}>
+        {!selectedDocumentRevision && renderAssessmentForm()}
         {renderDocumentRevisionForm()}
+      </Grid>
+      <Grid item={true} xs={3}>
+        {renderCRAudit()}
       </Grid>
     </Grid>
   );

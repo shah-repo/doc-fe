@@ -8,6 +8,8 @@ import {
   CHANGE_REQUEST_LIST_ASYNC,
   CHANGE_REQUEST_ROOT_URL,
   CHANGE_REQUEST_SET,
+  CHANGE_REQUEST_GET_AUDIT_ASYNC,
+  CHANGE_REQUEST_AUDIT_SET,
 } from "./constants";
 import {
   ChangeRequest,
@@ -20,6 +22,9 @@ import {
   ChangeRequestTransition,
   ChangeRequestTransitionRequestBody,
   ChangeRequestTransitionResponse,
+  Audit,
+  ChangeRequestAuditSetAction,
+  AuditActionPayload,
 } from "./types";
 
 const changeRequestsList = (changeRequests: ChangeRequest[]): ChangeRequestListAction => ({
@@ -101,6 +106,23 @@ const applyTransition = (
   handlers,
 });
 
+const auditSet = (audit: AuditActionPayload): ChangeRequestAuditSetAction => ({
+  type: CHANGE_REQUEST_AUDIT_SET,
+  payload: audit,
+});
+
+const loadAudit = (id: string): ApiAction<Audit[]> => apiAction({
+  url: `${CHANGE_REQUEST_ROOT_URL}/${id}/audit`,
+  method: "get",
+  asyncType: CHANGE_REQUEST_GET_AUDIT_ASYNC,
+  onSuccess: (audit, dispatch) => {
+    dispatch(auditSet({
+      id,
+      audit,
+    }));
+  },
+});
+
 export default {
   changeRequestsList,
   changeRequestSet,
@@ -111,4 +133,6 @@ export default {
   applyTransition,
   loadAvailableApprovers,
   availableApproversList,
+  auditSet,
+  loadAudit,
 };

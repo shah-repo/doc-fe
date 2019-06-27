@@ -8,6 +8,8 @@ import {
   CHANGE_REQUEST_LIST_ASYNC,
   CHANGE_REQUEST_GET_APPROVERS_ASYNC,
   CHANGE_REQUEST_LIST_APPROVERS,
+  CHANGE_REQUEST_AUDIT_SET,
+  CHANGE_REQUEST_GET_AUDIT_ASYNC,
 } from "./constants";
 import {
   ChangeRequest,
@@ -19,6 +21,10 @@ import {
   ChangeRequestListApproversAction,
   ChangeRequestAvailableApprovers,
   ChangeRequestsApproversAllIdsState,
+  ChangeRequestAuditSetAction,
+  Audit,
+  AuditByCRIdState,
+  allIdsState,
 } from "./types";
 
 type ChangeRequestActions = ChangeRequestSetAction | ChangeRequestListAction;
@@ -63,12 +69,34 @@ export const approversAllIds = (state: ChangeRequestsApproversAllIdsState = [], 
   }
 };
 
+
+export const auditsByCRId = (state: AuditByCRIdState = {}, action: ChangeRequestAuditSetAction): AuditByCRIdState => {
+  switch (action.type) {
+    case CHANGE_REQUEST_AUDIT_SET:
+      return { ...state, [action.payload.id]: action.payload.audit };
+    default:
+      return state;
+  }
+};
+
+export const auditsAllId = (state: allIdsState = [], action: ChangeRequestAuditSetAction): allIdsState => {
+  switch (action.type) {
+    case CHANGE_REQUEST_AUDIT_SET:
+      return _.uniq([...state, action.payload.id]);
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   loadListAsyncInfo: asyncReducer(CHANGE_REQUEST_LIST_ASYNC),
   loadAsyncInfo: asyncReducer(CHANGE_REQUEST_GET_ASYNC),
   loadApproversAsyncInfo: asyncReducer(CHANGE_REQUEST_GET_APPROVERS_ASYNC),
+  loadAuditAsyncInfo: asyncReducer(CHANGE_REQUEST_GET_AUDIT_ASYNC),
   byId,
   allIds,
   approversById,
   approversAllIds,
+  auditsByCRId,
+  auditsAllId
 });
