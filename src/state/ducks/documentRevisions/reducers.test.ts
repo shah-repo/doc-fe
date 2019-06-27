@@ -1,7 +1,7 @@
-import { DOCUMENT_REVISION_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_SET } from "./constants";
-import { allIds, byId, documentsById } from "./reducers";
-import { getDocumentRevision, getDocument } from "./tests/factories";
-import { DocumentRevision, DocumentRevisionsListAction, DocumentRevisionSetAction, DocumentSetAction } from "./types";
+import { DOCUMENT_REVISION_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_SET, DOCUMENT_REVISION_AUDIT_SET } from "./constants";
+import { allIds, byId, documentsById, auditsByCRId, auditsAllId } from "./reducers";
+import { getDocumentRevision, getDocument, getAudit } from "./tests/factories";
+import { DocumentRevision, DocumentRevisionsListAction, DocumentRevisionSetAction, DocumentSetAction, DocumentRevisionAuditSetAction } from "./types";
 
 describe("document revisions reducers tests", () => {
   const documentRevisionList: DocumentRevision[] = [
@@ -10,6 +10,14 @@ describe("document revisions reducers tests", () => {
   ];
   const documentRevision = getDocumentRevision();
   const document = getDocument();
+  const audit = [
+    getAudit(),
+    getAudit(),
+  ]
+  const auditPayload = {
+    id: documentRevision.id,
+    audit,
+  }
 
   const documentRevisionListAction: DocumentRevisionsListAction = {
     type: DOCUMENT_REVISION_LIST,
@@ -24,6 +32,11 @@ describe("document revisions reducers tests", () => {
   const documentSetAction: DocumentSetAction = {
     type: DOCUMENT_SET,
     payload: document,
+  };
+
+  const auditAction: DocumentRevisionAuditSetAction = {
+    type: DOCUMENT_REVISION_AUDIT_SET,
+    payload: auditPayload,
   };
 
   describe("byId reducer tests", () => {
@@ -83,6 +96,32 @@ describe("document revisions reducers tests", () => {
         ...initialState,
         [document.id]: document,
       });
+    });
+  });
+
+  describe("auditsByCRId reducer tests", () => {
+    const initialState = {};
+
+    const expectedState = {
+      ...initialState,
+      [documentRevision.id]: audit,
+    };
+
+    it("sets ids on CHANGE_REQUEST_AUDIT_SET action", () => {
+      expect(auditsByCRId(initialState, auditAction)).toEqual(expectedState);
+    });
+  });
+
+  describe("auditsAllId reducer tests", () => {
+    const initialState = [documentRevisionList[0].id];
+
+    const expectedState = [
+      ...initialState,
+      documentRevision.id,
+    ];
+
+    it("sets ids on CHANGE_REQUEST_AUDIT_SET action", () => {
+      expect(auditsAllId(initialState, auditAction)).toEqual(expectedState);
     });
   });
 });

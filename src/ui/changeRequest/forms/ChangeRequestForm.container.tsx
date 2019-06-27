@@ -9,7 +9,8 @@ import { DocumentRevisionsByIdState, documentRevisionsSelectors } from '../../..
 import DocumentRevisionUpdateContainer from '../../documentRevision/DocumentRevisionUpdate.container';
 import { ApplicationState } from '../../../state/reducers';
 import { ChangeRequest } from '../../../state/ducks/changeRequest';
-import AuditContainer from '../components/Audit.container';
+import ChangeRequestAuditContainer from '../audit/Audit.container';
+import DocumentRevisionAuditContainer from '../../documentRevision/audit/Audit.container';
 
 interface StateProps {
   documentRevisionsById: DocumentRevisionsByIdState;
@@ -64,21 +65,21 @@ export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFo
   }
 
   const renderDocumentRevisionForm = () => {
-    if (!selectedDocumentRevision) {
-      return null;
+    if (selectedDocumentRevision) {
+      return <DocumentRevisionUpdateContainer documentRevision={documentRevisionsById[selectedDocumentRevision]} />;
     }
-
-    return (
-      <DocumentRevisionUpdateContainer documentRevision={documentRevisionsById[selectedDocumentRevision]} />
-    )
   }
 
-  const renderCRAudit = () => {
-    if (!changeRequest) {
-      return null;
+  const renderChangeRequestAudit = () => {
+    if (changeRequest) {
+      return <ChangeRequestAuditContainer changeRequestId={changeRequest.id} />
     }
+  }
 
-    return <AuditContainer changeRequestId={changeRequest.id} />
+  const renderDocumentRevisionAudit = () => {
+    if (selectedDocumentRevision) {
+      return <DocumentRevisionAuditContainer documentRevisionId={selectedDocumentRevision} />
+    }
   }
 
   return (
@@ -98,7 +99,8 @@ export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFo
         {renderDocumentRevisionForm()}
       </Grid>
       <Grid item={true} xs={3}>
-        {renderCRAudit()}
+        {renderDocumentRevisionAudit()}
+        {renderChangeRequestAudit()}
       </Grid>
     </Grid>
   );

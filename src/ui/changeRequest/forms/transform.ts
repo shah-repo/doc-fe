@@ -28,11 +28,18 @@ const createNestedObjectForRequestBody = (value: NestedObject) => ({
   attachments: value.attachments.map((attachment) => ({ id: attachment.id })),
 })
 
+const toImplementationPlanEditRequestBody = (values: ImplementationPlan): ImplementationPlan => (
+  {
+    tasks: values.tasks,
+    attachments: values.attachments,
+  }
+)
+
 export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues): ChangeRequestEditRequestBody => {
   const changeRequestEditRequestBody: ChangeRequestEditRequestBody = {
     description: values.description,
     assessment: createNestedObjectForRequestBody(values.assessment),
-    implementationPlan: values.implementationPlan,
+    implementationPlan: toImplementationPlanEditRequestBody(values.implementationPlan),
     justifications: createNestedObjectForRequestBody(values.justifications),
     approvals: values.approvals.map((approver): Approver => ({ email: approver.value })),
     effectiveDate: values.effectiveDate && moment.utc(values.effectiveDate).startOf('day').toDate(),

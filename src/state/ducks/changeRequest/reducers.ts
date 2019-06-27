@@ -69,7 +69,6 @@ export const approversAllIds = (state: ChangeRequestsApproversAllIdsState = [], 
   }
 };
 
-
 export const auditsByCRId = (state: AuditByCRIdState = {}, action: ChangeRequestAuditSetAction): AuditByCRIdState => {
   switch (action.type) {
     case CHANGE_REQUEST_AUDIT_SET:

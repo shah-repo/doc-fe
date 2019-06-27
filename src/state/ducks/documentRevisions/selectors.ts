@@ -9,6 +9,8 @@ import { DocumentRevisionStatus } from "./types";
 const allIds = (state: ApplicationState) => state.documentRevisions.allIds;
 const byId = (state: ApplicationState) => state.documentRevisions.byId;
 const documentsById = (state: ApplicationState) => state.documentRevisions.documentsById;
+const auditsByCRId = (state: ApplicationState) => state.documentRevisions.auditsByCRId;
+const auditsAllId = (state: ApplicationState) => state.documentRevisions.auditsAllId;
 
 const getDocumentRevisionsList = createSelector(
   allIds, byId,
@@ -18,6 +20,7 @@ const getDocumentRevisionsList = createSelector(
 const getDocumentRevision = (state: ApplicationState, documentRevisionId: string) => byId(state)[documentRevisionId];
 const getDocument = (state: ApplicationState, documentId: string) => documentsById(state)[documentId];
 const getDocumentRevisions = (state: ApplicationState, documentId: string) => _.get(documentsById(state)[documentId], 'documentRevisions', []);
+const getAudit = (state: ApplicationState, documentRevisionId: string) => auditsByCRId(state)[documentRevisionId];
 
 const makeGetDocumentRevisions = () => {
   return createSelector(
@@ -41,6 +44,7 @@ const getAvailableReferences = createSelector(
 const getLoadAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadAsyncInfo;
 const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadListAsyncInfo;
 const getLoadDocumentAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadDocumentAsyncInfo;
+const getLoadAuditAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadAuditAsyncInfo;
 
 export default {
   byId,
@@ -53,4 +57,6 @@ export default {
   getDocumentRevisions,
   makeGetDocumentRevisions,
   getAvailableReferences,
+  getAudit,
+  getLoadAuditAsyncState,
 };

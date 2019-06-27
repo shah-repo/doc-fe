@@ -35,13 +35,9 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 
 const validate = (values: ChangeRequestFormValues) => {
   let errors: FormikErrors<any> = {};
-  const { assessment, justifications, implementationPlan } = values;
+  const { justifications, implementationPlan } = values;
   const descriptionOrAttachment = "changeRequest.assessmentForm.error.descriptionOrAttachment";
   const taskOrAttachment = "changeRequest.assessmentForm.error.taskOrAttachment";
-
-  if (!assessment.description && assessment.attachments.length === 0) {
-    _.set(errors, 'assessment.description', descriptionOrAttachment);
-  } 
   
   if (!justifications.description && justifications.attachments.length === 0) {
     _.set(errors, 'justifications.description', descriptionOrAttachment);
