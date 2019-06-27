@@ -13,7 +13,7 @@ const createNestedObject = () => (
 const createImplementationPlan = () => (
   {
     id: faker.random.uuid(),
-    implementationPlanTasks: [],
+    tasks: [],
     attachments: [],
   }
 )

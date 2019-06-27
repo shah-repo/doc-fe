@@ -1,6 +1,7 @@
 import { Attachment as AttachmentInterface } from "../../../state/ducks/attachments";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { User } from "../../../state/ducks/common";
+import { ImplementationPlan } from "../../../state/ducks/changeRequest";
 
 export type Attachment = AttachmentInterface;
 
@@ -26,12 +27,6 @@ export interface ImplementationPlanTask {
   description: string;
   dueDate?: Date;
   assigned: User[];
-}
-
-export interface ImplementationPlan {
-  id?: string;
-  implementationPlanTasks: ImplementationPlanTask[];
-  attachments: Attachment[];
 }
 
 export interface ChangeRequestFormValues {

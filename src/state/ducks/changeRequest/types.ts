@@ -35,7 +35,7 @@ export interface ImplementationPlanTask {
 
 export interface ImplementationPlan {
   id?: string;
-  implementationPlanTasks: ImplementationPlanTask[];
+  tasks: ImplementationPlanTask[];
   attachments: Attachment[];
 }
 

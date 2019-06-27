@@ -26,7 +26,7 @@ const Tasks: React.FunctionComponent<Props> = ({
     });
   };
 
-  const tasks = form.values.implementationPlan.implementationPlanTasks;
+  const tasks = form.values.implementationPlan.tasks;
   const numberOfTasks = tasks.length;
   const renderAddButton = () => (
     <TaskFormDialog

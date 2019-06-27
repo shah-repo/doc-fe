@@ -4,24 +4,17 @@ import { ChangeRequestFormValues } from "./types";
 
 type NestedObject = Assessment | Justifications;
 
-const createNestedObject = (value: NestedObject) => ({
+const createNestedObject = (value: NestedObject = { description: "", attachments: [] }) => ({
   description: value.description,
   attachments: value.attachments,
 })
-
-const createImplementationPlan = (value: ImplementationPlan) => (
-  {
-    implementationPlanTasks: [],
-    attachments: [],
-  }
-)
 
 export const toChangeRequestFormValues = (changeRequest: ChangeRequest): ChangeRequestFormValues => {
   const values: ChangeRequestFormValues = {
     description: changeRequest.description,
     assessment: createNestedObject(changeRequest.assessment),
     justifications: createNestedObject(changeRequest.justifications),
-    implementationPlan: createImplementationPlan(changeRequest.implementationPlan),
+    implementationPlan: changeRequest.implementationPlan,
     approvals: changeRequest.approvals.map((approval) => ({ label: approval.approver.name, value: approval.approver.email })),
     effectiveDate: changeRequest.effectiveDate && moment.utc(changeRequest.effectiveDate).startOf('day').toDate(),
     documentRevisions: changeRequest.documentRevisions.map((documentRevision) => documentRevision.id ),

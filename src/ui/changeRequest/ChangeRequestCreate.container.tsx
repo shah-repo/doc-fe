@@ -23,7 +23,7 @@ export const DEFAULT_INITIAL_VALUES: ChangeRequestFormValues = {
   description: '',
   justifications: { description: '', attachments: [] },
   assessment: { description: '', attachments: [] },
-  implementationPlan: { implementationPlanTasks: [], attachments: [] },
+  implementationPlan: { tasks: [], attachments: [] },
   approvals: [],
   documentRevisions: [],
 };

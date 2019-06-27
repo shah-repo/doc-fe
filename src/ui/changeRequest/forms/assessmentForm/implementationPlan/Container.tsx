@@ -24,12 +24,12 @@ const Container: React.FunctionComponent<Props> = () => {
   return (
     <React.Fragment>
       <span className={classes.error}>
-        <ErrorMessage name="implementationPlan.implementationPlanTasks" />
+        <ErrorMessage name="implementationPlan.tasks" />
       </span>
       <Typography>
         <Text message="changeRequest.assessmentForm.implementationPlan" />
       </Typography>
-      <FieldArray name="implementationPlan.implementationPlanTasks" render={renderTasks} />
+      <FieldArray name="implementationPlan.tasks" render={renderTasks} />
       <FieldArray name="implementationPlan.attachments" render={renderAttachments} />
     </React.Fragment>
   );
