@@ -133,5 +133,6 @@ export default {
   loadDocument,
   documentSet,
   applyTransition,
+  auditSet,
   loadAudit,
 };

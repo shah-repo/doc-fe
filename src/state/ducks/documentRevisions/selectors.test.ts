@@ -3,7 +3,7 @@ import { ApplicationState } from "../../reducers";
 import { getAsyncState } from "../../tests/factories";
 import initialStoreState from "../../tests/helpers/initialStoreState";
 import selectors from "./selectors";
-import { getDocumentRevision, getDocument } from "./tests/factories";
+import { getDocumentRevision, getDocument, getAudit } from "./tests/factories";
 import { DocumentRevisionsAllIdsState, DocumentRevisionsByIdState, DocumentByIdState } from "./types";
 
 describe("document revision selectors tests", () => {
@@ -19,6 +19,10 @@ describe("document revision selectors tests", () => {
     [documents[0].id]: documents[0],
     [documents[1].id]: documents[1],
   };
+  const audit = [getAudit(), getAudit()];
+  const auditsByCRId = {
+    [documentRevisions[0].id]: audit,
+  }
 
   beforeAll(() => {
     state = _.cloneDeep(initialStoreState);
@@ -28,6 +32,8 @@ describe("document revision selectors tests", () => {
     state.documentRevisions.loadAsyncInfo = getAsyncState();
     state.documentRevisions.loadListAsyncInfo = getAsyncState();
     state.documentRevisions.loadDocumentAsyncInfo = getAsyncState();
+    state.documentRevisions.auditsByCRId = auditsByCRId;
+    state.documentRevisions.loadAuditAsyncInfo = getAsyncState();
   });
 
   it("getDocumentRevisionsList", () => {
@@ -58,5 +64,13 @@ describe("document revision selectors tests", () => {
 
   it("getLoadDocumentAsyncState", () => {
     expect(selectors.getLoadDocumentAsyncState(state)).toBe(state.documentRevisions.loadDocumentAsyncInfo);
+  });
+
+  it("getAudit", () => {
+    expect(selectors.getAudit(state, documentRevisions[0].id)).toBe(audit);
+  });
+
+  it("getLoadAuditAsyncState", () => {
+    expect(selectors.getLoadAuditAsyncState(state)).toBe(state.documentRevisions.loadAuditAsyncInfo);
   });
 });
