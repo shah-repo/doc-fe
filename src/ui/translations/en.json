@@ -137,6 +137,7 @@
   "documentRevision.form.references": "References",
   "documentRevision.form.referencedBy": "Referenced by",
   "documentRevision.form.processChange": "Process change",
+  "documentRevision.audit.docHistory": "Doc History",
 
   "transition.action.confirm": "Confirm",
   "transition.action.cancel": "Cancel",

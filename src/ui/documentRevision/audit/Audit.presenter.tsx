@@ -68,7 +68,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   return (
     <div className={classes.container}>
       <IconButton onClick={toggleList} classes={{ root: classes.collapsableButton }}>
-        <Text translation="changeRequest.audit.crHistory" />
+        <Text translation="documentRevision.audit.docHistory" />
         {renderExpandIcon()}
       </IconButton>
       <div className={classes.collapsableContainer}>
