@@ -78,7 +78,7 @@ export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFo
 
   const renderDocumentRevisionAudit = () => {
     if (selectedDocumentRevision) {
-      return <DocumentRevisionAuditContainer documentRevisionId="603f9183-fb1d-4688-859b-a6f945249620" />
+      return <DocumentRevisionAuditContainer documentRevisionId={selectedDocumentRevision} />
     }
   }
 
