@@ -42,7 +42,6 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({ asyncState, a
           validate={validator(required)}
         />
         <Field name="justifications" render={renderJustifications} />
-        <Field name="assessment" render={renderAssessments} />
         <Field name="implementationPlan" render={renderimplementationPlan} />
         <DatePickerField
           name="effectiveDate"
