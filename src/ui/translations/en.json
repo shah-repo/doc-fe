@@ -138,6 +138,10 @@
   "documentRevision.form.referencedBy": "Referenced by",
   "documentRevision.form.processChange": "Process change",
   "documentRevision.audit.docHistory": "Doc History",
+  "documentRevision.audit.name.STRING_EDITED": "Name changed",
+  "documentRevision.audit.description.STRING_EDITED": "Description changed",
+  "documentRevision.audit.attachments.ARRAY_NEW": "Attachment added",
+  "documentRevision.audit.attachments.ARRAY_DELETED": "Attachment removed",
 
   "transition.action.confirm": "Confirm",
   "transition.action.cancel": "Cancel",

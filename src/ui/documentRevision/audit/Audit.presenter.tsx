@@ -1,10 +1,8 @@
 import React from "react";
 import { Collapse, List, IconButton } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
-import { Audit } from "../../../state/ducks/changeRequest";
+import { Audit } from "../../../state/ducks/documentRevisions";
 import { Attachment } from "../../../state/ducks/attachments";
-import { Approval, User } from "../../../state/ducks/common";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import Text from "../../components/Text";
 import Date from "../../components/Date";
 import { styles } from "./Audit.presenter.styles";
@@ -28,20 +26,11 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       case "attachments":
         const attachment = change.nextValue as Attachment;
         return attachment.name;
-      case "approvals":
-        const approval = change.nextValue as Approval;
-        return approval.approver.name;
-      case "approvers":
-        const approver = change.nextValue as User;
-        return approver.name;
-      case "documentRevisions":
-        const documentRevision = change.nextValue as DocumentRevision;
-        return documentRevision.description;
       default:
         return change.nextValue;
     }
   };
-  const renderChange = () => (
+  const renderChanges = () => (
     audit.map((change, index) => {
       let nextValue = getNextValue(change);
 
@@ -54,7 +43,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             <Date value={change.timestamp} />
           </div>
           <div>
-            <Text message={`changeRequest.audit.${change.field}.${change.type}`} />
+            <Text message={`documentRevision.audit.${change.field}.${change.type}`} />
           </div>
           {nextValue}
         </div>
@@ -74,7 +63,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       <div className={classes.collapsableContainer}>
         <Collapse in={isOpen} timeout="auto" unmountOnExit={true}>
           <List>
-            {renderChange()}
+            {renderChanges()}
           </List>
         </Collapse>
       </div>

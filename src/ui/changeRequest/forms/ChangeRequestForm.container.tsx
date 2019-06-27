@@ -78,8 +78,7 @@ export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFo
 
   const renderDocumentRevisionAudit = () => {
     if (selectedDocumentRevision) {
-      // "603f9183-fb1d-4688-859b-a6f945249620"
-      return <DocumentRevisionAuditContainer documentRevisionId={selectedDocumentRevision} />
+      return <DocumentRevisionAuditContainer documentRevisionId="603f9183-fb1d-4688-859b-a6f945249620" />
     }
   }
 
@@ -100,8 +99,8 @@ export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFo
         {renderDocumentRevisionForm()}
       </Grid>
       <Grid item={true} xs={3}>
-        {renderChangeRequestAudit()}
         {renderDocumentRevisionAudit()}
+        {renderChangeRequestAudit()}
       </Grid>
     </Grid>
   );

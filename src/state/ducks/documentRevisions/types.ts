@@ -106,7 +106,7 @@ export interface DocumentRevisionTransitionResponse {
 export interface Audit {
   field: string;
   type: string;
-  nextValue: string | User | Attachment | Approval | DocumentRevision;
+  nextValue: string | Attachment;
   timestamp: string;
   groupId: string;
   owner: User;
