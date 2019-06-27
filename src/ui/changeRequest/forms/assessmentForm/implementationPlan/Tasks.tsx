@@ -3,9 +3,8 @@ import _ from 'lodash';
 import React from "react";
 import TaskFormDialog from "./TaskFormDialog";
 import useDialog from "../../../../hooks/useDialog";
-import { ImplementationPlanTask } from "../../types";
+import { ImplementationPlanTaskForm, ImplementationPlanTask } from "../../types";
 import TaskPresenter from "./Task.presenter";
-import { OptionType } from "../../../../components/forms/fields/Autocomplete/types";
 
 interface Props extends FieldArrayRenderProps {}
 
@@ -18,11 +17,15 @@ const Tasks: React.FunctionComponent<Props> = ({
     dialog.open();
   };
 
-  const onSubmit = (values: ImplementationPlanTask) => {
+  const onSubmit = (values: ImplementationPlanTaskForm) => {
     dialog.close();
+    const assigned: any = values.assigned;
     push({
       ...values,
-      assigned: values.assigned.map((value: any) => ({ id: value.value, name: value.label }))
+      assigned: {
+        id: assigned!.value,
+        name: assigned!.label
+      }
     });
   };
 

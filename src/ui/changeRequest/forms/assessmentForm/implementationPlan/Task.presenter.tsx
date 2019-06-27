@@ -43,7 +43,7 @@ export const TaskPresenter: React.FunctionComponent<Props> = ({
       <div className={classes.detailsContainer}>
         <span className={classes.assignedTo}>
           <Text translation="common.assignedTo" />:&nbsp;
-          {task.assigned.map((assignee) => `${assignee.name}, `)}
+          {task.assigned.name}
         </span>
         <span>
           <Text translation="common.dueDate" />:&nbsp;

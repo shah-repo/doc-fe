@@ -30,7 +30,7 @@ export interface ImplementationPlanTask {
   title: string;
   description: string;
   dueDate?: Date;
-  assigned: Approval[];
+  assigned: User;
 }
 
 export interface ImplementationPlan {

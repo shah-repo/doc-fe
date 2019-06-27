@@ -21,12 +21,18 @@ export interface Assessment {
   attachments: Attachment[];
 }
 
-export interface ImplementationPlanTask {
-  id?: string;
+export interface ImplementationPlanTaskForm {
   title: string;
   description: string;
   dueDate?: Date;
-  assigned: User[];
+  assigned?: User;
+}
+
+export interface ImplementationPlanTask {
+  title: string;
+  description: string;
+  dueDate: Date;
+  assigned: User;
 }
 
 export interface ChangeRequestFormValues {
