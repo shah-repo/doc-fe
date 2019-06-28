@@ -54,7 +54,7 @@ export const ChangeRequestPreviewContainer: React.FunctionComponent<ChangeReques
     />
   );
   const renderDocumentRevision = () => (
-    <DocumentRevisionPreviewPresenter documentRevision={selectedDocumentRevision} canSubmitDocument={canSubmitDocument} />
+    <DocumentRevisionPreviewPresenter documentRevision={selectedDocumentRevision} />
   );
 
   const selectDocumentRevision = (documentRevision: DocumentRevision) => setSelectedDocumentRevision(documentRevision)

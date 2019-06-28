@@ -10,6 +10,8 @@ export const canSubmitDocumentRevision = (
   currentUserEmail: string,
 ) => currentUserEmail === documentRevision.owner.email && documentRevision.status === DocumentRevisionStatus.PendingChange;
 
+export const canCreateNewVersion = (documentRevision: DocumentRevision) => documentRevision.status === DocumentRevisionStatus.Released;
+
 export const documentRevisionIdMask = (
   type: string,
   count: string | number,

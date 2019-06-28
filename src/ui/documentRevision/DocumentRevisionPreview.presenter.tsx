@@ -1,4 +1,4 @@
-import { Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
+import { Grid, Typography, withStyles, WithStyles, Button } from "@material-ui/core";
 import React from "react";
 import { Attachment } from "../../state/ducks/attachments";
 import { DocumentRevision } from "../../state/ducks/documentRevisions";
@@ -6,36 +6,22 @@ import FileCard from "../components/cards/FileCard";
 import Text from "../components/Text";
 import styles from "./DocumentRevisionPreview.styles";
 import { documentRevisionIdMask } from "./helpers";
-import PendingSubmissionDialogContainer from "./dialogs/PendingSubmissionDialog.container";
+import PreviewControlsContainer from "./PreviewControls.container";
 
 interface DocumentRevisionPreviewPresenterProps extends WithStyles<typeof styles> {
   documentRevision: DocumentRevision | null;
-  canSubmitDocument: boolean | null;
 }
 
-const DocumentRevisionPreviewPresenter: React.FunctionComponent<DocumentRevisionPreviewPresenterProps> =
-  ({ classes, documentRevision, canSubmitDocument }) => {
+export const DocumentRevisionPreviewPresenter: React.FunctionComponent<DocumentRevisionPreviewPresenterProps> = ({
+  classes, documentRevision
+}) => {
     if (!documentRevision) { return null; }
-    const renderPendingSubmissionButton = () => {
-      return (
-        canSubmitDocument && <PendingSubmissionDialogContainer
-          transition="pending_submission"
-          documentRevisionId={documentRevision.id}
-        />
-      )
-    }
 
     const attachments = (documentRevision.attachments || []).map((attachment: Attachment, index: number) => (
       <FileCard key={index} attachment={attachment} />
     ));
 
-    const referencedBy = documentRevision.referencedBy.map((reference, index) => (
-      <Grid container={true} key={index}>
-        <Grid item={true} xs={3}>
-          <Typography>{index + 1}. <strong>{reference.name}</strong></Typography>
-        </Grid>
-      </Grid>
-    ));
+    const renderReferences = () => documentRevision.referencedBy.map((reference) => reference.name )
 
     return (
       <Grid container={true} className={classes.container} spacing={8}>
@@ -95,18 +81,16 @@ const DocumentRevisionPreviewPresenter: React.FunctionComponent<DocumentRevision
           </Typography>
         </Grid>
         <Grid item={true} xs={10}>
-          {documentRevision.referencedBy.map((reference, index) => reference.name )}
+          {renderReferences()}
         </Grid>
         <Grid item={true} xs={12}>
           <Grid container={true} spacing={8}>
             {attachments}
           </Grid>
         </Grid>
-        <Grid>
-          {renderPendingSubmissionButton()}
-        </Grid>
+        <PreviewControlsContainer documentRevision={documentRevision} />
       </Grid>
     );
   };
 
-export default withStyles(styles)(DocumentRevisionPreviewPresenter);
+export default withStyles(styles)(DocumentRevisionPreviewPresenter)
