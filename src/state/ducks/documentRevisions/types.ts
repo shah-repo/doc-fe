@@ -59,6 +59,7 @@ export interface DocumentRevisionEditRequestBody {
   attachments: Attachment[];
   type?: string;
   referenceTo: ReferenceToEditRequest[];
+  document?: Partial<DocumentRevisionDocument>;
 }
 
 export interface DocumentRevisionSetAction {

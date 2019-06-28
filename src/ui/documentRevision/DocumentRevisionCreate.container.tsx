@@ -1,19 +1,17 @@
 import React from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { authSelectors } from "../../state/ducks/auth";
 import {
   DocumentRevision,
   documentRevisionsActions,
   documentRevisionsSelectors,
 } from "../../state/ducks/documentRevisions";
-import { Document, documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
 import useAsync from "../hooks/useAsync";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
-import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
+import { toNewVersionRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
 import { generateDocumentRevisionVersionPath } from "./pathGenerators";
 
@@ -66,7 +64,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
     const loadAction = () => loadDocumentRevisions();
 
     const onSubmit = (values: DocumentRevisionFormValues) => {
-      async.start(create, toDocumentRevisionEditRequestBody(values), async);
+      async.start(create, toNewVersionRequestBody(values), async);
     };
 
     const initialValues: DocumentRevisionFormValues = documentRevision ? toDocumentRevisionFormValues(documentRevision) : DEFAULT_INITIAL_VALUES;

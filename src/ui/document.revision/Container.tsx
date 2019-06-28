@@ -38,10 +38,10 @@ const Container: React.FunctionComponent<Props> = ({
     const isNewVersion = props.match.path === DOCUMENT_REVISION_NEW_VERSION_URL;
     
     return (
-      <props.component documentRevisionId={documentRevisionId} documentId={documentId} isNewVersion={isNewVersion} />
+      <DocumentRevisionManagerContainer documentRevisionId={documentRevisionId} documentId={documentId} isNewVersion={isNewVersion} />
     )
   }
-  const renderDocumentRevisionManagerContainer = (props: any) => renderWrapper({ component: DocumentRevisionManagerContainer, ...props});
+  const renderDocumentRevisionManagerContainer = (props: any) => renderWrapper(props);
 
   return (
     <Switch>

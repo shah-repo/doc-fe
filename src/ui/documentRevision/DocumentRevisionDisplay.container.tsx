@@ -35,11 +35,11 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 
 export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevisionDisplayContainerProps> = ({
   currentUserEmail, loadDocumentRevision, isNewVersion,
-  documentRevisionId, documentRevision, loadDocumentRevisionAsyncState, ...props
+  documentRevisionId, documentRevision, loadDocumentRevisionAsyncState
 }) => {
   const loadDocumentRevisionAction = () => loadDocumentRevision(documentRevisionId);
   const canEdit = documentRevision && !isNewVersion && canEditDocumentRevision(documentRevision, currentUserEmail);
-  const canPreview = documentRevision && !canEdit && !isNewVersion;
+  const canPreview = documentRevision && !(canEdit || isNewVersion);
 
   return (
     <AsyncGate asyncState={loadDocumentRevisionAsyncState} asyncAction={loadDocumentRevisionAction} startActionOnMount={true}>
