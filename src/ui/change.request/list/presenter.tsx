@@ -1,15 +1,15 @@
 import { Button, Grid, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { ChangeRequest } from "../../state/ducks/changeRequest";
-import { TableColumnProps } from "../components/table/columns/types";
-import { TablePanel } from "../components/table/TablePanel";
-import { TableSelectionProps } from "../components/table/types";
-import Text from "../components/Text";
-import { CHANGE_REQUEST_CREATE_URL } from "../constants/urls";
-import styles from "./List.styles";
-import { canEditChangeRequest } from "./utils/helpers";
-import { ChangeRequestsUserProps } from "./utils/types";
+import { ChangeRequest } from "../../../state/ducks/changeRequest";
+import { TableColumnProps } from "../../components/table/columns/types";
+import { TablePanel } from "../../components/table/TablePanel";
+import { TableSelectionProps } from "../../components/table/types";
+import Text from "../../components/Text";
+import { CHANGE_REQUEST_CREATE_URL } from "../../constants/urls";
+import { canEditChangeRequest } from "../utils/helpers";
+import { ChangeRequestsUserProps } from "../utils/types";
+import styles from "./styles";
 
 type Props = ChangeRequestsUserProps & WithStyles<typeof styles>;
 

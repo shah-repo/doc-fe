@@ -1,6 +1,12 @@
 import faker from "faker";
-import { ChangeRequest, ChangeRequestStatus, ChangeRequestEditRequestBody, ChangeRequestAvailableApprovers, Audit } from "../types";
 import { getUser } from "../../common/tests/factories";
+import {
+  Audit,
+  ChangeRequest,
+  ChangeRequestAvailableApprovers,
+  ChangeRequestEditRequestBody,
+  ChangeRequestStatus,
+} from "../types";
 
 const createNestedObject = () => (
   {
@@ -8,7 +14,28 @@ const createNestedObject = () => (
     description: faker.lorem.sentence(),
     attachments: [],
   }
-)
+);
+
+const createAssessment = () => (
+  {
+    description: faker.lorem.sentence(),
+    design: {
+      reasoning: "",
+      attachment: {
+        id: faker.random.uuid(),
+        name: faker.lorem.word(),
+        type: faker.lorem.word(),
+        s3link: faker.lorem.text(),
+      },
+    },
+    process: {
+      reasoning: "No Attachment",
+    },
+    regulatory: {
+      reasoning: "No Attachment",
+    },
+  }
+);
 
 const createImplementationPlan = () => (
   {
@@ -16,34 +43,38 @@ const createImplementationPlan = () => (
     tasks: [],
     attachments: [],
   }
-)
+);
 
 export const getChangeRequest = (changeRequest: Partial<ChangeRequest> = {}): ChangeRequest => ({
   id: faker.random.uuid(),
   state: ChangeRequestStatus.Draft,
   description: faker.lorem.sentence(),
-  assessment: createNestedObject(),
+  assessments: createAssessment(),
   implementationPlan: createImplementationPlan(),
   justifications: createNestedObject(),
-  effectiveDate: faker.date.future(undefined, '2019-05-31'),
+  effectiveDate: faker.date.future(undefined, "2019-05-31"),
   approvals: [],
-  owner: getUser({ id: faker.random.uuid(), email: 'test@email.com' }),
+  owner: getUser({ id: faker.random.uuid(), email: "test@email.com" }),
   documentRevisions: [],
   ...changeRequest,
 });
 
-export const getChangeRequestEditRequestBody = (body: Partial<ChangeRequestEditRequestBody> = {}): ChangeRequestEditRequestBody => ({
+export const getChangeRequestEditRequestBody = (
+  body: Partial<ChangeRequestEditRequestBody> = {},
+): ChangeRequestEditRequestBody => ({
   description: faker.lorem.sentence(),
-  assessment: createNestedObject(),
+  assessments: createAssessment(),
   implementationPlan: createNestedObject(),
   justifications: createNestedObject(),
-  effectiveDate: faker.date.future(undefined, '2019-05-31'),
+  effectiveDate: faker.date.future(undefined, "2019-05-31"),
   approvals: [],
   documentRevisions: [],
   ...body,
 });
 
-export const getApprover = (approver: Partial<ChangeRequestAvailableApprovers> = {}): ChangeRequestAvailableApprovers => ({
+export const getApprover = (
+  approver: Partial<ChangeRequestAvailableApprovers> = {},
+): ChangeRequestAvailableApprovers => ({
   id: faker.random.uuid(),
   email: faker.internet.email(),
   name: faker.name.firstName(),

@@ -2,15 +2,20 @@ import { FieldArrayRenderProps, FormikProps } from "formik";
 import React from "react";
 import { connect } from "react-redux";
 import { attachmentsActions } from "../../../../state/ducks/attachments";
+import { Assessment, ImplementationPlan } from "../../../../state/ducks/changeRequest";
 import { ApplicationState } from "../../../../state/reducers";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
-import { Attachment, ChangeRequestFormValues, FileUploadFormValues, Assessment, Justifications } from "../types";
+import {
+  Attachment,
+  ChangeRequestFormValues,
+  FileUploadFormValues,
+  Justifications,
+} from "../types";
 import AttachmentsPresenter from "./Attachments.presenter";
-import { ImplementationPlan } from "../../../../state/ducks/changeRequest";
 
 interface AttachmentsKey {
-  [attachmentsKey: string]: Assessment | ImplementationPlan | Justifications;
+  [attachmentsKey: string]: ImplementationPlan | Justifications;
 }
 
 interface OwnProps extends FieldArrayRenderProps {

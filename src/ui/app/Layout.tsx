@@ -2,8 +2,8 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-import ChangeRequestContainer from "../change.request/Container";
-import ChangeRequestListContainer from "../change.request/List.container";
+import ChangeRequestContainer from "../change.request/container";
+import ChangeRequestListContainer from "../change.request/list/container";
 import ChangeRequestCreateContainer from "../changeRequest/ChangeRequestCreate.container";
 import {
   CHANGE_REQUEST_CREATE_URL,
@@ -14,7 +14,6 @@ import {
   DOCUMENT_REVISION_ROOT_URL,
   DOCUMENT_ROOT_URL,
   HOME_URL,
-  DOCUMENT_REVISION_DETAILS_URL,
 } from "../constants/urls";
 import DashboardContainer from "../dashboard/Dashboard.container";
 import DocumentRevisionContainer from "../document.revision/Container";

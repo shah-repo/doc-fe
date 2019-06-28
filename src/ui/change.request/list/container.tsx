@@ -1,13 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
-import { authSelectors } from "../../state/ducks/auth";
-import { changeRequestsActions, changeRequestsSelectors } from "../../state/ducks/changeRequest";
-import { ApplicationState } from "../../state/reducers";
-import AsyncGate from "../components/AsyncGate";
-import ListPresenter from "./List.presenter";
-import { changeRequestEditPath } from "./utils/paths";
-import { ListDispatchProps, ListStateProps } from "./utils/types";
+import { authSelectors } from "../../../state/ducks/auth";
+import {
+  changeRequestsActions,
+  changeRequestsSelectors,
+} from "../../../state/ducks/changeRequest";
+import { ApplicationState } from "../../../state/reducers";
+import AsyncGate from "../../components/AsyncGate";
+import { changeRequestEditPath } from "../utils/paths";
+import { ListDispatchProps, ListStateProps } from "../utils/types";
+import ListPresenter from "./presenter";
 
 type DispatchProps = ListDispatchProps;
 type StateProps = ListStateProps;

@@ -1,7 +1,8 @@
 import { Attachment as AttachmentInterface } from "../../../state/ducks/attachments";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { User } from "../../../state/ducks/common";
 import { ImplementationPlan } from "../../../state/ducks/changeRequest";
+import { Assessment } from "../../../state/ducks/changeRequest/types";
+import { User } from "../../../state/ducks/common";
+import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 
 export type Attachment = AttachmentInterface;
 
@@ -10,12 +11,6 @@ export interface FileUploadFormValues {
 }
 
 export interface Justifications {
-  id?: string;
-  description?: string;
-  attachments: Attachment[];
-}
-
-export interface Assessment {
   id?: string;
   description?: string;
   attachments: Attachment[];
@@ -39,7 +34,7 @@ export interface ChangeRequestFormValues {
   id?: string;
   description: string;
   justifications: Justifications;
-  assessment: Assessment;
+  assessments: Assessment;
   implementationPlan: ImplementationPlan;
   effectiveDate?: Date;
   approvals: OptionType[];

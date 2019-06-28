@@ -1,23 +1,23 @@
 import { Typography, withStyles, WithStyles } from "@material-ui/core";
-import { Form, FormikProps, Field, FieldProps } from "formik";
+import { Field, FieldProps, Form, FormikProps } from "formik";
 import React from "react";
+import { ChangeRequest } from "../../../../state/ducks/changeRequest";
 import { AsyncState } from "../../../../state/types";
-import InputField from "../../../components/forms/fields/Input";
-import DatePickerField from "../../../components/forms/fields/DatePicker";
-import { required, validator } from "../../../components/forms/fields/validators";
 import AutcompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
+import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
+import DatePickerField from "../../../components/forms/fields/DatePicker";
+import InputField from "../../../components/forms/fields/Input";
+import { required, validator } from "../../../components/forms/fields/validators";
 import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";
+import SubmitButton from "../../../components/forms/SubmitButton";
 import Text from "../../../components/Text";
 import { ChangeRequestFormValues } from "../types.js";
-import AssessmentFormJustifications from './AssessmentFormJustifications';
-import AssessmentFormAssessments from './AssessmentFormAssessments';
-import AssessmentFormImplementationPlan from './implementationPlan/Container';
-import styles from './AssessmentForm.styles';
-import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
+import styles from "./AssessmentForm.styles";
+import AssessmentFormAssessments from "./AssessmentFormAssessments";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
-import { ChangeRequest } from "../../../../state/ducks/changeRequest";
-import SubmitButton from "../../../components/forms/SubmitButton";
+import AssessmentFormJustifications from "./AssessmentFormJustifications";
+import AssessmentFormImplementationPlan from "./implementationPlan/Container";
 
 interface Props extends WithStyles<typeof styles>, FormikProps<ChangeRequestFormValues> {
   asyncState: AsyncState;
@@ -25,10 +25,24 @@ interface Props extends WithStyles<typeof styles>, FormikProps<ChangeRequestForm
   availableApprovers: OptionType[];
 }
 
-const AssessmentFormPresenter: React.FunctionComponent<Props> = ({ asyncState, availableApprovers, classes, changeRequest }) => {
-  const renderJustifications = (props: FieldProps<ChangeRequestFormValues>) => <AssessmentFormJustifications {...props} />;
-  const renderAssessments = (props: FieldProps<ChangeRequestFormValues>) => <AssessmentFormAssessments {...props} />;
-  const renderimplementationPlan = (props: FieldProps<ChangeRequestFormValues>) => <AssessmentFormImplementationPlan {...props} />;
+const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
+  asyncState,
+  availableApprovers,
+  classes,
+  changeRequest,
+}) => {
+
+  const renderJustifications = (props: FieldProps<ChangeRequestFormValues>) => (
+    <AssessmentFormJustifications {...props} />
+  );
+
+  const renderAssessments = (props: FieldProps<ChangeRequestFormValues>) => (
+    <AssessmentFormAssessments {...props} />
+  );
+
+  const renderimplementationPlan = (props: FieldProps<ChangeRequestFormValues>) => (
+    <AssessmentFormImplementationPlan {...props} />
+  );
 
   return (
     <div className={classes.container}>
@@ -42,6 +56,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({ asyncState, a
           validate={validator(required)}
         />
         <Field name="justifications" render={renderJustifications} />
+        <Field name="assessments" render={renderAssessments} />
         <Field name="implementationPlan" render={renderimplementationPlan} />
         <DatePickerField
           name="effectiveDate"
@@ -53,7 +68,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({ asyncState, a
           autocompleteProps={{
             id: "approvals",
             isMulti: true,
-            placeholder: <Text translation="changeRequest.assessmentForm.selectApprover" />
+            placeholder: <Text translation="changeRequest.assessmentForm.selectApprover" />,
           }}
           options={availableApprovers}
         />
