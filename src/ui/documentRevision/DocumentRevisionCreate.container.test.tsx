@@ -23,6 +23,7 @@ describe("DocumentRevisionCreateContainer tests", () => {
     loadDocumentRevisions: jest.fn(),
     documentRevisions: [documentRevision],
     loadAsyncState: getAsyncState(),
+    loadDocument: jest.fn(),
   };
 
   const getWrapper = (props: Partial<DocumentRevisionCreateContainerProps>) => shallow(
@@ -48,9 +49,10 @@ describe("DocumentRevisionCreateContainer tests", () => {
     const documentRevision = getDocumentRevision();
     (createParameters[1].successHandler as CallbackHandler<DocumentRevision>).execute(documentRevision);
 
+    expect(defaultProps.loadDocument).toHaveBeenCalledWith(documentRevision.document.id);
     expect(routeComponentProps.history.push).toHaveBeenCalledWith(
       generateDocumentRevisionVersionPath(documentRevision.id, documentRevision.document.id)
-      );
+    );
   });
 
   it("sets default initialValues", () => {
