@@ -71,6 +71,13 @@
   "change.request.list.state": "State",
   "change.request.list.noRows": "No change requests",
   "change.request.create": "Create a change request",
+  "change.request.assessments": "Assessments",
+  "change.request.design.assessment": "Design Assessment",
+  "change.request.process.assessment": "Process Assessment",
+  "change.request.regulatory.assessment": "Regulatory Assessment",
+  "change.request.reasoning": "Reasoning",
+  "change.request.assessments.error": "Please provide attachment or reasoning for every assessment",
+
   "changeRequest.transition.submitted": "Submit change request",
   "changeRequest.transition.withdrawn": "Withdraw submission",
   "changeRequest.transition.approve": "Approve submission",
@@ -97,6 +104,9 @@
   "common.title": "Title",
   "common.documentId": "Document ID",
   "common.remove": "Remove",
+  "common.upload": "Upload",
+  "common.cancel": "Cancel",
+  "common.confirm": "Confirm",
 
   "dashboard.reviews": "Documents to review",
   "dashboard.noReviews": "No documents to review",
