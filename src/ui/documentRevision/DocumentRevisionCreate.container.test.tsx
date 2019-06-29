@@ -9,7 +9,7 @@ import {
   DocumentRevisionCreateContainerProps,
 } from "./DocumentRevisionCreate.container";
 import DocumentRevisionFormContainer from "./forms/DocumentRevisionForm.container";
-import { toDocumentRevisionEditRequestBody } from "./forms/transform";
+import { toNewVersionRequestBody } from "./forms/transform";
 import { generateDocumentRevisionVersionPath } from "./pathGenerators";
 import { getDocumentRevision } from "../../state/ducks/documentRevisions/tests/factories";
 import { DocumentRevision } from "../../state/ducks/documentRevisions";
@@ -42,7 +42,7 @@ describe("DocumentRevisionCreateContainer tests", () => {
     expect(create).toHaveBeenCalledTimes(1);
     const createParameters = create.mock.calls[0];
 
-    expect(createParameters[0]).toEqual(toDocumentRevisionEditRequestBody(values));
+    expect(createParameters[0]).toEqual(toNewVersionRequestBody(values));
     expect(createParameters[1]).toBeDefined();
 
     const documentRevision = getDocumentRevision();
