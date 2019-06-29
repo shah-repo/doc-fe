@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { DocumentRevision, DocumentRevisionEditRequestBody } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionEditRequestBody, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { documentRevisionIdMask } from "../helpers"; 
 import { DocumentRevisionFormValues } from "./types";
 
@@ -39,6 +39,7 @@ export const toNewVersionRequestBody = (values: DocumentRevisionFormValues): Doc
   }
 
   newValues.type = values.type;
+  newValues.revisionChangeType = RevisionChangeType.NextRevision; // TODO: needs to come from radio button
 
   return newValues;
 };

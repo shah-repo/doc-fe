@@ -63,7 +63,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       <div className={classes.collapsableContainer}>
         <Collapse in={isOpen} timeout="auto" unmountOnExit={true}>
           <List>
-            {renderChanges()}
+            {audit && renderChanges()}
           </List>
         </Collapse>
       </div>

@@ -21,7 +21,7 @@ export const DocumentRevisionPreviewPresenter: React.FunctionComponent<DocumentR
       <FileCard key={index} attachment={attachment} />
     ));
 
-    const renderReferences = () => documentRevision.referencedBy.map((reference) => reference.name )
+    const renderReferences = () => documentRevision.referencedBy && documentRevision.referencedBy.map((reference) => reference.name )
 
     return (
       <Grid container={true} className={classes.container} spacing={8}>

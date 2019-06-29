@@ -25,7 +25,7 @@ const getAudit = (state: ApplicationState, documentRevisionId: string) => audits
 const makeGetDocumentRevisions = () => {
   return createSelector(
     getDocumentRevisions,
-    documentRevisions => documentRevisions
+    documentRevisions => documentRevisions.reverse(),
   )
 }
 

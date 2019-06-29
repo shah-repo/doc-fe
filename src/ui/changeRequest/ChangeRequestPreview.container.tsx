@@ -42,9 +42,6 @@ export const ChangeRequestPreviewContainer: React.FunctionComponent<ChangeReques
     changeRequest.state === ChangeRequestStatus.InReview &&
     (currentUserApproval as Approval).status === ApprovalStatus.Pending;
 
-
-  const canSubmitDocument = selectedDocumentRevision && canSubmitDocumentRevision(selectedDocumentRevision, currentUserEmail);
-
   const renderAssessmentPreview = () => (
     <AssessmentPreviewPresenter
       canSendToReview={canSendToReview}
