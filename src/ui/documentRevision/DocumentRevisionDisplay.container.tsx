@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
 import { ApplicationState } from "../../state/reducers";
@@ -38,11 +38,17 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
   documentRevisionId, documentRevision, loadDocumentRevisionAsyncState
 }) => {
   const loadDocumentRevisionAction = () => loadDocumentRevision(documentRevisionId);
+
+  useEffect(() => {
+    if (documentRevisionId) {
+      loadDocumentRevisionAction();
+    }
+  }, [documentRevisionId]);
   const canEdit = documentRevision && !isNewVersion && canEditDocumentRevision(documentRevision, currentUserEmail);
   const canPreview = documentRevision && !(canEdit || isNewVersion);
 
   return (
-    <AsyncGate asyncState={loadDocumentRevisionAsyncState} asyncAction={loadDocumentRevisionAction} startActionOnMount={true}>
+    <AsyncGate asyncState={loadDocumentRevisionAsyncState} asyncAction={loadDocumentRevisionAction} startActionOnMount={false}>
       {canEdit && <DocumentRevisionUpdateContainer documentRevision={documentRevision} />}
       {canPreview && <DocumentRevisionPreviewPresenter documentRevision={documentRevision} />}
       {isNewVersion && <CloneContainer documentRevision={documentRevision} />}

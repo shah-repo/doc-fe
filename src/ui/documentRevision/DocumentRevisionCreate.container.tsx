@@ -23,6 +23,7 @@ interface StateProps {
 interface DispatchProps {
   create: typeof documentRevisionsActions.create;
   loadDocumentRevisions: typeof documentRevisionsActions.loadList;
+  loadDocument: typeof documentRevisionsActions.loadDocument;
 }
 
 interface OwnProps {
@@ -47,17 +48,16 @@ export const DEFAULT_INITIAL_VALUES = {
 };
 
 export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionCreateContainerProps> = ({
-  create,
-  history,
-  loadDocumentRevisions,
-  loadAsyncState,
-  documentRevisions,
-  documentRevision,
+  create, history, loadDocumentRevisions, loadAsyncState,
+  documentRevisions, documentRevision, loadDocument
 }) => {
 
     const async = useAsync<DocumentRevision>({
       onSuccess: (createdDocumentRevision?) => {
-        history.push(generateDocumentRevisionVersionPath(createdDocumentRevision!.id, createdDocumentRevision!.document.id));
+        if (createdDocumentRevision) {
+          loadDocument(createdDocumentRevision.document.id);
+          history.push(generateDocumentRevisionVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id));
+        }
       },
     });
 
@@ -86,4 +86,5 @@ const DocumentRevisionCreateContainerWithRouter = withRouter(DocumentRevisionCre
 export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
   create: documentRevisionsActions.create,
   loadDocumentRevisions: documentRevisionsActions.loadList,
+  loadDocument: documentRevisionsActions.loadDocument,
 })(DocumentRevisionCreateContainerWithRouter);
