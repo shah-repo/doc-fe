@@ -3,7 +3,7 @@ import { Translation } from "../../../translations/types";
 
 export type DialogBreakpoint = "xs" | "sm" | "md" | "lg" | "xl";
 export type DialogContentRenderer = () => any;
-export type DialogHandler = (type: DialogAction) => any;
+export type DialogHandler = (action: DialogAction) => any;
 
 export enum DialogAction {
   Close = "common.close",

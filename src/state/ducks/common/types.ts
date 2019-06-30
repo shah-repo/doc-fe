@@ -16,5 +16,8 @@ export interface Approval {
   status: ApprovalStatus;
   approver: User;
   reviewedAt?: string;
+}
 
+export interface Id {
+  id: string;
 }

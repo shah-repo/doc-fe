@@ -16,11 +16,18 @@ export interface Justifications {
   attachments: Attachment[];
 }
 
+export interface ImplementationPlanTaskFormUser {
+  id: string;
+  email?: string;
+  name?: string;
+}
+
 export interface ImplementationPlanTaskForm {
+  id?: string;
   title: string;
   description: string;
   dueDate?: Date;
-  assigned?: User;
+  assigned?: ImplementationPlanTaskFormUser;
 }
 
 export interface ImplementationPlanTask {

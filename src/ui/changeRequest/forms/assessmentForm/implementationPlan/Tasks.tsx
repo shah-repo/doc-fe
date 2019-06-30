@@ -1,15 +1,17 @@
 import { FieldArrayRenderProps } from "formik";
-import _ from 'lodash';
+import _ from "lodash";
 import React from "react";
-import TaskFormDialog from "./TaskFormDialog";
 import useDialog from "../../../../hooks/useDialog";
-import { ImplementationPlanTaskForm, ImplementationPlanTask } from "../../types";
+import { ImplementationPlanTask, ImplementationPlanTaskForm } from "../../types";
 import TaskPresenter from "./Task.presenter";
+import TaskFormDialog from "./TaskFormDialog";
 
-interface Props extends FieldArrayRenderProps {}
+type Props = FieldArrayRenderProps;
 
 const Tasks: React.FunctionComponent<Props> = ({
-  push, remove, form
+  push,
+  remove,
+  form,
 }) => {
   const dialog = useDialog();
 
@@ -24,8 +26,7 @@ const Tasks: React.FunctionComponent<Props> = ({
       ...values,
       assigned: {
         id: assigned!.value,
-        name: assigned!.label
-      }
+      },
     });
   };
 
@@ -38,7 +39,7 @@ const Tasks: React.FunctionComponent<Props> = ({
       closeDialog={dialog.close}
       onSubmit={onSubmit}
     />
-  )
+  );
   const removeTask = (index: number) => () => remove(index);
 
   if (numberOfTasks === 0) {

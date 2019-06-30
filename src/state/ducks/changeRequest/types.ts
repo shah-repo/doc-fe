@@ -1,5 +1,5 @@
 import { Attachment } from "../attachments";
-import { Approval, User } from "../common";
+import { Approval, Id, User } from "../common";
 import { DocumentRevision } from "../documentRevisions";
 import {
   CHANGE_REQUEST_AUDIT_SET,
@@ -30,12 +30,6 @@ export enum AssessmentType {
   Regulatory = "regulatory",
 }
 
-export interface AssessmentItem {
-  id?: string;
-  reasoning?: string;
-  attachment?: Attachment;
-}
-
 export interface Assessment {
   description?: string;
   design: AssessmentItem;
@@ -43,12 +37,20 @@ export interface Assessment {
   regulatory: AssessmentItem;
 }
 
+export interface AssessmentItem {
+  reasoning?: string | null;
+  attachment?: Attachment | null;
+}
+
 export interface ImplementationPlanTask {
   id: string;
   title: string;
   description: string;
   dueDate?: Date;
-  assigned: User;
+  assigned: User | Id;
+  createdAt?: string;
+  status?: string;
+  updatedAt?: string;
 }
 
 export interface ImplementationPlan {

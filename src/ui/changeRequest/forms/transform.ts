@@ -1,10 +1,13 @@
+import * as _ from "lodash";
 import moment from "moment";
 import {
   Approver,
   Assessment,
+  AssessmentType,
   ChangeRequest,
   ChangeRequestEditRequestBody,
   ImplementationPlan,
+  ImplementationPlanTask,
   Justifications,
 } from "../../../state/ducks/changeRequest";
 import { ChangeRequestFormValues } from "./types";
@@ -18,9 +21,9 @@ const createNestedObject = (value: NestedObject = { description: "", attachments
 
 const createAssessment = (value: Assessment = {
   description: "",
-  design: { reasoning: "", attachment: undefined },
-  process: { reasoning: "", attachment: undefined },
-  regulatory: { reasoning: "", attachment: undefined },
+  design: {reasoning: null, attachment: null},
+  process: {reasoning: null, attachment: null},
+  regulatory: {reasoning: null, attachment: null},
 }) => ({
   description: value.description,
   design: value.design,
@@ -49,19 +52,26 @@ const createNestedObjectForRequestBody = (value: NestedObject) => ({
   attachments: value.attachments.map((attachment) => ({ id: attachment.id })),
 });
 
-const createAssessmentObjectForRequestBody = (value: Assessment) => ({
-  description: value.description,
-  design: value.design,
-  process: value.process,
-  regulatory: value.regulatory,
-});
+const toImplementationPlanEditRequestBody = (values: ImplementationPlan): ImplementationPlan => {
+  const valuesTasks: ImplementationPlanTask[] = [];
 
-const toImplementationPlanEditRequestBody = (values: ImplementationPlan): ImplementationPlan => (
-  {
-    tasks: values.tasks,
-    attachments: values.attachments,
-  }
-);
+  values.tasks.map((t) => {
+    const { createdAt, status, updatedAt, assigned, ...excluded } = t;
+    valuesTasks.push({ assigned: { id: t.assigned.id }, ...excluded });
+  });
+  return { tasks: valuesTasks, attachments: values.attachments };
+};
+
+const createAssessmentObjectForRequestBody = (value: Assessment) => {
+  const assessments: any = createAssessment(value);
+
+  Object.values(AssessmentType).map((t) => {
+    const itemAttachment = _.get(value, `${t}.attachment`, null);
+    const itemReasoning: string = _.get(value, `${t}.reasoning`, null);
+    assessments[t] = {attachment: itemAttachment, reasoning: itemReasoning};
+  });
+  return assessments;
+};
 
 export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues): ChangeRequestEditRequestBody => {
   const changeRequestEditRequestBody: ChangeRequestEditRequestBody = {

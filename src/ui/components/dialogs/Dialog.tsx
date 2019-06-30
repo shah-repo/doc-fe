@@ -29,9 +29,9 @@ const DialogWindow: React.FunctionComponent<Props> = ({
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down(breakpoint));
 
-  const handleAction = (type: DialogAction) => () => {
+  const handleAction = (action: DialogAction) => () => {
     if (onActionClick) {
-      onActionClick!(type);
+      onActionClick!(action);
     }
     dialogHandler.close();
   };

@@ -1,8 +1,9 @@
-import { Typography, withStyles, WithStyles } from "@material-ui/core";
+import { withStyles, WithStyles } from "@material-ui/core";
 import { Field, FieldProps, Form, FormikProps } from "formik";
 import React from "react";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest";
 import { AsyncState } from "../../../../state/types";
+import AssessmentContainer from "../../../change.request/assessment/container";
 import AutcompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
 import DatePickerField from "../../../components/forms/fields/DatePicker";
@@ -14,7 +15,6 @@ import SubmitButton from "../../../components/forms/SubmitButton";
 import Text from "../../../components/Text";
 import { ChangeRequestFormValues } from "../types.js";
 import styles from "./AssessmentForm.styles";
-import AssessmentFormAssessments from "./AssessmentFormAssessments";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
 import AssessmentFormJustifications from "./AssessmentFormJustifications";
 import AssessmentFormImplementationPlan from "./implementationPlan/Container";
@@ -37,7 +37,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   );
 
   const renderAssessments = (props: FieldProps<ChangeRequestFormValues>) => (
-    <AssessmentFormAssessments {...props} />
+    <AssessmentContainer {...props} />
   );
 
   const renderimplementationPlan = (props: FieldProps<ChangeRequestFormValues>) => (
