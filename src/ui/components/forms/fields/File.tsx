@@ -1,6 +1,4 @@
-import {
-  Button, Typography, WithStyles, withStyles,
-} from "@material-ui/core";
+import { Link, Typography, WithStyles, withStyles } from "@material-ui/core";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
 import Text from "../../Text";
@@ -25,9 +23,9 @@ const File: React.FunctionComponent<FileProps> = ({ classes, ...fieldProps }) =>
         <Typography className={classes.text}>
           {fileName || <Text translation="document.file.selectText" />}
         </Typography>
-        <Button variant="text" className={classes.button}>
+        <Link component="span" variant="button" className={classes.button}>
           <Text translation="document.file.select" />
-        </Button>
+        </Link>
       </label>
     </Field>
   );
