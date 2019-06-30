@@ -76,7 +76,7 @@
   "change.request.process.assessment": "Process Assessment",
   "change.request.regulatory.assessment": "Regulatory Assessment",
   "change.request.reasoning": "Reasoning",
-  "change.request.assessments.error": "Please provide attachment or reasoning for every assessment",
+  "change.request.assessments.error": "Please provide attachment or reasoning for each assessment",
 
   "changeRequest.transition.submitted": "Submit change request",
   "changeRequest.transition.withdrawn": "Withdraw submission",
@@ -107,6 +107,7 @@
   "common.upload": "Upload",
   "common.cancel": "Cancel",
   "common.confirm": "Confirm",
+  "common.ok": "Ok",
 
   "dashboard.reviews": "Documents to review",
   "dashboard.noReviews": "No documents to review",
