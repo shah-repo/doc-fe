@@ -1,6 +1,6 @@
 import { Attachment } from "../attachments";
-import { DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
-import { User } from "../common";
+import { DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET, DOCUMENT_REVISION_AUDIT_SET } from "./constants";
+import { User, Approval } from "../common";
 
 export enum DocumentRevisionStatus {
   Draft = "DRAFT",
@@ -15,6 +15,12 @@ export enum DocumentRevisionStatus {
   Deprecated = "DEPRECATED",
   Obsolete = "OBSOLETE",
   Implementation = "IMPLEMENTATION",
+}
+
+export enum RevisionChangeType {
+  NextRevision = "NEXT_REVISION",
+  NextRevisionStage = "NEXT_REVISION_STAGE",
+  Obsolete = "OBSOLETE",
 }
 
 export interface DocumentRevisionDocument {
@@ -59,6 +65,8 @@ export interface DocumentRevisionEditRequestBody {
   attachments: Attachment[];
   type?: string;
   referenceTo: ReferenceToEditRequest[];
+  document?: Partial<DocumentRevisionDocument>;
+  revisionChangeType?: RevisionChangeType;
 }
 
 export interface DocumentRevisionSetAction {
@@ -102,3 +110,28 @@ export interface DocumentRevisionTransitionRequestBody {
 export interface DocumentRevisionTransitionResponse {
   id: string;
 }
+
+export interface Audit {
+  field: string;
+  type: string;
+  nextValue: string | Attachment;
+  timestamp: string;
+  groupId: string;
+  owner: User;
+}
+
+export interface AuditActionPayload {
+  id: string;
+  audit: Audit[];
+}
+
+export interface DocumentRevisionAuditSetAction {
+  type: typeof DOCUMENT_REVISION_AUDIT_SET;
+  payload: AuditActionPayload;
+}
+
+export interface AuditByCRIdState {
+  [key: string]: Audit[];
+}
+
+export type AllIdsState = string[];

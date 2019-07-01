@@ -9,6 +9,8 @@ import {
   DOCUMENT_GET_ASYNC,
   DOCUMENT_SET,
   DOCUMENT_ROOT_URL,
+  DOCUMENT_REVISION_AUDIT_SET,
+  DOCUMENT_REVISION_GET_AUDIT_ASYNC,
 } from "./constants";
 import {
   DocumentRevision,
@@ -20,6 +22,9 @@ import {
   DocumentRevisionTransitionRequestBody,
   DocumentRevisionTransition,
   DocumentRevisionTransitionResponse,
+  AuditActionPayload,
+  DocumentRevisionAuditSetAction,
+  Audit,
 } from "./types";
 
 const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentRevisionsListAction => ({
@@ -101,6 +106,23 @@ const applyTransition = (
   handlers,
 });
 
+const auditSet = (audit: AuditActionPayload): DocumentRevisionAuditSetAction => ({
+  type: DOCUMENT_REVISION_AUDIT_SET,
+  payload: audit,
+});
+
+const loadAudit = (id: string): ApiAction<Audit[]> => apiAction({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/${id}/audit`,
+  method: "get",
+  asyncType: DOCUMENT_REVISION_GET_AUDIT_ASYNC,
+  onSuccess: (audit, dispatch) => {
+    dispatch(auditSet({
+      id,
+      audit,
+    }));
+  },
+});
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
@@ -111,4 +133,6 @@ export default {
   loadDocument,
   documentSet,
   applyTransition,
+  auditSet,
+  loadAudit,
 };

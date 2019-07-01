@@ -8,7 +8,7 @@ import { documentRevisionsActions, DocumentRevision } from "../../state/ducks/do
 import { DocumentRevisionFormValues } from "./forms/types";
 import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
 import DocumentRevisionPreviewPresenter from "./DocumentRevisionPreview.presenter";
-import { canEditDocumentRevision, canSubmitDocumentRevision } from "./helpers";
+import { canEditDocumentRevision, canSubmitDocumentRevision, canCreateNewVersion } from "./helpers";
 
 interface StateProps {
   currentUserEmail: string;
@@ -35,10 +35,7 @@ export const DocumentRevisionUpdateContainer: React.FunctionComponent<DocumentRe
 }) => {
   if (!canEditDocumentRevision(documentRevision, currentUserEmail)) {
     return (
-      <DocumentRevisionPreviewPresenter
-        documentRevision={documentRevision}
-        canSubmitDocument={canSubmitDocumentRevision(documentRevision, currentUserEmail)}
-      />
+      <DocumentRevisionPreviewPresenter documentRevision={documentRevision} />
     );
   }
 

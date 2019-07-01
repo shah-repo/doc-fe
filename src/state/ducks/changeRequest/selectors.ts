@@ -7,6 +7,8 @@ const allIds = (state: ApplicationState) => state.changeRequests.allIds;
 const byId = (state: ApplicationState) => state.changeRequests.byId;
 const approversById = (state: ApplicationState) => state.changeRequests.approversById;
 const approversAllIds = (state: ApplicationState) => state.changeRequests.approversAllIds;
+const auditsByCRId = (state: ApplicationState) => state.changeRequests.auditsByCRId;
+const auditsAllId = (state: ApplicationState) => state.changeRequests.auditsAllId;
 
 const getChangeRequestsList = createSelector(
   allIds, byId,
@@ -18,11 +20,18 @@ const getApproversListForAssessmentForm = createSelector(
   (ids, approvers): OptionType[] => ids.map((id) => ({ value: approvers[id].email, label: approvers[id].name })),
 );
 
+const getAssignessList = createSelector(
+  approversAllIds, approversById,
+  (ids, approvers): OptionType[] => ids.map((id) => ({ value: approvers[id].id, label: approvers[id].name })),
+);
+
 const getChangeRequest = (state: ApplicationState, changeRequestId: string) => byId(state)[changeRequestId];
+const getAudit = (state: ApplicationState, changeRequestId: string) => auditsByCRId(state)[changeRequestId];
 
 const getLoadAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadAsyncInfo;
 const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadListAsyncInfo;
 const getLoadApproversAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadApproversAsyncInfo;
+const getLoadAuditAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadAuditAsyncInfo;
 
 export default {
   getChangeRequestsList,
@@ -31,4 +40,7 @@ export default {
   getLoadListAsyncState,
   getLoadApproversAsyncState,
   getApproversListForAssessmentForm,
+  getLoadAuditAsyncState,
+  getAudit,
+  getAssignessList,
 };

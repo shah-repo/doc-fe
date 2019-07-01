@@ -5,9 +5,10 @@ import React from "react";
 import { Attachment } from "../../../state/ducks/attachments";
 import { ChangeRequest, ChangeRequestTransition } from "../../../state/ducks/changeRequest";
 import FileCard from "../../components/cards/FileCard";
-import ChangeRequestTransitionDialogContainer from "../dialogs/ChangeRequestTransitionDialog.container";
-import styles from "../ChangeRequestPreview.styles";
 import Text from "../../components/Text";
+import styles from "../ChangeRequestPreview.styles";
+import ChangeRequestTransitionDialogContainer from "../dialogs/ChangeRequestTransitionDialog.container";
+import AssessmentFormControlsContainer from "../forms/assessmentForm/AssessmentFormControls.container";
 
 interface AssessmentPreviewPresenterProps extends WithStyles<typeof styles> {
   changeRequest: ChangeRequest;
@@ -18,15 +19,6 @@ interface AssessmentPreviewPresenterProps extends WithStyles<typeof styles> {
 
 const AssessmentPreviewPresenter: React.FunctionComponent<AssessmentPreviewPresenterProps> =
   ({ classes, changeRequest, canApproveOrReject, canSendToReview, canWithdraw }) => {
-    const renderButton = (condition: boolean, transition: ChangeRequestTransition, buttonProps?: ButtonProps) =>
-      condition && (
-        <ChangeRequestTransitionDialogContainer
-          transition={transition}
-          changeRequestId={changeRequest.id}
-          buttonProps={buttonProps}
-        />
-      );
-
     const approvals = changeRequest.approvals.map((approval, index) => (
       <Grid container={true} key={index}>
         <Grid item={true} xs={3}>
@@ -88,20 +80,12 @@ const AssessmentPreviewPresenter: React.FunctionComponent<AssessmentPreviewPrese
         </Grid>
         <Grid item={true} xs={10}>
           <Typography variant="h5">
-            {changeRequest.assessment.description}
+            {changeRequest.assessments.description}
           </Typography>
-        </Grid>
-        <Grid item={true} xs={12}>
-          {renderAttachments(changeRequest.assessment.attachments)}
         </Grid>
         <Grid item={true} xs={2}>
           <Typography variant="h5">
             <Text translation="changeRequest.assessmentForm.implementationPlan" />
-          </Typography>
-        </Grid>
-        <Grid item={true} xs={10}>
-          <Typography variant="h5">
-            {changeRequest.implementationPlan.description}
           </Typography>
         </Grid>
         <Grid item={true} xs={12}>
@@ -112,10 +96,7 @@ const AssessmentPreviewPresenter: React.FunctionComponent<AssessmentPreviewPrese
         </Grid>
         <Grid item={true} xs={12}>
           <div className={classes.actionButtons}>
-            {renderButton(canSendToReview, "to_review")}
-            {renderButton(canWithdraw, "withdraw")}
-            {renderButton(canApproveOrReject, "reject", { color: "secondary" })}
-            {renderButton(canApproveOrReject, "approve")}
+            <AssessmentFormControlsContainer changeRequest={changeRequest} />
           </div>
         </Grid>
       </Grid>

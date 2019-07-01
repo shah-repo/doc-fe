@@ -4,6 +4,7 @@ import * as React from "react";
 import { TextField } from "@material-ui/core";
 import Text from "../../../components/Text";
 import Field, { FieldOwnProps } from "./Field";
+import ErrorMessage from "./ErrorMessage";
 
 interface DatePickerOwnProps extends FieldOwnProps {
   datePickerProps?: Pick<ReactDatePickerProps, Exclude<keyof ReactDatePickerProps, "onChange">>;
@@ -16,20 +17,21 @@ const DatePicker: React.FunctionComponent<DatePickerPropsWithFormik> = ({ datePi
 
   return (
     <Field {...fieldProps}>
-        <ReactDatePicker
-          autoComplete="off"
-          {...fieldProps.field}
-          {...datePickerProps}
-          onChange={onChange}
-          selected={fieldProps.field.value}
-          customInput={
-            <TextField
-              required={false}
-              fullWidth={true}
-              label={<Text translation={label} />}
-            />
-          }
-        />
+      <ErrorMessage {...fieldProps} />
+      <ReactDatePicker
+        autoComplete="off"
+        {...fieldProps.field}
+        {...datePickerProps}
+        onChange={onChange}
+        selected={fieldProps.field.value}
+        customInput={
+          <TextField
+            required={false}
+            fullWidth={true}
+            label={<Text translation={label} />}
+          />
+        }
+      />
     </Field>
   );
 };

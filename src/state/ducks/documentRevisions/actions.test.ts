@@ -3,7 +3,7 @@ import { getCallbackHandler } from "../../../common/tests/factories";
 import { Handlers } from "../../types";
 import actions from "./actions";
 import { DOCUMENT_REVISION_ROOT_URL, DOCUMENT_ROOT_URL } from "./constants";
-import { getDocumentRevision, getDocumentRevisionEditRequestBody, getDocument } from "./tests/factories";
+import { getDocumentRevision, getDocumentRevisionEditRequestBody, getDocument, getAudit } from "./tests/factories";
 import { DocumentRevision, DocumentRevisionEditRequestBody, Document, DocumentRevisionTransitionResponse, DocumentRevisionTransitionRequestBody } from "./types";
 
 describe("documents actions tests", () => {
@@ -51,6 +51,26 @@ describe("documents actions tests", () => {
     it("calls PATCH on DOCUMENT_REVISION_ROOT_URL/id", () => {
       expect(action.url).toBe(`${DOCUMENT_REVISION_ROOT_URL}/${documentRevision.id}`);
       expect(action.method).toBe("patch");
+    });
+
+    it("calls dispatch with documentRevisionSet action on success", () => {
+      const dispatch = jest.fn();
+      action.onSuccess(documentRevision, dispatch);
+      expect(dispatch).toHaveBeenCalledWith(actions.documentRevisionSet(documentRevision));
+    });
+  });
+
+
+  describe("create tests", () => {
+    const handlers: Handlers<DocumentRevision> = {
+      successHandler: getCallbackHandler<DocumentRevision>(),
+      errorHandler: getCallbackHandler<string>(),
+    };
+    const action = actions.create(body, handlers);
+
+    it("calls POST on DOCUMENT_REVISION_ROOT_URL", () => {
+      expect(action.url).toBe(DOCUMENT_REVISION_ROOT_URL);
+      expect(action.method).toBe("post");
     });
 
     it("calls dispatch with documentRevisionSet action on success", () => {
@@ -114,6 +134,23 @@ describe("documents actions tests", () => {
       action.onFailure("ERROR", dispatch);
 
       expect(handlers.errorHandler.execute).toHaveBeenCalledWith("ERROR");
+    });
+  });
+
+  describe("load audit tests", () => {
+    const action = actions.loadAudit(documentRevision.id);
+
+    it("calls GET on DOCUMENT_REVISION_ROOT_URL/id/audit", () => {
+      expect(action.url).toBe(`${DOCUMENT_REVISION_ROOT_URL}/${documentRevision.id}/audit`);
+      expect(action.method).toBe("get");
+    });
+
+    it("calls dispatch with auditSet action on success", () => {
+      const dispatch = jest.fn();
+      const audit = [getAudit()];
+      const payload = { id: documentRevision.id, audit };
+      action.onSuccess(audit, dispatch);
+      expect(dispatch).toHaveBeenCalledWith(actions.auditSet(payload));
     });
   });
 });

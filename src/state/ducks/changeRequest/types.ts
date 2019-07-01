@@ -1,6 +1,12 @@
 import { Attachment } from "../attachments";
 import { Approval, User } from "../common";
-import { CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET } from "./constants";
+import { DocumentRevision } from "../documentRevisions";
+import {
+  CHANGE_REQUEST_AUDIT_SET,
+  CHANGE_REQUEST_LIST,
+  CHANGE_REQUEST_LIST_APPROVERS,
+  CHANGE_REQUEST_SET,
+} from "./constants";
 
 export enum ChangeRequestStatus {
   Draft = "DRAFT",
@@ -18,15 +24,38 @@ export interface Justifications {
   attachments: Attachment[];
 }
 
+export enum AssessmentType {
+  Design = "design",
+  Process = "process",
+  Regulatory = "regulatory",
+}
+
 export interface Assessment {
-  id?: string;
   description?: string;
-  attachments: Attachment[];
+  design: AssessmentItem;
+  process: AssessmentItem;
+  regulatory: AssessmentItem;
+}
+
+export interface AssessmentItem {
+  reasoning?: string | null;
+  attachment?: Attachment | null;
+}
+
+export interface ImplementationPlanTask {
+  id: string;
+  title: string;
+  description: string;
+  dueDate?: Date;
+  assigned: Partial<User>;
+  createdAt?: string;
+  status?: string;
+  updatedAt?: string;
 }
 
 export interface ImplementationPlan {
   id?: string;
-  description?: string;
+  tasks: ImplementationPlanTask[];
   attachments: Attachment[];
 }
 
@@ -35,7 +64,7 @@ export interface ChangeRequest {
   crId?: string;
   description: string;
   state: ChangeRequestStatus;
-  assessment: Assessment;
+  assessments: Assessment;
   implementationPlan: ImplementationPlan;
   justifications: Justifications;
   effectiveDate: Date;
@@ -60,9 +89,10 @@ export interface EditRequestBodyNestedObject {
   description?: string;
   attachments: EditRequestBodyAttachment[];
 }
+
 export interface ChangeRequestEditRequestBody {
   description: string;
-  assessment: EditRequestBodyNestedObject;
+  assessments: Assessment;
   implementationPlan: EditRequestBodyNestedObject;
   justifications: EditRequestBodyNestedObject;
   effectiveDate?: Date;
@@ -86,7 +116,8 @@ export interface ChangeRequestsByIdState {
 
 export type ChangeRequestsAllIdsState = string[];
 
-export type ChangeRequestTransition = "approve" | "reject" | "to_review" | "withdraw";
+export type ChangeRequestTransition =
+  "approve" | "reject" | "to_review" | "withdrawn" | "submitted" | "in_review" | "closed";
 
 export interface ChangeRequestTransitionRequestBody {
   password: string;
@@ -124,3 +155,28 @@ export interface ChangeRequestsProps {
 export interface ChangeRequestProps {
   changeRequest: ChangeRequest;
 }
+
+export interface Audit {
+  field: string;
+  type: string;
+  nextValue: string | User | Attachment | Approval | DocumentRevision;
+  timestamp: string;
+  groupId: string;
+  owner: User;
+}
+
+export interface AuditActionPayload {
+  id: string;
+  audit: Audit[];
+}
+
+export interface ChangeRequestAuditSetAction {
+  type: typeof CHANGE_REQUEST_AUDIT_SET;
+  payload: AuditActionPayload;
+}
+
+export interface AuditByCRIdState {
+  [key: string]: Audit[];
+}
+
+export type allIdsState = string[];

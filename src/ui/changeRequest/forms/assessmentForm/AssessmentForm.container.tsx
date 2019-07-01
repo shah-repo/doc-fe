@@ -1,14 +1,15 @@
-import { Formik, FormikActions, FormikProps, FormikErrors } from "formik";
+import { Formik, FormikActions, FormikErrors, FormikProps } from "formik";
+import _ from "lodash";
 import React from "react";
-import _ from 'lodash';
-import { AsyncState } from "../../../../state/types";
-import AssessmentFormPresenter from "./AssessmentForm.presenter";
-import { ChangeRequestFormValues } from "../types";
-import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
-import { changeRequestsActions, changeRequestsSelectors } from "../../../../state/ducks/changeRequest";
 import { connect } from "react-redux";
+import { ChangeRequest, changeRequestsActions, changeRequestsSelectors } from "../../../../state/ducks/changeRequest";
 import { ApplicationState } from "../../../../state/reducers";
+import { AsyncState } from "../../../../state/types";
 import AsyncGate from "../../../components/AsyncGate";
+import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
+import Text from "../../../components/Text";
+import { ChangeRequestFormValues } from "../types";
+import AssessmentFormPresenter from "./AssessmentForm.presenter";
 
 interface StateProps {
   loadApproversAsyncState: AsyncState;
@@ -22,6 +23,7 @@ interface OwnProps {
   initialValues: ChangeRequestFormValues;
   asyncState: AsyncState;
   onSubmit: (values: ChangeRequestFormValues, actions: FormikActions<ChangeRequestFormValues>) => void;
+  changeRequest?: ChangeRequest;
 }
 
 type AssessmentFormContainerProps = StateProps & DispatchProps & OwnProps;
@@ -32,29 +34,45 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 });
 
 const validate = (values: ChangeRequestFormValues) => {
-  let errors: FormikErrors<any> = {};
-  const { assessment, justifications, implementationPlan } = values;
+  const errors: FormikErrors<any> = {};
+  const { justifications, implementationPlan, assessments } = values;
   const descriptionOrAttachment = "changeRequest.assessmentForm.error.descriptionOrAttachment";
+  const taskOrAttachment = "changeRequest.assessmentForm.error.taskOrAttachment";
+  const isAssessmentDesignValid = assessments.design.reasoning || assessments.design.attachment;
+  const isAssessmentProcessValid = assessments.process.reasoning || assessments.process.attachment;
+  const isAssessmentRegulatoryValid = assessments.regulatory.reasoning || assessments.regulatory.attachment;
 
-  if (!assessment.description && assessment.attachments.length === 0) {
-    _.set(errors, 'assessment.description', descriptionOrAttachment);
-  } 
-  
-  if (!justifications.description && justifications.attachments.length === 0) {
-    _.set(errors, 'justifications.description', descriptionOrAttachment);
+  if (!isAssessmentDesignValid || !isAssessmentProcessValid || !isAssessmentRegulatoryValid) {
+    _.set(errors, "assessments", <Text translation="change.request.assessments.error" />);
   }
-  
-  if (!implementationPlan.description && implementationPlan.attachments.length === 0) {
-    _.set(errors, 'implementationPlan.description', descriptionOrAttachment);
+
+  if (!justifications.description && justifications.attachments.length === 0) {
+    _.set(errors, "justifications.description", descriptionOrAttachment);
+  }
+
+  if (implementationPlan.tasks.length === 0 && implementationPlan.attachments.length === 0) {
+    _.set(errors, "implementationPlan.tasks", <Text translation={taskOrAttachment} />);
   }
 
   return errors;
-}
+};
 
-const AssessmentFormContainer: React.FunctionComponent<AssessmentFormContainerProps> =
-  ({ onSubmit, initialValues, asyncState, availableApprovers, loadApproversAsyncState, loadAvailableApprovers }) => {
+const AssessmentFormContainer: React.FunctionComponent<AssessmentFormContainerProps> = ({
+  onSubmit,
+  initialValues,
+  asyncState,
+  availableApprovers,
+  loadApproversAsyncState,
+  loadAvailableApprovers,
+  changeRequest,
+}) => {
     const render = (props: FormikProps<ChangeRequestFormValues>) => (
-      <AssessmentFormPresenter {...props} asyncState={asyncState} availableApprovers={availableApprovers} />
+      <AssessmentFormPresenter
+        {...props}
+        asyncState={asyncState}
+        availableApprovers={availableApprovers}
+        changeRequest={changeRequest}
+      />
     );
 
     return (
@@ -69,7 +87,6 @@ const AssessmentFormContainer: React.FunctionComponent<AssessmentFormContainerPr
       </AsyncGate>
     );
   };
-
 
 export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
   loadAvailableApprovers: changeRequestsActions.loadAvailableApprovers,

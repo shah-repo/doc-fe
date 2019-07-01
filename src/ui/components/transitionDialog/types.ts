@@ -2,4 +2,4 @@ export interface PasswordFormValues {
   password: string;
 }
 
-export type Transition = "approve" | "reject" | "to_review" | "withdraw" | "pending_submission";
+export type Transition = "approve" | "reject" | "in_review" | "to_review" | "submitted" | "withdrawn" | "closed" | "pending_submission" | "to_review" | "withdraw";

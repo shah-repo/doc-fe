@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { DocumentRevision, DocumentRevisionEditRequestBody } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionEditRequestBody, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { documentRevisionIdMask } from "../helpers"; 
 import { DocumentRevisionFormValues } from "./types";
 
@@ -13,6 +13,7 @@ export const toDocumentRevisionFormValues = (documentRevision: DocumentRevision)
     type: documentRevision.type,
     referenceTo: documentRevision.referenceTo.map((reference) => ({ value: reference.id, label: reference.name })),
     referencedBy: documentRevision.referencedBy,
+    document: documentRevision.document,
   };
 
   return values;
@@ -28,4 +29,25 @@ export const toDocumentRevisionEditRequestBody = (values: DocumentRevisionFormVa
   };
 
   return values.id ? _.omit(documentRevisionEditRequestBody, "type") : documentRevisionEditRequestBody;
+};
+
+export const toNewVersionRequestBody = (values: DocumentRevisionFormValues): DocumentRevisionEditRequestBody => {
+  const newValues = toDocumentRevisionEditRequestBody(values);
+
+  if (values.document) {
+    newValues.document = { id: values.document.id };
+  }
+
+  newValues.type = values.type;
+  newValues.revisionChangeType = values.revisionChangeType;
+
+  return newValues;
+};
+
+export const toDocumentRevisionFormValuesWithRevisionChange = (documentRevision: DocumentRevision): DocumentRevisionFormValues => {
+  const values: DocumentRevisionFormValues = toDocumentRevisionFormValues(documentRevision);
+
+  values.revisionChangeType = RevisionChangeType.NextRevision;
+
+  return values;
 };

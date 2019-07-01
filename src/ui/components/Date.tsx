@@ -5,7 +5,7 @@ import moment from "moment";
 type FormattedDateProps = FormattedDate.Props;
 
 export interface DateFormatterProps extends Partial<FormattedDateProps> {
-  value: Date | string | number | undefined;
+  value?: Date | string | number;
 }
 
 const DateFormatter: React.FunctionComponent<DateFormatterProps> = ({

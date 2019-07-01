@@ -8,6 +8,8 @@ import {
   DOCUMENT_REVISION_LIST_ASYNC,
   DOCUMENT_SET,
   DOCUMENT_GET_ASYNC,
+  DOCUMENT_REVISION_AUDIT_SET,
+  DOCUMENT_REVISION_GET_AUDIT_ASYNC,
 } from "./constants";
 import {
   DocumentRevision,
@@ -17,6 +19,9 @@ import {
   DocumentRevisionSetAction,
   DocumentSetAction,
   DocumentByIdState,
+  DocumentRevisionAuditSetAction,
+  AuditByCRIdState,
+  AllIdsState,
 } from "./types";
 
 type DocumentRevisionActions = DocumentRevisionsListAction | DocumentRevisionSetAction;
@@ -52,11 +57,32 @@ export const documentsById = (state: DocumentByIdState = {}, action: DocumentSet
   }
 };
 
+export const auditsByCRId = (state: AuditByCRIdState = {}, action: DocumentRevisionAuditSetAction): AuditByCRIdState => {
+  switch (action.type) {
+    case DOCUMENT_REVISION_AUDIT_SET:
+      return { ...state, [action.payload.id]: action.payload.audit };
+    default:
+      return state;
+  }
+};
+
+export const auditsAllId = (state: AllIdsState = [], action: DocumentRevisionAuditSetAction): AllIdsState => {
+  switch (action.type) {
+    case DOCUMENT_REVISION_AUDIT_SET:
+      return _.uniq([...state, action.payload.id]);
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   loadListAsyncInfo: asyncReducer(DOCUMENT_REVISION_LIST_ASYNC),
   loadAsyncInfo: asyncReducer(DOCUMENT_REVISION_GET_ASYNC),
   loadDocumentAsyncInfo: asyncReducer(DOCUMENT_GET_ASYNC),
+  loadAuditAsyncInfo: asyncReducer(DOCUMENT_REVISION_GET_AUDIT_ASYNC),
   byId,
   allIds,
   documentsById,
+  auditsByCRId,
+  auditsAllId
 });
