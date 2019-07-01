@@ -5,9 +5,9 @@ import React from "react";
 import { Attachment } from "../../../state/ducks/attachments";
 import { ChangeRequest, ChangeRequestTransition } from "../../../state/ducks/changeRequest";
 import FileCard from "../../components/cards/FileCard";
-import ChangeRequestTransitionDialogContainer from "../dialogs/ChangeRequestTransitionDialog.container";
-import styles from "../ChangeRequestPreview.styles";
 import Text from "../../components/Text";
+import styles from "../ChangeRequestPreview.styles";
+import ChangeRequestTransitionDialogContainer from "../dialogs/ChangeRequestTransitionDialog.container";
 import AssessmentFormControlsContainer from "../forms/assessmentForm/AssessmentFormControls.container";
 
 interface AssessmentPreviewPresenterProps extends WithStyles<typeof styles> {
@@ -72,6 +72,16 @@ const AssessmentPreviewPresenter: React.FunctionComponent<AssessmentPreviewPrese
         </Grid>
         <Grid item={true} xs={12}>
           {renderAttachments(changeRequest.justifications.attachments)}
+        </Grid>
+        <Grid item={true} xs={2}>
+          <Typography variant="h5">
+            <Text translation="changeRequest.assessmentForm.assessments" />
+          </Typography>
+        </Grid>
+        <Grid item={true} xs={10}>
+          <Typography variant="h5">
+            {changeRequest.assessments.description}
+          </Typography>
         </Grid>
         <Grid item={true} xs={2}>
           <Typography variant="h5">

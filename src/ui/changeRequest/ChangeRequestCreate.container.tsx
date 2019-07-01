@@ -4,10 +4,10 @@ import { RouteComponentProps } from "react-router-dom";
 import { ChangeRequest, changeRequestsActions } from "../../state/ducks/changeRequest";
 import { ApplicationState } from "../../state/reducers";
 import useAsync from "../hooks/useAsync";
+import ChangeRequestFormContainer from "./forms/ChangeRequestForm.container";
 import { toChangeRequestEditRequestBody } from "./forms/transform";
 import { ChangeRequestFormValues } from "./forms/types";
 import { generateChangeRequestEditPath } from "./pathGenerators";
-import ChangeRequestFormContainer from "./forms/ChangeRequestForm.container";
 
 interface DispatchProps {
   create: typeof changeRequestsActions.create;
@@ -20,9 +20,9 @@ interface OwnProps extends RouteComponentProps {
 export type ChangeRequestCreateContainerProps = OwnProps & DispatchProps;
 
 export const DEFAULT_INITIAL_VALUES: ChangeRequestFormValues = {
-  description: '',
-  justifications: { description: '', attachments: [] },
-  assessment: { description: '', attachments: [] },
+  description: "",
+  justifications: { description: "", attachments: [] },
+  assessments: { description: "", design: {}, process: {}, regulatory: {} },
   implementationPlan: { tasks: [], attachments: [] },
   approvals: [],
   documentRevisions: [],

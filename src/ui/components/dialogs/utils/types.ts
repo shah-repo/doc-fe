@@ -1,0 +1,28 @@
+import { DialogHandler as  DialogHandlerHook } from "../../../hooks/useDialog";
+import { Translation } from "../../../translations/types";
+
+export type DialogBreakpoint = "xs" | "sm" | "md" | "lg" | "xl";
+export type DialogContentRenderer = () => any;
+export type DialogHandler = (action: DialogAction) => any;
+
+export enum DialogAction {
+  Close = "common.close",
+  Agree = "common.agree",
+  Disagree = "common.disagree",
+  Cancel = "common.cancel",
+  Ok = "common.ok",
+  Confirm = "common.confirm",
+}
+
+export enum DialogVariant {
+  Responsive = "",
+}
+
+export interface DialogResponsiveProps {
+  breakpoint?: DialogBreakpoint;
+  title?: Translation;
+  contentRenderer?: DialogContentRenderer;
+  actions?: DialogAction[];
+  onActionClick?: DialogHandler;
+  dialogHandler: DialogHandlerHook;
+}

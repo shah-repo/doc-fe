@@ -1,7 +1,12 @@
 import { Attachment } from "../attachments";
 import { Approval, User } from "../common";
-import { CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET, CHANGE_REQUEST_AUDIT_SET } from "./constants";
 import { DocumentRevision } from "../documentRevisions";
+import {
+  CHANGE_REQUEST_AUDIT_SET,
+  CHANGE_REQUEST_LIST,
+  CHANGE_REQUEST_LIST_APPROVERS,
+  CHANGE_REQUEST_SET,
+} from "./constants";
 
 export enum ChangeRequestStatus {
   Draft = "DRAFT",
@@ -19,10 +24,22 @@ export interface Justifications {
   attachments: Attachment[];
 }
 
+export enum AssessmentType {
+  Design = "design",
+  Process = "process",
+  Regulatory = "regulatory",
+}
+
 export interface Assessment {
-  id?: string;
   description?: string;
-  attachments: Attachment[];
+  design: AssessmentItem;
+  process: AssessmentItem;
+  regulatory: AssessmentItem;
+}
+
+export interface AssessmentItem {
+  reasoning?: string | null;
+  attachment?: Attachment | null;
 }
 
 export interface ImplementationPlanTask {
@@ -31,6 +48,9 @@ export interface ImplementationPlanTask {
   description: string;
   dueDate?: Date;
   assigned: Partial<User>;
+  createdAt?: string;
+  status?: string;
+  updatedAt?: string;
 }
 
 export interface ImplementationPlan {
@@ -44,7 +64,7 @@ export interface ChangeRequest {
   crId?: string;
   description: string;
   state: ChangeRequestStatus;
-  assessment: Assessment;
+  assessments: Assessment;
   implementationPlan: ImplementationPlan;
   justifications: Justifications;
   effectiveDate: Date;
@@ -69,9 +89,10 @@ export interface EditRequestBodyNestedObject {
   description?: string;
   attachments: EditRequestBodyAttachment[];
 }
+
 export interface ChangeRequestEditRequestBody {
   description: string;
-  assessment: EditRequestBodyNestedObject;
+  assessments: Assessment;
   implementationPlan: EditRequestBodyNestedObject;
   justifications: EditRequestBodyNestedObject;
   effectiveDate?: Date;
@@ -95,7 +116,8 @@ export interface ChangeRequestsByIdState {
 
 export type ChangeRequestsAllIdsState = string[];
 
-export type ChangeRequestTransition = "approve" | "reject" | "to_review" | "withdrawn" | "submitted" | "in_review" | "closed";
+export type ChangeRequestTransition =
+  "approve" | "reject" | "to_review" | "withdrawn" | "submitted" | "in_review" | "closed";
 
 export interface ChangeRequestTransitionRequestBody {
   password: string;
