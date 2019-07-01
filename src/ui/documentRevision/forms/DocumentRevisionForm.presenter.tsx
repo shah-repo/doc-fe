@@ -24,11 +24,12 @@ interface Props extends WithStyles<typeof styles>, FormikProps<DocumentRevisionF
   asyncState: AsyncState;
   documentRevisions?: DocumentRevision[];
   availableReferences: OptionType[];
+  showRevisionTypeChange?: boolean;
 }
 
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   asyncState, classes, initialValues, handleChange, setFieldValue, documentRevisions,
-  availableReferences, dirty,
+  availableReferences, showRevisionTypeChange,
 }) => {
   const renderAttachments = (props: FieldArrayRenderProps) => <AttachmentsContainer {...props} />;
 
@@ -92,11 +93,15 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           {initialValues.referencedBy.map((reference) => reference.name)}
         </div>
         <FieldArray name="attachments" render={renderAttachments} />
-        <RadioGroup name="revisionChangeType" validate={validator(required)} >
-          <RadioButton label={<Text translation="documentRevision.form.nextRevision" />} value={RevisionChangeType.NextRevision} />
-          <RadioButton label={<Text translation="documentRevision.form.nextRevisionStage" />} value={RevisionChangeType.NextRevisionStage} />
-          <RadioButton label={<Text translation="documentRevision.form.obsolete" />} value={RevisionChangeType.Obsolete} />
-        </RadioGroup>
+        {
+          showRevisionTypeChange && (
+            <RadioGroup name="revisionChangeType" validate={validator(required)} >
+              <RadioButton label={<Text translation="documentRevision.form.nextRevision" />} value={RevisionChangeType.NextRevision} />
+              <RadioButton label={<Text translation="documentRevision.form.nextRevisionStage" />} value={RevisionChangeType.NextRevisionStage} />
+              <RadioButton label={<Text translation="documentRevision.form.obsolete" />} value={RevisionChangeType.Obsolete} />
+            </RadioGroup>
+          )
+        }
         <SubmitButton asyncState={asyncState} label="common.save" />
       </Form>
     </div>

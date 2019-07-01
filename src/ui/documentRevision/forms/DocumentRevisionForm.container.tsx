@@ -17,6 +17,7 @@ interface OwnProps {
   asyncState: AsyncState;
   documentRevisions?: DocumentRevision[];
   onSubmit: (values: DocumentRevisionFormValues, actions: FormikActions<DocumentRevisionFormValues>) => void;
+  showRevisionTypeChange?: boolean;
 }
 
 type DocumentRevisionFormContainerProps = OwnProps & StateProps;
@@ -31,6 +32,7 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<DocumentRevi
   asyncState,
   documentRevisions,
   availableReferences,
+  showRevisionTypeChange,
 }) => {
     const render = (props: FormikProps<DocumentRevisionFormValues>) => (
       <DocumentRevisionFormPresenter
@@ -38,6 +40,7 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<DocumentRevi
         asyncState={asyncState}
         documentRevisions={documentRevisions}
         availableReferences={availableReferences}
+        showRevisionTypeChange={showRevisionTypeChange}
       />
     );
 

@@ -78,6 +78,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
           onSubmit={onSubmit}
           initialValues={initialValues}
           documentRevisions={documentRevisions}
+          showRevisionTypeChange={true}
         />
       </AsyncGate>
     );
