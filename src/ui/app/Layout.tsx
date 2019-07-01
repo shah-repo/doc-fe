@@ -2,7 +2,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-import ChangeRequestContainer from "../change.request/container";
+import ChangeRequestContainer from "../change.request/Container";
 import ChangeRequestListContainer from "../change.request/list/container";
 import ChangeRequestCreateContainer from "../changeRequest/ChangeRequestCreate.container";
 import {
