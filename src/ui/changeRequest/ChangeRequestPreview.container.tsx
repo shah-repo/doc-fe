@@ -9,7 +9,8 @@ import AssessmentPreviewPresenter from "./preview/AssessmentPreview.presenter";
 import DocumentRevisionControlPreviewPresenter from "./documentRevision/DocumentRevisionControlPreview.presenter";
 import { DocumentRevision } from "../../state/ducks/documentRevisions";
 import DocumentRevisionPreviewPresenter from "../documentRevision/DocumentRevisionPreview.presenter";
-import { canSubmitDocumentRevision } from "../documentRevision/helpers";
+import ChangeRequestAuditContainer from './audit/Audit.container';
+import DocumentRevisionAuditContainer from '../documentRevision/audit/Audit.container';
 
 interface StateProps {
   currentUserEmail: string;
@@ -54,11 +55,23 @@ export const ChangeRequestPreviewContainer: React.FunctionComponent<ChangeReques
     <DocumentRevisionPreviewPresenter documentRevision={selectedDocumentRevision} />
   );
 
+  const renderChangeRequestAudit = () => {
+    if (changeRequest) {
+      return <ChangeRequestAuditContainer changeRequestId={changeRequest.id} />
+    }
+  }
+
+  const renderDocumentRevisionAudit = () => {
+    if (selectedDocumentRevision) {
+      return <DocumentRevisionAuditContainer documentRevisionId={selectedDocumentRevision.id} />
+    }
+  }
+
   const selectDocumentRevision = (documentRevision: DocumentRevision) => setSelectedDocumentRevision(documentRevision)
   const selectAssessmentForm = () => setSelectedDocumentRevision(null);
 
   return (
-    <Grid container={true} spacing={8}>
+    <Grid container={true} spacing={2}>
       <Grid item={true} xs={2}>
         <DocumentRevisionControlPreviewPresenter
           documentsInChangeRequest={changeRequest.documentRevisions}
@@ -66,9 +79,13 @@ export const ChangeRequestPreviewContainer: React.FunctionComponent<ChangeReques
           selectDocumentRevision={selectDocumentRevision}
         />
       </Grid>
-      <Grid item={true} xs={10}>
+      <Grid item={true} xs={7}>
         {!selectedDocumentRevision && renderAssessmentPreview()}
         {selectedDocumentRevision && renderDocumentRevision()}
+      </Grid>
+      <Grid item={true} xs={3}>
+        {renderDocumentRevisionAudit()}
+        {renderChangeRequestAudit()}
       </Grid>
     </Grid>
   );

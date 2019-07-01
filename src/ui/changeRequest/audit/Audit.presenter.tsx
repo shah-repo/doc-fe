@@ -42,7 +42,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     }
   };
   const renderChange = () => (
-    audit.map((change, index) => {
+    audit && audit.map((change, index) => {
       let nextValue = getNextValue(change);
 
       return (

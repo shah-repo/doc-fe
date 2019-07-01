@@ -103,6 +103,7 @@
   "changeRequest.audit.tasks.status.STRING_NEW": "New implementation plan task status",
   "changeRequest.audit.tasks.dueDate.OBJECT_NEW": "New implementation plan task due date",
   "changeRequest.audit.tasks.title.STRING_NEW": "New implementation plan task title",
+  "changeRequest.audit.state.STRING_EDITED": "State changed",
 
   "common.assignedTo": "Assigned to",
   "common.dueDate": "Due date",

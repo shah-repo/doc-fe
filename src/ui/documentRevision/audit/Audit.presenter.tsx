@@ -17,7 +17,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   audit,
 }) => {
   const classes = styles();
-  const [isOpen, setOpen] = React.useState(false);
+  const [isOpen, setOpen] = React.useState(true);
 
   const toggleList = () => setOpen(!isOpen);
 
