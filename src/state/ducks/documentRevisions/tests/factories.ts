@@ -1,6 +1,6 @@
 import faker from "faker";
 import { getUser } from "../../common/tests/factories";
-import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, Document, Audit } from "../types";
+import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, Document, Audit, RevisionChangeType } from "../types";
 
 export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> = {}): DocumentRevision => ({
   id: faker.random.uuid(),
@@ -25,6 +25,7 @@ export const getDocumentRevisionEditRequestBody = (body: Partial<DocumentRevisio
   attachments: [],
   type: faker.lorem.word(),
   referenceTo: [],
+  revisionChangeType: RevisionChangeType.NextRevision,
   ...body,
 });
 

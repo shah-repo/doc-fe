@@ -1,6 +1,6 @@
 import { generatePath } from "react-router-dom";
 import {
-  DOCUMENT_REVISION_VERSION_URL,
+  DOCUMENT_REVISION_VERSION_URL, DOCUMENT_REVISION_NEW_VERSION_URL,
 } from "../../constants/urls";
 import { RouteParams } from "./types";
 
@@ -15,3 +15,6 @@ documentPath(DOCUMENT_REVISION_VERSION_URL, { documentRevisionId, documentId });
 
 export const documentVersionPath = (documentRevisionId: string, documentId: string) =>
 documentPath(DOCUMENT_REVISION_VERSION_URL, { documentRevisionId, documentId });
+
+export const documentNewVersionPath = (documentRevisionId: string, documentId: string) =>
+documentPath(DOCUMENT_REVISION_NEW_VERSION_URL, { documentRevisionId, documentId });

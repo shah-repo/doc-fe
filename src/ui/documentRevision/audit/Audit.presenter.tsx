@@ -17,7 +17,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   audit,
 }) => {
   const classes = styles();
-  const [isOpen, setOpen] = React.useState(false);
+  const [isOpen, setOpen] = React.useState(true);
 
   const toggleList = () => setOpen(!isOpen);
 
@@ -63,7 +63,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       <div className={classes.collapsableContainer}>
         <Collapse in={isOpen} timeout="auto" unmountOnExit={true}>
           <List>
-            {renderChanges()}
+            {audit && renderChanges()}
           </List>
         </Collapse>
       </div>

@@ -9,6 +9,7 @@ import { ApplicationState } from "../../state/reducers";
 import {
   DOCUMENT_REVISION_VERSION_URL,
   DOCUMENT_REVISION_DETAILS_URL,
+  DOCUMENT_REVISION_NEW_VERSION_URL,
 } from "../constants/urls";
 import {
   ContainerDispatchProps,
@@ -34,17 +35,19 @@ const Container: React.FunctionComponent<Props> = ({
   const documentId = match.params.documentId;
   const renderWrapper = (props: any) => {
     const documentRevisionId = props.match.params.documentRevisionId;
+    const isNewVersion = props.match.path === DOCUMENT_REVISION_NEW_VERSION_URL;
     
     return (
-      <props.component documentRevisionId={documentRevisionId} documentId={documentId} />
+      <DocumentRevisionManagerContainer documentRevisionId={documentRevisionId} documentId={documentId} isNewVersion={isNewVersion} />
     )
   }
-  const renderDocumentRevisionManagerContainer = (props: any) => renderWrapper({ component: DocumentRevisionManagerContainer, ...props});
+  const renderDocumentRevisionManagerContainer = (props: any) => renderWrapper(props);
 
   return (
     <Switch>
       <Route path={DOCUMENT_REVISION_VERSION_URL} exact={true} render={renderDocumentRevisionManagerContainer} />
       <Route path={DOCUMENT_REVISION_DETAILS_URL} exact={true} render={renderDocumentRevisionManagerContainer} />
+      <Route path={DOCUMENT_REVISION_NEW_VERSION_URL} exact={true} render={renderDocumentRevisionManagerContainer} />
     </Switch>
   );
 };
