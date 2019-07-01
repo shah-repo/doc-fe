@@ -58,15 +58,17 @@ const toImplementationPlanEditRequestBody = (values: ImplementationPlan): Implem
     return ({ assigned: { id: t.assigned.id }, ...excluded });
   });
   return { tasks: valuesTasks, attachments: values.attachments };
+
 };
 
 const createAssessmentObjectForRequestBody = (value: Assessment) => {
   const assessments: any = createAssessment(value);
 
   Object.values(AssessmentType).map((t) => {
-    const itemAttachment = _.get(value, `${t}.attachment`, null);
+    const attachmentValue = _.get(value, `${t}.attachment`, null);
+    const itemAttachment = (attachmentValue) ? { id: attachmentValue.id } : attachmentValue;
     const itemReasoning: string = _.get(value, `${t}.reasoning`, null);
-    assessments[t] = {attachment: itemAttachment, reasoning: itemReasoning};
+    assessments[t] = { attachment: itemAttachment, reasoning: itemReasoning };
   });
   return assessments;
 };
