@@ -1,19 +1,17 @@
 import React from "react";
 import { connect } from "react-redux";
-import { RouteComponentProps } from "react-router-dom";
-import { authSelectors } from "../../state/ducks/auth";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import {
   DocumentRevision,
   documentRevisionsActions,
   documentRevisionsSelectors,
 } from "../../state/ducks/documentRevisions";
-import { Document, documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
 import useAsync from "../hooks/useAsync";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
-import { toDocumentRevisionEditRequestBody } from "./forms/transform";
+import { toNewVersionRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
 import { generateDocumentRevisionVersionPath } from "./pathGenerators";
 
@@ -25,11 +23,14 @@ interface StateProps {
 interface DispatchProps {
   create: typeof documentRevisionsActions.create;
   loadDocumentRevisions: typeof documentRevisionsActions.loadList;
+  loadDocument: typeof documentRevisionsActions.loadDocument;
 }
 
-interface OwnProps extends RouteComponentProps {}
+interface OwnProps {
+  documentRevision: DocumentRevision;
+}
 
-export type DocumentRevisionCreateContainerProps = OwnProps & DispatchProps & StateProps;
+export type DocumentRevisionCreateContainerProps = OwnProps & DispatchProps & StateProps & RouteComponentProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   loadAsyncState: documentRevisionsSelectors.getLoadListAsyncState(state),
@@ -47,38 +48,43 @@ export const DEFAULT_INITIAL_VALUES = {
 };
 
 export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionCreateContainerProps> = ({
-  create,
-  history,
-  loadDocumentRevisions,
-  loadAsyncState,
-  documentRevisions,
+  create, history, loadDocumentRevisions, loadAsyncState,
+  documentRevisions, documentRevision, loadDocument
 }) => {
 
     const async = useAsync<DocumentRevision>({
       onSuccess: (createdDocumentRevision?) => {
-        history.push(generateDocumentRevisionVersionPath(createdDocumentRevision!.id, createdDocumentRevision!.document.id));
+        if (createdDocumentRevision) {
+          loadDocument(createdDocumentRevision.document.id);
+          history.push(generateDocumentRevisionVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id));
+        }
       },
     });
 
     const loadAction = () => loadDocumentRevisions();
 
     const onSubmit = (values: DocumentRevisionFormValues) => {
-      async.start(create, toDocumentRevisionEditRequestBody(values), async);
+      async.start(create, toNewVersionRequestBody(values), async);
     };
+
+    const initialValues: DocumentRevisionFormValues = documentRevision ? toDocumentRevisionFormValues(documentRevision) : DEFAULT_INITIAL_VALUES;
 
     return (
       <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>
         <DocumentRevisionForm
           asyncState={async.asyncState}
           onSubmit={onSubmit}
-          initialValues={DEFAULT_INITIAL_VALUES}
+          initialValues={initialValues}
           documentRevisions={documentRevisions}
         />
       </AsyncGate>
     );
   };
 
-export default connect<{}, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
+const DocumentRevisionCreateContainerWithRouter = withRouter(DocumentRevisionCreateContainer);
+
+export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
   create: documentRevisionsActions.create,
   loadDocumentRevisions: documentRevisionsActions.loadList,
-})(DocumentRevisionCreateContainer);
+  loadDocument: documentRevisionsActions.loadDocument,
+})(DocumentRevisionCreateContainerWithRouter);

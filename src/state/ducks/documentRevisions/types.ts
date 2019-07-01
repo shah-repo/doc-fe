@@ -17,6 +17,12 @@ export enum DocumentRevisionStatus {
   Implementation = "IMPLEMENTATION",
 }
 
+export enum RevisionChangeType {
+  NextRevision = "NEXT_REVISION",
+  NextRevisionStage = "NEXT_REVISION_STAGE",
+  Obsolete = "OBSOLETE",
+}
+
 export interface DocumentRevisionDocument {
   id: string;
   ordinalNumber: number;
@@ -59,6 +65,8 @@ export interface DocumentRevisionEditRequestBody {
   attachments: Attachment[];
   type?: string;
   referenceTo: ReferenceToEditRequest[];
+  document?: Partial<DocumentRevisionDocument>;
+  revisionChangeType?: RevisionChangeType;
 }
 
 export interface DocumentRevisionSetAction {

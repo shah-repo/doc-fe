@@ -20,6 +20,7 @@ interface DispatchProps {
 interface OwnProps {
   documentId: string;
   documentRevisionId: string | null;
+  isNewVersion: boolean;
 }
 
 export type DocumentRevisionManagerContainerProps = OwnProps & DispatchProps & StateProps ;
@@ -31,8 +32,8 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 });
 
 export const DocumentRevisionManagerContainer: React.FunctionComponent<DocumentRevisionManagerContainerProps> = ({
-  loadDocumentAsyncState, loadDocument,
-  documentId, documentRevisionId, documentRevisions,
+  loadDocumentAsyncState, loadDocument, isNewVersion,
+  documentId, documentRevisionId, documentRevisions
 }) => {
   const loadDocumentAction = () => loadDocument(documentId);
 
@@ -44,7 +45,7 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<DocumentR
         </AsyncGate>
       </Grid>
       <Grid item={true} xs={10}>
-        {documentRevisionId && <DocumentRevisionDisplayContainer documentRevisionId={documentRevisionId} />}
+        {documentRevisionId && <DocumentRevisionDisplayContainer documentRevisionId={documentRevisionId} isNewVersion={isNewVersion} />}
       </Grid>
     </Grid>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { ApplicationState } from "../../../state/reducers";
 import { documentRevisionsActions, Audit, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
@@ -30,9 +30,14 @@ export const AuditContainer: React.FunctionComponent<AuditContainerProps> = ({
   audit, loadAudit, documentRevisionId, loadAuditAsyncState
 }) => {
   const loadAuditAction = () => loadAudit(documentRevisionId);
+  useEffect(() => {
+    if (documentRevisionId) {
+      loadAuditAction();
+    }
+  }, [documentRevisionId]);
 
   return (
-    <AsyncGate asyncAction={loadAuditAction} asyncState={loadAuditAsyncState} startActionOnMount={true}>
+    <AsyncGate asyncAction={loadAuditAction} asyncState={loadAuditAsyncState} startActionOnMount={false}>
       <AuditPresenter audit={audit} />
     </AsyncGate>
   );

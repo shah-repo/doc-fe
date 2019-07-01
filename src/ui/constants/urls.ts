@@ -23,5 +23,6 @@ export const DOCUMENT_REVISION_LIST_URL = "/document_revision";
 export const DOCUMENT_REVISION_ROOT_URL = `${DOCUMENT_REVISION_LIST_URL}/:documentId`;
 export const DOCUMENT_REVISION_DETAILS_URL = `${DOCUMENT_REVISION_ROOT_URL}/details`;
 export const DOCUMENT_REVISION_VERSION_URL = `${DOCUMENT_REVISION_ROOT_URL}/version/:documentRevisionId`;
+export const DOCUMENT_REVISION_NEW_VERSION_URL = `${DOCUMENT_REVISION_ROOT_URL}/new-version/:documentRevisionId`;
 
 export const SIGNUP_URL = "/signup";

@@ -53,11 +53,9 @@ const createNestedObjectForRequestBody = (value: NestedObject) => ({
 });
 
 const toImplementationPlanEditRequestBody = (values: ImplementationPlan): ImplementationPlan => {
-  const valuesTasks: ImplementationPlanTask[] = [];
-
-  values.tasks.map((t) => {
+  const valuesTasks: ImplementationPlanTask[] = values.tasks.map((t) => {
     const { createdAt, status, updatedAt, assigned, ...excluded } = t;
-    valuesTasks.push({ assigned: { id: t.assigned.id }, ...excluded });
+    return ({ assigned: { id: t.assigned.id }, ...excluded });
   });
   return { tasks: valuesTasks, attachments: values.attachments };
 };
