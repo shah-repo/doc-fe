@@ -39,7 +39,15 @@ export const toNewVersionRequestBody = (values: DocumentRevisionFormValues): Doc
   }
 
   newValues.type = values.type;
-  newValues.revisionChangeType = RevisionChangeType.NextRevision; // TODO: needs to come from radio button
+  newValues.revisionChangeType = values.revisionChangeType;
 
   return newValues;
+};
+
+export const toDocumentRevisionFormValuesWithRevisionChange = (documentRevision: DocumentRevision): DocumentRevisionFormValues => {
+  const values: DocumentRevisionFormValues = toDocumentRevisionFormValues(documentRevision);
+
+  values.revisionChangeType = RevisionChangeType.NextRevision;
+
+  return values;
 };

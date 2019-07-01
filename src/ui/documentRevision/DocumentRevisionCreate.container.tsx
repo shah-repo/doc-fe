@@ -5,13 +5,14 @@ import {
   DocumentRevision,
   documentRevisionsActions,
   documentRevisionsSelectors,
+  RevisionChangeType,
 } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
 import useAsync from "../hooks/useAsync";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
-import { toNewVersionRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
+import { toNewVersionRequestBody, toDocumentRevisionFormValuesWithRevisionChange } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
 import { generateDocumentRevisionVersionPath } from "./pathGenerators";
 
@@ -45,6 +46,7 @@ export const DEFAULT_INITIAL_VALUES = {
   type: "",
   referenceTo: [],
   referencedBy: [],
+  revisionChangeType: RevisionChangeType.NextRevision,
 };
 
 export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionCreateContainerProps> = ({
@@ -67,7 +69,8 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
       async.start(create, toNewVersionRequestBody(values), async);
     };
 
-    const initialValues: DocumentRevisionFormValues = documentRevision ? toDocumentRevisionFormValues(documentRevision) : DEFAULT_INITIAL_VALUES;
+    const showRevisionTypeChange = !!documentRevision;
+    const initialValues: DocumentRevisionFormValues = documentRevision ? toDocumentRevisionFormValuesWithRevisionChange(documentRevision) : DEFAULT_INITIAL_VALUES;
 
     return (
       <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>
@@ -76,6 +79,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
           onSubmit={onSubmit}
           initialValues={initialValues}
           documentRevisions={documentRevisions}
+          showRevisionTypeChange={showRevisionTypeChange}
         />
       </AsyncGate>
     );
