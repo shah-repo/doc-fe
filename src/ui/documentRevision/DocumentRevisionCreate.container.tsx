@@ -69,6 +69,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
       async.start(create, toNewVersionRequestBody(values), async);
     };
 
+    const showRevisionTypeChange = !!documentRevision;
     const initialValues: DocumentRevisionFormValues = documentRevision ? toDocumentRevisionFormValues(documentRevision) : DEFAULT_INITIAL_VALUES;
 
     return (
@@ -78,7 +79,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
           onSubmit={onSubmit}
           initialValues={initialValues}
           documentRevisions={documentRevisions}
-          showRevisionTypeChange={true}
+          showRevisionTypeChange={showRevisionTypeChange}
         />
       </AsyncGate>
     );
