@@ -68,7 +68,7 @@ const Item: React.FunctionComponent<Props> = ({
       </Box>
       <InsertDriveFile className={classes.icon} />
       <Box component="div" m={1}>
-        {attachment!.name}
+        {attachment && `${attachment.name}.${attachment.type}`}
       </Box>
     </Typography>
   );
