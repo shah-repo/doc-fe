@@ -60,6 +60,26 @@ describe("documents actions tests", () => {
     });
   });
 
+
+  describe("create tests", () => {
+    const handlers: Handlers<DocumentRevision> = {
+      successHandler: getCallbackHandler<DocumentRevision>(),
+      errorHandler: getCallbackHandler<string>(),
+    };
+    const action = actions.create(body, handlers);
+
+    it("calls POST on DOCUMENT_REVISION_ROOT_URL", () => {
+      expect(action.url).toBe(DOCUMENT_REVISION_ROOT_URL);
+      expect(action.method).toBe("post");
+    });
+
+    it("calls dispatch with documentRevisionSet action on success", () => {
+      const dispatch = jest.fn();
+      action.onSuccess(documentRevision, dispatch);
+      expect(dispatch).toHaveBeenCalledWith(actions.documentRevisionSet(documentRevision));
+    });
+  });
+
   describe("load document tests", () => {
     const action = actions.loadDocument(documentRevision.document.id);
 

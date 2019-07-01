@@ -44,6 +44,38 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     return (documentRevisions || []).length + 1;
   };
 
+  const renderTypeOfRevisionChange = () => {
+    if (showRevisionTypeChange) {
+      return (
+        <React.Fragment>
+          <Typography variant="h6" >
+            <Text translation="documentRevision.form.typeOfRevisionChange" />
+          </Typography>
+          <RadioGroup name="revisionChangeType" validate={validator(required)} >
+            <RadioButton label={<Text translation="documentRevision.form.nextRevision" />} value={RevisionChangeType.NextRevision} />
+            <RadioButton label={<Text translation="documentRevision.form.nextRevisionStage" />} value={RevisionChangeType.NextRevisionStage} />
+            <RadioButton label={<Text translation="documentRevision.form.obsolete" />} value={RevisionChangeType.Obsolete} />
+          </RadioGroup>
+        </React.Fragment>
+      )
+    }
+  }
+
+  const renderReferences = () => {
+    if (initialValues.referencedBy.length > 0) {
+      return (
+        <React.Fragment>
+          <Typography variant="h6" >
+            <Text translation="documentRevision.form.referencedBy" />
+          </Typography>
+          <div>
+            {initialValues.referencedBy.map((reference) => reference.name)}
+          </div>
+        </React.Fragment>
+      )
+    }
+  }
+
   return (
     <div className={classes.container}>
       <Form>
@@ -81,27 +113,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           }}
           options={availableReferences}
         />
-        {
-          initialValues.referencedBy.length > 0
-          && (
-            <Typography variant="h6" >
-              <Text translation="documentRevision.form.referencedBy" />
-            </Typography>
-          )
-        }
-        <div>
-          {initialValues.referencedBy.map((reference) => reference.name)}
-        </div>
+        {renderReferences()}
         <FieldArray name="attachments" render={renderAttachments} />
-        {
-          showRevisionTypeChange && (
-            <RadioGroup name="revisionChangeType" validate={validator(required)} >
-              <RadioButton label={<Text translation="documentRevision.form.nextRevision" />} value={RevisionChangeType.NextRevision} />
-              <RadioButton label={<Text translation="documentRevision.form.nextRevisionStage" />} value={RevisionChangeType.NextRevisionStage} />
-              <RadioButton label={<Text translation="documentRevision.form.obsolete" />} value={RevisionChangeType.Obsolete} />
-            </RadioGroup>
-          )
-        }
+        {renderTypeOfRevisionChange()}
         <SubmitButton asyncState={asyncState} label="common.save" />
       </Form>
     </div>

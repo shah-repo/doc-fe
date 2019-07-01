@@ -12,7 +12,7 @@ import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
 import useAsync from "../hooks/useAsync";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
-import { toNewVersionRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
+import { toNewVersionRequestBody, toDocumentRevisionFormValuesWithRevisionChange } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
 import { generateDocumentRevisionVersionPath } from "./pathGenerators";
 
@@ -70,7 +70,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
     };
 
     const showRevisionTypeChange = !!documentRevision;
-    const initialValues: DocumentRevisionFormValues = documentRevision ? toDocumentRevisionFormValues(documentRevision) : DEFAULT_INITIAL_VALUES;
+    const initialValues: DocumentRevisionFormValues = documentRevision ? toDocumentRevisionFormValuesWithRevisionChange(documentRevision) : DEFAULT_INITIAL_VALUES;
 
     return (
       <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>

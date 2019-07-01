@@ -1,6 +1,6 @@
 import { Attachment } from "../../../state/ducks/attachments";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { Reference, DocumentRevisionDocument } from "../../../state/ducks/documentRevisions";
+import { Reference, DocumentRevisionDocument, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 
 export interface DocumentRevisionFormValues {
   id?: string;
@@ -12,4 +12,5 @@ export interface DocumentRevisionFormValues {
   referenceTo: OptionType[];
   referencedBy: Reference[];
   document?: Partial<DocumentRevisionDocument>;
+  revisionChangeType?: RevisionChangeType;
 }
