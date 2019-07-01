@@ -1,8 +1,8 @@
-import { withStyles, WithStyles, Typography, Button } from "@material-ui/core";
+import { withStyles, WithStyles, Typography } from "@material-ui/core";
 import { FieldArray, FieldArrayRenderProps, Form, FormikProps } from "formik";
-import React, { ChangeEvent } from "react";
+import React from "react";
 import documentTypes from "../../../data/documentTypes.json";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { AsyncState } from "../../../state/types";
 import InputField from "../../components/forms/fields/Input";
 import SelectField from "../../components/forms/fields/Select";
@@ -17,7 +17,8 @@ import { DocumentRevisionFormValues } from "./types";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import Text from "../../components/Text";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
-import PendingSubmissionDialogContainer from "../dialogs/PendingSubmissionDialog.container";
+import RadioButton from "../../components/forms/fields/RadioButton";
+import RadioGroup from "../../components/forms/fields/RadioGroup";
 
 interface Props extends WithStyles<typeof styles>, FormikProps<DocumentRevisionFormValues> {
   asyncState: AsyncState;
@@ -91,6 +92,11 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           {initialValues.referencedBy.map((reference) => reference.name)}
         </div>
         <FieldArray name="attachments" render={renderAttachments} />
+        <RadioGroup name="revisionChangeType" validate={validator(required)} >
+          <RadioButton label={<Text translation="documentRevision.form.nextRevision" />} value={RevisionChangeType.NextRevision} />
+          <RadioButton label={<Text translation="documentRevision.form.nextRevisionStage" />} value={RevisionChangeType.NextRevisionStage} />
+          <RadioButton label={<Text translation="documentRevision.form.obsolete" />} value={RevisionChangeType.Obsolete} />
+        </RadioGroup>
         <SubmitButton asyncState={asyncState} label="common.save" />
       </Form>
     </div>

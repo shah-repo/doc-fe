@@ -5,6 +5,7 @@ import {
   DocumentRevision,
   documentRevisionsActions,
   documentRevisionsSelectors,
+  RevisionChangeType,
 } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
@@ -45,6 +46,7 @@ export const DEFAULT_INITIAL_VALUES = {
   type: "",
   referenceTo: [],
   referencedBy: [],
+  revisionChangeType: RevisionChangeType.NextRevision,
 };
 
 export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionCreateContainerProps> = ({
