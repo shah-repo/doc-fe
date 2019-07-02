@@ -1,29 +1,37 @@
 import { Formik, FormikActions, FormikProps } from "formik";
 import _ from "lodash";
 import React from "react";
-import { DocumentRevision, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsSelectors, DocumentRevisionStatus, documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { AsyncState } from "../../../state/types";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
 import { ApplicationState } from "../../../state/reducers";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { connect } from "react-redux";
+import AsyncGate from "../../components/AsyncGate";
 
 interface StateProps {
   availableReferences: OptionType[];
+  loadAsyncState: AsyncState;
+  documentRevisions: DocumentRevision[];
+}
+
+interface DispatchProps {
+  loadDocumentRevisions: typeof documentRevisionsActions.loadList;
 }
 interface OwnProps {
   initialValues: DocumentRevisionFormValues;
   asyncState: AsyncState;
-  documentRevisions?: DocumentRevision[];
   onSubmit: (values: DocumentRevisionFormValues, actions: FormikActions<DocumentRevisionFormValues>) => void;
   showRevisionTypeChange?: boolean;
 }
 
-type DocumentRevisionFormContainerProps = OwnProps & StateProps;
+type DocumentRevisionFormContainerProps = OwnProps & StateProps & DispatchProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   availableReferences: documentRevisionsSelectors.getAvailableReferences(state),
+  loadAsyncState: documentRevisionsSelectors.getLoadListAsyncState(state),
+  documentRevisions: documentRevisionsSelectors.getDocumentRevisionsList(state),
 });
 
 export const DocumentRevisionFormContainer: React.FunctionComponent<DocumentRevisionFormContainerProps> = ({
@@ -33,6 +41,8 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<DocumentRevi
   documentRevisions,
   availableReferences,
   showRevisionTypeChange,
+  loadDocumentRevisions,
+  loadAsyncState,
 }) => {
     const render = (props: FormikProps<DocumentRevisionFormValues>) => (
       <DocumentRevisionFormPresenter
@@ -44,14 +54,20 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<DocumentRevi
       />
     );
 
+    const loadAction = () => loadDocumentRevisions([DocumentRevisionStatus.Released, DocumentRevisionStatus.Deprecated, DocumentRevisionStatus.Obsolete]);
+
     return (
-      <Formik
-        render={render}
-        initialValues={initialValues}
-        onSubmit={onSubmit}
-        enableReinitialize={true}
-      />
+      <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>
+        <Formik
+          render={render}
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+          enableReinitialize={true}
+        />
+      </AsyncGate>
     );
   };
 
-export default connect<StateProps, {}, OwnProps, ApplicationState>(mapStateToProps, {})(DocumentRevisionFormContainer);
+export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
+  loadDocumentRevisions: documentRevisionsActions.loadList,
+})(DocumentRevisionFormContainer);

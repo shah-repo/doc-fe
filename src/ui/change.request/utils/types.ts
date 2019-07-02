@@ -50,4 +50,5 @@ export interface RouteParams {
 
 export interface ActionProps {
   editChangeRequest: (changeRequestId: string) => void;
+  previewChangeRequest: (changeRequestId: string) => void;
 }

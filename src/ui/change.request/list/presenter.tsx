@@ -18,6 +18,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   changeRequests,
   currentUserEmail,
   editChangeRequest,
+  previewChangeRequest,
 }) => {
 
   const ChangeRequestList = TablePanel<ChangeRequest>();
@@ -30,6 +31,10 @@ const ListPresenter: React.FunctionComponent<Props> = ({
 
   const onStateSelect = ({ rowData }: TableSelectionProps<ChangeRequest>) => () => {
     return editChangeRequest(rowData.id);
+  };
+
+  const onRowSelect = ({rowData}: TableSelectionProps<ChangeRequest>) => () => {
+    return previewChangeRequest(rowData.id);
   };
 
   const columns: Array<TableColumnProps<ChangeRequest>> = [
@@ -78,6 +83,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
           columns={columns}
           noRowsTranslation="change.request.list.noRows"
           cellMeasure={true}
+          onSelect={onRowSelect}
         />
       </Grid>
     </Grid>
