@@ -13,6 +13,7 @@ describe("TaskFormDialog tests", () => {
     closeDialog: jest.fn(),
     openDialog: jest.fn(),
     isDialogOpen: false,
+    task: null,
   };
   const getWrapper = (props: Partial<TaskFormDialogProps>) => shallow(
     <TaskFormDialog {...defaultProps} {...props} />,
