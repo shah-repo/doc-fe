@@ -31,7 +31,7 @@ export const DocumentRevisionListContainer: React.FunctionComponent<DocumentRevi
               className={classes.linkTitle}
             >
               <div>
-                <Text translation="documentRevision.version" /> {documentRevision.revision} - {documentRevision.status}
+                <Text translation="documentRevision.version" /> {documentRevision.version} - {documentRevision.status}
               </div>
             </NavLink>
             <NavLink
@@ -40,7 +40,7 @@ export const DocumentRevisionListContainer: React.FunctionComponent<DocumentRevi
               className={classes.linkBody}
             >
               <div>
-                <Text translation="documentRevision.owner" />:
+                <Text translation="documentRevision.owner" />: {documentRevision.owner.name}
               </div>
               <div>
                 <Text translation="documentRevision.released" />: <Date value={documentRevision.released} />
