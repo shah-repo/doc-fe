@@ -25,6 +25,7 @@ import {
   AuditActionPayload,
   DocumentRevisionAuditSetAction,
   Audit,
+  DocumentRevisionStatus,
 } from "./types";
 
 const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentRevisionsListAction => ({
@@ -37,14 +38,20 @@ const documentRevisionSet = (documentRevision: DocumentRevision): DocumentRevisi
   payload: documentRevision,
 });
 
-const loadList = (): ApiAction<DocumentRevision[]> => apiAction({
-  url: DOCUMENT_REVISION_ROOT_URL,
-  method: "get",
-  asyncType: DOCUMENT_REVISION_LIST_ASYNC,
-  onSuccess: (documentRevisions, dispatch) => {
-    dispatch(documentRevisionsList(documentRevisions));
-  },
-});
+const loadList = (states: DocumentRevisionStatus[] = []): ApiAction<DocumentRevision[]> =>{
+  const url = states.length === 0
+    ? DOCUMENT_REVISION_ROOT_URL
+    : states.reduce((acc, state) => acc + `status%5B%5D=${state}&`, `${DOCUMENT_REVISION_ROOT_URL}?`);
+
+  return apiAction({
+    url,
+    method: "get",
+    asyncType: DOCUMENT_REVISION_LIST_ASYNC,
+    onSuccess: (documentRevisions, dispatch) => {
+      dispatch(documentRevisionsList(documentRevisions));
+    },
+  });
+}
 
 const load = (id: string): ApiAction<DocumentRevision> => apiAction({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
