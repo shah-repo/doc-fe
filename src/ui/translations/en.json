@@ -130,6 +130,7 @@
   "common.confirm": "Confirm",
   "common.ok": "Ok",
   "common.edit": "Edit",
+  "common.status": "Status",
 
   "dashboard.reviews": "Documents to review",
   "dashboard.noReviews": "No documents to review",

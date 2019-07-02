@@ -30,6 +30,7 @@ export interface ImplementationPlanTaskForm {
   description: string;
   dueDate?: Date;
   assigned?: ImplementationPlanTaskFormUser;
+  status: string;
 }
 
 export interface ImplementationPlanTask {
@@ -37,6 +38,7 @@ export interface ImplementationPlanTask {
   description: string;
   dueDate: Date;
   assigned: User;
+  status: string;
 }
 
 export interface ChangeRequestFormValues {

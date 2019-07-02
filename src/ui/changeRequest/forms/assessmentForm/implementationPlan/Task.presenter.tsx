@@ -23,7 +23,7 @@ export const styles = makeStyles(() =>
       marginTop: 10,
       color: 'gray',
     },
-    assignedTo: {
+    marginRight: {
       marginRight: 20,
     },
     button: {
@@ -42,13 +42,17 @@ export const TaskPresenter: React.FunctionComponent<Props> = ({
       <div>{task.title}</div>
       <div>{task.description}</div>
       <div className={classes.detailsContainer}>
-        <span className={classes.assignedTo}>
+        <span className={classes.marginRight}>
           <Text translation="common.assignedTo" />:&nbsp;
           {task.assigned.name}
         </span>
-        <span>
+        <span className={classes.marginRight}>
           <Text translation="common.dueDate" />:&nbsp;
           <Date value={task.dueDate} />
+        </span>
+        <span>
+          <Text translation="common.status" />:&nbsp;
+          {task.status}
         </span>
         <Button onClick={removeTask(index)} className={classes.button} color="secondary">
           <Text translation="common.remove" />

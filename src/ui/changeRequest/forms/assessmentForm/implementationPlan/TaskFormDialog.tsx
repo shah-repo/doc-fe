@@ -27,6 +27,7 @@ export type TaskFormDialogProps = OwnProps;
 const INITIAL_VALUES = {
   title: "",
   description: "",
+  status: "PENDING"
 };
 
 const styles = makeStyles(() =>
