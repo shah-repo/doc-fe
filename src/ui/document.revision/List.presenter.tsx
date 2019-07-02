@@ -97,6 +97,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
           columns={columns}
           noRowsTranslation="document.revision.list.noRows"
           onSelect={onRowSelect}
+          searchable={false}
         />
       </Grid>
     </Grid>

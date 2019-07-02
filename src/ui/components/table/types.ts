@@ -14,6 +14,7 @@ export interface TablePanelProps<T> {
   noRowsTranslation: Translation;
   cellMeasure?: boolean;
   onSelect?: TableSelectionRenderer<T>;
+  searchable?: boolean;
 }
 
 // CSS

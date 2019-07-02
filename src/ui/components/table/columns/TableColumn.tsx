@@ -1,10 +1,13 @@
+import { Box } from "@material-ui/core";
+import { OutlinedInputProps } from "@material-ui/core/OutlinedInput";
 import React from "react";
-import { CellMeasurer, CellMeasurerCache, Column, TableCellProps as ColumnProps } from "react-virtualized";
+import { CellMeasurer, Column, TableCellProps as ColumnProps } from "react-virtualized";
 import Text from "../../Text";
 import TableColumnAction from "./TableColumn.actions";
 import {
   StyledCellLink,
   StyledTableCell,
+  StyledTableField,
   StyledTableHeader,
   StyledTooltip,
 } from "./TableColumn.styles";
@@ -21,7 +24,7 @@ type InnerProps = InnerTableColumnProps;
 export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
 
   const { key, label, cellType, columnOptions, cellOptions, hoverDataInfo = false, onSelect } = props;
-  const { measurerCache } = innerProps;
+  const { measurerCache, searchable } = innerProps;
 
   measurerCache.clearAll();
   const cellWhiteSpace = () => (measurerCache.hasFixedHeight()) ? "nowrap" : "initial";
@@ -35,10 +38,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
 
   const cellLinkType = ({cellData, rowData}: TableCellProps<T>) => {
     return (
-      <StyledCellLink
-        variant="subtitle2"
-        onClick={handleClick({cellData, rowData})}
-      >
+      <StyledCellLink variant="subtitle2" onClick={handleClick({cellData, rowData})} >
         {cellData}
       </StyledCellLink>
     );
@@ -86,13 +86,26 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
     );
   };
 
+  const searchFieldRenderer = () => (
+    <Box component="div" className="headerField">
+      <StyledTableField
+        name={key}
+        // onChange={handleChange("name")}
+        margin="normal"
+        InputProps={{ disableUnderline: true } as Partial<OutlinedInputProps>}
+      />
+    </Box>
+  );
+
   const headerRenderer = () => {
     return (
-      <StyledTableHeader
-        component="div"
-        variant="head"
-      >
-        <Text translation={label} />
+      <StyledTableHeader component="div" variant="head" >
+        <Box component="div" className="columnBox" >
+          <Box component="div" className="headerText" >
+            <Text translation={label} />
+          </Box>
+          {searchable && searchFieldRenderer()}
+        </Box>
       </StyledTableHeader>
     );
   };

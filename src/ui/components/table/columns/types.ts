@@ -5,6 +5,7 @@ import { TableSelectionRenderer } from "../types";
 
 export type TableColumnType = "BASE" | "LINK" | "ACTION";
 export type TableColumnActionType = "EDIT" | "FILE_COPY" | "PREVIEW";
+export type TableColumnSearchType = "FIELD" | "SELECT";
 export type TableCellTypeRenderer<T> = (rowData: T) => TableColumnType;
 
 export interface TableCellProps<T> {
@@ -31,4 +32,5 @@ export interface TableColumnActionProps<T> {
 
 export interface InnerTableColumnProps {
   measurerCache: CellMeasurerCache;
+  searchable?: boolean;
 }

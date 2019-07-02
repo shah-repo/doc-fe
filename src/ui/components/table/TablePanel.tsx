@@ -20,8 +20,10 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
   noRowsTranslation,
   cellMeasure = false,
   onSelect,
+  searchable = true,
 }) => {
 
+  const headerHeight = (searchable) ? 120 : 50;
   const styleProps: TableStyleProps = { isSelectable: (onSelect !== undefined) };
   const classes = styles(styleProps);
   const noRowsRenderer = () => <Text translation={noRowsTranslation} />;
@@ -47,7 +49,7 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
       <Table
         width={width}
         height={height}
-        headerHeight={50}
+        headerHeight={headerHeight}
         rowHeight={measurerCache.rowHeight}
         deferredMeasurementCache={measurerCache}
         rowCount={data.length}
@@ -58,7 +60,7 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
         noRowsRenderer={noRowsRenderer}
         onRowClick={onSelect && (({rowData}) => onSelect({rowData})())}
       >
-        {columns.map((item) => TableColumn<T>(item, {measurerCache}))}
+        {columns.map((item) => TableColumn<T>(item, { measurerCache, searchable }))}
       </Table>
     );
   };
