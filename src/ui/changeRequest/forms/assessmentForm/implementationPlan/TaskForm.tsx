@@ -61,9 +61,9 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
         autocompleteProps={{
           id: "assigned",
           placeholder: <Text translation="common.assignedTo" />,
+          isClearable: true,
         }}
         options={availableAssignees}
-        validate={validator(required)}
       />
       <DatePickerField
         name="dueDate"

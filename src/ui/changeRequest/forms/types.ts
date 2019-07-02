@@ -17,9 +17,11 @@ export interface Justifications {
 }
 
 export interface ImplementationPlanTaskFormUser {
-  id: string;
+  id?: string;
   email?: string;
   name?: string;
+  value?: string;
+  label?: string;
 }
 
 export interface ImplementationPlanTaskForm {
