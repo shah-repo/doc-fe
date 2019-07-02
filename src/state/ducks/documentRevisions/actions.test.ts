@@ -4,7 +4,7 @@ import { Handlers } from "../../types";
 import actions from "./actions";
 import { DOCUMENT_REVISION_ROOT_URL, DOCUMENT_ROOT_URL } from "./constants";
 import { getDocumentRevision, getDocumentRevisionEditRequestBody, getDocument, getAudit } from "./tests/factories";
-import { DocumentRevision, DocumentRevisionEditRequestBody, Document, DocumentRevisionTransitionResponse, DocumentRevisionTransitionRequestBody } from "./types";
+import { DocumentRevision, DocumentRevisionEditRequestBody, Document, DocumentRevisionTransitionResponse, DocumentRevisionTransitionRequestBody, DocumentRevisionStatus } from "./types";
 
 describe("documents actions tests", () => {
   describe("loadList tests", () => {
@@ -12,6 +12,21 @@ describe("documents actions tests", () => {
 
     it("calls GET on DOCUMENT_REVISION_ROOT_URL", () => {
       expect(action.url).toBe(DOCUMENT_REVISION_ROOT_URL);
+      expect(action.method).toBe("get");
+    });
+
+    it("calls dispatch with documentRevisionsList action on success", () => {
+      const dispatch = jest.fn();
+      action.onSuccess([], dispatch);
+      expect(dispatch).toHaveBeenCalledWith(actions.documentRevisionsList([]));
+    });
+  });
+
+  describe("loadList with filter tests", () => {
+    const action = actions.loadList([DocumentRevisionStatus.Released, DocumentRevisionStatus.Deprecated, DocumentRevisionStatus.Obsolete]);
+
+    it("calls GET on DOCUMENT_REVISION_ROOT_URL?status%5B%5D=RELEASED&status%5B%5D=DEPRECATED&status%5B%5D=OBSOLETE", () => {
+      expect(action.url).toBe(`${DOCUMENT_REVISION_ROOT_URL}?status%5B%5D=RELEASED&status%5B%5D=DEPRECATED&status%5B%5D=OBSOLETE&`);
       expect(action.method).toBe("get");
     });
 
