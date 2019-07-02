@@ -80,7 +80,7 @@ const AssessmentPreviewPresenter: React.FunctionComponent<AssessmentPreviewPrese
         </Grid>
         <Grid item={true} xs={10}>
           <Typography variant="h5">
-            {changeRequest.assessments.description}
+            {changeRequest.assessments && changeRequest.assessments.description}
           </Typography>
         </Grid>
         <Grid item={true} xs={2}>

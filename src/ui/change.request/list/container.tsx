@@ -8,7 +8,10 @@ import {
 } from "../../../state/ducks/changeRequest";
 import { ApplicationState } from "../../../state/reducers";
 import AsyncGate from "../../components/AsyncGate";
-import { changeRequestEditPath } from "../utils/paths";
+import {
+  changeRequestEditPath,
+  changeRequestPreviewPath,
+} from "../utils/paths";
 import { ListDispatchProps, ListStateProps } from "../utils/types";
 import ListPresenter from "./presenter";
 
@@ -32,6 +35,7 @@ const ListContainer: React.FunctionComponent<Props> = ({
 }) => {
   const loadAction = () => loadChangeRequests();
   const edit = (changeRequestId: string) => history.push(changeRequestEditPath(changeRequestId));
+  const preview = (changeRequestId: string) => history.push(changeRequestPreviewPath(changeRequestId));
 
   return (
     <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>
@@ -39,6 +43,7 @@ const ListContainer: React.FunctionComponent<Props> = ({
         changeRequests={changeRequests}
         currentUserEmail={currentUserEmail}
         editChangeRequest={edit}
+        previewChangeRequest={preview}
       />
     </AsyncGate>
   );
