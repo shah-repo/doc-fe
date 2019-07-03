@@ -16,8 +16,8 @@ import {
   HOME_URL,
 } from "../constants/urls";
 import DashboardContainer from "../dashboard/Dashboard.container";
-import DocumentRevisionContainer from "../document.revision/Container";
-import DocumentRevisionTableContainer from "../document.revision/List.container";
+import DocumentRevisionContainer from "../document.revision/container";
+import DocumentRevisionListContainer from "../document.revision/list/container";
 import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisionCreate.container";
 import DocumentContainer from "../documents/Document.container";
 import HeaderContainer from "./Header.container";
@@ -39,7 +39,7 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
           <Route path={CHANGE_REQUEST_CREATE_URL} exact={true} component={ChangeRequestCreateContainer} />
           <Route path={CHANGE_REQUEST_ROOT_URL} component={ChangeRequestContainer} />
           <Route path={CHANGE_REQUEST_LIST_URL} exact={true} component={ChangeRequestListContainer} />
-          <Route path={DOCUMENT_REVISION_LIST_URL} exact={true} component={DocumentRevisionTableContainer} />
+          <Route path={DOCUMENT_REVISION_LIST_URL} exact={true} component={DocumentRevisionListContainer} />
           <Route path={DOCUMENT_REVISION_CREATE_URL} exact={true} component={DocumentRevisionCreateContainer} />
           <Route path={DOCUMENT_REVISION_ROOT_URL} component={DocumentRevisionContainer} />
           <Redirect to={{ pathname: HOME_URL }} />
