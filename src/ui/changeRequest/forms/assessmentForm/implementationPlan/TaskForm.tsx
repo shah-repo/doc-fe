@@ -10,6 +10,8 @@ import { changeRequestsSelectors } from "../../../../../state/ducks/changeReques
 import { connect } from "react-redux";
 import { ApplicationState } from "../../../../../state/reducers";
 import DatePickerField from "../../../../components/forms/fields/DatePicker";
+import implementationPlanTaskStates from "../../../../../data/implementationPlanTaskStates.json";
+import SelectField from "../../../../components/forms/fields/Select";
 
 interface OwnProps {
   cancel: () => void;
@@ -61,14 +63,21 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
         autocompleteProps={{
           id: "assigned",
           placeholder: <Text translation="common.assignedTo" />,
+          isClearable: true,
         }}
         options={availableAssignees}
-        validate={validator(required)}
       />
       <DatePickerField
         name="dueDate"
         label="common.dueDate"
         datePickerProps={{ minDate: new Date() }}
+        validate={validator(required)}
+      />
+      <SelectField
+        name="status"
+        label="common.status"
+        selectProps={{inputProps: { id: "status" }}}
+        options={implementationPlanTaskStates}
         validate={validator(required)}
       />
       <Button
