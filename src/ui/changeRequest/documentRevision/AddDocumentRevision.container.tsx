@@ -7,7 +7,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import DialogContent from '@material-ui/core/DialogContent';
 import Text from "../../components/Text";
-import { DocumentRevision, DocumentRevisionsByIdState } from '../../../state/ducks/documentRevisions';
+import { DocumentRevision, DocumentRevisionsByIdState, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions';
 import DocumentRevisionTable from './DocumentRevisionTable.presenter';
 import styles from "./AddDocumentRevision.styles";
 
@@ -32,7 +32,7 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
   useEffect(() => {
     const documentsToIgnore = [...addedDocuments, ...documentsInChangeRequest].map((documentRevisionId) => documentRevisionId);
     const filteredArray = documentRevisionsList.filter((documentRevision) =>
-      documentsToIgnore.indexOf(documentRevision.id) < 0);
+      documentsToIgnore.indexOf(documentRevision.id) < 0 && documentRevision.status === DocumentRevisionStatus.Draft);
     setDocumentRevisionsToShow(filteredArray);
   }, [addedDocuments, documentsInChangeRequest, documentRevisionsList]);
 
