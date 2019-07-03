@@ -1,5 +1,5 @@
 import React from "react";
-import { CellMeasurer, CellMeasurerCache, Column, TableCellProps as ColumnProps } from "react-virtualized";
+import { CellMeasurer, Column, TableCellProps as ColumnProps } from "react-virtualized";
 import Text from "../../Text";
 import TableColumnAction from "./TableColumn.actions";
 import {
@@ -20,13 +20,13 @@ type InnerProps = InnerTableColumnProps;
 
 export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
 
-  const { key, label, cellType, columnOptions, cellOptions, hoverDataInfo = false, onSelect } = props;
+  const { key, label, cellType, columnOptions, cellOptions, tooltipKey, onSelect } = props;
   const { measurerCache } = innerProps;
 
   measurerCache.clearAll();
   const cellWhiteSpace = () => (measurerCache.hasFixedHeight()) ? "nowrap" : "initial";
 
-  const handleClick = ({rowData}: TableCellProps<T>) => (e: React.MouseEvent<HTMLElement>) => {
+  const handleClick = ({rowData}: TableCellProps<T>) => (e: React.MouseEvent) => {
     if (onSelect) {
       onSelect({rowData})();
       e.stopPropagation();
@@ -106,8 +106,8 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
         {... cellOptions}
       >
         <StyledTooltip
-          disableHoverListener={!hoverDataInfo}
-          title={columnProps.cellData || ""}
+          disableHoverListener={!tooltipKey}
+          title={columnProps.rowData[tooltipKey] || ""}
         >
           <div>{cellMeasurer(columnProps)}</div>
         </StyledTooltip>
