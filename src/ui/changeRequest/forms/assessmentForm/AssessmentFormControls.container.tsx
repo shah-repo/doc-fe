@@ -1,11 +1,8 @@
 import { withStyles, WithStyles } from "@material-ui/core";
 import React from "react";
 import styles from './AssessmentForm.styles';
-import { AsyncState } from "../../../../state/types.js";
-import SubmitButton from "../../../components/forms/SubmitButton";
 import ChangeRequestTransitionDialogContainer from "../../dialogs/ChangeRequestTransitionDialog.container";
 import { ChangeRequest, ChangeRequestStatus, ChangeRequestTransition } from "../../../../state/ducks/changeRequest";
-import { canSubmitChangeRequest, canWithdrawChangeRequest } from "../../helpers";
 import { ApplicationState } from "../../../../state/reducers";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { connect } from "react-redux";
@@ -46,7 +43,11 @@ const AssessmentFormControlsContainer: React.FunctionComponent<AssessmentFormCon
 
   const isCurrentUserOwner = changeRequest.owner.email === currentUserEmail;
   const isCurrentUserDocControl = true;
-  const canWithdraw = isCurrentUserOwner && changeRequest.state !== ChangeRequestStatus.Closed && changeRequest.state !== ChangeRequestStatus.Draft;
+  const canWithdraw =
+    isCurrentUserOwner
+    && changeRequest.state !== ChangeRequestStatus.Closed
+    && changeRequest.state !== ChangeRequestStatus.Draft
+    && changeRequest.state !== ChangeRequestStatus.Withdrawn;
   const canSubmit = isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.Draft;
   const canSendToReview = isCurrentUserDocControl && changeRequest.state === ChangeRequestStatus.Submitted;
   const canClose = isCurrentUserOwner

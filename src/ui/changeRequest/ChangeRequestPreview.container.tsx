@@ -32,24 +32,8 @@ export const ChangeRequestPreviewContainer: React.FunctionComponent<ChangeReques
 }) => {
   const [selectedDocumentRevision, setSelectedDocumentRevision] = React.useState<DocumentRevision | null>(null);
 
-  const isCurrentUserOwner = changeRequest.owner.email === currentUserEmail;
-  const canWithdraw = isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.InReview;
-  const canSendToReview = isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.Draft;
-
-  const currentUserApproval = changeRequest.approvals.find((approval) => approval.approver.email === currentUserEmail);
-  const isCurrentUserApprover = !!currentUserApproval;
-  const canApproveOrReject =
-    isCurrentUserApprover &&
-    changeRequest.state === ChangeRequestStatus.InReview &&
-    (currentUserApproval as Approval).status === ApprovalStatus.Pending;
-
   const renderAssessmentPreview = () => (
-    <AssessmentPreviewPresenter
-      canSendToReview={canSendToReview}
-      canWithdraw={canWithdraw}
-      canApproveOrReject={canApproveOrReject}
-      changeRequest={changeRequest}
-    />
+    <AssessmentPreviewPresenter changeRequest={changeRequest} />
   );
   const renderDocumentRevision = () => (
     <DocumentRevisionPreviewPresenter documentRevision={selectedDocumentRevision} />
