@@ -7,17 +7,17 @@ import {
 } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import {
-  DOCUMENT_REVISION_VERSION_URL,
   DOCUMENT_REVISION_DETAILS_URL,
   DOCUMENT_REVISION_NEW_VERSION_URL,
+  DOCUMENT_REVISION_VERSION_URL,
 } from "../constants/urls";
+import DocumentRevisionManagerContainer from "../documentRevision/DocumentRevisionsManager.container";
 import {
   ContainerDispatchProps,
   ContainerOwnProps,
   ContainerProps,
   ContainerStateProps,
 } from "./utils/types";
-import DocumentRevisionManagerContainer from "../documentRevision/DocumentRevisionsManager.container";
 
 type DispatchProps = ContainerDispatchProps;
 type StateProps = ContainerStateProps;
@@ -33,14 +33,20 @@ const Container: React.FunctionComponent<Props> = ({
   match,
 }) => {
   const documentId = match.params.documentId;
+
   const renderWrapper = (props: any) => {
     const documentRevisionId = props.match.params.documentRevisionId;
     const isNewVersion = props.match.path === DOCUMENT_REVISION_NEW_VERSION_URL;
-    
+
     return (
-      <DocumentRevisionManagerContainer documentRevisionId={documentRevisionId} documentId={documentId} isNewVersion={isNewVersion} />
-    )
-  }
+      <DocumentRevisionManagerContainer
+        documentRevisionId={documentRevisionId}
+        documentId={documentId}
+        isNewVersion={isNewVersion}
+      />
+    );
+  };
+
   const renderDocumentRevisionManagerContainer = (props: any) => renderWrapper(props);
 
   return (

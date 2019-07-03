@@ -1,16 +1,16 @@
 import { Button, Grid, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { DocumentRevision } from "../../state/ducks/documentRevisions";
-import { TableColumnProps } from "../components/table/columns/types";
-import { TablePanel } from "../components/table/TablePanel";
-import { TableSelectionProps } from "../components/table/types";
-import Text from "../components/Text";
-import { DOCUMENT_REVISION_CREATE_URL } from "../constants/urls";
-import styles from "./List.styles";
-import { canEditDocumentRevision } from "./utils/helpers";
-import { documentRevisionIdMask } from "./utils/helpers";
-import { DocumentRevisionsUserProps } from "./utils/types";
+import { maskId } from "../../../state/ducks/common/helpers";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { TableColumnProps } from "../../components/table/columns/types";
+import { TablePanel } from "../../components/table/TablePanel";
+import { TableSelectionProps } from "../../components/table/types";
+import Text from "../../components/Text";
+import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
+import { canEditDocumentRevision } from "../utils/helpers";
+import { DocumentRevisionsUserProps } from "../utils/types";
+import styles from "./styles";
 
 type Props = DocumentRevisionsUserProps & WithStyles<typeof styles>;
 
@@ -43,7 +43,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       key: "docId",
       label: "document.revision.list.docId",
       columnOptions: {
-        cellDataGetter: ({ rowData }) => documentRevisionIdMask(rowData.type, rowData.document.ordinalNumber),
+        cellDataGetter: ({ rowData }) => `${rowData.type}${maskId(rowData.document.ordinalNumber)}`,
         width: 150,
       },
     },
@@ -71,6 +71,14 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       label: "document.revision.list.owner",
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.owner.name,
+      },
+    },
+    {
+      key: "document",
+      label: "change.request.list.crId",
+      columnOptions: {
+        cellDataGetter: ({ rowData }) => `CR${maskId(rowData.document.ordinalNumber)}`,
+        width: 100,
       },
     },
     {

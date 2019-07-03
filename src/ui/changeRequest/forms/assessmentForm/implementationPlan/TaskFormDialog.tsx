@@ -19,6 +19,7 @@ export interface OwnProps {
   openDialog: () => void;
   isDialogOpen: boolean;
   buttonProps?: ButtonProps;
+  task: ImplementationPlanTaskForm | null;
 }
 
 export type TaskFormDialogProps = OwnProps;
@@ -26,6 +27,7 @@ export type TaskFormDialogProps = OwnProps;
 const INITIAL_VALUES = {
   title: "",
   description: "",
+  status: "PENDING"
 };
 
 const styles = makeStyles(() =>
@@ -40,13 +42,14 @@ const styles = makeStyles(() =>
 ));
 
 export const TaskFormDialog: React.FunctionComponent<TaskFormDialogProps> =
-  ({ onSubmit, closeDialog, openDialog, isDialogOpen, buttonProps }) => {
+  ({ onSubmit, closeDialog, openDialog, isDialogOpen, buttonProps, task }) => {
     const renderForm = (props: FormikProps<any>) => (
       <TaskForm cancel={closeDialog} />
     );
     const classes = styles();
 
     const preventPropagation = (event: React.FormEvent) =>  event.stopPropagation();
+    const initialValues = task || INITIAL_VALUES;
 
     return (
       <div>
@@ -71,7 +74,7 @@ export const TaskFormDialog: React.FunctionComponent<TaskFormDialogProps> =
           <DialogContent classes={{ root: classes.dialogContent }}>
             <Formik
               render={renderForm}
-              initialValues={INITIAL_VALUES}
+              initialValues={initialValues}
               onSubmit={onSubmit}
             />
           </DialogContent>

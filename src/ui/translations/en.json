@@ -34,6 +34,7 @@
 
   "changeRequest.title": "Document - Change Request",
   "changeRequest.state": "State",
+  "changeRequest.assessmentsDescription": "Assessments description",
   "changeRequest.assessmentForm.description": "Description",
   "changeRequest.assessmentForm.justifications": "Justifications",
   "changeRequest.assessmentForm.assessments": "Assessments",
@@ -129,6 +130,11 @@
   "common.cancel": "Cancel",
   "common.confirm": "Confirm",
   "common.ok": "Ok",
+  "common.edit": "Edit",
+  "common.status": "Status",
+  "common.design": "Design",
+  "common.regulatory": "Regulatory",
+  "common.process": "Process",
 
   "dashboard.reviews": "Documents to review",
   "dashboard.noReviews": "No documents to review",

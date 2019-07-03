@@ -7,6 +7,7 @@ import Date from "../../../../components/Date";
 export interface Props {
   task: ImplementationPlanTask;
   removeTask: (index: number) => () => void;
+  editTask: (task: ImplementationPlanTask, index: number) => () => void;
   index: number;
 }
 
@@ -22,17 +23,17 @@ export const styles = makeStyles(() =>
       marginTop: 10,
       color: 'gray',
     },
-    assignedTo: {
+    marginRight: {
       marginRight: 20,
     },
-    removeBtn: {
+    button: {
       float: 'right',
     },
   },
 ));
 
 export const TaskPresenter: React.FunctionComponent<Props> = ({
-  task, removeTask, index
+  task, removeTask, index, editTask
 }) => {
   const classes = styles();
 
@@ -41,16 +42,23 @@ export const TaskPresenter: React.FunctionComponent<Props> = ({
       <div>{task.title}</div>
       <div>{task.description}</div>
       <div className={classes.detailsContainer}>
-        <span className={classes.assignedTo}>
+        <span className={classes.marginRight}>
           <Text translation="common.assignedTo" />:&nbsp;
           {task.assigned.name}
         </span>
-        <span>
+        <span className={classes.marginRight}>
           <Text translation="common.dueDate" />:&nbsp;
           <Date value={task.dueDate} />
         </span>
-        <Button onClick={removeTask(index)} className={classes.removeBtn} color="secondary">
+        <span>
+          <Text translation="common.status" />:&nbsp;
+          {task.status}
+        </span>
+        <Button onClick={removeTask(index)} className={classes.button} color="secondary">
           <Text translation="common.remove" />
+        </Button>
+        <Button onClick={editTask(task, index)} className={classes.button} color="primary">
+          <Text translation="common.edit" />
         </Button>
       </div>
     </div>
