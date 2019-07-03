@@ -31,22 +31,25 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFormContainerProps> = ({
   onSubmit, asyncState, initialValues, documentRevisionsById, changeRequest,
 }) => {
-  const [initialValuesState, setInitialValuesState] = useState<ChangeRequestFormValues>(initialValues);
   const [selectedDocumentRevision, setSelectedDocumentRevision] = useState<string | null>(null);
+  const [documentRevisionsList, setDocumentRevisionsList] = useState<string[]>(initialValues.documentRevisions);
 
   const doneAddingDocuments = (addedDocuments: string[]) => {
-    const documentRevisions = new Set([...addedDocuments, ...initialValuesState.documentRevisions]);
-    setInitialValuesState({
-      ...initialValuesState,
-      documentRevisions: Array.from(documentRevisions),
-    });
+    const documentRevisions = new Set([...addedDocuments, ...documentRevisionsList]);
+    setDocumentRevisionsList(Array.from(documentRevisions));
   }
 
   const deleteDocumentFromChangeRequest = (deleteDocumentRevisionId: string) => {
-    setInitialValuesState({
-      ...initialValuesState,
-      documentRevisions: initialValuesState.documentRevisions.filter((documentRevisionId) => documentRevisionId !== deleteDocumentRevisionId ),
-    })
+    setDocumentRevisionsList(documentRevisionsList.filter((documentRevisionId) => documentRevisionId !== deleteDocumentRevisionId ));
+  }
+
+  const overrideSubmit = (values: ChangeRequestFormValues) => {
+    const valuesWithDocRev = {
+      ...values,
+      documentRevisions: documentRevisionsList,
+    }
+
+    onSubmit(valuesWithDocRev);
   }
 
   const selectDocumentRevision = (documentRevisionId: string) => setSelectedDocumentRevision(documentRevisionId);
@@ -56,8 +59,8 @@ export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFo
   const renderAssessmentForm = () => {
     return (
       <AssessmentFormContainer
-        initialValues={initialValuesState}
-        onSubmit={onSubmit}
+        initialValues={initialValues}
+        onSubmit={overrideSubmit}
         asyncState={asyncState}
         changeRequest={changeRequest}
       />
@@ -87,7 +90,7 @@ export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFo
       <Grid item={true} xs={2}>
         <DocumentRevisionControlContainer
           doneAddingDocuments={doneAddingDocuments}
-          documentsInChangeRequest={initialValuesState.documentRevisions}
+          documentsInChangeRequest={documentRevisionsList}
           deleteDocumentFromChangeRequest={deleteDocumentFromChangeRequest}
           selectDocumentRevision={selectDocumentRevision}
           selectAssessmentForm={selectAssessmentForm}
