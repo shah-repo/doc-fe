@@ -1,23 +1,23 @@
 import React from "react";
 import { connect } from "react-redux";
-import { authSelectors } from "../../state/ducks/auth";
+import { authSelectors } from "../../../state/ducks/auth";
 import {
   documentRevisionsActions,
   documentRevisionsSelectors,
-} from "../../state/ducks/documentRevisions";
-import { ApplicationState } from "../../state/reducers";
-import AsyncGate from "../components/AsyncGate";
-import ListPresenter from "./List.presenter";
+} from "../../../state/ducks/documentRevisions";
+import { ApplicationState } from "../../../state/reducers";
+import AsyncGate from "../../components/AsyncGate";
 import {
   documentEditPath,
   documentPreviewPath,
-} from "./utils/paths";
+} from "../utils/paths";
 import {
   ListDispatchProps,
   ListOwnProps,
   ListProps,
   ListStateProps,
-} from "./utils/types";
+} from "../utils/types";
+import ListPresenter from "./presenter";
 
 type DispatchProps = ListDispatchProps;
 type StateProps = ListStateProps;

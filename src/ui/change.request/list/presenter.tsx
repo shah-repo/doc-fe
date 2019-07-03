@@ -2,6 +2,7 @@ import { Button, Grid, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
+import { maskId } from "../../../state/ducks/common/helpers";
 import { TableColumnProps } from "../../components/table/columns/types";
 import { TablePanel } from "../../components/table/TablePanel";
 import { TableSelectionProps } from "../../components/table/types";
@@ -39,10 +40,10 @@ const ListPresenter: React.FunctionComponent<Props> = ({
 
   const columns: Array<TableColumnProps<ChangeRequest>> = [
     {
-      key: "crId",
+      key: "ordinalNumber",
       label: "change.request.list.crId",
       columnOptions: {
-        cellDataGetter: ({ rowData }) => rowData.type,
+        cellDataGetter: ({ rowData }) => `CR${maskId(rowData.ordinalNumber)}`,
         width: 100,
       },
     },
