@@ -11,9 +11,6 @@ import AssessmentFormControlsContainer from "../forms/assessmentForm/AssessmentF
 
 interface AssessmentPreviewPresenterProps extends WithStyles<typeof styles> {
   changeRequest: ChangeRequest;
-  canSendToReview: boolean;
-  canWithdraw: boolean;
-  canApproveOrReject: boolean;
 }
 
 const AssessmentPreviewPresenter: React.FunctionComponent<AssessmentPreviewPresenterProps> =
