@@ -32,45 +32,4 @@ describe("ChangeRequestPreviewContainer tests", () => {
 
     expect(presenter.prop("changeRequest")).toEqual(changeRequest);
   });
-
-  it("canWithdraw", () => {
-    const presenter = getPresenter({
-      changeRequest: {
-        ...changeRequest,
-        state: ChangeRequestStatus.InReview,
-      },
-    });
-
-    expect(presenter.prop("canWithdraw")).toBe(true);
-  });
-
-  it("canSendToReview", () => {
-    const presenter = getPresenter({
-      changeRequest: {
-        ...changeRequest,
-        state: ChangeRequestStatus.Draft,
-      },
-    });
-
-    expect(presenter.prop("canSendToReview")).toBe(true);
-  });
-
-  it("canApproveOrReject", () => {
-    const approverEmail = "approver@email.com";
-    const presenter = getPresenter({
-      changeRequest: {
-        ...changeRequest,
-        state: ChangeRequestStatus.InReview,
-        approvals: [
-          getApproval({
-            approver: getUser({ email: approverEmail }),
-            status: ApprovalStatus.Pending,
-          }),
-        ],
-      },
-      currentUserEmail: approverEmail,
-    });
-
-    expect(presenter.prop("canApproveOrReject")).toBe(true);
-  });
 });
