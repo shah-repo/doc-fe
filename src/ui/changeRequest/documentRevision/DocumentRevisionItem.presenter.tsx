@@ -4,6 +4,7 @@ import { RemoveCircleOutline } from "@material-ui/icons";
 import { DocumentRevision } from '../../../state/ducks/documentRevisions';
 import Text from "../../components/Text";
 import Date from "../../components/Date";
+import { styles } from "./DocumentRevisionItem.styles";
 
 interface OwnProps {
   documentRevision: DocumentRevision;
@@ -16,30 +17,17 @@ export type DocumentRevisionItemPresenterProps = OwnProps;
 export const DocumentRevisionItemPresenter: React.FunctionComponent<DocumentRevisionItemPresenterProps> = ({
   onClick, onDelete, documentRevision
 }) => {
+  const classes = styles();
+
   return (
-    <div
-      style={{
-        margin: "10px 0",
-        lineHeight: '23px',
-        borderBottom: "1px solid lightgray",
-        width: "100%",
-        cursor: "pointer",
-      }}
-    >
+    <div className={classes.container}>
       <Grid container={true}>
         <Grid item={true} xs={10}>
           <div
             onClick={onClick}
           >
             <Tooltip title={documentRevision.name} aria-label={documentRevision.name}>
-              <div
-                style={{
-                  overflow: "hidden", 
-                  whiteSpace: "nowrap", 
-                  textOverflow: "ellipsis",
-                  color: "red",
-                }}
-              >
+              <div className={classes.title}>
                 {documentRevision.name}
               </div>
             </Tooltip>
