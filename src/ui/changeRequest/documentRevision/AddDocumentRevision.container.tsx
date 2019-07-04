@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { WithStyles, withStyles } from "@material-ui/core";
 import Chip from '@material-ui/core/Chip';
 import Button from "@material-ui/core/Button";
-import { Dialog, Typography, AppBar, Toolbar } from '@material-ui/core';
+import { Dialog, AppBar, Toolbar } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import DialogContent from '@material-ui/core/DialogContent';

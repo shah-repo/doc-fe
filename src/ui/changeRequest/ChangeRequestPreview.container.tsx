@@ -28,7 +28,6 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 
 export const ChangeRequestPreviewContainer: React.FunctionComponent<ChangeRequestPreviewContainerProps> = ({
   changeRequest,
-  currentUserEmail,
 }) => {
   const [selectedDocumentRevision, setSelectedDocumentRevision] = React.useState<DocumentRevision | null>(null);
 
