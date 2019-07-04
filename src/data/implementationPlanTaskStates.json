@@ -1,4 +1,4 @@
 [
   { "value": "PENDING", "text": "Pending" },
-  { "value": "CLOSED", "text": "Closed" }
+  { "value": "DONE", "text": "Done" }
 ]
