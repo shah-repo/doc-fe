@@ -18,7 +18,7 @@ export interface TableColumnProps<T> {
   cellType?: TableColumnType | TableCellTypeRenderer<T>;
   columnOptions?: Partial<ColumnProps>;
   cellOptions?: Partial<TableCellProps>;
-  hoverDataInfo?: boolean;
+  tooltipKey?: keyof T;
   onSelect?: TableSelectionRenderer<T>;
 
 }

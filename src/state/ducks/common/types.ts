@@ -1,4 +1,3 @@
-export type Event = React.ChangeEvent<HTMLInputElement>;
 
 export enum ApprovalStatus {
   Pending = "PENDING",
@@ -21,4 +20,3 @@ export interface Approval {
 export interface Id {
   id: string;
 }
-
