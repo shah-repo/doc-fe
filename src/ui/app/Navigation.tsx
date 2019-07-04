@@ -13,7 +13,6 @@ import Text from "../components/Text";
 import {
   CHANGE_REQUEST_CREATE_URL,
   CHANGE_REQUEST_LIST_URL,
-  DOCUMENT_REVISION_CREATE_URL,
   DOCUMENT_REVISION_LIST_URL,
   HOME_URL,
 } from "../constants/urls";

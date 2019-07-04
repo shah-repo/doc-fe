@@ -53,6 +53,7 @@ export interface DocumentRevision {
   released: Date;
   referenceTo: Reference[];
   referencedBy: Reference[];
+  createdAt?: string;
 }
 
 export interface ReferenceToEditRequest {
