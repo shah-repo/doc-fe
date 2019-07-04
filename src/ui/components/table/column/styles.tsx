@@ -1,4 +1,4 @@
-import { Link, TableCell, Tooltip, TextField } from "@material-ui/core";
+import { Link, TableCell, Tooltip } from "@material-ui/core";
 import { createStyles, makeStyles, Theme, withStyles } from "@material-ui/core/styles";
 
 export const StyledTableHeader = withStyles((theme) => ({
@@ -24,14 +24,6 @@ export const StyledTableHeader = withStyles((theme) => ({
     },
   },
 }))(TableCell);
-
-export const StyledTableField = withStyles((theme) => ({
-  root: {
-    width: "100%",
-    backgroundColor: theme.palette.common.white,
-    padding: theme.spacing(1),
-  },
-}))(TextField);
 
 export const StyledTableCell = withStyles((theme) => ({
   body: {

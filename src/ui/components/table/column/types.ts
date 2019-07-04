@@ -1,6 +1,7 @@
 import { TableCellProps } from "@material-ui/core/TableCell";
 import { CellMeasurerCache, ColumnProps } from "react-virtualized";
 import { Translation } from "../../../translations/types";
+import { TableSearchFieldProps, TableSearchType } from "../search/types";
 import { TableSelectionRenderer } from "../types";
 
 export type TableColumnType = "BASE" | "LINK" | "ACTION";
@@ -21,7 +22,7 @@ export interface TableColumnProps<T> {
   cellOptions?: Partial<TableCellProps>;
   hoverDataInfo?: boolean;
   onSelect?: TableSelectionRenderer<T>;
-
+  searchOptions?: Partial<TableSearchFieldProps>;
 }
 
 export interface TableColumnActionProps<T> {

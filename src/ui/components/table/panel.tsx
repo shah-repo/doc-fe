@@ -8,8 +8,8 @@ import {
   Table,
 } from "react-virtualized";
 import Text from "../../components/Text";
-import { TableColumn } from "./columns/TableColumn";
-import { styles } from "./TablePanel.styles";
+import { TableColumn } from "./column/base";
+import { styles } from "./styles";
 import { TablePanelProps, TableStyleProps } from "./types";
 
 type Props<T> = TablePanelProps<T>;

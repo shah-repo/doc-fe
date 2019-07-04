@@ -3,8 +3,8 @@ import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { maskId } from "../../../state/ducks/common/helpers";
-import { TableColumnProps } from "../../components/table/columns/types";
-import { TablePanel } from "../../components/table/TablePanel";
+import { TableColumnProps } from "../../components/table/column/types";
+import { TablePanel } from "../../components/table/panel";
 import { TableSelectionProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import { CHANGE_REQUEST_CREATE_URL } from "../../constants/urls";
@@ -66,6 +66,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       cellType: stateCellTypeRenderer,
       onSelect: onStateSelect,
       columnOptions: { width: 80 },
+      searchOptions: { searchType: "select", selectOptions: [{value: "1", text: "Text 1"}, {value: "2", text: "Text2"}] },
     },
   ];
 

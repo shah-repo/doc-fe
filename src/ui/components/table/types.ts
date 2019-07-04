@@ -1,5 +1,5 @@
 import { Translation } from "../../translations/types";
-import { TableColumnActionType, TableColumnProps } from "./columns/types";
+import { TableColumnActionType, TableColumnProps } from "./column/types";
 
 export type TableSelectionRenderer<T> = (props: TableSelectionProps<T>) => () => any;
 

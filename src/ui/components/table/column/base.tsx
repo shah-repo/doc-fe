@@ -1,16 +1,20 @@
 import { Box } from "@material-ui/core";
-import { OutlinedInputProps } from "@material-ui/core/OutlinedInput";
 import React from "react";
-import { CellMeasurer, Column, TableCellProps as ColumnProps } from "react-virtualized";
+import {
+  CellMeasurer,
+  Column,
+  TableCellProps as ColumnProps,
+} from "react-virtualized";
 import Text from "../../Text";
-import TableColumnAction from "./TableColumn.actions";
+import { TableSearchSelectField } from "../search/select";
+import { TableSearchTextField } from "../search/text";
+import TableColumnAction from "./action";
 import {
   StyledCellLink,
   StyledTableCell,
-  StyledTableField,
   StyledTableHeader,
   StyledTooltip,
-} from "./TableColumn.styles";
+} from "./styles";
 import {
   InnerTableColumnProps,
   TableCellProps,
@@ -23,7 +27,7 @@ type InnerProps = InnerTableColumnProps;
 
 export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
 
-  const { key, label, cellType, columnOptions, cellOptions, hoverDataInfo = false, onSelect } = props;
+  const { key, label, cellType, columnOptions, cellOptions, hoverDataInfo = false, onSelect, searchOptions } = props;
   const { measurerCache, searchable } = innerProps;
 
   measurerCache.clearAll();
@@ -70,10 +74,10 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
     }
   };
 
-  const cellMeasurer = ({ parent, dataKey, rowIndex, columnIndex, ... other }: any) => {
+  const cellMeasurer = ({ parent, rowIndex, columnIndex, ... other }: any) => {
     return (
       <CellMeasurer
-        key={dataKey}
+        key={key}
         cache={measurerCache!}
         rowIndex={rowIndex}
         columnIndex={columnIndex}
@@ -86,16 +90,16 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
     );
   };
 
-  const searchFieldRenderer = () => (
-    <Box component="div" className="headerField">
-      <StyledTableField
-        name={key}
-        // onChange={handleChange("name")}
-        margin="normal"
-        InputProps={{ disableUnderline: true } as Partial<OutlinedInputProps>}
-      />
-    </Box>
-  );
+  const searchFieldRenderer = () => {
+    const searchType = (searchOptions) ? searchOptions.searchType : "text";
+    switch (searchType) {
+      case "select":
+          const options = searchOptions && searchOptions.selectOptions;
+          return <TableSearchSelectField key={key} selectOptions={options || []} />;
+      default:
+        return <TableSearchTextField key={key} />;
+    }
+  };
 
   const headerRenderer = () => {
     return (
@@ -104,7 +108,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
           <Box component="div" className="headerText" >
             <Text translation={label} />
           </Box>
-          {searchable && searchFieldRenderer()}
+          {searchable && <Box component="div" className="headerField">{searchFieldRenderer()}</Box>}
         </Box>
       </StyledTableHeader>
     );
