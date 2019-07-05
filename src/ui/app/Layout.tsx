@@ -23,6 +23,7 @@ import DocumentContainer from "../documents/Document.container";
 import HeaderContainer from "./Header.container";
 import styles from "./Layout.styles";
 import Navigation from "./Navigation";
+import DataFetcherContainer from "./DataFetcher.container";
 
 type Props = WithStyles<typeof styles>;
 
@@ -33,6 +34,7 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
       <HeaderContainer />
       <Navigation />
       <main className={classes.content}>
+        <DataFetcherContainer />
         <Switch>
           <Route path={HOME_URL} exact={true} component={DashboardContainer} />
           <Route path={DOCUMENT_ROOT_URL} component={DocumentContainer} />

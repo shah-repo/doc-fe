@@ -1,4 +1,4 @@
-import { AUTH_TOKENS, AUTH_USER, LOGOUT_USER } from "./constants";
+import { AUTH_TOKENS, AUTH_USER, LOGOUT_USER, USER_PERMISSIONS } from "./constants";
 
 export interface LoginRequestBody {
   email: string;
@@ -72,3 +72,10 @@ export interface UserState {
 export interface AuthProps {
   currentUserEmail: string;
 }
+
+export interface UserPermissionsAction {
+  type: typeof USER_PERMISSIONS;
+  payload: string[];
+}
+
+export type UserPermissionsState = string[];
