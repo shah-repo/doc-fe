@@ -1,9 +1,8 @@
 import { Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
-import { ButtonProps } from "@material-ui/core/Button";
 import moment from "moment";
 import React from "react";
 import { Attachment } from "../../../state/ducks/attachments";
-import { ChangeRequest, ChangeRequestTransition, ImplementationPlanTask } from "../../../state/ducks/changeRequest";
+import { ChangeRequest, ImplementationPlanTask } from "../../../state/ducks/changeRequest";
 import FileCard from "../../components/cards/FileCard";
 import Text from "../../components/Text";
 import styles from "../ChangeRequestPreview.styles";
