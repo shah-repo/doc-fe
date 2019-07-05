@@ -3,7 +3,7 @@ import _ from "lodash";
 import React, { useState } from "react";
 import moment from "moment";
 import useDialog from "../../../../hooks/useDialog";
-import { ImplementationPlanTask, ImplementationPlanTaskForm } from "../../types";
+import { ImplementationPlanTask, ImplementationPlanTaskForm, ImplementationPlanTaskFormValues } from "../../types";
 import TaskPresenter from "./Task.presenter";
 import TaskFormDialog from "./TaskFormDialog";
 
@@ -29,20 +29,12 @@ const Tasks: React.FunctionComponent<Props> = ({
   };
 
   const onSubmit = (values: ImplementationPlanTaskForm) => {
-    const newValues = {
-      ...values,
-      assigned: {
-        id: _.get(values.assigned, 'value'),
-        name: _.get(values.assigned, 'label'),
-      },
-    };
-
     closeDialog()
 
     if (selectedIndex !== null) {
-      replace(selectedIndex, newValues);
+      replace(selectedIndex, values);
     } else {
-      push(newValues);
+      push(values);
     }
   };
 
@@ -58,17 +50,11 @@ const Tasks: React.FunctionComponent<Props> = ({
     />
   );
   const removeTask = (index: number) => () => remove(index);
-  const editTask = (task: ImplementationPlanTaskForm, index: number) => () => {
+  const editTask = (task: ImplementationPlanTaskFormValues, index: number) => () => {
     changeSelectedIndex(index);
     changeSelectedTask({
       ...task,
       dueDate: moment(task.dueDate).toDate(),
-      assigned: {
-        id: _.get(task.assigned, 'id'),
-        name: _.get(task.assigned, 'name'),
-        value: _.get(task.assigned, 'id'),
-        label: _.get(task.assigned, 'name'),
-      },
     });
     dialog.open();
   };
@@ -80,7 +66,7 @@ const Tasks: React.FunctionComponent<Props> = ({
   return (
     <div>
       {
-        tasks.map((task: ImplementationPlanTask, index: number) => {
+        tasks.map((task: ImplementationPlanTaskFormValues, index: number) => {
           return (
             <TaskPresenter
               key={index}

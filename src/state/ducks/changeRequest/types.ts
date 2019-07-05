@@ -1,5 +1,5 @@
 import { Attachment } from "../attachments";
-import { Approval, User } from "../common";
+import { Approval, User, Id } from "../common";
 import { DocumentRevision } from "../documentRevisions";
 import {
   CHANGE_REQUEST_AUDIT_SET,
@@ -46,16 +46,31 @@ export interface ImplementationPlanTask {
   id: string;
   title: string;
   description: string;
-  dueDate?: Date;
-  assigned: Partial<User>;
-  createdAt?: string;
-  status?: string;
-  updatedAt?: string;
+  dueDate: Date;
+  assigned?: User;
+  createdAt: string;
+  status: string;
+  updatedAt: string;
 }
+
 
 export interface ImplementationPlan {
   id?: string;
   tasks: ImplementationPlanTask[];
+  attachments: Attachment[];
+}
+
+export interface ImplementationPlanTaskRequest {
+  id?: string;
+  title: string;
+  description: string;
+  dueDate?: Date;
+  assigned?: Id;
+  status: string;
+}
+
+export interface ImplementationPlanRequest {
+  tasks: ImplementationPlanTaskRequest[];
   attachments: Attachment[];
 }
 

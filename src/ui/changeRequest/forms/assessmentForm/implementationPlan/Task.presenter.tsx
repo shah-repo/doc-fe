@@ -1,13 +1,13 @@
 import React from "react";
 import { createStyles, Button, makeStyles } from "@material-ui/core";
-import { ImplementationPlanTask } from "../../types";
+import { ImplementationPlanTaskFormValues } from "../../types";
 import Text from "../../../../components/Text";
 import Date from "../../../../components/Date";
 
 export interface Props {
-  task: ImplementationPlanTask;
+  task: ImplementationPlanTaskFormValues;
   removeTask: (index: number) => () => void;
-  editTask: (task: ImplementationPlanTask, index: number) => () => void;
+  editTask: (task: ImplementationPlanTaskFormValues, index: number) => () => void;
   index: number;
 }
 
@@ -44,7 +44,7 @@ export const TaskPresenter: React.FunctionComponent<Props> = ({
       <div className={classes.detailsContainer}>
         <span className={classes.marginRight}>
           <Text translation="common.assignedTo" />:&nbsp;
-          {task.assigned.name}
+          {task.assigned && task.assigned.label}
         </span>
         <span className={classes.marginRight}>
           <Text translation="common.dueDate" />:&nbsp;

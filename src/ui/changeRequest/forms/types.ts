@@ -16,23 +16,6 @@ export interface Justifications {
   attachments: Attachment[];
 }
 
-export interface ImplementationPlanTaskFormUser {
-  id?: string;
-  email?: string;
-  name?: string;
-  value?: string;
-  label?: string;
-}
-
-export interface ImplementationPlanTaskForm {
-  id?: string;
-  title: string;
-  description: string;
-  dueDate?: Date;
-  assigned?: ImplementationPlanTaskFormUser;
-  status: string;
-}
-
 export interface ImplementationPlanTask {
   title: string;
   description: string;
@@ -41,12 +24,35 @@ export interface ImplementationPlanTask {
   status: string;
 }
 
+
+export interface ImplementationPlanTaskForm {
+  id?: string;
+  title: string;
+  description: string;
+  dueDate?: Date;
+  assigned?: OptionType;
+  status: string;
+}
+export interface ImplementationPlanTaskFormValues {
+  id?: string;
+  title: string;
+  description: string;
+  dueDate?: Date;
+  assigned?: OptionType;
+  status: string;
+}
+
+export interface ImplementationPlanFormValues {
+  attachments: Attachment[],
+  tasks: ImplementationPlanTaskFormValues[],
+}
+
 export interface ChangeRequestFormValues {
   id?: string;
   description: string;
   justifications: Justifications;
   assessments: Assessment;
-  implementationPlan: ImplementationPlan;
+  implementationPlan: ImplementationPlanFormValues;
   effectiveDate?: Date;
   approvals: OptionType[];
   documentRevisions: string[];
