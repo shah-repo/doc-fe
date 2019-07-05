@@ -65,7 +65,7 @@ export const getChangeRequestEditRequestBody = (
 ): ChangeRequestEditRequestBody => ({
   description: faker.lorem.sentence(),
   assessments: createAssessment(),
-  implementationPlan: createNestedObject(),
+  implementationPlan: createImplementationPlan(),
   justifications: createNestedObject(),
   effectiveDate: faker.date.future(undefined, "2019-05-31"),
   approvals: [],

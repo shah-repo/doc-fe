@@ -53,24 +53,9 @@ export interface ImplementationPlanTask {
   updatedAt: string;
 }
 
-
 export interface ImplementationPlan {
-  id?: string;
+  id: string;
   tasks: ImplementationPlanTask[];
-  attachments: Attachment[];
-}
-
-export interface ImplementationPlanTaskRequest {
-  id?: string;
-  title: string;
-  description: string;
-  dueDate?: Date;
-  assigned?: Id;
-  status: string;
-}
-
-export interface ImplementationPlanRequest {
-  tasks: ImplementationPlanTaskRequest[];
   attachments: Attachment[];
 }
 
@@ -105,10 +90,25 @@ export interface EditRequestBodyNestedObject {
   attachments: EditRequestBodyAttachment[];
 }
 
+
+export interface ImplementationPlanTaskRequest {
+  id?: string;
+  title: string;
+  description: string;
+  dueDate?: Date;
+  assigned?: Id;
+  status: string;
+}
+
+export interface ImplementationPlanRequest {
+  tasks: ImplementationPlanTaskRequest[];
+  attachments: Attachment[];
+}
+
 export interface ChangeRequestEditRequestBody {
   description: string;
   assessments: Assessment;
-  implementationPlan: EditRequestBodyNestedObject;
+  implementationPlan: ImplementationPlanRequest;
   justifications: EditRequestBodyNestedObject;
   effectiveDate?: Date;
   approvals: Approver[];

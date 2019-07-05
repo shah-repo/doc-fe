@@ -7,12 +7,11 @@ import {
   ChangeRequest,
   ChangeRequestEditRequestBody,
   ImplementationPlan,
-  ImplementationPlanTask,
   Justifications,
   ImplementationPlanTaskRequest,
   ImplementationPlanRequest,
 } from "../../../state/ducks/changeRequest";
-import { ChangeRequestFormValues, ImplementationPlanTaskForm, ImplementationPlanFormValues, ImplementationPlanTaskFormValues } from "./types";
+import { ChangeRequestFormValues, ImplementationPlanFormValues, ImplementationPlanTaskFormValues } from "./types";
 
 type NestedObject = Justifications;
 

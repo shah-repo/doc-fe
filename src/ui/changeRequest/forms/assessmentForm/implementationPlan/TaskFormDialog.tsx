@@ -10,16 +10,16 @@ import { ButtonProps } from "@material-ui/core/Button";
 import { Formik, FormikProps } from "formik";
 import React from "react";
 import Text from "../../../../components/Text";
-import { ImplementationPlanTaskForm } from "../../types";
+import { ImplementationPlanTaskFormValues } from "../../types";
 import TaskForm from "./TaskForm";
 
 export interface OwnProps {
-  onSubmit: (values: ImplementationPlanTaskForm) => void;
+  onSubmit: (values: ImplementationPlanTaskFormValues) => void;
   closeDialog: () => void;
   openDialog: () => void;
   isDialogOpen: boolean;
   buttonProps?: ButtonProps;
-  task: ImplementationPlanTaskForm | null;
+  task: ImplementationPlanTaskFormValues | null;
 }
 
 export type TaskFormDialogProps = OwnProps;

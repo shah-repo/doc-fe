@@ -3,7 +3,7 @@ import _ from "lodash";
 import React, { useState } from "react";
 import moment from "moment";
 import useDialog from "../../../../hooks/useDialog";
-import { ImplementationPlanTask, ImplementationPlanTaskForm, ImplementationPlanTaskFormValues } from "../../types";
+import { ImplementationPlanTaskFormValues } from "../../types";
 import TaskPresenter from "./Task.presenter";
 import TaskFormDialog from "./TaskFormDialog";
 
@@ -16,7 +16,7 @@ const Tasks: React.FunctionComponent<Props> = ({
   replace,
 }) => {
   const dialog = useDialog();
-  const [selectedTask, changeSelectedTask] = useState<ImplementationPlanTaskForm | null>(null);
+  const [selectedTask, changeSelectedTask] = useState<ImplementationPlanTaskFormValues | null>(null);
   const [selectedIndex, changeSelectedIndex] = useState<number | null>(null);
 
   const openDialog = () => {
@@ -28,7 +28,7 @@ const Tasks: React.FunctionComponent<Props> = ({
     changeSelectedIndex(null);
   };
 
-  const onSubmit = (values: ImplementationPlanTaskForm) => {
+  const onSubmit = (values: ImplementationPlanTaskFormValues) => {
     closeDialog()
 
     if (selectedIndex !== null) {

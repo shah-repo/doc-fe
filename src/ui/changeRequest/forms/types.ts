@@ -16,23 +16,6 @@ export interface Justifications {
   attachments: Attachment[];
 }
 
-export interface ImplementationPlanTask {
-  title: string;
-  description: string;
-  dueDate: Date;
-  assigned: User;
-  status: string;
-}
-
-
-export interface ImplementationPlanTaskForm {
-  id?: string;
-  title: string;
-  description: string;
-  dueDate?: Date;
-  assigned?: OptionType;
-  status: string;
-}
 export interface ImplementationPlanTaskFormValues {
   id?: string;
   title: string;
