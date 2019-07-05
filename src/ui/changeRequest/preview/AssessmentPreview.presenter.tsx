@@ -81,6 +81,14 @@ const AssessmentPreviewPresenter: React.FunctionComponent<AssessmentPreviewPrese
       <Grid container={true} className={classes.container} spacing={8}>
         <Grid item={true} xs={12}>
           <Typography variant="h6" gutterBottom>
+            <Text translation="common.status" />:
+          </Typography>
+          <Typography variant="h5">
+            {changeRequest.state}
+          </Typography>
+        </Grid>
+        <Grid item={true} xs={12}>
+          <Typography variant="h6" gutterBottom>
             <Text translation="changeRequest.assessmentForm.description" />:
           </Typography>
           <Typography variant="h5">
