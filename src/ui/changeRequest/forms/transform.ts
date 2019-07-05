@@ -7,10 +7,11 @@ import {
   ChangeRequest,
   ChangeRequestEditRequestBody,
   ImplementationPlan,
-  ImplementationPlanTask,
   Justifications,
+  ImplementationPlanTaskRequest,
+  ImplementationPlanRequest,
 } from "../../../state/ducks/changeRequest";
-import { ChangeRequestFormValues } from "./types";
+import { ChangeRequestFormValues, ImplementationPlanFormValues, ImplementationPlanTaskFormValues } from "./types";
 
 type NestedObject = Justifications;
 
@@ -31,12 +32,37 @@ const createAssessment = (value: Assessment = {
   regulatory: value.regulatory,
 });
 
+const toImplementationPlanFormValues = (plan: ImplementationPlan): ImplementationPlanFormValues => {
+  return (
+    {
+      attachments: plan.attachments,
+      tasks: plan.tasks.map((task) => {
+        let taskForm: ImplementationPlanTaskFormValues = {
+          id: task.id,
+          status: task.status,
+          title: task.title,
+          description: task.description,
+          dueDate: task.dueDate,
+        };
+
+        if (task.assigned) {
+          taskForm.assigned = {
+            value: task.assigned.id,
+            label: task.assigned.name,
+          }
+        }
+        return taskForm;
+      })
+    }
+  )
+}
+
 export const toChangeRequestFormValues = (changeRequest: ChangeRequest): ChangeRequestFormValues => {
   const values: ChangeRequestFormValues = {
     description: changeRequest.description,
     assessments: createAssessment(changeRequest.assessments),
     justifications: createNestedObject(changeRequest.justifications),
-    implementationPlan: changeRequest.implementationPlan,
+    implementationPlan: toImplementationPlanFormValues(changeRequest.implementationPlan),
     approvals: changeRequest.approvals.map((approval) => ({
       label: approval.approver.name, value: approval.approver.email,
     })),
@@ -52,13 +78,16 @@ const createNestedObjectForRequestBody = (value: NestedObject) => ({
   attachments: value.attachments.map((attachment) => ({ id: attachment.id })),
 });
 
-const toImplementationPlanEditRequestBody = (values: ImplementationPlan): ImplementationPlan => {
-  const valuesTasks: ImplementationPlanTask[] = values.tasks.map((t) => {
-    const { createdAt, updatedAt, assigned, ...excluded } = t; // TODO: remove status once BE ready
-    return ({ assigned: { id: t.assigned.id }, ...excluded });
+const toImplementationPlanEditRequestBody = (values: ImplementationPlanFormValues): ImplementationPlanRequest => {
+  const valuesTasks: ImplementationPlanTaskRequest[] = values.tasks.map((t) => {
+    const { assigned, ...excluded } = t;
+    if (assigned) {
+      return ({ assigned: { id: assigned.value }, ...excluded });
+    } else {
+      return ({ ...excluded });
+    }
   });
   return { tasks: valuesTasks, attachments: values.attachments };
-
 };
 
 const createAssessmentObjectForRequestBody = (value: Assessment) => {
