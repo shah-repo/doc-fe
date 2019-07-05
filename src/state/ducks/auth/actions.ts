@@ -75,7 +75,7 @@ const login = (loginValues: LoginRequestBody, handlers: Handlers):
     data: loginValues,
     includeAuthorization: false,
     onSuccess: (data, dispatch) => {
-      dispatch(authUser({ email: loginValues.email, name: data.name }));
+      dispatch(authUser({ email: loginValues.email, name: data.name, id: data.id }));
       dispatch(authTokens(data));
     },
     handlers,
@@ -88,7 +88,7 @@ const loginWithCode = (loginValues: LoginWithCodeRequestBody, handlers: Handlers
     data: loginValues,
     includeAuthorization: false,
     onSuccess: (response, dispatch) => {
-      dispatch(authUser({ email: response.email, name: response.name }));
+      dispatch(authUser({ email: response.email, name: response.name, id: response.id }));
       dispatch(authTokens(response));
     },
     onFailure: (m, dispatch) => {

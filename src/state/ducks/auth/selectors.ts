@@ -12,6 +12,10 @@ const currentUserName = (state: ApplicationState): string => {
   return state.auth.user.name;
 };
 
+const currentUserId = (state: ApplicationState): string => {
+  return state.auth.user.id;
+};
+
 const accessToken = (state: ApplicationState): string => {
   return state.auth.tokens.access.value;
 };
@@ -21,4 +25,5 @@ export default {
   currentUserEmail,
   accessToken,
   currentUserName,
+  currentUserId,
 };

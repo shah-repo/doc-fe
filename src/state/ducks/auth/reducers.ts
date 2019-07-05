@@ -24,6 +24,7 @@ export const tokens = (state: TokensState = TOKENS_DEFAULT_STATE, action: AuthTo
 export const USER_DEFAULT_STATE: UserState = {
   email: "",
   name: "",
+  id: "",
 };
 
 type AuthUserActions = AuthUserAction | LogoutUserAction;
@@ -31,7 +32,7 @@ type AuthUserActions = AuthUserAction | LogoutUserAction;
 export const user = (state: UserState = USER_DEFAULT_STATE, action: AuthUserActions): UserState => {
   switch (action.type) {
     case AUTH_USER:
-      return { ...state, email: action.payload.email, name: action.payload.name };
+      return { ...state, email: action.payload.email, name: action.payload.name, id: action.payload.id };
     case LOGOUT_USER:
       return { ...USER_DEFAULT_STATE };
     default:

@@ -36,6 +36,7 @@ export interface Tokens {
 }
 
 export interface User {
+  id: string;
   email: string;
   name: string;
 }
@@ -63,6 +64,7 @@ export interface LogoutUserAction {
 export type TokensState = Required<Tokens>;
 
 export interface UserState {
+  id: string;
   email: string;
   name: string;
 }
