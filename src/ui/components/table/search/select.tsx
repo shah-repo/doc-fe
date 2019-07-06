@@ -15,9 +15,9 @@ export const TableSearchSelectField: React.FunctionComponent<Props> = ({
   const classes = selectStyles();
   const [value, setValue] = React.useState<string | number>("");
 
-  function handleChange(event: React.ChangeEvent<{ value: unknown }>) {
+  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setValue(event.target.value as string | number);
-  }
+  };
 
   const menuItemRenderer = (option: SelectOption) => (
     <MenuItem key={option.value} value={option.value}>{option.text}</MenuItem>
