@@ -28,7 +28,7 @@ type InnerProps = InnerTableColumnProps;
 export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
 
   const { key, label, cellType, columnOptions, cellOptions, hoverDataInfo = false, onSelect, searchOptions } = props;
-  const { measurerCache, searchable } = innerProps;
+  const { measurerCache, searchable, queryGetter } = innerProps;
 
   measurerCache.clearAll();
   const cellWhiteSpace = () => (measurerCache.hasFixedHeight()) ? "nowrap" : "initial";
@@ -95,9 +95,9 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
     switch (searchType) {
       case "select":
           const options = searchOptions && searchOptions.selectOptions;
-          return <TableSearchSelectField key={key} selectOptions={options || []} />;
+          return <TableSearchSelectField dataKey={key} queryGetter={queryGetter} {...searchOptions} />;
       default:
-        return <TableSearchTextField key={key} />;
+        return <TableSearchTextField dataKey={key} queryGetter={queryGetter} {...searchOptions} />;
     }
   };
 

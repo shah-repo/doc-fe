@@ -1,18 +1,33 @@
 import { OutlinedInputProps } from "@material-ui/core/OutlinedInput";
 import React from "react";
+import { searchQueryString } from "./helpers";
 import { StyledSearchTextField } from "./styles";
 import { TableSearchFieldProps } from "./types";
 
 type Props = Partial<TableSearchFieldProps>;
 
 export const TableSearchTextField: React.FunctionComponent<Props> = ({
-  dataKey,
+  dataKey = "",
+  searchValueGetter,
+  queryGetter,
 }) => {
+
+  const [value, setValue] = React.useState<string | number>("");
+
+  const handleChange = (event: React.ChangeEvent<{ value: string }>) => {
+    const query = event.target.value;
+    setValue(query);
+    const finalQuery = searchQueryString({ query, searchValueGetter });
+    if (queryGetter) {
+      queryGetter(dataKey, finalQuery);
+    }
+  };
 
   return (
     <StyledSearchTextField
+      value={value}
       name={dataKey}
-      // onChange={handleChange("name")}
+      onChange={handleChange}
       margin="normal"
       InputProps={{ disableUnderline: true } as Partial<OutlinedInputProps>}
     />

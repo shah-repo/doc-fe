@@ -41,7 +41,7 @@ export interface AssessmentDispatchProps {
 }
 
 // Common
-export type ChangeRequestsUserProps = ChangeRequestsProps & ActionProps & AuthProps;
+export type ChangeRequestsUserProps = ChangeRequestsProps & ActionProps & AuthProps & ListDispatchProps;
 export type ChangeRequestUserProps = ChangeRequestProps & AuthProps;
 
 export interface RouteParams {

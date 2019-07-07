@@ -2,21 +2,29 @@ import { FormControl, InputBase, MenuItem, Select } from "@material-ui/core";
 import InputLabel from "@material-ui/core/InputLabel";
 import React from "react";
 import { SelectOption } from "../../forms/fields/Select";
+import { searchQueryString } from "./helpers";
 import { selectStyles } from "./styles";
 import { TableSearchFieldProps } from "./types";
 
 type Props = Partial<TableSearchFieldProps>;
 
 export const TableSearchSelectField: React.FunctionComponent<Props> = ({
-  dataKey,
+  dataKey = "",
   selectOptions = [],
+  searchValueGetter,
+  queryGetter,
 }) => {
 
   const classes = selectStyles();
   const [value, setValue] = React.useState<string | number>("");
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setValue(event.target.value as string | number);
+    const query = event.target.value as string;
+    setValue(query as string | number);
+    const finalQuery = searchQueryString({ query, searchValueGetter });
+    if (queryGetter) {
+      queryGetter(dataKey, finalQuery);
+    }
   };
 
   const menuItemRenderer = (option: SelectOption) => (

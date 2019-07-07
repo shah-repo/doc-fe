@@ -2,7 +2,7 @@ import { Button, Grid, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
-import { maskId } from "../../../state/ducks/common/helpers";
+import { maskId, unmaskId } from "../../../state/ducks/common/helpers";
 import { TableColumnProps } from "../../components/table/column/types";
 import { TablePanel } from "../../components/table/panel";
 import { TableSelectionProps } from "../../components/table/types";
@@ -20,6 +20,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   currentUserEmail,
   editChangeRequest,
   previewChangeRequest,
+  loadChangeRequests,
 }) => {
 
   const ChangeRequestList = TablePanel<ChangeRequest>();
@@ -31,11 +32,16 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   };
 
   const onStateSelect = ({ rowData }: TableSelectionProps<ChangeRequest>) => () => {
-    return editChangeRequest(rowData.id);
+    loadChangeRequests("/title=da");
+    // return editChangeRequest(rowData.id);
   };
 
   const onRowSelect = ({rowData}: TableSelectionProps<ChangeRequest>) => () => {
     return previewChangeRequest(rowData.id);
+  };
+
+  const handleQuery = (query: string) => {
+    alert(query);
   };
 
   const columns: Array<TableColumnProps<ChangeRequest>> = [
@@ -46,6 +52,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
         cellDataGetter: ({ rowData }) => `CR${maskId(rowData.ordinalNumber)}`,
         width: 100,
       },
+      searchOptions : { searchValueGetter: (value) => unmaskId(value) },
     },
     {
       key: "description",
@@ -86,6 +93,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
           noRowsTranslation="change.request.list.noRows"
           cellMeasure={true}
           onSelect={onRowSelect}
+          handleQuery={handleQuery}
         />
       </Grid>
     </Grid>

@@ -1,7 +1,7 @@
 import { TableCellProps } from "@material-ui/core/TableCell";
 import { CellMeasurerCache, ColumnProps } from "react-virtualized";
 import { Translation } from "../../../translations/types";
-import { TableSearchFieldProps, TableSearchType } from "../search/types";
+import { TableSearchFieldProps, TableSearchQueryHandler, TableSearchType } from "../search/types";
 import { TableSelectionRenderer } from "../types";
 
 export type TableColumnType = "BASE" | "LINK" | "ACTION";
@@ -34,4 +34,5 @@ export interface TableColumnActionProps<T> {
 export interface InnerTableColumnProps {
   measurerCache: CellMeasurerCache;
   searchable?: boolean;
+  queryGetter?: (key: string, value: string) => any;
 }

@@ -1,5 +1,6 @@
 import { Translation } from "../../translations/types";
 import { TableColumnActionType, TableColumnProps } from "./column/types";
+import { TableSearchQueryHandler } from "./search/types";
 
 export type TableSelectionRenderer<T> = (props: TableSelectionProps<T>) => () => any;
 
@@ -15,6 +16,7 @@ export interface TablePanelProps<T> {
   cellMeasure?: boolean;
   onSelect?: TableSelectionRenderer<T>;
   searchable?: boolean;
+  handleQuery?: TableSearchQueryHandler;
 }
 
 // CSS

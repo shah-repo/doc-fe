@@ -44,6 +44,7 @@ const ListContainer: React.FunctionComponent<Props> = ({
         currentUserEmail={currentUserEmail}
         editChangeRequest={edit}
         previewChangeRequest={preview}
+        loadChangeRequests={loadChangeRequests}
       />
     </AsyncGate>
   );

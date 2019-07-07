@@ -9,6 +9,7 @@ import {
 } from "react-virtualized";
 import Text from "../../components/Text";
 import { TableColumn } from "./column/base";
+import { TableSearchDelimiter } from "./search/types";
 import { styles } from "./styles";
 import { TablePanelProps, TableStyleProps } from "./types";
 
@@ -21,11 +22,32 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
   cellMeasure = false,
   onSelect,
   searchable = true,
+  handleQuery,
 }) => {
 
   const headerHeight = (searchable) ? 120 : 50;
   const styleProps: TableStyleProps = { isSelectable: (onSelect !== undefined) };
   const classes = styles(styleProps);
+
+  const queryDict: { [key: string]: string; }  = {};
+
+  const queryGetter = (key: string, value: string) => {
+    if (handleQuery) {
+      (value === "") ? delete queryDict[key] :  queryDict[key] = value;
+
+      let finalQuery: string = TableSearchDelimiter.Main;
+      Object.keys(queryDict).map((k: string, index: number) => {
+        const delimiter = (index === 0) ? "" : TableSearchDelimiter.Regular;
+        finalQuery += `${delimiter}${k}=${queryDict[k]}`;
+      });
+
+      if (finalQuery === TableSearchDelimiter.Main) {
+        finalQuery = "";
+      }
+      handleQuery(finalQuery);
+    }
+  };
+
   const noRowsRenderer = () => <Text translation={noRowsTranslation} />;
 
   const rowGetter = ({ index }: Index): T => {
@@ -60,7 +82,7 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
         noRowsRenderer={noRowsRenderer}
         onRowClick={onSelect && (({rowData}) => onSelect({rowData})())}
       >
-        {columns.map((item) => TableColumn<T>(item, { measurerCache, searchable }))}
+        {columns.map((item) => TableColumn<T>(item, { measurerCache, searchable, queryGetter }))}
       </Table>
     );
   };
