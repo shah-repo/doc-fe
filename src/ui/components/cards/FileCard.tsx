@@ -10,6 +10,7 @@ import { Delete } from "@material-ui/icons";
 import React from "react";
 import { Attachment } from "../../../state/ducks/attachments";
 import DownloadButtonContainer from "./DownloadButton.container";
+import { CardTooltip } from "./FileCard.styles";
 
 export interface FileCardProps {
   removeAttachment?: () => void;
@@ -25,20 +26,22 @@ const FileCard: React.FunctionComponent<FileCardProps> = ({ removeAttachment, at
 
   return (
     <Grid item={true} xs={12} md={6} lg={3}>
-      <Card>
-        <CardContent>
-          <Typography variant="h5" component="h2" noWrap={true}>
-            {attachment.name}
-          </Typography>
-          <Typography color="textSecondary">
-            {attachment.type}
-          </Typography>
-        </CardContent>
-        <CardActions>
-          {removeButton}
-          <DownloadButtonContainer attachmentId={attachment.id} />
-        </CardActions>
-      </Card>
+      <CardTooltip title={`${attachment.name}.${attachment.type}`}>
+        <Card>
+          <CardContent>
+            <Typography variant="h5" component="h2" noWrap={true}>
+              {attachment.name}
+            </Typography>
+            <Typography color="textSecondary">
+              {attachment.type}
+            </Typography>
+          </CardContent>
+          <CardActions>
+            {removeButton}
+            <DownloadButtonContainer attachmentId={attachment.id} />
+          </CardActions>
+        </Card>
+      </CardTooltip>
     </Grid>
   );
 };
