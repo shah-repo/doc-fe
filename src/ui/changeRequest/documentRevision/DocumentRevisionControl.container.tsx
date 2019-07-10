@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Button from "@material-ui/core/Button";
-import Chip from '@material-ui/core/Chip';
 
 import Text from "../../components/Text";
 import AddDocumentRevisionContainer from './AddDocumentRevision.container';
@@ -11,6 +10,7 @@ import { connect } from 'react-redux';
 import { ApplicationState } from '../../../state/reducers';
 import styles from "./DocumentRevisionControl.styles";
 import { withStyles, WithStyles } from '@material-ui/core';
+import DocumentRevisionItemPresenter from './DocumentRevisionItem.presenter';
 
 interface StateProps {
   loadDocumentRevisionsAsyncState: AsyncState;
@@ -51,10 +51,9 @@ export const DocumentRevisionControlContainer: React.FunctionComponent<DocumentR
 
   const renderDocumentRevisions = () => (
     documentsInChangeRequest.map((documentRevisionId) => (
-      <Chip
-        className={classes.documentRevision}
+      <DocumentRevisionItemPresenter
         key={documentRevisionId}
-        label={(documentRevisionsById[documentRevisionId] || {}).name}
+        documentRevision={documentRevisionsById[documentRevisionId]}
         onDelete={() => deleteDocumentFromChangeRequest(documentRevisionId)}
         onClick={() => selectDocumentRevision(documentRevisionId)}
       />

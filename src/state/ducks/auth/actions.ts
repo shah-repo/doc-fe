@@ -13,6 +13,9 @@ import {
   LOGIN_WITH_CODE_URL,
   LOGOUT_URL,
   LOGOUT_USER,
+  PERMISSIONS_URL,
+  USER_PERMISSIONS,
+  USER_PERMISSIONS_GET_ASYNC,
 } from "./constants";
 import authSelectors from "./selectors";
 import {
@@ -26,6 +29,7 @@ import {
   LogoutUserAction,
   Tokens,
   User,
+  UserPermissionsAction,
 } from "./types";
 
 const authTokens = (authResponse: AuthResponse): AuthTokensAction => {
@@ -68,6 +72,13 @@ const logoutUser = (): LogoutUserAction => ({
   type: LOGOUT_USER,
 });
 
+const userPermissions = (permissions: string[]): UserPermissionsAction => {
+  return {
+    type: USER_PERMISSIONS,
+    payload: permissions,
+  };
+};
+
 const login = (loginValues: LoginRequestBody, handlers: Handlers):
   ApiAction<AuthResponse, LoginRequestBody> => apiActionWithCallbacks({
     url: LOGIN_URL,
@@ -75,7 +86,7 @@ const login = (loginValues: LoginRequestBody, handlers: Handlers):
     data: loginValues,
     includeAuthorization: false,
     onSuccess: (data, dispatch) => {
-      dispatch(authUser({ email: loginValues.email, name: data.name }));
+      dispatch(authUser({ email: loginValues.email, name: data.name, id: data.id }));
       dispatch(authTokens(data));
     },
     handlers,
@@ -88,7 +99,7 @@ const loginWithCode = (loginValues: LoginWithCodeRequestBody, handlers: Handlers
     data: loginValues,
     includeAuthorization: false,
     onSuccess: (response, dispatch) => {
-      dispatch(authUser({ email: response.email, name: response.name }));
+      dispatch(authUser({ email: response.email, name: response.name, id: response.id }));
       dispatch(authTokens(response));
     },
     onFailure: (m, dispatch) => {
@@ -110,6 +121,16 @@ const logout = (): ThunkAction<void, ApplicationState, any, AnyAction> => (dispa
   dispatch(action);
 };
 
+const loadPermissions = (userId: string):
+  ApiAction<string[]> => apiAction({
+    url: `${PERMISSIONS_URL}/${userId}`,
+    asyncType: USER_PERMISSIONS_GET_ASYNC,
+    method: "get",
+    onSuccess: (permissions, dispatch) => {
+      dispatch(userPermissions(permissions));
+    },
+  });
+
 export default {
   authUser,
   authTokens,
@@ -117,4 +138,5 @@ export default {
   login,
   logout,
   loginWithCode,
+  loadPermissions,
 };

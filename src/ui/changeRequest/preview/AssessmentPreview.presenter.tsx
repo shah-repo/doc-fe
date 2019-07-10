@@ -1,9 +1,8 @@
 import { Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
-import { ButtonProps } from "@material-ui/core/Button";
 import moment from "moment";
 import React from "react";
 import { Attachment } from "../../../state/ducks/attachments";
-import { ChangeRequest, ChangeRequestTransition, ImplementationPlanTask } from "../../../state/ducks/changeRequest";
+import { ChangeRequest, ImplementationPlanTask } from "../../../state/ducks/changeRequest";
 import FileCard from "../../components/cards/FileCard";
 import Text from "../../components/Text";
 import styles from "../ChangeRequestPreview.styles";
@@ -11,9 +10,6 @@ import AssessmentFormControlsContainer from "../forms/assessmentForm/AssessmentF
 
 interface AssessmentPreviewPresenterProps extends WithStyles<typeof styles> {
   changeRequest: ChangeRequest;
-  canSendToReview: boolean;
-  canWithdraw: boolean;
-  canApproveOrReject: boolean;
 }
 
 const AssessmentPreviewPresenter: React.FunctionComponent<AssessmentPreviewPresenterProps> =
@@ -82,6 +78,14 @@ const AssessmentPreviewPresenter: React.FunctionComponent<AssessmentPreviewPrese
 
     return (
       <Grid container={true} className={classes.container} spacing={8}>
+        <Grid item={true} xs={12}>
+          <Typography variant="h6" gutterBottom>
+            <Text translation="common.status" />:
+          </Typography>
+          <Typography variant="h5">
+            {changeRequest.state}
+          </Typography>
+        </Grid>
         <Grid item={true} xs={12}>
           <Typography variant="h6" gutterBottom>
             <Text translation="changeRequest.assessmentForm.description" />:

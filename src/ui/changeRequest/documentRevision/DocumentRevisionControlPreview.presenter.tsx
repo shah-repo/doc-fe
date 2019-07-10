@@ -6,6 +6,7 @@ import Chip from '@material-ui/core/Chip';
 import Text from "../../components/Text";
 import { DocumentRevision } from '../../../state/ducks/documentRevisions';
 import styles from "./DocumentRevisionControlPreview.styles";
+import DocumentRevisionItemPresenter from './DocumentRevisionItem.presenter';
 
 interface OwnProps extends WithStyles<typeof styles> {
   documentsInChangeRequest: DocumentRevision[];
@@ -20,10 +21,9 @@ export const DocumentRevisionControlPreviewPresenter: React.FunctionComponent<Do
 }) => {
   const renderDocumentRevisions = () => (
     documentsInChangeRequest.map((documentRevision) => (
-      <Chip
-        className={classes.documentRevision}
+      <DocumentRevisionItemPresenter
         key={documentRevision.id}
-        label={documentRevision.name}
+        documentRevision={documentRevision}
         onClick={() => selectDocumentRevision(documentRevision)}
       />
     ))

@@ -1,4 +1,3 @@
-export type Event = React.ChangeEvent<HTMLInputElement>;
 
 export enum ApprovalStatus {
   Pending = "PENDING",
