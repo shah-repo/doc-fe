@@ -19,12 +19,12 @@ export const TableSearchSelectField: React.FunctionComponent<Props> = ({
   const [value, setValue] = React.useState<string | number>("");
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    if (!queryGetter) { return; }
     const query = event.target.value as string;
     setValue(query as string | number);
+
     const finalQuery = searchQueryString({ query, searchValueGetter });
-    if (queryGetter) {
-      queryGetter(dataKey, finalQuery);
-    }
+    queryGetter(dataKey, finalQuery);
   };
 
   const menuItemRenderer = (option: SelectOption) => (

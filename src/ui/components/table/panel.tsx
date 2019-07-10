@@ -1,5 +1,6 @@
 import { Box } from "@material-ui/core";
-import React from "react";
+import { AxiosRequestConfig } from "axios";
+import React, { useState } from "react";
 import {
   AutoSizer,
   CellMeasurerCache,
@@ -7,51 +8,93 @@ import {
   Size,
   Table,
 } from "react-virtualized";
+import apiClient from "../../../state/apiClient";
+import refreshTokenOperation from "../../../state/middlewares/api/refreshToken";
+import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
+import { store } from "../../../state/store";
 import Text from "../../components/Text";
 import { TableColumn } from "./column/base";
 import { TableSearchDelimiter } from "./search/types";
 import { styles } from "./styles";
-import { TablePanelProps, TableStyleProps } from "./types";
+import { TablePanelProps, TablePanelStateProps, TableStyleProps } from "./types";
 
 type Props<T> = TablePanelProps<T>;
 
 export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> => ({
-  data,
+  tableData,
   columns,
   noRowsTranslation,
   cellMeasure = false,
   onSelect,
   searchable = true,
-  handleQuery,
+  queryUrl = "",
 }) => {
 
   const headerHeight = (searchable) ? 120 : 50;
   const styleProps: TableStyleProps = { isSelectable: (onSelect !== undefined) };
   const classes = styles(styleProps);
 
-  const queryDict: { [key: string]: string; }  = {};
+  const [state, setState] = useState<TablePanelStateProps<T>>({
+    queryData: tableData,
+    queryDict: {},
+    apiError: "",
+  });
+
+  const setQueryDict = (key: string, value: string) => {
+    const dict = state.queryDict;
+    (value === "") ? delete dict[key] : dict[key] = value;
+    setState({...state, queryDict: dict});
+  };
 
   const queryGetter = (key: string, value: string) => {
-    if (handleQuery) {
-      (value === "") ? delete queryDict[key] :  queryDict[key] = value;
+    if (!queryUrl) { return; }
 
-      let finalQuery: string = TableSearchDelimiter.Main;
-      Object.keys(queryDict).map((k: string, index: number) => {
-        const delimiter = (index === 0) ? "" : TableSearchDelimiter.Regular;
-        finalQuery += `${delimiter}${k}=${queryDict[k]}`;
-      });
+    let finalQuery: string = TableSearchDelimiter.Main;
+    const { queryDict } = state;
+    setQueryDict(key, value);
 
-      if (finalQuery === TableSearchDelimiter.Main) {
-        finalQuery = "";
+    Object.keys(queryDict).map((k: string, index: number) => {
+      const delimiter = (index === 0) ? "" : TableSearchDelimiter.Regular;
+      finalQuery += `${delimiter}${k}=${queryDict[k]}`;
+    });
+
+    if (finalQuery === TableSearchDelimiter.Main) {
+      finalQuery = "";
+    }
+
+    queryApi(finalQuery);
+  };
+
+  const queryApi = async (query: string) => {
+    try {
+      const requestConfig: AxiosRequestConfig = {
+        method: "get",
+        url: queryUrl + query,
+        headers: {},
+      };
+
+      await refreshTokenOperation(store.dispatch, store.getState());
+      requestConfig.headers.Authorization = store.getState().auth.tokens.id.value;
+
+      const { data } = await apiClient.request(requestConfig);
+      setState({...state, queryData: data as T[], apiError: ""});
+    } catch (exception) {
+      let responseMessage: string = "";
+
+      if (exception.response) {
+        const { data: { message } } = exception.response as AsyncActionErrorResponse;
+        responseMessage = (Array.isArray(message)) ? message.join("; ") : message;
       }
-      handleQuery(finalQuery);
+
+      const errorMessage: string = responseMessage || exception.message;
+      setState({...state, apiError: "Error: " + errorMessage});
     }
   };
 
   const noRowsRenderer = () => <Text translation={noRowsTranslation} />;
 
   const rowGetter = ({ index }: Index): T => {
-    return data[index];
+    return state.queryData[index];
   };
 
   const rowClassName = ({ index }: Index) => {
@@ -74,7 +117,7 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
         headerHeight={headerHeight}
         rowHeight={measurerCache.rowHeight}
         deferredMeasurementCache={measurerCache}
-        rowCount={data.length}
+        rowCount={state.queryData.length}
         className={classes.table}
         rowClassName={rowClassName}
         headerClassName={classes.header}
@@ -97,6 +140,7 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
 
   return (
     <Box className={classes.root}>
+      <div style={{color: "red"}}>{state.apiError}</div>
       {bodyRenderer()}
     </Box>
   );

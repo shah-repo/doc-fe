@@ -1,6 +1,5 @@
 import { Translation } from "../../translations/types";
 import { TableColumnActionType, TableColumnProps } from "./column/types";
-import { TableSearchQueryHandler } from "./search/types";
 
 export type TableSelectionRenderer<T> = (props: TableSelectionProps<T>) => () => any;
 
@@ -10,13 +9,19 @@ export interface TableSelectionProps<T>  {
 }
 
 export interface TablePanelProps<T> {
-  data: T[];
+  tableData: T[];
   columns: Array<TableColumnProps<T>>;
   noRowsTranslation: Translation;
   cellMeasure?: boolean;
   onSelect?: TableSelectionRenderer<T>;
   searchable?: boolean;
-  handleQuery?: TableSearchQueryHandler;
+  queryUrl?: string;
+}
+
+export interface TablePanelStateProps<T> {
+  queryData: T[];
+  queryDict: { [key: string]: string; };
+  apiError: string;
 }
 
 // CSS

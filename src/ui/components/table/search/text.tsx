@@ -15,12 +15,12 @@ export const TableSearchTextField: React.FunctionComponent<Props> = ({
   const [value, setValue] = React.useState<string | number>("");
 
   const handleChange = (event: React.ChangeEvent<{ value: string }>) => {
+    if (!queryGetter) { return; }
     const query = event.target.value;
     setValue(query);
+
     const finalQuery = searchQueryString({ query, searchValueGetter });
-    if (queryGetter) {
-      queryGetter(dataKey, finalQuery);
-    }
+    queryGetter(dataKey, finalQuery);
   };
 
   return (
