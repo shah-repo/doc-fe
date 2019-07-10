@@ -5,7 +5,7 @@ export const selectStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       margin: theme.spacing(2, 0, 1),
-      minWidth: 120,
+      width: "100%",
     },
     input: {
       backgroundColor: theme.palette.common.white,

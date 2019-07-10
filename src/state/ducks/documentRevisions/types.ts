@@ -1,6 +1,12 @@
 import { Attachment } from "../attachments";
-import { DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET, DOCUMENT_REVISION_AUDIT_SET } from "./constants";
-import { User, Approval } from "../common";
+import { ChangeRequest } from "../changeRequest";
+import { User } from "../common";
+import {
+  DOCUMENT_REVISION_AUDIT_SET,
+  DOCUMENT_REVISION_LIST,
+  DOCUMENT_REVISION_SET,
+  DOCUMENT_SET,
+} from "./constants";
 
 export enum DocumentRevisionStatus {
   Draft = "DRAFT",
@@ -49,10 +55,46 @@ export interface DocumentRevision {
   attachments: Attachment[];
   status: DocumentRevisionStatus;
   document: DocumentRevisionDocument;
-  type: string;
+  type: DocumentRevisionType;
   released: Date;
   referenceTo: Reference[];
   referencedBy: Reference[];
+  changeRequest?: ChangeRequest;
+}
+
+export enum DocumentRevisionType {
+  SOP = "SOP",
+  MI = "MI",
+  ADM = "ADM",
+  CS = "CS",
+  CP = "CP",
+  EHS = "EHS",
+  FG = "FG",
+  FRM = "FRM",
+  GD = "GD",
+  CR = "CR",
+  DD = "DD",
+  DMR = "DMR",
+  ES = "ES",
+  FM = "FM",
+  LBL = "LBL",
+  MKT = "MKT",
+  MPI = "MPI",
+  MVP = "MVP",
+  QM = "QM",
+  QP = "QP",
+  QS = "QS",
+  REF = "REF",
+  RPT = "RPT",
+  RM = "RM",
+  SA = "SA",
+  SI = "SI",
+  TC = "TC",
+  TL = "TL",
+  TM = "TM",
+  TP = "TP",
+  TR = "TR",
+  WI = "WI",
 }
 
 export interface ReferenceToEditRequest {

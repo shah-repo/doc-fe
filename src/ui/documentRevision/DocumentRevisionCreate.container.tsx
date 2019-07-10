@@ -9,7 +9,7 @@ import {
 import { ApplicationState } from "../../state/reducers";
 import useAsync from "../hooks/useAsync";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
-import { toNewVersionRequestBody, toDocumentRevisionFormValuesWithRevisionChange } from "./forms/transform";
+import { toDocumentRevisionFormValuesWithRevisionChange, toNewVersionRequestBody } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
 import { generateDocumentRevisionVersionPath } from "./pathGenerators";
 
@@ -36,7 +36,7 @@ export const DEFAULT_INITIAL_VALUES = {
 };
 
 export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionCreateContainerProps> = ({
-  create, history, documentRevision, loadDocument
+  create, history, documentRevision, loadDocument,
 }) => {
 
     const async = useAsync<DocumentRevision>({

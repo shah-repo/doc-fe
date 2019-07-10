@@ -1,9 +1,9 @@
+import _ from "lodash";
 import { createSelector } from "reselect";
-import _ from 'lodash';
-import { ApplicationState } from "../../reducers";
-import { AsyncState } from "../../types";
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
 import { documentRevisionIdMask } from "../../../ui/documentRevision/helpers";
+import { ApplicationState } from "../../reducers";
+import { AsyncState } from "../../types";
 import { DocumentRevisionStatus } from "./types";
 
 const allIds = (state: ApplicationState) => state.documentRevisions.allIds;
@@ -19,15 +19,15 @@ const getDocumentRevisionsList = createSelector(
 
 const getDocumentRevision = (state: ApplicationState, documentRevisionId: string) => byId(state)[documentRevisionId];
 const getDocument = (state: ApplicationState, documentId: string) => documentsById(state)[documentId];
-const getDocumentRevisions = (state: ApplicationState, documentId: string) => _.get(documentsById(state)[documentId], 'documentRevisions', []);
+const getDocumentRevisions = (state: ApplicationState, documentId: string) => _.get(documentsById(state)[documentId], "documentRevisions", []);
 const getAudit = (state: ApplicationState, documentRevisionId: string) => auditsByCRId(state)[documentRevisionId];
 
 const makeGetDocumentRevisions = () => {
   return createSelector(
     getDocumentRevisions,
-    documentRevisions => _.sortBy(documentRevisions, ['version']),
-  )
-}
+    (documentRevisions) => _.sortBy(documentRevisions, ["version"]),
+  );
+};
 
 const allowedStates = [DocumentRevisionStatus.Released, DocumentRevisionStatus.Deprecated, DocumentRevisionStatus.Obsolete];
 const getAvailableReferences = createSelector(
@@ -37,7 +37,7 @@ const getAvailableReferences = createSelector(
     .filter((id) => allowedStates.indexOf(docRevs[id].status) > -1)
     .map((id) => ({
       value: id,
-      label: `${documentRevisionIdMask(docRevs[id].type, docRevs[id].document.ordinalNumber)} - ${docRevs[id].revision} - ${docRevs[id].name}`
+      label: `${documentRevisionIdMask(docRevs[id].type, docRevs[id].document.ordinalNumber)} - ${docRevs[id].revision} - ${docRevs[id].name}`,
   }))),
 );
 

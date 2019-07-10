@@ -1,6 +1,6 @@
 import faker from "faker";
 import { getUser } from "../../common/tests/factories";
-import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, Document, Audit, RevisionChangeType } from "../types";
+import { Audit, Document, DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, DocumentRevisionType, RevisionChangeType } from "../types";
 
 export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> = {}): DocumentRevision => ({
   id: faker.random.uuid(),
@@ -12,8 +12,8 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
   name: faker.lorem.sentence(),
   description: faker.lorem.sentence(),
   document: { id: faker.random.uuid(), ordinalNumber: faker.random.number(10) },
-  type: faker.lorem.word(),
-  released: faker.date.future(undefined, '2019-05-31'),
+  type: DocumentRevisionType.ADM,
+  released: faker.date.future(undefined, "2019-05-31"),
   referenceTo: [],
   referencedBy: [],
   ...documentRevision,
