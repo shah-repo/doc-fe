@@ -1,18 +1,21 @@
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import {
+  CHANGE_REQUEST_AUDIT_SET,
   CHANGE_REQUEST_GET_APPROVERS_ASYNC,
   CHANGE_REQUEST_GET_ASYNC,
+  CHANGE_REQUEST_GET_AUDIT_ASYNC,
   CHANGE_REQUEST_LIST,
   CHANGE_REQUEST_LIST_APPROVERS,
   CHANGE_REQUEST_LIST_ASYNC,
   CHANGE_REQUEST_ROOT_URL,
   CHANGE_REQUEST_SET,
-  CHANGE_REQUEST_GET_AUDIT_ASYNC,
-  CHANGE_REQUEST_AUDIT_SET,
 } from "./constants";
 import {
+  Audit,
+  AuditActionPayload,
   ChangeRequest,
+  ChangeRequestAuditSetAction,
   ChangeRequestAvailableApprovers,
   ChangeRequestAvailableApproversResponse,
   ChangeRequestEditRequestBody,
@@ -22,9 +25,6 @@ import {
   ChangeRequestTransition,
   ChangeRequestTransitionRequestBody,
   ChangeRequestTransitionResponse,
-  Audit,
-  ChangeRequestAuditSetAction,
-  AuditActionPayload,
 } from "./types";
 
 const changeRequestsList = (changeRequests: ChangeRequest[]): ChangeRequestListAction => ({
@@ -37,8 +37,8 @@ const changeRequestSet = (changeRequest: ChangeRequest): ChangeRequestSetAction 
   payload: changeRequest,
 });
 
-const loadList = (): ApiAction<ChangeRequest[]> => apiAction({
-  url: CHANGE_REQUEST_ROOT_URL,
+const loadList = (searchTerms: string = ""): ApiAction<ChangeRequest[]> => apiAction({
+  url: `${CHANGE_REQUEST_ROOT_URL}${searchTerms}`,
   method: "get",
   asyncType: CHANGE_REQUEST_LIST_ASYNC,
   onSuccess: (changeRequests, dispatch) => {
@@ -55,7 +55,9 @@ const load = (id: string): ApiAction<ChangeRequest> => apiAction({
   },
 });
 
-const availableApproversList = (availableApprovers: ChangeRequestAvailableApprovers[]): ChangeRequestListApproversAction => ({
+const availableApproversList = (
+  availableApprovers: ChangeRequestAvailableApprovers[],
+): ChangeRequestListApproversAction => ({
   type: CHANGE_REQUEST_LIST_APPROVERS,
   payload: availableApprovers,
 });

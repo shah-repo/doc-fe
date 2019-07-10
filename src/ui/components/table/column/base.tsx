@@ -1,13 +1,20 @@
+import { Box } from "@material-ui/core";
 import React from "react";
-import { CellMeasurer, Column, TableCellProps as ColumnProps } from "react-virtualized";
+import {
+  CellMeasurer,
+  Column,
+  TableCellProps as ColumnProps,
+} from "react-virtualized";
 import Text from "../../Text";
-import TableColumnAction from "./TableColumn.actions";
+import { TableSearchSelectField } from "../search/select";
+import { TableSearchTextField } from "../search/text";
+import TableColumnAction from "./action";
 import {
   StyledCellLink,
   StyledTableCell,
   StyledTableHeader,
   StyledTooltip,
-} from "./TableColumn.styles";
+} from "./styles";
 import {
   InnerTableColumnProps,
   TableCellProps,
@@ -20,8 +27,8 @@ type InnerProps = InnerTableColumnProps;
 
 export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
 
-  const { key, label, cellType, columnOptions, cellOptions, tooltipKey, onSelect } = props;
-  const { measurerCache } = innerProps;
+  const { key, label, cellType, columnOptions, cellOptions, tooltipKey, onSelect, searchOptions } = props;
+  const { measurerCache, searchable, queryGetter } = innerProps;
 
   measurerCache.clearAll();
   const cellWhiteSpace = () => (measurerCache.hasFixedHeight()) ? "nowrap" : "initial";
@@ -35,10 +42,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
 
   const cellLinkType = ({cellData, rowData}: TableCellProps<T>) => {
     return (
-      <StyledCellLink
-        variant="subtitle2"
-        onClick={handleClick({cellData, rowData})}
-      >
+      <StyledCellLink variant="subtitle2" onClick={handleClick({cellData, rowData})} >
         {cellData}
       </StyledCellLink>
     );
@@ -70,10 +74,10 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
     }
   };
 
-  const cellMeasurer = ({ parent, dataKey, rowIndex, columnIndex, ... other }: any) => {
+  const cellMeasurer = ({ parent, rowIndex, columnIndex, ... other }: any) => {
     return (
       <CellMeasurer
-        key={dataKey}
+        key={key}
         cache={measurerCache!}
         rowIndex={rowIndex}
         columnIndex={columnIndex}
@@ -86,13 +90,26 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
     );
   };
 
+  const searchFieldRenderer = () => {
+    const searchType = (searchOptions) ? searchOptions.searchType : "text";
+    switch (searchType) {
+      case "select":
+          const options = searchOptions && searchOptions.selectOptions;
+          return <TableSearchSelectField dataKey={key} queryGetter={queryGetter} {...searchOptions} />;
+      default:
+        return <TableSearchTextField dataKey={key} queryGetter={queryGetter} {...searchOptions} />;
+    }
+  };
+
   const headerRenderer = () => {
     return (
-      <StyledTableHeader
-        component="div"
-        variant="head"
-      >
-        <Text translation={label} />
+      <StyledTableHeader component="div" variant="head" >
+        <Box component="div" className="columnBox" >
+          <Box component="div" className="headerText" >
+            <Text translation={label} />
+          </Box>
+          {searchable && <Box component="div" className="headerField">{searchFieldRenderer()}</Box>}
+        </Box>
       </StyledTableHeader>
     );
   };

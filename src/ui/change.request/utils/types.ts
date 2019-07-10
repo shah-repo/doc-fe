@@ -7,7 +7,7 @@ import {
   changeRequestsActions,
   ChangeRequestsProps,
 } from "../../../state/ducks/changeRequest";
-import { AssessmentType } from "../../../state/ducks/changeRequest/types";
+import { AssessmentType, ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { LoadAsyncState } from "../../../state/types";
 import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
 

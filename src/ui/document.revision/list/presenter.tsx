@@ -1,14 +1,18 @@
 import { Button, Grid, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { maskId } from "../../../state/ducks/common/helpers";
+import { maskId, unmaskId } from "../../../state/ducks/common/helpers";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { TableColumnProps } from "../../components/table/columns/types";
-import { TablePanel } from "../../components/table/TablePanel";
+import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
+import { TableColumnProps } from "../../components/table/column/types";
+import { TablePanel } from "../../components/table/panel";
 import { TableSelectionProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
-import { canEditDocumentRevision } from "../utils/helpers";
+import {
+  canEditDocumentRevision,
+  documentRevisionStatusOption,
+  documentRevisionTypeOption } from "../utils/helpers";
 import { DocumentRevisionsUserProps } from "../utils/types";
 import styles from "./styles";
 
@@ -42,6 +46,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "docId",
       label: "document.revision.list.docId",
+      searchOptions: { searchValueGetter: (value) => unmaskId(value) },
       columnOptions: {
         cellDataGetter: ({ rowData }) => `${rowData.type}${maskId(rowData.document.ordinalNumber)}`,
         width: 150,
@@ -50,21 +55,24 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "version",
       label: "document.revision.list.version",
+      searchOptions: { searchValueGetter: (value) => unmaskId(value) },
+      cellOptions: { align: "center" },
       columnOptions: {
         cellDataGetter: ({ rowData }) => `V${rowData.version}`,
         flexShrink: 2,
       },
-      cellOptions: { align: "center" },
     },
     {
       key: "name",
       label: "document.revision.list.name",
+      searchOptions: { dataKey: "title" },
       tooltipKey: "description",
     },
     {
       key: "type",
       label: "document.revision.list.type",
       columnOptions: { width: 100 },
+      searchOptions: { searchType: "select", selectOptions: documentRevisionTypeOption() },
     },
     {
       key: "owner",
@@ -74,10 +82,16 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       },
     },
     {
-      key: "document",
+      key: "changeRequest",
       label: "change.request.list.crId",
+      searchOptions: { dataKey: "crId", searchValueGetter: (value) => unmaskId(value) },
       columnOptions: {
-        cellDataGetter: ({ rowData }) => `CR${maskId(rowData.document.ordinalNumber)}`,
+        cellDataGetter: ({ rowData }) => {
+          if (rowData.changeRequest) {
+            return `CR${maskId(rowData.changeRequest.ordinalNumber)}`;
+          }
+          return "";
+        },
         width: 100,
       },
     },
@@ -87,6 +101,11 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       cellType: stateCellTypeRenderer,
       onSelect: onStateSelect,
       columnOptions: { width: 160 },
+      searchOptions: {
+        dataKey: "status[]",
+        searchType: "select",
+        selectOptions: documentRevisionStatusOption(),
+      },
     },
   ];
 
@@ -101,10 +120,11 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       </Grid>
       <Grid item={true} className={classes.item}>
         <DocumentList
-          data={documentRevisions}
+          tableData={documentRevisions}
           columns={columns}
           noRowsTranslation="document.revision.list.noRows"
           onSelect={onRowSelect}
+          queryUrl={DOCUMENT_REVISION_ROOT_URL}
         />
       </Grid>
     </Grid>

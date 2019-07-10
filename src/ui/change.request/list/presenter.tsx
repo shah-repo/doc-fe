@@ -2,13 +2,14 @@ import { Button, Grid, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
-import { maskId } from "../../../state/ducks/common/helpers";
-import { TableColumnProps } from "../../components/table/columns/types";
-import { TablePanel } from "../../components/table/TablePanel";
+import { CHANGE_REQUEST_ROOT_URL } from "../../../state/ducks/changeRequest/constants";
+import { maskId, unmaskId } from "../../../state/ducks/common/helpers";
+import { TableColumnProps } from "../../components/table/column/types";
+import { TablePanel } from "../../components/table/panel";
 import { TableSelectionProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import { CHANGE_REQUEST_CREATE_URL } from "../../constants/urls";
-import { canEditChangeRequest } from "../utils/helpers";
+import { canEditChangeRequest, changeRequestStatusOption } from "../utils/helpers";
 import { ChangeRequestsUserProps } from "../utils/types";
 import styles from "./styles";
 
@@ -40,8 +41,9 @@ const ListPresenter: React.FunctionComponent<Props> = ({
 
   const columns: Array<TableColumnProps<ChangeRequest>> = [
     {
-      key: "ordinalNumber",
+      key: "crId",
       label: "change.request.list.crId",
+      searchOptions : { searchValueGetter: (value) => unmaskId(value) },
       columnOptions: {
         cellDataGetter: ({ rowData }) => `CR${maskId(rowData.ordinalNumber)}`,
         width: 100,
@@ -66,6 +68,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       cellType: stateCellTypeRenderer,
       onSelect: onStateSelect,
       columnOptions: { width: 80 },
+      searchOptions: { searchType: "select", selectOptions: changeRequestStatusOption() },
     },
   ];
 
@@ -80,11 +83,12 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       </Grid>
       <Grid item={true} className={classes.item}>
         <ChangeRequestList
-          data={changeRequests}
+          tableData={changeRequests}
           columns={columns}
           noRowsTranslation="change.request.list.noRows"
           cellMeasure={true}
           onSelect={onRowSelect}
+          queryUrl={CHANGE_REQUEST_ROOT_URL}
         />
       </Grid>
     </Grid>

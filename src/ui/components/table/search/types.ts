@@ -1,0 +1,22 @@
+import { SelectOption } from "../../forms/fields/Select";
+
+export type TableSearchType = "text" | "select";
+export type TableSearchQueryHandler = (query: string) => any;
+
+export enum TableSearchDelimiter {
+  Main = "?",
+  Regular = "&",
+}
+
+export interface TableSearchFieldProps {
+  dataKey: string;
+  searchType: TableSearchType;
+  selectOptions: SelectOption[];
+  searchValueGetter?: TableSearchQueryHandler;
+  queryGetter?: (key: string, value: string) => any;
+}
+
+export interface TableSearchQueryProps {
+  query: string | number;
+  searchValueGetter?: TableSearchQueryHandler;
+}

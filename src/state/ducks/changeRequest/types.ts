@@ -61,6 +61,7 @@ export interface ImplementationPlan {
 
 export interface ChangeRequest {
   id: string;
+  crId: string;
   ordinalNumber: number;
   description: string;
   state: ChangeRequestStatus;
