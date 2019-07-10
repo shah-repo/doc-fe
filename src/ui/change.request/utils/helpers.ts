@@ -1,5 +1,6 @@
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest";
 import { AssessmentType } from "../../../state/ducks/changeRequest";
+import { SelectOption } from "../../components/forms/fields/Select";
 import { Translation } from "../../translations/types";
 import { ChangeRequestUserProps } from "./types";
 
@@ -13,3 +14,13 @@ export function assessmentParagraphTitle(type: AssessmentType): Translation {
     case AssessmentType.Regulatory: return "change.request.regulatory.assessment";
   }
 }
+
+export const changeRequestStatusOption = () => {
+  const options: SelectOption[] = [];
+  Object.keys(ChangeRequestStatus).map((key) => {
+    // TODO: Change ChangeRequestStatus status into key = value, value = text
+    const keyName = ChangeRequestStatus[key as keyof typeof ChangeRequestStatus];
+    options.push({value: keyName, text: keyName});
+  });
+  return options;
+};

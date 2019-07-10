@@ -47,6 +47,7 @@ const createImplementationPlan = () => (
 
 export const getChangeRequest = (changeRequest: Partial<ChangeRequest> = {}): ChangeRequest => ({
   id: faker.random.uuid(),
+  crId: faker.random.alphaNumeric(),
   ordinalNumber: faker.random.number(),
   state: ChangeRequestStatus.Draft,
   description: faker.lorem.sentence(),
