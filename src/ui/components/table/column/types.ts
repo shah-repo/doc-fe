@@ -1,7 +1,7 @@
 import { TableCellProps } from "@material-ui/core/TableCell";
 import { CellMeasurerCache, ColumnProps } from "react-virtualized";
 import { Translation } from "../../../translations/types";
-import { TableSearchFieldProps, TableSearchQueryHandler, TableSearchType } from "../search/types";
+import { TableSearchFieldProps } from "../search/types";
 import { TableSelectionRenderer } from "../types";
 
 export type TableColumnType = "BASE" | "LINK" | "ACTION";
