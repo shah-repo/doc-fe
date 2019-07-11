@@ -37,6 +37,8 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       case "documentRevisions":
         const documentRevision = change.nextValue as DocumentRevision;
         return documentRevision.description;
+      case "tasks.dueDate":
+        return <DateTime value={change.nextValue as string} />;
       default:
         return change.nextValue;
     }
