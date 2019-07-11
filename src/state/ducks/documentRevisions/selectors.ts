@@ -4,6 +4,7 @@ import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/typ
 import { documentRevisionIdMask } from "../../../ui/documentRevision/helpers";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
+import { maskId } from "../common/helpers";
 import { DocumentRevisionStatus } from "./types";
 
 const allIds = (state: ApplicationState) => state.documentRevisions.allIds;
@@ -29,17 +30,15 @@ const makeGetDocumentRevisions = () => {
   );
 };
 
-const allowedStates = [DocumentRevisionStatus.Released, DocumentRevisionStatus.Deprecated, DocumentRevisionStatus.Obsolete];
-const getAvailableReferences = createSelector(
-  allIds, byId,
-  (ids, docRevs): OptionType[] => (
-    ids
-    .filter((id) => allowedStates.indexOf(docRevs[id].status) > -1)
-    .map((id) => ({
+const getAvailableReferences = createSelector(allIds, byId, (ids, docRevs): OptionType[] => (
+  ids.map((id) => {
+    const { type, document, revision, name } = docRevs[id];
+    return {
       value: id,
-      label: `${documentRevisionIdMask(docRevs[id].type, docRevs[id].document.ordinalNumber)} - ${docRevs[id].revision} - ${docRevs[id].name}`,
-  }))),
-);
+      label: `${type}${maskId(document.ordinalNumber)} - ${revision} - ${name}`,
+    };
+  })
+));
 
 const getLoadAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadAsyncInfo;
 const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadListAsyncInfo;
