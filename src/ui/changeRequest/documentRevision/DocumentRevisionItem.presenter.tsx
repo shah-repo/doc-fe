@@ -1,9 +1,10 @@
-import React from 'react';
-import { Grid, IconButton, Tooltip } from '@material-ui/core';
+import { Grid, IconButton, Tooltip } from "@material-ui/core";
 import { RemoveCircleOutline } from "@material-ui/icons";
-import { DocumentRevision } from '../../../state/ducks/documentRevisions';
-import Text from "../../components/Text";
+import React from "react";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { CardTooltip } from "../../components/cards/FileCard.styles";
 import Date from "../../components/Date";
+import Text from "../../components/Text";
 import { styles } from "./DocumentRevisionItem.styles";
 
 interface OwnProps {
@@ -15,7 +16,7 @@ interface OwnProps {
 export type DocumentRevisionItemPresenterProps = OwnProps;
 
 export const DocumentRevisionItemPresenter: React.FunctionComponent<DocumentRevisionItemPresenterProps> = ({
-  onClick, onDelete, documentRevision
+  onClick, onDelete, documentRevision,
 }) => {
   const classes = styles();
 
@@ -26,11 +27,11 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<DocumentRevi
           <div
             onClick={onClick}
           >
-            <Tooltip title={documentRevision.name} aria-label={documentRevision.name}>
+            <CardTooltip title={documentRevision.name} aria-label={documentRevision.name}>
               <div className={classes.title}>
                 {documentRevision.name}
               </div>
-            </Tooltip>
+            </CardTooltip>
             <div>
               <Text translation="common.version" />:&nbsp;
               {documentRevision.version}
