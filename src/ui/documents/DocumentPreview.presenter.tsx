@@ -4,7 +4,7 @@ import moment from "moment";
 import React from "react";
 import { Attachment } from "../../state/ducks/attachments";
 import { Document, DocumentTransition } from "../../state/ducks/documents";
-import FileCard from "./cards/FileCard";
+import FileCard from "../components/cards/FileCard";
 import DocumentTransitionDialogContainer from "./dialogs/DocumentTransitionDialog.container";
 import styles from "./DocumentPreview.styles";
 
