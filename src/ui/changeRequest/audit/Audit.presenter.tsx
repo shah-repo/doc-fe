@@ -1,12 +1,12 @@
-import React from "react";
-import { Collapse, List, IconButton } from "@material-ui/core";
+import { Collapse, IconButton, List } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
-import { Audit } from "../../../state/ducks/changeRequest";
+import React from "react";
 import { Attachment } from "../../../state/ducks/attachments";
+import { Audit } from "../../../state/ducks/changeRequest";
 import { Approval, User } from "../../../state/ducks/common";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
-import Date from "../../components/Date";
 import { styles } from "./Audit.presenter.styles";
 
 interface OwnProps {
@@ -43,7 +43,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   };
   const renderChange = () => (
     audit && audit.map((change, index) => {
-      let nextValue = getNextValue(change);
+      const nextValue = getNextValue(change);
 
       return (
         <div
@@ -51,7 +51,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           className={classes.changeContainer}
         >
           <div className={classes.dateContainer}>
-            <Date value={change.timestamp} />
+            <DateTime value={change.timestamp} />
           </div>
           <div>
             <Text message={`changeRequest.audit.${change.field}.${change.type}`} />
@@ -60,10 +60,10 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         </div>
       );
     })
-  )
+  );
   const renderExpandIcon = () => (
     isOpen ? <ExpandLess /> : <ExpandMore />
-  )
+  );
 
   return (
     <div className={classes.container}>
