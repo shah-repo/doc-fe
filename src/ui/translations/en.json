@@ -120,6 +120,8 @@
   "changeRequest.audit.assessments.process.attachment.STRING_EDITED": "Assessment process attachment changed",
   "changeRequest.audit.assessments.design.reasoning.STRING_EDITED": "Assessment design reasoning changed",
   "changeRequest.audit.assessments.design.attachment.STRING_EDITED": "Assessment design attachment changed",
+  "changeRequest.audit.assessments.regulatory.reasoning.STRING_EDITED": "Assessment regulatory reasoning changed",
+  "changeRequest.audit.assessments.regulatory.attachment.STRING_EDITED": "Assessment regulatory attachment changed",
   "changeRequest.audit.assessments.design.attachment.OBJECT_NEW": "New design assessment attachment",
   "changeRequest.audit.assessments.process.attachment.OBJECT_NEW": "New process assessment attachment",
   "changeRequest.audit.assessments.regulatory.attachment.OBJECT_NEW": "New regulatory assessment attachment",
