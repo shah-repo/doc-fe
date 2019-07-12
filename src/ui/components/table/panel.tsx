@@ -38,6 +38,7 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
     queryData: tableData,
     queryDict: {},
     apiError: "",
+    scrollToIndex: 0,
   });
 
   const setQueryDict = (key: string, value: string) => {
@@ -77,7 +78,7 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
       requestConfig.headers.Authorization = store.getState().auth.tokens.id.value;
 
       const { data } = await apiClient.request(requestConfig);
-      setState({...state, queryData: data as T[], apiError: ""});
+      setState({...state, queryData: data as T[], apiError: "", scrollToIndex: 0});
     } catch (exception) {
       let responseMessage: string = "";
 
@@ -124,6 +125,7 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
         rowGetter={rowGetter}
         noRowsRenderer={noRowsRenderer}
         onRowClick={onSelect && (({rowData}) => onSelect({rowData})())}
+        scrollToIndex={state.scrollToIndex}
       >
         {columns.map((item) => TableColumn<T>(item, { measurerCache, searchable, queryGetter }))}
       </Table>
