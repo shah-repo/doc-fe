@@ -22,6 +22,7 @@ export interface TablePanelStateProps<T> {
   queryData: T[];
   queryDict: { [key: string]: string; };
   apiError: string;
+  scrollToIndex: number;
 }
 
 // CSS
