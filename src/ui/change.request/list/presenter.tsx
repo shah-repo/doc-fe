@@ -85,7 +85,6 @@ const ListPresenter: React.FunctionComponent<Props> = ({
         <ChangeRequestList
           tableData={changeRequests}
           columns={columns}
-          noRowsTranslation="change.request.list.noRows"
           cellMeasure={true}
           onSelect={onRowSelect}
           queryUrl={CHANGE_REQUEST_ROOT_URL}

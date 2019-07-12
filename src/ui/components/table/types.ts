@@ -11,7 +11,7 @@ export interface TableSelectionProps<T>  {
 export interface TablePanelProps<T> {
   tableData: T[];
   columns: Array<TableColumnProps<T>>;
-  noRowsTranslation: Translation;
+  noRowsTranslation?: Translation;
   cellMeasure?: boolean;
   onSelect?: TableSelectionRenderer<T>;
   searchable?: boolean;

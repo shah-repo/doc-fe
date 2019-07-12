@@ -122,7 +122,6 @@ const ListPresenter: React.FunctionComponent<Props> = ({
         <DocumentList
           tableData={documentRevisions}
           columns={columns}
-          noRowsTranslation="document.revision.list.noRows"
           onSelect={onRowSelect}
           queryUrl={DOCUMENT_REVISION_ROOT_URL}
         />
