@@ -16,7 +16,7 @@ const AssessmentFormAssessments: React.FunctionComponent<Props> = () => {
     <React.Fragment>
       <InputField
         name="assessment.description"
-        label="changeRequest.assessmentForm.assessments"
+        label="common.assessments"
         validate={validator(required)}
       />
       <FieldArray name="assessment.attachments" render={renderAttachments} />

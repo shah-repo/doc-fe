@@ -23,7 +23,7 @@ const DocumentApprovers: React.FunctionComponent<Props> = ({ classes, push, remo
     <div className={classes.container}>
       <div className={classes.title}>
         <Typography variant="subtitle1">
-          <Text translation="document.approver" />:
+          <Text translation="common.approvers" />:
         </Typography>
         <Fab size="small" color="secondary" aria-label="Create" onClick={addApprover}>
           <Add fontSize="small" />

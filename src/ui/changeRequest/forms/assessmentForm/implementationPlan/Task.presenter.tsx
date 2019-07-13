@@ -1,8 +1,8 @@
+import { Button, createStyles, makeStyles } from "@material-ui/core";
 import React from "react";
-import { createStyles, Button, makeStyles } from "@material-ui/core";
-import { ImplementationPlanTaskFormValues } from "../../types";
-import Text from "../../../../components/Text";
 import Date from "../../../../components/Date";
+import Text from "../../../../components/Text";
+import { ImplementationPlanTaskFormValues } from "../../types";
 
 export interface Props {
   task: ImplementationPlanTaskFormValues;
@@ -14,26 +14,26 @@ export interface Props {
 export const styles = makeStyles(() =>
   createStyles({
     container: {
-      border: '1px solid lightgray',
-      margin: '10px 0',
+      border: "1px solid lightgray",
+      margin: "10px 0",
       padding: 10,
       lineHeight: 2,
     },
     detailsContainer: {
       marginTop: 10,
-      color: 'gray',
+      color: "gray",
     },
     marginRight: {
       marginRight: 20,
     },
     button: {
-      float: 'right',
+      float: "right",
     },
   },
 ));
 
 export const TaskPresenter: React.FunctionComponent<Props> = ({
-  task, removeTask, index, editTask
+  task, removeTask, index, editTask,
 }) => {
   const classes = styles();
 
@@ -43,11 +43,11 @@ export const TaskPresenter: React.FunctionComponent<Props> = ({
       <div>{task.description}</div>
       <div className={classes.detailsContainer}>
         <span className={classes.marginRight}>
-          <Text translation="common.assignedTo" />:&nbsp;
+          <Text translation="common.assigned.to" />:&nbsp;
           {task.assigned && task.assigned.label}
         </span>
         <span className={classes.marginRight}>
-          <Text translation="common.dueDate" />:&nbsp;
+          <Text translation="common.due.date" />:&nbsp;
           <Date value={task.dueDate} />
         </span>
         <span>
@@ -62,7 +62,7 @@ export const TaskPresenter: React.FunctionComponent<Props> = ({
         </Button>
       </div>
     </div>
-  )
+  );
 };
 
 export default TaskPresenter;

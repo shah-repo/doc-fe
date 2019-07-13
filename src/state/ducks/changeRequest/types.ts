@@ -1,5 +1,5 @@
 import { Attachment } from "../attachments";
-import { Approval, User, Id } from "../common";
+import { Approval, Id, User } from "../common";
 import { DocumentRevision } from "../documentRevisions";
 import {
   CHANGE_REQUEST_AUDIT_SET,
@@ -24,10 +24,14 @@ export interface Justifications {
   attachments: Attachment[];
 }
 
+export interface JustificationProps {
+  justification: Justifications;
+}
+
 export enum AssessmentType {
-  Design = "design",
-  Process = "process",
-  Regulatory = "regulatory",
+  design = "design",
+  process = "process",
+  regulatory = "regulatory",
 }
 
 export interface Assessment {
@@ -40,6 +44,10 @@ export interface Assessment {
 export interface AssessmentItem {
   reasoning?: string | null;
   attachment?: Attachment | null;
+}
+
+export interface AssessmentProps {
+  assessment: Assessment;
 }
 
 export interface ImplementationPlanTask {
@@ -57,6 +65,10 @@ export interface ImplementationPlan {
   id: string;
   tasks: ImplementationPlanTask[];
   attachments: Attachment[];
+}
+
+export interface ImplementationPlanProps {
+  implementationPlan: ImplementationPlan;
 }
 
 export interface ChangeRequest {
@@ -90,7 +102,6 @@ export interface EditRequestBodyNestedObject {
   description?: string;
   attachments: EditRequestBodyAttachment[];
 }
-
 
 export interface ImplementationPlanTaskRequest {
   id?: string;

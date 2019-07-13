@@ -16,7 +16,7 @@ const AssessmentFormJustifications: React.FunctionComponent<Props> = () => {
     <React.Fragment>
       <InputField
         name="justifications.description"
-        label="changeRequest.assessmentForm.justifications"
+        label="common.justifications"
       />
       <FieldArray name="justifications.attachments" render={renderAttachments} />
     </React.Fragment>

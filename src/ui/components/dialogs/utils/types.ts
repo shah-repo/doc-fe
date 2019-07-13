@@ -20,7 +20,7 @@ export enum DialogVariant {
 
 export interface DialogResponsiveProps {
   breakpoint?: DialogBreakpoint;
-  title?: Translation;
+  title?: Translation | string;
   contentRenderer?: DialogContentRenderer;
   actions?: DialogAction[];
   onActionClick?: DialogHandler;

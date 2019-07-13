@@ -3,23 +3,23 @@ import { createStyles, makeStyles } from "@material-ui/core";
 export const styles = makeStyles(() =>
   createStyles({
     container: {
-      marginLeft: 50
+      marginLeft: 30,
     },
     collapsableButton: {
       width: "100%",
       borderRadius: 0,
-      justifyContent: 'end'
+      justifyContent: "end"
     },
     collapsableContainer: {
       maxHeight: 700,
-      overflowY: 'auto',
+      overflowY: "auto",
     },
     changeContainer: {
-      borderBottom: '1px solid lightgray',
+      borderBottom: "1px solid lightgray",
       marginBottom: 20,
     },
     dateContainer: {
-      marginBottom: 10
-    }
+      marginBottom: 10,
+    },
   },
 ));
