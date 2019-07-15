@@ -76,14 +76,14 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     },
     {
       key: "owner",
-      label: "document.revision.list.owner",
+      label: "common.owner",
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.owner.name,
       },
     },
     {
       key: "changeRequest",
-      label: "change.request.list.crId",
+      label: "common.crid",
       searchOptions: { dataKey: "crId", searchValueGetter: (value) => unmaskId(value) },
       columnOptions: {
         cellDataGetter: ({ rowData }) => {

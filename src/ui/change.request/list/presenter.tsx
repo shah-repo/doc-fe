@@ -42,7 +42,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   const columns: Array<TableColumnProps<ChangeRequest>> = [
     {
       key: "crId",
-      label: "change.request.list.crId",
+      label: "common.crid",
       searchOptions : { searchValueGetter: (value) => unmaskId(value) },
       columnOptions: {
         cellDataGetter: ({ rowData }) => `CR${maskId(rowData.ordinalNumber)}`,

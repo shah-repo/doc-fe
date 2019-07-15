@@ -38,7 +38,7 @@ const DialogWindow: React.FunctionComponent<Props> = ({
 
   const titleRenderer = () => (
     <DialogTitle>
-      <Text translation={title} />
+      <Text message={title} />
     </DialogTitle>
   );
 
@@ -52,7 +52,7 @@ const DialogWindow: React.FunctionComponent<Props> = ({
 
   const actionRenderer = (type: DialogAction) => (
     <Button key={type} onClick={handleAction(type)} color="primary">
-      <Text translation={type as Translation} />
+      <Text message={type} />
     </Button>
   );
 

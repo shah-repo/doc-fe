@@ -1,10 +1,10 @@
 import React from "react";
-import { DocumentRevision } from "../../state/ducks/documentRevisions";
 import { NavLink } from "react-router-dom";
-import { generateDocumentRevisionVersionPath } from "./pathGenerators";
-import { styles } from "./DocumentRevisionList.container.styles";
-import Text from "../components/Text";
+import { DocumentRevision } from "../../state/ducks/documentRevisions";
 import Date from "../components/Date";
+import Text from "../components/Text";
+import { styles } from "./DocumentRevisionList.container.styles";
+import { generateDocumentRevisionVersionPath } from "./pathGenerators";
 
 interface OwnProps {
   documentRevisions: DocumentRevision[];
@@ -27,7 +27,7 @@ export const DocumentRevisionListContainer: React.FunctionComponent<DocumentRevi
           <div key={documentRevision.id} className={classes.linkContainer}>
             <NavLink
               to={link}
-              activeStyle={{ color: 'gray' }}
+              activeStyle={{ color: "gray" }}
               className={classes.linkTitle}
             >
               <div>
@@ -40,7 +40,7 @@ export const DocumentRevisionListContainer: React.FunctionComponent<DocumentRevi
               className={classes.linkBody}
             >
               <div>
-                <Text translation="documentRevision.owner" />: {documentRevision.owner.name}
+                <Text translation="common.owner" />: {documentRevision.owner.name}
               </div>
               <div>
                 <Text translation="documentRevision.released" />: <Date value={documentRevision.released} />
@@ -48,7 +48,7 @@ export const DocumentRevisionListContainer: React.FunctionComponent<DocumentRevi
             </NavLink>
           </div>
         )
-      })}
+      })};
     </React.Fragment>
   );
 };

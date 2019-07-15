@@ -91,7 +91,7 @@ const DocumentTable: React.FunctionComponent<DocumentTableProps> = ({
       >
         {renderColumn("title", "dashboard.table.title", { flexGrow: 2 })}
         {renderColumn("type", "dashboard.table.type", { width: 50 })}
-        {renderColumn("owner", "dashboard.table.owner", { flexGrow: 2 })}
+        {renderColumn("owner", "common.owner", { flexGrow: 2 })}
         {renderColumn("state", "dashboard.table.state", { width: 50 })}
         {actionsColumn}
       </Table>

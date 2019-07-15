@@ -31,12 +31,12 @@ const Presenter: React.FunctionComponent<Props> = ({
     />
   );
 
-  const itemRenderer = (type: AssessmentType ) => {
-    return (
+  const itemRenderer = () => {
+    return Object.values(AssessmentType).map((type) => (
       <Grid key={type} item={true} xs={true}>
         <Item type={type} form={form} />
       </Grid>
-    );
+    ));
   };
 
   return (
@@ -46,11 +46,11 @@ const Presenter: React.FunctionComponent<Props> = ({
           <ErrorMessage name="assessments" />
         </Box>
         <Typography variant="h5" component="h3">
-          <Text translation="change.request.assessments" />
+          <Text translation="common.assessments" />
         </Typography>
         {descriptionRenderer()}
         <Grid container={true} spacing={3}>
-          {Object.values(AssessmentType).map((t: AssessmentType) => itemRenderer(t))}
+          {itemRenderer()}
         </Grid>
       </Paper>
     </React.Fragment>

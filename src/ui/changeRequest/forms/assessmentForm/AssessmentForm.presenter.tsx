@@ -51,7 +51,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
         <FormProgress asyncState={asyncState} />
         <InputField
           name="description"
-          label="changeRequest.assessmentForm.description"
+          label="common.description"
           inputProps={{ id: "description" }}
           validate={validator(required)}
         />
@@ -60,7 +60,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
         <Field name="implementationPlan" render={renderimplementationPlan} />
         <DatePickerField
           name="effectiveDate"
-          label="changeRequest.assessmentForm.targetDate"
+          label="common.target.date"
           datePickerProps={{ minDate: new Date() }}
         />
         <AutcompleteField

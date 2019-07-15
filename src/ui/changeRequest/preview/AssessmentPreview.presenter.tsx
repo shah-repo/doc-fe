@@ -37,7 +37,7 @@ const AssessmentPreviewPresenter: React.FunctionComponent<AssessmentPreviewPrese
             <FileCard key={index} attachment={attachment} />
           ))
         }
-      </Grid>
+      </Grid>;
 
     const renderImplementationPlanTasks = (tasks: ImplementationPlanTask[]) => {
       return (
@@ -45,41 +45,41 @@ const AssessmentPreviewPresenter: React.FunctionComponent<AssessmentPreviewPrese
           {
             tasks.map((task) => (
               <Grid item={true} xs={12} key={task.id}>
-                <Typography variant="h6" gutterBottom>
+                <Typography variant="h6" gutterBottom={true}>
                   <Text translation="common.title" />:
                 </Typography>
-                <Typography variant="h5" gutterBottom>
+                <Typography variant="h5" gutterBottom={true}>
                   {task.title}
                 </Typography>
-                <Typography variant="h6" gutterBottom>
+                <Typography variant="h6" gutterBottom={true}>
                   <Text translation="common.description" />:
                 </Typography>
-                <Typography variant="h5" gutterBottom>
+                <Typography variant="h5" gutterBottom={true}>
                   {task.description}
                 </Typography>
-                <Typography variant="h6" gutterBottom>
+                <Typography variant="h6" gutterBottom={true}>
                   <Text translation="common.status" />:
                 </Typography>
-                <Typography variant="h5" gutterBottom>
+                <Typography variant="h5" gutterBottom={true}>
                   {task.status}
                 </Typography>
-                <Typography variant="h6" gutterBottom>
-                  <Text translation="common.dueDate" />:
+                <Typography variant="h6" gutterBottom={true}>
+                  <Text translation="common.due.date" />:
                 </Typography>
-                <Typography variant="h5" gutterBottom>
+                <Typography variant="h5" gutterBottom={true}>
                   {task.dueDate}
                 </Typography>
               </Grid>
             ))
           }
         </Grid>
-      )
-    }
+      );
+    };
 
     return (
       <Grid container={true} className={classes.container} spacing={8}>
         <Grid item={true} xs={12}>
-          <Typography variant="h6" gutterBottom>
+          <Typography variant="h6" gutterBottom={true}>
             <Text translation="common.status" />:
           </Typography>
           <Typography variant="h5">
@@ -87,16 +87,16 @@ const AssessmentPreviewPresenter: React.FunctionComponent<AssessmentPreviewPrese
           </Typography>
         </Grid>
         <Grid item={true} xs={12}>
-          <Typography variant="h6" gutterBottom>
-            <Text translation="changeRequest.assessmentForm.description" />:
+          <Typography variant="h6" gutterBottom={true}>
+            <Text translation="common.description" />:
           </Typography>
           <Typography variant="h5">
             {changeRequest.description}
           </Typography>
         </Grid>
         <Grid item={true} xs={12}>
-          <Typography variant="h6" gutterBottom>
-            <Text translation="changeRequest.assessmentForm.justifications" />:
+          <Typography variant="h6" gutterBottom={true}>
+            <Text translation="common.justifications" />:
           </Typography>
           <Typography variant="h5">
             {changeRequest.justifications.description}
@@ -104,37 +104,37 @@ const AssessmentPreviewPresenter: React.FunctionComponent<AssessmentPreviewPrese
         </Grid>
         {renderAttachments(changeRequest.justifications.attachments)}
         <Grid item={true} xs={12}>
-          <Typography variant="h6" gutterBottom>
+          <Typography variant="h6" gutterBottom={true}>
             <Text translation="changeRequest.assessmentsDescription" />:
           </Typography>
-          <Typography variant="h5" gutterBottom>
+          <Typography variant="h5" gutterBottom={true}>
             {changeRequest.assessments.description}
           </Typography>
-          <Typography variant="h6" gutterBottom>
+          <Typography variant="h6" gutterBottom={true}>
             <Text translation="common.design" />:
           </Typography>
-          <Typography variant="h5" gutterBottom>
+          <Typography variant="h5" gutterBottom={true}>
             {changeRequest.assessments.design.reasoning}
           </Typography>
           {changeRequest.assessments.design.attachment && renderAttachments([changeRequest.assessments.design.attachment])}
-          <Typography variant="h6" gutterBottom>
+          <Typography variant="h6" gutterBottom={true}>
             <Text translation="common.regulatory" />:
           </Typography>
           <Typography variant="h5">
             {changeRequest.assessments.regulatory.reasoning}
           </Typography>
           {changeRequest.assessments.regulatory.attachment && renderAttachments([changeRequest.assessments.regulatory.attachment])}
-          <Typography variant="h6" gutterBottom>
+          <Typography variant="h6" gutterBottom={true}>
             <Text translation="common.process" />:
           </Typography>
-          <Typography variant="h5" gutterBottom>
+          <Typography variant="h5" gutterBottom={true}>
             {changeRequest.assessments.process.reasoning}
           </Typography>
           {changeRequest.assessments.process.attachment && renderAttachments([changeRequest.assessments.process.attachment])}
         </Grid>
         <Grid item={true} xs={12}>
-          <Typography variant="h6" gutterBottom>
-            <Text translation="changeRequest.assessmentForm.implementationPlan" />:
+          <Typography variant="h6" gutterBottom={true}>
+            <Text translation="common.implementation.plan" />:
           </Typography>
           {renderAttachments(changeRequest.implementationPlan.attachments)}
           {renderImplementationPlanTasks(changeRequest.implementationPlan.tasks)}

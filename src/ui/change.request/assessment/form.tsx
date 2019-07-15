@@ -25,7 +25,7 @@ const Form: React.FunctionComponent<Props> = ({
       <Field
         component={TextField}
         name={`assessments.${type}.reasoning`}
-        label={<Text translation="change.request.reasoning" />}
+        label={<Text translation="common.reasoning" />}
         className={classes.textField}
         margin="normal"
         variant="filled"
