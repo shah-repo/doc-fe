@@ -24,10 +24,6 @@ export interface Justifications {
   attachments: Attachment[];
 }
 
-export interface JustificationProps {
-  justification: Justifications;
-}
-
 export enum AssessmentType {
   design = "design",
   process = "process",
@@ -46,10 +42,6 @@ export interface AssessmentItem {
   attachment?: Attachment | null;
 }
 
-export interface AssessmentProps {
-  assessment: Assessment;
-}
-
 export interface ImplementationPlanTask {
   id: string;
   title: string;
@@ -65,10 +57,6 @@ export interface ImplementationPlan {
   id: string;
   tasks: ImplementationPlanTask[];
   attachments: Attachment[];
-}
-
-export interface ImplementationPlanProps {
-  implementationPlan: ImplementationPlan;
 }
 
 export interface ChangeRequest {
@@ -173,14 +161,6 @@ export type ChangeRequestsApproversAllIdsState = string[];
 export interface ChangeRequestListApproversAction {
   type: typeof CHANGE_REQUEST_LIST_APPROVERS;
   payload: ChangeRequestAvailableApprovers[];
-}
-
-export interface ChangeRequestsProps {
-  changeRequests: ChangeRequest[];
-}
-
-export interface ChangeRequestProps {
-  changeRequest: ChangeRequest;
 }
 
 export interface Audit {

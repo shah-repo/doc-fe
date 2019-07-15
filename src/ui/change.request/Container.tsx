@@ -26,19 +26,19 @@ type Props = OwnProps & DispatchProps & StateProps;
 
 const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps => ({
   loadAsyncState: changeRequestsSelectors.getLoadAsyncState(state),
-  changeRequest: changeRequestsSelectors.getChangeRequest(state, props.match.params.changeRequestId),
+  dataProp: changeRequestsSelectors.getChangeRequest(state, props.match.params.changeRequestId),
 });
 
 const Container: React.FunctionComponent<Props> = ({
   load,
   loadAsyncState,
   match,
-  changeRequest,
+  dataProp,
 }) => {
   const changeRequestId = match.params.changeRequestId;
   const loadAction = () => load(changeRequestId);
-  const updateRenderer = () => <ChangeRequestUpdateContainer changeRequest={changeRequest} />;
-  const summaryRenderer = () => <SummaryContainer changeRequest={changeRequest} />;
+  const updateRenderer = () => <ChangeRequestUpdateContainer changeRequest={dataProp} />;
+  const summaryRenderer = () => <SummaryContainer dataProp={dataProp} />;
 
   return (
     <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>

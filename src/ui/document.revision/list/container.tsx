@@ -26,14 +26,14 @@ type Props = OwnProps & ListProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   loadAsyncState: documentRevisionsSelectors.getLoadListAsyncState(state),
-  documentRevisions: documentRevisionsSelectors.getDocumentRevisionsList(state),
+  dataProp: documentRevisionsSelectors.getDocumentRevisionsList(state),
   currentUserEmail: authSelectors.currentUserEmail(state),
 });
 
 const ListContainer: React.FunctionComponent<Props> = ({
   loadDocumentRevisions,
   loadAsyncState,
-  documentRevisions,
+  dataProp,
   currentUserEmail,
   history,
 }) => {
@@ -44,7 +44,7 @@ const ListContainer: React.FunctionComponent<Props> = ({
   return (
     <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>
       <ListPresenter
-        documentRevisions={documentRevisions}
+        dataProp={dataProp}
         currentUserEmail={currentUserEmail}
         editDocumentRevision={edit}
         previewDocumentRevision={preview}

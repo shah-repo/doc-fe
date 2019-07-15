@@ -26,7 +26,7 @@ type Props = ContainerProps;
 
 const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps => ({
   loadAsyncState: documentRevisionsSelectors.getLoadAsyncState(state),
-  documentRevision: documentRevisionsSelectors.getDocumentRevision(state, props.match.params.documentRevisionId),
+  dataProp: documentRevisionsSelectors.getDocumentRevision(state, props.match.params.documentRevisionId),
 });
 
 const Container: React.FunctionComponent<Props> = ({

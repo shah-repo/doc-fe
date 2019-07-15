@@ -1,26 +1,31 @@
 import { Box, Grid, ListItem, Typography, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
-import { AssessmentItem, AssessmentProps, AssessmentType } from "../../../state/ducks/changeRequest";
-import BaseSummaryField from "../../common/summary/base";
+import {
+  Assessment as Model,
+  AssessmentItem,
+  AssessmentType,
+} from "../../../state/ducks/changeRequest";
+import { DataProps } from "../../../state/ducks/common";
+import SummaryField from "../../common/summary/base";
 import FileCard from "../../components/cards/FileCard";
 import Text from "../../components/Text";
 import styles from "./styles";
 
-type Props = AssessmentProps & WithStyles<typeof styles>;
+type Props = DataProps<Model> & WithStyles<typeof styles>;
 
 const Assessment: React.FunctionComponent<Props> = ({
   classes,
-  assessment,
+  dataProp,
 }) => {
 
   const attachmentRenderer = (item: AssessmentItem) =>
     <FileCard attachment={item.attachment!} />;
 
   const reasoningRenderer = (item: AssessmentItem) =>
-    <BaseSummaryField label="common.reasoning" value={item.reasoning} />;
+    <SummaryField label="common.reasoning" value={item.reasoning} />;
 
   const itemRenderer = () => Object.values(AssessmentType).map((type, index) => {
-    const item = assessment[type as keyof typeof AssessmentType];
+    const item = dataProp[type as keyof typeof AssessmentType];
     return (
       <Box key={`${item}-${index}`}>
         <ListItem>
@@ -37,7 +42,7 @@ const Assessment: React.FunctionComponent<Props> = ({
       <ListItem>
         <Typography variant="h6"><Text translation="common.assessments" />:</Typography>
       </ListItem>
-      <BaseSummaryField label="common.description" value={assessment.description} />;
+      <SummaryField label="common.description" value={dataProp.description} />;
       {itemRenderer()}
     </Box>
   );

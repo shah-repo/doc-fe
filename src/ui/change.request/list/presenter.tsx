@@ -17,7 +17,7 @@ type Props = ChangeRequestsUserProps & WithStyles<typeof styles>;
 
 const ListPresenter: React.FunctionComponent<Props> = ({
   classes,
-  changeRequests,
+  dataProp,
   currentUserEmail,
   editChangeRequest,
   previewChangeRequest,
@@ -27,7 +27,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
 
   const stateCellTypeRenderer = (rowData: ChangeRequest) => {
     const changeRequest = rowData;
-    const canEdit = canEditChangeRequest({changeRequest, currentUserEmail});
+    const canEdit = canEditChangeRequest({dataProp: changeRequest, currentUserEmail});
     return (canEdit) ? "LINK" : "BASE";
   };
 
@@ -83,7 +83,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       </Grid>
       <Grid item={true} className={classes.item}>
         <ChangeRequestList
-          tableData={changeRequests}
+          tableData={dataProp}
           columns={columns}
           cellMeasure={true}
           onSelect={onRowSelect}
