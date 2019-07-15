@@ -23,7 +23,7 @@ type Props<T> = TablePanelProps<T>;
 export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> => ({
   tableData,
   columns,
-  noRowsTranslation,
+  noRowsTranslation = "table.no.results.found",
   cellMeasure = false,
   onSelect,
   searchable = true,
@@ -92,7 +92,11 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
     }
   };
 
-  const noRowsRenderer = () => <Text translation={noRowsTranslation} />;
+  const noRowsRenderer = () => (
+    <Box className={classes.emptyMsg}>
+      <Text translation={noRowsTranslation} />
+    </Box>
+  );
 
   const rowGetter = ({ index }: Index): T => {
     return state.queryData[index];

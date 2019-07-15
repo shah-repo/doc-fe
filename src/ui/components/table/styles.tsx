@@ -20,6 +20,9 @@ export const styles = makeStyles((theme) => ({
   rowOdd: {
     backgroundColor: "transparent",
   },
+  emptyMsg: {
+    padding: theme.spacing(2),
+  },
   row: (props: TableStyleProps) => ({
     paddingRight: "0!important",
     cursor: (props.isSelectable) ? "pointer" : "default",

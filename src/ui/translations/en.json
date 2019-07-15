@@ -31,6 +31,7 @@
   "fields.select.none": "None",
 
   "table.column.actions": "Actions",
+  "table.no.results.found": "No results found",
 
   "changeRequest.title": "Document - Change Request",
   "changeRequest.state": "State",
@@ -70,7 +71,6 @@
   "change.request.list.description": "Description",
   "change.request.list.owner": "Owner",
   "change.request.list.state": "State",
-  "change.request.list.noRows": "No change requests",
   "change.request.create": "Create a change request",
   "change.request.assessments": "Assessments",
   "change.request.design.assessment": "Design Assessment",
@@ -222,6 +222,5 @@
   "document.revision.list.state": "Status",
   "document.revision.list.type": "Type",
   "document.revision.list.version": "Released version",
-  "document.revision.list.noRows": "No document revisions",
   "document.revision.create": "Create a document"
 }
