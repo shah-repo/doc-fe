@@ -22,6 +22,19 @@ export interface ListDispatchProps {
   loadDocumentRevisions: typeof documentRevisionsActions.loadList;
 }
 
+// Summary
+export type SummaryStateProps = LoadAsyncState & DataProps<DocumentRevision[]>;
+
+export interface SummaryDispatchProps {
+  loadDocument: typeof documentRevisionsActions.loadDocument;
+}
+
+export interface SummaryOwnProps {
+  documentId: string;
+  documentRevisionId: string | null;
+  isNewVersion: boolean;
+}
+
 // Common
 export type DocumentRevisionUserProps = DataProps<DocumentRevision> & AuthProps;
 export type DocumentRevisionsUserProps = DataProps<DocumentRevision[]> & ActionProps & AuthProps;

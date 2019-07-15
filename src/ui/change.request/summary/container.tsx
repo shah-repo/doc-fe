@@ -9,8 +9,8 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../../state/reducers";
 import ChangeRequestAuditContainer from "../../changeRequest/audit/Audit.container";
 import SummaryPresenter from "../../changeRequest/documentRevision/DocumentRevisionControlPreview.presenter";
+import DocumentRevisionSummaryPresenter from "../../document.revision/summary/presenter";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
-import DocumentRevisionPreviewPresenter from "../../documentRevision/DocumentRevisionPreview.presenter";
 import Presenter from "./presenter";
 import styles from "./styles";
 
@@ -41,7 +41,7 @@ export const Container: React.FunctionComponent<Props> = ({
         />
       </Grid>
       <Grid item={true} xs={6}>
-        {docRev && <DocumentRevisionPreviewPresenter documentRevision={docRev} />}
+        {docRev && <DocumentRevisionSummaryPresenter dataProp={docRev} />}
         {!docRev && <Presenter dataProp={dataProp} />}
       </Grid>
       <Grid item={true} xs={3}>

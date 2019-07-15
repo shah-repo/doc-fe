@@ -66,7 +66,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       return (
         <React.Fragment>
           <Typography variant="h6" >
-            <Text translation="documentRevision.form.referencedBy" />
+            <Text translation="common.referenced.by" />
           </Typography>
           <div>
             {initialValues.referencedBy.map((reference) => reference.name)}

@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
+import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
-import { documentRevisionsActions, documentRevisionsSelectors, DocumentRevision } from "../../state/ducks/documentRevisions";
-import AsyncGate from "../components/AsyncGate";
 import { AsyncState } from "../../state/types";
-import DocumentRevisionPreviewPresenter from "./DocumentRevisionPreview.presenter";
-import { canEditDocumentRevision } from "./helpers";
-import DocumentRevisionUpdateContainer from "./DocumentRevisionUpdate.container";
+import AsyncGate from "../components/AsyncGate";
+import SummaryPresenter from "../document.revision/summary/presenter";
 import CloneContainer from "./Clone.container";
+import DocumentRevisionUpdateContainer from "./DocumentRevisionUpdate.container";
+import { canEditDocumentRevision } from "./helpers";
 
 interface StateProps {
   currentUserEmail: string;
@@ -35,7 +35,7 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 
 export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevisionDisplayContainerProps> = ({
   currentUserEmail, loadDocumentRevision, isNewVersion,
-  documentRevisionId, documentRevision, loadDocumentRevisionAsyncState
+  documentRevisionId, documentRevision, loadDocumentRevisionAsyncState,
 }) => {
   const loadDocumentRevisionAction = () => loadDocumentRevision(documentRevisionId);
 
@@ -50,7 +50,7 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
   return (
     <AsyncGate asyncState={loadDocumentRevisionAsyncState} asyncAction={loadDocumentRevisionAction} startActionOnMount={false}>
       {canEdit && <DocumentRevisionUpdateContainer documentRevision={documentRevision} />}
-      {canPreview && <DocumentRevisionPreviewPresenter documentRevision={documentRevision} />}
+      {canPreview && <SummaryPresenter dataProp={documentRevision} />}
       {isNewVersion && <CloneContainer documentRevision={documentRevision} />}
     </AsyncGate>
   );

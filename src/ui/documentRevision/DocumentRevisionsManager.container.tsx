@@ -36,7 +36,7 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<DocumentR
   documentId, documentRevisionId, documentRevisions
 }) => {
   const loadDocumentAction = () => loadDocument(documentId);
-
+  alert("ddd");
   return (
     <Grid container={true} spacing={10}>
       <Grid item={true} xs={2}>
