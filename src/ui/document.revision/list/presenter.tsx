@@ -27,6 +27,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
 }) => {
 
   const DocumentList = TablePanel<DocumentRevision>();
+  const [clearFilter, setClearFilter] = React.useState<boolean>(false);
 
   const stateCellTypeRenderer = (rowData: DocumentRevision) => {
     const documentRevision = rowData;
@@ -44,6 +45,8 @@ const ListPresenter: React.FunctionComponent<Props> = ({
 
   const typeTooltipRenderer = (rowData: DocumentRevision) =>
     DocumentRevisionType[rowData.type as unknown as keyof typeof DocumentRevisionType];
+
+  const clear = () => setClearFilter(!clearFilter);
 
   const columns: Array<TableColumnProps<DocumentRevision>> = [
     {
@@ -115,7 +118,12 @@ const ListPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <Grid container={true} className={classes.root}>
-      <Grid container={true} justify="flex-end">
+      <Grid item={true} xs={6}>
+        <Button color="secondary" className={classes.clearButton} onClick={clear} >
+          Clear filters
+        </Button>
+      </Grid>
+      <Grid container={true} xs={6} justify="flex-end">
         <RouterLink to={DOCUMENT_REVISION_CREATE_URL} className={classes.link}>
           <Button variant="contained" color="primary" className={classes.button}>
             <Text translation="document.revision.create" />
@@ -128,6 +136,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
           columns={columns}
           onSelect={onRowSelect}
           queryUrl={DOCUMENT_REVISION_ROOT_URL}
+          clearFilter={clearFilter}
         />
       </Grid>
     </Grid>

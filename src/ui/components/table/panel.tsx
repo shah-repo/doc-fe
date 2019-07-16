@@ -28,6 +28,7 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
   onSelect,
   searchable = true,
   queryUrl = "",
+  clearFilter,
 }) => {
 
   const headerHeight = (searchable) ? 120 : 50;

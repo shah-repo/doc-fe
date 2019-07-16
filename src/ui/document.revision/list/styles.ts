@@ -14,4 +14,8 @@ export default (theme: Theme) => createStyles({
   button: {
     marginBottom: "25px",
   },
+  clearButton: {
+    backgroundColor: theme.palette.common.white,
+    padding: theme.spacing(1),
+  },
 });
