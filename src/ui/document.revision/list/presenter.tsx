@@ -46,7 +46,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   const typeTooltipRenderer = (rowData: DocumentRevision) =>
     DocumentRevisionType[rowData.type as unknown as keyof typeof DocumentRevisionType];
 
-  const clear = (event: React.MouseEvent) => setClearFilter(!clearFilter);
+  const clear = () => setClearFilter(!clearFilter);
 
   const columns: Array<TableColumnProps<DocumentRevision>> = [
     {

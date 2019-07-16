@@ -24,6 +24,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
 }) => {
 
   const ChangeRequestList = TablePanel<ChangeRequest>();
+  const [clearFilter, setClearFilter] = React.useState<boolean>(false);
 
   const stateCellTypeRenderer = (rowData: ChangeRequest) => {
     const changeRequest = rowData;
@@ -38,6 +39,8 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   const onRowSelect = ({rowData}: TableSelectionProps<ChangeRequest>) => () => {
     return previewChangeRequest(rowData.id);
   };
+
+  const clear = () => setClearFilter(!clearFilter);
 
   const columns: Array<TableColumnProps<ChangeRequest>> = [
     {
@@ -74,7 +77,12 @@ const ListPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <Grid container={true} className={classes.root}>
-      <Grid container={true} justify="flex-end">
+      <Grid item={true} xs={6}>
+        <Button color="secondary" className={classes.clearButton} onClick={clear} >
+          Clear filters
+        </Button>
+      </Grid>
+      <Grid container={true} xs={6} justify="flex-end">
         <RouterLink to={CHANGE_REQUEST_CREATE_URL} className={classes.link}>
           <Button variant="contained" color="primary" className={classes.button}>
             <Text translation="change.request.create" />
