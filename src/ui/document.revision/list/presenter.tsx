@@ -2,7 +2,7 @@ import { Button, Grid, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { maskId, unmaskId } from "../../../state/ducks/common/helpers";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionType } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { TableColumnProps } from "../../components/table/column/types";
 import { TablePanel } from "../../components/table/panel";
@@ -42,6 +42,9 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     return previewDocumentRevision(rowData.id, rowData.document.id);
   };
 
+  const typeTooltipRenderer = (rowData: DocumentRevision) =>
+    DocumentRevisionType[rowData.type as unknown as keyof typeof DocumentRevisionType];
+
   const columns: Array<TableColumnProps<DocumentRevision>> = [
     {
       key: "docId",
@@ -72,6 +75,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       key: "type",
       label: "document.revision.list.type",
       columnOptions: { width: 100 },
+      tooltipKey: typeTooltipRenderer,
       searchOptions: { searchType: "select", selectOptions: documentRevisionTypeOption() },
     },
     {
