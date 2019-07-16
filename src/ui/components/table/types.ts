@@ -16,6 +16,7 @@ export interface TablePanelProps<T> {
   onSelect?: TableSelectionRenderer<T>;
   searchable?: boolean;
   queryUrl?: string;
+  clearFilter?: any;
 }
 
 export interface TablePanelStateProps<T> {
