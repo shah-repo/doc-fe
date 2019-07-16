@@ -31,7 +31,7 @@ const Justification: React.FunctionComponent<Props> = ({
       <ListItem>
         <Typography variant="h6"><Text translation="common.justifications" />:</Typography>
       </ListItem>
-      <BaseSummaryField label="common.description" value={description} />;
+      <BaseSummaryField label="common.description" value={description} />
       {attachments && <ListItem><Grid container={true} spacing={1}>{attachmentRenderer()}</Grid></ListItem>}
     </Box>
   );

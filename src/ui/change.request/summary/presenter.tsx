@@ -4,6 +4,7 @@ import { ChangeRequestProps } from "../../../state/ducks/changeRequest";
 import { maskId } from "../../../state/ducks/common/helpers";
 import ControlsContainer from "../../changeRequest/forms/assessmentForm/AssessmentFormControls.container";
 import BaseSummaryField from "../../common/summary/base";
+import Text from "../../components/Text";
 import Approvers from "./approvers";
 import Assessment from "./assessment";
 import ImplementationPlan from "./implementation.plan";
@@ -21,7 +22,10 @@ export const Presenter: React.FunctionComponent<Props> = ({
     <Box>
       <Box className={classes.previewBox}>
         <ListItem>
-          <Typography variant="h5">CRID: {`CR${maskId(changeRequest.ordinalNumber)}`}</Typography>
+          <Typography variant="h5">
+            <Text translation="common.crid" />
+            {`: CR${maskId(changeRequest.ordinalNumber)}`}
+          </Typography>
         </ListItem>
         <BaseSummaryField label="common.owner" value={changeRequest.owner.name} />
         <BaseSummaryField label="common.status" value={changeRequest.state} />
