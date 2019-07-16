@@ -31,11 +31,11 @@ const ImplementationPlan: React.FunctionComponent<Props> = ({
       <ListItem>
         <Typography variant="button"><Text message={`Task-${index + 1}`} />:</Typography>
       </ListItem>
-      <BaseSummaryField label="common.title" value={task.title} />;
-      <BaseSummaryField label="common.description" value={task.description} />;
-      <BaseSummaryField label="common.due.date" value={task.dueDate} />;
-      <BaseSummaryField label="common.assigned.to" value={task.assigned && task.assigned.name} />;
-      <BaseSummaryField label="common.status" value={task.status} />;
+      <BaseSummaryField label="common.title" value={task.title} />
+      <BaseSummaryField label="common.description" value={task.description} />
+      <BaseSummaryField label="common.due.date" value={task.dueDate} />
+      <BaseSummaryField label="common.assigned.to" value={task.assigned && task.assigned.name} />
+      <BaseSummaryField label="common.status" value={task.status} />
     </Box>
   ));
 
