@@ -24,8 +24,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
       <Box className={classes.previewBox}>
         <ListItem>
           <Typography variant="h5">
-            <Text translation="common.crid" />
-            {`: CR${maskId(dataProp.ordinalNumber)}`}
+            <Text translation="common.crid" />:
+            {` ${maskId(dataProp.ordinalNumber)}`}
           </Typography>
         </ListItem>
         <SummaryField label="common.owner" value={dataProp.owner.name} />
@@ -40,9 +40,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
       <Box className={classes.submitBox}>
         <ControlsContainer changeRequest={dataProp} />
       </Box>
-    </Box>
+    </Box >
   );
 };
 
-export default withStyles(styles)(Presenter) ;
-
+export default withStyles(styles)(Presenter);
