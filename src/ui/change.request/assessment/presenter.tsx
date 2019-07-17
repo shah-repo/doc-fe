@@ -2,9 +2,9 @@ import { Box, Grid, Paper, Typography } from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
 import { ErrorMessage } from "formik";
 import { Field } from "formik";
-import { TextField } from "formik-material-ui";
 import React from "react";
 import { AssessmentType } from "../../../state/ducks/changeRequest";
+import TextField from "../../components/forms/fields/TextField";
 import Text from "../../components/Text";
 import { AssessmentProps } from "../utils/types";
 import Item from "./item";
@@ -16,20 +16,6 @@ const Presenter: React.FunctionComponent<Props> = ({
   classes,
   form,
 }) => {
-
-  const descriptionRenderer = () => (
-    <Field
-      component={TextField}
-      name="assessments.description"
-      label={<Text translation="common.description" />}
-      className={classes.textField}
-      margin="normal"
-      variant="filled"
-      multiline={true}
-      rows="2"
-      fullWidth={true}
-    />
-  );
 
   const itemRenderer = () => {
     return Object.values(AssessmentType).map((type) => (
@@ -48,7 +34,11 @@ const Presenter: React.FunctionComponent<Props> = ({
         <Typography variant="h5" component="h3">
           <Text translation="common.assessments" />
         </Typography>
-        {descriptionRenderer()}
+        <Field
+          component={TextField}
+          name="assessments.description"
+          label="common.description"
+        />
         <Grid container={true} spacing={3}>
           {itemRenderer()}
         </Grid>

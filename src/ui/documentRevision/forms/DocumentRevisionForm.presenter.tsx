@@ -1,5 +1,5 @@
 import { Typography, withStyles, WithStyles } from "@material-ui/core";
-import { FieldArray, FieldArrayRenderProps, Form, FormikProps } from "formik";
+import { Field, FieldArray, FieldArrayRenderProps, Form, FormikProps } from "formik";
 import React from "react";
 import { DocumentRevision, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { AsyncState } from "../../../state/types";
@@ -9,6 +9,7 @@ import InputField from "../../components/forms/fields/Input";
 import RadioButton from "../../components/forms/fields/RadioButton";
 import RadioGroup from "../../components/forms/fields/RadioGroup";
 import SelectField from "../../components/forms/fields/Select";
+import TextField from "../../components/forms/fields/TextField";
 import { required, validator } from "../../components/forms/fields/validators";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
@@ -81,10 +82,10 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       <Form>
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
-        <InputField
+        <Field
+          component={TextField}
           name="description"
           label="common.description"
-          inputProps={{ id: "description" }}
           validate={validator(required)}
         />
         <InputField

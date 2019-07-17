@@ -1,20 +1,20 @@
-import { FieldArrayRenderProps, FormikProps, FieldArray, FieldProps } from "formik";
-import { Typography } from "@material-ui/core";
+import { FieldArray, FieldArrayRenderProps, FieldProps } from "formik";
+import { Field } from "formik";
 import React from "react";
-import { required, validator } from "../../../components/forms/fields/validators";
-import Text from "../../../components/Text";
-import InputField from "../../../components/forms/fields/Input";
+import TextField from "../../../components/forms/fields/TextField";
+import AttachmentsContainer from "../attachments/Attachments.container";
 import { ChangeRequestFormValues } from "../types";
-import AttachmentsContainer from '../attachments/Attachments.container';
 
 interface Props extends FieldProps<ChangeRequestFormValues> {}
 
 const AssessmentFormJustifications: React.FunctionComponent<Props> = () => {
-  const renderAttachments = (props: FieldArrayRenderProps) => <AttachmentsContainer attachmentsKey="justifications" {...props} />;
+  const renderAttachments = (props: FieldArrayRenderProps) =>
+    <AttachmentsContainer attachmentsKey="justifications" {...props} />;
 
   return (
     <React.Fragment>
-      <InputField
+      <Field
+        component={TextField}
         name="justifications.description"
         label="common.justifications"
       />
