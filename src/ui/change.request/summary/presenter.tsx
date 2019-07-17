@@ -25,7 +25,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         <ListItem>
           <Typography variant="h5">
             <Text translation="common.crid" />:
-            {` ${maskId(dataProp.ordinalNumber)}`}
+            {` CR${maskId(dataProp.ordinalNumber)}`}
           </Typography>
         </ListItem>
         <SummaryField label="common.owner" value={dataProp.owner.name} />

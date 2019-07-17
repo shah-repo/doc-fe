@@ -23,7 +23,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         <ListItem>
           <Typography variant="h5">
             <Text translation="document.revision.list.docId" />:
-            {`${dataProp.type}${maskId(dataProp.document.ordinalNumber)}`}
+            {` ${dataProp.type}${maskId(dataProp.document.ordinalNumber)}`}
           </Typography>
         </ListItem>
         <SummaryField label="common.status" value={dataProp.status} />

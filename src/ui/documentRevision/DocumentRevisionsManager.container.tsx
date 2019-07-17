@@ -39,12 +39,12 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<DocumentR
 
   return (
     <Grid container={true} spacing={10}>
-      <Grid item={true} xs={2}>
+      <Grid item={true} xs={3}>
         <AsyncGate asyncState={loadDocumentAsyncState} asyncAction={loadDocumentAction} startActionOnMount={true}>
           <DocumentRevisionListContainer documentRevisions={documentRevisions} documentId={documentId} />
         </AsyncGate>
       </Grid>
-      <Grid item={true} xs={10}>
+      <Grid item={true} xs={6}>
         {documentRevisionId && <DocumentRevisionDisplayContainer documentRevisionId={documentRevisionId} isNewVersion={isNewVersion} />}
       </Grid>
     </Grid>
