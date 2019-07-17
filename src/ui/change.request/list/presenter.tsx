@@ -3,7 +3,7 @@ import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { CHANGE_REQUEST_ROOT_URL } from "../../../state/ducks/changeRequest/constants";
-import { maskId, unmaskId } from "../../../state/ducks/common/helpers";
+import { unmaskId } from "../../../state/ducks/common/helpers";
 import { TableColumnProps } from "../../components/table/column/types";
 import { TablePanel } from "../../components/table/panel";
 import { TableSelectionProps } from "../../components/table/types";
@@ -46,11 +46,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "crId",
       label: "common.crid",
-      searchOptions : { searchValueGetter: (value) => unmaskId(value) },
-      columnOptions: {
-        cellDataGetter: ({ rowData }) => `CR${maskId(rowData.ordinalNumber)}`,
-        width: 100,
-      },
+      columnOptions: { width: 100},
     },
     {
       key: "description",
@@ -82,7 +78,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
           Clear filters
         </Button>
       </Grid>
-      <Grid container={true} xs={6} justify="flex-end">
+      <Grid item={true} xs={6} style={{textAlign: "right"}}>
         <RouterLink to={CHANGE_REQUEST_CREATE_URL} className={classes.link}>
           <Button variant="contained" color="primary" className={classes.button}>
             <Text translation="change.request.create" />
@@ -96,6 +92,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
           cellMeasure={true}
           onSelect={onRowSelect}
           queryUrl={CHANGE_REQUEST_ROOT_URL}
+          clearFilter={clear}
         />
       </Grid>
     </Grid>

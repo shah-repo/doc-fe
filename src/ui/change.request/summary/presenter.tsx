@@ -2,7 +2,6 @@ import { Box, ListItem, Typography, WithStyles, withStyles } from "@material-ui/
 import React from "react";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
-import { maskId } from "../../../state/ducks/common/helpers";
 import ControlsContainer from "../../changeRequest/forms/assessmentForm/AssessmentFormControls.container";
 import SummaryField from "../../common/summary/base";
 import Text from "../../components/Text";
@@ -24,8 +23,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
       <Box className={classes.previewBox}>
         <ListItem>
           <Typography variant="h5">
-            <Text translation="common.crid" />:
-            {` CR${maskId(dataProp.ordinalNumber)}`}
+            <Text translation="common.crid" />: {dataProp.crId}
           </Typography>
         </ListItem>
         <SummaryField label="common.owner" value={dataProp.owner.name} />

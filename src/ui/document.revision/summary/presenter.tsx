@@ -1,7 +1,6 @@
 import { Box, ListItem, Typography, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import { DataProps } from "../../../state/ducks/common";
-import { maskId } from "../../../state/ducks/common/helpers";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import SummaryField from "../../common/summary/base";
 import Text from "../../components/Text";

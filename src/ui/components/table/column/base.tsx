@@ -115,7 +115,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
   };
 
   const tooltipRenderer = (columnProps: ColumnProps) => {
-    let tooltipValue = columnProps.rowData[tooltipKey] || "";
+    let tooltipValue: string = columnProps.rowData[tooltipKey] || "";
     if (typeof tooltipKey === "function") {
       tooltipValue = (tooltipKey as TableCellTooltipRenderer<T>)(columnProps.rowData);
     }
@@ -123,7 +123,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
     return (
       <StyledTooltip
         disableHoverListener={!tooltipKey}
-        title={tooltipValue}
+        title={tooltipValue || ""}
       >
         <div>{cellMeasurer(columnProps)}</div>
       </StyledTooltip>

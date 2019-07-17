@@ -4,7 +4,6 @@ import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/typ
 import { documentRevisionIdMask } from "../../../ui/documentRevision/helpers";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
-import { maskId } from "../common/helpers";
 import { DocumentRevisionStatus } from "./types";
 
 const allIds = (state: ApplicationState) => state.documentRevisions.allIds;
