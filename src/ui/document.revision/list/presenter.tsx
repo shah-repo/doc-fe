@@ -1,7 +1,7 @@
 import { Button, Grid, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { maskId, unmaskId } from "../../../state/ducks/common/helpers";
+import { unmaskId } from "../../../state/ducks/common/helpers";
 import { DocumentRevision, DocumentRevisionType } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { TableColumnProps } from "../../components/table/column/types";
@@ -52,9 +52,8 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "docId",
       label: "document.revision.list.docId",
-      searchOptions: { searchValueGetter: (value) => unmaskId(value) },
       columnOptions: {
-        cellDataGetter: ({ rowData }) => `${rowData.type}${maskId(rowData.document.ordinalNumber)}`,
+        cellDataGetter: ({ rowData }) => rowData.document.docId,
         width: 150,
       },
     },
@@ -77,9 +76,12 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "type",
       label: "document.revision.list.type",
-      columnOptions: { width: 100 },
       tooltipKey: typeTooltipRenderer,
       searchOptions: { searchType: "select", selectOptions: documentRevisionTypeOption() },
+      columnOptions: {
+        cellDataGetter: ({ rowData }) => rowData.document.type,
+        width: 100,
+      },
     },
     {
       key: "owner",
@@ -93,12 +95,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       label: "common.crid",
       searchOptions: { dataKey: "crId", searchValueGetter: (value) => unmaskId(value) },
       columnOptions: {
-        cellDataGetter: ({ rowData }) => {
-          if (rowData.changeRequest) {
-            return `CR${maskId(rowData.changeRequest.ordinalNumber)}`;
-          }
-          return "";
-        },
+        cellDataGetter: ({ rowData }) => rowData.changeRequest && rowData.changeRequest.crId,
         width: 100,
       },
     },
@@ -123,7 +120,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
           Clear filters
         </Button>
       </Grid>
-      <Grid container={true} xs={6} justify="flex-end">
+      <Grid item={true} xs={6} style={{textAlign: "right"}}>
         <RouterLink to={DOCUMENT_REVISION_CREATE_URL} className={classes.link}>
           <Button variant="contained" color="primary" className={classes.button}>
             <Text translation="document.revision.create" />

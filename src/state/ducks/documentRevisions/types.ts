@@ -31,7 +31,8 @@ export enum RevisionChangeType {
 
 export interface DocumentRevisionDocument {
   id: string;
-  ordinalNumber: number;
+  docId: string;
+  type: string;
 }
 export interface Document {
   id: string;

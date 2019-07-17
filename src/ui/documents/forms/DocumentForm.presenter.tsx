@@ -1,7 +1,6 @@
 import { Typography, withStyles, WithStyles } from "@material-ui/core";
 import { FieldArray, FieldArrayRenderProps, Form, FormikProps } from "formik";
 import React from "react";
-import documentTypes from "../../../data/documentTypes.json";
 import { AsyncState } from "../../../state/types";
 import InputField from "../../components/forms/fields/Input";
 import SelectField from "../../components/forms/fields/Select";
@@ -10,6 +9,7 @@ import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
 import SubmitButton from "../../components/forms/SubmitButton";
 import Text from "../../components/Text";
+import { documentRevisionTypeFormOption } from "../../document.revision/utils/helpers";
 import DocumentTransitionDialogContainer from "../dialogs/DocumentTransitionDialog.container";
 import AttachmentsContainer from "./attachments/Attachments.container";
 import DocumentApprovers from "./DocumentApprovers";
@@ -58,7 +58,7 @@ const DocumentFormPresenter: React.FunctionComponent<Props> = ({ asyncState, val
           name="type"
           label="document.type"
           selectProps={{ inputProps: { id: "type" } }}
-          options={documentTypes}
+          options={documentRevisionTypeFormOption()}
           validate={validator(required)}
         />
         <FieldArray name="approvers" render={renderApprovers} />

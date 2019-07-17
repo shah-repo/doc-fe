@@ -1,4 +1,4 @@
-import { Paper, WithStyles, withStyles, Button } from "@material-ui/core";
+import { Button, Paper, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import {
   AutoSizer,
@@ -11,12 +11,12 @@ import {
 } from "react-virtualized";
 import { DocumentRevision, DocumentRevisionsByIdState, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import Text from "../../components/Text";
+import { documentRevisionIdMask } from "../../documentRevision/helpers";
 import { Translation } from "../../translations/types";
 import styles from "./DocumentRevisionTable.styles";
 import {
   DocumentRevisionListItem,
 } from "./types";
-import { documentRevisionIdMask } from "../../documentRevision/helpers";
 
 interface DocumentRevisionTableProps extends WithStyles<typeof styles> {
   documentRevisionsToShow: DocumentRevision[];
@@ -24,7 +24,7 @@ interface DocumentRevisionTableProps extends WithStyles<typeof styles> {
 }
 
 const DocumentRevisionTable: React.FunctionComponent<DocumentRevisionTableProps> = ({
-  classes, documentRevisionsToShow, addDocument
+  classes, documentRevisionsToShow, addDocument,
 }) => {
   const rowGetter = ({ index }: Index): DocumentRevisionListItem => {
     const documentRevision = documentRevisionsToShow[index];
@@ -34,7 +34,7 @@ const DocumentRevisionTable: React.FunctionComponent<DocumentRevisionTableProps>
       name: documentRevision.name,
       owner: documentRevision.owner.name,
       state: documentRevision.status,
-      version: documentRevisionIdMask(documentRevision.type, documentRevision.document.ordinalNumber),
+      version: documentRevision.document.docId,
     };
   };
 

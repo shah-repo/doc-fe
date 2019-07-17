@@ -31,7 +31,7 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
   clearFilter,
 }) => {
 
-  const headerHeight = (searchable) ? 120 : 50;
+  const headerHeight = (searchable) ? 117 : 50;
   const styleProps: TableStyleProps = { isSelectable: (onSelect !== undefined) };
   const classes = styles(styleProps);
 

@@ -32,7 +32,7 @@ const DocumentRevisionTable: React.FunctionComponent<DocumentRevisionTableProps>
     const documentRevision = documentRevisions[index];
 
     return {
-      id: documentRevisionIdMask(documentRevision.type, documentRevision.document.ordinalNumber),
+      id: documentRevision.document.docId,
       revision: documentRevision.revision,
       description: documentRevision.description,
       name: documentRevision.name,

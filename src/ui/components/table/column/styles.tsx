@@ -19,7 +19,7 @@ export const StyledTableHeader = withStyles((theme) => ({
       },
       "& .headerField": {
         backgroundColor: "#e8e9ed",
-        padding: theme.spacing(0, 2),
+        padding: theme.spacing(0, 1),
       },
     },
   },

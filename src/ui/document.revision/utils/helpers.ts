@@ -42,3 +42,12 @@ export const documentRevisionStatusOption = () => {
   });
   return options;
 };
+
+export const documentRevisionTypeFormOption = () => {
+  const options: SelectOption[] = [];
+  Object.keys(DocumentRevisionType).map((key) => {
+    const keyName = DocumentRevisionType[key as keyof typeof DocumentRevisionType];
+    options.push({value: key, text: keyName});
+  });
+  return options;
+};

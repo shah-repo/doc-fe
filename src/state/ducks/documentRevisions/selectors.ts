@@ -4,7 +4,6 @@ import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/typ
 import { documentRevisionIdMask } from "../../../ui/documentRevision/helpers";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
-import { maskId } from "../common/helpers";
 import { DocumentRevisionStatus } from "./types";
 
 const allIds = (state: ApplicationState) => state.documentRevisions.allIds;
@@ -32,10 +31,10 @@ const makeGetDocumentRevisions = () => {
 
 const getAvailableReferences = createSelector(allIds, byId, (ids, docRevs): OptionType[] => (
   ids.map((id) => {
-    const { type, document, revision, name } = docRevs[id];
+    const { document, revision, name } = docRevs[id];
     return {
       value: id,
-      label: `${type}${maskId(document.ordinalNumber)} - ${revision} - ${name}`,
+      label: `${document.docId} - ${revision} - ${name}`,
     };
   })
 ));

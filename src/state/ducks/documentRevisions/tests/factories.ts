@@ -11,7 +11,7 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
   attachments: [],
   name: faker.lorem.sentence(),
   description: faker.lorem.sentence(),
-  document: { id: faker.random.uuid(), ordinalNumber: faker.random.number(10) },
+  document: { id: faker.random.uuid(), docId: faker.random.alphaNumeric(), type: faker.random.word() },
   type: DocumentRevisionType.ADM,
   released: faker.date.future(undefined, "2019-05-31"),
   referenceTo: [],
