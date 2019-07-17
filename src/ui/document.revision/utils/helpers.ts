@@ -13,10 +13,10 @@ const isPendingChange = (documentRevision: DocumentRevision) =>
   documentRevision.status === DocumentRevisionStatus.PendingChange;
 
 export const canEditDocumentRevision = ({
-  documentRevision,
+  dataProp,
   currentUserEmail,
 }: DocumentRevisionUserProps) =>
-  currentUserEmail === documentRevision.owner.email && (isDraft || isPendingChange);
+  currentUserEmail === dataProp.owner.email && (isDraft || isPendingChange);
 
 export const documentRevisionIdMask = (
   type: string,

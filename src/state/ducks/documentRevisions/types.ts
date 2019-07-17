@@ -132,13 +132,6 @@ export interface DocumentRevisionsByIdState {
 export interface DocumentByIdState {
   [key: string]: Document;
 }
-export interface DocumentRevisionProps {
-  documentRevision: DocumentRevision;
-}
-
-export interface DocumentRevisionsProps {
-  documentRevisions: DocumentRevision[];
-}
 
 export type DocumentRevisionsAllIdsState = string[];
 

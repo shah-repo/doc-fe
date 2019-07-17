@@ -1,12 +1,12 @@
+import { Grid } from "@material-ui/core";
 import React from "react";
 import { connect } from "react-redux";
+import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
-import { documentRevisionsActions, documentRevisionsSelectors, DocumentRevision } from "../../state/ducks/documentRevisions";
-import AsyncGate from "../components/AsyncGate";
-import DocumentRevisionListContainer from "./DocumentRevisionList.container";
 import { AsyncState } from "../../state/types";
+import AsyncGate from "../components/AsyncGate";
 import DocumentRevisionDisplayContainer from "./DocumentRevisionDisplay.container";
-import { Grid } from "@material-ui/core";
+import DocumentRevisionListContainer from "./DocumentRevisionList.container";
 
 interface StateProps {
   loadDocumentAsyncState: AsyncState;
@@ -33,18 +33,18 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 
 export const DocumentRevisionManagerContainer: React.FunctionComponent<DocumentRevisionManagerContainerProps> = ({
   loadDocumentAsyncState, loadDocument, isNewVersion,
-  documentId, documentRevisionId, documentRevisions
+  documentId, documentRevisionId, documentRevisions,
 }) => {
   const loadDocumentAction = () => loadDocument(documentId);
 
   return (
     <Grid container={true} spacing={10}>
-      <Grid item={true} xs={2}>
+      <Grid item={true} xs={3}>
         <AsyncGate asyncState={loadDocumentAsyncState} asyncAction={loadDocumentAction} startActionOnMount={true}>
           <DocumentRevisionListContainer documentRevisions={documentRevisions} documentId={documentId} />
         </AsyncGate>
       </Grid>
-      <Grid item={true} xs={10}>
+      <Grid item={true} xs={6}>
         {documentRevisionId && <DocumentRevisionDisplayContainer documentRevisionId={documentRevisionId} isNewVersion={isNewVersion} />}
       </Grid>
     </Grid>

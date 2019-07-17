@@ -7,20 +7,21 @@ import {
   withStyles,
 } from "@material-ui/core";
 import React from "react";
-import { ImplementationPlanProps } from "../../../state/ducks/changeRequest";
-import BaseSummaryField from "../../common/summary/base";
+import { ImplementationPlan as Model } from "../../../state/ducks/changeRequest";
+import { DataProps } from "../../../state/ducks/common";
+import SummaryField from "../../common/summary/base";
 import FileCard from "../../components/cards/FileCard";
 import Text from "../../components/Text";
 import styles from "./styles";
 
-type Props = ImplementationPlanProps & WithStyles<typeof styles>;
+type Props = DataProps<Model> & WithStyles<typeof styles>;
 
 const ImplementationPlan: React.FunctionComponent<Props> = ({
   classes,
-  implementationPlan,
+  dataProp,
 }) => {
 
-  const { tasks, attachments } = implementationPlan;
+  const { tasks, attachments } = dataProp;
 
   const attachmentRenderer = () => attachments.map((attachment, index) => (
     <FileCard key={index} attachment={attachment} />
@@ -31,11 +32,11 @@ const ImplementationPlan: React.FunctionComponent<Props> = ({
       <ListItem>
         <Typography variant="button"><Text message={`Task-${index + 1}`} />:</Typography>
       </ListItem>
-      <BaseSummaryField label="common.title" value={task.title} />
-      <BaseSummaryField label="common.description" value={task.description} />
-      <BaseSummaryField label="common.due.date" value={task.dueDate} />
-      <BaseSummaryField label="common.assigned.to" value={task.assigned && task.assigned.name} />
-      <BaseSummaryField label="common.status" value={task.status} />
+      <SummaryField label="common.title" value={task.title} />
+      <SummaryField label="common.description" value={task.description} />
+      <SummaryField label="common.due.date" value={task.dueDate} />
+      <SummaryField label="common.assigned.to" value={task.assigned && task.assigned.name} />
+      <SummaryField label="common.status" value={task.status} />
     </Box>
   ));
 

@@ -20,7 +20,7 @@ type Props = DocumentRevisionsUserProps & WithStyles<typeof styles>;
 
 const ListPresenter: React.FunctionComponent<Props> = ({
   classes,
-  documentRevisions,
+  dataProp,
   currentUserEmail,
   editDocumentRevision,
   previewDocumentRevision,
@@ -31,7 +31,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
 
   const stateCellTypeRenderer = (rowData: DocumentRevision) => {
     const documentRevision = rowData;
-    const canEdit = canEditDocumentRevision({documentRevision, currentUserEmail});
+    const canEdit = canEditDocumentRevision({dataProp: documentRevision, currentUserEmail});
     return (canEdit) ? "LINK" : "BASE";
   };
 
@@ -132,7 +132,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       </Grid>
       <Grid item={true} className={classes.item}>
         <DocumentList
-          tableData={documentRevisions}
+          tableData={dataProp}
           columns={columns}
           onSelect={onRowSelect}
           queryUrl={DOCUMENT_REVISION_ROOT_URL}

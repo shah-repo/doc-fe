@@ -7,20 +7,21 @@ import {
   withStyles,
 } from "@material-ui/core";
 import React from "react";
-import { JustificationProps } from "../../../state/ducks/changeRequest";
-import BaseSummaryField from "../../common/summary/base";
+import { Justifications } from "../../../state/ducks/changeRequest";
+import { DataProps } from "../../../state/ducks/common";
+import SummaryField from "../../common/summary/base";
 import FileCard from "../../components/cards/FileCard";
 import Text from "../../components/Text";
 import styles from "./styles";
 
-type Props = JustificationProps & WithStyles<typeof styles>;
+type Props = DataProps<Justifications> & WithStyles<typeof styles>;
 
 const Justification: React.FunctionComponent<Props> = ({
   classes,
-  justification,
+  dataProp,
 }) => {
 
-  const { description, attachments } = justification;
+  const { description, attachments } = dataProp;
 
   const attachmentRenderer = () => attachments.map((attachment, index) => (
     <FileCard key={index} attachment={attachment} />
@@ -31,7 +32,7 @@ const Justification: React.FunctionComponent<Props> = ({
       <ListItem>
         <Typography variant="h6"><Text translation="common.justifications" />:</Typography>
       </ListItem>
-      <BaseSummaryField label="common.description" value={description} />
+      <SummaryField label="common.description" value={description} />
       {attachments && <ListItem><Grid container={true} spacing={1}>{attachmentRenderer()}</Grid></ListItem>}
     </Box>
   );

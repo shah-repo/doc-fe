@@ -23,7 +23,7 @@ type Props = OwnProps & DispatchProps & StateProps;
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
   loadAsyncState: changeRequestsSelectors.getLoadListAsyncState(state),
-  changeRequests: changeRequestsSelectors.getChangeRequestsList(state),
+  dataProp: changeRequestsSelectors.getChangeRequestsList(state),
 });
 
 const ListContainer: React.FunctionComponent<Props> = ({
@@ -31,7 +31,7 @@ const ListContainer: React.FunctionComponent<Props> = ({
   loadAsyncState,
   history,
   currentUserEmail,
-  changeRequests,
+  dataProp,
 }) => {
   const loadAction = () => loadChangeRequests();
   const edit = (changeRequestId: string) => history.push(changeRequestEditPath(changeRequestId));
@@ -40,7 +40,7 @@ const ListContainer: React.FunctionComponent<Props> = ({
   return (
     <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>
       <ListPresenter
-        changeRequests={changeRequests}
+        dataProp={dataProp}
         currentUserEmail={currentUserEmail}
         editChangeRequest={edit}
         previewChangeRequest={preview}

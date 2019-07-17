@@ -2,17 +2,14 @@ import { FormikProps } from "formik";
 import { RouteComponentProps } from "react-router-dom";
 import { attachmentsActions } from "../../../state/ducks/attachments";
 import { AuthProps } from "../../../state/ducks/auth/types";
-import {
-  ChangeRequestProps,
-  changeRequestsActions,
-  ChangeRequestsProps,
-} from "../../../state/ducks/changeRequest";
-import { AssessmentType } from "../../../state/ducks/changeRequest/types";
+import { changeRequestsActions } from "../../../state/ducks/changeRequest";
+import { AssessmentType, ChangeRequest } from "../../../state/ducks/changeRequest/types";
+import { DataProps } from "../../../state/ducks/common";
 import { LoadAsyncState } from "../../../state/types";
 import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
 
 // Container
-export type ContainerStateProps = LoadAsyncState & ChangeRequestProps;
+export type ContainerStateProps = LoadAsyncState & DataProps<ChangeRequest>;
 export type ContainerOwnProps = RouteComponentProps<RouteParams>;
 
 export interface ContainerDispatchProps {
@@ -21,7 +18,7 @@ export interface ContainerDispatchProps {
 
 // List
 export type ListProps = ActionProps;
-export type ListStateProps = ChangeRequestsProps & LoadAsyncState & AuthProps;
+export type ListStateProps = DataProps<ChangeRequest[]> & LoadAsyncState & AuthProps;
 
 export interface ListDispatchProps {
   loadChangeRequests: typeof changeRequestsActions.loadList;
@@ -43,8 +40,8 @@ export interface AssessmentDispatchProps {
 // Summary
 
 // Common
-export type ChangeRequestsUserProps = ChangeRequestsProps & ActionProps & AuthProps;
-export type ChangeRequestUserProps = ChangeRequestProps & AuthProps;
+export type ChangeRequestsUserProps = DataProps<ChangeRequest[]> & ActionProps & AuthProps;
+export type ChangeRequestUserProps = DataProps<ChangeRequest> & AuthProps;
 
 export interface RouteParams {
   changeRequestId: string;

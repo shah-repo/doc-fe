@@ -4,8 +4,8 @@ import { SelectOption } from "../../components/forms/fields/Select";
 import { Translation } from "../../translations/types";
 import { ChangeRequestUserProps } from "./types";
 
-export const canEditChangeRequest = ({changeRequest, currentUserEmail}: ChangeRequestUserProps) =>
-  currentUserEmail === changeRequest.owner.email && changeRequest.state === ChangeRequestStatus.Draft;
+export const canEditChangeRequest = ({dataProp, currentUserEmail}: ChangeRequestUserProps) =>
+  currentUserEmail === dataProp.owner.email && dataProp.state === ChangeRequestStatus.Draft;
 
 export const changeRequestStatusOption = () => {
   const options: SelectOption[] = [];

@@ -18,10 +18,10 @@ export interface Approval {
   reviewedAt?: string;
 }
 
-export interface ApprovalsProps {
-  approvals: Approval[];
-}
-
 export interface Id {
   id: string;
+}
+
+export interface DataProps<T> {
+  dataProp: T;
 }
