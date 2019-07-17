@@ -22,12 +22,11 @@ export const Presenter: React.FunctionComponent<Props> = ({
       <Box className={classes.previewBox}>
         <ListItem>
           <Typography variant="h5">
-            <Text translation="document.revision.list.docId" />:
-            {` ${dataProp.type}${maskId(dataProp.document.ordinalNumber)}`}
+            <Text translation="document.revision.list.docId" />: {dataProp.document.docId}
           </Typography>
         </ListItem>
         <SummaryField label="common.status" value={dataProp.status} />
-        <SummaryField label="common.type" value={dataProp.type} />
+        <SummaryField label="common.type" value={dataProp.document.type} />
         <SummaryField label="common.description" value={dataProp.description} />
         <SummaryField label="common.name" value={dataProp.name} />
         {dataProp.referencedBy && <Reference dataProp={dataProp.referencedBy} />}

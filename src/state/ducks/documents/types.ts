@@ -37,6 +37,7 @@ export interface Document {
   approvals: Approval[];
   attachments: Attachment[];
   actions: TableColumnActionType[];
+  docId: string;
 }
 
 export interface DocumentEditRequestBody {

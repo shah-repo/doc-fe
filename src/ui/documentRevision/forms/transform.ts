@@ -1,12 +1,12 @@
-import _ from 'lodash';
+import _ from "lodash";
 import { DocumentRevision, DocumentRevisionEditRequestBody, RevisionChangeType } from "../../../state/ducks/documentRevisions";
-import { documentRevisionIdMask } from "../helpers"; 
+import { documentRevisionIdMask } from "../helpers";
 import { DocumentRevisionFormValues } from "./types";
 
 export const toDocumentRevisionFormValues = (documentRevision: DocumentRevision): DocumentRevisionFormValues => {
   const values: DocumentRevisionFormValues = {
     id: documentRevision.id,
-    documentId: documentRevisionIdMask(documentRevision.type, documentRevision.document.ordinalNumber),
+    documentId: documentRevision.document.docId,
     description: documentRevision.description,
     name: documentRevision.name,
     attachments: documentRevision.attachments,

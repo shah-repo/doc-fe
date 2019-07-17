@@ -32,7 +32,7 @@ export const DocumentRevisionPreviewPresenter: React.FunctionComponent<DocumentR
         </Grid>
         <Grid item={true} xs={10}>
           <Typography variant="h6">
-            {documentRevisionIdMask(documentRevision.type, documentRevision.document.ordinalNumber)}
+            {documentRevision.document.docId}
           </Typography>
         </Grid>
         <Grid item={true} xs={2}>

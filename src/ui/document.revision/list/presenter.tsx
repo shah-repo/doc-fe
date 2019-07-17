@@ -52,9 +52,8 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "docId",
       label: "document.revision.list.docId",
-      searchOptions: { searchValueGetter: (value) => unmaskId(value) },
       columnOptions: {
-        cellDataGetter: ({ rowData }) => `${rowData.type}${maskId(rowData.document.ordinalNumber)}`,
+        cellDataGetter: ({ rowData }) => rowData.document.docId,
         width: 150,
       },
     },
@@ -77,9 +76,12 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "type",
       label: "document.revision.list.type",
-      columnOptions: { width: 100 },
       tooltipKey: typeTooltipRenderer,
       searchOptions: { searchType: "select", selectOptions: documentRevisionTypeOption() },
+      columnOptions: {
+        cellDataGetter: ({ rowData }) => rowData.document.type,
+        width: 100,
+      },
     },
     {
       key: "owner",
