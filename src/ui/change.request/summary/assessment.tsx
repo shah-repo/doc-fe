@@ -42,7 +42,7 @@ const Assessment: React.FunctionComponent<Props> = ({
       <ListItem>
         <Typography variant="h6"><Text translation="common.assessments" />:</Typography>
       </ListItem>
-      <SummaryField label="common.description" value={dataProp.description} />;
+      <SummaryField label="common.description" value={dataProp.description} />
       {itemRenderer()}
     </Box>
   );

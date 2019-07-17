@@ -4,6 +4,7 @@ import { DataProps } from "../../../state/ducks/common";
 import { maskId } from "../../../state/ducks/common/helpers";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import SummaryField from "../../common/summary/base";
+import Text from "../../components/Text";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
 import Attachment from "./attachment";
 import Reference from "./reference";
@@ -21,7 +22,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
       <Box className={classes.previewBox}>
         <ListItem>
           <Typography variant="h5">
-            DOC ID: {`${dataProp.type}${maskId(dataProp.document.ordinalNumber)}`}
+            <Text translation="document.revision.list.docId" />:
+            {`${dataProp.type}${maskId(dataProp.document.ordinalNumber)}`}
           </Typography>
         </ListItem>
         <SummaryField label="common.status" value={dataProp.status} />

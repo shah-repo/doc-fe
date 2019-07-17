@@ -2,7 +2,7 @@ import { Button, Grid, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { maskId, unmaskId } from "../../../state/ducks/common/helpers";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionType } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { TableColumnProps } from "../../components/table/column/types";
 import { TablePanel } from "../../components/table/panel";
@@ -27,6 +27,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
 }) => {
 
   const DocumentList = TablePanel<DocumentRevision>();
+  const [clearFilter, setClearFilter] = React.useState<boolean>(false);
 
   const stateCellTypeRenderer = (rowData: DocumentRevision) => {
     const documentRevision = rowData;
@@ -41,6 +42,11 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   const onRowSelect = ({rowData}: TableSelectionProps<DocumentRevision>) => () => {
     return previewDocumentRevision(rowData.id, rowData.document.id);
   };
+
+  const typeTooltipRenderer = (rowData: DocumentRevision) =>
+    DocumentRevisionType[rowData.type as unknown as keyof typeof DocumentRevisionType];
+
+  const clear = () => setClearFilter(!clearFilter);
 
   const columns: Array<TableColumnProps<DocumentRevision>> = [
     {
@@ -72,6 +78,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       key: "type",
       label: "document.revision.list.type",
       columnOptions: { width: 100 },
+      tooltipKey: typeTooltipRenderer,
       searchOptions: { searchType: "select", selectOptions: documentRevisionTypeOption() },
     },
     {
@@ -111,7 +118,12 @@ const ListPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <Grid container={true} className={classes.root}>
-      <Grid container={true} justify="flex-end">
+      <Grid item={true} xs={6}>
+        <Button color="secondary" className={classes.clearButton} onClick={clear} >
+          Clear filters
+        </Button>
+      </Grid>
+      <Grid container={true} xs={6} justify="flex-end">
         <RouterLink to={DOCUMENT_REVISION_CREATE_URL} className={classes.link}>
           <Button variant="contained" color="primary" className={classes.button}>
             <Text translation="document.revision.create" />
@@ -124,6 +136,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
           columns={columns}
           onSelect={onRowSelect}
           queryUrl={DOCUMENT_REVISION_ROOT_URL}
+          clearFilter={clearFilter}
         />
       </Grid>
     </Grid>

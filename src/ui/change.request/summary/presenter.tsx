@@ -5,6 +5,7 @@ import { DataProps } from "../../../state/ducks/common";
 import { maskId } from "../../../state/ducks/common/helpers";
 import ControlsContainer from "../../changeRequest/forms/assessmentForm/AssessmentFormControls.container";
 import SummaryField from "../../common/summary/base";
+import Text from "../../components/Text";
 import Approvers from "./approvers";
 import Assessment from "./assessment";
 import ImplementationPlan from "./implementation.plan";
@@ -22,7 +23,10 @@ export const Presenter: React.FunctionComponent<Props> = ({
     <Box>
       <Box className={classes.previewBox}>
         <ListItem>
-          <Typography variant="h5">CRID: {`CR${maskId(dataProp.ordinalNumber)}`}</Typography>
+          <Typography variant="h5">
+            <Text translation="common.crid" />
+            {`: CR${maskId(dataProp.ordinalNumber)}`}
+          </Typography>
         </ListItem>
         <SummaryField label="common.owner" value={dataProp.owner.name} />
         <SummaryField label="common.status" value={dataProp.state} />
@@ -41,3 +45,4 @@ export const Presenter: React.FunctionComponent<Props> = ({
 };
 
 export default withStyles(styles)(Presenter) ;
+

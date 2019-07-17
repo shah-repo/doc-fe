@@ -47,8 +47,8 @@ export const DocumentRevisionListContainer: React.FunctionComponent<DocumentRevi
               </div>
             </NavLink>
           </div>
-        )
-      })};
+        );
+      })}
     </React.Fragment>
   );
 };

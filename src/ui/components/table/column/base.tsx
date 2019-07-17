@@ -18,6 +18,7 @@ import {
 import {
   InnerTableColumnProps,
   TableCellProps,
+  TableCellTooltipRenderer,
   TableCellTypeRenderer,
   TableColumnProps,
 } from "./types";
@@ -94,7 +95,6 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
     const searchType = (searchOptions) ? searchOptions.searchType : "text";
     switch (searchType) {
       case "select":
-          const options = searchOptions && searchOptions.selectOptions;
           return <TableSearchSelectField dataKey={key} queryGetter={queryGetter} {...searchOptions} />;
       default:
         return <TableSearchTextField dataKey={key} queryGetter={queryGetter} {...searchOptions} />;
@@ -114,6 +114,22 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
     );
   };
 
+  const tooltipRenderer = (columnProps: ColumnProps) => {
+    let tooltipValue = columnProps.rowData[tooltipKey] || "";
+    if (typeof tooltipKey === "function") {
+      tooltipValue = (tooltipKey as TableCellTooltipRenderer<T>)(columnProps.rowData);
+    }
+
+    return (
+      <StyledTooltip
+        disableHoverListener={!tooltipKey}
+        title={tooltipValue}
+      >
+        <div>{cellMeasurer(columnProps)}</div>
+      </StyledTooltip>
+    );
+  };
+
   const cellRenderer = (columnProps: ColumnProps) => {
     return (
       <StyledTableCell
@@ -122,12 +138,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
         align={"left"}
         {... cellOptions}
       >
-        <StyledTooltip
-          disableHoverListener={!tooltipKey}
-          title={columnProps.rowData[tooltipKey] || ""}
-        >
-          <div>{cellMeasurer(columnProps)}</div>
-        </StyledTooltip>
+        {tooltipRenderer(columnProps)}
       </StyledTableCell>
     );
   };
