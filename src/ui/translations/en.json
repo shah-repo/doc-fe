@@ -107,6 +107,7 @@
   "changeRequest.audit.tasks.title.STRING_NEW": "New implementation plan task title",
   "changeRequest.audit.state.STRING_EDITED": "State changed",
   "changeRequest.audit.tasks.assigned.STRING_EDITED": "Implementation plan task state changed",
+  "changeRequest.audit.tasks.description.STRING_EDITED": "Implementation plan task description changed",
   "changeRequest.audit.description.STRING_EDITED": "Description changed",
   "changeRequest.audit.assessments.process.reasoning.STRING_EDITED": "Assessment process reasoning changed",
   "changeRequest.audit.assessments.process.attachment.STRING_EDITED": "Assessment process attachment changed",
