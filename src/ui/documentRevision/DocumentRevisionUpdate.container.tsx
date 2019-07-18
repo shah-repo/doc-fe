@@ -7,7 +7,7 @@ import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { documentRevisionsActions, DocumentRevision } from "../../state/ducks/documentRevisions";
 import { DocumentRevisionFormValues } from "./forms/types";
 import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
-import DocumentRevisionPreviewPresenter from "./DocumentRevisionPreview.presenter";
+import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";
 import { canEditDocumentRevision, canSubmitDocumentRevision, canCreateNewVersion } from "./helpers";
 
 interface StateProps {
@@ -35,7 +35,7 @@ export const DocumentRevisionUpdateContainer: React.FunctionComponent<DocumentRe
 }) => {
   if (!canEditDocumentRevision(documentRevision, currentUserEmail)) {
     return (
-      <DocumentRevisionPreviewPresenter documentRevision={documentRevision} />
+      <DocumentRevisionSummaryPresenter dataProp={documentRevision} />
     );
   }
 
