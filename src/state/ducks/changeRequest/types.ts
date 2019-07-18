@@ -102,7 +102,7 @@ export interface ImplementationPlanTaskRequest {
 
 export interface ImplementationPlanRequest {
   tasks: ImplementationPlanTaskRequest[];
-  attachments: Attachment[];
+  attachments: EditRequestBodyAttachment[];
 }
 
 export interface ChangeRequestEditRequestBody {
