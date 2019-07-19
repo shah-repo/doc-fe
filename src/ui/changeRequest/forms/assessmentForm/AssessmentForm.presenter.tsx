@@ -7,7 +7,7 @@ import AssessmentContainer from "../../../change.request/assessment/container";
 import AutcompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
 import DatePickerField from "../../../components/forms/fields/DatePicker";
-import TextField from "../../../components/forms/fields/TextField";
+import FilledInputField from "../../../components/forms/fields/FilledInput";
 import { required, validator } from "../../../components/forms/fields/validators";
 import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";
@@ -49,10 +49,10 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
       <Form>
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
-        <Field
-          component={TextField}
+        <FilledInputField
           name="description"
           label="common.description"
+          inputProps={{ id: "description", multiline: true, rows: "2" }}
           validate={validator(required)}
         />
         <Field name="justifications" render={renderJustifications} />

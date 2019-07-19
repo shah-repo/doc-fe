@@ -1,10 +1,9 @@
 import { Box, Grid, Paper, Typography } from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
 import { ErrorMessage } from "formik";
-import { Field } from "formik";
 import React from "react";
 import { AssessmentType } from "../../../state/ducks/changeRequest";
-import TextField from "../../components/forms/fields/TextField";
+import FilledInputField from "../../components/forms/fields/FilledInput";
 import Text from "../../components/Text";
 import { AssessmentProps } from "../utils/types";
 import Item from "./item";
@@ -34,10 +33,10 @@ const Presenter: React.FunctionComponent<Props> = ({
         <Typography variant="h5" component="h3">
           <Text translation="common.assessments" />
         </Typography>
-        <Field
-          component={TextField}
+        <FilledInputField
           name="assessments.description"
           label="common.description"
+          inputProps={{ multiline: true, rows: "2" }}
         />
         <Grid container={true} spacing={3}>
           {itemRenderer()}

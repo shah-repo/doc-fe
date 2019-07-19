@@ -13,6 +13,8 @@ import Text from "../../Text";
 export interface FieldOwnProps {
   label?: Translation;
   formControlProps?: FormControlProps;
+  variant?: "standard" | "outlined" | "filled";
+  required?: boolean;
 }
 
 type FieldProps = FieldOwnProps & FormikFieldProps;
@@ -23,6 +25,8 @@ const Field: React.FunctionComponent<FieldProps> = ({
   children,
   formControlProps,
   label,
+  variant,
+  required,
 }) => {
   const error = _.get(errors, field.name);
   const isFieldTouched = _.get(touched, field.name);
@@ -41,7 +45,14 @@ const Field: React.FunctionComponent<FieldProps> = ({
   );
 
   return (
-    <FormControl margin="normal" required={true} fullWidth={true} error={shouldDisplayError} {...formControlProps}>
+    <FormControl
+      variant={variant || "standard"}
+      margin="normal"
+      required={required}
+      fullWidth={true}
+      error={shouldDisplayError}
+      {...formControlProps}
+    >
       {LabelComponent}
       {children}
       {ErrorComponent}

@@ -1,7 +1,6 @@
 import { FieldArray, FieldArrayRenderProps, FieldProps } from "formik";
-import { Field } from "formik";
 import React from "react";
-import TextField from "../../../components/forms/fields/TextField";
+import FilledInputField from "../../../components/forms/fields/FilledInput";
 import AttachmentsContainer from "../attachments/Attachments.container";
 import { ChangeRequestFormValues } from "../types";
 
@@ -13,10 +12,10 @@ const AssessmentFormJustifications: React.FunctionComponent<Props> = () => {
 
   return (
     <React.Fragment>
-      <Field
-        component={TextField}
+      <FilledInputField
         name="justifications.description"
         label="common.justifications"
+        inputProps={{ multiline: true, rows: "2" }}
       />
       <FieldArray name="justifications.attachments" render={renderAttachments} />
     </React.Fragment>
