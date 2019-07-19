@@ -72,7 +72,6 @@
   "change.request.assessments.error": "Please provide attachment or reasoning for each assessment",
 
   "changeRequest.transition.submitted": "Submit change request",
-  "changeRequest.transition.withdrawn": "Withdraw submission",
   "changeRequest.transition.approve": "Approve submission",
   "changeRequest.transition.reject": "Reject submission",
   "changeRequest.transition.closed": "Close",
