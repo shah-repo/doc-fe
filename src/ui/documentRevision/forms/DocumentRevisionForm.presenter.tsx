@@ -5,11 +5,11 @@ import { DocumentRevision, RevisionChangeType } from "../../../state/ducks/docum
 import { AsyncState } from "../../../state/types";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
+import FilledInputField from "../../components/forms/fields/FilledInput";
 import InputField from "../../components/forms/fields/Input";
 import RadioButton from "../../components/forms/fields/RadioButton";
 import RadioGroup from "../../components/forms/fields/RadioGroup";
 import SelectField from "../../components/forms/fields/Select";
-import TextField from "../../components/forms/fields/TextField";
 import { required, validator } from "../../components/forms/fields/validators";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
@@ -82,11 +82,11 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       <Form>
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
-        <Field
-          component={TextField}
+        <FilledInputField
           name="description"
           label="common.description"
           validate={validator(required)}
+          inputProps={{ multiline: true, rows: "2" }}
         />
         <InputField
           name="name"

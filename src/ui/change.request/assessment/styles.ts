@@ -14,26 +14,6 @@ export default (theme: Theme) => createStyles({
     alignItems: "center",
     textAlign: "center",
   },
-  textField: {
-    "marginTop": "8px",
-    "& label.Mui-focused": {
-      color: "green",
-    },
-    "& .MuiInput-underline:after": {
-      borderBottomColor: "transparent",
-    },
-    "& .MuiOutlinedInput-root": {
-      "& fieldset": {
-        borderColor: "transparent",
-      },
-      "&:hover fieldset": {
-        borderColor: "#ccc",
-      },
-      "&.Mui-focused fieldset": {
-        borderColor: "#ccc",
-      },
-    },
-  },
   close: {
     flex: 1,
     marginLeft: "100px",
