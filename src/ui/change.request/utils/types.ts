@@ -25,6 +25,12 @@ export interface ListDispatchProps {
 }
 
 // Assessment
+export enum AssessmentReasoningOption {
+  statement_1 = "Statement 1",
+  statement_2 = "Statement 2",
+  statement_3 = "Statement 3",
+}
+
 export interface AssessmentProps {
   form: FormikProps<ChangeRequestFormValues>;
 }
