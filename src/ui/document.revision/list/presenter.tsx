@@ -5,7 +5,6 @@ import { unmaskId } from "../../../state/ducks/common/helpers";
 import { DocumentRevision, DocumentRevisionType } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { TableColumnProps } from "../../components/table/column/types";
-import { TableColumnActionType } from "../../components/table/column/types";
 import { TablePanel } from "../../components/table/panel";
 import { TableSelectionProps } from "../../components/table/types";
 import Text from "../../components/Text";
@@ -38,12 +37,6 @@ const ListPresenter: React.FunctionComponent<Props> = ({
 
   const onStateSelect = ({rowData}: TableSelectionProps<DocumentRevision>) => () => {
     return editDocumentRevision(rowData.id, rowData.document.id);
-  };
-
-  const onActionSelect = ({ actionType, rowData}: TableSelectionProps<DocumentRevision>) => () => {
-    if (actionType === "ADD") {
-      return alert("");
-    }
   };
 
   const onRowSelect = ({rowData}: TableSelectionProps<DocumentRevision>) => () => {
@@ -116,17 +109,6 @@ const ListPresenter: React.FunctionComponent<Props> = ({
         dataKey: "status[]",
         searchType: "select",
         selectOptions: documentRevisionStatusOption(),
-      },
-    },
-    {
-      key: "actions",
-      label: "table.column.actions",
-      cellType: "ACTION",
-      omitSearch: true,
-      onSelect: onActionSelect,
-      columnOptions: {
-        cellDataGetter: () => ["ADD"],
-        width: 100,
       },
     },
   ];
