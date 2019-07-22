@@ -1,9 +1,10 @@
 import { shallow } from "enzyme";
 import faker from "faker";
 import React from "react";
+import { getUser } from "../../state/ducks/common/tests/factories";
 import { DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import { getDocumentRevision } from "../../state/ducks/documentRevisions/tests/factories";
-import { getUser } from "../../state/ducks/common/tests/factories";
+import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";
 import { ASYNC_DEFAULT_STATE } from "../hooks/useAsync";
 import {
   DocumentRevisionUpdateContainer,
@@ -11,7 +12,6 @@ import {
 } from "./DocumentRevisionUpdate.container";
 import DocumentRevisionFormContainer from "./forms/DocumentRevisionForm.container";
 import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
-import DocumentRevisionPreviewPresenter from "./DocumentRevisionPreview.presenter";
 
 describe("DocumentRevisionUpdateContainer tests", () => {
   const currentUserEmail = faker.internet.email();
@@ -62,9 +62,9 @@ describe("DocumentRevisionUpdateContainer tests", () => {
     const wrapper = getWrapper({
       currentUserEmail: notExistingEmail,
     });
-    const preview = wrapper.find(DocumentRevisionPreviewPresenter).first();
+    const preview = wrapper.find(DocumentRevisionSummaryPresenter).first();
 
     expect(preview).toBeDefined();
-    expect(preview.prop("documentRevision")).toEqual(documentRevision);
+    expect(preview.prop("dataProp")).toEqual(documentRevision);
   });
 });

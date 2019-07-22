@@ -16,6 +16,7 @@ export const getDocument = (document: Partial<Document> = {}): Document => ({
   owner: getUser(),
   status: DocumentStatus.Draft,
   actions: [],
+  docId: faker.random.alphaNumeric(),
   ...document,
 });
 

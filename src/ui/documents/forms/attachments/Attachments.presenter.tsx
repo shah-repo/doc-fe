@@ -12,8 +12,8 @@ import { Add } from "@material-ui/icons";
 import { Formik, FormikActions, FormikProps } from "formik";
 import React from "react";
 import { AsyncState } from "../../../../state/types";
+import FileCard from "../../../components/cards/FileCard";
 import Text from "../../../components/Text";
-import FileCard from "../../cards/FileCard";
 import { Attachment, FileUploadFormValues } from "../types";
 import styles from "./Attachments.styles";
 import FileUploadForm from "./FileUploadForm";
@@ -45,7 +45,7 @@ const AttachmentsPresenter: React.FunctionComponent<Props> =
       <div className={classes.container}>
         <div className={classes.title}>
           <Typography variant="subtitle1">
-            <Text translation="document.files" />:
+            <Text translation="common.attachments" />:
           </Typography>
           <Fab size="small" color="secondary" aria-label="Create" onClick={openDialog}>
             <Add fontSize="small" />

@@ -45,7 +45,7 @@ const AttachmentsPresenter: React.FunctionComponent<Props> =
       <div className={classes.container}>
         <div className={classes.title}>
           <Typography variant="subtitle1">
-            <Text translation="document.files" />:
+            <Text translation="common.attachments" />:
           </Typography>
           <Fab size="small" color="secondary" aria-label="Create" onClick={openDialog}>
             <Add fontSize="small" />

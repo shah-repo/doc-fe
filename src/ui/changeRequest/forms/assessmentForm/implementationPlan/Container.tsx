@@ -27,7 +27,7 @@ const Container: React.FunctionComponent<Props> = () => {
         <ErrorMessage name="implementationPlan.tasks" />
       </span>
       <Typography>
-        <Text message="changeRequest.assessmentForm.implementationPlan" />
+        <Text message="common.implementation.plan" />
       </Typography>
       <FieldArray name="implementationPlan.tasks" render={renderTasks} />
       <FieldArray name="implementationPlan.attachments" render={renderAttachments} />

@@ -1,17 +1,17 @@
+import { Button, createStyles, makeStyles } from "@material-ui/core";
 import { Form } from "formik";
-import { Button, makeStyles, createStyles } from "@material-ui/core";
 import React from "react";
-import InputField from "../../../../components/forms/fields/Input";
-import { validator, required } from "../../../../components/forms/fields/validators";
-import Text from "../../../../components/Text";
+import { connect } from "react-redux";
+import implementationPlanTaskStates from "../../../../../data/implementationPlanTaskStates.json";
+import { changeRequestsSelectors } from "../../../../../state/ducks/changeRequest";
+import { ApplicationState } from "../../../../../state/reducers";
 import AutocompleteField from "../../../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../../../components/forms/fields/Autocomplete/types";
-import { changeRequestsSelectors } from "../../../../../state/ducks/changeRequest";
-import { connect } from "react-redux";
-import { ApplicationState } from "../../../../../state/reducers";
 import DatePickerField from "../../../../components/forms/fields/DatePicker";
-import implementationPlanTaskStates from "../../../../../data/implementationPlanTaskStates.json";
+import InputField from "../../../../components/forms/fields/Input";
 import SelectField from "../../../../components/forms/fields/Select";
+import { required, validator } from "../../../../components/forms/fields/validators";
+import Text from "../../../../components/Text";
 
 interface OwnProps {
   cancel: () => void;
@@ -30,17 +30,17 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 export const styles = makeStyles(() =>
   createStyles({
     submitBtn: {
-      float: 'right',
-      clear: 'right',
+      float: "right",
+      clear: "right",
     },
     cancelBtn: {
-      float: 'right',
+      float: "right",
     },
   },
 ));
 
 export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
-  cancel, availableAssignees
+  cancel, availableAssignees,
 }) => {
   const classes = styles();
 
@@ -62,14 +62,14 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
         name="assigned"
         autocompleteProps={{
           id: "assigned",
-          placeholder: <Text translation="common.assignedTo" />,
+          placeholder: <Text translation="common.assigned.to" />,
           isClearable: true,
         }}
         options={availableAssignees}
       />
       <DatePickerField
         name="dueDate"
-        label="common.dueDate"
+        label="common.due.date"
         datePickerProps={{ minDate: new Date() }}
         validate={validator(required)}
       />
@@ -79,6 +79,7 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
         selectProps={{inputProps: { id: "status" }}}
         options={implementationPlanTaskStates}
         validate={validator(required)}
+        includeEmpty={false}
       />
       <Button
         type="submit"

@@ -11,7 +11,6 @@ import Dialog from "../../components/dialogs/Dialog";
 import { DialogAction } from "../../components/dialogs/utils/types";
 import Text from "../../components/Text";
 import useDialog from "../../hooks/useDialog";
-import { assessmentParagraphTitle } from "../utils/helpers";
 import { AssessmentItemProps } from "../utils/types";
 import Form from "./form";
 import styles from "./styles";
@@ -47,7 +46,7 @@ const Item: React.FunctionComponent<Props> = ({
         <SubtitlesOutlined />
       </IconButton>
       <Dialog
-        title={assessmentParagraphTitle(type)}
+        title={`change.request.${type}.assessment`}
         contentRenderer={formRenderer}
         dialogHandler={dialogHandler}
         actions={[DialogAction.Ok]}
@@ -76,7 +75,7 @@ const Item: React.FunctionComponent<Props> = ({
   return (
     <Box component="div" m={1} className={classes.paragraph}>
       <Typography component="p" >
-        <Text translation={assessmentParagraphTitle(type)} />
+        <Text message={`change.request.${type}.assessment`} />
       </Typography>
       {!attachment && reasoningRenderer()}
       {attachment && attachmentRenderer()}

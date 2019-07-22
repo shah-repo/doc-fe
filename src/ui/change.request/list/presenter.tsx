@@ -2,13 +2,14 @@ import { Button, Grid, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
-import { maskId } from "../../../state/ducks/common/helpers";
-import { TableColumnProps } from "../../components/table/columns/types";
-import { TablePanel } from "../../components/table/TablePanel";
+import { CHANGE_REQUEST_ROOT_URL } from "../../../state/ducks/changeRequest/constants";
+import { unmaskId } from "../../../state/ducks/common/helpers";
+import { TableColumnProps } from "../../components/table/column/types";
+import { TablePanel } from "../../components/table/panel";
 import { TableSelectionProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import { CHANGE_REQUEST_CREATE_URL } from "../../constants/urls";
-import { canEditChangeRequest } from "../utils/helpers";
+import { canEditChangeRequest, changeRequestStatusOption } from "../utils/helpers";
 import { ChangeRequestsUserProps } from "../utils/types";
 import styles from "./styles";
 
@@ -16,17 +17,18 @@ type Props = ChangeRequestsUserProps & WithStyles<typeof styles>;
 
 const ListPresenter: React.FunctionComponent<Props> = ({
   classes,
-  changeRequests,
+  dataProp,
   currentUserEmail,
   editChangeRequest,
   previewChangeRequest,
 }) => {
 
   const ChangeRequestList = TablePanel<ChangeRequest>();
+  const [clearFilter, setClearFilter] = React.useState<boolean>(false);
 
   const stateCellTypeRenderer = (rowData: ChangeRequest) => {
     const changeRequest = rowData;
-    const canEdit = canEditChangeRequest({changeRequest, currentUserEmail});
+    const canEdit = canEditChangeRequest({dataProp: changeRequest, currentUserEmail});
     return (canEdit) ? "LINK" : "BASE";
   };
 
@@ -38,14 +40,13 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     return previewChangeRequest(rowData.id);
   };
 
+  const clear = () => setClearFilter(!clearFilter);
+
   const columns: Array<TableColumnProps<ChangeRequest>> = [
     {
-      key: "ordinalNumber",
-      label: "change.request.list.crId",
-      columnOptions: {
-        cellDataGetter: ({ rowData }) => `CR${maskId(rowData.ordinalNumber)}`,
-        width: 100,
-      },
+      key: "crId",
+      label: "common.crid",
+      columnOptions: { width: 100},
     },
     {
       key: "description",
@@ -66,12 +67,18 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       cellType: stateCellTypeRenderer,
       onSelect: onStateSelect,
       columnOptions: { width: 80 },
+      searchOptions: { searchType: "select", selectOptions: changeRequestStatusOption() },
     },
   ];
 
   return (
     <Grid container={true} className={classes.root}>
-      <Grid container={true} justify="flex-end">
+      <Grid item={true} xs={6}>
+        <Button color="secondary" className={classes.clearButton} onClick={clear} >
+          Clear filters
+        </Button>
+      </Grid>
+      <Grid item={true} xs={6} style={{textAlign: "right"}}>
         <RouterLink to={CHANGE_REQUEST_CREATE_URL} className={classes.link}>
           <Button variant="contained" color="primary" className={classes.button}>
             <Text translation="change.request.create" />
@@ -80,11 +87,12 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       </Grid>
       <Grid item={true} className={classes.item}>
         <ChangeRequestList
-          data={changeRequests}
+          tableData={dataProp}
           columns={columns}
-          noRowsTranslation="change.request.list.noRows"
           cellMeasure={true}
           onSelect={onRowSelect}
+          queryUrl={CHANGE_REQUEST_ROOT_URL}
+          clearFilter={clear}
         />
       </Grid>
     </Grid>

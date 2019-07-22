@@ -10,6 +10,7 @@ export interface User {
   email: string;
   name: string;
 }
+
 export interface Approval {
   id: string;
   status: ApprovalStatus;
@@ -19,4 +20,8 @@ export interface Approval {
 
 export interface Id {
   id: string;
+}
+
+export interface DataProps<T> {
+  dataProp: T;
 }

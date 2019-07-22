@@ -87,7 +87,10 @@ const toImplementationPlanEditRequestBody = (values: ImplementationPlanFormValue
       return ({ ...excluded });
     }
   });
-  return { tasks: valuesTasks, attachments: values.attachments };
+  return {
+    tasks: valuesTasks,
+    attachments: values.attachments.map((attachment) => ({ id: attachment.id })),
+  };
 };
 
 const createAssessmentObjectForRequestBody = (value: Assessment) => {

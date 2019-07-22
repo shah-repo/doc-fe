@@ -20,6 +20,7 @@ import DocumentRevisionContainer from "../document.revision/container";
 import DocumentRevisionListContainer from "../document.revision/list/container";
 import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisionCreate.container";
 import DocumentContainer from "../documents/Document.container";
+import DataFetcherContainer from "./DataFetcher.container";
 import HeaderContainer from "./Header.container";
 import styles from "./Layout.styles";
 import Navigation from "./Navigation";
@@ -33,6 +34,7 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
       <HeaderContainer />
       <Navigation />
       <main className={classes.content}>
+        <DataFetcherContainer />
         <Switch>
           <Route path={HOME_URL} exact={true} component={DashboardContainer} />
           <Route path={DOCUMENT_ROOT_URL} component={DocumentContainer} />

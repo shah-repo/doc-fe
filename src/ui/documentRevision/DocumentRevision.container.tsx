@@ -12,8 +12,8 @@ import {
   DOCUMENT_REVISION_DETAILS_URL,
   DOCUMENT_REVISION_VERSION_URL,
 } from "../constants/urls";
-import { DocumentRevisionRouteParams } from "./types";
 import DocumentRevisionManagerContainer from "./DocumentRevisionsManager.container";
+import { DocumentRevisionRouteParams } from "./types";
 
 interface StateProps {
   loadAsyncState: AsyncState;
@@ -39,11 +39,11 @@ const DocumentRevisionContainer: React.FunctionComponent<DocumentRevisionContain
   const documentId = match.params.documentId;
   const renderWrapper = (props: any) => {
     const documentRevisionId = props.match.params.documentRevisionId;
-    
+
     return (
       <props.component documentRevisionId={documentRevisionId} documentId={documentId} />
-    )
-  }
+    );
+  };
   const renderDocumentRevisionManagerContainer = (props: any) => renderWrapper({ component: DocumentRevisionManagerContainer, ...props});
 
   return (

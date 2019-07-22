@@ -1,16 +1,13 @@
 import { RouteComponentProps } from "react-router-dom";
 import { AuthProps } from "../../../state/ducks/auth/types";
-import {
-  DocumentRevisionProps,
-  documentRevisionsActions,
-  DocumentRevisionsProps,
-} from "../../../state/ducks/documentRevisions";
+import { DataProps } from "../../../state/ducks/common";
+import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { LoadAsyncState } from "../../../state/types";
 
 // Container
 export type ContainerProps = ContainerOwnProps & ContainerDispatchProps & ContainerStateProps;
 export type ContainerOwnProps = RouteComponentProps<RouteParams>;
-export type ContainerStateProps = LoadAsyncState & DocumentRevisionProps;
+export type ContainerStateProps = LoadAsyncState & DataProps<DocumentRevision>;
 
 export interface ContainerDispatchProps {
   load: typeof documentRevisionsActions.load;
@@ -19,15 +16,28 @@ export interface ContainerDispatchProps {
 // List
 export type ListProps = ListDispatchProps & ListStateProps;
 export type ListOwnProps = RouteComponentProps;
-export type ListStateProps = DocumentRevisionsProps & LoadAsyncState & AuthProps;
+export type ListStateProps = DataProps<DocumentRevision[]> & LoadAsyncState & AuthProps;
 
 export interface ListDispatchProps {
   loadDocumentRevisions: typeof documentRevisionsActions.loadList;
 }
 
+// Summary
+export type SummaryStateProps = LoadAsyncState & DataProps<DocumentRevision[]>;
+
+export interface SummaryDispatchProps {
+  loadDocument: typeof documentRevisionsActions.loadDocument;
+}
+
+export interface SummaryOwnProps {
+  documentId: string;
+  documentRevisionId: string | null;
+  isNewVersion: boolean;
+}
+
 // Common
-export type DocumentRevisionUserProps = DocumentRevisionProps & AuthProps;
-export type DocumentRevisionsUserProps = DocumentRevisionsProps & ActionProps & AuthProps;
+export type DocumentRevisionUserProps = DataProps<DocumentRevision> & AuthProps;
+export type DocumentRevisionsUserProps = DataProps<DocumentRevision[]> & ActionProps & AuthProps;
 
 export interface RouteParams {
   documentRevisionId: string;

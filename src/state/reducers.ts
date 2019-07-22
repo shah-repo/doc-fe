@@ -2,10 +2,10 @@ import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import auth from "./ducks/auth";
-import documents from "./ducks/documents";
+import { LOGOUT_USER } from "./ducks/auth/constants";
 import changeRequests from "./ducks/changeRequest";
 import documentRevisions from "./ducks/documentRevisions";
-import { LOGOUT_USER } from "./ducks/auth/constants";
+import documents from "./ducks/documents";
 
 const authPersistConfig = {
   key: "auth",
@@ -22,11 +22,11 @@ const appReducer = combineReducers({
 
 const rootReducer = (state: any, action: any) => {
   if (action.type === LOGOUT_USER) {
-    state = undefined
+    state = undefined;
   }
 
-  return appReducer(state, action)
-}
+  return appReducer(state, action);
+};
 
 export type ApplicationState = ReturnType<typeof rootReducer>;
 export default rootReducer;

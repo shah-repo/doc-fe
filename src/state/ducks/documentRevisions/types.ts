@@ -1,6 +1,12 @@
 import { Attachment } from "../attachments";
-import { DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET, DOCUMENT_REVISION_AUDIT_SET } from "./constants";
-import { User, Approval } from "../common";
+import { ChangeRequest } from "../changeRequest";
+import { User } from "../common";
+import {
+  DOCUMENT_REVISION_AUDIT_SET,
+  DOCUMENT_REVISION_LIST,
+  DOCUMENT_REVISION_SET,
+  DOCUMENT_SET,
+} from "./constants";
 
 export enum DocumentRevisionStatus {
   Draft = "DRAFT",
@@ -25,7 +31,8 @@ export enum RevisionChangeType {
 
 export interface DocumentRevisionDocument {
   id: string;
-  ordinalNumber: number;
+  docId: string;
+  type: string;
 }
 export interface Document {
   id: string;
@@ -49,11 +56,45 @@ export interface DocumentRevision {
   attachments: Attachment[];
   status: DocumentRevisionStatus;
   document: DocumentRevisionDocument;
-  type: string;
+  type: DocumentRevisionType;
   released: Date;
   referenceTo: Reference[];
   referencedBy: Reference[];
   createdAt?: string;
+  changeRequest?: ChangeRequest;
+}
+
+export enum DocumentRevisionType {
+  SOP = "Standard Operating Procedure",
+  ADM = "Administrative",
+  CS = "Component Specifications",
+  CP = "Clinical Protocol",
+  EHS = "Environmental Health & Safety",
+  FG = "Finished Good",
+  GD = "General Document",
+  CR = "Clinical Report",
+  DD = "Design Document",
+  DMR = "Device Master Record",
+  ES = "Equipment Specifications",
+  FM = "Form",
+  LBL = "Labeling",
+  MKT = "Marketing",
+  MPI = "Manufacturing Process Instructions",
+  MVP = "Master Validation Plan",
+  QM = "Quality Manual",
+  QP = "Quality Plan",
+  QS = "Quality Specifications",
+  REF = "Model/Catalog Number",
+  RPT = "Report",
+  RM = "Risk Management",
+  SA = "Subassembly",
+  SI = "Supply Item",
+  TC = "Training Curriculum",
+  TL = "Tooling",
+  TM = "Test Method",
+  TP = "Test Protocol",
+  TR = "Test Report",
+  WI = "Work Instructions",
 }
 
 export interface ReferenceToEditRequest {
@@ -91,13 +132,6 @@ export interface DocumentRevisionsByIdState {
 
 export interface DocumentByIdState {
   [key: string]: Document;
-}
-export interface DocumentRevisionProps {
-  documentRevision: DocumentRevision;
-}
-
-export interface DocumentRevisionsProps {
-  documentRevisions: DocumentRevision[];
 }
 
 export type DocumentRevisionsAllIdsState = string[];

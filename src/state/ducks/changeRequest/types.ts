@@ -1,5 +1,5 @@
 import { Attachment } from "../attachments";
-import { Approval, User, Id } from "../common";
+import { Approval, Id, User } from "../common";
 import { DocumentRevision } from "../documentRevisions";
 import {
   CHANGE_REQUEST_AUDIT_SET,
@@ -25,9 +25,9 @@ export interface Justifications {
 }
 
 export enum AssessmentType {
-  Design = "design",
-  Process = "process",
-  Regulatory = "regulatory",
+  design = "design",
+  process = "process",
+  regulatory = "regulatory",
 }
 
 export interface Assessment {
@@ -61,6 +61,7 @@ export interface ImplementationPlan {
 
 export interface ChangeRequest {
   id: string;
+  crId: string;
   ordinalNumber: number;
   description: string;
   state: ChangeRequestStatus;
@@ -90,7 +91,6 @@ export interface EditRequestBodyNestedObject {
   attachments: EditRequestBodyAttachment[];
 }
 
-
 export interface ImplementationPlanTaskRequest {
   id?: string;
   title: string;
@@ -102,7 +102,7 @@ export interface ImplementationPlanTaskRequest {
 
 export interface ImplementationPlanRequest {
   tasks: ImplementationPlanTaskRequest[];
-  attachments: Attachment[];
+  attachments: EditRequestBodyAttachment[];
 }
 
 export interface ChangeRequestEditRequestBody {
@@ -161,14 +161,6 @@ export type ChangeRequestsApproversAllIdsState = string[];
 export interface ChangeRequestListApproversAction {
   type: typeof CHANGE_REQUEST_LIST_APPROVERS;
   payload: ChangeRequestAvailableApprovers[];
-}
-
-export interface ChangeRequestsProps {
-  changeRequests: ChangeRequest[];
-}
-
-export interface ChangeRequestProps {
-  changeRequest: ChangeRequest;
 }
 
 export interface Audit {

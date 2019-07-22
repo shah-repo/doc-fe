@@ -11,6 +11,7 @@ import { ButtonProps } from "@material-ui/core/Button";
 
 interface StateProps {
   currentUserEmail: string;
+  isCurrentUserDocControl: boolean;
 }
 
 interface OwnProps {
@@ -19,11 +20,15 @@ interface OwnProps {
 
 export type AssessmentFormControlsContainerProps = OwnProps & StateProps & WithStyles<typeof styles>;
 
+const getHasPermission = authSelectors.makeGetHasPermission();
 const mapStateToProps = (state: ApplicationState) => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
+  isCurrentUserDocControl: getHasPermission(state, "CR_TO_IN_REVIEW"),
 });
 
-const AssessmentFormControlsContainer: React.FunctionComponent<AssessmentFormControlsContainerProps> = ({ classes, changeRequest, currentUserEmail }) => {
+const AssessmentFormControlsContainer: React.FunctionComponent<AssessmentFormControlsContainerProps> = ({
+  classes, changeRequest, currentUserEmail, isCurrentUserDocControl
+}) => {
   if (!changeRequest) {
     return null;
   }
@@ -42,7 +47,6 @@ const AssessmentFormControlsContainer: React.FunctionComponent<AssessmentFormCon
   }
 
   const isCurrentUserOwner = changeRequest.owner.email === currentUserEmail;
-  const isCurrentUserDocControl = true;
   const canWithdraw =
     isCurrentUserOwner
     && changeRequest.state !== ChangeRequestStatus.Closed
