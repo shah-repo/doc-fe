@@ -95,7 +95,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           validate={validator(required)}
         />
         <SelectField
-          name="type"
+          name="document.type"
           label="document.type"
           selectProps={{inputProps: { id: "type", disabled: initialValues.id && true }, onChange: onTypeChange }}
           options={documentRevisionTypeFormOption()}
