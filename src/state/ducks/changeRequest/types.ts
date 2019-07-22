@@ -10,7 +10,6 @@ import {
 
 export enum ChangeRequestStatus {
   Draft = "DRAFT",
-  Submitted = "SUBMITTED",
   InReview = "IN_REVIEW",
   Withdrawn = "WITHDRAWN",
   Approved = "APPROVED",
