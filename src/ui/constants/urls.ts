@@ -26,3 +26,4 @@ export const DOCUMENT_REVISION_VERSION_URL = `${DOCUMENT_REVISION_ROOT_URL}/vers
 export const DOCUMENT_REVISION_NEW_VERSION_URL = `${DOCUMENT_REVISION_ROOT_URL}/new-version/:documentRevisionId`;
 
 export const SIGNUP_URL = "/signup";
+export const STATUS = "/status";
