@@ -47,6 +47,11 @@ const AssessmentFormControlsContainer: React.FunctionComponent<AssessmentFormCon
   };
 
   const isCurrentUserOwner = changeRequest.owner.email === currentUserEmail;
+  const canWithdraw =
+    isCurrentUserOwner
+    && changeRequest.state !== ChangeRequestStatus.Closed
+    && changeRequest.state !== ChangeRequestStatus.Draft
+    && changeRequest.state !== ChangeRequestStatus.Withdrawn;
   const canSendToReview = isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.Draft;
   const canClose = isCurrentUserOwner
     && (changeRequest.state === ChangeRequestStatus.Approved || changeRequest.state === ChangeRequestStatus.Rejected);
@@ -60,6 +65,7 @@ const AssessmentFormControlsContainer: React.FunctionComponent<AssessmentFormCon
 
   return (
     <div className={classes.container}>
+      {renderButton(canWithdraw, "withdrawn")}
       {renderButton(canSendToReview, "in_review")}
       {renderButton(canApproveOrReject, "reject", { color: "secondary" })}
       {renderButton(canApproveOrReject, "approve")}

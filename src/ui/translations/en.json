@@ -76,6 +76,7 @@
   "changeRequest.transition.reject": "Reject submission",
   "changeRequest.transition.closed": "Close",
   "changeRequest.transition.in_review": "Send to review",
+  "changeRequest.transition.withdrawn": "Withdraw submission",
   "changeRequest.audit.documentRevisions.ARRAY_NEW": "New document revision added",
   "changeRequest.audit.documentRevisions.ARRAY_DELETED": "Document revision removed",
   "changeRequest.audit.approvers.ARRAY_ADDED": "New approver added",
