@@ -33,7 +33,7 @@ const Attachment: React.FunctionComponent<Props> = ({
       formAssessment[type] = { attachment };
       form.setValues({
         ...form.values,
-        ...formAssessment,
+        assessments: formAssessment,
       });
     },
   });
