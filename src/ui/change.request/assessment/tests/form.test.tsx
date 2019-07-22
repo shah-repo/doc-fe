@@ -1,7 +1,8 @@
 import React from "react";
 import { mount } from "enzyme";
 import  Form from "../form";
-import { Formik, Field } from "formik";
+import { Formik } from "formik";
+import FilledInputField from "../../../components/forms/fields/FilledInput";
 import { addLocaleData, IntlProvider } from "react-intl";
 import localeEn from "react-intl/locale-data/en";
 import messagesEn from "../../../translations/en.json";
@@ -43,6 +44,7 @@ describe("Assessment form unit test", () => {
 
   it("Textfield is multiline", () => {
     const wrapper = getWrapper({});
-    expect(wrapper.find(Field).at(0).prop("multiline")).toBe(true);
+    const inputProps = { multiline: true, rows: "2" };
+    expect(wrapper.find(FilledInputField).prop("inputProps")).toEqual(inputProps);
   })
 })

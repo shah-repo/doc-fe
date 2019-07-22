@@ -16,7 +16,7 @@ import { act } from 'react-dom/test-utils';
 const middlewares = [];
 const mockStore = configureStore(middlewares);
 
-describe("Assessment item unit tests", () => {
+describe("Assessment attachment unit tests", () => {
   addLocaleData([...localeEn]);
   const messages = { en: messagesEn };
   const language = "en";

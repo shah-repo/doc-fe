@@ -1,7 +1,7 @@
 import { mount } from "enzyme";
 import React from "react";
 import Presenter from "../presenter";
-import { Field } from "formik";
+import FilledInputField from "../../../components/forms/fields/FilledInput";
 import { Formik, FormikErrors, FormikProps } from "formik";
 import { addLocaleData, IntlProvider } from "react-intl";
 import localeEn from "react-intl/locale-data/en";
@@ -54,6 +54,7 @@ describe("Assessment presenter unit test", () => {
 
   it("Field is multiline", () => {
     const wrapper = getWrapper({});
-    expect(wrapper.find(Field).prop("multiline")).toBe(true);
+    const inputProps = { multiline: true, rows: "2" };
+    expect(wrapper.find(FilledInputField).prop("inputProps")).toEqual(inputProps);
   })
 })
