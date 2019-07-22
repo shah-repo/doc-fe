@@ -1,15 +1,11 @@
 import { mount } from "enzyme";
 import React from "react";
-import Item from "../item";
-import { addLocaleData, IntlProvider } from "react-intl";
-import localeEn from "react-intl/locale-data/en";
-import messagesEn from "../../../translations/en.json";
+import { Item, Props } from "../item";
+import toJson from 'enzyme-to-json';
+
+jest.mock("../../../components/Text");
 
 describe("Assessment item unit test", () => {
-  addLocaleData([...localeEn]);
-  const messages = { en: messagesEn };
-  const language = "en";
-
   const defaultProps = {
     classes: {
       exampleClass: ""
@@ -37,10 +33,8 @@ describe("Assessment item unit test", () => {
       }
     }
   }
-  const getWrapper = (props: Partial<Prpos>) => mount(
-    <IntlProvider locale={language} messages={messages[language]}>
-      <Item {...defaultProps} {...props}/>
-    </IntlProvider>
+  const getWrapper = (props: Partial<Props>) => mount(
+    <Item {...defaultProps} {...props}/>
   );
 
   it("renders attachmentRenderer correctly", () => {
@@ -83,11 +77,11 @@ describe("Assessment item unit test", () => {
       }
     }
     const wrapper = getWrapper({ form });
-    expect(wrapper.html()).toMatchSnapshot();
+    expect(toJson(wrapper)).toMatchSnapshot();
   });
 
   it("renders resoningRenderer correctly", () => {
     const wrapper = getWrapper({});
-    expect(wrapper.html()).toMatchSnapshot();
+    expect(toJson(wrapper)).toMatchSnapshot();
   });
 });

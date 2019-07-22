@@ -1,17 +1,12 @@
 import { mount } from "enzyme";
 import React from "react";
-import Presenter from "../presenter";
+import { Presenter, Props } from "../presenter";
 import FilledInputField from "../../../components/forms/fields/FilledInput";
-import { Formik, FormikErrors, FormikProps } from "formik";
-import { addLocaleData, IntlProvider } from "react-intl";
-import localeEn from "react-intl/locale-data/en";
-import messagesEn from "../../../translations/en.json";
+import { Formik } from "formik";
+
+jest.mock("../../../components/Text");
 
 describe("Assessment presenter unit test", () => {
-  addLocaleData([...localeEn]);
-  const messages = { en: messagesEn };
-  const language = "en";
-
   const defaultProps = {
     classes: {
       exampleClass: ""
@@ -40,17 +35,13 @@ describe("Assessment presenter unit test", () => {
   }
 
   const getWrapper = (props: Props<Props>) => mount(
-    <IntlProvider locale={language} messages={messages[language]}>
-      <Formik>
+      <Formik
+        onSubmit={() => {}}
+        initialValues={{}}
+      >
         <Presenter {...defaultProps} {...props}/>
       </Formik>
-    </IntlProvider>
   );
-
-  it("Displays Presenter correctly", () => {
-    const wrapper = getWrapper({});
-    expect(wrapper.html()).toMatchSnapshot();
-  })
 
   it("Field is multiline", () => {
     const wrapper = getWrapper({});

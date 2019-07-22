@@ -9,9 +9,9 @@ import { AssessmentProps } from "../utils/types";
 import Item from "./item";
 import styles from "./styles";
 
-type Props = AssessmentProps & WithStyles <typeof styles>;
+export type Props = AssessmentProps & WithStyles <typeof styles>;
 
-const Presenter: React.FunctionComponent<Props> = ({
+export const Presenter: React.FunctionComponent<Props> = ({
   classes,
   form,
 }) => {
