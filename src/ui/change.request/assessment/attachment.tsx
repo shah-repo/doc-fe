@@ -17,11 +17,11 @@ import { AssessmentDispatchProps } from "../utils/types";
 
 type DispatchProps = AssessmentDispatchProps;
 type OwnProps = FieldProps<ChangeRequestFormValues>;
-type Props = OwnProps & DispatchProps & {
+export type Props = OwnProps & DispatchProps & {
   type: AssessmentType;
 };
 
-const Attachment: React.FunctionComponent<Props> = ({
+export const Attachment: React.FunctionComponent<Props> = ({
   upload,
   form,
   type,

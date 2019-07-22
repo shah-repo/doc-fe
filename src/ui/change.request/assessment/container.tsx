@@ -3,7 +3,7 @@ import React from "react";
 import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
 import Presenter from "./presenter";
 
-type Props = FieldProps<ChangeRequestFormValues>;
+export type Props = FieldProps<ChangeRequestFormValues>;
 
 const Container: React.FunctionComponent<Props> = ({
   form,
