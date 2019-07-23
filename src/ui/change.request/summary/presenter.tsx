@@ -28,6 +28,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         </ListItem>
         <SummaryField label="common.owner" value={dataProp.owner.name} />
         <SummaryField label="common.status" value={dataProp.state} />
+        <SummaryField label="common.title" value={dataProp.title} />
         <SummaryField label="common.description" value={dataProp.description} />
         <SummaryField label="common.target.date" value={dataProp.effectiveDate} />
         <Justification dataProp={dataProp.justifications} />

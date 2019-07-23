@@ -3,7 +3,6 @@ import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { CHANGE_REQUEST_ROOT_URL } from "../../../state/ducks/changeRequest/constants";
-import { unmaskId } from "../../../state/ducks/common/helpers";
 import { TableColumnProps } from "../../components/table/column/types";
 import { TablePanel } from "../../components/table/panel";
 import { TableSelectionProps } from "../../components/table/types";
@@ -49,9 +48,10 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       columnOptions: { width: 100},
     },
     {
-      key: "description",
-      label: "change.request.list.description",
+      key: "title",
+      label: "common.crtitle",
       columnOptions: { flexGrow: 2 },
+      tooltipKey: "description",
     },
     {
       key: "owner",
@@ -63,7 +63,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     },
     {
       key: "state",
-      label: "change.request.list.state",
+      label: "common.status",
       cellType: stateCellTypeRenderer,
       onSelect: onStateSelect,
       columnOptions: { width: 80 },
