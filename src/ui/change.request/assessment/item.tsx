@@ -15,9 +15,9 @@ import { AssessmentItemProps } from "../utils/types";
 import Form from "./form";
 import styles from "./styles";
 
-type Props = AssessmentItemProps & WithStyles <typeof styles>;
+export type Props = AssessmentItemProps & WithStyles <typeof styles>;
 
-const Item: React.FunctionComponent<Props> = ({
+export const Item: React.FunctionComponent<Props> = ({
   classes,
   type,
   form,
