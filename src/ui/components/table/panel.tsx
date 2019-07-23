@@ -14,7 +14,6 @@ import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import Text from "../../components/Text";
 import { TableColumn } from "./column/base";
-import { TableSearchDelimiter } from "./search/types";
 import { styles } from "./styles";
 import { TablePanelProps, TablePanelStateProps, TableStyleProps } from "./types";
 
@@ -28,9 +27,10 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
   onSelect,
   searchable = true,
   queryUrl = "",
-  clearFilter,
 }) => {
 
+  const queryDelay = 300;
+  let lastQueryValue: string = "";
   const headerHeight = (searchable) ? 117 : 50;
   const styleProps: TableStyleProps = { isSelectable: (onSelect !== undefined) };
   const classes = styles(styleProps);
@@ -42,36 +42,25 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
     scrollToIndex: 0,
   });
 
-  const setQueryDict = (key: string, value: string) => {
-    const dict = state.queryDict;
-    (value === "") ? delete dict[key] : dict[key] = value;
-    setState({...state, queryDict: dict});
-  };
-
   const queryGetter = (key: string, value: string) => {
     if (!queryUrl) { return; }
+    lastQueryValue = value;
 
-    let finalQuery: string = TableSearchDelimiter.Main;
-    const { queryDict } = state;
-    setQueryDict(key, value);
-
-    Object.keys(queryDict).map((k: string, index: number) => {
-      const delimiter = (index === 0) ? "" : TableSearchDelimiter.Regular;
-      finalQuery += `${delimiter}${k}=${queryDict[k]}`;
-    });
-
-    if (finalQuery === TableSearchDelimiter.Main) {
-      finalQuery = "";
-    }
-
-    queryApi(finalQuery);
+    setTimeout(() => {
+      if (lastQueryValue !== value) { return; }
+      const dict = state.queryDict;
+      (value === "") ? delete dict[key] : dict[key] = value;
+      setState({...state, queryDict: dict});
+      queryApi();
+    }, queryDelay);
   };
 
-  const queryApi = async (query: string) => {
+  const queryApi = async () => {
     try {
       const requestConfig: AxiosRequestConfig = {
         method: "get",
-        url: queryUrl + query,
+        url: queryUrl,
+        params: state.queryDict,
         headers: {},
       };
 
