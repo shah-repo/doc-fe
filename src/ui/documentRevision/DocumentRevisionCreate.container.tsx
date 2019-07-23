@@ -31,7 +31,6 @@ export const DEFAULT_INITIAL_VALUES = {
   attachments: [],
   type: "",
   referenceTo: [],
-  referencedBy: [],
   revisionChangeType: RevisionChangeType.NextRevision,
 };
 

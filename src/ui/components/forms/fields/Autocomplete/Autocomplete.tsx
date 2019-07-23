@@ -10,6 +10,7 @@ import { OptionType } from "./types";
 interface AutocompleteOwnProps extends FieldOwnProps {
   autocompleteProps: SelectComponentsProps;
   options: OptionType[];
+  onClick?: (value: any) => void; 
 }
 
 type AutocompletePropsWithFormik = AutocompleteOwnProps & FormikFieldProps;
@@ -17,6 +18,7 @@ type AutocompletePropsWithFormik = AutocompleteOwnProps & FormikFieldProps;
 const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
   autocompleteProps,
   options,
+  onClick,
   ...fieldProps
 }) => {
   const onChange = (value: ValueType<OptionType>) => {
@@ -30,7 +32,10 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
           {...autocompleteProps}
           options={options}
           onChange={onChange}
-          components={AutocompleteComponents}
+          components={{
+            ...AutocompleteComponents,
+            MultiValue: (props) => AutocompleteComponents.MultiValue({ ...props, onClick }),
+          }}
         />
     </Field>
   );
