@@ -2,7 +2,7 @@ import React from "react";
 import { mount, shallow } from "enzyme";
 import  { Form, Props } from "../form";
 import { Formik } from "formik";
-import FilledInputField from "../../../components/forms/fields/FilledInput";
+import FilledSelectField from "../../../components/forms/fields/FilledSelect";
 import { AssessmentType } from "../../../../state/ducks/changeRequest";
 
 jest.mock("../../../components/Text");
@@ -17,9 +17,8 @@ describe("Assessment form unit test", () => {
     </Formik>
   );
 
-  it("Textfield is multiline", () => {
+  it("Displays form correctly", () => {
     const wrapper = getWrapper({});
-    const inputProps = { multiline: true, rows: "2" };
-    expect(wrapper.dive().dive().find(FilledInputField).prop("inputProps")).toEqual(inputProps);
+    expect(wrapper.dive().dive().find(FilledSelectField)).toHaveLength(1);
   })
 })
