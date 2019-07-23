@@ -1,8 +1,6 @@
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest";
-import { AssessmentType } from "../../../state/ducks/changeRequest";
 import { SelectOption } from "../../components/forms/fields/Select";
-import { Translation } from "../../translations/types";
-import { ChangeRequestUserProps } from "./types";
+import { AssessmentReasoningOption, ChangeRequestUserProps } from "./types";
 
 export const canEditChangeRequest = ({dataProp, currentUserEmail}: ChangeRequestUserProps) =>
   currentUserEmail === dataProp.owner.email && dataProp.state === ChangeRequestStatus.Draft;
@@ -12,6 +10,16 @@ export const changeRequestStatusOption = () => {
   Object.keys(ChangeRequestStatus).map((key) => {
     // TODO: Change ChangeRequestStatus status into key = value, value = text
     const keyName = ChangeRequestStatus[key as keyof typeof ChangeRequestStatus];
+    options.push({value: keyName, text: keyName});
+  });
+  return options;
+};
+
+export const assessmentStatementOption = () => {
+  const options: SelectOption[] = [];
+  Object.keys(AssessmentReasoningOption).map((key) => {
+    // TODO: Change ChangeRequestStatus status into key = value, value = text
+    const keyName = AssessmentReasoningOption[key as keyof typeof AssessmentReasoningOption];
     options.push({value: keyName, text: keyName});
   });
   return options;

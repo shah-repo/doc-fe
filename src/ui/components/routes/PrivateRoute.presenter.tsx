@@ -10,10 +10,6 @@ export interface PrivateRoutePresenterProps extends Pick<RouteComponentProps, "l
 
 const PrivateRoutePresenter: React.FunctionComponent<PrivateRoutePresenterProps> =
   ({ component: Component, isAuthenticated, ...rest }) => {
-    if (rest.location.pathname == "/status") {
-      return <StatusPresenter {...rest} />;
-    }
-
     if (isAuthenticated) {
       return <Component {...rest} />;
     }

@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Route, RouteComponentProps, Switch } from "react-router-dom";
+import { Route, RouteComponentProps } from "react-router-dom";
+import Switch from "../app/Switch";
 import { Document, documentsActions, documentsSelectors } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";

@@ -2,7 +2,6 @@ import React from "react";
 
 const StatusPresenter: React.FunctionComponent = (props) => {
     let dict = require('../../data/buildInfo.json');
-    console.log(dict);
     let elements = Object.keys(dict).map((key: string) => {
       return (
         <tr>

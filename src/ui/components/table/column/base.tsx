@@ -28,7 +28,7 @@ type InnerProps = InnerTableColumnProps;
 
 export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
 
-  const { key, label, cellType, columnOptions, cellOptions, tooltipKey, onSelect, searchOptions } = props;
+  const { key, label, cellType, columnOptions, cellOptions, tooltipKey, onSelect, searchOptions, omitSearch } = props;
   const { measurerCache, searchable, queryGetter } = innerProps;
 
   measurerCache.clearAll();
@@ -65,7 +65,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
 
   const cellTypeRenderer = ({ cellData, rowData }: ColumnProps) => {
     let type = cellType;
-    if (cellType as TableCellTypeRenderer<T>) {
+    if (typeof cellType === "function") {
       type = (cellType as TableCellTypeRenderer<T>)(rowData);
     }
     switch (type) {
@@ -92,13 +92,16 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
   };
 
   const searchFieldRenderer = () => {
+    if (omitSearch === true) {
+      return <Box style={{background: "transparent", height: 65}} />;
+    }
     const searchType = (searchOptions) ? searchOptions.searchType : "text";
     switch (searchType) {
       case "select":
           return <TableSearchSelectField dataKey={key} queryGetter={queryGetter} {...searchOptions} />;
       default:
-        return <TableSearchTextField dataKey={key} queryGetter={queryGetter} {...searchOptions} />;
-    }
+        return <TableSearchTextField dataKey={key} queryGetter={queryGetter} {...searchOptions} />
+;    }
   };
 
   const headerRenderer = () => {

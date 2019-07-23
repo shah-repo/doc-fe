@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Route, Switch } from "react-router-dom";
+import { Route } from "react-router-dom";
+import Switch from "../app/Switch";
 import {
   documentRevisionsActions,
   documentRevisionsSelectors,

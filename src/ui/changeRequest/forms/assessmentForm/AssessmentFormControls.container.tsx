@@ -1,13 +1,13 @@
 import { withStyles, WithStyles } from "@material-ui/core";
-import React from "react";
-import styles from './AssessmentForm.styles';
-import ChangeRequestTransitionDialogContainer from "../../dialogs/ChangeRequestTransitionDialog.container";
-import { ChangeRequest, ChangeRequestStatus, ChangeRequestTransition } from "../../../../state/ducks/changeRequest";
-import { ApplicationState } from "../../../../state/reducers";
-import { authSelectors } from "../../../../state/ducks/auth";
-import { connect } from "react-redux";
-import { Approval, ApprovalStatus } from "../../../../state/ducks/documents";
 import { ButtonProps } from "@material-ui/core/Button";
+import React from "react";
+import { connect } from "react-redux";
+import { authSelectors } from "../../../../state/ducks/auth";
+import { ChangeRequest, ChangeRequestStatus, ChangeRequestTransition } from "../../../../state/ducks/changeRequest";
+import { Approval, ApprovalStatus } from "../../../../state/ducks/documents";
+import { ApplicationState } from "../../../../state/reducers";
+import ChangeRequestTransitionDialogContainer from "../../dialogs/ChangeRequestTransitionDialog.container";
+import styles from "./AssessmentForm.styles";
 
 interface StateProps {
   currentUserEmail: string;
@@ -27,7 +27,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 });
 
 const AssessmentFormControlsContainer: React.FunctionComponent<AssessmentFormControlsContainerProps> = ({
-  classes, changeRequest, currentUserEmail, isCurrentUserDocControl
+  classes, changeRequest, currentUserEmail, isCurrentUserDocControl,
 }) => {
   if (!changeRequest) {
     return null;
@@ -42,18 +42,13 @@ const AssessmentFormControlsContainer: React.FunctionComponent<AssessmentFormCon
           buttonProps={buttonProps}
           label={`changeRequest.transition.${transition}`}
         />
-      )
+      );
     }
-  }
+  };
 
   const isCurrentUserOwner = changeRequest.owner.email === currentUserEmail;
-  const canWithdraw =
-    isCurrentUserOwner
-    && changeRequest.state !== ChangeRequestStatus.Closed
-    && changeRequest.state !== ChangeRequestStatus.Draft
-    && changeRequest.state !== ChangeRequestStatus.Withdrawn;
-  const canSubmit = isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.Draft;
-  const canSendToReview = isCurrentUserDocControl && changeRequest.state === ChangeRequestStatus.Submitted;
+  const canWithdraw = isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.InReview;
+  const canSendToReview = isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.Draft;
   const canClose = isCurrentUserOwner
     && (changeRequest.state === ChangeRequestStatus.Approved || changeRequest.state === ChangeRequestStatus.Rejected);
 
@@ -66,11 +61,10 @@ const AssessmentFormControlsContainer: React.FunctionComponent<AssessmentFormCon
 
   return (
     <div className={classes.container}>
-      {renderButton(canSubmit, 'submitted')}
-      {renderButton(canWithdraw, 'withdrawn')}
+      {renderButton(canWithdraw, "withdrawn")}
+      {renderButton(canSendToReview, "in_review")}
       {renderButton(canApproveOrReject, "reject", { color: "secondary" })}
       {renderButton(canApproveOrReject, "approve")}
-      {renderButton(canSendToReview, "in_review")}
       {renderButton(canClose, "closed")}
     </div>
   );
