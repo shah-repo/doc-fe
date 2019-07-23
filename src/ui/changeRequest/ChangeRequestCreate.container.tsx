@@ -20,6 +20,7 @@ interface OwnProps extends RouteComponentProps {
 export type ChangeRequestCreateContainerProps = OwnProps & DispatchProps;
 
 export const DEFAULT_INITIAL_VALUES: ChangeRequestFormValues = {
+  title: "",
   description: "",
   justifications: { description: "", attachments: [] },
   assessments: { description: "", design: {}, process: {}, regulatory: {} },

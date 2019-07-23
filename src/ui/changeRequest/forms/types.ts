@@ -26,12 +26,13 @@ export interface ImplementationPlanTaskFormValues {
 }
 
 export interface ImplementationPlanFormValues {
-  attachments: Attachment[],
-  tasks: ImplementationPlanTaskFormValues[],
+  attachments: Attachment[];
+  tasks: ImplementationPlanTaskFormValues[];
 }
 
 export interface ChangeRequestFormValues {
   id?: string;
+  title: string;
   description: string;
   justifications: Justifications;
   assessments: Assessment;
