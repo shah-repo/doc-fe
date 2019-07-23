@@ -1,6 +1,7 @@
 import { Typography, withStyles, WithStyles } from "@material-ui/core";
-import { Field, FieldArray, FieldArrayRenderProps, Form, FormikProps } from "formik";
-import React from "react";
+import { FieldArray, FieldArrayRenderProps, Form, FormikProps } from "formik";
+import { Link } from "react-router-dom";
+import React, { MouseEventHandler } from "react";
 import { DocumentRevision, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { AsyncState } from "../../../state/types";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
@@ -32,6 +33,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   asyncState, classes, initialValues, handleChange, setFieldValue, documentRevisions,
   availableReferences, showRevisionTypeChange,
 }) => {
+  const openReference = (id: string) => { console.log(id); };
   const renderAttachments = (props: FieldArrayRenderProps) => <AttachmentsContainer {...props} />;
 
   const onTypeChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
@@ -63,14 +65,20 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   };
 
   const renderReferences = () => {
-    if (initialValues.referencedBy.length > 0) {
+    if (initialValues.referencedBy && initialValues.referencedBy.length > 0) {
       return (
         <React.Fragment>
           <Typography variant="h6" >
             <Text translation="common.referenced.by" />
           </Typography>
           <div>
-            {initialValues.referencedBy.map((reference) => reference.name)}
+            {initialValues.referencedBy.map((reference) => {
+              return (
+                <div>
+                  reference.name
+                </div>
+              )
+            })}
           </div>
         </React.Fragment>
       );
@@ -112,8 +120,10 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             id: "referenceTo",
             isMulti: true,
             placeholder: <Text translation="documentRevision.form.references" />,
+            closeMenuOnSelect: false,
           }}
           options={availableReferences}
+          onClick={openReference}
         />
         {renderReferences()}
         <FieldArray name="attachments" render={renderAttachments} />

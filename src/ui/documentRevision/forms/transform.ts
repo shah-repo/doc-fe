@@ -11,7 +11,7 @@ export const toDocumentRevisionFormValues = (documentRevision: DocumentRevision)
     name: documentRevision.name,
     attachments: documentRevision.attachments,
     type: documentRevision.type,
-    referenceTo: documentRevision.referenceTo.map((reference) => ({ value: reference.id, label: reference.name })),
+    referenceTo: documentRevision.referenceTo.map((reference: any) => ({ value: reference.id, label: reference.docId })),
     referencedBy: documentRevision.referencedBy,
     document: documentRevision.document,
   };
