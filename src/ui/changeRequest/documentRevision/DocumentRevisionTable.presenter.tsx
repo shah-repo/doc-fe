@@ -76,20 +76,14 @@ const DocumentRevisionTable: React.FunctionComponent<
   ];
 
   const bodyRenderer = () => {
-    if (documentRevisionsToShow.length > 0) {
-      return (
-        <ChangeRequestList
-          columns={columns}
-          tableData={documentRevisionsToShow}
-          cellMeasure={true}
-          clearFilter={clear}
-          queryUrl={DOCUMENT_REVISION_ROOT_URL}
-        />
-      );
-    }
-
     return (
-      <Text translation="changeRequest.documentRevisionTable.noDocumentRevisions" />
+      <ChangeRequestList
+        columns={columns}
+        tableData={documentRevisionsToShow}
+        cellMeasure={true}
+        clearFilter={clear}
+        queryUrl={DOCUMENT_REVISION_ROOT_URL}
+      />
     );
   };
 
