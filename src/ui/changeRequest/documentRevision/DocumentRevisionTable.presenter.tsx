@@ -1,118 +1,99 @@
-import { Button, Paper, WithStyles, withStyles } from "@material-ui/core";
+import { Paper, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import {
-  AutoSizer,
-  Column,
-  ColumnProps,
-  Index,
-  Size,
-  Table,
-  TableCellProps,
-} from "react-virtualized";
-import { DocumentRevision, DocumentRevisionsByIdState, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+  DocumentRevision,
+  DocumentRevisionsByIdState,
+  DocumentRevisionStatus,
+} from "../../../state/ducks/documentRevisions";
+import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
+import {
+  TableColumnActionProps,
+  TableColumnProps,
+} from "../../components/table/column/types";
+import { TablePanel } from "../../components/table/panel";
+import { TableSelectionProps } from "../../components/table/types";
 import Text from "../../components/Text";
+import { documentRevisionStatusOption } from "../../document.revision/utils/helpers";
 import { documentRevisionIdMask } from "../../documentRevision/helpers";
 import { Translation } from "../../translations/types";
 import styles from "./DocumentRevisionTable.styles";
-import {
-  DocumentRevisionListItem,
-} from "./types";
+import { DocumentRevisionListItem } from "./types";
 
 interface DocumentRevisionTableProps extends WithStyles<typeof styles> {
   documentRevisionsToShow: DocumentRevision[];
   addDocument: (documentRevisionId: string) => void;
 }
 
-const DocumentRevisionTable: React.FunctionComponent<DocumentRevisionTableProps> = ({
-  classes, documentRevisionsToShow, addDocument,
-}) => {
-  const rowGetter = ({ index }: Index): DocumentRevisionListItem => {
-    const documentRevision = documentRevisionsToShow[index];
-
-    return {
-      id: documentRevision.id,
-      name: documentRevision.name,
-      owner: documentRevision.owner.name,
-      state: documentRevision.status,
-      version: documentRevision.document.docId,
-    };
+const DocumentRevisionTable: React.FunctionComponent<
+  DocumentRevisionTableProps
+> = ({ classes, documentRevisionsToShow, addDocument }) => {
+  const onStateSelect = ({
+    rowData,
+  }: TableSelectionProps<DocumentRevision>) => () => {
+    return addDocument(rowData.id);
   };
 
-  const actionsColumnCellRenderer = ({ rowIndex }: TableCellProps): React.ReactNode => {
-    return (
-      <div className={classes.actions}>
-        {
-          documentRevisionsToShow[rowIndex].status === DocumentRevisionStatus.Draft && (
-            <Button onClick={() => addDocument(documentRevisionsToShow[rowIndex].id)} variant="contained" color="primary">
-              <Text translation="changeRequest.documentRevisionTable.add" />
-            </Button>
-          )
-        }
-      </div>
-    );
-  };
-
-  const renderColumn = (
-    key: keyof DocumentRevisionListItem | "actions" | "version",
-    label: Translation,
-    columnOptions?: Partial<ColumnProps>,
-  ) => {
-    return (
-      <Column
-        label={<Text translation={label} />}
-        dataKey={key}
-        className={classes.flexContainer}
-        headerClassName={classes.flexContainer}
-        width={100}
-        flexGrow={1}
-        {...columnOptions}
-      />
-    );
-  };
-
-  const actionsColumn = renderColumn("actions", "changeRequest.table.actions", {
-    cellRenderer: actionsColumnCellRenderer,
-    headerClassName: classes.actions,
-  });
-
-  const tableRenderer = ({ height, width }: Size) => {
-    return (
-      <Table
-        width={width}
-        height={height}
-        headerHeight={50}
-        rowHeight={50}
-        rowCount={documentRevisionsToShow.length}
-        className={classes.table}
-        rowClassName={`${classes.tableRow} ${classes.flexContainer}`}
-        rowGetter={rowGetter}
-      >
-        {renderColumn("name", "changeRequest.documentRevisionTable.name", { width: 50 })}
-        {renderColumn("version", "changeRequest.documentRevisionTable.version", { width: 10 })}
-        {renderColumn("owner", "changeRequest.documentRevisionTable.owner", { flexGrow: 2 })}
-        {renderColumn("state", "changeRequest.documentRevisionTable.state", { width: 50 })}
-        {actionsColumn}
-      </Table>
-    );
-  };
+  const [clearFilter, setClearFilter] = React.useState<boolean>(false);
+  const clear = () => setClearFilter(!clearFilter);
+  const ChangeRequestList = TablePanel<DocumentRevision>();
+  const columns: Array<TableColumnProps<DocumentRevision>> = [
+    {
+      key: "name",
+      label: "changeRequest.documentRevisionTable.name",
+      columnOptions: { width: 50 },
+    },
+    {
+      key: "version",
+      label: "changeRequest.documentRevisionTable.version",
+      columnOptions: { width: 10 },
+    },
+    {
+      key: "owner",
+      label: "changeRequest.documentRevisionTable.owner",
+      columnOptions: {
+        cellDataGetter: ({ rowData }) => rowData.owner.name,
+        flexGrow: 1,
+      },
+    },
+    {
+      key: "status",
+      label: "changeRequest.documentRevisionTable.state",
+      onSelect: onStateSelect,
+      columnOptions: { width: 80 },
+      searchOptions: {
+        searchType: "select",
+        selectOptions: documentRevisionStatusOption(),
+      },
+    },
+    {
+      key: "actions",
+      label: "changeRequest.documentRevisionTable.actions",
+      cellType: "ACTION",
+      omitSearch: true,
+      onSelect: onStateSelect,
+      columnOptions: { cellDataGetter: () => ["ADD"], width: 10 },
+    },
+  ];
 
   const bodyRenderer = () => {
     if (documentRevisionsToShow.length > 0) {
       return (
-        <AutoSizer>
-          {tableRenderer}
-        </AutoSizer>
+        <ChangeRequestList
+          columns={columns}
+          tableData={documentRevisionsToShow}
+          cellMeasure={true}
+          clearFilter={clear}
+          queryUrl={DOCUMENT_REVISION_ROOT_URL}
+        />
       );
     }
 
-    return <Text translation="changeRequest.documentRevisionTable.noDocumentRevisions" />;
+    return (
+      <Text translation="changeRequest.documentRevisionTable.noDocumentRevisions" />
+    );
   };
 
-  return (
-    <Paper className={classes.root}>
-      {bodyRenderer()}
-    </Paper>
-  );
+  return <Paper className={classes.root}>{bodyRenderer()}</Paper>;
 };
 
 export default withStyles(styles)(DocumentRevisionTable);
