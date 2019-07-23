@@ -106,6 +106,7 @@ export interface ImplementationPlanRequest {
 }
 
 export interface ChangeRequestEditRequestBody {
+  title: string;
   description: string;
   assessments: Assessment;
   implementationPlan: ImplementationPlanRequest;

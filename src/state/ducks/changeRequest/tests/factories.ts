@@ -65,6 +65,7 @@ export const getChangeRequest = (changeRequest: Partial<ChangeRequest> = {}): Ch
 export const getChangeRequestEditRequestBody = (
   body: Partial<ChangeRequestEditRequestBody> = {},
 ): ChangeRequestEditRequestBody => ({
+  title: faker.lorem.sentence(),
   description: faker.lorem.sentence(),
   assessments: createAssessment(),
   implementationPlan: createImplementationPlan(),
