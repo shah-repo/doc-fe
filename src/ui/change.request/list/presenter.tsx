@@ -49,7 +49,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     },
     {
       key: "title",
-      label: "common.title",
+      label: "common.crtitle",
       columnOptions: { flexGrow: 2 },
       tooltipKey: "description",
     },
