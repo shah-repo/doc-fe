@@ -1,5 +1,4 @@
 import { Box } from "@material-ui/core";
-import { WithStyles, withStyles } from "@material-ui/core/styles";
 import { Field, FieldProps } from "formik";
 import React from "react";
 import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
@@ -7,12 +6,10 @@ import FilledSelectField from "../../components/forms/fields/FilledSelect";
 import { assessmentStatementOption } from "../utils/helpers";
 import { AssessmentItemProps } from "../utils/types";
 import Attachment from "./attachment";
-import styles from "./styles";
 
-type Props = AssessmentItemProps & WithStyles <typeof styles>;
+export type Props = AssessmentItemProps;
 
-const Form: React.FunctionComponent<Props> = ({
-  classes,
+export const Form: React.FunctionComponent<Props> = ({
   type,
 }) => {
 
@@ -33,4 +30,4 @@ const Form: React.FunctionComponent<Props> = ({
   );
 };
 
-export default withStyles(styles)(Form);
+export default Form;

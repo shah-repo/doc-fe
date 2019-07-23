@@ -1,3 +1,4 @@
+import { TableColumnActionType } from "../../../ui/components/table/column/types";
 import { Attachment } from "../attachments";
 import { ChangeRequest } from "../changeRequest";
 import { User } from "../common";
@@ -62,6 +63,7 @@ export interface DocumentRevision {
   referenceTo: Reference[];
   createdAt?: string;
   changeRequest?: ChangeRequest;
+  actions?: TableColumnActionType[];
 }
 
 export enum DocumentRevisionType {

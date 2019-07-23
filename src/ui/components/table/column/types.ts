@@ -1,16 +1,16 @@
-import { TableCellProps } from "@material-ui/core/TableCell";
+import { TableCellProps as MuiTableCellProps } from "@material-ui/core/TableCell";
 import { CellMeasurerCache, ColumnProps } from "react-virtualized";
 import { Translation } from "../../../translations/types";
 import { TableSearchFieldProps } from "../search/types";
 import { TableSelectionRenderer } from "../types";
 
 export type TableColumnType = "BASE" | "LINK" | "ACTION";
-export type TableColumnActionType = "EDIT" | "FILE_COPY" | "PREVIEW";
+export type TableColumnActionType = "EDIT" | "FILE_COPY" | "PREVIEW" | "ADD";
 export type TableColumnSearchType = "FIELD" | "SELECT";
 export type TableCellTypeRenderer<T> = (rowData: T) => TableColumnType;
 export type TableCellTooltipRenderer<T> = (rowData: T) => string;
 
-export interface TableCellProps<T> {
+export interface TableCellProps<T> extends MuiTableCellProps {
   cellData: TableColumnActionType[];
   rowData: T;
 }
@@ -20,10 +20,11 @@ export interface TableColumnProps<T> {
   label: Translation;
   cellType?: TableColumnType | TableCellTypeRenderer<T>;
   columnOptions?: Partial<ColumnProps>;
-  cellOptions?: Partial<TableCellProps>;
+  cellOptions?: Partial<TableCellProps<T>>;
   tooltipKey?: keyof T | TableCellTooltipRenderer<T>;
   onSelect?: TableSelectionRenderer<T>;
   searchOptions?: Partial<TableSearchFieldProps>;
+  omitSearch?: boolean;
 }
 
 export interface TableColumnActionProps<T> {
