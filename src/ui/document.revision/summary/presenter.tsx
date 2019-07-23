@@ -28,7 +28,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         <SummaryField label="common.type" value={dataProp.document.type} />
         <SummaryField label="common.description" value={dataProp.description} />
         <SummaryField label="common.name" value={dataProp.name} />
-        {dataProp.referencedBy && <Reference dataProp={dataProp.referencedBy} />}
+        {dataProp.document.referencedBy && <Reference dataProp={dataProp.document.referencedBy} />}
         {dataProp.attachments && <Attachment dataProp={dataProp.attachments} />}
       </Box>
       <Box className={classes.submitBox}>

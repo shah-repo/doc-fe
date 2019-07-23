@@ -1,5 +1,6 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
+import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
@@ -7,6 +8,7 @@ import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
 import DocumentRevisionDisplayContainer from "./DocumentRevisionDisplay.container";
 import DocumentRevisionListContainer from "./DocumentRevisionList.container";
+import { documentVersionPath } from "../document.revision/utils/paths";
 
 interface StateProps {
   loadDocumentAsyncState: AsyncState;
@@ -36,6 +38,12 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<DocumentR
   documentId, documentRevisionId, documentRevisions,
 }) => {
   const loadDocumentAction = () => loadDocument(documentId);
+
+  if (documentRevisions.length > 0 && !documentRevisionId) {
+    const docRevIdToRedirect = documentRevisions[documentRevisions.length - 1].id;
+    // redirect to latest version
+    return <Redirect to={documentVersionPath(docRevIdToRedirect, documentId)} />;
+  }
 
   return (
     <Grid container={true} spacing={10}>

@@ -34,6 +34,7 @@ export interface DocumentRevisionDocument {
   id: string;
   docId: string;
   type: string;
+  referencedBy: DocumentRevision[];
 }
 export interface Document {
   id: string;
@@ -60,7 +61,6 @@ export interface DocumentRevision {
   type: DocumentRevisionType;
   released: Date;
   referenceTo: Reference[];
-  referencedBy: Reference[];
   createdAt?: string;
   changeRequest?: ChangeRequest;
   actions?: TableColumnActionType[];
