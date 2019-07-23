@@ -10,7 +10,6 @@ export interface DocumentRevisionFormValues {
   attachments: Attachment[];
   type: string;
   referenceTo: OptionType[];
-  referencedBy: Reference[];
   document?: Partial<DocumentRevisionDocument>;
   revisionChangeType?: RevisionChangeType;
 }

@@ -21,7 +21,7 @@ import AttachmentsContainer from "../../documents/forms/attachments/Attachments.
 import { documentRevisionIdMask } from "../helpers";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
-import { documentDetailsPath } from "../../document.revision/utils/paths";
+import { documentVersionPath, documentDetailsPath } from "../../document.revision/utils/paths";
 
 interface Props extends WithStyles<typeof styles>, FormikProps<DocumentRevisionFormValues> {
   asyncState: AsyncState;
@@ -66,18 +66,22 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   };
 
   const renderReferences = () => {
-    if (initialValues.referencedBy && initialValues.referencedBy.length > 0) {
+    if (initialValues.document && initialValues.document.referencedBy && initialValues.document.referencedBy.length > 0) {
       return (
         <React.Fragment>
           <Typography variant="h6" >
             <Text translation="common.referenced.by" />
           </Typography>
           <div>
-            {initialValues.referencedBy.map((reference) => {
+            {initialValues.document.referencedBy.map((reference) => {
               return (
-                <div>
-                  reference.name
-                </div>
+                <Link
+                  key={reference.id}
+                  to={documentVersionPath(reference.id, reference.document.id)}
+                  target="_blank"
+                >
+                  {reference.name}
+                </Link>
               )
             })}
           </div>

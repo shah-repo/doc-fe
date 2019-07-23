@@ -1,12 +1,13 @@
-import { Button, Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
+import { Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
 import React from "react";
+import { Link } from "react-router-dom";
 import { Attachment } from "../../state/ducks/attachments";
 import { DocumentRevision } from "../../state/ducks/documentRevisions";
 import FileCard from "../components/cards/FileCard";
 import Text from "../components/Text";
 import styles from "./DocumentRevisionPreview.styles";
-import { documentRevisionIdMask } from "./helpers";
 import PreviewControlsContainer from "./PreviewControls.container";
+import { documentVersionPath } from "../document.revision/utils/paths";
 
 interface DocumentRevisionPreviewPresenterProps extends WithStyles<typeof styles> {
   documentRevision: DocumentRevision | null;
@@ -21,7 +22,18 @@ export const DocumentRevisionPreviewPresenter: React.FunctionComponent<DocumentR
       <FileCard key={index} attachment={attachment} />
     ));
 
-    const renderReferences = () => documentRevision.referencedBy && documentRevision.referencedBy.map((reference) => reference.name );
+    const renderReferences = () =>
+      documentRevision.document && documentRevision.document.referencedBy && documentRevision.document.referencedBy.map(
+        (reference) => (
+          <Link
+            key={reference.id}
+            to={documentVersionPath(reference.id, reference.document.id)}
+            target="_blank"
+          >
+            {reference.name}
+          </Link>
+        )
+      );
 
     return (
       <Grid container={true} className={classes.container} spacing={8}>
