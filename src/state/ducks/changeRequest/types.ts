@@ -62,6 +62,7 @@ export interface ChangeRequest {
   id: string;
   crId: string;
   ordinalNumber: number;
+  title: string;
   description: string;
   state: ChangeRequestStatus;
   assessments: Assessment;

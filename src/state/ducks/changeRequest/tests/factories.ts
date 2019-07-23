@@ -50,6 +50,7 @@ export const getChangeRequest = (changeRequest: Partial<ChangeRequest> = {}): Ch
   crId: faker.random.alphaNumeric(),
   ordinalNumber: faker.random.number(),
   state: ChangeRequestStatus.Draft,
+  title: faker.lorem.sentence(),
   description: faker.lorem.sentence(),
   assessments: createAssessment(),
   implementationPlan: createImplementationPlan(),
