@@ -36,7 +36,6 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
             ...AutocompleteComponents,
             MultiValue: (props) => AutocompleteComponents.MultiValue({ ...props, onClick }),
           }}
-
         />
     </Field>
   );

@@ -21,6 +21,7 @@ import AttachmentsContainer from "../../documents/forms/attachments/Attachments.
 import { documentRevisionIdMask } from "../helpers";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
+import { documentDetailsPath } from "../../document.revision/utils/paths";
 
 interface Props extends WithStyles<typeof styles>, FormikProps<DocumentRevisionFormValues> {
   asyncState: AsyncState;
@@ -33,7 +34,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   asyncState, classes, initialValues, handleChange, setFieldValue, documentRevisions,
   availableReferences, showRevisionTypeChange,
 }) => {
-  const openReference = (id: string) => { console.log(id); };
+  const openReference = (documentId: string) => { window.open(documentDetailsPath(documentId), '_blank'); };
   const renderAttachments = (props: FieldArrayRenderProps) => <AttachmentsContainer {...props} />;
 
   const onTypeChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
