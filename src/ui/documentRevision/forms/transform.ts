@@ -1,12 +1,13 @@
 import _ from "lodash";
 import { DocumentRevision, DocumentRevisionEditRequestBody, RevisionChangeType } from "../../../state/ducks/documentRevisions";
+import { Document } from "../../../state/ducks/documents/types";
 import { documentRevisionIdMask } from "../helpers";
 import { DocumentRevisionFormValues } from "./types";
 
 export const toDocumentRevisionFormValues = (documentRevision: DocumentRevision): DocumentRevisionFormValues => {
   const values: DocumentRevisionFormValues = {
     id: documentRevision.id,
-    documentId: documentRevision.document.docId,
+    docId: documentRevision.docId,
     description: documentRevision.description,
     name: documentRevision.name,
     attachments: documentRevision.attachments,
@@ -24,8 +25,8 @@ export const toDocumentRevisionEditRequestBody = (values: DocumentRevisionFormVa
     description: values.description,
     name: values.name,
     attachments: values.attachments,
-    type: values.document && values.document.type,
     referenceTo: values.referenceTo.map((reference) => ({ id: reference.value })),
+    document: { ...values.document, docId: (values.typePrefix || "").concat(values.docId || "") },
   };
 
   return values.id ? _.omit(documentRevisionEditRequestBody, "type") : documentRevisionEditRequestBody;
@@ -33,14 +34,13 @@ export const toDocumentRevisionEditRequestBody = (values: DocumentRevisionFormVa
 
 export const toNewVersionRequestBody = (values: DocumentRevisionFormValues): DocumentRevisionEditRequestBody => {
   const newValues = toDocumentRevisionEditRequestBody(values);
+  const document: Partial<Document> = {};
 
-  if (values.document && values.document.id) {
-    newValues.document = { id: values.document.id };
-  }
-
-  newValues.type = values.document && values.document.type;
   newValues.revisionChangeType = values.revisionChangeType;
 
+  // TODO: remove this once editable docId is implemented
+  if (!values.document) { return newValues; }
+  newValues.document = { type: values.document.type };
   return newValues;
 };
 

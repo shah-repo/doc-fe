@@ -1,10 +1,11 @@
 import { Attachment } from "../../../state/ducks/attachments";
+import { DocumentRevisionDocument, Reference, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { Reference, DocumentRevisionDocument, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 
 export interface DocumentRevisionFormValues {
   id?: string;
-  documentId?: string;
+  docId?: string;
+  typePrefix?: string;
   description: string;
   name: string;
   attachments: Attachment[];

@@ -46,7 +46,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "crId",
       label: "common.crid",
-      columnOptions: { width: 100},
+      columnOptions: { width: 100 },
     },
     {
       key: "description",

@@ -1,4 +1,4 @@
-import { Typography, withStyles, WithStyles } from "@material-ui/core";
+import { Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
 import { Field, FieldArray, FieldArrayRenderProps, Form, FormikProps } from "formik";
 import React from "react";
 import { DocumentRevision, RevisionChangeType } from "../../../state/ducks/documentRevisions";
@@ -17,7 +17,7 @@ import SubmitButton from "../../components/forms/SubmitButton";
 import Text from "../../components/Text";
 import { documentRevisionTypeFormOption } from "../../document.revision/utils/helpers";
 import AttachmentsContainer from "../../documents/forms/attachments/Attachments.container";
-import { documentRevisionIdMask } from "../helpers";
+import { documentRevisionIdMask, maskId } from "../helpers";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -36,9 +36,10 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   const onTypeChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
     const type = event.target.value as string;
-    const docIdGen = documentRevisionIdMask(type, revisionOrdinalNumber(type));
+    const docIdGen = maskId(revisionOrdinalNumber(type));
     handleChange(event);
-    setFieldValue("documentId", docIdGen);
+    setFieldValue("typePrefix", type);
+    setFieldValue("docId", docIdGen);
   };
 
   const revisionOrdinalNumber = (type: string) => {
@@ -102,10 +103,20 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           validate={validator(required)}
           includeEmpty={false}
         />
-        <InputField
-          name="documentId"
-          inputProps={{ id: "documentId", disabled: true, placeholder: "Document ID" }}
-        />
+        <Grid container={true} direction="row" >
+          <Grid item={true} >
+            <InputField
+              name="typePrefix"
+              inputProps={{ id: "typePrefix", placeholder: "DOC ID", readOnly: true, style: {width: 50} }}
+            />
+          </Grid>
+          <Grid item={true} style={{flex: 1}} >
+            <InputField
+              name="docId"
+              inputProps={{ id: "docId", readOnly: true }}
+            />
+          </Grid>
+        </Grid>
         <AutcompleteField
           name="referenceTo"
           autocompleteProps={{
