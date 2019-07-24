@@ -2,8 +2,14 @@ import { ChangeRequestStatus } from "../../../state/ducks/changeRequest";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { AssessmentReasoningOption, ChangeRequestUserProps } from "./types";
 
-export const canEditChangeRequest = ({dataProp, currentUserEmail}: ChangeRequestUserProps) =>
-  currentUserEmail === dataProp.owner.email && dataProp.state === ChangeRequestStatus.Draft;
+export const canEditChangeRequest = ({dataProp, currentUserEmail}: ChangeRequestUserProps) => (
+  currentUserEmail === dataProp.owner.email
+  && (
+    dataProp.state === ChangeRequestStatus.Draft
+    || dataProp.state === ChangeRequestStatus.Withdrawn
+    || dataProp.state === ChangeRequestStatus.Rejected
+  )
+);
 
 export const changeRequestStatusOption = () => {
   const options: SelectOption[] = [];
