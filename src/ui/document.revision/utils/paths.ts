@@ -1,11 +1,22 @@
 import { generatePath } from "react-router-dom";
 import {
-  DOCUMENT_REVISION_VERSION_URL, DOCUMENT_REVISION_NEW_VERSION_URL,
+  DOCUMENT_REVISION_VERSION_URL, DOCUMENT_REVISION_NEW_VERSION_URL, DOCUMENT_REVISION_DETAILS_URL
 } from "../../constants/urls";
 import { RouteParams } from "./types";
 
 const documentPath = (path: string, routeParams: RouteParams) =>
   generatePath(path, { ...routeParams });
+
+export const documentDetailsPath = (documentId: string) =>
+  documentPath(DOCUMENT_REVISION_DETAILS_URL, { documentId, documentRevisionId: "" });
+
+export const documentDetailsPathWithDeprecatedDate = (documentId: string, deprecateAt: string) => {
+  const url = documentDetailsPath(documentId);
+
+  if (!deprecateAt) return url;
+
+  return `${url}?deprecated_at=${deprecateAt}`;
+}
 
 export const documentEditPath = (documentRevisionId: string, documentId: string) =>
 documentPath(DOCUMENT_REVISION_VERSION_URL, { documentRevisionId, documentId });

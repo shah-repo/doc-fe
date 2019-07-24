@@ -7,9 +7,9 @@ import {
   ChangeRequest,
   ChangeRequestEditRequestBody,
   ImplementationPlan,
-  Justifications,
-  ImplementationPlanTaskRequest,
   ImplementationPlanRequest,
+  ImplementationPlanTaskRequest,
+  Justifications,
 } from "../../../state/ducks/changeRequest";
 import { ChangeRequestFormValues, ImplementationPlanFormValues, ImplementationPlanTaskFormValues } from "./types";
 
@@ -37,7 +37,7 @@ const toImplementationPlanFormValues = (plan: ImplementationPlan): Implementatio
     {
       attachments: plan.attachments,
       tasks: plan.tasks.map((task) => {
-        let taskForm: ImplementationPlanTaskFormValues = {
+        const taskForm: ImplementationPlanTaskFormValues = {
           id: task.id,
           status: task.status,
           title: task.title,
@@ -49,16 +49,17 @@ const toImplementationPlanFormValues = (plan: ImplementationPlan): Implementatio
           taskForm.assigned = {
             value: task.assigned.id,
             label: task.assigned.name,
-          }
+          };
         }
         return taskForm;
-      })
+      }),
     }
-  )
-}
+  );
+};
 
 export const toChangeRequestFormValues = (changeRequest: ChangeRequest): ChangeRequestFormValues => {
   const values: ChangeRequestFormValues = {
+    title: changeRequest.title,
     description: changeRequest.description,
     assessments: createAssessment(changeRequest.assessments),
     justifications: createNestedObject(changeRequest.justifications),
@@ -107,6 +108,7 @@ const createAssessmentObjectForRequestBody = (value: Assessment) => {
 
 export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues): ChangeRequestEditRequestBody => {
   const changeRequestEditRequestBody: ChangeRequestEditRequestBody = {
+    title: values.title,
     description: values.description,
     assessments: createAssessmentObjectForRequestBody(values.assessments),
     implementationPlan: toImplementationPlanEditRequestBody(values.implementationPlan),

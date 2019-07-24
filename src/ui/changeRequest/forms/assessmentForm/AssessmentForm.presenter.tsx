@@ -50,8 +50,14 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
         <FilledInputField
+          name="title"
+          label="cr.title"
+          inputProps={{ id: "title", multiline: true, rows: "2" }}
+          validate={validator(required)}
+        />
+        <FilledInputField
           name="description"
-          label="common.description"
+          label="cr.description"
           inputProps={{ id: "description", multiline: true, rows: "2" }}
           validate={validator(required)}
         />

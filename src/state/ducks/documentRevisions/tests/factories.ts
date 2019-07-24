@@ -11,11 +11,10 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
   attachments: [],
   name: faker.lorem.sentence(),
   description: faker.lorem.sentence(),
-  document: { id: faker.random.uuid(), docId: faker.random.alphaNumeric(), type: faker.random.word() },
+  document: { id: faker.random.uuid(), docId: faker.random.alphaNumeric(), type: faker.random.word(), referencedBy: [] },
   type: DocumentRevisionType.ADM,
   released: faker.date.future(undefined, "2019-05-31"),
   referenceTo: [],
-  referencedBy: [],
   ...documentRevision,
 });
 

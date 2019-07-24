@@ -64,6 +64,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       cellOptions: { align: "center" },
       columnOptions: {
         cellDataGetter: ({ rowData }) => `V${rowData.version}`,
+        width: 150,
         flexShrink: 2,
       },
     },
@@ -93,7 +94,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "changeRequest",
       label: "common.crid",
-      searchOptions: { dataKey: "crId", searchValueGetter: (value) => unmaskId(value) },
+      searchOptions: { dataKey: "crId" },
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.changeRequest && rowData.changeRequest.crId,
         width: 100,

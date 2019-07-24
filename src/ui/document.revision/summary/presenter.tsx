@@ -6,8 +6,8 @@ import SummaryField from "../../common/summary/base";
 import Text from "../../components/Text";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
 import Attachment from "./attachment";
-import Reference from "./reference";
 import styles from "./styles";
+import ReferenceContainer from "./reference.container";
 
 type Props = DataProps<DocumentRevision> & WithStyles<typeof styles>;
 
@@ -15,7 +15,6 @@ export const Presenter: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
 }) => {
-
   return(
     <Box>
       <Box className={classes.previewBox}>
@@ -28,7 +27,11 @@ export const Presenter: React.FunctionComponent<Props> = ({
         <SummaryField label="common.type" value={dataProp.document.type} />
         <SummaryField label="common.description" value={dataProp.description} />
         <SummaryField label="common.name" value={dataProp.name} />
-        {dataProp.referencedBy && <Reference dataProp={dataProp.referencedBy} />}
+        {
+          dataProp.referenceTo
+          && <ReferenceContainer dataProp={dataProp.referenceTo} isReferenceTo={true} status={dataProp.status} deprecatedAt={dataProp.deprecatedAt} />
+        }
+        {dataProp.document.referencedBy && <ReferenceContainer dataProp={dataProp.document.referencedBy} isReferenceTo={false} />}
         {dataProp.attachments && <Attachment dataProp={dataProp.attachments} />}
       </Box>
       <Box className={classes.submitBox}>

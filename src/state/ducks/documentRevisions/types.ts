@@ -1,3 +1,4 @@
+import { TableColumnActionType } from "../../../ui/components/table/column/types";
 import { Attachment } from "../attachments";
 import { ChangeRequest } from "../changeRequest";
 import { User } from "../common";
@@ -33,6 +34,7 @@ export interface DocumentRevisionDocument {
   id: string;
   docId: string;
   type: string;
+  referencedBy: DocumentRevision[];
 }
 export interface Document {
   id: string;
@@ -60,9 +62,12 @@ export interface DocumentRevision {
   type: DocumentRevisionType;
   released: Date;
   referenceTo: Reference[];
-  referencedBy: Reference[];
   createdAt?: string;
   changeRequest?: ChangeRequest;
+  actions?: TableColumnActionType[];
+  deprecatedAt?: string;
+  obsoletedAt?: string;
+  releasedAt?: string;
 }
 
 export enum DocumentRevisionType {

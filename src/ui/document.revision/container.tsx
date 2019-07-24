@@ -1,4 +1,5 @@
 import React from "react";
+import queryString from "query-string";
 import { connect } from "react-redux";
 import { Route } from "react-router-dom";
 import Switch from "../app/Switch";
@@ -32,8 +33,10 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 
 const Container: React.FunctionComponent<Props> = ({
   match,
+  location,
 }) => {
   const documentId = match.params.documentId;
+  const deprecatedAt = queryString.parse(location.search).deprecated_at as string;
 
   const renderWrapper = (props: any) => {
     const documentRevisionId = props.match.params.documentRevisionId;
@@ -44,6 +47,7 @@ const Container: React.FunctionComponent<Props> = ({
         documentRevisionId={documentRevisionId}
         documentId={documentId}
         isNewVersion={isNewVersion}
+        deprecatedAt={deprecatedAt}
       />
     );
   };

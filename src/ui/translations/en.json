@@ -123,6 +123,10 @@
   "changeRequest.audit.assessments.regulatory.attachment.OBJECT_NEW": "New regulatory assessment attachment",
   "changeRequest.audit.tasks.ARRAY_DELETED": "Implementation plan tasks deleted",
 
+  "cr.description": "Description of Changes",
+  "cr.justification": "Justification of Changes",
+  "cr.title": "CR Title",
+
   "common.assigned.to": "Assigned to",
   "common.due.date": "Due date",
   "common.name": "Name",
@@ -155,6 +159,7 @@
   "common.target.date": "Target Date",
   "common.approvers": "Approvers",
   "common.referenced.by": "Referenced by",
+  "common.references": "References",
 
   "dashboard.reviews": "Documents to review",
   "dashboard.noReviews": "No documents to review",

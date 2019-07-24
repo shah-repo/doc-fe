@@ -1,6 +1,8 @@
+
 import { Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
 import { Field, FieldArray, FieldArrayRenderProps, Form, FormikProps } from "formik";
-import React from "react";
+import React, { MouseEventHandler } from "react";
+import { Link } from "react-router-dom";
 import { DocumentRevision, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { AsyncState } from "../../../state/types";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
@@ -16,6 +18,7 @@ import FormProgress from "../../components/forms/FormProgress";
 import SubmitButton from "../../components/forms/SubmitButton";
 import Text from "../../components/Text";
 import { documentRevisionTypeFormOption } from "../../document.revision/utils/helpers";
+import { documentDetailsPath, documentVersionPath } from "../../document.revision/utils/paths";
 import AttachmentsContainer from "../../documents/forms/attachments/Attachments.container";
 import { documentRevisionIdMask, maskId } from "../helpers";
 import styles from "./DocumentRevisionForm.styles";
@@ -32,6 +35,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   asyncState, classes, initialValues, handleChange, setFieldValue, documentRevisions,
   availableReferences, showRevisionTypeChange,
 }) => {
+  const openReference = (documentId: string) => { window.open(documentDetailsPath(documentId), "_blank"); };
   const renderAttachments = (props: FieldArrayRenderProps) => <AttachmentsContainer {...props} />;
 
   const onTypeChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
@@ -64,14 +68,24 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   };
 
   const renderReferences = () => {
-    if (initialValues.referencedBy.length > 0) {
+    if (initialValues.document && initialValues.document.referencedBy && initialValues.document.referencedBy.length > 0) {
       return (
         <React.Fragment>
           <Typography variant="h6" >
             <Text translation="common.referenced.by" />
           </Typography>
           <div>
-            {initialValues.referencedBy.map((reference) => reference.name)}
+            {initialValues.document.referencedBy.map((reference) => {
+              return (
+                <Link
+                  key={reference.id}
+                  to={documentVersionPath(reference.id, reference.document.id)}
+                  target="_blank"
+                >
+                  {reference.name}
+                </Link>
+              );
+            })}
           </div>
         </React.Fragment>
       );
@@ -123,8 +137,10 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             id: "referenceTo",
             isMulti: true,
             placeholder: <Text translation="documentRevision.form.references" />,
+            closeMenuOnSelect: false,
           }}
           options={availableReferences}
+          onClick={openReference}
         />
         {renderReferences()}
         <FieldArray name="attachments" render={renderAttachments} />

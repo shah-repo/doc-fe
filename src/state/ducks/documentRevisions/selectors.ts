@@ -32,8 +32,9 @@ const makeGetDocumentRevisions = () => {
 const getAvailableReferences = createSelector(allIds, byId, (ids, docRevs): OptionType[] => (
   ids.map((id) => {
     const { document, revision, name } = docRevs[id];
+
     return {
-      value: id,
+      value: document.id,
       label: `${document.docId} - ${revision} - ${name}`,
     };
   })
