@@ -159,6 +159,7 @@
   "common.target.date": "Target Date",
   "common.approvers": "Approvers",
   "common.referenced.by": "Referenced by",
+  "common.references": "References",
 
   "dashboard.reviews": "Documents to review",
   "dashboard.noReviews": "No documents to review",
