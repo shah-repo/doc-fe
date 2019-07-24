@@ -5,28 +5,21 @@ import { DataProps } from "../../../state/ducks/common";
 import { Reference as Model } from "../../../state/ducks/documentRevisions";
 import Text from "../../components/Text";
 import styles from "./styles";
-import { documentVersionPath, documentDetailsPath } from "../utils/paths";
-import { Translation } from "../../translations/types";
 
 interface OwnProps {
-  label: Translation;
-  isReferenceTo: boolean;
+  label: string;
+  getUrl: (reference: any) => string;
 }
 
 type Props = OwnProps & DataProps<Model[]> & WithStyles<typeof styles>;
 
-const Reference: React.FunctionComponent<Props> = ({
+const ReferencePresenter: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
   label,
-  isReferenceTo,
+  getUrl,
 }) => {
-
   const referencesRenderer = () => dataProp.map((reference: any, index) => {
-    const url = isReferenceTo
-      ? documentDetailsPath(reference.id)
-      : documentVersionPath(reference.id, reference.document.id);
-    
     return (
       <ListItem key={reference.id}>
         <Grid item={true} xs={4}>
@@ -35,7 +28,7 @@ const Reference: React.FunctionComponent<Props> = ({
         <Grid item={true} xs={8}>
           <Typography variant="subtitle1">
             <Link
-              to={url}
+              to={getUrl(reference)}
               target="_blank"
             >
               {reference.name}
@@ -49,11 +42,11 @@ const Reference: React.FunctionComponent<Props> = ({
   return (
     <Box className={classes.box}>
       <ListItem>
-        <Typography variant="h6"><Text translation={label} />:</Typography>
+        <Typography variant="h6"><Text message={label} />:</Typography>
       </ListItem>
       {referencesRenderer()}
     </Box>
   );
 };
 
-export default withStyles(styles)(Reference);
+export default withStyles(styles)(ReferencePresenter);

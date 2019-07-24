@@ -10,6 +10,14 @@ const documentPath = (path: string, routeParams: RouteParams) =>
 export const documentDetailsPath = (documentId: string) =>
   documentPath(DOCUMENT_REVISION_DETAILS_URL, { documentId, documentRevisionId: "" });
 
+export const documentDetailsPathWithDeprecatedDate = (documentId: string, deprecateAt: string) => {
+  const url = documentDetailsPath(documentId);
+
+  if (!deprecateAt) return url;
+
+  return `${url}?deprecated_at=${deprecateAt}`;
+}
+
 export const documentEditPath = (documentRevisionId: string, documentId: string) =>
 documentPath(DOCUMENT_REVISION_VERSION_URL, { documentRevisionId, documentId });
 
