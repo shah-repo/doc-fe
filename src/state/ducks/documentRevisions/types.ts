@@ -64,6 +64,9 @@ export interface DocumentRevision {
   createdAt?: string;
   changeRequest?: ChangeRequest;
   actions?: TableColumnActionType[];
+  deprecatedAt?: string;
+  obsoletedAt?: string;
+  releasedAt?: string;
 }
 
 export enum DocumentRevisionType {

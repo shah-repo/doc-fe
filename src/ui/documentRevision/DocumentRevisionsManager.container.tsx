@@ -2,6 +2,8 @@ import { Grid } from "@material-ui/core";
 import React from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
+import _ from "lodash";
+import moment from "moment";
 import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
@@ -23,6 +25,7 @@ interface OwnProps {
   documentId: string;
   documentRevisionId: string | null;
   isNewVersion: boolean;
+  deprecatedAt: string;
 }
 
 export type DocumentRevisionManagerContainerProps = OwnProps & DispatchProps & StateProps ;
@@ -35,13 +38,23 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 
 export const DocumentRevisionManagerContainer: React.FunctionComponent<DocumentRevisionManagerContainerProps> = ({
   loadDocumentAsyncState, loadDocument, isNewVersion,
-  documentId, documentRevisionId, documentRevisions,
+  documentId, documentRevisionId, documentRevisions, deprecatedAt
 }) => {
   const loadDocumentAction = () => loadDocument(documentId);
 
   if (documentRevisions.length > 0 && !documentRevisionId) {
-    const docRevIdToRedirect = documentRevisions[documentRevisions.length - 1].id;
-    // redirect to latest version
+    let indexOfDocRev = documentRevisions.length - 1;
+    if (deprecatedAt) {
+      const depreactedAtDate = moment(deprecatedAt);
+      let indexOfLastReleased = _.findLastIndex(documentRevisions, (doc) => {
+        if (!doc.releasedAt) return false;
+  
+        return moment(doc.releasedAt).isSameOrBefore(depreactedAtDate);
+      })
+      indexOfDocRev = indexOfLastReleased > -1 ? indexOfLastReleased : indexOfDocRev;
+    }
+    
+    const docRevIdToRedirect = documentRevisions[indexOfDocRev].id;
     return <Redirect to={documentVersionPath(docRevIdToRedirect, documentId)} />;
   }
 
