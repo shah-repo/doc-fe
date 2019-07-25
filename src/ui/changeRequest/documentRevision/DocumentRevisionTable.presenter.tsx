@@ -67,7 +67,7 @@ const DocumentRevisionTable: React.FunctionComponent<
     },
     {
       key: "actions",
-      label: "changeRequest.documentRevisionTable.actions",
+      label: "changeRequest.documentRevisionTable.add",
       cellType: "ACTION",
       omitSearch: true,
       onSelect: onStateSelect,
