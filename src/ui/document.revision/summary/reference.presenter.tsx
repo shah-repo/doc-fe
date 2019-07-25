@@ -31,7 +31,7 @@ const ReferencePresenter: React.FunctionComponent<Props> = ({
               to={getUrl(reference)}
               target="_blank"
             >
-              {reference.name}
+              {reference.name || reference.docId}
             </Link>
           </Typography>
         </Grid>

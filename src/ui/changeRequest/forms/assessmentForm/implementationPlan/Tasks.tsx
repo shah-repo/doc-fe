@@ -54,7 +54,7 @@ const Tasks: React.FunctionComponent<Props> = ({
     changeSelectedIndex(index);
     changeSelectedTask({
       ...task,
-      dueDate: moment(task.dueDate).toDate(),
+      dueDate: moment.utc(task.dueDate).startOf("day").toDate(),
     });
     dialog.open();
   };

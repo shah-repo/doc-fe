@@ -5,6 +5,7 @@ import {
   WithStyles,
   withStyles,
 } from "@material-ui/core";
+import moment from "moment";
 import React from "react";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
@@ -37,7 +38,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         <SummaryField label="cr.description" value={dataProp.description} />
         <SummaryField
           label="common.target.date"
-          value={dataProp.effectiveDate}
+          value={moment.utc(dataProp.effectiveDate).format("LL")}
         />
         <Justification dataProp={dataProp.justifications} />
         <Assessment dataProp={dataProp.assessments} />
