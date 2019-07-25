@@ -10,7 +10,6 @@ export const toDocumentRevisionFormValues = (documentRevision: DocumentRevision)
     description: documentRevision.description,
     name: documentRevision.name,
     attachments: documentRevision.attachments,
-    type: documentRevision.type,
     referenceTo: documentRevision.referenceTo.map((reference: any) => ({ value: reference.id, label: reference.docId })),
     document: documentRevision.document,
   };
@@ -23,7 +22,6 @@ export const toDocumentRevisionEditRequestBody = (values: DocumentRevisionFormVa
     description: values.description,
     name: values.name,
     attachments: values.attachments,
-    type: values.document && values.document.type,
     referenceTo: values.referenceTo.map((reference) => ({ id: reference.value })),
   };
 
@@ -32,14 +30,10 @@ export const toDocumentRevisionEditRequestBody = (values: DocumentRevisionFormVa
 
 export const toNewVersionRequestBody = (values: DocumentRevisionFormValues): DocumentRevisionEditRequestBody => {
   const newValues = toDocumentRevisionEditRequestBody(values);
-
-  if (values.document && values.document.id) {
-    newValues.document = { id: values.document.id };
-  }
-
-  newValues.type = values.document && values.document.type;
   newValues.revisionChangeType = values.revisionChangeType;
-
+  if (values.document) {
+    newValues.document = { id: values.document.id, type: values.document.type };
+  }
   return newValues;
 };
 
