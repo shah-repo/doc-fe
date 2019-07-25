@@ -6,6 +6,7 @@ import {
   WithStyles,
   withStyles,
 } from "@material-ui/core";
+import moment from "moment";
 import React from "react";
 import { ImplementationPlan as Model } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
@@ -34,7 +35,7 @@ const ImplementationPlan: React.FunctionComponent<Props> = ({
       </ListItem>
       <SummaryField label="common.title" value={task.title} />
       <SummaryField label="common.description" value={task.description} />
-      <SummaryField label="common.due.date" value={task.dueDate} />
+      <SummaryField label="common.due.date" value={moment.utc(task.dueDate).format("LL")} />
       <SummaryField label="common.assigned.to" value={task.assigned && task.assigned.name} />
       <SummaryField label="common.status" value={task.status} />
     </Box>
