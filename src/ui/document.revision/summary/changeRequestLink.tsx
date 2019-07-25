@@ -1,4 +1,4 @@
-import { ListItem, Typography, WithStyles, withStyles } from "@material-ui/core";
+import { ListItem, Typography, WithStyles, withStyles, Tooltip } from "@material-ui/core";
 import React from "react";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
@@ -15,12 +15,16 @@ export const ChangeRequestLink: React.FunctionComponent<Props> = ({
     return null;
   }
 
+  const { changeRequest } = dataProp;
+
   return(
     <ListItem>
       <Typography variant="h5">
         <Text translation="document.revision.list.crId" />:&nbsp;
-        <Link to={changeRequestEditPath(dataProp.changeRequest.id)} target="_blank">
-          {dataProp.changeRequest.crId}
+        <Link to={changeRequestEditPath(changeRequest.id)} target="_blank">
+          <Tooltip title={changeRequest.description}>
+            <span>{changeRequest.crId}</span>
+          </Tooltip>
         </Link>
       </Typography>
     </ListItem>
