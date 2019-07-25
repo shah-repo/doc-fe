@@ -31,7 +31,6 @@ import {
   User,
   UserPermissionsAction,
 } from "./types";
-import { persistor } from "../../store";
 
 const authTokens = (authResponse: AuthResponse): AuthTokensAction => {
   const expiresAt = moment()
@@ -114,9 +113,7 @@ const logout = (): ThunkAction<void, ApplicationState, any, AnyAction> => (dispa
     url: LOGOUT_URL,
     method: "post",
     data: { AccessToken: authSelectors.accessToken(getState()) },
-    onCompleted: async () => {
-      await persistor.purge()
-      await persistor.persist()
+    onCompleted: () => {
       dispatch(logoutUser());
     },
   });
