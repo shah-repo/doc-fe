@@ -234,6 +234,5 @@
   "document.revision.list.state": "Status",
   "document.revision.list.type": "Type",
   "document.revision.list.version": "Released version",
-  "document.revision.create": "Create a document",
-  "document.revision.list.crId": "CR ID"
+  "document.revision.create": "Create a document"
 }

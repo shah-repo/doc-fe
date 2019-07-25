@@ -20,7 +20,7 @@ export const ChangeRequestLink: React.FunctionComponent<Props> = ({
   return(
     <ListItem>
       <Typography variant="h5">
-        <Text translation="document.revision.list.crId" />:&nbsp;
+        <Text translation="common.crid" />:&nbsp;
         <Link to={changeRequestEditPath(changeRequest.id)} target="_blank">
           <Tooltip title={changeRequest.description}>
             <span>{changeRequest.crId}</span>
