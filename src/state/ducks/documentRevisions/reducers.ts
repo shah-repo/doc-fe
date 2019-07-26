@@ -1,27 +1,28 @@
 import _ from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
+import { documentsSelectors } from "../documents";
 import {
-  DOCUMENT_REVISION_GET_ASYNC,
-  DOCUMENT_REVISION_SET,
-  DOCUMENT_REVISION_LIST,
-  DOCUMENT_REVISION_LIST_ASYNC,
-  DOCUMENT_SET,
   DOCUMENT_GET_ASYNC,
   DOCUMENT_REVISION_AUDIT_SET,
+  DOCUMENT_REVISION_GET_ASYNC,
   DOCUMENT_REVISION_GET_AUDIT_ASYNC,
+  DOCUMENT_REVISION_LIST,
+  DOCUMENT_REVISION_LIST_ASYNC,
+  DOCUMENT_REVISION_SET,
+  DOCUMENT_SET,
 } from "./constants";
 import {
+  AllIdsState,
+  AuditByCRIdState,
+  DocumentByIdState,
   DocumentRevision,
-  DocumentRevisionsListAction,
+  DocumentRevisionAuditSetAction,
   DocumentRevisionsAllIdsState,
   DocumentRevisionsByIdState,
   DocumentRevisionSetAction,
+  DocumentRevisionsListAction,
   DocumentSetAction,
-  DocumentByIdState,
-  DocumentRevisionAuditSetAction,
-  AuditByCRIdState,
-  AllIdsState,
 } from "./types";
 
 type DocumentRevisionActions = DocumentRevisionsListAction | DocumentRevisionSetAction;
@@ -84,5 +85,5 @@ export default combineReducers({
   allIds,
   documentsById,
   auditsByCRId,
-  auditsAllId
+  auditsAllId,
 });

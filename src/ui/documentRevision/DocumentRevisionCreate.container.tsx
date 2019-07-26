@@ -12,6 +12,7 @@ import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { toDocumentRevisionFormValuesWithRevisionChange, toNewVersionRequestBody } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
 import { generateDocumentRevisionVersionPath } from "./pathGenerators";
+import { documentsSelectors } from "../../state/ducks/documents";
 
 interface DispatchProps {
   create: typeof documentRevisionsActions.create;
@@ -24,14 +25,14 @@ interface OwnProps {
 
 export type DocumentRevisionCreateContainerProps = OwnProps & DispatchProps & RouteComponentProps;
 
-export const DEFAULT_INITIAL_VALUES = {
-  documentId: "",
+export const DEFAULT_INITIAL_VALUES: DocumentRevisionFormValues = {
   name: "",
   description: "",
   attachments: [],
   type: "",
   referenceTo: [],
   revisionChangeType: RevisionChangeType.NextRevision,
+  document: { docId: "" },
 };
 
 export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionCreateContainerProps> = ({
@@ -40,6 +41,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
 
     const async = useAsync<DocumentRevision>({
       onSuccess: (createdDocumentRevision?) => {
+        documentsSelectors.setProposedDocId("");
         if (createdDocumentRevision) {
           loadDocument(createdDocumentRevision.document.id);
           history.push(generateDocumentRevisionVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id));
@@ -52,7 +54,9 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
     };
 
     const showRevisionTypeChange = !!documentRevision;
-    const initialValues: DocumentRevisionFormValues = documentRevision ? toDocumentRevisionFormValuesWithRevisionChange(documentRevision) : DEFAULT_INITIAL_VALUES;
+    const initialValues = documentRevision ?
+      toDocumentRevisionFormValuesWithRevisionChange(documentRevision) :
+      DEFAULT_INITIAL_VALUES;
 
     return (
       <DocumentRevisionForm

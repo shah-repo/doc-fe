@@ -1,9 +1,10 @@
 
-import { Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
-import { Field, FieldArray, FieldArrayRenderProps, Form, FormikProps } from "formik";
-import React, { MouseEventHandler } from "react";
+import { Typography, withStyles, WithStyles } from "@material-ui/core";
+import { FieldArray, FieldArrayRenderProps, Form, FormikProps } from "formik";
+import React from "react";
 import { Link } from "react-router-dom";
 import { DocumentRevision, RevisionChangeType } from "../../../state/ducks/documentRevisions";
+import { documentsActions, documentsSelectors } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
@@ -20,7 +21,6 @@ import Text from "../../components/Text";
 import { documentRevisionTypeFormOption } from "../../document.revision/utils/helpers";
 import { documentDetailsPath, documentVersionPath } from "../../document.revision/utils/paths";
 import AttachmentsContainer from "../../documents/forms/attachments/Attachments.container";
-import { documentRevisionIdMask, maskId } from "../helpers";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -29,25 +29,39 @@ interface Props extends WithStyles<typeof styles>, FormikProps<DocumentRevisionF
   documentRevisions?: DocumentRevision[];
   availableReferences: OptionType[];
   showRevisionTypeChange?: boolean;
+  loadDocumentProposedId: typeof documentsActions.loadDocumentProposedId;
+  proposedDocId: string;
 }
 
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   asyncState, classes, initialValues, handleChange, setFieldValue, documentRevisions,
-  availableReferences, showRevisionTypeChange,
+  availableReferences, showRevisionTypeChange, loadDocumentProposedId, proposedDocId, values,
 }) => {
   const openReference = (documentId: string) => { window.open(documentDetailsPath(documentId), "_blank"); };
   const renderAttachments = (props: FieldArrayRenderProps) => <AttachmentsContainer {...props} />;
 
-  const onTypeChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-    const type = event.target.value as string;
-    const docIdGen = maskId(revisionOrdinalNumber(type));
-    handleChange(event);
-    setFieldValue("typePrefix", type);
-    setFieldValue("docId", docIdGen);
+  const isDisabled: boolean = initialValues.id !== undefined;
+  const docIdValue = isDisabled ? values.document!.docId : proposedDocId;
+
+  if (!isDisabled && values.document) {
+    values.document.docId = proposedDocId;
+  }
+
+  const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    const { type } = values.document || {type: undefined};
+
+    if (!values.document && !type) { return; }
+    const pattern = new RegExp(type + "\\d{0," + type!.length + "}", "g" );
+
+    if (!value.match(pattern)) { return; }
+    documentsSelectors.setProposedDocId(value);
   };
 
-  const revisionOrdinalNumber = (type: string) => {
-    return (documentRevisions || []).length + 1;
+  const handleTypeChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
+    const type = event.target.value as string;
+    loadDocumentProposedId(type);
+    handleChange(event);
   };
 
   const renderTypeOfRevisionChange = () => {
@@ -112,25 +126,16 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         <SelectField
           name="document.type"
           label="document.type"
-          selectProps={{inputProps: { id: "type", disabled: initialValues.id && true }, onChange: onTypeChange }}
+          selectProps={{inputProps: { id: "type", disabled: isDisabled }, onChange: handleTypeChange }}
           options={documentRevisionTypeFormOption()}
           validate={validator(required)}
           includeEmpty={false}
         />
-        <Grid container={true} direction="row" >
-          <Grid item={true} >
-            <InputField
-              name="typePrefix"
-              inputProps={{ id: "typePrefix", placeholder: "DOC ID", readOnly: true, style: {width: 50} }}
-            />
-          </Grid>
-          <Grid item={true} style={{flex: 1}} >
-            <InputField
-              name="docId"
-              inputProps={{ id: "docId", readOnly: true }}
-            />
-          </Grid>
-        </Grid>
+        <InputField
+          name="document.docId"
+          label="document.revision.list.docId"
+          inputProps={{ id: "docId", value: docIdValue, disabled: isDisabled, onChange: handleDocIdChange }}
+        />
         <AutcompleteField
           name="referenceTo"
           autocompleteProps={{
