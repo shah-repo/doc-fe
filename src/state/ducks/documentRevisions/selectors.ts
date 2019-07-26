@@ -1,10 +1,10 @@
 import _ from "lodash";
 import { createSelector } from "reselect";
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
-import { documentRevisionIdMask } from "../../../ui/documentRevision/helpers";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
-import { DocumentRevisionStatus } from "./types";
+import { ChangeRequest } from "../changeRequest";
+import { DocumentRevisionStatus } from ".";
 
 const allIds = (state: ApplicationState) => state.documentRevisions.allIds;
 const byId = (state: ApplicationState) => state.documentRevisions.byId;
@@ -29,16 +29,56 @@ const makeGetDocumentRevisions = () => {
   );
 };
 
-const getAvailableReferences = createSelector(allIds, byId, (ids, docRevs): OptionType[] => (
-  ids.map((id) => {
-    const { document, revision, name } = docRevs[id];
+const getDocumentsChangeRequest = (state: ApplicationState, changeRequest?: ChangeRequest) => changeRequest;
 
-    return {
-      value: document.id,
-      label: `${document.docId} - ${revision} - ${name}`,
-    };
-  })
-));
+const makeGetAvailableReferences = () => {
+  return createSelector(
+    [allIds, byId, getDocumentsChangeRequest],
+    (ids, docRevs, initialChangeRequest): OptionType[] => {
+      const filteredIds = ids.filter((id) => {
+        const { status, changeRequest } = docRevs[id];
+
+        if (status === DocumentRevisionStatus.Released) {
+          return true;
+        }
+
+        if (status === DocumentRevisionStatus.PendingChange) {
+          if ((changeRequest && initialChangeRequest) && (changeRequest.id === initialChangeRequest.id)) {
+            return true;
+          }
+        }
+
+        return false;
+      })
+
+      // if two doc revs from same to document, take the one with the higher version number
+      const uniqueIds = filteredIds.filter((id) => {
+        const docRev = docRevs[id];
+
+        const skipId = _.some(filteredIds, (filteredId) => {
+          const filteredDocRev = docRevs[filteredId];
+
+          if (filteredDocRev.document.id === docRev.document.id) {
+            return filteredDocRev.version > docRev.version;
+          }
+
+          return false;
+        })
+
+        return !skipId;
+      })
+
+      return uniqueIds.map((id) => {
+        const { document, revision, name } = docRevs[id];
+    
+        return {
+          value: document.id,
+          label: `${document.docId} - ${revision} - ${name}`,
+        };
+      });
+    }
+  );
+};
 
 const getLoadAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadAsyncInfo;
 const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadListAsyncInfo;
@@ -55,7 +95,7 @@ export default {
   getDocument,
   getDocumentRevisions,
   makeGetDocumentRevisions,
-  getAvailableReferences,
   getAudit,
   getLoadAuditAsyncState,
+  makeGetAvailableReferences,
 };
