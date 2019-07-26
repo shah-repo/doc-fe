@@ -52,9 +52,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     const { type } = values.document || {type: undefined};
 
     if (!values.document && !type) { return; }
-    const pattern = new RegExp(type + "\\d{0," + type!.length + "}", "g" );
+    const pattern = new RegExp("^" + type + "\\d{0," + type!.length + "}", "g" );
 
-    if (!value.match(pattern)) { return; }
+    if (!pattern.test(value)) { return; }
     documentsSelectors.setProposedDocId(value);
   };
 
