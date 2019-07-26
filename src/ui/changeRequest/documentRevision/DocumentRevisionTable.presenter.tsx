@@ -61,13 +61,14 @@ const DocumentRevisionTable: React.FunctionComponent<
       onSelect: onStateSelect,
       columnOptions: { width: 80 },
       searchOptions: {
+        dataKey: "status[]",
         searchType: "select",
         selectOptions: documentRevisionStatusOption(),
       },
     },
     {
       key: "actions",
-      label: "changeRequest.documentRevisionTable.actions",
+      label: "changeRequest.documentRevisionTable.add",
       cellType: "ACTION",
       omitSearch: true,
       onSelect: onStateSelect,

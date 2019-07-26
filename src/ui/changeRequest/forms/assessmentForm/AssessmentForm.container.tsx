@@ -33,30 +33,6 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
   availableApprovers: changeRequestsSelectors.getApproversListForAssessmentForm(state),
 });
 
-const validate = (values: ChangeRequestFormValues) => {
-  const errors: FormikErrors<any> = {};
-  const { justifications, implementationPlan, assessments } = values;
-  const descriptionOrAttachment = "changeRequest.assessmentForm.error.descriptionOrAttachment";
-  const taskOrAttachment = "changeRequest.assessmentForm.error.taskOrAttachment";
-  const isAssessmentDesignValid = assessments.design.reasoning || assessments.design.attachment;
-  const isAssessmentProcessValid = assessments.process.reasoning || assessments.process.attachment;
-  const isAssessmentRegulatoryValid = assessments.regulatory.reasoning || assessments.regulatory.attachment;
-
-  if (!isAssessmentDesignValid || !isAssessmentProcessValid || !isAssessmentRegulatoryValid) {
-    _.set(errors, "assessments", <Text translation="change.request.assessments.error" />);
-  }
-
-  if (!justifications.description && justifications.attachments.length === 0) {
-    _.set(errors, "justifications.description", descriptionOrAttachment);
-  }
-
-  if (implementationPlan.tasks.length === 0 && implementationPlan.attachments.length === 0) {
-    _.set(errors, "implementationPlan.tasks", <Text translation={taskOrAttachment} />);
-  }
-
-  return errors;
-};
-
 const AssessmentFormContainer: React.FunctionComponent<AssessmentFormContainerProps> = ({
   onSubmit,
   initialValues,
@@ -82,7 +58,6 @@ const AssessmentFormContainer: React.FunctionComponent<AssessmentFormContainerPr
           initialValues={initialValues}
           onSubmit={onSubmit}
           enableReinitialize={true}
-          validate={validate}
         />
       </AsyncGate>
     );

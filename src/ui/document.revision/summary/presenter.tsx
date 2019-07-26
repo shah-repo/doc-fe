@@ -8,6 +8,7 @@ import ControlsContainer from "../../documentRevision/PreviewControls.container"
 import Attachment from "./attachment";
 import styles from "./styles";
 import ReferenceContainer from "./reference.container";
+import ChangeRequestLink from "./changeRequestLink";
 
 type Props = DataProps<DocumentRevision> & WithStyles<typeof styles>;
 
@@ -18,6 +19,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   return(
     <Box>
       <Box className={classes.previewBox}>
+        <ChangeRequestLink dataProp={dataProp} />
         <ListItem>
           <Typography variant="h5">
             <Text translation="document.revision.list.docId" />: {dataProp.document.docId}

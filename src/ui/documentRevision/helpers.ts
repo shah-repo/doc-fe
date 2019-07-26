@@ -3,7 +3,13 @@ import { DocumentRevision, DocumentRevisionStatus } from "../../state/ducks/docu
 export const canEditDocumentRevision = (
   documentRevision: DocumentRevision,
   currentUserEmail: string,
-) => documentRevision.owner && currentUserEmail === documentRevision.owner.email && documentRevision.status === DocumentRevisionStatus.Draft;
+) => (
+  documentRevision.owner && currentUserEmail === documentRevision.owner.email
+  && (
+    documentRevision.status === DocumentRevisionStatus.Draft
+    || documentRevision.status === DocumentRevisionStatus.PendingChange
+  )
+);
 
 export const canSubmitDocumentRevision = (
   documentRevision: DocumentRevision,

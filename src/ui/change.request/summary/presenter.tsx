@@ -1,4 +1,11 @@
-import { Box, ListItem, Typography, WithStyles, withStyles } from "@material-ui/core";
+import {
+  Box,
+  ListItem,
+  Typography,
+  WithStyles,
+  withStyles,
+} from "@material-ui/core";
+import moment from "moment";
 import React from "react";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
@@ -17,8 +24,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
 }) => {
-
-  return(
+  return (
     <Box>
       <Box className={classes.previewBox}>
         <ListItem>
@@ -28,9 +34,12 @@ export const Presenter: React.FunctionComponent<Props> = ({
         </ListItem>
         <SummaryField label="common.owner" value={dataProp.owner.name} />
         <SummaryField label="common.status" value={dataProp.state} />
-        <SummaryField label="cr.crtitle" value={dataProp.title} />
+        <SummaryField label="cr.title" value={dataProp.title} />
         <SummaryField label="cr.description" value={dataProp.description} />
-        <SummaryField label="cr.target.date" value={dataProp.effectiveDate} />
+        <SummaryField
+          label="common.target.date"
+          value={moment.utc(dataProp.effectiveDate).format("LL")}
+        />
         <Justification dataProp={dataProp.justifications} />
         <Assessment dataProp={dataProp.assessments} />
         <ImplementationPlan dataProp={dataProp.implementationPlan} />
@@ -39,7 +48,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
       <Box className={classes.submitBox}>
         <ControlsContainer changeRequest={dataProp} />
       </Box>
-    </Box >
+    </Box>
   );
 };
 

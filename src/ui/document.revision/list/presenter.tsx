@@ -71,7 +71,6 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "name",
       label: "document.revision.list.name",
-      searchOptions: { dataKey: "title" },
       tooltipKey: "description",
     },
     {
