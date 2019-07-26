@@ -1,4 +1,4 @@
-import { IconButton } from "@material-ui/core";
+import { Fab } from "@material-ui/core";
 import { Add, Edit, FileCopy, OpenInNew } from "@material-ui/icons";
 import React from "react";
 import { TableSelectionProps } from "../types";
@@ -18,7 +18,7 @@ const TableColumnAction = <T extends any>(): React.FunctionComponent<
       case "PREVIEW":
         return <OpenInNew />;
       case "ADD":
-        return <Add color="secondary" />;
+        return <Add />;
     }
   };
 
@@ -33,9 +33,12 @@ const TableColumnAction = <T extends any>(): React.FunctionComponent<
   };
 
   return (
-    <IconButton onClick={handleClick({ rowData, actionType })}>
+    <Fab
+      color={actionType === "ADD" ? "secondary" : undefined}
+      size="small"
+      onClick={handleClick({ rowData, actionType })}>
       {iconRenderer()}
-    </IconButton>
+    </Fab>
   );
 };
 
