@@ -6,13 +6,13 @@ import {
   documentRevisionsActions,
   RevisionChangeType,
 } from "../../state/ducks/documentRevisions";
+import { documentsSelectors } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import useAsync from "../hooks/useAsync";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { toDocumentRevisionFormValuesWithRevisionChange, toNewVersionRequestBody } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
 import { generateDocumentRevisionVersionPath } from "./pathGenerators";
-import { documentsSelectors } from "../../state/ducks/documents";
 
 interface DispatchProps {
   create: typeof documentRevisionsActions.create;
@@ -29,7 +29,6 @@ export const DEFAULT_INITIAL_VALUES: DocumentRevisionFormValues = {
   name: "",
   description: "",
   attachments: [],
-  type: "",
   referenceTo: [],
   revisionChangeType: RevisionChangeType.NextRevision,
   document: { docId: "" },
