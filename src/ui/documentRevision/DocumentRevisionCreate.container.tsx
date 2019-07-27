@@ -6,7 +6,7 @@ import {
   documentRevisionsActions,
   RevisionChangeType,
 } from "../../state/ducks/documentRevisions";
-import { documentsSelectors } from "../../state/ducks/documents";
+import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import useAsync from "../hooks/useAsync";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
@@ -17,6 +17,7 @@ import { generateDocumentRevisionVersionPath } from "./pathGenerators";
 interface DispatchProps {
   create: typeof documentRevisionsActions.create;
   loadDocument: typeof documentRevisionsActions.loadDocument;
+  setDocId: typeof documentsActions.setDocumentProposedId;
 }
 
 interface OwnProps {
@@ -35,12 +36,12 @@ export const DEFAULT_INITIAL_VALUES: DocumentRevisionFormValues = {
 };
 
 export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionCreateContainerProps> = ({
-  create, history, documentRevision, loadDocument,
+  create, history, documentRevision, loadDocument, setDocId,
 }) => {
 
     const async = useAsync<DocumentRevision>({
       onSuccess: (createdDocumentRevision?) => {
-        documentsSelectors.setProposedDocId("");
+        setDocId("");
         if (createdDocumentRevision) {
           loadDocument(createdDocumentRevision.document.id);
           history.push(generateDocumentRevisionVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id));
@@ -63,6 +64,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
         onSubmit={onSubmit}
         initialValues={initialValues}
         showRevisionTypeChange={showRevisionTypeChange}
+        setDocId={setDocId}
       />
     );
   };
@@ -72,4 +74,5 @@ const DocumentRevisionCreateContainerWithRouter = withRouter(DocumentRevisionCre
 export default connect<{}, DispatchProps, OwnProps, ApplicationState>(null, {
   create: documentRevisionsActions.create,
   loadDocument: documentRevisionsActions.loadDocument,
+  setDocId: documentsActions.setDocumentProposedId,
 })(DocumentRevisionCreateContainerWithRouter);

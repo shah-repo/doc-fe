@@ -1,14 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
+import { DocumentRevision, documentRevisionsActions } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
+import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";
 import useAsync from "../hooks/useAsync";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
-import { documentRevisionsActions, DocumentRevision } from "../../state/ducks/documentRevisions";
-import { DocumentRevisionFormValues } from "./forms/types";
 import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
-import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";
-import { canEditDocumentRevision, canSubmitDocumentRevision, canCreateNewVersion } from "./helpers";
+import { DocumentRevisionFormValues } from "./forms/types";
+import { canEditDocumentRevision } from "./helpers";
 
 interface StateProps {
   currentUserEmail: string;

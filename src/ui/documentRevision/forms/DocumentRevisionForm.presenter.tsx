@@ -4,7 +4,7 @@ import { FieldArray, FieldArrayRenderProps, Form, FormikProps } from "formik";
 import React from "react";
 import { Link } from "react-router-dom";
 import { DocumentRevision, RevisionChangeType } from "../../../state/ducks/documentRevisions";
-import { documentsActions, documentsSelectors } from "../../../state/ducks/documents";
+import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
@@ -31,11 +31,12 @@ interface Props extends WithStyles<typeof styles>, FormikProps<DocumentRevisionF
   showRevisionTypeChange?: boolean;
   loadDocumentProposedId: typeof documentsActions.loadDocumentProposedId;
   proposedDocId: string;
+  setDocId?: typeof documentsActions.setDocumentProposedId;
 }
 
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   asyncState, classes, initialValues, handleChange, setFieldValue, documentRevisions,
-  availableReferences, showRevisionTypeChange, loadDocumentProposedId, proposedDocId, values,
+  availableReferences, showRevisionTypeChange, loadDocumentProposedId, proposedDocId, values, setDocId,
 }) => {
   const openReference = (documentId: string) => { window.open(documentDetailsPath(documentId), "_blank"); };
   const renderAttachments = (props: FieldArrayRenderProps) => <AttachmentsContainer {...props} />;
@@ -54,8 +55,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     if (!values.document && !type) { return; }
     const pattern = new RegExp("^" + type + "\\d{0," + type!.length + "}", "g" );
 
-    if (!pattern.test(value)) { return; }
-    documentsSelectors.setProposedDocId(value);
+    if (!pattern.test(value) && !setDocId) { return; }
+    setDocId!(value);
   };
 
   const handleTypeChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {

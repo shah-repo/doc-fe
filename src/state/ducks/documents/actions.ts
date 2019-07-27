@@ -1,4 +1,3 @@
-import { Dispatch } from "redux";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import {
@@ -84,8 +83,10 @@ const loadDocumentProposedId = (type: string): ApiAction<DocumentProposedId> => 
   },
 });
 
-export const setDocumentProposedId = (docId: string) =>
-  (dispatch: Dispatch) => dispatch(documentProposedIdSet(docId));
+const setDocumentProposedId = (docId: string): DocumentProposedIdSetAction => ({
+  type: DOCUMENT_PROPOSED_DOC_ID_SET,
+  payload: docId,
+});
 
 const create = (body: DocumentEditRequestBody, handlers: Handlers<Document>):
   ApiAction<Document, DocumentEditRequestBody> => apiActionWithCallbacks({
