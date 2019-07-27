@@ -55,7 +55,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     if (!values.document && !type) { return; }
     const pattern = new RegExp("^" + type + "\\d{0," + type!.length + "}", "g" );
 
-    if (!pattern.test(value) && !setDocId) { return; }
+    if (!pattern.test(value) || !setDocId) { return; }
     setDocId!(value);
   };
 
