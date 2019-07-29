@@ -18,6 +18,7 @@ import { documentRevisionIdMask } from "../../documentRevision/helpers";
 import { Translation } from "../../translations/types";
 import styles from "./DocumentRevisionTable.styles";
 import { DocumentRevisionListItem } from "./types";
+import { SelectOption } from "../../components/forms/fields/Select";
 
 interface DocumentRevisionTableProps extends WithStyles<typeof styles> {
   documentRevisionsToShow: DocumentRevision[];
@@ -33,9 +34,11 @@ const DocumentRevisionTable: React.FunctionComponent<
     return addDocument(rowData.id);
   };
 
-  const [clearFilter, setClearFilter] = React.useState<boolean>(false);
-  const clear = () => setClearFilter(!clearFilter);
   const ChangeRequestList = TablePanel<DocumentRevision>();
+  const options: SelectOption[] = [
+    { value: "DRAFT", text: "DRAFT" },
+    { value: "RELEASED", text: "RELEASED" },
+  ];
   const columns: Array<TableColumnProps<DocumentRevision>> = [
     {
       key: "name",
@@ -63,7 +66,7 @@ const DocumentRevisionTable: React.FunctionComponent<
       searchOptions: {
         dataKey: "status[]",
         searchType: "select",
-        selectOptions: documentRevisionStatusOption(),
+        selectOptions: options,
       },
     },
     {
@@ -82,7 +85,6 @@ const DocumentRevisionTable: React.FunctionComponent<
         columns={columns}
         tableData={documentRevisionsToShow}
         cellMeasure={true}
-        clearFilter={clear}
         queryUrl={DOCUMENT_REVISION_ROOT_URL}
       />
     );
