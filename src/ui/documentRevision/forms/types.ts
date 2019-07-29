@@ -1,6 +1,6 @@
 import { Attachment } from "../../../state/ducks/attachments";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
-import { DocumentRevisionDocument, RevisionChangeType } from "../../../state/ducks/documentRevisions";
+import { DocumentRevisionDocument, Reference, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 
 export interface DocumentRevisionFormValues {

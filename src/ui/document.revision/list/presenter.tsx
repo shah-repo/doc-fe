@@ -64,7 +64,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       cellOptions: { align: "center" },
       columnOptions: {
         cellDataGetter: ({ rowData }) => `V${rowData.version}`,
-        width: 150,
+        width: 170,
         flexShrink: 2,
       },
     },
