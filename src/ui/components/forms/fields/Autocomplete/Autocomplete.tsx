@@ -3,6 +3,8 @@ import * as React from "react";
 import Select from "react-select";
 import { SelectComponentsProps } from "react-select/lib/Select";
 import { ValueType } from "react-select/lib/types";
+import Text from "../../../../components/Text";
+import { Translation } from "../../../../translations/types";
 import Field, { FieldOwnProps } from "../Field";
 import AutocompleteComponents from "./AutocompleteComponents";
 import { OptionType } from "./types";
@@ -10,7 +12,7 @@ import { OptionType } from "./types";
 interface AutocompleteOwnProps extends FieldOwnProps {
   autocompleteProps: SelectComponentsProps;
   options: OptionType[];
-  onClick?: (value: any) => void; 
+  onClick?: (value: any) => void;
 }
 
 type AutocompletePropsWithFormik = AutocompleteOwnProps & FormikFieldProps;

@@ -35,8 +35,8 @@ interface Props extends WithStyles<typeof styles>, FormikProps<DocumentRevisionF
 }
 
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
-  asyncState, classes, initialValues, handleChange, setFieldValue, documentRevisions,
-  availableReferences, showRevisionTypeChange, loadDocumentProposedId, proposedDocId, values, setDocId,
+  asyncState, classes, initialValues, handleChange, availableReferences, showRevisionTypeChange,
+  loadDocumentProposedId, proposedDocId, values, setDocId,
 }) => {
   const openReference = (documentId: string) => { window.open(documentDetailsPath(documentId), "_blank"); };
   const renderAttachments = (props: FieldArrayRenderProps) => <AttachmentsContainer {...props} />;

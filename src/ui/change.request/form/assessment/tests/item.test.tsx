@@ -1,14 +1,14 @@
 import { mount } from "enzyme";
+import toJson from "enzyme-to-json";
 import React from "react";
 import { Item, Props } from "../item";
-import toJson from 'enzyme-to-json';
 
-jest.mock("../../../components/Text");
+jest.mock("../../../../components/Text");
 
 describe("Assessment item unit test", () => {
   const defaultProps = {
     classes: {
-      exampleClass: ""
+      exampleClass: "",
     },
     type: "design",
     form: {
@@ -29,12 +29,12 @@ describe("Assessment item unit test", () => {
           tasks: [],
         },
         approvals: [],
-        documentRevisions:[],
-      }
-    }
-  }
+        documentRevisions: [],
+      },
+    },
+  };
   const getWrapper = (props: Partial<Props>) => mount(
-    <Item {...defaultProps} {...props}/>
+    <Item {...defaultProps} {...props} />,
   );
 
   it("renders attachmentRenderer correctly", () => {
@@ -54,15 +54,15 @@ describe("Assessment item unit test", () => {
                 id: "",
                 maxRevisionStages: 3,
                 name: "",
-                updatedAt: ""
+                updatedAt: "",
               },
               createdAt: "",
-              id:"",
+              id: "",
               importMetadataJson: {},
               name: "",
               s3link: "",
               type: "",
-              updatedAt: ""
+              updatedAt: "",
             },
           },
           process: {},
@@ -73,9 +73,9 @@ describe("Assessment item unit test", () => {
           tasks: [],
         },
         approvals: [],
-        documentRevisions:[],
-      }
-    }
+        documentRevisions: [],
+      },
+    };
     const wrapper = getWrapper({ form });
     expect(toJson(wrapper)).toMatchSnapshot();
   });

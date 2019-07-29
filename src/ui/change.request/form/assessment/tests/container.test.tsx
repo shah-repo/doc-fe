@@ -1,10 +1,10 @@
 import { mount } from "enzyme";
-import { Formik, Field } from "formik";
+import { Field, Formik } from "formik";
 import React from "react";
 import Container, { Props } from "../container";
 import Presenter from "../presenter";
 
-jest.mock("../../../components/Text");
+jest.mock("../../../../components/Text");
 
 describe("Assessment container unit tests", () => {
   const defaultProps = {
@@ -26,9 +26,9 @@ describe("Assessment container unit tests", () => {
           tasks: [],
         },
         approvals: [],
-        documentRevisions:[],
-      }
-    }
+        documentRevisions: [],
+      },
+    },
   };
 
   const getWrapper = (props: Partial<Props>) => mount(
@@ -37,7 +37,7 @@ describe("Assessment container unit tests", () => {
       onSubmit={jest.fn()}
     >
       <Field render={(fieldProps: any) => <Container {...fieldProps} {...defaultProps} {...props}/>} />
-    </Formik>
+    </Formik>,
   );
 
   it("Displays presenter", () => {
