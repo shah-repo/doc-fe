@@ -26,8 +26,6 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
           documentId,
         );
 
-        console.log(documentRevision);
-
         return (
           <div key={documentRevision.id} className={classes.linkContainer}>
             <NavLink
