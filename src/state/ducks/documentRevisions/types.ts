@@ -50,6 +50,7 @@ export interface Reference {
 export interface DocumentRevision {
   id: string;
   docId?: string;
+  typePrefix?: string;
   version: number;
   revision: string;
   name: string;
@@ -108,6 +109,7 @@ export interface ReferenceToEditRequest {
 
 export interface DocumentRevisionEditRequestBody {
   name: string;
+  docId?: string;
   description: string;
   attachments: Attachment[];
   type?: string;

@@ -9,21 +9,45 @@ import moment from "moment";
 import React from "react";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
+import { AsyncState } from "../../../state/types";
 import ControlsContainer from "../../changeRequest/forms/assessmentForm/AssessmentFormControls.container";
 import SummaryField from "../../common/summary/base";
+import FormProgress from "../../components/forms/FormProgress";
+import SubmitButton from "../../components/forms/SubmitButton";
 import Text from "../../components/Text";
-import Approvers from "./approvers";
+import ApproversField from "../form/approvers";
+import ApproversSummary from "./approvers";
 import Assessment from "./assessment";
 import ImplementationPlan from "./implementation.plan";
 import Justification from "./justification";
 import styles from "./styles";
 
-type Props = DataProps<ChangeRequest> & WithStyles<typeof styles>;
+interface OwnProps extends DataProps<ChangeRequest> {
+  asyncState: AsyncState;
+  canEdit: boolean;
+}
+
+type Props = OwnProps & WithStyles<typeof styles>;
 
 export const Presenter: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
+  asyncState,
+  canEdit,
 }) => {
+
+  const approversFieldRenderer = () => (
+    <Box>
+      <ListItem>
+        <Typography variant="h6"><Text translation="common.approvers" />:</Typography>
+      </ListItem>
+      <ListItem><ApproversField /></ListItem>
+    </Box>
+  );
+
+  const submitButtonRenderer = () =>
+    <SubmitButton asyncState={asyncState} label="document.save" style={{ paddingTop: 25 }} />;
+
   return (
     <Box>
       <Box className={classes.previewBox}>
@@ -43,9 +67,12 @@ export const Presenter: React.FunctionComponent<Props> = ({
         <Justification dataProp={dataProp.justifications} />
         <Assessment dataProp={dataProp.assessments} />
         <ImplementationPlan dataProp={dataProp.implementationPlan} />
-        <Approvers dataProp={dataProp.approvals} />
+        {canEdit && approversFieldRenderer()}
+        {!canEdit && <ApproversSummary dataProp={dataProp.approvals} />}
       </Box>
       <Box className={classes.submitBox}>
+        {canEdit && <FormProgress asyncState={asyncState} />}
+        {canEdit && submitButtonRenderer()}
         <ControlsContainer changeRequest={dataProp} />
       </Box>
     </Box>

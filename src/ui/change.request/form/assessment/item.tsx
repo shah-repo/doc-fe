@@ -7,11 +7,11 @@ import {
   SubtitlesOutlined,
 } from "@material-ui/icons";
 import React from "react";
-import Dialog from "../../components/dialogs/Dialog";
-import { DialogAction } from "../../components/dialogs/utils/types";
-import Text from "../../components/Text";
-import useDialog from "../../hooks/useDialog";
-import { AssessmentItemProps } from "../utils/types";
+import Dialog from "../../../components/dialogs/Dialog";
+import { DialogAction } from "../../../components/dialogs/utils/types";
+import Text from "../../../components/Text";
+import useDialog from "../../../hooks/useDialog";
+import { AssessmentItemProps } from "../../utils/types";
 import Form from "./form";
 import styles from "./styles";
 

@@ -2,6 +2,9 @@ import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import {
   DOCUMENT_GET_ASYNC,
+  DOCUMENT_PROPOSED_DOC_ID,
+  DOCUMENT_PROPOSED_DOC_ID_ASYNC,
+  DOCUMENT_PROPOSED_DOC_ID_SET,
   DOCUMENT_SET,
   DOCUMENTS_LIST,
   DOCUMENTS_LIST_ASYNC,
@@ -14,6 +17,8 @@ import {
   Document,
   DocumentEditRequestBody,
   DocumentListAction,
+  DocumentProposedId,
+  DocumentProposedIdSetAction,
   DocumentSetAction,
   DocumentsToReviewListAction,
   DocumentTransition,
@@ -34,6 +39,11 @@ const documentsToReviewList = (documents: Document[]): DocumentsToReviewListActi
 const documentSet = (document: Document): DocumentSetAction => ({
   type: DOCUMENT_SET,
   payload: document,
+});
+
+const documentProposedIdSet = (docId: string): DocumentProposedIdSetAction => ({
+  type: DOCUMENT_PROPOSED_DOC_ID_SET,
+  payload: docId,
 });
 
 const loadList = (): ApiAction<Document[]> => apiAction({
@@ -61,6 +71,21 @@ const load = (id: string): ApiAction<Document> => apiAction({
   onSuccess: (document, dispatch) => {
     dispatch(documentSet(document));
   },
+});
+
+const loadDocumentProposedId = (type: string): ApiAction<DocumentProposedId> => apiAction({
+  url: DOCUMENT_PROPOSED_DOC_ID,
+  method: "get",
+  params: { type },
+  asyncType: DOCUMENT_PROPOSED_DOC_ID_ASYNC,
+  onSuccess: (documentProposedId, dispatch) => {
+    dispatch(documentProposedIdSet(documentProposedId.docId || ""));
+  },
+});
+
+const setDocumentProposedId = (docId: string): DocumentProposedIdSetAction => ({
+  type: DOCUMENT_PROPOSED_DOC_ID_SET,
+  payload: docId,
 });
 
 const create = (body: DocumentEditRequestBody, handlers: Handlers<Document>):
@@ -110,4 +135,6 @@ export default {
   create,
   save,
   applyTransition,
+  loadDocumentProposedId,
+  setDocumentProposedId,
 };

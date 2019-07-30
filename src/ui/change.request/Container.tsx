@@ -1,12 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Route } from "react-router-dom";
-import Switch from "../app/Switch";
+import { authSelectors } from "../../state/ducks/auth";
 import {
   changeRequestsActions,
   changeRequestsSelectors,
 } from "../../state/ducks/changeRequest";
 import { ApplicationState } from "../../state/reducers";
+import Switch from "../app/Switch";
 import ChangeRequestUpdateContainer from "../changeRequest/ChangeRequestUpdate.container";
 import AsyncGate from "../components/AsyncGate";
 import {
@@ -23,11 +24,13 @@ import {
 type DispatchProps = ContainerDispatchProps;
 type StateProps = ContainerStateProps;
 type OwnProps = ContainerOwnProps;
+
 type Props = OwnProps & DispatchProps & StateProps;
 
 const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps => ({
   loadAsyncState: changeRequestsSelectors.getLoadAsyncState(state),
   dataProp: changeRequestsSelectors.getChangeRequest(state, props.match.params.changeRequestId),
+  currentUserEmail: authSelectors.currentUserEmail(state),
 });
 
 const Container: React.FunctionComponent<Props> = ({
@@ -35,11 +38,12 @@ const Container: React.FunctionComponent<Props> = ({
   loadAsyncState,
   match,
   dataProp,
+  currentUserEmail,
 }) => {
   const changeRequestId = match.params.changeRequestId;
   const loadAction = () => load(changeRequestId);
   const updateRenderer = () => <ChangeRequestUpdateContainer changeRequest={dataProp} />;
-  const summaryRenderer = () => <SummaryContainer dataProp={dataProp} />;
+  const summaryRenderer = () => <SummaryContainer dataProp={dataProp} currentUserEmail={currentUserEmail} />;
 
   return (
     <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>
