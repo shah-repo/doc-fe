@@ -1,6 +1,6 @@
 {
   "translation.unknown": "",
-  
+
   "login.title": "Sign in",
   "login.email": "Email address",
   "login.password": "Password",
@@ -234,5 +234,10 @@
   "document.revision.list.state": "Status",
   "document.revision.list.type": "Type",
   "document.revision.list.version": "Released version",
-  "document.revision.create": "Create a document"
+  "document.revision.create": "Create a document",
+
+  "page.title.changeRequest": "Change Request List",
+  "page.title.documentList": "Document List",
+  "page.title.documentCreate": "Create New Document",
+  "page.title.changeRequestCreate": "Create New Change Request"
 }

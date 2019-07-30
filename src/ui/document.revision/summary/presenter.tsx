@@ -1,4 +1,10 @@
-import { Box, ListItem, Typography, WithStyles, withStyles } from "@material-ui/core";
+import {
+  Box,
+  ListItem,
+  Typography,
+  WithStyles,
+  withStyles,
+} from "@material-ui/core";
 import React from "react";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
@@ -16,24 +22,34 @@ export const Presenter: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
 }) => {
-  return(
+  return (
     <Box>
       <Box className={classes.previewBox}>
         <ChangeRequestLink dataProp={dataProp} />
         <ListItem>
           <Typography variant="h5">
-            <Text translation="document.revision.list.docId" />: {dataProp.document.docId}
+            <Text translation="document.revision.list.docId" />:{" "}
+            {dataProp.document.docId}
           </Typography>
         </ListItem>
         <SummaryField label="common.status" value={dataProp.status} />
         <SummaryField label="common.type" value={dataProp.document.type} />
         <SummaryField label="common.description" value={dataProp.description} />
-        <SummaryField label="common.name" value={dataProp.name} />
-        {
-          dataProp.referenceTo
-          && <ReferenceContainer dataProp={dataProp.referenceTo} isReferenceTo={true} status={dataProp.status} deprecatedAt={dataProp.deprecatedAt} />
-        }
-        {dataProp.document.referencedBy && <ReferenceContainer dataProp={dataProp.document.referencedBy} isReferenceTo={false} />}
+        <SummaryField label="document.title" value={dataProp.name} />
+        {dataProp.referenceTo && (
+          <ReferenceContainer
+            dataProp={dataProp.referenceTo}
+            isReferenceTo={true}
+            status={dataProp.status}
+            deprecatedAt={dataProp.deprecatedAt}
+          />
+        )}
+        {dataProp.document.referencedBy && (
+          <ReferenceContainer
+            dataProp={dataProp.document.referencedBy}
+            isReferenceTo={false}
+          />
+        )}
         {dataProp.attachments && <Attachment dataProp={dataProp.attachments} />}
       </Box>
       <Box className={classes.submitBox}>
@@ -43,4 +59,4 @@ export const Presenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default withStyles(styles)(Presenter) ;
+export default withStyles(styles)(Presenter);
