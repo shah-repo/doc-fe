@@ -13,5 +13,6 @@ export const getApproval = (approval: Partial<Approval> = {}): Approval => ({
   approver: getUser(),
   reviewedAt: undefined,
   status: ApprovalStatus.Approved,
+  active: faker.random.boolean(),
   ...approval,
 });
