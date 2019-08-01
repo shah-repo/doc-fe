@@ -2,7 +2,7 @@ import { Collapse, IconButton, List } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import React from "react";
 import { Attachment } from "../../../state/ducks/attachments";
-import { Audit } from "../../../state/ducks/documentRevisions";
+import { Audit, Reference } from "../../../state/ducks/documentRevisions";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
 import { styles } from "./Audit.presenter.styles";
@@ -26,6 +26,9 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       case "attachments":
         const attachment = change.nextValue as Attachment;
         return attachment.name;
+      case "referenceTo":
+        const referenceTo = change.nextValue as Reference;
+        return referenceTo.docId;
       default:
         return change.nextValue;
     }

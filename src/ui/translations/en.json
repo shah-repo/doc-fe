@@ -216,6 +216,9 @@
   "documentRevision.audit.status.STRING_NEW": "New status",
   "documentRevision.audit.type.STRING_NEW": "New type",
   "documentRevision.audit.status.STRING_EDITED": "Updated status",
+  "documentRevision.audit.document.docId.STRING_NEW": "New Doc ID",
+  "documentRevision.audit.document.type.STRING_NEW": "New document type",
+  "documentRevision.audit.referenceTo.ARRAY_NEW": "New reference to",
 
   "transition.action.confirm": "Confirm",
   "transition.action.cancel": "Cancel",
