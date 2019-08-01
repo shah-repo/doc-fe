@@ -6,6 +6,8 @@ import { changeRequestsActions, ChangeRequestTransition, ChangeRequestTransition
 import useAsync from "../../../hooks/useAsync";
 import { ApplicationState } from "../../../../state/reducers";
 import { AsyncStatus } from "../../../../state/types";
+import FormMessage from "../../../components/forms/FormMessage";
+import FormProgress from "../../../components/forms/FormProgress";
 
 interface OwnProps {
   transition: ChangeRequestTransition;
@@ -31,14 +33,18 @@ const TransitionButton: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <Button
-      variant="contained"
-      color="primary"
-      onClick={onClick}
-      disabled={async.asyncState.status === AsyncStatus.Active}
-    >
-      <Text message={label} />
-    </Button>
+    <React.Fragment>
+      <FormMessage asyncState={async.asyncState} />
+      <FormProgress asyncState={async.asyncState} />
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={onClick}
+        disabled={async.asyncState.status === AsyncStatus.Active}
+      >
+        <Text message={label} />
+      </Button>
+    </React.Fragment>
   );
 };
 
