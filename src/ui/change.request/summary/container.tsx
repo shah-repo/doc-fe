@@ -48,7 +48,7 @@ export const Container: React.FunctionComponent<Props> = ({
 
   const summaryPresenterRenderer = () => (
     <Form>
-      <Presenter dataProp={dataProp} asyncState={async.asyncState} canEdit={canEdit} />;
+      <Presenter dataProp={dataProp} asyncState={async.asyncState} canEdit={canEdit} />
     </Form>
   );
 
