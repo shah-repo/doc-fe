@@ -3,8 +3,8 @@ import { createSelector } from "reselect";
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
-import { ChangeRequest } from "../changeRequest";
 import { DocumentRevisionStatus } from ".";
+import { DocumentRevisionFormValues } from "../../../ui/documentRevision/forms/types";
 
 const allIds = (state: ApplicationState) => state.documentRevisions.allIds;
 const byId = (state: ApplicationState) => state.documentRevisions.byId;
@@ -29,21 +29,25 @@ const makeGetDocumentRevisions = () => {
   );
 };
 
-const getDocumentsChangeRequest = (state: ApplicationState, changeRequest?: ChangeRequest) => changeRequest;
+const getCurrentDocumentValues = (state: ApplicationState, docRev: DocumentRevisionFormValues) => docRev;
 
 const makeGetAvailableReferences = () => {
   return createSelector(
-    [allIds, byId, getDocumentsChangeRequest],
-    (ids, docRevs, initialChangeRequest): OptionType[] => {
+    [allIds, byId, getCurrentDocumentValues],
+    (ids, docRevs, currentDocRev): OptionType[] => {
       const filteredIds = ids.filter((id) => {
-        const { status, changeRequest } = docRevs[id];
+        const { status, changeRequest, document } = docRevs[id];
+
+        if (currentDocRev.document && currentDocRev.document.id === document.id) {
+          return false;
+        }
 
         if (status === DocumentRevisionStatus.Released) {
           return true;
         }
 
         if (status === DocumentRevisionStatus.PendingChange) {
-          if ((changeRequest && initialChangeRequest) && (changeRequest.id === initialChangeRequest.id)) {
+          if ((changeRequest && currentDocRev.changeRequest) && (changeRequest.id === currentDocRev.changeRequest.id)) {
             return true;
           }
         }

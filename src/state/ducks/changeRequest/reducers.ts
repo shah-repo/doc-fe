@@ -38,7 +38,7 @@ export const byId = (state: ChangeRequestsByIdState = {}, action: ChangeRequestA
         ...action.payload,
         approvals: action.payload.approvals.filter((a) => a.active),
       };
-      return { [action.payload.id]: newState, ...state };
+      return { ...state, [action.payload.id]: newState };
     default:
       return state;
   }
@@ -49,7 +49,7 @@ export const allIds = (state: ChangeRequestsAllIdsState = [], action: ChangeRequ
     case CHANGE_REQUEST_LIST:
       return _.uniq([...action.payload.map((changeRequest) => changeRequest.id)]);
     case CHANGE_REQUEST_SET:
-      return _.uniq([action.payload.id, ...state]);
+      return _.uniq([...state, action.payload.id]);
     default:
       return state;
   }

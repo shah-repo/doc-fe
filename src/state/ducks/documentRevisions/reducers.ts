@@ -32,7 +32,7 @@ export const byId = (state: DocumentRevisionsByIdState = {}, action: DocumentRev
     case DOCUMENT_REVISION_LIST:
       return { ...(_.keyBy<DocumentRevision>(action.payload, (documentRevision) => documentRevision.id)) };
     case DOCUMENT_REVISION_SET:
-      return { [action.payload.id]: action.payload, ...state };
+      return { ...state, [action.payload.id]: action.payload };
     default:
       return state;
   }
@@ -43,7 +43,7 @@ export const allIds = (state: DocumentRevisionsAllIdsState = [], action: Documen
     case DOCUMENT_REVISION_LIST:
       return _.uniq([...action.payload.map((documentRevision) => documentRevision.id)]);
     case DOCUMENT_REVISION_SET:
-      return _.uniq([action.payload.id, ...state]);
+      return _.uniq([...state, action.payload.id]);
     default:
       return state;
   }
@@ -52,7 +52,7 @@ export const allIds = (state: DocumentRevisionsAllIdsState = [], action: Documen
 export const documentsById = (state: DocumentByIdState = {}, action: DocumentSetAction): DocumentByIdState => {
   switch (action.type) {
     case DOCUMENT_SET:
-      return { [action.payload.id]: action.payload, ...state };
+      return { ...state, [action.payload.id]: action.payload };
     default:
       return state;
   }
@@ -61,7 +61,7 @@ export const documentsById = (state: DocumentByIdState = {}, action: DocumentSet
 export const auditsByCRId = (state: AuditByCRIdState = {}, action: DocumentRevisionAuditSetAction): AuditByCRIdState => {
   switch (action.type) {
     case DOCUMENT_REVISION_AUDIT_SET:
-      return { [action.payload.id]: action.payload.audit, ...state };
+      return { ...state, [action.payload.id]: action.payload.audit };
     default:
       return state;
   }
@@ -70,7 +70,7 @@ export const auditsByCRId = (state: AuditByCRIdState = {}, action: DocumentRevis
 export const auditsAllId = (state: AllIdsState = [], action: DocumentRevisionAuditSetAction): AllIdsState => {
   switch (action.type) {
     case DOCUMENT_REVISION_AUDIT_SET:
-      return _.uniq([action.payload.id, ...state]);
+      return _.uniq([...state, action.payload.id]);
     default:
       return state;
   }
