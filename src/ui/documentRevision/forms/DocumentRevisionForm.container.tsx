@@ -34,7 +34,7 @@ type DocumentRevisionFormContainerProps = OwnProps & StateProps & DispatchProps;
 
 const getAvailableReferences = documentRevisionsSelectors.makeGetAvailableReferences();
 const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps => ({
-  availableReferences: getAvailableReferences(state, props.initialValues.changeRequest),
+  availableReferences: getAvailableReferences(state, props.initialValues),
   loadAsyncState: documentRevisionsSelectors.getLoadListAsyncState(state),
   documentRevisions: documentRevisionsSelectors.getDocumentRevisionsList(state),
   proposedDocId: documentsSelectors.getProposedDocId(state),
@@ -70,7 +70,13 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<DocumentRevi
     };
 
     const loadAction = () => loadDocumentRevisions(
-      [DocumentRevisionStatus.Released, DocumentRevisionStatus.Deprecated, DocumentRevisionStatus.Obsolete, DocumentRevisionStatus.PendingChange],
+      [
+        DocumentRevisionStatus.Released,
+        DocumentRevisionStatus.Deprecated,
+        DocumentRevisionStatus.Obsolete,
+        DocumentRevisionStatus.PendingChange,
+        DocumentRevisionStatus.Draft,
+      ],
     );
 
     return (

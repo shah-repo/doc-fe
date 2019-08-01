@@ -80,8 +80,8 @@ describe("change requests reducers tests", () => {
 
     it("sets new change request on CHANGE_REQUEST_SET action", () => {
       expect(allIds(initialState, changeRequestSetAction)).toEqual([
-        changeRequest.id,
         ...initialState,
+        changeRequest.id,
       ]);
     });
   });

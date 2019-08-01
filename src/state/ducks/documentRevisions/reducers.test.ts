@@ -77,8 +77,8 @@ describe("document revisions reducers tests", () => {
 
     it("sets new document on DOCUMENT_REVISION_SET action", () => {
       expect(allIds(initialState, documentRevisionSetAction)).toEqual([
-        documentRevision.id,
         ...initialState,
+        documentRevision.id,
       ]);
     });
   });
@@ -114,8 +114,8 @@ describe("document revisions reducers tests", () => {
     const initialState = [documentRevisionList[0].id];
 
     const expectedState = [
-      documentRevision.id,
       ...initialState,
+      documentRevision.id,
     ];
 
     it("sets ids on CHANGE_REQUEST_AUDIT_SET action", () => {
