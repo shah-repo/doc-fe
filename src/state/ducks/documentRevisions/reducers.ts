@@ -30,9 +30,9 @@ type DocumentRevisionActions = DocumentRevisionsListAction | DocumentRevisionSet
 export const byId = (state: DocumentRevisionsByIdState = {}, action: DocumentRevisionActions): DocumentRevisionsByIdState => {
   switch (action.type) {
     case DOCUMENT_REVISION_LIST:
-      return { ...state, ...(_.keyBy<DocumentRevision>(action.payload, (documentRevision) => documentRevision.id)) };
+      return { ...(_.keyBy<DocumentRevision>(action.payload, (documentRevision) => documentRevision.id)) };
     case DOCUMENT_REVISION_SET:
-      return { ...state, [action.payload.id]: action.payload };
+      return { [action.payload.id]: action.payload, ...state };
     default:
       return state;
   }
@@ -41,9 +41,9 @@ export const byId = (state: DocumentRevisionsByIdState = {}, action: DocumentRev
 export const allIds = (state: DocumentRevisionsAllIdsState = [], action: DocumentRevisionActions): DocumentRevisionsAllIdsState => {
   switch (action.type) {
     case DOCUMENT_REVISION_LIST:
-      return _.uniq([...state, ...action.payload.map((documentRevision) => documentRevision.id)]);
+      return _.uniq([...action.payload.map((documentRevision) => documentRevision.id)]);
     case DOCUMENT_REVISION_SET:
-      return _.uniq([...state, action.payload.id]);
+      return _.uniq([action.payload.id, ...state]);
     default:
       return state;
   }
@@ -52,7 +52,7 @@ export const allIds = (state: DocumentRevisionsAllIdsState = [], action: Documen
 export const documentsById = (state: DocumentByIdState = {}, action: DocumentSetAction): DocumentByIdState => {
   switch (action.type) {
     case DOCUMENT_SET:
-      return { ...state, [action.payload.id]: action.payload };
+      return { [action.payload.id]: action.payload, ...state };
     default:
       return state;
   }
@@ -61,7 +61,7 @@ export const documentsById = (state: DocumentByIdState = {}, action: DocumentSet
 export const auditsByCRId = (state: AuditByCRIdState = {}, action: DocumentRevisionAuditSetAction): AuditByCRIdState => {
   switch (action.type) {
     case DOCUMENT_REVISION_AUDIT_SET:
-      return { ...state, [action.payload.id]: action.payload.audit };
+      return { [action.payload.id]: action.payload.audit, ...state };
     default:
       return state;
   }
@@ -70,7 +70,7 @@ export const auditsByCRId = (state: AuditByCRIdState = {}, action: DocumentRevis
 export const auditsAllId = (state: AllIdsState = [], action: DocumentRevisionAuditSetAction): AllIdsState => {
   switch (action.type) {
     case DOCUMENT_REVISION_AUDIT_SET:
-      return _.uniq([...state, action.payload.id]);
+      return _.uniq([action.payload.id, ...state]);
     default:
       return state;
   }

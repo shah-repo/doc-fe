@@ -49,7 +49,6 @@ describe("change requests reducers tests", () => {
     };
 
     const expectedState = {
-      ...initialState,
       [changeRequestList[0].id]: changeRequestList[0],
       [changeRequestList[1].id]: changeRequestList[1],
     };
@@ -71,7 +70,6 @@ describe("change requests reducers tests", () => {
     const initialState = [initialChangeRequest.id];
 
     const expectedState = [
-      ...initialState,
       changeRequestList[0].id,
       changeRequestList[1].id,
     ];
@@ -82,8 +80,8 @@ describe("change requests reducers tests", () => {
 
     it("sets new change request on CHANGE_REQUEST_SET action", () => {
       expect(allIds(initialState, changeRequestSetAction)).toEqual([
-        ...initialState,
         changeRequest.id,
+        ...initialState,
       ]);
     });
   });

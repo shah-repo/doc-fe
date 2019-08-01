@@ -32,13 +32,13 @@ type ChangeRequestActions = ChangeRequestSetAction | ChangeRequestListAction;
 export const byId = (state: ChangeRequestsByIdState = {}, action: ChangeRequestActions): ChangeRequestsByIdState => {
   switch (action.type) {
     case CHANGE_REQUEST_LIST:
-      return { ...state, ...(_.keyBy<ChangeRequest>(action.payload, (changeRequest) => changeRequest.id)) };
+      return { ...(_.keyBy<ChangeRequest>(action.payload, (changeRequest) => changeRequest.id)) };
     case CHANGE_REQUEST_SET:
       const newState: ChangeRequest = {
         ...action.payload,
         approvals: action.payload.approvals.filter((a) => a.active),
       };
-      return { ...state, [action.payload.id]: newState };
+      return { [action.payload.id]: newState, ...state };
     default:
       return state;
   }
@@ -47,9 +47,9 @@ export const byId = (state: ChangeRequestsByIdState = {}, action: ChangeRequestA
 export const allIds = (state: ChangeRequestsAllIdsState = [], action: ChangeRequestActions): ChangeRequestsAllIdsState => {
   switch (action.type) {
     case CHANGE_REQUEST_LIST:
-      return _.uniq([...state, ...action.payload.map((changeRequest) => changeRequest.id)]);
+      return _.uniq([...action.payload.map((changeRequest) => changeRequest.id)]);
     case CHANGE_REQUEST_SET:
-      return _.uniq([...state, action.payload.id]);
+      return _.uniq([action.payload.id, ...state]);
     default:
       return state;
   }
