@@ -13,7 +13,7 @@ import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
 import DocumentRevisionSummaryPresenter from "../../document.revision/summary/presenter";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
 import useAsync from "../../hooks/useAsync";
-import { canEditChangeRequest } from "../utils/helpers";
+import { canEditApprovers } from "../utils/helpers";
 import { SummaryDispatchProps } from "../utils/types";
 import Presenter from "./presenter";
 
@@ -25,10 +25,6 @@ interface  OwnProps extends DataProps<ChangeRequest> {
 
 type Props = OwnProps & DispatchProps;
 
-const mapDispatchToProps = () => ({
-  save: changeRequestsActions.save,
-});
-
 export const Container: React.FunctionComponent<Props> = ({
   dataProp,
   save,
@@ -39,7 +35,7 @@ export const Container: React.FunctionComponent<Props> = ({
   const docRevSummary = (documentRevision: DocumentRevision) => setDocRev(documentRevision);
   const crSummary = () => setDocRev(null);
 
-  const canEdit = canEditChangeRequest({ dataProp, currentUserEmail });
+  const canEdit = canEditApprovers({ dataProp, currentUserEmail });
   const async = useAsync<ChangeRequest>();
 
   const onSubmit = (values: ChangeRequestFormValues) => {
