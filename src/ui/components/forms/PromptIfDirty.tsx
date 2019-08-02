@@ -8,19 +8,19 @@ interface Props {
 const PromptIfDirty: React.FunctionComponent<Props> = ({
   dirty,
 }) => {
-  const beforeUnload = (e: Event) => {
-    e.preventDefault();
-    e.returnValue = true;
-  }
+  const startBeforeUnload = () => { window.onbeforeunload = (e: Event) => { e.returnValue = true; }};
+  const cancelBeforeUnload = () => window.onbeforeunload = () => {};
 
   if (dirty) {
-    window.addEventListener('beforeunload', beforeUnload);
+    startBeforeUnload();
   } else {
-    window.removeEventListener("beforeunload", beforeUnload);
+    cancelBeforeUnload();
   }
 
   useEffect(() => {
-    window.removeEventListener("beforeunload", beforeUnload);
+    return () => {
+      cancelBeforeUnload();
+    };
   }, []);
 
   return (
