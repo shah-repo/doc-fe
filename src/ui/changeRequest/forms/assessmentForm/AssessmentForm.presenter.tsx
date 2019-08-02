@@ -1,6 +1,6 @@
 import { withStyles, WithStyles } from "@material-ui/core";
-import { Field, FieldProps, Form, FormikProps } from "formik";
-import React from "react";
+import { Field, FieldProps, FormikProps } from "formik";
+import React, { useEffect } from "react";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest";
 import { AsyncState } from "../../../../state/types";
 import ApproversField from "../../../change.request/form/approvers";
@@ -16,17 +16,29 @@ import styles from "./AssessmentForm.styles";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
 import AssessmentFormJustifications from "./AssessmentFormJustifications";
 import AssessmentFormImplementationPlan from "./implementationPlan/Container";
+import PromptIfDirty from "../../../components/forms/PromptIfDirty";
+import FormWrapper from "../../../components/forms/FormWrapper";
 
 interface Props extends WithStyles<typeof styles>, FormikProps<ChangeRequestFormValues> {
   asyncState: AsyncState;
   changeRequest?: ChangeRequest;
+  documentRevisionsList: string[];
 }
 
 const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   asyncState,
   classes,
   changeRequest,
+  dirty,
+  initialValues,
+  resetForm,
+  documentRevisionsList,
+  setFieldValue,
 }) => {
+  useEffect(() => {
+    setFieldValue("documentRevisions", documentRevisionsList);
+  }, [documentRevisionsList]);
+
 
   const renderJustifications = (props: FieldProps<ChangeRequestFormValues>) => (
     <AssessmentFormJustifications {...props} />
@@ -42,7 +54,8 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <div className={classes.container}>
-      <Form>
+      <FormWrapper dirty={dirty} resetForm={resetForm} initialValues={initialValues}>
+        <PromptIfDirty dirty={dirty} />
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
         <FilledInputField
@@ -68,7 +81,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
         <ApproversField />
         <SubmitButton asyncState={asyncState} label="document.save" />
         <AssessmentFormControlsContainer changeRequest={changeRequest} />
-      </Form>
+      </FormWrapper>
     </div>
   );
 };
