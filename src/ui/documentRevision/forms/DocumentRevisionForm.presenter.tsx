@@ -29,6 +29,8 @@ import {
 import AttachmentsContainer from "../../documents/forms/attachments/Attachments.container";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
+import FormWrapper from "../../components/forms/FormWrapper";
+import PromptIfDirty from "../../components/forms/PromptIfDirty";
 
 interface Props
   extends WithStyles<typeof styles>,
@@ -45,6 +47,7 @@ interface Props
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   asyncState, classes, initialValues, handleChange, availableReferences, showRevisionTypeChange,
   loadDocumentProposedId, proposedDocId, values, setDocId,
+  dirty, resetForm,
 }) => {
   const openReference = (documentId: string) => { window.open(documentDetailsPath(documentId), "_blank"); };
   const renderAttachments = (props: FieldArrayRenderProps) => <AttachmentsContainer {...props} />;
@@ -133,7 +136,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <div className={classes.container}>
-      <Form>
+      <FormWrapper dirty={dirty} initialValues={initialValues} resetForm={resetForm}>
+        <PromptIfDirty dirty={dirty} />
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
         <InputField
@@ -178,7 +182,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         <FieldArray name="attachments" render={renderAttachments} />
         {renderTypeOfRevisionChange()}
         <SubmitButton asyncState={asyncState} label="common.save" />
-      </Form>
+      </FormWrapper>
     </div>
   );
 };
