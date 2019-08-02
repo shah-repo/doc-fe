@@ -16,17 +16,34 @@ import styles from "./AssessmentForm.styles";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
 import AssessmentFormJustifications from "./AssessmentFormJustifications";
 import AssessmentFormImplementationPlan from "./implementationPlan/Container";
+import PromptIfDirty from "../../../components/forms/PromptIfDirty";
 
 interface Props extends WithStyles<typeof styles>, FormikProps<ChangeRequestFormValues> {
   asyncState: AsyncState;
   changeRequest?: ChangeRequest;
+  documentRevisionsList: string[];
 }
 
 const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   asyncState,
   classes,
   changeRequest,
+  dirty,
+  initialValues,
+  resetForm,
+  documentRevisionsList,
+  setFieldValue,
 }) => {
+  React.useEffect(() => {
+    if (dirty) {
+      resetForm();
+    }
+  }, [initialValues]);
+
+  React.useEffect(() => {
+    setFieldValue("documentRevisions", documentRevisionsList);
+  }, [documentRevisionsList]);
+
 
   const renderJustifications = (props: FieldProps<ChangeRequestFormValues>) => (
     <AssessmentFormJustifications {...props} />
@@ -43,6 +60,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   return (
     <div className={classes.container}>
       <Form>
+        <PromptIfDirty dirty={dirty} />
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
         <FilledInputField

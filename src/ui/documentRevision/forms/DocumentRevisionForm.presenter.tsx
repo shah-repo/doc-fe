@@ -115,9 +115,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           <div>
             {initialValues.document.referencedBy.map((reference) => {
               return (
-                <div>
+                <div key={reference.id}>
                   <Link
-                    key={reference.id}
                     to={documentVersionPath(reference.id, reference.document.id)}
                     target="_blank"
                   >
