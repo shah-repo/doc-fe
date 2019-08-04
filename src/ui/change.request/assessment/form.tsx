@@ -2,6 +2,7 @@ import { Box } from "@material-ui/core";
 import { Field, FieldProps } from "formik";
 import React from "react";
 import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
+import AttachmentField from "../../components/common/attachment.field/field";
 import FilledSelectField from "../../components/forms/fields/FilledSelect";
 import { assessmentStatementOption } from "../utils/helpers";
 import { AssessmentItemProps } from "../utils/types";
@@ -13,10 +14,6 @@ export const Form: React.FunctionComponent<Props> = ({
   type,
 }) => {
 
-  const attachmentRenderer = (props: FieldProps<ChangeRequestFormValues>) => (
-    <Attachment {...props} type={type} />
-  );
-
   return (
     <Box component="div" style={{minWidth: "500px"}}>
       <FilledSelectField
@@ -25,7 +22,7 @@ export const Form: React.FunctionComponent<Props> = ({
         options={assessmentStatementOption()}
         includeEmpty={true}
       />
-      <Field name={`assessments.${type}.attachment`} render={attachmentRenderer} />
+      <AttachmentField name={`assessments.${type}.attachment`} component="field" multiple={false} />;
     </Box>
   );
 };
