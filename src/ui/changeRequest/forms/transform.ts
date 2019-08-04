@@ -27,9 +27,9 @@ const createAssessment = (value: Assessment = {
   regulatory: {reasoning: null, attachment: null},
 }) => ({
   description: value.description,
-  design: value.design,
-  process: value.process,
-  regulatory: value.regulatory,
+  design: { reasoning: value.design.reasoning, attachment: value.design.attachment },
+  process: { reasoning: value.process.reasoning, attachment: value.process.attachment },
+  regulatory: { reasoning: value.regulatory.reasoning, attachment: value.regulatory.attachment },
 });
 
 const toImplementationPlanFormValues = (plan: ImplementationPlan): ImplementationPlanFormValues => {

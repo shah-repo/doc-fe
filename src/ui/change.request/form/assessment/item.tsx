@@ -34,7 +34,7 @@ export const Item: React.FunctionComponent<Props> = ({
 
   const clearAttachment = () => {
     const values = form.values;
-    values.assessments[type] = { attachment: null };
+    values.assessments[type] = { attachment: null, reasoning: null };
     form.setValues(values);
   };
 
@@ -53,7 +53,7 @@ export const Item: React.FunctionComponent<Props> = ({
       />
       <InsertDriveFileOutlined
         className={classes.icon}
-        color={isValid() ? "primary" : "error"}
+        color={isValid() ? "secondary" : "error"}
       />
     </Box>
   );
