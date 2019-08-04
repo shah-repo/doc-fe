@@ -1,36 +1,43 @@
-import { FieldArrayRenderProps, FieldProps, FieldArray, ErrorMessage } from "formik";
-import { Typography, makeStyles, createStyles } from "@material-ui/core";
+import { createStyles, makeStyles } from "@material-ui/core";
+import { ErrorMessage, FieldArray, FieldArrayRenderProps, FieldProps } from "formik";
 import React from "react";
-import Text from "../../../../components/Text";
+import AttachmentField from "../../../../components/common/attachment.field/field";
+import AttachmentIconField from "../../../../components/common/attachment.icon/field";
+import HeaderField from "../../../../components/common/header.field/field";
+import AttachmentsContainer from "../../attachments/Attachments.container";
 import { ChangeRequestFormValues } from "../../types";
-import AttachmentsContainer from '../../attachments/Attachments.container';
-import Tasks from './Tasks';
+import Tasks from "./Tasks";
 
 interface Props extends FieldProps<ChangeRequestFormValues> {}
 
 export const styles = makeStyles(() =>
   createStyles({
     error: {
-      color: 'red',
+      color: "red",
     },
   },
 ));
 
 const Container: React.FunctionComponent<Props> = () => {
-  const renderAttachments = (props: FieldArrayRenderProps) => <AttachmentsContainer attachmentsKey="implementationPlan" {...props} />;
+
   const renderTasks = (props: FieldArrayRenderProps) => <Tasks {...props} />;
   const classes = styles();
+
+  const actionsRenderer = () => (
+    // *NOTE: we need to add Add Task action here
+    <React.Fragment>
+      <AttachmentField name="implementationPlan.attachments" />;
+    </React.Fragment>
+  );
 
   return (
     <React.Fragment>
       <span className={classes.error}>
         <ErrorMessage name="implementationPlan.tasks" />
       </span>
-      <Typography>
-        <Text message="common.implementation.plan" />
-      </Typography>
+      <HeaderField dataProp="common.implementation.plan" actionsRenderer={actionsRenderer} />
       <FieldArray name="implementationPlan.tasks" render={renderTasks} />
-      <FieldArray name="implementationPlan.attachments" render={renderAttachments} />
+      <AttachmentIconField name="implementationPlan.attachments" />
     </React.Fragment>
   );
 };
