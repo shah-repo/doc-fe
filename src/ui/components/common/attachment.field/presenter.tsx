@@ -3,14 +3,14 @@ import AttachFile from "@material-ui/icons/AttachFile";
 import React from "react";
 import Text from "../../Text";
 import { styles } from "./utils/styles";
-import { AttachmentPresenterProps } from "./utils/types";
+import { AttachmentFieldProps } from "./utils/types";
 
-export type Props = AttachmentPresenterProps;
-
-export const Presenter: React.FunctionComponent<Props> = ({
+export const AttachmentFieldPresenter: React.FunctionComponent<AttachmentFieldProps> = ({
+  name,
   multiple,
-  component,
+  component = "button",
   onChange,
+  ...other
 }) => {
 
   const isField = component === "field";
@@ -22,13 +22,13 @@ export const Presenter: React.FunctionComponent<Props> = ({
       <input
         accept="*"
         className={classes.input}
-        id="text-button-file"
+        id={`${name}-button-file`}
         multiple={multiple}
         type="file"
         onChange={onChange}
         onBlur={onChange}
       />
-      <label htmlFor="text-button-file" >
+      <label htmlFor={`${name}-button-file`} >
         <Link component="span" variant="button" className={classes.link}>
           <AttachFile className={classes.icon} />
           <Text translation={text} />
@@ -38,4 +38,4 @@ export const Presenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default Presenter;
+export default AttachmentFieldPresenter;

@@ -8,20 +8,20 @@ import {
 } from "../../../../state/ducks/attachments";
 import { ApplicationState } from "../../../../state/reducers";
 import useAsync from "../../../hooks/useAsync";
-import Presenter from "./presenter";
-import { AttachmentContainerProps, AttachmentDispatchProps } from "./utils/types";
 import FormProgress from "../../forms/FormProgress";
+import Presenter from "./presenter";
+import { AttachmentContainerProps, AttachmentFieldDispatchProps } from "./utils/types";
 
-type DispatchProps = AttachmentDispatchProps;
-type Props = AttachmentContainerProps;
+type DispatchProps = AttachmentFieldDispatchProps;
 
-export const AttachmentContainer: React.FunctionComponent<Props> = ({
+export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps> = ({
+  name,
   upload,
   component = "button",
-  name,
-  multiple,
+  multiple = true,
   field,
   form,
+  ...other
 }) => {
 
   const handleUpload = (files: File[]) => {
@@ -54,11 +54,11 @@ export const AttachmentContainer: React.FunctionComponent<Props> = ({
   return (
     <Box>
       <FormProgress asyncState={async.asyncState} />
-      <Presenter component={component} multiple={multiple} onChange={onChange} />
+      <Presenter {...other} name={name} component={component} multiple={multiple} onChange={onChange} />
     </Box>
   );
 };
 
 export default connect<{}, DispatchProps, {}, ApplicationState>(null, {
   upload: attachmentsActions.upload,
-})(AttachmentContainer);
+})(AttachmentFieldContainer);
