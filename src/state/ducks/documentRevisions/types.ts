@@ -45,11 +45,13 @@ export interface Document {
 export interface Reference {
   id: string;
   name: string;
+  docId?: string;
 }
 
 export interface DocumentRevision {
   id: string;
   docId?: string;
+  typePrefix?: string;
   version: number;
   revision: string;
   name: string;
@@ -108,6 +110,7 @@ export interface ReferenceToEditRequest {
 
 export interface DocumentRevisionEditRequestBody {
   name: string;
+  docId?: string;
   description: string;
   attachments: Attachment[];
   type?: string;
@@ -154,7 +157,7 @@ export interface DocumentRevisionTransitionResponse {
 export interface Audit {
   field: string;
   type: string;
-  nextValue: string | Attachment;
+  nextValue: string | Attachment | Reference;
   timestamp: string;
   groupId: string;
   owner: User;

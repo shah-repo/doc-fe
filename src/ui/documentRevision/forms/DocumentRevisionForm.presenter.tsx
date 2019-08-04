@@ -1,8 +1,13 @@
+
 import { Typography, withStyles, WithStyles } from "@material-ui/core";
 import { FieldArray, FieldArrayRenderProps, Form, FormikProps } from "formik";
+import React from "react";
 import { Link } from "react-router-dom";
-import React, { MouseEventHandler } from "react";
-import { DocumentRevision, RevisionChangeType } from "../../../state/ducks/documentRevisions";
+import {
+  DocumentRevision,
+  RevisionChangeType,
+} from "../../../state/ducks/documentRevisions";
+import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
@@ -17,48 +22,82 @@ import FormProgress from "../../components/forms/FormProgress";
 import SubmitButton from "../../components/forms/SubmitButton";
 import Text from "../../components/Text";
 import { documentRevisionTypeFormOption } from "../../document.revision/utils/helpers";
+import {
+  documentDetailsPath,
+  documentVersionPath,
+} from "../../document.revision/utils/paths";
 import AttachmentsContainer from "../../documents/forms/attachments/Attachments.container";
-import { documentRevisionIdMask } from "../helpers";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
-import { documentVersionPath, documentDetailsPath } from "../../document.revision/utils/paths";
+import FormWrapper from "../../components/forms/FormWrapper";
+import PromptIfDirty from "../../components/forms/PromptIfDirty";
 
-interface Props extends WithStyles<typeof styles>, FormikProps<DocumentRevisionFormValues> {
+interface Props
+  extends WithStyles<typeof styles>,
+    FormikProps<DocumentRevisionFormValues> {
   asyncState: AsyncState;
   documentRevisions?: DocumentRevision[];
   availableReferences: OptionType[];
   showRevisionTypeChange?: boolean;
+  loadDocumentProposedId: typeof documentsActions.loadDocumentProposedId;
+  proposedDocId: string;
+  setDocId?: typeof documentsActions.setDocumentProposedId;
 }
 
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
-  asyncState, classes, initialValues, handleChange, setFieldValue, documentRevisions,
-  availableReferences, showRevisionTypeChange,
+  asyncState, classes, initialValues, handleChange, availableReferences, showRevisionTypeChange,
+  loadDocumentProposedId, proposedDocId, values, setDocId,
+  dirty, resetForm,
 }) => {
-  const openReference = (documentId: string) => { window.open(documentDetailsPath(documentId), '_blank'); };
+  const openReference = (documentId: string) => { window.open(documentDetailsPath(documentId), "_blank"); };
   const renderAttachments = (props: FieldArrayRenderProps) => <AttachmentsContainer {...props} />;
 
-  const onTypeChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-    const type = event.target.value as string;
-    const docIdGen = documentRevisionIdMask(type, revisionOrdinalNumber(type));
-    handleChange(event);
-    setFieldValue("documentId", docIdGen);
+  const isDisabled: boolean = initialValues.id !== undefined;
+  const docIdValue = isDisabled ? values.document!.docId : proposedDocId;
+
+  if (!isDisabled && values.document) {
+    values.document.docId = proposedDocId;
+  }
+
+  const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    const { type } = values.document || {type: undefined};
+
+    if (!values.document && !type) { return; }
+    const pattern = new RegExp("^" + type + "\\d{0," + type!.length + "}", "g" );
+
+    if (!pattern.test(value) || !setDocId) { return; }
+    setDocId!(value);
   };
 
-  const revisionOrdinalNumber = (type: string) => {
-    return (documentRevisions || []).length + 1;
+  const handleTypeChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
+    const type = event.target.value as string;
+    loadDocumentProposedId(type);
+    handleChange(event);
   };
 
   const renderTypeOfRevisionChange = () => {
     if (showRevisionTypeChange) {
       return (
         <React.Fragment>
-          <Typography variant="h6" >
+          <Typography variant="h6">
             <Text translation="documentRevision.form.typeOfRevisionChange" />
           </Typography>
-          <RadioGroup name="revisionChangeType" validate={validator(required)} >
-            <RadioButton label={<Text translation="documentRevision.form.nextRevision" />} value={RevisionChangeType.NextRevision} />
-            <RadioButton label={<Text translation="documentRevision.form.nextRevisionStage" />} value={RevisionChangeType.NextRevisionStage} />
-            <RadioButton label={<Text translation="documentRevision.form.obsolete" />} value={RevisionChangeType.Obsolete} />
+          <RadioGroup name="revisionChangeType" validate={validator(required)}>
+            <RadioButton
+              label={<Text translation="documentRevision.form.nextRevision" />}
+              value={RevisionChangeType.NextRevision}
+            />
+            <RadioButton
+              label={
+                <Text translation="documentRevision.form.nextRevisionStage" />
+              }
+              value={RevisionChangeType.NextRevisionStage}
+            />
+            <RadioButton
+              label={<Text translation="documentRevision.form.obsolete" />}
+              value={RevisionChangeType.Obsolete}
+            />
           </RadioGroup>
         </React.Fragment>
       );
@@ -66,23 +105,28 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   };
 
   const renderReferences = () => {
-    if (initialValues.document && initialValues.document.referencedBy && initialValues.document.referencedBy.length > 0) {
+    if (
+      initialValues.document &&
+      initialValues.document.referencedBy &&
+      initialValues.document.referencedBy.length > 0
+    ) {
       return (
         <React.Fragment>
-          <Typography variant="h6" >
+          <Typography variant="h6">
             <Text translation="common.referenced.by" />
           </Typography>
           <div>
             {initialValues.document.referencedBy.map((reference) => {
               return (
-                <Link
-                  key={reference.id}
-                  to={documentVersionPath(reference.id, reference.document.id)}
-                  target="_blank"
-                >
-                  {reference.name}
-                </Link>
-              )
+                <div key={reference.id}>
+                  <Link
+                    to={documentVersionPath(reference.id, reference.document.id)}
+                    target="_blank"
+                  >
+                    {reference.name}
+                  </Link>
+                </div>
+              );
             })}
           </div>
         </React.Fragment>
@@ -92,39 +136,43 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <div className={classes.container}>
-      <Form>
+      <FormWrapper dirty={dirty} initialValues={initialValues} resetForm={resetForm}>
+        <PromptIfDirty dirty={dirty} />
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
+        <InputField
+          name="name"
+          label="document.title"
+          inputProps={{ id: "name" }}
+          validate={validator(required)}
+        />
         <FilledInputField
           name="description"
           label="common.description"
           validate={validator(required)}
           inputProps={{ multiline: true, rows: "2" }}
         />
-        <InputField
-          name="name"
-          label="common.name"
-          inputProps={{ id: "name" }}
-          validate={validator(required)}
-        />
         <SelectField
           name="document.type"
           label="document.type"
-          selectProps={{inputProps: { id: "type", disabled: initialValues.id && true }, onChange: onTypeChange }}
+          selectProps={{inputProps: { id: "type", disabled: isDisabled }, onChange: handleTypeChange }}
           options={documentRevisionTypeFormOption()}
           validate={validator(required)}
           includeEmpty={false}
         />
         <InputField
-          name="documentId"
-          inputProps={{ id: "documentId", disabled: true, placeholder: "Document ID" }}
+          name="document.docId"
+          label="document.revision.list.docId"
+          inputProps={{ id: "docId", value: docIdValue, disabled: isDisabled, onChange: handleDocIdChange }}
         />
         <AutcompleteField
           name="referenceTo"
           autocompleteProps={{
             id: "referenceTo",
             isMulti: true,
-            placeholder: <Text translation="documentRevision.form.references" />,
+            placeholder: (
+              <Text translation="documentRevision.form.references" />
+            ),
             closeMenuOnSelect: false,
           }}
           options={availableReferences}
@@ -134,7 +182,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         <FieldArray name="attachments" render={renderAttachments} />
         {renderTypeOfRevisionChange()}
         <SubmitButton asyncState={asyncState} label="common.save" />
-      </Form>
+      </FormWrapper>
     </div>
   );
 };

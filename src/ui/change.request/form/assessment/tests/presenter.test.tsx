@@ -1,15 +1,15 @@
 import { mount } from "enzyme";
-import React from "react";
-import { Presenter, Props } from "../presenter";
-import FilledInputField from "../../../components/forms/fields/FilledInput";
 import { Formik } from "formik";
+import React from "react";
+import FilledInputField from "../../../../components/forms/fields/FilledInput";
+import { Presenter, Props } from "../presenter";
 
-jest.mock("../../../components/Text");
+jest.mock("../../../../components/Text");
 
 describe("Assessment presenter unit test", () => {
   const defaultProps = {
     classes: {
-      exampleClass: ""
+      exampleClass: "",
     },
     form: {
       values: {
@@ -29,23 +29,23 @@ describe("Assessment presenter unit test", () => {
           tasks: [],
         },
         approvals: [],
-        documentRevisions:[],
-      }
-    }
-  }
+        documentRevisions: [],
+      },
+    },
+  };
 
-  const getWrapper = (props: Props<Props>) => mount(
+  const getWrapper = (props: Props) => mount(
       <Formik
         onSubmit={() => {}}
         initialValues={{}}
       >
         <Presenter {...defaultProps} {...props}/>
-      </Formik>
+      </Formik>,
   );
 
   it("Field is multiline", () => {
     const wrapper = getWrapper({});
     const inputProps = { multiline: true, rows: "2" };
     expect(wrapper.find(FilledInputField).prop("inputProps")).toEqual(inputProps);
-  })
-})
+  });
+});

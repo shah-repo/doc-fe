@@ -26,3 +26,11 @@ export const documentRevisionIdMask = (
     const pad = "0000";
     return type + pad.substring(0, pad.length - countStr.length) + countStr;
 };
+
+export const maskId = (
+  count: string | number,
+) => {
+    const countStr = "" + count;
+    const pad = "0000";
+    return pad.substring(0, pad.length - countStr.length) + countStr;
+};

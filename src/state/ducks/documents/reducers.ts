@@ -3,6 +3,7 @@ import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
 import {
   DOCUMENT_GET_ASYNC,
+  DOCUMENT_PROPOSED_DOC_ID_SET,
   DOCUMENT_SET,
   DOCUMENTS_LIST,
   DOCUMENTS_LIST_ASYNC,
@@ -12,6 +13,7 @@ import {
 import {
   Document,
   DocumentListAction,
+  DocumentProposedIdSetAction,
   DocumentsAllIdsState,
   DocumentsByIdState,
   DocumentSetAction,
@@ -23,9 +25,9 @@ type DocumentActions = DocumentListAction | DocumentSetAction | DocumentsToRevie
 
 const extendDocument = (document: Document): Document => (
   { owner: {}, approvals: [], attachments: [], ...document }
-)
+);
 
-const keyByDocumentIdReducer = (acc: DocumentsByIdState, document: Document): DocumentsByIdState =>(
+const keyByDocumentIdReducer = (acc: DocumentsByIdState, document: Document): DocumentsByIdState => (
   { ...acc, [document.id]: extendDocument(document) }
 );
 
@@ -65,6 +67,13 @@ export const reviewIds = (
   return state;
 };
 
+const proposedDocId = (state: string = "", action: DocumentProposedIdSetAction): string => {
+  if (action.type === DOCUMENT_PROPOSED_DOC_ID_SET) {
+    return action.payload;
+  }
+  return state;
+};
+
 export default combineReducers({
   loadListAsyncInfo: asyncReducer(DOCUMENTS_LIST_ASYNC),
   loadReviewListAsyncInfo: asyncReducer(DOCUMENTS_TO_REVIEW_LIST_ASYNC),
@@ -72,4 +81,5 @@ export default combineReducers({
   byId,
   allIds,
   reviewIds,
+  proposedDocId,
 });

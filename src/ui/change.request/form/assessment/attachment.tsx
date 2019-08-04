@@ -4,16 +4,19 @@ import { connect } from "react-redux";
 import {
   Attachment as AttachmentModel,
   attachmentsActions,
-} from "../../../state/ducks/attachments";
-import { AssessmentType } from "../../../state/ducks/changeRequest";
-import { ApplicationState } from "../../../state/reducers";
-import { ChangeRequestFormValues, FileUploadFormValues } from "../../changeRequest/forms/types";
-import FileField from "../../components/forms/fields/File";
-import FormMessage from "../../components/forms/FormMessage";
-import FormProgress from "../../components/forms/FormProgress";
-import SubmitButton from "../../components/forms/SubmitButton";
-import useAsync from "../../hooks/useAsync";
-import { AssessmentDispatchProps } from "../utils/types";
+} from "../../../../state/ducks/attachments";
+import { AssessmentType } from "../../../../state/ducks/changeRequest";
+import { ApplicationState } from "../../../../state/reducers";
+import {
+  ChangeRequestFormValues,
+  FileUploadFormValues,
+} from "../../../changeRequest/forms/types";
+import FileField from "../../../components/forms/fields/File";
+import FormMessage from "../../../components/forms/FormMessage";
+import FormProgress from "../../../components/forms/FormProgress";
+import SubmitButton from "../../../components/forms/SubmitButton";
+import useAsync from "../../../hooks/useAsync";
+import { AssessmentDispatchProps } from "../../utils/types";
 
 type DispatchProps = AssessmentDispatchProps;
 type OwnProps = FieldProps<ChangeRequestFormValues>;

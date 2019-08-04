@@ -1,6 +1,9 @@
 import { shallow } from "enzyme";
 import React from "react";
 import CallbackHandler from "../../common/callbackHandler";
+import { DocumentRevision } from "../../state/ducks/documentRevisions";
+import { getDocumentRevision } from "../../state/ducks/documentRevisions/tests/factories";
+import { getAsyncState } from "../../state/tests/factories";
 import { ASYNC_DEFAULT_STATE } from "../hooks/useAsync";
 import getRouteComponentProps from "../tests/helpers/getRouteComponentProps";
 import {
@@ -11,9 +14,6 @@ import {
 import DocumentRevisionFormContainer from "./forms/DocumentRevisionForm.container";
 import { toNewVersionRequestBody } from "./forms/transform";
 import { generateDocumentRevisionVersionPath } from "./pathGenerators";
-import { getDocumentRevision } from "../../state/ducks/documentRevisions/tests/factories";
-import { DocumentRevision } from "../../state/ducks/documentRevisions";
-import { getAsyncState } from "../../state/tests/factories";
 
 describe("DocumentRevisionCreateContainer tests", () => {
   const documentRevision = getDocumentRevision();
@@ -24,6 +24,7 @@ describe("DocumentRevisionCreateContainer tests", () => {
     documentRevisions: [documentRevision],
     loadAsyncState: getAsyncState(),
     loadDocument: jest.fn(),
+    setDocId: jest.fn(),
   };
 
   const getWrapper = (props: Partial<DocumentRevisionCreateContainerProps>) => shallow(
@@ -51,7 +52,7 @@ describe("DocumentRevisionCreateContainer tests", () => {
 
     expect(defaultProps.loadDocument).toHaveBeenCalledWith(documentRevision.document.id);
     expect(routeComponentProps.history.push).toHaveBeenCalledWith(
-      generateDocumentRevisionVersionPath(documentRevision.id, documentRevision.document.id)
+      generateDocumentRevisionVersionPath(documentRevision.id, documentRevision.document.id),
     );
   });
 

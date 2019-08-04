@@ -13,15 +13,18 @@ interface OwnProps {
 
 export type DocumentRevisionListContainerProps = OwnProps;
 
-export const DocumentRevisionListContainer: React.FunctionComponent<DocumentRevisionListContainerProps> = ({
-  documentRevisions, documentId,
-}) => {
+export const DocumentRevisionListContainer: React.FunctionComponent<
+  DocumentRevisionListContainerProps
+> = ({ documentRevisions, documentId }) => {
   const classes = styles();
 
   return (
     <React.Fragment>
       {documentRevisions.map((documentRevision) => {
-        const link = generateDocumentRevisionVersionPath(documentRevision.id, documentId);
+        const link = generateDocumentRevisionVersionPath(
+          documentRevision.id,
+          documentId,
+        );
 
         return (
           <div key={documentRevision.id} className={classes.linkContainer}>
@@ -31,7 +34,8 @@ export const DocumentRevisionListContainer: React.FunctionComponent<DocumentRevi
               className={classes.linkTitle}
             >
               <div>
-                <Text translation="documentRevision.version" /> {documentRevision.version} - {documentRevision.status}
+                <Text translation="documentRevision.version" />{" "}
+                {documentRevision.version} - {documentRevision.status}
               </div>
             </NavLink>
             <NavLink
@@ -40,10 +44,12 @@ export const DocumentRevisionListContainer: React.FunctionComponent<DocumentRevi
               className={classes.linkBody}
             >
               <div>
-                <Text translation="common.owner" />: {documentRevision.owner.name}
+                <Text translation="common.owner" />:{" "}
+                {documentRevision.owner.name}
               </div>
               <div>
-                <Text translation="documentRevision.released" />: <Date value={documentRevision.released} />
+                <Text translation="documentRevision.released" />:{" "}
+                <Date value={documentRevision.releasedAt} />
               </div>
             </NavLink>
           </div>

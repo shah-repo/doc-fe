@@ -1,12 +1,9 @@
 import { Box } from "@material-ui/core";
-import { Field, FieldProps } from "formik";
 import React from "react";
-import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
-import AttachmentField from "../../components/common/attachment.field/field";
-import FilledSelectField from "../../components/forms/fields/FilledSelect";
-import { assessmentStatementOption } from "../utils/helpers";
-import { AssessmentItemProps } from "../utils/types";
-import Attachment from "./attachment";
+import AttachmentField from "../../../components/common/attachment.field/field";
+import FilledSelectField from "../../../components/forms/fields/FilledSelect";
+import { assessmentStatementOption } from "../../utils/helpers";
+import { AssessmentItemProps } from "../../utils/types";
 
 export type Props = AssessmentItemProps;
 

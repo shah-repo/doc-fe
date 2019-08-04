@@ -9,7 +9,7 @@ import { LoadAsyncState } from "../../../state/types";
 import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
 
 // Container
-export type ContainerStateProps = LoadAsyncState & DataProps<ChangeRequest>;
+export type ContainerStateProps = LoadAsyncState & DataProps<ChangeRequest> & AuthProps;
 export type ContainerOwnProps = RouteComponentProps<RouteParams>;
 
 export interface ContainerDispatchProps {
@@ -44,6 +44,9 @@ export interface AssessmentDispatchProps {
 }
 
 // Summary
+export interface SummaryDispatchProps {
+  save: typeof changeRequestsActions.save;
+}
 
 // Common
 export type ChangeRequestsUserProps = DataProps<ChangeRequest[]> & ActionProps & AuthProps;

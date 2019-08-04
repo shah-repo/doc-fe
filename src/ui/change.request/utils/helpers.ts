@@ -11,6 +11,11 @@ export const canEditChangeRequest = ({dataProp, currentUserEmail}: ChangeRequest
   )
 );
 
+export const canEditApprovers = ({dataProp, currentUserEmail}: ChangeRequestUserProps) => {
+  return canEditChangeRequest({dataProp, currentUserEmail}) ||
+    (currentUserEmail === dataProp.owner.email && dataProp.state === ChangeRequestStatus.InReview);
+};
+
 export const changeRequestStatusOption = () => {
   const options: SelectOption[] = [];
   Object.keys(ChangeRequestStatus).map((key) => {

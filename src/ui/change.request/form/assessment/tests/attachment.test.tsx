@@ -1,13 +1,13 @@
 import { mount } from "enzyme";
+import { Field, Formik } from "formik";
 import React from "react";
+import FormMessage from "../../../../components/forms/FormMessage";
+import FormProgress from "../../../../components/forms/FormProgress";
+import SubmitButton from "../../../../components/forms/SubmitButton";
+import { ASYNC_DEFAULT_STATE } from "../../../../hooks/useAsync";
 import { Attachment, Props } from "../attachment";
-import { Formik, Field } from "formik";
-import FormMessage from "../../../components/forms/FormMessage";
-import FormProgress from "../../../components/forms/FormProgress";
-import SubmitButton from "../../../components/forms/SubmitButton";
-import { ASYNC_DEFAULT_STATE } from "../../../hooks/useAsync";
 
-jest.mock("../../../components/Text");
+jest.mock("../../../../components/Text");
 
 describe("Assessment attachment unit tests", () => {
   const defaultProps = {
@@ -30,8 +30,8 @@ describe("Assessment attachment unit tests", () => {
           tasks: [],
         },
         approvals: [],
-        documentRevisions:[],}
-      }
+        documentRevisions: []},
+      },
   };
   const getWrapper = (props: Partial<Props>) => mount (
     <Formik
@@ -39,7 +39,7 @@ describe("Assessment attachment unit tests", () => {
       initialValues={{}}
     >
       <Field render={(fieldProps: any) => <Attachment {...fieldProps} {...defaultProps} {...props}/>} />
-    </Formik>
+    </Formik>,
   );
 
   it("setAsyncState for FormMessage", () => {
@@ -59,9 +59,9 @@ describe("Assessment attachment unit tests", () => {
 
   it("Sets Formik initialValues", () => {
     const initialValues = {
-      file: undefined
+      file: undefined,
     };
     const wrapper = getWrapper({});
     expect(wrapper.find(Formik).at(1).prop("initialValues")).toEqual(initialValues);
-  })
+  });
 });

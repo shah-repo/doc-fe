@@ -2,29 +2,29 @@ import _ from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
 import {
-  CHANGE_REQUEST_GET_ASYNC,
-  CHANGE_REQUEST_SET,
-  CHANGE_REQUEST_LIST,
-  CHANGE_REQUEST_LIST_ASYNC,
-  CHANGE_REQUEST_GET_APPROVERS_ASYNC,
-  CHANGE_REQUEST_LIST_APPROVERS,
   CHANGE_REQUEST_AUDIT_SET,
+  CHANGE_REQUEST_GET_APPROVERS_ASYNC,
+  CHANGE_REQUEST_GET_ASYNC,
   CHANGE_REQUEST_GET_AUDIT_ASYNC,
+  CHANGE_REQUEST_LIST,
+  CHANGE_REQUEST_LIST_APPROVERS,
+  CHANGE_REQUEST_LIST_ASYNC,
+  CHANGE_REQUEST_SET,
 } from "./constants";
 import {
-  ChangeRequest,
-  ChangeRequestSetAction,
-  ChangeRequestListAction,
-  ChangeRequestsByIdState,
-  ChangeRequestsAllIdsState,
-  ChangeRequestsApproversByIdState,
-  ChangeRequestListApproversAction,
-  ChangeRequestAvailableApprovers,
-  ChangeRequestsApproversAllIdsState,
-  ChangeRequestAuditSetAction,
+  allIdsState,
   Audit,
   AuditByCRIdState,
-  allIdsState,
+  ChangeRequest,
+  ChangeRequestAuditSetAction,
+  ChangeRequestAvailableApprovers,
+  ChangeRequestListAction,
+  ChangeRequestListApproversAction,
+  ChangeRequestsAllIdsState,
+  ChangeRequestsApproversAllIdsState,
+  ChangeRequestsApproversByIdState,
+  ChangeRequestsByIdState,
+  ChangeRequestSetAction,
 } from "./types";
 
 type ChangeRequestActions = ChangeRequestSetAction | ChangeRequestListAction;
@@ -32,9 +32,13 @@ type ChangeRequestActions = ChangeRequestSetAction | ChangeRequestListAction;
 export const byId = (state: ChangeRequestsByIdState = {}, action: ChangeRequestActions): ChangeRequestsByIdState => {
   switch (action.type) {
     case CHANGE_REQUEST_LIST:
-      return { ...state, ...(_.keyBy<ChangeRequest>(action.payload, (changeRequest) => changeRequest.id)) };
+      return { ...(_.keyBy<ChangeRequest>(action.payload, (changeRequest) => changeRequest.id)) };
     case CHANGE_REQUEST_SET:
-      return { ...state, [action.payload.id]: action.payload };
+      const newState: ChangeRequest = {
+        ...action.payload,
+        approvals: action.payload.approvals.filter((a) => a.active),
+      };
+      return { ...state, [action.payload.id]: newState };
     default:
       return state;
   }
@@ -43,7 +47,7 @@ export const byId = (state: ChangeRequestsByIdState = {}, action: ChangeRequestA
 export const allIds = (state: ChangeRequestsAllIdsState = [], action: ChangeRequestActions): ChangeRequestsAllIdsState => {
   switch (action.type) {
     case CHANGE_REQUEST_LIST:
-      return _.uniq([...state, ...action.payload.map((changeRequest) => changeRequest.id)]);
+      return _.uniq([...action.payload.map((changeRequest) => changeRequest.id)]);
     case CHANGE_REQUEST_SET:
       return _.uniq([...state, action.payload.id]);
     default:
@@ -97,5 +101,5 @@ export default combineReducers({
   approversById,
   approversAllIds,
   auditsByCRId,
-  auditsAllId
+  auditsAllId,
 });

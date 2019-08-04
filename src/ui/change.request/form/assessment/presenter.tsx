@@ -2,10 +2,10 @@ import { Box, Grid, Paper, Typography } from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
 import { ErrorMessage } from "formik";
 import React from "react";
-import { AssessmentType } from "../../../state/ducks/changeRequest";
-import FilledInputField from "../../components/forms/fields/FilledInput";
-import Text from "../../components/Text";
-import { AssessmentProps } from "../utils/types";
+import { AssessmentType } from "../../../../state/ducks/changeRequest";
+import FilledInputField from "../../../components/forms/fields/FilledInput";
+import Text from "../../../components/Text";
+import { AssessmentProps } from "../../utils/types";
 import Item from "./item";
 import styles from "./styles";
 

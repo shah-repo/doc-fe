@@ -43,15 +43,6 @@ export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFo
     setDocumentRevisionsList(documentRevisionsList.filter((documentRevisionId) => documentRevisionId !== deleteDocumentRevisionId ));
   }
 
-  const overrideSubmit = (values: ChangeRequestFormValues) => {
-    const valuesWithDocRev = {
-      ...values,
-      documentRevisions: documentRevisionsList,
-    }
-
-    onSubmit(valuesWithDocRev);
-  }
-
   const selectDocumentRevision = (documentRevisionId: string) => setSelectedDocumentRevision(documentRevisionId);
 
   const selectAssessmentForm = () => setSelectedDocumentRevision(null);
@@ -60,9 +51,10 @@ export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFo
     return (
       <AssessmentFormContainer
         initialValues={initialValues}
-        onSubmit={overrideSubmit}
+        onSubmit={onSubmit}
         asyncState={asyncState}
         changeRequest={changeRequest}
+        documentRevisionsList={documentRevisionsList}
       />
     )
   }

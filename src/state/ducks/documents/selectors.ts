@@ -17,6 +17,7 @@ const getDocumentsToReviewList = createSelector(
 );
 
 const getDocument = (state: ApplicationState, documentId: string) => byId(state)[documentId];
+const getProposedDocId = (state: ApplicationState): string => state.documents.proposedDocId;
 
 const getLoadAsyncState = (state: ApplicationState): AsyncState => state.documents.loadAsyncInfo;
 const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.documents.loadListAsyncInfo;
@@ -29,4 +30,5 @@ export default {
   getLoadAsyncState,
   getLoadReviewListAsyncState,
   getLoadListAsyncState,
+  getProposedDocId,
 };

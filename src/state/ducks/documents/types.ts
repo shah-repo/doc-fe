@@ -1,6 +1,6 @@
 import { TableColumnActionType } from "../../../ui/components/table/column/types";
 import { Attachment } from "../attachments";
-import { DOCUMENT_SET, DOCUMENTS_LIST, DOCUMENTS_TO_REVIEW_LIST } from "./constants";
+import { DOCUMENT_PROPOSED_DOC_ID_SET, DOCUMENT_SET, DOCUMENTS_LIST, DOCUMENTS_TO_REVIEW_LIST } from "./constants";
 
 export enum DocumentStatus {
   Draft = "DRAFT",
@@ -38,6 +38,15 @@ export interface Document {
   attachments: Attachment[];
   actions: TableColumnActionType[];
   docId: string;
+}
+
+export interface DocumentProposedId {
+  docId?: string;
+}
+
+export interface DocumentProposedIdSetAction {
+  type: typeof DOCUMENT_PROPOSED_DOC_ID_SET;
+  payload: string;
 }
 
 export interface DocumentEditRequestBody {
