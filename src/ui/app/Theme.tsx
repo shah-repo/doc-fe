@@ -23,7 +23,9 @@ const theme = createMuiTheme({
         background: "#fff",
       },
       colorPrimary: {
-        background: "#f5f5f5",
+        background: "transparent",
+        backgroundColor: "transparent",
+        color: "#4d4d4d",
       },
       root: {
         boxShadow: "none",
