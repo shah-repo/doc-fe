@@ -26,7 +26,7 @@ const Container: React.FunctionComponent<Props> = () => {
   const actionsRenderer = () => (
     // *NOTE: we need to add Add Task action here
     <React.Fragment>
-      <AttachmentField name="implementationPlan.attachments" />;
+      <AttachmentField name="implementationPlan.attachments" />
     </React.Fragment>
   );
 

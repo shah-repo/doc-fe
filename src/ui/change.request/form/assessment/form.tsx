@@ -9,13 +9,7 @@ export type Props = AssessmentItemProps;
 
 export const Form: React.FunctionComponent<Props> = ({
   type,
-  form,
 }) => {
-  const { reasoning } = form.values.assessments[type];
-
-  const onChange = (name: string, value: string | number) => {
-    form.setFieldValue(name, value as string);
-  };
 
   return (
     <Box component="div" style={{minWidth: "500px"}}>
@@ -25,7 +19,7 @@ export const Form: React.FunctionComponent<Props> = ({
         options={assessmentStatementOption()}
         includeEmpty={true}
       />
-      <AttachmentField name={`assessments.${type}.attachment`} component="field" multiple={false} />;
+      <AttachmentField name={`assessments.${type}.attachment`} component="field" multiple={false} />
     </Box>
   );
 };

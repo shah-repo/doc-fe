@@ -10,7 +10,6 @@ export const AttachmentFieldPresenter: React.FunctionComponent<AttachmentFieldPr
   multiple,
   component = "button",
   onChange,
-  ...other
 }) => {
 
   const isField = component === "field";
