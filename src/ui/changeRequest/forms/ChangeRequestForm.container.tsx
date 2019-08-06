@@ -20,6 +20,7 @@ interface OwnProps {
   onSubmit: (values: ChangeRequestFormValues) => void;
   asyncState: AsyncState;
   changeRequest?: ChangeRequest;
+  doNotPrompt?: boolean;
 }
 
 type ChangeRequestFormContainerProps = OwnProps & StateProps;
@@ -30,6 +31,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 
 export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFormContainerProps> = ({
   onSubmit, asyncState, initialValues, documentRevisionsById, changeRequest,
+  doNotPrompt,
 }) => {
   const [selectedDocumentRevision, setSelectedDocumentRevision] = useState<string | null>(null);
   const [documentRevisionsList, setDocumentRevisionsList] = useState<string[]>(initialValues.documentRevisions);
@@ -55,6 +57,7 @@ export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFo
         asyncState={asyncState}
         changeRequest={changeRequest}
         documentRevisionsList={documentRevisionsList}
+        doNotPrompt={doNotPrompt}
       />
     )
   }

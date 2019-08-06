@@ -42,12 +42,13 @@ interface Props
   loadDocumentProposedId: typeof documentsActions.loadDocumentProposedId;
   proposedDocId: string;
   setDocId?: typeof documentsActions.setDocumentProposedId;
+  doNotPrompt?: boolean;
 }
 
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   asyncState, classes, initialValues, handleChange, availableReferences, showRevisionTypeChange,
   loadDocumentProposedId, proposedDocId, values, setDocId,
-  dirty, resetForm,
+  dirty, resetForm, doNotPrompt,
 }) => {
   const openReference = (documentId: string) => { window.open(documentDetailsPath(documentId), "_blank"); };
   const renderAttachments = (props: FieldArrayRenderProps) => <AttachmentsContainer {...props} />;
@@ -137,7 +138,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   return (
     <div className={classes.container}>
       <FormWrapper dirty={dirty} initialValues={initialValues} resetForm={resetForm}>
-        <PromptIfDirty dirty={dirty} />
+        <PromptIfDirty dirty={dirty} doNotPrompt={doNotPrompt} />
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
         <InputField
