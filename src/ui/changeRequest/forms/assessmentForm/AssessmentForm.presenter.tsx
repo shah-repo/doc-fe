@@ -23,6 +23,7 @@ interface Props extends WithStyles<typeof styles>, FormikProps<ChangeRequestForm
   asyncState: AsyncState;
   changeRequest?: ChangeRequest;
   documentRevisionsList: string[];
+  doNotPrompt?: boolean;
 }
 
 const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
@@ -34,6 +35,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   resetForm,
   documentRevisionsList,
   setFieldValue,
+  doNotPrompt,
 }) => {
   useEffect(() => {
     setFieldValue("documentRevisions", documentRevisionsList);
@@ -55,7 +57,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   return (
     <div className={classes.container}>
       <FormWrapper dirty={dirty} resetForm={resetForm} initialValues={initialValues}>
-        <PromptIfDirty dirty={dirty} />
+        <PromptIfDirty dirty={dirty} doNotPrompt={doNotPrompt} />
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
         <FilledInputField
