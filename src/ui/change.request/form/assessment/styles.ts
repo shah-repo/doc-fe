@@ -20,7 +20,7 @@ export default (theme: Theme) => createStyles({
     marginBottom: "-12px",
   },
   icon: {
-    fontSize: "100px",
+    fontSize: "70px",
   },
   error: {
     color: "red",

@@ -12,6 +12,7 @@ interface OwnProps {
   onSubmit: (values: ChangeRequestFormValues, actions: FormikActions<ChangeRequestFormValues>) => void;
   changeRequest?: ChangeRequest;
   documentRevisionsList: string[];
+  doNotPrompt?: boolean;
 }
 
 type AssessmentFormContainerProps = OwnProps;
@@ -22,6 +23,7 @@ const AssessmentFormContainer: React.FunctionComponent<AssessmentFormContainerPr
   asyncState,
   changeRequest,
   documentRevisionsList,
+  doNotPrompt,
 }) => {
     const render = (props: FormikProps<ChangeRequestFormValues>) => (
       <AssessmentFormPresenter
@@ -29,6 +31,7 @@ const AssessmentFormContainer: React.FunctionComponent<AssessmentFormContainerPr
         asyncState={asyncState}
         changeRequest={changeRequest}
         documentRevisionsList={documentRevisionsList}
+        doNotPrompt={doNotPrompt}
       />
     );
 

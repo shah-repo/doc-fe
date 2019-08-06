@@ -28,6 +28,7 @@ interface OwnProps {
   onSubmit: (values: DocumentRevisionFormValues, actions: FormikActions<DocumentRevisionFormValues>) => void;
   showRevisionTypeChange?: boolean;
   setDocId?: typeof documentsActions.setDocumentProposedId;
+  doNotPrompt?: boolean;
 }
 
 type DocumentRevisionFormContainerProps = OwnProps & StateProps & DispatchProps;
@@ -52,6 +53,7 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<DocumentRevi
   loadDocumentProposedId,
   proposedDocId,
   setDocId,
+  doNotPrompt,
 }) => {
 
     const render = (props: FormikProps<DocumentRevisionFormValues>) => {
@@ -65,6 +67,7 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<DocumentRevi
           loadDocumentProposedId={loadDocumentProposedId}
           proposedDocId={proposedDocId}
           setDocId={setDocId}
+          doNotPrompt={doNotPrompt}
         />
       );
     };
