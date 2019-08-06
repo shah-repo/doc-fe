@@ -10,11 +10,13 @@ import LoginWithCodeContainer from "../users/LoginWithCode.container";
 import styles from "./App.styles";
 import Layout from "./Layout";
 import StatusPresenter from "../status/Status.presenter";
+import AutoLogout from "./AutoLogout";
 
 interface Props extends WithStyles<typeof styles> {}
 
 const AppPresenter: React.FunctionComponent<Props> = ({ classes }) => (
   <div>
+    <AutoLogout />
     <Switch>
       <Route path={LOGIN_URL} exact={true} component={LoginContainer} />
       <Route path={LOGIN_WITH_CODE_URL} exact={true} component={LoginWithCodeContainer} />
