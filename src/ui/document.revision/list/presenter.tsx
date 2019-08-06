@@ -134,6 +134,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
           onSelect={onRowSelect}
           queryUrl={DOCUMENT_REVISION_ROOT_URL}
           clearFilter={clearFilter}
+          cellMeasure={true}
         />
       </Grid>
     </Grid>
