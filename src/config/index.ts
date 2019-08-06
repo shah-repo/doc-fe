@@ -7,6 +7,7 @@ const DEFAULTS = {
   SIGNUP_DOMAIN_URL: "/",
   FRONTEND_URL: "/",
   AWS_COGNITO_CLIENT_ID: "default",
+  AUTO_LOGOUT_TIME: "1800000", // 30 minutes in milliseconds
 };
 
 type ConfigKey = keyof typeof DEFAULTS;
@@ -50,6 +51,10 @@ class Config {
     });
 
     return `${this.SignUpDomainUrl}/signup?${params}`;
+  }
+
+  public static get AutoLogoutTime() {
+    return this.getNumber("AUTO_LOGOUT_TIME");
   }
 }
 

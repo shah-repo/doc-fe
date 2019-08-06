@@ -1,26 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import _ from "lodash";
 import IdleTimer from 'react-idle-timer';
 import useDialog from "../hooks/useDialog";
-import useInterval from "../hooks/useInterval";
-import { DialogAction } from "../components/dialogs/utils/types";
-import Dialog from "../components/dialogs/Dialog";
-import Text from "../components/Text";
 import { authActions } from "../../state/ducks/auth";
 import { ApplicationState } from "../../state/reducers";
 import AutoLogoutDialog from "./AutoLogoutDialog";
+import Config from "../../config";
 
 interface DispatchProps {
-  logout: () => void;
+  pingServer: typeof authActions.pingServer;
 }
 
 type Props = DispatchProps;
 
 const AutoLogout: React.FunctionComponent<Props> = ({
-  logout,
+  pingServer,
 }) => {
-  const timeout = 15000;
+  const timeout = Config.AutoLogoutTime;
+  const tenMinutes = 1000 * 60 * 10;
   const dialogHandler = useDialog();
 
   const onIdle = () => {
@@ -31,12 +29,12 @@ const AutoLogout: React.FunctionComponent<Props> = ({
     dialogHandler.close();
   }
 
-  const throttled = _.throttle(() => {
-    console.log(new Date());
-  }, 10000)
+  const pingEveryTenMinutes = _.throttle(() => {
+    pingServer();
+  }, tenMinutes)
 
   const onAction = () => {
-    throttled();
+    pingEveryTenMinutes();
   }
 
   return (
@@ -55,5 +53,5 @@ const AutoLogout: React.FunctionComponent<Props> = ({
 }
 
 export default connect<{}, DispatchProps, {}, ApplicationState>(null, {
-  logout: authActions.logout,
+  pingServer: authActions.pingServer,
 })(AutoLogout);
