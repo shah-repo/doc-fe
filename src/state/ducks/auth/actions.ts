@@ -16,6 +16,8 @@ import {
   PERMISSIONS_URL,
   USER_PERMISSIONS,
   USER_PERMISSIONS_GET_ASYNC,
+  HEALTHCHECK_URL,
+  HEALTHCHECK_GET_ASYNC,
 } from "./constants";
 import authSelectors from "./selectors";
 import {
@@ -131,6 +133,13 @@ const loadPermissions = (userId: string):
     },
   });
 
+const pingServer = ():
+  ApiAction => apiAction({
+    url: `${HEALTHCHECK_URL}`,
+    asyncType: HEALTHCHECK_GET_ASYNC,
+    method: "get",
+  });
+
 export default {
   authUser,
   authTokens,
@@ -139,4 +148,5 @@ export default {
   logout,
   loginWithCode,
   loadPermissions,
+  pingServer,
 };

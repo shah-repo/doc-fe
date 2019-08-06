@@ -1,6 +1,8 @@
 {
   "translation.unknown": "",
 
+  "autoLogout.timer": "You will be logged out in {time} seconds",
+
   "login.title": "Sign in",
   "login.email": "Email address",
   "login.password": "Password",
@@ -167,6 +169,7 @@
   "common.references": "References",
   "common.upload.files": "Upload files",
   "common.add.attachment": "Add attachment",
+  "common.warning": "Warning",
 
   "dashboard.reviews": "Documents to review",
   "dashboard.noReviews": "No documents to review",
