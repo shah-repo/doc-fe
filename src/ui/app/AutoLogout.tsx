@@ -1,15 +1,28 @@
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import _ from "lodash";
 import IdleTimer from 'react-idle-timer';
 import useDialog from "../hooks/useDialog";
 import useInterval from "../hooks/useInterval";
 import { DialogAction } from "../components/dialogs/utils/types";
 import Dialog from "../components/dialogs/Dialog";
 import Text from "../components/Text";
+import { authActions } from "../../state/ducks/auth";
+import { ApplicationState } from "../../state/reducers";
 
-const AutoLogout: React.FunctionComponent = () => {
-  const logoutTime = 10;
+interface DispatchProps {
+  logout: () => void;
+}
+
+type Props = DispatchProps;
+
+const AutoLogout: React.FunctionComponent<Props> = ({
+  logout,
+}) => {
+  const timeout = 25000;
+  const initialTimerValue = 10;
   const [tickInterval, setTickInterval] = useState<number | null>(null);
-  const [timerValue, updateTimerValue] = useState(logoutTime);
+  const [timerValue, updateTimerValue] = useState(initialTimerValue);
   const dialogHandler = useDialog();
   const startInterval = () => setTickInterval(1000);
   const stopInterval = () => setTickInterval(null);
@@ -22,7 +35,15 @@ const AutoLogout: React.FunctionComponent = () => {
   const onActive = () => {
     dialogHandler.close();
     stopInterval();
-    updateTimerValue(10);
+    updateTimerValue(initialTimerValue);
+  }
+
+  const throttled = _.throttle(() => {
+    console.log(new Date());
+  }, 10000)
+
+  const onAction = () => {
+    throttled();
   }
 
   const contentRenderer = () => {
@@ -41,6 +62,7 @@ const AutoLogout: React.FunctionComponent = () => {
     if (timerValue === 0) {
       stopInterval();
       dialogHandler.close();
+      logout();
     }
   }, [timerValue])
 
@@ -48,10 +70,11 @@ const AutoLogout: React.FunctionComponent = () => {
     <React.Fragment>
       <IdleTimer
         element={document}
-        onIdle={onIdle}
         debounce={250}
-        timeout={5000}
+        timeout={timeout}
         onActive={onActive}
+        onAction={onAction}
+        onIdle={onIdle}
       />
       <Dialog
         title={"common.warning"}
@@ -62,4 +85,6 @@ const AutoLogout: React.FunctionComponent = () => {
   );
 }
 
-export default AutoLogout;
+export default connect<{}, DispatchProps, {}, ApplicationState>(null, {
+  logout: authActions.logout,
+})(AutoLogout);
