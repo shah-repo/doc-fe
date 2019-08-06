@@ -6,6 +6,7 @@ import {
   DocumentRevisionStatus,
 } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
+import { SelectOption } from "../../components/forms/fields/Select";
 import {
   TableColumnActionProps,
   TableColumnProps,
@@ -35,10 +36,15 @@ const DocumentRevisionTable: React.FunctionComponent<
   };
 
   const ChangeRequestList = TablePanel<DocumentRevision>();
+
   const options: SelectOption[] = [
-    { value: "DRAFT", text: "DRAFT" },
-    { value: "RELEASED", text: "RELEASED" },
+    { value: DocumentRevisionStatus.Draft, text: DocumentRevisionStatus.Draft },
+    {
+      value: DocumentRevisionStatus.Released,
+      text: DocumentRevisionStatus.Released,
+    },
   ];
+
   const columns: Array<TableColumnProps<DocumentRevision>> = [
     {
       key: "name",
