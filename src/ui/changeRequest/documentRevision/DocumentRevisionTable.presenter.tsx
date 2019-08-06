@@ -19,7 +19,6 @@ import { documentRevisionIdMask } from "../../documentRevision/helpers";
 import { Translation } from "../../translations/types";
 import styles from "./DocumentRevisionTable.styles";
 import { DocumentRevisionListItem } from "./types";
-import { SelectOption } from "../../components/forms/fields/Select";
 
 interface DocumentRevisionTableProps extends WithStyles<typeof styles> {
   documentRevisionsToShow: DocumentRevision[];
