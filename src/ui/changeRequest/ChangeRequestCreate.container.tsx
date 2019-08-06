@@ -46,6 +46,7 @@ export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequest
         initialValues={DEFAULT_INITIAL_VALUES}
         asyncState={async.asyncState}
         onSubmit={onSubmitAssessment}
+        doNotPrompt={true}
       />
     );
   };
