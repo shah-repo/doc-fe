@@ -165,6 +165,8 @@
   "common.approvers": "Approvers",
   "common.referenced.by": "Referenced by",
   "common.references": "References",
+  "common.upload.files": "Upload files",
+  "common.add.attachment": "Add attachment",
 
   "dashboard.reviews": "Documents to review",
   "dashboard.noReviews": "No documents to review",
