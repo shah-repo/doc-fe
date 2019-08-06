@@ -1,8 +1,8 @@
 import { mount, shallow } from "enzyme";
-import { Formik } from "formik";
+import { Field, Formik, FormikProps } from "formik";
 import React from "react";
 import { AssessmentType } from "../../../../../state/ducks/changeRequest";
-import FilledSelectField from "../../../../components/forms/fields/FilledSelect";
+import EditableSelect from "../../../../components/forms/fields/EditableSelect/EditableSelect";
 import { Form, Props } from "../form";
 
 jest.mock("../../../../components/Text");
@@ -10,15 +10,16 @@ jest.mock("../../../../components/Text");
 describe("Assessment form unit test", () => {
   const getWrapper = (props: Partial<Props>) => shallow (
     <Formik
-      initialValues={{}}
+      initialValues={{assessments: {process: {}, design: {}, regulatory: {}}}}
       onSubmit={jest.fn()}
     >
-      <Form type={AssessmentType.design} {...props}/>
+      <Field render={({ form }: FormikProps) =>
+        <Form form={form} type={AssessmentType.design} {...props} />} />
     </Formik>,
   );
 
   it("Displays form correctly", () => {
     const wrapper = getWrapper({});
-    expect(wrapper.dive().dive().find(FilledSelectField)).toHaveLength(1);
+    expect(wrapper.dive().dive().dive().dive().dive().find(EditableSelect)).toHaveLength(1);
   });
 });
