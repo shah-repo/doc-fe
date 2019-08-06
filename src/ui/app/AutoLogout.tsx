@@ -9,6 +9,7 @@ import Dialog from "../components/dialogs/Dialog";
 import Text from "../components/Text";
 import { authActions } from "../../state/ducks/auth";
 import { ApplicationState } from "../../state/reducers";
+import AutoLogoutDialog from "./AutoLogoutDialog";
 
 interface DispatchProps {
   logout: () => void;
@@ -19,23 +20,15 @@ type Props = DispatchProps;
 const AutoLogout: React.FunctionComponent<Props> = ({
   logout,
 }) => {
-  const timeout = 25000;
-  const initialTimerValue = 10;
-  const [tickInterval, setTickInterval] = useState<number | null>(null);
-  const [timerValue, updateTimerValue] = useState(initialTimerValue);
+  const timeout = 15000;
   const dialogHandler = useDialog();
-  const startInterval = () => setTickInterval(1000);
-  const stopInterval = () => setTickInterval(null);
 
   const onIdle = () => {
     dialogHandler.open();
-    startInterval();
   };
 
   const onActive = () => {
     dialogHandler.close();
-    stopInterval();
-    updateTimerValue(initialTimerValue);
   }
 
   const throttled = _.throttle(() => {
@@ -45,26 +38,6 @@ const AutoLogout: React.FunctionComponent<Props> = ({
   const onAction = () => {
     throttled();
   }
-
-  const contentRenderer = () => {
-    return (
-      <div>
-        <Text translation="autoLogout.timer" values={{ time: timerValue }} />
-      </div>
-    )
-  };
-
-  useInterval(() => {
-    updateTimerValue(timerValue - 1);
-  }, tickInterval);
-
-  useEffect(() => {
-    if (timerValue === 0) {
-      stopInterval();
-      dialogHandler.close();
-      logout();
-    }
-  }, [timerValue])
 
   return (
     <React.Fragment>
@@ -76,11 +49,7 @@ const AutoLogout: React.FunctionComponent<Props> = ({
         onAction={onAction}
         onIdle={onIdle}
       />
-      <Dialog
-        title={"common.warning"}
-        contentRenderer={contentRenderer}
-        dialogHandler={dialogHandler}
-      />
+      {dialogHandler.isOpen && <AutoLogoutDialog dialogHandler={dialogHandler} />}
     </React.Fragment>
   );
 }
