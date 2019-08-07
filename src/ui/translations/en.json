@@ -170,6 +170,7 @@
   "common.upload.files": "Upload files",
   "common.add.attachment": "Add attachment",
   "common.warning": "Warning",
+  "common.open": "Open",
 
   "dashboard.type.PENDING_REVIEW": "is pending your approval",
   "dashboard.noPendingActions": "No pending actions",

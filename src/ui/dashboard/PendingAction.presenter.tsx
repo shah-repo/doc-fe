@@ -1,6 +1,9 @@
 import React from "react";
 import { PendingAction } from "../../state/ducks/dashboard";
 import Text from "../components/Text";
+import { Button, Grid } from "@material-ui/core";
+import { styles } from "./PendingAction.styles";
+import { changeRequestEditPath } from "../change.request/utils/paths";
 
 interface OwnProps {
   pendingAction: PendingAction;
@@ -11,17 +14,20 @@ type Props = OwnProps;
 export const PendingActionPresenter: React.FunctionComponent<Props> = ({
   pendingAction
 }) => {
-  console.log(pendingAction);
+  const classes = styles();
   return (
-    <div>
-      <span
-        style={{
-          color: 'red',
-        }}
-      >{`CRID: ${pendingAction.changeReq.crId} `}</span>
-      <span>{`from ${pendingAction.changeReq.owner.name} `}</span>
-      <Text message={`dashboard.type.${pendingAction.type}`} />
-    </div>
+    <Grid container spacing={10} justify="space-between" alignItems="baseline">
+      <Grid item xs={8}>
+        <span className={classes.crId}>{`CRID: ${pendingAction.changeReq.crId} `}</span>
+        <span>{`from ${pendingAction.changeReq.owner.name} `}</span>
+        <Text message={`dashboard.type.${pendingAction.type}`} />
+      </Grid>
+      <Grid item xs={2}>
+        <Button variant="contained" target="_blank" href={changeRequestEditPath(pendingAction.changeReq.id)} color="secondary">
+          <Text translation="common.open" />
+        </Button>
+      </Grid>
+    </Grid>
   );
 };
 
