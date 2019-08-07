@@ -172,6 +172,7 @@
   "common.warning": "Warning",
 
   "dashboard.type.PENDING_REVIEW": "is pending your approval",
+  "dashboard.noPendingActions": "No pending actions",
 
   "document.title": "Document title",
   "document.type": "Document type",

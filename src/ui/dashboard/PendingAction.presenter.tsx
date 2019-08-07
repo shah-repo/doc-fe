@@ -14,7 +14,11 @@ export const PendingActionPresenter: React.FunctionComponent<Props> = ({
   console.log(pendingAction);
   return (
     <div>
-      <span>{`CRID: ${pendingAction.changeReq.crId} `}</span>
+      <span
+        style={{
+          color: 'red',
+        }}
+      >{`CRID: ${pendingAction.changeReq.crId} `}</span>
       <span>{`from ${pendingAction.changeReq.owner.name} `}</span>
       <Text message={`dashboard.type.${pendingAction.type}`} />
     </div>
