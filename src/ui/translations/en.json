@@ -171,16 +171,7 @@
   "common.add.attachment": "Add attachment",
   "common.warning": "Warning",
 
-  "dashboard.reviews": "Documents to review",
-  "dashboard.noReviews": "No documents to review",
-  "dashboard.noDocuments": "No documents",
-  "dashboard.createDocument": "Create document",
-  "dashboard.table.title": "Title",
-  "dashboard.table.type": "Type",
-  "dashboard.table.state": "State",
-  "dashboard.table.actions": "Actions",
-  "dashboard.table.editAction": "Edit",
-  "dashboard.table.cloneAction": "Clone",
+  "dashboard.type.PENDING_REVIEW": "is pending your approval",
 
   "document.title": "Document title",
   "document.type": "Document type",

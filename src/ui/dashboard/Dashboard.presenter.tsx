@@ -1,25 +1,31 @@
-import { Grid, WithStyles, withStyles } from "@material-ui/core";
+import { Grid, WithStyles, withStyles, Paper } from "@material-ui/core";
 import React from "react";
 import AsyncGate from "../components/AsyncGate";
 import styles from "./Dashboard.styles";
-import DocumentReviews from "./DocumentReviews.presenter";
+import PendingAction from "./PendingAction.presenter";
 import { DashboardPresenterParentProps } from "./types";
 
 type DashboardPresenterProps = DashboardPresenterParentProps & WithStyles<typeof styles>;
 
 const DashboardPresenter: React.FunctionComponent<DashboardPresenterProps> = ({
   classes,
-  loadPendingActions, loadPendingActionsListAsyncState, itemsToReview,
+  loadPendingActions, loadPendingActionsListAsyncState, pendingActions,
 }) => {
   return (
     <Grid container={true} className={classes.root} spacing={8}>
-      <Grid item={true} xs={12} md={3} className={classes.item}>
+      <Grid item={true} className={classes.item}>
         <AsyncGate
           asyncAction={loadPendingActions}
           asyncState={loadPendingActionsListAsyncState}
           startActionOnMount={true}
         >
-          <DocumentReviews documentsToReview={itemsToReview} />
+          <Paper className={classes.actionsContainer}>
+          {
+            pendingActions.map((pendingAction) => {
+              return <PendingAction key={pendingAction.changeReq.id} pendingAction={pendingAction} />
+            })
+          }
+          </Paper>
         </AsyncGate>
       </Grid>
     </Grid>

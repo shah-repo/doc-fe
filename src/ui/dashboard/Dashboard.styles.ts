@@ -21,4 +21,7 @@ export default (theme: Theme) =>
       clear: "both",
       height: 50,
     },
+    actionsContainer: {
+      padding: 20,
+    },
   });
