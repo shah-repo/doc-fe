@@ -22,14 +22,14 @@ const createNestedObject = (value: NestedObject = { description: "", attachments
 
 const createAssessment = (value: Assessment = {
   description: "",
-  design: {reasoning: null, attachment: null},
-  process: {reasoning: null, attachment: null},
-  regulatory: {reasoning: null, attachment: null},
+  design: {reasoning: null, attachments: null},
+  process: {reasoning: null, attachments: null},
+  regulatory: {reasoning: null, attachments: null},
 }) => ({
   description: value.description,
-  design: { reasoning: value.design.reasoning, attachment: value.design.attachment },
-  process: { reasoning: value.process.reasoning, attachment: value.process.attachment },
-  regulatory: { reasoning: value.regulatory.reasoning, attachment: value.regulatory.attachment },
+  design: { reasoning: value.design.reasoning, attachments: value.design.attachments },
+  process: { reasoning: value.process.reasoning, attachments: value.process.attachments },
+  regulatory: { reasoning: value.regulatory.reasoning, attachments: value.regulatory.attachments },
 });
 
 const toImplementationPlanFormValues = (plan: ImplementationPlan): ImplementationPlanFormValues => {
@@ -96,13 +96,15 @@ const toImplementationPlanEditRequestBody = (values: ImplementationPlanFormValue
 
 const createAssessmentObjectForRequestBody = (value: Assessment) => {
   const assessments: any = createAssessment(value);
+  console.log(assessments);
 
   Object.values(AssessmentType).map((t) => {
     const attachmentValue = _.get(value, `${t}.attachment`, null);
     const itemAttachment = (attachmentValue) ? { id: attachmentValue.id } : attachmentValue;
     const itemReasoning: string = _.get(value, `${t}.reasoning`, null);
-    assessments[t] = { attachment: itemAttachment, reasoning: itemReasoning };
+    assessments[t] = { attachments: itemAttachment || [], reasoning: itemReasoning };
   });
+  console.log(assessments);
   return assessments;
 };
 

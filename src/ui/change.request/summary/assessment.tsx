@@ -18,8 +18,11 @@ const Assessment: React.FunctionComponent<Props> = ({
   dataProp,
 }) => {
 
-  const attachmentRenderer = (item: AssessmentItem) =>
-    <FileCard attachment={item.attachment!} />;
+  const attachmentRenderer = (item: AssessmentItem) => (
+    item.attachments && item.attachments.map((attachment) => {
+      <FileCard attachment={attachment} />;
+    })
+  )
 
   const reasoningRenderer = (item: AssessmentItem) =>
     <SummaryField label="common.reasoning" value={item.reasoning} />;
@@ -32,7 +35,7 @@ const Assessment: React.FunctionComponent<Props> = ({
           <Typography variant="button"><Text message={`common.${type}`} />:</Typography>
         </ListItem>
         {item.reasoning && reasoningRenderer(item)}
-        {item.attachment && <ListItem><Grid container={true} spacing={2}>{attachmentRenderer(item)}</Grid></ListItem>}
+        {item.attachments && <ListItem><Grid container={true} spacing={2}>{attachmentRenderer(item)}</Grid></ListItem>}
       </Box>
     );
   });

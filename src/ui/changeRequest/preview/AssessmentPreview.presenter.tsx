@@ -116,21 +116,21 @@ const AssessmentPreviewPresenter: React.FunctionComponent<AssessmentPreviewPrese
           <Typography variant="h5" gutterBottom={true}>
             {changeRequest.assessments.design.reasoning}
           </Typography>
-          {changeRequest.assessments.design.attachment && renderAttachments([changeRequest.assessments.design.attachment])}
+          {changeRequest.assessments.design.attachments && renderAttachments(changeRequest.assessments.design.attachments)}
           <Typography variant="h6" gutterBottom={true}>
             <Text translation="common.regulatory" />:
           </Typography>
           <Typography variant="h5">
             {changeRequest.assessments.regulatory.reasoning}
           </Typography>
-          {changeRequest.assessments.regulatory.attachment && renderAttachments([changeRequest.assessments.regulatory.attachment])}
+          {changeRequest.assessments.regulatory.attachments && renderAttachments(changeRequest.assessments.regulatory.attachments)}
           <Typography variant="h6" gutterBottom={true}>
             <Text translation="common.process" />:
           </Typography>
           <Typography variant="h5" gutterBottom={true}>
             {changeRequest.assessments.process.reasoning}
           </Typography>
-          {changeRequest.assessments.process.attachment && renderAttachments([changeRequest.assessments.process.attachment])}
+          {changeRequest.assessments.process.attachments && renderAttachments(changeRequest.assessments.process.attachments)}
         </Grid>
         <Grid item={true} xs={12}>
           <Typography variant="h6" gutterBottom={true}>

@@ -1,5 +1,6 @@
 import { Box, IconButton, Typography } from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
+import _ from "lodash";
 import {
   CancelOutlined,
   InsertDriveFile,
@@ -22,19 +23,19 @@ export const Item: React.FunctionComponent<Props> = ({
   type,
   form,
 }) => {
-  const { reasoning, attachment } = form.values.assessments[type];
+  const { reasoning, attachments } = form.values.assessments[type];
   const dialogHandler = useDialog();
 
   const openDialog = () => dialogHandler.open();
 
   const isValid = () => {
-    if (attachment || reasoning) { return true; }
+    if (!_.isEmpty(attachments) || reasoning) { return true; }
     return false;
   };
 
   const clearAttachment = () => {
     const values = form.values;
-    values.assessments[type] = { attachment: null, reasoning: null };
+    values.assessments[type] = { attachments: null, reasoning: null };
     form.setValues(values);
   };
 
@@ -66,9 +67,15 @@ export const Item: React.FunctionComponent<Props> = ({
         </IconButton>
       </Box>
       <InsertDriveFile className={classes.icon} />
-      <Box component="div" m={1}>
-        {attachment && `${attachment.name}.${attachment.type}`}
-      </Box>
+      {
+        attachments && attachments.map((attachment) => {
+          return (
+            <Box component="div" m={1}>
+              {attachment && `${attachment.name}.${attachment.type}`}
+            </Box>
+          );
+        })
+      }
     </Typography>
   );
 
@@ -77,8 +84,8 @@ export const Item: React.FunctionComponent<Props> = ({
       <Typography component="p" >
         <Text message={`change.request.${type}.assessment`} />
       </Typography>
-      {!attachment && reasoningRenderer()}
-      {attachment && attachmentRenderer()}
+      {_.isEmpty(attachments) && reasoningRenderer()}
+      {!_.isEmpty(attachments) && attachmentRenderer()}
     </Box>
   );
 };
