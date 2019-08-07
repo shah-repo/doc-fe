@@ -96,7 +96,6 @@ const toImplementationPlanEditRequestBody = (values: ImplementationPlanFormValue
 
 const createAssessmentObjectForRequestBody = (value: Assessment) => {
   const assessments: any = createAssessment(value);
-  console.log(assessments);
 
   Object.values(AssessmentType).map((t) => {
     const attachmentValue = _.get(value, `${t}.attachment`, null);
@@ -104,7 +103,6 @@ const createAssessmentObjectForRequestBody = (value: Assessment) => {
     const itemReasoning: string = _.get(value, `${t}.reasoning`, null);
     assessments[t] = { attachments: itemAttachment || [], reasoning: itemReasoning };
   });
-  console.log(assessments);
   return assessments;
 };
 
