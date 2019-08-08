@@ -15,6 +15,7 @@ import useDialog from "../../../hooks/useDialog";
 import { AssessmentItemProps } from "../../utils/types";
 import Form from "./form";
 import styles from "./styles";
+import AttachmentIconField from "../../../components/common/attachment.icon/field";
 
 export type Props = AssessmentItemProps & WithStyles <typeof styles>;
 
@@ -62,15 +63,7 @@ export const Item: React.FunctionComponent<Props> = ({
         </IconButton>
       </Box>
       <InsertDriveFile className={classes.icon} />
-      {
-        attachments && attachments.map((attachment) => {
-          return (
-            <Box component="div" m={1} key={attachment.id}>
-              {attachment && `${attachment.name}.${attachment.type}`}
-            </Box>
-          );
-        })
-      }
+      <AttachmentIconField name={`assessments.${type}.attachments`} />
     </Typography>
   );
 

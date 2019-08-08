@@ -9,6 +9,7 @@ export interface AttachmentIconProps {
   extension?: string;
   size?: AttachmentIconSize;
   handleRemove?: (attachment: Attachment) => () => any;
+  handleDownload?: (attachmentId: string) => () => any;
 }
 
 export interface AttachmentIconStyleProp {
