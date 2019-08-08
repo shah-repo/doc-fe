@@ -6,6 +6,7 @@ import { LOGOUT_USER } from "./ducks/auth/constants";
 import changeRequests from "./ducks/changeRequest";
 import documentRevisions from "./ducks/documentRevisions";
 import documents from "./ducks/documents";
+import dashboard from "./ducks/dashboard";
 
 const authPersistConfig = {
   key: "auth",
@@ -18,6 +19,7 @@ const appReducer = combineReducers({
   documents,
   changeRequests,
   documentRevisions,
+  dashboard,
 });
 
 const rootReducer = (state: any, action: any) => {
