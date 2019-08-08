@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import AttachmentField from "../../../components/common/attachment.field/field";
+import AttachmentField from "../../../components/common/attachment.field/container";
 import EditableSelectField from "../../../components/forms/fields/EditableSelect/field";
 import { assessmentStatementOption } from "../../utils/helpers";
 import { AssessmentItemProps } from "../../utils/types";

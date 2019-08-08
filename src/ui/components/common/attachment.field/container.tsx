@@ -9,6 +9,7 @@ import {
 import { ApplicationState } from "../../../../state/reducers";
 import useAsync from "../../../hooks/useAsync";
 import FormProgress from "../../forms/FormProgress";
+import { withFormik } from "../../hoc/formik";
 import Presenter from "./presenter";
 import { AttachmentContainerProps, AttachmentFieldDispatchProps } from "./utils/types";
 
@@ -36,13 +37,13 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
 
   const async = useAsync<AttachmentModel>({
     onSuccess: (attachment?: AttachmentModel) => {
-      if (!attachment) { return; }
+      if (!attachment && !form && !field) { return; }
       if (!multiple) {
-        return form.setFieldValue(name, attachment);
+        return form!.setFieldValue(name, attachment);
       }
-      const attachments: Attachment[] = field.value || [];
-      attachments.push(attachment);
-      form.setFieldValue(name, attachments);
+      const attachments: Attachment[] = field!.value || [];
+      attachments.push(attachment!);
+      form!.setFieldValue(name, attachments);
     },
   });
 
@@ -61,4 +62,4 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
 
 export default connect<{}, DispatchProps, {}, ApplicationState>(null, {
   upload: attachmentsActions.upload,
-})(AttachmentFieldContainer);
+})(withFormik(AttachmentFieldContainer));
