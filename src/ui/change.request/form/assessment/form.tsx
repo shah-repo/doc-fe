@@ -19,7 +19,7 @@ export const Form: React.FunctionComponent<Props> = ({
         options={assessmentStatementOption()}
         includeEmpty={true}
       />
-      <AttachmentField name={`assessments.${type}.attachment`} component="field" multiple={false} />
+      <AttachmentField name={`assessments.${type}.attachments`} component="field" />
     </Box>
   );
 };

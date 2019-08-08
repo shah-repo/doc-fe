@@ -46,12 +46,7 @@ export const Item: React.FunctionComponent<Props> = ({
       <IconButton className={classes.close} onClick={openDialog}>
         <SubtitlesOutlined />
       </IconButton>
-      <Dialog
-        title={`change.request.${type}.assessment`}
-        contentRenderer={formRenderer}
-        dialogHandler={dialogHandler}
-        actions={[DialogAction.Ok]}
-      />
+      <div />
       <InsertDriveFileOutlined
         className={classes.icon}
         color={isValid() ? "secondary" : "error"}
@@ -70,7 +65,7 @@ export const Item: React.FunctionComponent<Props> = ({
       {
         attachments && attachments.map((attachment) => {
           return (
-            <Box component="div" m={1}>
+            <Box component="div" m={1} key={attachment.id}>
               {attachment && `${attachment.name}.${attachment.type}`}
             </Box>
           );
@@ -86,6 +81,12 @@ export const Item: React.FunctionComponent<Props> = ({
       </Typography>
       {_.isEmpty(attachments) && reasoningRenderer()}
       {!_.isEmpty(attachments) && attachmentRenderer()}
+      <Dialog
+        title={`change.request.${type}.assessment`}
+        contentRenderer={formRenderer}
+        dialogHandler={dialogHandler}
+        actions={[DialogAction.Ok]}
+      />
     </Box>
   );
 };

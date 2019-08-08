@@ -12,6 +12,7 @@ import {
   Justifications,
 } from "../../../state/ducks/changeRequest";
 import { ChangeRequestFormValues, ImplementationPlanFormValues, ImplementationPlanTaskFormValues } from "./types";
+import { Attachment } from "../../../state/ducks/attachments";
 
 type NestedObject = Justifications;
 
@@ -98,10 +99,10 @@ const createAssessmentObjectForRequestBody = (value: Assessment) => {
   const assessments: any = createAssessment(value);
 
   Object.values(AssessmentType).map((t) => {
-    const attachmentValue = _.get(value, `${t}.attachment`, null);
-    const itemAttachment = (attachmentValue) ? { id: attachmentValue.id } : attachmentValue;
+    const attachmentValue = _.get(value, `${t}.attachments`, null);
+    const itemAttachment = (attachmentValue) ? attachmentValue.map((attachment: Attachment) => ({ id: attachment.id })) : [];
     const itemReasoning: string = _.get(value, `${t}.reasoning`, null);
-    assessments[t] = { attachments: itemAttachment || [], reasoning: itemReasoning };
+    assessments[t] = { attachments: itemAttachment, reasoning: itemReasoning };
   });
   return assessments;
 };

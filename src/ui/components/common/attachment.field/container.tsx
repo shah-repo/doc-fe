@@ -46,7 +46,7 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
       form.setFieldValue(name, attachments);
     },
   });
-
+  
   const onChange = (event: React.FormEvent<HTMLInputElement>) => {
     if (!event.currentTarget.files) { return; }
     handleUpload(Array.from(event.currentTarget.files) as File[]);
