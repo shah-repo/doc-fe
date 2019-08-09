@@ -1,4 +1,4 @@
-import { withStyles, WithStyles } from "@material-ui/core";
+import { withStyles, WithStyles, Typography } from "@material-ui/core";
 import { Field, FieldProps, FormikProps } from "formik";
 import React, { useEffect } from "react";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest";
@@ -7,7 +7,10 @@ import ApproversField from "../../../change.request/form/approvers";
 import AssessmentContainer from "../../../change.request/form/assessment/container";
 import DatePickerField from "../../../components/forms/fields/DatePicker";
 import FilledInputField from "../../../components/forms/fields/FilledInput";
-import { required, validator } from "../../../components/forms/fields/validators";
+import {
+  required,
+  validator,
+} from "../../../components/forms/fields/validators";
 import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";
 import SubmitButton from "../../../components/forms/SubmitButton";
@@ -18,8 +21,11 @@ import AssessmentFormJustifications from "./AssessmentFormJustifications";
 import AssessmentFormImplementationPlan from "./implementationPlan/Container";
 import PromptIfDirty from "../../../components/forms/PromptIfDirty";
 import FormWrapper from "../../../components/forms/FormWrapper";
+import Text from "../../../components/Text";
 
-interface Props extends WithStyles<typeof styles>, FormikProps<ChangeRequestFormValues> {
+interface Props
+  extends WithStyles<typeof styles>,
+    FormikProps<ChangeRequestFormValues> {
   asyncState: AsyncState;
   changeRequest?: ChangeRequest;
   documentRevisionsList: string[];
@@ -41,7 +47,6 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
     setFieldValue("documentRevisions", documentRevisionsList);
   }, [documentRevisionsList]);
 
-
   const renderJustifications = (props: FieldProps<ChangeRequestFormValues>) => (
     <AssessmentFormJustifications {...props} />
   );
@@ -50,16 +55,25 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
     <AssessmentContainer {...props} />
   );
 
-  const renderimplementationPlan = (props: FieldProps<ChangeRequestFormValues>) => (
-    <AssessmentFormImplementationPlan {...props} />
-  );
+  const renderimplementationPlan = (
+    props: FieldProps<ChangeRequestFormValues>,
+  ) => <AssessmentFormImplementationPlan {...props} />;
 
   return (
     <div className={classes.container}>
-      <FormWrapper dirty={dirty} resetForm={resetForm} initialValues={initialValues}>
+      <FormWrapper
+        dirty={dirty}
+        resetForm={resetForm}
+        initialValues={initialValues}
+      >
         <PromptIfDirty dirty={dirty} doNotPrompt={doNotPrompt} />
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
+        {changeRequest && changeRequest.crId ? (
+          <Typography variant="h5">
+            <Text translation="common.crid" />: {changeRequest.crId}
+          </Typography>
+        ) : null}
         <FilledInputField
           name="title"
           label="cr.title"
