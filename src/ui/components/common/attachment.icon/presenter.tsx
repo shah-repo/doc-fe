@@ -1,4 +1,4 @@
-import { Box, Grid, IconButton, Typography } from "@material-ui/core";
+import { Box, ButtonBase, CircularProgress, Grid, IconButton, Typography } from "@material-ui/core";
 import { CancelOutlined } from "@material-ui/icons";
 import React from "react";
 import FileIcon from "./icon";
@@ -6,31 +6,33 @@ import { styles } from "./utils/styles";
 import { AttachmentIconProps } from "./utils/types";
 
 export const AttachmentIconPresenter: React.FunctionComponent<AttachmentIconProps> = ({
-  attachments,
+  attachment,
   size,
   handleRemove,
+  handleDownload,
   ...other
 }) => {
 
   const classes = styles({ size: size || "md" });
+  const file = attachment!;
+  const isLoading = file.isLoading || false;
 
-  const attachmentsRenderer = (attachments || []).map((attachment) => {
-    return (
-      <Grid key={`cell-${attachment.id}`} item={true} xs={3}>
+  return (
+      <Grid key={`cell-${attachment!.id}`} item={true} xs={3}>
         <Box className={classes.closeRoot}>
-          <IconButton className={classes.closeRoot} onClick={handleRemove && handleRemove(attachment)}>
+          <IconButton className={classes.closeRoot} onClick={handleRemove && handleRemove(file)}>
             <CancelOutlined className={classes.closeIcon} />
           </IconButton>
         </Box>
-        <FileIcon key={`icon-${attachment.id}`} {...other} extension={attachment.type} />
+        <ButtonBase key={`icon-${attachment!.id}`} onClick={handleDownload && handleDownload(file)}>
+          {isLoading && <CircularProgress className={classes.progress} />}
+          {!isLoading && <FileIcon {...other} extension={file.type} />}
+        </ButtonBase>
         <Typography variant="caption" gutterBottom={true} align="justify" className={classes.fileName}>
-          {`${attachment.name}.${attachment.type}`}
+          {`${file.name}.${file.type}`}
         </Typography>
       </Grid>
     );
-  });
-
-  return <Grid container={true} >{attachments && attachmentsRenderer}</Grid>;
 };
 
 export default AttachmentIconPresenter;

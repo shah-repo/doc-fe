@@ -1,15 +1,31 @@
+import { Grid } from "@material-ui/core";
 import React from "react";
-import { Attachment } from "../../../../state/ducks/attachments";
+import { connect } from "react-redux";
+import {
+  Attachment,
+  AttachmentDownloadResponse,
+  attachmentsActions,
+} from "../../../../state/ducks/attachments";
+import { ApplicationState } from "../../../../state/reducers";
+import useAsync from "../../../hooks/useAsync";
 import { withFormik } from "../../hoc/formik";
 import Presenter from "./presenter";
-import { AttachmentIconContainerProps } from "./utils/types";
+import {
+  AttachmentIconContainerProps,
+  AttachmentIconDispatchProps,
+} from "./utils/types";
+
+type DispatchProps = AttachmentIconDispatchProps;
 
 export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerProps> = ({
   name,
+  download,
   form,
   field,
   ...other
 }) => {
+
+  const async = useAsync<AttachmentDownloadResponse>();
 
   const handleRemove = (attachment: Attachment) => () => {
     if (!form && !field) { return; }
@@ -17,7 +33,23 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     form!.setFieldValue(name, filtered);
   };
 
-  return <Presenter {...other} name={name} attachments={field!.value as Attachment[]} handleRemove={handleRemove} />;
+  const handleDownload = (attachment: Attachment) => () =>
+    async.start(download, attachment, async);
+
+  const attachmentsRenderer = (field!.value as Attachment[] || []).map((attachment) => (
+    <Presenter
+      {...other}
+      key={`attachment-${attachment.id}`}
+      name={name}
+      attachment={attachment}
+      handleRemove={handleRemove}
+      handleDownload={handleDownload}
+    />
+  ));
+
+  return <Grid container={true}>{attachmentsRenderer}</Grid>;
 };
 
-export default withFormik(AttachmentIconContainer);
+export default connect<{}, DispatchProps, {}, ApplicationState>(null, {
+  download: attachmentsActions.download,
+})(withFormik(AttachmentIconContainer));

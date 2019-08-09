@@ -16,12 +16,19 @@ const upload = (file: File, handlers: Handlers<Attachment>): ApiAction => {
   });
 };
 
-const download = (id: string, handlers: Handlers<AttachmentDownloadResponse>):
-  ApiAction<AttachmentDownloadResponse> => apiActionWithCallbacks({
-    url: `${ATTACHMENT_ROOT_URL}/${id}/download`,
+const download = (attachment: Attachment, handlers: Handlers<AttachmentDownloadResponse>): ApiAction => {
+  attachment.isLoading = true;
+
+  return apiActionWithCallbacks<AttachmentDownloadResponse, string>({
+    url: `${ATTACHMENT_ROOT_URL}/${attachment.id}/download`,
     method: "get",
+    onSuccess: (downloadInfo) => {
+      attachment.isLoading = false;
+      window.open(downloadInfo!.url, "_parent");
+    },
     handlers,
   });
+};
 
 export default {
   upload,
