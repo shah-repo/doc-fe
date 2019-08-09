@@ -12,6 +12,7 @@ import {
   Justifications,
 } from "../../../state/ducks/changeRequest";
 import { ChangeRequestFormValues, ImplementationPlanFormValues, ImplementationPlanTaskFormValues } from "./types";
+import { Attachment } from "../../../state/ducks/attachments";
 
 type NestedObject = Justifications;
 
@@ -22,14 +23,14 @@ const createNestedObject = (value: NestedObject = { description: "", attachments
 
 const createAssessment = (value: Assessment = {
   description: "",
-  design: {reasoning: null, attachment: null},
-  process: {reasoning: null, attachment: null},
-  regulatory: {reasoning: null, attachment: null},
+  design: {reasoning: null, attachments: null},
+  process: {reasoning: null, attachments: null},
+  regulatory: {reasoning: null, attachments: null},
 }) => ({
   description: value.description,
-  design: { reasoning: value.design.reasoning, attachment: value.design.attachment },
-  process: { reasoning: value.process.reasoning, attachment: value.process.attachment },
-  regulatory: { reasoning: value.regulatory.reasoning, attachment: value.regulatory.attachment },
+  design: { reasoning: value.design.reasoning, attachments: value.design.attachments },
+  process: { reasoning: value.process.reasoning, attachments: value.process.attachments },
+  regulatory: { reasoning: value.regulatory.reasoning, attachments: value.regulatory.attachments },
 });
 
 const toImplementationPlanFormValues = (plan: ImplementationPlan): ImplementationPlanFormValues => {
@@ -98,10 +99,10 @@ const createAssessmentObjectForRequestBody = (value: Assessment) => {
   const assessments: any = createAssessment(value);
 
   Object.values(AssessmentType).map((t) => {
-    const attachmentValue = _.get(value, `${t}.attachment`, null);
-    const itemAttachment = (attachmentValue) ? { id: attachmentValue.id } : attachmentValue;
+    const attachmentValue = _.get(value, `${t}.attachments`, null);
+    const itemAttachment = (attachmentValue) ? attachmentValue.map((attachment: Attachment) => ({ id: attachment.id })) : [];
     const itemReasoning: string = _.get(value, `${t}.reasoning`, null);
-    assessments[t] = { attachment: itemAttachment, reasoning: itemReasoning };
+    assessments[t] = { attachments: itemAttachment, reasoning: itemReasoning };
   });
   return assessments;
 };

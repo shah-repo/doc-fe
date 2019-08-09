@@ -6,6 +6,7 @@ import {
   DocumentRevisionStatus,
 } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
+import { SelectOption } from "../../components/forms/fields/Select";
 import {
   TableColumnActionProps,
   TableColumnProps,
@@ -33,9 +34,16 @@ const DocumentRevisionTable: React.FunctionComponent<
     return addDocument(rowData.id);
   };
 
-  const [clearFilter, setClearFilter] = React.useState<boolean>(false);
-  const clear = () => setClearFilter(!clearFilter);
   const ChangeRequestList = TablePanel<DocumentRevision>();
+
+  const options: SelectOption[] = [
+    { value: DocumentRevisionStatus.Draft, text: DocumentRevisionStatus.Draft },
+    {
+      value: DocumentRevisionStatus.Released,
+      text: DocumentRevisionStatus.Released,
+    },
+  ];
+
   const columns: Array<TableColumnProps<DocumentRevision>> = [
     {
       key: "name",
@@ -63,7 +71,7 @@ const DocumentRevisionTable: React.FunctionComponent<
       searchOptions: {
         dataKey: "status[]",
         searchType: "select",
-        selectOptions: documentRevisionStatusOption(),
+        selectOptions: options,
       },
     },
     {
@@ -82,7 +90,6 @@ const DocumentRevisionTable: React.FunctionComponent<
         columns={columns}
         tableData={documentRevisionsToShow}
         cellMeasure={true}
-        clearFilter={clear}
         queryUrl={DOCUMENT_REVISION_ROOT_URL}
       />
     );

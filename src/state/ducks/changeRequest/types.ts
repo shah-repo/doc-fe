@@ -38,7 +38,7 @@ export interface Assessment {
 
 export interface AssessmentItem {
   reasoning?: string | null;
-  attachment?: Attachment | null;
+  attachments?: Attachment[] | null;
 }
 
 export interface ImplementationPlanTask {

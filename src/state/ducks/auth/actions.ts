@@ -16,6 +16,8 @@ import {
   PERMISSIONS_URL,
   USER_PERMISSIONS,
   USER_PERMISSIONS_GET_ASYNC,
+  PING_SERVER_URL,
+  PING_SERVER_GET_ASYNC,
 } from "./constants";
 import authSelectors from "./selectors";
 import {
@@ -131,6 +133,16 @@ const loadPermissions = (userId: string):
     },
   });
 
+const pingServer = ():
+  ApiAction => apiAction({
+    url: `${PING_SERVER_URL}`,
+    asyncType: PING_SERVER_GET_ASYNC,
+    method: "get",
+    onFailure: (message, dispatch) => {
+      dispatch(logoutUser())
+    }
+  });
+
 export default {
   authUser,
   authTokens,
@@ -139,4 +151,5 @@ export default {
   logout,
   loginWithCode,
   loadPermissions,
+  pingServer,
 };

@@ -1,6 +1,7 @@
-import { createStyles, Theme } from "@material-ui/core";
 
-export default (theme: Theme) =>
+import { createStyles, makeStyles, Theme } from "@material-ui/core";
+
+export const styles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: "100%",
@@ -21,4 +22,11 @@ export default (theme: Theme) =>
       clear: "both",
       height: 50,
     },
-  });
+    actionsContainer: {
+      padding: 20,
+    },
+    noPendingActions: {
+      margin: theme.spacing(2),
+    },
+  },
+));
