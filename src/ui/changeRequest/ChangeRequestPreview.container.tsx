@@ -2,7 +2,10 @@ import { Grid } from "@material-ui/core";
 import React from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
-import { ChangeRequest, ChangeRequestStatus } from "../../state/ducks/changeRequest";
+import {
+  ChangeRequest,
+  ChangeRequestStatus,
+} from "../../state/ducks/changeRequest";
 import { Approval, ApprovalStatus } from "../../state/ducks/common";
 import { DocumentRevision } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
@@ -26,10 +29,13 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
 });
 
-export const ChangeRequestPreviewContainer: React.FunctionComponent<ChangeRequestPreviewContainerProps> = ({
-  changeRequest,
-}) => {
-  const [selectedDocumentRevision, setSelectedDocumentRevision] = React.useState<DocumentRevision | null>(null);
+export const ChangeRequestPreviewContainer: React.FunctionComponent<
+  ChangeRequestPreviewContainerProps
+> = ({ changeRequest }) => {
+  const [
+    selectedDocumentRevision,
+    setSelectedDocumentRevision,
+  ] = React.useState<DocumentRevision | null>(null);
 
   const renderAssessmentPreview = () => (
     <AssessmentPreviewPresenter changeRequest={changeRequest} />
@@ -46,11 +52,16 @@ export const ChangeRequestPreviewContainer: React.FunctionComponent<ChangeReques
 
   const renderDocumentRevisionAudit = () => {
     if (selectedDocumentRevision) {
-      return <DocumentRevisionAuditContainer documentRevisionId={selectedDocumentRevision.id} />;
+      return (
+        <DocumentRevisionAuditContainer
+          documentRevisionId={selectedDocumentRevision.id}
+        />
+      );
     }
   };
 
-  const selectDocumentRevision = (documentRevision: DocumentRevision) => setSelectedDocumentRevision(documentRevision);
+  const selectDocumentRevision = (documentRevision: DocumentRevision) =>
+    setSelectedDocumentRevision(documentRevision);
   const selectAssessmentForm = () => setSelectedDocumentRevision(null);
 
   return (
@@ -60,6 +71,7 @@ export const ChangeRequestPreviewContainer: React.FunctionComponent<ChangeReques
           documentsInChangeRequest={changeRequest.documentRevisions}
           selectAssessmentForm={selectAssessmentForm}
           selectDocumentRevision={selectDocumentRevision}
+          selectedDocumentRevision={selectedDocumentRevision!.id || null}
         />
       </Grid>
       <Grid item={true} xs={7}>
@@ -74,4 +86,6 @@ export const ChangeRequestPreviewContainer: React.FunctionComponent<ChangeReques
   );
 };
 
-export default connect<StateProps, {}, OwnProps, ApplicationState>(mapStateToProps)(ChangeRequestPreviewContainer);
+export default connect<StateProps, {}, OwnProps, ApplicationState>(
+  mapStateToProps,
+)(ChangeRequestPreviewContainer);
