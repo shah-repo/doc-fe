@@ -9,6 +9,7 @@ export const AttachmentIconPresenter: React.FunctionComponent<AttachmentIconProp
   attachments,
   size,
   handleRemove,
+  handleDownload,
   ...other
 }) => {
 
@@ -22,8 +23,10 @@ export const AttachmentIconPresenter: React.FunctionComponent<AttachmentIconProp
             <CancelOutlined className={classes.closeIcon} />
           </IconButton>
         </Box>
-        <FileIcon key={`icon-${attachment.id}`} {...other} extension={attachment.type} />
-        <Typography variant="caption" gutterBottom={true} align="justify" className={classes.fileName}>
+        <IconButton style={{ fontSize: "initial" }} onClick={handleDownload && handleDownload(attachment.id)}>
+          <FileIcon key={`icon-${attachment.id}`} {...other} extension={attachment.type} />
+        </IconButton>
+        <Typography variant="caption" gutterBottom={true} align="justify" className={classes.fileName} noWrap>
           {`${attachment.name}.${attachment.type}`}
         </Typography>
       </Grid>
