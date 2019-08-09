@@ -8,11 +8,11 @@ import {
 } from "../../../../state/ducks/attachments";
 import { ApplicationState } from "../../../../state/reducers";
 import useAsync from "../../../hooks/useAsync";
+import FormMessage from "../../forms/FormMessage";
 import FormProgress from "../../forms/FormProgress";
 import { withFormik } from "../../hoc/formik";
 import Presenter from "./presenter";
 import { AttachmentContainerProps, AttachmentFieldDispatchProps } from "./utils/types";
-import FormMessage from "../../forms/FormMessage";
 
 type DispatchProps = AttachmentFieldDispatchProps;
 
@@ -47,7 +47,7 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
       form!.setFieldValue(name, attachments);
     },
   });
-  
+
   const onChange = (event: React.FormEvent<HTMLInputElement>) => {
     if (!event.currentTarget.files) { return; }
     handleUpload(Array.from(event.currentTarget.files) as File[]);
