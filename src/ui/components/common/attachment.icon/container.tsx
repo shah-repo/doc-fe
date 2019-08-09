@@ -47,7 +47,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     />
   ));
 
-  return <Grid container={true}>{attachmentsRenderer}</Grid>;
+  return <Grid container={true} spacing={2}>{attachmentsRenderer}</Grid>;
 };
 
 export default connect<{}, DispatchProps, {}, ApplicationState>(null, {

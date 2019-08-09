@@ -18,7 +18,7 @@ export const AttachmentIconPresenter: React.FunctionComponent<AttachmentIconProp
   const isLoading = file.isLoading || false;
 
   return (
-      <Grid key={`cell-${attachment!.id}`} item={true} xs={3}>
+      <Grid key={`cell-${attachment!.id}`} item={true} xs={12} sm={6} md={3}>
         <Box className={classes.closeRoot}>
           <IconButton className={classes.closeRoot} onClick={handleRemove && handleRemove(file)}>
             <CancelOutlined className={classes.closeIcon} />
