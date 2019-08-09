@@ -55,6 +55,7 @@ export interface ImplementationPlanTask {
   createdAt: string;
   status: string;
   updatedAt: string;
+  closingNote: string | null;
 }
 
 export interface ImplementationPlan {

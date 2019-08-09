@@ -7,17 +7,24 @@ import useDialog from "../../hooks/useDialog";
 import InputField from "../../components/forms/fields/Input";
 import { validator, required } from "../../components/forms/fields/validators";
 import { Formik, Form } from "formik";
+import { changeRequestsActions } from "../../../state/ducks/changeRequest";
+import useAsync from "../../hooks/useAsync";
+import FormProgress from "../../components/forms/FormProgress";
+import FormMessage from "../../components/forms/FormMessage";
 
 interface OwnProps {
+  crId: string;
   taskId: string;
+  closeTask: typeof changeRequestsActions.closeTask;
 }
 
 type Props = OwnProps;
 
 const CloseTask: React.FunctionComponent<Props> = ({
-  taskId,
+  taskId, closeTask, crId,
 }) => {
   const dialog = useDialog();
+  const async = useAsync();
 
   const openDialog = () => dialog.open();
 
@@ -36,17 +43,22 @@ const CloseTask: React.FunctionComponent<Props> = ({
           color="secondary"
           fullWidth={true}
         >
-          <Text translation="common.close" />
+          <Text translation="common.close.task" />
         </Button>
       </Form>
     )
   };
 
-  const onSubmit = (action: any) => { console.log("clik"); console.log(action); }
+  const onSubmit = (values: any) => {
+    dialog.close();
+    async.start(closeTask, crId, taskId, values, async)
+  }
   const preventPropagation = (event: React.FormEvent) =>  event.stopPropagation();
 
   return (
     <Fragment>
+      <FormProgress asyncState={async.asyncState} />
+      <FormMessage asyncState={async.asyncState} />
       <Button
         variant="contained"
         color="secondary"
@@ -58,7 +70,7 @@ const CloseTask: React.FunctionComponent<Props> = ({
       <Dialog
         open={dialog.isOpen}
         onSubmit={preventPropagation}
-        //onClose={dialog.close}
+        onClose={dialog.close}
       >
         <DialogTitle>
           <Text translation="common.closing.note" />

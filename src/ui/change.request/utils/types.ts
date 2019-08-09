@@ -46,6 +46,7 @@ export interface AssessmentDispatchProps {
 // Summary
 export interface SummaryDispatchProps {
   save: typeof changeRequestsActions.save;
+  closeTask: typeof changeRequestsActions.closeTask;
 }
 
 // Common

@@ -125,11 +125,14 @@ const loadAudit = (id: string): ApiAction<Audit[]> => apiAction({
   },
 });
 
-const closeTask = (id: string, body: any, handlers: Handlers<ChangeRequest>):
+const closeTask = (changeRequestId: string, taskId: string, body: any, handlers: Handlers):
   ApiAction => apiActionWithCallbacks({
-    url: `${CHANGE_REQUEST_ROOT_URL}/implementation_plan_task/${id}/done`,
+    url: `${CHANGE_REQUEST_ROOT_URL}/implementation_plan_task/${taskId}/done`,
     method: "post",
     data: body,
+    onSuccess: (d, dispatch) => {
+      dispatch(load(changeRequestId));
+    },
     handlers,
   });
 

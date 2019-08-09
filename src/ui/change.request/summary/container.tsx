@@ -29,6 +29,7 @@ export const Container: React.FunctionComponent<Props> = ({
   dataProp,
   save,
   currentUserEmail,
+  closeTask,
 }) => {
   const [docRev, setDocRev] = React.useState<DocumentRevision | null>(null);
 
@@ -49,6 +50,7 @@ export const Container: React.FunctionComponent<Props> = ({
         asyncState={async.asyncState}
         canEdit={canEdit}
         currentUserEmail={currentUserEmail}
+        closeTask={closeTask}
       />
     </Form>
   );
@@ -84,4 +86,5 @@ export const Container: React.FunctionComponent<Props> = ({
 
 export default connect<{}, DispatchProps, OwnProps, ApplicationState>(null, {
     save: changeRequestsActions.save,
+    closeTask: changeRequestsActions.closeTask,
   })(Container);
