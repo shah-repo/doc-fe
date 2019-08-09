@@ -2,9 +2,11 @@ import { Grid, WithStyles, withStyles, Paper, Typography } from "@material-ui/co
 import React from "react";
 import AsyncGate from "../components/AsyncGate";
 import { styles } from "./Dashboard.styles";
-import PendingAction from "./PendingAction.presenter";
 import { DashboardPresenterParentProps } from "./types";
 import Text from "../components/Text";
+import { PendingActionType } from "../../state/ducks/dashboard";
+import ChangeRequestApproval from "./action.types/ChangeRequestApproval";
+import TaskApproval from "./action.types/TaskApproval";
 
 type DashboardPresenterProps = DashboardPresenterParentProps;
 
@@ -16,7 +18,12 @@ const DashboardPresenter: React.FunctionComponent<DashboardPresenterProps> = ({
     <React.Fragment>
     {
       pendingActions.map((pendingAction) => {
-        return <PendingAction key={pendingAction.changeReq.id} pendingAction={pendingAction} />
+        switch (pendingAction.type) {
+          case PendingActionType.PENDING_REVIEW:
+            return <ChangeRequestApproval key={pendingAction.changeReq.id} pendingAction={pendingAction} />
+          default:
+            return <TaskApproval key={pendingAction.changeReq.id} pendingAction={pendingAction} />
+        }
       })
     }
     </React.Fragment>
