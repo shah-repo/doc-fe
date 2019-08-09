@@ -4,12 +4,12 @@ export const LOGOUT_USER = "auth/LOGOUT_USER";
 export const USER_PERMISSIONS = "auth/USER_PERMISSIONS";
 
 export const USER_PERMISSIONS_GET_ASYNC = "auth/USER_PERMISSIONS_GET_ASYNC";
-export const HEALTHCHECK_GET_ASYNC = "auth/HEALTHCHECK_GET_ASYNC";
+export const PING_SERVER_GET_ASYNC = "auth/PING_SERVER_GET_ASYNC";
 
 export const LOGIN_URL = "/auth/login";
 export const LOGIN_WITH_CODE_URL = "/auth/tokens";
 export const LOGOUT_URL = "/auth/logout";
 export const PERMISSIONS_URL = "/users/permissions";
-export const HEALTHCHECK_URL = "/healthcheck";
+export const PING_SERVER_URL = "/healthcheck";
 
 export const AUTH_TOKENS_REFRESH_THRESHOLD_SECONDS = 100;
