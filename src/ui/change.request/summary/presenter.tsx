@@ -25,6 +25,7 @@ import styles from "./styles";
 interface OwnProps extends DataProps<ChangeRequest> {
   asyncState: AsyncState;
   canEdit: boolean;
+  currentUserEmail: string;
 }
 
 type Props = OwnProps & WithStyles<typeof styles>;
@@ -34,6 +35,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   dataProp,
   asyncState,
   canEdit,
+  currentUserEmail,
 }) => {
 
   const approversFieldRenderer = () => (
@@ -66,7 +68,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         />
         <Justification dataProp={dataProp.justifications} />
         <Assessment dataProp={dataProp.assessments} />
-        <ImplementationPlan dataProp={dataProp.implementationPlan} />
+        <ImplementationPlan dataProp={dataProp.implementationPlan} currentUserEmail={currentUserEmail} crStatus={dataProp.state} />
         {canEdit && approversFieldRenderer()}
         {!canEdit && <ApproversSummary dataProp={dataProp.approvals} />}
       </Box>

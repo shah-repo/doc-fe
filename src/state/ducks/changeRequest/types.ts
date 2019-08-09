@@ -17,6 +17,11 @@ export enum ChangeRequestStatus {
   Closed = "CLOSED",
 }
 
+export enum ImplementationPlanTaskStatus {
+  Pending = "PENDING",
+  Done = "DONE"
+}
+
 export interface Justifications {
   id?: string;
   description?: string;

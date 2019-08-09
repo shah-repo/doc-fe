@@ -125,6 +125,14 @@ const loadAudit = (id: string): ApiAction<Audit[]> => apiAction({
   },
 });
 
+const closeTask = (id: string, body: any, handlers: Handlers<ChangeRequest>):
+  ApiAction => apiActionWithCallbacks({
+    url: `${CHANGE_REQUEST_ROOT_URL}/implementation_plan_task/${id}/done`,
+    method: "post",
+    data: body,
+    handlers,
+  });
+
 export default {
   changeRequestsList,
   changeRequestSet,
@@ -137,4 +145,5 @@ export default {
   availableApproversList,
   auditSet,
   loadAudit,
+  closeTask,
 };
