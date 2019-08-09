@@ -71,7 +71,9 @@ export const ChangeRequestPreviewContainer: React.FunctionComponent<
           documentsInChangeRequest={changeRequest.documentRevisions}
           selectAssessmentForm={selectAssessmentForm}
           selectDocumentRevision={selectDocumentRevision}
-          selectedDocumentRevision={selectedDocumentRevision!.id || null}
+          selectedDocumentRevision={
+            selectedDocumentRevision ? selectedDocumentRevision.id : null
+          }
         />
       </Grid>
       <Grid item={true} xs={7}>
