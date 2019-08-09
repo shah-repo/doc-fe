@@ -21,9 +21,6 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<
 > = ({ onClick, onDelete, documentRevision, selectedDocumentRevision }) => {
   const classes = styles();
   const isSelected = () => selectedDocumentRevision === documentRevision.id;
-  console.log("selected Document:" + selectedDocumentRevision);
-  console.log("This Document:" + documentRevision);
-  console.log(isSelected);
   return (
     <div
       className={
