@@ -1,9 +1,9 @@
 import React, { Fragment, useCallback, useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { formBuilderActions } from "../../../../state/ducks/formBuilder";
 import { FieldConstants } from "./FieldConstants";
 import FieldPresenter from "./helper/ModalFieldPresenter";
 import styles from "./Modal.module.css";
-import { formBuilderActions } from "../../../state/ducks/formBuilder";
-import { connect } from "react-redux";
 
 interface BigObject<T> {
   [index: string]: T;
@@ -16,8 +16,8 @@ interface DispatchProps {
 const NewFieldModal: React.FunctionComponent<DispatchProps> = ({
   ADD_FIELD,
 }) => {
-  const [chosenField, setChosenField] = useState();
-  const [modalStateContent, setModalContent] = useState();
+  const [chosenField, setChosenField] = useState("");
+  const [modalStateContent, setModalContent] = useState({});
 
   const addField = useCallback(
     (e: any, config: any) => {
@@ -39,48 +39,52 @@ const NewFieldModal: React.FunctionComponent<DispatchProps> = ({
   };
 
   const sections: BigObject<string> = FieldConstants.sections;
-  const sectionButtons = Object.keys(sections).map(value => {
+  const sectionButtons = Object.keys(sections).map((value) => {
     return (
       <button
         className={styles[value]}
         onClick={() => handleClick(value)}
-        key={value}>
+        key={value}
+      >
         {sections[value]}
       </button>
     );
   });
 
   const basicFields: BigObject<string> = FieldConstants.basicFields;
-  const basicFieldButtons = Object.keys(basicFields).map(value => {
+  const basicFieldButtons = Object.keys(basicFields).map((value) => {
     return (
       <button
         className={styles[value]}
         onClick={() => handleClick(value)}
-        key={value}>
+        key={value}
+      >
         {basicFields[value]}
       </button>
     );
   });
 
   const approvals: BigObject<string> = FieldConstants.approvals;
-  const approvalButtons = Object.keys(approvals).map(value => {
+  const approvalButtons = Object.keys(approvals).map((value) => {
     return (
       <button
         className={styles[value]}
         onClick={() => handleClick(value)}
-        key={value}>
+        key={value}
+      >
         {approvals[value]}
       </button>
     );
   });
 
   const lists: BigObject<string> = FieldConstants.lists;
-  const listButtons = Object.keys(lists).map(value => {
+  const listButtons = Object.keys(lists).map((value) => {
     return (
       <button
         className={styles[value]}
         onClick={() => handleClick(value)}
-        key={value}>
+        key={value}
+      >
         {lists[value]}
       </button>
     );

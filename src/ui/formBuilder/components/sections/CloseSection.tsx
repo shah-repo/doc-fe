@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import styles from "../basic/BasicFields.module.css";
-import { formBuilderActions } from "../../../state/ducks/formBuilder";
+import { formBuilderActions } from "../../../../state/ducks/formBuilder";
 import { connect } from "react-redux";
 
 interface OwnProps {
@@ -41,7 +41,8 @@ const CloseSection: React.FunctionComponent<CloseSectionProps> = ({
   const button = (
     <button
       onClick={editMode ? undefined : closeSection}
-      className={styles.actionButton}>
+      className={styles.actionButton}
+    >
       Close Section
     </button>
   );

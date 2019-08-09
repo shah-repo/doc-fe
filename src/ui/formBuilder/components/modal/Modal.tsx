@@ -1,10 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
-import { formBuilderActions } from "../../../state/ducks/formBuilder";
+import { formBuilderActions } from "../../../../state/ducks/formBuilder";
 import EditFieldModal from "./EditFieldModal";
 import styles from "./Modal.module.css";
 import NewFieldModal from "./NewFieldModal";
-import { formReducerType } from "../../../state/ducks/formBuilder/reducer";
+import { formReducerType } from "../../../../state/ducks/formBuilder/reducer";
 
 interface DispatchProps {
   hideModal: typeof formBuilderActions.hideModal;

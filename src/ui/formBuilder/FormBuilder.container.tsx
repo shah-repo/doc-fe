@@ -24,7 +24,7 @@ const FormBuilderContainer: React.FunctionComponent<StateProps> = ({
   setFormInfo,
 }) => {
   const [formState] = useState(formBuilderState);
-  const [headerState, setHeaderState] = useState();
+  const [headerState, setHeaderState] = useState({ title: "", formNumber: "" });
   const [withHeader, setwithHeader] = useState(false);
 
   const handleInputChange = (e: any) => {

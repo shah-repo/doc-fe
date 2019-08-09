@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "../Modal.module.css";
 
 interface ApprovalsModalProps {
-  currentConfig: {};
+  currentConfig: { title: ""; links: [] };
   title: string;
   handleSubmit: (e: any, config: any) => void;
 }
@@ -12,7 +12,7 @@ const ApprovalsModal: React.FunctionComponent<ApprovalsModalProps> = ({
   handleSubmit,
   title,
 }) => {
-  const [config, setConfig] = useState();
+  const [config, setConfig] = useState({ title: "", links: [] });
 
   useEffect(() => {
     if (currentConfig) {
@@ -41,7 +41,7 @@ const ApprovalsModal: React.FunctionComponent<ApprovalsModalProps> = ({
           name="title"
           placeholder="Enter here"
           required={true}
-          defaultValue={config ? config.title : null}
+          defaultValue={config ? config.title : undefined}
         />
         <button>{currentConfig ? "Save" : "Add"}</button>
       </div>

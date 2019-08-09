@@ -3,13 +3,13 @@ import styles from "../Modal.module.css";
 
 interface MultipleCheckboxModalProps {
   handleSubmit: (e: any, config: any) => void;
-  currentConfig?: { options: any };
+  currentConfig?: { title: string; options: [] };
 }
 
 const MultipleCheckboxModal: React.FunctionComponent<
   MultipleCheckboxModalProps
 > = ({ handleSubmit, currentConfig }) => {
-  const [config, setConfig] = useState();
+  const [config, setConfig] = useState({ title: "", options: [] });
 
   useEffect(() => {
     if (currentConfig) {
@@ -43,7 +43,7 @@ const MultipleCheckboxModal: React.FunctionComponent<
           name="title"
           placeholder="Enter here"
           required={true}
-          defaultValue={config ? config.title : null}
+          defaultValue={config ? config.title : undefined}
         />
         <label>Options</label>
         <textarea
@@ -51,7 +51,9 @@ const MultipleCheckboxModal: React.FunctionComponent<
           name="options"
           placeholder={"Option 1\nOption 2\nOption 3\n[other]"}
           required={true}
-          defaultValue={currentConfig ? currentConfig.options.join("\n") : null}
+          defaultValue={
+            currentConfig ? currentConfig.options.join("\n") : undefined
+          }
         />
         <span>
           {" "}

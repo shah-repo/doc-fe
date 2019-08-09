@@ -20,7 +20,7 @@ const MultipleHyperLink: React.FunctionComponent<MultipleHyperLinkProps> = ({
 }) => {
   const defaultHyperLinks = values ? values.hyperLinks : [];
   const [hyperLinks, addHyperLinks]: any[] = useState(defaultHyperLinks);
-  const [hyperLink, setHyperLink] = useState();
+  const [hyperLink, setHyperLink] = useState("");
   const [showInput, setShowInput] = useState(false);
 
   useEffect(() => {

@@ -3,7 +3,7 @@ import styles from "../Modal.module.css";
 
 interface LineFieldModalProps {
   title: string;
-  currentConfig?: {};
+  currentConfig?: { title: string; placeholder: string };
   handleSubmit: (e: any, config: any) => void;
 }
 
@@ -12,7 +12,7 @@ const LineFieldModal: React.FunctionComponent<LineFieldModalProps> = ({
   currentConfig,
   handleSubmit,
 }) => {
-  const [config, setConfig] = useState();
+  const [config, setConfig] = useState({ placeholder: "", title: "" });
 
   useEffect(() => {
     if (currentConfig) {
@@ -41,7 +41,7 @@ const LineFieldModal: React.FunctionComponent<LineFieldModalProps> = ({
           name="title"
           placeholder="Enter here"
           required={true}
-          defaultValue={config ? config.title : null}
+          defaultValue={config ? config.title : undefined}
         />
         <label> Placeholder Text</label>
         <input
@@ -50,7 +50,7 @@ const LineFieldModal: React.FunctionComponent<LineFieldModalProps> = ({
           name="placeholder"
           placeholder="Enter here"
           required={true}
-          defaultValue={config ? config.placeholder : null}
+          defaultValue={config ? config.placeholder : undefined}
         />
         <button>{currentConfig ? "Save" : "Add"}</button>
       </div>

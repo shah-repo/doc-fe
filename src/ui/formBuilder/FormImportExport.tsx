@@ -28,7 +28,7 @@ const FormImportExport: React.FunctionComponent<FormImportExport> = ({
   const formData = formBuilderState;
   const [fileName, setFileName] = useState(formBuilderState.title);
   const [modalVisible, setShowModal] = useState(false);
-  const inputFile: any = useRef();
+  const inputFile: any = useRef({});
 
   const exportTemplate = (e: any) => {
     e.preventDefault();

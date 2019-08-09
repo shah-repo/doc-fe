@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "../Modal.module.css";
 
 interface FileUploadModalProps {
-  currentConfig?: {};
+  currentConfig?: { title: string };
   handleSubmit: (e: any, config: any) => void;
 }
 
@@ -10,7 +10,7 @@ const FileUploadModal: React.FunctionComponent<FileUploadModalProps> = ({
   currentConfig,
   handleSubmit,
 }) => {
-  const [config, setConfig] = useState();
+  const [config, setConfig] = useState({ title: "" });
 
   useEffect(() => {
     if (currentConfig) {
@@ -39,7 +39,7 @@ const FileUploadModal: React.FunctionComponent<FileUploadModalProps> = ({
           name="title"
           placeholder="Enter here"
           required={true}
-          defaultValue={config ? config.title : null}
+          defaultValue={config ? config.title : undefined}
         />
         <button>{currentConfig ? "Save" : "Add"}</button>
       </div>

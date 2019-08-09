@@ -1,28 +1,28 @@
 import React from "react";
 import { connect } from "react-redux";
 import { formBuilderActions } from "../../state/ducks/formBuilder";
-import ApprovalCollection from "../components/basic/ApprovalCollection";
+import ApprovalCollection from "./components/basic/ApprovalCollection";
 // import { DELETE_FIELD, EDIT_FIELD, SHOW_MODAL } from "../../state/formActions";
-import CheckBox from "../components/basic/Checkbox";
-import DatePicker from "../components/basic/DatePicker";
-import FileUpload from "../components/basic/FileUpload";
-import HyperLink from "../components/basic/HyperLink";
-import MultipleCheckbox from "../components/basic/MultipleCheckbox";
-import MultipleHyperLink from "../components/basic/MultipleHyperLink";
-import MultiplePackaging from "../components/basic/MultiplePackaging";
-import Numeric from "../components/basic/Numeric";
-import Paragraph from "../components/basic/Paragraph";
-import RadioField from "../components/basic/Radio";
-import SingleLine from "../components/basic/SingleLine";
-import TextArea from "../components/basic/TextArea";
-import ActionButton from "../components/buttons/ActionButton";
-import Lists from "../components/lists/Lists";
-import CloseSection from "../components/sections/CloseSection";
-import Section from "../components/sections/Section";
-import SubSection from "../components/sections/SubSection";
+import CheckBox from "./components/basic/Checkbox";
+import DatePicker from "./components/basic/DatePicker";
+import FileUpload from "./components/basic/FileUpload";
+import HyperLink from "./components/basic/HyperLink";
+import MultipleCheckbox from "./components/basic/MultipleCheckbox";
+import MultipleHyperLink from "./components/basic/MultipleHyperLink";
+import MultiplePackaging from "./components/basic/MultiplePackaging";
+import Numeric from "./components/basic/Numeric";
+import Paragraph from "./components/basic/Paragraph";
+import RadioField from "./components/basic/Radio";
+import SingleLine from "./components/basic/SingleLine";
+import TextArea from "./components/basic/TextArea";
+import ActionButton from "./components/buttons/ActionButton";
+import Lists from "./components/lists/Lists";
+import CloseSection from "./components/sections/CloseSection";
+import Section from "./components/sections/Section";
+import SubSection from "./components/sections/SubSection";
 import styles from "./FormBuilder.module.css";
 import { ReactComponent as MoveHandle } from "./icons/icon_move.svg";
-import TaskListContainer from "../components/taskList/TaskList.container";
+// import TaskListContainer from "./components/taskList/TaskList.container";
 
 interface FieldProps {
   order: string;
@@ -144,14 +144,14 @@ const FormFieldEditor: React.FunctionComponent<FormFieldProps> = ({
       );
       break;
 
-    case "actionItems":
-      formField = (
-        <TaskListContainer
-          currentUserEmail="admin@enlil.com"
-          currentUser="admin"
-        />
-      );
-      break;
+    // case "actionItems":
+    //   formField = (
+    //     <TaskListContainer
+    //       currentUserEmail="admin@enlil.com"
+    //       currentUser="admin"
+    //     />
+    //   );
+    //   break;
     case "hyperlink":
       formField = (
         <HyperLink
@@ -305,7 +305,8 @@ const FormFieldEditor: React.FunctionComponent<FormFieldProps> = ({
       onDragEnd={onDragEnd}
       onDragStart={onDragStart}
       // tslint:disable-next-line: jsx-alignment
-      className={containerStyle}>
+      className={containerStyle}
+    >
       {hideTopControls ? null : topControls}
       {formField}
       <div className={styles.moveHandle}>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "../Modal.module.css";
 
 interface HyperLinkModalProps {
-  currentConfig: {};
+  currentConfig: { title: string; url: string };
   handleSubmit: (e: any, config: any) => void;
 }
 
@@ -10,7 +10,7 @@ const HyperLinkModal: React.FunctionComponent<HyperLinkModalProps> = ({
   currentConfig,
   handleSubmit,
 }) => {
-  const [config, setConfig] = useState();
+  const [config, setConfig] = useState({ title: "", url: "" });
 
   useEffect(() => {
     if (currentConfig) {
@@ -47,7 +47,7 @@ const HyperLinkModal: React.FunctionComponent<HyperLinkModalProps> = ({
           name="title"
           placeholder="Enter here"
           required={true}
-          defaultValue={config ? config.title : null}
+          defaultValue={config ? config.title : undefined}
         />
         <label>URL</label>
         <input
@@ -56,7 +56,7 @@ const HyperLinkModal: React.FunctionComponent<HyperLinkModalProps> = ({
           name="url"
           placeholder="Enter link here"
           required={true}
-          defaultValue={config ? config.url : null}
+          defaultValue={config ? config.url : undefined}
         />
         <button>{currentConfig ? "Save" : "Add"}</button>
       </div>

@@ -20,7 +20,7 @@ const MultiplePackaging: React.FunctionComponent<MultiplePackagingProps> = ({
 }) => {
   const defaultPackages = values ? values.packagings : [];
   const [packagings, setPackagings]: any[] = useState(defaultPackages);
-  const [packaging, setPackaging] = useState();
+  const [packaging, setPackaging] = useState({});
   const [showInput, setShowInput] = useState(false);
 
   useEffect(() => {

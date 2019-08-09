@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { formBuilderActions } from "../../../../../state/ducks/formBuilder";
+import ApprovalCollectionModal from "../fields/ApprovalCollectionModal";
 import CheckBoxModal from "../fields/CheckBoxModal";
 import DatePickerModal from "../fields/DatePickerModal";
 import FileUploadModal from "../fields/FileUploadModal";
@@ -7,14 +10,11 @@ import LineFieldModal from "../fields/LineFieldModal";
 import ListsModal from "../fields/ListsModal";
 import MultipleCheckboxModal from "../fields/MultipleCheckboxModal";
 import MultipleHyperLinkModal from "../fields/MultipleHyperLinkModal";
+import MultiplePackagingModal from "../fields/MultiplePackagingModal";
 import NumericModal from "../fields/NumericModal";
 import ParagraphModal from "../fields/ParagraphModal";
 import RadioModal from "../fields/RadioModal";
 import SectionModal from "../fields/SectionModal";
-import MultiplePackagingModal from "../fields/MultiplePackagingModal";
-import ApprovalCollectionModal from "../fields/ApprovalCollectionModal";
-import { formBuilderActions } from "../../../../state/ducks/formBuilder";
-import { connect } from "react-redux";
 
 interface FieldPresenter {
   chosenField: string;
@@ -36,7 +36,7 @@ const FieldPresenter: React.FunctionComponent<FieldPresenterProps> = ({
   ADD_FIELD,
   ADD_LIST,
 }) => {
-  const [modalStateContent, setModalContent] = useState();
+  const [modalStateContent, setModalContent] = useState({});
 
   useEffect(() => {
     switch (chosenField) {

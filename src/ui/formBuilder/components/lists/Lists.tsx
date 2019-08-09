@@ -25,7 +25,7 @@ const Lists: React.FunctionComponent<ListsProps> = ({
   editMode,
 }) => {
   const [choices, setChoices] = useState([]);
-  const [stringTitle, setStringTitle] = useState();
+  const [stringTitle, setStringTitle] = useState("");
   const [other, setOther] = useState(false);
   useEffect(() => {
     if (options) {
@@ -47,7 +47,8 @@ const Lists: React.FunctionComponent<ListsProps> = ({
       key={i}
       value={choice}
       // tslint:disable-next-line: jsx-alignment
-      selected={choice === (values ? values.selected : "")}>
+      selected={choice === (values ? values.selected : "")}
+    >
       {choice}
     </option>
   ));
@@ -86,7 +87,8 @@ const Lists: React.FunctionComponent<ListsProps> = ({
         name="selected"
         onChange={handeSelectChange}
         // tslint:disable-next-line: jsx-alignment
-        defaultValue={values ? values.selected : ""}>
+        defaultValue={values ? values.selected : ""}
+      >
         <option>Please select from {stringTitle}</option>
         {selectOptions}
       </select>

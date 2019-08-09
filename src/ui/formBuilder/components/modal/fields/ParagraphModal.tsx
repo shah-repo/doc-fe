@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "../Modal.module.css";
 
 interface ParagraphModalProps {
-  currentConfig?: {};
+  currentConfig?: { text: string; textType: string };
   handleSubmit: (e: any, config: any) => void;
 }
 
@@ -10,7 +10,7 @@ const ParagraphModal: React.FunctionComponent<ParagraphModalProps> = ({
   handleSubmit,
   currentConfig,
 }) => {
-  const [config, setConfig] = useState();
+  const [config, setConfig] = useState({ textType: "", text: "" });
 
   useEffect(() => {
     if (currentConfig) {

@@ -3,7 +3,7 @@ import styles from "../Modal.module.css";
 
 interface SectionModalProps {
   title: string;
-  currentConfig?: {};
+  currentConfig?: { title: string };
   handleSubmit: (e: any, config: any) => void;
 }
 
@@ -12,7 +12,7 @@ const SectionModal: React.FunctionComponent<SectionModalProps> = ({
   currentConfig,
   handleSubmit,
 }) => {
-  const [config, setConfig] = useState();
+  const [config, setConfig] = useState({ title: "" });
 
   useEffect(() => {
     if (currentConfig) {
@@ -41,7 +41,7 @@ const SectionModal: React.FunctionComponent<SectionModalProps> = ({
           name="title"
           placeholder="Enter here"
           required={true}
-          defaultValue={config ? config.title : null}
+          defaultValue={config ? config.title : undefined}
         />
         <button>{currentConfig ? "Save" : "Add"}</button>
       </div>

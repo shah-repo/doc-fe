@@ -2,7 +2,14 @@ import React, { useState, useEffect } from "react";
 import styles from "../Modal.module.css";
 
 interface NumericModalProps {
-  currentConfig?: { tolerance: boolean };
+  currentConfig?: {
+    toleranceType: string;
+    tolerance: boolean;
+    min: string;
+    max: string;
+    title: string;
+    placeholder: string;
+  };
   title: string;
   handleSubmit: (e: any, config: any) => void;
 }
@@ -12,7 +19,14 @@ const NumericModal: React.FunctionComponent<NumericModalProps> = ({
   title,
   handleSubmit,
 }) => {
-  const [config, setConfig] = useState();
+  const [config, setConfig] = useState({
+    toleranceType: "",
+    tolerance: false,
+    min: "",
+    max: "",
+    placeholder: "",
+    title: "",
+  });
   const [withTolerance, setTolerance] = useState(false);
 
   useEffect(() => {
@@ -74,7 +88,7 @@ const NumericModal: React.FunctionComponent<NumericModalProps> = ({
         name="min"
         placeholder="Enter minimum value placeholder"
         required={withTolerance}
-        defaultValue={config ? config.min : null}
+        defaultValue={config ? config.min : undefined}
       />
       <input
         onChange={handleInputChange}
@@ -82,7 +96,7 @@ const NumericModal: React.FunctionComponent<NumericModalProps> = ({
         name="max"
         placeholder="Enter maximum value palceholder"
         required={withTolerance}
-        defaultValue={config ? config.max : null}
+        defaultValue={config ? config.max : undefined}
       />
     </div>
   );
@@ -100,7 +114,7 @@ const NumericModal: React.FunctionComponent<NumericModalProps> = ({
           name="title"
           placeholder="Enter here"
           required={true}
-          defaultValue={config ? config.title : null}
+          defaultValue={config ? config.title : undefined}
         />
         <label>Placeholder</label>
         <input
@@ -109,15 +123,15 @@ const NumericModal: React.FunctionComponent<NumericModalProps> = ({
           name="placeholder"
           placeholder="Enter here"
           required={true}
-          defaultValue={config ? config.placeholder : null}
+          defaultValue={config ? config.placeholder : undefined}
         />
         <input
           type="checkbox"
           onChange={toleranceCheck}
           name="tolerance"
-          checked={config ? config.tolerance : null}
+          checked={config ? config.tolerance : false}
         />{" "}
-        with tolerance? {withTolerance ? tolerance : null}
+        with tolerance? {withTolerance ? tolerance : undefined}
         <button>{currentConfig ? "Save" : "Add"}</button>
       </div>
     </form>

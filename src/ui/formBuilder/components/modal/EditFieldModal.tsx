@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from "react";
 import { connect } from "react-redux";
-import { formBuilderActions } from "../../../state/ducks/formBuilder";
-import { formReducerType } from "../../../state/ducks/formBuilder/reducer";
+import { formBuilderActions } from "../../../../state/ducks/formBuilder";
+import { formReducerType } from "../../../../state/ducks/formBuilder/reducer";
 import ModalFieldPresenter from "./helper/ModalFieldPresenter";
 import styles from "./Modal.module.css";
 
@@ -29,7 +29,7 @@ const EditFieldModal: React.FunctionComponent<EditFieldModalProps> = ({
 }) => {
   // eslint-disable-next-line
   const { currentField } = formBuilderState;
-  const [reason, setReason] = useState();
+  const [reason, setReason] = useState("");
   const [withReason, setWithReason] = useState(false);
 
   const updateField = (e: any, config: any) => {

@@ -3,13 +3,13 @@ import styles from "../Modal.module.css";
 
 interface MultipleHyperLinkModalProps {
   handleSubmit: (e: any, config: any) => void;
-  currentConfig?: { links: any };
+  currentConfig?: { title: string; links: [] };
 }
 
 const MultipleHyperLinkModal: React.FunctionComponent<
   MultipleHyperLinkModalProps
 > = ({ handleSubmit, currentConfig }) => {
-  const [config, setConfig] = useState();
+  const [config, setConfig] = useState({ title: "", links: [] });
 
   useEffect(() => {
     if (currentConfig) {
@@ -38,7 +38,7 @@ const MultipleHyperLinkModal: React.FunctionComponent<
           name="title"
           placeholder="Enter here"
           required={true}
-          defaultValue={config ? config.title : null}
+          defaultValue={config ? config.title : undefined}
         />
         <button>{currentConfig ? "Save" : "Add"}</button>
       </div>

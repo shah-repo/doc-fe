@@ -1,24 +1,24 @@
 import React from "react";
-import ApprovalCollection from "../components/basic/ApprovalCollection";
-import CheckBox from "../components/basic/Checkbox";
-import DatePicker from "../components/basic/DatePicker";
-import FileUpload from "../components/basic/FileUpload";
-import HyperLink from "../components/basic/HyperLink";
-import MultipleCheckbox from "../components/basic/MultipleCheckbox";
-import MultipleHyperLink from "../components/basic/MultipleHyperLink";
-import MultiplePackaging from "../components/basic/MultiplePackaging";
-import Numeric from "../components/basic/Numeric";
-import Paragraph from "../components/basic/Paragraph";
-import RadioField from "../components/basic/Radio";
-import SingleLine from "../components/basic/SingleLine";
-import TextArea from "../components/basic/TextArea";
-import ActionButton from "../components/buttons/ActionButton";
-import Lists from "../components/lists/Lists";
-import CloseSection from "../components/sections/CloseSection";
-import Section from "../components/sections/Section";
-import SubSection from "../components/sections/SubSection";
+import ApprovalCollection from "./components/basic/ApprovalCollection";
+import CheckBox from "./components/basic/Checkbox";
+import DatePicker from "./components/basic/DatePicker";
+import FileUpload from "./components/basic/FileUpload";
+import HyperLink from "./components/basic/HyperLink";
+import MultipleCheckbox from "./components/basic/MultipleCheckbox";
+import MultipleHyperLink from "./components/basic/MultipleHyperLink";
+import MultiplePackaging from "./components/basic/MultiplePackaging";
+import Numeric from "./components/basic/Numeric";
+import Paragraph from "./components/basic/Paragraph";
+import RadioField from "./components/basic/Radio";
+import SingleLine from "./components/basic/SingleLine";
+import TextArea from "./components/basic/TextArea";
+import ActionButton from "./components/buttons/ActionButton";
+import Lists from "./components/lists/Lists";
+import CloseSection from "./components/sections/CloseSection";
+import Section from "./components/sections/Section";
+import SubSection from "./components/sections/SubSection";
 import styles from "./FormBuilder.module.css";
-import TaskListContainer from "../components/taskList/TaskList.container";
+// import TaskListContainer from "./components/taskList/TaskList.container";
 
 interface FormFieldProps {
   order: string;
@@ -143,14 +143,14 @@ const FormFieldViewer: React.FunctionComponent<FormFieldProps> = ({
         />
       );
       break;
-    case "actionItems":
-      formField = (
-        <TaskListContainer
-          currentUserEmail="admin@enlil.com"
-          currentUser="admin"
-        />
-      );
-      break;
+    // case "actionItems":
+    //   formField = (
+    //     <TaskListContainer
+    //       currentUserEmail="admin@enlil.com"
+    //       currentUser="admin"
+    //     />
+    //   );
+    //   break;
     case "hyperlink":
       formField = (
         <HyperLink
