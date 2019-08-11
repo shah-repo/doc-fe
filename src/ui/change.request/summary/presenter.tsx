@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core";
 import moment from "moment";
 import React from "react";
-import { ChangeRequest } from "../../../state/ducks/changeRequest";
+import { ChangeRequest, changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
 import { AsyncState } from "../../../state/types";
 import ControlsContainer from "../../changeRequest/forms/assessmentForm/AssessmentFormControls.container";
@@ -25,6 +25,8 @@ import styles from "./styles";
 interface OwnProps extends DataProps<ChangeRequest> {
   asyncState: AsyncState;
   canEdit: boolean;
+  currentUserEmail: string;
+  closeTask: typeof changeRequestsActions.closeTask;
 }
 
 type Props = OwnProps & WithStyles<typeof styles>;
@@ -34,6 +36,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
   dataProp,
   asyncState,
   canEdit,
+  currentUserEmail,
+  closeTask,
 }) => {
 
   const approversFieldRenderer = () => (
@@ -66,7 +70,13 @@ export const Presenter: React.FunctionComponent<Props> = ({
         />
         <Justification dataProp={dataProp.justifications} />
         <Assessment dataProp={dataProp.assessments} />
-        <ImplementationPlan dataProp={dataProp.implementationPlan} />
+        <ImplementationPlan
+          dataProp={dataProp.implementationPlan}
+          currentUserEmail={currentUserEmail}
+          crStatus={dataProp.state}
+          closeTask={closeTask}
+          crId={dataProp.id}
+        />
         {canEdit && approversFieldRenderer()}
         {!canEdit && <ApproversSummary dataProp={dataProp.approvals} />}
       </Box>

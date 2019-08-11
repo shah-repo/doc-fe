@@ -171,6 +171,10 @@
   "common.add.attachment": "Add attachment",
   "common.warning": "Warning",
   "common.open": "Open",
+  "common.done": "Done",
+  "common.closing.note": "Closing note",
+  "common.close": "Close",
+  "common.close.task": "Close task",
 
   "dashboard.type.PENDING_REVIEW": "is pending your approval",
   "dashboard.noPendingActions": "No pending actions",
