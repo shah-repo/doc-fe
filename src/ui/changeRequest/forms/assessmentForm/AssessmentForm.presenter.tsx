@@ -24,6 +24,7 @@ interface Props extends WithStyles<typeof styles>, FormikProps<ChangeRequestForm
   changeRequest?: ChangeRequest;
   documentRevisionsList: string[];
   doNotPrompt?: boolean;
+  onDirtyFlagChange?: (dirty: boolean) => void;
 }
 
 const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
@@ -36,11 +37,11 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   documentRevisionsList,
   setFieldValue,
   doNotPrompt,
+  onDirtyFlagChange,
 }) => {
   useEffect(() => {
     setFieldValue("documentRevisions", documentRevisionsList);
   }, [documentRevisionsList]);
-
 
   const renderJustifications = (props: FieldProps<ChangeRequestFormValues>) => (
     <AssessmentFormJustifications {...props} />
@@ -57,7 +58,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   return (
     <div className={classes.container}>
       <FormWrapper dirty={dirty} resetForm={resetForm} initialValues={initialValues}>
-        <PromptIfDirty dirty={dirty} doNotPrompt={doNotPrompt} />
+        <PromptIfDirty dirty={dirty} doNotPrompt={doNotPrompt} onDirtyFlagChange={onDirtyFlagChange} />
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
         <FilledInputField
