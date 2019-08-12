@@ -38,7 +38,7 @@ const FileCard: React.FunctionComponent<FileCardProps> = ({ removeAttachment, at
           </CardContent>
           <CardActions>
             {removeButton}
-            <DownloadButtonContainer attachmentId={attachment.id} />
+            <DownloadButtonContainer attachment={attachment} />
           </CardActions>
         </Card>
       </CardTooltip>

@@ -33,6 +33,8 @@ export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFo
   onSubmit, asyncState, initialValues, documentRevisionsById, changeRequest,
   doNotPrompt,
 }) => {
+  const alertMessage = "You have unsaved changes.";
+  const [isFormDirty, setIsFormDirty] = useState<boolean>(false);
   const [selectedDocumentRevision, setSelectedDocumentRevision] = useState<string | null>(null);
   const [documentRevisionsList, setDocumentRevisionsList] = useState<string[]>(initialValues.documentRevisions);
 
@@ -45,9 +47,23 @@ export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFo
     setDocumentRevisionsList(documentRevisionsList.filter((documentRevisionId) => documentRevisionId !== deleteDocumentRevisionId ));
   }
 
-  const selectDocumentRevision = (documentRevisionId: string) => setSelectedDocumentRevision(documentRevisionId);
+  const selectDocumentRevision = (documentRevisionId: string) => {
+    if (isFormDirty) {
+      alert(alertMessage);
+      return;
+    }
+    setSelectedDocumentRevision(documentRevisionId);
+  }
 
-  const selectAssessmentForm = () => setSelectedDocumentRevision(null);
+  const selectAssessmentForm = () => {
+    if (isFormDirty) {
+      alert(alertMessage);
+      return;
+    }
+    setSelectedDocumentRevision(null)
+  };
+
+  const onDirtyFlagChange = (dirty: boolean) => setIsFormDirty(dirty);
 
   const renderAssessmentForm = () => {
     return (
@@ -58,13 +74,19 @@ export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFo
         changeRequest={changeRequest}
         documentRevisionsList={documentRevisionsList}
         doNotPrompt={doNotPrompt}
+        onDirtyFlagChange={onDirtyFlagChange}
       />
     )
   }
 
   const renderDocumentRevisionForm = () => {
     if (selectedDocumentRevision) {
-      return <DocumentRevisionUpdateContainer documentRevision={documentRevisionsById[selectedDocumentRevision]} />;
+      return (
+        <DocumentRevisionUpdateContainer
+          documentRevision={documentRevisionsById[selectedDocumentRevision]}
+          onDirtyFlagChange={onDirtyFlagChange}
+        />
+      );
     }
   }
 

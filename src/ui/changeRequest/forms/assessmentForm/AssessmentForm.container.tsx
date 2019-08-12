@@ -13,6 +13,7 @@ interface OwnProps {
   changeRequest?: ChangeRequest;
   documentRevisionsList: string[];
   doNotPrompt?: boolean;
+  onDirtyFlagChange?: (dirty: boolean) => void;
 }
 
 type AssessmentFormContainerProps = OwnProps;
@@ -24,6 +25,7 @@ const AssessmentFormContainer: React.FunctionComponent<AssessmentFormContainerPr
   changeRequest,
   documentRevisionsList,
   doNotPrompt,
+  onDirtyFlagChange,
 }) => {
     const render = (props: FormikProps<ChangeRequestFormValues>) => (
       <AssessmentFormPresenter
@@ -32,6 +34,7 @@ const AssessmentFormContainer: React.FunctionComponent<AssessmentFormContainerPr
         changeRequest={changeRequest}
         documentRevisionsList={documentRevisionsList}
         doNotPrompt={doNotPrompt}
+        onDirtyFlagChange={onDirtyFlagChange}
       />
     );
 

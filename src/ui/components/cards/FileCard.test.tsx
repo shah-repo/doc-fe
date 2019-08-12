@@ -30,6 +30,6 @@ describe("FileCard tests", () => {
 
   it("sets correct attachmentId on DownloadButtonContainer", () => {
     const wrapper = getWrapper({});
-    expect(wrapper.find(DownloadButtonContainer).prop("attachmentId")).toEqual(attachment.id);
+    expect(wrapper.find(DownloadButtonContainer).prop("attachment")).toEqual(attachment);
   });
 });
