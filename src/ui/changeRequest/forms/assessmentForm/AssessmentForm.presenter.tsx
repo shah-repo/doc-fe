@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest";
 import { AsyncState } from "../../../../state/types";
 import ApproversField from "../../../change.request/form/approvers";
-import AssessmentContainer from "../../../change.request/form/assessment/container";
+import AssessmentsField from "../../../change.request/form/assessments";
 import JustificationField from "../../../change.request/form/justification";
 import DatePickerField from "../../../components/forms/fields/DatePicker";
 import FilledInputField from "../../../components/forms/fields/FilledInput";
@@ -41,10 +41,6 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
     setFieldValue("documentRevisions", documentRevisionsList);
   }, [documentRevisionsList]);
 
-  const renderAssessments = (props: FieldProps<ChangeRequestFormValues>) => (
-    <AssessmentContainer {...props} />
-  );
-
   const renderimplementationPlan = (props: FieldProps<ChangeRequestFormValues>) => (
     <AssessmentFormImplementationPlan {...props} />
   );
@@ -68,7 +64,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
           validate={validator(required)}
         />
         <JustificationField />
-        <Field name="assessments" render={renderAssessments} />
+        <AssessmentsField />
         <Field name="implementationPlan" render={renderimplementationPlan} />
         <DatePickerField
           name="effectiveDate"

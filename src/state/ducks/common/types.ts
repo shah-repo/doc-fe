@@ -26,3 +26,5 @@ export interface Id {
 export interface DataProps<T> {
   dataProp: T;
 }
+
+export type RenderSize = "sm" | "md" | "lg";

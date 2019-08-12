@@ -1,9 +1,8 @@
-import { FieldProps } from "formik";
 import { Translation } from "../../../../../translations/types";
+import { FormikHybridFieldProps } from "../../../../hoc/utils/types";
 import { SelectOption } from "../../Select";
 
-export interface EditableSelectFieldProps {
-  name: string;
+export interface EditableSelectFieldProps extends FormikHybridFieldProps {
   label?: Translation | string;
   options?: SelectOption[];
   includeEmpty?: boolean;
@@ -11,4 +10,4 @@ export interface EditableSelectFieldProps {
   handleChange?: (event: React.ChangeEvent<{ value: unknown }>) => any;
 }
 
-export type EditableSelectContainerProps = EditableSelectFieldProps & FieldProps;
+export type EditableSelectContainerProps = EditableSelectFieldProps;

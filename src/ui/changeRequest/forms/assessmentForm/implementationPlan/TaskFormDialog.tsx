@@ -1,10 +1,10 @@
 import {
   Button,
+  createStyles,
   Dialog,
   DialogContent,
   DialogTitle,
   makeStyles,
-  createStyles,
 } from "@material-ui/core";
 import { ButtonProps } from "@material-ui/core/Button";
 import { Formik, FormikProps } from "formik";
@@ -27,17 +27,17 @@ export type TaskFormDialogProps = OwnProps;
 const INITIAL_VALUES = {
   title: "",
   description: "",
-  status: "PENDING"
+  status: "PENDING",
 };
 
 const styles = makeStyles(() =>
   createStyles({
     dialogPaper: {
-      overflowY: 'unset'
+      overflowY: "unset"
     },
     dialogContent: {
-      overflowY: 'unset'
-    }
+      overflowY: "unset"
+    },
   },
 ));
 
@@ -54,6 +54,7 @@ export const TaskFormDialog: React.FunctionComponent<TaskFormDialogProps> =
     return (
       <div>
         <Button
+          style={{ marginTop: "12px" }}
           color="primary"
           variant="contained"
           onClick={openDialog}
