@@ -22,10 +22,7 @@ const download = (attachment: Attachment, handlers: Handlers<AttachmentDownloadR
   return apiActionWithCallbacks<AttachmentDownloadResponse, string>({
     url: `${ATTACHMENT_ROOT_URL}/${attachment.id}/download`,
     method: "get",
-    onSuccess: (downloadInfo) => {
-      attachment.isLoading = false;
-      window.open(downloadInfo!.url, "_parent");
-    },
+    onSuccess: () => attachment.isLoading = false,
     handlers,
   });
 };

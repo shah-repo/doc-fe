@@ -25,7 +25,10 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   ...other
 }) => {
 
-  const async = useAsync<AttachmentDownloadResponse>();
+  const async = useAsync<AttachmentDownloadResponse>({
+    onSuccess: (downloadInfo) =>
+      window.open(downloadInfo!.url, "_parent"),
+  });
 
   const handleRemove = (attachment: Attachment) => () => {
     if (!form && !field) { return; }
