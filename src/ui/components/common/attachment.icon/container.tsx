@@ -1,43 +1,58 @@
+import { Grid } from "@material-ui/core";
 import React from "react";
-import { Attachment, AttachmentDownloadResponse, attachmentsActions } from "../../../../state/ducks/attachments";
-import Presenter from "./presenter";
-import { AttachmentIconContainerProps } from "./utils/types";
-import useAsync from "../../../hooks/useAsync";
-import { ApplicationState } from "../../../../state/reducers";
 import { connect } from "react-redux";
+import {
+  Attachment,
+  AttachmentDownloadResponse,
+  attachmentsActions,
+} from "../../../../state/ducks/attachments";
+import { ApplicationState } from "../../../../state/reducers";
+import useAsync from "../../../hooks/useAsync";
+import { withFormik } from "../../hoc/formik";
+import Presenter from "./presenter";
+import {
+  AttachmentIconContainerProps,
+  AttachmentIconDispatchProps,
+} from "./utils/types";
 
-interface OwnProps extends AttachmentIconContainerProps {};
+type DispatchProps = AttachmentIconDispatchProps;
 
-interface DispatchProps {
-  download: typeof attachmentsActions.download;
-}
-
-type Props = OwnProps & DispatchProps;
-
-export const AttachmentIconContainer: React.FunctionComponent<Props> = ({
+export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerProps> = ({
   name,
-  form,
-  field: { value },
   download,
+  form,
+  field,
   ...other
 }) => {
 
-  const handleRemove = (attachment: Attachment) => () => {
-    const filtered = (value as Attachment[]).filter((a) => a.id !== attachment.id);
-    form.setFieldValue(name, filtered);
-  };
-
   const async = useAsync<AttachmentDownloadResponse>({
-    onSuccess: (downloadInfo) => window.open(downloadInfo!.url, "_parent"),
+    onSuccess: (downloadInfo) =>
+      window.open(downloadInfo!.url, "_parent"),
   });
 
-  const handleDownload = (attachmentId: string) => () => {
-    async.start(download, attachmentId, async)
+  const handleRemove = (attachment: Attachment) => () => {
+    if (!form && !field) { return; }
+    const filtered = (field!.value as Attachment[]).filter((a) => a.id !== attachment.id);
+    form!.setFieldValue(name, filtered);
   };
 
-  return <Presenter {...other} name={name} attachments={value as Attachment[]} handleRemove={handleRemove} handleDownload={handleDownload} />;
+  const handleDownload = (attachment: Attachment) => () =>
+    async.start(download, attachment, async);
+
+  const attachmentsRenderer = (field!.value as Attachment[] || []).map((attachment) => (
+    <Presenter
+      {...other}
+      key={`attachment-${attachment.id}`}
+      name={name}
+      attachment={attachment}
+      handleRemove={handleRemove}
+      handleDownload={handleDownload}
+    />
+  ));
+
+  return <Grid container={true} spacing={2}>{attachmentsRenderer}</Grid>;
 };
 
-export default connect<{}, DispatchProps, OwnProps, ApplicationState>(null, {
+export default connect<{}, DispatchProps, {}, ApplicationState>(null, {
   download: attachmentsActions.download,
-})(AttachmentIconContainer);
+})(withFormik(AttachmentIconContainer));

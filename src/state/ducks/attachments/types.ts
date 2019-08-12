@@ -3,6 +3,7 @@ export interface Attachment {
   name: string;
   type: string;
   s3link: string;
+  isLoading?: boolean;
 }
 
 export interface AttachmentDownloadResponse {

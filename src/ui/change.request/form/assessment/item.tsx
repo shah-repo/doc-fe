@@ -1,13 +1,14 @@
 import { Box, IconButton, Typography } from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
-import _ from "lodash";
 import {
   CancelOutlined,
   InsertDriveFile,
   InsertDriveFileOutlined,
   SubtitlesOutlined,
 } from "@material-ui/icons";
+import _ from "lodash";
 import React from "react";
+import AttachmentIconField from "../../../components/common/attachment.icon/container";
 import Dialog from "../../../components/dialogs/Dialog";
 import { DialogAction } from "../../../components/dialogs/utils/types";
 import Text from "../../../components/Text";
@@ -15,7 +16,6 @@ import useDialog from "../../../hooks/useDialog";
 import { AssessmentItemProps } from "../../utils/types";
 import Form from "./form";
 import styles from "./styles";
-import AttachmentIconField from "../../../components/common/attachment.icon/field";
 
 export type Props = AssessmentItemProps & WithStyles <typeof styles>;
 
