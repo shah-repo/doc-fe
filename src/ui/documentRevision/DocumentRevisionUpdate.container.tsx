@@ -20,6 +20,7 @@ interface DispatchProps {
 
 interface OwnProps {
   documentRevision: DocumentRevision;
+  onDirtyFlagChange?: (dirty: boolean) => void;
 }
 
 export type DocumentRevisionUpdateContainerProps = OwnProps & DispatchProps & StateProps;
@@ -32,6 +33,7 @@ export const DocumentRevisionUpdateContainer: React.FunctionComponent<DocumentRe
   save,
   documentRevision,
   currentUserEmail,
+  onDirtyFlagChange,
 }) => {
   if (!canEditDocumentRevision(documentRevision, currentUserEmail)) {
     return (
@@ -50,6 +52,7 @@ export const DocumentRevisionUpdateContainer: React.FunctionComponent<DocumentRe
       asyncState={async.asyncState}
       onSubmit={onSubmit}
       initialValues={toDocumentRevisionFormValues(documentRevision)}
+      onDirtyFlagChange={onDirtyFlagChange}
     />
   );
 };
