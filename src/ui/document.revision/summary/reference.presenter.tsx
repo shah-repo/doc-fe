@@ -2,7 +2,7 @@ import { Box, ListItem, Typography, WithStyles, withStyles, Grid } from "@materi
 import React from "react";
 import { Link } from "react-router-dom";
 import { DataProps } from "../../../state/ducks/common";
-import { Reference as Model } from "../../../state/ducks/documentRevisions";
+import { Reference as Model, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import Text from "../../components/Text";
 import styles from "./styles";
 
@@ -20,23 +20,26 @@ const ReferencePresenter: React.FunctionComponent<Props> = ({
   getUrl,
 }) => {
   const referencesRenderer = () => dataProp.map((reference: any, index) => {
-    return (
-      <ListItem key={reference.id}>
-        <Grid item={true} xs={4}>
-          <Typography variant="body1"><Text message={`${index + 1}`} />:</Typography>
-        </Grid>
-        <Grid item={true} xs={8}>
-          <Typography variant="subtitle1">
-            <Link
-              to={getUrl(reference)}
-              target="_blank"
-            >
-              {reference.name || reference.docId}
-            </Link>
-          </Typography>
-        </Grid>
-      </ListItem>
-    )
+      return (
+        reference.status !== DocumentRevisionStatus.Deprecated
+        ? (
+          <ListItem key={reference.id}>
+          <Grid item={true} xs={4}>
+            <Typography variant="body1"><Text message={`${index + 1}`} />:</Typography>
+          </Grid>
+          <Grid item={true} xs={8}>
+            <Typography variant="subtitle1">
+              <Link
+                to={getUrl(reference)}
+                target="_blank"
+              >
+                {reference.name || reference.docId}
+              </Link>
+            </Typography>
+          </Grid>
+        </ListItem>
+        )
+        : null);
   });
 
   return (
