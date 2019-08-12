@@ -8,5 +8,10 @@ export enum HeaderSize {
 
 export interface HeaderFieldProps {
   size?: RenderSize;
+  variant?: "regular" | "dense";
   actionsRenderer?: () => any;
+}
+
+export interface HeaderFieldStyleProps {
+  variant: "regular" | "dense";
 }

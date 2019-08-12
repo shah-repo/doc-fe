@@ -64,7 +64,7 @@ const Tasks: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <div style={{ paddingTop: "10px" }}>
+    <div>
       {
         tasks.map((task: ImplementationPlanTaskFormValues, index: number) => {
           return (

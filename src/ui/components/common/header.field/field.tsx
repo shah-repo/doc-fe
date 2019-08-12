@@ -4,17 +4,19 @@ import React from "react";
 import { DataProps } from "../../../../state/ducks/common";
 import { Translation } from "../../../translations/types";
 import Text from "../../Text";
-import styles from "./utils/styles";
+import { styles } from "./utils/styles";
 import { HeaderFieldProps, HeaderSize } from "./utils/types";
 
-type Props = DataProps<Translation | string> & HeaderFieldProps & WithStyles<typeof styles>;
+type Props = DataProps<Translation | string> & HeaderFieldProps;
 
 const HeaderField: React.FunctionComponent<Props> = ({
-  classes,
   dataProp,
   size = "md",
+  variant = "dense",
   actionsRenderer,
 }) => {
+
+  const classes = styles({ variant });
 
   return(
     <AppBar position="static" className={classes.root}>
@@ -29,4 +31,4 @@ const HeaderField: React.FunctionComponent<Props> = ({
   );
 };
 
-export default withStyles(styles)(HeaderField);
+export default HeaderField;

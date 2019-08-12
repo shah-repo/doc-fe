@@ -54,7 +54,6 @@ export const TaskFormDialog: React.FunctionComponent<TaskFormDialogProps> =
     return (
       <div>
         <Button
-          style={{ marginTop: "12px" }}
           color="primary"
           variant="contained"
           onClick={openDialog}
