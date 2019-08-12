@@ -21,7 +21,7 @@ describe("DateFormatter component unit tests", () => {
   ).text();
 
   it("displays null", () => {
-    expect(getDate({ value: undefined })).toEqual('failed');
+    expect(getDate({ value: undefined })).toEqual('');
   });
 
   it("displays formatted date", () => {
