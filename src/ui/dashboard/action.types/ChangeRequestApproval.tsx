@@ -1,9 +1,9 @@
 import React from "react";
-import { PendingAction } from "../../state/ducks/dashboard";
-import Text from "../components/Text";
+import { PendingAction } from "../../../state/ducks/dashboard";
+import Text from "../../components/Text";
 import { Button, Grid } from "@material-ui/core";
 import { styles } from "./PendingAction.styles";
-import { changeRequestEditPath } from "../change.request/utils/paths";
+import { changeRequestEditPath } from "../../change.request/utils/paths";
 
 interface OwnProps {
   pendingAction: PendingAction;
@@ -11,10 +11,11 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-export const PendingActionPresenter: React.FunctionComponent<Props> = ({
+export const ChangeRequestApproval: React.FunctionComponent<Props> = ({
   pendingAction
 }) => {
   const classes = styles();
+  console.log(pendingAction);
   return (
     <Grid container spacing={10} justify="space-between" alignItems="baseline">
       <Grid item xs={8}>
@@ -31,4 +32,4 @@ export const PendingActionPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default PendingActionPresenter;
+export default ChangeRequestApproval;

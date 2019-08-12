@@ -27,9 +27,9 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     switch (change.field) {
       case "attachments":
       case "justifications.attachments":
-      case "assessments.process.attachment":
-      case "assessments.design.attachment":
-      case "assessments.regulatory.attachment":
+      case "assessments.process.attachments":
+      case "assessments.design.attachments":
+      case "assessments.regulatory.attachments":
         const attachment = change.nextValue as Attachment;
         return `${attachment.name}.${attachment.type}`;
       case "approvals":

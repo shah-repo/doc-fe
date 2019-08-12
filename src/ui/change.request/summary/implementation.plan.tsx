@@ -5,21 +5,35 @@ import {
   Typography,
   WithStyles,
   withStyles,
+  Button,
 } from "@material-ui/core";
 import moment from "moment";
 import React from "react";
-import { ImplementationPlan as Model } from "../../../state/ducks/changeRequest";
+import { ImplementationPlan as Model, ChangeRequestStatus, ImplementationPlanTask, changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
 import SummaryField from "../../common/summary/base";
 import FileCard from "../../components/cards/FileCard";
 import Text from "../../components/Text";
 import styles from "./styles";
+import { canCloseTask } from "../utils/helpers";
+import CloseTask from "./close.task";
 
-type Props = DataProps<Model> & WithStyles<typeof styles>;
+interface OwnProps extends DataProps<Model> {
+  currentUserEmail: string;
+  crStatus: ChangeRequestStatus;
+  closeTask: typeof changeRequestsActions.closeTask;
+  crId: string;
+}
+
+type Props = OwnProps & WithStyles<typeof styles>;
 
 const ImplementationPlan: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
+  currentUserEmail,
+  crStatus,
+  closeTask,
+  crId
 }) => {
 
   const { tasks, attachments } = dataProp;
@@ -27,6 +41,9 @@ const ImplementationPlan: React.FunctionComponent<Props> = ({
   const attachmentRenderer = () => attachments.map((attachment, index) => (
     <FileCard key={index} attachment={attachment} />
   ));
+
+  const closeTaskRenderer = (task: ImplementationPlanTask) =>
+    canCloseTask(crStatus, task, currentUserEmail) && <CloseTask crId={crId} taskId={task.id} closeTask={closeTask} />
 
   const taskRenderer = () => tasks.map((task, index) => (
     <Box key={`${task.id} ${index}`}>
@@ -38,6 +55,8 @@ const ImplementationPlan: React.FunctionComponent<Props> = ({
       <SummaryField label="common.due.date" value={moment.utc(task.dueDate).format("LL")} />
       <SummaryField label="common.assigned.to" value={task.assigned && task.assigned.name} />
       <SummaryField label="common.status" value={task.status} />
+      {task.closingNote && <SummaryField label="common.closing.note" value={task.closingNote} />}
+      {closeTaskRenderer(task)}
     </Box>
   ));
 

@@ -8,10 +8,18 @@ export const styles = makeStyles((theme) => ({
     height: (size === "lg") ? "90px" : (size === "md") ? "70px" : "50px",
   }),
   closeRoot: ({ size }: AttachmentIconStyleProp) => ({
-    margin: (size === "lg") ? theme.spacing(0, 0, -1.7, 4) :
-            (size === "md") ? theme.spacing(0, 0, -1.3, 3.2) : theme.spacing(0, 0, -1.4, 2.6),
-    padding: theme.spacing(0.4),
+    margin: (size === "lg") ? theme.spacing(0, 0, -1.7, 4.5) :
+            (size === "md") ? theme.spacing(0, 0, -1.3, 3.7) : theme.spacing(0, 0, -1.4, 3.1),
+    padding: theme.spacing(0.5),
     fontSize: (size === "lg") ? "1.3em" : (size === "md") ? "1.2em" : "1.1em",
+  }),
+  progress: ({ size }: AttachmentIconStyleProp) => ({
+    "color": theme.palette.secondary.main,
+    "width": ((size === "lg") ? "90px" : (size === "md") ? "70px" : "50px") + "!important",
+    "height": ((size === "lg") ? "90px" : (size === "md") ? "70px" : "50px") + "!important",
+    "& .MuiCircularProgress-svg": {
+      margin: theme.spacing(2.5),
+    },
   }),
   fileName: {
     paddingRight: theme.spacing(3),
