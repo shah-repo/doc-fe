@@ -10,6 +10,6 @@ export const LOGIN_URL = "/auth/login";
 export const LOGIN_WITH_CODE_URL = "/auth/tokens";
 export const LOGOUT_URL = "/auth/logout";
 export const PERMISSIONS_URL = "/users/permissions";
-export const PING_SERVER_URL = "/healthcheck";
+export const PING_SERVER_URL = "/auth/prevent_idle_logout";
 
 export const AUTH_TOKENS_REFRESH_THRESHOLD_SECONDS = 100;
