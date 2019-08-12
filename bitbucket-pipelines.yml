@@ -5,7 +5,7 @@ options:
 pipelines:
   const:
     tests: &RUN_TESTS
-      name: Tesing
+      name: Tests
       size: 2x
       image: node:10 
       services:
