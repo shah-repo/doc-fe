@@ -16,8 +16,8 @@ const HeaderField: React.FunctionComponent<Props> = ({
 }) => {
 
   return(
-    <AppBar position="static" className={classes.root} >
-      <Toolbar variant="dense" disableGutters={true} style={{minHeight: 30, height: 30}} >
+    <AppBar position="static" className={classes.root}>
+      <Toolbar variant="dense" disableGutters={true} style={{minHeight: 30}} >
         <Typography variant="h5" gutterBottom={true}>
           <Text translation={dataProp} />
         </Typography>
