@@ -20,26 +20,29 @@ const ReferencePresenter: React.FunctionComponent<Props> = ({
   getUrl,
 }) => {
   const referencesRenderer = () => dataProp.map((reference: any, index) => {
-      return (
-        reference.status !== DocumentRevisionStatus.Deprecated
-        ? (
-          <ListItem key={reference.id}>
-          <Grid item={true} xs={4}>
-            <Typography variant="body1"><Text message={`${index + 1}`} />:</Typography>
-          </Grid>
-          <Grid item={true} xs={8}>
-            <Typography variant="subtitle1">
-              <Link
-                to={getUrl(reference)}
-                target="_blank"
-              >
-                {reference.name || reference.docId}
-              </Link>
-            </Typography>
-          </Grid>
-        </ListItem>
-        )
-        : null);
+    const notDeprecated = reference.status !== DocumentRevisionStatus.Deprecated;
+    return (
+      <React.Fragment key={reference.id}>
+        { notDeprecated &&
+          (
+            <ListItem>
+              <Grid item={true} xs={4}>
+                <Typography variant="body1"><Text message={`${index + 1}`} />:</Typography>
+              </Grid>
+              <Grid item={true} xs={8}>
+                <Typography variant="subtitle1">
+                  <Link
+                    to={getUrl(reference)}
+                    target="_blank"
+                  >
+                    {reference.name || reference.docId}
+                  </Link>
+                    </Typography>
+              </Grid>
+            </ListItem>
+          )}
+      </React.Fragment>
+    );
   });
 
   return (
