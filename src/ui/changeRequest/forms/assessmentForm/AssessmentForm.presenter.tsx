@@ -61,17 +61,20 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
     props: FieldProps<ChangeRequestFormValues>,
   ) => <AssessmentFormImplementationPlan {...props} />;
 
+  const renderCrId = () => 
+    changeRequest && changeRequest.id && (
+      <Typography variant="h5">
+        <Text translation="common.crid" />: {changeRequest.crId}
+      </Typography>
+    );
+
   return (
     <div className={classes.container}>
       <FormWrapper dirty={dirty} resetForm={resetForm} initialValues={initialValues}>
         <PromptIfDirty dirty={dirty} doNotPrompt={doNotPrompt} onDirtyFlagChange={onDirtyFlagChange} />
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
-        {changeRequest && changeRequest.crId ? (
-          <Typography variant="h5">
-            <Text translation="common.crid" />: {changeRequest.crId}
-          </Typography>
-        ) : null}
+        {renderCrId()}
         <FilledInputField
           name="title"
           label="cr.title"
