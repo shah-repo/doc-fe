@@ -36,7 +36,7 @@ export const toDocumentRevisionEditRequestBody =
 export const toNewVersionRequestBody = (values: DocumentRevisionFormValues): DocumentRevisionEditRequestBody => {
   const newValues = toDocumentRevisionEditRequestBody(values);
   newValues.revisionChangeType = values.revisionChangeType;
-  newValues.document = values.document;
+  newValues.document = values.document ? { id: values.document.id } : {};
   return newValues;
 };
 
