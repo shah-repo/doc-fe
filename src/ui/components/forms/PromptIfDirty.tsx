@@ -10,6 +10,12 @@ interface Props {
 const PromptIfDirty: React.FunctionComponent<Props> = ({
   dirty, doNotPrompt, onDirtyFlagChange
 }) => {
+  useEffect(() => {
+    if (onDirtyFlagChange) {
+      onDirtyFlagChange(dirty);
+    }
+  }, [dirty]);
+
   if (doNotPrompt) {
     return null;
   }
@@ -21,10 +27,6 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
       startBeforeUnload();
     } else {
       cancelBeforeUnload();
-    }
-
-    if (onDirtyFlagChange) {
-      onDirtyFlagChange(dirty);
     }
   }, [dirty]);
 

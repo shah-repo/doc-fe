@@ -1,4 +1,4 @@
-import { withStyles, WithStyles } from "@material-ui/core";
+import { withStyles, WithStyles, Typography } from "@material-ui/core";
 import { Field, FieldProps, FormikProps } from "formik";
 import React, { useEffect } from "react";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest";
@@ -8,7 +8,10 @@ import AssessmentsField from "../../../change.request/form/assessments";
 import JustificationField from "../../../change.request/form/justification";
 import DatePickerField from "../../../components/forms/fields/DatePicker";
 import FilledInputField from "../../../components/forms/fields/FilledInput";
-import { required, validator } from "../../../components/forms/fields/validators";
+import {
+  required,
+  validator,
+} from "../../../components/forms/fields/validators";
 import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";
 import FormWrapper from "../../../components/forms/FormWrapper";
@@ -18,8 +21,11 @@ import { ChangeRequestFormValues } from "../types.js";
 import styles from "./AssessmentForm.styles";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
 import AssessmentFormImplementationPlan from "./implementationPlan/Container";
+import Text from "../../../components/Text";
 
-interface Props extends WithStyles<typeof styles>, FormikProps<ChangeRequestFormValues> {
+interface Props
+  extends WithStyles<typeof styles>,
+    FormikProps<ChangeRequestFormValues> {
   asyncState: AsyncState;
   changeRequest?: ChangeRequest;
   documentRevisionsList: string[];
@@ -43,6 +49,12 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
     setFieldValue("documentRevisions", documentRevisionsList);
   }, [documentRevisionsList]);
 
+  const renderCrId = () => 
+    changeRequest && changeRequest.id && (
+      <Typography variant="h5">
+        <Text translation="common.crid" />: {changeRequest.crId}
+      </Typography>
+    );
   const renderimplementationPlan = (props: FieldProps<ChangeRequestFormValues>) => (
     <AssessmentFormImplementationPlan {...props} />
   );
@@ -53,6 +65,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
         <PromptIfDirty dirty={dirty} doNotPrompt={doNotPrompt} onDirtyFlagChange={onDirtyFlagChange} />
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
+        {renderCrId()}
         <FilledInputField
           name="title"
           label="cr.title"
