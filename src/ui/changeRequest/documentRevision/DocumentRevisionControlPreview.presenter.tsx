@@ -1,37 +1,49 @@
-import React from 'react';
+import React from "react";
 import { WithStyles, withStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import Chip from '@material-ui/core/Chip';
+import Chip from "@material-ui/core/Chip";
 
 import Text from "../../components/Text";
-import { DocumentRevision } from '../../../state/ducks/documentRevisions';
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import styles from "./DocumentRevisionControlPreview.styles";
-import DocumentRevisionItemPresenter from './DocumentRevisionItem.presenter';
+import DocumentRevisionItemPresenter from "./DocumentRevisionItem.presenter";
 
 interface OwnProps extends WithStyles<typeof styles> {
   documentsInChangeRequest: DocumentRevision[];
   selectAssessmentForm: () => void;
   selectDocumentRevision: (documentRevision: DocumentRevision) => void;
+  selectedDocumentRevision: string | null;
 }
 
 export type DocumentRevisionControlPreviewPresenterProps = OwnProps;
 
-export const DocumentRevisionControlPreviewPresenter: React.FunctionComponent<DocumentRevisionControlPreviewPresenterProps> = ({
-  documentsInChangeRequest, selectAssessmentForm, selectDocumentRevision, classes,
+export const DocumentRevisionControlPreviewPresenter: React.FunctionComponent<
+  DocumentRevisionControlPreviewPresenterProps
+> = ({
+  documentsInChangeRequest,
+  selectAssessmentForm,
+  selectDocumentRevision,
+  selectedDocumentRevision,
+  classes,
 }) => {
-  const renderDocumentRevisions = () => (
+  const renderDocumentRevisions = () =>
     documentsInChangeRequest.map((documentRevision) => (
       <DocumentRevisionItemPresenter
         key={documentRevision.id}
         documentRevision={documentRevision}
+        selectedDocumentRevision={selectedDocumentRevision!}
         onClick={() => selectDocumentRevision(documentRevision)}
       />
-    ))
-  )
+    ));
 
   return (
     <div className={classes.container}>
-      <Button variant="contained" color="primary" onClick={selectAssessmentForm} fullWidth>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={selectAssessmentForm}
+        fullWidth
+      >
         <Text translation="changeRequest.documentControl.assessmentForm" />
       </Button>
       <div className={classes.documentRevisionContainer}>

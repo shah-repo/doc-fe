@@ -1,16 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 
 import Text from "../../components/Text";
-import AddDocumentRevisionContainer from './AddDocumentRevision.container';
-import { AsyncState } from '../../../state/types';
-import { DocumentRevision, DocumentRevisionsByIdState, documentRevisionsActions, documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
-import AsyncGate from '../../components/AsyncGate';
-import { connect } from 'react-redux';
-import { ApplicationState } from '../../../state/reducers';
+import AddDocumentRevisionContainer from "./AddDocumentRevision.container";
+import { AsyncState } from "../../../state/types";
+import {
+  DocumentRevision,
+  DocumentRevisionsByIdState,
+  documentRevisionsActions,
+  documentRevisionsSelectors,
+} from "../../../state/ducks/documentRevisions";
+import AsyncGate from "../../components/AsyncGate";
+import { connect } from "react-redux";
+import { ApplicationState } from "../../../state/reducers";
 import styles from "./DocumentRevisionControl.styles";
-import { withStyles, WithStyles } from '@material-ui/core';
-import DocumentRevisionItemPresenter from './DocumentRevisionItem.presenter';
+import { withStyles, WithStyles } from "@material-ui/core";
+import DocumentRevisionItemPresenter from "./DocumentRevisionItem.presenter";
 
 interface StateProps {
   loadDocumentRevisionsAsyncState: AsyncState;
@@ -31,45 +36,76 @@ interface OwnProps {
   selectedDocumentRevision: string | null;
 }
 
-export type DocumentRevisionControlContainerProps = OwnProps & DispatchProps & StateProps & WithStyles<typeof styles>;
+export type DocumentRevisionControlContainerProps = OwnProps &
+  DispatchProps &
+  StateProps &
+  WithStyles<typeof styles>;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
-  loadDocumentRevisionsAsyncState: documentRevisionsSelectors.getLoadListAsyncState(state),
-  documentRevisionsList: documentRevisionsSelectors.getDocumentRevisionsList(state),
+  loadDocumentRevisionsAsyncState: documentRevisionsSelectors.getLoadListAsyncState(
+    state,
+  ),
+  documentRevisionsList: documentRevisionsSelectors.getDocumentRevisionsList(
+    state,
+  ),
   documentRevisionsById: documentRevisionsSelectors.byId(state),
 });
 
-export const DocumentRevisionControlContainer: React.FunctionComponent<DocumentRevisionControlContainerProps> = ({
-  doneAddingDocuments, documentsInChangeRequest, loadDocumentRevisionsAsyncState, loadDocumentRevisionsAction,
-  documentRevisionsList, deleteDocumentFromChangeRequest, selectDocumentRevision,
-  selectAssessmentForm, classes, documentRevisionsById
+export const DocumentRevisionControlContainer: React.FunctionComponent<
+  DocumentRevisionControlContainerProps
+> = ({
+  doneAddingDocuments,
+  documentsInChangeRequest,
+  loadDocumentRevisionsAsyncState,
+  loadDocumentRevisionsAction,
+  documentRevisionsList,
+  deleteDocumentFromChangeRequest,
+  selectDocumentRevision,
+  selectAssessmentForm,
+  classes,
+  documentRevisionsById,
+  selectedDocumentRevision,
 }) => {
   const [showAddDocuments, setShowAddDocuments] = useState(false);
 
   const openAddDocuments = () => setShowAddDocuments(true);
   const closeAddDocuments = () => setShowAddDocuments(false);
 
-  const renderDocumentRevisions = () => (
+  const renderDocumentRevisions = () =>
     documentsInChangeRequest.map((documentRevisionId) => (
       <DocumentRevisionItemPresenter
         key={documentRevisionId}
         documentRevision={documentRevisionsById[documentRevisionId]}
         onDelete={() => deleteDocumentFromChangeRequest(documentRevisionId)}
         onClick={() => selectDocumentRevision(documentRevisionId)}
+        selectedDocumentRevision={selectedDocumentRevision!}
       />
-    ))
-  )
+    ));
 
   return (
-    <AsyncGate asyncState={loadDocumentRevisionsAsyncState} asyncAction={loadDocumentRevisionsAction} startActionOnMount={true}>
+    <AsyncGate
+      asyncState={loadDocumentRevisionsAsyncState}
+      asyncAction={loadDocumentRevisionsAction}
+      startActionOnMount={true}
+    >
       <div className={classes.container}>
-        <Button variant="contained" color="primary" onClick={selectAssessmentForm} fullWidth>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={selectAssessmentForm}
+          fullWidth
+        >
           <Text translation="changeRequest.documentControl.assessmentForm" />
         </Button>
         <div className={classes.documentRevisionContainer}>
           {renderDocumentRevisions()}
         </div>
-        <Button variant="contained" color="primary" onClick={openAddDocuments} fullWidth>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={openAddDocuments}
+          fullWidth
+        >
           <Text translation="changeRequest.documentControl.addDocuments" />
         </Button>
         <AddDocumentRevisionContainer
@@ -85,8 +121,13 @@ export const DocumentRevisionControlContainer: React.FunctionComponent<DocumentR
   );
 };
 
-const DocumentRevisionControlContainerWithStyles = withStyles(styles)(DocumentRevisionControlContainer);
+const DocumentRevisionControlContainerWithStyles = withStyles(styles)(
+  DocumentRevisionControlContainer,
+);
 
-export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
-  loadDocumentRevisionsAction: documentRevisionsActions.loadList,
-})(DocumentRevisionControlContainerWithStyles);
+export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
+  mapStateToProps,
+  {
+    loadDocumentRevisionsAction: documentRevisionsActions.loadList,
+  },
+)(DocumentRevisionControlContainerWithStyles);

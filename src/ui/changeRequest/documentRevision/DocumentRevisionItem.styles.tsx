@@ -8,6 +8,7 @@ export const styles = makeStyles(() =>
       borderBottom: "1px solid lightgray",
       width: "100%",
       cursor: "pointer",
+      padding: "10px",
     },
     title: {
       overflow: "hidden",
@@ -15,5 +16,8 @@ export const styles = makeStyles(() =>
       textOverflow: "ellipsis",
       color: "red",
     },
-  },
-));
+    selected: {
+      background: "#fff",
+    },
+  }),
+);
