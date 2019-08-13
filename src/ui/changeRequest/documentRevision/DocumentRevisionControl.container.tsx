@@ -95,7 +95,7 @@ export const DocumentRevisionControlContainer: React.FunctionComponent<
           onClick={selectAssessmentForm}
           fullWidth
         >
-          <Text translation="changeRequest.documentControl.assessmentForm" />
+          <Text translation="changeRequest.documentControl.changeRequestForm" />
         </Button>
         <div className={classes.documentRevisionContainer}>
           {renderDocumentRevisions()}

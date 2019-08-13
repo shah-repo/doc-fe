@@ -50,7 +50,7 @@
   "changeRequest.table.actions": "Actions",
   "changeRequest.table.editAction": "Edit",
   "changeRequest.table.noChangeRequests": "No change requests",
-  "changeRequest.documentControl.assessmentForm": "Assessment form",
+  "changeRequest.documentControl.changeRequestForm": "Change request form",
   "changeRequest.documentControl.addDocuments": "Add documents",
   "changeRequest.documentControl.done": "Done",
   "changeRequest.documentRevisionTable.name": "Name",
@@ -182,7 +182,7 @@
   "dashboard.type.PENDING_REVIEW": "is pending your approval",
   "dashboard.type.PENDING_IMPL_PLAN_TASK": " task is pending your approval",
   "dashboard.noPendingActions": "No pending actions",
-  
+
   "document.title": "Document title",
   "document.type": "Document type",
   "document.save": "Save",
