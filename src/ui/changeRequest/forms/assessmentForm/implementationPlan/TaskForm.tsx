@@ -55,7 +55,7 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
       <InputField
         name="description"
         label="common.description"
-        inputProps={{ id: "description" }}
+        inputProps={{ id: "description", multiline: true }}
         validate={validator(required)}
       />
       <AutocompleteField
