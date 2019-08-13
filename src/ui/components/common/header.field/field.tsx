@@ -4,22 +4,25 @@ import React from "react";
 import { DataProps } from "../../../../state/ducks/common";
 import { Translation } from "../../../translations/types";
 import Text from "../../Text";
-import styles from "./utils/styles";
-import { HeaderFieldProps } from "./utils/types";
+import { styles } from "./utils/styles";
+import { HeaderFieldProps, HeaderSize } from "./utils/types";
 
-type Props = DataProps<Translation> & HeaderFieldProps & WithStyles<typeof styles>;
+type Props = DataProps<Translation | string> & HeaderFieldProps;
 
 const HeaderField: React.FunctionComponent<Props> = ({
-  classes,
   dataProp,
+  size = "md",
+  variant = "dense",
   actionsRenderer,
 }) => {
 
+  const classes = styles({ variant });
+
   return(
-    <AppBar position="static" className={classes.root} >
-      <Toolbar variant="dense" disableGutters={true} style={{minHeight: 30, height: 30}} >
-        <Typography variant="h5" gutterBottom={true}>
-          <Text translation={dataProp} />
+    <AppBar position="static" className={classes.root}>
+      <Toolbar variant="dense" disableGutters={true} style={{minHeight: 30}} >
+        <Typography variant={HeaderSize[size]} gutterBottom={true}>
+          <Text message={dataProp} />
         </Typography>
         <Box style={{flexGrow: 1}} />
         {actionsRenderer && actionsRenderer()}
@@ -28,4 +31,4 @@ const HeaderField: React.FunctionComponent<Props> = ({
   );
 };
 
-export default withStyles(styles)(HeaderField);
+export default HeaderField;

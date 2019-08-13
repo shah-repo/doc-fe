@@ -5,20 +5,16 @@ export default (theme: Theme) => createStyles({
     display: "grid",
   },
   textField: {
-    gridArea: "1 / 1",
-    width: "90%",
+    gridArea: "1/1",
+    width: "94%",
     background: "transparent",
     borderRadius: 0,
-    borderRight: "0.5px solid #ccc",
   },
   selectField: {
-    "gridArea": "1 / 1",
+    "gridArea": "1/1",
     "width": "100%",
     "z-index": "0",
     "background": "transparent",
-    "&.MuiSelect-icon": {
-      right: "5%",
-    },
   },
   input: {
     "backgroundColor": "transparent",

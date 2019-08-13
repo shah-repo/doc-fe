@@ -1,6 +1,6 @@
 
 import { Typography, withStyles, WithStyles } from "@material-ui/core";
-import { FieldArray, FieldArrayRenderProps, Form, FormikProps } from "formik";
+import { FormikProps } from "formik";
 import React from "react";
 import { Link } from "react-router-dom";
 import {
@@ -19,18 +19,18 @@ import SelectField from "../../components/forms/fields/Select";
 import { required, validator } from "../../components/forms/fields/validators";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
+import FormWrapper from "../../components/forms/FormWrapper";
+import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import SubmitButton from "../../components/forms/SubmitButton";
 import Text from "../../components/Text";
+import AttachmentsField from "../../document.revision/form/attachments";
 import { documentRevisionTypeFormOption } from "../../document.revision/utils/helpers";
 import {
   documentDetailsPath,
   documentVersionPath,
 } from "../../document.revision/utils/paths";
-import AttachmentsContainer from "../../documents/forms/attachments/Attachments.container";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
-import FormWrapper from "../../components/forms/FormWrapper";
-import PromptIfDirty from "../../components/forms/PromptIfDirty";
 
 interface Props
   extends WithStyles<typeof styles>,
@@ -52,7 +52,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   dirty, resetForm, doNotPrompt, onDirtyFlagChange
 }) => {
   const openReference = (documentId: string) => { window.open(documentDetailsPath(documentId), "_blank"); };
-  const renderAttachments = (props: FieldArrayRenderProps) => <AttachmentsContainer {...props} />;
 
   const isDisabled: boolean = initialValues.id !== undefined;
   const docIdValue = isDisabled ? values.document!.docId : proposedDocId;
@@ -181,9 +180,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           onClick={openReference}
         />
         {renderReferences()}
-        <FieldArray name="attachments" render={renderAttachments} />
+        <AttachmentsField />
         {renderTypeOfRevisionChange()}
-        <SubmitButton asyncState={asyncState} label="common.save" />
+        <SubmitButton style={{marginTop: "30px"}} asyncState={asyncState} label="common.save" />
       </FormWrapper>
     </div>
   );

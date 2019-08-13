@@ -2,9 +2,9 @@ import { makeStyles } from "@material-ui/core";
 import { AttachmentStyleProps } from "./types";
 
 export const styles = makeStyles((theme) => ({
-  root: (props: AttachmentStyleProps) => ({
+  root: ({ isField }: AttachmentStyleProps) => ({
     padding: theme.spacing(2, 1),
-    backgroundColor: props.isField ? theme.palette.background.default : "transparent",
+    backgroundColor: isField ? "rgba(0, 0, 0, 0.09)" : "transparent",
   }),
   input: {
     display: "none",
@@ -12,8 +12,8 @@ export const styles = makeStyles((theme) => ({
   link: {
     display: "flex",
   },
-  icon: (props: AttachmentStyleProps) => ({
-    display: props.isField ? "inherited" : "none",
+  icon: ({ isField }: AttachmentStyleProps) => ({
+    display: isField ? "inherited" : "none",
     marginRight: theme.spacing(0.5),
     width: 20,
     height: 20,

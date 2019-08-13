@@ -1,4 +1,3 @@
-import { FieldProps } from "formik";
 import { attachmentsActions } from "../../../../../state/ducks/attachments";
 import { FormikHybridFieldProps } from "../../../hoc/utils/types";
 
@@ -18,4 +17,4 @@ export interface AttachmentStyleProps {
   isField: boolean;
 }
 
-export type AttachmentContainerProps = AttachmentFieldProps & AttachmentFieldDispatchProps & Partial<FieldProps>;
+export type AttachmentContainerProps = AttachmentFieldProps & AttachmentFieldDispatchProps;

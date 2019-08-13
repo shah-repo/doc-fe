@@ -1,7 +1,7 @@
 import { FieldArrayRenderProps } from "formik";
 import _ from "lodash";
-import React, { useState } from "react";
 import moment from "moment";
+import React, { useState } from "react";
 import useDialog from "../../../../hooks/useDialog";
 import { ImplementationPlanTaskFormValues } from "../../types";
 import TaskPresenter from "./Task.presenter";
@@ -29,7 +29,7 @@ const Tasks: React.FunctionComponent<Props> = ({
   };
 
   const onSubmit = (values: ImplementationPlanTaskFormValues) => {
-    closeDialog()
+    closeDialog();
 
     if (selectedIndex !== null) {
       replace(selectedIndex, values);
