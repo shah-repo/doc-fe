@@ -4,10 +4,11 @@ import { Prompt } from "react-router-dom";
 interface Props {
   dirty: boolean;
   doNotPrompt?: boolean;
+  onDirtyFlagChange?: (dirty: boolean) => void;
 }
 
 const PromptIfDirty: React.FunctionComponent<Props> = ({
-  dirty, doNotPrompt,
+  dirty, doNotPrompt, onDirtyFlagChange
 }) => {
   if (doNotPrompt) {
     return null;
@@ -20,6 +21,10 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
       startBeforeUnload();
     } else {
       cancelBeforeUnload();
+    }
+
+    if (onDirtyFlagChange) {
+      onDirtyFlagChange(dirty);
     }
   }, [dirty]);
 

@@ -43,12 +43,13 @@ interface Props
   proposedDocId: string;
   setDocId?: typeof documentsActions.setDocumentProposedId;
   doNotPrompt?: boolean;
+  onDirtyFlagChange?: (dirty: boolean) => void;
 }
 
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   asyncState, classes, initialValues, handleChange, availableReferences, showRevisionTypeChange,
   loadDocumentProposedId, proposedDocId, values, setDocId,
-  dirty, resetForm, doNotPrompt,
+  dirty, resetForm, doNotPrompt, onDirtyFlagChange
 }) => {
   const openReference = (documentId: string) => { window.open(documentDetailsPath(documentId), "_blank"); };
 
@@ -137,7 +138,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   return (
     <div className={classes.container}>
       <FormWrapper dirty={dirty} initialValues={initialValues} resetForm={resetForm}>
-        <PromptIfDirty dirty={dirty} doNotPrompt={doNotPrompt} />
+        <PromptIfDirty dirty={dirty} doNotPrompt={doNotPrompt} onDirtyFlagChange={onDirtyFlagChange} />
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
         <InputField

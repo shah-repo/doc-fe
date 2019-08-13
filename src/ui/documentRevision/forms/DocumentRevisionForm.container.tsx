@@ -29,6 +29,7 @@ interface OwnProps {
   showRevisionTypeChange?: boolean;
   setDocId?: typeof documentsActions.setDocumentProposedId;
   doNotPrompt?: boolean;
+  onDirtyFlagChange?: (dirty: boolean) => void;
 }
 
 type DocumentRevisionFormContainerProps = OwnProps & StateProps & DispatchProps;
@@ -54,6 +55,7 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<DocumentRevi
   proposedDocId,
   setDocId,
   doNotPrompt,
+  onDirtyFlagChange,
 }) => {
 
     const render = (props: FormikProps<DocumentRevisionFormValues>) => {
@@ -68,6 +70,7 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<DocumentRevi
           proposedDocId={proposedDocId}
           setDocId={setDocId}
           doNotPrompt={doNotPrompt}
+          onDirtyFlagChange={onDirtyFlagChange}
         />
       );
     };

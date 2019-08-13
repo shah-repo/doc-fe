@@ -28,7 +28,7 @@ const ReferenceContainer: React.FunctionComponent<Props> = ({
       : (reference: any) => documentDetailsPath(reference.id);
   } else {
     label = "common.referenced.by";
-    getUrl = (reference: any) => documentVersionPath(reference.id, reference.document.id);;
+    getUrl = (reference: any) => documentVersionPath(reference.id, reference.document.id);
   }
 
   return (
