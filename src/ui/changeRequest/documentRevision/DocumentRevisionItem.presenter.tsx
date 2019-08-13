@@ -1,6 +1,7 @@
 import { Grid, IconButton, Tooltip } from "@material-ui/core";
 import { RemoveCircleOutline } from "@material-ui/icons";
 import React from "react";
+import classNames from "classnames";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { CardTooltip } from "../../components/cards/FileCard.styles";
 import Date from "../../components/Date";
@@ -20,11 +21,12 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<
   DocumentRevisionItemPresenterProps
 > = ({ onClick, onDelete, documentRevision, selectedDocumentRevision }) => {
   const classes = styles();
-  const isSelected = () => selectedDocumentRevision === documentRevision.id;
+  const isSelected = selectedDocumentRevision === documentRevision.id;
+
   return (
     <div
       className={
-        classes.container + " " + (isSelected() ? classes.selected : undefined)
+        classNames(classes.container, { [classes.selected]: isSelected })
       }
     >
       <Grid container={true}>
