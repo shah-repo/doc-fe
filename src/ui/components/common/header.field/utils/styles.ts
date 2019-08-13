@@ -1,7 +1,8 @@
-import { createStyles, Theme } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
+import { HeaderFieldStyleProps } from "./types";
 
-export default (theme: Theme) => createStyles({
-  root: {
-    padding: theme.spacing(1),
-  },
-});
+export const styles = makeStyles((theme) => ({
+  root: ({ variant }: HeaderFieldStyleProps) => ({
+    margin: theme.spacing(3.5, 0, (variant === "regular") ? 0 : -2.5),
+  }),
+}));

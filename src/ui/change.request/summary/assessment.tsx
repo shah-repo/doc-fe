@@ -18,11 +18,8 @@ const Assessment: React.FunctionComponent<Props> = ({
   dataProp,
 }) => {
 
-  const attachmentRenderer = (item: AssessmentItem) => (
-    item.attachments && item.attachments.map((attachment) => {
-      <FileCard attachment={attachment} />;
-    })
-  )
+  const attachmentRenderer = (item: AssessmentItem) => item.attachments!.map((attachment) =>
+    <FileCard key={`assessment-${attachment.id}`} attachment={attachment} />);
 
   const reasoningRenderer = (item: AssessmentItem) =>
     <SummaryField label="common.reasoning" value={item.reasoning} />;

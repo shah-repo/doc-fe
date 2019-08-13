@@ -1,7 +1,5 @@
 import { Attachment as AttachmentInterface } from "../../../state/ducks/attachments";
-import { ImplementationPlan } from "../../../state/ducks/changeRequest";
 import { Assessment } from "../../../state/ducks/changeRequest/types";
-import { User } from "../../../state/ducks/common";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 
 export type Attachment = AttachmentInterface;
