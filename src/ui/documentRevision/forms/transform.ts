@@ -36,16 +36,9 @@ export const toDocumentRevisionEditRequestBody =
 export const toNewVersionRequestBody = (values: DocumentRevisionFormValues): DocumentRevisionEditRequestBody => {
   const newValues = toDocumentRevisionEditRequestBody(values);
   newValues.revisionChangeType = values.revisionChangeType;
-  newValues.document = {};
 
   if (values.document) {
-    if (values.document.id) {
-      // new revision
-      newValues.document = _.pick(values.document, ['id']);
-    } else {
-      // new document
-      newValues.document = _.pick(values.document, ['docId', 'type']);
-    }
+    newValues.document = _.pick(values.document, ['id', 'type']);
   }
 
   return newValues;
