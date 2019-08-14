@@ -11,6 +11,10 @@ export const DateTime: React.FunctionComponent<Props> = ({
   value,
   format,
   ...other
-}) => <Moment format={format || "YYYY-MM-DD h:mm a"} {...other} >{value}</Moment>;
+}) => (
+  <Moment format={format || "MMMM Do YYYY h:mm a"} {...other}>
+    {value}
+  </Moment>
+);
 
 export default DateTime;
