@@ -1,6 +1,7 @@
 import { withStyles, WithStyles, Typography } from "@material-ui/core";
 import { Field, FieldProps, FormikProps } from "formik";
 import React, { useEffect } from "react";
+import _ from "lodash";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest";
 import { AsyncState } from "../../../../state/types";
 import ApproversField from "../../../change.request/form/approvers";
@@ -22,6 +23,7 @@ import styles from "./AssessmentForm.styles";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
 import AssessmentFormImplementationPlan from "./implementationPlan/Container";
 import Text from "../../../components/Text";
+import useDidMount from "../../../hooks/useDidMount";
 
 interface Props
   extends WithStyles<typeof styles>,
@@ -45,8 +47,12 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   doNotPrompt,
   onDirtyFlagChange,
 }) => {
+  const didMount = useDidMount();
+
   useEffect(() => {
-    setFieldValue("documentRevisions", documentRevisionsList);
+    if (didMount) {
+      setFieldValue("documentRevisions", documentRevisionsList);
+    }
   }, [documentRevisionsList]);
 
   const renderCrId = () => 

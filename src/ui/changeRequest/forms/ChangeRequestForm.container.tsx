@@ -8,12 +8,13 @@ import { AsyncState } from '../../../state/types';
 import { DocumentRevisionsByIdState, documentRevisionsSelectors } from '../../../state/ducks/documentRevisions';
 import DocumentRevisionUpdateContainer from '../../documentRevision/DocumentRevisionUpdate.container';
 import { ApplicationState } from '../../../state/reducers';
-import { ChangeRequest } from '../../../state/ducks/changeRequest';
+import { ChangeRequest, changeRequestsSelectors, ChangeRequestsByIdState } from '../../../state/ducks/changeRequest';
 import ChangeRequestAuditContainer from '../audit/Audit.container';
 import DocumentRevisionAuditContainer from '../../documentRevision/audit/Audit.container';
 
 interface StateProps {
   documentRevisionsById: DocumentRevisionsByIdState;
+  changeRequestsById: ChangeRequestsByIdState;
 }
 interface OwnProps {
   initialValues: ChangeRequestFormValues;
@@ -27,11 +28,12 @@ type ChangeRequestFormContainerProps = OwnProps & StateProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   documentRevisionsById: documentRevisionsSelectors.byId(state),
+  changeRequestsById: changeRequestsSelectors.byId(state),
 });
 
 export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFormContainerProps> = ({
   onSubmit, asyncState, initialValues, documentRevisionsById, changeRequest,
-  doNotPrompt,
+  doNotPrompt, changeRequestsById,
 }) => {
   const alertMessage = "You have unsaved changes.";
   const [isFormDirty, setIsFormDirty] = useState<boolean>(false);
@@ -81,9 +83,13 @@ export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFo
 
   const renderDocumentRevisionForm = () => {
     if (selectedDocumentRevision) {
+      const docRev = {
+        ...documentRevisionsById[selectedDocumentRevision],
+        changeRequest: initialValues.id ? changeRequestsById[initialValues.id] : undefined,
+      }
       return (
         <DocumentRevisionUpdateContainer
-          documentRevision={documentRevisionsById[selectedDocumentRevision]}
+          documentRevision={docRev}
           onDirtyFlagChange={onDirtyFlagChange}
         />
       );
