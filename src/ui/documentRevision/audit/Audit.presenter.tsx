@@ -33,41 +33,39 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         return change.nextValue;
     }
   };
-  const renderChanges = () => (
+  const renderChanges = () =>
     audit.map((change, index) => {
       const nextValue = getNextValue(change);
 
       return (
-        <div
-          key={index}
-          className={classes.changeContainer}
-        >
+        <div key={index} className={classes.changeContainer}>
           <div className={classes.dateContainer}>
+            <span className={classes.owner}>{change.owner.name}</span> -{" "}
             <DateTime value={change.timestamp} />
           </div>
           <div>
-            <Text message={`documentRevision.audit.${change.field}.${change.type}`} />
+            <Text
+              message={`documentRevision.audit.${change.field}.${change.type}`}
+            />
           </div>
-          {nextValue}
+          <div className={classes.auditValue}>{nextValue}</div>
         </div>
       );
-    })
-  );
-  const renderExpandIcon = () => (
-    isOpen ? <ExpandLess /> : <ExpandMore />
-  );
+    });
+  const renderExpandIcon = () => (isOpen ? <ExpandLess /> : <ExpandMore />);
 
   return (
     <div className={classes.container}>
-      <IconButton onClick={toggleList} classes={{ root: classes.collapsableButton }}>
+      <IconButton
+        onClick={toggleList}
+        classes={{ root: classes.collapsableButton }}
+      >
         <Text translation="documentRevision.audit.docHistory" />
         {renderExpandIcon()}
       </IconButton>
       <div className={classes.collapsableContainer}>
         <Collapse in={isOpen} timeout="auto" unmountOnExit={true}>
-          <List>
-            {audit && renderChanges()}
-          </List>
+          <List>{audit && renderChanges()}</List>
         </Collapse>
       </div>
     </div>
