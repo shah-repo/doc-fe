@@ -9,6 +9,17 @@ ENVIRONMENT_DIR="${AWS_DIR}/environments"
 BASH_SCRIPTS_DIR="${AWS_DIR}/bash_scripts"
 PYTHON_SCRIPTS_DIR="${AWS_DIR}/python_scripts"
 
+export CLUSTER_NAME=$ECS_CLUSTER_NAME
+export COMMIT_HASH="${BITBUCKET_COMMIT::7}"
+export IMAGE_NAME="${REPOSITORY_URL}:${COMMIT_HASH}"
+
+if [ "${ENV}" == "prod" ]; then
+	export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_PROD
+	export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_PROD
+	export CLUSTER_NAME=$ECS_CLUSTER_NAME_PROD
+	export IMAGE_NAME="${REPOSITORY_URL_PROD}:${COMMIT_HASH}"
+fi
+
 # Install Dependencies
 echo "-------- Installing Dependencies --------"
 
@@ -18,21 +29,10 @@ chmod a+x "${BASH_SCRIPTS_DIR}/install.sh"
 # Login to AWS
 echo "-------- Logging into AWS --------"
 
-if [ "${ENV}" == "prod" ]; then
-	export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_PROD
-	export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_PROD
-fi
-
 aws ecr get-login --no-include-email --region "${AWS_DEFAULT_REGION}" | bash
 
 # Generating Build Info
 echo "-------- Generating Build Info --------"
-
-COMMIT_HASH="${BITBUCKET_COMMIT::7}"
-export IMAGE_NAME="${REPOSITORY_URL}:${COMMIT_HASH}"
-if [ "${ENV}" == "prod" ]; then
-	export IMAGE_NAME="${REPOSITORY_URL_PROD}:${COMMIT_HASH}"
-fi
 
 chmod a+x "${BASH_SCRIPTS_DIR}/status.sh"
 "${BASH_SCRIPTS_DIR}/status.sh"
@@ -56,11 +56,6 @@ docker build -f ./docker/Dockerfile \
 # Deploy
 if [ "${DTD}" == "true" ]; then
 	
-	cluster_name=$ECS_CLUSTER_NAME
-	if [ "${ENV}" == "prod" ]; then
-		cluster_name=$ECS_CLUSTER_NAME_PROD
-	fi
-
 	echo "-------- Pushing Image to AWS ECR --------"
 
 	docker push "${IMAGE_NAME}"
@@ -74,5 +69,5 @@ if [ "${DTD}" == "true" ]; then
 	
 	echo "Registered ECS Task Definition:" "${TASK_VERSION}"
 	
-	aws ecs update-service --cluster "${cluster_name}" --service "${ECS_SERVICE_NAME}" --task-definition "${ECS_TASK_NAME}:${TASK_VERSION}"
+	aws ecs update-service --cluster "${CLUSTER_NAME}" --service "${ECS_SERVICE_NAME}" --task-definition "${ECS_TASK_NAME}:${TASK_VERSION}"
 fi
