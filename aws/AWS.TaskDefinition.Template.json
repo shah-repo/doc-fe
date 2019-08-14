@@ -1,5 +1,5 @@
 {
-  "taskRoleArn": "arn:aws:iam::817083319299:role/shifamed-task-role",
+  "taskRoleArn": "<role>",
   "containerDefinitions": [
     {
       "name": "<container_name>",
@@ -28,7 +28,7 @@
         "options": {
           "awslogs-region": "us-west-2",
           "awslogs-stream-prefix": "doc-fe",
-          "awslogs-group": "/ecs-develop"
+          "awslogs-group": "<log_group>"
         }
       },
       "portMappings": [
