@@ -25,7 +25,7 @@ pipelines:
         - docker
       script:
         - chmod a+x ./aws/bash_scripts/build.sh
-        - ./aws/bash_scripts/build.sh "dev" "true"
+        - ./aws/bash_scripts/build.sh "dev"
 
     deploy_to_production: &DEPLOY_TO_PRODUCTION
       name: Deploy to Production
@@ -37,7 +37,7 @@ pipelines:
         - docker
       script:
         - chmod a+x ./aws/bash_scripts/build.sh
-        - ./aws/bash_scripts/build.sh "prod" "true"
+        - ./aws/bash_scripts/build.sh "prod"
 
   default:
       - step: *RUN_TESTS
