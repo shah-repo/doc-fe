@@ -60,6 +60,7 @@ const toImplementationPlanFormValues = (plan: ImplementationPlan): Implementatio
 
 export const toChangeRequestFormValues = (changeRequest: ChangeRequest): ChangeRequestFormValues => {
   const values: ChangeRequestFormValues = {
+    id: changeRequest.id,
     title: changeRequest.title,
     description: changeRequest.description,
     assessments: createAssessment(changeRequest.assessments),

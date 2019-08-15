@@ -1,7 +1,7 @@
 import { Grid } from "@material-ui/core";
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { ChangeRequest } from "../../../state/ducks/changeRequest";
+import { ChangeRequest, ChangeRequestsByIdState, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
 import { DocumentRevisionsByIdState, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
@@ -14,6 +14,7 @@ import { ChangeRequestFormValues } from "./types";
 
 interface StateProps {
   documentRevisionsById: DocumentRevisionsByIdState;
+  changeRequestsById: ChangeRequestsByIdState;
 }
 interface OwnProps {
   initialValues: ChangeRequestFormValues;
@@ -27,11 +28,12 @@ type ChangeRequestFormContainerProps = OwnProps & StateProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   documentRevisionsById: documentRevisionsSelectors.byId(state),
+  changeRequestsById: changeRequestsSelectors.byId(state),
 });
 
 export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFormContainerProps> = ({
   onSubmit, asyncState, initialValues, documentRevisionsById, changeRequest,
-  doNotPrompt,
+  doNotPrompt, changeRequestsById,
 }) => {
   const alertMessage = "You have unsaved changes.";
   const [isFormDirty, setIsFormDirty] = useState<boolean>(false);
@@ -81,9 +83,13 @@ export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFo
 
   const renderDocumentRevisionForm = () => {
     if (selectedDocumentRevision) {
+      const docRev = {
+        ...documentRevisionsById[selectedDocumentRevision],
+        changeRequest: initialValues.id ? changeRequestsById[initialValues.id] : undefined,
+      };
       return (
         <DocumentRevisionUpdateContainer
-          documentRevision={documentRevisionsById[selectedDocumentRevision]}
+          documentRevision={docRev}
           onDirtyFlagChange={onDirtyFlagChange}
         />
       );

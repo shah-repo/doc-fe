@@ -1,5 +1,6 @@
-import { Box, Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
+import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { Field, FieldProps, FormikProps } from "formik";
+import _ from "lodash";
 import React, { useEffect } from "react";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest";
 import { AsyncState } from "../../../../state/types";
@@ -17,6 +18,7 @@ import FormProgress from "../../../components/forms/FormProgress";
 import FormWrapper from "../../../components/forms/FormWrapper";
 import PromptIfDirty from "../../../components/forms/PromptIfDirty";
 import SubmitButton from "../../../components/forms/SubmitButton";
+import useDidMount from "../../../hooks/useDidMount";
 import { ChangeRequestFormValues } from "../types.js";
 import styles from "./AssessmentForm.styles";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
@@ -44,8 +46,12 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   doNotPrompt,
   onDirtyFlagChange,
 }) => {
+  const didMount = useDidMount();
+
   useEffect(() => {
-    setFieldValue("documentRevisions", documentRevisionsList);
+    if (didMount) {
+      setFieldValue("documentRevisions", documentRevisionsList);
+    }
   }, [documentRevisionsList]);
 
   const renderCrId = () =>
