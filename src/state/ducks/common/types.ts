@@ -28,3 +28,9 @@ export interface DataProps<T> {
 }
 
 export type RenderSize = "sm" | "md" | "lg";
+
+export enum TypographySize {
+  sm = "subtitle1",
+  md = "h5",
+  lg = "h4",
+}

@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   createStyles,
   Dialog,
@@ -33,10 +34,10 @@ const INITIAL_VALUES = {
 const styles = makeStyles(() =>
   createStyles({
     dialogPaper: {
-      overflowY: "unset"
+      overflowY: "unset",
     },
     dialogContent: {
-      overflowY: "unset"
+      overflowY: "unset",
     },
   },
 ));
@@ -53,20 +54,24 @@ export const TaskFormDialog: React.FunctionComponent<TaskFormDialogProps> =
 
     return (
       <div>
-        <Button
-          color="primary"
-          variant="contained"
-          onClick={openDialog}
-          {...buttonProps}
-        >
-          <Text translation="changeRequest.assessmentForm.addTask" />
-        </Button>
+        <Box mt={2} mb={task ? 2 : 6}>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={openDialog}
+            {...buttonProps}
+          >
+            <Text translation="changeRequest.assessmentForm.addTask" />
+          </Button>
+        </Box>
         <Dialog
           disableEscapeKeyDown={true}
           disableBackdropClick={true}
           open={isDialogOpen}
           onSubmit={preventPropagation}
           classes={{ paper: classes.dialogContent }}
+          fullWidth={true}
+          maxWidth="md"
         >
           <DialogTitle>
             <Text translation="changeRequest.assessmentForm.addTask" />

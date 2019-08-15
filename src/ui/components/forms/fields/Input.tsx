@@ -1,20 +1,27 @@
-import {
-  Input as MuiInput,
-} from "@material-ui/core";
-import { InputProps as MuiInputProps } from "@material-ui/core/Input";
+import { InputBaseProps as MuiInputProps } from "@material-ui/core/InputBase";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
+import { RenderSize } from "../../../../state/ducks/common";
 import Field, { FieldOwnProps } from "./Field";
+import { InputField as MuiInput } from "./Input.styles";
 
 interface InputOwnProps extends FieldOwnProps {
   inputProps?: MuiInputProps;
+  size?: RenderSize;
+  actionsRenderer?: () => any;
 }
 
 type InputPropsWithFormik = InputOwnProps & FormikFieldProps;
 
-const Input: React.FunctionComponent<InputPropsWithFormik> = ({ inputProps, ...fieldProps }) => {
+const Input: React.FunctionComponent<InputPropsWithFormik> = ({
+  inputProps,
+  size = "md",
+  actionsRenderer,
+  ...fieldProps
+}) => {
+
   return (
-    <Field {...fieldProps}>
+    <Field size={size} actionsRenderer={actionsRenderer} {...fieldProps} inputLabelProps={{ shrink: true }} >
       <MuiInput required={false} {...fieldProps.field} {...inputProps} />
     </Field>
   );

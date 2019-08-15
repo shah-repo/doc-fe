@@ -39,7 +39,7 @@ describe("Field component tests", () => {
   it("displays input component by default", () => {
     const wrapper = getWrapper({});
 
-    expect(wrapper.find(MuiInput)).toHaveLength(1);
+    expect(wrapper.find(InputField)).toHaveLength(1);
     expect(wrapper.find(InputLabel)).toHaveLength(0);
     expect(wrapper.find(FormHelperText)).toHaveLength(0);
   });
