@@ -1,5 +1,6 @@
 import { CssBaseline  } from "@material-ui/core";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
+import { palette } from "@material-ui/system";
 import * as React from "react";
 
 const theme = createMuiTheme({
@@ -29,6 +30,28 @@ const theme = createMuiTheme({
       },
       root: {
         boxShadow: "none",
+      },
+    },
+    MuiTypography: {
+      root: {
+        fontFamily: "Product Sans",
+      },
+      subtitle1: {
+        color: "#4d4d4d",
+        fontSize: "0.9rem",
+      },
+      h5: {
+        color: "#4d4d4d",
+        fontSize: "1.1rem",
+      },
+      h4: {
+        color: "#4d4d4d",
+        ontSize: "1.4rem",
+      },
+    },
+    MuiButton: {
+      root: {
+        fontSize: "0.8rem",
       },
     },
   },

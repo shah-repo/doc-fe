@@ -1,5 +1,5 @@
 
-import { Typography, withStyles, WithStyles } from "@material-ui/core";
+import { Box, Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -11,7 +11,6 @@ import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
-import FilledInputField from "../../components/forms/fields/FilledInput";
 import InputField from "../../components/forms/fields/Input";
 import RadioButton from "../../components/forms/fields/RadioButton";
 import RadioGroup from "../../components/forms/fields/RadioGroup";
@@ -49,7 +48,7 @@ interface Props
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   asyncState, classes, initialValues, handleChange, availableReferences, showRevisionTypeChange,
   loadDocumentProposedId, proposedDocId, values, setDocId,
-  dirty, resetForm, doNotPrompt, onDirtyFlagChange
+  dirty, resetForm, doNotPrompt, onDirtyFlagChange,
 }) => {
   const openReference = (documentId: string) => { window.open(documentDetailsPath(documentId), "_blank"); };
 
@@ -90,9 +89,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               value={RevisionChangeType.NextRevision}
             />
             <RadioButton
-              label={
-                <Text translation="documentRevision.form.nextRevisionStage" />
-              }
+              label={<Text translation="documentRevision.form.nextRevisionStage" />}
               value={RevisionChangeType.NextRevisionStage}
             />
             <RadioButton
@@ -136,7 +133,12 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <div className={classes.container}>
+    <Grid
+      container={true}
+      direction="column"
+      justify="center"
+      alignItems="center"
+    >
       <FormWrapper dirty={dirty} initialValues={initialValues} resetForm={resetForm}>
         <PromptIfDirty dirty={dirty} doNotPrompt={doNotPrompt} onDirtyFlagChange={onDirtyFlagChange} />
         <FormMessage asyncState={asyncState} />
@@ -144,10 +146,10 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         <InputField
           name="name"
           label="document.title"
-          inputProps={{ id: "name" }}
+          inputProps={{ multiline: true, rows: "2"}}
           validate={validator(required)}
         />
-        <FilledInputField
+        <InputField
           name="description"
           label="common.description"
           validate={validator(required)}
@@ -163,17 +165,15 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         />
         <InputField
           name="document.docId"
-          label="document.revision.list.docId"
+          label="common.documentId"
           inputProps={{ id: "docId", value: docIdValue, disabled: isDisabled, onChange: handleDocIdChange }}
         />
         <AutcompleteField
           name="referenceTo"
+          label="documentRevision.form.references"
           autocompleteProps={{
             id: "referenceTo",
             isMulti: true,
-            placeholder: (
-              <Text translation="documentRevision.form.references" />
-            ),
             closeMenuOnSelect: false,
           }}
           options={availableReferences}
@@ -182,9 +182,16 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         {renderReferences()}
         <AttachmentsField />
         {renderTypeOfRevisionChange()}
-        <SubmitButton style={{marginTop: "30px"}} asyncState={asyncState} label="common.save" />
+        <Box mt={10}>
+          <Grid item={true} container={true} alignItems="flex-end" direction="column">
+            <SubmitButton
+              asyncState={asyncState}
+              label={isDisabled ? "common.save" : "navigation.createDocument"}
+            />
+          </Grid>
+        </Box>
       </FormWrapper>
-    </div>
+    </Grid>
   );
 };
 

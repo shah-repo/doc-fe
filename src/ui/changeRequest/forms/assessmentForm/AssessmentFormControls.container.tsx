@@ -1,4 +1,4 @@
-import { withStyles, WithStyles } from "@material-ui/core";
+import { Box, withStyles, WithStyles } from "@material-ui/core";
 import { ButtonProps } from "@material-ui/core/Button";
 import React from "react";
 import { connect } from "react-redux";
@@ -76,13 +76,13 @@ const AssessmentFormControlsContainer: React.FunctionComponent<AssessmentFormCon
     (currentUserApproval as Approval).status === ApprovalStatus.Pending;
 
   return (
-    <div className={classes.container}>
+    <Box component="span">
       {renderTransitionButton(canWithdraw, "withdrawn")}
       {renderTransitionButton(canSendToReview, "in_review")}
       {renderDialogButton(canApproveOrReject, "reject", { color: "secondary" })}
       {renderDialogButton(canApproveOrReject, "approve")}
       {renderTransitionButton(canClose, "closed")}
-    </div>
+    </Box>
   );
 };
 

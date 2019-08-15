@@ -1,4 +1,4 @@
-import { withStyles, WithStyles, Typography } from "@material-ui/core";
+import { Box, Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
 import { Field, FieldProps, FormikProps } from "formik";
 import React, { useEffect } from "react";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest";
@@ -7,7 +7,7 @@ import ApproversField from "../../../change.request/form/approvers";
 import AssessmentsField from "../../../change.request/form/assessments";
 import JustificationField from "../../../change.request/form/justification";
 import DatePickerField from "../../../components/forms/fields/DatePicker";
-import FilledInputField from "../../../components/forms/fields/FilledInput";
+import InputField from "../../../components/forms/fields/Input";
 import {
   required,
   validator,
@@ -21,7 +21,6 @@ import { ChangeRequestFormValues } from "../types.js";
 import styles from "./AssessmentForm.styles";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
 import AssessmentFormImplementationPlan from "./implementationPlan/Container";
-import Text from "../../../components/Text";
 
 interface Props
   extends WithStyles<typeof styles>,
@@ -49,11 +48,13 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
     setFieldValue("documentRevisions", documentRevisionsList);
   }, [documentRevisionsList]);
 
-  const renderCrId = () => 
+  const renderCrId = () =>
     changeRequest && changeRequest.id && (
-      <Typography variant="h5">
-        <Text translation="common.crid" />: {changeRequest.crId}
-      </Typography>
+      <InputField
+        name=""
+        label="common.crid"
+        inputProps={{ disabled: true, value: changeRequest.crId }}
+      />
     );
   const renderimplementationPlan = (props: FieldProps<ChangeRequestFormValues>) => (
     <AssessmentFormImplementationPlan {...props} />
@@ -66,13 +67,13 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
         {renderCrId()}
-        <FilledInputField
+        <InputField
           name="title"
           label="cr.title"
           inputProps={{ id: "title", multiline: true, rows: "2" }}
           validate={validator(required)}
         />
-        <FilledInputField
+        <InputField
           name="description"
           label="cr.description"
           inputProps={{ id: "description", multiline: true, rows: "2" }}
@@ -87,8 +88,18 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
           datePickerProps={{ minDate: new Date() }}
         />
         <ApproversField />
-        <SubmitButton asyncState={asyncState} label="document.save" />
-        <AssessmentFormControlsContainer changeRequest={changeRequest} />
+        <Box mt={6}>
+          <Grid item={true} container={true} alignItems="flex-end" direction="column">
+            <div>
+              <AssessmentFormControlsContainer changeRequest={changeRequest} />
+              <SubmitButton
+                asyncState={asyncState}
+                label={changeRequest ? "common.save" : "navigation.createChangeRequest"}
+                style={{ marginLeft: 15 }}
+              />
+            </div>
+          </Grid>
+        </Box>
       </FormWrapper>
     </div>
   );
