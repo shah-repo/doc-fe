@@ -139,58 +139,60 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       justify="center"
       alignItems="center"
     >
-      <FormWrapper dirty={dirty} initialValues={initialValues} resetForm={resetForm}>
-        <PromptIfDirty dirty={dirty} doNotPrompt={doNotPrompt} onDirtyFlagChange={onDirtyFlagChange} />
-        <FormMessage asyncState={asyncState} />
-        <FormProgress asyncState={asyncState} />
-        <InputField
-          name="name"
-          label="document.title"
-          inputProps={{ multiline: true, rows: "2"}}
-          validate={validator(required)}
-        />
-        <InputField
-          name="description"
-          label="common.description"
-          validate={validator(required)}
-          inputProps={{ multiline: true, rows: "2" }}
-        />
-        <SelectField
-          name="document.type"
-          label="document.type"
-          selectProps={{inputProps: { id: "type", disabled: isDisabled }, onChange: handleTypeChange }}
-          options={documentRevisionTypeFormOption()}
-          validate={validator(required)}
-          includeEmpty={false}
-        />
-        <InputField
-          name="document.docId"
-          label="common.documentId"
-          inputProps={{ id: "docId", value: docIdValue, disabled: isDisabled, onChange: handleDocIdChange }}
-        />
-        <AutcompleteField
-          name="referenceTo"
-          label="documentRevision.form.references"
-          autocompleteProps={{
-            id: "referenceTo",
-            isMulti: true,
-            closeMenuOnSelect: false,
-          }}
-          options={availableReferences}
-          onClick={openReference}
-        />
-        {renderReferences()}
-        <AttachmentsField />
-        {renderTypeOfRevisionChange()}
-        <Box mt={10}>
-          <Grid item={true} container={true} alignItems="flex-end" direction="column">
-            <SubmitButton
-              asyncState={asyncState}
-              label={isDisabled ? "common.save" : "navigation.createDocument"}
-            />
-          </Grid>
-        </Box>
-      </FormWrapper>
+      <Grid item={true} lg={isDisabled ? 12 : 7} sm={isDisabled ? 12 : 10} xs={12}>
+        <FormWrapper dirty={dirty} initialValues={initialValues} resetForm={resetForm}>
+          <PromptIfDirty dirty={dirty} doNotPrompt={doNotPrompt} onDirtyFlagChange={onDirtyFlagChange} />
+          <FormMessage asyncState={asyncState} />
+          <FormProgress asyncState={asyncState} />
+          <InputField
+            name="name"
+            label="document.title"
+            inputProps={{ multiline: true, rows: "2"}}
+            validate={validator(required)}
+          />
+          <InputField
+            name="description"
+            label="common.description"
+            validate={validator(required)}
+            inputProps={{ multiline: true, rows: "2" }}
+          />
+          <SelectField
+            name="document.type"
+            label="document.type"
+            selectProps={{inputProps: { id: "type", disabled: isDisabled }, onChange: handleTypeChange }}
+            options={documentRevisionTypeFormOption()}
+            validate={validator(required)}
+            includeEmpty={false}
+          />
+          <InputField
+            name="document.docId"
+            label="common.documentId"
+            inputProps={{ id: "docId", value: docIdValue, disabled: isDisabled, onChange: handleDocIdChange }}
+          />
+          <AutcompleteField
+            name="referenceTo"
+            label="documentRevision.form.references"
+            autocompleteProps={{
+              id: "referenceTo",
+              isMulti: true,
+              closeMenuOnSelect: false,
+            }}
+            options={availableReferences}
+            onClick={openReference}
+          />
+          {renderReferences()}
+          <AttachmentsField />
+          {renderTypeOfRevisionChange()}
+          <Box mt={10}>
+            <Grid item={true} container={true} alignItems="flex-end" direction="column">
+              <SubmitButton
+                asyncState={asyncState}
+                label={isDisabled ? "common.save" : "navigation.createDocument"}
+              />
+            </Grid>
+          </Box>
+        </FormWrapper>
+      </Grid>
     </Grid>
   );
 };
