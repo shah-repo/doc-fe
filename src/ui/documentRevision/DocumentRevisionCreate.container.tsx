@@ -66,6 +66,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
         showRevisionTypeChange={showRevisionTypeChange}
         setDocId={setDocId}
         doNotPrompt={true}
+        documentRevision={documentRevision}
       />
     );
   };
