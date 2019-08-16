@@ -48,6 +48,11 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<
               :&nbsp;
               <Date value={documentRevision.createdAt} />
             </div>
+            <div>
+             <Text translation="common.documentId" />
+             :&nbsp;
+             {documentRevision.document.docId}
+           </div>
           </div>
         </Grid>
         <Grid item={true} xs={1}>
