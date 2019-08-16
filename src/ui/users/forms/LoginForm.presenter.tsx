@@ -19,12 +19,14 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({ classes, asyncStat
       <InputField
         name="email"
         label="login.email"
+        size="sm"
         inputProps={{ autoComplete: "email", autoFocus: true, id: "email" }}
         validate={validator(required, email)}
       />
       <InputField
         name="password"
         label="login.password"
+        size="sm"
         inputProps={{ autoComplete: "current-password", id: "password", type: "password" }}
         validate={validator(required)}
       />

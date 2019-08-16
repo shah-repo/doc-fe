@@ -86,7 +86,7 @@ export const Container: React.FunctionComponent<Props> = ({
         />
       </Grid>
       <Grid item={true} xs={6}>
-        {docRev && <DocumentRevisionSummaryPresenter dataProp={docRev} />}
+        {docRev && <DocumentRevisionSummaryPresenter dataProp={{ ...docRev, changeRequest: dataProp }} />}
         {!docRev && summaryFormikRenderer()}
       </Grid>
       <Grid item={true} xs={3}>

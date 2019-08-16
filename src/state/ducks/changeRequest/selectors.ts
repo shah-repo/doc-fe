@@ -34,6 +34,7 @@ const getLoadApproversAsyncState = (state: ApplicationState): AsyncState => stat
 const getLoadAuditAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadAuditAsyncInfo;
 
 export default {
+  byId,
   getChangeRequestsList,
   getChangeRequest,
   getLoadAsyncState,

@@ -4,6 +4,7 @@ import { authSelectors } from "../../../state/ducks/auth";
 import {
   documentRevisionsActions,
   documentRevisionsSelectors,
+  DocumentRevisionStatus,
 } from "../../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../../state/reducers";
 import AsyncGate from "../../components/AsyncGate";
@@ -37,7 +38,14 @@ const ListContainer: React.FunctionComponent<Props> = ({
   currentUserEmail,
   history,
 }) => {
-  const loadAction = () => loadDocumentRevisions();
+  const loadAction = () => loadDocumentRevisions([
+    DocumentRevisionStatus.Released,
+    DocumentRevisionStatus.Obsolete,
+    DocumentRevisionStatus.Implementation,
+    DocumentRevisionStatus.InReview,
+    DocumentRevisionStatus.PendingChange,
+    DocumentRevisionStatus.Draft,
+  ]);
   const edit = (documentRevisionId: string, documentId: string) =>
     history.push(documentEditPath(documentRevisionId, documentId));
 

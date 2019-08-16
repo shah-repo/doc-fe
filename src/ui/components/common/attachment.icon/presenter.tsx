@@ -18,20 +18,20 @@ export const AttachmentIconPresenter: React.FunctionComponent<AttachmentIconProp
   const isLoading = file.isLoading || false;
 
   return (
-      <Grid key={`cell-${attachment!.id}`} item={true} xs={12} sm={6} md={3}>
-        <Box className={classes.closeRoot}>
-          <IconButton className={classes.closeRoot} onClick={handleRemove && handleRemove(file)}>
-            <CancelOutlined className={classes.closeIcon} />
-          </IconButton>
-        </Box>
-        <ButtonBase key={`icon-${attachment!.id}`} onClick={handleDownload && handleDownload(file)}>
-          {isLoading && <CircularProgress className={classes.progress} />}
-          {!isLoading && <FileIcon {...other} extension={file.type} />}
-        </ButtonBase>
-        <Typography variant="caption" gutterBottom={true} align="justify" className={classes.fileName}>
-          {`${file.name}.${file.type}`}
-        </Typography>
-      </Grid>
+    <Grid key={`cell-${attachment!.id}`} item={true} xs={12} sm={6} md={3} style={{ marginBottom: 35 }}>
+      <Box className={classes.closeRoot}>
+        <IconButton className={classes.closeRoot} onClick={handleRemove && handleRemove(file)}>
+          <CancelOutlined className={classes.closeIcon} />
+        </IconButton>
+      </Box>
+      <ButtonBase key={`icon-${attachment!.id}`} onClick={handleDownload && handleDownload(file)}>
+        {isLoading && <CircularProgress className={classes.progress} />}
+        {!isLoading && <FileIcon {...other} extension={file.type} />}
+      </ButtonBase>
+      <Typography variant="caption" gutterBottom={true} align="justify" className={classes.fileName}>
+        {`${file.name}.${file.type}`}
+      </Typography>
+    </Grid>
     );
 };
 

@@ -1,6 +1,7 @@
-import { Box, MenuItem, TextField, WithStyles, withStyles } from "@material-ui/core";
+import { Box, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
-import Text from "../../../Text";
+import InputField from "../Input";
+import SelectField from "../Select";
 import styles from "./utils/styles";
 import { EditableSelectFieldProps } from "./utils/types";
 
@@ -16,37 +17,21 @@ export const EditableSelectPresenter: React.FunctionComponent<Props> = ({
   value = "",
 }) => {
 
-  const EmptyItem = includeEmpty && (
-    <MenuItem value="">
-      <Text translation="fields.select.none" tagName="em" />
-    </MenuItem>
-  );
-
-  const Items = options.map((option) => (
-    <MenuItem key={option.value} value={option.value}>{option.text}</MenuItem>
-  ));
-
   return (
     <Box className={classes.root}>
-      <TextField
-        select={true}
-        className={classes.selectField}
-        margin="normal"
-        variant="filled"
-        onChange={handleChange}
-      >
-        {includeEmpty && EmptyItem}
-        {Items}
-      </TextField>
-      <TextField
+      <SelectField
+        name=""
+        label={undefined}
+        selectProps={{inputProps: { id: "type" }, onChange: handleChange }}
+        options={options}
+        includeEmpty={includeEmpty}
+        formControlProps={{ className:  classes.selectField }}
+      />
+      <InputField
         name={name}
-        label={<Text message={label} />}
-        className={classes.textField}
-        variant="filled"
-        margin="normal"
-        value={value}
-        onChange={handleChange}
-        InputProps={{ className: classes.input }}
+        label={label}
+        inputProps={{ value, onChange: handleChange}}
+        formControlProps={{ className:  classes.textField }}
       />
     </Box>
   );

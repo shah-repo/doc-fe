@@ -1,5 +1,4 @@
 import { Box, Grid } from "@material-ui/core";
-import { ErrorMessage } from "formik";
 import React from "react";
 import { AssessmentType } from "../../../state/ducks/changeRequest";
 import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
@@ -7,7 +6,7 @@ import AttachmentField from "../../components/common/attachment.field/container"
 import AttachmentIconField from "../../components/common/attachment.icon/container";
 import HeaderField from "../../components/common/header.field/field";
 import EditableSelectField from "../../components/forms/fields/EditableSelect/container";
-import FilledInputField from "../../components/forms/fields/FilledInput";
+import InputField from "../../components/forms/fields/Input";
 import { withFormik } from "../../components/hoc/formik";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
 import { assessmentStatementOption } from "../utils/helpers";
@@ -29,7 +28,7 @@ const Assessments: React.FunctionComponent<Props> = ({
     }
 
     return (
-      <Grid key={type} item={true} xs={12}>
+      <Box key={type} mb={(attachments && attachments.length > 0) ? 0 : 4}>
         <HeaderField
           dataProp={`change.request.${type}.assessment`}
           size="sm"
@@ -37,27 +36,22 @@ const Assessments: React.FunctionComponent<Props> = ({
         />
         <EditableSelectField
           name={`assessments.${type}.reasoning`}
-          label="common.reasoning"
           options={assessmentStatementOption()}
           includeEmpty={true}
         />
         <AttachmentIconField name={`assessments.${type}.attachments`} />
-      </Grid>
+      </Box>
     );
   });
 
   return (
     <Box>
-     <ErrorMessage name="assessments" />
-      <HeaderField dataProp="common.assessments" />
-      <FilledInputField
+      <InputField
         name="assessments.description"
-        label="common.description"
+        label="common.assessments"
         inputProps={{ multiline: true, rows: "2" }}
       />
-      <Grid container={true} spacing={3}>
-        {itemRenderer()}
-      </Grid>
+      {itemRenderer()}
     </Box>
   );
 };

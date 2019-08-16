@@ -1,5 +1,5 @@
 
-import { Typography, withStyles, WithStyles } from "@material-ui/core";
+import { Box, Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -11,7 +11,6 @@ import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
-import FilledInputField from "../../components/forms/fields/FilledInput";
 import InputField from "../../components/forms/fields/Input";
 import RadioButton from "../../components/forms/fields/RadioButton";
 import RadioGroup from "../../components/forms/fields/RadioGroup";
@@ -49,7 +48,7 @@ interface Props
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   asyncState, classes, initialValues, handleChange, availableReferences, showRevisionTypeChange,
   loadDocumentProposedId, proposedDocId, values, setDocId,
-  dirty, resetForm, doNotPrompt, onDirtyFlagChange
+  dirty, resetForm, doNotPrompt, onDirtyFlagChange,
 }) => {
   const openReference = (documentId: string) => { window.open(documentDetailsPath(documentId), "_blank"); };
 
@@ -90,9 +89,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               value={RevisionChangeType.NextRevision}
             />
             <RadioButton
-              label={
-                <Text translation="documentRevision.form.nextRevisionStage" />
-              }
+              label={<Text translation="documentRevision.form.nextRevisionStage" />}
               value={RevisionChangeType.NextRevisionStage}
             />
             <RadioButton
@@ -136,55 +133,67 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <div className={classes.container}>
-      <FormWrapper dirty={dirty} initialValues={initialValues} resetForm={resetForm}>
-        <PromptIfDirty dirty={dirty} doNotPrompt={doNotPrompt} onDirtyFlagChange={onDirtyFlagChange} />
-        <FormMessage asyncState={asyncState} />
-        <FormProgress asyncState={asyncState} />
-        <InputField
-          name="name"
-          label="document.title"
-          inputProps={{ id: "name" }}
-          validate={validator(required)}
-        />
-        <FilledInputField
-          name="description"
-          label="common.description"
-          validate={validator(required)}
-          inputProps={{ multiline: true, rows: "2" }}
-        />
-        <SelectField
-          name="document.type"
-          label="document.type"
-          selectProps={{inputProps: { id: "type", disabled: isDisabled }, onChange: handleTypeChange }}
-          options={documentRevisionTypeFormOption()}
-          validate={validator(required)}
-          includeEmpty={false}
-        />
-        <InputField
-          name="document.docId"
-          label="document.revision.list.docId"
-          inputProps={{ id: "docId", value: docIdValue, disabled: isDisabled, onChange: handleDocIdChange }}
-        />
-        <AutcompleteField
-          name="referenceTo"
-          autocompleteProps={{
-            id: "referenceTo",
-            isMulti: true,
-            placeholder: (
-              <Text translation="documentRevision.form.references" />
-            ),
-            closeMenuOnSelect: false,
-          }}
-          options={availableReferences}
-          onClick={openReference}
-        />
-        {renderReferences()}
-        <AttachmentsField />
-        {renderTypeOfRevisionChange()}
-        <SubmitButton style={{marginTop: "30px"}} asyncState={asyncState} label="common.save" />
-      </FormWrapper>
-    </div>
+    <Grid
+      container={true}
+      direction="column"
+      justify="center"
+      alignItems="center"
+    >
+      <Grid item={true} lg={isDisabled ? 12 : 7} sm={isDisabled ? 12 : 10} xs={12}>
+        <FormWrapper dirty={dirty} initialValues={initialValues} resetForm={resetForm}>
+          <PromptIfDirty dirty={dirty} doNotPrompt={doNotPrompt} onDirtyFlagChange={onDirtyFlagChange} />
+          <FormMessage asyncState={asyncState} />
+          <FormProgress asyncState={asyncState} />
+          <InputField
+            name="name"
+            label="document.title"
+            inputProps={{ multiline: true, rows: "2"}}
+            validate={validator(required)}
+          />
+          <InputField
+            name="description"
+            label="common.description"
+            validate={validator(required)}
+            inputProps={{ multiline: true, rows: "2" }}
+          />
+          <SelectField
+            name="document.type"
+            label="document.type"
+            selectProps={{inputProps: { id: "type", disabled: isDisabled }, onChange: handleTypeChange }}
+            options={documentRevisionTypeFormOption()}
+            validate={validator(required)}
+            includeEmpty={false}
+          />
+          <InputField
+            name="document.docId"
+            label="common.documentId"
+            inputProps={{ id: "docId", value: docIdValue, disabled: isDisabled, onChange: handleDocIdChange }}
+          />
+          <AutcompleteField
+            name="referenceTo"
+            label="documentRevision.form.references"
+            autocompleteProps={{
+              id: "referenceTo",
+              isMulti: true,
+              closeMenuOnSelect: false,
+            }}
+            options={availableReferences}
+            onClick={openReference}
+          />
+          {renderReferences()}
+          <AttachmentsField />
+          {renderTypeOfRevisionChange()}
+          <Box mt={10}>
+            <Grid item={true} container={true} alignItems="flex-end" direction="column">
+              <SubmitButton
+                asyncState={asyncState}
+                label={isDisabled ? "common.save" : "navigation.createDocument"}
+              />
+            </Grid>
+          </Box>
+        </FormWrapper>
+      </Grid>
+    </Grid>
   );
 };
 

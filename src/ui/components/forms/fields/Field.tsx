@@ -1,42 +1,64 @@
 import {
   FormControl,
   FormHelperText,
-  InputLabel,
+  Typography,
 } from "@material-ui/core";
 import { FormControlProps } from "@material-ui/core/FormControl";
+import { InputLabelProps } from "@material-ui/core/InputLabel";
 import { FieldProps as FormikFieldProps } from "formik";
 import _ from "lodash";
 import * as React from "react";
+import { RenderSize, TypographySize } from "../../../../state/ducks/common";
 import { Translation } from "../../../translations/types";
+import HeaderField from "../../common/header.field/field";
 import Text from "../../Text";
+import { LabelField } from "./Input.styles";
 
 export interface FieldOwnProps {
-  label?: Translation;
+  label?: Translation | string;
   formControlProps?: FormControlProps;
+  inputLabelProps?: InputLabelProps;
   variant?: "standard" | "outlined" | "filled";
   required?: boolean;
+  size?: RenderSize;
+  actionsRenderer?: () => any;
 }
 
 type FieldProps = FieldOwnProps & FormikFieldProps;
 
 const Field: React.FunctionComponent<FieldProps> = ({
   field,
-  form: { touched, errors },
+  form,
+  form: { touched, errors, isSubmitting },
   children,
   formControlProps,
   label,
   variant,
   required,
+  size = "md",
+  actionsRenderer,
 }) => {
   const error = _.get(errors, field.name);
   const isFieldTouched = _.get(touched, field.name);
   const shouldDisplayError = Boolean(isFieldTouched && error);
 
-  const LabelComponent = label && (
-    <InputLabel htmlFor={field.name}>
-      <Text translation={label} />
-    </InputLabel>
-  );
+  // Workaround for untouched select fields
+  if (error && !shouldDisplayError && isSubmitting) {
+    form!.setFieldTouched(field.name, true);
+  }
+
+  const LabelComponent = () => {
+    if (actionsRenderer) {
+      return <HeaderField dataProp={label || ""} actionsRenderer={actionsRenderer} />;
+    }
+    return label && (
+      <LabelField htmlFor={field.name}>
+        <Typography variant={TypographySize[size]} color={shouldDisplayError ? "primary" : "initial"} >
+          <Text message={label} />
+        </Typography>
+      </LabelField>
+    );
+  };
 
   const ErrorComponent = shouldDisplayError && (
     <FormHelperText>
@@ -47,13 +69,13 @@ const Field: React.FunctionComponent<FieldProps> = ({
   return (
     <FormControl
       variant={variant || "standard"}
-      margin="normal"
       required={required}
       fullWidth={true}
       error={shouldDisplayError}
+      style={{ marginTop: "8px", marginBottom: "35px" }}
       {...formControlProps}
     >
-      {LabelComponent}
+      {LabelComponent()}
       {children}
       {ErrorComponent}
     </FormControl>

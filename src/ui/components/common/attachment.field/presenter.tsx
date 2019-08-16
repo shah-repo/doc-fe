@@ -17,7 +17,7 @@ export const AttachmentFieldPresenter: React.FunctionComponent<AttachmentFieldPr
   const classes = styles({ isField });
 
   return (
-    <Box className={classes.root}>
+    <Box mt={0.2} className={classes.root}>
       <input
         accept="*"
         className={classes.input}

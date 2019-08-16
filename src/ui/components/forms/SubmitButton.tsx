@@ -13,7 +13,6 @@ export interface SubmitButtonProps extends ButtonProps {
 const SubmitButton: React.FunctionComponent<SubmitButtonProps> = ({ asyncState, label, ...buttonProps }) => (
   <Button
     type="submit"
-    fullWidth={true}
     variant="contained"
     color="primary"
     disabled={asyncState.status === AsyncStatus.Active}
