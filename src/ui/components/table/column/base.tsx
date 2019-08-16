@@ -1,4 +1,4 @@
-import { Box } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import React from "react";
 import {
   CellMeasurer,
@@ -100,17 +100,17 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
       case "select":
           return <TableSearchSelectField dataKey={key} queryGetter={queryGetter} {...searchOptions} />;
       default:
-        return <TableSearchTextField dataKey={key} queryGetter={queryGetter} {...searchOptions} />
-;    }
+        return <TableSearchTextField dataKey={key} queryGetter={queryGetter} {...searchOptions} />;
+      }
   };
 
   const headerRenderer = () => {
     return (
       <StyledTableHeader component="div" variant="head" >
         <Box component="div" className="columnBox" >
-          <Box component="div" className="headerText" >
-            <Text translation={label} />
-          </Box>
+          <Typography variant="subtitle2" className="headerText">
+            <Text message={label} />
+          </Typography>
           {searchable && <Box component="div" className="headerField">{searchFieldRenderer()}</Box>}
         </Box>
       </StyledTableHeader>

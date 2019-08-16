@@ -94,7 +94,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
           datePickerProps={{ minDate: new Date() }}
         />
         <ApproversField />
-        <Box mt={6}>
+        <Box mt={4}>
           <Grid item={true} container={true} alignItems="flex-end" direction="column">
             <div>
               <AssessmentFormControlsContainer changeRequest={changeRequest} />

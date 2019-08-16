@@ -16,6 +16,7 @@ export const StyledTableHeader = withStyles((theme) => ({
       "flex": 1,
       "& .headerText": {
         padding: theme.spacing(2),
+        color: theme.palette.common.white,
       },
       "& .headerField": {
         backgroundColor: "#e8e9ed",
