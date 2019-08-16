@@ -26,13 +26,15 @@ interface OwnProps {
 
 export type DocumentRevisionCreateContainerProps = OwnProps & DispatchProps & RouteComponentProps;
 
-export const DEFAULT_INITIAL_VALUES: DocumentRevisionFormValues = {
-  name: "",
-  description: "",
-  attachments: [],
-  referenceTo: [],
-  revisionChangeType: RevisionChangeType.NextRevision,
-  document: { docId: "" },
+export const DEFAULT_INITIAL_VALUES = (): DocumentRevisionFormValues => {
+  return {
+    name: "",
+    description: "",
+    attachments: [],
+    referenceTo: [],
+    revisionChangeType: RevisionChangeType.NextRevision,
+    document: { docId: "" },
+  };
 };
 
 export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionCreateContainerProps> = ({
@@ -59,7 +61,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   const showRevisionTypeChange = !!documentRevision;
   const initialValues = documentRevision ?
       toDocumentRevisionFormValuesWithRevisionChange(documentRevision) :
-      DEFAULT_INITIAL_VALUES;
+      DEFAULT_INITIAL_VALUES();
 
   return (
       <DocumentRevisionForm
