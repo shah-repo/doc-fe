@@ -39,9 +39,12 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   create, history, documentRevision, loadDocument, setDocId,
 }) => {
 
-    const async = useAsync<DocumentRevision>({
+  if (!documentRevision) {
+    setDocId("");
+  }
+
+  const async = useAsync<DocumentRevision>({
       onSuccess: (createdDocumentRevision?) => {
-        setDocId("");
         if (createdDocumentRevision) {
           loadDocument(createdDocumentRevision.document.id);
           history.push(generateDocumentRevisionVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id));
@@ -49,16 +52,16 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
       },
     });
 
-    const onSubmit = (values: DocumentRevisionFormValues) => {
+  const onSubmit = (values: DocumentRevisionFormValues) => {
       async.start(create, toNewVersionRequestBody(values), async);
     };
 
-    const showRevisionTypeChange = !!documentRevision;
-    const initialValues = documentRevision ?
+  const showRevisionTypeChange = !!documentRevision;
+  const initialValues = documentRevision ?
       toDocumentRevisionFormValuesWithRevisionChange(documentRevision) :
       DEFAULT_INITIAL_VALUES;
 
-    return (
+  return (
       <DocumentRevisionForm
         asyncState={async.asyncState}
         onSubmit={onSubmit}
