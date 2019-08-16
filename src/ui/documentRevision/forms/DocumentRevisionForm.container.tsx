@@ -90,7 +90,9 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<DocumentRevi
 
     return (
       <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>
-        <ChangeRequestLink dataProp={documentRevision} />
+        <div style={{marginLeft: -16}}>
+          <ChangeRequestLink dataProp={documentRevision} />
+        </div>
         <Formik
           render={render}
           initialValues={initialValues}
