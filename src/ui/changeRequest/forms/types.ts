@@ -1,3 +1,4 @@
+import { EditorState } from "draft-js";
 import { Attachment as AttachmentInterface } from "../../../state/ducks/attachments";
 import { Assessment } from "../../../state/ducks/changeRequest/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
@@ -38,6 +39,7 @@ export interface ChangeRequestFormValues {
   effectiveDate?: Date;
   approvals: OptionType[];
   documentRevisions: string[];
+  test?: EditorState;
 }
 
 export interface PasswordFormValues {
