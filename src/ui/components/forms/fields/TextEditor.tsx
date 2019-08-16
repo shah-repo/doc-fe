@@ -18,12 +18,22 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
   ...fieldProps
 }) => {
   const onEditorStateChange = (editorState: EditorState) => {
-    fieldProps.form.setFieldValue(fieldProps.field.name, editorState);
+    const newHasText = editorState.getCurrentContent().hasText();
+    const previousHasText = fieldProps.field.value.getCurrentContent().hasText();
+
+    if (newHasText) {
+      fieldProps.form.setFieldValue(fieldProps.field.name, editorState);
+    }
+
+    if (!newHasText && previousHasText) {
+      fieldProps.form.setFieldValue(fieldProps.field.name, EditorState.createEmpty());
+    }
   };
 
   return (
     <Field {...fieldProps} >
       <Editor
+        defaultEditorState={fieldProps.field.value}
         editorState={fieldProps.field.value}
         // editorStyle={this.styles.editor}
         toolbarStyle={{
