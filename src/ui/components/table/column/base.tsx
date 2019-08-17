@@ -1,4 +1,4 @@
-import { Box, Typography } from "@material-ui/core";
+import { Box, Tooltip, Typography } from "@material-ui/core";
 import React from "react";
 import {
   CellMeasurer,
@@ -13,7 +13,6 @@ import {
   StyledCellLink,
   StyledTableCell,
   StyledTableHeader,
-  StyledTooltip,
 } from "./styles";
 import {
   InnerTableColumnProps,
@@ -124,12 +123,12 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
     }
 
     return (
-      <StyledTooltip
+      <Tooltip
         disableHoverListener={!tooltipKey}
         title={tooltipValue || ""}
       >
         <div>{cellMeasurer(columnProps)}</div>
-      </StyledTooltip>
+      </Tooltip>
     );
   };
 

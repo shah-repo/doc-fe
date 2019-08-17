@@ -43,12 +43,6 @@ export const StyledCellLink = withStyles((theme) => ({
   },
 }))(Link);
 
-export const StyledTooltip = withStyles((theme: Theme) => ({
-  tooltip: {
-    fontSize: "13px",
-  },
-}))(Tooltip);
-
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     columnBox: {

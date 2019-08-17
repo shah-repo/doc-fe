@@ -71,6 +71,11 @@ const theme = createMuiTheme({
         fontSize: "0.8rem",
       },
     },
+    MuiTooltip: {
+      tooltip: {
+        fontSize: "0.8rem",
+      },
+    },
   },
 });
 
