@@ -1,5 +1,6 @@
 import {
   Box,
+  Grid,
   ListItem,
   Typography,
   WithStyles,
@@ -50,7 +51,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   );
 
   const submitButtonRenderer = () =>
-    <SubmitButton asyncState={asyncState} label="document.save" style={{ marginRight: 20 }} />;
+    <SubmitButton asyncState={asyncState} label="document.save" />;
 
   return (
     <Box>
@@ -81,9 +82,13 @@ export const Presenter: React.FunctionComponent<Props> = ({
         {!canEdit && <ApproversSummary dataProp={dataProp.approvals} />}
       </Box>
       <Box className={classes.submitBox}>
-        {canEdit && <FormProgress asyncState={asyncState} />}
-        {canEdit && submitButtonRenderer()}
-        <ControlsContainer changeRequest={dataProp} />
+        <Grid item={true} container={true} alignItems="flex-end" direction="column">
+          <div>
+            {canEdit && <FormProgress asyncState={asyncState} />}
+            {canEdit && submitButtonRenderer()}
+            <ControlsContainer changeRequest={dataProp} />
+          </div>
+        </Grid>
       </Box>
     </Box>
   );

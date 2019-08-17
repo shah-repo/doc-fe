@@ -28,9 +28,11 @@ export const AttachmentIconPresenter: React.FunctionComponent<AttachmentIconProp
         {isLoading && <CircularProgress className={classes.progress} />}
         {!isLoading && <FileIcon {...other} extension={file.type} />}
       </ButtonBase>
-      <Typography variant="caption" gutterBottom={true} align="justify" className={classes.fileName}>
-        {`${file.name}.${file.type}`}
-      </Typography>
+      <Box>
+        <Typography variant="caption" gutterBottom={true} align="left" className={classes.fileName}>
+          {`${file.name}.${file.type}`}
+        </Typography>
+      </Box>
     </Grid>
     );
 };

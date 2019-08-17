@@ -101,7 +101,6 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
               <SubmitButton
                 asyncState={asyncState}
                 label={changeRequest ? "common.save" : "navigation.createChangeRequest"}
-                style={{ marginLeft: 15 }}
               />
             </div>
           </Grid>

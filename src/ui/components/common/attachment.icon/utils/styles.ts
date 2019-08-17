@@ -22,8 +22,9 @@ export const styles = makeStyles((theme) => ({
     },
   }),
   fileName: {
-    paddingRight: theme.spacing(3),
-    display: "block",
+    overflowWrap: "break-word",
+    wordWrap: "break-word",
+    hyphens: "auto",
   },
   closeIcon: {
     fontSize: "inherit",

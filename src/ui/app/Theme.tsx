@@ -1,7 +1,8 @@
 import { CssBaseline  } from "@material-ui/core";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
-import { palette } from "@material-ui/system";
 import * as React from "react";
+
+const defaultTheme = createMuiTheme();
 
 const theme = createMuiTheme({
   palette: {
@@ -59,6 +60,7 @@ const theme = createMuiTheme({
       root: {
         fontSize: "0.7rem",
         borderRadius: 0,
+        margin: defaultTheme.spacing(1),
       },
     },
     MuiLink: {
@@ -74,6 +76,10 @@ const theme = createMuiTheme({
     MuiTooltip: {
       tooltip: {
         fontSize: "0.8rem",
+        maxWidth: "350px",
+        overflowWrap: "break-word",
+        wordWrap: "break-word",
+        hyphens: "auto",
       },
     },
   },
