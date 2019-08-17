@@ -50,7 +50,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   );
 
   const submitButtonRenderer = () =>
-    <SubmitButton asyncState={asyncState} label="document.save" style={{ paddingTop: 25 }} />;
+    <SubmitButton asyncState={asyncState} label="document.save" style={{ marginRight: 20 }} />;
 
   return (
     <Box>
