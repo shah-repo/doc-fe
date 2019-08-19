@@ -11,6 +11,7 @@ import AsyncGate from "../components/AsyncGate";
 import DocumentRevisionDisplayContainer from "./DocumentRevisionDisplay.container";
 import DocumentRevisionListContainer from "./DocumentRevisionList.container";
 import { documentVersionPath } from "../document.revision/utils/paths";
+import DocumentRevisionAuditContainer from "./audit/Audit.container";
 
 interface StateProps {
   loadDocumentAsyncState: AsyncState;
@@ -48,12 +49,12 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<DocumentR
       const depreactedAtDate = moment(deprecatedAt);
       let indexOfLastReleased = _.findLastIndex(documentRevisions, (doc) => {
         if (!doc.releasedAt) return false;
-  
+
         return moment(doc.releasedAt).isSameOrBefore(depreactedAtDate);
       })
       indexOfDocRev = indexOfLastReleased > -1 ? indexOfLastReleased : indexOfDocRev;
     }
-    
+
     const docRevIdToRedirect = documentRevisions[indexOfDocRev].id;
     return <Redirect to={documentVersionPath(docRevIdToRedirect, documentId)} />;
   }
@@ -67,6 +68,11 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<DocumentR
       </Grid>
       <Grid item={true} xs={6}>
         {documentRevisionId && <DocumentRevisionDisplayContainer documentRevisionId={documentRevisionId} isNewVersion={isNewVersion} />}
+      </Grid>
+      <Grid item={true} xs={3}>
+        {documentRevisionId && (
+          <DocumentRevisionAuditContainer documentRevisionId={documentRevisionId} />
+        )}
       </Grid>
     </Grid>
   );

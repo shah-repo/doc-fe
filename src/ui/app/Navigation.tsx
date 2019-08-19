@@ -43,7 +43,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({ classes, locatio
         Icon={Dashboard}
         currentPath={location.pathname}
         childrenUrls={[
-          { url: CHANGE_REQUEST_CREATE_URL, text: "navigation.createChangeRequest" },
+          // { url: CHANGE_REQUEST_CREATE_URL, text: "navigation.createChangeRequest" },
         ]}
       />
       <NavigationLinkContainer

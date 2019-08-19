@@ -53,6 +53,7 @@ export const DocumentRevisionUpdateContainer: React.FunctionComponent<DocumentRe
       onSubmit={onSubmit}
       initialValues={toDocumentRevisionFormValues(documentRevision)}
       onDirtyFlagChange={onDirtyFlagChange}
+      documentRevision={documentRevision}
     />
   );
 };

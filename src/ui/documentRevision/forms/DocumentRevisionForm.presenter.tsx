@@ -46,7 +46,7 @@ interface Props
 }
 
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
-  asyncState, classes, initialValues, handleChange, availableReferences, showRevisionTypeChange,
+  asyncState, initialValues, handleChange, availableReferences, showRevisionTypeChange,
   loadDocumentProposedId, proposedDocId, values, setDocId,
   dirty, resetForm, doNotPrompt, onDirtyFlagChange,
 }) => {

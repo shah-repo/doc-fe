@@ -7,7 +7,4 @@ export default (theme: Theme) =>
       margin: "auto",
       display: "inline-block",
     },
-    button: {
-      margin: theme.spacing(1),
-    },
   });

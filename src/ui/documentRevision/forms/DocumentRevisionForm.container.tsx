@@ -10,6 +10,7 @@ import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
+import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 
 interface StateProps {
   availableReferences: OptionType[];
@@ -30,6 +31,7 @@ interface OwnProps {
   setDocId?: typeof documentsActions.setDocumentProposedId;
   doNotPrompt?: boolean;
   onDirtyFlagChange?: (dirty: boolean) => void;
+  documentRevision: DocumentRevision;
 }
 
 type DocumentRevisionFormContainerProps = OwnProps & StateProps & DispatchProps;
@@ -56,6 +58,7 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<DocumentRevi
   setDocId,
   doNotPrompt,
   onDirtyFlagChange,
+  documentRevision,
 }) => {
 
     const render = (props: FormikProps<DocumentRevisionFormValues>) => {
@@ -87,6 +90,9 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<DocumentRevi
 
     return (
       <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>
+        <div style={{marginLeft: -16}}>
+          <ChangeRequestLink dataProp={documentRevision} />
+        </div>
         <Formik
           render={render}
           initialValues={initialValues}

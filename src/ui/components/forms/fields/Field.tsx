@@ -12,6 +12,7 @@ import { RenderSize, TypographySize } from "../../../../state/ducks/common";
 import { Translation } from "../../../translations/types";
 import HeaderField from "../../common/header.field/field";
 import Text from "../../Text";
+import { styles } from "./Field.styles";
 import { LabelField } from "./Input.styles";
 
 export interface FieldOwnProps {
@@ -21,7 +22,13 @@ export interface FieldOwnProps {
   variant?: "standard" | "outlined" | "filled";
   required?: boolean;
   size?: RenderSize;
+  gutter?: boolean;
   actionsRenderer?: () => any;
+}
+
+export interface FieldStyleProps {
+  gutter?: boolean;
+  error?: boolean;
 }
 
 type FieldProps = FieldOwnProps & FormikFieldProps;
@@ -36,11 +43,13 @@ const Field: React.FunctionComponent<FieldProps> = ({
   variant,
   required,
   size = "md",
+  gutter = true,
   actionsRenderer,
 }) => {
   const error = _.get(errors, field.name);
   const isFieldTouched = _.get(touched, field.name);
   const shouldDisplayError = Boolean(isFieldTouched && error);
+  const classes = styles({ gutter, error: shouldDisplayError });
 
   // Workaround for untouched select fields
   if (error && !shouldDisplayError && isSubmitting) {
@@ -53,7 +62,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
     }
     return label && (
       <LabelField htmlFor={field.name}>
-        <Typography variant={TypographySize[size]} color={shouldDisplayError ? "primary" : "initial"} >
+        <Typography variant={TypographySize[size]} className={classes.typography} >
           <Text message={label} />
         </Typography>
       </LabelField>
@@ -72,7 +81,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
       required={required}
       fullWidth={true}
       error={shouldDisplayError}
-      style={{ marginTop: "8px", marginBottom: "35px" }}
+      className={classes.form}
       {...formControlProps}
     >
       {LabelComponent()}

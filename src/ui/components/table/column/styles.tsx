@@ -16,6 +16,7 @@ export const StyledTableHeader = withStyles((theme) => ({
       "flex": 1,
       "& .headerText": {
         padding: theme.spacing(2),
+        color: theme.palette.common.white,
       },
       "& .headerField": {
         backgroundColor: "#e8e9ed",
@@ -41,12 +42,6 @@ export const StyledCellLink = withStyles((theme) => ({
     cursor: "pointer",
   },
 }))(Link);
-
-export const StyledTooltip = withStyles((theme: Theme) => ({
-  tooltip: {
-    fontSize: "13px",
-  },
-}))(Tooltip);
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
