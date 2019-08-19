@@ -24,8 +24,6 @@ import styles from "./AssessmentForm.styles";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
 import AssessmentFormImplementationPlan from "./implementationPlan/Container";
 import TextEditorFieldQuill from "../../../components/forms/fields/TextEditorQuill";
-import TextEditorField from "../../../components/forms/fields/TextEditor";
-import TextEditorFieldContent from "../../../components/forms/fields/TextEditorContent";
 
 interface Props
   extends WithStyles<typeof styles>,
@@ -76,17 +74,15 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
         {renderCrId()}
-        <TextEditorFieldQuill name="quill" />
         <InputField
           name="title"
           label="cr.title"
           inputProps={{ id: "title", multiline: true, rows: "2" }}
           validate={validator(required)}
         />
-        <InputField
+        <TextEditorFieldQuill
           name="description"
           label="cr.description"
-          inputProps={{ id: "description", multiline: true, rows: "2" }}
           validate={validator(required)}
         />
         <JustificationField />

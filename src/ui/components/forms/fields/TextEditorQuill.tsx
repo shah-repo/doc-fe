@@ -5,11 +5,12 @@ import * as React from "react";
 import ReactQuill, { } from "react-quill";
 import { QuillOptionsStatic} from "quill";
 import Field, { FieldOwnProps } from "./Field";
-import 'react-quill/dist/quill.snow.css';
-import 'react-quill/dist/quill.bubble.css';
+import { RenderSize } from "../../../../state/ducks/common";
 
 interface TextEditorOwnProps extends FieldOwnProps {
   quillOptions?: QuillOptionsStatic;
+  size?: RenderSize;
+  actionsRenderer?: () => any;
 }
 
 type TextEditorPropsWithFormik = TextEditorOwnProps & FormikFieldProps;
@@ -24,8 +25,9 @@ const modules = {
     [{size: []}],
     ['bold', 'italic', 'underline', 'strike', 'blockquote'],
     [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-    ['link', 'image', 'video'],
-    ['clean']
+    ['link', 'video'],
+    ['clean'],
+    [{ 'color': [] }, { 'background': [] }],
   ],
   clipboard: {
     // toggle to add extra line breaks when pasting HTML:
@@ -40,11 +42,13 @@ const formats = [
   'header', 'font', 'size',
   'bold', 'italic', 'underline', 'strike', 'blockquote',
   'list', 'bullet', 'indent',
-  'link', 'image', 'video'
+  'link', 'video', 'color'
 ]
 
 const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
   quillOptions,
+  actionsRenderer,
+  size,
   ...fieldProps
 }) => {
   const handleChange = (editHtml: string) => {
@@ -52,17 +56,16 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
   };
 
   return (
-    <Field {...fieldProps} >
+    <Field size={size} actionsRenderer={actionsRenderer} {...fieldProps} inputLabelProps={{ shrink: true }} >
       <div className="editor-container">
         <ReactQuill
           theme="bubble"
-          onChange={handleChange}
-          value={fieldProps.field.value}
           modules={modules}
           formats={formats}
           bounds={'.editor-container'}
-          placeholder="Test"
           {...quillOptions}
+          onChange={handleChange}
+          value={fieldProps.field.value}
         />
       </div>
     </Field>

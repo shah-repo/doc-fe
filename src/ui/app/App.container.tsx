@@ -5,7 +5,7 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import "react-virtualized/styles.css";
 import "react-datepicker/dist/react-datepicker.css";
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import 'react-quill/dist/quill.bubble.css'
 import "./app.css";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistor, store } from "../../state/store";
