@@ -30,6 +30,7 @@ import {
 } from "../../document.revision/utils/paths";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
+import TextEditorField from "../../components/forms/fields/TextEditor";
 
 interface Props
   extends WithStyles<typeof styles>,
@@ -150,11 +151,10 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             inputProps={{ multiline: true, rows: "2"}}
             validate={validator(required)}
           />
-          <InputField
+          <TextEditorField
             name="description"
             label="common.description"
             validate={validator(required)}
-            inputProps={{ multiline: true, rows: "2" }}
           />
           <SelectField
             name="document.type"
