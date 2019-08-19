@@ -22,8 +22,9 @@ export const styles = makeStyles((theme) => ({
     },
   }),
   fileName: {
-    paddingRight: theme.spacing(3),
-    display: "block",
+    overflowWrap: "break-word",
+    wordWrap: "break-word",
+    hyphens: "auto",
   },
   closeIcon: {
     fontSize: "inherit",
@@ -50,7 +51,7 @@ export const styles = makeStyles((theme) => ({
     "backgroundColor": theme.palette.primary.main,
     "width": "100%",
     "position": "relative",
-    "z-index": "2",
+    "z-index": "1",
     "top": "55%",
     "textAlign": "center",
     "height": "30%",

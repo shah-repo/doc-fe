@@ -1,9 +1,8 @@
 import { Grid, IconButton, Tooltip } from "@material-ui/core";
 import { RemoveCircleOutline } from "@material-ui/icons";
-import React from "react";
 import classNames from "classnames";
+import React from "react";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { CardTooltip } from "../../components/cards/FileCard.styles";
 import Date from "../../components/Date";
 import Text from "../../components/Text";
 import { styles } from "./DocumentRevisionItem.styles";
@@ -26,18 +25,17 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<
   return (
     <div
       className={
-        classNames(classes.container, { [classes.selected]: isSelected })
-      }
+        classNames(classes.container, { [classes.selected]: isSelected })}
     >
       <Grid container={true}>
         <Grid item={true} xs={10}>
           <div onClick={onClick}>
-            <CardTooltip
+            <Tooltip
               title={documentRevision.name}
               aria-label={documentRevision.name}
             >
               <div className={classes.title}>{documentRevision.name}</div>
-            </CardTooltip>
+            </Tooltip>
             <div>
               <Text translation="common.version" />
               :&nbsp;

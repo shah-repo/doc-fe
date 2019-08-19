@@ -116,7 +116,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   return (
     <Grid container={true} className={classes.root}>
       <Grid item={true} xs={6}>
-        <Button color="secondary" className={classes.clearButton} onClick={clear} >
+        <Button color="primary" className={classes.clearButton} onClick={clear} >
           Clear filters
         </Button>
       </Grid>
