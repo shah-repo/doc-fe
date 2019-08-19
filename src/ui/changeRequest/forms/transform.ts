@@ -1,7 +1,5 @@
 import * as _ from "lodash";
 import moment from "moment";
-import { convertToRaw, EditorState } from 'draft-js';
-const draftToHtml = require('draftjs-to-html');
 import {
   Approver,
   Assessment,
