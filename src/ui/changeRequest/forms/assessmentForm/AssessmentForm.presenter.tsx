@@ -23,7 +23,9 @@ import { ChangeRequestFormValues } from "../types.js";
 import styles from "./AssessmentForm.styles";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
 import AssessmentFormImplementationPlan from "./implementationPlan/Container";
+import TextEditorFieldQuill from "../../../components/forms/fields/TextEditorQuill";
 import TextEditorField from "../../../components/forms/fields/TextEditor";
+import TextEditorFieldContent from "../../../components/forms/fields/TextEditorContent";
 
 interface Props
   extends WithStyles<typeof styles>,
@@ -74,7 +76,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
         {renderCrId()}
-        <TextEditorField name="test" />
+        <TextEditorFieldQuill name="quill" />
         <InputField
           name="title"
           label="cr.title"

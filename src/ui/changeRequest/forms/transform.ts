@@ -73,7 +73,9 @@ export const toChangeRequestFormValues = (changeRequest: ChangeRequest): ChangeR
     })),
     effectiveDate: changeRequest.effectiveDate && moment.utc(changeRequest.effectiveDate).startOf("day").toDate(),
     documentRevisions: changeRequest.documentRevisions.map((documentRevision) => documentRevision.id ),
-    test:  EditorState.createEmpty(),
+    test: EditorState.createEmpty(),
+    contentState: {},
+    quill: "<p><br></p>",
   };
 
   return values;
@@ -113,8 +115,8 @@ const createAssessmentObjectForRequestBody = (value: Assessment) => {
 
 export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues): ChangeRequestEditRequestBody => {
   console.log(values);
-  const html = values.test ? draftToHtml(convertToRaw(values.test.getCurrentContent())) : undefined;
-  console.log(html);
+  //const html = values.test ? draftToHtml(convertToRaw(values.test.getCurrentContent())) : undefined;
+  //console.log(html);
   const changeRequestEditRequestBody: ChangeRequestEditRequestBody = {
     title: values.title,
     description: values.description,

@@ -40,6 +40,8 @@ export interface ChangeRequestFormValues {
   approvals: OptionType[];
   documentRevisions: string[];
   test?: EditorState;
+  quill?: string;
+  contentState?: any;
 }
 
 export interface PasswordFormValues {
