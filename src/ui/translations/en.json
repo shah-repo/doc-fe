@@ -133,8 +133,8 @@
   "changeRequest.audit.assessments.regulatory.attachment.OBJECT_NEW": "Regulatory Assessment Attachment Added",
   "changeRequest.audit.tasks.ARRAY_DELETED": "Implementation plan tasks deleted",
 
-  "cr.description": "Description of Changes",
-  "cr.justification": "Justification of Changes",
+  "cr.description": "Description Of Changes",
+  "cr.justification": "Justification Of Changes",
   "cr.title": "CR Title",
 
   "common.assigned.to": "Assigned To",
