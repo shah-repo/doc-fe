@@ -1,7 +1,9 @@
 import { createSelector } from "reselect";
+import striptags from "striptags";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
+import { Audit } from "./types";
 
 const allIds = (state: ApplicationState) => state.changeRequests.allIds;
 const byId = (state: ApplicationState) => state.changeRequests.byId;
@@ -28,6 +30,21 @@ const getAssignessList = createSelector(
 const getChangeRequest = (state: ApplicationState, changeRequestId: string) => byId(state)[changeRequestId];
 const getAudit = (state: ApplicationState, changeRequestId: string) => auditsByCRId(state)[changeRequestId];
 
+const makeGetAudit = () => {
+  return createSelector(
+    getAudit,
+    (audits: Audit[] = []) => audits.map((audit) => {
+      if (audit.field === "description") {
+        const html = audit.nextValue as string;
+        audit.nextValue = striptags(html).substring(0, 30);
+        return audit;
+      }
+
+      return audit;
+    }),
+  )
+}
+
 const getLoadAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadAsyncInfo;
 const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadListAsyncInfo;
 const getLoadApproversAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadApproversAsyncInfo;
@@ -44,4 +61,5 @@ export default {
   getLoadAuditAsyncState,
   getAudit,
   getAssignessList,
+  makeGetAudit,
 };
