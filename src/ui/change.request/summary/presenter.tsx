@@ -13,6 +13,7 @@ import { DataProps } from "../../../state/ducks/common";
 import { AsyncState } from "../../../state/types";
 import ControlsContainer from "../../changeRequest/forms/assessmentForm/AssessmentFormControls.container";
 import SummaryField from "../../common/summary/base";
+import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import FormProgress from "../../components/forms/FormProgress";
 import SubmitButton from "../../components/forms/SubmitButton";
 import Text from "../../components/Text";
@@ -64,7 +65,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         <SummaryField label="common.owner" value={dataProp.owner.name} />
         <SummaryField label="common.status" value={dataProp.state} />
         <SummaryField label="cr.title" value={dataProp.title} />
-        <SummaryField label="cr.description" value={dataProp.description} />
+        <SummaryFieldWithHtml label="cr.description" value={dataProp.description} />
         <SummaryField
           label="common.target.date"
           value={moment.utc(dataProp.effectiveDate).format("LL")}
