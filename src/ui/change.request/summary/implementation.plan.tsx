@@ -17,7 +17,7 @@ import Text from "../../components/Text";
 import styles from "./styles";
 import { canCloseTask } from "../utils/helpers";
 import CloseTask from "./close.task";
-import { getFormattedDateString } from "../../../state/helpers";
+import { getFormattedDateString } from "../../../common/utils/date";
 
 interface OwnProps extends DataProps<Model> {
   currentUserEmail: string;

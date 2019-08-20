@@ -23,7 +23,7 @@ import Assessment from "./assessment";
 import ImplementationPlan from "./implementation.plan";
 import Justification from "./justification";
 import styles from "./styles";
-import { getFormattedDateString } from "../../../state/helpers";
+import { getFormattedDateString } from "../../../common/utils/date";
 
 interface OwnProps extends DataProps<ChangeRequest> {
   asyncState: AsyncState;

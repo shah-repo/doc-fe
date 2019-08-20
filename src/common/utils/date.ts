@@ -8,7 +8,7 @@ export const getDateString = (date: DateTypes, format: string = "") => {
   return moment(date).tz(TIME_ZONE).startOf("day").format(format);
 }
 
-export const applyTimezoneToDate = (date: Date | string) => {
+export const applyTimezoneToDate = (date: DateTypes) => {
   return new Date(moment(date).tz(TIME_ZONE).startOf("day").format());
 }
 

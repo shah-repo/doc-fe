@@ -6,7 +6,7 @@ import useDialog from "../../../../hooks/useDialog";
 import { ImplementationPlanTaskFormValues } from "../../types";
 import TaskPresenter from "./Task.presenter";
 import TaskFormDialog from "./TaskFormDialog";
-import { applyTimezoneToDate } from "../../../../../state/helpers";
+import { applyTimezoneToDate } from "../../../../../common/utils/date";
 
 type Props = FieldArrayRenderProps;
 

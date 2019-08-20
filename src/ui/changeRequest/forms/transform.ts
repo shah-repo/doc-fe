@@ -14,7 +14,7 @@ import {
 import { ChangeRequestFormValues, ImplementationPlanFormValues, ImplementationPlanTaskFormValues } from "./types";
 import { Attachment } from "../../../state/ducks/attachments";
 import { reactQuillEmptyString } from "../../components/forms/fields/validators";
-import { getDateString, applyTimezoneToDate } from "../../../state/helpers";
+import { getDateString, applyTimezoneToDate } from "../../../common/utils/date";
 
 type NestedObject = Justifications;
 
