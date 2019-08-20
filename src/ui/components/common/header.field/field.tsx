@@ -1,4 +1,4 @@
-import { AppBar, Box, Toolbar, Typography } from "@material-ui/core";
+import { AppBar, Box, Grid, Toolbar, Typography } from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
 import React from "react";
 import { DataProps, TypographySize } from "../../../../state/ducks/common";
@@ -19,15 +19,12 @@ const HeaderField: React.FunctionComponent<Props> = ({
   const classes = styles({ variant, size });
 
   return(
-      <AppBar position="static">
-      <Toolbar disableGutters={true} className={classes.toolbar}>
-        <Typography variant={TypographySize[size]} gutterBottom={true}>
-          <Text message={dataProp} />
-        </Typography>
-        <Box p={0} style={{flexGrow: 1}} />
-        {actionsRenderer && actionsRenderer()}
-      </Toolbar>
-    </AppBar>
+    <Toolbar disableGutters={true} className={classes.toolbar}>
+      <Typography variant={TypographySize[size]} gutterBottom={true} style={{flex: 1}} >
+        <Text message={dataProp} />
+      </Typography>
+      {actionsRenderer && actionsRenderer()}
+    </Toolbar>
   );
 };
 

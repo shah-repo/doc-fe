@@ -1,9 +1,11 @@
-import { createStyles, Theme } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
+import { FieldStyleProps } from "../../Field";
 
-export default (theme: Theme) => createStyles({
-  root: {
+export const styles = makeStyles((theme) => ({
+  root: ({ gutter }: FieldStyleProps) => ({
+    margin: gutter ? theme.spacing(1, 0, 4.2) : theme.spacing(1, 0, 1),
     display: "grid",
-  },
+  }),
   textField: {
     "gridArea": "1/1",
     "width": "94%",
@@ -18,4 +20,4 @@ export default (theme: Theme) => createStyles({
     "width": "100%",
     "z-index": "0",
   },
-});
+}));
