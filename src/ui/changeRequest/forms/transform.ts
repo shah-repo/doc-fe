@@ -13,6 +13,7 @@ import {
 } from "../../../state/ducks/changeRequest";
 import { ChangeRequestFormValues, ImplementationPlanFormValues, ImplementationPlanTaskFormValues } from "./types";
 import { Attachment } from "../../../state/ducks/attachments";
+import { reactQuillEmptyString } from "../../components/forms/fields/validators";
 
 type NestedObject = Justifications;
 
@@ -62,7 +63,6 @@ export const toChangeRequestFormValues = (changeRequest: ChangeRequest): ChangeR
   const values: ChangeRequestFormValues = {
     id: changeRequest.id,
     title: changeRequest.title,
-    description: changeRequest.description,
     assessments: createAssessment(changeRequest.assessments),
     justifications: createNestedObject(changeRequest.justifications),
     implementationPlan: toImplementationPlanFormValues(changeRequest.implementationPlan),
@@ -71,6 +71,7 @@ export const toChangeRequestFormValues = (changeRequest: ChangeRequest): ChangeR
     })),
     effectiveDate: changeRequest.effectiveDate && moment.utc(changeRequest.effectiveDate).startOf("day").toDate(),
     documentRevisions: changeRequest.documentRevisions.map((documentRevision) => documentRevision.id ),
+    description: changeRequest.description || reactQuillEmptyString,
   };
 
   return values;

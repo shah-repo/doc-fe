@@ -4,3 +4,17 @@
     display: block;
     width: 100%;
 }
+
+.editor-container {
+    margin-top: 30px;
+}
+
+.editor-container .ql-container {
+    background: rgba(0, 0, 0, 0.09);
+    font-size: 16px;
+}
+
+.editor-container .ql-editor {
+    min-height: 8em;
+    max-height: 36em;
+}

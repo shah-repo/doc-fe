@@ -49,10 +49,12 @@ if len(sys.argv) >= 4:
 
     with open('./aws/AWS.TaskDefinition.Template.json') as taskDefinition:
         data = json.load(taskDefinition)
+        data['taskRoleArn'] = env_vars('TASK_ROLE_ARN')
         for containerDefinition in data['containerDefinitions']:
             if containerDefinition['name'] == '<container_name>':
                 containerDefinition['name']  = name # set container name
                 containerDefinition['image'] = image # ser container image
+                containerDefinition['logConfiguration']['options']['awslogs-group'] = env_vars('AWS_LOGS_GROUP')
 
                 destinationArray = containerDefinition['environment']
                 replaceValues(env_vars, destinationArray) # replace values from local env file
