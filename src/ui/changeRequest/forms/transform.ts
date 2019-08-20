@@ -14,6 +14,7 @@ import {
 import { ChangeRequestFormValues, ImplementationPlanFormValues, ImplementationPlanTaskFormValues } from "./types";
 import { Attachment } from "../../../state/ducks/attachments";
 import { reactQuillEmptyString } from "../../components/forms/fields/validators";
+import { getDateString, applyTimezoneToDate } from "../../../state/helpers";
 
 type NestedObject = Justifications;
 
@@ -69,7 +70,7 @@ export const toChangeRequestFormValues = (changeRequest: ChangeRequest): ChangeR
     approvals: changeRequest.approvals.map((approval) => ({
       label: approval.approver.name, value: approval.approver.email,
     })),
-    effectiveDate: changeRequest.effectiveDate && moment.utc(changeRequest.effectiveDate).startOf("day").toDate(),
+    effectiveDate: changeRequest.effectiveDate && applyTimezoneToDate(changeRequest.effectiveDate),
     documentRevisions: changeRequest.documentRevisions.map((documentRevision) => documentRevision.id ),
     description: changeRequest.description || reactQuillEmptyString,
   };
@@ -84,11 +85,12 @@ const createNestedObjectForRequestBody = (value: NestedObject) => ({
 
 const toImplementationPlanEditRequestBody = (values: ImplementationPlanFormValues): ImplementationPlanRequest => {
   const valuesTasks: ImplementationPlanTaskRequest[] = values.tasks.map((t) => {
-    const { assigned, ...excluded } = t;
+    const { assigned, dueDate, ...excluded } = t;
+    const normalizedDueDate = getDateString(dueDate);
     if (assigned) {
-      return ({ assigned: { id: assigned.value }, ...excluded });
+      return ({ assigned: { id: assigned.value }, dueDate: normalizedDueDate, ...excluded });
     } else {
-      return ({ ...excluded });
+      return ({ dueDate: normalizedDueDate, ...excluded });
     }
   });
   return {
@@ -117,7 +119,7 @@ export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues):
     implementationPlan: toImplementationPlanEditRequestBody(values.implementationPlan),
     justifications: createNestedObjectForRequestBody(values.justifications),
     approvals: values.approvals.map((approver): Approver => ({ email: approver.value })),
-    effectiveDate: values.effectiveDate && moment.utc(values.effectiveDate).startOf("day").toDate(),
+    effectiveDate: values.effectiveDate && getDateString(values.effectiveDate),
     documentRevisions: values.documentRevisions.map((documentRevisionId) => ({ id: documentRevisionId })),
   };
 

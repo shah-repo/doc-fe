@@ -70,7 +70,7 @@ export const getChangeRequestEditRequestBody = (
   assessments: createAssessment(),
   implementationPlan: createImplementationPlan(),
   justifications: createNestedObject(),
-  effectiveDate: faker.date.future(undefined, "2019-05-31"),
+  effectiveDate: faker.date.future(undefined, "2019-05-31").toString(),
   approvals: [],
   documentRevisions: [],
   ...body,

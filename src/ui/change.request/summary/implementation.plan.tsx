@@ -17,6 +17,7 @@ import Text from "../../components/Text";
 import styles from "./styles";
 import { canCloseTask } from "../utils/helpers";
 import CloseTask from "./close.task";
+import { getFormattedDateString } from "../../../state/helpers";
 
 interface OwnProps extends DataProps<Model> {
   currentUserEmail: string;
@@ -52,7 +53,7 @@ const ImplementationPlan: React.FunctionComponent<Props> = ({
       </ListItem>
       <SummaryField label="common.title" value={task.title} />
       <SummaryField label="common.description" value={task.description} />
-      <SummaryField label="common.due.date" value={moment.utc(task.dueDate).format("LL")} />
+      <SummaryField label="common.due.date" value={getFormattedDateString(task.dueDate)} />
       <SummaryField label="common.assigned.to" value={task.assigned && task.assigned.name} />
       <SummaryField label="common.status" value={task.status} />
       {task.closingNote && <SummaryField label="common.closing.note" value={task.closingNote} />}

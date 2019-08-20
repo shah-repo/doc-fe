@@ -23,6 +23,7 @@ import Assessment from "./assessment";
 import ImplementationPlan from "./implementation.plan";
 import Justification from "./justification";
 import styles from "./styles";
+import { getFormattedDateString } from "../../../state/helpers";
 
 interface OwnProps extends DataProps<ChangeRequest> {
   asyncState: AsyncState;
@@ -68,7 +69,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         <SummaryFieldWithHtml label="cr.description" value={dataProp.description} />
         <SummaryField
           label="common.target.date"
-          value={moment.utc(dataProp.effectiveDate).format("LL")}
+          value={getFormattedDateString(dataProp.effectiveDate)}
         />
         <Justification dataProp={dataProp.justifications} />
         <Assessment dataProp={dataProp.assessments} />

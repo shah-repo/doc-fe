@@ -6,6 +6,7 @@ import useDialog from "../../../../hooks/useDialog";
 import { ImplementationPlanTaskFormValues } from "../../types";
 import TaskPresenter from "./Task.presenter";
 import TaskFormDialog from "./TaskFormDialog";
+import { applyTimezoneToDate } from "../../../../../state/helpers";
 
 type Props = FieldArrayRenderProps;
 
@@ -54,7 +55,7 @@ const Tasks: React.FunctionComponent<Props> = ({
     changeSelectedIndex(index);
     changeSelectedTask({
       ...task,
-      dueDate: moment.utc(task.dueDate).startOf("day").toDate(),
+      dueDate: task.dueDate ? applyTimezoneToDate(task.dueDate) : undefined,
     });
     dialog.open();
   };
