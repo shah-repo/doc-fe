@@ -9,6 +9,7 @@ import React from "react";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import SummaryField from "../../common/summary/base";
+import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import Text from "../../components/Text";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
 import Attachment from "./attachment";
@@ -35,7 +36,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         <SummaryField label="common.status" value={dataProp.status} />
         <SummaryField label="common.type" value={dataProp.document.type} />
         <SummaryField label="document.title" value={dataProp.name} />
-        <SummaryField label="common.description" value={dataProp.description} />
+        <SummaryFieldWithHtml label="cr.description" value={dataProp.description} />
         {dataProp.referenceTo && (
           <ReferenceContainer
             dataProp={dataProp.referenceTo}

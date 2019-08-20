@@ -21,9 +21,10 @@ interface DispatchProps {
 
 export type AuditContainerProps = OwnProps & StateProps & DispatchProps;
 
+const getAudit = documentRevisionsSelectors.makeGetAudit();
 const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps => ({
   loadAuditAsyncState: documentRevisionsSelectors.getLoadAuditAsyncState(state),
-  audit: documentRevisionsSelectors.getAudit(state, props.documentRevisionId),
+  audit: getAudit(state, props.documentRevisionId),
 });
 
 export const AuditContainer: React.FunctionComponent<AuditContainerProps> = ({

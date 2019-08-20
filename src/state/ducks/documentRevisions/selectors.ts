@@ -1,9 +1,10 @@
 import _ from "lodash";
 import { createSelector } from "reselect";
+import striptags from "striptags";
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
-import { DocumentRevisionStatus } from ".";
+import { DocumentRevisionStatus, Audit } from "./types";
 import { DocumentRevisionFormValues } from "../../../ui/documentRevision/forms/types";
 
 const allIds = (state: ApplicationState) => state.documentRevisions.allIds;
@@ -84,6 +85,21 @@ const makeGetAvailableReferences = () => {
   );
 };
 
+const makeGetAudit = () => {
+  return createSelector(
+    getAudit,
+    (audits: Audit[] = []) => audits.map((audit) => {
+      if (audit.field === "description") {
+        const html = audit.nextValue as string;
+        audit.nextValue = striptags(html).substring(0, 30);
+        return audit;
+      }
+
+      return audit;
+    }),
+  )
+}
+
 const getLoadAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadAsyncInfo;
 const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadListAsyncInfo;
 const getLoadDocumentAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadDocumentAsyncInfo;
@@ -102,4 +118,5 @@ export default {
   getAudit,
   getLoadAuditAsyncState,
   makeGetAvailableReferences,
+  makeGetAudit,
 };

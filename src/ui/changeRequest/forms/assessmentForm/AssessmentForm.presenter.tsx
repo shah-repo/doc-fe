@@ -23,6 +23,7 @@ import { ChangeRequestFormValues } from "../types.js";
 import styles from "./AssessmentForm.styles";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
 import AssessmentFormImplementationPlan from "./implementationPlan/Container";
+import TextEditorField from "../../../components/forms/fields/TextEditor";
 
 interface Props
   extends WithStyles<typeof styles>,
@@ -79,10 +80,9 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
           inputProps={{ id: "title", multiline: true, rows: "2" }}
           validate={validator(required)}
         />
-        <InputField
+        <TextEditorField
           name="description"
           label="cr.description"
-          inputProps={{ id: "description", multiline: true, rows: "2" }}
           validate={validator(required)}
         />
         <JustificationField />
