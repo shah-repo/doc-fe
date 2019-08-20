@@ -58,7 +58,7 @@ const theme = createMuiTheme({
     },
     MuiButton: {
       root: {
-        fontSize: "0.7rem",
+        fontSize: "0.75rem",
         borderRadius: 0,
         margin: defaultTheme.spacing(1),
       },
