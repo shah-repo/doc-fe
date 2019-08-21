@@ -2,6 +2,7 @@ import { Grid } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import React from "react";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 import {
   ChangeRequest,
   changeRequestsActions,
@@ -19,9 +20,10 @@ import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
 import DocumentRevisionSummaryPresenter from "../../document.revision/summary/presenter";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
 import useAsync from "../../hooks/useAsync";
-import { canEditApprovers } from "../utils/helpers";
+import { canEditApprovers, canEditChangeRequest } from "../utils/helpers";
 import { SummaryDispatchProps } from "../utils/types";
 import Presenter from "./presenter";
+import { changeRequestEditPath } from "../utils/paths";
 
 type DispatchProps = SummaryDispatchProps;
 
@@ -37,6 +39,10 @@ export const Container: React.FunctionComponent<Props> = ({
   currentUserEmail,
   closeTask,
 }) => {
+  if (canEditChangeRequest({ dataProp, currentUserEmail })) {
+    return <Redirect to={changeRequestEditPath(dataProp.id)} />;
+  }
+
   const [docRev, setDocRev] = React.useState<DocumentRevision | null>(null);
 
   const docRevSummary = (documentRevision: DocumentRevision) =>
@@ -100,6 +106,8 @@ export const Container: React.FunctionComponent<Props> = ({
     </Grid>
   );
 };
+
+Container.displayName = 'ChangeRequestSummaryContainer';
 
 export default connect<{}, DispatchProps, OwnProps, ApplicationState>(
   null,
