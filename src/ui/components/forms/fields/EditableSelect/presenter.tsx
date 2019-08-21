@@ -2,20 +2,22 @@ import { Box, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import InputField from "../Input";
 import SelectField from "../Select";
-import styles from "./utils/styles";
+import { styles } from "./utils/styles";
 import { EditableSelectFieldProps } from "./utils/types";
 
-type Props = EditableSelectFieldProps & WithStyles <typeof styles>;
+type Props = EditableSelectFieldProps;
 
 export const EditableSelectPresenter: React.FunctionComponent<Props> = ({
-  classes,
   name,
   includeEmpty = true,
   label = "",
   options = [],
   handleChange,
   value = "",
+  gutter = true,
 }) => {
+
+  const classes = styles({ gutter, error: false });
 
   return (
     <Box className={classes.root}>
@@ -37,4 +39,4 @@ export const EditableSelectPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default withStyles(styles)(EditableSelectPresenter);
+export default EditableSelectPresenter;

@@ -7,6 +7,7 @@ export interface EditableSelectFieldProps extends FormikHybridFieldProps {
   options?: SelectOption[];
   includeEmpty?: boolean;
   value?: string;
+  gutter?: boolean;
   handleChange?: (event: React.ChangeEvent<{ value: unknown }>) => any;
 }
 
