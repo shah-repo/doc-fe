@@ -13,6 +13,7 @@ import {
   canEditDocumentRevision,
   documentRevisionStatusOption,
   documentRevisionTypeOption } from "../utils/helpers";
+import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
 import styles from "./styles";
 
@@ -46,12 +47,21 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   const typeTooltipRenderer = (rowData: DocumentRevision) =>
     DocumentRevisionType[rowData.document.type as unknown as keyof typeof DocumentRevisionType];
 
+  const cellHrefRenderer = (rowData: DocumentRevision): string => {
+    const canEdit = canEditDocumentRevision({dataProp: rowData, currentUserEmail});
+    if (canEdit) {
+      return documentEditPath(rowData.id, rowData.document.id);
+    }
+    return documentPreviewPath(rowData.id, rowData.document.id);
+  };
+
   const clear = () => setClearFilter(!clearFilter);
 
   const columns: Array<TableColumnProps<DocumentRevision>> = [
     {
       key: "docId",
       label: "document.revision.list.docId",
+      cellHref: cellHrefRenderer,
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.document.docId,
         width: 150,
@@ -62,6 +72,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       label: "document.revision.list.version",
       searchOptions: { searchValueGetter: (value) => unmaskId(value) },
       cellOptions: { align: "center" },
+      cellHref: cellHrefRenderer,
       columnOptions: {
         cellDataGetter: ({ rowData }) => `V${rowData.version}`,
         width: 170,
@@ -72,11 +83,13 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       key: "name",
       label: "document.revision.list.name",
       tooltipKey: "description",
+      cellHref: cellHrefRenderer,
     },
     {
       key: "type",
       label: "document.revision.list.type",
       tooltipKey: typeTooltipRenderer,
+      cellHref: cellHrefRenderer,
       searchOptions: { searchType: "select", selectOptions: documentRevisionTypeOption() },
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.document.type,
@@ -86,6 +99,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "owner",
       label: "common.owner",
+      cellHref: cellHrefRenderer,
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.owner.name,
       },
@@ -94,6 +108,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       key: "changeRequest",
       label: "common.crid",
       searchOptions: { dataKey: "crId" },
+      cellHref: cellHrefRenderer,
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.changeRequest && rowData.changeRequest.crId,
         width: 100,
@@ -105,6 +120,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       cellType: stateCellTypeRenderer,
       onSelect: onStateSelect,
       columnOptions: { width: 160 },
+      cellHref: cellHrefRenderer,
       searchOptions: {
         dataKey: "status[]",
         searchType: "select",

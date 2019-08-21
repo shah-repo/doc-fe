@@ -88,9 +88,7 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
     </Box>
   );
 
-  const rowGetter = ({ index }: Index): T => {
-    return state.queryData[index];
-  };
+  const rowGetter = ({ index }: Index): T => state.queryData[index] as T;
 
   const rowClassName = ({ index }: Index) => {
     return (index % 2 === 0) ?
