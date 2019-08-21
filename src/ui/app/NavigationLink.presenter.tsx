@@ -1,5 +1,4 @@
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
@@ -8,6 +7,7 @@ import { NavLink } from "react-router-dom";
 import Text from "../components/Text";
 import { LinkDefinition } from "./NavigationLink.container";
 
+import { Box } from "@material-ui/core";
 import styles from "./NavigationLink.styles";
 
 interface NavigationLinkPresenterProps extends LinkDefinition, WithStyles<typeof styles> {
@@ -24,7 +24,6 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
         className={classNames(classes.link, { [classes.childLink]: isChild })}
         activeClassName={classes.activeLink}
       >
-        {Icon && <ListItemIcon><Icon fontSize={isChild ? "small" : "default"} /></ListItemIcon>}
         <ListItemText
           primaryTypographyProps={{ variant: isChild ? "caption" : "subtitle1" }}
           primary={<Text translation={text} />}

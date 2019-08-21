@@ -82,6 +82,12 @@ const theme = createMuiTheme({
         hyphens: "auto",
       },
     },
+    MuiListItemText: {
+      primary: {
+        fontSize: "0.9rem",
+        color: "#4d4d4d",
+      },
+    },
   },
 });
 

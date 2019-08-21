@@ -7,19 +7,23 @@ export default (theme: Theme) =>
     link: {
       display: "flex",
       textDecoration: "none",
-      padding: theme.spacing(1),
       flex: 1,
     },
     childLink: {
       paddingLeft: theme.spacing(3),
     },
     activeLink: {
-      backgroundColor: theme.palette.grey[300],
+      "backgroundColor": theme.palette.primary.main,
+      "& .MuiListItemText-root": {
+        backgroundColor: theme.palette.background.default,
+      },
     },
     linkButton: {
       padding: 0,
     },
     item: {
-      padding: 0,
+      margin: theme.spacing(0, 0, 0, 0.6),
+      padding: theme.spacing(1.6, 1, 1.6, 1.8),
+      backgroundColor: theme.palette.common.white,
     },
   });
