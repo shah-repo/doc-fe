@@ -12,12 +12,7 @@ import {
 export enum DocumentRevisionStatus {
   Draft = "DRAFT",
   PendingChange = "PENDING_CHANGE",
-  PendingSubmission = "PENDING_SUBMISSION",
-  Submitted = "SUBMITTED",
   InReview = "IN_REVIEW",
-  Withdrawn = "WITHDRAWN",
-  Approved = "APPROVED",
-  Rejected = "REJECTED",
   Released = "RELEASED",
   Deprecated = "DEPRECATED",
   Obsolete = "OBSOLETE",
