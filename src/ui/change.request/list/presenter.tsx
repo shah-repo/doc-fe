@@ -9,6 +9,7 @@ import { TableSelectionProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import { CHANGE_REQUEST_CREATE_URL } from "../../constants/urls";
 import { canEditChangeRequest, changeRequestStatusOption } from "../utils/helpers";
+import { changeRequestEditPath, changeRequestPreviewPath } from "../utils/paths";
 import { ChangeRequestsUserProps } from "../utils/types";
 import styles from "./styles";
 
@@ -25,18 +26,17 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   const ChangeRequestList = TablePanel<ChangeRequest>();
   const [clearFilter, setClearFilter] = React.useState<boolean>(false);
 
-  const stateCellTypeRenderer = (rowData: ChangeRequest) => {
-    const changeRequest = rowData;
-    const canEdit = canEditChangeRequest({dataProp: changeRequest, currentUserEmail});
-    return (canEdit) ? "LINK" : "BASE";
-  };
-
-  const onStateSelect = ({ rowData }: TableSelectionProps<ChangeRequest>) => () => {
-    return editChangeRequest(rowData.id);
-  };
+  const canEdit = (data: ChangeRequest) => canEditChangeRequest({dataProp: data, currentUserEmail});
 
   const onRowSelect = ({rowData}: TableSelectionProps<ChangeRequest>) => () => {
     return previewChangeRequest(rowData.id);
+  };
+
+  const cellHrefRenderer = (rowData: ChangeRequest): string => {
+    if (canEdit(rowData)) {
+      return changeRequestEditPath(rowData.id);
+    }
+    return changeRequestPreviewPath(rowData.id);
   };
 
   const clear = () => setClearFilter(!clearFilter);
@@ -45,17 +45,20 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "crId",
       label: "common.crid",
+      cellHref: cellHrefRenderer,
       columnOptions: { width: 100 },
     },
     {
       key: "title",
       label: "cr.title",
+      cellHref: cellHrefRenderer,
       columnOptions: { flexGrow: 2 },
       tooltipKey: "description",
     },
     {
       key: "owner",
       label: "change.request.list.owner",
+      cellHref: cellHrefRenderer,
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.owner.name,
         flexGrow: 1,
@@ -64,9 +67,10 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "state",
       label: "common.status",
-      cellType: stateCellTypeRenderer,
-      onSelect: onStateSelect,
+      cellHref: cellHrefRenderer,
       columnOptions: { width: 80 },
+      onSelect: ({rowData}) => () => editChangeRequest(rowData.id),
+      cellType: (rowData: ChangeRequest) => (canEdit(rowData)) ? "LINK" : "BASE",
       searchOptions: { searchType: "select", selectOptions: changeRequestStatusOption() },
     },
   ];

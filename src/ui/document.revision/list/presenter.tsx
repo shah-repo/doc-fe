@@ -30,26 +30,16 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   const DocumentList = TablePanel<DocumentRevision>();
   const [clearFilter, setClearFilter] = React.useState<boolean>(false);
 
-  const stateCellTypeRenderer = (rowData: DocumentRevision) => {
-    const documentRevision = rowData;
-    const canEdit = canEditDocumentRevision({dataProp: documentRevision, currentUserEmail});
-    return (canEdit) ? "LINK" : "BASE";
-  };
+  const canEdit = (data: DocumentRevision) => canEditDocumentRevision({dataProp: data, currentUserEmail});
 
-  const onStateSelect = ({rowData}: TableSelectionProps<DocumentRevision>) => () => {
-    return editDocumentRevision(rowData.id, rowData.document.id);
-  };
-
-  const onRowSelect = ({rowData}: TableSelectionProps<DocumentRevision>) => () => {
-    return previewDocumentRevision(rowData.id, rowData.document.id);
-  };
+  const onRowSelect = ({rowData}: TableSelectionProps<DocumentRevision>) => () =>
+    previewDocumentRevision(rowData.id, rowData.document.id);
 
   const typeTooltipRenderer = (rowData: DocumentRevision) =>
     DocumentRevisionType[rowData.document.type as unknown as keyof typeof DocumentRevisionType];
 
   const cellHrefRenderer = (rowData: DocumentRevision): string => {
-    const canEdit = canEditDocumentRevision({dataProp: rowData, currentUserEmail});
-    if (canEdit) {
+    if (canEdit(rowData)) {
       return documentEditPath(rowData.id, rowData.document.id);
     }
     return documentPreviewPath(rowData.id, rowData.document.id);
@@ -117,10 +107,10 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "status",
       label: "document.revision.list.state",
-      cellType: stateCellTypeRenderer,
-      onSelect: onStateSelect,
       columnOptions: { width: 160 },
       cellHref: cellHrefRenderer,
+      cellType: (rowData) => (canEdit(rowData)) ? "LINK" : "BASE",
+      onSelect: ({rowData}) => () => editDocumentRevision(rowData.id, rowData.document.id),
       searchOptions: {
         dataKey: "status[]",
         searchType: "select",
