@@ -101,7 +101,7 @@ export interface ImplementationPlanTaskRequest {
   id?: string;
   title: string;
   description: string;
-  dueDate?: Date;
+  dueDate?: string;
   assigned?: Id;
   status: string;
 }
@@ -117,7 +117,7 @@ export interface ChangeRequestEditRequestBody {
   assessments: Assessment;
   implementationPlan: ImplementationPlanRequest;
   justifications: EditRequestBodyNestedObject;
-  effectiveDate?: Date;
+  effectiveDate?: string;
   approvals: Approver[];
   documentRevisions: DocumentRevisionRequestBody[];
 }
