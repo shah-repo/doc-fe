@@ -1,7 +1,7 @@
 import React from "react";
 import AttachmentField from "../../components/common/attachment.field/container";
 import AttachmentIconField from "../../components/common/attachment.icon/container";
-import InputField from "../../components/forms/fields/Input";
+import TextEditorField from "../../components/forms/fields/TextEditor";
 
 export const Justification: React.FunctionComponent<{}> = () => {
 
@@ -9,10 +9,9 @@ export const Justification: React.FunctionComponent<{}> = () => {
 
   return (
     <React.Fragment>
-      <InputField
+      <TextEditorField
         name="justifications.description"
         label="cr.justification"
-        inputProps={{ multiline: true, rows: "2" }}
         actionsRenderer={actionsRenderer}
       />
       <AttachmentIconField name="justifications.attachments" />

@@ -7,6 +7,7 @@ import {
 } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
 import SummaryField from "../../common/summary/base";
+import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import FileCard from "../../components/cards/FileCard";
 import Text from "../../components/Text";
 import styles from "./styles";
@@ -42,7 +43,7 @@ const Assessment: React.FunctionComponent<Props> = ({
       <ListItem>
         <Typography variant="h6"><Text translation="common.assessments" />:</Typography>
       </ListItem>
-      <SummaryField label="common.description" value={dataProp.description} />
+      <SummaryFieldWithHtml label="common.description" value={dataProp.description} />
       {itemRenderer()}
     </Box>
   );

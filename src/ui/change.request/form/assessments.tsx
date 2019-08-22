@@ -6,7 +6,7 @@ import AttachmentField from "../../components/common/attachment.field/container"
 import AttachmentIconField from "../../components/common/attachment.icon/container";
 import HeaderField from "../../components/common/header.field/field";
 import EditableSelectField from "../../components/forms/fields/EditableSelect/container";
-import InputField from "../../components/forms/fields/Input";
+import TextEditorField from "../../components/forms/fields/TextEditor";
 import { withFormik } from "../../components/hoc/formik";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
 import { assessmentStatementOption } from "../utils/helpers";
@@ -46,10 +46,9 @@ const Assessments: React.FunctionComponent<Props> = ({
 
   return (
     <Box>
-      <InputField
+      <TextEditorField
         name="assessments.description"
         label="common.assessments"
-        inputProps={{ multiline: true, rows: "2" }}
       />
       {itemRenderer()}
     </Box>

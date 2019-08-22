@@ -5,8 +5,8 @@
     width: 100%;
 }
 
-.editor-container {
-    margin-top: 30px;
+.editor-container.label-margin {
+    margin-top: 25px;
 }
 
 .editor-container .ql-container {
