@@ -1,4 +1,5 @@
 import {
+  Box,
   Grid,
   ListItem,
   Typography,
@@ -8,6 +9,7 @@ import {
 import React from "react";
 import { Justifications } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
+import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import FileCard from "../../components/cards/FileCard";
 import Text from "../../components/Text";
 import styles from "./styles";
@@ -30,7 +32,7 @@ const Justification: React.FunctionComponent<Props> = ({
       <Typography variant="h6">
         <Text translation="common.justifications" />
       </Typography>
-      <Typography variant="subtitle1">{`${description}` || "—"}</Typography>
+      <SummaryFieldWithHtml label="common.description" value={description} />
       {attachments && (
         <ListItem>
           <Grid container={true} spacing={1}>

@@ -6,6 +6,7 @@ import {
   AssessmentType,
 } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
+import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import FileCard from "../../components/cards/FileCard";
 import Text from "../../components/Text";
 import styles from "./styles";
@@ -51,9 +52,10 @@ const Assessment: React.FunctionComponent<Props> = ({ classes, dataProp }) => {
           <Typography variant="h6">
             <Text translation="common.assessments" />:
           </Typography>
-          <Typography variant="subtitle1">
-            {`${dataProp.description}` || "—"}
-          </Typography>
+          <SummaryFieldWithHtml
+            label="common.description"
+            value={dataProp.description}
+          />
         </Grid>
         {itemRenderer()}.
       </Grid>
