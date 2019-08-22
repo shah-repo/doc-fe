@@ -7,11 +7,11 @@ import {
   withStyles,
   Button,
 } from "@material-ui/core";
-import moment from "moment";
 import React from "react";
 import { ImplementationPlan as Model, ChangeRequestStatus, ImplementationPlanTask, changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
 import SummaryField from "../../common/summary/base";
+import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import FileCard from "../../components/cards/FileCard";
 import Text from "../../components/Text";
 import styles from "./styles";
@@ -52,7 +52,7 @@ const ImplementationPlan: React.FunctionComponent<Props> = ({
         <Typography variant="button"><Text message={`Task-${index + 1}`} />:</Typography>
       </ListItem>
       <SummaryField label="common.title" value={task.title} />
-      <SummaryField label="common.description" value={task.description} />
+      <SummaryFieldWithHtml label="common.description" value={task.description} />
       <SummaryField label="common.due.date" value={getFormattedDateString(task.dueDate)} />
       <SummaryField label="common.assigned.to" value={task.assigned && task.assigned.name} />
       <SummaryField label="common.status" value={task.status} />

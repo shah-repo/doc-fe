@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { Justifications } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
-import SummaryField from "../../common/summary/base";
+import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import FileCard from "../../components/cards/FileCard";
 import Text from "../../components/Text";
 import styles from "./styles";
@@ -32,7 +32,7 @@ const Justification: React.FunctionComponent<Props> = ({
       <ListItem>
         <Typography variant="h6"><Text translation="common.justifications" />:</Typography>
       </ListItem>
-      <SummaryField label="common.description" value={description} />
+      <SummaryFieldWithHtml label="common.description" value={description} />
       {attachments && <ListItem><Grid container={true} spacing={1}>{attachmentRenderer()}</Grid></ListItem>}
     </Box>
   );

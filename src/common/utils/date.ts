@@ -9,7 +9,7 @@ export const getDateString = (date: DateTypes, format: string = "") => {
 }
 
 export const applyTimezoneToDate = (date: DateTypes) => {
-  return moment(date).tz(TIME_ZONE).startOf("day").toDate();
+  return new Date(moment(date).tz(TIME_ZONE).startOf("day").format());
 }
 
 export const getFormattedDateString = (date: DateTypes) => getDateString(date, "LL");

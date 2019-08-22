@@ -9,6 +9,7 @@ import AutocompleteField from "../../../../components/forms/fields/Autocomplete/
 import { OptionType } from "../../../../components/forms/fields/Autocomplete/types";
 import DatePickerField from "../../../../components/forms/fields/DatePicker";
 import InputField from "../../../../components/forms/fields/Input";
+import TextEditorField from "../../../../components/forms/fields/TextEditor";
 import SelectField from "../../../../components/forms/fields/Select";
 import { required, validator } from "../../../../components/forms/fields/validators";
 import Text from "../../../../components/Text";
@@ -53,11 +54,10 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
         inputProps={{ id: "title" }}
         validate={validator(required)}
       />
-      <InputField
+      <TextEditorField
         name="description"
         size="sm"
         label="common.description"
-        inputProps={{ id: "description", multiline: true }}
         validate={validator(required)}
       />
       <Grid container={true} spacing={3}>

@@ -4,6 +4,7 @@ import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } fro
 import * as React from "react";
 import ReactQuill, { } from "react-quill";
 import { QuillOptionsStatic} from "quill";
+import classNames from "classnames";
 import Field, { FieldOwnProps } from "../Field";
 import { RenderSize } from "../../../../../state/ducks/common";
 import { modules, formats } from "./configuration";
@@ -28,16 +29,16 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
 
   return (
     <Field size={size} actionsRenderer={actionsRenderer} {...fieldProps} inputLabelProps={{ shrink: true }} >
-      <div className="editor-container">
-        <ReactQuill
-          theme="bubble"
-          modules={modules}
-          formats={formats}
-          bounds={'.editor-container'}
-          {...quillOptions}
-          onChange={handleChange}
-          value={fieldProps.field.value}
-        />
+      <div className={classNames("editor-container", { "label-margin": !actionsRenderer })} >
+      <ReactQuill
+        theme="snow"
+        modules={modules}
+        formats={formats}
+        bounds={'.editor-container'}
+        {...quillOptions}
+        onChange={handleChange}
+        value={fieldProps.field.value}
+      />
       </div>
     </Field>
   );

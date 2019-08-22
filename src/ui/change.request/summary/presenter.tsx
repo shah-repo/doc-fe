@@ -6,7 +6,6 @@ import {
   WithStyles,
   withStyles,
 } from "@material-ui/core";
-import moment from "moment";
 import React from "react";
 import { ChangeRequest, changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
