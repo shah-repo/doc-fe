@@ -16,7 +16,6 @@ export enum DocumentRevisionStatus {
   Released = "RELEASED",
   Deprecated = "DEPRECATED",
   Obsolete = "OBSOLETE",
-  Implementation = "IMPLEMENTATION",
 }
 
 export enum RevisionChangeType {
