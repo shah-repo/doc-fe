@@ -36,6 +36,15 @@ export const StyledTableCell = withStyles((theme) => ({
   },
 }))(TableCell);
 
+export const StyledTableLink = withStyles((theme) => ({
+  root: {
+    "textDecoration": "none",
+    "&:hover": {
+      textDecoration: "none",
+    },
+  },
+}))(Link);
+
 export const StyledCellLink = withStyles((theme) => ({
   root: {
     color: "#c42127",
