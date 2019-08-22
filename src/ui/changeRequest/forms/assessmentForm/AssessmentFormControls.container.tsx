@@ -60,12 +60,7 @@ const AssessmentFormControlsContainer: React.FunctionComponent<AssessmentFormCon
 
   const isCurrentUserOwner = changeRequest.owner.email === currentUserEmail;
   const canWithdraw = isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.InReview;
-  const canSendToReview = isCurrentUserOwner
-    && (
-      changeRequest.state === ChangeRequestStatus.Draft
-      || changeRequest.state === ChangeRequestStatus.Withdrawn
-      || changeRequest.state === ChangeRequestStatus.Rejected
-    );
+  const canSendToReview = isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.Draft
   const canClose = isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.Approved;
 
   const currentUserApproval = changeRequest.approvals.find((approval) => approval.approver.email === currentUserEmail);
