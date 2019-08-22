@@ -41,9 +41,9 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   create, history, documentRevision, loadDocument, setDocId,
 }) => {
 
-  if (!documentRevision) {
-    setDocId("");
-  }
+  const initialValues = documentRevision ?
+      toDocumentRevisionFormValuesWithRevisionChange(documentRevision) :
+      DEFAULT_INITIAL_VALUES();
 
   const async = useAsync<DocumentRevision>({
       onSuccess: (createdDocumentRevision?) => {
@@ -59,9 +59,6 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
     };
 
   const showRevisionTypeChange = !!documentRevision;
-  const initialValues = documentRevision ?
-      toDocumentRevisionFormValuesWithRevisionChange(documentRevision) :
-      DEFAULT_INITIAL_VALUES();
 
   return (
       <DocumentRevisionForm

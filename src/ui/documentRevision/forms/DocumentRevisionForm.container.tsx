@@ -8,9 +8,9 @@ import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
+import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
-import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 
 interface StateProps {
   availableReferences: OptionType[];
