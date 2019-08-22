@@ -4,6 +4,8 @@ import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
 import { Audit } from "./types";
+import { stripTags } from "../../../common/utils/helpers";
+import _ from "lodash";
 
 const allIds = (state: ApplicationState) => state.changeRequests.allIds;
 const byId = (state: ApplicationState) => state.changeRequests.byId;
@@ -14,7 +16,14 @@ const auditsAllId = (state: ApplicationState) => state.changeRequests.auditsAllI
 
 const getChangeRequestsList = createSelector(
   allIds, byId,
-  (ids, changeRequests) => ids.map((id) => changeRequests[id]),
+  (ids, changeRequests) => (
+    ids.map((id) => {
+      const cr = _.cloneDeep(changeRequests[id]);
+      cr.description = stripTags(changeRequests[id].description);
+      
+      return cr;
+    })
+  ),
 );
 
 const getApproversListForAssessmentForm = createSelector(
