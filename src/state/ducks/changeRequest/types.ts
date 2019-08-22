@@ -11,9 +11,8 @@ import {
 export enum ChangeRequestStatus {
   Draft = "DRAFT",
   InReview = "IN_REVIEW",
-  Withdrawn = "WITHDRAWN",
+  Implementation = "IMPLEMENTATION",
   Approved = "APPROVED",
-  Rejected = "REJECTED",
   Closed = "CLOSED",
 }
 
