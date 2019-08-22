@@ -28,10 +28,6 @@ const ListPresenter: React.FunctionComponent<Props> = ({
 
   const canEdit = (data: ChangeRequest) => canEditChangeRequest({dataProp: data, currentUserEmail});
 
-  const onRowSelect = ({rowData}: TableSelectionProps<ChangeRequest>) => () => {
-    return previewChangeRequest(rowData.id);
-  };
-
   const cellHrefRenderer = (rowData: ChangeRequest): string => {
     if (canEdit(rowData)) {
       return changeRequestEditPath(rowData.id);
@@ -67,7 +63,6 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "state",
       label: "common.status",
-      cellHref: cellHrefRenderer,
       columnOptions: { width: 80 },
       onSelect: ({rowData}) => () => editChangeRequest(rowData.id),
       cellType: (rowData: ChangeRequest) => (canEdit(rowData)) ? "LINK" : "BASE",
@@ -94,7 +89,6 @@ const ListPresenter: React.FunctionComponent<Props> = ({
           tableData={dataProp}
           columns={columns}
           cellMeasure={true}
-          onSelect={onRowSelect}
           queryUrl={CHANGE_REQUEST_ROOT_URL}
           clearFilter={clear}
         />
