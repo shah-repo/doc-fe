@@ -25,4 +25,7 @@ export default (theme: Theme) =>
         color: theme.palette.secondary.light,
       },
     },
+    list: {
+      padding: theme.spacing(3, 0),
+    },
   });

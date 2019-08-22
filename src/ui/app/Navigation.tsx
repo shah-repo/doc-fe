@@ -11,7 +11,6 @@ import { Link } from "react-router-dom";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import Text from "../components/Text";
 import {
-  CHANGE_REQUEST_CREATE_URL,
   CHANGE_REQUEST_LIST_URL,
   DOCUMENT_REVISION_LIST_URL,
   HOME_URL,
@@ -36,7 +35,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({ classes, locatio
       </Typography>
     </ Toolbar>
     <Divider />
-    <List>
+    <List className={classes.list}>
       <NavigationLinkContainer
         url={HOME_URL}
         text="navigation.dashboard"
@@ -51,9 +50,12 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({ classes, locatio
         text="navigation.document.list"
         Icon={Dashboard}
         currentPath={location.pathname}
-        childrenUrls={[
-          { url: CHANGE_REQUEST_LIST_URL, text: "navigation.change.request.open" },
-        ]}
+      />
+      <NavigationLinkContainer
+        url={CHANGE_REQUEST_LIST_URL}
+        text="navigation.change.request.list"
+        Icon={Dashboard}
+        currentPath={location.pathname}
       />
     </List>
   </Drawer>
