@@ -30,15 +30,15 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
   return (
     <Field size={size} actionsRenderer={actionsRenderer} {...fieldProps} inputLabelProps={{ shrink: true }} >
       <div className={classNames("editor-container", { "label-margin": !actionsRenderer })} >
-      <ReactQuill
-        theme="snow"
-        modules={modules}
-        formats={formats}
-        bounds={'.editor-container'}
-        {...quillOptions}
-        onChange={handleChange}
-        value={fieldProps.field.value}
-      />
+        <ReactQuill
+          theme="snow"
+          modules={modules}
+          formats={formats}
+          bounds={'.editor-container'}
+          {...quillOptions}
+          onChange={handleChange}
+          value={fieldProps.field.value}
+        />
       </div>
     </Field>
   );
