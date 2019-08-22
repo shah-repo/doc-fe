@@ -7,7 +7,10 @@ import {
   withStyles,
 } from "@material-ui/core";
 import React from "react";
-import { ChangeRequest, changeRequestsActions } from "../../../state/ducks/changeRequest";
+import {
+  ChangeRequest,
+  changeRequestsActions,
+} from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
 import { AsyncState } from "../../../state/types";
 import ControlsContainer from "../../changeRequest/forms/assessmentForm/AssessmentFormControls.container";
@@ -41,49 +44,59 @@ export const Presenter: React.FunctionComponent<Props> = ({
   currentUserEmail,
   closeTask,
 }) => {
-
   const approversFieldRenderer = () => (
     <Box>
       <ListItem>
-        <Typography variant="h6"><Text translation="common.approvers" />:</Typography>
+        <Typography variant="h6">
+          <Text translation="common.approvers" />:
+        </Typography>
       </ListItem>
-      <ListItem><ApproversField /></ListItem>
+      <ListItem>
+        <ApproversField />
+      </ListItem>
     </Box>
   );
 
-  const submitButtonRenderer = () =>
-    <SubmitButton asyncState={asyncState} label="document.save" />;
+  const submitButtonRenderer = () => (
+    <SubmitButton asyncState={asyncState} label="document.save" />
+  );
 
   return (
     <Box>
       <Box className={classes.previewBox}>
-        <ListItem>
-          <Typography variant="h5">
-            <Text translation="common.crid" />: {dataProp.crId}
-          </Typography>
-        </ListItem>
-        <SummaryField label="common.owner" value={dataProp.owner.name} />
-        <SummaryField label="common.status" value={dataProp.state} />
-        <SummaryField label="cr.title" value={dataProp.title} />
-        <SummaryFieldWithHtml label="cr.description" value={dataProp.description} />
-        <SummaryField
-          label="common.target.date"
-          value={getFormattedDateString(dataProp.effectiveDate)}
-        />
-        <Justification dataProp={dataProp.justifications} />
-        <Assessment dataProp={dataProp.assessments} />
-        <ImplementationPlan
-          dataProp={dataProp.implementationPlan}
-          currentUserEmail={currentUserEmail}
-          crStatus={dataProp.state}
-          closeTask={closeTask}
-          crId={dataProp.id}
-        />
-        {canEdit && approversFieldRenderer()}
-        {!canEdit && <ApproversSummary dataProp={dataProp.approvals} />}
+        <Grid container={true} spacing={4} direction="column">
+          <SummaryFieldWithHtml
+            label="cr.description"
+            value={dataProp.description}
+          />
+          <SummaryField
+            label="common.target.date"
+            value={getFormattedDateString(dataProp.effectiveDate)}
+          />
+          <SummaryField label="common.owner" value={dataProp.owner.name} />
+          <SummaryField label="common.status" value={dataProp.state} />
+          <SummaryField label="cr.title" value={dataProp.title} />
+
+          <Justification dataProp={dataProp.justifications} />
+          <Assessment dataProp={dataProp.assessments} />
+          <ImplementationPlan
+            dataProp={dataProp.implementationPlan}
+            currentUserEmail={currentUserEmail}
+            crStatus={dataProp.state}
+            closeTask={closeTask}
+            crId={dataProp.id}
+          />
+          {canEdit && approversFieldRenderer()}
+          {!canEdit && <ApproversSummary dataProp={dataProp.approvals} />}
+        </Grid>
       </Box>
       <Box className={classes.submitBox}>
-        <Grid item={true} container={true} alignItems="flex-end" direction="column">
+        <Grid
+          item={true}
+          container={true}
+          alignItems="flex-end"
+          direction="column"
+        >
           <div>
             {canEdit && <FormProgress asyncState={asyncState} />}
             {canEdit && submitButtonRenderer()}

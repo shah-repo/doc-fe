@@ -1,4 +1,4 @@
-import { Box, Grid, ListItem, Typography, WithStyles, withStyles } from "@material-ui/core";
+import { Grid, Typography, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import {
   Assessment as Model,
@@ -6,7 +6,6 @@ import {
   AssessmentType,
 } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
-import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import FileCard from "../../components/cards/FileCard";
 import Text from "../../components/Text";
@@ -14,38 +13,53 @@ import styles from "./styles";
 
 type Props = DataProps<Model> & WithStyles<typeof styles>;
 
-const Assessment: React.FunctionComponent<Props> = ({
-  classes,
-  dataProp,
-}) => {
+const Assessment: React.FunctionComponent<Props> = ({ classes, dataProp }) => {
+  const attachmentRenderer = (item: AssessmentItem) =>
+    item.attachments!.map((attachment) => (
+      <FileCard key={`assessment-${attachment.id}`} attachment={attachment} />
+    ));
 
-  const attachmentRenderer = (item: AssessmentItem) => item.attachments!.map((attachment) =>
-    <FileCard key={`assessment-${attachment.id}`} attachment={attachment} />);
+  const reasoningRenderer = (item: AssessmentItem) => (
+    <Grid item xs={12}>
+      <Typography variant="subtitle1">{`${item.reasoning}` || "—"}</Typography>
+    </Grid>
+  );
 
-  const reasoningRenderer = (item: AssessmentItem) =>
-    <SummaryField label="common.reasoning" value={item.reasoning} />;
-
-  const itemRenderer = () => Object.values(AssessmentType).map((type, index) => {
-    const item = dataProp[type as keyof typeof AssessmentType];
-    return (
-      <Box key={`${item}-${index}`}>
-        <ListItem>
-          <Typography variant="button"><Text message={`common.${type}`} />:</Typography>
-        </ListItem>
-        {item.reasoning && reasoningRenderer(item)}
-        {item.attachments && <ListItem><Grid container={true} spacing={2}>{attachmentRenderer(item)}</Grid></ListItem>}
-      </Box>
-    );
-  });
+  const itemRenderer = () =>
+    Object.values(AssessmentType).map((type, index) => {
+      const item = dataProp[type as keyof typeof AssessmentType];
+      return (
+        <Grid item xs={12} key={`${item}-${index}`}>
+          <Grid item xs={12}>
+            <Typography variant="h5">
+              <Text message={`common.${type}`} />:
+            </Typography>
+          </Grid>
+          {item.reasoning && reasoningRenderer(item)}
+          {item.attachments && (
+            <Grid item xs={12}>
+              {attachmentRenderer(item)}
+            </Grid>
+          )}
+        </Grid>
+      );
+    });
 
   return (
-    <Box className={classes.box}>
-      <ListItem>
-        <Typography variant="h6"><Text translation="common.assessments" />:</Typography>
-      </ListItem>
-      <SummaryFieldWithHtml label="common.description" value={dataProp.description} />
-      {itemRenderer()}
-    </Box>
+    <Grid item xs={12}>
+      <Grid container={true} spacing={3}>
+        <Grid item xs={12}>
+          <Typography variant="h6">
+            <Text translation="common.assessments" />:
+          </Typography>
+          <SummaryFieldWithHtml
+            label="common.description"
+            value={dataProp.description}
+          />
+        </Grid>
+        {itemRenderer()}.
+      </Grid>
+    </Grid>
   );
 };
 

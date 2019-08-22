@@ -12,15 +12,15 @@ export default (theme: Theme) =>
       width: DRAWER_WIDTH,
     },
     toolbar: {
-      backgroundColor: "#c20811",
+      backgroundColor: theme.palette.primary.main,
     },
     toolbarTitle: {
       flex: 1,
       textAlign: "center",
     },
     headerLink: {
-      "textDecoration": "none",
-      "color": theme.palette.common.white,
+      textDecoration: "none",
+      color: theme.palette.common.white,
       "&:hover": {
         color: theme.palette.secondary.light,
       },

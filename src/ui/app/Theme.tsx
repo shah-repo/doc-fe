@@ -1,4 +1,4 @@
-import { CssBaseline  } from "@material-ui/core";
+import { CssBaseline } from "@material-ui/core";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import * as React from "react";
 
@@ -7,7 +7,7 @@ const defaultTheme = createMuiTheme();
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: "#d12833",
+      main: "#0066FF",
       contrastText: "#fff",
     },
     secondary: {
@@ -17,6 +17,9 @@ const theme = createMuiTheme({
     background: {
       default: "#f0f0f0",
       paper: "#fff",
+    },
+    text: {
+      hint: "#B4C0CA",
     },
   },
   overrides: {
@@ -35,25 +38,32 @@ const theme = createMuiTheme({
     },
     MuiTypography: {
       root: {
-        fontFamily: "Product Sans",
+        fontFamily: "Open Sans, sans-serif;",
       },
       subtitle1: {
         color: "#4d4d4d",
         fontSize: "0.8rem",
+        fontFamily: "Open Sans, sans-serif;",
       },
       subtitle2: {
         subtitle1: {
           color: "#4d4d4d",
           fontSize: "0.875rem",
+          fontFamily: "Open Sans, sans-serif;",
         },
       },
       h5: {
         color: "#4d4d4d",
         fontSize: "1.1rem",
+        fontFamily: "Open Sans, sans-serif;",
       },
       h4: {
         color: "#4d4d4d",
         ontSize: "1.4rem",
+      },
+      h6: {
+        fontWeight: "normal",
+        fontFamily: "Open Sans, sans-serif;",
       },
     },
     MuiButton: {
@@ -71,6 +81,11 @@ const theme = createMuiTheme({
     MuiTableCell: {
       root: {
         fontSize: "0.8rem",
+      },
+    },
+    MuiSelect: {
+      icon: {
+        right: "10px",
       },
     },
     MuiTooltip: {

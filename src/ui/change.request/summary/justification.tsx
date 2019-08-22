@@ -20,21 +20,27 @@ const Justification: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
 }) => {
-
   const { description, attachments } = dataProp;
 
-  const attachmentRenderer = () => attachments.map((attachment, index) => (
-    <FileCard key={index} attachment={attachment} />
-  ));
+  const attachmentRenderer = () =>
+    attachments.map((attachment, index) => (
+      <FileCard key={index} attachment={attachment} />
+    ));
 
   return (
-    <Box className={classes.box}>
-      <ListItem>
-        <Typography variant="h6"><Text translation="common.justifications" />:</Typography>
-      </ListItem>
+    <Grid item xs={12} className={classes.box}>
+      <Typography variant="h6">
+        <Text translation="common.justifications" />
+      </Typography>
       <SummaryFieldWithHtml label="common.description" value={description} />
-      {attachments && <ListItem><Grid container={true} spacing={1}>{attachmentRenderer()}</Grid></ListItem>}
-    </Box>
+      {attachments && (
+        <ListItem>
+          <Grid container={true} spacing={1}>
+            {attachmentRenderer()}
+          </Grid>
+        </ListItem>
+      )}
+    </Grid>
   );
 };
 

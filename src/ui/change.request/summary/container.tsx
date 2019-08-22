@@ -1,6 +1,6 @@
-import { Grid } from "@material-ui/core";
+import { Grid, WithStyles, withStyles } from "@material-ui/core";
 import { Form, Formik } from "formik";
-import React from "react";
+import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import {
@@ -18,12 +18,14 @@ import {
 } from "../../changeRequest/forms/transform";
 import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
 import DocumentRevisionSummaryPresenter from "../../document.revision/summary/presenter";
+import DocumentRevisionHeader from "./header";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
 import useAsync from "../../hooks/useAsync";
 import { canEditApprovers, canEditChangeRequest } from "../utils/helpers";
 import { SummaryDispatchProps } from "../utils/types";
 import Presenter from "./presenter";
 import { changeRequestEditPath } from "../utils/paths";
+import styles from "./styles";
 
 type DispatchProps = SummaryDispatchProps;
 
@@ -31,9 +33,10 @@ interface OwnProps extends DataProps<ChangeRequest> {
   currentUserEmail: string;
 }
 
-type Props = OwnProps & DispatchProps;
+type Props = OwnProps & DispatchProps & WithStyles<typeof styles>;
 
 export const Container: React.FunctionComponent<Props> = ({
+  classes,
   dataProp,
   save,
   currentUserEmail,
@@ -82,36 +85,44 @@ export const Container: React.FunctionComponent<Props> = ({
     />
   );
   return (
-    <Grid container={true} spacing={1}>
-      <Grid item={true} xs={3}>
-        <SummaryPresenter
-          documentsInChangeRequest={dataProp.documentRevisions}
-          selectAssessmentForm={crSummary}
-          selectDocumentRevision={docRevSummary}
-          selectedDocumentRevision={docRev ? docRev.id : null}
-        />
-      </Grid>
-      <Grid item={true} xs={6}>
-        {docRev && <DocumentRevisionSummaryPresenter dataProp={{ ...docRev, changeRequest: dataProp }} />}
-        {!docRev && summaryFormikRenderer()}
-      </Grid>
-      <Grid item={true} xs={3}>
-        {docRev && (
-          <DocumentRevisionAuditContainer documentRevisionId={docRev.id} />
-        )}
-        {dataProp && (
-          <ChangeRequestAuditContainer changeRequestId={dataProp.id} />
-        )}
+    <Grid container={true} justify="center" className={classes.whiteContainer}>
+      <DocumentRevisionHeader dataProp={dataProp} />
+      <Grid container={true} spacing={1}>
+        <Grid item={true} xs={3}>
+          <SummaryPresenter
+            documentsInChangeRequest={dataProp.documentRevisions}
+            selectAssessmentForm={crSummary}
+            selectDocumentRevision={docRevSummary}
+            selectedDocumentRevision={docRev ? docRev.id : null}
+          />
+        </Grid>
+        <Grid item={true} xs={6}>
+          {docRev && (
+            <DocumentRevisionSummaryPresenter
+              dataProp={{ ...docRev, changeRequest: dataProp }}
+            />
+          )}
+          {!docRev && summaryFormikRenderer()}
+        </Grid>
+        <Grid item={true} xs={3}>
+          {docRev && (
+            <DocumentRevisionAuditContainer documentRevisionId={docRev.id} />
+          )}
+          {dataProp && (
+            <ChangeRequestAuditContainer changeRequestId={dataProp.id} />
+          )}
+        </Grid>
       </Grid>
     </Grid>
   );
 };
 
-Container.displayName = 'ChangeRequestSummaryContainer';
+Container.displayName = "ChangeRequestSummaryContainer";
 
 export default connect<{}, DispatchProps, OwnProps, ApplicationState>(
   null,
   {
     save: changeRequestsActions.save,
     closeTask: changeRequestsActions.closeTask,
-  })(Container);
+  },
+)(withStyles(styles)(Container));

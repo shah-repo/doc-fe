@@ -112,6 +112,7 @@
   "changeRequest.audit.assessments.description.STRING_NEW": "Assessments Description Added",
   "changeRequest.audit.assessments.description.STRING_EDITED": "Assessments Description Updated",
   "changeRequest.audit.tasks.assigned.STRING_NEW": "Implementation Plan Task Assignee Added",
+  "changeRequest.audit.tasks.closingNote.OBJECT_DELETED": "Closing Note Deleted",
   "changeRequest.audit.tasks.description.STRING_NEW": "Implementation Plan Task Description Added",
   "changeRequest.audit.tasks.description.STRING_EDITED": "Implementation Plan Task Description Updated",
   "changeRequest.audit.tasks.status.STRING_NEW": "Implementation Plan Task Status Added",
@@ -134,7 +135,7 @@
   "changeRequest.audit.assessments.regulatory.attachment.OBJECT_NEW": "Regulatory Assessment Attachment Added",
   "changeRequest.audit.tasks.ARRAY_DELETED": "Implementation plan tasks deleted",
 
-  "cr.description": "Description Of Changes",
+  "cr.description": "Description Of Change Request",
   "cr.justification": "Justification Of Changes",
   "cr.title": "CR Title",
 

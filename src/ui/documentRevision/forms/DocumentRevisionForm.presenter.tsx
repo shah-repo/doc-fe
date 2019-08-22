@@ -1,5 +1,10 @@
-
-import { Box, Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
+import {
+  Box,
+  Grid,
+  Typography,
+  withStyles,
+  WithStyles,
+} from "@material-ui/core";
 import { FormikProps } from "formik";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -47,11 +52,24 @@ interface Props
 }
 
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
-  asyncState, initialValues, handleChange, availableReferences, showRevisionTypeChange,
-  loadDocumentProposedId, proposedDocId, values, setDocId,
-  dirty, resetForm, doNotPrompt, onDirtyFlagChange,
+  asyncState,
+  initialValues,
+  handleChange,
+  availableReferences,
+  showRevisionTypeChange,
+  loadDocumentProposedId,
+  proposedDocId,
+  values,
+  setDocId,
+  dirty,
+  resetForm,
+  doNotPrompt,
+  onDirtyFlagChange,
+  classes,
 }) => {
-  const openReference = (documentId: string) => { window.open(documentDetailsPath(documentId), "_blank"); };
+  const openReference = (documentId: string) => {
+    window.open(documentDetailsPath(documentId), "_blank");
+  };
 
   const isDisabled: boolean = initialValues.id !== undefined;
   const docIdValue = isDisabled ? values.document!.docId : proposedDocId;
@@ -62,16 +80,22 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    const { type } = values.document || {type: undefined};
+    const { type } = values.document || { type: undefined };
 
-    if (!values.document && !type) { return; }
-    const pattern = new RegExp("^" + type + "\\d{0," + type!.length + "}", "g" );
+    if (!values.document && !type) {
+      return;
+    }
+    const pattern = new RegExp("^" + type + "\\d{0," + type!.length + "}", "g");
 
-    if (!pattern.test(value) || !setDocId) { return; }
+    if (!pattern.test(value) || !setDocId) {
+      return;
+    }
     setDocId!(value);
   };
 
-  const handleTypeChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
+  const handleTypeChange = (
+    event: React.ChangeEvent<{ name?: string; value: unknown }>,
+  ) => {
     const type = event.target.value as string;
     loadDocumentProposedId(type);
     handleChange(event);
@@ -90,7 +114,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               value={RevisionChangeType.NextRevision}
             />
             <RadioButton
-              label={<Text translation="documentRevision.form.nextRevisionStage" />}
+              label={
+                <Text translation="documentRevision.form.nextRevisionStage" />
+              }
               value={RevisionChangeType.NextRevisionStage}
             />
             <RadioButton
@@ -119,7 +145,10 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               return (
                 <div key={reference.id}>
                   <Link
-                    to={documentVersionPath(reference.id, reference.document.id)}
+                    to={documentVersionPath(
+                      reference.id,
+                      reference.document.id,
+                    )}
                     target="_blank"
                   >
                     {reference.name}
@@ -139,16 +168,30 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       direction="column"
       justify="center"
       alignItems="center"
+      className={classes.container}
     >
-      <Grid item={true} lg={isDisabled ? 12 : 7} sm={isDisabled ? 12 : 10} xs={12}>
-        <FormWrapper dirty={dirty} initialValues={initialValues} resetForm={resetForm}>
-          <PromptIfDirty dirty={dirty} doNotPrompt={doNotPrompt} onDirtyFlagChange={onDirtyFlagChange} />
+      <Grid
+        item={true}
+        lg={isDisabled ? 12 : 7}
+        sm={isDisabled ? 12 : 10}
+        xs={12}
+      >
+        <FormWrapper
+          dirty={dirty}
+          initialValues={initialValues}
+          resetForm={resetForm}
+        >
+          <PromptIfDirty
+            dirty={dirty}
+            doNotPrompt={doNotPrompt}
+            onDirtyFlagChange={onDirtyFlagChange}
+          />
           <FormMessage asyncState={asyncState} />
           <FormProgress asyncState={asyncState} />
           <InputField
             name="name"
             label="document.title"
-            inputProps={{ multiline: true, rows: "2"}}
+            inputProps={{ multiline: true, rows: "2" }}
             validate={validator(required)}
           />
           <TextEditorField
@@ -159,7 +202,10 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           <SelectField
             name="document.type"
             label="document.type"
-            selectProps={{inputProps: { id: "type", disabled: isDisabled }, onChange: handleTypeChange }}
+            selectProps={{
+              inputProps: { id: "type", disabled: isDisabled },
+              onChange: handleTypeChange,
+            }}
             options={documentRevisionTypeFormOption()}
             validate={validator(required)}
             includeEmpty={false}
@@ -167,7 +213,12 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           <InputField
             name="document.docId"
             label="common.documentId"
-            inputProps={{ id: "docId", value: docIdValue, disabled: isDisabled, onChange: handleDocIdChange }}
+            inputProps={{
+              id: "docId",
+              value: docIdValue,
+              disabled: isDisabled,
+              onChange: handleDocIdChange,
+            }}
           />
           <AutcompleteField
             name="referenceTo"
@@ -184,7 +235,12 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           <AttachmentsField />
           {renderTypeOfRevisionChange()}
           <Box mt={10}>
-            <Grid item={true} container={true} alignItems="flex-end" direction="column">
+            <Grid
+              item={true}
+              container={true}
+              alignItems="flex-end"
+              direction="column"
+            >
               <SubmitButton
                 asyncState={asyncState}
                 label={isDisabled ? "common.save" : "navigation.createDocument"}

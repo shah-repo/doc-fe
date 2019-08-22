@@ -1,0 +1,11 @@
+import { createStyles, Theme } from "@material-ui/core";
+
+export default (theme: Theme) =>
+  createStyles({
+    whiteContainer: {
+      background: "#fff",
+      padding: theme.spacing(3, 0),
+      margin: "0",
+      width: "100%",
+    },
+  });

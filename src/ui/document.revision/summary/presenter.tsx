@@ -36,7 +36,10 @@ export const Presenter: React.FunctionComponent<Props> = ({
         <SummaryField label="common.status" value={dataProp.status} />
         <SummaryField label="common.type" value={dataProp.document.type} />
         <SummaryField label="document.title" value={dataProp.name} />
-        <SummaryFieldWithHtml label="cr.description" value={dataProp.description} />
+        <SummaryFieldWithHtml
+          label="cr.description"
+          value={dataProp.description}
+        />
         {dataProp.referenceTo && (
           <ReferenceContainer
             dataProp={dataProp.referenceTo}

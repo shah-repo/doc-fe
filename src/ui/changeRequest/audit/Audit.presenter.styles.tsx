@@ -3,7 +3,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core";
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      marginLeft: 30,
+      margin: "0 30px",
     },
     collapsableButton: {
       width: "100%",
@@ -16,7 +16,7 @@ export const styles = makeStyles((theme: Theme) =>
     },
     changeContainer: {
       borderBottom: "1px solid lightgray",
-      marginBottom: 5,
+      margin: "0 5px 5px",
       padding: theme.spacing(1),
       background: "#fff",
     },
