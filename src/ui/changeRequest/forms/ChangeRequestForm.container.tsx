@@ -1,8 +1,15 @@
-import { Grid } from "@material-ui/core";
+import { Grid, WithStyles, withStyles } from "@material-ui/core";
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { ChangeRequest, ChangeRequestsByIdState, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
-import { DocumentRevisionsByIdState, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
+import {
+  ChangeRequest,
+  ChangeRequestsByIdState,
+  changeRequestsSelectors,
+} from "../../../state/ducks/changeRequest";
+import {
+  DocumentRevisionsByIdState,
+  documentRevisionsSelectors,
+} from "../../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
@@ -10,6 +17,7 @@ import DocumentRevisionUpdateContainer from "../../documentRevision/DocumentRevi
 import ChangeRequestAuditContainer from "../audit/Audit.container";
 import DocumentRevisionControlContainer from "../documentRevision/DocumentRevisionControl.container";
 import AssessmentFormContainer from "./assessmentForm/AssessmentForm.container";
+import styles from "./styles";
 import { ChangeRequestFormValues } from "./types";
 
 interface StateProps {
@@ -24,29 +32,52 @@ interface OwnProps {
   doNotPrompt?: boolean;
 }
 
-type ChangeRequestFormContainerProps = OwnProps & StateProps;
+type ChangeRequestFormContainerProps = OwnProps &
+  StateProps &
+  WithStyles<typeof styles>;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   documentRevisionsById: documentRevisionsSelectors.byId(state),
   changeRequestsById: changeRequestsSelectors.byId(state),
 });
 
-export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFormContainerProps> = ({
-  onSubmit, asyncState, initialValues, documentRevisionsById, changeRequest,
-  doNotPrompt, changeRequestsById,
+export const ChangeRequestFormContainer: React.FunctionComponent<
+  ChangeRequestFormContainerProps
+> = ({
+  classes,
+  onSubmit,
+  asyncState,
+  initialValues,
+  documentRevisionsById,
+  changeRequest,
+  doNotPrompt,
+  changeRequestsById,
 }) => {
   const alertMessage = "You have unsaved changes.";
   const [isFormDirty, setIsFormDirty] = useState<boolean>(false);
-  const [selectedDocumentRevision, setSelectedDocumentRevision] = useState<string | null>(null);
-  const [documentRevisionsList, setDocumentRevisionsList] = useState<string[]>(initialValues.documentRevisions);
+  const [selectedDocumentRevision, setSelectedDocumentRevision] = useState<
+    string | null
+  >(null);
+  const [documentRevisionsList, setDocumentRevisionsList] = useState<string[]>(
+    initialValues.documentRevisions,
+  );
 
   const doneAddingDocuments = (addedDocuments: string[]) => {
-    const documentRevisions = new Set([...addedDocuments, ...documentRevisionsList]);
+    const documentRevisions = new Set([
+      ...addedDocuments,
+      ...documentRevisionsList,
+    ]);
     setDocumentRevisionsList(Array.from(documentRevisions));
   };
 
-  const deleteDocumentFromChangeRequest = (deleteDocumentRevisionId: string) => {
-    setDocumentRevisionsList(documentRevisionsList.filter((documentRevisionId) => documentRevisionId !== deleteDocumentRevisionId ));
+  const deleteDocumentFromChangeRequest = (
+    deleteDocumentRevisionId: string,
+  ) => {
+    setDocumentRevisionsList(
+      documentRevisionsList.filter(
+        (documentRevisionId) => documentRevisionId !== deleteDocumentRevisionId,
+      ),
+    );
   };
 
   const selectDocumentRevision = (documentRevisionId: string) => {
@@ -85,7 +116,9 @@ export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFo
     if (selectedDocumentRevision) {
       const docRev = {
         ...documentRevisionsById[selectedDocumentRevision],
-        changeRequest: initialValues.id ? changeRequestsById[initialValues.id] : undefined,
+        changeRequest: initialValues.id
+          ? changeRequestsById[initialValues.id]
+          : undefined,
       };
       return (
         <DocumentRevisionUpdateContainer
@@ -104,12 +137,16 @@ export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFo
 
   const renderDocumentRevisionAudit = () => {
     if (selectedDocumentRevision) {
-      return <DocumentRevisionAuditContainer documentRevisionId={selectedDocumentRevision} />;
+      return (
+        <DocumentRevisionAuditContainer
+          documentRevisionId={selectedDocumentRevision}
+        />
+      );
     }
   };
 
   return (
-    <Grid container={true} spacing={4}>
+    <Grid container={true} spacing={4} className={classes.whiteContainer}>
       <Grid item={true} xs={12} sm={3} md={2}>
         <DocumentRevisionControlContainer
           doneAddingDocuments={doneAddingDocuments}
@@ -132,4 +169,7 @@ export const ChangeRequestFormContainer: React.FunctionComponent<ChangeRequestFo
   );
 };
 
-export default connect<StateProps, {}, OwnProps, ApplicationState>(mapStateToProps, {})(ChangeRequestFormContainer);
+export default connect<StateProps, {}, OwnProps, ApplicationState>(
+  mapStateToProps,
+  {},
+)(withStyles(styles)(ChangeRequestFormContainer));

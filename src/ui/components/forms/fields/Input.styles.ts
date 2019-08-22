@@ -13,11 +13,12 @@ export const InputField = withStyles((theme: Theme) =>
     input: {
       // "backgroundColor": theme.palette.background.madefaultin,
       position: "relative",
-      backgroundColor: "rgba(0, 0, 0, 0.09)",
+      backgroundColor: "transparent",
       fontSize: theme.spacing(2),
       width: "auto",
       padding: theme.spacing(2),
       flex: 1,
+      border: `1px solid ${theme.palette.text.hint}`,
     },
   }),
 )(InputBase);

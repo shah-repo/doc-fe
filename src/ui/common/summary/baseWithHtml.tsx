@@ -7,13 +7,12 @@ import { getInnerHTMLProp, sanitizeHtml } from "../../../common/utils/helpers";
 
 type Props = SummaryBaseProps;
 
-const BaseWithhtml: React.FunctionComponent<Props> = ({
-  label,
-  value,
-}) => (
-  <ListItem>
-    <Grid item={true} xs={4}>
-      <Typography variant="body1"><Text message={label} />:</Typography>
+const BaseWithhtml: React.FunctionComponent<Props> = ({ label, value }) => (
+  <Grid item xs={12}>
+    <Grid item={true} xs={12}>
+      <Typography variant="h6">
+        <Text message={label} />:
+      </Typography>
     </Grid>
     <Grid item={true} xs={8}>
       <ReactQuill
@@ -24,7 +23,7 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
         <div style={{ border: "none" }} />
       </ReactQuill>
     </Grid>
-  </ListItem>
+  </Grid>
 );
 
 export default BaseWithhtml;
