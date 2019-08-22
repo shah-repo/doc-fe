@@ -41,7 +41,6 @@ const ListContainer: React.FunctionComponent<Props> = ({
   const loadAction = () => loadDocumentRevisions([
     DocumentRevisionStatus.Released,
     DocumentRevisionStatus.Obsolete,
-    DocumentRevisionStatus.Implementation,
     DocumentRevisionStatus.InReview,
     DocumentRevisionStatus.PendingChange,
     DocumentRevisionStatus.Draft,
