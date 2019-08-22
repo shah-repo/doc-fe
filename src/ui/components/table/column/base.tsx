@@ -1,5 +1,7 @@
 import { Box, Tooltip, Typography } from "@material-ui/core";
+import Link from "@material-ui/core/Link";
 import React from "react";
+import { Link as RouterLink } from "react-router-dom";
 import {
   CellMeasurer,
   Column,
@@ -13,7 +15,6 @@ import {
   StyledCellLink,
   StyledTableCell,
   StyledTableHeader,
-  StyledTableLink,
 } from "./styles";
 import {
   InnerTableColumnProps,
@@ -113,9 +114,10 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
   );
 
   const tooltipRenderer = (columnProps: ColumnProps) => {
-    let tooltipValue: string = columnProps.rowData[tooltipKey] || "";
+    const { rowData } = columnProps;
+    let tooltipValue: string = rowData[tooltipKey] || "";
     if (typeof tooltipKey === "function") {
-      tooltipValue = (tooltipKey as TableCellTooltipRenderer<T>)(columnProps.rowData);
+      tooltipValue = (tooltipKey as TableCellTooltipRenderer<T>)(rowData);
     }
 
     return (
@@ -128,17 +130,31 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
     );
   };
 
+  const linkRenderer = (columnProps: ColumnProps) => {
+    const { rowData } = columnProps;
+    if (cellHref) {
+      return (
+        <Link
+          className="columnLink"
+          component={RouterLink}
+          to={cellHref(rowData)}
+        >
+          {tooltipRenderer(columnProps)}
+        </Link>
+      );
+    }
+    return tooltipRenderer(columnProps);
+  };
+
   const cellRenderer = (columnProps: ColumnProps) => (
-    <StyledTableLink href={cellHref && cellHref(columnProps.rowData as T)}>
-      <StyledTableCell
-        component="div"
-        variant="body"
-        align={"left"}
-        {... cellOptions}
-      >
-        {tooltipRenderer(columnProps)}
-      </StyledTableCell>
-    </StyledTableLink>
+    <StyledTableCell
+      component="div"
+      variant="body"
+      align={"left"}
+      {... cellOptions}
+    >
+      {linkRenderer(columnProps)}
+    </StyledTableCell>
   );
 
   return (

@@ -32,9 +32,6 @@ const ListPresenter: React.FunctionComponent<Props> = ({
 
   const canEdit = (data: DocumentRevision) => canEditDocumentRevision({dataProp: data, currentUserEmail});
 
-  const onRowSelect = ({rowData}: TableSelectionProps<DocumentRevision>) => () =>
-    previewDocumentRevision(rowData.id, rowData.document.id);
-
   const typeTooltipRenderer = (rowData: DocumentRevision) =>
     DocumentRevisionType[rowData.document.type as unknown as keyof typeof DocumentRevisionType];
 
@@ -108,7 +105,6 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       key: "status",
       label: "document.revision.list.state",
       columnOptions: { width: 160 },
-      cellHref: cellHrefRenderer,
       cellType: (rowData) => (canEdit(rowData)) ? "LINK" : "BASE",
       onSelect: ({rowData}) => () => editDocumentRevision(rowData.id, rowData.document.id),
       searchOptions: {
@@ -137,7 +133,6 @@ const ListPresenter: React.FunctionComponent<Props> = ({
         <DocumentList
           tableData={dataProp}
           columns={columns}
-          onSelect={onRowSelect}
           queryUrl={DOCUMENT_REVISION_ROOT_URL}
           clearFilter={clearFilter}
           cellMeasure={true}

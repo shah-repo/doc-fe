@@ -20,6 +20,7 @@ const theme = createMuiTheme({
     },
     text: {
       hint: "#B4C0CA",
+      primary: "#4d4d4d",
     },
   },
   overrides: {
