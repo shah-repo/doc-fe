@@ -1,8 +1,9 @@
 import { Grid, ListItem, Typography } from "@material-ui/core";
 import React from "react";
+import ReactQuill from "react-quill";
 import Text from "../../components/Text";
 import { SummaryBaseProps } from "./types";
-import { getInnerHTMLProp } from "../../../common/utils/helpers";
+import { getInnerHTMLProp, sanitizeHtml } from "../../../common/utils/helpers";
 
 type Props = SummaryBaseProps;
 
@@ -15,7 +16,13 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
       <Typography variant="body1"><Text message={label} />:</Typography>
     </Grid>
     <Grid item={true} xs={8}>
-      <Typography dangerouslySetInnerHTML={getInnerHTMLProp(value)} variant="subtitle1" />
+      <ReactQuill
+        readOnly={true}
+        value={sanitizeHtml(value)}
+        modules={{ toolbar: false }}
+      >
+        <div style={{ border: "none" }} />
+      </ReactQuill>
     </Grid>
   </ListItem>
 );
