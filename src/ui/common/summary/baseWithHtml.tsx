@@ -3,7 +3,7 @@ import React from "react";
 import ReactQuill from "react-quill";
 import Text from "../../components/Text";
 import { SummaryBaseProps } from "./types";
-import { getInnerHTMLProp, sanitizeHtml } from "../../../common/utils/helpers";
+import { sanitizeHtml } from "../../../common/utils/helpers";
 
 type Props = SummaryBaseProps;
 
