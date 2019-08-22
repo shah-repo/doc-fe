@@ -6,6 +6,7 @@ import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
 import { DocumentRevisionStatus, Audit } from "./types";
 import { DocumentRevisionFormValues } from "../../../ui/documentRevision/forms/types";
+import { stripTags } from "../../../common/utils/helpers";
 
 const allIds = (state: ApplicationState) => state.documentRevisions.allIds;
 const byId = (state: ApplicationState) => state.documentRevisions.byId;
@@ -15,7 +16,14 @@ const auditsAllId = (state: ApplicationState) => state.documentRevisions.auditsA
 
 const getDocumentRevisionsList = createSelector(
   allIds, byId,
-  (ids, documentRevisions) => ids.map((id) => documentRevisions[id]),
+  (ids, documentRevisions) => (
+    ids.map((id) => {
+      const docRev = _.cloneDeep(documentRevisions[id]);
+      docRev.description = stripTags(documentRevisions[id].description);
+      
+      return docRev;
+    })
+  ),
 );
 
 const getDocumentRevision = (state: ApplicationState, documentRevisionId: string) => byId(state)[documentRevisionId];
