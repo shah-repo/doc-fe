@@ -38,6 +38,13 @@ const makeGetDocumentRevisions = () => {
   );
 };
 
+const makeGetHasDraftVersion = () => {
+  return createSelector(
+    [getDocumentRevisions],
+    (documentRevisions) => _.some(documentRevisions, ['status', DocumentRevisionStatus.Draft]),
+  );
+};
+
 const getCurrentDocumentValues = (state: ApplicationState, docRev: DocumentRevisionFormValues) => docRev;
 
 const makeGetAvailableReferences = () => {
@@ -127,4 +134,5 @@ export default {
   getLoadAuditAsyncState,
   makeGetAvailableReferences,
   makeGetAudit,
+  makeGetHasDraftVersion,
 };
