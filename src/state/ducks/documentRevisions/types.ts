@@ -151,7 +151,7 @@ export interface DocumentRevisionTransitionResponse {
 export interface Audit {
   field: string;
   type: string;
-  nextValue: string | Attachment | Reference;
+  nextValue: string | Attachment | Reference | ChangeRequest;
   timestamp: string;
   groupId: string;
   owner: User;

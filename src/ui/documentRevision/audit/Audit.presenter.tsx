@@ -6,6 +6,7 @@ import { Audit, Reference } from "../../../state/ducks/documentRevisions";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
 import { styles } from "./Audit.presenter.styles";
+import { ChangeRequest } from "../../../state/ducks/changeRequest";
 
 interface OwnProps {
   audit: Audit[];
@@ -29,6 +30,9 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       case "referenceTo":
         const referenceTo = change.nextValue as Reference;
         return referenceTo.docId;
+      case "changeRequest":
+        const changeRequest = change.nextValue as ChangeRequest;
+        return changeRequest.crId;
       default:
         return change.nextValue;
     }
