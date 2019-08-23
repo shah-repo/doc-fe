@@ -43,13 +43,17 @@ const makeGetAudit = () => {
   return createSelector(
     getAudit,
     (audits: Audit[] = []) => audits.map((audit) => {
-      if (audit.field === "description") {
-        const html = audit.nextValue as string;
-        audit.nextValue = striptags(html).substring(0, 30);
-        return audit;
+      switch (audit.field) {
+        case "assessments.description":
+        case "justifications.description":
+        case "tasks.description":
+        case "description":
+          const html = audit.nextValue as string;
+          audit.nextValue = striptags(html).substring(0, 100);
+          return audit;
+        default:
+          return audit;
       }
-
-      return audit;
     }),
   )
 }
