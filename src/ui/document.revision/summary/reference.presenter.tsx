@@ -9,6 +9,8 @@ import styles from "./styles";
 interface OwnProps {
   label: string;
   getUrl: (reference: any) => string;
+  docId: (reference: any) => string;
+  docTitle: (reference: any) => string;
 }
 
 type Props = OwnProps & DataProps<Model[]> & WithStyles<typeof styles>;
@@ -18,6 +20,8 @@ const ReferencePresenter: React.FunctionComponent<Props> = ({
   dataProp,
   label,
   getUrl,
+  docId,
+  docTitle,
 }) => {
   const referencesRenderer = () => dataProp.map((reference: any, index) => {
     const notDeprecated = reference.status !== DocumentRevisionStatus.Deprecated;
@@ -35,7 +39,7 @@ const ReferencePresenter: React.FunctionComponent<Props> = ({
                     to={getUrl(reference)}
                     target="_blank"
                   >
-                    {reference.name || reference.docId}
+                    {docId(reference)} - {docTitle(reference)}
                   </Link>
                     </Typography>
               </Grid>
