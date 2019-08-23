@@ -5,6 +5,7 @@ import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { changeRequestEditPath } from "../../change.request/utils/paths";
 import Text from "../../components/Text";
+import { stripTags } from "../../../common/utils/helpers";
 
 type Props = DataProps<DocumentRevision>;
 
@@ -22,7 +23,7 @@ export const ChangeRequestLink: React.FunctionComponent<Props> = ({
       <Typography variant="h5">
         <Text translation="common.crid" />:&nbsp;
         <Link to={changeRequestEditPath(changeRequest.id)} target="_blank">
-          <Tooltip title={changeRequest.description}>
+          <Tooltip title={stripTags(changeRequest.description)}>
             <span>{changeRequest.crId}</span>
           </Tooltip>
         </Link>
