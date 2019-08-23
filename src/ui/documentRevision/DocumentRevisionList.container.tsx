@@ -49,7 +49,7 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
               </div>
               <div>
                 <Text translation="documentRevision.released" />:{" "}
-                <Date value={documentRevision.releasedAt} />
+                <Date value={documentRevision.obsoletedAt || documentRevision.releasedAt} />
               </div>
             </NavLink>
           </div>
