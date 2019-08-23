@@ -1,4 +1,4 @@
-import moment from "moment";
+import moment from "moment-timezone";
 import { Dispatch } from "redux";
 import { Translation } from "../../../ui/translations/types";
 import apiClient from "../../apiClient";

@@ -1,4 +1,4 @@
-import moment from "moment";
+import moment from "moment-timezone";
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 import Config from "../../../config";

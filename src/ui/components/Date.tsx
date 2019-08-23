@@ -1,6 +1,5 @@
 import * as React from "react";
 import { FormattedDate } from "react-intl";
-import moment from "moment";
 
 type FormattedDateProps = FormattedDate.Props;
 

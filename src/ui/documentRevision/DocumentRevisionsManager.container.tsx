@@ -3,7 +3,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import _ from "lodash";
-import moment from "moment";
+import moment from "moment-timezone";
 import {
   DocumentRevision,
   documentRevisionsActions,
