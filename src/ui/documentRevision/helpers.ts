@@ -16,7 +16,8 @@ export const canSubmitDocumentRevision = (
   currentUserEmail: string,
 ) => documentRevision.owner && currentUserEmail === documentRevision.owner.email && documentRevision.status === DocumentRevisionStatus.PendingChange;
 
-export const canCreateNewVersion = (documentRevision: DocumentRevision) => documentRevision.status === DocumentRevisionStatus.Released;
+export const canCreateNewVersion = (documentRevision: DocumentRevision, hasDraft: boolean) =>
+  documentRevision.status === DocumentRevisionStatus.Released && !hasDraft;
 
 export const documentRevisionIdMask = (
   type: string,

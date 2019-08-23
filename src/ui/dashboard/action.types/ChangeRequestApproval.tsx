@@ -15,7 +15,7 @@ export const ChangeRequestApproval: React.FunctionComponent<Props> = ({
   pendingAction
 }) => {
   const classes = styles();
-  console.log(pendingAction);
+  
   return (
     <Grid container spacing={10} justify="space-between" alignItems="baseline">
       <Grid item xs={8}>
