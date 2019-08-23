@@ -10,28 +10,31 @@ import { LinkDefinition } from "./NavigationLink.container";
 import { Box } from "@material-ui/core";
 import styles from "./NavigationLink.styles";
 
-interface NavigationLinkPresenterProps extends LinkDefinition, WithStyles<typeof styles> {
+interface NavigationLinkPresenterProps
+  extends LinkDefinition,
+    WithStyles<typeof styles> {
   ActionIcon?: ReactNode;
   isChild?: boolean;
 }
 
-const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterProps> =
-  ({ classes, url, text, Icon, ActionIcon, isChild }) => (
-    <ListItem button={true} className={classes.linkButton}>
-      <NavLink
-        to={url}
-        exact={true}
-        className={classNames(classes.link, { [classes.childLink]: isChild })}
-        activeClassName={classes.activeLink}
-      >
-        <ListItemText
-          primaryTypographyProps={{ variant: isChild ? "caption" : "subtitle1" }}
-          primary={<Text translation={text} />}
-          className={classes.item}
-        />
-        {ActionIcon}
-      </NavLink>
-    </ListItem >
-  );
+const NavigationLinkPresenter: React.FunctionComponent<
+  NavigationLinkPresenterProps
+> = ({ classes, url, text, Icon, ActionIcon, isChild }) => (
+  <ListItem button={true} className={classes.linkButton}>
+    <NavLink
+      to={url}
+      exact={true}
+      className={classNames(classes.link, { [classes.childLink]: isChild })}
+      activeClassName={classes.activeLink}
+    >
+      <ListItemText
+        primaryTypographyProps={{ variant: isChild ? "caption" : "subtitle1" }}
+        primary={<Text translation={text} />}
+        className={classes.item}
+      />
+      {ActionIcon}
+    </NavLink>
+  </ListItem>
+);
 
 export default withStyles(styles)(NavigationLinkPresenter);
