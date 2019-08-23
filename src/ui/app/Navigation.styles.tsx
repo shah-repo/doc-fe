@@ -10,9 +10,10 @@ export default (theme: Theme) =>
     },
     drawerPaper: {
       width: DRAWER_WIDTH,
+      background: "#29064C",
     },
     toolbar: {
-      backgroundColor: theme.palette.primary.main,
+      backgroundColor: "#29064C",
     },
     toolbarTitle: {
       flex: 1,
