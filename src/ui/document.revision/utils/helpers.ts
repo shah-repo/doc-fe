@@ -33,9 +33,11 @@ export const documentRevisionTypeOption = () => {
 export const documentRevisionStatusOption = () => {
   const options: SelectOption[] = [];
   Object.keys(DocumentRevisionStatus).map((key) => {
-    // TODO: Change DocumentRevisionStatus status into key = value, value = text
+    // TODO: Change DocumentRevisionStatus enum into key = value, value = text
     const keyName = DocumentRevisionStatus[key as keyof typeof DocumentRevisionStatus];
-    options.push({value: keyName, text: keyName});
+    if (keyName !== DocumentRevisionStatus.Deprecated) {
+      options.push({value: keyName, text: keyName});
+    }
   });
   return options;
 };
