@@ -1,4 +1,4 @@
-import moment from "moment";
+import moment from "moment-timezone";
 import { getCallbackHandler } from "../../../common/tests/factories";
 import Config from "../../../config";
 import initialStoreState from "../../tests/helpers/initialStoreState";
