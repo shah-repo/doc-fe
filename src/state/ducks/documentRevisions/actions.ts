@@ -1,31 +1,32 @@
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
+import { documentsActions } from "../documents";
 import {
+  DOCUMENT_GET_ASYNC,
+  DOCUMENT_REVISION_AUDIT_SET,
   DOCUMENT_REVISION_GET_ASYNC,
+  DOCUMENT_REVISION_GET_AUDIT_ASYNC,
   DOCUMENT_REVISION_LIST,
   DOCUMENT_REVISION_LIST_ASYNC,
   DOCUMENT_REVISION_ROOT_URL,
   DOCUMENT_REVISION_SET,
-  DOCUMENT_GET_ASYNC,
-  DOCUMENT_SET,
   DOCUMENT_ROOT_URL,
-  DOCUMENT_REVISION_AUDIT_SET,
-  DOCUMENT_REVISION_GET_AUDIT_ASYNC,
+  DOCUMENT_SET,
 } from "./constants";
 import {
+  Audit,
+  AuditActionPayload,
+  Document,
   DocumentRevision,
+  DocumentRevisionAuditSetAction,
   DocumentRevisionEditRequestBody,
   DocumentRevisionSetAction,
   DocumentRevisionsListAction,
-  DocumentSetAction,
-  Document,
-  DocumentRevisionTransitionRequestBody,
-  DocumentRevisionTransition,
-  DocumentRevisionTransitionResponse,
-  AuditActionPayload,
-  DocumentRevisionAuditSetAction,
-  Audit,
   DocumentRevisionStatus,
+  DocumentRevisionTransition,
+  DocumentRevisionTransitionRequestBody,
+  DocumentRevisionTransitionResponse,
+  DocumentSetAction,
 } from "./types";
 
 const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentRevisionsListAction => ({
@@ -38,7 +39,7 @@ const documentRevisionSet = (documentRevision: DocumentRevision): DocumentRevisi
   payload: documentRevision,
 });
 
-const loadList = (states: DocumentRevisionStatus[] = []): ApiAction<DocumentRevision[]> =>{
+const loadList = (states: DocumentRevisionStatus[] = []): ApiAction<DocumentRevision[]> => {
   const url = states.length === 0
     ? DOCUMENT_REVISION_ROOT_URL
     : states.reduce((acc, state) => acc + `status%5B%5D=${state}&`, `${DOCUMENT_REVISION_ROOT_URL}?`);
@@ -51,7 +52,7 @@ const loadList = (states: DocumentRevisionStatus[] = []): ApiAction<DocumentRevi
       dispatch(documentRevisionsList(documentRevisions));
     },
   });
-}
+};
 
 const load = (id: string): ApiAction<DocumentRevision> => apiAction({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
@@ -79,7 +80,12 @@ const create = (body: DocumentRevisionEditRequestBody, handlers: Handlers<Docume
     method: "post",
     data: body,
     onSuccess: (documentRevision, dispatch) => {
+      documentsActions.setDocumentProposedId("");
       dispatch(documentRevisionSet(documentRevision));
+    },
+    onFailure: () => {
+      const { docId } = body.document || { docId: "" };
+      documentsActions.setDocumentProposedId(docId || "");
     },
     handlers,
   });

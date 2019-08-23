@@ -6,7 +6,6 @@ import { DocumentRevision, DocumentRevisionType } from "../../../state/ducks/doc
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { TableColumnProps } from "../../components/table/column/types";
 import { TablePanel } from "../../components/table/panel";
-import { TableSelectionProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import {
@@ -24,7 +23,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   dataProp,
   currentUserEmail,
   editDocumentRevision,
-  previewDocumentRevision,
+  setDocId,
 }) => {
 
   const DocumentList = TablePanel<DocumentRevision>();
@@ -43,6 +42,8 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   };
 
   const clear = () => setClearFilter(!clearFilter);
+
+  const onCreateClick = () => setDocId("");
 
   const columns: Array<TableColumnProps<DocumentRevision>> = [
     {
@@ -123,7 +124,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
         </Button>
       </Grid>
       <Grid item={true} xs={6} style={{textAlign: "right"}}>
-        <RouterLink to={DOCUMENT_REVISION_CREATE_URL} className={classes.link}>
+        <RouterLink onClick={(onCreateClick)} to={DOCUMENT_REVISION_CREATE_URL} className={classes.link}>
           <Button variant="contained" color="primary" className={classes.button}>
             <Text translation="document.revision.create" />
           </Button>

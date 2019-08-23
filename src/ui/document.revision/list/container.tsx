@@ -6,6 +6,7 @@ import {
   documentRevisionsSelectors,
   DocumentRevisionStatus,
 } from "../../../state/ducks/documentRevisions";
+import { documentsActions } from "../../../state/ducks/documents";
 import { ApplicationState } from "../../../state/reducers";
 import AsyncGate from "../../components/AsyncGate";
 import {
@@ -37,6 +38,7 @@ const ListContainer: React.FunctionComponent<Props> = ({
   dataProp,
   currentUserEmail,
   history,
+  setDocId,
 }) => {
   const loadAction = () => loadDocumentRevisions([
     DocumentRevisionStatus.Released,
@@ -58,6 +60,7 @@ const ListContainer: React.FunctionComponent<Props> = ({
         currentUserEmail={currentUserEmail}
         editDocumentRevision={edit}
         previewDocumentRevision={preview}
+        setDocId={setDocId}
       />
     </AsyncGate>
   );
@@ -65,4 +68,5 @@ const ListContainer: React.FunctionComponent<Props> = ({
 
 export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
   loadDocumentRevisions: documentRevisionsActions.loadList,
+  setDocId: documentsActions.setDocumentProposedId,
 })(ListContainer);
