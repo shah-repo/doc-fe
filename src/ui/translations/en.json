@@ -227,6 +227,7 @@
   "documentRevision.audit.document.docId.STRING_NEW": "New Doc ID",
   "documentRevision.audit.document.type.STRING_NEW": "New document type",
   "documentRevision.audit.referenceTo.ARRAY_NEW": "New reference to",
+  "documentRevision.audit.changeRequest.STRING_NEW": "New change request",
 
   "transition.action.confirm": "Confirm",
   "transition.action.cancel": "Cancel",
