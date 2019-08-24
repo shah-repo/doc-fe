@@ -90,7 +90,7 @@ const DocumentRevisionTable: React.FunctionComponent<
         columns={columns}
         tableData={documentRevisionsToShow}
         cellMeasure={true}
-        queryUrl={DOCUMENT_REVISION_ROOT_URL}
+        queryUrl={`${DOCUMENT_REVISION_ROOT_URL}?status%5B%5D=${DocumentRevisionStatus.Draft}`}
       />
     );
   };

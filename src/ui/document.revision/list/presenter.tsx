@@ -2,7 +2,7 @@ import { Button, Grid, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { unmaskId } from "../../../state/ducks/common/helpers";
-import { DocumentRevision, DocumentRevisionType } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionType, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { TableColumnProps } from "../../components/table/column/types";
 import { TablePanel } from "../../components/table/panel";
@@ -26,6 +26,12 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   setDocId,
 }) => {
 
+  const queryUrl = `${DOCUMENT_REVISION_ROOT_URL}?
+status%5B%5D=${DocumentRevisionStatus.Draft}&
+status%5B%5D=${DocumentRevisionStatus.PendingChange}&
+status%5B%5D=${DocumentRevisionStatus.InReview}&
+status%5B%5D=${DocumentRevisionStatus.Released}&
+status%5B%5D=${DocumentRevisionStatus.Obsolete}&`;
   const DocumentList = TablePanel<DocumentRevision>();
   const [clearFilter, setClearFilter] = React.useState<boolean>(false);
 
@@ -134,7 +140,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
         <DocumentList
           tableData={dataProp}
           columns={columns}
-          queryUrl={DOCUMENT_REVISION_ROOT_URL}
+          queryUrl={queryUrl}
           clearFilter={clearFilter}
           cellMeasure={true}
         />
