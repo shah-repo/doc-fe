@@ -47,7 +47,8 @@ export interface DocumentRevision {
   docId?: string;
   typePrefix?: string;
   version: number;
-  revision: string;
+  revision: number;
+  revisionStage: number;
   name: string;
   description: string;
   owner: User;
