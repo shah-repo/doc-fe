@@ -5,6 +5,7 @@ import Date from "../components/Date";
 import Text from "../components/Text";
 import { styles } from "./DocumentRevisionList.container.styles";
 import { generateDocumentRevisionVersionPath } from "./pathGenerators";
+import { generateVersionNumber } from "./helpers";
 
 interface OwnProps {
   documentRevisions: DocumentRevision[];
@@ -35,7 +36,7 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
             >
               <div>
                 <Text translation="documentRevision.version" />{" "}
-                {documentRevision.version} - {documentRevision.status}
+                {generateVersionNumber(documentRevision.revision, documentRevision.revisionStage)} - {documentRevision.status}
               </div>
             </NavLink>
             <NavLink
