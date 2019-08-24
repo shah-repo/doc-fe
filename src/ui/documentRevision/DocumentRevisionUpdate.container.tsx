@@ -37,7 +37,10 @@ export const DocumentRevisionUpdateContainer: React.FunctionComponent<DocumentRe
 }) => {
   if (!canEditDocumentRevision(documentRevision, currentUserEmail)) {
     return (
-      <DocumentRevisionSummaryPresenter dataProp={documentRevision} />
+      <DocumentRevisionSummaryPresenter
+        dataProp={documentRevision}
+        canShowCreateVersionButton={true}
+      />
     );
   }
 
