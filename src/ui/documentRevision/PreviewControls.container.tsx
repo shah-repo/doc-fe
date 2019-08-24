@@ -10,6 +10,7 @@ import { canCreateNewVersion } from "./helpers";
 
 interface OwnProps {
   documentRevision: DocumentRevision;
+  canShowCreateVersionButton?: boolean;
 }
 
 interface StateProps {
@@ -24,7 +25,7 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 });
 
 export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainerProps> = ({
-  documentRevision, history, hasDraftVersion,
+  documentRevision, history, hasDraftVersion, canShowCreateVersionButton
 }) => {
     const cloneDocument = () => history.push(documentNewVersionPath(documentRevision.id, documentRevision.document.id));
 
@@ -36,7 +37,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
 
     return (
       <Grid>
-        {canCreateNewVersion(documentRevision, hasDraftVersion) && renderCloneButton()}
+        {canCreateNewVersion(documentRevision, hasDraftVersion, canShowCreateVersionButton) && renderCloneButton()}
       </Grid>
     );
   };

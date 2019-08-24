@@ -13,6 +13,7 @@ interface DocumentRevisionPreviewPresenterProps extends WithStyles<typeof styles
   documentRevision: DocumentRevision | null;
 }
 
+// TODO: check if this can be deleted
 export const DocumentRevisionPreviewPresenter: React.FunctionComponent<DocumentRevisionPreviewPresenterProps> = ({
   classes, documentRevision,
 }) => {
