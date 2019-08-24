@@ -4,7 +4,7 @@ export const modules = {
     [{size: []}],
     ['bold', 'italic', 'underline', 'strike', 'blockquote'],
     [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-    ['link', 'video'],
+    ['link'],
     ['clean'],
     [{ 'color': [] }, { 'background': [] }],
   ],
@@ -14,5 +14,5 @@ export const formats = [
   'header', 'font', 'size',
   'bold', 'italic', 'underline', 'strike', 'blockquote',
   'list', 'bullet', 'indent',
-  'link', 'video', 'color', 'background'
+  'link', 'color', 'background'
 ]

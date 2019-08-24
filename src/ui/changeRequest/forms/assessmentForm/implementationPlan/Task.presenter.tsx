@@ -4,6 +4,7 @@ import Date from "../../../../components/Date";
 import Text from "../../../../components/Text";
 import { ImplementationPlanTaskFormValues } from "../../types";
 import { getInnerHTMLProp } from "../../../../../common/utils/helpers";
+import SummaryFieldWithHtml from "../../../../common/summary/baseWithHtml";
 
 export interface Props {
   task: ImplementationPlanTaskFormValues;
@@ -41,7 +42,7 @@ export const TaskPresenter: React.FunctionComponent<Props> = ({
   return (
     <div className={classes.container}>
       <div>{task.title}</div>
-      <div dangerouslySetInnerHTML={getInnerHTMLProp(task.description)} />
+      <SummaryFieldWithHtml value={task.description} />
       <div className={classes.detailsContainer}>
         <span className={classes.marginRight}>
           <Text translation="common.assigned.to" />:&nbsp;

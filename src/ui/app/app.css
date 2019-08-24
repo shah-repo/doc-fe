@@ -20,6 +20,11 @@
   border: 1px solid #b4c0ca;
 }
 
+.task-description .editor-container .ql-editor {
+  min-height: 8em;
+  max-height: 18em;
+}
+
 .editor-container .ql-editor {
   min-height: 8em;
   max-height: 36em;
