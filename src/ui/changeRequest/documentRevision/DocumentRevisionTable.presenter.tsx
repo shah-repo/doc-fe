@@ -12,7 +12,7 @@ import {
   TableColumnProps,
 } from "../../components/table/column/types";
 import { TablePanel } from "../../components/table/panel";
-import { TableSelectionProps } from "../../components/table/types";
+import { TableSearchQueryType, TableSelectionProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import { documentRevisionStatusOption } from "../../document.revision/utils/helpers";
 import { documentRevisionIdMask } from "../../documentRevision/helpers";
@@ -23,11 +23,12 @@ import { DocumentRevisionListItem } from "./types";
 interface DocumentRevisionTableProps extends WithStyles<typeof styles> {
   documentRevisionsToShow: DocumentRevision[];
   addDocument: (documentRevisionId: string) => void;
+  addedDocuments: string[];
 }
 
 const DocumentRevisionTable: React.FunctionComponent<
   DocumentRevisionTableProps
-> = ({ classes, documentRevisionsToShow, addDocument }) => {
+> = ({ classes, documentRevisionsToShow, addDocument, addedDocuments }) => {
   const onStateSelect = ({
     rowData,
   }: TableSelectionProps<DocumentRevision>) => () => {
@@ -43,6 +44,18 @@ const DocumentRevisionTable: React.FunctionComponent<
       text: DocumentRevisionStatus.Released,
     },
   ];
+
+  const customQuerySet = (queryDict: TableSearchQueryType) => {
+    if (queryDict["status[]"]) { return queryDict; }
+    queryDict["status[]"] = [
+      DocumentRevisionStatus.Draft,
+      DocumentRevisionStatus.Released,
+    ];
+    return queryDict;
+  };
+
+  const customDataSet = (data: DocumentRevision[]) =>
+    data.filter((rec) => !addedDocuments.includes(rec.id));
 
   const columns: Array<TableColumnProps<DocumentRevision>> = [
     {
@@ -91,6 +104,8 @@ const DocumentRevisionTable: React.FunctionComponent<
         tableData={documentRevisionsToShow}
         cellMeasure={true}
         queryUrl={DOCUMENT_REVISION_ROOT_URL}
+        customQuerySet={customQuerySet}
+        customDataSet={customDataSet}
       />
     );
   };

@@ -42,6 +42,9 @@ export const documentRevisionStatusOption = () => {
   return options;
 };
 
+export const documentRevisionQueryStatus = (): DocumentRevisionStatus[] =>
+  Object.values(DocumentRevisionStatus).filter((value) => value !== DocumentRevisionStatus.Deprecated);
+
 export const documentRevisionTypeFormOption = () => {
   const options: SelectOption[] = [];
   Object.keys(DocumentRevisionType).map((key) => {

@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import { AppBar, Dialog, Toolbar } from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/core";
-import Chip from '@material-ui/core/Chip';
 import Button from "@material-ui/core/Button";
-import { Dialog, AppBar, Toolbar } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import IconButton from '@material-ui/core/IconButton';
-import DialogContent from '@material-ui/core/DialogContent';
+import Chip from "@material-ui/core/Chip";
+import DialogContent from "@material-ui/core/DialogContent";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import React, { useEffect, useState } from "react";
+import { DocumentRevision, DocumentRevisionsByIdState, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import Text from "../../components/Text";
-import { DocumentRevision, DocumentRevisionsByIdState, DocumentRevisionStatus } from '../../../state/ducks/documentRevisions';
-import DocumentRevisionTable from './DocumentRevisionTable.presenter';
 import styles from "./AddDocumentRevision.styles";
+import DocumentRevisionTable from "./DocumentRevisionTable.presenter";
 
 interface AddDocumentRevisionContainerProps extends WithStyles<typeof styles> {
   isOpen: boolean;
@@ -22,17 +22,21 @@ interface AddDocumentRevisionContainerProps extends WithStyles<typeof styles> {
 
 export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRevisionContainerProps> = ({
   isOpen, close, documentRevisionsList, classes,
-  doneAddingDocuments, documentsInChangeRequest, documentRevisionsById
+  doneAddingDocuments, documentsInChangeRequest, documentRevisionsById,
 }) => {
   const [documentRevisionsToShow, setDocumentRevisionsToShow] = useState<DocumentRevision[]>([]);
   const [addedDocuments, setAddedDocuments] = useState<string[]>([]);
   const addDocument = (documentRevisionId: string) => setAddedDocuments([...addedDocuments, documentRevisionId]);
-  const deleteDocument = (documentRevisionId: string) => setAddedDocuments(addedDocuments.filter((id) => id !== documentRevisionId));
+  const deleteDocument = (documentRevisionId: string) =>
+    setAddedDocuments(addedDocuments.filter((id) => id !== documentRevisionId));
 
   useEffect(() => {
-    const documentsToIgnore = [...addedDocuments, ...documentsInChangeRequest].map((documentRevisionId) => documentRevisionId);
+    const documentsToIgnore = [...addedDocuments, ...documentsInChangeRequest].map((documentRevisionId) =>
+      documentRevisionId);
     const filteredArray = documentRevisionsList.filter((documentRevision) =>
-      documentsToIgnore.indexOf(documentRevision.id) < 0 && documentRevision.status === DocumentRevisionStatus.Draft);
+      documentsToIgnore.indexOf(documentRevision.id) < 0 &&
+      (documentRevision.status === DocumentRevisionStatus.Draft ||
+      documentRevision.status === DocumentRevisionStatus.Released));
     setDocumentRevisionsToShow(filteredArray);
   }, [addedDocuments, documentsInChangeRequest, documentRevisionsList]);
 
@@ -40,7 +44,7 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
     doneAddingDocuments([...addedDocuments]);
     setAddedDocuments([]);
     close();
-  }
+  };
 
   const renderSlectedDocuments = () => (
     addedDocuments.map((documentRevisionId) => (
@@ -51,10 +55,10 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
         onDelete={() => deleteDocument(documentRevisionId)}
       />
     ))
-  )
+  );
 
   return (
-    <Dialog fullScreen open={isOpen}>
+    <Dialog fullScreen={true} open={isOpen}>
       <AppBar className={classes.appBar}>
         <Toolbar>
           <IconButton color="primary" onClick={close} aria-label="Close">
@@ -77,6 +81,7 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
         <DocumentRevisionTable
           documentRevisionsToShow={documentRevisionsToShow}
           addDocument={addDocument}
+          addedDocuments={addedDocuments}
         />
       </DialogContent>
     </Dialog>

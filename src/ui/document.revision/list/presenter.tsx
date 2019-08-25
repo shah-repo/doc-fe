@@ -6,12 +6,14 @@ import { DocumentRevision, DocumentRevisionType } from "../../../state/ducks/doc
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { TableColumnProps } from "../../components/table/column/types";
 import { TablePanel } from "../../components/table/panel";
+import { TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import {
   canEditDocumentRevision,
+  documentRevisionQueryStatus,
   documentRevisionStatusOption,
-  documentRevisionTypeOption } from "../utils/helpers";
+  documentRevisionTypeOption} from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
 import styles from "./styles";
@@ -25,7 +27,6 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   editDocumentRevision,
   setDocId,
 }) => {
-
   const DocumentList = TablePanel<DocumentRevision>();
   const [clearFilter, setClearFilter] = React.useState<boolean>(false);
 
@@ -44,6 +45,12 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   const clear = () => setClearFilter(!clearFilter);
 
   const onCreateClick = () => setDocId("");
+
+  const customQuerySet = (queryDict: TableSearchQueryType) => {
+    if (queryDict["status[]"]) { return queryDict; }
+    queryDict["status[]"] = documentRevisionQueryStatus();
+    return queryDict;
+  };
 
   const columns: Array<TableColumnProps<DocumentRevision>> = [
     {
@@ -137,6 +144,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
           queryUrl={DOCUMENT_REVISION_ROOT_URL}
           clearFilter={clearFilter}
           cellMeasure={true}
+          customQuerySet={customQuerySet}
         />
       </Grid>
     </Grid>
