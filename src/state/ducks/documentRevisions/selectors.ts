@@ -34,7 +34,7 @@ const getAudit = (state: ApplicationState, documentRevisionId: string) => audits
 const makeGetDocumentRevisions = () => {
   return createSelector(
     getDocumentRevisions,
-    (documentRevisions) => _.sortBy(documentRevisions, ["version"]),
+    (documentRevisions) => _.sortBy(documentRevisions, (docRev) => -docRev.version),
   );
 };
 

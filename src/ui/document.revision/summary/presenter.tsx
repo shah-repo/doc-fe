@@ -17,11 +17,16 @@ import styles from "./styles";
 import ReferenceContainer from "./reference.container";
 import ChangeRequestLink from "./changeRequestLink";
 
-type Props = DataProps<DocumentRevision> & WithStyles<typeof styles>;
+interface OwnProps {
+  canShowCreateVersionButton?: boolean;
+}
+
+type Props = OwnProps & DataProps<DocumentRevision> & WithStyles<typeof styles>;
 
 export const Presenter: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
+  canShowCreateVersionButton,
 }) => {
   return (
     <Box>
@@ -57,10 +62,12 @@ export const Presenter: React.FunctionComponent<Props> = ({
         {dataProp.attachments && <Attachment dataProp={dataProp.attachments} />}
       </Box>
       <Box className={classes.submitBox}>
-        <ControlsContainer documentRevision={dataProp} />
+        <ControlsContainer documentRevision={dataProp} canShowCreateVersionButton={canShowCreateVersionButton} />
       </Box>
     </Box>
   );
 };
+
+Presenter.displayName = "DocRevSummaryPresenter";
 
 export default withStyles(styles)(Presenter);

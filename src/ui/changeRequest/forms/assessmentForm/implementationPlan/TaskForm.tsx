@@ -54,12 +54,14 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
         inputProps={{ id: "title" }}
         validate={validator(required)}
       />
-      <TextEditorField
-        name="description"
-        size="sm"
-        label="common.description"
-        validate={validator(required)}
-      />
+      <div className="task-description">
+        <TextEditorField
+          name="description"
+          size="sm"
+          label="common.description"
+          validate={validator(required)}
+        />
+      </div>
       <Grid container={true} spacing={3}>
       <Grid item={true} xs={4}>
         <AutocompleteField

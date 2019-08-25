@@ -12,7 +12,7 @@ export interface DocumentRevisionActionProps {
 
 export interface DocumentRevisionListItem {
   id: string;
-  revision: string;
+  revision: number;
   description: string;
   name: string;
   owner: string;
