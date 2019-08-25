@@ -2,16 +2,18 @@ import { Button, Grid, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { unmaskId } from "../../../state/ducks/common/helpers";
-import { DocumentRevision, DocumentRevisionType, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionType } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { TableColumnProps } from "../../components/table/column/types";
 import { TablePanel } from "../../components/table/panel";
+import { TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import {
   canEditDocumentRevision,
+  documentRevisionQueryStatus,
   documentRevisionStatusOption,
-  documentRevisionTypeOption } from "../utils/helpers";
+  documentRevisionTypeOption} from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
 import styles from "./styles";
@@ -25,13 +27,6 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   editDocumentRevision,
   setDocId,
 }) => {
-
-  const queryUrl = `${DOCUMENT_REVISION_ROOT_URL}?
-status%5B%5D=${DocumentRevisionStatus.Draft}&
-status%5B%5D=${DocumentRevisionStatus.PendingChange}&
-status%5B%5D=${DocumentRevisionStatus.InReview}&
-status%5B%5D=${DocumentRevisionStatus.Released}&
-status%5B%5D=${DocumentRevisionStatus.Obsolete}&`;
   const DocumentList = TablePanel<DocumentRevision>();
   const [clearFilter, setClearFilter] = React.useState<boolean>(false);
 
@@ -50,6 +45,12 @@ status%5B%5D=${DocumentRevisionStatus.Obsolete}&`;
   const clear = () => setClearFilter(!clearFilter);
 
   const onCreateClick = () => setDocId("");
+
+  const customQuerySet = (queryDict: TableSearchQueryType) => {
+    if (queryDict["status[]"]) { return queryDict; }
+    queryDict["status[]"] = documentRevisionQueryStatus();
+    return queryDict;
+  };
 
   const columns: Array<TableColumnProps<DocumentRevision>> = [
     {
@@ -140,9 +141,10 @@ status%5B%5D=${DocumentRevisionStatus.Obsolete}&`;
         <DocumentList
           tableData={dataProp}
           columns={columns}
-          queryUrl={queryUrl}
+          queryUrl={DOCUMENT_REVISION_ROOT_URL}
           clearFilter={clearFilter}
           cellMeasure={true}
+          customQuerySet={customQuerySet}
         />
       </Grid>
     </Grid>

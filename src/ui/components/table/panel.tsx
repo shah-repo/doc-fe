@@ -1,5 +1,6 @@
 import { Box } from "@material-ui/core";
 import { AxiosRequestConfig } from "axios";
+import qs from "query-string";
 import React, { useState } from "react";
 import {
   AutoSizer,
@@ -27,6 +28,8 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
   onSelect,
   searchable = true,
   queryUrl = "",
+  customQuerySet,
+  customDataSet,
 }) => {
 
   const queryDelay = 300;
@@ -48,8 +51,13 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
 
     setTimeout(() => {
       if (lastQueryValue !== value) { return; }
-      const dict = state.queryDict;
+      let dict = state.queryDict;
       (value === "") ? delete dict[key] : dict[key] = value;
+
+      if (customQuerySet) {
+        dict = customQuerySet(dict);
+      }
+
       setState({...state, queryDict: dict});
       queryApi();
     }, queryDelay);
@@ -61,13 +69,17 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
         method: "get",
         url: queryUrl,
         params: state.queryDict,
+        paramsSerializer: (params) => qs.stringify(params),
         headers: {},
       };
 
       await refreshTokenOperation(store.dispatch, store.getState());
       requestConfig.headers.Authorization = store.getState().auth.tokens.id.value;
 
-      const { data } = await apiClient.request(requestConfig);
+      let { data } = await apiClient.request(requestConfig);
+      if (customDataSet) {
+        data = customDataSet(data);
+      }
       setState({...state, queryData: data as T[], apiError: "", scrollToIndex: 0});
     } catch (exception) {
       let responseMessage: string = "";
