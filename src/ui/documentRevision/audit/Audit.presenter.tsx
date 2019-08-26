@@ -1,10 +1,12 @@
 import { Box, Collapse, IconButton, List } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
+import _ from "lodash";
 import React from "react";
 import { Attachment } from "../../../state/ducks/attachments";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { Reference } from "../../../state/ducks/documentRevisions";
+import { getAuditDefaultValue } from "../../common/utils/helpers";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
 import { styles } from "./Audit.presenter.styles";
@@ -24,6 +26,10 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const toggleList = () => setOpen(!isOpen);
 
   const getNextValue = (change: Audit) => {
+    if (!change.nextValue) {
+      return "N/A";
+    }
+
     switch (change.field) {
       case "attachments":
         const attachment = change.nextValue as Attachment;
@@ -35,7 +41,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         const changeRequest = change.nextValue as ChangeRequest;
         return changeRequest.crId;
       default:
-        return change.nextValue;
+        return getAuditDefaultValue(change.nextValue);
     }
   };
 
