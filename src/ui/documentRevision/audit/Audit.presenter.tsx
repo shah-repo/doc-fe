@@ -8,6 +8,7 @@ import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
 import { styles } from "./Audit.presenter.styles";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
+import { getAuditDefaultValue } from "../../common/utils/helpers";
 
 interface OwnProps {
   audit: Audit[];
@@ -38,12 +39,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         const changeRequest = change.nextValue as ChangeRequest;
         return changeRequest.crId;
       default:
-        const { nextValue } = change;
-
-        if (_.isString(nextValue))
-          return nextValue;
-        
-        return "N/A";
+        return getAuditDefaultValue(change.nextValue);
     }
   };
   const renderChanges = () =>

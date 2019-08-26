@@ -1,7 +1,6 @@
 import { Collapse, IconButton, List } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import React from "react";
-import _ from "lodash";
 import { Attachment } from "../../../state/ducks/attachments";
 import { Audit } from "../../../state/ducks/changeRequest";
 import { Approval, User } from "../../../state/ducks/common";
@@ -9,6 +8,7 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
 import { styles } from "./Audit.presenter.styles";
+import { getAuditDefaultValue } from "../../common/utils/helpers";
 
 interface OwnProps {
   audit: Audit[];
@@ -50,12 +50,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       case "effectiveDate":
         return <DateTime value={change.nextValue as string} />;
       default:
-        const { nextValue } = change;
-
-        if (_.isString(nextValue))
-          return nextValue;
-        
-        return "N/A";
+        return getAuditDefaultValue(change.nextValue);
     }
   };
   const renderChange = () =>
