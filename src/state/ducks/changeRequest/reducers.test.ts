@@ -1,7 +1,7 @@
-import { CHANGE_REQUEST_SET, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_AUDIT_SET } from "./constants";
-import { allIds, byId, approversById, approversAllIds, auditsByCRId, auditsAllId } from "./reducers";
-import { getChangeRequest, getApprover, getAudit } from "./tests/factories";
-import { ChangeRequest, ChangeRequestListAction, ChangeRequestSetAction, ChangeRequestAvailableApprovers, ChangeRequestListApproversAction, ChangeRequestAuditSetAction } from "./types";
+import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET } from "./constants";
+import { allIds, approversAllIds, approversById, auditsAllId, auditsByCRId, byId } from "./reducers";
+import { getApprover, getAudit, getChangeRequest } from "./tests/factories";
+import { ChangeRequest, ChangeRequestAuditSetAction, ChangeRequestAvailableApprovers, ChangeRequestListAction, ChangeRequestListApproversAction, ChangeRequestSetAction } from "./types";
 
 describe("change requests reducers tests", () => {
   const changeRequestList: ChangeRequest[] = [
@@ -16,11 +16,11 @@ describe("change requests reducers tests", () => {
   const audit = [
     getAudit(),
     getAudit(),
-  ]
+  ];
   const auditPayload = {
     id: changeRequest.id,
     audit,
-  }
+  };
 
   const changeRequestListAction: ChangeRequestListAction = {
     type: CHANGE_REQUEST_LIST,
@@ -123,7 +123,7 @@ describe("change requests reducers tests", () => {
 
     const expectedState = {
       ...initialState,
-      [changeRequest.id]: audit,
+      [changeRequest.id]: { 1: audit },
     };
 
     it("sets ids on CHANGE_REQUEST_AUDIT_SET action", () => {
