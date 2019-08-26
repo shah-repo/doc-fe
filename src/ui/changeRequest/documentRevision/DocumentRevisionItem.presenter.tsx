@@ -6,6 +6,7 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import Date from "../../components/Date";
 import Text from "../../components/Text";
 import { styles } from "./DocumentRevisionItem.styles";
+import { generateVersionNumber } from "../../documentRevision/helpers";
 
 interface OwnProps {
   documentRevision: DocumentRevision;
@@ -39,7 +40,7 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<
             <div>
               <Text translation="common.version" />
               :&nbsp;
-              {documentRevision.version}
+              {generateVersionNumber(documentRevision.revision, documentRevision.revisionStage)}
             </div>
             <div>
               <Text translation="common.created" />
