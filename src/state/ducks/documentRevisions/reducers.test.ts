@@ -1,7 +1,7 @@
-import { DOCUMENT_REVISION_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_SET, DOCUMENT_REVISION_AUDIT_SET } from "./constants";
-import { allIds, byId, documentsById, auditsByCRId, auditsAllId } from "./reducers";
-import { getDocumentRevision, getDocument, getAudit } from "./tests/factories";
-import { DocumentRevision, DocumentRevisionsListAction, DocumentRevisionSetAction, DocumentSetAction, DocumentRevisionAuditSetAction } from "./types";
+import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
+import { allIds, auditsAllId, auditsByCRId, byId, documentsById } from "./reducers";
+import { getAudit, getDocument, getDocumentRevision } from "./tests/factories";
+import { DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentSetAction } from "./types";
 
 describe("document revisions reducers tests", () => {
   const documentRevisionList: DocumentRevision[] = [
@@ -13,11 +13,11 @@ describe("document revisions reducers tests", () => {
   const audit = [
     getAudit(),
     getAudit(),
-  ]
+  ];
   const auditPayload = {
     id: documentRevision.id,
     audit,
-  }
+  };
 
   const documentRevisionListAction: DocumentRevisionsListAction = {
     type: DOCUMENT_REVISION_LIST,
@@ -102,7 +102,7 @@ describe("document revisions reducers tests", () => {
 
     const expectedState = {
       ...initialState,
-      [documentRevision.id]: audit,
+      [documentRevision.id]: { 1: audit },
     };
 
     it("sets ids on CHANGE_REQUEST_AUDIT_SET action", () => {

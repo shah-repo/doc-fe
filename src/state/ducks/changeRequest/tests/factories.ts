@@ -1,7 +1,7 @@
 import faker from "faker";
+import { Audit, AuditGroupType } from "../../audit/types";
 import { getUser } from "../../common/tests/factories";
 import {
-  Audit,
   ChangeRequest,
   ChangeRequestAvailableApprovers,
   ChangeRequestEditRequestBody,
@@ -87,10 +87,10 @@ export const getApprover = (
 
 export const getAudit = (audit: Partial<Audit> = {}): Audit => ({
   type: faker.lorem.word(),
-  field: faker.lorem.word(),
-  nextValue: faker.lorem.sentence(),
-  groupId: faker.random.uuid(),
-  timestamp: faker.date.recent().toString(),
-  owner: getUser(),
-  ...audit,
+    field: faker.lorem.word(),
+    nextValue: faker.lorem.sentence(),
+    groupId: "1",
+    timestamp: faker.date.recent().toString(),
+    owner: getUser(),
+    ...audit,
 });

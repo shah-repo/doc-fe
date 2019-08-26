@@ -1,5 +1,6 @@
 import { TableColumnActionType } from "../../../ui/components/table/column/types";
 import { Attachment } from "../attachments";
+import { AuditActionPayload } from "../audit/types";
 import { ChangeRequest } from "../changeRequest";
 import { User } from "../common";
 import {
@@ -149,27 +150,9 @@ export interface DocumentRevisionTransitionResponse {
   id: string;
 }
 
-export interface Audit {
-  field: string;
-  type: string;
-  nextValue: string | Attachment | Reference | ChangeRequest;
-  timestamp: string;
-  groupId: string;
-  owner: User;
-}
-
-export interface AuditActionPayload {
-  id: string;
-  audit: Audit[];
-}
-
 export interface DocumentRevisionAuditSetAction {
   type: typeof DOCUMENT_REVISION_AUDIT_SET;
   payload: AuditActionPayload;
-}
-
-export interface AuditByCRIdState {
-  [key: string]: Audit[];
 }
 
 export type AllIdsState = string[];

@@ -1,6 +1,6 @@
 import { Attachment } from "../attachments";
+import { AuditActionPayload } from "../audit/types";
 import { Approval, Id, User } from "../common";
-import { DocumentRevision } from "../documentRevisions";
 import {
   CHANGE_REQUEST_AUDIT_SET,
   CHANGE_REQUEST_LIST,
@@ -168,27 +168,9 @@ export interface ChangeRequestListApproversAction {
   payload: ChangeRequestAvailableApprovers[];
 }
 
-export interface Audit {
-  field: string;
-  type: string;
-  nextValue: string | User | Attachment | Approval | DocumentRevision;
-  timestamp: string;
-  groupId: string;
-  owner: User;
-}
-
-export interface AuditActionPayload {
-  id: string;
-  audit: Audit[];
-}
-
 export interface ChangeRequestAuditSetAction {
   type: typeof CHANGE_REQUEST_AUDIT_SET;
   payload: AuditActionPayload;
-}
-
-export interface AuditByCRIdState {
-  [key: string]: Audit[];
 }
 
 export type allIdsState = string[];
