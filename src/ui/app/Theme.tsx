@@ -41,6 +41,11 @@ const theme = createMuiTheme({
       root: {
         fontFamily: "Open Sans, sans-serif;",
       },
+      body2: {
+        color: "#8A9DAD",
+        fontSize: "0.8rem",
+        fontFamily: "Open Sans, sans-serif;",
+      },
       subtitle1: {
         color: "#4d4d4d",
         fontSize: "0.8rem",
@@ -55,7 +60,7 @@ const theme = createMuiTheme({
       },
       h5: {
         color: "#4d4d4d",
-        fontSize: "1.1rem",
+        fontSize: "1rem",
         fontFamily: "Open Sans, sans-serif;",
       },
       h4: {
@@ -63,6 +68,7 @@ const theme = createMuiTheme({
         ontSize: "1.4rem",
       },
       h6: {
+        fontSize: "1.1rem",
         fontWeight: "normal",
         fontFamily: "Open Sans, sans-serif;",
       },

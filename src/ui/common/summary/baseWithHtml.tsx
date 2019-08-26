@@ -14,14 +14,13 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
   classes,
 }) => (
   <Grid item xs={12}>
-    {
-      label && 
+    {label && (
       <Grid item={true} xs={12}>
         <Typography variant="h6">
-          <Text message={label} />:
+          <Text message={label} />
         </Typography>
       </Grid>
-    }
+    )}
     <Grid item={true} xs={12}>
       <ReactQuill
         readOnly={true}

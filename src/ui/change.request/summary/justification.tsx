@@ -10,8 +10,7 @@ import React from "react";
 import { Justifications } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
-import FileCard from "../../components/cards/FileCard";
-import Text from "../../components/Text";
+import AttachmentIconField from "../../components/common/attachment.icon/container";
 import styles from "./styles";
 
 type Props = DataProps<Justifications> & WithStyles<typeof styles>;
@@ -24,15 +23,14 @@ const Justification: React.FunctionComponent<Props> = ({
 
   const attachmentRenderer = () =>
     attachments.map((attachment, index) => (
-      <FileCard key={index} attachment={attachment} />
+      <AttachmentIconField
+        name={`assessments.${attachment.type}.attachments`}
+      />
     ));
 
   return (
     <Grid item xs={12} className={classes.box}>
-      <Typography variant="h6">
-        <Text translation="common.justifications" />
-      </Typography>
-      <SummaryFieldWithHtml label="common.description" value={description} />
+      <SummaryFieldWithHtml label="common.justifications" value={description} />
       {attachments && (
         <ListItem>
           <Grid container={true} spacing={1}>

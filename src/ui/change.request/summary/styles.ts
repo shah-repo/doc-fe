@@ -6,12 +6,17 @@ export default (theme: Theme) =>
       flexGrow: 1,
     },
     box: {
-      padding: theme.spacing(2, 0),
+      "&.MuiGrid-item.MuiGrid-grid-xs-12": {
+        padding: theme.spacing(0, 2, 4),
+      },
     },
     previewBox: {
       borderLeft: "1px solid #ccc",
       borderRight: "1px solid #ccc",
       padding: theme.spacing(0, 5),
+    },
+    assessments: {
+      padding: theme.spacing(4, 3),
     },
     submitBox: {
       textAlign: "center",
@@ -33,6 +38,22 @@ export default (theme: Theme) =>
       color: theme.palette.text.hint,
     },
     summaryContainer: {
-      padding: "0 40px",
+      padding: theme.spacing(0, 4),
+    },
+    taskContainer: {
+      padding: theme.spacing(2),
+      borderBottom: "1px solid" + theme.palette.text.hint,
+    },
+    taskBasicInformation: {},
+    taskDescription: {
+      margin: theme.spacing(1, 0, 3),
+      "&.ql-container.ql-snow": {
+        border: 0,
+        "& .ql-editor": {
+          padding: 0,
+          fontFamily: "Open Sans, sans-serif",
+          color: "#474747 !important",
+        },
+      },
     },
   });

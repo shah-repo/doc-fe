@@ -19,6 +19,7 @@ import DocumentRevisionControlContainer from "../documentRevision/DocumentRevisi
 import AssessmentFormContainer from "./assessmentForm/AssessmentForm.container";
 import styles from "./styles";
 import { ChangeRequestFormValues } from "./types";
+import ChangeRequestHeader from "../../change.request/summary/header";
 
 interface StateProps {
   documentRevisionsById: DocumentRevisionsByIdState;
@@ -146,24 +147,27 @@ export const ChangeRequestFormContainer: React.FunctionComponent<
   };
 
   return (
-    <Grid container={true} spacing={4} className={classes.whiteContainer}>
-      <Grid item={true} xs={12} sm={3} md={2}>
-        <DocumentRevisionControlContainer
-          doneAddingDocuments={doneAddingDocuments}
-          documentsInChangeRequest={documentRevisionsList}
-          deleteDocumentFromChangeRequest={deleteDocumentFromChangeRequest}
-          selectDocumentRevision={selectDocumentRevision}
-          selectAssessmentForm={selectAssessmentForm}
-          selectedDocumentRevision={selectedDocumentRevision}
-        />
-      </Grid>
-      <Grid item={true} xs={12} sm={6} md={7}>
-        {!selectedDocumentRevision && renderAssessmentForm()}
-        {renderDocumentRevisionForm()}
-      </Grid>
-      <Grid item={true} xs={12} sm={3} md={3}>
-        {renderDocumentRevisionAudit()}
-        {renderChangeRequestAudit()}
+    <Grid container={true} className={classes.whiteContainer}>
+      {changeRequest && <ChangeRequestHeader dataProp={changeRequest!} />}
+      <Grid container={true} spacing={4}>
+        <Grid item={true} xs={12} sm={3} md={2}>
+          <DocumentRevisionControlContainer
+            doneAddingDocuments={doneAddingDocuments}
+            documentsInChangeRequest={documentRevisionsList}
+            deleteDocumentFromChangeRequest={deleteDocumentFromChangeRequest}
+            selectDocumentRevision={selectDocumentRevision}
+            selectAssessmentForm={selectAssessmentForm}
+            selectedDocumentRevision={selectedDocumentRevision}
+          />
+        </Grid>
+        <Grid item={true} xs={12} sm={6} md={7}>
+          {!selectedDocumentRevision && renderAssessmentForm()}
+          {renderDocumentRevisionForm()}
+        </Grid>
+        <Grid item={true} xs={12} sm={3} md={3}>
+          {renderDocumentRevisionAudit()}
+          {renderChangeRequestAudit()}
+        </Grid>
       </Grid>
     </Grid>
   );
