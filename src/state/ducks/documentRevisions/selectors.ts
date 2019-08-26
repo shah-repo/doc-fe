@@ -39,10 +39,14 @@ const makeGetDocumentRevisions = () => {
   );
 };
 
-const makeGetHasDraftVersion = () => {
+const makeGetDisableCreateNewVersion = () => {
   return createSelector(
     [getDocumentRevisions],
-    (documentRevisions) => _.some(documentRevisions, ["status", DocumentRevisionStatus.Draft]),
+    (documentRevisions) => _.some(documentRevisions, (docRev) =>
+      docRev.status === DocumentRevisionStatus.Draft ||
+      docRev.status === DocumentRevisionStatus.PendingChange ||
+      docRev.status === DocumentRevisionStatus.InReview
+    ),
   );
 };
 
@@ -137,5 +141,5 @@ export default {
   getLoadAuditAsyncState,
   makeGetAvailableReferences,
   makeGetAudit,
-  makeGetHasDraftVersion,
+  makeGetDisableCreateNewVersion,
 };

@@ -14,18 +14,18 @@ interface OwnProps {
 }
 
 interface StateProps {
-  hasDraftVersion: boolean;
+  disableCreateNewVersion: boolean;
 }
 
 type PreviewControlsContainerProps = OwnProps & StateProps & RouteComponentProps;
 
-const getHasDraftVersion = documentRevisionsSelectors.makeGetHasDraftVersion();
+const getDisableCreateNewVersion = documentRevisionsSelectors.makeGetDisableCreateNewVersion();
 const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps => ({
-  hasDraftVersion: getHasDraftVersion(state, props.documentRevision.document.id),
+  disableCreateNewVersion: getDisableCreateNewVersion(state, props.documentRevision.document.id),
 });
 
 export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainerProps> = ({
-  documentRevision, history, hasDraftVersion, canShowCreateVersionButton
+  documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton
 }) => {
     const cloneDocument = () => history.push(documentNewVersionPath(documentRevision.id, documentRevision.document.id));
 
@@ -37,7 +37,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
 
     return (
       <Grid>
-        {canCreateNewVersion(documentRevision, hasDraftVersion, canShowCreateVersionButton) && renderCloneButton()}
+        {canCreateNewVersion(documentRevision, disableCreateNewVersion, canShowCreateVersionButton) && renderCloneButton()}
       </Grid>
     );
   };

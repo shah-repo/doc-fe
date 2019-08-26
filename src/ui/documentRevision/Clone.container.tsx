@@ -12,19 +12,19 @@ export interface OwnProps {
 }
 
 interface StateProps {
-  hasDraftVersion: boolean;
+  disableCreateNewVersion: boolean;
 }
 
 type CloneContainerProps = OwnProps & StateProps;
 
-const getHasDraftVersion = documentRevisionsSelectors.makeGetHasDraftVersion();
+const getDisableCreateNewVersion = documentRevisionsSelectors.makeGetDisableCreateNewVersion();
 const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps => ({
-  hasDraftVersion: getHasDraftVersion(state, props.documentRevision.document.id),
+  disableCreateNewVersion: getDisableCreateNewVersion(state, props.documentRevision.document.id),
 });
 export const CloneContainer: React.FunctionComponent<CloneContainerProps> = ({
-  documentRevision, hasDraftVersion
+  documentRevision, disableCreateNewVersion
 }) => {
-  if (!canCreateNewVersion(documentRevision, hasDraftVersion, true)) {
+  if (!canCreateNewVersion(documentRevision, disableCreateNewVersion, true)) {
     return <Redirect to={documentVersionPath(documentRevision.id, documentRevision.document.id)} />;
   }
   return (
