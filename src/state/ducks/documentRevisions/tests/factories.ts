@@ -1,6 +1,7 @@
 import faker from "faker";
+import { Audit } from "../../audit/types";
 import { getUser } from "../../common/tests/factories";
-import { Audit, Document, DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, DocumentRevisionType, RevisionChangeType } from "../types";
+import { Document, DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, DocumentRevisionType, RevisionChangeType } from "../types";
 
 export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> = {}): DocumentRevision => ({
   id: faker.random.uuid(),

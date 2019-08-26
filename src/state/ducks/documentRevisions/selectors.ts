@@ -6,7 +6,8 @@ import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/typ
 import { DocumentRevisionFormValues } from "../../../ui/documentRevision/forms/types";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
-import { AuditGroupType, DocumentRevisionStatus } from "./types";
+import { Audit, AuditGroupType } from "../audit/types";
+import { DocumentRevisionStatus } from "./types";
 
 const allIds = (state: ApplicationState) => state.documentRevisions.allIds;
 const byId = (state: ApplicationState) => state.documentRevisions.byId;
@@ -105,7 +106,7 @@ const makeGetAudit = () => {
     getAudit,
     (audits: AuditGroupType = {}) =>  {
       Object.keys(audits).map((groupId) => {
-        audits[groupId].map((audit) => {
+        audits[groupId].map((audit: Audit) => {
           if (audit.field === "description") {
             const html = audit.nextValue as string;
             audit.nextValue = striptags(html).substring(0, 30);

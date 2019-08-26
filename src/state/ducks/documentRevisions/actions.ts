@@ -1,5 +1,6 @@
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
+import { Audit, AuditActionPayload } from "../audit/types";
 import { documentsActions } from "../documents";
 import {
   DOCUMENT_GET_ASYNC,
@@ -14,8 +15,6 @@ import {
   DOCUMENT_SET,
 } from "./constants";
 import {
-  Audit,
-  AuditActionPayload,
   Document,
   DocumentRevision,
   DocumentRevisionAuditSetAction,

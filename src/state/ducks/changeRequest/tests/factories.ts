@@ -1,7 +1,7 @@
 import faker from "faker";
+import { Audit } from "../../audit/types";
 import { getUser } from "../../common/tests/factories";
 import {
-  Audit,
   ChangeRequest,
   ChangeRequestAvailableApprovers,
   ChangeRequestEditRequestBody,

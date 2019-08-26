@@ -1,5 +1,6 @@
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
+import { Audit, AuditActionPayload } from "../audit/types";
 import {
   CHANGE_REQUEST_AUDIT_SET,
   CHANGE_REQUEST_GET_APPROVERS_ASYNC,
@@ -12,8 +13,6 @@ import {
   CHANGE_REQUEST_SET,
 } from "./constants";
 import {
-  Audit,
-  AuditActionPayload,
   ChangeRequest,
   ChangeRequestAuditSetAction,
   ChangeRequestAvailableApprovers,

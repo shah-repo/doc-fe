@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
+import { AuditGroupType } from "../../../state/ducks/audit/types";
 import {
-  AuditGroupType,
   documentRevisionsActions,
   documentRevisionsSelectors,
 } from "../../../state/ducks/documentRevisions";

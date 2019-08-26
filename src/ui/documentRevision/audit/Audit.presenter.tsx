@@ -2,8 +2,9 @@ import { Box, Collapse, IconButton, List } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import React from "react";
 import { Attachment } from "../../../state/ducks/attachments";
+import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
-import { Audit, AuditGroupType, Reference } from "../../../state/ducks/documentRevisions";
+import { Reference } from "../../../state/ducks/documentRevisions";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
 import { styles } from "./Audit.presenter.styles";
@@ -38,20 +39,19 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     }
   };
 
-  const renderAuditGroup = () =>
-    Object.keys(audit).map((groupId) => {
-      const change = audit[groupId][0];
+  const renderAuditGroup = () => Object.keys(audit).map((groupId) => {
+    const change = audit[groupId][0];
 
-      return (
-        <Box key={groupId} className={classes.changeContainer}>
-          <div className={classes.dateContainer}>
-            <span className={classes.owner}>{change.owner.name}</span> -{" "}
-            <DateTime value={change.timestamp} />
-          </div>
-          {renderChanges(audit[groupId])}
-        </Box>
-      );
-    });
+    return (
+      <Box key={groupId} className={classes.changeContainer}>
+        <div className={classes.dateContainer}>
+          <span className={classes.owner}>{change.owner.name}</span> -{" "}
+          <DateTime value={change.timestamp} />
+        </div>
+        {renderChanges(audit[groupId])}
+      </Box>
+    );
+  });
 
   const renderChanges = (audits: Audit[]) => audits.map((change, index) => (
     <Box key={`${change.groupId}-${index}`}>

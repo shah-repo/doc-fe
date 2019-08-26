@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
+import { AuditByCRIdState } from "../audit/types";
 import {
   DOCUMENT_GET_ASYNC,
   DOCUMENT_REVISION_AUDIT_SET,
@@ -13,7 +14,6 @@ import {
 } from "./constants";
 import {
   AllIdsState,
-  AuditByCRIdState,
   DocumentByIdState,
   DocumentRevision,
   DocumentRevisionAuditSetAction,
