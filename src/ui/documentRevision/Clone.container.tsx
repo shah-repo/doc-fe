@@ -24,7 +24,7 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 export const CloneContainer: React.FunctionComponent<CloneContainerProps> = ({
   documentRevision, hasDraftVersion
 }) => {
-  if (!canCreateNewVersion(documentRevision, hasDraftVersion)) {
+  if (!canCreateNewVersion(documentRevision, hasDraftVersion, true)) {
     return <Redirect to={documentVersionPath(documentRevision.id, documentRevision.document.id)} />;
   }
   return (
