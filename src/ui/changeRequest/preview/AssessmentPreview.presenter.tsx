@@ -107,9 +107,6 @@ const AssessmentPreviewPresenter: React.FunctionComponent<AssessmentPreviewPrese
           <Typography variant="h6" gutterBottom={true}>
             <Text translation="changeRequest.assessmentsDescription" />:
           </Typography>
-          <Typography variant="h5" gutterBottom={true}>
-            {changeRequest.assessments.description}
-          </Typography>
           <Typography variant="h6" gutterBottom={true}>
             <Text translation="common.design" />:
           </Typography>

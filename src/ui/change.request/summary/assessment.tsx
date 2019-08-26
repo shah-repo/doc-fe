@@ -20,7 +20,7 @@ const Assessment: React.FunctionComponent<Props> = ({ classes, dataProp }) => {
     ));
 
   const reasoningRenderer = (item: AssessmentItem) => (
-    <Grid item xs={12}>
+    <Grid item={true} xs={12}>
       <Typography variant="subtitle1">{`${item.reasoning}` || "—"}</Typography>
     </Grid>
   );
@@ -29,15 +29,15 @@ const Assessment: React.FunctionComponent<Props> = ({ classes, dataProp }) => {
     Object.values(AssessmentType).map((type, index) => {
       const item = dataProp[type as keyof typeof AssessmentType];
       return (
-        <Grid item xs={12} key={`${item}-${index}`}>
-          <Grid item xs={12}>
+        <Grid item={true} xs={12} key={`${item}-${index}`}>
+          <Grid item={true} xs={12}>
             <Typography variant="h5">
               <Text message={`common.${type}`} />:
             </Typography>
           </Grid>
           {item.reasoning && reasoningRenderer(item)}
           {item.attachments && (
-            <Grid item xs={12}>
+            <Grid item={true} xs={12}>
               {attachmentRenderer(item)}
             </Grid>
           )}
@@ -46,16 +46,12 @@ const Assessment: React.FunctionComponent<Props> = ({ classes, dataProp }) => {
     });
 
   return (
-    <Grid item xs={12}>
+    <Grid item={true} xs={12}>
       <Grid container={true} spacing={3}>
-        <Grid item xs={12}>
+        <Grid item={true} xs={12}>
           <Typography variant="h6">
             <Text translation="common.assessments" />:
           </Typography>
-          <SummaryFieldWithHtml
-            label="common.description"
-            value={dataProp.description}
-          />
         </Grid>
         {itemRenderer()}.
       </Grid>

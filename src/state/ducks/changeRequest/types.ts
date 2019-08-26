@@ -18,7 +18,7 @@ export enum ChangeRequestStatus {
 
 export enum ImplementationPlanTaskStatus {
   Pending = "PENDING",
-  Done = "DONE"
+  Done = "DONE",
 }
 
 export interface Justifications {
@@ -34,7 +34,6 @@ export enum AssessmentType {
 }
 
 export interface Assessment {
-  description?: string;
   design: AssessmentItem;
   process: AssessmentItem;
   regulatory: AssessmentItem;
