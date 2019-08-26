@@ -3,12 +3,12 @@
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
 import ReactQuill from "react-quill";
-import { QuillOptionsStatic, RangeStatic, Sources } from "quill";
+import { QuillOptionsStatic } from "quill";
 import classNames from "classnames";
 import Field, { FieldOwnProps } from "../Field";
 import { RenderSize } from "../../../../../state/ducks/common";
 import { modules, formats } from "./configuration";
-import ClickedOutside from "../../../ClickedOutside";
+import useComponentVisible from "../../../../hooks/useComponentVisible";
 
 interface TextEditorOwnProps extends FieldOwnProps {
   quillOptions?: QuillOptionsStatic;
@@ -24,13 +24,12 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
   size,
   ...fieldProps
 }) => {
-  const [showToolbar, setShowToolbar] = React.useState(false);
+  const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
   const handleChange = (editHtml: string) => {
     fieldProps.form.setFieldValue(fieldProps.field.name, editHtml);
   };
 
-  const onClick = () => setShowToolbar(true);
-  const onBlur = () => setShowToolbar(false);
+  const onClick = () => setIsComponentVisible(true);
 
   return (
     <Field 
@@ -39,25 +38,24 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
       {...fieldProps}
       inputLabelProps={{ shrink: true }}
     >
-      <ClickedOutside onBlur={onBlur}>
-        <div
-          className={classNames("editor-container", { "label-margin": !actionsRenderer })}
-          onClick={onClick}
-        >
-          <ReactQuill
-            theme="snow"
-            bounds=".editor-container"
-            modules={{
-              ...modules,
-              toolbar: showToolbar ? modules.toolbar : false,
-            }}
-            formats={formats}
-            {...quillOptions}
-            onChange={handleChange}
-            value={fieldProps.field.value}
-          />
-        </div>
-      </ClickedOutside>
+      <div
+        className={classNames("editor-container", { "label-margin": !actionsRenderer })}
+        onClick={onClick}
+        ref={ref}
+      >
+        <ReactQuill
+          theme="snow"
+          bounds=".editor-container"
+          modules={{
+            ...modules,
+            toolbar: isComponentVisible ? modules.toolbar : false,
+          }}
+          formats={formats}
+          {...quillOptions}
+          onChange={handleChange}
+          value={fieldProps.field.value}
+        />
+      </div>
     </Field>
   );
 };
