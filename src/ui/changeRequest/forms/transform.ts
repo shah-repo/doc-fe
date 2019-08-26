@@ -1,4 +1,6 @@
 import * as _ from "lodash";
+import { applyTimezoneToDate, getDateString } from "../../../common/utils/date";
+import { Attachment } from "../../../state/ducks/attachments";
 import {
   Approver,
   Assessment,
@@ -10,10 +12,8 @@ import {
   ImplementationPlanTaskRequest,
   Justifications,
 } from "../../../state/ducks/changeRequest";
-import { ChangeRequestFormValues, ImplementationPlanFormValues, ImplementationPlanTaskFormValues } from "./types";
-import { Attachment } from "../../../state/ducks/attachments";
 import { reactQuillEmptyString } from "../../components/forms/fields/validators";
-import { getDateString, applyTimezoneToDate } from "../../../common/utils/date";
+import { ChangeRequestFormValues, ImplementationPlanFormValues, ImplementationPlanTaskFormValues } from "./types";
 
 type NestedObject = Justifications;
 
@@ -23,12 +23,10 @@ const createNestedObject = (value: NestedObject = { description: "", attachments
 });
 
 const createAssessment = (value: Assessment = {
-  description: "",
   design: {reasoning: null, attachments: null},
   process: {reasoning: null, attachments: null},
   regulatory: {reasoning: null, attachments: null},
 }) => ({
-  description: value.description,
   design: { reasoning: value.design.reasoning, attachments: value.design.attachments },
   process: { reasoning: value.process.reasoning, attachments: value.process.attachments },
   regulatory: { reasoning: value.regulatory.reasoning, attachments: value.regulatory.attachments },

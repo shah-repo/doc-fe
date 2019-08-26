@@ -34,7 +34,6 @@ export enum AssessmentType {
 }
 
 export interface Assessment {
-  description?: string;
   design: AssessmentItem;
   process: AssessmentItem;
   regulatory: AssessmentItem;
