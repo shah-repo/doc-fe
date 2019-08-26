@@ -1,12 +1,13 @@
 import _ from "lodash";
 import { createSelector } from "reselect";
 import striptags from "striptags";
+import { stripTags } from "../../../common/utils/helpers";
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
+import { DocumentRevisionFormValues } from "../../../ui/documentRevision/forms/types";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
-import { DocumentRevisionStatus, Audit } from "./types";
-import { DocumentRevisionFormValues } from "../../../ui/documentRevision/forms/types";
-import { stripTags } from "../../../common/utils/helpers";
+import { Audit, AuditGroupType } from "../audit/types";
+import { DocumentRevisionStatus } from "./types";
 
 const allIds = (state: ApplicationState) => state.documentRevisions.allIds;
 const byId = (state: ApplicationState) => state.documentRevisions.byId;
@@ -20,7 +21,7 @@ const getDocumentRevisionsList = createSelector(
     ids.map((id) => {
       const docRev = _.cloneDeep(documentRevisions[id]);
       docRev.description = stripTags(documentRevisions[id].description);
-      
+
       return docRev;
     })
   ),
@@ -29,7 +30,7 @@ const getDocumentRevisionsList = createSelector(
 const getDocumentRevision = (state: ApplicationState, documentRevisionId: string) => byId(state)[documentRevisionId];
 const getDocument = (state: ApplicationState, documentId: string) => documentsById(state)[documentId];
 const getDocumentRevisions = (state: ApplicationState, documentId: string) => _.get(documentsById(state)[documentId], "documentRevisions", []);
-const getAudit = (state: ApplicationState, documentRevisionId: string) => auditsByCRId(state)[documentRevisionId];
+const getAudit = (state: ApplicationState, documentRevisionId: string): AuditGroupType => auditsByCRId(state)[documentRevisionId];
 
 const makeGetDocumentRevisions = () => {
   return createSelector(
@@ -41,7 +42,7 @@ const makeGetDocumentRevisions = () => {
 const makeGetHasDraftVersion = () => {
   return createSelector(
     [getDocumentRevisions],
-    (documentRevisions) => _.some(documentRevisions, ['status', DocumentRevisionStatus.Draft]),
+    (documentRevisions) => _.some(documentRevisions, ["status", DocumentRevisionStatus.Draft]),
   );
 };
 
@@ -69,7 +70,7 @@ const makeGetAvailableReferences = () => {
         }
 
         return false;
-      })
+      });
 
       // if two doc revs from same to document, take the one with the higher version number
       const uniqueIds = filteredIds.filter((id) => {
@@ -83,37 +84,39 @@ const makeGetAvailableReferences = () => {
           }
 
           return false;
-        })
+        });
 
         return !skipId;
-      })
+      });
 
       return uniqueIds.map((id) => {
         const { document, revision, name } = docRevs[id];
-    
+
         return {
           value: document.id,
           label: `${document.docId} - ${revision} - ${name}`,
         };
       });
-    }
+    },
   );
 };
 
 const makeGetAudit = () => {
   return createSelector(
     getAudit,
-    (audits: Audit[] = []) => audits.map((audit) => {
-      if (audit.field === "description") {
-        const html = audit.nextValue as string;
-        audit.nextValue = striptags(html).substring(0, 30);
-        return audit;
-      }
-
-      return audit;
-    }),
-  )
-}
+    (audits: AuditGroupType = {}) =>  {
+      Object.keys(audits).map((groupId) => {
+        audits[groupId].map((audit: Audit) => {
+          if (audit.field === "description") {
+            const html = audit.nextValue as string;
+            audit.nextValue = striptags(html).substring(0, 30);
+          }
+        });
+      });
+      return audits;
+    },
+  );
+};
 
 const getLoadAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadAsyncInfo;
 const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadListAsyncInfo;
