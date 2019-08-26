@@ -1,6 +1,7 @@
 import { Collapse, IconButton, List } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import React from "react";
+import _ from "lodash";
 import { Attachment } from "../../../state/ducks/attachments";
 import { Audit } from "../../../state/ducks/changeRequest";
 import { Approval, User } from "../../../state/ducks/common";
@@ -24,6 +25,9 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const toggleList = () => setOpen(!isOpen);
 
   const getNextValue = (change: Audit) => {
+    if (!change.nextValue)
+      return "N/A";
+    
     switch (change.field) {
       case "attachments":
       case "justifications.attachments":
@@ -46,7 +50,12 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       case "effectiveDate":
         return <DateTime value={change.nextValue as string} />;
       default:
-        return change.nextValue as string;
+        const { nextValue } = change;
+
+        if (_.isString(nextValue))
+          return nextValue;
+        
+        return "N/A";
     }
   };
   const renderChange = () =>
