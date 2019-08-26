@@ -12,36 +12,38 @@ import { assessmentStatementOption } from "../utils/helpers";
 
 type Props = Partial<FormikHybridFieldProps>;
 
-const Assessments: React.FunctionComponent<Props> = ({
-  form,
-}) => {
-  const itemRenderer = () => Object.values(AssessmentType).map((type) => {
+const Assessments: React.FunctionComponent<Props> = ({ form }) => {
+  const itemRenderer = () =>
+    Object.values(AssessmentType).map((type) => {
+      const { attachments, reasoning } = form!.values.assessments[
+        type as AssessmentType
+      ];
 
-    const { attachments, reasoning} = form!.values.assessments[type as AssessmentType];
+      const actionsRenderer = () => (
+        <AttachmentField name={`assessments.${type}.attachments`} />
+      );
 
-    const actionsRenderer = () => <AttachmentField name={`assessments.${type}.attachments`} />;
+      // Has attachment
+      if ((attachments || []).length > 0 && reasoning) {
+        form!.setFieldValue(`assessments.${type}.reasoning`, undefined);
+      }
 
-    // Has attachment
-    if ((attachments || []).length > 0 && reasoning) {
-      form!.setFieldValue(`assessments.${type}.reasoning`, undefined);
-    }
-
-    return (
-      <Box key={type} mb={(attachments && attachments.length > 0) ? 0 : 4}>
-        <HeaderField
-          dataProp={`change.request.${type}.assessment`}
-          size="sm"
-          actionsRenderer={actionsRenderer}
-        />
-        <EditableSelectField
-          name={`assessments.${type}.reasoning`}
-          options={assessmentStatementOption()}
-          includeEmpty={true}
-        />
-        <AttachmentIconField name={`assessments.${type}.attachments`} />
-      </Box>
-    );
-  });
+      return (
+        <Box key={type} mb={attachments && attachments.length > 0 ? 0 : 4}>
+          <HeaderField
+            dataProp={`change.request.${type}.assessment`}
+            size="sm"
+            actionsRenderer={actionsRenderer}
+          />
+          <EditableSelectField
+            name={`assessments.${type}.reasoning`}
+            options={assessmentStatementOption()}
+            includeEmpty={true}
+          />
+          <AttachmentIconField name={`assessments.${type}.attachments`} />
+        </Box>
+      );
+    });
 
   return (
     <Box>

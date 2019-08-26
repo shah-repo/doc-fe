@@ -85,10 +85,15 @@ export const Container: React.FunctionComponent<Props> = ({
     />
   );
   return (
-    <Grid container={true} justify="center" className={classes.whiteContainer}>
+    <Grid
+      container={true}
+      justify="center"
+      spacing={2}
+      className={classes.whiteContainer}
+    >
       <DocumentRevisionHeader dataProp={dataProp} />
       <Grid container={true} spacing={1}>
-        <Grid item={true} xs={3}>
+        <Grid item={true} xs={2}>
           <SummaryPresenter
             documentsInChangeRequest={dataProp.documentRevisions}
             selectAssessmentForm={crSummary}
@@ -96,7 +101,7 @@ export const Container: React.FunctionComponent<Props> = ({
             selectedDocumentRevision={docRev ? docRev.id : null}
           />
         </Grid>
-        <Grid item={true} xs={6}>
+        <Grid item={true} xs={7}>
           {docRev && (
             <DocumentRevisionSummaryPresenter
               dataProp={{ ...docRev, changeRequest: dataProp }}

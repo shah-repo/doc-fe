@@ -56,21 +56,30 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   }, [documentRevisionsList]);
 
   const renderCrId = () =>
-    changeRequest && changeRequest.id && (
+    changeRequest &&
+    changeRequest.id && (
       <InputField
         name=""
         label="common.crid"
         inputProps={{ disabled: true, value: changeRequest.crId }}
       />
     );
-  const renderimplementationPlan = (props: FieldProps<ChangeRequestFormValues>) => (
-    <AssessmentFormImplementationPlan {...props} />
-  );
+  const renderimplementationPlan = (
+    props: FieldProps<ChangeRequestFormValues>,
+  ) => <AssessmentFormImplementationPlan {...props} />;
 
   return (
     <div className={classes.container}>
-      <FormWrapper dirty={dirty} resetForm={resetForm} initialValues={initialValues}>
-        <PromptIfDirty dirty={dirty} doNotPrompt={doNotPrompt} onDirtyFlagChange={onDirtyFlagChange} />
+      <FormWrapper
+        dirty={dirty}
+        resetForm={resetForm}
+        initialValues={initialValues}
+      >
+        <PromptIfDirty
+          dirty={dirty}
+          doNotPrompt={doNotPrompt}
+          onDirtyFlagChange={onDirtyFlagChange}
+        />
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
         {renderCrId()}
@@ -95,12 +104,21 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
         />
         <ApproversField />
         <Box mt={4}>
-          <Grid item={true} container={true} alignItems="flex-end" direction="column">
+          <Grid
+            item={true}
+            container={true}
+            alignItems="flex-end"
+            direction="column"
+          >
             <div>
               <AssessmentFormControlsContainer changeRequest={changeRequest} />
               <SubmitButton
                 asyncState={asyncState}
-                label={changeRequest ? "common.save" : "navigation.createChangeRequest"}
+                label={
+                  changeRequest
+                    ? "common.save"
+                    : "navigation.createChangeRequest"
+                }
               />
             </div>
           </Grid>

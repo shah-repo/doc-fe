@@ -8,11 +8,6 @@ type Props = SummaryBaseProps;
 const Base: React.FunctionComponent<Props> = ({ label, value }) => (
   <Grid item xs={12}>
     <Grid item xs={12}>
-      <Typography variant="h6">
-        <Text message={label} />:
-      </Typography>
-    </Grid>
-    <Grid item xs={12}>
       <Typography variant="subtitle1">{`${value}` || "—"}</Typography>
     </Grid>
   </Grid>

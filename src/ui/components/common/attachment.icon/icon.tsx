@@ -8,7 +8,6 @@ export const AttachmentIcon: React.FunctionComponent<AttachmentIconProps> = ({
   extension,
   size,
 }) => {
-
   const classes = styles({ size: size || "md" });
 
   return (
@@ -18,8 +17,16 @@ export const AttachmentIcon: React.FunctionComponent<AttachmentIconProps> = ({
         <Box className={`${classes.ribbonFront} ${classes.ribbonFrontSize}`}>
           {extension && extension.toUpperCase()}
         </Box>
-        <Box className={`${classes.ribbonEdgeTopleft} ${classes.ribbonEdgeTopleftBorder}`} />
-        <Box className={`${classes.ribbonEdgeTopright} ${classes.ribbonEdgeToprightBorder}`} />
+        <Box
+          className={`${classes.ribbonEdgeTopleft} ${
+            classes.ribbonEdgeTopleftBorder
+          }`}
+        />
+        <Box
+          className={`${classes.ribbonEdgeTopright} ${
+            classes.ribbonEdgeToprightBorder
+          }`}
+        />
       </Box>
     </Box>
   );

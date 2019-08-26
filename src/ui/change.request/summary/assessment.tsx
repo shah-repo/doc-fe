@@ -7,17 +7,16 @@ import {
 } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
-import FileCard from "../../components/cards/FileCard";
+import AttachmentField from "../../components/common/attachment.icon/container";
 import Text from "../../components/Text";
 import styles from "./styles";
 
 type Props = DataProps<Model> & WithStyles<typeof styles>;
 
 const Assessment: React.FunctionComponent<Props> = ({ classes, dataProp }) => {
-  const attachmentRenderer = (item: AssessmentItem) =>
-    item.attachments!.map((attachment) => (
-      <FileCard key={`assessment-${attachment.id}`} attachment={attachment} />
-    ));
+  const attachmentRenderer = (type: AssessmentType) => (
+    <AttachmentField name={`assessments.${type}.attachments`} />
+  );
 
   const reasoningRenderer = (item: AssessmentItem) => (
     <Grid item={true} xs={12}>
@@ -32,13 +31,13 @@ const Assessment: React.FunctionComponent<Props> = ({ classes, dataProp }) => {
         <Grid item={true} xs={12} key={`${item}-${index}`}>
           <Grid item={true} xs={12}>
             <Typography variant="h5">
-              <Text message={`common.${type}`} />:
+              <Text message={`common.${type}`} />
             </Typography>
           </Grid>
           {item.reasoning && reasoningRenderer(item)}
           {item.attachments && (
             <Grid item={true} xs={12}>
-              {attachmentRenderer(item)}
+              {attachmentRenderer(type)}
             </Grid>
           )}
         </Grid>
@@ -46,14 +45,14 @@ const Assessment: React.FunctionComponent<Props> = ({ classes, dataProp }) => {
     });
 
   return (
-    <Grid item={true} xs={12}>
+    <Grid item={true} xs={12} className={classes.box}>
       <Grid container={true} spacing={3}>
         <Grid item={true} xs={12}>
           <Typography variant="h6">
-            <Text translation="common.assessments" />:
+            <Text translation="common.assessments" />
           </Typography>
         </Grid>
-        {itemRenderer()}.
+        <Grid className={classes.assessments}>{itemRenderer()}</Grid>
       </Grid>
     </Grid>
   );

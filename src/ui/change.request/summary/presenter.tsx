@@ -47,11 +47,6 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const approversFieldRenderer = () => (
     <Box>
       <ListItem>
-        <Typography variant="h6">
-          <Text translation="common.approvers" />:
-        </Typography>
-      </ListItem>
-      <ListItem>
         <ApproversField />
       </ListItem>
     </Box>
@@ -65,17 +60,12 @@ export const Presenter: React.FunctionComponent<Props> = ({
     <Box>
       <Box className={classes.previewBox}>
         <Grid container={true} spacing={4} direction="column">
-          <SummaryFieldWithHtml
-            label="cr.description"
-            value={dataProp.description}
-          />
-          <SummaryField
-            label="common.target.date"
-            value={getFormattedDateString(dataProp.effectiveDate)}
-          />
-          <SummaryField label="common.owner" value={dataProp.owner.name} />
-          <SummaryField label="common.status" value={dataProp.state} />
-          <SummaryField label="cr.title" value={dataProp.title} />
+          <Grid item xs={12} className={classes.box}>
+            <SummaryFieldWithHtml
+              label="cr.description"
+              value={dataProp.description}
+            />
+          </Grid>
 
           <Justification dataProp={dataProp.justifications} />
           <Assessment dataProp={dataProp.assessments} />

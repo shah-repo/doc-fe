@@ -20,15 +20,15 @@ export const Header: React.FunctionComponent<Props> = ({
   return (
     <Grid
       container={true}
-      justify="center"
       alignItems="center"
       spacing={4}
       className={classes.headerContainer}
     >
+      <Grid item xs={2} alignItems="center" />
       <Grid item xs={2} alignItems="center">
         <Chip label={dataProp.state} className={classes.status} />
       </Grid>
-      <Grid item xs={2} alignItems="center">
+      <Grid item xs={3} alignItems="center">
         <Typography variant="h6" align="center">
           {dataProp.title}
         </Typography>

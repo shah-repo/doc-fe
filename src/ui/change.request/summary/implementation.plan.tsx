@@ -1,23 +1,31 @@
 import {
   Box,
+  Button,
   Grid,
   ListItem,
   Typography,
   WithStyles,
   withStyles,
-  Button,
 } from "@material-ui/core";
 import React from "react";
-import { ImplementationPlan as Model, ChangeRequestStatus, ImplementationPlanTask, changeRequestsActions } from "../../../state/ducks/changeRequest";
+import AttachmentIconField from "../../components/common/attachment.icon/container";
+import { getFormattedDateString } from "../../../common/utils/date";
+import {
+  changeRequestsActions,
+  ChangeRequestStatus,
+  ImplementationPlan as Model,
+  ImplementationPlanTask,
+} from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import FileCard from "../../components/cards/FileCard";
 import Text from "../../components/Text";
-import styles from "./styles";
 import { canCloseTask } from "../utils/helpers";
 import CloseTask from "./close.task";
-import { getFormattedDateString } from "../../../common/utils/date";
+import styles from "./styles";
+import ReactQuill from "react-quill";
+import { sanitizeHtml } from "../../../common/utils/helpers";
 
 interface OwnProps extends DataProps<Model> {
   currentUserEmail: string;
@@ -34,41 +42,71 @@ const ImplementationPlan: React.FunctionComponent<Props> = ({
   currentUserEmail,
   crStatus,
   closeTask,
-  crId
+  crId,
 }) => {
-
   const { tasks, attachments } = dataProp;
 
-  const attachmentRenderer = () => attachments.map((attachment, index) => (
-    <FileCard key={index} attachment={attachment} />
-  ));
+  const attachmentRenderer = () => (
+    <AttachmentIconField name="implementationPlan.attachments" />
+  );
 
   const closeTaskRenderer = (task: ImplementationPlanTask) =>
-    canCloseTask(crStatus, task, currentUserEmail) && <CloseTask crId={crId} taskId={task.id} closeTask={closeTask} />
+    canCloseTask(crStatus, task, currentUserEmail) && (
+      <CloseTask crId={crId} taskId={task.id} closeTask={closeTask} />
+    );
 
-  const taskRenderer = () => tasks.map((task, index) => (
-    <Box key={`${task.id} ${index}`}>
-      <ListItem>
-        <Typography variant="button"><Text message={`Task-${index + 1}`} />:</Typography>
-      </ListItem>
-      <SummaryField label="common.title" value={task.title} />
-      <SummaryFieldWithHtml label="common.description" value={task.description} />
-      <SummaryField label="common.due.date" value={getFormattedDateString(task.dueDate)} />
-      <SummaryField label="common.assigned.to" value={task.assigned && task.assigned.name} />
-      <SummaryField label="common.status" value={task.status} />
-      {task.closingNote && <SummaryField label="common.closing.note" value={task.closingNote} />}
-      {closeTaskRenderer(task)}
-    </Box>
-  ));
+  const taskRenderer = () =>
+    tasks.map((task, index) => (
+      <Grid
+        item
+        xs={12}
+        key={`${task.id} ${index}`}
+        className={classes.taskContainer}
+      >
+        <Typography variant="h5">
+          <Text message={task.title} />
+        </Typography>
+        <ReactQuill
+          readOnly={true}
+          value={sanitizeHtml(task.description)}
+          modules={{ toolbar: false }}
+        >
+          <div className={classes.taskDescription} />
+        </ReactQuill>
+        <Grid container={true} className={classes.taskBasicInformation}>
+          <Grid item xs={4}>
+            <Typography variant="body2">
+              <Text message="common.due.date" />:{" "}
+              <Text message={getFormattedDateString(task.dueDate)} />
+            </Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography variant="body2">
+              <Text message="common.assigned.to" />:{" "}
+              {task.assigned && task.assigned.name}
+            </Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography variant="body2">
+              <Text message="common.state" />: <Text message={task.status} />
+            </Typography>
+          </Grid>
+        </Grid>
+        {task.closingNote && (
+          <SummaryField label="common.closing.note" value={task.closingNote} />
+        )}
+        {closeTaskRenderer(task)}
+      </Grid>
+    ));
 
   return (
-    <Box className={classes.box}>
-      <ListItem>
-        <Typography variant="h6"><Text translation="common.implementation.plan" />:</Typography>
-      </ListItem>
-      {attachments && <ListItem><Grid container={true} spacing={2}>{attachmentRenderer()}</Grid></ListItem>}
+    <Grid item xs={12} className={classes.box}>
+      <Typography variant="h6">
+        <Text translation="common.implementation.plan" />
+      </Typography>
       {taskRenderer()}
-    </Box>
+      {attachments && attachmentRenderer()}
+    </Grid>
   );
 };
 
