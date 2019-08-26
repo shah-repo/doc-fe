@@ -1,7 +1,6 @@
 import _ from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
-import { documentsSelectors } from "../documents";
 import {
   DOCUMENT_GET_ASYNC,
   DOCUMENT_REVISION_AUDIT_SET,
@@ -58,10 +57,13 @@ export const documentsById = (state: DocumentByIdState = {}, action: DocumentSet
   }
 };
 
-export const auditsByCRId = (state: AuditByCRIdState = {}, action: DocumentRevisionAuditSetAction): AuditByCRIdState => {
+export const auditsByCRId = (
+  state: AuditByCRIdState = {},
+  action: DocumentRevisionAuditSetAction): AuditByCRIdState => {
   switch (action.type) {
     case DOCUMENT_REVISION_AUDIT_SET:
-      return { ...state, [action.payload.id]: action.payload.audit };
+      const audits = _.groupBy(action.payload.audit,  "groupId");
+      return { ...state, [action.payload.id]: audits };
     default:
       return state;
   }

@@ -168,8 +168,10 @@ export interface DocumentRevisionAuditSetAction {
   payload: AuditActionPayload;
 }
 
+export interface AuditGroupType { [key: string]: Audit[]; }
+
 export interface AuditByCRIdState {
-  [key: string]: Audit[];
+  [key: string]: AuditGroupType;
 }
 
 export type AllIdsState = string[];
