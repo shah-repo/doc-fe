@@ -2,12 +2,13 @@
 
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
-import ReactQuill, { } from "react-quill";
-import { QuillOptionsStatic} from "quill";
+import ReactQuill from "react-quill";
+import { QuillOptionsStatic, RangeStatic, Sources } from "quill";
 import classNames from "classnames";
 import Field, { FieldOwnProps } from "../Field";
 import { RenderSize } from "../../../../../state/ducks/common";
 import { modules, formats } from "./configuration";
+import ClickedOutside from "../../../ClickedOutside";
 
 interface TextEditorOwnProps extends FieldOwnProps {
   quillOptions?: QuillOptionsStatic;
@@ -23,23 +24,40 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
   size,
   ...fieldProps
 }) => {
+  const [showToolbar, setShowToolbar] = React.useState(false);
   const handleChange = (editHtml: string) => {
     fieldProps.form.setFieldValue(fieldProps.field.name, editHtml);
   };
 
+  const onClick = () => setShowToolbar(true);
+  const onBlur = () => setShowToolbar(false);
+
   return (
-    <Field size={size} actionsRenderer={actionsRenderer} {...fieldProps} inputLabelProps={{ shrink: true }} >
-      <div className={classNames("editor-container", { "label-margin": !actionsRenderer })} >
-        <ReactQuill
-          theme="snow"
-          modules={modules}
-          formats={formats}
-          bounds={'.editor-container'}
-          {...quillOptions}
-          onChange={handleChange}
-          value={fieldProps.field.value}
-        />
-      </div>
+    <Field 
+      size={size}
+      actionsRenderer={actionsRenderer}
+      {...fieldProps}
+      inputLabelProps={{ shrink: true }}
+    >
+      <ClickedOutside onBlur={onBlur}>
+        <div
+          className={classNames("editor-container", { "label-margin": !actionsRenderer })}
+          onClick={onClick}
+        >
+          <ReactQuill
+            theme="snow"
+            bounds=".editor-container"
+            modules={{
+              ...modules,
+              toolbar: showToolbar ? modules.toolbar : false,
+            }}
+            formats={formats}
+            {...quillOptions}
+            onChange={handleChange}
+            value={fieldProps.field.value}
+          />
+        </div>
+      </ClickedOutside>
     </Field>
   );
 };
