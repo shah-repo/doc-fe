@@ -29,8 +29,10 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
     fieldProps.form.setFieldValue(fieldProps.field.name, editHtml);
   };
   const handleBlur = (e: any) => {
-    const { touched, setFieldTouched } = fieldProps.form;
-    const { name } = fieldProps.field;
+    const {
+      field: { name },
+      form: { touched, setFieldTouched }
+    } = fieldProps;
 
     if (!touched[name]) {
       setFieldTouched(name, true);
