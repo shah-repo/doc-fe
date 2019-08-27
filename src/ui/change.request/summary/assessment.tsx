@@ -28,14 +28,19 @@ const Assessment: React.FunctionComponent<Props> = ({ classes, dataProp }) => {
     Object.values(AssessmentType).map((type, index) => {
       const item = dataProp[type as keyof typeof AssessmentType];
       return (
-        <Grid item={true} xs={12} key={`${item}-${index}`}>
+        <Grid
+          item={true}
+          xs={12}
+          key={`${item}-${index}`}
+          className={classes.assessmentItem}
+        >
           <Grid item={true} xs={12}>
             <Typography variant="h5">
               <Text message={`common.${type}`} />
             </Typography>
           </Grid>
           {item.reasoning && reasoningRenderer(item)}
-          {item.attachments && (
+          {item.attachments!.length > 0 && (
             <Grid item={true} xs={12}>
               {attachmentRenderer(type)}
             </Grid>
