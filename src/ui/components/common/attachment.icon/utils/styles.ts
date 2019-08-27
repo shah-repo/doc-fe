@@ -7,7 +7,7 @@ export const styles = makeStyles((theme) => ({
     width: size === "lg" ? "90px" : size === "md" ? "70px" : "50px",
     height: size === "lg" ? "90px" : size === "md" ? "70px" : "50px",
   }),
-  closeRoot: ({ size }: AttachmentIconStyleProp) => ({
+  closeRoot: ({ size, disabled }: AttachmentIconStyleProp) => ({
     margin:
       size === "lg"
         ? theme.spacing(0, 0, -1.7, 4.5)
@@ -16,12 +16,13 @@ export const styles = makeStyles((theme) => ({
         : theme.spacing(0, 0, -1.4, 3.1),
     padding: theme.spacing(0.5),
     fontSize: size === "lg" ? "1.3em" : size === "md" ? "1.2em" : "1.1em",
+    display: (disabled) ? "none" : "inherit",
   }),
   progress: ({ size }: AttachmentIconStyleProp) => ({
-    color: theme.palette.secondary.main,
-    width:
+    "color": theme.palette.secondary.main,
+    "width":
       (size === "lg" ? "90px" : size === "md" ? "70px" : "50px") + "!important",
-    height:
+    "height":
       (size === "lg" ? "90px" : size === "md" ? "70px" : "50px") + "!important",
     "& .MuiCircularProgress-svg": {
       margin: theme.spacing(2.5),
@@ -75,7 +76,7 @@ export const styles = makeStyles((theme) => ({
     left: "0",
     borderColor: "transparent #99c transparent transparent",
     position: "absolute",
-    "border-style": "solid",
+    borderStyle: "solid",
     height: "0px",
     width: "0px",
   },
@@ -88,14 +89,14 @@ export const styles = makeStyles((theme) => ({
         : "3px 4px 0 0",
   }),
   ribbonEdgeTopright: {
-    top: "50%",
-    borderWidth: "5px 0 0 10px",
-    right: "0",
-    borderColor: "transparent transparent transparent #99c",
-    position: "absolute",
+    "top": "50%",
+    "borderWidth": "5px 0 0 10px",
+    "right": "0",
+    "borderColor": "transparent transparent transparent #99c",
+    "position": "absolute",
     "border-style": "solid",
-    height: "0px",
-    width: "0px",
+    "height": "0px",
+    "width": "0px",
   },
   ribbonEdgeToprightBorder: (props: AttachmentIconStyleProp) => ({
     borderWidth:
