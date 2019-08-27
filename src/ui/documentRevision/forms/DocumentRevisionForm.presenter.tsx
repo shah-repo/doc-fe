@@ -66,6 +66,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   doNotPrompt,
   onDirtyFlagChange,
   classes,
+  ...rest
 }) => {
   const openReference = (documentId: string) => {
     window.open(documentDetailsPath(documentId), "_blank");
@@ -180,6 +181,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           dirty={dirty}
           initialValues={initialValues}
           resetForm={resetForm}
+          {...rest}
         >
           <PromptIfDirty
             dirty={dirty}

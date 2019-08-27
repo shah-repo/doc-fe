@@ -40,12 +40,15 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   classes,
   changeRequest,
   dirty,
-  initialValues,
-  resetForm,
   documentRevisionsList,
   setFieldValue,
   doNotPrompt,
   onDirtyFlagChange,
+  isSubmitting,
+  isValidating,
+  initialValues,
+  resetForm,
+  errors,
 }) => {
   const didMount = useDidMount();
 
@@ -74,6 +77,9 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
         dirty={dirty}
         resetForm={resetForm}
         initialValues={initialValues}
+        isSubmitting={isSubmitting}
+        isValidating={isValidating}
+        errors={errors}
       >
         <PromptIfDirty
           dirty={dirty}

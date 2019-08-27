@@ -77,6 +77,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
 
   return (
     <FormControl
+      id={`field-${field.name}`}
       variant={variant || "standard"}
       required={required}
       fullWidth={true}
