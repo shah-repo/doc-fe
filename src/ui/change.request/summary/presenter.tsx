@@ -79,19 +79,15 @@ export const Presenter: React.FunctionComponent<Props> = ({
           {canEdit && approversFieldRenderer()}
           {!canEdit && <ApproversSummary dataProp={dataProp.approvals} />}
         </Grid>
-      </Box>
-      <Box className={classes.submitBox}>
         <Grid
           item={true}
           container={true}
           alignItems="flex-end"
           direction="column"
         >
-          <div>
-            {canEdit && <FormProgress asyncState={asyncState} />}
-            {canEdit && submitButtonRenderer()}
-            <ControlsContainer changeRequest={dataProp} />
-          </div>
+          {canEdit && <FormProgress asyncState={asyncState} />}
+          {canEdit && submitButtonRenderer()}
+          <ControlsContainer changeRequest={dataProp} />
         </Grid>
       </Box>
     </Box>
