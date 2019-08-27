@@ -18,6 +18,10 @@ export default (theme: Theme) =>
     assessments: {
       padding: theme.spacing(4, 3),
     },
+    assessmentItem: {
+      borderBottom: "1px solid " + theme.palette.text.hint,
+      marginBottom: theme.spacing(3),
+    },
     submitBox: {
       textAlign: "center",
     },
