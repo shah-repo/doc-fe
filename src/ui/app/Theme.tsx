@@ -11,7 +11,8 @@ const theme = createMuiTheme({
       contrastText: "#fff",
     },
     secondary: {
-      main: "#29064C",
+      dark: "#29064C",
+      main: "#6E09EA",
       contrastText: "#fff",
     },
     background: {
@@ -76,7 +77,7 @@ const theme = createMuiTheme({
     MuiButton: {
       root: {
         fontSize: "0.75rem",
-        borderRadius: 0,
+        borderRadius: 3,
         margin: defaultTheme.spacing(1),
       },
     },
