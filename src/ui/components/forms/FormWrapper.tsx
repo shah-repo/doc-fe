@@ -11,7 +11,7 @@ interface Props {
 }
 
 const FormWrapper: React.FunctionComponent<Props> = ({
-  dirty, resetForm, initialValues, children, errors = {},
+  dirty, resetForm, initialValues, children, errors,
   isSubmitting, isValidating,
 }) => {
   useEffect(() => {
