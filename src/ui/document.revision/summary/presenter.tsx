@@ -5,6 +5,7 @@ import {
   WithStyles,
   withStyles,
 } from "@material-ui/core";
+import { Formik } from "formik";
 import React from "react";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
@@ -13,9 +14,9 @@ import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import Text from "../../components/Text";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
 import Attachment from "./attachment";
-import styles from "./styles";
-import ReferenceContainer from "./reference.container";
 import ChangeRequestLink from "./changeRequestLink";
+import ReferenceContainer from "./reference.container";
+import styles from "./styles";
 
 interface OwnProps {
   canShowCreateVersionButton?: boolean;
@@ -26,45 +27,54 @@ type Props = OwnProps & DataProps<DocumentRevision> & WithStyles<typeof styles>;
 export const Presenter: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
+  dataProp: { document, attachments, status, name, referenceTo, deprecatedAt, description },
   canShowCreateVersionButton,
 }) => {
-  return (
+
+  const onSubmit = () => void(0);
+
+  const contentRenderer = () => (
     <Box>
       <Box className={classes.previewBox}>
         <ChangeRequestLink dataProp={dataProp} />
         <ListItem>
           <Typography variant="h5">
             <Text translation="document.revision.list.docId" />:{" "}
-            {dataProp.document.docId}
+            {document.docId}
           </Typography>
         </ListItem>
-        <SummaryField label="common.status" value={dataProp.status} />
-        <SummaryField label="common.type" value={dataProp.document.type} />
-        <SummaryField label="document.title" value={dataProp.name} />
-        <SummaryFieldWithHtml
-          label="cr.description"
-          value={dataProp.description}
-        />
-        {dataProp.referenceTo && (
+        <SummaryField label="common.status" value={status} />
+        <SummaryField label="common.type" value={document.type} />
+        <SummaryField label="document.title" value={name} />
+        <SummaryFieldWithHtml label="cr.description" value={description} />
+        {referenceTo && (
           <ReferenceContainer
-            dataProp={dataProp.referenceTo}
+            dataProp={referenceTo}
             isReferenceTo={true}
-            status={dataProp.status}
-            deprecatedAt={dataProp.deprecatedAt}
-          />
-        )}
-        {dataProp.document.referencedBy && (
+            status={status}
+            deprecatedAt={deprecatedAt}
+          />)}
+        {document.referencedBy && (
           <ReferenceContainer
-            dataProp={dataProp.document.referencedBy}
+            dataProp={document.referencedBy}
             isReferenceTo={false}
           />
         )}
-        {dataProp.attachments && <Attachment dataProp={dataProp.attachments} />}
+        {attachments && <Attachment />}
       </Box>
       <Box className={classes.submitBox}>
         <ControlsContainer documentRevision={dataProp} canShowCreateVersionButton={canShowCreateVersionButton} />
       </Box>
     </Box>
+  );
+
+  return (
+    <Formik
+      render={contentRenderer}
+      initialValues={dataProp}
+      onSubmit={onSubmit}
+      enableReinitialize={true}
+    />
   );
 };
 
