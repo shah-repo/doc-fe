@@ -36,7 +36,7 @@ type FieldProps = FieldOwnProps & FormikFieldProps;
 const Field: React.FunctionComponent<FieldProps> = ({
   field,
   form,
-  form: { touched, errors, isSubmitting },
+  form: { touched, errors, isSubmitting, status },
   children,
   formControlProps,
   label,
@@ -46,8 +46,9 @@ const Field: React.FunctionComponent<FieldProps> = ({
   gutter = true,
   actionsRenderer,
 }) => {
-  const error = _.get(errors, field.name);
-  const isFieldTouched = _.get(touched, field.name);
+  // storing BE response in status
+  const error = _.get(errors, field.name) || _.get(status, field.name);
+  const isFieldTouched = _.get(touched, field.name) || _.get(status, field.name);
   const shouldDisplayError = Boolean(isFieldTouched && error);
   const classes = styles({ gutter, error: shouldDisplayError });
 

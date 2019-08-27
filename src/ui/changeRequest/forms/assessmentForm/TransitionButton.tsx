@@ -18,6 +18,7 @@ interface OwnProps {
   label: string;
   changeRequestId: string;
   buttonProps?: ButtonProps;
+  setStatus?(status?: any): void;
 }
 
 interface DispatchProps {
@@ -32,9 +33,15 @@ const TransitionButton: React.FunctionComponent<Props> = ({
   applyTransition,
   changeRequestId,
   buttonProps,
+  setStatus,
 }) => {
-  const async = useAsync<ChangeRequestTransitionResponse>();
+  const async = useAsync<ChangeRequestTransitionResponse>({
+    onError: (message) => {
+      setStatus && setStatus(message)
+    }
+  });
   const onClick = () => {
+    setStatus && setStatus(undefined)
     async.start(
       applyTransition,
       changeRequestId,

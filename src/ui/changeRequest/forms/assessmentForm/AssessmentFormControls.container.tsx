@@ -21,6 +21,7 @@ interface StateProps {
 
 interface OwnProps {
   changeRequest?: ChangeRequest;
+  setStatus?(status?: any): void;
 }
 
 export type AssessmentFormControlsContainerProps = OwnProps &
@@ -33,9 +34,9 @@ const mapStateToProps = (state: ApplicationState) => ({
   isCurrentUserDocControl: getHasPermission(state, "CR_TO_IN_REVIEW"),
 });
 
-const AssessmentFormControlsContainer: React.FunctionComponent<
-  AssessmentFormControlsContainerProps
-> = ({ classes, changeRequest, currentUserEmail, isCurrentUserDocControl }) => {
+const AssessmentFormControlsContainer: React.FunctionComponent<AssessmentFormControlsContainerProps> = ({
+  changeRequest, currentUserEmail, setStatus
+}) => {
   if (!changeRequest) {
     return null;
   }
@@ -68,6 +69,7 @@ const AssessmentFormControlsContainer: React.FunctionComponent<
           transition={transition}
           buttonProps={buttonProps}
           label={`changeRequest.transition.${transition}`}
+          setStatus={setStatus}
         />
       );
     }
