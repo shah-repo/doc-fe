@@ -6,14 +6,11 @@ import styles from "./styles";
 
 type Props = WithStyles<typeof styles>;
 
-const Attachment: React.FunctionComponent<Props> = ({
-  classes,
-}) => {
-
+const Attachment: React.FunctionComponent<Props> = ({ classes }) => {
   return (
     <Box className={classes.box}>
       <HeaderField dataProp="common.attachments" />
-      <AttachmentField name="attachments" />
+      <AttachmentField name="attachments" disabled={true} />
     </Box>
   );
 };

@@ -47,7 +47,10 @@ const ImplementationPlan: React.FunctionComponent<Props> = ({
   const { tasks, attachments } = dataProp;
 
   const attachmentRenderer = () => (
-    <AttachmentIconField name="implementationPlan.attachments" />
+    <AttachmentIconField
+      name="implementationPlan.attachments"
+      disabled={true}
+    />
   );
 
   const closeTaskRenderer = (task: ImplementationPlanTask) =>
