@@ -9,6 +9,7 @@ import { TablePanel } from "../../components/table/panel";
 import { TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
+import { generateVersionNumber } from "../../documentRevision/helpers";
 import {
   canEditDocumentRevision,
   documentRevisionQueryStatus,
@@ -69,7 +70,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       cellOptions: { align: "center" },
       cellHref: cellHrefRenderer,
       columnOptions: {
-        cellDataGetter: ({ rowData }) => `V${rowData.version}`,
+        cellDataGetter: ({ rowData: { revision, revisionStage }}) => generateVersionNumber(revision, revisionStage),
         width: 170,
         flexShrink: 2,
       },
