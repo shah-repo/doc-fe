@@ -24,6 +24,7 @@ import styles from "./AssessmentForm.styles";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
 import AssessmentFormImplementationPlan from "./implementationPlan/Container";
 import TextEditorField from "../../../components/forms/fields/TextEditor";
+import ScrollToError from "../../../components/forms/ScrollToError";
 
 interface Props
   extends WithStyles<typeof styles>,
@@ -40,12 +41,15 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   classes,
   changeRequest,
   dirty,
-  initialValues,
-  resetForm,
   documentRevisionsList,
   setFieldValue,
   doNotPrompt,
   onDirtyFlagChange,
+  isSubmitting,
+  isValidating,
+  initialValues,
+  resetForm,
+  errors,
 }) => {
   const didMount = useDidMount();
 
@@ -75,6 +79,11 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
         resetForm={resetForm}
         initialValues={initialValues}
       >
+        <ScrollToError
+          isSubmitting={isSubmitting}
+          isValidating={isValidating}
+          errors={errors}
+        />
         <PromptIfDirty
           dirty={dirty}
           doNotPrompt={doNotPrompt}

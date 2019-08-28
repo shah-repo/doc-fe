@@ -28,6 +28,16 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
   const handleChange = (editHtml: string) => {
     fieldProps.form.setFieldValue(fieldProps.field.name, editHtml);
   };
+  const handleBlur = (e: any) => {
+    const {
+      field: { name },
+      form: { touched, setFieldTouched }
+    } = fieldProps;
+
+    if (!touched[name]) {
+      setFieldTouched(name, true);
+    }
+  }
 
   const onClick = () => setIsComponentVisible(true);
 
@@ -54,6 +64,7 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
           {...quillOptions}
           onChange={handleChange}
           value={fieldProps.field.value}
+          onBlur={handleBlur}
         />
       </div>
     </Field>

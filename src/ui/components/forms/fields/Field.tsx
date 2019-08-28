@@ -46,6 +46,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
   gutter = true,
   actionsRenderer,
 }) => {
+  // storing BE response in status
   const error = _.get(errors, field.name);
   const isFieldTouched = _.get(touched, field.name);
   const shouldDisplayError = Boolean(isFieldTouched && error);
@@ -77,6 +78,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
 
   return (
     <FormControl
+      id={`field-${field.name}`}
       variant={variant || "standard"}
       required={required}
       fullWidth={true}

@@ -33,9 +33,9 @@ const mapStateToProps = (state: ApplicationState) => ({
   isCurrentUserDocControl: getHasPermission(state, "CR_TO_IN_REVIEW"),
 });
 
-const AssessmentFormControlsContainer: React.FunctionComponent<
-  AssessmentFormControlsContainerProps
-> = ({ classes, changeRequest, currentUserEmail, isCurrentUserDocControl }) => {
+const AssessmentFormControlsContainer: React.FunctionComponent<AssessmentFormControlsContainerProps> = ({
+  changeRequest, currentUserEmail,
+}) => {
   if (!changeRequest) {
     return null;
   }

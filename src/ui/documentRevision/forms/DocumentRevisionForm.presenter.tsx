@@ -36,6 +36,7 @@ import {
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
 import TextEditorField from "../../components/forms/fields/TextEditor";
+import ScrollToError from "../../components/forms/ScrollToError";
 
 interface Props
   extends WithStyles<typeof styles>,
@@ -66,6 +67,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   doNotPrompt,
   onDirtyFlagChange,
   classes,
+  isSubmitting,
+  isValidating,
+  errors,
 }) => {
   const openReference = (documentId: string) => {
     window.open(documentDetailsPath(documentId), "_blank");
@@ -181,6 +185,11 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           initialValues={initialValues}
           resetForm={resetForm}
         >
+          <ScrollToError
+            isSubmitting={isSubmitting}
+            isValidating={isValidating}
+            errors={errors}
+          />
           <PromptIfDirty
             dirty={dirty}
             doNotPrompt={doNotPrompt}
