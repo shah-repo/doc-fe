@@ -21,8 +21,8 @@
 }
 
 .task-description .editor-container .ql-editor {
-  min-height: 8em;
-  max-height: 18em;
+  min-height: 18vh;
+  max-height: 24vh;
 }
 
 .editor-container .ql-editor {

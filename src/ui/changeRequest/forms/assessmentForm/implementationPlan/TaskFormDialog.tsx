@@ -31,23 +31,11 @@ const INITIAL_VALUES = {
   status: "PENDING",
 };
 
-const styles = makeStyles(() =>
-  createStyles({
-    dialogPaper: {
-      overflowY: "unset",
-    },
-    dialogContent: {
-      overflowY: "unset",
-    },
-  },
-));
-
 export const TaskFormDialog: React.FunctionComponent<TaskFormDialogProps> =
   ({ onSubmit, closeDialog, openDialog, isDialogOpen, buttonProps, task }) => {
     const renderForm = (props: FormikProps<any>) => (
       <TaskForm cancel={closeDialog} />
     );
-    const classes = styles();
 
     const preventPropagation = (event: React.FormEvent) =>  event.stopPropagation();
     const initialValues = task || INITIAL_VALUES;
@@ -69,14 +57,13 @@ export const TaskFormDialog: React.FunctionComponent<TaskFormDialogProps> =
           disableBackdropClick={true}
           open={isDialogOpen}
           onSubmit={preventPropagation}
-          classes={{ paper: classes.dialogContent }}
           fullWidth={true}
           maxWidth="md"
         >
           <DialogTitle>
             <Text translation="changeRequest.assessmentForm.addTask" />
           </DialogTitle>
-          <DialogContent classes={{ root: classes.dialogContent }}>
+          <DialogContent>
             <Formik
               render={renderForm}
               initialValues={initialValues}
