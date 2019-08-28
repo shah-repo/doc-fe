@@ -7,7 +7,7 @@ import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
 import { Audit, AuditGroupType } from "../audit/types";
 import { DocumentRevisionStatus } from "./types";
-import { stripTagsFromDocRev } from "./helpers";
+import { stripTagsFromObject } from "../../../common/utils/helpers";
 
 const allIds = (state: ApplicationState) => state.documentRevisions.allIds;
 const byId = (state: ApplicationState) => state.documentRevisions.byId;
@@ -18,7 +18,7 @@ const auditsAllId = (state: ApplicationState) => state.documentRevisions.auditsA
 const getDocumentRevisionsList = createSelector(
   allIds, byId,
   (ids, documentRevisions) =>
-    ids.map((id) => stripTagsFromDocRev(documentRevisions[id]))
+    ids.map((id) => stripTagsFromObject(documentRevisions[id]))
 );
 
 const getDocumentRevision = (state: ApplicationState, documentRevisionId: string) => byId(state)[documentRevisionId];

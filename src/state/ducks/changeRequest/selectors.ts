@@ -1,12 +1,11 @@
 import _ from "lodash";
 import { createSelector } from "reselect";
 import striptags from "striptags";
-import { stripTags } from "../../../common/utils/helpers";
+import { stripTagsFromObject } from "../../../common/utils/helpers";
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
 import { Audit, AuditGroupType } from "../audit/types";
-import { stripTagsFromChangeRequest } from "./helpers";
 
 const allIds = (state: ApplicationState) => state.changeRequests.allIds;
 const byId = (state: ApplicationState) => state.changeRequests.byId;
@@ -18,7 +17,7 @@ const auditsAllId = (state: ApplicationState) => state.changeRequests.auditsAllI
 const getChangeRequestsList = createSelector(
   allIds, byId,
   (ids, changeRequests) => 
-    ids.map((id) => stripTagsFromChangeRequest(changeRequests[id]))
+    ids.map((id) => stripTagsFromObject(changeRequests[id]))
 );
 
 const getApproversListForAssessmentForm = createSelector(
