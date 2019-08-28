@@ -15,7 +15,7 @@ type Props = DataProps<Model> & WithStyles<typeof styles>;
 
 const Assessment: React.FunctionComponent<Props> = ({ classes, dataProp }) => {
   const attachmentRenderer = (type: AssessmentType) => (
-    <AttachmentField name={`assessments.${type}.attachments`} />
+    <AttachmentField name={`assessments.${type}.attachments`} disabled={true} />
   );
 
   const reasoningRenderer = (item: AssessmentItem) => (
