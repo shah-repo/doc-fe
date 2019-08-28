@@ -18,6 +18,7 @@ import {
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
 import styles from "./styles";
+import { stripTagsFromObject } from "../../../common/utils/helpers";
 
 type Props = DocumentRevisionsUserProps & WithStyles<typeof styles>;
 
@@ -124,6 +125,9 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     },
   ];
 
+  const customDataSet = (data: DocumentRevision[]) =>
+    data.map((docRev) => stripTagsFromObject(docRev))
+
   return (
     <Grid container={true} className={classes.root}>
       <Grid item={true} xs={6}>
@@ -146,6 +150,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
           clearFilter={clearFilter}
           cellMeasure={true}
           customQuerySet={customQuerySet}
+          customDataSet={customDataSet}
         />
       </Grid>
     </Grid>
