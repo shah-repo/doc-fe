@@ -47,8 +47,8 @@ const Field: React.FunctionComponent<FieldProps> = ({
   actionsRenderer,
 }) => {
   // storing BE response in status
-  const error = _.get(errors, field.name) || _.get(status, field.name);
-  const isFieldTouched = _.get(touched, field.name) || _.get(status, field.name);
+  const error = _.get(errors, field.name);
+  const isFieldTouched = _.get(touched, field.name);
   const shouldDisplayError = Boolean(isFieldTouched && error);
   const classes = styles({ gutter, error: shouldDisplayError });
 

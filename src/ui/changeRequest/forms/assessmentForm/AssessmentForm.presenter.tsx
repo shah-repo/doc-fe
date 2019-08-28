@@ -50,8 +50,6 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   initialValues,
   resetForm,
   errors,
-  setStatus,
-  status,
 }) => {
   const didMount = useDidMount();
 
@@ -85,7 +83,6 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
           isSubmitting={isSubmitting}
           isValidating={isValidating}
           errors={errors}
-          status={status}
         />
         <PromptIfDirty
           dirty={dirty}
@@ -123,7 +120,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
             direction="column"
           >
             <div>
-              <AssessmentFormControlsContainer changeRequest={changeRequest} setStatus={setStatus} />
+              <AssessmentFormControlsContainer changeRequest={changeRequest} />
               <SubmitButton
                 asyncState={asyncState}
                 label={

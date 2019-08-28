@@ -21,7 +21,6 @@ interface StateProps {
 
 interface OwnProps {
   changeRequest?: ChangeRequest;
-  setStatus?(status?: any): void;
 }
 
 export type AssessmentFormControlsContainerProps = OwnProps &
@@ -35,7 +34,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 });
 
 const AssessmentFormControlsContainer: React.FunctionComponent<AssessmentFormControlsContainerProps> = ({
-  changeRequest, currentUserEmail, setStatus
+  changeRequest, currentUserEmail,
 }) => {
   if (!changeRequest) {
     return null;
@@ -69,7 +68,6 @@ const AssessmentFormControlsContainer: React.FunctionComponent<AssessmentFormCon
           transition={transition}
           buttonProps={buttonProps}
           label={`changeRequest.transition.${transition}`}
-          setStatus={setStatus}
         />
       );
     }
