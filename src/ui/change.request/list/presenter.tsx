@@ -70,7 +70,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   ];
 
   const customDataSet = (data: ChangeRequest[]) =>
-    data.map((cr) => stripTagsFromObject(cr) as ChangeRequest)
+    data.map((cr) => stripTagsFromObject(cr))
 
   return (
     <Grid container={true} className={classes.root}>

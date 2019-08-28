@@ -12,7 +12,7 @@ export const getInnerHTMLProp = (html: string) => (
 
 export const stripTags = (html: string) => striptags(html, [], '\n');
 
-export const stripTagsFromObject = (item: ChangeRequest | DocumentRevision) => {
+export const stripTagsFromObject = <T extends ChangeRequest | DocumentRevision>(item: T) => {
   const copy = _.cloneDeep(item);
   copy.description = stripTags(item.description);
 

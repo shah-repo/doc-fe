@@ -125,7 +125,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   ];
 
   const customDataSet = (data: DocumentRevision[]) =>
-    data.map((docRev) => stripTagsFromObject(docRev) as DocumentRevision)
+    data.map((docRev) => stripTagsFromObject(docRev))
 
   return (
     <Grid container={true} className={classes.root}>
