@@ -5,13 +5,13 @@ import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { CHANGE_REQUEST_ROOT_URL } from "../../../state/ducks/changeRequest/constants";
 import { TableColumnProps } from "../../components/table/column/types";
 import { TablePanel } from "../../components/table/panel";
-import { TableSelectionProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import { CHANGE_REQUEST_CREATE_URL } from "../../constants/urls";
 import { canEditChangeRequest, changeRequestStatusOption } from "../utils/helpers";
 import { changeRequestEditPath, changeRequestPreviewPath } from "../utils/paths";
 import { ChangeRequestsUserProps } from "../utils/types";
 import styles from "./styles";
+import { stripTagsFromChangeRequest } from "../../../state/ducks/changeRequest/helpers";
 
 type Props = ChangeRequestsUserProps & WithStyles<typeof styles>;
 
@@ -20,7 +20,6 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   dataProp,
   currentUserEmail,
   editChangeRequest,
-  previewChangeRequest,
 }) => {
 
   const ChangeRequestList = TablePanel<ChangeRequest>();
@@ -70,6 +69,9 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     },
   ];
 
+  const customDataSet = (data: ChangeRequest[]) =>
+    data.map((cr) => stripTagsFromChangeRequest(cr))
+
   return (
     <Grid container={true} className={classes.root}>
       <Grid item={true} xs={6}>
@@ -91,6 +93,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
           cellMeasure={true}
           queryUrl={CHANGE_REQUEST_ROOT_URL}
           clearFilter={clear}
+          customDataSet={customDataSet}
         />
       </Grid>
     </Grid>
