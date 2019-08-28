@@ -111,6 +111,21 @@ const theme = createMuiTheme({
         color: "#4d4d4d",
       },
     },
+    MuiExpansionPanel: {
+      root: {
+        boxShadow: "none",
+      },
+    },
+    MuiExpansionPanelSummary: {
+      root: {
+        padding: defaultTheme.spacing(0, 2.5),
+      },
+    },
+    MuiExpansionPanelDetails: {
+      root: {
+        padding: defaultTheme.spacing(1),
+      },
+    },
   },
 });
 

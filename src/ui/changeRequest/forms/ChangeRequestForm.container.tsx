@@ -12,6 +12,7 @@ import {
 } from "../../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
+import ChangeRequestHeader from "../../change.request/summary/header";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
 import DocumentRevisionUpdateContainer from "../../documentRevision/DocumentRevisionUpdate.container";
 import ChangeRequestAuditContainer from "../audit/Audit.container";
@@ -19,7 +20,6 @@ import DocumentRevisionControlContainer from "../documentRevision/DocumentRevisi
 import AssessmentFormContainer from "./assessmentForm/AssessmentForm.container";
 import styles from "./styles";
 import { ChangeRequestFormValues } from "./types";
-import ChangeRequestHeader from "../../change.request/summary/header";
 
 interface StateProps {
   documentRevisionsById: DocumentRevisionsByIdState;
@@ -138,11 +138,7 @@ export const ChangeRequestFormContainer: React.FunctionComponent<
 
   const renderDocumentRevisionAudit = () => {
     if (selectedDocumentRevision) {
-      return (
-        <DocumentRevisionAuditContainer
-          documentRevisionId={selectedDocumentRevision}
-        />
-      );
+      return <DocumentRevisionAuditContainer documentRevisionId={selectedDocumentRevision}/>;
     }
   };
 
