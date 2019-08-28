@@ -36,7 +36,7 @@ type FieldProps = FieldOwnProps & FormikFieldProps;
 const Field: React.FunctionComponent<FieldProps> = ({
   field,
   form,
-  form: { touched, errors, isSubmitting, status },
+  form: { touched, errors, isSubmitting },
   children,
   formControlProps,
   label,
