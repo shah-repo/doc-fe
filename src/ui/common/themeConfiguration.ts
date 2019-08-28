@@ -137,7 +137,7 @@ const defaultThemeOptions: ThemeOptions = {
     },
     MuiExpansionPanelSummary: {
       root: {
-        padding: defaultTheme.spacing(0, 2.5),
+        padding: defaultTheme.spacing(0, 1.9),
       },
     },
     MuiExpansionPanelDetails: {
