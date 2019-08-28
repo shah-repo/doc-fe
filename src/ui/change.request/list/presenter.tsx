@@ -11,7 +11,7 @@ import { canEditChangeRequest, changeRequestStatusOption } from "../utils/helper
 import { changeRequestEditPath, changeRequestPreviewPath } from "../utils/paths";
 import { ChangeRequestsUserProps } from "../utils/types";
 import styles from "./styles";
-import { stripTagsFromChangeRequest } from "../../../state/ducks/changeRequest/helpers";
+import { stripTagsFromObject } from "../../../common/utils/helpers";
 
 type Props = ChangeRequestsUserProps & WithStyles<typeof styles>;
 
@@ -70,7 +70,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   ];
 
   const customDataSet = (data: ChangeRequest[]) =>
-    data.map((cr) => stripTagsFromChangeRequest(cr))
+    data.map((cr) => stripTagsFromObject(cr) as ChangeRequest)
 
   return (
     <Grid container={true} className={classes.root}>

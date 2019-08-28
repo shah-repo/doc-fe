@@ -17,7 +17,7 @@ import {
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
 import styles from "./styles";
-import { stripTagsFromDocRev } from "../../../state/ducks/documentRevisions/helpers";
+import { stripTagsFromObject } from "../../../common/utils/helpers";
 
 type Props = DocumentRevisionsUserProps & WithStyles<typeof styles>;
 
@@ -125,7 +125,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   ];
 
   const customDataSet = (data: DocumentRevision[]) =>
-    data.map((docRev) => stripTagsFromDocRev(docRev))
+    data.map((docRev) => stripTagsFromObject(docRev) as DocumentRevision)
 
   return (
     <Grid container={true} className={classes.root}>
