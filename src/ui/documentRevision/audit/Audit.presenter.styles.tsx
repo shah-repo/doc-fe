@@ -3,16 +3,11 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core";
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      marginLeft: 30,
+      width: "97%",
     },
-    collapsableButton: {
-      width: "100%",
-      borderRadius: 0,
-      justifyContent: "end",
-    },
-    collapsableContainer: {
-      maxHeight: 700,
+    details: {
       overflowY: "auto",
+      maxHeight: "50vw",
     },
     changeContainer: {
       borderBottom: "1px solid lightgray",
@@ -29,7 +24,7 @@ export const styles = makeStyles((theme: Theme) =>
       fontWeight: 500,
     },
     dateContainer: {
-      marginBottom: 10,
+      marginBottom: theme.spacing(2),
       color: theme.palette.text.hint,
     },
   }),

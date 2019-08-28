@@ -1,14 +1,21 @@
-import { Box, Collapse, IconButton, List } from "@material-ui/core";
-import { ExpandLess, ExpandMore } from "@material-ui/icons";
+import {
+  Box,
+  ExpansionPanel,
+  ExpansionPanelDetails,
+  ExpansionPanelSummary,
+  List,
+  Typography,
+} from "@material-ui/core";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import React from "react";
 import { Attachment } from "../../../state/ducks/attachments";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
-import { Approval, User } from "../../../state/ducks/common";
+import { Approval, TypographySize, User } from "../../../state/ducks/common";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { getAuditDefaultValue } from "../../common/utils/helpers";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
 import { styles } from "./Audit.presenter.styles";
-import { getAuditDefaultValue } from "../../common/utils/helpers";
 
 interface OwnProps {
   audit: AuditGroupType;
@@ -20,14 +27,12 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   audit,
 }) => {
   const classes = styles();
-  const [isOpen, setOpen] = React.useState(false);
-
-  const toggleList = () => setOpen(!isOpen);
 
   const getNextValue = (change: Audit) => {
-    if (!change.nextValue)
+    if (!change.nextValue) {
       return "N/A";
-    
+    }
+
     switch (change.field) {
       case "attachments":
       case "justifications.attachments":
@@ -60,7 +65,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     return (
       <Box key={groupId} className={classes.changeContainer}>
         <div className={classes.dateContainer}>
-          <span className={classes.owner}>{change.owner.name}</span> -{" "}
+          <div className={classes.owner}>{change.owner.name}</div>
           <DateTime value={change.timestamp} />
         </div>
         {renderChanges(audit[groupId])}
@@ -69,28 +74,28 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   });
 
   const renderChanges = (audits: Audit[]) => audits.map((change, index) => (
-    <Box key={`${change.groupId}-${index}`}>
+    <Box mb={1} key={`${change.groupId}-${index}`}>
       <Box><Text message={`changeRequest.audit.${change.field}.${change.type}`} /></Box>
       <div className={classes.auditValue}>{getNextValue(change)}</div>
     </Box>
   ));
 
-  const renderExpandIcon = () => (isOpen ? <ExpandLess /> : <ExpandMore />);
+  const [expanded, setExpanded] = React.useState<boolean>(false);
+
+  const handleChange = () => () => setExpanded(!expanded);
 
   return (
     <div className={classes.container}>
-      <IconButton
-        onClick={toggleList}
-        classes={{ root: classes.collapsableButton }}
-      >
-        <Text translation="changeRequest.audit.crHistory" />
-        {renderExpandIcon()}
-      </IconButton>
-      <div className={classes.collapsableContainer}>
-        <Collapse in={isOpen} timeout="auto" unmountOnExit={true}>
+      <ExpansionPanel expanded={expanded} onChange={handleChange()}>
+      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} >
+        <Typography variant={TypographySize.md}>
+          <Text translation="changeRequest.audit.crHistory" />
+        </Typography>
+      </ExpansionPanelSummary>
+        <ExpansionPanelDetails className={classes.details}>
           <List>{audit && renderAuditGroup()}</List>
-        </Collapse>
-      </div>
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
     </div>
   );
 };

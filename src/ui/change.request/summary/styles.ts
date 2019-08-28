@@ -30,7 +30,7 @@ export default (theme: Theme) =>
       padding: theme.spacing(3, 0),
     },
     headerContainer: {
-      padding: "10px 0 60px",
+      padding: theme.spacing(5, 0),
     },
     status: {
       color: "#fff",

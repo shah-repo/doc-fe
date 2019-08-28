@@ -20,7 +20,7 @@ const defaultPaletteOptions = {
     hint: "#B4C0CA",
     primary: "#4d4d4d",
   },
-}
+};
 
 const devPaletteOptions = {
   ...defaultPaletteOptions,
@@ -29,17 +29,17 @@ const devPaletteOptions = {
     dark: "#FFCA00",
     main: "#EBBA00",
     contrastText: "#29064C",
-  }
-}
+  },
+};
 
 const demoPaletteOptions = {
   ...defaultPaletteOptions,
   secondary: {
     ...defaultPaletteOptions.secondary,
     dark: "#C42260",
-    main: "#D52568"
-  }
-}
+    main: "#D52568",
+  },
+};
 
 const defaultThemeOptions: ThemeOptions = {
   palette: defaultPaletteOptions,
@@ -130,8 +130,23 @@ const defaultThemeOptions: ThemeOptions = {
         color: "#4d4d4d",
       },
     },
+    MuiExpansionPanel: {
+      root: {
+        boxShadow: "none",
+      },
+    },
+    MuiExpansionPanelSummary: {
+      root: {
+        padding: defaultTheme.spacing(0, 2.5),
+      },
+    },
+    MuiExpansionPanelDetails: {
+      root: {
+        padding: defaultTheme.spacing(1),
+      },
+    },
   },
-}
+};
 
 export const devEnvThemeOptions: ThemeOptions = {
   ...defaultThemeOptions,

@@ -1,9 +1,9 @@
 import { Grid, withStyles, WithStyles } from "@material-ui/core";
-import React from "react";
-import { Redirect } from "react-router-dom";
-import { connect } from "react-redux";
 import _ from "lodash";
 import moment from "moment-timezone";
+import React from "react";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 import {
   DocumentRevision,
   documentRevisionsActions,
@@ -12,10 +12,10 @@ import {
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
-import DocumentRevisionDisplayContainer from "./DocumentRevisionDisplay.container";
-import DocumentRevisionListContainer from "./DocumentRevisionList.container";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import DocumentRevisionAuditContainer from "./audit/Audit.container";
+import DocumentRevisionDisplayContainer from "./DocumentRevisionDisplay.container";
+import DocumentRevisionListContainer from "./DocumentRevisionList.container";
 import styles from "./styles";
 
 interface StateProps {
@@ -68,8 +68,8 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
     let indexOfDocRev = documentRevisions.length - 1;
     if (deprecatedAt) {
       const depreactedAtDate = moment(deprecatedAt);
-      let indexOfLastReleased = _.findLastIndex(documentRevisions, (doc) => {
-        if (!doc.releasedAt) return false;
+      const indexOfLastReleased = _.findLastIndex(documentRevisions, (doc) => {
+        if (!doc.releasedAt) { return false; }
 
         return moment(doc.releasedAt).isSameOrBefore(depreactedAtDate);
       });
