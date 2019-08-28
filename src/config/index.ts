@@ -1,6 +1,10 @@
 import queryString from "query-string";
 import { LOGIN_WITH_CODE_URL } from "../ui/constants/urls";
 
+export const DEV_THEME = "DEV_THEME";
+export const DEMO_THEME = "DEMO_THEME";
+export const PRODUCTION_THEME = "PRODUCTION_THEME";
+
 const DEFAULTS = {
   API_ENDPOINT: "/",
   REFRESH_TOKEN_VALIDITY_DAYS: "30",
@@ -8,6 +12,7 @@ const DEFAULTS = {
   FRONTEND_URL: "/",
   AWS_COGNITO_CLIENT_ID: "default",
   AUTO_LOGOUT_TIME: "1800000", // 30 minutes in milliseconds
+  THEME: DEV_THEME,
 };
 
 type ConfigKey = keyof typeof DEFAULTS;
@@ -55,6 +60,10 @@ class Config {
 
   public static get AutoLogoutTime() {
     return this.getNumber("AUTO_LOGOUT_TIME");
+  }
+
+  public static get Theme() {
+    return this.get("THEME");
   }
 }
 
