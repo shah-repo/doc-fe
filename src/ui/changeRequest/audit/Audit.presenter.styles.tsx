@@ -11,7 +11,6 @@ export const styles = makeStyles((theme: Theme) =>
     },
     changeContainer: {
       borderBottom: "1px solid lightgray",
-      margin: "0 5px 5px",
       padding: theme.spacing(1),
       background: "#fff",
     },
