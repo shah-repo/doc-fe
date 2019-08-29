@@ -1,51 +1,8 @@
 import React from "react";
 import SvgIcon from '@material-ui/core/SvgIcon';
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import Text from "../../components/Text";
-import Config, { PRODUCTION_THEME, DEMO_THEME, DEV_THEME } from "../../../config";
-
-export const styles = makeStyles((theme: Theme) =>
-  createStyles({
-    svgRoot: {
-      height: "auto",
-      width: "60%",
-    },
-    letters: {
-      color: theme.palette.secondary.contrastText,
-    },
-    icon: {
-      color: theme.palette.secondary.light,
-    },
-    evnironmentContainer: {
-      borderRadius: 15,
-      backgroundColor: theme.palette.secondary.contrastText,
-      margin: "5px auto",
-      width: "fit-content",
-    },
-    envCnt: {
-      background: "0% 0% no-repeat padding-box",
-      borderRadius: 15,
-      opacity: 1,
-      backgroundColor: theme.palette.secondary.contrastText,
-      margin: "5px 0px 5px 50px",
-      width: "fit-content",
-    },
-    environmentText: {
-      color: theme.palette.secondary.dark,
-      margin: "10px 20px",
-      fontSize: 14,
-      fontWeight: "bold",
-    },
-    evnTxt: {
-      textAlign: "left",
-      font: "Bold 10px/14px Open Sans",
-      letterSpacing: 0,
-      color: theme.palette.secondary.dark,
-      opacity: 1,
-      margin: "10px 20px",
-    }
-  }),
-);
+import Config, { DEMO_THEME, DEV_THEME } from "../../../config";
+import styles from "./Logo.styles";
 
 const Logo: React.FunctionComponent = () => {
   const classes = styles();
