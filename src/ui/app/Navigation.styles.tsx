@@ -14,6 +14,7 @@ export default (theme: Theme) =>
     },
     toolbar: {
       backgroundColor: theme.palette.secondary.dark,
+      marginTop: 40,
     },
     toolbarTitle: {
       flex: 1,
