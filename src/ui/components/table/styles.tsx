@@ -26,5 +26,6 @@ export const styles = makeStyles((theme) => ({
   row: (props: TableStyleProps) => ({
     paddingRight: "0!important",
     cursor: (props.isSelectable) ? "pointer" : "default",
+    borderBottom: `1px solid ${theme.palette.text.hint}`,
   }),
 }));

@@ -4,7 +4,7 @@ import { createStyles, makeStyles, Theme, withStyles } from "@material-ui/core/s
 export const selectStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      margin: theme.spacing(2, 0, 1),
+      margin: theme.spacing(2.1, 0, 1),
       width: "100%",
     },
     input: {
