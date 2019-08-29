@@ -57,6 +57,9 @@ pipelines:
     deploy-to-dev:
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEVELOPMENT
+    deploy-to-demo:
+      - step: *RUN_TESTS
+      - step: *DEPLOY_TO_DEMO
     deploy-to-prod:
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_PRODUCTION
