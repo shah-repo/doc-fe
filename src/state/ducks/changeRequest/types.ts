@@ -51,6 +51,7 @@ export interface ImplementationPlanTask {
   dueDate: Date;
   assigned?: User;
   createdAt: string;
+  closeDate: Date;
   status: string;
   updatedAt: string;
   closingNote: string | null;
@@ -76,6 +77,7 @@ export interface ChangeRequest {
   approvals: Approval[];
   owner: User;
   documentRevisions: any[];
+  closedAt: Date;
 }
 
 export interface Approver {
