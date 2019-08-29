@@ -8,27 +8,25 @@ export default (theme: Theme) =>
       display: "flex",
       textDecoration: "none",
       flex: 1,
-      color: "#fff",
     },
     childLink: {
       paddingLeft: theme.spacing(3),
     },
     activeLink: {
-      backgroundColor: "#fff",
-      "& .MuiListItemText-root": {
-        backgroundColor: theme.palette.secondary.main,
-        opacity: 1,
+      backgroundColor: "#29064C",
+      "& .MuiListItemText-primary": {
+        fontWeight: "bold",
       },
     },
     linkButton: {
       padding: 0,
     },
-    item: {
-      margin: theme.spacing(0, 0, 0, 0.6),
-      padding: theme.spacing(1.6, 1, 1.6, 1.8),
-      opacity: 0.5,
-      "& .MuiListItemText-primary": {
-        color: "#fff",
-      },
+    itemIcon: {
+      color: "#29064C",
+    },
+    itemText: {
+      color: "#29064C",
+      opacity: 1,
+      letterSpacing: 0,
     },
   });
