@@ -1,0 +1,50 @@
+{
+  "taskRoleArn": "<role>",
+  "containerDefinitions": [
+    {
+      "name": "<container_name>",
+      "image": "<container_image>",
+      "memoryReservation": 64,
+      "environment": [
+        {
+          "name": "REACT_APP_AWS_COGNITO_CLIENT_ID",
+          "value": ""
+        },
+        {
+          "name": "REACT_APP_FRONTEND_URL",
+          "value": ""
+        },
+        {
+          "name": "REACT_APP_SIGNUP_DOMAIN_URL",
+          "value": ""
+        },
+        {
+          "name": "REACT_APP_API_ENDPOINT",
+          "value": ""
+        },
+        {
+          "name": "REACT_APP_THEME",
+          "value": ""
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-region": "us-west-2",
+          "awslogs-stream-prefix": "doc-fe",
+          "awslogs-group": "<log_group>"
+        }
+      },
+      "portMappings": [
+        {
+          "protocol": "tcp",
+          "containerPort": 5000,
+          "hostPort": 0
+        }
+      ],
+      "dockerLabels": {},
+      "essential": true,
+      "volumesFrom": []
+    }
+  ]
+}

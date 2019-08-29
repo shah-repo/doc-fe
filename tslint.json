@@ -1,0 +1,21 @@
+{
+    "defaultSeverity": "warning",
+    "extends": [
+        "tslint:recommended",
+        "tslint-react"
+    ],
+    "jsRules": {},
+    "rules": {
+        "no-implicit-dependencies": [true, "dev"],
+        "object-literal-sort-keys": false,
+        "interface-name": false
+    },
+    "rulesDirectory": [],
+    "linterOptions": {
+        "exclude": [
+            "config/**/*.js",
+            "node_modules/**/*.ts",
+            "src/serviceWorker.ts"
+        ]
+    }
+}
