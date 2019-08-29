@@ -13,14 +13,18 @@ export default (theme: Theme) =>
     previewBox: {
       borderLeft: "1px solid #ccc",
       borderRight: "1px solid #ccc",
-      padding: theme.spacing(0, 5),
+      padding: theme.spacing(0, 3),
+      margin: 0,
+      width: "100%",
     },
     assessments: {
       padding: theme.spacing(4, 3),
+      width: "100%",
     },
     assessmentItem: {
+      marginBottom: theme.spacing(4),
       borderBottom: "1px solid " + theme.palette.text.hint,
-      marginBottom: theme.spacing(3),
+      paddingBottom: theme.spacing(2),
     },
     submitBox: {
       textAlign: "center",
@@ -30,7 +34,7 @@ export default (theme: Theme) =>
       padding: theme.spacing(3, 0),
     },
     headerContainer: {
-      padding: theme.spacing(5, 0),
+      padding: "10px 0 60px",
     },
     status: {
       color: "#fff",
@@ -58,6 +62,14 @@ export default (theme: Theme) =>
           fontFamily: "Open Sans, sans-serif",
           color: "#474747 !important",
         },
+      },
+    },
+    sidebar: {
+      "&.MuiGrid-item.MuiGrid-grid-xs-2": {
+        paddingTop: theme.spacing(12),
+      },
+      "&.MuiGrid-item.MuiGrid-grid-xs-3": {
+        paddingTop: theme.spacing(14),
       },
     },
   });

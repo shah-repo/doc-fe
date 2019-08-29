@@ -3,14 +3,14 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core";
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      width: "97%",
+      margin: theme.spacing(0, 4, 0, 2),
     },
     details: {
       overflowY: "auto",
       maxHeight: "50vw",
     },
     changeContainer: {
-      borderBottom: "1px solid lightgray",
+      borderBottom: "1px solid " + theme.palette.text.hint,
       padding: theme.spacing(1),
       background: "#fff",
     },

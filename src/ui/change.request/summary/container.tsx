@@ -91,9 +91,8 @@ export const Container: React.FunctionComponent<Props> = ({
       spacing={2}
       className={classes.whiteContainer}
     >
-      <DocumentRevisionHeader dataProp={dataProp} />
       <Grid container={true} spacing={1}>
-        <Grid item={true} xs={2}>
+        <Grid item={true} xs={2} className={classes.sidebar}>
           <SummaryPresenter
             documentsInChangeRequest={dataProp.documentRevisions}
             selectAssessmentForm={crSummary}
@@ -101,7 +100,7 @@ export const Container: React.FunctionComponent<Props> = ({
             selectedDocumentRevision={docRev ? docRev.id : null}
           />
         </Grid>
-        <Grid item={true} xs={7}>
+        <Grid item={true} xs={7} className={classes.root}>
           {docRev && (
             <DocumentRevisionSummaryPresenter
               dataProp={{ ...docRev, changeRequest: dataProp }}
@@ -109,7 +108,7 @@ export const Container: React.FunctionComponent<Props> = ({
           )}
           {!docRev && summaryFormikRenderer()}
         </Grid>
-        <Grid item={true} xs={3}>
+        <Grid item={true} xs={3} className={classes.sidebar}>
           {docRev && (
             <DocumentRevisionAuditContainer documentRevisionId={docRev.id} />
           )}
