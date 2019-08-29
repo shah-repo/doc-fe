@@ -31,12 +31,16 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
           <div key={documentRevision.id} className={classes.linkContainer}>
             <NavLink
               to={link}
-              activeStyle={{ color: "gray" }}
+              activeStyle={{ color: "#0066FF", background: "#f0f0f0" }}
               className={classes.linkTitle}
             >
               <div>
                 <Text translation="documentRevision.version" />{" "}
-                {generateVersionNumber(documentRevision.revision, documentRevision.revisionStage)} - {documentRevision.status}
+                {generateVersionNumber(
+                  documentRevision.revision,
+                  documentRevision.revisionStage,
+                )}{" "}
+                - {documentRevision.status}
               </div>
             </NavLink>
             <NavLink
@@ -50,7 +54,11 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
               </div>
               <div>
                 <Text translation="documentRevision.released" />:{" "}
-                <Date value={documentRevision.obsoletedAt || documentRevision.releasedAt} />
+                <Date
+                  value={
+                    documentRevision.obsoletedAt || documentRevision.releasedAt
+                  }
+                />
               </div>
             </NavLink>
           </div>

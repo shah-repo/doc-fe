@@ -13,14 +13,18 @@ export default (theme: Theme) =>
     previewBox: {
       borderLeft: "1px solid #ccc",
       borderRight: "1px solid #ccc",
-      padding: theme.spacing(0, 5),
+      padding: theme.spacing(0, 3),
+      margin: 0,
+      width: "100%",
     },
     assessments: {
       padding: theme.spacing(4, 3),
+      width: "100%",
     },
     assessmentItem: {
+      marginBottom: theme.spacing(4),
       borderBottom: "1px solid " + theme.palette.text.hint,
-      marginBottom: theme.spacing(3),
+      paddingBottom: theme.spacing(2),
     },
     submitBox: {
       textAlign: "center",
@@ -30,13 +34,16 @@ export default (theme: Theme) =>
       padding: theme.spacing(3, 0),
     },
     headerContainer: {
-      padding: theme.spacing(5, 0),
+      padding: "10px 0 60px",
     },
     status: {
       color: "#fff",
       background: theme.palette.text.hint,
-      padding: "20px 25px",
+      padding: theme.spacing(2.2, 0.2),
+      minWidth: "110px",
       borderRadius: "60px",
+      textAlign: "center",
+      fontSize: "0.7rem",
     },
     crId: {
       color: theme.palette.text.hint,
@@ -50,14 +57,22 @@ export default (theme: Theme) =>
     },
     taskBasicInformation: {},
     taskDescription: {
-      margin: theme.spacing(1, 0, 3),
+      "margin": theme.spacing(1, 0, 3),
       "&.ql-container.ql-snow": {
-        border: 0,
+        "border": 0,
         "& .ql-editor": {
           padding: 0,
           fontFamily: "Open Sans, sans-serif",
           color: "#474747 !important",
         },
+      },
+    },
+    sidebar: {
+      "&.MuiGrid-item.MuiGrid-grid-xs-2": {
+        paddingTop: theme.spacing(12),
+      },
+      "&.MuiGrid-item.MuiGrid-grid-xs-3": {
+        paddingTop: theme.spacing(14),
       },
     },
   });
