@@ -80,19 +80,32 @@ const ImplementationPlan: React.FunctionComponent<Props> = ({
           <Grid item xs={4}>
             <Typography variant="body2">
               <Text message="common.due.date" />:{" "}
-              <Text message={getFormattedDateString(task.dueDate)} />
             </Typography>
+            <Box>
+              <Typography variant="body2">
+                <Text message={getFormattedDateString(task.dueDate)} />
+              </Typography>
+            </Box>
           </Grid>
           <Grid item xs={4}>
             <Typography variant="body2">
               <Text message="common.assigned.to" />:{" "}
-              {task.assigned && task.assigned.name}
             </Typography>
+            <Box>
+              <Typography variant="body2">
+                {task.assigned && task.assigned.name}
+              </Typography>
+            </Box>
           </Grid>
           <Grid item xs={4}>
             <Typography variant="body2">
-              <Text message="common.state" />: <Text message={task.status} />
+              <Text message="common.state" />:
             </Typography>
+            <Box>
+              <Typography variant="body2">
+                <Text message={task.status} />
+              </Typography>
+            </Box>
           </Grid>
         </Grid>
         {task.closingNote && (

@@ -16,7 +16,7 @@ export default (theme: Theme) =>
     activeLink: {
       backgroundColor: "#fff",
       "& .MuiListItemText-root": {
-        backgroundColor: theme.palette.secondary.main,
+        backgroundColor: theme.palette.secondary.dark,
         opacity: 1,
       },
     },

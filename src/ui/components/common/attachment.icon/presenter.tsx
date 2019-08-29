@@ -12,7 +12,9 @@ import FileIcon from "./icon";
 import { styles } from "./utils/styles";
 import { AttachmentIconProps } from "./utils/types";
 
-export const AttachmentIconPresenter: React.FunctionComponent<AttachmentIconProps> = ({
+export const AttachmentIconPresenter: React.FunctionComponent<
+  AttachmentIconProps
+> = ({
   attachment,
   size,
   handleRemove,
@@ -34,7 +36,7 @@ export const AttachmentIconPresenter: React.FunctionComponent<AttachmentIconProp
       xs={12}
       sm={4}
       md={2}
-      style={{ marginBottom: 25 }}
+      style={{ marginBottom: 5 }}
     >
       <Box className={classes.closeRoot}>
         <IconButton

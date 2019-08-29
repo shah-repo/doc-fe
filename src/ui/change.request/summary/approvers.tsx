@@ -16,11 +16,9 @@ type Props = DataProps<Approval[]> & WithStyles<typeof styles>;
 const Approvers: React.FunctionComponent<Props> = ({ classes, dataProp }) => {
   const approvalRenderer = () =>
     dataProp.map((approval, index) => (
-      <SummaryField
-        key={index}
-        label={approval.approver.name}
-        value={approval.status}
-      />
+      <Typography variant="h6">
+        <Text message={approval.approver.name} />:
+      </Typography>
     ));
 
   return (

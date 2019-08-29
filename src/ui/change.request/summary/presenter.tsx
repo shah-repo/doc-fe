@@ -61,8 +61,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         container={true}
         spacing={4}
         direction="column"
-        className={classes.previewBox}
-      >
+        className={classes.previewBox}>
         <Grid item xs={12} className={classes.box}>
           <SummaryFieldWithHtml
             label="cr.description"
@@ -87,8 +86,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
           item={true}
           container={true}
           alignItems="flex-end"
-          direction="column"
-        >
+          direction="column">
           {canEdit && <FormProgress asyncState={asyncState} />}
           {canEdit && submitButtonRenderer()}
           <ControlsContainer changeRequest={dataProp} />
