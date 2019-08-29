@@ -17,6 +17,7 @@ export const styles = makeStyles((theme: Theme) =>
     auditValue: {
       color: theme.palette.primary.main,
       fontWeight: 500,
+      wordBreak: "break-word",
     },
     owner: {
       color: theme.palette.text.primary,

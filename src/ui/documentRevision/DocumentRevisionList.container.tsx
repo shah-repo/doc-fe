@@ -20,7 +20,7 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
   const classes = styles();
 
   return (
-    <React.Fragment>
+    <div className={classes.container}>
       {documentRevisions.map((documentRevision) => {
         const link = generateDocumentRevisionVersionPath(
           documentRevision.id,
@@ -64,7 +64,7 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
           </div>
         );
       })}
-    </React.Fragment>
+    </div>
   );
 };
 

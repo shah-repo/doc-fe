@@ -25,8 +25,9 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<
 
   return (
     <div
-      className={
-        classNames(classes.container, { [classes.selected]: isSelected })}
+      className={classNames(classes.container, {
+        [classes.selected]: isSelected,
+      })}
     >
       <Grid container={true}>
         <Grid item={true} xs={10}>
@@ -40,7 +41,10 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<
             <div>
               <Text translation="common.version" />
               :&nbsp;
-              {generateVersionNumber(documentRevision.revision, documentRevision.revisionStage)}
+              {generateVersionNumber(
+                documentRevision.revision,
+                documentRevision.revisionStage,
+              )}
             </div>
             <div>
               <Text translation="common.created" />
@@ -48,10 +52,10 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<
               <Date value={documentRevision.createdAt} />
             </div>
             <div>
-             <Text translation="common.documentId" />
-             :&nbsp;
-             {documentRevision.document.docId}
-           </div>
+              <Text translation="common.documentId" />
+              :&nbsp;
+              {documentRevision.document.docId}
+            </div>
           </div>
         </Grid>
         <Grid item={true} xs={1}>

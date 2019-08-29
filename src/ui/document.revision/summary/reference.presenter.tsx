@@ -38,7 +38,7 @@ const ReferencePresenter: React.FunctionComponent<Props> = ({
       const notDeprecated =
         reference.status !== DocumentRevisionStatus.Deprecated;
       return (
-        <React.Fragment key={reference.id}>
+        <Grid item key={reference.id}>
           {notDeprecated && (
             <ListItem>
               <Grid item={true} xs={12}>
@@ -51,7 +51,7 @@ const ReferencePresenter: React.FunctionComponent<Props> = ({
               </Grid>
             </ListItem>
           )}
-        </React.Fragment>
+        </Grid>
       );
     });
 

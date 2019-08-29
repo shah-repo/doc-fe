@@ -86,8 +86,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
           item={true}
           container={true}
           alignItems="flex-end"
-          direction="column"
-        >
+          direction="column">
           {canEdit && <FormProgress asyncState={asyncState} />}
           {canEdit && submitButtonRenderer()}
           <ControlsContainer changeRequest={dataProp} />
