@@ -31,6 +31,22 @@ export enum AssessmentReasoningOption {
   statement_3 = "Statement 3",
 }
 
+export enum RegulatoryAssessmentReasoningOption {
+  no_approvals = "No current product approvals",
+  no_submissions = "No current submissions",
+  not_certified = "Quality System not certified",
+}
+
+export type AssessmentReasoningType = {
+  [key in AssessmentType]: any;
+};
+
+export const AssessmentReasoningOptionn: AssessmentReasoningType = {
+  design: AssessmentReasoningOption,
+  process: AssessmentReasoningOption,
+  regulatory: RegulatoryAssessmentReasoningOption,
+};
+
 export interface AssessmentProps {
   form: FormikProps<ChangeRequestFormValues>;
 }
