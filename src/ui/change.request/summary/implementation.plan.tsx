@@ -62,16 +62,14 @@ const ImplementationPlan: React.FunctionComponent<Props> = ({
         item={true}
         xs={12}
         key={`${task.id} ${index}`}
-        className={classes.taskContainer}
-      >
+        className={classes.taskContainer}>
         <Typography variant="h5">
           <Text message={task.title} />
         </Typography>
         <ReactQuill
           readOnly={true}
           value={sanitizeHtml(task.description)}
-          modules={{ toolbar: false }}
-        >
+          modules={{ toolbar: false }}>
           <div className={classes.taskDescription} />
         </ReactQuill>
         <Grid container={true} className={classes.taskBasicInformation}>
@@ -98,12 +96,15 @@ const ImplementationPlan: React.FunctionComponent<Props> = ({
           <Grid item={true} xs={4}>
             <Typography variant="body2">
               <Text message="common.state" />:
-              <Text message={task.status} />
-              {task.closeDate && <Text message={`, ${getFormattedDateString(task.closeDate)}`} />}
             </Typography>
             <Box>
               <Typography variant="body2">
                 <Text message={task.status} />
+                {task.closeDate && (
+                  <Text
+                    message={`, ${getFormattedDateString(task.closeDate)}`}
+                  />
+                )}
               </Typography>
             </Box>
           </Grid>
