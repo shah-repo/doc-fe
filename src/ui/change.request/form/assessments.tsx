@@ -37,7 +37,7 @@ const Assessments: React.FunctionComponent<Props> = ({ form }) => {
           />
           <EditableSelectField
             name={`assessments.${type}.reasoning`}
-            options={assessmentStatementOption()}
+            options={assessmentStatementOption(type)}
             includeEmpty={true}
           />
           <AttachmentIconField name={`assessments.${type}.attachments`} />
