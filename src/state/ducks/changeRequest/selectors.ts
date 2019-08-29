@@ -1,7 +1,6 @@
 import _ from "lodash";
 import { createSelector } from "reselect";
-import striptags from "striptags";
-import { stripTagsFromObject } from "../../../common/utils/helpers";
+import { stripTagsFromObject, stripTags } from "../../../common/utils/helpers";
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
@@ -64,7 +63,7 @@ const makeGetAudit = () => {
             case "tasks.description":
             case "description":
               const html = audit.nextValue as string;
-              audit.nextValue = striptags(html).substring(0, 100);
+              audit.nextValue = stripTags(html).substring(0, 100);
               return audit;
             default:
               return audit;

@@ -1,13 +1,12 @@
 import _ from "lodash";
 import { createSelector } from "reselect";
-import striptags from "striptags";
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
 import { DocumentRevisionFormValues } from "../../../ui/documentRevision/forms/types";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
 import { Audit, AuditGroupType } from "../audit/types";
 import { DocumentRevisionStatus } from "./types";
-import { stripTagsFromObject } from "../../../common/utils/helpers";
+import { stripTagsFromObject, stripTags } from "../../../common/utils/helpers";
 
 const allIds = (state: ApplicationState) => state.documentRevisions.allIds;
 const byId = (state: ApplicationState) => state.documentRevisions.byId;
@@ -107,7 +106,7 @@ const makeGetAudit = () => {
         audits[groupId].map((audit: Audit) => {
           if (audit.field === "description") {
             const html = audit.nextValue as string;
-            audit.nextValue = striptags(html).substring(0, 30);
+            audit.nextValue = stripTags(html).substring(0, 30);
           }
         });
       });
