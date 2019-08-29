@@ -13,6 +13,7 @@ export const styles = makeStyles((theme) => ({
     "borderRadius": 0,
     "& input": {
       background: "transparent",
+      border: "none",
     },
   },
   selectField: {
