@@ -1,4 +1,3 @@
-
 export enum ApprovalStatus {
   Pending = "PENDING",
   Approved = "APPROVED",
@@ -31,6 +30,6 @@ export type RenderSize = "sm" | "md" | "lg";
 
 export enum TypographySize {
   sm = "subtitle1",
-  md = "h5",
+  md = "h6",
   lg = "h4",
 }

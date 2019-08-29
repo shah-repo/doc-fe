@@ -3,7 +3,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core";
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      width: "97%",
+      margin: theme.spacing(0, 4, 0, 2),
     },
     details: {
       overflowY: "auto",
@@ -11,13 +11,14 @@ export const styles = makeStyles((theme: Theme) =>
     },
     changeContainer: {
       borderBottom: "1px solid lightgray",
-      marginBottom: 5,
+      margin: "0 5px 5px",
       padding: theme.spacing(1),
       background: "#fff",
     },
     auditValue: {
       color: theme.palette.primary.main,
       fontWeight: 500,
+      wordBreak: "break-word",
     },
     owner: {
       color: theme.palette.text.primary,
