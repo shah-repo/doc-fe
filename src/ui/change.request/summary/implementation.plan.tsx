@@ -8,8 +8,9 @@ import {
   withStyles,
 } from "@material-ui/core";
 import React from "react";
-import AttachmentIconField from "../../components/common/attachment.icon/container";
+import ReactQuill from "react-quill";
 import { getFormattedDateString } from "../../../common/utils/date";
+import { sanitizeHtml } from "../../../common/utils/helpers";
 import {
   changeRequestsActions,
   ChangeRequestStatus,
@@ -18,14 +19,11 @@ import {
 } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
 import SummaryField from "../../common/summary/base";
-import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
-import FileCard from "../../components/cards/FileCard";
+import AttachmentIconField from "../../components/common/attachment.icon/container";
 import Text from "../../components/Text";
 import { canCloseTask } from "../utils/helpers";
 import CloseTask from "./close.task";
 import styles from "./styles";
-import ReactQuill from "react-quill";
-import { sanitizeHtml } from "../../../common/utils/helpers";
 
 interface OwnProps extends DataProps<Model> {
   currentUserEmail: string;
@@ -61,7 +59,7 @@ const ImplementationPlan: React.FunctionComponent<Props> = ({
   const taskRenderer = () =>
     tasks.map((task, index) => (
       <Grid
-        item
+        item={true}
         xs={12}
         key={`${task.id} ${index}`}
         className={classes.taskContainer}
@@ -77,7 +75,7 @@ const ImplementationPlan: React.FunctionComponent<Props> = ({
           <div className={classes.taskDescription} />
         </ReactQuill>
         <Grid container={true} className={classes.taskBasicInformation}>
-          <Grid item xs={4}>
+          <Grid item={true} xs={4}>
             <Typography variant="body2">
               <Text message="common.due.date" />:{" "}
             </Typography>
@@ -87,7 +85,7 @@ const ImplementationPlan: React.FunctionComponent<Props> = ({
               </Typography>
             </Box>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item={true} xs={4}>
             <Typography variant="body2">
               <Text message="common.assigned.to" />:{" "}
             </Typography>
@@ -97,9 +95,11 @@ const ImplementationPlan: React.FunctionComponent<Props> = ({
               </Typography>
             </Box>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item={true} xs={4}>
             <Typography variant="body2">
               <Text message="common.state" />:
+              <Text message={task.status} />
+              {task.closeDate && <Text message={`, ${getFormattedDateString(task.closeDate)}`} />}
             </Typography>
             <Box>
               <Typography variant="body2">
@@ -116,7 +116,7 @@ const ImplementationPlan: React.FunctionComponent<Props> = ({
     ));
 
   return (
-    <Grid item xs={12} className={classes.box}>
+    <Grid item={true} xs={12} className={classes.box}>
       <Typography variant="h6">
         <Text translation="common.implementation.plan" />
       </Typography>
