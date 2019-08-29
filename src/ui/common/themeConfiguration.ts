@@ -8,6 +8,7 @@ const defaultPaletteOptions = {
     contrastText: "#fff",
   },
   secondary: {
+    light: "#B3F9F5",
     dark: "#29064C",
     main: "#6E09EA",
     contrastText: "#fff",
@@ -29,6 +30,7 @@ const devPaletteOptions = {
     dark: "#FFCA00",
     main: "#EBBA00",
     contrastText: "#29064C",
+    light: "#0066FF",
   },
 };
 
