@@ -33,37 +33,28 @@ const iconMapping: IconObject = {
 const NavigationLinkPresenter: React.FunctionComponent<
   NavigationLinkPresenterProps
 > = ({ classes, url, text, Icon, ActionIcon, isChild }) => (
-  <ListItem button={true} className={classes.linkButton}>
-    <NavLink
-      to={url}
-      exact={true}
-      className={classNames(classes.link, { [classes.childLink]: isChild })}
-      activeClassName={classes.activeLink}
+  <NavLink
+    to={url}
+    exact={true}
+    className={classNames(classes.link, { [classes.childLink]: isChild })}
+    activeClassName={classes.activeLink}
+  >
+    <ListItem
+      button
+      className={classes.itemButton}
     >
-      <ListItem
-        button
-        style={{
-          marginLeft: 5,
-          backgroundColor: "#FFCA00"
-        }}
+      <ListItemIcon
+        className={classes.itemIcon}
       >
-        <ListItemIcon
-          style={{
-            color: "#29064C",
-          }}
-        >
-          {iconMapping[url]}
-        </ListItemIcon>
-        <ListItemText
-          primary={<Text translation={text} />}
-          style={{
-            color: "#29064C",
-          }}
-        />
-      </ListItem>
-      {ActionIcon}
-    </NavLink>
-  </ListItem>
+        {iconMapping[url]}
+      </ListItemIcon>
+      <ListItemText
+        primary={<Text translation={text} />}
+        className={classes.itemText}
+      />
+    </ListItem>
+    {ActionIcon}
+  </NavLink>
 );
 
 export default withStyles(styles)(NavigationLinkPresenter);
