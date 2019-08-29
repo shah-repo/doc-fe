@@ -50,7 +50,9 @@ const NavigationLinkPresenter: React.FunctionComponent<
       </ListItemIcon>
       <ListItemText
         primary={<Text translation={text} />}
-        className={classes.itemText}
+        classes={{
+          primary: classes.itemText
+        }}
       />
     </ListItem>
     {ActionIcon}
