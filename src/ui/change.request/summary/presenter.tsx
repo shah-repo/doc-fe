@@ -2,7 +2,6 @@ import {
   Box,
   Grid,
   ListItem,
-  Typography,
   WithStyles,
   withStyles,
 } from "@material-ui/core";
@@ -14,18 +13,15 @@ import {
 import { DataProps } from "../../../state/ducks/common";
 import { AsyncState } from "../../../state/types";
 import ControlsContainer from "../../changeRequest/forms/assessmentForm/AssessmentFormControls.container";
-import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import FormProgress from "../../components/forms/FormProgress";
 import SubmitButton from "../../components/forms/SubmitButton";
-import Text from "../../components/Text";
 import ApproversField from "../form/approvers";
 import ApproversSummary from "./approvers";
 import Assessment from "./assessment";
 import ImplementationPlan from "./implementation.plan";
 import Justification from "./justification";
 import styles from "./styles";
-import { getFormattedDateString } from "../../../common/utils/date";
 
 interface OwnProps extends DataProps<ChangeRequest> {
   asyncState: AsyncState;
