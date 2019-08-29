@@ -19,6 +19,7 @@ import SubmitButton from "../../components/forms/SubmitButton";
 import ApproversField from "../form/approvers";
 import ApproversSummary from "./approvers";
 import Assessment from "./assessment";
+import ChangeRequestHeader from "./header";
 import ImplementationPlan from "./implementation.plan";
 import Justification from "./justification";
 import styles from "./styles";
@@ -54,27 +55,33 @@ export const Presenter: React.FunctionComponent<Props> = ({
 
   return (
     <Box>
-      <Box className={classes.previewBox}>
-        <Grid container={true} spacing={4} direction="column">
-          <Grid item xs={12} className={classes.box}>
-            <SummaryFieldWithHtml
-              label="cr.description"
-              value={dataProp.description}
-            />
-          </Grid>
-
-          <Justification dataProp={dataProp.justifications} />
-          <Assessment dataProp={dataProp.assessments} />
-          <ImplementationPlan
-            dataProp={dataProp.implementationPlan}
-            currentUserEmail={currentUserEmail}
-            crStatus={dataProp.state}
-            closeTask={closeTask}
-            crId={dataProp.id}
+      <ChangeRequestHeader dataProp={dataProp} />
+      <Grid
+        container={true}
+        spacing={4}
+        direction="column"
+        className={classes.previewBox}
+      >
+        <Grid item={true} xs={12} className={classes.box}>
+          <SummaryFieldWithHtml
+            label="cr.description"
+            value={dataProp.description}
           />
-          {canEdit && approversFieldRenderer()}
-          {!canEdit && <ApproversSummary dataProp={dataProp.approvals} />}
         </Grid>
+
+        <Justification dataProp={dataProp.justifications} />
+        <Assessment dataProp={dataProp.assessments} />
+        <ImplementationPlan
+          dataProp={dataProp.implementationPlan}
+          currentUserEmail={currentUserEmail}
+          crStatus={dataProp.state}
+          closeTask={closeTask}
+          crId={dataProp.id}
+        />
+        {canEdit && approversFieldRenderer()}
+        {!canEdit && <ApproversSummary dataProp={dataProp.approvals} />}
+      </Grid>
+      <Box className={classes.submitBox} p={4}>
         <Grid
           item={true}
           container={true}

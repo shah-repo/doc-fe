@@ -69,7 +69,9 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
     if (deprecatedAt) {
       const depreactedAtDate = moment(deprecatedAt);
       const indexOfLastReleased = _.findLastIndex(documentRevisions, (doc) => {
-        if (!doc.releasedAt) { return false; }
+        if (!doc.releasedAt) {
+          return false;
+        }
 
         return moment(doc.releasedAt).isSameOrBefore(depreactedAtDate);
       });
@@ -84,8 +86,8 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
   }
 
   return (
-    <Grid container={true} spacing={10} className={classes.whiteContainer}>
-      <Grid item={true} xs={3}>
+    <Grid container={true} spacing={2} className={classes.whiteContainer}>
+      <Grid item={true} xs={2} className={classes.sidebar}>
         <AsyncGate
           asyncState={loadDocumentAsyncState}
           asyncAction={loadDocumentAction}
@@ -97,7 +99,7 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
           />
         </AsyncGate>
       </Grid>
-      <Grid item={true} xs={6}>
+      <Grid item={true} xs={7}>
         {documentRevisionId && (
           <DocumentRevisionDisplayContainer
             documentRevisionId={documentRevisionId}
@@ -105,7 +107,7 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
           />
         )}
       </Grid>
-      <Grid item={true} xs={3}>
+      <Grid item={true} xs={3} className={classes.sidebar}>
         {documentRevisionId && (
           <DocumentRevisionAuditContainer
             documentRevisionId={documentRevisionId}

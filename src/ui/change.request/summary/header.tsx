@@ -18,7 +18,7 @@ type Props = DataProps<ChangeRequest> & WithStyles<typeof styles>;
 export const Header: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
-  dataProp: { state, closedAt},
+  dataProp: { state, closedAt },
 }) => {
 
   const status = (
@@ -35,16 +35,15 @@ export const Header: React.FunctionComponent<Props> = ({
       spacing={4}
       className={classes.headerContainer}
     >
-      <Grid item={true} xs={2} alignItems="center" />
-      <Grid item={true} xs={2} alignItems="center">
+      <Grid item={true} xs={3} alignItems="center">
         <Chip label={status} className={classes.status} />
       </Grid>
-      <Grid item={true} xs={3} alignItems="center">
+      <Grid item={true} xs={6} alignItems="center">
         <Typography variant="h6" align="center">
           {dataProp.title}
         </Typography>
       </Grid>
-      <Grid item={true} xs={2} alignItems="center">
+      <Grid item={true} xs={3} alignItems="center">
         <Typography variant="h6" align="right" className={classes.crId}>
           <Text translation="common.crid" />: {dataProp.crId}
         </Typography>

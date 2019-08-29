@@ -33,12 +33,10 @@ const Approvers: React.FunctionComponent<Props> = ({ classes, dataProp }) => {
   });
 
   return (
-    <Box className={classes.box}>
-      <ListItem>
-        <Typography variant="h6">
-          <Text translation="common.approvers" />:
-        </Typography>
-      </ListItem>
+    <Box className={classes.box} p={4}>
+      <Typography variant="h6">
+        <Text translation="common.approvers" />
+      </Typography>
       {approvalRenderer()}
     </Box>
   );

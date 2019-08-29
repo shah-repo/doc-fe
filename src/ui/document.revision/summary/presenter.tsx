@@ -4,6 +4,7 @@ import {
   Typography,
   WithStyles,
   withStyles,
+  Grid,
 } from "@material-ui/core";
 import { Formik } from "formik";
 import React from "react";
@@ -16,6 +17,7 @@ import ControlsContainer from "../../documentRevision/PreviewControls.container"
 import Attachment from "./attachment";
 import ChangeRequestLink from "./changeRequestLink";
 import ReferenceContainer from "./reference.container";
+import DocumentHeader from "./header";
 import styles from "./styles";
 
 interface OwnProps {
@@ -27,33 +29,39 @@ type Props = OwnProps & DataProps<DocumentRevision> & WithStyles<typeof styles>;
 export const Presenter: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
-  dataProp: { document, attachments, status, name, referenceTo, deprecatedAt, description },
+  dataProp: {
+    document,
+    attachments,
+    status,
+    name,
+    referenceTo,
+    deprecatedAt,
+    description,
+  },
   canShowCreateVersionButton,
 }) => {
-
-  const onSubmit = () => void(0);
+  const onSubmit = () => void 0;
 
   const contentRenderer = () => (
     <Box>
-      <Box className={classes.previewBox}>
+      <DocumentHeader dataProp={dataProp} />
+      <Grid
+        container={true}
+        className={classes.previewBox}
+        spacing={4}
+        direction="column"
+      >
         <ChangeRequestLink dataProp={dataProp} />
-        <ListItem>
-          <Typography variant="h5">
-            <Text translation="document.revision.list.docId" />:{" "}
-            {document.docId}
-          </Typography>
-        </ListItem>
-        <SummaryField label="common.status" value={status} />
-        <SummaryField label="common.type" value={document.type} />
         <SummaryField label="document.title" value={name} />
-        <SummaryFieldWithHtml label="cr.description" value={description} />
+        <SummaryFieldWithHtml label="common.description" value={description} />
         {referenceTo && (
           <ReferenceContainer
             dataProp={referenceTo}
             isReferenceTo={true}
             status={status}
             deprecatedAt={deprecatedAt}
-          />)}
+          />
+        )}
         {document.referencedBy && (
           <ReferenceContainer
             dataProp={document.referencedBy}
@@ -61,9 +69,12 @@ export const Presenter: React.FunctionComponent<Props> = ({
           />
         )}
         {attachments && <Attachment />}
-      </Box>
+      </Grid>
       <Box className={classes.submitBox}>
-        <ControlsContainer documentRevision={dataProp} canShowCreateVersionButton={canShowCreateVersionButton} />
+        <ControlsContainer
+          documentRevision={dataProp}
+          canShowCreateVersionButton={canShowCreateVersionButton}
+        />
       </Box>
     </Box>
   );
