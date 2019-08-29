@@ -111,8 +111,22 @@ const defaultThemeOptions: ThemeOptions = {
       root: {
         fontSize: "0.8rem",
       },
+      head: {
+        fontSize: "0.81rem",
+        fontWeight: 500,
+        background: defaultPaletteOptions.primary.main,
+        color: defaultTheme.palette.common.white,
+      },
+    },
+    MuiInputBase: {
+      root: {
+        fontSize: "0.8rem",
+      },
     },
     MuiSelect: {
+      root: {
+        fontSize: "0.8rem",
+      },
       icon: {
         right: "10px",
       },
@@ -124,6 +138,11 @@ const defaultThemeOptions: ThemeOptions = {
         overflowWrap: "break-word",
         wordWrap: "break-word",
         hyphens: "auto",
+      },
+    },
+    MuiMenuItem: {
+      root: {
+        fontSize: "0.8rem",
       },
     },
     MuiListItemText: {

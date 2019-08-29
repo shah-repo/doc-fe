@@ -124,7 +124,7 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
         deferredMeasurementCache={measurerCache}
         rowCount={state.queryData.length}
         className={classes.table}
-        rowClassName={rowClassName}
+        rowClassName={classes.row}
         headerClassName={classes.header}
         rowGetter={rowGetter}
         noRowsRenderer={noRowsRenderer}

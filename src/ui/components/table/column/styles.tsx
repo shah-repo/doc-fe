@@ -3,20 +3,12 @@ import { createStyles, makeStyles, Theme, withStyles } from "@material-ui/core/s
 
 export const StyledTableHeader = withStyles((theme) => ({
   head: {
-    // *TO DO: theming palette
-    // backgroundColor: theme.palette.common.black,
-    "backgroundColor": "#aeb8d6",
-    "color": theme.palette.common.white,
     "display": "flex",
     "margin": 0,
     "padding": "0!important",
     "& .columnBox": {
       "display": "column",
       "flex": 1,
-      "& .headerText": {
-        padding: theme.spacing(2),
-        color: theme.palette.common.white,
-      },
       "& .headerField": {
         backgroundColor: "#e8e9ed",
         padding: theme.spacing(0, 1),
@@ -46,7 +38,7 @@ export const StyledTableCell = withStyles((theme) => ({
 
 export const StyledCellLink = withStyles((theme) => ({
   root: {
-    color: "#c42127",
+    color: theme.palette.primary.main,
     cursor: "pointer",
   },
 }))(Link);
