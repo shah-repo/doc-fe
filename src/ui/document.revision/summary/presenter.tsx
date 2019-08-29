@@ -1,10 +1,9 @@
 import {
   Box,
-  ListItem,
+  Grid,
   Typography,
   WithStyles,
   withStyles,
-  Grid,
 } from "@material-ui/core";
 import { Formik } from "formik";
 import React from "react";
@@ -12,7 +11,6 @@ import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
-import Text from "../../components/Text";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
 import Attachment from "./attachment";
 import ChangeRequestLink from "./changeRequestLink";
@@ -49,8 +47,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         container={true}
         className={classes.previewBox}
         spacing={4}
-        direction="column"
-      >
+        direction="column">
         <ChangeRequestLink dataProp={dataProp} />
         <SummaryField label="document.title" value={name} />
         <SummaryFieldWithHtml label="common.description" value={description} />

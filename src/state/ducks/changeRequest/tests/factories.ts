@@ -59,6 +59,7 @@ export const getChangeRequest = (changeRequest: Partial<ChangeRequest> = {}): Ch
   approvals: [],
   owner: getUser({ id: faker.random.uuid(), email: "test@email.com" }),
   documentRevisions: [],
+  closedAt: faker.date.future(undefined, "2019-05-31"),
   ...changeRequest,
 });
 

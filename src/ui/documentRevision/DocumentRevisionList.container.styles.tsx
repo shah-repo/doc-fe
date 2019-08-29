@@ -8,7 +8,6 @@ export const styles = makeStyles((theme: Theme) =>
     linkContainer: {
       borderBottom: "1px solid " + theme.palette.text.hint,
       padding: theme.spacing(2),
-      margin: theme.spacing(1),
     },
     linkTitle: {
       color: theme.palette.text.primary,

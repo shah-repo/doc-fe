@@ -105,7 +105,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
   const headerRenderer = () => (
     <StyledTableHeader component="div" variant="head" >
       <Box component="div" className="columnBox" >
-        <Typography variant="subtitle2" className="headerText">
+        <Typography variant="subtitle1" className="headerText">
           <Text message={label} />
         </Typography>
         {searchable && <Box component="div" className="headerField">{searchFieldRenderer()}</Box>}

@@ -10,7 +10,6 @@ export const StyledTableHeader = withStyles((theme) => ({
     "display": "flex",
     "margin": 0,
     "padding": "0!important",
-    "fontSize": 14,
     "& .columnBox": {
       "display": "column",
       "flex": 1,

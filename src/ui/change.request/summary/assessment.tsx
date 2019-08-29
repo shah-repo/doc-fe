@@ -1,4 +1,10 @@
-import { Grid, Typography, WithStyles, withStyles } from "@material-ui/core";
+import {
+  Grid,
+  Typography,
+  WithStyles,
+  withStyles,
+  Box,
+} from "@material-ui/core";
 import React from "react";
 import {
   Assessment as Model,
@@ -19,32 +25,23 @@ const Assessment: React.FunctionComponent<Props> = ({ classes, dataProp }) => {
   );
 
   const reasoningRenderer = (item: AssessmentItem) => (
-    <Grid item={true} xs={12}>
-      <Typography variant="subtitle1">{`${item.reasoning}` || "—"}</Typography>
-    </Grid>
+    <Box>
+      <Typography variant="subtitle1">
+        <Text message={`${item.reasoning}` || "—"} />
+      </Typography>
+    </Box>
   );
 
   const itemRenderer = () =>
     Object.values(AssessmentType).map((type, index) => {
       const item = dataProp[type as keyof typeof AssessmentType];
       return (
-        <Grid
-          item={true}
-          xs={12}
-          key={`${item}-${index}`}
-          className={classes.assessmentItem}
-        >
-          <Grid item={true} xs={12}>
-            <Typography variant="h5">
-              <Text message={`common.${type}`} />
-            </Typography>
-          </Grid>
+        <Grid key={`${item}-${index}`} className={classes.assessmentItem}>
+          <Typography variant="h5">
+            <Text message={`change.request.${type}.assessment`} />
+          </Typography>
           {item.reasoning && reasoningRenderer(item)}
-          {item.attachments!.length > 0 && (
-            <Grid item={true} xs={12}>
-              {attachmentRenderer(type)}
-            </Grid>
-          )}
+          {item.attachments!.length > 0 && attachmentRenderer(type)}
         </Grid>
       );
     });
@@ -57,7 +54,9 @@ const Assessment: React.FunctionComponent<Props> = ({ classes, dataProp }) => {
             <Text translation="common.assessments" />
           </Typography>
         </Grid>
-        <Grid className={classes.assessments}>{itemRenderer()}</Grid>
+        <Grid item className={classes.assessments}>
+          {itemRenderer()}
+        </Grid>
       </Grid>
     </Grid>
   );

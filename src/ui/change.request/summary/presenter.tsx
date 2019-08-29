@@ -2,7 +2,6 @@ import {
   Box,
   Grid,
   ListItem,
-  Typography,
   WithStyles,
   withStyles,
 } from "@material-ui/core";
@@ -20,10 +19,10 @@ import SubmitButton from "../../components/forms/SubmitButton";
 import ApproversField from "../form/approvers";
 import ApproversSummary from "./approvers";
 import Assessment from "./assessment";
+import ChangeRequestHeader from "./header";
 import ImplementationPlan from "./implementation.plan";
 import Justification from "./justification";
 import styles from "./styles";
-import ChangeRequestHeader from "./header";
 
 interface OwnProps extends DataProps<ChangeRequest> {
   asyncState: AsyncState;
@@ -63,7 +62,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         direction="column"
         className={classes.previewBox}
       >
-        <Grid item xs={12} className={classes.box}>
+        <Grid item={true} xs={12} className={classes.box}>
           <SummaryFieldWithHtml
             label="cr.description"
             value={dataProp.description}
@@ -87,8 +86,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
           item={true}
           container={true}
           alignItems="flex-end"
-          direction="column"
-        >
+          direction="column">
           {canEdit && <FormProgress asyncState={asyncState} />}
           {canEdit && submitButtonRenderer()}
           <ControlsContainer changeRequest={dataProp} />

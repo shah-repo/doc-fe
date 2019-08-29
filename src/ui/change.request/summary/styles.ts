@@ -39,8 +39,11 @@ export default (theme: Theme) =>
     status: {
       color: "#fff",
       background: theme.palette.text.hint,
-      padding: "20px 25px",
+      padding: theme.spacing(2.2, 0.2),
+      minWidth: "110px",
       borderRadius: "60px",
+      textAlign: "center",
+      fontSize: "0.7rem",
     },
     crId: {
       color: theme.palette.text.hint,
@@ -54,9 +57,9 @@ export default (theme: Theme) =>
     },
     taskBasicInformation: {},
     taskDescription: {
-      margin: theme.spacing(1, 0, 3),
+      "margin": theme.spacing(1, 0, 3),
       "&.ql-container.ql-snow": {
-        border: 0,
+        "border": 0,
         "& .ql-editor": {
           padding: 0,
           fontFamily: "Open Sans, sans-serif",

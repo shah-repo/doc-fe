@@ -33,9 +33,9 @@ const mapStateToProps = (state: ApplicationState) => ({
   isCurrentUserDocControl: getHasPermission(state, "CR_TO_IN_REVIEW"),
 });
 
-const AssessmentFormControlsContainer: React.FunctionComponent<AssessmentFormControlsContainerProps> = ({
-  changeRequest, currentUserEmail,
-}) => {
+const AssessmentFormControlsContainer: React.FunctionComponent<
+  AssessmentFormControlsContainerProps
+> = ({ changeRequest, currentUserEmail }) => {
   if (!changeRequest) {
     return null;
   }
@@ -104,7 +104,9 @@ const AssessmentFormControlsContainer: React.FunctionComponent<AssessmentFormCon
       {renderDialogButton(canApproveOrReject, "approve", {
         color: "secondary",
       })}
-      {renderTransitionButton(canClose, "closed")}
+      {renderTransitionButton(canClose, "closed", {
+        color: "secondary",
+      })}
     </Box>
   );
 };
