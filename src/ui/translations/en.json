@@ -25,6 +25,7 @@
   "validators.required": "Required",
   "validators.requiredAtLeastOne": "At least one input required",
   "validators.email": "Invalid email address",
+  "validators.approversRequired": "At least one approver required",
 
   "errors.tokenRefresh": "Token refresh failed",
   "errors.userNotLoggedIn": "User is not logged in",

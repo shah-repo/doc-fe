@@ -76,12 +76,23 @@ export const Container: React.FunctionComponent<Props> = ({
     </Form>
   );
 
+  const validate = (values: ChangeRequestFormValues) => {
+    let errors: any = {}
+
+    if (values.approvals.length === 0) {
+      errors.approvals = "validators.approversRequired";
+    }
+
+    return errors;
+  }
+
   const summaryFormikRenderer = () => (
     <Formik
       render={summaryPresenterRenderer}
       initialValues={toChangeRequestFormValues(dataProp)}
       onSubmit={onSubmit}
       enableReinitialize={true}
+      validate={validate}
     />
   );
   return (
