@@ -25,7 +25,16 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
   ...fieldProps
 }) => {
   const onChange = (value: ValueType<OptionType>) => {
-    fieldProps.form.setFieldValue(fieldProps.field.name, value);
+    const { 
+      form: { setFieldValue, setFieldTouched, touched },
+      field: { name }
+    } = fieldProps;
+
+    if (!touched[name]) {
+      setFieldTouched(name, true);
+    }
+
+    setFieldValue(name, value);
   };
 
   return (
