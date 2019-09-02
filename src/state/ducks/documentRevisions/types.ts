@@ -100,6 +100,12 @@ export enum DocumentRevisionType {
   WI = "Work Instructions",
 }
 
+export const RevisionStageOptions = [
+  { value: 1, text: "common.Numeric" },
+  { value: 2, text: "common.AlphaNumeric" },
+  { value: 3, text: "common.Alpha" }
+]
+
 export interface ReferenceToEditRequest {
   id: string;
 }
@@ -113,6 +119,7 @@ export interface DocumentRevisionEditRequestBody {
   referenceTo: ReferenceToEditRequest[];
   document?: Partial<DocumentRevisionDocument>;
   revisionChangeType?: RevisionChangeType;
+  revisionStage?: number;
 }
 
 export interface DocumentRevisionSetAction {
