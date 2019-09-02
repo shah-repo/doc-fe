@@ -15,7 +15,7 @@ export default (theme: Theme) =>
     activeLink: {
       backgroundColor: theme.palette.secondary.contrastText,
       "& .MuiListItemText-primary": {
-        fontWeight: 500,
+        fontWeight: "bold",
       },
     },
     linkButton: {
@@ -27,7 +27,7 @@ export default (theme: Theme) =>
     itemText: {
       color: theme.palette.secondary.contrastText,
       letterSpacing: 0,
-      fontWeight: 300,
+      fontFamily: "Open Sans",
     },
     itemButton: {
       marginLeft: 5,
