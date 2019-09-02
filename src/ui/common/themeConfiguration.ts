@@ -100,6 +100,8 @@ const defaultThemeOptions: ThemeOptions = {
         fontSize: "0.75rem",
         borderRadius: 3,
         margin: defaultTheme.spacing(1),
+        fontFamily: "Open Sans",
+        fontWeight: "bold",
       },
     },
     MuiLink: {
@@ -113,9 +115,10 @@ const defaultThemeOptions: ThemeOptions = {
       },
       head: {
         fontSize: "0.81rem",
-        fontWeight: 500,
         background: "#5C9DFF",
         color: defaultTheme.palette.common.white,
+        fontFamily: "Open Sans",
+        fontWeight: "bold",
       },
     },
     MuiInputBase: {

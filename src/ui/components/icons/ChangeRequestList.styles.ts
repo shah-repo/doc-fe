@@ -9,13 +9,11 @@ const styles = makeStyles((theme: Theme) =>
       fill: "none",
       stroke: theme.palette.secondary.contrastText,
       strokeMiterlimit: 10,
-      strokwWidth: 1.75,
     },
     pen: {
       fill: "none",
       stroke: theme.palette.secondary.contrastText,
       strokeMiterlimit: 10,
-      strokwWidth: 1.75,
       strokeLinecap: "square",
     },
   }),

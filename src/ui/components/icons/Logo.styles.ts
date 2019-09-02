@@ -26,6 +26,7 @@ const styles = makeStyles((theme: Theme) =>
       letterSpacing: 0,
       color: theme.palette.secondary.dark,
       margin: "10px 20px",
+      lineHeight: "28px",
     }
   }),
 );
