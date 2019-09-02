@@ -187,6 +187,9 @@
   "common.close": "Close",
   "common.close.task": "Close task",
   "common.document": "Document",
+  "common.Numeric": "Numeric",
+  "common.AlphaNumeric": "Alpha Numeric",
+  "common.Alpha": "Alpha",
 
   "dashboard.type.PENDING_REVIEW": "is pending your approval",
   "dashboard.type.PENDING_IMPL_PLAN_TASK": " task is pending your approval",
@@ -210,6 +213,7 @@
   "document.action.reject": "Reject",
   "document.action.to_review": "Send to review",
   "document.action.withdraw": "Withdraw",
+  "document.revision.stage": "Document Revision Stage",
 
   "documentRevision.createNewVersion": "Create a new version",
   "documentRevision.version": "Version",

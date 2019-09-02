@@ -1,9 +1,9 @@
 import { mount, ReactWrapper } from "enzyme";
 import { Form, Formik } from "formik";
+import _ from "lodash";
 import React from "react";
 import SelectField, { SelectOption, SelectOwnProps } from "./Select";
 
-jest.mock("../../Text");
 jest.mock("@material-ui/core/Select", () => (props: any) => (
   <select>
     {props.children}
@@ -59,9 +59,9 @@ describe("Select component tests", () => {
     const optionsNodes = wrapper.find("option");
 
     expect(optionsNodes.at(0).prop("value")).toEqual(options[0].value);
-    expect(optionsNodes.at(0).text()).toEqual(options[0].text);
+    expect(_.get(optionsNodes.at(0).props(), "children.props.message")).toEqual(options[0].text);
 
     expect(optionsNodes.at(1).prop("value")).toEqual(options[1].value);
-    expect(optionsNodes.at(1).text()).toEqual(options[1].text);
+    expect(_.get(optionsNodes.at(1).props(), "children.props.message")).toEqual(options[1].text);
   });
 });
