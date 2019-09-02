@@ -24,6 +24,7 @@ const Justification: React.FunctionComponent<Props> = ({
   const attachmentRenderer = () =>
     attachments.map((attachment, index) => (
       <AttachmentIconField
+        key={attachment.id}
         name={`assessments.${attachment.type}.attachments`}
       />
     ));

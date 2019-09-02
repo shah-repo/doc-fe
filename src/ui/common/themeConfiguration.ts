@@ -120,6 +120,9 @@ const defaultThemeOptions: ThemeOptions = {
       root: {
         fontSize: "0.8rem",
       },
+      input: {
+        fontSize: "0.8rem",
+      },
     },
     MuiSelect: {
       root: {
