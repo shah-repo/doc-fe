@@ -14,7 +14,7 @@ const defaultPaletteOptions = {
     contrastText: "#fff",
   },
   background: {
-    default: "#5C9DFF",
+    default: "f0f0f0",
     paper: "#fff",
   },
   text: {
@@ -114,7 +114,7 @@ const defaultThemeOptions: ThemeOptions = {
       head: {
         fontSize: "0.81rem",
         fontWeight: 500,
-        background: defaultPaletteOptions.background.default,
+        background: "#5C9DFF",
         color: defaultTheme.palette.common.white,
       },
     },
