@@ -25,10 +25,16 @@ export interface ListDispatchProps {
 }
 
 // Assessment
-export enum AssessmentReasoningOption {
-  statement_1 = "Statement 1",
-  statement_2 = "Statement 2",
-  statement_3 = "Statement 3",
+export enum DesignAssessmentReasoningOption {
+  not_affect_changes =
+    "Changes do not affect form, fit, function or materials with no impact on risk, safety or effectiveness",
+  equivalent_changes =
+    "Changes are equivalent to current design with no impact on risk, safety or effectiveness. Equivalency established through design verification",
+}
+
+export enum ProcessAssessmentReasoningOption {
+  not_affect_changes =
+    "Changes do not affect bioburden, sterilization, or validated state and are covered by existing QC methods",
 }
 
 export enum RegulatoryAssessmentReasoningOption {
@@ -41,9 +47,9 @@ export type AssessmentReasoningType = {
   [key in AssessmentType]: any;
 };
 
-export const AssessmentReasoningOptionn: AssessmentReasoningType = {
-  design: AssessmentReasoningOption,
-  process: AssessmentReasoningOption,
+export const AssessmentReasoningOption: AssessmentReasoningType = {
+  design: DesignAssessmentReasoningOption,
+  process: ProcessAssessmentReasoningOption,
   regulatory: RegulatoryAssessmentReasoningOption,
 };
 
