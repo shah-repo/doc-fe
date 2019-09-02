@@ -1,6 +1,6 @@
 import { Attachment } from "../attachments";
+import { AuditActionPayload } from "../audit/types";
 import { Approval, Id, User } from "../common";
-import { DocumentRevision } from "../documentRevisions";
 import {
   CHANGE_REQUEST_AUDIT_SET,
   CHANGE_REQUEST_LIST,
@@ -11,10 +11,14 @@ import {
 export enum ChangeRequestStatus {
   Draft = "DRAFT",
   InReview = "IN_REVIEW",
-  Withdrawn = "WITHDRAWN",
+  Implementation = "IMPLEMENTATION",
   Approved = "APPROVED",
-  Rejected = "REJECTED",
   Closed = "CLOSED",
+}
+
+export enum ImplementationPlanTaskStatus {
+  Pending = "PENDING",
+  Done = "DONE",
 }
 
 export interface Justifications {
@@ -30,7 +34,6 @@ export enum AssessmentType {
 }
 
 export interface Assessment {
-  description?: string;
   design: AssessmentItem;
   process: AssessmentItem;
   regulatory: AssessmentItem;
@@ -48,8 +51,10 @@ export interface ImplementationPlanTask {
   dueDate: Date;
   assigned?: User;
   createdAt: string;
+  closeDate: Date;
   status: string;
   updatedAt: string;
+  closingNote: string | null;
 }
 
 export interface ImplementationPlan {
@@ -72,6 +77,7 @@ export interface ChangeRequest {
   approvals: Approval[];
   owner: User;
   documentRevisions: any[];
+  closedAt: Date;
 }
 
 export interface Approver {
@@ -95,7 +101,7 @@ export interface ImplementationPlanTaskRequest {
   id?: string;
   title: string;
   description: string;
-  dueDate?: Date;
+  dueDate?: string;
   assigned?: Id;
   status: string;
 }
@@ -111,7 +117,7 @@ export interface ChangeRequestEditRequestBody {
   assessments: Assessment;
   implementationPlan: ImplementationPlanRequest;
   justifications: EditRequestBodyNestedObject;
-  effectiveDate?: Date;
+  effectiveDate?: string;
   approvals: Approver[];
   documentRevisions: DocumentRevisionRequestBody[];
 }
@@ -164,27 +170,9 @@ export interface ChangeRequestListApproversAction {
   payload: ChangeRequestAvailableApprovers[];
 }
 
-export interface Audit {
-  field: string;
-  type: string;
-  nextValue: string | User | Attachment | Approval | DocumentRevision;
-  timestamp: string;
-  groupId: string;
-  owner: User;
-}
-
-export interface AuditActionPayload {
-  id: string;
-  audit: Audit[];
-}
-
 export interface ChangeRequestAuditSetAction {
   type: typeof CHANGE_REQUEST_AUDIT_SET;
   payload: AuditActionPayload;
-}
-
-export interface AuditByCRIdState {
-  [key: string]: Audit[];
 }
 
 export type allIdsState = string[];

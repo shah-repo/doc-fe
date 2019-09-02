@@ -1,8 +1,14 @@
 import { PENDING_ACTIONS_LIST } from "./constants";
 import { ChangeRequest } from "../changeRequest";
 
+export enum PendingActionType {
+  PENDING_REVIEW = 'PENDING_REVIEW',
+  PENDING_DOC_CONTROL = 'PENDING_DOC_CONTROL',
+  PENDING_IMPL_PLAN_TASK = 'PENDING_IMPL_PLAN_TASK',
+}
+
 export interface PendingAction {
-  type: string;
+  type: PendingActionType;
   userId: string;
   changeReq: ChangeRequest;
 }

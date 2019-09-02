@@ -5,8 +5,7 @@ options:
 pipelines:
   const:
     tests: &RUN_TESTS
-      name: Tesing
-      size: 2x
+      name: Tests
       image: node:10 
       services:
         - docker
@@ -17,8 +16,7 @@ pipelines:
         - ./aws/bash_scripts/runTests.sh
 
     deploy_to_development: &DEPLOY_TO_DEVELOPMENT
-      name: Deploy to Development
-      size: 2x
+      name: Deploying to Development
       image: python:3   
       deployment: Development
       services:
@@ -27,19 +25,31 @@ pipelines:
         - docker
       script:
         - chmod a+x ./aws/bash_scripts/build.sh
-        - ./aws/bash_scripts/build.sh "dev" "true"
+        - ./aws/bash_scripts/build.sh "dev"
 
-    # deploy_to_development: &DEPLOY_TO_PRODUCTION
-    #   name: Deploy to Production
-    #   image: python:3   
-    #   deployment: Production
-    #   services:
-    #     - docker
-    #   caches:
-    #     - docker
-    #   script:
-    #     - chmod a+x ./aws/bash_scripts/build.sh
-    #     - ./aws/bash_scripts/build.sh "dev" "true"
+    deploy_to_production: &DEPLOY_TO_PRODUCTION
+      name: Deploying to Production
+      image: python:3   
+      deployment: Production
+      services:
+        - docker
+      caches:
+        - docker
+      script:
+        - chmod a+x ./aws/bash_scripts/build.sh
+        - ./aws/bash_scripts/build.sh "prod"
+
+    deploy_to_demo: &DEPLOY_TO_DEMO
+      name: Deploying to Demo
+      image: python:3   
+      deployment: Demo
+      services:
+        - docker
+      caches:
+        - docker
+      script:
+        - chmod a+x ./aws/bash_scripts/build.sh
+        - ./aws/bash_scripts/build.sh "demo"
 
   default:
       - step: *RUN_TESTS
@@ -47,17 +57,27 @@ pipelines:
     deploy-to-dev:
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEVELOPMENT
+    deploy-to-demo:
+      - step: *RUN_TESTS
+      - step: *DEPLOY_TO_DEMO
+    deploy-to-prod:
+      - step: *RUN_TESTS
+      - step: *DEPLOY_TO_PRODUCTION
   branches:
-    # master:
-    #   - step: *DEPLOY_TO_PRODUCTION
+    master:
+      - step: *RUN_TESTS
+      - step: *DEPLOY_TO_PRODUCTION
     develop:
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEVELOPMENT
     infrastructure:
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEVELOPMENT
+    demo:
+      - step: *RUN_TESTS
+      - step: *DEPLOY_TO_DEMO
       
 definitions:
   services:
     docker:
-      memory: 2048
+      memory: 3096

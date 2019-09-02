@@ -26,22 +26,27 @@ interface OwnProps {
 
 export type DocumentRevisionCreateContainerProps = OwnProps & DispatchProps & RouteComponentProps;
 
-export const DEFAULT_INITIAL_VALUES: DocumentRevisionFormValues = {
-  name: "",
-  description: "",
-  attachments: [],
-  referenceTo: [],
-  revisionChangeType: RevisionChangeType.NextRevision,
-  document: { docId: "" },
+export const DEFAULT_INITIAL_VALUES = (): DocumentRevisionFormValues => {
+  return {
+    name: "",
+    description: "",
+    attachments: [],
+    referenceTo: [],
+    revisionChangeType: RevisionChangeType.NextRevision,
+    document: { docId: "" },
+  };
 };
 
 export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionCreateContainerProps> = ({
   create, history, documentRevision, loadDocument, setDocId,
 }) => {
 
-    const async = useAsync<DocumentRevision>({
+  const initialValues = documentRevision ?
+      toDocumentRevisionFormValuesWithRevisionChange(documentRevision) :
+      DEFAULT_INITIAL_VALUES();
+
+  const async = useAsync<DocumentRevision>({
       onSuccess: (createdDocumentRevision?) => {
-        setDocId("");
         if (createdDocumentRevision) {
           loadDocument(createdDocumentRevision.document.id);
           history.push(generateDocumentRevisionVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id));
@@ -49,16 +54,13 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
       },
     });
 
-    const onSubmit = (values: DocumentRevisionFormValues) => {
+  const onSubmit = (values: DocumentRevisionFormValues) => {
       async.start(create, toNewVersionRequestBody(values), async);
     };
 
-    const showRevisionTypeChange = !!documentRevision;
-    const initialValues = documentRevision ?
-      toDocumentRevisionFormValuesWithRevisionChange(documentRevision) :
-      DEFAULT_INITIAL_VALUES;
+  const showRevisionTypeChange = !!documentRevision;
 
-    return (
+  return (
       <DocumentRevisionForm
         asyncState={async.asyncState}
         onSubmit={onSubmit}
@@ -66,6 +68,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
         showRevisionTypeChange={showRevisionTypeChange}
         setDocId={setDocId}
         doNotPrompt={true}
+        documentRevision={documentRevision}
       />
     );
   };

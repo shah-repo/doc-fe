@@ -11,6 +11,6 @@ export default (theme: Theme) =>
       right: 0,
       overflow: "auto",
       padding: theme.spacing(5),
-      backgroundColor: "#f0f0f0",
+      backgroundColor: "white",
     },
   });

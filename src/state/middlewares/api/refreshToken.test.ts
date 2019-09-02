@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 import MockAdapter from "axios-mock-adapter";
 import _ from "lodash";
-import moment from "moment";
+import moment from "moment-timezone";
 import Config from "../../../config";
 import { Translation } from "../../../ui/translations/types";
 import api from "../../apiClient";

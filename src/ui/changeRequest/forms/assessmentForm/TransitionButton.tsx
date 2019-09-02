@@ -1,8 +1,12 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
+import Button, { ButtonProps } from "@material-ui/core/Button";
 import Text from "../../../components/Text";
 import { connect } from "react-redux";
-import { changeRequestsActions, ChangeRequestTransition, ChangeRequestTransitionResponse } from "../../../../state/ducks/changeRequest";
+import {
+  changeRequestsActions,
+  ChangeRequestTransition,
+  ChangeRequestTransitionResponse,
+} from "../../../../state/ducks/changeRequest";
 import useAsync from "../../../hooks/useAsync";
 import { ApplicationState } from "../../../../state/reducers";
 import { AsyncStatus } from "../../../../state/types";
@@ -13,6 +17,7 @@ interface OwnProps {
   transition: ChangeRequestTransition;
   label: string;
   changeRequestId: string;
+  buttonProps?: ButtonProps;
 }
 
 interface DispatchProps {
@@ -22,13 +27,20 @@ interface DispatchProps {
 export type Props = OwnProps & DispatchProps;
 
 const TransitionButton: React.FunctionComponent<Props> = ({
-  transition, label, applyTransition, changeRequestId,
+  transition,
+  label,
+  applyTransition,
+  changeRequestId,
+  buttonProps,
 }) => {
   const async = useAsync<ChangeRequestTransitionResponse>();
   const onClick = () => {
     async.start(
       applyTransition,
-      changeRequestId, { password: "" }, transition, async,
+      changeRequestId,
+      { password: "" },
+      transition,
+      async,
     );
   };
 
@@ -41,6 +53,7 @@ const TransitionButton: React.FunctionComponent<Props> = ({
         color="primary"
         onClick={onClick}
         disabled={async.asyncState.status === AsyncStatus.Active}
+        {...buttonProps}
       >
         <Text message={label} />
       </Button>
@@ -48,6 +61,9 @@ const TransitionButton: React.FunctionComponent<Props> = ({
   );
 };
 
-export default connect<{}, DispatchProps, OwnProps, ApplicationState>(null, {
-  applyTransition: changeRequestsActions.applyTransition,
-})(TransitionButton);
+export default connect<{}, DispatchProps, OwnProps, ApplicationState>(
+  null,
+  {
+    applyTransition: changeRequestsActions.applyTransition,
+  },
+)(TransitionButton);

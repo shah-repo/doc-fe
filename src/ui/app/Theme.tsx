@@ -1,38 +1,23 @@
-import { CssBaseline  } from "@material-ui/core";
+import { CssBaseline } from "@material-ui/core";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import * as React from "react";
+import Config, { PRODUCTION_THEME, DEMO_THEME, DEV_THEME } from "../../config";
+import { ThemeOptions } from "@material-ui/core/styles/createMuiTheme";
+import { productionEnvThemeOptions, demoEnvThemeOptions, devEnvThemeOptions } from "../common/themeConfiguration";
 
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: "#d12833",
-      contrastText: "#fff",
-    },
-    secondary: {
-      main: "#aeb8d6",
-      contrastText: "#fff",
-    },
-    background: {
-      default: "#f0f0f0",
-      paper: "#fff",
-    },
-  },
-  overrides: {
-    MuiAppBar: {
-      colorDefault: {
-        background: "#fff",
-      },
-      colorPrimary: {
-        background: "transparent",
-        backgroundColor: "transparent",
-        color: "#4d4d4d",
-      },
-      root: {
-        boxShadow: "none",
-      },
-    },
-  },
-});
+const getEnvThemeOptions = (env: string = DEV_THEME): ThemeOptions => {
+  switch (env) {
+    case PRODUCTION_THEME:
+      return productionEnvThemeOptions;
+    case DEMO_THEME:
+      return demoEnvThemeOptions;
+    case DEV_THEME:
+    default:
+      return devEnvThemeOptions;
+  }
+}
+
+const theme = createMuiTheme(getEnvThemeOptions(Config.Theme));
 
 const Theme: React.FunctionComponent = ({ children }) => (
   <MuiThemeProvider theme={theme}>

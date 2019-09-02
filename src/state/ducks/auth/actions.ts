@@ -1,4 +1,4 @@
-import moment from "moment";
+import moment from "moment-timezone";
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 import Config from "../../../config";
@@ -16,8 +16,8 @@ import {
   PERMISSIONS_URL,
   USER_PERMISSIONS,
   USER_PERMISSIONS_GET_ASYNC,
-  HEALTHCHECK_URL,
-  HEALTHCHECK_GET_ASYNC,
+  PING_SERVER_URL,
+  PING_SERVER_GET_ASYNC,
 } from "./constants";
 import authSelectors from "./selectors";
 import {
@@ -135,9 +135,12 @@ const loadPermissions = (userId: string):
 
 const pingServer = ():
   ApiAction => apiAction({
-    url: `${HEALTHCHECK_URL}`,
-    asyncType: HEALTHCHECK_GET_ASYNC,
+    url: `${PING_SERVER_URL}`,
+    asyncType: PING_SERVER_GET_ASYNC,
     method: "get",
+    onFailure: (message, dispatch) => {
+      dispatch(logoutUser())
+    }
   });
 
 export default {

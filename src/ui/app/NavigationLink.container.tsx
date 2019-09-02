@@ -46,7 +46,7 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
 
     return (
       <React.Fragment>
-        <NavigationLinkPresenter url={url} text={text} Icon={Icon} ActionIcon={childrenUrls.length && actionIcon} />
+        <NavigationLinkPresenter url={url} text={text} Icon={Icon} ActionIcon={childrenUrls.length ? actionIcon : ""} />
         {childrenList}
       </React.Fragment>
     );

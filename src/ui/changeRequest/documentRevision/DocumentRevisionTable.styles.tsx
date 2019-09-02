@@ -6,7 +6,7 @@ export default (theme: Theme) =>
       flex: 1,
       flexGrow: 1,
       minHeight: 0,
-      padding: "20px",
+      padding: theme.spacing(2, 6),
       [theme.breakpoints.down("xs")]: {
         height: "100%",
         minHeight: "200px",
@@ -21,7 +21,7 @@ export default (theme: Theme) =>
       alignItems: "center",
       boxSizing: "border-box",
       margin: 0,
-      wordWrap: 'break-word',
+      wordWrap: "break-word",
       marginRight: 20,
     },
     tableRow: {

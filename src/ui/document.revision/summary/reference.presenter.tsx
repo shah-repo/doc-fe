@@ -1,14 +1,26 @@
-import { Box, ListItem, Typography, WithStyles, withStyles, Grid } from "@material-ui/core";
+import {
+  Box,
+  ListItem,
+  Typography,
+  WithStyles,
+  withStyles,
+  Grid,
+} from "@material-ui/core";
 import React from "react";
 import { Link } from "react-router-dom";
 import { DataProps } from "../../../state/ducks/common";
-import { Reference as Model } from "../../../state/ducks/documentRevisions";
+import {
+  Reference as Model,
+  DocumentRevisionStatus,
+} from "../../../state/ducks/documentRevisions";
 import Text from "../../components/Text";
 import styles from "./styles";
 
 interface OwnProps {
   label: string;
   getUrl: (reference: any) => string;
+  docId: (reference: any) => string;
+  docTitle: (reference: any) => string;
 }
 
 type Props = OwnProps & DataProps<Model[]> & WithStyles<typeof styles>;
@@ -18,31 +30,37 @@ const ReferencePresenter: React.FunctionComponent<Props> = ({
   dataProp,
   label,
   getUrl,
+  docId,
+  docTitle,
 }) => {
-  const referencesRenderer = () => dataProp.map((reference: any, index) => {
-    return (
-      <ListItem key={reference.id}>
-        <Grid item={true} xs={4}>
-          <Typography variant="body1"><Text message={`${index + 1}`} />:</Typography>
+  const referencesRenderer = () =>
+    dataProp.map((reference: any, index) => {
+      const notDeprecated =
+        reference.status !== DocumentRevisionStatus.Deprecated;
+      return (
+        <Grid item key={reference.id}>
+          {notDeprecated && (
+            <ListItem>
+              <Grid item={true} xs={12}>
+                <Typography variant="body1">
+                  <Text message={`${index + 1}`} />:
+                  <Link to={getUrl(reference)} target="_blank">
+                    {docId(reference)} - {docTitle(reference)}
+                  </Link>
+                </Typography>
+              </Grid>
+            </ListItem>
+          )}
         </Grid>
-        <Grid item={true} xs={8}>
-          <Typography variant="subtitle1">
-            <Link
-              to={getUrl(reference)}
-              target="_blank"
-            >
-              {reference.name || reference.docId}
-            </Link>
-          </Typography>
-        </Grid>
-      </ListItem>
-    )
-  });
+      );
+    });
 
   return (
     <Box className={classes.box}>
       <ListItem>
-        <Typography variant="h6"><Text message={label} />:</Typography>
+        <Typography variant="h6">
+          <Text message={label} />:
+        </Typography>
       </ListItem>
       {referencesRenderer()}
     </Box>

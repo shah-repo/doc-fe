@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { AsyncState, AsyncStatus } from "../../state/types";
 import styles from "./AsyncGate.styles";
 import Text from "./Text";
+import useDidMount from "../hooks/useDidMount";
 
 export interface AsyncGateProps  {
   asyncState: AsyncState;
@@ -19,6 +20,8 @@ const AsyncGate: React.FunctionComponent<Props> = ({
   asyncAction,
   startActionOnMount = false,
 }) => {
+  const didMount = useDidMount();
+  
   const runAsyncAction = () => {
     if (asyncAction) {
       asyncAction();
@@ -31,7 +34,7 @@ const AsyncGate: React.FunctionComponent<Props> = ({
     }
   });
 
-  if (asyncState.status === AsyncStatus.Success) {
+  if (asyncState.status === AsyncStatus.Success && didMount) {
     return (
       <React.Fragment>
         {children}

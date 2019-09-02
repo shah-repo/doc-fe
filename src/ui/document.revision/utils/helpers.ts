@@ -12,11 +12,8 @@ const isDraft = (documentRevision: DocumentRevision) =>
 const isPendingChange = (documentRevision: DocumentRevision) =>
   documentRevision.status === DocumentRevisionStatus.PendingChange;
 
-export const canEditDocumentRevision = ({
-  dataProp,
-  currentUserEmail,
-}: DocumentRevisionUserProps) =>
-  currentUserEmail === dataProp.owner.email && (isDraft || isPendingChange);
+export const canEditDocumentRevision = ({ dataProp, currentUserEmail}: DocumentRevisionUserProps) =>
+  currentUserEmail === dataProp.owner.email && (isDraft(dataProp) || isPendingChange(dataProp));
 
 export const documentRevisionIdMask = (
   type: string,
@@ -36,12 +33,17 @@ export const documentRevisionTypeOption = () => {
 export const documentRevisionStatusOption = () => {
   const options: SelectOption[] = [];
   Object.keys(DocumentRevisionStatus).map((key) => {
-    // TODO: Change DocumentRevisionStatus status into key = value, value = text
+    // TODO: Change DocumentRevisionStatus enum into key = value, value = text
     const keyName = DocumentRevisionStatus[key as keyof typeof DocumentRevisionStatus];
-    options.push({value: keyName, text: keyName});
+    if (keyName !== DocumentRevisionStatus.Deprecated) {
+      options.push({value: keyName, text: keyName});
+    }
   });
   return options;
 };
+
+export const documentRevisionQueryStatus = (): DocumentRevisionStatus[] =>
+  Object.values(DocumentRevisionStatus).filter((value) => value !== DocumentRevisionStatus.Deprecated);
 
 export const documentRevisionTypeFormOption = () => {
   const options: SelectOption[] = [];

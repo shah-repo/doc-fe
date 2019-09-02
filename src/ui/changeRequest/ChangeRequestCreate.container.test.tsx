@@ -6,13 +6,13 @@ import { getChangeRequest } from "../../state/ducks/changeRequest/tests/factorie
 import { ASYNC_DEFAULT_STATE } from "../hooks/useAsync";
 import getRouteComponentProps from "../tests/helpers/getRouteComponentProps";
 import {
-  DEFAULT_INITIAL_VALUES,
   ChangeRequestCreateContainer,
   ChangeRequestCreateContainerProps,
+  DEFAULT_INITIAL_VALUES,
 } from "./ChangeRequestCreate.container";
+import ChangeRequestFormContainer from "./forms/ChangeRequestForm.container";
 import { toChangeRequestEditRequestBody } from "./forms/transform";
 import { generateChangeRequestEditPath } from "./pathGenerators";
-import ChangeRequestFormContainer from "./forms/ChangeRequestForm.container";
 
 describe("ChangeRequestCreateContainer tests", () => {
   const defaultProps: ChangeRequestCreateContainerProps = {
@@ -30,7 +30,7 @@ describe("ChangeRequestCreateContainer tests", () => {
     const wrapper = getWrapper({ ...routeComponentProps, create });
 
     const form = wrapper.find(ChangeRequestFormContainer);
-    const values = DEFAULT_INITIAL_VALUES;
+    const values = DEFAULT_INITIAL_VALUES();
 
     form.prop("onSubmit")(values);
 
@@ -50,7 +50,7 @@ describe("ChangeRequestCreateContainer tests", () => {
     const wrapper = getWrapper({});
     const form = wrapper.find(ChangeRequestFormContainer);
 
-    expect(form.prop("initialValues")).toEqual(DEFAULT_INITIAL_VALUES);
+    expect(form.prop("initialValues")).toEqual(DEFAULT_INITIAL_VALUES());
   });
 
   it("sets asyncState", () => {

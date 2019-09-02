@@ -16,7 +16,8 @@ export const canSubmitDocumentRevision = (
   currentUserEmail: string,
 ) => documentRevision.owner && currentUserEmail === documentRevision.owner.email && documentRevision.status === DocumentRevisionStatus.PendingChange;
 
-export const canCreateNewVersion = (documentRevision: DocumentRevision) => documentRevision.status === DocumentRevisionStatus.Released;
+export const canCreateNewVersion = (documentRevision: DocumentRevision, disableCreateNewVersion: boolean, canShowCreateVersionButton?: boolean) =>
+  documentRevision.status === DocumentRevisionStatus.Released && !disableCreateNewVersion && canShowCreateVersionButton;
 
 export const documentRevisionIdMask = (
   type: string,
@@ -33,4 +34,33 @@ export const maskId = (
     const countStr = "" + count;
     const pad = "0000";
     return pad.substring(0, pad.length - countStr.length) + countStr;
+};
+
+
+const getAlphabetFromNumber = (_num: number) => {
+  let str = "";
+
+  const multiples = Math.ceil(_num / 26);
+  const _charAtCode = _num - ((multiples - 1) * 26)
+
+  for (let i = 0; i < multiples; i++)
+      str += String.fromCharCode(_charAtCode + 64);
+
+  return str;
+}
+
+export const generateVersionNumber = (
+  revision: number,
+  revisionStage: number,
+) => {
+  switch (revisionStage) {
+    case 1:
+      return revision;
+    case 2:
+      return `1${getAlphabetFromNumber(revision)}`;
+    case 3:
+      return `${getAlphabetFromNumber(revision)}`;
+    default:
+      return "N/A";
+  }
 };

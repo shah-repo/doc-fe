@@ -10,19 +10,24 @@ export default (theme: Theme) =>
     },
     drawerPaper: {
       width: DRAWER_WIDTH,
+      background: theme.palette.secondary.dark,
     },
     toolbar: {
-      backgroundColor: "#c20811",
+      backgroundColor: theme.palette.secondary.dark,
+      marginTop: 40,
     },
     toolbarTitle: {
       flex: 1,
       textAlign: "center",
     },
     headerLink: {
-      "textDecoration": "none",
-      "color": theme.palette.common.white,
+      textDecoration: "none",
+      color: theme.palette.common.white,
       "&:hover": {
         color: theme.palette.secondary.light,
       },
+    },
+    list: {
+      padding: theme.spacing(3, 0),
     },
   });

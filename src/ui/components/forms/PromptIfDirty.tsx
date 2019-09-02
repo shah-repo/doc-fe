@@ -4,11 +4,18 @@ import { Prompt } from "react-router-dom";
 interface Props {
   dirty: boolean;
   doNotPrompt?: boolean;
+  onDirtyFlagChange?: (dirty: boolean) => void;
 }
 
 const PromptIfDirty: React.FunctionComponent<Props> = ({
-  dirty, doNotPrompt,
+  dirty, doNotPrompt, onDirtyFlagChange
 }) => {
+  useEffect(() => {
+    if (onDirtyFlagChange) {
+      onDirtyFlagChange(dirty);
+    }
+  }, [dirty]);
+
   if (doNotPrompt) {
     return null;
   }

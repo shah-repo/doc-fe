@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import _ from "lodash";
 import IdleTimer from 'react-idle-timer';
@@ -20,6 +20,10 @@ const AutoLogout: React.FunctionComponent<Props> = ({
   const timeout = Config.AutoLogoutTime;
   const tenMinutes = 1000 * 60 * 10;
   const dialogHandler = useDialog();
+
+  useState(() => {
+    pingServer();
+  });
 
   const onIdle = () => {
     dialogHandler.open();

@@ -1,7 +1,10 @@
+import _ from "lodash";
 import { createSelector } from "reselect";
+import { stripTagsFromObject, stripTags } from "../../../common/utils/helpers";
+import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
-import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
+import { Audit, AuditGroupType } from "../audit/types";
 
 const allIds = (state: ApplicationState) => state.changeRequests.allIds;
 const byId = (state: ApplicationState) => state.changeRequests.byId;
@@ -12,7 +15,8 @@ const auditsAllId = (state: ApplicationState) => state.changeRequests.auditsAllI
 
 const getChangeRequestsList = createSelector(
   allIds, byId,
-  (ids, changeRequests) => ids.map((id) => changeRequests[id]),
+  (ids, changeRequests) => 
+    ids.map((id) => stripTagsFromObject(changeRequests[id]))
 );
 
 const getApproversListForAssessmentForm = createSelector(
@@ -28,12 +32,56 @@ const getAssignessList = createSelector(
 const getChangeRequest = (state: ApplicationState, changeRequestId: string) => byId(state)[changeRequestId];
 const getAudit = (state: ApplicationState, changeRequestId: string) => auditsByCRId(state)[changeRequestId];
 
+// const makeGetAudit = () => {
+//   return createSelector(
+//     getAudit,
+//     (audits: Audit[] = []) => audits.map((audit) => {
+//       switch (audit.field) {
+//         case "assessments.description":
+//         case "justifications.description":
+//         case "tasks.description":
+//         case "description":
+//           const html = audit.nextValue as string;
+//           audit.nextValue = striptags(html).substring(0, 100);
+//           return audit;
+//         default:
+//           return audit;
+//       }
+//     }),
+//   )
+// }
+
+const makeGetAudit = () => {
+  return createSelector(
+    getAudit,
+    (audits: AuditGroupType = {}) =>  {
+      Object.keys(audits).map((groupId) => {
+        audits[groupId].map((audit: Audit) => {
+          switch (audit.field) {
+            case "assessments.description":
+            case "justifications.description":
+            case "tasks.description":
+            case "description":
+              const html = audit.nextValue as string;
+              audit.nextValue = stripTags(html).substring(0, 100);
+              return audit;
+            default:
+              return audit;
+          }
+        });
+      });
+      return audits;
+    },
+  );
+};
+
 const getLoadAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadAsyncInfo;
 const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadListAsyncInfo;
 const getLoadApproversAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadApproversAsyncInfo;
 const getLoadAuditAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadAuditAsyncInfo;
 
 export default {
+  byId,
   getChangeRequestsList,
   getChangeRequest,
   getLoadAsyncState,
@@ -43,4 +91,5 @@ export default {
   getLoadAuditAsyncState,
   getAudit,
   getAssignessList,
+  makeGetAudit,
 };

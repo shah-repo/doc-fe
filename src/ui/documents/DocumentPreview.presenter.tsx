@@ -1,6 +1,6 @@
 import { Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
 import { ButtonProps } from "@material-ui/core/Button";
-import moment from "moment";
+import moment from "moment-timezone";
 import React from "react";
 import { Attachment } from "../../state/ducks/attachments";
 import { Document, DocumentTransition } from "../../state/ducks/documents";

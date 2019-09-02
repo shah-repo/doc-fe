@@ -50,7 +50,7 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
   return (
     <AsyncGate asyncState={loadDocumentRevisionAsyncState} asyncAction={loadDocumentRevisionAction} startActionOnMount={false}>
       {canEdit && <DocumentRevisionUpdateContainer documentRevision={documentRevision} />}
-      {canPreview && <SummaryPresenter dataProp={documentRevision} />}
+      {canPreview && <SummaryPresenter dataProp={documentRevision} canShowCreateVersionButton={true} />}
       {isNewVersion && <CloneContainer documentRevision={documentRevision} />}
     </AsyncGate>
   );

@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
+import { AuditByCRIdState } from "../audit/types";
 import {
   CHANGE_REQUEST_AUDIT_SET,
   CHANGE_REQUEST_GET_APPROVERS_ASYNC,
@@ -13,8 +14,6 @@ import {
 } from "./constants";
 import {
   allIdsState,
-  Audit,
-  AuditByCRIdState,
   ChangeRequest,
   ChangeRequestAuditSetAction,
   ChangeRequestAvailableApprovers,
@@ -73,10 +72,13 @@ export const approversAllIds = (state: ChangeRequestsApproversAllIdsState = [], 
   }
 };
 
-export const auditsByCRId = (state: AuditByCRIdState = {}, action: ChangeRequestAuditSetAction): AuditByCRIdState => {
+export const auditsByCRId = (
+  state: AuditByCRIdState = {},
+  action: ChangeRequestAuditSetAction): AuditByCRIdState => {
   switch (action.type) {
     case CHANGE_REQUEST_AUDIT_SET:
-      return { ...state, [action.payload.id]: action.payload.audit };
+      const audits = _.groupBy(action.payload.audit,  "groupId");
+      return { ...state, [action.payload.id]: audits };
     default:
       return state;
   }

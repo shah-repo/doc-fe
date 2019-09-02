@@ -1,39 +1,71 @@
-import { Box, Grid, IconButton, Typography } from "@material-ui/core";
+import {
+  Box,
+  ButtonBase,
+  CircularProgress,
+  Grid,
+  IconButton,
+  Typography,
+} from "@material-ui/core";
 import { CancelOutlined } from "@material-ui/icons";
 import React from "react";
 import FileIcon from "./icon";
 import { styles } from "./utils/styles";
 import { AttachmentIconProps } from "./utils/types";
 
-export const AttachmentIconPresenter: React.FunctionComponent<AttachmentIconProps> = ({
-  attachments,
+export const AttachmentIconPresenter: React.FunctionComponent<
+  AttachmentIconProps
+> = ({
+  attachment,
   size,
   handleRemove,
   handleDownload,
+  disabled = false,
   ...other
 }) => {
-
-  const classes = styles({ size: size || "md" });
-
-  const attachmentsRenderer = (attachments || []).map((attachment) => {
-    return (
-      <Grid key={`cell-${attachment.id}`} item={true} xs={3}>
-        <Box className={classes.closeRoot}>
-          <IconButton className={classes.closeRoot} onClick={handleRemove && handleRemove(attachment)}>
-            <CancelOutlined className={classes.closeIcon} />
-          </IconButton>
-        </Box>
-        <IconButton style={{ fontSize: "initial" }} onClick={handleDownload && handleDownload(attachment.id)}>
-          <FileIcon key={`icon-${attachment.id}`} {...other} extension={attachment.type} />
-        </IconButton>
-        <Typography variant="caption" gutterBottom={true} align="justify" className={classes.fileName} noWrap>
-          {`${attachment.name}.${attachment.type}`}
-        </Typography>
-      </Grid>
-    );
+  const classes = styles({
+    size: size || "md",
+    disabled,
   });
+  const file = attachment!;
+  const isLoading = file.isLoading || false;
 
-  return <Grid container={true} >{attachments && attachmentsRenderer}</Grid>;
+  return (
+    <Grid
+      key={`cell-${attachment!.id}`}
+      item={true}
+      xs={12}
+      sm={4}
+      md={2}
+      style={{ marginBottom: 5 }}
+    >
+      <Box className={classes.closeRoot}>
+        <IconButton
+          className={classes.closeRoot}
+          onClick={handleRemove && handleRemove(file)}
+        >
+          <CancelOutlined className={classes.closeIcon} />
+        </IconButton>
+      </Box>
+      <ButtonBase
+        key={`icon-${attachment!.id}`}
+        onClick={handleDownload && handleDownload(file)}
+      >
+        {isLoading && <CircularProgress className={classes.progress} />}
+        {!isLoading && <FileIcon {...other} extension={file.type} />}
+      </ButtonBase>
+      <Box>
+        <Typography
+          variant="caption"
+          gutterBottom={true}
+          align="left"
+          className={classes.fileName}
+          title={`${file.name}.${file.type}`}
+        >
+          {`${file.name}.${file.type}`}
+        </Typography>
+      </Box>
+    </Grid>
+  );
 };
 
 export default AttachmentIconPresenter;

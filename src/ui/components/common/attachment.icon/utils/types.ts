@@ -1,19 +1,23 @@
-import { FieldProps } from "formik";
-import { Attachment } from "../../../../../state/ducks/attachments";
+import { Attachment, attachmentsActions } from "../../../../../state/ducks/attachments";
+import { RenderSize } from "../../../../../state/ducks/common";
+import { FormikHybridFieldProps } from "../../../hoc/utils/types";
 
-export type AttachmentIconSize = "sm" | "md" | "lg";
+export interface AttachmentIconDispatchProps {
+  download: typeof attachmentsActions.download;
+}
 
-export interface AttachmentIconProps {
-  name: string;
-  attachments?: Attachment[];
+export interface AttachmentIconProps extends FormikHybridFieldProps {
+  attachment?: Attachment;
   extension?: string;
-  size?: AttachmentIconSize;
+  size?: RenderSize;
+  disabled?: boolean;
   handleRemove?: (attachment: Attachment) => () => any;
-  handleDownload?: (attachmentId: string) => () => any;
+  handleDownload?: (attachment: Attachment) => () => any;
 }
 
 export interface AttachmentIconStyleProp {
-  size: AttachmentIconSize;
+  size: RenderSize;
+  disabled: boolean;
 }
 
-export type AttachmentIconContainerProps = AttachmentIconProps & FieldProps;
+export type AttachmentIconContainerProps = AttachmentIconProps & AttachmentIconDispatchProps;

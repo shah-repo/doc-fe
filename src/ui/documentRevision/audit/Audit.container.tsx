@@ -1,7 +1,11 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
+import { AuditGroupType } from "../../../state/ducks/audit/types";
+import {
+  documentRevisionsActions,
+  documentRevisionsSelectors,
+} from "../../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../../state/reducers";
-import { documentRevisionsActions, Audit, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import AuditPresenter from "./Audit.presenter";
@@ -11,7 +15,7 @@ interface OwnProps {
 }
 
 interface StateProps {
-  audit: Audit[];
+  audit: AuditGroupType;
   loadAuditAsyncState: AsyncState;
 }
 
@@ -21,13 +25,15 @@ interface DispatchProps {
 
 export type AuditContainerProps = OwnProps & StateProps & DispatchProps;
 
+const getAudit = documentRevisionsSelectors.makeGetAudit();
+
 const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps => ({
   loadAuditAsyncState: documentRevisionsSelectors.getLoadAuditAsyncState(state),
-  audit: documentRevisionsSelectors.getAudit(state, props.documentRevisionId),
+  audit: getAudit(state, props.documentRevisionId),
 });
 
 export const AuditContainer: React.FunctionComponent<AuditContainerProps> = ({
-  audit, loadAudit, documentRevisionId, loadAuditAsyncState
+  audit, loadAudit, documentRevisionId, loadAuditAsyncState,
 }) => {
   const loadAuditAction = () => loadAudit(documentRevisionId);
   useEffect(() => {
