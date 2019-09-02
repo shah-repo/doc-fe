@@ -72,7 +72,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       cellHref: cellHrefRenderer,
       columnOptions: {
         cellDataGetter: ({ rowData: { revision, revisionStage }}) => generateVersionNumber(revision, revisionStage),
-        width: 70,
+        width: 80,
         flexShrink: 1,
       },
     },
