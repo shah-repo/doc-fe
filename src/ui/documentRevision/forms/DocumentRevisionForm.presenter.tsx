@@ -140,7 +140,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       initialValues.document.referencedBy &&
       initialValues.document.referencedBy.length > 0
     ) {
-      console.log("here");
       return (
         <React.Fragment>
           <Typography variant="h6">
