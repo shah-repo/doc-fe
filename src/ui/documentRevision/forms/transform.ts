@@ -28,6 +28,7 @@ export const toDocumentRevisionEditRequestBody =
     name: values.name,
     attachments: values.attachments,
     referenceTo: values.referenceTo.map((reference) => ({ id: reference.value })),
+    revisionStage: values.revisionStage,
   };
 
   return documentRevisionEditRequestBody;

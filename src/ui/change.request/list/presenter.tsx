@@ -75,13 +75,22 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   return (
     <Grid container={true} className={classes.root}>
       <Grid item={true} xs={6}>
-        <Button color="primary" className={classes.clearButton} onClick={clear} >
-          Clear filters
+        <Button
+          color="primary"
+          variant="outlined"
+          className={classes.clearButton}
+          onClick={clear}
+        >
+          <Text translation="common.clear.filters" />
         </Button>
       </Grid>
       <Grid item={true} xs={6} style={{textAlign: "right"}}>
         <RouterLink to={CHANGE_REQUEST_CREATE_URL} className={classes.link}>
-          <Button variant="contained" color="primary" className={classes.button}>
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+          >
             <Text translation="change.request.create" />
           </Button>
         </RouterLink>
