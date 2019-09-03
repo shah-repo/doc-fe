@@ -38,7 +38,7 @@ export const StyledTableCell = withStyles((theme) => ({
 
 export const StyledCellLink = withStyles((theme) => ({
   root: {
-    color: theme.palette.primary.main,
+    color: theme.palette.background.default,
     cursor: "pointer",
   },
 }))(Link);

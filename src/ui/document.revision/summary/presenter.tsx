@@ -14,9 +14,10 @@ import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
 import Attachment from "./attachment";
 import ChangeRequestLink from "./changeRequestLink";
-import ReferenceContainer from "./reference.container";
 import DocumentHeader from "./header";
 import styles from "./styles";
+import ReferenceToContainer from "./referenceTo.container";
+import ReferencedByContainer from "./referencedBy.container";
 
 interface OwnProps {
   canShowCreateVersionButton?: boolean;
@@ -51,18 +52,17 @@ export const Presenter: React.FunctionComponent<Props> = ({
         <ChangeRequestLink dataProp={dataProp} />
         <SummaryField label="document.title" value={name} />
         <SummaryFieldWithHtml label="common.description" value={description} />
-        {referenceTo && (
-          <ReferenceContainer
+        {
+          referenceTo &&
+          <ReferenceToContainer
             dataProp={referenceTo}
-            isReferenceTo={true}
             status={status}
             deprecatedAt={deprecatedAt}
           />
-        )}
+        }
         {document.referencedBy && (
-          <ReferenceContainer
+          <ReferencedByContainer
             dataProp={document.referencedBy}
-            isReferenceTo={false}
           />
         )}
         {attachments && <Attachment />}
