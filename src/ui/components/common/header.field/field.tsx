@@ -1,9 +1,17 @@
-import { AppBar, Box, Grid, Toolbar, Typography } from "@material-ui/core";
+import {
+  AppBar,
+  Box,
+  Grid,
+  PropTypes,
+  Toolbar,
+  Typography,
+} from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
 import React from "react";
 import {
   DataProps,
   TypographyColor,
+  TypographyProps,
   TypographySize,
 } from "../../../../state/ducks/common";
 import { Translation } from "../../../translations/types";
@@ -11,16 +19,18 @@ import Text from "../../Text";
 import { styles } from "./utils/styles";
 import { HeaderFieldProps } from "./utils/types";
 
-type Props = DataProps<Translation | string> & HeaderFieldProps;
+type Props = DataProps<Translation | string> &
+  HeaderFieldProps &
+  Partial<TypographyProps>;
 
 const HeaderField: React.FunctionComponent<Props> = ({
   dataProp,
   size = "md",
-  variant = "dense",
-  color = "secondary",
+  variant = "h6",
+  color = "primary",
   actionsRenderer,
 }) => {
-  const classes = styles({ variant, size });
+  const classes = styles({ size, color });
 
   return (
     <Toolbar disableGutters={true} className={classes.toolbar}>

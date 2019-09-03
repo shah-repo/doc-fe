@@ -5,8 +5,9 @@ import { FieldProps as FormikFieldProps } from "formik";
 import _ from "lodash";
 import * as React from "react";
 import {
-  RenderColor,
   RenderSize,
+  TypographyColor,
+  TypographyProps,
   TypographySize,
 } from "../../../../state/ducks/common";
 import { Translation } from "../../../translations/types";
@@ -21,9 +22,7 @@ export interface FieldOwnProps {
   inputLabelProps?: InputLabelProps;
   variant?: "standard" | "outlined" | "filled";
   required?: boolean;
-  size?: RenderSize;
   gutter?: boolean;
-  color?: RenderColor;
   actionsRenderer?: () => any;
 }
 
@@ -32,7 +31,7 @@ export interface FieldStyleProps {
   error?: boolean;
 }
 
-type FieldProps = FieldOwnProps & FormikFieldProps;
+type FieldProps = FieldOwnProps & FormikFieldProps & Partial<TypographyProps>;
 
 const Field: React.FunctionComponent<FieldProps> = ({
   field,

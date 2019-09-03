@@ -10,6 +10,7 @@ import { SelectComponentsProps } from "react-select/lib/Select";
 import { ValueType } from "react-select/lib/types";
 import {
   TypographyColor,
+  TypographyProps,
   TypographySize,
 } from "../../../../../state/ducks/common";
 import Text from "../../../../components/Text";
@@ -23,7 +24,9 @@ interface AutocompleteOwnProps extends FieldOwnProps {
   onClick?: (value: any) => void;
 }
 
-type AutocompletePropsWithFormik = AutocompleteOwnProps & FormikFieldProps;
+type AutocompletePropsWithFormik = AutocompleteOwnProps &
+  FormikFieldProps &
+  Partial<TypographyProps>;
 
 const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
   autocompleteProps,
@@ -64,7 +67,9 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
   );
 };
 
-type AutocompleteFieldProps = AutocompleteOwnProps & FieldConfig;
+type AutocompleteFieldProps = AutocompleteOwnProps &
+  FieldConfig &
+  Partial<TypographyProps>;
 
 const AutocompleteField: React.FunctionComponent<
   AutocompleteFieldProps
