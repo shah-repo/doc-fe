@@ -70,15 +70,13 @@ const defaultThemeOptions: ThemeOptions = {
       },
       subtitle1: {
         color: "#4d4d4d",
-        fontSize: "0.8rem",
+        fontSize: "0.885rem",
         fontFamily: "Open Sans, sans-serif;",
       },
       subtitle2: {
-        subtitle1: {
-          color: "#4d4d4d",
-          fontSize: "0.875rem",
-          fontFamily: "Open Sans, sans-serif;",
-        },
+        color: "#4d4d4d",
+        fontSize: "0.8rem",
+        fontFamily: "Open Sans, sans-serif;",
       },
       h5: {
         color: "#4d4d4d",
@@ -87,7 +85,7 @@ const defaultThemeOptions: ThemeOptions = {
       },
       h4: {
         color: "#4d4d4d",
-        ontSize: "1.4rem",
+        fontSize: "1.4rem",
       },
       h6: {
         fontSize: "1.1rem",
