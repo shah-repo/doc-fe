@@ -17,6 +17,8 @@ import ChangeRequestLink from "./changeRequestLink";
 import ReferenceContainer from "./reference.container";
 import DocumentHeader from "./header";
 import styles from "./styles";
+import ReferenceToContainer from "./referenceTo.container";
+import ReferencedByContainer from "./referencedBy.container";
 
 interface OwnProps {
   canShowCreateVersionButton?: boolean;
@@ -51,6 +53,14 @@ export const Presenter: React.FunctionComponent<Props> = ({
         <ChangeRequestLink dataProp={dataProp} />
         <SummaryField label="document.title" value={name} />
         <SummaryFieldWithHtml label="common.description" value={description} />
+        {
+          referenceTo &&
+          <ReferenceToContainer
+            dataProp={referenceTo}
+            status={status}
+            deprecatedAt={deprecatedAt}
+          />
+        }
         {referenceTo && (
           <ReferenceContainer
             dataProp={referenceTo}
@@ -63,6 +73,11 @@ export const Presenter: React.FunctionComponent<Props> = ({
           <ReferenceContainer
             dataProp={document.referencedBy}
             isReferenceTo={false}
+          />
+        )}
+        {document.referencedBy && (
+          <ReferencedByContainer
+            dataProp={document.referencedBy}
           />
         )}
         {attachments && <Attachment />}

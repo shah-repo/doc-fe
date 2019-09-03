@@ -52,3 +52,9 @@ export interface ActionProps {
   editDocumentRevision: (documentRevisionId: string, documentId: string) => void;
   previewDocumentRevision: (documentRevisionId: string, documentId: string) => void;
 }
+
+export interface ReferenceSummary {
+  id: string;
+  url: string;
+  title: string;
+}

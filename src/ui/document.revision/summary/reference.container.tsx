@@ -36,7 +36,6 @@ const ReferenceContainer: React.FunctionComponent<Props> = ({
     getUrl = (reference: any) => documentVersionPath(reference.id, reference.document.id);
     docId = (reference: any) => reference.document.docId;
     docTitle = (reference: any) => reference.name;
-
   }
 
   return (
