@@ -14,7 +14,6 @@ import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
 import Attachment from "./attachment";
 import ChangeRequestLink from "./changeRequestLink";
-import ReferenceContainer from "./reference.container";
 import DocumentHeader from "./header";
 import styles from "./styles";
 import ReferenceToContainer from "./referenceTo.container";
@@ -61,20 +60,6 @@ export const Presenter: React.FunctionComponent<Props> = ({
             deprecatedAt={deprecatedAt}
           />
         }
-        {referenceTo && (
-          <ReferenceContainer
-            dataProp={referenceTo}
-            isReferenceTo={true}
-            status={status}
-            deprecatedAt={deprecatedAt}
-          />
-        )}
-        {document.referencedBy && (
-          <ReferenceContainer
-            dataProp={document.referencedBy}
-            isReferenceTo={false}
-          />
-        )}
         {document.referencedBy && (
           <ReferencedByContainer
             dataProp={document.referencedBy}

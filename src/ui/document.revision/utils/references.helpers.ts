@@ -17,15 +17,17 @@ const getCorrectDocRev = (documentRevisions?: DocumentRevision[]) => {
 
 const getReferenceToUrl = (
   documentStatus: DocumentRevisionStatus,
-  documentRevisionId: string,
   documentId: string,
+  documentRevisionId: string,
   deprecatedAt: string
 ): string => {
+  console.log(documentId);
+  console.log(documentRevisionId);
   if (documentStatus === DocumentRevisionStatus.Deprecated) {
     return documentDetailsPathWithDeprecatedDate(documentId, deprecatedAt)
   }
 
-  return documentVersionPath(documentId, documentRevisionId);
+  return documentVersionPath(documentRevisionId, documentId);
 }
 
 export const getReferenceToSummary = (dataProp: Reference[], status: DocumentRevisionStatus, deprecatedAt: string) => {
