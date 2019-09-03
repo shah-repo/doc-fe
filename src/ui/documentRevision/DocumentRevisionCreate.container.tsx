@@ -34,6 +34,7 @@ export const DEFAULT_INITIAL_VALUES = (): DocumentRevisionFormValues => {
     referenceTo: [],
     revisionChangeType: RevisionChangeType.NextRevision,
     document: { docId: "" },
+    revisionStage: 1,
   };
 };
 

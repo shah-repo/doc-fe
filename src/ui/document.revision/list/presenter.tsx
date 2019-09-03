@@ -1,6 +1,7 @@
 import { Button, Grid, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
+import { stripTagsFromObject } from "../../../common/utils/helpers";
 import { unmaskId } from "../../../state/ducks/common/helpers";
 import { DocumentRevision, DocumentRevisionType } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
@@ -18,7 +19,6 @@ import {
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
 import styles from "./styles";
-import { stripTagsFromObject } from "../../../common/utils/helpers";
 
 type Props = DocumentRevisionsUserProps & WithStyles<typeof styles>;
 
@@ -66,14 +66,14 @@ const ListPresenter: React.FunctionComponent<Props> = ({
     },
     {
       key: "version",
-      label: "document.revision.list.version",
+      label: "common.version",
       searchOptions: { searchValueGetter: (value) => unmaskId(value) },
       cellOptions: { align: "center" },
       cellHref: cellHrefRenderer,
       columnOptions: {
         cellDataGetter: ({ rowData: { revision, revisionStage }}) => generateVersionNumber(revision, revisionStage),
-        width: 180,
-        flexShrink: 2,
+        width: 80,
+        flexShrink: 1,
       },
     },
     {
@@ -126,13 +126,18 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   ];
 
   const customDataSet = (data: DocumentRevision[]) =>
-    data.map((docRev) => stripTagsFromObject(docRev))
+    data.map((docRev) => stripTagsFromObject(docRev));
 
   return (
     <Grid container={true} className={classes.root}>
       <Grid item={true} xs={6}>
-        <Button color="primary" className={classes.clearButton} onClick={clear} >
-          Clear filters
+        <Button
+          color="primary"
+          variant="outlined"
+          className={classes.clearButton}
+          onClick={clear}
+        >
+          <Text translation="common.clear.filters" />
         </Button>
       </Grid>
       <Grid item={true} xs={6} style={{textAlign: "right"}}>

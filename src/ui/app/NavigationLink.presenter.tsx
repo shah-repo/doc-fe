@@ -3,12 +3,12 @@ import ListItemText from "@material-ui/core/ListItemText";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
 import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
 import FolderOutlinedIcon from '@material-ui/icons/FolderOutlined';
-import TrackChangesOutlinedIcon from '@material-ui/icons/TrackChangesOutlined';
 import classNames from "classnames";
 import React, { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 import Text from "../components/Text";
 import { LinkDefinition } from "./NavigationLink.container";
+import ChangeRequestListIcon from "../components/icons/ChangeRequestList";
 
 import { Box, ListItemIcon } from "@material-ui/core";
 import styles from "./NavigationLink.styles";
@@ -27,7 +27,7 @@ interface IconObject {
 const iconMapping: IconObject = {
   "/": <DashboardOutlinedIcon />,
   "/document_revision": <FolderOutlinedIcon />,
-  "/change_request": <TrackChangesOutlinedIcon />,
+  "/change_request": <ChangeRequestListIcon />,
 }
 
 const NavigationLinkPresenter: React.FunctionComponent<

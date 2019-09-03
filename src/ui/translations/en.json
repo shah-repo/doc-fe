@@ -25,6 +25,7 @@
   "validators.required": "Required",
   "validators.requiredAtLeastOne": "At least one input required",
   "validators.email": "Invalid email address",
+  "validators.approversRequired": "At least one approver required",
 
   "errors.tokenRefresh": "Token refresh failed",
   "errors.userNotLoggedIn": "User is not logged in",
@@ -187,6 +188,10 @@
   "common.close": "Close",
   "common.close.task": "Close task",
   "common.document": "Document",
+  "common.Numeric": "Numeric",
+  "common.AlphaNumeric": "Alpha Numeric",
+  "common.Alpha": "Alpha",
+  "common.clear.filters": "Clear Filters",
 
   "dashboard.type.PENDING_REVIEW": "is pending your approval",
   "dashboard.type.PENDING_IMPL_PLAN_TASK": " task is pending your approval",
@@ -210,6 +215,7 @@
   "document.action.reject": "Reject",
   "document.action.to_review": "Send to review",
   "document.action.withdraw": "Withdraw",
+  "document.revision.stage": "Document Revision Stage",
 
   "documentRevision.createNewVersion": "Create a new version",
   "documentRevision.version": "Version",

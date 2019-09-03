@@ -14,7 +14,7 @@ const defaultPaletteOptions = {
     contrastText: "#fff",
   },
   background: {
-    default: "#f0f0f0",
+    default: "f0f0f0",
     paper: "#fff",
   },
   text: {
@@ -70,15 +70,13 @@ const defaultThemeOptions: ThemeOptions = {
       },
       subtitle1: {
         color: "#4d4d4d",
-        fontSize: "0.8rem",
+        fontSize: "0.885rem",
         fontFamily: "Open Sans, sans-serif;",
       },
       subtitle2: {
-        subtitle1: {
-          color: "#4d4d4d",
-          fontSize: "0.875rem",
-          fontFamily: "Open Sans, sans-serif;",
-        },
+        color: "#4d4d4d",
+        fontSize: "0.8rem",
+        fontFamily: "Open Sans, sans-serif;",
       },
       h5: {
         color: "#4d4d4d",
@@ -87,7 +85,7 @@ const defaultThemeOptions: ThemeOptions = {
       },
       h4: {
         color: "#4d4d4d",
-        ontSize: "1.4rem",
+        fontSize: "1.4rem",
       },
       h6: {
         fontSize: "1.1rem",
@@ -100,6 +98,8 @@ const defaultThemeOptions: ThemeOptions = {
         fontSize: "0.75rem",
         borderRadius: 3,
         margin: defaultTheme.spacing(1),
+        fontFamily: "Open Sans",
+        fontWeight: "bold",
       },
     },
     MuiLink: {
@@ -113,13 +113,17 @@ const defaultThemeOptions: ThemeOptions = {
       },
       head: {
         fontSize: "0.81rem",
-        fontWeight: 500,
-        background: defaultPaletteOptions.primary.main,
+        background: "#5C9DFF",
         color: defaultTheme.palette.common.white,
+        fontFamily: "Open Sans",
+        fontWeight: "bold",
       },
     },
     MuiInputBase: {
       root: {
+        fontSize: "0.8rem",
+      },
+      input: {
         fontSize: "0.8rem",
       },
     },

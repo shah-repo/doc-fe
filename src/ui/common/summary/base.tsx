@@ -10,7 +10,7 @@ const Base: React.FunctionComponent<Props> = ({ label, value }) => (
     <Grid container={true} spacing={1}>
       <Grid item={true} xs={12}>
         <Typography variant="h6">
-          <Text message={label} />
+          {label && <Text message={label} />}
         </Typography>
       </Grid>
       <Grid item={true} xs={12}>
