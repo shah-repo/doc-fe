@@ -30,26 +30,17 @@ export const AttachmentIconPresenter: React.FunctionComponent<
   const isLoading = file.isLoading || false;
 
   return (
-    <Grid
-      key={`cell-${attachment!.id}`}
-      item={true}
-      xs={12}
-      sm={4}
-      md={2}
-      style={{ marginBottom: 5 }}
-    >
+    <Grid key={`cell-${attachment!.id}`} item={true} xs={12} sm={4} md={2}>
       <Box className={classes.closeRoot}>
         <IconButton
           className={classes.closeRoot}
-          onClick={handleRemove && handleRemove(file)}
-        >
+          onClick={handleRemove && handleRemove(file)}>
           <CancelOutlined className={classes.closeIcon} />
         </IconButton>
       </Box>
       <ButtonBase
         key={`icon-${attachment!.id}`}
-        onClick={handleDownload && handleDownload(file)}
-      >
+        onClick={handleDownload && handleDownload(file)}>
         {isLoading && <CircularProgress className={classes.progress} />}
         {!isLoading && <FileIcon {...other} extension={file.type} />}
       </ButtonBase>
@@ -59,8 +50,7 @@ export const AttachmentIconPresenter: React.FunctionComponent<
           gutterBottom={true}
           align="left"
           className={classes.fileName}
-          title={`${file.name}.${file.type}`}
-        >
+          title={`${file.name}.${file.type}`}>
           {`${file.name}.${file.type}`}
         </Typography>
       </Box>

@@ -29,7 +29,7 @@ const Assessments: React.FunctionComponent<Props> = ({ form }) => {
       }
 
       return (
-        <Box key={type} mb={3}>
+        <Box key={type} mb={4}>
           <HeaderField
             dataProp={`change.request.${type}.assessment`}
             size="sm"
@@ -39,6 +39,7 @@ const Assessments: React.FunctionComponent<Props> = ({ form }) => {
             name={`assessments.${type}.reasoning`}
             options={assessmentStatementOption(type)}
             includeEmpty={true}
+            gutter={(attachments || []).length === 0}
           />
           <AttachmentIconField name={`assessments.${type}.attachments`} />
         </Box>
@@ -46,7 +47,7 @@ const Assessments: React.FunctionComponent<Props> = ({ form }) => {
     });
 
   return (
-    <Box mb={4}>
+    <Box mb={6}>
       <Box mb={2} mt={3}>
         <HeaderField dataProp="common.assessments" />
       </Box>

@@ -3,6 +3,7 @@ import { FieldStyleProps } from "../../Field";
 
 export const styles = makeStyles(theme => ({
   root: ({ gutter }: FieldStyleProps) => ({
+    margin: gutter ? theme.spacing(1, 0, 4.2) : theme.spacing(1, 0, 0),
     display: "grid",
   }),
   textField: {

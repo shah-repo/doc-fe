@@ -10,7 +10,7 @@ export const Justification: React.FunctionComponent<{}> = () => {
   );
 
   return (
-    <Box mb={5}>
+    <Box mb={8}>
       <TextEditorField
         name="justifications.description"
         label="cr.justification"
