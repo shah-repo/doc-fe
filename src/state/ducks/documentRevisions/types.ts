@@ -41,6 +41,8 @@ export interface Reference {
   id: string;
   name: string;
   docId?: string;
+  documentRevisions?: DocumentRevision[];
+  document: DocumentRevisionDocument;
 }
 
 export interface DocumentRevision {
