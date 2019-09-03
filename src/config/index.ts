@@ -2,10 +2,6 @@ import queryString from "query-string";
 import { LOGIN_WITH_CODE_URL } from "../ui/constants/urls";
 import { ThemeEnv } from "./types";
 
-export const DEV_THEME = "DEV_THEME";
-export const DEMO_THEME = "DEMO_THEME";
-export const PRODUCTION_THEME = "PRODUCTION_THEME";
-
 const DEFAULTS = {
   API_ENDPOINT: "/",
   REFRESH_TOKEN_VALIDITY_DAYS: "30",

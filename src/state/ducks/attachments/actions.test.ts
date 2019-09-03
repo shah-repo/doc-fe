@@ -43,12 +43,18 @@ describe("attachemnt actions tests", () => {
       successHandler: getCallbackHandler<AttachmentDownloadResponse>(),
       errorHandler: getCallbackHandler<string>(),
     };
-    const id = "ki23jrlo2i3jr;";
 
-    const action = attachmentsActions.download(id, handlers);
+    const attachment: Attachment = {
+      id: "ki23jrlo2i3jr;",
+      name: "Title",
+      type: "SOC",
+      s3link: "https://mylink.com",
+    };
+
+    const action = attachmentsActions.download(attachment, handlers);
 
     it("calls GET on ATTACHMENT_ROOT_URL/id/download", () => {
-      expect(action.url).toBe(`${ATTACHMENT_ROOT_URL}/${id}/download`);
+      expect(action.url).toBe(`${ATTACHMENT_ROOT_URL}/${attachment.id}/download`);
       expect(action.method).toBe("get");
     });
 
