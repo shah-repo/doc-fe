@@ -21,7 +21,7 @@ interface OwnProps {
 
 type Props = OwnProps & DataProps<Model[]> & WithStyles<typeof styles>;
 
-const ReferencePresenterNew: React.FunctionComponent<Props> = ({
+const ReferencePresenter: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
   label,
@@ -56,4 +56,4 @@ const ReferencePresenterNew: React.FunctionComponent<Props> = ({
   );
 };
 
-export default withStyles(styles)(ReferencePresenterNew);
+export default withStyles(styles)(ReferencePresenter);

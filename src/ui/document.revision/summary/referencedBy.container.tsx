@@ -1,9 +1,9 @@
 import React, { useMemo } from "react";
 import { DataProps } from "../../../state/ducks/common";
 import {
-  Reference as Model, DocumentRevisionStatus,
+  Reference as Model,
 } from "../../../state/ducks/documentRevisions";
-import ReferencePresenterNew from "./reference.presenterNew";
+import ReferencePresenter from "./reference.presenter";
 import { getReferencedBySummary } from "../utils/references.helpers";
 import { ReferenceSummary } from "../utils/types";
 
@@ -17,7 +17,7 @@ const ReferencedByContainer: React.FunctionComponent<Props> = ({
   }, [dataProp]);
 
   return (
-    <ReferencePresenterNew label="common.referenced.by" dataProp={refSummary} />
+    <ReferencePresenter label="common.referenced.by" dataProp={refSummary} />
   );
 };
 

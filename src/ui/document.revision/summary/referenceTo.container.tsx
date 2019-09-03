@@ -3,7 +3,7 @@ import { DataProps } from "../../../state/ducks/common";
 import {
   Reference as Model, DocumentRevisionStatus,
 } from "../../../state/ducks/documentRevisions";
-import ReferencePresenterNew from "./reference.presenterNew";
+import ReferencePresenter from "./reference.presenter";
 import { getReferenceToSummary } from "../utils/references.helpers";
 import { ReferenceSummary } from "../utils/types";
 
@@ -24,7 +24,7 @@ const ReferenceToContainer: React.FunctionComponent<Props> = ({
   }, [dataProp]);
 
   return (
-    <ReferencePresenterNew label="common.references" dataProp={refSummary} />
+    <ReferencePresenter label="common.references" dataProp={refSummary} />
   );
 };
 
