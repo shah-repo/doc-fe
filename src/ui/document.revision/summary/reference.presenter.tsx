@@ -43,7 +43,7 @@ const ReferencePresenter: React.FunctionComponent<Props> = ({
             <ListItem>
               <Grid item={true} xs={12}>
                 <Typography variant="body1">
-                  <Text message={`${index + 1}`} />:
+                  <Text message={`${index + 1}`} />.{" "}
                   <Link to={getUrl(reference)} target="_blank">
                     {docId(reference)} - {docTitle(reference)}
                   </Link>
@@ -59,7 +59,7 @@ const ReferencePresenter: React.FunctionComponent<Props> = ({
     <Box className={classes.box}>
       <ListItem>
         <Typography variant="h6">
-          <Text message={label} />:
+          <Text message={label} />
         </Typography>
       </ListItem>
       {referencesRenderer()}

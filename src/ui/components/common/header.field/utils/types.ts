@@ -1,7 +1,8 @@
-import { RenderSize } from "../../../../../state/ducks/common";
+import { RenderSize, RenderColor } from "../../../../../state/ducks/common";
 
 export interface HeaderFieldProps {
   size?: RenderSize;
+  color?: RenderColor;
   variant?: "regular" | "dense";
   actionsRenderer?: () => any;
 }

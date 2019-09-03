@@ -14,7 +14,7 @@ type Props = Partial<FormikHybridFieldProps>;
 
 const Assessments: React.FunctionComponent<Props> = ({ form }) => {
   const itemRenderer = () =>
-    Object.values(AssessmentType).map((type) => {
+    Object.values(AssessmentType).map(type => {
       const { attachments, reasoning } = form!.values.assessments[
         type as AssessmentType
       ];
@@ -29,7 +29,7 @@ const Assessments: React.FunctionComponent<Props> = ({ form }) => {
       }
 
       return (
-        <Box key={type} mb={attachments && attachments.length > 0 ? 0 : 4}>
+        <Box key={type} mb={3}>
           <HeaderField
             dataProp={`change.request.${type}.assessment`}
             size="sm"
@@ -46,8 +46,10 @@ const Assessments: React.FunctionComponent<Props> = ({ form }) => {
     });
 
   return (
-    <Box>
-      <Box mb={4} mt={3}><HeaderField dataProp="common.assessments" /></Box>
+    <Box mb={4}>
+      <Box mb={2} mt={3}>
+        <HeaderField dataProp="common.assessments" />
+      </Box>
       {itemRenderer()}
     </Box>
   );

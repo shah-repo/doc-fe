@@ -1,4 +1,6 @@
-import createMuiTheme, { ThemeOptions } from "@material-ui/core/styles/createMuiTheme";
+import createMuiTheme, {
+  ThemeOptions,
+} from "@material-ui/core/styles/createMuiTheme";
 
 const defaultTheme = createMuiTheme();
 
@@ -129,9 +131,12 @@ const defaultThemeOptions: ThemeOptions = {
     MuiSelect: {
       root: {
         fontSize: "0.8rem",
+        height: "1.1875rem",
+        lineHeight: "1.2",
       },
       icon: {
         right: "10px",
+        top: "calc(50% - 8px)",
       },
     },
     MuiTooltip: {

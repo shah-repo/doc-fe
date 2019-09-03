@@ -33,3 +33,9 @@ export enum TypographySize {
   md = "h6",
   lg = "h4",
 }
+export type RenderColor = "primary" | "secondary";
+
+export enum TypographyColor {
+  primary = "textPrimary",
+  secondary = "textSecondary",
+}

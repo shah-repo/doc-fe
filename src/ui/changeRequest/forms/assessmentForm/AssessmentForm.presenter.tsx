@@ -77,8 +77,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
       <FormWrapper
         dirty={dirty}
         resetForm={resetForm}
-        initialValues={initialValues}
-      >
+        initialValues={initialValues}>
         <ScrollToError
           isSubmitting={isSubmitting}
           isValidating={isValidating}
@@ -98,11 +97,13 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
           inputProps={{ id: "title", multiline: true, rows: "2" }}
           validate={validator(required)}
         />
-        <TextEditorField
-          name="description"
-          label="cr.description"
-          validate={validator(required)}
-        />
+        <Box mb={1}>
+          <TextEditorField
+            name="description"
+            label="cr.description"
+            validate={validator(required)}
+          />
+        </Box>
         <JustificationField />
         <AssessmentsField />
         <Field name="implementationPlan" render={renderimplementationPlan} />
@@ -117,8 +118,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
             item={true}
             container={true}
             alignItems="flex-end"
-            direction="column"
-          >
+            direction="column">
             <div>
               <AssessmentFormControlsContainer changeRequest={changeRequest} />
               <SubmitButton

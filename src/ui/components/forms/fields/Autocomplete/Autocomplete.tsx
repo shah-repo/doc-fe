@@ -1,10 +1,17 @@
 import { Box, Typography } from "@material-ui/core";
-import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
+import {
+  Field as FormikField,
+  FieldConfig,
+  FieldProps as FormikFieldProps,
+} from "formik";
 import * as React from "react";
 import Select from "react-select";
 import { SelectComponentsProps } from "react-select/lib/Select";
 import { ValueType } from "react-select/lib/types";
-import { TypographySize } from "../../../../../state/ducks/common";
+import {
+  TypographyColor,
+  TypographySize,
+} from "../../../../../state/ducks/common";
 import Text from "../../../../components/Text";
 import Field, { FieldOwnProps } from "../Field";
 import { InputField, LabelField } from "../Input.styles";
@@ -25,9 +32,9 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
   ...fieldProps
 }) => {
   const onChange = (value: ValueType<OptionType>) => {
-    const { 
+    const {
       form: { setFieldValue, setFieldTouched, touched },
-      field: { name }
+      field: { name },
     } = fieldProps;
 
     if (!touched[name]) {
@@ -39,26 +46,28 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
 
   return (
     <Field {...fieldProps} label={undefined}>
-        <Box mb={0.3}>
-          <Typography variant={TypographySize[fieldProps.size || "md"]}>
-            <Text message={fieldProps.label}/>
-          </Typography>
-        </Box>
-        <Select
-          {...fieldProps.field}
-          {...autocompleteProps}
-          options={options}
-          onChange={onChange}
-          input={<InputField name={fieldProps.field.name} />}
-        />
+      <Box mb={0.3}>
+        <Typography
+          variant={TypographySize[fieldProps.size || "md"]}
+          color={TypographyColor[fieldProps.color || "secondary"]}>
+          <Text message={fieldProps.label} />
+        </Typography>
+      </Box>
+      <Select
+        {...fieldProps.field}
+        {...autocompleteProps}
+        options={options}
+        onChange={onChange}
+        input={<InputField name={fieldProps.field.name} />}
+      />
     </Field>
   );
 };
 
 type AutocompleteFieldProps = AutocompleteOwnProps & FieldConfig;
 
-const AutocompleteField: React.FunctionComponent<AutocompleteFieldProps> = (props) => (
-  <FormikField component={Autocomplete} {...props} />
-);
+const AutocompleteField: React.FunctionComponent<
+  AutocompleteFieldProps
+> = props => <FormikField component={Autocomplete} {...props} />;
 
 export default AutocompleteField;

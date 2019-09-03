@@ -12,6 +12,7 @@ export const InputField = withStyles((theme: Theme) =>
     },
     input: {
       // "backgroundColor": theme.palette.background.madefaultin,
+      marginTop: theme.spacing(1),
       position: "relative",
       backgroundColor: "transparent",
       fontSize: theme.spacing(2),

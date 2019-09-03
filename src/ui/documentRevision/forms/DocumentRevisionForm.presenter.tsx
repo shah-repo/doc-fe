@@ -141,11 +141,11 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     ) {
       return (
         <React.Fragment>
-          <Typography variant="h6">
+          <Typography variant="h6" color="textSecondary">
             <Text translation="common.referenced.by" />
           </Typography>
           <div>
-            {initialValues.document.referencedBy.map((reference) => {
+            {initialValues.document.referencedBy.map(reference => {
               return (
                 <div key={reference.id}>
                   <Link
@@ -153,8 +153,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                       reference.id,
                       reference.document.id,
                     )}
-                    target="_blank"
-                  >
+                    target="_blank">
                     {reference.name}
                   </Link>
                 </div>
@@ -172,19 +171,16 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       direction="column"
       justify="center"
       alignItems="center"
-      className={classes.container}
-    >
+      className={classes.container}>
       <Grid
         item={true}
         lg={isDisabled ? 12 : 7}
         sm={isDisabled ? 12 : 10}
-        xs={12}
-      >
+        xs={12}>
         <FormWrapper
           dirty={dirty}
           initialValues={initialValues}
-          resetForm={resetForm}
-        >
+          resetForm={resetForm}>
           <ScrollToError
             isSubmitting={isSubmitting}
             isValidating={isValidating}
@@ -197,6 +193,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           />
           <FormMessage asyncState={asyncState} />
           <FormProgress asyncState={asyncState} />
+
           <InputField
             name="name"
             label="document.title"
@@ -248,8 +245,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               item={true}
               container={true}
               alignItems="flex-end"
-              direction="column"
-            >
+              direction="column">
               <SubmitButton
                 asyncState={asyncState}
                 label={isDisabled ? "common.save" : "navigation.createDocument"}
