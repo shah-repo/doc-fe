@@ -1,13 +1,14 @@
+import SvgIcon from "@material-ui/core/SvgIcon";
 import React from "react";
-import SvgIcon from '@material-ui/core/SvgIcon';
+import Config from "../../../config";
+import { ThemeEnv } from "../../../config/types";
 import Text from "../../components/Text";
-import Config, { DEMO_THEME, DEV_THEME } from "../../../config";
 import styles from "./Logo.styles";
 
 const Logo: React.FunctionComponent = () => {
   const classes = styles();
-  const theme = Config.Theme
-  const showEnvironment = theme === DEV_THEME || theme === DEMO_THEME;
+  const theme = Config.Theme;
+  const showEnvironment = theme === ThemeEnv.DEV_THEME || theme === ThemeEnv.DEMO_THEME;
 
   return (
     <React.Fragment>
@@ -37,6 +38,6 @@ const Logo: React.FunctionComponent = () => {
       }
     </React.Fragment>
   );
-}
+};
 
 export default Logo;
