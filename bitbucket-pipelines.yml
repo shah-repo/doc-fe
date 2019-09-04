@@ -12,8 +12,8 @@ pipelines:
       caches:
         - docker
       script:
-        - chmod a+x ./aws/bash_scripts/runTests.sh
-        - ./aws/bash_scripts/runTests.sh
+        - chmod a+x ${BITBUCKET_CLONE_DIR}/aws/bash_scripts/runTests.sh
+        - ${BITBUCKET_CLONE_DIR}/aws/bash_scripts/runTests.sh
 
     deploy_to_development: &DEPLOY_TO_DEVELOPMENT
       name: Deploying to Development
