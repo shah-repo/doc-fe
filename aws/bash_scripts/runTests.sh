@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e
 
-AWS_DIR="${BITBUCKET_CLONE_DIR}/aws"
+BASE_DIR="${BITBUCKET_CLONE_DIR}"
+AWS_DIR="${BASE_DIR}/aws"
 ENVIRONMENT_DIR="${AWS_DIR}/environments"
 BASH_SCRIPTS_DIR="${AWS_DIR}/bash_scripts"
 PYTHON_SCRIPTS_DIR="${AWS_DIR}/python_scripts"
@@ -30,4 +31,10 @@ echo "-------- Executing Tests --------"
 
 
 mkdir -p ${TEST_RESULTS_DIR}
-JEST_JUNIT_OUTPUT=${TEST_RESULTS_DIR}/jest-results.xml yarn test --reporters="jest-junit" --forceExit --runInBand
+export JEST_JUNIT_OUTPUT="${TEST_RESULTS_DIR}/jest-results.xml"
+
+yarn test --watchAll=false --reporters="jest-junit" --forceExit --detectOpenHandles --ci
+
+if [ -f "${BASE_DIR}/junit.xml" ]; then 
+	mv "${BASE_DIR}/junit.xml" "${TEST_RESULTS_DIR}/junit.xml"
+fi
