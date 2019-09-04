@@ -33,7 +33,7 @@ echo "-------- Executing Tests --------"
 mkdir -p ${TEST_RESULTS_DIR}
 export JEST_JUNIT_OUTPUT="${TEST_RESULTS_DIR}/jest-results.xml"
 
-yarn test --no-watch --reporters="jest-junit" --forceExit --detectOpenHandles --runInBand
+yarn test --watchAll=false --reporters="jest-junit" --forceExit --detectOpenHandles --ci
 
 if [ -f "${BASE_DIR}/junit.xml" ]; then 
 	mv "${BASE_DIR}/junit.xml" "${TEST_RESULTS_DIR}/junit.xml"
