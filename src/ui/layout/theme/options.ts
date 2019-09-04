@@ -2,9 +2,11 @@ import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import Config from "../../../config";
 import { ThemeEnv } from "../../../config/types";
 import { ThemePalette } from "./palette";
-import { muiTheme } from "./palette";
+// import { muiTheme } from "./palette";
 
 const appPalette = ThemePalette[Config.Theme as ThemeEnv];
+
+export const muiTheme = createMuiTheme();
 
 export default createMuiTheme({
   ...muiTheme,
