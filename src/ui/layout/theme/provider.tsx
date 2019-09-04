@@ -1,6 +1,6 @@
 import { CssBaseline, MuiThemeProvider } from "@material-ui/core";
 import * as React from "react";
-import theme from "./options";
+import theme from "./generator";
 
 const Theme: React.FunctionComponent = ({
   children,

@@ -1,6 +1,6 @@
-import { Palette } from "@material-ui/core/styles/createPalette";
+import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import { ThemeEnv } from "../../../../config/types";
 
-export type ThemePalleteType = {
-  [key in ThemeEnv]: Palette;
+export type ThemeEnvType = {
+  [key in ThemeEnv]: () => Theme;
 };

@@ -1,10 +1,9 @@
 import { createMuiTheme } from "@material-ui/core";
 import { Palette } from "@material-ui/core/styles/createPalette";
-import { ThemePalleteType } from "./utils/types";
 
 export const muiTheme = createMuiTheme();
 
-const defaultPalette: Palette = {
+export const defaultPalette: Palette = {
   ...muiTheme.palette,
   primary: {
     main: "#0066FF",
@@ -30,7 +29,7 @@ const defaultPalette: Palette = {
   },
 };
 
-const devPalette: Palette = {
+export const devPalette: Palette = {
   ...defaultPalette,
   secondary: {
     ...defaultPalette.secondary,
@@ -41,17 +40,11 @@ const devPalette: Palette = {
   },
 };
 
-const demoPalette: Palette = {
+export const demoPalette: Palette = {
   ...defaultPalette,
   secondary: {
     ...defaultPalette.secondary,
     dark: "#C42260",
     main: "#D52568",
   },
-};
-
-export const ThemePalette: ThemePalleteType = {
-  DEV_THEME: devPalette,
-  DEMO_THEME: demoPalette,
-  PRODUCTION_THEME: defaultPalette,
 };
