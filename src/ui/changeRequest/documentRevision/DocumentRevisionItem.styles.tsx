@@ -15,9 +15,14 @@ export const styles = makeStyles((theme: Theme) =>
       whiteSpace: "nowrap",
       textOverflow: "ellipsis",
       color: theme.palette.background.default,
+      fontWeight: theme.typography.fontWeightBold,
+    },
+    titleSelected: {
+      color: theme.palette.primary.main,
+      fontWeight: theme.typography.fontWeightBold,
     },
     selected: {
-      background: "#f0f0f0",
+      background: theme.palette.primary.light,
     },
   }),
 );

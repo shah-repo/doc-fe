@@ -8,6 +8,7 @@ const defaultPaletteOptions = {
   primary: {
     main: "#0066FF",
     contrastText: "#fff",
+    light: "#DBE9FF",
   },
   secondary: {
     light: "#B3F9F5",
@@ -132,7 +133,7 @@ const defaultThemeOptions: ThemeOptions = {
     MuiSelect: {
       root: {
         fontSize: "0.8rem",
-        lineHeight: "1.2",
+        lineHeight: "1.2rem",
       },
       icon: {
         right: "10px",

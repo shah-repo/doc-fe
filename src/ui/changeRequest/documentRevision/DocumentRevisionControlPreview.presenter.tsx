@@ -27,7 +27,7 @@ export const DocumentRevisionControlPreviewPresenter: React.FunctionComponent<
   classes,
 }) => {
   const renderDocumentRevisions = () =>
-    documentsInChangeRequest.map((documentRevision) => (
+    documentsInChangeRequest.map(documentRevision => (
       <DocumentRevisionItemPresenter
         key={documentRevision.id}
         documentRevision={documentRevision}
@@ -43,7 +43,7 @@ export const DocumentRevisionControlPreviewPresenter: React.FunctionComponent<
         color="primary"
         onClick={selectAssessmentForm}
         fullWidth
-      >
+        className={classes.assessmentFormButton}>
         <Text translation="changeRequest.documentControl.changeRequestForm" />
       </Button>
       <div className={classes.documentRevisionContainer}>

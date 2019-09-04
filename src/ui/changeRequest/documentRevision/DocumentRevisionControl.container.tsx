@@ -14,8 +14,9 @@ import AsyncGate from "../../components/AsyncGate";
 import { connect } from "react-redux";
 import { ApplicationState } from "../../../state/reducers";
 import styles from "./DocumentRevisionControl.styles";
-import { withStyles, WithStyles } from "@material-ui/core";
+import { withStyles, WithStyles, Icon } from "@material-ui/core";
 import DocumentRevisionItemPresenter from "./DocumentRevisionItem.presenter";
+import { AddCircleRounded } from "@material-ui/icons";
 
 interface StateProps {
   loadDocumentRevisionsAsyncState: AsyncState;
@@ -72,7 +73,7 @@ export const DocumentRevisionControlContainer: React.FunctionComponent<
   const closeAddDocuments = () => setShowAddDocuments(false);
 
   const renderDocumentRevisions = () =>
-    documentsInChangeRequest.map((documentRevisionId) => (
+    documentsInChangeRequest.map(documentRevisionId => (
       <DocumentRevisionItemPresenter
         key={documentRevisionId}
         documentRevision={documentRevisionsById[documentRevisionId]}
@@ -86,26 +87,27 @@ export const DocumentRevisionControlContainer: React.FunctionComponent<
     <AsyncGate
       asyncState={loadDocumentRevisionsAsyncState}
       asyncAction={loadDocumentRevisionsAction}
-      startActionOnMount={true}
-    >
+      startActionOnMount={true}>
       <div className={classes.container}>
         <Button
           variant="contained"
           color="primary"
           onClick={selectAssessmentForm}
           fullWidth
-        >
+          className={classes.assessmentFormButton}>
           <Text translation="changeRequest.documentControl.changeRequestForm" />
         </Button>
         <div className={classes.documentRevisionContainer}>
           {renderDocumentRevisions()}
         </div>
         <Button
-          variant="contained"
+          variant="text"
           color="primary"
           onClick={openAddDocuments}
-          fullWidth
-        >
+          fullWidth>
+          <Icon className={classes.leftIcon}>
+            <AddCircleRounded />
+          </Icon>
           <Text translation="changeRequest.documentControl.addDocuments" />
         </Button>
         <AddDocumentRevisionContainer
