@@ -1,6 +1,0 @@
-
-export enum ThemeEnv {
-  DEV_THEME = "DEV_THEME",
-  DEMO_THEME = "DEMO_THEME",
-  PRODUCTION_THEME = "PRODUCTION_THEME",
-}

@@ -1,8 +1,8 @@
 import SvgIcon from "@material-ui/core/SvgIcon";
 import React from "react";
 import Config from "../../../config";
-import { ThemeEnv } from "../../../config/types";
 import Text from "../../components/Text";
+import { ThemeEnv } from "../../layout/theme/utils/types";
 import styles from "./Logo.styles";
 
 const Logo: React.FunctionComponent = () => {

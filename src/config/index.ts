@@ -1,6 +1,6 @@
 import queryString from "query-string";
 import { LOGIN_WITH_CODE_URL } from "../ui/constants/urls";
-import { ThemeEnv } from "./types";
+import { ThemeEnv } from "../ui/layout/theme/utils/types";
 
 const DEFAULTS = {
   API_ENDPOINT: "/",

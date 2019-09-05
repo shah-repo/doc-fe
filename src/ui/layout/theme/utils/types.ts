@@ -1,6 +1,14 @@
-import { Theme } from "@material-ui/core/styles/createMuiTheme";
-import { ThemeEnv } from "../../../../config/types";
+import { Palette } from "@material-ui/core/styles/createPalette";
+import { defaultPalette, demoPalette, devPalette, muiTheme } from "../palette";
 
-export type ThemeEnvType = {
-  [key in ThemeEnv]: () => Theme;
+export enum ThemeEnv {
+  DEV_THEME = "DEV_THEME",
+  DEMO_THEME = "DEMO_THEME",
+  PRODUCTION_THEME = "PRODUCTION_THEME",
+}
+
+export const ThemePalette: Record<ThemeEnv, Palette> = {
+  DEV_THEME: devPalette,
+  DEMO_THEME: demoPalette,
+  PRODUCTION_THEME: defaultPalette,
 };
