@@ -23,4 +23,7 @@ export default (theme: Theme) =>
     leftIcon: {
       marginRight: theme.spacing(1),
     },
+    addDocument: {
+      margin: 0,
+    },
   });

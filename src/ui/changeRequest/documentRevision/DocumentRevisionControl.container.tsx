@@ -104,7 +104,8 @@ export const DocumentRevisionControlContainer: React.FunctionComponent<
           variant="text"
           color="primary"
           onClick={openAddDocuments}
-          fullWidth>
+          fullWidth
+          className={classes.addDocument}>
           <Icon className={classes.leftIcon}>
             <AddCircleRounded />
           </Icon>
