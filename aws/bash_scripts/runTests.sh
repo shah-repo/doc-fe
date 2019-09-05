@@ -6,14 +6,10 @@ AWS_DIR="${BASE_DIR}/aws"
 ENVIRONMENT_DIR="${AWS_DIR}/environments"
 BASH_SCRIPTS_DIR="${AWS_DIR}/bash_scripts"
 PYTHON_SCRIPTS_DIR="${AWS_DIR}/python_scripts"
-
 TEST_RESULTS_DIR="${BITBUCKET_CLONE_DIR}/test-results"
 
 # Install Dependencies
 echo "-------- Installing Dependencies --------"
-
-chmod a+x "${BASH_SCRIPTS_DIR}/install.sh"
-"${BASH_SCRIPTS_DIR}/install.sh"
 
 # Exporting required variables
 SCRIPT="${PYTHON_SCRIPTS_DIR}/getEnvValue.py"
@@ -35,7 +31,6 @@ export JEST_JUNIT_OUTPUT_DIR="${TEST_RESULTS_DIR}"
 yarn test \
 	--verbose \
 	--no-watch \
-	--outputFile="${JEST_JUNIT_OUTPUT_DIR}/"test.json \
-	--json \
 	--reporters="default" \
-	--reporters="jest-junit" 
+	--reporters="jest-junit" \
+	--forceExit
