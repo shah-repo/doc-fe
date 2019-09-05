@@ -14,8 +14,8 @@ pipelines:
       script:
         - chmod a+x ./aws/bash_scripts/runTests.sh
         - ./aws/bash_scripts/runTests.sh
-      after-script:
-        - python3 ./aws/python_scripts/processTestResults.py ./test-results/test.json
+#      after-script:
+#        - python3 ./aws/python_scripts/processTestResults.py ./test-results/test.json
 
     deploy_to_development: &DEPLOY_TO_DEVELOPMENT
       name: Deploying to Development
