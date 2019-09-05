@@ -14,7 +14,7 @@ if os.path.exists(path):
             for result in data['testResults']:
                 if result['status'] == 'failed':
                     print('File: ' + result['name'])
-                    print(result['message'])
+                    print(result['message'].encode('utf-8'))
                     print('\n')
             print('****************** Test Results ******************')
             print('\n') 
