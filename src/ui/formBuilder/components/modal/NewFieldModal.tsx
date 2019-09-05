@@ -17,7 +17,6 @@ const NewFieldModal: React.FunctionComponent<DispatchProps> = ({
   ADD_FIELD,
 }) => {
   const [chosenField, setChosenField] = useState("");
-  const [modalStateContent, setModalContent] = useState({});
 
   const addField = useCallback(
     (e: any, config: any) => {
@@ -39,52 +38,48 @@ const NewFieldModal: React.FunctionComponent<DispatchProps> = ({
   };
 
   const sections: BigObject<string> = FieldConstants.sections;
-  const sectionButtons = Object.keys(sections).map((value) => {
+  const sectionButtons = Object.keys(sections).map(value => {
     return (
       <button
         className={styles[value]}
         onClick={() => handleClick(value)}
-        key={value}
-      >
+        key={value}>
         {sections[value]}
       </button>
     );
   });
 
   const basicFields: BigObject<string> = FieldConstants.basicFields;
-  const basicFieldButtons = Object.keys(basicFields).map((value) => {
+  const basicFieldButtons = Object.keys(basicFields).map(value => {
     return (
       <button
         className={styles[value]}
         onClick={() => handleClick(value)}
-        key={value}
-      >
+        key={value}>
         {basicFields[value]}
       </button>
     );
   });
 
   const approvals: BigObject<string> = FieldConstants.approvals;
-  const approvalButtons = Object.keys(approvals).map((value) => {
+  const approvalButtons = Object.keys(approvals).map(value => {
     return (
       <button
         className={styles[value]}
         onClick={() => handleClick(value)}
-        key={value}
-      >
+        key={value}>
         {approvals[value]}
       </button>
     );
   });
 
   const lists: BigObject<string> = FieldConstants.lists;
-  const listButtons = Object.keys(lists).map((value) => {
+  const listButtons = Object.keys(lists).map(value => {
     return (
       <button
         className={styles[value]}
         onClick={() => handleClick(value)}
-        key={value}
-      >
+        key={value}>
         {lists[value]}
       </button>
     );
@@ -106,16 +101,14 @@ const NewFieldModal: React.FunctionComponent<DispatchProps> = ({
     </div>
   );
 
-  useEffect(() => {
-    if (chosenField) {
-      setModalContent(
-        <FieldPresenter chosenField={chosenField} clickHandler={addField} />,
-      );
-    } else {
-      setModalContent(modalContent);
-    }
-  }, [chosenField]);
-  return <Fragment>{modalStateContent}</Fragment>;
+  return (
+    <Fragment>
+      {chosenField && (
+        <FieldPresenter chosenField={chosenField} clickHandler={addField} />
+      )}
+      {!chosenField && modalContent}
+    </Fragment>
+  );
 };
 
 export default connect(

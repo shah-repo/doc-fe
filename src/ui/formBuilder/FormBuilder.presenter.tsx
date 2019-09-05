@@ -1,12 +1,12 @@
 import React, { Fragment, useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { formReducerType } from "../../state/ducks/formBuilder/reducer";
 import Modal from "./components/modal/Modal";
 import styles from "./FormBuilder.module.css";
-import FormViewerContainer from "./FormViewer.container";
 import FormEditorContainer from "./FormEditor.container";
 import FormHeaderContainer from "./FormHeader.container";
 import FormImportExport from "./FormImportExport";
-import { connect } from "react-redux";
-import { formReducerType } from "../../state/ducks/formBuilder/reducer";
+import FormViewerContainer from "./FormViewer.container";
 
 interface FormBuilderPresenterProps {
   modalState: any;
