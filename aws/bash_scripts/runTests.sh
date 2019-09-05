@@ -12,6 +12,9 @@ TEST_RESULTS_DIR="${BITBUCKET_CLONE_DIR}/test-results"
 # Install Dependencies
 echo "-------- Installing Dependencies --------"
 
+chmod a+x "${BASH_SCRIPTS_DIR}/install.sh"
+"${BASH_SCRIPTS_DIR}/install.sh"
+
 # Exporting required variables
 SCRIPT="${PYTHON_SCRIPTS_DIR}/getEnvValue.py"
 export REACT_APP_API_ENDPOINT=$(python3 $SCRIPT $ENV $ENVIRONMENT_DIR REACT_APP_API_ENDPOINT 2>&1) 
@@ -20,21 +23,19 @@ export REACT_APP_FRONTEND_URL=$(python3 $SCRIPT $ENV $ENVIRONMENT_DIR REACT_APP_
 export REACT_APP_SIGNUP_DOMAIN_URL=$(python3 $SCRIPT $ENV $ENVIRONMENT_DIR REACT_APP_SIGNUP_DOMAIN_URL 2>&1) 
 export REACT_APP_THEME=$(python3 $SCRIPT $ENV $ENVIRONMENT_DIR REACT_APP_THEME 2>&1) 
 
-# install dependencies 
-echo "-------- Installing Dependencies --------"
-
 yarn install
 yarn add jest-junit
 
 # execute tests
 echo "-------- Executing Tests --------"
 
-
 mkdir -p ${TEST_RESULTS_DIR}
-export JEST_JUNIT_OUTPUT="${TEST_RESULTS_DIR}/jest-results.xml"
+export JEST_JUNIT_OUTPUT_DIR="${TEST_RESULTS_DIR}"
 
-yarn test --watchAll=false --reporters="jest-junit" --forceExit --detectOpenHandles --ci
-
-if [ -f "${BASE_DIR}/junit.xml" ]; then 
-	mv "${BASE_DIR}/junit.xml" "${TEST_RESULTS_DIR}/junit.xml"
-fi
+yarn test \
+	--verbose \
+	--no-watch \
+	--outputFile="${JEST_JUNIT_OUTPUT_DIR}/"test.json \
+	--json \
+	--reporters="default" \
+	--reporters="jest-junit" 
