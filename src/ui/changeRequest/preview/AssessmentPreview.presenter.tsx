@@ -1,5 +1,5 @@
 import { Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
-import moment from "moment";
+import moment from "moment-timezone";
 import React from "react";
 import { Attachment } from "../../../state/ducks/attachments";
 import { ChangeRequest, ImplementationPlanTask } from "../../../state/ducks/changeRequest";
@@ -106,9 +106,6 @@ const AssessmentPreviewPresenter: React.FunctionComponent<AssessmentPreviewPrese
         <Grid item={true} xs={12}>
           <Typography variant="h6" gutterBottom={true}>
             <Text translation="changeRequest.assessmentsDescription" />:
-          </Typography>
-          <Typography variant="h5" gutterBottom={true}>
-            {changeRequest.assessments.description}
           </Typography>
           <Typography variant="h6" gutterBottom={true}>
             <Text translation="common.design" />:

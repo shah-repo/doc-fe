@@ -1,5 +1,6 @@
 import * as _ from "lodash";
-import moment from "moment";
+import { applyTimezoneToDate, getDateString } from "../../../common/utils/date";
+import { Attachment } from "../../../state/ducks/attachments";
 import {
   Approver,
   Assessment,
@@ -11,8 +12,8 @@ import {
   ImplementationPlanTaskRequest,
   Justifications,
 } from "../../../state/ducks/changeRequest";
+import { reactQuillEmptyString } from "../../components/forms/fields/validators";
 import { ChangeRequestFormValues, ImplementationPlanFormValues, ImplementationPlanTaskFormValues } from "./types";
-import { Attachment } from "../../../state/ducks/attachments";
 
 type NestedObject = Justifications;
 
@@ -22,12 +23,10 @@ const createNestedObject = (value: NestedObject = { description: "", attachments
 });
 
 const createAssessment = (value: Assessment = {
-  description: "",
   design: {reasoning: null, attachments: null},
   process: {reasoning: null, attachments: null},
   regulatory: {reasoning: null, attachments: null},
 }) => ({
-  description: value.description,
   design: { reasoning: value.design.reasoning, attachments: value.design.attachments },
   process: { reasoning: value.process.reasoning, attachments: value.process.attachments },
   regulatory: { reasoning: value.regulatory.reasoning, attachments: value.regulatory.attachments },
@@ -60,16 +59,17 @@ const toImplementationPlanFormValues = (plan: ImplementationPlan): Implementatio
 
 export const toChangeRequestFormValues = (changeRequest: ChangeRequest): ChangeRequestFormValues => {
   const values: ChangeRequestFormValues = {
+    id: changeRequest.id,
     title: changeRequest.title,
-    description: changeRequest.description,
     assessments: createAssessment(changeRequest.assessments),
     justifications: createNestedObject(changeRequest.justifications),
     implementationPlan: toImplementationPlanFormValues(changeRequest.implementationPlan),
     approvals: changeRequest.approvals.map((approval) => ({
       label: approval.approver.name, value: approval.approver.email,
     })),
-    effectiveDate: changeRequest.effectiveDate && moment.utc(changeRequest.effectiveDate).startOf("day").toDate(),
+    effectiveDate: changeRequest.effectiveDate && applyTimezoneToDate(changeRequest.effectiveDate),
     documentRevisions: changeRequest.documentRevisions.map((documentRevision) => documentRevision.id ),
+    description: changeRequest.description || reactQuillEmptyString,
   };
 
   return values;
@@ -82,11 +82,12 @@ const createNestedObjectForRequestBody = (value: NestedObject) => ({
 
 const toImplementationPlanEditRequestBody = (values: ImplementationPlanFormValues): ImplementationPlanRequest => {
   const valuesTasks: ImplementationPlanTaskRequest[] = values.tasks.map((t) => {
-    const { assigned, ...excluded } = t;
+    const { assigned, dueDate, ...excluded } = t;
+    const normalizedDueDate = getDateString(dueDate);
     if (assigned) {
-      return ({ assigned: { id: assigned.value }, ...excluded });
+      return ({ assigned: { id: assigned.value }, dueDate: normalizedDueDate, ...excluded });
     } else {
-      return ({ ...excluded });
+      return ({ dueDate: normalizedDueDate, ...excluded });
     }
   });
   return {
@@ -115,7 +116,7 @@ export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues):
     implementationPlan: toImplementationPlanEditRequestBody(values.implementationPlan),
     justifications: createNestedObjectForRequestBody(values.justifications),
     approvals: values.approvals.map((approver): Approver => ({ email: approver.value })),
-    effectiveDate: values.effectiveDate && moment.utc(values.effectiveDate).startOf("day").toDate(),
+    effectiveDate: values.effectiveDate && getDateString(values.effectiveDate),
     documentRevisions: values.documentRevisions.map((documentRevisionId) => ({ id: documentRevisionId })),
   };
 

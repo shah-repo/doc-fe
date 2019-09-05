@@ -37,7 +37,7 @@ describe("DocumentRevisionCreateContainer tests", () => {
     const wrapper = getWrapper({ ...routeComponentProps, create });
 
     const form = wrapper.find(DocumentRevisionFormContainer);
-    const values = DEFAULT_INITIAL_VALUES;
+    const values = DEFAULT_INITIAL_VALUES();
 
     form.prop("onSubmit")(values);
 
@@ -60,7 +60,7 @@ describe("DocumentRevisionCreateContainer tests", () => {
     const wrapper = getWrapper({});
     const form = wrapper.find(DocumentRevisionFormContainer);
 
-    expect(form.prop("initialValues")).toEqual(DEFAULT_INITIAL_VALUES);
+    expect(form.prop("initialValues")).toEqual(DEFAULT_INITIAL_VALUES());
   });
 
   it("sets asyncState", () => {

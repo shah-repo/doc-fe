@@ -8,8 +8,7 @@ export const AttachmentIcon: React.FunctionComponent<AttachmentIconProps> = ({
   extension,
   size,
 }) => {
-
-  const classes = styles({ size: size || "md" });
+  const classes = styles({ size: size || "md", disabled: false });
 
   return (
     <Box className={classes.root}>

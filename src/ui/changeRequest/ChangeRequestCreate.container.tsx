@@ -19,14 +19,16 @@ interface OwnProps extends RouteComponentProps {
 
 export type ChangeRequestCreateContainerProps = OwnProps & DispatchProps;
 
-export const DEFAULT_INITIAL_VALUES: ChangeRequestFormValues = {
-  title: "",
-  description: "",
-  justifications: { description: "", attachments: [] },
-  assessments: { description: "", design: {}, process: {}, regulatory: {} },
-  implementationPlan: { tasks: [], attachments: [] },
-  approvals: [],
-  documentRevisions: [],
+export const DEFAULT_INITIAL_VALUES = (): ChangeRequestFormValues => {
+  return {
+    title: "",
+    description: "",
+    justifications: { description: "", attachments: [] },
+    assessments: { design: {}, process: {}, regulatory: {} },
+    implementationPlan: { tasks: [], attachments: [] },
+    approvals: [],
+    documentRevisions: [],
+  };
 };
 
 export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequestCreateContainerProps> =
@@ -43,7 +45,7 @@ export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequest
 
     return (
       <ChangeRequestFormContainer
-        initialValues={DEFAULT_INITIAL_VALUES}
+        initialValues={DEFAULT_INITIAL_VALUES()}
         asyncState={async.asyncState}
         onSubmit={onSubmitAssessment}
         doNotPrompt={true}

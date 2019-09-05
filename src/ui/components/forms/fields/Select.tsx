@@ -7,6 +7,7 @@ import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } fro
 import * as React from "react";
 import Text from "../../Text";
 import Field, { FieldOwnProps } from "./Field";
+import { InputField } from "./Input.styles";
 
 export interface SelectOption {
   value: string | number;
@@ -30,12 +31,16 @@ const Select: React.FunctionComponent<SelectPropsWithFormik> =
     );
 
     const Items = options.map((option) => (
-      <MenuItem key={option.value} value={option.value}>{option.text}</MenuItem>
+      <MenuItem key={option.value} value={option.value}><Text message={option.text} /></MenuItem>
     ));
 
     return (
       <Field {...fieldProps}>
-        <MuiSelect {...fieldProps.field} {...selectProps}>
+        <MuiSelect
+          {...fieldProps.field}
+          {...selectProps}
+          input={<InputField name={fieldProps.field.name} />}
+        >
           {EmptyItem}
           {Items}
         </MuiSelect>

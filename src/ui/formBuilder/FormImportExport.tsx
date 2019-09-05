@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { formReducerType } from "../../state/ducks/formBuilder/reducer";
-import modalStyles from "../components/modal/Modal.module.css";
+import modalStyles from "./components/modal/Modal.module.css";
 import styles from "./FormBuilder.module.css";
 import { ReactComponent as ExportIcon } from "./icons/icon_export.svg";
 import { ReactComponent as ImportIcon } from "./icons/icon_import.svg";

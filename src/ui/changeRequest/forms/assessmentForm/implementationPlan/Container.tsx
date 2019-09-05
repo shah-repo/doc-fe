@@ -1,8 +1,8 @@
 import { createStyles, makeStyles } from "@material-ui/core";
 import { ErrorMessage, FieldArray, FieldArrayRenderProps, FieldProps } from "formik";
 import React from "react";
-import AttachmentField from "../../../../components/common/attachment.field/field";
-import AttachmentIconField from "../../../../components/common/attachment.icon/field";
+import AttachmentField from "../../../../components/common/attachment.field/container";
+import AttachmentIconField from "../../../../components/common/attachment.icon/container";
 import HeaderField from "../../../../components/common/header.field/field";
 import AttachmentsContainer from "../../attachments/Attachments.container";
 import { ChangeRequestFormValues } from "../../types";
@@ -35,7 +35,7 @@ const Container: React.FunctionComponent<Props> = () => {
       <span className={classes.error}>
         <ErrorMessage name="implementationPlan.tasks" />
       </span>
-      <HeaderField dataProp="common.implementation.plan" actionsRenderer={actionsRenderer} />
+      <HeaderField dataProp="common.implementation.plan" variant="regular" actionsRenderer={actionsRenderer} />
       <FieldArray name="implementationPlan.tasks" render={renderTasks} />
       <AttachmentIconField name="implementationPlan.attachments" />
     </React.Fragment>

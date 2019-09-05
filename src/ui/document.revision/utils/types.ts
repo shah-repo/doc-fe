@@ -2,6 +2,7 @@ import { RouteComponentProps } from "react-router-dom";
 import { AuthProps } from "../../../state/ducks/auth/types";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { documentsActions } from "../../../state/ducks/documents";
 import { LoadAsyncState } from "../../../state/types";
 
 // Container
@@ -20,6 +21,7 @@ export type ListStateProps = DataProps<DocumentRevision[]> & LoadAsyncState & Au
 
 export interface ListDispatchProps {
   loadDocumentRevisions: typeof documentRevisionsActions.loadList;
+  setDocId: typeof documentsActions.setDocumentProposedId;
 }
 
 // Summary
@@ -37,7 +39,9 @@ export interface SummaryOwnProps {
 
 // Common
 export type DocumentRevisionUserProps = DataProps<DocumentRevision> & AuthProps;
-export type DocumentRevisionsUserProps = DataProps<DocumentRevision[]> & ActionProps & AuthProps;
+export type DocumentRevisionsUserProps = DataProps<DocumentRevision[]> & ActionProps & AuthProps & {
+  setDocId: typeof documentsActions.setDocumentProposedId;
+};
 
 export interface RouteParams {
   documentRevisionId: string;
@@ -47,4 +51,10 @@ export interface RouteParams {
 export interface ActionProps {
   editDocumentRevision: (documentRevisionId: string, documentId: string) => void;
   previewDocumentRevision: (documentRevisionId: string, documentId: string) => void;
+}
+
+export interface ReferenceSummary {
+  id: string;
+  url: string;
+  title: string;
 }

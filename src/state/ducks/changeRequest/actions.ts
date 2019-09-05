@@ -1,5 +1,6 @@
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
+import { Audit, AuditActionPayload } from "../audit/types";
 import {
   CHANGE_REQUEST_AUDIT_SET,
   CHANGE_REQUEST_GET_APPROVERS_ASYNC,
@@ -12,8 +13,6 @@ import {
   CHANGE_REQUEST_SET,
 } from "./constants";
 import {
-  Audit,
-  AuditActionPayload,
   ChangeRequest,
   ChangeRequestAuditSetAction,
   ChangeRequestAvailableApprovers,
@@ -125,6 +124,17 @@ const loadAudit = (id: string): ApiAction<Audit[]> => apiAction({
   },
 });
 
+const closeTask = (changeRequestId: string, taskId: string, body: any, handlers: Handlers):
+  ApiAction => apiActionWithCallbacks({
+    url: `${CHANGE_REQUEST_ROOT_URL}/implementation_plan_task/${taskId}/done`,
+    method: "post",
+    data: body,
+    onSuccess: (d, dispatch) => {
+      dispatch(load(changeRequestId));
+    },
+    handlers,
+  });
+
 export default {
   changeRequestsList,
   changeRequestSet,
@@ -137,4 +147,5 @@ export default {
   availableApproversList,
   auditSet,
   loadAudit,
+  closeTask,
 };

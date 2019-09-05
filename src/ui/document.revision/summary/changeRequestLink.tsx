@@ -1,17 +1,18 @@
-import { ListItem, Typography, WithStyles, withStyles, Tooltip } from "@material-ui/core";
+import { ListItem, Tooltip, Typography, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
+import { Link } from "react-router-dom";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import Text from "../../components/Text";
 import { changeRequestEditPath } from "../../change.request/utils/paths";
-import { Link } from "react-router-dom";
+import Text from "../../components/Text";
+import { stripTags } from "../../../common/utils/helpers";
 
 type Props = DataProps<DocumentRevision>;
 
 export const ChangeRequestLink: React.FunctionComponent<Props> = ({
   dataProp,
 }) => {
-  if (!dataProp.changeRequest) {
+  if (!dataProp || !dataProp.changeRequest) {
     return null;
   }
 
@@ -22,7 +23,7 @@ export const ChangeRequestLink: React.FunctionComponent<Props> = ({
       <Typography variant="h5">
         <Text translation="common.crid" />:&nbsp;
         <Link to={changeRequestEditPath(changeRequest.id)} target="_blank">
-          <Tooltip title={changeRequest.description}>
+          <Tooltip title={stripTags(changeRequest.description)}>
             <span>{changeRequest.crId}</span>
           </Tooltip>
         </Link>

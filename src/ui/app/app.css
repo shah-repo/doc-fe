@@ -1,6 +1,35 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans");
+
 .react-datepicker-wrapper,
 .react-datepicker__input-container,
 .react-datepicker__input-container input {
-    display: block;
-    width: 100%;
+  display: block;
+  width: 100%;
+}
+
+.editor-container.label-margin {
+  margin-top: 25px;
+}
+.editor-container {
+  margin-top: 5px;
+}
+
+.editor-container .ql-container {
+  background: transparent;
+  font-size: 16px;
+  border: 1px solid #b4c0ca;
+}
+
+.task-description .editor-container .ql-editor {
+  min-height: 18vh;
+  max-height: 24vh;
+}
+
+.editor-container .ql-editor {
+  min-height: 8em;
+  max-height: 36em;
+}
+
+.MuiSelect-icon {
+  right: 10px;
 }

@@ -5,6 +5,7 @@ import Date from "../components/Date";
 import Text from "../components/Text";
 import { styles } from "./DocumentRevisionList.container.styles";
 import { generateDocumentRevisionVersionPath } from "./pathGenerators";
+import { generateVersionNumber } from "./helpers";
 
 interface OwnProps {
   documentRevisions: DocumentRevision[];
@@ -19,7 +20,7 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
   const classes = styles();
 
   return (
-    <React.Fragment>
+    <div className={classes.container}>
       {documentRevisions.map((documentRevision) => {
         const link = generateDocumentRevisionVersionPath(
           documentRevision.id,
@@ -30,12 +31,16 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
           <div key={documentRevision.id} className={classes.linkContainer}>
             <NavLink
               to={link}
-              activeStyle={{ color: "gray" }}
+              activeStyle={{ color: "#0066FF", background: "#f0f0f0" }}
               className={classes.linkTitle}
             >
               <div>
                 <Text translation="documentRevision.version" />{" "}
-                {documentRevision.version} - {documentRevision.status}
+                {generateVersionNumber(
+                  documentRevision.revision,
+                  documentRevision.revisionStage,
+                )}{" "}
+                - {documentRevision.status}
               </div>
             </NavLink>
             <NavLink
@@ -49,13 +54,17 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
               </div>
               <div>
                 <Text translation="documentRevision.released" />:{" "}
-                <Date value={documentRevision.releasedAt} />
+                <Date
+                  value={
+                    documentRevision.obsoletedAt || documentRevision.releasedAt
+                  }
+                />
               </div>
             </NavLink>
           </div>
         );
       })}
-    </React.Fragment>
+    </div>
   );
 };
 

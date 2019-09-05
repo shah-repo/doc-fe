@@ -5,19 +5,15 @@ import Text from "../../Text";
 import { styles } from "./utils/styles";
 import { AttachmentFieldProps } from "./utils/types";
 
-export const AttachmentFieldPresenter: React.FunctionComponent<AttachmentFieldProps> = ({
-  name,
-  multiple,
-  component = "button",
-  onChange,
-}) => {
-
+export const AttachmentFieldPresenter: React.FunctionComponent<
+  AttachmentFieldProps
+> = ({ name, multiple, component = "button", onChange }) => {
   const isField = component === "field";
   const text = isField ? "common.upload.files" : "common.add.attachment";
   const classes = styles({ isField });
 
   return (
-    <Box className={classes.root}>
+    <Box mt={0.2} className={classes.root}>
       <input
         accept="*"
         className={classes.input}
@@ -27,13 +23,13 @@ export const AttachmentFieldPresenter: React.FunctionComponent<AttachmentFieldPr
         onChange={onChange}
         onBlur={onChange}
       />
-      <label htmlFor={`${name}-button-file`} >
+      <label htmlFor={`${name}-button-file`}>
         <Link component="span" variant="button" className={classes.link}>
           <AttachFile className={classes.icon} />
           <Text translation={text} />
         </Link>
       </label>
-    </Box >
+    </Box>
   );
 };
 

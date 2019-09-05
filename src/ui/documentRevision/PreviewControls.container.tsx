@@ -2,29 +2,30 @@ import { Button, Grid } from "@material-ui/core";
 import React from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { authSelectors } from "../../state/ducks/auth";
-import { DocumentRevision } from "../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import Text from "../components/Text";
 import { documentNewVersionPath } from "../document.revision/utils/paths";
-import { canCreateNewVersion, canSubmitDocumentRevision } from "./helpers";
+import { canCreateNewVersion } from "./helpers";
 
 interface OwnProps {
   documentRevision: DocumentRevision;
+  canShowCreateVersionButton?: boolean;
 }
 
 interface StateProps {
-  currentUserEmail: string;
+  disableCreateNewVersion: boolean;
 }
 
 type PreviewControlsContainerProps = OwnProps & StateProps & RouteComponentProps;
 
-const mapStateToProps = (state: ApplicationState): StateProps => ({
-  currentUserEmail: authSelectors.currentUserEmail(state),
+const getDisableCreateNewVersion = documentRevisionsSelectors.makeGetDisableCreateNewVersion();
+const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps => ({
+  disableCreateNewVersion: getDisableCreateNewVersion(state, props.documentRevision.document.id),
 });
 
 export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainerProps> = ({
-  documentRevision, history, currentUserEmail,
+  documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton
 }) => {
     const cloneDocument = () => history.push(documentNewVersionPath(documentRevision.id, documentRevision.document.id));
 
@@ -36,7 +37,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
 
     return (
       <Grid>
-        {canCreateNewVersion(documentRevision) && renderCloneButton()}
+        {canCreateNewVersion(documentRevision, disableCreateNewVersion, canShowCreateVersionButton) && renderCloneButton()}
       </Grid>
     );
   };

@@ -1,5 +1,7 @@
-import { Box } from "@material-ui/core";
+import { Box, Tooltip, Typography } from "@material-ui/core";
+import Link from "@material-ui/core/Link";
 import React from "react";
+import { Link as RouterLink } from "react-router-dom";
 import {
   CellMeasurer,
   Column,
@@ -13,7 +15,6 @@ import {
   StyledCellLink,
   StyledTableCell,
   StyledTableHeader,
-  StyledTooltip,
 } from "./styles";
 import {
   InnerTableColumnProps,
@@ -28,7 +29,8 @@ type InnerProps = InnerTableColumnProps;
 
 export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
 
-  const { key, label, cellType, columnOptions, cellOptions, tooltipKey, onSelect, searchOptions, omitSearch } = props;
+  const { key, label, cellType, columnOptions, cellOptions,
+          tooltipKey, onSelect, searchOptions, omitSearch, cellHref } = props;
   const { measurerCache, searchable, queryGetter } = innerProps;
 
   measurerCache.clearAll();
@@ -41,13 +43,11 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
     }
   };
 
-  const cellLinkType = ({cellData, rowData}: TableCellProps<T>) => {
-    return (
-      <StyledCellLink variant="subtitle2" onClick={handleClick({cellData, rowData})} >
-        {cellData}
-      </StyledCellLink>
-    );
-  };
+  const cellLinkType = ({cellData, rowData}: TableCellProps<T>) => (
+    <StyledCellLink variant="subtitle2" onClick={handleClick({cellData, rowData})} >
+      {cellData}
+    </StyledCellLink>
+  );
 
   const cellActionType = ({cellData, rowData}: TableCellProps<T>) => {
     return cellData.map((actionType) => {
@@ -75,21 +75,19 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
     }
   };
 
-  const cellMeasurer = ({ parent, rowIndex, columnIndex, ... other }: any) => {
-    return (
-      <CellMeasurer
-        key={key}
-        cache={measurerCache!}
-        rowIndex={rowIndex}
-        columnIndex={columnIndex}
-        parent={parent}
-      >
-        <div style={{whiteSpace: cellWhiteSpace(), padding: "5px 0"}}>
-          {cellTypeRenderer(other)}
-        </div>
-      </CellMeasurer>
-    );
-  };
+  const cellMeasurer = ({ parent, rowIndex, columnIndex, ... other }: any) => (
+    <CellMeasurer
+      key={key}
+      cache={measurerCache!}
+      rowIndex={rowIndex}
+      columnIndex={columnIndex}
+      parent={parent}
+    >
+      <div style={{whiteSpace: cellWhiteSpace(), padding: "5px 0"}}>
+        {cellTypeRenderer(other)}
+      </div>
+    </CellMeasurer>
+  );
 
   const searchFieldRenderer = () => {
     if (omitSearch === true) {
@@ -100,51 +98,62 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
       case "select":
           return <TableSearchSelectField dataKey={key} queryGetter={queryGetter} {...searchOptions} />;
       default:
-        return <TableSearchTextField dataKey={key} queryGetter={queryGetter} {...searchOptions} />
-;    }
+        return <TableSearchTextField dataKey={key} queryGetter={queryGetter} {...searchOptions} />;
+      }
   };
 
-  const headerRenderer = () => {
-    return (
-      <StyledTableHeader component="div" variant="head" >
-        <Box component="div" className="columnBox" >
-          <Box component="div" className="headerText" >
-            <Text translation={label} />
-          </Box>
-          {searchable && <Box component="div" className="headerField">{searchFieldRenderer()}</Box>}
-        </Box>
-      </StyledTableHeader>
-    );
-  };
+  const headerRenderer = () => (
+    <StyledTableHeader component="div" variant="head" >
+      <Box component="div" className="columnBox" >
+        <Box p={2}><Text message={label} /></Box>
+        {searchable && <Box component="div" className="headerField">{searchFieldRenderer()}</Box>}
+      </Box>
+    </StyledTableHeader>
+  );
 
   const tooltipRenderer = (columnProps: ColumnProps) => {
-    let tooltipValue: string = columnProps.rowData[tooltipKey] || "";
+    const { rowData } = columnProps;
+    let tooltipValue: string = rowData[tooltipKey] || "";
     if (typeof tooltipKey === "function") {
-      tooltipValue = (tooltipKey as TableCellTooltipRenderer<T>)(columnProps.rowData);
+      tooltipValue = (tooltipKey as TableCellTooltipRenderer<T>)(rowData);
     }
 
     return (
-      <StyledTooltip
+      <Tooltip
         disableHoverListener={!tooltipKey}
         title={tooltipValue || ""}
       >
         <div>{cellMeasurer(columnProps)}</div>
-      </StyledTooltip>
+      </Tooltip>
     );
   };
 
-  const cellRenderer = (columnProps: ColumnProps) => {
-    return (
-      <StyledTableCell
-        component="div"
-        variant="body"
-        align={"left"}
-        {... cellOptions}
-      >
-        {tooltipRenderer(columnProps)}
-      </StyledTableCell>
-    );
+  const linkRenderer = (columnProps: ColumnProps) => {
+    const { rowData } = columnProps;
+    if (cellHref) {
+      return (
+        <Link
+          className="columnLink"
+          component={RouterLink}
+          to={cellHref(rowData)}
+        >
+          {tooltipRenderer(columnProps)}
+        </Link>
+      );
+    }
+    return tooltipRenderer(columnProps);
   };
+
+  const cellRenderer = (columnProps: ColumnProps) => (
+    <StyledTableCell
+      component="div"
+      variant="body"
+      align="left"
+      {... cellOptions}
+    >
+      {linkRenderer(columnProps)}
+    </StyledTableCell>
+  );
 
   return (
     <Column

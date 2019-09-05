@@ -1,7 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
+import { AuditGroupType } from "../../../state/ducks/audit/types";
+import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
 import { ApplicationState } from "../../../state/reducers";
-import { changeRequestsActions, Audit, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import AuditPresenter from "./Audit.presenter";
@@ -11,7 +12,7 @@ interface OwnProps {
 }
 
 interface StateProps {
-  audit: Audit[];
+  audit: AuditGroupType;
   loadAuditAsyncState: AsyncState;
 }
 
@@ -21,13 +22,14 @@ interface DispatchProps {
 
 export type AuditContainerProps = OwnProps & StateProps & DispatchProps;
 
+const getAudit = changeRequestsSelectors.makeGetAudit();
 const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps => ({
   loadAuditAsyncState: changeRequestsSelectors.getLoadAuditAsyncState(state),
-  audit: changeRequestsSelectors.getAudit(state, props.changeRequestId),
+  audit: getAudit(state, props.changeRequestId),
 });
 
 export const AuditContainer: React.FunctionComponent<AuditContainerProps> = ({
-  audit, loadAudit, changeRequestId, loadAuditAsyncState
+  audit, loadAudit, changeRequestId, loadAuditAsyncState,
 }) => {
   const loadAuditAction = () => loadAudit(changeRequestId);
 

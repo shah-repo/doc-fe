@@ -25,6 +25,7 @@ export interface TableColumnProps<T> {
   onSelect?: TableSelectionRenderer<T>;
   searchOptions?: Partial<TableSearchFieldProps>;
   omitSearch?: boolean;
+  cellHref?: (rowData: T) => string;
 }
 
 export interface TableColumnActionProps<T> {

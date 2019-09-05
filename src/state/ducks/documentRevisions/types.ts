@@ -1,5 +1,6 @@
 import { TableColumnActionType } from "../../../ui/components/table/column/types";
 import { Attachment } from "../attachments";
+import { AuditActionPayload } from "../audit/types";
 import { ChangeRequest } from "../changeRequest";
 import { User } from "../common";
 import {
@@ -12,16 +13,10 @@ import {
 export enum DocumentRevisionStatus {
   Draft = "DRAFT",
   PendingChange = "PENDING_CHANGE",
-  PendingSubmission = "PENDING_SUBMISSION",
-  Submitted = "SUBMITTED",
   InReview = "IN_REVIEW",
-  Withdrawn = "WITHDRAWN",
-  Approved = "APPROVED",
-  Rejected = "REJECTED",
   Released = "RELEASED",
   Deprecated = "DEPRECATED",
   Obsolete = "OBSOLETE",
-  Implementation = "IMPLEMENTATION",
 }
 
 export enum RevisionChangeType {
@@ -46,6 +41,8 @@ export interface Reference {
   id: string;
   name: string;
   docId?: string;
+  documentRevisions?: DocumentRevision[];
+  document: DocumentRevisionDocument;
 }
 
 export interface DocumentRevision {
@@ -53,7 +50,8 @@ export interface DocumentRevision {
   docId?: string;
   typePrefix?: string;
   version: number;
-  revision: string;
+  revision: number;
+  revisionStage: number;
   name: string;
   description: string;
   owner: User;
@@ -104,6 +102,12 @@ export enum DocumentRevisionType {
   WI = "Work Instructions",
 }
 
+export const RevisionStageOptions = [
+  { value: 1, text: "common.Numeric" },
+  { value: 2, text: "common.AlphaNumeric" },
+  { value: 3, text: "common.Alpha" }
+]
+
 export interface ReferenceToEditRequest {
   id: string;
 }
@@ -117,6 +121,7 @@ export interface DocumentRevisionEditRequestBody {
   referenceTo: ReferenceToEditRequest[];
   document?: Partial<DocumentRevisionDocument>;
   revisionChangeType?: RevisionChangeType;
+  revisionStage?: number;
 }
 
 export interface DocumentRevisionSetAction {
@@ -154,27 +159,9 @@ export interface DocumentRevisionTransitionResponse {
   id: string;
 }
 
-export interface Audit {
-  field: string;
-  type: string;
-  nextValue: string | Attachment | Reference;
-  timestamp: string;
-  groupId: string;
-  owner: User;
-}
-
-export interface AuditActionPayload {
-  id: string;
-  audit: Audit[];
-}
-
 export interface DocumentRevisionAuditSetAction {
   type: typeof DOCUMENT_REVISION_AUDIT_SET;
   payload: AuditActionPayload;
-}
-
-export interface AuditByCRIdState {
-  [key: string]: Audit[];
 }
 
 export type AllIdsState = string[];

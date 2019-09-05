@@ -8,6 +8,7 @@ import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
+import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -29,6 +30,8 @@ interface OwnProps {
   showRevisionTypeChange?: boolean;
   setDocId?: typeof documentsActions.setDocumentProposedId;
   doNotPrompt?: boolean;
+  onDirtyFlagChange?: (dirty: boolean) => void;
+  documentRevision: DocumentRevision;
 }
 
 type DocumentRevisionFormContainerProps = OwnProps & StateProps & DispatchProps;
@@ -54,6 +57,8 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<DocumentRevi
   proposedDocId,
   setDocId,
   doNotPrompt,
+  onDirtyFlagChange,
+  documentRevision,
 }) => {
 
     const render = (props: FormikProps<DocumentRevisionFormValues>) => {
@@ -68,6 +73,7 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<DocumentRevi
           proposedDocId={proposedDocId}
           setDocId={setDocId}
           doNotPrompt={doNotPrompt}
+          onDirtyFlagChange={onDirtyFlagChange}
         />
       );
     };
@@ -84,6 +90,9 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<DocumentRevi
 
     return (
       <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>
+        <div style={{marginLeft: -16}}>
+          <ChangeRequestLink dataProp={documentRevision} />
+        </div>
         <Formik
           render={render}
           initialValues={initialValues}

@@ -1,9 +1,9 @@
 import React, { Fragment, useState } from "react";
 import { connect } from "react-redux";
-import { formReducerType } from "../../state/ducks/formBuilder/reducer";
-import styles from "../components/modal/Modal.module.css";
-import FormBuilderPresenter from "./FormBuilder.presenter";
 import { formBuilderActions } from "../../state/ducks/formBuilder";
+import { formReducerType } from "../../state/ducks/formBuilder/reducer";
+import styles from "./components/modal/Modal.module.css";
+import FormBuilderPresenter from "./FormBuilder.presenter";
 
 interface FormBuilderStateType {
   formBuilderState: formReducerType;

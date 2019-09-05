@@ -28,6 +28,7 @@ export const toDocumentRevisionEditRequestBody =
     name: values.name,
     attachments: values.attachments,
     referenceTo: values.referenceTo.map((reference) => ({ id: reference.value })),
+    revisionStage: values.revisionStage,
   };
 
   return documentRevisionEditRequestBody;
@@ -36,7 +37,17 @@ export const toDocumentRevisionEditRequestBody =
 export const toNewVersionRequestBody = (values: DocumentRevisionFormValues): DocumentRevisionEditRequestBody => {
   const newValues = toDocumentRevisionEditRequestBody(values);
   newValues.revisionChangeType = values.revisionChangeType;
-  newValues.document = values.document;
+
+  if (values.document) {
+    if (values.document.id) {
+      // new revision
+      newValues.document = _.pick(values.document, ['id']);
+    } else {
+      // new document
+      newValues.document = _.pick(values.document, ['docId', 'type']);
+    }
+  }
+
   return newValues;
 };
 

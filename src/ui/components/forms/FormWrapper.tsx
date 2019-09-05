@@ -1,4 +1,4 @@
-import { Form } from "formik";
+import { Form, FormikErrors } from "formik";
 import React, { useEffect } from "react";
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const FormWrapper: React.FunctionComponent<Props> = ({
-  dirty, resetForm, initialValues, children
+  dirty, resetForm, initialValues, children,
 }) => {
   useEffect(() => {
     if (dirty) {
