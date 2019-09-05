@@ -12,4 +12,5 @@ export interface DocumentRevisionFormValues {
   document?: Partial<DocumentRevisionDocument>;
   revisionChangeType?: RevisionChangeType;
   changeRequest?: ChangeRequest;
+  revisionStage?: number;
 }

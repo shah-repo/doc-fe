@@ -14,7 +14,7 @@ export const styles = makeStyles((theme: Theme) =>
       overflow: "hidden",
       whiteSpace: "nowrap",
       textOverflow: "ellipsis",
-      color: theme.palette.primary.main,
+      color: theme.palette.background.default,
     },
     selected: {
       background: "#f0f0f0",

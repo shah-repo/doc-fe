@@ -18,22 +18,24 @@ const Approvers: React.FunctionComponent<Props> = ({ classes, dataProp }) => {
   const approvalRenderer = () => dataProp.map((approval, index) => {
     const { approver, status, reviewedAt } = approval;
     const value = (
-      <Box>
-        {status}
-        {reviewedAt && <Text message={`, ${getFormattedDateString(reviewedAt)}`} />}
+      <Box pl={2}>
+        <Typography variant="subtitle1" component="span">{approver.name}</Typography>
+        <Typography variant="body2" component="span">
+          {` | ${status}`}
+          {reviewedAt && <Text message={` | ${getFormattedDateString(reviewedAt)}`} />}
+        </Typography>
       </Box>
     );
     return (
       <SummaryField
         key={`${approval.id}-${index}`}
-        label={approver.name}
         value={value}
       />
     );
   });
 
   return (
-    <Box className={classes.box} p={4}>
+    <Box className={classes.box} p={2}>
       <Typography variant="h6">
         <Text translation="common.approvers" />
       </Typography>

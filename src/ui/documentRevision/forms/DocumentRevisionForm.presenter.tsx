@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import {
   DocumentRevision,
   RevisionChangeType,
+  RevisionStageOptions,
 } from "../../../state/ducks/documentRevisions";
 import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
@@ -166,6 +167,18 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
   };
 
+  const renderRevisionStageDropdown = !isDisabled &&
+      <SelectField
+        name="revisionStage"
+        label="document.revision.stage"
+        selectProps={{
+          inputProps: { id: "revisionStage" },
+        }}
+        options={RevisionStageOptions}
+        validate={validator(required)}
+        includeEmpty={false}
+      />
+
   return (
     <Grid
       container={true}
@@ -229,6 +242,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               onChange: handleDocIdChange,
             }}
           />
+          {renderRevisionStageDropdown}
           <AutcompleteField
             name="referenceTo"
             label="documentRevision.form.references"

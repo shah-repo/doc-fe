@@ -31,7 +31,7 @@ const Select: React.FunctionComponent<SelectPropsWithFormik> =
     );
 
     const Items = options.map((option) => (
-      <MenuItem key={option.value} value={option.value}>{option.text}</MenuItem>
+      <MenuItem key={option.value} value={option.value}><Text message={option.text} /></MenuItem>
     ));
 
     return (
