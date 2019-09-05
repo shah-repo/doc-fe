@@ -5,7 +5,7 @@ import os.path
 
 path=sys.argv[1] #'./test-results/test.json'
 if os.path.exists(path):
-    with open(path) as handle:
+    with open(path, 'r+', encoding="utf-8") as handle:
         data = json.load(handle)
         if data['numFailedTestSuites'] >= 1 or data['numFailedTests'] >= 1 or data['numRuntimeErrorTestSuites'] >= 1:
             print('\n') 
