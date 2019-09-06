@@ -15,204 +15,219 @@ import NumericModal from "../fields/NumericModal";
 import ParagraphModal from "../fields/ParagraphModal";
 import RadioModal from "../fields/RadioModal";
 import SectionModal from "../fields/SectionModal";
-
-interface FieldPresenter {
-  chosenField: string;
-  clickHandler: any;
-  currentConfig?: any;
-}
+import { FieldPresenterProps, FieldTypes } from "./types";
 
 interface DispatchProps {
-  ADD_FIELD: typeof formBuilderActions.addField;
-  ADD_LIST: typeof formBuilderActions.addList;
+  addField: typeof formBuilderActions.addField;
+  addList: typeof formBuilderActions.addList;
 }
 
-type FieldPresenterProps = FieldPresenter & DispatchProps;
+type Props = FieldPresenterProps & DispatchProps;
 
-const FieldPresenter: React.FunctionComponent<FieldPresenterProps> = ({
+const FieldPresenter: React.FunctionComponent<Props> = ({
   chosenField,
   currentConfig,
   clickHandler,
-  ADD_FIELD,
-  ADD_LIST,
+  addField,
+  addList,
 }) => {
   const [modalStateContent, setModalContent] = useState(<div />);
 
+  const fields = {
+    singleLine: (
+      <LineFieldModal
+        title="Single Line Textfield"
+        currentConfig={currentConfig}
+        handleSubmit={clickHandler}
+      />
+    ),
+    section: (
+      <SectionModal
+        title="Section"
+        handleSubmit={clickHandler}
+        currentConfig={currentConfig}
+      />
+    ),
+  };
+
+  const fieldSelect = (field: FieldTypes) => setModalContent(fields[field]);
+
   useEffect(() => {
-    switch (chosenField) {
-      case "singleLine":
-        setModalContent(
-          <LineFieldModal
-            title="Single Line Textfield"
-            currentConfig={currentConfig}
-            handleSubmit={clickHandler}
-          />,
-        );
-        break;
-      case "section":
-        setModalContent(
-          <SectionModal
-            title="Section"
-            handleSubmit={clickHandler}
-            currentConfig={currentConfig}
-          />,
-        );
-        break;
-      case "subSection":
-        setModalContent(
-          <SectionModal
-            title="Sub Section"
-            handleSubmit={clickHandler}
-            currentConfig={currentConfig}
-          />,
-        );
-        break;
-      case "multiLine":
-        setModalContent(
-          <LineFieldModal
-            title="Multi-Line Textfield"
-            handleSubmit={clickHandler}
-            currentConfig={currentConfig}
-          />,
-        );
-        break;
-      case "checkbox":
-        setModalContent(
-          <CheckBoxModal
-            handleSubmit={clickHandler}
-            currentConfig={currentConfig}
-          />,
-        );
-        break;
-      case "radio":
-        setModalContent(
-          <RadioModal
-            handleSubmit={clickHandler}
-            currentConfig={currentConfig}
-          />,
-        );
-        break;
-      case "numeric":
-        setModalContent(
-          <NumericModal
-            title="Numeric Field"
-            handleSubmit={clickHandler}
-            currentConfig={currentConfig}
-          />,
-        );
-        break;
-      case "datepicker":
-        setModalContent(
-          <DatePickerModal
-            title="Date Picker Field"
-            currentConfig={currentConfig}
-            handleSubmit={clickHandler}
-          />,
-        );
-        break;
-      case "actionItems":
-        ADD_FIELD({
-          type: chosenField,
-          closed: false,
-          config: { colWidth: "col-12", title: "Quality Assurance" },
-        });
-        break;
-      case "hyperlink":
-        setModalContent(
-          <HyperLinkModal
-            handleSubmit={clickHandler}
-            currentConfig={currentConfig}
-          />,
-        );
-        break;
-      case "multipleHyperlink":
-        setModalContent(
-          <MultipleHyperLinkModal
-            handleSubmit={clickHandler}
-            currentConfig={currentConfig}
-          />,
-        );
-        break;
-      case "paragraph":
-        setModalContent(
-          <ParagraphModal
-            handleSubmit={clickHandler}
-            currentConfig={currentConfig}
-          />,
-        );
-        break;
-      case "fileUpload":
-        setModalContent(
-          <FileUploadModal
-            handleSubmit={clickHandler}
-            currentConfig={currentConfig}
-          />,
-        );
-        break;
-      case "multipleCheckbox":
-        setModalContent(
-          <MultipleCheckboxModal
-            handleSubmit={clickHandler}
-            currentConfig={currentConfig}
-          />,
-        );
-        break;
-      case "multiplePackaging":
-        setModalContent(
-          <MultiplePackagingModal
-            handleSubmit={clickHandler}
-            currentConfig={currentConfig}
-          />,
-        );
-        break;
-      case "approvalCollection":
-        setModalContent(
-          <ApprovalCollectionModal
-            handleSubmit={clickHandler}
-            currentConfig={currentConfig}
-          />,
-        );
-        break;
-      case "qa":
-        ADD_FIELD({
-          type: chosenField,
-          closed: false,
-          config: { colWidth: "col-12", title: "Quality Assurance" },
-        });
-        break;
-      case "operations":
-        ADD_FIELD({
-          type: chosenField,
-          closed: false,
-          config: { colWidth: "col-12", title: "Operations" },
-        });
-        break;
-      case "standards":
-      case "finishedGoods":
-      case "lots":
-      case "mpis":
-      case "parts":
-      case "sops":
-      case "suppliers":
-        ADD_LIST(chosenField);
-        break;
-      case "custom":
-        setModalContent(
-          <ListsModal
-            handleSubmit={clickHandler}
-            currentConfig={currentConfig}
-          />,
-        );
-        break;
-      case "closeSection":
-        ADD_FIELD({
-          type: chosenField,
-          closed: false,
-          diff: [],
-          config: { colWidth: "col-12" },
-        });
-        break;
-    }
+    fieldSelect(chosenField);
+    // switch (chosenField) {
+    //   case "singleLine":
+    //     setModalContent(
+    //       <LineFieldModal
+    //         title="Single Line Textfield"
+    //         currentConfig={currentConfig}
+    //         handleSubmit={clickHandler}
+    //       />,
+    //     );
+    //     break;
+    //   case "section":
+    //     setModalContent(
+    //       <SectionModal
+    //         title="Section"
+    //         handleSubmit={clickHandler}
+    //         currentConfig={currentConfig}
+    //       />,
+    //     );
+    //     break;
+    //   case "subSection":
+    //     setModalContent(
+    //       <SectionModal
+    //         title="Sub Section"
+    //         handleSubmit={clickHandler}
+    //         currentConfig={currentConfig}
+    //       />,
+    //     );
+    //     break;
+    //   case "multiLine":
+    //     setModalContent(
+    //       <LineFieldModal
+    //         title="Multi-Line Textfield"
+    //         handleSubmit={clickHandler}
+    //         currentConfig={currentConfig}
+    //       />,
+    //     );
+    //     break;
+    //   case "checkbox":
+    //     setModalContent(
+    //       <CheckBoxModal
+    //         handleSubmit={clickHandler}
+    //         currentConfig={currentConfig}
+    //       />,
+    //     );
+    //     break;
+    //   case "radio":
+    //     setModalContent(
+    //       <RadioModal
+    //         handleSubmit={clickHandler}
+    //         currentConfig={currentConfig}
+    //       />,
+    //     );
+    //     break;
+    //   case "numeric":
+    //     setModalContent(
+    //       <NumericModal
+    //         title="Numeric Field"
+    //         handleSubmit={clickHandler}
+    //         currentConfig={currentConfig}
+    //       />,
+    //     );
+    //     break;
+    //   case "datepicker":
+    //     setModalContent(
+    //       <DatePickerModal
+    //         title="Date Picker Field"
+    //         currentConfig={currentConfig}
+    //         handleSubmit={clickHandler}
+    //       />,
+    //     );
+    //     break;
+    //   case "actionItems":
+    //     ADD_FIELD({
+    //       type: chosenField,
+    //       closed: false,
+    //       config: { colWidth: "col-12", title: "Quality Assurance" },
+    //     });
+    //     break;
+    //   case "hyperlink":
+    //     setModalContent(
+    //       <HyperLinkModal
+    //         handleSubmit={clickHandler}
+    //         currentConfig={currentConfig}
+    //       />,
+    //     );
+    //     break;
+    //   case "multipleHyperlink":
+    //     setModalContent(
+    //       <MultipleHyperLinkModal
+    //         handleSubmit={clickHandler}
+    //         currentConfig={currentConfig}
+    //       />,
+    //     );
+    //     break;
+    //   case "paragraph":
+    //     setModalContent(
+    //       <ParagraphModal
+    //         handleSubmit={clickHandler}
+    //         currentConfig={currentConfig}
+    //       />,
+    //     );
+    //     break;
+    //   case "fileUpload":
+    //     setModalContent(
+    //       <FileUploadModal
+    //         handleSubmit={clickHandler}
+    //         currentConfig={currentConfig}
+    //       />,
+    //     );
+    //     break;
+    //   case "multipleCheckbox":
+    //     setModalContent(
+    //       <MultipleCheckboxModal
+    //         handleSubmit={clickHandler}
+    //         currentConfig={currentConfig}
+    //       />,
+    //     );
+    //     break;
+    //   case "multiplePackaging":
+    //     setModalContent(
+    //       <MultiplePackagingModal
+    //         handleSubmit={clickHandler}
+    //         currentConfig={currentConfig}
+    //       />,
+    //     );
+    //     break;
+    //   case "approvalCollection":
+    //     setModalContent(
+    //       <ApprovalCollectionModal
+    //         handleSubmit={clickHandler}
+    //         currentConfig={currentConfig}
+    //       />,
+    //     );
+    //     break;
+    //   case "qa":
+    //     ADD_FIELD({
+    //       type: chosenField,
+    //       closed: false,
+    //       config: { colWidth: "col-12", title: "Quality Assurance" },
+    //     });
+    //     break;
+    //   case "operations":
+    //     ADD_FIELD({
+    //       type: chosenField,
+    //       closed: false,
+    //       config: { colWidth: "col-12", title: "Operations" },
+    //     });
+    //     break;
+    //   case "standards":
+    //   case "finishedGoods":
+    //   case "lots":
+    //   case "mpis":
+    //   case "parts":
+    //   case "sops":
+    //   case "suppliers":
+    //     ADD_LIST(chosenField);
+    //     break;
+    //   case "custom":
+    //     setModalContent(
+    //       <ListsModal
+    //         handleSubmit={clickHandler}
+    //         currentConfig={currentConfig}
+    //       />,
+    //     );
+    //     break;
+    //   case "closeSection":
+    //     ADD_FIELD({
+    //       type: chosenField,
+    //       closed: false,
+    //       diff: [],
+    //       config: { colWidth: "col-12" },
+    //     });
+    //     break;
+    // }
   }, [chosenField]);
 
   return <div>{modalStateContent}</div>;
@@ -221,7 +236,7 @@ const FieldPresenter: React.FunctionComponent<FieldPresenterProps> = ({
 export default connect(
   null,
   {
-    ADD_FIELD: formBuilderActions.addField,
-    ADD_LIST: formBuilderActions.addList,
+    addField: formBuilderActions.addField,
+    addList: formBuilderActions.addList,
   },
 )(FieldPresenter);

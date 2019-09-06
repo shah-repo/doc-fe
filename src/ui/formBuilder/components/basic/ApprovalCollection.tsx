@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, ChangeEvent, MouseEvent } from "react";
 import styles from "./BasicFields.module.css";
 
 interface ApprovalCollectionProps {
@@ -18,15 +18,13 @@ const ApprovalCollection: React.FunctionComponent<ApprovalCollectionProps> = ({
 
   const approvalButtonColection =
     approvalButtons &&
-    approvalButtons.map((button: string, i: any) => (
+    approvalButtons.map((button: string, i: number) => (
       <button> {button} </button>
     ));
 
-  const toggleShowInput = (e: any) => {
-    setShowInput(!showInput);
-  };
+  const toggleShowInput = () => setShowInput(!showInput);
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setApprovalButton(e.target.value);
   };
 
@@ -44,9 +42,9 @@ const ApprovalCollection: React.FunctionComponent<ApprovalCollectionProps> = ({
   );
 
   const addApprovalButton = (
-    <span className={styles.addHyperLink} onClick={toggleShowInput}>
+    <button className={styles.addHyperLink} onClick={toggleShowInput}>
       + Add Approval Button
-    </span>
+    </button>
   );
 
   const viewMode = (
