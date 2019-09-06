@@ -36,7 +36,7 @@ const FieldPresenter: React.FunctionComponent<FieldPresenterProps> = ({
   ADD_FIELD,
   ADD_LIST,
 }) => {
-  const [modalStateContent, setModalContent] = useState({});
+  const [modalStateContent, setModalContent] = useState(<div />);
 
   useEffect(() => {
     switch (chosenField) {
