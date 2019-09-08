@@ -148,7 +148,7 @@
 }
 
 /* input styles */
-label {
+.FormBuilder label {
   position: relative;
   top: -13px;
   width: 100%;
