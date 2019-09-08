@@ -264,5 +264,8 @@
   "page.title.changeRequest": "Change Request List",
   "page.title.documentList": "Document List",
   "page.title.documentCreate": "Create New Document",
-  "page.title.changeRequestCreate": "Create New Change Request"
+  "page.title.changeRequestCreate": "Create New Change Request",
+
+  "form.builder": "Form Builder",
+  "form.builder.create": "Create a form"
 }

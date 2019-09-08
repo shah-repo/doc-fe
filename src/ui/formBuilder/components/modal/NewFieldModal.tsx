@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { formBuilderActions } from "../../../../state/ducks/formBuilder";
 import { FieldConstants } from "./FieldConstants";
 import FieldPresenter from "./helper/ModalFieldPresenter";
+import { FieldTypes } from "./helper/types";
 import styles from "./Modal.module.css";
 
 interface BigObject<T> {
@@ -38,7 +39,7 @@ const NewFieldModal: React.FunctionComponent<DispatchProps> = ({
   };
 
   const sections: BigObject<string> = FieldConstants.sections;
-  const sectionButtons = Object.keys(sections).map(value => {
+  const sectionButtons = Object.keys(sections).map((value) => {
     return (
       <button
         className={styles[value]}
@@ -50,7 +51,7 @@ const NewFieldModal: React.FunctionComponent<DispatchProps> = ({
   });
 
   const basicFields: BigObject<string> = FieldConstants.basicFields;
-  const basicFieldButtons = Object.keys(basicFields).map(value => {
+  const basicFieldButtons = Object.keys(basicFields).map((value) => {
     return (
       <button
         className={styles[value]}
@@ -62,7 +63,7 @@ const NewFieldModal: React.FunctionComponent<DispatchProps> = ({
   });
 
   const approvals: BigObject<string> = FieldConstants.approvals;
-  const approvalButtons = Object.keys(approvals).map(value => {
+  const approvalButtons = Object.keys(approvals).map((value) => {
     return (
       <button
         className={styles[value]}
@@ -74,7 +75,7 @@ const NewFieldModal: React.FunctionComponent<DispatchProps> = ({
   });
 
   const lists: BigObject<string> = FieldConstants.lists;
-  const listButtons = Object.keys(lists).map(value => {
+  const listButtons = Object.keys(lists).map((value) => {
     return (
       <button
         className={styles[value]}
@@ -104,7 +105,7 @@ const NewFieldModal: React.FunctionComponent<DispatchProps> = ({
   return (
     <Fragment>
       {chosenField && (
-        <FieldPresenter chosenField={chosenField} clickHandler={addField} />
+        <FieldPresenter chosenField={chosenField as FieldTypes} clickHandler={addField} />
       )}
       {!chosenField && modalContent}
     </Fragment>
