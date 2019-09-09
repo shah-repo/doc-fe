@@ -14,7 +14,7 @@ export const styles = makeStyles((theme: Theme) =>
       overflow: "hidden",
       whiteSpace: "nowrap",
       textOverflow: "ellipsis",
-      color: theme.palette.background.default,
+      color: theme.palette.text.primary,
       fontWeight: theme.typography.fontWeightBold,
     },
     titleSelected: {

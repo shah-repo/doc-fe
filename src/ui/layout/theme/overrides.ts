@@ -26,7 +26,7 @@ const ThemeOverrides = (appTheme: Theme): Overrides => ({
     },
     subtitle1: {
       color: appTheme.palette.text.primary,
-      fontSize: "0.875rem",
+      fontSize: "0.885rem",
       fontFamily: "Open Sans, sans-serif;",
     },
     subtitle2: {
@@ -58,9 +58,18 @@ const ThemeOverrides = (appTheme: Theme): Overrides => ({
       fontWeight: "bold",
     },
   },
+  MuiFab: {
+    root: {
+      fontSize: "0.75rem",
+    },
+    label: {
+      lineHeight: "1rem",
+    },
+  },
   MuiLink: {
     root: {
       fontSize: "0.8rem",
+      color: appTheme.palette.primary.main,
     },
   },
   MuiTableCell: {
@@ -86,6 +95,7 @@ const ThemeOverrides = (appTheme: Theme): Overrides => ({
   MuiSelect: {
     root: {
       fontSize: "0.8rem",
+      lineHeight: "1.2rem",
     },
     icon: {
       right: "10px",

@@ -8,7 +8,7 @@ export const defaultPalette: Palette = {
   primary: {
     main: "#0066FF",
     contrastText: "#fff",
-    light: "#6b93ff",
+    light: "#dbe9ff",
     dark: "#003dcb",
   },
   secondary: {

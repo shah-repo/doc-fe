@@ -15,9 +15,4 @@ export default (theme: Theme) =>
       flexWrap: "wrap",
       margin: "10px 0",
     },
-    assessmentFormButton: {
-      margin: 0,
-      borderRadius: theme.spacing(4),
-      padding: theme.spacing(2),
-    },
   });

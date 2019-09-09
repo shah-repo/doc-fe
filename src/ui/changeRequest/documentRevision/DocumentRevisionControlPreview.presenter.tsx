@@ -1,10 +1,10 @@
-import React from "react";
-import { WithStyles, withStyles } from "@material-ui/core";
+import { Fab, WithStyles, withStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Chip from "@material-ui/core/Chip";
+import React from "react";
 
-import Text from "../../components/Text";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import Text from "../../components/Text";
 import styles from "./DocumentRevisionControlPreview.styles";
 import DocumentRevisionItemPresenter from "./DocumentRevisionItem.presenter";
 
@@ -27,7 +27,7 @@ export const DocumentRevisionControlPreviewPresenter: React.FunctionComponent<
   classes,
 }) => {
   const renderDocumentRevisions = () =>
-    documentsInChangeRequest.map(documentRevision => (
+    documentsInChangeRequest.map((documentRevision) => (
       <DocumentRevisionItemPresenter
         key={documentRevision.id}
         documentRevision={documentRevision}
@@ -38,14 +38,14 @@ export const DocumentRevisionControlPreviewPresenter: React.FunctionComponent<
 
   return (
     <div className={classes.container}>
-      <Button
-        variant="contained"
+      <Fab
         color="primary"
+        variant="extended"
+        size="large"
         onClick={selectAssessmentForm}
-        fullWidth
-        className={classes.assessmentFormButton}>
+      >
         <Text translation="changeRequest.documentControl.changeRequestForm" />
-      </Button>
+      </Fab>
       <div className={classes.documentRevisionContainer}>
         {renderDocumentRevisions()}
       </div>
