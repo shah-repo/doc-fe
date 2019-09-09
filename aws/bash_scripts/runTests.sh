@@ -35,7 +35,5 @@ export JEST_JUNIT_OUTPUT_DIR="${TEST_RESULTS_DIR}"
 yarn test \
 	--verbose \
 	--no-watch \
-	--outputFile="${JEST_JUNIT_OUTPUT_DIR}/"test.json \
-	--json \
 	--reporters="default" \
 	--reporters="jest-junit" 
