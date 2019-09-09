@@ -1,22 +1,22 @@
-import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
+import React, { useState } from "react";
 
-import Text from "../../components/Text";
-import AddDocumentRevisionContainer from "./AddDocumentRevision.container";
-import { AsyncState } from "../../../state/types";
+import { Fab, Icon, withStyles, WithStyles } from "@material-ui/core";
+import { AddCircleRounded } from "@material-ui/icons";
+import { connect } from "react-redux";
 import {
   DocumentRevision,
-  DocumentRevisionsByIdState,
   documentRevisionsActions,
+  DocumentRevisionsByIdState,
   documentRevisionsSelectors,
 } from "../../../state/ducks/documentRevisions";
-import AsyncGate from "../../components/AsyncGate";
-import { connect } from "react-redux";
 import { ApplicationState } from "../../../state/reducers";
+import { AsyncState } from "../../../state/types";
+import AsyncGate from "../../components/AsyncGate";
+import Text from "../../components/Text";
+import AddDocumentRevisionContainer from "./AddDocumentRevision.container";
 import styles from "./DocumentRevisionControl.styles";
-import { withStyles, WithStyles, Icon } from "@material-ui/core";
 import DocumentRevisionItemPresenter from "./DocumentRevisionItem.presenter";
-import { AddCircleRounded } from "@material-ui/icons";
 
 interface StateProps {
   loadDocumentRevisionsAsyncState: AsyncState;
@@ -73,7 +73,7 @@ export const DocumentRevisionControlContainer: React.FunctionComponent<
   const closeAddDocuments = () => setShowAddDocuments(false);
 
   const renderDocumentRevisions = () =>
-    documentsInChangeRequest.map(documentRevisionId => (
+    documentsInChangeRequest.map((documentRevisionId) => (
       <DocumentRevisionItemPresenter
         key={documentRevisionId}
         documentRevision={documentRevisionsById[documentRevisionId]}
@@ -89,14 +89,14 @@ export const DocumentRevisionControlContainer: React.FunctionComponent<
       asyncAction={loadDocumentRevisionsAction}
       startActionOnMount={true}>
       <div className={classes.container}>
-        <Button
-          variant="contained"
+        <Fab
           color="primary"
+          variant="extended"
+          size="large"
           onClick={selectAssessmentForm}
-          fullWidth
-          className={classes.assessmentFormButton}>
+        >
           <Text translation="changeRequest.documentControl.changeRequestForm" />
-        </Button>
+        </Fab>
         <div className={classes.documentRevisionContainer}>
           {renderDocumentRevisions()}
         </div>
@@ -104,7 +104,7 @@ export const DocumentRevisionControlContainer: React.FunctionComponent<
           variant="text"
           color="primary"
           onClick={openAddDocuments}
-          fullWidth
+          fullWidth={true}
           className={classes.addDocument}>
           <Icon className={classes.leftIcon}>
             <AddCircleRounded />
