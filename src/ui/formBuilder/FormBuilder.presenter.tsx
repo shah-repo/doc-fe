@@ -35,8 +35,9 @@ const FormBuilderPresenter: React.FunctionComponent<
   return (
     <div className="FormBuilder">
       <FormHeaderContainer />
-      {modalState.show ? <Modal /> : null}
-      {viewFormMode ? <FormViewerContainer /> : builderContainer}
+      {modalState.show && <Modal />}
+      {viewFormMode && <FormViewerContainer />}
+      {!viewFormMode && builderContainer}
 
       <button onClick={toggleView} className={styles.viewForm}>
         VIEW {viewFormMode ? "BUILDER" : "FORM"}

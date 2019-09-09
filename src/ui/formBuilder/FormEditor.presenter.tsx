@@ -13,7 +13,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  UPDATE_DRAG_DROP_FIELDS: typeof formBuilderActions.updateDragAndDropFields;
+  updateDragAndDropFields: typeof formBuilderActions.updateDragAndDropFields;
 }
 
 const mapStateToProps = ({ formBuilderState }: formReducerType) => ({
@@ -24,15 +24,15 @@ type FormEdtiroPresenterProps = StateProps & DispatchProps;
 
 const FormEditorPresenter: React.FunctionComponent<
   FormEdtiroPresenterProps
-> = ({ formBuilderState, UPDATE_DRAG_DROP_FIELDS }) => {
+> = ({ formBuilderState, updateDragAndDropFields }) => {
   const [fields, setFields] = useState(formBuilderState.elements);
 
   useEffect(() => {
     setFields(formBuilderState.elements);
   }, [formBuilderState.elements]);
 
-  let dragged: any;
-  let container: any;
+  let dragged: HTMLElement;
+  let container: HTMLElement;
 
   const dragStart = (e: any) => {
     dragged = e.currentTarget;
@@ -47,14 +47,14 @@ const FormEditorPresenter: React.FunctionComponent<
       dragged.style.display = "block";
     }
     if (container && container.className.includes("dragContainer")) {
-      container.parentNode.removeChild(placeholder);
+      container.parentNode!.removeChild(placeholder);
       const from = Number(dragged.dataset.id);
       let to = Number(container.dataset.id);
       if (from < to) {
         to--;
       }
       tempFields.splice(to, 0, tempFields.splice(from, 1)[0]);
-      UPDATE_DRAG_DROP_FIELDS([...tempFields]);
+      updateDragAndDropFields([...tempFields]);
     }
   };
 
@@ -73,7 +73,7 @@ const FormEditorPresenter: React.FunctionComponent<
       e.target.className.includes("dragContainer")
     ) {
       container = e.target;
-      container.parentNode.insertBefore(placeholder, container);
+      container.parentNode!.insertBefore(placeholder, container);
     }
   };
 
@@ -103,5 +103,5 @@ const FormEditorPresenter: React.FunctionComponent<
 
 export default connect(
   mapStateToProps,
-  { UPDATE_DRAG_DROP_FIELDS: formBuilderActions.updateDragAndDropFields },
+  { updateDragAndDropFields: formBuilderActions.updateDragAndDropFields },
 )(FormEditorPresenter);
