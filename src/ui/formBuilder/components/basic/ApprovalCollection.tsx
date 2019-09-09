@@ -16,12 +16,6 @@ const ApprovalCollection: React.FunctionComponent<ApprovalCollectionProps> = ({
   const [approvalButton, setApprovalButton] = useState("");
   const [showInput, setShowInput] = useState(false);
 
-  const approvalButtonColection =
-    approvalButtons &&
-    approvalButtons.map((button: string, i: number) => (
-      <button> {button} </button>
-    ));
-
   const toggleShowInput = () => setShowInput(!showInput);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -49,9 +43,14 @@ const ApprovalCollection: React.FunctionComponent<ApprovalCollectionProps> = ({
 
   const viewMode = (
     <Fragment>
-      <div className={styles.linksContainer}>{approvalButtonColection}</div>
-      {showInput ? hyperLinkInput : null}
-      {!showInput ? addApprovalButton : null}
+      <div className={styles.linksContainer}>
+        {approvalButtons &&
+          approvalButtons.map((button: string, i: number) => (
+            <button> {button} </button>
+          ))}
+      </div>
+      {showInput && hyperLinkInput}
+      {!showInput && addApprovalButton}
     </Fragment>
   );
 
@@ -59,12 +58,11 @@ const ApprovalCollection: React.FunctionComponent<ApprovalCollectionProps> = ({
     <span>This will display the ability to add an approval collection</span>
   );
 
-  const currentDiv = editMode ? editModeDiv : viewMode;
-
   return (
     <div className={styles.ApprovalCollectionContainer}>
       <h3>{title}</h3>
-      {currentDiv}
+      {editMode && editModeDiv}
+      {!editMode && viewMode}
     </div>
   );
 };
