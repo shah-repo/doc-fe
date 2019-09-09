@@ -10,15 +10,15 @@ interface BigObject<T> {
 }
 
 interface DispatchProps {
-  ADD_FIELD: typeof formBuilderActions.addField;
+  addField: typeof formBuilderActions.addField;
 }
 
 const NewFieldModal: React.FunctionComponent<DispatchProps> = ({
-  ADD_FIELD,
+  addField,
 }) => {
   const [chosenField, setChosenField] = useState("");
 
-  const addField = useCallback(
+  const addFieldHandler = useCallback(
     (e: any, config: any) => {
       const field = {
         type: chosenField,
@@ -28,7 +28,7 @@ const NewFieldModal: React.FunctionComponent<DispatchProps> = ({
       if (!config.colWidth) {
         config.colWidth = "col-12";
       }
-      ADD_FIELD(field);
+      addField(field);
     },
     [chosenField],
   );
@@ -38,48 +38,52 @@ const NewFieldModal: React.FunctionComponent<DispatchProps> = ({
   };
 
   const sections: BigObject<string> = FieldConstants.sections;
-  const sectionButtons = Object.keys(sections).map(value => {
+  const sectionButtons = Object.keys(sections).map((value) => {
     return (
       <button
         className={styles[value]}
         onClick={() => handleClick(value)}
-        key={value}>
+        key={value}
+      >
         {sections[value]}
       </button>
     );
   });
 
   const basicFields: BigObject<string> = FieldConstants.basicFields;
-  const basicFieldButtons = Object.keys(basicFields).map(value => {
+  const basicFieldButtons = Object.keys(basicFields).map((value) => {
     return (
       <button
         className={styles[value]}
         onClick={() => handleClick(value)}
-        key={value}>
+        key={value}
+      >
         {basicFields[value]}
       </button>
     );
   });
 
   const approvals: BigObject<string> = FieldConstants.approvals;
-  const approvalButtons = Object.keys(approvals).map(value => {
+  const approvalButtons = Object.keys(approvals).map((value) => {
     return (
       <button
         className={styles[value]}
         onClick={() => handleClick(value)}
-        key={value}>
+        key={value}
+      >
         {approvals[value]}
       </button>
     );
   });
 
   const lists: BigObject<string> = FieldConstants.lists;
-  const listButtons = Object.keys(lists).map(value => {
+  const listButtons = Object.keys(lists).map((value) => {
     return (
       <button
         className={styles[value]}
         onClick={() => handleClick(value)}
-        key={value}>
+        key={value}
+      >
         {lists[value]}
       </button>
     );
@@ -104,7 +108,10 @@ const NewFieldModal: React.FunctionComponent<DispatchProps> = ({
   return (
     <Fragment>
       {chosenField && (
-        <FieldPresenter chosenField={chosenField} clickHandler={addField} />
+        <FieldPresenter
+          chosenField={chosenField}
+          clickHandler={addFieldHandler}
+        />
       )}
       {!chosenField && modalContent}
     </Fragment>
@@ -113,5 +120,5 @@ const NewFieldModal: React.FunctionComponent<DispatchProps> = ({
 
 export default connect(
   null,
-  { ADD_FIELD: formBuilderActions.addField },
+  { addField: formBuilderActions.addField },
 )(NewFieldModal);

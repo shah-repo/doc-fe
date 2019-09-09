@@ -34,14 +34,14 @@ const FormEditorPresenter: React.FunctionComponent<
   let dragged: HTMLElement;
   let container: HTMLElement;
 
-  const dragStart = (e: any) => {
-    dragged = e.currentTarget;
+  const dragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    dragged = e.currentTarget as HTMLDivElement;
     dragged.style.display = "block";
     e.dataTransfer.effectAllowed = "move";
-    e.dataTransfer.setData("FormField", dragged);
+    e.dataTransfer.setData("FormField", dragged.toString());
   };
 
-  const dragEnd = (e: any) => {
+  const dragEnd = (e: React.DragEvent<HTMLDivElement>) => {
     const tempFields = fields;
     if (dragged) {
       dragged.style.display = "block";
@@ -58,26 +58,26 @@ const FormEditorPresenter: React.FunctionComponent<
     }
   };
 
-  const dragOver = (e: any) => {
+  const dragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     if (dragged) {
       dragged.style.display = "none";
     }
 
-    if (e.target.className === "placeholder") {
+    if (e.currentTarget.className === "placeholder") {
       return;
     }
     if (
-      e.target.className &&
-      typeof e.target.className.includes !== "undefined" &&
-      e.target.className.includes("dragContainer")
+      e.currentTarget.className &&
+      typeof e.currentTarget.className.includes !== "undefined" &&
+      e.currentTarget.className.includes("dragContainer")
     ) {
-      container = e.target;
+      container = e.currentTarget;
       container.parentNode!.insertBefore(placeholder, container);
     }
   };
 
-  const Forms = fields.map((elem: any, i: any) => {
+  const Forms = fields.map((elem: any, i: number) => {
     return (
       <FormFieldEditor
         onDragStart={dragStart}

@@ -25,7 +25,7 @@ import { ReactComponent as MoveHandle } from "./icons/icon_move.svg";
 // import TaskListContainer from "./components/taskList/TaskList.container";
 
 interface FieldProps {
-  order: string;
+  order: number;
   type: string;
   closed: boolean;
   diff?: any;
