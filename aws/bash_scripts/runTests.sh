@@ -4,16 +4,12 @@ set -e
 BASE_DIR="${BITBUCKET_CLONE_DIR}"
 AWS_DIR="${BASE_DIR}/aws"
 ENVIRONMENT_DIR="${AWS_DIR}/environments"
-BASH_SCRIPTS_DIR="${AWS_DIR}/bash_scripts"
 PYTHON_SCRIPTS_DIR="${AWS_DIR}/python_scripts"
 
 TEST_RESULTS_DIR="${BITBUCKET_CLONE_DIR}/test-results"
 
 # Install Dependencies
 echo "-------- Installing Dependencies --------"
-
-chmod a+x "${BASH_SCRIPTS_DIR}/install.sh"
-"${BASH_SCRIPTS_DIR}/install.sh"
 
 # Exporting required variables
 SCRIPT="${PYTHON_SCRIPTS_DIR}/getEnvValue.py"
