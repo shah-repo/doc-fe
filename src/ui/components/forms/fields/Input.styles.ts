@@ -6,7 +6,7 @@ export const InputField = withStyles((theme: Theme) =>
   createStyles({
     root: {
       "label + &": {
-        marginTop: theme.spacing(3),
+        marginTop: theme.spacing(4),
         padding: "2px 0 0 0",
       },
     },
