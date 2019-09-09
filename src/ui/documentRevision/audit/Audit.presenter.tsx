@@ -39,7 +39,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     switch (change.field) {
       case "attachments":
         const attachment = change.nextValue as Attachment;
-        return attachment.name;
+        return `${attachment.name}.${attachment.type}`;
       case "referenceTo":
         const referenceTo = change.nextValue as Reference;
         return referenceTo.docId;
