@@ -36,4 +36,5 @@ yarn test \
 	--verbose \
 	--no-watch \
 	--reporters="default" \
-	--reporters="jest-junit" 
+	--reporters="jest-junit" \
+	--forceExit 
