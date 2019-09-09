@@ -30,6 +30,9 @@ export const TableSearchTextField: React.FunctionComponent<Props> = ({
       onChange={handleChange}
       margin="normal"
       InputProps={{ disableUnderline: true } as Partial<OutlinedInputProps>}
+      inputProps={{ "data-lpignore": true }}
     />
   );
 };
+
+TableSearchTextField.displayName = "TableSearchTextField";

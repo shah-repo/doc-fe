@@ -17,7 +17,7 @@ describe("TablePanel component tests", () => {
 
   const DocumentList = TablePanel<Document>();
   const data: Document[] = [getDocument()];
-  const noRowsTranslation = "dashboard.noReviews";
+  const noRowsTranslation = "table.no.results.found";
   let isActionSelected: boolean = false;
 
   const onActionSelect = ({ rowData, actionType }: TableSelectionProps<Document>) => () => {
