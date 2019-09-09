@@ -192,6 +192,7 @@
   "common.AlphaNumeric": "Alpha Numeric",
   "common.Alpha": "Alpha",
   "common.clear.filters": "Clear Filters",
+  "common.create": "Create",
 
   "dashboard.type.PENDING_REVIEW": "is pending your approval",
   "dashboard.type.PENDING_IMPL_PLAN_TASK": " task is pending your approval",
@@ -267,5 +268,7 @@
   "page.title.changeRequestCreate": "Create New Change Request",
 
   "form.builder": "Form Builder",
-  "form.builder.create": "Create a form"
+  "form.builder.create": "Create a form",
+  "form.builder.title": "Form Title",
+  "form.builder.number": "Form Number"
 }

@@ -2,12 +2,21 @@ import { DialogProps } from "@material-ui/core/Dialog";
 import { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
 import { Translation } from "../../../../translations/types";
 
-export interface FBInjectedProps {
+export interface FBDialogInjectedProps {
   open: boolean;
-  setOpen: () => any;
-  setClose: () => any;
+  setDialogOpen: () => any;
+  setDialogClose: () => any;
 }
 
-export interface FBDialogProps extends DialogProps, FBInjectedProps {
+export enum FBDialogActionLabel {
+  create = "common.create",
+}
+
+export type FBDialogAction = "create";
+
+export interface FBDialogProps extends DialogProps, FBDialogInjectedProps {
   title?: string | Translation;
+  maxWidth?: Breakpoint;
+  actions?: FBDialogAction[];
+  onActionClick?: (action: FBDialogAction) => any;
 }

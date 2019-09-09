@@ -2,25 +2,23 @@ import { Box, Dialog, DialogContent, DialogTitle } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
 import Text from "../../../components/Text";
+import { withDialogActions, withDialogSettings } from "./utils/hoc";
 import { FBDialogProps } from "./utils/types";
 
 const FBDialog: React.FunctionComponent<FBDialogProps> = ({
   title,
-  setClose,
+  setDialogClose,
   ...props
 }) => (
-  <Dialog {...props}>
+  <Dialog fullWidth={true} {...props}>
     <DialogTitle>
-      <Box display="inline">
-        <CloseIcon fontSize="large" onClick={setClose} />
-      </Box>
+      <CloseIcon fontSize="large" onClick={setDialogClose} />
       <Box
-        pl={2}
-        pr={2}
-        display="inline"
+        mt={-3}
         textAlign="center"
         fontWeight="fontWeightBold"
         fontSize="h6.fontSize"
+        width={1}
       >
         <Text message={title} />
       </Box>
@@ -31,4 +29,4 @@ const FBDialog: React.FunctionComponent<FBDialogProps> = ({
   </Dialog>
 );
 
-export default FBDialog;
+export default withDialogActions(withDialogSettings(FBDialog));

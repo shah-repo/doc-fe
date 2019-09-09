@@ -13,7 +13,6 @@ import {
   DOCUMENT_REVISION_LIST_URL,
   DOCUMENT_REVISION_ROOT_URL,
   DOCUMENT_ROOT_URL,
-  FORM_BUILDER_POC_URL,
   FORM_BUILDER_URL,
   HOME_URL,
 } from "../constants/urls";
@@ -22,7 +21,6 @@ import DocumentRevisionContainer from "../document.revision/container";
 import DocumentRevisionListContainer from "../document.revision/list/container";
 import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisionCreate.container";
 import DocumentContainer from "../documents/Document.container";
-import FBProvider from "../form.builder/FormBuilder";
 import FormBuilder from "../form.builder/FormBuilder";
 import FormBuilderContainer from "../formBuilder/FormBuilder.container";
 import AutoLogout from "./AutoLogout";
@@ -75,7 +73,6 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
             component={DocumentRevisionContainer}
           />
           <Route path={FORM_BUILDER_URL} component={FormBuilderContainer} />
-          <Route path={FORM_BUILDER_POC_URL} component={FBProvider} />
           <Redirect to={{ pathname: HOME_URL }} />
         </Switch>
       </main>

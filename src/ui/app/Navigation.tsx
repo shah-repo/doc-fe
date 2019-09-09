@@ -8,14 +8,15 @@ import { Dashboard } from "@material-ui/icons";
 import React from "react";
 import { Link } from "react-router-dom";
 import { RouteComponentProps, withRouter } from "react-router-dom";
+import Logo from "../components/icons/Logo";
 import {
   CHANGE_REQUEST_LIST_URL,
   DOCUMENT_REVISION_LIST_URL,
+  FORM_BUILDER_URL,
   HOME_URL,
 } from "../constants/urls";
 import styles from "./Navigation.styles";
 import NavigationLinkContainer from "./NavigationLink.container";
-import Logo from "../components/icons/Logo";
 
 type NavigationProps = WithStyles<typeof styles> & RouteComponentProps;
 
@@ -52,6 +53,12 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({ classes, locatio
       <NavigationLinkContainer
         url={CHANGE_REQUEST_LIST_URL}
         text="navigation.change.request.list"
+        Icon={Dashboard}
+        currentPath={location.pathname}
+      />
+      <NavigationLinkContainer
+        url={FORM_BUILDER_URL}
+        text="form.builder"
         Icon={Dashboard}
         currentPath={location.pathname}
       />

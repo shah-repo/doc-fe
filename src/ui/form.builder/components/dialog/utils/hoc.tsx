@@ -1,10 +1,16 @@
+import { Button, DialogActions } from "@material-ui/core";
+import { useTheme } from "@material-ui/core/styles";
+import { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import React from "react";
-import { FBInjectedProps } from "./types";
+import Text from "../../../../components/Text";
+import { Subtract } from "../../common/utils/types";
+import { FBDialogAction, FBDialogActionLabel, FBDialogInjectedProps, FBDialogProps } from "./types";
 
-type Subtract<T, V> = Pick<T, Exclude<keyof T, keyof V>>;
-
-export function withDialogHelper<T extends FBInjectedProps>(Component: React.ComponentType<T>) {
-  return class extends React.Component<Subtract<T, FBInjectedProps>> {
+export function withDialogStates<T extends FBDialogInjectedProps>(
+  Component: React.ComponentType<T>,
+) {
+  return class extends React.Component<Subtract<T, FBDialogInjectedProps>> {
     public state = { open: false as boolean };
 
     public setOpen = () => this.setState({ open: true });
@@ -14,11 +20,58 @@ export function withDialogHelper<T extends FBInjectedProps>(Component: React.Com
       return (
         <Component
           {...this.props as T}
-          setOpen={this.setOpen}
-          setClose={this.setClose}
+          setDialogOpen={this.setOpen}
+          setDialogClose={this.setClose}
           open={this.state.open}
         />
       );
     }
+  };
+}
+
+export function withDialogSettings<T extends FBDialogProps, U>(
+  Component: React.ComponentType<T>,
+) {
+
+  return (props: T) => {
+    const fullScreen = (maxWidth: Breakpoint = "sm") =>
+      useMediaQuery(useTheme().breakpoints.down(maxWidth));
+
+    return <Component fullScreen={fullScreen(props.maxWidth)} {...props} />;
+  };
+}
+
+export function withDialogActions<T extends FBDialogProps, U>(
+  Component: React.ComponentType<T>,
+) {
+
+  return (props: T) => {
+
+    const onActionClick = (action: FBDialogAction) => () => {
+      if (props.onActionClick) {
+        props.onActionClick(action);
+      }
+    };
+
+    const actionRenderer = () => props.actions!.map((action, i) => {
+      const text = FBDialogActionLabel[action];
+      return (
+        <Button
+          key={`dialogAction-${action}-${i}`}
+          variant="contained"
+          color="primary"
+          onClick={onActionClick(action)}
+        >
+          <Text message={text} />
+        </Button>
+      );
+    });
+
+    return (
+      <Component {...props} >
+        {props.children}
+        {props.actions && <DialogActions>{actionRenderer()}</DialogActions>}
+      </Component>
+    );
   };
 }
