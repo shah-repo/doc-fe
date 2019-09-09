@@ -2,7 +2,7 @@ import { Box, Dialog, DialogContent, DialogTitle } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
 import Text from "../../../components/Text";
-import { withDialogActions, withDialogSettings } from "./utils/hoc";
+import { withDialogActions, withDialogDefaults } from "./utils/hoc";
 import { FBDialogProps } from "./utils/types";
 
 const FBDialog: React.FunctionComponent<FBDialogProps> = ({
@@ -29,4 +29,4 @@ const FBDialog: React.FunctionComponent<FBDialogProps> = ({
   </Dialog>
 );
 
-export default withDialogActions(withDialogSettings(FBDialog));
+export default withDialogActions(withDialogDefaults(FBDialog));

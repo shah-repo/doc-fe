@@ -2,7 +2,7 @@ import React from "react";
 import { Subtract } from "../../../common/utils/types";
 import { FBTextFieldInjectedProps } from "./types";
 
-export function withTextFieldSettings<T extends FBTextFieldInjectedProps>(
+export function withTextFieldDefaults<T extends FBTextFieldInjectedProps>(
   Component: React.ComponentType<T>,
 ) {
 

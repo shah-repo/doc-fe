@@ -3,7 +3,7 @@ import { Box, TextField } from "@material-ui/core";
 import { OutlinedTextFieldProps } from "@material-ui/core/TextField";
 import React from "react";
 import Text from "../../../../components/Text";
-import { withTextFieldSettings } from "./utils/hoc";
+import { withTextFieldDefaults } from "./utils/hoc";
 
 const FBTextField: React.FunctionComponent<OutlinedTextFieldProps> = ({
   variant,
@@ -29,4 +29,4 @@ const FBTextField: React.FunctionComponent<OutlinedTextFieldProps> = ({
   );
 };
 
-export default withTextFieldSettings(FBTextField);
+export default withTextFieldDefaults(FBTextField);
