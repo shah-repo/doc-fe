@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { formBuilderActions } from "../../state/ducks/formBuilder";
 import ApprovalCollection from "./components/basic/ApprovalCollection";
-// import { DELETE_FIELD, EDIT_FIELD, SHOW_MODAL } from "../../state/formActions";
 import CheckBox from "./components/basic/Checkbox";
 import DatePicker from "./components/basic/DatePicker";
 import FileUpload from "./components/basic/FileUpload";
@@ -22,39 +21,16 @@ import Section from "./components/sections/Section";
 import SubSection from "./components/sections/SubSection";
 import styles from "./FormBuilder.module.css";
 import { ReactComponent as MoveHandle } from "./icons/icon_move.svg";
+import { FormBuilderFieldProps } from "../../state/ducks/formBuilder/types";
 // import TaskListContainer from "./components/taskList/TaskList.container";
 
-interface FieldProps {
-  order: string;
-  type: string;
-  closed: boolean;
-  diff?: any;
-  editMode: boolean;
-  config: {
-    colWidth: string;
-    title: string;
-    placeholder?: string;
-    options?: any[];
-    tolerance?: boolean;
-    toleranceType?: string;
-    max?: string;
-    min?: string;
-    notes?: string;
-    url?: string;
-    text?: string;
-    textType?: string;
-  };
-  onDragStart: any;
-  onDragEnd: any;
-}
-
 interface DispatchProps {
-  DELETE_FIELD: typeof formBuilderActions.deleteField;
-  EDIT_FIELD: typeof formBuilderActions.editField;
-  SHOW_MODAL: typeof formBuilderActions.showModal;
+  deleteField: typeof formBuilderActions.deleteField;
+  editField: typeof formBuilderActions.editField;
+  showModal: typeof formBuilderActions.showModal;
 }
 
-type FormFieldProps = FieldProps & DispatchProps;
+type FormFieldProps = FormBuilderFieldProps & DispatchProps;
 
 const FormFieldEditor: React.FunctionComponent<FormFieldProps> = ({
   type,
@@ -65,9 +41,9 @@ const FormFieldEditor: React.FunctionComponent<FormFieldProps> = ({
   onDragStart,
   diff,
   editMode,
-  DELETE_FIELD,
-  EDIT_FIELD,
-  SHOW_MODAL,
+  deleteField,
+  editField,
+  showModal,
 }) => {
   let formField;
   switch (type) {
@@ -256,16 +232,16 @@ const FormFieldEditor: React.FunctionComponent<FormFieldProps> = ({
       break;
   }
 
-  const showModal = () => {
-    SHOW_MODAL(order);
+  const showModalHandler = () => {
+    showModal(order);
   };
 
-  const editField = () => {
-    EDIT_FIELD(type, config, order, closed);
+  const editFieldHandler = () => {
+    editField(type, config, order, closed);
   };
 
   const removeField = () => {
-    DELETE_FIELD(order);
+    deleteField(order);
   };
   const showEdit = [
     "standards",
@@ -279,7 +255,7 @@ const FormFieldEditor: React.FunctionComponent<FormFieldProps> = ({
   ].includes(type);
 
   const editTemp = (
-    <div className={styles.edit} onClick={editField}>
+    <div className={styles.edit} onClick={editFieldHandler}>
       Edit
     </div>
   );
@@ -312,7 +288,7 @@ const FormFieldEditor: React.FunctionComponent<FormFieldProps> = ({
       <div className={styles.moveHandle}>
         <MoveHandle />
       </div>
-      <div className={styles.addField} onClick={showModal}>
+      <div className={styles.addField} onClick={showModalHandler}>
         Add Field
       </div>
     </div>
@@ -322,8 +298,8 @@ const FormFieldEditor: React.FunctionComponent<FormFieldProps> = ({
 export default connect(
   null,
   {
-    DELETE_FIELD: formBuilderActions.deleteField,
-    EDIT_FIELD: formBuilderActions.editField,
-    SHOW_MODAL: formBuilderActions.showModal,
+    deleteField: formBuilderActions.deleteField,
+    editField: formBuilderActions.editField,
+    showModal: formBuilderActions.showModal,
   },
 )(FormFieldEditor);

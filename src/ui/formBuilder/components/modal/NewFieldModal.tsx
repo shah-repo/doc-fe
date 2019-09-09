@@ -11,15 +11,15 @@ interface BigObject<T> {
 }
 
 interface DispatchProps {
-  ADD_FIELD: typeof formBuilderActions.addField;
+  addField: typeof formBuilderActions.addField;
 }
 
 const NewFieldModal: React.FunctionComponent<DispatchProps> = ({
-  ADD_FIELD,
+  addField,
 }) => {
   const [chosenField, setChosenField] = useState("");
 
-  const addField = useCallback(
+  const addFieldHandler = useCallback(
     (e: any, config: any) => {
       const field = {
         type: chosenField,
@@ -29,7 +29,7 @@ const NewFieldModal: React.FunctionComponent<DispatchProps> = ({
       if (!config.colWidth) {
         config.colWidth = "col-12";
       }
-      ADD_FIELD(field);
+      addField(field);
     },
     [chosenField],
   );
@@ -44,7 +44,8 @@ const NewFieldModal: React.FunctionComponent<DispatchProps> = ({
       <button
         className={styles[value]}
         onClick={() => handleClick(value)}
-        key={value}>
+        key={value}
+      >
         {sections[value]}
       </button>
     );
@@ -56,7 +57,8 @@ const NewFieldModal: React.FunctionComponent<DispatchProps> = ({
       <button
         className={styles[value]}
         onClick={() => handleClick(value)}
-        key={value}>
+        key={value}
+      >
         {basicFields[value]}
       </button>
     );
@@ -68,7 +70,8 @@ const NewFieldModal: React.FunctionComponent<DispatchProps> = ({
       <button
         className={styles[value]}
         onClick={() => handleClick(value)}
-        key={value}>
+        key={value}
+      >
         {approvals[value]}
       </button>
     );
@@ -80,7 +83,8 @@ const NewFieldModal: React.FunctionComponent<DispatchProps> = ({
       <button
         className={styles[value]}
         onClick={() => handleClick(value)}
-        key={value}>
+        key={value}
+      >
         {lists[value]}
       </button>
     );
@@ -114,5 +118,5 @@ const NewFieldModal: React.FunctionComponent<DispatchProps> = ({
 
 export default connect(
   null,
-  { ADD_FIELD: formBuilderActions.addField },
+  { addField: formBuilderActions.addField },
 )(NewFieldModal);

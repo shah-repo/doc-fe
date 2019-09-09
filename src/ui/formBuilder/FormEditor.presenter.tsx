@@ -13,7 +13,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  UPDATE_DRAG_DROP_FIELDS: typeof formBuilderActions.updateDragAndDropFields;
+  updateDragAndDropFields: typeof formBuilderActions.updateDragAndDropFields;
 }
 
 const mapStateToProps = ({ formBuilderState }: formReducerType) => ({
@@ -24,60 +24,60 @@ type FormEdtiroPresenterProps = StateProps & DispatchProps;
 
 const FormEditorPresenter: React.FunctionComponent<
   FormEdtiroPresenterProps
-> = ({ formBuilderState, UPDATE_DRAG_DROP_FIELDS }) => {
+> = ({ formBuilderState, updateDragAndDropFields }) => {
   const [fields, setFields] = useState(formBuilderState.elements);
 
   useEffect(() => {
     setFields(formBuilderState.elements);
   }, [formBuilderState.elements]);
 
-  let dragged: any;
-  let container: any;
+  let dragged: HTMLElement;
+  let container: HTMLElement;
 
-  const dragStart = (e: any) => {
-    dragged = e.currentTarget;
+  const dragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    dragged = e.currentTarget as HTMLDivElement;
     dragged.style.display = "block";
     e.dataTransfer.effectAllowed = "move";
-    e.dataTransfer.setData("FormField", dragged);
+    e.dataTransfer.setData("FormField", dragged.toString());
   };
 
-  const dragEnd = (e: any) => {
+  const dragEnd = (e: React.DragEvent<HTMLDivElement>) => {
     const tempFields = fields;
     if (dragged) {
       dragged.style.display = "block";
     }
     if (container && container.className.includes("dragContainer")) {
-      container.parentNode.removeChild(placeholder);
+      container.parentNode!.removeChild(placeholder);
       const from = Number(dragged.dataset.id);
       let to = Number(container.dataset.id);
       if (from < to) {
         to--;
       }
       tempFields.splice(to, 0, tempFields.splice(from, 1)[0]);
-      UPDATE_DRAG_DROP_FIELDS([...tempFields]);
+      updateDragAndDropFields([...tempFields]);
     }
   };
 
-  const dragOver = (e: any) => {
+  const dragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     if (dragged) {
       dragged.style.display = "none";
     }
 
-    if (e.target.className === "placeholder") {
+    if (e.currentTarget.className === "placeholder") {
       return;
     }
     if (
-      e.target.className &&
-      typeof e.target.className.includes !== "undefined" &&
-      e.target.className.includes("dragContainer")
+      e.currentTarget.className &&
+      typeof e.currentTarget.className.includes !== "undefined" &&
+      e.currentTarget.className.includes("dragContainer")
     ) {
-      container = e.target;
-      container.parentNode.insertBefore(placeholder, container);
+      container = e.currentTarget;
+      container.parentNode!.insertBefore(placeholder, container);
     }
   };
 
-  const Forms = fields.map((elem: any, i: any) => {
+  const Forms = fields.map((elem: any, i: number) => {
     return (
       <FormFieldEditor
         onDragStart={dragStart}
@@ -103,5 +103,5 @@ const FormEditorPresenter: React.FunctionComponent<
 
 export default connect(
   mapStateToProps,
-  { UPDATE_DRAG_DROP_FIELDS: formBuilderActions.updateDragAndDropFields },
+  { updateDragAndDropFields: formBuilderActions.updateDragAndDropFields },
 )(FormEditorPresenter);
