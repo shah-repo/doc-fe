@@ -5,6 +5,7 @@ import {
 } from "../../../state/ducks/documentRevisions";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { DocumentRevisionUserProps } from "./types";
+import _ from "lodash";
 
 const isDraft = (documentRevision: DocumentRevision) =>
   documentRevision.status === DocumentRevisionStatus.Draft;
@@ -51,5 +52,5 @@ export const documentRevisionTypeFormOption = () => {
     const keyName = DocumentRevisionType[key as keyof typeof DocumentRevisionType];
     options.push({value: key, text: keyName});
   });
-  return options;
+  return _.orderBy(options, ["text"], ["asc"]);
 };
