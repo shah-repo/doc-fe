@@ -9,7 +9,7 @@ const ThemeOverrides = (appTheme: Theme): Overrides => ({
     colorPrimary: {
       background: "transparent",
       backgroundColor: "transparent",
-      color: "#4d4d4d",
+      color: appTheme.palette.text.primary,
     },
     root: {
       boxShadow: "none",
@@ -25,22 +25,22 @@ const ThemeOverrides = (appTheme: Theme): Overrides => ({
       fontFamily: "Open Sans, sans-serif;",
     },
     subtitle1: {
-      color: "#4d4d4d",
-      fontSize: "0.875remrem",
+      color: appTheme.palette.text.primary,
+      fontSize: "0.875rem",
       fontFamily: "Open Sans, sans-serif;",
     },
     subtitle2: {
-      color: "#4d4d4d",
+      color: appTheme.palette.text.primary,
       fontSize: "0.8rem",
       fontFamily: "Open Sans, sans-serif;",
     },
     h5: {
-      color: "#4d4d4d",
+      color: appTheme.palette.text.primary,
       fontSize: "1rem",
       fontFamily: "Open Sans, sans-serif;",
     },
     h4: {
-      color: "#4d4d4d",
+      color: appTheme.palette.text.primary,
       fontSize: "1.4rem",
     },
     h6: {
@@ -108,7 +108,7 @@ const ThemeOverrides = (appTheme: Theme): Overrides => ({
   MuiListItemText: {
     primary: {
       fontSize: "0.9rem",
-      color: "#4d4d4d",
+      color: appTheme.palette.text.primary,
     },
   },
   MuiExpansionPanel: {
