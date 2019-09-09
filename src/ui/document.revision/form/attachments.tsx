@@ -6,8 +6,12 @@ import HeaderField from "../../components/common/header.field/field";
 
 const Attachments: React.FunctionComponent<{}> = () => {
   return (
-    <Box mt={1}>
-      <HeaderField dataProp="common.attachments" variant="regular" />
+    <Box mt={6}>
+      <HeaderField
+        dataProp="common.attachments"
+        variant="regular"
+        color="secondary"
+      />
       <AttachmentField name="attachments" component="field" />
       <AttachmentIconField name="attachments" />
     </Box>

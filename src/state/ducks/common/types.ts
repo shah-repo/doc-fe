@@ -33,3 +33,14 @@ export enum TypographySize {
   md = "h6",
   lg = "h4",
 }
+
+export enum TypographyColor {
+  primary = "textPrimary",
+  secondary = "textSecondary",
+}
+
+export interface TypographyProps {
+  size: keyof typeof TypographySize;
+  color: keyof typeof TypographyColor;
+  variant: string;
+}
