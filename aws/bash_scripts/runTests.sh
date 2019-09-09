@@ -5,7 +5,6 @@ BASE_DIR="${BITBUCKET_CLONE_DIR}"
 AWS_DIR="${BASE_DIR}/aws"
 ENVIRONMENT_DIR="${AWS_DIR}/environments"
 PYTHON_SCRIPTS_DIR="${AWS_DIR}/python_scripts"
-
 TEST_RESULTS_DIR="${BITBUCKET_CLONE_DIR}/test-results"
 
 # Install Dependencies
@@ -33,4 +32,4 @@ yarn test \
 	--no-watch \
 	--reporters="default" \
 	--reporters="jest-junit" \
-	--forceExit 
+	--forceExit
