@@ -136,6 +136,17 @@ const ThemeOverrides = (appTheme: Theme): Overrides => ({
       padding: appTheme.spacing(1),
     },
   },
+  MuiOutlinedInput: {
+    notchedOutline: {
+      borderRadius: 0,
+    },
+  },
+  MuiDialogActions: {
+    root: {
+      padding: appTheme.spacing(1, 0),
+      margin: appTheme.spacing(0, -1),
+    },
+  },
 });
 
 export default ThemeOverrides;
