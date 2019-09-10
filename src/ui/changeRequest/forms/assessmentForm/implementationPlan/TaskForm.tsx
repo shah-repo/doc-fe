@@ -1,5 +1,5 @@
 import { Button, createStyles, Grid, makeStyles, Paper } from "@material-ui/core";
-import { Form } from "formik";
+import { Form, FormikProps } from "formik";
 import React from "react";
 import { connect } from "react-redux";
 import implementationPlanTaskStates from "../../../../../data/implementationPlanTaskStates.json";
@@ -9,12 +9,13 @@ import AutocompleteField from "../../../../components/forms/fields/Autocomplete/
 import { OptionType } from "../../../../components/forms/fields/Autocomplete/types";
 import DatePickerField from "../../../../components/forms/fields/DatePicker";
 import InputField from "../../../../components/forms/fields/Input";
-import TextEditorField from "../../../../components/forms/fields/TextEditor";
 import SelectField from "../../../../components/forms/fields/Select";
+import TextEditorField from "../../../../components/forms/fields/TextEditor";
 import { required, validator } from "../../../../components/forms/fields/validators";
 import Text from "../../../../components/Text";
+import { ImplementationPlanTaskFormValues } from "../../types.js";
 
-interface OwnProps {
+interface OwnProps extends FormikProps<ImplementationPlanTaskFormValues> {
   cancel: () => void;
 }
 
@@ -41,9 +42,15 @@ export const styles = makeStyles(() =>
 ));
 
 export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
-  cancel, availableAssignees,
+  cancel, availableAssignees, values,
 }) => {
   const classes = styles();
+  const isNew = values.id === undefined;
+  let planStateOptions = implementationPlanTaskStates;
+
+  if (isNew) {
+    planStateOptions = implementationPlanTaskStates.filter((option) => option.value !== "DONE");
+  }
 
   return (
     <Form>
@@ -87,7 +94,7 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
             label="common.status"
             size="sm"
             selectProps={{inputProps: { id: "status" }}}
-            options={implementationPlanTaskStates}
+            options={planStateOptions}
             validate={validator(required)}
             includeEmpty={false}
           />

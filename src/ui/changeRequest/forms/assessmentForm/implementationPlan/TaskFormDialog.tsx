@@ -34,7 +34,7 @@ const INITIAL_VALUES = {
 export const TaskFormDialog: React.FunctionComponent<TaskFormDialogProps> =
   ({ onSubmit, closeDialog, openDialog, isDialogOpen, buttonProps, task }) => {
     const renderForm = (props: FormikProps<any>) => (
-      <TaskForm cancel={closeDialog} />
+      <TaskForm cancel={closeDialog} {...props} />
     );
 
     const preventPropagation = (event: React.FormEvent) =>  event.stopPropagation();
