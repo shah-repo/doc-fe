@@ -1,17 +1,41 @@
 import { Box, Fab } from "@material-ui/core";
 import NavigationIcon from "@material-ui/icons/Navigation";
-import React from "react";
+import React, { useState } from "react";
 import Text from "../components/Text";
 import FBDialog from "./components/dialog/FBDialog";
 import { withDialogStates } from "./components/dialog/utils/hoc";
 import { FBDialogAction, FBDialogProps } from "./components/dialog/utils/types";
 import FBTextField from "./components/inputs/textfield/FBTextField";
+import FormBuilderContainer from "../formBuilder/FormBuilder.container";
+import { HeaderState } from "../../state/ducks/formBuilder/types";
+import { connect } from "react-redux";
+import { formBuilderActions } from "../../state/ducks/formBuilder";
 
-const FormBuilder: React.FunctionComponent<FBDialogProps> = ({
+interface DispatchProps {
+  setFormInfo: typeof formBuilderActions.setFormInfo;
+}
+
+type formProps = FBDialogProps & DispatchProps;
+
+const FormBuilder: React.FunctionComponent<formProps> = ({
+  setFormInfo,
   ...props
 }) => {
+  const onActionClick = (action: FBDialogAction) => createForm();
 
-  const onActionClick = (action: FBDialogAction) => props.setDialogClose();
+  const createForm = () => {
+    setFormInfo(headerState.title, headerState.formNumber, "Draft");
+    props.setDialogClose();
+  };
+
+  const [headerState, setHeaderState] = useState<HeaderState>({
+    title: "",
+    formNumber: 0,
+  });
+
+  const handleChange = (title: string, formNumber: number) => {
+    setHeaderState({ title, formNumber });
+  };
 
   return (
     <Box mb={1} display="flex" flexDirection="row-reverse">
@@ -25,13 +49,13 @@ const FormBuilder: React.FunctionComponent<FBDialogProps> = ({
         onActionClick={onActionClick}
         {...props}
       >
-        <Box pt={3} >
-          <FBTextField label="form.builder.title" />
-          <FBTextField label="form.builder.number" />
-        </Box>
+        <FormBuilderContainer handleChange={handleChange} />
       </FBDialog>
     </Box>
   );
 };
 
-export default withDialogStates(FormBuilder);
+export default connect(
+  null,
+  { setFormInfo: formBuilderActions.setFormInfo },
+)(withDialogStates(FormBuilder));

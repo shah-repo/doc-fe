@@ -22,7 +22,7 @@ import DocumentRevisionListContainer from "../document.revision/list/container";
 import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisionCreate.container";
 import DocumentContainer from "../documents/Document.container";
 import FormBuilder from "../form.builder/FormBuilder";
-import FormBuilderContainer from "../formBuilder/FormBuilder.container";
+import FormBuilderPresenter from "../formBuilder/FormBuilder.presenter";
 import AutoLogout from "./AutoLogout";
 import DataFetcherContainer from "./DataFetcher.container";
 import HeaderContainer from "./Header.container";
@@ -72,7 +72,7 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
             path={DOCUMENT_REVISION_ROOT_URL}
             component={DocumentRevisionContainer}
           />
-          <Route path={FORM_BUILDER_URL} component={FormBuilderContainer} />
+          <Route path={FORM_BUILDER_URL} component={FormBuilderPresenter} />
           <Redirect to={{ pathname: HOME_URL }} />
         </Switch>
       </main>

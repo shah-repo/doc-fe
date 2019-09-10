@@ -7,6 +7,7 @@ import FormBuilderPresenter from "./FormBuilder.presenter";
 
 interface FormBuilderStateType {
   formBuilderState: formReducerType;
+  handleChange: (title: string, formNumber: number) => void;
 }
 
 interface DispatchProps {
@@ -22,14 +23,16 @@ type StateProps = FormBuilderStateType & DispatchProps;
 const FormBuilderContainer: React.FunctionComponent<StateProps> = ({
   formBuilderState,
   setFormInfo,
+  handleChange,
 }) => {
   const [formState] = useState(formBuilderState);
-  const [headerState, setHeaderState] = useState({ title: "", formNumber: "" });
+  const [headerState, setHeaderState] = useState({ title: "", formNumber: 0 });
   const [withHeader, setwithHeader] = useState(false);
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
     setHeaderState({ ...headerState, [name]: value });
+    handleChange(headerState.title, headerState.formNumber);
   };
 
   const submitForm = (e: any) => {
@@ -39,31 +42,27 @@ const FormBuilderContainer: React.FunctionComponent<StateProps> = ({
   };
 
   const createForm = (
-    <div className={styles.modalOverlay}>
-      <div className={styles.modalBody}>
-        <form onSubmit={submitForm}>
-          <div className={styles.modalFormContainer}>
-            <h2> Create a form</h2>
-            <label>Form Title</label>
-            <input
-              type="text"
-              onChange={handleInputChange}
-              name="title"
-              placeholder="Enter here"
-              required={true}
-            />
-            <label>Form Number</label>
-            <input
-              type="text"
-              onChange={handleInputChange}
-              name="formNumber"
-              placeholder="Enter here"
-              required={true}
-            />
-            <button>CREATE</button>
-          </div>
-        </form>
-      </div>
+    <div className="formBuilder">
+      <form onSubmit={submitForm}>
+        <div className={styles.modalFormContainer}>
+          <label>Form Title</label>
+          <input
+            type="text"
+            onChange={handleInputChange}
+            name="title"
+            placeholder="Enter here"
+            required={true}
+          />
+          <label>Form Number</label>
+          <input
+            type="text"
+            onChange={handleInputChange}
+            name="formNumber"
+            placeholder="Enter here"
+            required={true}
+          />
+        </div>
+      </form>
     </div>
   );
 

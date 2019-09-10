@@ -23,3 +23,8 @@ export interface FormBuilderFieldConfig {
   text?: string;
   textType?: string;
 }
+
+export interface HeaderState {
+  title: string;
+  formNumber: number;
+}

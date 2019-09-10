@@ -1,7 +1,5 @@
-export type FieldTypes = "singleLine" | "section";
-
 export interface FieldPresenterProps {
-  chosenField: FieldTypes;
+  chosenField: any;
   clickHandler: any;
   currentConfig?: any;
 }
