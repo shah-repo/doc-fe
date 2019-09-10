@@ -25,6 +25,7 @@ import AssessmentFormControlsContainer from "./AssessmentFormControls.container"
 import AssessmentFormImplementationPlan from "./implementationPlan/Container";
 import TextEditorField from "../../../components/forms/fields/TextEditor";
 import ScrollToError from "../../../components/forms/ScrollToError";
+import DialogButton from "../../../components/textDiff/DialogButton";
 
 interface Props
   extends WithStyles<typeof styles>,
@@ -120,6 +121,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
             alignItems="flex-end"
             direction="column">
             <div>
+              <DialogButton />
               <AssessmentFormControlsContainer changeRequest={changeRequest} />
               <SubmitButton
                 asyncState={asyncState}
