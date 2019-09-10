@@ -6,14 +6,30 @@ import FBDialog from "./components/dialog/FBDialog";
 import { withDialogStates } from "./components/dialog/utils/hoc";
 import { FBDialogAction, FBDialogProps } from "./components/dialog/utils/types";
 import FBTextField from "./components/inputs/textfield/FBTextField";
-import FormBuilderContainer from "../formBuilder/FormBuilder.container";
 
-const FormBuilder: React.FunctionComponent<FBDialogProps> = ({ ...props }) => {
+const FormBuilder: React.FunctionComponent<FBDialogProps> = ({
+  ...props
+}) => {
+
   const onActionClick = (action: FBDialogAction) => props.setDialogClose();
 
   return (
     <Box mb={1} display="flex" flexDirection="row-reverse">
-      <FormBuilderContainer />
+      <Fab variant="extended" size="small" onClick={props.setDialogOpen}>
+        <NavigationIcon />
+        <Text message="form.builder" />
+      </Fab>
+      <FBDialog
+        title="form.builder.create"
+        actions={["create"]}
+        onActionClick={onActionClick}
+        {...props}
+      >
+        <Box pt={3} >
+          <FBTextField label="form.builder.title" />
+          <FBTextField label="form.builder.number" />
+        </Box>
+      </FBDialog>
     </Box>
   );
 };
