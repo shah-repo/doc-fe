@@ -217,7 +217,7 @@
   "document.action.withdraw": "Withdraw",
   "document.revision.stage": "Document Revision Stage",
 
-  "documentRevision.createNewVersion": "Create a new version",
+  "documentRevision.revise": "Revise Document",
   "documentRevision.version": "Version",
   "documentRevision.released": "Released",
   "documentRevision.form.references": "References",
