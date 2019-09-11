@@ -98,6 +98,10 @@ export enum DocumentRevisionType {
   TP = "Test Protocol",
   TR = "Test Report",
   WI = "Work Instructions",
+  ESL = "Equipment Specifications Lot",
+  TLL = "Tooling Lot",
+  CSL = "Component Specifications Lot",
+  EB = "Engineering Build",
 }
 
 export const RevisionStageOptions = [
