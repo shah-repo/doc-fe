@@ -22,6 +22,7 @@ import SubSection from "./components/sections/SubSection";
 import styles from "./FormBuilder.module.css";
 import { ReactComponent as MoveHandle } from "./icons/icon_move.svg";
 import { FormBuilderFieldProps } from "../../state/ducks/formBuilder/types";
+import TaskListContainer from "./components/taskList/TaskList.container";
 // import TaskListContainer from "./components/taskList/TaskList.container";
 
 interface DispatchProps {
@@ -120,14 +121,14 @@ const FormFieldEditor: React.FunctionComponent<FormFieldProps> = ({
       );
       break;
 
-    // case "actionItems":
-    //   formField = (
-    //     <TaskListContainer
-    //       currentUserEmail="admin@enlil.com"
-    //       currentUser="admin"
-    //     />
-    //   );
-    //   break;
+    case "actionItems":
+      formField = (
+        <TaskListContainer
+          currentUserEmail="admin@enlil.com"
+          currentUser="admin"
+        />
+      );
+      break;
     case "hyperlink":
       formField = (
         <HyperLink
