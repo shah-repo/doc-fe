@@ -2,10 +2,7 @@ let JsDiff = require('diff')
 import { DeltaStatic, DeltaOperation } from "quill";
 
 export const compareHandler = (oldContent: DeltaStatic, newContent: DeltaStatic) => {
-    if (oldContent == null || newContent == null) {
-        return;
-    }
-    if (oldContent.ops == null || newContent.ops == null) {
+    if (!oldContent || !oldContent.ops || !newContent || !newContent.ops) {
         return;
     }
 
