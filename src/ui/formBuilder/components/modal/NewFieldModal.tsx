@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { formBuilderActions } from "../../../../state/ducks/formBuilder";
 import { FieldConstants } from "./FieldConstants";
 import FieldPresenter from "./helper/ModalFieldPresenter";
-import { FieldTypes } from "./helper/types";
 import styles from "./Modal.module.css";
 
 interface BigObject<T> {
@@ -109,7 +108,10 @@ const NewFieldModal: React.FunctionComponent<DispatchProps> = ({
   return (
     <Fragment>
       {chosenField && (
-        <FieldPresenter chosenField={chosenField as FieldTypes} clickHandler={addField} />
+        <FieldPresenter
+          chosenField={chosenField}
+          clickHandler={addFieldHandler}
+        />
       )}
       {!chosenField && modalContent}
     </Fragment>
