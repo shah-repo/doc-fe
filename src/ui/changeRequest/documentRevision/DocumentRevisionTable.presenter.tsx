@@ -37,6 +37,14 @@ const DocumentRevisionTable: React.FunctionComponent<
 
   const columns: Array<TableColumnProps<DocumentRevision>> = [
     {
+      key: "docId",
+      label: "document.revision.list.docId",
+      columnOptions: {
+        cellDataGetter: ({ rowData }) => rowData.document.docId,
+        width: 100,
+      },
+    },
+    {
       key: "name",
       label: "changeRequest.documentRevisionTable.name",
       columnOptions: { flexGrow: 1 },
