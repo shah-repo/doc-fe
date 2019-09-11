@@ -17,12 +17,14 @@ const Diff: React.FunctionComponent<Props> = ({
   const refOld = useRef<ReactQuill>(null);
   const refNew = useRef<ReactQuill>(null);
   useEffect(() => {
+    refNew.current && refNew.current.getEditor().pasteHTML(newText);
+    
     const oldContents = refOld.current && refOld.current.getEditor().getContents();
     const newContents = refNew.current && refNew.current.getEditor().getContents();
     const difference = compareHandler(oldContents, newContents);
 
     setNewDelta(difference);
-  }, []);
+  }, [newText]);
 
   return (
     <div>

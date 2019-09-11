@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import DialogWindow from "../dialogs/Dialog";
 import { DialogHandler } from "../../hooks/useDialog";
 import Diff from "./Diff";
@@ -14,26 +14,22 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-const oldText = "<p>2.8.2019 a-1 <strong>bold</strong></p>";
-const newText = "<p>2.8.2019 a-1 <em>italic</em> <u>underline</u></p>";
+const oldTextHard = "<p>2.8.2019 a-1 <strong>bold</strong></p>";
+const newTextHard = "<p>2.8.2019 a-1 <em>italic</em> <u>underline</u></p>";
 
 const Dialog: React.FunctionComponent<Props> = ({
   auditId, dialogHandler,
 }) => {
+  const [oldText, setOldText] = useState("");
+  const [newText, setNewText] = useState("");
   const async = useAsync({
     onSuccess: (arg) => {
-      console.log(arg);
-      console.log("success");
+      setOldText(oldTextHard);
+      setNewText(newTextHard);
     }
   });
 
   const action = useActionCreator(auditActions.getChanges);
-  //console.log(auditActions.getChanges);
-  // const dispatchMethod = (auditId: string, async: Handlers) => dispatch(auditActions.getChanges(auditId, async))
-  //const loadChanges = () => async.start(auditActions.getChanges, auditId, async);
-  //const loadChanges = () => async.start(dispatch(auditActions.getChanges), auditId, async);
-  //const loadChanges = () => dispatch(auditActions.getChanges(auditId, async));
-  // const loadChanges = () => async.start(dispatchMethod, auditId, async);
   const loadChanges = () => async.start(action, auditId, async);
   
   const contentRenderer = () => (
