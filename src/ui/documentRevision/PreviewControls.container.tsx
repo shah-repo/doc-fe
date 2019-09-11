@@ -31,7 +31,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
 
     const renderCloneButton = () => (
       <Button color="primary" onClick={cloneDocument}>
-        <Text translation="documentRevision.createNewVersion" />
+        <Text translation="documentRevision.revise" />
       </Button>
     );
 
