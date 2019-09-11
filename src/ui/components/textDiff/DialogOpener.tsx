@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import useDialog from "../../hooks/useDialog";
-import Dialog from "./Dialog";
+import Dialog from "./Dialog.container";
 import { styles } from "./DialogOpener.styles";
 
 interface OwnProps {

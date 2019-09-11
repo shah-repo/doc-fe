@@ -1,12 +1,9 @@
 import React, { useState } from "react";
-import DialogWindow from "../dialogs/Dialog";
 import { DialogHandler } from "../../hooks/useDialog";
-import Diff from "./Diff";
 import useAsync from "../../hooks/useAsync";
 import { auditActions } from "../../../state/ducks/audit";
-import AsyncGate from "../AsyncGate";
 import useActionCreator from "../../hooks/useActionCreator";
-import { styles } from "./Dialog.styles";
+import DialogPresenter from "./Dialog.presenter";
 
 interface OwnProps {
   auditId: string;
@@ -21,7 +18,6 @@ const newTextHard = '<p>2.8.2019 a-2 <strong>bold </strong>so much text</p><p><b
 const Dialog: React.FunctionComponent<Props> = ({
   auditId, dialogHandler,
 }) => {
-  const classes = styles();
   const [oldText, setOldText] = useState("");
   const [newText, setNewText] = useState("");
   const async = useAsync({
@@ -34,26 +30,13 @@ const Dialog: React.FunctionComponent<Props> = ({
   const action = useActionCreator(auditActions.getChanges);
   const loadChanges = () => async.start(action, auditId, async);
   
-  const contentRenderer = () => (
-    <div className={classes.container}>
-      <AsyncGate
-        asyncState={async.asyncState}
-        asyncAction={loadChanges}
-        startActionOnMount={true}
-      >
-        <Diff
-          oldText={oldText}
-          newText={newText}
-        />
-      </AsyncGate>
-    </div>
-  );
-
   return (
-    <DialogWindow
-      title={"common.changes"}
-      contentRenderer={contentRenderer}
+    <DialogPresenter
       dialogHandler={dialogHandler}
+      oldText={oldText}
+      newText={newText}
+      async={async}
+      loadChanges={loadChanges}
     />
   );
 }

@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import Button from "@material-ui/core/Button";
 import useDialog from "../../hooks/useDialog";
-import Dialog from "./Dialog";
+import Dialog from "./Dialog.container";
 import Text from "../Text";
 
 interface OwnProps {
