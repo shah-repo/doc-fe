@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import { compareHandler } from "./helpers.js";
-import { styles } from "./Diff.styles";
+import DiffPresenter from "./Diff.presenter";
 
 interface OwnProps {
   oldText: string;
@@ -10,11 +10,10 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-const Diff: React.FunctionComponent<Props> = ({
+const DiffContainer: React.FunctionComponent<Props> = ({
   oldText, newText,
 }) => {
-  const classes = styles();
-  const [newDelta, setNewDelta] = useState(null);
+  const [delta, setDelta] = useState(null);
   const refOld = useRef<ReactQuill>(null);
   const refNew = useRef<ReactQuill>(null);
   useEffect(() => {
@@ -24,29 +23,20 @@ const Diff: React.FunctionComponent<Props> = ({
     const newContents = refNew.current && refNew.current.getEditor().getContents();
     const difference = compareHandler(oldContents, newContents);
 
-    setNewDelta(difference);
+    setDelta(difference);
   }, [newText]);
 
   return (
-    <div>
-      <ReactQuill
-        ref={refOld}
-        readOnly={true}
-        value={oldText}
-        modules={{ toolbar: false }}
-        className={classes.editor}
-      />
-      <ReactQuill
-        ref={refNew}
-        readOnly={true}
-        value={newDelta || newText}
-        modules={{ toolbar: false }}
-        className={classes.editor}
-      />
-    </div>
+    <DiffPresenter
+      oldText={oldText}
+      newText={newText}
+      refOld={refOld}
+      refNew={refNew}
+      delta={delta}
+    />
   );
 }
 
-Diff.displayName = "TextDiff";
+DiffContainer.displayName = "TextDiffContainer";
 
-export default Diff;
+export default DiffContainer;

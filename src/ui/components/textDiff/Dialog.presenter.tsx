@@ -1,7 +1,7 @@
 import React from "react";
 import DialogWindow from "../dialogs/Dialog";
 import { DialogHandler } from "../../hooks/useDialog";
-import Diff from "./Diff";
+import Diff from "./Diff.container";
 import AsyncGate from "../AsyncGate";
 import { styles } from "./Dialog.styles";
 import { Async } from "../../hooks/useAsync";
@@ -16,7 +16,7 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-const Dialog: React.FunctionComponent<Props> = ({
+const DialogPresenter: React.FunctionComponent<Props> = ({
   oldText, newText, loadChanges, dialogHandler, async
 }) => {
   const classes = styles();
@@ -45,6 +45,6 @@ const Dialog: React.FunctionComponent<Props> = ({
   );
 }
 
-Dialog.displayName = "TextDiffDialog";
+DialogPresenter.displayName = "TextDiffDialogPresenter";
 
-export default Dialog;
+export default DialogPresenter;
