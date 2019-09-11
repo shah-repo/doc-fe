@@ -2,13 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import { compareHandler } from "./helpers.js";
 import DiffPresenter from "./Diff.presenter";
+import { DiffContainerProps } from "./types.js";
 
-interface OwnProps {
-  oldText: string;
-  newText: string;
-}
-
-type Props = OwnProps;
+type Props = DiffContainerProps;
 
 const DiffContainer: React.FunctionComponent<Props> = ({
   oldText, newText,

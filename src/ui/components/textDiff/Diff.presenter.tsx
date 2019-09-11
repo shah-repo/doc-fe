@@ -1,17 +1,9 @@
-import React, { RefObject } from "react";
+import React from "react";
 import ReactQuill from "react-quill";
-import { compareHandler } from "./helpers.js";
 import { styles } from "./Diff.styles";
+import { DiffPresenterProps } from "./types.js";
 
-interface OwnProps {
-  oldText: string;
-  newText: string;
-  refOld: RefObject<ReactQuill>;
-  refNew: RefObject<ReactQuill>;
-  delta: any;
-}
-
-type Props = OwnProps;
+type Props = DiffPresenterProps;
 
 const DiffPresenter: React.FunctionComponent<Props> = ({
   oldText, newText, refOld, refNew, delta,

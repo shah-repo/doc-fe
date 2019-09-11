@@ -2,13 +2,9 @@ import React, { Fragment } from "react";
 import useDialog from "../../hooks/useDialog";
 import Dialog from "./Dialog.container";
 import { styles } from "./DialogOpener.styles";
+import { DialogOpenerProps } from "./types";
 
-interface OwnProps {
-  id: string;
-  text: string;
-}
-
-type Props = OwnProps;
+type Props = DialogOpenerProps;
 
 const DialogOpener: React.FunctionComponent<Props> = ({
   id, text,

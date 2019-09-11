@@ -4,10 +4,7 @@ import useDialog from "../../hooks/useDialog";
 import Dialog from "./Dialog.container";
 import Text from "../Text";
 
-interface OwnProps {
-}
-
-type Props = OwnProps;
+type Props = {};
 
 const DialogButton: React.FunctionComponent<Props> = ({
 }) => {
