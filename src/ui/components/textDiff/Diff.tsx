@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import ReactQuill from "react-quill";
-import { sanitizeHtml } from "../../../common/utils/helpers";
 import { compareHandler } from "./helpers.js";
+import { styles } from "./Diff.styles";
 
 interface OwnProps {
   oldText: string;
@@ -13,6 +13,7 @@ type Props = OwnProps;
 const Diff: React.FunctionComponent<Props> = ({
   oldText, newText,
 }) => {
+  const classes = styles();
   const [newDelta, setNewDelta] = useState(null);
   const refOld = useRef<ReactQuill>(null);
   const refNew = useRef<ReactQuill>(null);
@@ -33,12 +34,14 @@ const Diff: React.FunctionComponent<Props> = ({
         readOnly={true}
         value={oldText}
         modules={{ toolbar: false }}
+        className={classes.editor}
       />
       <ReactQuill
         ref={refNew}
         readOnly={true}
         value={newDelta || newText}
         modules={{ toolbar: false }}
+        className={classes.editor}
       />
     </div>
   );
