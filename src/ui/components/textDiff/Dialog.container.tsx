@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { DialogHandler } from "../../hooks/useDialog";
 import useAsync from "../../hooks/useAsync";
 import { auditActions } from "../../../state/ducks/audit";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -17,7 +16,7 @@ const DialogContainer: React.FunctionComponent<Props> = ({
   const [oldText, setOldText] = useState("");
   const [newText, setNewText] = useState("");
   const async = useAsync({
-    onSuccess: (arg) => {
+    onSuccess: (data) => {
       setOldText(oldTextHard);
       setNewText(newTextHard);
     }

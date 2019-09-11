@@ -1,15 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import ReactQuill from "react-quill";
-import { compareHandler } from "./helpers.js";
+import { compareHandler } from "./helpers";
 import DiffPresenter from "./Diff.presenter";
-import { DiffContainerProps } from "./types.js";
+import { DiffContainerProps } from "./types";
+import { DeltaStatic } from "quill";
 
 type Props = DiffContainerProps;
 
 const DiffContainer: React.FunctionComponent<Props> = ({
   oldText, newText,
 }) => {
-  const [delta, setDelta] = useState(null);
+  const [delta, setDelta] = useState<DeltaStatic | null>(null);
   const refOld = useRef<ReactQuill>(null);
   const refNew = useRef<ReactQuill>(null);
   useEffect(() => {
@@ -17,9 +18,12 @@ const DiffContainer: React.FunctionComponent<Props> = ({
     
     const oldContents = refOld.current && refOld.current.getEditor().getContents();
     const newContents = refNew.current && refNew.current.getEditor().getContents();
-    const difference = compareHandler(oldContents, newContents);
+    let difference;
 
-    setDelta(difference);
+    if (oldContents && newContents) {
+      difference = compareHandler(oldContents, newContents);
+      setDelta(difference || null);
+    }
   }, [newText]);
 
   return (

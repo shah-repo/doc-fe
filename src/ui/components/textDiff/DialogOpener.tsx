@@ -15,12 +15,12 @@ const DialogOpener: React.FunctionComponent<Props> = ({
 
   return (
     <Fragment>
-      <span
+      <div
         className={classes.container}
         onClick={openDialog}
       >
         {text}
-      </span>
+      </div>
       <Dialog
         auditId={id}
         dialogHandler={dialogHandler}
