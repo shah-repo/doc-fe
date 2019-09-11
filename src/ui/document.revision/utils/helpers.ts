@@ -26,13 +26,13 @@ export const documentRevisionIdMask = (
 
 export const documentRevisionTypeOption = () => {
   const options: SelectOption[] = [];
-  Object.keys(DocumentRevisionType).map((key) => options.push({value: key, text: key}));
+  Object.keys(DocumentRevisionType).sort().map((key) => options.push({value: key, text: key}));
   return options;
 };
 
 export const documentRevisionStatusOption = () => {
   const options: SelectOption[] = [];
-  Object.keys(DocumentRevisionStatus).map((key) => {
+  Object.keys(DocumentRevisionStatus).sort().map((key) => {
     // TODO: Change DocumentRevisionStatus enum into key = value, value = text
     const keyName = DocumentRevisionStatus[key as keyof typeof DocumentRevisionStatus];
     if (keyName !== DocumentRevisionStatus.Deprecated) {
@@ -47,7 +47,7 @@ export const documentRevisionQueryStatus = (): DocumentRevisionStatus[] =>
 
 export const documentRevisionTypeFormOption = () => {
   const options: SelectOption[] = [];
-  Object.keys(DocumentRevisionType).map((key) => {
+  Object.keys(DocumentRevisionType).sort().map((key) => {
     const keyName = DocumentRevisionType[key as keyof typeof DocumentRevisionType];
     options.push({value: key, text: keyName});
   });
