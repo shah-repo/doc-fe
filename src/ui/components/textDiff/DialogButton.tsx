@@ -22,6 +22,7 @@ const DialogButton: React.FunctionComponent<Props> = ({
         <Text translation="common.open" />
       </Button>
       <Dialog
+        auditId="123"
         dialogHandler={dialogHandler}
       />
     </Fragment>
