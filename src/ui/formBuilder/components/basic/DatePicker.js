@@ -9,13 +9,13 @@ const DatePicker = ({
   currentIndex,
   editMode,
 }) => {
-  const handleDayChange = day => {
+  const handleDayChange = (day) => {
     if (!editMode) {
       updateValue(currentIndex, "date", day);
     }
   };
 
-  return <div / >
+  return <div />;
 };
 
 export default DatePicker;
