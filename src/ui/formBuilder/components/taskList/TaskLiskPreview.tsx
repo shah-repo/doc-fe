@@ -6,7 +6,7 @@ import TaskListContainer from "./TaskList.container";
 // });
 
 const TaskListPresenter: React.FunctionComponent = () => {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState("");
 
   const selectUserHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setUser(e.target.value);
@@ -18,7 +18,8 @@ const TaskListPresenter: React.FunctionComponent = () => {
         onChange={selectUserHandler}
         defaultValue="1"
         // tslint:disable-next-line: jsx-alignment
-        style={{ marginBottom: "50px" }}>
+        style={{ marginBottom: "50px" }}
+      >
         <option value="1" disabled={true}>
           Select User
         </option>
