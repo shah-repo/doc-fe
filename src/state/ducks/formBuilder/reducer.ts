@@ -21,11 +21,13 @@ const initialState = {
   elements: [],
   modalState: {},
   currentField: "",
+  tasks: [],
 };
 
 const formReducer = (state: any = initialState, action: any) => {
   const elements = [...state.elements];
   const index = state.currentIndex;
+  const newTasks = [...state.tasks];
   switch (action.type) {
     case ADD_FIELD:
       elements.splice(index + 1, 0, action.field);
@@ -163,6 +165,22 @@ const formReducer = (state: any = initialState, action: any) => {
           return element;
         }),
       };
+    case "ADD_TASK":
+      return {
+        ...state,
+        tasks: [...state.tasks, action.payload],
+      };
+    case "EDIT_TASK":
+      newTasks.splice(action.id, 1, action.task);
+      return { ...state, tasks: [...state.tasks] };
+    case "DELETE_TASK":
+      newTasks.splice(action.id, 1);
+      return { ...state, tasks: [...newTasks] };
+    case "CLOSE_TASK":
+      const task = newTasks[action.id];
+      task.status = "closed";
+      newTasks.splice(action.id, 1, task);
+      return { ...state, tasks: [...newTasks] };
     default:
       return state;
   }
