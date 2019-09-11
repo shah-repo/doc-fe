@@ -8,6 +8,13 @@
   float: left;
 }
 
+.FormBuilder label {
+  position: relative;
+  top: -13px;
+  width: 100%;
+  font-size: 21px;
+}
+
 .FormBuilder input[type="text"],
 .FormBuilder input[type="number"] {
   width: 100%;

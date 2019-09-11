@@ -22,6 +22,7 @@ import DocumentRevisionListContainer from "../document.revision/list/container";
 import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisionCreate.container";
 import DocumentContainer from "../documents/Document.container";
 import FormBuilder from "../form.builder/FormBuilder";
+import FormBuilderContainer from "../formBuilder/FormBuilder.container";
 import FormBuilderPresenter from "../formBuilder/FormBuilder.presenter";
 import AutoLogout from "./AutoLogout";
 import DataFetcherContainer from "./DataFetcher.container";
@@ -39,7 +40,7 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
       <HeaderContainer />
       <Navigation />
       <main className={classes.content}>
-        <FormBuilder />
+        <FormBuilderContainer />
         <DataFetcherContainer />
         <Switch>
           <Route path={HOME_URL} exact={true} component={DashboardContainer} />

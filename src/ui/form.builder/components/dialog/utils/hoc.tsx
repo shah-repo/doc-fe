@@ -34,8 +34,12 @@ export function withDialogDefaults<T extends FBDialogProps, U>(
 ) {
 
   return (props: T) => {
-    const fullScreen = (maxWidth: Breakpoint = "sm") =>
-      useMediaQuery(useTheme().breakpoints.down(maxWidth));
+    const fullScreen = (maxWidth: Breakpoint = "sm") => {
+      if (!props.fullScreen) {
+        return useMediaQuery(useTheme().breakpoints.down(maxWidth));
+      }
+      return props.fullScreen;
+    };
 
     return <Component fullScreen={fullScreen(props.maxWidth)} {...props} />;
   };

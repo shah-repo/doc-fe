@@ -12,7 +12,6 @@ const FormHeaderPresenter : React.FunctionComponent<formProps> = ({
 }) => {
   return (
     <div className={formStyles.formHeader}>
-      <div className={formStyles.closeForm}> X </div>
       <div className={formStyles.formHeaderInfoContainer}>
         <button className={formStyles.formStatus}>{status}</button>
         <h2 className={formStyles.formTitle}>{title}</h2>
