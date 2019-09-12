@@ -9,7 +9,6 @@ import { WithStyles, withStyles } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
-import { Translation } from "../../translations/types";
 import Text from "../Text";
 import styles from "./Dialog.styles";
 import { DialogAction, DialogResponsiveProps } from "./utils/types";

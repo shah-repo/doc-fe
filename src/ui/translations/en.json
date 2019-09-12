@@ -192,6 +192,7 @@
   "common.AlphaNumeric": "Alpha Numeric",
   "common.Alpha": "Alpha",
   "common.clear.filters": "Clear Filters",
+  "common.changes": "Changes",
   "common.create": "Create",
 
   "dashboard.type.PENDING_REVIEW": "is pending your approval",

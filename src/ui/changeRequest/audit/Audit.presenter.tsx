@@ -8,14 +8,12 @@ import {
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import React from "react";
-import { Attachment } from "../../../state/ducks/attachments";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
-import { Approval, TypographySize, User } from "../../../state/ducks/common";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { getAuditDefaultValue } from "../../common/utils/helpers";
+import { TypographySize } from "../../../state/ducks/common";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
 import { styles } from "./Audit.presenter.styles";
+import { getNextValue } from "../../common/utils/audit";
 
 interface OwnProps {
   audit: AuditGroupType;
@@ -27,37 +25,6 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   audit,
 }) => {
   const classes = styles();
-
-  const getNextValue = (change: Audit) => {
-    if (!change.nextValue) {
-      return "N/A";
-    }
-
-    switch (change.field) {
-      case "attachments":
-      case "justifications.attachments":
-      case "assessments.process.attachments":
-      case "assessments.design.attachments":
-      case "assessments.regulatory.attachments":
-        const attachment = change.nextValue as Attachment;
-        return `${attachment.name}.${attachment.type}`;
-      case "approvals":
-        const approval = change.nextValue as Approval;
-        return approval.approver.name;
-      case "approvers":
-      case "tasks.assigned":
-        const approver = change.nextValue as User;
-        return approver.name;
-      case "documentRevisions":
-        const documentRevision = change.nextValue as DocumentRevision;
-        return documentRevision.name;
-      case "tasks.dueDate":
-      case "effectiveDate":
-        return <DateTime value={change.nextValue as string} />;
-      default:
-        return getAuditDefaultValue(change.nextValue);
-    }
-  };
 
   const renderAuditGroup = () => Object.keys(audit).map((groupId) => {
     const change = audit[groupId][0];
