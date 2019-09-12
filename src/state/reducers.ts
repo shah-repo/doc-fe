@@ -7,6 +7,7 @@ import changeRequests from "./ducks/changeRequest";
 import documentRevisions from "./ducks/documentRevisions";
 import documents from "./ducks/documents";
 import dashboard from "./ducks/dashboard";
+import formBuilderState from "./ducks/formBuilder";
 
 const authPersistConfig = {
   key: "auth",
@@ -20,6 +21,7 @@ const appReducer = combineReducers({
   changeRequests,
   documentRevisions,
   dashboard,
+  formBuilderState,
 });
 
 const rootReducer = (state: any, action: any) => {
