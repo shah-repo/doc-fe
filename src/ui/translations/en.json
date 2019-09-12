@@ -271,5 +271,8 @@
   "form.builder": "Form Builder",
   "form.builder.create": "Create a form",
   "form.builder.title": "Form Title",
-  "form.builder.number": "Form Number"
+  "form.builder.number": "Form Number",
+
+  "attachment.download.file": "Download attached file {fileName}.{fileType}",
+  "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}"
 }

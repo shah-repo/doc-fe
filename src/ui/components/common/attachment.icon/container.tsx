@@ -25,6 +25,8 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   ...other
 }) => {
 
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) =>
       window.open(downloadInfo!.url, "_parent"),
@@ -39,6 +41,13 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const handleDownload = (attachment: Attachment) => () =>
     async.start(download, attachment, async);
 
+  const handleContextMenu = (evt: React.MouseEvent<HTMLElement>) => {
+    evt.preventDefault();
+    setAnchorEl(evt.currentTarget);
+  }
+
+  const closeContextMenu = () => setAnchorEl(null);
+
   const attachmentsRenderer = (field!.value as Attachment[] || []).map((attachment) => (
     <Presenter
       {...other}
@@ -47,6 +56,9 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
       attachment={attachment}
       handleRemove={handleRemove}
       handleDownload={handleDownload}
+      handleContextMenu={handleContextMenu}
+      closeContextMenu={closeContextMenu}
+      anchorEl={anchorEl}
     />
   ));
 
