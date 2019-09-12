@@ -109,7 +109,7 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
       asyncAction={loadAction}
       startActionOnMount={true}>
       <Box ml={3}>
-        <ChangeRequestLink dataProp={documentRevision} />
+        {!showRevisionTypeChange && <ChangeRequestLink dataProp={documentRevision} />}
       </Box>
       <Formik
         render={render}
