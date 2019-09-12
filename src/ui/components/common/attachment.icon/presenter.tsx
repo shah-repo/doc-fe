@@ -19,6 +19,7 @@ export const AttachmentIconPresenter: React.FunctionComponent<
   size,
   handleRemove,
   handleDownload,
+  handleContextMenu,
   disabled = false,
   ...other
 }) => {
@@ -39,6 +40,7 @@ export const AttachmentIconPresenter: React.FunctionComponent<
         </IconButton>
       </Box>
       <ButtonBase
+        onContextMenu={handleContextMenu && handleContextMenu(file)}
         key={`icon-${attachment!.id}`}
         onClick={handleDownload && handleDownload(file)}>
         {isLoading && <CircularProgress className={classes.progress} />}
