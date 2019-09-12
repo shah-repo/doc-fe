@@ -1,4 +1,4 @@
-import { Attachment, attachmentsActions } from "../../../../../state/ducks/attachments";
+import { Attachment, attachmentsActions, AttachmentType } from "../../../../../state/ducks/attachments";
 import { RenderSize } from "../../../../../state/ducks/common";
 import { FormikHybridFieldProps } from "../../../hoc/utils/types";
 
@@ -12,14 +12,14 @@ export interface AttachmentIconProps extends FormikHybridFieldProps {
   size?: RenderSize;
   disabled?: boolean;
   handleRemove?: (attachment: Attachment) => () => any;
-  handleDownload?: (attachment: Attachment) => () => any;
+  handleDownload?: (attachment: Attachment, type?: AttachmentType) => () => any;
   handleContextMenu?: (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   closeContextMenu?: () => void;
   anchorEl?: null | HTMLElement;
 }
 
 export interface AttachmentMenuProps {
-  handleDownload?: (attachment: Attachment) => () => any;
+  handleDownload?: (attachment: Attachment, type?: AttachmentType) => () => any;
   handleClose?: () => void;
   anchorEl?: null | HTMLElement;
   file: Attachment;

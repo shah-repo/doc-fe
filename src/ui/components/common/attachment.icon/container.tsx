@@ -5,6 +5,7 @@ import {
   Attachment,
   AttachmentDownloadResponse,
   attachmentsActions,
+  AttachmentType,
 } from "../../../../state/ducks/attachments";
 import { ApplicationState } from "../../../../state/reducers";
 import useAsync from "../../../hooks/useAsync";
@@ -38,8 +39,8 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     form!.setFieldValue(name, filtered);
   };
 
-  const handleDownload = (attachment: Attachment) => () =>
-    async.start(download, attachment, async);
+  const handleDownload = (attachment: Attachment, type?: AttachmentType) => () =>
+    async.start(download, attachment, async, type);
 
   const handleContextMenu = (evt: React.MouseEvent<HTMLElement>) => {
     evt.preventDefault();

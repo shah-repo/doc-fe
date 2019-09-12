@@ -3,18 +3,22 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { AttachmentMenuProps } from "./utils/types";
 import Text from "../../Text";
+import { AttachmentType } from "../../../../state/ducks/attachments";
 
 const AttachmentMenu: React.FunctionComponent<AttachmentMenuProps> = ({
+  handleDownload,
   handleClose,
   anchorEl,
-  file: {
+  file,
+}) => {
+  const {
     name: fileName,
     type: fileType,
     s3linkCleanCopy,
-  }
-}) => {
-  const handleClick = () => {
+  } = file;
+  const handleClick = (type: AttachmentType) => () => {
     handleClose && handleClose();
+    handleDownload && handleDownload(file, type)();
   };
   return (
     <Menu
@@ -24,11 +28,11 @@ const AttachmentMenu: React.FunctionComponent<AttachmentMenuProps> = ({
       open={Boolean(anchorEl)}
       onClose={handleClose}
     >
-      <MenuItem onClick={handleClick}>
+      <MenuItem onClick={handleClick(AttachmentType.Attached)}>
         <Text translation="attachment.download.file" values={{ fileName, fileType }} />
       </MenuItem>
       { s3linkCleanCopy &&
-        <MenuItem onClick={handleClick}>
+        <MenuItem onClick={handleClick(AttachmentType.CleanCopy)}>
           <Text translation="attachment.download.clean.copy" values={{ fileName, fileType }} />
         </MenuItem> 
       }
