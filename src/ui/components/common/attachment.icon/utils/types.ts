@@ -13,16 +13,14 @@ export interface AttachmentIconProps extends FormikHybridFieldProps {
   disabled?: boolean;
   handleRemove?: (attachment: Attachment) => () => any;
   handleDownload?: (attachment: Attachment, type?: AttachmentType) => () => any;
-  handleContextMenu?: (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-  closeContextMenu?: () => void;
-  anchorEl?: null | HTMLElement;
+  handleContextMenu?: (file: Attachment) => (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
 export interface AttachmentMenuProps {
   handleDownload?: (attachment: Attachment, type?: AttachmentType) => () => any;
   handleClose?: () => void;
   anchorEl?: null | HTMLElement;
-  file: Attachment;
+  attachment?: Attachment;
 }
 
 export interface AttachmentIconStyleProp {

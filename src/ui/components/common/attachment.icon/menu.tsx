@@ -3,14 +3,15 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { AttachmentMenuProps } from "./utils/types";
 import Text from "../../Text";
-import { AttachmentType } from "../../../../state/ducks/attachments";
+import { AttachmentType, Attachment } from "../../../../state/ducks/attachments";
 
 const AttachmentMenu: React.FunctionComponent<AttachmentMenuProps> = ({
   handleDownload,
   handleClose,
   anchorEl,
-  file,
+  attachment,
 }) => {
+  const file = attachment || {} as Attachment;
   const {
     name: fileName,
     type: fileType,

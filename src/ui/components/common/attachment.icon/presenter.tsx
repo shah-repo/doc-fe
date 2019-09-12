@@ -11,7 +11,6 @@ import React from "react";
 import FileIcon from "./icon";
 import { styles } from "./utils/styles";
 import { AttachmentIconProps } from "./utils/types";
-import Menu from "./menu";
 
 export const AttachmentIconPresenter: React.FunctionComponent<
   AttachmentIconProps
@@ -21,8 +20,6 @@ export const AttachmentIconPresenter: React.FunctionComponent<
   handleRemove,
   handleDownload,
   handleContextMenu,
-  closeContextMenu,
-  anchorEl,
   disabled = false,
   ...other
 }) => {
@@ -35,12 +32,6 @@ export const AttachmentIconPresenter: React.FunctionComponent<
 
   return (
     <Grid key={`cell-${attachment!.id}`} item={true} xs={12} sm={4} md={2}>
-      <Menu
-        handleDownload={handleDownload}
-        handleClose={closeContextMenu}
-        anchorEl={anchorEl}
-        file={file}
-      />
       <Box className={classes.closeRoot}>
         <IconButton
           className={classes.closeRoot}
@@ -49,7 +40,7 @@ export const AttachmentIconPresenter: React.FunctionComponent<
         </IconButton>
       </Box>
       <ButtonBase
-        onContextMenu={handleContextMenu}
+        onContextMenu={handleContextMenu && handleContextMenu(file)}
         key={`icon-${attachment!.id}`}
         onClick={handleDownload && handleDownload(file)}>
         {isLoading && <CircularProgress className={classes.progress} />}

@@ -1,5 +1,5 @@
 import { Grid } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import {
   Attachment,
@@ -15,6 +15,7 @@ import {
   AttachmentIconContainerProps,
   AttachmentIconDispatchProps,
 } from "./utils/types";
+import Menu from "./menu";
 
 type DispatchProps = AttachmentIconDispatchProps;
 
@@ -26,7 +27,8 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   ...other
 }) => {
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [fileToDownload, setFileToDownload] = useState<undefined | Attachment>(undefined);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) =>
@@ -42,8 +44,9 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const handleDownload = (attachment: Attachment, type?: AttachmentType) => () =>
     async.start(download, attachment, async, type);
 
-  const handleContextMenu = (evt: React.MouseEvent<HTMLElement>) => {
+  const handleContextMenu = (file: Attachment) => (evt: React.MouseEvent<HTMLElement>) => {
     evt.preventDefault();
+    setFileToDownload(file);
     setAnchorEl(evt.currentTarget);
   }
 
@@ -58,12 +61,20 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
       handleRemove={handleRemove}
       handleDownload={handleDownload}
       handleContextMenu={handleContextMenu}
-      closeContextMenu={closeContextMenu}
-      anchorEl={anchorEl}
     />
   ));
 
-  return <Grid container={true} spacing={2}>{attachmentsRenderer}</Grid>;
+  return (
+    <Grid container={true} spacing={2}>
+      <Menu
+        handleDownload={handleDownload}
+        handleClose={closeContextMenu}
+        anchorEl={anchorEl}
+        attachment={fileToDownload}
+      />
+      {attachmentsRenderer}
+    </Grid>
+  );
 };
 
 export default connect<{}, DispatchProps, {}, ApplicationState>(null, {
