@@ -192,6 +192,7 @@
   "common.AlphaNumeric": "Alpha Numeric",
   "common.Alpha": "Alpha",
   "common.clear.filters": "Clear Filters",
+  "common.create": "Create",
 
   "dashboard.type.PENDING_REVIEW": "is pending your approval",
   "dashboard.type.PENDING_IMPL_PLAN_TASK": " task is pending your approval",
@@ -217,7 +218,7 @@
   "document.action.withdraw": "Withdraw",
   "document.revision.stage": "Document Revision Stage",
 
-  "documentRevision.createNewVersion": "Create a new version",
+  "documentRevision.revise": "Revise Document",
   "documentRevision.version": "Version",
   "documentRevision.released": "Released",
   "documentRevision.form.references": "References",
@@ -240,6 +241,7 @@
   "documentRevision.audit.document.docId.STRING_NEW": "New Doc ID",
   "documentRevision.audit.document.type.STRING_NEW": "New document type",
   "documentRevision.audit.referenceTo.ARRAY_NEW": "New reference to",
+  "documentRevision.audit.referenceTo.ARRAY_DELETED": "Reference removed",
   "documentRevision.audit.changeRequest.STRING_NEW": "New change request",
 
   "transition.action.confirm": "Confirm",
@@ -264,5 +266,10 @@
   "page.title.changeRequest": "Change Request List",
   "page.title.documentList": "Document List",
   "page.title.documentCreate": "Create New Document",
-  "page.title.changeRequestCreate": "Create New Change Request"
+  "page.title.changeRequestCreate": "Create New Change Request",
+
+  "form.builder": "Form Builder",
+  "form.builder.create": "Create a form",
+  "form.builder.title": "Form Title",
+  "form.builder.number": "Form Number"
 }

@@ -9,6 +9,7 @@ import { TableColumnProps } from "../../components/table/column/types";
 import { TablePanel } from "../../components/table/panel";
 import { TableSearchQueryType, TableSelectionProps } from "../../components/table/types";
 import styles from "./DocumentRevisionTable.styles";
+import { generateVersionNumber } from "../../documentRevision/helpers";
 
 interface DocumentRevisionTableProps extends WithStyles<typeof styles> {
   documentRevisionsToShow: DocumentRevision[];
@@ -37,6 +38,14 @@ const DocumentRevisionTable: React.FunctionComponent<
 
   const columns: Array<TableColumnProps<DocumentRevision>> = [
     {
+      key: "docId",
+      label: "document.revision.list.docId",
+      columnOptions: {
+        cellDataGetter: ({ rowData }) => rowData.document.docId,
+        width: 100,
+      },
+    },
+    {
       key: "name",
       label: "changeRequest.documentRevisionTable.name",
       columnOptions: { flexGrow: 1 },
@@ -44,7 +53,10 @@ const DocumentRevisionTable: React.FunctionComponent<
     {
       key: "version",
       label: "changeRequest.documentRevisionTable.version",
-      columnOptions: { width: 50 },
+      columnOptions: {
+        cellDataGetter: ({ rowData: { revision, revisionStage }}) => generateVersionNumber(revision, revisionStage),
+        width: 50,
+      },
     },
     {
       key: "owner",

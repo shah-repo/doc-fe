@@ -27,16 +27,17 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<
     <div
       className={classNames(classes.container, {
         [classes.selected]: isSelected,
-      })}
-    >
+      })}>
       <Grid container={true}>
         <Grid item={true} xs={10}>
           <div onClick={onClick}>
             <Tooltip
               title={documentRevision.name}
-              aria-label={documentRevision.name}
-            >
-              <div className={classes.title}>{documentRevision.name}</div>
+              aria-label={documentRevision.name}>
+              <div
+                className={isSelected ? classes.titleSelected : classes.title}>
+                {documentRevision.name}
+              </div>
             </Tooltip>
             <div>
               <Text translation="common.version" />

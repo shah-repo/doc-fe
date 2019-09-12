@@ -16,7 +16,7 @@ type Props = WithStyles<typeof styles>;
 const Attachment: React.FunctionComponent<Props> = ({ classes }) => {
   return (
     <Box p={2}>
-      <HeaderField dataProp="common.attachments" />
+      <HeaderField dataProp="common.attachments" color="primary" />
       <AttachmentField name="attachments" disabled={true} />
     </Box>
   );

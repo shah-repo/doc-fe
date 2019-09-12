@@ -5,6 +5,7 @@ import {
 } from "../../../state/ducks/documentRevisions";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { DocumentRevisionUserProps } from "./types";
+import _ from "lodash";
 
 const isDraft = (documentRevision: DocumentRevision) =>
   documentRevision.status === DocumentRevisionStatus.Draft;
@@ -26,20 +27,20 @@ export const documentRevisionIdMask = (
 
 export const documentRevisionTypeOption = () => {
   const options: SelectOption[] = [];
-  Object.keys(DocumentRevisionType).sort().map((key) => options.push({value: key, text: key}));
-  return options;
+  Object.keys(DocumentRevisionType).map((key) => options.push({value: key, text: key}));
+  return _.orderBy(options, ["text"], ["asc"]);
 };
 
 export const documentRevisionStatusOption = () => {
   const options: SelectOption[] = [];
-  Object.keys(DocumentRevisionStatus).sort().map((key) => {
+  Object.keys(DocumentRevisionStatus).map((key) => {
     // TODO: Change DocumentRevisionStatus enum into key = value, value = text
     const keyName = DocumentRevisionStatus[key as keyof typeof DocumentRevisionStatus];
     if (keyName !== DocumentRevisionStatus.Deprecated) {
       options.push({value: keyName, text: keyName});
     }
   });
-  return options;
+  return _.orderBy(options, ["text"], ["asc"]);
 };
 
 export const documentRevisionQueryStatus = (): DocumentRevisionStatus[] =>
@@ -47,9 +48,9 @@ export const documentRevisionQueryStatus = (): DocumentRevisionStatus[] =>
 
 export const documentRevisionTypeFormOption = () => {
   const options: SelectOption[] = [];
-  Object.keys(DocumentRevisionType).sort().map((key) => {
+  Object.keys(DocumentRevisionType).map((key) => {
     const keyName = DocumentRevisionType[key as keyof typeof DocumentRevisionType];
     options.push({value: key, text: keyName});
   });
-  return options;
+  return _.orderBy(options, ["text"], ["asc"]);
 };

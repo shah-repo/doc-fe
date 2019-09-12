@@ -1,14 +1,15 @@
-import {
-  FormControl,
-  FormHelperText,
-  Typography,
-} from "@material-ui/core";
+import { FormControl, FormHelperText, Typography } from "@material-ui/core";
 import { FormControlProps } from "@material-ui/core/FormControl";
 import { InputLabelProps } from "@material-ui/core/InputLabel";
 import { FieldProps as FormikFieldProps } from "formik";
 import _ from "lodash";
 import * as React from "react";
-import { RenderSize, TypographySize } from "../../../../state/ducks/common";
+import {
+  RenderSize,
+  TypographyColor,
+  TypographyProps,
+  TypographySize,
+} from "../../../../state/ducks/common";
 import { Translation } from "../../../translations/types";
 import HeaderField from "../../common/header.field/field";
 import Text from "../../Text";
@@ -21,7 +22,6 @@ export interface FieldOwnProps {
   inputLabelProps?: InputLabelProps;
   variant?: "standard" | "outlined" | "filled";
   required?: boolean;
-  size?: RenderSize;
   gutter?: boolean;
   actionsRenderer?: () => any;
 }
@@ -31,7 +31,7 @@ export interface FieldStyleProps {
   error?: boolean;
 }
 
-type FieldProps = FieldOwnProps & FormikFieldProps;
+type FieldProps = FieldOwnProps & FormikFieldProps & Partial<TypographyProps>;
 
 const Field: React.FunctionComponent<FieldProps> = ({
   field,
@@ -59,14 +59,20 @@ const Field: React.FunctionComponent<FieldProps> = ({
 
   const LabelComponent = () => {
     if (actionsRenderer) {
-      return <HeaderField dataProp={label || ""} actionsRenderer={actionsRenderer} />;
+      return (
+        <HeaderField dataProp={label || ""} actionsRenderer={actionsRenderer} />
+      );
     }
-    return label && (
-      <LabelField htmlFor={field.name}>
-        <Typography variant={TypographySize[size]} className={classes.typography} >
-          <Text message={label} />
-        </Typography>
-      </LabelField>
+    return (
+      label && (
+        <LabelField htmlFor={field.name}>
+          <Typography
+            variant={TypographySize[size]}
+            className={classes.typography}>
+            <Text message={label} />
+          </Typography>
+        </LabelField>
+      )
     );
   };
 
@@ -84,8 +90,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
       fullWidth={true}
       error={shouldDisplayError}
       className={classes.form}
-      {...formControlProps}
-    >
+      {...formControlProps}>
       {LabelComponent()}
       {children}
       {ErrorComponent}
