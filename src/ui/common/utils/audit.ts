@@ -46,8 +46,7 @@ export const getNextValue = (audit: Audit) => {
     case "justifications.description":
     case "tasks.description":
     case "description":
-      // id currently not included in audit
-      return DialogOpener({ id: "123", text: audit.nextValue as string });
+      return DialogOpener({ id: audit.id, text: audit.nextValue as string });
     case "referenceTo":
       return (audit.nextValue as Reference).docId;
     case "changeRequest":

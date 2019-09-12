@@ -17,7 +17,7 @@ const DiffPresenter: React.FunctionComponent<Props> = ({
         readOnly={true}
         value={oldText}
         modules={{ toolbar: false }}
-        className={classes.editor}
+        className={classes.hiddenEditor}
       />
       <ReactQuill
         ref={refNew}

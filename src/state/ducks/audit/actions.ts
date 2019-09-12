@@ -1,9 +1,9 @@
 import { ApiAction, Handlers } from "../../types";
 import { apiActionWithCallbacks } from "../../factories";
 
-const getChanges = (auditId: string, handlers: Handlers):
+const getChanges = (id: string, handlers: Handlers):
   ApiAction => apiActionWithCallbacks({
-      url: "/status",
+      url: `/audit_logs/${id}`,
       method: "get",
       handlers,
     });
