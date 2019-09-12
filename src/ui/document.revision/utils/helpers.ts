@@ -28,7 +28,7 @@ export const documentRevisionIdMask = (
 export const documentRevisionTypeOption = () => {
   const options: SelectOption[] = [];
   Object.keys(DocumentRevisionType).map((key) => options.push({value: key, text: key}));
-  return _.orderBy(options, ["value"], ["asc"]);
+  return _.orderBy(options, ["text"], ["asc"]);
 };
 
 export const documentRevisionStatusOption = () => {
@@ -40,7 +40,7 @@ export const documentRevisionStatusOption = () => {
       options.push({value: keyName, text: keyName});
     }
   });
-  return options;
+  return _.orderBy(options, ["text"], ["asc"]);
 };
 
 export const documentRevisionQueryStatus = (): DocumentRevisionStatus[] =>
