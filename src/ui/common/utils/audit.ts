@@ -1,11 +1,11 @@
-import React from "react";
 import _ from "lodash";
 import { Audit } from "../../../state/ducks/audit/types";
 import { Attachment } from "../../../state/ducks/attachments";
 import { Approval, User } from "../../../state/ducks/common";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, Reference } from "../../../state/ducks/documentRevisions";
 import DateTime from "../../components/DateTime";
 import DialogOpener from "../../components/textDiff/DialogOpener";
+import { ChangeRequest } from "../../../state/ducks/changeRequest";
 
 /**
  * Return nextValue only if string, otherwise it will crash FE
@@ -48,6 +48,10 @@ export const getNextValue = (audit: Audit) => {
     case "description":
       // id currently not included in audit
       return DialogOpener({ id: "123", text: audit.nextValue as string });
+    case "referenceTo":
+      return (audit.nextValue as Reference).docId;
+    case "changeRequest":
+      return (audit.nextValue as ChangeRequest).crId;
     default:
       return getAuditDefaultValue(audit.nextValue);
   }
