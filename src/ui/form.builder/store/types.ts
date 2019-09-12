@@ -1,0 +1,17 @@
+
+export interface FBContextInjectedProps {
+  get: (key: keyof FBContextProps) => any;
+  set: (key: keyof FBContextProps, value: any) => any;
+  remove: (key: keyof FBContextProps) => any;
+}
+
+export interface FBContextProps {
+  title: string;
+  formNumber: number;
+  status: string;
+  elements: string[];
+  modalState: string;
+  currentField: number;
+}
+
+export type FBStoreProps = FBContextProps & FBContextInjectedProps;
