@@ -25,5 +25,7 @@ export const DOCUMENT_REVISION_DETAILS_URL = `${DOCUMENT_REVISION_ROOT_URL}/deta
 export const DOCUMENT_REVISION_VERSION_URL = `${DOCUMENT_REVISION_ROOT_URL}/version/:documentRevisionId`;
 export const DOCUMENT_REVISION_NEW_VERSION_URL = `${DOCUMENT_REVISION_ROOT_URL}/new-version/:documentRevisionId`;
 
+export const FORM_BUILDER_URL = "/form_builder";
+
 export const SIGNUP_URL = "/signup";
 export const STATUS = "/status";
