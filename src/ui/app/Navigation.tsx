@@ -56,12 +56,6 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({ classes, locatio
         Icon={Dashboard}
         currentPath={location.pathname}
       />
-      <NavigationLinkContainer
-        url={FORM_BUILDER_URL}
-        text="form.builder"
-        Icon={Dashboard}
-        currentPath={location.pathname}
-      />
     </List>
   </Drawer>
 );

@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { formReducerType } from "../../state/ducks/formBuilder/reducer";
+import fieldStyles from "./components/basic/BasicFields.module.css";
 import Modal from "./components/modal/Modal";
 import styles from "./FormBuilder.module.css";
 import FormEditorContainer from "./FormEditor.container";
@@ -33,7 +34,7 @@ const FormBuilderPresenter: React.FunctionComponent<
   };
 
   return (
-    <div className="FormBuilder">
+    <div className={fieldStyles.FormBuilder}>
       <FormHeaderContainer />
       {modalState.show && <Modal />}
       {viewFormMode && <FormViewerContainer />}

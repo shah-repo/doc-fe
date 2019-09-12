@@ -73,6 +73,6 @@ type AutocompleteFieldProps = AutocompleteOwnProps &
 
 const AutocompleteField: React.FunctionComponent<
   AutocompleteFieldProps
-> = props => <FormikField component={Autocomplete} {...props} />;
+> = (props) => <FormikField component={Autocomplete} {...props} />;
 
 export default AutocompleteField;

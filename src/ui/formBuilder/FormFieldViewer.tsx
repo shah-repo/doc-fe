@@ -18,6 +18,7 @@ import CloseSection from "./components/sections/CloseSection";
 import Section from "./components/sections/Section";
 import SubSection from "./components/sections/SubSection";
 import styles from "./FormBuilder.module.css";
+import TaskListContainer from "./components/taskList/TaskList.container";
 // import TaskListContainer from "./components/taskList/TaskList.container";
 
 interface FormFieldProps {
@@ -143,14 +144,14 @@ const FormFieldViewer: React.FunctionComponent<FormFieldProps> = ({
         />
       );
       break;
-    // case "actionItems":
-    //   formField = (
-    //     <TaskListContainer
-    //       currentUserEmail="admin@enlil.com"
-    //       currentUser="admin"
-    //     />
-    //   );
-    //   break;
+    case "actionItems":
+      formField = (
+        <TaskListContainer
+          currentUserEmail="admin@enlil.com"
+          currentUser="admin"
+        />
+      );
+      break;
     case "hyperlink":
       formField = (
         <HyperLink

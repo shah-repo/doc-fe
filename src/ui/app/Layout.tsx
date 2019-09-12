@@ -2,6 +2,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
+import Config from "../../config";
 import ChangeRequestContainer from "../change.request/Container";
 import ChangeRequestListContainer from "../change.request/list/container";
 import ChangeRequestCreateContainer from "../changeRequest/ChangeRequestCreate.container";
@@ -23,6 +24,8 @@ import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisio
 import DocumentContainer from "../documents/Document.container";
 import FormBuilder from "../form.builder/FormBuilder";
 import FormBuilderContainer from "../formBuilder/FormBuilder.container";
+import FormBuilderPresenter from "../formBuilder/FormBuilder.presenter";
+import { ThemeEnv } from "../layout/theme/utils/types";
 import AutoLogout from "./AutoLogout";
 import DataFetcherContainer from "./DataFetcher.container";
 import HeaderContainer from "./Header.container";
@@ -32,6 +35,8 @@ import Navigation from "./Navigation";
 type Props = WithStyles<typeof styles>;
 
 const Layout: React.FunctionComponent<Props> = ({ classes }) => {
+  // NOTE* temp condition
+  const showFormBuilder = Config.Theme === ThemeEnv.DEV_THEME;
   return (
     <div>
       <AutoLogout />
@@ -39,7 +44,7 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
       <HeaderContainer />
       <Navigation />
       <main className={classes.content}>
-        <FormBuilder />
+        {showFormBuilder && <FormBuilderContainer />}
         <DataFetcherContainer />
         <Switch>
           <Route path={HOME_URL} exact={true} component={DashboardContainer} />
@@ -72,7 +77,6 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
             path={DOCUMENT_REVISION_ROOT_URL}
             component={DocumentRevisionContainer}
           />
-          <Route path={FORM_BUILDER_URL} component={FormBuilderContainer} />
           <Redirect to={{ pathname: HOME_URL }} />
         </Switch>
       </main>

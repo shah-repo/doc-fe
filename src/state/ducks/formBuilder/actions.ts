@@ -116,7 +116,7 @@ export const uploadTemplate = (elements: any) => {
 
 export const setFormInfo = (
   title: string,
-  formNumber: string,
+  formNumber: number,
   status: string,
 ) => {
   return {

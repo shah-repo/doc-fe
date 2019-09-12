@@ -6,7 +6,7 @@ import { withDialogActions, withDialogDefaults } from "./utils/hoc";
 import { FBDialogProps } from "./utils/types";
 
 const FBDialog: React.FunctionComponent<FBDialogProps> = ({
-  title,
+  title = false,
   setDialogClose,
   ...props
 }) => (
@@ -20,7 +20,7 @@ const FBDialog: React.FunctionComponent<FBDialogProps> = ({
         fontSize="h6.fontSize"
         width={1}
       >
-        <Text message={title} />
+        {title && <Text message={title as string} />}
       </Box>
     </DialogTitle>
     <DialogContent>
