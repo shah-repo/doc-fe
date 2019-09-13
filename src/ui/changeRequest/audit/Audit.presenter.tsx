@@ -10,10 +10,10 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import React from "react";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
 import { TypographySize } from "../../../state/ducks/common";
+import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
 import { styles } from "./Audit.presenter.styles";
-import { getNextValue } from "../../common/utils/audit";
 
 interface OwnProps {
   audit: AuditGroupType;
@@ -43,7 +43,9 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const renderChanges = (audits: Audit[]) => audits.map((change, index) => (
     <Box mb={1} key={`${change.groupId}-${index}`}>
       <Box><Text message={`changeRequest.audit.${change.field}.${change.type}`} /></Box>
-      <div className={classes.auditValue}>{getNextValue(change)}</div>
+      <div className={classes.auditValue}>
+        <AuditFactory audit={change} />
+      </div>
     </Box>
   ));
 
