@@ -5,6 +5,7 @@ import {
   Grid,
   IconButton,
   Typography,
+  Tooltip,
 } from "@material-ui/core";
 import { CancelOutlined } from "@material-ui/icons";
 import React from "react";
@@ -39,13 +40,15 @@ export const AttachmentIconPresenter: React.FunctionComponent<
           <CancelOutlined className={classes.closeIcon} />
         </IconButton>
       </Box>
-      <ButtonBase
-        onContextMenu={handleContextMenu && handleContextMenu(file)}
-        key={`icon-${attachment!.id}`}
-        onClick={handleDownload && handleDownload(file)}>
-        {isLoading && <CircularProgress className={classes.progress} />}
-        {!isLoading && <FileIcon {...other} extension={file.type} />}
-      </ButtonBase>
+      <Tooltip title={`${attachment!.name}.${attachment!.type}`}>
+        <ButtonBase
+          onContextMenu={handleContextMenu && handleContextMenu(file)}
+          key={`icon-${attachment!.id}`}
+          onClick={handleDownload && handleDownload(file)}>
+          {isLoading && <CircularProgress className={classes.progress} />}
+          {!isLoading && <FileIcon {...other} extension={file.type} />}
+        </ButtonBase>
+      </Tooltip>
       <Box>
         <Typography
           variant="caption"
