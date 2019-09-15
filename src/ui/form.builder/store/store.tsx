@@ -1,7 +1,7 @@
 import React from "react";
 import { Subtract } from "../components/common/utils/types";
 import { FBContextInitialValues } from "./helpers";
-import { FBContextProps, FBStoreProps } from "./types";
+import { FBContextProps, FBStoreProps, FBWithStoreProps } from "./types";
 
 const StoreContext = React.createContext(FBContextInitialValues);
 
@@ -31,7 +31,7 @@ function createStore<T extends FBStoreProps>(
   };
 }
 
-function withStore<T extends FBStoreProps>(
+function withStore<T extends FBWithStoreProps>(
   Component: React.ComponentType<T>,
 ) {
 
