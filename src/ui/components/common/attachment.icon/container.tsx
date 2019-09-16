@@ -1,10 +1,11 @@
 import { Grid } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import {
   Attachment,
   AttachmentDownloadResponse,
   attachmentsActions,
+  AttachmentType,
 } from "../../../../state/ducks/attachments";
 import { ApplicationState } from "../../../../state/reducers";
 import useAsync from "../../../hooks/useAsync";
@@ -14,6 +15,7 @@ import {
   AttachmentIconContainerProps,
   AttachmentIconDispatchProps,
 } from "./utils/types";
+import Menu from "./menu";
 
 type DispatchProps = AttachmentIconDispatchProps;
 
@@ -24,6 +26,9 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   field,
   ...other
 }) => {
+
+  const [fileToDownload, setFileToDownload] = useState<undefined | Attachment>(undefined);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) =>
@@ -36,8 +41,16 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     form!.setFieldValue(name, filtered);
   };
 
-  const handleDownload = (attachment: Attachment) => () =>
-    async.start(download, attachment, async);
+  const handleDownload = (attachment: Attachment, type?: AttachmentType) => () =>
+    async.start(download, attachment, async, type);
+
+  const handleContextMenu = (file: Attachment) => (evt: React.MouseEvent<HTMLElement>) => {
+    evt.preventDefault();
+    setFileToDownload(file);
+    setAnchorEl(evt.currentTarget);
+  }
+
+  const closeContextMenu = () => setAnchorEl(null);
 
   const attachmentsRenderer = (field!.value as Attachment[] || []).map((attachment) => (
     <Presenter
@@ -47,10 +60,21 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
       attachment={attachment}
       handleRemove={handleRemove}
       handleDownload={handleDownload}
+      handleContextMenu={handleContextMenu}
     />
   ));
 
-  return <Grid container={true} spacing={2}>{attachmentsRenderer}</Grid>;
+  return (
+    <Grid container={true} spacing={2}>
+      <Menu
+        handleDownload={handleDownload}
+        handleClose={closeContextMenu}
+        anchorEl={anchorEl}
+        attachment={fileToDownload}
+      />
+      {attachmentsRenderer}
+    </Grid>
+  );
 };
 
 export default connect<{}, DispatchProps, {}, ApplicationState>(null, {
