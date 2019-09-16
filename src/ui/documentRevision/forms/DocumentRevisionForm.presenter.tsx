@@ -6,10 +6,11 @@ import {
   WithStyles,
 } from "@material-ui/core";
 import { FormikProps } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   DocumentRevision,
+  DocumentRevisionType,
   RevisionChangeType,
   RevisionStageOptions,
 } from "../../../state/ducks/documentRevisions";
@@ -21,11 +22,13 @@ import InputField from "../../components/forms/fields/Input";
 import RadioButton from "../../components/forms/fields/RadioButton";
 import RadioGroup from "../../components/forms/fields/RadioGroup";
 import SelectField from "../../components/forms/fields/Select";
+import TextEditorField from "../../components/forms/fields/TextEditor";
 import { required, validator } from "../../components/forms/fields/validators";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
+import ScrollToError from "../../components/forms/ScrollToError";
 import SubmitButton from "../../components/forms/SubmitButton";
 import Text from "../../components/Text";
 import AttachmentsField from "../../document.revision/form/attachments";
@@ -34,10 +37,9 @@ import {
   documentDetailsPath,
   documentVersionPath,
 } from "../../document.revision/utils/paths";
+import FormBuilderPresenter from "../../formBuilder/FormBuilder.presenter";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
-import TextEditorField from "../../components/forms/fields/TextEditor";
-import ScrollToError from "../../components/forms/ScrollToError";
 
 interface Props
   extends WithStyles<typeof styles>,
@@ -51,6 +53,7 @@ interface Props
   setDocId?: typeof documentsActions.setDocumentProposedId;
   doNotPrompt?: boolean;
   onDirtyFlagChange?: (dirty: boolean) => void;
+  formState: any;
 }
 
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
@@ -71,7 +74,11 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   isSubmitting,
   isValidating,
   errors,
+  formState,
 }) => {
+
+  const [fbActive, fbSetActive] = useState(false);
+
   const openReference = (documentId: string) => {
     window.open(documentDetailsPath(documentId), "_blank");
   };
@@ -103,6 +110,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   ) => {
     const type = event.target.value as string;
     loadDocumentProposedId(type);
+    const isFM = DocumentRevisionType[type as keyof typeof DocumentRevisionType] ===  DocumentRevisionType.FM;
+    fbSetActive(isFM);
     handleChange(event);
   };
 
@@ -146,7 +155,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <Text translation="common.referenced.by" />
           </Typography>
           <div>
-            {initialValues.document.referencedBy.map(reference => {
+            {initialValues.document.referencedBy.map((reference) => {
               return (
                 <div key={reference.id}>
                   <Link
@@ -166,17 +175,16 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
   };
 
-  const renderRevisionStageDropdown = !isDisabled &&
-      <SelectField
-        name="revisionStage"
-        label="document.revision.stage"
-        selectProps={{
-          inputProps: { id: "revisionStage" },
-        }}
-        options={RevisionStageOptions}
-        validate={validator(required)}
-        includeEmpty={false}
-      />
+  const renderRevisionStageDropdown = !isDisabled && (
+    <SelectField
+      name="revisionStage"
+      label="document.revision.stage"
+      selectProps={{ inputProps: { id: "revisionStage" } }}
+      options={RevisionStageOptions}
+      validate={validator(required)}
+      includeEmpty={false}
+    />
+  );
 
   return (
     <Grid
@@ -184,16 +192,19 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       direction="column"
       justify="center"
       alignItems="center"
-      className={classes.container}>
+      className={classes.container}
+    >
       <Grid
         item={true}
         lg={isDisabled ? 12 : 7}
         sm={isDisabled ? 12 : 10}
-        xs={12}>
+        xs={12}
+      >
         <FormWrapper
           dirty={dirty}
           initialValues={initialValues}
-          resetForm={resetForm}>
+          resetForm={resetForm}
+        >
           <ScrollToError
             isSubmitting={isSubmitting}
             isValidating={isValidating}
@@ -254,6 +265,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           {renderReferences()}
           <AttachmentsField />
           {renderTypeOfRevisionChange()}
+          <Box mt={7} mx={-7}>
+            {fbActive && <FormBuilderPresenter {...formState} inDialog={false} />}
+          </Box>
           <Box mt={10}>
             <Grid
               item={true}

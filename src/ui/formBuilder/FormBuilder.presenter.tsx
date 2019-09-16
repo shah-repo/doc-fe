@@ -11,6 +11,7 @@ import FormViewerContainer from "./FormViewer.container";
 
 interface FormBuilderPresenterProps {
   modalState: any;
+  inDialog?: boolean;
 }
 
 const mapStateToProps = ({ formBuilderState }: formReducerType) => ({
@@ -19,7 +20,7 @@ const mapStateToProps = ({ formBuilderState }: formReducerType) => ({
 
 const FormBuilderPresenter: React.FunctionComponent<
   FormBuilderPresenterProps
-> = ({ modalState }) => {
+> = ({ modalState, inDialog = true }) => {
   const [viewFormMode, setViewFormMode] = useState(false);
 
   const builderContainer = (
@@ -35,7 +36,7 @@ const FormBuilderPresenter: React.FunctionComponent<
 
   return (
     <div className={fieldStyles.FormBuilder}>
-      <FormHeaderContainer />
+      {inDialog && <FormHeaderContainer />}
       {modalState.show && <Modal />}
       {viewFormMode && <FormViewerContainer />}
       {!viewFormMode && builderContainer}

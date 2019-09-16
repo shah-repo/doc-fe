@@ -1,6 +1,7 @@
+import { Box } from "@material-ui/core";
 import { Formik, FormikActions, FormikProps } from "formik";
 import _ from "lodash";
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import {
   DocumentRevision,
@@ -12,6 +13,8 @@ import {
   documentsActions,
   documentsSelectors,
 } from "../../../state/ducks/documents";
+import { formBuilderActions } from "../../../state/ducks/formBuilder";
+import { formReducerType } from "../../../state/ducks/formBuilder/reducer";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
@@ -19,13 +22,13 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
-import { Box } from "@material-ui/core";
 
 interface StateProps {
   availableReferences: OptionType[];
   loadAsyncState: AsyncState;
   documentRevisions: DocumentRevision[];
   proposedDocId: string;
+  formBuilderState: formReducerType;
 }
 
 interface DispatchProps {
@@ -57,6 +60,7 @@ const mapStateToProps = (
   loadAsyncState: documentRevisionsSelectors.getLoadListAsyncState(state),
   documentRevisions: documentRevisionsSelectors.getDocumentRevisionsList(state),
   proposedDocId: documentsSelectors.getProposedDocId(state),
+  formBuilderState: formBuilderActions.setFormInfo,
 });
 
 export const DocumentRevisionFormContainer: React.FunctionComponent<
@@ -76,7 +80,10 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
   doNotPrompt,
   onDirtyFlagChange,
   documentRevision,
+  formBuilderState,
 }) => {
+  const [formState] = useState(formBuilderState);
+
   const render = (props: FormikProps<DocumentRevisionFormValues>) => {
     return (
       <DocumentRevisionFormPresenter
@@ -90,6 +97,7 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
         setDocId={setDocId}
         doNotPrompt={doNotPrompt}
         onDirtyFlagChange={onDirtyFlagChange}
+        formState={formState}
       />
     );
   };

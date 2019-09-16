@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import styles from "./FormBuilder.module.css";
-import FormFieldEditor from "./FormFieldEditor";
-import { formReducerType } from "../../state/ducks/formBuilder/reducer";
 import { connect } from "react-redux";
 import { formBuilderActions } from "../../state/ducks/formBuilder";
+import { formReducerType } from "../../state/ducks/formBuilder/reducer";
+import styles from "./FormBuilder.module.css";
+import FormFieldEditor from "./FormFieldEditor";
 
 const placeholder = document.createElement("div");
 placeholder.className = styles.placeholder;
