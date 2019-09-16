@@ -12,6 +12,7 @@ import {
   TypographyColor,
   TypographyProps,
   TypographySize,
+  Approval,
 } from "../../../../../state/ducks/common";
 import Text from "../../../../components/Text";
 import Field, { FieldOwnProps } from "../Field";
@@ -22,6 +23,7 @@ interface AutocompleteOwnProps extends FieldOwnProps {
   autocompleteProps: SelectComponentsProps;
   options: OptionType[];
   onClick?: (value: any) => void;
+  dataProp?: Approval[];
 }
 
 type AutocompletePropsWithFormik = AutocompleteOwnProps &
@@ -32,6 +34,7 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
   autocompleteProps,
   options,
   onClick,
+  dataProp,
   ...fieldProps
 }) => {
   const onChange = (value: ValueType<OptionType>) => {
@@ -47,12 +50,19 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
     setFieldValue(name, value);
   };
 
+  const styles = {
+    multiValueRemove: (base: React.CSSProperties, state: any) => {
+      return dataProp!.some(approver => approver.approver.name === state.data.label) ? { ...base, display: "none" } : base ;
+    },
+  };
+
   return (
     <Field {...fieldProps} label={undefined}>
       <Box mb={0.3}>
         <Typography
           variant={TypographySize[fieldProps.size || "md"]}
-          color={TypographyColor[fieldProps.color || "secondary"]}>
+          color={TypographyColor[fieldProps.color || "secondary"]}
+        >
           <Text message={fieldProps.label} />
         </Typography>
       </Box>
@@ -62,6 +72,7 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
         options={options}
         onChange={onChange}
         input={<InputField name={fieldProps.field.name} />}
+        styles={styles}
       />
     </Field>
   );
