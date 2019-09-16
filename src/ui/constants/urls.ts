@@ -27,5 +27,8 @@ export const DOCUMENT_REVISION_NEW_VERSION_URL = `${DOCUMENT_REVISION_ROOT_URL}/
 
 export const FORM_BUILDER_URL = "/form_builder";
 
+export const TRAINING_ROOT_URL = "/training";
+export const TRAINING_DETAIL_URL = `${TRAINING_ROOT_URL}/detail/:trainingId`;
+
 export const SIGNUP_URL = "/signup";
 export const STATUS = "/status";
