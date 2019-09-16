@@ -1,0 +1,47 @@
+import { Button, Grid } from "@material-ui/core";
+import React from "react";
+import { PendingAction } from "../../../state/ducks/dashboard";
+import Date from "../../components/Date";
+import Text from "../../components/Text";
+import { TrainingRecord } from "../../training/types";
+import { styles } from "./PendingAction.styles";
+import { generateTrainingDetailPath } from "../../training/pathGenerators";
+
+interface OwnProps {
+  pendingAction: PendingAction;
+}
+
+type Props = OwnProps;
+
+export const TrainingRequest: React.FunctionComponent<Props> = ({
+  pendingAction,
+}) => {
+  const classes = styles();
+  const trainingRecord = pendingAction.trainingRecord as TrainingRecord;
+
+  return (
+    <Grid container={true} spacing={10} justify="space-between" alignItems="baseline">
+      <Grid item={true} xs={8}>
+        <span className={classes.crId}>
+          <Text message={`dashboard.type.${pendingAction.type}`} />
+        </span>
+        <span>
+          <Text translation="dashboard.is.due.on" />
+          <Date value={trainingRecord.dueOn} />
+        </span>
+      </Grid>
+      <Grid item={true} xs={2}>
+        <Button
+          variant="contained"
+          target="_blank"
+          href={generateTrainingDetailPath(trainingRecord.id)}
+          color="secondary"
+        >
+          <Text translation="common.open" />
+        </Button>
+      </Grid>
+    </Grid>
+  );
+};
+
+export default TrainingRequest;

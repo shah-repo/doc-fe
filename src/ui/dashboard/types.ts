@@ -4,4 +4,3 @@ import {
 } from "./Dashboard.container";
 
 export type DashboardPresenterParentProps = DashboardContainerStateProps & DashboardContainerDispatchProps;
-

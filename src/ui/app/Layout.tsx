@@ -16,6 +16,7 @@ import {
   DOCUMENT_ROOT_URL,
   FORM_BUILDER_URL,
   HOME_URL,
+  TRAINING_DETAIL_URL,
 } from "../constants/urls";
 import DashboardContainer from "../dashboard/Dashboard.container";
 import DocumentRevisionContainer from "../document.revision/container";
@@ -26,6 +27,7 @@ import FormBuilder from "../form.builder/FormBuilder";
 import FormBuilderContainer from "../formBuilder/FormBuilder.container";
 import FormBuilderPresenter from "../formBuilder/FormBuilder.presenter";
 import { ThemeEnv } from "../layout/theme/utils/types";
+import TrainingDetailContainer from "../training/TrainingDetail.container";
 import AutoLogout from "./AutoLogout";
 import DataFetcherContainer from "./DataFetcher.container";
 import HeaderContainer from "./Header.container";
@@ -76,6 +78,10 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
           <Route
             path={DOCUMENT_REVISION_ROOT_URL}
             component={DocumentRevisionContainer}
+          />
+          <Route
+            path={TRAINING_DETAIL_URL}
+            component={TrainingDetailContainer}
           />
           <Redirect to={{ pathname: HOME_URL }} />
         </Switch>

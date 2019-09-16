@@ -1,5 +1,5 @@
 import { generatePath } from "react-router-dom";
-import { CHANGE_REQUEST_UPDATE_URL, CHANGE_REQUEST_PREVIEW_URL } from "../constants/urls";
+import { CHANGE_REQUEST_PREVIEW_URL, CHANGE_REQUEST_UPDATE_URL } from "../constants/urls";
 import { ChangeRequestRouteParams } from "./types";
 
 const generateChangeRequestPath = (path: string, routeParams: ChangeRequestRouteParams) =>
