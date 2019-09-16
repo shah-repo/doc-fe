@@ -197,7 +197,9 @@
 
   "dashboard.type.PENDING_REVIEW": "is pending your approval",
   "dashboard.type.PENDING_IMPL_PLAN_TASK": " task is pending your approval",
+  "dashboard.type.PENDING_TRAINING_RECORDS": "Training",
   "dashboard.noPendingActions": "No pending actions",
+  "dashboard.is.due.on": " is due on ",
 
   "document.title": "Document Title",
   "document.type": "Document Type",
