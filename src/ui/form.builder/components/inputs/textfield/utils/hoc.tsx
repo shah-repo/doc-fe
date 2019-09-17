@@ -21,10 +21,11 @@ export function withTextFieldDefaults<T extends FBTextFieldProps>(
       const { field, label } = this.props;
       return (
         <Component
+          fullWidth={true}
           {...this.props as T}
           variant="outlined"
-          onChange={this.handleChange}
-          defaultValue={field.value}
+          onChange={this.handleChange()}
+          value={field.value}
           labelRenderer={label && this.labelRenderer}
         />
       );

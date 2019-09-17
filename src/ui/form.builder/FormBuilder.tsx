@@ -28,7 +28,7 @@ const FormBuilder: React.FunctionComponent<FBDialogProps> = ({
         {...props}
       >
         <Box pt={3}>
-          <FBForm onSubmit={onSubmit} initialValues={{ fb_title: "", fb_number: "" }}>
+          <FBForm >
             <FBTextField label="form.builder.title" name="fb_title" required={true} />
             <FBTextField label="form.builder.number" name="fb_number" required={true} />
             <Button
