@@ -1,4 +1,5 @@
 import { Box } from "@material-ui/core";
+import classNames from "classnames";
 import { InsertDriveFile } from "@material-ui/icons";
 import React from "react";
 import { styles } from "./utils/styles";
@@ -7,11 +8,13 @@ import { AttachmentIconProps } from "./utils/types";
 export const AttachmentIcon: React.FunctionComponent<AttachmentIconProps> = ({
   extension,
   size,
+  isUploading,
 }) => {
   const classes = styles({ size: size || "md", disabled: false });
-
   return (
-    <Box className={classes.root}>
+    <Box className={classNames(classes.root, {
+      [classes.isUploading]: isUploading,
+    })}>
       <InsertDriveFile className={classes.fileIcon} />
       <Box className={classes.ribbonWrapper}>
         <Box className={`${classes.ribbonFront} ${classes.ribbonFrontSize}`}>

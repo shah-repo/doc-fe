@@ -8,6 +8,7 @@ import {
   Tooltip,
 } from "@material-ui/core";
 import { CancelOutlined } from "@material-ui/icons";
+import classNames from "classnames";
 import React from "react";
 import FileIcon from "./icon";
 import { styles } from "./utils/styles";
@@ -29,7 +30,17 @@ export const AttachmentIconPresenter: React.FunctionComponent<
     disabled,
   });
   const file = attachment!;
+
   const isLoading = file.isLoading || false;
+  const isUploading = file.s3link == null;
+
+  const isUploadingRenderer = () => (
+    <Box>
+      <Typography>
+        {"Uploading..."}
+      </Typography>
+    </Box>
+  );
 
   return (
     <Grid key={`cell-${attachment!.id}`} item={true} xs={12} sm={4} md={2}>
@@ -46,7 +57,7 @@ export const AttachmentIconPresenter: React.FunctionComponent<
           key={`icon-${attachment!.id}`}
           onClick={handleDownload && handleDownload(file)}>
           {isLoading && <CircularProgress className={classes.progress} />}
-          {!isLoading && <FileIcon {...other} extension={file.type} />}
+          {!isLoading && <FileIcon {...other} extension={file.type} isUploading={isUploading} />}
         </ButtonBase>
       </Tooltip>
       <Box>
@@ -54,11 +65,14 @@ export const AttachmentIconPresenter: React.FunctionComponent<
           variant="caption"
           gutterBottom={true}
           align="left"
-          className={classes.fileName}
+          className={classNames(classes.fileName, {
+            [classes.isUploading]: isUploading,
+          })}
           title={`${file.name}.${file.type}`}>
           {`${file.name}.${file.type}`}
         </Typography>
       </Box>
+      {isUploading && isUploadingRenderer()}
     </Grid>
   );
 };

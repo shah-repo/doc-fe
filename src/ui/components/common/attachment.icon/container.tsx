@@ -41,8 +41,10 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     form!.setFieldValue(name, filtered);
   };
 
-  const handleDownload = (attachment: Attachment, type?: AttachmentType) => () =>
+  const handleDownload = (attachment: Attachment, type?: AttachmentType) => () => {
+    if (attachment.s3link == null) { return; }
     async.start(download, attachment, async, type);
+  };
 
   const handleContextMenu = (file: Attachment) => (evt: React.MouseEvent<HTMLElement>) => {
     evt.preventDefault();
