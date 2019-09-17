@@ -6,25 +6,20 @@ import { FBTextFieldProps } from "./utils/types";
 
 const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   variant,
-  label,
+  labelRenderer,
   onChange,
   ...props
 }) => {
 
-  const labelRenderer = (
-    <Box mb={0.5} fontSize="subtitle1.fontSize" fontWeight="fontWeightRegular">
-      <Text message={label as string} />
-    </Box>
-  );
-
   return (
     <Box mb={4}>
-      {label && labelRenderer}
+      {labelRenderer}
       <TextField
         variant={variant}
         fullWidth={true}
         onChange={onChange}
         {...props}
+        label=""
       />
     </Box>
   );
