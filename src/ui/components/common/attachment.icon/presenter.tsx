@@ -48,7 +48,7 @@ export const AttachmentIconPresenter: React.FunctionComponent<
         <IconButton
           className={classes.closeRoot}
           onClick={handleRemove && handleRemove(file)}>
-          <CancelOutlined className={classes.closeIcon} />
+          {!isUploading && <CancelOutlined className={classes.closeIcon} />}
         </IconButton>
       </Box>
       <Tooltip title={`${attachment!.name}.${attachment!.type}`}>

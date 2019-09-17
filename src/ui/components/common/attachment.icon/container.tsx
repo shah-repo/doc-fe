@@ -47,10 +47,11 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   };
 
   const handleContextMenu = (file: Attachment) => (evt: React.MouseEvent<HTMLElement>) => {
+    if (file.s3link == null) { return; }
     evt.preventDefault();
     setFileToDownload(file);
     setAnchorEl(evt.currentTarget);
-  }
+  };
 
   const closeContextMenu = () => setAnchorEl(null);
 
