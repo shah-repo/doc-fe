@@ -2,6 +2,7 @@ import { Box, Button, Fab } from "@material-ui/core";
 import NavigationIcon from "@material-ui/icons/Navigation";
 import React from "react";
 import Text from "../components/Text";
+import FBAddFieldButton0 from "./components/custom/add.field.0/FBAddFieldButton0";
 import FBDialog from "./components/dialog/FBDialog";
 import { withDialogStates } from "./components/dialog/utils/hoc";
 import { FBDialogAction, FBDialogProps } from "./components/dialog/utils/types";
@@ -28,7 +29,8 @@ const FormBuilder: React.FunctionComponent<FBDialogProps> = ({
         {...props}
       >
         <Box pt={3}>
-          <FBForm >
+          <FBAddFieldButton0 />
+          {/* <FBForm >
             <FBTextField label="form.builder.title" name="fb_title" required={true} />
             <FBTextField label="form.builder.number" name="fb_number" required={true} />
             <Button
@@ -38,7 +40,7 @@ const FormBuilder: React.FunctionComponent<FBDialogProps> = ({
             >
               Create
             </Button>
-          </FBForm>
+          </FBForm> */}
         </Box>
       </FBDialog>
     </Box>

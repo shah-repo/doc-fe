@@ -271,5 +271,6 @@
   "form.builder": "Form Builder",
   "form.builder.create": "Create a form",
   "form.builder.title": "Form Title",
-  "form.builder.number": "Form Number"
+  "form.builder.number": "Form Number",
+  "form.builder.add.field": "Add Field"
 }
