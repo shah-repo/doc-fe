@@ -13,6 +13,7 @@ import React from "react";
 import FileIcon from "./icon";
 import { styles } from "./utils/styles";
 import { AttachmentIconProps } from "./utils/types";
+import Text from "../../../components/Text";
 
 export const AttachmentIconPresenter: React.FunctionComponent<
   AttachmentIconProps
@@ -25,20 +26,18 @@ export const AttachmentIconPresenter: React.FunctionComponent<
   disabled = false,
   ...other
 }) => {
+  const file = attachment!;
+  const isUploading = file.s3link == null;
+  const isLoading = file.isLoading || false;
+
   const classes = styles({
     size: size || "md",
-    disabled,
+    disabled: disabled || isUploading,
   });
-  const file = attachment!;
-
-  const isLoading = file.isLoading || false;
-  const isUploading = file.s3link == null;
 
   const isUploadingRenderer = () => (
     <Box>
-      <Typography>
-        {"Uploading..."}
-      </Typography>
+      <Text translation="common.uploading"/>
     </Box>
   );
 
@@ -48,7 +47,7 @@ export const AttachmentIconPresenter: React.FunctionComponent<
         <IconButton
           className={classes.closeRoot}
           onClick={handleRemove && handleRemove(file)}>
-          {!isUploading && <CancelOutlined className={classes.closeIcon} />}
+          <CancelOutlined className={classes.closeIcon} />
         </IconButton>
       </Box>
       <Tooltip title={`${attachment!.name}.${attachment!.type}`}>
