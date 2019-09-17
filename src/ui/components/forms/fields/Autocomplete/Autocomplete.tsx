@@ -52,7 +52,8 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
       <Box mb={0.3}>
         <Typography
           variant={TypographySize[fieldProps.size || "md"]}
-          color={TypographyColor[fieldProps.color || "secondary"]}>
+          color={TypographyColor[fieldProps.color || "secondary"]}
+        >
           <Text message={fieldProps.label} />
         </Typography>
       </Box>
