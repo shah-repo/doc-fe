@@ -1,9 +1,9 @@
 import { Form, FormikConfig } from "formik";
 import React from "react";
 import { Subtract } from "../../common/utils/types";
-import { FBFormInjectedProps } from "./types";
+import { FBFormInjectedProps, FBFormProps } from "./types";
 
-export function withFormDefaults<T extends FormikConfig<any>>(
+export function withFormDefaults<T extends FBFormProps>(
   Component: React.ComponentType<T>,
 ) {
 
