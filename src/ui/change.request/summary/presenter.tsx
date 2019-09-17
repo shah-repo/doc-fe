@@ -23,7 +23,6 @@ import ChangeRequestHeader from "./header";
 import ImplementationPlan from "./implementation.plan";
 import Justification from "./justification";
 import styles from "./styles";
-import _ from "lodash";
 
 interface OwnProps extends DataProps<ChangeRequest> {
   asyncState: AsyncState;
@@ -45,7 +44,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const approversFieldRenderer = () => (
     <Box>
       <ListItem>
-        <ApproversField dataProp={_.filter(dataProp.approvals, ["status", "APPROVED"] )}/>
+        <ApproversField />
       </ListItem>
     </Box>
   );
