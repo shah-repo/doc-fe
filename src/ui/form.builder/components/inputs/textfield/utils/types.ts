@@ -1,9 +1,9 @@
 import { OutlinedTextFieldProps } from "@material-ui/core/TextField";
+import { FormikHybridFieldProps } from "../../../../../components/hoc/utils/types";
 
-export interface FBTextFieldInjectedProps {
+export interface FBTextFieldInjectedProps  {
   variant: "outlined";
+  onTextFieldChange: () => (event: React.ChangeEvent<HTMLInputElement>) => any;
 }
 
-export interface FBTextFieldProps extends OutlinedTextFieldProps, FBTextFieldInjectedProps {
-
-}
+export type FBTextFieldProps = OutlinedTextFieldProps & FBTextFieldInjectedProps & FormikHybridFieldProps;

@@ -1,13 +1,13 @@
-
 import { Box, TextField } from "@material-ui/core";
-import { OutlinedTextFieldProps } from "@material-ui/core/TextField";
 import React from "react";
 import Text from "../../../../components/Text";
 import { withTextFieldDefaults } from "./utils/hoc";
+import { FBTextFieldProps } from "./utils/types";
 
-const FBTextField: React.FunctionComponent<OutlinedTextFieldProps> = ({
+const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   variant,
   label,
+  onChange,
   ...props
 }) => {
 
@@ -23,6 +23,7 @@ const FBTextField: React.FunctionComponent<OutlinedTextFieldProps> = ({
       <TextField
         variant={variant}
         fullWidth={true}
+        onChange={onChange}
         {...props}
       />
     </Box>
