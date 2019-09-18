@@ -18,6 +18,7 @@ import DocumentHeader from "./header";
 import styles from "./styles";
 import ReferenceToContainer from "./referenceTo.container";
 import ReferencedByContainer from "./referencedBy.container";
+import TrainingControl from "./training.control";
 
 interface OwnProps {
   canShowCreateVersionButton?: boolean;
@@ -36,6 +37,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
     referenceTo,
     deprecatedAt,
     description,
+    trainingRecord,
   },
   canShowCreateVersionButton,
 }) => {
@@ -66,6 +68,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
           />
         )}
         {attachments && <Attachment />}
+        {trainingRecord && <TrainingControl dataProp={trainingRecord} />}
       </Grid>
       <Box className={classes.submitBox}>
         <ControlsContainer

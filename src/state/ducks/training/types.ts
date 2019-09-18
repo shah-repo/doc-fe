@@ -12,9 +12,9 @@ export enum TrainingPlanTransition {
 
 export interface TrainingRecord {
   id: string;
-  completedAt: string;
+  completedAt?: string;
   expireOn: string;
-  obsoletedOn: string;
+  obsoletedOn?: string;
   dueOn: string;
   isRefreshed: boolean;
   isValid: boolean;
@@ -28,4 +28,8 @@ export interface TrainingPlan {
   trainingRecords: TrainingRecord[];
   document: DocumentRevisionDocument;
   user: User;
+}
+
+export interface TrainingTransitionRequestBody {
+  password: string;
 }
