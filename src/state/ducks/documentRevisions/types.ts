@@ -67,6 +67,7 @@ export interface DocumentRevision {
   deprecatedAt?: string;
   obsoletedAt?: string;
   releasedAt?: string;
+  retrain?: boolean;
 }
 
 export enum DocumentRevisionType {
@@ -126,6 +127,7 @@ export interface DocumentRevisionEditRequestBody {
   document?: Partial<DocumentRevisionDocument>;
   revisionChangeType?: RevisionChangeType;
   revisionStage?: number;
+  retrain?: boolean;
 }
 
 export interface DocumentRevisionSetAction {

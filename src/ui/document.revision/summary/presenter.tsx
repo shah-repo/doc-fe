@@ -33,6 +33,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
     attachments,
     status,
     name,
+    retrain,
     referenceTo,
     deprecatedAt,
     description,
@@ -51,6 +52,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         direction="column">
         <ChangeRequestLink dataProp={dataProp} />
         <SummaryField label="document.title" value={name} />
+        <SummaryField label="document.revision.trainingRequired" value={retrain ? "yes" : "no"} />
         <SummaryFieldWithHtml label="common.description" value={description} />
         {
           referenceTo &&
