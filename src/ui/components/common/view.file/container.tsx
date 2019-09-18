@@ -3,6 +3,7 @@ import { AttachmentDownloadResponse, attachmentsActions } from "../../../../stat
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import { ViewFileContainerProps } from "./utils/types";
+import ViewFilePresenter from "./presenter";
 
 const ViewFileContainer: React.FunctionComponent<ViewFileContainerProps> = ({
   attachment,
@@ -18,11 +19,18 @@ const ViewFileContainer: React.FunctionComponent<ViewFileContainerProps> = ({
   useEffect(() => {
     if (isOpen) {
       async.start(download, attachment, async);
+      return;
     }
+    setSignedUrl("");
   }, [isOpen]);
 
   return (
-    <div>View file</div>
+    <ViewFilePresenter
+      handleClose={handleClose}
+      isOpen={isOpen}
+      asyncState={async.asyncState}
+      url={signedUrl}
+    />
   );
 };
 
