@@ -11,9 +11,6 @@ const ViewFileContent: React.FunctionComponent<ViewFileContentProps> = ({
   type,
 }) => {
   const classes = styles();
-  // url = "https://ec.europa.eu/transport/sites/transport/files/themes/passengers/air/doc/complain_form/eu_complaint_form_en.pdf";
-  // url = "http://www.html5videoplayer.net/videos/toystory.mp4";
-
   const isVideo = type === "mp4";
   const isPDF = type === "pdf";
 

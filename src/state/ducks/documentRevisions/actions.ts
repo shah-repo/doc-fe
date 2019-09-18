@@ -58,17 +58,7 @@ const load = (id: string): ApiAction<DocumentRevision> => apiAction({
   method: "get",
   asyncType: DOCUMENT_REVISION_GET_ASYNC,
   onSuccess: (documentRevision, dispatch) => {
-    // TODO: remove mock once BE ready
-    dispatch(documentRevisionSet({
-      ...documentRevision,
-      trainingRecord: {
-        id: "382c6eaf-dfcd-4fe2-b9af-11b83606336e",
-        dueOn: "2019-10-20T00:00:00.000Z",
-        expireOn: "2019-10-21T00:00:00.000Z",
-        isRefreshed: false,
-        isValid: true,
-      },
-    }));
+    dispatch(documentRevisionSet(documentRevision));
   },
 });
 
