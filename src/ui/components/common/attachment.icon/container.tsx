@@ -21,6 +21,8 @@ import {
 
 type DispatchProps = AttachmentIconDispatchProps;
 
+export let SetFile: React.Context<React.Dispatch<React.SetStateAction<Attachment | undefined>>>;
+
 export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerProps> = ({
   name,
   download,
@@ -33,6 +35,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const attachments = field!.value as Attachment[] || [];
   const [selectedFile, setSelectedFile] = useState<undefined | Attachment>(undefined);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  SetFile = React.createContext(setSelectedFile);
 
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) =>

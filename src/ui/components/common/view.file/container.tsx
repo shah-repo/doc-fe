@@ -22,7 +22,7 @@ const ViewFileContainer: React.FunctionComponent<ViewFileContainerProps> = ({
       return;
     }
     setSignedUrl("");
-  }, [isOpen]);
+  }, [isOpen, attachment]);
 
   return (
     <ViewFilePresenter

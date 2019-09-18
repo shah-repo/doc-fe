@@ -1,6 +1,7 @@
 import { Button } from "@material-ui/core";
-import React, { useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import Text from "../../../Text";
+import { SetFile } from "../../attachment.icon/container";
 import { styles } from "../utils/styles";
 import { ViewFileTitleControlsProps } from "../utils/types";
 
@@ -8,17 +9,22 @@ const ViewFileTitleControls: React.FunctionComponent<ViewFileTitleControlsProps>
   attachment,
   attachments,
 }) => {
-  const { isPreviousDisabled, isNextDisabled } = useMemo(() => {
-    const viewableFiles = attachments.filter((item) => item.id === attachment!.id);
+  const setFile = useContext(SetFile);
+  const { setPreviousAttachment, setNextAttachment } = useMemo(() => {
+    const viewableFiles = attachments.filter((item) => item.type === "pdf");
     if (viewableFiles.length === 1) {
-      return { isPreviousDisabled: true, isNextDisabled: true };
+      return { setPreviousAttachment: undefined, setNextAttachment: undefined };
     }
-    const currentIndex = attachments.findIndex((item) => item.id === attachment!.id);
+    const currentIndex = viewableFiles.findIndex((item) => item.id === attachment!.id);
 
-    const disablePrevious = currentIndex === 0;
-    const disableNext = (currentIndex - 1) === viewableFiles.length;
+    const setPrevious = currentIndex === 0
+      ? undefined
+      : () => setFile(viewableFiles[currentIndex - 1]);
+    const setNext = (currentIndex + 1) >= viewableFiles.length
+      ? undefined
+      : () => setFile(viewableFiles[currentIndex + 1]);
 
-    return { isPreviousDisabled: disablePrevious, isNextDisabled: disableNext };
+    return { setPreviousAttachment: setPrevious, setNextAttachment: setNext };
   }, [attachment, attachments]);
   const classes = styles();
   return (
@@ -26,14 +32,16 @@ const ViewFileTitleControls: React.FunctionComponent<ViewFileTitleControlsProps>
       <Button
         color="secondary"
         variant="outlined"
-        disabled={isPreviousDisabled}
+        disabled={!setPreviousAttachment}
+        onClick={setPreviousAttachment}
       >
         <Text translation="common.previous" />
       </Button>
       <Button
         color="secondary"
         variant="contained"
-        disabled={isNextDisabled}
+        disabled={!setNextAttachment}
+        onClick={setNextAttachment}
       >
         <Text translation="common.next" />
       </Button>
