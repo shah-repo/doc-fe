@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Attachment } from "../../../../../state/ducks/attachments";
 import { AsyncState } from "../../../../../state/types";
 
@@ -23,6 +24,11 @@ export interface ViewFileContentProps {
 }
 
 export interface ViewFileTitleProps {
+  attachment?: Attachment;
+  attachments: Attachment[];
+}
+
+export interface ViewFileTitleControlsProps {
   attachment?: Attachment;
   attachments: Attachment[];
 }
