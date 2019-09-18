@@ -13,6 +13,7 @@ export interface ViewFilePresenterProps {
   asyncState: AsyncState;
   url: string;
   attachment?: Attachment;
+  attachments: Attachment[];
   handleClose(): void;
 }
 
@@ -23,4 +24,5 @@ export interface ViewFileContentProps {
 
 export interface ViewFileTitleProps {
   attachment?: Attachment;
+  attachments: Attachment[];
 }

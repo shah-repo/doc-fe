@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { AttachmentDownloadResponse, attachmentsActions } from "../../../../state/ducks/attachments";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
-import { ViewFileContainerProps } from "./utils/types";
 import ViewFilePresenter from "./presenter";
+import { ViewFileContainerProps } from "./utils/types";
 
 const ViewFileContainer: React.FunctionComponent<ViewFileContainerProps> = ({
   attachment,
@@ -31,6 +31,7 @@ const ViewFileContainer: React.FunctionComponent<ViewFileContainerProps> = ({
       asyncState={async.asyncState}
       url={signedUrl}
       attachment={attachment}
+      attachments={attachments}
     />
   );
 };

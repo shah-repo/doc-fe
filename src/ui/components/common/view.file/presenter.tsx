@@ -11,6 +11,7 @@ const ViewFilePresenter: React.FunctionComponent<ViewFilePresenterProps> = ({
   asyncState,
   url,
   attachment,
+  attachments,
 }) => {
   const classes = styles();
   return (
@@ -21,7 +22,10 @@ const ViewFilePresenter: React.FunctionComponent<ViewFilePresenterProps> = ({
       maxWidth="lg"
       fullWidth={true}
     >
-      <ViewFileTitle attachment={attachment} />
+      <ViewFileTitle
+        attachment={attachment}
+        attachments={attachments}
+      />
       <ViewFileContent
         asyncState={asyncState}
         url={url}
