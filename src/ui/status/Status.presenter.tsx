@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 const API = process.env.REACT_APP_API_ENDPOINT;
 const STATUS_QUERY = "/v1/status";
-const STATUS_QUERY = "/v1/micro/healthcheck";
+const MICRO_STATUS_QUERY = "/v1/micro/healthcheck";
 
 interface StatusState {
     data: Object
@@ -24,7 +24,7 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
     .then(
       (result) => {
         let dict = JSON.parse(result);
-        console.log("Dict 2: " + dict);
+        //console.log("Dict 2: " + dict);
         this.setState({ data: dict });
       },
       // Note: it's important to handle errors here
@@ -39,7 +39,7 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
     .then(
       (result) => {
         let dict = JSON.parse(result);
-        console.log("Dict 3: " + dict);
+        //console.log("Dict 3: " + dict);
         this.setState({ data1: dict });
       },
       // Note: it's important to handle errors here
@@ -53,7 +53,7 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
 
   render() {
     let dict = require('../../data/buildInfo.json');
-    console.log("Dict: " + dict);
+    //console.log("Dict: " + dict);
     var index = 0;
     let elements = Object.keys(dict).map((key) => {
       index += 1; 
