@@ -191,9 +191,7 @@
 }
 
 .viewForm {
-  position: fixed;
-  right: 20px;
-  top: 20px;
+  float: right;
   background: #ccc;
   border: 0;
   padding: 8px 20px;
