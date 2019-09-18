@@ -30,6 +30,7 @@ const ViewFileContainer: React.FunctionComponent<ViewFileContainerProps> = ({
       isOpen={isOpen}
       asyncState={async.asyncState}
       url={signedUrl}
+      attachment={attachment}
     />
   );
 };

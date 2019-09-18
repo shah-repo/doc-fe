@@ -1,6 +1,7 @@
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import React from "react";
 import AsyncGate from "../../../AsyncGate";
+import Text from "../../../Text";
 import { styles } from "../utils/styles";
 import { ViewFileContentProps } from "../utils/types";
 
@@ -15,7 +16,7 @@ const ViewFileContent: React.FunctionComponent<ViewFileContentProps> = ({
     <MuiDialogContent className={classes.content}>
       <AsyncGate asyncState={asyncState}>
         <object width="100%" height="100%" type="application/pdf" data={url}>
-          <p>Insert your error message here, if the PDF cannot be displayed.</p>
+          <Text translation="common.file.not.loaded" />
         </object>
       </AsyncGate>
     </MuiDialogContent>

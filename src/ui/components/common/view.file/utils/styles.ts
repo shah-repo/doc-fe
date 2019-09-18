@@ -2,9 +2,9 @@ import { makeStyles } from "@material-ui/core";
 
 export const styles = makeStyles(theme => ({
   paper: {
-    maxWidth: 1620,
-    width: "70%",
-    height: "80%",
+    //maxWidth: 1620,
+    //width: "70%",
+    height: "100%",
     marginTop: 100,
   },
   title: {
@@ -16,5 +16,6 @@ export const styles = makeStyles(theme => ({
   },
   content: {
     marginTop: 20,
+    overflow: "hidden",
   },
 }));
