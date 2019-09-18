@@ -55,7 +55,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         <SummaryField label="document.title" value={name} />
         <SummaryField
           label="document.revision.trainingRequired"
-          value={<Text translation={retrain ? "document.yes" : "document.no"} />}
+          value={<Text translation={retrain ? "common.yes" : "common.no"} />}
         />
         <SummaryFieldWithHtml label="common.description" value={description} />
         {
