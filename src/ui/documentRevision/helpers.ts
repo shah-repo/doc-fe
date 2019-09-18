@@ -67,8 +67,10 @@ export const generateVersionNumber = (
   }
 };
 
-
-export const shouldRedircetToLatestReleasd = (documentRevisions: DocumentRevision[], documentRevisionId: string | null) =>
+export const shouldRedircetToLatestReleasd = (
+  documentRevisions: DocumentRevision[],
+  documentRevisionId: string | null,
+) =>
   documentRevisions.length > 0 && !documentRevisionId;
 
 export const getDocRevIdToRedirect = (

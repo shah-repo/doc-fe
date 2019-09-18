@@ -1,11 +1,11 @@
 import { Button, Grid } from "@material-ui/core";
 import React from "react";
 import { PendingAction } from "../../../state/ducks/dashboard";
+import { TrainingRecord } from "../../../state/ducks/training";
 import Date from "../../components/Date";
 import Text from "../../components/Text";
-import { TrainingRecord } from "../../training/types";
+import { documentDetailsPath } from "../../document.revision/utils/paths";
 import { styles } from "./PendingAction.styles";
-import { generateTrainingDetailPath } from "../../training/pathGenerators";
 
 interface OwnProps {
   pendingAction: PendingAction;
@@ -34,7 +34,7 @@ export const TrainingRequest: React.FunctionComponent<Props> = ({
         <Button
           variant="contained"
           target="_blank"
-          href={generateTrainingDetailPath(trainingRecord.id)}
+          href={documentDetailsPath(trainingRecord.trainingPlan!.document.id)}
           color="secondary"
         >
           <Text translation="common.open" />
