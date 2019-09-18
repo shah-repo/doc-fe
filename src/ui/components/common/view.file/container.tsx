@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { AttachmentDownloadResponse, attachmentsActions } from "../../../../state/ducks/attachments";
+import { AttachmentDownloadResponse, attachmentsActions, Attachment } from "../../../../state/ducks/attachments";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import ViewFilePresenter from "./presenter";
 import { ViewFileContainerProps } from "./utils/types";
 
 const ViewFileContainer: React.FunctionComponent<ViewFileContainerProps> = ({
-  attachment,
+  attachment = ({}) as Attachment,
   attachments,
   isOpen,
   handleClose,

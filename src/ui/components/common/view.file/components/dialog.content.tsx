@@ -8,16 +8,31 @@ import { ViewFileContentProps } from "../utils/types";
 const ViewFileContent: React.FunctionComponent<ViewFileContentProps> = ({
   asyncState,
   url,
+  type,
 }) => {
   const classes = styles();
-  url = "https://ec.europa.eu/transport/sites/transport/files/themes/passengers/air/doc/complain_form/eu_complaint_form_en.pdf";
+  // url = "https://ec.europa.eu/transport/sites/transport/files/themes/passengers/air/doc/complain_form/eu_complaint_form_en.pdf";
+  // url = "http://www.html5videoplayer.net/videos/toystory.mp4";
+
+  const isVideo = type === "mp4";
+  const isPDF = type === "pdf";
+
+  const renderVideo = isVideo && (
+    <video controls={true} width="100%" height="95%">
+      <source src={url} type="video/mp4"/>
+    </video>
+  );
+  const renderPDF = isPDF && (
+    <object width="100%" height="100%" type="application/pdf" data={url}>
+      <Text translation="common.file.not.loaded" />
+    </object>
+  );
 
   return (
     <MuiDialogContent className={classes.content}>
       <AsyncGate asyncState={asyncState}>
-        <object width="100%" height="100%" type="application/pdf" data={url}>
-          <Text translation="common.file.not.loaded" />
-        </object>
+        {renderVideo}
+        {renderPDF}
       </AsyncGate>
     </MuiDialogContent>
   );

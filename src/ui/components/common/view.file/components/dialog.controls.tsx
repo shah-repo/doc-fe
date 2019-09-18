@@ -2,6 +2,7 @@ import { Button } from "@material-ui/core";
 import React, { useContext, useMemo } from "react";
 import Text from "../../../Text";
 import { SetFile } from "../../attachment.icon/container";
+import { VIEWABLE_FILES } from "../utils/constants";
 import { styles } from "../utils/styles";
 import { ViewFileTitleControlsProps } from "../utils/types";
 
@@ -11,7 +12,7 @@ const ViewFileTitleControls: React.FunctionComponent<ViewFileTitleControlsProps>
 }) => {
   const setFile = useContext(SetFile);
   const { setPreviousAttachment, setNextAttachment } = useMemo(() => {
-    const viewableFiles = attachments.filter((item) => item.type === "pdf");
+    const viewableFiles = attachments.filter((item) => VIEWABLE_FILES.includes(item.type));
     if (viewableFiles.length === 1) {
       return { setPreviousAttachment: undefined, setNextAttachment: undefined };
     }

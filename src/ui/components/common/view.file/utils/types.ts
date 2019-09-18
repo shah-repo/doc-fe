@@ -21,6 +21,7 @@ export interface ViewFilePresenterProps {
 export interface ViewFileContentProps {
   asyncState: AsyncState;
   url: string;
+  type: string;
 }
 
 export interface ViewFileTitleProps {

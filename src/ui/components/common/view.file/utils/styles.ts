@@ -4,6 +4,8 @@ export const styles = makeStyles((theme) => ({
   paper: {
     height: "100%",
     marginTop: 100,
+    boxShadow: "unset",
+    backgroundColor: "transparent",
   },
   title: {
     position: "fixed",
@@ -13,7 +15,6 @@ export const styles = makeStyles((theme) => ({
     left: 0,
   },
   content: {
-    marginTop: 20,
     overflow: "hidden",
   },
   buttonsContainer: {

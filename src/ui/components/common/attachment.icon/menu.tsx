@@ -3,6 +3,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import React from "react";
 import { Attachment, AttachmentType } from "../../../../state/ducks/attachments";
 import Text from "../../Text";
+import { VIEWABLE_FILES } from "../view.file/utils/constants";
 import { AttachmentMenuProps } from "./utils/types";
 
 const AttachmentMenu: React.FunctionComponent<AttachmentMenuProps> = ({
@@ -13,7 +14,7 @@ const AttachmentMenu: React.FunctionComponent<AttachmentMenuProps> = ({
   handleViewFile,
 }) => {
   const file = attachment || {} as Attachment;
-  const isFileViewable = file.type === "pdf";
+  const isFileViewable =  VIEWABLE_FILES.includes(file.type);
   const {
     name: fileName,
     type: fileType,
