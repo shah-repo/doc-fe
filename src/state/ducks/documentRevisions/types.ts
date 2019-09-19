@@ -69,6 +69,7 @@ export interface DocumentRevision {
   obsoletedAt?: string;
   releasedAt?: string;
   trainingRecords: TrainingRecord[];
+  retrain?: boolean;
 }
 
 export enum DocumentRevisionType {
@@ -128,6 +129,7 @@ export interface DocumentRevisionEditRequestBody {
   document?: Partial<DocumentRevisionDocument>;
   revisionChangeType?: RevisionChangeType;
   revisionStage?: number;
+  retrain?: boolean;
 }
 
 export interface DocumentRevisionSetAction {

@@ -1,7 +1,6 @@
 import {
   Box,
   Grid,
-  Typography,
   WithStyles,
   withStyles,
 } from "@material-ui/core";
@@ -11,13 +10,14 @@ import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
+import Text from "../../components/Text";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
 import Attachment from "./attachment";
 import ChangeRequestLink from "./changeRequestLink";
 import DocumentHeader from "./header";
-import styles from "./styles";
-import ReferenceToContainer from "./referenceTo.container";
 import ReferencedByContainer from "./referencedBy.container";
+import ReferenceToContainer from "./referenceTo.container";
+import styles from "./styles";
 import TrainingControl from "./training.control";
 
 interface OwnProps {
@@ -34,6 +34,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
     attachments,
     status,
     name,
+    retrain,
     referenceTo,
     deprecatedAt,
     description,
@@ -53,6 +54,10 @@ export const Presenter: React.FunctionComponent<Props> = ({
         direction="column">
         <ChangeRequestLink dataProp={dataProp} />
         <SummaryField label="document.title" value={name} />
+        <SummaryField
+          label="document.revision.trainingRequired"
+          value={<Text translation={retrain ? "common.yes" : "common.no"} />}
+        />
         <SummaryFieldWithHtml label="common.description" value={description} />
         {
           referenceTo &&
