@@ -9,6 +9,6 @@ export const getAuditDefaultValue = (nextValue: any): string => {
   if (_.isString(nextValue)) {
     return nextValue;
   }
-  
+
   return "N/A";
-}
+};

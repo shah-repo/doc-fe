@@ -1,12 +1,13 @@
-import { Grid, WithStyles, withStyles, Paper, Typography } from "@material-ui/core";
+import { Grid, Paper, Typography, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
-import AsyncGate from "../components/AsyncGate";
-import { styles } from "./Dashboard.styles";
-import { DashboardPresenterParentProps } from "./types";
-import Text from "../components/Text";
 import { PendingActionType } from "../../state/ducks/dashboard";
+import AsyncGate from "../components/AsyncGate";
+import Text from "../components/Text";
 import ChangeRequestApproval from "./action.types/ChangeRequestApproval";
 import TaskApproval from "./action.types/TaskApproval";
+import TrainingRequest from "./action.types/TrainingRequest";
+import { styles } from "./Dashboard.styles";
+import { DashboardPresenterParentProps } from "./types";
 
 type DashboardPresenterProps = DashboardPresenterParentProps;
 
@@ -20,9 +21,11 @@ const DashboardPresenter: React.FunctionComponent<DashboardPresenterProps> = ({
       pendingActions.map((pendingAction) => {
         switch (pendingAction.type) {
           case PendingActionType.PENDING_REVIEW:
-            return <ChangeRequestApproval key={pendingAction.changeReq.id} pendingAction={pendingAction} />
+            return <ChangeRequestApproval key={pendingAction.changeReq.id} pendingAction={pendingAction} />;
+          case PendingActionType.PENDING_TRAINING_RECORDS:
+            return <TrainingRequest key={pendingAction.trainingRecord!.id} pendingAction={pendingAction} />;
           default:
-            return <TaskApproval key={pendingAction.changeReq.id} pendingAction={pendingAction} />
+            return <TaskApproval key={pendingAction.changeReq.id} pendingAction={pendingAction} />;
         }
       })
     }

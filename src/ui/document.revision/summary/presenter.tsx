@@ -18,6 +18,7 @@ import DocumentHeader from "./header";
 import styles from "./styles";
 import ReferenceToContainer from "./referenceTo.container";
 import ReferencedByContainer from "./referencedBy.container";
+import Text from "../../components/Text";
 
 interface OwnProps {
   canShowCreateVersionButton?: boolean;
@@ -33,6 +34,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
     attachments,
     status,
     name,
+    retrain,
     referenceTo,
     deprecatedAt,
     description,
@@ -51,6 +53,10 @@ export const Presenter: React.FunctionComponent<Props> = ({
         direction="column">
         <ChangeRequestLink dataProp={dataProp} />
         <SummaryField label="document.title" value={name} />
+        <SummaryField
+          label="document.revision.trainingRequired"
+          value={<Text translation={retrain ? "common.yes" : "common.no"} />}
+        />
         <SummaryFieldWithHtml label="common.description" value={description} />
         {
           referenceTo &&

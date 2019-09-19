@@ -38,6 +38,7 @@ export const getDocument = (document: Partial<Document> = {}): Document => ({
 });
 
 export const getAudit = (audit: Partial<Audit> = {}): Audit => ({
+  id: faker.random.uuid(),
   type: faker.lorem.word(),
   field: faker.lorem.word(),
   nextValue: faker.lorem.sentence(),

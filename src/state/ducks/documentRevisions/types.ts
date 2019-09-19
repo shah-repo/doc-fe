@@ -67,6 +67,7 @@ export interface DocumentRevision {
   deprecatedAt?: string;
   obsoletedAt?: string;
   releasedAt?: string;
+  retrain?: boolean;
 }
 
 export enum DocumentRevisionType {
@@ -100,6 +101,10 @@ export enum DocumentRevisionType {
   TP = "Test Protocol",
   TR = "Test Report",
   WI = "Work Instructions",
+  ESL = "Equipment Specifications Lot",
+  TLL = "Tooling Lot",
+  CSL = "Component Specifications Lot",
+  EB = "Engineering Build",
 }
 
 export const RevisionStageOptions = [
@@ -122,6 +127,7 @@ export interface DocumentRevisionEditRequestBody {
   document?: Partial<DocumentRevisionDocument>;
   revisionChangeType?: RevisionChangeType;
   revisionStage?: number;
+  retrain?: boolean;
 }
 
 export interface DocumentRevisionSetAction {

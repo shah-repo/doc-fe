@@ -50,6 +50,9 @@ export const styles = makeStyles(theme => ({
     fontSize: "100%",
     gridArea: "1/1",
   },
+  isUploading: {
+    opacity: 0.5,
+  },
   ribbonWrapper: {
     position: "relative",
     gridArea: "1/1",
