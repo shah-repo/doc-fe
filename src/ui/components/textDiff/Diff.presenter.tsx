@@ -4,7 +4,6 @@ import React from "react";
 import ReactQuill from "react-quill";
 import Text from "../../components/Text";
 import { styles } from "./utils/Diff.styles";
-import "./utils/editor.css";
 import { DiffPresenterProps } from "./utils/types.js";
 
 type Props = DiffPresenterProps;

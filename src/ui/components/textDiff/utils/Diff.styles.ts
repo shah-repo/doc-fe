@@ -10,7 +10,8 @@ export const styles = makeStyles((theme: Theme) =>
     },
     editor: {
       width: "100%",
-      maxHeight: 550,
+      height: "59vh",
+      maxHeight: "59vh",
       overflow: "auto",
       display: "inline-block",
     },
