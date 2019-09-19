@@ -3,6 +3,7 @@ import { AuthProps } from "../../../state/ducks/auth/types";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { documentsActions } from "../../../state/ducks/documents";
+import { TrainingRecord } from "../../../state/ducks/training";
 import { LoadAsyncState } from "../../../state/types";
 
 // Container
@@ -57,4 +58,8 @@ export interface ReferenceSummary {
   id: string;
   url: string;
   title: string;
+}
+
+export interface TrainingControlProps extends DataProps<TrainingRecord[]> {
+  documentRevisionId: string;
 }

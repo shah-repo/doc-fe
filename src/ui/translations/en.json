@@ -195,6 +195,10 @@
   "common.changes": "Changes",
   "common.create": "Create",
   "common.uploading": "Uploading...",
+  "common.view.file": "View File",
+  "common.file.not.loaded": "File not loaded",
+  "common.previous": "Previous",
+  "common.next": "Next",
   "common.yes" : "Yes",
   "common.no" : "No",
 
@@ -281,5 +285,10 @@
   "form.builder.number": "Form Number",
 
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
-  "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}"
+  "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
+
+  "training.completed": "Training completed",
+  "training.certify.completion": "Click the button to certify training completion",
+
+  "file.viewer.video.not.supported": "Your browser does not support the video tag"
 }

@@ -22,6 +22,7 @@ export interface AttachmentMenuProps {
   handleClose?: () => void;
   anchorEl?: null | HTMLElement;
   attachment?: Attachment;
+  handleViewFile: (attachment: Attachment) => void;
 }
 
 export interface AttachmentIconStyleProp {

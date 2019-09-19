@@ -14,8 +14,8 @@ import { documentVersionPath } from "../document.revision/utils/paths";
 import DocumentRevisionAuditContainer from "./audit/Audit.container";
 import DocumentRevisionDisplayContainer from "./DocumentRevisionDisplay.container";
 import DocumentRevisionListContainer from "./DocumentRevisionList.container";
+import { getDocRevIdToRedirect, shouldRedircetToLatestReleasd } from "./helpers";
 import styles from "./styles";
-import { shouldRedircetToLatestReleasd, getDocRevIdToRedirect } from "./helpers";
 
 interface StateProps {
   loadDocumentAsyncState: AsyncState;
@@ -62,7 +62,7 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
   deprecatedAt,
 }) => {
   const loadDocumentAction = () => loadDocument(documentId);
-  
+
   if (shouldRedircetToLatestReleasd(documentRevisions, documentRevisionId)) {
     const docRevIdToRedirect = getDocRevIdToRedirect(documentRevisions, deprecatedAt);
     return (

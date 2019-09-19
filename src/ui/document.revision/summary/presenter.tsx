@@ -1,7 +1,6 @@
 import {
   Box,
   Grid,
-  Typography,
   WithStyles,
   withStyles,
 } from "@material-ui/core";
@@ -11,14 +10,15 @@ import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
+import Text from "../../components/Text";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
 import Attachment from "./attachment";
 import ChangeRequestLink from "./changeRequestLink";
 import DocumentHeader from "./header";
-import styles from "./styles";
-import ReferenceToContainer from "./referenceTo.container";
 import ReferencedByContainer from "./referencedBy.container";
-import Text from "../../components/Text";
+import ReferenceToContainer from "./referenceTo.container";
+import styles from "./styles";
+import TrainingControl from "./training.control";
 
 interface OwnProps {
   canShowCreateVersionButton?: boolean;
@@ -30,6 +30,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
   dataProp: {
+    id,
     document,
     attachments,
     status,
@@ -38,6 +39,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
     referenceTo,
     deprecatedAt,
     description,
+    trainingRecords,
   },
   canShowCreateVersionButton,
 }) => {
@@ -72,6 +74,11 @@ export const Presenter: React.FunctionComponent<Props> = ({
           />
         )}
         {attachments && <Attachment />}
+        <TrainingControl
+          dataProp={trainingRecords}
+          classes={classes}
+          documentRevisionId={id}
+        />
       </Grid>
       <Box className={classes.submitBox}>
         <ControlsContainer

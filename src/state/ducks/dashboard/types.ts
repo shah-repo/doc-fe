@@ -1,5 +1,5 @@
-import { TrainingRecord } from "../../../ui/training/types";
 import { ChangeRequest } from "../changeRequest";
+import { TrainingRecord } from "../training";
 import { PENDING_ACTIONS_LIST } from "./constants";
 
 export enum PendingActionType {
