@@ -77,7 +77,6 @@ export const getDocRevIdToRedirect = (
   documentRevisions: DocumentRevision[],
   deprecatedAt: string,
 ) => {
-  let indexOfDocRev = documentRevisions.length - 1;
   if (deprecatedAt) {
     const depreactedAtDate = moment(deprecatedAt);
     const indexOfLastReleased = _.findLastIndex(documentRevisions, (doc) => {
@@ -87,9 +86,23 @@ export const getDocRevIdToRedirect = (
 
       return moment(doc.releasedAt).isSameOrBefore(depreactedAtDate);
     });
-    indexOfDocRev =
-      indexOfLastReleased > -1 ? indexOfLastReleased : indexOfDocRev;
+    const indexOfDocRev =
+      indexOfLastReleased > -1 ? indexOfLastReleased : 0;
+
+    return documentRevisions[indexOfDocRev].id;
   }
 
-  return documentRevisions[indexOfDocRev].id;
-}
+  const filteredList = documentRevisions.filter(({ releasedAt }) => releasedAt);
+
+  if (filteredList.length === 0) {
+    return documentRevisions[0].id;
+  }
+
+  const sortedList = _.orderBy(
+    filteredList,
+    [({ releasedAt }) => new Date(releasedAt!) ],
+    "desc",
+  );
+
+  return sortedList[0].id;
+};
