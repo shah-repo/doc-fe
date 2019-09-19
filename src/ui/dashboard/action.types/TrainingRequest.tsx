@@ -26,7 +26,10 @@ export const TrainingRequest: React.FunctionComponent<Props> = ({
           <Text message={`dashboard.type.${pendingAction.type}`} />
         </span>
         <span>
-          <Text translation="dashboard.is.due.on" />
+          <Text
+            translation="dashboard.is.due.on"
+            values={{ docId: pendingAction.trainingRecord!.trainingPlan!.document.docId }}
+          />
           <Date value={trainingRecord.dueOn} />
         </span>
       </Grid>
