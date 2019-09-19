@@ -19,6 +19,7 @@ import { AsyncState } from "../../../state/types";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
 import InputField from "../../components/forms/fields/Input";
+import CheckboxField from "../../components/forms/fields/Checkbox";
 import RadioButton from "../../components/forms/fields/RadioButton";
 import RadioGroup from "../../components/forms/fields/RadioGroup";
 import SelectField from "../../components/forms/fields/Select";
@@ -270,6 +271,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             onClick={openReference}
           />
           {renderReferences()}
+          <CheckboxField name="retrain" label="document.revision.trainingRequired"/>
           <AttachmentsField />
           {renderTypeOfRevisionChange()}
           <Box mt={7} mx={-7}>

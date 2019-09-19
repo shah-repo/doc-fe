@@ -194,10 +194,15 @@
   "common.clear.filters": "Clear Filters",
   "common.changes": "Changes",
   "common.create": "Create",
+  "common.uploading": "Uploading...",
+  "common.yes" : "Yes",
+  "common.no" : "No",
 
   "dashboard.type.PENDING_REVIEW": "is pending your approval",
   "dashboard.type.PENDING_IMPL_PLAN_TASK": " task is pending your approval",
+  "dashboard.type.PENDING_TRAINING_RECORDS": "Training",
   "dashboard.noPendingActions": "No pending actions",
+  "dashboard.is.due.on": " is due on ",
 
   "document.title": "Document Title",
   "document.type": "Document Type",
@@ -263,6 +268,7 @@
   "document.revision.list.type": "Type",
   "document.revision.list.version": "Released version",
   "document.revision.create": "Create a document",
+  "document.revision.trainingRequired": "Training Required",
 
   "page.title.changeRequest": "Change Request List",
   "page.title.documentList": "Document List",
