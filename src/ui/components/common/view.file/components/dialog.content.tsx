@@ -4,6 +4,7 @@ import AsyncGate from "../../../AsyncGate";
 import Text from "../../../Text";
 import { styles } from "../utils/styles";
 import { ViewFileContentProps } from "../utils/types";
+import { SUPPORTED_VIDEO_FILES } from "../utils/constants";
 
 const ViewFileContent: React.FunctionComponent<ViewFileContentProps> = ({
   asyncState,
@@ -11,12 +12,16 @@ const ViewFileContent: React.FunctionComponent<ViewFileContentProps> = ({
   type,
 }) => {
   const classes = styles();
-  const isVideo = type === "mp4";
+  const isVideo = SUPPORTED_VIDEO_FILES.includes(type);
   const isPDF = type === "pdf";
 
   const renderVideo = isVideo && (
     <video controls={true} width="100%" height="95%">
       <source src={url} type="video/mp4"/>
+      <source src={url} type="video/webm"/>
+      <source src={url} type="video/ogg"/>
+      <source src={url} type="video/avi"/>
+      <Text translation="file.viewer.video.not.supported" />
     </video>
   );
   const renderPDF = isPDF && (
