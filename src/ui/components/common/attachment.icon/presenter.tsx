@@ -32,7 +32,7 @@ export const AttachmentIconPresenter: React.FunctionComponent<
 
   const classes = styles({
     size: size || "md",
-    disabled: disabled || isUploading,
+    disabled,
   });
 
   const isUploadingRenderer = () => (
