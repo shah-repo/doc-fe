@@ -47,8 +47,8 @@ export const compareHandler = (oldContent: DeltaStatic, newContent: DeltaStatic)
     finalChanges.ops && finalChanges.ops.forEach(op => {
         if (op.hasOwnProperty('attributes')) {
             if (op.attributes && op.attributes.background === null && op.attributes.color === null) { // retain the green color, indicating change
-                op.attributes.background = "#cce8cc"
-                op.attributes.color = "#003700"
+                op.attributes.background = "#C9DFFF";
+                op.attributes.color = "#003700";
             }
         }
     })
@@ -96,8 +96,8 @@ const indicateInsertsAndDeletion = (delta: DeltaStatic) => {
         if (op.hasOwnProperty('attributes') || op.hasOwnProperty('insert')) {
             // color it green
             op.attributes = {
-                background: "#cce8cc",
-                color: "#003700"
+                background: "#C9DFFF",
+                color: "#003700",
             };
         }
 
@@ -108,11 +108,10 @@ const indicateInsertsAndDeletion = (delta: DeltaStatic) => {
             delete op.delete;
             // but color it red and struckthrough
             op.attributes = {
-                background: "#e8cccc",
+                background: "#FFD3D3",
                 color: "#370000",
-                strike: true
             };
         }
     }
-    return delta
-}
+    return delta;
+};

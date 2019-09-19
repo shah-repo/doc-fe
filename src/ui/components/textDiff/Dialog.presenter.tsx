@@ -1,19 +1,16 @@
 import React from "react";
+import AsyncGate from "../AsyncGate";
 import DialogWindow from "../dialogs/Dialog";
 import Diff from "./Diff.container";
-import AsyncGate from "../AsyncGate";
-import { styles } from "./Dialog.styles";
-import { DialogPresenterProps } from "./types";
+import { DialogPresenterProps } from "./utils/types";
 
 type Props = DialogPresenterProps;
 
 const DialogPresenter: React.FunctionComponent<Props> = ({
-  oldText, newText, loadChanges, dialogHandler, async
+  oldText, newText, loadChanges, dialogHandler, async,
 }) => {
-  const classes = styles();
-  
   const contentRenderer = () => (
-    <div className={classes.container}>
+    <div>
       <AsyncGate
         asyncState={async.asyncState}
         asyncAction={loadChanges}
@@ -29,12 +26,14 @@ const DialogPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <DialogWindow
-      title={"common.changes"}
+      title={"common.text.difference"}
       contentRenderer={contentRenderer}
       dialogHandler={dialogHandler}
+      maxWidth="lg"
+      fullWidth={true}
     />
   );
-}
+};
 
 DialogPresenter.displayName = "TextDiffDialogPresenter";
 
