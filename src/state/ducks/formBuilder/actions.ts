@@ -12,7 +12,15 @@ import {
   UPDATE_FIELD,
   UPDATE_FIELD_VALUE,
   UPLOAD_TEMPLATE,
+  VIEW_FORM_MODE,
 } from "./constants";
+
+export const viewFormMode = (mode: boolean) => {
+  return {
+    type: VIEW_FORM_MODE,
+    mode,
+  };
+};
 
 export const showModal = (currentIndex: number | string) => {
   return {
@@ -148,6 +156,7 @@ export const updateFieldValue = (
 };
 
 export default {
+  viewFormMode,
   showModal,
   hideModal,
   addField,

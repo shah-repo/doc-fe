@@ -37,7 +37,8 @@ import {
   documentDetailsPath,
   documentVersionPath,
 } from "../../document.revision/utils/paths";
-import FormBuilderPresenter from "../../formBuilder/FormBuilder.presenter";
+import { isFBActive } from "../../formBuilder/helpers/FBLocalStorageHelper";
+import FBDocumentRevision from "../formBuilder/FBDocumentRevision.container";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -76,8 +77,12 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   errors,
   formState,
 }) => {
-
-  const [fbActive, fbSetActive] = useState(false);
+  const fbState =
+    isFBActive &&
+    initialValues.document &&
+    initialValues.document.type &&
+    DocumentRevisionType[initialValues.document.type as keyof typeof DocumentRevisionType] ===  DocumentRevisionType.FM;
+  const [fbActive, fbSetActive] = useState(fbState);
 
   const openReference = (documentId: string) => {
     window.open(documentDetailsPath(documentId), "_blank");
@@ -110,7 +115,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   ) => {
     const type = event.target.value as string;
     loadDocumentProposedId(type);
-    const isFM = DocumentRevisionType[type as keyof typeof DocumentRevisionType] ===  DocumentRevisionType.FM;
+    const isFM =
+      isFBActive &&
+      DocumentRevisionType[type as keyof typeof DocumentRevisionType] ===  DocumentRevisionType.FM;
     fbSetActive(isFM);
     handleChange(event);
   };
@@ -266,7 +273,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           <AttachmentsField />
           {renderTypeOfRevisionChange()}
           <Box mt={7} mx={-7}>
-            {fbActive && <FormBuilderPresenter {...formState} inDialog={false} />}
+            {fbActive && <FBDocumentRevision documentId={initialValues.id} />}
           </Box>
           <Box mt={10}>
             <Grid

@@ -20,6 +20,7 @@ import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
+import { formBuilderGet, isFBActive } from "../../formBuilder/helpers/FBLocalStorageHelper";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -34,7 +35,10 @@ interface StateProps {
 interface DispatchProps {
   loadDocumentRevisions: typeof documentRevisionsActions.loadList;
   loadDocumentProposedId: typeof documentsActions.loadDocumentProposedId;
+  uploadTemplate: typeof formBuilderActions.uploadTemplate;
+  fbFormMode: typeof formBuilderActions.viewFormMode;
 }
+
 interface OwnProps {
   initialValues: DocumentRevisionFormValues;
   asyncState: AsyncState;
@@ -60,7 +64,7 @@ const mapStateToProps = (
   loadAsyncState: documentRevisionsSelectors.getLoadListAsyncState(state),
   documentRevisions: documentRevisionsSelectors.getDocumentRevisionsList(state),
   proposedDocId: documentsSelectors.getProposedDocId(state),
-  formBuilderState: formBuilderActions.setFormInfo,
+  formBuilderState: formBuilderActions.uploadTemplate,
 });
 
 export const DocumentRevisionFormContainer: React.FunctionComponent<
@@ -81,8 +85,23 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
   onDirtyFlagChange,
   documentRevision,
   formBuilderState,
+  uploadTemplate,
+  fbFormMode,
 }) => {
   const [formState] = useState(formBuilderState);
+
+  if (isFBActive) {
+    if (documentRevision && documentRevision.id) {
+      const data = formBuilderGet(documentRevision.id);
+      if (data) {
+        uploadTemplate(data.elements);
+        fbFormMode(true);
+      }
+    } else {
+      uploadTemplate([]);
+      fbFormMode(false);
+    }
+  }
 
   const render = (props: FormikProps<DocumentRevisionFormValues>) => {
     return (
@@ -134,5 +153,7 @@ export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
   {
     loadDocumentRevisions: documentRevisionsActions.loadList,
     loadDocumentProposedId: documentsActions.loadDocumentProposedId,
+    uploadTemplate: formBuilderActions.uploadTemplate,
+    fbFormMode: formBuilderActions.viewFormMode,
   },
 )(DocumentRevisionFormContainer);

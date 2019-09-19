@@ -25,27 +25,25 @@ const SectionModal: React.FunctionComponent<SectionModalProps> = ({
     setConfig({ ...config, [name]: value });
   };
 
-  const submitForm = (e: any) => {
+  const submitForm = () => (e: any) => {
     e.preventDefault();
     handleSubmit(e, config);
   };
 
   return (
-    <form onSubmit={submitForm}>
-      <div className={styles.modalFormContainer}>
-        <h2>Add {title}</h2>
-        <label>Label</label>
-        <input
-          type="text"
-          onChange={handleInputChange}
-          name="title"
-          placeholder="Enter here"
-          required={true}
-          defaultValue={config ? config.title : undefined}
-        />
-        <button>{currentConfig ? "Save" : "Add"}</button>
-      </div>
-    </form>
+    <div className={styles.modalFormContainer}>
+      <h2>Add {title}</h2>
+      <label>Label</label>
+      <input
+        type="text"
+        onChange={handleInputChange}
+        name="title"
+        placeholder="Enter here"
+        required={true}
+        defaultValue={config ? config.title : undefined}
+      />
+      <button type="button" onClick={submitForm()}>{currentConfig ? "Save" : "Add"}</button>
+    </div>
   );
 };
 

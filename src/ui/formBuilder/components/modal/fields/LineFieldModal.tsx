@@ -25,36 +25,34 @@ const LineFieldModal: React.FunctionComponent<LineFieldModalProps> = ({
     setConfig({ ...config, [name]: value });
   };
 
-  const submitForm = (e: any) => {
+  const submitForm = () => (e: any) => {
     e.preventDefault();
     handleSubmit(e, config);
   };
 
   return (
-    <form onSubmit={submitForm}>
-      <div className={styles.modalFormContainer}>
-        <h2> {title}</h2>
-        <label>Label</label>
-        <input
-          type="text"
-          onChange={handleInputChange}
-          name="title"
-          placeholder="Enter here"
-          required={true}
-          defaultValue={config ? config.title : undefined}
-        />
-        <label> Placeholder Text</label>
-        <input
-          type="text"
-          onChange={handleInputChange}
-          name="placeholder"
-          placeholder="Enter here"
-          required={true}
-          defaultValue={config ? config.placeholder : undefined}
-        />
-        <button>{currentConfig ? "Save" : "Add"}</button>
-      </div>
-    </form>
+    <div className={styles.modalFormContainer}>
+      <h2> {title}</h2>
+      <label>Label</label>
+      <input
+        type="text"
+        onChange={handleInputChange}
+        name="title"
+        placeholder="Enter here"
+        required={true}
+        defaultValue={config ? config.title : undefined}
+      />
+      <label> Placeholder Text</label>
+      <input
+        type="text"
+        onChange={handleInputChange}
+        name="placeholder"
+        placeholder="Enter here"
+        required={true}
+        defaultValue={config ? config.placeholder : undefined}
+      />
+      <button type="button" onClick={submitForm()}>{currentConfig ? "Save" : "Add"}</button>
+    </div>
   );
 };
 
