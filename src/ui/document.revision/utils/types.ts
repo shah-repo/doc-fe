@@ -60,4 +60,6 @@ export interface ReferenceSummary {
   title: string;
 }
 
-export type TrainingControlProps = DataProps<TrainingRecord[]>;
+export interface TrainingControlProps extends DataProps<TrainingRecord[]> {
+  documentRevisionId: string;
+}

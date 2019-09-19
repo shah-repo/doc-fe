@@ -1,22 +1,17 @@
-import { apiAction, apiActionWithCallbacks } from "../../factories";
+import { apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
+import { documentRevisionsActions } from "../documentRevisions";
 import {
-  TRAINING_PLAN_ROOT_URL,
   TRAINING_RECORD_ROOT_URL,
 } from "./constants";
 import {
-  TrainingPlan,
   TrainingPlanTransition,
   TrainingTransitionRequestBody,
 } from "./types";
 
-const load = (id: string): ApiAction<TrainingPlan> => apiAction({
-  url: `${TRAINING_PLAN_ROOT_URL}/${id}`,
-  method: "get",
-});
-
 const applyTransition = (
   id: string,
+  documentRevisionId: string,
   body: TrainingTransitionRequestBody,
   transition: TrainingPlanTransition,
   handlers: Handlers,
@@ -24,10 +19,12 @@ const applyTransition = (
   url: `${TRAINING_RECORD_ROOT_URL}/${id}/${transition}`,
   method: "post",
   data: body,
+  onSuccess: (documentRevision, dispatch) => {
+    dispatch(documentRevisionsActions.load(documentRevisionId));
+  },
   handlers,
 });
 
 export default {
-  load,
   applyTransition,
 };

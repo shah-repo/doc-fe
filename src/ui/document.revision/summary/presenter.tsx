@@ -30,6 +30,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
   dataProp: {
+    id,
     document,
     attachments,
     status,
@@ -73,7 +74,11 @@ export const Presenter: React.FunctionComponent<Props> = ({
           />
         )}
         {attachments && <Attachment />}
-        <TrainingControl dataProp={trainingRecords} classes={classes} />
+        <TrainingControl
+          dataProp={trainingRecords}
+          classes={classes}
+          documentRevisionId={id}
+        />
       </Grid>
       <Box className={classes.submitBox}>
         <ControlsContainer

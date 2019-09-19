@@ -15,6 +15,7 @@ type Props = TrainingControlProps & WithStyles<typeof styles>;
 const TrainingControl: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
+  documentRevisionId,
 }) => {
   const trainingRecord = useMemo(() => dataProp.find((record) => !record.completedAt), [dataProp]);
 
@@ -37,6 +38,7 @@ const TrainingControl: React.FunctionComponent<Props> = ({
     async.start(
       applyTransition,
       trainingRecord.id,
+      documentRevisionId,
       values,
       transition,
       async,
