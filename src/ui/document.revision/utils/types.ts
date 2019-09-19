@@ -60,4 +60,4 @@ export interface ReferenceSummary {
   title: string;
 }
 
-export type TrainingControlProps = DataProps<TrainingRecord>;
+export type TrainingControlProps = DataProps<TrainingRecord[]>;

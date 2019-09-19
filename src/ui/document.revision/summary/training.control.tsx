@@ -1,7 +1,6 @@
-import { Typography } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import { Typography, WithStyles } from "@material-ui/core";
+import React, { useMemo } from "react";
 import { trainingActions, TrainingPlanTransition } from "../../../state/ducks/training";
-import Date from "../../components/Date";
 import Text from "../../components/Text";
 import TransitionDialog from "../../components/transitionDialog/TransitionDialog";
 import { PasswordFormValues } from "../../components/transitionDialog/types";
@@ -9,21 +8,20 @@ import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
 import { TrainingControlProps } from "../utils/types";
+import styles from "./styles";
 
-const TrainingControl: React.FunctionComponent<TrainingControlProps> = ({
+type Props = TrainingControlProps & WithStyles<typeof styles>;
+
+const TrainingControl: React.FunctionComponent<Props> = ({
+  classes,
   dataProp,
 }) => {
-  const completedAt = dataProp.completedAt;
-  if (completedAt) {
-    return (
-      <Typography>
-        <Text
-          translation="training.completed.on"
-          values={{ date: <Date value={completedAt} /> }}
-        />
-      </Typography>
-    );
+  const trainingRecord = useMemo(() => dataProp.find((record) => !record.completedAt), [dataProp]);
+
+  if (!trainingRecord) {
+    return null;
   }
+
   const applyTransition = useActionCreator(trainingActions.applyTransition);
   const dialog = useDialog();
   const async = useAsync({ onSuccess: dialog.close });
@@ -38,7 +36,7 @@ const TrainingControl: React.FunctionComponent<TrainingControlProps> = ({
   const onSubmit = (values: PasswordFormValues) => {
     async.start(
       applyTransition,
-      dataProp.id,
+      trainingRecord.id,
       values,
       transition,
       async,
@@ -46,15 +44,20 @@ const TrainingControl: React.FunctionComponent<TrainingControlProps> = ({
   };
 
   return (
-    <TransitionDialog
-      isDialogOpen={dialog.isOpen}
-      openDialog={openDialog}
-      closeDialog={dialog.close}
-      onSubmit={onSubmit}
-      asyncState={async.asyncState}
-      transition={transition}
-      label={label}
-    />
+    <span>
+      <Typography display="inline" className={classes.trainingText}>
+        <Text translation="training.certify.completion" />
+      </Typography>
+      <TransitionDialog
+        isDialogOpen={dialog.isOpen}
+        openDialog={openDialog}
+        closeDialog={dialog.close}
+        onSubmit={onSubmit}
+        asyncState={async.asyncState}
+        transition={transition}
+        label={label}
+      />
+    </span>
   );
 };
 

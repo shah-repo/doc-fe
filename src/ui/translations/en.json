@@ -286,5 +286,6 @@
 
   "training.completed.on": "Training was completed on {date}",
   "training.completed": "Training completed",
-  "training.completed.copy": "Click the button to certify training completion"
+  "training.completed.copy": "Click the button to certify training completion",
+  "training.certify.completion": "Click the button to certify training completion"
 }

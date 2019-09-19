@@ -21,7 +21,7 @@ const applyTransition = (
   transition: TrainingPlanTransition,
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
-  url: `${TRAINING_RECORD_ROOT_URL}1/${id}/${transition}`,
+  url: `${TRAINING_RECORD_ROOT_URL}/${id}/${transition}`,
   method: "post",
   data: body,
   handlers,

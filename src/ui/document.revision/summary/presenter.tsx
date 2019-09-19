@@ -37,7 +37,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
     referenceTo,
     deprecatedAt,
     description,
-    trainingRecord,
+    trainingRecords,
   },
   canShowCreateVersionButton,
 }) => {
@@ -68,7 +68,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
           />
         )}
         {attachments && <Attachment />}
-        {trainingRecord && <TrainingControl dataProp={trainingRecord} />}
+        <TrainingControl dataProp={trainingRecords} classes={classes} />
       </Grid>
       <Box className={classes.submitBox}>
         <ControlsContainer

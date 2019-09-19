@@ -30,4 +30,7 @@ export default (theme: Theme) =>
     crId: {
       color: theme.palette.text.hint,
     },
+    trainingText: {
+      marginRight: 20,
+    }
   });

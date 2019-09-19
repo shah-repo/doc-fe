@@ -68,7 +68,7 @@ export interface DocumentRevision {
   deprecatedAt?: string;
   obsoletedAt?: string;
   releasedAt?: string;
-  trainingRecord?: TrainingRecord;
+  trainingRecords: TrainingRecord[];
 }
 
 export enum DocumentRevisionType {
