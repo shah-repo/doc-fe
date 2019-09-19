@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../Modal.module.css";
 
 interface NumericModalProps {
@@ -36,7 +36,7 @@ const NumericModal: React.FunctionComponent<NumericModalProps> = ({
     }
   }, [currentConfig]);
 
-  const handleInputChange = (e: any) => {
+  const handleInputChange = () => (e: any) => {
     const { name, value } = e.target;
     setConfig({ ...config, [name]: value });
   };
@@ -47,7 +47,7 @@ const NumericModal: React.FunctionComponent<NumericModalProps> = ({
     setTolerance(checked);
   };
 
-  const submitForm = (e: any) => {
+  const submitForm = () => (e: any) => {
     e.preventDefault();
     handleSubmit(e, config);
   };
@@ -102,39 +102,37 @@ const NumericModal: React.FunctionComponent<NumericModalProps> = ({
   );
 
   return (
-    <form onSubmit={submitForm}>
-      <div className={styles.modalFormContainer}>
-        <h2>
-          {currentConfig ? "Edit" : "Add"} {title}
-        </h2>
-        <label>Label</label>
-        <input
-          type="text"
-          onChange={handleInputChange}
-          name="title"
-          placeholder="Enter here"
-          required={true}
-          defaultValue={config ? config.title : undefined}
-        />
-        <label>Placeholder</label>
-        <input
-          type="text"
-          onChange={handleInputChange}
-          name="placeholder"
-          placeholder="Enter here"
-          required={true}
-          defaultValue={config ? config.placeholder : undefined}
-        />
-        <input
-          type="checkbox"
-          onChange={toleranceCheck}
-          name="tolerance"
-          checked={config ? config.tolerance : false}
-        />{" "}
-        with tolerance? {withTolerance ? tolerance : undefined}
-        <button>{currentConfig ? "Save" : "Add"}</button>
-      </div>
-    </form>
+    <div className={styles.modalFormContainer}>
+      <h2>
+        {currentConfig ? "Edit" : "Add"} {title}
+      </h2>
+      <label>Label</label>
+      <input
+        type="text"
+        onChange={handleInputChange}
+        name="title"
+        placeholder="Enter here"
+        required={true}
+        defaultValue={config ? config.title : undefined}
+      />
+      <label>Placeholder</label>
+      <input
+        type="text"
+        onChange={handleInputChange}
+        name="placeholder"
+        placeholder="Enter here"
+        required={true}
+        defaultValue={config ? config.placeholder : undefined}
+      />
+      <input
+        type="checkbox"
+        onChange={toleranceCheck}
+        name="tolerance"
+        checked={config ? config.tolerance : false}
+      />{" "}
+      with tolerance? {withTolerance ? tolerance : undefined}
+      <button type="button" onClick={submitForm()}>{currentConfig ? "Save" : "Add"}</button>
+    </div>
   );
 };
 

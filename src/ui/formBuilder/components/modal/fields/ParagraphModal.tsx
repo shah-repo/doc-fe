@@ -23,54 +23,52 @@ const ParagraphModal: React.FunctionComponent<ParagraphModalProps> = ({
     setConfig({ ...config, [name]: value });
   };
 
-  const submitForm = (e: any) => {
+  const submitForm = () => (e: any) => {
     e.preventDefault();
     handleSubmit(e, config);
   };
 
   return (
-    <form onSubmit={submitForm}>
-      <div className={styles.modalFormContainer}>
-        <h2>Paragraph</h2>
-        <textarea
-          onChange={handleInputChange}
-          name="text"
-          placeholder="Enter text here"
-          required={true}
-          value={config ? config.text : ""}
-        />
-        <h4 className={styles.subTitle}>Text type</h4>
-        <div className={styles.radioContainer}>
-          <label>
-            {" "}
-            Heading
-            <input
-              type="radio"
-              onChange={handleInputChange}
-              name="textType"
-              value="heading"
-              required={true}
-              checked={config ? "heading" === config.textType : false}
-            />
-            <span className={styles.customRadio} />
-          </label>
-          <label>
-            {" "}
-            Body
-            <input
-              type="radio"
-              onChange={handleInputChange}
-              name="textType"
-              value="body"
-              required={true}
-              checked={config ? "body" === config.textType : false}
-            />
-            <span className={styles.customRadio} />
-          </label>
-        </div>
-        <button>{currentConfig ? "Save" : "Add"}</button>
+    <div className={styles.modalFormContainer}>
+      <h2>Paragraph</h2>
+      <textarea
+        onChange={handleInputChange}
+        name="text"
+        placeholder="Enter text here"
+        required={true}
+        value={config ? config.text : ""}
+      />
+      <h4 className={styles.subTitle}>Text type</h4>
+      <div className={styles.radioContainer}>
+        <label>
+          {" "}
+          Heading
+          <input
+            type="radio"
+            onChange={handleInputChange}
+            name="textType"
+            value="heading"
+            required={true}
+            checked={config ? "heading" === config.textType : false}
+          />
+          <span className={styles.customRadio} />
+        </label>
+        <label>
+          {" "}
+          Body
+          <input
+            type="radio"
+            onChange={handleInputChange}
+            name="textType"
+            value="body"
+            required={true}
+            checked={config ? "body" === config.textType : false}
+          />
+          <span className={styles.customRadio} />
+        </label>
       </div>
-    </form>
+      <button type="button" onClick={submitForm()}>{currentConfig ? "Save" : "Add"}</button>
+    </div>
   );
 };
 

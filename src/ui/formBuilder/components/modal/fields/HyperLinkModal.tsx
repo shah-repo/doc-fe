@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../Modal.module.css";
 
 interface HyperLinkModalProps {
@@ -31,36 +31,34 @@ const HyperLinkModal: React.FunctionComponent<HyperLinkModalProps> = ({
     }
   };
 
-  const submitForm = (e: any) => {
+  const submitForm = () => (e: any) => {
     e.preventDefault();
     handleSubmit(e, config);
   };
 
   return (
-    <form onSubmit={submitForm}>
-      <div className={styles.modalFormContainer}>
-        <h2>Hyperlink</h2>
-        <label>Label</label>
-        <input
-          type="text"
-          onChange={handleInputChange}
-          name="title"
-          placeholder="Enter here"
-          required={true}
-          defaultValue={config ? config.title : undefined}
-        />
-        <label>URL</label>
-        <input
-          type="text"
-          onChange={handleInputChange}
-          name="url"
-          placeholder="Enter link here"
-          required={true}
-          defaultValue={config ? config.url : undefined}
-        />
-        <button>{currentConfig ? "Save" : "Add"}</button>
-      </div>
-    </form>
+    <div className={styles.modalFormContainer}>
+      <h2>Hyperlink</h2>
+      <label>Label</label>
+      <input
+        type="text"
+        onChange={handleInputChange}
+        name="title"
+        placeholder="Enter here"
+        required={true}
+        defaultValue={config ? config.title : undefined}
+      />
+      <label>URL</label>
+      <input
+        type="text"
+        onChange={handleInputChange}
+        name="url"
+        placeholder="Enter link here"
+        required={true}
+        defaultValue={config ? config.url : undefined}
+      />
+      <button type="button" onClick={submitForm()}>{currentConfig ? "Save" : "Add"}</button>
+    </div>
   );
 };
 

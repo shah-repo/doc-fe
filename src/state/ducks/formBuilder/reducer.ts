@@ -12,6 +12,7 @@ import {
   UPDATE_FIELD,
   UPDATE_FIELD_VALUE,
   UPLOAD_TEMPLATE,
+  VIEW_FORM_MODE,
 } from "./constants";
 
 const initialState = {
@@ -22,6 +23,7 @@ const initialState = {
   modalState: {},
   currentField: "",
   tasks: [],
+  viewFormMode: false,
 };
 
 const formReducer = (state: any = initialState, action: any) => {
@@ -29,6 +31,11 @@ const formReducer = (state: any = initialState, action: any) => {
   const index = state.currentIndex;
   const newTasks = [...state.tasks];
   switch (action.type) {
+    case VIEW_FORM_MODE:
+      return {
+        ...state,
+        viewFormMode: action.mode,
+      };
     case ADD_FIELD:
       elements.splice(index + 1, 0, action.field);
       return {
