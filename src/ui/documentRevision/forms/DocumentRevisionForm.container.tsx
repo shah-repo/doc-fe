@@ -29,7 +29,6 @@ interface StateProps {
   loadAsyncState: AsyncState;
   documentRevisions: DocumentRevision[];
   proposedDocId: string;
-  formBuilderState: formReducerType;
 }
 
 interface DispatchProps {
@@ -64,7 +63,6 @@ const mapStateToProps = (
   loadAsyncState: documentRevisionsSelectors.getLoadListAsyncState(state),
   documentRevisions: documentRevisionsSelectors.getDocumentRevisionsList(state),
   proposedDocId: documentsSelectors.getProposedDocId(state),
-  formBuilderState: formBuilderActions.uploadTemplate,
 });
 
 export const DocumentRevisionFormContainer: React.FunctionComponent<
@@ -84,24 +82,9 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
   doNotPrompt,
   onDirtyFlagChange,
   documentRevision,
-  formBuilderState,
   uploadTemplate,
   fbFormMode,
 }) => {
-  const [formState] = useState(formBuilderState);
-
-  if (isFBActive) {
-    if (documentRevision && documentRevision.id) {
-      const data = formBuilderGet(documentRevision.id);
-      if (data) {
-        uploadTemplate(data.elements);
-        fbFormMode(true);
-      }
-    } else {
-      uploadTemplate([]);
-      fbFormMode(false);
-    }
-  }
 
   const render = (props: FormikProps<DocumentRevisionFormValues>) => {
     return (
@@ -116,7 +99,8 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
         setDocId={setDocId}
         doNotPrompt={doNotPrompt}
         onDirtyFlagChange={onDirtyFlagChange}
-        formState={formState}
+        uploadTemplate={uploadTemplate}
+        fbFormMode={fbFormMode}
       />
     );
   };

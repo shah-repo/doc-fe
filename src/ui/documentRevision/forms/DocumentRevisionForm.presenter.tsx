@@ -18,8 +18,8 @@ import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
-import InputField from "../../components/forms/fields/Input";
 import CheckboxField from "../../components/forms/fields/Checkbox";
+import InputField from "../../components/forms/fields/Input";
 import RadioButton from "../../components/forms/fields/RadioButton";
 import RadioGroup from "../../components/forms/fields/RadioGroup";
 import SelectField from "../../components/forms/fields/Select";
@@ -38,7 +38,7 @@ import {
   documentDetailsPath,
   documentVersionPath,
 } from "../../document.revision/utils/paths";
-import { isFBActive } from "../../formBuilder/helpers/FBLocalStorageHelper";
+import { formBuilderGet, isFBActive } from "../../formBuilder/helpers/FBLocalStorageHelper";
 import FBDocumentRevision from "../formBuilder/FBDocumentRevision.container";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
@@ -55,7 +55,8 @@ interface Props
   setDocId?: typeof documentsActions.setDocumentProposedId;
   doNotPrompt?: boolean;
   onDirtyFlagChange?: (dirty: boolean) => void;
-  formState: any;
+  uploadTemplate: (elements: any) => any;
+  fbFormMode: (mode: boolean) => any;
 }
 
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
@@ -76,14 +77,22 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   isSubmitting,
   isValidating,
   errors,
-  formState,
+  uploadTemplate,
+  fbFormMode,
 }) => {
+
   const fbState =
     isFBActive &&
     initialValues.document &&
     initialValues.document.type &&
     DocumentRevisionType[initialValues.document.type as keyof typeof DocumentRevisionType] ===  DocumentRevisionType.FM;
+
   const [fbActive, fbSetActive] = useState(fbState);
+
+  if (fbState && initialValues.id && formBuilderGet(initialValues.id)) {
+    uploadTemplate(formBuilderGet(initialValues.id).elements);
+    fbFormMode(true);
+  }
 
   const openReference = (documentId: string) => {
     window.open(documentDetailsPath(documentId), "_blank");
@@ -120,6 +129,10 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       isFBActive &&
       DocumentRevisionType[type as keyof typeof DocumentRevisionType] ===  DocumentRevisionType.FM;
     fbSetActive(isFM);
+    if (isFM && !initialValues.id) {
+      uploadTemplate([]);
+      fbFormMode(false);
+    }
     handleChange(event);
   };
 

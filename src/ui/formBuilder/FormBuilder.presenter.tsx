@@ -47,8 +47,8 @@ const FormBuilderPresenter: React.FunctionComponent<
       {modalState.show && <Modal />}
       {viewFormMode && <FormViewerContainer />}
       {!viewFormMode && builderContainer}
-      <div style={{paddingBottom: "60px"}}>
-        <button onClick={toggleView} className={styles.viewForm}>
+      <div style={{paddingTop: "30px"}}>
+        <button type="button" onClick={toggleView} className={styles.viewForm}>
           VIEW {viewFormMode ? "BUILDER" : "FORM"}
         </button>
       </div>
