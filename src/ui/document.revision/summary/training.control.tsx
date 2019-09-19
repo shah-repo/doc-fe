@@ -17,7 +17,7 @@ const TrainingControl: React.FunctionComponent<Props> = ({
   dataProp,
   documentRevisionId,
 }) => {
-  const trainingRecord = useMemo(() => dataProp.find((record) => !record.completedAt), [dataProp]);
+  const trainingRecord = useMemo(() => dataProp && dataProp.find((record) => !record.completedAt), [dataProp]);
 
   if (!trainingRecord) {
     return null;
