@@ -1,4 +1,3 @@
-
 import classNames from "classnames";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import { QuillOptionsStatic } from "quill";
