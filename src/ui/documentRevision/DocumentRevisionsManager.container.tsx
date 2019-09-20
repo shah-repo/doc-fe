@@ -1,6 +1,4 @@
 import { Grid, withStyles, WithStyles } from "@material-ui/core";
-import _ from "lodash";
-import moment from "moment-timezone";
 import React from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
@@ -16,6 +14,7 @@ import { documentVersionPath } from "../document.revision/utils/paths";
 import DocumentRevisionAuditContainer from "./audit/Audit.container";
 import DocumentRevisionDisplayContainer from "./DocumentRevisionDisplay.container";
 import DocumentRevisionListContainer from "./DocumentRevisionList.container";
+import { getDocRevIdToRedirect, shouldRedircetToLatestReleasd } from "./helpers";
 import styles from "./styles";
 
 interface StateProps {
@@ -64,22 +63,8 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
 }) => {
   const loadDocumentAction = () => loadDocument(documentId);
 
-  if (documentRevisions.length > 0 && !documentRevisionId) {
-    let indexOfDocRev = documentRevisions.length - 1;
-    if (deprecatedAt) {
-      const depreactedAtDate = moment(deprecatedAt);
-      const indexOfLastReleased = _.findLastIndex(documentRevisions, (doc) => {
-        if (!doc.releasedAt) {
-          return false;
-        }
-
-        return moment(doc.releasedAt).isSameOrBefore(depreactedAtDate);
-      });
-      indexOfDocRev =
-        indexOfLastReleased > -1 ? indexOfLastReleased : indexOfDocRev;
-    }
-
-    const docRevIdToRedirect = documentRevisions[indexOfDocRev].id;
+  if (shouldRedircetToLatestReleasd(documentRevisions, documentRevisionId)) {
+    const docRevIdToRedirect = getDocRevIdToRedirect(documentRevisions, deprecatedAt);
     return (
       <Redirect to={documentVersionPath(docRevIdToRedirect, documentId)} />
     );

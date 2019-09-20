@@ -1,9 +1,8 @@
 import { makeStyles } from "@material-ui/core";
-import { HeaderFieldStyleProps } from "./types";
 
-export const styles = makeStyles((theme) => ({
-  toolbar: ({ size }: HeaderFieldStyleProps) => ({
+export const styles = makeStyles(theme => ({
+  toolbar: {
     minHeight: "20px",
     height: "20px",
-  }),
+  },
 }));

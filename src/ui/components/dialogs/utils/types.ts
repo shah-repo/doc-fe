@@ -1,3 +1,4 @@
+import { DialogProps } from "@material-ui/core/Dialog";
 import { DialogHandler as  DialogHandlerHook } from "../../../hooks/useDialog";
 import { Translation } from "../../../translations/types";
 
@@ -18,7 +19,7 @@ export enum DialogVariant {
   Responsive = "",
 }
 
-export interface DialogResponsiveProps {
+export interface DialogResponsiveProps extends Partial<DialogProps> {
   breakpoint?: DialogBreakpoint;
   title?: Translation | string;
   contentRenderer?: DialogContentRenderer;

@@ -79,7 +79,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
           crId={dataProp.id}
         />
         {canEdit && approversFieldRenderer()}
-        {!canEdit && <ApproversSummary dataProp={dataProp.approvals} />}
+        <ApproversSummary dataProp={dataProp.approvals} />
       </Grid>
       <Box className={classes.submitBox} p={4}>
         <Grid

@@ -22,7 +22,12 @@ const Input: React.FunctionComponent<InputPropsWithFormik> = ({
 
   return (
     <Field size={size} actionsRenderer={actionsRenderer} {...fieldProps} inputLabelProps={{ shrink: true }} >
-      <MuiInput required={false} {...fieldProps.field} {...inputProps} />
+      <MuiInput
+        required={false}
+        inputProps={{ "data-lpignore": true }}
+        {...fieldProps.field}
+        {...inputProps}
+      />
     </Field>
   );
 };

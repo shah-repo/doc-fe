@@ -24,7 +24,11 @@ const Header: React.FunctionComponent<Props> = ({
 }) => (
   <AppBar position="fixed" color="primary" className={classes.appBar}>
     <Toolbar>
-      <Grid container={true} spacing={10} justify="space-between">
+      <Grid
+        container={true}
+        spacing={10}
+        justify="space-between"
+        alignItems="center">
         <Grid item={true} xs={6}>
           {pageTitle !== "translation.unknown" ? (
             <Typography variant="h6">

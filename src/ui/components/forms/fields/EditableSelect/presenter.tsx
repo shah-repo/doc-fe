@@ -16,7 +16,6 @@ export const EditableSelectPresenter: React.FunctionComponent<Props> = ({
   value = "",
   gutter = true,
 }) => {
-
   const classes = styles({ gutter, error: false });
 
   return (
@@ -24,16 +23,16 @@ export const EditableSelectPresenter: React.FunctionComponent<Props> = ({
       <SelectField
         name=""
         label={undefined}
-        selectProps={{inputProps: { id: "type" }, onChange: handleChange }}
+        selectProps={{ inputProps: { id: "type" }, onChange: handleChange }}
         options={options}
         includeEmpty={includeEmpty}
-        formControlProps={{ className:  classes.selectField }}
+        formControlProps={{ className: classes.selectField }}
       />
       <InputField
         name={name}
         label={label}
-        inputProps={{ value, onChange: handleChange}}
-        formControlProps={{ className:  classes.textField }}
+        inputProps={{ value, onChange: handleChange }}
+        formControlProps={{ className: classes.textField }}
       />
     </Box>
   );

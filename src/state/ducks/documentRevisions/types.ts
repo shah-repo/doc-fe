@@ -9,6 +9,7 @@ import {
   DOCUMENT_REVISION_SET,
   DOCUMENT_SET,
 } from "./constants";
+import { TrainingRecord } from "../training";
 
 export enum DocumentRevisionStatus {
   Draft = "DRAFT",
@@ -41,6 +42,8 @@ export interface Reference {
   id: string;
   name: string;
   docId?: string;
+  documentRevisions?: DocumentRevision[];
+  document: DocumentRevisionDocument;
 }
 
 export interface DocumentRevision {
@@ -65,6 +68,8 @@ export interface DocumentRevision {
   deprecatedAt?: string;
   obsoletedAt?: string;
   releasedAt?: string;
+  trainingRecords: TrainingRecord[];
+  retrain?: boolean;
 }
 
 export enum DocumentRevisionType {
@@ -124,6 +129,7 @@ export interface DocumentRevisionEditRequestBody {
   document?: Partial<DocumentRevisionDocument>;
   revisionChangeType?: RevisionChangeType;
   revisionStage?: number;
+  retrain?: boolean;
 }
 
 export interface DocumentRevisionSetAction {

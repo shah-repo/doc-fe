@@ -3,8 +3,8 @@ import { ApplicationState } from "../../reducers";
 import { getAsyncState } from "../../tests/factories";
 import initialStoreState from "../../tests/helpers/initialStoreState";
 import selectors from "./selectors";
-import { getDocumentRevision, getDocument, getAudit } from "./tests/factories";
-import { DocumentRevisionsAllIdsState, DocumentRevisionsByIdState, DocumentByIdState } from "./types";
+import { getAudit, getDocument, getDocumentRevision } from "./tests/factories";
+import { DocumentByIdState, DocumentRevisionsAllIdsState, DocumentRevisionsByIdState } from "./types";
 
 describe("document revision selectors tests", () => {
   let state: ApplicationState;
@@ -22,7 +22,7 @@ describe("document revision selectors tests", () => {
   const audit = [getAudit(), getAudit()];
   const auditsByCRId = {
     [documentRevisions[0].id]: audit,
-  }
+  };
 
   beforeAll(() => {
     state = _.cloneDeep(initialStoreState);
@@ -32,7 +32,7 @@ describe("document revision selectors tests", () => {
     state.documentRevisions.loadAsyncInfo = getAsyncState();
     state.documentRevisions.loadListAsyncInfo = getAsyncState();
     state.documentRevisions.loadDocumentAsyncInfo = getAsyncState();
-    state.documentRevisions.auditsByCRId = auditsByCRId;
+    state.documentRevisions.auditsByCRId = { [audit[0].groupId]: auditsByCRId };
     state.documentRevisions.loadAuditAsyncInfo = getAsyncState();
   });
 
@@ -50,7 +50,7 @@ describe("document revision selectors tests", () => {
 
   it("makeGetDocumentRevisions", () => {
     const getDocumentRevisions = selectors.makeGetDocumentRevisions();
-    
+
     expect(getDocumentRevisions(state, documents[1].id)).toEqual(documents[1].documentRevisions);
   });
 
@@ -64,10 +64,6 @@ describe("document revision selectors tests", () => {
 
   it("getLoadDocumentAsyncState", () => {
     expect(selectors.getLoadDocumentAsyncState(state)).toBe(state.documentRevisions.loadDocumentAsyncInfo);
-  });
-
-  it("getAudit", () => {
-    expect(selectors.getAudit(state, documentRevisions[0].id)).toBe(audit);
   });
 
   it("getLoadAuditAsyncState", () => {

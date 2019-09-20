@@ -4,6 +4,7 @@ import { Approval, User } from "../common";
 import { DocumentRevision, Reference } from "../documentRevisions";
 
 export interface Audit {
+  id: string;
   field: string;
   type: string;
   nextValue: string | User | Attachment | Approval | Reference | DocumentRevision | ChangeRequest;

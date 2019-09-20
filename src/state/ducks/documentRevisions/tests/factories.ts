@@ -1,7 +1,14 @@
 import faker from "faker";
-import { Audit } from "../../audit/types";
+import { Audit, AuditGroupType } from "../../audit/types";
 import { getUser } from "../../common/tests/factories";
-import { Document, DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, DocumentRevisionType, RevisionChangeType } from "../types";
+import {
+  Document,
+  DocumentRevision,
+  DocumentRevisionEditRequestBody,
+  DocumentRevisionStatus,
+  DocumentRevisionType,
+  RevisionChangeType,
+} from "../types";
 
 export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> = {}): DocumentRevision => ({
   id: faker.random.uuid(),
@@ -13,14 +20,22 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
   attachments: [],
   name: faker.lorem.sentence(),
   description: faker.lorem.sentence(),
-  document: { id: faker.random.uuid(), docId: faker.random.alphaNumeric(), type: faker.random.word(), referencedBy: [] },
+  document: {
+    id: faker.random.uuid(),
+    docId: faker.random.alphaNumeric(),
+    type: faker.random.word(),
+    referencedBy: [],
+  },
   type: DocumentRevisionType.ADM,
   released: faker.date.future(undefined, "2019-05-31"),
   referenceTo: [],
+  trainingRecords: [],
   ...documentRevision,
 });
 
-export const getDocumentRevisionEditRequestBody = (body: Partial<DocumentRevisionEditRequestBody> = {}): DocumentRevisionEditRequestBody => ({
+export const getDocumentRevisionEditRequestBody = (
+  body: Partial<DocumentRevisionEditRequestBody> = {}
+): DocumentRevisionEditRequestBody => ({
   name: faker.lorem.sentence(),
   description: faker.lorem.sentence(),
   attachments: [],
@@ -38,6 +53,7 @@ export const getDocument = (document: Partial<Document> = {}): Document => ({
 });
 
 export const getAudit = (audit: Partial<Audit> = {}): Audit => ({
+  id: faker.random.uuid(),
   type: faker.lorem.word(),
   field: faker.lorem.word(),
   nextValue: faker.lorem.sentence(),

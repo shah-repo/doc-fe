@@ -16,6 +16,7 @@ export const toDocumentRevisionFormValues = (documentRevision: DocumentRevision)
       ({ value: reference.id, label: reference.docId })),
     document: documentRevision.document,
     changeRequest: documentRevision.changeRequest,
+    retrain: documentRevision.retrain,
   };
 
   return values;
@@ -29,6 +30,7 @@ export const toDocumentRevisionEditRequestBody =
     attachments: values.attachments,
     referenceTo: values.referenceTo.map((reference) => ({ id: reference.value })),
     revisionStage: values.revisionStage,
+    retrain: values.retrain,
   };
 
   return documentRevisionEditRequestBody;

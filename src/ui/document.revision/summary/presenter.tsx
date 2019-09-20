@@ -1,7 +1,6 @@
 import {
   Box,
   Grid,
-  Typography,
   WithStyles,
   withStyles,
 } from "@material-ui/core";
@@ -11,12 +10,15 @@ import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
+import Text from "../../components/Text";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
 import Attachment from "./attachment";
 import ChangeRequestLink from "./changeRequestLink";
-import ReferenceContainer from "./reference.container";
 import DocumentHeader from "./header";
+import ReferencedByContainer from "./referencedBy.container";
+import ReferenceToContainer from "./referenceTo.container";
 import styles from "./styles";
+import TrainingControl from "./training.control";
 
 interface OwnProps {
   canShowCreateVersionButton?: boolean;
@@ -28,13 +30,16 @@ export const Presenter: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
   dataProp: {
+    id,
     document,
     attachments,
     status,
     name,
+    retrain,
     referenceTo,
     deprecatedAt,
     description,
+    trainingRecords,
   },
   canShowCreateVersionButton,
 }) => {
@@ -50,22 +55,30 @@ export const Presenter: React.FunctionComponent<Props> = ({
         direction="column">
         <ChangeRequestLink dataProp={dataProp} />
         <SummaryField label="document.title" value={name} />
+        <SummaryField
+          label="document.revision.trainingRequired"
+          value={<Text translation={retrain ? "common.yes" : "common.no"} />}
+        />
         <SummaryFieldWithHtml label="common.description" value={description} />
-        {referenceTo && (
-          <ReferenceContainer
+        {
+          referenceTo &&
+          <ReferenceToContainer
             dataProp={referenceTo}
-            isReferenceTo={true}
             status={status}
             deprecatedAt={deprecatedAt}
           />
-        )}
+        }
         {document.referencedBy && (
-          <ReferenceContainer
+          <ReferencedByContainer
             dataProp={document.referencedBy}
-            isReferenceTo={false}
           />
         )}
         {attachments && <Attachment />}
+        <TrainingControl
+          dataProp={trainingRecords}
+          classes={classes}
+          documentRevisionId={id}
+        />
       </Grid>
       <Box className={classes.submitBox}>
         <ControlsContainer

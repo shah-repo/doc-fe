@@ -1,9 +1,6 @@
 import queryString from "query-string";
 import { LOGIN_WITH_CODE_URL } from "../ui/constants/urls";
-
-export const DEV_THEME = "DEV_THEME";
-export const DEMO_THEME = "DEMO_THEME";
-export const PRODUCTION_THEME = "PRODUCTION_THEME";
+import { ThemeEnv } from "../ui/layout/theme/utils/types";
 
 const DEFAULTS = {
   API_ENDPOINT: "/",
@@ -12,7 +9,7 @@ const DEFAULTS = {
   FRONTEND_URL: "/",
   AWS_COGNITO_CLIENT_ID: "default",
   AUTO_LOGOUT_TIME: "1800000", // 30 minutes in milliseconds
-  THEME: DEV_THEME,
+  THEME: ThemeEnv.DEV_THEME,
 };
 
 type ConfigKey = keyof typeof DEFAULTS;

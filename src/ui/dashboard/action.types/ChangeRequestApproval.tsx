@@ -12,19 +12,24 @@ interface OwnProps {
 type Props = OwnProps;
 
 export const ChangeRequestApproval: React.FunctionComponent<Props> = ({
-  pendingAction
+  pendingAction,
 }) => {
   const classes = styles();
-  
+
   return (
-    <Grid container spacing={10} justify="space-between" alignItems="baseline">
-      <Grid item xs={8}>
+    <Grid container={true} spacing={10} justify="space-between" alignItems="baseline">
+      <Grid item={true} xs={8}>
         <span className={classes.crId}>{`CRID: ${pendingAction.changeReq.crId} `}</span>
         <span>{`from ${pendingAction.changeReq.owner.name} `}</span>
         <Text message={`dashboard.type.${pendingAction.type}`} />
       </Grid>
-      <Grid item xs={2}>
-        <Button variant="contained" target="_blank" href={changeRequestEditPath(pendingAction.changeReq.id)} color="secondary">
+      <Grid item={true} xs={2}>
+        <Button
+          variant="contained"
+          target="_blank"
+          href={changeRequestEditPath(pendingAction.changeReq.id)}
+          color="secondary"
+        >
           <Text translation="common.open" />
         </Button>
       </Grid>
