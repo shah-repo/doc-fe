@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import useAsync from "../../hooks/useAsync";
 import { auditActions } from "../../../state/ducks/audit";
 import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
 import DialogPresenter from "./Dialog.presenter";
-import { DialogContainerProps } from "./types";
+import { DialogContainerProps } from "./utils/types";
 
 type Props = DialogContainerProps;
 
@@ -16,12 +16,12 @@ const DialogContainer: React.FunctionComponent<Props> = ({
     onSuccess: (data: any) => {
       setOldText(data.previousValue);
       setNewText(data.nextValue);
-    }
+    },
   });
 
   const action = useActionCreator(auditActions.getChanges);
   const loadChanges = () => async.start(action, auditId, async);
-  
+
   return (
     <DialogPresenter
       dialogHandler={dialogHandler}
@@ -31,7 +31,7 @@ const DialogContainer: React.FunctionComponent<Props> = ({
       loadChanges={loadChanges}
     />
   );
-}
+};
 
 DialogContainer.displayName = "TextDiffDialogContainer";
 

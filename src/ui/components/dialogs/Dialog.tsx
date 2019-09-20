@@ -23,8 +23,8 @@ const DialogWindow: React.FunctionComponent<Props> = ({
   actions,
   onActionClick,
   dialogHandler,
+  ...props
 }) => {
-
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down(breakpoint));
 
@@ -58,6 +58,7 @@ const DialogWindow: React.FunctionComponent<Props> = ({
   return (
     <div>
       <Dialog
+        {...props}
         fullScreen={fullScreen}
         open={dialogHandler.isOpen}
         onClose={dialogHandler.close}
