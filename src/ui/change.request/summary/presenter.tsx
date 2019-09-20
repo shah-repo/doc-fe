@@ -95,7 +95,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
           {canEdit && <FormProgress asyncState={asyncState} />}
           {canEdit && <FormMessage asyncState={asyncState} />}
           {canEdit && submitButtonRenderer()}
-          <ControlsContainer changeRequest={dataProp} />
+          <ControlsContainer changeRequest={dataProp} errors={errors} />
         </Grid>
       </Box>
     </Box>
