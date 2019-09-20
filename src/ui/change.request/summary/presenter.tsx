@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Grid,
   ListItem,
   WithStyles,
@@ -20,7 +19,6 @@ import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
 import SubmitButton from "../../components/forms/SubmitButton";
-import Text from "../../components/Text";
 import ApproversField from "../form/approvers";
 import ApproversSummary from "./approvers";
 import Assessment from "./assessment";
@@ -34,8 +32,6 @@ interface OwnProps extends DataProps<ChangeRequest> {
   canEdit: boolean;
   currentUserEmail: string;
   closeTask: typeof changeRequestsActions.closeTask;
-  isEditMode: boolean;
-  setIsEditMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 type Props = OwnProps & WithStyles<typeof styles> & FormikProps<ChangeRequestFormValues>;
@@ -48,8 +44,6 @@ export const Presenter: React.FunctionComponent<Props> = ({
   currentUserEmail,
   closeTask,
   errors,
-  isEditMode,
-  setIsEditMode,
 }) => {
   const approversFieldRenderer = () => (
     <Box>
@@ -62,18 +56,6 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const submitButtonRenderer = () => (
     <SubmitButton asyncState={asyncState} label="document.save" errors={errors} />
   );
-  const editModeBtnRenderer = () => {
-    const handleClick = () => setIsEditMode(!isEditMode);
-    return (
-      <Button
-        onClick={handleClick}
-        color="secondary"
-        variant="outlined"
-      >
-        <Text translation={isEditMode ? "common.done.editing" : "common.edit"} />
-      </Button>
-    );
-  };
 
   return (
     <Box>
@@ -100,7 +82,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
           closeTask={closeTask}
           crId={dataProp.id}
         />
-        {isEditMode && canEdit && approversFieldRenderer()}
+        {canEdit && approversFieldRenderer()}
         <ApproversSummary dataProp={dataProp.approvals} />
       </Grid>
       <Box className={classes.submitBox} p={4}>
@@ -112,9 +94,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
         >
           {canEdit && <FormProgress asyncState={asyncState} />}
           {canEdit && <FormMessage asyncState={asyncState} />}
-          {isEditMode && canEdit && submitButtonRenderer()}
-          {!isEditMode && <ControlsContainer changeRequest={dataProp} />}
-          {canEdit && editModeBtnRenderer()}
+          {canEdit && submitButtonRenderer()}
+          <ControlsContainer changeRequest={dataProp} />
         </Grid>
       </Box>
     </Box>
