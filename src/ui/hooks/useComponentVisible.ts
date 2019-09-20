@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from "react";
 
 export default function useComponentVisible(initialIsVisible: boolean) {
     const [isComponentVisible, setIsComponentVisible] = useState<boolean>(initialIsVisible);
@@ -11,9 +11,9 @@ export default function useComponentVisible(initialIsVisible: boolean) {
     };
 
     useEffect(() => {
-      document.addEventListener('mousedown', handleClickOutside, true);
+      document.addEventListener("click", handleClickOutside, true);
       return () => {
-        document.removeEventListener('mousedown', handleClickOutside, true);
+        document.removeEventListener("click", handleClickOutside, true);
       };
     }, []);
 
