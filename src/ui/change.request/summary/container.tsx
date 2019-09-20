@@ -53,6 +53,7 @@ export const Container: React.FunctionComponent<Props> = ({
 
   const canEdit = canEditApprovers({ dataProp, currentUserEmail });
   const async = useAsync<ChangeRequest>();
+  const [isEditMode, setIsEditMode] = React.useState(!canEdit);
 
   const onSubmit = (values: ChangeRequestFormValues) => {
     async.start(
@@ -71,6 +72,8 @@ export const Container: React.FunctionComponent<Props> = ({
         canEdit={canEdit}
         currentUserEmail={currentUserEmail}
         closeTask={closeTask}
+        isEditMode={isEditMode}
+        setIsEditMode={setIsEditMode}
         {...props}
       />
     </Form>
