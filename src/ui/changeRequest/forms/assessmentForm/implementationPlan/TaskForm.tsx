@@ -104,12 +104,13 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
         type="submit"
         color="primary"
         className={classes.submitBtn}
+        variant="contained"
       >
         <Text translation="transition.action.confirm" />
       </Button>
       <Button
-        variant="text"
-        color="secondary"
+        variant="outlined"
+        color="primary"
         onClick={cancel}
         className={classes.cancelBtn}
       >

@@ -5,6 +5,7 @@ import {
   WithStyles,
   withStyles,
 } from "@material-ui/core";
+import { FormikProps } from "formik";
 import React from "react";
 import {
   ChangeRequest,
@@ -13,7 +14,9 @@ import {
 import { DataProps } from "../../../state/ducks/common";
 import { AsyncState } from "../../../state/types";
 import ControlsContainer from "../../changeRequest/forms/assessmentForm/AssessmentFormControls.container";
+import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
+import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
 import SubmitButton from "../../components/forms/SubmitButton";
 import ApproversField from "../form/approvers";
@@ -31,7 +34,7 @@ interface OwnProps extends DataProps<ChangeRequest> {
   closeTask: typeof changeRequestsActions.closeTask;
 }
 
-type Props = OwnProps & WithStyles<typeof styles>;
+type Props = OwnProps & WithStyles<typeof styles> & FormikProps<ChangeRequestFormValues>;
 
 export const Presenter: React.FunctionComponent<Props> = ({
   classes,
@@ -40,6 +43,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   canEdit,
   currentUserEmail,
   closeTask,
+  errors,
 }) => {
   const approversFieldRenderer = () => (
     <Box>
@@ -50,7 +54,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   );
 
   const submitButtonRenderer = () => (
-    <SubmitButton asyncState={asyncState} label="document.save" />
+    <SubmitButton asyncState={asyncState} label="document.save" errors={errors} />
   );
 
   return (
@@ -86,8 +90,10 @@ export const Presenter: React.FunctionComponent<Props> = ({
           item={true}
           container={true}
           alignItems="flex-end"
-          direction="column">
+          direction="column"
+        >
           {canEdit && <FormProgress asyncState={asyncState} />}
+          {canEdit && <FormMessage asyncState={asyncState} />}
           {canEdit && submitButtonRenderer()}
           <ControlsContainer changeRequest={dataProp} />
         </Grid>
