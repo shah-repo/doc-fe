@@ -5,7 +5,7 @@ import {
   WithStyles,
   withStyles,
 } from "@material-ui/core";
-import React from "react";
+import React, { useMemo } from "react";
 import {
   ChangeRequest,
   changeRequestsActions,
@@ -23,6 +23,7 @@ import ChangeRequestHeader from "./header";
 import ImplementationPlan from "./implementation.plan";
 import Justification from "./justification";
 import styles from "./styles";
+import _ from "lodash";
 
 interface OwnProps extends DataProps<ChangeRequest> {
   asyncState: AsyncState;
@@ -41,10 +42,12 @@ export const Presenter: React.FunctionComponent<Props> = ({
   currentUserEmail,
   closeTask,
 }) => {
+  const approvedApprovers = useMemo(() => _.filter(dataProp.approvals, ["status", "APPROVED"] ), [dataProp]);
+
   const approversFieldRenderer = () => (
     <Box>
       <ListItem>
-        <ApproversField />
+        <ApproversField dataProp={approvedApprovers}/>
       </ListItem>
     </Box>
   );
