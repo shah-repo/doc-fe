@@ -15,3 +15,11 @@ export type FBOnChangeProps =
   Pick<SelectProps, "onChange" | "value"> &
   Pick<OutlinedTextFieldProps, "onChange"> &
   Pick<BaseTextFieldProps, "value">;
+
+export interface FBStateInjectedProps {
+  setState: (key: keyof FBStateProps, value: any) => any;
+}
+
+export interface FBStateProps extends FBStateInjectedProps {
+  initial: boolean;
+}
