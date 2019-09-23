@@ -48,7 +48,7 @@ describe("Tasks container tests", () => {
   });
 
   it("button should open dialog", () => {
-    wrapper.dive().find(TaskFormDialog).dive().find(Button).simulate("click");
+    wrapper.dive().find(TaskFormDialog).dive().find(Button).prop("onClick")!({} as any);
 
     expect(wrapper.prop("isDialogOpen")).toBe(true);
   });
