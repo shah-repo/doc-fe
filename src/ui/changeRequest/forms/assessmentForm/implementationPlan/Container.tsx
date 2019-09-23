@@ -4,9 +4,8 @@ import React from "react";
 import AttachmentField from "../../../../components/common/attachment.field/container";
 import AttachmentIconField from "../../../../components/common/attachment.icon/container";
 import HeaderField from "../../../../components/common/header.field/field";
-import AttachmentsContainer from "../../attachments/Attachments.container";
 import { ChangeRequestFormValues } from "../../types";
-import Tasks from "./Tasks";
+import Tasks from "./Tasks.container";
 
 interface Props extends FieldProps<ChangeRequestFormValues> {}
 
