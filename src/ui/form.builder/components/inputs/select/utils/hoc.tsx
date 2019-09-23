@@ -1,7 +1,8 @@
-import { Box, MenuItem } from "@material-ui/core";
+import { MenuItem } from "@material-ui/core";
 import React from "react";
 import { withFormik } from "../../../../../components/hoc/formik";
 import Text from "../../../../../components/Text";
+import { withLabelRenderer } from "../../../common/hoc/withLabelRenderer";
 import { Subtract } from "../../../common/utils/types";
 import { FBSelectInjectedProps, FBSelectProps } from "./types";
 
@@ -10,17 +11,6 @@ export function withSelectDefaults<T extends FBSelectProps>(
 ) {
 
   class HOC extends React.Component<Subtract<T, FBSelectInjectedProps>> {
-
-    public onChange?: (
-      event: React.ChangeEvent<{ name?: string; value: unknown }>,
-      child: React.ReactNode,
-    ) => void;
-
-    private labelRenderer = (
-      <Box mb={0.5} fontSize="subtitle1.fontSize" fontWeight="fontWeightRegular">
-        <Text message={this.props.label as string} />
-      </Box>
-    );
 
     private EmptyItem = this.props.includeEmpty && (
       <MenuItem value="">
@@ -43,7 +33,6 @@ export function withSelectDefaults<T extends FBSelectProps>(
           variant="outlined"
           onChange={this.handleChange()}
           value={field.value}
-          labelRenderer={label && this.labelRenderer}
           emptyItem={this.EmptyItem}
           items={this.Items}
         />
@@ -58,5 +47,5 @@ export function withSelectDefaults<T extends FBSelectProps>(
     }
   }
 
-  return withFormik(HOC);
+  return withFormik(withLabelRenderer(HOC));
 }

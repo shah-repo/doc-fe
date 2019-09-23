@@ -1,7 +1,6 @@
-import { Box } from "@material-ui/core";
 import React from "react";
 import { withFormik } from "../../../../../components/hoc/formik";
-import Text from "../../../../../components/Text";
+import { withLabelRenderer } from "../../../common/hoc/withLabelRenderer";
 import { Subtract } from "../../../common/utils/types";
 import { FBTextFieldInjectedProps, FBTextFieldProps } from "./types";
 
@@ -10,12 +9,6 @@ export function withTextFieldDefaults<T extends FBTextFieldProps>(
 ) {
 
   class HOC extends React.Component<Subtract<T, FBTextFieldInjectedProps>> {
-
-    private labelRenderer = (
-      <Box mb={0.5} fontSize="subtitle1.fontSize" fontWeight="fontWeightRegular">
-        <Text message={this.props.label as string} />
-      </Box>
-    );
 
     public render() {
       const { field, label } = this.props;
@@ -26,7 +19,6 @@ export function withTextFieldDefaults<T extends FBTextFieldProps>(
           variant="outlined"
           onChange={this.handleChange()}
           value={field.value}
-          labelRenderer={label && this.labelRenderer}
         />
       );
     }
@@ -37,5 +29,5 @@ export function withTextFieldDefaults<T extends FBTextFieldProps>(
     }
   }
 
-  return withFormik(HOC);
+  return withFormik(withLabelRenderer(HOC));
 }

@@ -1,4 +1,4 @@
-import { Form, FormikConfig } from "formik";
+import { Form } from "formik";
 import React from "react";
 import { Subtract } from "../../common/utils/types";
 import { FBFormInjectedProps, FBFormProps } from "./types";
