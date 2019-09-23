@@ -1,6 +1,6 @@
 import { Checkbox } from "@material-ui/core";
 import React from "react";
-import { withFormik } from "../../../../../components/hoc/formik";
+import { withElOnChange } from "../../../common/hoc/withElOnChange";
 import { withLabelRenderer } from "../../../common/hoc/withLabelRenderer";
 import { Subtract } from "../../../common/utils/types";
 import { FBCheckboxInjectedProps, FBCheckboxProps } from "./types";
@@ -12,20 +12,20 @@ export function withCheckboxDefaults<T extends FBCheckboxProps>(
   class HOC extends React.Component<Subtract<T, FBCheckboxInjectedProps>> {
 
     public render() {
-      const { field, label } = this.props;
+      const { field } = this.props;
+      const checkboxRenderer = (
+        <Checkbox
+          checked={field.value}
+        />
+      );
       return (
         <Component
           {...this.props as T}
-          control={<Checkbox checked={field.value} value={field.value} onChange={this.handleChange()} />}
+          control={checkboxRenderer}
         />
       );
     }
-
-    private handleChange = () => (event: React.ChangeEvent<HTMLInputElement>) => {
-      const { form, field } = this.props;
-      form.setFieldValue(field.name, event.target.checked);
-    }
   }
 
-  return withFormik(withLabelRenderer(HOC));
+  return withElOnChange(withLabelRenderer(HOC));
 }

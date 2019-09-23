@@ -13,7 +13,6 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
       {labelRenderer}
       <TextField
         {...props}
-        label=""
       />
     </Box>
   );
