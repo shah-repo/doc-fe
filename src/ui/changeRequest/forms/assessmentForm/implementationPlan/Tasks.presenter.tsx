@@ -10,7 +10,7 @@ interface OwnProps {
   closeDialog: () => void;
   onSubmit: (values: ImplementationPlanTaskFormValues) => void;
   selectedTask: ImplementationPlanTaskFormValues | null;
-  dialogIsOpen: boolean;
+  isDialogOpen: boolean;
   numberOfTasks: number;
   removeTask: (index: number) => () => void;
   editTask: (task: ImplementationPlanTaskFormValues, index: number) => () => void;
@@ -18,13 +18,13 @@ interface OwnProps {
 
 export type Props = OwnProps;
 
-const TasksPresenter: React.FunctionComponent<Props> = ({
+export const TasksPresenter: React.FunctionComponent<Props> = ({
   tasks,
   openDialog,
   closeDialog,
   onSubmit,
   selectedTask,
-  dialogIsOpen,
+  isDialogOpen,
   numberOfTasks,
   removeTask,
   editTask,
@@ -32,7 +32,7 @@ const TasksPresenter: React.FunctionComponent<Props> = ({
   const renderAddButton = () => (
     <TaskFormDialog
       openDialog={openDialog}
-      isDialogOpen={dialogIsOpen}
+      isDialogOpen={isDialogOpen}
       closeDialog={closeDialog}
       onSubmit={onSubmit}
       task={selectedTask}

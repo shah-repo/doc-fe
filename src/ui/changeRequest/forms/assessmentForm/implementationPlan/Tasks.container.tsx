@@ -8,7 +8,7 @@ import TasksPresenter from "./Tasks.presenter";
 
 export type Props = FieldArrayRenderProps;
 
-const TasksContainer: React.FunctionComponent<Props> = ({
+export const TasksContainer: React.FunctionComponent<Props> = ({
   push,
   remove,
   form,
@@ -59,7 +59,7 @@ const TasksContainer: React.FunctionComponent<Props> = ({
       onSubmit={onSubmit}
       selectedTask={selectedTask}
       tasks={tasks}
-      dialogIsOpen={dialog.isOpen}
+      isDialogOpen={dialog.isOpen}
     />
   );
 };
