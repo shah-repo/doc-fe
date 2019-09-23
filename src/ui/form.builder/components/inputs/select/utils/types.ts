@@ -16,4 +16,5 @@ export type FBSelectProps =
   FormikHybridFieldProps & {
   includeEmpty?: boolean;
   options: SelectOption[];
+  variant?: "outlined";
 };

@@ -14,7 +14,9 @@ export enum FBDialogActionLabel {
 
 export type FBDialogAction = "create";
 
-export interface FBDialogProps extends Omit<DialogProps, "title">, FBDialogInjectedProps {
+export interface FBDialogProps extends
+  Omit<DialogProps, "title">,
+  FBDialogInjectedProps {
   title?: string | Translation | false;
   maxWidth?: Breakpoint;
   actions?: FBDialogAction[];

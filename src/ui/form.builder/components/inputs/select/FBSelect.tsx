@@ -14,7 +14,11 @@ const FBSelect: React.FunctionComponent<FBSelectProps> = ({
   return (
     <Box mb={4}>
       {labelRenderer}
-      <FormControl variant={variant} fullWidth={true}>
+      <FormControl
+        variant={variant}
+        fullWidth={true}
+        required={props.required}
+      >
         <Select {...props} >
           {emptyItem}
           {items}
