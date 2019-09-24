@@ -1,4 +1,6 @@
+import { FBStateProps } from "./types";
 
-export const FBStatesInitialValues = {
-  initial: true,
+export const FBStateInitialValues: FBStateProps = {
+  name: "",
+  documentType: null,
 };

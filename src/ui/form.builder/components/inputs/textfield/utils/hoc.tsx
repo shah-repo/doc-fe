@@ -1,6 +1,6 @@
 import React from "react";
-import { withElOnChange } from "../../../common/hoc/withElOnChange";
-import { withLabelRenderer } from "../../../common/hoc/withLabelRenderer";
+import { withElOnChange } from "../../../common/hocs/withElOnChange";
+import { withLabelRenderer } from "../../../common/hocs/withLabelRenderer";
 import { Subtract } from "../../../common/utils/types";
 import { FBTextFieldInjectedProps, FBTextFieldProps } from "./types";
 
