@@ -11,7 +11,7 @@ const AttachmentMenu: React.FunctionComponent<AttachmentMenuProps> = ({
   handleClose,
   anchorEl,
   attachment,
-  handleViewFile,
+  openFileView,
 }) => {
   const file = attachment || {} as Attachment;
   const isFileViewable =  VIEWABLE_FILES.includes(file.type);
@@ -26,7 +26,7 @@ const AttachmentMenu: React.FunctionComponent<AttachmentMenuProps> = ({
   };
   const handleViewFileClick = () => {
     handleClose && handleClose();
-    handleViewFile && handleViewFile(attachment!);
+    openFileView && openFileView();
   };
   return (
     <Menu

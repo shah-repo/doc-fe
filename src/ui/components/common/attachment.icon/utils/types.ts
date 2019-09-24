@@ -6,7 +6,7 @@ export interface AttachmentIconDispatchProps {
   download: typeof attachmentsActions.download;
 }
 
-export interface AttachmentIconProps extends FormikHybridFieldProps {
+export interface AttachmentIconFactoryProps extends FormikHybridFieldProps {
   attachment?: Attachment;
   extension?: string;
   size?: RenderSize;
@@ -14,7 +14,13 @@ export interface AttachmentIconProps extends FormikHybridFieldProps {
   handleRemove?: (attachment: Attachment) => () => any;
   handleDownload?: (attachment: Attachment, type?: AttachmentType) => () => any;
   handleContextMenu?: (file: Attachment) => (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  handleViewFile?: (attachment: Attachment) => () => any;
+}
+
+export interface AttachmentIconProps extends AttachmentIconFactoryProps {
   isUploading?: boolean;
+  isLoading?: boolean;
+  handleIconClick?: (attachment: Attachment, type?: AttachmentType) => () => any;
 }
 
 export interface AttachmentMenuProps {
@@ -22,7 +28,7 @@ export interface AttachmentMenuProps {
   handleClose?: () => void;
   anchorEl?: null | HTMLElement;
   attachment?: Attachment;
-  handleViewFile: (attachment: Attachment) => void;
+  openFileView: () => void;
 }
 
 export interface AttachmentIconStyleProp {
