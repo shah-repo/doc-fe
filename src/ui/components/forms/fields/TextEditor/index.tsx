@@ -1,14 +1,12 @@
-
-
+import classNames from "classnames";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
+import { QuillOptionsStatic } from "quill";
 import * as React from "react";
 import ReactQuill from "react-quill";
-import { QuillOptionsStatic } from "quill";
-import classNames from "classnames";
-import Field, { FieldOwnProps } from "../Field";
 import { RenderSize } from "../../../../../state/ducks/common";
-import { modules, formats } from "./configuration";
 import useComponentVisible from "../../../../hooks/useComponentVisible";
+import Field, { FieldOwnProps } from "../Field";
+import { formats, modules } from "./configuration";
 
 interface TextEditorOwnProps extends FieldOwnProps {
   quillOptions?: QuillOptionsStatic;
@@ -31,18 +29,18 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
   const handleBlur = (e: any) => {
     const {
       field: { name },
-      form: { touched, setFieldTouched }
+      form: { touched, setFieldTouched },
     } = fieldProps;
 
     if (!touched[name]) {
       setFieldTouched(name, true);
     }
-  }
+  };
 
-  const onClick = () => setIsComponentVisible(true);
+  const handleFocus = () => setIsComponentVisible(true);
 
   return (
-    <Field 
+    <Field
       size={size}
       actionsRenderer={actionsRenderer}
       {...fieldProps}
@@ -50,8 +48,9 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
     >
       <div
         className={classNames("editor-container", { "label-margin": !actionsRenderer })}
-        onClick={onClick}
         ref={ref}
+        tabIndex={0}
+        onFocus={handleFocus}
       >
         <ReactQuill
           theme="snow"
@@ -65,6 +64,7 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
           onChange={handleChange}
           value={fieldProps.field.value}
           onBlur={handleBlur}
+          readOnly={!isComponentVisible}
         />
       </div>
     </Field>
