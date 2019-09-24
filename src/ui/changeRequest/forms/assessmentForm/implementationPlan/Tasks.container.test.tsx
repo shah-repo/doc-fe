@@ -46,10 +46,4 @@ describe("Tasks container tests", () => {
     const wrapperWithTasks = getWrapper({ form: formWithTasks });
     expect(toJson(wrapperWithTasks)).toMatchSnapshot();
   });
-
-  it("button should open dialog", () => {
-    wrapper.dive().find(TaskFormDialog).dive().find(Button).prop("onClick")!({} as any);
-
-    expect(wrapper.prop("isDialogOpen")).toBe(true);
-  });
 });
