@@ -13,7 +13,7 @@ import useDialog from "../../../hooks/useDialog";
 import { withFormik } from "../../hoc/formik";
 import ViewFile from "../view.file/container";
 import Menu from "./menu";
-import Presenter from "./presenter";
+import PresenterFactory from "./presenter.factory";
 import {
   AttachmentIconContainerProps,
   AttachmentIconDispatchProps,
@@ -49,12 +49,10 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   };
 
   const handleDownload = (attachment: Attachment, type?: AttachmentType) => () => {
-    if (attachment.s3link == null) { return; }
     async.start(download, attachment, async, type);
   };
 
   const handleContextMenu = (file: Attachment) => (evt: React.MouseEvent<HTMLElement>) => {
-    if (file.s3link == null) { return; }
     evt.preventDefault();
     setSelectedFile(file);
     setAnchorEl(evt.currentTarget);
@@ -62,12 +60,15 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
 
   const closeContextMenu = () => setAnchorEl(null);
 
-  const handleViewFile = (attachment: Attachment) => {
-    dialogHandler.open();
+  const handleViewFile = (attachment: Attachment) => () => {
+    setSelectedFile(attachment);
+    openFileView();
   };
 
+  const openFileView = () => dialogHandler.open();
+
   const attachmentsRenderer = attachments.map((attachment) => (
-    <Presenter
+    <PresenterFactory
       {...other}
       key={`attachment-${attachment.id}`}
       name={name}
@@ -75,6 +76,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
       handleRemove={handleRemove}
       handleDownload={handleDownload}
       handleContextMenu={handleContextMenu}
+      handleViewFile={handleViewFile}
     />
   ));
 
@@ -91,7 +93,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
         handleClose={closeContextMenu}
         anchorEl={anchorEl}
         attachment={selectedFile}
-        handleViewFile={handleViewFile}
+        openFileView={openFileView}
       />
       {attachmentsRenderer}
     </Grid>
