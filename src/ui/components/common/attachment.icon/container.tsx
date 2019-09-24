@@ -9,7 +9,9 @@ import {
 } from "../../../../state/ducks/attachments";
 import { ApplicationState } from "../../../../state/reducers";
 import useAsync from "../../../hooks/useAsync";
+import useDialog from "../../../hooks/useDialog";
 import { withFormik } from "../../hoc/formik";
+import ViewFile from "../view.file/container";
 import Menu from "./menu";
 import Presenter from "./presenter";
 import {
@@ -19,6 +21,8 @@ import {
 
 type DispatchProps = AttachmentIconDispatchProps;
 
+export let SetFile: React.Context<React.Dispatch<React.SetStateAction<Attachment | undefined>>>;
+
 export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerProps> = ({
   name = "",
   download,
@@ -27,8 +31,11 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   ...other
 }) => {
 
-  const [fileToDownload, setFileToDownload] = useState<undefined | Attachment>(undefined);
+  const dialogHandler = useDialog();
+  const attachments = field!.value as Attachment[] || [];
+  const [selectedFile, setSelectedFile] = useState<undefined | Attachment>(undefined);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  SetFile = React.createContext(setSelectedFile);
 
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) =>
@@ -49,13 +56,17 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const handleContextMenu = (file: Attachment) => (evt: React.MouseEvent<HTMLElement>) => {
     if (file.s3link == null) { return; }
     evt.preventDefault();
-    setFileToDownload(file);
+    setSelectedFile(file);
     setAnchorEl(evt.currentTarget);
   };
 
   const closeContextMenu = () => setAnchorEl(null);
 
-  const attachmentsRenderer = (field!.value as Attachment[] || []).map((attachment) => (
+  const handleViewFile = (attachment: Attachment) => {
+    dialogHandler.open();
+  };
+
+  const attachmentsRenderer = attachments.map((attachment) => (
     <Presenter
       {...other}
       key={`attachment-${attachment.id}`}
@@ -71,11 +82,18 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
 
   return (
     <Grid container={true} spacing={2}>
+      <ViewFile
+        isOpen={dialogHandler.isOpen}
+        handleClose={dialogHandler.close}
+        attachments={attachments}
+        attachment={selectedFile}
+      />
       <Menu
         handleDownload={handleDownload}
         handleClose={closeContextMenu}
         anchorEl={anchorEl}
-        attachment={fileToDownload}
+        attachment={selectedFile}
+        handleViewFile={handleViewFile}
       />
       {attachmentsRenderer}
     </Grid>

@@ -26,6 +26,7 @@ import DocumentContainer from "../documents/Document.container";
 import FormBuilder from "../form.builder/FormBuilder";
 import FormBuilderContainer from "../formBuilder/FormBuilder.container";
 import FormBuilderPresenter from "../formBuilder/FormBuilder.presenter";
+import { isFBActive } from "../formBuilder/helpers/FBLocalStorageHelper";
 import { ThemeEnv } from "../layout/theme/utils/types";
 import TrainingDetailContainer from "../training/TrainingDetail.container";
 import AutoLogout from "./AutoLogout";
@@ -37,8 +38,6 @@ import Navigation from "./Navigation";
 type Props = WithStyles<typeof styles>;
 
 const Layout: React.FunctionComponent<Props> = ({ classes }) => {
-  // NOTE* temp condition
-  const showFormBuilder = Config.Theme === ThemeEnv.DEV_THEME;
   return (
     <div>
       <AutoLogout />
@@ -46,7 +45,7 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
       <HeaderContainer />
       <Navigation />
       <main className={classes.content}>
-        {showFormBuilder && <FormBuilderContainer />}
+        {isFBActive && <FormBuilderContainer />}
         <DataFetcherContainer />
         <Switch>
           <Route path={HOME_URL} exact={true} component={DashboardContainer} />

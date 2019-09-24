@@ -1,9 +1,9 @@
+import { DeltaStatic } from "quill";
 import React, { useEffect, useRef, useState } from "react";
 import ReactQuill from "react-quill";
-import { compareHandler } from "./helpers";
 import DiffPresenter from "./Diff.presenter";
-import { DiffContainerProps } from "./types";
-import { DeltaStatic } from "quill";
+import { compareHandler } from "./utils/helpers";
+import { DiffContainerProps } from "./utils/types";
 
 type Props = DiffContainerProps;
 
@@ -15,7 +15,11 @@ const DiffContainer: React.FunctionComponent<Props> = ({
   const refNew = useRef<ReactQuill>(null);
   useEffect(() => {
     refNew.current && refNew.current.getEditor().pasteHTML(newText);
-    
+
+    if (!oldText || oldText === "undefined") {
+      return;
+    }
+
     const oldContents = refOld.current && refOld.current.getEditor().getContents();
     const newContents = refNew.current && refNew.current.getEditor().getContents();
     let difference;
@@ -35,7 +39,7 @@ const DiffContainer: React.FunctionComponent<Props> = ({
       delta={delta}
     />
   );
-}
+};
 
 DiffContainer.displayName = "TextDiffContainer";
 

@@ -22,35 +22,33 @@ const CheckBoxModal: React.FunctionComponent<CheckBoxModalProps> = ({
     setConfig({ ...config, [e.target.name]: e.target.value });
   };
 
-  const submitForm = (e: any) => {
+  const submitForm = () => (e: any) => {
     e.preventDefault();
     handleSubmit(e, config);
   };
 
   return (
-    <form onSubmit={submitForm}>
-      <div className={styles.modalFormContainer}>
-        <h2>{currentConfig ? "Edit" : "Add"} Checkbox</h2>
-        <label>Label</label>
-        <input
-          type="text"
-          onChange={handleInputChange}
-          name="title"
-          placeholder="Enter here"
-          required={true}
-          defaultValue={config.title}
-        />
-        <label>Notes</label>
-        <input
-          type="text"
-          onChange={handleInputChange}
-          name="notes"
-          placeholder="Enter here"
-          value={config.notes}
-        />
-        <button>{currentConfig ? "Save" : "Add"}</button>
-      </div>
-    </form>
+    <div className={styles.modalFormContainer}>
+      <h2>{currentConfig ? "Edit" : "Add"} Checkbox</h2>
+      <label>Label</label>
+      <input
+        type="text"
+        onChange={handleInputChange}
+        name="title"
+        placeholder="Enter here"
+        required={true}
+        defaultValue={config.title}
+      />
+      <label>Notes</label>
+      <input
+        type="text"
+        onChange={handleInputChange}
+        name="notes"
+        placeholder="Enter here"
+        value={config.notes}
+      />
+      <button type="button" onClick={submitForm()}>{currentConfig ? "Save" : "Add"}</button>
+    </div>
   );
 };
 

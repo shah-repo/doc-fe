@@ -1,5 +1,6 @@
 export const SHOW_MODAL = "formBuilder/SHOW_MODAL";
 export const HIDE_MODAL = "formBuilder/HIDE_MODAL";
+export const VIEW_FORM_MODE = "formBuilder/VIEW_FORM_MODE";
 
 export const ADD_FIELD = "formBuilder/ADD_FIELD";
 export const EDIT_FIELD = "formBuilder/EDIT_FIELD";

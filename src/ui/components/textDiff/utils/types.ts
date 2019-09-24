@@ -1,7 +1,7 @@
 import { RefObject } from "react";
 import ReactQuill from "react-quill";
-import { DialogHandler } from "../../hooks/useDialog";
-import { Async } from "../../hooks/useAsync";
+import { Async } from "../../../hooks/useAsync";
+import { DialogHandler } from "../../../hooks/useDialog";
 
 export interface DialogContainerProps {
   auditId: string;
@@ -11,9 +11,9 @@ export interface DialogContainerProps {
 export interface DialogPresenterProps {
   oldText: string;
   newText: string;
-  loadChanges(): void;
   dialogHandler: DialogHandler;
   async: Async;
+  loadChanges(): void;
 }
 
 export interface DiffContainerProps {

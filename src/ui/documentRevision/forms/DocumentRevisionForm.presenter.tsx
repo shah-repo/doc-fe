@@ -6,10 +6,11 @@ import {
   WithStyles,
 } from "@material-ui/core";
 import { FormikProps } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   DocumentRevision,
+  DocumentRevisionType,
   RevisionChangeType,
   RevisionStageOptions,
 } from "../../../state/ducks/documentRevisions";
@@ -17,16 +18,18 @@ import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
-import InputField from "../../components/forms/fields/Input";
 import CheckboxField from "../../components/forms/fields/Checkbox";
+import InputField from "../../components/forms/fields/Input";
 import RadioButton from "../../components/forms/fields/RadioButton";
 import RadioGroup from "../../components/forms/fields/RadioGroup";
 import SelectField from "../../components/forms/fields/Select";
+import TextEditorField from "../../components/forms/fields/TextEditor";
 import { required, validator } from "../../components/forms/fields/validators";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
+import ScrollToError from "../../components/forms/ScrollToError";
 import SubmitButton from "../../components/forms/SubmitButton";
 import Text from "../../components/Text";
 import AttachmentsField from "../../document.revision/form/attachments";
@@ -35,10 +38,10 @@ import {
   documentDetailsPath,
   documentVersionPath,
 } from "../../document.revision/utils/paths";
+import { formBuilderGet, isFBActive } from "../../formBuilder/helpers/FBLocalStorageHelper";
+import FBDocumentRevision from "../formBuilder/FBDocumentRevision.container";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
-import TextEditorField from "../../components/forms/fields/TextEditor";
-import ScrollToError from "../../components/forms/ScrollToError";
 
 interface Props
   extends WithStyles<typeof styles>,
@@ -52,6 +55,8 @@ interface Props
   setDocId?: typeof documentsActions.setDocumentProposedId;
   doNotPrompt?: boolean;
   onDirtyFlagChange?: (dirty: boolean) => void;
+  uploadTemplate: (elements: any) => any;
+  fbFormMode: (mode: boolean) => any;
 }
 
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
@@ -72,7 +77,23 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   isSubmitting,
   isValidating,
   errors,
+  uploadTemplate,
+  fbFormMode,
 }) => {
+
+  const fbState =
+    isFBActive &&
+    initialValues.document &&
+    initialValues.document.type &&
+    DocumentRevisionType[initialValues.document.type as keyof typeof DocumentRevisionType] ===  DocumentRevisionType.FM;
+
+  const [fbActive, fbSetActive] = useState(fbState);
+
+  if (fbState && initialValues.id && formBuilderGet(initialValues.id)) {
+    uploadTemplate(formBuilderGet(initialValues.id).elements);
+    fbFormMode(true);
+  }
+
   const openReference = (documentId: string) => {
     window.open(documentDetailsPath(documentId), "_blank");
   };
@@ -104,6 +125,14 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   ) => {
     const type = event.target.value as string;
     loadDocumentProposedId(type);
+    const isFM =
+      isFBActive &&
+      DocumentRevisionType[type as keyof typeof DocumentRevisionType] ===  DocumentRevisionType.FM;
+    fbSetActive(isFM);
+    if (isFM && !initialValues.id) {
+      uploadTemplate([]);
+      fbFormMode(false);
+    }
     handleChange(event);
   };
 
@@ -147,7 +176,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <Text translation="common.referenced.by" />
           </Typography>
           <div>
-            {initialValues.document.referencedBy.map(reference => {
+            {initialValues.document.referencedBy.map((reference) => {
               return (
                 <div key={reference.id}>
                   <Link
@@ -167,17 +196,16 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
   };
 
-  const renderRevisionStageDropdown = !isDisabled &&
-      <SelectField
-        name="revisionStage"
-        label="document.revision.stage"
-        selectProps={{
-          inputProps: { id: "revisionStage" },
-        }}
-        options={RevisionStageOptions}
-        validate={validator(required)}
-        includeEmpty={false}
-      />
+  const renderRevisionStageDropdown = !isDisabled && (
+    <SelectField
+      name="revisionStage"
+      label="document.revision.stage"
+      selectProps={{ inputProps: { id: "revisionStage" } }}
+      options={RevisionStageOptions}
+      validate={validator(required)}
+      includeEmpty={false}
+    />
+  );
 
   return (
     <Grid
@@ -185,16 +213,19 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       direction="column"
       justify="center"
       alignItems="center"
-      className={classes.container}>
+      className={classes.container}
+    >
       <Grid
         item={true}
         lg={isDisabled ? 12 : 7}
         sm={isDisabled ? 12 : 10}
-        xs={12}>
+        xs={12}
+      >
         <FormWrapper
           dirty={dirty}
           initialValues={initialValues}
-          resetForm={resetForm}>
+          resetForm={resetForm}
+        >
           <ScrollToError
             isSubmitting={isSubmitting}
             isValidating={isValidating}
@@ -256,6 +287,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           <CheckboxField name="retrain" label="document.revision.trainingRequired"/>
           <AttachmentsField />
           {renderTypeOfRevisionChange()}
+          <Box mt={7} mx={-7}>
+            {fbActive && <FBDocumentRevision documentId={initialValues.id} />}
+          </Box>
           <Box mt={10}>
             <Grid
               item={true}

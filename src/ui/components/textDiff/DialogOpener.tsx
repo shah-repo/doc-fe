@@ -1,8 +1,8 @@
 import React, { Fragment } from "react";
 import useDialog from "../../hooks/useDialog";
 import Dialog from "./Dialog.container";
-import { styles } from "./DialogOpener.styles";
-import { DialogOpenerProps } from "./types";
+import { styles } from "./utils/DialogOpener.styles";
+import { DialogOpenerProps } from "./utils/types";
 
 type Props = DialogOpenerProps;
 
