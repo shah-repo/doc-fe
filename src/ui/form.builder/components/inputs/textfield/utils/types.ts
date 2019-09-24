@@ -1,9 +1,12 @@
 import { OutlinedTextFieldProps } from "@material-ui/core/TextField";
+import { FormikHybridFieldProps } from "../../../../../components/hoc/utils/types";
+import { FBFormDefaultProps, FBLabelRendererProps, FBOnChangeProps } from "../../../common/utils/types";
 
-export interface FBTextFieldInjectedProps {
-  variant: "outlined";
-}
+export type FBTextFieldInjectedProps = Pick<OutlinedTextFieldProps, "variant">;
 
-export interface FBTextFieldProps extends OutlinedTextFieldProps, FBTextFieldInjectedProps {
-
-}
+export type FBTextFieldProps =
+  OutlinedTextFieldProps &
+  FBFormDefaultProps &
+  FBLabelRendererProps &
+  FBOnChangeProps &
+  FormikHybridFieldProps;

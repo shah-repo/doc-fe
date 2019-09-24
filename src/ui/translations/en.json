@@ -283,9 +283,10 @@
   "page.title.changeRequestCreate": "Create New Change Request",
 
   "form.builder": "Form Builder",
-  "form.builder.create": "Create a form",
-  "form.builder.title": "Form Title",
-  "form.builder.number": "Form Number",
+  "form.builder.create": "Create a Form",
+  "form.builder.name": "Form Name",
+  "form.builder.type": "Form Document Type",
+  "form.builder.add.field": "Add Field",
 
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
