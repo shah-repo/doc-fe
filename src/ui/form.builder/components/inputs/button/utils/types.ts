@@ -1,7 +1,7 @@
 import { ButtonProps } from "@material-ui/core/Button";
-
-export type FBInjectedButtonProps = ButtonProps;
-
+import { PropTypes } from "@material-ui/core";
 export interface FBButtonProps {
+  variant: ButtonProps["variant"];
+  color: PropTypes.Color;
   label: string;
 }

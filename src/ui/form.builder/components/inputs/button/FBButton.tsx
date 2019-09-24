@@ -1,15 +1,16 @@
 import { Button } from "@material-ui/core";
 import Text from "../../../../components/Text";
-import { withButtonDefaults } from "./utils/hoc";
 import { FBButtonProps } from "./utils/types";
 
 const FBButon: React.FunctionComponent<FBButtonProps> = ({
   label,
+  variant = "contained",
+  color = "secondary",
   ...props
 }) => (
-  <Button {...props}>
+  <Button variant={variant} color={color} {...props}>
     <Text message={label} />
   </Button>
 );
 
-export default withButtonDefaults(FBButon);
+export default FBButon;
