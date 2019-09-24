@@ -2,7 +2,7 @@ import { Button, DialogActions } from "@material-ui/core";
 import { useTheme } from "@material-ui/core/styles";
 import { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import React from "react";
+import React, { useState } from "react";
 import Text from "../../../../components/Text";
 import { Subtract } from "../../common/utils/types";
 import { FBDialogAction, FBDialogActionLabel, FBDialogInjectedProps, FBDialogProps } from "./types";
@@ -29,7 +29,7 @@ export function withDialogStates<T extends FBDialogInjectedProps>(
   };
 }
 
-export function withDialogDefaults<T extends FBDialogProps, U>(
+export function withDialogDefaults<T extends FBDialogProps>(
   Component: React.ComponentType<T>,
 ) {
 
@@ -41,11 +41,11 @@ export function withDialogDefaults<T extends FBDialogProps, U>(
       return props.fullScreen;
     };
 
-    return <Component fullScreen={fullScreen(props.maxWidth)} {...props} />;
+    return <Component {...props} fullScreen={fullScreen(props.maxWidth)} />;
   };
 }
 
-export function withDialogActions<T extends FBDialogProps, U>(
+export function withDialogActions<T extends FBDialogProps>(
   Component: React.ComponentType<T>,
 ) {
 
