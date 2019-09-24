@@ -1,8 +1,8 @@
 import { MenuItem } from "@material-ui/core";
 import React from "react";
 import Text from "../../../../../components/Text";
-import { withElOnChange } from "../../../common/hoc/withElOnChange";
-import { withLabelRenderer } from "../../../common/hoc/withLabelRenderer";
+import { withElOnChange } from "../../../common/hocs/withElOnChange";
+import { withLabelRenderer } from "../../../common/hocs/withLabelRenderer";
 import { Subtract } from "../../../common/utils/types";
 import { FBSelectInjectedProps, FBSelectProps } from "./types";
 

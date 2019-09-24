@@ -1,6 +1,6 @@
 import { Box, FormGroup } from "@material-ui/core";
 import React from "react";
-import { withLabelRenderer } from "../../common/hoc/withLabelRenderer";
+import { withLabelRenderer } from "../../common/hocs/withLabelRenderer";
 import FBCheckbox from "./FBCheckbox";
 import { FBCheckboxGroupProps } from "./utils/types";
 
