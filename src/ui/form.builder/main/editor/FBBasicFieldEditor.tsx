@@ -41,7 +41,7 @@ const FBBasicFieldEditor: React.FunctionComponent<FBFormDefaultProps & FBDialogP
         <FBButon label="Checkbox group" onClick={handleFieldType("checkboxgroup")} />
       </Box>
       <FBDialog
-        title="form.builder.create"
+        title="Create a field"
         {...props}
       />
     </Box>

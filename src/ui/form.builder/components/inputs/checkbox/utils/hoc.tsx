@@ -13,11 +13,13 @@ export function withCheckboxDefaults<T extends FBCheckboxProps>(
 
     public render() {
       const { field } = this.props;
+
       const checkboxRenderer = (
         <Checkbox
           checked={field.value}
         />
       );
+
       return (
         <Component
           {...this.props as T}

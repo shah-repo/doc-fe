@@ -19,7 +19,7 @@ export type FBCheckboxGroupProps =
 
 export type FBCheckboxProps =
   FBFormDefaultProps &
-  Partial<FormControlLabelProps> &
+  Partial<Omit<FormControlLabelProps, "label">> &
   FBCheckboxInjectedProps &
   FBOnChangeProps &
   FormikHybridFieldProps & {

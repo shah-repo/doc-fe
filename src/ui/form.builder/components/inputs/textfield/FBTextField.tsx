@@ -6,17 +6,14 @@ import { FBTextFieldProps } from "./utils/types";
 const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   labelRenderer,
   ...props
-}) => {
-
-  return (
-    <Box mb={4}>
-      {labelRenderer}
-      <TextField
-        {...props}
-        multiline={true}
-      />
-    </Box>
-  );
-};
+}) => (
+  <Box mb={4}>
+    {labelRenderer}
+    <TextField
+      multiline={Boolean(props.rows && ((props.rows as number) > 0))}
+      {...props}
+    />
+  </Box>
+);
 
 export default withTextFieldDefaults(FBTextField);

@@ -1,9 +1,8 @@
-import FBBasicEditorProp from "../properties/FBBasicEditorProp";
-import FBTextFieldEditorProp from "../properties/FBTextFieldEditorProp";
+import FBTextFieldEditorConfig from "../configs/FBTextFieldEditorConfig";
 import { FBBasicFieldEditorEl } from "./types";
 
 export const FBBasicFieldEditorComponent: FBBasicFieldEditorEl = {
-  textfield: FBTextFieldEditorProp,
-  checkbox: FBBasicEditorProp,
-  checkboxgroup: FBBasicEditorProp,
+  textfield: FBTextFieldEditorConfig,
+  checkbox: FBTextFieldEditorConfig,
+  checkboxgroup: FBTextFieldEditorConfig,
 };

@@ -14,8 +14,8 @@ const FBCheckbox: React.FunctionComponent<FBCheckboxProps> = ({
     <Box mb={4}>
       {labelRenderer}
       <FormControlLabel
-        label={<Text message={controlLabel} />}
         {...props}
+        label={controlLabel && <Text message={controlLabel} />}
       />
     </Box>
   );
