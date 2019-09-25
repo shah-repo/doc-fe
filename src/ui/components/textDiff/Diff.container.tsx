@@ -13,18 +13,19 @@ const DiffContainer: React.FunctionComponent<Props> = ({
   const [delta, setDelta] = useState<DeltaStatic | null>(null);
   const refOld = useRef<ReactQuill>(null);
   const refNew = useRef<ReactQuill>(null);
+  const refMain = useRef<ReactQuill>(null);
   useEffect(() => {
     if (!oldText || !newText) {
       return;
     }
     if (oldText === "undefined") {
-      const contents = refOld.current!.getEditor().clipboard.convert(oldText);
+      const contents = refMain.current!.getEditor().clipboard.convert(oldText);
       refNew.current!.getEditor().setContents(contents);
       return;
     }
 
-    const oldContents = refOld.current!.getEditor().clipboard.convert(oldText);
-    const newContents = refNew.current!.getEditor().clipboard.convert(newText);
+    const oldContents = refMain.current!.getEditor().clipboard.convert(oldText);
+    const newContents = refMain.current!.getEditor().clipboard.convert(newText);
 
     if (oldContents && newContents) {
       const difference = compareHandler(oldContents, newContents);
@@ -36,10 +37,9 @@ const DiffContainer: React.FunctionComponent<Props> = ({
 
   return (
     <DiffPresenter
-      oldText={oldText}
-      newText={newText}
       refOld={refOld}
       refNew={refNew}
+      refMain={refMain}
       delta={delta}
     />
   );

@@ -1,3 +1,4 @@
+import { DeltaStatic } from "quill";
 import { RefObject } from "react";
 import ReactQuill from "react-quill";
 import { Async } from "../../../hooks/useAsync";
@@ -22,11 +23,10 @@ export interface DiffContainerProps {
 }
 
 export interface DiffPresenterProps {
-  oldText: string;
-  newText: string;
   refOld: RefObject<ReactQuill>;
   refNew: RefObject<ReactQuill>;
-  delta: any;
+  refMain: RefObject<ReactQuill>;
+  delta: DeltaStatic | null;
 }
 
 export interface DialogOpenerProps {
