@@ -1,7 +1,7 @@
 import { Box } from "@material-ui/core";
 import { AxiosRequestConfig } from "axios";
 import qs from "query-string";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AutoSizer,
   CellMeasurerCache,
@@ -9,6 +9,7 @@ import {
   Size,
   Table,
 } from "react-virtualized";
+import { useDebounce } from "use-debounce";
 import apiClient from "../../../state/apiClient";
 import refreshTokenOperation from "../../../state/middlewares/api/refreshToken";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
@@ -44,23 +45,28 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
     apiError: "",
     scrollToIndex: 0,
   });
+  const [debouncedQuery] = useDebounce(state.queryDict, queryDelay);
 
+  // TODO: check if debounce correctly refactored
+  useEffect(() => {
+    queryApi();
+  }, [debouncedQuery]);
+
+  // Is this debounce?
+  // https://github.com/xnimorz/use-debounce
   const queryGetter = (key: string, value: string) => {
     if (!queryUrl) { return; }
     lastQueryValue = value;
 
-    setTimeout(() => {
-      if (lastQueryValue !== value) { return; }
-      let dict = state.queryDict;
-      (value === "") ? delete dict[key] : dict[key] = value;
+    if (lastQueryValue !== value) { return; }
+    let dict = state.queryDict;
+    (value === "") ? delete dict[key] : dict[key] = value;
 
-      if (customQuerySet) {
-        dict = customQuerySet(dict);
-      }
+    if (customQuerySet) {
+      dict = customQuerySet(dict);
+    }
 
-      setState({...state, queryDict: dict});
-      queryApi();
-    }, queryDelay);
+    setState({...state, queryDict: dict});
   };
 
   const queryApi = async () => {
