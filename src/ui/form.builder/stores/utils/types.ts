@@ -17,3 +17,7 @@ export interface FBTemplateStore {
   namePrefix: () => string;
   generateSchemaEl: (type: FBBasicFieldEditorType, values: any) => FBTemplateSchema;
 }
+
+export interface FBFlowStore {
+  mode: "view" | "form";
+}
