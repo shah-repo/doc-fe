@@ -9,7 +9,9 @@ const FBCheckboxGroup: React.FunctionComponent<FBCheckboxGroupProps> = ({
   options,
 }) => {
 
-  const optionsRenderer = options.map((option, i) => <FBCheckbox key={`fb.check.${name}.${i}`} {...option}  />);
+  const optionsRenderer = options.map((option, i) =>
+    <FBCheckbox key={`fb.check.${name}.${i}`} {...option} />);
+
   return (
     <Box mb={4}>
       {labelRenderer}

@@ -13,6 +13,7 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
       {labelRenderer}
       <TextField
         {...props}
+        multiline={true}
       />
     </Box>
   );

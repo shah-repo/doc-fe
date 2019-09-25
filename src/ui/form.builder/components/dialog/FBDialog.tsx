@@ -8,6 +8,7 @@ import { FBDialogProps } from "./utils/types";
 const FBDialog: React.FunctionComponent<FBDialogProps> = ({
   title = false,
   setDialogClose,
+  children,
   ...props
 }) => (
   <Dialog fullWidth={true} {...props}>
@@ -24,7 +25,7 @@ const FBDialog: React.FunctionComponent<FBDialogProps> = ({
       </Box>
     </DialogTitle>
     <DialogContent>
-      {props.children}
+      {children}
     </DialogContent>
   </Dialog>
 );

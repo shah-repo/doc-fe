@@ -10,11 +10,12 @@ export function withElOnChange<T extends FBOnChangeProps & FormikHybridFieldProp
   class HOC extends React.Component<Subtract<T, FBOnChangeProps>> {
 
     public render() {
+      const { field } = this.props;
       return (
         <Component
           {...this.props as T}
           onChange={this.handleChange()}
-          value={this.props.field.value}
+          value={field.value && field.value}
         />
       );
     }

@@ -6,6 +6,7 @@ export interface FBDialogInjectedProps {
   open: boolean;
   setDialogOpen: () => any;
   setDialogClose: () => any;
+  setDialogChildren: (el: JSX.Element) => any;
 }
 
 export enum FBDialogActionLabel {

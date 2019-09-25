@@ -45,7 +45,7 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
       <HeaderContainer />
       <Navigation />
       <main className={classes.content}>
-        {isFBActive && <FormBuilderContainer />}
+        {isFBActive && <FormBuilder />}
         <DataFetcherContainer />
         <Switch>
           <Route path={HOME_URL} exact={true} component={DashboardContainer} />
