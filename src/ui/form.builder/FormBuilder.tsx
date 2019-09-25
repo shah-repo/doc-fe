@@ -22,7 +22,7 @@ const FormBuilder: React.FunctionComponent<FBDialogProps> = ({
         <Text message="form.builder" />
       </Fab>
       <FBDialog
-        title={`${templateStore.name}` || "form.builder.create"}
+        title={`${templateStore.name || "form.builder.create"}`}
         fullScreen={!isInfo}
         {...props}
       >

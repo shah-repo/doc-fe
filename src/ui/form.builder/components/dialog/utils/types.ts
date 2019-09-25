@@ -20,6 +20,6 @@ export interface FBDialogProps extends
   FBDialogInjectedProps {
   title?: string | Translation | false;
   maxWidth?: Breakpoint;
-  actions?: FBDialogAction[];
+  actions?: FBDialogAction[] | false;
   onActionClick?: (action: FBDialogAction) => any;
 }

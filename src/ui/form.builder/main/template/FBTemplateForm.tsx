@@ -10,7 +10,7 @@ const FBTemplateForm: React.FunctionComponent<{}> = () => {
         <Grid item={true} xs={3}>
           <FBEditor />
         </Grid>
-        <Grid item={true} xs={6}>
+        <Grid item={true} xs={9} sm={8} md={6}>
           <FBRenderForm />
         </Grid>
       </Grid>

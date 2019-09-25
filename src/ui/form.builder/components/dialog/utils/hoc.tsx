@@ -60,7 +60,7 @@ export function withDialogActions<T extends FBDialogProps>(
       }
     };
 
-    const actionRenderer = () => props.actions!.map((action, i) => {
+    const actionRenderer = () => props.actions && props.actions!.map((action, i) => {
       const text = FBDialogActionLabel[action];
       return (
         <Button
