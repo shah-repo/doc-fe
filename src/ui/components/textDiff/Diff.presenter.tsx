@@ -24,13 +24,12 @@ const DiffPresenter: React.FunctionComponent<Props> = ({
         <ReactQuill
           ref={refOld}
           readOnly={true}
-          value={oldText}
           modules={{ toolbar: false }}
-          className={classNames(classes.editor, { [classes.hiddenEditor]: !delta })}
+          className={classNames(classes.editor, { [classes.fullWidth]: !delta })}
         />
       </div>
       <div
-        className={classNames(classes.editorContainer, { [classes.fullWidth]: !delta })}
+        className={classNames(classes.editorContainer, { [classes.hiddenEditor]: !delta })}
       >
         <Typography className={classes.font}>
           <Text translation="common.updated" />
@@ -38,7 +37,6 @@ const DiffPresenter: React.FunctionComponent<Props> = ({
         <ReactQuill
           ref={refNew}
           readOnly={true}
-          value={delta || newText}
           modules={{ toolbar: false }}
           className={classNames(classes.editor, { [classes.fullWidth]: !delta })}
         />
