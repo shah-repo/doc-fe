@@ -108,8 +108,7 @@ const indicateInsertsAndDeletion = (delta: DeltaStatic) => {
             delete op.delete;
             // but color it red and struckthrough
             op.attributes = {
-                background: "#FFD3D3",
-                color: "black",
+                strike: true,
             };
         }
     }
