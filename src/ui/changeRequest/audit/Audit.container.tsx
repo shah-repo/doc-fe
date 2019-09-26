@@ -6,8 +6,6 @@ import {
   changeRequestsSelectors,
 } from "../../../state/ducks/changeRequest";
 import { ApplicationState } from "../../../state/reducers";
-import { AsyncState } from "../../../state/types";
-import AsyncGate from "../../components/AsyncGate";
 import AuditPresenter from "./Audit.presenter";
 
 interface OwnProps {
@@ -16,7 +14,6 @@ interface OwnProps {
 
 interface StateProps {
   audit: AuditGroupType;
-  loadAuditAsyncState: AsyncState;
 }
 
 interface DispatchProps {
@@ -30,7 +27,6 @@ const mapStateToProps = (
   state: ApplicationState,
   props: OwnProps,
 ): StateProps => ({
-  loadAuditAsyncState: changeRequestsSelectors.getLoadAuditAsyncState(state),
   audit: getAudit(state, props.changeRequestId),
 });
 
@@ -38,7 +34,6 @@ export const AuditContainer: React.FunctionComponent<AuditContainerProps> = ({
   audit,
   loadAudit,
   changeRequestId,
-  loadAuditAsyncState,
 }) => {
   const loadAuditAction = () => loadAudit(changeRequestId);
   useState(() => {
