@@ -21,8 +21,6 @@ const getReferenceToUrl = (
   documentRevisionId: string,
   deprecatedAt: string
 ): string => {
-  console.log(documentId);
-  console.log(documentRevisionId);
   if (documentStatus === DocumentRevisionStatus.Deprecated) {
     return documentDetailsPathWithDeprecatedDate(documentId, deprecatedAt)
   }

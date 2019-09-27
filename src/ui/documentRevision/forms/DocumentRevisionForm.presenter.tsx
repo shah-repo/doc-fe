@@ -207,6 +207,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     />
   );
 
+  const renderTrainingRequired = (values.version! > 1 || showRevisionTypeChange) &&
+    <CheckboxField name="retrain" label="document.revision.trainingRequired"/>;
+
   return (
     <Grid
       container={true}
@@ -284,7 +287,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             onClick={openReference}
           />
           {renderReferences()}
-          <CheckboxField name="retrain" label="document.revision.trainingRequired"/>
+          {renderTrainingRequired}
           <AttachmentsField />
           {renderTypeOfRevisionChange()}
           <Box mt={7} mx={-7}>
