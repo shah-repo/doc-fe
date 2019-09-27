@@ -7,6 +7,7 @@ import { FBTemplateStore } from "./utils/types";
 const templateStore: FBTemplateStore = store({
   name: null,
   documentType: null,
+  documentId: undefined,
   schema: [],
 
   setState: (values: FBTemplateStore) => _.merge(templateStore, values),

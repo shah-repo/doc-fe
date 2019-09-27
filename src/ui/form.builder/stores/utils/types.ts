@@ -12,6 +12,7 @@ export interface FBTemplateSchema {
 export interface FBTemplateStore {
   name: string | null;
   documentType: DocumentRevisionType | null;
+  documentId?: string;
   schema: FBTemplateSchema[];
   setState: (values: FBTemplateStore) => any;
   namePrefix: () => string;
@@ -20,4 +21,12 @@ export interface FBTemplateStore {
 
 export interface FBFlowStore {
   mode: "view" | "form";
+  documentId?: string;
+  submitLabel: string;
+  templateName: string | null;
+  documentType?: DocumentRevisionType;
+  values: {
+    [key: string]: any;
+  };
+  setState: (values: FBFlowStore) => any;
 }
