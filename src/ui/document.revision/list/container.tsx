@@ -42,10 +42,6 @@ const ListContainer: React.FunctionComponent<Props> = ({
 }) => {
   const loadAction = () => loadDocumentRevisions([
     DocumentRevisionStatus.Released,
-    DocumentRevisionStatus.Obsolete,
-    DocumentRevisionStatus.InReview,
-    DocumentRevisionStatus.PendingChange,
-    DocumentRevisionStatus.Draft,
   ]);
   const edit = (documentRevisionId: string, documentId: string) =>
     history.push(documentEditPath(documentRevisionId, documentId));
