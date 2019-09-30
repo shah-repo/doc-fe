@@ -43,6 +43,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             <div className={classes.owner}>{change.owner.name}</div>
             <DateTime value={change.timestamp} />
           </div>
+          {console.log(auditField, checkIfGroup(auditField))}
           {checkIfGroup(auditField) && renderGroupChanges(audit[groupId])}
           {!checkIfGroup(auditField) && renderChanges(audit[groupId])}
         </Box>
@@ -67,9 +68,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const change = audits[0];
     return (
       <Box mb={1}>
-        <Text
-          message={`documentRevision.audit.${change.field}.${change.type}`}
-        />
+        <Text message={`changeRequest.audit.${change.field}.${change.type}`} />
         {audits.map((change, index) => (
           <Box key={`${change.groupId}-${index}`}>
             <div className={classes.auditValue}>
