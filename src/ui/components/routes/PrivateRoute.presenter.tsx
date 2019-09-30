@@ -1,15 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Redirect, RouteComponentProps } from "react-router-dom";
-import StatusPresenter from "../../status/Status.presenter";
 import { LOGIN_URL } from "../../constants/urls";
 
-export interface PrivateRoutePresenterProps extends Pick<RouteComponentProps, "location"> {
+export interface PrivateRoutePresenterProps extends RouteComponentProps {
   isAuthenticated: boolean;
   component: React.ComponentType;
 }
 
 const PrivateRoutePresenter: React.FunctionComponent<PrivateRoutePresenterProps> =
   ({ component: Component, isAuthenticated, ...rest }) => {
+    useEffect(() => {
+      if (isAuthenticated) {
+        rest.history.replace("/");
+      }
+    }, [isAuthenticated]);
+
     if (isAuthenticated) {
       return <Component {...rest} />;
     }
