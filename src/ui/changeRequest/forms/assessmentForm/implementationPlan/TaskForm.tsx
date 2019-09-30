@@ -23,7 +23,7 @@ interface StateProps {
   availableAssignees: OptionType[];
 }
 
-type TaskFormProps = OwnProps & StateProps;
+export type TaskFormProps = OwnProps & StateProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   availableAssignees: changeRequestsSelectors.getAssignessList(state),
