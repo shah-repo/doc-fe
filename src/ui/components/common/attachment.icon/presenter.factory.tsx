@@ -1,7 +1,6 @@
 import React from "react";
 import { VIEWABLE_FILES } from "../view.file/utils/constants";
 import Presenter from "./presenter";
-import { styles } from "./utils/styles";
 import { AttachmentIconFactoryProps, AttachmentIconProps } from "./utils/types";
 
 export const AttachmentIconPresenterFactory: React.FunctionComponent<
@@ -25,6 +24,7 @@ AttachmentIconFactoryProps
     attachment,
     isUploading,
     isLoading,
+    ...other,
   };
   let props: AttachmentIconProps = {
     ...defaultProps,
@@ -51,7 +51,6 @@ AttachmentIconFactoryProps
 
   return (
     <Presenter
-      {...other}
       {...props}
     />
   );
