@@ -43,7 +43,6 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             <div className={classes.owner}>{change.owner.name}</div>
             <DateTime value={change.timestamp} />
           </div>
-          {console.log(auditField, checkIfGroup(auditField))}
           {checkIfGroup(auditField) && renderGroupChanges(audit[groupId])}
           {!checkIfGroup(auditField) && renderChanges(audit[groupId])}
         </Box>
