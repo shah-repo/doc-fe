@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Redirect, RouteComponentProps } from "react-router-dom";
 import { LOGIN_URL } from "../../constants/urls";
 
-export interface PrivateRoutePresenterProps extends RouteComponentProps {
+export interface PrivateRoutePresenterProps extends Pick<RouteComponentProps, "location" | "history"> {
   isAuthenticated: boolean;
   component: React.ComponentType;
 }
