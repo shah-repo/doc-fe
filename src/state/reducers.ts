@@ -4,9 +4,9 @@ import storage from "redux-persist/lib/storage";
 import auth from "./ducks/auth";
 import { LOGOUT_USER } from "./ducks/auth/constants";
 import changeRequests from "./ducks/changeRequest";
+import dashboard from "./ducks/dashboard";
 import documentRevisions from "./ducks/documentRevisions";
 import documents from "./ducks/documents";
-import dashboard from "./ducks/dashboard";
 import formBuilderState from "./ducks/formBuilder";
 
 const authPersistConfig = {
@@ -26,8 +26,8 @@ const appReducer = combineReducers({
 
 const rootReducer = (state: any, action: any) => {
   if (action.type === LOGOUT_USER) {
-    const { auth } = state;
-    state = { auth };
+    const { auth: authState } = state;
+    state = { authState };
   }
 
   return appReducer(state, action);

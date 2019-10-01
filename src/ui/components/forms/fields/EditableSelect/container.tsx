@@ -4,7 +4,7 @@ import Presenter from "./presenter";
 import { EditableSelectContainerProps } from "./utils/types";
 
 export const EditableSelectContainer: React.FunctionComponent<EditableSelectContainerProps> = ({
-  name,
+  name = "",
   form,
   field,
   ...other
@@ -16,7 +16,14 @@ export const EditableSelectContainer: React.FunctionComponent<EditableSelectCont
   };
 
   return (
-    <Presenter {...other} name={name} value={field && field.value} handleChange={handleChange} />
+    <Presenter
+      {...other}
+      name={name}
+      value={field && field.value}
+      handleChange={handleChange}
+      form={form}
+      field={field}
+    />
   );
 };
 

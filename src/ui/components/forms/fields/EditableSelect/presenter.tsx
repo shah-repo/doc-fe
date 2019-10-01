@@ -8,7 +8,7 @@ import { EditableSelectFieldProps } from "./utils/types";
 type Props = EditableSelectFieldProps;
 
 export const EditableSelectPresenter: React.FunctionComponent<Props> = ({
-  name,
+  name = "",
   includeEmpty = true,
   label = "",
   options = [],

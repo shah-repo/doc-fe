@@ -40,7 +40,7 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
 
   const [state, setState] = useState<TablePanelStateProps<T>>({
     queryData: tableData,
-    queryDict: {},
+    queryDict: {"status[]": "RELEASED"},
     apiError: "",
     scrollToIndex: 0,
   });
