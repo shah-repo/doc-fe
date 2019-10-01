@@ -6,7 +6,7 @@ import HeaderField from "../../components/common/header.field/field";
 
 const Attachments: React.FunctionComponent<{}> = () => {
   return (
-    <Box mt={6}>
+    <Box>
       <HeaderField
         dataProp="common.attachments"
         variant="regular"
