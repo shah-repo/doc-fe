@@ -25,33 +25,31 @@ AttachmentIconFactoryProps
     attachment,
     isUploading,
     isLoading,
+    handleRemove,
+    ...other,
   };
   let props: AttachmentIconProps = {
     ...defaultProps,
-    handleContextMenu,
-    handleRemove,
     handleIconClick: handleDownload,
+    handleContextMenu,
   };
 
-  if (isUploading) {
+  if (isFileViewable && !isUploading) {
     props = {
       ...defaultProps,
+      handleIconClick: handleViewFile,
       handleContextMenu,
     };
   }
 
-  if (isFileViewable) {
+  if (isUploading) {
     props = {
       ...defaultProps,
-      handleContextMenu,
-      handleRemove,
-      handleIconClick: handleViewFile,
     };
   }
 
   return (
     <Presenter
-      {...other}
       {...props}
     />
   );
