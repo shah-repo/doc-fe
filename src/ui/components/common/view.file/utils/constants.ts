@@ -6,10 +6,24 @@ export const SUPPORTED_VIDEO_FILES = [
   "avi",
 ];
 export const SUPPORTED_IMAGE_FILES = [
+  "apng",
+  "bmp",
+  "gif",
+  "ico",
+  "cur",
+  "jpg",
+  "jpeg",
+  "jfif",
+  "pjpeg",
+  "pjp",
   "png",
+  "svg",
+  "webp",
 ];
 
 export const PDF = "pdf";
+export const IMAGE = "image";
+export const VIDEO = "video";
 
 export const VIEWABLE_FILES = [
   ...SUPPORTED_IMAGE_FILES,

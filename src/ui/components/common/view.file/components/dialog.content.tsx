@@ -1,8 +1,14 @@
 import MuiDialogContent from "@material-ui/core/DialogContent";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AsyncGate from "../../../AsyncGate";
 import Text from "../../../Text";
-import { SUPPORTED_IMAGE_FILES, SUPPORTED_VIDEO_FILES, PDF } from "../utils/constants";
+import {
+  IMAGE,
+  PDF,
+  SUPPORTED_IMAGE_FILES,
+  SUPPORTED_VIDEO_FILES,
+  VIDEO,
+} from "../utils/constants";
 import { styles } from "../utils/styles";
 import { ViewFileContentProps } from "../utils/types";
 
@@ -12,11 +18,24 @@ const ViewFileContent: React.FunctionComponent<ViewFileContentProps> = ({
   type,
 }) => {
   const classes = styles();
-  const isVideo = SUPPORTED_VIDEO_FILES.includes(type);
-  const isImage = SUPPORTED_IMAGE_FILES.includes(type);
-  const isPDF = type === PDF;
+  const [fileType, setFileType] = useState("");
 
-  const renderVideo = isVideo && (
+  useEffect(() => {
+    if (SUPPORTED_VIDEO_FILES.includes(type)) {
+      setFileType(VIDEO);
+      return;
+    }
+    if (SUPPORTED_IMAGE_FILES.includes(type)) {
+      setFileType(IMAGE);
+      return;
+    }
+    if (type === PDF) {
+      setFileType(PDF);
+      return;
+    }
+  }, [url]);
+
+  const renderVideo = fileType === VIDEO && (
     <video controls={true} width="100%" height="95%">
       <source src={url} type="video/mp4"/>
       <source src={url} type="video/webm"/>
@@ -25,12 +44,12 @@ const ViewFileContent: React.FunctionComponent<ViewFileContentProps> = ({
       <Text translation="file.viewer.video.not.supported" />
     </video>
   );
-  const renderPDF = isPDF && (
+  const renderPDF = fileType === PDF && (
     <object width="100%" height="100%" type="application/pdf" data={url}>
       <Text translation="common.file.not.loaded" />
     </object>
   );
-  const renderImage = isImage && (
+  const renderImage = fileType === IMAGE && (
     <img src={url} />
   );
 
