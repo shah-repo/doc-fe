@@ -1,14 +1,26 @@
+import { Box } from "@material-ui/core";
 import { Formik, FormikActions, FormikProps } from "formik";
 import _ from "lodash";
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
-import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
-import { documentsActions, documentsSelectors } from "../../../state/ducks/documents";
+import {
+  DocumentRevision,
+  documentRevisionsActions,
+  documentRevisionsSelectors,
+  DocumentRevisionStatus,
+} from "../../../state/ducks/documentRevisions";
+import {
+  documentsActions,
+  documentsSelectors,
+} from "../../../state/ducks/documents";
+import { formBuilderActions } from "../../../state/ducks/formBuilder";
+import { formReducerType } from "../../../state/ducks/formBuilder/reducer";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
+import { formBuilderGet, isFBActive } from "../../formBuilder/helpers/FBLocalStorageHelper";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -22,11 +34,17 @@ interface StateProps {
 interface DispatchProps {
   loadDocumentRevisions: typeof documentRevisionsActions.loadList;
   loadDocumentProposedId: typeof documentsActions.loadDocumentProposedId;
+  uploadTemplate: typeof formBuilderActions.uploadTemplate;
+  fbFormMode: typeof formBuilderActions.viewFormMode;
 }
+
 interface OwnProps {
   initialValues: DocumentRevisionFormValues;
   asyncState: AsyncState;
-  onSubmit: (values: DocumentRevisionFormValues, actions: FormikActions<DocumentRevisionFormValues>) => void;
+  onSubmit: (
+    values: DocumentRevisionFormValues,
+    actions: FormikActions<DocumentRevisionFormValues>,
+  ) => void;
   showRevisionTypeChange?: boolean;
   setDocId?: typeof documentsActions.setDocumentProposedId;
   doNotPrompt?: boolean;
@@ -37,14 +55,19 @@ interface OwnProps {
 type DocumentRevisionFormContainerProps = OwnProps & StateProps & DispatchProps;
 
 const getAvailableReferences = documentRevisionsSelectors.makeGetAvailableReferences();
-const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps => ({
+const mapStateToProps = (
+  state: ApplicationState,
+  props: OwnProps,
+): StateProps => ({
   availableReferences: getAvailableReferences(state, props.initialValues),
   loadAsyncState: documentRevisionsSelectors.getLoadListAsyncState(state),
   documentRevisions: documentRevisionsSelectors.getDocumentRevisionsList(state),
   proposedDocId: documentsSelectors.getProposedDocId(state),
 });
 
-export const DocumentRevisionFormContainer: React.FunctionComponent<DocumentRevisionFormContainerProps> = ({
+export const DocumentRevisionFormContainer: React.FunctionComponent<
+  DocumentRevisionFormContainerProps
+> = ({
   onSubmit,
   initialValues,
   asyncState,
@@ -59,51 +82,62 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<DocumentRevi
   doNotPrompt,
   onDirtyFlagChange,
   documentRevision,
+  uploadTemplate,
+  fbFormMode,
 }) => {
 
-    const render = (props: FormikProps<DocumentRevisionFormValues>) => {
-      return (
-        <DocumentRevisionFormPresenter
-          {...props}
-          asyncState={asyncState}
-          documentRevisions={documentRevisions}
-          availableReferences={availableReferences}
-          showRevisionTypeChange={showRevisionTypeChange}
-          loadDocumentProposedId={loadDocumentProposedId}
-          proposedDocId={proposedDocId}
-          setDocId={setDocId}
-          doNotPrompt={doNotPrompt}
-          onDirtyFlagChange={onDirtyFlagChange}
-        />
-      );
-    };
-
-    const loadAction = () => loadDocumentRevisions(
-      [
-        DocumentRevisionStatus.Released,
-        DocumentRevisionStatus.Deprecated,
-        DocumentRevisionStatus.Obsolete,
-        DocumentRevisionStatus.PendingChange,
-        DocumentRevisionStatus.Draft,
-      ],
-    );
-
+  const render = (props: FormikProps<DocumentRevisionFormValues>) => {
     return (
-      <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>
-        <div style={{marginLeft: -16}}>
-          <ChangeRequestLink dataProp={documentRevision} />
-        </div>
-        <Formik
-          render={render}
-          initialValues={initialValues}
-          onSubmit={onSubmit}
-          enableReinitialize={true}
-        />
-      </AsyncGate>
+      <DocumentRevisionFormPresenter
+        {...props}
+        asyncState={asyncState}
+        documentRevisions={documentRevisions}
+        availableReferences={availableReferences}
+        showRevisionTypeChange={showRevisionTypeChange}
+        loadDocumentProposedId={loadDocumentProposedId}
+        proposedDocId={proposedDocId}
+        setDocId={setDocId}
+        doNotPrompt={doNotPrompt}
+        onDirtyFlagChange={onDirtyFlagChange}
+        uploadTemplate={uploadTemplate}
+        fbFormMode={fbFormMode}
+      />
     );
   };
 
-export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
-  loadDocumentRevisions: documentRevisionsActions.loadList,
-  loadDocumentProposedId: documentsActions.loadDocumentProposedId,
-})(DocumentRevisionFormContainer);
+  const loadAction = () =>
+    loadDocumentRevisions([
+      DocumentRevisionStatus.Released,
+      DocumentRevisionStatus.Deprecated,
+      DocumentRevisionStatus.Obsolete,
+      DocumentRevisionStatus.PendingChange,
+      DocumentRevisionStatus.Draft,
+    ]);
+
+  return (
+    <AsyncGate
+      asyncState={loadAsyncState}
+      asyncAction={loadAction}
+      startActionOnMount={true}>
+      <Box ml={3}>
+        {!showRevisionTypeChange && <ChangeRequestLink dataProp={documentRevision} />}
+      </Box>
+      <Formik
+        render={render}
+        initialValues={initialValues}
+        onSubmit={onSubmit}
+        enableReinitialize={true}
+      />
+    </AsyncGate>
+  );
+};
+
+export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
+  mapStateToProps,
+  {
+    loadDocumentRevisions: documentRevisionsActions.loadList,
+    loadDocumentProposedId: documentsActions.loadDocumentProposedId,
+    uploadTemplate: formBuilderActions.uploadTemplate,
+    fbFormMode: formBuilderActions.viewFormMode,
+  },
+)(DocumentRevisionFormContainer);

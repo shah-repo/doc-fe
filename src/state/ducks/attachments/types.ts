@@ -3,6 +3,7 @@ export interface Attachment {
   name: string;
   type: string;
   s3link: string;
+  s3linkCleanCopy?: string;
   isLoading?: boolean;
 }
 
@@ -11,3 +12,8 @@ export interface AttachmentDownloadResponse {
 }
 
 export type AttachmentState = Attachment;
+
+export enum AttachmentType {
+  Attached = "ATTACHED",
+  CleanCopy = "CLEAN_COPY"
+}

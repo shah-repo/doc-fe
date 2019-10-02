@@ -9,7 +9,6 @@ import { WithStyles, withStyles } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
-import { Translation } from "../../translations/types";
 import Text from "../Text";
 import styles from "./Dialog.styles";
 import { DialogAction, DialogResponsiveProps } from "./utils/types";
@@ -24,8 +23,8 @@ const DialogWindow: React.FunctionComponent<Props> = ({
   actions,
   onActionClick,
   dialogHandler,
+  ...props
 }) => {
-
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down(breakpoint));
 
@@ -59,6 +58,7 @@ const DialogWindow: React.FunctionComponent<Props> = ({
   return (
     <div>
       <Dialog
+        {...props}
         fullScreen={fullScreen}
         open={dialogHandler.isOpen}
         onClose={dialogHandler.close}

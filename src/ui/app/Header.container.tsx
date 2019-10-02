@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import { RouteComponentProps, withRouter } from "react-router";
 import { authActions, authSelectors } from "../../state/ducks/auth";
 import { ApplicationState } from "../../state/reducers";
-import HeaderPresenter from "./Header.presenter";
-import { withRouter, RouteComponentProps } from "react-router";
+import {
+  CHANGE_REQUEST_CREATE_URL,
+  CHANGE_REQUEST_LIST_URL,
+  DOCUMENT_REVISION_CREATE_URL,
+  DOCUMENT_REVISION_LIST_URL,
+} from "../constants/urls";
 import { Translation } from "../translations/types";
-
+import HeaderPresenter from "./Header.presenter";
 interface StateProps {
   email: string;
   name: string;
@@ -37,27 +42,27 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
   useEffect(() => {
     setTranslationByPath(location.pathname);
 
-    unlistenHistory = history.listen((location) => {
+    unlistenHistory = history.listen(location => {
       setTranslationByPath(location.pathname);
     });
 
     return () => {
-      unlistenHistory()
-    }
+      unlistenHistory();
+    };
   }, []);
 
   const setTranslationByPath = (path: any) => {
     switch (path) {
-      case "/change_request":
+      case CHANGE_REQUEST_LIST_URL:
         setPageTitle("page.title.changeRequest");
         break;
-      case "/document_revision":
+      case DOCUMENT_REVISION_LIST_URL:
         setPageTitle("page.title.documentList");
         break;
-      case "/change_request/create":
+      case CHANGE_REQUEST_CREATE_URL:
         setPageTitle("page.title.changeRequestCreate");
         break;
-      case "/document_revision/create":
+      case DOCUMENT_REVISION_CREATE_URL:
         setPageTitle("page.title.documentCreate");
         break;
       default:

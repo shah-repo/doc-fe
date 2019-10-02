@@ -13,11 +13,11 @@ jest.mock("react-router-dom", () => ({
 describe("NavigationLinkContainer component unit tests", () => {
   const defaultProps: NavigationLinkContainerProps = {
     url: "/url",
-    text: "dashboard.reviews",
+    text: "header.title",
     Icon: Home,
     childrenUrls: [
-      { url: "/child1", text: "dashboard.reviews", Icon: Home },
-      { url: "/child2", text: "dashboard.reviews"},
+      { url: "/child1", text: "header.title", Icon: Home },
+      { url: "/child2", text: "header.title"},
     ],
     currentPath: "/url",
   };
@@ -37,7 +37,7 @@ describe("NavigationLinkContainer component unit tests", () => {
 
     expect(rootUrl.props()).toMatchObject({
       url: "/url",
-      text: "dashboard.reviews",
+      text: "header.title",
       Icon: Home,
     });
   });

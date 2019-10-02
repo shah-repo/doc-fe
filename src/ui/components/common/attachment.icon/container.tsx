@@ -1,21 +1,27 @@
 import { Grid } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import {
   Attachment,
   AttachmentDownloadResponse,
   attachmentsActions,
+  AttachmentType,
 } from "../../../../state/ducks/attachments";
 import { ApplicationState } from "../../../../state/reducers";
 import useAsync from "../../../hooks/useAsync";
+import useDialog from "../../../hooks/useDialog";
 import { withFormik } from "../../hoc/formik";
-import Presenter from "./presenter";
+import ViewFile from "../view.file/container";
+import Menu from "./menu";
+import PresenterFactory from "./presenter.factory";
 import {
   AttachmentIconContainerProps,
   AttachmentIconDispatchProps,
 } from "./utils/types";
 
 type DispatchProps = AttachmentIconDispatchProps;
+
+export let SetFile: React.Context<React.Dispatch<React.SetStateAction<Attachment | undefined>>>;
 
 export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerProps> = ({
   name,
@@ -24,6 +30,12 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   field,
   ...other
 }) => {
+
+  const dialogHandler = useDialog();
+  const attachments = field!.value as Attachment[] || [];
+  const [selectedFile, setSelectedFile] = useState<undefined | Attachment>(undefined);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  SetFile = React.createContext(setSelectedFile);
 
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) =>
@@ -36,21 +48,56 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     form!.setFieldValue(name, filtered);
   };
 
-  const handleDownload = (attachment: Attachment) => () =>
-    async.start(download, attachment, async);
+  const handleDownload = (attachment: Attachment, type?: AttachmentType) => () => {
+    async.start(download, attachment, async, type);
+  };
 
-  const attachmentsRenderer = (field!.value as Attachment[] || []).map((attachment) => (
-    <Presenter
+  const handleContextMenu = (file: Attachment) => (evt: React.MouseEvent<HTMLElement>) => {
+    evt.preventDefault();
+    setSelectedFile(file);
+    setAnchorEl(evt.currentTarget);
+  };
+
+  const closeContextMenu = () => setAnchorEl(null);
+
+  const handleViewFile = (attachment: Attachment) => () => {
+    setSelectedFile(attachment);
+    openFileView();
+  };
+
+  const openFileView = () => dialogHandler.open();
+
+  const attachmentsRenderer = attachments.map((attachment) => (
+    <PresenterFactory
       {...other}
       key={`attachment-${attachment.id}`}
       name={name}
       attachment={attachment}
       handleRemove={handleRemove}
       handleDownload={handleDownload}
+      handleContextMenu={handleContextMenu}
+      handleViewFile={handleViewFile}
     />
   ));
 
-  return <Grid container={true} spacing={2}>{attachmentsRenderer}</Grid>;
+  return (
+    <Grid container={true} spacing={2}>
+      <ViewFile
+        isOpen={dialogHandler.isOpen}
+        handleClose={dialogHandler.close}
+        attachments={attachments}
+        attachment={selectedFile}
+      />
+      <Menu
+        handleDownload={handleDownload}
+        handleClose={closeContextMenu}
+        anchorEl={anchorEl}
+        attachment={selectedFile}
+        openFileView={openFileView}
+      />
+      {attachmentsRenderer}
+    </Grid>
+  );
 };
 
 export default connect<{}, DispatchProps, {}, ApplicationState>(null, {

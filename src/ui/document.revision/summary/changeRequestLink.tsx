@@ -1,11 +1,17 @@
-import { ListItem, Tooltip, Typography, WithStyles, withStyles } from "@material-ui/core";
+import {
+  ListItem,
+  Tooltip,
+  Typography,
+  WithStyles,
+  withStyles,
+} from "@material-ui/core";
 import React from "react";
 import { Link } from "react-router-dom";
+import { stripTags } from "../../../common/utils/helpers";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { changeRequestEditPath } from "../../change.request/utils/paths";
 import Text from "../../components/Text";
-import { stripTags } from "../../../common/utils/helpers";
 
 type Props = DataProps<DocumentRevision>;
 
@@ -18,10 +24,11 @@ export const ChangeRequestLink: React.FunctionComponent<Props> = ({
 
   const { changeRequest } = dataProp;
 
-  return(
+  return (
     <ListItem>
-      <Typography variant="h5">
-        <Text translation="common.crid" />:&nbsp;
+      <Typography variant="h6">
+        <Text translation="common.crid" />
+        :&nbsp;
         <Link to={changeRequestEditPath(changeRequest.id)} target="_blank">
           <Tooltip title={stripTags(changeRequest.description)}>
             <span>{changeRequest.crId}</span>

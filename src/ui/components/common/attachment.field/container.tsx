@@ -49,8 +49,24 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
   });
 
   const onChange = (event: React.FormEvent<HTMLInputElement>) => {
-    if (!event.currentTarget.files) { return; }
-    handleUpload(Array.from(event.currentTarget.files) as File[]);
+    let isUserAlerted = false;
+    const filteredFiles = Array.from(event.currentTarget.files || []).filter((file) => {
+      const type = file.name.split(".").pop();
+
+      if (type === "doc") {
+        // TODO: update react-intl and make use of hooks to translate this message
+        !isUserAlerted && alert(".doc files are not accepted. Please use .docx");
+        isUserAlerted = true;
+        return false;
+      }
+      return true;
+    });
+
+    if (filteredFiles.length === 0) {
+      return;
+    }
+
+    handleUpload(filteredFiles as File[]);
   };
 
   return (
