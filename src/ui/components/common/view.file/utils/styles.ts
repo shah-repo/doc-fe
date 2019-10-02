@@ -1,12 +1,12 @@
 import { makeStyles } from "@material-ui/core";
 
 export const styles = makeStyles((theme) => ({
-  paper: {
-    height: "100%",
+  paper: ({ isPDF }: { isPDF: boolean } = { isPDF: false }) => ({
+    height: isPDF ? "100%" : undefined,
     marginTop: 100,
     boxShadow: "unset",
     backgroundColor: "transparent",
-  },
+  }),
   title: {
     position: "fixed",
     top: 0,
@@ -16,6 +16,9 @@ export const styles = makeStyles((theme) => ({
   },
   content: {
     overflow: "hidden",
+  },
+  contentRoot: {
+    textAlign: "center",
   },
   buttonsContainer: {
     position: "absolute",
