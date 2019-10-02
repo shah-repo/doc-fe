@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { connect } from "react-redux";
 import _ from "lodash";
-import IdleTimer from 'react-idle-timer';
-import useDialog from "../hooks/useDialog";
+import React, { useEffect } from "react";
+import IdleTimer from "react-idle-timer";
+import { connect } from "react-redux";
+import Config from "../../config";
 import { authActions } from "../../state/ducks/auth";
 import { ApplicationState } from "../../state/reducers";
+import useDialog from "../hooks/useDialog";
 import AutoLogoutDialog from "./AutoLogoutDialog";
-import Config from "../../config";
 
 interface DispatchProps {
   pingServer: typeof authActions.pingServer;
@@ -21,9 +21,9 @@ const AutoLogout: React.FunctionComponent<Props> = ({
   const tenMinutes = 1000 * 60 * 10;
   const dialogHandler = useDialog();
 
-  useState(() => {
+  useEffect(() => {
     pingServer();
-  });
+  }, []);
 
   const onIdle = () => {
     dialogHandler.open();
@@ -31,15 +31,15 @@ const AutoLogout: React.FunctionComponent<Props> = ({
 
   const onActive = () => {
     dialogHandler.close();
-  }
+  };
 
   const pingEveryTenMinutes = _.throttle(() => {
     pingServer();
-  }, tenMinutes)
+  }, tenMinutes);
 
   const onAction = () => {
     pingEveryTenMinutes();
-  }
+  };
 
   return (
     <React.Fragment>
@@ -54,7 +54,7 @@ const AutoLogout: React.FunctionComponent<Props> = ({
       {dialogHandler.isOpen && <AutoLogoutDialog dialogHandler={dialogHandler} />}
     </React.Fragment>
   );
-}
+};
 
 export default connect<{}, DispatchProps, {}, ApplicationState>(null, {
   pingServer: authActions.pingServer,
