@@ -11,10 +11,10 @@ const FBSectionBox: React.FunctionComponent<FBFormDefaultProps> = ({
       mb={4}
       bgcolor="primary.main"
       color="primary.contrastText"
-      py="1.5"
-      px="2"
+      py={1.5}
+      px={2}
       fontSize="h6.fontSize"
-      fontWeight="100"
+      fontWeight={100}
     >
       <Text message={label!.toUpperCase()} />
     </Box>
