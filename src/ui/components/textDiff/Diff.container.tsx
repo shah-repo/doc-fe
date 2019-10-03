@@ -2,9 +2,8 @@ import { DeltaStatic } from "quill";
 import React, { useEffect, useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import DiffPresenter from "./Diff.presenter";
-import { compareHandler } from "./utils/helpers";
+import { findDiff } from "./utils/helpers";
 import { DiffContainerProps } from "./utils/types";
-import { findDiff } from "./utils/helpers2.js";
 
 type Props = DiffContainerProps;
 
