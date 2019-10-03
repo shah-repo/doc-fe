@@ -28,7 +28,6 @@ const DiffContainer: React.FunctionComponent<Props> = ({
     const newContents = refMain.current!.getEditor().clipboard.convert(newText);
 
     if (oldContents && newContents) {
-      // const difference = compareHandler(oldContents, newContents);
       const difference = findDiff(oldContents, newContents);
       setDelta(difference || null);
       refOld.current!.getEditor().setContents(oldContents);
