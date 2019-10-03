@@ -107,6 +107,8 @@ export enum DocumentRevisionType {
   TLL = "Tooling Lot",
   CSL = "Component Specifications Lot",
   EB = "Engineering Build",
+  NSW = "Non-product Software",
+  PRT = "Parts",
 }
 
 export const RevisionStageOptions = [
