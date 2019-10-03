@@ -48,7 +48,7 @@ export const compareHandler = (oldContent: DeltaStatic, newContent: DeltaStatic)
         if (op.hasOwnProperty('attributes')) {
             if (op.attributes && op.attributes.background === null && op.attributes.color === null) { // retain the green color, indicating change
                 op.attributes.background = "#C9DFFF";
-                op.attributes.color = "#003700";
+                op.attributes.color = "black";
             }
         }
     })
@@ -97,7 +97,7 @@ const indicateInsertsAndDeletion = (delta: DeltaStatic) => {
             // color it green
             op.attributes = {
                 background: "#C9DFFF",
-                color: "#003700",
+                color: "black",
             };
         }
 
