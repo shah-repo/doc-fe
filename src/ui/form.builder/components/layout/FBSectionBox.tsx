@@ -1,7 +1,7 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import Text from "../../../components/Text";
-import { FBFormDefaultProps } from "../common/utils/types";
+import { FBFormDefaultProps } from "../../types/common";
 
 const FBSectionBox: React.FunctionComponent<FBFormDefaultProps> = ({
   label,

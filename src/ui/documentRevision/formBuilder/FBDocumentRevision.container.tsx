@@ -1,33 +1,18 @@
 import React from "react";
-import { connect } from "react-redux";
-import { formReducerType } from "../../../state/ducks/formBuilder/reducer";
-import FormBuilderPresenter from "../../formBuilder/FormBuilder.presenter";
-import { formBuilderSubmit } from "../../formBuilder/helpers/FBLocalStorageHelper";
+import { withFBStore } from "../../form.builder/hocs/withFBStore";
+import FBWorkspace from "../../form.builder/main/workspace/FBWorkspace";
+import { FBStoreProps } from "../../form.builder/types/store";
 
-interface FormBuilderStateType {
-  formBuilderState: formReducerType;
+interface FBDocumentRevisionProps extends FBStoreProps {
+  docId?: string;
 }
 
-interface FBDocumentRevProps {
-  documentId?: string;
-}
-
-const mapStateToProps = ({ formBuilderState }: formReducerType) => ({
-  formBuilderState,
-});
-
-const FBDocumentRevision: React.FunctionComponent<FormBuilderStateType & FBDocumentRevProps> = ({
-  formBuilderState,
-  documentId,
+const FBDocumentRevision: React.FunctionComponent<FBDocumentRevisionProps> = ({
+  formBuilderStore,
+  docId,
 }) => {
 
-  if (documentId) {
-    formBuilderSubmit(documentId, formBuilderState);
-  }
-
-  return <FormBuilderPresenter {...formBuilderState} inDialog={false} />;
+  return <FBWorkspace />;
 };
 
-export default connect(
-  mapStateToProps,
-)(FBDocumentRevision);
+export default withFBStore(FBDocumentRevision);

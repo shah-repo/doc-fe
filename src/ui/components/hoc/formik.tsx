@@ -1,6 +1,6 @@
 import { Field as FormikField, FieldProps } from "formik";
 import React from "react";
-import { Subtract } from "../../form.builder/components/common/utils/types";
+import { Subtract } from "../../form.builder/types/common";
 import { FormikHybridFieldProps } from "./utils/types";
 
 export function withFormik<T extends FormikHybridFieldProps, U>(
