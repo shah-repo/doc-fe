@@ -2,18 +2,15 @@ import { Box, Fab } from "@material-ui/core";
 import NavigationIcon from "@material-ui/icons/Navigation";
 import React from "react";
 import Text from "../components/Text";
-import FBDialog from "./components/dialog/FBDialog";
-import { withDialogStates } from "./components/dialog/utils/hoc";
-import { FBDialogProps } from "./components/dialog/utils/types";
-import FBTemplateForm from "./main/template/FBTemplateForm";
-import FBTemplateInfo from "./main/template/FBTemplateInfo";
-import { templateStore, view } from "./stores/templateStore";
+import FBDialog from "./components/feedback/FBDialog";
+import { withDialogState } from "./hocs/withDialogState";
+import FBInfo from "./main/workspace/FBInfo";
+import FBWorkspace from "./main/workspace/FBWorkspace";
+import { FBDialogProps } from "./types/dialog";
 
 const FormBuilder: React.FunctionComponent<FBDialogProps> = ({
   ...props
 }) => {
-
-  const isInfo = (templateStore.name === null);
 
   return (
     <Box mb={1} display="flex" flexDirection="row-reverse">
@@ -22,17 +19,18 @@ const FormBuilder: React.FunctionComponent<FBDialogProps> = ({
         <Text message="form.builder" />
       </Fab>
       <FBDialog
-        title={`${templateStore.name || "form.builder.create"}`}
-        fullScreen={!isInfo}
+        title={"form.builder.create"}
+        // fullScreen={!isInfo}
         {...props}
       >
         <Box pt={3}>
-          {isInfo && <FBTemplateInfo />}
-          {!isInfo && <FBTemplateForm />}
+          <FBInfo />
+          {/* {isInfo && <FBInfo />}
+          {!isInfo && <FBWorkspace />} */}
         </Box>
       </FBDialog>
     </Box>
   );
 };
 
-export default withDialogStates(view(FormBuilder));
+export default withDialogState(FormBuilder);

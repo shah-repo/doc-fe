@@ -287,10 +287,24 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           <CheckboxField name="retrain" label="document.revision.trainingRequired"/>
           <AttachmentsField />
           {renderTypeOfRevisionChange()}
-          <Box mt={7} mx={-7}>
-            {fbActive && <FBDocumentRevision documentId={initialValues.id} />}
+          {fbActive && (
+            <Box my={4}>
+              <SelectField
+                name="document.outputType"
+                label="document.output.type"
+                selectProps={{
+                  inputProps: { id: "outputType" },
+                }}
+                options={documentRevisionTypeFormOption()}
+                validate={validator(required)}
+                includeEmpty={false}
+              />
+            </Box>
+          )}
+          <Box>
+            {fbActive && <FBDocumentRevision docId={initialValues.id} />}
           </Box>
-          <Box mt={10}>
+          <Box mt={5}>
             <Grid
               item={true}
               container={true}

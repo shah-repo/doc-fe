@@ -213,6 +213,7 @@
 
   "document.title": "Document Title",
   "document.type": "Document Type",
+  "document.output.type": "Output Document Type",
   "document.save": "Save",
   "document.emptyData": "No data",
   "document.form.title": "Document: {name}",
@@ -287,7 +288,12 @@
   "form.builder.name": "Form Name",
   "form.builder.type": "Form Document Type",
   "form.builder.add.field": "Add Field",
-  "form.builder.basic.fields": "Basic Fields",
+  "form.builder.section": "Section",
+  "form.builder.basics": "Basic Fields",
+  "form.builder.lists": "Lists",
+  "form.builder.textfield": "Text field",
+  "form.builder.checkbox": "Checkbox",
+  "form.builder.checkboxgroup": "Checkbox group",
 
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",

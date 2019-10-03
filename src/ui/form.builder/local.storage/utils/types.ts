@@ -1,5 +1,5 @@
 import { DocumentRevisionType } from "../../../../state/ducks/documentRevisions";
-import { FBTemplateStore } from "../../stores/utils/types";
+import { FBTemplateStore } from "../../types/store";
 
 export interface FBLocalStorageProps {
   templateSubmit: () => boolean;
