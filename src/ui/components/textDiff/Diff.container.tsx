@@ -4,6 +4,7 @@ import ReactQuill from "react-quill";
 import DiffPresenter from "./Diff.presenter";
 import { compareHandler } from "./utils/helpers";
 import { DiffContainerProps } from "./utils/types";
+import { findDiff } from "./utils/helpers2.js";
 
 type Props = DiffContainerProps;
 
@@ -28,7 +29,8 @@ const DiffContainer: React.FunctionComponent<Props> = ({
     const newContents = refMain.current!.getEditor().clipboard.convert(newText);
 
     if (oldContents && newContents) {
-      const difference = compareHandler(oldContents, newContents);
+      // const difference = compareHandler(oldContents, newContents);
+      const difference = findDiff(oldContents, newContents);
       setDelta(difference || null);
       refOld.current!.getEditor().setContents(oldContents);
       refNew.current!.getEditor().setContents(difference as DeltaStatic);
