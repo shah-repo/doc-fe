@@ -3,9 +3,7 @@ import React from "react";
 import FBTextField from "../inputs/FBTextField";
 
 const FBSectionEditor: React.FunctionComponent<{}> = () => (
-  <Box>
-    <FBTextField label="Label" name="label" />
-  </Box>
+  <FBTextField label="Label" name="label" />
 );
 
 export default FBSectionEditor;
