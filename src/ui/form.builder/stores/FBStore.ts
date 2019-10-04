@@ -1,4 +1,5 @@
-import { computed, observable } from "mobx";
+import { action, computed, observable } from "mobx";
+import { FBEditorSectionConfig } from "../defaults/editor";
 import { FBTemplateSchema } from "../types/store";
 import { FBWorkspaceMode } from "../types/workspace";
 
@@ -11,6 +12,14 @@ export class FBStore {
 
   @computed get prefixName() {
     return `${this.schema.length}_${(this.name || "").replace(" ", "")}`;
+  }
+
+  @action public toolbarMargin(schemaIndex: number): number {
+    const { type, label } = this.schema[schemaIndex];
+    if (FBEditorSectionConfig.basics.includes(type) ) {
+      return -4;
+    }
+    return 0;
   }
 }
 

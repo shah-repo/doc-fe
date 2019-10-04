@@ -14,7 +14,11 @@ const FBAddFieldButton: React.FunctionComponent<Props> = ({
 }) => {
 
   return (
-    <Box display="flex" mt={-4} {...props}>
+    <Box
+      display="flex"
+      mt={-4}
+      {...props}
+    >
       <Box
         borderTop={3}
         my="auto"

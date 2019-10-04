@@ -17,7 +17,6 @@ const FBEditorFieldToolbar: React.FunctionComponent<Props> = ({
     <Box
       display="flex"
       flexDirection="row-reverse"
-      mb={-0.2}
       {...props}
     >
       <Box>
