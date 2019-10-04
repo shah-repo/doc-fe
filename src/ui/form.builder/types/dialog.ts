@@ -4,7 +4,7 @@ import { Translation } from "../../translations/types";
 
 export interface FBDialogInjectedProps {
   open: boolean;
-  children?: React.ReactNode;
+  content?: React.ReactNode;
   setDialogOpen: () => any;
   setDialogClose: () => any;
   setDialogChildren: (el: React.ReactNode) => any;

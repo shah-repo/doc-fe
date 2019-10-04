@@ -6,11 +6,11 @@ export function withDialogState<T extends FBDialogInjectedProps>(
   Component: React.ComponentType<T>,
 ) {
   return class extends React.Component<Subtract<T, FBDialogInjectedProps>> {
-    public state = { open: false as boolean, children: this.props.children };
+    public state = { open: false as boolean, content: undefined };
 
     public setOpen = () => this.setState({ open: true });
     public setClose = () => this.setState({ open: false });
-    public setChildren = (el: React.ReactNode) => this.setState({ ...this.state, children: el });
+    public setChildren = (el: React.ReactNode) => this.setState({ ...this.state, content: el });
 
     public render() {
       return (
@@ -20,7 +20,7 @@ export function withDialogState<T extends FBDialogInjectedProps>(
           setDialogClose={this.setClose}
           setDialogChildren={this.setChildren}
           open={this.state.open}
-          children={this.state.children}
+          content={this.state.content}
         />
       );
     }

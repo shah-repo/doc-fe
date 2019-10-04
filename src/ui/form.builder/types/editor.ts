@@ -22,12 +22,6 @@ export type FBEditorSectionType = "section" | "basicFields" | "lists";
 export type FBEditorElementType =
   "textfield" | "checkbox" | "checkboxgroup";
 
-export interface FBEditorSectionInjectedProps {
-  generateSections: () => any;
-}
-
-export type FBEditorSectionProps = FBEditorSectionInjectedProps & FBDialogProps;
-
 export interface FBEditorFormProps extends Partial<FBDialogInjectedProps> {
   type: FBEditorElementType;
 }
