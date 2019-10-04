@@ -1,8 +1,7 @@
 import { Button, DialogActions } from "@material-ui/core";
 import { useTheme } from "@material-ui/core/styles";
-import { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import React, { useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Text from "../../../../components/Text";
 import { Subtract } from "../../common/utils/types";
 import { FBDialogAction, FBDialogActionLabel, FBDialogInjectedProps, FBDialogProps } from "./types";
@@ -35,21 +34,26 @@ export function withDialogDefaults<T extends FBDialogProps>(
 
   return (props: T) => {
     // TODO: check if this refactoring works as expected
-    const calculateFullScreen = (maxWidth: Breakpoint = "sm") =>
-      useMediaQuery(useTheme().breakpoints.down(maxWidth));
-    const returnFullScreen = (maxWidth: Breakpoint = "sm") =>
-      props.fullScreen;
-    const fullScreenRef = React.useRef(returnFullScreen);
+    const {
+      fullScreen,
+      maxWidth = "sm",
+    } = props;
+    const [fullScreenProp, setFullScreenProp] = useState(() => {
+      if (!fullScreen) {
+        return useMediaQuery(useTheme().breakpoints.down(maxWidth));
+      }
+      return fullScreen;
+    });
 
-    React.useEffect(() => {
-      if (!props.fullScreen) {
-        fullScreenRef.current = calculateFullScreen;
+    useEffect(() => {
+      if (!fullScreen) {
+        setFullScreenProp(useMediaQuery(useTheme().breakpoints.down(maxWidth)));
         return;
       }
-      fullScreenRef.current = returnFullScreen;
-    }, [props.fullScreen]);
+      setFullScreenProp(true);
+    }, [fullScreen, maxWidth]);
 
-    return <Component fullScreen={fullScreenRef.current(props.maxWidth)} {...props} />;
+    return <Component fullScreen={fullScreenProp} {...props} />;
   };
 }
 
