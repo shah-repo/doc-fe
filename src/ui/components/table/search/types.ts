@@ -9,6 +9,7 @@ export interface TableSearchFieldProps {
   selectOptions: SelectOption[];
   searchValueGetter?: TableSearchQueryHandler;
   queryGetter?: (key: string, value: string) => any;
+  defaultValue?: string;
 }
 
 export interface TableSearchQueryProps {

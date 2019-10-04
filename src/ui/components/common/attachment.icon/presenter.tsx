@@ -4,16 +4,16 @@ import {
   CircularProgress,
   Grid,
   IconButton,
-  Typography,
   Tooltip,
+  Typography,
 } from "@material-ui/core";
 import { CancelOutlined } from "@material-ui/icons";
 import classNames from "classnames";
 import React from "react";
+import Text from "../../../components/Text";
 import FileIcon from "./icon";
 import { styles } from "./utils/styles";
 import { AttachmentIconProps } from "./utils/types";
-import Text from "../../../components/Text";
 
 export const AttachmentIconPresenter: React.FunctionComponent<
   AttachmentIconProps
@@ -21,15 +21,14 @@ export const AttachmentIconPresenter: React.FunctionComponent<
   attachment,
   size,
   handleRemove,
-  handleDownload,
+  handleIconClick,
   handleContextMenu,
   disabled = false,
+  isLoading,
+  isUploading,
   ...other
 }) => {
   const file = attachment!;
-  const isUploading = file.s3link == null;
-  const isLoading = file.isLoading || false;
-
   const classes = styles({
     size: size || "md",
     disabled,
@@ -42,19 +41,21 @@ export const AttachmentIconPresenter: React.FunctionComponent<
   );
 
   return (
-    <Grid key={`cell-${attachment!.id}`} item={true} xs={12} sm={4} md={2}>
+    <Grid key={`cell-${file.id}`} item={true} xs={12} sm={4} md={2}>
       <Box className={classes.closeRoot}>
         <IconButton
           className={classes.closeRoot}
-          onClick={handleRemove && handleRemove(file)}>
+          onClick={handleRemove && handleRemove(file)}
+        >
           <CancelOutlined className={classes.closeIcon} />
         </IconButton>
       </Box>
-      <Tooltip title={`${attachment!.name}.${attachment!.type}`}>
+      <Tooltip title={`${file.name}.${file.type}`}>
         <ButtonBase
           onContextMenu={handleContextMenu && handleContextMenu(file)}
-          key={`icon-${attachment!.id}`}
-          onClick={handleDownload && handleDownload(file)}>
+          key={`icon-${file.id}`}
+          onClick={handleIconClick && handleIconClick(file)}
+        >
           {isLoading && <CircularProgress className={classes.progress} />}
           {!isLoading && <FileIcon {...other} extension={file.type} isUploading={isUploading} />}
         </ButtonBase>
@@ -67,7 +68,8 @@ export const AttachmentIconPresenter: React.FunctionComponent<
           className={classNames(classes.fileName, {
             [classes.isUploading]: isUploading,
           })}
-          title={`${file.name}.${file.type}`}>
+          title={`${file.name}.${file.type}`}
+        >
           {`${file.name}.${file.type}`}
         </Typography>
       </Box>

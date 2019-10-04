@@ -1,7 +1,8 @@
 import Dialog from "@material-ui/core/Dialog";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ViewFileContent from "./components/dialog.content";
 import ViewFileTitle from "./components/dialog.title";
+import { PDF } from "./utils/constants";
 import { styles } from "./utils/styles";
 import { ViewFilePresenterProps } from "./utils/types";
 
@@ -14,14 +15,15 @@ const ViewFilePresenter: React.FunctionComponent<ViewFilePresenterProps> = ({
   attachments,
   ...props
 }) => {
-  const classes = styles();
+  const isPDF = attachment!.type === PDF;
+  const classes = styles({ isPDF });
   return (
     <Dialog
       onClose={handleClose}
       open={isOpen}
       classes={{ paper: classes.paper }}
       maxWidth="lg"
-      fullWidth={true}
+      fullWidth={isPDF}
     >
       <ViewFileTitle
         attachment={attachment}

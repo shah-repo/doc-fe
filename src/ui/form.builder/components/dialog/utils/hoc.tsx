@@ -29,7 +29,7 @@ export function withDialogStates<T extends FBDialogInjectedProps>(
   };
 }
 
-export function withDialogDefaults<T extends FBDialogProps, U>(
+export function withDialogDefaults<T extends FBDialogProps>(
   Component: React.ComponentType<T>,
 ) {
 
@@ -53,7 +53,7 @@ export function withDialogDefaults<T extends FBDialogProps, U>(
   };
 }
 
-export function withDialogActions<T extends FBDialogProps, U>(
+export function withDialogActions<T extends FBDialogProps>(
   Component: React.ComponentType<T>,
 ) {
 
