@@ -29,7 +29,6 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   editDocumentRevision,
   setDocId,
 }) => {
-  const DocumentList = TablePanel<DocumentRevision>();
   const [clearFilter, setClearFilter] = React.useState<boolean>(false);
 
   const canEdit = (data: DocumentRevision) => canEditDocumentRevision({dataProp: data, currentUserEmail});
@@ -149,7 +148,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
         </RouterLink>
       </Grid>
       <Grid item={true} className={classes.item}>
-        <DocumentList
+        <TablePanel<DocumentRevision>
           tableData={dataProp}
           columns={columns}
           queryUrl={DOCUMENT_REVISION_ROOT_URL}

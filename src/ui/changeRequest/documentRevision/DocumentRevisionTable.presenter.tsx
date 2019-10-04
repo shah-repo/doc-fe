@@ -26,8 +26,6 @@ const DocumentRevisionTable: React.FunctionComponent<
     return addDocument(rowData.id);
   };
 
-  const ChangeRequestList = TablePanel<DocumentRevision>();
-
   const customQuerySet = (queryDict: TableSearchQueryType) => {
     queryDict["status[]"] = [DocumentRevisionStatus.Draft];
     return queryDict;
@@ -84,7 +82,7 @@ const DocumentRevisionTable: React.FunctionComponent<
 
   const bodyRenderer = () => {
     return (
-      <ChangeRequestList
+      <TablePanel<DocumentRevision>
         columns={columns}
         tableData={documentRevisionsToShow}
         cellMeasure={true}

@@ -22,7 +22,6 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   editChangeRequest,
 }) => {
 
-  const ChangeRequestList = TablePanel<ChangeRequest>();
   const [clearFilter, setClearFilter] = React.useState<boolean>(false);
 
   const canEdit = (data: ChangeRequest) => canEditChangeRequest({dataProp: data, currentUserEmail});
@@ -96,7 +95,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
         </RouterLink>
       </Grid>
       <Grid item={true} className={classes.item}>
-        <ChangeRequestList
+        <TablePanel<ChangeRequest>
           tableData={dataProp}
           columns={columns}
           cellMeasure={true}

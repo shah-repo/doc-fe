@@ -21,7 +21,7 @@ import { TablePanelProps, TablePanelStateProps, TableStyleProps } from "./types"
 
 type Props<T> = TablePanelProps<T>;
 
-export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> => ({
+export function TablePanel<T extends any>({
   tableData,
   columns,
   noRowsTranslation = "table.no.results.found",
@@ -31,7 +31,7 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
   queryUrl = "",
   customQuerySet,
   customDataSet,
-}) => {
+}: Props<T>) {
 
   const queryDelay = 300;
   let lastQueryValue: string = "";
@@ -52,8 +52,6 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
     queryApi();
   }, [debouncedQuery]);
 
-  // Is this debounce?
-  // https://github.com/xnimorz/use-debounce
   const queryGetter = (key: string, value: string) => {
     if (!queryUrl) { return; }
     lastQueryValue = value;
