@@ -7,7 +7,7 @@ import { withDialogDefaults } from "../../hocs/withDialogDefaults";
 import { FBDialogProps } from "../../types/dialog";
 
 const FBDialog: React.FunctionComponent<FBDialogProps> = ({
-  title = false,
+  title,
   setDialogClose,
   content,
   ...props

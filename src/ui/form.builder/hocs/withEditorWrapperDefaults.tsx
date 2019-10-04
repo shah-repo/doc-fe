@@ -23,7 +23,7 @@ export function withEditorWrapperDefaults<T extends FBEditorWrapperProps & FBDia
           editField={this.edit}
           removeField={this.remove}
         >
-          <FBDialog title="form.builder.edit.field" {...this.props as FBDialogProps}>
+          <FBDialog {...this.props as FBDialogProps}>
             <Box display="block" p={2} />
           </FBDialog>
           {this.props.children}
@@ -35,11 +35,12 @@ export function withEditorWrapperDefaults<T extends FBEditorWrapperProps & FBDia
       const schema = formBuilderStore.schema[this.props.index];
       const { type } = schema;
 
-      this.props.setDialogChildren(
+      this.props.setDialogContent(
         <FBForm
           initialValues={schema}
           render={withEditorRenderer({type, ...this.props})}
         />,
+        "form.builder.edit.field",
       );
       this.props.setDialogOpen();
     }

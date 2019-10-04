@@ -14,8 +14,9 @@ const FBEditorDialog: React.FunctionComponent<FBDialogProps> = ({
 }) => {
 
   const handleFieldType = (type: FBEditorElementType) => () => {
-    props.setDialogChildren(
+    props.setDialogContent(
       <FBForm render={withEditorRenderer({type, ...props})} />,
+      "Create a Field",
     );
   };
 
