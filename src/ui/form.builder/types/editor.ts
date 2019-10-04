@@ -5,22 +5,28 @@ export interface FBEditorDialogProps extends FBDialogProps {
   handleClick: () => any;
 }
 
-export type FBEditorDialogInjectedProps = Pick<FBEditorDialogProps, "handleClick">;
+export type FBEditorDialogInjectedProps = Pick<
+  FBEditorDialogProps,
+  "handleClick"
+>;
 
 export interface FBEditorWrapperInjectedProps {
   editField: () => any;
   removeField: () => any;
 }
 
-export interface FBEditorWrapperProps extends
-BoxProps,
-FBEditorWrapperInjectedProps {
+export interface FBEditorWrapperProps
+  extends BoxProps,
+    FBEditorWrapperInjectedProps {
   index: number;
 }
 
 export type FBEditorSectionType = "section" | "basicFields" | "lists";
 export type FBEditorElementType =
-  "textfield" | "checkbox" | "checkboxgroup";
+  | "textfield"
+  | "checkbox"
+  | "checkboxgroup"
+  | "section";
 
 export interface FBEditorFormProps extends Partial<FBDialogInjectedProps> {
   type: FBEditorElementType;
