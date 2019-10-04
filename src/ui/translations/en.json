@@ -288,6 +288,7 @@
   "form.builder.name": "Form Name",
   "form.builder.type": "Form Document Type",
   "form.builder.add.field": "Add Field",
+  "form.builder.edit.field": "Edit Field",
   "form.builder.section": "Section",
   "form.builder.basics": "Basic Fields",
   "form.builder.lists": "Lists",

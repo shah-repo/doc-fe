@@ -1,11 +1,16 @@
-import { BoxProps } from "@material-ui/core/Box";
+import Box from "@material-ui/core/Box";
 import React from "react";
+import FBDialog from "../components/feedback/FBDialog";
+import FBForm from "../components/form/FBForm";
 import { formBuilderStore } from "../stores/FBStore";
 import { Subtract } from "../types/common";
+import { FBDialogProps } from "../types/dialog";
 import { FBEditorWrapperInjectedProps, FBEditorWrapperProps } from "../types/editor";
+import { withDialogState } from "./withDialogState";
+import { withEditorRenderer } from "./withEditorRenderer";
 import { withMouseOver } from "./withMouseOver";
 
-export function withEditorWrapperDefaults<T extends FBEditorWrapperProps>(
+export function withEditorWrapperDefaults<T extends FBEditorWrapperProps & FBDialogProps>(
   Component: React.ComponentType<T>,
 ) {
 
@@ -17,12 +22,26 @@ export function withEditorWrapperDefaults<T extends FBEditorWrapperProps>(
           {...this.props as T}
           editField={this.edit}
           removeField={this.remove}
-        />
+        >
+          <FBDialog title="form.builder.edit.field" {...this.props as FBDialogProps}>
+            <Box display="block" p={2} />
+          </FBDialog>
+          {this.props.children}
+        </Component>
       );
     }
 
     private edit = () => {
-      alert("edit");
+      const schema = formBuilderStore.schema[this.props.index];
+      const { type } = schema;
+
+      this.props.setDialogChildren(
+        <FBForm
+          initialValues={schema}
+          render={withEditorRenderer({type, ...this.props})}
+        />,
+      );
+      this.props.setDialogOpen();
     }
 
     private remove = () => {
@@ -30,5 +49,5 @@ export function withEditorWrapperDefaults<T extends FBEditorWrapperProps>(
     }
   }
 
-  return withMouseOver(HOC);
+  return withMouseOver(withDialogState(HOC));
 }
