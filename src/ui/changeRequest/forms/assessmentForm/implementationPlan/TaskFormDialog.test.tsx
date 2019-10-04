@@ -1,10 +1,10 @@
+import { Button } from "@material-ui/core";
 import { shallow, ShallowWrapper } from "enzyme";
+import { Formik } from "formik";
 import React from "react";
 
-import { TaskFormDialog, TaskFormDialogProps } from "./TaskFormDialog";
-import { Button } from "@material-ui/core";
-import { Formik } from "formik";
 import TaskForm from "./TaskForm";
+import { TaskFormDialog, TaskFormDialogProps } from "./TaskFormDialog";
 
 describe("TaskFormDialog tests", () => {
   let wrapper: ShallowWrapper;
@@ -21,10 +21,10 @@ describe("TaskFormDialog tests", () => {
 
   beforeAll(() => {
     wrapper = getWrapper({});
-  })
+  });
 
   it("should call openDialog", () => {
-    wrapper.find(Button).at(0).simulate('click');
+    wrapper.find(Button).at(0).simulate("click");
 
     expect(defaultProps.openDialog).toHaveBeenCalledTimes(1);
   });

@@ -139,7 +139,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const renderTypeOfRevisionChange = () => {
     if (showRevisionTypeChange) {
       return (
-        <React.Fragment>
+        <Box mt={7}>
           <Typography variant="h6">
             <Text translation="documentRevision.form.typeOfRevisionChange" />
           </Typography>
@@ -159,7 +159,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               value={RevisionChangeType.Obsolete}
             />
           </RadioGroup>
-        </React.Fragment>
+        </Box>
       );
     }
   };

@@ -7,7 +7,7 @@ import {
 import { Formik } from "formik";
 import React from "react";
 import { DataProps } from "../../../state/ducks/common";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import Text from "../../components/Text";
@@ -45,6 +45,14 @@ export const Presenter: React.FunctionComponent<Props> = ({
 }) => {
   const onSubmit = () => void 0;
 
+  const renderTrainingControl = status === DocumentRevisionStatus.Released && (
+    <TrainingControl
+      dataProp={trainingRecords}
+      classes={classes}
+      documentRevisionId={id}
+    />
+  );
+
   const contentRenderer = () => (
     <Box>
       <DocumentHeader dataProp={dataProp} />
@@ -52,7 +60,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
         container={true}
         className={classes.previewBox}
         spacing={4}
-        direction="column">
+        direction="column"
+      >
         <ChangeRequestLink dataProp={dataProp} />
         <SummaryField label="document.title" value={name} />
         <SummaryField
@@ -74,11 +83,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
           />
         )}
         {attachments && <Attachment />}
-        <TrainingControl
-          dataProp={trainingRecords}
-          classes={classes}
-          documentRevisionId={id}
-        />
+        {renderTrainingControl}
       </Grid>
       <Box className={classes.submitBox}>
         <ControlsContainer

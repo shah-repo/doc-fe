@@ -18,14 +18,14 @@ const DashboardPresenter: React.FunctionComponent<DashboardPresenterProps> = ({
   const renderPendingActions = () => (
     <React.Fragment>
     {
-      pendingActions.map((pendingAction) => {
+      pendingActions.map((pendingAction, index) => {
         switch (pendingAction.type) {
           case PendingActionType.PENDING_REVIEW:
-            return <ChangeRequestApproval key={pendingAction.changeReq.id} pendingAction={pendingAction} />;
+            return <ChangeRequestApproval key={index} pendingAction={pendingAction} />;
           case PendingActionType.PENDING_TRAINING_RECORDS:
-            return <TrainingRequest key={pendingAction.trainingRecord!.id} pendingAction={pendingAction} />;
+            return <TrainingRequest key={index} pendingAction={pendingAction} />;
           default:
-            return <TaskApproval key={pendingAction.changeReq.id} pendingAction={pendingAction} />;
+            return <TaskApproval key={index} pendingAction={pendingAction} />;
         }
       })
     }

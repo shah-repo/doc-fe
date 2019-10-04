@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { AuditGroupType } from "../../../state/ducks/audit/types";
-import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
+import {
+  changeRequestsActions,
+  changeRequestsSelectors,
+} from "../../../state/ducks/changeRequest";
 import { ApplicationState } from "../../../state/reducers";
-import { AsyncState } from "../../../state/types";
-import AsyncGate from "../../components/AsyncGate";
 import AuditPresenter from "./Audit.presenter";
 
 interface OwnProps {
@@ -13,7 +14,6 @@ interface OwnProps {
 
 interface StateProps {
   audit: AuditGroupType;
-  loadAuditAsyncState: AsyncState;
 }
 
 interface DispatchProps {
@@ -23,23 +23,29 @@ interface DispatchProps {
 export type AuditContainerProps = OwnProps & StateProps & DispatchProps;
 
 const getAudit = changeRequestsSelectors.makeGetAudit();
-const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps => ({
-  loadAuditAsyncState: changeRequestsSelectors.getLoadAuditAsyncState(state),
+const mapStateToProps = (
+  state: ApplicationState,
+  props: OwnProps,
+): StateProps => ({
   audit: getAudit(state, props.changeRequestId),
 });
 
 export const AuditContainer: React.FunctionComponent<AuditContainerProps> = ({
-  audit, loadAudit, changeRequestId, loadAuditAsyncState,
+  audit,
+  loadAudit,
+  changeRequestId,
 }) => {
   const loadAuditAction = () => loadAudit(changeRequestId);
+  useState(() => {
+    loadAuditAction();
+  });
 
-  return (
-    <AsyncGate asyncAction={loadAuditAction} asyncState={loadAuditAsyncState} startActionOnMount={true}>
-      <AuditPresenter audit={audit} />
-    </AsyncGate>
-  );
+  return <AuditPresenter audit={audit} />;
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
-  loadAudit: changeRequestsActions.loadAudit,
-})(AuditContainer);
+export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
+  mapStateToProps,
+  {
+    loadAudit: changeRequestsActions.loadAudit,
+  },
+)(AuditContainer);

@@ -19,7 +19,7 @@ const applyTransition = (
   url: `${TRAINING_RECORD_ROOT_URL}/${id}/${transition}`,
   method: "post",
   data: body,
-  onSuccess: (documentRevision, dispatch) => {
+  onSuccess: (trainingRecord, dispatch) => {
     dispatch(documentRevisionsActions.load(documentRevisionId));
   },
   handlers,
