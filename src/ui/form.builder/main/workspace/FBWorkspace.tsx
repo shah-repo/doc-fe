@@ -6,6 +6,7 @@ import FBForm from "../../components/form/FBForm";
 import { FBFieldComponent } from "../../defaults/editor";
 import { withFBStore } from "../../hocs/withFBStore";
 import { FBStoreProps } from "../../types/store";
+import FBEditorDialog from "../editor/FBEditorDialog";
 
 const FBWorkspace: React.FunctionComponent<FBStoreProps> = ({
   formBuilderStore : { schema, mode },
@@ -25,6 +26,7 @@ const FBWorkspace: React.FunctionComponent<FBStoreProps> = ({
     <FBForm>
       {isStarter && <FBAddFieldButton0 />}
       {!isStarter && fieldsRenderer}
+      <FBEditorDialog />
       {/* <Box display="flex" flexDirection="row-reverse">
         <FBButton label="Create" onClick={handleSubmit} />
       </Box> */}

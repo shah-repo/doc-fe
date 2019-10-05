@@ -21,6 +21,14 @@ export class FBStore {
     }
     return 0;
   }
+
+  @action public getSchema = (index: number): FBTemplateSchema => {
+    return this.schema[index];
+  }
+
+  @action public removeSchema = (index: number) => () => {
+    this.schema.splice(index, 1);
+  }
 }
 
 export const formBuilderStore = new FBStore();

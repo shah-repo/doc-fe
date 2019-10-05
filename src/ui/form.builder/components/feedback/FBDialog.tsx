@@ -26,7 +26,9 @@ const FBDialog: React.FunctionComponent<FBDialogProps> = ({
       </Box>
     </DialogTitle>
     <DialogContent>
-      {content || props.children}
+      <Box px={4} pb={2} pt={!title && 2}>
+        {content || props.children}
+      </Box>
     </DialogContent>
   </Dialog>
 );

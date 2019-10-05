@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { withEditorWrapperDefaults } from "../../hocs/withEditorWrapperDefaults";
+import { withMouseOver } from "../../hocs/withMouseOver";
 import { formBuilderStore } from "../../stores/FBStore";
 import { FBEditorWrapperProps } from "../../types/editor";
 import FBAddFieldButton from "../custom/FBAddFieldButton";
@@ -21,4 +21,4 @@ const FBEditorWrapper: React.FunctionComponent<FBEditorWrapperProps> = ({
   </Box>
 );
 
-export default withEditorWrapperDefaults(FBEditorWrapper);
+export default withMouseOver(FBEditorWrapper);

@@ -1,32 +1,33 @@
 import { Box } from "@material-ui/core";
-import { BoxProps } from "@material-ui/core/Box";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import React from "react";
-import { FBEditorWrapperInjectedProps } from "../../types/editor";
+import editorStore from "../../stores/FBEditorStore";
+import { formBuilderStore } from "../../stores/FBStore";
+import { FBEditorWrapperProps } from "../../types/editor";
 
-type Props = FBEditorWrapperInjectedProps & BoxProps;
-
-const FBEditorFieldToolbar: React.FunctionComponent<Props> = ({
-  editField,
-  removeField,
+const FBEditorFieldToolbar: React.FunctionComponent<FBEditorWrapperProps> = ({
+  index,
   ...props
-}) => {
-
-  return (
-    <Box
-      display="flex"
-      flexDirection="row-reverse"
-      {...props}
-    >
-      <Box>
-        <RemoveCircleOutlineIcon color="error" onClick={removeField} />
-      </Box>
-      <Box pr={2}>
-        <BorderColorIcon color="primary" onClick={editField} />
-      </Box>
+}) => (
+  <Box
+    display="flex"
+    flexDirection="row-reverse"
+    {...props}
+  >
+    <Box>
+      <RemoveCircleOutlineIcon
+        onClick={formBuilderStore.removeSchema(index)}
+        color="error"
+      />
     </Box>
-  );
-};
+    <Box pr={2}>
+      <BorderColorIcon
+        onClick={editorStore.editorTypeEdit(index)}
+        color="primary"
+      />
+    </Box>
+  </Box>
+);
 
 export default FBEditorFieldToolbar;

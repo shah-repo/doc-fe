@@ -14,7 +14,7 @@ export interface FBDialogInjectedProps {
   title?: string | Translation | false;
   setDialogOpen: () => any;
   setDialogClose: () => any;
-  setDialogContent: (content: React.ReactNode, title?: string | Translation | false) => any;
+  setDialogContent?: (content: React.ReactNode, title?: string | Translation | false) => any;
 }
 
 export enum FBDialogActionLabel {
