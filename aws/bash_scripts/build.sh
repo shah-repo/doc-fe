@@ -21,6 +21,10 @@ elif [ "${ENV}" == "demo" ]; then
 	export ECS_TASK_NAME=$ECS_TASK_NAME_DEMO
 	export ECS_CLUSTER_NAME=$ECS_CLUSTER_NAME_DEMO
 	export IMAGE_NAME="${REPOSITORY_URL_DEMO}:${COMMIT_HASH}"
+elif [ "${ENV}" == "dev2" ]; then
+	export ECS_TASK_NAME=$ECS_TASK_NAME_DEV2
+	export ECS_CLUSTER_NAME=$ECS_CLUSTER_NAME_DEV2
+	export IMAGE_NAME="${REPOSITORY_URL_DEV2}:${COMMIT_HASH}"
 fi
 
 # Install Dependencies
