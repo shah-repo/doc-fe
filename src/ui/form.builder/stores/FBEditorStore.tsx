@@ -36,7 +36,10 @@ export class FBEditorStore {
     this.content = (
       <FBForm
         initialValues={initialValues || {}}
-        render={withEditorRenderer({ type })}
+        render={withEditorRenderer({
+          type,
+          index: initialValues ? initialValues.index : formBuilderStore.schema.length,
+        })}
       />
     );
     this.title = title || "form.builder.create.field";

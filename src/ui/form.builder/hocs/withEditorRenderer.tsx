@@ -13,25 +13,31 @@ export const withEditorRenderer =
 (other: FBEditorFormProps) =>
 (props: FormikProps<FBTemplateSchema>) => {
 
-  const { type } = other;
+  const { type, index } = other;
   const InputType = FBFieldEditorComponent[type as string];
 
   const onClick = () => {
     const schema: FBTemplateSchema = {
       type,
+      index,
       name: `${formBuilderStore.prefixName}_${type}_field`,
+      disabled: formBuilderStore.mode === "design",
       ...props.values,
     };
-    formBuilderStore.schema.push(schema);
+    formBuilderStore.schema[index] = schema;
     editorStore.open = false;
   };
+
+  const buttonLabel = (formBuilderStore.schema[index] === undefined)
+    ? "form.builder.add.field"
+    : "common.save";
 
   return (
     <Form>
       <InputType />
       <Box display="flex" flexDirection="row-reverse" mx={-1}>
         <FBButton label="common.cancel" onClick={editorStore.reset} />
-        <FBButton label="form.builder.add.field" onClick={onClick} />
+        <FBButton label={buttonLabel} onClick={onClick} />
       </Box>
     </Form>
   );
