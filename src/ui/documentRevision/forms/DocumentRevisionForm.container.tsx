@@ -96,13 +96,7 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
   document,
 }) => {
   if (initialValues.document && document) {
-    initialValues = {
-      ...initialValues,
-      document: {
-        ...initialValues.document,
-        documentType: document.documentType.id,
-      },
-    };
+    initialValues.document.documentType = document.documentType.id;
   }
   document = document || {} as Document;
 

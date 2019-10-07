@@ -1,10 +1,11 @@
-import _ from "lodash";
 import React, { Fragment } from "react";
 import { Attachment } from "../../state/ducks/attachments";
 import { Audit } from "../../state/ducks/audit";
 import { ChangeRequest } from "../../state/ducks/changeRequest";
 import { Approval, User } from "../../state/ducks/common";
 import { DocumentRevision, Reference } from "../../state/ducks/documentRevisions";
+import { DocumentType } from "../../state/ducks/documentRevisions/documentType";
+import { getAuditDefaultValue } from "../common/utils/audit";
 import DateTime from "./DateTime";
 import DialogOpener from "./textDiff/DialogOpener";
 
@@ -13,19 +14,6 @@ interface OwnProps {
 }
 
 export type Props = OwnProps;
-
-/**
- * Return nextValue only if string, otherwise it will crash FE
- * @param {any} nextValue Any audit type
- * @returns {string} nextValue if string, otherwise returns "N/A"
- */
-export const getAuditDefaultValue = (nextValue: any): string => {
-  if (_.isString(nextValue)) {
-    return nextValue;
-  }
-
-  return "N/A";
-};
 
 export const AuditFactory: React.FunctionComponent<Props> = ({
   audit,
@@ -69,6 +57,9 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
       break;
     case "changeRequest":
       returnValue = (audit.nextValue as ChangeRequest).crId;
+      break;
+    case "documentType":
+      returnValue = (audit.nextValue as DocumentType).documentTypeName;
       break;
     default:
       returnValue = getAuditDefaultValue(audit.nextValue);
