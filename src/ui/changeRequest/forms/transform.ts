@@ -101,7 +101,9 @@ const createAssessmentObjectForRequestBody = (value: Assessment) => {
 
   Object.values(AssessmentType).map((t) => {
     const attachmentValue = _.get(value, `${t}.attachments`, null);
-    const itemAttachment = (attachmentValue) ? attachmentValue.map((attachment: Attachment) => ({ id: attachment.id })) : [];
+    const itemAttachment = (attachmentValue) ?
+      attachmentValue.map((attachment: Attachment) => ({ id: attachment.id })) :
+      [];
     const itemReasoning: string = _.get(value, `${t}.reasoning`, null);
     assessments[t] = { attachments: itemAttachment, reasoning: itemReasoning };
   });

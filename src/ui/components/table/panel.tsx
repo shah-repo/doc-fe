@@ -47,7 +47,6 @@ export function TablePanel<T extends any>({
   });
   const [debouncedQuery] = useDebounce(state.queryDict, queryDelay);
 
-  // TODO: check if debounce correctly refactored
   useEffect(() => {
     queryApi();
   }, [debouncedQuery]);
@@ -57,7 +56,7 @@ export function TablePanel<T extends any>({
     lastQueryValue = value;
 
     if (lastQueryValue !== value) { return; }
-    let dict = state.queryDict;
+    let dict = { ...state.queryDict };
     (value === "") ? delete dict[key] : dict[key] = value;
 
     if (customQuerySet) {
