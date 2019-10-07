@@ -10,6 +10,7 @@ import _ from "lodash";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
+  Document,
   DocumentRevision,
   DocumentRevisionType,
   RevisionChangeType,
@@ -57,6 +58,7 @@ interface Props
   doNotPrompt?: boolean;
   documentTypes: SelectOption[];
   documentTypesById: DocumentTypeByIdState;
+  document: Document;
   onDirtyFlagChange?: (dirty: boolean) => void;
   uploadTemplate: (elements: any) => any;
   fbFormMode: (mode: boolean) => any;
@@ -84,14 +86,13 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   fbFormMode,
   documentTypes,
   documentTypesById,
+  document,
 }) => {
-  const documentTypeId = _.get(initialValues, "document.documentType");
-  const documentTypeAcronym = (documentTypesById[documentTypeId] || {}).documentTypeAcronym;
-
   const fbState =
     isFBActive &&
     // TODO: what should happen with this
-    documentTypeAcronym ===  DocumentRevisionType.FM;
+    document &&
+    document.documentType.documentTypeAcronym ===  DocumentRevisionType.FM;
 
   const [fbActive, fbSetActive] = useState(fbState);
 

@@ -4,6 +4,7 @@ import _ from "lodash";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import {
+  Document,
   DocumentRevision,
   documentRevisionsActions,
   documentRevisionsSelectors,
@@ -31,6 +32,7 @@ interface StateProps {
   proposedDocId: string;
   documentTypes: SelectOption[];
   documentTypesById: DocumentTypeByIdState;
+  document: Document;
 }
 
 interface DispatchProps {
@@ -67,6 +69,7 @@ const mapStateToProps = (
   proposedDocId: documentsSelectors.getProposedDocId(state),
   documentTypes: documentTypeSelectors.getDocumentTypeFormOptions(state),
   documentTypesById: documentTypeSelectors.byId(state),
+  document: documentRevisionsSelectors.getDocument(state, _.get(props.initialValues, "document.id")!),
 });
 
 export const DocumentRevisionFormContainer: React.FunctionComponent<
@@ -90,7 +93,18 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
   fbFormMode,
   documentTypes,
   documentTypesById,
+  document,
 }) => {
+  if (initialValues.document && document) {
+    initialValues = {
+      ...initialValues,
+      document: {
+        ...initialValues.document,
+        documentType: document.documentType.id,
+      },
+    };
+  }
+  document = document || {} as Document;
 
   const render = (props: FormikProps<DocumentRevisionFormValues>) => {
     return (
@@ -109,10 +123,14 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
         fbFormMode={fbFormMode}
         documentTypes={documentTypes}
         documentTypesById={documentTypesById}
+        document={document}
       />
     );
   };
 
+  // TODO: check why are we loading all document revisions
+  // if it's really necessary maybe it can be loaded through the DataFetcherContainer
+  // it will be loaded only once instead every time this component is mounted
   const loadAction = () =>
     loadDocumentRevisions([
       DocumentRevisionStatus.Released,

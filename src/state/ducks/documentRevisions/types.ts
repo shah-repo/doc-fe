@@ -35,7 +35,8 @@ export interface DocumentRevisionDocument {
 }
 export interface Document {
   id: string;
-  ordinalNumber: number;
+  docId: string;
+  documentType: DocumentType;
   documentRevisions: DocumentRevision[];
 }
 

@@ -56,8 +56,9 @@ export const getDocumentRevisionEditRequestBody = (
 
 export const getDocument = (document: Partial<Document> = {}): Document => ({
   id: faker.random.uuid(),
-  ordinalNumber: faker.random.number(),
+  docId: faker.random.word(),
   documentRevisions: [getDocumentRevision()],
+  documentType: generateDocumentType(),
   ...document,
 });
 
