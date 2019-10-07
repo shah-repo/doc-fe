@@ -3,13 +3,14 @@ import { Attachment } from "../attachments";
 import { AuditActionPayload } from "../audit/types";
 import { ChangeRequest } from "../changeRequest";
 import { User } from "../common";
+import { TrainingRecord } from "../training";
 import {
   DOCUMENT_REVISION_AUDIT_SET,
   DOCUMENT_REVISION_LIST,
   DOCUMENT_REVISION_SET,
   DOCUMENT_SET,
 } from "./constants";
-import { TrainingRecord } from "../training";
+import { DocumentType } from "./documentType";
 
 export enum DocumentRevisionStatus {
   Draft = "DRAFT",
@@ -59,7 +60,7 @@ export interface DocumentRevision {
   attachments: Attachment[];
   status: DocumentRevisionStatus;
   document: DocumentRevisionDocument;
-  type: DocumentRevisionType;
+  documentType: DocumentType;
   released: Date;
   referenceTo: Reference[];
   createdAt?: string;
@@ -72,6 +73,7 @@ export interface DocumentRevision {
   retrain?: boolean;
 }
 
+// TODO: check if this is still needed
 export enum DocumentRevisionType {
   SOP = "Standard Operating Procedure",
   ADM = "Administrative",
@@ -112,8 +114,8 @@ export enum DocumentRevisionType {
 export const RevisionStageOptions = [
   { value: 1, text: "common.Numeric" },
   { value: 2, text: "common.AlphaNumeric" },
-  { value: 3, text: "common.Alpha" }
-]
+  { value: 3, text: "common.Alpha" },
+];
 
 export interface ReferenceToEditRequest {
   id: string;

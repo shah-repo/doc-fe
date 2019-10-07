@@ -1,0 +1,19 @@
+import { DOCUMENT_TYPE_LIST } from "./constants";
+import { DocumentType } from "./types";
+
+export interface DocumentType {
+  id: string;
+  documentTypeAcronym: string;
+  documentTypeName: string;
+}
+
+export interface DocumentTypeListAction {
+  type: typeof DOCUMENT_TYPE_LIST;
+  payload: DocumentType[];
+}
+
+export interface DocumentTypeByIdState {
+  [key: string]: DocumentType;
+}
+
+export type DocumentTypeAllIdsState = string[];

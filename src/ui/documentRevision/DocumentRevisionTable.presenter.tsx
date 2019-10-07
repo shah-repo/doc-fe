@@ -38,7 +38,7 @@ const DocumentRevisionTable: React.FunctionComponent<DocumentRevisionTableProps>
       name: documentRevision.name,
       owner: documentRevision.owner.name,
       status: documentRevision.status,
-      type: documentRevision.type,
+      type: documentRevision.documentType.documentTypeAcronym,
     };
   };
 
