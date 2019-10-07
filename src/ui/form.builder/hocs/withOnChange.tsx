@@ -1,6 +1,7 @@
 import React from "react";
 import { withFormik } from "../../components/hoc/formik";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
+import { formBuilderStore } from "../stores/FBStore";
 import { FBOnChangeProps, Subtract } from "../types/common";
 
 export function withOnChange<T extends FBOnChangeProps & FormikHybridFieldProps>(
@@ -25,6 +26,7 @@ export function withOnChange<T extends FBOnChangeProps & FormikHybridFieldProps>
       const target = event.target;
       const value = target.type === "checkbox" ? target.checked : target.value;
       form.setFieldValue(field.name, value);
+      formBuilderStore.values = form.values;
     }
   }
 

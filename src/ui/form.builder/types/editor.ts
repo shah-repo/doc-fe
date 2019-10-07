@@ -17,4 +17,5 @@ export type FBEditorElementType =
 
 export interface FBEditorFormProps {
   type: FBEditorElementType;
+  index: number;
 }
