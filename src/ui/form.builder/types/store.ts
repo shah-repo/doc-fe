@@ -9,7 +9,7 @@ export interface FBTemplateSchema {
   placeholder?: string;
   rows?: number;
   checkboxNote?: string;
-  disabled: boolean;
+  disabled?: boolean;
 }
 
 export interface FBStoreProps {

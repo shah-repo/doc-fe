@@ -5,6 +5,7 @@ import FBEditorWrapper from "../../components/custom/FBEditorWrapper";
 import FBForm from "../../components/form/FBForm";
 import { FBFieldComponent } from "../../defaults/editor";
 import { withFBStore } from "../../hocs/withFBStore";
+import { formBuilderStore } from "../../stores/FBStore";
 import { FBStoreProps } from "../../types/store";
 import FBEditorDialog from "../editor/FBEditorDialog";
 
@@ -15,6 +16,7 @@ const FBWorkspace: React.FunctionComponent<FBStoreProps> = ({
 
   const fieldsRenderer = schema.map((field, i) => {
     const InputType = FBFieldComponent[field.type as string];
+    field.disabled = formBuilderStore.mode === "design";
     return (
       <FBEditorWrapper key={`${name}_${i}`} index={i}>
         <InputType {...field} />
@@ -23,7 +25,7 @@ const FBWorkspace: React.FunctionComponent<FBStoreProps> = ({
   });
 
   return (
-    <FBForm>
+    <FBForm initialValues={formBuilderStore.values}>
       {isStarter && <FBAddFieldButton0 />}
       {!isStarter && fieldsRenderer}
       <FBEditorDialog />

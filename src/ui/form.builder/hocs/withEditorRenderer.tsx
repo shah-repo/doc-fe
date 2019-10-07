@@ -21,7 +21,6 @@ export const withEditorRenderer =
       type,
       index,
       name: `${formBuilderStore.prefixName}_${type}_field`,
-      disabled: formBuilderStore.mode === "design",
       ...props.values,
     };
     formBuilderStore.schema[index] = schema;
