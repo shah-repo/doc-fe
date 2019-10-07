@@ -32,8 +32,8 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
   document: {
     id: faker.random.uuid(),
     docId: faker.random.alphaNumeric(),
-    type: faker.random.word(),
     referencedBy: [],
+    documentType: faker.random.word(),
   },
   documentType: generateDocumentType(),
   released: faker.date.future(undefined, "2019-05-31"),

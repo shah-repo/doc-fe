@@ -30,7 +30,7 @@ export enum RevisionChangeType {
 export interface DocumentRevisionDocument {
   id: string;
   docId: string;
-  type: string;
+  documentType: string;
   referencedBy: DocumentRevision[];
 }
 export interface Document {

@@ -1,3 +1,4 @@
+import _ from "lodash";
 import {
   DocumentRevision,
   DocumentRevisionStatus,
@@ -5,7 +6,6 @@ import {
 } from "../../../state/ducks/documentRevisions";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { DocumentRevisionUserProps } from "./types";
-import _ from "lodash";
 
 const isDraft = (documentRevision: DocumentRevision) =>
   documentRevision.status === DocumentRevisionStatus.Draft;

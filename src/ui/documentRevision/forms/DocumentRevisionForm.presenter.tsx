@@ -6,6 +6,7 @@ import {
   WithStyles,
 } from "@material-ui/core";
 import { FormikProps } from "formik";
+import _ from "lodash";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -14,6 +15,7 @@ import {
   RevisionChangeType,
   RevisionStageOptions,
 } from "../../../state/ducks/documentRevisions";
+import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
@@ -22,7 +24,7 @@ import CheckboxField from "../../components/forms/fields/Checkbox";
 import InputField from "../../components/forms/fields/Input";
 import RadioButton from "../../components/forms/fields/RadioButton";
 import RadioGroup from "../../components/forms/fields/RadioGroup";
-import SelectField from "../../components/forms/fields/Select";
+import SelectField, { SelectOption } from "../../components/forms/fields/Select";
 import TextEditorField from "../../components/forms/fields/TextEditor";
 import { required, validator } from "../../components/forms/fields/validators";
 import FormMessage from "../../components/forms/FormMessage";
@@ -33,7 +35,6 @@ import ScrollToError from "../../components/forms/ScrollToError";
 import SubmitButton from "../../components/forms/SubmitButton";
 import Text from "../../components/Text";
 import AttachmentsField from "../../document.revision/form/attachments";
-import { documentRevisionTypeFormOption } from "../../document.revision/utils/helpers";
 import {
   documentDetailsPath,
   documentVersionPath,
@@ -54,6 +55,8 @@ interface Props
   proposedDocId: string;
   setDocId?: typeof documentsActions.setDocumentProposedId;
   doNotPrompt?: boolean;
+  documentTypes: SelectOption[];
+  documentTypesById: DocumentTypeByIdState;
   onDirtyFlagChange?: (dirty: boolean) => void;
   uploadTemplate: (elements: any) => any;
   fbFormMode: (mode: boolean) => any;
@@ -79,13 +82,16 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   errors,
   uploadTemplate,
   fbFormMode,
+  documentTypes,
+  documentTypesById,
 }) => {
+  const documentTypeId = _.get(initialValues, "document.documentType");
+  const documentTypeAcronym = (documentTypesById[documentTypeId] || {}).documentTypeAcronym;
 
   const fbState =
     isFBActive &&
-    initialValues.document &&
-    initialValues.document.type &&
-    DocumentRevisionType[initialValues.document.type as keyof typeof DocumentRevisionType] ===  DocumentRevisionType.FM;
+    // TODO: what should happen with this
+    documentTypeAcronym ===  DocumentRevisionType.FM;
 
   const [fbActive, fbSetActive] = useState(fbState);
 
@@ -107,7 +113,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    const { type } = values.document || { type: undefined };
+    const { documentType } = values.document || { documentType: undefined };
+    const type = (documentTypesById[documentType!] || {}).documentTypeAcronym;
 
     if (!values.document && !type) {
       return;
@@ -123,11 +130,14 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const handleTypeChange = (
     event: React.ChangeEvent<{ name?: string; value: unknown }>,
   ) => {
-    const type = event.target.value as string;
-    loadDocumentProposedId(type);
+    const typeId = event.target.value as string;
+    const type = documentTypesById[typeId] || {};
+    loadDocumentProposedId(type.documentTypeAcronym);
+
     const isFM =
       isFBActive &&
-      DocumentRevisionType[type as keyof typeof DocumentRevisionType] ===  DocumentRevisionType.FM;
+      // TODO: this needs to be tested
+      type.documentTypeAcronym ===  DocumentRevisionType.FM;
     fbSetActive(isFM);
     if (isFM && !initialValues.id) {
       uploadTemplate([]);
@@ -184,7 +194,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                       reference.id,
                       reference.document.id,
                     )}
-                    target="_blank">
+                    target="_blank"
+                  >
                     {reference.name}
                   </Link>
                 </div>
@@ -251,13 +262,13 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             validate={validator(required)}
           />
           <SelectField
-            name="document.type"
+            name="document.documentType"
             label="document.type"
             selectProps={{
-              inputProps: { id: "type", disabled: isDisabled },
+              inputProps: { id: "documentType", disabled: isDisabled },
               onChange: handleTypeChange,
             }}
-            options={documentRevisionTypeFormOption()}
+            options={documentTypes}
             validate={validator(required)}
             includeEmpty={false}
           />
@@ -295,7 +306,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               item={true}
               container={true}
               alignItems="flex-end"
-              direction="column">
+              direction="column"
+            >
               <SubmitButton
                 asyncState={asyncState}
                 label={isDisabled ? "common.save" : "navigation.createDocument"}

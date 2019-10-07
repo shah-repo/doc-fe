@@ -34,8 +34,9 @@ const ListPresenter: React.FunctionComponent<Props> = ({
 
   const canEdit = (data: DocumentRevision) => canEditDocumentRevision({dataProp: data, currentUserEmail});
 
+  // TODO: fix tolltip
   const typeTooltipRenderer = (rowData: DocumentRevision) =>
-    DocumentRevisionType[rowData.document.type as unknown as keyof typeof DocumentRevisionType];
+    rowData.document.documentType;
 
   const cellHrefRenderer = (rowData: DocumentRevision): string => {
     if (canEdit(rowData)) {
