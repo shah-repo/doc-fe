@@ -6,8 +6,8 @@ import {
 } from "formik";
 import * as React from "react";
 import Select, { createFilter } from "react-select";
-import { SelectComponentsProps } from "react-select/lib/Select";
-import { ValueType } from "react-select/lib/types";
+import { SelectComponentsProps } from "react-select/base";
+import { ValueType } from "react-select/src/types";
 import {
   TypographyColor,
   TypographyProps,
