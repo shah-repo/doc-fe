@@ -4,16 +4,14 @@ export interface FBEditorWrapperProps extends BoxProps {
   index: number;
 }
 
-export type FBEditorSectionType =
-  | "section"
-  | "basicFields"
-  | "lists";
+export type FBEditorSectionType = "section" | "basicFields" | "lists";
 
 export type FBEditorElementType =
   | "textfield"
   | "checkbox"
   | "checkboxgroup"
-  | "section";
+  | "section"
+  | "texteditor";
 
 export interface FBEditorFormProps {
   type: FBEditorElementType;

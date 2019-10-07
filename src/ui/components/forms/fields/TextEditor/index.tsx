@@ -1,5 +1,9 @@
 import classNames from "classnames";
-import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
+import {
+  Field as FormikField,
+  FieldConfig,
+  FieldProps as FormikFieldProps,
+} from "formik";
 import { QuillOptionsStatic } from "quill";
 import * as React from "react";
 import ReactQuill from "react-quill";
@@ -8,7 +12,7 @@ import useComponentVisible from "../../../../hooks/useComponentVisible";
 import Field, { FieldOwnProps } from "../Field";
 import { formats, modules } from "./configuration";
 
-interface TextEditorOwnProps extends FieldOwnProps {
+export interface TextEditorOwnProps extends FieldOwnProps {
   quillOptions?: QuillOptionsStatic;
   size?: RenderSize;
   actionsRenderer?: () => any;
@@ -22,7 +26,11 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
   size,
   ...fieldProps
 }) => {
-  const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
+  const {
+    ref,
+    isComponentVisible,
+    setIsComponentVisible,
+  } = useComponentVisible(false);
   const handleChange = (editHtml: string) => {
     fieldProps.form.setFieldValue(fieldProps.field.name, editHtml);
   };
@@ -47,7 +55,9 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
       inputLabelProps={{ shrink: true }}
     >
       <div
-        className={classNames("editor-container", { "label-margin": !actionsRenderer })}
+        className={classNames("editor-container", {
+          "label-margin": !actionsRenderer,
+        })}
         ref={ref}
         tabIndex={0}
         onFocus={handleFocus}
@@ -73,6 +83,8 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
 
 type TextEditorFieldProps = TextEditorOwnProps & FieldConfig;
 
-const TextEditorField: React.FunctionComponent<TextEditorFieldProps> = (props) => <FormikField component={TextEditor} {...props} />;
+const TextEditorField: React.FunctionComponent<TextEditorFieldProps> = (
+  props,
+) => <FormikField component={TextEditor} {...props} />;
 
 export default TextEditorField;

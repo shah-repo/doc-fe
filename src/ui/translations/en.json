@@ -199,8 +199,8 @@
   "common.file.not.loaded": "File not loaded",
   "common.previous": "Previous",
   "common.next": "Next",
-  "common.yes" : "Yes",
-  "common.no" : "No",
+  "common.yes": "Yes",
+  "common.no": "No",
   "common.original": "Original",
   "common.updated": "Updated",
   "common.text.difference": "Text difference",
@@ -296,6 +296,7 @@
   "form.builder.textfield": "Text field",
   "form.builder.checkbox": "Checkbox",
   "form.builder.checkboxgroup": "Checkbox group",
+  "form.builder.texteditor": "Text Editor",
 
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
