@@ -27,6 +27,18 @@ pipelines:
         - chmod a+x ./aws/bash_scripts/build.sh
         - ./aws/bash_scripts/build.sh "dev"
 
+    deploy_to_development: &DEPLOY_TO_DEVELOPMENT_2
+      name: Deploying to Development 2
+      image: python:3   
+      deployment: Development
+      services:
+        - docker
+      caches:
+        - docker
+      script:
+        - chmod a+x ./aws/bash_scripts/build.sh
+        - ./aws/bash_scripts/build.sh "dev2"
+
     deploy_to_production: &DEPLOY_TO_PRODUCTION
       name: Deploying to Production
       image: python:3   
@@ -57,6 +69,9 @@ pipelines:
     deploy-to-dev:
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEVELOPMENT
+    deploy-to-dev2:
+      - step: *RUN_TESTS
+      - step: *DEPLOY_TO_DEVELOPMENT_2
     deploy-to-demo:
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEMO
@@ -70,6 +85,9 @@ pipelines:
     develop:
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEVELOPMENT
+    develop2:
+      - step: *RUN_TESTS
+      - step: *DEPLOY_TO_DEVELOPMENT_2
     infrastructure:
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEVELOPMENT
