@@ -28,6 +28,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   currentUserEmail,
   editDocumentRevision,
   setDocId,
+  documentTypeOptions,
 }) => {
   const DocumentList = TablePanel<DocumentRevision>();
   const [clearFilter, setClearFilter] = React.useState<boolean>(false);
@@ -84,11 +85,11 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       cellHref: cellHrefRenderer,
     },
     {
-      key: "documentType",
+      key: "documentTypeId",
       label: "document.revision.list.type",
       tooltipKey: typeTooltipRenderer,
       cellHref: cellHrefRenderer,
-      searchOptions: { searchType: "select", selectOptions: documentRevisionTypeOption() },
+      searchOptions: { searchType: "select", selectOptions: documentTypeOptions },
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.document.type,
         width: 100,

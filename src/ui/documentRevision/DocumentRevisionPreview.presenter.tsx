@@ -5,9 +5,9 @@ import { Attachment } from "../../state/ducks/attachments";
 import { DocumentRevision } from "../../state/ducks/documentRevisions";
 import FileCard from "../components/cards/FileCard";
 import Text from "../components/Text";
+import { documentVersionPath } from "../document.revision/utils/paths";
 import styles from "./DocumentRevisionPreview.styles";
 import PreviewControlsContainer from "./PreviewControls.container";
-import { documentVersionPath } from "../document.revision/utils/paths";
 
 interface DocumentRevisionPreviewPresenterProps
   extends WithStyles<typeof styles> {
@@ -65,7 +65,7 @@ export const DocumentRevisionPreviewPresenter: React.FunctionComponent<
         </Typography>
       </Grid>
       <Grid item={true} xs={10}>
-        <Typography variant="h6">{documentRevision.documentType.documentTypeName}</Typography>
+        <Typography variant="h6">{documentRevision.document.documentType}</Typography>
       </Grid>
       <Grid item={true} xs={2}>
         <Typography variant="h6">

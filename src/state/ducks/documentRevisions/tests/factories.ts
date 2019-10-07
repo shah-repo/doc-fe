@@ -35,7 +35,6 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
     referencedBy: [],
     documentType: faker.random.word(),
   },
-  documentType: generateDocumentType(),
   released: faker.date.future(undefined, "2019-05-31"),
   referenceTo: [],
   trainingRecords: [],

@@ -25,11 +25,25 @@ const getDocumentTypeFormOptions = createSelector(
       , ["text"], ["asc"]),
 );
 
+const getDocumentTypeOptions = createSelector(
+  allIds, byId,
+  (ids, documentTypes) =>
+    _.orderBy(
+      ids.map((id) => {
+        return {
+          value: documentTypes[id].id,
+          text: documentTypes[id].documentTypeAcronym,
+        };
+      })
+      , ["text"], ["asc"]),
+);
+
 const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.documentType.loadListAsyncInfo;
 
 export default {
   byId,
   getDocumentTypeList,
   getDocumentTypeFormOptions,
+  getDocumentTypeOptions,
   getLoadListAsyncState,
 };
