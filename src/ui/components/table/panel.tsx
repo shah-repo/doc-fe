@@ -15,6 +15,7 @@ import refreshTokenOperation from "../../../state/middlewares/api/refreshToken";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import Text from "../../components/Text";
+import useDidMount from "../../hooks/useDidMount";
 import { TableColumn } from "./column/base";
 import { styles } from "./styles";
 import { TablePanelProps, TablePanelStateProps, TableStyleProps } from "./types";
@@ -33,6 +34,7 @@ export function TablePanel<T extends any>({
   customDataSet,
 }: Props<T>) {
 
+  const didMount = useDidMount();
   const queryDelay = 300;
   let lastQueryValue: string = "";
   const headerHeight = (searchable) ? 117 : 50;
@@ -41,14 +43,16 @@ export function TablePanel<T extends any>({
 
   const [state, setState] = useState<TablePanelStateProps<T>>({
     queryData: tableData,
-    queryDict: {"status[]": "RELEASED"},
+    queryDict: {},
     apiError: "",
     scrollToIndex: 0,
   });
   const [debouncedQuery] = useDebounce(state.queryDict, queryDelay);
 
   useEffect(() => {
-    queryApi();
+    if (didMount) {
+      queryApi();
+    }
   }, [debouncedQuery]);
 
   const queryGetter = (key: string, value: string) => {
@@ -153,4 +157,4 @@ export function TablePanel<T extends any>({
       {bodyRenderer()}
     </Box>
   );
-};
+}

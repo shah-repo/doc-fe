@@ -3,7 +3,7 @@ import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { stripTagsFromObject } from "../../../common/utils/helpers";
 import { unmaskId } from "../../../state/ducks/common/helpers";
-import { DocumentRevision, DocumentRevisionType, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus, DocumentRevisionType } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { TableColumnProps } from "../../components/table/column/types";
 import { TablePanel } from "../../components/table/panel";
@@ -29,6 +29,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   editDocumentRevision,
   setDocId,
 }) => {
+  const ALL_DOC_REV_STATES = "ALL_DOC_REV_STATES";
   const [clearFilter, setClearFilter] = React.useState<boolean>(false);
 
   const canEdit = (data: DocumentRevision) => canEditDocumentRevision({dataProp: data, currentUserEmail});
@@ -48,8 +49,12 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   const onCreateClick = () => setDocId("");
 
   const customQuerySet = (queryDict: TableSearchQueryType) => {
-    if (queryDict["status[]"]) { return queryDict; }
-    queryDict["status[]"] = documentRevisionQueryStatus();
+    if (!queryDict["status[]"]) {
+      queryDict["status[]"] = DocumentRevisionStatus.Released;
+    } else if (queryDict["status[]"] === ALL_DOC_REV_STATES) {
+      queryDict["status[]"] = documentRevisionQueryStatus();
+    }
+
     return queryDict;
   };
 
@@ -121,6 +126,12 @@ const ListPresenter: React.FunctionComponent<Props> = ({
         defaultValue: DocumentRevisionStatus.Released,
         searchType: "select",
         selectOptions: documentRevisionStatusOption(),
+        searchValueGetter: (query) => {
+          if (!query) {
+            return ALL_DOC_REV_STATES;
+          }
+          return query;
+        },
       },
     },
   ];
