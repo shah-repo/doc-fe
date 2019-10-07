@@ -9,7 +9,7 @@ const FBEditorSection: React.FunctionComponent<FBFormDefaultProps> = ({
 }) => {
 
   return (
-    <Box>
+    <Box mb={4}>
       {labelRenderer}
       <Box ml={-1}>
         {props.children}

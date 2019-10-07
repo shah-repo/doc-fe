@@ -14,7 +14,7 @@ export function withLabelRenderer<T extends FBFormDefaultProps>(
   return class extends React.Component<Subtract<T, FBLabelRendererProps>> {
 
     private labelRenderer = (
-      <Box mb={0.5} fontSize="subtitle1.fontSize" fontWeight="fontWeightRegular">
+      <Box mb={0.5} fontSize="h6.fontSize" fontWeight={300}>
         <Text message={this.props.label as string} />
       </Box>
     );

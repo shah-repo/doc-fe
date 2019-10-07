@@ -2,8 +2,6 @@ import _ from "lodash";
 import React from "react";
 import { DocumentRevisionType } from "../../../state/ducks/documentRevisions";
 import { Subtract } from "../types/common";
-import { FBFlowStore, FBTemplateStore } from "../types/store";
-import { FBLocalStorageProps } from "./utils/types";
 
 // *NOTE: for POC only; this will be removed
 // export function withLocalStorage<T extends FBLocalStorageProps>(

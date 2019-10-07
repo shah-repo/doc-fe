@@ -1,20 +1,16 @@
-import { Box } from "@material-ui/core";
+import { observer } from "mobx-react";
 import React from "react";
 import FBDialog from "../../components/feedback/FBDialog";
-import FBEditor from "../../main/editor/FBEditor";
-import { FBDialogProps } from "../../types/dialog";
+import editorStore from "../../stores/FBEditorStore";
 
-const FBEditorDialog: React.FunctionComponent<FBDialogProps> = ({
-  ...props
-}) => {
+const FBEditorDialog: React.FunctionComponent<{}> = () => (
+  <FBDialog
+    open={editorStore.open}
+    content={editorStore.content}
+    title={editorStore.title}
+    setDialogClose={editorStore.reset}
+    setDialogOpen={editorStore.setOpen}
+  />
+);
 
-  return (
-    <FBDialog {...props}>
-      <Box display="block" p={2}>
-        <FBEditor />
-      </Box>
-    </FBDialog>
-  );
-};
-
-export default FBEditorDialog;
+export default observer(FBEditorDialog);
