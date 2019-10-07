@@ -12,7 +12,7 @@ import SummaryField from "../../common/summary/base";
 import Text from "../../components/Text";
 import styles from "./styles";
 
-type Props = DataProps<Approval[]> & WithStyles<typeof styles>;
+export type Props = DataProps<Approval[]> & WithStyles<typeof styles>;
 
 const Approvers: React.FunctionComponent<Props> = ({ classes, dataProp }) => {
   const approvalRenderer = () => dataProp.map((approval, index) => {
