@@ -5,12 +5,11 @@ import { FBTextEditorFieldProps } from "../../types/editorfield";
 import { withLabelRenderer } from "../../hocs/withLabelRenderer";
 
 const FBTextEditorField: React.FunctionComponent<FBTextEditorFieldProps> = ({
-  labelRenderer,
+  label,
   ...props
 }) => (
   <Box mb={4}>
-    {labelRenderer}
-    <TextEditorField name="" {...props} />
+    <TextEditorField label={label} name={label || ""} {...props} />
   </Box>
 );
 

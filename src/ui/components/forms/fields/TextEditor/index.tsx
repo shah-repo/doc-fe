@@ -18,7 +18,7 @@ export interface TextEditorOwnProps extends FieldOwnProps {
   actionsRenderer?: () => any;
 }
 
-type TextEditorPropsWithFormik = TextEditorOwnProps & FormikFieldProps;
+export type TextEditorPropsWithFormik = TextEditorOwnProps & FormikFieldProps;
 
 const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
   quillOptions,

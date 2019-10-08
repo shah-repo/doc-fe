@@ -1,8 +1,7 @@
-import { TextEditorOwnProps } from "../../components/forms/fields/TextEditor";
-import { FBLabelRendererProps } from "./common";
+import { TextEditorPropsWithFormik } from "../../components/forms/fields/TextEditor";
 
-export interface EditorFieldProps extends TextEditorOwnProps {
+export interface EditorFieldProps {
   label?: string;
 }
 
-export type FBTextEditorFieldProps = EditorFieldProps & FBLabelRendererProps;
+export type FBTextEditorFieldProps = EditorFieldProps;
