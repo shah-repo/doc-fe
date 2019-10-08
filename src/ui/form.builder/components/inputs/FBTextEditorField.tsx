@@ -10,7 +10,7 @@ const FBTextEditorField: React.FunctionComponent<FBFormDefaultProps> = ({
 }) => (
   <Box mb={4}>
     {labelRenderer}
-    <TextEditorField name="" {...props} />
+    <TextEditorField label="" name="" {...props} />
   </Box>
 );
 
