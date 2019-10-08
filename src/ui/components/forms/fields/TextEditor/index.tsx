@@ -81,7 +81,7 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
   );
 };
 
-type TextEditorFieldProps = TextEditorOwnProps & FieldConfig;
+export type TextEditorFieldProps = TextEditorOwnProps & FieldConfig;
 
 const TextEditorField: React.FunctionComponent<TextEditorFieldProps> = (
   props,
