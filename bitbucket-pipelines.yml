@@ -80,7 +80,7 @@ pipelines:
     develop:
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEVELOP_1
-    develop2:
+    develop_19.2.1:
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEVELOP_2
     infrastructure:
