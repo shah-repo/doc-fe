@@ -15,8 +15,8 @@ pipelines:
         - chmod a+x ./aws/bash_scripts/runTests.sh
         - ./aws/bash_scripts/runTests.sh
 
-    deploy_to_development: &DEPLOY_TO_DEVELOPMENT
-      name: Deploying to Development
+    deploy_to_development: &DEPLOY_TO_DEVELOP_1
+      name: Deploy to Development 1
       image: python:3   
       deployment: Development
       services:
@@ -27,20 +27,15 @@ pipelines:
         - chmod a+x ./aws/bash_scripts/build.sh
         - ./aws/bash_scripts/build.sh "dev"
 
-    deploy_to_development: &DEPLOY_TO_DEVELOPMENT_2
-      name: Deploying to Development 2
-      image: python:3   
-      deployment: Development
-      services:
-        - docker
-      caches:
-        - docker
+    deploy_to_development: &DEPLOY_TO_DEVELOP_2
+      <<: *DEPLOY_TO_DEVELOP_1
+      name: Deploy to Development 2
       script:
         - chmod a+x ./aws/bash_scripts/build.sh
         - ./aws/bash_scripts/build.sh "dev2"
 
     deploy_to_production: &DEPLOY_TO_PRODUCTION
-      name: Deploying to Production
+      name: Deploy to Production
       image: python:3   
       deployment: Production
       services:
@@ -52,7 +47,7 @@ pipelines:
         - ./aws/bash_scripts/build.sh "prod"
 
     deploy_to_demo: &DEPLOY_TO_DEMO
-      name: Deploying to Demo
+      name: Deploy to Demo
       image: python:3   
       deployment: Demo
       services:
@@ -68,10 +63,10 @@ pipelines:
   tags:
     deploy-to-dev:
       - step: *RUN_TESTS
-      - step: *DEPLOY_TO_DEVELOPMENT
+      - step: *DEPLOY_TO_DEVELOP_1
     deploy-to-dev2:
       - step: *RUN_TESTS
-      - step: *DEPLOY_TO_DEVELOPMENT_2
+      - step: *DEPLOY_TO_DEVELOP_2
     deploy-to-demo:
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEMO
@@ -84,13 +79,13 @@ pipelines:
       - step: *DEPLOY_TO_PRODUCTION
     develop:
       - step: *RUN_TESTS
-      - step: *DEPLOY_TO_DEVELOPMENT
+      - step: *DEPLOY_TO_DEVELOP_1
     develop2:
       - step: *RUN_TESTS
-      - step: *DEPLOY_TO_DEVELOPMENT_2
+      - step: *DEPLOY_TO_DEVELOP_2
     infrastructure:
       - step: *RUN_TESTS
-      - step: *DEPLOY_TO_DEVELOPMENT
+      - step: *DEPLOY_TO_DEVELOP_1
     demo:
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEMO
