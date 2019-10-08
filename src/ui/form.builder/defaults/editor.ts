@@ -1,8 +1,9 @@
 import FBCheckboxEditor from "../components/editors/FBCheckboxEditor";
-import FBSectionEditor from "../components/editors/FBSectionEditor";
+import FBLabelEditor from "../components/editors/FBLabelEditor";
 import FBTextFieldEditor from "../components/editors/FBTextFieldEditor";
 import FBCheckbox from "../components/inputs/FBCheckbox";
 import FBDatePicker from "../components/inputs/FBDatePicker";
+import FBTextEditorField from "../components/inputs/FBTextEditorField";
 import FBTextField from "../components/inputs/FBTextField";
 import FBSectionBox from "../components/layout/FBSectionBox";
 import { FBEditorElementType } from "../types/editor";
@@ -14,11 +15,12 @@ export interface FBEditorDict {
 export const FBFieldEditorComponent: {
   [key: string]: React.FunctionComponent<{}>;
 } = {
-  section: FBSectionEditor,
+  section: FBLabelEditor,
   textfield: FBTextFieldEditor,
   checkbox: FBCheckboxEditor,
   checkboxgroup: FBTextFieldEditor,
-  datepicker: FBSectionEditor,
+  datepicker: FBLabelEditor,
+  texteditor: FBLabelEditor,
 };
 
 export const FBFieldComponent: { [key: string]: any } = {
@@ -27,10 +29,11 @@ export const FBFieldComponent: { [key: string]: any } = {
   checkbox: FBCheckbox,
   checkboxgroup: FBCheckbox,
   datepicker: FBDatePicker,
+  texteditor: FBTextEditorField,
 };
 
 export const FBEditorSectionConfig: { [key: string]: FBEditorElementType[] } = {
   section: ["section"],
-  basics: ["textfield", "checkbox", "checkboxgroup", "datepicker"],
+  basics: ["textfield", "checkbox", "checkboxgroup", "texteditor", "datepicker"],
   lists: [],
 };
