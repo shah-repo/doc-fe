@@ -16,7 +16,6 @@ export interface TextEditorOwnProps extends FieldOwnProps {
   quillOptions?: QuillOptionsStatic;
   size?: RenderSize;
   actionsRenderer?: () => any;
-  name?: string;
 }
 
 export type TextEditorPropsWithFormik = TextEditorOwnProps & FormikFieldProps;
