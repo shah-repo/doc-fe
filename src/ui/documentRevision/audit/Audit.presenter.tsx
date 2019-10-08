@@ -44,39 +44,61 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             <div className={classes.owner}>{change.owner.name}</div>
             <DateTime value={change.timestamp} />
           </div>
-          {checkIfGroup(auditField) && renderGroupChanges(audit[groupId])}
-          {!checkIfGroup(auditField) && renderChanges(audit[groupId])}
+          {renderChanges(audit[groupId])}
         </Box>
       );
     });
 
-  const renderChanges = (audits: Audit[]) =>
-    audits.map((change, index) => (
-      <Box mb={1} key={`${change.groupId}-${index}`}>
-        <Box>
-          <Text
-            message={`documentRevision.audit.${change.field}.${change.type}`}
-          />
-        </Box>
-        <div className={classes.auditValue}>
-          <AuditFactory audit={change} />
-        </div>
-      </Box>
-    ));
+  const renderChanges = (audits: Audit[]) => {
+    const references: Audit[] = [];
+    const attachments: Audit[] = [];
 
-  const renderGroupChanges = (audits: Audit[]) => {
-    const change = audits[0];
-    return (
-      <Box mb={1}>
-        <Text
-          message={`documentRevision.audit.${change.field}.${change.type}`}
-        />
-        {audits.map((change, index) => (
-          <Box key={`${change.groupId}-${index}`}>
+    const singleFields = audits.map((change, index) => {
+      if (change.field.includes("attachments")) {
+        attachments.push(change);
+      } else if (change.field.includes("referenceTo")) {
+        references.push(change);
+      } else {
+        return (
+          <Box mb={1} key={`${change.groupId}-${index}`}>
+            <Box>
+              <Text
+                message={`documentRevision.audit.${change.field}.${change.type}`}
+              />
+            </Box>
             <div className={classes.auditValue}>
               <AuditFactory audit={change} />
             </div>
           </Box>
+        );
+      }
+    });
+
+    return (
+      <Box>
+        {singleFields}
+        {attachments.length > 0 && renderGroupChanges(attachments)}
+        {references.length > 0 && renderGroupChanges(references)}
+      </Box>
+    );
+  };
+
+  const renderGroupChanges = (auditGroup: Audit[]) => {
+    const field = auditGroup[0].field;
+    const type = auditGroup[0].type;
+
+    return (
+      <Box mb={1} key={`${auditGroup[0].groupId}`}>
+        <Box>
+          <Text message={`documentRevision.audit.${field}.${type}`} />
+        </Box>
+        {auditGroup.map((change, index) => (
+          <div
+            key={change.groupId + `-${index}`}
+            className={classes.auditValue}
+          >
+            <AuditFactory audit={change} />
+          </div>
         ))}
       </Box>
     );

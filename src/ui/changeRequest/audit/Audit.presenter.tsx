@@ -70,13 +70,13 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     return (
       <Box>
         {singleFields}
-        {attachments.length > 0 && renderGroup(attachments)}
-        {references.length > 0 && renderGroup(references)}
+        {attachments.length > 0 && renderGroupChanges(attachments)}
+        {references.length > 0 && renderGroupChanges(references)}
       </Box>
     );
   };
 
-  const renderGroup = (auditGroup: Audit[]) => {
+  const renderGroupChanges = (auditGroup: Audit[]) => {
     const field = auditGroup[0].field;
     const type = auditGroup[0].type;
 
