@@ -72,7 +72,7 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
           formats={formats}
           {...quillOptions}
           onChange={handleChange}
-          value={fieldProps.field.value}
+          value={fieldProps.field.value || ""}
           onBlur={handleBlur}
           readOnly={!isComponentVisible}
         />
