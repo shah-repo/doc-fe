@@ -27,12 +27,6 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const classes = styles();
   const [expanded, setExpanded] = React.useState<boolean>(false);
 
-  const checkIfGroup = (auditField: string) => {
-    return ["attachments", "referenceTo"].some((audit) =>
-      auditField.includes(audit),
-    );
-  };
-
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId) => {
       const change = audit[groupId][0];
