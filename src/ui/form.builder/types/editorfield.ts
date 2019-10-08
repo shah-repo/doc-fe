@@ -1,7 +1,3 @@
-import { TextEditorPropsWithFormik } from "../../components/forms/fields/TextEditor";
+import { FBFormDefaultProps } from "./common";
 
-export interface EditorFieldProps {
-  label?: string;
-}
-
-export type FBTextEditorFieldProps = EditorFieldProps;
+export type FBTextEditorFieldProps = FBFormDefaultProps;
