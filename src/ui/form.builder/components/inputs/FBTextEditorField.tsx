@@ -1,10 +1,10 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import TextEditorField from "../../../components/forms/fields/TextEditor";
-import { FBTextEditorFieldProps } from "../../types/editorfield";
 import { withLabelRenderer } from "../../hocs/withLabelRenderer";
+import { FBFormDefaultProps } from "../../types/common";
 
-const FBTextEditorField: React.FunctionComponent<FBTextEditorFieldProps> = ({
+const FBTextEditorField: React.FunctionComponent<FBFormDefaultProps> = ({
   labelRenderer,
   ...props
 }) => (
