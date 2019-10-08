@@ -25,7 +25,7 @@ export class FBEditorStore {
     setTimeout(() => {
       this.content = undefined;
       this.title = undefined;
-    }, 1000);
+    }, 500);
   }
 
   @action public editorTypeRenderer = (
