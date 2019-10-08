@@ -139,7 +139,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const renderTypeOfRevisionChange = () => {
     if (showRevisionTypeChange) {
       return (
-        <React.Fragment>
+        <Box mt={7}>
           <Typography variant="h6">
             <Text translation="documentRevision.form.typeOfRevisionChange" />
           </Typography>
@@ -159,7 +159,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               value={RevisionChangeType.Obsolete}
             />
           </RadioGroup>
-        </React.Fragment>
+        </Box>
       );
     }
   };
@@ -206,9 +206,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       includeEmpty={false}
     />
   );
-
-  const renderTrainingRequired = (values.version! > 1 || showRevisionTypeChange) &&
-    <CheckboxField name="retrain" label="document.revision.trainingRequired"/>;
 
   return (
     <Grid
@@ -287,7 +284,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             onClick={openReference}
           />
           {renderReferences()}
-          {renderTrainingRequired}
+          <CheckboxField name="retrain" label="document.revision.trainingRequired"/>
           <AttachmentsField />
           {renderTypeOfRevisionChange()}
           <Box mt={7} mx={-7}>

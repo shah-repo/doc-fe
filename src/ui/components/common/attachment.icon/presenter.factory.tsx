@@ -4,7 +4,7 @@ import Presenter from "./presenter";
 import { AttachmentIconFactoryProps, AttachmentIconProps } from "./utils/types";
 
 export const AttachmentIconPresenterFactory: React.FunctionComponent<
-AttachmentIconFactoryProps
+  AttachmentIconFactoryProps
 > = ({
   attachment,
   size,
@@ -24,36 +24,31 @@ AttachmentIconFactoryProps
     attachment,
     isUploading,
     isLoading,
+    handleRemove,
+    disabled,
     ...other,
   };
   let props: AttachmentIconProps = {
     ...defaultProps,
-    handleContextMenu,
-    handleRemove,
     handleIconClick: handleDownload,
+    handleContextMenu,
   };
+
+  if (isFileViewable && !isUploading) {
+    props = {
+      ...defaultProps,
+      handleIconClick: handleViewFile,
+      handleContextMenu,
+    };
+  }
 
   if (isUploading) {
     props = {
       ...defaultProps,
-      handleContextMenu,
     };
   }
 
-  if (isFileViewable) {
-    props = {
-      ...defaultProps,
-      handleContextMenu,
-      handleRemove,
-      handleIconClick: handleViewFile,
-    };
-  }
-
-  return (
-    <Presenter
-      {...props}
-    />
-  );
+  return <Presenter {...props} />;
 };
 
 export default AttachmentIconPresenterFactory;

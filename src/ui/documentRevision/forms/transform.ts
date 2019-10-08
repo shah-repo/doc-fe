@@ -17,7 +17,6 @@ export const toDocumentRevisionFormValues = (documentRevision: DocumentRevision)
     document: documentRevision.document,
     changeRequest: documentRevision.changeRequest,
     retrain: documentRevision.retrain,
-    version: documentRevision.version,
   };
 
   return values;
