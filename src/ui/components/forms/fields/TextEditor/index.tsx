@@ -7,6 +7,7 @@ import { RenderSize } from "../../../../../state/ducks/common";
 import useComponentVisible from "../../../../hooks/useComponentVisible";
 import Field, { FieldOwnProps } from "../Field";
 import { formats, modules } from "./configuration";
+import Text from "../../../Text";
 
 interface TextEditorOwnProps extends FieldOwnProps {
   quillOptions?: QuillOptionsStatic;
@@ -23,6 +24,26 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
   ...fieldProps
 }) => {
   const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
+
+  React.useEffect(() => {
+    if (!isComponentVisible) {
+      return;
+    }
+
+    const placeholderPickerItems =
+      Array.prototype.slice.call(document.querySelectorAll(".ql-placeholder .ql-picker-item"));
+
+    placeholderPickerItems.forEach((item) => item.textContent = item.dataset.value);
+
+    const dropdown = document.querySelector(".ql-placeholder .ql-picker-label");
+
+    if (!dropdown) {
+      return;
+    }
+
+    dropdown.innerHTML
+        = "Insert placeholder" + dropdown.innerHTML;
+  }, [isComponentVisible]);
   const handleChange = (editHtml: string) => {
     fieldProps.form.setFieldValue(fieldProps.field.name, editHtml);
   };
