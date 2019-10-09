@@ -91,8 +91,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const fbState =
     isFBActive &&
     // TODO: what should happen with this
-    document &&
-    document.documentType.documentTypeAcronym ===  DocumentRevisionType.FM;
+    _.get(document, "documentType.documentTypeAcronym") ===  DocumentRevisionType.FM;
 
   const [fbActive, fbSetActive] = useState(fbState);
 
