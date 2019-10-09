@@ -10,11 +10,12 @@ export interface FBLabelRendererProps {
 
 export type FBFormDefaultProps = FBLabelRendererProps & {
   label?: string;
+  disabled?: boolean;
 };
 
 export type FBOnChangeProps =
   Pick<SelectProps, "onChange" | "value"> &
   Pick<OutlinedTextFieldProps, "onChange"> & {
     value?: any;
+    onChange: () => (trigger: React.ChangeEvent<HTMLInputElement> | Date) => any;
   };
-  // Pick<BaseTextFieldProps, "value">;
