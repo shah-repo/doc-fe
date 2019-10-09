@@ -9,17 +9,8 @@ export const modules = {
         ["link"],
         ["clean"],
         [{ color: [] }, { background: [] }],
-        [{ placeholder: ["[GuestName]", "[HotelName]"] }], // my custom dropdown
     ],
     handlers: {
-        placeholder(value: string) {
-          const that: any = this;
-          if (value) {
-            const cursorPosition = that.quill.getSelection().index;
-            that.quill.insertText(cursorPosition, value);
-            that.quill.setSelection(cursorPosition + value.length);
-          }
-        },
     },
   },
 };

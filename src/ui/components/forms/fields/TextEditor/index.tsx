@@ -7,7 +7,8 @@ import { RenderSize } from "../../../../../state/ducks/common";
 import useComponentVisible from "../../../../hooks/useComponentVisible";
 import Field, { FieldOwnProps } from "../Field";
 import { formats, modules } from "./configuration";
-import Text from "../../../Text";
+import "./textEditor.css";
+import { useRef, useEffect, useState } from "react";
 
 interface TextEditorOwnProps extends FieldOwnProps {
   quillOptions?: QuillOptionsStatic;
@@ -24,26 +25,61 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
   ...fieldProps
 }) => {
   const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
+  const [toolbar, setToolbar] = useState<any>({});
 
-  React.useEffect(() => {
-    if (!isComponentVisible) {
-      return;
-    }
+  useEffect(() => {
+    setToolbar(
+      {
+        container: [
+          ...modules.toolbar.container,
+          ...customContainers,
+        ],
+        handlers: {
+          ...modules.toolbar.handlers,
+          ...customHandlers,
+        },
+      },
+    );
+  }, []);
 
+  const customContainers = [
+    [{ assessment: ["[GuestName]", "[HotelName]"] }],
+  ];
+
+  const customHandlers = {
+    assessment(value: string) {
+      const that: any = this;
+      if (value) {
+        const cursorPosition = that.quill.getSelection().index;
+        that.quill.insertText(cursorPosition, value);
+        that.quill.setSelection(cursorPosition + value.length);
+      }
+    },
+  };
+
+  const customToolbarAction = () => {
     const placeholderPickerItems =
-      Array.prototype.slice.call(document.querySelectorAll(".ql-placeholder .ql-picker-item"));
+      Array.prototype.slice.call(document.querySelectorAll(".ql-assessment .ql-picker-item"));
 
     placeholderPickerItems.forEach((item) => item.textContent = item.dataset.value);
 
-    const dropdown = document.querySelector(".ql-placeholder .ql-picker-label");
+    const dropdown = document.querySelector(".ql-assessment .ql-picker-label");
 
     if (!dropdown) {
       return;
     }
 
     dropdown.innerHTML
-        = "Insert placeholder" + dropdown.innerHTML;
+        = "Select assessment" + dropdown.innerHTML;
+  };
+
+  useEffect(() => {
+    if (!isComponentVisible) {
+      return;
+    }
+    customToolbarAction();
   }, [isComponentVisible]);
+
   const handleChange = (editHtml: string) => {
     fieldProps.form.setFieldValue(fieldProps.field.name, editHtml);
   };
@@ -78,7 +114,7 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
           bounds=".editor-container"
           modules={{
             ...modules,
-            toolbar: isComponentVisible ? modules.toolbar : false,
+            toolbar: isComponentVisible ? toolbar : false,
           }}
           formats={formats}
           {...quillOptions}
@@ -94,6 +130,8 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
 
 type TextEditorFieldProps = TextEditorOwnProps & FieldConfig;
 
-const TextEditorField: React.FunctionComponent<TextEditorFieldProps> = (props) => <FormikField component={TextEditor} {...props} />;
+const TextEditorField: React.FunctionComponent<TextEditorFieldProps> = (
+  props,
+) => <FormikField component={TextEditor} {...props} />;
 
 export default TextEditorField;
