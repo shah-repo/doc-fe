@@ -16,15 +16,20 @@ export function withOnChange<T extends FBOnChangeProps & FormikHybridFieldProps>
         <Component
           {...this.props as T}
           onChange={this.handleChange()}
-          value={field.value && field.value}
+          value={field.value && field.value || null}
         />
       );
     }
 
-    private handleChange = () => (event: React.ChangeEvent<HTMLInputElement>) => {
+    private handleChange = () => (trigger: React.ChangeEvent<HTMLInputElement> | Date) => {
       const { form, field } = this.props;
-      const target = event.target;
-      const value = target.type === "checkbox" ? target.checked : target.value;
+      let value: string | number | boolean | Date;
+      if (trigger instanceof Date) {
+        value = trigger;
+      } else {
+        const target = trigger.target;
+        value = target.type === "checkbox" ? target.checked : target.value;
+      }
       form.setFieldValue(field.name, value);
       formBuilderStore.values = form.values;
     }

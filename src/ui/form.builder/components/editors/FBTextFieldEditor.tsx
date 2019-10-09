@@ -2,18 +2,19 @@ import { Box } from "@material-ui/core";
 import React from "react";
 import FBCheckbox from "../inputs/FBCheckbox";
 import FBTextField from "../inputs/FBTextField";
+import FBLabelEditor from "./FBLabelEditor";
 
 const FBTextFieldEditor: React.FunctionComponent<{}> = () => (
   <Box>
-    <FBTextField label="Label" name="label" />
-    <FBTextField label="Placeholder" name="placeholder" />
+    <FBLabelEditor />
+    <FBTextField label="form.builder.placeholder" name="placeholder" />
     <FBTextField
       type="number"
-      label="Row number"
+      label="form.builder.rowNumber"
       defaultValue={1}
       name="rows"
     />
-    <FBCheckbox controlLabel="Required" name="required" />
+    <FBCheckbox controlLabel="form.builder.required" name="required" />
   </Box>
 );
 

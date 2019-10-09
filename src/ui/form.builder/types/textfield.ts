@@ -9,8 +9,8 @@ import {
 export type FBTextFieldInjectedProps = Pick<OutlinedTextFieldProps, "variant">;
 
 export type FBTextFieldProps =
-  OutlinedTextFieldProps &
-  FBFormDefaultProps &
-  FBLabelRendererProps &
-  FBOnChangeProps &
-  FormikHybridFieldProps;
+  & OutlinedTextFieldProps
+  & FBFormDefaultProps
+  & FBLabelRendererProps
+  & FBOnChangeProps
+  & FormikHybridFieldProps;

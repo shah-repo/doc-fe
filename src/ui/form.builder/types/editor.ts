@@ -11,6 +11,7 @@ export type FBEditorElementType =
   | "checkbox"
   | "checkboxgroup"
   | "section"
+  | "datepicker"
   | "texteditor";
 
 export interface FBEditorFormProps {
