@@ -1,41 +1,35 @@
 import React from "react";
 import { connect } from "react-redux";
-import FormMessage from "../components/forms/FormMessage";
-import FormProgress from "../components/forms/FormProgress";
-import { authActions, authSelectors } from "../../state/ducks/auth";
+import { documentTypeActions, documentTypeSelectors } from "../../state/ducks/documentRevisions/documentType";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
 
-export interface OwnProps {
-}
-
 interface DispatchProps {
-  loadPermissions: typeof authActions.loadPermissions;
+  loadDocumentTypes: typeof documentTypeActions.loadList;
 }
 
 interface StateProps {
-  currentUserId: string;
-  loadPermissionsAsyncState: AsyncState;
+  loadDocTypeAsyncState: AsyncState;
 }
 
-type DataFetcherContainerProps = OwnProps & DispatchProps & StateProps;
+type DataFetcherContainerProps = DispatchProps & StateProps;
 
 const mapStateToProps = (state: ApplicationState) => ({
-  currentUserId: authSelectors.currentUserId(state),
-  loadPermissionsAsyncState: authSelectors.getLoadPermissionsAsyncState(state),
+  loadDocTypeAsyncState: documentTypeSelectors.getLoadListAsyncState(state),
 });
 
 const DataFetcherContainer: React.FunctionComponent<DataFetcherContainerProps> = ({
-  loadPermissions, currentUserId, loadPermissionsAsyncState
+  loadDocumentTypes,
+  loadDocTypeAsyncState,
 }) => {
-  const loadAction = () => loadPermissions(currentUserId);
+  const loadAction = () => loadDocumentTypes();
 
   return (
-    <AsyncGate asyncState={loadPermissionsAsyncState} asyncAction={loadAction} startActionOnMount={true} />
-  )
+    <AsyncGate asyncState={loadDocTypeAsyncState} asyncAction={loadAction} startActionOnMount={true} />
+  );
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
-  loadPermissions: authActions.loadPermissions,
+export default connect<StateProps, DispatchProps, {}, ApplicationState>(mapStateToProps, {
+  loadDocumentTypes: documentTypeActions.loadList,
 })(DataFetcherContainer);
