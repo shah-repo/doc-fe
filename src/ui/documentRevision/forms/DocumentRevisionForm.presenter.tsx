@@ -7,6 +7,7 @@ import {
 } from "@material-ui/core";
 import { FormikProps } from "formik";
 import _ from "lodash";
+import { observer } from "mobx-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -40,6 +41,7 @@ import {
   documentDetailsPath,
   documentVersionPath,
 } from "../../document.revision/utils/paths";
+import { formBuilderStore } from "../../form.builder/stores/FBStore";
 import { formBuilderGet, isFBActive } from "../../formBuilder/helpers/FBLocalStorageHelper";
 import FBDocumentRevision from "../formBuilder/FBDocumentRevision.container";
 import styles from "./DocumentRevisionForm.styles";
@@ -88,16 +90,24 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   documentTypesById,
   document,
 }) => {
+
   const fbState =
     isFBActive &&
     // TODO: what should happen with this
-    _.get(document, "documentType.documentTypeAcronym") ===  DocumentRevisionType.FM;
+    _.get(document, "documentType.documentTypeName") ===  DocumentRevisionType.FM;
 
   const [fbActive, fbSetActive] = useState(fbState);
 
   if (fbState && initialValues.id && formBuilderGet(initialValues.id)) {
     uploadTemplate(formBuilderGet(initialValues.id).elements);
     fbFormMode(true);
+  }
+
+  if (initialValues.id) {
+    formBuilderStore.mode = "form";
+    formBuilderStore.documentId = initialValues.id;
+    formBuilderStore.setTemplate(initialValues.id);
+    formBuilderStore.setValue(initialValues.id);
   }
 
   const openReference = (documentId: string) => {
@@ -127,17 +137,24 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     setDocId!(value);
   };
 
+  const handleOutput = (
+    event: React.ChangeEvent<{ name?: string; value: unknown }>,
+  ) => {
+    const typeId = event.target.value as string;
+    formBuilderStore.documentOutputType = typeId;
+    handleChange(event);
+  };
+
   const handleTypeChange = (
     event: React.ChangeEvent<{ name?: string; value: unknown }>,
   ) => {
     const typeId = event.target.value as string;
     const type = documentTypesById[typeId] || {};
     loadDocumentProposedId(type.documentTypeAcronym);
-
     const isFM =
       isFBActive &&
       // TODO: this needs to be tested
-      type.documentTypeAcronym ===  DocumentRevisionType.FM;
+      type.documentTypeName ===  DocumentRevisionType.FM;
     fbSetActive(isFM);
     if (isFM && !initialValues.id) {
       uploadTemplate([]);
@@ -301,13 +318,15 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           {fbActive && (
             <Box my={4}>
               <SelectField
-                name="document.outputType"
+                name="documentOutputType"
                 label="document.output.type"
                 selectProps={{
-                  inputProps: { id: "outputType" },
+                  inputProps: { id: "documentOutputType", disabled: isDisabled },
+                  onChange: handleOutput,
+                  value: formBuilderStore.documentOutputType,
                 }}
-                options={documentRevisionTypeFormOption()}
-                validate={validator(required)}
+                options={documentTypes}
+                validate={!isDisabled ? validator(required) : undefined}
                 includeEmpty={false}
               />
             </Box>
@@ -334,4 +353,4 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default withStyles(styles)(DocumentRevisionFormPresenter);
+export default withStyles(styles)(observer(DocumentRevisionFormPresenter));
