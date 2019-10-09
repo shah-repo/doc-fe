@@ -109,6 +109,7 @@ export enum DocumentRevisionType {
   EB = "Engineering Build",
   NSW = "Non-product Software",
   PRT = "Parts",
+  CPT = "Concept",
 }
 
 export const RevisionStageOptions = [

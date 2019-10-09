@@ -9,12 +9,18 @@ import { DiffPresenterProps } from "./utils/types.js";
 type Props = DiffPresenterProps;
 
 const DiffPresenter: React.FunctionComponent<Props> = ({
-  oldText, newText, refOld, refNew, delta,
+  refOld, refNew, delta, refMain,
 }) => {
   const classes = styles();
 
   return (
     <div className="diff-container">
+      <ReactQuill
+        ref={refMain}
+        readOnly={true}
+        modules={{ toolbar: false }}
+        style={{ display: "none" }}
+      />
       <div
         className={classNames(classes.editorContainer, { [classes.hiddenEditor]: !delta })}
       >
@@ -24,7 +30,6 @@ const DiffPresenter: React.FunctionComponent<Props> = ({
         <ReactQuill
           ref={refOld}
           readOnly={true}
-          value={oldText}
           modules={{ toolbar: false }}
           className={classNames(classes.editor, { [classes.hiddenEditor]: !delta })}
         />
@@ -38,7 +43,6 @@ const DiffPresenter: React.FunctionComponent<Props> = ({
         <ReactQuill
           ref={refNew}
           readOnly={true}
-          value={delta || newText}
           modules={{ toolbar: false }}
           className={classNames(classes.editor, { [classes.fullWidth]: !delta })}
         />
