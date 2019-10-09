@@ -29,23 +29,31 @@ const Assessments: React.FunctionComponent<Props> = ({ form }) => {
         form!.setFieldValue(`assessments.${type}.reasoning`, null);
       }
 
-      return (
-        <Box key={type} mb={4}>
+      const renderTextEditor = !hasAttachment && (
+        <TextEditorField
+          name={`assessments.${type}.reasoning`}
+          customContainers={getCustomContainers(type)}
+          customHandlers={customHandlers}
+          customToolbarAction={customToolbarAction}
+          actionsRenderer={actionsRenderer}
+          label={`change.request.${type}.assessment`}
+        />
+      );
+      const renderAttachments = hasAttachment && (
+        <>
           <HeaderField
             dataProp={`change.request.${type}.assessment`}
             size="sm"
             actionsRenderer={actionsRenderer}
           />
-          {
-            !hasAttachment &&
-            <TextEditorField
-              name={`assessments.${type}.reasoning`}
-              customContainers={getCustomContainers(type)}
-              customHandlers={customHandlers}
-              customToolbarAction={customToolbarAction}
-            />
-          }
           <AttachmentIconField name={`assessments.${type}.attachments`} />
+        </>
+      );
+
+      return (
+        <Box key={type} mb={4}>
+          {renderTextEditor}
+          {renderAttachments}
         </Box>
       );
     });
