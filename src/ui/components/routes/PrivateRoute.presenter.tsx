@@ -10,7 +10,7 @@ export interface PrivateRoutePresenterProps extends Pick<RouteComponentProps, "l
 const PrivateRoutePresenter: React.FunctionComponent<PrivateRoutePresenterProps> =
   ({ component: Component, isAuthenticated, ...rest }) => {
     useEffect(() => {
-      if (isAuthenticated) {
+      if (!isAuthenticated) {
         rest.history.replace("/");
       }
     }, [isAuthenticated]);
