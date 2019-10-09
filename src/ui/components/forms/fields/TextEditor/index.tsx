@@ -1,18 +1,20 @@
 import classNames from "classnames";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import { QuillOptionsStatic } from "quill";
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import { RenderSize } from "../../../../../state/ducks/common";
 import useComponentVisible from "../../../../hooks/useComponentVisible";
 import Field, { FieldOwnProps } from "../Field";
 import { formats, modules } from "./configuration";
 import "./textEditor.css";
-import { useRef, useEffect, useState } from "react";
 
 interface TextEditorOwnProps extends FieldOwnProps {
   quillOptions?: QuillOptionsStatic;
   size?: RenderSize;
+  customContainers?: any[];
+  customHandlers?: any;
+  customToolbarAction?: () => void;
   actionsRenderer?: () => any;
 }
 
@@ -22,6 +24,9 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
   quillOptions,
   actionsRenderer,
   size,
+  customContainers = [],
+  customHandlers = [],
+  customToolbarAction,
   ...fieldProps
 }) => {
   const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
@@ -42,42 +47,11 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
     );
   }, []);
 
-  const customContainers = [
-    [{ assessment: ["[GuestName]", "[HotelName]"] }],
-  ];
-
-  const customHandlers = {
-    assessment(value: string) {
-      const that: any = this;
-      if (value) {
-        const cursorPosition = that.quill.getSelection().index;
-        that.quill.insertText(cursorPosition, value);
-        that.quill.setSelection(cursorPosition + value.length);
-      }
-    },
-  };
-
-  const customToolbarAction = () => {
-    const placeholderPickerItems =
-      Array.prototype.slice.call(document.querySelectorAll(".ql-assessment .ql-picker-item"));
-
-    placeholderPickerItems.forEach((item) => item.textContent = item.dataset.value);
-
-    const dropdown = document.querySelector(".ql-assessment .ql-picker-label");
-
-    if (!dropdown) {
-      return;
-    }
-
-    dropdown.innerHTML
-        = "Select assessment" + dropdown.innerHTML;
-  };
-
   useEffect(() => {
     if (!isComponentVisible) {
       return;
     }
-    customToolbarAction();
+    customToolbarAction && customToolbarAction();
   }, [isComponentVisible]);
 
   const handleChange = (editHtml: string) => {

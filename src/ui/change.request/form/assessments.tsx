@@ -9,6 +9,7 @@ import EditableSelectField from "../../components/forms/fields/EditableSelect/co
 import { withFormik } from "../../components/hoc/formik";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
 import { assessmentStatementOption } from "../utils/helpers";
+import TextEditorField from "../../components/forms/fields/TextEditor";
 
 type Props = Partial<FormikHybridFieldProps>;
 
@@ -28,6 +29,37 @@ const Assessments: React.FunctionComponent<Props> = ({ form }) => {
         form!.setFieldValue(`assessments.${type}.reasoning`, undefined);
       }
 
+      const reasoningOptions = assessmentStatementOption(type);
+      const toolbarOptions = reasoningOptions.map((option) => option.value);
+      const customContainers = [
+        [{ assessment: toolbarOptions }],
+      ];
+
+      const customHandlers = {
+        assessment(value: string) {
+          const that: any = this;
+          if (value) {
+            that.quill.setText(value);
+          }
+        },
+      };
+
+      const customToolbarAction = () => {
+        const placeholderPickerItems =
+          Array.prototype.slice.call(document.querySelectorAll(".ql-assessment .ql-picker-item"));
+
+        placeholderPickerItems.forEach((item) => item.textContent = item.dataset.value);
+
+        const dropdown = document.querySelector(".ql-assessment .ql-picker-label");
+
+        if (!dropdown) {
+          return;
+        }
+
+        dropdown.innerHTML
+            = "Select reasoning" + dropdown.innerHTML;
+      };
+
       return (
         <Box key={type} mb={4}>
           <HeaderField
@@ -35,11 +67,11 @@ const Assessments: React.FunctionComponent<Props> = ({ form }) => {
             size="sm"
             actionsRenderer={actionsRenderer}
           />
-          <EditableSelectField
+          <TextEditorField
             name={`assessments.${type}.reasoning`}
-            options={assessmentStatementOption(type)}
-            includeEmpty={true}
-            gutter={(attachments || []).length === 0}
+            customContainers={customContainers}
+            customHandlers={customHandlers}
+            customToolbarAction={customToolbarAction}
           />
           <AttachmentIconField name={`assessments.${type}.attachments`} />
         </Box>
