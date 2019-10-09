@@ -13,6 +13,7 @@ import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { toDocumentRevisionFormValuesWithRevisionChange, toNewVersionRequestBody } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
 import { generateDocumentRevisionVersionPath } from "./pathGenerators";
+import { formBuilderStore } from "../form.builder/stores/FBStore";
 
 interface DispatchProps {
   create: typeof documentRevisionsActions.create;
@@ -49,6 +50,9 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   const async = useAsync<DocumentRevision>({
       onSuccess: (createdDocumentRevision?) => {
         if (createdDocumentRevision) {
+          formBuilderStore.documentId = createdDocumentRevision.id;
+          formBuilderStore.submitTemplate();
+          formBuilderStore.submitValue();
           loadDocument(createdDocumentRevision.document.id);
           history.push(generateDocumentRevisionVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id));
         }

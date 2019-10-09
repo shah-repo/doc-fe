@@ -257,6 +257,7 @@
   "documentRevision.audit.referenceTo.ARRAY_NEW": "New reference to",
   "documentRevision.audit.referenceTo.ARRAY_DELETED": "Reference removed",
   "documentRevision.audit.changeRequest.STRING_NEW": "New change request",
+  "documentRevision.audit.documentType.STRING_NEW": "New document type",
 
   "transition.action.confirm": "Confirm",
   "transition.action.cancel": "Cancel",

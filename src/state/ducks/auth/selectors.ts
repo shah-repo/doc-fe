@@ -1,6 +1,6 @@
+import { createSelector } from "reselect";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
-import { createSelector } from "reselect";
 
 const isAuthenticated = (state: ApplicationState): boolean => {
   return Boolean(state.auth.tokens.id.value);
@@ -28,14 +28,14 @@ const getLoadPermissionsAsyncState = (state: ApplicationState): AsyncState => {
 
 const getHasPermission = (state: ApplicationState, permission: string): boolean => (
   state.auth.permissions.includes(permission)
-)
+);
 
 const makeGetHasPermission = () => {
   return createSelector(
     getHasPermission,
     (hasPermission: boolean) => hasPermission,
-  )
-}
+  );
+};
 
 export default {
   isAuthenticated,

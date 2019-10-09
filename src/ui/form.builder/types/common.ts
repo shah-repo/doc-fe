@@ -1,5 +1,6 @@
 import { SelectProps } from "@material-ui/core/Select";
 import { BaseTextFieldProps, OutlinedTextFieldProps } from "@material-ui/core/TextField";
+import { Delta } from "quill";
 
 export type Subtract<T, V> = Pick<T, Exclude<keyof T, keyof V>>;
 
@@ -9,9 +10,12 @@ export interface FBLabelRendererProps {
 
 export type FBFormDefaultProps = FBLabelRendererProps & {
   label?: string;
+  disabled?: boolean;
 };
 
 export type FBOnChangeProps =
   Pick<SelectProps, "onChange" | "value"> &
-  Pick<OutlinedTextFieldProps, "onChange"> &
-  Pick<BaseTextFieldProps, "value">;
+  Pick<OutlinedTextFieldProps, "onChange"> & {
+    value?: any;
+    onChange: () => (trigger: React.ChangeEvent<HTMLInputElement> | Date) => any;
+  };

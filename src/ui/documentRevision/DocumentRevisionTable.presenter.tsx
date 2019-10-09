@@ -25,6 +25,7 @@ interface DocumentRevisionTableProps extends DocumentRevisionActionProps, WithSt
   currentUserEmail: string;
 }
 
+// TODO: check if this can be deleted
 const DocumentRevisionTable: React.FunctionComponent<DocumentRevisionTableProps> = ({
   classes, documentRevisions, currentUserEmail, editDocumentRevision, previewDocumentRevision,
 }) => {
@@ -38,7 +39,7 @@ const DocumentRevisionTable: React.FunctionComponent<DocumentRevisionTableProps>
       name: documentRevision.name,
       owner: documentRevision.owner.name,
       status: documentRevision.status,
-      type: documentRevision.type,
+      type: documentRevision.document.documentType,
     };
   };
 

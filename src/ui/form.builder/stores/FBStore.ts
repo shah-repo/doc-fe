@@ -1,12 +1,15 @@
 import _ from "lodash";
 import { action, computed, observable } from "mobx";
+import { DocumentRevisionType } from "../../../state/ducks/documentRevisions";
+import { DocumentTypeByIdState, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { SelectOption } from "../../components/forms/fields/Select";
 import { FBEditorSectionConfig } from "../defaults/editor";
 import { FBTemplateSchema } from "../types/store";
 import { FBWorkspaceMode } from "../types/workspace";
 
 export class FBStore {
   @observable public name?: string = undefined;
-  @observable public documentType?: string = undefined;
+  @observable public documentOutputType?: string = undefined;
   @observable public documentId?: string = undefined;
   @observable public schema: FBTemplateSchema[] = [];
   @observable public values: { [key: string]: any } = {};
@@ -34,7 +37,7 @@ export class FBStore {
 
   @action public reset = () => {
     this.name = undefined;
-    this.documentType = undefined;
+    this.documentOutputType = undefined;
     this.documentId = undefined;
     this.schema = [];
     this.values = {};
@@ -46,7 +49,7 @@ export class FBStore {
     const tplStr = localStorage.getItem("fbTemplates");
     const templates = tplStr ? JSON.parse(tplStr) : [];
     const filtered = _.filter(templates, (template) => template.documentId !== this.documentId);
-    const newTemplate = _.pick(this, ["documentType", "documentId", "schema"]);
+    const newTemplate = _.pick(this, ["documentOutputType", "documentId", "schema"]);
     filtered.push(newTemplate);
     localStorage.setItem("fbTemplates", JSON.stringify(filtered));
   }
@@ -66,7 +69,7 @@ export class FBStore {
     const filtered = _.filter(templates, (template) => template.documentId === documentId);
     if (filtered.length > 0) {
       this.documentId = documentId;
-      this.documentType = filtered[0].documentType;
+      this.documentOutputType = filtered[0].documentOutputType;
       this.schema = filtered[0].schema;
     }
   }

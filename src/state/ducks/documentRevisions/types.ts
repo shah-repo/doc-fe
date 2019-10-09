@@ -3,13 +3,14 @@ import { Attachment } from "../attachments";
 import { AuditActionPayload } from "../audit/types";
 import { ChangeRequest } from "../changeRequest";
 import { User } from "../common";
+import { TrainingRecord } from "../training";
 import {
   DOCUMENT_REVISION_AUDIT_SET,
   DOCUMENT_REVISION_LIST,
   DOCUMENT_REVISION_SET,
   DOCUMENT_SET,
 } from "./constants";
-import { TrainingRecord } from "../training";
+import { DocumentType } from "./documentType";
 
 export enum DocumentRevisionStatus {
   Draft = "DRAFT",
@@ -29,12 +30,13 @@ export enum RevisionChangeType {
 export interface DocumentRevisionDocument {
   id: string;
   docId: string;
-  type: string;
+  documentType: string;
   referencedBy: DocumentRevision[];
 }
 export interface Document {
   id: string;
-  ordinalNumber: number;
+  docId: string;
+  documentType: DocumentType;
   documentRevisions: DocumentRevision[];
 }
 
@@ -59,7 +61,11 @@ export interface DocumentRevision {
   attachments: Attachment[];
   status: DocumentRevisionStatus;
   document: DocumentRevisionDocument;
-  type: DocumentRevisionType;
+  // TODO: this needs a proper fix
+  // this is a hack for document.revision/list/presenter
+  // Array<TableColumnProps<DocumentRevision>>
+  // to allow the use of this key
+  documentTypeId?: string;
   released: Date;
   referenceTo: Reference[];
   createdAt?: string;
@@ -72,6 +78,7 @@ export interface DocumentRevision {
   retrain?: boolean;
 }
 
+// TODO: check if this is still needed
 export enum DocumentRevisionType {
   SOP = "Standard Operating Procedure",
   ADM = "Administrative",
@@ -112,8 +119,8 @@ export enum DocumentRevisionType {
 export const RevisionStageOptions = [
   { value: 1, text: "common.Numeric" },
   { value: 2, text: "common.AlphaNumeric" },
-  { value: 3, text: "common.Alpha" }
-]
+  { value: 3, text: "common.Alpha" },
+];
 
 export interface ReferenceToEditRequest {
   id: string;

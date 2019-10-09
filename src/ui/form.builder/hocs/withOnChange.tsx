@@ -21,17 +21,28 @@ export function withOnChange<T extends FBOnChangeProps & FormikHybridFieldProps>
       );
     }
 
-    private handleChange = () => (trigger: React.ChangeEvent<HTMLInputElement> | Date) => {
+    private handleChange = () => (trigger:
+      | React.ChangeEvent<HTMLInputElement>
+      | string
+      | Date,
+    ) => {
       const { form, field } = this.props;
-      let value: string | number | boolean | Date;
-      if (trigger instanceof Date) {
-        value = trigger;
-      } else {
-        const target = trigger.target;
-        value = target.type === "checkbox" ? target.checked : target.value;
+      let value: any;
+
+      switch (true) {
+        case (trigger instanceof Date):
+        case (typeof trigger === "string"):
+            value = trigger;
+            break;
+        default:
+          const target = (trigger as React.ChangeEvent<HTMLInputElement>).target;
+          value = target.type === "checkbox" ? target.checked : target.value;
       }
       form.setFieldValue(field.name, value);
-      formBuilderStore.values = form.values;
+
+      if (formBuilderStore.mode === "design") { return; }
+      formBuilderStore.values = {...formBuilderStore.values, [field.name as string]: value };
+      formBuilderStore.submitValue();
     }
   }
 
