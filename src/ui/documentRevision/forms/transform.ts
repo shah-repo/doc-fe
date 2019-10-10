@@ -4,6 +4,7 @@ import {
   DocumentRevisionEditRequestBody,
   RevisionChangeType,
 } from "../../../state/ducks/documentRevisions";
+import { DocumentType } from "../../../state/ducks/documentRevisions/documentType";
 import { DocumentRevisionFormValues } from "./types";
 
 export const toDocumentRevisionFormValues = (documentRevision: DocumentRevision): DocumentRevisionFormValues => {
@@ -46,7 +47,7 @@ export const toNewVersionRequestBody = (values: DocumentRevisionFormValues): Doc
       newValues.document = _.pick(values.document, ["id"]);
     } else {
       // new document
-      newValues.document = _.pick(values.document, ["docId", "type"]);
+      newValues.document = _.pick(values.document, ["docId", "documentType"]);
     }
   }
 

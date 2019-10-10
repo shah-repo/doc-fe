@@ -94,7 +94,7 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
               Object.keys(this.state.data1).map((key) => (
                   <tr key={key}>
                     <td><b>{key}: </b></td>
-                    <td>{(this.state.data1 as any)[key]}</td>
+                    <td>{(this.state.data1 as any)[key] == true ? "true" : "false"}</td>
                   </tr>
               ))
             }

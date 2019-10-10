@@ -28,14 +28,16 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   currentUserEmail,
   editDocumentRevision,
   setDocId,
+  documentTypeOptions,
 }) => {
   const ALL_DOC_REV_STATES = "ALL_DOC_REV_STATES";
   const [clearFilter, setClearFilter] = React.useState<boolean>(false);
 
   const canEdit = (data: DocumentRevision) => canEditDocumentRevision({dataProp: data, currentUserEmail});
 
+  // TODO: fix tolltip
   const typeTooltipRenderer = (rowData: DocumentRevision) =>
-    DocumentRevisionType[rowData.document.type as unknown as keyof typeof DocumentRevisionType];
+    rowData.document.documentType;
 
   const cellHrefRenderer = (rowData: DocumentRevision): string => {
     if (canEdit(rowData)) {
@@ -87,11 +89,11 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       cellHref: cellHrefRenderer,
     },
     {
-      key: "type",
+      key: "documentTypeId",
       label: "document.revision.list.type",
       tooltipKey: typeTooltipRenderer,
       cellHref: cellHrefRenderer,
-      searchOptions: { searchType: "select", selectOptions: documentRevisionTypeOption() },
+      searchOptions: { searchType: "select", selectOptions: documentTypeOptions },
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.document.type,
         width: 100,
