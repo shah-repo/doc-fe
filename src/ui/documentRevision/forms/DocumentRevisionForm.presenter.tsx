@@ -41,6 +41,8 @@ import {
   documentDetailsPath,
   documentVersionPath,
 } from "../../document.revision/utils/paths";
+import FBButton from "../../form.builder/components/inputs/FBButton";
+import editorStore from "../../form.builder/stores/FBEditorStore";
 import { formBuilderStore } from "../../form.builder/stores/FBStore";
 import { formBuilderGet, isFBActive } from "../../formBuilder/helpers/FBLocalStorageHelper";
 import FBDocumentRevision from "../formBuilder/FBDocumentRevision.container";
@@ -160,6 +162,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       uploadTemplate([]);
       fbFormMode(false);
     }
+    formBuilderStore.reset();
+    editorStore.reset();
     handleChange(event);
   };
 
@@ -234,6 +238,15 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       includeEmpty={false}
     />
   );
+
+  const saveFB = () => {
+    formBuilderStore.documentId = "1";
+    formBuilderStore.submitTemplate();
+    formBuilderStore.submitValue();
+    formBuilderStore.mode = "form";
+    formBuilderStore.setTemplate("1");
+    formBuilderStore.setValue("1");
+  };
 
   return (
     <Grid
@@ -341,10 +354,11 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               alignItems="flex-end"
               direction="column"
             >
-              <SubmitButton
+              <FBButton label="SAVE" onClick={saveFB} />
+              {/* <SubmitButton
                 asyncState={asyncState}
                 label={isDisabled ? "common.save" : "navigation.createDocument"}
-              />
+              /> */}
             </Grid>
           </Box>
         </FormWrapper>

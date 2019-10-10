@@ -1,25 +1,20 @@
 import { Box, FormGroup } from "@material-ui/core";
+import _ from "lodash";
 import React from "react";
-import { withLabelRenderer } from "../../hocs/withLabelRenderer";
-import { FBCheckboxGroupProps } from "../../types/checkbox";
-import FBCheckbox from "./FBCheckbox";
+import { withOptionRenderer } from "../../hocs/withOptionRenderer";
+import { FBFormDefaultProps } from "../../types/common";
 
-const FBCheckboxGroup: React.FunctionComponent<FBCheckboxGroupProps> = ({
+const FBCheckboxGroup: React.FunctionComponent<FBFormDefaultProps> = ({
   labelRenderer,
-  options,
-}) => {
+  optionsRenderer,
+  includeNote,
+}) => (
+  <Box mb={4}>
+    {labelRenderer}
+    <FormGroup row={!includeNote}>
+      {optionsRenderer}
+    </FormGroup>
+  </Box>
+);
 
-  const optionsRenderer = options.map((option, i) =>
-    <FBCheckbox key={`fb.check.${name}.${i}`} {...option} />);
-
-  return (
-    <Box mb={4}>
-      {labelRenderer}
-      <FormGroup row={true}>
-        {optionsRenderer}
-      </FormGroup>
-    </Box>
-  );
-};
-
-export default withLabelRenderer(FBCheckboxGroup);
+export default withOptionRenderer(FBCheckboxGroup);

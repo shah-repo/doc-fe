@@ -1,12 +1,21 @@
 import DateFnsUtils from "@date-io/date-fns";
 import { Box } from "@material-ui/core";
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import {
+  KeyboardDatePicker,
+  KeyboardDatePickerProps,
+  MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
 import React from "react";
 import { withLabelRenderer } from "../../hocs/withLabelRenderer";
 import { withOnChange } from "../../hocs/withOnChange";
-import { FBDatePickerProps } from "../../types/datepicker";
+import { FBFormDefaultProps, FBOnChangeProps } from "../../types/common";
 
-const FBDatePicker: React.FunctionComponent<FBDatePickerProps> = ({
+type Props =
+  & KeyboardDatePickerProps
+  & FBFormDefaultProps
+  & FBOnChangeProps;
+
+const FBDatePicker: React.FunctionComponent<Props> = ({
   labelRenderer,
   ...props
 }) => (

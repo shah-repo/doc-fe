@@ -10,6 +10,10 @@ export interface FBTemplateSchema {
   rows?: number;
   checkboxNote?: string;
   disabled?: boolean;
+  includeOther?: boolean;
+  options?: string;
+  includeNote?: boolean;
+  optionNote?: string;
 }
 
 export interface FBStoreProps {

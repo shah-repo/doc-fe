@@ -1,9 +1,12 @@
 import { Button } from "@material-ui/core";
+import { ButtonProps } from "@material-ui/core/Button/Button";
 import React from "react";
 import Text from "../../../components/Text";
-import { FBButtonProps } from "../../types/button";
+import { FBFormDefaultProps } from "../../types/common";
 
-const FBButton: React.FunctionComponent<FBButtonProps> = ({
+type Props = ButtonProps & FBFormDefaultProps;
+
+const FBButton: React.FunctionComponent<Props> = ({
   label,
   variant = "contained",
   color = "secondary",

@@ -1,14 +1,13 @@
 import React from "react";
 import { withFormik } from "../../components/hoc/formik";
-import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
 import { formBuilderStore } from "../stores/FBStore";
 import { FBOnChangeProps, Subtract } from "../types/common";
 
-export function withOnChange<T extends FBOnChangeProps & FormikHybridFieldProps>(
+export function withOnChange<T extends FBOnChangeProps>(
   Component: React.ComponentType<T>,
 ) {
 
-  class HOC extends React.Component<Subtract<T, FBOnChangeProps>> {
+  class HOC extends React.Component<Subtract<T, Pick<FBOnChangeProps, "value"|"onChange">>> {
 
     public render() {
       const { field } = this.props;

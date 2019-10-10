@@ -14,7 +14,7 @@ const FBTextFieldEditor: React.FunctionComponent<{}> = () => (
       defaultValue={1}
       name="rows"
     />
-    <FBCheckbox controlLabel="form.builder.required" name="required" />
+    <FBCheckbox label="form.builder.required" name="required" />
   </Box>
 );
 
