@@ -1,20 +1,20 @@
-import { Box, Grid } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import React from "react";
 import { AssessmentType } from "../../../state/ducks/changeRequest";
 import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
 import AttachmentField from "../../components/common/attachment.field/container";
 import AttachmentIconField from "../../components/common/attachment.icon/container";
 import HeaderField from "../../components/common/header.field/field";
-import EditableSelectField from "../../components/forms/fields/EditableSelect/container";
+import TextEditorField from "../../components/forms/fields/TextEditor";
 import { withFormik } from "../../components/hoc/formik";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
-import { assessmentStatementOption } from "../utils/helpers";
+import { customHandlers, customToolbarAction, getCustomContainers } from "../utils/assessment";
 
 type Props = Partial<FormikHybridFieldProps>;
 
 const Assessments: React.FunctionComponent<Props> = ({ form }) => {
   const itemRenderer = () =>
-    Object.values(AssessmentType).map(type => {
+    Object.values(AssessmentType).map((type) => {
       const { attachments, reasoning } = form!.values.assessments[
         type as AssessmentType
       ];
@@ -23,25 +23,37 @@ const Assessments: React.FunctionComponent<Props> = ({ form }) => {
         <AttachmentField name={`assessments.${type}.attachments`} />
       );
 
-      // Has attachment
-      if ((attachments || []).length > 0 && reasoning) {
-        form!.setFieldValue(`assessments.${type}.reasoning`, undefined);
+      const hasAttachment = (attachments || []).length > 0;
+
+      if (hasAttachment && reasoning) {
+        form!.setFieldValue(`assessments.${type}.reasoning`, null);
       }
 
-      return (
-        <Box key={type} mb={4}>
+      const renderTextEditor = !hasAttachment && (
+        <TextEditorField
+          name={`assessments.${type}.reasoning`}
+          customContainers={getCustomContainers(type)}
+          customHandlers={customHandlers}
+          customToolbarAction={customToolbarAction}
+          actionsRenderer={actionsRenderer}
+          label={`change.request.${type}.assessment`}
+        />
+      );
+      const renderAttachments = hasAttachment && (
+        <>
           <HeaderField
             dataProp={`change.request.${type}.assessment`}
             size="sm"
             actionsRenderer={actionsRenderer}
           />
-          <EditableSelectField
-            name={`assessments.${type}.reasoning`}
-            options={assessmentStatementOption(type)}
-            includeEmpty={true}
-            gutter={(attachments || []).length === 0}
-          />
           <AttachmentIconField name={`assessments.${type}.attachments`} />
+        </>
+      );
+
+      return (
+        <Box key={type} mb={4}>
+          {renderTextEditor}
+          {renderAttachments}
         </Box>
       );
     });
