@@ -292,6 +292,7 @@
   "form.builder.create.field": "Create a Field",
   "form.builder.edit.field": "Edit Field",
   "form.builder.section": "Section",
+  "form.builder.subsection": "Subsection",
   "form.builder.basics": "Basic Fields",
   "form.builder.lists": "Lists",
   "form.builder.textfield": "Text field",
