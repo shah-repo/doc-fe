@@ -10,7 +10,7 @@ const Theme: React.FunctionComponent = ({
   const whiteLabeling = useSelector(companySelectors.getWhiteLabeling);
 
   return (
-    <MuiThemeProvider theme={theme}>
+    <MuiThemeProvider theme={theme(whiteLabeling.colors)}>
       <CssBaseline />
       {children}
     </MuiThemeProvider>

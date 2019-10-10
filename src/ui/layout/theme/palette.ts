@@ -1,7 +1,39 @@
 import { createMuiTheme } from "@material-ui/core";
 import { Palette } from "@material-ui/core/styles/createPalette";
+import { WhiteLabelingColors } from "../../../state/ducks/company";
+import { ThemeEnv } from "./utils/types";
 
 export const muiTheme = createMuiTheme();
+
+export const createAppPalette = (theme: ThemeEnv, customColors: WhiteLabelingColors) => {
+  console.log(theme);
+  console.log(customColors);
+  let palette;
+  switch (theme) {
+    case ThemeEnv.DEMO_THEME:
+      palette = demoPalette;
+      break;
+    case ThemeEnv.DEV_THEME:
+      palette = devPalette;
+      break;
+    default:
+      palette = defaultPalette;
+      break;
+    }
+
+  palette = {
+    ...palette,
+    secondary: {
+      ...palette.secondary,
+      dark: customColors.primary || palette.secondary.dark,
+      main: customColors.main || palette.secondary.main,
+      contrastText: customColors.hint || palette.secondary.contrastText,
+      light: customColors.secondary || palette.secondary.light,
+    },
+  };
+
+  return palette;
+};
 
 export const defaultPalette: Palette = {
   ...muiTheme.palette,
