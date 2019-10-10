@@ -13,9 +13,9 @@ import { ChangeRequestsUserProps } from "../utils/types";
 import styles from "./styles";
 import { stripTagsFromObject } from "../../../common/utils/helpers";
 
-type Props = ChangeRequestsUserProps & WithStyles<typeof styles>;
+export type Props = ChangeRequestsUserProps & WithStyles<typeof styles>;
 
-const ListPresenter: React.FunctionComponent<Props> = ({
+export const ListPresenter: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
   currentUserEmail,
@@ -70,7 +70,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   ];
 
   const customDataSet = (data: ChangeRequest[]) =>
-    data.map((cr) => stripTagsFromObject(cr))
+    data.map((cr) => stripTagsFromObject(cr));
 
   return (
     <Grid container={true} className={classes.root}>

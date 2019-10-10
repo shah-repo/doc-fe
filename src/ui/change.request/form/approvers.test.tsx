@@ -1,24 +1,27 @@
 import { shallow } from "enzyme";
 import React from "react";
 import { Approvers, Props } from "./approvers";
-import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
-import { AsyncStatus } from "../../../state/types";
-import { getApprover } from "../../../state/ducks/changeRequest/tests/factories";
+import faker from "faker";
 import { getApproval } from "../../../state/ducks/common/tests/factories";
-
-jest.mock("../../components/AsyncGate");
+import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
+import { ASYNC_DEFAULT_STATE } from "../../hooks/useAsync";
 
 describe("Approvers tests", () => {
   const defaultProps: Props = {
-    availableApprovers: getApprover(),
-    dataProp: getApproval(),
+    availableApprovers: [{
+      label: faker.name.firstName(),
+      value: faker.internet.email(),
+    }],
+    dataProp: [getApproval()],
+    loadApproversAsyncState: ASYNC_DEFAULT_STATE,
+    loadAvailableApprovers: jest.fn(),
   };
 
-  const getWrapper = (props: Partial<Props>) => shallow(
+  const getWrapper = (props: Partial<Props>= {}) => shallow(
     <Approvers {...defaultProps} {...props}/>,
   ).find(AutcompleteField);
 
-  it("Sets options props correctly", () => {
+  it("Sets options prop correctly", () => {
     const wrapper = getWrapper();
     expect(wrapper.prop("options")).toEqual(defaultProps.availableApprovers);
   });
