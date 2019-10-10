@@ -13,8 +13,10 @@ const FBSubSectionBox: React.FunctionComponent<FBFormDefaultProps> = ({
       px={2}
       fontSize="h6.fontSize"
       fontWeight={100}
-      borderBottom={1}
-      borderTop={1}
+      borderColor="text.hint"
+      border={1}
+      borderLeft={0}
+      borderRight={0}
     >
       <Text message={label!.toUpperCase()} />
     </Box>
