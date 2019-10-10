@@ -1,7 +1,7 @@
 import { ApplicationState } from "../../reducers";
 
-const getSelectedCompany = (state: ApplicationState) => state.company.selectedCompany;
+const getWhiteLabeling = (state: ApplicationState) => state.company.selectedCompany.whiteLabeling;
 
 export default {
-  getSelectedCompany,
+  getWhiteLabeling,
 };
