@@ -1,16 +1,20 @@
 import classNames from "classnames";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import { QuillOptionsStatic } from "quill";
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import { RenderSize } from "../../../../../state/ducks/common";
 import useComponentVisible from "../../../../hooks/useComponentVisible";
 import Field, { FieldOwnProps } from "../Field";
 import { formats, modules } from "./configuration";
+import "./textEditor.css";
 
 interface TextEditorOwnProps extends FieldOwnProps {
   quillOptions?: QuillOptionsStatic;
   size?: RenderSize;
+  customContainers?: any[];
+  customHandlers?: any;
+  customToolbarAction?: () => void;
   actionsRenderer?: () => any;
 }
 
@@ -20,9 +24,36 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
   quillOptions,
   actionsRenderer,
   size,
+  customContainers = [],
+  customHandlers = [],
+  customToolbarAction,
   ...fieldProps
 }) => {
   const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
+  const [toolbar, setToolbar] = useState<any>({});
+
+  useEffect(() => {
+    setToolbar(
+      {
+        container: [
+          ...modules.toolbar.container,
+          ...customContainers,
+        ],
+        handlers: {
+          ...modules.toolbar.handlers,
+          ...customHandlers,
+        },
+      },
+    );
+  }, []);
+
+  useEffect(() => {
+    if (!isComponentVisible) {
+      return;
+    }
+    customToolbarAction && customToolbarAction();
+  }, [isComponentVisible]);
+
   const handleChange = (editHtml: string) => {
     fieldProps.form.setFieldValue(fieldProps.field.name, editHtml);
   };
@@ -57,7 +88,7 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
           bounds=".editor-container"
           modules={{
             ...modules,
-            toolbar: isComponentVisible ? modules.toolbar : false,
+            toolbar: isComponentVisible ? toolbar : false,
           }}
           formats={formats}
           {...quillOptions}
@@ -73,6 +104,8 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
 
 type TextEditorFieldProps = TextEditorOwnProps & FieldConfig;
 
-const TextEditorField: React.FunctionComponent<TextEditorFieldProps> = (props) => <FormikField component={TextEditor} {...props} />;
+const TextEditorField: React.FunctionComponent<TextEditorFieldProps> = (
+  props,
+) => <FormikField component={TextEditor} {...props} />;
 
 export default TextEditorField;

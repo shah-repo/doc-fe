@@ -4,23 +4,24 @@ import _ from "lodash";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import {
+  Document,
   DocumentRevision,
   documentRevisionsActions,
   documentRevisionsSelectors,
   DocumentRevisionStatus,
 } from "../../../state/ducks/documentRevisions";
+import { DocumentTypeByIdState, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import {
   documentsActions,
   documentsSelectors,
 } from "../../../state/ducks/documents";
 import { formBuilderActions } from "../../../state/ducks/formBuilder";
-import { formReducerType } from "../../../state/ducks/formBuilder/reducer";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
+import { SelectOption } from "../../components/forms/fields/Select";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
-import { formBuilderGet, isFBActive } from "../../formBuilder/helpers/FBLocalStorageHelper";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -29,6 +30,9 @@ interface StateProps {
   loadAsyncState: AsyncState;
   documentRevisions: DocumentRevision[];
   proposedDocId: string;
+  documentTypes: SelectOption[];
+  documentTypesById: DocumentTypeByIdState;
+  document: Document;
 }
 
 interface DispatchProps {
@@ -63,6 +67,9 @@ const mapStateToProps = (
   loadAsyncState: documentRevisionsSelectors.getLoadListAsyncState(state),
   documentRevisions: documentRevisionsSelectors.getDocumentRevisionsList(state),
   proposedDocId: documentsSelectors.getProposedDocId(state),
+  documentTypes: documentTypeSelectors.getDocumentTypeFormOptions(state),
+  documentTypesById: documentTypeSelectors.byId(state),
+  document: documentRevisionsSelectors.getDocument(state, _.get(props.initialValues, "document.id")!),
 });
 
 export const DocumentRevisionFormContainer: React.FunctionComponent<
@@ -84,7 +91,14 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
   documentRevision,
   uploadTemplate,
   fbFormMode,
+  documentTypes,
+  documentTypesById,
+  document,
 }) => {
+  if (initialValues.document && document) {
+    initialValues.document.documentType = document.documentType.id;
+  }
+  document = document || {} as Document;
 
   const render = (props: FormikProps<DocumentRevisionFormValues>) => {
     return (
@@ -101,10 +115,16 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
         onDirtyFlagChange={onDirtyFlagChange}
         uploadTemplate={uploadTemplate}
         fbFormMode={fbFormMode}
+        documentTypes={documentTypes}
+        documentTypesById={documentTypesById}
+        document={document}
       />
     );
   };
 
+  // TODO: check why are we loading all document revisions
+  // if it's really necessary maybe it can be loaded through the DataFetcherContainer
+  // it will be loaded only once instead every time this component is mounted
   const loadAction = () =>
     loadDocumentRevisions([
       DocumentRevisionStatus.Released,
@@ -118,7 +138,8 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
     <AsyncGate
       asyncState={loadAsyncState}
       asyncAction={loadAction}
-      startActionOnMount={true}>
+      startActionOnMount={true}
+    >
       <Box ml={3}>
         {!showRevisionTypeChange && <ChangeRequestLink dataProp={documentRevision} />}
       </Box>

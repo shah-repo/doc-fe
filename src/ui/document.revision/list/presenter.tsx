@@ -3,7 +3,7 @@ import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { stripTagsFromObject } from "../../../common/utils/helpers";
 import { unmaskId } from "../../../state/ducks/common/helpers";
-import { DocumentRevision, DocumentRevisionType, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus, DocumentRevisionType } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { TableColumnProps } from "../../components/table/column/types";
 import { TablePanel } from "../../components/table/panel";
@@ -28,14 +28,16 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   currentUserEmail,
   editDocumentRevision,
   setDocId,
+  documentTypeOptions,
 }) => {
-  const DocumentList = TablePanel<DocumentRevision>();
+  const ALL_DOC_REV_STATES = "ALL_DOC_REV_STATES";
   const [clearFilter, setClearFilter] = React.useState<boolean>(false);
 
   const canEdit = (data: DocumentRevision) => canEditDocumentRevision({dataProp: data, currentUserEmail});
 
+  // TODO: fix tolltip
   const typeTooltipRenderer = (rowData: DocumentRevision) =>
-    DocumentRevisionType[rowData.document.type as unknown as keyof typeof DocumentRevisionType];
+    rowData.document.documentType;
 
   const cellHrefRenderer = (rowData: DocumentRevision): string => {
     if (canEdit(rowData)) {
@@ -49,8 +51,12 @@ const ListPresenter: React.FunctionComponent<Props> = ({
   const onCreateClick = () => setDocId("");
 
   const customQuerySet = (queryDict: TableSearchQueryType) => {
-    if (queryDict["status[]"]) { return queryDict; }
-    queryDict["status[]"] = documentRevisionQueryStatus();
+    if (!queryDict["status[]"]) {
+      queryDict["status[]"] = DocumentRevisionStatus.Released;
+    } else if (queryDict["status[]"] === ALL_DOC_REV_STATES) {
+      queryDict["status[]"] = documentRevisionQueryStatus();
+    }
+
     return queryDict;
   };
 
@@ -83,11 +89,11 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       cellHref: cellHrefRenderer,
     },
     {
-      key: "type",
+      key: "documentTypeId",
       label: "document.revision.list.type",
       tooltipKey: typeTooltipRenderer,
       cellHref: cellHrefRenderer,
-      searchOptions: { searchType: "select", selectOptions: documentRevisionTypeOption() },
+      searchOptions: { searchType: "select", selectOptions: documentTypeOptions },
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.document.type,
         width: 100,
@@ -122,6 +128,12 @@ const ListPresenter: React.FunctionComponent<Props> = ({
         defaultValue: DocumentRevisionStatus.Released,
         searchType: "select",
         selectOptions: documentRevisionStatusOption(),
+        searchValueGetter: (query) => {
+          if (!query) {
+            return ALL_DOC_REV_STATES;
+          }
+          return query;
+        },
       },
     },
   ];
@@ -149,7 +161,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
         </RouterLink>
       </Grid>
       <Grid item={true} className={classes.item}>
-        <DocumentList
+        <TablePanel<DocumentRevision>
           tableData={dataProp}
           columns={columns}
           queryUrl={DOCUMENT_REVISION_ROOT_URL}

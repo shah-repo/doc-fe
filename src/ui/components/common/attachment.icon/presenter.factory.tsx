@@ -6,6 +6,7 @@ import { AttachmentIconFactoryProps, AttachmentIconProps } from "./utils/types";
 export const AttachmentIconPresenterFactory: React.FunctionComponent<
   AttachmentIconFactoryProps
 > = ({
+  name,
   attachment,
   size,
   handleRemove,

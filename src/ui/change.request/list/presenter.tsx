@@ -1,6 +1,7 @@
 import { Button, Grid, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
+import { stripTagsFromObject } from "../../../common/utils/helpers";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { CHANGE_REQUEST_ROOT_URL } from "../../../state/ducks/changeRequest/constants";
 import { TableColumnProps } from "../../components/table/column/types";
@@ -11,7 +12,6 @@ import { canEditChangeRequest, changeRequestStatusOption } from "../utils/helper
 import { changeRequestEditPath, changeRequestPreviewPath } from "../utils/paths";
 import { ChangeRequestsUserProps } from "../utils/types";
 import styles from "./styles";
-import { stripTagsFromObject } from "../../../common/utils/helpers";
 
 export type Props = ChangeRequestsUserProps & WithStyles<typeof styles>;
 
@@ -22,7 +22,6 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   editChangeRequest,
 }) => {
 
-  const ChangeRequestList = TablePanel<ChangeRequest>();
   const [clearFilter, setClearFilter] = React.useState<boolean>(false);
 
   const canEdit = (data: ChangeRequest) => canEditChangeRequest({dataProp: data, currentUserEmail});
@@ -96,7 +95,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         </RouterLink>
       </Grid>
       <Grid item={true} className={classes.item}>
-        <ChangeRequestList
+        <TablePanel<ChangeRequest>
           tableData={dataProp}
           columns={columns}
           cellMeasure={true}
