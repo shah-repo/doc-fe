@@ -30,13 +30,13 @@ const AutoLogoutDialog: React.FunctionComponent<Props> = ({
       dialogHandler.close();
       logout();
     }
-  }, [timerValue])
+  }, [timerValue]);
   const contentRenderer = () => {
     return (
       <div>
         <Text translation="autoLogout.timer" values={{ time: timerValue }} />
       </div>
-    )
+    );
   };
 
   useInterval(() => {

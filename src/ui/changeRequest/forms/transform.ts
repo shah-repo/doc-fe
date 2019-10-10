@@ -101,7 +101,9 @@ const createAssessmentObjectForRequestBody = (value: Assessment) => {
 
   Object.values(AssessmentType).map((t) => {
     const attachmentValue = _.get(value, `${t}.attachments`, null);
-    const itemAttachment = (attachmentValue) ? attachmentValue.map((attachment: Attachment) => ({ id: attachment.id })) : [];
+    const itemAttachment = (attachmentValue) ?
+      attachmentValue.map((attachment: Attachment) => ({ id: attachment.id })) :
+      [];
     const itemReasoning: string = _.get(value, `${t}.reasoning`, null);
     assessments[t] = { attachments: itemAttachment, reasoning: itemReasoning };
   });
@@ -115,7 +117,7 @@ export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues):
     assessments: createAssessmentObjectForRequestBody(values.assessments),
     implementationPlan: toImplementationPlanEditRequestBody(values.implementationPlan),
     justifications: createNestedObjectForRequestBody(values.justifications),
-    approvals: values.approvals.map((approver): Approver => ({ email: approver.value })),
+    approvals: (values.approvals || []).map((approver): Approver => ({ email: approver.value })),
     effectiveDate: values.effectiveDate && getDateString(values.effectiveDate),
     documentRevisions: values.documentRevisions.map((documentRevisionId) => ({ id: documentRevisionId })),
   };

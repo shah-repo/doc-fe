@@ -1,7 +1,7 @@
 import { Box } from "@material-ui/core";
 import { AxiosRequestConfig } from "axios";
 import qs from "query-string";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AutoSizer,
   CellMeasurerCache,
@@ -9,18 +9,20 @@ import {
   Size,
   Table,
 } from "react-virtualized";
+import { useDebounce } from "use-debounce";
 import apiClient from "../../../state/apiClient";
 import refreshTokenOperation from "../../../state/middlewares/api/refreshToken";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import Text from "../../components/Text";
+import useDidMount from "../../hooks/useDidMount";
 import { TableColumn } from "./column/base";
 import { styles } from "./styles";
 import { TablePanelProps, TablePanelStateProps, TableStyleProps } from "./types";
 
 type Props<T> = TablePanelProps<T>;
 
-export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> => ({
+export function TablePanel<T extends any>({
   tableData,
   columns,
   noRowsTranslation = "table.no.results.found",
@@ -30,8 +32,9 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
   queryUrl = "",
   customQuerySet,
   customDataSet,
-}) => {
+}: Props<T>) {
 
+  const didMount = useDidMount();
   const queryDelay = 300;
   let lastQueryValue: string = "";
   const headerHeight = (searchable) ? 117 : 50;
@@ -40,27 +43,31 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
 
   const [state, setState] = useState<TablePanelStateProps<T>>({
     queryData: tableData,
-    queryDict: {"status[]": "RELEASED"},
+    queryDict: {},
     apiError: "",
     scrollToIndex: 0,
   });
+  const [debouncedQuery] = useDebounce(state.queryDict, queryDelay);
+
+  useEffect(() => {
+    if (didMount) {
+      queryApi();
+    }
+  }, [debouncedQuery]);
 
   const queryGetter = (key: string, value: string) => {
     if (!queryUrl) { return; }
     lastQueryValue = value;
 
-    setTimeout(() => {
-      if (lastQueryValue !== value) { return; }
-      let dict = state.queryDict;
-      (value === "") ? delete dict[key] : dict[key] = value;
+    if (lastQueryValue !== value) { return; }
+    let dict = { ...state.queryDict };
+    (value === "") ? delete dict[key] : dict[key] = value;
 
-      if (customQuerySet) {
-        dict = customQuerySet(dict);
-      }
+    if (customQuerySet) {
+      dict = customQuerySet(dict);
+    }
 
-      setState({...state, queryDict: dict});
-      queryApi();
-    }, queryDelay);
+    setState({...state, queryDict: dict});
   };
 
   const queryApi = async () => {
@@ -150,4 +157,4 @@ export const TablePanel = <T extends any>(): React.FunctionComponent<Props<T>> =
       {bodyRenderer()}
     </Box>
   );
-};
+}

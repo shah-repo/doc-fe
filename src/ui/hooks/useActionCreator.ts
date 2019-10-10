@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useDispatch } from "react-redux";
-import { bindActionCreators, ActionCreator } from "redux";
+import { ActionCreator, bindActionCreators } from "redux";
 
 const useActionCreator = <A> (
   action: ActionCreator<A>,
@@ -8,8 +8,8 @@ const useActionCreator = <A> (
   const dispatch = useDispatch();
 
   return useMemo(() => {
-    return bindActionCreators(action, dispatch)
-  }, [dispatch]);
+    return bindActionCreators(action, dispatch);
+  }, [dispatch, action]);
 };
 
 export default useActionCreator;

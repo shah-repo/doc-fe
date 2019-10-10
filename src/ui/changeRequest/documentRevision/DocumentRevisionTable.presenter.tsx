@@ -8,8 +8,8 @@ import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisio
 import { TableColumnProps } from "../../components/table/column/types";
 import { TablePanel } from "../../components/table/panel";
 import { TableSearchQueryType, TableSelectionProps } from "../../components/table/types";
-import styles from "./DocumentRevisionTable.styles";
 import { generateVersionNumber } from "../../documentRevision/helpers";
+import styles from "./DocumentRevisionTable.styles";
 
 interface DocumentRevisionTableProps extends WithStyles<typeof styles> {
   documentRevisionsToShow: DocumentRevision[];
@@ -25,8 +25,6 @@ const DocumentRevisionTable: React.FunctionComponent<
   }: TableSelectionProps<DocumentRevision>) => () => {
     return addDocument(rowData.id);
   };
-
-  const ChangeRequestList = TablePanel<DocumentRevision>();
 
   const customQuerySet = (queryDict: TableSearchQueryType) => {
     queryDict["status[]"] = [DocumentRevisionStatus.Draft];
@@ -84,7 +82,7 @@ const DocumentRevisionTable: React.FunctionComponent<
 
   const bodyRenderer = () => {
     return (
-      <ChangeRequestList
+      <TablePanel<DocumentRevision>
         columns={columns}
         tableData={documentRevisionsToShow}
         cellMeasure={true}
