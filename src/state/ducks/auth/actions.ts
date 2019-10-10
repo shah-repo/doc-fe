@@ -14,10 +14,10 @@ import {
   LOGOUT_URL,
   LOGOUT_USER,
   PERMISSIONS_URL,
+  PING_SERVER_GET_ASYNC,
+  PING_SERVER_URL,
   USER_PERMISSIONS,
   USER_PERMISSIONS_GET_ASYNC,
-  PING_SERVER_URL,
-  PING_SERVER_GET_ASYNC,
 } from "./constants";
 import authSelectors from "./selectors";
 import {
@@ -139,8 +139,8 @@ const pingServer = ():
     asyncType: PING_SERVER_GET_ASYNC,
     method: "get",
     onFailure: (message, dispatch) => {
-      dispatch(logoutUser())
-    }
+      dispatch(logoutUser());
+    },
   });
 
 export default {

@@ -4,6 +4,7 @@ import storage from "redux-persist/lib/storage";
 import auth from "./ducks/auth";
 import { LOGOUT_USER } from "./ducks/auth/constants";
 import changeRequests from "./ducks/changeRequest";
+import company from "./ducks/company";
 import dashboard from "./ducks/dashboard";
 import documentRevisions from "./ducks/documentRevisions";
 import documentType from "./ducks/documentRevisions/documentType";
@@ -24,6 +25,7 @@ const appReducer = combineReducers({
   dashboard,
   formBuilderState,
   documentType,
+  company,
 });
 
 const rootReducer = (state: any, action: any) => {
