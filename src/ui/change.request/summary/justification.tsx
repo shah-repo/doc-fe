@@ -13,9 +13,9 @@ import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import AttachmentIconField from "../../components/common/attachment.icon/container";
 import styles from "./styles";
 
-type Props = DataProps<Justifications> & WithStyles<typeof styles>;
+export type Props = DataProps<Justifications> & WithStyles<typeof styles>;
 
-const Justification: React.FunctionComponent<Props> = ({
+export const Justification: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
 }) => {
