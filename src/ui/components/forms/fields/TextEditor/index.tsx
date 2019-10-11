@@ -6,6 +6,7 @@ import ReactQuill from "react-quill";
 import { RenderSize } from "../../../../../state/ducks/common";
 import useComponentVisible from "../../../../hooks/useComponentVisible";
 import Field, { FieldOwnProps } from "../Field";
+import { reactQuillEmptyString } from "../validators";
 import { formats, modules } from "./configuration";
 import "./textEditor.css";
 
@@ -55,7 +56,9 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
   }, [isComponentVisible]);
 
   const handleChange = (editHtml: string) => {
-    fieldProps.form.setFieldValue(fieldProps.field.name, editHtml);
+    // when you click on an empty editor Quill injects some HTML
+    const value = editHtml === reactQuillEmptyString ? null : editHtml;
+    fieldProps.form.setFieldValue(fieldProps.field.name, value);
   };
   const handleBlur = (e: any) => {
     const {
