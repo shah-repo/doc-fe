@@ -2,7 +2,7 @@ import { DeltaStatic } from "quill";
 import React, { useEffect, useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import DiffPresenter from "./Diff.presenter";
-import { compareHandler } from "./utils/helpers";
+import { findDiff } from "./utils/helpers";
 import { DiffContainerProps } from "./utils/types";
 
 type Props = DiffContainerProps;
@@ -13,29 +13,33 @@ const DiffContainer: React.FunctionComponent<Props> = ({
   const [delta, setDelta] = useState<DeltaStatic | null>(null);
   const refOld = useRef<ReactQuill>(null);
   const refNew = useRef<ReactQuill>(null);
+  const refMain = useRef<ReactQuill>(null);
   useEffect(() => {
-    refNew.current && refNew.current.getEditor().pasteHTML(newText);
-
-    if (!oldText || oldText === "undefined") {
+    if (!oldText || !newText) {
+      return;
+    }
+    if (oldText === "undefined") {
+      const contents = refMain.current!.getEditor().clipboard.convert(newText);
+      refNew.current!.getEditor().setContents(contents);
       return;
     }
 
-    const oldContents = refOld.current && refOld.current.getEditor().getContents();
-    const newContents = refNew.current && refNew.current.getEditor().getContents();
-    let difference;
+    const oldContents = refMain.current!.getEditor().clipboard.convert(oldText);
+    const newContents = refMain.current!.getEditor().clipboard.convert(newText);
 
     if (oldContents && newContents) {
-      difference = compareHandler(oldContents, newContents);
+      const difference = findDiff(oldContents, newContents);
       setDelta(difference || null);
+      refOld.current!.getEditor().setContents(oldContents);
+      refNew.current!.getEditor().setContents(difference as DeltaStatic);
     }
   }, [newText]);
 
   return (
     <DiffPresenter
-      oldText={oldText}
-      newText={newText}
       refOld={refOld}
       refNew={refNew}
+      refMain={refMain}
       delta={delta}
     />
   );

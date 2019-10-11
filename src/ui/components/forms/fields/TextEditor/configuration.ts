@@ -1,3 +1,4 @@
+
 export const modules = {
   toolbar: {
     container:
@@ -12,6 +13,9 @@ export const modules = {
     ],
     handlers: {
     },
+  },
+  clipboard: {
+    matchVisual: false,
   },
 };
 
