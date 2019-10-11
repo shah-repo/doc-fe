@@ -15,7 +15,8 @@ const FBWorkspace: React.FunctionComponent<FBStoreProps> = ({
   const isStarter = (mode === "design") && (schema.length === 0);
 
   const fieldsRenderer = schema.map((field, i) => {
-    const InputType = FBFieldComponent[field.type as string];
+    const { type, name } = field;
+    const InputType = FBFieldComponent[type as string];
     field.disabled = formBuilderStore.mode === "design";
     return (
       <FBEditorWrapper key={`${name}_${i}`} index={i}>
