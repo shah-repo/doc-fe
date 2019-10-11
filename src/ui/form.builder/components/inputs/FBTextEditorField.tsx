@@ -1,19 +1,12 @@
-import { Box, createStyles, makeStyles, Theme } from "@material-ui/core";
-import { FieldProps } from "formik";
+import { Box } from "@material-ui/core";
 import React from "react";
 import ReactQuill from "react-quill";
-import Field from "../../../components/forms/fields/Field";
 import { formats, modules } from "../../../components/forms/fields/TextEditor/configuration";
-import { FormikHybridFieldProps } from "../../../components/hoc/utils/types";
 import { withLabelRenderer } from "../../hocs/withLabelRenderer";
 import { withOnChange } from "../../hocs/withOnChange";
 import { FBFormDefaultProps, FBOnChangeProps } from "../../types/common";
 
-type Props =
-  & FBFormDefaultProps
-  & FBOnChangeProps
-  & FormikHybridFieldProps
-  & FieldProps;
+type Props = FBFormDefaultProps & FBOnChangeProps;
 
 const FBTextEditorField: React.FunctionComponent<Props> = ({
   labelRenderer,
@@ -29,6 +22,7 @@ const FBTextEditorField: React.FunctionComponent<Props> = ({
       onChange={props.onChange}
       value={props.value || ""}
       readOnly={props.disabled}
+      style={{ minHeight: 120 }}
       id={`field-${props.field.name}`}
     />
   </Box>

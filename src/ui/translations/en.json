@@ -304,6 +304,12 @@
   "form.builder.placeholder": "Placeholder",
   "form.builder.rowNumber": "Row Number",
   "form.builder.required": "Required",
+  "form.builder.options.placeholder": "Option 1\nOption 2\nOption 3\n...",
+  "form.builder.options.note": "One option per line.",
+  "form.builder.include.other": "Include 'Other'",
+  "form.builder.other": "Other",
+  "form.builder.options": "Options",
+  "form.builder.include.note": "Include 'Note'",
 
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",

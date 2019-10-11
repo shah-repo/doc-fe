@@ -14,14 +14,16 @@ export const withEditorRenderer =
 (props: FormikProps<FBTemplateSchema>) => {
 
   const { type, index } = other;
+  const { includeNote, includeOther } = props.values;
   const InputType = FBFieldEditorComponent[type as string];
 
   const onClick = () => {
     const schema: FBTemplateSchema = {
       type,
       index,
-      name: `${formBuilderStore.prefixName}_${type}_field`,
+      name: `${formBuilderStore.prefixName}_field_${type}`,
       ...props.values,
+      includeNote: includeNote || includeOther,
     };
     formBuilderStore.schema[index] = schema;
     editorStore.open = false;

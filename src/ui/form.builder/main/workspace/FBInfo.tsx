@@ -11,12 +11,12 @@ const FBInfo: React.FunctionComponent<{}> = () => {
   return (
     <FBForm>
       <FBTextField label="form.builder.name" name="name" required={true} />
-      <FBSelect
+      {/* <FBSelect
         label="form.builder.type"
         name="documentType"
         required={true}
         options={documentRevisionTypeOption()}
-      />
+      /> */}
       <Button
         type="submit"
         variant="contained"

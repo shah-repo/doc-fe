@@ -1,21 +1,37 @@
 import { SelectProps } from "@material-ui/core/Select";
-import { BaseTextFieldProps, OutlinedTextFieldProps } from "@material-ui/core/TextField";
-import { Delta } from "quill";
+import { OutlinedTextFieldProps } from "@material-ui/core/TextField";
+import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
+import { FBEditorElementType } from "./editor";
 
 export type Subtract<T, V> = Pick<T, Exclude<keyof T, keyof V>>;
 
 export interface FBLabelRendererProps {
-  labelRenderer?: JSX.Element;
+  labelRenderer?: React.ReactNode;
 }
 
-export type FBFormDefaultProps = FBLabelRendererProps & {
+export interface FBOptionRendererProps {
+  optionsRenderer?: React.ReactNode[];
+}
+
+export type FBFormDefaultProps =
+  & FBLabelRendererProps
+  & FBOptionRendererProps
+  & {
+  name?: string;
   label?: string;
   disabled?: boolean;
+  gutter?: boolean;
+  options?: string;
+  includeOther?: boolean;
+  includeNote?: boolean;
+  optionNote?: string;
 };
 
 export type FBOnChangeProps =
-  Pick<SelectProps, "onChange" | "value"> &
-  Pick<OutlinedTextFieldProps, "onChange"> & {
+  & FormikHybridFieldProps
+  & Pick<SelectProps, "onChange" | "value">
+  & Pick<OutlinedTextFieldProps, "onChange">
+  & {
     value?: any;
     onChange: () => (trigger: React.ChangeEvent<HTMLInputElement> | Date) => any;
   };

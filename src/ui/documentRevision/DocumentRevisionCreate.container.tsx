@@ -8,12 +8,12 @@ import {
 } from "../../state/ducks/documentRevisions";
 import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
+import { formBuilderStore } from "../form.builder/stores/FBStore";
 import useAsync from "../hooks/useAsync";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { toDocumentRevisionFormValuesWithRevisionChange, toNewVersionRequestBody } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
 import { generateDocumentRevisionVersionPath } from "./pathGenerators";
-import { formBuilderStore } from "../form.builder/stores/FBStore";
 
 interface DispatchProps {
   create: typeof documentRevisionsActions.create;
@@ -60,7 +60,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
     });
 
   const onSubmit = (values: DocumentRevisionFormValues) => {
-      async.start(create, toNewVersionRequestBody(values), async);
+    async.start(create, toNewVersionRequestBody(values), async);
     };
 
   const showRevisionTypeChange = !!documentRevision;

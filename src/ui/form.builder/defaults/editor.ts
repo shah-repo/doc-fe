@@ -1,7 +1,9 @@
 import FBCheckboxEditor from "../components/editors/FBCheckboxEditor";
+import FBCheckboxGroupEditor from "../components/editors/FBCheckboxGroupEditor";
 import FBLabelEditor from "../components/editors/FBLabelEditor";
 import FBTextFieldEditor from "../components/editors/FBTextFieldEditor";
 import FBCheckbox from "../components/inputs/FBCheckbox";
+import FBCheckboxGroup from "../components/inputs/FBCheckboxGroup";
 import FBDatePicker from "../components/inputs/FBDatePicker";
 import FBTextEditorField from "../components/inputs/FBTextEditorField";
 import FBTextField from "../components/inputs/FBTextField";
@@ -20,7 +22,7 @@ export const FBFieldEditorComponent: {
   subsection: FBLabelEditor,
   textfield: FBTextFieldEditor,
   checkbox: FBCheckboxEditor,
-  checkboxgroup: FBTextFieldEditor,
+  checkboxgroup: FBCheckboxGroupEditor,
   datepicker: FBLabelEditor,
   texteditor: FBLabelEditor,
 };
@@ -30,9 +32,13 @@ export const FBFieldComponent: { [key: string]: any } = {
   subsection: FBSubSectionBox,
   textfield: FBTextField,
   checkbox: FBCheckbox,
-  checkboxgroup: FBCheckbox,
+  checkboxgroup: FBCheckboxGroup,
   datepicker: FBDatePicker,
   texteditor: FBTextEditorField,
+};
+
+export const FBGroupField: { [key: string]: any } = {
+  checkboxgroup: FBCheckbox,
 };
 
 export const FBEditorSectionConfig: { [key: string]: FBEditorElementType[] } = {

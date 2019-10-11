@@ -1,6 +1,5 @@
 import { SelectProps } from "@material-ui/core/Select";
 import { SelectOption } from "../../components/forms/fields/Select";
-import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
 import {
   FBFormDefaultProps,
   FBLabelRendererProps,
@@ -16,8 +15,7 @@ export type FBSelectProps =
   SelectProps &
   FBFormDefaultProps &
   FBSelectInjectedProps &
-  FBOnChangeProps &
-  FormikHybridFieldProps & {
+  FBOnChangeProps & {
   includeEmpty?: boolean;
   options: SelectOption[];
   variant?: "outlined";

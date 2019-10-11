@@ -1,24 +1,31 @@
-import { Box, FormControlLabel } from "@material-ui/core";
+import { Box, Checkbox, FormControlLabel } from "@material-ui/core";
 import React from "react";
 import Text from "../../../components/Text";
-import { withCheckboxDefaults } from "../../hocs/withCheckboxDefaults";
+import { withOnChange } from "../../hocs/withOnChange";
+import { formBuilderStore } from "../../stores/FBStore";
 import { FBCheckboxProps } from "../../types/checkbox";
+import FBTextField from "./FBTextField";
 
 const FBCheckbox: React.FunctionComponent<FBCheckboxProps> = ({
-  labelRenderer,
-  controlLabel,
+  label,
+  field,
+  gutter = true,
+  includeNote,
   ...props
-}) => {
+}) => (
+  <Box mb={gutter ? 4 : 0}>
+    <FormControlLabel
+      {...props}
+      label={label && <Text message={label} />}
+      control={<Checkbox checked={field.value} />}
+    />
+    {formBuilderStore.mode === "form" && (field.value as boolean) && includeNote && (
+      <FBTextField
+        disabled={props.disabled}
+        name={`${props.name}_optionNote_field`}
+      />)
+    }
+  </Box>
+);
 
-  return (
-    <Box mb={4}>
-      {labelRenderer}
-      <FormControlLabel
-        {...props}
-        label={controlLabel && <Text message={controlLabel} />}
-      />
-    </Box>
-  );
-};
-
-export default withCheckboxDefaults(FBCheckbox);
+export default withOnChange(FBCheckbox);
