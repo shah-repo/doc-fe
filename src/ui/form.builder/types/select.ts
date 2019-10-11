@@ -17,6 +17,6 @@ export type FBSelectProps =
   FBSelectInjectedProps &
   FBOnChangeProps & {
   includeEmpty?: boolean;
-  options: SelectOption[];
+  showNote?: boolean;
   variant?: "outlined";
 };

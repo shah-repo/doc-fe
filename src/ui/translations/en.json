@@ -300,6 +300,7 @@
   "form.builder.checkboxgroup": "Checkbox group",
   "form.builder.datepicker": "Date picker",
   "form.builder.texteditor": "Text Editor",
+  "form.builder.select": "Select Field",
   "form.builder.label": "Label",
   "form.builder.placeholder": "Placeholder",
   "form.builder.rowNumber": "Row Number",
@@ -310,6 +311,7 @@
   "form.builder.other": "Other",
   "form.builder.options": "Options",
   "form.builder.include.note": "Include 'Note'",
+  "form.builder.include.empty": "Include 'Empty'",
 
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",

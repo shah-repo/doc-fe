@@ -25,6 +25,7 @@ export function withOptionRenderer<T extends FBFormDefaultProps>(
     private optionRenderer = () => {
       const { includeOther } = this.props;
       const options = this.props.options || "";
+      if (typeof options !== "string") { return; }
       const optionsArray =  _.split(options!, "\n");
       if (includeOther) {
         optionsArray.push("form.builder.other");

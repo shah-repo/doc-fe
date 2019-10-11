@@ -13,7 +13,8 @@ export type FBEditorElementType =
   | "section"
   | "subsection"
   | "datepicker"
-  | "texteditor";
+  | "texteditor"
+  | "select";
 
 export interface FBEditorFormProps {
   type: FBEditorElementType;
