@@ -23,10 +23,11 @@ export const AttachmentIconPresenterFactory: React.FunctionComponent<
   const defaultProps = {
     name,
     attachment,
+    size,
+    disabled,
     isUploading,
     isLoading,
     handleRemove,
-    disabled,
     ...other,
   };
   let props: AttachmentIconProps = {
