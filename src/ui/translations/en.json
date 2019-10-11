@@ -256,6 +256,7 @@
   "documentRevision.audit.referenceTo.ARRAY_NEW": "New reference to",
   "documentRevision.audit.referenceTo.ARRAY_DELETED": "Reference removed",
   "documentRevision.audit.changeRequest.STRING_NEW": "New change request",
+  "documentRevision.audit.documentType.STRING_NEW": "New document type",
 
   "transition.action.confirm": "Confirm",
   "transition.action.cancel": "Cancel",
@@ -283,9 +284,10 @@
   "page.title.changeRequestCreate": "Create New Change Request",
 
   "form.builder": "Form Builder",
-  "form.builder.create": "Create a form",
-  "form.builder.title": "Form Title",
-  "form.builder.number": "Form Number",
+  "form.builder.create": "Create a Form",
+  "form.builder.name": "Form Name",
+  "form.builder.type": "Form Document Type",
+  "form.builder.add.field": "Add Field",
 
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",

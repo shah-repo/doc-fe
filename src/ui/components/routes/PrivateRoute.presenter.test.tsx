@@ -1,4 +1,5 @@
 import { mount, ReactWrapper } from "enzyme";
+import { History } from "history";
 import _ from "lodash";
 import React from "react";
 import { LOGIN_URL } from "../../constants/urls";
@@ -21,6 +22,9 @@ describe("PrivateRoute tests", () => {
       state: "",
       hash: "",
     },
+    history: {
+      replace: jest.fn(),
+    } as unknown as History,
   };
 
   const getProps = (customProps: Partial<PrivateRoutePresenterProps>): PrivateRoutePresenterProps =>

@@ -17,7 +17,7 @@ import { AttachmentContainerProps, AttachmentFieldDispatchProps } from "./utils/
 type DispatchProps = AttachmentFieldDispatchProps;
 
 export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps> = ({
-  name,
+  name = "",
   upload,
   component = "button",
   multiple = true,
@@ -73,7 +73,15 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
     <Box>
       <FormProgress asyncState={async.asyncState} />
       <FormMessage asyncState={async.asyncState} />
-      <Presenter {...other} name={name} component={component} multiple={multiple} onChange={onChange} />
+      <Presenter
+        {...other}
+        name={name}
+        component={component}
+        multiple={multiple}
+        onChange={onChange}
+        form={form}
+        field={field}
+      />
     </Box>
   );
 };

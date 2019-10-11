@@ -1,15 +1,14 @@
 import { FieldArrayRenderProps } from "formik";
 import _ from "lodash";
 import React, { useState } from "react";
+import { applyTimezoneToDate } from "../../../../../common/utils/date";
 import useDialog from "../../../../hooks/useDialog";
 import { ImplementationPlanTaskFormValues } from "../../types";
-import TaskPresenter from "./Task.presenter";
-import TaskFormDialog from "./TaskFormDialog";
-import { applyTimezoneToDate } from "../../../../../common/utils/date";
+import TasksPresenter from "./Tasks.presenter";
 
-type Props = FieldArrayRenderProps;
+export type Props = FieldArrayRenderProps;
 
-const Tasks: React.FunctionComponent<Props> = ({
+export const TasksContainer: React.FunctionComponent<Props> = ({
   push,
   remove,
   form,
@@ -40,15 +39,6 @@ const Tasks: React.FunctionComponent<Props> = ({
 
   const tasks = form.values.implementationPlan.tasks;
   const numberOfTasks = tasks.length;
-  const renderAddButton = () => (
-    <TaskFormDialog
-      openDialog={openDialog}
-      isDialogOpen={dialog.isOpen}
-      closeDialog={closeDialog}
-      onSubmit={onSubmit}
-      task={selectedTask}
-    />
-  );
   const removeTask = (index: number) => () => remove(index);
   const editTask = (task: ImplementationPlanTaskFormValues, index: number) => () => {
     changeSelectedIndex(index);
@@ -59,28 +49,19 @@ const Tasks: React.FunctionComponent<Props> = ({
     dialog.open();
   };
 
-  if (numberOfTasks === 0) {
-    return renderAddButton();
-  }
-
   return (
-    <div>
-      {
-        tasks.map((task: ImplementationPlanTaskFormValues, index: number) => {
-          return (
-            <TaskPresenter
-              key={index}
-              task={task}
-              removeTask={removeTask}
-              index={index}
-              editTask={editTask}
-            />
-          );
-        })
-      }
-      {renderAddButton()}
-    </div>
+    <TasksPresenter
+      removeTask={removeTask}
+      openDialog={openDialog}
+      closeDialog={closeDialog}
+      numberOfTasks={numberOfTasks}
+      editTask={editTask}
+      onSubmit={onSubmit}
+      selectedTask={selectedTask}
+      tasks={tasks}
+      isDialogOpen={dialog.isOpen}
+    />
   );
 };
 
-export default Tasks;
+export default TasksContainer;

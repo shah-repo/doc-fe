@@ -24,7 +24,7 @@ type DispatchProps = AttachmentIconDispatchProps;
 export let SetFile: React.Context<React.Dispatch<React.SetStateAction<Attachment | undefined>>>;
 
 export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerProps> = ({
-  name,
+  name = "",
   download,
   form,
   field,
@@ -75,6 +75,8 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
       attachment={attachment}
       handleRemove={handleRemove}
       handleDownload={handleDownload}
+      form={form}
+      field={field}
       handleContextMenu={handleContextMenu}
       handleViewFile={handleViewFile}
     />

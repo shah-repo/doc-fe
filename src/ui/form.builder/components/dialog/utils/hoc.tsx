@@ -1,8 +1,7 @@
 import { Button, DialogActions } from "@material-ui/core";
 import { useTheme } from "@material-ui/core/styles";
-import { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Text from "../../../../components/Text";
 import { Subtract } from "../../common/utils/types";
 import { FBDialogAction, FBDialogActionLabel, FBDialogInjectedProps, FBDialogProps } from "./types";
@@ -29,23 +28,24 @@ export function withDialogStates<T extends FBDialogInjectedProps>(
   };
 }
 
-export function withDialogDefaults<T extends FBDialogProps, U>(
+export function withDialogDefaults<T extends FBDialogProps>(
   Component: React.ComponentType<T>,
 ) {
 
   return (props: T) => {
-    const fullScreen = (maxWidth: Breakpoint = "sm") => {
-      if (!props.fullScreen) {
-        return useMediaQuery(useTheme().breakpoints.down(maxWidth));
-      }
-      return props.fullScreen;
-    };
+    // TODO: check if this refactoring works as expected
+    const {
+      fullScreen,
+      maxWidth = "sm",
+    } = props;
+    const breakpoint: string = useTheme().breakpoints.down(maxWidth);
+    const mediaQuery: boolean = useMediaQuery(breakpoint);
 
-    return <Component fullScreen={fullScreen(props.maxWidth)} {...props} />;
+    return <Component fullScreen={fullScreen || mediaQuery} {...props} />;
   };
 }
 
-export function withDialogActions<T extends FBDialogProps, U>(
+export function withDialogActions<T extends FBDialogProps>(
   Component: React.ComponentType<T>,
 ) {
 

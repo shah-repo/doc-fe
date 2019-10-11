@@ -117,7 +117,7 @@ const ImplementationPlan: React.FunctionComponent<Props> = ({
     ));
 
   return (
-    <Grid item={true} xs={12} className={classes.box}>
+    <Grid container={true} xs={12} className={classes.box}>
       <Typography variant="h6">
         <Text translation="common.implementation.plan" />
       </Typography>

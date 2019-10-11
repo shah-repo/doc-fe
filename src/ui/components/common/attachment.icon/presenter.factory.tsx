@@ -4,8 +4,9 @@ import Presenter from "./presenter";
 import { AttachmentIconFactoryProps, AttachmentIconProps } from "./utils/types";
 
 export const AttachmentIconPresenterFactory: React.FunctionComponent<
-AttachmentIconFactoryProps
+  AttachmentIconFactoryProps
 > = ({
+  name,
   attachment,
   size,
   handleRemove,
@@ -27,6 +28,7 @@ AttachmentIconFactoryProps
     isUploading,
     isLoading,
     handleRemove,
+    disabled,
     ...other,
   };
   let props: AttachmentIconProps = {
@@ -49,11 +51,7 @@ AttachmentIconFactoryProps
     };
   }
 
-  return (
-    <Presenter
-      {...props}
-    />
-  );
+  return <Presenter {...props} />;
 };
 
 export default AttachmentIconPresenterFactory;

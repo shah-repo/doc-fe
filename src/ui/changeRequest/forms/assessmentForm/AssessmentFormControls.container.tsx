@@ -1,5 +1,7 @@
 import { Box, withStyles, WithStyles } from "@material-ui/core";
 import { ButtonProps } from "@material-ui/core/Button";
+import { FormikErrors } from "formik";
+import _ from "lodash";
 import React from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../../../state/ducks/auth";
@@ -21,6 +23,7 @@ interface StateProps {
 
 interface OwnProps {
   changeRequest?: ChangeRequest;
+  errors?: FormikErrors<any>;
 }
 
 export type AssessmentFormControlsContainerProps = OwnProps &
@@ -35,7 +38,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 
 const AssessmentFormControlsContainer: React.FunctionComponent<
   AssessmentFormControlsContainerProps
-> = ({ changeRequest, currentUserEmail }) => {
+> = ({ changeRequest, currentUserEmail, errors }) => {
   if (!changeRequest) {
     return null;
   }
@@ -73,6 +76,7 @@ const AssessmentFormControlsContainer: React.FunctionComponent<
     }
   };
 
+  const formHasErrors = !_.isEmpty(errors);
   const isCurrentUserOwner = changeRequest.owner.email === currentUserEmail;
   const canWithdraw =
     isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.InReview;
@@ -100,9 +104,11 @@ const AssessmentFormControlsContainer: React.FunctionComponent<
       {renderDialogButton(canApproveOrReject, "reject", {
         color: "secondary",
         variant: "outlined",
+        disabled: formHasErrors,
       })}
       {renderDialogButton(canApproveOrReject, "approve", {
         color: "secondary",
+        disabled: formHasErrors,
       })}
       {renderTransitionButton(canClose, "closed", {
         color: "secondary",

@@ -5,9 +5,9 @@ import {
   FieldProps as FormikFieldProps,
 } from "formik";
 import * as React from "react";
-import Select from "react-select";
-import { SelectComponentsProps } from "react-select/lib/Select";
-import { ValueType } from "react-select/lib/types";
+import Select, { createFilter } from "react-select";
+import { SelectComponentsProps } from "react-select/base";
+import { ValueType } from "react-select/src/types";
 import {
   TypographyColor,
   TypographyProps,
@@ -47,6 +47,9 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
     setFieldValue(name, value);
   };
 
+  const stringify = (option: OptionType) => option.label;
+  const filterOption = createFilter({ ignoreAccents: false, stringify });
+
   return (
     <Field {...fieldProps} label={undefined}>
       <Box mb={0.3}>
@@ -62,6 +65,7 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
         {...autocompleteProps}
         options={options}
         onChange={onChange}
+        filterOption={filterOption}
         input={<InputField name={fieldProps.field.name} />}
       />
     </Field>

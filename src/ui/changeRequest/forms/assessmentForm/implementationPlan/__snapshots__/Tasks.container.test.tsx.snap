@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tasks container tests should match snapshot - with 2 tasks 1`] = `
+<TasksPresenter
+  closeDialog={[Function]}
+  editTask={[Function]}
+  isDialogOpen={false}
+  numberOfTasks={2}
+  onSubmit={[Function]}
+  openDialog={[Function]}
+  removeTask={[Function]}
+  selectedTask={null}
+  tasks={
+    Array [
+      Object {
+        "title": "Title 1",
+      },
+      Object {
+        "title": "Title 2",
+      },
+    ]
+  }
+/>
+`;
+
+exports[`Tasks container tests should match snapshot - with no tasks 1`] = `
+<TasksPresenter
+  closeDialog={[Function]}
+  editTask={[Function]}
+  isDialogOpen={false}
+  numberOfTasks={0}
+  onSubmit={[Function]}
+  openDialog={[Function]}
+  removeTask={[Function]}
+  selectedTask={null}
+  tasks={Array []}
+/>
+`;
