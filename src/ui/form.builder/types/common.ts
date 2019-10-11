@@ -1,5 +1,6 @@
 import { SelectProps } from "@material-ui/core/Select";
 import { OutlinedTextFieldProps } from "@material-ui/core/TextField";
+import { SelectOption } from "../../components/forms/fields/Select";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
 import { FBEditorElementType } from "./editor";
 
@@ -21,7 +22,7 @@ export type FBFormDefaultProps =
   label?: string;
   disabled?: boolean;
   gutter?: boolean;
-  options?: string;
+  options?: SelectOption[] | string;
   includeOther?: boolean;
   includeNote?: boolean;
   optionNote?: string;
