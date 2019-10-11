@@ -32,9 +32,9 @@ interface OwnProps extends DataProps<Model> {
   crId: string;
 }
 
-type Props = OwnProps & WithStyles<typeof styles>;
+export type Props = OwnProps & WithStyles<typeof styles>;
 
-const ImplementationPlan: React.FunctionComponent<Props> = ({
+export const ImplementationPlan: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
   currentUserEmail,
