@@ -11,7 +11,7 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import Text from "../../components/Text";
 import styles from "./styles";
 
-type Props = DataProps<DocumentRevision> & WithStyles<typeof styles>;
+export type Props = DataProps<DocumentRevision> & WithStyles<typeof styles>;
 
 export const Header: React.FunctionComponent<Props> = ({
   classes,
