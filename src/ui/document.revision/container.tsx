@@ -24,14 +24,14 @@ import {
 type DispatchProps = ContainerDispatchProps;
 type StateProps = ContainerStateProps;
 type OwnProps = ContainerOwnProps;
-type Props = ContainerProps;
+export type Props = ContainerProps;
 
 const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps => ({
   loadAsyncState: documentRevisionsSelectors.getLoadAsyncState(state),
   dataProp: documentRevisionsSelectors.getDocumentRevision(state, props.match.params.documentRevisionId),
 });
 
-const Container: React.FunctionComponent<Props> = ({
+export const Container: React.FunctionComponent<Props> = ({
   match,
   location,
 }) => {
