@@ -32,12 +32,12 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
     };
   }, []);
 
-  const startBeforeUnload = () => { window.onbeforeunload = (e: Event) => { e.returnValue = true; }};
+  const startBeforeUnload = () => { window.onbeforeunload = (e: Event) => { e.returnValue = true; }; };
   const cancelBeforeUnload = () => window.onbeforeunload = () => {};
 
   return (
     <Prompt
-      when={dirty}
+      when={dirty && !doNotPrompt}
       message="Are you sure you want to leave? You have unsaved changes."
     />
   );

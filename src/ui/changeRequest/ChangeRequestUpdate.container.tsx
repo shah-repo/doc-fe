@@ -8,6 +8,7 @@ import {
 } from "../../state/ducks/changeRequest";
 import { ApplicationState } from "../../state/reducers";
 import useAsync from "../hooks/useAsync";
+import ChangeRequestFormContainer from "./forms/ChangeRequestForm.container";
 import {
   toChangeRequestEditRequestBody,
   toChangeRequestFormValues,
@@ -15,7 +16,6 @@ import {
 import { ChangeRequestFormValues } from "./forms/types";
 import { canEditChangeRequest } from "./helpers";
 import { generateChangeRequestPreviewPath } from "./pathGenerators";
-import ChangeRequestFormContainer from "./forms/ChangeRequestForm.container";
 
 interface StateProps {
   currentUserEmail: string;
