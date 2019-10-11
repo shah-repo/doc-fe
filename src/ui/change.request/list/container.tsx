@@ -18,7 +18,7 @@ import ListPresenter from "./presenter";
 type DispatchProps = ListDispatchProps;
 type StateProps = ListStateProps;
 type OwnProps = RouteComponentProps;
-type Props = OwnProps & DispatchProps & StateProps;
+export type Props = OwnProps & DispatchProps & StateProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
@@ -26,7 +26,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
   dataProp: changeRequestsSelectors.getChangeRequestsList(state),
 });
 
-const ListContainer: React.FunctionComponent<Props> = ({
+export const ListContainer: React.FunctionComponent<Props> = ({
   loadChangeRequests,
   loadAsyncState,
   history,
