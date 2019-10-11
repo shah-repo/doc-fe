@@ -6,6 +6,7 @@ import { AttachmentIconFactoryProps, AttachmentIconProps } from "./utils/types";
 export const AttachmentIconPresenterFactory: React.FunctionComponent<
   AttachmentIconFactoryProps
 > = ({
+  name,
   attachment,
   size,
   handleRemove,
@@ -22,10 +23,11 @@ export const AttachmentIconPresenterFactory: React.FunctionComponent<
   const defaultProps = {
     name,
     attachment,
+    size,
+    disabled,
     isUploading,
     isLoading,
     handleRemove,
-    disabled,
     ...other,
   };
   let props: AttachmentIconProps = {

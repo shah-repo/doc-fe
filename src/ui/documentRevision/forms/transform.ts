@@ -29,7 +29,7 @@ export const toDocumentRevisionEditRequestBody =
     description: values.description,
     name: values.name,
     attachments: values.attachments,
-    referenceTo: values.referenceTo.map((reference) => ({ id: reference.value })),
+    referenceTo: (values.referenceTo || []).map((reference) => ({ id: reference.value })),
     revisionStage: values.revisionStage,
     retrain: values.retrain,
   };

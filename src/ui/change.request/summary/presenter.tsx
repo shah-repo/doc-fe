@@ -35,7 +35,7 @@ interface OwnProps extends DataProps<ChangeRequest> {
   closeTask: typeof changeRequestsActions.closeTask;
 }
 
-type Props = OwnProps & WithStyles<typeof styles> & FormikProps<ChangeRequestFormValues>;
+export type Props = OwnProps & WithStyles<typeof styles> & FormikProps<ChangeRequestFormValues>;
 
 export const Presenter: React.FunctionComponent<Props> = ({
   classes,

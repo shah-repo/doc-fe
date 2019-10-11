@@ -32,7 +32,7 @@ interface OwnProps extends DataProps<ChangeRequest> {
   currentUserEmail: string;
 }
 
-type Props = OwnProps & DispatchProps & WithStyles<typeof styles>;
+export type Props = OwnProps & DispatchProps & WithStyles<typeof styles>;
 
 export const Container: React.FunctionComponent<Props> = ({
   classes,
@@ -41,18 +41,17 @@ export const Container: React.FunctionComponent<Props> = ({
   currentUserEmail,
   closeTask,
 }) => {
+  const [docRev, setDocRev] = React.useState<DocumentRevision | null>(null);
+  const async = useAsync<ChangeRequest>();
   if (canEditChangeRequest({ dataProp, currentUserEmail })) {
     return <Redirect to={changeRequestEditPath(dataProp.id)} />;
   }
-
-  const [docRev, setDocRev] = React.useState<DocumentRevision | null>(null);
 
   const docRevSummary = (documentRevision: DocumentRevision) =>
     setDocRev(documentRevision);
   const crSummary = () => setDocRev(null);
 
   const canEdit = canEditApprovers({ dataProp, currentUserEmail });
-  const async = useAsync<ChangeRequest>();
 
   const onSubmit = (values: ChangeRequestFormValues) => {
     async.start(

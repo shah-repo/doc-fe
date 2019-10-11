@@ -21,7 +21,7 @@ interface OwnProps {
   dataProp?: Approval[];
 }
 
-type Props = StateProps & DispatchProps & OwnProps;
+export type Props = StateProps & DispatchProps & OwnProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   loadApproversAsyncState: changeRequestsSelectors.getLoadApproversAsyncState(state),

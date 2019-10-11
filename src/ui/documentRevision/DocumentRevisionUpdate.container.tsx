@@ -47,6 +47,12 @@ export const DocumentRevisionUpdateContainer: React.FunctionComponent<
   onDirtyFlagChange,
   loadAudit,
 }) => {
+  const async = useAsync<DocumentRevision>({
+    onSuccess: () => {
+      loadAudit(documentRevision.id);
+    },
+  });
+
   if (!canEditDocumentRevision(documentRevision, currentUserEmail)) {
     return (
       <DocumentRevisionSummaryPresenter
@@ -55,12 +61,6 @@ export const DocumentRevisionUpdateContainer: React.FunctionComponent<
       />
     );
   }
-
-  const async = useAsync<DocumentRevision>({
-    onSuccess: () => {
-      loadAudit(documentRevision.id);
-    },
-  });
 
   const onSubmit = (values: DocumentRevisionFormValues) => {
     async.start(

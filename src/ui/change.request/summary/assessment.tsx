@@ -17,9 +17,9 @@ import AttachmentField from "../../components/common/attachment.icon/container";
 import Text from "../../components/Text";
 import styles from "./styles";
 
-type Props = DataProps<Model> & WithStyles<typeof styles>;
+export type Props = DataProps<Model> & WithStyles<typeof styles>;
 
-const Assessment: React.FunctionComponent<Props> = ({ classes, dataProp }) => {
+export const Assessment: React.FunctionComponent<Props> = ({ classes, dataProp }) => {
   const attachmentRenderer = (type: AssessmentType) => (
     <AttachmentField name={`assessments.${type}.attachments`} disabled={true} />
   );

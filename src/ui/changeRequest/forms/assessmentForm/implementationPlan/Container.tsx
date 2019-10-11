@@ -7,7 +7,7 @@ import HeaderField from "../../../../components/common/header.field/field";
 import { ChangeRequestFormValues } from "../../types";
 import Tasks from "./Tasks.container";
 
-interface Props extends FieldProps<ChangeRequestFormValues> {}
+export interface Props extends FieldProps<ChangeRequestFormValues> {}
 
 export const styles = makeStyles(() =>
   createStyles({

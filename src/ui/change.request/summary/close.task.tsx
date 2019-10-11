@@ -18,9 +18,9 @@ interface OwnProps {
   closeTask: typeof changeRequestsActions.closeTask;
 }
 
-type Props = OwnProps;
+export type Props = OwnProps;
 
-const CloseTask: React.FunctionComponent<Props> = ({
+export const CloseTask: React.FunctionComponent<Props> = ({
   taskId, closeTask, crId,
 }) => {
   const dialog = useDialog();
@@ -51,8 +51,9 @@ const CloseTask: React.FunctionComponent<Props> = ({
 
   const onSubmit = (values: any) => {
     dialog.close();
-    async.start(closeTask, crId, taskId, values, async)
-  }
+    async.start(closeTask, crId, taskId, values, async);
+  };
+
   const preventPropagation = (event: React.FormEvent) =>  event.stopPropagation();
 
   return (
