@@ -28,7 +28,6 @@ export const AttachmentIconPresenterFactory: React.FunctionComponent<
     isUploading,
     isLoading,
     handleRemove,
-    disabled,
     ...other,
   };
   let props: AttachmentIconProps = {
