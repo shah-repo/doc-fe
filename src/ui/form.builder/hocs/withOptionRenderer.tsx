@@ -43,24 +43,18 @@ export function withOptionRenderer<T extends FBFormDefaultProps>(
       }
       const type = name.split("_").pop();
       const InputType = FBGroupField[type as string];
-      let nameProp: string = "";
-      return optionsArray.map((label, i) => {
-        type !== "radiogroup"
-          ? (nameProp = `${name}_check_${i}`)
-          : (nameProp = `${name}_radio`);
-        return (
-          <InputType
-            {...this.props}
-            key={`fb.check.${name}.${i}`}
-            name={nameProp}
-            gutter={false}
-            label={label}
-            includeNote={
-              label === "form.builder.other" ? this.props.includeNote : false
-            }
-          />
-        );
-      });
+      return optionsArray.map((label, i) => (
+        <InputType
+          {...this.props}
+          key={`fb.check.${name}.${i}`}
+          name={type !== "radiogroup" ? `${name}_check_${i}` : name}
+          gutter={false}
+          label={label}
+          includeNote={
+            label === "form.builder.other" ? this.props.includeNote : false
+          }
+        />
+      ));
     };
   }
 
