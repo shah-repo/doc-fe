@@ -15,7 +15,7 @@ const company: Company = {
     colors: {
       secondary: "#008000",
       secondaryContrastText: "#00FFFF",
-      primary: "#008000",
+      primary: "#008AAA",
       primaryContrastText: "#ffffff",
       textHighlight: "#f016d3",
       defaultBackground: "#16f0ec",

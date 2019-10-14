@@ -22,13 +22,10 @@ export const createAppPalette = (theme: ThemeEnv, customColors: WhiteLabelingCol
   palette = {
     ...palette,
     primary: {
-      ...palette.primary,
       main: customColors.primary || palette.primary.main,
-      dark: customColors.primary || palette.primary.dark,
       contrastText: customColors.primaryContrastText || palette.primary.contrastText,
     },
     secondary: {
-      ...palette.secondary,
       main: customColors.secondary || palette.secondary.main,
       contrastText: customColors.secondaryContrastText || palette.secondary.contrastText,
     },
