@@ -20,9 +20,9 @@ import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
 import styles from "./styles";
 
-type Props = DocumentRevisionsUserProps & WithStyles<typeof styles>;
+export type Props = DocumentRevisionsUserProps & WithStyles<typeof styles>;
 
-const ListPresenter: React.FunctionComponent<Props> = ({
+export const ListPresenter: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
   currentUserEmail,
