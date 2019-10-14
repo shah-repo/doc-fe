@@ -15,6 +15,6 @@ export default (customColors: WhiteLabelingColors) => {
 
   return createMuiTheme({
     ...appTheme,
-    overrides: ThemeOverrides(appTheme),
+    overrides: ThemeOverrides(appTheme, customColors),
   });
-}
+};

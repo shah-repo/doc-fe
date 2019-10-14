@@ -6,8 +6,6 @@ import { ThemeEnv } from "./utils/types";
 export const muiTheme = createMuiTheme();
 
 export const createAppPalette = (theme: ThemeEnv, customColors: WhiteLabelingColors) => {
-  console.log(theme);
-  console.log(customColors);
   let palette;
   switch (theme) {
     case ThemeEnv.DEMO_THEME:
@@ -23,12 +21,20 @@ export const createAppPalette = (theme: ThemeEnv, customColors: WhiteLabelingCol
 
   palette = {
     ...palette,
+    primary: {
+      ...palette.primary,
+      main: customColors.primary || palette.primary.main,
+      dark: customColors.primary || palette.primary.dark,
+      contrastText: customColors.primaryContrastText || palette.primary.contrastText,
+    },
     secondary: {
       ...palette.secondary,
-      dark: customColors.primary || palette.secondary.dark,
-      main: customColors.main || palette.secondary.main,
-      contrastText: customColors.hint || palette.secondary.contrastText,
-      light: customColors.secondary || palette.secondary.light,
+      main: customColors.secondary || palette.secondary.main,
+      contrastText: customColors.secondaryContrastText || palette.secondary.contrastText,
+    },
+    background: {
+      ...palette.background,
+      default: customColors.defaultBackground || palette.background.default,
     },
   };
 
@@ -50,7 +56,7 @@ export const defaultPalette: Palette = {
     contrastText: "#fff",
   },
   background: {
-    default: "#f0f0f0",
+    default: "#5C9DFF",
     paper: "#fff",
   },
   text: {
@@ -63,6 +69,9 @@ export const defaultPalette: Palette = {
 
 export const devPalette: Palette = {
   ...defaultPalette,
+  primary: {
+    ...defaultPalette.primary,
+  },
   secondary: {
     ...defaultPalette.secondary,
     dark: "#FFCA00",

@@ -24,7 +24,7 @@ const styles = makeStyles((theme: Theme) =>
       fontSize: 12,
       fontWeight: "bold",
       letterSpacing: 0,
-      color: theme.palette.secondary.dark,
+      color: theme.palette.secondary.main,
       margin: "10px 20px",
       lineHeight: "28px",
     }

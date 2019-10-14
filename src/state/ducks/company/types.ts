@@ -3,10 +3,12 @@ import { DocumentType } from "../documentRevisions/documentType";
 import { SELECT_COMPANY } from "./constants";
 
 export interface WhiteLabelingColors {
-  main: string;
+  defaultBackground: string;
   primary: string;
+  primaryContrastText: string;
   secondary: string;
-  hint: string;
+  secondaryContrastText: string;
+  textHighlight: string;
 }
 
 export interface WhiteLabeling {

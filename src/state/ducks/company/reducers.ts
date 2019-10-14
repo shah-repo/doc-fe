@@ -12,10 +12,12 @@ export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
   whiteLabeling: {
     logo: "",
     colors: {
-      main: "",
+      defaultBackground: "",
+      primaryContrastText: "",
       primary: "",
       secondary: "",
-      hint: "",
+      secondaryContrastText: "",
+      textHighlight: "",
     },
   },
 };

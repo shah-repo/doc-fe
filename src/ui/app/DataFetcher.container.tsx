@@ -13,10 +13,12 @@ const company: Company = {
   whiteLabeling: {
     logo: "",
     colors: {
-      main: "#008000",
+      secondary: "#008000",
+      secondaryContrastText: "#00FFFF",
       primary: "#008000",
-      secondary: "#00FFFF",
-      hint: "#00FFFF",
+      primaryContrastText: "#ffffff",
+      textHighlight: "#f016d3",
+      defaultBackground: "#16f0ec",
     },
   },
 };
@@ -32,7 +34,7 @@ const DataFetcherContainer: React.FunctionComponent = () => {
     loadDocumentTypesAsync.start(loadDocumentTypesAction, loadDocumentTypesAsync);
   }, []);
 
-  // NOTE: should we error messages here?
+  // NOTE: should we show error messages here?
   return null;
 };
 

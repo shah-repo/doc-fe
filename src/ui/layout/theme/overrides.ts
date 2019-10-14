@@ -1,7 +1,8 @@
 import { Theme } from "@material-ui/core";
 import { Overrides } from "@material-ui/core/styles/overrides";
+import { WhiteLabelingColors } from "../../../state/ducks/company";
 
-const ThemeOverrides = (appTheme: Theme): Overrides => ({
+const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Overrides => ({
   MuiAppBar: {
     colorDefault: {
       background: appTheme.palette.common.white,
@@ -69,7 +70,7 @@ const ThemeOverrides = (appTheme: Theme): Overrides => ({
   MuiLink: {
     root: {
       fontSize: "0.8rem",
-      color: appTheme.palette.primary.main,
+      color: customColors.textHighlight || appTheme.palette.text.secondary,
     },
   },
   MuiTableCell: {
@@ -78,7 +79,7 @@ const ThemeOverrides = (appTheme: Theme): Overrides => ({
     },
     head: {
       ffontSize: "0.81rem",
-      background: "#5C9DFF",
+      background: appTheme.palette.background.default,
       color: appTheme.palette.common.white,
       fontFamily: "Open Sans",
       fontWeight: "bold",
