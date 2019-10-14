@@ -26,28 +26,76 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 }) => {
   const classes = styles();
 
-  const renderAuditGroup = () => Object.keys(audit).map((groupId) => {
-    const change = audit[groupId][0];
+  const renderAuditGroup = () =>
+    Object.keys(audit).map((groupId) => {
+      const change = audit[groupId][0];
+
+      return (
+        <Box key={groupId} className={classes.changeContainer}>
+          <div className={classes.dateContainer}>
+            <div className={classes.owner}>{change.owner.name}</div>
+            <DateTime value={change.timestamp} />
+          </div>
+
+          {renderChanges(audit[groupId])}
+        </Box>
+      );
+    });
+
+  const renderChanges = (audits: Audit[]) => {
+    const references: Audit[] = [];
+    const attachments: Audit[] = [];
+
+    const singleFields = audits.map((change, index) => {
+      if (change.field.includes("attachments")) {
+        attachments.push(change);
+      } else if (change.field.includes("referenceTo")) {
+        references.push(change);
+      } else {
+        return (
+          <Box mb={1} key={`${change.groupId}-${index}`}>
+            <Box>
+              <Text
+                message={`changeRequest.audit.${change.field}.${change.type}`}
+              />
+            </Box>
+            <div className={classes.auditValue}>
+              <AuditFactory audit={change} />
+            </div>
+          </Box>
+        );
+      }
+    });
 
     return (
-      <Box key={groupId} className={classes.changeContainer}>
-        <div className={classes.dateContainer}>
-          <div className={classes.owner}>{change.owner.name}</div>
-          <DateTime value={change.timestamp} />
-        </div>
-        {renderChanges(audit[groupId])}
+      <Box>
+        {singleFields}
+        {attachments.length > 0 && renderGroupChanges(attachments)}
+        {references.length > 0 && renderGroupChanges(references)}
       </Box>
     );
-  });
+  };
 
-  const renderChanges = (audits: Audit[]) => audits.map((change, index) => (
-    <Box mb={1} key={`${change.groupId}-${index}`}>
-      <Box><Text message={`changeRequest.audit.${change.field}.${change.type}`} /></Box>
-      <div className={classes.auditValue}>
-        <AuditFactory audit={change} />
-      </div>
-    </Box>
-  ));
+  const renderGroupChanges = (auditGroup: Audit[]) => {
+    const field = auditGroup[0].field;
+    const type = auditGroup[0].type;
+
+    return (
+      <Box mb={1} key={`${auditGroup[0].groupId}`}>
+        <Box>
+          <Text message={`changeRequest.audit.${field}.${type}`} />
+        </Box>
+        {auditGroup.map((change, index) => (
+          <div
+            key={change.groupId + `-${index}`}
+            className={classes.auditValue}
+          >
+            <AuditFactory audit={change} />
+          </div>
+        ))}
+      </Box>
+    );
+  };
 
   const [expanded, setExpanded] = React.useState<boolean>(false);
 
@@ -56,11 +104,11 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   return (
     <div className={classes.container}>
       <ExpansionPanel expanded={expanded} onChange={handleChange()}>
-      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} >
-        <Typography variant={TypographySize.md}>
-          <Text translation="changeRequest.audit.crHistory" />
-        </Typography>
-      </ExpansionPanelSummary>
+        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography variant={TypographySize.md}>
+            <Text translation="changeRequest.audit.crHistory" />
+          </Typography>
+        </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>
           <List>{audit && renderAuditGroup()}</List>
         </ExpansionPanelDetails>
