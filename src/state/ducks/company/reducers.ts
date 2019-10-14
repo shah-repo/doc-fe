@@ -17,7 +17,6 @@ export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
       primary: "",
       secondary: "",
       secondaryContrastText: "",
-      textHighlight: "",
     },
   },
 };

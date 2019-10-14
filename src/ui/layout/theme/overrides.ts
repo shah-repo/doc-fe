@@ -70,7 +70,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   MuiLink: {
     root: {
       fontSize: "0.8rem",
-      color: customColors.textHighlight || appTheme.palette.text.secondary,
+      color: appTheme.palette.primary.main,
     },
   },
   MuiTableCell: {

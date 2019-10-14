@@ -8,7 +8,6 @@ export interface WhiteLabelingColors {
   primaryContrastText: string;
   secondary: string;
   secondaryContrastText: string;
-  textHighlight: string;
 }
 
 export interface WhiteLabeling {
