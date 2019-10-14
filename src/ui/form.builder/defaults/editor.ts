@@ -6,6 +6,8 @@ import FBTextFieldEditor from "../components/editors/FBTextFieldEditor";
 import FBCheckbox from "../components/inputs/FBCheckbox";
 import FBCheckboxGroup from "../components/inputs/FBCheckboxGroup";
 import FBDatePicker from "../components/inputs/FBDatePicker";
+import FBRadio from "../components/inputs/FBRadio";
+import FBRadioGroup from "../components/inputs/FBRadioGroup";
 import FBSelect from "../components/inputs/FBSelect";
 import FBTextEditorField from "../components/inputs/FBTextEditorField";
 import FBTextField from "../components/inputs/FBTextField";
@@ -28,6 +30,8 @@ export const FBFieldEditorComponent: {
   datepicker: FBLabelEditor,
   texteditor: FBLabelEditor,
   select: FBSelectEditor,
+  radio: FBCheckboxEditor,
+  radiogroup: FBCheckboxGroupEditor,
 };
 
 export const FBFieldComponent: { [key: string]: any } = {
@@ -39,10 +43,13 @@ export const FBFieldComponent: { [key: string]: any } = {
   datepicker: FBDatePicker,
   texteditor: FBTextEditorField,
   select: FBSelect,
+  radio: FBRadio,
+  radiogroup: FBRadioGroup,
 };
 
 export const FBGroupField: { [key: string]: any } = {
   checkboxgroup: FBCheckbox,
+  radiogroup: FBRadio,
 };
 
 export const FBEditorSectionConfig: { [key: string]: FBEditorElementType[] } = {
@@ -54,6 +61,8 @@ export const FBEditorSectionConfig: { [key: string]: FBEditorElementType[] } = {
     "texteditor",
     "datepicker",
     "select",
+    "radio",
+    "radiogroup",
   ],
   lists: [],
 };
