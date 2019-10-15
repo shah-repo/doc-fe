@@ -33,8 +33,8 @@ const Assessments: React.FunctionComponent<Props> = ({ form }) => {
         <TextEditorField
           name={`assessments.${type}.reasoning`}
           customContainers={getCustomContainers(type)}
-          customHandlers={customHandlers}
-          customToolbarAction={customToolbarAction}
+          customHandlers={customHandlers(type)}
+          customToolbarAction={customToolbarAction(type)}
           actionsRenderer={actionsRenderer}
           label={`change.request.${type}.assessment`}
         />
