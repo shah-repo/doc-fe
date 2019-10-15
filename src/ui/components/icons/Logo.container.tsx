@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { companySelectors } from "../../../state/ducks/company";
-import Logo from "./Logo";
+import Logo from "./Logo.presenter";
 
 const LogoContainer: React.FunctionComponent = () => {
   const whiteLabeling = useSelector(companySelectors.getWhiteLabeling);
