@@ -11,7 +11,7 @@ const company: Company = {
   users: [],
   documentTypes: [],
   whiteLabeling: {
-    logo: "",
+    logo: "https://cdn.worldvectorlogo.com/logos/puma-logo.svg",
     colors: {
       primary: "#49A846",
       primaryContrastText: "",
