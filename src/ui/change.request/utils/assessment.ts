@@ -6,26 +6,26 @@ export const getCustomContainers = (type: AssessmentType) => {
   const toolbarOptions = reasoningOptions.map((option) => option.value);
 
   return [
-    [{ assessment: toolbarOptions }],
+    [{ [`assessment-${type}`]: toolbarOptions }],
   ];
 };
 
-export const customHandlers = {
-  assessment(value: string) {
+export const customHandlers = (type: AssessmentType) => ({
+  [`assessment-${type}`](value: string) {
     const that: any = this;
 
     if (value) {
       that.quill.setText(value);
     }
   },
-};
+});
 
-export const customToolbarAction = () => {
+export const customToolbarAction = (type: AssessmentType) => () => {
   const placeholderPickerItems =
-    Array.prototype.slice.call(document.querySelectorAll(".ql-assessment .ql-picker-item"));
+    Array.prototype.slice.call(document.querySelectorAll(`.ql-assessment-${type} .ql-picker-item`));
   placeholderPickerItems.forEach((item) => item.textContent = item.dataset.value);
 
-  const dropdown = document.querySelector(".ql-assessment .ql-picker-label");
+  const dropdown = document.querySelector(`.ql-assessment-${type} .ql-picker-label`);
   if (!dropdown) {
     return;
   }
