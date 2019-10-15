@@ -13,11 +13,11 @@ const company: Company = {
   whiteLabeling: {
     logo: "",
     colors: {
-      primary: "",
+      primary: "#49A846",
       primaryContrastText: "",
-      secondary: "",
-      secondaryContrastText: "",
-      defaultBackground: "",
+      secondary: "#CE138A",
+      secondaryContrastText: "#FFFFFF",
+      defaultBackground: "#FFAB00",
     },
   },
 };
