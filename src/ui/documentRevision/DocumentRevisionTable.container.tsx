@@ -21,7 +21,7 @@ interface DispatchProps {
 
 type OwnProps = RouteComponentProps;
 
-type DocumentRevisionContainerProps = OwnProps & DispatchProps & StateProps;
+export type DocumentRevisionContainerProps = OwnProps & DispatchProps & StateProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
@@ -29,7 +29,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
   documentRevisions: documentRevisionsSelectors.getDocumentRevisionsList(state),
 });
 
-const DocumentRevisionContainer: React.FunctionComponent<DocumentRevisionContainerProps> = ({
+export const DocumentRevisionContainer: React.FunctionComponent<DocumentRevisionContainerProps> = ({
   loadDocumentRevisions,
   loadAsyncState,
   history,
