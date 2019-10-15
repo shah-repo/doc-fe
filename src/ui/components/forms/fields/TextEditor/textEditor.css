@@ -10,6 +10,13 @@
   padding-right: 20px;
 }
 
+[class*="ql-assessment-"] .ql-picker-options .ql-picker-item {
+  max-width: 30vw;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 .editor-container .ql-container {
   background: transparent;
   font-size: 16px;
