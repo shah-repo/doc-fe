@@ -2,8 +2,10 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { companySelectors } from "../../../state/ducks/company";
 import Text from "../Text";
+import styles from "./BottomLogo.styles";
 
 const BottomLogoContainer: React.FunctionComponent = () => {
+  const classes = styles();
   const whiteLabeling = useSelector(companySelectors.getWhiteLabeling);
 
   if (!whiteLabeling.logo) {
@@ -11,26 +13,11 @@ const BottomLogoContainer: React.FunctionComponent = () => {
   }
 
   return (
-    <div
-      style={{
-        bottom: 30,
-        position: "absolute",
-        textAlign: "center",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "flex-start",
-        color: "white",
-        letterSpacing: 1,
-        fontWeight: 100,
-      }}
-    >
+    <div className={classes.container}>
       <Text translation="common.powered.by" />
       <img
-        src="https://cdn.worldvectorlogo.com/logos/apple-music.svg"
-        style={{
-          width: "30%",
-          marginLeft: 10,
-        }}
+        src="/apple-music.svg"
+        className={classes.logo}
       />
     </div>
   );

@@ -27,7 +27,7 @@ const styles = makeStyles((theme: Theme) =>
       color: theme.palette.secondary.main,
       margin: "10px 20px",
       lineHeight: "28px",
-    }
+    },
   }),
 );
 
