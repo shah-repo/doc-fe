@@ -45,7 +45,7 @@ import FBDocumentRevision from "../formBuilder/FBDocumentRevision.container";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
 
-interface Props
+export interface Props
   extends WithStyles<typeof styles>,
     FormikProps<DocumentRevisionFormValues> {
   asyncState: AsyncState;
@@ -64,7 +64,7 @@ interface Props
   fbFormMode: (mode: boolean) => any;
 }
 
-const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
+export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   asyncState,
   initialValues,
   handleChange,

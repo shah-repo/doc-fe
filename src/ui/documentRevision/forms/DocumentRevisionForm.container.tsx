@@ -56,7 +56,7 @@ interface OwnProps {
   documentRevision: DocumentRevision;
 }
 
-type DocumentRevisionFormContainerProps = OwnProps & StateProps & DispatchProps;
+export type DocumentRevisionFormContainerProps = OwnProps & StateProps & DispatchProps;
 
 const getAvailableReferences = documentRevisionsSelectors.makeGetAvailableReferences();
 const mapStateToProps = (
