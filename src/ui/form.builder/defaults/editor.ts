@@ -1,8 +1,10 @@
-import FBCheckboxEditor from "../components/editors/FBCheckboxEditor";
-import FBCheckboxGroupEditor from "../components/editors/FBCheckboxGroupEditor";
+import FBAutocompleteEditor from "../components/editors/FBAutocompleteEditor";
+import FBControlEditor from "../components/editors/FBControlEditor";
+import FBControlGroupEditor from "../components/editors/FBControlGroupEditor";
 import FBLabelEditor from "../components/editors/FBLabelEditor";
 import FBSelectEditor from "../components/editors/FBSelectEditor";
 import FBTextFieldEditor from "../components/editors/FBTextFieldEditor";
+import FBAutocomplete from "../components/inputs/FBAutocomplete";
 import FBCheckbox from "../components/inputs/FBCheckbox";
 import FBCheckboxGroup from "../components/inputs/FBCheckboxGroup";
 import FBDatePicker from "../components/inputs/FBDatePicker";
@@ -25,13 +27,14 @@ export const FBFieldEditorComponent: {
   section: FBLabelEditor,
   subsection: FBLabelEditor,
   textfield: FBTextFieldEditor,
-  checkbox: FBCheckboxEditor,
-  checkboxgroup: FBCheckboxGroupEditor,
+  checkbox: FBControlEditor,
+  checkboxgroup: FBControlGroupEditor,
   datepicker: FBLabelEditor,
   texteditor: FBLabelEditor,
   select: FBSelectEditor,
-  radio: FBCheckboxEditor,
-  radiogroup: FBCheckboxGroupEditor,
+  radio: FBControlEditor,
+  radiogroup: FBControlGroupEditor,
+  autocomplete: FBAutocompleteEditor,
 };
 
 export const FBFieldComponent: { [key: string]: any } = {
@@ -45,6 +48,7 @@ export const FBFieldComponent: { [key: string]: any } = {
   select: FBSelect,
   radio: FBRadio,
   radiogroup: FBRadioGroup,
+  autocomplete: FBAutocomplete,
 };
 
 export const FBGroupField: { [key: string]: any } = {
@@ -64,5 +68,5 @@ export const FBEditorSectionConfig: { [key: string]: FBEditorElementType[] } = {
     "radio",
     "radiogroup",
   ],
-  lists: [],
+  lists: ["autocomplete"],
 };

@@ -14,6 +14,8 @@ export interface FBTemplateSchema {
   options?: string;
   includeNote?: boolean;
   optionNote?: string;
+  autocompleteList?: string;
+  isMulti?: boolean;
 }
 
 export interface FBStoreProps {

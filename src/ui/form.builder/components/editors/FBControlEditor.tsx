@@ -3,11 +3,11 @@ import React from "react";
 import FBCheckbox from "../inputs/FBCheckbox";
 import FBLabelEditor from "./FBLabelEditor";
 
-const FBCheckboxEditor: React.FunctionComponent<{}> = () => (
+const FBControlEditor: React.FunctionComponent<{}> = () => (
   <Box>
     <FBLabelEditor />
     <FBCheckbox label="form.builder.include.note" name="includeNote" />
   </Box>
 );
 
-export default FBCheckboxEditor;
+export default FBControlEditor;

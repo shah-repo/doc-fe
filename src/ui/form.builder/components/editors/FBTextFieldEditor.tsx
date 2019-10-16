@@ -3,11 +3,12 @@ import React from "react";
 import FBCheckbox from "../inputs/FBCheckbox";
 import FBTextField from "../inputs/FBTextField";
 import FBLabelEditor from "./FBLabelEditor";
+import FBPlaceholderEditor from "./FBPlaceholderEditor";
 
 const FBTextFieldEditor: React.FunctionComponent<{}> = () => (
   <Box>
     <FBLabelEditor />
-    <FBTextField label="form.builder.placeholder" name="placeholder" />
+    <FBPlaceholderEditor />
     <FBTextField
       type="number"
       label="form.builder.rowNumber"

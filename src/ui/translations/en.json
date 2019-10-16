@@ -314,6 +314,9 @@
   "form.builder.options": "Options",
   "form.builder.include.note": "Include 'Note'",
   "form.builder.include.empty": "Include 'Empty'",
+  "form.builder.autocomplete": "Autocomplete",
+  "form.builder.select.options": "Select Options",
+  "form.builder.multi.select": "Multi Select",
 
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",

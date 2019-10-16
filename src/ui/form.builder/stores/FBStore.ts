@@ -21,7 +21,7 @@ export class FBStore {
 
   @action public toolbarMargin(schemaIndex: number): number {
     const { type, label } = this.schema[schemaIndex];
-    if (FBEditorSectionConfig.basics.includes(type) ) {
+    if (!FBEditorSectionConfig.section.includes(type) && label) {
       return -4;
     }
     return 0;

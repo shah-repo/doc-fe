@@ -16,7 +16,8 @@ export type FBEditorElementType =
   | "texteditor"
   | "select"
   | "radio"
-  | "radiogroup";
+  | "radiogroup"
+  | "autocomplete";
 
 export interface FBEditorFormProps {
   type: FBEditorElementType;
