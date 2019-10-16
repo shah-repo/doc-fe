@@ -20,13 +20,13 @@ import {
   DocumentRevisionListItem,
 } from "./types";
 
-interface DocumentRevisionTableProps extends DocumentRevisionActionProps, WithStyles<typeof styles> {
+export interface DocumentRevisionTableProps extends DocumentRevisionActionProps, WithStyles<typeof styles> {
   documentRevisions: DocumentRevision[];
   currentUserEmail: string;
 }
 
 // TODO: check if this can be deleted
-const DocumentRevisionTable: React.FunctionComponent<DocumentRevisionTableProps> = ({
+export const DocumentRevisionTable: React.FunctionComponent<DocumentRevisionTableProps> = ({
   classes, documentRevisions, currentUserEmail, editDocumentRevision, previewDocumentRevision,
 }) => {
   const rowGetter = ({ index }: Index): DocumentRevisionListItem => {
