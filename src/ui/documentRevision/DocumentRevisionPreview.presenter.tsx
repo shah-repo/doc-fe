@@ -9,7 +9,7 @@ import { documentVersionPath } from "../document.revision/utils/paths";
 import styles from "./DocumentRevisionPreview.styles";
 import PreviewControlsContainer from "./PreviewControls.container";
 
-interface DocumentRevisionPreviewPresenterProps
+export interface DocumentRevisionPreviewPresenterProps
   extends WithStyles<typeof styles> {
   documentRevision: DocumentRevision | null;
 }

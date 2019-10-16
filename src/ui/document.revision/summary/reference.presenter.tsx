@@ -17,9 +17,9 @@ interface OwnProps {
   label: string;
 }
 
-type Props = OwnProps & DataProps<Model[]> & WithStyles<typeof styles>;
+export type Props = OwnProps & DataProps<Model[]> & WithStyles<typeof styles>;
 
-const ReferencePresenter: React.FunctionComponent<Props> = ({
+export const ReferencePresenter: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
   label,

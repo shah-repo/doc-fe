@@ -24,7 +24,7 @@ interface OwnProps {
   canShowCreateVersionButton?: boolean;
 }
 
-type Props = OwnProps & DataProps<DocumentRevision> & WithStyles<typeof styles>;
+export type Props = OwnProps & DataProps<DocumentRevision> & WithStyles<typeof styles>;
 
 export const Presenter: React.FunctionComponent<Props> = ({
   classes,
