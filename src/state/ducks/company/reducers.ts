@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { combineReducers } from "redux";
-import { SELECT_COMPANY } from "./constants";
+import { SELECT_COMPANY, WHITE_LABEL_DEFAULT } from "./constants";
 import { SelectCompanyAction, SelectCompanyState } from "./types";
 
 export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
@@ -9,16 +9,7 @@ export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
   maxRevisionStages: 1,
   users: [],
   documentTypes: [],
-  whiteLabeling: {
-    logo: "",
-    colors: {
-      defaultBackground: "",
-      primaryContrastText: "",
-      primary: "",
-      secondary: "",
-      secondaryContrastText: "",
-    },
-  },
+  whiteLabeling: WHITE_LABEL_DEFAULT,
 };
 
 export const selectedCompany = (

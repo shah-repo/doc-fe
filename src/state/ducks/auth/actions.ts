@@ -5,6 +5,7 @@ import Config from "../../../config";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApplicationState } from "../../reducers";
 import { ApiAction, Handlers } from "../../types";
+import { companyActions } from "../company";
 import {
   AUTH_TOKENS,
   AUTH_TOKENS_REFRESH_THRESHOLD_SECONDS,
@@ -90,6 +91,7 @@ const login = (loginValues: LoginRequestBody, handlers: Handlers):
     onSuccess: (data, dispatch) => {
       dispatch(authUser({ email: loginValues.email, name: data.name, id: data.id }));
       dispatch(authTokens(data));
+      dispatch(companyActions.selectCompany(data.company));
     },
     handlers,
   });

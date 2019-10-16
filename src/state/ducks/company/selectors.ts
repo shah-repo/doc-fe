@@ -1,6 +1,12 @@
+import { createSelector } from "reselect";
 import { ApplicationState } from "../../reducers";
+import { WHITE_LABEL_DEFAULT } from "./constants";
 
-const getWhiteLabeling = (state: ApplicationState) => state.company.selectedCompany.whiteLabeling;
+const getSelectedCompany = (state: ApplicationState) => state.company.selectedCompany;
+const getWhiteLabeling = createSelector(
+  getSelectedCompany,
+  (selectedCompany) => selectedCompany.whiteLabeling || WHITE_LABEL_DEFAULT,
+);
 
 export default {
   getWhiteLabeling,

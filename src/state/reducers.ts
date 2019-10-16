@@ -16,6 +16,11 @@ const authPersistConfig = {
   storage,
   whitelist: ["tokens", "user"],
 };
+const companyPersistConfig = {
+  key: "company",
+  storage,
+  whitelist: ["selectedCompany"],
+};
 
 const appReducer = combineReducers({
   auth: persistReducer(authPersistConfig, auth),
@@ -25,13 +30,17 @@ const appReducer = combineReducers({
   dashboard,
   formBuilderState,
   documentType,
-  company,
+  company: persistReducer(companyPersistConfig, company),
 });
 
 const rootReducer = (state: any, action: any) => {
   if (action.type === LOGOUT_USER) {
     const { auth: authState } = state;
-    state = { auth: authState };
+    const { company: companyState } = state;
+    state = {
+      auth: authState,
+      company: companyState,
+    };
   }
 
   return appReducer(state, action);

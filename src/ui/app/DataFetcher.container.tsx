@@ -23,13 +23,13 @@ const company: Company = {
 };
 
 const DataFetcherContainer: React.FunctionComponent = () => {
-  const selectCompanyAction = useActionCreator(companyActions.selectCompany);
-  const selectCompanyAsync = useAsync();
+  // const selectCompanyAction = useActionCreator(companyActions.selectCompany);
+  // const selectCompanyAsync = useAsync();
   const loadDocumentTypesAction = useActionCreator(documentTypeActions.loadList);
   const loadDocumentTypesAsync = useAsync();
 
   useEffect(() => {
-    selectCompanyAsync.start(selectCompanyAction, company);
+    // selectCompanyAsync.start(selectCompanyAction, company);
     loadDocumentTypesAsync.start(loadDocumentTypesAction, loadDocumentTypesAsync);
   }, []);
 

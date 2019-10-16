@@ -1,3 +1,4 @@
+import { Company } from "../company";
 import { AUTH_TOKENS, AUTH_USER, LOGOUT_USER, USER_PERMISSIONS } from "./constants";
 
 export interface LoginRequestBody {
@@ -18,6 +19,10 @@ export interface AuthResponse {
   RefreshToken?: string;
   ExpiresIn: number;
   IdToken: string;
+  id: string;
+  name: string;
+  email: string;
+  company: Company;
 }
 
 export interface AuthWithCodeResponse extends AuthResponse {
