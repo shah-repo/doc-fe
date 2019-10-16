@@ -9,25 +9,13 @@ const Logo: React.FunctionComponent = () => {
   const classes = styles();
   const theme = Config.Theme;
   const showEnvironment = theme === ThemeEnv.DEV_THEME || theme === ThemeEnv.DEMO_THEME;
+  const logo = theme === ThemeEnv.DEV_THEME ?
+    "/logo_enlil_dark.svg" :
+    "/logo_enlil.svg";
 
   return (
     <React.Fragment>
-      <SvgIcon
-        viewBox="0 0 103.749 33.264"
-        classes={{
-          root: classes.svgRoot,
-        }}
-      >
-        <g transform="translate(-800.978 -149.331)">
-          <path className={classes.letters} d="M900.534,155.876H889.421V162.3h10.566v6.479H889.421v7.376h11.113v6.478H881.746V149.4h18.789Z" transform="translate(-52.859 -0.043)"/>
-          <path className={classes.letters} d="M945.229,180.138h7.177v2.642a8.114,8.114,0,0,1,6.877-3.239,7.838,7.838,0,0,1,8.621,8.771v14.054h-7.176V190.953c0-1.445-.05-3.289-1.2-4.435a3.767,3.767,0,0,0-2.741-1,3.9,3.9,0,0,0-2.99,1.2,5.689,5.689,0,0,0-1.4,4.236v11.413h-7.177Z" transform="translate(-94.406 -19.771)"/>
-          <rect className={classes.letters} width="7.177" height="33.264" transform="translate(876.719 149.331)"/>
-          <rect className={classes.letters} width="7.177" height="22.228" transform="translate(887.134 160.367)"/>
-          <rect className={classes.letters} width="7.177" height="33.264" transform="translate(897.549 149.331)"/>
-          <path className={classes.letters} d="M1052.767,149.331a4.186,4.186,0,1,1-4.186,4.187,4.149,4.149,0,0,1,4.186-4.187" transform="translate(-162.045)"/>
-          <path className={classes.icon} d="M818.552,151.765l-1.391,8.633a.249.249,0,0,1-.432.126l-4.1-4.622a.249.249,0,0,1,.04-.366l5.494-4.012a.249.249,0,0,1,.393.241m-10.906.363,5.767,6.495a.249.249,0,0,1-.176.414l-5.767.249a.25.25,0,0,1-.26-.249v-6.743a.249.249,0,0,1,.436-.166m-6.43,8.646,8.489-.366a.249.249,0,0,1,.212.4l-3.226,4.407a.249.249,0,0,1-.353.05l-5.263-4.042a.249.249,0,0,1,.141-.447m2.764,10.2,4.757-6.5a.249.249,0,0,1,.441.082l1.324,4.849a.249.249,0,0,1-.175.306l-6.081,1.65a.249.249,0,0,1-.266-.387m9.426,4.443-2.155-7.893a.249.249,0,0,1,.34-.294l4.833,2.1a.25.25,0,0,1,.127.334l-2.679,5.789a.249.249,0,0,1-.466-.039m9.585-4.551-7.6-3.309a.249.249,0,0,1-.02-.446l4.9-2.692a.25.25,0,0,1,.347.116l2.7,6a.25.25,0,0,1-.327.331m-5.164-6.954.84-5.215a.25.25,0,0,1,.3-.2l6.23,1.33a.249.249,0,0,1,.068.462l-7.07,3.886a.25.25,0,0,1-.366-.258" transform="translate(0 -1.403)"/>
-        </g>
-      </SvgIcon>
+      <img src={logo} />
       {
         showEnvironment &&
         <div className={classes.envCnt}>

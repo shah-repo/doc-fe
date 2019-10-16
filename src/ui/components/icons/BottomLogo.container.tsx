@@ -16,7 +16,7 @@ const BottomLogoContainer: React.FunctionComponent = () => {
     <div className={classes.container}>
       <Text translation="common.powered.by" />
       <img
-        src="/apple-music.svg"
+        src="/logo_enlil.svg"
         className={classes.logo}
       />
     </div>

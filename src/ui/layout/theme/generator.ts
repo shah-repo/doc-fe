@@ -10,7 +10,7 @@ export const createAppTheme = (customColors: WhiteLabelingColors) => createMuiTh
   palette: createAppPalette(Config.Theme as ThemeEnv, customColors),
 });
 
-export default (customColors: WhiteLabelingColors) => {
+export default (customColors: WhiteLabelingColors = {} as WhiteLabelingColors) => {
   const appTheme = createAppTheme(customColors);
 
   return createMuiTheme({
