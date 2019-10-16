@@ -17,7 +17,6 @@ import { generateDocumentRevisionVersionPath } from "./pathGenerators";
 
 interface DispatchProps {
   create: typeof documentRevisionsActions.create;
-  loadDocument: typeof documentRevisionsActions.loadDocument;
   setDocId: typeof documentsActions.setDocumentProposedId;
 }
 
@@ -40,8 +39,12 @@ export const DEFAULT_INITIAL_VALUES = (): DocumentRevisionFormValues => {
 };
 
 export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionCreateContainerProps> = ({
-  create, history, documentRevision, loadDocument, setDocId,
+  create,
+  history,
+  documentRevision,
+  setDocId,
 }) => {
+  const [doNotPrompt, setDoNotPrompt] = React.useState(false);
 
   const initialValues = documentRevision ?
       toDocumentRevisionFormValuesWithRevisionChange(documentRevision) :
@@ -53,8 +56,10 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
           formBuilderStore.documentId = createdDocumentRevision.id;
           formBuilderStore.submitTemplate();
           formBuilderStore.submitValue();
-          loadDocument(createdDocumentRevision.document.id);
-          history.push(generateDocumentRevisionVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id));
+          setDoNotPrompt(true);
+          history.push(
+            generateDocumentRevisionVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id),
+          );
         }
       },
     });
@@ -72,7 +77,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
         initialValues={initialValues}
         showRevisionTypeChange={showRevisionTypeChange}
         setDocId={setDocId}
-        doNotPrompt={true}
+        doNotPrompt={doNotPrompt}
         documentRevision={documentRevision}
       />
     );
@@ -82,6 +87,5 @@ const DocumentRevisionCreateContainerWithRouter = withRouter(DocumentRevisionCre
 
 export default connect<{}, DispatchProps, OwnProps, ApplicationState>(null, {
   create: documentRevisionsActions.create,
-  loadDocument: documentRevisionsActions.loadDocument,
   setDocId: documentsActions.setDocumentProposedId,
 })(DocumentRevisionCreateContainerWithRouter);

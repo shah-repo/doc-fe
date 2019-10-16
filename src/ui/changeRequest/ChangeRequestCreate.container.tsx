@@ -30,8 +30,10 @@ export const DEFAULT_INITIAL_VALUES: ChangeRequest = {
 
 export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequestCreateContainerProps> =
   ({ create, history }) => {
+    const [doNotPrompt, setDoNotPrompt] = React.useState(false);
     const async = useAsync<ChangeRequest>({
       onSuccess: (createdChangeRequest?) => {
+        setDoNotPrompt(true);
         history.push(generateChangeRequestEditPath(createdChangeRequest!.id));
       },
     });
@@ -45,7 +47,7 @@ export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequest
         initialValues={toChangeRequestFormValues(DEFAULT_INITIAL_VALUES)}
         asyncState={async.asyncState}
         onSubmit={onSubmitAssessment}
-        doNotPrompt={true}
+        doNotPrompt={doNotPrompt}
       />
     );
   };
