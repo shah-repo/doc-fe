@@ -62,14 +62,16 @@ export const ImplementationPlan: React.FunctionComponent<Props> = ({
         item={true}
         xs={12}
         key={`${task.id} ${index}`}
-        className={classes.taskContainer}>
+        className={classes.taskContainer}
+      >
         <Typography variant="h5">
           <Text message={task.title} />
         </Typography>
         <ReactQuill
           readOnly={true}
           value={sanitizeHtml(task.description)}
-          modules={{ toolbar: false }}>
+          modules={{ toolbar: false }}
+        >
           <div className={classes.taskDescription} />
         </ReactQuill>
         <Grid container={true} className={classes.taskBasicInformation}>

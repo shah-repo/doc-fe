@@ -1,9 +1,9 @@
 import {
+  Box,
   Grid,
   Typography,
   WithStyles,
   withStyles,
-  Box,
 } from "@material-ui/core";
 import React from "react";
 import {
@@ -26,9 +26,7 @@ export const Assessment: React.FunctionComponent<Props> = ({ classes, dataProp }
 
   const reasoningRenderer = (item: AssessmentItem) => (
     <Box>
-      <Typography variant="subtitle1">
-        <Text message={`${item.reasoning}` || "—"} />
-      </Typography>
+      <SummaryFieldWithHtml label="common.justifications" value={`${item.reasoning}` || "—"} />
     </Box>
   );
 
@@ -54,7 +52,7 @@ export const Assessment: React.FunctionComponent<Props> = ({ classes, dataProp }
             <Text translation="common.assessments" />
           </Typography>
         </Grid>
-        <Grid item className={classes.assessments}>
+        <Grid item={true} className={classes.assessments}>
           {itemRenderer()}
         </Grid>
       </Grid>
