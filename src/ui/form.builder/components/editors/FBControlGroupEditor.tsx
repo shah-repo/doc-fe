@@ -4,7 +4,7 @@ import FBOptionsContainer from "../custom/FBOptionsContainer";
 import FBCheckbox from "../inputs/FBCheckbox";
 import FBLabelEditor from "./FBLabelEditor";
 
-const FBCheckboxGroupEditor: React.FunctionComponent<{}> = () => (
+const FBControlGroupEditor: React.FunctionComponent<{}> = () => (
   <Box>
     <FBLabelEditor />
     <FBOptionsContainer label="form.builder.options" name="options" />
@@ -12,4 +12,4 @@ const FBCheckboxGroupEditor: React.FunctionComponent<{}> = () => (
   </Box>
 );
 
-export default FBCheckboxGroupEditor;
+export default FBControlGroupEditor;

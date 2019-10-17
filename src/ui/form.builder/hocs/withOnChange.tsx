@@ -20,22 +20,23 @@ export function withOnChange<T extends FBOnChangeProps>(
       );
     }
 
-    private handleChange = () => (trigger:
-      | React.ChangeEvent<HTMLInputElement>
-      | string
-      | Date,
-    ) => {
+    private isEvent(
+      value: React.ChangeEvent<HTMLInputElement>,
+    ): value is React.ChangeEvent<HTMLInputElement> {
+      return (value as React.ChangeEvent<HTMLInputElement>).target !== undefined;
+    }
+
+    private handleChange = () => (trigger: any) => {
       const { form, field } = this.props;
       let value: any;
 
       switch (true) {
-        case (trigger instanceof Date):
-        case (typeof trigger === "string"):
-            value = trigger;
-            break;
-        default:
+        case (trigger && this.isEvent(trigger)):
           const target = (trigger as React.ChangeEvent<HTMLInputElement>).target;
           value = target.type === "checkbox" ? target.checked : target.value;
+          break;
+        default:
+            value = trigger;
       }
       form.setFieldValue(field.name, value);
 
