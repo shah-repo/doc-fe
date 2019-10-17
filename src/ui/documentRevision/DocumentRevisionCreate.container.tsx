@@ -8,7 +8,7 @@ import {
 } from "../../state/ducks/documentRevisions";
 import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
-import { formBuilderStore } from "../form.builder/stores/FBStore";
+import formBuilderStore from "../form.builder/stores/FBStore";
 import useAsync from "../hooks/useAsync";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { toDocumentRevisionFormValuesWithRevisionChange, toNewVersionRequestBody } from "./forms/transform";
@@ -26,17 +26,15 @@ interface OwnProps {
 
 export type DocumentRevisionCreateContainerProps = OwnProps & DispatchProps & RouteComponentProps;
 
-export const DEFAULT_INITIAL_VALUES = (): DocumentRevisionFormValues => {
-  return {
-    name: "",
-    description: "",
-    attachments: [],
-    referenceTo: [],
-    revisionChangeType: RevisionChangeType.NextRevision,
-    document: { docId: "" },
-    revisionStage: 1,
-  };
-};
+export const DEFAULT_INITIAL_VALUES = (): DocumentRevisionFormValues => ({
+  name: "",
+  description: "",
+  attachments: [],
+  referenceTo: [],
+  revisionChangeType: RevisionChangeType.NextRevision,
+  document: { docId: "" },
+  revisionStage: 1,
+});
 
 export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionCreateContainerProps> = ({
   create,
@@ -53,9 +51,6 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   const async = useAsync<DocumentRevision>({
       onSuccess: (createdDocumentRevision?) => {
         if (createdDocumentRevision) {
-          formBuilderStore.documentId = createdDocumentRevision.id;
-          formBuilderStore.submitTemplate();
-          formBuilderStore.submitValue();
           setDoNotPrompt(true);
           history.push(
             generateDocumentRevisionVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id),
@@ -65,8 +60,9 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
     });
 
   const onSubmit = (values: DocumentRevisionFormValues) => {
-    async.start(create, toNewVersionRequestBody(values), async);
-    };
+    const v = {...values, formTemplate: formBuilderStore.formTemplate()};
+    async.start(create, toNewVersionRequestBody(v), async);
+  };
 
   const showRevisionTypeChange = !!documentRevision;
 

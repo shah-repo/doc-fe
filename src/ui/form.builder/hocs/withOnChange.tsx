@@ -1,6 +1,6 @@
 import React from "react";
 import { withFormik } from "../../components/hoc/formik";
-import { formBuilderStore } from "../stores/FBStore";
+import formBuilderStore from "../stores/FBStore";
 import { FBOnChangeProps, Subtract } from "../types/common";
 
 export function withOnChange<T extends FBOnChangeProps>(

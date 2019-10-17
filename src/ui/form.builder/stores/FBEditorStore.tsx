@@ -7,7 +7,7 @@ import { withEditorRenderer } from "../hocs/withEditorRenderer";
 import FBEditorSection from "../main/editor/FBEditorSection";
 import { FBEditorElementType } from "../types/editor";
 import { FBTemplateSchema } from "../types/store";
-import { formBuilderStore } from "./FBStore";
+import formBuilderStore from "./FBStore";
 
 export class FBEditorStore {
   @observable public open: boolean = false;

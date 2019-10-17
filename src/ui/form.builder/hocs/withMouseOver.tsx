@@ -1,6 +1,6 @@
 import { BoxProps } from "@material-ui/core/Box";
 import React from "react";
-import { formBuilderStore } from "../stores/FBStore";
+import formBuilderStore from "../stores/FBStore";
 import { Subtract } from "../types/common";
 
 export function withMouseOver<T extends BoxProps>(

@@ -1,8 +1,8 @@
-import { Box, Radio, FormControlLabel } from "@material-ui/core";
+import { Box, FormControlLabel, Radio } from "@material-ui/core";
 import React from "react";
 import Text from "../../../components/Text";
 import { withOnChange } from "../../hocs/withOnChange";
-import { formBuilderStore } from "../../stores/FBStore";
+import formBuilderStore from "../../stores/FBStore";
 import { FBCheckboxProps } from "../../types/checkbox";
 import FBTextField from "./FBTextField";
 
