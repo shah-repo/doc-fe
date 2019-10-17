@@ -1,7 +1,7 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import { withMouseOver } from "../../hocs/withMouseOver";
-import { formBuilderStore } from "../../stores/FBStore";
+import formBuilderStore from "../../stores/FBStore";
 import { FBEditorWrapperProps } from "../../types/editor";
 import FBAddFieldButton from "../custom/FBAddFieldButton";
 import FBEditorFieldToolbar from "../custom/FBEditorFieldToolbar";

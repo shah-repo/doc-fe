@@ -14,4 +14,5 @@ export interface DocumentRevisionFormValues {
   changeRequest?: ChangeRequest;
   revisionStage?: number;
   retrain?: boolean;
+  formInput?:  string;
 }

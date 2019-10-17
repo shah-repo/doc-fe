@@ -5,7 +5,7 @@ import FBEditorWrapper from "../../components/custom/FBEditorWrapper";
 import FBForm from "../../components/form/FBForm";
 import { FBFieldComponent } from "../../defaults/editor";
 import { withFBStore } from "../../hocs/withFBStore";
-import { formBuilderStore } from "../../stores/FBStore";
+import formBuilderStore from "../../stores/FBStore";
 import { FBStoreProps } from "../../types/store";
 import FBEditorDialog from "../editor/FBEditorDialog";
 

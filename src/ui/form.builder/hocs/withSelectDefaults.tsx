@@ -3,7 +3,7 @@ import _ from "lodash";
 import React from "react";
 import { SelectOption } from "../../components/forms/fields/FilledSelect";
 import Text from "../../components/Text";
-import { formBuilderStore } from "../stores/FBStore";
+import formBuilderStore from "../stores/FBStore";
 import { Subtract } from "../types/common";
 import { FBSelectInjectedProps, FBSelectProps } from "../types/select";
 import { withLabelRenderer } from "./withLabelRenderer";

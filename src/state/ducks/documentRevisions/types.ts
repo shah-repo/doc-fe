@@ -76,6 +76,7 @@ export interface DocumentRevision {
   releasedAt?: string;
   trainingRecords: TrainingRecord[];
   retrain?: boolean;
+  formInput?: string;
 }
 
 // TODO: check if this is still needed

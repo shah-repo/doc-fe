@@ -3,7 +3,7 @@ import BorderColorIcon from "@material-ui/icons/BorderColor";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import React from "react";
 import editorStore from "../../stores/FBEditorStore";
-import { formBuilderStore } from "../../stores/FBStore";
+import formBuilderStore from "../../stores/FBStore";
 import { FBEditorWrapperProps } from "../../types/editor";
 
 const FBEditorFieldToolbar: React.FunctionComponent<FBEditorWrapperProps> = ({

@@ -8,12 +8,11 @@ import {
 import { FormikProps } from "formik";
 import _ from "lodash";
 import { observer } from "mobx-react";
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import {
   Document,
   DocumentRevision,
-  DocumentRevisionType,
   RevisionChangeType,
   RevisionStageOptions,
 } from "../../../state/ducks/documentRevisions";
@@ -41,10 +40,7 @@ import {
   documentDetailsPath,
   documentVersionPath,
 } from "../../document.revision/utils/paths";
-import FBButton from "../../form.builder/components/inputs/FBButton";
-import editorStore from "../../form.builder/stores/FBEditorStore";
-import { formBuilderStore } from "../../form.builder/stores/FBStore";
-import { formBuilderGet, isFBActive } from "../../formBuilder/helpers/FBLocalStorageHelper";
+import formBuilderStore from "../../form.builder/stores/FBStore";
 import FBDocumentRevision from "../formBuilder/FBDocumentRevision.container";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
@@ -92,25 +88,12 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   documentTypesById,
   document,
 }) => {
+  const { documentType } = values.document || { documentType: undefined };
+  const documentGroup = (documentTypesById[documentType!] || {}).group;
 
-  const fbState =
-    isFBActive &&
-    // TODO: what should happen with this
-    _.get(document, "documentType.documentTypeName") ===  DocumentRevisionType.FM;
-
-  const [fbActive, fbSetActive] = useState(fbState);
-
-  if (fbState && initialValues.id && formBuilderGet(initialValues.id)) {
-    uploadTemplate(formBuilderGet(initialValues.id).elements);
-    fbFormMode(true);
-  }
-
-  if (initialValues.id) {
-    formBuilderStore.mode = "form";
-    formBuilderStore.documentId = initialValues.id;
-    formBuilderStore.setTemplate(initialValues.id);
-    formBuilderStore.setValue(initialValues.id);
-  }
+  values.formInput = formBuilderStore.formInput;
+  formBuilderStore.groupType = documentGroup;
+  formBuilderStore.set(initialValues.formInput);
 
   const openReference = (documentId: string) => {
     window.open(documentDetailsPath(documentId), "_blank");
@@ -153,17 +136,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     const typeId = event.target.value as string;
     const type = documentTypesById[typeId] || {};
     loadDocumentProposedId(type.documentTypeAcronym);
-    const isFM =
-      isFBActive &&
-      // TODO: this needs to be tested
-      type.documentTypeName ===  DocumentRevisionType.FM;
-    fbSetActive(isFM);
-    if (isFM && !initialValues.id) {
-      uploadTemplate([]);
-      fbFormMode(false);
-    }
-    formBuilderStore.reset();
-    editorStore.reset();
+    formBuilderStore.groupType = type.group;
     handleChange(event);
   };
 
@@ -238,15 +211,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       includeEmpty={false}
     />
   );
-
-  const saveFB = () => {
-    formBuilderStore.documentId = "1";
-    formBuilderStore.submitTemplate();
-    formBuilderStore.submitValue();
-    formBuilderStore.mode = "form";
-    formBuilderStore.setTemplate("1");
-    formBuilderStore.setValue("1");
-  };
 
   return (
     <Grid
@@ -328,7 +292,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           <CheckboxField name="retrain" label="document.revision.trainingRequired"/>
           <AttachmentsField />
           {renderTypeOfRevisionChange()}
-          {fbActive && (
+          {formBuilderStore.active && (
             <Box my={4}>
               <SelectField
                 name="documentOutputType"
@@ -345,7 +309,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             </Box>
           )}
           <Box>
-            {fbActive && <FBDocumentRevision docId={initialValues.id} />}
+            {formBuilderStore.active && <FBDocumentRevision docId={initialValues.id} />}
           </Box>
           <Box mt={5}>
             <Grid
@@ -354,11 +318,10 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               alignItems="flex-end"
               direction="column"
             >
-              <FBButton label="SAVE" onClick={saveFB} />
-              {/* <SubmitButton
+              <SubmitButton
                 asyncState={asyncState}
                 label={isDisabled ? "common.save" : "navigation.createDocument"}
-              /> */}
+              />
             </Grid>
           </Box>
         </FormWrapper>

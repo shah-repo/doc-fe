@@ -1,10 +1,13 @@
 import { DOCUMENT_TYPE_LIST } from "./constants";
 import { DocumentType } from "./types";
 
+export type DocumentTypeGroup = "FORM" | "OTHER";
+
 export interface DocumentType {
   id: string;
   documentTypeAcronym: string;
   documentTypeName: string;
+  group: DocumentTypeGroup;
 }
 
 export interface DocumentTypeListAction {

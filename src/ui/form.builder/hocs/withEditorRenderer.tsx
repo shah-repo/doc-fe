@@ -5,7 +5,7 @@ import React from "react";
 import FBButton from "../components/inputs/FBButton";
 import { FBFieldEditorComponent } from "../defaults/editor";
 import editorStore from "../stores/FBEditorStore";
-import { formBuilderStore } from "../stores/FBStore";
+import formBuilderStore from "../stores/FBStore";
 import { FBEditorFormProps } from "../types/editor";
 import { FBTemplateSchema } from "../types/store";
 
