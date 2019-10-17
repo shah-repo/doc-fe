@@ -89,16 +89,6 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
           />
         </Grid>
         <Grid item={true} xs={4}>
-          {/* <SelectField
-            name="status"
-            label="common.status"
-            size="sm"
-            selectProps={{inputProps: { id: "status" }}}
-            options={planStateOptions}
-            validate={validator(required)}
-            includeEmpty={false}
-          /> */}
-
           <InputField
             name="status"
             label="common.status"
