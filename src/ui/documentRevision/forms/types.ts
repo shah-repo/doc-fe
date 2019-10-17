@@ -2,8 +2,9 @@ import { Attachment } from "../../../state/ducks/attachments";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { DocumentRevisionDocument, Reference, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
+import { FBFormInputProps, FBFormTemplateProps } from "../../form.builder/types/formik";
 
-export interface DocumentRevisionFormValues {
+export interface DocumentRevisionFormValues extends FBFormInputProps {
   id?: string;
   description: string;
   name: string;
@@ -14,5 +15,5 @@ export interface DocumentRevisionFormValues {
   changeRequest?: ChangeRequest;
   revisionStage?: number;
   retrain?: boolean;
-  formInput?:  string;
+  formTemplate?: FBFormTemplateProps;
 }

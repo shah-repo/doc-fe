@@ -1,4 +1,5 @@
 import { TableColumnActionType } from "../../../ui/components/table/column/types";
+import { FBFormInputProps, FBFormTemplateProps } from "../../../ui/form.builder/types/formik";
 import { Attachment } from "../attachments";
 import { AuditActionPayload } from "../audit/types";
 import { ChangeRequest } from "../changeRequest";
@@ -48,7 +49,7 @@ export interface Reference {
   document: DocumentRevisionDocument;
 }
 
-export interface DocumentRevision {
+export interface DocumentRevision extends FBFormInputProps {
   id: string;
   docId?: string;
   typePrefix?: string;
@@ -76,7 +77,7 @@ export interface DocumentRevision {
   releasedAt?: string;
   trainingRecords: TrainingRecord[];
   retrain?: boolean;
-  formInput?: string;
+  formTemplate?: FBFormTemplateProps;
 }
 
 // TODO: check if this is still needed
@@ -141,6 +142,7 @@ export interface DocumentRevisionEditRequestBody {
   revisionChangeType?: RevisionChangeType;
   revisionStage?: number;
   retrain?: boolean;
+  formTemplate?: FBFormTemplateProps;
 }
 
 export interface DocumentRevisionSetAction {

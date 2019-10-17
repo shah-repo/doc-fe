@@ -8,6 +8,7 @@ import {
 } from "../../state/ducks/documentRevisions";
 import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
+import formBuilderStore from "../form.builder/stores/FBStore";
 import useAsync from "../hooks/useAsync";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { toDocumentRevisionFormValuesWithRevisionChange, toNewVersionRequestBody } from "./forms/transform";
@@ -59,7 +60,8 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
     });
 
   const onSubmit = (values: DocumentRevisionFormValues) => {
-    async.start(create, toNewVersionRequestBody(values), async);
+    const v = {...values, formTemplate: formBuilderStore.formTemplate()};
+    async.start(create, toNewVersionRequestBody(v), async);
   };
 
   const showRevisionTypeChange = !!documentRevision;

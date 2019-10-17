@@ -40,6 +40,8 @@ import {
   documentDetailsPath,
   documentVersionPath,
 } from "../../document.revision/utils/paths";
+import { withFormIntegration } from "../../form.builder/hocs/withFormIntegration";
+import FBWorkspace from "../../form.builder/main/workspace/FBWorkspace";
 import formBuilderStore from "../../form.builder/stores/FBStore";
 import FBDocumentRevision from "../formBuilder/FBDocumentRevision.container";
 import styles from "./DocumentRevisionForm.styles";
@@ -88,13 +90,11 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   documentTypesById,
   document,
 }) => {
-  const { documentType } = values.document || { documentType: undefined };
-  const documentGroup = (documentTypesById[documentType!] || {}).group;
 
-  values.formInput = formBuilderStore.formInput;
-  formBuilderStore.groupType = documentGroup;
-  formBuilderStore.set(initialValues.formInput);
-
+  if (initialValues.id) {
+    formBuilderStore.setFormTemplate(values.formTemplate);
+  }
+  
   const openReference = (documentId: string) => {
     window.open(documentDetailsPath(documentId), "_blank");
   };
@@ -104,6 +104,13 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   if (!isDisabled && values.document) {
     values.document.docId = proposedDocId;
+  }
+
+  if (values.document && values.document.documentType) {
+    const documentGroup = documentTypesById[values.document.documentType.id].group;
+    formBuilderStore.groupType = documentGroup;
+  } else {
+    formBuilderStore.groupType = "OTHER";
   }
 
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -302,7 +309,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 selectProps={{
                   inputProps: { id: "documentOutputType", disabled: isDisabled },
                   onChange: handleOutput,
-                  value: formBuilderStore.documentOutputType,
                 }}
                 options={documentTypes}
                 validate={!isDisabled ? validator(required) : undefined}
@@ -311,7 +317,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             </Box>
           )}
           <Box>
-            {formBuilderStore.active && <FBDocumentRevision docId={initialValues.id} />}
+            {formBuilderStore.active && <FBWorkspace />}
           </Box>
           <Box mt={5}>
             <Grid

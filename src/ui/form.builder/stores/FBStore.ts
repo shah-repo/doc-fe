@@ -1,9 +1,10 @@
 import _ from "lodash";
 import { action, autorun, computed, observable } from "mobx";
 import Config from "../../../config";
-import { DocumentTypeGroup } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentGroupType } from "../../../state/ducks/documentRevisions/documentType";
 import { ThemeEnv } from "../../layout/theme/utils/types";
 import { FBEditorSectionConfig } from "../defaults/editor";
+import { FBFormTemplateProps } from "../types/formik";
 import { FBTemplateSchema } from "../types/store";
 import { FBWorkspaceMode } from "../types/workspace";
 import editorStore from "./FBEditorStore";
@@ -14,7 +15,7 @@ export class FBStore {
   @observable public schema: FBTemplateSchema[] = [];
   @observable public values: { [key: string]: any } = {};
   @observable public mode: FBWorkspaceMode = "design";
-  @observable public groupType: DocumentTypeGroup = "OTHER";
+  @observable public groupType: DocumentGroupType = "OTHER";
 
   constructor() {
     autorun(() => {
@@ -31,6 +32,21 @@ export class FBStore {
   @computed get formInput(): string {
     const formInput = _.pick(this, ["documentOutputType", "schema", "values"]);
     return JSON.stringify(formInput);
+  }
+
+  // tslint:disable-next-line: align
+  @action public formTemplate(): FBFormTemplateProps | undefined {
+    const { documentOutputType, schema } = this;
+    if (!documentOutputType) { return; }
+
+    const template: FBFormTemplateProps = {
+      outputDocumentType: {
+        id: documentOutputType,
+      },
+      schema: JSON.stringify(schema),
+    };
+
+    return template;
   }
 
   @computed get active(): boolean {
@@ -61,6 +77,16 @@ export class FBStore {
     this.mode = "design";
     this.groupType = "OTHER";
     editorStore.reset();
+  }
+
+  @action public setFormTemplate = (formTemplate?: FBFormTemplateProps) => {
+    if (!formTemplate) {
+      this.schema = [];
+    } else {
+      const { outputDocumentType, schema } = formTemplate;
+      this.schema = schema as unknown as FBTemplateSchema[];
+      this.documentOutputType = outputDocumentType.id;
+    }
   }
 
   @action public set = (json?: string) => {
