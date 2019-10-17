@@ -25,3 +25,6 @@ yarn-error.log*
 /.vscode
 
 test-results/*
+.env
+.gitignore
+yarn.lock

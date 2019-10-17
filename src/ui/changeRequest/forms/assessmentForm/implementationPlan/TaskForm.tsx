@@ -89,7 +89,7 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
           />
         </Grid>
         <Grid item={true} xs={4}>
-          <SelectField
+          {/* <SelectField
             name="status"
             label="common.status"
             size="sm"
@@ -97,6 +97,16 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
             options={planStateOptions}
             validate={validator(required)}
             includeEmpty={false}
+          /> */}
+
+          <InputField
+            name="status"
+            label="common.status"
+            inputProps={{
+              id: "docId",
+              value: "Pending",
+              disabled: true,
+            }}
           />
         </Grid>
       </Grid>
