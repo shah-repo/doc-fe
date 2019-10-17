@@ -39,7 +39,7 @@ export const DocumentRevisionTable: React.FunctionComponent<DocumentRevisionTabl
       name: documentRevision.name,
       owner: documentRevision.owner.name,
       status: documentRevision.status,
-      type: documentRevision.document.documentType,
+      type: documentRevision.document.documentType.documentTypeName,
     };
   };
 

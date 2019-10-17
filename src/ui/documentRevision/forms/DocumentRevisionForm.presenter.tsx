@@ -113,8 +113,10 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    const { documentType } = values.document || { documentType: undefined };
-    const type = (documentTypesById[documentType!] || {}).documentTypeAcronym;
+    const { documentType } = values.document || {};
+
+    if (!documentType) { return; }
+    const type = documentTypesById[documentType.id].documentTypeAcronym;
 
     if (!values.document && !type) {
       return;
@@ -262,7 +264,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             validate={validator(required)}
           />
           <SelectField
-            name="document.documentType"
+            name="document.documentType.id"
             label="document.type"
             selectProps={{
               inputProps: { id: "documentType", disabled: isDisabled },
