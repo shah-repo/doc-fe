@@ -15,6 +15,7 @@ import {
 } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
 import { canEditDocumentRevision } from "./helpers";
+import formBuilderStore from "../form.builder/stores/FBStore";
 
 interface StateProps {
   currentUserEmail: string;
@@ -63,10 +64,11 @@ export const DocumentRevisionUpdateContainer: React.FunctionComponent<
   }
 
   const onSubmit = (values: DocumentRevisionFormValues) => {
+    const v = {...values, formTemplate: formBuilderStore.formTemplate()};
     async.start(
       save,
       documentRevision.id,
-      toDocumentRevisionEditRequestBody(values),
+      toDocumentRevisionEditRequestBody(v),
       async,
     );
   };
