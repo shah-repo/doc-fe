@@ -4,10 +4,11 @@ import {
   DocumentRevisionEditRequestBody,
   RevisionChangeType,
 } from "../../../state/ducks/documentRevisions";
-import { DocumentType } from "../../../state/ducks/documentRevisions/documentType";
+import formBuilderStore from "../../form.builder/stores/FBStore";
 import { DocumentRevisionFormValues } from "./types";
 
 export const toDocumentRevisionFormValues = (documentRevision: DocumentRevision): DocumentRevisionFormValues => {
+  formBuilderStore.setFormTemplate(documentRevision.formTemplate);
   const values: DocumentRevisionFormValues = {
     id: documentRevision.id,
     description: documentRevision.description,
@@ -33,7 +34,13 @@ export const toDocumentRevisionEditRequestBody =
     referenceTo: (values.referenceTo || []).map((reference) => ({ id: reference.value })),
     revisionStage: values.revisionStage,
     retrain: values.retrain,
-    formTemplate: values.formTemplate,
+    formTemplate: values.formTemplate && {
+      id: values.formTemplate.id,
+      schema: JSON.stringify(formBuilderStore.schema),
+      outputDocumentType: {
+        id: values.formTemplate.outputDocumentType.id,
+      },
+    },
   };
 
   return documentRevisionEditRequestBody;

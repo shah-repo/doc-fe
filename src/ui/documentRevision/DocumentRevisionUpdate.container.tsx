@@ -64,11 +64,10 @@ export const DocumentRevisionUpdateContainer: React.FunctionComponent<
   }
 
   const onSubmit = (values: DocumentRevisionFormValues) => {
-    const v = {...values, formTemplate: formBuilderStore.formTemplate()};
     async.start(
       save,
       documentRevision.id,
-      toDocumentRevisionEditRequestBody(v),
+      toDocumentRevisionEditRequestBody(values),
       async,
     );
   };

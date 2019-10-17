@@ -14,9 +14,11 @@ export interface FBFormikProps extends Omit<FormikConfig<any>, "onSubmit"|"initi
 
 export interface FBFormInputProps {
   formInput?: string;
+  formTemplate?: FBFormTemplateProps;
 }
 
 export interface FBFormTemplateProps {
+  id: string;
   outputDocumentType: Id;
   schema: FBTemplateSchema[] | string;
 }

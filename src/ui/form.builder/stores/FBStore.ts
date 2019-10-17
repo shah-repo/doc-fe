@@ -11,7 +11,6 @@ import editorStore from "./FBEditorStore";
 
 export class FBStore {
   @observable public name?: string = undefined;
-  @observable public documentOutputType?: string = undefined;
   @observable public schema: FBTemplateSchema[] = [];
   @observable public values: { [key: string]: any } = {};
   @observable public mode: FBWorkspaceMode = "design";
@@ -32,21 +31,6 @@ export class FBStore {
   @computed get formInput(): string {
     const formInput = _.pick(this, ["documentOutputType", "schema", "values"]);
     return JSON.stringify(formInput);
-  }
-
-  // tslint:disable-next-line: align
-  @action public formTemplate(): FBFormTemplateProps | undefined {
-    const { documentOutputType, schema } = this;
-    if (!documentOutputType) { return; }
-
-    const template: FBFormTemplateProps = {
-      outputDocumentType: {
-        id: documentOutputType,
-      },
-      schema: JSON.stringify(schema),
-    };
-
-    return template;
   }
 
   @computed get active(): boolean {
@@ -71,7 +55,6 @@ export class FBStore {
 
   @action public reset = () => {
     this.name = undefined;
-    this.documentOutputType = undefined;
     this.schema = [];
     this.values = {};
     this.mode = "design";
@@ -83,9 +66,8 @@ export class FBStore {
     if (!formTemplate) {
       this.schema = [];
     } else {
-      const { outputDocumentType, schema } = formTemplate;
-      this.schema = schema as unknown as FBTemplateSchema[];
-      this.documentOutputType = outputDocumentType.id;
+      const { schema } = formTemplate;
+      this.schema = schema as FBTemplateSchema[];
     }
   }
 
@@ -94,8 +76,7 @@ export class FBStore {
       this.reset();
       return;
     }
-    const { documentOutputType, schema, values } = JSON.parse(json) as FBStore;
-    this.documentOutputType = documentOutputType;
+    const { schema, values } = JSON.parse(json) as FBStore;
     this.schema = schema || [];
     this.values = values || {};
   }
