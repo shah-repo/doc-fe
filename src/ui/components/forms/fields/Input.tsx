@@ -9,6 +9,7 @@ interface InputOwnProps extends FieldOwnProps {
   inputProps?: MuiInputProps;
   size?: RenderSize;
   actionsRenderer?: () => any;
+  lpignore?: boolean;
 }
 
 type InputPropsWithFormik = InputOwnProps & FormikFieldProps;
@@ -17,6 +18,7 @@ const Input: React.FunctionComponent<InputPropsWithFormik> = ({
   inputProps,
   size = "md",
   actionsRenderer,
+  lpignore = true,
   ...fieldProps
 }) => {
 
@@ -24,7 +26,7 @@ const Input: React.FunctionComponent<InputPropsWithFormik> = ({
     <Field size={size} actionsRenderer={actionsRenderer} {...fieldProps} inputLabelProps={{ shrink: true }} >
       <MuiInput
         required={false}
-        inputProps={{ "data-lpignore": true }}
+        inputProps={{ "data-lpignore": lpignore }}
         {...fieldProps.field}
         {...inputProps}
       />
