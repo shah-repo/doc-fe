@@ -1,5 +1,9 @@
 import classNames from "classnames";
-import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
+import {
+  Field as FormikField,
+  FieldConfig,
+  FieldProps as FormikFieldProps,
+} from "formik";
 import { QuillOptionsStatic } from "quill";
 import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
@@ -10,7 +14,7 @@ import { reactQuillEmptyString } from "../validators";
 import { formats, modules } from "./configuration";
 import "./textEditor.css";
 
-interface TextEditorOwnProps extends FieldOwnProps {
+export interface TextEditorOwnProps extends FieldOwnProps {
   quillOptions?: QuillOptionsStatic;
   size?: RenderSize;
   customContainers?: any[];
@@ -19,7 +23,7 @@ interface TextEditorOwnProps extends FieldOwnProps {
   actionsRenderer?: () => any;
 }
 
-type TextEditorPropsWithFormik = TextEditorOwnProps & FormikFieldProps;
+export type TextEditorPropsWithFormik = TextEditorOwnProps & FormikFieldProps;
 
 const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
   quillOptions,
@@ -30,7 +34,13 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
   customToolbarAction,
   ...fieldProps
 }) => {
-  const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
+
+  const {
+    ref,
+    isComponentVisible,
+    setIsComponentVisible,
+  } = useComponentVisible(false);
+
   const [toolbar, setToolbar] = useState<any>({});
 
   useEffect(() => {
@@ -81,7 +91,9 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
       inputLabelProps={{ shrink: true }}
     >
       <div
-        className={classNames("editor-container", { "label-margin": !actionsRenderer })}
+        className={classNames("editor-container", {
+          "label-margin": !actionsRenderer,
+        })}
         ref={ref}
         tabIndex={0}
         onFocus={handleFocus}
@@ -96,7 +108,7 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
           formats={formats}
           {...quillOptions}
           onChange={handleChange}
-          value={fieldProps.field.value}
+          value={fieldProps.field.value || ""}
           onBlur={handleBlur}
           readOnly={!isComponentVisible}
         />
@@ -105,7 +117,7 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
   );
 };
 
-type TextEditorFieldProps = TextEditorOwnProps & FieldConfig;
+export type TextEditorFieldProps = TextEditorOwnProps & FieldConfig;
 
 const TextEditorField: React.FunctionComponent<TextEditorFieldProps> = (
   props,

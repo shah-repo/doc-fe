@@ -1,9 +1,9 @@
-import { Formik, FormikConfig } from "formik";
+import { Formik } from "formik";
 import React from "react";
-import { withFormDefaults } from "./utils/hoc";
-import { FBFormProps } from "./utils/types";
+import { withFormikDefaults } from "../../hocs/withFormikDefaults";
+import { FBFormikProps } from "../../types/formik";
 
-const FBForm: React.FunctionComponent<FBFormProps> = ({
+const FBForm: React.FunctionComponent<FBFormikProps> = ({
   // tslint:disable-next-line: no-empty
   onSubmit = () => {},
   initialValues = {},
@@ -19,4 +19,4 @@ const FBForm: React.FunctionComponent<FBFormProps> = ({
   );
 };
 
-export default withFormDefaults(FBForm);
+export default withFormikDefaults(FBForm);

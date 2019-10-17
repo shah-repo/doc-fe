@@ -32,7 +32,17 @@ export const byId = (
 ): DocumentRevisionsByIdState => {
   switch (action.type) {
     case DOCUMENT_REVISION_LIST:
-      return { ...(_.keyBy<DocumentRevision>(action.payload, (documentRevision) => documentRevision.id)) };
+        return action.payload.reduce(
+          (acc: DocumentRevisionsByIdState, docRev: DocumentRevision) => {
+            return {
+              ...acc,
+              [docRev.id]: {
+                ...state[docRev.id],
+                ...docRev,
+              },
+            };
+        }, {});
+      // return { ...(_.keyBy<DocumentRevision>(action.payload, (documentRevision) => documentRevision.id)) };
     case DOCUMENT_REVISION_SET:
       return { ...state, [action.payload.id]: action.payload };
     default:
