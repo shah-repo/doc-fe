@@ -40,10 +40,8 @@ import {
   documentDetailsPath,
   documentVersionPath,
 } from "../../document.revision/utils/paths";
-import { withFormIntegration } from "../../form.builder/hocs/withFormIntegration";
 import FBWorkspace from "../../form.builder/main/workspace/FBWorkspace";
 import formBuilderStore from "../../form.builder/stores/FBStore";
-import FBDocumentRevision from "../formBuilder/FBDocumentRevision.container";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -60,10 +58,7 @@ interface Props
   doNotPrompt?: boolean;
   documentTypes: SelectOption[];
   documentTypesById: DocumentTypeByIdState;
-  document: Document;
   onDirtyFlagChange?: (dirty: boolean) => void;
-  uploadTemplate: (elements: any) => any;
-  fbFormMode: (mode: boolean) => any;
 }
 
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
@@ -84,17 +79,10 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   isSubmitting,
   isValidating,
   errors,
-  uploadTemplate,
-  fbFormMode,
   documentTypes,
   documentTypesById,
-  document,
 }) => {
 
-  if (initialValues.id) {
-    formBuilderStore.setFormTemplate(values.formTemplate);
-  }
-  
   const openReference = (documentId: string) => {
     window.open(documentDetailsPath(documentId), "_blank");
   };
@@ -129,14 +117,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       return;
     }
     setDocId!(value);
-  };
-
-  const handleOutput = (
-    event: React.ChangeEvent<{ name?: string; value: unknown }>,
-  ) => {
-    const typeId = event.target.value as string;
-    formBuilderStore.documentOutputType = typeId;
-    handleChange(event);
   };
 
   const handleTypeChange = (
@@ -304,11 +284,10 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           {formBuilderStore.active && (
             <Box my={4}>
               <SelectField
-                name="documentOutputType"
+                name="formTemplate.outputDocumentType.id"
                 label="document.output.type"
                 selectProps={{
-                  inputProps: { id: "documentOutputType", disabled: isDisabled },
-                  onChange: handleOutput,
+                  inputProps: { id: "formTemplate.outputDocumentType" },
                 }}
                 options={documentTypes}
                 validate={!isDisabled ? validator(required) : undefined}
