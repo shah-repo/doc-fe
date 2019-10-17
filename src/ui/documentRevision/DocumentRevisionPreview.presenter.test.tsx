@@ -1,15 +1,15 @@
+import { Typography } from "@material-ui/core";
 import { shallow } from "enzyme";
 import React from "react";
+import { Link } from "react-router-dom";
+import { getAttachment } from "../../state/ducks/attachments/tests/factories";
 import { getDocumentRevision } from "../../state/ducks/documentRevisions/tests/factories";
+import FileCard from "../components/cards/FileCard";
 import {
     DocumentRevisionPreviewPresenter,
     DocumentRevisionPreviewPresenterProps,
 } from "./DocumentRevisionPreview.presenter";
 import PreviewControlsContainer from "./PreviewControls.container";
-import { getAttachment } from "../../state/ducks/attachments/tests/factories";
-import { Link } from "react-router-dom";
-import FileCard from "../components/cards/FileCard";
-import { Typography } from "@material-ui/core";
 
 describe("DocumentRevisionPreviewPresenter test with no documentRevision", () => {
     const defaultProps: DocumentRevisionPreviewPresenterProps  = {
@@ -70,7 +70,7 @@ describe("DocumentRevisionPreviewPresenter test with documentRevision", () => {
 
     expect(typography.at(1).contains(docRev.document.docId));
     expect(typography.at(2).contains(docRev.status));
-    expect(typography.at(4).contains(docRev.document.documentType));
+    expect(typography.at(4).contains(docRev.document.documentType.documentTypeName));
     expect(typography.at(6).contains(docRev.description));
     expect(typography.at(8).contains(docRev.name));
   });
