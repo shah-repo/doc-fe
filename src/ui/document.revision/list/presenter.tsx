@@ -37,7 +37,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
 
   // TODO: fix tolltip
   const typeTooltipRenderer = (rowData: DocumentRevision) =>
-    rowData.document.documentType;
+    rowData.document.documentType.documentTypeName;
 
   const cellHrefRenderer = (rowData: DocumentRevision): string => {
     if (canEdit(rowData)) {
@@ -95,7 +95,9 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       cellHref: cellHrefRenderer,
       searchOptions: { searchType: "select", selectOptions: documentTypeOptions },
       columnOptions: {
-        cellDataGetter: ({ rowData }) => rowData.document.type,
+        cellDataGetter: ({ rowData }) => {
+          return rowData.document.documentType.documentTypeAcronym;
+        },
         width: 100,
       },
     },

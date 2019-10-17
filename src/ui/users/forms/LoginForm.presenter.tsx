@@ -23,6 +23,7 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({ classes, asyncStat
         gutter={false}
         inputProps={{ autoComplete: "email", autoFocus: true, id: "email" }}
         validate={validator(required, email)}
+        lpignore={false}
       />
       <InputField
         name="password"
@@ -31,6 +32,7 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({ classes, asyncStat
         gutter={false}
         inputProps={{ autoComplete: "current-password", id: "password", type: "password" }}
         validate={validator(required)}
+        lpignore={false}
       />
       <SubmitButton asyncState={asyncState} label="login.button" className={classes.submit} />
     </Form>
