@@ -6,15 +6,23 @@ import FBTextEditorField from "./FBTextEditorField";
 
 jest.mock("../../../components/Text");
 
+declare global {
+  namespace NodeJS {
+    interface Global {
+      MutationObserver: any;
+      document: any;
+    }
+  }
+}
+
 global.MutationObserver = class {
-  constructor(callback) {}
+  constructor() {}
   disconnect() {}
-  observe(element, initObject) {}
+  observe() {}
   takeRecords() {
     return [];
   }
 };
-
 global.document.getSelection = function() {};
 
 describe("FBTexEditortField component tests", () => {
@@ -44,7 +52,7 @@ describe("FBTexEditortField component tests", () => {
       />,
     );
   };
-  it("displays FBTextField component by default", () => {
+  it("displays FBTexEditortField component by default", () => {
     const wrapper = getWrapper({});
     expect(wrapper.find(FBTextEditorField)).toHaveLength(1);
   });
