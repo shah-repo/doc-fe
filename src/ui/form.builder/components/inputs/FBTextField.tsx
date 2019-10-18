@@ -5,10 +5,9 @@ import { withLabelRenderer } from "../../hocs/withLabelRenderer";
 import { withOnChange } from "../../hocs/withOnChange";
 import { FBFormDefaultProps, FBOnChangeProps } from "../../types/common";
 
-type Props =
-  & Omit<OutlinedTextFieldProps, "variant">
-  & FBFormDefaultProps
-  & FBOnChangeProps;
+export type Props = Omit<OutlinedTextFieldProps, "variant"> &
+  FBFormDefaultProps &
+  FBOnChangeProps;
 
 const FBTextField: React.FunctionComponent<Props> = ({
   labelRenderer,
@@ -17,7 +16,7 @@ const FBTextField: React.FunctionComponent<Props> = ({
   <Box mb={4}>
     {labelRenderer}
     <TextField
-      multiline={Boolean(props.rows && ((props.rows as number) > 0))}
+      multiline={Boolean(props.rows && (props.rows as number) > 0)}
       fullWidth={true}
       {...props}
       variant="outlined"
