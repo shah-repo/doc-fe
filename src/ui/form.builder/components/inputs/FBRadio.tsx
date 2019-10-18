@@ -11,6 +11,8 @@ const FBRadio: React.FunctionComponent<FBCheckboxProps> = ({
   field,
   gutter = true,
   includeNote,
+  disabled,
+  readOnly,
   ...props
 }) => (
   <Box mb={gutter ? 4 : 0}>
@@ -18,12 +20,13 @@ const FBRadio: React.FunctionComponent<FBCheckboxProps> = ({
       {...props}
       label={label && <Text message={label} />}
       control={<Radio checked={field.value === label} value={label} />}
+      disabled={disabled || readOnly}
     />
     {formBuilderStore.mode === "form" &&
       field.value === label &&
       includeNote && (
         <FBTextField
-          disabled={props.disabled}
+          disabled={disabled || readOnly}
           name={`${props.name}_optionNote_field`}
         />
       )}

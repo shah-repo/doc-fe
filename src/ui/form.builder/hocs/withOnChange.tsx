@@ -42,7 +42,6 @@ export function withOnChange<T extends FBOnChangeProps>(
 
       if (formBuilderStore.mode === "design") { return; }
       formBuilderStore.values = {...formBuilderStore.values, [field.name as string]: value };
-      formBuilderStore.submitValue();
     }
   }
 

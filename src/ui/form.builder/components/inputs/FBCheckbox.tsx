@@ -11,6 +11,8 @@ const FBCheckbox: React.FunctionComponent<FBCheckboxProps> = ({
   field,
   gutter = true,
   includeNote,
+  disabled,
+  readOnly,
   ...props
 }) => (
   <Box mb={gutter ? 4 : 0}>
@@ -18,10 +20,11 @@ const FBCheckbox: React.FunctionComponent<FBCheckboxProps> = ({
       {...props}
       label={label && <Text message={label} />}
       control={<Checkbox checked={field.value} />}
+      disabled={disabled || readOnly}
     />
     {formBuilderStore.mode === "form" && (field.value as boolean) && includeNote && (
       <FBTextField
-        disabled={props.disabled}
+        disabled={disabled}
         name={`${props.name}_optionNote_field`}
       />)
     }
