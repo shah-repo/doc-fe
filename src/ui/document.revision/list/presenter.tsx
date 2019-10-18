@@ -3,7 +3,7 @@ import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { stripTagsFromObject } from "../../../common/utils/helpers";
 import { unmaskId } from "../../../state/ducks/common/helpers";
-import { DocumentRevision, DocumentRevisionStatus, DocumentRevisionType } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { TableColumnProps } from "../../components/table/column/types";
 import { TablePanel } from "../../components/table/panel";
@@ -15,7 +15,7 @@ import {
   canEditDocumentRevision,
   documentRevisionQueryStatus,
   documentRevisionStatusOption,
-  documentRevisionTypeOption} from "../utils/helpers";
+} from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
 import styles from "./styles";

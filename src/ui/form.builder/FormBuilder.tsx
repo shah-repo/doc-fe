@@ -5,7 +5,6 @@ import Text from "../components/Text";
 import FBDialog from "./components/feedback/FBDialog";
 import { withDialogState } from "./hocs/withDialogState";
 import FBInfo from "./main/workspace/FBInfo";
-import FBWorkspace from "./main/workspace/FBWorkspace";
 import { FBDialogProps } from "./types/dialog";
 
 const FormBuilder: React.FunctionComponent<FBDialogProps> = ({

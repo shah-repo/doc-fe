@@ -11,6 +11,8 @@ type Props = FBFormDefaultProps & FBOnChangeProps;
 const FBTextEditorField: React.FunctionComponent<Props> = ({
   labelRenderer,
   form,
+  disabled,
+  readOnly,
   ...props
 }) => (
   <Box mb={4}>
@@ -21,7 +23,7 @@ const FBTextEditorField: React.FunctionComponent<Props> = ({
       formats={formats}
       onChange={props.onChange}
       value={props.value || ""}
-      readOnly={props.disabled}
+      readOnly={disabled || readOnly}
       style={{ minHeight: 120 }}
       id={`field-${props.field.name}`}
     />

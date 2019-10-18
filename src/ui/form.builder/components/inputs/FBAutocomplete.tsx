@@ -15,6 +15,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   labelRenderer,
   autocompleteList,
   disabled,
+  readOnly,
   ...props
 }) => {
 
@@ -77,7 +78,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             shrink: true,
           },
         }}
-        isDisabled={disabled}
+        isDisabled={disabled || readOnly}
         {...props}
         options={options}
       />
