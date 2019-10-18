@@ -81,7 +81,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   documentTypesById,
 }) => {
 
-  formBuilderStore.mode = "preview";
   const openReference = (documentId: string) => {
     window.open(documentDetailsPath(documentId), "_blank");
   };
