@@ -1,17 +1,24 @@
 import {
   Box,
+  Button,
   Grid,
   WithStyles,
   withStyles,
 } from "@material-ui/core";
 import { Formik } from "formik";
+import { Dictionary } from "lodash";
 import React from "react";
+import { Link as RouterLink } from "react-router-dom";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import Text from "../../components/Text";
+import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
+import FBWorkspace from "../../form.builder/main/workspace/FBWorkspace";
+import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
+import formBuilderStore from "../../form.builder/stores/FBStore";
 import Attachment from "./attachment";
 import ChangeRequestLink from "./changeRequestLink";
 import DocumentHeader from "./header";
@@ -44,6 +51,18 @@ export const Presenter: React.FunctionComponent<Props> = ({
   canShowCreateVersionButton,
 }) => {
   const onSubmit = () => void 0;
+
+  let { formTemplate } = dataProp;
+  if (!formTemplate) {
+    const { formInput, formDocument } = dataProp;
+    formTemplate = formDocument && formDocument.formTemplate;
+    formBuilderStore.setFormTemplatePreview(formTemplate, formInput as Dictionary<any>);
+  } else {
+    formBuilderStore.setFormTemplatePreview(dataProp.formTemplate);
+  }
+
+  const onCreateClick = () =>
+    documentRevisionStore.setMode("createFrom", dataProp);
 
   const renderTrainingControl = status === DocumentRevisionStatus.Released && (
     <TrainingControl
@@ -85,7 +104,23 @@ export const Presenter: React.FunctionComponent<Props> = ({
         {attachments && <Attachment />}
         {renderTrainingControl}
       </Grid>
-      <Box className={classes.submitBox}>
+      {formBuilderStore.active && (
+         <Box px={5}>
+           <FBWorkspace />
+         </Box>
+       )}
+      <Box flexDirection="row-reverse" display="flex">
+        {dataProp.status === DocumentRevisionStatus.Released && (
+          <RouterLink
+            onClick={(onCreateClick)}
+            to={DOCUMENT_REVISION_CREATE_URL}
+            style={{textDecoration: "none"}}
+          >
+            <Button color="primary">
+              <Text translation="common.create.new" />
+            </Button>
+          </RouterLink>
+        )}
         <ControlsContainer
           documentRevision={dataProp}
           canShowCreateVersionButton={canShowCreateVersionButton}
