@@ -4,7 +4,7 @@ import {
   DocumentRevisionEditRequestBody,
   RevisionChangeType,
 } from "../../../state/ducks/documentRevisions";
-import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
+import documentRevisionStore, { FBDocumentRevisionRequestType } from "../../form.builder/stores/custom/FBDocumentRevisionStore";
 import formBuilderStore from "../../form.builder/stores/FBStore";
 import { FBDocumentFlowProps, FBFormTemplateProps } from "../../form.builder/types/formik";
 import { DocumentRevisionFormValues } from "./types";
@@ -12,26 +12,56 @@ import { DocumentRevisionFormValues } from "./types";
 export const toFormBuilderTemplate = (
   values: DocumentRevisionFormValues,
 ): FBFormTemplateProps | undefined => {
+
   const { formTemplate } = values;
   const { outputDocumentType } = formTemplate || {};
-  if (outputDocumentType && formTemplate && documentRevisionStore.mode !== "createFrom") {
-    return ({
-      id: formTemplate.id,
-      schema: JSON.stringify(formBuilderStore.schema),
-      outputDocumentType: {
-        id: outputDocumentType.id,
-      },
-    });
+  const reqType = documentRevisionStore.requestType(values);
+  switch (reqType) {
+    case "create":
+    case "update":
+      if (outputDocumentType) {
+        return ({
+          id: undefined,
+          schema: JSON.stringify(formBuilderStore.schema),
+          outputDocumentType: {
+            id: outputDocumentType.id,
+          },
+        });
+      }
+
   }
+
   return undefined;
+
+  // const { formTemplate } = values;
+  // const { outputDocumentType } = formTemplate || {};
+  // if (outputDocumentType && formTemplate && documentRevisionStore.mode !== "createFrom") {
+  //   return ({
+  //     id: formTemplate.id,
+  //     schema: JSON.stringify(formBuilderStore.schema),
+  //     outputDocumentType: {
+  //       id: outputDocumentType.id,
+  //     },
+  //   });
+  // }
+  // return undefined;
 };
 
 export const toFormBuilderDocument = (
   values: DocumentRevisionFormValues,
 ): FBDocumentFlowProps | undefined => {
   const { id } = values.formDocument || {};
-  if (id === undefined || documentRevisionStore.mode === "updateFromOther") { return; }
-  return ({ id });
+  const reqType = documentRevisionStore.requestType(values);
+  switch (reqType) {
+    case "fbUpdate":
+      return ({ id });
+    default:
+      return;
+  }
+
+  // const { id } = values.formDocument || {};
+  // if (id === undefined || documentRevisionStore.mode === "updateFromOther") { return; }
+  // return ({ id });
 };
 
 export const toDocumentRevisionFormValues = (documentRevision: DocumentRevision): DocumentRevisionFormValues => {
@@ -48,6 +78,7 @@ export const toDocumentRevisionFormValues = (documentRevision: DocumentRevision)
     formTemplate: documentRevision.formTemplate,
     formInput: documentRevision.formInput,
     formDocument: documentRevision.formDocument,
+    status: documentRevision.status,
   };
 
   return values;

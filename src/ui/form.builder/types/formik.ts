@@ -26,7 +26,7 @@ export interface FBDocumentProps extends FBDocumentFlowProps {
 }
 
 export interface FBFormTemplateProps {
-  id: string;
+  id?: string;
   outputDocumentType: Id;
   schema: FBTemplateSchema[] | string;
 }

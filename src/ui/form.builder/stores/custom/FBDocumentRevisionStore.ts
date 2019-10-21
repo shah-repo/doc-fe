@@ -1,12 +1,18 @@
 import _, { Dictionary } from "lodash";
 import { action, computed, observable } from "mobx";
 import { Id } from "../../../../state/ducks/common";
-import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { DocumentType, DocumentTypeByIdState } from "../../../../state/ducks/documentRevisions/documentType";
 import { DocumentRevisionFormValues } from "../../../documentRevision/forms/types";
 import { FBFormTemplateProps } from "../../types/formik";
 import { FBDocumentRevisionMode } from "../../types/store";
 import formBuilderStore from "../FBStore";
+
+export type FBDocumentRevisionRequestType =
+  | "none"
+  | "create"
+  | "update"
+  | "fbUpdate";
 
 export class FBDocumentRevisionStore {
 
@@ -38,6 +44,21 @@ export class FBDocumentRevisionStore {
   @observable public mode: FBDocumentRevisionMode = "create";
   public fromDocumentRevision?: DocumentRevision = undefined;
   public documentTypesById: DocumentTypeByIdState = {};
+
+  @action public requestType(values: DocumentRevisionFormValues): FBDocumentRevisionRequestType {
+    const { id, formTemplate, document, status } = values;
+    const { documentType } = document || {};
+    const { group } = documentType || {};
+
+    switch (true) {
+      case (id === undefined):
+        return (group !== "FORM") ? "create" : "none";
+      case (id !== undefined && status === DocumentRevisionStatus.Draft):
+        return "update";
+    }
+
+    return "none";
+  }
 
   @action public setValues = (
     values: DocumentRevisionFormValues,
