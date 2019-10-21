@@ -21,3 +21,9 @@ export interface FBTemplateSchema {
 export interface FBStoreProps {
   formBuilderStore: FBStore;
 }
+
+export type FBDocumentRevisionMode =
+  | "create"
+  | "update"
+  | "updateFromOther"
+  | "createFrom";

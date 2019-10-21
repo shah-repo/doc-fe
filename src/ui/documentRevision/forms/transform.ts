@@ -4,11 +4,37 @@ import {
   DocumentRevisionEditRequestBody,
   RevisionChangeType,
 } from "../../../state/ducks/documentRevisions";
+import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
 import formBuilderStore from "../../form.builder/stores/FBStore";
+import { FBDocumentFlowProps, FBFormTemplateProps } from "../../form.builder/types/formik";
 import { DocumentRevisionFormValues } from "./types";
 
+export const toFormBuilderTemplate = (
+  values: DocumentRevisionFormValues,
+): FBFormTemplateProps | undefined => {
+  const { formTemplate } = values;
+  const { outputDocumentType } = formTemplate || {};
+  if (outputDocumentType && formTemplate && documentRevisionStore.mode !== "createFrom") {
+    return ({
+      id: formTemplate.id,
+      schema: JSON.stringify(formBuilderStore.schema),
+      outputDocumentType: {
+        id: outputDocumentType.id,
+      },
+    });
+  }
+  return undefined;
+};
+
+export const toFormBuilderDocument = (
+  values: DocumentRevisionFormValues,
+): FBDocumentFlowProps | undefined => {
+  const { id } = values.formDocument || {};
+  if (id === undefined || documentRevisionStore.mode === "updateFromOther") { return; }
+  return ({ id });
+};
+
 export const toDocumentRevisionFormValues = (documentRevision: DocumentRevision): DocumentRevisionFormValues => {
-  formBuilderStore.setFormTemplate(documentRevision.formTemplate);
   const values: DocumentRevisionFormValues = {
     id: documentRevision.id,
     description: documentRevision.description,
@@ -20,6 +46,8 @@ export const toDocumentRevisionFormValues = (documentRevision: DocumentRevision)
     changeRequest: documentRevision.changeRequest,
     retrain: documentRevision.retrain,
     formTemplate: documentRevision.formTemplate,
+    formInput: documentRevision.formInput,
+    formDocument: documentRevision.formDocument,
   };
 
   return values;
@@ -34,13 +62,9 @@ export const toDocumentRevisionEditRequestBody =
     referenceTo: (values.referenceTo || []).map((reference) => ({ id: reference.value })),
     revisionStage: values.revisionStage,
     retrain: values.retrain,
-    formTemplate: values.formTemplate && {
-      id: values.formTemplate.id,
-      schema: JSON.stringify(formBuilderStore.schema),
-      outputDocumentType: {
-        id: values.formTemplate.outputDocumentType.id,
-      },
-    },
+    formTemplate: toFormBuilderTemplate(values),
+    formInput: JSON.stringify(formBuilderStore.getValues()),
+    formDocument: toFormBuilderDocument(values),
   };
 
   return documentRevisionEditRequestBody;
@@ -57,6 +81,7 @@ export const toNewVersionRequestBody = (values: DocumentRevisionFormValues): Doc
     } else {
       // new document
       newValues.document = _.pick(values.document, ["docId", "documentType"]);
+      newValues.document.documentType = _.pick(values.document.documentType, ["id"]);
     }
   }
 

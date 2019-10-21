@@ -1,6 +1,7 @@
-import _ from "lodash";
+import _, { Dictionary } from "lodash";
 import { action, autorun, computed, observable } from "mobx";
 import Config from "../../../config";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { DocumentGroupType } from "../../../state/ducks/documentRevisions/documentType";
 import { ThemeEnv } from "../../layout/theme/utils/types";
 import { FBEditorSectionConfig } from "../defaults/editor";
@@ -38,6 +39,7 @@ export class FBStore {
   @observable public values: { [key: string]: any } = {};
   @observable public mode: FBWorkspaceMode = "design";
   @observable public groupType: DocumentGroupType = "OTHER";
+  public changeReqRevisions: DocumentRevision[] = [];
 
   constructor() {
     autorun(() => {
@@ -45,6 +47,12 @@ export class FBStore {
         this.reset();
       }
     });
+  }
+
+  @action public getDocRev = (id: string): DocumentRevision | undefined => {
+    const docRev = this.changeReqRevisions.filter((doc) => doc.id === id);
+    if (docRev.length === 0) { return undefined; }
+    return docRev[0];
   }
 
   @action public toolbarMargin(schemaIndex: number): number {
@@ -63,6 +71,10 @@ export class FBStore {
     this.schema.splice(index, 1);
   }
 
+  @action public getValues = (): { [key: string]: any } | undefined => {
+    return _.isEmpty(this.values) ? undefined : this.values;
+  }
+
   @action public reset = () => {
     this.name = undefined;
     this.schema = [];
@@ -73,12 +85,35 @@ export class FBStore {
   }
 
   @action public setFormTemplate = (formTemplate?: FBFormTemplateProps) => {
-    if (!formTemplate) {
-      this.schema = [];
-    } else {
-      const { schema } = formTemplate;
-      this.schema = schema as FBTemplateSchema[];
-    }
+    (formTemplate) ?
+      this.schema = formTemplate.schema as FBTemplateSchema[] :
+      this.reset();
+  }
+
+  @action public setFormTemplateDesign = (formTemplate?: FBFormTemplateProps) => {
+    this.groupType = "FORM";
+    this.mode = "design";
+    this.setFormTemplate(formTemplate);
+  }
+
+  @action public setFormTemplatePreview = (
+    formTemplate?: FBFormTemplateProps,
+    inputValues?: Dictionary<any>,
+    ) => {
+    this.groupType = "FORM";
+    this.mode = "preview";
+    this.values = inputValues || {};
+    this.setFormTemplate(formTemplate);
+  }
+
+  @action public setFormTemplateForm = (
+    formTemplate?: FBFormTemplateProps,
+    inputValues?: Dictionary<any>,
+  ) => {
+    this.groupType = "FORM";
+    this.mode = "form";
+    this.values = inputValues || {};
+    this.setFormTemplate(formTemplate);
   }
 
   @action private isDisabled = (): boolean => {

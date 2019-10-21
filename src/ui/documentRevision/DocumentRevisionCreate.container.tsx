@@ -8,6 +8,7 @@ import {
 } from "../../state/ducks/documentRevisions";
 import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
+import documentRevisionStore from "../form.builder/stores/custom/FBDocumentRevisionStore";
 import useAsync from "../hooks/useAsync";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { toDocumentRevisionFormValuesWithRevisionChange, toNewVersionRequestBody } from "./forms/transform";
@@ -42,10 +43,19 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   setDocId,
 }) => {
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
+  const isNew = documentRevision === undefined;
+  let initialValues = DEFAULT_INITIAL_VALUES();
 
-  const initialValues = documentRevision ?
-      toDocumentRevisionFormValuesWithRevisionChange(documentRevision) :
-      DEFAULT_INITIAL_VALUES();
+  if (isNew) {
+    if (documentRevisionStore.mode === "createFrom") {
+      initialValues = documentRevisionStore.setValues(initialValues);
+    } else {
+      documentRevisionStore.setMode("create");
+      setDocId("");
+    }
+  } else {
+    initialValues = toDocumentRevisionFormValuesWithRevisionChange(documentRevision);
+  }
 
   const async = useAsync<DocumentRevision>({
       onSuccess: (createdDocumentRevision?) => {

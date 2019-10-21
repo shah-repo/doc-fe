@@ -3,7 +3,6 @@ import React from "react";
 import FBOptionsContainer from "../custom/FBOptionsContainer";
 import FBCheckbox from "../inputs/FBCheckbox";
 import FBLabelEditor from "./FBLabelEditor";
-import FBCheckboxGroup from "../inputs/FBCheckboxGroup";
 
 const FBSelectEditor: React.FunctionComponent<{}> = () => (
   <Box>
