@@ -16,6 +16,8 @@ export const toFormBuilderTemplate = (
   const { formTemplate } = values;
   const { outputDocumentType } = formTemplate || {};
   const reqType = documentRevisionStore.requestType(values);
+  // tslint:disable-next-line: no-console
+  console.log(formBuilderStore.schema);
   switch (reqType) {
     case "create":
     case "update":
