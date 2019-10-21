@@ -31,7 +31,7 @@ export class FBStore {
     return ({
       disabled: this.isDisabled(),
       readOnly: this.isReadonly(),
-      className: this.isDisabled() ? FBClasses.inputDisabled : "",
+      // className: this.isDisabled() ? FBClasses.inputDisabled : "",
     });
   }
   @observable public name?: string = undefined;

@@ -16,24 +16,20 @@ export const toFormBuilderTemplate = (
   const { formTemplate } = values;
   const { outputDocumentType } = formTemplate || {};
   const reqType = documentRevisionStore.requestType(values);
-  // tslint:disable-next-line: no-console
-  console.log(formBuilderStore.schema);
   switch (reqType) {
     case "create":
     case "update":
       if (outputDocumentType) {
         return ({
-          id: undefined,
           schema: JSON.stringify(formBuilderStore.schema),
           outputDocumentType: {
             id: outputDocumentType.id,
           },
         });
       }
-
+    default:
+      return;
   }
-
-  return undefined;
 };
 
 export const toFormBuilderDocument = (
