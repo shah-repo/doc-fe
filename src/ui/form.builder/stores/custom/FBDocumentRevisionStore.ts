@@ -12,6 +12,7 @@ export type FBDocumentRevisionRequestType =
   | "none"
   | "create"
   | "update"
+  | "fbCreate"
   | "fbUpdate";
 
 export class FBDocumentRevisionStore {
@@ -46,18 +47,28 @@ export class FBDocumentRevisionStore {
   public documentTypesById: DocumentTypeByIdState = {};
 
   @action public requestType(values: DocumentRevisionFormValues): FBDocumentRevisionRequestType {
-    const { id, formTemplate, document, status } = values;
+    const { id, document, status, formDocument } = values;
     const { documentType } = document || {};
     const { group } = documentType || {};
+    const isNew = (id === undefined);
+    const isFromFB = !_.isEmpty(formDocument);
+    const isStatus = (
+      status === DocumentRevisionStatus.Draft ||
+      status === DocumentRevisionStatus.PendingChange
+    );
 
     switch (true) {
-      case (id === undefined):
-        return (group !== "FORM") ? "create" : "none";
-      case (id !== undefined && status === DocumentRevisionStatus.Draft):
+      case (isNew && isFromFB):
+        return "fbCreate";
+      case (!isNew && !isFromFB && isStatus):
         return "update";
+      case (!isNew && isFromFB):
+        return "fbUpdate";
+      case (isNew && !isFromFB):
+        return (group !== "FORM") ? "create" : "none";
+      default:
+        return "none";
     }
-
-    return "none";
   }
 
   @action public setValues = (

@@ -4,7 +4,7 @@ import {
   DocumentRevisionEditRequestBody,
   RevisionChangeType,
 } from "../../../state/ducks/documentRevisions";
-import documentRevisionStore, { FBDocumentRevisionRequestType } from "../../form.builder/stores/custom/FBDocumentRevisionStore";
+import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
 import formBuilderStore from "../../form.builder/stores/FBStore";
 import { FBDocumentFlowProps, FBFormTemplateProps } from "../../form.builder/types/formik";
 import { DocumentRevisionFormValues } from "./types";
@@ -32,19 +32,6 @@ export const toFormBuilderTemplate = (
   }
 
   return undefined;
-
-  // const { formTemplate } = values;
-  // const { outputDocumentType } = formTemplate || {};
-  // if (outputDocumentType && formTemplate && documentRevisionStore.mode !== "createFrom") {
-  //   return ({
-  //     id: formTemplate.id,
-  //     schema: JSON.stringify(formBuilderStore.schema),
-  //     outputDocumentType: {
-  //       id: outputDocumentType.id,
-  //     },
-  //   });
-  // }
-  // return undefined;
 };
 
 export const toFormBuilderDocument = (
@@ -53,15 +40,11 @@ export const toFormBuilderDocument = (
   const { id } = values.formDocument || {};
   const reqType = documentRevisionStore.requestType(values);
   switch (reqType) {
-    case "fbUpdate":
+    case "fbCreate":
       return ({ id });
     default:
       return;
   }
-
-  // const { id } = values.formDocument || {};
-  // if (id === undefined || documentRevisionStore.mode === "updateFromOther") { return; }
-  // return ({ id });
 };
 
 export const toDocumentRevisionFormValues = (documentRevision: DocumentRevision): DocumentRevisionFormValues => {
