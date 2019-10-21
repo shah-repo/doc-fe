@@ -83,12 +83,14 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   documentTypesById,
 }) => {
 
+  const reqType = documentRevisionStore.requestType(initialValues);
   const openReference = (documentId: string) => {
     window.open(documentDetailsPath(documentId), "_blank");
   };
 
   const isDisabled: boolean = initialValues.id !== undefined;
   const docIdValue = isDisabled ? values.document!.docId : proposedDocId;
+  const typeIsDisabled = isDisabled || (reqType === "fbCreate" || reqType === "fbUpdate");
 
   if (!isDisabled && values.document) {
     values.document.docId = proposedDocId;
@@ -241,7 +243,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             name="document.documentType.id"
             label="document.type"
             selectProps={{
-              inputProps: { id: "documentType", disabled: isDisabled },
+              inputProps: { id: "documentType", disabled: typeIsDisabled},
               onChange: handleTypeChange,
             }}
             options={documentTypes}
