@@ -1,5 +1,5 @@
 import { Grid, WithStyles, withStyles } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import {
   ChangeRequest,
@@ -7,6 +7,7 @@ import {
   changeRequestsSelectors,
 } from "../../../state/ducks/changeRequest";
 import {
+  DocumentRevision,
   DocumentRevisionsByIdState,
   documentRevisionsSelectors,
 } from "../../../state/ducks/documentRevisions";
@@ -62,6 +63,18 @@ export const ChangeRequestFormContainer: React.FunctionComponent<
   const [documentRevisionsList, setDocumentRevisionsList] = useState<string[]>(
     initialValues.documentRevisions,
   );
+  const [documentsInCrById, setDocumentsInCrById] = useState({});
+
+  useEffect(() => {
+    if (changeRequest && changeRequest.documentRevisions) {
+      setDocumentsInCrById(
+        changeRequest.documentRevisions.reduce(
+          (acc, docRev: DocumentRevision) => ({ ...acc, [docRev.id]: docRev }),
+          {},
+        ),
+      );
+    }
+  }, [(changeRequest || {}).documentRevisions]);
 
   const doneAddingDocuments = (addedDocuments: string[]) => {
     const documentRevisions = new Set([
@@ -157,6 +170,7 @@ export const ChangeRequestFormContainer: React.FunctionComponent<
             selectDocumentRevision={selectDocumentRevision}
             selectAssessmentForm={selectAssessmentForm}
             selectedDocumentRevision={selectedDocumentRevision}
+            documentsInCrById={documentsInCrById}
           />
         </Grid>
         <Grid item={true} xs={12} sm={6} md={7}>
