@@ -43,7 +43,7 @@ import formBuilderStore from "../../form.builder/stores/FBStore";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
 
-interface Props
+export interface Props
   extends WithStyles<typeof styles>,
     FormikProps<DocumentRevisionFormValues> {
   asyncState: AsyncState;
@@ -59,7 +59,7 @@ interface Props
   onDirtyFlagChange?: (dirty: boolean) => void;
 }
 
-const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
+export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   asyncState,
   initialValues,
   handleChange,
