@@ -19,15 +19,12 @@ const Assessments: React.FunctionComponent<Props> = ({ form }) => {
         type as AssessmentType
       ];
 
-      const actionsRenderer = () => (
-        <AttachmentField name={`assessments.${type}.attachments`} />
-      );
+      const actionsRenderer = () => {
+        if (reasoning !== null) { return; }
+        return <AttachmentField name={`assessments.${type}.attachments`} />;
+      };
 
       const hasAttachment = (attachments || []).length > 0;
-
-      if (hasAttachment && reasoning) {
-        form!.setFieldValue(`assessments.${type}.reasoning`, null);
-      }
 
       const renderTextEditor = !hasAttachment && (
         <TextEditorField
