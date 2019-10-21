@@ -9,6 +9,7 @@ import {
   documentRevisionsActions,
   DocumentRevisionsByIdState,
   documentRevisionsSelectors,
+  DocumentRevisionStatus,
 } from "../../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
@@ -25,7 +26,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  loadDocumentRevisionsAction: typeof documentRevisionsActions.loadList;
+  loadDocumentRevisions: typeof documentRevisionsActions.loadList;
 }
 
 interface OwnProps {
@@ -35,6 +36,7 @@ interface OwnProps {
   selectDocumentRevision: (documentRevisionId: string) => void;
   selectAssessmentForm: () => void;
   selectedDocumentRevision: string | null;
+  documentsInCrById: any;
 }
 
 export type DocumentRevisionControlContainerProps = OwnProps &
@@ -58,7 +60,7 @@ export const DocumentRevisionControlContainer: React.FunctionComponent<
   doneAddingDocuments,
   documentsInChangeRequest,
   loadDocumentRevisionsAsyncState,
-  loadDocumentRevisionsAction,
+  loadDocumentRevisions,
   documentRevisionsList,
   deleteDocumentFromChangeRequest,
   selectDocumentRevision,
@@ -66,6 +68,7 @@ export const DocumentRevisionControlContainer: React.FunctionComponent<
   classes,
   documentRevisionsById,
   selectedDocumentRevision,
+  documentsInCrById,
 }) => {
   const [showAddDocuments, setShowAddDocuments] = useState(false);
 
@@ -76,18 +79,21 @@ export const DocumentRevisionControlContainer: React.FunctionComponent<
     documentsInChangeRequest.map((documentRevisionId) => (
       <DocumentRevisionItemPresenter
         key={documentRevisionId}
-        documentRevision={documentRevisionsById[documentRevisionId]}
+        documentRevision={documentsInCrById[documentRevisionId] || documentRevisionsById[documentRevisionId]}
         onDelete={() => deleteDocumentFromChangeRequest(documentRevisionId)}
         onClick={() => selectDocumentRevision(documentRevisionId)}
         selectedDocumentRevision={selectedDocumentRevision!}
       />
     ));
 
+  const loadDocumentRevisionsAction = () => loadDocumentRevisions([DocumentRevisionStatus.Draft]);
+
   return (
     <AsyncGate
       asyncState={loadDocumentRevisionsAsyncState}
       asyncAction={loadDocumentRevisionsAction}
-      startActionOnMount={true}>
+      startActionOnMount={true}
+    >
       <div className={classes.container}>
         <Fab
           color="primary"
@@ -131,6 +137,6 @@ const DocumentRevisionControlContainerWithStyles = withStyles(styles)(
 export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
   mapStateToProps,
   {
-    loadDocumentRevisionsAction: documentRevisionsActions.loadList,
+    loadDocumentRevisions: documentRevisionsActions.loadList,
   },
 )(DocumentRevisionControlContainerWithStyles);
