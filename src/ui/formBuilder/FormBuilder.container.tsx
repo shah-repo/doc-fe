@@ -5,9 +5,9 @@ import { connect } from "react-redux";
 import { formBuilderActions } from "../../state/ducks/formBuilder";
 import { formReducerType } from "../../state/ducks/formBuilder/reducer";
 import Text from "../components/Text";
-import FBDialog from "../form.builder/components/dialog/FBDialog";
-import { withDialogStates } from "../form.builder/components/dialog/utils/hoc";
-import { FBDialogProps } from "../form.builder/components/dialog/utils/types";
+import FBDialog from "../form.builder/components/feedback/FBDialog";
+import { withDialogState } from "../form.builder/hocs/withDialogState";
+import { FBDialogProps } from "../form.builder/types/dialog";
 import styles from "./components/modal/Modal.module.css";
 import FormBuilderPresenter from "./FormBuilder.presenter";
 
@@ -106,4 +106,4 @@ const FormBuilderContainer: React.FunctionComponent<StateProps> = ({
 export default connect(
   mapStateToProps,
   { setFormInfo: formBuilderActions.setFormInfo },
-)(withDialogStates(FormBuilderContainer));
+)(withDialogState(FormBuilderContainer));

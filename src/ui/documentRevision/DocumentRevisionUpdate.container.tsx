@@ -15,6 +15,7 @@ import {
 } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
 import { canEditDocumentRevision } from "./helpers";
+import formBuilderStore from "../form.builder/stores/FBStore";
 
 interface StateProps {
   currentUserEmail: string;

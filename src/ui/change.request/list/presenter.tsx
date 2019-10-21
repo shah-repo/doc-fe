@@ -13,9 +13,9 @@ import { changeRequestEditPath, changeRequestPreviewPath } from "../utils/paths"
 import { ChangeRequestsUserProps } from "../utils/types";
 import styles from "./styles";
 
-type Props = ChangeRequestsUserProps & WithStyles<typeof styles>;
+export type Props = ChangeRequestsUserProps & WithStyles<typeof styles>;
 
-const ListPresenter: React.FunctionComponent<Props> = ({
+export const ListPresenter: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
   currentUserEmail,

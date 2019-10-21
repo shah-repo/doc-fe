@@ -32,7 +32,7 @@ interface OwnProps extends DataProps<ChangeRequest> {
   currentUserEmail: string;
 }
 
-type Props = OwnProps & DispatchProps & WithStyles<typeof styles>;
+export type Props = OwnProps & DispatchProps & WithStyles<typeof styles>;
 
 export const Container: React.FunctionComponent<Props> = ({
   classes,

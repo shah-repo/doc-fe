@@ -3,7 +3,7 @@ import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { stripTagsFromObject } from "../../../common/utils/helpers";
 import { unmaskId } from "../../../state/ducks/common/helpers";
-import { DocumentRevision, DocumentRevisionStatus, DocumentRevisionType } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { TableColumnProps } from "../../components/table/column/types";
 import { TablePanel } from "../../components/table/panel";
@@ -15,14 +15,14 @@ import {
   canEditDocumentRevision,
   documentRevisionQueryStatus,
   documentRevisionStatusOption,
-  documentRevisionTypeOption} from "../utils/helpers";
+} from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
 import styles from "./styles";
 
-type Props = DocumentRevisionsUserProps & WithStyles<typeof styles>;
+export type Props = DocumentRevisionsUserProps & WithStyles<typeof styles>;
 
-const ListPresenter: React.FunctionComponent<Props> = ({
+export const ListPresenter: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
   currentUserEmail,
@@ -37,7 +37,7 @@ const ListPresenter: React.FunctionComponent<Props> = ({
 
   // TODO: fix tolltip
   const typeTooltipRenderer = (rowData: DocumentRevision) =>
-    rowData.document.documentType;
+    rowData.document.documentType.documentTypeName;
 
   const cellHrefRenderer = (rowData: DocumentRevision): string => {
     if (canEdit(rowData)) {
@@ -95,7 +95,9 @@ const ListPresenter: React.FunctionComponent<Props> = ({
       cellHref: cellHrefRenderer,
       searchOptions: { searchType: "select", selectOptions: documentTypeOptions },
       columnOptions: {
-        cellDataGetter: ({ rowData }) => rowData.document.type,
+        cellDataGetter: ({ rowData }) => {
+          return rowData.document.documentType.documentTypeAcronym;
+        },
         width: 100,
       },
     },

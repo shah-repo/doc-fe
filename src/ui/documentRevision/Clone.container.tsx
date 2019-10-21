@@ -15,7 +15,7 @@ interface StateProps {
   disableCreateNewVersion: boolean;
 }
 
-type CloneContainerProps = OwnProps & StateProps;
+export type CloneContainerProps = OwnProps & StateProps;
 
 const getDisableCreateNewVersion = documentRevisionsSelectors.makeGetDisableCreateNewVersion();
 const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps => ({

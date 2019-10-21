@@ -7,9 +7,9 @@ import ReferencePresenter from "./reference.presenter";
 import { getReferencedBySummary } from "../utils/references.helpers";
 import { ReferenceSummary } from "../utils/types";
 
-type Props = DataProps<Model[]>;
+export type Props = DataProps<Model[]>;
 
-const ReferencedByContainer: React.FunctionComponent<Props> = ({
+export const ReferencedByContainer: React.FunctionComponent<Props> = ({
   dataProp,
 }) => {
   const refSummary: ReferenceSummary[] = useMemo(() => {

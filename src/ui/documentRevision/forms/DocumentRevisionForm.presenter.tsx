@@ -6,13 +6,11 @@ import {
   WithStyles,
 } from "@material-ui/core";
 import { FormikProps } from "formik";
-import _ from "lodash";
-import React, { useState } from "react";
+import { observer } from "mobx-react";
+import React from "react";
 import { Link } from "react-router-dom";
 import {
-  Document,
   DocumentRevision,
-  DocumentRevisionType,
   RevisionChangeType,
   RevisionStageOptions,
 } from "../../../state/ducks/documentRevisions";
@@ -40,12 +38,12 @@ import {
   documentDetailsPath,
   documentVersionPath,
 } from "../../document.revision/utils/paths";
-import { formBuilderGet, isFBActive } from "../../formBuilder/helpers/FBLocalStorageHelper";
-import FBDocumentRevision from "../formBuilder/FBDocumentRevision.container";
+import FBWorkspace from "../../form.builder/main/workspace/FBWorkspace";
+import formBuilderStore from "../../form.builder/stores/FBStore";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
 
-interface Props
+export interface Props
   extends WithStyles<typeof styles>,
     FormikProps<DocumentRevisionFormValues> {
   asyncState: AsyncState;
@@ -58,13 +56,10 @@ interface Props
   doNotPrompt?: boolean;
   documentTypes: SelectOption[];
   documentTypesById: DocumentTypeByIdState;
-  document: Document;
   onDirtyFlagChange?: (dirty: boolean) => void;
-  uploadTemplate: (elements: any) => any;
-  fbFormMode: (mode: boolean) => any;
 }
 
-const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
+export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   asyncState,
   initialValues,
   handleChange,
@@ -82,23 +77,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   isSubmitting,
   isValidating,
   errors,
-  uploadTemplate,
-  fbFormMode,
   documentTypes,
   documentTypesById,
-  document,
 }) => {
-  const fbState =
-    isFBActive &&
-    // TODO: what should happen with this
-    _.get(document, "documentType.documentTypeAcronym") ===  DocumentRevisionType.FM;
-
-  const [fbActive, fbSetActive] = useState(fbState);
-
-  if (fbState && initialValues.id && formBuilderGet(initialValues.id)) {
-    uploadTemplate(formBuilderGet(initialValues.id).elements);
-    fbFormMode(true);
-  }
 
   const openReference = (documentId: string) => {
     window.open(documentDetailsPath(documentId), "_blank");
@@ -111,10 +92,19 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     values.document.docId = proposedDocId;
   }
 
+  if (values.document && values.document.documentType) {
+    const documentGroup = documentTypesById[values.document.documentType.id].group;
+    formBuilderStore.groupType = documentGroup;
+  } else {
+    formBuilderStore.groupType = "OTHER";
+  }
+
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    const { documentType } = values.document || { documentType: undefined };
-    const type = (documentTypesById[documentType!] || {}).documentTypeAcronym;
+    const { documentType } = values.document || {};
+
+    if (!documentType) { return; }
+    const type = documentTypesById[documentType.id].documentTypeAcronym;
 
     if (!values.document && !type) {
       return;
@@ -133,16 +123,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     const typeId = event.target.value as string;
     const type = documentTypesById[typeId] || {};
     loadDocumentProposedId(type.documentTypeAcronym);
-
-    const isFM =
-      isFBActive &&
-      // TODO: this needs to be tested
-      type.documentTypeAcronym ===  DocumentRevisionType.FM;
-    fbSetActive(isFM);
-    if (isFM && !initialValues.id) {
-      uploadTemplate([]);
-      fbFormMode(false);
-    }
+    formBuilderStore.groupType = type.group;
     handleChange(event);
   };
 
@@ -262,7 +243,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             validate={validator(required)}
           />
           <SelectField
-            name="document.documentType"
+            name="document.documentType.id"
             label="document.type"
             selectProps={{
               inputProps: { id: "documentType", disabled: isDisabled },
@@ -298,10 +279,24 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           <CheckboxField name="retrain" label="document.revision.trainingRequired"/>
           <AttachmentsField />
           {renderTypeOfRevisionChange()}
-          <Box mt={7} mx={-7}>
-            {fbActive && <FBDocumentRevision documentId={initialValues.id} />}
+          {formBuilderStore.active && (
+            <Box my={4}>
+              <SelectField
+                name="formTemplate.outputDocumentType.id"
+                label="document.output.type"
+                selectProps={{
+                  inputProps: { id: "formTemplate.outputDocumentType" },
+                }}
+                options={documentTypes}
+                validate={!isDisabled ? validator(required) : undefined}
+                includeEmpty={false}
+              />
+            </Box>
+          )}
+          <Box>
+            {formBuilderStore.active && <FBWorkspace />}
           </Box>
-          <Box mt={10}>
+          <Box mt={5}>
             <Grid
               item={true}
               container={true}
@@ -320,4 +315,4 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default withStyles(styles)(DocumentRevisionFormPresenter);
+export default withStyles(styles)(observer(DocumentRevisionFormPresenter));

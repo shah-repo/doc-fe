@@ -25,7 +25,7 @@ import ListPresenter from "./presenter";
 type DispatchProps = ListDispatchProps;
 type StateProps = ListStateProps;
 type OwnProps = ListOwnProps;
-type Props = OwnProps & ListProps;
+export type Props = OwnProps & ListProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   loadAsyncState: documentRevisionsSelectors.getLoadListAsyncState(state),
@@ -34,7 +34,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
   documentTypeOptions: documentTypeSelectors.getDocumentTypeOptions(state),
 });
 
-const ListContainer: React.FunctionComponent<Props> = ({
+export const ListContainer: React.FunctionComponent<Props> = ({
   loadDocumentRevisions,
   loadAsyncState,
   dataProp,

@@ -27,14 +27,14 @@ interface DispatchProps {
 
 type OwnProps = RouteComponentProps<DocumentRevisionRouteParams>;
 
-type DocumentRevisionContainerProps = OwnProps & DispatchProps & StateProps;
+export type DocumentRevisionContainerProps = OwnProps & DispatchProps & StateProps;
 
 const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps => ({
   loadAsyncState: documentRevisionsSelectors.getLoadAsyncState(state),
   documentRevision: documentRevisionsSelectors.getDocumentRevision(state, props.match.params.documentRevisionId), // documentRevisionId unreachable in nested switch
 });
 
-const DocumentRevisionContainer: React.FunctionComponent<DocumentRevisionContainerProps> = ({
+export const DocumentRevisionContainer: React.FunctionComponent<DocumentRevisionContainerProps> = ({
   match,
 }) => {
   const documentId = match.params.documentId;

@@ -13,7 +13,7 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { changeRequestEditPath } from "../../change.request/utils/paths";
 import Text from "../../components/Text";
 
-type Props = DataProps<DocumentRevision>;
+export type Props = DataProps<DocumentRevision>;
 
 export const ChangeRequestLink: React.FunctionComponent<Props> = ({
   dataProp,

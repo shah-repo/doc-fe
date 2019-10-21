@@ -1,9 +1,9 @@
 import {
+  Box,
   Grid,
   Typography,
   WithStyles,
   withStyles,
-  Box,
 } from "@material-ui/core";
 import React from "react";
 import {
@@ -17,18 +17,16 @@ import AttachmentField from "../../components/common/attachment.icon/container";
 import Text from "../../components/Text";
 import styles from "./styles";
 
-type Props = DataProps<Model> & WithStyles<typeof styles>;
+export type Props = DataProps<Model> & WithStyles<typeof styles>;
 
-const Assessment: React.FunctionComponent<Props> = ({ classes, dataProp }) => {
+export const Assessment: React.FunctionComponent<Props> = ({ classes, dataProp }) => {
   const attachmentRenderer = (type: AssessmentType) => (
     <AttachmentField name={`assessments.${type}.attachments`} disabled={true} />
   );
 
   const reasoningRenderer = (item: AssessmentItem) => (
     <Box>
-      <Typography variant="subtitle1">
-        <Text message={`${item.reasoning}` || "—"} />
-      </Typography>
+      <SummaryFieldWithHtml label="common.justifications" value={`${item.reasoning}` || "—"} />
     </Box>
   );
 
@@ -54,7 +52,7 @@ const Assessment: React.FunctionComponent<Props> = ({ classes, dataProp }) => {
             <Text translation="common.assessments" />
           </Typography>
         </Grid>
-        <Grid item className={classes.assessments}>
+        <Grid item={true} className={classes.assessments}>
           {itemRenderer()}
         </Grid>
       </Grid>

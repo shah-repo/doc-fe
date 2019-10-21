@@ -2,7 +2,6 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-import Config from "../../config";
 import ChangeRequestContainer from "../change.request/Container";
 import ChangeRequestListContainer from "../change.request/list/container";
 import ChangeRequestCreateContainer from "../changeRequest/ChangeRequestCreate.container";
@@ -14,7 +13,6 @@ import {
   DOCUMENT_REVISION_LIST_URL,
   DOCUMENT_REVISION_ROOT_URL,
   DOCUMENT_ROOT_URL,
-  FORM_BUILDER_URL,
   HOME_URL,
   TRAINING_DETAIL_URL,
 } from "../constants/urls";
@@ -24,10 +22,7 @@ import DocumentRevisionListContainer from "../document.revision/list/container";
 import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisionCreate.container";
 import DocumentContainer from "../documents/Document.container";
 import FormBuilder from "../form.builder/FormBuilder";
-import FormBuilderContainer from "../formBuilder/FormBuilder.container";
-import FormBuilderPresenter from "../formBuilder/FormBuilder.presenter";
 import { isFBActive } from "../formBuilder/helpers/FBLocalStorageHelper";
-import { ThemeEnv } from "../layout/theme/utils/types";
 import TrainingDetailContainer from "../training/TrainingDetail.container";
 import AutoLogout from "./AutoLogout";
 import DataFetcherContainer from "./DataFetcher.container";
@@ -45,7 +40,7 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
       <HeaderContainer />
       <Navigation />
       <main className={classes.content}>
-        {isFBActive && <FormBuilderContainer />}
+        {isFBActive && <FormBuilder />}
         <DataFetcherContainer />
         <Switch>
           <Route path={HOME_URL} exact={true} component={DashboardContainer} />

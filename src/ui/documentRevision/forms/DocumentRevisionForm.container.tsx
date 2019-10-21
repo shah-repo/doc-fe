@@ -1,7 +1,7 @@
 import { Box } from "@material-ui/core";
 import { Formik, FormikActions, FormikProps } from "formik";
 import _ from "lodash";
-import React, { useState } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import {
   Document,
@@ -15,7 +15,6 @@ import {
   documentsActions,
   documentsSelectors,
 } from "../../../state/ducks/documents";
-import { formBuilderActions } from "../../../state/ducks/formBuilder";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
@@ -38,8 +37,6 @@ interface StateProps {
 interface DispatchProps {
   loadDocumentRevisions: typeof documentRevisionsActions.loadList;
   loadDocumentProposedId: typeof documentsActions.loadDocumentProposedId;
-  uploadTemplate: typeof formBuilderActions.uploadTemplate;
-  fbFormMode: typeof formBuilderActions.viewFormMode;
 }
 
 interface OwnProps {
@@ -56,7 +53,7 @@ interface OwnProps {
   documentRevision: DocumentRevision;
 }
 
-type DocumentRevisionFormContainerProps = OwnProps & StateProps & DispatchProps;
+export type DocumentRevisionFormContainerProps = OwnProps & StateProps & DispatchProps;
 
 const getAvailableReferences = documentRevisionsSelectors.makeGetAvailableReferences();
 const mapStateToProps = (
@@ -89,14 +86,12 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
   doNotPrompt,
   onDirtyFlagChange,
   documentRevision,
-  uploadTemplate,
-  fbFormMode,
   documentTypes,
   documentTypesById,
   document,
 }) => {
-  if (initialValues.document && document) {
-    initialValues.document.documentType = document.documentType.id;
+  if (initialValues.document && initialValues.document.documentType && document) {
+    initialValues.document.documentType.id = document.documentType.id;
   }
   document = document || {} as Document;
 
@@ -113,11 +108,8 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
         setDocId={setDocId}
         doNotPrompt={doNotPrompt}
         onDirtyFlagChange={onDirtyFlagChange}
-        uploadTemplate={uploadTemplate}
-        fbFormMode={fbFormMode}
         documentTypes={documentTypes}
         documentTypesById={documentTypesById}
-        document={document}
       />
     );
   };
@@ -158,7 +150,5 @@ export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
   {
     loadDocumentRevisions: documentRevisionsActions.loadList,
     loadDocumentProposedId: documentsActions.loadDocumentProposedId,
-    uploadTemplate: formBuilderActions.uploadTemplate,
-    fbFormMode: formBuilderActions.viewFormMode,
   },
 )(DocumentRevisionFormContainer);
