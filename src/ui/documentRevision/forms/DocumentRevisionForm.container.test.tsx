@@ -66,6 +66,5 @@ describe("DocumentRevisionFormContainer tests", () => {
         expect(documentRevisionFormPresenter.exists()).toBe(true);
         expect(documentRevisionFormPresenter.prop("documentRevisions")).toEqual(defaultProps.documentRevisions);
         expect(documentRevisionFormPresenter.prop("availableReferences")).toEqual(defaultProps.availableReferences);
-        expect(documentRevisionFormPresenter.prop("document")).toEqual(defaultProps.document);
     });
 });
