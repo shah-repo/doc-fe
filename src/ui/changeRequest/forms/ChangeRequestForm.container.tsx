@@ -21,6 +21,7 @@ import DocumentRevisionControlContainer from "../documentRevision/DocumentRevisi
 import AssessmentFormContainer from "./assessmentForm/AssessmentForm.container";
 import styles from "./styles";
 import { ChangeRequestFormValues } from "./types";
+import DocumentRevisionLoader from "../documentRevision/DocumentRevisionLoader";
 
 interface StateProps {
   documentRevisionsById: DocumentRevisionsByIdState;
@@ -128,15 +129,9 @@ export const ChangeRequestFormContainer: React.FunctionComponent<
 
   const renderDocumentRevisionForm = () => {
     if (selectedDocumentRevision) {
-      const docRev = {
-        ...documentRevisionsById[selectedDocumentRevision],
-        changeRequest: initialValues.id
-          ? changeRequestsById[initialValues.id]
-          : undefined,
-      };
       return (
-        <DocumentRevisionUpdateContainer
-          documentRevision={docRev}
+        <DocumentRevisionLoader
+          documentRevisionId={selectedDocumentRevision || ""}
           onDirtyFlagChange={onDirtyFlagChange}
         />
       );

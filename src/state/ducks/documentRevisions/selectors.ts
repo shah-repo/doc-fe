@@ -1,12 +1,12 @@
 import _ from "lodash";
 import { createSelector } from "reselect";
+import { stripTags, stripTagsFromObject } from "../../../common/utils/helpers";
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
 import { DocumentRevisionFormValues } from "../../../ui/documentRevision/forms/types";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
 import { Audit, AuditGroupType } from "../audit/types";
 import { DocumentRevisionStatus } from "./types";
-import { stripTagsFromObject, stripTags } from "../../../common/utils/helpers";
 
 const allIds = (state: ApplicationState) => state.documentRevisions.allIds;
 const byId = (state: ApplicationState) => state.documentRevisions.byId;
@@ -17,13 +17,15 @@ const auditsAllId = (state: ApplicationState) => state.documentRevisions.auditsA
 const getDocumentRevisionsList = createSelector(
   allIds, byId,
   (ids, documentRevisions) =>
-    ids.map((id) => stripTagsFromObject(documentRevisions[id]))
+    ids.map((id) => stripTagsFromObject(documentRevisions[id])),
 );
 
 const getDocumentRevision = (state: ApplicationState, documentRevisionId: string) => byId(state)[documentRevisionId];
 const getDocument = (state: ApplicationState, documentId: string) => documentsById(state)[documentId];
-const getDocumentRevisions = (state: ApplicationState, documentId: string) => _.get(documentsById(state)[documentId], "documentRevisions", []);
-const getAudit = (state: ApplicationState, documentRevisionId: string): AuditGroupType => auditsByCRId(state)[documentRevisionId];
+const getDocumentRevisions = (state: ApplicationState, documentId: string) =>
+  _.get(documentsById(state)[documentId], "documentRevisions", []);
+const getAudit = (state: ApplicationState, documentRevisionId: string): AuditGroupType =>
+  auditsByCRId(state)[documentRevisionId];
 
 const makeGetDocumentRevisions = () => {
   return createSelector(
@@ -38,7 +40,7 @@ const makeGetDisableCreateNewVersion = () => {
     (documentRevisions) => _.some(documentRevisions, (docRev) =>
       docRev.status === DocumentRevisionStatus.Draft ||
       docRev.status === DocumentRevisionStatus.PendingChange ||
-      docRev.status === DocumentRevisionStatus.InReview
+      docRev.status === DocumentRevisionStatus.InReview,
     ),
   );
 };
