@@ -5,6 +5,7 @@ import React from "react";
 import SelectField from "../../../../components/forms/fields/Select";
 import { ImplementationPlanTaskFormValues } from "../../types";
 import { TaskForm, TaskFormProps } from "./TaskForm";
+import InputField from "../../../../components/forms/fields/Input";
 
 describe("TaskForm tests", () => {
   let wrapper: ShallowWrapper;
@@ -23,15 +24,15 @@ describe("TaskForm tests", () => {
   });
 
   it("should have correct options when new", () => {
-    const expectedOptions = [{ text: "Pending", value: "PENDING" }];
-    expect(wrapper.find(SelectField).at(0).prop("options")).toEqual(expectedOptions);
+    const expectedOptions = { id: "statusId", value: "PENDING", disabled:true };
+    expect(wrapper.find(InputField).at(1).prop("inputProps")).toEqual(expectedOptions);
   });
 
   it("should have correct options when not new", () => {
     const notNewWrapper = getWrapper({ values: { id: "12" } as ImplementationPlanTaskFormValues });
-    const expectedOptions = [{ text: "Pending", value: "PENDING" }, { text: "Done", value: "DONE" }];
+    const expectedOptions = { id: "statusId", value: "PENDING", disabled:true };
 
-    expect(notNewWrapper.find(SelectField).at(0).prop("options")).toEqual(expectedOptions);
+    expect(notNewWrapper.find(InputField).at(1).prop("inputProps")).toEqual(expectedOptions);
   });
 
   it("should cancel and close the dialog", () => {

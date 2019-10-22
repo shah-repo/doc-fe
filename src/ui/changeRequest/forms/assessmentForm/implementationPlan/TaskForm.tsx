@@ -9,7 +9,6 @@ import AutocompleteField from "../../../../components/forms/fields/Autocomplete/
 import { OptionType } from "../../../../components/forms/fields/Autocomplete/types";
 import DatePickerField from "../../../../components/forms/fields/DatePicker";
 import InputField from "../../../../components/forms/fields/Input";
-import SelectField from "../../../../components/forms/fields/Select";
 import TextEditorField from "../../../../components/forms/fields/TextEditor";
 import { required, validator } from "../../../../components/forms/fields/validators";
 import Text from "../../../../components/Text";
@@ -93,9 +92,9 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
             name="status"
             label="common.status"
             inputProps={{
-              id: "docId",
-              value: "Pending",
-              disabled: true,
+              id: "statusId",
+              value: "PENDING",
+              disabled: true
             }}
           />
         </Grid>
