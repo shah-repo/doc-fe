@@ -14,6 +14,10 @@ export const styles = makeStyles((theme: Theme) =>
       textDecoration: "none",
       fontWeight: 500,
     },
+    activeLinkTitle: {
+      color: theme.palette.primary.main,
+      background: "#f0f0f0",
+    },
     linkBody: {
       textDecoration: "none",
       color: "gray",
