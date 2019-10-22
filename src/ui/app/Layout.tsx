@@ -21,8 +21,6 @@ import DocumentRevisionContainer from "../document.revision/container";
 import DocumentRevisionListContainer from "../document.revision/list/container";
 import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisionCreate.container";
 import DocumentContainer from "../documents/Document.container";
-import FormBuilder from "../form.builder/FormBuilder";
-import { isFBActive } from "../formBuilder/helpers/FBLocalStorageHelper";
 import TrainingDetailContainer from "../training/TrainingDetail.container";
 import AutoLogout from "./AutoLogout";
 import DataFetcherContainer from "./DataFetcher.container";
@@ -40,7 +38,6 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
       <HeaderContainer />
       <Navigation />
       <main className={classes.content}>
-        {isFBActive && <FormBuilder />}
         <DataFetcherContainer />
         <Switch>
           <Route path={HOME_URL} exact={true} component={DashboardContainer} />

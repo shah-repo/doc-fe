@@ -12,9 +12,6 @@ describe("Justification tests without attachments", () => {
         description: "Test description",
         attachments: [ ],
       },
-    classes: {
-      box: "",
-    },
   };
 
   const getWrapper = (props: Partial<Props>= {}) => shallow(
@@ -40,9 +37,6 @@ describe("Justification tests with attachments", () => {
         description: "Test description",
         attachments: [ getAttachment() ],
       },
-    classes: {
-      box: "",
-    },
   };
 
   const getWrapper = (props: Partial<Props>= {}) => shallow(

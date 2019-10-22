@@ -207,6 +207,8 @@
   "common.download": "Download",
   "common.import": "Import Template",
   "common.export": "Export Template",
+  "common.powered.by": "Powered by",
+  "common.create.new": "Create new",
 
   "dashboard.type.PENDING_REVIEW": "is pending your approval",
   "dashboard.type.PENDING_IMPL_PLAN_TASK": " task is pending your approval",
@@ -281,6 +283,7 @@
   "document.revision.list.version": "Released version",
   "document.revision.create": "Create a document",
   "document.revision.trainingRequired": "Training Required",
+  "document.revision.released.date": "Released Date",
 
   "page.title.changeRequest": "Change Request List",
   "page.title.documentList": "Document List",
@@ -322,6 +325,7 @@
   "form.builder.multi.select": "Multi Select",
   "form.builder.export": "Export Form",
   "form.builder.filename": "Enter filename",
+  "form.builder.field.name": "Field Name",
 
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",

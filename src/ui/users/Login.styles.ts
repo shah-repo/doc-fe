@@ -23,6 +23,7 @@ export default (theme: Theme) =>
     avatar: {
       backgroundColor: theme.palette.secondary.main,
       margin: theme.spacing(1),
+      color: theme.palette.secondary.contrastText,
     },
     form: {
       marginTop: theme.spacing(1),

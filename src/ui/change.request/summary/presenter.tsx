@@ -60,6 +60,18 @@ export const Presenter: React.FunctionComponent<Props> = ({
     <SubmitButton asyncState={asyncState} label="document.save" errors={errors} />
   );
 
+  const renderImplementationPlan = dataProp.implementationPlan && 
+    (dataProp.implementationPlan.attachments.length > 0 || dataProp.implementationPlan.tasks.length > 0) &&
+    (
+      <ImplementationPlan
+        dataProp={dataProp.implementationPlan}
+        currentUserEmail={currentUserEmail}
+        crStatus={dataProp.state}
+        closeTask={closeTask}
+        crId={dataProp.id}
+      />
+    );
+
   return (
     <Box>
       <ChangeRequestHeader dataProp={dataProp} />
@@ -78,13 +90,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
 
         <Justification dataProp={dataProp.justifications} />
         <Assessment dataProp={dataProp.assessments} />
-        <ImplementationPlan
-          dataProp={dataProp.implementationPlan}
-          currentUserEmail={currentUserEmail}
-          crStatus={dataProp.state}
-          closeTask={closeTask}
-          crId={dataProp.id}
-        />
+        {renderImplementationPlan}
         {canEdit && approversFieldRenderer()}
         <ApproversSummary dataProp={dataProp.approvals} />
       </Grid>

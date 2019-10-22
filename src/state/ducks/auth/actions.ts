@@ -5,6 +5,7 @@ import Config from "../../../config";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApplicationState } from "../../reducers";
 import { ApiAction, Handlers } from "../../types";
+import { companyActions } from "../company";
 import {
   AUTH_TOKENS,
   AUTH_TOKENS_REFRESH_THRESHOLD_SECONDS,
@@ -14,10 +15,10 @@ import {
   LOGOUT_URL,
   LOGOUT_USER,
   PERMISSIONS_URL,
+  PING_SERVER_GET_ASYNC,
+  PING_SERVER_URL,
   USER_PERMISSIONS,
   USER_PERMISSIONS_GET_ASYNC,
-  PING_SERVER_URL,
-  PING_SERVER_GET_ASYNC,
 } from "./constants";
 import authSelectors from "./selectors";
 import {
@@ -90,6 +91,7 @@ const login = (loginValues: LoginRequestBody, handlers: Handlers):
     onSuccess: (data, dispatch) => {
       dispatch(authUser({ email: loginValues.email, name: data.name, id: data.id }));
       dispatch(authTokens(data));
+      dispatch(companyActions.selectCompany(data.company));
     },
     handlers,
   });
@@ -139,8 +141,8 @@ const pingServer = ():
     asyncType: PING_SERVER_GET_ASYNC,
     method: "get",
     onFailure: (message, dispatch) => {
-      dispatch(logoutUser())
-    }
+      dispatch(logoutUser());
+    },
   });
 
 export default {

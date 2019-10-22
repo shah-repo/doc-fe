@@ -1,5 +1,5 @@
 import { TableColumnActionType } from "../../../ui/components/table/column/types";
-import { FBFormInputProps, FBFormTemplateProps } from "../../../ui/form.builder/types/formik";
+import { FBDocumentFlowProps } from "../../../ui/form.builder/types/formik";
 import { Attachment } from "../attachments";
 import { AuditActionPayload } from "../audit/types";
 import { ChangeRequest } from "../changeRequest";
@@ -31,7 +31,7 @@ export enum RevisionChangeType {
 export interface DocumentRevisionDocument {
   id: string;
   docId: string;
-  documentType: DocumentType;
+  documentType: Partial<DocumentType>;
   referencedBy: DocumentRevision[];
 }
 export interface Document {
@@ -49,7 +49,7 @@ export interface Reference {
   document: DocumentRevisionDocument;
 }
 
-export interface DocumentRevision extends FBFormInputProps {
+export interface DocumentRevision extends FBDocumentFlowProps {
   id: string;
   docId?: string;
   typePrefix?: string;
@@ -77,7 +77,6 @@ export interface DocumentRevision extends FBFormInputProps {
   releasedAt?: string;
   trainingRecords: TrainingRecord[];
   retrain?: boolean;
-  formTemplate?: FBFormTemplateProps;
 }
 
 // TODO: check if this is still needed
@@ -131,7 +130,7 @@ export interface ReferenceToEditRequest {
   id: string;
 }
 
-export interface DocumentRevisionEditRequestBody {
+export interface DocumentRevisionEditRequestBody extends FBDocumentFlowProps {
   name: string;
   docId?: string;
   description: string;
@@ -142,7 +141,6 @@ export interface DocumentRevisionEditRequestBody {
   revisionChangeType?: RevisionChangeType;
   revisionStage?: number;
   retrain?: boolean;
-  formTemplate?: FBFormTemplateProps;
 }
 
 export interface DocumentRevisionSetAction {

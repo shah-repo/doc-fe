@@ -8,7 +8,7 @@ import { withFBStore } from "../../hocs/withFBStore";
 import formBuilderStore from "../../stores/FBStore";
 import { FBStoreProps } from "../../types/store";
 import FBEditorDialog from "../editor/FBEditorDialog";
-import { Button, Box } from "@material-ui/core";
+import FBSortableContainer from "./FBSortableContainer";
 import FBImportExport from "../../components/custom/FBImportExport";
 
 const FBWorkspace: React.FunctionComponent<FBStoreProps> = ({
@@ -30,7 +30,7 @@ const FBWorkspace: React.FunctionComponent<FBStoreProps> = ({
   return (
     <FBForm initialValues={formBuilderStore.values}>
       {isStarter && <FBAddFieldButton0 />}
-      {!isStarter && fieldsRenderer}
+      {!isStarter && <FBSortableContainer items={schema} />}
       <FBImportExport />
       <FBEditorDialog />
       {/* <Box display="flex" flexDirection="row-reverse">
