@@ -17,7 +17,7 @@ const FBEditorFieldToolbar: React.FunctionComponent<FBEditorWrapperProps> = ({
   >
     <Box>
       <RemoveCircleOutlineIcon
-        onClick={formBuilderStore.removeSchema(index)}
+        onClick={formBuilderStore.removeSchemaItem(index)}
         color="error"
       />
     </Box>

@@ -14,7 +14,7 @@ const FBTextField: React.FunctionComponent<Props> = ({
   labelRenderer,
   ...props
 }) => (
-  <Box mb={4}>
+  <Box mb={4} width="100%">
     {labelRenderer}
     <TextField
       multiline={Boolean(props.rows && (props.rows as number) > 0)}
