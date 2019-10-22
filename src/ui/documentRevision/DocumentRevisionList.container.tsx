@@ -4,8 +4,8 @@ import { DocumentRevision } from "../../state/ducks/documentRevisions";
 import Date from "../components/Date";
 import Text from "../components/Text";
 import { styles } from "./DocumentRevisionList.container.styles";
-import { generateDocumentRevisionVersionPath } from "./pathGenerators";
 import { generateVersionNumber } from "./helpers";
+import { generateDocumentRevisionVersionPath } from "./pathGenerators";
 
 interface OwnProps {
   documentRevisions: DocumentRevision[];
@@ -31,8 +31,8 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
           <div key={documentRevision.id} className={classes.linkContainer}>
             <NavLink
               to={link}
-              activeStyle={{ color: "#0066FF", background: "#f0f0f0" }}
               className={classes.linkTitle}
+              activeClassName={classes.activeLinkTitle}
             >
               <div>
                 <Text translation="documentRevision.version" />{" "}

@@ -1,7 +1,42 @@
 import { createMuiTheme } from "@material-ui/core";
-import { Palette } from "@material-ui/core/styles/createPalette";
+import { Palette, PaletteColor } from "@material-ui/core/styles/createPalette";
+import { WhiteLabelingColors } from "../../../state/ducks/company";
+import { ThemeEnv } from "./utils/types";
 
 export const muiTheme = createMuiTheme();
+
+export const createAppPalette = (theme: ThemeEnv, customColors: WhiteLabelingColors) => {
+  let palette;
+  switch (theme) {
+    case ThemeEnv.DEMO_THEME:
+      palette = demoPalette;
+      break;
+    case ThemeEnv.DEV_THEME:
+      palette = devPalette;
+      break;
+    default:
+      palette = defaultPalette;
+      break;
+    }
+
+  palette = {
+    ...palette,
+    primary: {
+      main: customColors.primary || palette.primary.main,
+      contrastText: customColors.primaryContrastText || palette.primary.contrastText,
+    },
+    secondary: {
+      main: customColors.secondary || palette.secondary.main,
+      contrastText: customColors.secondaryContrastText || palette.secondary.contrastText,
+    },
+    background: {
+      default: customColors.defaultBackground || palette.background.default,
+    },
+    tonalOffset: 0.4,
+  };
+
+  return palette;
+};
 
 export const defaultPalette: Palette = {
   ...muiTheme.palette,
@@ -18,7 +53,7 @@ export const defaultPalette: Palette = {
     contrastText: "#fff",
   },
   background: {
-    default: "#f0f0f0",
+    default: "#5C9DFF",
     paper: "#fff",
   },
   text: {
@@ -32,7 +67,7 @@ export const defaultPalette: Palette = {
 export const devPalette: Palette = {
   ...defaultPalette,
   secondary: {
-    ...defaultPalette.secondary,
+    // ...defaultPalette.secondary,
     dark: "#FFCA00",
     main: "#EBBA00",
     contrastText: "#29064C",
@@ -43,8 +78,8 @@ export const devPalette: Palette = {
 export const demoPalette: Palette = {
   ...defaultPalette,
   secondary: {
-    ...defaultPalette.secondary,
+    // ...defaultPalette.secondary,
     dark: "#C42260",
     main: "#D52568",
-  },
+  } as PaletteColor,
 };

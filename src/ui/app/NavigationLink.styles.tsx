@@ -13,7 +13,7 @@ export default (theme: Theme) =>
       paddingLeft: theme.spacing(3),
     },
     activeLink: {
-      backgroundColor: theme.palette.secondary.contrastText,
+      "backgroundColor": theme.palette.secondary.contrastText,
       "& .MuiListItemText-primary": {
         fontWeight: "bold",
       },
@@ -30,10 +30,10 @@ export default (theme: Theme) =>
       fontFamily: "Open Sans",
     },
     itemButton: {
-      marginLeft: 5,
-      backgroundColor: theme.palette.secondary.dark,
+      "marginLeft": 5,
+      "backgroundColor": theme.palette.secondary.main,
       "&:hover": {
-        backgroundColor: theme.palette.secondary.dark,
+        backgroundColor: theme.palette.secondary.main,
       },
     },
   });
