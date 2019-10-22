@@ -12,7 +12,6 @@ import { FBWorkspaceMode } from "../types/workspace";
 import editorStore from "./FBEditorStore";
 
 export class FBStore {
-
   @computed get prefixName() {
     return `${this.schema.length}_${(this.name || "").replace(" ", "")}`;
   }
@@ -27,11 +26,11 @@ export class FBStore {
   }
 
   @computed get fieldMode(): Partial<FBFormDefaultProps> {
-    return ({
+    return {
       disabled: this.isDisabled(),
       readOnly: this.isReadonly(),
       className: this.isDisabled() ? FBClasses.inputDisabled : "",
-    });
+    };
   }
   @observable public name?: string = undefined;
   @observable public schema: FBTemplateSchema[] = [];
@@ -57,11 +56,11 @@ export class FBStore {
 
   @action public getSchema = (index: number): FBTemplateSchema => {
     return this.schema[index];
-  }
+  };
 
   @action public removeSchema = (index: number) => () => {
     this.schema.splice(index, 1);
-  }
+  };
 
   @action public reset = () => {
     this.name = undefined;
@@ -70,7 +69,7 @@ export class FBStore {
     this.mode = "design";
     this.groupType = "OTHER";
     editorStore.reset();
-  }
+  };
 
   @action public setFormTemplate = (formTemplate?: FBFormTemplateProps) => {
     if (!formTemplate) {
@@ -79,15 +78,31 @@ export class FBStore {
       const { schema } = formTemplate;
       this.schema = schema as FBTemplateSchema[];
     }
-  }
+  };
+
+  @action public importSchema = (schema: FBTemplateSchema[]) => {
+    return (this.schema = schema);
+  };
+
+  @action public exportSchema = (schemaName: string) => {
+    const dataStr =
+      "data:text/json;charset=utf-8," +
+      encodeURIComponent(JSON.stringify(this.schema));
+    const anchor = document.createElement("a");
+    anchor.style.display = "none";
+    document.body.appendChild(anchor);
+    anchor.download = `${schemaName}.json`;
+    anchor.href = dataStr;
+    anchor.click();
+  };
 
   @action private isDisabled = (): boolean => {
     return this.mode === "preview";
-  }
+  };
 
   @action private isReadonly = (): boolean => {
     return this.mode !== "form";
-  }
+  };
 }
 
 const formBuilderStore = new FBStore();
