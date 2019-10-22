@@ -27,12 +27,18 @@ describe("tokens reducer tests", () => {
 describe("user reducer tests", () => {
   const payload: AuthUserPayload = {
     email: "dino@codecons.com",
+    id: "1",
+    name: "Dino",
   };
 
   it("sets user email", () => {
     const action: AuthUserAction = { type: AUTH_USER, payload };
 
-    expect(user(undefined, action)).toEqual({ email: payload.email });
+    expect(user(undefined, action)).toEqual({
+      email: payload.email,
+      id: payload.id,
+      name: payload.name,
+    });
   });
 
   it("resets state on user logout", () => {

@@ -1,26 +1,44 @@
-import { AppBar, Box, Grid, Toolbar, Typography } from "@material-ui/core";
+import {
+  AppBar,
+  Box,
+  Grid,
+  PropTypes,
+  Toolbar,
+  Typography,
+} from "@material-ui/core";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
 import React from "react";
-import { DataProps, TypographySize } from "../../../../state/ducks/common";
+import {
+  DataProps,
+  TypographyColor,
+  TypographyProps,
+  TypographySize,
+} from "../../../../state/ducks/common";
 import { Translation } from "../../../translations/types";
 import Text from "../../Text";
 import { styles } from "./utils/styles";
 import { HeaderFieldProps } from "./utils/types";
 
-type Props = DataProps<Translation | string> & HeaderFieldProps;
+type Props = DataProps<Translation | string> &
+  HeaderFieldProps &
+  Partial<TypographyProps>;
 
 const HeaderField: React.FunctionComponent<Props> = ({
   dataProp,
   size = "md",
-  variant = "dense",
+  variant = "h6",
+  color = "primary",
   actionsRenderer,
 }) => {
+  const classes = styles({ size, color });
 
-  const classes = styles({ variant, size });
-
-  return(
+  return (
     <Toolbar disableGutters={true} className={classes.toolbar}>
-      <Typography variant={TypographySize[size]} gutterBottom={true} style={{flex: 1}} >
+      <Typography
+        variant={TypographySize[size]}
+        color={TypographyColor[color]}
+        gutterBottom={true}
+        style={{ flex: 1 }}>
         <Text message={dataProp} />
       </Typography>
       {actionsRenderer && actionsRenderer()}

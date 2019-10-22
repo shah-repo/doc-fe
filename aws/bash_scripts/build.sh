@@ -8,19 +8,16 @@ ENVIRONMENT_DIR="${AWS_DIR}/environments"
 BASH_SCRIPTS_DIR="${AWS_DIR}/bash_scripts"
 PYTHON_SCRIPTS_DIR="${AWS_DIR}/python_scripts"
 
-export ECS_CLUSTER_NAME=$ECS_CLUSTER_NAME
+set -o allexport
+[[ -f "${ENVIRONMENT_DIR}/pipelines/${ENV}.env" ]] && source "${ENVIRONMENT_DIR}/pipelines/${ENV}.env"
+set +o allexport
+
 export COMMIT_HASH="${BITBUCKET_COMMIT::7}"
 export IMAGE_NAME="${REPOSITORY_URL}:${COMMIT_HASH}"
 
 if [ "${ENV}" == "prod" ]; then
 	export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_PROD
 	export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_PROD
-	export ECS_CLUSTER_NAME=$ECS_CLUSTER_NAME_PROD
-	export IMAGE_NAME="${REPOSITORY_URL_PROD}:${COMMIT_HASH}"
-elif [ "${ENV}" == "demo" ]; then
-	export ECS_TASK_NAME=$ECS_TASK_NAME_DEMO
-	export ECS_CLUSTER_NAME=$ECS_CLUSTER_NAME_DEMO
-	export IMAGE_NAME="${REPOSITORY_URL_DEMO}:${COMMIT_HASH}"
 fi
 
 # Install Dependencies
