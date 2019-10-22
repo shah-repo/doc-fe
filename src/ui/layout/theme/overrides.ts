@@ -1,5 +1,6 @@
 import { Theme } from "@material-ui/core";
 import { Overrides } from "@material-ui/core/styles/overrides";
+import { FBClasses } from "../../form.builder/defaults/layout";
 
 const ThemeOverrides = (appTheme: Theme): Overrides => ({
   MuiAppBar: {
@@ -137,6 +138,13 @@ const ThemeOverrides = (appTheme: Theme): Overrides => ({
     },
   },
   MuiOutlinedInput: {
+    root: {
+      [`&.${FBClasses.inputDisabled}`]: {
+        "& fieldset": {
+          borderWidth: "0px!important",
+        },
+      },
+    },
     notchedOutline: {
       borderRadius: 0,
     },

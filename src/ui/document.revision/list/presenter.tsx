@@ -3,7 +3,7 @@ import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { stripTagsFromObject } from "../../../common/utils/helpers";
 import { unmaskId } from "../../../state/ducks/common/helpers";
-import { DocumentRevision, DocumentRevisionStatus, DocumentRevisionType } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { TableColumnProps } from "../../components/table/column/types";
 import { TablePanel } from "../../components/table/panel";
@@ -15,7 +15,7 @@ import {
   canEditDocumentRevision,
   documentRevisionQueryStatus,
   documentRevisionStatusOption,
-  documentRevisionTypeOption} from "../utils/helpers";
+} from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
 import Date from "../../components/Date";
@@ -38,7 +38,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
 
   // TODO: fix tolltip
   const typeTooltipRenderer = (rowData: DocumentRevision) =>
-    rowData.document.documentType.documentTypeName;
+    rowData.document.documentType.documentTypeName || "";
 
   const cellHrefRenderer = (rowData: DocumentRevision): string => {
     if (canEdit(rowData)) {
@@ -48,8 +48,6 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   };
 
   const clear = () => setClearFilter(!clearFilter);
-
-  const onCreateClick = () => setDocId("");
 
   const customQuerySet = (queryDict: TableSearchQueryType) => {
     if (!queryDict["status[]"]) {
@@ -167,7 +165,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         </Button>
       </Grid>
       <Grid item={true} xs={6} style={{textAlign: "right"}}>
-        <RouterLink onClick={(onCreateClick)} to={DOCUMENT_REVISION_CREATE_URL} className={classes.link}>
+        <RouterLink to={DOCUMENT_REVISION_CREATE_URL} className={classes.link}>
           <Button variant="contained" color="primary" className={classes.button}>
             <Text translation="document.revision.create" />
           </Button>

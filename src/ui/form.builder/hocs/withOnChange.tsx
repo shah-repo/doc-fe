@@ -15,7 +15,7 @@ export function withOnChange<T extends FBOnChangeProps>(
         <Component
           {...this.props as T}
           onChange={this.handleChange()}
-          value={field.value && field.value || null}
+          value={(field.value && field.value) || null}
         />
       );
     }
@@ -42,7 +42,6 @@ export function withOnChange<T extends FBOnChangeProps>(
 
       if (formBuilderStore.mode === "design") { return; }
       formBuilderStore.values = {...formBuilderStore.values, [field.name as string]: value };
-      formBuilderStore.submitValue();
     }
   }
 

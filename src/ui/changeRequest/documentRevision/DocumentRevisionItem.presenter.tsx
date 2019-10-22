@@ -5,8 +5,8 @@ import React from "react";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import Date from "../../components/Date";
 import Text from "../../components/Text";
-import { styles } from "./DocumentRevisionItem.styles";
 import { generateVersionNumber } from "../../documentRevision/helpers";
+import { styles } from "./DocumentRevisionItem.styles";
 
 interface OwnProps {
   documentRevision: DocumentRevision;
@@ -19,7 +19,16 @@ export type DocumentRevisionItemPresenterProps = OwnProps;
 
 export const DocumentRevisionItemPresenter: React.FunctionComponent<
   DocumentRevisionItemPresenterProps
-> = ({ onClick, onDelete, documentRevision, selectedDocumentRevision }) => {
+> = ({
+  onClick,
+  onDelete,
+  documentRevision,
+  selectedDocumentRevision,
+}) => {
+  if (!documentRevision) {
+    return null;
+  }
+
   const classes = styles();
   const isSelected = selectedDocumentRevision === documentRevision.id;
 

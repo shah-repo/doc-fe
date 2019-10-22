@@ -1,4 +1,4 @@
-import { Button, Grid } from "@material-ui/core";
+import { Box, Button, Grid } from "@material-ui/core";
 import React from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
@@ -35,10 +35,12 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
       </Button>
     );
 
+    const canCreate = canCreateNewVersion(documentRevision, disableCreateNewVersion, canShowCreateVersionButton);
+
     return (
-      <Grid>
-        {canCreateNewVersion(documentRevision, disableCreateNewVersion, canShowCreateVersionButton) && renderCloneButton()}
-      </Grid>
+      <Box component="span">
+        {canCreate && renderCloneButton()}
+      </Box>
     );
   };
 

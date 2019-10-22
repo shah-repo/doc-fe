@@ -1,28 +1,18 @@
-import _ from "lodash";
+import _, { Dictionary } from "lodash";
 import { action, autorun, computed, observable } from "mobx";
 import Config from "../../../config";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { DocumentGroupType } from "../../../state/ducks/documentRevisions/documentType";
 import { ThemeEnv } from "../../layout/theme/utils/types";
 import { FBEditorSectionConfig } from "../defaults/editor";
+import { FBClasses } from "../defaults/layout";
+import { FBFormDefaultProps } from "../types/common";
 import { FBFormTemplateProps } from "../types/formik";
 import { FBTemplateSchema } from "../types/store";
 import { FBWorkspaceMode } from "../types/workspace";
 import editorStore from "./FBEditorStore";
 
 export class FBStore {
-  @observable public name?: string = undefined;
-  @observable public schema: FBTemplateSchema[] = [];
-  @observable public values: { [key: string]: any } = {};
-  @observable public mode: FBWorkspaceMode = "design";
-  @observable public groupType: DocumentGroupType = "OTHER";
-
-  constructor() {
-    autorun(() => {
-      if (this.groupType === "OTHER") {
-        this.reset();
-      }
-    });
-  }
 
   @computed get prefixName() {
     return `${this.schema.length}_${(this.name || "").replace(" ", "")}`;
@@ -35,6 +25,34 @@ export class FBStore {
 
   @computed get active(): boolean {
     return Config.Theme === ThemeEnv.DEV_THEME && this.groupType === "FORM";
+  }
+
+  @computed get fieldMode(): Partial<FBFormDefaultProps> {
+    return ({
+      disabled: this.isDisabled(),
+      readOnly: this.isReadonly(),
+      // className: this.isDisabled() ? FBClasses.inputDisabled : "",
+    });
+  }
+  @observable public name?: string = undefined;
+  @observable public schema: FBTemplateSchema[] = [];
+  @observable public values: { [key: string]: any } = {};
+  @observable public mode: FBWorkspaceMode = "design";
+  @observable public groupType: DocumentGroupType = "OTHER";
+  public changeReqRevisions: DocumentRevision[] = [];
+
+  constructor() {
+    autorun(() => {
+      if (this.groupType === "OTHER") {
+        this.reset();
+      }
+    });
+  }
+
+  @action public getDocRev = (id: string): DocumentRevision | undefined => {
+    const docRev = this.changeReqRevisions.filter((doc) => doc.id === id);
+    if (docRev.length === 0) { return undefined; }
+    return docRev[0];
   }
 
   @action public toolbarMargin(schemaIndex: number): number {
@@ -53,6 +71,10 @@ export class FBStore {
     this.schema.splice(index, 1);
   }
 
+  @action public getValues = (): { [key: string]: any } | undefined => {
+    return _.isEmpty(this.values) ? undefined : this.values;
+  }
+
   @action public reset = () => {
     this.name = undefined;
     this.schema = [];
@@ -63,60 +85,43 @@ export class FBStore {
   }
 
   @action public setFormTemplate = (formTemplate?: FBFormTemplateProps) => {
-    if (!formTemplate) {
-      this.schema = [];
-    } else {
-      const { schema } = formTemplate;
-      this.schema = schema as FBTemplateSchema[];
-    }
-  }
-
-  @action public set = (json?: string) => {
-    if (!json) {
+    (formTemplate) ?
+      this.schema = formTemplate.schema as FBTemplateSchema[] :
       this.reset();
-      return;
-    }
-    const { schema, values } = JSON.parse(json) as FBStore;
-    this.schema = schema || [];
-    this.values = values || {};
   }
 
-  // * NOTE: For demo only will be removed
-  @action public submitTemplate = () => {
-    // const tplStr = localStorage.getItem("fbTemplates");
-    // const templates = tplStr ? JSON.parse(tplStr) : [];
-    // const filtered = _.filter(templates, (template) => template.documentId !== this.documentId);
-    // const newTemplate = _.pick(this, ["documentOutputType", "documentId", "schema"]);
-    // filtered.push(newTemplate);
-    // localStorage.setItem("fbTemplates", JSON.stringify(filtered));
+  @action public setFormTemplateDesign = (formTemplate?: FBFormTemplateProps) => {
+    this.groupType = "FORM";
+    this.mode = "design";
+    this.setFormTemplate(formTemplate);
   }
 
-  @action public submitValue = () => {
-    // const valueStr = localStorage.getItem("fbValues");
-    // const values = valueStr ? JSON.parse(valueStr) : [];
-    // const filtered = _.filter(values, (value) => value.documentId !== this.documentId);
-    // const newValues = _.pick(this, ["documentId", "values"]);
-    // filtered.push(newValues);
-    // localStorage.setItem("fbValues", JSON.stringify(filtered));
+  @action public setFormTemplatePreview = (
+    formTemplate?: FBFormTemplateProps,
+    inputValues?: Dictionary<any>,
+    ) => {
+    this.groupType = "FORM";
+    this.mode = "preview";
+    this.values = inputValues || {};
+    this.setFormTemplate(formTemplate);
   }
 
-  @action public setTemplate = (documentId: string) => {
-    // const tplStr = localStorage.getItem("fbTemplates");
-    // const templates = tplStr ? JSON.parse(tplStr) : [];
-    // const filtered = _.filter(templates, (template) => template.documentId === documentId);
-    // if (filtered.length > 0) {
-    //   this.documentOutputType = filtered[0].documentOutputType;
-    //   this.schema = filtered[0].schema;
-    // }
+  @action public setFormTemplateForm = (
+    formTemplate?: FBFormTemplateProps,
+    inputValues?: Dictionary<any>,
+  ) => {
+    this.groupType = "FORM";
+    this.mode = "form";
+    this.values = inputValues || {};
+    this.setFormTemplate(formTemplate);
   }
 
-  @action public setValue = (documentId: string) => {
-    // const valueStr = localStorage.getItem("fbValues");
-    // const values = valueStr ? JSON.parse(valueStr) : [];
-    // const filtered = _.filter(values, (value) => value.documentId === documentId);
-    // if (filtered.length > 0) {
-    //   this.values = filtered[0].values;
-    // }
+  @action private isDisabled = (): boolean => {
+    return this.mode === "preview";
+  }
+
+  @action private isReadonly = (): boolean => {
+    return this.mode !== "form";
   }
 }
 

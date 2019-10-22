@@ -6,11 +6,11 @@ import FolderOutlinedIcon from '@material-ui/icons/FolderOutlined';
 import classNames from "classnames";
 import React, { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
+import ChangeRequestListIcon from "../components/icons/ChangeRequestList";
 import Text from "../components/Text";
 import { LinkDefinition } from "./NavigationLink.container";
-import ChangeRequestListIcon from "../components/icons/ChangeRequestList";
 
-import { Box, ListItemIcon } from "@material-ui/core";
+import { ListItemIcon } from "@material-ui/core";
 import styles from "./NavigationLink.styles";
 
 interface NavigationLinkPresenterProps
@@ -28,7 +28,7 @@ const iconMapping: IconObject = {
   "/": <DashboardOutlinedIcon />,
   "/document_revision": <FolderOutlinedIcon />,
   "/change_request": <ChangeRequestListIcon />,
-}
+};
 
 const NavigationLinkPresenter: React.FunctionComponent<
   NavigationLinkPresenterProps
@@ -40,7 +40,7 @@ const NavigationLinkPresenter: React.FunctionComponent<
     activeClassName={classes.activeLink}
   >
     <ListItem
-      button
+      button={true}
       className={classes.itemButton}
     >
       <ListItemIcon
@@ -51,7 +51,7 @@ const NavigationLinkPresenter: React.FunctionComponent<
       <ListItemText
         primary={<Text translation={text} />}
         classes={{
-          primary: classes.itemText
+          primary: classes.itemText,
         }}
       />
     </ListItem>

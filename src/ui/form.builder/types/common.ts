@@ -20,6 +20,8 @@ export type FBFormDefaultProps =
   name?: string;
   label?: string;
   disabled?: boolean;
+  readOnly?: boolean;
+  className?: string;
   gutter?: boolean;
   options?: SelectOption[] | string;
   includeOther?: boolean;
@@ -27,6 +29,7 @@ export type FBFormDefaultProps =
   optionNote?: string;
   autocompleteList?: string;
   isMulti?: boolean;
+  fieldName?: string;
 };
 
 export type FBOnChangeProps =
