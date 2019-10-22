@@ -28,6 +28,12 @@ export interface ListDispatchProps {
   setDocId: typeof documentsActions.setDocumentProposedId;
 }
 
+export enum ReleasedDateOptions {
+  LAST_WEEK = "Last 7 days",
+  LAST_TWO_WEEKS = "Last 14 days",
+  LAST_MONTH = "Last 30 days",
+}
+
 // Summary
 export type SummaryStateProps = LoadAsyncState & DataProps<DocumentRevision[]>;
 
