@@ -1,32 +1,21 @@
 import { Grid, WithStyles, withStyles } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
 import {
   ChangeRequest,
-  ChangeRequestsByIdState,
-  changeRequestsSelectors,
 } from "../../../state/ducks/changeRequest";
 import {
   DocumentRevision,
-  DocumentRevisionsByIdState,
-  documentRevisionsSelectors,
 } from "../../../state/ducks/documentRevisions";
-import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import ChangeRequestHeader from "../../change.request/summary/header";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
-import DocumentRevisionUpdateContainer from "../../documentRevision/DocumentRevisionUpdate.container";
 import ChangeRequestAuditContainer from "../audit/Audit.container";
 import DocumentRevisionControlContainer from "../documentRevision/DocumentRevisionControl.container";
+import DocumentRevisionLoader from "../documentRevision/DocumentRevisionLoader";
 import AssessmentFormContainer from "./assessmentForm/AssessmentForm.container";
 import styles from "./styles";
 import { ChangeRequestFormValues } from "./types";
-import DocumentRevisionLoader from "../documentRevision/DocumentRevisionLoader";
 
-interface StateProps {
-  documentRevisionsById: DocumentRevisionsByIdState;
-  changeRequestsById: ChangeRequestsByIdState;
-}
 interface OwnProps {
   initialValues: ChangeRequestFormValues;
   onSubmit: (values: ChangeRequestFormValues) => void;
@@ -36,13 +25,7 @@ interface OwnProps {
 }
 
 type ChangeRequestFormContainerProps = OwnProps &
-  StateProps &
   WithStyles<typeof styles>;
-
-const mapStateToProps = (state: ApplicationState): StateProps => ({
-  documentRevisionsById: documentRevisionsSelectors.byId(state),
-  changeRequestsById: changeRequestsSelectors.byId(state),
-});
 
 export const ChangeRequestFormContainer: React.FunctionComponent<
   ChangeRequestFormContainerProps
@@ -51,10 +34,8 @@ export const ChangeRequestFormContainer: React.FunctionComponent<
   onSubmit,
   asyncState,
   initialValues,
-  documentRevisionsById,
   changeRequest,
   doNotPrompt,
-  changeRequestsById,
 }) => {
   const alertMessage = "You have unsaved changes.";
   const [isFormDirty, setIsFormDirty] = useState<boolean>(false);
@@ -182,7 +163,4 @@ export const ChangeRequestFormContainer: React.FunctionComponent<
   );
 };
 
-export default connect<StateProps, {}, OwnProps, ApplicationState>(
-  mapStateToProps,
-  {},
-)(withStyles(styles)(ChangeRequestFormContainer));
+export default withStyles(styles)(ChangeRequestFormContainer);

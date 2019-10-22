@@ -5,7 +5,8 @@ import {
   DocumentRevisionType,
 } from "../../../state/ducks/documentRevisions";
 import { SelectOption } from "../../components/forms/fields/Select";
-import { DocumentRevisionUserProps } from "./types";
+import { DocumentRevisionUserProps, ReleasedDateOptions } from "./types";
+import moment from "moment-timezone";
 
 const isDraft = (documentRevision: DocumentRevision) =>
   documentRevision.status === DocumentRevisionStatus.Draft;
@@ -57,4 +58,21 @@ export const documentRevisionTypeFormOption = () => {
     options.push({value: key, text: keyName});
   });
   return _.orderBy(options, ["text"], ["asc"]);
+};
+
+export const documentRevisionReleasedDateOption = () => {
+  return [
+    {
+      text: ReleasedDateOptions.LAST_WEEK,
+      value: moment().subtract(7, "d").toISOString(),
+    },
+    {
+      text: ReleasedDateOptions.LAST_TWO_WEEKS,
+      value: moment().subtract(14, "d").toISOString(),
+    },
+    {
+      text: ReleasedDateOptions.LAST_MONTH,
+      value: moment().subtract(30, "d").toISOString(),
+    },
+  ];
 };

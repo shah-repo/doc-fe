@@ -15,9 +15,11 @@ import {
   canEditDocumentRevision,
   documentRevisionQueryStatus,
   documentRevisionStatusOption,
+  documentRevisionReleasedDateOption,
 } from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
+import Date from "../../components/Date";
 import styles from "./styles";
 
 export type Props = DocumentRevisionsUserProps & WithStyles<typeof styles>;
@@ -134,6 +136,21 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
           }
           return query;
         },
+      },
+    },
+    {
+      key: "releasedAt",
+      label: "document.revision.released.date",
+      cellHref: cellHrefRenderer,
+      cellOptions: { align: "center" },
+      columnOptions: {
+        width: 100,
+        cellDataGetter: ({ rowData }) => <Date value={rowData.releasedAt} />,
+      },
+      searchOptions: {
+        dataKey: "releasedAfter",
+        searchType: "select",
+        selectOptions: documentRevisionReleasedDateOption(),
       },
     },
   ];
