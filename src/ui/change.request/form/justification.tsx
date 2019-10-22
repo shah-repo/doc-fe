@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { Attachment } from "../../../state/ducks/attachments";
+import { Justifications } from "../../../state/ducks/changeRequest";
 import AttachmentField from "../../components/common/attachment.field/container";
 import AttachmentIconField from "../../components/common/attachment.icon/container";
 import TextEditorField from "../../components/forms/fields/TextEditor";
@@ -11,7 +11,7 @@ export const Justification: React.FunctionComponent<FormikHybridFieldProps> = ({
   field: { value },
 }) => {
 
-  const { attachments }: {attachments: Attachment[]} = value.justifications;
+  const { attachments }: Justifications = value.justifications;
 
   const actionsRenderer = () => (
     <AttachmentField name="justifications.attachments" />
