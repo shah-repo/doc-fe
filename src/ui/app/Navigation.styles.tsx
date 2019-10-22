@@ -10,10 +10,10 @@ export default (theme: Theme) =>
     },
     drawerPaper: {
       width: DRAWER_WIDTH,
-      background: theme.palette.secondary.dark,
+      background: theme.palette.secondary.main,
     },
     toolbar: {
-      backgroundColor: theme.palette.secondary.dark,
+      backgroundColor: theme.palette.secondary.main,
       marginTop: 40,
     },
     toolbarTitle: {
@@ -21,8 +21,8 @@ export default (theme: Theme) =>
       textAlign: "center",
     },
     headerLink: {
-      textDecoration: "none",
-      color: theme.palette.common.white,
+      "textDecoration": "none",
+      "color": theme.palette.common.white,
       "&:hover": {
         color: theme.palette.secondary.light,
       },

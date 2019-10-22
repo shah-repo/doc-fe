@@ -30,7 +30,7 @@ describe("ChangeRequestCreateContainer tests", () => {
     const wrapper = getWrapper({ ...routeComponentProps, create });
 
     const form = wrapper.find(ChangeRequestFormContainer);
-    const values = toChangeRequestFormValues(DEFAULT_INITIAL_VALUES);
+    const values = toChangeRequestFormValues(DEFAULT_INITIAL_VALUES());
 
     form.prop("onSubmit")(values);
 
@@ -50,7 +50,7 @@ describe("ChangeRequestCreateContainer tests", () => {
     const wrapper = getWrapper({});
     const form = wrapper.find(ChangeRequestFormContainer);
 
-    expect(form.prop("initialValues")).toEqual(toChangeRequestFormValues(DEFAULT_INITIAL_VALUES));
+    expect(form.prop("initialValues")).toEqual(toChangeRequestFormValues(DEFAULT_INITIAL_VALUES()));
   });
 
   it("sets asyncState", () => {
