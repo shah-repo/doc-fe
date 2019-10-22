@@ -205,6 +205,7 @@
   "common.updated": "Updated",
   "common.text.difference": "Text difference",
   "common.powered.by": "Powered by",
+  "common.create.new": "Create new",
 
   "dashboard.type.PENDING_REVIEW": "is pending your approval",
   "dashboard.type.PENDING_IMPL_PLAN_TASK": " task is pending your approval",
@@ -318,6 +319,7 @@
   "form.builder.autocomplete": "Autocomplete",
   "form.builder.select.options": "Select Options",
   "form.builder.multi.select": "Multi Select",
+  "form.builder.field.name": "Field Name",
 
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",

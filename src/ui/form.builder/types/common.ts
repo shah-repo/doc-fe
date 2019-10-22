@@ -29,6 +29,7 @@ export type FBFormDefaultProps =
   optionNote?: string;
   autocompleteList?: string;
   isMulti?: boolean;
+  fieldName?: string;
 };
 
 export type FBOnChangeProps =
