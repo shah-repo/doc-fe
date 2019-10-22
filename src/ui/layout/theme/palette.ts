@@ -1,5 +1,5 @@
 import { createMuiTheme } from "@material-ui/core";
-import { Palette } from "@material-ui/core/styles/createPalette";
+import { Palette, PaletteColor } from "@material-ui/core/styles/createPalette";
 import { WhiteLabelingColors } from "../../../state/ducks/company";
 import { ThemeEnv } from "./utils/types";
 
@@ -30,9 +30,9 @@ export const createAppPalette = (theme: ThemeEnv, customColors: WhiteLabelingCol
       contrastText: customColors.secondaryContrastText || palette.secondary.contrastText,
     },
     background: {
-      ...palette.background,
       default: customColors.defaultBackground || palette.background.default,
     },
+    tonalOffset: 0.4,
   };
 
   return palette;
@@ -66,11 +66,8 @@ export const defaultPalette: Palette = {
 
 export const devPalette: Palette = {
   ...defaultPalette,
-  primary: {
-    ...defaultPalette.primary,
-  },
   secondary: {
-    ...defaultPalette.secondary,
+    // ...defaultPalette.secondary,
     dark: "#FFCA00",
     main: "#EBBA00",
     contrastText: "#29064C",
@@ -81,8 +78,8 @@ export const devPalette: Palette = {
 export const demoPalette: Palette = {
   ...defaultPalette,
   secondary: {
-    ...defaultPalette.secondary,
+    // ...defaultPalette.secondary,
     dark: "#C42260",
     main: "#D52568",
-  },
+  } as PaletteColor,
 };
