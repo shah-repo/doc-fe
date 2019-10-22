@@ -15,7 +15,7 @@ export function withOnChange<T extends FBOnChangeProps>(
         <Component
           {...this.props as T}
           onChange={this.handleChange()}
-          value={field.value && field.value || null}
+          value={(field.value && field.value) || null}
         />
       );
     }

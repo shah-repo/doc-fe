@@ -16,8 +16,15 @@ export interface FBTemplateSchema {
   optionNote?: string;
   autocompleteList?: string;
   isMulti?: boolean;
+  fieldName?: string;
 }
 
 export interface FBStoreProps {
   formBuilderStore: FBStore;
 }
+
+export type FBDocumentRevisionMode =
+  | "create"
+  | "update"
+  | "updateFromOther"
+  | "createFrom";

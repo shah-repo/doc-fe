@@ -5,8 +5,6 @@ import { FieldProps as FormikFieldProps } from "formik";
 import _ from "lodash";
 import * as React from "react";
 import {
-  RenderSize,
-  TypographyColor,
   TypographyProps,
   TypographySize,
 } from "../../../../state/ducks/common";
