@@ -15,6 +15,7 @@ import {
   canEditDocumentRevision,
   documentRevisionQueryStatus,
   documentRevisionStatusOption,
+  documentRevisionReleasedDateOption,
 } from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
@@ -145,6 +146,11 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       columnOptions: {
         width: 100,
         cellDataGetter: ({ rowData }) => <Date value={rowData.releasedAt} />,
+      },
+      searchOptions: {
+        dataKey: "releasedAfter",
+        searchType: "select",
+        selectOptions: documentRevisionReleasedDateOption(),
       },
     },
   ];
