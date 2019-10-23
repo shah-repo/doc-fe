@@ -66,6 +66,9 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
           );
         }
       },
+      onError: () => {
+        documentRevisionStore.reset();
+      },
     });
 
   const onSubmit = (values: DocumentRevisionFormValues) => {

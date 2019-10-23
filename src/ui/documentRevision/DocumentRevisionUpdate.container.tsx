@@ -15,7 +15,7 @@ import {
 } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
 import { canEditDocumentRevision } from "./helpers";
-import formBuilderStore from "../form.builder/stores/FBStore";
+import documentRevisionStore from "../form.builder/stores/custom/FBDocumentRevisionStore";
 
 interface StateProps {
   currentUserEmail: string;
@@ -51,6 +51,9 @@ export const DocumentRevisionUpdateContainer: React.FunctionComponent<
   const async = useAsync<DocumentRevision>({
     onSuccess: () => {
       loadAudit(documentRevision.id);
+    },
+    onError: () => {
+      documentRevisionStore.reset();
     },
   });
 
