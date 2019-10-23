@@ -35,7 +35,8 @@ export type FBEditorElementType =
   | "radio"
   | "radiogroup"
   | "autocomplete"
-  | "hyperlink";
+  | "hyperlink"
+  | "fileupload";
 
 export interface FBEditorFormProps {
   type: FBEditorElementType;

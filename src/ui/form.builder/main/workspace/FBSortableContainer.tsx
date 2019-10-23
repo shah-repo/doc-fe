@@ -45,6 +45,22 @@ const FBSortableContainer: React.FunctionComponent<FBSortableProps> = ({
     sortableStore.setMode("active");
   };
 
+  if (formBuilderStore.mode === "form") {
+
+    const t = items.map((value, index) => {
+      const { type, name } = value;
+      const InputType = FBFieldComponent[type as string];
+
+      return (
+        <FBEditorWrapper key={`${name}_${index}`} index={index} {...value} >
+          <InputType {...value} {...formBuilderStore.fieldMode} />
+        </FBEditorWrapper>
+      );
+    });
+
+    return (<span>{t}</span>);
+  }
+
   return (
     <SortableList items={items} onSortStart={onSortStart} onSortEnd={onSortEnd} />
   );
