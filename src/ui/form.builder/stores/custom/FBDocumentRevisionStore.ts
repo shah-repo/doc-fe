@@ -126,7 +126,6 @@ export class FBDocumentRevisionStore {
   @action public reset = () => {
     this.mode = "create";
     this.fromDocumentRevision = undefined;
-    formBuilderStore.reset();
   }
 }
 
