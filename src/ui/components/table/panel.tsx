@@ -1,4 +1,4 @@
-import { Box } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import { AxiosRequestConfig } from "axios";
 import qs from "query-string";
 import React, { useEffect, useState } from "react";
@@ -48,7 +48,6 @@ export function TablePanel<T extends any>({
     scrollToIndex: 0,
   });
   const [debouncedQuery] = useDebounce(state.queryDict, queryDelay);
-
   useEffect(() => {
     if (didMount) {
       queryApi();
@@ -151,8 +150,17 @@ export function TablePanel<T extends any>({
     );
   };
 
+  const recordsCountRenderer = () => (
+    <Typography variant="h6">
+      <Text translation="common.records.found"/>
+      :&nbsp;
+      <span style={{fontWeight: "bold"}}>{state.queryData.length}</span>
+    </Typography>
+  );
+
   return (
     <Box className={classes.root}>
+      {recordsCountRenderer()}
       <div style={{color: "red"}}>{state.apiError}</div>
       {bodyRenderer()}
     </Box>
