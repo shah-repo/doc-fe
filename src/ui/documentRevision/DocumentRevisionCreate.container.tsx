@@ -9,6 +9,7 @@ import {
 import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import documentRevisionStore from "../form.builder/stores/custom/FBDocumentRevisionStore";
+import formBuilderStore from "../form.builder/stores/FBStore";
 import useAsync from "../hooks/useAsync";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { toDocumentRevisionFormValuesWithRevisionChange, toNewVersionRequestBody } from "./forms/transform";
@@ -67,7 +68,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
         }
       },
       onError: () => {
-        documentRevisionStore.reset();
+        formBuilderStore.reset();
       },
     });
 
