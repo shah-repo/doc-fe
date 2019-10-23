@@ -20,7 +20,6 @@ pipelines:
       image: node:10
       services:
         - docker
-        - postgres
       caches:
         - docker
         - node
