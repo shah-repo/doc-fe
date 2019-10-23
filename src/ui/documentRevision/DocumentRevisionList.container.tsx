@@ -10,13 +10,14 @@ import { generateDocumentRevisionVersionPath } from "./pathGenerators";
 interface OwnProps {
   documentRevisions: DocumentRevision[];
   documentId: string;
+  docId: string;
 }
 
 export type DocumentRevisionListContainerProps = OwnProps;
 
 export const DocumentRevisionListContainer: React.FunctionComponent<
   DocumentRevisionListContainerProps
-> = ({ documentRevisions, documentId }) => {
+> = ({ documentRevisions, documentId, docId }) => {
   const classes = styles();
 
   return (
@@ -26,7 +27,6 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
           documentRevision.id,
           documentId,
         );
-
         return (
           <div key={documentRevision.id} className={classes.linkContainer}>
             <NavLink
@@ -35,11 +35,13 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
               activeClassName={classes.activeLinkTitle}
             >
               <div>
-                <Text translation="documentRevision.version" />{" "}
+                <Text translation="documentRevision.version" />
+                &nbsp;
                 {generateVersionNumber(
                   documentRevision.revision,
                   documentRevision.revisionStage,
-                )}{" "}
+                )}
+                &nbsp;
                 - {documentRevision.status}
               </div>
             </NavLink>
@@ -49,11 +51,23 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
               className={classes.linkBody}
             >
               <div>
-                <Text translation="common.owner" />:{" "}
+                <Text translation="common.title" />
+                :&nbsp;
+                {documentRevision.name}
+              </div>
+              <div>
+                <Text translation="common.documentId" />
+                :&nbsp;
+                {docId}
+              </div>
+              <div>
+                <Text translation="common.owner" />
+                :&nbsp;
                 {documentRevision.owner.name}
               </div>
               <div>
-                <Text translation="documentRevision.released" />:{" "}
+                <Text translation="documentRevision.released" />
+                :&nbsp;
                 <Date
                   value={
                     documentRevision.obsoletedAt || documentRevision.releasedAt

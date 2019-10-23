@@ -36,7 +36,8 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<
     <div
       className={classNames(classes.container, {
         [classes.selected]: isSelected,
-      })}>
+      })}
+    >
       <Grid container={true}>
         <Grid item={true} xs={10}>
           <div onClick={onClick}>
@@ -57,9 +58,13 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<
               )}
             </div>
             <div>
-              <Text translation="common.created" />
-              :&nbsp;
-              <Date value={documentRevision.createdAt} />
+              <Text translation="documentRevision.released" />
+                :&nbsp;
+                <Date
+                  value={
+                    documentRevision.obsoletedAt || documentRevision.releasedAt
+                  }
+                />
             </div>
             <div>
               <Text translation="common.documentId" />

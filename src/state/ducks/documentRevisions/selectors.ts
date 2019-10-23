@@ -24,6 +24,8 @@ const getDocumentRevision = (state: ApplicationState, documentRevisionId: string
 const getDocument = (state: ApplicationState, documentId: string) => documentsById(state)[documentId];
 const getDocumentRevisions = (state: ApplicationState, documentId: string) =>
   _.get(documentsById(state)[documentId], "documentRevisions", []);
+const getDocId = (state: ApplicationState, documentId: string) =>
+  _.get(documentsById(state)[documentId], "docId");
 const getAudit = (state: ApplicationState, documentRevisionId: string): AuditGroupType =>
   auditsByCRId(state)[documentRevisionId];
 
@@ -137,4 +139,5 @@ export default {
   makeGetAvailableReferences,
   makeGetAudit,
   makeGetDisableCreateNewVersion,
+  getDocId,
 };
