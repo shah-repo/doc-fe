@@ -56,6 +56,7 @@
     "reselect": "4.0.0",
     "striptags": "3.1.1",
     "tslint-etc": "^1.7.0",
+    "tslint-junit-formatter-forked": "https://github.com/zorankova/tslint-junit-formatter-forked.git#v5.1.2",
     "typescript": "3.6.3",
     "use-debounce": "3.0.1"
   },
