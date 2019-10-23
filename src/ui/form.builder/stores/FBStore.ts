@@ -5,7 +5,6 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { DocumentGroupType } from "../../../state/ducks/documentRevisions/documentType";
 import { ThemeEnv } from "../../layout/theme/utils/types";
 import { FBEditorSectionConfig } from "../defaults/editor";
-import { FBClasses } from "../defaults/layout";
 import { FBFormDefaultProps } from "../types/common";
 import { FBFormTemplateProps } from "../types/formik";
 import { FBTemplateSchema } from "../types/store";
@@ -39,7 +38,6 @@ export class FBStore {
   @observable public values: { [key: string]: any } = {};
   @observable public mode: FBWorkspaceMode = "design";
   @observable public groupType: DocumentGroupType = "OTHER";
-  public changeReqRevisions: DocumentRevision[] = [];
 
   constructor() {
     autorun(() => {
@@ -49,26 +47,17 @@ export class FBStore {
     });
   }
 
-  @action public getDocRev = (id: string): DocumentRevision | undefined => {
-    const docRev = this.changeReqRevisions.filter((doc) => doc.id === id);
-    if (docRev.length === 0) { return undefined; }
-    return docRev[0];
-  }
-
-  @action public toolbarMargin(schemaIndex: number): number {
-    const { type, label } = this.schema[schemaIndex];
-    if (!FBEditorSectionConfig.section.includes(type) && label) {
-      return -4;
-    }
-    return 0;
-  }
-
-  @action public getSchema = (index: number): FBTemplateSchema => {
+  @action public getSchemaItem = (index: number): FBTemplateSchema | undefined => {
     return this.schema[index];
   }
 
-  @action public removeSchema = (index: number) => () => {
-    this.schema.splice(index, 1);
+  @action public removeSchemaItem = (index?: number) => () => {
+    if (index === undefined) { return; }
+    _.remove(this.schema, this.getSchemaItem(index));
+  }
+
+  @action public setSchema = (schema: FBTemplateSchema[]) => {
+    this.schema = schema;
   }
 
   @action public getValues = (): { [key: string]: any } | undefined => {

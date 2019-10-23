@@ -45,7 +45,8 @@ export class FBEditorStore {
     this.title = title || "form.builder.create.field";
   }
 
-  @action public editorTypeEdit = (index: number) => () => {
+  @action public editorTypeEdit = (index?: number) => () => {
+    if (index === undefined) { return; }
     const schema = formBuilderStore.schema[index];
     const { type } = schema;
 
