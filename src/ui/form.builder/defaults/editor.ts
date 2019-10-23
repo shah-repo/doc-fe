@@ -17,6 +17,7 @@ import FBTextField from "../components/inputs/FBTextField";
 import FBSectionBox from "../components/layout/FBSectionBox";
 import FBSubSectionBox from "../components/layout/FBSubSectionBox";
 import FBLink from "../components/navigation/FBLink";
+import FBFileUpload from "../components/navigation/FBFileUpload";
 import { FBEditorElementType } from "../types/editor";
 
 export interface FBEditorDict {
@@ -38,6 +39,7 @@ export const FBFieldEditorComponent: {
   radiogroup: FBControlGroupEditor,
   autocomplete: FBAutocompleteEditor,
   hyperlink: FBHyperlinkEditor,
+  fileupload: FBLabelEditor,
 };
 
 export const FBFieldComponent: { [key: string]: any } = {
@@ -53,6 +55,7 @@ export const FBFieldComponent: { [key: string]: any } = {
   radiogroup: FBRadioGroup,
   autocomplete: FBAutocomplete,
   hyperlink: FBLink,
+  fileupload: FBFileUpload,
 };
 
 export const FBGroupField: { [key: string]: any } = {
@@ -72,6 +75,7 @@ export const FBEditorSectionConfig: { [key: string]: FBEditorElementType[] } = {
     "select",
     "radio",
     "radiogroup",
+    "fileupload",
   ],
   lists: ["autocomplete"],
 };
