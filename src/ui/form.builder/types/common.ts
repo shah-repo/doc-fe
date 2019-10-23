@@ -33,6 +33,7 @@ export type FBFormDefaultProps =
   autocompleteList?: string;
   isMulti?: boolean;
   fieldName?: string;
+  linkUrl?: string;
 };
 
 export type FBOnChangeProps =
