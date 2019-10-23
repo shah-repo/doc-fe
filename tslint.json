@@ -9,7 +9,9 @@
         "no-implicit-dependencies": [true, "dev"],
         "object-literal-sort-keys": false,
         "interface-name": false,
-        "jsx-no-multiline-js": false
+        "jsx-no-multiline-js": false,
+        "jsx-boolean-value": false,
+        "no-empty": false
     },
     "rulesDirectory": [],
     "linterOptions": {

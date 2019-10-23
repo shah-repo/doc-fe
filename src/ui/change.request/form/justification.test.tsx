@@ -1,10 +1,10 @@
 import { shallow } from "enzyme";
-import React from "react";
-import { Justification, Props } from "./justification";
 import faker from "faker";
+import React from "react";
+import { getAttachment } from "../../../state/ducks/attachments/tests/factories";
 import AttachmentIconField from "../../components/common/attachment.icon/container";
 import TextEditorField from "../../components/forms/fields/TextEditor";
-import { getAttachment } from "../../../state/ducks/attachments/tests/factories";
+import { Justification, Props } from "./justification";
 
 describe("Justification with attachments tests", () => {
   const defaultProps: Props = {

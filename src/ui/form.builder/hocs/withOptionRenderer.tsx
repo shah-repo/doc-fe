@@ -1,13 +1,11 @@
 import _ from "lodash";
 import React from "react";
-import FBCheckbox from "../components/inputs/FBCheckbox";
 import { FBGroupField } from "../defaults/editor";
 import {
   FBFormDefaultProps,
   FBOptionRendererProps,
   Subtract,
 } from "../types/common";
-import { FBEditorElementType } from "../types/editor";
 import { withLabelRenderer } from "./withLabelRenderer";
 
 export function withOptionRenderer<T extends FBFormDefaultProps>(

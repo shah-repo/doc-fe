@@ -1,6 +1,5 @@
 import {
   Box,
-  ListItem,
   Typography,
   WithStyles,
   withStyles,

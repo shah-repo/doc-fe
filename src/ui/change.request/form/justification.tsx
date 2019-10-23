@@ -1,13 +1,13 @@
 import { Box } from "@material-ui/core";
+import { isEmpty } from "lodash";
 import React from "react";
+import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
 import AttachmentField from "../../components/common/attachment.field/container";
 import AttachmentIconField from "../../components/common/attachment.icon/container";
-import TextEditorField from "../../components/forms/fields/TextEditor";
-import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
-import { withFormik } from "../../components/hoc/formik";
-import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
-import _ from "lodash";
 import HeaderField from "../../components/common/header.field/field";
+import TextEditorField from "../../components/forms/fields/TextEditor";
+import { withFormik } from "../../components/hoc/formik";
+import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
 
 export type Props = Partial<FormikHybridFieldProps>;
 
@@ -16,7 +16,7 @@ export const Justification: React.FunctionComponent<Props> = ({ form }) => {
   const hasAttachment = (attachments || []).length > 0;
 
   const actionsRenderer = () => {
-    if (!_.isEmpty(description)) { return; }
+    if (!isEmpty(description)) { return; }
     return <AttachmentField name="justifications.attachments" />;
   };
 

@@ -1,6 +1,5 @@
 import { Box } from "@material-ui/core";
 import { Form, FormikProps } from "formik";
-import _ from "lodash";
 import React from "react";
 import FBButton from "../components/inputs/FBButton";
 import { FBFieldEditorComponent } from "../defaults/editor";

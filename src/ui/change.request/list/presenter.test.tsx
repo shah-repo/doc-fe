@@ -1,11 +1,11 @@
-import { shallow } from "enzyme";
-import React from "react";
-import { ListPresenter,  Props } from "./presenter";
-import { getChangeRequest } from "../../../state/ducks/changeRequest/tests/factories";
-import faker from "faker";
 import { Grid } from "@material-ui/core";
-import { CHANGE_REQUEST_CREATE_URL } from "../../constants/urls";
+import { shallow } from "enzyme";
+import faker from "faker";
+import React from "react";
 import { Link as RouterLink } from "react-router-dom";
+import { getChangeRequest } from "../../../state/ducks/changeRequest/tests/factories";
+import { CHANGE_REQUEST_CREATE_URL } from "../../constants/urls";
+import { ListPresenter,  Props } from "./presenter";
 
 describe("Approvers tests", () => {
   const defaultProps: Props = {

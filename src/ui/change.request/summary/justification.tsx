@@ -1,8 +1,6 @@
 import {
-  Box,
   Grid,
   ListItem,
-  Typography,
   WithStyles,
   withStyles,
 } from "@material-ui/core";

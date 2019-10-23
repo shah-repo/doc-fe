@@ -1,13 +1,13 @@
-import { shallow } from "enzyme";
-import React from "react";
-import { CloseTask, Props } from "./close.task";
-import faker from "faker";
-import { ASYNC_DEFAULT_STATE } from "../../hooks/useAsync";
-import FormProgress from "../../components/forms/FormProgress";
-import FormMessage from "../../components/forms/FormMessage";
 import { Dialog } from "@material-ui/core";
-import { Formik, Form } from "formik";
+import { shallow } from "enzyme";
+import faker from "faker";
+import { Form, Formik } from "formik";
+import React from "react";
 import InputField from "../../components/forms/fields/Input";
+import FormMessage from "../../components/forms/FormMessage";
+import FormProgress from "../../components/forms/FormProgress";
+import { ASYNC_DEFAULT_STATE } from "../../hooks/useAsync";
+import { CloseTask, Props } from "./close.task";
 
 describe("CloseTask tests", () => {
   const defaultProps: Props = {

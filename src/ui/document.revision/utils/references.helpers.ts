@@ -1,5 +1,5 @@
-import { documentDetailsPathWithDeprecatedDate, documentPreviewPath, documentVersionPath } from "./paths";
 import { DocumentRevision, DocumentRevisionStatus, Reference } from "../../../state/ducks/documentRevisions";
+import { documentDetailsPathWithDeprecatedDate, documentVersionPath } from "./paths";
 import { ReferenceSummary } from "./types";
 
 const getCorrectDocRev = (documentRevisions?: DocumentRevision[]) => {

@@ -1,9 +1,9 @@
 import { shallow } from "enzyme";
-import React from "react";
-import { ListContainer,  Props } from "./container";
 import faker from "faker";
-import getRouteComponentProps from "../../tests/helpers/getRouteComponentProps";
+import React from "react";
 import { getChangeRequest } from "../../../state/ducks/changeRequest/tests/factories";
+import getRouteComponentProps from "../../tests/helpers/getRouteComponentProps";
+import { ListContainer,  Props } from "./container";
 import ListPresenter from "./presenter";
 
 describe("Approvers tests", () => {
