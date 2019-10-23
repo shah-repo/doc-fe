@@ -144,7 +144,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       cellHref: cellHrefRenderer,
       cellOptions: { align: "center" },
       columnOptions: {
-        width: 108,
+        width: 115,
         cellDataGetter: ({ rowData }) => <Date value={rowData.releasedAt} />,
       },
       searchOptions: {
