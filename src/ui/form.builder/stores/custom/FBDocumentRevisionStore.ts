@@ -54,7 +54,8 @@ export class FBDocumentRevisionStore {
     const isFromFB = !_.isEmpty(formDocument);
     const isStatus = (
       status === DocumentRevisionStatus.Draft ||
-      status === DocumentRevisionStatus.PendingChange
+      status === DocumentRevisionStatus.PendingChange ||
+      status === DocumentRevisionStatus.Released
     );
 
     switch (true) {
@@ -122,7 +123,7 @@ export class FBDocumentRevisionStore {
     }
   }
 
-  @action private reset = () => {
+  @action public reset = () => {
     this.mode = "create";
     this.fromDocumentRevision = undefined;
   }

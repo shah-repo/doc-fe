@@ -17,6 +17,7 @@ export interface FBTemplateSchema {
   autocompleteList?: string;
   isMulti?: boolean;
   fieldName?: string;
+  linkUrl?: string;
 }
 
 export interface FBStoreProps {

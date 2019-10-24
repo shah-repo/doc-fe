@@ -1,6 +1,4 @@
-import { Box } from "@material-ui/core";
 import arrayMove from "array-move";
-import { observer } from "mobx-react";
 import React from "react";
 import {SortableContainer, SortableElement} from "react-sortable-hoc";
 import FBEditorWrapper from "../../components/custom/FBEditorWrapper";
@@ -10,8 +8,8 @@ import formBuilderStore from "../../stores/FBStore";
 import { FBSortableProps } from "../../types/sortable";
 import { FBTemplateSchema } from "../../types/store";
 
-const SortableItem = SortableElement(({value , index}: {value: FBTemplateSchema, index: number}) => {
-  const { type, name } = value;
+const SortableItem = SortableElement(({value}: {value: FBTemplateSchema}) => {
+  const { type, name, index } = value;
   const InputType = FBFieldComponent[type as string];
 
   return (
@@ -38,6 +36,7 @@ const FBSortableContainer: React.FunctionComponent<FBSortableProps> = ({
 }) => {
   const onSortEnd = ({oldIndex, newIndex}: {oldIndex: number, newIndex: number}) => {
     const schema = arrayMove(formBuilderStore.schema, oldIndex, newIndex);
+    schema.map((item, i) => { item.index = i; });
     formBuilderStore.setSchema(schema);
     sortableStore.setMode("inactive");
   };
@@ -45,6 +44,22 @@ const FBSortableContainer: React.FunctionComponent<FBSortableProps> = ({
   const onSortStart = () => {
     sortableStore.setMode("active");
   };
+
+  if (formBuilderStore.mode === "form") {
+
+    const t = items.map((value, index) => {
+      const { type, name } = value;
+      const InputType = FBFieldComponent[type as string];
+
+      return (
+        <FBEditorWrapper key={`${name}_${index}`} index={index} {...value} >
+          <InputType {...value} {...formBuilderStore.fieldMode} />
+        </FBEditorWrapper>
+      );
+    });
+
+    return (<span>{t}</span>);
+  }
 
   return (
     <SortableList items={items} onSortStart={onSortStart} onSortEnd={onSortEnd} />

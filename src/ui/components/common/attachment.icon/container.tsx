@@ -8,6 +8,7 @@ import {
   AttachmentType,
 } from "../../../../state/ducks/attachments";
 import { ApplicationState } from "../../../../state/reducers";
+import formBuilderStore from "../../../form.builder/stores/FBStore";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
 import { withFormik } from "../../hoc/formik";
@@ -46,6 +47,8 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     if (!form && !field) { return; }
     const filtered = (field!.value as Attachment[]).filter((a) => a.id !== attachment.id);
     form!.setFieldValue(name, filtered);
+    if (formBuilderStore.mode === "design") { return; }
+    formBuilderStore.values = {...formBuilderStore.values, [name as string]: filtered };
   };
 
   const handleDownload = (attachment: Attachment, type?: AttachmentType) => () => {

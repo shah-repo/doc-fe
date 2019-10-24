@@ -52,6 +52,9 @@ export const DocumentRevisionUpdateContainer: React.FunctionComponent<
     onSuccess: () => {
       loadAudit(documentRevision.id);
     },
+    onError: () => {
+      formBuilderStore.reset();
+    },
   });
 
   if (!canEditDocumentRevision(documentRevision, currentUserEmail)) {
