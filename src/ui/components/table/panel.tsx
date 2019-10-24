@@ -151,11 +151,13 @@ export function TablePanel<T extends any>({
   };
 
   const recordsCountRenderer = () => (
-    <Typography variant="h6">
-      <Text translation="common.records.found"/>
-      :&nbsp;
-      <span style={{fontWeight: "bold"}}>{state.queryData.length}</span>
-    </Typography>
+    <Box ml={1} mb={3}>
+      <Typography variant="h6">
+        <Text translation="common.records.found"/>
+        :&nbsp;
+        <span style={{fontWeight: "bold"}}>{state.queryData.length}</span>
+      </Typography>
+    </Box>
   );
 
   return (
