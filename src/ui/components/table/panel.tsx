@@ -109,12 +109,6 @@ export function TablePanel<T extends any>({
 
   const rowGetter = ({ index }: Index): T => state.queryData[index] as T;
 
-  const rowClassName = ({ index }: Index) => {
-    return (index % 2 === 0) ?
-    `${classes.row} ${classes.rowEven}` :
-    `${classes.row} ${classes.rowOdd}`;
-  };
-
   const measurerCache = new CellMeasurerCache({
     fixedWidth: true,
     fixedHeight: !cellMeasure,

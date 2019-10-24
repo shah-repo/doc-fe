@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 
 const API = process.env.REACT_APP_API_ENDPOINT;
 const STATUS_QUERY = "/v1/status";

@@ -1,44 +1,46 @@
 import {
-  Grid,
-  ListItem,
-  WithStyles,
-  withStyles,
+  Box,
+  Typography,
 } from "@material-ui/core";
 import React from "react";
 import { Justifications } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import AttachmentIconField from "../../components/common/attachment.icon/container";
-import styles from "./styles";
+import Text from "../../components/Text";
 
-export type Props = DataProps<Justifications> & WithStyles<typeof styles>;
+export type Props = DataProps<Justifications>;
 
 export const Justification: React.FunctionComponent<Props> = ({
-  classes,
   dataProp,
 }) => {
   const { description, attachments } = dataProp;
+  const hasAttachment = (attachments || []).length > 0;
 
-  const attachmentRenderer = () =>
-    attachments.map((attachment, index) => (
+  const reasoningRenderer = () => (
+    <Box>
+      <SummaryFieldWithHtml label="common.justifications" value={description} />
+    </Box>
+  );
+
+  const attachmentRenderer = () => (
+    <Box>
+      <Typography variant="h6">
+        <Text translation="common.justifications" />
+      </Typography>
       <AttachmentIconField
-        key={attachment.id}
-        name={`assessments.${attachment.type}.attachments`}
+        name="justifications.attachments"
+        disabled={true}
       />
-    ));
+    </Box>
+  );
 
   return (
-    <Grid item xs={12} className={classes.box}>
-      <SummaryFieldWithHtml label="common.justifications" value={description} />
-      {attachments && (
-        <ListItem>
-          <Grid container={true} spacing={1}>
-            {attachmentRenderer()}
-          </Grid>
-        </ListItem>
-      )}
-    </Grid>
+    <Box ml={2} mb={3}>
+      {description && reasoningRenderer()}
+      {hasAttachment && attachmentRenderer()}
+    </Box>
   );
 };
 
-export default withStyles(styles)(Justification);
+export default Justification;

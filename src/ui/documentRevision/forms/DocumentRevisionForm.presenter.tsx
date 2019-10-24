@@ -6,6 +6,7 @@ import {
   WithStyles,
 } from "@material-ui/core";
 import { FormikProps } from "formik";
+import _ from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -39,6 +40,7 @@ import {
   documentVersionPath,
 } from "../../document.revision/utils/paths";
 import FBWorkspace from "../../form.builder/main/workspace/FBWorkspace";
+import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
 import formBuilderStore from "../../form.builder/stores/FBStore";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
@@ -81,22 +83,17 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   documentTypesById,
 }) => {
 
+  const reqType = documentRevisionStore.requestType(initialValues);
   const openReference = (documentId: string) => {
     window.open(documentDetailsPath(documentId), "_blank");
   };
 
   const isDisabled: boolean = initialValues.id !== undefined;
   const docIdValue = isDisabled ? values.document!.docId : proposedDocId;
+  const typeIsDisabled = isDisabled || (reqType === "fbCreate" || reqType === "fbUpdate");
 
   if (!isDisabled && values.document) {
     values.document.docId = proposedDocId;
-  }
-
-  if (values.document && values.document.documentType) {
-    const documentGroup = documentTypesById[values.document.documentType.id].group;
-    formBuilderStore.groupType = documentGroup;
-  } else {
-    formBuilderStore.groupType = "OTHER";
   }
 
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,7 +101,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     const { documentType } = values.document || {};
 
     if (!documentType) { return; }
-    const type = documentTypesById[documentType.id].documentTypeAcronym;
+    const type = documentTypesById[documentType.id!].documentTypeAcronym;
 
     if (!values.document && !type) {
       return;
@@ -126,6 +123,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     formBuilderStore.groupType = type.group;
     handleChange(event);
   };
+
+  if (showRevisionTypeChange) {
+    documentRevisionStore.setMode("update", initialValues as unknown as DocumentRevision);
+  }
 
   const renderTypeOfRevisionChange = () => {
     if (showRevisionTypeChange) {
@@ -246,7 +247,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             name="document.documentType.id"
             label="document.type"
             selectProps={{
-              inputProps: { id: "documentType", disabled: isDisabled },
+              inputProps: { id: "documentType", disabled: typeIsDisabled},
               onChange: handleTypeChange,
             }}
             options={documentTypes}
@@ -279,8 +280,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           <CheckboxField name="retrain" label="document.revision.trainingRequired"/>
           <AttachmentsField />
           {renderTypeOfRevisionChange()}
-          {formBuilderStore.active && (
-            <Box my={4}>
+          {documentRevisionStore.outputActive && (
+            <Box mt={4}>
               <SelectField
                 name="formTemplate.outputDocumentType.id"
                 label="document.output.type"
@@ -288,14 +289,15 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                   inputProps: { id: "formTemplate.outputDocumentType" },
                 }}
                 options={documentTypes}
-                validate={!isDisabled ? validator(required) : undefined}
                 includeEmpty={false}
               />
             </Box>
           )}
-          <Box>
-            {formBuilderStore.active && <FBWorkspace />}
-          </Box>
+          {formBuilderStore.active && (
+            <Box mt={5}>
+               <FBWorkspace />
+            </Box>
+          )}
           <Box mt={5}>
             <Grid
               item={true}

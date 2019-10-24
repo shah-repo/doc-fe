@@ -2,7 +2,6 @@ import React, { Fragment, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { formBuilderActions } from "../../../../state/ducks/formBuilder";
 import styles from "../basic/BasicFields.module.css";
-import { CloseSectionText } from "./types";
 
 interface OwnProps {
   closed: boolean;

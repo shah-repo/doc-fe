@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import { Formik, FormikActions, FormikProps } from "formik";
-import _ from "lodash";
+import { get } from "lodash";
 import React from "react";
 import { connect } from "react-redux";
 import {
@@ -21,6 +21,7 @@ import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
+import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -66,7 +67,7 @@ const mapStateToProps = (
   proposedDocId: documentsSelectors.getProposedDocId(state),
   documentTypes: documentTypeSelectors.getDocumentTypeFormOptions(state),
   documentTypesById: documentTypeSelectors.byId(state),
-  document: documentRevisionsSelectors.getDocument(state, _.get(props.initialValues, "document.id")!),
+  document: documentRevisionsSelectors.getDocument(state, get(props.initialValues, "document.id")!),
 });
 
 export const DocumentRevisionFormContainer: React.FunctionComponent<
@@ -90,6 +91,19 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
   documentTypesById,
   document,
 }) => {
+
+  if (documentRevisionStore.mode !== "createFrom") {
+    const { formDocument, formTemplate } = initialValues;
+    if (!formTemplate && formDocument) {
+      documentRevisionStore.setMode("updateFromOther", initialValues as unknown as DocumentRevision);
+    } else {
+      documentRevisionStore.setMode("update", initialValues as unknown as DocumentRevision);
+    }
+  } else if (initialValues.document && initialValues.document.documentType) {
+    const { documentTypeAcronym } = initialValues.document.documentType;
+    loadDocumentProposedId(documentTypeAcronym || "");
+  }
+
   if (initialValues.document && initialValues.document.documentType && document) {
     initialValues.document.documentType.id = document.documentType.id;
   }

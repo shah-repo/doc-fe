@@ -11,7 +11,6 @@ const byId = (state: ApplicationState) => state.changeRequests.byId;
 const approversById = (state: ApplicationState) => state.changeRequests.approversById;
 const approversAllIds = (state: ApplicationState) => state.changeRequests.approversAllIds;
 const auditsByCRId = (state: ApplicationState) => state.changeRequests.auditsByCRId;
-const auditsAllId = (state: ApplicationState) => state.changeRequests.auditsAllId;
 
 const getChangeRequestsList = createSelector(
   allIds, byId,

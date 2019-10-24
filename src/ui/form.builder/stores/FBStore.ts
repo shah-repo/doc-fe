@@ -1,10 +1,6 @@
-import _ from "lodash";
+import _, { Dictionary } from "lodash";
 import { action, autorun, computed, observable } from "mobx";
-import Config from "../../../config";
 import { DocumentGroupType } from "../../../state/ducks/documentRevisions/documentType";
-import { ThemeEnv } from "../../layout/theme/utils/types";
-import { FBEditorSectionConfig } from "../defaults/editor";
-import { FBClasses } from "../defaults/layout";
 import { FBFormDefaultProps } from "../types/common";
 import { FBFormTemplateProps } from "../types/formik";
 import { FBTemplateSchema } from "../types/store";
@@ -23,14 +19,14 @@ export class FBStore {
   }
 
   @computed get active(): boolean {
-    return Config.Theme === ThemeEnv.DEV_THEME && this.groupType === "FORM";
+    return this.groupType === "FORM";
   }
 
   @computed get fieldMode(): Partial<FBFormDefaultProps> {
     return ({
       disabled: this.isDisabled(),
       readOnly: this.isReadonly(),
-      className: this.isDisabled() ? FBClasses.inputDisabled : "",
+      // className: this.isDisabled() ? FBClasses.inputDisabled : "",
     });
   }
   @observable public name?: string = undefined;
@@ -47,20 +43,21 @@ export class FBStore {
     });
   }
 
-  @action public toolbarMargin(schemaIndex: number): number {
-    const { type, label } = this.schema[schemaIndex];
-    if (!FBEditorSectionConfig.section.includes(type) && label) {
-      return -4;
-    }
-    return 0;
-  }
-
-  @action public getSchema = (index: number): FBTemplateSchema => {
+  @action public getSchemaItem = (index: number): FBTemplateSchema | undefined => {
     return this.schema[index];
   }
 
-  @action public removeSchema = (index: number) => () => {
-    this.schema.splice(index, 1);
+  @action public removeSchemaItem = (index?: number) => () => {
+    if (index === undefined) { return; }
+    _.remove(this.schema, this.getSchemaItem(index));
+  }
+
+  @action public setSchema = (schema: FBTemplateSchema[]) => {
+    this.schema = schema;
+  }
+
+  @action public getValues = (): { [key: string]: any } | undefined => {
+    return _.isEmpty(this.values) ? undefined : this.values;
   }
 
   @action public reset = () => {
@@ -73,12 +70,35 @@ export class FBStore {
   }
 
   @action public setFormTemplate = (formTemplate?: FBFormTemplateProps) => {
-    if (!formTemplate) {
-      this.schema = [];
-    } else {
-      const { schema } = formTemplate;
-      this.schema = schema as FBTemplateSchema[];
-    }
+    (formTemplate) ?
+      this.schema = formTemplate.schema as FBTemplateSchema[] :
+      this.reset();
+  }
+
+  @action public setFormTemplateDesign = (formTemplate?: FBFormTemplateProps) => {
+    this.groupType = "FORM";
+    this.mode = "design";
+    this.setFormTemplate(formTemplate);
+  }
+
+  @action public setFormTemplatePreview = (
+    formTemplate?: FBFormTemplateProps,
+    inputValues?: Dictionary<any>,
+    ) => {
+    this.groupType = "FORM";
+    this.mode = "preview";
+    this.values = inputValues || {};
+    this.setFormTemplate(formTemplate);
+  }
+
+  @action public setFormTemplateForm = (
+    formTemplate?: FBFormTemplateProps,
+    inputValues?: Dictionary<any>,
+  ) => {
+    this.groupType = "FORM";
+    this.mode = "form";
+    this.values = inputValues || {};
+    this.setFormTemplate(formTemplate);
   }
 
   @action private isDisabled = (): boolean => {

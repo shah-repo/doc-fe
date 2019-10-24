@@ -1,12 +1,15 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import ReactQuill from "react-quill";
-import { formats, modules } from "../../../components/forms/fields/TextEditor/configuration";
+import {
+  formats,
+  modules,
+} from "../../../components/forms/fields/TextEditor/configuration";
 import { withLabelRenderer } from "../../hocs/withLabelRenderer";
 import { withOnChange } from "../../hocs/withOnChange";
 import { FBFormDefaultProps, FBOnChangeProps } from "../../types/common";
 
-type Props = FBFormDefaultProps & FBOnChangeProps;
+export type Props = FBFormDefaultProps & FBOnChangeProps;
 
 const FBTextEditorField: React.FunctionComponent<Props> = ({
   labelRenderer,

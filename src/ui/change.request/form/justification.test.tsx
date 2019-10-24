@@ -4,21 +4,22 @@ import React from "react";
 import { getAttachment } from "../../../state/ducks/attachments/tests/factories";
 import AttachmentIconField from "../../components/common/attachment.icon/container";
 import TextEditorField from "../../components/forms/fields/TextEditor";
-import { Justification, Props } from "./justification";
+import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
+import { Justification } from "./justification";
 
 describe("Justification with attachments tests", () => {
-  const defaultProps: Props = {
-    form: {
-      values: {
+  const defaultProps: FormikHybridFieldProps = {
+    field: {
+      value: {
         justifications: {
           description: "",
           attachments: [getAttachment()],
         },
         },
       },
-    } as Props;
+    } as FormikHybridFieldProps;
 
-  const getWrapper = (props: Partial<Props>= {}) => shallow (
+  const getWrapper = (props: Partial<FormikHybridFieldProps>= {}) => shallow (
     <Justification {...defaultProps} {...props} />,
   );
 
@@ -29,18 +30,18 @@ describe("Justification with attachments tests", () => {
 });
 
 describe("Justification without attachments tests", () => {
-  const defaultProps: Props = {
-    form: {
-      values: {
+  const defaultProps: FormikHybridFieldProps = {
+    field: {
+      value: {
         justifications: {
           description: faker.lorem.paragraph(),
           attachments: [],
         },
         },
       },
-    } as Props;
+    } as FormikHybridFieldProps;
 
-  const getWrapper = (props: Partial<Props>= {}) => shallow (
+  const getWrapper = (props: Partial<FormikHybridFieldProps>= {}) => shallow (
     <Justification {...defaultProps} {...props} />,
   );
 

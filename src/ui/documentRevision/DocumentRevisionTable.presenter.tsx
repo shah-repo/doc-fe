@@ -1,5 +1,5 @@
 import {  IconButton, Paper, WithStyles, withStyles } from "@material-ui/core";
-import { Edit, FileCopy, OpenInNew } from "@material-ui/icons";
+import { Edit, OpenInNew } from "@material-ui/icons";
 import React from "react";
 import {
   AutoSizer,
@@ -14,7 +14,7 @@ import { DocumentRevision } from "../../state/ducks/documentRevisions";
 import Text from "../components/Text";
 import { Translation } from "../translations/types";
 import styles from "./DocumentRevisionTable.styles";
-import { canEditDocumentRevision, documentRevisionIdMask } from "./helpers";
+import { canEditDocumentRevision } from "./helpers";
 import {
   DocumentRevisionActionProps,
   DocumentRevisionListItem,
@@ -39,7 +39,7 @@ export const DocumentRevisionTable: React.FunctionComponent<DocumentRevisionTabl
       name: documentRevision.name,
       owner: documentRevision.owner.name,
       status: documentRevision.status,
-      type: documentRevision.document.documentType.documentTypeName,
+      type: documentRevision.document.documentType.documentTypeName || "",
     };
   };
 

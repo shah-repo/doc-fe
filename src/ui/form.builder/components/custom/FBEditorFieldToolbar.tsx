@@ -15,13 +15,13 @@ const FBEditorFieldToolbar: React.FunctionComponent<FBEditorWrapperProps> = ({
     flexDirection="row-reverse"
     {...props}
   >
-    <Box>
+    <Box zIndex="tooltip">
       <RemoveCircleOutlineIcon
-        onClick={formBuilderStore.removeSchema(index)}
+        onClick={formBuilderStore.removeSchemaItem(index)}
         color="error"
       />
     </Box>
-    <Box pr={2}>
+    <Box pr={2} zIndex="tooltip">
       <BorderColorIcon
         onClick={editorStore.editorTypeEdit(index)}
         color="primary"

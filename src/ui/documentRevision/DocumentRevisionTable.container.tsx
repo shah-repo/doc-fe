@@ -1,13 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Route, RouteComponentProps, Switch } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom";
+import { authSelectors } from "../../state/ducks/auth";
 import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
+import DocumentRevisionTable from "./DocumentRevisionTable.presenter";
 import { generateDocumentRevisionVersionPath } from "./pathGenerators";
-import DocumentRevisionTable from './DocumentRevisionTable.presenter';
-import { authSelectors } from "../../state/ducks/auth";
 
 interface StateProps {
   loadAsyncState: AsyncState;

@@ -7,6 +7,7 @@ import {
 } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";
+import formBuilderStore from "../form.builder/stores/FBStore";
 import useAsync from "../hooks/useAsync";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import {
@@ -50,6 +51,9 @@ export const DocumentRevisionUpdateContainer: React.FunctionComponent<
   const async = useAsync<DocumentRevision>({
     onSuccess: () => {
       loadAudit(documentRevision.id);
+    },
+    onError: () => {
+      formBuilderStore.reset();
     },
   });
 
