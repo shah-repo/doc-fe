@@ -57,6 +57,7 @@ export const Approvers: React.FunctionComponent<Props> = ({
           isMulti: true,
           isClearable: false,
           styles,
+          backspaceRemovesValue: false,
         }}
         options={availableApprovers}
       />
