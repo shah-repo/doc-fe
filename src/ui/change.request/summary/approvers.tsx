@@ -11,6 +11,7 @@ import { Approval, DataProps } from "../../../state/ducks/common";
 import SummaryField from "../../common/summary/base";
 import Text from "../../components/Text";
 import styles from "./styles";
+import DateTime from "../../components/DateTime";
 
 export type Props = DataProps<Approval[]> & WithStyles<typeof styles>;
 
@@ -22,7 +23,15 @@ export const Approvers: React.FunctionComponent<Props> = ({ classes, dataProp })
         <Typography variant="subtitle1" component="span">{approver.name}</Typography>
         <Typography variant="body2" component="span">
           {` | ${status}`}
-          {reviewedAt && <Text message={` | ${getFormattedDateString(reviewedAt)}`} />}
+          {reviewedAt &&
+            <span>
+              |&nbsp;
+              <DateTime
+                value={reviewedAt}
+                format="LLL"
+              />
+            </span>
+          }
         </Typography>
       </Box>
     );
