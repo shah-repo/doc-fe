@@ -202,117 +202,112 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <Grid
-      container={true}
+      item={true}
       direction="column"
       justify="center"
       alignItems="center"
       className={classes.container}
+      lg={isDisabled ? 12 : 7}
+      sm={isDisabled ? 12 : 10}
+      xs={12}
     >
-      <Grid
-        item={true}
-        lg={isDisabled ? 12 : 7}
-        sm={isDisabled ? 12 : 10}
-        xs={12}
+      <FormWrapper
+        dirty={dirty}
+        initialValues={initialValues}
+        resetForm={resetForm}
       >
-        <FormWrapper
+        <ScrollToError
+          isSubmitting={isSubmitting}
+          isValidating={isValidating}
+          errors={errors}
+        />
+        <PromptIfDirty
           dirty={dirty}
-          initialValues={initialValues}
-          resetForm={resetForm}
-        >
-          <ScrollToError
-            isSubmitting={isSubmitting}
-            isValidating={isValidating}
-            errors={errors}
-          />
-          <PromptIfDirty
-            dirty={dirty}
-            doNotPrompt={doNotPrompt}
-            onDirtyFlagChange={onDirtyFlagChange}
-          />
-          <FormMessage asyncState={asyncState} />
-          <FormProgress asyncState={asyncState} />
-
-          <InputField
-            name="name"
-            label="document.title"
-            inputProps={{ multiline: true, rows: "2" }}
-            validate={validator(required)}
-          />
-          <TextEditorField
-            name="description"
-            label="common.description"
-            validate={validator(required)}
-          />
-          <SelectField
-            name="document.documentType.id"
-            label="document.type"
-            selectProps={{
-              inputProps: { id: "documentType", disabled: typeIsDisabled},
-              onChange: handleTypeChange,
-            }}
-            options={documentTypes}
-            validate={validator(required)}
-            includeEmpty={false}
-          />
-          <InputField
-            name="document.docId"
-            label="common.documentId"
-            inputProps={{
-              id: "docId",
-              value: docIdValue,
-              disabled: isDisabled,
-              onChange: handleDocIdChange,
-            }}
-          />
-          {renderRevisionStageDropdown}
-          <AutcompleteField
-            name="referenceTo"
-            label="documentRevision.form.references"
-            autocompleteProps={{
-              id: "referenceTo",
-              isMulti: true,
-              closeMenuOnSelect: false,
-            }}
-            options={availableReferences}
-            onClick={openReference}
-          />
-          {renderReferences()}
-          <CheckboxField name="retrain" label="document.revision.trainingRequired"/>
-          <AttachmentsField />
-          {renderTypeOfRevisionChange()}
-          {documentRevisionStore.outputActive && (
-            <Box mt={4}>
-              <SelectField
-                name="formTemplate.outputDocumentType.id"
-                label="document.output.type"
-                selectProps={{
-                  inputProps: { id: "formTemplate.outputDocumentType" },
-                }}
-                options={documentTypes}
-                includeEmpty={false}
-              />
-            </Box>
-          )}
-          {formBuilderStore.active && (
-            <Box mt={5}>
-               <FBWorkspace />
-            </Box>
-          )}
-          <Box mt={5}>
-            <Grid
-              item={true}
-              container={true}
-              alignItems="flex-end"
-              direction="column"
-            >
-              <SubmitButton
-                asyncState={asyncState}
-                label={isDisabled ? "common.save" : "navigation.createDocument"}
-              />
-            </Grid>
+          doNotPrompt={doNotPrompt}
+          onDirtyFlagChange={onDirtyFlagChange}
+        />
+        <FormMessage asyncState={asyncState} />
+        <FormProgress asyncState={asyncState} />
+        <InputField
+          name="name"
+          label="document.title"
+          inputProps={{ multiline: true, rows: "2" }}
+          validate={validator(required)}
+        />
+        <TextEditorField
+          name="description"
+          label="common.description"
+          validate={validator(required)}
+        />
+        <SelectField
+          name="document.documentType.id"
+          label="document.type"
+          selectProps={{
+            inputProps: { id: "documentType", disabled: typeIsDisabled},
+            onChange: handleTypeChange,
+          }}
+          options={documentTypes}
+          validate={validator(required)}
+          includeEmpty={false}
+        />
+        <InputField
+          name="document.docId"
+          label="common.documentId"
+          inputProps={{
+            id: "docId",
+            value: docIdValue,
+            disabled: isDisabled,
+            onChange: handleDocIdChange,
+          }}
+        />
+        {renderRevisionStageDropdown}
+        <AutcompleteField
+          name="referenceTo"
+          label="documentRevision.form.references"
+          autocompleteProps={{
+            id: "referenceTo",
+            isMulti: true,
+            closeMenuOnSelect: false,
+          }}
+          options={availableReferences}
+          onClick={openReference}
+        />
+        {renderReferences()}
+        <CheckboxField name="retrain" label="document.revision.trainingRequired"/>
+        <AttachmentsField />
+        {renderTypeOfRevisionChange()}
+        {documentRevisionStore.outputActive && (
+          <Box mt={4}>
+            <SelectField
+              name="formTemplate.outputDocumentType.id"
+              label="document.output.type"
+              selectProps={{
+                inputProps: { id: "formTemplate.outputDocumentType" },
+              }}
+              options={documentTypes}
+              includeEmpty={false}
+            />
           </Box>
-        </FormWrapper>
-      </Grid>
+        )}
+        {formBuilderStore.active && (
+          <Box mt={5}>
+             <FBWorkspace />
+          </Box>
+        )}
+        <Box mt={5}>
+          <Grid
+            item={true}
+            container={true}
+            alignItems="flex-end"
+            direction="column"
+          >
+            <SubmitButton
+              asyncState={asyncState}
+              label={isDisabled ? "common.save" : "navigation.createDocument"}
+            />
+          </Grid>
+        </Box>
+      </FormWrapper>
     </Grid>
   );
 };
