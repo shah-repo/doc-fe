@@ -43,7 +43,7 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
       if (!multiple) {
         return form!.setFieldValue(name, attachment);
       }
-      const attachments: Attachment[] = [...field!.value] || [];
+      const attachments: Attachment[] = field!.value ? [...field!.value] : [];
       attachments.push(attachment!);
       form!.setFieldValue(name, attachments);
       if (formBuilderStore.mode === "design") { return; }
