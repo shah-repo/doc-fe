@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import { Formik, FormikActions, FormikProps } from "formik";
-import _, { Dictionary } from "lodash";
+import _ from "lodash";
 import React from "react";
 import { connect } from "react-redux";
 import {
@@ -22,7 +22,6 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
-import formBuilderStore from "../../form.builder/stores/FBStore";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
 

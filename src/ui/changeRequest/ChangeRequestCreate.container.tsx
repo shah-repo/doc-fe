@@ -24,7 +24,6 @@ export const DEFAULT_INITIAL_VALUES = (): ChangeRequest => {
     title: "",
     description: "",
     justifications: { description: "", attachments: [] },
-    assessments: { design: {}, process: {}, regulatory: {} },
     implementationPlan: { tasks: [], attachments: [] },
     approvals: [],
     documentRevisions: [],

@@ -77,7 +77,8 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
       <FormWrapper
         dirty={dirty}
         resetForm={resetForm}
-        initialValues={initialValues}>
+        initialValues={initialValues}
+      >
         <ScrollToError
           isSubmitting={isSubmitting}
           isValidating={isValidating}
@@ -118,7 +119,8 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
             item={true}
             container={true}
             alignItems="flex-end"
-            direction="column">
+            direction="column"
+          >
             <div>
               <AssessmentFormControlsContainer changeRequest={changeRequest} />
               <SubmitButton

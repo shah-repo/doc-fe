@@ -23,9 +23,9 @@ const createNestedObject = (value: NestedObject = { description: "", attachments
 });
 
 const createAssessment = (value: Assessment = {
-  design: {reasoning: null, attachments: null},
-  process: {reasoning: null, attachments: null},
-  regulatory: {reasoning: null, attachments: null},
+  design: {reasoning: null, attachments: []},
+  process: {reasoning: null, attachments: []},
+  regulatory: {reasoning: null, attachments: []},
 }) => ({
   design: { reasoning: value.design.reasoning, attachments: value.design.attachments },
   process: { reasoning: value.process.reasoning, attachments: value.process.attachments },
