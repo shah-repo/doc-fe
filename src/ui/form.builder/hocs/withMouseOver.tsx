@@ -43,7 +43,8 @@ export function withMouseOver<T extends FBEditorWrapperProps>(
     }
 
     private editSchemaItem = () => {
-      editorStore.editorTypeEdit(this.props.index);
+      const index = (this.props.index || 0) as number;
+      editorStore.editorTypeEdit(index, "update");
     }
 
     private toolbarMargin = (): number => {

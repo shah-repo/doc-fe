@@ -37,7 +37,7 @@ const FBEditorWrapper: React.FunctionComponent<FBEditorWrapperProps> = ({
         <DragIndicatorIcon  />
       </Box>
     </Box>
-    <FBAddFieldButton visibility={visibility} />
+    <FBAddFieldButton visibility={visibility} {...props} />
   </Box >
 );
 
