@@ -78,7 +78,7 @@ export const Container: React.FunctionComponent<Props> = ({
   const validate = (values: ChangeRequestFormValues) => {
     const errors: FormikErrors<any> = {};
 
-    if (values.approvals.length === 0) {
+    if (!values.approvals || values.approvals.length === 0) {
       errors.approvals = "validators.approversRequired";
     }
 
