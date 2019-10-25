@@ -13,7 +13,7 @@ export const withEditorRenderer =
 (other: FBEditorFormProps) =>
 (props: FormikProps<FBTemplateSchema>) => {
 
-  const { type, index } = other;
+  const { type, index, mode } = other;
   const { includeNote, includeOther, fieldName } = props.values;
   const InputType = FBFieldEditorComponent[type as string];
 
@@ -25,11 +25,12 @@ export const withEditorRenderer =
       ...props.values,
       includeNote: includeNote || includeOther,
     };
-    formBuilderStore.schema[index] = schema;
+    const removeEl = (mode === "create") ? 0 : 1;
+    formBuilderStore.schema.splice(index, removeEl, schema);
     editorStore.open = false;
   };
 
-  const buttonLabel = (formBuilderStore.schema[index] === undefined)
+  const buttonLabel = mode === "create"
     ? "form.builder.add.field"
     : "common.save";
 

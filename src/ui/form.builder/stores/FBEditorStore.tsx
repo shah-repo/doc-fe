@@ -5,16 +5,20 @@ import FBButton from "../components/inputs/FBButton";
 import { FBEditorSectionConfig } from "../defaults/editor";
 import { withEditorRenderer } from "../hocs/withEditorRenderer";
 import FBEditorSection from "../main/editor/FBEditorSection";
-import { FBEditorElementType } from "../types/editor";
+import { FBEditorElementType, FBEditorModeType } from "../types/editor";
 import { FBTemplateSchema } from "../types/store";
 import formBuilderStore from "./FBStore";
 
 export class FBEditorStore {
   @observable public open: boolean = false;
-  @observable public content?: React.ReactNode = undefined;
-  @observable public title?: string = undefined;
+  @observable public content?: React.ReactNode;
+  @observable public title?: string;
+  private editorIndex: number = 0;
+  private editorMode: FBEditorModeType = "create";
 
-  @action public setOpen = () => {
+  @action public setOpen = (forIndex: number, withMode: FBEditorModeType) => () => {
+    this.editorIndex = forIndex;
+    this.editorMode = withMode;
     this.open = true;
     this.content = this.sections();
     this.title = "";
@@ -22,6 +26,7 @@ export class FBEditorStore {
 
   @action public reset = () => {
     this.open = false;
+    this.editorIndex = 0;
     setTimeout(() => {
       this.content = undefined;
       this.title = undefined;
@@ -38,15 +43,16 @@ export class FBEditorStore {
         initialValues={initialValues || {}}
         render={withEditorRenderer({
           type,
-          index: initialValues ? initialValues.index : formBuilderStore.schema.length,
+          index: this.editorIndex,
+          mode: this.editorMode,
         })}
       />
     );
     this.title = title || "form.builder.create.field";
   }
 
-  @action public editorTypeEdit = (index?: number) => () => {
-    if (index === undefined) { return; }
+  @action public editorTypeEdit = (index: number, withMode: FBEditorModeType) => () => {
+    this.editorMode = withMode;
     const schema = formBuilderStore.schema[index];
     const { type } = schema;
 

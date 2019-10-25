@@ -9,7 +9,6 @@ const FBEditorDialog: React.FunctionComponent<{}> = () => (
     content={editorStore.content}
     title={editorStore.title}
     setDialogClose={editorStore.reset}
-    setDialogOpen={editorStore.setOpen}
   />
 );
 

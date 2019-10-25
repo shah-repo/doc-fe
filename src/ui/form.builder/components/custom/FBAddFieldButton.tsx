@@ -3,8 +3,10 @@ import { BoxProps } from "@material-ui/core/Box";
 import React from "react";
 import Text from "../../../components/Text";
 import editorStore from "../../stores/FBEditorStore";
+import { FBEditorWrapperProps } from "../../types/editor";
 
-const FBAddFieldButton: React.FunctionComponent<BoxProps> = ({
+const FBAddFieldButton: React.FunctionComponent<FBEditorWrapperProps> = ({
+  index = 0,
   ...props
 }) => (
   <Box
@@ -23,7 +25,7 @@ const FBAddFieldButton: React.FunctionComponent<BoxProps> = ({
       color="primary"
       fullWidth={true}
       size="medium"
-      onClick={editorStore.setOpen}
+      onClick={editorStore.setOpen(index + 1, "create")}
     >
       <Text translation="form.builder.add.field" />
     </Button>

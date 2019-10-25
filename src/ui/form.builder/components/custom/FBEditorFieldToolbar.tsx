@@ -7,7 +7,7 @@ import formBuilderStore from "../../stores/FBStore";
 import { FBEditorWrapperProps } from "../../types/editor";
 
 const FBEditorFieldToolbar: React.FunctionComponent<FBEditorWrapperProps> = ({
-  index,
+  index = 0,
   ...props
 }) => (
   <Box
@@ -23,7 +23,7 @@ const FBEditorFieldToolbar: React.FunctionComponent<FBEditorWrapperProps> = ({
     </Box>
     <Box pr={2} zIndex="tooltip">
       <BorderColorIcon
-        onClick={editorStore.editorTypeEdit(index)}
+        onClick={editorStore.editorTypeEdit(index, "update")}
         color="primary"
       />
     </Box>

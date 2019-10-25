@@ -1,6 +1,8 @@
 import { BoxProps } from "@material-ui/core/Box";
 import { FBFormDefaultProps, Subtract } from "./common";
 
+export type FBEditorModeType = "create" | "update";
+
 export interface FBEditorWrapperProps extends BoxProps, FBFormDefaultProps {
   indicatorVisibility?: "visible" | "hidden";
   toolbarMargin?: number;
@@ -41,4 +43,5 @@ export type FBEditorElementType =
 export interface FBEditorFormProps {
   type: FBEditorElementType;
   index: number;
+  mode: FBEditorModeType;
 }
