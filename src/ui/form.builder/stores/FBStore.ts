@@ -110,20 +110,29 @@ export class FBStore {
     this.setFormTemplate(formTemplate);
   };
 
-  @action public importSchema = (schema: FBTemplateSchema[]) => {
-    return (this.schema = schema);
+  @action public importSchema = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const reader = new FileReader();
+    reader.onload = (event: any) => {
+      const schema = JSON.parse(event.target.result);
+      this.schema = schema;
+    };
+    reader.readAsText(e.currentTarget.files![0]);
   };
 
-  @action public exportSchema = (schemaName: string) => {
+  @action public exportSchema = () => {
     const dataStr =
       "data:text/json;charset=utf-8," +
       encodeURIComponent(JSON.stringify(this.schema));
     const anchor = document.createElement("a");
     anchor.style.display = "none";
     document.body.appendChild(anchor);
-    anchor.download = `${schemaName}.json`;
+    anchor.download = `${this.name}.json`;
     anchor.href = dataStr;
     anchor.click();
+  };
+
+  @action public setName = (name: string) => {
+    return (this.name = name);
   };
 
   @action private isDisabled = (): boolean => {

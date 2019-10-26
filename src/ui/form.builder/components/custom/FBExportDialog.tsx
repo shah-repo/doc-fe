@@ -1,66 +1,36 @@
-import { Box, Button, TextField } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import Text from "../../../components/Text";
-import VerticalAlignTopIcon from "@material-ui/icons/VerticalAlignTop";
-import React, { useState } from "react";
+
+import React from "react";
 import FBDialog from "../feedback/FBDialog";
 import formBuilderStore from "../../stores/FBStore";
-import { FBDialogInjectedProps } from "../../types/dialog";
-import { withDialogState } from "../../hocs/withDialogState";
+import { FBDialogProps } from "../../types/dialog";
+import FBButton from "../inputs/FBButton";
+import FBTextField from "../inputs/FBTextField";
 
-export interface FBExportDialogProps extends FBDialogInjectedProps {
-  Span: any;
-}
-
-const FBExportDialog: React.FunctionComponent<FBExportDialogProps> = ({
-  setDialogOpen,
-  setDialogClose,
-  open,
-  Span,
+const FBExportDialog: React.FunctionComponent<FBDialogProps> = ({
+  ...props
 }) => {
-  const [fileName, setFilename] = useState<string>("");
-
-  const handleOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilename(e.target.value);
+  const handleOnchange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    formBuilderStore.setName(event.currentTarget.value);
   };
-
-  const exportSchema = () => {
-    formBuilderStore.exportSchema(fileName);
-    setDialogClose();
-  };
-
-  const dialogContent = (
-    <Box my={3}>
-      <TextField
-        label={<Text translation="form.builder.filename" />}
-        onChange={handleOnchange}
-        fullWidth={true}
-        variant="outlined"
-      />
-      <Box display="flex" justifyContent="flex-end">
-        <Button onClick={exportSchema} color="primary" variant="contained">
-          <Text translation="common.download" />
-        </Button>
-      </Box>
-    </Box>
-  );
 
   return (
     <React.Fragment>
-      <FBDialog
-        open={open}
-        content={dialogContent}
-        title={`form.builder.export`}
-        setDialogClose={setDialogClose}
-        setDialogOpen={setDialogOpen}
-      />
-      <Button
-        component={Span}
-        onClick={setDialogOpen}
-        startIcon={<VerticalAlignTopIcon />}>
-        <Text translation="common.export" />
-      </Button>
+      <FBDialog title={`form.builder.export`} {...props}>
+        <FBTextField
+          onChange={handleOnchange}
+          label={"form.builder.filename"}
+        />
+        <Box display="flex" justifyContent="flex-end">
+          <FBButton
+            onClick={formBuilderStore.exportSchema}
+            label={"common.export"}
+          />
+        </Box>
+      </FBDialog>
     </React.Fragment>
   );
 };
 
-export default withDialogState(FBExportDialog);
+export default FBExportDialog;

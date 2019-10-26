@@ -1,20 +1,23 @@
 import { Box, Button } from "@material-ui/core";
 import VerticalAlignBottomIcon from "@material-ui/icons/VerticalAlignBottom";
+import VerticalAlignTopIcon from "@material-ui/icons/VerticalAlignTop";
 import Text from "../../../components/Text";
 import React from "react";
 import formBuilderStore from "../../stores/FBStore";
 import FBExportDialog from "./FBExportDialog";
+import { FBDialogProps } from "../../types/dialog";
+import { withDialogState } from "../../hocs/withDialogState";
+import FBButton from "../inputs/FBButton";
 
-const FBImportExport: React.FunctionComponent = () => {
+const FBImportExport: React.FunctionComponent<FBDialogProps> = ({
+  setDialogClose,
+  setDialogOpen,
+  open,
+}) => {
   const Span = (props: any) => <span {...props} />;
 
   const importSchema = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const reader = new FileReader();
-    reader.onload = (event: any) => {
-      const schema = JSON.parse(event.target.result);
-      formBuilderStore.importSchema(schema);
-    };
-    reader.readAsText(e.currentTarget.files![0]);
+    formBuilderStore.importSchema(e);
   };
 
   return (
@@ -23,6 +26,11 @@ const FBImportExport: React.FunctionComponent = () => {
       flexDirection="row"
       justifyContent="flex-end"
       alignItems="flex-end">
+      <FBExportDialog
+        setDialogClose={setDialogClose}
+        setDialogOpen={setDialogOpen}
+        open={open}
+      />
       <input
         hidden={true}
         id="upload-file"
@@ -30,13 +38,23 @@ const FBImportExport: React.FunctionComponent = () => {
         onChange={importSchema}
       />
       <label htmlFor="upload-file">
-        <Button component={Span} startIcon={<VerticalAlignBottomIcon />}>
-          <Text translation="common.import" />
-        </Button>
+        <FBButton
+          component={Span}
+          color="default"
+          startIcon={<VerticalAlignBottomIcon />}
+          label={"common.import"}
+        />
       </label>
-      <FBExportDialog Span={Span} />
+
+      <FBButton
+        component={Span}
+        color="default"
+        onClick={setDialogOpen}
+        startIcon={<VerticalAlignTopIcon />}
+        label={"common.export"}
+      />
     </Box>
   );
 };
 
-export default FBImportExport;
+export default withDialogState(FBImportExport);

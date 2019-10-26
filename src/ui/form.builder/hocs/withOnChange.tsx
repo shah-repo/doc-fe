@@ -6,15 +6,15 @@ import { FBOnChangeProps, Subtract } from "../types/common";
 export function withOnChange<T extends FBOnChangeProps>(
   Component: React.ComponentType<T>,
 ) {
-
-  class HOC extends React.Component<Subtract<T, Pick<FBOnChangeProps, "value"|"onChange">>> {
-
+  class HOC extends React.Component<
+    Subtract<T, Pick<FBOnChangeProps, "value">>
+  > {
     public render() {
-      const { field } = this.props;
+      const { field, onChange } = this.props;
       return (
         <Component
-          {...this.props as T}
-          onChange={this.handleChange()}
+          {...(this.props as T)}
+          onChange={(onChange && onChange()) || this.handleChange()}
           value={(field.value && field.value) || null}
         />
       );
@@ -23,7 +23,9 @@ export function withOnChange<T extends FBOnChangeProps>(
     private isEvent(
       value: React.ChangeEvent<HTMLInputElement>,
     ): value is React.ChangeEvent<HTMLInputElement> {
-      return (value as React.ChangeEvent<HTMLInputElement>).target !== undefined;
+      return (
+        (value as React.ChangeEvent<HTMLInputElement>).target !== undefined
+      );
     }
 
     private handleChange = () => (trigger: any) => {
@@ -31,18 +33,24 @@ export function withOnChange<T extends FBOnChangeProps>(
       let value: any;
 
       switch (true) {
-        case (trigger && this.isEvent(trigger)):
-          const target = (trigger as React.ChangeEvent<HTMLInputElement>).target;
+        case trigger && this.isEvent(trigger):
+          const target = (trigger as React.ChangeEvent<HTMLInputElement>)
+            .target;
           value = target.type === "checkbox" ? target.checked : target.value;
           break;
         default:
-            value = trigger;
+          value = trigger;
       }
       form.setFieldValue(field.name, value);
 
-      if (formBuilderStore.mode === "design") { return; }
-      formBuilderStore.values = {...formBuilderStore.values, [field.name as string]: value };
-    }
+      if (formBuilderStore.mode === "design") {
+        return;
+      }
+      formBuilderStore.values = {
+        ...formBuilderStore.values,
+        [field.name as string]: value,
+      };
+    };
   }
 
   return withFormik(HOC);
