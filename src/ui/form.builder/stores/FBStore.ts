@@ -116,7 +116,9 @@ export class FBStore {
       const schema = JSON.parse(event.target.result);
       this.schema = schema;
     };
-    reader.readAsText(e.currentTarget.files![0]);
+    if (e.currentTarget.files) {
+      reader.readAsText(e.currentTarget.files![0]);
+    }
   };
 
   @action public exportSchema = () => {
@@ -131,8 +133,10 @@ export class FBStore {
     anchor.click();
   };
 
-  @action public setName = (name: string) => {
-    return (this.name = name);
+  @action public setName = (
+    event: React.ChangeEvent<HTMLInputElement> | Date,
+  ) => {
+    console.log((event as React.ChangeEvent<HTMLInputElement>).target);
   };
 
   @action private isDisabled = (): boolean => {

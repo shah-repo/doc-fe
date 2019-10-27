@@ -9,10 +9,11 @@ export type Props = Omit<OutlinedTextFieldProps, "variant"> &
   FBFormDefaultProps &
   FBOnChangeProps;
 
-const FBTextField: React.FunctionComponent<Props> = ({
-  labelRenderer,
-  ...props
-}) => (
+const FBTextField: React.FunctionComponent<
+  Omit<Props, "onChange"> & {
+    onChange?: () => (e: React.ChangeEvent<HTMLInputElement> | Date) => any;
+  }
+> = ({ labelRenderer, ...props }) => (
   <Box mb={4} width="100%">
     {labelRenderer}
     <TextField

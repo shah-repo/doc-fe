@@ -14,32 +14,30 @@ export interface FBOptionRendererProps {
   optionsRenderer?: React.ReactNode[];
 }
 
-export type FBFormDefaultProps =
-  & FBLabelRendererProps
-  & FBOptionRendererProps
-  & {
-  name?: string;
-  index?: number;
-  type?: FBEditorElementType | string;
-  label?: string;
-  disabled?: boolean;
-  readOnly?: boolean;
-  className?: string;
-  gutter?: boolean;
-  options?: SelectOption[] | string;
-  includeOther?: boolean;
-  includeNote?: boolean;
-  optionNote?: string;
-  autocompleteList?: string;
-  isMulti?: boolean;
-  fieldName?: string;
-};
+export type FBFormDefaultProps = FBLabelRendererProps &
+  FBOptionRendererProps & {
+    name?: string;
+    index?: number;
+    type?: FBEditorElementType | string;
+    label?: string;
+    disabled?: boolean;
+    readOnly?: boolean;
+    className?: string;
+    gutter?: boolean;
+    options?: SelectOption[] | string;
+    includeOther?: boolean;
+    includeNote?: boolean;
+    optionNote?: string;
+    autocompleteList?: string;
+    isMulti?: boolean;
+    fieldName?: string;
+  };
 
-export type FBOnChangeProps =
-  & FormikHybridFieldProps
-  & Pick<SelectProps, "onChange" | "value">
-  & Pick<OutlinedTextFieldProps, "onChange">
-  & {
+export type FBOnChangeProps = FormikHybridFieldProps &
+  Pick<SelectProps, "onChange" | "value"> &
+  Pick<OutlinedTextFieldProps, "onChange"> & {
     value?: any;
-    onChange: () => (trigger: React.ChangeEvent<HTMLInputElement> | Date) => any;
+    onChange?: () => (
+      trigger: React.ChangeEvent<HTMLInputElement> | Date,
+    ) => any;
   };
