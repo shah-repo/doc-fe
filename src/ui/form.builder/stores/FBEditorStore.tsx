@@ -16,15 +16,11 @@ export class FBEditorStore {
   public editorMode: FBEditorModeType = "create";
 
   @action public setOpen = (forIndex: number = -1) => () => {
-    // tslint:disable-next-line: no-console
-    console.log("for index:" + forIndex)
     this.open = true;
     this.content = this.sections();
     this.title = "";
     this.editorIndex = forIndex + 1;
     this.editorMode = "create";
-    // tslint:disable-next-line: no-console
-    console.log("create at index:" + this.editorIndex);
   }
 
   @action public reset = () => {
@@ -57,8 +53,6 @@ export class FBEditorStore {
     const { type, index } = schema;
     this.editorIndex = index;
     this.editorMode = "update";
-    // tslint:disable-next-line: no-console
-    console.log("update at index:" + this.editorIndex);
     this.open = true;
     this.editorTypeRenderer(type, schema, "form.builder.edit.field")();
   }

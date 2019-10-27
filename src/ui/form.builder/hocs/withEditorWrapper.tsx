@@ -34,11 +34,9 @@ export function withEditorWrapper<T extends FBEditorWrapperProps>(
     }
 
     private removeSchemaItem = () => {
-      // tslint:disable-next-line: no-console
-      console.log("from editor index:" + this.props.index);
       formBuilderStore.removeSchemaItem(this.props.index);
     }
-    
+
     private editSchemaItem = () =>
       formBuilderStore.editSchemaItem(this.props.index);
 
