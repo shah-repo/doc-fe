@@ -136,7 +136,7 @@ export class FBStore {
   @action public setName = (
     event: React.ChangeEvent<HTMLInputElement> | Date,
   ) => {
-    console.log((event as React.ChangeEvent<HTMLInputElement>).target);
+    this.name = (event as React.ChangeEvent<HTMLInputElement>).target.value;
   };
 
   @action private isDisabled = (): boolean => {
