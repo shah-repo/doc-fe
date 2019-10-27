@@ -1,26 +1,22 @@
 import { BoxProps } from "@material-ui/core/Box";
 import { FBFormDefaultProps, Subtract } from "./common";
 
-export type FBEditorModeType = "create" | "update";
-
 export interface FBEditorWrapperProps extends BoxProps, FBFormDefaultProps {
   indicatorVisibility?: "visible" | "hidden";
   toolbarMargin?: number;
-  indicatorMargin?: boolean;
+  indicatorMargin?: number;
   removeSchemaItem?: () => any;
   editSchemaItem?: () => any;
 }
 
-export type FBEditorWrapperSubtractProps<T> = Subtract<T, Omit<FBEditorWrapperProps,
-  | "type"
-  | "label"
-  | "index"
->>;
+export type FBEditorWrapperSubtractProps<T> = Subtract<
+  T,
+  Omit<FBEditorWrapperProps, "type" | "label" | "index">
+>;
 
-export type FBEditorWrapperStateProps = Pick<FBEditorWrapperProps,
-  | "visibility"
-  | "toolbarMargin"
-  | "indicatorMargin"
+export type FBEditorWrapperStateProps = Pick<
+  FBEditorWrapperProps,
+  "visibility" | "toolbarMargin" | "indicatorMargin"
 >;
 
 export type FBEditorSectionType = "section" | "basicFields" | "lists";
@@ -39,6 +35,8 @@ export type FBEditorElementType =
   | "autocomplete"
   | "hyperlink"
   | "fileupload";
+
+export type FBEditorModeType = "create" | "update";
 
 export interface FBEditorFormProps {
   type: FBEditorElementType;
