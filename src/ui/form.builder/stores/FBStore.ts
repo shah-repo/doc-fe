@@ -60,6 +60,10 @@ export class FBStore {
     editorStore.editorTypeEdit(schema);
   }
 
+  @action public getSchema = (): FBTemplateSchema[] => {
+    return this.schema;
+  }
+
   @action public setSchema = (newSchema: FBTemplateSchema[]) => {
     newSchema.map((o, i) => {
       o.index = i;
