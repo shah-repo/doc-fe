@@ -283,6 +283,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               }}
               options={documentTypes}
               includeEmpty={false}
+              validate={validator(required)}
             />
           </Box>
         )}

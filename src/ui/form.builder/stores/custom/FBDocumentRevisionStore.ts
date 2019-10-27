@@ -42,6 +42,7 @@ export class FBDocumentRevisionStore {
   @computed public get outputActive(): boolean {
     return formBuilderStore.active && this.mode === "create";
   }
+
   @observable public mode: FBDocumentRevisionMode = "create";
   public fromDocumentRevision?: DocumentRevision = undefined;
   public documentTypesById: DocumentTypeByIdState = {};
