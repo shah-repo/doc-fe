@@ -7,26 +7,28 @@ import { withEditorRenderer } from "../hocs/withEditorRenderer";
 import FBEditorSection from "../main/editor/FBEditorSection";
 import { FBEditorElementType, FBEditorModeType } from "../types/editor";
 import { FBTemplateSchema } from "../types/store";
-import formBuilderStore from "./FBStore";
 
 export class FBEditorStore {
   @observable public open: boolean = false;
-  @observable public content?: React.ReactNode;
-  @observable public title?: string;
-  private editorIndex: number = 0;
-  private editorMode: FBEditorModeType = "create";
+  @observable public content?: React.ReactNode = undefined;
+  @observable public title?: string = undefined;
+  public editorIndex: number = 0;
+  public editorMode: FBEditorModeType = "create";
 
-  @action public setOpen = (forIndex: number, withMode: FBEditorModeType) => () => {
-    this.editorIndex = forIndex;
-    this.editorMode = withMode;
+  @action public setOpen = (forIndex: number = -1) => () => {
+    // tslint:disable-next-line: no-console
+    console.log("for index:" + forIndex)
     this.open = true;
     this.content = this.sections();
     this.title = "";
+    this.editorIndex = forIndex + 1;
+    this.editorMode = "create";
+    // tslint:disable-next-line: no-console
+    console.log("create at index:" + this.editorIndex);
   }
 
   @action public reset = () => {
     this.open = false;
-    this.editorIndex = 0;
     setTimeout(() => {
       this.content = undefined;
       this.title = undefined;
@@ -51,24 +53,28 @@ export class FBEditorStore {
     this.title = title || "form.builder.create.field";
   }
 
-  @action public editorTypeEdit = (index: number, withMode: FBEditorModeType) => () => {
-    this.editorMode = withMode;
-    const schema = formBuilderStore.schema[index];
-    const { type } = schema;
-
+  @action public editorTypeEdit = (schema: FBTemplateSchema) => {
+    const { type, index } = schema;
+    this.editorIndex = index;
+    this.editorMode = "update";
+    // tslint:disable-next-line: no-console
+    console.log("update at index:" + this.editorIndex);
     this.open = true;
     this.editorTypeRenderer(type, schema, "form.builder.edit.field")();
   }
 
-  @action private sections = () => Object.keys(FBEditorSectionConfig).map((key) => (
-    <FBEditorSection label={`form.builder.${key as string}`}>
+  @action private sections = () => Object.keys(FBEditorSectionConfig).map((key, i) => (
+    <FBEditorSection
+      key={`form.builder.${key as string}-${i}`}
+      label={`form.builder.${key as string}`}>
       {this.generateElements(FBEditorSectionConfig[key])}
     </FBEditorSection>
   ))
 
   @action private generateElements = (elements: FBEditorElementType[]) =>
-    elements.map((el) => (
+    elements.map((el, i) => (
       <FBButton
+        key={`form.builder.${el as string}-${i}`}
         label={`form.builder.${el as string}`}
         onClick={this.editorTypeRenderer(el)}
       />

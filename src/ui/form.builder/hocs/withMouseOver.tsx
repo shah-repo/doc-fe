@@ -7,77 +7,77 @@ import sortableStore from "../stores/FBSortableStore";
 import formBuilderStore from "../stores/FBStore";
 import { FBEditorWrapperProps, FBEditorWrapperSubtractProps } from "../types/editor";
 
-export function withMouseOver<T extends FBEditorWrapperProps>(
-  Component: React.ComponentType<T>,
-) {
+// export function withMouseOver<T extends FBEditorWrapperProps>(
+//   Component: React.ComponentType<T>,
+// ) {
 
-  class HOC extends React.Component<FBEditorWrapperSubtractProps<T>> {
+//   class HOC extends React.Component<FBEditorWrapperSubtractProps<T>> {
 
-    public state: Pick<BoxProps, "visibility"> = {
-      visibility: "hidden",
-    };
+//     public state: Pick<BoxProps, "visibility"> = {
+//       visibility: "hidden",
+//     };
 
-    public render() {
-      return (
-        <Component
-          {...this.props as T}
-          visibility={this.state.visibility}
-          indicatorVisibility={this.isIndicatorVisible()}
-          toolbarMargin={this.toolbarMargin()}
-          indicatorMargin={this.indicatorMargin()}
-          removeSchemaItem={this.removeSchemaItem}
-          editSchemaItem={this.editSchemaItem}
-          // onMouseDown={this.onMouseDown()}
-          onMouseOver={this.onMouseOver}
-          onMouseLeave={this.onMouseLeave}
-        />
-      );
-    }
+//     public render() {
+//       return (
+//         <Component
+//           {...this.props as T}
+//           visibility={this.state.visibility}
+//           indicatorVisibility={this.isIndicatorVisible()}
+//           toolbarMargin={this.toolbarMargin()}
+//           indicatorMargin={this.indicatorMargin()}
+//           removeSchemaItem={this.removeSchemaItem}
+//           editSchemaItem={this.editSchemaItem}
+//           // onMouseDown={this.onMouseDown()}
+//           onMouseOver={this.onMouseOver}
+//           onMouseLeave={this.onMouseLeave}
+//         />
+//       );
+//     }
 
-    // private onMouseDown = () => () => {
+//     // private onMouseDown = () => () => {
 
-    // }
+//     // }
 
-    private removeSchemaItem = () => {
-      formBuilderStore.removeSchemaItem(this.props.index);
-    }
+//     private removeSchemaItem = () => {
+//       formBuilderStore.removeSchemaItem(this.props.index);
+//     }
 
-    private editSchemaItem = () => {
-      const index = (this.props.index || 0) as number;
-      editorStore.editorTypeEdit(index, "update");
-    }
+//     private editSchemaItem = () => {
+//       const index = (this.props.index || 0) as number;
+//       editorStore.editorTypeEdit(index, "update");
+//     }
 
-    private toolbarMargin = (): number => {
-      if (!this.isSection() && this.hasLabel()) {
-        return -4;
-      }
-      return 0;
-    }
+//     private toolbarMargin = (): number => {
+//       if (!this.isSection() && this.hasLabel()) {
+//         return -4;
+//       }
+//       return 0;
+//     }
 
-    private indicatorMargin = (): number => {
-      return this.isSection() ? 4 : 0;
-    }
+//     private indicatorMargin = (): number => {
+//       return this.isSection() ? 4 : 0;
+//     }
 
-    private isSection = (): boolean => {
-      return _.includes(FBEditorSectionConfig.section, this.props.type);
-    }
+//     private isSection = (): boolean => {
+//       return _.includes(FBEditorSectionConfig.section, this.props.type);
+//     }
 
-    private hasLabel = (): boolean => {
-      return this.props.label !== undefined;
-    }
+//     private hasLabel = (): boolean => {
+//       return this.props.label !== undefined;
+//     }
 
-    private isIndicatorVisible = (): "visible" | "hidden" =>
-      formBuilderStore.mode === "design" ? "visible" : "hidden"
+//     private isIndicatorVisible = (): "visible" | "hidden" =>
+//       formBuilderStore.mode === "design" ? "visible" : "hidden"
 
-    private onMouseOver = () => {
-      if (formBuilderStore.mode === "design" && sortableStore.mode === "inactive") {
-        this.setState({ visibility: "visible" });
-      }
-    }
+//     private onMouseOver = () => {
+//       if (formBuilderStore.mode === "design" && sortableStore.mode === "inactive") {
+//         this.setState({ visibility: "visible" });
+//       }
+//     }
 
-    private onMouseLeave = () => {
-      this.setState({ visibility: "hidden" });
-    }
-  }
-  return HOC;
-}
+//     private onMouseLeave = () => {
+//       this.setState({ visibility: "hidden" });
+//     }
+//   }
+//   return HOC;
+// }

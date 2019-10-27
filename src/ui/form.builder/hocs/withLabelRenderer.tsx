@@ -23,7 +23,7 @@ export function withLabelRenderer<T extends FBFormDefaultProps>(
     }
 
     private labelRenderer = () => (
-      <Box mb={0.5} fontSize="h6.fontSize" fontWeight={300}>
+      <Box mb={0.5} fontSize="h6.fontSize" fontWeight={300} width="70%">
         <Text message={this.props.label as string} />
       </Box>
     )

@@ -13,6 +13,7 @@ const FBCheckbox: React.FunctionComponent<FBCheckboxProps> = ({
   includeNote,
   disabled,
   readOnly,
+  labelRenderer,
   ...props
 }) => (
   <Box mb={gutter ? 4 : 0}>
