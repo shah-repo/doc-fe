@@ -133,7 +133,7 @@ export class FBStore {
     anchor.click();
   };
 
-  @action public setName = (
+  @action public setName = () => (
     event: React.ChangeEvent<HTMLInputElement> | Date,
   ) => {
     this.name = (event as React.ChangeEvent<HTMLInputElement>).target.value;

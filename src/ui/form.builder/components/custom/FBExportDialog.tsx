@@ -13,8 +13,7 @@ const FBExportDialog: React.FunctionComponent<FBDialogProps> = ({
     <React.Fragment>
       <FBDialog title={`form.builder.export`} {...props}>
         <FBTextField
-          onChange={() => (e: React.ChangeEvent<HTMLInputElement> | Date) =>
-            formBuilderStore.setName(e)}
+          onChange={formBuilderStore.setName}
           label={"form.builder.filename"}
         />
         <Box display="flex" justifyContent="flex-end">

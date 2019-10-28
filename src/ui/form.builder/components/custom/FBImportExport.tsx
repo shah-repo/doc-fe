@@ -16,16 +16,13 @@ const FBImportExport: React.FunctionComponent<FBDialogProps> = ({
 }) => {
   const Span = (props: any) => <span {...props} />;
 
-  const importSchema = (e: React.ChangeEvent<HTMLInputElement>) => {
-    formBuilderStore.importSchema(e);
-  };
-
   return (
     <Box
       display="flex"
       flexDirection="row"
       justifyContent="flex-end"
-      alignItems="flex-end">
+      alignItems="flex-end"
+    >
       <FBExportDialog
         setDialogClose={setDialogClose}
         setDialogOpen={setDialogOpen}
@@ -35,7 +32,7 @@ const FBImportExport: React.FunctionComponent<FBDialogProps> = ({
         hidden={true}
         id="upload-file"
         type="file"
-        onChange={importSchema}
+        onChange={formBuilderStore.importSchema}
       />
       <label htmlFor="upload-file">
         <FBButton
