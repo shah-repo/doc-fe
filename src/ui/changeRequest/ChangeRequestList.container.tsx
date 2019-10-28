@@ -37,8 +37,12 @@ const ChangeRequestContainer: React.FunctionComponent<ChangeRequestContainerProp
   changeRequests,
 }) => {
   const loadAction = () => loadChangeRequests();
-  const editChangeRequest = (changeRequestId: string) => () => history.push(generateChangeRequestEditPath(changeRequestId));
-  const previewChangeRequest = (changeRequestId: string) => () => history.push(generateChangeRequestPreviewPath(changeRequestId));
+  const editChangeRequest = (
+    changeRequestId: string,
+    ) => () => history.push(generateChangeRequestEditPath(changeRequestId));
+  const previewChangeRequest = (
+    changeRequestId: string,
+    ) => () => history.push(generateChangeRequestPreviewPath(changeRequestId));
 
   return (
     <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>
@@ -52,6 +56,6 @@ const ChangeRequestContainer: React.FunctionComponent<ChangeRequestContainerProp
   );
 };
 
-export default connect<StateProps, DispatchProps, OwnProps,ApplicationState>(mapStateToProps, {
+export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
   loadChangeRequests: changeRequestsActions.loadList,
 })(ChangeRequestContainer);

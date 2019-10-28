@@ -1,17 +1,17 @@
-import React from "react";
 import Button, { ButtonProps } from "@material-ui/core/Button";
-import Text from "../../../components/Text";
+import React from "react";
 import { connect } from "react-redux";
 import {
   changeRequestsActions,
   ChangeRequestTransition,
   ChangeRequestTransitionResponse,
 } from "../../../../state/ducks/changeRequest";
-import useAsync from "../../../hooks/useAsync";
 import { ApplicationState } from "../../../../state/reducers";
 import { AsyncStatus } from "../../../../state/types";
 import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";
+import Text from "../../../components/Text";
+import useAsync from "../../../hooks/useAsync";
 
 interface OwnProps {
   transition: ChangeRequestTransition;

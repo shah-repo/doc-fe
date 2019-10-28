@@ -1,4 +1,5 @@
 import _ from "lodash";
+import moment from "moment-timezone";
 import {
   DocumentRevision,
   DocumentRevisionStatus,
@@ -6,7 +7,6 @@ import {
 } from "../../../state/ducks/documentRevisions";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { DocumentRevisionUserProps, ReleasedDateOptions } from "./types";
-import moment from "moment-timezone";
 
 const isDraft = (documentRevision: DocumentRevision) =>
   documentRevision.status === DocumentRevisionStatus.Draft;

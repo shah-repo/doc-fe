@@ -1,7 +1,4 @@
-import {
-  Toolbar,
-  Typography,
-} from "@material-ui/core";
+import { Toolbar, Typography } from "@material-ui/core";
 import React from "react";
 import {
   DataProps,
@@ -33,7 +30,8 @@ const HeaderField: React.FunctionComponent<Props> = ({
         variant={TypographySize[size]}
         color={TypographyColor[color]}
         gutterBottom={true}
-        style={{ flex: 1 }}>
+        style={{ flex: 1 }}
+      >
         <Text message={dataProp} />
       </Typography>
       {actionsRenderer && actionsRenderer()}

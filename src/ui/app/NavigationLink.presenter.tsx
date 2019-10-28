@@ -1,8 +1,8 @@
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
-import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
-import FolderOutlinedIcon from '@material-ui/icons/FolderOutlined';
+import DashboardOutlinedIcon from "@material-ui/icons/DashboardOutlined";
+import FolderOutlinedIcon from "@material-ui/icons/FolderOutlined";
 import classNames from "classnames";
 import React, { ReactNode } from "react";
 import { NavLink } from "react-router-dom";

@@ -10,6 +10,7 @@ describe("FBTextField component tests", () => {
   interface TestFormValues {
     label: string;
   }
+  // tslint:disable-next-line: no-unused-declaration
   let formProps: FormikProps<TestFormValues>;
 
   const getWrapper = (props: Partial<Props>): ReactWrapper => {

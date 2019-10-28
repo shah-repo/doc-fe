@@ -60,7 +60,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
     <SubmitButton asyncState={asyncState} label="document.save" errors={errors} />
   );
 
-  const renderImplementationPlan = dataProp.implementationPlan && 
+  const renderImplementationPlan = dataProp.implementationPlan &&
     (dataProp.implementationPlan.attachments.length > 0 || dataProp.implementationPlan.tasks.length > 0) &&
     (
       <ImplementationPlan

@@ -6,7 +6,6 @@ import {
   WithStyles,
 } from "@material-ui/core";
 import { FormikProps } from "formik";
-import _ from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
 import { Link } from "react-router-dom";

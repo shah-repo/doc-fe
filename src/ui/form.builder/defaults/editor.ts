@@ -16,8 +16,8 @@ import FBTextEditorField from "../components/inputs/FBTextEditorField";
 import FBTextField from "../components/inputs/FBTextField";
 import FBSectionBox from "../components/layout/FBSectionBox";
 import FBSubSectionBox from "../components/layout/FBSubSectionBox";
-import FBLink from "../components/navigation/FBLink";
 import FBFileUpload from "../components/navigation/FBFileUpload";
+import FBLink from "../components/navigation/FBLink";
 import { FBEditorElementType } from "../types/editor";
 
 export interface FBEditorDict {

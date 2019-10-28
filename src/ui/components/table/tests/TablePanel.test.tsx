@@ -17,6 +17,7 @@ describe("TablePanel component tests", () => {
 
   const data: Document[] = [getDocument()];
   const noRowsTranslation = "table.no.results.found";
+  // tslint:disable-next-line: no-unused-declaration
   let isActionSelected: boolean = false;
 
   const onActionSelect = ({ rowData, actionType }: TableSelectionProps<Document>) => () => {

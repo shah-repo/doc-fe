@@ -118,7 +118,9 @@ const makeGetAudit = () => {
 
 const getLoadAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadAsyncInfo;
 const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadListAsyncInfo;
-const getLoadDocumentAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadDocumentAsyncInfo;
+const getLoadDocumentAsyncState = (
+  state: ApplicationState,
+): AsyncState => state.documentRevisions.loadDocumentAsyncInfo;
 const getLoadAuditAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadAuditAsyncInfo;
 
 export default {

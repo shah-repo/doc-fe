@@ -1,10 +1,10 @@
 import { shallow } from "enzyme";
-import React from "react";
-import { ListContainer, Props} from "./container";
-import { getDocumentRevision } from "../../../state/ducks/documentRevisions/tests/factories";
 import faker from "faker";
+import React from "react";
+import { getDocumentRevision } from "../../../state/ducks/documentRevisions/tests/factories";
 import { ASYNC_DEFAULT_STATE } from "../../hooks/useAsync";
 import getRouteComponentProps from "../../tests/helpers/getRouteComponentProps";
+import { ListContainer, Props} from "./container";
 import ListPresenter from "./presenter";
 
 describe("ListContainer tests", () => {

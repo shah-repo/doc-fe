@@ -36,7 +36,8 @@ const TableColumnAction = <T extends any>(): React.FunctionComponent<
     <Fab
       color={actionType === "ADD" ? "secondary" : undefined}
       size="small"
-      onClick={handleClick({ rowData, actionType })}>
+      onClick={handleClick({ rowData, actionType })}
+    >
       {iconRenderer()}
     </Fab>
   );

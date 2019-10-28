@@ -1,4 +1,4 @@
-import _ from "lodash";
+
 import { createSelector } from "reselect";
 import { stripTags, stripTagsFromObject } from "../../../common/utils/helpers";
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";

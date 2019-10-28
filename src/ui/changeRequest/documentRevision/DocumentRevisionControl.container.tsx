@@ -79,14 +79,18 @@ export const DocumentRevisionControlContainer: React.FunctionComponent<
     documentsInChangeRequest.map((documentRevisionId) => (
       <DocumentRevisionItemPresenter
         key={documentRevisionId}
-        documentRevision={documentsInCrById[documentRevisionId] || documentRevisionsById[documentRevisionId]}
+        documentRevision={
+          documentsInCrById[documentRevisionId] ||
+          documentRevisionsById[documentRevisionId]
+        }
         onDelete={() => deleteDocumentFromChangeRequest(documentRevisionId)}
         onClick={() => selectDocumentRevision(documentRevisionId)}
         selectedDocumentRevision={selectedDocumentRevision!}
       />
     ));
 
-  const loadDocumentRevisionsAction = () => loadDocumentRevisions([DocumentRevisionStatus.Draft]);
+  const loadDocumentRevisionsAction = () =>
+    loadDocumentRevisions([DocumentRevisionStatus.Draft]);
 
   return (
     <AsyncGate
@@ -111,7 +115,8 @@ export const DocumentRevisionControlContainer: React.FunctionComponent<
           color="primary"
           onClick={openAddDocuments}
           fullWidth={true}
-          className={classes.addDocument}>
+          className={classes.addDocument}
+        >
           <Icon className={classes.leftIcon}>
             <AddCircleRounded />
           </Icon>

@@ -49,8 +49,17 @@ export const DocumentRevisionTable: React.FunctionComponent<DocumentRevisionTabl
 
     return (
       <div className={classes.actions}>
-        {canEdit && <IconButton onClick={editDocumentRevision(documentRevision.id, documentRevision.document.id)}><Edit /></IconButton>}
-        {<IconButton onClick={previewDocumentRevision(documentRevision.id, documentRevision.document.id)}><OpenInNew /></IconButton>}
+        {canEdit &&
+        <IconButton
+          onClick={editDocumentRevision(documentRevision.id, documentRevision.document.id)}
+        >
+          <Edit />
+        </IconButton>}
+        {<IconButton
+          onClick={previewDocumentRevision(documentRevision.id, documentRevision.document.id)}
+        >
+            <OpenInNew />
+        </IconButton>}
       </div>
     );
   };

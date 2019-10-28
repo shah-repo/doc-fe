@@ -29,7 +29,7 @@ export const LoginWithCodeContainer: React.FunctionComponent<LoginWithCodeContai
   // NOTE: not sure if this is what the old code with useState tried to achieve
   useEffect(() => {
     if (code) {
-      async.start(loginWithCode, { code }, async)
+      async.start(loginWithCode, { code }, async);
     }
   }, [code]);
 

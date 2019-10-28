@@ -28,7 +28,8 @@ const Header: React.FunctionComponent<Props> = ({
         container={true}
         spacing={10}
         justify="space-between"
-        alignItems="center">
+        alignItems="center"
+      >
         <Grid item={true} xs={6}>
           {pageTitle !== "translation.unknown" ? (
             <Typography variant="h6">

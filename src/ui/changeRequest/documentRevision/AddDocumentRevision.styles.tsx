@@ -3,22 +3,22 @@ import { createStyles, Theme } from "@material-ui/core";
 export default (theme: Theme) =>
   createStyles({
     documentRevision: {
-      margin: '10px',
+      margin: "10px",
     },
     appBar: {
-      position: 'relative',
-      backgroundColor: 'white',
+      position: "relative",
+      backgroundColor: "white",
     },
     dialogContent: {
-      display: 'contents',
+      display: "contents",
     },
     doneButton: {
-      margin: '20px 50px'
+      margin: "20px 50px",
     },
     documentRevisionContainer: {
-      display: 'flex',
-      justifyContent: 'start',
-      flexWrap: 'wrap',
-      marginBottom: 10
+      display: "flex",
+      justifyContent: "start",
+      flexWrap: "wrap",
+      marginBottom: 10,
     },
   });

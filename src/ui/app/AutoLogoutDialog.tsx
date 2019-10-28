@@ -1,4 +1,4 @@
-import _ from "lodash";
+
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { authActions } from "../../state/ducks/auth";
@@ -47,7 +47,7 @@ const AutoLogoutDialog: React.FunctionComponent<Props> = ({
       dialogHandler={dialogHandler}
     />
   );
-}
+};
 
 export default connect<{}, DispatchProps, OwnProps, ApplicationState>(null, {
   logout: authActions.logout,

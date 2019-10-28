@@ -6,7 +6,11 @@ import DialogContent from "@material-ui/core/DialogContent";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import React, { useEffect, useState } from "react";
-import { DocumentRevision, DocumentRevisionsByIdState, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import {
+  DocumentRevision,
+  DocumentRevisionsByIdState,
+  DocumentRevisionStatus,
+} from "../../../state/ducks/documentRevisions";
 import Text from "../../components/Text";
 import styles from "./AddDocumentRevision.styles";
 import DocumentRevisionTable from "./DocumentRevisionTable.presenter";
@@ -20,21 +24,36 @@ interface AddDocumentRevisionContainerProps extends WithStyles<typeof styles> {
   documentRevisionsById: DocumentRevisionsByIdState;
 }
 
-export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRevisionContainerProps> = ({
-  isOpen, close, documentRevisionsList, classes,
-  doneAddingDocuments, documentsInChangeRequest, documentRevisionsById,
+export const AddDocumentRevisionContainer: React.FunctionComponent<
+  AddDocumentRevisionContainerProps
+> = ({
+  isOpen,
+  close,
+  documentRevisionsList,
+  classes,
+  doneAddingDocuments,
+  documentsInChangeRequest,
+  documentRevisionsById,
 }) => {
-  const [documentRevisionsToShow, setDocumentRevisionsToShow] = useState<DocumentRevision[]>([]);
+  const [documentRevisionsToShow, setDocumentRevisionsToShow] = useState<
+    DocumentRevision[]
+  >([]);
   const [addedDocuments, setAddedDocuments] = useState<string[]>([]);
-  const addDocument = (documentRevisionId: string) => setAddedDocuments([...addedDocuments, documentRevisionId]);
+  const addDocument = (documentRevisionId: string) =>
+    setAddedDocuments([...addedDocuments, documentRevisionId]);
   const deleteDocument = (documentRevisionId: string) =>
     setAddedDocuments(addedDocuments.filter((id) => id !== documentRevisionId));
 
   useEffect(() => {
-    const documentsToIgnore = [...addedDocuments, ...documentsInChangeRequest].map((documentRevisionId) =>
-      documentRevisionId);
-    const filteredArray = documentRevisionsList.filter((documentRevision) =>
-      documentsToIgnore.indexOf(documentRevision.id) < 0 && documentRevision.status === DocumentRevisionStatus.Draft);
+    const documentsToIgnore = [
+      ...addedDocuments,
+      ...documentsInChangeRequest,
+    ].map((documentRevisionId) => documentRevisionId);
+    const filteredArray = documentRevisionsList.filter(
+      (documentRevision) =>
+        documentsToIgnore.indexOf(documentRevision.id) < 0 &&
+        documentRevision.status === DocumentRevisionStatus.Draft,
+    );
     setDocumentRevisionsToShow(filteredArray);
   }, [addedDocuments, documentsInChangeRequest, documentRevisionsList]);
 
@@ -44,7 +63,7 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
     close();
   };
 
-  const renderSlectedDocuments = () => (
+  const renderSlectedDocuments = () =>
     addedDocuments.map((documentRevisionId) => (
       <Chip
         className={classes.documentRevision}
@@ -52,8 +71,7 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
         label={(documentRevisionsById[documentRevisionId] || {}).name}
         onDelete={() => deleteDocument(documentRevisionId)}
       />
-    ))
-  );
+    ));
 
   return (
     <Dialog fullScreen={true} open={isOpen}>

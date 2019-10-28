@@ -5,6 +5,7 @@ import {
   FieldConfig,
   FieldProps as FormikFieldProps,
 } from "formik";
+// tslint:disable-next-line: no-implicit-dependencies
 import { QuillOptionsStatic } from "quill";
 import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";

@@ -1,3 +1,4 @@
+// tslint:disable-next-line: no-implicit-dependencies
 import { DeltaStatic } from "quill";
 import { RefObject } from "react";
 import ReactQuill from "react-quill";

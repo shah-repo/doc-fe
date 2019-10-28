@@ -1,4 +1,4 @@
-import { Box, Chip, Grid, Typography } from "@material-ui/core";
+import { Box, Grid, Typography } from "@material-ui/core";
 import { mount } from "enzyme";
 import React from "react";
 import { getChangeRequest } from "../../../state/ducks/changeRequest/tests/factories";

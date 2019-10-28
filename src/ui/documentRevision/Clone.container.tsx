@@ -1,11 +1,11 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { DocumentRevision, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
-import { canCreateNewVersion } from "./helpers";
+import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import DocumentRevisionCreateContainer from "./DocumentRevisionCreate.container";
-import { ApplicationState } from "../../state/reducers";
-import { connect } from "react-redux";
+import { canCreateNewVersion } from "./helpers";
 
 export interface OwnProps {
   documentRevision: DocumentRevision;
@@ -22,7 +22,7 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
   disableCreateNewVersion: getDisableCreateNewVersion(state, props.documentRevision.document.id),
 });
 export const CloneContainer: React.FunctionComponent<CloneContainerProps> = ({
-  documentRevision, disableCreateNewVersion
+  documentRevision, disableCreateNewVersion,
 }) => {
   if (!canCreateNewVersion(documentRevision, disableCreateNewVersion, true)) {
     return <Redirect to={documentVersionPath(documentRevision.id, documentRevision.document.id)} />;

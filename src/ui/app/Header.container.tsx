@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { RouteComponentProps, withRouter } from "react-router";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import { authActions, authSelectors } from "../../state/ducks/auth";
 import { ApplicationState } from "../../state/reducers";
 import {
@@ -42,7 +42,7 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
   useEffect(() => {
     setTranslationByPath(location.pathname);
 
-    unlistenHistory = history.listen(location => {
+    unlistenHistory = history.listen((location) => {
       setTranslationByPath(location.pathname);
     });
 

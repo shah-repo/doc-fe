@@ -32,7 +32,7 @@ export function withOptionRenderer<T extends FBFormDefaultProps>(
         optionsArray.push("form.builder.other");
       }
       return this.controlRenderer(optionsArray);
-    };
+    }
 
     private controlRenderer = (optionsArray: string[]) => {
       const { name } = this.props;
@@ -53,7 +53,7 @@ export function withOptionRenderer<T extends FBFormDefaultProps>(
           }
         />
       ));
-    };
+    }
   }
 
   return withLabelRenderer(HOC);

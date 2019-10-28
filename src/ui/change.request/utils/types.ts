@@ -29,6 +29,7 @@ export enum DesignAssessmentReasoningOption {
   not_affect_changes =
     "Changes do not affect form, fit, function or materials with no impact on risk, safety or effectiveness",
   equivalent_changes =
+    // tslint:disable-next-line: max-line-length
     "Changes are equivalent to current design with no impact on risk, safety or effectiveness. Equivalency established through design verification",
 }
 

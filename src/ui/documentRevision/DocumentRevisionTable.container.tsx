@@ -54,6 +54,6 @@ export const DocumentRevisionContainer: React.FunctionComponent<DocumentRevision
   );
 };
 
-export default connect<StateProps, DispatchProps, OwnProps,ApplicationState>(mapStateToProps, {
+export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
   loadDocumentRevisions: documentRevisionsActions.loadList,
 })(DocumentRevisionContainer);
