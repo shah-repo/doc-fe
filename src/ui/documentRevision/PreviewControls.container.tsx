@@ -30,11 +30,12 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainerProps> = ({
   documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton,
 }) => {
+
     const cloneDocument = () => history.push(documentNewVersionPath(documentRevision.id, documentRevision.document.id));
 
     const onCreateClick = () => {
       documentRevisionStore.setMode("createFrom", documentRevision);
-    }
+    };
 
     const renderCloneButton = () => (
       <Button color="primary" onClick={cloneDocument}>
@@ -54,8 +55,14 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
       </RouterLink>
     );
 
+    const { document } = documentRevision || {};
+    const { documentType } = document || {};
     const canCreate = canCreateNewVersion(documentRevision, disableCreateNewVersion, canShowCreateVersionButton);
-    const canCreateFrom = documentRevision.status === DocumentRevisionStatus.Released && !canCreate;
+    const canCreateFrom = (
+      documentType && documentType.group === "FORM" &&
+      documentRevision.status === DocumentRevisionStatus.Released
+    );
+
     return (
       <Box component="span">
         {canCreate && renderCloneButton()}
