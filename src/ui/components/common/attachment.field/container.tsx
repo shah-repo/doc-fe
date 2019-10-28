@@ -7,6 +7,7 @@ import {
   attachmentsActions,
 } from "../../../../state/ducks/attachments";
 import { ApplicationState } from "../../../../state/reducers";
+import formBuilderStore from "../../../form.builder/stores/FBStore";
 import useAsync from "../../../hooks/useAsync";
 import FormMessage from "../../forms/FormMessage";
 import FormProgress from "../../forms/FormProgress";
@@ -45,6 +46,8 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
       const attachments: Attachment[] = field!.value || [];
       attachments.push(attachment!);
       form!.setFieldValue(name, attachments);
+      if (formBuilderStore.mode === "design") { return; }
+      formBuilderStore.values = {...formBuilderStore.values, [name as string]: attachments };
     },
   });
 
