@@ -20,6 +20,7 @@ export interface TablePanelProps<T> {
   clearFilter?: any;
   customQuerySet?: (queryDict: TableSearchQueryType) => TableSearchQueryType;
   customDataSet?: (data: T[]) => T[];
+  tableName?: string;
 }
 
 export interface TablePanelStateProps<T> {
