@@ -44,6 +44,23 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
     setIsComponentVisible,
   } = useComponentVisible(false);
 
+  const [toolbar, setToolbar] = useState<any>({});
+
+  useEffect(() => {
+    setToolbar(
+      {
+        container: [
+          ...modules.toolbar.container,
+          ...customContainers,
+        ],
+        handlers: {
+          ...modules.toolbar.handlers,
+          ...customHandlers,
+        },
+      },
+    );
+  }, []);
+
   useEffect(() => {
     if (!isComponentVisible) {
       return;
@@ -90,22 +107,14 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
             bounds=".editor-container"
             modules={{
               ...modules,
-              toolbar: {
-                container: [
-                  ...modules.toolbar.container,
-                  ...customContainers,
-                ],
-                handlers: {
-                  ...modules.toolbar.handlers,
-                  ...customHandlers,
-                },
-              },
+              toolbar,
             }}
             formats={formats}
             {...quillOptions}
             onChange={handleChange}
             value={fieldProps.field.value || ""}
             onBlur={handleBlur}
+            readOnly={!isComponentVisible}
             className={!isComponentVisible ? "hide-toolbar" : ""}
           />
         </Box>
