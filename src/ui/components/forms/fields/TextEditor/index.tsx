@@ -44,23 +44,6 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
     setIsComponentVisible,
   } = useComponentVisible(false);
 
-  const [toolbar, setToolbar] = useState<any>({});
-
-  useEffect(() => {
-    setToolbar(
-      {
-        container: [
-          ...modules.toolbar.container,
-          ...customContainers,
-        ],
-        handlers: {
-          ...modules.toolbar.handlers,
-          ...customHandlers,
-        },
-      },
-    );
-  }, []);
-
   useEffect(() => {
     if (!isComponentVisible) {
       return;
@@ -70,7 +53,7 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
 
   const handleChange = (editHtml: string) => {
     // when you click on an empty editor Quill injects some HTML
-    const value = editHtml === reactQuillEmptyString ? "" : editHtml;
+    const value = editHtml === reactQuillEmptyString ? null : editHtml;
     fieldProps.form.setFieldValue(fieldProps.field.name, value);
   };
   const handleBlur = (e: any) => {
@@ -107,14 +90,23 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
             bounds=".editor-container"
             modules={{
               ...modules,
-              toolbar: isComponentVisible ? toolbar : false,
+              toolbar: {
+                container: [
+                  ...modules.toolbar.container,
+                  ...customContainers,
+                ],
+                handlers: {
+                  ...modules.toolbar.handlers,
+                  ...customHandlers,
+                },
+              },
             }}
             formats={formats}
             {...quillOptions}
             onChange={handleChange}
             value={fieldProps.field.value || ""}
             onBlur={handleBlur}
-            readOnly={!isComponentVisible}
+            className={!isComponentVisible ? "hide-toolbar" : ""}
           />
         </Box>
       </div>
