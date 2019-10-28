@@ -20,9 +20,9 @@ export class FBDocumentRevisionStore {
   @computed private get formTemplate(): FBFormTemplateProps | undefined {
     if (!this.fromDocumentRevision) { return undefined; }
     let { formTemplate } = this.fromDocumentRevision || {};
-    if (this.mode === "updateFromOther") {
-      const { formDocument } = this.fromDocumentRevision;
-      formTemplate = formDocument && formDocument.formTemplate;
+    const { formDocument } = this.fromDocumentRevision || {};
+    if (formDocument ) {
+      formTemplate = formDocument.formTemplate;
     }
     return formTemplate;
   }
