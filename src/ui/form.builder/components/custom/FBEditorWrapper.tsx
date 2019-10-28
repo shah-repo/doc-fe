@@ -14,7 +14,9 @@ const FBEditorWrapper: React.FunctionComponent<FBEditorWrapperProps> = ({
   toolbarMargin,
   indicatorMargin,
   ...props
-}) => (
+}) => {
+
+  return (
   <Box {...props}>
     <FBEditorFieldToolbar
       visibility={visibility}
@@ -30,6 +32,7 @@ const FBEditorWrapper: React.FunctionComponent<FBEditorWrapperProps> = ({
         alignItems="center"
         visibility={indicatorVisibility}
         style={{cursor: "grab"}}
+        // onMouseDown={props.onMouseDown}
       >
         <DragIndicatorIcon  />
       </Box>
@@ -37,5 +40,7 @@ const FBEditorWrapper: React.FunctionComponent<FBEditorWrapperProps> = ({
     <FBAddFieldButton visibility={visibility} />
   </Box >
 );
+
+};
 
 export default withMouseOver(FBEditorWrapper);

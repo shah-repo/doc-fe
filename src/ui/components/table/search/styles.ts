@@ -9,7 +9,7 @@ export const selectStyles = makeStyles((theme: Theme) =>
     },
     input: {
       backgroundColor: theme.palette.common.white,
-      padding: theme.spacing(0.35, 0.3, 0.3, 0.3),
+      padding: theme.spacing(0.3, 0.3, 0.3, 0.3),
     },
   }),
 );

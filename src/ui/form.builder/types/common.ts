@@ -31,6 +31,7 @@ export type FBFormDefaultProps = FBLabelRendererProps &
     autocompleteList?: string;
     isMulti?: boolean;
     fieldName?: string;
+    linkUrl?: string;
   };
 
 export type FBOnChangeProps = FormikHybridFieldProps &

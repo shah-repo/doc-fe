@@ -22,7 +22,7 @@ export class FBStore {
   }
 
   @computed get active(): boolean {
-    return Config.Theme === ThemeEnv.DEV_THEME && this.groupType === "FORM";
+    return this.groupType === "FORM";
   }
 
   @computed get fieldMode(): Partial<FBFormDefaultProps> {

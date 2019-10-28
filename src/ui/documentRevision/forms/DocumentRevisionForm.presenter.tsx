@@ -124,6 +124,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     handleChange(event);
   };
 
+  if (showRevisionTypeChange) {
+    documentRevisionStore.setMode("update", initialValues as unknown as DocumentRevision);
+  }
+
   const renderTypeOfRevisionChange = () => {
     if (showRevisionTypeChange) {
       return (
