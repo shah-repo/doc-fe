@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Grid,
   WithStyles,
   withStyles,
@@ -8,13 +7,11 @@ import {
 import { Formik } from "formik";
 import { Dictionary } from "lodash";
 import React from "react";
-import { Link as RouterLink } from "react-router-dom";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import Text from "../../components/Text";
-import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
 import FBWorkspace from "../../form.builder/main/workspace/FBWorkspace";
 import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
@@ -60,9 +57,6 @@ export const Presenter: React.FunctionComponent<Props> = ({
   } else {
     formBuilderStore.setFormTemplatePreview(dataProp.formTemplate);
   }
-
-  const onCreateClick = () =>
-    documentRevisionStore.setMode("createFrom", dataProp);
 
   const renderTrainingControl = status === DocumentRevisionStatus.Released && (
     <TrainingControl
@@ -110,17 +104,6 @@ export const Presenter: React.FunctionComponent<Props> = ({
          </Box>
        )}
       <Box flexDirection="row-reverse" display="flex">
-        {dataProp.status === DocumentRevisionStatus.Released && (
-          <RouterLink
-            onClick={(onCreateClick)}
-            to={DOCUMENT_REVISION_CREATE_URL}
-            style={{textDecoration: "none"}}
-          >
-            <Button color="primary">
-              <Text translation="common.create.new" />
-            </Button>
-          </RouterLink>
-        )}
         <ControlsContainer
           documentRevision={dataProp}
           canShowCreateVersionButton={canShowCreateVersionButton}
