@@ -70,7 +70,7 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
 
   const handleChange = (editHtml: string) => {
     // when you click on an empty editor Quill injects some HTML
-    const value = editHtml === reactQuillEmptyString ? null : editHtml;
+    const value = editHtml === reactQuillEmptyString ? "" : editHtml;
     fieldProps.form.setFieldValue(fieldProps.field.name, value);
   };
   const handleBlur = (e: any) => {
