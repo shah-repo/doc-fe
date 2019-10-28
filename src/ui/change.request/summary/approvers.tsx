@@ -25,11 +25,8 @@ export const Approvers: React.FunctionComponent<Props> = ({ classes, dataProp })
           {` | ${status}`}
           {reviewedAt &&
             <span>
-              |&nbsp;
-              <DateTime
-                value={reviewedAt}
-                format="LLL"
-              />
+              {"| "}
+              <DateTime value={reviewedAt}/>
             </span>
           }
         </Typography>
