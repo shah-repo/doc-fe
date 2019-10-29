@@ -23,6 +23,7 @@ import ReferencedByContainer from "./referencedBy.container";
 import ReferenceToContainer from "./referenceTo.container";
 import styles from "./styles";
 import TrainingControl from "./training.control";
+import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 
 interface OwnProps {
   canShowCreateVersionButton?: boolean;
@@ -49,6 +50,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
 }) => {
   const onSubmit = () => void 0;
 
+  documentRevisionStore.fromDocumentRevision = dataProp;
   let { formTemplate } = dataProp;
   if (!formTemplate) {
     const { formInput, formDocument } = dataProp;
@@ -75,6 +77,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         spacing={4}
         direction="column"
       >
+        {documentRevisionStore.outputInfo && <DocumentRevisionOutputInfo />}
         <ChangeRequestLink dataProp={dataProp} />
         <SummaryField label="document.title" value={name} />
         <SummaryField
