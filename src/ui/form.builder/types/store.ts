@@ -29,3 +29,9 @@ export type FBDocumentRevisionMode =
   | "update"
   | "updateFromOther"
   | "createFrom";
+
+export interface FBDocumentRevisionOutputInfo {
+  docId: string;
+  version: string | number;
+  releasedDate?: string;
+}
