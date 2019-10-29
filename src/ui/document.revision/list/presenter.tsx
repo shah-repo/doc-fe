@@ -34,9 +34,8 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   documentTypeOptions,
   tableName,
   tableState,
+  clearFilter,
 }) => {
-  const ALL_DOC_REV_STATES = "ALL_DOC_REV_STATES";
-  const [clearFilter, setClearFilter] = React.useState<boolean>(false);
 
   const canEdit = (data: DocumentRevision) => canEditDocumentRevision({dataProp: data, currentUserEmail});
 
@@ -50,12 +49,8 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     return documentPreviewPath(rowData.id, rowData.document.id);
   };
 
-  const clear = () => setClearFilter(!clearFilter);
-
   const customQuerySet = (queryDict: TableSearchQueryType) => {
     if (!queryDict["status[]"]) {
-      queryDict["status[]"] = DocumentRevisionStatus.Released;
-    } else if (queryDict["status[]"] === ALL_DOC_REV_STATES) {
       queryDict["status[]"] = documentRevisionQueryStatus();
     }
 
@@ -156,12 +151,6 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
               undefined,
         searchType: "select",
         selectOptions: documentRevisionStatusOption(),
-        searchValueGetter: (query) => {
-          if (!query) {
-            return ALL_DOC_REV_STATES;
-          }
-          return query;
-        },
       },
     },
     {
@@ -177,7 +166,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         dataKey: "releasedAfter",
         searchType: "select",
         selectOptions: documentRevisionReleasedDateOption(),
-        // defaultValue: tableState.queryDict.releasedAfter,
+        defaultValue: tableState.queryDict.releasedAfter,
       },
     },
   ];
@@ -192,7 +181,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
           color="primary"
           variant="outlined"
           className={classes.clearButton}
-          onClick={clear}
+          onClick={clearFilter}
         >
           <Text translation="common.clear.filters" />
         </Button>
@@ -209,7 +198,6 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
           tableData={dataProp}
           columns={columns}
           queryUrl={DOCUMENT_REVISION_ROOT_URL}
-          clearFilter={clearFilter}
           cellMeasure={true}
           customQuerySet={customQuerySet}
           customDataSet={customDataSet}

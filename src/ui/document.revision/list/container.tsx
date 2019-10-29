@@ -61,6 +61,7 @@ export const ListContainer: React.FunctionComponent<Props> = ({
       TABLE_NAME,
     ));
   }
+  const clearFilter = () => dispatch(tableSearchActions.clearSearchCriteria(TABLE_NAME));
 
   return (
     <ListPresenter
@@ -72,6 +73,7 @@ export const ListContainer: React.FunctionComponent<Props> = ({
       documentTypeOptions={documentTypeOptions}
       tableName={TABLE_NAME}
       tableState={tableState}
+      clearFilter={clearFilter}
     />
   );
 };

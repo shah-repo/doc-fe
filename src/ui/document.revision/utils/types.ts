@@ -54,6 +54,7 @@ export type DocumentRevisionsUserProps = DataProps<DocumentRevision[]> & ActionP
   documentTypeOptions: SelectOption[];
   tableName: string;
   tableState: TablePanelStateProps<DocumentRevision>;
+  clearFilter?: () => void;
 };
 
 export interface RouteParams {
