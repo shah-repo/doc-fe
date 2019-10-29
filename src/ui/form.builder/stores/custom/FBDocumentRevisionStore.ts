@@ -105,7 +105,7 @@ export class FBDocumentRevisionStore {
       case "update":
         const { documentType } = (record && record.document) || {};
         if (!documentType || documentType.group !== "FORM") {
-          return this.reset();
+          this.reset();
         }
         return formBuilderStore.setFormTemplateDesign(ft);
       case "updateFromOther":
