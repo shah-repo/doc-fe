@@ -23,6 +23,7 @@ import useAsync from "../../hooks/useAsync";
 import { canEditApprovers, canEditChangeRequest } from "../utils/helpers";
 import { changeRequestEditPath } from "../utils/paths";
 import { SummaryDispatchProps } from "../utils/types";
+import DocumentRevisionLoader from "./loader";
 import Presenter from "./presenter";
 import styles from "./styles";
 
@@ -112,9 +113,7 @@ export const Container: React.FunctionComponent<Props> = ({
         </Grid>
         <Grid item={true} xs={7} className={classes.root}>
           {docRev && (
-            <DocumentRevisionSummaryPresenter
-              dataProp={{ ...docRev, changeRequest: dataProp }}
-            />
+            <DocumentRevisionLoader documentRevisionId={docRev.id} />
           )}
           {!docRev && summaryFormikRenderer()}
         </Grid>
