@@ -5,17 +5,18 @@ export default (theme: Theme) => createStyles({
     height: "100%",
   },
   item: {
-    height: "75vh",
+    height: "77vh",
     width: "100%",
   },
   link: {
     textDecoration: "none",
   },
   button: {
-    marginBottom: "25px",
+    margin: "0px",
+    boxShadow: "none",
   },
   clearButton: {
+    margin: "0px",
     backgroundColor: theme.palette.common.white,
-    padding: theme.spacing(1),
   },
 });
