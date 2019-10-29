@@ -32,11 +32,3 @@
   min-height: 8em;
   max-height: 36em;
 }
-
-.hide-toolbar .ql-toolbar {
-  display: none;
-}
-
-.hide-toolbar .ql-container.ql-snow {
-  border-top: 1px solid #b4c0ca!important;
-}

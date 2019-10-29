@@ -198,11 +198,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <Grid
-      container={true}
       item={true}
-      direction="column"
-      justify="center"
-      alignItems="center"
       className={classes.container}
       lg={isDisabled ? 12 : 7}
       sm={isDisabled ? 12 : 10}
