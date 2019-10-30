@@ -29,7 +29,6 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   classes,
   currentUserEmail,
   editDocumentRevision,
-  setDocId,
   documentTypeOptions,
   tableName,
   tableState,

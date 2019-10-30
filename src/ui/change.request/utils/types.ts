@@ -18,7 +18,6 @@ export interface ContainerDispatchProps {
 
 // List
 export type ListProps = ActionProps;
-export type ListStateProps = AuthProps;
 
 export interface ListDispatchProps {
   loadChangeRequests: typeof changeRequestsActions.loadList;

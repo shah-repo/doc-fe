@@ -1,32 +1,28 @@
 import { shallow } from "enzyme";
-import React from "react";
-import { ListContainer, Props} from "./container";
-import { getDocumentRevision } from "../../../state/ducks/documentRevisions/tests/factories";
 import faker from "faker";
-import { ASYNC_DEFAULT_STATE } from "../../hooks/useAsync";
+import React from "react";
 import getRouteComponentProps from "../../tests/helpers/getRouteComponentProps";
-import ListPresenter from "./presenter";
+import { ListContainer, Props} from "./container";
+import { ListPresenter } from "./presenter";
+
+jest.mock("react-redux", () => ({
+  useDispatch: jest.fn(),
+  useSelector: () => ({
+    queryDict: { docId: "1" },
+  }),
+}));
 
 describe("ListContainer tests", () => {
   const defaultProps: Props = {
     ...getRouteComponentProps(),
-    loadDocumentRevisions: jest.fn(),
-    loadAsyncState: ASYNC_DEFAULT_STATE,
-    dataProp: [ getDocumentRevision() ],
-    currentUserEmail: faker.internet.email(),
-    setDocId: jest.fn(),
-    documentTypeOptions: [{
-        value: faker.lorem.word(),
-        text: faker.lorem.word(),
-    }],
   };
 
   const getWrapper = (props: Partial<Props>= {}) => shallow(
     <ListContainer {...defaultProps} {...props}/>,
   );
 
-  it("Set props correctly", () => {
+  it("render ListPresenter", () => {
     const wrapper = getWrapper();
-    expect(wrapper.find(ListPresenter).prop("dataProp")).toEqual(defaultProps.dataProp);
+    expect(wrapper.dive().find(ListPresenter)).toHaveLength(1);
   });
 });

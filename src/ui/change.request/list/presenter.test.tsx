@@ -1,15 +1,15 @@
+import { Button, Grid } from "@material-ui/core";
 import { shallow } from "enzyme";
-import React from "react";
-import { ListPresenter,  Props } from "./presenter";
-import { getChangeRequest } from "../../../state/ducks/changeRequest/tests/factories";
 import faker from "faker";
-import { Grid } from "@material-ui/core";
-import { CHANGE_REQUEST_CREATE_URL } from "../../constants/urls";
+import React from "react";
 import { Link as RouterLink } from "react-router-dom";
+import { CHANGE_REQUEST_CREATE_URL } from "../../constants/urls";
+import { ListPresenter,  Props } from "./presenter";
 
 describe("Approvers tests", () => {
   const defaultProps: Props = {
-      dataProp: [getChangeRequest()],
+      tableName: faker.name.firstName(),
+      clearFilter: jest.fn(),
       currentUserEmail: faker.internet.email(),
       editChangeRequest: jest.fn(),
       previewChangeRequest: jest.fn(),
@@ -31,8 +31,14 @@ describe("Approvers tests", () => {
     expect(wrapper.find(RouterLink).prop("to")).toEqual(CHANGE_REQUEST_CREATE_URL);
   });
 
-  it("tableData is set correctly", () => {
+  it("tableName is set correctly", () => {
       const wrapper = getWrapper();
-      expect(wrapper.find(Grid).at(3).children().prop("tableData")).toEqual(defaultProps.dataProp);
+      expect(wrapper.find(Grid).at(3).children().prop("tableName")).toEqual(defaultProps.tableName);
+  });
+
+  it("clear filter is called", () => {
+      const wrapper = getWrapper();
+      wrapper.find(Button).at(0).simulate("click");
+      expect(defaultProps.clearFilter).toHaveBeenCalledTimes(1);
   });
 });

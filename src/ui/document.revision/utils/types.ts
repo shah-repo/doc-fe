@@ -18,7 +18,6 @@ export interface ContainerDispatchProps {
 }
 
 // List
-export type ListProps = ListDispatchProps & ListStateProps;
 export type ListOwnProps = RouteComponentProps;
 export type ListStateProps = DataProps<DocumentRevision[]> & AuthProps & {
   documentTypeOptions: SelectOption[];
@@ -50,7 +49,6 @@ export interface SummaryOwnProps {
 // Common
 export type DocumentRevisionUserProps = DataProps<DocumentRevision> & AuthProps;
 export type DocumentRevisionsUserProps = ActionProps & AuthProps & {
-  setDocId: typeof documentsActions.setDocumentProposedId;
   documentTypeOptions: SelectOption[];
   tableName: string;
   tableState: TablePanelStateProps<DocumentRevision>;

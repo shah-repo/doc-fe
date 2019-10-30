@@ -1,24 +1,23 @@
 import { shallow } from "enzyme";
-import React from "react";
-import { ListContainer,  Props } from "./container";
 import faker from "faker";
+import React from "react";
 import getRouteComponentProps from "../../tests/helpers/getRouteComponentProps";
-import { getChangeRequest } from "../../../state/ducks/changeRequest/tests/factories";
-import ListPresenter from "./presenter";
+import { ListContainer,  Props } from "./container";
+import { ListPresenter } from "./presenter";
 
-describe("Approvers tests", () => {
+jest.mock("react-redux");
+
+describe("Change request list container tests", () => {
   const defaultProps: Props = {
-      dataProp: getChangeRequest(),
       currentUserEmail: faker.internet.email(),
-      loadChangeRequests: jest.fn(),
   } as unknown as Props;
 
   const getWrapper = (props: Partial<Props>= {}) => shallow(
     <ListContainer {...defaultProps} {...getRouteComponentProps()} {...props}/>,
   );
 
-  it("dataProp is set correctly", () => {
+  it("render ListPresenter", () => {
     const wrapper = getWrapper();
-    expect(wrapper.find(ListPresenter).prop("dataProp")).toEqual(defaultProps.dataProp);
+    expect(wrapper.dive().find(ListPresenter)).toHaveLength(1);
   });
 });

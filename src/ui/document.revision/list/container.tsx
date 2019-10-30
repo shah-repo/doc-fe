@@ -16,28 +16,15 @@ import {
 import {
   ListDispatchProps,
   ListOwnProps,
-  ListProps,
   ListStateProps,
 } from "../utils/types";
 import ListPresenter from "./presenter";
 
-type DispatchProps = ListDispatchProps;
-type StateProps = ListStateProps;
 type OwnProps = ListOwnProps;
-export type Props = OwnProps & ListProps;
-
-const mapStateToProps = (state: ApplicationState): StateProps => ({
-  dataProp: documentRevisionsSelectors.getDocumentRevisionsList(state),
-  currentUserEmail: authSelectors.currentUserEmail(state),
-  documentTypeOptions: documentTypeSelectors.getDocumentTypeOptions(state),
-});
+export type Props = OwnProps;
 
 export const ListContainer: React.FunctionComponent<Props> = ({
-  dataProp,
-  currentUserEmail,
   history,
-  setDocId,
-  documentTypeOptions,
 }) => {
   const TABLE_NAME = "documentRevisions";
   const tableState = useSelector((reduxState: ApplicationState) =>
@@ -63,12 +50,14 @@ export const ListContainer: React.FunctionComponent<Props> = ({
   }
   const clearFilter = () => dispatch(tableSearchActions.clearSearchCriteria(TABLE_NAME));
 
+  const currentUserEmail = useSelector(authSelectors.currentUserEmail);
+  const documentTypeOptions = useSelector(documentTypeSelectors.getDocumentTypeOptions);
+
   return (
     <ListPresenter
       currentUserEmail={currentUserEmail}
       editDocumentRevision={edit}
       previewDocumentRevision={preview}
-      setDocId={setDocId}
       documentTypeOptions={documentTypeOptions}
       tableName={TABLE_NAME}
       tableState={tableState}
@@ -77,6 +66,4 @@ export const ListContainer: React.FunctionComponent<Props> = ({
   );
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
-  setDocId: documentsActions.setDocumentProposedId,
-})(ListContainer);
+export default ListContainer;
