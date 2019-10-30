@@ -35,7 +35,7 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
               activeClassName={classes.activeLinkTitle}
             >
               <div>
-                <Text translation="documentRevision.version" />
+                <Text translation="common.version" />
                 &nbsp;
                 {generateVersionNumber(
                   documentRevision.revision,
@@ -51,23 +51,19 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
               className={classes.linkBody}
             >
               <div>
-                <Text translation="common.title" />
-                :&nbsp;
+                <Text translation="common.title" />:{" "}
                 {documentRevision.name}
               </div>
               <div>
-                <Text translation="common.documentId" />
-                :&nbsp;
+                <Text translation="common.documentId" />:{" "}
                 {docId}
               </div>
               <div>
-                <Text translation="common.owner" />
-                :&nbsp;
+                <Text translation="common.owner" />:{" "}
                 {documentRevision.owner.name}
               </div>
               <div>
-                <Text translation="documentRevision.released" />
-                :&nbsp;
+                <Text translation="common.released" />:{" "}
                 <Date
                   value={
                     documentRevision.obsoletedAt || documentRevision.releasedAt

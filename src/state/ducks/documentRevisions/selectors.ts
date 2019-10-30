@@ -25,7 +25,7 @@ const getDocument = (state: ApplicationState, documentId: string) => documentsBy
 const getDocumentRevisions = (state: ApplicationState, documentId: string) =>
   _.get(documentsById(state)[documentId], "documentRevisions", []);
 const getDocId = (state: ApplicationState, documentId: string) =>
-  _.get(documentsById(state)[documentId], "docId");
+  _.get(documentsById(state)[documentId], "docId", "");
 const getAudit = (state: ApplicationState, documentRevisionId: string): AuditGroupType =>
   auditsByCRId(state)[documentRevisionId];
 

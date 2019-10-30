@@ -50,26 +50,27 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<
               </div>
             </Tooltip>
             <div>
-              <Text translation="common.version" />
-              :&nbsp;
+              <Text translation="common.version" />:{" "}
               {generateVersionNumber(
                 documentRevision.revision,
                 documentRevision.revisionStage,
               )}
             </div>
             <div>
-              <Text translation="documentRevision.released" />
-                :&nbsp;
+              <Text translation="common.documentId" />:{" "}
+              {documentRevision.document.docId}
+            </div>
+            <div>
+                <Text translation="common.owner" />:{" "}
+                {documentRevision.owner.name}
+            </div>
+            <div>
+              <Text translation="common.released" />:{" "}
                 <Date
                   value={
                     documentRevision.obsoletedAt || documentRevision.releasedAt
                   }
                 />
-            </div>
-            <div>
-              <Text translation="common.documentId" />
-              :&nbsp;
-              {documentRevision.document.docId}
             </div>
           </div>
         </Grid>
