@@ -15,11 +15,12 @@ interface DocumentRevisionTableProps extends WithStyles<typeof styles> {
   documentRevisionsToShow: DocumentRevision[];
   addDocument: (documentRevisionId: string) => void;
   addedDocuments: string[];
+  tableName: string;
 }
 
 const DocumentRevisionTable: React.FunctionComponent<
   DocumentRevisionTableProps
-> = ({ classes, documentRevisionsToShow, addDocument, addedDocuments }) => {
+> = ({ classes, tableName, addDocument, addedDocuments }) => {
   const onStateSelect = ({
     rowData,
   }: TableSelectionProps<DocumentRevision>) => () => {
@@ -84,11 +85,11 @@ const DocumentRevisionTable: React.FunctionComponent<
     return (
       <TablePanel<DocumentRevision>
         columns={columns}
-        tableData={documentRevisionsToShow}
         cellMeasure={true}
         queryUrl={DOCUMENT_REVISION_ROOT_URL}
         customQuerySet={customQuerySet}
         customDataSet={customDataSet}
+        tableName={tableName}
       />
     );
   };

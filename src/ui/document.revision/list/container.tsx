@@ -65,7 +65,6 @@ export const ListContainer: React.FunctionComponent<Props> = ({
 
   return (
     <ListPresenter
-      dataProp={dataProp}
       currentUserEmail={currentUserEmail}
       editDocumentRevision={edit}
       previewDocumentRevision={preview}

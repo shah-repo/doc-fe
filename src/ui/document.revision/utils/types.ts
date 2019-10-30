@@ -49,7 +49,7 @@ export interface SummaryOwnProps {
 
 // Common
 export type DocumentRevisionUserProps = DataProps<DocumentRevision> & AuthProps;
-export type DocumentRevisionsUserProps = DataProps<DocumentRevision[]> & ActionProps & AuthProps & {
+export type DocumentRevisionsUserProps = ActionProps & AuthProps & {
   setDocId: typeof documentsActions.setDocumentProposedId;
   documentTypeOptions: SelectOption[];
   tableName: string;

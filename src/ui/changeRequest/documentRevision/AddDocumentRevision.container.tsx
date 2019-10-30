@@ -6,7 +6,11 @@ import DialogContent from "@material-ui/core/DialogContent";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import React, { useEffect, useState } from "react";
-import { DocumentRevision, DocumentRevisionsByIdState, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import {
+  DocumentRevision,
+  DocumentRevisionsByIdState,
+  DocumentRevisionStatus,
+} from "../../../state/ducks/documentRevisions";
 import Text from "../../components/Text";
 import styles from "./AddDocumentRevision.styles";
 import DocumentRevisionTable from "./DocumentRevisionTable.presenter";
@@ -24,6 +28,7 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
   isOpen, close, documentRevisionsList, classes,
   doneAddingDocuments, documentsInChangeRequest, documentRevisionsById,
 }) => {
+  const TABLE_NAME = "addDocRevTable";
   const [documentRevisionsToShow, setDocumentRevisionsToShow] = useState<DocumentRevision[]>([]);
   const [addedDocuments, setAddedDocuments] = useState<string[]>([]);
   const addDocument = (documentRevisionId: string) => setAddedDocuments([...addedDocuments, documentRevisionId]);
@@ -80,6 +85,7 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
           documentRevisionsToShow={documentRevisionsToShow}
           addDocument={addDocument}
           addedDocuments={addedDocuments}
+          tableName={TABLE_NAME}
         />
       </DialogContent>
     </Dialog>

@@ -26,7 +26,6 @@ import { TablePanelProps, TableStyleProps } from "./types";
 type Props<T> = TablePanelProps<T>;
 
 export function TablePanel<T extends any>({
-  tableData,
   columns,
   noRowsTranslation = "table.no.results.found",
   cellMeasure = false,
@@ -35,7 +34,7 @@ export function TablePanel<T extends any>({
   queryUrl = "",
   customQuerySet,
   customDataSet,
-  tableName = "",
+  tableName,
 }: Props<T>) {
 
   const didMount = useDidMount();

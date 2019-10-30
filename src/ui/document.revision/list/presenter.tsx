@@ -27,7 +27,6 @@ export type Props = DocumentRevisionsUserProps & WithStyles<typeof styles>;
 
 export const ListPresenter: React.FunctionComponent<Props> = ({
   classes,
-  dataProp,
   currentUserEmail,
   editDocumentRevision,
   setDocId,
@@ -195,7 +194,6 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       </Grid>
       <Grid item={true} className={classes.item}>
         <TablePanel<DocumentRevision>
-          tableData={dataProp}
           columns={columns}
           queryUrl={DOCUMENT_REVISION_ROOT_URL}
           cellMeasure={true}
