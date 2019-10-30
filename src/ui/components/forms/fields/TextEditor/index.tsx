@@ -1,3 +1,4 @@
+import { Box } from "@material-ui/core";
 import classNames from "classnames";
 import {
   Field as FormikField,
@@ -21,6 +22,7 @@ export interface TextEditorOwnProps extends FieldOwnProps {
   customHandlers?: any;
   customToolbarAction?: () => void;
   actionsRenderer?: () => any;
+  hidden?: boolean;
 }
 
 export type TextEditorPropsWithFormik = TextEditorOwnProps & FormikFieldProps;
@@ -32,6 +34,7 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
   customContainers = [],
   customHandlers = [],
   customToolbarAction,
+  hidden = false,
   ...fieldProps
 }) => {
 
@@ -98,20 +101,22 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
         tabIndex={0}
         onFocus={handleFocus}
       >
-        <ReactQuill
-          theme="snow"
-          bounds=".editor-container"
-          modules={{
-            ...modules,
-            toolbar: isComponentVisible ? toolbar : false,
-          }}
-          formats={formats}
-          {...quillOptions}
-          onChange={handleChange}
-          value={fieldProps.field.value || ""}
-          onBlur={handleBlur}
-          readOnly={!isComponentVisible}
-        />
+        <Box hidden={hidden}>
+          <ReactQuill
+            theme="snow"
+            bounds=".editor-container"
+            modules={{
+              ...modules,
+              toolbar: isComponentVisible ? toolbar : false,
+            }}
+            formats={formats}
+            {...quillOptions}
+            onChange={handleChange}
+            value={fieldProps.field.value || ""}
+            onBlur={handleBlur}
+            readOnly={!isComponentVisible}
+          />
+        </Box>
       </div>
     </Field>
   );

@@ -25,13 +25,18 @@ export function withMouseOver<T extends FBEditorWrapperProps>(
           indicatorVisibility={this.isIndicatorVisible()}
           toolbarMargin={this.toolbarMargin()}
           indicatorMargin={this.indicatorMargin()}
-          removeSchemaItem={(this.removeSchemaItem())}
-          editSchemaItem={(this.editSchemaItem())}
+          removeSchemaItem={this.removeSchemaItem}
+          editSchemaItem={this.editSchemaItem}
+          // onMouseDown={this.onMouseDown()}
           onMouseOver={this.onMouseOver}
           onMouseLeave={this.onMouseLeave}
         />
       );
     }
+
+    // private onMouseDown = () => () => {
+
+    // }
 
     private removeSchemaItem = () => {
       formBuilderStore.removeSchemaItem(this.props.index);

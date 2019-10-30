@@ -5,6 +5,7 @@ import { stripTagsFromObject } from "../../../common/utils/helpers";
 import { unmaskId } from "../../../state/ducks/common/helpers";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
+import Date from "../../components/Date";
 import { TableColumnProps } from "../../components/table/column/types";
 import { TablePanel } from "../../components/table/panel";
 import { TableSearchQueryType } from "../../components/table/types";
@@ -14,12 +15,11 @@ import { generateVersionNumber } from "../../documentRevision/helpers";
 import {
   canEditDocumentRevision,
   documentRevisionQueryStatus,
-  documentRevisionStatusOption,
   documentRevisionReleasedDateOption,
+  documentRevisionStatusOption,
 } from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
-import Date from "../../components/Date";
 import styles from "./styles";
 
 export type Props = DocumentRevisionsUserProps & WithStyles<typeof styles>;
@@ -144,7 +144,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       cellHref: cellHrefRenderer,
       cellOptions: { align: "center" },
       columnOptions: {
-        width: 100,
+        width: 108,
         cellDataGetter: ({ rowData }) => <Date value={rowData.releasedAt} />,
       },
       searchOptions: {
