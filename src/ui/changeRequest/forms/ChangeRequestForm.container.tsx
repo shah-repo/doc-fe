@@ -7,12 +7,8 @@ import {
   DocumentRevision,
 } from "../../../state/ducks/documentRevisions";
 import { AsyncState } from "../../../state/types";
-import ChangeRequestHeader from "../../change.request/summary/header";
-import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
-import ChangeRequestAuditContainer from "../audit/Audit.container";
 import DocumentRevisionControlContainer from "../documentRevision/DocumentRevisionControl.container";
-import DocumentRevisionLoader from "../documentRevision/DocumentRevisionLoader";
-import AssessmentFormContainer from "./assessmentForm/AssessmentForm.container";
+import { ChangeRequestFormPresenter } from "./ChangeRequestForm.presenter";
 import styles from "./styles";
 import { ChangeRequestFormValues } from "./types";
 
@@ -76,64 +72,23 @@ export const ChangeRequestFormContainer: React.FunctionComponent<
     );
   };
 
-  const selectDocumentRevision = (documentRevisionId: string) => {
-    if (isFormDirty) {
-      alert(alertMessage);
-      return;
+  const alertIfFormDirty = () => {
+    if (!isFormDirty) {
+      return true;
     }
-    setSelectedDocumentRevision(documentRevisionId);
+    alert(alertMessage);
+    return false;
+  };
+
+  const selectDocumentRevision = (documentRevisionId: string) => {
+    alertIfFormDirty() && setSelectedDocumentRevision(documentRevisionId);
   };
 
   const selectAssessmentForm = () => {
-    if (isFormDirty) {
-      alert(alertMessage);
-      return;
-    }
-    setSelectedDocumentRevision(null);
+    alertIfFormDirty() && setSelectedDocumentRevision(null);
   };
 
   const onDirtyFlagChange = (dirty: boolean) => setIsFormDirty(dirty);
-
-  const renderAssessmentForm = () => {
-    return (
-      <AssessmentFormContainer
-        initialValues={initialValues}
-        onSubmit={onSubmit}
-        asyncState={asyncState}
-        changeRequest={changeRequest}
-        documentRevisionsList={documentRevisionsList}
-        doNotPrompt={doNotPrompt}
-        onDirtyFlagChange={onDirtyFlagChange}
-      />
-    );
-  };
-
-  const renderDocumentRevisionForm = () => {
-    if (selectedDocumentRevision) {
-      return (
-        <DocumentRevisionLoader
-          documentRevisionId={selectedDocumentRevision || ""}
-          onDirtyFlagChange={onDirtyFlagChange}
-        />
-      );
-    }
-  };
-
-  const renderChangeRequestAudit = () => {
-    if (changeRequest) {
-      return <ChangeRequestAuditContainer changeRequestId={changeRequest.id} />;
-    }
-  };
-
-  const renderDocumentRevisionAudit = () => {
-    if (selectedDocumentRevision) {
-      return (
-        <DocumentRevisionAuditContainer
-          documentRevisionId={selectedDocumentRevision}
-        />
-      );
-    }
-  };
 
   return (
     <Grid container={true} className={classes.whiteContainer}>
@@ -149,15 +104,16 @@ export const ChangeRequestFormContainer: React.FunctionComponent<
             documentsInCrById={documentsInCrById}
           />
         </Grid>
-        <Grid item={true} xs={12} sm={6} md={7}>
-          {changeRequest && <ChangeRequestHeader dataProp={changeRequest!} />}
-          {!selectedDocumentRevision && renderAssessmentForm()}
-          {renderDocumentRevisionForm()}
-        </Grid>
-        <Grid item={true} xs={12} sm={3} md={3}>
-          {renderDocumentRevisionAudit()}
-          {renderChangeRequestAudit()}
-        </Grid>
+        <ChangeRequestFormPresenter
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+          asyncState={asyncState}
+          doNotPrompt={doNotPrompt}
+          onDirtyFlagChange={onDirtyFlagChange}
+          changeRequest={changeRequest}
+          selectedDocumentRevision={selectedDocumentRevision}
+          documentRevisionsList={documentRevisionsList}
+        />
       </Grid>
     </Grid>
   );
