@@ -3,13 +3,18 @@ import { getCallbackHandler } from "../../../common/tests/factories";
 import { Handlers } from "../../types";
 import actions from "./actions";
 import { CHANGE_REQUEST_ROOT_URL } from "./constants";
-import { getChangeRequest, getChangeRequestEditRequestBody, getApprover, getAudit } from "./tests/factories";
+import {
+  getApprover,
+  getAudit,
+  getChangeRequest,
+  getChangeRequestEditRequestBody,
+} from "./tests/factories";
 import {
   ChangeRequest,
-  ChangeRequestEditRequestBody,
-  ChangeRequestTransitionResponse,
-  ChangeRequestTransitionRequestBody,
   ChangeRequestAvailableApprovers,
+  ChangeRequestEditRequestBody,
+  ChangeRequestTransitionRequestBody,
+  ChangeRequestTransitionResponse,
 } from "./types";
 
 describe("change requests actions tests", () => {
@@ -91,7 +96,7 @@ describe("change requests actions tests", () => {
 
     it("calls dispatch with availableApproversList action on success", () => {
       const dispatch = jest.fn();
-      const availableApproversResponse= { optionalApprovers: approvers };
+      const availableApproversResponse = { optionalApprovers: approvers };
 
       action.onSuccess(availableApproversResponse, dispatch);
       expect(dispatch).toHaveBeenCalledWith(actions.availableApproversList(approvers));

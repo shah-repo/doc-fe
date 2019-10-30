@@ -1,5 +1,5 @@
 import queryString from "query-string";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
 import { authActions } from "../../state/ducks/auth";
@@ -26,13 +26,17 @@ export const LoginWithCodeContainer: React.FunctionComponent<LoginWithCodeContai
       history.replace(LOGIN_URL);
     },
   });
+  // NOTE: not sure if this is what the old code with useState tried to achieve
+  useEffect(() => {
+    if (code) {
+      async.start(loginWithCode, { code }, async)
+    }
+  }, [code]);
 
   if (!code) {
     history.replace(LOGIN_URL);
     return null;
   }
-
-  useState(() => async.start(loginWithCode, { code }, async));
 
   return (
     <AsyncGate asyncState={async.asyncState} />

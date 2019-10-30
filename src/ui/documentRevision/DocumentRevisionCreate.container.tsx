@@ -8,6 +8,8 @@ import {
 } from "../../state/ducks/documentRevisions";
 import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
+import documentRevisionStore from "../form.builder/stores/custom/FBDocumentRevisionStore";
+import formBuilderStore from "../form.builder/stores/FBStore";
 import useAsync from "../hooks/useAsync";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { toDocumentRevisionFormValuesWithRevisionChange, toNewVersionRequestBody } from "./forms/transform";
@@ -16,7 +18,6 @@ import { generateDocumentRevisionVersionPath } from "./pathGenerators";
 
 interface DispatchProps {
   create: typeof documentRevisionsActions.create;
-  loadDocument: typeof documentRevisionsActions.loadDocument;
   setDocId: typeof documentsActions.setDocumentProposedId;
 }
 
@@ -26,38 +27,51 @@ interface OwnProps {
 
 export type DocumentRevisionCreateContainerProps = OwnProps & DispatchProps & RouteComponentProps;
 
-export const DEFAULT_INITIAL_VALUES = (): DocumentRevisionFormValues => {
-  return {
-    name: "",
-    description: "",
-    attachments: [],
-    referenceTo: [],
-    revisionChangeType: RevisionChangeType.NextRevision,
-    document: { docId: "" },
-    revisionStage: 1,
-  };
-};
+export const DEFAULT_INITIAL_VALUES = (): DocumentRevisionFormValues => ({
+  name: "",
+  description: "",
+  attachments: [],
+  referenceTo: [],
+  revisionChangeType: RevisionChangeType.NextRevision,
+  document: { docId: "" },
+  revisionStage: 1,
+});
 
 export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionCreateContainerProps> = ({
-  create, history, documentRevision, loadDocument, setDocId,
+  create,
+  history,
+  documentRevision,
+  setDocId,
 }) => {
+  const [doNotPrompt, setDoNotPrompt] = React.useState(false);
+  const isNew = documentRevision === undefined;
+  let initialValues = DEFAULT_INITIAL_VALUES();
 
-  const initialValues = documentRevision ?
-      toDocumentRevisionFormValuesWithRevisionChange(documentRevision) :
-      DEFAULT_INITIAL_VALUES();
+  if (isNew) {
+    if (documentRevisionStore.mode === "createFrom") {
+      initialValues = documentRevisionStore.setValues(initialValues);
+    } else {
+      documentRevisionStore.setMode("create");
+      setDocId("");
+    }
+  } else {
+    initialValues = toDocumentRevisionFormValuesWithRevisionChange(documentRevision);
+  }
 
   const async = useAsync<DocumentRevision>({
       onSuccess: (createdDocumentRevision?) => {
         if (createdDocumentRevision) {
-          loadDocument(createdDocumentRevision.document.id);
-          history.push(generateDocumentRevisionVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id));
+          setDoNotPrompt(true);
+          history.push(
+            generateDocumentRevisionVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id),
+          );
         }
       },
     });
 
   const onSubmit = (values: DocumentRevisionFormValues) => {
-      async.start(create, toNewVersionRequestBody(values), async);
-    };
+    async.start(create, toNewVersionRequestBody(values), async);
+  };
 
   const showRevisionTypeChange = !!documentRevision;
 
@@ -68,7 +82,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
         initialValues={initialValues}
         showRevisionTypeChange={showRevisionTypeChange}
         setDocId={setDocId}
-        doNotPrompt={true}
+        doNotPrompt={doNotPrompt}
         documentRevision={documentRevision}
       />
     );
@@ -78,6 +92,5 @@ const DocumentRevisionCreateContainerWithRouter = withRouter(DocumentRevisionCre
 
 export default connect<{}, DispatchProps, OwnProps, ApplicationState>(null, {
   create: documentRevisionsActions.create,
-  loadDocument: documentRevisionsActions.loadDocument,
   setDocId: documentsActions.setDocumentProposedId,
 })(DocumentRevisionCreateContainerWithRouter);

@@ -4,7 +4,46 @@ import {
   DocumentRevisionEditRequestBody,
   RevisionChangeType,
 } from "../../../state/ducks/documentRevisions";
+import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
+import formBuilderStore from "../../form.builder/stores/FBStore";
+import { FBDocumentFlowProps, FBFormTemplateProps } from "../../form.builder/types/formik";
 import { DocumentRevisionFormValues } from "./types";
+
+export const toFormBuilderTemplate = (
+  values: DocumentRevisionFormValues,
+): FBFormTemplateProps | undefined => {
+
+  const { formTemplate } = values;
+  const { outputDocumentType } = formTemplate || {};
+  const reqType = documentRevisionStore.requestType(values);
+  switch (reqType) {
+    case "create":
+    case "update":
+      if (outputDocumentType) {
+        return ({
+          schema: JSON.stringify(formBuilderStore.getSchema()),
+          outputDocumentType: {
+            id: outputDocumentType.id,
+          },
+        });
+      }
+    default:
+      return;
+  }
+};
+
+export const toFormBuilderDocument = (
+  values: DocumentRevisionFormValues,
+): FBDocumentFlowProps | undefined => {
+  const { id } = values.formDocument || {};
+  const reqType = documentRevisionStore.requestType(values);
+  switch (reqType) {
+    case "fbCreate":
+      return ({ id });
+    default:
+      return;
+  }
+};
 
 export const toDocumentRevisionFormValues = (documentRevision: DocumentRevision): DocumentRevisionFormValues => {
   const values: DocumentRevisionFormValues = {
@@ -17,6 +56,10 @@ export const toDocumentRevisionFormValues = (documentRevision: DocumentRevision)
     document: documentRevision.document,
     changeRequest: documentRevision.changeRequest,
     retrain: documentRevision.retrain,
+    formTemplate: documentRevision.formTemplate,
+    formInput: documentRevision.formInput,
+    formDocument: documentRevision.formDocument,
+    status: documentRevision.status,
   };
 
   return values;
@@ -28,9 +71,12 @@ export const toDocumentRevisionEditRequestBody =
     description: values.description,
     name: values.name,
     attachments: values.attachments,
-    referenceTo: values.referenceTo.map((reference) => ({ id: reference.value })),
+    referenceTo: (values.referenceTo || []).map((reference) => ({ id: reference.value })),
     revisionStage: values.revisionStage,
     retrain: values.retrain,
+    formTemplate: toFormBuilderTemplate(values),
+    formInput: JSON.stringify(formBuilderStore.getValues()),
+    formDocument: toFormBuilderDocument(values),
   };
 
   return documentRevisionEditRequestBody;
@@ -43,10 +89,11 @@ export const toNewVersionRequestBody = (values: DocumentRevisionFormValues): Doc
   if (values.document) {
     if (values.document.id) {
       // new revision
-      newValues.document = _.pick(values.document, ['id']);
+      newValues.document = _.pick(values.document, ["id"]);
     } else {
       // new document
-      newValues.document = _.pick(values.document, ['docId', 'type']);
+      newValues.document = _.pick(values.document, ["docId", "documentType"]);
+      newValues.document.documentType = _.pick(values.document.documentType, ["id"]);
     }
   }
 

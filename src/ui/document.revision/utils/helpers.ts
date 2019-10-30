@@ -1,11 +1,12 @@
+import _ from "lodash";
 import {
   DocumentRevision,
   DocumentRevisionStatus,
   DocumentRevisionType,
 } from "../../../state/ducks/documentRevisions";
 import { SelectOption } from "../../components/forms/fields/Select";
-import { DocumentRevisionUserProps } from "./types";
-import _ from "lodash";
+import { DocumentRevisionUserProps, ReleasedDateOptions } from "./types";
+import moment from "moment-timezone";
 
 const isDraft = (documentRevision: DocumentRevision) =>
   documentRevision.status === DocumentRevisionStatus.Draft;
@@ -25,6 +26,8 @@ export const documentRevisionIdMask = (
     return type + pad.substring(0, pad.length - countStr.length) + countStr;
 };
 
+// TODO: check if we still need this
+// ENC-807 document types are fetched from BE
 export const documentRevisionTypeOption = () => {
   const options: SelectOption[] = [];
   Object.keys(DocumentRevisionType).map((key) => options.push({value: key, text: key}));
@@ -46,6 +49,8 @@ export const documentRevisionStatusOption = () => {
 export const documentRevisionQueryStatus = (): DocumentRevisionStatus[] =>
   Object.values(DocumentRevisionStatus).filter((value) => value !== DocumentRevisionStatus.Deprecated);
 
+// TODO: check if we still need this
+// ENC-807 document types are fetched from BE
 export const documentRevisionTypeFormOption = () => {
   const options: SelectOption[] = [];
   Object.keys(DocumentRevisionType).map((key) => {
@@ -53,4 +58,21 @@ export const documentRevisionTypeFormOption = () => {
     options.push({value: key, text: keyName});
   });
   return _.orderBy(options, ["text"], ["asc"]);
+};
+
+export const documentRevisionReleasedDateOption = () => {
+  return [
+    {
+      text: ReleasedDateOptions.LAST_WEEK,
+      value: moment().subtract(7, "d").toISOString(),
+    },
+    {
+      text: ReleasedDateOptions.LAST_TWO_WEEKS,
+      value: moment().subtract(14, "d").toISOString(),
+    },
+    {
+      text: ReleasedDateOptions.LAST_MONTH,
+      value: moment().subtract(30, "d").toISOString(),
+    },
+  ];
 };

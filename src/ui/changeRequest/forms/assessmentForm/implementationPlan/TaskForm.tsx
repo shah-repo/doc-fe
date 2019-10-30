@@ -23,7 +23,7 @@ interface StateProps {
   availableAssignees: OptionType[];
 }
 
-type TaskFormProps = OwnProps & StateProps;
+export type TaskFormProps = OwnProps & StateProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   availableAssignees: changeRequestsSelectors.getAssignessList(state),
@@ -104,12 +104,13 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
         type="submit"
         color="primary"
         className={classes.submitBtn}
+        variant="contained"
       >
         <Text translation="transition.action.confirm" />
       </Button>
       <Button
-        variant="text"
-        color="secondary"
+        variant="outlined"
+        color="primary"
         onClick={cancel}
         className={classes.cancelBtn}
       >

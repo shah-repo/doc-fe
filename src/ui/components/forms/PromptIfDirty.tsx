@@ -8,21 +8,17 @@ interface Props {
 }
 
 const PromptIfDirty: React.FunctionComponent<Props> = ({
-  dirty, doNotPrompt, onDirtyFlagChange
+  dirty, doNotPrompt, onDirtyFlagChange,
 }) => {
   useEffect(() => {
     if (onDirtyFlagChange) {
       onDirtyFlagChange(dirty);
     }
-  }, [dirty]);
 
-  if (doNotPrompt) {
-    return null;
-  }
-  const startBeforeUnload = () => { window.onbeforeunload = (e: Event) => { e.returnValue = true; }};
-  const cancelBeforeUnload = () => window.onbeforeunload = () => {};
+    if (doNotPrompt) {
+      return;
+    }
 
-  useEffect(() => {
     if (dirty) {
       startBeforeUnload();
     } else {
@@ -36,9 +32,12 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
     };
   }, []);
 
+  const startBeforeUnload = () => { window.onbeforeunload = (e: Event) => { e.returnValue = true; }; };
+  const cancelBeforeUnload = () => window.onbeforeunload = () => {};
+
   return (
     <Prompt
-      when={dirty}
+      when={dirty && !doNotPrompt}
       message="Are you sure you want to leave? You have unsaved changes."
     />
   );

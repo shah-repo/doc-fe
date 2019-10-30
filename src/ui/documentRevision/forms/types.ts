@@ -1,9 +1,14 @@
 import { Attachment } from "../../../state/ducks/attachments";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
-import { DocumentRevisionDocument, Reference, RevisionChangeType } from "../../../state/ducks/documentRevisions";
+import {
+  DocumentRevisionDocument,
+  DocumentRevisionStatus,
+  RevisionChangeType,
+} from "../../../state/ducks/documentRevisions";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
+import { FBDocumentFlowProps } from "../../form.builder/types/formik";
 
-export interface DocumentRevisionFormValues {
+export interface DocumentRevisionFormValues extends FBDocumentFlowProps {
   id?: string;
   description: string;
   name: string;
@@ -14,4 +19,5 @@ export interface DocumentRevisionFormValues {
   changeRequest?: ChangeRequest;
   revisionStage?: number;
   retrain?: boolean;
+  status?: DocumentRevisionStatus;
 }

@@ -7,6 +7,7 @@ import {
   attachmentsActions,
 } from "../../../../state/ducks/attachments";
 import { ApplicationState } from "../../../../state/reducers";
+import formBuilderStore from "../../../form.builder/stores/FBStore";
 import useAsync from "../../../hooks/useAsync";
 import FormMessage from "../../forms/FormMessage";
 import FormProgress from "../../forms/FormProgress";
@@ -17,7 +18,7 @@ import { AttachmentContainerProps, AttachmentFieldDispatchProps } from "./utils/
 type DispatchProps = AttachmentFieldDispatchProps;
 
 export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContainerProps> = ({
-  name,
+  name = "",
   upload,
   component = "button",
   multiple = true,
@@ -42,9 +43,11 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
       if (!multiple) {
         return form!.setFieldValue(name, attachment);
       }
-      const attachments: Attachment[] = field!.value || [];
+      const attachments: Attachment[] = field!.value ? [...field!.value] : [];
       attachments.push(attachment!);
       form!.setFieldValue(name, attachments);
+      if (formBuilderStore.mode === "design") { return; }
+      formBuilderStore.values = {...formBuilderStore.values, [name as string]: attachments };
     },
   });
 
@@ -73,7 +76,15 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
     <Box>
       <FormProgress asyncState={async.asyncState} />
       <FormMessage asyncState={async.asyncState} />
-      <Presenter {...other} name={name} component={component} multiple={multiple} onChange={onChange} />
+      <Presenter
+        {...other}
+        name={name}
+        component={component}
+        multiple={multiple}
+        onChange={onChange}
+        form={form}
+        field={field}
+      />
     </Box>
   );
 };

@@ -5,5 +5,6 @@ export default (theme: Theme) =>
     progress: {
       marginTop: theme.spacing(1),
       marginBottom: theme.spacing(1),
+      minWidth: 150,
     },
   });

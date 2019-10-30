@@ -5,6 +5,7 @@ import {
   withStyles,
 } from "@material-ui/core";
 import { Formik } from "formik";
+import { Dictionary } from "lodash";
 import React from "react";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
@@ -12,6 +13,9 @@ import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import Text from "../../components/Text";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
+import FBWorkspace from "../../form.builder/main/workspace/FBWorkspace";
+import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
+import formBuilderStore from "../../form.builder/stores/FBStore";
 import Attachment from "./attachment";
 import ChangeRequestLink from "./changeRequestLink";
 import DocumentHeader from "./header";
@@ -19,12 +23,13 @@ import ReferencedByContainer from "./referencedBy.container";
 import ReferenceToContainer from "./referenceTo.container";
 import styles from "./styles";
 import TrainingControl from "./training.control";
+import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 
 interface OwnProps {
   canShowCreateVersionButton?: boolean;
 }
 
-type Props = OwnProps & DataProps<DocumentRevision> & WithStyles<typeof styles>;
+export type Props = OwnProps & DataProps<DocumentRevision> & WithStyles<typeof styles>;
 
 export const Presenter: React.FunctionComponent<Props> = ({
   classes,
@@ -45,6 +50,16 @@ export const Presenter: React.FunctionComponent<Props> = ({
 }) => {
   const onSubmit = () => void 0;
 
+  documentRevisionStore.fromDocumentRevision = dataProp;
+  let { formTemplate } = dataProp;
+  if (!formTemplate) {
+    const { formInput, formDocument } = dataProp;
+    formTemplate = formDocument && formDocument.formTemplate;
+    formBuilderStore.setFormTemplatePreview(formTemplate, formInput as Dictionary<any>);
+  } else {
+    formBuilderStore.setFormTemplatePreview(dataProp.formTemplate);
+  }
+
   const renderTrainingControl = status === DocumentRevisionStatus.Released && (
     <TrainingControl
       dataProp={trainingRecords}
@@ -62,6 +77,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         spacing={4}
         direction="column"
       >
+        {documentRevisionStore.outputInfo && <DocumentRevisionOutputInfo />}
         <ChangeRequestLink dataProp={dataProp} />
         <SummaryField label="document.title" value={name} />
         <SummaryField
@@ -85,7 +101,12 @@ export const Presenter: React.FunctionComponent<Props> = ({
         {attachments && <Attachment />}
         {renderTrainingControl}
       </Grid>
-      <Box className={classes.submitBox}>
+      {formBuilderStore.active && (
+         <Box px={5}>
+           <FBWorkspace />
+         </Box>
+       )}
+      <Box flexDirection="row-reverse" display="flex">
         <ControlsContainer
           documentRevision={dataProp}
           canShowCreateVersionButton={canShowCreateVersionButton}

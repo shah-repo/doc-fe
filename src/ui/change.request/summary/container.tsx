@@ -1,6 +1,6 @@
 import { Grid, WithStyles, withStyles } from "@material-ui/core";
-import { Form, Formik } from "formik";
-import React, { Fragment } from "react";
+import { Form, Formik, FormikErrors, FormikProps } from "formik";
+import React from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import {
@@ -18,13 +18,13 @@ import {
 } from "../../changeRequest/forms/transform";
 import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
 import DocumentRevisionSummaryPresenter from "../../document.revision/summary/presenter";
-import DocumentRevisionHeader from "./header";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
 import useAsync from "../../hooks/useAsync";
 import { canEditApprovers, canEditChangeRequest } from "../utils/helpers";
-import { SummaryDispatchProps } from "../utils/types";
-import Presenter from "./presenter";
 import { changeRequestEditPath } from "../utils/paths";
+import { SummaryDispatchProps } from "../utils/types";
+import DocumentRevisionLoader from "./loader";
+import Presenter from "./presenter";
 import styles from "./styles";
 
 type DispatchProps = SummaryDispatchProps;
@@ -33,7 +33,7 @@ interface OwnProps extends DataProps<ChangeRequest> {
   currentUserEmail: string;
 }
 
-type Props = OwnProps & DispatchProps & WithStyles<typeof styles>;
+export type Props = OwnProps & DispatchProps & WithStyles<typeof styles>;
 
 export const Container: React.FunctionComponent<Props> = ({
   classes,
@@ -42,18 +42,17 @@ export const Container: React.FunctionComponent<Props> = ({
   currentUserEmail,
   closeTask,
 }) => {
+  const [docRev, setDocRev] = React.useState<DocumentRevision | null>(null);
+  const async = useAsync<ChangeRequest>();
   if (canEditChangeRequest({ dataProp, currentUserEmail })) {
     return <Redirect to={changeRequestEditPath(dataProp.id)} />;
   }
-
-  const [docRev, setDocRev] = React.useState<DocumentRevision | null>(null);
 
   const docRevSummary = (documentRevision: DocumentRevision) =>
     setDocRev(documentRevision);
   const crSummary = () => setDocRev(null);
 
   const canEdit = canEditApprovers({ dataProp, currentUserEmail });
-  const async = useAsync<ChangeRequest>();
 
   const onSubmit = (values: ChangeRequestFormValues) => {
     async.start(
@@ -64,7 +63,7 @@ export const Container: React.FunctionComponent<Props> = ({
     );
   };
 
-  const summaryPresenterRenderer = () => (
+  const summaryPresenterRenderer = (props: FormikProps<ChangeRequestFormValues>) => (
     <Form>
       <Presenter
         dataProp={dataProp}
@@ -72,19 +71,20 @@ export const Container: React.FunctionComponent<Props> = ({
         canEdit={canEdit}
         currentUserEmail={currentUserEmail}
         closeTask={closeTask}
+        {...props}
       />
     </Form>
   );
 
   const validate = (values: ChangeRequestFormValues) => {
-    let errors: any = {}
+    const errors: FormikErrors<any> = {};
 
-    if (values.approvals.length === 0) {
+    if (!values.approvals || values.approvals.length === 0) {
       errors.approvals = "validators.approversRequired";
     }
 
     return errors;
-  }
+  };
 
   const summaryFormikRenderer = () => (
     <Formik
@@ -113,9 +113,7 @@ export const Container: React.FunctionComponent<Props> = ({
         </Grid>
         <Grid item={true} xs={7} className={classes.root}>
           {docRev && (
-            <DocumentRevisionSummaryPresenter
-              dataProp={{ ...docRev, changeRequest: dataProp }}
-            />
+            <DocumentRevisionLoader documentRevisionId={docRev.id} />
           )}
           {!docRev && summaryFormikRenderer()}
         </Grid>

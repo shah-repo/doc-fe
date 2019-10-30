@@ -13,7 +13,7 @@ import { DataProps } from "../../../state/ducks/common";
 import Text from "../../components/Text";
 import styles from "./styles";
 
-type Props = DataProps<ChangeRequest> & WithStyles<typeof styles>;
+export type Props = DataProps<ChangeRequest> & WithStyles<typeof styles>;
 
 export const Header: React.FunctionComponent<Props> = ({
   classes,

@@ -15,7 +15,6 @@ describe("TablePanel component tests", () => {
   const messages = { en: messagesEn };
   const language = "en";
 
-  const DocumentList = TablePanel<Document>();
   const data: Document[] = [getDocument()];
   const noRowsTranslation = "table.no.results.found";
   let isActionSelected: boolean = false;
@@ -56,7 +55,7 @@ describe("TablePanel component tests", () => {
   const getDocumentList = () => {
     return (
       <IntlProvider locale={language} messages={messages[language]}>
-        <DocumentList
+        <TablePanel<Document>
           tableData={data}
           columns={columns}
           noRowsTranslation={noRowsTranslation}

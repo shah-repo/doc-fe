@@ -26,10 +26,23 @@ import {
 
 type DocumentRevisionActions = DocumentRevisionsListAction | DocumentRevisionSetAction;
 
-export const byId = (state: DocumentRevisionsByIdState = {}, action: DocumentRevisionActions): DocumentRevisionsByIdState => {
+export const byId = (
+  state: DocumentRevisionsByIdState = {},
+  action: DocumentRevisionActions,
+): DocumentRevisionsByIdState => {
   switch (action.type) {
     case DOCUMENT_REVISION_LIST:
-      return { ...(_.keyBy<DocumentRevision>(action.payload, (documentRevision) => documentRevision.id)) };
+        return action.payload.reduce(
+          (acc: DocumentRevisionsByIdState, docRev: DocumentRevision) => {
+            return {
+              ...acc,
+              [docRev.id]: {
+                ...state[docRev.id],
+                ...docRev,
+              },
+            };
+        }, {});
+      // return { ...(_.keyBy<DocumentRevision>(action.payload, (documentRevision) => documentRevision.id)) };
     case DOCUMENT_REVISION_SET:
       return { ...state, [action.payload.id]: action.payload };
     default:
@@ -37,7 +50,10 @@ export const byId = (state: DocumentRevisionsByIdState = {}, action: DocumentRev
   }
 };
 
-export const allIds = (state: DocumentRevisionsAllIdsState = [], action: DocumentRevisionActions): DocumentRevisionsAllIdsState => {
+export const allIds = (
+  state: DocumentRevisionsAllIdsState = [],
+  action: DocumentRevisionActions,
+): DocumentRevisionsAllIdsState => {
   switch (action.type) {
     case DOCUMENT_REVISION_LIST:
       return _.uniq([...action.payload.map((documentRevision) => documentRevision.id)]);
@@ -48,7 +64,10 @@ export const allIds = (state: DocumentRevisionsAllIdsState = [], action: Documen
   }
 };
 
-export const documentsById = (state: DocumentByIdState = {}, action: DocumentSetAction): DocumentByIdState => {
+export const documentsById = (
+  state: DocumentByIdState = {},
+  action: DocumentSetAction,
+): DocumentByIdState => {
   switch (action.type) {
     case DOCUMENT_SET:
       return { ...state, [action.payload.id]: action.payload };

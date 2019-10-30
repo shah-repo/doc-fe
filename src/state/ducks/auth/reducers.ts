@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import asyncReducer from "../../reducers/asyncReducer";
 import {
   AUTH_TOKENS,
   AUTH_USER,
@@ -6,8 +7,15 @@ import {
   USER_PERMISSIONS,
   USER_PERMISSIONS_GET_ASYNC,
 } from "./constants";
-import { AuthTokensAction, AuthUserAction, LogoutUserAction, TokensState, UserState, UserPermissionsState, UserPermissionsAction } from "./types";
-import asyncReducer from "../../reducers/asyncReducer";
+import {
+  AuthTokensAction,
+  AuthUserAction,
+  LogoutUserAction,
+  TokensState,
+  UserPermissionsAction,
+  UserPermissionsState,
+  UserState,
+} from "./types";
 
 export const TOKENS_DEFAULT_STATE: TokensState = {
   id: { value: "", expiresAt: "" },
@@ -49,10 +57,13 @@ export const user = (state: UserState = USER_DEFAULT_STATE, action: AuthUserActi
 
 export const USER_PERMISSIONS_DEFAULT_STATE: UserPermissionsState = [];
 
-export const permissions = (state: UserPermissionsState = USER_PERMISSIONS_DEFAULT_STATE, action: UserPermissionsAction): UserPermissionsState => {
+export const permissions = (
+  state: UserPermissionsState = USER_PERMISSIONS_DEFAULT_STATE,
+  action: UserPermissionsAction,
+): UserPermissionsState => {
   switch (action.type) {
     case USER_PERMISSIONS:
-      return action.payload
+      return action.payload;
     default:
       return state;
   }

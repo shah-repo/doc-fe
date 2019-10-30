@@ -8,11 +8,11 @@ import { Dashboard } from "@material-ui/icons";
 import React from "react";
 import { Link } from "react-router-dom";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import Logo from "../components/icons/Logo";
+import BottomLogo from "../components/icons/BottomLogo.container";
+import Logo from "../components/icons/Logo.container";
 import {
   CHANGE_REQUEST_LIST_URL,
   DOCUMENT_REVISION_LIST_URL,
-  FORM_BUILDER_URL,
   HOME_URL,
 } from "../constants/urls";
 import styles from "./Navigation.styles";
@@ -57,6 +57,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({ classes, locatio
         currentPath={location.pathname}
       />
     </List>
+    <BottomLogo />
   </Drawer>
 );
 

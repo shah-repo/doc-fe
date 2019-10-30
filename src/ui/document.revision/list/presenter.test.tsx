@@ -1,0 +1,42 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { ListPresenter, Props} from "./presenter";
+import { getDocumentRevision } from "../../../state/ducks/documentRevisions/tests/factories";
+import faker from "faker";
+import { Grid } from "@material-ui/core";
+import { Link as RouterLink } from "react-router-dom";
+import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
+
+describe("ListPresenter tests", () => {
+  const defaultProps: Props = {
+    dataProp: [getDocumentRevision()],
+    currentUserEmail: faker.internet.email(),
+    editDocumentRevision: jest.fn(),
+    setDocId: jest.fn(),
+    previewDocumentRevision: jest.fn(),
+    documentTypeOptions: [{
+        value: faker.lorem.word(),
+        text: faker.lorem.word(),
+    }],
+    classes: {
+        root: "",
+        button: "",
+        item: "",
+        link: "",
+        clearButton: "",
+    },
+  };
+
+  const getWrapper = (props: Partial<Props>= {}) => shallow(
+    <ListPresenter {...defaultProps} {...props}/>,
+  );
+  it("RouterLink props are set correctly", () => {
+    const wrapper = getWrapper();
+    expect(wrapper.find(RouterLink).prop("to")).toEqual(DOCUMENT_REVISION_CREATE_URL);
+  });
+
+  it("tableData is set correctly", () => {
+      const wrapper = getWrapper();
+      expect(wrapper.find(Grid).at(3).children().prop("tableData")).toEqual(defaultProps.dataProp);
+  });
+});

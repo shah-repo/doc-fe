@@ -13,10 +13,11 @@ export const TableSearchSelectField: React.FunctionComponent<Props> = ({
   selectOptions = [],
   searchValueGetter,
   queryGetter,
+  defaultValue,
 }) => {
 
   const classes = selectStyles();
-  const [value, setValue] = React.useState<string | number>("");
+  const [value, setValue] = React.useState<string | number>(defaultValue || "");
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     if (!queryGetter) { return; }

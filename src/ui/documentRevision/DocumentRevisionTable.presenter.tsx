@@ -20,12 +20,13 @@ import {
   DocumentRevisionListItem,
 } from "./types";
 
-interface DocumentRevisionTableProps extends DocumentRevisionActionProps, WithStyles<typeof styles> {
+export interface DocumentRevisionTableProps extends DocumentRevisionActionProps, WithStyles<typeof styles> {
   documentRevisions: DocumentRevision[];
   currentUserEmail: string;
 }
 
-const DocumentRevisionTable: React.FunctionComponent<DocumentRevisionTableProps> = ({
+// TODO: check if this can be deleted
+export const DocumentRevisionTable: React.FunctionComponent<DocumentRevisionTableProps> = ({
   classes, documentRevisions, currentUserEmail, editDocumentRevision, previewDocumentRevision,
 }) => {
   const rowGetter = ({ index }: Index): DocumentRevisionListItem => {
@@ -38,7 +39,7 @@ const DocumentRevisionTable: React.FunctionComponent<DocumentRevisionTableProps>
       name: documentRevision.name,
       owner: documentRevision.owner.name,
       status: documentRevision.status,
-      type: documentRevision.type,
+      type: documentRevision.document.documentType.documentTypeName || "",
     };
   };
 

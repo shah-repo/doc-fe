@@ -5,6 +5,7 @@ import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks
 import { documentsActions } from "../../../state/ducks/documents";
 import { TrainingRecord } from "../../../state/ducks/training";
 import { LoadAsyncState } from "../../../state/types";
+import { SelectOption } from "../../components/forms/fields/Select";
 
 // Container
 export type ContainerProps = ContainerOwnProps & ContainerDispatchProps & ContainerStateProps;
@@ -18,11 +19,19 @@ export interface ContainerDispatchProps {
 // List
 export type ListProps = ListDispatchProps & ListStateProps;
 export type ListOwnProps = RouteComponentProps;
-export type ListStateProps = DataProps<DocumentRevision[]> & LoadAsyncState & AuthProps;
+export type ListStateProps = DataProps<DocumentRevision[]> & LoadAsyncState & AuthProps & {
+  documentTypeOptions: SelectOption[];
+};
 
 export interface ListDispatchProps {
   loadDocumentRevisions: typeof documentRevisionsActions.loadList;
   setDocId: typeof documentsActions.setDocumentProposedId;
+}
+
+export enum ReleasedDateOptions {
+  LAST_WEEK = "Last 7 days",
+  LAST_TWO_WEEKS = "Last 14 days",
+  LAST_MONTH = "Last 30 days",
 }
 
 // Summary
@@ -42,6 +51,7 @@ export interface SummaryOwnProps {
 export type DocumentRevisionUserProps = DataProps<DocumentRevision> & AuthProps;
 export type DocumentRevisionsUserProps = DataProps<DocumentRevision[]> & ActionProps & AuthProps & {
   setDocId: typeof documentsActions.setDocumentProposedId;
+  documentTypeOptions: SelectOption[];
 };
 
 export interface RouteParams {

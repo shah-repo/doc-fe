@@ -2,12 +2,13 @@ import { Attachment } from "../attachments";
 import { ChangeRequest } from "../changeRequest";
 import { Approval, User } from "../common";
 import { DocumentRevision, Reference } from "../documentRevisions";
+import { DocumentType } from "../documentRevisions/documentType";
 
 export interface Audit {
   id: string;
   field: string;
   type: string;
-  nextValue: string | User | Attachment | Approval | Reference | DocumentRevision | ChangeRequest;
+  nextValue: string | User | Attachment | Approval | Reference | DocumentRevision | ChangeRequest | DocumentType;
   timestamp: string;
   groupId: string;
   owner: User;

@@ -9,6 +9,7 @@ import AssessmentsField from "../../../change.request/form/assessments";
 import JustificationField from "../../../change.request/form/justification";
 import DatePickerField from "../../../components/forms/fields/DatePicker";
 import InputField from "../../../components/forms/fields/Input";
+import TextEditorField from "../../../components/forms/fields/TextEditor";
 import {
   required,
   validator,
@@ -17,14 +18,13 @@ import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";
 import FormWrapper from "../../../components/forms/FormWrapper";
 import PromptIfDirty from "../../../components/forms/PromptIfDirty";
+import ScrollToError from "../../../components/forms/ScrollToError";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import useDidMount from "../../../hooks/useDidMount";
 import { ChangeRequestFormValues } from "../types.js";
 import styles from "./AssessmentForm.styles";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
 import AssessmentFormImplementationPlan from "./implementationPlan/Container";
-import TextEditorField from "../../../components/forms/fields/TextEditor";
-import ScrollToError from "../../../components/forms/ScrollToError";
 
 interface Props
   extends WithStyles<typeof styles>,
@@ -77,7 +77,8 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
       <FormWrapper
         dirty={dirty}
         resetForm={resetForm}
-        initialValues={initialValues}>
+        initialValues={initialValues}
+      >
         <ScrollToError
           isSubmitting={isSubmitting}
           isValidating={isValidating}
@@ -118,7 +119,8 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
             item={true}
             container={true}
             alignItems="flex-end"
-            direction="column">
+            direction="column"
+          >
             <div>
               <AssessmentFormControlsContainer changeRequest={changeRequest} />
               <SubmitButton

@@ -16,14 +16,9 @@ import { toNewVersionRequestBody } from "./forms/transform";
 import { generateDocumentRevisionVersionPath } from "./pathGenerators";
 
 describe("DocumentRevisionCreateContainer tests", () => {
-  const documentRevision = getDocumentRevision();
   const defaultProps: DocumentRevisionCreateContainerProps = {
     ...getRouteComponentProps(),
     create: jest.fn(),
-    loadDocumentRevisions: jest.fn(),
-    documentRevisions: [documentRevision],
-    loadAsyncState: getAsyncState(),
-    loadDocument: jest.fn(),
     setDocId: jest.fn(),
   };
 
@@ -50,7 +45,6 @@ describe("DocumentRevisionCreateContainer tests", () => {
     const documentRevision = getDocumentRevision();
     (createParameters[1].successHandler as CallbackHandler<DocumentRevision>).execute(documentRevision);
 
-    expect(defaultProps.loadDocument).toHaveBeenCalledWith(documentRevision.document.id);
     expect(routeComponentProps.history.push).toHaveBeenCalledWith(
       generateDocumentRevisionVersionPath(documentRevision.id, documentRevision.document.id),
     );

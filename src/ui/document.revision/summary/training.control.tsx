@@ -17,6 +17,9 @@ const TrainingControl: React.FunctionComponent<Props> = ({
   dataProp,
   documentRevisionId,
 }) => {
+  const applyTransition = useActionCreator(trainingActions.applyTransition);
+  const dialog = useDialog();
+  const async = useAsync({ onSuccess: dialog.close });
   const trainingRecord = useMemo(() =>
     dataProp &&
     dataProp.find((record) => !record.completedAt && record.isValid)
@@ -26,9 +29,6 @@ const TrainingControl: React.FunctionComponent<Props> = ({
     return null;
   }
 
-  const applyTransition = useActionCreator(trainingActions.applyTransition);
-  const dialog = useDialog();
-  const async = useAsync({ onSuccess: dialog.close });
   const transition = TrainingPlanTransition.Complete;
   const label = "training.completed";
 

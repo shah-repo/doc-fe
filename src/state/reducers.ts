@@ -4,15 +4,22 @@ import storage from "redux-persist/lib/storage";
 import auth from "./ducks/auth";
 import { LOGOUT_USER } from "./ducks/auth/constants";
 import changeRequests from "./ducks/changeRequest";
-import documentRevisions from "./ducks/documentRevisions";
-import documents from "./ducks/documents";
+import company from "./ducks/company";
 import dashboard from "./ducks/dashboard";
+import documentRevisions from "./ducks/documentRevisions";
+import documentType from "./ducks/documentRevisions/documentType";
+import documents from "./ducks/documents";
 import formBuilderState from "./ducks/formBuilder";
 
 const authPersistConfig = {
   key: "auth",
   storage,
   whitelist: ["tokens", "user"],
+};
+const companyPersistConfig = {
+  key: "company",
+  storage,
+  whitelist: ["selectedCompany"],
 };
 
 const appReducer = combineReducers({
@@ -22,12 +29,18 @@ const appReducer = combineReducers({
   documentRevisions,
   dashboard,
   formBuilderState,
+  documentType,
+  company: persistReducer(companyPersistConfig, company),
 });
 
 const rootReducer = (state: any, action: any) => {
   if (action.type === LOGOUT_USER) {
-    const { auth } = state;
-    state = { auth };
+    const { auth: authState } = state;
+    const { company: companyState } = state;
+    state = {
+      auth: authState,
+      company: companyState,
+    };
   }
 
   return appReducer(state, action);

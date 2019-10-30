@@ -1,10 +1,10 @@
-import { Grid, withStyles, WithStyles, Typography } from "@material-ui/core";
+import { Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
 import React from "react";
 import ReactQuill from "react-quill";
-import Text from "../../components/Text";
-import { SummaryBaseProps } from "./types";
 import { sanitizeHtml } from "../../../common/utils/helpers";
+import Text from "../../components/Text";
 import styles from "./styles";
+import { SummaryBaseProps } from "./types";
 
 type Props = SummaryBaseProps & WithStyles<typeof styles>;
 
@@ -13,7 +13,7 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
   value,
   classes,
 }) => (
-  <Grid item xs={12}>
+  <Grid item={true} xs={12}>
     {label && (
       <Grid item={true} xs={12}>
         <Typography variant="h6">

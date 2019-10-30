@@ -1,0 +1,34 @@
+.editor-container.label-margin {
+  margin-top: 33px;
+}
+
+.editor-container {
+  margin-top: 5px;
+}
+
+.editor-container [class*="ql-assessment-"] .ql-picker-label {
+  padding-right: 20px;
+}
+
+[class*="ql-assessment-"] .ql-picker-options .ql-picker-item {
+  max-width: 30vw;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.editor-container .ql-container {
+  background: transparent;
+  font-size: 16px;
+  border: 1px solid #b4c0ca;
+}
+
+.task-description .editor-container .ql-editor {
+  min-height: 18vh;
+  max-height: 24vh;
+}
+
+.editor-container .ql-editor {
+  min-height: 8em;
+  max-height: 36em;
+}

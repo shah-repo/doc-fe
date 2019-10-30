@@ -5,7 +5,9 @@ import {
   WithStyles,
   withStyles,
 } from "@material-ui/core";
-import React from "react";
+import { FormikProps } from "formik";
+import _ from "lodash";
+import React, { useMemo } from "react";
 import {
   ChangeRequest,
   changeRequestsActions,
@@ -13,7 +15,9 @@ import {
 import { DataProps } from "../../../state/ducks/common";
 import { AsyncState } from "../../../state/types";
 import ControlsContainer from "../../changeRequest/forms/assessmentForm/AssessmentFormControls.container";
+import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
+import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
 import SubmitButton from "../../components/forms/SubmitButton";
 import ApproversField from "../form/approvers";
@@ -31,7 +35,7 @@ interface OwnProps extends DataProps<ChangeRequest> {
   closeTask: typeof changeRequestsActions.closeTask;
 }
 
-type Props = OwnProps & WithStyles<typeof styles>;
+export type Props = OwnProps & WithStyles<typeof styles> & FormikProps<ChangeRequestFormValues>;
 
 export const Presenter: React.FunctionComponent<Props> = ({
   classes,
@@ -40,20 +44,23 @@ export const Presenter: React.FunctionComponent<Props> = ({
   canEdit,
   currentUserEmail,
   closeTask,
+  errors,
 }) => {
+  const approvedApprovers = useMemo(() => _.filter(dataProp.approvals, ["status", "APPROVED"] ), [dataProp]);
+
   const approversFieldRenderer = () => (
     <Box>
       <ListItem>
-        <ApproversField />
+        <ApproversField dataProp={approvedApprovers}/>
       </ListItem>
     </Box>
   );
 
   const submitButtonRenderer = () => (
-    <SubmitButton asyncState={asyncState} label="document.save" />
+    <SubmitButton asyncState={asyncState} label="document.save" errors={errors} />
   );
 
-  const renderImplementationPlan = dataProp.implementationPlan && 
+  const renderImplementationPlan = dataProp.implementationPlan &&
     (dataProp.implementationPlan.attachments.length > 0 || dataProp.implementationPlan.tasks.length > 0) &&
     (
       <ImplementationPlan
@@ -92,10 +99,12 @@ export const Presenter: React.FunctionComponent<Props> = ({
           item={true}
           container={true}
           alignItems="flex-end"
-          direction="column">
+          direction="column"
+        >
           {canEdit && <FormProgress asyncState={asyncState} />}
+          {canEdit && <FormMessage asyncState={asyncState} />}
           {canEdit && submitButtonRenderer()}
-          <ControlsContainer changeRequest={dataProp} />
+          <ControlsContainer changeRequest={dataProp} errors={errors} />
         </Grid>
       </Box>
     </Box>
