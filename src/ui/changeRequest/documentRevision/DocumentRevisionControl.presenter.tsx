@@ -34,13 +34,15 @@ export const DocumentRevisionControlPresenter: React.FunctionComponent<
   openAddDocuments,
 }) => {
   const classes = styles();
+  const handleDelete = (documentRevisionId: string) => () => deleteDocumentFromChangeRequest(documentRevisionId);
+  const handleClick = (documentRevisionId: string) => () => selectDocumentRevision(documentRevisionId);
   const renderDocumentRevisions = () =>
     documentsInChangeRequest.map((documentRevisionId: string) => (
       <DocumentRevisionItemPresenter
         key={documentRevisionId}
         documentRevision={documentsInCrById[documentRevisionId] || documentRevisionsById[documentRevisionId]}
-        onDelete={() => deleteDocumentFromChangeRequest(documentRevisionId)}
-        onClick={() => selectDocumentRevision(documentRevisionId)}
+        onDelete={handleDelete(documentRevisionId)}
+        onClick={handleClick(documentRevisionId)}
         selectedDocumentRevision={selectedDocumentRevision!}
       />
     ));
