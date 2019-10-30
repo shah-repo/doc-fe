@@ -11,6 +11,7 @@ import {
   DocumentRevisionsByIdState,
   DocumentRevisionStatus,
 } from "../../../state/ducks/documentRevisions";
+import { TablePanelStateProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import styles from "./AddDocumentRevision.styles";
 import DocumentRevisionTable from "./DocumentRevisionTable.presenter";
@@ -22,13 +23,21 @@ interface AddDocumentRevisionContainerProps extends WithStyles<typeof styles> {
   documentsInChangeRequest: string[];
   documentRevisionsList: DocumentRevision[];
   documentRevisionsById: DocumentRevisionsByIdState;
+  tableName: string;
+  tableState: TablePanelStateProps<DocumentRevision>;
 }
 
 export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRevisionContainerProps> = ({
-  isOpen, close, documentRevisionsList, classes,
-  doneAddingDocuments, documentsInChangeRequest, documentRevisionsById,
+  isOpen,
+  close,
+  documentRevisionsList,
+  classes,
+  doneAddingDocuments,
+  documentsInChangeRequest,
+  documentRevisionsById,
+  tableName,
+  tableState,
 }) => {
-  const TABLE_NAME = "addDocRevTable";
   const [documentRevisionsToShow, setDocumentRevisionsToShow] = useState<DocumentRevision[]>([]);
   const [addedDocuments, setAddedDocuments] = useState<string[]>([]);
   const addDocument = (documentRevisionId: string) => setAddedDocuments([...addedDocuments, documentRevisionId]);
@@ -85,7 +94,8 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
           documentRevisionsToShow={documentRevisionsToShow}
           addDocument={addDocument}
           addedDocuments={addedDocuments}
-          tableName={TABLE_NAME}
+          tableName={tableName}
+          tableState={tableState}
         />
       </DialogContent>
     </Dialog>

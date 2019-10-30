@@ -1,9 +1,9 @@
-import Button from "@material-ui/core/Button";
-import React, { useState } from "react";
-
 import { Fab, Icon, withStyles, WithStyles } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 import { AddCircleRounded } from "@material-ui/icons";
-import { connect } from "react-redux";
+import _ from "lodash";
+import React, { useState } from "react";
+import { connect, useDispatch, useSelector } from "react-redux";
 import {
   DocumentRevision,
   documentRevisionsActions,
@@ -11,9 +11,9 @@ import {
   documentRevisionsSelectors,
   DocumentRevisionStatus,
 } from "../../../state/ducks/documentRevisions";
+import { tableSearchActions, tableSearchSelectors } from "../../../state/ducks/tableSearch";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
-import AsyncGate from "../../components/AsyncGate";
 import Text from "../../components/Text";
 import AddDocumentRevisionContainer from "./AddDocumentRevision.container";
 import styles from "./DocumentRevisionControl.styles";
@@ -86,47 +86,58 @@ export const DocumentRevisionControlContainer: React.FunctionComponent<
       />
     ));
 
-  const loadDocumentRevisionsAction = () => loadDocumentRevisions([DocumentRevisionStatus.Draft]);
+  const TABLE_NAME = "addDocRevTable";
+  const tableState = useSelector((reduxState: ApplicationState) =>
+    tableSearchSelectors.getTableState(reduxState, TABLE_NAME),
+  );
+  const dispatch = useDispatch();
+  if (_.isEmpty(tableState.queryDict)) {
+    dispatch(tableSearchActions.setSearchCriteria(
+      {
+        ...tableState,
+        queryDict: {
+          "status[]": DocumentRevisionStatus.Draft,
+        },
+      },
+      TABLE_NAME,
+    ));
+  }
 
   return (
-    <AsyncGate
-      asyncState={loadDocumentRevisionsAsyncState}
-      asyncAction={loadDocumentRevisionsAction}
-      startActionOnMount={true}
-    >
-      <div className={classes.container}>
-        <Fab
-          color="primary"
-          variant="extended"
-          size="large"
-          onClick={selectAssessmentForm}
-        >
-          <Text translation="changeRequest.documentControl.changeRequestForm" />
-        </Fab>
-        <div className={classes.documentRevisionContainer}>
-          {renderDocumentRevisions()}
-        </div>
-        <Button
-          variant="text"
-          color="primary"
-          onClick={openAddDocuments}
-          fullWidth={true}
-          className={classes.addDocument}>
-          <Icon className={classes.leftIcon}>
-            <AddCircleRounded />
-          </Icon>
-          <Text translation="changeRequest.documentControl.addDocuments" />
-        </Button>
-        <AddDocumentRevisionContainer
-          isOpen={showAddDocuments}
-          close={closeAddDocuments}
-          doneAddingDocuments={doneAddingDocuments}
-          documentsInChangeRequest={documentsInChangeRequest}
-          documentRevisionsList={documentRevisionsList}
-          documentRevisionsById={documentRevisionsById}
-        />
+    <div className={classes.container}>
+      <Fab
+        color="primary"
+        variant="extended"
+        size="large"
+        onClick={selectAssessmentForm}
+      >
+        <Text translation="changeRequest.documentControl.changeRequestForm" />
+      </Fab>
+      <div className={classes.documentRevisionContainer}>
+        {renderDocumentRevisions()}
       </div>
-    </AsyncGate>
+      <Button
+        variant="text"
+        color="primary"
+        onClick={openAddDocuments}
+        fullWidth={true}
+        className={classes.addDocument}>
+        <Icon className={classes.leftIcon}>
+          <AddCircleRounded />
+        </Icon>
+        <Text translation="changeRequest.documentControl.addDocuments" />
+      </Button>
+      <AddDocumentRevisionContainer
+        isOpen={showAddDocuments}
+        close={closeAddDocuments}
+        doneAddingDocuments={doneAddingDocuments}
+        documentsInChangeRequest={documentsInChangeRequest}
+        documentRevisionsList={documentRevisionsList}
+        documentRevisionsById={documentRevisionsById}
+        tableName={TABLE_NAME}
+        tableState={tableState}
+      />
+    </div>
   );
 };
 

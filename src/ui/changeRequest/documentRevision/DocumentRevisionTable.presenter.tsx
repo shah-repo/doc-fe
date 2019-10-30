@@ -1,13 +1,15 @@
 import { Paper, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
+import { useDispatch } from "react-redux";
 import {
   DocumentRevision,
+  documentRevisionsActions,
   DocumentRevisionStatus,
 } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { TableColumnProps } from "../../components/table/column/types";
 import { TablePanel } from "../../components/table/panel";
-import { TableSearchQueryType, TableSelectionProps } from "../../components/table/types";
+import { TablePanelStateProps, TableSearchQueryType, TableSelectionProps } from "../../components/table/types";
 import { generateVersionNumber } from "../../documentRevision/helpers";
 import styles from "./DocumentRevisionTable.styles";
 
@@ -16,14 +18,24 @@ interface DocumentRevisionTableProps extends WithStyles<typeof styles> {
   addDocument: (documentRevisionId: string) => void;
   addedDocuments: string[];
   tableName: string;
+  tableState: TablePanelStateProps<DocumentRevision>;
 }
 
 const DocumentRevisionTable: React.FunctionComponent<
   DocumentRevisionTableProps
-> = ({ classes, tableName, addDocument, addedDocuments }) => {
+> = ({
+  classes,
+  tableName,
+  addDocument,
+  addedDocuments,
+  tableState,
+}) => {
+  const dispatch = useDispatch();
   const onStateSelect = ({
     rowData,
   }: TableSelectionProps<DocumentRevision>) => () => {
+    // saving the document to documentRevisionsById
+    dispatch(documentRevisionsActions.documentRevisionSet(rowData));
     return addDocument(rowData.id);
   };
 
@@ -43,11 +55,17 @@ const DocumentRevisionTable: React.FunctionComponent<
         cellDataGetter: ({ rowData }) => rowData.document.docId,
         width: 100,
       },
+      searchOptions: {
+        defaultValue: tableState.queryDict.docId,
+      },
     },
     {
       key: "name",
       label: "changeRequest.documentRevisionTable.name",
       columnOptions: { flexGrow: 1 },
+      searchOptions: {
+        defaultValue: tableState.queryDict.name,
+      },
     },
     {
       key: "version",
@@ -56,6 +74,9 @@ const DocumentRevisionTable: React.FunctionComponent<
         cellDataGetter: ({ rowData: { revision, revisionStage }}) => generateVersionNumber(revision, revisionStage),
         width: 50,
       },
+      searchOptions: {
+        defaultValue: tableState.queryDict.version,
+      },
     },
     {
       key: "owner",
@@ -63,6 +84,9 @@ const DocumentRevisionTable: React.FunctionComponent<
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.owner.name,
         flexGrow: 2,
+      },
+      searchOptions: {
+        defaultValue: tableState.queryDict.owner,
       },
     },
     {
