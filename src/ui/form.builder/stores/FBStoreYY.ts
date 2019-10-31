@@ -94,6 +94,7 @@ export class FBStore {
     this.groupType = "FORM";
     this.mode = "design";
     this.setFormTemplate(formTemplate);
+    this.values = {};
   }
 
   @action public setFormTemplatePreview = (

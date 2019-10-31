@@ -40,11 +40,12 @@ import {
   documentVersionPath,
 } from "../../document.revision/utils/paths";
 import FBWorkspace from "../../form.builder/main/workspace/FBWorkspace";
+import documentRevisionStore1 from "../../form.builder/stores/FBDRStore";
 import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
-import formBuilderStore from "../../form.builder/stores/FBStore";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
+import formBuilderStore from "../../form.builder/stores/FBStore";
 
 export interface Props
   extends WithStyles<typeof styles>,
@@ -76,7 +77,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   resetForm,
   doNotPrompt,
   onDirtyFlagChange,
-  classes,
   isSubmitting,
   isValidating,
   errors,
@@ -84,14 +84,14 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   documentTypesById,
 }) => {
 
-  const reqType = documentRevisionStore.requestType(initialValues);
+  // const reqType = documentRevisionStore.requestType(initialValues);
   const openReference = (documentId: string) => {
     window.open(documentDetailsPath(documentId), "_blank");
   };
 
   const isDisabled: boolean = initialValues.id !== undefined;
   const docIdValue = isDisabled ? values.document!.docId : proposedDocId;
-  const typeIsDisabled = isDisabled || (reqType === "fbCreate" || reqType === "fbUpdate");
+  // const typeIsDisabled = isDisabled || (reqType === "fbCreate" || reqType === "fbUpdate");
 
   if (!isDisabled && values.document) {
     values.document.docId = proposedDocId;
@@ -121,7 +121,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     const typeId = event.target.value as string;
     const type = documentTypesById[typeId] || {};
     loadDocumentProposedId(type.documentTypeAcronym);
-    formBuilderStore.groupType = type.group;
+    documentRevisionStore1.setInitialFBMode(type.group);
     handleChange(event);
   };
 
@@ -235,7 +235,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             name="document.documentType.id"
             label="document.type"
             selectProps={{
-              inputProps: { id: "documentType", disabled: typeIsDisabled},
+              // inputProps: { id: "documentType", disabled: typeIsDisabled},
+              inputProps: { id: "documentType"},
               onChange: handleTypeChange,
             }}
             options={documentTypes}
@@ -268,7 +269,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           <CheckboxField name="retrain" label="document.revision.trainingRequired"/>
           <AttachmentsField />
           {renderTypeOfRevisionChange()}
-          {documentRevisionStore.outputActive && (
+          {formBuilderStore.active && (
             <Box mt={4}>
               <SelectField
                 name="formTemplate.outputDocumentType.id"

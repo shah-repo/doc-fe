@@ -130,27 +130,27 @@ export class FBDocumentRevisionStore {
     this.fromDocumentRevision = record;
     const ft = this.formTemplate;
 
-    switch (mode) {
-      case "update":
-        const { documentType } = (record && record.document) || {};
-        if (!documentType || documentType.group !== "FORM") {
-          this.reset();
-        }
-        return formBuilderStore.setFormTemplateDesign(ft);
-      case "updateFromOther":
-        const { formInput }: Dictionary<any> = record || {};
-        const { formTemplate } = (record && record.formDocument) || {};
-        if (!formTemplate) {
-          return this.reset();
-        }
-        return formBuilderStore.setFormTemplateForm(ft, formInput);
-      case "createFrom":
-        return formBuilderStore.setFormTemplateForm(ft);
-      case "create":
-        this.reset();
-        formBuilderStore.reset();
-        return formBuilderStore.setFormTemplateDesign(ft);
-    }
+    // switch (mode) {
+    //   case "update":
+    //     const { documentType } = (record && record.document) || {};
+    //     if (!documentType || documentType.group !== "FORM") {
+    //       this.reset();
+    //     }
+    //     return formBuilderStore.setFormTemplateDesign(ft);
+    //   case "updateFromOther":
+    //     const { formInput }: Dictionary<any> = record || {};
+    //     const { formTemplate } = (record && record.formDocument) || {};
+    //     if (!formTemplate) {
+    //       return this.reset();
+    //     }
+    //     return formBuilderStore.setFormTemplateForm(ft, formInput);
+    //   case "createFrom":
+    //     return formBuilderStore.setFormTemplateForm(ft);
+    //   case "create":
+    //     this.reset();
+    //     formBuilderStore.reset();
+    //     return formBuilderStore.setFormTemplateDesign(ft);
+    // }
   }
 
   @action public reset = () => {

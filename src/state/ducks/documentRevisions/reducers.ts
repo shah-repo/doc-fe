@@ -23,6 +23,7 @@ import {
   DocumentRevisionsListAction,
   DocumentSetAction,
 } from "./types";
+import documentRevisionStore1 from "../../../ui/form.builder/stores/FBDRStore";
 
 type DocumentRevisionActions = DocumentRevisionsListAction | DocumentRevisionSetAction;
 
@@ -44,6 +45,7 @@ export const byId = (
         }, {});
       // return { ...(_.keyBy<DocumentRevision>(action.payload, (documentRevision) => documentRevision.id)) };
     case DOCUMENT_REVISION_SET:
+      documentRevisionStore1.setValues(action.payload);
       return { ...state, [action.payload.id]: action.payload };
     default:
       return state;

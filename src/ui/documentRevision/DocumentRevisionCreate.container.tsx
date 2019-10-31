@@ -48,12 +48,13 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   let initialValues = DEFAULT_INITIAL_VALUES();
 
   if (isNew) {
-    if (documentRevisionStore.mode === "createFrom") {
-      initialValues = documentRevisionStore.setValues(initialValues);
-    } else {
-      documentRevisionStore.setMode("create");
-      setDocId("");
-    }
+    initialValues = documentRevisionStore.setValues(initialValues);
+    // if (documentRevisionStore.mode === "createFrom") {
+    //   initialValues = documentRevisionStore.setValues(initialValues);
+    // } else {
+    //   documentRevisionStore.setMode("create");
+    //   setDocId("");
+    // }
   } else {
     initialValues = toDocumentRevisionFormValuesWithRevisionChange(documentRevision);
   }
