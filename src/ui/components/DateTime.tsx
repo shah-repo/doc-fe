@@ -12,7 +12,7 @@ export const DateTime: React.FunctionComponent<Props> = ({
   format,
   ...other
 }) => (
-  <Moment format={format || "MMMM Do YYYY h:mm a"} {...other}>
+  <Moment format={format || "LLL"} {...other}>
     {value}
   </Moment>
 );
