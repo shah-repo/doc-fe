@@ -1,22 +1,20 @@
 import _ from "lodash";
 import React from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
-import { authSelectors } from "../../../state/ducks/auth";
+import { useDispatch, useSelector } from "react-redux";
+import authSelectors from "../../../state/ducks/auth/selectors";
 import {
-  documentRevisionsSelectors, DocumentRevisionStatus,
+  DocumentRevisionStatus,
 } from "../../../state/ducks/documentRevisions";
-import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
-import { documentsActions } from "../../../state/ducks/documents";
-import { tableSearchActions, tableSearchSelectors } from "../../../state/ducks/tableSearch";
+import documentTypeSelectors from "../../../state/ducks/documentRevisions/documentType/selectors";
+import tableSearchActions from "../../../state/ducks/tableSearch/actions";
+import tableSearchSelectors from "../../../state/ducks/tableSearch/selectors";
 import { ApplicationState } from "../../../state/reducers";
 import {
   documentEditPath,
   documentPreviewPath,
 } from "../utils/paths";
 import {
-  ListDispatchProps,
   ListOwnProps,
-  ListStateProps,
 } from "../utils/types";
 import ListPresenter from "./presenter";
 
