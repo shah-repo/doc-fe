@@ -102,6 +102,9 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     icon: {
       right: "10px",
     },
+    select: {
+      paddingLeft: appTheme.spacing(0.5),
+    },
   },
   MuiTooltip: {
     tooltip: {

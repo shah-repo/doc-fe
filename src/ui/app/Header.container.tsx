@@ -5,9 +5,7 @@ import { authActions, authSelectors } from "../../state/ducks/auth";
 import { ApplicationState } from "../../state/reducers";
 import {
   CHANGE_REQUEST_CREATE_URL,
-  CHANGE_REQUEST_LIST_URL,
   DOCUMENT_REVISION_CREATE_URL,
-  DOCUMENT_REVISION_LIST_URL,
 } from "../constants/urls";
 import { Translation } from "../translations/types";
 import HeaderPresenter from "./Header.presenter";
@@ -53,12 +51,6 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
 
   const setTranslationByPath = (path: any) => {
     switch (path) {
-      case CHANGE_REQUEST_LIST_URL:
-        setPageTitle("page.title.changeRequest");
-        break;
-      case DOCUMENT_REVISION_LIST_URL:
-        setPageTitle("page.title.documentList");
-        break;
       case CHANGE_REQUEST_CREATE_URL:
         setPageTitle("page.title.changeRequestCreate");
         break;
