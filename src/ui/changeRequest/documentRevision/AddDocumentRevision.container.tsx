@@ -10,7 +10,7 @@ import { AddDocumentRevisionPresenter } from "./AddDocumentRevision.presenter";
 interface AddDocumentRevisionContainerProps {
   isOpen: boolean;
   close: () => void;
-  doneAddingDocuments: (addedDocuments: string[]) => void;
+  setDocumentRevisionsList: (documents: string[]) => void;
   documentsInChangeRequest: string[];
   documentRevisionsList: DocumentRevision[];
   documentRevisionsById: DocumentRevisionsByIdState;
@@ -22,7 +22,7 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
   isOpen,
   close,
   documentRevisionsList,
-  doneAddingDocuments,
+  setDocumentRevisionsList,
   documentsInChangeRequest,
   documentRevisionsById,
   tableName,
@@ -30,7 +30,10 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
 }) => {
   const [documentRevisionsToShow, setDocumentRevisionsToShow] = useState<DocumentRevision[]>([]);
   const [addedDocuments, setAddedDocuments] = useState<string[]>([]);
-  const addDocument = (documentRevisionId: string) => setAddedDocuments([...addedDocuments, documentRevisionId]);
+  const addDocument = (documentRevisionId: string) =>
+    setAddedDocuments(Array.from(
+      new Set([...addedDocuments, documentRevisionId]),
+    ));
   const deleteDocument = (documentRevisionId: string) =>
     setAddedDocuments(addedDocuments.filter((id) => id !== documentRevisionId));
 
@@ -43,7 +46,11 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
   }, [addedDocuments, documentsInChangeRequest, documentRevisionsList]);
 
   const closeDialogAddDocuments = () => {
-    doneAddingDocuments([...addedDocuments]);
+    const documentRevisions = new Set([
+      ...addedDocuments,
+      ...documentsInChangeRequest,
+    ]);
+    setDocumentRevisionsList(Array.from(documentRevisions));
     setAddedDocuments([]);
     close();
   };

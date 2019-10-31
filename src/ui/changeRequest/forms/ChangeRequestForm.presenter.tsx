@@ -7,10 +7,8 @@ import { AsyncState } from "../../../state/types";
 import ChangeRequestHeader from "../../change.request/summary/header";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
 import ChangeRequestAuditContainer from "../audit/Audit.container";
-import DocumentRevisionControlContainer from "../documentRevision/DocumentRevisionControl.container";
 import DocumentRevisionLoader from "../documentRevision/DocumentRevisionLoader";
 import AssessmentFormContainer from "./assessmentForm/AssessmentForm.container";
-import styles from "./styles";
 import { ChangeRequestFormValues } from "./types";
 
 interface OwnProps {

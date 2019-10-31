@@ -19,13 +19,12 @@ interface StateProps {
 }
 
 interface OwnProps {
-  doneAddingDocuments: (addedDocuments: string[]) => void;
   documentsInChangeRequest: string[];
-  deleteDocumentFromChangeRequest: (documentRevisionId: string) => void;
-  selectDocumentRevision: (documentRevisionId: string) => void;
-  selectAssessmentForm: () => void;
   selectedDocumentRevision: string | null;
   documentsInCrById: { [key: string]: DocumentRevision };
+  selectDocumentRevision: (documentRevisionId: string) => void;
+  selectAssessmentForm: () => void;
+  setDocumentRevisionsList: (documents: string[]) => void;
 }
 
 export type DocumentRevisionControlContainerProps = OwnProps &
@@ -41,10 +40,9 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 export const DocumentRevisionControlContainer: React.FunctionComponent<
   DocumentRevisionControlContainerProps
 > = ({
-  doneAddingDocuments,
+  setDocumentRevisionsList,
   documentsInChangeRequest,
   documentRevisionsList,
-  deleteDocumentFromChangeRequest,
   selectDocumentRevision,
   selectAssessmentForm,
   documentRevisionsById,
@@ -56,6 +54,15 @@ export const DocumentRevisionControlContainer: React.FunctionComponent<
 
   const openAddDocuments = () => setShowAddDocuments(true);
   const closeAddDocuments = () => setShowAddDocuments(false);
+  const deleteDocumentFromChangeRequest = (
+    deleteDocumentRevisionId: string,
+  ) => {
+    setDocumentRevisionsList(
+      documentsInChangeRequest.filter(
+        (documentRevisionId) => documentRevisionId !== deleteDocumentRevisionId,
+      ),
+    );
+  };
 
   const TABLE_NAME = "addDocRevTable";
   const tableState = useSelector((reduxState: ApplicationState) =>
@@ -89,7 +96,7 @@ export const DocumentRevisionControlContainer: React.FunctionComponent<
       <AddDocumentRevisionContainer
         isOpen={showAddDocuments}
         close={closeAddDocuments}
-        doneAddingDocuments={doneAddingDocuments}
+        setDocumentRevisionsList={setDocumentRevisionsList}
         documentsInChangeRequest={documentsInChangeRequest}
         documentRevisionsList={documentRevisionsList}
         documentRevisionsById={documentRevisionsById}

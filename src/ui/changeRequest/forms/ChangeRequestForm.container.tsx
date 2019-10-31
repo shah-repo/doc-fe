@@ -54,24 +54,6 @@ export const ChangeRequestFormContainer: React.FunctionComponent<
     }
   }, [(changeRequest || {}).documentRevisions]);
 
-  const doneAddingDocuments = (addedDocuments: string[]) => {
-    const documentRevisions = new Set([
-      ...addedDocuments,
-      ...documentRevisionsList,
-    ]);
-    setDocumentRevisionsList(Array.from(documentRevisions));
-  };
-
-  const deleteDocumentFromChangeRequest = (
-    deleteDocumentRevisionId: string,
-  ) => {
-    setDocumentRevisionsList(
-      documentRevisionsList.filter(
-        (documentRevisionId) => documentRevisionId !== deleteDocumentRevisionId,
-      ),
-    );
-  };
-
   const alertIfFormDirty = () => {
     if (!isFormDirty) {
       return true;
@@ -95,9 +77,8 @@ export const ChangeRequestFormContainer: React.FunctionComponent<
       <Grid container={true} spacing={4}>
         <Grid item={true} xs={12} sm={3} md={2}>
           <DocumentRevisionControlContainer
-            doneAddingDocuments={doneAddingDocuments}
+            setDocumentRevisionsList={setDocumentRevisionsList}
             documentsInChangeRequest={documentRevisionsList}
-            deleteDocumentFromChangeRequest={deleteDocumentFromChangeRequest}
             selectDocumentRevision={selectDocumentRevision}
             selectAssessmentForm={selectAssessmentForm}
             selectedDocumentRevision={selectedDocumentRevision}
