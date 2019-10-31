@@ -37,11 +37,11 @@ export function withOptionRenderer<T extends FBFormDefaultProps>(
     };
 
     private controlRenderer = (optionsArray: string[]) => {
-      const { name } = this.props;
-      if (!name) {
+      const { name, type } = this.props;
+      if (!name || !type) {
         return;
       }
-      const type = name.split("_").pop();
+
       const InputType = FBGroupField[type as string];
       return optionsArray.map((label, i) => (
         <InputType

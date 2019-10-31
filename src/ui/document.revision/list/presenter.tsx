@@ -22,6 +22,7 @@ import {
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
 import styles from "./styles";
+import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
 
 export type Props = DocumentRevisionsUserProps & WithStyles<typeof styles>;
 
@@ -41,6 +42,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     rowData.document.documentType.documentTypeName || "";
 
   const cellHrefRenderer = (rowData: DocumentRevision): string => {
+    documentRevisionStore.reset()
     if (canEdit(rowData)) {
       return documentEditPath(rowData.id, rowData.document.id);
     }
@@ -157,7 +159,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       cellHref: cellHrefRenderer,
       cellOptions: { align: "center" },
       columnOptions: {
-        width: 108,
+        width: 115,
         cellDataGetter: ({ rowData }) => <Date value={rowData.releasedAt} />,
       },
       searchOptions: {

@@ -9,4 +9,13 @@ export default (theme: Theme) =>
       paddingLeft: DRAWER_WIDTH,
       color: "rgba(0, 0, 0, 0.87)",
     },
+    welcomeText: {
+      color: "#29064C",
+      fontSize: "0.8rem",
+    },
+    name: {
+      color: "#0066FF",
+      fontSize: "0.8rem",
+      fontWeight: "bold",
+    },
   });

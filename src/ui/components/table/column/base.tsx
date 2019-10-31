@@ -91,7 +91,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
 
   const searchFieldRenderer = () => {
     if (omitSearch === true) {
-      return <Box style={{background: "transparent", height: 56}} />;
+      return <Box style={{background: "transparent", height: 62}} />;
     }
     const searchType = (searchOptions) ? searchOptions.searchType : "text";
     switch (searchType) {
