@@ -40,10 +40,10 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
   useEffect(() => {
     const documentsToIgnore = [...addedDocuments, ...documentsInChangeRequest].map((documentRevisionId) =>
       documentRevisionId);
-    const filteredArray = documentRevisionsList.filter((documentRevision) =>
+    const filteredArray = tableState.queryData.filter((documentRevision) =>
       documentsToIgnore.indexOf(documentRevision.id) < 0 && documentRevision.status === DocumentRevisionStatus.Draft);
     setDocumentRevisionsToShow(filteredArray);
-  }, [addedDocuments, documentsInChangeRequest, documentRevisionsList]);
+  }, [addedDocuments, documentsInChangeRequest, tableState.queryData]);
 
   const closeDialogAddDocuments = () => {
     const documentRevisions = new Set([

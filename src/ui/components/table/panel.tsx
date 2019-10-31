@@ -35,6 +35,7 @@ export function TablePanel<T extends any>({
   customQuerySet,
   customDataSet,
   tableName,
+  providedData,
 }: Props<T>) {
 
   const didMount = useDidMount();
@@ -49,6 +50,7 @@ export function TablePanel<T extends any>({
   );
   const [debouncedQuery] = useDebounce(tableState.queryDict, queryDelay);
   const dispatch = useDispatch();
+  const queryData = providedData || tableState.queryData;
 
   useEffect(() => {
     if (didMount) {
@@ -122,7 +124,7 @@ export function TablePanel<T extends any>({
     </Box>
   );
 
-  const rowGetter = ({ index }: Index): T => tableState.queryData[index] as T;
+  const rowGetter = ({ index }: Index): T => queryData[index] as T;
 
   const rowClassName = ({ index }: Index) => {
     return (index % 2 === 0) ?
@@ -144,7 +146,7 @@ export function TablePanel<T extends any>({
         headerHeight={headerHeight}
         rowHeight={measurerCache.rowHeight}
         deferredMeasurementCache={measurerCache}
-        rowCount={tableState.queryData.length}
+        rowCount={queryData.length}
         className={classes.table}
         rowClassName={classes.row}
         headerClassName={classes.header}

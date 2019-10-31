@@ -29,6 +29,7 @@ const DocumentRevisionTable: React.FunctionComponent<
   addDocument,
   addedDocuments,
   tableState,
+  documentRevisionsToShow,
 }) => {
   const dispatch = useDispatch();
   const onStateSelect = ({
@@ -114,6 +115,7 @@ const DocumentRevisionTable: React.FunctionComponent<
         customQuerySet={customQuerySet}
         customDataSet={customDataSet}
         tableName={tableName}
+        providedData={documentRevisionsToShow}
       />
     );
   };
