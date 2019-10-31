@@ -18,6 +18,6 @@ export const StyledSearchTextField = withStyles((theme) => ({
   root: {
     width: "100%",
     backgroundColor: theme.palette.common.white,
-    padding: theme.spacing(0.5),
+    padding: theme.spacing(0.6),
   },
 }))(TextField);
