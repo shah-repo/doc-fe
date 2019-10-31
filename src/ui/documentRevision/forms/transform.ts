@@ -21,7 +21,7 @@ export const toFormBuilderTemplate = (
     case "update":
       if (outputDocumentType) {
         return ({
-          schema: JSON.stringify(formBuilderStore.schema),
+          schema: JSON.stringify(formBuilderStore.getSchema()),
           outputDocumentType: {
             id: outputDocumentType.id,
           },

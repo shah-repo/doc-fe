@@ -17,12 +17,12 @@ export type Props = ChangeRequestsUserProps & WithStyles<typeof styles>;
 
 export const ListPresenter: React.FunctionComponent<Props> = ({
   classes,
-  dataProp,
   currentUserEmail,
   editChangeRequest,
+  tableName,
+  clearFilter,
+  tableState,
 }) => {
-
-  const [clearFilter, setClearFilter] = React.useState<boolean>(false);
 
   const canEdit = (data: ChangeRequest) => canEditChangeRequest({dataProp: data, currentUserEmail});
 
@@ -33,14 +33,15 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     return changeRequestPreviewPath(rowData.id);
   };
 
-  const clear = () => setClearFilter(!clearFilter);
-
   const columns: Array<TableColumnProps<ChangeRequest>> = [
     {
       key: "crId",
       label: "common.crid",
       cellHref: cellHrefRenderer,
       columnOptions: { width: 100 },
+      searchOptions: {
+        defaultValue: tableState.queryDict.crId,
+      },
     },
     {
       key: "title",
@@ -48,6 +49,9 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       cellHref: cellHrefRenderer,
       columnOptions: { flexGrow: 2 },
       tooltipKey: "description",
+      searchOptions: {
+        defaultValue: tableState.queryDict.title,
+      },
     },
     {
       key: "owner",
@@ -57,6 +61,9 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         cellDataGetter: ({ rowData }) => rowData.owner.name,
         flexGrow: 1,
       },
+      searchOptions: {
+        defaultValue: tableState.queryDict.owner,
+      },
     },
     {
       key: "state",
@@ -64,7 +71,11 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       columnOptions: { width: 80 },
       onSelect: ({rowData}) => () => editChangeRequest(rowData.id),
       cellType: (rowData: ChangeRequest) => (canEdit(rowData)) ? "LINK" : "BASE",
-      searchOptions: { searchType: "select", selectOptions: changeRequestStatusOption() },
+      searchOptions: {
+        searchType: "select",
+        selectOptions: changeRequestStatusOption(),
+        defaultValue: tableState.queryDict.state,
+      },
     },
   ];
 
@@ -78,7 +89,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
           color="primary"
           variant="outlined"
           className={classes.clearButton}
-          onClick={clear}
+          onClick={clearFilter}
         >
           <Text translation="common.clear.filters" />
         </Button>
@@ -96,12 +107,11 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       </Grid>
       <Grid item={true} className={classes.item}>
         <TablePanel<ChangeRequest>
-          tableData={dataProp}
           columns={columns}
           cellMeasure={true}
           queryUrl={CHANGE_REQUEST_ROOT_URL}
-          clearFilter={clear}
           customDataSet={customDataSet}
+          tableName={tableName}
         />
       </Grid>
     </Grid>
