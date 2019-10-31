@@ -79,11 +79,12 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       fontSize: "0.8rem",
     },
     head: {
-      ffontSize: "0.81rem",
+      fontSize: "0.81rem",
       background: appTheme.palette.background.default,
       color: appTheme.palette.common.white,
       fontFamily: "Open Sans",
       fontWeight: "bold",
+      lineHeight: "0.9rem",
     },
   },
   MuiInputBase: {
