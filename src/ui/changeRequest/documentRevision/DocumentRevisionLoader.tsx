@@ -40,10 +40,13 @@ export const DocumentRevisionLoader: React.FunctionComponent<Props> = ({
       asyncAction={loadDocumentRevision}
       startActionOnMount={false}
     >
-      <DocumentRevisionUpdateContainer
-        documentRevision={documentRevision}
-        onDirtyFlagChange={onDirtyFlagChange}
-      />
+      {
+        documentRevision &&
+        <DocumentRevisionUpdateContainer
+          documentRevision={documentRevision}
+          onDirtyFlagChange={onDirtyFlagChange}
+        />
+      }
     </AsyncGate>
   );
 };
