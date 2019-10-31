@@ -17,12 +17,11 @@ export type Props = ChangeRequestsUserProps & WithStyles<typeof styles>;
 
 export const ListPresenter: React.FunctionComponent<Props> = ({
   classes,
-  dataProp,
   currentUserEmail,
   editChangeRequest,
+  tableName,
+  clearFilter,
 }) => {
-
-  const [clearFilter, setClearFilter] = React.useState<boolean>(false);
 
   const canEdit = (data: ChangeRequest) => canEditChangeRequest({dataProp: data, currentUserEmail});
 
@@ -32,8 +31,6 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     }
     return changeRequestPreviewPath(rowData.id);
   };
-
-  const clear = () => setClearFilter(!clearFilter);
 
   const columns: Array<TableColumnProps<ChangeRequest>> = [
     {
@@ -78,7 +75,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
           color="primary"
           variant="outlined"
           className={classes.clearButton}
-          onClick={clear}
+          onClick={clearFilter}
         >
           <Text translation="common.clear.filters" />
         </Button>
@@ -96,12 +93,11 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       </Grid>
       <Grid item={true} className={classes.item}>
         <TablePanel<ChangeRequest>
-          tableData={dataProp}
           columns={columns}
           cellMeasure={true}
           queryUrl={CHANGE_REQUEST_ROOT_URL}
-          clearFilter={clear}
           customDataSet={customDataSet}
+          tableName={tableName}
         />
       </Grid>
     </Grid>

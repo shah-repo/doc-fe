@@ -15,6 +15,7 @@ interface OwnProps {
 
 export type DocumentRevisionListContainerProps = OwnProps;
 
+// TODO: check if this component is used
 export const DocumentRevisionListContainer: React.FunctionComponent<
   DocumentRevisionListContainerProps
 > = ({ documentRevisions, documentId, docId }) => {

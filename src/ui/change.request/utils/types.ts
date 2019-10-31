@@ -18,7 +18,6 @@ export interface ContainerDispatchProps {
 
 // List
 export type ListProps = ActionProps;
-export type ListStateProps = DataProps<ChangeRequest[]> & LoadAsyncState & AuthProps;
 
 export interface ListDispatchProps {
   loadChangeRequests: typeof changeRequestsActions.loadList;
@@ -72,7 +71,7 @@ export interface SummaryDispatchProps {
 }
 
 // Common
-export type ChangeRequestsUserProps = DataProps<ChangeRequest[]> & ActionProps & AuthProps;
+export type ChangeRequestsUserProps = ActionProps & AuthProps & { tableName: string; clearFilter: () => void };
 export type ChangeRequestUserProps = DataProps<ChangeRequest> & AuthProps;
 
 export interface RouteParams {

@@ -10,6 +10,14 @@ import { TableColumnProps } from "../column/types";
 import { TablePanel } from "../panel";
 import { TableSelectionProps } from "../types";
 
+jest.mock("react-redux", () => ({
+  useDispatch: jest.fn(),
+  useSelector: () => ({
+    queryDict: {},
+    queryData: [],
+  }),
+}));
+
 describe("TablePanel component tests", () => {
   addLocaleData([...localeEn]);
   const messages = { en: messagesEn };
@@ -56,9 +64,9 @@ describe("TablePanel component tests", () => {
     return (
       <IntlProvider locale={language} messages={messages[language]}>
         <TablePanel<Document>
-          tableData={data}
           columns={columns}
           noRowsTranslation={noRowsTranslation}
+          tableName="table"
         />
       </IntlProvider>
     );

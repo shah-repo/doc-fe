@@ -2,6 +2,7 @@ import { Box } from "@material-ui/core";
 import { AxiosRequestConfig } from "axios";
 import qs from "query-string";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   AutoSizer,
   CellMeasurerCache,
@@ -11,19 +12,20 @@ import {
 } from "react-virtualized";
 import { useDebounce } from "use-debounce";
 import apiClient from "../../../state/apiClient";
+import { tableSearchActions, tableSearchSelectors } from "../../../state/ducks/tableSearch";
 import refreshTokenOperation from "../../../state/middlewares/api/refreshToken";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
+import { ApplicationState } from "../../../state/reducers";
 import { store } from "../../../state/store";
 import Text from "../../components/Text";
 import useDidMount from "../../hooks/useDidMount";
 import { TableColumn } from "./column/base";
 import { styles } from "./styles";
-import { TablePanelProps, TablePanelStateProps, TableStyleProps } from "./types";
+import { TablePanelProps, TableStyleProps } from "./types";
 
 type Props<T> = TablePanelProps<T>;
 
 export function TablePanel<T extends any>({
-  tableData,
   columns,
   noRowsTranslation = "table.no.results.found",
   cellMeasure = false,
@@ -32,6 +34,8 @@ export function TablePanel<T extends any>({
   queryUrl = "",
   customQuerySet,
   customDataSet,
+  tableName,
+  providedData,
 }: Props<T>) {
 
   const didMount = useDidMount();
@@ -41,33 +45,38 @@ export function TablePanel<T extends any>({
   const styleProps: TableStyleProps = { isSelectable: (onSelect !== undefined) };
   const classes = styles(styleProps);
 
-  const [state, setState] = useState<TablePanelStateProps<T>>({
-    queryData: tableData,
-    queryDict: {},
-    apiError: "",
-    scrollToIndex: 0,
-  });
-  const [debouncedQuery] = useDebounce(state.queryDict, queryDelay);
+  const tableState = useSelector((reduxState: ApplicationState) =>
+    tableSearchSelectors.getTableState(reduxState, tableName),
+  );
+  const [debouncedQuery] = useDebounce(tableState.queryDict, queryDelay);
+  const dispatch = useDispatch();
+  const queryData = providedData || tableState.queryData;
 
   useEffect(() => {
     if (didMount) {
       queryApi();
     }
   }, [debouncedQuery]);
+  useEffect(() => {
+    queryApi();
+  }, []);
 
   const queryGetter = (key: string, value: string) => {
     if (!queryUrl) { return; }
     lastQueryValue = value;
 
     if (lastQueryValue !== value) { return; }
-    let dict = { ...state.queryDict };
+    let dict = { ...tableState.queryDict };
     (value === "") ? delete dict[key] : dict[key] = value;
 
     if (customQuerySet) {
       dict = customQuerySet(dict);
     }
 
-    setState({...state, queryDict: dict});
+    dispatch(tableSearchActions.setSearchCriteria(
+      {...tableState, queryDict: dict},
+      tableName,
+    ));
   };
 
   const queryApi = async () => {
@@ -75,7 +84,7 @@ export function TablePanel<T extends any>({
       const requestConfig: AxiosRequestConfig = {
         method: "get",
         url: queryUrl,
-        params: state.queryDict,
+        params: tableState.queryDict,
         paramsSerializer: (params) => qs.stringify(params),
         headers: {},
       };
@@ -87,7 +96,11 @@ export function TablePanel<T extends any>({
       if (customDataSet) {
         data = customDataSet(data);
       }
-      setState({...state, queryData: data as T[], apiError: "", scrollToIndex: 0});
+
+      dispatch(tableSearchActions.setSearchCriteria(
+        {...tableState, queryData: data as T[], apiError: "", scrollToIndex: 0},
+        tableName,
+      ));
     } catch (exception) {
       let responseMessage: string = "";
 
@@ -97,7 +110,11 @@ export function TablePanel<T extends any>({
       }
 
       const errorMessage: string = responseMessage || exception.message;
-      setState({...state, apiError: "Error: " + errorMessage});
+
+      dispatch(tableSearchActions.setSearchCriteria(
+        {...tableState, apiError: "Error: " + errorMessage},
+        tableName,
+      ));
     }
   };
 
@@ -107,7 +124,7 @@ export function TablePanel<T extends any>({
     </Box>
   );
 
-  const rowGetter = ({ index }: Index): T => state.queryData[index] as T;
+  const rowGetter = ({ index }: Index): T => queryData[index] as T;
 
   const rowClassName = ({ index }: Index) => {
     return (index % 2 === 0) ?
@@ -129,14 +146,14 @@ export function TablePanel<T extends any>({
         headerHeight={headerHeight}
         rowHeight={measurerCache.rowHeight}
         deferredMeasurementCache={measurerCache}
-        rowCount={state.queryData.length}
+        rowCount={queryData.length}
         className={classes.table}
         rowClassName={classes.row}
         headerClassName={classes.header}
         rowGetter={rowGetter}
         noRowsRenderer={noRowsRenderer}
         onRowClick={onSelect && (({rowData}) => onSelect({rowData})())}
-        scrollToIndex={state.scrollToIndex}
+        scrollToIndex={tableState.scrollToIndex}
       >
         {columns.map((item) => TableColumn<T>(item, { measurerCache, searchable, queryGetter }))}
       </Table>
@@ -153,7 +170,7 @@ export function TablePanel<T extends any>({
 
   return (
     <Box className={classes.root}>
-      <div style={{color: "red"}}>{state.apiError}</div>
+      <div style={{color: "red"}}>{tableState.apiError}</div>
       {bodyRenderer()}
     </Box>
   );
