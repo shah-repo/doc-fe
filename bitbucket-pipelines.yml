@@ -86,7 +86,7 @@ pipelines:
     infrastructure:
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEVELOP_1
-    release/19.3:
+    release/19.3.1:
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEMO
       
