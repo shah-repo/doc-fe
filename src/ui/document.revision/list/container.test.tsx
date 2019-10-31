@@ -1,4 +1,4 @@
-import { shallow } from "enzyme";
+import { mount } from "enzyme";
 import React from "react";
 import getRouteComponentProps from "../../tests/helpers/getRouteComponentProps";
 import { ListContainer, Props} from "./container";
@@ -38,12 +38,12 @@ describe("Document revision ListContainer tests", () => {
     ...getRouteComponentProps(),
   };
 
-  const getWrapper = (props: Partial<Props>= {}) => shallow(
+  const getWrapper = (props: Partial<Props>= {}) => mount(
     <ListContainer {...defaultProps} {...props}/>,
   );
 
   it("render ListPresenter", () => {
     const wrapper = getWrapper();
-    expect(wrapper.dive().find(ListPresenter)).toHaveLength(1);
+    expect(wrapper.find(ListPresenter)).toHaveLength(1);
   });
 });
