@@ -2,11 +2,14 @@ import { Box, Button, Grid } from "@material-ui/core";
 import React from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { DocumentRevision, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsSelectors, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import Text from "../components/Text";
 import { documentNewVersionPath } from "../document.revision/utils/paths";
 import { canCreateNewVersion } from "./helpers";
+import documentRevisionStore from "../form.builder/stores/custom/FBDocumentRevisionStore";
+import { DOCUMENT_REVISION_CREATE_URL } from "../constants/urls";
+import { Link as RouterLink } from "react-router-dom";
 
 interface OwnProps {
   documentRevision: DocumentRevision;
@@ -27,7 +30,12 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainerProps> = ({
   documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton,
 }) => {
+
     const cloneDocument = () => history.push(documentNewVersionPath(documentRevision.id, documentRevision.document.id));
+
+    const onCreateClick = () => {
+      documentRevisionStore.setMode("createFrom", documentRevision);
+    };
 
     const renderCloneButton = () => (
       <Button color="primary" onClick={cloneDocument}>
@@ -35,11 +43,30 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
       </Button>
     );
 
+    const renderCreateFromButton = () => (
+      <RouterLink
+        onClick={(onCreateClick)}
+        to={DOCUMENT_REVISION_CREATE_URL}
+        style={{textDecoration: "none"}}
+      >
+        <Button color="primary">
+          <Text translation="common.create.new" />
+        </Button>
+      </RouterLink>
+    );
+
+    const { document } = documentRevision || {};
+    const { documentType } = document || {};
     const canCreate = canCreateNewVersion(documentRevision, disableCreateNewVersion, canShowCreateVersionButton);
+    const canCreateFrom = (
+      documentType && documentType.group === "FORM" &&
+      documentRevision.status === DocumentRevisionStatus.Released
+    );
 
     return (
       <Box component="span">
         {canCreate && renderCloneButton()}
+        {canCreateFrom && renderCreateFromButton()}
       </Box>
     );
   };

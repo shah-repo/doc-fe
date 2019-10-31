@@ -103,6 +103,7 @@
   "changeRequest.audit.effectiveDate.STRING_EDITED": "Effective Date Updated",
   "changeRequest.audit.state.STRING_NEW": "Status",
   "changeRequest.audit.justifications.attachments.ARRAY_NEW": "Justification Attachment Added",
+  "changeRequest.audit.justifications.attachments.ARRAY_DELETED": "Justification Attachment Deleted",
   "changeRequest.audit.assessments.design.STRING_NEW": "Design Assessment Added",
   "changeRequest.audit.assessments.regulatory.STRING_NEW": "Regulatory Assessment Added",
   "changeRequest.audit.assessments.process.STRING_NEW": "Process Assessment Added",

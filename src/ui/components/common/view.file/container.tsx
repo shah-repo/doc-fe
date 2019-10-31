@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { AttachmentDownloadResponse, attachmentsActions, Attachment } from "../../../../state/ducks/attachments";
+import { Attachment, AttachmentDownloadResponse, attachmentsActions } from "../../../../state/ducks/attachments";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import ViewFilePresenter from "./presenter";

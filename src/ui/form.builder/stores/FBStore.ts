@@ -1,10 +1,6 @@
 import _, { Dictionary } from "lodash";
 import { action, autorun, computed, observable } from "mobx";
-import Config from "../../../config";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { DocumentGroupType } from "../../../state/ducks/documentRevisions/documentType";
-import { ThemeEnv } from "../../layout/theme/utils/types";
-import { FBEditorSectionConfig } from "../defaults/editor";
 import { FBFormDefaultProps } from "../types/common";
 import { FBFormTemplateProps } from "../types/formik";
 import { FBTemplateSchema } from "../types/store";
@@ -29,7 +25,7 @@ export class FBStore {
   @computed get fieldMode(): Partial<FBFormDefaultProps> {
     return ({
       disabled: this.isDisabled(),
-      readOnly: this.isReadonly(),
+      // readOnly: this.isReadonly(),
       // className: this.isDisabled() ? FBClasses.inputDisabled : "",
     });
   }
@@ -51,13 +47,28 @@ export class FBStore {
     return this.schema[index];
   }
 
-  @action public removeSchemaItem = (index?: number) => () => {
+  @action public removeSchemaItem = (index?: number) => {
     if (index === undefined) { return; }
-    _.remove(this.schema, this.getSchemaItem(index));
+    const newSchema = this.schema.filter((o) => o.index !== index);
+    this.setSchema(newSchema);
   }
 
-  @action public setSchema = (schema: FBTemplateSchema[]) => {
-    this.schema = schema;
+  @action public editSchemaItem = (index?: number) => {
+    if (index === undefined) { return; }
+    const schema = this.getSchemaItem(index);
+    if (!schema) { return; }
+    editorStore.editorTypeEdit(schema);
+  }
+
+  @action public getSchema = (): FBTemplateSchema[] => {
+    return this.schema;
+  }
+
+  @action public setSchema = (newSchema: FBTemplateSchema[]) => {
+    newSchema.map((o, i) => {
+      o.index = i;
+    });
+    this.schema = newSchema;
   }
 
   @action public getValues = (): { [key: string]: any } | undefined => {
@@ -106,12 +117,12 @@ export class FBStore {
   }
 
   @action private isDisabled = (): boolean => {
-    return this.mode === "preview";
-  }
-
-  @action private isReadonly = (): boolean => {
     return this.mode !== "form";
   }
+
+  // @action private isReadonly = (): boolean => {
+  //   return this.mode !== "form";
+  // }
 }
 
 const formBuilderStore = new FBStore();

@@ -29,6 +29,7 @@ const FBDatePicker: React.FunctionComponent<Props> = ({
         variant="inline"
         inputVariant="outlined"
         format="MM/dd/yyyy"
+        autoOk={true}
         label=""
       />
     </MuiPickersUtilsProvider>

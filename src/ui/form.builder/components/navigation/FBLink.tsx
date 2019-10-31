@@ -9,16 +9,16 @@ export type Props = Omit<OutlinedTextFieldProps, "variant"> &
   FBFormDefaultProps &
   FBOnChangeProps;
 
-const FBLink: React.FunctionComponent<Props> = ({
-  labelRenderer,
-  linkUrl,
-}) => (
+const FBLink: React.FunctionComponent<Props> = ({ labelRenderer, linkUrl }) => (
   <Box mb={4} width="100%">
     {labelRenderer}
     <Link
       component="button"
       variant="body2"
-      onClick={() => {window.open(linkUrl); }}
+      rel="noopener"
+      onClick={() => {
+        window.open(linkUrl!.includes("http") ? linkUrl : `https://${linkUrl}`);
+      }}
     >
       {linkUrl}
     </Link>
