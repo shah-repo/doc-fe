@@ -21,6 +21,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   editChangeRequest,
   tableName,
   clearFilter,
+  tableState,
 }) => {
 
   const canEdit = (data: ChangeRequest) => canEditChangeRequest({dataProp: data, currentUserEmail});
@@ -38,6 +39,9 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       label: "common.crid",
       cellHref: cellHrefRenderer,
       columnOptions: { width: 100 },
+      searchOptions: {
+        defaultValue: tableState.queryDict.crId,
+      },
     },
     {
       key: "title",
@@ -45,6 +49,9 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       cellHref: cellHrefRenderer,
       columnOptions: { flexGrow: 2 },
       tooltipKey: "description",
+      searchOptions: {
+        defaultValue: tableState.queryDict.title,
+      },
     },
     {
       key: "owner",
@@ -54,6 +61,9 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         cellDataGetter: ({ rowData }) => rowData.owner.name,
         flexGrow: 1,
       },
+      searchOptions: {
+        defaultValue: tableState.queryDict.owner,
+      },
     },
     {
       key: "state",
@@ -61,7 +71,11 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       columnOptions: { width: 80 },
       onSelect: ({rowData}) => () => editChangeRequest(rowData.id),
       cellType: (rowData: ChangeRequest) => (canEdit(rowData)) ? "LINK" : "BASE",
-      searchOptions: { searchType: "select", selectOptions: changeRequestStatusOption() },
+      searchOptions: {
+        searchType: "select",
+        selectOptions: changeRequestStatusOption(),
+        defaultValue: tableState.queryDict.state,
+      },
     },
   ];
 

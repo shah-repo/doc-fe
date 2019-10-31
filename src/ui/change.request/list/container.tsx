@@ -1,8 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
-import { authSelectors } from "../../../state/ducks/auth";
-import { tableSearchActions } from "../../../state/ducks/tableSearch";
+import authSelectors from "../../../state/ducks/auth/selectors";
+import tableSearchActions from "../../../state/ducks/tableSearch/actions";
+import tableSearchSelectors from "../../../state/ducks/tableSearch/selectors";
+import { ApplicationState } from "../../../state/reducers";
 import {
   changeRequestEditPath,
   changeRequestPreviewPath,
@@ -21,6 +23,9 @@ export const ListContainer: React.FunctionComponent<Props> = ({
   const dispatch = useDispatch();
   const clearFilter = () => dispatch(tableSearchActions.clearSearchCriteria(TABLE_NAME));
   const currentUserEmail = useSelector(authSelectors.currentUserEmail);
+  const tableState = useSelector((reduxState: ApplicationState) =>
+    tableSearchSelectors.getTableState(reduxState, TABLE_NAME),
+  );
 
   return (
     <ListPresenter
@@ -29,6 +34,7 @@ export const ListContainer: React.FunctionComponent<Props> = ({
       previewChangeRequest={preview}
       tableName={TABLE_NAME}
       clearFilter={clearFilter}
+      tableState={tableState}
     />
   );
 };
