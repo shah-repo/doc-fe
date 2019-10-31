@@ -18,7 +18,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     },
   },
   MuiTypography: {
-    root: {
+    caption: {
       fontFamily: "Open Sans, sans-serif;",
     },
     body2: {
