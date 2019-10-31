@@ -7,6 +7,11 @@ import { ListPresenter } from "./presenter";
 jest.mock("react-redux", () => ({
   useDispatch: jest.fn(() => jest.fn()),
   useSelector: jest.fn((fn) => fn()),
+  connect: (mapStateToProps: any, mapDispatchToProps: any) => (ReactComponent: any) => ({
+    mapStateToProps,
+    mapDispatchToProps,
+    ReactComponent,
+  }),
 }));
 jest.mock("../../components/Text");
 jest.mock("../../../state/ducks/documentRevisions/documentType/selectors.ts", () => ({
