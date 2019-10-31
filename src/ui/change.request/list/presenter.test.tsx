@@ -6,9 +6,12 @@ import { Link as RouterLink } from "react-router-dom";
 import { CHANGE_REQUEST_CREATE_URL } from "../../constants/urls";
 import { ListPresenter,  Props } from "./presenter";
 
-describe("Approvers tests", () => {
+describe("Change request list presenter tests", () => {
   const defaultProps: Props = {
       tableName: faker.name.firstName(),
+      tableState: {
+        queryDict: {},
+      },
       clearFilter: jest.fn(),
       currentUserEmail: faker.internet.email(),
       editChangeRequest: jest.fn(),

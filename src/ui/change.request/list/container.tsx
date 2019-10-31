@@ -1,8 +1,9 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
-import { authSelectors } from "../../../state/ducks/auth";
-import { tableSearchActions, tableSearchSelectors } from "../../../state/ducks/tableSearch";
+import authSelectors from "../../../state/ducks/auth/selectors";
+import tableSearchActions from "../../../state/ducks/tableSearch/actions";
+import tableSearchSelectors from "../../../state/ducks/tableSearch/selectors";
 import { ApplicationState } from "../../../state/reducers";
 import {
   changeRequestEditPath,
