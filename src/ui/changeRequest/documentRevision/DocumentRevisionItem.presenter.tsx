@@ -36,7 +36,8 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<
     <div
       className={classNames(classes.container, {
         [classes.selected]: isSelected,
-      })}>
+      })}
+    >
       <Grid container={true}>
         <Grid item={true} xs={10}>
           <div onClick={onClick}>
@@ -49,22 +50,27 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<
               </div>
             </Tooltip>
             <div>
-              <Text translation="common.version" />
-              :&nbsp;
+              <Text translation="common.version" />:{" "}
               {generateVersionNumber(
                 documentRevision.revision,
                 documentRevision.revisionStage,
               )}
             </div>
             <div>
-              <Text translation="common.created" />
-              :&nbsp;
-              <Date value={documentRevision.createdAt} />
+              <Text translation="common.documentId" />:{" "}
+              {documentRevision.document.docId}
             </div>
             <div>
-              <Text translation="common.documentId" />
-              :&nbsp;
-              {documentRevision.document.docId}
+                <Text translation="common.owner" />:{" "}
+                {documentRevision.owner.name}
+            </div>
+            <div>
+              <Text translation="common.released" />:{" "}
+                <Date
+                  value={
+                    documentRevision.obsoletedAt || documentRevision.releasedAt
+                  }
+                />
             </div>
           </div>
         </Grid>
