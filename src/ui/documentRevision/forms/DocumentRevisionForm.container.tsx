@@ -21,10 +21,8 @@ import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
-import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
-import documentRevisionStore1 from "../../form.builder/stores/FBDRStore";
 
 interface StateProps {
   availableReferences: OptionType[];
@@ -92,18 +90,6 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
   documentTypesById,
   document,
 }) => {
-
-  // if (documentRevisionStore.mode !== "createFrom") {
-  //   const { formDocument, formTemplate } = initialValues;
-  //   if (!formTemplate && formDocument) {
-  //     documentRevisionStore.setMode("updateFromOther", initialValues as unknown as DocumentRevision);
-  //   } else if (initialValues.id) {
-  //     documentRevisionStore.setMode("update", initialValues as unknown as DocumentRevision);
-  //   }
-  // } else if (initialValues.document && initialValues.document.documentType) {
-  //   const { documentTypeAcronym } = initialValues.document.documentType;
-  //   loadDocumentProposedId(documentTypeAcronym || "");
-  // }
 
   if (initialValues.document && initialValues.document.documentType && document) {
     initialValues.document.documentType.id = document.documentType.id;

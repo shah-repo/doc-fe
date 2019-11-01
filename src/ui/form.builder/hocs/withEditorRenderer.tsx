@@ -35,12 +35,12 @@ export const withEditorRenderer =
     : "common.save";
 
   return (
-    <Form>
+    <Box>
       <InputType />
       <Box display="flex" flexDirection="row-reverse" mx={-1}>
         <FBButton label={buttonLabel} onClick={onClick} />
         <FBButton label="common.cancel" onClick={editorStore.reset} />
       </Box>
-    </Form>
+    </Box>
   );
 };

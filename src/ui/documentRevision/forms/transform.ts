@@ -2,52 +2,12 @@ import _ from "lodash";
 import {
   DocumentRevision,
   DocumentRevisionEditRequestBody,
+  DocumentRevisionStatus,
   RevisionChangeType,
 } from "../../../state/ducks/documentRevisions";
-import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
 import documentRevisionStore1 from "../../form.builder/stores/FBDRStore";
 import formBuilderStore from "../../form.builder/stores/FBStore";
-import {
-  FBDocumentFlowProps,
-  FBFormTemplateProps,
-} from "../../form.builder/types/formik";
 import { DocumentRevisionFormValues } from "./types";
-
-// export const toFormBuilderTemplate = (
-//   values: DocumentRevisionFormValues,
-// ): FBFormTemplateProps | undefined => {
-
-//   const { formTemplate } = values;
-//   const { outputDocumentType } = formTemplate || {};
-//   const reqType = documentRevisionStore.requestType(values);
-//   switch (reqType) {
-//     case "create":
-//     case "update":
-//       if (outputDocumentType) {
-//         return ({
-//           schema: JSON.stringify(formBuilderStore.getSchema()),
-//           outputDocumentType: {
-//             id: outputDocumentType.id,
-//           },
-//         });
-//       }
-//     default:
-//       return;
-//   }
-// };
-
-// export const toFormBuilderDocument = (
-//   values: DocumentRevisionFormValues,
-// ): FBDocumentFlowProps | undefined => {
-//   const { id } = values.formDocument || {};
-//   const reqType = documentRevisionStore.requestType(values);
-//   switch (reqType) {
-//     case "fbCreate":
-//       return ({ id });
-//     default:
-//       return;
-//   }
-// };
 
 const toRequestFormBuilder = (values: DocumentRevision) => {
   switch (documentRevisionStore1.mode) {
@@ -58,9 +18,11 @@ const toRequestFormBuilder = (values: DocumentRevision) => {
       return {
         ...values,
         formTemplate: {
-          ...values.formTemplate,
+          outputDocumentType: {
+            id: _.get(values, "formTemplate.outputDocumentType.id"),
+          },
           schema: JSON.stringify(formBuilderStore.getSchema()),
-        },
+        }
       };
     default:
       return { ...values };
@@ -87,7 +49,6 @@ export const toDocumentRevisionFormValues = (
     formDocument: documentRevision.formDocument,
     status: documentRevision.status,
   };
-  // documentRevisionStore1.setValues(documentRevision);
   return values;
 };
 
@@ -95,7 +56,11 @@ export const toDocumentRevisionEditRequestBody = (
   values: DocumentRevisionFormValues,
 ): DocumentRevisionEditRequestBody => {
   const data = {
-    ...toRequestFormBuilder((values as unknown) as DocumentRevision),
+    ...toRequestFormBuilder((_.pick(values, [
+      "formTemplate",
+      "formDocument",
+      "formInput"
+    ]) as unknown) as DocumentRevision),
     description: values.description,
     name: values.name,
     attachments: values.attachments,
@@ -107,20 +72,6 @@ export const toDocumentRevisionEditRequestBody = (
   } as DocumentRevisionEditRequestBody;
 
   return data;
-  // const documentRevisionEditRequestBody: DocumentRevisionEditRequestBody = {
-  //   ...toFormBuilder(values as unknown as DocumentRevision),
-  //   description: values.description,
-  //   name: values.name,
-  //   attachments: values.attachments,
-  //   referenceTo: (values.referenceTo || []).map((reference) => ({ id: reference.value })),
-  //   revisionStage: values.revisionStage,
-  //   retrain: values.retrain,
-  //   // formTemplate: toFormBuilderTemplate(values),
-  //   // formInput: JSON.stringify(formBuilderStore.getValues()),
-  //   // formDocument: toFormBuilderDocument(values),
-  // };
-
-  // return documentRevisionEditRequestBody;
 };
 
 export const toNewVersionRequestBody = (
@@ -148,9 +99,29 @@ export const toNewVersionRequestBody = (
 export const toDocumentRevisionFormValuesWithRevisionChange = (
   documentRevision: DocumentRevision,
 ): DocumentRevisionFormValues => {
+  documentRevision.status = DocumentRevisionStatus.Draft;
   const values: DocumentRevisionFormValues = toDocumentRevisionFormValues(
     documentRevision,
   );
   values.revisionChangeType = RevisionChangeType.NextRevision;
+  documentRevisionStore1.setValues(documentRevision);
   return values;
+};
+
+export const toDocumentRevisionFormValuesForOutput = (
+  documentRevision: DocumentRevision,
+): DocumentRevisionFormValues => {
+  const values = {
+    ...documentRevision,
+    document: {
+      ...(_.pick(documentRevision, ["document"])),
+      documentType: _.get(documentRevision, "formTemplate.outputDocumentType"),
+    },
+    formTemplate: undefined,
+    formDocument: {
+      id: documentRevision.id,
+    },
+  };
+
+  return values as unknown as DocumentRevisionFormValues;
 };

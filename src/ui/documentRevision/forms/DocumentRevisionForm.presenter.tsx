@@ -40,12 +40,12 @@ import {
   documentVersionPath,
 } from "../../document.revision/utils/paths";
 import FBWorkspace from "../../form.builder/main/workspace/FBWorkspace";
-import documentRevisionStore1 from "../../form.builder/stores/FBDRStore";
 import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
+import documentRevisionStore1 from "../../form.builder/stores/FBDRStore";
+import formBuilderStore from "../../form.builder/stores/FBStore";
+import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
-import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
-import formBuilderStore from "../../form.builder/stores/FBStore";
 
 export interface Props
   extends WithStyles<typeof styles>,
@@ -84,14 +84,16 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   documentTypesById,
 }) => {
 
-  // const reqType = documentRevisionStore.requestType(initialValues);
+  if (!values.id && !_.get(values, "document.documentType")) {
+    documentRevisionStore1.setMode("none");
+  }
+
   const openReference = (documentId: string) => {
     window.open(documentDetailsPath(documentId), "_blank");
   };
 
   const isDisabled: boolean = initialValues.id !== undefined;
   const docIdValue = isDisabled ? values.document!.docId : proposedDocId;
-  // const typeIsDisabled = isDisabled || (reqType === "fbCreate" || reqType === "fbUpdate");
 
   if (!isDisabled && values.document) {
     values.document.docId = proposedDocId;
