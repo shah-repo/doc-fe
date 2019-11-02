@@ -1,28 +1,37 @@
-import React from "react";
 import { Box } from "@material-ui/core";
+import _ from "lodash";
+import React from "react";
+import { DataProps } from "../../../state/ducks/common";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import Date from "../../components/Date";
-import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
+import Text from "../../components/Text";
+import { generateVersionNumber } from "../helpers";
 
-const DocumentRevisionOutputInfo: React.FunctionComponent<{}> = () => {
+const DocumentRevisionOutputInfo: React.FunctionComponent<DataProps<DocumentRevision>> = ({
+  dataProp,
+}) => {
 
-    const { outputInfo } = documentRevisionStore || {};
-    const { docId, version, releasedDate } = outputInfo || {};
+  const { revision, revisionStage, releasedAt } = _.get(dataProp, "formDocument") || {};
+  const hasVersion = revision && revisionStage;
+  const version = hasVersion
+    ? generateVersionNumber(revision!, revisionStage!)
+    : "";
 
-    return (
-        <Box
-            fontSize="subtitle1.fontSize"
-            color="primary.main"
-            py={1}
-            mb={3}
-        >
-            Form Info:
-            <Box fontSize="subtitle2.fontSize" color="text.primary">
-            <Box>{docId}</Box>
-            <Box>Version: {version}</Box>
-            <Box>Released: {releasedDate &&  <Date value={releasedDate} />}</Box>
-            </Box>
-        </Box>
-    );
+  const { docId } = _.get(dataProp, "formDocument.document");
+
+  return (
+    <Box mb={3}>
+      <Box mb={0.5} fontSize="h6.fontSize" fontWeight={300}>
+        <Text message="output.info" />
+      </Box>
+      <Box display="row" fontSize="subtitle2.fontSize">
+        {`${docId}, `}
+        <Text message="documentRevision.version" />
+        {` ${version}, `}
+        <Date value={releasedAt} />
+      </Box>
+    </Box>
+  );
 };
 
 export default DocumentRevisionOutputInfo;

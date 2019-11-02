@@ -9,7 +9,6 @@ import {
 } from "../../state/ducks/documentRevisions";
 import { documentsActions, documentsSelectors } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
-import documentRevisionStore from "../form.builder/stores/custom/FBDocumentRevisionStore";
 import useAsync from "../hooks/useAsync";
 import { DocumentCloneType } from "./Clone.container";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
@@ -54,6 +53,7 @@ export const DEFAULT_INITIAL_VALUES = (): DocumentRevisionFormValues => ({
   revisionChangeType: RevisionChangeType.NextRevision,
   document: { docId: "" },
   revisionStage: 1,
+  formTemplate: undefined,
 });
 
 export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionCreateContainerProps> = ({
@@ -69,21 +69,16 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   let initialValues = DEFAULT_INITIAL_VALUES();
 
   switch (type) {
-    case "none":
-      initialValues = documentRevisionStore.setValues(initialValues);
-      setDocId("");
-      break;
     case "newVersion":
       initialValues = toDocumentRevisionFormValuesWithRevisionChange(documentRevision);
+      break;
     case "newOutput":
       initialValues = toDocumentRevisionFormValuesForOutput(documentRevision);
       const documentTypeAcronym = _.get(initialValues, "document.documentType.documentTypeAcronym");
       if (documentTypeAcronym) {
         loadDocumentProposedId(documentTypeAcronym);
-        if (initialValues.document) {
-          initialValues.document!.docId = proposedDocId;
-        }
       }
+      break;
   }
 
   const async = useAsync<DocumentRevision>({
@@ -101,7 +96,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
     async.start(create, toNewVersionRequestBody(values), async);
   };
 
-  const showRevisionTypeChange = !!documentRevision;
+  const showRevisionTypeChange = type === "newVersion" && !!documentRevision;
 
   return (
       <DocumentRevisionForm
@@ -112,6 +107,8 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
         setDocId={setDocId}
         doNotPrompt={doNotPrompt}
         documentRevision={documentRevision}
+        loadDocumentProposedId={loadDocumentProposedId}
+        proposedDocId={proposedDocId}
       />
     );
   };

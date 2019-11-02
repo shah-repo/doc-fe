@@ -11,10 +11,7 @@ import {
   DocumentRevisionStatus,
 } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
-import {
-  documentsActions,
-  documentsSelectors,
-} from "../../../state/ducks/documents";
+import { documentsActions } from "../../../state/ducks/documents";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
@@ -28,7 +25,6 @@ interface StateProps {
   availableReferences: OptionType[];
   loadAsyncState: AsyncState;
   documentRevisions: DocumentRevision[];
-  proposedDocId: string;
   documentTypes: SelectOption[];
   documentTypesById: DocumentTypeByIdState;
   document: Document;
@@ -36,7 +32,6 @@ interface StateProps {
 
 interface DispatchProps {
   loadDocumentRevisions: typeof documentRevisionsActions.loadList;
-  loadDocumentProposedId: typeof documentsActions.loadDocumentProposedId;
 }
 
 interface OwnProps {
@@ -51,6 +46,8 @@ interface OwnProps {
   doNotPrompt?: boolean;
   onDirtyFlagChange?: (dirty: boolean) => void;
   documentRevision: DocumentRevision;
+  proposedDocId?: string;
+  loadDocumentProposedId?: typeof documentsActions.loadDocumentProposedId;
 }
 
 export type DocumentRevisionFormContainerProps = OwnProps & StateProps & DispatchProps;
@@ -63,7 +60,6 @@ const mapStateToProps = (
   availableReferences: getAvailableReferences(state, props.initialValues),
   loadAsyncState: documentRevisionsSelectors.getLoadListAsyncState(state),
   documentRevisions: documentRevisionsSelectors.getDocumentRevisionsList(state),
-  proposedDocId: documentsSelectors.getProposedDocId(state),
   documentTypes: documentTypeSelectors.getDocumentTypeFormOptions(state),
   documentTypesById: documentTypeSelectors.byId(state),
   document: documentRevisionsSelectors.getDocument(state, _.get(props.initialValues, "document.id")!),
@@ -91,9 +87,6 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
   document,
 }) => {
 
-  if (initialValues.document && initialValues.document.documentType && document) {
-    initialValues.document.documentType.id = document.documentType.id;
-  }
   document = document || {} as Document;
 
   const render = (props: FormikProps<DocumentRevisionFormValues>) => {
@@ -146,10 +139,6 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
   );
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
-  mapStateToProps,
-  {
-    loadDocumentRevisions: documentRevisionsActions.loadList,
-    loadDocumentProposedId: documentsActions.loadDocumentProposedId,
-  },
-)(DocumentRevisionFormContainer);
+export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
+  loadDocumentRevisions: documentRevisionsActions.loadList,
+})(DocumentRevisionFormContainer);

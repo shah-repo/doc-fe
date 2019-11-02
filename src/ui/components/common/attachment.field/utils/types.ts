@@ -10,6 +10,7 @@ export interface AttachmentFieldDispatchProps {
 export interface AttachmentFieldProps extends FormikHybridFieldProps {
   multiple?: boolean;
   component?: AttachmentComponent;
+  disabled?: boolean;
   onChange?: (event: React.FormEvent<HTMLInputElement>) => any;
 }
 

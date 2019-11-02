@@ -24,7 +24,9 @@ import CheckboxField from "../../components/forms/fields/Checkbox";
 import InputField from "../../components/forms/fields/Input";
 import RadioButton from "../../components/forms/fields/RadioButton";
 import RadioGroup from "../../components/forms/fields/RadioGroup";
-import SelectField, { SelectOption } from "../../components/forms/fields/Select";
+import SelectField, {
+  SelectOption,
+} from "../../components/forms/fields/Select";
 import TextEditorField from "../../components/forms/fields/TextEditor";
 import { required, validator } from "../../components/forms/fields/validators";
 import FormMessage from "../../components/forms/FormMessage";
@@ -40,9 +42,8 @@ import {
   documentVersionPath,
 } from "../../document.revision/utils/paths";
 import FBWorkspace from "../../form.builder/main/workspace/FBWorkspace";
-import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
-import documentRevisionStore1 from "../../form.builder/stores/FBDRStore";
-import formBuilderStore from "../../form.builder/stores/FBStore";
+import FBDRStore from "../../form.builder/stores/FBDRStore";
+import FBStore from "../../form.builder/stores/FBStore";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
@@ -54,8 +55,8 @@ export interface Props
   documentRevisions?: DocumentRevision[];
   availableReferences: OptionType[];
   showRevisionTypeChange?: boolean;
-  loadDocumentProposedId: typeof documentsActions.loadDocumentProposedId;
-  proposedDocId: string;
+  loadDocumentProposedId?: typeof documentsActions.loadDocumentProposedId;
+  proposedDocId?: string;
   setDocId?: typeof documentsActions.setDocumentProposedId;
   doNotPrompt?: boolean;
   documentTypes: SelectOption[];
@@ -64,6 +65,7 @@ export interface Props
 }
 
 export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
+  classes,
   asyncState,
   initialValues,
   handleChange,
@@ -81,29 +83,35 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   isValidating,
   errors,
   documentTypes,
-  documentTypesById,
+  documentTypesById
 }) => {
-
   if (!values.id && !_.get(values, "document.documentType")) {
-    documentRevisionStore1.setMode("none");
+    FBDRStore.setMode("none");
+    if (setDocId) {
+      setDocId("");
+    }
   }
 
   const openReference = (documentId: string) => {
     window.open(documentDetailsPath(documentId), "_blank");
   };
 
-  const isDisabled: boolean = initialValues.id !== undefined;
-  const docIdValue = isDisabled ? values.document!.docId : proposedDocId;
+  const isDisabled: boolean = _.get(initialValues, "id") !== undefined;
+  const docId = _.get(initialValues, "document.docId");
+  const useProposedDocId = (!docId || docId === "") && values.document;
+  const docIdValue = useProposedDocId ? proposedDocId : values.document!.docId;
 
-  if (!isDisabled && values.document) {
-    values.document.docId = proposedDocId;
+  if (useProposedDocId) {
+    values.document!.docId = proposedDocId;
   }
 
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     const { documentType } = values.document || {};
 
-    if (!documentType) { return; }
+    if (!documentType) {
+      return;
+    }
     const type = documentTypesById[documentType.id!].documentTypeAcronym;
 
     if (!values.document && !type) {
@@ -118,12 +126,14 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   };
 
   const handleTypeChange = (
-    event: React.ChangeEvent<{ name?: string; value: unknown }>,
+    event: React.ChangeEvent<{ name?: string; value: unknown }>
   ) => {
     const typeId = event.target.value as string;
     const type = documentTypesById[typeId] || {};
-    loadDocumentProposedId(type.documentTypeAcronym);
-    documentRevisionStore1.setInitialFBMode(type.group);
+    if (loadDocumentProposedId) {
+      loadDocumentProposedId(type.documentTypeAcronym);
+    }
+    FBDRStore.setInitialFBMode(type.group);
     handleChange(event);
   };
 
@@ -167,13 +177,13 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <Text translation="common.referenced.by" />
           </Typography>
           <div>
-            {initialValues.document.referencedBy.map((reference) => {
+            {initialValues.document.referencedBy.map(reference => {
               return (
                 <div key={reference.id}>
                   <Link
                     to={documentVersionPath(
                       reference.id,
-                      reference.document.id,
+                      reference.document.id
                     )}
                     target="_blank"
                   >
@@ -200,112 +210,118 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   );
 
   return (
-    <Box display="flex" flexDirection="row" px={1}>
-      <Box width="20%" marginRight={1}>
-        {documentRevisionStore.outputInfo && <DocumentRevisionOutputInfo />}
-      </Box>
-      <Box width="60%">
-        <FormWrapper
+    <Grid
+      item={true}
+      className={classes.container}
+      lg={isDisabled ? 12 : 7}
+      sm={isDisabled ? 12 : 10}
+      xs={12}
+    >
+      {FBDRStore.isOutput && (
+        <DocumentRevisionOutputInfo
+          dataProp={(values as unknown) as DocumentRevision}
+        />
+      )}
+      <FormWrapper
+        dirty={dirty}
+        initialValues={initialValues}
+        resetForm={resetForm}
+      >
+        <ScrollToError
+          isSubmitting={isSubmitting}
+          isValidating={isValidating}
+          errors={errors}
+        />
+        <PromptIfDirty
           dirty={dirty}
-          initialValues={initialValues}
-          resetForm={resetForm}
-        >
-          <ScrollToError
-            isSubmitting={isSubmitting}
-            isValidating={isValidating}
-            errors={errors}
-          />
-          <PromptIfDirty
-            dirty={dirty}
-            doNotPrompt={doNotPrompt}
-            onDirtyFlagChange={onDirtyFlagChange}
-          />
-          <FormMessage asyncState={asyncState} />
-          <FormProgress asyncState={asyncState} />
-          <InputField
-            name="name"
-            label="document.title"
-            inputProps={{ multiline: true, rows: "2" }}
-            validate={validator(required)}
-          />
-          <TextEditorField
-            name="description"
-            label="common.description"
-            validate={validator(required)}
-          />
-          <SelectField
-            name="document.documentType.id"
-            label="document.type"
-            selectProps={{
-              // inputProps: { id: "documentType", disabled: typeIsDisabled},
-              inputProps: { id: "documentType"},
-              onChange: handleTypeChange,
-            }}
-            options={documentTypes}
-            validate={validator(required)}
-            includeEmpty={false}
-          />
-          <InputField
-            name="document.docId"
-            label="common.documentId"
-            inputProps={{
-              id: "docId",
-              value: docIdValue,
-              disabled: isDisabled,
-              onChange: handleDocIdChange,
-            }}
-          />
-          {renderRevisionStageDropdown}
-          <AutcompleteField
-            name="referenceTo"
-            label="documentRevision.form.references"
-            autocompleteProps={{
-              id: "referenceTo",
-              isMulti: true,
-              closeMenuOnSelect: false,
-            }}
-            options={availableReferences}
-            onClick={openReference}
-          />
-          {renderReferences()}
-          <CheckboxField name="retrain" label="document.revision.trainingRequired"/>
-          <AttachmentsField />
-          {renderTypeOfRevisionChange()}
-          {formBuilderStore.active && (
-            <Box mt={4}>
-              <SelectField
-                name="formTemplate.outputDocumentType.id"
-                label="document.output.type"
-                selectProps={{
-                  inputProps: { id: "formTemplate.outputDocumentType" },
-                }}
-                options={documentTypes}
-                includeEmpty={false}
-                validate={validator(required)}
-              />
-            </Box>
-          )}
-          {formBuilderStore.active && (
-            <Box mt={5}>
-              <FBWorkspace />
-            </Box>
-          )}
-          <Box mt={5}>
-            <Grid
-              item={true}
-              container={true}
-              alignItems="flex-end"
-              direction="column"
-            >
-              <SubmitButton
-                asyncState={asyncState}
-                label={isDisabled ? "common.save" : "navigation.createDocument"}
-              />
-            </Grid>
+          doNotPrompt={doNotPrompt}
+          onDirtyFlagChange={onDirtyFlagChange}
+        />
+        <FormMessage asyncState={asyncState} />
+        <FormProgress asyncState={asyncState} />
+        <InputField
+          name="name"
+          label="document.title"
+          inputProps={{ multiline: true, rows: "2" }}
+          validate={validator(required)}
+        />
+        <TextEditorField
+          name="description"
+          label="common.description"
+          validate={validator(required)}
+        />
+        <SelectField
+          name="document.documentType.id"
+          label="document.type"
+          selectProps={{
+            inputProps: { id: "documentType", disabled: isDisabled },
+            onChange: handleTypeChange,
+          }}
+          options={documentTypes}
+          validate={validator(required)}
+          includeEmpty={false}
+        />
+        <InputField
+          name="document.docId"
+          label="common.documentId"
+          inputProps={{
+            id: "document.docId",
+            value: docIdValue,
+            disabled: isDisabled,
+            onChange: handleDocIdChange,
+          }}
+        />
+        {renderRevisionStageDropdown}
+        <AutcompleteField
+          name="referenceTo"
+          label="documentRevision.form.references"
+          autocompleteProps={{
+            id: "referenceTo",
+            isMulti: true,
+            closeMenuOnSelect: false,
+          }}
+          options={availableReferences}
+          onClick={openReference}
+        />
+        {renderReferences()}
+        <CheckboxField
+          name="retrain"
+          label="document.revision.trainingRequired"
+        />
+        <AttachmentsField />
+        {renderTypeOfRevisionChange()}
+        {FBStore.active && !FBDRStore.isOutput && (
+          <Box mt={4}>
+            <SelectField
+              name="formTemplate.outputDocumentType.id"
+              label="document.output.type"
+              selectProps={{
+                inputProps: { id: "formTemplate.outputDocumentType" },
+              }}
+              options={documentTypes}
+              includeEmpty={false}
+              validate={validator(required)}
+            />
           </Box>
-        </FormWrapper>
-      </Box>
-    </Box>
+        )}
+        {FBStore.active && (
+          <Box mt={5}><FBWorkspace /></Box>
+        )}
+        <Box mt={5}>
+          <Grid
+            item={true}
+            container={true}
+            alignItems="flex-end"
+            direction="column"
+          >
+            <SubmitButton
+              asyncState={asyncState}
+              label={isDisabled ? "common.save" : "navigation.createDocument"}
+            />
+          </Grid>
+        </Box>
+      </FormWrapper>
+    </Grid>
   );
 };
 

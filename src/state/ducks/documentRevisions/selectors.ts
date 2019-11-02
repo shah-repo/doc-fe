@@ -7,7 +7,6 @@ import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
 import { Audit, AuditGroupType } from "../audit/types";
 import { DocumentRevisionStatus } from "./types";
-import documentRevisionStore1 from "../../../ui/form.builder/stores/FBDRStore";
 
 const allIds = (state: ApplicationState) => state.documentRevisions.allIds;
 const byId = (state: ApplicationState) => state.documentRevisions.byId;
@@ -22,50 +21,47 @@ const getDocumentRevisionsList = createSelector(
   allIds,
   byId,
   (ids, documentRevisions) =>
-    ids.map(id => stripTagsFromObject(documentRevisions[id]))
+    ids.map((id) => stripTagsFromObject(documentRevisions[id])),
 );
 
 const getDocumentRevision = (
   state: ApplicationState,
-  documentRevisionId: string
-) => {
-  const docRev = byId(state)[documentRevisionId];
-  documentRevisionStore1.setValues(docRev);
-  return docRev;
-};
+  documentRevisionId: string,
+) => byId(state)[documentRevisionId];
+
 const getDocument = (state: ApplicationState, documentId: string) =>
   documentsById(state)[documentId];
 const getDocumentRevisions = (state: ApplicationState, documentId: string) =>
   _.get(documentsById(state)[documentId], "documentRevisions", []);
 const getAudit = (
   state: ApplicationState,
-  documentRevisionId: string
+  documentRevisionId: string,
 ): AuditGroupType => auditsByCRId(state)[documentRevisionId];
 
 const makeGetDocumentRevisions = () => {
   return createSelector(
     getDocumentRevisions,
-    documentRevisions => _.sortBy(documentRevisions, docRev => -docRev.version)
+    (documentRevisions) => _.sortBy(documentRevisions, (docRev) => -docRev.version),
   );
 };
 
 const makeGetDisableCreateNewVersion = () => {
   return createSelector(
     [getDocumentRevisions],
-    documentRevisions =>
+    (documentRevisions) =>
       _.some(
         documentRevisions,
-        docRev =>
+        (docRev) =>
           docRev.status === DocumentRevisionStatus.Draft ||
           docRev.status === DocumentRevisionStatus.PendingChange ||
-          docRev.status === DocumentRevisionStatus.InReview
-      )
+          docRev.status === DocumentRevisionStatus.InReview,
+      ),
   );
 };
 
 const getCurrentDocumentValues = (
   state: ApplicationState,
-  docRev: DocumentRevisionFormValues
+  docRev: DocumentRevisionFormValues,
 ) => docRev;
 
 const makeGetAvailableReferences = () => {
@@ -100,10 +96,10 @@ const makeGetAvailableReferences = () => {
       });
 
       // if two doc revs from same to document, take the one with the higher version number
-      const uniqueIds = filteredIds.filter(id => {
+      const uniqueIds = filteredIds.filter((id) => {
         const docRev = docRevs[id];
 
-        const skipId = _.some(filteredIds, filteredId => {
+        const skipId = _.some(filteredIds, (filteredId) => {
           const filteredDocRev = docRevs[filteredId];
 
           if (filteredDocRev.document.id === docRev.document.id) {
@@ -116,12 +112,12 @@ const makeGetAvailableReferences = () => {
         return !skipId;
       });
 
-      return uniqueIds.map(id => {
+      return uniqueIds.map((id) => {
         const { document, revision, name } = docRevs[id];
 
         return {
           value: document.id,
-          label: `${document.docId} - ${revision} - ${name}`
+          label: `${document.docId} - ${revision} - ${name}`,
         };
       });
     }
@@ -132,7 +128,7 @@ const makeGetAudit = () => {
   return createSelector(
     getAudit,
     (audits: AuditGroupType = {}) => {
-      Object.keys(audits).map(groupId => {
+      Object.keys(audits).map((groupId) => {
         audits[groupId].map((audit: Audit) => {
           if (audit.field === "description") {
             const html = audit.nextValue as string;
@@ -168,5 +164,5 @@ export default {
   getLoadAuditAsyncState,
   makeGetAvailableReferences,
   makeGetAudit,
-  makeGetDisableCreateNewVersion
+  makeGetDisableCreateNewVersion,
 };
