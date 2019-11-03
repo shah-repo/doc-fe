@@ -173,13 +173,13 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <Text translation="common.referenced.by" />
           </Typography>
           <div>
-            {initialValues.document.referencedBy.map(reference => {
+            {initialValues.document.referencedBy.map((reference) => {
               return (
                 <div key={reference.id}>
                   <Link
                     to={documentVersionPath(
                       reference.id,
-                      reference.document.id
+                      reference.document.id,
                     )}
                     target="_blank"
                   >

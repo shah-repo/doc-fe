@@ -53,7 +53,7 @@ export const DEFAULT_INITIAL_VALUES = (): DocumentRevisionFormValues => ({
   revisionChangeType: RevisionChangeType.NextRevision,
   document: { docId: "" },
   revisionStage: 1,
-  formTemplate: undefined,
+  formTemplate: {outputDocumentType: { id: "" }, schema: []},
 });
 
 export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionCreateContainerProps> = ({

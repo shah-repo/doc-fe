@@ -49,11 +49,13 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
       </Button>
     );
 
-    const canCreate = canCreateNewVersion(documentRevision, disableCreateNewVersion, canShowCreateVersionButton);
+    const canCreate = () => {
+      return canCreateNewVersion(documentRevision, disableCreateNewVersion, canShowCreateVersionButton);
+    };
 
     return (
       <Box component="span">
-        {canCreate && renderCloneButton()}
+        {canCreate() && renderCloneButton()}
         {canCreateOutput(documentRevision) && renderOutputButton()}
       </Box>
     );

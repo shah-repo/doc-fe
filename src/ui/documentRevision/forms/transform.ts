@@ -12,8 +12,6 @@ import { DocumentRevisionFormValues } from "./types";
 
 const toRequestFormBuilder = (values: DocumentRevision) => {
   switch (FBDRStore.mode) {
-    case "none":
-      return { ...values };
     case "create":
     case "update":
       return {
@@ -34,7 +32,10 @@ const toRequestFormBuilder = (values: DocumentRevision) => {
         formInput: JSON.stringify(FBStore.getValues()),
       };
     default:
-      return { ...values };
+      return {
+        ...values,
+        formTemplate: undefined,
+      };
   }
 };
 
@@ -127,6 +128,7 @@ export const toDocumentRevisionFormValuesForOutput = (
   const values = {
     ...DEFAULT_INITIAL_VALUES() as unknown as DocumentRevision,
     id: "",
+    formTemplate: undefined,
     status: DocumentRevisionStatus.Draft,
     document: {
       documentType: _.get(documentRevision, "formTemplate.outputDocumentType"),
