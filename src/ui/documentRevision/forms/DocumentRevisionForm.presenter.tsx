@@ -83,7 +83,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   isValidating,
   errors,
   documentTypes,
-  documentTypesById
+  documentTypesById,
 }) => {
   if (!values.id && !_.get(values, "document.documentType")) {
     FBDRStore.setMode("none");
@@ -99,11 +99,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDisabled: boolean = _.get(initialValues, "id") !== undefined;
   const docId = _.get(initialValues, "document.docId");
   const useProposedDocId = (!docId || docId === "") && values.document;
-  const docIdValue = useProposedDocId ? proposedDocId : values.document!.docId;
-
-  if (useProposedDocId) {
-    values.document!.docId = proposedDocId;
-  }
+  values.document!.docId =  useProposedDocId ? proposedDocId : values.document!.docId;
 
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -266,7 +262,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           label="common.documentId"
           inputProps={{
             id: "document.docId",
-            value: docIdValue,
+            value: values.document!.docId,
             disabled: isDisabled,
             onChange: handleDocIdChange,
           }}
