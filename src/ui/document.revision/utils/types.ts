@@ -47,14 +47,10 @@ export interface SummaryOwnProps {
 }
 
 // Common
-// export type DocumentRevisionsUserProps = DataProps<DocumentRevision[]> & ActionProps & AuthProps & {
-//   setDocId: typeof documentsActions.setDocumentProposedId;
-
-export type DocumentRevisionsUserProps = ActionProps & AuthProps & {
+export type DocumentRevisionsUserProps = ActionProps & {
   documentTypeOptions: SelectOption[];
   tableName: string;
   tableState: TablePanelStateProps<DocumentRevision>;
-  setDocId: typeof documentsActions.setDocumentProposedId;
   clearFilter?: () => void;
 };
 

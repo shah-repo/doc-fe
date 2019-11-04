@@ -28,7 +28,6 @@ export type Props = DocumentRevisionsUserProps & WithStyles<typeof styles>;
 
 export const ListPresenter: React.FunctionComponent<Props> = ({
   classes,
-  currentUserEmail,
   editDocumentRevision,
   documentTypeOptions,
   tableName,

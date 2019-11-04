@@ -62,7 +62,7 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<
             </div>
             <div>
                 <Text translation="common.owner" />:{" "}
-                {documentRevision.owner.name}
+                {documentRevision.owner && documentRevision.owner.name}
             </div>
             <div>
               <Text translation="common.released" />:{" "}
