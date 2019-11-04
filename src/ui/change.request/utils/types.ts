@@ -7,6 +7,7 @@ import { AssessmentType, ChangeRequest } from "../../../state/ducks/changeReques
 import { DataProps } from "../../../state/ducks/common";
 import { LoadAsyncState } from "../../../state/types";
 import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
+import { TablePanelStateProps } from "../../components/table/types";
 
 // Container
 export type ContainerStateProps = LoadAsyncState & DataProps<ChangeRequest> & AuthProps;
@@ -18,7 +19,6 @@ export interface ContainerDispatchProps {
 
 // List
 export type ListProps = ActionProps;
-export type ListStateProps = DataProps<ChangeRequest[]> & LoadAsyncState & AuthProps;
 
 export interface ListDispatchProps {
   loadChangeRequests: typeof changeRequestsActions.loadList;
@@ -72,7 +72,11 @@ export interface SummaryDispatchProps {
 }
 
 // Common
-export type ChangeRequestsUserProps = DataProps<ChangeRequest[]> & ActionProps & AuthProps;
+export type ChangeRequestsUserProps = ActionProps & AuthProps & {
+  tableName: string;
+  clearFilter: () => void,
+  tableState: TablePanelStateProps<ChangeRequest>,
+};
 export type ChangeRequestUserProps = DataProps<ChangeRequest> & AuthProps;
 
 export interface RouteParams {

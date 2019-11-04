@@ -33,10 +33,14 @@ const getDocument = (state: ApplicationState, documentId: string) =>
   documentsById(state)[documentId];
 const getDocumentRevisions = (state: ApplicationState, documentId: string) =>
   _.get(documentsById(state)[documentId], "documentRevisions", []);
+
 const getAudit = (
   state: ApplicationState,
   documentRevisionId: string,
 ): AuditGroupType => auditsByCRId(state)[documentRevisionId];
+
+const getDocId = (state: ApplicationState, documentId: string) =>
+  _.get(documentsById(state)[documentId], "docId", "");
 
 const makeGetDocumentRevisions = () => {
   return createSelector(
@@ -165,4 +169,5 @@ export default {
   makeGetAvailableReferences,
   makeGetAudit,
   makeGetDisableCreateNewVersion,
+  getDocId,
 };
