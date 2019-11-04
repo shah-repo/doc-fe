@@ -1,5 +1,5 @@
-import moment from "moment";
 import _ from "lodash";
+import moment from "moment";
 import { DocumentRevision, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 
 export const canEditDocumentRevision = (
@@ -20,6 +20,14 @@ export const canSubmitDocumentRevision = (
 
 export const canCreateNewVersion = (documentRevision: DocumentRevision, disableCreateNewVersion: boolean, canShowCreateVersionButton?: boolean) =>
   documentRevision.status === DocumentRevisionStatus.Released && !disableCreateNewVersion && canShowCreateVersionButton;
+
+export const canCreateOutput = (documentRevision: DocumentRevision) => {
+  const documentType = _.get(documentRevision, "document.documentType");
+  return (
+    documentType && documentType.group === "FORM" &&
+    documentRevision.status === DocumentRevisionStatus.Released
+  );
+};
 
 export const documentRevisionIdMask = (
   type: string,

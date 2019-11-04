@@ -21,8 +21,6 @@ import {
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
 import styles from "./styles";
-import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
-
 export type Props = DocumentRevisionsUserProps & WithStyles<typeof styles>;
 
 export const ListPresenter: React.FunctionComponent<Props> = ({
@@ -36,14 +34,13 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   const ALL_DOC_REV_STATES = "ALL_DOC_REV_STATES";
   const [clearFilter, setClearFilter] = React.useState<boolean>(false);
 
-  const canEdit = (data: DocumentRevision) => canEditDocumentRevision({dataProp: data, currentUserEmail});
+  const canEdit = (data: DocumentRevision) => canEditDocumentRevision(data);
 
   // TODO: fix tolltip
   const typeTooltipRenderer = (rowData: DocumentRevision) =>
     rowData.document.documentType.documentTypeName || "";
 
   const cellHrefRenderer = (rowData: DocumentRevision): string => {
-    documentRevisionStore.reset()
     if (canEdit(rowData)) {
       return documentEditPath(rowData.id, rowData.document.id);
     }

@@ -10,7 +10,7 @@ import {
   DOCUMENT_REVISION_LIST,
   DOCUMENT_REVISION_LIST_ASYNC,
   DOCUMENT_REVISION_SET,
-  DOCUMENT_SET,
+  DOCUMENT_SET
 } from "./constants";
 import {
   AllIdsState,
@@ -21,28 +21,32 @@ import {
   DocumentRevisionsByIdState,
   DocumentRevisionSetAction,
   DocumentRevisionsListAction,
-  DocumentSetAction,
+  DocumentSetAction
 } from "./types";
 
-type DocumentRevisionActions = DocumentRevisionsListAction | DocumentRevisionSetAction;
+type DocumentRevisionActions =
+  | DocumentRevisionsListAction
+  | DocumentRevisionSetAction;
 
 export const byId = (
   state: DocumentRevisionsByIdState = {},
-  action: DocumentRevisionActions,
+  action: DocumentRevisionActions
 ): DocumentRevisionsByIdState => {
   switch (action.type) {
     case DOCUMENT_REVISION_LIST:
-        return action.payload.reduce(
-          (acc: DocumentRevisionsByIdState, docRev: DocumentRevision) => {
-            return {
-              ...acc,
-              [docRev.id]: {
-                ...state[docRev.id],
-                ...docRev,
-              },
-            };
-        }, {});
-      // return { ...(_.keyBy<DocumentRevision>(action.payload, (documentRevision) => documentRevision.id)) };
+      return action.payload.reduce(
+        (acc: DocumentRevisionsByIdState, docRev: DocumentRevision) => {
+          return {
+            ...acc,
+            [docRev.id]: {
+              ...state[docRev.id],
+              ...docRev
+            }
+          };
+        },
+        {}
+      );
+    // return { ...(_.keyBy<DocumentRevision>(action.payload, (documentRevision) => documentRevision.id)) };
     case DOCUMENT_REVISION_SET:
       return { ...state, [action.payload.id]: action.payload };
     default:
@@ -52,11 +56,13 @@ export const byId = (
 
 export const allIds = (
   state: DocumentRevisionsAllIdsState = [],
-  action: DocumentRevisionActions,
+  action: DocumentRevisionActions
 ): DocumentRevisionsAllIdsState => {
   switch (action.type) {
     case DOCUMENT_REVISION_LIST:
-      return _.uniq([...action.payload.map((documentRevision) => documentRevision.id)]);
+      return _.uniq([
+        ...action.payload.map(documentRevision => documentRevision.id)
+      ]);
     case DOCUMENT_REVISION_SET:
       return _.uniq([...state, action.payload.id]);
     default:
@@ -66,7 +72,7 @@ export const allIds = (
 
 export const documentsById = (
   state: DocumentByIdState = {},
-  action: DocumentSetAction,
+  action: DocumentSetAction
 ): DocumentByIdState => {
   switch (action.type) {
     case DOCUMENT_SET:
@@ -78,17 +84,21 @@ export const documentsById = (
 
 export const auditsByCRId = (
   state: AuditByCRIdState = {},
-  action: DocumentRevisionAuditSetAction): AuditByCRIdState => {
+  action: DocumentRevisionAuditSetAction
+): AuditByCRIdState => {
   switch (action.type) {
     case DOCUMENT_REVISION_AUDIT_SET:
-      const audits = _.groupBy(action.payload.audit,  "groupId");
+      const audits = _.groupBy(action.payload.audit, "groupId");
       return { ...state, [action.payload.id]: audits };
     default:
       return state;
   }
 };
 
-export const auditsAllId = (state: AllIdsState = [], action: DocumentRevisionAuditSetAction): AllIdsState => {
+export const auditsAllId = (
+  state: AllIdsState = [],
+  action: DocumentRevisionAuditSetAction
+): AllIdsState => {
   switch (action.type) {
     case DOCUMENT_REVISION_AUDIT_SET:
       return _.uniq([...state, action.payload.id]);
@@ -106,5 +116,5 @@ export default combineReducers({
   allIds,
   documentsById,
   auditsByCRId,
-  auditsAllId,
+  auditsAllId
 });
