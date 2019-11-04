@@ -13,8 +13,8 @@ describe( "DocumentInfo tests", () => {
       );
 
     it("Renders correctly", () => {
-    const wrapper = getWrapper();
+        const wrapper = getWrapper();
 
-    expect(wrapper.find("span").contains(defaultProps.numberOfRecords)).toBe(true);
+        expect(wrapper.find("span").contains(defaultProps.numberOfRecords)).toBe(true);
     });
 });

@@ -9,7 +9,7 @@ interface OwnProps {
 export type Props = OwnProps;
 
 export const DocumentInfo: React.FunctionComponent<Props> = ({
-numberOfRecords,
+  numberOfRecords,
 }) => {
   return (
     <Box component="span">
