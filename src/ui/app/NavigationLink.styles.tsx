@@ -8,6 +8,7 @@ export default (theme: Theme) =>
       display: "flex",
       textDecoration: "none",
       flex: 1,
+      marginBottom: theme.spacing(2.5),
     },
     childLink: {
       paddingLeft: theme.spacing(3),
@@ -22,7 +23,11 @@ export default (theme: Theme) =>
       padding: 0,
     },
     itemIcon: {
-      color: theme.palette.secondary.contrastText,
+      "color": theme.palette.secondary.contrastText,
+      "minWidth": "40px",
+      "& svg": {
+        stroke: theme.palette.secondary.contrastText,
+      },
     },
     itemText: {
       color: theme.palette.secondary.contrastText,
