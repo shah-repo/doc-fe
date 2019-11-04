@@ -12,6 +12,7 @@ import { canEditChangeRequest, changeRequestStatusOption } from "../utils/helper
 import { changeRequestEditPath, changeRequestPreviewPath } from "../utils/paths";
 import { ChangeRequestsUserProps } from "../utils/types";
 import styles from "./styles";
+import { DocumentInfo } from "../../components/table/DocumentInfo";
 
 export type Props = ChangeRequestsUserProps & WithStyles<typeof styles>;
 
@@ -93,6 +94,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         >
           <Text translation="common.clear.filters" />
         </Button>
+        <DocumentInfo numberOfRecords={tableState.queryData.length} />
       </Grid>
       <Grid item={true} xs={6} style={{textAlign: "right"}}>
         <RouterLink to={CHANGE_REQUEST_CREATE_URL} className={classes.link}>

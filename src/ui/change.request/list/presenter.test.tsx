@@ -11,6 +11,7 @@ describe("Change request list presenter tests", () => {
       tableName: faker.name.firstName(),
       tableState: {
         queryDict: {},
+        queryData: [],
       },
       clearFilter: jest.fn(),
       currentUserEmail: faker.internet.email(),

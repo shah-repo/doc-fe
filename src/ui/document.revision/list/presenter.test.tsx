@@ -11,6 +11,7 @@ describe("ListPresenter tests", () => {
     tableName: faker.name.firstName(),
     tableState: {
       queryDict: {},
+      queryData: [],
     },
     currentUserEmail: faker.internet.email(),
     editDocumentRevision: jest.fn(),

@@ -23,6 +23,7 @@ import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
 import styles from "./styles";
 import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
+import { DocumentInfo } from "../../components/table/DocumentInfo";
 
 export type Props = DocumentRevisionsUserProps & WithStyles<typeof styles>;
 
@@ -185,6 +186,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         >
           <Text translation="common.clear.filters" />
         </Button>
+        <DocumentInfo numberOfRecords={tableState.queryData.length} />
       </Grid>
       <Grid item={true} xs={6} style={{textAlign: "right"}}>
         <RouterLink to={DOCUMENT_REVISION_CREATE_URL} className={classes.link}>

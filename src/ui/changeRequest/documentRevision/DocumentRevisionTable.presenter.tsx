@@ -12,6 +12,7 @@ import { TablePanel } from "../../components/table/panel";
 import { TablePanelStateProps, TableSearchQueryType, TableSelectionProps } from "../../components/table/types";
 import { generateVersionNumber } from "../../documentRevision/helpers";
 import styles from "./DocumentRevisionTable.styles";
+import { DocumentInfo } from "../../components/table/DocumentInfo";
 
 interface DocumentRevisionTableProps extends WithStyles<typeof styles> {
   documentRevisionsToShow: DocumentRevision[];
@@ -120,7 +121,10 @@ const DocumentRevisionTable: React.FunctionComponent<
     );
   };
 
-  return <Paper className={classes.root}>{bodyRenderer()}</Paper>;
+  return <Paper className={classes.root}>
+    <DocumentInfo numberOfRecords={tableState.queryData.length} />
+    {bodyRenderer()}
+    </Paper>;
 };
 
 export default withStyles(styles)(DocumentRevisionTable);
