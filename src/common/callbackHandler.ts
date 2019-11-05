@@ -1,7 +1,7 @@
 export type CallbackHandlerFn<T> = (arg: T) => any;
 
 class CallbackHandler<T = any> {
-  public constructor(
+  constructor(
     private callback?: CallbackHandlerFn<T>,
   ) {}
 
