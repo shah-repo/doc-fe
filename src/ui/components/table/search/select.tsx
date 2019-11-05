@@ -17,14 +17,11 @@ export const TableSearchSelectField: React.FunctionComponent<Props> = ({
 }) => {
 
   const classes = selectStyles();
-  const [value, setValue] = React.useState<string | number>(defaultValue || "");
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     if (!queryGetter) { return; }
-    const query = event.target.value as string;
-    setValue(query as string | number);
 
-    const finalQuery = searchQueryString({ query, searchValueGetter });
+    const finalQuery = searchQueryString({ query: event.target.value as string, searchValueGetter });
     queryGetter(dataKey, finalQuery);
   };
 
@@ -36,7 +33,7 @@ export const TableSearchSelectField: React.FunctionComponent<Props> = ({
     <FormControl variant="filled" className={classes.root}>
       <InputLabel htmlFor="search-select-field" />
       <Select
-        value={value}
+        value={defaultValue || ""}
         onChange={handleChange}
         input={<InputBase name={dataKey} id="search-select-field" className={classes.input} />}
       >

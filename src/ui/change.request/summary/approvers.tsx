@@ -5,9 +5,9 @@ import {
   withStyles,
 } from "@material-ui/core";
 import React from "react";
-import { getFormattedDateString } from "../../../common/utils/date";
 import { Approval, DataProps } from "../../../state/ducks/common";
 import SummaryField from "../../common/summary/base";
+import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
 import styles from "./styles";
 
@@ -21,7 +21,12 @@ export const Approvers: React.FunctionComponent<Props> = ({ classes, dataProp })
         <Typography variant="subtitle1" component="span">{approver.name}</Typography>
         <Typography variant="body2" component="span">
           {` | ${status}`}
-          {reviewedAt && <Text message={` | ${getFormattedDateString(reviewedAt)}`} />}
+          {reviewedAt &&
+            <span>
+              {"| "}
+              <DateTime value={reviewedAt}/>
+            </span>
+          }
         </Typography>
       </Box>
     );

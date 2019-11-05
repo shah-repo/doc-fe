@@ -1,12 +1,12 @@
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
-import DashboardOutlinedIcon from "@material-ui/icons/DashboardOutlined";
-import FolderOutlinedIcon from "@material-ui/icons/FolderOutlined";
 import classNames from "classnames";
 import React, { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
-import ChangeRequestListIcon from "../components/icons/ChangeRequestList";
+import { ReactComponent as ChangeRequestListIcon } from "../components/icons/change_request_list_icon.svg";
+import { ReactComponent as DashboardIcon } from "../components/icons/dashboard_icon.svg";
+import { ReactComponent as DocumentListICon } from "../components/icons/document_list_icon.svg";
 import Text from "../components/Text";
 import { LinkDefinition } from "./NavigationLink.container";
 
@@ -25,8 +25,8 @@ interface IconObject {
 }
 
 const iconMapping: IconObject = {
-  "/": <DashboardOutlinedIcon />,
-  "/document_revision": <FolderOutlinedIcon />,
+  "/": <DashboardIcon />,
+  "/document_revision": <DocumentListICon />,
   "/change_request": <ChangeRequestListIcon />,
 };
 
@@ -39,13 +39,8 @@ const NavigationLinkPresenter: React.FunctionComponent<
     className={classNames(classes.link, { [classes.childLink]: isChild })}
     activeClassName={classes.activeLink}
   >
-    <ListItem
-      button={true}
-      className={classes.itemButton}
-    >
-      <ListItemIcon
-        className={classes.itemIcon}
-      >
+    <ListItem button={true} className={classes.itemButton}>
+      <ListItemIcon className={classes.itemIcon}>
         {iconMapping[url]}
       </ListItemIcon>
       <ListItemText

@@ -3,13 +3,16 @@ import { shallow } from "enzyme";
 import faker from "faker";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { getDocumentRevision } from "../../../state/ducks/documentRevisions/tests/factories";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import { ListPresenter, Props} from "./presenter";
 
 describe("ListPresenter tests", () => {
   const defaultProps: Props = {
-    dataProp: [getDocumentRevision()],
+    tableName: faker.name.firstName(),
+    tableState: {
+      queryDict: {},
+      queryData: [],
+    },
     currentUserEmail: faker.internet.email(),
     editDocumentRevision: jest.fn(),
     setDocId: jest.fn(),
@@ -35,8 +38,8 @@ describe("ListPresenter tests", () => {
     expect(wrapper.find(RouterLink).prop("to")).toEqual(DOCUMENT_REVISION_CREATE_URL);
   });
 
-  it("tableData is set correctly", () => {
+  it("tableName is set correctly", () => {
       const wrapper = getWrapper();
-      expect(wrapper.find(Grid).at(3).children().prop("tableData")).toEqual(defaultProps.dataProp);
+      expect(wrapper.find(Grid).at(3).children().prop("tableName")).toEqual(defaultProps.tableName);
   });
 });

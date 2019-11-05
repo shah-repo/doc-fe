@@ -38,12 +38,17 @@ export const Approvers: React.FunctionComponent<Props> = ({
   const styles = {
       multiValueRemove: (base: React.CSSProperties, state: any) => {
         return (dataProp! && dataProp!.some((approver) => approver.approver.email === state.data.value)) ?
-          { ...base, display: "none" } : base ;
-     },
+          { ...base, display: "none" } :
+          base;
+      },
   };
 
   return (
-    <AsyncGate asyncState={loadApproversAsyncState} asyncAction={loadAvailableApprovers} startActionOnMount={true}>
+    <AsyncGate
+      asyncState={loadApproversAsyncState}
+      asyncAction={loadAvailableApprovers}
+      startActionOnMount={true}
+    >
       <AutcompleteField
         name="approvals"
         label="common.approvers"
@@ -52,6 +57,7 @@ export const Approvers: React.FunctionComponent<Props> = ({
           isMulti: true,
           isClearable: false,
           styles,
+          backspaceRemovesValue: false,
         }}
         options={availableApprovers}
       />

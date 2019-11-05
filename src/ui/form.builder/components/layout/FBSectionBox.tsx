@@ -16,7 +16,7 @@ const FBSectionBox: React.FunctionComponent<FBFormDefaultProps> = ({
       fontSize="h6.fontSize"
       fontWeight={100}
     >
-      <Text message={label!.toUpperCase()} />
+      {label && <Text message={label.toUpperCase()} />}
     </Box>
   );
 };

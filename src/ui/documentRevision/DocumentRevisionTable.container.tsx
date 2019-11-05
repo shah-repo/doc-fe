@@ -2,7 +2,11 @@ import React from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
 import { authSelectors } from "../../state/ducks/auth";
-import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
+import {
+  DocumentRevision,
+  documentRevisionsActions,
+  documentRevisionsSelectors,
+} from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
@@ -29,6 +33,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
   documentRevisions: documentRevisionsSelectors.getDocumentRevisionsList(state),
 });
 
+// TODO: check if we're using this component
 export const DocumentRevisionContainer: React.FunctionComponent<DocumentRevisionContainerProps> = ({
   loadDocumentRevisions,
   loadAsyncState,

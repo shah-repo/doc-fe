@@ -1,4 +1,5 @@
 import { Button, Grid, WithStyles, withStyles } from "@material-ui/core";
+import _ from "lodash";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { stripTagsFromObject } from "../../../common/utils/helpers";
@@ -7,11 +8,13 @@ import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/d
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import Date from "../../components/Date";
 import { TableColumnProps } from "../../components/table/column/types";
+import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
 import { TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import { generateVersionNumber } from "../../documentRevision/helpers";
+import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
 import {
   canEditDocumentRevision,
   documentRevisionQueryStatus,
@@ -26,34 +29,29 @@ export type Props = DocumentRevisionsUserProps & WithStyles<typeof styles>;
 
 export const ListPresenter: React.FunctionComponent<Props> = ({
   classes,
-  dataProp,
   currentUserEmail,
   editDocumentRevision,
-  setDocId,
   documentTypeOptions,
+  tableName,
+  tableState,
+  clearFilter,
 }) => {
-  const ALL_DOC_REV_STATES = "ALL_DOC_REV_STATES";
-  const [clearFilter, setClearFilter] = React.useState<boolean>(false);
 
   const canEdit = (data: DocumentRevision) => canEditDocumentRevision({dataProp: data, currentUserEmail});
 
-  // TODO: fix tolltip
   const typeTooltipRenderer = (rowData: DocumentRevision) =>
     rowData.document.documentType.documentTypeName || "";
 
   const cellHrefRenderer = (rowData: DocumentRevision): string => {
+    documentRevisionStore.reset();
     if (canEdit(rowData)) {
       return documentEditPath(rowData.id, rowData.document.id);
     }
     return documentPreviewPath(rowData.id, rowData.document.id);
   };
 
-  const clear = () => setClearFilter(!clearFilter);
-
   const customQuerySet = (queryDict: TableSearchQueryType) => {
     if (!queryDict["status[]"]) {
-      queryDict["status[]"] = DocumentRevisionStatus.Released;
-    } else if (queryDict["status[]"] === ALL_DOC_REV_STATES) {
       queryDict["status[]"] = documentRevisionQueryStatus();
     }
 
@@ -69,11 +67,17 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         cellDataGetter: ({ rowData }) => rowData.document.docId,
         width: 150,
       },
+      searchOptions: {
+        defaultValue: tableState.queryDict.docId,
+      },
     },
     {
       key: "version",
       label: "common.version",
-      searchOptions: { searchValueGetter: (value) => unmaskId(value) },
+      searchOptions: {
+        searchValueGetter: (value) => unmaskId(value),
+        defaultValue: tableState.queryDict.version,
+      },
       cellOptions: { align: "center" },
       cellHref: cellHrefRenderer,
       columnOptions: {
@@ -87,13 +91,20 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       label: "document.revision.list.name",
       tooltipKey: "description",
       cellHref: cellHrefRenderer,
+      searchOptions: {
+        defaultValue: tableState.queryDict.name,
+      },
     },
     {
       key: "documentTypeId",
       label: "document.revision.list.type",
       tooltipKey: typeTooltipRenderer,
       cellHref: cellHrefRenderer,
-      searchOptions: { searchType: "select", selectOptions: documentTypeOptions },
+      searchOptions: {
+        searchType: "select",
+        selectOptions: documentTypeOptions,
+        defaultValue: tableState.queryDict.documentTypeId,
+      },
       columnOptions: {
         cellDataGetter: ({ rowData }) => {
           return rowData.document.documentType.documentTypeAcronym;
@@ -108,11 +119,17 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.owner.name,
       },
+      searchOptions: {
+        defaultValue: tableState.queryDict.owner,
+      },
     },
     {
       key: "changeRequest",
       label: "common.crid",
-      searchOptions: { dataKey: "crId" },
+      searchOptions: {
+        dataKey: "crId",
+        defaultValue: tableState.queryDict.crId,
+      },
       cellHref: cellHrefRenderer,
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.changeRequest && rowData.changeRequest.crId,
@@ -127,15 +144,14 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       onSelect: ({rowData}) => () => editDocumentRevision(rowData.id, rowData.document.id),
       searchOptions: {
         dataKey: "status[]",
-        defaultValue: DocumentRevisionStatus.Released,
+        defaultValue:
+          !tableState.queryDict["status[]"] ?
+            DocumentRevisionStatus.Released :
+            _.isString(tableState.queryDict["status[]"]) ?
+              tableState.queryDict["status[]"] :
+              undefined,
         searchType: "select",
         selectOptions: documentRevisionStatusOption(),
-        searchValueGetter: (query) => {
-          if (!query) {
-            return ALL_DOC_REV_STATES;
-          }
-          return query;
-        },
       },
     },
     {
@@ -144,13 +160,14 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       cellHref: cellHrefRenderer,
       cellOptions: { align: "center" },
       columnOptions: {
-        width: 108,
+        width: 115,
         cellDataGetter: ({ rowData }) => <Date value={rowData.releasedAt} />,
       },
       searchOptions: {
         dataKey: "releasedAfter",
         searchType: "select",
         selectOptions: documentRevisionReleasedDateOption(),
+        defaultValue: tableState.queryDict.releasedAfter,
       },
     },
   ];
@@ -165,10 +182,11 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
           color="primary"
           variant="outlined"
           className={classes.clearButton}
-          onClick={clear}
+          onClick={clearFilter}
         >
           <Text translation="common.clear.filters" />
         </Button>
+        <DocumentInfo numberOfRecords={tableState.queryData.length} />
       </Grid>
       <Grid item={true} xs={6} style={{textAlign: "right"}}>
         <RouterLink to={DOCUMENT_REVISION_CREATE_URL} className={classes.link}>
@@ -179,13 +197,12 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       </Grid>
       <Grid item={true} className={classes.item}>
         <TablePanel<DocumentRevision>
-          tableData={dataProp}
           columns={columns}
           queryUrl={DOCUMENT_REVISION_ROOT_URL}
-          clearFilter={clearFilter}
           cellMeasure={true}
           customQuerySet={customQuerySet}
           customDataSet={customDataSet}
+          tableName={tableName}
         />
       </Grid>
     </Grid>

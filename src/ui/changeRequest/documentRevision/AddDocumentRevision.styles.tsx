@@ -1,6 +1,6 @@
-import { createStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from "@material-ui/core";
 
-export default (theme: Theme) =>
+export default makeStyles((theme: Theme) =>
   createStyles({
     documentRevision: {
       margin: "10px",
@@ -21,4 +21,5 @@ export default (theme: Theme) =>
       flexWrap: "wrap",
       marginBottom: 10,
     },
-  });
+  }),
+);

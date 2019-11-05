@@ -2,15 +2,12 @@ import { observer } from "mobx-react";
 import React from "react";
 import FBAddFieldButton0 from "../../components/custom/FBAddFieldButton0";
 import FBForm from "../../components/form/FBForm";
-import { withFBStore } from "../../hocs/withFBStore";
 import formBuilderStore from "../../stores/FBStore";
-import { FBStoreProps } from "../../types/store";
 import FBEditorDialog from "../editor/FBEditorDialog";
 import FBSortableContainer from "./FBSortableContainer";
 
-const FBWorkspace: React.FunctionComponent<FBStoreProps> = ({
-  formBuilderStore : { schema, mode },
-}) => {
+const FBWorkspace: React.FunctionComponent<{}> = () => {
+  const { schema, mode } = formBuilderStore;
   const isStarter = (mode === "design") && (schema.length === 0);
 
   return (
@@ -25,4 +22,4 @@ const FBWorkspace: React.FunctionComponent<FBStoreProps> = ({
   );
 };
 
-export default withFBStore(observer(FBWorkspace));
+export default observer(FBWorkspace);

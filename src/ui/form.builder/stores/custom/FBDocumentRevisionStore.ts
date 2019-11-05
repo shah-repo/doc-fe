@@ -4,8 +4,9 @@ import { Id } from "../../../../state/ducks/common";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { DocumentType, DocumentTypeByIdState } from "../../../../state/ducks/documentRevisions/documentType";
 import { DocumentRevisionFormValues } from "../../../documentRevision/forms/types";
+import { generateVersionNumber } from "../../../documentRevision/helpers";
 import { FBFormTemplateProps } from "../../types/formik";
-import { FBDocumentRevisionMode } from "../../types/store";
+import { FBDocumentRevisionMode, FBDocumentRevisionOutputInfo } from "../../types/store";
 import formBuilderStore from "../FBStore";
 
 export type FBDocumentRevisionRequestType =
@@ -20,9 +21,9 @@ export class FBDocumentRevisionStore {
   @computed private get formTemplate(): FBFormTemplateProps | undefined {
     if (!this.fromDocumentRevision) { return undefined; }
     let { formTemplate } = this.fromDocumentRevision || {};
-    if (this.mode === "updateFromOther") {
-      const { formDocument } = this.fromDocumentRevision;
-      formTemplate = formDocument && formDocument.formTemplate;
+    const { formDocument } = this.fromDocumentRevision || {};
+    if (formDocument ) {
+      formTemplate = formDocument.formTemplate;
     }
     return formTemplate;
   }
@@ -42,6 +43,27 @@ export class FBDocumentRevisionStore {
   @computed public get outputActive(): boolean {
     return formBuilderStore.active && this.mode === "create";
   }
+
+  @computed public get outputInfo(): FBDocumentRevisionOutputInfo | undefined {
+    const { formDocument, document, releasedAt, revision, revisionStage } = this.fromDocumentRevision || {};
+    const { documentType } = document || {};
+
+    if (formDocument && formDocument.document) {
+      return {
+        docId: (formDocument.document && formDocument.document.docId) || "",
+        version: generateVersionNumber(formDocument.revision || 0, formDocument.revisionStage || 0),
+        releasedDate: formDocument.releasedAt,
+      };
+    } else if (document && documentType && documentType.group !== "FORM") {
+      return {
+        docId: document.docId,
+        version: generateVersionNumber(revision || 0, revisionStage || 0),
+        releasedDate: releasedAt || "",
+      };
+    }
+    return undefined;
+  }
+
   @observable public mode: FBDocumentRevisionMode = "create";
   public fromDocumentRevision?: DocumentRevision = undefined;
   public documentTypesById: DocumentTypeByIdState = {};
@@ -78,7 +100,7 @@ export class FBDocumentRevisionStore {
       switch (this.mode) {
         case "createFrom":
           if (!this.outputType) { return values; }
-          return {
+          const newTemplate = {
             ...values,
             document: {
               ...values.document,
@@ -87,6 +109,14 @@ export class FBDocumentRevisionStore {
             formTemplate: this.formTemplate,
             formDocument: this.formDocument,
           };
+          this.fromDocumentRevision = {
+            ...this.fromDocumentRevision,
+            document: {
+              ...this.fromDocumentRevision!.document,
+              documentType: this.outputType,
+            },
+          } as DocumentRevision;
+          return newTemplate;
         default:
           return values;
       }
@@ -104,7 +134,7 @@ export class FBDocumentRevisionStore {
       case "update":
         const { documentType } = (record && record.document) || {};
         if (!documentType || documentType.group !== "FORM") {
-          return this.reset();
+          this.reset();
         }
         return formBuilderStore.setFormTemplateDesign(ft);
       case "updateFromOther":

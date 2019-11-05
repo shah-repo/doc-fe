@@ -96,7 +96,7 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
     const { formDocument, formTemplate } = initialValues;
     if (!formTemplate && formDocument) {
       documentRevisionStore.setMode("updateFromOther", initialValues as unknown as DocumentRevision);
-    } else {
+    } else if (initialValues.id) {
       documentRevisionStore.setMode("update", initialValues as unknown as DocumentRevision);
     }
   } else if (initialValues.document && initialValues.document.documentType) {

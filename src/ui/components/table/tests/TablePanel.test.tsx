@@ -2,7 +2,6 @@ import { mount } from "enzyme";
 import React from "react";
 import { addLocaleData, IntlProvider } from "react-intl";
 import localeEn from "react-intl/locale-data/en";
-import { getDocument } from "../../../../state/ducks/documents/tests/factories";
 import { Document } from "../../../../state/ducks/documents/types";
 import messagesEn from "../../../translations/en.json";
 import { StyledTableHeader } from "../column/styles";
@@ -10,12 +9,19 @@ import { TableColumnProps } from "../column/types";
 import { TablePanel } from "../panel";
 import { TableSelectionProps } from "../types";
 
+jest.mock("react-redux", () => ({
+  useDispatch: jest.fn(),
+  useSelector: () => ({
+    queryDict: {},
+    queryData: [],
+  }),
+}));
+
 describe("TablePanel component tests", () => {
   addLocaleData([...localeEn]);
   const messages = { en: messagesEn };
   const language = "en";
 
-  const data: Document[] = [getDocument()];
   const noRowsTranslation = "table.no.results.found";
   // tslint:disable-next-line: no-unused-declaration
   let isActionSelected: boolean = false;
@@ -57,9 +63,9 @@ describe("TablePanel component tests", () => {
     return (
       <IntlProvider locale={language} messages={messages[language]}>
         <TablePanel<Document>
-          tableData={data}
           columns={columns}
           noRowsTranslation={noRowsTranslation}
+          tableName="table"
         />
       </IntlProvider>
     );

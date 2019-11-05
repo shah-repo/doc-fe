@@ -6,7 +6,7 @@ import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocom
 import { ASYNC_DEFAULT_STATE } from "../../hooks/useAsync";
 import { Approvers, Props } from "./approvers";
 
-describe("Approvers tests", () => {
+describe("Change request form Approvers tests", () => {
   const defaultProps: Props = {
     availableApprovers: [{
       label: faker.name.firstName(),

@@ -9,7 +9,8 @@
   "login.button": "Sign in",
 
   "header.title": "Enlil",
-  "header.welcome": "Welcome, {name}",
+  "header.welcome": "Welcome", 
+  "header.name": "{name}",
   "header.logout": "Logout",
 
   "navigation.dashboard": "Dashboard",
@@ -103,6 +104,7 @@
   "changeRequest.audit.effectiveDate.STRING_EDITED": "Effective Date Updated",
   "changeRequest.audit.state.STRING_NEW": "Status",
   "changeRequest.audit.justifications.attachments.ARRAY_NEW": "Justification Attachment Added",
+  "changeRequest.audit.justifications.attachments.ARRAY_DELETED": "Justification Attachment Deleted",
   "changeRequest.audit.assessments.design.STRING_NEW": "Design Assessment Added",
   "changeRequest.audit.assessments.regulatory.STRING_NEW": "Regulatory Assessment Added",
   "changeRequest.audit.assessments.process.STRING_NEW": "Process Assessment Added",
@@ -206,6 +208,8 @@
   "common.text.difference": "Text difference",
   "common.powered.by": "Powered by",
   "common.create.new": "Create new",
+  "common.released": "Released",
+  "common.records.found": "Records found",
 
   "dashboard.type.PENDING_REVIEW": "is pending your approval",
   "dashboard.type.PENDING_IMPL_PLAN_TASK": " task is pending your approval",
@@ -235,8 +239,6 @@
   "document.revision.stage": "Document Revision Stage",
 
   "documentRevision.revise": "Revise Document",
-  "documentRevision.version": "Version",
-  "documentRevision.released": "Released",
   "documentRevision.form.references": "References",
   "documentRevision.form.processChange": "Process change",
   "documentRevision.form.nextRevision": "Next Revision",

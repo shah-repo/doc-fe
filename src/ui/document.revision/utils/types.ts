@@ -6,6 +6,7 @@ import { documentsActions } from "../../../state/ducks/documents";
 import { TrainingRecord } from "../../../state/ducks/training";
 import { LoadAsyncState } from "../../../state/types";
 import { SelectOption } from "../../components/forms/fields/Select";
+import { TablePanelStateProps } from "../../components/table/types";
 
 // Container
 export type ContainerProps = ContainerOwnProps & ContainerDispatchProps & ContainerStateProps;
@@ -17,14 +18,12 @@ export interface ContainerDispatchProps {
 }
 
 // List
-export type ListProps = ListDispatchProps & ListStateProps;
 export type ListOwnProps = RouteComponentProps;
-export type ListStateProps = DataProps<DocumentRevision[]> & LoadAsyncState & AuthProps & {
+export type ListStateProps = DataProps<DocumentRevision[]> & AuthProps & {
   documentTypeOptions: SelectOption[];
 };
 
 export interface ListDispatchProps {
-  loadDocumentRevisions: typeof documentRevisionsActions.loadList;
   setDocId: typeof documentsActions.setDocumentProposedId;
 }
 
@@ -49,9 +48,11 @@ export interface SummaryOwnProps {
 
 // Common
 export type DocumentRevisionUserProps = DataProps<DocumentRevision> & AuthProps;
-export type DocumentRevisionsUserProps = DataProps<DocumentRevision[]> & ActionProps & AuthProps & {
-  setDocId: typeof documentsActions.setDocumentProposedId;
+export type DocumentRevisionsUserProps = ActionProps & AuthProps & {
   documentTypeOptions: SelectOption[];
+  tableName: string;
+  tableState: TablePanelStateProps<DocumentRevision>;
+  clearFilter?: () => void;
 };
 
 export interface RouteParams {

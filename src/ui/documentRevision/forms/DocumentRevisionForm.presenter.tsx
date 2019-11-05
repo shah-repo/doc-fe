@@ -41,6 +41,7 @@ import {
 import FBWorkspace from "../../form.builder/main/workspace/FBWorkspace";
 import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
 import formBuilderStore from "../../form.builder/stores/FBStore";
+import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -123,10 +124,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     handleChange(event);
   };
 
-  if (showRevisionTypeChange) {
-    documentRevisionStore.setMode("update", initialValues as unknown as DocumentRevision);
-  }
-
   const renderTypeOfRevisionChange = () => {
     if (showRevisionTypeChange) {
       return (
@@ -200,19 +197,11 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   );
 
   return (
-    <Grid
-      container={true}
-      direction="column"
-      justify="center"
-      alignItems="center"
-      className={classes.container}
-    >
-      <Grid
-        item={true}
-        lg={isDisabled ? 12 : 7}
-        sm={isDisabled ? 12 : 10}
-        xs={12}
-      >
+    <Box display="flex" flexDirection="row" px={1}>
+      <Box width="20%" marginRight={1}>
+        {documentRevisionStore.outputInfo && <DocumentRevisionOutputInfo />}
+      </Box>
+      <Box width="60%">
         <FormWrapper
           dirty={dirty}
           initialValues={initialValues}
@@ -230,7 +219,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           />
           <FormMessage asyncState={asyncState} />
           <FormProgress asyncState={asyncState} />
-
           <InputField
             name="name"
             label="document.title"
@@ -289,12 +277,13 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 }}
                 options={documentTypes}
                 includeEmpty={false}
+                validate={validator(required)}
               />
             </Box>
           )}
           {formBuilderStore.active && (
             <Box mt={5}>
-               <FBWorkspace />
+              <FBWorkspace />
             </Box>
           )}
           <Box mt={5}>
@@ -311,8 +300,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             </Grid>
           </Box>
         </FormWrapper>
-      </Grid>
-    </Grid>
+      </Box>
+    </Box>
   );
 };
 

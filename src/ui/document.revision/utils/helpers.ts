@@ -64,15 +64,15 @@ export const documentRevisionReleasedDateOption = () => {
   return [
     {
       text: ReleasedDateOptions.LAST_WEEK,
-      value: moment().subtract(7, "d").toISOString(),
+      value: moment().subtract(7, "d").startOf("day").toISOString(),
     },
     {
       text: ReleasedDateOptions.LAST_TWO_WEEKS,
-      value: moment().subtract(14, "d").toISOString(),
+      value: moment().subtract(14, "d").startOf("day").toISOString(),
     },
     {
       text: ReleasedDateOptions.LAST_MONTH,
-      value: moment().subtract(30, "d").toISOString(),
+      value: moment().subtract(30, "d").startOf("day").toISOString(),
     },
   ];
 };
