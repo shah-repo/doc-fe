@@ -3,7 +3,10 @@ import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { stripTagsFromObject } from "../../../common/utils/helpers";
 import { unmaskId } from "../../../state/ducks/common/helpers";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import {
+  DocumentRevision,
+  DocumentRevisionStatus,
+} from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import Date from "../../components/Date";
 import { TableColumnProps } from "../../components/table/column/types";
@@ -36,14 +39,15 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   const ALL_DOC_REV_STATES = "ALL_DOC_REV_STATES";
   const [clearFilter, setClearFilter] = React.useState<boolean>(false);
 
-  const canEdit = (data: DocumentRevision) => canEditDocumentRevision({dataProp: data, currentUserEmail});
+  const canEdit = (data: DocumentRevision) =>
+    canEditDocumentRevision({ dataProp: data, currentUserEmail });
 
   // TODO: fix tolltip
   const typeTooltipRenderer = (rowData: DocumentRevision) =>
     rowData.document.documentType.documentTypeName || "";
 
   const cellHrefRenderer = (rowData: DocumentRevision): string => {
-    documentRevisionStore.reset()
+    documentRevisionStore.reset();
     if (canEdit(rowData)) {
       return documentEditPath(rowData.id, rowData.document.id);
     }
@@ -67,6 +71,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       key: "docId",
       label: "document.revision.list.docId",
       cellHref: cellHrefRenderer,
+      sortable: true,
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.document.docId,
         width: 150,
@@ -79,7 +84,8 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       cellOptions: { align: "center" },
       cellHref: cellHrefRenderer,
       columnOptions: {
-        cellDataGetter: ({ rowData: { revision, revisionStage }}) => generateVersionNumber(revision, revisionStage),
+        cellDataGetter: ({ rowData: { revision, revisionStage } }) =>
+          generateVersionNumber(revision, revisionStage),
         width: 80,
         flexShrink: 1,
       },
@@ -95,7 +101,10 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       label: "document.revision.list.type",
       tooltipKey: typeTooltipRenderer,
       cellHref: cellHrefRenderer,
-      searchOptions: { searchType: "select", selectOptions: documentTypeOptions },
+      searchOptions: {
+        searchType: "select",
+        selectOptions: documentTypeOptions,
+      },
       columnOptions: {
         cellDataGetter: ({ rowData }) => {
           return rowData.document.documentType.documentTypeAcronym;
@@ -117,7 +126,8 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       searchOptions: { dataKey: "crId" },
       cellHref: cellHrefRenderer,
       columnOptions: {
-        cellDataGetter: ({ rowData }) => rowData.changeRequest && rowData.changeRequest.crId,
+        cellDataGetter: ({ rowData }) =>
+          rowData.changeRequest && rowData.changeRequest.crId,
         width: 100,
       },
     },
@@ -125,8 +135,9 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       key: "status",
       label: "document.revision.list.state",
       columnOptions: { width: 160 },
-      cellType: (rowData) => (canEdit(rowData)) ? "LINK" : "BASE",
-      onSelect: ({rowData}) => () => editDocumentRevision(rowData.id, rowData.document.id),
+      cellType: (rowData) => (canEdit(rowData) ? "LINK" : "BASE"),
+      onSelect: ({ rowData }) => () =>
+        editDocumentRevision(rowData.id, rowData.document.id),
       searchOptions: {
         dataKey: "status[]",
         defaultValue: DocumentRevisionStatus.Released,
@@ -172,9 +183,13 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
           <Text translation="common.clear.filters" />
         </Button>
       </Grid>
-      <Grid item={true} xs={6} style={{textAlign: "right"}}>
+      <Grid item={true} xs={6} style={{ textAlign: "right" }}>
         <RouterLink to={DOCUMENT_REVISION_CREATE_URL} className={classes.link}>
-          <Button variant="contained" color="primary" className={classes.button}>
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+          >
             <Text translation="document.revision.create" />
           </Button>
         </RouterLink>
@@ -188,6 +203,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
           cellMeasure={true}
           customQuerySet={customQuerySet}
           customDataSet={customDataSet}
+          sortBy={"docId"}
         />
       </Grid>
     </Grid>

@@ -6,16 +6,13 @@ import {
   CellMeasurer,
   Column,
   TableCellProps as ColumnProps,
+  SortDirectionType,
 } from "react-virtualized";
 import Text from "../../Text";
 import { TableSearchSelectField } from "../search/select";
 import { TableSearchTextField } from "../search/text";
 import TableColumnAction from "./action";
-import {
-  StyledCellLink,
-  StyledTableCell,
-  StyledTableHeader,
-} from "./styles";
+import { StyledCellLink, StyledTableCell, StyledTableHeader } from "./styles";
 import {
   InnerTableColumnProps,
   TableCellProps,
@@ -28,28 +25,45 @@ type Props<T> = TableColumnProps<T>;
 type InnerProps = InnerTableColumnProps;
 
 export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
-
-  const { key, label, cellType, columnOptions, cellOptions,
-          tooltipKey, onSelect, searchOptions, omitSearch, cellHref } = props;
+  const {
+    key,
+    label,
+    cellType,
+    columnOptions,
+    cellOptions,
+    tooltipKey,
+    onSelect,
+    searchOptions,
+    omitSearch,
+    cellHref,
+    sortable,
+    sortDirection,
+  } = props;
   const { measurerCache, searchable, queryGetter } = innerProps;
 
   measurerCache.clearAll();
-  const cellWhiteSpace = () => (measurerCache.hasFixedHeight()) ? "nowrap" : "initial";
+  const cellWhiteSpace = () =>
+    measurerCache.hasFixedHeight() ? "nowrap" : "initial";
 
-  const handleClick = ({rowData}: TableCellProps<T>) => (e: React.MouseEvent) => {
+  const handleClick = ({ rowData }: TableCellProps<T>) => (
+    e: React.MouseEvent,
+  ) => {
     if (onSelect) {
-      onSelect({rowData})();
+      onSelect({ rowData })();
       e.stopPropagation();
     }
   };
 
-  const cellLinkType = ({cellData, rowData}: TableCellProps<T>) => (
-    <StyledCellLink variant="subtitle2" onClick={handleClick({cellData, rowData})} >
+  const cellLinkType = ({ cellData, rowData }: TableCellProps<T>) => (
+    <StyledCellLink
+      variant="subtitle2"
+      onClick={handleClick({ cellData, rowData })}
+    >
       {cellData}
     </StyledCellLink>
   );
 
-  const cellActionType = ({cellData, rowData}: TableCellProps<T>) => {
+  const cellActionType = ({ cellData, rowData }: TableCellProps<T>) => {
     return cellData.map((actionType) => {
       const ActionColumn = TableColumnAction<T>();
       return (
@@ -69,13 +83,16 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
       type = (cellType as TableCellTypeRenderer<T>)(rowData);
     }
     switch (type) {
-      case "LINK": return cellLinkType({cellData, rowData});
-      case "ACTION": return cellActionType({cellData, rowData});
-      default: return cellData;
+      case "LINK":
+        return cellLinkType({ cellData, rowData });
+      case "ACTION":
+        return cellActionType({ cellData, rowData });
+      default:
+        return cellData;
     }
   };
 
-  const cellMeasurer = ({ parent, rowIndex, columnIndex, ... other }: any) => (
+  const cellMeasurer = ({ parent, rowIndex, columnIndex, ...other }: any) => (
     <CellMeasurer
       key={key}
       cache={measurerCache!}
@@ -83,7 +100,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
       columnIndex={columnIndex}
       parent={parent}
     >
-      <div style={{whiteSpace: cellWhiteSpace(), padding: "5px 0"}}>
+      <div style={{ whiteSpace: cellWhiteSpace(), padding: "5px 0" }}>
         {cellTypeRenderer(other)}
       </div>
     </CellMeasurer>
@@ -91,22 +108,56 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
 
   const searchFieldRenderer = () => {
     if (omitSearch === true) {
-      return <Box style={{background: "transparent", height: 62}} />;
+      return <Box style={{ background: "transparent", height: 62 }} />;
     }
-    const searchType = (searchOptions) ? searchOptions.searchType : "text";
+    const searchType = searchOptions ? searchOptions.searchType : "text";
     switch (searchType) {
       case "select":
-          return <TableSearchSelectField dataKey={key} queryGetter={queryGetter} {...searchOptions} />;
+        return (
+          <TableSearchSelectField
+            dataKey={key}
+            queryGetter={queryGetter}
+            {...searchOptions}
+          />
+        );
       default:
-        return <TableSearchTextField dataKey={key} queryGetter={queryGetter} {...searchOptions} />;
-      }
+        return (
+          <TableSearchTextField
+            dataKey={key}
+            queryGetter={queryGetter}
+            {...searchOptions}
+          />
+        );
+    }
+  };
+
+  const sortRenderer = (sortDirection: SortDirectionType) => {
+    const classNames =
+      sortDirection === "ASC" ? `sort_ascending` : `sort_descending`;
+    return (
+      <svg className={classNames} width={18} height={18} viewBox="0 0 24 24">
+        {sortDirection === "ASC" ? (
+          <path d="M7 14l5-5 5 5z" />
+        ) : (
+          <path d="M7 10l5 5 5-5z" />
+        )}
+        <path d="M0 0h24v24H0z" fill="none" />
+      </svg>
+    );
   };
 
   const headerRenderer = () => (
-    <StyledTableHeader component="div" variant="head" >
-      <Box component="div" className="columnBox" >
-        <Box height="50px" pt={2} pl={1}><Text message={label} /></Box>
-        {searchable && <Box component="div" className="headerField">{searchFieldRenderer()}</Box>}
+    <StyledTableHeader component="div" variant="head">
+      <Box component="div" className="columnBox">
+        <Box height="50px" pt={2} pl={1}>
+          <Text message={label} />
+        </Box>
+        {searchable && (
+          <Box component="div" className="headerField">
+            {searchFieldRenderer()}
+          </Box>
+        )}
+        {sortable && sortRenderer(sortDirection!)}
       </Box>
     </StyledTableHeader>
   );
@@ -119,10 +170,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
     }
 
     return (
-      <Tooltip
-        disableHoverListener={!tooltipKey}
-        title={tooltipValue || ""}
-      >
+      <Tooltip disableHoverListener={!tooltipKey} title={tooltipValue || ""}>
         <div>{cellMeasurer(columnProps)}</div>
       </Tooltip>
     );
@@ -149,7 +197,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
       component="div"
       variant="body"
       align="left"
-      {... cellOptions}
+      {...cellOptions}
     >
       {linkRenderer(columnProps)}
     </StyledTableCell>
@@ -161,6 +209,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
       dataKey={key}
       width={200}
       flexGrow={1}
+      disableSort={!sortable}
       headerRenderer={headerRenderer}
       cellRenderer={cellRenderer}
       {...columnOptions}

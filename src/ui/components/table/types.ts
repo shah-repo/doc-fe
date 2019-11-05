@@ -1,10 +1,15 @@
 import { Translation } from "../../translations/types";
 import { TableColumnActionType, TableColumnProps } from "./column/types";
+import { SortDirectionType } from "react-virtualized/dist/es/Table";
 
-export type TableSelectionRenderer<T> = (props: TableSelectionProps<T>) => () => any;
-export interface TableSearchQueryType { [key: string]: any; }
+export type TableSelectionRenderer<T> = (
+  props: TableSelectionProps<T>,
+) => () => any;
+export interface TableSearchQueryType {
+  [key: string]: any;
+}
 
-export interface TableSelectionProps<T>  {
+export interface TableSelectionProps<T> {
   rowData: T;
   actionType?: TableColumnActionType;
 }
@@ -18,6 +23,7 @@ export interface TablePanelProps<T> {
   searchable?: boolean;
   queryUrl?: string;
   clearFilter?: any;
+  sortBy?: string;
   customQuerySet?: (queryDict: TableSearchQueryType) => TableSearchQueryType;
   customDataSet?: (data: T[]) => T[];
 }
@@ -27,6 +33,8 @@ export interface TablePanelStateProps<T> {
   queryDict: TableSearchQueryType;
   apiError: string;
   scrollToIndex: number;
+  sortDirection?: SortDirectionType | undefined;
+  sortBy?: string;
 }
 
 // CSS

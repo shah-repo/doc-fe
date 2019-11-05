@@ -8,6 +8,7 @@ import {
   Index,
   Size,
   Table,
+  SortDirectionType,
 } from "react-virtualized";
 import { useDebounce } from "use-debounce";
 import apiClient from "../../../state/apiClient";
@@ -18,7 +19,12 @@ import Text from "../../components/Text";
 import useDidMount from "../../hooks/useDidMount";
 import { TableColumn } from "./column/base";
 import { styles } from "./styles";
-import { TablePanelProps, TablePanelStateProps, TableStyleProps } from "./types";
+import {
+  TablePanelProps,
+  TablePanelStateProps,
+  TableStyleProps,
+} from "./types";
+import _ from "lodash";
 
 type Props<T> = TablePanelProps<T>;
 
@@ -32,13 +38,15 @@ export function TablePanel<T extends any>({
   queryUrl = "",
   customQuerySet,
   customDataSet,
+  sortBy,
 }: Props<T>) {
-
   const didMount = useDidMount();
   const queryDelay = 300;
   let lastQueryValue: string = "";
-  const headerHeight = (searchable) ? 117 : 50;
-  const styleProps: TableStyleProps = { isSelectable: (onSelect !== undefined) };
+  const headerHeight = searchable ? 117 : 50;
+  const styleProps: TableStyleProps = {
+    isSelectable: onSelect !== undefined,
+  };
   const classes = styles(styleProps);
 
   const [state, setState] = useState<TablePanelStateProps<T>>({
@@ -46,8 +54,13 @@ export function TablePanel<T extends any>({
     queryDict: {},
     apiError: "",
     scrollToIndex: 0,
+    sortDirection: "ASC",
   });
   const [debouncedQuery] = useDebounce(state.queryDict, queryDelay);
+
+  useEffect(() => {
+    console.log(state.sortDirection);
+  }, [state.sortDirection]);
 
   useEffect(() => {
     if (didMount) {
@@ -56,18 +69,22 @@ export function TablePanel<T extends any>({
   }, [debouncedQuery]);
 
   const queryGetter = (key: string, value: string) => {
-    if (!queryUrl) { return; }
+    if (!queryUrl) {
+      return;
+    }
     lastQueryValue = value;
 
-    if (lastQueryValue !== value) { return; }
+    if (lastQueryValue !== value) {
+      return;
+    }
     let dict = { ...state.queryDict };
-    (value === "") ? delete dict[key] : dict[key] = value;
+    value === "" ? delete dict[key] : (dict[key] = value);
 
     if (customQuerySet) {
       dict = customQuerySet(dict);
     }
 
-    setState({...state, queryDict: dict});
+    setState({ ...state, queryDict: dict });
   };
 
   const queryApi = async () => {
@@ -87,17 +104,24 @@ export function TablePanel<T extends any>({
       if (customDataSet) {
         data = customDataSet(data);
       }
-      setState({...state, queryData: data as T[], apiError: "", scrollToIndex: 0});
+      setState({
+        ...state,
+        queryData: data as T[],
+        apiError: "",
+        scrollToIndex: 0,
+      });
     } catch (exception) {
       let responseMessage: string = "";
 
       if (exception.response) {
-        const { data: { message } } = exception.response as AsyncActionErrorResponse;
-        responseMessage = (Array.isArray(message)) ? message.join("; ") : message;
+        const {
+          data: { message },
+        } = exception.response as AsyncActionErrorResponse;
+        responseMessage = Array.isArray(message) ? message.join("; ") : message;
       }
 
       const errorMessage: string = responseMessage || exception.message;
-      setState({...state, apiError: "Error: " + errorMessage});
+      setState({ ...state, apiError: "Error: " + errorMessage });
     }
   };
 
@@ -110,9 +134,9 @@ export function TablePanel<T extends any>({
   const rowGetter = ({ index }: Index): T => state.queryData[index] as T;
 
   const rowClassName = ({ index }: Index) => {
-    return (index % 2 === 0) ?
-    `${classes.row} ${classes.rowEven}` :
-    `${classes.row} ${classes.rowOdd}`;
+    return index % 2 === 0
+      ? `${classes.row} ${classes.rowEven}`
+      : `${classes.row} ${classes.rowOdd}`;
   };
 
   const measurerCache = new CellMeasurerCache({
@@ -134,26 +158,42 @@ export function TablePanel<T extends any>({
         rowClassName={classes.row}
         headerClassName={classes.header}
         rowGetter={rowGetter}
+        sortBy={sortBy}
+        sort={sort}
+        sortDirection={state.sortDirection}
         noRowsRenderer={noRowsRenderer}
-        onRowClick={onSelect && (({rowData}) => onSelect({rowData})())}
+        onRowClick={onSelect && (({ rowData }) => onSelect({ rowData })())}
         scrollToIndex={state.scrollToIndex}
       >
-        {columns.map((item) => TableColumn<T>(item, { measurerCache, searchable, queryGetter }))}
+        {columns.map((item) =>
+          TableColumn<T>(item, {
+            measurerCache,
+            searchable,
+            queryGetter,
+          }),
+        )}
       </Table>
     );
   };
 
+  const sort = (info: { sortBy: string; sortDirection: SortDirectionType }) => {
+    let sortedData = _.sortBy(state.queryData, `document.${info.sortBy}`);
+    sortedData =
+      info.sortDirection === "ASC" ? (sortedData as T[]) : sortedData.reverse();
+    setState({
+      ...state,
+      queryData: sortedData,
+      sortDirection: info.sortDirection === "ASC" ? "DESC" : "ASC",
+    });
+  };
+
   const bodyRenderer = () => {
-    return (
-      <AutoSizer>
-        {tableRenderer}
-      </AutoSizer>
-    );
+    return <AutoSizer>{tableRenderer}</AutoSizer>;
   };
 
   return (
     <Box className={classes.root}>
-      <div style={{color: "red"}}>{state.apiError}</div>
+      <div style={{ color: "red" }}>{state.apiError}</div>
       {bodyRenderer()}
     </Box>
   );

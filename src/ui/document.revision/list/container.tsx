@@ -10,10 +10,7 @@ import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/do
 import { documentsActions } from "../../../state/ducks/documents";
 import { ApplicationState } from "../../../state/reducers";
 import AsyncGate from "../../components/AsyncGate";
-import {
-  documentEditPath,
-  documentPreviewPath,
-} from "../utils/paths";
+import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import {
   ListDispatchProps,
   ListOwnProps,
@@ -43,9 +40,8 @@ export const ListContainer: React.FunctionComponent<Props> = ({
   setDocId,
   documentTypeOptions,
 }) => {
-  const loadAction = () => loadDocumentRevisions([
-    DocumentRevisionStatus.Released,
-  ]);
+  const loadAction = () =>
+    loadDocumentRevisions([DocumentRevisionStatus.Released]);
   const edit = (documentRevisionId: string, documentId: string) =>
     history.push(documentEditPath(documentRevisionId, documentId));
 
@@ -53,7 +49,11 @@ export const ListContainer: React.FunctionComponent<Props> = ({
     history.push(documentPreviewPath(documentRevisionId, documentId));
 
   return (
-    <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>
+    <AsyncGate
+      asyncState={loadAsyncState}
+      asyncAction={loadAction}
+      startActionOnMount={true}
+    >
       <ListPresenter
         dataProp={dataProp}
         currentUserEmail={currentUserEmail}
@@ -66,7 +66,10 @@ export const ListContainer: React.FunctionComponent<Props> = ({
   );
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
-  loadDocumentRevisions: documentRevisionsActions.loadList,
-  setDocId: documentsActions.setDocumentProposedId,
-})(ListContainer);
+export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
+  mapStateToProps,
+  {
+    loadDocumentRevisions: documentRevisionsActions.loadList,
+    setDocId: documentsActions.setDocumentProposedId,
+  },
+)(ListContainer);

@@ -7,7 +7,10 @@ import {
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { TableColumnProps } from "../../components/table/column/types";
 import { TablePanel } from "../../components/table/panel";
-import { TableSearchQueryType, TableSelectionProps } from "../../components/table/types";
+import {
+  TableSearchQueryType,
+  TableSelectionProps,
+} from "../../components/table/types";
 import { generateVersionNumber } from "../../documentRevision/helpers";
 import styles from "./DocumentRevisionTable.styles";
 
@@ -52,7 +55,8 @@ const DocumentRevisionTable: React.FunctionComponent<
       key: "version",
       label: "changeRequest.documentRevisionTable.version",
       columnOptions: {
-        cellDataGetter: ({ rowData: { revision, revisionStage }}) => generateVersionNumber(revision, revisionStage),
+        cellDataGetter: ({ rowData: { revision, revisionStage } }) =>
+          generateVersionNumber(revision, revisionStage),
         width: 50,
       },
     },
