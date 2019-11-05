@@ -6,7 +6,7 @@ pipelines:
   const:
     tests: &RUN_TESTS
       name: Tests
-      image: node:10 
+      image: node:10.16.3
       services:
         - docker
       caches:
