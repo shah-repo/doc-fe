@@ -1,62 +1,59 @@
 import _, { Dictionary } from "lodash";
-import { action, autorun, computed, observable } from "mobx";
-import { DocumentGroupType } from "../../../state/ducks/documentRevisions/documentType";
+import { action, computed, observable } from "mobx";
 import { FBFormDefaultProps } from "../types/common";
-import { FBFormTemplateProps } from "../types/formik";
 import { FBTemplateSchema } from "../types/store";
 import { FBWorkspaceMode } from "../types/workspace";
 import editorStore from "./FBEditorStore";
 
-export class FBStore {
+export class FormBuilderStore {
+  @computed get active(): boolean {
+    return this.mode !== "none";
+  }
 
   @computed get prefixName() {
     return `${this.schema.length}_${(this.name || "").replace(" ", "")}`;
   }
 
-  @computed get formInput(): string {
-    const formInput = _.pick(this, ["documentOutputType", "schema", "values"]);
-    return JSON.stringify(formInput);
-  }
-
-  @computed get active(): boolean {
-    return this.groupType === "FORM";
-  }
-
   @computed get fieldMode(): Partial<FBFormDefaultProps> {
-    return ({
-      disabled: this.isDisabled(),
+    return {
+      disabled: this.isDisabled()
       // readOnly: this.isReadonly(),
       // className: this.isDisabled() ? FBClasses.inputDisabled : "",
-    });
+    };
   }
+
   @observable public name?: string = undefined;
   @observable public schema: FBTemplateSchema[] = [];
-  @observable public values: { [key: string]: any } = {};
-  @observable public mode: FBWorkspaceMode = "design";
-  @observable public groupType: DocumentGroupType = "OTHER";
+  @observable public values: Dictionary<any> = {};
+  @observable public mode: FBWorkspaceMode = "none";
 
-  constructor() {
-    autorun(() => {
-      if (this.groupType === "OTHER") {
-        this.reset();
-      }
-    });
+  @action public setMode = (mode: FBWorkspaceMode) => {
+    this.mode = mode;
+    this.setModeConfig();
   }
 
-  @action public getSchemaItem = (index: number): FBTemplateSchema | undefined => {
+  @action public getSchemaItem = (
+    index: number,
+  ): FBTemplateSchema | undefined => {
     return this.schema[index];
   }
 
   @action public removeSchemaItem = (index?: number) => {
-    if (index === undefined) { return; }
-    const newSchema = this.schema.filter((o) => o.index !== index);
+    if (index === undefined) {
+      return;
+    }
+    const newSchema = this.schema.filter(o => o.index !== index);
     this.setSchema(newSchema);
   }
 
   @action public editSchemaItem = (index?: number) => {
-    if (index === undefined) { return; }
+    if (index === undefined) {
+      return;
+    }
     const schema = this.getSchemaItem(index);
-    if (!schema) { return; }
+    if (!schema) {
+      return;
+    }
     editorStore.editorTypeEdit(schema);
   }
 
@@ -71,59 +68,29 @@ export class FBStore {
     this.schema = newSchema;
   }
 
-  @action public getValues = (): { [key: string]: any } | undefined => {
-    return _.isEmpty(this.values) ? undefined : this.values;
+  @action public getValues = () => {
+    return this.values;
   }
 
-  @action public reset = () => {
-    this.name = undefined;
-    this.schema = [];
-    this.values = {};
-    this.mode = "design";
-    this.groupType = "OTHER";
-    editorStore.reset();
+  @action public setValues = (values: Dictionary<any> | undefined) => {
+    this.values = values || {};
   }
 
-  @action public setFormTemplate = (formTemplate?: FBFormTemplateProps) => {
-    (formTemplate) ?
-      this.schema = formTemplate.schema as FBTemplateSchema[] :
-      this.reset();
-  }
-
-  @action public setFormTemplateDesign = (formTemplate?: FBFormTemplateProps) => {
-    this.groupType = "FORM";
-    this.mode = "design";
-    this.setFormTemplate(formTemplate);
-  }
-
-  @action public setFormTemplatePreview = (
-    formTemplate?: FBFormTemplateProps,
-    inputValues?: Dictionary<any>,
-    ) => {
-    this.groupType = "FORM";
-    this.mode = "preview";
-    this.values = inputValues || {};
-    this.setFormTemplate(formTemplate);
-  }
-
-  @action public setFormTemplateForm = (
-    formTemplate?: FBFormTemplateProps,
-    inputValues?: Dictionary<any>,
-  ) => {
-    this.groupType = "FORM";
-    this.mode = "form";
-    this.values = inputValues || {};
-    this.setFormTemplate(formTemplate);
+  @action private setModeConfig = () => {
+    switch (this.mode) {
+      case "none":
+      case "design":
+        this.schema = [];
+        this.values = {};
+      default:
+        return;
+    }
   }
 
   @action private isDisabled = (): boolean => {
     return this.mode !== "form";
   }
-
-  // @action private isReadonly = (): boolean => {
-  //   return this.mode !== "form";
-  // }
 }
 
-const formBuilderStore = new FBStore();
-export default formBuilderStore;
+const FBStore = new FormBuilderStore();
+export default FBStore;

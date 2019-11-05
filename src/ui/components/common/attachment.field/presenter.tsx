@@ -7,7 +7,7 @@ import { AttachmentFieldProps } from "./utils/types";
 
 export const AttachmentFieldPresenter: React.FunctionComponent<
   AttachmentFieldProps
-> = ({ name, multiple, component = "button", onChange }) => {
+> = ({ name, multiple, component = "button", onChange, disabled }) => {
   const isField = component === "field";
   const text = isField ? "common.upload.files" : "common.add.attachment";
   const classes = styles({ isField });
@@ -22,6 +22,7 @@ export const AttachmentFieldPresenter: React.FunctionComponent<
         type="file"
         onChange={onChange}
         onBlur={onChange}
+        disabled={disabled}
       />
       <label htmlFor={`${name}-button-file`}>
         <Link component="span" variant="button" className={classes.link}>

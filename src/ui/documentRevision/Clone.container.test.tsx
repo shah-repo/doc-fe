@@ -10,6 +10,7 @@ describe("Clone container redirect test", () => {
   const defaultProps: CloneContainerProps = {
     disableCreateNewVersion: true,
     documentRevision: getDocumentRevision(),
+    type: "newVersion",
   };
 
   const getWrapper = (props: Partial<CloneContainerProps>= {}) => shallow (
@@ -30,6 +31,7 @@ describe("Clone container test", () => {
   const defaultProps: CloneContainerProps = {
     disableCreateNewVersion: false,
     documentRevision: {...getDocumentRevision(), status: DocumentRevisionStatus.Released},
+    type: "newVersion",
   };
 
   const getWrapper = (props: Partial<CloneContainerProps>= {}) => shallow (

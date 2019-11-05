@@ -10,22 +10,33 @@ import { DocumentRevisionStatus } from "./types";
 
 const allIds = (state: ApplicationState) => state.documentRevisions.allIds;
 const byId = (state: ApplicationState) => state.documentRevisions.byId;
-const documentsById = (state: ApplicationState) => state.documentRevisions.documentsById;
-const auditsByCRId = (state: ApplicationState) => state.documentRevisions.auditsByCRId;
-const auditsAllId = (state: ApplicationState) => state.documentRevisions.auditsAllId;
+const documentsById = (state: ApplicationState) =>
+  state.documentRevisions.documentsById;
+const auditsByCRId = (state: ApplicationState) =>
+  state.documentRevisions.auditsByCRId;
+const auditsAllId = (state: ApplicationState) =>
+  state.documentRevisions.auditsAllId;
 
 const getDocumentRevisionsList = createSelector(
-  allIds, byId,
+  allIds,
+  byId,
   (ids, documentRevisions) =>
     ids.map((id) => stripTagsFromObject(documentRevisions[id])),
 );
 
-const getDocumentRevision = (state: ApplicationState, documentRevisionId: string) => byId(state)[documentRevisionId];
-const getDocument = (state: ApplicationState, documentId: string) => documentsById(state)[documentId];
+const getDocumentRevision = (
+  state: ApplicationState,
+  documentRevisionId: string,
+) => byId(state)[documentRevisionId];
+
+const getDocument = (state: ApplicationState, documentId: string) =>
+  documentsById(state)[documentId];
 const getDocumentRevisions = (state: ApplicationState, documentId: string) =>
   _.get(documentsById(state)[documentId], "documentRevisions", []);
-const getAudit = (state: ApplicationState, documentRevisionId: string): AuditGroupType =>
-  auditsByCRId(state)[documentRevisionId];
+const getAudit = (
+  state: ApplicationState,
+  documentRevisionId: string,
+): AuditGroupType => auditsByCRId(state)[documentRevisionId];
 
 const makeGetDocumentRevisions = () => {
   return createSelector(
@@ -37,24 +48,33 @@ const makeGetDocumentRevisions = () => {
 const makeGetDisableCreateNewVersion = () => {
   return createSelector(
     [getDocumentRevisions],
-    (documentRevisions) => _.some(documentRevisions, (docRev) =>
-      docRev.status === DocumentRevisionStatus.Draft ||
-      docRev.status === DocumentRevisionStatus.PendingChange ||
-      docRev.status === DocumentRevisionStatus.InReview,
-    ),
+    (documentRevisions) =>
+      _.some(
+        documentRevisions,
+        (docRev) =>
+          docRev.status === DocumentRevisionStatus.Draft ||
+          docRev.status === DocumentRevisionStatus.PendingChange ||
+          docRev.status === DocumentRevisionStatus.InReview,
+      ),
   );
 };
 
-const getCurrentDocumentValues = (state: ApplicationState, docRev: DocumentRevisionFormValues) => docRev;
+const getCurrentDocumentValues = (
+  state: ApplicationState,
+  docRev: DocumentRevisionFormValues,
+) => docRev;
 
 const makeGetAvailableReferences = () => {
   return createSelector(
     [allIds, byId, getCurrentDocumentValues],
     (ids, docRevs, currentDocRev): OptionType[] => {
-      const filteredIds = ids.filter((id) => {
+      const filteredIds = ids.filter(id => {
         const { status, changeRequest, document } = docRevs[id];
 
-        if (currentDocRev.document && currentDocRev.document.id === document.id) {
+        if (
+          currentDocRev.document &&
+          currentDocRev.document.id === document.id
+        ) {
           return false;
         }
 
@@ -63,7 +83,11 @@ const makeGetAvailableReferences = () => {
         }
 
         if (status === DocumentRevisionStatus.PendingChange) {
-          if ((changeRequest && currentDocRev.changeRequest) && (changeRequest.id === currentDocRev.changeRequest.id)) {
+          if (
+            changeRequest &&
+            currentDocRev.changeRequest &&
+            changeRequest.id === currentDocRev.changeRequest.id
+          ) {
             return true;
           }
         }
@@ -96,14 +120,14 @@ const makeGetAvailableReferences = () => {
           label: `${document.docId} - ${revision} - ${name}`,
         };
       });
-    },
+    }
   );
 };
 
 const makeGetAudit = () => {
   return createSelector(
     getAudit,
-    (audits: AuditGroupType = {}) =>  {
+    (audits: AuditGroupType = {}) => {
       Object.keys(audits).map((groupId) => {
         audits[groupId].map((audit: Audit) => {
           if (audit.field === "description") {
@@ -113,14 +137,18 @@ const makeGetAudit = () => {
         });
       });
       return audits;
-    },
+    }
   );
 };
 
-const getLoadAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadAsyncInfo;
-const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadListAsyncInfo;
-const getLoadDocumentAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadDocumentAsyncInfo;
-const getLoadAuditAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadAuditAsyncInfo;
+const getLoadAsyncState = (state: ApplicationState): AsyncState =>
+  state.documentRevisions.loadAsyncInfo;
+const getLoadListAsyncState = (state: ApplicationState): AsyncState =>
+  state.documentRevisions.loadListAsyncInfo;
+const getLoadDocumentAsyncState = (state: ApplicationState): AsyncState =>
+  state.documentRevisions.loadDocumentAsyncInfo;
+const getLoadAuditAsyncState = (state: ApplicationState): AsyncState =>
+  state.documentRevisions.loadAuditAsyncInfo;
 
 export default {
   byId,

@@ -30,6 +30,7 @@ interface OwnProps {
   documentId: string;
   documentRevisionId: string | null;
   isNewVersion: boolean;
+  isNewOutput: boolean;
   deprecatedAt: string;
 }
 
@@ -56,6 +57,7 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
   loadDocumentAsyncState,
   loadDocument,
   isNewVersion,
+  isNewOutput,
   documentId,
   documentRevisionId,
   documentRevisions,
@@ -84,14 +86,22 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
           />
         </AsyncGate>
       </Grid>
-      <Grid item={true} xs={7}>
-        {documentRevisionId && (
+      {documentRevisionId && !isNewOutput && (
+        <Grid item={true} xs={7}>
           <DocumentRevisionDisplayContainer
             documentRevisionId={documentRevisionId}
             isNewVersion={isNewVersion}
           />
-        )}
-      </Grid>
+        </Grid>
+      )}
+      {documentRevisionId && isNewOutput && (
+        <Grid item={true} xs={7}>
+          <DocumentRevisionDisplayContainer
+            documentRevisionId={documentRevisionId}
+            isNewOutput={isNewOutput}
+          />
+        </Grid>
+      )}
       <Grid item={true} xs={3} className={classes.sidebar}>
         {documentRevisionId && (
           <DocumentRevisionAuditContainer

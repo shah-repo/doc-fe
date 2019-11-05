@@ -1,1 +1,1 @@
-export type FBWorkspaceMode = "design" | "form" | "preview";
+export type FBWorkspaceMode = "none" | "design" | "form" | "preview";
