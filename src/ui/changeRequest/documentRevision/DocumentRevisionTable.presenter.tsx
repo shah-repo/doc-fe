@@ -8,11 +8,11 @@ import {
 } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { TableColumnProps } from "../../components/table/column/types";
+import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
 import { TablePanelStateProps, TableSearchQueryType, TableSelectionProps } from "../../components/table/types";
 import { generateVersionNumber } from "../../documentRevision/helpers";
 import styles from "./DocumentRevisionTable.styles";
-import { DocumentInfo } from "../../components/table/DocumentInfo";
 
 interface DocumentRevisionTableProps extends WithStyles<typeof styles> {
   documentRevisionsToShow: DocumentRevision[];
@@ -121,10 +121,12 @@ const DocumentRevisionTable: React.FunctionComponent<
     );
   };
 
-  return <Paper className={classes.root}>
+  return (
+  <Paper className={classes.root}>
     <DocumentInfo numberOfRecords={tableState.queryData.length} />
     {bodyRenderer()}
-    </Paper>;
+  </Paper>
+  );
 };
 
 export default withStyles(styles)(DocumentRevisionTable);

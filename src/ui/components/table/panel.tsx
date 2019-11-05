@@ -1,7 +1,7 @@
 import { Box } from "@material-ui/core";
 import { AxiosRequestConfig } from "axios";
 import qs from "query-string";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   AutoSizer,
@@ -125,12 +125,6 @@ export function TablePanel<T extends any>({
   );
 
   const rowGetter = ({ index }: Index): T => queryData[index] as T;
-
-  const rowClassName = ({ index }: Index) => {
-    return (index % 2 === 0) ?
-    `${classes.row} ${classes.rowEven}` :
-    `${classes.row} ${classes.rowOdd}`;
-  };
 
   const measurerCache = new CellMeasurerCache({
     fixedWidth: true,

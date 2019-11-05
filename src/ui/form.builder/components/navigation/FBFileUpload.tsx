@@ -1,11 +1,10 @@
 import { Box } from "@material-ui/core";
 import { OutlinedTextFieldProps } from "@material-ui/core/TextField";
-import React, { Fragment } from "react";
+import React from "react";
 import AttachmentField from "../../../components/common/attachment.field/container";
 import AttachmentIconField from "../../../components/common/attachment.icon/container";
 import { withLabelRenderer } from "../../hocs/withLabelRenderer";
 import { withOnChange } from "../../hocs/withOnChange";
-import formBuilderStore from "../../stores/FBStore";
 import { FBFormDefaultProps, FBOnChangeProps } from "../../types/common";
 
 export type Props = Omit<OutlinedTextFieldProps, "variant"> &

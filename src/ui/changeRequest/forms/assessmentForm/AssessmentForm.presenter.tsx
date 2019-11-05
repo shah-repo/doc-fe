@@ -1,6 +1,5 @@
 import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { Field, FieldProps, FormikProps } from "formik";
-import _ from "lodash";
 import React, { useEffect } from "react";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest";
 import { AsyncState } from "../../../../state/types";

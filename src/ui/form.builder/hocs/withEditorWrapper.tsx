@@ -38,35 +38,35 @@ export function withEditorWrapper<T extends FBEditorWrapperProps>(
     }
 
     private editSchemaItem = () =>
-      formBuilderStore.editSchemaItem(this.props.index);
+      formBuilderStore.editSchemaItem(this.props.index)
 
     private toolbarMargin = (): number => {
       if (!this.isSection() && this.hasLabel()) {
         return -4;
       }
       return 0;
-    };
+    }
 
     private indicatorMargin = (): number =>
-      this.isSection() || !this.hasLabel() ? 4 : 0;
+      this.isSection() || !this.hasLabel() ? 4 : 0
 
     private isSection = (): boolean =>
-      _.includes(FBEditorSectionConfig.section, this.props.type);
+      _.includes(FBEditorSectionConfig.section, this.props.type)
 
     private hasLabel = (): boolean => this.props.label !== undefined;
 
     private canBeVisible = (): boolean =>
-      formBuilderStore.mode === "design" && sortableStore.mode === "inactive";
+      formBuilderStore.mode === "design" && sortableStore.mode === "inactive"
 
     private isIndicatorVisible = (): "visible" | "hidden" =>
-      formBuilderStore.mode === "design" ? "visible" : "hidden";
+      formBuilderStore.mode === "design" ? "visible" : "hidden"
 
     private onMouseOver = () => {
       if (!this.canBeVisible()) {
         return;
       }
       this.setState({ visibility: "visible" });
-    };
+    }
 
     private onMouseLeave = () => this.setState({ visibility: "hidden" });
   }

@@ -30,7 +30,6 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId) => {
       const change = audit[groupId][0];
-      const auditField = audit[groupId][0].field;
 
       return (
         <Box key={groupId} className={classes.changeContainer}>

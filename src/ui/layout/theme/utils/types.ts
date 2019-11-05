@@ -1,5 +1,5 @@
 import { Palette } from "@material-ui/core/styles/createPalette";
-import { defaultPalette, demoPalette, devPalette, muiTheme } from "../palette";
+import { defaultPalette, demoPalette, devPalette } from "../palette";
 
 export enum ThemeEnv {
   DEV_THEME = "DEV_THEME",

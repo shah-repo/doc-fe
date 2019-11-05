@@ -66,7 +66,8 @@ const Field: React.FunctionComponent<FieldProps> = ({
         <LabelField htmlFor={field.name}>
           <Typography
             variant={TypographySize[size]}
-            className={classes.typography}>
+            className={classes.typography}
+          >
             <Text message={label} />
           </Typography>
         </LabelField>
@@ -88,7 +89,8 @@ const Field: React.FunctionComponent<FieldProps> = ({
       fullWidth={true}
       error={shouldDisplayError}
       className={classes.form}
-      {...formControlProps}>
+      {...formControlProps}
+    >
       {LabelComponent()}
       {children}
       {ErrorComponent}

@@ -1,5 +1,6 @@
-import moment from "moment";
 import _ from "lodash";
+// tslint:disable-next-line: no-implicit-dependencies
+import moment from "moment";
 import { DocumentRevision, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 
 export const canEditDocumentRevision = (
@@ -16,7 +17,8 @@ export const canEditDocumentRevision = (
 export const canSubmitDocumentRevision = (
   documentRevision: DocumentRevision,
   currentUserEmail: string,
-) => documentRevision.owner && currentUserEmail === documentRevision.owner.email && documentRevision.status === DocumentRevisionStatus.PendingChange;
+) => documentRevision.owner && currentUserEmail === documentRevision.owner.email &&
+documentRevision.status === DocumentRevisionStatus.PendingChange;
 
 export const canCreateNewVersion = (documentRevision: DocumentRevision, disableCreateNewVersion: boolean, canShowCreateVersionButton?: boolean) =>
   documentRevision.status === DocumentRevisionStatus.Released && !disableCreateNewVersion && canShowCreateVersionButton;
@@ -38,18 +40,18 @@ export const maskId = (
     return pad.substring(0, pad.length - countStr.length) + countStr;
 };
 
-
-const getAlphabetFromNumber = (_num: number) => {
+const getAlphabetFromNumber = (num: number) => {
   let str = "";
 
-  const multiples = Math.ceil(_num / 26);
-  const _charAtCode = _num - ((multiples - 1) * 26)
+  const multiples = Math.ceil(num / 26);
+  const charAtCode = num - ((multiples - 1) * 26);
 
-  for (let i = 0; i < multiples; i++)
-      str += String.fromCharCode(_charAtCode + 64);
+  for (let i = 0; i < multiples; i++) {
+      str += String.fromCharCode(charAtCode + 64);
+  }
 
   return str;
-}
+};
 
 export const generateVersionNumber = (
   revision: number,

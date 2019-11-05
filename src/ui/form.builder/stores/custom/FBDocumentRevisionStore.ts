@@ -4,10 +4,10 @@ import { Id } from "../../../../state/ducks/common";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { DocumentType, DocumentTypeByIdState } from "../../../../state/ducks/documentRevisions/documentType";
 import { DocumentRevisionFormValues } from "../../../documentRevision/forms/types";
+import { generateVersionNumber } from "../../../documentRevision/helpers";
 import { FBFormTemplateProps } from "../../types/formik";
 import { FBDocumentRevisionMode, FBDocumentRevisionOutputInfo } from "../../types/store";
 import formBuilderStore from "../FBStore";
-import { generateVersionNumber } from "../../../documentRevision/helpers";
 
 export type FBDocumentRevisionRequestType =
   | "none"

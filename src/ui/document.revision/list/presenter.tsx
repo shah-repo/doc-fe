@@ -8,11 +8,13 @@ import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/d
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import Date from "../../components/Date";
 import { TableColumnProps } from "../../components/table/column/types";
+import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
 import { TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import { generateVersionNumber } from "../../documentRevision/helpers";
+import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
 import {
   canEditDocumentRevision,
   documentRevisionQueryStatus,
@@ -22,8 +24,6 @@ import {
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
 import styles from "./styles";
-import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
-import { DocumentInfo } from "../../components/table/DocumentInfo";
 
 export type Props = DocumentRevisionsUserProps & WithStyles<typeof styles>;
 
@@ -43,7 +43,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     rowData.document.documentType.documentTypeName || "";
 
   const cellHrefRenderer = (rowData: DocumentRevision): string => {
-    documentRevisionStore.reset()
+    documentRevisionStore.reset();
     if (canEdit(rowData)) {
       return documentEditPath(rowData.id, rowData.document.id);
     }

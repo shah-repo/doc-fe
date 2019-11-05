@@ -1,8 +1,6 @@
 import {
   Box,
-  Button,
   Grid,
-  ListItem,
   Typography,
   WithStyles,
   withStyles,

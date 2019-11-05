@@ -10,7 +10,7 @@ import {
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
-import DocumentRevisionTable from './DocumentRevisionTable.presenter';
+import DocumentRevisionTable from "./DocumentRevisionTable.presenter";
 import { generateDocumentRevisionVersionPath } from "./pathGenerators";
 
 interface StateProps {

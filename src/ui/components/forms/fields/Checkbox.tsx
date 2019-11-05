@@ -5,9 +5,9 @@ import {
 import { CheckboxProps as MuiCheckboxProps } from "@material-ui/core/Checkbox";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
-import Field, { FieldOwnProps } from "./Field";
-import Text from "../../Text";
 import { Translation } from "../../../translations/types";
+import Text from "../../Text";
+import Field, { FieldOwnProps } from "./Field";
 
 interface CheckboxOwnProps extends FieldOwnProps {
   checkboxProps?: MuiCheckboxProps;
@@ -30,7 +30,7 @@ const Checkbox: React.FunctionComponent<CheckboxPropsWithFormik> = ({ checkboxPr
             {...fieldProps.field}
             {...checkboxProps}
             checked={field.value && true}
-            value={field.value ? 'checked' : ''}
+            value={field.value ? "checked" : ""}
           />
         }
         label={<Text translation={label} />}
@@ -41,6 +41,7 @@ const Checkbox: React.FunctionComponent<CheckboxPropsWithFormik> = ({ checkboxPr
 
 type CheckboxFieldProps = CheckboxOwnProps & FieldConfig;
 
-const CheckboxField: React.FunctionComponent<CheckboxFieldProps> = (props) => <FormikField component={Checkbox} {...props} />;
+const CheckboxField: React.FunctionComponent<CheckboxFieldProps> = (props) =>
+<FormikField component={Checkbox} {...props} />;
 
 export default CheckboxField;

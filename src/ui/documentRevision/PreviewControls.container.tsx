@@ -1,15 +1,15 @@
-import { Box, Button, Grid } from "@material-ui/core";
+import { Box, Button } from "@material-ui/core";
 import React from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { DocumentRevision, documentRevisionsSelectors, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import Text from "../components/Text";
-import { documentNewVersionPath } from "../document.revision/utils/paths";
-import { canCreateNewVersion } from "./helpers";
-import documentRevisionStore from "../form.builder/stores/custom/FBDocumentRevisionStore";
 import { DOCUMENT_REVISION_CREATE_URL } from "../constants/urls";
-import { Link as RouterLink } from "react-router-dom";
+import { documentNewVersionPath } from "../document.revision/utils/paths";
+import documentRevisionStore from "../form.builder/stores/custom/FBDocumentRevisionStore";
+import { canCreateNewVersion } from "./helpers";
 
 interface OwnProps {
   documentRevision: DocumentRevision;

@@ -1,17 +1,15 @@
 import {
   Box,
-  ListItem,
   Typography,
   WithStyles,
   withStyles,
 } from "@material-ui/core";
 import React from "react";
-import { getFormattedDateString } from "../../../common/utils/date";
 import { Approval, DataProps } from "../../../state/ducks/common";
 import SummaryField from "../../common/summary/base";
+import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
 import styles from "./styles";
-import DateTime from "../../components/DateTime";
 
 export type Props = DataProps<Approval[]> & WithStyles<typeof styles>;
 

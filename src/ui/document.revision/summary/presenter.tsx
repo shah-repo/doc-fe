@@ -12,6 +12,7 @@ import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/d
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import Text from "../../components/Text";
+import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
 import FBWorkspace from "../../form.builder/main/workspace/FBWorkspace";
 import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
@@ -23,7 +24,6 @@ import ReferencedByContainer from "./referencedBy.container";
 import ReferenceToContainer from "./referenceTo.container";
 import styles from "./styles";
 import TrainingControl from "./training.control";
-import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 
 interface OwnProps {
   canShowCreateVersionButton?: boolean;

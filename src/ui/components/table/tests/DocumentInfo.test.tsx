@@ -1,7 +1,7 @@
 import { shallow } from "enzyme";
+import faker from "faker";
 import React from "react";
 import { DocumentInfo, Props } from "../DocumentInfo";
-import faker from "faker";
 
 describe( "DocumentInfo tests", () => {
     const defaultProps: Props = {

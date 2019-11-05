@@ -12,7 +12,6 @@ const allIds = (state: ApplicationState) => state.documentRevisions.allIds;
 const byId = (state: ApplicationState) => state.documentRevisions.byId;
 const documentsById = (state: ApplicationState) => state.documentRevisions.documentsById;
 const auditsByCRId = (state: ApplicationState) => state.documentRevisions.auditsByCRId;
-const auditsAllId = (state: ApplicationState) => state.documentRevisions.auditsAllId;
 
 const getDocumentRevisionsList = createSelector(
   allIds, byId,
@@ -121,7 +120,9 @@ const makeGetAudit = () => {
 
 const getLoadAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadAsyncInfo;
 const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadListAsyncInfo;
-const getLoadDocumentAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadDocumentAsyncInfo;
+const getLoadDocumentAsyncState = (
+  state: ApplicationState,
+): AsyncState => state.documentRevisions.loadDocumentAsyncInfo;
 const getLoadAuditAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadAuditAsyncInfo;
 
 export default {

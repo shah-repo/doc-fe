@@ -1,11 +1,11 @@
-import React from "react";
 import { shallow } from "enzyme";
-import { DocumentRevisionDisplayContainer, DocumentRevisionDisplayContainerProps } from "./DocumentRevisionDisplay.container";
-import { getDocumentRevision } from "../../state/ducks/documentRevisions/tests/factories";
 import faker from "faker";
-import { ASYNC_DEFAULT_STATE } from "../hooks/useAsync";
+import React from "react";
+import { getDocumentRevision } from "../../state/ducks/documentRevisions/tests/factories";
 import SummaryPresenter from "../document.revision/summary/presenter";
+import { ASYNC_DEFAULT_STATE } from "../hooks/useAsync";
 import CloneContainer from "./Clone.container";
+import { DocumentRevisionDisplayContainer, DocumentRevisionDisplayContainerProps } from "./DocumentRevisionDisplay.container";
 import DocumentRevisionUpdateContainer from "./DocumentRevisionUpdate.container";
 
 describe("DocumentRevisionDisplayContainer isNewVersion test", () => {

@@ -1,14 +1,14 @@
-import React from "react";
 import { shallow } from "enzyme";
-import { DocumentRevisionContainer, DocumentRevisionContainerProps } from "./DocumentRevision.container";
+import React from "react";
+import { Route } from "react-router-dom";
 import { getDocumentRevision } from "../../state/ducks/documentRevisions/tests/factories";
-import { ASYNC_DEFAULT_STATE } from "../hooks/useAsync";
-import getRouteComponentProps from "../tests/helpers/getRouteComponentProps";
 import {
     DOCUMENT_REVISION_DETAILS_URL,
     DOCUMENT_REVISION_VERSION_URL,
   } from "../constants/urls";
-import { Route } from "react-router-dom";
+import { ASYNC_DEFAULT_STATE } from "../hooks/useAsync";
+import getRouteComponentProps from "../tests/helpers/getRouteComponentProps";
+import { DocumentRevisionContainer, DocumentRevisionContainerProps } from "./DocumentRevision.container";
 
 describe("DocumentRevisionContainer test", () => {
   const defaultProps: DocumentRevisionContainerProps = {

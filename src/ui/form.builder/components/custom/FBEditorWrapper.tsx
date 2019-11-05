@@ -1,11 +1,11 @@
 import { Box } from "@material-ui/core";
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
+import _ from "lodash";
 import React from "react";
 import { withEditorWrapper } from "../../hocs/withEditorWrapper";
 import { FBEditorWrapperProps } from "../../types/editor";
 import FBAddFieldButton from "../custom/FBAddFieldButton";
 import FBEditorFieldToolbar from "../custom/FBEditorFieldToolbar";
-import _ from 'lodash';
 
 const FBEditorWrapper: React.FunctionComponent<FBEditorWrapperProps> = ({
   visibility,

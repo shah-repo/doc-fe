@@ -1,9 +1,9 @@
 import { shallow } from "enzyme";
 import React from "react";
 import { getAttachment } from "../../../state/ducks/attachments/tests/factories";
-import { Justification,   Props } from "./justification";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import AttachmentIconField from "../../components/common/attachment.icon/container";
+import { Justification,   Props } from "./justification";
 
 describe("Justification tests without attachments", () => {
   const defaultProps: Props = {

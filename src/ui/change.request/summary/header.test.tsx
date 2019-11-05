@@ -1,8 +1,8 @@
+import { Box, Grid, Typography } from "@material-ui/core";
 import { mount } from "enzyme";
 import React from "react";
-import { Header, Props  } from "./header";
 import { getChangeRequest } from "../../../state/ducks/changeRequest/tests/factories";
-import { Box, Chip, Grid, Typography } from "@material-ui/core";
+import { Header, Props  } from "./header";
 
 jest.mock("../../components/Text");
 

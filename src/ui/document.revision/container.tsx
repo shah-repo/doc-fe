@@ -1,13 +1,13 @@
-import React from "react";
 import queryString from "query-string";
+import React from "react";
 import { connect } from "react-redux";
 import { Route } from "react-router-dom";
-import Switch from "../app/Switch";
 import {
   documentRevisionsActions,
   documentRevisionsSelectors,
 } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
+import Switch from "../app/Switch";
 import {
   DOCUMENT_REVISION_DETAILS_URL,
   DOCUMENT_REVISION_NEW_VERSION_URL,

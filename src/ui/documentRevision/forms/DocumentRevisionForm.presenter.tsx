@@ -6,7 +6,6 @@ import {
   WithStyles,
 } from "@material-ui/core";
 import { FormikProps } from "formik";
-import _ from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -42,9 +41,9 @@ import {
 import FBWorkspace from "../../form.builder/main/workspace/FBWorkspace";
 import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
 import formBuilderStore from "../../form.builder/stores/FBStore";
+import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
-import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 
 export interface Props
   extends WithStyles<typeof styles>,
