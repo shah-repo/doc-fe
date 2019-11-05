@@ -23,8 +23,7 @@ COPY aws/bash_scripts/runTests.sh runTests.sh
 RUN chmod a+x runTests.sh
 
 # install dependencies 
-RUN yarn install
-RUN yarn add jest-junit
+RUN yarn install --pure-lockfile
 
 # build the app
 RUN yarn build
