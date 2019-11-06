@@ -46,6 +46,7 @@ import FBStore from "../../form.builder/stores/FBStore";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
+import _ from "lodash";
 
 export interface Props
   extends WithStyles<typeof styles>,
