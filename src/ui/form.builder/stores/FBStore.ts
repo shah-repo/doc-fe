@@ -62,9 +62,7 @@ export class FormBuilderStore {
   }
 
   @action public setSchema = (newSchema: FBTemplateSchema[]) => {
-    newSchema.map((o, i) => {
-      o.index = i;
-    });
+    newSchema.map((o, i) => o.index = i);
     this.schema = newSchema;
   }
 

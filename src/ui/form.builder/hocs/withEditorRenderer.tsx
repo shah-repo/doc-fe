@@ -25,7 +25,9 @@ export const withEditorRenderer =
       includeNote: includeNote || includeOther,
     };
     const removeEl = (mode === "create") ? 0 : 1;
-    FBStore.schema.splice(index, removeEl, schema);
+    const newSchema = FBStore.schema;
+    newSchema.splice(index, removeEl, schema);
+    FBStore.setSchema(newSchema);
     editorStore.open = false;
   };
 
