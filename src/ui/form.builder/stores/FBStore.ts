@@ -82,6 +82,7 @@ export class FormBuilderStore {
       case "design":
         this.schema = [];
         this.values = {};
+        break;
       default:
         return;
     }
