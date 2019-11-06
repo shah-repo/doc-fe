@@ -2,16 +2,16 @@ import { observer } from "mobx-react";
 import React from "react";
 import FBAddFieldButton0 from "../../components/custom/FBAddFieldButton0";
 import FBForm from "../../components/form/FBForm";
-import formBuilderStore from "../../stores/FBStore";
+import FBStore from "../../stores/FBStore";
 import FBEditorDialog from "../editor/FBEditorDialog";
 import FBSortableContainer from "./FBSortableContainer";
 
 const FBWorkspace: React.FunctionComponent<{}> = () => {
-  const { schema, mode } = formBuilderStore;
+  const { schema, mode } = FBStore;
   const isStarter = (mode === "design") && (schema.length === 0);
 
   return (
-    <FBForm initialValues={formBuilderStore.values}>
+    <FBForm initialValues={FBStore.values}>
       {isStarter && <FBAddFieldButton0 />}
       {!isStarter && <FBSortableContainer items={schema} />}
       <FBEditorDialog />

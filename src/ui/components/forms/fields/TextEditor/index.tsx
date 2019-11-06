@@ -87,7 +87,6 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
   };
 
   const handleFocus = () => {
-    refEditor.current!.focus();
     setIsComponentVisible(true);
   };
 

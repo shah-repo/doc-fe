@@ -6,7 +6,7 @@ pipelines:
   const:
     tests: &RUN_TESTS
       name: Tests
-      image: node:10 
+      image: node:10.16.3
       services:
         - docker
       caches:
@@ -118,7 +118,7 @@ pipelines:
       - step: *RUN_LINTER
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEVELOP_1
-    release/19.3:
+    release/19.3.2:
       - step: *RUN_LINTER
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEMO
