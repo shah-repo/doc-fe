@@ -71,7 +71,7 @@ const makeGetAvailableReferences = () => {
   return createSelector(
     [allIds, byId, getCurrentDocumentValues],
     (ids, docRevs, currentDocRev): OptionType[] => {
-      const filteredIds = ids.filter(id => {
+      const filteredIds = ids.filter((id) => {
         const { status, changeRequest, document } = docRevs[id];
 
         if (
@@ -123,7 +123,7 @@ const makeGetAvailableReferences = () => {
           label: `${document.docId} - ${revision} - ${name}`,
         };
       });
-    }
+    },
   );
 };
 
@@ -140,10 +140,9 @@ const makeGetAudit = () => {
         });
       });
       return audits;
-    }
+    },
   );
 };
-
 
 const getLoadAsyncState = (state: ApplicationState): AsyncState =>
   state.documentRevisions.loadAsyncInfo;

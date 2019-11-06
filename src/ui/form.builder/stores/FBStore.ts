@@ -1,4 +1,4 @@
-import _, { Dictionary } from "lodash";
+import { Dictionary } from "lodash";
 import { action, computed, observable } from "mobx";
 import { FBFormDefaultProps } from "../types/common";
 import { FBTemplateSchema } from "../types/store";
@@ -16,7 +16,7 @@ export class FormBuilderStore {
 
   @computed get fieldMode(): Partial<FBFormDefaultProps> {
     return {
-      disabled: this.isDisabled()
+      disabled: this.isDisabled(),
       // readOnly: this.isReadonly(),
       // className: this.isDisabled() ? FBClasses.inputDisabled : "",
     };
@@ -42,7 +42,7 @@ export class FormBuilderStore {
     if (index === undefined) {
       return;
     }
-    const newSchema = this.schema.filter(o => o.index !== index);
+    const newSchema = this.schema.filter((o) => o.index !== index);
     this.setSchema(newSchema);
   }
 

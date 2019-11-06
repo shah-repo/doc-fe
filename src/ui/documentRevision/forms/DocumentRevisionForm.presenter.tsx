@@ -6,6 +6,7 @@ import {
   WithStyles,
 } from "@material-ui/core";
 import { FormikProps } from "formik";
+import _ from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -46,7 +47,6 @@ import FBStore from "../../form.builder/stores/FBStore";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
-import _ from "lodash";
 
 export interface Props
   extends WithStyles<typeof styles>,
@@ -122,7 +122,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   };
 
   const handleTypeChange = (
-    event: React.ChangeEvent<{ name?: string; value: unknown }>
+    event: React.ChangeEvent<{ name?: string; value: unknown }>,
   ) => {
     const typeId = event.target.value as string;
     const type = documentTypesById[typeId] || {};
