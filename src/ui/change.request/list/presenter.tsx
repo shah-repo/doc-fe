@@ -5,6 +5,7 @@ import { stripTagsFromObject } from "../../../common/utils/helpers";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { CHANGE_REQUEST_ROOT_URL } from "../../../state/ducks/changeRequest/constants";
 import { TableColumnProps } from "../../components/table/column/types";
+import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
 import Text from "../../components/Text";
 import { CHANGE_REQUEST_CREATE_URL } from "../../constants/urls";
@@ -12,7 +13,6 @@ import { canEditChangeRequest, changeRequestStatusOption } from "../utils/helper
 import { changeRequestEditPath, changeRequestPreviewPath } from "../utils/paths";
 import { ChangeRequestsUserProps } from "../utils/types";
 import styles from "./styles";
-import { DocumentInfo } from "../../components/table/DocumentInfo";
 
 export type Props = ChangeRequestsUserProps & WithStyles<typeof styles>;
 

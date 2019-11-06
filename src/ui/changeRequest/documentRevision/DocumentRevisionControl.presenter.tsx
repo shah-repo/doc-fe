@@ -1,9 +1,11 @@
 import { Fab, Icon } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { AddCircleRounded } from "@material-ui/icons";
-import _ from "lodash";
 import React from "react";
-import { DocumentRevision, DocumentRevisionsByIdState } from "../../../state/ducks/documentRevisions";
+import {
+  DocumentRevision,
+  DocumentRevisionsByIdState,
+} from "../../../state/ducks/documentRevisions";
 import Text from "../../components/Text";
 import styles from "./DocumentRevisionControl.styles";
 import DocumentRevisionItemPresenter from "./DocumentRevisionItem.presenter";
@@ -34,13 +36,18 @@ export const DocumentRevisionControlPresenter: React.FunctionComponent<
   openAddDocuments,
 }) => {
   const classes = styles();
-  const handleDelete = (documentRevisionId: string) => () => deleteDocumentFromChangeRequest(documentRevisionId);
-  const handleClick = (documentRevisionId: string) => () => selectDocumentRevision(documentRevisionId);
+  const handleDelete = (documentRevisionId: string) => () =>
+    deleteDocumentFromChangeRequest(documentRevisionId);
+  const handleClick = (documentRevisionId: string) => () =>
+    selectDocumentRevision(documentRevisionId);
   const renderDocumentRevisions = () =>
     documentsInChangeRequest.map((documentRevisionId: string) => (
       <DocumentRevisionItemPresenter
         key={documentRevisionId}
-        documentRevision={documentsInCrById[documentRevisionId] || documentRevisionsById[documentRevisionId]}
+        documentRevision={
+          documentsInCrById[documentRevisionId] ||
+          documentRevisionsById[documentRevisionId]
+        }
         onDelete={handleDelete(documentRevisionId)}
         onClick={handleClick(documentRevisionId)}
         selectedDocumentRevision={selectedDocumentRevision!}
@@ -65,7 +72,8 @@ export const DocumentRevisionControlPresenter: React.FunctionComponent<
         color="primary"
         onClick={openAddDocuments}
         fullWidth={true}
-        className={classes.addDocument}>
+        className={classes.addDocument}
+      >
         <Icon className={classes.leftIcon}>
           <AddCircleRounded />
         </Icon>

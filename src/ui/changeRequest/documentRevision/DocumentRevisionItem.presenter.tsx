@@ -19,12 +19,7 @@ export type DocumentRevisionItemPresenterProps = OwnProps;
 
 export const DocumentRevisionItemPresenter: React.FunctionComponent<
   DocumentRevisionItemPresenterProps
-> = ({
-  onClick,
-  onDelete,
-  documentRevision,
-  selectedDocumentRevision,
-}) => {
+> = ({ onClick, onDelete, documentRevision, selectedDocumentRevision }) => {
   if (!documentRevision) {
     return null;
   }
@@ -43,9 +38,11 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<
           <div onClick={onClick}>
             <Tooltip
               title={documentRevision.name}
-              aria-label={documentRevision.name}>
+              aria-label={documentRevision.name}
+            >
               <div
-                className={isSelected ? classes.titleSelected : classes.title}>
+                className={isSelected ? classes.titleSelected : classes.title}
+              >
                 {documentRevision.name}
               </div>
             </Tooltip>

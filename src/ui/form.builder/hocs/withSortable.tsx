@@ -10,7 +10,7 @@ import { FBSortableProps } from "../types/sortable";
 import { FBTemplateSchema } from "../types/store";
 
 export function withSortable<T extends FBSortableProps>(
-  Component: React.ComponentType<T>
+  Component: React.ComponentType<T>,
 ) {
   return class extends React.Component<
     Subtract<T, Omit<FBSortableProps, "items">>

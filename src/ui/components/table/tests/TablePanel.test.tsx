@@ -2,7 +2,6 @@ import { mount } from "enzyme";
 import React from "react";
 import { addLocaleData, IntlProvider } from "react-intl";
 import localeEn from "react-intl/locale-data/en";
-import { getDocument } from "../../../../state/ducks/documents/tests/factories";
 import { Document } from "../../../../state/ducks/documents/types";
 import messagesEn from "../../../translations/en.json";
 import { StyledTableHeader } from "../column/styles";
@@ -23,8 +22,8 @@ describe("TablePanel component tests", () => {
   const messages = { en: messagesEn };
   const language = "en";
 
-  const data: Document[] = [getDocument()];
   const noRowsTranslation = "table.no.results.found";
+  // tslint:disable-next-line: no-unused-declaration
   let isActionSelected: boolean = false;
 
   const onActionSelect = ({ rowData, actionType }: TableSelectionProps<Document>) => () => {

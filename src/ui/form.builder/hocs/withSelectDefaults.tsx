@@ -15,12 +15,6 @@ export function withSelectDefaults<T extends FBSelectProps>(
 
   class HOC extends React.Component<Subtract<T, FBSelectInjectedProps>> {
 
-    private EmptyItem = this.props.includeEmpty && (
-      <MenuItem value="">
-        <Text translation="fields.select.none" tagName="em" />
-      </MenuItem>
-    );
-
     public render() {
       return (
         <Component

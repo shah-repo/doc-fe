@@ -1,11 +1,11 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { DocumentRevision, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { canCreateNewVersion, canCreateOutput } from "./helpers";
+import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import DocumentRevisionCreateContainer from "./DocumentRevisionCreate.container";
-import { ApplicationState } from "../../state/reducers";
-import { connect } from "react-redux";
 
 export type DocumentCloneType = "none" | "newVersion" | "newOutput";
 

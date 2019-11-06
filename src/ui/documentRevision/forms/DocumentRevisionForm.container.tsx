@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import { Formik, FormikActions, FormikProps } from "formik";
-import _ from "lodash";
+import { get } from "lodash";
 import React from "react";
 import { connect } from "react-redux";
 import {
@@ -62,7 +62,7 @@ const mapStateToProps = (
   documentRevisions: documentRevisionsSelectors.getDocumentRevisionsList(state),
   documentTypes: documentTypeSelectors.getDocumentTypeFormOptions(state),
   documentTypesById: documentTypeSelectors.byId(state),
-  document: documentRevisionsSelectors.getDocument(state, _.get(props.initialValues, "document.id")!),
+  document: documentRevisionsSelectors.getDocument(state, get(props.initialValues, "document.id")!),
 });
 
 export const DocumentRevisionFormContainer: React.FunctionComponent<

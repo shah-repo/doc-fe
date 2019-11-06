@@ -6,7 +6,7 @@ import {
   withStyles,
 } from "@material-ui/core";
 import { FormikProps } from "formik";
-import _ from "lodash";
+import { filter } from "lodash";
 import React, { useMemo } from "react";
 import {
   ChangeRequest,
@@ -46,7 +46,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   closeTask,
   errors,
 }) => {
-  const approvedApprovers = useMemo(() => _.filter(dataProp.approvals, ["status", "APPROVED"] ), [dataProp]);
+  const approvedApprovers = useMemo(() => filter(dataProp.approvals, ["status", "APPROVED"] ), [dataProp]);
 
   const approversFieldRenderer = () => (
     <Box>

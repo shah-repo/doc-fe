@@ -10,12 +10,11 @@ import { DocumentRevisionStatus } from "./types";
 
 const allIds = (state: ApplicationState) => state.documentRevisions.allIds;
 const byId = (state: ApplicationState) => state.documentRevisions.byId;
+
 const documentsById = (state: ApplicationState) =>
   state.documentRevisions.documentsById;
 const auditsByCRId = (state: ApplicationState) =>
   state.documentRevisions.auditsByCRId;
-const auditsAllId = (state: ApplicationState) =>
-  state.documentRevisions.auditsAllId;
 
 const getDocumentRevisionsList = createSelector(
   allIds,
@@ -144,6 +143,7 @@ const makeGetAudit = () => {
     }
   );
 };
+
 
 const getLoadAsyncState = (state: ApplicationState): AsyncState =>
   state.documentRevisions.loadAsyncInfo;

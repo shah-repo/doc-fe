@@ -1,22 +1,22 @@
 import { shallow } from "enzyme";
-import React from "react";
-import { DocumentRevisionFormPresenter, Props } from "./DocumentRevisionForm.presenter";
-import { getDocumentRevision, getDocument } from "../../../state/ducks/documentRevisions/tests/factories";
-import { ASYNC_DEFAULT_STATE } from "../../hooks/useAsync";
 import faker from "faker";
-import { getAttachment } from "../../../state/ducks/attachments/tests/factories";
-import FormWrapper from "../../components/forms/FormWrapper";
-import ScrollToError from "../../components/forms/ScrollToError";
-import PromptIfDirty from "../../components/forms/PromptIfDirty";
-import FormMessage from "../../components/forms/FormMessage";
-import FormProgress from "../../components/forms/FormProgress";
-import SelectField from "../../components/forms/fields/Select";
-import { RevisionStageOptions, RevisionChangeType } from "../../../state/ducks/documentRevisions";
-import AutocompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
+import React from "react";
 import { Link } from "react-router-dom";
-import { documentVersionPath } from "../../document.revision/utils/paths";
+import { getAttachment } from "../../../state/ducks/attachments/tests/factories";
+import { RevisionChangeType, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
+import { getDocument, getDocumentRevision } from "../../../state/ducks/documentRevisions/tests/factories";
+import AutocompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import RadioButton from "../../components/forms/fields/RadioButton";
 import RadioGroupField from "../../components/forms/fields/RadioGroup";
+import SelectField from "../../components/forms/fields/Select";
+import FormMessage from "../../components/forms/FormMessage";
+import FormProgress from "../../components/forms/FormProgress";
+import FormWrapper from "../../components/forms/FormWrapper";
+import PromptIfDirty from "../../components/forms/PromptIfDirty";
+import ScrollToError from "../../components/forms/ScrollToError";
+import { documentVersionPath } from "../../document.revision/utils/paths";
+import { ASYNC_DEFAULT_STATE } from "../../hooks/useAsync";
+import { DocumentRevisionFormPresenter, Props } from "./DocumentRevisionForm.presenter";
 
 describe("DocumentRevisionFormPresenter tests", () => {
     const defaultProps: Props = {
@@ -104,7 +104,7 @@ describe("DocumentRevisionFormPresenter tests", () => {
             }],
             document: {...getDocument(), referencedBy: [getDocumentRevision()]},
         };
-        const wrapper = getWrapper({...defaultProps, initialValues: initialValues });        
+        const wrapper = getWrapper({...defaultProps, initialValues });
         const reference = initialValues.document.referencedBy[0];
 
         expect(wrapper.find(Link)).toHaveLength(1);

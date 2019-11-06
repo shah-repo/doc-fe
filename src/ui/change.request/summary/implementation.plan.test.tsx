@@ -1,10 +1,10 @@
-import { shallow } from "enzyme";
-import React from "react";
-import { ImplementationPlan,   Props } from "./implementation.plan";
-import faker from "faker";
 import { Grid } from "@material-ui/core";
+import { shallow } from "enzyme";
+import faker from "faker";
+import React from "react";
 import SummaryField from "../../common/summary/base";
 import CloseTask from "./close.task";
+import { ImplementationPlan,   Props } from "./implementation.plan";
 
 describe("ImplementationPlan with tasks tests", () => {
   const defaultProps: Props = {

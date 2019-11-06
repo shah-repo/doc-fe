@@ -1,5 +1,5 @@
 import { FormHelperText } from "@material-ui/core";
-import { mount, ReactWrapper } from "enzyme";
+import { mount } from "enzyme";
 import React from "react";
 import { AsyncStatus } from "../../../state/types";
 import FormMessage, { FormMessageProps } from "./FormMessage";

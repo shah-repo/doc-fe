@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import styles from "./BasicFields.module.css";
 
 interface MultiplePackagingProps {
@@ -24,7 +24,7 @@ const MultiplePackaging: React.FunctionComponent<MultiplePackagingProps> = ({
   const [showInput, setShowInput] = useState(false);
 
   useEffect(() => {
-    if (!editMode) updateValue(currentIndex, "packagings", packagings);
+    if (!editMode) { updateValue(currentIndex, "packagings", packagings); }
   }, [packagings]);
 
   const removePackage = (e: any) => {

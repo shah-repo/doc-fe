@@ -1,4 +1,4 @@
-import React, { Fragment, useState, ChangeEvent, MouseEvent } from "react";
+import React, { ChangeEvent, Fragment, useState } from "react";
 import styles from "./BasicFields.module.css";
 
 interface ApprovalCollectionProps {

@@ -21,14 +21,15 @@ interface AddDocumentRevisionContainerProps {
 export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRevisionContainerProps> = ({
   isOpen,
   close,
-  documentRevisionsList,
   setDocumentRevisionsList,
   documentsInChangeRequest,
   documentRevisionsById,
   tableName,
   tableState,
 }) => {
-  const [documentRevisionsToShow, setDocumentRevisionsToShow] = useState<DocumentRevision[]>([]);
+  const [documentRevisionsToShow, setDocumentRevisionsToShow] = useState<
+    DocumentRevision[]
+  >([]);
   const [addedDocuments, setAddedDocuments] = useState<string[]>([]);
   const addDocument = (documentRevisionId: string) =>
     setAddedDocuments(Array.from(

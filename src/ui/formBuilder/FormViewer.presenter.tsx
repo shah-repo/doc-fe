@@ -1,8 +1,8 @@
 import React from "react";
-import FormFieldViewer from "./FormFieldViewer";
-import styles from "./FormBuilder.module.css";
-import { formBuilderActions } from "../../state/ducks/formBuilder";
 import { connect } from "react-redux";
+import { formBuilderActions } from "../../state/ducks/formBuilder";
+import styles from "./FormBuilder.module.css";
+import FormFieldViewer from "./FormFieldViewer";
 
 interface OwnProps {
   elements: any;

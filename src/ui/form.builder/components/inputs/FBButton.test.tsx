@@ -1,5 +1,4 @@
-import { mount, ReactWrapper } from "enzyme";
-import { Form, Formik, FormikProps } from "formik";
+import { mount } from "enzyme";
 import React from "react";
 import { Props } from "./FBButton";
 import FBButton from "./FBButton";

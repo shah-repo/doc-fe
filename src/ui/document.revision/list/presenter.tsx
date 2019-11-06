@@ -14,6 +14,7 @@ import { TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import { generateVersionNumber } from "../../documentRevision/helpers";
+import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
 import {
   canEditDocumentRevision,
   documentRevisionQueryStatus,

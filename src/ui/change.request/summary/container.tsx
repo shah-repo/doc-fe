@@ -17,7 +17,6 @@ import {
   toChangeRequestFormValues,
 } from "../../changeRequest/forms/transform";
 import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
-import DocumentRevisionSummaryPresenter from "../../document.revision/summary/presenter";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
 import useAsync from "../../hooks/useAsync";
 import { canEditApprovers, canEditChangeRequest } from "../utils/helpers";

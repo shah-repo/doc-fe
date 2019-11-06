@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Attachment } from "../../../../../state/ducks/attachments";
 import { AsyncState } from "../../../../../state/types";
 

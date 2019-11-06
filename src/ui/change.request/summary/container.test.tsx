@@ -1,12 +1,12 @@
 import { shallow } from "enzyme";
-import React from "react";
-import { Container, Props } from "./container";
 import faker from "faker";
+import { Form, Formik } from "formik";
+import React from "react";
 import { getChangeRequest } from "../../../state/ducks/changeRequest/tests/factories";
+import ChangeRequestAuditContainer from "../../changeRequest/audit/Audit.container";
 import SummaryPresenter from "../../changeRequest/documentRevision/DocumentRevisionControlPreview.presenter";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
-import ChangeRequestAuditContainer from "../../changeRequest/audit/Audit.container";
-import { Formik, Form } from "formik";
+import { Container, Props } from "./container";
 import Presenter from "./presenter";
 
 describe("Container tests", () => {
@@ -27,7 +27,9 @@ describe("Container tests", () => {
 
   it("Props are set correctly", () => {
     const wrapper = getWrapper();
-    expect(wrapper.find(SummaryPresenter).prop("documentsInChangeRequest")).toEqual(defaultProps.dataProp.documentRevisions);
+    expect(
+      wrapper.find(SummaryPresenter).prop("documentsInChangeRequest"),
+    ).toEqual(defaultProps.dataProp.documentRevisions);
   });
 
   it("Displays correctly", () => {
