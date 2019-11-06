@@ -1,4 +1,3 @@
-import { FBStore } from "../stores/FBStore";
 import { FBEditorElementType } from "./editor";
 
 export interface FBTemplateSchema {
@@ -20,12 +19,10 @@ export interface FBTemplateSchema {
   linkUrl?: string;
 }
 
-export interface FBStoreProps {
-  formBuilderStore: FBStore;
-}
-
 export type FBDocumentRevisionMode =
+  | "none"
   | "create"
   | "update"
-  | "updateFromOther"
-  | "createFrom";
+  | "preview"
+  | "outputCreate"
+  | "outputPreview";

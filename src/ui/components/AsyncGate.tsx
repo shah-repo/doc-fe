@@ -1,9 +1,9 @@
 import { Button, LinearProgress, Typography, WithStyles, withStyles } from "@material-ui/core";
 import React, { useState } from "react";
 import { AsyncState, AsyncStatus } from "../../state/types";
+import useDidMount from "../hooks/useDidMount";
 import styles from "./AsyncGate.styles";
 import Text from "./Text";
-import useDidMount from "../hooks/useDidMount";
 
 export interface AsyncGateProps  {
   asyncState: AsyncState;
@@ -21,7 +21,7 @@ const AsyncGate: React.FunctionComponent<Props> = ({
   startActionOnMount = false,
 }) => {
   const didMount = useDidMount();
-  
+
   const runAsyncAction = () => {
     if (asyncAction) {
       asyncAction();

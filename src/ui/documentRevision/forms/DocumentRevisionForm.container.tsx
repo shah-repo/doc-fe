@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import { Formik, FormikActions, FormikProps } from "formik";
-import _, { Dictionary } from "lodash";
+import { get } from "lodash";
 import React from "react";
 import { connect } from "react-redux";
 import {
@@ -11,18 +11,13 @@ import {
   DocumentRevisionStatus,
 } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
-import {
-  documentsActions,
-  documentsSelectors,
-} from "../../../state/ducks/documents";
+import { documentsActions } from "../../../state/ducks/documents";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
-import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
-import formBuilderStore from "../../form.builder/stores/FBStore";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -30,7 +25,6 @@ interface StateProps {
   availableReferences: OptionType[];
   loadAsyncState: AsyncState;
   documentRevisions: DocumentRevision[];
-  proposedDocId: string;
   documentTypes: SelectOption[];
   documentTypesById: DocumentTypeByIdState;
   document: Document;
@@ -38,7 +32,6 @@ interface StateProps {
 
 interface DispatchProps {
   loadDocumentRevisions: typeof documentRevisionsActions.loadList;
-  loadDocumentProposedId: typeof documentsActions.loadDocumentProposedId;
 }
 
 interface OwnProps {
@@ -53,6 +46,8 @@ interface OwnProps {
   doNotPrompt?: boolean;
   onDirtyFlagChange?: (dirty: boolean) => void;
   documentRevision: DocumentRevision;
+  proposedDocId?: string;
+  loadDocumentProposedId?: typeof documentsActions.loadDocumentProposedId;
 }
 
 export type DocumentRevisionFormContainerProps = OwnProps & StateProps & DispatchProps;
@@ -65,10 +60,9 @@ const mapStateToProps = (
   availableReferences: getAvailableReferences(state, props.initialValues),
   loadAsyncState: documentRevisionsSelectors.getLoadListAsyncState(state),
   documentRevisions: documentRevisionsSelectors.getDocumentRevisionsList(state),
-  proposedDocId: documentsSelectors.getProposedDocId(state),
   documentTypes: documentTypeSelectors.getDocumentTypeFormOptions(state),
   documentTypesById: documentTypeSelectors.byId(state),
-  document: documentRevisionsSelectors.getDocument(state, _.get(props.initialValues, "document.id")!),
+  document: documentRevisionsSelectors.getDocument(state, get(props.initialValues, "document.id")!),
 });
 
 export const DocumentRevisionFormContainer: React.FunctionComponent<
@@ -93,21 +87,6 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
   document,
 }) => {
 
-  if (documentRevisionStore.mode !== "createFrom") {
-    const { formDocument, formTemplate } = initialValues;
-    if (!formTemplate && formDocument) {
-      documentRevisionStore.setMode("updateFromOther", initialValues as unknown as DocumentRevision);
-    } else {
-      documentRevisionStore.setMode("update", initialValues as unknown as DocumentRevision);
-    }
-  } else if (initialValues.document && initialValues.document.documentType) {
-    const { documentTypeAcronym } = initialValues.document.documentType;
-    loadDocumentProposedId(documentTypeAcronym || "");
-  }
-
-  if (initialValues.document && initialValues.document.documentType && document) {
-    initialValues.document.documentType.id = document.documentType.id;
-  }
   document = document || {} as Document;
 
   const render = (props: FormikProps<DocumentRevisionFormValues>) => {
@@ -160,10 +139,6 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
   );
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
-  mapStateToProps,
-  {
-    loadDocumentRevisions: documentRevisionsActions.loadList,
-    loadDocumentProposedId: documentsActions.loadDocumentProposedId,
-  },
-)(DocumentRevisionFormContainer);
+export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
+  loadDocumentRevisions: documentRevisionsActions.loadList,
+})(DocumentRevisionFormContainer);

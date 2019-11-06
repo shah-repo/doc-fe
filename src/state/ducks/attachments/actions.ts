@@ -1,7 +1,11 @@
 import { apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import { ATTACHMENT_ROOT_URL, ATTACHMENT_UPLOAD_URL } from "./constants";
-import { Attachment, AttachmentDownloadResponse, AttachmentType } from "./types";
+import {
+  Attachment,
+  AttachmentDownloadResponse,
+  AttachmentType,
+} from "./types";
 
 const upload = (file: File, handlers: Handlers<Attachment>): ApiAction => {
   const formData = new FormData();
@@ -16,14 +20,18 @@ const upload = (file: File, handlers: Handlers<Attachment>): ApiAction => {
   });
 };
 
-const download = (attachment: Attachment, handlers: Handlers<AttachmentDownloadResponse>, type?: AttachmentType): ApiAction => {
+const download = (
+  attachment: Attachment,
+  handlers: Handlers<AttachmentDownloadResponse>,
+  type?: AttachmentType,
+): ApiAction => {
   attachment.isLoading = true;
-  let queryParams = type ? `?type=${type}` : "";
+  const queryParams = type ? `?type=${type}` : "";
 
   return apiActionWithCallbacks<AttachmentDownloadResponse, string>({
     url: `${ATTACHMENT_ROOT_URL}/${attachment.id}/download${queryParams}`,
     method: "get",
-    onSuccess: () => attachment.isLoading = false,
+    onSuccess: () => (attachment.isLoading = false),
     handlers,
   });
 };

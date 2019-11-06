@@ -1,49 +1,35 @@
-import _, { Dictionary } from "lodash";
-import { action, autorun, computed, observable } from "mobx";
-import Config from "../../../config";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { DocumentGroupType } from "../../../state/ducks/documentRevisions/documentType";
-import { ThemeEnv } from "../../layout/theme/utils/types";
-import { FBEditorSectionConfig } from "../defaults/editor";
+import { Dictionary } from "lodash";
+import { action, computed, observable } from "mobx";
 import { FBFormDefaultProps } from "../types/common";
-import { FBFormTemplateProps } from "../types/formik";
 import { FBTemplateSchema } from "../types/store";
 import { FBWorkspaceMode } from "../types/workspace";
 import editorStore from "./FBEditorStore";
 
-export class FBStore {
+export class FormBuilderStore {
+  @computed get active(): boolean {
+    return this.mode !== "none";
+  }
+
   @computed get prefixName() {
     return `${this.schema.length}_${(this.name || "").replace(" ", "")}`;
-  }
-
-  @computed get formInput(): string {
-    const formInput = _.pick(this, ["documentOutputType", "schema", "values"]);
-    return JSON.stringify(formInput);
-  }
-
-  @computed get active(): boolean {
-    return this.groupType === "FORM";
   }
 
   @computed get fieldMode(): Partial<FBFormDefaultProps> {
     return {
       disabled: this.isDisabled(),
-      readOnly: this.isReadonly(),
+      // readOnly: this.isReadonly(),
       // className: this.isDisabled() ? FBClasses.inputDisabled : "",
     };
   }
+
   @observable public name?: string = undefined;
   @observable public schema: FBTemplateSchema[] = [];
-  @observable public values: { [key: string]: any } = {};
-  @observable public mode: FBWorkspaceMode = "design";
-  @observable public groupType: DocumentGroupType = "OTHER";
+  @observable public values: Dictionary<any> = {};
+  @observable public mode: FBWorkspaceMode = "none";
 
-  constructor() {
-    autorun(() => {
-      if (this.groupType === "OTHER") {
-        this.reset();
-      }
-    });
+  @action public setMode = (mode: FBWorkspaceMode) => {
+    this.mode = mode;
+    this.setModeConfig();
   }
 
   @action public getSchemaItem = (
@@ -52,103 +38,58 @@ export class FBStore {
     return this.schema[index];
   };
 
-  @action public removeSchemaItem = (index?: number) => () => {
+  @action public removeSchemaItem = (index?: number) => {
     if (index === undefined) {
       return;
     }
-    _.remove(this.schema, this.getSchemaItem(index));
-  };
+    const newSchema = this.schema.filter((o) => o.index !== index);
+    this.setSchema(newSchema);
+  }
 
-  @action public setSchema = (schema: FBTemplateSchema[]) => {
-    this.schema = schema;
-  };
-
-  @action public getValues = (): { [key: string]: any } | undefined => {
-    return _.isEmpty(this.values) ? undefined : this.values;
-  };
-
-  @action public reset = () => {
-    this.name = undefined;
-    this.schema = [];
-    this.values = {};
-    this.mode = "design";
-    this.groupType = "OTHER";
-    editorStore.reset();
-  };
-
-  @action public setFormTemplate = (formTemplate?: FBFormTemplateProps) => {
-    formTemplate
-      ? (this.schema = formTemplate.schema as FBTemplateSchema[])
-      : this.reset();
-  };
-
-  @action public setFormTemplateDesign = (
-    formTemplate?: FBFormTemplateProps,
-  ) => {
-    this.groupType = "FORM";
-    this.mode = "design";
-    this.setFormTemplate(formTemplate);
-  };
-
-  @action public setFormTemplatePreview = (
-    formTemplate?: FBFormTemplateProps,
-    inputValues?: Dictionary<any>,
-  ) => {
-    this.groupType = "FORM";
-    this.mode = "preview";
-    this.values = inputValues || {};
-    this.setFormTemplate(formTemplate);
-  };
-
-  @action public setFormTemplateForm = (
-    formTemplate?: FBFormTemplateProps,
-    inputValues?: Dictionary<any>,
-  ) => {
-    this.groupType = "FORM";
-    this.mode = "form";
-    this.values = inputValues || {};
-    this.setFormTemplate(formTemplate);
-  };
-
-  @action public importSchema = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const reader = new FileReader();
-    reader.onload = (event: any) => {
-      const schema = JSON.parse(event.target.result);
-      this.schema = schema;
-    };
-    if (e.currentTarget.files) {
-      reader.readAsText(e.currentTarget.files![0]);
+  @action public editSchemaItem = (index?: number) => {
+    if (index === undefined) {
+      return;
     }
-  };
+    const schema = this.getSchemaItem(index);
+    if (!schema) {
+      return;
+    }
+    editorStore.editorTypeEdit(schema);
+  }
 
-  @action public exportSchema = () => {
-    const dataStr =
-      "data:text/json;charset=utf-8," +
-      encodeURIComponent(JSON.stringify(this.schema));
-    const anchor = document.createElement("a");
-    anchor.style.display = "none";
-    document.body.appendChild(anchor);
-    anchor.download = `${this.name}.json`;
-    anchor.href = dataStr;
-    anchor.click();
-  };
+  @action public getSchema = (): FBTemplateSchema[] => {
+    return this.schema;
+  }
 
-  @action public setName = () => (
-    event: React.ChangeEvent<HTMLInputElement> | Date,
-  ) => {
-    return (this.name = (event as React.ChangeEvent<
-      HTMLInputElement
-    >).target.value);
-  };
+  @action public setSchema = (newSchema: FBTemplateSchema[]) => {
+    newSchema.map((o, i) => o.index = i);
+    this.schema = newSchema;
+  }
+
+  @action public getValues = () => {
+    return this.values;
+  }
+
+  @action public setValues = (values: Dictionary<any> | undefined) => {
+    this.values = values || {};
+  }
+
+  @action private setModeConfig = () => {
+    switch (this.mode) {
+      case "none":
+      case "design":
+        this.schema = [];
+        this.values = {};
+        break;
+      default:
+        return;
+    }
+  }
 
   @action private isDisabled = (): boolean => {
-    return this.mode === "preview";
-  };
-
-  @action private isReadonly = (): boolean => {
     return this.mode !== "form";
   };
 }
 
-const formBuilderStore = new FBStore();
-export default formBuilderStore;
+const FBStore = new FormBuilderStore();
+export default FBStore;

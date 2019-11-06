@@ -11,7 +11,7 @@ const DateFormatter: React.FunctionComponent<DateFormatterProps> = ({
   value,
   ...props
 }: DateFormatterProps) => {
-  if (!value) return null;
+  if (!value) { return null; }
 
   return <FormattedDate value={value} {...props} />;
 };

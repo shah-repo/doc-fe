@@ -1,4 +1,4 @@
-import { Box, Tooltip, Typography } from "@material-ui/core";
+import { Box, Tooltip } from "@material-ui/core";
 import Link from "@material-ui/core/Link";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
@@ -75,7 +75,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
     }
   };
 
-  const cellMeasurer = ({ parent, rowIndex, columnIndex, ... other }: any) => (
+  const cellMeasurer = ({ parent, rowIndex, columnIndex, ...other }: any) => (
     <CellMeasurer
       key={key}
       cache={measurerCache!}
@@ -91,7 +91,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
 
   const searchFieldRenderer = () => {
     if (omitSearch === true) {
-      return <Box style={{background: "transparent", height: 65}} />;
+      return <Box style={{background: "transparent", height: 62}} />;
     }
     const searchType = (searchOptions) ? searchOptions.searchType : "text";
     switch (searchType) {

@@ -12,7 +12,7 @@ export interface FBDialogInjectedProps {
   open: boolean;
   content?: React.ReactNode;
   title?: string | Translation | false;
-  setDialogOpen: () => any;
+  setDialogOpen?: () => any;
   setDialogClose: () => any;
   setDialogContent?: (content: React.ReactNode, title?: string | Translation | false) => any;
 }

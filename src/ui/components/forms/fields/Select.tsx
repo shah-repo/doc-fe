@@ -6,10 +6,10 @@ import {
   FieldProps as FormikFieldProps,
 } from "formik";
 import * as React from "react";
+import { TypographyProps } from "../../../../state/ducks/common";
 import Text from "../../Text";
 import Field, { FieldOwnProps } from "./Field";
 import { InputField } from "./Input.styles";
-import { TypographyProps } from "../../../../state/ducks/common";
 
 export interface SelectOption {
   value: string | number;
@@ -38,7 +38,7 @@ const Select: React.FunctionComponent<SelectPropsWithFormik> = ({
     </MenuItem>
   );
 
-  const Items = options.map(option => (
+  const Items = options.map((option) => (
     <MenuItem key={option.value} value={option.value}>
       <Text message={option.text} />
     </MenuItem>
@@ -49,7 +49,8 @@ const Select: React.FunctionComponent<SelectPropsWithFormik> = ({
       <MuiSelect
         {...fieldProps.field}
         {...selectProps}
-        input={<InputField name={fieldProps.field.name} />}>
+        input={<InputField name={fieldProps.field.name} />}
+      >
         {EmptyItem}
         {Items}
       </MuiSelect>
@@ -59,7 +60,7 @@ const Select: React.FunctionComponent<SelectPropsWithFormik> = ({
 
 type SelectFieldProps = SelectOwnProps & FieldConfig & Partial<TypographyProps>;
 
-const SelectField: React.FunctionComponent<SelectFieldProps> = props => (
+const SelectField: React.FunctionComponent<SelectFieldProps> = (props) => (
   <FormikField component={Select} {...props} />
 );
 

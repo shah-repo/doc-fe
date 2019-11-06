@@ -1,9 +1,8 @@
 import { Box } from "@material-ui/core";
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
+import _ from "lodash";
 import React from "react";
-import { withMouseOver } from "../../hocs/withMouseOver";
-import sortableStore from "../../stores/FBSortableStore";
-import formBuilderStore from "../../stores/FBStore";
+import { withEditorWrapper } from "../../hocs/withEditorWrapper";
 import { FBEditorWrapperProps } from "../../types/editor";
 import FBAddFieldButton from "../custom/FBAddFieldButton";
 import FBEditorFieldToolbar from "../custom/FBEditorFieldToolbar";
@@ -11,18 +10,12 @@ import FBEditorFieldToolbar from "../custom/FBEditorFieldToolbar";
 const FBEditorWrapper: React.FunctionComponent<FBEditorWrapperProps> = ({
   visibility,
   indicatorVisibility,
-  toolbarMargin,
   indicatorMargin,
+  onMouseDown,
   ...props
-}) => {
-
-  return (
-  <Box {...props}>
-    <FBEditorFieldToolbar
-      visibility={visibility}
-      mb={toolbarMargin}
-      {...props}
-    />
+}) => (
+  <Box {..._.omit(props, ["removeSchemaItem", "editSchemaItem"])}>
+    <FBEditorFieldToolbar visibility={visibility} {...props}/>
     <Box display="flex" flexDirection="row">
       <Box width="100%">{props.children}</Box>
       <Box
@@ -32,15 +25,12 @@ const FBEditorWrapper: React.FunctionComponent<FBEditorWrapperProps> = ({
         alignItems="center"
         visibility={indicatorVisibility}
         style={{cursor: "grab"}}
-        // onMouseDown={props.onMouseDown}
       >
         <DragIndicatorIcon  />
       </Box>
     </Box>
-    <FBAddFieldButton visibility={visibility} />
+    <FBAddFieldButton visibility={visibility} index={props.index} />
   </Box >
 );
 
-};
-
-export default withMouseOver(FBEditorWrapper);
+export default withEditorWrapper(FBEditorWrapper);

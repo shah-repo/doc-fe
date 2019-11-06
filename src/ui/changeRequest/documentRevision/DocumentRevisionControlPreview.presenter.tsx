@@ -1,6 +1,4 @@
 import { Fab, WithStyles, withStyles } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import Chip from "@material-ui/core/Chip";
 import React from "react";
 
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";

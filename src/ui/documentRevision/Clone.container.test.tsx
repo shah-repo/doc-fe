@@ -1,15 +1,16 @@
-import React from "react";
 import { shallow } from "enzyme";
-import { CloneContainer, CloneContainerProps } from "./Clone.container";
+import React from "react";
+import { DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import { getDocumentRevision } from "../../state/ducks/documentRevisions/tests/factories";
 import { documentVersionPath } from "../document.revision/utils/paths";
-import { DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
+import { CloneContainer, CloneContainerProps } from "./Clone.container";
 import DocumentRevisionCreateContainer from "./DocumentRevisionCreate.container";
 
 describe("Clone container redirect test", () => {
   const defaultProps: CloneContainerProps = {
     disableCreateNewVersion: true,
     documentRevision: getDocumentRevision(),
+    type: "newVersion",
   };
 
   const getWrapper = (props: Partial<CloneContainerProps>= {}) => shallow (
@@ -30,6 +31,7 @@ describe("Clone container test", () => {
   const defaultProps: CloneContainerProps = {
     disableCreateNewVersion: false,
     documentRevision: {...getDocumentRevision(), status: DocumentRevisionStatus.Released},
+    type: "newVersion",
   };
 
   const getWrapper = (props: Partial<CloneContainerProps>= {}) => shallow (

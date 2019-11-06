@@ -5,7 +5,8 @@ import { withLabelRenderer } from "../../hocs/withLabelRenderer";
 import { withOnChange } from "../../hocs/withOnChange";
 import { FBFormDefaultProps, FBOnChangeProps } from "../../types/common";
 
-export type Props = Omit<OutlinedTextFieldProps, "variant"> &
+export type Props =
+  Omit<OutlinedTextFieldProps, "variant"> &
   FBFormDefaultProps &
   FBOnChangeProps;
 

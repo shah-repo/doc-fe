@@ -5,11 +5,11 @@ import { redirectTo } from "../../common/redirectHandler";
 import Config from "../../config";
 import PrivateRouteContainer from "../components/routes/PrivateRoute.container";
 import { LOGIN_URL, LOGIN_WITH_CODE_URL, SIGNUP_URL, STATUS } from "../constants/urls";
+import StatusPresenter from "../status/Status.presenter";
 import LoginContainer from "../users/Login.container";
 import LoginWithCodeContainer from "../users/LoginWithCode.container";
 import styles from "./App.styles";
 import Layout from "./Layout";
-import StatusPresenter from "../status/Status.presenter";
 
 interface Props extends WithStyles<typeof styles> {}
 

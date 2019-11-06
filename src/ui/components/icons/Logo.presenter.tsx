@@ -1,4 +1,3 @@
-import SvgIcon from "@material-ui/core/SvgIcon";
 import React from "react";
 import Config from "../../../config";
 import Text from "../../components/Text";

@@ -1,4 +1,4 @@
-import _ from "lodash";
+
 import { combineReducers } from "redux";
 import { LOGOUT_USER } from "../auth/constants";
 import { LogoutUserAction } from "../auth/types";

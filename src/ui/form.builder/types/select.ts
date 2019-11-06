@@ -1,5 +1,4 @@
 import { SelectProps } from "@material-ui/core/Select";
-import { SelectOption } from "../../components/forms/fields/Select";
 import {
   FBFormDefaultProps,
   FBLabelRendererProps,

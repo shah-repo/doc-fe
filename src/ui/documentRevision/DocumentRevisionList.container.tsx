@@ -10,13 +10,15 @@ import { generateDocumentRevisionVersionPath } from "./pathGenerators";
 interface OwnProps {
   documentRevisions: DocumentRevision[];
   documentId: string;
+  docId: string;
 }
 
 export type DocumentRevisionListContainerProps = OwnProps;
 
+// TODO: check if this component is used
 export const DocumentRevisionListContainer: React.FunctionComponent<
   DocumentRevisionListContainerProps
-> = ({ documentRevisions, documentId }) => {
+> = ({ documentRevisions, documentId, docId }) => {
   const classes = styles();
 
   return (
@@ -26,7 +28,6 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
           documentRevision.id,
           documentId,
         );
-
         return (
           <div key={documentRevision.id} className={classes.linkContainer}>
             <NavLink
@@ -35,11 +36,13 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
               activeClassName={classes.activeLinkTitle}
             >
               <div>
-                <Text translation="documentRevision.version" />{" "}
+                <Text translation="common.version" />
+                &nbsp;
                 {generateVersionNumber(
                   documentRevision.revision,
                   documentRevision.revisionStage,
-                )}{" "}
+                )}
+                &nbsp;
                 - {documentRevision.status}
               </div>
             </NavLink>
@@ -49,11 +52,19 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
               className={classes.linkBody}
             >
               <div>
+                <Text translation="common.title" />:{" "}
+                {documentRevision.name}
+              </div>
+              <div>
+                <Text translation="common.documentId" />:{" "}
+                {docId}
+              </div>
+              <div>
                 <Text translation="common.owner" />:{" "}
                 {documentRevision.owner.name}
               </div>
               <div>
-                <Text translation="documentRevision.released" />:{" "}
+                <Text translation="common.released" />:{" "}
                 <Date
                   value={
                     documentRevision.obsoletedAt || documentRevision.releasedAt

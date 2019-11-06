@@ -5,8 +5,9 @@ import {
   FieldConfig,
   FieldProps as FormikFieldProps,
 } from "formik";
+// tslint:disable-next-line: no-implicit-dependencies
 import { QuillOptionsStatic } from "quill";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import { RenderSize } from "../../../../../state/ducks/common";
 import useComponentVisible from "../../../../hooks/useComponentVisible";
@@ -43,6 +44,7 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
     isComponentVisible,
     setIsComponentVisible,
   } = useComponentVisible(false);
+  const refEditor = useRef<ReactQuill>(null);
 
   const [toolbar, setToolbar] = useState<any>({});
 
@@ -70,7 +72,7 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
 
   const handleChange = (editHtml: string) => {
     // when you click on an empty editor Quill injects some HTML
-    const value = editHtml === reactQuillEmptyString ? null : editHtml;
+    const value = editHtml === reactQuillEmptyString ? "" : editHtml;
     fieldProps.form.setFieldValue(fieldProps.field.name, value);
   };
   const handleBlur = (e: any) => {
@@ -84,7 +86,9 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
     }
   };
 
-  const handleFocus = () => setIsComponentVisible(true);
+  const handleFocus = () => {
+    setIsComponentVisible(true);
+  };
 
   return (
     <Field
@@ -103,6 +107,7 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
       >
         <Box hidden={hidden}>
           <ReactQuill
+            ref={refEditor}
             theme="snow"
             bounds=".editor-container"
             modules={{
