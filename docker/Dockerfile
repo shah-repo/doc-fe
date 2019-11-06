@@ -24,7 +24,8 @@ RUN chmod a+x runTests.sh
 
 # install dependencies
 RUN apk add git
-RUN yarn install --pure-lockfile
+RUN yarn install
+RUN yarn add jest-junit
 
 # build the app
 RUN yarn build
