@@ -22,7 +22,8 @@ COPY aws/bash_scripts/runTests.sh runTests.sh
 
 RUN chmod a+x runTests.sh
 
-# install dependencies 
+# install dependencies
+RUN apk add git
 RUN yarn install
 RUN yarn add jest-junit
 
