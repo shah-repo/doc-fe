@@ -3,7 +3,7 @@ import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
 
 const isAuthenticated = (state: ApplicationState): boolean => {
-  return Boolean(state.auth.tokens.id.value);
+  return Boolean(state.auth.user.sessionId);
 };
 
 const currentUserEmail = (state: ApplicationState): string => {

@@ -3,7 +3,6 @@ import { Action, Dispatch, Middleware, MiddlewareAPI } from "redux";
 import apiClient from "../../apiClient";
 import { ApplicationState } from "../../reducers";
 import { ApiAction, AsyncAction, AsyncStatus } from "../../types";
-import refreshTokenOperation from "./refreshToken";
 import { AsyncActionErrorResponse } from "./types";
 
 export const CALL_API = "middlewares/CALL_API";
@@ -52,8 +51,7 @@ const apiMiddleware: Middleware =
           }
 
           if (action.includeAuthorization) {
-            await refreshTokenOperation(dispatch, getState());
-            requestConfig.headers.Authorization = getState().auth.tokens.id.value;
+            requestConfig.headers.Authorization = `bearer ${getState().auth.user.employeeId}:${getState().auth.user.sessionId}`;
           }
 
           const { data } = await apiClient.request(requestConfig);

@@ -16,7 +16,7 @@ describe("auth selectors tests", () => {
     });
 
     it("user is authenticated", () => {
-      state.auth.tokens.id.value = "ID_TOKEN";
+      state.auth.user.sessionId = "ID_TOKEN";
       expect(authSelectors.isAuthenticated(state)).toBe(true);
     });
   });

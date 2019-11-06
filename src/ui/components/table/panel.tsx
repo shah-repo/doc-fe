@@ -13,7 +13,6 @@ import {
 import { useDebounce } from "use-debounce";
 import apiClient from "../../../state/apiClient";
 import { tableSearchActions, tableSearchSelectors } from "../../../state/ducks/tableSearch";
-import refreshTokenOperation from "../../../state/middlewares/api/refreshToken";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { ApplicationState } from "../../../state/reducers";
 import { store } from "../../../state/store";
@@ -89,8 +88,7 @@ export function TablePanel<T extends any>({
         headers: {},
       };
 
-      await refreshTokenOperation(store.dispatch, store.getState());
-      requestConfig.headers.Authorization = store.getState().auth.tokens.id.value;
+      requestConfig.headers.Authorization = `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`;
 
       let { data } = await apiClient.request(requestConfig);
       if (customDataSet) {

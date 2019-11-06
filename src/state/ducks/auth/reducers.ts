@@ -40,6 +40,8 @@ export const USER_DEFAULT_STATE: UserState = {
   email: "",
   name: "",
   id: "",
+  employeeId: "",
+  sessionId: "",
 };
 
 type AuthUserActions = AuthUserAction | LogoutUserAction;
@@ -47,7 +49,14 @@ type AuthUserActions = AuthUserAction | LogoutUserAction;
 export const user = (state: UserState = USER_DEFAULT_STATE, action: AuthUserActions): UserState => {
   switch (action.type) {
     case AUTH_USER:
-      return { ...state, email: action.payload.email, name: action.payload.name, id: action.payload.id };
+      return {
+        ...state,
+        email: action.payload.email,
+        name: action.payload.name,
+        id: action.payload.id,
+        employeeId: action.payload.employeeId,
+        sessionId: action.payload.sessionId,
+      };
     case LOGOUT_USER:
       return { ...USER_DEFAULT_STATE };
     default:
