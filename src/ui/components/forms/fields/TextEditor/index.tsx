@@ -7,15 +7,15 @@ import {
 } from "formik";
 // tslint:disable-next-line: no-implicit-dependencies
 import { QuillOptionsStatic } from "quill";
-import React, { useEffect, useRef, useState, useMemo } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import ReactQuill from "react-quill";
+import { sanitizeHtml } from "../../../../../common/utils/helpers";
 import { RenderSize } from "../../../../../state/ducks/common";
 import useComponentVisible from "../../../../hooks/useComponentVisible";
 import Field, { FieldOwnProps } from "../Field";
 import { reactQuillEmptyString } from "../validators";
 import { formats, modules } from "./configuration";
 import "./textEditor.css";
-import { sanitizeHtml } from "../../../../../common/utils/helpers";
 
 export interface TextEditorOwnProps extends FieldOwnProps {
   quillOptions?: QuillOptionsStatic;
