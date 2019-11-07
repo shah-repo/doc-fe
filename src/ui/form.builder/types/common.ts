@@ -1,5 +1,6 @@
 import { SelectProps } from "@material-ui/core/Select";
 import { OutlinedTextFieldProps } from "@material-ui/core/TextField";
+import { ValueType } from "react-select/src/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
 import { FBEditorElementType } from "./editor";
@@ -34,11 +35,15 @@ export type FBFormDefaultProps = FBLabelRendererProps &
     linkUrl?: string;
   };
 
+export type FBOnChangeType =
+  | React.ChangeEvent<HTMLInputElement>
+  | ValueType<SelectOption>
+  | string
+  | Date;
+
 export type FBOnChangeProps = FormikHybridFieldProps &
   Pick<SelectProps, "onChange" | "value"> &
   Pick<OutlinedTextFieldProps, "onChange"> & {
     value?: any;
-    onChange?: () => (
-      trigger: React.ChangeEvent<HTMLInputElement> | Date,
-    ) => any;
+    onChange?: (trigger: any) => void;
   };

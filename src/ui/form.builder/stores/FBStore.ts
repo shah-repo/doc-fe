@@ -32,11 +32,19 @@ export class FormBuilderStore {
     this.setModeConfig();
   }
 
+  @action public setName = (name: string) => {
+    this.name = name;
+  }
+
+  @action public getName = (): string | undefined => {
+    return this.name;
+  }
+
   @action public getSchemaItem = (
     index: number,
   ): FBTemplateSchema | undefined => {
     return this.schema[index];
-  };
+  }
 
   @action public removeSchemaItem = (index?: number) => {
     if (index === undefined) {
@@ -88,7 +96,7 @@ export class FormBuilderStore {
 
   @action private isDisabled = (): boolean => {
     return this.mode !== "form";
-  };
+  }
 }
 
 const FBStore = new FormBuilderStore();

@@ -14,7 +14,7 @@ export function withOnChange<T extends FBOnChangeProps>(
       return (
         <Component
           {...(this.props as T)}
-          onChange={(onChange && onChange()) || this.handleChange()}
+          onChange={((onChange && onChange) || this.handleChange)}
           value={(field.value && field.value) || null}
         />
       );
@@ -28,7 +28,7 @@ export function withOnChange<T extends FBOnChangeProps>(
       );
     }
 
-    private handleChange = () => (trigger: any) => {
+    private handleChange = (trigger: any) => {
       const { form, field } = this.props;
       let value: any;
 

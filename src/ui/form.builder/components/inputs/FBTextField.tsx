@@ -1,20 +1,13 @@
 import { Box, TextField } from "@material-ui/core";
-import { OutlinedTextFieldProps } from "@material-ui/core/TextField";
 import React from "react";
 import { withLabelRenderer } from "../../hocs/withLabelRenderer";
 import { withOnChange } from "../../hocs/withOnChange";
-import { FBFormDefaultProps, FBOnChangeProps } from "../../types/common";
+import { FBTextFieldProps } from "../../types/textfield";
 
-export type Props =
-  Omit<OutlinedTextFieldProps, "variant"> &
-  FBFormDefaultProps &
-  FBOnChangeProps;
-
-const FBTextField: React.FunctionComponent<
-  Omit<Props, "onChange"> & {
-    onChange?: () => (e: React.ChangeEvent<HTMLInputElement> | Date) => any;
-  }
-> = ({ labelRenderer, ...props }) => (
+const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
+  labelRenderer,
+  ...props
+}) => (
   <Box mb={4} width="100%">
     {labelRenderer}
     <TextField
