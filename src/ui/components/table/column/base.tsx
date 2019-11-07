@@ -7,6 +7,7 @@ import {
   Column,
   TableCellProps as ColumnProps,
   SortDirectionType,
+  SortIndicator,
 } from "react-virtualized";
 import Text from "../../Text";
 import { TableSearchSelectField } from "../search/select";
@@ -37,7 +38,6 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
     omitSearch,
     cellHref,
     sortable,
-    sortDirection,
   } = props;
   const { measurerCache, searchable, queryGetter } = innerProps;
 
@@ -131,27 +131,17 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
     }
   };
 
-  const sortRenderer = (sortDirection: SortDirectionType) => {
-    const classNames =
-      sortDirection === "ASC" ? `sort_ascending` : `sort_descending`;
-    return (
-      <svg className={classNames} width={18} height={18} viewBox="0 0 24 24">
-        {sortDirection === "ASC" ? (
-          <path d="M7 14l5-5 5 5z" />
-        ) : (
-          <path d="M7 10l5 5 5-5z" />
-        )}
-        <path d="M0 0h24v24H0z" fill="none" />
-      </svg>
-    );
-  };
-
-  const headerRenderer = () => (
+  const headerRenderer = (props: {
+    dataKey: string;
+    sortBy?: string | undefined;
+    sortDirection?: SortDirectionType | undefined;
+  }): React.ReactNode => (
     <StyledTableHeader component="div" variant="head">
       <Box component="div" className="columnBox">
         <Box height="50px" pt={2} pl={1}>
           <Text message={label} />
-          {sortable && sortRenderer(sortDirection!)}
+
+          {sortable && <SortIndicator sortDirection={props.sortDirection} />}
         </Box>
         {searchable && (
           <Box component="div" className="headerField">

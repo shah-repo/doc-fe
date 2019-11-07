@@ -9,6 +9,7 @@ import {
   Size,
   Table,
   SortDirectionType,
+  SortDirection,
 } from "react-virtualized";
 import { useDebounce } from "use-debounce";
 import apiClient from "../../../state/apiClient";
@@ -25,7 +26,7 @@ import {
   TableStyleProps,
   TableSortProps,
 } from "./types";
-import SortDirection from "./SortDirection";
+
 import _ from "lodash";
 
 type Props<T> = TablePanelProps<T>;
@@ -56,7 +57,7 @@ export function TablePanel<T extends any>({
     sortDirection: SortDirectionType,
   ) => {
     let sortedData = _.sortBy(data, `document.${sortBy}`);
-    sortedData = sortDirection === "ASC" ? (data as T[]) : data.reverse();
+    sortedData = sortDirection === "DESC" ? sortedData.reverse() : sortedData;
 
     return sortedData;
   };
@@ -193,9 +194,7 @@ export function TablePanel<T extends any>({
 
   const sort = ({ sortBy, sortDirection }: TableSortProps<T>) => {
     let sortedData = processData(state.queryData, sortBy!, sortDirection!);
-    // let sortedData = _.sortBy(state.queryData, `document.${sortBy}`);
-    // sortedData =
-    //   sortDirection === "ASC" ? (sortedData as T[]) : sortedData.reverse();
+    const newSortDirection = sortDirection === "ASC" ? "DESC" : "ASC";
     setState({
       ...state,
       queryData: sortedData,
