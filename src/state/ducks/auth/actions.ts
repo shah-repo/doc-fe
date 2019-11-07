@@ -19,7 +19,6 @@ import {
   USER_PERMISSIONS,
   USER_PERMISSIONS_GET_ASYNC,
 } from "./constants";
-import authSelectors from "./selectors";
 import {
   AuthResponse,
   AuthTokensAction,
@@ -81,7 +80,12 @@ const login = (loginValues: LoginRequestBody, handlers: Handlers):
     data: loginValues,
     includeAuthorization: false,
     onSuccess: (data, dispatch) => {
-      dispatch(authUser({ email: loginValues.email, name: data.name, id: data.id, sessionId: data.sessionId, employeeId: data.employees[0].id }));
+      dispatch(authUser({
+        email: loginValues.email,
+        name: data.name, id: data.id,
+        sessionId: data.sessionId,
+        employeeId: data.employees[0].id,
+      }));
       dispatch(authTokens(data));
       dispatch(companyActions.selectCompany(data.company));
     },
@@ -95,7 +99,13 @@ const loginWithCode = (loginValues: LoginWithCodeRequestBody, handlers: Handlers
     data: loginValues,
     includeAuthorization: false,
     onSuccess: (response, dispatch) => {
-      dispatch(authUser({ email: response.email, name: response.name, id: response.id, sessionId: response.sessionId, employeeId: response.employees[0].id }));
+      dispatch(authUser({
+        email: response.email,
+        name: response.name,
+        id: response.id,
+        sessionId: response.sessionId,
+        employeeId: response.employees[0].id,
+      }));
       dispatch(authTokens(response));
     },
     onFailure: (m, dispatch) => {
@@ -108,7 +118,6 @@ const logout = (): ThunkAction<void, ApplicationState, any, AnyAction> => (dispa
   const action: ApiAction<any, LogoutRequestBody> = apiAction({
     url: LOGOUT_URL,
     method: "post",
-    data: { AccessToken: authSelectors.accessToken(getState()) },
     onCompleted: () => {
       dispatch(logoutUser());
     },
@@ -133,7 +142,7 @@ const pingServer = ():
     asyncType: PING_SERVER_GET_ASYNC,
     method: "get",
     onFailure: (message, dispatch) => {
-      // dispatch(logoutUser());
+      dispatch(logoutUser());
     },
   });
 

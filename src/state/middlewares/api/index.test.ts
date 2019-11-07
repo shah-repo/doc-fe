@@ -56,20 +56,20 @@ describe("api middleware test", () => {
   });
 
   describe("when call is successful", () => {
-    const ID_TOKEN = "ID_TOKEN";
+    const SESSION_ID = "SESSION_ID";
+    const EMPLOYEE_ID = "EMPLOYEE_ID";
 
     const onSuccess = jest.fn();
     const onCompleted = jest.fn();
     const onFailure = jest.fn();
     const dispatchCalls: any[] = [];
-
+    const state = _.cloneDeep(initialStoreState);
+    state.auth.user.sessionId = "SESSION_ID";
+    state.auth.user.employeeId = "EMPLOYEE_ID";
     let action: ApiAction;
 
     beforeAll(async () => {
       requestConfig = {};
-
-      const state = _.cloneDeep(initialStoreState);
-      state.auth.tokens.id.value = ID_TOKEN;
 
       ({ store, next, invoke, defaultState } = middlewareMockStore(api, state));
 
@@ -102,7 +102,8 @@ describe("api middleware test", () => {
     });
 
     it("sets Authorization in request headers", () => {
-      expect(requestConfig.headers).toMatchObject({ Authorization: "bearer :" });
+      expect(requestConfig.headers).toMatchObject({
+        Authorization: `bearer ${EMPLOYEE_ID}:${SESSION_ID}` });
     });
 
     it("correctly configured axios requst", () => {
@@ -112,7 +113,7 @@ describe("api middleware test", () => {
         params: action.params,
         url: `${Config.ApiEndpoint}${action.url}`,
         headers: expect.objectContaining({
-          Authorization: "bearer :",
+          Authorization: `bearer ${EMPLOYEE_ID}:${SESSION_ID}`,
         }),
       });
     });

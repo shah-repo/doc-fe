@@ -51,7 +51,8 @@ const apiMiddleware: Middleware =
           }
 
           if (action.includeAuthorization) {
-            requestConfig.headers.Authorization = `bearer ${getState().auth.user.employeeId}:${getState().auth.user.sessionId}`;
+            requestConfig.headers.Authorization =
+            `bearer ${getState().auth.user.employeeId}:${getState().auth.user.sessionId}`;
           }
 
           const { data } = await apiClient.request(requestConfig);

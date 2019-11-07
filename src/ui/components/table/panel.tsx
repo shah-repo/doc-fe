@@ -12,7 +12,10 @@ import {
 } from "react-virtualized";
 import { useDebounce } from "use-debounce";
 import apiClient from "../../../state/apiClient";
-import { tableSearchActions, tableSearchSelectors } from "../../../state/ducks/tableSearch";
+import {
+  tableSearchActions,
+  tableSearchSelectors,
+} from "../../../state/ducks/tableSearch";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { ApplicationState } from "../../../state/reducers";
 import { store } from "../../../state/store";
@@ -36,12 +39,11 @@ export function TablePanel<T extends any>({
   tableName,
   providedData,
 }: Props<T>) {
-
   const didMount = useDidMount();
   const queryDelay = 300;
   let lastQueryValue: string = "";
-  const headerHeight = (searchable) ? 117 : 50;
-  const styleProps: TableStyleProps = { isSelectable: (onSelect !== undefined) };
+  const headerHeight = searchable ? 117 : 50;
+  const styleProps: TableStyleProps = { isSelectable: onSelect !== undefined };
   const classes = styles(styleProps);
 
   const tableState = useSelector((reduxState: ApplicationState) =>
@@ -61,21 +63,27 @@ export function TablePanel<T extends any>({
   }, []);
 
   const queryGetter = (key: string, value: string) => {
-    if (!queryUrl) { return; }
+    if (!queryUrl) {
+      return;
+    }
     lastQueryValue = value;
 
-    if (lastQueryValue !== value) { return; }
+    if (lastQueryValue !== value) {
+      return;
+    }
     let dict = { ...tableState.queryDict };
-    (value === "") ? delete dict[key] : dict[key] = value;
+    value === "" ? delete dict[key] : (dict[key] = value);
 
     if (customQuerySet) {
       dict = customQuerySet(dict);
     }
 
-    dispatch(tableSearchActions.setSearchCriteria(
-      {...tableState, queryDict: dict},
-      tableName,
-    ));
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        { ...tableState, queryDict: dict },
+        tableName,
+      ),
+    );
   };
 
   const queryApi = async () => {
@@ -88,31 +96,44 @@ export function TablePanel<T extends any>({
         headers: {},
       };
 
-      requestConfig.headers.Authorization = `bearer ${store.getState().auth.user.employeeId}:${store.getState().auth.user.sessionId}`;
+      requestConfig.headers.Authorization = `bearer ${
+        store.getState().auth.user.employeeId
+      }:${store.getState().auth.user.sessionId}`;
 
       let { data } = await apiClient.request(requestConfig);
       if (customDataSet) {
         data = customDataSet(data);
       }
 
-      dispatch(tableSearchActions.setSearchCriteria(
-        {...tableState, queryData: data as T[], apiError: "", scrollToIndex: 0},
-        tableName,
-      ));
+      dispatch(
+        tableSearchActions.setSearchCriteria(
+          {
+            ...tableState,
+            queryData: data as T[],
+            apiError: "",
+            scrollToIndex: 0,
+          },
+          tableName,
+        ),
+      );
     } catch (exception) {
       let responseMessage: string = "";
 
       if (exception.response) {
-        const { data: { message } } = exception.response as AsyncActionErrorResponse;
-        responseMessage = (Array.isArray(message)) ? message.join("; ") : message;
+        const {
+          data: { message },
+        } = exception.response as AsyncActionErrorResponse;
+        responseMessage = Array.isArray(message) ? message.join("; ") : message;
       }
 
       const errorMessage: string = responseMessage || exception.message;
 
-      dispatch(tableSearchActions.setSearchCriteria(
-        {...tableState, apiError: "Error: " + errorMessage},
-        tableName,
-      ));
+      dispatch(
+        tableSearchActions.setSearchCriteria(
+          { ...tableState, apiError: "Error: " + errorMessage },
+          tableName,
+        ),
+      );
     }
   };
 
@@ -144,25 +165,23 @@ export function TablePanel<T extends any>({
         headerClassName={classes.header}
         rowGetter={rowGetter}
         noRowsRenderer={noRowsRenderer}
-        onRowClick={onSelect && (({rowData}) => onSelect({rowData})())}
+        onRowClick={onSelect && (({ rowData }) => onSelect({ rowData })())}
         scrollToIndex={tableState.scrollToIndex}
       >
-        {columns.map((item) => TableColumn<T>(item, { measurerCache, searchable, queryGetter }))}
+        {columns.map((item) =>
+          TableColumn<T>(item, { measurerCache, searchable, queryGetter }),
+        )}
       </Table>
     );
   };
 
   const bodyRenderer = () => {
-    return (
-      <AutoSizer>
-        {tableRenderer}
-      </AutoSizer>
-    );
+    return <AutoSizer>{tableRenderer}</AutoSizer>;
   };
 
   return (
     <Box className={classes.root}>
-      <div style={{color: "red"}}>{tableState.apiError}</div>
+      <div style={{ color: "red" }}>{tableState.apiError}</div>
       {bodyRenderer()}
     </Box>
   );
