@@ -194,7 +194,7 @@ export function TablePanel<T extends any>({
 
   const sort = ({ sortBy, sortDirection }: TableSortProps<T>) => {
     let sortedData = processData(state.queryData, sortBy!, sortDirection!);
-    const newSortDirection = sortDirection === "ASC" ? "DESC" : "ASC";
+
     setState({
       ...state,
       queryData: sortedData,
