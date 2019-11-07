@@ -23,7 +23,9 @@ import {
   TablePanelProps,
   TablePanelStateProps,
   TableStyleProps,
+  TableSortProps,
 } from "./types";
+import SortDirection from "./SortDirection";
 import _ from "lodash";
 
 type Props<T> = TablePanelProps<T>;
@@ -47,20 +49,30 @@ export function TablePanel<T extends any>({
   const styleProps: TableStyleProps = {
     isSelectable: onSelect !== undefined,
   };
+
+  const processData = (
+    data: T[],
+    sortBy: string,
+    sortDirection: SortDirectionType,
+  ) => {
+    let sortedData = _.sortBy(data, `document.${sortBy}`);
+    sortedData = sortDirection === "ASC" ? (data as T[]) : data.reverse();
+
+    return sortedData;
+  };
+
   const classes = styles(styleProps);
+  const sortDirection = SortDirection.DESC;
+  const sortedData = processData(tableData, sortBy!, sortDirection!);
 
   const [state, setState] = useState<TablePanelStateProps<T>>({
-    queryData: tableData,
+    queryData: sortedData,
     queryDict: {},
     apiError: "",
     scrollToIndex: 0,
-    sortDirection: "ASC",
+    sortDirection,
   });
   const [debouncedQuery] = useDebounce(state.queryDict, queryDelay);
-
-  useEffect(() => {
-    console.log(state.sortDirection);
-  }, [state.sortDirection]);
 
   useEffect(() => {
     if (didMount) {
@@ -104,9 +116,12 @@ export function TablePanel<T extends any>({
       if (customDataSet) {
         data = customDataSet(data);
       }
+
+      const sortedData = processData(data, sortBy!, state.sortDirection!);
+
       setState({
         ...state,
-        queryData: data as T[],
+        queryData: sortedData,
         apiError: "",
         scrollToIndex: 0,
       });
@@ -176,14 +191,15 @@ export function TablePanel<T extends any>({
     );
   };
 
-  const sort = (info: { sortBy: string; sortDirection: SortDirectionType }) => {
-    let sortedData = _.sortBy(state.queryData, `document.${info.sortBy}`);
-    sortedData =
-      info.sortDirection === "ASC" ? (sortedData as T[]) : sortedData.reverse();
+  const sort = ({ sortBy, sortDirection }: TableSortProps<T>) => {
+    let sortedData = processData(state.queryData, sortBy!, sortDirection!);
+    // let sortedData = _.sortBy(state.queryData, `document.${sortBy}`);
+    // sortedData =
+    //   sortDirection === "ASC" ? (sortedData as T[]) : sortedData.reverse();
     setState({
       ...state,
       queryData: sortedData,
-      sortDirection: info.sortDirection === "ASC" ? "DESC" : "ASC",
+      sortDirection,
     });
   };
 

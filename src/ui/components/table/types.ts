@@ -14,6 +14,11 @@ export interface TableSelectionProps<T> {
   actionType?: TableColumnActionType;
 }
 
+export interface TableSortProps<T> {
+  sortDirection?: SortDirectionType;
+  sortBy?: string;
+}
+
 export interface TablePanelProps<T> {
   tableData: T[];
   columns: Array<TableColumnProps<T>>;
@@ -33,7 +38,7 @@ export interface TablePanelStateProps<T> {
   queryDict: TableSearchQueryType;
   apiError: string;
   scrollToIndex: number;
-  sortDirection?: SortDirectionType | undefined;
+  sortDirection?: SortDirectionType;
   sortBy?: string;
 }
 

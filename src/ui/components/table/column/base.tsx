@@ -151,13 +151,13 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
       <Box component="div" className="columnBox">
         <Box height="50px" pt={2} pl={1}>
           <Text message={label} />
+          {sortable && sortRenderer(sortDirection!)}
         </Box>
         {searchable && (
           <Box component="div" className="headerField">
             {searchFieldRenderer()}
           </Box>
         )}
-        {sortable && sortRenderer(sortDirection!)}
       </Box>
     </StyledTableHeader>
   );
