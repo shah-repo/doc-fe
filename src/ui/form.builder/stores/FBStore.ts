@@ -32,6 +32,14 @@ export class FormBuilderStore {
     this.setModeConfig();
   }
 
+  @action public setName = (name: string) => {
+    this.name = name;
+  }
+
+  @action public getName = (): string | undefined => {
+    return this.name;
+  }
+
   @action public getSchemaItem = (
     index: number,
   ): FBTemplateSchema | undefined => {
