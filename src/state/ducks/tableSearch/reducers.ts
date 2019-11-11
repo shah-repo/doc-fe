@@ -1,16 +1,16 @@
-import { combineReducers } from 'redux';
-import { TABLE_SEARCH_CLEAR, TABLE_SEARCH_SET, TABLE_SORT } from './constants';
+import { combineReducers } from "redux";
+import { TABLE_SEARCH_CLEAR, TABLE_SEARCH_SET, TABLE_SORT } from "./constants";
 import {
   TableSearchByIdState,
   TableSearchClearAction,
   TableSearchSetAction,
   TableSortAction,
-} from './types';
+} from "./types";
 
 export const DEFAULT_TABLE_SEARCH = {
   queryData: [],
   queryDict: {},
-  apiError: '',
+  apiError: "",
   scrollToIndex: 0,
 };
 
