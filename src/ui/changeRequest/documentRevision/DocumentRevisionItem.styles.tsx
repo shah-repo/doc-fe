@@ -5,7 +5,7 @@ export const styles = makeStyles((theme: Theme) =>
     container: {
       margin: "10px 0",
       lineHeight: "23px",
-      borderBottom: "1px solid " + theme.palette.text.hint,
+      borderBottom: `1px solid ${theme.palette.text.hint}`,
       width: "100%",
       cursor: "pointer",
       padding: "10px",

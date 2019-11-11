@@ -6,7 +6,7 @@ export const styles = makeStyles((theme: Theme) =>
       padding: theme.spacing(1),
     },
     linkContainer: {
-      borderBottom: "1px solid " + theme.palette.text.hint,
+      borderBottom: `1px solid ${theme.palette.text.hint}`,
       padding: theme.spacing(2),
     },
     linkTitle: {
