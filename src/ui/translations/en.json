@@ -210,6 +210,7 @@
   "common.create.new": "Create new",
   "common.released": "Released",
   "common.records.found": "Records found",
+  "common.docId": "Doc ID",
 
   "dashboard.type.PENDING_REVIEW": "is pending your approval",
   "dashboard.type.PENDING_IMPL_PLAN_TASK": " task is pending your approval",

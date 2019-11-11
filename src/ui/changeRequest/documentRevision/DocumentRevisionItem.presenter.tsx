@@ -1,4 +1,4 @@
-import { Grid, IconButton, Tooltip } from "@material-ui/core";
+import { Grid, IconButton } from "@material-ui/core";
 import { RemoveCircleOutline } from "@material-ui/icons";
 import classNames from "classnames";
 import React from "react";
@@ -36,26 +36,20 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<
       <Grid container={true}>
         <Grid item={true} xs={10}>
           <div onClick={onClick}>
-            <Tooltip
-              title={documentRevision.name}
-              aria-label={documentRevision.name}
-            >
-              <div
-                className={isSelected ? classes.titleSelected : classes.title}
-              >
-                {documentRevision.name}
-              </div>
-            </Tooltip>
+            <div className={isSelected ? classes.item : classes.itemSelected}>
+              <Text translation="common.docId" />:{" "}
+              {documentRevision.document.docId}
+            </div>
+            <div>
+              <Text translation="common.title" />:{" "}
+              {documentRevision.name}
+            </div>
             <div>
               <Text translation="common.version" />:{" "}
               {generateVersionNumber(
                 documentRevision.revision,
                 documentRevision.revisionStage,
               )}
-            </div>
-            <div>
-              <Text translation="common.documentId" />:{" "}
-              {documentRevision.document.docId}
             </div>
             <div>
                 <Text translation="common.owner" />:{" "}
