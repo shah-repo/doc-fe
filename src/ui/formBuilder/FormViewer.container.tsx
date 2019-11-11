@@ -1,8 +1,8 @@
 import React, { Fragment } from "react";
-import styles from "./FormBuilder.module.css";
-import FormViewerPresenter from "./FormViewer.presenter";
 import { connect } from "react-redux";
 import { formReducerType } from "../../state/ducks/formBuilder/reducer";
+import styles from "./FormBuilder.module.css";
+import FormViewerPresenter from "./FormViewer.presenter";
 
 interface StateProps {
   formBuilderState: formReducerType;

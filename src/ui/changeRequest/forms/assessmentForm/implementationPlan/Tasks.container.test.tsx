@@ -1,12 +1,9 @@
-import { Button } from "@material-ui/core";
+
 import { shallow, ShallowWrapper } from "enzyme";
 import toJson from "enzyme-to-json";
 import { FormikProps } from "formik";
 import React from "react";
-
-import { TaskFormDialog } from "./TaskFormDialog";
 import { Props, TasksContainer } from "./Tasks.container";
-import { TasksPresenter } from "./Tasks.presenter";
 
 describe("Tasks container tests", () => {
   let wrapper: ShallowWrapper;

@@ -1,6 +1,5 @@
 import { Box, TextField } from "@material-ui/core";
 import { OutlinedTextFieldProps } from "@material-ui/core/TextField";
-import _ from "lodash";
 import React from "react";
 import Text from "../../../components/Text";
 import { withLabelRenderer } from "../../hocs/withLabelRenderer";

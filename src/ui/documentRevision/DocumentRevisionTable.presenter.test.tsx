@@ -1,9 +1,9 @@
-import React from "react";
 import { shallow } from "enzyme";
-import { DocumentRevisionTable, DocumentRevisionTableProps } from "./DocumentRevisionTable.presenter";
-import { getDocumentRevision } from "../../state/ducks/documentRevisions/tests/factories";
 import faker from "faker";
+import React from "react";
 import { AutoSizer, Column } from "react-virtualized";
+import { getDocumentRevision } from "../../state/ducks/documentRevisions/tests/factories";
+import { DocumentRevisionTable, DocumentRevisionTableProps } from "./DocumentRevisionTable.presenter";
 
 describe("DocumentRevisionTable test", () => {
   const defaultProps: DocumentRevisionTableProps = {

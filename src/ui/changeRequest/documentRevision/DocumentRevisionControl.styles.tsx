@@ -1,6 +1,6 @@
-import { createStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from "@material-ui/core";
 
-export default (theme: Theme) =>
+export default makeStyles((theme: Theme) =>
   createStyles({
     container: {
       margin: 0,
@@ -26,4 +26,5 @@ export default (theme: Theme) =>
     addDocument: {
       margin: 0,
     },
-  });
+  }),
+);

@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { Attachment, AttachmentDownloadResponse, attachmentsActions } from "../../../state/ducks/attachments";
 import { ApplicationState } from "../../../state/reducers";
-import { AsyncStatus } from "../../../state/types";
 import useAsync from "../../hooks/useAsync";
 import DownloadButtonPresenter from "./DownloadButton.presenter";
 

@@ -20,7 +20,7 @@ export const requiredAtLeastOne: Validator = (value) => {
   if (!value || value.length === 0) {
     return "validators.requiredAtLeastOne";
   }
-}
+};
 
 export const validator = (...validators: Validator[]): Validator => (value: any): Translation | undefined => {
   for (const validatorFn of validators) {

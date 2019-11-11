@@ -1,4 +1,4 @@
-import { Grid, Paper, Typography, WithStyles, withStyles } from "@material-ui/core";
+import { Grid, Paper, Typography } from "@material-ui/core";
 import React from "react";
 import { PendingActionType } from "../../state/ducks/dashboard";
 import AsyncGate from "../components/AsyncGate";

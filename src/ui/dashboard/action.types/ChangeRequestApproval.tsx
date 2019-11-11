@@ -1,9 +1,9 @@
+import { Button, Grid } from "@material-ui/core";
 import React from "react";
 import { PendingAction } from "../../../state/ducks/dashboard";
-import Text from "../../components/Text";
-import { Button, Grid } from "@material-ui/core";
-import { styles } from "./PendingAction.styles";
 import { changeRequestEditPath } from "../../change.request/utils/paths";
+import Text from "../../components/Text";
+import { styles } from "./PendingAction.styles";
 
 interface OwnProps {
   pendingAction: PendingAction;

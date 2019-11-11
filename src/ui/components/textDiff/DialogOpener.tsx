@@ -27,7 +27,7 @@ const DialogOpener: React.FunctionComponent<Props> = ({
       />
     </Fragment>
   );
-}
+};
 
 DialogOpener.displayName = "TextDiffDialogOpener";
 

@@ -1,14 +1,14 @@
 import React from "react";
 import formStyles from "./FormBuilder.module.css";
 
-interface formProps {
+interface FormProps {
   status: string;
   title: string;
   formNumber: string;
-};
+}
 
-const FormHeaderPresenter : React.FunctionComponent<formProps> = ({
-  status, title, formNumber
+const FormHeaderPresenter: React.FunctionComponent<FormProps> = ({
+  status, title, formNumber,
 }) => {
   return (
     <div className={formStyles.formHeader}>

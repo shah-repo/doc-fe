@@ -20,6 +20,7 @@ import styles from "./styles";
 interface StateProps {
   loadDocumentAsyncState: AsyncState;
   documentRevisions: DocumentRevision[];
+  docId: string;
 }
 
 interface DispatchProps {
@@ -30,6 +31,7 @@ interface OwnProps {
   documentId: string;
   documentRevisionId: string | null;
   isNewVersion: boolean;
+  isNewOutput: boolean;
   deprecatedAt: string;
 }
 
@@ -47,6 +49,7 @@ const mapStateToProps = (
     state,
   ),
   documentRevisions: getDocumentRevisions(state, props.documentId),
+  docId: documentRevisionsSelectors.getDocId(state, props.documentId),
 });
 
 export const DocumentRevisionManagerContainer: React.FunctionComponent<
@@ -56,10 +59,12 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
   loadDocumentAsyncState,
   loadDocument,
   isNewVersion,
+  isNewOutput,
   documentId,
   documentRevisionId,
   documentRevisions,
   deprecatedAt,
+  docId,
 }) => {
   const loadDocumentAction = () => loadDocument(documentId);
 
@@ -81,17 +86,26 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
           <DocumentRevisionListContainer
             documentRevisions={documentRevisions}
             documentId={documentId}
+            docId={docId}
           />
         </AsyncGate>
       </Grid>
-      <Grid item={true} xs={7}>
-        {documentRevisionId && (
+      {documentRevisionId && !isNewOutput && (
+        <Grid item={true} xs={7}>
           <DocumentRevisionDisplayContainer
             documentRevisionId={documentRevisionId}
             isNewVersion={isNewVersion}
           />
-        )}
-      </Grid>
+        </Grid>
+      )}
+      {documentRevisionId && isNewOutput && (
+        <Grid item={true} xs={7}>
+          <DocumentRevisionDisplayContainer
+            documentRevisionId={documentRevisionId}
+            isNewOutput={isNewOutput}
+          />
+        </Grid>
+      )}
       <Grid item={true} xs={3} className={classes.sidebar}>
         {documentRevisionId && (
           <DocumentRevisionAuditContainer

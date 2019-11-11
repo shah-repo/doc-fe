@@ -3,10 +3,10 @@ import React from "react";
 import { connect } from "react-redux";
 import { changeRequestsActions, ChangeRequestTransition, ChangeRequestTransitionResponse } from "../../../state/ducks/changeRequest";
 import { ApplicationState } from "../../../state/reducers";
+import TransitionDialog from "../../components/transitionDialog/TransitionDialog";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
 import { PasswordFormValues } from "../forms/types";
-import TransitionDialog from "../../components/transitionDialog/TransitionDialog";
 
 interface OwnProps {
   changeRequestId: string;
@@ -22,7 +22,7 @@ interface DispatchProps {
 export type TransitionDialogContainerProps = OwnProps & DispatchProps;
 
 export const TransitionDialogContainer: React.FunctionComponent<TransitionDialogContainerProps> = ({
-  changeRequestId, applyTransition, transition, buttonProps, label
+  changeRequestId, applyTransition, transition, buttonProps, label,
 }) => {
   const dialog = useDialog();
   const async = useAsync<ChangeRequestTransitionResponse>({ onSuccess: dialog.close });

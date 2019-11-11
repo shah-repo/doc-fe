@@ -2,11 +2,7 @@ import { Grid } from "@material-ui/core";
 import React from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
-import {
-  ChangeRequest,
-  ChangeRequestStatus,
-} from "../../state/ducks/changeRequest";
-import { Approval, ApprovalStatus } from "../../state/ducks/common";
+import { ChangeRequest } from "../../state/ducks/changeRequest";
 import { DocumentRevision } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";

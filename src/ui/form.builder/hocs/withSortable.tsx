@@ -4,13 +4,13 @@ import { SortEnd } from "react-sortable-hoc";
 import FBEditorWrapper from "../components/custom/FBEditorWrapper";
 import { FBFieldComponent } from "../defaults/editor";
 import sortableStore from "../stores/FBSortableStore";
-import formBuilderStore from "../stores/FBStore";
+import FBStore from "../stores/FBStore";
 import { Subtract } from "../types/common";
 import { FBSortableProps } from "../types/sortable";
 import { FBTemplateSchema } from "../types/store";
 
 export function withSortable<T extends FBSortableProps>(
-  Component: React.ComponentType<T>
+  Component: React.ComponentType<T>,
 ) {
   return class extends React.Component<
     Subtract<T, Omit<FBSortableProps, "items">>
@@ -32,19 +32,19 @@ export function withSortable<T extends FBSortableProps>(
 
       return (
         <FBEditorWrapper key={`${name}_${index}`} {...schema}>
-          <InputType {...schema} {...formBuilderStore.fieldMode} />
+          <InputType {...schema} {...FBStore.fieldMode} />
         </FBEditorWrapper>
       );
-    };
+    }
 
     private onSortEnd = ({ oldIndex, newIndex }: SortEnd) => {
-      const newSchema = arrayMove(formBuilderStore.schema, oldIndex, newIndex);
-      formBuilderStore.setSchema(newSchema);
+      const newSchema = arrayMove(FBStore.schema, oldIndex, newIndex);
+      FBStore.setSchema(newSchema);
       sortableStore.setMode("inactive");
-    };
+    }
 
     private onSortStart = () => sortableStore.setMode("active");
 
-    private isSortable = (): boolean => formBuilderStore.mode !== "form";
+    private isSortable = (): boolean => FBStore.mode !== "form";
   };
 }

@@ -1,5 +1,5 @@
 import {
-  FormHelperText, Input as MuiInput, InputLabel,
+  FormHelperText, InputLabel,
 } from "@material-ui/core";
 import { mount, ReactWrapper } from "enzyme";
 import { Form, Formik, FormikProps } from "formik";

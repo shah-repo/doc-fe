@@ -1,10 +1,10 @@
 import { shallow } from "enzyme";
-import React from "react";
-import { Presenter, Props } from "./presenter";
-import { getDocumentRevision } from "../../../state/ducks/documentRevisions/tests/factories";
 import { Formik } from "formik";
+import React from "react";
+import { getDocumentRevision } from "../../../state/ducks/documentRevisions/tests/factories";
 import ChangeRequestLink from "./changeRequestLink";
 import DocumentHeader from "./header";
+import { Presenter, Props } from "./presenter";
 import TrainingControl from "./training.control";
 
 describe("Presenter tests", () => {

@@ -1,9 +1,7 @@
 import { Button } from "@material-ui/core";
 import React from "react";
 import Text from "../../../components/Text";
-import { documentRevisionTypeOption } from "../../../document.revision/utils/helpers";
 import FBForm from "../../components/form/FBForm";
-import FBSelect from "../../components/inputs/FBSelect";
 import FBTextField from "../../components/inputs/FBTextField";
 
 const FBInfo: React.FunctionComponent<{}> = () => {

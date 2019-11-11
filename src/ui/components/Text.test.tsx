@@ -1,4 +1,4 @@
-import { mount, ReactWrapper } from "enzyme";
+import { mount } from "enzyme";
 import React from "react";
 import { addLocaleData, IntlProvider } from "react-intl";
 import localeEn from "react-intl/locale-data/en";

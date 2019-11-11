@@ -1,8 +1,8 @@
 import { shallow } from "enzyme";
-import React from "react";
-import { ReferencedByContainer,  Props } from "./referencedBy.container";
 import faker from "faker";
+import React from "react";
 import ReferencePresenter from "./reference.presenter";
+import { Props,  ReferencedByContainer } from "./referencedBy.container";
 
 describe("ReferencedByContainer tests", () => {
   const defaultProps: Props = {

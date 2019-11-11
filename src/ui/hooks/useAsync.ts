@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { useState } from "react";
 import { AsyncState, AsyncStatus } from "../../state/types";
 import useCallbackHandler from "./useCallbackHandler";

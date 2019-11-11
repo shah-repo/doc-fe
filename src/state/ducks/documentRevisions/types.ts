@@ -34,6 +34,7 @@ export interface DocumentRevisionDocument {
   documentType: Partial<DocumentType>;
   referencedBy: DocumentRevision[];
 }
+
 export interface Document {
   id: string;
   docId: string;

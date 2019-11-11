@@ -44,6 +44,8 @@ export interface User {
   id: string;
   email: string;
   name: string;
+  employeeId: string;
+  sessionId: string;
 }
 
 export type AuthUserPayload = User;
@@ -72,6 +74,8 @@ export interface UserState {
   id: string;
   email: string;
   name: string;
+  employeeId: string;
+  sessionId: string;
 }
 
 export interface AuthProps {

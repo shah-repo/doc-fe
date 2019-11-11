@@ -1,5 +1,5 @@
 import faker from "faker";
-import { Audit, AuditGroupType } from "../../audit/types";
+import { Audit } from "../../audit/types";
 import { getUser } from "../../common/tests/factories";
 import {
   ChangeRequest,

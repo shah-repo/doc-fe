@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from "react";
+
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { DialogHandler } from "../hooks/useDialog";
-import _ from "lodash";
-import IdleTimer from 'react-idle-timer';
-import useDialog from "../hooks/useDialog";
-import useInterval from "../hooks/useInterval";
-import { DialogAction } from "../components/dialogs/utils/types";
-import Dialog from "../components/dialogs/Dialog";
-import Text from "../components/Text";
 import { authActions } from "../../state/ducks/auth";
 import { ApplicationState } from "../../state/reducers";
+import Dialog from "../components/dialogs/Dialog";
+import Text from "../components/Text";
+import { DialogHandler } from "../hooks/useDialog";
+import useInterval from "../hooks/useInterval";
 
 interface OwnProps {
   dialogHandler: DialogHandler;
@@ -50,7 +47,7 @@ const AutoLogoutDialog: React.FunctionComponent<Props> = ({
       dialogHandler={dialogHandler}
     />
   );
-}
+};
 
 export default connect<{}, DispatchProps, OwnProps, ApplicationState>(null, {
   logout: authActions.logout,

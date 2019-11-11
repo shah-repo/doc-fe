@@ -1,9 +1,9 @@
 import { shallow } from "enzyme";
 import React from "react";
-import Attachments from "./attachments";
-import AttachmentIconField from "../../components/common/attachment.icon/container";
 import AttachmentField from "../../components/common/attachment.field/container";
+import AttachmentIconField from "../../components/common/attachment.icon/container";
 import HeaderField from "../../components/common/header.field/field";
+import Attachments from "./attachments";
 
 describe("Attachments tests", () => {
 

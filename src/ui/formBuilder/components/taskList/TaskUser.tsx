@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
-import styles from "./Tasks.module.css";
 import { ReactComponent as DocIcon } from "../../icons/icon_doc.svg";
 import { ReactComponent as PdfIcon } from "../../icons/icon_pdf.svg";
 import { ReactComponent as PngIcon } from "../../icons/icon_png.svg";
 import { ReactComponent as TxtIcon } from "../../icons/icon_txt.svg";
-import { ReactComponent as UploadIcon } from "../../icons/icon_upload.svg";
+import styles from "./Tasks.module.css";
 
 interface LocalProps {
   currentUser: string;

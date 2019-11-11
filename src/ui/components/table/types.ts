@@ -20,7 +20,6 @@ export interface TableSortProps<T> {
 }
 
 export interface TablePanelProps<T> {
-  tableData: T[];
   columns: Array<TableColumnProps<T>>;
   noRowsTranslation?: Translation;
   cellMeasure?: boolean;
@@ -31,6 +30,8 @@ export interface TablePanelProps<T> {
   sortBy?: string;
   customQuerySet?: (queryDict: TableSearchQueryType) => TableSearchQueryType;
   customDataSet?: (data: T[]) => T[];
+  tableName: string;
+  providedData?: T[];
 }
 
 export interface TablePanelStateProps<T> {

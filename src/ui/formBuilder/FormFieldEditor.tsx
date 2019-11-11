@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { formBuilderActions } from "../../state/ducks/formBuilder";
+import { FormBuilderFieldProps } from "../../state/ducks/formBuilder/types";
 import ApprovalCollection from "./components/basic/ApprovalCollection";
 import CheckBox from "./components/basic/Checkbox";
 import DatePicker from "./components/basic/DatePicker";
@@ -19,10 +20,9 @@ import Lists from "./components/lists/Lists";
 import CloseSection from "./components/sections/CloseSection";
 import Section from "./components/sections/Section";
 import SubSection from "./components/sections/SubSection";
+import TaskListContainer from "./components/taskList/TaskList.container";
 import styles from "./FormBuilder.module.css";
 import { ReactComponent as MoveHandle } from "./icons/icon_move.svg";
-import { FormBuilderFieldProps } from "../../state/ducks/formBuilder/types";
-import TaskListContainer from "./components/taskList/TaskList.container";
 // import TaskListContainer from "./components/taskList/TaskList.container";
 
 interface DispatchProps {
