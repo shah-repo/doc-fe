@@ -17,7 +17,7 @@ const DocumentRevisionOutputInfo: React.FunctionComponent<DataProps<DocumentRevi
     ? generateVersionNumber(revision!, revisionStage!)
     : "";
 
-  const { docId } = _.get(dataProp, "formDocument.document");
+  const docId = _.get(dataProp, "formDocument.document.docId");
 
   return (
     <Box mb={3}>
