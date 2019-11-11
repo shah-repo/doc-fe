@@ -1,5 +1,4 @@
 import { Box, Button } from "@material-ui/core";
-import { BoxProps } from "@material-ui/core/Box";
 import React from "react";
 import Text from "../../../components/Text";
 import editorStore from "../../stores/FBEditorStore";

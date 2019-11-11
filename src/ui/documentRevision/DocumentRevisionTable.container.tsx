@@ -1,13 +1,17 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Route, RouteComponentProps, Switch } from "react-router-dom";
-import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
+import { RouteComponentProps } from "react-router-dom";
+import { authSelectors } from "../../state/ducks/auth";
+import {
+  DocumentRevision,
+  documentRevisionsActions,
+  documentRevisionsSelectors,
+} from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
+import DocumentRevisionTable from "./DocumentRevisionTable.presenter";
 import { generateDocumentRevisionVersionPath } from "./pathGenerators";
-import DocumentRevisionTable from './DocumentRevisionTable.presenter';
-import { authSelectors } from "../../state/ducks/auth";
 
 interface StateProps {
   loadAsyncState: AsyncState;
@@ -29,6 +33,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
   documentRevisions: documentRevisionsSelectors.getDocumentRevisionsList(state),
 });
 
+// TODO: check if we're using this component
 export const DocumentRevisionContainer: React.FunctionComponent<DocumentRevisionContainerProps> = ({
   loadDocumentRevisions,
   loadAsyncState,
@@ -54,6 +59,6 @@ export const DocumentRevisionContainer: React.FunctionComponent<DocumentRevision
   );
 };
 
-export default connect<StateProps, DispatchProps, OwnProps,ApplicationState>(mapStateToProps, {
+export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
   loadDocumentRevisions: documentRevisionsActions.loadList,
 })(DocumentRevisionContainer);

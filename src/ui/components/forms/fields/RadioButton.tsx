@@ -1,9 +1,9 @@
 import {
-  Radio as MuiRadio,
   FormControlLabel,
+  Radio as MuiRadio,
 } from "@material-ui/core";
-import { RadioProps as MuiRadioProps } from "@material-ui/core/Radio";
 import { FormControlLabelProps } from "@material-ui/core/FormControlLabel";
+import { RadioProps as MuiRadioProps } from "@material-ui/core/Radio";
 import * as React from "react";
 
 interface RadioButtonOwnProps extends Pick<FormControlLabelProps, Exclude<keyof FormControlLabelProps, "control">> {

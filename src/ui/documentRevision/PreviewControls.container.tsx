@@ -2,6 +2,7 @@ import { Box, Button } from "@material-ui/core";
 import React from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
+
 import {
   DocumentRevision,
   documentRevisionsSelectors,

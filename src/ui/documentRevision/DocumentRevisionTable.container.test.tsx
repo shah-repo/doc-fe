@@ -1,11 +1,11 @@
-import React from "react";
 import { shallow } from "enzyme";
-import { DocumentRevisionContainer, DocumentRevisionContainerProps } from "./DocumentRevisionTable.container";
-import { ASYNC_DEFAULT_STATE } from "../hooks/useAsync";
-import { getDocumentRevision } from "../../state/ducks/documentRevisions/tests/factories";
 import faker from "faker";
+import React from "react";
+import { getDocumentRevision } from "../../state/ducks/documentRevisions/tests/factories";
+import { ASYNC_DEFAULT_STATE } from "../hooks/useAsync";
 import getRouteComponentProps from "../tests/helpers/getRouteComponentProps";
-import DocumentRevisionTable from './DocumentRevisionTable.presenter';
+import { DocumentRevisionContainer, DocumentRevisionContainerProps } from "./DocumentRevisionTable.container";
+import DocumentRevisionTable from "./DocumentRevisionTable.presenter";
 
 describe("DocumentRevisionContainer test", () => {
   const defaultProps: DocumentRevisionContainerProps = {

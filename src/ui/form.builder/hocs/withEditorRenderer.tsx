@@ -1,6 +1,5 @@
 import { Box } from "@material-ui/core";
-import { Form, FormikProps } from "formik";
-import _ from "lodash";
+import { FormikProps } from "formik";
 import React from "react";
 import FBButton from "../components/inputs/FBButton";
 import { FBFieldEditorComponent } from "../defaults/editor";
@@ -26,7 +25,9 @@ export const withEditorRenderer =
       includeNote: includeNote || includeOther,
     };
     const removeEl = (mode === "create") ? 0 : 1;
-    FBStore.schema.splice(index, removeEl, schema);
+    const newSchema = FBStore.schema;
+    newSchema.splice(index, removeEl, schema);
+    FBStore.setSchema(newSchema);
     editorStore.open = false;
   };
 

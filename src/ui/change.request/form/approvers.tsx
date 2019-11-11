@@ -1,9 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
 import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
+import { Approval } from "../../../state/ducks/common";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
-import { Approval } from "../../../state/ducks/common";
 import AsyncGate from "../../components/AsyncGate";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";

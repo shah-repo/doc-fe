@@ -9,7 +9,8 @@
   "login.button": "Sign in",
 
   "header.title": "Enlil",
-  "header.welcome": "Welcome, {name}",
+  "header.welcome": "Welcome", 
+  "header.name": "{name}",
   "header.logout": "Logout",
 
   "navigation.dashboard": "Dashboard",
@@ -205,8 +206,12 @@
   "common.original": "Original",
   "common.updated": "Updated",
   "common.text.difference": "Text difference",
+  "common.download": "Download",
+  "common.export": "Export",
   "common.powered.by": "Powered by",
   "common.create.new": "Create new",
+  "common.released": "Released",
+  "common.records.found": "Records found",
 
   "output.info": "Form Info",
 
@@ -238,8 +243,6 @@
   "document.revision.stage": "Document Revision Stage",
 
   "documentRevision.revise": "Revise Document",
-  "documentRevision.version": "Version",
-  "documentRevision.released": "Released",
   "documentRevision.form.references": "References",
   "documentRevision.form.processChange": "Process change",
   "documentRevision.form.nextRevision": "Next Revision",
@@ -323,6 +326,10 @@
   "form.builder.autocomplete": "Autocomplete",
   "form.builder.select.options": "Select Options",
   "form.builder.multi.select": "Multi Select",
+  "form.builder.export": "Export Form",
+  "form.builder.import.template": "Import Template",
+  "form.builder.template.name": "Template Name",
+  "form.builder.export.template": "Export Template",
   "form.builder.field.name": "Field Name",
   "form.builder.hyperlink": "Hyperlink",
   "form.builder.fileupload": "File Upload",

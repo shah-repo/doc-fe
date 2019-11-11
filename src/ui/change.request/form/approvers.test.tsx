@@ -1,12 +1,12 @@
 import { shallow } from "enzyme";
-import React from "react";
-import { Approvers, Props } from "./approvers";
 import faker from "faker";
+import React from "react";
 import { getApproval } from "../../../state/ducks/common/tests/factories";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { ASYNC_DEFAULT_STATE } from "../../hooks/useAsync";
+import { Approvers, Props } from "./approvers";
 
-describe("Approvers tests", () => {
+describe("Change request form Approvers tests", () => {
   const defaultProps: Props = {
     availableApprovers: [{
       label: faker.name.firstName(),

@@ -14,7 +14,7 @@ const FBSortableContainer: React.FunctionComponent<FBSortableProps> = ({
   const SortableItem = SortableElement(
     ({ value }: { value: FBTemplateSchema }) => (
       <li style={{ listStyleType: "none" }}>{wrapperRenderer(value)}</li>
-    )
+    ),
   );
 
   const SortableList = SortableContainer(() => {

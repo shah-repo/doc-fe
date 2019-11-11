@@ -9,10 +9,9 @@ import {
   ChangeRequestUpdateContainer,
   ChangeRequestUpdateContainerProps,
 } from "./ChangeRequestUpdate.container";
-import AssessmentFormContainer from "./forms/assessmentForm/AssessmentForm.container";
+import ChangeRequestFormContainer from "./forms/ChangeRequestForm.container";
 import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "./forms/transform";
 import { generateChangeRequestPreviewPath } from "./pathGenerators";
-import ChangeRequestFormContainer from "./forms/ChangeRequestForm.container";
 
 describe("ChangeRequestUpdateContainer tests", () => {
   const currentUserEmail = faker.internet.email();

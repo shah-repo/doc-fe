@@ -24,7 +24,9 @@ export const canCloseTask = (
   return (
     (task.assigned && task.assigned.email === currentUserEmail) &&
     (task.status === ImplementationPlanTaskStatus.Pending) &&
-    (changeRequestStatus === ChangeRequestStatus.InReview || changeRequestStatus === ChangeRequestStatus.Implementation || changeRequestStatus === ChangeRequestStatus.Approved)
+    (changeRequestStatus === ChangeRequestStatus.InReview ||
+      changeRequestStatus === ChangeRequestStatus.Implementation ||
+      changeRequestStatus === ChangeRequestStatus.Approved)
   );
 };
 

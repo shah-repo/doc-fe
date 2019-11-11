@@ -26,7 +26,7 @@ const DocumentRevisionOutputInfo: React.FunctionComponent<DataProps<DocumentRevi
       </Box>
       <Box display="row" fontSize="subtitle2.fontSize">
         {`${docId}, `}
-        <Text message="documentRevision.version" />
+        <Text message="common.version" />
         {` ${version}, `}
         <Date value={releasedAt} />
       </Box>

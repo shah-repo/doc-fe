@@ -20,6 +20,7 @@ import styles from "./styles";
 interface StateProps {
   loadDocumentAsyncState: AsyncState;
   documentRevisions: DocumentRevision[];
+  docId: string;
 }
 
 interface DispatchProps {
@@ -48,6 +49,7 @@ const mapStateToProps = (
     state,
   ),
   documentRevisions: getDocumentRevisions(state, props.documentId),
+  docId: documentRevisionsSelectors.getDocId(state, props.documentId),
 });
 
 export const DocumentRevisionManagerContainer: React.FunctionComponent<
@@ -62,6 +64,7 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
   documentRevisionId,
   documentRevisions,
   deprecatedAt,
+  docId,
 }) => {
   const loadDocumentAction = () => loadDocument(documentId);
 
@@ -83,6 +86,7 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
           <DocumentRevisionListContainer
             documentRevisions={documentRevisions}
             documentId={documentId}
+            docId={docId}
           />
         </AsyncGate>
       </Grid>

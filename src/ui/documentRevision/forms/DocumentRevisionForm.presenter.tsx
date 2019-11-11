@@ -122,7 +122,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   };
 
   const handleTypeChange = (
-    event: React.ChangeEvent<{ name?: string; value: unknown }>
+    event: React.ChangeEvent<{ name?: string; value: unknown }>,
   ) => {
     const typeId = event.target.value as string;
     const type = documentTypesById[typeId] || {};

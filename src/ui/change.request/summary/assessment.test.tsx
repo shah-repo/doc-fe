@@ -1,9 +1,9 @@
+import { Box } from "@material-ui/core";
 import { shallow } from "enzyme";
 import React from "react";
 import { getAttachment } from "../../../state/ducks/attachments/tests/factories";
-import { Assessment,   Props } from "./assessment";
 import AttachmentField from "../../components/common/attachment.icon/container";
-import { Box } from "@material-ui/core";
+import { Assessment,   Props } from "./assessment";
 
 describe("Assessment tests", () => {
   const defaultProps: Props = {

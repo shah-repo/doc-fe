@@ -1,13 +1,13 @@
+import { Button } from "@material-ui/core";
 import { shallow } from "enzyme";
 import React from "react";
+import { DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
+import { getDocumentRevision } from "../../state/ducks/documentRevisions/tests/factories";
+import getRouteComponentProps from "../tests/helpers/getRouteComponentProps";
 import {
     PreviewControlsContainer,
     PreviewControlsContainerProps,
 } from "./PreviewControls.container";
-import { getDocumentRevision } from "../../state/ducks/documentRevisions/tests/factories";
-import getRouteComponentProps from "../tests/helpers/getRouteComponentProps";
-import { DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
-import { Button } from "@material-ui/core";
 
 describe("PreviewControls tests", () => {
     const documentRevision = {...getDocumentRevision(), status: DocumentRevisionStatus.Released};

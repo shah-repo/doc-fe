@@ -3,23 +3,17 @@ import _ from "lodash";
 import React from "react";
 import { SelectOption } from "../../components/forms/fields/FilledSelect";
 import Text from "../../components/Text";
+import FBStore from "../stores/FBStore";
 import { Subtract } from "../types/common";
 import { FBSelectInjectedProps, FBSelectProps } from "../types/select";
 import { withLabelRenderer } from "./withLabelRenderer";
 import { withOnChange } from "./withOnChange";
-import FBStore from "../stores/FBStore";
 
 export function withSelectDefaults<T extends FBSelectProps>(
   Component: React.ComponentType<T>,
 ) {
 
   class HOC extends React.Component<Subtract<T, FBSelectInjectedProps>> {
-
-    private EmptyItem = this.props.includeEmpty && (
-      <MenuItem value="">
-        <Text translation="fields.select.none" tagName="em" />
-      </MenuItem>
-    );
 
     public render() {
       return (

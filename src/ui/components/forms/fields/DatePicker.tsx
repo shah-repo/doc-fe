@@ -53,6 +53,6 @@ type DatePickerFieldProps = DatePickerOwnProps &
 
 const DatePickerField: React.FunctionComponent<
   DatePickerFieldProps
-> = props => <FormikField component={DatePicker} {...props} />;
+> = (props) => <FormikField component={DatePicker} {...props} />;
 
 export default DatePickerField;
