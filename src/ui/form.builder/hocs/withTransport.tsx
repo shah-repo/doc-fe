@@ -59,6 +59,7 @@ export function withTransport<T extends FBTransportSchemaProps>(
       anchor.download = `${FBStore.getName() || "template"}.json`;
       anchor.href = dataStr;
       anchor.click();
+      this.props.setDialogClose();
     }
 
     private setSchemaName = (trigger: any) => {
