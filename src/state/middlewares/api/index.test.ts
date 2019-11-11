@@ -10,11 +10,8 @@ import initialStoreState from "../../tests/helpers/initialStoreState";
 import { ApiAction, AsyncAction, AsyncStatus } from "../../types";
 import api from "../api";
 import middlewareMockStore from "../tests/helpers/middlewareMockStore";
-import refreshTokenOperation from "./refreshToken";
 
 const apiMock = new MockAdapter(apiInstance);
-
-jest.mock("./refreshToken", () => jest.fn().mockImplementation(() => Promise.resolve()));
 
 describe("api middleware test", () => {
   const asyncType = "TEST_ASYNC";
@@ -59,22 +56,20 @@ describe("api middleware test", () => {
   });
 
   describe("when call is successful", () => {
-    const ID_TOKEN = "ID_TOKEN";
+    const SESSION_ID = "SESSION_ID";
+    const EMPLOYEE_ID = "EMPLOYEE_ID";
 
     const onSuccess = jest.fn();
     const onCompleted = jest.fn();
     const onFailure = jest.fn();
     const dispatchCalls: any[] = [];
-
+    const state = _.cloneDeep(initialStoreState);
+    state.auth.user.sessionId = "SESSION_ID";
+    state.auth.user.employeeId = "EMPLOYEE_ID";
     let action: ApiAction;
 
     beforeAll(async () => {
       requestConfig = {};
-
-      (refreshTokenOperation as jest.Mock).mockClear();
-
-      const state = _.cloneDeep(initialStoreState);
-      state.auth.tokens.id.value = ID_TOKEN;
 
       ({ store, next, invoke, defaultState } = middlewareMockStore(api, state));
 
@@ -106,12 +101,9 @@ describe("api middleware test", () => {
       expect(dispatchCalls[0][0]).toEqual(expectedAction);
     });
 
-    it("calls refreshToken function", () => {
-      expect(refreshTokenOperation).toHaveBeenCalledWith(store.dispatch, defaultState);
-    });
-
     it("sets Authorization in request headers", () => {
-      expect(requestConfig.headers).toMatchObject({ Authorization: ID_TOKEN });
+      expect(requestConfig.headers).toMatchObject({
+        Authorization: `bearer ${EMPLOYEE_ID}:${SESSION_ID}` });
     });
 
     it("correctly configured axios requst", () => {
@@ -121,7 +113,7 @@ describe("api middleware test", () => {
         params: action.params,
         url: `${Config.ApiEndpoint}${action.url}`,
         headers: expect.objectContaining({
-          Authorization: ID_TOKEN,
+          Authorization: `bearer ${EMPLOYEE_ID}:${SESSION_ID}`,
         }),
       });
     });
@@ -158,7 +150,6 @@ describe("api middleware test", () => {
     const dispatchCalls: any[] = [];
 
     beforeAll(async () => {
-      (refreshTokenOperation as jest.Mock).mockClear();
       ({ store, next, invoke, defaultState } = middlewareMockStore(api));
 
       await invoke(apiAction({
@@ -183,10 +174,6 @@ describe("api middleware test", () => {
       };
 
       expect(dispatchCalls[0][0]).toEqual(expectedAction);
-    });
-
-    it("did not call refreshToken function since includeAuthorization flag is false", () => {
-      expect(refreshTokenOperation).not.toHaveBeenCalled();
     });
 
     it("dispatches async Error status", () => {

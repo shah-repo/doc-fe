@@ -3,7 +3,7 @@ import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
 
 const isAuthenticated = (state: ApplicationState): boolean => {
-  return Boolean(state.auth.tokens.id.value);
+  return Boolean(state.auth.user.sessionId && state.auth.user.employeeId);
 };
 
 const currentUserEmail = (state: ApplicationState): string => {
@@ -16,10 +16,6 @@ const currentUserName = (state: ApplicationState): string => {
 
 const currentUserId = (state: ApplicationState): string => {
   return state.auth.user.id;
-};
-
-const accessToken = (state: ApplicationState): string => {
-  return state.auth.tokens.access.value;
 };
 
 const getLoadPermissionsAsyncState = (state: ApplicationState): AsyncState => {
@@ -40,7 +36,6 @@ const makeGetHasPermission = () => {
 export default {
   isAuthenticated,
   currentUserEmail,
-  accessToken,
   currentUserName,
   currentUserId,
   getLoadPermissionsAsyncState,
