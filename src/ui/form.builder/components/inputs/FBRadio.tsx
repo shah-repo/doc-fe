@@ -2,7 +2,7 @@ import { Box, FormControlLabel, Radio } from "@material-ui/core";
 import React from "react";
 import Text from "../../../components/Text";
 import { withOnChange } from "../../hocs/withOnChange";
-import formBuilderStore from "../../stores/FBStore";
+import FBStore from "../../stores/FBStore";
 import { FBCheckboxProps } from "../../types/checkbox";
 import FBTextField from "./FBTextField";
 
@@ -22,7 +22,7 @@ const FBRadio: React.FunctionComponent<FBCheckboxProps> = ({
       control={<Radio checked={field.value === label} value={label} />}
       disabled={disabled || readOnly}
     />
-    {formBuilderStore.mode === "form" &&
+    {FBStore.mode === "form" &&
       field.value === label &&
       includeNote && (
         <FBTextField

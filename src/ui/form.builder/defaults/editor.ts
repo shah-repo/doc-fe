@@ -1,3 +1,4 @@
+import { Dictionary } from "lodash";
 import FBAutocompleteEditor from "../components/editors/FBAutocompleteEditor";
 import FBControlEditor from "../components/editors/FBControlEditor";
 import FBControlGroupEditor from "../components/editors/FBControlGroupEditor";
@@ -20,10 +21,6 @@ import FBFileUpload from "../components/navigation/FBFileUpload";
 import FBLink from "../components/navigation/FBLink";
 import { FBEditorElementType } from "../types/editor";
 
-export interface FBEditorDict {
-  [key: string]: React.FunctionComponent<{}>;
-}
-
 export const FBFieldEditorComponent: {
   [key: string]: React.FunctionComponent<{}>;
 } = {
@@ -42,7 +39,7 @@ export const FBFieldEditorComponent: {
   fileupload: FBLabelEditor,
 };
 
-export const FBFieldComponent: { [key: string]: any } = {
+export const FBFieldComponent: Dictionary<any> = {
   section: FBSectionBox,
   subsection: FBSubSectionBox,
   textfield: FBTextField,
@@ -58,7 +55,7 @@ export const FBFieldComponent: { [key: string]: any } = {
   fileupload: FBFileUpload,
 };
 
-export const FBGroupField: { [key: string]: any } = {
+export const FBGroupField: Dictionary<any>  = {
   checkboxgroup: FBCheckbox,
   radiogroup: FBRadio,
 };

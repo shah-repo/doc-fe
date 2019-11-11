@@ -5,8 +5,9 @@ import {
   DocumentRevisionStatus,
   DocumentRevisionType,
 } from "../../../state/ducks/documentRevisions";
+import { store } from "../../../state/store";
 import { SelectOption } from "../../components/forms/fields/Select";
-import { DocumentRevisionUserProps, ReleasedDateOptions } from "./types";
+import { ReleasedDateOptions } from "./types";
 
 const isDraft = (documentRevision: DocumentRevision) =>
   documentRevision.status === DocumentRevisionStatus.Draft;
@@ -14,8 +15,14 @@ const isDraft = (documentRevision: DocumentRevision) =>
 const isPendingChange = (documentRevision: DocumentRevision) =>
   documentRevision.status === DocumentRevisionStatus.PendingChange;
 
-export const canEditDocumentRevision = ({ dataProp, currentUserEmail}: DocumentRevisionUserProps) =>
-  currentUserEmail === dataProp.owner.email && (isDraft(dataProp) || isPendingChange(dataProp));
+export const canEditDocumentRevision = (documentRevision: DocumentRevision) => {
+  const owner = _.get(documentRevision, "owner.email");
+  const currentUser = store.getState().auth.user.email;
+  return (
+    currentUser === owner &&
+    (isDraft(documentRevision) || isPendingChange(documentRevision))
+  );
+};
 
 export const documentRevisionIdMask = (
   type: string,

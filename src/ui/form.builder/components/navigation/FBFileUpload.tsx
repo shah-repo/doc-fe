@@ -13,14 +13,13 @@ export type Props = Omit<OutlinedTextFieldProps, "variant"> &
 
 const FBFileUpload: React.FunctionComponent<Props> = ({
   labelRenderer,
-  form,
-  field,
+  disabled,
   name,
 }) => (
   <Box mb={5} width="100%">
     {labelRenderer}
-    <AttachmentField name={name} component="field" />
-    <AttachmentIconField name={name}  />
+    <AttachmentField name={name} component="field" disabled={disabled} />
+    <AttachmentIconField name={name} disabled={disabled}  />
   </Box>
 );
 

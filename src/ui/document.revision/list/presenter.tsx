@@ -14,7 +14,6 @@ import { TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import { generateVersionNumber } from "../../documentRevision/helpers";
-import documentRevisionStore from "../../form.builder/stores/custom/FBDocumentRevisionStore";
 import {
   canEditDocumentRevision,
   documentRevisionQueryStatus,
@@ -29,7 +28,6 @@ export type Props = DocumentRevisionsUserProps & WithStyles<typeof styles>;
 
 export const ListPresenter: React.FunctionComponent<Props> = ({
   classes,
-  currentUserEmail,
   editDocumentRevision,
   documentTypeOptions,
   tableName,
@@ -37,13 +35,12 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   clearFilter,
 }) => {
 
-  const canEdit = (data: DocumentRevision) => canEditDocumentRevision({dataProp: data, currentUserEmail});
+  const canEdit = (data: DocumentRevision) => canEditDocumentRevision(data);
 
   const typeTooltipRenderer = (rowData: DocumentRevision) =>
     rowData.document.documentType.documentTypeName || "";
 
   const cellHrefRenderer = (rowData: DocumentRevision): string => {
-    documentRevisionStore.reset();
     if (canEdit(rowData)) {
       return documentEditPath(rowData.id, rowData.document.id);
     }

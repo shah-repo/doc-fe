@@ -1,7 +1,6 @@
 import _ from "lodash";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import authSelectors from "../../../state/ducks/auth/selectors";
 import {
   DocumentRevisionStatus,
 } from "../../../state/ducks/documentRevisions";
@@ -47,13 +46,10 @@ export const ListContainer: React.FunctionComponent<Props> = ({
     ));
   }
   const clearFilter = () => dispatch(tableSearchActions.clearSearchCriteria(TABLE_NAME));
-
-  const currentUserEmail = useSelector(authSelectors.currentUserEmail);
   const documentTypeOptions = useSelector(documentTypeSelectors.getDocumentTypeOptions);
 
   return (
     <ListPresenter
-      currentUserEmail={currentUserEmail}
       editDocumentRevision={edit}
       previewDocumentRevision={preview}
       documentTypeOptions={documentTypeOptions}
