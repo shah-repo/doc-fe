@@ -126,7 +126,6 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       onSelect: ({rowData}) => () => editDocumentRevision(rowData.id, rowData.document.id),
       searchOptions: {
         dataKey: "status[]",
-        defaultValue: DocumentRevisionStatus.Released,
         searchType: "select",
         selectOptions: documentRevisionStatusOption(),
         searchValueGetter: (query) => {

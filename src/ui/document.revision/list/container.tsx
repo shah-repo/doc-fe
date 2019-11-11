@@ -44,7 +44,6 @@ export const ListContainer: React.FunctionComponent<Props> = ({
   documentTypeOptions,
 }) => {
   const loadAction = () => loadDocumentRevisions([
-    DocumentRevisionStatus.Released,
   ]);
   const edit = (documentRevisionId: string, documentId: string) =>
     history.push(documentEditPath(documentRevisionId, documentId));
