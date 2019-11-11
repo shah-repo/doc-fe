@@ -1,42 +1,42 @@
-import { Box } from '@material-ui/core';
-import { AxiosRequestConfig } from 'axios';
-import qs from 'query-string';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { Box } from "@material-ui/core";
+import { AxiosRequestConfig } from "axios";
+import _ from "lodash";
+import qs from "query-string";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   AutoSizer,
   CellMeasurerCache,
   Index,
   Size,
-  Table,
-  SortDirectionType,
   SortDirection,
-} from 'react-virtualized';
-import { useDebounce } from 'use-debounce';
-import apiClient from '../../../state/apiClient';
+  SortDirectionType,
+  Table,
+} from "react-virtualized";
+import { useDebounce } from "use-debounce";
+import apiClient from "../../../state/apiClient";
 import {
   tableSearchActions,
   tableSearchSelectors,
-} from '../../../state/ducks/tableSearch';
-import { AsyncActionErrorResponse } from '../../../state/middlewares/api/types';
-import { ApplicationState } from '../../../state/reducers';
-import { store } from '../../../state/store';
-import Text from '../../components/Text';
-import useDidMount from '../../hooks/useDidMount';
-import { TableColumn } from './column/base';
-import { styles } from './styles';
-import { TablePanelProps, TableStyleProps, TableSortProps } from './types';
-import _ from 'lodash';
+} from "../../../state/ducks/tableSearch";
+import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
+import { ApplicationState } from "../../../state/reducers";
+import { store } from "../../../state/store";
+import Text from "../../components/Text";
+import useDidMount from "../../hooks/useDidMount";
+import { TableColumn } from "./column/base";
+import { styles } from "./styles";
+import { TablePanelProps, TableSortProps, TableStyleProps } from "./types";
 
 type Props<T> = TablePanelProps<T>;
 
 export function TablePanel<T extends any>({
   columns,
-  noRowsTranslation = 'table.no.results.found',
+  noRowsTranslation = "table.no.results.found",
   cellMeasure = false,
   onSelect,
   searchable = true,
-  queryUrl = '',
+  queryUrl = "",
   customQuerySet,
   customDataSet,
   sortBy,
@@ -45,7 +45,7 @@ export function TablePanel<T extends any>({
 }: Props<T>) {
   const didMount = useDidMount();
   const queryDelay = 300;
-  let lastQueryValue: string = '';
+  let lastQueryValue: string = "";
   const headerHeight = searchable ? 117 : 50;
   const styleProps: TableStyleProps = {
     isSelectable: onSelect !== undefined,
@@ -67,7 +67,7 @@ export function TablePanel<T extends any>({
     sortDirection: SortDirectionType,
   ) => {
     let sortedData = _.sortBy(data, `document.${sortBy}`);
-    sortedData = sortDirection === 'DESC' ? sortedData.reverse() : sortedData;
+    sortedData = sortDirection === "DESC" ? sortedData.reverse() : sortedData;
 
     return sortedData;
   };
@@ -91,7 +91,7 @@ export function TablePanel<T extends any>({
       return;
     }
     let dict = { ...tableState.queryDict };
-    value === '' ? delete dict[key] : (dict[key] = value);
+    value === "" ? delete dict[key] : (dict[key] = value);
 
     if (customQuerySet) {
       dict = customQuerySet(dict);
@@ -108,10 +108,10 @@ export function TablePanel<T extends any>({
   const queryApi = async () => {
     try {
       const requestConfig: AxiosRequestConfig = {
-        method: 'get',
+        method: "get",
         url: queryUrl,
         params: tableState.queryDict,
-        paramsSerializer: params => qs.stringify(params),
+        paramsSerializer: (params) => qs.stringify(params),
         headers: {},
       };
 
@@ -129,27 +129,27 @@ export function TablePanel<T extends any>({
           {
             ...tableState,
             queryData: data as T[],
-            apiError: '',
+            apiError: "",
             scrollToIndex: 0,
           },
           tableName,
         ),
       );
     } catch (exception) {
-      let responseMessage: string = '';
+      let responseMessage: string = "";
 
       if (exception.response) {
         const {
           data: { message },
         } = exception.response as AsyncActionErrorResponse;
-        responseMessage = Array.isArray(message) ? message.join('; ') : message;
+        responseMessage = Array.isArray(message) ? message.join("; ") : message;
       }
 
       const errorMessage: string = responseMessage || exception.message;
 
       dispatch(
         tableSearchActions.setSearchCriteria(
-          { ...tableState, apiError: 'Error: ' + errorMessage },
+          { ...tableState, apiError: "Error: " + errorMessage },
           tableName,
         ),
       );
@@ -190,7 +190,7 @@ export function TablePanel<T extends any>({
         onRowClick={onSelect && (({ rowData }) => onSelect({ rowData })())}
         scrollToIndex={tableState.scrollToIndex}
       >
-        {columns.map(item =>
+        {columns.map((item) =>
           TableColumn<T>(item, { measurerCache, searchable, queryGetter }),
         )}
       </Table>
@@ -198,7 +198,7 @@ export function TablePanel<T extends any>({
   };
 
   const sort = ({ sortBy, sortDirection }: TableSortProps<T>) => {
-    let sortedTableData = processData(
+    const sortedTableData = processData(
       tableState.queryData,
       sortBy!,
       sortDirection!,
@@ -209,7 +209,7 @@ export function TablePanel<T extends any>({
         {
           ...tableState,
           queryData: sortedTableData as T[],
-          apiError: '',
+          apiError: "",
           scrollToIndex: 0,
           sortDirection,
         },
@@ -224,7 +224,7 @@ export function TablePanel<T extends any>({
 
   return (
     <Box className={classes.root}>
-      <div style={{ color: 'red' }}>{tableState.apiError}</div>
+      <div style={{ color: "red" }}>{tableState.apiError}</div>
       {bodyRenderer()}
     </Box>
   );

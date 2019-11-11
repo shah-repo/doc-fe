@@ -1,20 +1,20 @@
-import _ from 'lodash';
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions';
-import documentTypeSelectors from '../../../state/ducks/documentRevisions/documentType/selectors';
-import tableSearchActions from '../../../state/ducks/tableSearch/actions';
-import tableSearchSelectors from '../../../state/ducks/tableSearch/selectors';
-import { ApplicationState } from '../../../state/reducers';
-import { documentEditPath, documentPreviewPath } from '../utils/paths';
-import { ListOwnProps } from '../utils/types';
-import ListPresenter from './presenter';
+import _ from "lodash";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import documentTypeSelectors from "../../../state/ducks/documentRevisions/documentType/selectors";
+import tableSearchActions from "../../../state/ducks/tableSearch/actions";
+import tableSearchSelectors from "../../../state/ducks/tableSearch/selectors";
+import { ApplicationState } from "../../../state/reducers";
+import { documentEditPath, documentPreviewPath } from "../utils/paths";
+import { ListOwnProps } from "../utils/types";
+import ListPresenter from "./presenter";
 
 type OwnProps = ListOwnProps;
 export type Props = OwnProps;
 
 export const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
-  const TABLE_NAME = 'documentRevisions';
+  const TABLE_NAME = "documentRevisions";
   const tableState = useSelector((reduxState: ApplicationState) =>
     tableSearchSelectors.getTableState(reduxState, TABLE_NAME),
   );
@@ -31,7 +31,7 @@ export const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
         {
           ...tableState,
           queryDict: {
-            'status[]': DocumentRevisionStatus.Released,
+            "status[]": DocumentRevisionStatus.Released,
           },
         },
         TABLE_NAME,

@@ -1,10 +1,10 @@
-import { TablePanelStateProps } from '../../../ui/components/table/types';
-import { TABLE_SEARCH_CLEAR, TABLE_SEARCH_SET, TABLE_SORT } from './constants';
+import { TablePanelStateProps } from "../../../ui/components/table/types";
+import { TABLE_SEARCH_CLEAR, TABLE_SEARCH_SET, TABLE_SORT } from "./constants";
 import {
   TableSearchClearAction,
   TableSearchSetAction,
   TableSortAction,
-} from './types';
+} from "./types";
 
 const setSearchCriteria = <T>(
   searchCriteria: TablePanelStateProps<T>,

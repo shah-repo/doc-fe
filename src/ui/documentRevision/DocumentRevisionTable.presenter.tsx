@@ -1,6 +1,6 @@
-import { IconButton, Paper, WithStyles, withStyles } from '@material-ui/core';
-import { Edit, OpenInNew } from '@material-ui/icons';
-import React from 'react';
+import { IconButton, Paper, WithStyles, withStyles } from "@material-ui/core";
+import { Edit, OpenInNew } from "@material-ui/icons";
+import React from "react";
 import {
   AutoSizer,
   Column,
@@ -9,13 +9,13 @@ import {
   Size,
   Table,
   TableCellProps,
-} from 'react-virtualized';
-import { DocumentRevision } from '../../state/ducks/documentRevisions';
-import Text from '../components/Text';
-import { Translation } from '../translations/types';
-import styles from './DocumentRevisionTable.styles';
-import { canEditDocumentRevision } from './helpers';
-import { DocumentRevisionActionProps, DocumentRevisionListItem } from './types';
+} from "react-virtualized";
+import { DocumentRevision } from "../../state/ducks/documentRevisions";
+import Text from "../components/Text";
+import { Translation } from "../translations/types";
+import styles from "./DocumentRevisionTable.styles";
+import { canEditDocumentRevision } from "./helpers";
+import { DocumentRevisionActionProps, DocumentRevisionListItem } from "./types";
 
 export interface DocumentRevisionTableProps
   extends DocumentRevisionActionProps,
@@ -44,7 +44,7 @@ export const DocumentRevisionTable: React.FunctionComponent<
       name: documentRevision.name,
       owner: documentRevision.owner.name,
       status: documentRevision.status,
-      type: documentRevision.document.documentType.documentTypeName || '',
+      type: documentRevision.document.documentType.documentTypeName || "",
     };
   };
 
@@ -81,7 +81,7 @@ export const DocumentRevisionTable: React.FunctionComponent<
   };
 
   const renderColumn = (
-    key: keyof DocumentRevisionListItem | 'actions',
+    key: keyof DocumentRevisionListItem | "actions",
     label: Translation,
     columnOptions?: Partial<ColumnProps>,
   ) => {
@@ -90,7 +90,7 @@ export const DocumentRevisionTable: React.FunctionComponent<
         label={
           <div>
             <Text translation={label} /> dasdas
-            <SortIndicator sortDirection={'ASC'} />
+            <SortIndicator sortDirection={"ASC"} />
           </div>
         }
         dataKey={key}
@@ -106,7 +106,7 @@ export const DocumentRevisionTable: React.FunctionComponent<
   const SortIndicator = ({ sortDirection }: any) => {
     return (
       <svg className={sortDirection} width={18} height={18} viewBox="0 0 24 24">
-        {sortDirection === 'ASC' ? (
+        {sortDirection === "ASC" ? (
           <path d="M7 14l5-5 5 5z" />
         ) : (
           <path d="M7 10l5 5 5-5z" />
@@ -116,7 +116,7 @@ export const DocumentRevisionTable: React.FunctionComponent<
     );
   };
 
-  const actionsColumn = renderColumn('actions', 'changeRequest.table.actions', {
+  const actionsColumn = renderColumn("actions", "changeRequest.table.actions", {
     cellRenderer: actionsColumnCellRenderer,
     headerClassName: classes.actions,
     width: 70,
@@ -133,32 +133,32 @@ export const DocumentRevisionTable: React.FunctionComponent<
         className={classes.table}
         rowClassName={`${classes.tableRow} ${classes.flexContainer}`}
         rowGetter={rowGetter}
-        sortBy={'id'}
-        sortDirection={'ASC'}
+        sortBy={"id"}
+        sortDirection={"ASC"}
       >
-        {renderColumn('id', 'changeRequest.documentRevisionTable.id', {
+        {renderColumn("id", "changeRequest.documentRevisionTable.id", {
           width: 60,
         })}
         {renderColumn(
-          'revision',
-          'changeRequest.documentRevisionTable.revision',
+          "revision",
+          "changeRequest.documentRevisionTable.revision",
           { width: 50 },
         )}
         {renderColumn(
-          'description',
-          'changeRequest.documentRevisionTable.description',
+          "description",
+          "changeRequest.documentRevisionTable.description",
           { flexGrow: 4 },
         )}
-        {renderColumn('name', 'changeRequest.documentRevisionTable.name', {
+        {renderColumn("name", "changeRequest.documentRevisionTable.name", {
           flexGrow: 3,
         })}
-        {renderColumn('owner', 'changeRequest.documentRevisionTable.owner', {
+        {renderColumn("owner", "changeRequest.documentRevisionTable.owner", {
           flexGrow: 2,
         })}
-        {renderColumn('status', 'changeRequest.documentRevisionTable.state', {
+        {renderColumn("status", "changeRequest.documentRevisionTable.state", {
           flexGrow: 3,
         })}
-        {renderColumn('type', 'changeRequest.documentRevisionTable.type', {
+        {renderColumn("type", "changeRequest.documentRevisionTable.type", {
           width: 50,
         })}
         {actionsColumn}

@@ -1,22 +1,22 @@
-import { Paper, WithStyles, withStyles } from '@material-ui/core';
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import { Paper, WithStyles, withStyles } from "@material-ui/core";
+import React from "react";
+import { useDispatch } from "react-redux";
 import {
   DocumentRevision,
   documentRevisionsActions,
   DocumentRevisionStatus,
-} from '../../../state/ducks/documentRevisions';
-import { DOCUMENT_REVISION_ROOT_URL } from '../../../state/ducks/documentRevisions/constants';
-import { TableColumnProps } from '../../components/table/column/types';
-import { DocumentInfo } from '../../components/table/DocumentInfo';
-import { TablePanel } from '../../components/table/panel';
+} from "../../../state/ducks/documentRevisions";
+import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
+import { TableColumnProps } from "../../components/table/column/types";
+import { DocumentInfo } from "../../components/table/DocumentInfo";
+import { TablePanel } from "../../components/table/panel";
 import {
   TablePanelStateProps,
   TableSearchQueryType,
   TableSelectionProps,
-} from '../../components/table/types';
-import { generateVersionNumber } from '../../documentRevision/helpers';
-import styles from './DocumentRevisionTable.styles';
+} from "../../components/table/types";
+import { generateVersionNumber } from "../../documentRevision/helpers";
+import styles from "./DocumentRevisionTable.styles";
 
 interface DocumentRevisionTableProps extends WithStyles<typeof styles> {
   documentRevisionsToShow: DocumentRevision[];
@@ -46,17 +46,17 @@ const DocumentRevisionTable: React.FunctionComponent<
   };
 
   const customQuerySet = (queryDict: TableSearchQueryType) => {
-    queryDict['status[]'] = [DocumentRevisionStatus.Draft];
+    queryDict["status[]"] = [DocumentRevisionStatus.Draft];
     return queryDict;
   };
 
   const customDataSet = (data: DocumentRevision[]) =>
-    data.filter(rec => !addedDocuments.includes(rec.id));
+    data.filter((rec) => !addedDocuments.includes(rec.id));
 
   const columns: Array<TableColumnProps<DocumentRevision>> = [
     {
-      key: 'docId',
-      label: 'document.revision.list.docId',
+      key: "docId",
+      label: "document.revision.list.docId",
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.document.docId,
         width: 100,
@@ -66,16 +66,16 @@ const DocumentRevisionTable: React.FunctionComponent<
       },
     },
     {
-      key: 'name',
-      label: 'changeRequest.documentRevisionTable.name',
+      key: "name",
+      label: "changeRequest.documentRevisionTable.name",
       columnOptions: { flexGrow: 1 },
       searchOptions: {
         defaultValue: tableState.queryDict.name,
       },
     },
     {
-      key: 'version',
-      label: 'changeRequest.documentRevisionTable.version',
+      key: "version",
+      label: "changeRequest.documentRevisionTable.version",
       columnOptions: {
         cellDataGetter: ({ rowData: { revision, revisionStage } }) =>
           generateVersionNumber(revision, revisionStage),
@@ -86,8 +86,8 @@ const DocumentRevisionTable: React.FunctionComponent<
       },
     },
     {
-      key: 'owner',
-      label: 'changeRequest.documentRevisionTable.owner',
+      key: "owner",
+      label: "changeRequest.documentRevisionTable.owner",
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.owner.name,
         flexGrow: 2,
@@ -97,18 +97,18 @@ const DocumentRevisionTable: React.FunctionComponent<
       },
     },
     {
-      key: 'status',
-      label: 'changeRequest.documentRevisionTable.state',
+      key: "status",
+      label: "changeRequest.documentRevisionTable.state",
       omitSearch: true,
       columnOptions: { width: 80 },
     },
     {
-      key: 'actions',
-      label: 'changeRequest.documentRevisionTable.add',
-      cellType: 'ACTION',
+      key: "actions",
+      label: "changeRequest.documentRevisionTable.add",
+      cellType: "ACTION",
       omitSearch: true,
       onSelect: onStateSelect,
-      columnOptions: { cellDataGetter: () => ['ADD'], width: 30 },
+      columnOptions: { cellDataGetter: () => ["ADD"], width: 30 },
     },
   ];
 

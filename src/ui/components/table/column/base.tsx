@@ -5,9 +5,9 @@ import { Link as RouterLink } from "react-router-dom";
 import {
   CellMeasurer,
   Column,
-  TableCellProps as ColumnProps,
   SortDirectionType,
   SortIndicator,
+  TableCellProps as ColumnProps,
 } from "react-virtualized";
 import Text from "../../Text";
 import { TableSearchSelectField } from "../search/select";

@@ -1,6 +1,6 @@
+import { SortDirectionType } from "react-virtualized/dist/es/Table";
 import { Translation } from "../../translations/types";
 import { TableColumnActionType, TableColumnProps } from "./column/types";
-import { SortDirectionType } from "react-virtualized/dist/es/Table";
 
 export type TableSelectionRenderer<T> = (
   props: TableSelectionProps<T>,
