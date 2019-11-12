@@ -5,6 +5,7 @@ import FBButton from "../components/inputs/FBButton";
 import { FBFieldEditorComponent } from "../defaults/editor";
 import editorStore from "../stores/FBEditorStore";
 import FBStore from "../stores/FBStore";
+import FBValidatorStore from "../stores/FBValidatorStore";
 import { FBEditorFormProps } from "../types/editor";
 import { FBTemplateSchema } from "../types/store";
 
@@ -13,7 +14,7 @@ export const withEditorRenderer =
 (props: FormikProps<FBTemplateSchema>) => {
 
   const { type, index, mode } = other;
-  const { includeNote, includeOther, fieldName } = props.values;
+  const { includeNote, includeOther, fieldName, validatorGroup } = props.values;
   const InputType = FBFieldEditorComponent[type as string];
 
   const onClick = () => {
@@ -23,6 +24,7 @@ export const withEditorRenderer =
       name: fieldName || `${FBStore.prefixName}_field_${type}`,
       ...props.values,
       includeNote: includeNote || includeOther,
+      schema: FBValidatorStore.fields(validatorGroup || ""),
     };
     const removeEl = (mode === "create") ? 0 : 1;
     const newSchema = FBStore.schema;

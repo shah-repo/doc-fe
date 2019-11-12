@@ -14,7 +14,7 @@ const FBEditorWrapper: React.FunctionComponent<FBEditorWrapperProps> = ({
   onMouseDown,
   ...props
 }) => (
-  <Box {..._.omit(props, ["removeSchemaItem", "editSchemaItem"])}>
+  <Box {..._.pick(props, ["onMouseLeave", "onMouseOver"])}>
     <FBEditorFieldToolbar visibility={visibility} {...props}/>
     <Box display="flex" flexDirection="row">
       <Box width="100%">{props.children}</Box>

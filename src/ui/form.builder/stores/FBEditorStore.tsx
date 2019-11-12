@@ -54,7 +54,7 @@ export class FBEditorStore {
     this.editorIndex = index;
     this.editorMode = "update";
     this.open = true;
-    this.editorTypeRenderer(type, schema, "form.builder.edit.field")();
+    this.editorTypeRenderer(type as FBEditorElementType, schema, "form.builder.edit.field")();
   }
 
   @action private sections = () => Object.keys(FBEditorSectionConfig).map((key, i) => (

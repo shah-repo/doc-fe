@@ -1,7 +1,7 @@
 import { FBEditorElementType } from "./editor";
 
 export interface FBTemplateSchema {
-  type: FBEditorElementType;
+  type: FBEditorElementType | string;
   name: string;
   index: number;
   label: string;
@@ -17,6 +17,8 @@ export interface FBTemplateSchema {
   isMulti?: boolean;
   fieldName?: string;
   linkUrl?: string;
+  validatorGroup?: string;
+  schema?: Array<Partial<FBTemplateSchema>>;
 }
 
 export type FBDocumentRevisionMode =
