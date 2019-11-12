@@ -1,5 +1,5 @@
-import {  IconButton, Paper, WithStyles, withStyles } from "@material-ui/core";
-import { Edit, FileCopy, OpenInNew } from "@material-ui/icons";
+import { IconButton, Paper, WithStyles, withStyles } from "@material-ui/core";
+import { Edit, OpenInNew } from "@material-ui/icons";
 import React from "react";
 import {
   AutoSizer,
@@ -14,20 +14,25 @@ import { DocumentRevision } from "../../state/ducks/documentRevisions";
 import Text from "../components/Text";
 import { Translation } from "../translations/types";
 import styles from "./DocumentRevisionTable.styles";
-import { canEditDocumentRevision, documentRevisionIdMask } from "./helpers";
-import {
-  DocumentRevisionActionProps,
-  DocumentRevisionListItem,
-} from "./types";
+import { canEditDocumentRevision } from "./helpers";
+import { DocumentRevisionActionProps, DocumentRevisionListItem } from "./types";
 
-export interface DocumentRevisionTableProps extends DocumentRevisionActionProps, WithStyles<typeof styles> {
+export interface DocumentRevisionTableProps
+  extends DocumentRevisionActionProps,
+    WithStyles<typeof styles> {
   documentRevisions: DocumentRevision[];
   currentUserEmail: string;
 }
 
 // TODO: check if this can be deleted
-export const DocumentRevisionTable: React.FunctionComponent<DocumentRevisionTableProps> = ({
-  classes, documentRevisions, currentUserEmail, editDocumentRevision, previewDocumentRevision,
+export const DocumentRevisionTable: React.FunctionComponent<
+  DocumentRevisionTableProps
+> = ({
+  classes,
+  documentRevisions,
+  currentUserEmail,
+  editDocumentRevision,
+  previewDocumentRevision,
 }) => {
   const rowGetter = ({ index }: Index): DocumentRevisionListItem => {
     const documentRevision = documentRevisions[index];
@@ -37,20 +42,40 @@ export const DocumentRevisionTable: React.FunctionComponent<DocumentRevisionTabl
       revision: documentRevision.revision,
       description: documentRevision.description,
       name: documentRevision.name,
-      owner: documentRevision.owner.name,
+      owner: documentRevision.owner.user.name,
       status: documentRevision.status,
-      type: documentRevision.document.documentType.documentTypeName,
+      type: documentRevision.document.documentType.documentTypeName || "",
     };
   };
 
-  const actionsColumnCellRenderer = ({ rowIndex }: TableCellProps): React.ReactNode => {
+  const actionsColumnCellRenderer = ({
+    rowIndex,
+  }: TableCellProps): React.ReactNode => {
     const documentRevision = documentRevisions[rowIndex];
     const canEdit = canEditDocumentRevision(documentRevision, currentUserEmail);
 
     return (
       <div className={classes.actions}>
-        {canEdit && <IconButton onClick={editDocumentRevision(documentRevision.id, documentRevision.document.id)}><Edit /></IconButton>}
-        {<IconButton onClick={previewDocumentRevision(documentRevision.id, documentRevision.document.id)}><OpenInNew /></IconButton>}
+        {canEdit && (
+          <IconButton
+            onClick={editDocumentRevision(
+              documentRevision.id,
+              documentRevision.document.id,
+            )}
+          >
+            <Edit />
+          </IconButton>
+        )}
+        {
+          <IconButton
+            onClick={previewDocumentRevision(
+              documentRevision.id,
+              documentRevision.document.id,
+            )}
+          >
+            <OpenInNew />
+          </IconButton>
+        }
       </div>
     );
   };
@@ -62,7 +87,12 @@ export const DocumentRevisionTable: React.FunctionComponent<DocumentRevisionTabl
   ) => {
     return (
       <Column
-        label={<Text translation={label} />}
+        label={
+          <div>
+            <Text translation={label} /> dasdas
+            <SortIndicator sortDirection={"ASC"} />
+          </div>
+        }
         dataKey={key}
         className={classes.flexContainer}
         headerClassName={classes.flexContainer}
@@ -70,6 +100,19 @@ export const DocumentRevisionTable: React.FunctionComponent<DocumentRevisionTabl
         flexGrow={1}
         {...columnOptions}
       />
+    );
+  };
+
+  const SortIndicator = ({ sortDirection }: any) => {
+    return (
+      <svg className={sortDirection} width={18} height={18} viewBox="0 0 24 24">
+        {sortDirection === "ASC" ? (
+          <path d="M7 14l5-5 5 5z" />
+        ) : (
+          <path d="M7 10l5 5 5-5z" />
+        )}
+        <path d="M0 0h24v24H0z" fill="none" />
+      </svg>
     );
   };
 
@@ -90,14 +133,34 @@ export const DocumentRevisionTable: React.FunctionComponent<DocumentRevisionTabl
         className={classes.table}
         rowClassName={`${classes.tableRow} ${classes.flexContainer}`}
         rowGetter={rowGetter}
+        sortBy={"id"}
+        sortDirection={"ASC"}
       >
-        {renderColumn("id", "changeRequest.documentRevisionTable.id", { width:  60 })}
-        {renderColumn("revision", "changeRequest.documentRevisionTable.revision", { width: 50 })}
-        {renderColumn("description", "changeRequest.documentRevisionTable.description", { flexGrow: 4 })}
-        {renderColumn("name", "changeRequest.documentRevisionTable.name", { flexGrow: 3 })}
-        {renderColumn("owner", "changeRequest.documentRevisionTable.owner", { flexGrow: 2 })}
-        {renderColumn("status", "changeRequest.documentRevisionTable.state", { flexGrow: 3 })}
-        {renderColumn("type", "changeRequest.documentRevisionTable.type", { width:  50 })}
+        {renderColumn("id", "changeRequest.documentRevisionTable.id", {
+          width: 60,
+        })}
+        {renderColumn(
+          "revision",
+          "changeRequest.documentRevisionTable.revision",
+          { width: 50 },
+        )}
+        {renderColumn(
+          "description",
+          "changeRequest.documentRevisionTable.description",
+          { flexGrow: 4 },
+        )}
+        {renderColumn("name", "changeRequest.documentRevisionTable.name", {
+          flexGrow: 3,
+        })}
+        {renderColumn("owner", "changeRequest.documentRevisionTable.owner", {
+          flexGrow: 2,
+        })}
+        {renderColumn("status", "changeRequest.documentRevisionTable.state", {
+          flexGrow: 3,
+        })}
+        {renderColumn("type", "changeRequest.documentRevisionTable.type", {
+          width: 50,
+        })}
         {actionsColumn}
       </Table>
     );
@@ -105,21 +168,13 @@ export const DocumentRevisionTable: React.FunctionComponent<DocumentRevisionTabl
 
   const bodyRenderer = () => {
     if (documentRevisions.length > 0) {
-      return (
-        <AutoSizer>
-          {tableRenderer}
-        </AutoSizer>
-      );
+      return <AutoSizer>{tableRenderer}</AutoSizer>;
     }
 
     return <Text translation="changeRequest.table.noChangeRequests" />;
   };
 
-  return (
-    <Paper className={classes.root}>
-      {bodyRenderer()}
-    </Paper>
-  );
+  return <Paper className={classes.root}>{bodyRenderer()}</Paper>;
 };
 
 export default withStyles(styles)(DocumentRevisionTable);

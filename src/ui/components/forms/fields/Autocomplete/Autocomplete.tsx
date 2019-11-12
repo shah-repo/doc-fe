@@ -15,7 +15,7 @@ import {
 } from "../../../../../state/ducks/common";
 import Text from "../../../../components/Text";
 import Field, { FieldOwnProps } from "../Field";
-import { InputField, LabelField } from "../Input.styles";
+import { InputField } from "../Input.styles";
 import { OptionType } from "./types";
 
 interface AutocompleteOwnProps extends FieldOwnProps {

@@ -16,7 +16,8 @@ describe("auth selectors tests", () => {
     });
 
     it("user is authenticated", () => {
-      state.auth.tokens.id.value = "ID_TOKEN";
+      state.auth.user.sessionId = "SESSION_ID";
+      state.auth.user.employeeId = "EMPLOYEE_ID";
       expect(authSelectors.isAuthenticated(state)).toBe(true);
     });
   });
@@ -25,13 +26,6 @@ describe("auth selectors tests", () => {
     it("it returns email address", () => {
       state.auth.user.email = "dino@codecons.com";
       expect(authSelectors.currentUserEmail(state)).toEqual("dino@codecons.com");
-    });
-  });
-
-  describe("accessToken selector tests", () => {
-    it("it returns access token value", () => {
-      state.auth.tokens.access.value = "TOKEN";
-      expect(authSelectors.accessToken(state)).toEqual("TOKEN");
     });
   });
 });

@@ -7,7 +7,7 @@ import {
   WithStyles,
 } from "@material-ui/core";
 import { ButtonProps } from "@material-ui/core/Button";
-import { Formik, FormikActions, FormikProps } from "formik";
+import { Formik, FormikProps } from "formik";
 import React from "react";
 import { DocumentTransition } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";

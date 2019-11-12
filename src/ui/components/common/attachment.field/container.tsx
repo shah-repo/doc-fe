@@ -1,4 +1,5 @@
 import { Box } from "@material-ui/core";
+import _ from "lodash";
 import React from "react";
 import { connect } from "react-redux";
 import {
@@ -7,6 +8,7 @@ import {
   attachmentsActions,
 } from "../../../../state/ducks/attachments";
 import { ApplicationState } from "../../../../state/reducers";
+import FBStore from "../../../form.builder/stores/FBStore";
 import useAsync from "../../../hooks/useAsync";
 import FormMessage from "../../forms/FormMessage";
 import FormProgress from "../../forms/FormProgress";
@@ -42,9 +44,16 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
       if (!multiple) {
         return form!.setFieldValue(name, attachment);
       }
-      const attachments: Attachment[] = field!.value || [];
+      const attachments: Attachment[] = field!.value ? [...field!.value] : [];
       attachments.push(attachment!);
       form!.setFieldValue(name, attachments);
+
+      if (FBStore.mode === "form") {
+        FBStore.setValues({
+          ...FBStore.values,
+          [name as string]: _.map(attachments, (attach) => _.pick(attach, ["id", "name", "s3link"])),
+        });
+      }
     },
   });
 

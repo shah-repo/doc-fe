@@ -1,5 +1,5 @@
 import {  IconButton, Paper, WithStyles, withStyles } from "@material-ui/core";
-import { Edit, FileCopy, OpenInNew } from "@material-ui/icons";
+import { Edit, OpenInNew } from "@material-ui/icons";
 import React from "react";
 import {
   AutoSizer,
@@ -14,11 +14,11 @@ import { ChangeRequest } from "../../state/ducks/changeRequest";
 import Text from "../components/Text";
 import { Translation } from "../translations/types";
 import styles from "./ChangeRequestTable.styles";
+import { canEditChangeRequest } from "./helpers";
 import {
   ChangeRequestActionProps,
   ChangeRequestListItem,
 } from "./types";
-import { canEditChangeRequest } from "./helpers";
 
 interface ChangeRequestTableProps extends ChangeRequestActionProps, WithStyles<typeof styles> {
   changeRequests: ChangeRequest[];
@@ -34,7 +34,7 @@ const ChangeRequestTable: React.FunctionComponent<ChangeRequestTableProps> = ({
     return {
       id: changeRequest.id,
       description: changeRequest.description,
-      owner: changeRequest.owner.name,
+      owner: changeRequest.owner.user.name,
       state: changeRequest.state,
     };
   };

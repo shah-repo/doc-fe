@@ -11,7 +11,11 @@ import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/d
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import Text from "../../components/Text";
+import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
+import FBWorkspace from "../../form.builder/main/workspace/FBWorkspace";
+import FBDRStore from "../../form.builder/stores/FBDRStore";
+import FBStore from "../../form.builder/stores/FBStore";
 import Attachment from "./attachment";
 import ChangeRequestLink from "./changeRequestLink";
 import DocumentHeader from "./header";
@@ -44,6 +48,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   canShowCreateVersionButton,
 }) => {
   const onSubmit = () => void 0;
+  FBDRStore.setValues(dataProp);
 
   const renderTrainingControl = status === DocumentRevisionStatus.Released && (
     <TrainingControl
@@ -63,6 +68,11 @@ export const Presenter: React.FunctionComponent<Props> = ({
         direction="column"
       >
         <ChangeRequestLink dataProp={dataProp} />
+        {FBDRStore.isOutput && (
+          <Box ml={2} mt={1}>
+            <DocumentRevisionOutputInfo dataProp={dataProp} />
+          </Box>
+        )}
         <SummaryField label="document.title" value={name} />
         <SummaryField
           label="document.revision.trainingRequired"
@@ -85,7 +95,12 @@ export const Presenter: React.FunctionComponent<Props> = ({
         {attachments && <Attachment />}
         {renderTrainingControl}
       </Grid>
-      <Box className={classes.submitBox}>
+      {FBStore.active && (
+         <Box px={5}>
+           <FBWorkspace />
+         </Box>
+       )}
+      <Box flexDirection="row-reverse" display="flex" px={3}>
         <ControlsContainer
           documentRevision={dataProp}
           canShowCreateVersionButton={canShowCreateVersionButton}

@@ -15,9 +15,6 @@ export default (theme: Theme) =>
       margin: 0,
       width: "100%",
     },
-    submitBox: {
-      textAlign: "center",
-    },
     headerContainer: {
       padding: "10px 0 60px",
     },
@@ -32,5 +29,5 @@ export default (theme: Theme) =>
     },
     trainingText: {
       marginRight: 20,
-    }
+    },
   });

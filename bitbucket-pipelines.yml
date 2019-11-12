@@ -6,7 +6,7 @@ pipelines:
   const:
     tests: &RUN_TESTS
       name: Tests
-      image: node:10 
+      image: node:10.16.3
       services:
         - docker
       caches:
@@ -14,6 +14,32 @@ pipelines:
       script:
         - chmod a+x ./aws/bash_scripts/runTests.sh
         - ./aws/bash_scripts/runTests.sh
+
+    lint_tests: &RUN_LINT_AND_TESTS
+      name: Linter & Tests
+      image: node:10
+      services:
+        - docker
+      caches:
+        - docker
+        - node
+      script:
+        - chmod a+x ./aws/bash_scripts/runLinter.sh
+        - ./aws/bash_scripts/runLinter.sh
+        - chmod a+x ./aws/bash_scripts/runTests.sh
+        - ./aws/bash_scripts/runTests.sh
+
+    lint: &RUN_LINTER
+      name: Linter
+      image: node:10
+      services:
+        - docker
+      caches:
+        - docker
+        - node
+      script:
+        - chmod a+x ./aws/bash_scripts/runLinter.sh
+        - ./aws/bash_scripts/runLinter.sh
 
     deploy_to_development: &DEPLOY_TO_DEVELOP_1
       name: Deploy to Development 1
@@ -59,34 +85,41 @@ pipelines:
         - ./aws/bash_scripts/build.sh "demo"
 
   default:
-      - step: *RUN_TESTS
+      - step: *RUN_LINT_AND_TESTS
   tags:
     deploy-to-dev:
-      - step: *RUN_TESTS
+      - step: *RUN_LINT_AND_TESTS
       - step: *DEPLOY_TO_DEVELOP_1
     deploy-to-dev2:
-      - step: *RUN_TESTS
+      - step: *RUN_LINT_AND_TESTS
       - step: *DEPLOY_TO_DEVELOP_2
     deploy-to-demo:
+      - step: *RUN_LINTER
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEMO
     deploy-to-prod:
+      - step: *RUN_LINTER
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_PRODUCTION
   branches:
     master:
+      - step: *RUN_LINTER
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_PRODUCTION
     develop:
+      - step: *RUN_LINTER
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEVELOP_1
     develop2:
+      - step: *RUN_LINTER
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEVELOP_2
     infrastructure:
+      - step: *RUN_LINTER
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEVELOP_1
-    demo:
+    release/19.3.2:
+      - step: *RUN_LINTER
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEMO
       

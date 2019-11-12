@@ -1,35 +1,21 @@
-import React from "react";
-import { connect } from "react-redux";
-import { documentTypeActions, documentTypeSelectors } from "../../state/ducks/documentRevisions/documentType";
-import { ApplicationState } from "../../state/reducers";
-import { AsyncState } from "../../state/types";
-import AsyncGate from "../components/AsyncGate";
+import React, { useEffect } from "react";
+import { documentTypeActions } from "../../state/ducks/documentRevisions/documentType";
+import useActionCreator from "../hooks/useActionCreator";
+import useAsync from "../hooks/useAsync";
 
-interface DispatchProps {
-  loadDocumentTypes: typeof documentTypeActions.loadList;
-}
+const DataFetcherContainer: React.FunctionComponent = () => {
+  // const selectCompanyAction = useActionCreator(companyActions.selectCompany);
+  // const selectCompanyAsync = useAsync();
+  const loadDocumentTypesAction = useActionCreator(documentTypeActions.loadList);
+  const loadDocumentTypesAsync = useAsync();
 
-interface StateProps {
-  loadDocTypeAsyncState: AsyncState;
-}
+  useEffect(() => {
+    // selectCompanyAsync.start(selectCompanyAction, company);
+    loadDocumentTypesAsync.start(loadDocumentTypesAction, loadDocumentTypesAsync);
+  }, []);
 
-type DataFetcherContainerProps = DispatchProps & StateProps;
-
-const mapStateToProps = (state: ApplicationState) => ({
-  loadDocTypeAsyncState: documentTypeSelectors.getLoadListAsyncState(state),
-});
-
-const DataFetcherContainer: React.FunctionComponent<DataFetcherContainerProps> = ({
-  loadDocumentTypes,
-  loadDocTypeAsyncState,
-}) => {
-  const loadAction = () => loadDocumentTypes();
-
-  return (
-    <AsyncGate asyncState={loadDocTypeAsyncState} asyncAction={loadAction} startActionOnMount={true} />
-  );
+  // NOTE: should we show error messages here?
+  return null;
 };
 
-export default connect<StateProps, DispatchProps, {}, ApplicationState>(mapStateToProps, {
-  loadDocumentTypes: documentTypeActions.loadList,
-})(DataFetcherContainer);
+export default DataFetcherContainer;

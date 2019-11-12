@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 
 import { formReducerType } from "../../../../state/ducks/formBuilder/reducer";
-import DatePickerField from "../../../components/forms/fields/DatePicker";
 import TaskAdmin from "./TaskAdmin";
 import styles from "./Tasks.module.css";
 
@@ -57,10 +56,6 @@ const TaskListPresenter: React.FunctionComponent<TaskListPresenterProps> = ({
 
   const closeFormHandler = () => {
     setShowForm(false);
-  };
-
-  const handleDayChange = (day: any) => {
-    setTask({ ...task, due_date: day ? day.toLocaleDateString() : "" });
   };
 
   const form = (

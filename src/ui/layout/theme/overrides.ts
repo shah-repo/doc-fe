@@ -1,7 +1,9 @@
 import { Theme } from "@material-ui/core";
 import { Overrides } from "@material-ui/core/styles/overrides";
+import { WhiteLabelingColors } from "../../../state/ducks/company";
+import { FBClasses } from "../../form.builder/defaults/layout";
 
-const ThemeOverrides = (appTheme: Theme): Overrides => ({
+const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Overrides => ({
   MuiAppBar: {
     colorDefault: {
       background: appTheme.palette.common.white,
@@ -16,7 +18,7 @@ const ThemeOverrides = (appTheme: Theme): Overrides => ({
     },
   },
   MuiTypography: {
-    root: {
+    caption: {
       fontFamily: "Open Sans, sans-serif;",
     },
     body2: {
@@ -77,11 +79,12 @@ const ThemeOverrides = (appTheme: Theme): Overrides => ({
       fontSize: "0.8rem",
     },
     head: {
-      ffontSize: "0.81rem",
-      background: "#5C9DFF",
+      fontSize: "0.81rem",
+      background: appTheme.palette.background.default,
       color: appTheme.palette.common.white,
       fontFamily: "Open Sans",
       fontWeight: "bold",
+      lineHeight: "0.9rem",
     },
   },
   MuiInputBase: {
@@ -99,6 +102,9 @@ const ThemeOverrides = (appTheme: Theme): Overrides => ({
     },
     icon: {
       right: "10px",
+    },
+    select: {
+      paddingLeft: appTheme.spacing(0.5),
     },
   },
   MuiTooltip: {
@@ -137,6 +143,13 @@ const ThemeOverrides = (appTheme: Theme): Overrides => ({
     },
   },
   MuiOutlinedInput: {
+    root: {
+      [`&.${FBClasses.inputDisabled}`]: {
+        "& fieldset": {
+          borderWidth: "0px!important",
+        },
+      },
+    },
     notchedOutline: {
       borderRadius: 0,
     },

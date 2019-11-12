@@ -1,29 +1,45 @@
 import _ from "lodash";
 import { createSelector } from "reselect";
+import { stripTags, stripTagsFromObject } from "../../../common/utils/helpers";
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
 import { DocumentRevisionFormValues } from "../../../ui/documentRevision/forms/types";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
 import { Audit, AuditGroupType } from "../audit/types";
 import { DocumentRevisionStatus } from "./types";
-import { stripTagsFromObject, stripTags } from "../../../common/utils/helpers";
 
 const allIds = (state: ApplicationState) => state.documentRevisions.allIds;
 const byId = (state: ApplicationState) => state.documentRevisions.byId;
-const documentsById = (state: ApplicationState) => state.documentRevisions.documentsById;
-const auditsByCRId = (state: ApplicationState) => state.documentRevisions.auditsByCRId;
-const auditsAllId = (state: ApplicationState) => state.documentRevisions.auditsAllId;
+
+const documentsById = (state: ApplicationState) =>
+  state.documentRevisions.documentsById;
+const auditsByCRId = (state: ApplicationState) =>
+  state.documentRevisions.auditsByCRId;
 
 const getDocumentRevisionsList = createSelector(
-  allIds, byId,
+  allIds,
+  byId,
   (ids, documentRevisions) =>
-    ids.map((id) => stripTagsFromObject(documentRevisions[id]))
+    ids.map((id) => stripTagsFromObject(documentRevisions[id])),
 );
 
-const getDocumentRevision = (state: ApplicationState, documentRevisionId: string) => byId(state)[documentRevisionId];
-const getDocument = (state: ApplicationState, documentId: string) => documentsById(state)[documentId];
-const getDocumentRevisions = (state: ApplicationState, documentId: string) => _.get(documentsById(state)[documentId], "documentRevisions", []);
-const getAudit = (state: ApplicationState, documentRevisionId: string): AuditGroupType => auditsByCRId(state)[documentRevisionId];
+const getDocumentRevision = (
+  state: ApplicationState,
+  documentRevisionId: string,
+) => byId(state)[documentRevisionId];
+
+const getDocument = (state: ApplicationState, documentId: string) =>
+  documentsById(state)[documentId];
+const getDocumentRevisions = (state: ApplicationState, documentId: string) =>
+  _.get(documentsById(state)[documentId], "documentRevisions", []);
+
+const getAudit = (
+  state: ApplicationState,
+  documentRevisionId: string,
+): AuditGroupType => auditsByCRId(state)[documentRevisionId];
+
+const getDocId = (state: ApplicationState, documentId: string) =>
+  _.get(documentsById(state)[documentId], "docId", "");
 
 const makeGetDocumentRevisions = () => {
   return createSelector(
@@ -35,15 +51,21 @@ const makeGetDocumentRevisions = () => {
 const makeGetDisableCreateNewVersion = () => {
   return createSelector(
     [getDocumentRevisions],
-    (documentRevisions) => _.some(documentRevisions, (docRev) =>
-      docRev.status === DocumentRevisionStatus.Draft ||
-      docRev.status === DocumentRevisionStatus.PendingChange ||
-      docRev.status === DocumentRevisionStatus.InReview
-    ),
+    (documentRevisions) =>
+      _.some(
+        documentRevisions,
+        (docRev) =>
+          docRev.status === DocumentRevisionStatus.Draft ||
+          docRev.status === DocumentRevisionStatus.PendingChange ||
+          docRev.status === DocumentRevisionStatus.InReview,
+      ),
   );
 };
 
-const getCurrentDocumentValues = (state: ApplicationState, docRev: DocumentRevisionFormValues) => docRev;
+const getCurrentDocumentValues = (
+  state: ApplicationState,
+  docRev: DocumentRevisionFormValues,
+) => docRev;
 
 const makeGetAvailableReferences = () => {
   return createSelector(
@@ -52,7 +74,10 @@ const makeGetAvailableReferences = () => {
       const filteredIds = ids.filter((id) => {
         const { status, changeRequest, document } = docRevs[id];
 
-        if (currentDocRev.document && currentDocRev.document.id === document.id) {
+        if (
+          currentDocRev.document &&
+          currentDocRev.document.id === document.id
+        ) {
           return false;
         }
 
@@ -61,7 +86,11 @@ const makeGetAvailableReferences = () => {
         }
 
         if (status === DocumentRevisionStatus.PendingChange) {
-          if ((changeRequest && currentDocRev.changeRequest) && (changeRequest.id === currentDocRev.changeRequest.id)) {
+          if (
+            changeRequest &&
+            currentDocRev.changeRequest &&
+            changeRequest.id === currentDocRev.changeRequest.id
+          ) {
             return true;
           }
         }
@@ -101,7 +130,7 @@ const makeGetAvailableReferences = () => {
 const makeGetAudit = () => {
   return createSelector(
     getAudit,
-    (audits: AuditGroupType = {}) =>  {
+    (audits: AuditGroupType = {}) => {
       Object.keys(audits).map((groupId) => {
         audits[groupId].map((audit: Audit) => {
           if (audit.field === "description") {
@@ -115,10 +144,14 @@ const makeGetAudit = () => {
   );
 };
 
-const getLoadAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadAsyncInfo;
-const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadListAsyncInfo;
-const getLoadDocumentAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadDocumentAsyncInfo;
-const getLoadAuditAsyncState = (state: ApplicationState): AsyncState => state.documentRevisions.loadAuditAsyncInfo;
+const getLoadAsyncState = (state: ApplicationState): AsyncState =>
+  state.documentRevisions.loadAsyncInfo;
+const getLoadListAsyncState = (state: ApplicationState): AsyncState =>
+  state.documentRevisions.loadListAsyncInfo;
+const getLoadDocumentAsyncState = (state: ApplicationState): AsyncState =>
+  state.documentRevisions.loadDocumentAsyncInfo;
+const getLoadAuditAsyncState = (state: ApplicationState): AsyncState =>
+  state.documentRevisions.loadAuditAsyncInfo;
 
 export default {
   byId,
@@ -135,4 +168,5 @@ export default {
   makeGetAvailableReferences,
   makeGetAudit,
   makeGetDisableCreateNewVersion,
+  getDocId,
 };

@@ -1,13 +1,11 @@
 import _ from "lodash";
 import React from "react";
-import FBCheckbox from "../components/inputs/FBCheckbox";
 import { FBGroupField } from "../defaults/editor";
 import {
   FBFormDefaultProps,
   FBOptionRendererProps,
   Subtract,
 } from "../types/common";
-import { FBEditorElementType } from "../types/editor";
 import { withLabelRenderer } from "./withLabelRenderer";
 
 export function withOptionRenderer<T extends FBFormDefaultProps>(
@@ -34,14 +32,14 @@ export function withOptionRenderer<T extends FBFormDefaultProps>(
         optionsArray.push("form.builder.other");
       }
       return this.controlRenderer(optionsArray);
-    };
+    }
 
     private controlRenderer = (optionsArray: string[]) => {
-      const { name } = this.props;
-      if (!name) {
+      const { name, type } = this.props;
+      if (!name || !type) {
         return;
       }
-      const type = name.split("_").pop();
+
       const InputType = FBGroupField[type as string];
       return optionsArray.map((label, i) => (
         <InputType
@@ -55,7 +53,7 @@ export function withOptionRenderer<T extends FBFormDefaultProps>(
           }
         />
       ));
-    };
+    }
   }
 
   return withLabelRenderer(HOC);

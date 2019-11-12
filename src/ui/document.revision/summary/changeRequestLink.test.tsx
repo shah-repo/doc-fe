@@ -1,12 +1,12 @@
+import { Tooltip } from "@material-ui/core";
 import { shallow } from "enzyme";
 import React from "react";
-import ChangeRequestLink, { Props } from "./changeRequestLink";
 import { Link } from "react-router-dom";
-import { getDocumentRevision } from "../../../state/ducks/documentRevisions/tests/factories";
-import { getChangeRequest } from "../../../state/ducks/changeRequest/tests/factories";
-import { changeRequestEditPath } from "../../change.request/utils/paths";
 import { stripTags } from "../../../common/utils/helpers";
-import { Tooltip } from "@material-ui/core";
+import { getChangeRequest } from "../../../state/ducks/changeRequest/tests/factories";
+import { getDocumentRevision } from "../../../state/ducks/documentRevisions/tests/factories";
+import { changeRequestEditPath } from "../../change.request/utils/paths";
+import ChangeRequestLink, { Props } from "./changeRequestLink";
 
 describe("ChangeRequestLink tests", () => {
 

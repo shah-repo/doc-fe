@@ -1,4 +1,4 @@
-import { Box, WithStyles, withStyles } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import React from "react";
 import InputField from "../Input";
 import SelectField from "../Select";

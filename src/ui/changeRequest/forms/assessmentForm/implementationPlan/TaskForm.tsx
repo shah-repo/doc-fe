@@ -1,4 +1,4 @@
-import { Button, createStyles, Grid, makeStyles, Paper } from "@material-ui/core";
+import { Button, createStyles, Grid, makeStyles } from "@material-ui/core";
 import { Form, FormikProps } from "formik";
 import React from "react";
 import { connect } from "react-redux";

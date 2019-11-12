@@ -1,5 +1,4 @@
 import { FieldArrayRenderProps } from "formik";
-import _ from "lodash";
 import React, { useState } from "react";
 import { applyTimezoneToDate } from "../../../../../common/utils/date";
 import useDialog from "../../../../hooks/useDialog";

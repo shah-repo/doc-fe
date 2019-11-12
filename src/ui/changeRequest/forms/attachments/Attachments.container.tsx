@@ -2,7 +2,7 @@ import { FieldArrayRenderProps, FormikProps } from "formik";
 import React from "react";
 import { connect } from "react-redux";
 import { attachmentsActions } from "../../../../state/ducks/attachments";
-import { Assessment, ImplementationPlan } from "../../../../state/ducks/changeRequest";
+import { ImplementationPlan } from "../../../../state/ducks/changeRequest";
 import { ApplicationState } from "../../../../state/reducers";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";

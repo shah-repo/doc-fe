@@ -77,7 +77,7 @@ const AssessmentFormControlsContainer: React.FunctionComponent<
   };
 
   const formHasErrors = !_.isEmpty(errors);
-  const isCurrentUserOwner = changeRequest.owner.email === currentUserEmail;
+  const isCurrentUserOwner = changeRequest.owner.user.email === currentUserEmail;
   const canWithdraw =
     isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.InReview;
   const canSendToReview =

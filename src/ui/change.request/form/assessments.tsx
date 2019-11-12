@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { AssessmentType } from "../../../state/ducks/changeRequest";
+import { AssessmentItem, AssessmentType } from "../../../state/ducks/changeRequest";
 import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
 import AttachmentField from "../../components/common/attachment.field/container";
 import AttachmentIconField from "../../components/common/attachment.icon/container";
@@ -15,7 +15,7 @@ type Props = Partial<FormikHybridFieldProps>;
 const Assessments: React.FunctionComponent<Props> = ({ form }) => {
   const itemRenderer = () =>
     Object.values(AssessmentType).map((type) => {
-      const { attachments, reasoning } = form!.values.assessments[
+      const { attachments, reasoning }: AssessmentItem = form!.values.assessments[
         type as AssessmentType
       ];
 
@@ -23,37 +23,23 @@ const Assessments: React.FunctionComponent<Props> = ({ form }) => {
         <AttachmentField name={`assessments.${type}.attachments`} />
       );
 
-      const hasAttachment = (attachments || []).length > 0;
-
-      if (hasAttachment && reasoning) {
-        form!.setFieldValue(`assessments.${type}.reasoning`, null);
+      // Has attachment
+      if ((attachments || []).length > 0 && reasoning) {
+        form!.setFieldValue(`assessments.${type}.reasoning`, undefined);
       }
-
-      const renderTextEditor = !hasAttachment && (
-        <TextEditorField
-          name={`assessments.${type}.reasoning`}
-          customContainers={getCustomContainers(type)}
-          customHandlers={customHandlers(type)}
-          customToolbarAction={customToolbarAction(type)}
-          actionsRenderer={actionsRenderer}
-          label={`change.request.${type}.assessment`}
-        />
-      );
-      const renderAttachments = hasAttachment && (
-        <>
-          <HeaderField
-            dataProp={`change.request.${type}.assessment`}
-            size="sm"
-            actionsRenderer={actionsRenderer}
-          />
-          <AttachmentIconField name={`assessments.${type}.attachments`} />
-        </>
-      );
 
       return (
         <Box key={type} mb={4}>
-          {renderTextEditor}
-          {renderAttachments}
+          <TextEditorField
+            name={`assessments.${type}.reasoning`}
+            label={`change.request.${type}.assessment`}
+            actionsRenderer={actionsRenderer}
+            hidden={(attachments || []).length > 0}
+            customHandlers={customHandlers(type)}
+            customToolbarAction={customToolbarAction(type)}
+            customContainers={getCustomContainers(type)}
+          />
+          <AttachmentIconField name={`assessments.${type}.attachments`} />
         </Box>
       );
     });

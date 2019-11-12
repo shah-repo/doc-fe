@@ -1,11 +1,13 @@
 import _ from "lodash";
+import moment from "moment-timezone";
 import {
   DocumentRevision,
   DocumentRevisionStatus,
   DocumentRevisionType,
 } from "../../../state/ducks/documentRevisions";
+import { store } from "../../../state/store";
 import { SelectOption } from "../../components/forms/fields/Select";
-import { DocumentRevisionUserProps } from "./types";
+import { ReleasedDateOptions } from "./types";
 
 const isDraft = (documentRevision: DocumentRevision) =>
   documentRevision.status === DocumentRevisionStatus.Draft;
@@ -13,8 +15,14 @@ const isDraft = (documentRevision: DocumentRevision) =>
 const isPendingChange = (documentRevision: DocumentRevision) =>
   documentRevision.status === DocumentRevisionStatus.PendingChange;
 
-export const canEditDocumentRevision = ({ dataProp, currentUserEmail}: DocumentRevisionUserProps) =>
-  currentUserEmail === dataProp.owner.email && (isDraft(dataProp) || isPendingChange(dataProp));
+export const canEditDocumentRevision = (documentRevision: DocumentRevision) => {
+  const owner = _.get(documentRevision, "owner.user.email");
+  const currentUser = store.getState().auth.user.email;
+  return (
+    currentUser === owner &&
+    (isDraft(documentRevision) || isPendingChange(documentRevision))
+  );
+};
 
 export const documentRevisionIdMask = (
   type: string,
@@ -57,4 +65,21 @@ export const documentRevisionTypeFormOption = () => {
     options.push({value: key, text: keyName});
   });
   return _.orderBy(options, ["text"], ["asc"]);
+};
+
+export const documentRevisionReleasedDateOption = () => {
+  return [
+    {
+      text: ReleasedDateOptions.LAST_WEEK,
+      value: moment().subtract(7, "d").startOf("day").toISOString(),
+    },
+    {
+      text: ReleasedDateOptions.LAST_TWO_WEEKS,
+      value: moment().subtract(14, "d").startOf("day").toISOString(),
+    },
+    {
+      text: ReleasedDateOptions.LAST_MONTH,
+      value: moment().subtract(30, "d").startOf("day").toISOString(),
+    },
+  ];
 };

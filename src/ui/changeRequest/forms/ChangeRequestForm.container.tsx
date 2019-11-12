@@ -1,30 +1,17 @@
 import { Grid, WithStyles, withStyles } from "@material-ui/core";
-import React, { useState } from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useState } from "react";
 import {
   ChangeRequest,
-  ChangeRequestsByIdState,
-  changeRequestsSelectors,
 } from "../../../state/ducks/changeRequest";
 import {
-  DocumentRevisionsByIdState,
-  documentRevisionsSelectors,
+  DocumentRevision,
 } from "../../../state/ducks/documentRevisions";
-import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
-import ChangeRequestHeader from "../../change.request/summary/header";
-import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
-import DocumentRevisionUpdateContainer from "../../documentRevision/DocumentRevisionUpdate.container";
-import ChangeRequestAuditContainer from "../audit/Audit.container";
 import DocumentRevisionControlContainer from "../documentRevision/DocumentRevisionControl.container";
-import AssessmentFormContainer from "./assessmentForm/AssessmentForm.container";
+import { ChangeRequestFormPresenter } from "./ChangeRequestForm.presenter";
 import styles from "./styles";
 import { ChangeRequestFormValues } from "./types";
 
-interface StateProps {
-  documentRevisionsById: DocumentRevisionsByIdState;
-  changeRequestsById: ChangeRequestsByIdState;
-}
 interface OwnProps {
   initialValues: ChangeRequestFormValues;
   onSubmit: (values: ChangeRequestFormValues) => void;
@@ -34,13 +21,7 @@ interface OwnProps {
 }
 
 type ChangeRequestFormContainerProps = OwnProps &
-  StateProps &
   WithStyles<typeof styles>;
-
-const mapStateToProps = (state: ApplicationState): StateProps => ({
-  documentRevisionsById: documentRevisionsSelectors.byId(state),
-  changeRequestsById: changeRequestsSelectors.byId(state),
-});
 
 export const ChangeRequestFormContainer: React.FunctionComponent<
   ChangeRequestFormContainerProps
@@ -49,10 +30,8 @@ export const ChangeRequestFormContainer: React.FunctionComponent<
   onSubmit,
   asyncState,
   initialValues,
-  documentRevisionsById,
   changeRequest,
   doNotPrompt,
-  changeRequestsById,
 }) => {
   const alertMessage = "You have unsaved changes.";
   const [isFormDirty, setIsFormDirty] = useState<boolean>(false);
@@ -62,118 +41,63 @@ export const ChangeRequestFormContainer: React.FunctionComponent<
   const [documentRevisionsList, setDocumentRevisionsList] = useState<string[]>(
     initialValues.documentRevisions,
   );
+  const [documentsInCrById, setDocumentsInCrById] = useState({});
 
-  const doneAddingDocuments = (addedDocuments: string[]) => {
-    const documentRevisions = new Set([
-      ...addedDocuments,
-      ...documentRevisionsList,
-    ]);
-    setDocumentRevisionsList(Array.from(documentRevisions));
-  };
+  useEffect(() => {
+    if (changeRequest && changeRequest.documentRevisions) {
+      setDocumentsInCrById(
+        changeRequest.documentRevisions.reduce(
+          (acc, docRev: DocumentRevision) => ({ ...acc, [docRev.id]: docRev }),
+          {},
+        ),
+      );
+    }
+  }, [(changeRequest || {}).documentRevisions]);
 
-  const deleteDocumentFromChangeRequest = (
-    deleteDocumentRevisionId: string,
-  ) => {
-    setDocumentRevisionsList(
-      documentRevisionsList.filter(
-        (documentRevisionId) => documentRevisionId !== deleteDocumentRevisionId,
-      ),
-    );
+  const alertIfFormDirty = () => {
+    if (!isFormDirty) {
+      return true;
+    }
+    alert(alertMessage);
+    return false;
   };
 
   const selectDocumentRevision = (documentRevisionId: string) => {
-    if (isFormDirty) {
-      alert(alertMessage);
-      return;
-    }
-    setSelectedDocumentRevision(documentRevisionId);
+    alertIfFormDirty() && setSelectedDocumentRevision(documentRevisionId);
   };
 
   const selectAssessmentForm = () => {
-    if (isFormDirty) {
-      alert(alertMessage);
-      return;
-    }
-    setSelectedDocumentRevision(null);
+    alertIfFormDirty() && setSelectedDocumentRevision(null);
   };
 
   const onDirtyFlagChange = (dirty: boolean) => setIsFormDirty(dirty);
-
-  const renderAssessmentForm = () => {
-    return (
-      <AssessmentFormContainer
-        initialValues={initialValues}
-        onSubmit={onSubmit}
-        asyncState={asyncState}
-        changeRequest={changeRequest}
-        documentRevisionsList={documentRevisionsList}
-        doNotPrompt={doNotPrompt}
-        onDirtyFlagChange={onDirtyFlagChange}
-      />
-    );
-  };
-
-  const renderDocumentRevisionForm = () => {
-    if (selectedDocumentRevision) {
-      const docRev = {
-        ...documentRevisionsById[selectedDocumentRevision],
-        changeRequest: initialValues.id
-          ? changeRequestsById[initialValues.id]
-          : undefined,
-      };
-      return (
-        <DocumentRevisionUpdateContainer
-          documentRevision={docRev}
-          onDirtyFlagChange={onDirtyFlagChange}
-        />
-      );
-    }
-  };
-
-  const renderChangeRequestAudit = () => {
-    if (changeRequest) {
-      return <ChangeRequestAuditContainer changeRequestId={changeRequest.id} />;
-    }
-  };
-
-  const renderDocumentRevisionAudit = () => {
-    if (selectedDocumentRevision) {
-      return (
-        <DocumentRevisionAuditContainer
-          documentRevisionId={selectedDocumentRevision}
-        />
-      );
-    }
-  };
 
   return (
     <Grid container={true} className={classes.whiteContainer}>
       <Grid container={true} spacing={4}>
         <Grid item={true} xs={12} sm={3} md={2}>
           <DocumentRevisionControlContainer
-            doneAddingDocuments={doneAddingDocuments}
+            setDocumentRevisionsList={setDocumentRevisionsList}
             documentsInChangeRequest={documentRevisionsList}
-            deleteDocumentFromChangeRequest={deleteDocumentFromChangeRequest}
             selectDocumentRevision={selectDocumentRevision}
             selectAssessmentForm={selectAssessmentForm}
             selectedDocumentRevision={selectedDocumentRevision}
+            documentsInCrById={documentsInCrById}
           />
         </Grid>
-        <Grid item={true} xs={12} sm={6} md={7}>
-          {changeRequest && <ChangeRequestHeader dataProp={changeRequest!} />}
-          {!selectedDocumentRevision && renderAssessmentForm()}
-          {renderDocumentRevisionForm()}
-        </Grid>
-        <Grid item={true} xs={12} sm={3} md={3}>
-          {renderDocumentRevisionAudit()}
-          {renderChangeRequestAudit()}
-        </Grid>
+        <ChangeRequestFormPresenter
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+          asyncState={asyncState}
+          doNotPrompt={doNotPrompt}
+          onDirtyFlagChange={onDirtyFlagChange}
+          changeRequest={changeRequest}
+          selectedDocumentRevision={selectedDocumentRevision}
+          documentRevisionsList={documentRevisionsList}
+        />
       </Grid>
     </Grid>
   );
 };
 
-export default connect<StateProps, {}, OwnProps, ApplicationState>(
-  mapStateToProps,
-  {},
-)(withStyles(styles)(ChangeRequestFormContainer));
+export default withStyles(styles)(ChangeRequestFormContainer);

@@ -2,7 +2,6 @@ import moment from "moment-timezone";
 import {
   applyTimezoneToDate,
   getDateString,
-  getFormattedDateString,
 } from "./date";
 
 describe("common/utils/date", () => {

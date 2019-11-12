@@ -8,12 +8,12 @@ import { SelectOption } from "../../components/forms/fields/Select";
 import { AssessmentReasoningOption, ChangeRequestUserProps } from "./types";
 
 export const canEditChangeRequest = ({dataProp, currentUserEmail}: ChangeRequestUserProps) => (
-  currentUserEmail === dataProp.owner.email && dataProp.state === ChangeRequestStatus.Draft
+  currentUserEmail === dataProp.owner.user.email && dataProp.state === ChangeRequestStatus.Draft
 );
 
 export const canEditApprovers = ({dataProp, currentUserEmail}: ChangeRequestUserProps) => {
   return canEditChangeRequest({dataProp, currentUserEmail}) ||
-    (currentUserEmail === dataProp.owner.email && dataProp.state === ChangeRequestStatus.InReview);
+    (currentUserEmail === dataProp.owner.user.email && dataProp.state === ChangeRequestStatus.InReview);
 };
 
 export const canCloseTask = (
@@ -24,7 +24,9 @@ export const canCloseTask = (
   return (
     (task.assigned && task.assigned.email === currentUserEmail) &&
     (task.status === ImplementationPlanTaskStatus.Pending) &&
-    (changeRequestStatus === ChangeRequestStatus.InReview || changeRequestStatus === ChangeRequestStatus.Implementation || changeRequestStatus === ChangeRequestStatus.Approved)
+    (changeRequestStatus === ChangeRequestStatus.InReview ||
+      changeRequestStatus === ChangeRequestStatus.Implementation ||
+      changeRequestStatus === ChangeRequestStatus.Approved)
   );
 };
 
