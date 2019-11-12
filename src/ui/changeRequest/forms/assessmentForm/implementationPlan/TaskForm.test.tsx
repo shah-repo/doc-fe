@@ -2,10 +2,9 @@ import { Button } from "@material-ui/core";
 import { shallow, ShallowWrapper } from "enzyme";
 import React from "react";
 
-import SelectField from "../../../../components/forms/fields/Select";
+import InputField from "../../../../components/forms/fields/Input";
 import { ImplementationPlanTaskFormValues } from "../../types";
 import { TaskForm, TaskFormProps } from "./TaskForm";
-import InputField from "../../../../components/forms/fields/Input";
 
 describe("TaskForm tests", () => {
   let wrapper: ShallowWrapper;
@@ -24,13 +23,13 @@ describe("TaskForm tests", () => {
   });
 
   it("should have correct options when new", () => {
-    const expectedOptions = { id: "statusId", value: "PENDING", disabled:true };
+    const expectedOptions = { id: "statusId", value: "PENDING", disabled: true };
     expect(wrapper.find(InputField).at(1).prop("inputProps")).toEqual(expectedOptions);
   });
 
   it("should have correct options when not new", () => {
     const notNewWrapper = getWrapper({ values: { id: "12" } as ImplementationPlanTaskFormValues });
-    const expectedOptions = { id: "statusId", value: "PENDING", disabled:true };
+    const expectedOptions = { id: "statusId", value: "PENDING", disabled: true };
 
     expect(notNewWrapper.find(InputField).at(1).prop("inputProps")).toEqual(expectedOptions);
   });

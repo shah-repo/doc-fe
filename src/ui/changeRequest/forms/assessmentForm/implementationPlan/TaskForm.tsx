@@ -94,7 +94,7 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
             inputProps={{
               id: "statusId",
               value: "PENDING",
-              disabled: true
+              disabled: true,
             }}
           />
         </Grid>
