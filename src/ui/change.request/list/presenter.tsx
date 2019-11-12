@@ -66,7 +66,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       label: "change.request.list.owner",
       cellHref: cellHrefRenderer,
       columnOptions: {
-        cellDataGetter: ({ rowData }) => rowData.owner.name,
+        cellDataGetter: ({ rowData }) => rowData.owner.user.name,
         flexGrow: 1,
       },
       searchOptions: {

@@ -10,7 +10,7 @@ export const canEditDocumentRevision = (
   currentUserEmail: string,
 ) =>
   documentRevision.owner &&
-  currentUserEmail === documentRevision.owner.email &&
+  currentUserEmail === documentRevision.owner.user.email &&
   (documentRevision.status === DocumentRevisionStatus.Draft ||
     documentRevision.status === DocumentRevisionStatus.PendingChange);
 
@@ -19,7 +19,7 @@ export const canSubmitDocumentRevision = (
   currentUserEmail: string,
 ) =>
   documentRevision.owner &&
-  currentUserEmail === documentRevision.owner.email &&
+  currentUserEmail === documentRevision.owner.user.email &&
   documentRevision.status === DocumentRevisionStatus.PendingChange;
 
 export const canCreateNewVersion = (

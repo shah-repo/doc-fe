@@ -42,7 +42,7 @@ export const DocumentRevisionTable: React.FunctionComponent<
       revision: documentRevision.revision,
       description: documentRevision.description,
       name: documentRevision.name,
-      owner: documentRevision.owner.name,
+      owner: documentRevision.owner.user.name,
       status: documentRevision.status,
       type: documentRevision.document.documentType.documentTypeName || "",
     };

@@ -1,8 +1,13 @@
 import { shallow } from "enzyme";
 import faker from "faker";
 import React from "react";
+import { getOwner } from "../../state/ducks/common/tests/factories";
 import { ApprovalStatus, DocumentStatus } from "../../state/ducks/documents";
-import { getApproval, getDocument, getUser } from "../../state/ducks/documents/tests/factories";
+import {
+  getApproval,
+  getDocument,
+  getUser,
+} from "../../state/ducks/documents/tests/factories";
 import {
   DocumentPreviewContainer,
   DocumentPreviewContainerProps,
@@ -12,8 +17,10 @@ import DocumentPreviewPresenter from "./DocumentPreview.presenter";
 describe("DocumentPreviewContainer tests", () => {
   const currentUserEmail = faker.internet.email();
   const document = getDocument({
-    owner: getUser({
-      email: currentUserEmail,
+    owner: getOwner({
+      user: getUser({
+        email: currentUserEmail,
+      }),
     }),
   });
   const defaultProps: DocumentPreviewContainerProps = {
@@ -21,9 +28,10 @@ describe("DocumentPreviewContainer tests", () => {
     currentUserEmail,
   };
 
-  const getPresenter = (props: Partial<DocumentPreviewContainerProps>) => shallow(
-    <DocumentPreviewContainer {...defaultProps} {...props} />,
-  ).find(DocumentPreviewPresenter);
+  const getPresenter = (props: Partial<DocumentPreviewContainerProps>) =>
+    shallow(<DocumentPreviewContainer {...defaultProps} {...props} />).find(
+      DocumentPreviewPresenter,
+    );
 
   it("sets document prop", () => {
     const presenter = getPresenter({});
