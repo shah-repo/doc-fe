@@ -10,7 +10,11 @@ import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisio
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
-import { TablePanelStateProps, TableSearchQueryType, TableSelectionProps } from "../../components/table/types";
+import {
+  TablePanelStateProps,
+  TableSearchQueryType,
+  TableSelectionProps,
+} from "../../components/table/types";
 import { generateVersionNumber } from "../../documentRevision/helpers";
 import styles from "./DocumentRevisionTable.styles";
 
@@ -73,7 +77,8 @@ const DocumentRevisionTable: React.FunctionComponent<
       key: "version",
       label: "changeRequest.documentRevisionTable.version",
       columnOptions: {
-        cellDataGetter: ({ rowData: { revision, revisionStage }}) => generateVersionNumber(revision, revisionStage),
+        cellDataGetter: ({ rowData: { revision, revisionStage } }) =>
+          generateVersionNumber(revision, revisionStage),
         width: 50,
       },
       searchOptions: {
@@ -84,7 +89,7 @@ const DocumentRevisionTable: React.FunctionComponent<
       key: "owner",
       label: "changeRequest.documentRevisionTable.owner",
       columnOptions: {
-        cellDataGetter: ({ rowData }) => rowData.owner.name,
+        cellDataGetter: ({ rowData }) => rowData.owner.user.name,
         flexGrow: 2,
       },
       searchOptions: {
@@ -122,10 +127,10 @@ const DocumentRevisionTable: React.FunctionComponent<
   };
 
   return (
-  <Paper className={classes.root}>
-    <DocumentInfo numberOfRecords={tableState.queryData.length} />
-    {bodyRenderer()}
-  </Paper>
+    <Paper className={classes.root}>
+      <DocumentInfo numberOfRecords={tableState.queryData.length} />
+      {bodyRenderer()}
+    </Paper>
   );
 };
 

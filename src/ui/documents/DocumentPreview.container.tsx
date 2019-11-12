@@ -23,7 +23,7 @@ export const DocumentPreviewContainer: React.FunctionComponent<DocumentPreviewCo
   document,
   currentUserEmail,
 }) => {
-  const isCurrentUserOwner = document.owner.email === currentUserEmail;
+  const isCurrentUserOwner = document.owner.user.email === currentUserEmail;
   const canWithdraw = isCurrentUserOwner && document.status === DocumentStatus.InReview;
   const canSendToReview = isCurrentUserOwner && document.status === DocumentStatus.Draft;
 

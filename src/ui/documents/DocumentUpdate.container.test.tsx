@@ -1,6 +1,7 @@
 import { shallow } from "enzyme";
 import faker from "faker";
 import React from "react";
+import { getOwner } from "../../state/ducks/common/tests/factories";
 import { DocumentStatus } from "../../state/ducks/documents";
 import { getDocument, getUser } from "../../state/ducks/documents/tests/factories";
 import { ASYNC_DEFAULT_STATE } from "../hooks/useAsync";
@@ -17,8 +18,10 @@ describe("DocumentUpdateContainer tests", () => {
   const notExistingEmail = "does.not.exist@codecons.com";
   const document = getDocument({
     status: DocumentStatus.Draft,
-    owner: getUser({
-      email: currentUserEmail,
+    owner: getOwner({
+      user: getUser({
+        email: currentUserEmail,
+      }),
     }),
   });
 
