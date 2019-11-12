@@ -20,7 +20,7 @@ export const ChangeRequestApproval: React.FunctionComponent<Props> = ({
     <Grid container={true} spacing={10} justify="space-between" alignItems="baseline">
       <Grid item={true} xs={8}>
         <span className={classes.crId}>{`CRID: ${pendingAction.changeReq.crId} `}</span>
-        <span>{`from ${pendingAction.changeReq.owner.name} `}</span>
+        <span>{`from ${pendingAction.changeReq.owner.user.name} `}</span>
         <Text message={`dashboard.type.${pendingAction.type}`} />
       </Grid>
       <Grid item={true} xs={2}>

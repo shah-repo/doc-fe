@@ -89,7 +89,7 @@ const DocumentRevisionTable: React.FunctionComponent<
       key: "owner",
       label: "changeRequest.documentRevisionTable.owner",
       columnOptions: {
-        cellDataGetter: ({ rowData }) => rowData.owner.name,
+        cellDataGetter: ({ rowData }) => rowData.owner.user.name,
         flexGrow: 2,
       },
       searchOptions: {

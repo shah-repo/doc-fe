@@ -35,7 +35,7 @@ describe("DocumentRevisionDisplayContainer isNewVersion test", () => {
 describe("DocumentRevisionDisplayContainer canEdit test", () => {
     const documentRevision = getDocumentRevision();
     const defaultProps: DocumentRevisionDisplayContainerProps = {
-        currentUserEmail: documentRevision.owner.email,
+        currentUserEmail: documentRevision.owner.user.email,
         loadDocumentRevisionAsyncState: ASYNC_DEFAULT_STATE,
         loadDocumentRevision: jest.fn(),
         documentRevisionId: faker.random.uuid(),

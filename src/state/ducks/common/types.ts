@@ -4,6 +4,11 @@ export enum ApprovalStatus {
   Rejected = "REJECTED",
 }
 
+export interface Owner {
+  id: string;
+  user: User;
+}
+
 export interface User {
   id: string;
   email: string;

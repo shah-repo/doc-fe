@@ -41,7 +41,7 @@ describe("TablePanel component tests", () => {
       key: "owner",
       label: "header.title",
       columnOptions: {
-        cellDataGetter: ({ rowData }) => rowData.owner.email,
+        cellDataGetter: ({ rowData }) => rowData.owner.user.email,
       },
     },
     {

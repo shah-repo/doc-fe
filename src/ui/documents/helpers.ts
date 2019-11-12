@@ -7,4 +7,4 @@ export const canCloneDocument = (document: Document) => _.includes<DocumentStatu
 );
 
 export const canEditDocument = (document: Document, currentUserEmail: string) =>
-  currentUserEmail === document.owner.email && document.status === DocumentStatus.Draft;
+  currentUserEmail === document.owner.user.email && document.status === DocumentStatus.Draft;
