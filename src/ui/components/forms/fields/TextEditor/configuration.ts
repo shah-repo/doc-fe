@@ -19,7 +19,7 @@ export const modules = {
         const input = tooltip.root.querySelector("input[data-link]");
         input.dataset.link = "www.enlil.io";
         input.placeholder = "www.enlil.io";
-        // input.dataset.lpignore = true;
+        input.dataset.lpignore = true;
 
         // https://github.com/quilljs/quill/blob/develop/themes/snow.js#L113
         if (value) {
