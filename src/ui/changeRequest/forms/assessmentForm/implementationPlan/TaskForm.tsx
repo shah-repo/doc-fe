@@ -2,7 +2,6 @@ import { Button, createStyles, Grid, makeStyles } from "@material-ui/core";
 import { Form, FormikProps } from "formik";
 import React from "react";
 import { connect } from "react-redux";
-import implementationPlanTaskStates from "../../../../../data/implementationPlanTaskStates.json";
 import { changeRequestsSelectors } from "../../../../../state/ducks/changeRequest";
 import { ApplicationState } from "../../../../../state/reducers";
 import AutocompleteField from "../../../../components/forms/fields/Autocomplete/Autocomplete";
@@ -41,15 +40,9 @@ export const styles = makeStyles(() =>
 ));
 
 export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
-  cancel, availableAssignees, values,
+  cancel, availableAssignees
 }) => {
   const classes = styles();
-  const isNew = values.id === undefined;
-  let planStateOptions = implementationPlanTaskStates;
-
-  if (isNew) {
-    planStateOptions = implementationPlanTaskStates.filter((option) => option.value !== "DONE");
-  }
 
   return (
     <Form>
