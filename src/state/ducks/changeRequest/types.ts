@@ -81,7 +81,7 @@ export interface ChangeRequest {
 }
 
 export interface Approver {
-  email: string;
+  id: string;
 }
 
 export interface DocumentRevisionRequestBody {
@@ -151,8 +151,7 @@ export interface ChangeRequestTransitionResponse {
 
 export interface ChangeRequestAvailableApprovers {
   id: string;
-  email: string;
-  name: string;
+  user: User;
 }
 
 export interface ChangeRequestAvailableApproversResponse {

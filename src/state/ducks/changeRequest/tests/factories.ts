@@ -80,9 +80,8 @@ export const getChangeRequestEditRequestBody = (
 export const getApprover = (
   approver: Partial<ChangeRequestAvailableApprovers> = {},
 ): ChangeRequestAvailableApprovers => ({
-  id: faker.random.uuid(),
-  email: faker.internet.email(),
-  name: faker.name.firstName(),
+    id: faker.random.uuid(),
+    user: getUser(),
   ...approver,
 });
 

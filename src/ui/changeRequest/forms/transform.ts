@@ -117,7 +117,7 @@ export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues):
     assessments: createAssessmentObjectForRequestBody(values.assessments),
     implementationPlan: toImplementationPlanEditRequestBody(values.implementationPlan),
     justifications: createNestedObjectForRequestBody(values.justifications),
-    approvals: (values.approvals || []).map((approver): Approver => ({ email: approver.value })),
+    approvals: (values.approvals || []).map((approver): Approver => ({ id: approver.value })),
     effectiveDate: values.effectiveDate && getDateString(values.effectiveDate),
     documentRevisions: values.documentRevisions.map((documentRevisionId) => ({ id: documentRevisionId })),
   };

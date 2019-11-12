@@ -94,8 +94,8 @@ describe("change requests reducers tests", () => {
 
     const expectedState = {
       ...initialState,
-      [approversList[0].id]: approversList[0],
-      [approversList[1].id]: approversList[1],
+      [approversList[0].user.id]: approversList[0],
+      [approversList[1].user.id]: approversList[1],
     };
 
     it("sets ids on CHANGE_REQUEST_LIST_APPROVERS action", () => {
@@ -109,8 +109,8 @@ describe("change requests reducers tests", () => {
 
     const expectedState = [
       ...initialState,
-      approversList[0].id,
-      approversList[1].id,
+      approversList[0].user.id,
+      approversList[1].user.id,
     ];
 
     it("sets ids on CHANGE_REQUEST_LIST_APPROVERS action", () => {
