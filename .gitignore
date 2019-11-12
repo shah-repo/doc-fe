@@ -26,5 +26,4 @@ yarn-error.log*
 
 test-results/*
 .env
-.gitignore
-yarn.lock
+
