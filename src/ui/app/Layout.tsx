@@ -27,6 +27,7 @@ import DataFetcherContainer from "./DataFetcher.container";
 import HeaderContainer from "./Header.container";
 import styles from "./Layout.styles";
 import Navigation from "./Navigation";
+import RemoteValidatorsLoader from "./RemoteValidators";
 
 type Props = WithStyles<typeof styles>;
 
@@ -34,6 +35,7 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
   return (
     <div>
       <AutoLogout />
+      <RemoteValidatorsLoader />
       <CssBaseline />
       <HeaderContainer />
       <Navigation />
