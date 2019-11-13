@@ -58,16 +58,16 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<
               {documentRevision.document.docId}
             </div>
             <div>
-                <Text translation="common.owner" />:{" "}
-                {documentRevision.owner && documentRevision.name}
+              <Text translation="common.owner" />:{" "}
+              {documentRevision.owner && documentRevision.owner.user.name}
             </div>
             <div>
               <Text translation="common.released" />:{" "}
-                <Date
-                  value={
-                    documentRevision.obsoletedAt || documentRevision.releasedAt
-                  }
-                />
+              <Date
+                value={
+                  documentRevision.obsoletedAt || documentRevision.releasedAt
+                }
+              />
             </div>
           </div>
         </Grid>
