@@ -1,6 +1,7 @@
 import { FBEditorElementType } from "./editor";
+import { FBShemaArrayProps } from "./common";
 
-export interface FBTemplateSchema {
+export interface FBTemplateSchema extends FBShemaArrayProps {
   type: FBEditorElementType | string;
   name: string;
   index: number;
@@ -18,7 +19,6 @@ export interface FBTemplateSchema {
   fieldName?: string;
   linkUrl?: string;
   validatorGroup?: string;
-  schema?: Array<Partial<FBTemplateSchema>>;
 }
 
 export type FBDocumentRevisionMode =

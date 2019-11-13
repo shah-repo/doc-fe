@@ -10,6 +10,10 @@ export class FormBuilderStore {
     return this.mode !== "none";
   }
 
+  @computed get isStarter(): boolean {
+    return (this.mode === "design") && (this.schema.length === 0);
+  }
+
   @computed get prefixName() {
     return `${this.schema.length}_${(this.name || "").replace(" ", "")}`;
   }

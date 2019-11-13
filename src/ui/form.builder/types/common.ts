@@ -16,8 +16,15 @@ export interface FBOptionRendererProps {
   optionsRenderer?: React.ReactNode[];
 }
 
-export type FBFormDefaultProps = FBLabelRendererProps &
-  FBOptionRendererProps & {
+export interface FBShemaArrayProps {
+  schema?: Array<Partial<FBTemplateSchema>>;
+}
+
+export type FBFormDefaultProps =
+  & FBLabelRendererProps
+  & FBShemaArrayProps
+  & FBOptionRendererProps
+  & {
     name?: string;
     index?: number;
     type?: FBEditorElementType | string;
@@ -36,7 +43,6 @@ export type FBFormDefaultProps = FBLabelRendererProps &
     linkUrl?: string;
     validatorGroup?: string;
     row?: boolean;
-    schema?: Array<Partial<FBTemplateSchema>>;
   };
 
 export type FBOnChangeType =

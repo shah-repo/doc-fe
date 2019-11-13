@@ -4,6 +4,7 @@ import apiClient from "../../apiClient";
 import { ApplicationState } from "../../reducers";
 import { ApiAction, AsyncAction, AsyncStatus } from "../../types";
 import { AsyncActionErrorResponse } from "./types";
+import mobxApiClient from "../../mobcApiClient";
 
 export const CALL_API = "middlewares/CALL_API";
 
@@ -51,8 +52,12 @@ const apiMiddleware: Middleware =
           }
 
           if (action.includeAuthorization) {
-            requestConfig.headers.Authorization =
-            `bearer ${getState().auth.user.employeeId}:${getState().auth.user.sessionId}`;
+            const { employeeId, sessionId } = getState().auth.user;
+            const authorization = `bearer ${employeeId}:${sessionId}`;
+
+            requestConfig.headers.Authorization = authorization;
+            // *Note mobx-rest demo
+            mobxApiClient(authorization);
           }
 
           const { data } = await apiClient.request(requestConfig);
