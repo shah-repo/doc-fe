@@ -34,7 +34,7 @@ const ChangeRequestTable: React.FunctionComponent<ChangeRequestTableProps> = ({
     return {
       id: changeRequest.id,
       description: changeRequest.description,
-      owner: changeRequest.owner.name,
+      owner: changeRequest.owner.user.name,
       state: changeRequest.state,
     };
   };

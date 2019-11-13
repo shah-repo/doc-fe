@@ -1,6 +1,6 @@
 import faker from "faker";
 import { Audit } from "../../audit/types";
-import { getUser } from "../../common/tests/factories";
+import { getOwner } from "../../common/tests/factories";
 import {
   ChangeRequest,
   ChangeRequestAvailableApprovers,
@@ -57,7 +57,7 @@ export const getChangeRequest = (changeRequest: Partial<ChangeRequest> = {}): Ch
   justifications: createNestedObject(),
   effectiveDate: faker.date.future(undefined, "2019-05-31"),
   approvals: [],
-  owner: getUser({ id: faker.random.uuid(), email: "test@email.com" }),
+  owner: getOwner(),
   documentRevisions: [],
   closedAt: faker.date.future(undefined, "2019-05-31"),
   ...changeRequest,
@@ -92,6 +92,6 @@ export const getAudit = (audit: Partial<Audit> = {}): Audit => ({
   nextValue: faker.lorem.sentence(),
   groupId: "1",
   timestamp: faker.date.recent().toString(),
-  owner: getUser(),
+  owner: getOwner(),
   ...audit,
 });

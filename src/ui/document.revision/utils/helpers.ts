@@ -16,7 +16,7 @@ const isPendingChange = (documentRevision: DocumentRevision) =>
   documentRevision.status === DocumentRevisionStatus.PendingChange;
 
 export const canEditDocumentRevision = (documentRevision: DocumentRevision) => {
-  const owner = _.get(documentRevision, "owner.email");
+  const owner = _.get(documentRevision, "owner.user.email");
   const currentUser = store.getState().auth.user.email;
   return (
     currentUser === owner &&
