@@ -7,7 +7,6 @@ import { FBAutocompleteProps } from "../../types/autocomplete";
 
 const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   labelRenderer,
-  autocompleteList,
   disabled,
   readOnly,
   ...props

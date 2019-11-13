@@ -30,7 +30,7 @@ export type FBFormDefaultProps = FBLabelRendererProps &
     includeOther?: boolean;
     includeNote?: boolean;
     optionNote?: string;
-    autocompleteList?: string;
+    autocompleteValue?: string;
     isMulti?: boolean;
     fieldName?: string;
     linkUrl?: string;

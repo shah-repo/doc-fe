@@ -7,39 +7,38 @@ import FBCheckbox from "../inputs/FBCheckbox";
 import FBSelect from "../inputs/FBSelect";
 import FBLabelEditor from "./FBLabelEditor";
 import FBPlaceholderEditor from "./FBPlaceholderEditor";
+import { SelectOption } from "../../../components/forms/fields/Select";
 
 // *NOTE: for demo only. Will be removed
 export const tempOtions: FBAutocompleteConfig[] = [
   {
-    id: "documentRevision",
+    id: "1",
+    value: "documentRevision",
     url: DOCUMENT_REVISION_ROOT_URL,
-    label: "Document revisions",
+    text: "Document revisions",
     renderKey: "name",
   },
   {
-    id: "changeRequest",
+    id: "2",
+    value: "changeRequest",
     url: CHANGE_REQUEST_ROOT_URL,
-    label: "Change requests",
+    text: "Change requests",
     renderKey: "title",
   },
   {
-    id: "approvers",
+    id: "3",
+    value: "approvers",
     url: `${CHANGE_REQUEST_ROOT_URL}/available_approvers`,
-    label: "Approvers",
+    text: "Approvers",
     renderKey: "email",
   },
 ];
-
-const options = tempOtions.map((config) => ({
-  value: config.id,
-  text: config.label,
-}));
 
 const FBAutocompleteEditor: React.FunctionComponent<{}> = () => (
   <Box>
     <FBLabelEditor />
     <FBPlaceholderEditor />
-    <FBSelect label="form.builder.select.options" options={options} name="autocompleteList" />
+    <FBSelect label="form.builder.select.options" options={tempOtions as SelectOption[]} name="autocompleteList" />
     <FBCheckbox label="form.builder.multi.select" name="isMulti" />
   </Box>
 

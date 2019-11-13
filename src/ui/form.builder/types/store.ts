@@ -13,7 +13,7 @@ export interface FBTemplateSchema {
   options?: string;
   includeNote?: boolean;
   optionNote?: string;
-  autocompleteList?: string;
+  autocompleteValue?: string;
   isMulti?: boolean;
   fieldName?: string;
   linkUrl?: string;

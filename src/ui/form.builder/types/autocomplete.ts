@@ -22,8 +22,9 @@ export interface FBAutocompleteInjectedProps {
 
 export interface FBAutocompleteConfig {
   id: string;
+  value: string;
   url: string;
-  label: string;
+  text: string;
   renderKey: string;
 }
 
