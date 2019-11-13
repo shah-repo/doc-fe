@@ -1,4 +1,4 @@
-const proxy = require('http-proxy-middleware');
+const proxy = require("http-proxy-middleware");
 
 const bucket = process.env.REACT_APP_AWS_BUCKET_PUBLIC;
 const region = process.env.REACT_APP_AWS_REGION;
@@ -8,8 +8,8 @@ module.exports = function(app) {
   app.use(
     `/${folder}`,
     proxy({
-      target: `https://${bucket}.s3-${region}.amazonaws.com`,
       changeOrigin: true,
-    })
+      target: `https://${bucket}.s3-${region}.amazonaws.com`,
+    }),
   );
 };

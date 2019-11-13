@@ -1,5 +1,4 @@
 import { AxiosRequestConfig } from "axios";
-import _ from "lodash";
 import React, { useEffect } from "react";
 import Config from "../../config";
 import apiClient from "../../state/apiClient";
@@ -21,10 +20,7 @@ const fetchRemoteValidators = async () => {
     const { data } = await apiClient.request(requestConfig);
     await import(/* webpackIgnore: true */ Config.RemoteValidatorsPath(data.file));
     (window as any).EnlilValidatorInstance = new (window as any).EnlilRemoteValidators();
-
-  } catch (exception) {
-    console.log("ERROR: ", exception);
-  }
+  } catch (exception) {}
 };
 
 export const getValidators = async () => {
@@ -34,11 +30,9 @@ export const getValidators = async () => {
   await fetchRemoteValidators();
 
   return (window as any).EnlilValidatorInstance;
-}
+};
 
-const RemoteValidatorsLoader: React.FunctionComponent<{}> = ({
-}) => {
-
+const RemoteValidatorsLoader: React.FunctionComponent<{}> = ({}) => {
   useEffect(() => {
     fetchRemoteValidators();
   }, []);
