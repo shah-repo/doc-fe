@@ -65,7 +65,7 @@ export const toChangeRequestFormValues = (changeRequest: ChangeRequest): ChangeR
     justifications: createNestedObject(changeRequest.justifications),
     implementationPlan: toImplementationPlanFormValues(changeRequest.implementationPlan),
     approvals: changeRequest.approvals.map((approval) => ({
-      label: approval.approver.name, value: approval.approver.email,
+      label: approval.approver.user.name, value: approval.approver.id,
     })),
     effectiveDate: changeRequest.effectiveDate && applyTimezoneToDate(changeRequest.effectiveDate),
     documentRevisions: changeRequest.documentRevisions.map((documentRevision) => documentRevision.id ),

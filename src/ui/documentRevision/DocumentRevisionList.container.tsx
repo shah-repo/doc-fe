@@ -61,7 +61,7 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
               </div>
               <div>
                 <Text translation="common.owner" />:{" "}
-                {documentRevision.owner.name}
+                {documentRevision.owner.user.name}
               </div>
               <div>
                 <Text translation="common.released" />:{" "}

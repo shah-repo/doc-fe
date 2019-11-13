@@ -1,7 +1,7 @@
 import { shallow } from "enzyme";
 import faker from "faker";
 import React from "react";
-import { getUser } from "../../state/ducks/common/tests/factories";
+import { getOwner, getUser } from "../../state/ducks/common/tests/factories";
 import { DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import { getDocumentRevision } from "../../state/ducks/documentRevisions/tests/factories";
 import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";
@@ -18,8 +18,10 @@ describe("DocumentRevisionUpdateContainer tests", () => {
   const notExistingEmail = "does.not.exist@codecons.com";
   const documentRevision = getDocumentRevision({
     status: DocumentRevisionStatus.Draft,
-    owner: getUser({
-      email: currentUserEmail,
+    owner: getOwner({
+      user: getUser({
+        email: currentUserEmail,
+      }),
     }),
   });
 

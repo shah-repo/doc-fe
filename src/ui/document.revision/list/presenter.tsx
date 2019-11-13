@@ -118,7 +118,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       label: "common.owner",
       cellHref: cellHrefRenderer,
       columnOptions: {
-        cellDataGetter: ({ rowData }) => rowData.owner.name,
+        cellDataGetter: ({ rowData }) => rowData.owner.user.name,
       },
       searchOptions: {
         defaultValue: tableState.queryDict.owner,
