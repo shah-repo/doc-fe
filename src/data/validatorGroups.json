@@ -7,7 +7,7 @@
                 "label": "Suppliers",
                 "placeholder": "Select supplier",
                 "isMulti": true,
-                "autocompleteList": "documentRevision"
+                "autocompleteValue": "documentRevision"
             },
             {
                 "type": "textfield",

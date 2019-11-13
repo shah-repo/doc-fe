@@ -38,7 +38,7 @@ const FBAutocompleteEditor: React.FunctionComponent<{}> = () => (
   <Box>
     <FBLabelEditor />
     <FBPlaceholderEditor />
-    <FBSelect label="form.builder.select.options" options={tempOtions as SelectOption[]} name="autocompleteList" />
+    <FBSelect label="form.builder.select.options" options={tempOtions as SelectOption[]} name="autocompleteValue" />
     <FBCheckbox label="form.builder.multi.select" name="isMulti" />
   </Box>
 
