@@ -1,5 +1,6 @@
 import { Box } from "@material-ui/core";
 import { AxiosRequestConfig } from "axios";
+import _ from "lodash";
 import qs from "query-string";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,6 +9,8 @@ import {
   CellMeasurerCache,
   Index,
   Size,
+  SortDirection,
+  SortDirectionType,
   Table,
 } from "react-virtualized";
 import { useDebounce } from "use-debounce";
@@ -23,7 +26,7 @@ import Text from "../../components/Text";
 import useDidMount from "../../hooks/useDidMount";
 import { TableColumn } from "./column/base";
 import { styles } from "./styles";
-import { TablePanelProps, TableStyleProps } from "./types";
+import { TablePanelProps, TableSortProps, TableStyleProps } from "./types";
 
 type Props<T> = TablePanelProps<T>;
 
@@ -36,6 +39,7 @@ export function TablePanel<T extends any>({
   queryUrl = "",
   customQuerySet,
   customDataSet,
+  sortBy,
   tableName,
   providedData,
 }: Props<T>) {
@@ -43,8 +47,12 @@ export function TablePanel<T extends any>({
   const queryDelay = 300;
   let lastQueryValue: string = "";
   const headerHeight = searchable ? 117 : 50;
-  const styleProps: TableStyleProps = { isSelectable: onSelect !== undefined };
+  const styleProps: TableStyleProps = {
+    isSelectable: onSelect !== undefined,
+  };
+
   const classes = styles(styleProps);
+  const sortDirection = SortDirection.DESC;
 
   const tableState = useSelector((reduxState: ApplicationState) =>
     tableSearchSelectors.getTableState(reduxState, tableName),
@@ -52,6 +60,17 @@ export function TablePanel<T extends any>({
   const [debouncedQuery] = useDebounce(tableState.queryDict, queryDelay);
   const dispatch = useDispatch();
   const queryData = providedData || tableState.queryData;
+
+  const processData = (
+    data: T[],
+    sortBy: string,
+    sortDirection: SortDirectionType,
+  ) => {
+    let sortedData = _.sortBy(data, `document.${sortBy}`);
+    sortedData = sortDirection === "DESC" ? sortedData.reverse() : sortedData;
+
+    return sortedData;
+  };
 
   useEffect(() => {
     if (didMount) {
@@ -80,7 +99,7 @@ export function TablePanel<T extends any>({
 
     dispatch(
       tableSearchActions.setSearchCriteria(
-        { ...tableState, queryDict: dict },
+        { ...tableState, queryDict: dict, sortDirection },
         tableName,
       ),
     );
@@ -164,6 +183,9 @@ export function TablePanel<T extends any>({
         rowClassName={classes.row}
         headerClassName={classes.header}
         rowGetter={rowGetter}
+        sortBy={sortBy}
+        sort={sort}
+        sortDirection={tableState.sortDirection}
         noRowsRenderer={noRowsRenderer}
         onRowClick={onSelect && (({ rowData }) => onSelect({ rowData })())}
         scrollToIndex={tableState.scrollToIndex}
@@ -172,6 +194,27 @@ export function TablePanel<T extends any>({
           TableColumn<T>(item, { measurerCache, searchable, queryGetter }),
         )}
       </Table>
+    );
+  };
+
+  const sort = ({ sortBy, sortDirection }: TableSortProps<T>) => {
+    const sortedTableData = processData(
+      tableState.queryData,
+      sortBy!,
+      sortDirection!,
+    );
+
+    dispatch(
+      tableSearchActions.setTableSort(
+        {
+          ...tableState,
+          queryData: sortedTableData as T[],
+          apiError: "",
+          scrollToIndex: 0,
+          sortDirection,
+        },
+        tableName,
+      ),
     );
   };
 

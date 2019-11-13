@@ -44,8 +44,8 @@ describe("change requests selectors tests", () => {
 
   it("getApproversListForAssessmentForm", () => {
     const expectedResult = [
-      { value: approvers[0].email, label: approvers[0].name },
-      { value: approvers[1].email, label: approvers[1].name },
+      { value: approvers[0].id, label: approvers[0].user.name },
+      { value: approvers[1].id, label: approvers[1].user.name },
     ];
     expect(selectors.getApproversListForAssessmentForm(state)).toEqual(expectedResult);
   });

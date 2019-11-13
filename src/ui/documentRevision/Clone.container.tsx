@@ -5,10 +5,13 @@ import { DocumentRevision, documentRevisionsSelectors } from "../../state/ducks/
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import DocumentRevisionCreateContainer from "./DocumentRevisionCreate.container";
-import { canCreateNewVersion } from "./helpers";
+import { canCreateNewVersion, canCreateOutput } from "./helpers";
+
+export type DocumentCloneType = "none" | "newVersion" | "newOutput";
 
 export interface OwnProps {
   documentRevision: DocumentRevision;
+  type: DocumentCloneType;
 }
 
 interface StateProps {
@@ -22,13 +25,21 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
   disableCreateNewVersion: getDisableCreateNewVersion(state, props.documentRevision.document.id),
 });
 export const CloneContainer: React.FunctionComponent<CloneContainerProps> = ({
-  documentRevision, disableCreateNewVersion,
+  documentRevision,
+  disableCreateNewVersion,
+  type,
 }) => {
-  if (!canCreateNewVersion(documentRevision, disableCreateNewVersion, true)) {
+  const redirect = (
+    (type === "newVersion") && !canCreateNewVersion(documentRevision, disableCreateNewVersion, true) ||
+    (type === "newOutput") && !canCreateOutput(documentRevision)
+  );
+
+  if (redirect) {
     return <Redirect to={documentVersionPath(documentRevision.id, documentRevision.document.id)} />;
   }
+
   return (
-    <DocumentRevisionCreateContainer documentRevision={documentRevision} />
+    <DocumentRevisionCreateContainer documentRevision={documentRevision} type={type} />
   );
 };
 

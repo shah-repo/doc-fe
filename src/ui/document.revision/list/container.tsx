@@ -1,29 +1,19 @@
 import _ from "lodash";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import authSelectors from "../../../state/ducks/auth/selectors";
-import {
-  DocumentRevisionStatus,
-} from "../../../state/ducks/documentRevisions";
+import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import documentTypeSelectors from "../../../state/ducks/documentRevisions/documentType/selectors";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import tableSearchSelectors from "../../../state/ducks/tableSearch/selectors";
 import { ApplicationState } from "../../../state/reducers";
-import {
-  documentEditPath,
-  documentPreviewPath,
-} from "../utils/paths";
-import {
-  ListOwnProps,
-} from "../utils/types";
+import { documentEditPath, documentPreviewPath } from "../utils/paths";
+import { ListOwnProps } from "../utils/types";
 import ListPresenter from "./presenter";
 
 type OwnProps = ListOwnProps;
 export type Props = OwnProps;
 
-export const ListContainer: React.FunctionComponent<Props> = ({
-  history,
-}) => {
+export const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
   const TABLE_NAME = "documentRevisions";
   const tableState = useSelector((reduxState: ApplicationState) =>
     tableSearchSelectors.getTableState(reduxState, TABLE_NAME),
@@ -36,24 +26,26 @@ export const ListContainer: React.FunctionComponent<Props> = ({
 
   const dispatch = useDispatch();
   if (_.isEmpty(tableState.queryDict)) {
-    dispatch(tableSearchActions.setSearchCriteria(
-      {
-        ...tableState,
-        queryDict: {
-          "status[]": DocumentRevisionStatus.Released,
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        {
+          ...tableState,
+          queryDict: {
+            "status[]": DocumentRevisionStatus.Released,
+          },
         },
-      },
-      TABLE_NAME,
-    ));
+        TABLE_NAME,
+      ),
+    );
   }
-  const clearFilter = () => dispatch(tableSearchActions.clearSearchCriteria(TABLE_NAME));
-
-  const currentUserEmail = useSelector(authSelectors.currentUserEmail);
-  const documentTypeOptions = useSelector(documentTypeSelectors.getDocumentTypeOptions);
+  const clearFilter = () =>
+    dispatch(tableSearchActions.clearSearchCriteria(TABLE_NAME));
+  const documentTypeOptions = useSelector(
+    documentTypeSelectors.getDocumentTypeOptions,
+  );
 
   return (
     <ListPresenter
-      currentUserEmail={currentUserEmail}
       editDocumentRevision={edit}
       previewDocumentRevision={preview}
       documentTypeOptions={documentTypeOptions}

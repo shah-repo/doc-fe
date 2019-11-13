@@ -77,7 +77,7 @@ const AssessmentFormControlsContainer: React.FunctionComponent<
   };
 
   const formHasErrors = !_.isEmpty(errors);
-  const isCurrentUserOwner = changeRequest.owner.email === currentUserEmail;
+  const isCurrentUserOwner = changeRequest.owner.user.email === currentUserEmail;
   const canWithdraw =
     isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.InReview;
   const canSendToReview =
@@ -86,13 +86,13 @@ const AssessmentFormControlsContainer: React.FunctionComponent<
     isCurrentUserOwner && changeRequest.state === ChangeRequestStatus.Approved;
 
   const currentUserApproval = changeRequest.approvals.find(
-    (approval) => approval.approver.email === currentUserEmail,
+    (approval) => approval.approver.user.email === currentUserEmail,
   );
   const isCurrentUserApprover = !!currentUserApproval;
   const canApproveOrReject =
     isCurrentUserApprover &&
     changeRequest.state === ChangeRequestStatus.InReview &&
-    (currentUserApproval as Approval).status === ApprovalStatus.Pending;
+    (currentUserApproval as unknown as Approval).status === ApprovalStatus.Pending;
 
   return (
     <Box component="span">

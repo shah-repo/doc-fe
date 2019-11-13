@@ -37,7 +37,7 @@ export const Approvers: React.FunctionComponent<Props> = ({
 
   const styles = {
       multiValueRemove: (base: React.CSSProperties, state: any) => {
-        return (dataProp! && dataProp!.some((approver) => approver.approver.email === state.data.value)) ?
+        return (dataProp! && dataProp!.some((approver) => approver.approver.id === state.data.value)) ?
           { ...base, display: "none" } :
           base;
       },

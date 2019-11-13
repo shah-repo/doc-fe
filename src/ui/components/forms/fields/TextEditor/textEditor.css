@@ -32,3 +32,8 @@
   min-height: 8em;
   max-height: 36em;
 }
+
+.ql-tooltip  input[type="text"] {
+  /* hides the last pass icon the hyperlink tooltip */
+  background-image: none !important;
+}

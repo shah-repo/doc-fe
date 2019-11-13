@@ -1,6 +1,5 @@
-import { Formik } from "formik";
+import { Form, Formik } from "formik";
 import React from "react";
-import { withFormikDefaults } from "../../hocs/withFormikDefaults";
 import { FBFormikProps } from "../../types/formik";
 
 const FBForm: React.FunctionComponent<FBFormikProps> = ({
@@ -15,8 +14,12 @@ const FBForm: React.FunctionComponent<FBFormikProps> = ({
       onSubmit={onSubmit}
       initialValues={initialValues}
       {...props}
-    />
+    >
+      <Form>
+        {props.children}
+      </Form>
+    </Formik>
   );
 };
 
-export default withFormikDefaults(FBForm);
+export default FBForm;

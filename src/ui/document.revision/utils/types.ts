@@ -47,8 +47,7 @@ export interface SummaryOwnProps {
 }
 
 // Common
-export type DocumentRevisionUserProps = DataProps<DocumentRevision> & AuthProps;
-export type DocumentRevisionsUserProps = ActionProps & AuthProps & {
+export type DocumentRevisionsUserProps = ActionProps & {
   documentTypeOptions: SelectOption[];
   tableName: string;
   tableState: TablePanelStateProps<DocumentRevision>;

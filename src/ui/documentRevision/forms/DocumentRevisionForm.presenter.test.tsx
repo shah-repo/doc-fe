@@ -44,6 +44,7 @@ describe("DocumentRevisionFormPresenter tests", () => {
             description: faker.lorem.words(),
             name: faker.lorem.word(),
             attachments: [getAttachment()],
+            document: getDocument(),
             referenceTo: [{
                 label: faker.lorem.word(),
                 value: faker.lorem.word(),
@@ -53,6 +54,7 @@ describe("DocumentRevisionFormPresenter tests", () => {
             description: faker.lorem.words(),
             name: faker.lorem.word(),
             attachments: [getAttachment()],
+            document: getDocument(),
             referenceTo: [{
                 label: faker.lorem.word(),
                 value: faker.lorem.word(),

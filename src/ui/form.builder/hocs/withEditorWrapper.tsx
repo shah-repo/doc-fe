@@ -3,7 +3,7 @@ import _ from "lodash";
 import React from "react";
 import { FBEditorSectionConfig } from "../defaults/editor";
 import sortableStore from "../stores/FBSortableStore";
-import formBuilderStore from "../stores/FBStore";
+import FBStore from "../stores/FBStore";
 import {
   FBEditorWrapperProps,
   FBEditorWrapperSubtractProps,
@@ -34,11 +34,12 @@ export function withEditorWrapper<T extends FBEditorWrapperProps>(
     }
 
     private removeSchemaItem = () => {
-      formBuilderStore.removeSchemaItem(this.props.index);
+      FBStore.removeSchemaItem(this.props.index);
     }
 
-    private editSchemaItem = () =>
-      formBuilderStore.editSchemaItem(this.props.index)
+    private editSchemaItem = () => {
+      FBStore.editSchemaItem(this.props.index);
+    }
 
     private toolbarMargin = (): number => {
       if (!this.isSection() && this.hasLabel()) {
@@ -47,19 +48,22 @@ export function withEditorWrapper<T extends FBEditorWrapperProps>(
       return 0;
     }
 
-    private indicatorMargin = (): number =>
-      this.isSection() || !this.hasLabel() ? 4 : 0
+    private indicatorMargin = (): number => {
+      return this.isSection() || !this.hasLabel() ? 4 : 0;
+    }
 
     private isSection = (): boolean =>
       _.includes(FBEditorSectionConfig.section, this.props.type)
 
     private hasLabel = (): boolean => this.props.label !== undefined;
 
-    private canBeVisible = (): boolean =>
-      formBuilderStore.mode === "design" && sortableStore.mode === "inactive"
+    private canBeVisible = (): boolean => {
+      return FBStore.mode === "design" && sortableStore.mode === "inactive";
+    }
 
-    private isIndicatorVisible = (): "visible" | "hidden" =>
-      formBuilderStore.mode === "design" ? "visible" : "hidden"
+    private isIndicatorVisible = (): "visible" | "hidden" => {
+      return FBStore.mode === "design" ? "visible" : "hidden";
+    }
 
     private onMouseOver = () => {
       if (!this.canBeVisible()) {
