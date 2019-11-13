@@ -16,7 +16,7 @@ export const getOwner = (owner: Partial<Owner> = {}): Owner => ({
 
 export const getApproval = (approval: Partial<Approval> = {}): Approval => ({
   id: faker.random.uuid(),
-  approver: getUser(),
+  approver: getOwner(),
   reviewedAt: undefined,
   status: ApprovalStatus.Approved,
   active: faker.random.boolean(),

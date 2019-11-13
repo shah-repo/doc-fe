@@ -18,7 +18,7 @@ export const Approvers: React.FunctionComponent<Props> = ({ classes, dataProp })
     const { approver, status, reviewedAt } = approval;
     const value = (
       <Box pl={2}>
-        <Typography variant="subtitle1" component="span">{approver.name}</Typography>
+        <Typography variant="subtitle1" component="span">{approver.user.name}</Typography>
         <Typography variant="body2" component="span">
           {` | ${status}`}
           {reviewedAt &&

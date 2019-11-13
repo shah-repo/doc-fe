@@ -23,7 +23,7 @@ const AssessmentPreviewPresenter: React.FunctionComponent<
       <Grid container={true}>
         <Grid item={true} xs={3}>
           <Typography>
-            {index + 1}. <strong>{approval.approver.name}</strong>
+            {index + 1}. <strong>{approval.approver.user.name}</strong>
           </Typography>
         </Grid>
         <Grid item={true} xs={3}>
