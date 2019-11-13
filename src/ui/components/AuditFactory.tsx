@@ -34,7 +34,7 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
       returnValue = `${name}.${type}`;
       break;
     case "approvals":
-      returnValue = (audit.nextValue as Approval).approver.name;
+      returnValue = (audit.nextValue as Approval).approver.user.name;
       break;
     case "approvers":
     case "tasks.assigned":

@@ -1,6 +1,6 @@
 import faker from "faker";
 import { Audit } from "../../audit/types";
-import { getOwner } from "../../common/tests/factories";
+import { getOwner, getUser } from "../../common/tests/factories";
 import {
   ChangeRequest,
   ChangeRequestAvailableApprovers,
