@@ -1,6 +1,6 @@
 import { Attachment } from "../attachments";
 import { AuditActionPayload } from "../audit/types";
-import { Approval, Id, User } from "../common";
+import { Approval, Id, Owner, User } from "../common";
 import {
   CHANGE_REQUEST_AUDIT_SET,
   CHANGE_REQUEST_LIST,
@@ -75,7 +75,7 @@ export interface ChangeRequest {
   justifications: Justifications;
   effectiveDate: Date;
   approvals: Approval[];
-  owner: User;
+  owner: Owner;
   documentRevisions: any[];
   closedAt: Date;
 }

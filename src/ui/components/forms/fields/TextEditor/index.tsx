@@ -14,6 +14,7 @@ import useComponentVisible from "../../../../hooks/useComponentVisible";
 import Field, { FieldOwnProps } from "../Field";
 import { reactQuillEmptyString } from "../validators";
 import { formats, modules } from "./configuration";
+import "./customLink";
 import "./textEditor.css";
 
 export interface TextEditorOwnProps extends FieldOwnProps {
