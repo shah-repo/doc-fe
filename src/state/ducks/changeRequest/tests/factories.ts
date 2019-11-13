@@ -1,6 +1,6 @@
 import faker from "faker";
 import { Audit } from "../../audit/types";
-import { getOwner } from "../../common/tests/factories";
+import { getOwner, getUser } from "../../common/tests/factories";
 import {
   ChangeRequest,
   ChangeRequestAvailableApprovers,
@@ -80,9 +80,8 @@ export const getChangeRequestEditRequestBody = (
 export const getApprover = (
   approver: Partial<ChangeRequestAvailableApprovers> = {},
 ): ChangeRequestAvailableApprovers => ({
-  id: faker.random.uuid(),
-  email: faker.internet.email(),
-  name: faker.name.firstName(),
+    id: faker.random.uuid(),
+    user: getUser(),
   ...approver,
 });
 

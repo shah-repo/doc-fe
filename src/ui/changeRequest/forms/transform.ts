@@ -65,7 +65,7 @@ export const toChangeRequestFormValues = (changeRequest: ChangeRequest): ChangeR
     justifications: createNestedObject(changeRequest.justifications),
     implementationPlan: toImplementationPlanFormValues(changeRequest.implementationPlan),
     approvals: changeRequest.approvals.map((approval) => ({
-      label: approval.approver.name, value: approval.approver.email,
+      label: approval.approver.user.name, value: approval.approver.id,
     })),
     effectiveDate: changeRequest.effectiveDate && applyTimezoneToDate(changeRequest.effectiveDate),
     documentRevisions: changeRequest.documentRevisions.map((documentRevision) => documentRevision.id ),
@@ -117,7 +117,7 @@ export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues):
     assessments: createAssessmentObjectForRequestBody(values.assessments),
     implementationPlan: toImplementationPlanEditRequestBody(values.implementationPlan),
     justifications: createNestedObjectForRequestBody(values.justifications),
-    approvals: (values.approvals || []).map((approver): Approver => ({ email: approver.value })),
+    approvals: (values.approvals || []).map((approver): Approver => ({ id: approver.value })),
     effectiveDate: values.effectiveDate && getDateString(values.effectiveDate),
     documentRevisions: values.documentRevisions.map((documentRevisionId) => ({ id: documentRevisionId })),
   };
