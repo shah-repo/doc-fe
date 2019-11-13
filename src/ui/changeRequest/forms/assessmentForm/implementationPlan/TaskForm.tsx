@@ -40,7 +40,7 @@ export const styles = makeStyles(() =>
 ));
 
 export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
-  cancel, availableAssignees
+  cancel, availableAssignees,
 }) => {
   const classes = styles();
 
