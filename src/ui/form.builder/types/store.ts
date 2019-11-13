@@ -1,5 +1,5 @@
-import { FBEditorElementType } from "./editor";
 import { FBShemaArrayProps } from "./common";
+import { FBEditorElementType } from "./editor";
 
 export interface FBTemplateSchema extends FBShemaArrayProps {
   type: FBEditorElementType | string;

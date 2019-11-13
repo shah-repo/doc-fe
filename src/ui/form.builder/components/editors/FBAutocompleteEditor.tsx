@@ -2,12 +2,12 @@ import { Box } from "@material-ui/core";
 import React from "react";
 import { CHANGE_REQUEST_ROOT_URL } from "../../../../state/ducks/changeRequest/constants";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../../state/ducks/documentRevisions/constants";
+import { SelectOption } from "../../../components/forms/fields/Select";
 import { FBAutocompleteConfig } from "../../types/autocomplete";
 import FBCheckbox from "../inputs/FBCheckbox";
 import FBSelect from "../inputs/FBSelect";
 import FBLabelEditor from "./FBLabelEditor";
 import FBPlaceholderEditor from "./FBPlaceholderEditor";
-import { SelectOption } from "../../../components/forms/fields/Select";
 
 // *NOTE: for demo only. Will be removed
 export const tempOtions: FBAutocompleteConfig[] = [

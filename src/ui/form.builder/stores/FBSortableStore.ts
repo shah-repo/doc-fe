@@ -1,4 +1,4 @@
-import { action, observable, computed } from "mobx";
+import { action, computed, observable } from "mobx";
 import { FBSortableType } from "../types/sortable";
 import FBStore from "./FBStore";
 
