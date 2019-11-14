@@ -87,6 +87,7 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
             documentRevisions={documentRevisions}
             documentId={documentId}
             docId={docId}
+            selectedDocumentRevision={documentRevisionId!}
           />
         </AsyncGate>
       </Grid>
