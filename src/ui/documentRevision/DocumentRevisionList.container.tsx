@@ -2,6 +2,7 @@ import classNames from "classnames";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { DocumentRevision } from "../../state/ducks/documentRevisions";
+import SummaryInfo from "../common/summary/SummaryInfo";
 import Date from "../components/Date";
 import Text from "../components/Text";
 import { styles } from "./DocumentRevisionList.container.styles";
@@ -58,26 +59,16 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
               key={documentRevision.id}
               className={classes.linkBody}
             >
-              <div>
-                <Text translation="common.docId" />:{" "}
-                {docId}
-              </div>
-              <div>
-                <Text translation="common.title" />:{" "}
-                {documentRevision.name}
-              </div>
-              <div>
-                <Text translation="common.owner" />:{" "}
-                {documentRevision.owner.user.name}
-              </div>
-              <div>
-                <Text translation="common.released" />:{" "}
-                <Date
-                  value={
-                    documentRevision.obsoletedAt || documentRevision.releasedAt
-                  }
-                />
-              </div>
+              <SummaryInfo label="common.docId" value={docId} />
+              <SummaryInfo label="common.title" value={documentRevision.name} />
+              <SummaryInfo label="common.owner" value={documentRevision.owner.user.name} />
+              <SummaryInfo
+                label="common.released"
+                value={
+                  <Date
+                    value={documentRevision.obsoletedAt || documentRevision.releasedAt}
+                  />}
+              />
             </NavLink>
           </div>
         );
