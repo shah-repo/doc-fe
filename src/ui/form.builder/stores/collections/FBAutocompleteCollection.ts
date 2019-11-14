@@ -1,10 +1,10 @@
-import { Collection } from 'mobx-rest';
-import { FBAutocompleteModel } from '../models/FBAutocompleteModel';
-import { DOCUMENT_REVISION_ROOT_URL } from '../../../../state/ducks/documentRevisions/constants';
-import { SelectOption } from '../../../components/forms/fields/Select';
+import { Collection } from "mobx-rest";
+import { DOCUMENT_REVISION_ROOT_URL } from "../../../../state/ducks/documentRevisions/constants";
+import { SelectOption } from "../../../components/forms/fields/Select";
+import { FBAutocompleteModel } from "../models/FBAutocompleteModel";
 
 class FBAutocompleteCollection extends Collection<FBAutocompleteModel> {
-  private urlStr: string = '';
+  private urlStr: string = "";
 
   constructor(url: string) {
     super();
@@ -26,7 +26,7 @@ class FBAutocompleteCollection extends Collection<FBAutocompleteModel> {
   }
 
   public values(): string[] {
-    const f = this.models.map(o => o.get('name'));
+    const f = this.models.map((o) => o.get("name"));
     return f;
   }
 }

@@ -1,6 +1,6 @@
+import { Dictionary } from "lodash";
 import { FBFormDefaultProps } from "./common";
 import { FBTemplateSchema } from "./store";
-import { Dictionary } from "lodash";
 
 export type FBValidatorProps = Pick<FBFormDefaultProps, "schema">;
 

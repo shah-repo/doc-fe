@@ -1,16 +1,16 @@
 import { observer } from "mobx-react";
 import React from "react";
+import { getValidators } from "../../../app/RemoteValidators";
 import FBAddFieldButton0 from "../../components/custom/FBAddFieldButton0";
 import FBTransportSchema from "../../components/custom/FBTransportSchema";
 import FBForm from "../../components/form/FBForm";
 import FBStore from "../../stores/FBStore";
-import FBEditorDialog from "../editor/FBEditorDialog";
-import FBSortableContainer from "./FBSortableContainer";
-import { getValidators } from "../../../app/RemoteValidators";
 import FBValidatorStore from "../../stores/FBValidatorStore";
 import { FBValidatorGroup } from "../../types/editor";
-import { FBValidatorInstanceProps } from "../../types/validator";
 import { FBTemplateSchema } from "../../types/store";
+import { FBValidatorInstanceProps } from "../../types/validator";
+import FBEditorDialog from "../editor/FBEditorDialog";
+import FBSortableContainer from "./FBSortableContainer";
 
 const FBWorkspace: React.FunctionComponent<{}> = () => {
   const { schema, mode } = FBStore;

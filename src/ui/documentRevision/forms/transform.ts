@@ -7,9 +7,9 @@ import {
 } from "../../../state/ducks/documentRevisions";
 import FBDRStore from "../../form.builder/stores/FBDRStore";
 import FBStore from "../../form.builder/stores/FBStore";
+import FBValidatorStore from "../../form.builder/stores/FBValidatorStore";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
 import { DocumentRevisionFormValues } from "./types";
-import FBValidatorStore from "../../form.builder/stores/FBValidatorStore";
 
 const toRequestFormBuilder = (values: DocumentRevision) => {
   switch (FBDRStore.mode) {
@@ -29,7 +29,7 @@ const toRequestFormBuilder = (values: DocumentRevision) => {
       return {
         ...values,
         formDocument: {
-          id: (_.get(values, "formDocument.id")),
+          id: _.get(values, "formDocument.id"),
         },
         formInput: FBStore.getValues(),
       };
@@ -126,9 +126,8 @@ export const toDocumentRevisionFormValuesWithRevisionChange = (
 export const toDocumentRevisionFormValuesForOutput = (
   documentRevision: DocumentRevision,
 ): DocumentRevisionFormValues => {
-
   const values = {
-    ...DEFAULT_INITIAL_VALUES() as unknown as DocumentRevision,
+    ...((DEFAULT_INITIAL_VALUES() as unknown) as DocumentRevision),
     id: "",
     formTemplate: undefined,
     status: DocumentRevisionStatus.Draft,
@@ -140,6 +139,6 @@ export const toDocumentRevisionFormValuesForOutput = (
       formTemplate: documentRevision.formTemplate,
     },
   };
-  FBDRStore.setValues(values as unknown as DocumentRevision);
-  return values as unknown as DocumentRevisionFormValues;
+  FBDRStore.setValues((values as unknown) as DocumentRevision);
+  return (values as unknown) as DocumentRevisionFormValues;
 };

@@ -1,10 +1,10 @@
-import { Model } from 'mobx-rest';
+import { Model } from "mobx-rest";
 
 export class FBAutocompleteModel extends Model {
   get value() {
-    return this.get('id');
+    return this.get("id");
   }
   get text() {
-    return this.get('name');
+    return this.get("name");
   }
 }
