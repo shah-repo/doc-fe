@@ -54,6 +54,8 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       queryDict["status[]"] = documentRevisionQueryStatus();
     }
 
+    queryDict.description = queryDict.name;
+
     return queryDict;
   };
 
