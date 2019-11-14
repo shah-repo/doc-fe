@@ -1,6 +1,6 @@
 import { Collection } from "mobx-rest";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../../state/ducks/documentRevisions/constants";
-import { SelectOption } from "../../../components/forms/fields/Select";
+import { FBAutocompleteSelect } from "../../types/autocomplete";
 import { FBAutocompleteModel } from "../models/FBAutocompleteModel";
 
 class FBAutocompleteCollection extends Collection<FBAutocompleteModel> {
@@ -18,9 +18,9 @@ class FBAutocompleteCollection extends Collection<FBAutocompleteModel> {
     return FBAutocompleteModel;
   }
 
-  public options(): SelectOption[] {
+  public options(): FBAutocompleteSelect[] {
     const t = this.models.map((o: FBAutocompleteModel) => {
-      return { value: o.value, text: o.text } as SelectOption;
+      return { value: o.value, text: o.text, label: o.text } as FBAutocompleteSelect;
     });
     return t;
   }

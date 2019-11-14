@@ -7,4 +7,8 @@ export class FBAutocompleteModel extends Model {
   get text() {
     return this.get("name");
   }
+
+  get label() {
+    return this.get("name");
+  }
 }

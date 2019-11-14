@@ -11,7 +11,7 @@ export interface FBTemplateSchema extends FBShemaArrayProps {
   checkboxNote?: string;
   disabled?: boolean;
   includeOther?: boolean;
-  options?: string;
+  options?: string | string[];
   includeNote?: boolean;
   optionNote?: string;
   autocompleteValue?: string;

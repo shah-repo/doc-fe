@@ -1,4 +1,5 @@
 import React from "react";
+import { SelectOption } from "../../components/forms/fields/Select";
 import { withFormik } from "../../components/hoc/formik";
 import FBStore from "../stores/FBStore";
 import { FBOnChangeProps, Subtract } from "../types/common";
@@ -28,19 +29,24 @@ export function withOnChange<T extends FBOnChangeProps>(
       );
     }
 
-    private handleChange = (trigger: any) => {
+    private handleChange = (trigger: any, newValue?: SelectOption[]) => {
       const { form, field } = this.props;
       let value: any;
 
-      switch (true) {
-        case trigger && this.isEvent(trigger):
-          const target = (trigger as React.ChangeEvent<HTMLInputElement>)
-            .target;
-          value = target.type === "checkbox" ? target.checked : target.value;
-          break;
-        default:
-          value = trigger;
+      if (newValue && newValue.length > 0) {
+        value = [newValue[0].value];
+      } else {
+        switch (true) {
+          case trigger && this.isEvent(trigger):
+            const target = (trigger as React.ChangeEvent<HTMLInputElement>)
+              .target;
+            value = target.type === "checkbox" ? target.checked : target.value;
+            break;
+          default:
+            value = trigger;
+        }
       }
+
       form.setFieldValue(field.name, value);
 
       if (FBStore.mode === "form") {

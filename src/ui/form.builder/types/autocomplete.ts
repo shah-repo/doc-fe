@@ -32,3 +32,7 @@ export type FBAutocompleteProps =
   & FBAutocompleteInjectedProps
   & FBFormDefaultProps
   & FBOnChangeProps;
+
+export interface FBAutocompleteSelect extends SelectOption {
+  label?: string;
+}

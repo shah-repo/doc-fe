@@ -18,6 +18,7 @@ const FBWorkspace: React.FunctionComponent<{}> = () => {
   // validatorCollection.fetch();
 
   getValidators().then((available) => {
+    if (!available) { return; }
     const storeData: FBValidatorGroup[] = [];
     const validators = available.availableValidators;
     Object.keys(validators).map((k) => {

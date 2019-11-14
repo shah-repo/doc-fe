@@ -25,6 +25,7 @@ export type FBFormDefaultProps =
   & FBShemaArrayProps
   & FBOptionRendererProps
   & {
+    placeholder?: string;
     name?: string;
     index?: number;
     type?: FBEditorElementType | string;
@@ -33,7 +34,7 @@ export type FBFormDefaultProps =
     readOnly?: boolean;
     className?: string;
     gutter?: boolean;
-    options?: SelectOption[] | string;
+    options?: SelectOption[] | string | string[];
     includeOther?: boolean;
     includeNote?: boolean;
     optionNote?: string;

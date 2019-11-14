@@ -8,10 +8,10 @@ const FBValidator: React.FunctionComponent<FBValidatorProps> = ({
 }) => (
   <Box
     mb={4}
-    border={1}
+    border={2}
     borderLeft={0}
     borderRight={0}
-    pt={2}
+    pt={3}
     borderColor="text.hint"
     style={{ borderStyle: "dashed" }}
   >

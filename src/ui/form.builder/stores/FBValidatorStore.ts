@@ -12,7 +12,7 @@ export class FormBuilderValidatorStore {
     return this.validatorGroups.map((validator) => validator.name);
   }
 
-  @computed get validators(): FBValidatorRestProps[] {
+  @computed get validators(): FBValidatorRestProps[] | undefined {
     const validators: FBValidatorRestProps[] = [];
     FBStore.schema.map((schemaItem) => {
       if (schemaItem.type === "validator") {
@@ -29,7 +29,7 @@ export class FormBuilderValidatorStore {
       }
     });
 
-    return validators;
+    return (validators.length > 0) ? validators : undefined;
   }
 
   @action public fields(name: string): Array<Partial<FBTemplateSchema>> | undefined {
