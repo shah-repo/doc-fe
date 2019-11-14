@@ -22,7 +22,7 @@ export const canCloseTask = (
   currentUserEmail: string,
 ) => {
   return (
-    (task.assigned && task.assigned.email === currentUserEmail) &&
+    (task.assigned && task.assigned.user.email === currentUserEmail) &&
     (task.status === ImplementationPlanTaskStatus.Pending) &&
     (changeRequestStatus === ChangeRequestStatus.InReview ||
       changeRequestStatus === ChangeRequestStatus.Implementation ||

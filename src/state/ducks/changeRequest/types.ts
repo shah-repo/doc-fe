@@ -49,7 +49,7 @@ export interface ImplementationPlanTask {
   title: string;
   description: string;
   dueDate: Date;
-  assigned?: User;
+  assigned?: Owner;
   createdAt: string;
   closeDate: Date;
   status: string;
