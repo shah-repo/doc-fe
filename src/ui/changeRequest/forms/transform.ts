@@ -48,7 +48,7 @@ const toImplementationPlanFormValues = (plan: ImplementationPlan): Implementatio
         if (task.assigned) {
           taskForm.assigned = {
             value: task.assigned.id,
-            label: task.assigned.name,
+            label: task.assigned.user.name,
           };
         }
         return taskForm;
