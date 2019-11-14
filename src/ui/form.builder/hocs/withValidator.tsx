@@ -17,7 +17,6 @@ export const withValidator = <T extends FBValidatorProps>(
             key={`validator_${name}_${i}`}
             {...schemaItem}
             {...FBStore.fieldMode}
-            name={name}
           />
         );
       });

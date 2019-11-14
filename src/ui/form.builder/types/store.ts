@@ -19,6 +19,7 @@ export interface FBTemplateSchema extends FBShemaArrayProps {
   fieldName?: string;
   linkUrl?: string;
   validatorGroup?: string;
+  metadata?: string;
 }
 
 export type FBDocumentRevisionMode =

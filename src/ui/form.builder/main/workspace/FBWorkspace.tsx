@@ -6,10 +6,35 @@ import FBForm from "../../components/form/FBForm";
 import FBStore from "../../stores/FBStore";
 import FBEditorDialog from "../editor/FBEditorDialog";
 import FBSortableContainer from "./FBSortableContainer";
+import { getValidators } from "../../../app/RemoteValidators";
+import FBValidatorStore from "../../stores/FBValidatorStore";
+import { FBValidatorGroup } from "../../types/editor";
+import { FBValidatorInstanceProps } from "../../types/validator";
+import { FBTemplateSchema } from "../../types/store";
 
 const FBWorkspace: React.FunctionComponent<{}> = () => {
   const { schema, mode } = FBStore;
   const isStarter = (mode === "design") && (schema.length === 0);
+  // validatorCollection.fetch();
+
+  getValidators().then((available) => {
+    const storeData: FBValidatorGroup[] = [];
+    const validators = available.availableValidators;
+    Object.keys(validators).map((k) => {
+      storeData.push({
+        name: k,
+        fields: validators[k].fields.map((field: FBValidatorInstanceProps) => {
+          return {
+            type: field.type,
+            ...field.props,
+            metadata: field.validatorMetadata.fieldKey,
+          } as Partial<FBTemplateSchema>;
+        }),
+      });
+    });
+
+    FBValidatorStore.validatorGroups = storeData;
+  });
 
   return (
     <FBForm initialValues={FBStore.values}>
