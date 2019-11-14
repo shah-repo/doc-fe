@@ -25,18 +25,6 @@
         {
           "name": "REACT_APP_THEME",
           "value": ""
-        },
-        {
-          "name": "REACT_APP_AWS_REGION",
-          "value": "us-west-2"
-        },
-        {
-          "name": "REACT_APP_AWS_BUCKET_PUBLIC",
-          "value": "doc-be-dev-public"
-        },
-        {
-          "name": "REACT_APP_VALIDATORS_S3_FOLDER_NAME",
-          "value": "remoteJS"
         }
       ],
       "logConfiguration": {

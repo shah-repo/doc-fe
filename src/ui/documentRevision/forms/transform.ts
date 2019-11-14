@@ -20,7 +20,7 @@ const toRequestFormBuilder = (values: DocumentRevision) => {
           outputDocumentType: {
             id: _.get(values, "formTemplate.outputDocumentType.id"),
           },
-          schema: FBStore.getSchema(),
+          schema: JSON.stringify(FBStore.getSchema()),
         },
       };
     case "outputCreate":
@@ -29,7 +29,7 @@ const toRequestFormBuilder = (values: DocumentRevision) => {
         formDocument: {
           id: (_.get(values, "formDocument.id")),
         },
-        formInput: FBStore.getValues(),
+        formInput: JSON.stringify(FBStore.getValues()),
       };
     default:
       return {
