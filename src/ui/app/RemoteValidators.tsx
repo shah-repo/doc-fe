@@ -28,7 +28,6 @@ export const getValidators = async () => {
     return (window as any).EnlilValidatorInstance;
   }
   await fetchRemoteValidators();
-
   return (window as any).EnlilValidatorInstance;
 };
 

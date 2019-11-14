@@ -6,6 +6,8 @@ import FBHyperlinkEditor from "../components/editors/FBHyperlinkEditor";
 import FBLabelEditor from "../components/editors/FBLabelEditor";
 import FBSelectEditor from "../components/editors/FBSelectEditor";
 import FBTextFieldEditor from "../components/editors/FBTextFieldEditor";
+import FBValidatorEditor from "../components/editors/FBValidatorEditor";
+import FBValidator from "../components/feedback/FBValidator";
 import FBAutocomplete from "../components/inputs/FBAutocomplete";
 import FBCheckbox from "../components/inputs/FBCheckbox";
 import FBCheckboxGroup from "../components/inputs/FBCheckboxGroup";
@@ -21,9 +23,7 @@ import FBFileUpload from "../components/navigation/FBFileUpload";
 import FBLink from "../components/navigation/FBLink";
 import { FBEditorElementType } from "../types/editor";
 
-export const FBFieldEditorComponent: {
-  [key: string]: React.FunctionComponent<{}>;
-} = {
+export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<{}>> = {
   section: FBLabelEditor,
   subsection: FBLabelEditor,
   textfield: FBTextFieldEditor,
@@ -37,6 +37,7 @@ export const FBFieldEditorComponent: {
   autocomplete: FBAutocompleteEditor,
   hyperlink: FBHyperlinkEditor,
   fileupload: FBLabelEditor,
+  validator: FBValidatorEditor,
 };
 
 export const FBFieldComponent: Dictionary<any> = {
@@ -53,6 +54,7 @@ export const FBFieldComponent: Dictionary<any> = {
   autocomplete: FBAutocomplete,
   hyperlink: FBLink,
   fileupload: FBFileUpload,
+  validator: FBValidator,
 };
 
 export const FBGroupField: Dictionary<any>  = {
@@ -60,7 +62,7 @@ export const FBGroupField: Dictionary<any>  = {
   radiogroup: FBRadio,
 };
 
-export const FBEditorSectionConfig: { [key: string]: FBEditorElementType[] } = {
+export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
   section: ["section", "subsection"],
   basics: [
     "textfield",
@@ -75,4 +77,5 @@ export const FBEditorSectionConfig: { [key: string]: FBEditorElementType[] } = {
     "fileupload",
   ],
   lists: ["autocomplete"],
+  groups: ["validator"],
 };

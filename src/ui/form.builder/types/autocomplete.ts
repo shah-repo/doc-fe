@@ -22,8 +22,9 @@ export interface FBAutocompleteInjectedProps {
 
 export interface FBAutocompleteConfig {
   id: string;
+  value: string;
   url: string;
-  label: string;
+  text: string;
   renderKey: string;
 }
 
@@ -31,3 +32,7 @@ export type FBAutocompleteProps =
   & FBAutocompleteInjectedProps
   & FBFormDefaultProps
   & FBOnChangeProps;
+
+export interface FBAutocompleteSelect extends SelectOption {
+  label?: string;
+}

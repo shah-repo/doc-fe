@@ -52,6 +52,10 @@ export function withSelectDefaults<T extends FBSelectProps>(
       let options = this.props.options;
       if (!options) { return []; }
 
+      if (Array.isArray(options)) {
+        options = _.join(options, "\n");
+      }
+
       if (typeof options === "string" ) {
         const optionsArray = _.split(options, "\n");
         options = optionsArray.map((label, i) => (

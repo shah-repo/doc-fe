@@ -1,7 +1,8 @@
+import { FBShemaArrayProps } from "./common";
 import { FBEditorElementType } from "./editor";
 
-export interface FBTemplateSchema {
-  type: FBEditorElementType;
+export interface FBTemplateSchema extends FBShemaArrayProps {
+  type: FBEditorElementType | string;
   name: string;
   index: number;
   label: string;
@@ -10,13 +11,15 @@ export interface FBTemplateSchema {
   checkboxNote?: string;
   disabled?: boolean;
   includeOther?: boolean;
-  options?: string;
+  options?: string | string[];
   includeNote?: boolean;
   optionNote?: string;
-  autocompleteList?: string;
+  autocompleteValue?: string;
   isMulti?: boolean;
   fieldName?: string;
   linkUrl?: string;
+  validatorGroup?: string;
+  metadata?: string;
 }
 
 export type FBDocumentRevisionMode =

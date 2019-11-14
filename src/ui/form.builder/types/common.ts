@@ -4,6 +4,7 @@ import { ValueType } from "react-select/src/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
 import { FBEditorElementType } from "./editor";
+import { FBTemplateSchema } from "./store";
 
 export type Subtract<T, V> = Pick<T, Exclude<keyof T, keyof V>>;
 
@@ -15,8 +16,16 @@ export interface FBOptionRendererProps {
   optionsRenderer?: React.ReactNode[];
 }
 
-export type FBFormDefaultProps = FBLabelRendererProps &
-  FBOptionRendererProps & {
+export interface FBShemaArrayProps {
+  schema?: Array<Partial<FBTemplateSchema>>;
+}
+
+export type FBFormDefaultProps =
+  & FBLabelRendererProps
+  & FBShemaArrayProps
+  & FBOptionRendererProps
+  & {
+    placeholder?: string;
     name?: string;
     index?: number;
     type?: FBEditorElementType | string;
@@ -25,14 +34,16 @@ export type FBFormDefaultProps = FBLabelRendererProps &
     readOnly?: boolean;
     className?: string;
     gutter?: boolean;
-    options?: SelectOption[] | string;
+    options?: SelectOption[] | string | string[];
     includeOther?: boolean;
     includeNote?: boolean;
     optionNote?: string;
-    autocompleteList?: string;
+    autocompleteValue?: string;
     isMulti?: boolean;
     fieldName?: string;
     linkUrl?: string;
+    validatorGroup?: string;
+    row?: boolean;
   };
 
 export type FBOnChangeType =

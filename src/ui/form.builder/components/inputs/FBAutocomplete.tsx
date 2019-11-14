@@ -1,20 +1,20 @@
 import { Box } from "@material-ui/core";
-import React, { useState } from "react";
+import React from "react";
 import Select from "react-select";
-import { SelectOption } from "../../../components/forms/fields/Select";
 import { withAutocompleteDefaults } from "../../hocs/withAutocompleteDefaults";
+import autocompleteList from "../../stores/collections/FBAutocompleteCollection";
 import { FBAutocompleteProps } from "../../types/autocomplete";
 
 const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   labelRenderer,
-  autocompleteList,
   disabled,
   readOnly,
   ...props
 }) => {
-
   // *NOTE: For demo only. Will be removed
-  const [options] = useState<SelectOption[]>([]);
+  // const [options] = useState<SelectOption[]>([]);
+  autocompleteList.fetch();
+  const options = autocompleteList.options();
   return (
     <Box mb={4}>
       {labelRenderer}
