@@ -46,6 +46,7 @@ export interface User {
   name: string;
   employeeId: string;
   sessionId: string;
+  employees: Company;
 }
 
 export type AuthUserPayload = User;
@@ -76,6 +77,7 @@ export interface UserState {
   name: string;
   employeeId: string;
   sessionId: string;
+  employees: Company;
 }
 
 export interface AuthProps {

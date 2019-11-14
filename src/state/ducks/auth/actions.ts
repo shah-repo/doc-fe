@@ -85,6 +85,7 @@ const login = (loginValues: LoginRequestBody, handlers: Handlers):
         name: data.name, id: data.id,
         sessionId: data.sessionId,
         employeeId: data.employees[0].id,
+        employees: data.employees,
       }));
       dispatch(authTokens(data));
       dispatch(companyActions.selectCompany(data.company));
@@ -105,6 +106,7 @@ const loginWithCode = (loginValues: LoginWithCodeRequestBody, handlers: Handlers
         id: response.id,
         sessionId: response.sessionId,
         employeeId: response.employees[0].id,
+        employees: response.employees,
       }));
       dispatch(authTokens(response));
     },
