@@ -1,6 +1,11 @@
 import { combineReducers } from "redux";
-import { TABLE_SEARCH_CLEAR, TABLE_SEARCH_SET } from "./constants";
-import { TableSearchByIdState, TableSearchClearAction, TableSearchSetAction } from "./types";
+import { TABLE_SEARCH_CLEAR, TABLE_SEARCH_SET, TABLE_SORT } from "./constants";
+import {
+  TableSearchByIdState,
+  TableSearchClearAction,
+  TableSearchSetAction,
+  TableSortAction,
+} from "./types";
 
 export const DEFAULT_TABLE_SEARCH = {
   queryData: [],
@@ -9,7 +14,9 @@ export const DEFAULT_TABLE_SEARCH = {
   scrollToIndex: 0,
 };
 
-type TableSearchActions = TableSearchSetAction<any> & TableSearchClearAction;
+type TableSearchActions = TableSearchSetAction<any> &
+  TableSearchClearAction &
+  TableSortAction<any>;
 
 export const byTableName = (
   state: TableSearchByIdState = {},
@@ -25,6 +32,11 @@ export const byTableName = (
       return {
         ...state,
         [action.tableName]: DEFAULT_TABLE_SEARCH,
+      };
+    case TABLE_SORT:
+      return {
+        ...state,
+        [action.tableName]: action.payload,
       };
     default:
       return state;

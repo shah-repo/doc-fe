@@ -3,7 +3,7 @@ import { FBDocumentFlowProps } from "../../../ui/form.builder/types/formik";
 import { Attachment } from "../attachments";
 import { AuditActionPayload } from "../audit/types";
 import { ChangeRequest } from "../changeRequest";
-import { User } from "../common";
+import { Owner } from "../common";
 import { TrainingRecord } from "../training";
 import {
   DOCUMENT_REVISION_AUDIT_SET,
@@ -59,7 +59,7 @@ export interface DocumentRevision extends FBDocumentFlowProps {
   revisionStage: number;
   name: string;
   description: string;
-  owner: User;
+  owner: Owner;
   attachments: Attachment[];
   status: DocumentRevisionStatus;
   document: DocumentRevisionDocument;

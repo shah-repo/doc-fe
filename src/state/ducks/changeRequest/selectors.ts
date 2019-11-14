@@ -20,12 +20,12 @@ const getChangeRequestsList = createSelector(
 
 const getApproversListForAssessmentForm = createSelector(
   approversAllIds, approversById,
-  (ids, approvers): OptionType[] => ids.map((id) => ({ value: approvers[id].email, label: approvers[id].name })),
+  (ids, approvers): OptionType[] => ids.map((id) => ({ value: approvers[id].id, label: approvers[id].user.name })),
 );
 
 const getAssignessList = createSelector(
   approversAllIds, approversById,
-  (ids, approvers): OptionType[] => ids.map((id) => ({ value: approvers[id].id, label: approvers[id].name })),
+  (ids, approvers): OptionType[] => ids.map((id) => ({ value: approvers[id].id, label: approvers[id].user.name })),
 );
 
 const getChangeRequest = (state: ApplicationState, changeRequestId: string) => byId(state)[changeRequestId];

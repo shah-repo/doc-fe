@@ -28,10 +28,18 @@ import {
 
 type ChangeRequestActions = ChangeRequestSetAction | ChangeRequestListAction;
 
-export const byId = (state: ChangeRequestsByIdState = {}, action: ChangeRequestActions): ChangeRequestsByIdState => {
+export const byId = (
+  state: ChangeRequestsByIdState = {},
+  action: ChangeRequestActions,
+): ChangeRequestsByIdState => {
   switch (action.type) {
     case CHANGE_REQUEST_LIST:
-      return { ...(_.keyBy<ChangeRequest>(action.payload, (changeRequest) => changeRequest.id)) };
+      return {
+        ..._.keyBy<ChangeRequest>(
+          action.payload,
+          (changeRequest) => changeRequest.id,
+        ),
+      };
     case CHANGE_REQUEST_SET:
       const newState: ChangeRequest = {
         ...action.payload,
@@ -43,7 +51,10 @@ export const byId = (state: ChangeRequestsByIdState = {}, action: ChangeRequestA
   }
 };
 
-export const allIds = (state: ChangeRequestsAllIdsState = [], action: ChangeRequestActions): ChangeRequestsAllIdsState => {
+export const allIds = (
+  state: ChangeRequestsAllIdsState = [],
+  action: ChangeRequestActions,
+): ChangeRequestsAllIdsState => {
   switch (action.type) {
     case CHANGE_REQUEST_LIST:
       return _.uniq([...action.payload.map((changeRequest) => changeRequest.id)]);
@@ -54,19 +65,33 @@ export const allIds = (state: ChangeRequestsAllIdsState = [], action: ChangeRequ
   }
 };
 
-export const approversById = (state: ChangeRequestsApproversByIdState = {}, action: ChangeRequestListApproversAction): ChangeRequestsApproversByIdState => {
+export const approversById = (
+  state: ChangeRequestsApproversByIdState = {},
+  action: ChangeRequestListApproversAction,
+): ChangeRequestsApproversByIdState => {
   switch (action.type) {
     case CHANGE_REQUEST_LIST_APPROVERS:
-      return { ...state, ...(_.keyBy<ChangeRequestAvailableApprovers>(action.payload, (approver) => approver.id)) };
+      return {
+        ...state,
+        ..._.keyBy<ChangeRequestAvailableApprovers>(
+          action.payload,
+          (approver) => approver.user.id,
+        ),
+      };
     default:
       return state;
   }
 };
-
-export const approversAllIds = (state: ChangeRequestsApproversAllIdsState = [], action: ChangeRequestListApproversAction): ChangeRequestsApproversAllIdsState => {
+export const approversAllIds = (
+  state: ChangeRequestsApproversAllIdsState = [],
+  action: ChangeRequestListApproversAction,
+): ChangeRequestsApproversAllIdsState => {
   switch (action.type) {
     case CHANGE_REQUEST_LIST_APPROVERS:
-      return _.uniq([...state, ...action.payload.map((approver) => approver.id)]);
+      return _.uniq([
+        ...state,
+        ...action.payload.map((approver) => approver.user.id),
+      ]);
     default:
       return state;
   }
@@ -74,17 +99,21 @@ export const approversAllIds = (state: ChangeRequestsApproversAllIdsState = [], 
 
 export const auditsByCRId = (
   state: AuditByCRIdState = {},
-  action: ChangeRequestAuditSetAction): AuditByCRIdState => {
+  action: ChangeRequestAuditSetAction,
+): AuditByCRIdState => {
   switch (action.type) {
     case CHANGE_REQUEST_AUDIT_SET:
-      const audits = _.groupBy(action.payload.audit,  "groupId");
+      const audits = _.groupBy(action.payload.audit, "groupId");
       return { ...state, [action.payload.id]: audits };
     default:
       return state;
   }
 };
 
-export const auditsAllId = (state: allIdsState = [], action: ChangeRequestAuditSetAction): allIdsState => {
+export const auditsAllId = (
+  state: allIdsState = [],
+  action: ChangeRequestAuditSetAction,
+): allIdsState => {
   switch (action.type) {
     case CHANGE_REQUEST_AUDIT_SET:
       return _.uniq([...state, action.payload.id]);
