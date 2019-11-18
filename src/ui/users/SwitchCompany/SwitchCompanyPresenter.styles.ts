@@ -24,4 +24,21 @@ export default (theme: Theme) =>
       fontSize: "16px",
       fontWeight: 300,
     },
+    companyRows: {
+      marginTop: "40px",
+    },
+    companyButton: {
+      background: "none",
+      color: "inherit",
+      border: "none",
+      padding: 0,
+      font: "inherit",
+      cursor: "pointer",
+      outline: "inherit",
+      fontSize: "18px",
+      width: "400px",
+      height: "70px",
+      textAlign: "justify",
+      borderBottom: "1px solid lightgrey",
+    },
   });

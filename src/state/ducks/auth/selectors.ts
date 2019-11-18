@@ -34,7 +34,7 @@ const makeGetHasPermission = () => {
   );
 };
 
-const companys = (state: ApplicationState) => state.auth.user.employees;
+const companies = (state: ApplicationState) => state.auth.user.employees;
 
 export default {
   isAuthenticated,
@@ -43,5 +43,5 @@ export default {
   currentUserId,
   getLoadPermissionsAsyncState,
   makeGetHasPermission,
-  companys,
+  companies,
 };

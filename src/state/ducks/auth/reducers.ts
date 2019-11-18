@@ -1,6 +1,5 @@
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
-import { WHITE_LABEL_DEFAULT } from "../company/constants";
 import {
   AUTH_USER,
   LOGOUT_USER,
@@ -21,14 +20,7 @@ export const USER_DEFAULT_STATE: UserState = {
   id: "",
   employeeId: "",
   sessionId: "",
-  employees: {
-    id: "",
-    name: "",
-    maxRevisionStages: 1,
-    users: [],
-    documentTypes: [],
-    whiteLabeling: WHITE_LABEL_DEFAULT,
-  },
+  employees: [],
 };
 
 type AuthUserActions = AuthUserAction | LogoutUserAction;

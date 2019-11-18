@@ -5,10 +5,15 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { Dashboard } from "@material-ui/icons";
 import React from "react";
-import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { authSelectors } from "../../state/ducks/auth";
+import { Employees } from "../../state/ducks/company";
+import { ApplicationState } from "../../state/reducers";
 import BottomLogo from "../components/icons/BottomLogo.container";
 import Logo from "../components/icons/Logo.container";
+import SwitchCompanyButton from "../components/icons/SwitchCompanyButton.presenter";
 import {
   CHANGE_REQUEST_LIST_URL,
   DOCUMENT_REVISION_LIST_URL,
@@ -17,9 +22,14 @@ import {
 import styles from "./Navigation.styles";
 import NavigationLinkContainer from "./NavigationLink.container";
 
-type NavigationProps = WithStyles<typeof styles> & RouteComponentProps;
+interface StateProps {
+  isUserAuthenticated: boolean;
+  companies: Employees[];
+}
 
-const Navigation: React.FunctionComponent<NavigationProps> = ({ classes, location }) => (
+type NavigationProps = StateProps & WithStyles<typeof styles> & RouteComponentProps;
+
+const Navigation: React.FunctionComponent<NavigationProps> = ({ classes, location, companies }) => (
   <Drawer
     className={classes.drawer}
     variant="permanent"
@@ -56,8 +66,18 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({ classes, locatio
         currentPath={location.pathname}
       />
     </List>
+    {companies.length > 1 &&
+    <SwitchCompanyButton location={location}/>
+    }
     <BottomLogo />
   </Drawer>
 );
 
-export default withRouter(withStyles(styles)(Navigation));
+const mapStateToProps = (state: ApplicationState): StateProps => ({
+  isUserAuthenticated: authSelectors.isAuthenticated(state),
+  companies: authSelectors.companies(state),
+});
+
+export default connect<StateProps, {}, {}, ApplicationState>(
+  mapStateToProps,
+)(withRouter(withStyles(styles)(Navigation)));
