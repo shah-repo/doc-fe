@@ -31,7 +31,8 @@
 .editor-container .ql-editor {
   min-height: 8em;
   max-height: 36em;
-}
+  font-family: "Open Sans", sans-serif;
+  }
 
 .ql-tooltip  input[type="text"] {
   /* hides the last pass icon the hyperlink tooltip */
