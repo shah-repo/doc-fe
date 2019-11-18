@@ -288,6 +288,7 @@
   "document.revision.create": "Create a document",
   "document.revision.trainingRequired": "Training Required",
   "document.revision.released.date": "Released Date",
+  "document.revision.docVersion": "Doc Versions",
 
   "page.title.changeRequest": "Change Request List",
   "page.title.documentList": "Document List",
