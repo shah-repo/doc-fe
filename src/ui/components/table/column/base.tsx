@@ -144,7 +144,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
           {sortable && <SortIndicator sortDirection={props.sortDirection} />}
         </Box>
         {searchable && (
-          <Box component="div" className="headerField">
+          <Box height="65px" component="div" className="headerField">
             {searchFieldRenderer()}
           </Box>
         )}
