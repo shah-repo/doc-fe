@@ -85,6 +85,11 @@ describe("login action tests", async () => {
         id: data.id,
         sessionId: data.sessionId,
         employeeId: data.employees[0].id,
+        employees: [
+          {
+            id: "",
+          },
+        ],
       }),
     );
     expect(dispatch.mock.calls[1][0]).toMatchObject({
@@ -136,6 +141,11 @@ describe("loginWithCode action tests", async () => {
         id: response.id,
         sessionId: response.sessionId,
         employeeId: response.employees[0].id,
+        employees: [
+          {
+            id: "",
+          },
+        ],
       }),
     );
     expect(dispatch.mock.calls[1][0]).toMatchObject({

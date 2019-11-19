@@ -4,6 +4,7 @@ const styles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
       bottom: 30,
+      left: 20,
       position: "absolute",
       textAlign: "center",
       display: "flex",

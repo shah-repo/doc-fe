@@ -22,9 +22,10 @@ const getLoadPermissionsAsyncState = (state: ApplicationState): AsyncState => {
   return state.auth.loadPermissionsAsyncInfo;
 };
 
-const getHasPermission = (state: ApplicationState, permission: string): boolean => (
-  state.auth.permissions.includes(permission)
-);
+const getHasPermission = (
+  state: ApplicationState,
+  permission: string,
+): boolean => state.auth.permissions.includes(permission);
 
 const makeGetHasPermission = () => {
   return createSelector(
@@ -33,6 +34,10 @@ const makeGetHasPermission = () => {
   );
 };
 
+const companies = (state: ApplicationState) => state.auth.user.employees;
+
+const hasMultipleCompanies = (state: ApplicationState): boolean => state.auth.user.employees.length > 1;
+
 export default {
   isAuthenticated,
   currentUserEmail,
@@ -40,4 +45,6 @@ export default {
   currentUserId,
   getLoadPermissionsAsyncState,
   makeGetHasPermission,
+  companies,
+  hasMultipleCompanies,
 };

@@ -342,5 +342,9 @@
   "training.completed": "Training completed",
   "training.certify.completion": "Click the button to certify training completion",
 
-  "file.viewer.video.not.supported": "Your browser does not support the video tag"
+  "file.viewer.video.not.supported": "Your browser does not support the video tag",
+
+  "company.switch.title": "Switch Company",
+  "company.switch.subtitle": "Select a company below to sign-in to",
+  "company.switch.button": "SWITCH COMPANY"
 }

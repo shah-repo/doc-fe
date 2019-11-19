@@ -1,4 +1,4 @@
-import { Company } from "../company";
+import { Company, Employees } from "../company";
 import { AUTH_TOKENS, AUTH_USER, LOGOUT_USER, USER_PERMISSIONS } from "./constants";
 
 export interface LoginRequestBody {
@@ -46,6 +46,7 @@ export interface User {
   name: string;
   employeeId: string;
   sessionId: string;
+  employees: Employees[];
 }
 
 export type AuthUserPayload = User;
@@ -76,6 +77,7 @@ export interface UserState {
   name: string;
   employeeId: string;
   sessionId: string;
+  employees: Employees[];
 }
 
 export interface AuthProps {
