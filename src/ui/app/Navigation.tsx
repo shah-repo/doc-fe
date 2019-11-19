@@ -22,7 +22,7 @@ import styles from "./Navigation.styles";
 import NavigationLinkContainer from "./NavigationLink.container";
 
 interface StateProps {
-  hasMultipleCompaines: boolean;
+  hasMultipleCompanies: boolean;
 }
 
 type NavigationProps = StateProps & WithStyles<typeof styles> & RouteComponentProps;
@@ -30,7 +30,7 @@ type NavigationProps = StateProps & WithStyles<typeof styles> & RouteComponentPr
 const Navigation: React.FunctionComponent<NavigationProps> = ({
   classes,
   location,
-  hasMultipleCompaines,
+  hasMultipleCompanies,
 }) => (
   <Drawer
     className={classes.drawer}
@@ -68,7 +68,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
         currentPath={location.pathname}
       />
     </List>
-    {hasMultipleCompaines &&
+    {hasMultipleCompanies &&
     <SwitchCompanyButton location={location} />
     }
     <BottomLogo />
@@ -76,7 +76,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
 );
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
-  hasMultipleCompaines: authSelectors.hasMultipleCompanies(state),
+  hasMultipleCompanies: authSelectors.hasMultipleCompanies(state),
 });
 
 export default connect<StateProps, {}, {}, ApplicationState>(

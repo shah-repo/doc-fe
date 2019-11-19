@@ -1,23 +1,22 @@
 import * as React from "react";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { companyActions, Employees } from "../../../state/ducks/company";
 import Text from "../../components/Text";
 import { HOME_URL } from "../../constants/urls";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
 import { LoginContainerProps } from "../Login.container";
-import { styles } from "./SwitchCompanyPresenter.styles";
+import { styles } from "./SwitchCompany.styles";
 
 export type Props = LoginContainerProps;
 
-const SwitchCompanyPresenter: React.FunctionComponent<Props> = ({ companies }) => {
-  const selectCompanyAction = useActionCreator(companyActions.selectCompany);
-  const selectCompanyAsync = useAsync();
+const SwitchCompany: React.FunctionComponent<Props> = ({ companies }) => {
   const history = useHistory();
+  const dispatch = useDispatch();
   const classes = styles();
-  function handleClick() {
+  const handleClick = (employee: Employees) => () => {
+    dispatch(companyActions.selectCompany(employee.company));
     history.push(HOME_URL);
-  }
+  };
   return (
     <div className={classes.root}>
         <div className={classes.container}>
@@ -33,10 +32,7 @@ const SwitchCompanyPresenter: React.FunctionComponent<Props> = ({ companies }) =
                 <button
                   key={employee.company.id}
                   className={classes.companyButton}
-                  onClick={() => (
-                      selectCompanyAsync.start(selectCompanyAction, employee.company),
-                      handleClick())
-                  }
+                  onClick={handleClick(employee)}
                 >
                   <div className={classes.company}>
                   {employee.company.whiteLabeling &&
@@ -58,4 +54,4 @@ const SwitchCompanyPresenter: React.FunctionComponent<Props> = ({ companies }) =
   );
 };
 
-export default SwitchCompanyPresenter;
+export default SwitchCompany;

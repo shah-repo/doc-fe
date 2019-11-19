@@ -6,7 +6,7 @@ import { Employees } from "../../state/ducks/company";
 import { ApplicationState } from "../../state/reducers";
 import { HOME_URL } from "../constants/urls";
 import LoginPresenter from "./Login.presenter";
-import SwitchCompanyPresenter from "./SwitchCompany/SwitchCompanyPresenter";
+import SwitchCompany from "./SwitchCompany/SwitchCompany";
 
 interface StateProps {
   isUserAuthenticated: boolean;
@@ -22,7 +22,7 @@ export const LoginContainer: React.FunctionComponent<LoginContainerProps> = (pro
   if (props.isUserAuthenticated) {
     if (props.hasMultipleCompanies) {
       return (
-        <SwitchCompanyPresenter
+        <SwitchCompany
           {...props}
         />
       );

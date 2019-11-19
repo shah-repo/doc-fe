@@ -36,9 +36,7 @@ const makeGetHasPermission = () => {
 
 const companies = (state: ApplicationState) => state.auth.user.employees;
 
-const hasMultipleCompanies = (state: ApplicationState): boolean => {
-  return Boolean(state.auth.user.employees.length > 1);
-};
+const hasMultipleCompanies = (state: ApplicationState): boolean => state.auth.user.employees.length > 1;
 
 export default {
   isAuthenticated,
