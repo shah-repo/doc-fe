@@ -34,7 +34,7 @@ const makeGetHasPermission = () => {
   );
 };
 
-const companies = (state: ApplicationState) => state.auth.user.employees;
+const employees = (state: ApplicationState) => state.auth.user.employees;
 
 const hasMultipleCompanies = (state: ApplicationState): boolean => state.auth.user.employees.length > 1;
 
@@ -45,6 +45,6 @@ export default {
   currentUserId,
   getLoadPermissionsAsyncState,
   makeGetHasPermission,
-  companies,
+  employees,
   hasMultipleCompanies,
 };
