@@ -1,8 +1,8 @@
 import React from "react";
-import { connect, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { RouteComponentProps, useHistory } from "react-router-dom";
 import { authSelectors } from "../../../state/ducks/auth";
-import { companySelectors, Employees } from "../../../state/ducks/company";
+import { Employees } from "../../../state/ducks/company";
 import { ApplicationState } from "../../../state/reducers";
 import { LOGIN_URL } from "../../constants/urls";
 import Text from "../Text";
@@ -17,21 +17,17 @@ export type SwitchCompanyButtonProps = StateProps & Pick<RouteComponentProps, "l
 
 const SwitchCompanyButton: React.FunctionComponent<SwitchCompanyButtonProps> = (props) => {
   const classes = styles();
-  const whiteLabeling = useSelector(companySelectors.getWhiteLabeling);
   const history = useHistory();
   function handleClick() {
     history.push(LOGIN_URL);
   }
-  if (!whiteLabeling.colors) {
-    return null;
-  }
   return (
     <div
       className={classes.switchButton}
-      onClick={() => handleClick()}
+      onClick={handleClick}
     >
       <span className={classes.switchButtonText}>
-        <Text message={"SWITCH COMPANY"} />
+        <Text translation="company.switch.button" />
       </span>
     </div>
   );

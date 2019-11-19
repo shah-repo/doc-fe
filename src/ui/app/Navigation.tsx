@@ -9,7 +9,6 @@ import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { authSelectors } from "../../state/ducks/auth";
-import { Employees } from "../../state/ducks/company";
 import { ApplicationState } from "../../state/reducers";
 import BottomLogo from "../components/icons/BottomLogo.container";
 import Logo from "../components/icons/Logo.container";
@@ -23,13 +22,16 @@ import styles from "./Navigation.styles";
 import NavigationLinkContainer from "./NavigationLink.container";
 
 interface StateProps {
-  isUserAuthenticated: boolean;
-  companies: Employees[];
+  hasMultipleCompaines: boolean;
 }
 
 type NavigationProps = StateProps & WithStyles<typeof styles> & RouteComponentProps;
 
-const Navigation: React.FunctionComponent<NavigationProps> = ({ classes, location, companies }) => (
+const Navigation: React.FunctionComponent<NavigationProps> = ({
+  classes,
+  location,
+  hasMultipleCompaines,
+}) => (
   <Drawer
     className={classes.drawer}
     variant="permanent"
@@ -66,16 +68,15 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({ classes, locatio
         currentPath={location.pathname}
       />
     </List>
-    {companies.length > 1 &&
-    <SwitchCompanyButton location={location}/>
+    {hasMultipleCompaines &&
+    <SwitchCompanyButton location={location} />
     }
     <BottomLogo />
   </Drawer>
 );
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
-  isUserAuthenticated: authSelectors.isAuthenticated(state),
-  companies: authSelectors.companies(state),
+  hasMultipleCompaines: authSelectors.hasMultipleCompanies(state),
 });
 
 export default connect<StateProps, {}, {}, ApplicationState>(

@@ -4,7 +4,7 @@ const styles = makeStyles((theme: Theme) =>
   createStyles({
     switchButton: {
       left: 32,
-      bottom: 30,
+      bottom: 70,
       position: "absolute",
       display: "flex",
       color: theme.palette.secondary.contrastText,
@@ -13,6 +13,7 @@ const styles = makeStyles((theme: Theme) =>
       backgroundColor: theme.palette.secondary.contrastText,
       width: "fit-content",
       margin: "10px auto",
+      cursor: "pointer",
     },
     switchButtonText: {
       fontSize: 14,

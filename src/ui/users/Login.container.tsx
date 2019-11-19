@@ -11,6 +11,7 @@ import SwitchCompanyPresenter from "./SwitchCompany/SwitchCompanyPresenter";
 interface StateProps {
   isUserAuthenticated: boolean;
   companies: Employees[];
+  hasMultipleCompanies: boolean;
 }
 
 export type LoginContainerProps = StateProps & Pick<RouteComponentProps, "location">;
@@ -19,7 +20,7 @@ export const LoginContainer: React.FunctionComponent<LoginContainerProps> = (pro
   const { from } = props.location.state || { from: { pathname: HOME_URL } };
 
   if (props.isUserAuthenticated) {
-    if ((props.companies).length > 1) {
+    if (props.hasMultipleCompanies) {
       return (
         <SwitchCompanyPresenter
           {...props}
@@ -37,6 +38,7 @@ export const LoginContainer: React.FunctionComponent<LoginContainerProps> = (pro
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   isUserAuthenticated: authSelectors.isAuthenticated(state),
   companies: authSelectors.companies(state),
+  hasMultipleCompanies: authSelectors.hasMultipleCompanies(state),
 });
 
 export default connect<StateProps, {}, {}, ApplicationState>(mapStateToProps)(LoginContainer);

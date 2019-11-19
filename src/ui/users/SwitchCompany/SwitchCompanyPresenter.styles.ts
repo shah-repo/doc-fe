@@ -1,6 +1,6 @@
-import { createStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from "@material-ui/core";
 
-export default (theme: Theme) =>
+export const styles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: "flex",
@@ -27,6 +27,12 @@ export default (theme: Theme) =>
     companyRows: {
       marginTop: "40px",
     },
+    avatar: {
+      width: "60px",
+      height: "60px",
+      marginRight: "16px",
+      borderRadius: "50%",
+    },
     companyButton: {
       background: "none",
       color: "inherit",
@@ -37,8 +43,15 @@ export default (theme: Theme) =>
       outline: "inherit",
       fontSize: "18px",
       width: "400px",
-      height: "70px",
+      height: "100px",
       textAlign: "justify",
       borderBottom: "1px solid lightgrey",
     },
-  });
+    company:  {
+      display: "flex",
+    },
+    companyName: {
+      margin: "18px 0",
+    },
+  }),
+  );
