@@ -22,8 +22,8 @@ interface DispatchProps {
 }
 
 interface OwnProps {
-  name: string,
-  label: string,
+  name: string;
+  label: string;
 }
 
 export type Props = StateProps & DispatchProps & OwnProps;

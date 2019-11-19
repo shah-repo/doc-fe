@@ -25,10 +25,9 @@ import styles from "./AssessmentForm.styles";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
 import AssessmentFormImplementationPlan from "./implementationPlan/Container";
 
-
 interface Props
   extends WithStyles<typeof styles>,
-  FormikProps<ChangeRequestFormValues> {
+    FormikProps<ChangeRequestFormValues> {
   asyncState: AsyncState;
   changeRequest?: ChangeRequest;
   documentRevisionsList: string[];
@@ -72,7 +71,6 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
     props: FieldProps<ChangeRequestFormValues>,
   ) => <AssessmentFormImplementationPlan {...props} />;
 
-
   return (
     <div className={classes.container}>
       <FormWrapper
@@ -94,7 +92,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
         <FormProgress asyncState={asyncState} />
         {renderCrId()}
 
-        < Box mb={1}>
+        <Box mb={1}>
           <InputField
             name="title"
             label="cr.title"

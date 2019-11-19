@@ -37,6 +37,7 @@ import ScrollToError from "../../components/forms/ScrollToError";
 import SubmitButton from "../../components/forms/SubmitButton";
 import Text from "../../components/Text";
 import AttachmentsField from "../../document.revision/form/attachments";
+import Title from "../../document.revision/form/title";
 import {
   documentDetailsPath,
   documentVersionPath,
@@ -47,7 +48,6 @@ import FBStore from "../../form.builder/stores/FBStore";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";
-import Title from "../../document.revision/form/title";
 
 export interface Props
   extends WithStyles<typeof styles>,
