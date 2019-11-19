@@ -1,6 +1,5 @@
 import { combineReducers } from "redux";
 import { createMigrate, persistReducer } from "redux-persist";
-import autoMergeLevel2 from "redux-persist/es/stateReconciler/autoMergeLevel2";
 import storage from "redux-persist/lib/storage";
 import auth from "./ducks/auth";
 import { LOGOUT_USER } from "./ducks/auth/constants";
@@ -19,7 +18,6 @@ const authPersistConfig = {
   storage,
   version: 0,
   whitelist: ["tokens", "user"],
-  stateReconciler: autoMergeLevel2,
   migrate: createMigrate(migrations),
 };
 const companyPersistConfig = {
