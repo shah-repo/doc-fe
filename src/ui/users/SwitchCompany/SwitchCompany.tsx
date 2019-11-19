@@ -1,7 +1,8 @@
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { companyActions, Employees } from "../../../state/ducks/company";
+import { authActions } from "../../../state/ducks/auth";
+import { companyActions, Employee } from "../../../state/ducks/company";
 import Text from "../../components/Text";
 import { HOME_URL } from "../../constants/urls";
 import { LoginContainerProps } from "../Login.container";
@@ -9,12 +10,13 @@ import { styles } from "./SwitchCompany.styles";
 
 export type Props = LoginContainerProps;
 
-const SwitchCompany: React.FunctionComponent<Props> = ({ companies }) => {
+const SwitchCompany: React.FunctionComponent<Props> = ({ employees }) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const classes = styles();
-  const handleClick = (employee: Employees) => () => {
+  const handleClick = (employee: Employee) => () => {
     dispatch(companyActions.selectCompany(employee.company));
+    dispatch(authActions.selectEmployee(employee));
     history.push(HOME_URL);
   };
   return (
@@ -27,7 +29,7 @@ const SwitchCompany: React.FunctionComponent<Props> = ({ companies }) => {
               <Text translation="company.switch.subtitle" />
             </div>
             <div className={classes.companyRows}>
-            {companies.map((employee: Employees) => {
+            {employees.map((employee: Employee) => {
               return (
                 <button
                   key={employee.company.id}
