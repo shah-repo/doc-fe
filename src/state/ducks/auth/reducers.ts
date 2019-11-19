@@ -20,6 +20,7 @@ export const USER_DEFAULT_STATE: UserState = {
   id: "",
   employeeId: "",
   sessionId: "",
+  employees: [],
 };
 
 type AuthUserActions = AuthUserAction | LogoutUserAction;
@@ -34,6 +35,7 @@ export const user = (state: UserState = USER_DEFAULT_STATE, action: AuthUserActi
         id: action.payload.id,
         employeeId: action.payload.employeeId,
         sessionId: action.payload.sessionId,
+        employees: action.payload.employees,
       };
     case LOGOUT_USER:
       return { ...USER_DEFAULT_STATE };
