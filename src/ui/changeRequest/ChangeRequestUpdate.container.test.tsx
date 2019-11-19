@@ -3,24 +3,25 @@ import faker from "faker";
 import React from "react";
 import { ChangeRequestStatus } from "../../state/ducks/changeRequest";
 import { getChangeRequest } from "../../state/ducks/changeRequest/tests/factories";
-import { getUser } from "../../state/ducks/common/tests/factories";
+import { getOwner, getUser } from "../../state/ducks/common/tests/factories";
 import { ASYNC_DEFAULT_STATE } from "../hooks/useAsync";
 import {
   ChangeRequestUpdateContainer,
   ChangeRequestUpdateContainerProps,
 } from "./ChangeRequestUpdate.container";
-import AssessmentFormContainer from "./forms/assessmentForm/AssessmentForm.container";
+import ChangeRequestFormContainer from "./forms/ChangeRequestForm.container";
 import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "./forms/transform";
 import { generateChangeRequestPreviewPath } from "./pathGenerators";
-import ChangeRequestFormContainer from "./forms/ChangeRequestForm.container";
 
 describe("ChangeRequestUpdateContainer tests", () => {
   const currentUserEmail = faker.internet.email();
   const notExistingEmail = "does.not.exist@codecons.com";
   const changeRequest = getChangeRequest({
     state: ChangeRequestStatus.Draft,
-    owner: getUser({
-      email: currentUserEmail,
+    owner: getOwner({
+      user: getUser({
+        email: currentUserEmail,
+      }),
     }),
   });
 

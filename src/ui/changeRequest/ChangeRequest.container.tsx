@@ -1,15 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Route, RouteComponentProps } from "react-router-dom";
-import Switch from "../app/Switch";
-import { ChangeRequest, changeRequestsActions, changeRequestsSelectors, ChangeRequestStatus } from "../../state/ducks/changeRequest";
+import { ChangeRequest, changeRequestsActions, changeRequestsSelectors } from "../../state/ducks/changeRequest";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
+import Switch from "../app/Switch";
 import AsyncGate from "../components/AsyncGate";
-import { CHANGE_REQUEST_UPDATE_URL, CHANGE_REQUEST_PREVIEW_URL } from "../constants/urls";
-import { ChangeRequestRouteParams } from "./types";
+import { CHANGE_REQUEST_PREVIEW_URL, CHANGE_REQUEST_UPDATE_URL } from "../constants/urls";
 import ChangeRequestPreviewContainer from "./ChangeRequestPreview.container";
 import ChangeRequestUpdateContainer from "./ChangeRequestUpdate.container";
+import { ChangeRequestRouteParams } from "./types";
 
 interface StateProps {
   loadAsyncState: AsyncState;

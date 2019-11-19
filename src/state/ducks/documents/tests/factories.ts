@@ -1,4 +1,5 @@
 import faker from "faker";
+import { getOwner } from "../../common/tests/factories";
 import { Approval, ApprovalStatus, Document, DocumentEditRequestBody, DocumentStatus, User } from "../types";
 
 export const getUser = (user: Partial<User> = {}): User => ({
@@ -13,7 +14,7 @@ export const getDocument = (document: Partial<Document> = {}): Document => ({
   type: faker.lorem.word(),
   attachments: [],
   approvals: [],
-  owner: getUser(),
+  owner: getOwner(),
   status: DocumentStatus.Draft,
   actions: [],
   docId: faker.random.alphaNumeric(),

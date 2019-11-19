@@ -1,7 +1,11 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
-import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
+import {
+  DocumentRevision,
+  documentRevisionsActions,
+  documentRevisionsSelectors,
+} from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
@@ -22,7 +26,8 @@ interface DispatchProps {
 
 interface OwnProps {
   documentRevisionId: string;
-  isNewVersion: boolean;
+  isNewVersion?: boolean;
+  isNewOutput?: boolean;
 }
 
 export type DocumentRevisionDisplayContainerProps = OwnProps & DispatchProps & StateProps ;
@@ -34,7 +39,7 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 });
 
 export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevisionDisplayContainerProps> = ({
-  currentUserEmail, loadDocumentRevision, isNewVersion,
+  currentUserEmail, loadDocumentRevision, isNewVersion, isNewOutput,
   documentRevisionId, documentRevision, loadDocumentRevisionAsyncState,
 }) => {
   const loadDocumentRevisionAction = () => loadDocumentRevision(documentRevisionId);
@@ -44,8 +49,15 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
       loadDocumentRevisionAction();
     }
   }, [documentRevisionId]);
-  const canEdit = documentRevision && !isNewVersion && canEditDocumentRevision(documentRevision, currentUserEmail);
-  const canPreview = documentRevision && !(canEdit || isNewVersion);
+
+  const canEdit = (
+    documentRevision &&
+    !isNewVersion &&
+    !isNewOutput &&
+    canEditDocumentRevision(documentRevision, currentUserEmail)
+  );
+
+  const canPreview = documentRevision && !(canEdit || isNewVersion || isNewOutput);
 
   return (
     <AsyncGate
@@ -55,7 +67,8 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
     >
       {canEdit && <DocumentRevisionUpdateContainer documentRevision={documentRevision} />}
       {canPreview && <SummaryPresenter dataProp={documentRevision} canShowCreateVersionButton={true} />}
-      {isNewVersion && <CloneContainer documentRevision={documentRevision} />}
+      {isNewVersion && <CloneContainer documentRevision={documentRevision} type="newVersion" />}
+      {isNewOutput && <CloneContainer documentRevision={documentRevision} type="newOutput" />}
     </AsyncGate>
   );
 };

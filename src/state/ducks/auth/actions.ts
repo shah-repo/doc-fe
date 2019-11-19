@@ -1,7 +1,6 @@
 import moment from "moment-timezone";
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
-import Config from "../../../config";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApplicationState } from "../../reducers";
 import { ApiAction, Handlers } from "../../types";
@@ -20,7 +19,6 @@ import {
   USER_PERMISSIONS,
   USER_PERMISSIONS_GET_ASYNC,
 } from "./constants";
-import authSelectors from "./selectors";
 import {
   AuthResponse,
   AuthTokensAction,
@@ -50,13 +48,6 @@ const authTokens = (authResponse: AuthResponse): AuthTokensAction => {
       expiresAt,
     },
   };
-
-  if (authResponse.RefreshToken) {
-    tokens.refresh = {
-      expiresAt: moment().add(Config.RefreshTokenValidityInDays - 1, "days").toISOString(),
-      value: authResponse.RefreshToken,
-    };
-  }
 
   return {
     type: AUTH_TOKENS,
@@ -89,7 +80,12 @@ const login = (loginValues: LoginRequestBody, handlers: Handlers):
     data: loginValues,
     includeAuthorization: false,
     onSuccess: (data, dispatch) => {
-      dispatch(authUser({ email: loginValues.email, name: data.name, id: data.id }));
+      dispatch(authUser({
+        email: loginValues.email,
+        name: data.name, id: data.id,
+        sessionId: data.sessionId,
+        employeeId: data.employees[0].id,
+      }));
       dispatch(authTokens(data));
       dispatch(companyActions.selectCompany(data.company));
     },
@@ -103,7 +99,13 @@ const loginWithCode = (loginValues: LoginWithCodeRequestBody, handlers: Handlers
     data: loginValues,
     includeAuthorization: false,
     onSuccess: (response, dispatch) => {
-      dispatch(authUser({ email: response.email, name: response.name, id: response.id }));
+      dispatch(authUser({
+        email: response.email,
+        name: response.name,
+        id: response.id,
+        sessionId: response.sessionId,
+        employeeId: response.employees[0].id,
+      }));
       dispatch(authTokens(response));
     },
     onFailure: (m, dispatch) => {
@@ -116,7 +118,6 @@ const logout = (): ThunkAction<void, ApplicationState, any, AnyAction> => (dispa
   const action: ApiAction<any, LogoutRequestBody> = apiAction({
     url: LOGOUT_URL,
     method: "post",
-    data: { AccessToken: authSelectors.accessToken(getState()) },
     onCompleted: () => {
       dispatch(logoutUser());
     },

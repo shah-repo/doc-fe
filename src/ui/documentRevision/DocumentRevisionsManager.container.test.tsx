@@ -1,9 +1,9 @@
+import { shallow } from "enzyme";
 import faker from "faker";
-import { ASYNC_DEFAULT_STATE } from "../hooks/useAsync";
 import React from "react";
 import { Redirect } from "react-router-dom";
 import { getDocumentRevision } from "../../state/ducks/documentRevisions/tests/factories";
-import { shallow } from "enzyme";
+import { ASYNC_DEFAULT_STATE } from "../hooks/useAsync";
 import DocumentRevisionAuditContainer from "./audit/Audit.container";
 import DocumentRevisionDisplayContainer from "./DocumentRevisionDisplay.container";
 import DocumentRevisionListContainer from "./DocumentRevisionList.container";

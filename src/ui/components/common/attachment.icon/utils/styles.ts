@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/core";
 import { AttachmentIconStyleProp } from "./types";
 
-export const styles = makeStyles(theme => ({
+export const styles = makeStyles((theme) => ({
   root: ({ size }: AttachmentIconStyleProp) => ({
     display: "grid",
     width: size === "lg" ? "90px" : size === "md" ? "70px" : "50px",
@@ -19,10 +19,10 @@ export const styles = makeStyles(theme => ({
     display: disabled ? "none" : "inherit",
   }),
   progress: ({ size }: AttachmentIconStyleProp) => ({
-    color: theme.palette.secondary.main,
-    width:
+    "color": theme.palette.secondary.main,
+    "width":
       (size === "lg" ? "90px" : size === "md" ? "70px" : "50px") + "!important",
-    height:
+    "height":
       (size === "lg" ? "90px" : size === "md" ? "70px" : "50px") + "!important",
     "& .MuiCircularProgress-svg": {
       margin: theme.spacing(2.5),
@@ -32,12 +32,13 @@ export const styles = makeStyles(theme => ({
     overflowWrap: "break-word",
     wordWrap: "break-word",
     hyphens: "auto",
-    maxWidth: "5.8rem",
+    maxWidth: "4.38rem",
     maxWeight: "1rem",
     overflow: "hidden",
     display: "block",
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
+    textAlign: "center",
   },
   closeIcon: {
     fontSize: "inherit",
@@ -92,14 +93,14 @@ export const styles = makeStyles(theme => ({
         : "3px 4px 0 0",
   }),
   ribbonEdgeTopright: {
-    top: "50%",
-    borderWidth: "5px 0 0 10px",
-    right: "0",
-    borderColor: "transparent transparent transparent #99c",
-    position: "absolute",
+    "top": "50%",
+    "borderWidth": "5px 0 0 10px",
+    "right": "0",
+    "borderColor": "transparent transparent transparent #99c",
+    "position": "absolute",
     "border-style": "solid",
-    height: "0px",
-    width: "0px",
+    "height": "0px",
+    "width": "0px",
   },
   ribbonEdgeToprightBorder: (props: AttachmentIconStyleProp) => ({
     borderWidth:

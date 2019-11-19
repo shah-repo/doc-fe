@@ -1,35 +1,21 @@
 import { observer } from "mobx-react";
 import React from "react";
 import FBAddFieldButton0 from "../../components/custom/FBAddFieldButton0";
-import FBEditorWrapper from "../../components/custom/FBEditorWrapper";
+import FBTransportSchema from "../../components/custom/FBTransportSchema";
 import FBForm from "../../components/form/FBForm";
-import { FBFieldComponent } from "../../defaults/editor";
-import { withFBStore } from "../../hocs/withFBStore";
-import formBuilderStore from "../../stores/FBStore";
-import { FBStoreProps } from "../../types/store";
+import FBStore from "../../stores/FBStore";
 import FBEditorDialog from "../editor/FBEditorDialog";
 import FBSortableContainer from "./FBSortableContainer";
 
-const FBWorkspace: React.FunctionComponent<FBStoreProps> = ({
-  formBuilderStore : { schema, mode },
-}) => {
+const FBWorkspace: React.FunctionComponent<{}> = () => {
+  const { schema, mode } = FBStore;
   const isStarter = (mode === "design") && (schema.length === 0);
 
-  const fieldsRenderer = schema.map((field, i) => {
-    const { type, name } = field;
-    const InputType = FBFieldComponent[type as string];
-
-    return (
-      <FBEditorWrapper key={`${name}_${i}`} index={i} {...field} >
-        <InputType {...field} {...formBuilderStore.fieldMode} />
-      </FBEditorWrapper>
-    );
-  });
-
   return (
-    <FBForm initialValues={formBuilderStore.values}>
+    <FBForm initialValues={FBStore.values}>
       {isStarter && <FBAddFieldButton0 />}
       {!isStarter && <FBSortableContainer items={schema} />}
+      <FBTransportSchema />
       <FBEditorDialog />
       {/* <Box display="flex" flexDirection="row-reverse">
         <FBButton label="Create" onClick={handleSubmit} />
@@ -38,4 +24,4 @@ const FBWorkspace: React.FunctionComponent<FBStoreProps> = ({
   );
 };
 
-export default withFBStore(observer(FBWorkspace));
+export default observer(FBWorkspace);

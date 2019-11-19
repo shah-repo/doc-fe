@@ -1,10 +1,10 @@
-import { Grid, IconButton, Tooltip } from "@material-ui/core";
+import { Grid, IconButton } from "@material-ui/core";
 import { RemoveCircleOutline } from "@material-ui/icons";
 import classNames from "classnames";
 import React from "react";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import SummaryInfo from "../../common/summary/SummaryInfo";
 import Date from "../../components/Date";
-import Text from "../../components/Text";
 import { generateVersionNumber } from "../../documentRevision/helpers";
 import { styles } from "./DocumentRevisionItem.styles";
 
@@ -19,12 +19,7 @@ export type DocumentRevisionItemPresenterProps = OwnProps;
 
 export const DocumentRevisionItemPresenter: React.FunctionComponent<
   DocumentRevisionItemPresenterProps
-> = ({
-  onClick,
-  onDelete,
-  documentRevision,
-  selectedDocumentRevision,
-}) => {
+> = ({ onClick, onDelete, documentRevision, selectedDocumentRevision }) => {
   if (!documentRevision) {
     return null;
   }
@@ -36,36 +31,39 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<
     <div
       className={classNames(classes.container, {
         [classes.selected]: isSelected,
-      })}>
+      })}
+    >
       <Grid container={true}>
         <Grid item={true} xs={10}>
           <div onClick={onClick}>
-            <Tooltip
-              title={documentRevision.name}
-              aria-label={documentRevision.name}>
-              <div
-                className={isSelected ? classes.titleSelected : classes.title}>
-                {documentRevision.name}
-              </div>
-            </Tooltip>
-            <div>
-              <Text translation="common.version" />
-              :&nbsp;
-              {generateVersionNumber(
+            <div className={isSelected ? classes.item : classes.itemSelected}>
+              <SummaryInfo
+                label="common.docId"
+                value={documentRevision.document.docId}
+              />
+            </div>
+            <SummaryInfo label="common.title" value={documentRevision.name} />
+            <SummaryInfo
+              label="common.version"
+              value={generateVersionNumber(
                 documentRevision.revision,
                 documentRevision.revisionStage,
               )}
-            </div>
-            <div>
-              <Text translation="common.created" />
-              :&nbsp;
-              <Date value={documentRevision.createdAt} />
-            </div>
-            <div>
-              <Text translation="common.documentId" />
-              :&nbsp;
-              {documentRevision.document.docId}
-            </div>
+            />
+            <SummaryInfo
+              label="common.owner"
+              value={documentRevision.owner && documentRevision.owner.user.name}
+            />
+            <SummaryInfo
+              label="common.released"
+              value={
+                <Date
+                  value={
+                    documentRevision.obsoletedAt || documentRevision.releasedAt
+                  }
+                />
+              }
+            />
           </div>
         </Grid>
         <Grid item={true} xs={1}>

@@ -5,14 +5,17 @@ import {
   FieldConfig,
   FieldProps as FormikFieldProps,
 } from "formik";
+// tslint:disable-next-line: no-implicit-dependencies
 import { QuillOptionsStatic } from "quill";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import ReactQuill from "react-quill";
+import { sanitizeHtml } from "../../../../../common/utils/helpers";
 import { RenderSize } from "../../../../../state/ducks/common";
 import useComponentVisible from "../../../../hooks/useComponentVisible";
 import Field, { FieldOwnProps } from "../Field";
 import { reactQuillEmptyString } from "../validators";
 import { formats, modules } from "./configuration";
+import "./customLink";
 import "./textEditor.css";
 
 export interface TextEditorOwnProps extends FieldOwnProps {
@@ -43,8 +46,15 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
     isComponentVisible,
     setIsComponentVisible,
   } = useComponentVisible(false);
+  const refEditor = useRef<ReactQuill>(null);
 
   const [toolbar, setToolbar] = useState<any>({});
+  const [value, setValue] = useState<string>("");
+  const { field, form } = fieldProps;
+
+  useMemo(() => {
+    setValue(sanitizeHtml(field.value) || "");
+  }, [field.value]);
 
   useEffect(() => {
     setToolbar(
@@ -70,21 +80,21 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
 
   const handleChange = (editHtml: string) => {
     // when you click on an empty editor Quill injects some HTML
-    const value = editHtml === reactQuillEmptyString ? null : editHtml;
-    fieldProps.form.setFieldValue(fieldProps.field.name, value);
+    const value = editHtml === reactQuillEmptyString ? "" : editHtml;
+    form.setFieldValue(field.name, value);
   };
   const handleBlur = (e: any) => {
-    const {
-      field: { name },
-      form: { touched, setFieldTouched },
-    } = fieldProps;
+    const  { name } = field;
+    const { touched, setFieldTouched } = form;
 
     if (!touched[name]) {
       setFieldTouched(name, true);
     }
   };
 
-  const handleFocus = () => setIsComponentVisible(true);
+  const handleFocus = () => {
+    setIsComponentVisible(true);
+  };
 
   return (
     <Field
@@ -103,6 +113,7 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
       >
         <Box hidden={hidden}>
           <ReactQuill
+            ref={refEditor}
             theme="snow"
             bounds=".editor-container"
             modules={{
@@ -112,7 +123,7 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
             formats={formats}
             {...quillOptions}
             onChange={handleChange}
-            value={fieldProps.field.value || ""}
+            value={value}
             onBlur={handleBlur}
             readOnly={!isComponentVisible}
           />

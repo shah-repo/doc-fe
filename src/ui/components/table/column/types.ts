@@ -1,5 +1,9 @@
 import { TableCellProps as MuiTableCellProps } from "@material-ui/core/TableCell";
-import { CellMeasurerCache, ColumnProps } from "react-virtualized";
+import {
+  CellMeasurerCache,
+  ColumnProps,
+  SortDirectionType,
+} from "react-virtualized";
 import { Translation } from "../../../translations/types";
 import { TableSearchFieldProps } from "../search/types";
 import { TableSelectionRenderer } from "../types";
@@ -25,6 +29,8 @@ export interface TableColumnProps<T> {
   onSelect?: TableSelectionRenderer<T>;
   searchOptions?: Partial<TableSearchFieldProps>;
   omitSearch?: boolean;
+  sortable?: boolean;
+  sortDirection?: SortDirectionType | undefined;
   cellHref?: (rowData: T) => string;
 }
 

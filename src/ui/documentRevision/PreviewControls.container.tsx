@@ -1,12 +1,16 @@
-import { Box, Button, Grid } from "@material-ui/core";
+import { Box, Button } from "@material-ui/core";
 import React from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { DocumentRevision, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
+
+import {
+  DocumentRevision,
+  documentRevisionsSelectors,
+} from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import Text from "../components/Text";
-import { documentNewVersionPath } from "../document.revision/utils/paths";
-import { canCreateNewVersion } from "./helpers";
+import { documentNewVersionPath, documentOutputPath } from "../document.revision/utils/paths";
+import { canCreateNewVersion, canCreateOutput } from "./helpers";
 
 interface OwnProps {
   documentRevision: DocumentRevision;
@@ -27,7 +31,12 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainerProps> = ({
   documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton,
 }) => {
+
     const cloneDocument = () => history.push(documentNewVersionPath(documentRevision.id, documentRevision.document.id));
+
+    const cloneOutputDocument = () => {
+      history.push(documentOutputPath(documentRevision.id, documentRevision.document.id));
+    };
 
     const renderCloneButton = () => (
       <Button color="primary" onClick={cloneDocument}>
@@ -35,11 +44,20 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
       </Button>
     );
 
-    const canCreate = canCreateNewVersion(documentRevision, disableCreateNewVersion, canShowCreateVersionButton);
+    const renderOutputButton = () => (
+      <Button color="primary" onClick={cloneOutputDocument}>
+        <Text translation="common.create.new" />
+      </Button>
+    );
+
+    const canCreate = () => {
+      return canCreateNewVersion(documentRevision, disableCreateNewVersion, canShowCreateVersionButton);
+    };
 
     return (
       <Box component="span">
-        {canCreate && renderCloneButton()}
+        {canCreate() && renderCloneButton()}
+        {canCreateOutput(documentRevision) && renderOutputButton()}
       </Box>
     );
   };

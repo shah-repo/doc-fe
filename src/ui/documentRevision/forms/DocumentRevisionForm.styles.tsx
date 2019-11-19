@@ -5,7 +5,7 @@ export default (theme: Theme) =>
     container: {
       margin: "auto",
       width: "100%",
-      padding: theme.spacing(5),
+      padding: theme.spacing(2, 5),
       background: "#fff",
     },
     reviewButton: {

@@ -6,6 +6,7 @@ import {
   withStyles,
 } from "@material-ui/core";
 import { FormikProps } from "formik";
+import { filter } from "lodash";
 import React, { useMemo } from "react";
 import {
   ChangeRequest,
@@ -26,7 +27,6 @@ import ChangeRequestHeader from "./header";
 import ImplementationPlan from "./implementation.plan";
 import Justification from "./justification";
 import styles from "./styles";
-import _ from "lodash";
 
 interface OwnProps extends DataProps<ChangeRequest> {
   asyncState: AsyncState;
@@ -46,7 +46,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   closeTask,
   errors,
 }) => {
-  const approvedApprovers = useMemo(() => _.filter(dataProp.approvals, ["status", "APPROVED"] ), [dataProp]);
+  const approvedApprovers = useMemo(() => filter(dataProp.approvals, ["status", "APPROVED"] ), [dataProp]);
 
   const approversFieldRenderer = () => (
     <Box>
@@ -60,7 +60,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
     <SubmitButton asyncState={asyncState} label="document.save" errors={errors} />
   );
 
-  const renderImplementationPlan = dataProp.implementationPlan && 
+  const renderImplementationPlan = dataProp.implementationPlan &&
     (dataProp.implementationPlan.attachments.length > 0 || dataProp.implementationPlan.tasks.length > 0) &&
     (
       <ImplementationPlan

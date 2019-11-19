@@ -1,4 +1,3 @@
-// tslint:disable:jsx-no-multiline-js
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import { withStyles, WithStyles } from "@material-ui/core/styles";

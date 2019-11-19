@@ -1,4 +1,4 @@
-import { DocumentRevisionStatus } from '../../../state/ducks/documentRevisions';
+import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 
 export interface DocumentRevisionListItem {
   id: string;

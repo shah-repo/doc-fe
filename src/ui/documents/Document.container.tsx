@@ -1,10 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Route, RouteComponentProps } from "react-router-dom";
-import Switch from "../app/Switch";
 import { Document, documentsActions, documentsSelectors } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
+import Switch from "../app/Switch";
 import AsyncGate from "../components/AsyncGate";
 import { DOCUMENT_CLONE_URL, DOCUMENT_PREVIEW_URL, DOCUMENT_UPDATE_URL } from "../constants/urls";
 import DocumentCloneContainer from "./DocumentClone.container";

@@ -1,5 +1,6 @@
 import { TableColumnActionType } from "../../../ui/components/table/column/types";
 import { Attachment } from "../attachments";
+import { Owner } from "../common";
 import { DOCUMENT_PROPOSED_DOC_ID_SET, DOCUMENT_SET, DOCUMENTS_LIST, DOCUMENTS_TO_REVIEW_LIST } from "./constants";
 
 export enum DocumentStatus {
@@ -33,7 +34,7 @@ export interface Document {
   name: string;
   type: string;
   status: DocumentStatus;
-  owner: User;
+  owner: Owner;
   approvals: Approval[];
   attachments: Attachment[];
   actions: TableColumnActionType[];

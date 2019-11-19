@@ -1,4 +1,4 @@
-import _ from "lodash";
+
 import { createSelector } from "reselect";
 import { stripTags, stripTagsFromObject } from "../../../common/utils/helpers";
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
@@ -11,7 +11,6 @@ const byId = (state: ApplicationState) => state.changeRequests.byId;
 const approversById = (state: ApplicationState) => state.changeRequests.approversById;
 const approversAllIds = (state: ApplicationState) => state.changeRequests.approversAllIds;
 const auditsByCRId = (state: ApplicationState) => state.changeRequests.auditsByCRId;
-const auditsAllId = (state: ApplicationState) => state.changeRequests.auditsAllId;
 
 const getChangeRequestsList = createSelector(
   allIds, byId,
@@ -21,12 +20,12 @@ const getChangeRequestsList = createSelector(
 
 const getApproversListForAssessmentForm = createSelector(
   approversAllIds, approversById,
-  (ids, approvers): OptionType[] => ids.map((id) => ({ value: approvers[id].email, label: approvers[id].name })),
+  (ids, approvers): OptionType[] => ids.map((id) => ({ value: approvers[id].id, label: approvers[id].user.name })),
 );
 
 const getAssignessList = createSelector(
   approversAllIds, approversById,
-  (ids, approvers): OptionType[] => ids.map((id) => ({ value: approvers[id].id, label: approvers[id].name })),
+  (ids, approvers): OptionType[] => ids.map((id) => ({ value: approvers[id].id, label: approvers[id].user.name })),
 );
 
 const getChangeRequest = (state: ApplicationState, changeRequestId: string) => byId(state)[changeRequestId];

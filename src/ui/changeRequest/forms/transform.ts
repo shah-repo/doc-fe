@@ -23,9 +23,9 @@ const createNestedObject = (value: NestedObject = { description: "", attachments
 });
 
 const createAssessment = (value: Assessment = {
-  design: {reasoning: null, attachments: null},
-  process: {reasoning: null, attachments: null},
-  regulatory: {reasoning: null, attachments: null},
+  design: {reasoning: "", attachments: []},
+  process: {reasoning: "", attachments: []},
+  regulatory: {reasoning: "", attachments: []},
 }) => ({
   design: { reasoning: value.design.reasoning, attachments: value.design.attachments },
   process: { reasoning: value.process.reasoning, attachments: value.process.attachments },
@@ -48,7 +48,7 @@ const toImplementationPlanFormValues = (plan: ImplementationPlan): Implementatio
         if (task.assigned) {
           taskForm.assigned = {
             value: task.assigned.id,
-            label: task.assigned.name,
+            label: task.assigned.user.name,
           };
         }
         return taskForm;
@@ -65,7 +65,7 @@ export const toChangeRequestFormValues = (changeRequest: ChangeRequest): ChangeR
     justifications: createNestedObject(changeRequest.justifications),
     implementationPlan: toImplementationPlanFormValues(changeRequest.implementationPlan),
     approvals: changeRequest.approvals.map((approval) => ({
-      label: approval.approver.name, value: approval.approver.email,
+      label: approval.approver.user.name, value: approval.approver.id,
     })),
     effectiveDate: changeRequest.effectiveDate && applyTimezoneToDate(changeRequest.effectiveDate),
     documentRevisions: changeRequest.documentRevisions.map((documentRevision) => documentRevision.id ),
@@ -117,7 +117,7 @@ export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues):
     assessments: createAssessmentObjectForRequestBody(values.assessments),
     implementationPlan: toImplementationPlanEditRequestBody(values.implementationPlan),
     justifications: createNestedObjectForRequestBody(values.justifications),
-    approvals: (values.approvals || []).map((approver): Approver => ({ email: approver.value })),
+    approvals: (values.approvals || []).map((approver): Approver => ({ id: approver.value })),
     effectiveDate: values.effectiveDate && getDateString(values.effectiveDate),
     documentRevisions: values.documentRevisions.map((documentRevisionId) => ({ id: documentRevisionId })),
   };

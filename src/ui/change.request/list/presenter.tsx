@@ -5,11 +5,18 @@ import { stripTagsFromObject } from "../../../common/utils/helpers";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { CHANGE_REQUEST_ROOT_URL } from "../../../state/ducks/changeRequest/constants";
 import { TableColumnProps } from "../../components/table/column/types";
+import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
 import Text from "../../components/Text";
 import { CHANGE_REQUEST_CREATE_URL } from "../../constants/urls";
-import { canEditChangeRequest, changeRequestStatusOption } from "../utils/helpers";
-import { changeRequestEditPath, changeRequestPreviewPath } from "../utils/paths";
+import {
+  canEditChangeRequest,
+  changeRequestStatusOption,
+} from "../utils/helpers";
+import {
+  changeRequestEditPath,
+  changeRequestPreviewPath,
+} from "../utils/paths";
 import { ChangeRequestsUserProps } from "../utils/types";
 import styles from "./styles";
 
@@ -17,14 +24,14 @@ export type Props = ChangeRequestsUserProps & WithStyles<typeof styles>;
 
 export const ListPresenter: React.FunctionComponent<Props> = ({
   classes,
-  dataProp,
   currentUserEmail,
   editChangeRequest,
+  tableName,
+  clearFilter,
+  tableState,
 }) => {
-
-  const [clearFilter, setClearFilter] = React.useState<boolean>(false);
-
-  const canEdit = (data: ChangeRequest) => canEditChangeRequest({dataProp: data, currentUserEmail});
+  const canEdit = (data: ChangeRequest) =>
+    canEditChangeRequest({ dataProp: data, currentUserEmail });
 
   const cellHrefRenderer = (rowData: ChangeRequest): string => {
     if (canEdit(rowData)) {
@@ -33,14 +40,16 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     return changeRequestPreviewPath(rowData.id);
   };
 
-  const clear = () => setClearFilter(!clearFilter);
-
   const columns: Array<TableColumnProps<ChangeRequest>> = [
     {
       key: "crId",
       label: "common.crid",
       cellHref: cellHrefRenderer,
       columnOptions: { width: 100 },
+      sortable: true,
+      searchOptions: {
+        defaultValue: tableState.queryDict.crId,
+      },
     },
     {
       key: "title",
@@ -48,23 +57,34 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       cellHref: cellHrefRenderer,
       columnOptions: { flexGrow: 2 },
       tooltipKey: "description",
+      searchOptions: {
+        defaultValue: tableState.queryDict.title,
+      },
     },
     {
       key: "owner",
       label: "change.request.list.owner",
       cellHref: cellHrefRenderer,
       columnOptions: {
-        cellDataGetter: ({ rowData }) => rowData.owner.name,
+        cellDataGetter: ({ rowData }) => rowData.owner.user.name,
         flexGrow: 1,
+      },
+      searchOptions: {
+        defaultValue: tableState.queryDict.owner,
       },
     },
     {
       key: "state",
       label: "common.status",
       columnOptions: { width: 80 },
-      onSelect: ({rowData}) => () => editChangeRequest(rowData.id),
-      cellType: (rowData: ChangeRequest) => (canEdit(rowData)) ? "LINK" : "BASE",
-      searchOptions: { searchType: "select", selectOptions: changeRequestStatusOption() },
+      onSelect: ({ rowData }) => () => editChangeRequest(rowData.id),
+      cellType: (rowData: ChangeRequest) =>
+        canEdit(rowData) ? "LINK" : "BASE",
+      searchOptions: {
+        searchType: "select",
+        selectOptions: changeRequestStatusOption(),
+        defaultValue: tableState.queryDict.state,
+      },
     },
   ];
 
@@ -78,12 +98,13 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
           color="primary"
           variant="outlined"
           className={classes.clearButton}
-          onClick={clear}
+          onClick={clearFilter}
         >
           <Text translation="common.clear.filters" />
         </Button>
+        <DocumentInfo numberOfRecords={tableState.queryData.length} />
       </Grid>
-      <Grid item={true} xs={6} style={{textAlign: "right"}}>
+      <Grid item={true} xs={6} style={{ textAlign: "right" }}>
         <RouterLink to={CHANGE_REQUEST_CREATE_URL} className={classes.link}>
           <Button
             variant="contained"
@@ -96,12 +117,12 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       </Grid>
       <Grid item={true} className={classes.item}>
         <TablePanel<ChangeRequest>
-          tableData={dataProp}
           columns={columns}
           cellMeasure={true}
           queryUrl={CHANGE_REQUEST_ROOT_URL}
-          clearFilter={clear}
           customDataSet={customDataSet}
+          tableName={tableName}
+          sortBy={"crId"}
         />
       </Grid>
     </Grid>

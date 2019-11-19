@@ -2,7 +2,7 @@ import { Box, Checkbox, FormControlLabel } from "@material-ui/core";
 import React from "react";
 import Text from "../../../components/Text";
 import { withOnChange } from "../../hocs/withOnChange";
-import formBuilderStore from "../../stores/FBStore";
+import FBStore from "../../stores/FBStore";
 import { FBCheckboxProps } from "../../types/checkbox";
 import FBTextField from "./FBTextField";
 
@@ -13,6 +13,7 @@ const FBCheckbox: React.FunctionComponent<FBCheckboxProps> = ({
   includeNote,
   disabled,
   readOnly,
+  labelRenderer,
   ...props
 }) => (
   <Box mb={gutter ? 4 : 0}>
@@ -22,7 +23,7 @@ const FBCheckbox: React.FunctionComponent<FBCheckboxProps> = ({
       control={<Checkbox checked={field.value} />}
       disabled={disabled || readOnly}
     />
-    {formBuilderStore.mode === "form" && (field.value as boolean) && includeNote && (
+    {FBStore.mode === "form" && (field.value as boolean) && includeNote && (
       <FBTextField
         disabled={disabled}
         name={`${props.name}_optionNote_field`}
