@@ -237,12 +237,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
         <Title name="name" label="common.title" />
-        {/* <InputField
-          name="name"
-          label="document.title"
-          inputProps={{ multiline: true, rows: "2" }}
-          validate={validator(required)}
-        /> */}
         <TextEditorField
           name="description"
           label="common.description"
