@@ -1,5 +1,5 @@
 import { Field } from "formik";
-import React from "react";
+import React, { useMemo } from "react";
 import { connect } from "react-redux";
 import {
   DocumentRevision,
@@ -39,11 +39,11 @@ export const Title: React.FunctionComponent<Props> = ({
   loadDocumentRevisions,
   ...props
 }) => {
-  const options = documents.map((document) => ({
+  const options = useMemo(() => documents.map((document) => ({
     label: document.description,
     value: document.description,
     isDisabled: true,
-  }));
+  })), [documents]);
 
   return (
     <Field
