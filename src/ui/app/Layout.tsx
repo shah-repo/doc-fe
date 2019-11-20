@@ -12,7 +12,6 @@ import {
   DOCUMENT_REVISION_CREATE_URL,
   DOCUMENT_REVISION_LIST_URL,
   DOCUMENT_REVISION_ROOT_URL,
-  DOCUMENT_ROOT_URL,
   HOME_URL,
   TRAINING_DETAIL_URL,
 } from "../constants/urls";
@@ -20,7 +19,6 @@ import DashboardContainer from "../dashboard/Dashboard.container";
 import DocumentRevisionContainer from "../document.revision/container";
 import DocumentRevisionListContainer from "../document.revision/list/container";
 import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisionCreate.container";
-import DocumentContainer from "../documents/Document.container";
 import TrainingDetailContainer from "../training/TrainingDetail.container";
 import AutoLogout from "./AutoLogout";
 import DataFetcherContainer from "./DataFetcher.container";
@@ -41,7 +39,6 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
         <DataFetcherContainer />
         <Switch>
           <Route path={HOME_URL} exact={true} component={DashboardContainer} />
-          <Route path={DOCUMENT_ROOT_URL} component={DocumentContainer} />
           <Route
             path={CHANGE_REQUEST_CREATE_URL}
             exact={true}
