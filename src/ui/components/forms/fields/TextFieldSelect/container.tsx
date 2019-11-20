@@ -9,17 +9,18 @@ export const TextFieldSelect: React.FunctionComponent<TextFieldSelectProps> = ({
   field,
   ...fieldProps
 }) => {
-
   const [options, filterOptions] = useState(fieldProps.options);
-  const [active, setActive] = useState(true)
+  const [active, setActive] = useState(true);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setActive(true)
+    setActive(true);
 
     const v = event.target.value as string;
     form!.setFieldValue(field.name!, v);
 
-    filterOptions(fieldProps.options!.filter((option) => option.value.includes(v)));
+    filterOptions(
+      fieldProps.options!.filter((option) => option.value.includes(v)),
+    );
 
     if (!form.touched[field.name]) {
       form.setFieldTouched(field.name, true);
@@ -27,8 +28,8 @@ export const TextFieldSelect: React.FunctionComponent<TextFieldSelectProps> = ({
   };
 
   const handleBlur = (event: React.FocusEvent) => {
-    setActive(false)
-  }
+    setActive(false);
+  };
 
   return (
     <Presenter

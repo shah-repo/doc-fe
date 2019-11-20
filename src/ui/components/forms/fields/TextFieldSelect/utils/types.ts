@@ -1,6 +1,6 @@
-import { Translation } from '../../../../../translations/types';
-import { FormikHybridFieldProps } from '../../../../hoc/utils/types';
-import { OptionType } from '../../Autocomplete/types';
+import { Translation } from "../../../../../translations/types";
+import { FormikHybridFieldProps } from "../../../../hoc/utils/types";
+import { OptionType } from "../../Autocomplete/types";
 
 interface TextFieldSelectOptions extends OptionType {
   disabled: boolean;
