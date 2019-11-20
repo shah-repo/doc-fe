@@ -15,6 +15,12 @@ export interface WhiteLabeling {
   colors: WhiteLabelingColors;
 }
 
+export interface Employee {
+  id: string;
+  active: boolean;
+  company: Company;
+}
+
 export interface Company {
   id: string;
   name: string;
