@@ -63,11 +63,6 @@ export interface DocumentRevision extends FBDocumentFlowProps {
   attachments: Attachment[];
   status: DocumentRevisionStatus;
   document: DocumentRevisionDocument;
-  // TODO: this needs a proper fix
-  // this is a hack for document.revision/list/presenter
-  // Array<TableColumnProps<DocumentRevision>>
-  // to allow the use of this key
-  documentTypeId?: string;
   released: Date;
   referenceTo: Reference[];
   createdAt?: string;
