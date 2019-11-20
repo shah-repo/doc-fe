@@ -66,13 +66,14 @@ export function TablePanel<T extends any>({
     sortBy: string,
     sortDirection: SortDirectionType,
   ) => {
-
-    let sortedData = _.sortBy(data, sortBy === "docId" ? `document.${sortBy}` : sortBy);
+    let sortedData = _.sortBy(
+      data,
+      sortBy === "docId" ? `document.${sortBy}` : sortBy,
+    );
     sortedData = sortDirection === "DESC" ? sortedData.reverse() : sortedData;
 
     return sortedData;
   };
-
 
   useEffect(() => {
     if (didMount) {
@@ -119,7 +120,7 @@ export function TablePanel<T extends any>({
 
       requestConfig.headers.Authorization = `bearer ${
         store.getState().auth.user.employeeId
-        }:${store.getState().auth.user.sessionId}`;
+      }:${store.getState().auth.user.sessionId}`;
 
       let { data } = await apiClient.request(requestConfig);
       if (customDataSet) {
