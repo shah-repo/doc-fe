@@ -9,6 +9,7 @@ import {
 } from "../../state/ducks/documentRevisions";
 import { documentsActions, documentsSelectors } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
+import { documentVersionPath } from "../document.revision/utils/paths";
 import useAsync from "../hooks/useAsync";
 import { DocumentCloneType } from "./Clone.container";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
@@ -18,7 +19,6 @@ import {
   toNewVersionRequestBody,
 } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
-import { generateDocumentRevisionVersionPath } from "./pathGenerators";
 
 interface DispatchProps {
   create: typeof documentRevisionsActions.create;
@@ -86,7 +86,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
         if (createdDocumentRevision) {
           setDoNotPrompt(true);
           history.push(
-            generateDocumentRevisionVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id),
+            documentVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id),
           );
         }
       },

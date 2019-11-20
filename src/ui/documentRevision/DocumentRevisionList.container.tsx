@@ -5,9 +5,9 @@ import { DocumentRevision } from "../../state/ducks/documentRevisions";
 import SummaryInfo from "../common/summary/SummaryInfo";
 import Date from "../components/Date";
 import Text from "../components/Text";
+import { documentVersionPath } from "../document.revision/utils/paths";
 import { styles } from "./DocumentRevisionList.container.styles";
 import { generateVersionNumber } from "./helpers";
-import { generateDocumentRevisionVersionPath } from "./pathGenerators";
 
 interface OwnProps {
   documentRevisions: DocumentRevision[];
@@ -27,7 +27,7 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
   return (
     <div className={classes.container}>
       {documentRevisions.map((documentRevision) => {
-        const link = generateDocumentRevisionVersionPath(
+        const link = documentVersionPath(
           documentRevision.id,
           documentId,
         );
