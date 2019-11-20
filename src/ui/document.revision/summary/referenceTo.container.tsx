@@ -21,7 +21,7 @@ export const ReferenceToContainer: React.FunctionComponent<Props> = ({
 }) => {
   const refSummary: ReferenceSummary[] = useMemo(() => {
     return getReferenceToSummary(dataProp, status, deprecatedAt);
-  }, [dataProp]);
+  }, [dataProp, status, deprecatedAt]);
 
   return (
     <ReferencePresenter label="common.references" dataProp={refSummary} />

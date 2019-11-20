@@ -30,8 +30,8 @@ export const CloneContainer: React.FunctionComponent<CloneContainerProps> = ({
   type,
 }) => {
   const redirect = (
-    (type === "newVersion") && !canCreateNewVersion(documentRevision, disableCreateNewVersion, true) ||
-    (type === "newOutput") && !canCreateOutput(documentRevision)
+    ((type === "newVersion") && !canCreateNewVersion(documentRevision, disableCreateNewVersion, true)) ||
+    ((type === "newOutput") && !canCreateOutput(documentRevision))
   );
 
   if (redirect) {
