@@ -13,7 +13,7 @@ export default (theme: Theme) =>
         paddingTop: theme.spacing(12),
       },
       "&.MuiGrid-item.MuiGrid-grid-xs-3": {
-        paddingTop: theme.spacing(14),
+        paddingTop: theme.spacing(12),
       },
     },
   });

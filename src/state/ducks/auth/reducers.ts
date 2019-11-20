@@ -3,12 +3,14 @@ import asyncReducer from "../../reducers/asyncReducer";
 import {
   AUTH_USER,
   LOGOUT_USER,
+  SET_EMPLOYEE,
   USER_PERMISSIONS,
   USER_PERMISSIONS_GET_ASYNC,
 } from "./constants";
 import {
   AuthUserAction,
   LogoutUserAction,
+  SelectEmployeeAction,
   UserPermissionsAction,
   UserPermissionsState,
   UserState,
@@ -20,9 +22,10 @@ export const USER_DEFAULT_STATE: UserState = {
   id: "",
   employeeId: "",
   sessionId: "",
+  employees: [],
 };
 
-type AuthUserActions = AuthUserAction | LogoutUserAction;
+type AuthUserActions = AuthUserAction | LogoutUserAction | SelectEmployeeAction;
 
 export const user = (state: UserState = USER_DEFAULT_STATE, action: AuthUserActions): UserState => {
   switch (action.type) {
@@ -34,6 +37,12 @@ export const user = (state: UserState = USER_DEFAULT_STATE, action: AuthUserActi
         id: action.payload.id,
         employeeId: action.payload.employeeId,
         sessionId: action.payload.sessionId,
+        employees: action.payload.employees,
+      };
+    case SET_EMPLOYEE:
+      return {
+        ...state,
+        employeeId: action.payload.id,
       };
     case LOGOUT_USER:
       return { ...USER_DEFAULT_STATE };

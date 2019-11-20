@@ -3,7 +3,6 @@ import moment from "moment-timezone";
 import {
   DocumentRevision,
   DocumentRevisionStatus,
-  DocumentRevisionType,
 } from "../../../state/ducks/documentRevisions";
 import { store } from "../../../state/store";
 import { SelectOption } from "../../components/forms/fields/Select";
@@ -33,14 +32,6 @@ export const documentRevisionIdMask = (
     return type + pad.substring(0, pad.length - countStr.length) + countStr;
 };
 
-// TODO: check if we still need this
-// ENC-807 document types are fetched from BE
-export const documentRevisionTypeOption = () => {
-  const options: SelectOption[] = [];
-  Object.keys(DocumentRevisionType).map((key) => options.push({value: key, text: key}));
-  return _.orderBy(options, ["text"], ["asc"]);
-};
-
 export const documentRevisionStatusOption = () => {
   const options: SelectOption[] = [];
   Object.keys(DocumentRevisionStatus).map((key) => {
@@ -55,17 +46,6 @@ export const documentRevisionStatusOption = () => {
 
 export const documentRevisionQueryStatus = (): DocumentRevisionStatus[] =>
   Object.values(DocumentRevisionStatus).filter((value) => value !== DocumentRevisionStatus.Deprecated);
-
-// TODO: check if we still need this
-// ENC-807 document types are fetched from BE
-export const documentRevisionTypeFormOption = () => {
-  const options: SelectOption[] = [];
-  Object.keys(DocumentRevisionType).map((key) => {
-    const keyName = DocumentRevisionType[key as keyof typeof DocumentRevisionType];
-    options.push({value: key, text: keyName});
-  });
-  return _.orderBy(options, ["text"], ["asc"]);
-};
 
 export const documentRevisionReleasedDateOption = () => {
   return [

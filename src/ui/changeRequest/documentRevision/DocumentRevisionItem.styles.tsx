@@ -14,11 +14,11 @@ export const styles = makeStyles((theme: Theme) =>
       overflow: "hidden",
       whiteSpace: "nowrap",
       textOverflow: "ellipsis",
-      color: theme.palette.text.primary,
+      color: theme.palette.primary.main,
       fontWeight: theme.typography.fontWeightBold,
     },
     itemSelected: {
-      color: theme.palette.primary.main,
+      color: theme.palette.text.primary,
       fontWeight: theme.typography.fontWeightBold,
     },
     selected: {

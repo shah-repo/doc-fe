@@ -1,5 +1,11 @@
-import { Company } from "../company";
-import { AUTH_TOKENS, AUTH_USER, LOGOUT_USER, USER_PERMISSIONS } from "./constants";
+import { Company, Employee } from "../company";
+import {
+  AUTH_TOKENS,
+  AUTH_USER,
+  LOGOUT_USER,
+  SET_EMPLOYEE,
+  USER_PERMISSIONS,
+} from "./constants";
 
 export interface LoginRequestBody {
   email: string;
@@ -46,6 +52,7 @@ export interface User {
   name: string;
   employeeId: string;
   sessionId: string;
+  employees: Employee[];
 }
 
 export type AuthUserPayload = User;
@@ -76,6 +83,7 @@ export interface UserState {
   name: string;
   employeeId: string;
   sessionId: string;
+  employees: Employee[];
 }
 
 export interface AuthProps {
@@ -88,3 +96,8 @@ export interface UserPermissionsAction {
 }
 
 export type UserPermissionsState = string[];
+
+export interface SelectEmployeeAction {
+  type: typeof SET_EMPLOYEE;
+  payload: Employee;
+}
