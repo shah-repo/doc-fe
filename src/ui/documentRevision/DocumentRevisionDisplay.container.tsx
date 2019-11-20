@@ -25,24 +25,44 @@ interface DispatchProps {
 }
 
 interface OwnProps {
+  documentId: string;
   documentRevisionId: string;
   isNewVersion?: boolean;
   isNewOutput?: boolean;
 }
 
-export type DocumentRevisionDisplayContainerProps = OwnProps & DispatchProps & StateProps ;
+export type DocumentRevisionDisplayContainerProps = OwnProps &
+  DispatchProps &
+  StateProps;
 
-const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps => ({
+const mapStateToProps = (
+  state: ApplicationState,
+  props: OwnProps,
+): StateProps => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
-  loadDocumentRevisionAsyncState: documentRevisionsSelectors.getLoadAsyncState(state),
-  documentRevision: documentRevisionsSelectors.getDocumentRevision(state, props.documentRevisionId),
+  loadDocumentRevisionAsyncState: documentRevisionsSelectors.getLoadAsyncState(
+    state,
+  ),
+  documentRevision: documentRevisionsSelectors.getDocumentRevision(
+    state,
+    props.documentRevisionId,
+  ),
 });
 
-export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevisionDisplayContainerProps> = ({
-  currentUserEmail, loadDocumentRevision, isNewVersion, isNewOutput,
-  documentRevisionId, documentRevision, loadDocumentRevisionAsyncState,
+export const DocumentRevisionDisplayContainer: React.FunctionComponent<
+  DocumentRevisionDisplayContainerProps
+> = ({
+  currentUserEmail,
+  loadDocumentRevision,
+  isNewVersion,
+  isNewOutput,
+  documentRevisionId,
+  documentRevision,
+  loadDocumentRevisionAsyncState,
+  documentId,
 }) => {
-  const loadDocumentRevisionAction = () => loadDocumentRevision(documentRevisionId);
+  const loadDocumentRevisionAction = () =>
+    loadDocumentRevision(documentRevisionId);
 
   useEffect(() => {
     if (documentRevisionId) {
@@ -50,14 +70,14 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
     }
   }, [documentRevisionId]);
 
-  const canEdit = (
+  const canEdit =
     documentRevision &&
     !isNewVersion &&
     !isNewOutput &&
-    canEditDocumentRevision(documentRevision, currentUserEmail)
-  );
+    canEditDocumentRevision(documentRevision, currentUserEmail);
 
-  const canPreview = documentRevision && !(canEdit || isNewVersion || isNewOutput);
+  const canPreview =
+    documentRevision && !(canEdit || isNewVersion || isNewOutput);
 
   return (
     <AsyncGate
@@ -65,14 +85,31 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
       asyncAction={loadDocumentRevisionAction}
       startActionOnMount={false}
     >
-      {canEdit && <DocumentRevisionUpdateContainer documentRevision={documentRevision} />}
-      {canPreview && <SummaryPresenter dataProp={documentRevision} canShowCreateVersionButton={true} />}
-      {isNewVersion && <CloneContainer documentRevision={documentRevision} type="newVersion" />}
-      {isNewOutput && <CloneContainer documentRevision={documentRevision} type="newOutput" />}
+      {canEdit && (
+        <DocumentRevisionUpdateContainer
+          documentRevision={documentRevision}
+          documentId={documentId}
+        />
+      )}
+      {canPreview && (
+        <SummaryPresenter
+          dataProp={documentRevision}
+          canShowCreateVersionButton={true}
+        />
+      )}
+      {isNewVersion && (
+        <CloneContainer documentRevision={documentRevision} type="newVersion" />
+      )}
+      {isNewOutput && (
+        <CloneContainer documentRevision={documentRevision} type="newOutput" />
+      )}
     </AsyncGate>
   );
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
-  loadDocumentRevision: documentRevisionsActions.load,
-})(DocumentRevisionDisplayContainer);
+export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
+  mapStateToProps,
+  {
+    loadDocumentRevision: documentRevisionsActions.load,
+  },
+)(DocumentRevisionDisplayContainer);

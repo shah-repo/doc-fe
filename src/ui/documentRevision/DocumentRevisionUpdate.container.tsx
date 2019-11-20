@@ -23,9 +23,11 @@ interface StateProps {
 interface DispatchProps {
   save: typeof documentRevisionsActions.save;
   loadAudit: typeof documentRevisionsActions.loadAudit;
+  loadDocument: typeof documentRevisionsActions.loadDocument;
 }
 
 interface OwnProps {
+  documentId?: string;
   documentRevision: DocumentRevision;
   onDirtyFlagChange?: (dirty: boolean) => void;
 }
@@ -46,46 +48,53 @@ export const DocumentRevisionUpdateContainer: React.FunctionComponent<
   currentUserEmail,
   onDirtyFlagChange,
   loadAudit,
+  documentId,
+  loadDocument,
 }) => {
-  const async = useAsync<DocumentRevision>({
-    onSuccess: () => {
-      loadAudit(documentRevision.id);
-    },
-  });
 
-  if (!canEditDocumentRevision(documentRevision, currentUserEmail)) {
+    const async = useAsync<DocumentRevision>({
+      onSuccess: () => {
+        loadAudit(documentRevision.id);
+        if (documentId) {
+          loadDocument(documentId!);
+        }
+      },
+    });
+
+    if (!canEditDocumentRevision(documentRevision, currentUserEmail)) {
+      return (
+        <DocumentRevisionSummaryPresenter
+          dataProp={documentRevision}
+          canShowCreateVersionButton={true}
+        />
+      );
+    }
+
+    const onSubmit = (values: DocumentRevisionFormValues) => {
+      async.start(
+        save,
+        documentRevision.id,
+        toDocumentRevisionEditRequestBody(values),
+        async,
+      );
+    };
+
     return (
-      <DocumentRevisionSummaryPresenter
-        dataProp={documentRevision}
-        canShowCreateVersionButton={true}
+      <DocumentRevisionForm
+        asyncState={async.asyncState}
+        onSubmit={onSubmit}
+        initialValues={toDocumentRevisionFormValues(documentRevision)}
+        onDirtyFlagChange={onDirtyFlagChange}
+        documentRevision={documentRevision}
       />
     );
-  }
-
-  const onSubmit = (values: DocumentRevisionFormValues) => {
-    async.start(
-      save,
-      documentRevision.id,
-      toDocumentRevisionEditRequestBody(values),
-      async,
-    );
   };
-
-  return (
-    <DocumentRevisionForm
-      asyncState={async.asyncState}
-      onSubmit={onSubmit}
-      initialValues={toDocumentRevisionFormValues(documentRevision)}
-      onDirtyFlagChange={onDirtyFlagChange}
-      documentRevision={documentRevision}
-    />
-  );
-};
 
 export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
   mapStateToProps,
   {
     save: documentRevisionsActions.save,
     loadAudit: documentRevisionsActions.loadAudit,
+    loadDocument: documentRevisionsActions.loadDocument,
   },
 )(DocumentRevisionUpdateContainer);
