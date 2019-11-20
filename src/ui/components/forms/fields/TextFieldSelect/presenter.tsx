@@ -15,6 +15,8 @@ export const EditableSelectPresenter: React.FunctionComponent<Props> = ({
   handleChange,
   value = "",
   gutter = true,
+  isActive = false,
+  handleBlur,
 }) => {
 
   const classes = styles({ gutter, error: false });
@@ -23,8 +25,9 @@ export const EditableSelectPresenter: React.FunctionComponent<Props> = ({
       <InputField
         name={name}
         label={label}
-        inputProps={{ value, onChange: handleChange, autoComplete: "off" }}
+        inputProps={{ value, onChange: handleChange, autoComplete: "off", onBlur: handleBlur }}
         formControlProps={{ className: classes.textField }}
+
       />
       <AutocompleteField
         name={name}
@@ -37,7 +40,7 @@ export const EditableSelectPresenter: React.FunctionComponent<Props> = ({
           backspaceRemovesValue: false,
           inputProps: { id: "title" },
           value,
-          menuIsOpen: value.length > 0,
+          menuIsOpen: value.length > 0 && isActive,
         }}
         formControlProps={{ className: classes.selectField }}
         options={options}

@@ -11,8 +11,10 @@ export const TextFieldSelect: React.FunctionComponent<TextFieldSelectProps> = ({
 }) => {
 
   const [options, filterOptions] = useState(fieldProps.options);
+  const [active, setActive] = useState(true)
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setActive(true)
 
     const v = event.target.value as string;
     form!.setFieldValue(field.name!, v);
@@ -24,9 +26,15 @@ export const TextFieldSelect: React.FunctionComponent<TextFieldSelectProps> = ({
     }
   };
 
+  const handleBlur = (event: React.FocusEvent) => {
+    setActive(false)
+  }
+
   return (
     <Presenter
       {...fieldProps}
+      handleBlur={handleBlur}
+      isActive={active}
       name={field.name}
       label={label}
       value={field && field.value}

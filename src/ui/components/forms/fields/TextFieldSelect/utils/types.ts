@@ -1,6 +1,6 @@
-import { Translation } from "../../../../../translations/types";
-import { FormikHybridFieldProps } from "../../../../hoc/utils/types";
-import { OptionType } from "../../Autocomplete/types";
+import { Translation } from '../../../../../translations/types';
+import { FormikHybridFieldProps } from '../../../../hoc/utils/types';
+import { OptionType } from '../../Autocomplete/types';
 
 interface TextFieldSelectOptions extends OptionType {
   disabled: boolean;
@@ -13,4 +13,6 @@ export interface TextFieldSelectProps extends FormikHybridFieldProps {
   gutter?: boolean;
   handleChange?: (event: React.ChangeEvent<{ value: unknown }>) => any;
   options?: TextFieldSelectOptions[];
+  isActive: boolean;
+  handleBlur: (event: React.FocusEvent) => void;
 }
