@@ -99,7 +99,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       },
     },
     {
-      key: "documentTypeId",
+      key: "documentTypeId" as keyof DocumentRevision,
       label: "document.revision.list.type",
       tooltipKey: typeTooltipRenderer,
       cellHref: cellHrefRenderer,
