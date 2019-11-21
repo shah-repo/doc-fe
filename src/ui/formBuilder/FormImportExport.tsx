@@ -1,11 +1,11 @@
 import React, { useRef, useState } from "react";
 import { connect } from "react-redux";
+import { ReactComponent as ExportIcon } from "../../assets/images/formBuilder/icon_export.svg";
+import { ReactComponent as ImportIcon } from "../../assets/images/formBuilder/icon_import.svg";
 import { formBuilderActions } from "../../state/ducks/formBuilder";
 import { formReducerType } from "../../state/ducks/formBuilder/reducer";
 import modalStyles from "./components/modal/Modal.module.css";
 import styles from "./FormBuilder.module.css";
-import { ReactComponent as ExportIcon } from "./icons/icon_export.svg";
-import { ReactComponent as ImportIcon } from "./icons/icon_import.svg";
 
 interface StateProps {
   formBuilderState: formReducerType;

@@ -28,9 +28,8 @@ export const styles = makeStyles((theme: Theme) =>
       marginTop: "40px",
     },
     avatar: {
-      width: "60px",
-      height: "60px",
-      marginRight: "16px",
+      width: "58px",
+      height: "58px",
       borderRadius: "50%",
     },
     companyButton: {
@@ -51,7 +50,7 @@ export const styles = makeStyles((theme: Theme) =>
       display: "flex",
     },
     companyName: {
-      margin: "18px 0",
+      margin: "18px 0 18px 16px",
     },
   }),
   );

@@ -4,9 +4,9 @@ import { withStyles, WithStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import React, { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
-import { ReactComponent as ChangeRequestListIcon } from "../components/icons/change_request_list_icon.svg";
-import { ReactComponent as DashboardIcon } from "../components/icons/dashboard_icon.svg";
-import { ReactComponent as DocumentListICon } from "../components/icons/document_list_icon.svg";
+import { ReactComponent as ChangeRequestListIcon } from "../../assets/images/change_request_list_icon.svg";
+import { ReactComponent as DashboardIcon } from "../../assets/images/dashboard_icon.svg";
+import { ReactComponent as DocumentListICon } from "../../assets/images/document_list_icon.svg";
 import Text from "../components/Text";
 import { LinkDefinition } from "./NavigationLink.container";
 
