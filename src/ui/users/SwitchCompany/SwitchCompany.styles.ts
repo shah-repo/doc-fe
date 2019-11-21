@@ -31,6 +31,7 @@ export const styles = makeStyles((theme: Theme) =>
       width: "58px",
       height: "58px",
       borderRadius: "50%",
+      border: "1px solid lightgrey",
     },
     companyButton: {
       background: "none",
