@@ -10,7 +10,7 @@ export const TextFieldSelect: React.FunctionComponent<TextFieldSelectProps> = ({
   ...fieldProps
 }) => {
   const [options, filterOptions] = useState(fieldProps.options);
-  const [active, setActive] = useState(true);
+  const [active, setActive] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setActive(true);
