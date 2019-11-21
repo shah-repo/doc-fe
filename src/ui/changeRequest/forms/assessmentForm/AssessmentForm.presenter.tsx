@@ -6,7 +6,6 @@ import { AsyncState } from "../../../../state/types";
 import ApproversField from "../../../change.request/form/approvers";
 import AssessmentsField from "../../../change.request/form/assessments";
 import JustificationField from "../../../change.request/form/justification";
-import Title from "../../../change.request/form/title";
 import DatePickerField from "../../../components/forms/fields/DatePicker";
 import InputField from "../../../components/forms/fields/Input";
 import TextEditorField from "../../../components/forms/fields/TextEditor";
@@ -28,7 +27,7 @@ import AssessmentFormImplementationPlan from "./implementationPlan/Container";
 
 interface Props
   extends WithStyles<typeof styles>,
-  FormikProps<ChangeRequestFormValues> {
+    FormikProps<ChangeRequestFormValues> {
   asyncState: AsyncState;
   changeRequest?: ChangeRequest;
   documentRevisionsList: string[];
@@ -93,8 +92,13 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
         <FormProgress asyncState={asyncState} />
         {renderCrId()}
 
-        < Box mb={1}>
-          <Title />
+        <Box mb={1}>
+          <InputField
+            name="title"
+            label="cr.title"
+            inputProps={{ id: "title", multiline: true, rows: "2" }}
+            validate={validator(required)}
+          />
           <TextEditorField
             name="description"
             label="cr.description"
