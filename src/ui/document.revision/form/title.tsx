@@ -37,8 +37,8 @@ export const Title: React.FunctionComponent<Props> = ({
   const options = useMemo(
     () =>
       documents.map((document) => ({
-        label: document.description,
-        value: document.description,
+        label: document.name,
+        value: document.name,
         isDisabled: true,
       })),
     [documents],
