@@ -14,7 +14,10 @@ const Logo: React.FunctionComponent = () => {
 
   return (
     <React.Fragment>
-      <img src={logo} />
+      <img
+        src={logo}
+        alt="Logo"
+      />
       {
         showEnvironment &&
         <div className={classes.envCnt}>
