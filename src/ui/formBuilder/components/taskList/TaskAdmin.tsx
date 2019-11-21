@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { ReactComponent as DeletIcon } from "../../icons/icon_delete.svg";
-import { ReactComponent as EditIcon } from "../../icons/icon_edit.svg";
+import { ReactComponent as DeletIcon } from "../../../../assets/images/formBuilder/icon_delete.svg";
+import { ReactComponent as EditIcon } from "../../../../assets/images/formBuilder/icon_edit.svg";
 import styles from "./Tasks.module.css";
 
 // const mapStateToProps = (state: ApplicationState): StateProps => ({

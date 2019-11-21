@@ -31,6 +31,7 @@ import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
 import SubmitButton from "../../components/forms/SubmitButton";
 import AttachmentsField from "../../document.revision/form/attachments";
+import Title from "../../document.revision/form/title";
 import {
   documentDetailsPath,
 } from "../../document.revision/utils/paths";
@@ -45,7 +46,7 @@ import { DocumentRevisionFormValues } from "./types";
 
 export interface Props
   extends WithStyles<typeof styles>,
-    FormikProps<DocumentRevisionFormValues> {
+  FormikProps<DocumentRevisionFormValues> {
   asyncState: AsyncState;
   documentRevisions?: DocumentRevision[];
   availableReferences: OptionType[];
@@ -94,7 +95,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDisabled: boolean = _.get(initialValues, "id") !== undefined;
   const docId = _.get(initialValues, "document.docId");
   const useProposedDocId = (!docId || docId === "") && values.document;
-  values.document!.docId =  useProposedDocId ? proposedDocId : values.document!.docId;
+  values.document!.docId = useProposedDocId ? proposedDocId : values.document!.docId;
 
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -172,12 +173,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         />
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
-        <InputField
-          name="name"
-          label="document.title"
-          inputProps={{ multiline: true, rows: "2" }}
-          validate={validator(required)}
-        />
+        <Title name="name" label="common.title" />
         <TextEditorField
           name="description"
           label="common.description"

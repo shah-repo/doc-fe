@@ -29,7 +29,7 @@ export function withSelectDefaults<T extends FBSelectProps>(
 
     private Items = () => this.options().map((option) => (
       <MenuItem key={option.value} value={option.value}>
-        <Text message={option.text} tagName="em"  />
+        <Text message={option.text} tagName="em" />
       </MenuItem>
     ))
 
@@ -52,10 +52,10 @@ export function withSelectDefaults<T extends FBSelectProps>(
       let options = this.props.options;
       if (!options) { return []; }
 
-      if (typeof options === "string" ) {
+      if (typeof options === "string") {
         const optionsArray = _.split(options, "\n");
         options = optionsArray.map((label, i) => (
-          {value: `gen_${i}`, text: label}) as SelectOption,
+          { value: `gen_${i}`, text: label }) as SelectOption,
         );
       }
       return options as SelectOption[];
@@ -65,7 +65,7 @@ export function withSelectDefaults<T extends FBSelectProps>(
       const { field, includeNote } = this.props;
 
       return (
-        FBStore.mode === "form" &&
+        (FBStore.mode === "form" || FBStore.mode === "preview") &&
         field.value === "gen_other" &&
         (includeNote || false)!
       );

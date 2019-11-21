@@ -4,8 +4,9 @@ import FBTextField from "../inputs/FBTextField";
 
 const FBNoteTextField: React.FunctionComponent<FBFormDefaultProps> = ({
   name,
+  ...props
 }) => (
-  <FBTextField name={`${name}_optionNote_field`}/>
-);
+    <FBTextField {...props} name={`${name}_optionNote_field`} />
+  );
 
 export default FBNoteTextField;

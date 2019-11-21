@@ -1,9 +1,9 @@
 import React, { Fragment, useRef, useState } from "react";
-import { ReactComponent as DocIcon } from "../../icons/icon_doc.svg";
-import { ReactComponent as PdfIcon } from "../../icons/icon_pdf.svg";
-import { ReactComponent as PngIcon } from "../../icons/icon_png.svg";
-import { ReactComponent as TxtIcon } from "../../icons/icon_txt.svg";
-import { ReactComponent as UploadIcon } from "../../icons/icon_upload.svg";
+import { ReactComponent as DocIcon } from "../../../../assets/images/formBuilder/icon_doc.svg";
+import { ReactComponent as PdfIcon } from "../../../../assets/images/formBuilder/icon_pdf.svg";
+import { ReactComponent as PngIcon } from "../../../../assets/images/formBuilder/icon_png.svg";
+import { ReactComponent as TxtIcon } from "../../../../assets/images/formBuilder/icon_txt.svg";
+import { ReactComponent as UploadIcon } from "../../../../assets/images/formBuilder/icon_upload.svg";
 import styles from "./BasicFields.module.css";
 
 interface FileUploadProps {
