@@ -20,12 +20,14 @@ const getChangeRequestsList = createSelector(
 
 const getApproversListForAssessmentForm = createSelector(
   approversAllIds, approversById,
-  (ids, approvers): OptionType[] => ids.map((id) => ({ value: approvers[id].id, label: approvers[id].user.name })),
+  (ids, approvers): OptionType[] =>
+    ids.map((id) => ({ value: approvers[id].id, label: approvers[id].user.name })),
 );
 
 const getAssignessList = createSelector(
   approversAllIds, approversById,
-  (ids, approvers): OptionType[] => ids.map((id) => ({ value: approvers[id].id, label: approvers[id].user.name })),
+  (ids, approvers): OptionType[] =>
+    ids.map((id) => ({ value: approvers[id].id, label: approvers[id].user.name })),
 );
 
 const getChangeRequest = (state: ApplicationState, changeRequestId: string) => byId(state)[changeRequestId];
@@ -42,6 +44,9 @@ const makeGetAudit = () => {
             case "justifications.description":
             case "tasks.description":
             case "description":
+            case "assessments.process.reasoning":
+            case "assessments.design.reasoning":
+            case "assessments.regulatory.reasoning":
               const html = audit.nextValue as string;
               audit.nextValue = stripTags(html).substring(0, 100);
               return audit;
