@@ -1,9 +1,9 @@
 import { apiAction } from "../../factories";
 import { ApiAction } from "../../types";
 import {
+  DASHBOARD_ROOT_URL,
   PENDING_ACTIONS_LIST,
   PENDING_ACTIONS_LIST_ASYNC,
-  DASHBOARD_ROOT_URL,
 } from "./constants";
 import {
   PendingAction,

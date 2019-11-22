@@ -6,22 +6,30 @@ export const styles = makeStyles((theme: Theme) =>
       padding: theme.spacing(1),
     },
     linkContainer: {
-      borderBottom: "1px solid " + theme.palette.text.hint,
+      borderBottom: `1px solid ${theme.palette.text.hint}`,
       padding: theme.spacing(2),
     },
     linkTitle: {
       color: theme.palette.text.primary,
       textDecoration: "none",
-      fontWeight: 500,
+      fontWeight: theme.typography.fontWeightBold,
     },
     activeLinkTitle: {
       color: theme.palette.primary.main,
-      background: "#f0f0f0",
+      fontWeight: theme.typography.fontWeightBold,
     },
     linkBody: {
       textDecoration: "none",
-      color: "gray",
+      color: theme.palette.text.primary,
       lineHeight: "25px",
+    },
+    selected: {
+      background: theme.palette.primary.light,
+    },
+    details: {
+      "&.MuiExpansionPanelDetails-root": {
+        display: "block",
+      },
     },
   }),
 );

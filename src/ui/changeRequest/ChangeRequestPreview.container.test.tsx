@@ -1,10 +1,8 @@
 import { shallow } from "enzyme";
 import faker from "faker";
 import React from "react";
-import { ChangeRequestStatus } from "../../state/ducks/changeRequest";
 import { getChangeRequest } from "../../state/ducks/changeRequest/tests/factories";
-import { getApproval, getUser } from "../../state/ducks/common/tests/factories";
-import { ApprovalStatus } from "../../state/ducks/common";
+import { getUser } from "../../state/ducks/common/tests/factories";
 import {
   ChangeRequestPreviewContainer,
   ChangeRequestPreviewContainerProps,

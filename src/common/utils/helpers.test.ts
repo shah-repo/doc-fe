@@ -18,7 +18,7 @@ describe("common/utils/helpers", () => {
   it("should sanitize the html string and return inner HTML props", () => {
     const unsanitized = "<p>abc<iframe/\/src=jAva&Tab;script:alert(3)>def";
     const innerHTMLProp = getInnerHTMLProp(unsanitized);
-    const expected = { __html: "<p>abcdef</p>" };
+    const expected = { __html: "<p>abc</p>" };
 
     expect(innerHTMLProp).toMatchObject(expected);
   });

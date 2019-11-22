@@ -4,8 +4,8 @@ import {
 import { RadioGroupProps as MuiRadioGroupProps } from "@material-ui/core/RadioGroup";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
-import Field, { FieldOwnProps } from "./Field";
 import ErrorMessage from "./ErrorMessage";
+import Field, { FieldOwnProps } from "./Field";
 
 interface RadioGroupOwnProps extends FieldOwnProps {
   radioGroupProps?: MuiRadioGroupProps;
@@ -13,7 +13,9 @@ interface RadioGroupOwnProps extends FieldOwnProps {
 
 type RadioGroupPropsWithFormik = RadioGroupOwnProps & FormikFieldProps;
 
-const RadioGroup: React.FunctionComponent<RadioGroupPropsWithFormik> = ({ radioGroupProps, children, ...fieldProps }) => {
+const RadioGroup: React.FunctionComponent<RadioGroupPropsWithFormik> = ({
+  radioGroupProps, children, ...fieldProps
+}) => {
   return (
     <Field {...fieldProps}>
       <ErrorMessage {...fieldProps} />
@@ -26,6 +28,7 @@ const RadioGroup: React.FunctionComponent<RadioGroupPropsWithFormik> = ({ radioG
 
 type RadioGroupFieldProps = RadioGroupOwnProps & FieldConfig;
 
-const RadioGroupField: React.FunctionComponent<RadioGroupFieldProps> = (props) => <FormikField component={RadioGroup} {...props} />;
+const RadioGroupField: React.FunctionComponent<RadioGroupFieldProps> =
+(props) => <FormikField component={RadioGroup} {...props} />;
 
 export default RadioGroupField;

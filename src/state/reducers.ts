@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { persistReducer } from "redux-persist";
+import { createMigrate, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import auth from "./ducks/auth";
 import { LOGOUT_USER } from "./ducks/auth/constants";
@@ -10,11 +10,15 @@ import documentRevisions from "./ducks/documentRevisions";
 import documentType from "./ducks/documentRevisions/documentType";
 import documents from "./ducks/documents";
 import formBuilderState from "./ducks/formBuilder";
+import tableSearch from "./ducks/tableSearch";
+import migrations from "./migrations";
 
 const authPersistConfig = {
   key: "auth",
   storage,
+  version: 0,
   whitelist: ["tokens", "user"],
+  migrate: createMigrate(migrations),
 };
 const companyPersistConfig = {
   key: "company",
@@ -31,6 +35,7 @@ const appReducer = combineReducers({
   formBuilderState,
   documentType,
   company: persistReducer(companyPersistConfig, company),
+  tableSearch,
 });
 
 const rootReducer = (state: any, action: any) => {

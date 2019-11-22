@@ -28,7 +28,8 @@ const Header: React.FunctionComponent<Props> = ({
         container={true}
         spacing={10}
         justify="space-between"
-        alignItems="center">
+        alignItems="center"
+      >
         <Grid item={true} xs={6}>
           {pageTitle !== "translation.unknown" ? (
             <Typography variant="h6">
@@ -38,8 +39,12 @@ const Header: React.FunctionComponent<Props> = ({
         </Grid>
         <Grid item={true} xs={6}>
           <Grid container={true} justify="flex-end" alignItems="center">
-            <Typography variant="caption" color="primary" noWrap={true}>
-              <Text translation="header.welcome" values={{ name }} />
+            <Typography variant="caption" className={classes.welcomeText} noWrap={true}>
+              <Text translation="header.welcome" />,
+            </Typography>
+            &nbsp;
+            <Typography variant="caption" className={classes.name} noWrap={true}>
+              <Text translation="header.name" values={{ name }} />
             </Typography>
             <Button color="primary" variant="text" onClick={onLogout}>
               <Text translation="header.logout" />

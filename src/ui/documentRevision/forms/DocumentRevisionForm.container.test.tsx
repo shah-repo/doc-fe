@@ -1,13 +1,13 @@
 import { shallow } from "enzyme";
-import React from "react";
-import { DocumentRevisionFormContainer, DocumentRevisionFormContainerProps} from "./DocumentRevisionForm.container";
 import faker from "faker";
+import { Formik } from "formik";
+import React from "react";
 import { getAttachment } from "../../../state/ducks/attachments/tests/factories";
-import { ASYNC_DEFAULT_STATE } from "../../hooks/useAsync";
 import { getDocumentRevision } from "../../../state/ducks/documentRevisions/tests/factories";
 import { getDocument } from "../../../state/ducks/documents/tests/factories";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
-import { Formik } from "formik";
+import { ASYNC_DEFAULT_STATE } from "../../hooks/useAsync";
+import { DocumentRevisionFormContainer, DocumentRevisionFormContainerProps} from "./DocumentRevisionForm.container";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 
 describe("DocumentRevisionFormContainer tests", () => {

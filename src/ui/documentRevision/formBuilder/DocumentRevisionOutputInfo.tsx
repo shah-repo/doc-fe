@@ -17,7 +17,7 @@ const DocumentRevisionOutputInfo: React.FunctionComponent<DataProps<DocumentRevi
     ? generateVersionNumber(revision!, revisionStage!)
     : "";
 
-  const { docId } = _.get(dataProp, "formDocument.document");
+  const docId = _.get(dataProp, "formDocument.document.docId");
 
   return (
     <Box mb={3}>
@@ -26,7 +26,7 @@ const DocumentRevisionOutputInfo: React.FunctionComponent<DataProps<DocumentRevi
       </Box>
       <Box display="row" fontSize="subtitle2.fontSize">
         {`${docId}, `}
-        <Text message="documentRevision.version" />
+        <Text message="common.version" />
         {` ${version}, `}
         <Date value={releasedAt} />
       </Box>

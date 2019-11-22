@@ -2,8 +2,6 @@ import {
   ListItem,
   Tooltip,
   Typography,
-  WithStyles,
-  withStyles,
 } from "@material-ui/core";
 import React from "react";
 import { Link } from "react-router-dom";

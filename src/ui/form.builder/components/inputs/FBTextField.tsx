@@ -1,17 +1,10 @@
 import { Box, TextField } from "@material-ui/core";
-import { OutlinedTextFieldProps } from "@material-ui/core/TextField";
-import { style } from "@material-ui/system";
 import React from "react";
 import { withLabelRenderer } from "../../hocs/withLabelRenderer";
 import { withOnChange } from "../../hocs/withOnChange";
-import { FBFormDefaultProps, FBOnChangeProps } from "../../types/common";
+import { FBTextFieldProps } from "../../types/textfield";
 
-export type Props =
-  Omit<OutlinedTextFieldProps, "variant"> &
-  FBFormDefaultProps &
-  FBOnChangeProps;
-
-const FBTextField: React.FunctionComponent<Props> = ({
+const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   labelRenderer,
   ...props
 }) => (

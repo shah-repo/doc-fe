@@ -15,5 +15,5 @@ export type AttachmentState = Attachment;
 
 export enum AttachmentType {
   Attached = "ATTACHED",
-  CleanCopy = "CLEAN_COPY"
+  CleanCopy = "CLEAN_COPY",
 }

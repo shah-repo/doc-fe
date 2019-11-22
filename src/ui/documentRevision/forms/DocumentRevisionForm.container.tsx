@@ -1,6 +1,7 @@
-import { Box } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
+import classNames from "classnames";
 import { Formik, FormikActions, FormikProps } from "formik";
-import _ from "lodash";
+import { get } from "lodash";
 import React from "react";
 import { connect } from "react-redux";
 import {
@@ -18,6 +19,8 @@ import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
+import DocumentHeader from "../../document.revision/summary/header";
+import styles from "./DocumentRevisionForm.container.style";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -62,7 +65,7 @@ const mapStateToProps = (
   documentRevisions: documentRevisionsSelectors.getDocumentRevisionsList(state),
   documentTypes: documentTypeSelectors.getDocumentTypeFormOptions(state),
   documentTypesById: documentTypeSelectors.byId(state),
-  document: documentRevisionsSelectors.getDocument(state, _.get(props.initialValues, "document.id")!),
+  document: documentRevisionsSelectors.getDocument(state, get(props.initialValues, "document.id")!),
 });
 
 export const DocumentRevisionFormContainer: React.FunctionComponent<
@@ -88,6 +91,7 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
 }) => {
 
   document = document || {} as Document;
+  const classes = styles();
 
   const render = (props: FormikProps<DocumentRevisionFormValues>) => {
     return (
@@ -126,15 +130,22 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
       asyncAction={loadAction}
       startActionOnMount={true}
     >
-      <Box ml={3}>
-        {!showRevisionTypeChange && <ChangeRequestLink dataProp={documentRevision} />}
-      </Box>
-      <Formik
-        render={render}
-        initialValues={initialValues}
-        onSubmit={onSubmit}
-        enableReinitialize={true}
-      />
+      {documentRevision && <DocumentHeader dataProp={documentRevision} />}
+      <Grid
+        className={classNames(classes.container, {
+                  [classes.borderContainer]: documentRevision,
+                })}
+      >
+        <Box ml={3}>
+          {!showRevisionTypeChange && <ChangeRequestLink dataProp={documentRevision} />}
+        </Box>
+        <Formik
+          render={render}
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+          enableReinitialize={true}
+        />
+      </Grid>
     </AsyncGate>
   );
 };

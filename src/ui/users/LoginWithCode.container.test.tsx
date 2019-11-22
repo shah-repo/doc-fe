@@ -1,4 +1,4 @@
-import { mount, ReactWrapper } from "enzyme";
+import { mount } from "enzyme";
 import _ from "lodash";
 import React from "react";
 import { act } from "react-dom/test-utils";

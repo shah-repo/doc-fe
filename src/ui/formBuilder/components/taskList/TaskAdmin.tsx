@@ -1,10 +1,8 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import { ReactComponent as DeletIcon } from "../../../../assets/images/formBuilder/icon_delete.svg";
+import { ReactComponent as EditIcon } from "../../../../assets/images/formBuilder/icon_edit.svg";
 import styles from "./Tasks.module.css";
-import { ReactComponent as DeletIcon } from "../../icons/icon_delete.svg";
-import { ReactComponent as EditIcon } from "../../icons/icon_edit.svg";
-import DatePickerField from "../../../components/forms/fields/DatePicker";
-import { validator } from "../../../components/forms/fields/validators";
 
 // const mapStateToProps = (state: ApplicationState): StateProps => ({
 //   currentUserEmail: authSelectors.currentUserEmail(state),
@@ -69,10 +67,6 @@ const Task: React.FunctionComponent<TaskProps> = ({
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setTask({ ...currentTask, [name]: value });
-  };
-
-  const handleDayChange = (day: any) => {
-    setTask({ ...currentTask, due_date: day.toLocaleDateString() });
   };
 
   const singleTaskContainer = (

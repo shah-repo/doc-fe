@@ -10,12 +10,11 @@ import { DocumentRevisionStatus } from "./types";
 
 const allIds = (state: ApplicationState) => state.documentRevisions.allIds;
 const byId = (state: ApplicationState) => state.documentRevisions.byId;
+
 const documentsById = (state: ApplicationState) =>
   state.documentRevisions.documentsById;
 const auditsByCRId = (state: ApplicationState) =>
   state.documentRevisions.auditsByCRId;
-const auditsAllId = (state: ApplicationState) =>
-  state.documentRevisions.auditsAllId;
 
 const getDocumentRevisionsList = createSelector(
   allIds,
@@ -33,10 +32,14 @@ const getDocument = (state: ApplicationState, documentId: string) =>
   documentsById(state)[documentId];
 const getDocumentRevisions = (state: ApplicationState, documentId: string) =>
   _.get(documentsById(state)[documentId], "documentRevisions", []);
+
 const getAudit = (
   state: ApplicationState,
   documentRevisionId: string,
 ): AuditGroupType => auditsByCRId(state)[documentRevisionId];
+
+const getDocId = (state: ApplicationState, documentId: string) =>
+  _.get(documentsById(state)[documentId], "docId", "");
 
 const makeGetDocumentRevisions = () => {
   return createSelector(
@@ -68,7 +71,7 @@ const makeGetAvailableReferences = () => {
   return createSelector(
     [allIds, byId, getCurrentDocumentValues],
     (ids, docRevs, currentDocRev): OptionType[] => {
-      const filteredIds = ids.filter(id => {
+      const filteredIds = ids.filter((id) => {
         const { status, changeRequest, document } = docRevs[id];
 
         if (
@@ -120,7 +123,7 @@ const makeGetAvailableReferences = () => {
           label: `${document.docId} - ${revision} - ${name}`,
         };
       });
-    }
+    },
   );
 };
 
@@ -128,8 +131,8 @@ const makeGetAudit = () => {
   return createSelector(
     getAudit,
     (audits: AuditGroupType = {}) => {
-      Object.keys(audits).map((groupId) => {
-        audits[groupId].map((audit: Audit) => {
+      Object.keys(audits).forEach((groupId) => {
+        audits[groupId].forEach((audit: Audit) => {
           if (audit.field === "description") {
             const html = audit.nextValue as string;
             audit.nextValue = stripTags(html).substring(0, 30);
@@ -137,7 +140,7 @@ const makeGetAudit = () => {
         });
       });
       return audits;
-    }
+    },
   );
 };
 
@@ -165,4 +168,5 @@ export default {
   makeGetAvailableReferences,
   makeGetAudit,
   makeGetDisableCreateNewVersion,
+  getDocId,
 };

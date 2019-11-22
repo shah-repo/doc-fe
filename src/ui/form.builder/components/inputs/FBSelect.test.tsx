@@ -1,10 +1,8 @@
-import { mount, ReactWrapper, shallow } from "enzyme";
+import { mount, ReactWrapper } from "enzyme";
 import { Form, Formik, FormikProps } from "formik";
 import React from "react";
 import { FBSelectProps } from "../../types/select";
 import FBSelect from "./FBSelect";
-import FBNoteTextField from "../custom/FBNoteTextField";
-import FBTextField from "./FBTextField";
 
 jest.mock("../../../components/Text");
 
@@ -12,6 +10,7 @@ describe("FBSelect component tests", () => {
   interface TestFormValues {
     label: string;
   }
+  // tslint:disable-next-line: no-unused-declaration
   let formProps: FormikProps<TestFormValues>;
 
   const getWrapper = (props: Partial<FBSelectProps>): ReactWrapper => {

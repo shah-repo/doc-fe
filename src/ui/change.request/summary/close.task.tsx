@@ -1,16 +1,16 @@
 import {
-  Button, Dialog, DialogTitle, DialogContent,
+  Button, Dialog, DialogContent, DialogTitle,
 } from "@material-ui/core";
+import { Form, Formik } from "formik";
 import React, { Fragment } from "react";
-import Text from "../../components/Text";
-import useDialog from "../../hooks/useDialog";
-import InputField from "../../components/forms/fields/Input";
-import { validator, required } from "../../components/forms/fields/validators";
-import { Formik, Form } from "formik";
 import { changeRequestsActions } from "../../../state/ducks/changeRequest";
-import useAsync from "../../hooks/useAsync";
-import FormProgress from "../../components/forms/FormProgress";
+import InputField from "../../components/forms/fields/Input";
+import { required, validator } from "../../components/forms/fields/validators";
 import FormMessage from "../../components/forms/FormMessage";
+import FormProgress from "../../components/forms/FormProgress";
+import Text from "../../components/Text";
+import useAsync from "../../hooks/useAsync";
+import useDialog from "../../hooks/useDialog";
 
 interface OwnProps {
   crId: string;
@@ -46,7 +46,7 @@ export const CloseTask: React.FunctionComponent<Props> = ({
           <Text translation="common.close.task" />
         </Button>
       </Form>
-    )
+    );
   };
 
   const onSubmit = (values: any) => {

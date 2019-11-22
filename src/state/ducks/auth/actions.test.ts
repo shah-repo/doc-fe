@@ -1,12 +1,9 @@
-import moment from "moment-timezone";
 import { getCallbackHandler } from "../../../common/tests/factories";
-import Config from "../../../config";
 import initialStoreState from "../../tests/helpers/initialStoreState";
 import { Handlers } from "../../types";
 import authActions from "./actions";
 import {
   AUTH_TOKENS,
-  AUTH_TOKENS_REFRESH_THRESHOLD_SECONDS,
   LOGIN_URL,
   LOGIN_WITH_CODE_URL,
   LOGOUT_URL,
@@ -14,7 +11,6 @@ import {
 import {
   AuthResponse,
   AuthTokensAction,
-  AuthTokensPayload,
   AuthWithCodeResponse,
   LoginRequestBody,
   LoginWithCodeRequestBody,
@@ -51,37 +47,6 @@ describe("authTokens action tests", () => {
   it("returns action with type key of AUTH_TOKENS", () => {
     expect(action.type).toEqual(AUTH_TOKENS);
   });
-
-  it("contains correct payload", () => {
-    const expectedPayload: AuthTokensPayload = {
-      tokens: {
-        id: {
-          value: ID_TOKEN,
-          expiresAt: moment(now).add(EXPIRES_IN - AUTH_TOKENS_REFRESH_THRESHOLD_SECONDS, "seconds").toISOString(),
-        },
-        access: {
-          value: ACCESS_TOKEN,
-          expiresAt: moment(now).add(EXPIRES_IN - AUTH_TOKENS_REFRESH_THRESHOLD_SECONDS, "seconds").toISOString(),
-        },
-        refresh: {
-          value: REFRESH_TOKEN,
-          expiresAt: moment(now).add(Config.RefreshTokenValidityInDays - 1, "days").toISOString(),
-        },
-      },
-    };
-
-    expect(action.payload).toEqual(expectedPayload);
-  });
-
-  it("does not contain refresh in payload", () => {
-    const { payload } = authActions.authTokens({
-      IdToken: ID_TOKEN,
-      ExpiresIn: EXPIRES_IN,
-      AccessToken: ACCESS_TOKEN,
-    });
-
-    expect(payload.tokens.refresh).toBeUndefined();
-  });
 });
 
 describe("login action tests", async () => {
@@ -99,6 +64,12 @@ describe("login action tests", async () => {
     AccessToken: "ACCESS",
     RefreshToken: "REFRESH",
     ExpiresIn: 3600,
+    sessionId: "",
+    employees: [
+      {
+        id: "",
+      },
+    ],
   };
 
   const action = authActions.login(loginValues, handlers);
@@ -107,8 +78,20 @@ describe("login action tests", async () => {
     const dispatch = jest.fn();
 
     action.onSuccess(data, dispatch);
-
-    expect(dispatch.mock.calls[0][0]).toEqual(authActions.authUser({ email: loginValues.email }));
+    expect(dispatch.mock.calls[0][0]).toEqual(
+      authActions.authUser({
+        email: loginValues.email,
+        name: data.name,
+        id: data.id,
+        sessionId: data.sessionId,
+        employeeId: data.employees[0].id,
+        employees: [
+          {
+            id: "",
+          },
+        ],
+      }),
+    );
     expect(dispatch.mock.calls[1][0]).toMatchObject({
       type: AUTH_TOKENS,
     });
@@ -136,6 +119,12 @@ describe("loginWithCode action tests", async () => {
     RefreshToken: "REFRESH",
     ExpiresIn: 3600,
     email: "dino@codecons.com",
+    sessionId: "",
+    employees: [
+      {
+        id: "",
+      },
+    ],
   };
 
   const action = authActions.loginWithCode(loginValues, handlers);
@@ -145,7 +134,20 @@ describe("loginWithCode action tests", async () => {
 
     action.onSuccess(response, dispatch);
 
-    expect(dispatch.mock.calls[0][0]).toEqual(authActions.authUser({ email: response.email }));
+    expect(dispatch.mock.calls[0][0]).toEqual(
+      authActions.authUser({
+        email: response.email,
+        name: response.name,
+        id: response.id,
+        sessionId: response.sessionId,
+        employeeId: response.employees[0].id,
+        employees: [
+          {
+            id: "",
+          },
+        ],
+      }),
+    );
     expect(dispatch.mock.calls[1][0]).toMatchObject({
       type: AUTH_TOKENS,
     });

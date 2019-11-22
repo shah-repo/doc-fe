@@ -19,12 +19,19 @@ describe("LoginContainer unit tests", () => {
     location: {
       ...getRouteComponentProps().location,
     },
+    companies: [
+      {
+        id: "",
+      },
+    ],
   };
 
-  const getProps = (customProps: Partial<LoginContainerProps>): LoginContainerProps =>
-    _.defaultsDeep({}, customProps, defaultProps);
+  const getProps = (
+    customProps: Partial<LoginContainerProps>,
+  ): LoginContainerProps => _.defaultsDeep({}, customProps, defaultProps);
 
-  const getWrapper = (props: LoginContainerProps) => mount(<LoginContainer {...props} />);
+  const getWrapper = (props: LoginContainerProps) =>
+    mount(<LoginContainer {...props} />);
 
   describe("when user is not authenticated", () => {
     beforeAll(() => {
