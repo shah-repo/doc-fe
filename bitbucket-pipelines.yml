@@ -118,7 +118,7 @@ pipelines:
       - step: *RUN_LINTER
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEVELOP_1
-    release/19.3.2:
+    release/19.4:
       - step: *RUN_LINTER
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEMO
