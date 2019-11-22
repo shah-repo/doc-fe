@@ -34,12 +34,11 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
   const [pageTitle, setPageTitle] = useState<Translation>(
     "translation.unknown",
   );
-  let unlistenHistory: any;
 
   useEffect(() => {
     setTranslationByPath(location.pathname);
 
-    unlistenHistory = history.listen((location) => {
+    const unlistenHistory = history.listen((location) => {
       setTranslationByPath(location.pathname);
     });
 

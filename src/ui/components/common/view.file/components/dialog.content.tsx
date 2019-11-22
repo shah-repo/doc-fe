@@ -50,7 +50,7 @@ const ViewFileContent: React.FunctionComponent<ViewFileContentProps> = ({
     </object>
   );
   const renderImage = fileType === IMAGE && (
-    <img src={url} />
+    <img src={url} alt={url} />
   );
 
   return (

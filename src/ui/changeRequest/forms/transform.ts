@@ -99,7 +99,7 @@ const toImplementationPlanEditRequestBody = (values: ImplementationPlanFormValue
 const createAssessmentObjectForRequestBody = (value: Assessment) => {
   const assessments: any = createAssessment(value);
 
-  Object.values(AssessmentType).map((t) => {
+  Object.values(AssessmentType).forEach((t) => {
     const attachmentValue = _.get(value, `${t}.attachments`, null);
     const itemAttachment = (attachmentValue) ?
       attachmentValue.map((attachment: Attachment) => ({ id: attachment.id })) :

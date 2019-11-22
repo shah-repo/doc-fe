@@ -131,8 +131,8 @@ const makeGetAudit = () => {
   return createSelector(
     getAudit,
     (audits: AuditGroupType = {}) => {
-      Object.keys(audits).map((groupId) => {
-        audits[groupId].map((audit: Audit) => {
+      Object.keys(audits).forEach((groupId) => {
+        audits[groupId].forEach((audit: Audit) => {
           if (audit.field === "description") {
             const html = audit.nextValue as string;
             audit.nextValue = stripTags(html).substring(0, 30);

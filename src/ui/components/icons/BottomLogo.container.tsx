@@ -18,6 +18,7 @@ const BottomLogoContainer: React.FunctionComponent = () => {
       <img
         src="/logo_enlil.svg"
         className={classes.logo}
+        alt="Enlil logo"
       />
     </div>
   );

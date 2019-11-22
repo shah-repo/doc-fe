@@ -31,30 +31,11 @@ const getAssignessList = createSelector(
 const getChangeRequest = (state: ApplicationState, changeRequestId: string) => byId(state)[changeRequestId];
 const getAudit = (state: ApplicationState, changeRequestId: string) => auditsByCRId(state)[changeRequestId];
 
-// const makeGetAudit = () => {
-//   return createSelector(
-//     getAudit,
-//     (audits: Audit[] = []) => audits.map((audit) => {
-//       switch (audit.field) {
-//         case "assessments.description":
-//         case "justifications.description":
-//         case "tasks.description":
-//         case "description":
-//           const html = audit.nextValue as string;
-//           audit.nextValue = striptags(html).substring(0, 100);
-//           return audit;
-//         default:
-//           return audit;
-//       }
-//     }),
-//   )
-// }
-
 const makeGetAudit = () => {
   return createSelector(
     getAudit,
     (audits: AuditGroupType = {}) =>  {
-      Object.keys(audits).map((groupId) => {
+      Object.keys(audits).forEach((groupId) => {
         audits[groupId].map((audit: Audit) => {
           switch (audit.field) {
             case "assessments.description":

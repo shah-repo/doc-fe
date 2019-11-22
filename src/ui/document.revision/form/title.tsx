@@ -1,5 +1,5 @@
 import { Field } from "formik";
-import React from "react";
+import React, { useMemo } from "react";
 import { connect } from "react-redux";
 import {
   DocumentRevision,
@@ -7,57 +7,54 @@ import {
   documentRevisionsSelectors,
 } from "../../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../../state/reducers";
-import { AsyncState } from "../../../state/types";
-import AsyncGate from "../../components/AsyncGate";
 import { TextFieldSelect } from "../../components/forms/fields/TextFieldSelect/container";
 import { required, validator } from "../../components/forms/fields/validators";
 
 interface StateProps {
   documents: DocumentRevision[];
-  loadAsyncState: AsyncState;
 }
 
 interface DispatchProps {
   loadDocumentRevisions: typeof documentRevisionsActions.loadList;
 }
 
-export type Props = StateProps & DispatchProps;
+interface OwnProps {
+  name: string;
+  label: string;
+}
+
+export type Props = StateProps & DispatchProps & OwnProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   documents: documentRevisionsSelectors.getDocumentRevisionsList(state),
-  loadAsyncState: documentRevisionsSelectors.getLoadListAsyncState(state),
 });
 
 export const Title: React.FunctionComponent<Props> = ({
   documents,
-  loadAsyncState,
   loadDocumentRevisions,
+  ...props
 }) => {
-  const loadAction = () => loadDocumentRevisions();
-  const options = documents.map((document) => ({
-    label: document.description,
-    value: document.description,
-    isDisabled: true,
-  }));
+  const options = useMemo(
+    () =>
+      documents.map((document) => ({
+        label: document.name,
+        value: document.name,
+        isDisabled: true,
+      })),
+    [documents],
+  );
 
   return (
-    <AsyncGate
-      asyncState={loadAsyncState}
-      asyncAction={loadAction}
-      startActionOnMount={true}
-    >
-      <Field
-        name="title"
-        label="cr.title"
-        options={options}
-        component={TextFieldSelect}
-        validate={validator(required)}
-      />
-    </AsyncGate>
+    <Field
+      {...props}
+      options={options}
+      component={TextFieldSelect}
+      validate={validator(required)}
+    />
   );
 };
 
-export default connect<StateProps, DispatchProps, {}, ApplicationState>(
+export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
   mapStateToProps,
   {
     loadDocumentRevisions: documentRevisionsActions.loadList,

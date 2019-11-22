@@ -34,7 +34,7 @@ export const documentRevisionIdMask = (
 
 export const documentRevisionStatusOption = () => {
   const options: SelectOption[] = [];
-  Object.keys(DocumentRevisionStatus).map((key) => {
+  Object.keys(DocumentRevisionStatus).forEach((key) => {
     // TODO: Change DocumentRevisionStatus enum into key = value, value = text
     const keyName = DocumentRevisionStatus[key as keyof typeof DocumentRevisionStatus];
     if (keyName !== DocumentRevisionStatus.Deprecated) {
