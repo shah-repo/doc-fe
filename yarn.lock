@@ -1321,7 +1321,7 @@
   dependencies:
     "@babel/runtime" "^7.2.0"
 
-"@material-ui/lab@^4.0.0-alpha.32":
+"@material-ui/lab@4.0.0-alpha.32":
   version "4.0.0-alpha.32"
   resolved "https://registry.yarnpkg.com/@material-ui/lab/-/lab-4.0.0-alpha.32.tgz#be339034db5ae0e75a83076e9e2ff93d52725a55"
   integrity sha512-ONh2WLp8E11Gsl/HaLQ1CLfZadtuyt2cbEKDCAJ9G267zCrKzrc5T9Ij7UH5Z2jwmP9aDjpp8PoA1+zUSlGknw==
@@ -7565,14 +7565,22 @@ mobx-react-lite@1.4.0:
   resolved "https://registry.yarnpkg.com/mobx-react-lite/-/mobx-react-lite-1.4.0.tgz#193beb5fdddf17ae61542f65ff951d84db402351"
   integrity sha512-5xCuus+QITQpzKOjAOIQ/YxNhOl/En+PlNJF+5QU4Qxn9gnNMJBbweAdEW3HnuVQbfqDYEUnkGs5hmkIIStehg==
 
-mobx-react@^6.1.3:
+mobx-react@6.1.3:
   version "6.1.3"
   resolved "https://registry.yarnpkg.com/mobx-react/-/mobx-react-6.1.3.tgz#ad07880ea60cdcdb2a7e2a0d54e01379710cf00a"
   integrity sha512-eT/jO9dYIoB1AlZwI2VC3iX0gPOeOIqZsiwg7tDJV1B7Z69h+TZZL3dgOE0UeS2zoHhGeKbP+K+OLeLMnnkGnA==
   dependencies:
     mobx-react-lite "1.4.0"
 
-mobx-rest@^5.0.6:
+mobx-rest-axios-adapter@2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/mobx-rest-axios-adapter/-/mobx-rest-axios-adapter-2.1.1.tgz#1af43061a3bf1ec35a7d668f911596d9b410fd20"
+  integrity sha512-NzJYGsXHLfx/WFqxKasWIsRWDnCKtlE2+QiCICbdP+1VSeWFmtIB0ljUeCQh3oBsuwAQdYxsU663wqv3X3HI7g==
+  dependencies:
+    lodash "^4.17.4"
+    qs "^6.5.1"
+
+mobx-rest@5.0.6:
   version "5.0.6"
   resolved "https://registry.yarnpkg.com/mobx-rest/-/mobx-rest-5.0.6.tgz#ae310ddc20d3c72261e863655cb133f1d213925a"
   integrity sha512-OKyn792ORBoRubHE5YFRlhabKrO7yxD7XmyGwLgULrkpzTQdvlPXOpR0J6LS4PgoKiIzOS0Vt1bEElLisWWqYQ==
@@ -9352,6 +9360,11 @@ qs@6.5.2, qs@~6.5.2:
   version "6.5.2"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
   integrity sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
+
+qs@^6.5.1:
+  version "6.9.1"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.9.1.tgz#20082c65cb78223635ab1a9eaca8875a29bf8ec9"
+  integrity sha512-Cxm7/SS/y/Z3MHWSxXb8lIFqgqBowP5JMlTUFyJN88y0SGQhVmZnqFK/PeuMX9LzUyWsqqhNxIyg0jlzq946yA==
 
 query-string@6.8.3:
   version "6.8.3"

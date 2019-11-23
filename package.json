@@ -35,6 +35,7 @@
     "mobx": "^5.14.0",
     "mobx-react": "6.1.3",
     "mobx-rest": "5.0.6",
+    "mobx-rest-axios-adapter": "2.1.1",
     "moment": "2.24.0",
     "moment-timezone": "^0.5.26",
     "prettier": "^1.18.2",
