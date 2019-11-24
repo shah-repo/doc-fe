@@ -63,7 +63,8 @@
     "tslint-junit-formatter-forked": "https://github.com/zorankova/tslint-junit-formatter-forked.git#v5.1.2",
     "typescript": "3.6.3",
     "use-debounce": "3.0.1",
-    "uuid": "^3.3.3"
+    "uuid": "^3.3.3",
+    "validatorjs": "3.17.1"
   },
   "scripts": {
     "start": "react-scripts start",
