@@ -1,37 +1,47 @@
-import { Box } from "@material-ui/core";
-import React, { useState } from "react";
 import Select from "react-select";
-import { SelectOption } from "../../../components/forms/fields/Select";
-import { withAutocompleteDefaults } from "../../hocs/withAutocompleteDefaults";
+import React from "react";
+import FBLabel from "../../components/common/FBLabel";
 import { FBAutocompleteProps } from "../../types/autocomplete";
+import { withAutocompleteDefaults } from "../../hocs/withAutocompleteDefaults";
+import { observer } from "mobx-react";
+import autocompleteList from "../../stores/domain/collections/FBAutocompleteCollection";
+import FBStore from "../../stores/FBStore";
+import autocompleteEditorList from "../../stores/domain/collections/FBAutocompleteEditorCollection";
 
 const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
-  labelRenderer,
-  autocompleteList,
-  disabled,
-  readOnly,
+  label,
+  autocompleteId,
+  name,
+  options,
   ...props
 }) => {
 
-  // *NOTE: For demo only. Will be removed
-  const [options] = useState<SelectOption[]>([]);
+  if (!options && autocompleteId && FBStore.mode === 'form') {
+    const autocompleteIndicator = autocompleteEditorList.getBy(
+      autocompleteId!,
+    );
+    const { path, renderKey } = autocompleteIndicator || {};
+    if (path && renderKey) {
+      autocompleteList.setArgs(path, renderKey);
+      autocompleteList.fetch();
+    }
+  }
   return (
-    <Box mb={4}>
-      {labelRenderer}
+    <FBLabel label={label}>
       <Select
-        inputId={`react-select-${props.name}`}
+        {...props}
+        inputId={`react-select-${name}`}
         TextFieldProps={{
           InputLabelProps: {
-            htmlFor: `react-select-${props.name}`,
+            htmlFor: `react-select-${name}`,
             shrink: true,
           },
         }}
-        isDisabled={disabled || readOnly}
-        {...props}
-        options={options}
+        isDisabled={props.disabled}
+        options={options || autocompleteList.data()}
       />
-    </Box>
+    </FBLabel>
   );
 };
 
-export default withAutocompleteDefaults(FBAutocomplete);
+export default withAutocompleteDefaults(observer(FBAutocomplete));

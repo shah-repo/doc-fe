@@ -10,10 +10,6 @@ export class FormBuilderStore {
     return this.mode !== "none";
   }
 
-  @computed get prefixName() {
-    return `${this.schema.length}_${(this.name || "").replace(" ", "")}`;
-  }
-
   @computed get fieldMode(): Partial<FBFormDefaultProps> {
     return {
       disabled: this.isDisabled(),

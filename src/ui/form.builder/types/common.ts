@@ -1,5 +1,5 @@
 import { SelectProps } from "@material-ui/core/Select";
-import { OutlinedTextFieldProps } from "@material-ui/core/TextField";
+import { OutlinedTextFieldProps, BaseTextFieldProps } from "@material-ui/core/TextField";
 import { ValueType } from "react-select/src/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
@@ -15,23 +15,23 @@ export interface FBOptionRendererProps {
   optionsRenderer?: React.ReactNode[];
 }
 
-export type FBFormDefaultProps = FBLabelRendererProps &
-  FBOptionRendererProps & {
-    name?: string;
+export type FBFormDefaultProps =
+  & Pick<BaseTextFieldProps, "children" | "disabled" | "name">
+  & FBLabelRendererProps
+  & FBOptionRendererProps
+  & {
     index?: number;
     type?: FBEditorElementType | string;
-    label?: string;
-    disabled?: boolean;
+    label?: string | React.ReactNode;
     readOnly?: boolean;
     className?: string;
     gutter?: boolean;
-    options?: SelectOption[] | string;
+    options?: any[];
     includeOther?: boolean;
     includeNote?: boolean;
     optionNote?: string;
-    autocompleteList?: string;
+    autocompleteId?: string;
     isMulti?: boolean;
-    fieldName?: string;
     linkUrl?: string;
   };
 

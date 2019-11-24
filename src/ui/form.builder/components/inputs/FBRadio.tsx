@@ -18,7 +18,7 @@ const FBRadio: React.FunctionComponent<FBCheckboxProps> = ({
     <Box mb={gutter ? 4 : 0}>
       <FormControlLabel
         {...props}
-        label={label && <Text message={label} />}
+        label={label && <Text message={label as string} />}
         control={<Radio checked={field.value === label} value={label} />}
         disabled={disabled || readOnly}
       />
