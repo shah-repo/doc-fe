@@ -16,6 +16,7 @@ export interface FBTemplateSchema {
   autocompleteId?: string;
   isMulti?: boolean;
   linkUrl?: string;
+  rules?: string;
 }
 
 export type FBDocumentRevisionMode =
