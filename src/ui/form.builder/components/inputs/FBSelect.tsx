@@ -5,7 +5,7 @@ import { FBSelectProps } from "../../types/select";
 import FBNoteTextField from "../custom/FBNoteTextField";
 
 const FBSelect: React.FunctionComponent<FBSelectProps> = ({
-  variant,
+  variant = "outlined",
   labelRenderer,
   items,
   field,
@@ -15,7 +15,7 @@ const FBSelect: React.FunctionComponent<FBSelectProps> = ({
 }) => (
     <Box mb={4}>
       {labelRenderer}
-      <FormControl variant={variant} fullWidth={true} required={props.required}>
+      <FormControl variant={variant} fullWidth={true}>
         <Select {...props}>{items}</Select>
       </FormControl>
       {showNote && (

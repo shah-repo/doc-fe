@@ -34,7 +34,8 @@ export type FBEditorElementType =
   | "radiogroup"
   | "autocomplete"
   | "hyperlink"
-  | "fileupload";
+  | "fileupload"
+  | "schemaSelect";
 
 export type FBEditorModeType = "create" | "update";
 

@@ -1,4 +1,6 @@
+import { SelectOption } from "../../components/forms/fields/Select";
 import { FBEditorElementType } from "./editor";
+import { FBValidatorDelimiter } from "./validation/validator";
 
 export interface FBTemplateSchema {
   type: FBEditorElementType;
@@ -10,13 +12,14 @@ export interface FBTemplateSchema {
   checkboxNote?: string;
   disabled?: boolean;
   includeOther?: boolean;
-  options?: string;
+  options?: string | string[] | SelectOption[];
   includeNote?: boolean;
   optionNote?: string;
   autocompleteId?: string;
   isMulti?: boolean;
   linkUrl?: string;
   rules?: string;
+  validatorDelimiter?: FBValidatorDelimiter;
 }
 
 export type FBDocumentRevisionMode =

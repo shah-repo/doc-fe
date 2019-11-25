@@ -4,6 +4,7 @@ import { ValueType } from "react-select/src/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
 import { FBEditorElementType } from "./editor";
+import { FBValidatorDelimiter } from "./validation/validator";
 
 export type Subtract<T, V> = Pick<T, Exclude<keyof T, keyof V>>;
 
@@ -26,7 +27,7 @@ export type FBFormDefaultProps =
     readOnly?: boolean;
     className?: string;
     gutter?: boolean;
-    options?: any[];
+    options?: SelectOption[] | string[] | string;
     includeOther?: boolean;
     includeNote?: boolean;
     optionNote?: string;
@@ -34,6 +35,7 @@ export type FBFormDefaultProps =
     isMulti?: boolean;
     linkUrl?: string;
     rules?: string;
+    validatorDelimiter?: FBValidatorDelimiter;
   };
 
 export type FBOnChangeType =
@@ -42,9 +44,12 @@ export type FBOnChangeType =
   | string
   | Date;
 
-export type FBOnChangeProps = FormikHybridFieldProps &
-  Pick<SelectProps, "onChange" | "value"> &
-  Pick<OutlinedTextFieldProps, "onChange"> & {
+export type FBOnChangeProps =
+  & FormikHybridFieldProps
+  & Pick<SelectProps, "onChange" | "value">
+  & Pick<OutlinedTextFieldProps, "onChange">
+  & Pick<FBFormDefaultProps, "validatorDelimiter">
+  & {
     value?: any;
     onChange?: (trigger: any) => void;
   };

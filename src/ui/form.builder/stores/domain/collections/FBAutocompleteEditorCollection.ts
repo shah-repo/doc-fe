@@ -1,6 +1,7 @@
 import { Collection } from "mobx-rest";
 import { CHANGE_REQUEST_ROOT_URL } from "../../../../../state/ducks/changeRequest/constants";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../../../state/ducks/documentRevisions/constants";
+import { DOCUMENT_TYPE_ROOT_URL } from "../../../../../state/ducks/documentRevisions/documentType/constants";
 import { SelectOption } from "../../../../components/forms/fields/Select";
 import { FBAutocompleteEditorModel } from "../models/FBAutocompleteEditorModel";
 
@@ -33,6 +34,12 @@ export class FBAutocompleteEditorCollection extends Collection<FBAutocompleteEdi
           path: `${CHANGE_REQUEST_ROOT_URL}/available_approvers`,
           label: "Approvers",
           renderKey: "email",
+        },
+        {
+          id: "4",
+          path: DOCUMENT_TYPE_ROOT_URL,
+          label: "Document types",
+          renderKey: "documentTypeName",
         },
       ];
   }
