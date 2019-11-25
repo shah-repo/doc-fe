@@ -14,9 +14,9 @@ import { DocumentRevision } from "../../state/ducks/documentRevisions";
 import SummaryInfo from "../common/summary/SummaryInfo";
 import Date from "../components/Date";
 import Text from "../components/Text";
+import { documentVersionPath } from "../document.revision/utils/paths";
 import { styles } from "./DocumentRevisionList.container.styles";
 import { generateVersionNumber } from "./helpers";
-import { generateDocumentRevisionVersionPath } from "./pathGenerators";
 
 interface OwnProps {
   documentRevisions: DocumentRevision[];
@@ -27,7 +27,7 @@ interface OwnProps {
 
 export type DocumentRevisionListContainerProps = OwnProps;
 
-// TODO: check if this component is used
+// used by the document revision manager container
 export const DocumentRevisionListContainer: React.FunctionComponent<
   DocumentRevisionListContainerProps
 > = ({ documentRevisions, documentId, docId, selectedDocumentRevision }) => {
@@ -46,7 +46,7 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
         <ExpansionPanelDetails className={classes.details}>
           <List>
             {documentRevisions.map((documentRevision) => {
-              const link = generateDocumentRevisionVersionPath(
+              const link = documentVersionPath(
                 documentRevision.id,
                 documentId,
               );

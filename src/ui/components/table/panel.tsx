@@ -66,7 +66,10 @@ export function TablePanel<T extends any>({
     sortBy: string,
     sortDirection: SortDirectionType,
   ) => {
-    let sortedData = _.sortBy(data, `document.${sortBy}`);
+    let sortedData = _.sortBy(
+      data,
+      sortBy === "docId" ? `document.${sortBy}` : sortBy,
+    );
     sortedData = sortDirection === "DESC" ? sortedData.reverse() : sortedData;
 
     return sortedData;

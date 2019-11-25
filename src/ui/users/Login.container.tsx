@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Redirect, RouteComponentProps } from "react-router-dom";
 import { authSelectors } from "../../state/ducks/auth";
-import { Employees } from "../../state/ducks/company";
+import { Employee } from "../../state/ducks/company";
 import { ApplicationState } from "../../state/reducers";
 import { HOME_URL } from "../constants/urls";
 import LoginPresenter from "./Login.presenter";
@@ -10,7 +10,7 @@ import SwitchCompany from "./SwitchCompany/SwitchCompany";
 
 interface StateProps {
   isUserAuthenticated: boolean;
-  companies: Employees[];
+  employees: Employee[];
   hasMultipleCompanies: boolean;
 }
 
@@ -37,7 +37,7 @@ export const LoginContainer: React.FunctionComponent<LoginContainerProps> = (pro
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   isUserAuthenticated: authSelectors.isAuthenticated(state),
-  companies: authSelectors.companies(state),
+  employees: authSelectors.employees(state),
   hasMultipleCompanies: authSelectors.hasMultipleCompanies(state),
 });
 

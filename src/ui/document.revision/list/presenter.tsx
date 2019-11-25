@@ -99,7 +99,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       },
     },
     {
-      key: "documentTypeId",
+      key: "documentTypeId" as keyof DocumentRevision,
       label: "document.revision.list.type",
       tooltipKey: typeTooltipRenderer,
       cellHref: cellHrefRenderer,
@@ -152,8 +152,8 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         defaultValue: !tableState.queryDict["status[]"]
           ? DocumentRevisionStatus.Released
           : _.isString(tableState.queryDict["status[]"])
-          ? tableState.queryDict["status[]"]
-          : undefined,
+            ? tableState.queryDict["status[]"]
+            : undefined,
         searchType: "select",
         selectOptions: documentRevisionStatusOption(),
       },

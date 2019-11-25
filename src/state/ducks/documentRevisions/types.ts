@@ -63,11 +63,6 @@ export interface DocumentRevision extends FBDocumentFlowProps {
   attachments: Attachment[];
   status: DocumentRevisionStatus;
   document: DocumentRevisionDocument;
-  // TODO: this needs a proper fix
-  // this is a hack for document.revision/list/presenter
-  // Array<TableColumnProps<DocumentRevision>>
-  // to allow the use of this key
-  documentTypeId?: string;
   released: Date;
   referenceTo: Reference[];
   createdAt?: string;
@@ -78,47 +73,6 @@ export interface DocumentRevision extends FBDocumentFlowProps {
   releasedAt?: string;
   trainingRecords: TrainingRecord[];
   retrain?: boolean;
-}
-
-// TODO: check if this is still needed
-export enum DocumentRevisionType {
-  SOP = "Standard Operating Procedure",
-  ADM = "Administrative",
-  CS = "Component Specifications",
-  CP = "Clinical Protocol",
-  EHS = "Environmental Health & Safety",
-  FG = "Finished Good",
-  GD = "General Document",
-  CR = "Clinical Report",
-  DD = "Design Document",
-  DMR = "Device Master Record",
-  ES = "Equipment Specifications",
-  FM = "Form",
-  LBL = "Labeling",
-  MKT = "Marketing",
-  MPI = "Manufacturing Process Instructions",
-  MVP = "Master Validation Plan",
-  QM = "Quality Manual",
-  QP = "Quality Plan",
-  QS = "Quality Specifications",
-  REF = "Model/Catalog Number",
-  RPT = "Report",
-  RM = "Risk Management",
-  SA = "Subassembly",
-  SI = "Supply Item",
-  TC = "Training Curriculum",
-  TL = "Tooling",
-  TM = "Test Method",
-  TP = "Test Protocol",
-  TR = "Test Report",
-  WI = "Work Instructions",
-  ESL = "Equipment Specifications Lot",
-  TLL = "Tooling Lot",
-  CSL = "Component Specifications Lot",
-  EB = "Engineering Build",
-  NSW = "Non-product Software",
-  PRT = "Parts",
-  CPT = "Concept",
 }
 
 export const RevisionStageOptions = [
