@@ -3,10 +3,9 @@ import faker from "faker";
 import React from "react";
 import { Link } from "react-router-dom";
 import { getAttachment } from "../../../state/ducks/attachments/tests/factories";
-import { RevisionChangeType, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
-import { getDocument, getDocumentRevision } from "../../../state/ducks/documentRevisions/tests/factories";
+import { RevisionStageOptions } from "../../../state/ducks/documentRevisions";
+import { getDocument } from "../../../state/ducks/documentRevisions/tests/factories";
 import AutocompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
-import RadioButton from "../../components/forms/fields/RadioButton";
 import RadioGroupField from "../../components/forms/fields/RadioGroup";
 import SelectField from "../../components/forms/fields/Select";
 import FormMessage from "../../components/forms/FormMessage";
@@ -14,7 +13,6 @@ import FormProgress from "../../components/forms/FormProgress";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
-import { documentVersionPath } from "../../document.revision/utils/paths";
 import { ASYNC_DEFAULT_STATE } from "../../hooks/useAsync";
 import { DocumentRevisionFormPresenter, Props } from "./DocumentRevisionForm.presenter";
 
@@ -91,31 +89,5 @@ describe("DocumentRevisionFormPresenter tests", () => {
     it("Displays correctly when there is no references", () => {
         const wrapper = getWrapper();
         expect(wrapper.find(Link).exists()).toBe(false);
-    });
-
-    it("Displays correctly when there is references", () => {
-        const initialValues = {
-            description: faker.lorem.words(),
-            name: faker.lorem.word(),
-            attachments: [getAttachment()],
-            referenceTo: [{
-                label: faker.lorem.word(),
-                value: faker.lorem.word(),
-            }],
-            document: {...getDocument(), referencedBy: [getDocumentRevision()]},
-        };
-        const wrapper = getWrapper({...defaultProps, initialValues });
-        const reference = initialValues.document.referencedBy[0];
-
-        expect(wrapper.find(Link)).toHaveLength(1);
-        expect(wrapper.find(Link).prop("to")).toEqual(documentVersionPath(reference.id, reference.document.id));
-    });
-
-    it("Renders type of revision change", () => {
-        const wrapper = getWrapper({...defaultProps, showRevisionTypeChange: true });
-        const radioButton = wrapper.find(RadioGroupField).find(RadioButton);
-        expect(radioButton.at(0).prop("value")).toEqual(RevisionChangeType.NextRevision);
-        expect(radioButton.at(1).prop("value")).toEqual(RevisionChangeType.NextRevisionStage);
-        expect(radioButton.at(2).prop("value")).toEqual(RevisionChangeType.Obsolete);
     });
 });
