@@ -14,8 +14,6 @@ import Layout from "./Layout";
 
 interface Props extends WithStyles<typeof styles> {}
 
-const renderSupplierSurveyContainer = (props: any) => <SupplierSurveyContainer {...props} />;
-
 const AppPresenter: React.FunctionComponent<Props> = ({ classes }) => (
   <div>
     <Switch>
@@ -25,7 +23,7 @@ const AppPresenter: React.FunctionComponent<Props> = ({ classes }) => (
         path={SIGNUP_URL}
         component={redirectTo(Config.SignUpUrl)}
       />
-      <Route path={SUPPLIER_SURVEY_URL} exact={true} render={renderSupplierSurveyContainer} />
+      <Route path={SUPPLIER_SURVEY_URL} exact={true} component={SupplierSurveyContainer} />
       <Route path={STATUS} exact={true} component={StatusPresenter} />
       <PrivateRouteContainer component={Layout} />
     </Switch>

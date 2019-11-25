@@ -1,10 +1,19 @@
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
 import { SUPPLIER_SURVEY_LIST, SUPPLIER_SURVEY_LIST_ASYNC } from "./constants";
-import { SupplierSurveyListAction, SupplierSurveyState } from "./types";
+import { SupplierSurveyForm, SupplierSurveyListAction, SupplierSurveyState } from "./types";
+
+export const SUPPLIER_SURVEY_DEFAULT_STATE: SupplierSurveyForm = {
+  createdAt: "",
+  updatedAt: "",
+  id: "",
+  token: "",
+  surveyFormDocumentRevision: {},
+  surveySubmission: null,
+};
 
 export const supplierSurvey = (
-  state: SupplierSurveyState = [],
+  state: SupplierSurveyState = SUPPLIER_SURVEY_DEFAULT_STATE,
   action: SupplierSurveyListAction,
 ): SupplierSurveyState => {
   switch (action.type) {

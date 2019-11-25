@@ -3,14 +3,17 @@ import { createStyles, Theme } from "@material-ui/core";
 export default (theme: Theme) =>
   createStyles({
     root: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
+      margin: "auto",
+      width: "100%",
       position: "absolute",
-      left: 0,
-      right: 0,
       top: 0,
       bottom: 0,
       backgroundColor: theme.palette.grey[300],
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    title: {
+      marginBottom: theme.spacing(8),
     },
   });
