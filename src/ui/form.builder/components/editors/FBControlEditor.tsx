@@ -1,13 +1,13 @@
-import { Box } from "@material-ui/core";
 import React from "react";
 import FBCheckbox from "../inputs/FBCheckbox";
 import FBLabelEditor from "./FBLabelEditor";
+import FBStepperEditor from "./FBStepperEditor";
 
 const FBControlEditor: React.FunctionComponent<{}> = () => (
-  <Box>
+  <FBStepperEditor>
     <FBLabelEditor />
     <FBCheckbox label="form.builder.include.note" name="includeNote" />
-  </Box>
+  </FBStepperEditor>
 );
 
 export default FBControlEditor;

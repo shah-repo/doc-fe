@@ -1,11 +1,11 @@
-import { Box } from "@material-ui/core";
 import React from "react";
 import FBTextField from "../inputs/FBTextField";
 import FBLabelEditor from "./FBLabelEditor";
 import FBPlaceholderEditor from "./FBPlaceholderEditor";
+import FBStepperEditor from "./FBStepperEditor";
 
 const FBTextFieldEditor: React.FunctionComponent<{}> = () => (
-  <Box>
+  <FBStepperEditor>
     <FBLabelEditor />
     <FBPlaceholderEditor />
     <FBTextField
@@ -14,7 +14,7 @@ const FBTextFieldEditor: React.FunctionComponent<{}> = () => (
       defaultValue={1}
       name="rows"
     />
-  </Box>
+  </FBStepperEditor>
 );
 
 export default FBTextFieldEditor;

@@ -4,6 +4,7 @@ import FBControlEditor from "../components/editors/FBControlEditor";
 import FBControlGroupEditor from "../components/editors/FBControlGroupEditor";
 import FBHyperlinkEditor from "../components/editors/FBHyperlinkEditor";
 import FBLabelEditor from "../components/editors/FBLabelEditor";
+import FBLabelStepperEditor from "../components/editors/FBLabelStepperEditor";
 import FBSelectEditor from "../components/editors/FBSelectEditor";
 import FBTextFieldEditor from "../components/editors/FBTextFieldEditor";
 import FBAutocomplete from "../components/inputs/FBAutocomplete";
@@ -29,14 +30,14 @@ export const FBFieldEditorComponent: {
   textfield: FBTextFieldEditor,
   checkbox: FBControlEditor,
   checkboxgroup: FBControlGroupEditor,
-  datepicker: FBLabelEditor,
-  texteditor: FBLabelEditor,
+  datepicker: FBLabelStepperEditor,
+  texteditor: FBLabelStepperEditor,
   select: FBSelectEditor,
   radio: FBControlEditor,
   radiogroup: FBControlGroupEditor,
   autocomplete: FBAutocompleteEditor,
   hyperlink: FBHyperlinkEditor,
-  fileupload: FBLabelEditor,
+  fileupload: FBLabelStepperEditor,
 };
 
 export const FBFieldComponent: Dictionary<any> = {

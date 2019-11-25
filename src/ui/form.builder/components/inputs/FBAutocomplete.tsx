@@ -1,12 +1,12 @@
-import Select from "react-select";
-import React from "react";
-import FBLabel from "../../components/common/FBLabel";
-import { FBAutocompleteProps } from "../../types/autocomplete";
-import { withAutocompleteDefaults } from "../../hocs/withAutocompleteDefaults";
 import { observer } from "mobx-react";
+import React from "react";
+import Select from "react-select";
+import FBLabel from "../../components/common/FBLabel";
+import { withAutocompleteDefaults } from "../../hocs/withAutocompleteDefaults";
 import autocompleteList from "../../stores/domain/collections/FBAutocompleteCollection";
-import FBStore from "../../stores/FBStore";
 import autocompleteEditorList from "../../stores/domain/collections/FBAutocompleteEditorCollection";
+import FBStore from "../../stores/FBStore";
+import { FBAutocompleteProps } from "../../types/autocomplete";
 
 const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   label,
@@ -16,7 +16,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   ...props
 }) => {
 
-  if (!options && autocompleteId && FBStore.mode === 'form') {
+  if (!options && autocompleteId && FBStore.mode === "form") {
     const autocompleteIndicator = autocompleteEditorList.getBy(
       autocompleteId!,
     );

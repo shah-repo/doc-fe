@@ -1,5 +1,5 @@
 import { SelectProps } from "@material-ui/core/Select";
-import { OutlinedTextFieldProps, BaseTextFieldProps } from "@material-ui/core/TextField";
+import { BaseTextFieldProps, OutlinedTextFieldProps } from "@material-ui/core/TextField";
 import { ValueType } from "react-select/src/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
