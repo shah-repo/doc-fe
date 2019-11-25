@@ -1,7 +1,6 @@
 import { Attachment } from "../attachments";
 import { ChangeRequest } from "../changeRequest";
 import { Approval, Owner } from "../common";
-import { Employee } from "../company";
 import { DocumentRevision, Reference } from "../documentRevisions";
 import { DocumentType } from "../documentRevisions/documentType";
 
@@ -11,7 +10,7 @@ export interface Audit {
   type: string;
   nextValue:
     | string
-    | Employee
+    | Owner
     | Attachment
     | Approval
     | Reference
