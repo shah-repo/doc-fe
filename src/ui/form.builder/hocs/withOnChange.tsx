@@ -119,6 +119,7 @@ export function withOnChange<T extends FBOnChangeProps>(
 
       validator.fails(() => {
         const errors = validator.errors.all();
+        FBValidatorStore.errors = {};
 
         _.map(errors, (v: string, k: string) =>
           FBValidatorStore.errors[k] = _.values(v).join("\n"),
