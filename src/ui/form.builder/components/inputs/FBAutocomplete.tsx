@@ -1,3 +1,4 @@
+import Box from "@material-ui/core/Box/Box";
 import { observer } from "mobx-react";
 import React from "react";
 import Select from "react-select";
@@ -13,6 +14,8 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   autocompleteId,
   name,
   options,
+  error,
+  helperText,
   ...props
 }) => {
   if (!options && autocompleteId) {
@@ -25,10 +28,12 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   }
   return (
     <FBLabel label={label}>
+      {/* <Box border={1} borderColor={error ? "error.main" : "transparent"}> */}
       <Select
         {...props}
         inputId={`react-select-${name}`}
         TextFieldProps={{
+          name,
           InputLabelProps: {
             htmlFor: `react-select-${name}`,
             shrink: true,
@@ -36,8 +41,11 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
         }}
         isDisabled={props.disabled}
         options={(options as SelectOption[]) || autocompleteList.data()}
-        isMulti={true}
       />
+      {/* </Box> */}
+      <Box mt={1} pl={1.5} fontSize="caption.fontSize" color="error.main">
+        {helperText}
+      </Box>
     </FBLabel>
   );
 };

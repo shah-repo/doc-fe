@@ -1,4 +1,4 @@
-import { Dictionary } from "lodash";
+import _, { Dictionary } from "lodash";
 import { action, computed, observable } from "mobx";
 import { FBFormDefaultProps } from "../types/common";
 import { FBTemplateSchema } from "../types/store";
@@ -40,6 +40,13 @@ export class FormBuilderStore {
     index: number,
   ): FBTemplateSchema | undefined => {
     return this.schema[index];
+  }
+
+  @action public getSchemaItemByName = (
+    name: string,
+  ): FBTemplateSchema | undefined => {
+    const filtered = _.filter(this.schema, (schemaItem) => schemaItem.name === name);
+    return filtered[0];
   }
 
   @action public removeSchemaItem = (index?: number) => {

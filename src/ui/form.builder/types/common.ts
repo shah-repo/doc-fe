@@ -36,6 +36,8 @@ export type FBFormDefaultProps =
     linkUrl?: string;
     rules?: string;
     validatorDelimiter?: FBValidatorDelimiter;
+    hasSchemaItem?: boolean;
+    fieldName?: string;
   };
 
 export type FBOnChangeType =
@@ -47,8 +49,8 @@ export type FBOnChangeType =
 export type FBOnChangeProps =
   & FormikHybridFieldProps
   & Pick<SelectProps, "onChange" | "value">
-  & Pick<OutlinedTextFieldProps, "onChange">
   & Pick<FBFormDefaultProps, "validatorDelimiter">
+  & Pick<OutlinedTextFieldProps, "error" | "helperText">
   & {
     value?: any;
     onChange?: (trigger: any) => void;

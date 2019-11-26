@@ -20,6 +20,7 @@ import FBSectionBox from "../components/layout/FBSectionBox";
 import FBSubSectionBox from "../components/layout/FBSubSectionBox";
 import FBFileUpload from "../components/navigation/FBFileUpload";
 import FBLink from "../components/navigation/FBLink";
+import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaItem";
 import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
 import { FBEditorElementType } from "../types/editor";
 
@@ -56,6 +57,7 @@ export const FBFieldComponent: Dictionary<any> = {
   hyperlink: FBLink,
   fileupload: FBFileUpload,
   schemaSelect: FBValidatorSchemaSelect,
+  schemaItem: FBValidatorSchemaItem,
 };
 
 export const FBGroupField: Dictionary<any>  = {

@@ -20,6 +20,8 @@ export interface FBTemplateSchema {
   linkUrl?: string;
   rules?: string;
   validatorDelimiter?: FBValidatorDelimiter;
+  hasSchemaItem?: boolean;
+  fieldName?: string;
 }
 
 export type FBDocumentRevisionMode =

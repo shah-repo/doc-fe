@@ -18,11 +18,11 @@ export const withValidatorOption = <T extends FBValidatorOptionProps>(
       const { indicatorValues } = FBValidatorStore;
       const value = ev.target.checked;
 
+      setChecked(value);
       if (value) {
         return FBValidatorStore.indicatorValues[name] = {};
       }
       FBValidatorStore.indicatorValues = _.omit(indicatorValues, name);
-      setChecked(value);
     };
 
     function isEvent(
@@ -52,6 +52,9 @@ export const withValidatorOption = <T extends FBValidatorOptionProps>(
           value = trigger;
       }
       form.setFieldValue(name, value);
+      if (indicator.autocompleteId === "4") {
+        value = value.documentTypeAcronym;
+      }
       FBValidatorStore.indicatorValues[field.name][`${delimiter}`] = value;
     };
 
@@ -61,15 +64,16 @@ export const withValidatorOption = <T extends FBValidatorOptionProps>(
           if (!type) {
             return;
           }
-          const uuidv4 = require("uuid/v4");
-          const name = uuidv4();
+          // const uuidv4 = require("uuid/v4");
+          const name = `${field.name}${props}${index}`;
           const InputType = FBFieldComponent[type];
           return (
             <InputType
               key={`indicator-${index}-${type}`}
-              name={`rule-${name}`}
+              name={name}
               {...props}
               onChange={optionOnChange(props, name)}
+              fieldName={field.name}
             />
           );
         },

@@ -21,10 +21,7 @@ export class FBValidatorCollection extends Collection<FBValidatorModel> {
             type: "schemaSelect",
             label: "Required if field:",
             validatorDelimiter: ":",
-          }, {
-            type: "textfield",
-            label: "has value",
-            validatorDelimiter: ",",
+            hasSchemaItem: true,
           }],
         },
         {
@@ -52,7 +49,7 @@ export class FBValidatorCollection extends Collection<FBValidatorModel> {
               value: "PENDING_CHANGE",
               text: "PENDING CHANGE",
             }],
-            label: "Must be of type:",
+            label: "Must be in:",
             validatorDelimiter: ":",
           }],
         },
@@ -63,8 +60,9 @@ export class FBValidatorCollection extends Collection<FBValidatorModel> {
           applicableIn: "textfield|select...",
           indicators: [{
             type: "autocomplete",
-            autocompleteId: "1",
+            autocompleteId: "4",
             label: "Must be of type:",
+            isMulti: false,
             validatorDelimiter: ":",
           }],
         },
@@ -79,7 +77,7 @@ export class FBValidatorCollection extends Collection<FBValidatorModel> {
             validatorDelimiter: ":",
           }, {
             type: "autocomplete",
-            autocompleteId: "1",
+            autocompleteId: "4",
             label: "document type:",
             validatorDelimiter: ",",
           }],

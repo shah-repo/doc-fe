@@ -35,7 +35,8 @@ export type FBEditorElementType =
   | "autocomplete"
   | "hyperlink"
   | "fileupload"
-  | "schemaSelect";
+  | "schemaSelect"
+  | "schemaItem";
 
 export type FBEditorModeType = "create" | "update";
 

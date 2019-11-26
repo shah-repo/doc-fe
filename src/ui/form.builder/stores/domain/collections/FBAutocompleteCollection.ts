@@ -20,12 +20,14 @@ export class FBAutocompleteCollection extends Collection<FBAutocompleteModel> {
 
   public data(): any[] {
     return this.models.map((o) => {
-      return {
-        ...o,
-        value: o.id,
-        text: o.get(this.keyStr),
-        label: o.get(this.keyStr),
-      };
+      if (o.has(this.keyStr)) {
+        return {
+          ...o.toJS(),
+          value: o.id,
+          text: o.get(this.keyStr),
+          label: o.get(this.keyStr),
+        };
+      }
     });
   }
 }

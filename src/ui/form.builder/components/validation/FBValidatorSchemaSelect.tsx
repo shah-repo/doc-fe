@@ -1,16 +1,22 @@
-import { observer } from "mobx-react";
+import Box from "@material-ui/core/Box/Box";
 import React from "react";
+import { withValidatorSchemaSelect } from "../../hocs/validation/withValidatorSchemaSelect";
 import FBValidatorStore from "../../stores/ui/FBValidatorStore";
-import { FBSelectProps } from "../../types/select";
+import { FBValidatorSchemaSelectProps } from "../../types/validation/validatorSchemaSelect";
 import FBSelect from "../inputs/FBSelect";
 
-const FBValidatorSchemaSelect: React.FunctionComponent<FBSelectProps> = ({
+const FBValidatorSchemaSelect: React.FunctionComponent<FBValidatorSchemaSelectProps> = ({
+  hasSchemaItem,
+  SchemaInputType,
   ...props
 }) => (
-  <FBSelect
-    {...props}
-    options={FBValidatorStore.schemaItemOptions}
-  />
+  <Box>
+    <FBSelect
+      {...props}
+      options={FBValidatorStore.schemaItemOptions}
+    />
+  {SchemaInputType && SchemaInputType}
+  </Box>
 );
 
-export default observer(FBValidatorSchemaSelect);
+export default withValidatorSchemaSelect(FBValidatorSchemaSelect);
