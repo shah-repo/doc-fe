@@ -1,5 +1,6 @@
 import { BoxProps } from "@material-ui/core/Box";
 import { FBFormDefaultProps, Subtract } from "./common";
+import { FBTemplateSchema } from "./store";
 
 export interface FBEditorWrapperProps extends BoxProps, FBFormDefaultProps {
   indicatorVisibility?: "visible" | "hidden";
@@ -19,7 +20,11 @@ export type FBEditorWrapperStateProps = Pick<
   "visibility" | "toolbarMargin" | "indicatorMargin"
 >;
 
-export type FBEditorSectionType = "section" | "basicFields" | "lists";
+export type FBEditorSectionType =
+  | "section"
+  | "basicFields"
+  | "lists"
+  | "groups";
 
 export type FBEditorElementType =
   | "textfield"
@@ -44,4 +49,9 @@ export interface FBEditorFormProps {
   type: FBEditorElementType;
   index: number;
   mode: FBEditorModeType;
+}
+
+export interface FBValidatorGroup {
+  name: string;
+  fields: Array<Partial<FBTemplateSchema>>;
 }

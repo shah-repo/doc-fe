@@ -23,7 +23,10 @@ export function withOptionRenderer<T extends FBFormDefaultProps>(
 
     private optionRenderer = () => {
       const { includeOther } = this.props;
-      const options = this.props.options || "";
+      let options = this.props.options || "";
+      if (Array.isArray(options)) {
+        options = _.join(options, "\n");
+      }
       if (typeof options !== "string") {
         return;
       }

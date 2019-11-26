@@ -26,6 +26,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
       autocompleteList.fetch();
     }
   }
+
   return (
     <FBLabel label={label}>
       {/* <Box border={1} borderColor={error ? "error.main" : "transparent"}> */}

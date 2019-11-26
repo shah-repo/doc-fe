@@ -7,10 +7,13 @@ const FBRadioGroup: React.FunctionComponent<FBFormDefaultProps> = ({
   labelRenderer,
   optionsRenderer,
   includeNote,
+  row,
 }) => (
   <Box mb={4}>
     {labelRenderer}
-    <FormGroup row={!includeNote}>{optionsRenderer}</FormGroup>
+    <FormGroup row={(row !== undefined) ? row : !includeNote}>
+      {optionsRenderer}
+    </FormGroup>
   </Box>
 );
 

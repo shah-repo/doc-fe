@@ -10,11 +10,22 @@ const DEFAULTS = {
   AWS_COGNITO_CLIENT_ID: "default",
   AUTO_LOGOUT_TIME: "1800000", // 30 minutes in milliseconds
   THEME: ThemeEnv.DEV_THEME,
+  VALIDATORS_S3_FOLDER_NAME: "",
+  AWS_BUCKET_PUBLIC: "",
+  AWS_REGION: "",
 };
 
 type ConfigKey = keyof typeof DEFAULTS;
 
 class Config {
+  public static RemoteValidatorsPath(filename: string) {
+    const bucket = this.get("AWS_BUCKET_PUBLIC");
+    const region = this.get("AWS_REGION");
+    const folder = this.get("VALIDATORS_S3_FOLDER_NAME");
+
+    return `https://${bucket}.s3-${region}.amazonaws.com/${folder}/${filename}`;
+  }
+
   private static PREFIX = "REACT_APP";
 
   private static get(name: ConfigKey): string {

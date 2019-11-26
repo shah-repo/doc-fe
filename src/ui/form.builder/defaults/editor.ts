@@ -7,6 +7,8 @@ import FBLabelEditor from "../components/editors/FBLabelEditor";
 import FBLabelStepperEditor from "../components/editors/FBLabelStepperEditor";
 import FBSelectEditor from "../components/editors/FBSelectEditor";
 import FBTextFieldEditor from "../components/editors/FBTextFieldEditor";
+import FBValidatorEditor from "../components/editors/FBValidatorEditor";
+import FBValidator from "../components/feedback/FBValidator";
 import FBAutocomplete from "../components/inputs/FBAutocomplete";
 import FBCheckbox from "../components/inputs/FBCheckbox";
 import FBCheckboxGroup from "../components/inputs/FBCheckboxGroup";
@@ -24,9 +26,7 @@ import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaIte
 import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
 import { FBEditorElementType } from "../types/editor";
 
-export const FBFieldEditorComponent: {
-  [key: string]: React.FunctionComponent<{}>;
-} = {
+export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<{}>> = {
   section: FBLabelEditor,
   subsection: FBLabelEditor,
   textfield: FBTextFieldEditor,
@@ -65,7 +65,7 @@ export const FBGroupField: Dictionary<any>  = {
   radiogroup: FBRadio,
 };
 
-export const FBEditorSectionConfig: { [key: string]: FBEditorElementType[] } = {
+export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
   section: ["section", "subsection"],
   basics: [
     "textfield",

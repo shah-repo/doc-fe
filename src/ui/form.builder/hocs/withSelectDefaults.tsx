@@ -66,7 +66,11 @@ export function withSelectDefaults<T extends FBSelectProps>(
         return options as SelectOption[];
       }
 
-      if (typeof options === "string") {
+      if (Array.isArray(options)) {
+        options = _.join(options, "\n");
+      }
+
+      if (typeof options === "string" ) {
         const optionsArray = _.split(options, "\n");
         options = optionsArray.map(
           (label, i) => ({ value: `gen_${i}`, text: label } as SelectOption),

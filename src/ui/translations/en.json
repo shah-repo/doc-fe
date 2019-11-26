@@ -335,6 +335,8 @@
   "form.builder.field.name": "Field Name",
   "form.builder.hyperlink": "Hyperlink",
   "form.builder.fileupload": "File Upload",
+  "form.builder.groups": "Groups",
+  "form.builder.validator": "Verified",
 
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",

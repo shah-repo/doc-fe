@@ -2,8 +2,8 @@ import { SelectOption } from "../../components/forms/fields/Select";
 import { FBEditorElementType } from "./editor";
 import { FBValidatorDelimiter } from "./validation/validator";
 
-export interface FBTemplateSchema {
-  type: FBEditorElementType;
+export interface FBTemplateSchema extends FBShemaArrayProps {
+  type: FBEditorElementType | string;
   name: string;
   index: number;
   label: string;
