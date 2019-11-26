@@ -54,6 +54,7 @@ export function withOptionRenderer<T extends FBFormDefaultProps>(
           includeNote={
             label === "form.builder.other" ? this.props.includeNote : false
           }
+          isGroup={true}
         />
       ));
     }

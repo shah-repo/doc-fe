@@ -4,4 +4,7 @@ import { FBFormDefaultProps, FBOnChangeProps } from "./common";
 export type FBCheckboxProps =
   & FBFormDefaultProps
   & Partial<Omit<FormControlLabelProps, "label">>
-  & FBOnChangeProps;
+  & FBOnChangeProps
+  & {
+    isGroup?: boolean;
+  };
