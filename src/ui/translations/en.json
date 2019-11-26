@@ -212,6 +212,7 @@
   "common.create.new": "Create new",
   "common.released": "Released",
   "common.records.found": "Records found",
+  "common.docId": "Doc ID",
 
   "output.info": "Form Info",
 
@@ -287,6 +288,7 @@
   "document.revision.create": "Create a document",
   "document.revision.trainingRequired": "Training Required",
   "document.revision.released.date": "Released Date",
+  "document.revision.docVersion": "Doc Versions",
 
   "page.title.changeRequest": "Change Request List",
   "page.title.documentList": "Document List",
@@ -340,5 +342,9 @@
   "training.completed": "Training completed",
   "training.certify.completion": "Click the button to certify training completion",
 
-  "file.viewer.video.not.supported": "Your browser does not support the video tag"
+  "file.viewer.video.not.supported": "Your browser does not support the video tag",
+
+  "company.switch.title": "Switch Company",
+  "company.switch.subtitle": "Select a company below to sign-in to",
+  "company.switch.button": "SWITCH COMPANY"
 }

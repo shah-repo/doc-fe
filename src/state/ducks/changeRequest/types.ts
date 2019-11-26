@@ -40,6 +40,7 @@ export interface Assessment {
 }
 
 export interface AssessmentItem {
+  id?: string;
   reasoning?: string | null;
   attachments?: Attachment[] | null;
 }
@@ -49,7 +50,7 @@ export interface ImplementationPlanTask {
   title: string;
   description: string;
   dueDate: Date;
-  assigned?: User;
+  assigned?: Owner;
   createdAt: string;
   closeDate: Date;
   status: string;
@@ -81,7 +82,7 @@ export interface ChangeRequest {
 }
 
 export interface Approver {
-  email: string;
+  id: string;
 }
 
 export interface DocumentRevisionRequestBody {
@@ -151,8 +152,7 @@ export interface ChangeRequestTransitionResponse {
 
 export interface ChangeRequestAvailableApprovers {
   id: string;
-  email: string;
-  name: string;
+  user: User;
 }
 
 export interface ChangeRequestAvailableApproversResponse {

@@ -91,13 +91,14 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
         {renderCrId()}
-        <InputField
-          name="title"
-          label="cr.title"
-          inputProps={{ id: "title", multiline: true, rows: "2" }}
-          validate={validator(required)}
-        />
+
         <Box mb={1}>
+          <InputField
+            name="title"
+            label="cr.title"
+            inputProps={{ id: "title", multiline: true, rows: "2" }}
+            validate={validator(required)}
+          />
           <TextEditorField
             name="description"
             label="cr.description"

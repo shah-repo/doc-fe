@@ -66,56 +66,59 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
   deprecatedAt,
   docId,
 }) => {
-  const loadDocumentAction = () => loadDocument(documentId);
+    const loadDocumentAction = () => loadDocument(documentId);
 
-  if (shouldRedircetToLatestReleasd(documentRevisions, documentRevisionId)) {
-    const docRevIdToRedirect = getDocRevIdToRedirect(documentRevisions, deprecatedAt);
+    if (shouldRedircetToLatestReleasd(documentRevisions, documentRevisionId)) {
+      const docRevIdToRedirect = getDocRevIdToRedirect(documentRevisions, deprecatedAt);
+      return (
+        <Redirect to={documentVersionPath(docRevIdToRedirect, documentId)} />
+      );
+    }
+
     return (
-      <Redirect to={documentVersionPath(docRevIdToRedirect, documentId)} />
-    );
-  }
-
-  return (
-    <Grid container={true} spacing={2} className={classes.whiteContainer}>
-      <Grid item={true} xs={2} className={classes.sidebar}>
-        <AsyncGate
-          asyncState={loadDocumentAsyncState}
-          asyncAction={loadDocumentAction}
-          startActionOnMount={true}
-        >
-          <DocumentRevisionListContainer
-            documentRevisions={documentRevisions}
-            documentId={documentId}
-            docId={docId}
-          />
-        </AsyncGate>
-      </Grid>
-      {documentRevisionId && !isNewOutput && (
-        <Grid item={true} xs={7}>
-          <DocumentRevisionDisplayContainer
-            documentRevisionId={documentRevisionId}
-            isNewVersion={isNewVersion}
-          />
+      <Grid container={true} spacing={2} className={classes.whiteContainer}>
+        <Grid item={true} xs={2} className={classes.sidebar}>
+          <AsyncGate
+            asyncState={loadDocumentAsyncState}
+            asyncAction={loadDocumentAction}
+            startActionOnMount={true}
+          >
+            <DocumentRevisionListContainer
+              documentRevisions={documentRevisions}
+              documentId={documentId}
+              docId={docId}
+              selectedDocumentRevision={documentRevisionId!}
+            />
+          </AsyncGate>
         </Grid>
-      )}
-      {documentRevisionId && isNewOutput && (
-        <Grid item={true} xs={7}>
-          <DocumentRevisionDisplayContainer
-            documentRevisionId={documentRevisionId}
-            isNewOutput={isNewOutput}
-          />
-        </Grid>
-      )}
-      <Grid item={true} xs={3} className={classes.sidebar}>
-        {documentRevisionId && (
-          <DocumentRevisionAuditContainer
-            documentRevisionId={documentRevisionId}
-          />
+        {documentRevisionId && !isNewOutput && (
+          <Grid item={true} xs={7}>
+            <DocumentRevisionDisplayContainer
+              documentRevisionId={documentRevisionId}
+              isNewVersion={isNewVersion}
+              documentId={documentId}
+            />
+          </Grid>
         )}
+        {documentRevisionId && isNewOutput && (
+          <Grid item={true} xs={7}>
+            <DocumentRevisionDisplayContainer
+              documentRevisionId={documentRevisionId}
+              isNewOutput={isNewOutput}
+              documentId={documentId}
+            />
+          </Grid>
+        )}
+        <Grid item={true} xs={3} className={classes.sidebar}>
+          {documentRevisionId && (
+            <DocumentRevisionAuditContainer
+              documentRevisionId={documentRevisionId}
+            />
+          )}
+        </Grid>
       </Grid>
-    </Grid>
-  );
-};
+    );
+  };
 
 export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
   mapStateToProps,

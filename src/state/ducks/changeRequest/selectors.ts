@@ -20,47 +20,33 @@ const getChangeRequestsList = createSelector(
 
 const getApproversListForAssessmentForm = createSelector(
   approversAllIds, approversById,
-  (ids, approvers): OptionType[] => ids.map((id) => ({ value: approvers[id].email, label: approvers[id].name })),
+  (ids, approvers): OptionType[] =>
+    ids.map((id) => ({ value: approvers[id].id, label: approvers[id].user.name })),
 );
 
 const getAssignessList = createSelector(
   approversAllIds, approversById,
-  (ids, approvers): OptionType[] => ids.map((id) => ({ value: approvers[id].id, label: approvers[id].name })),
+  (ids, approvers): OptionType[] =>
+    ids.map((id) => ({ value: approvers[id].id, label: approvers[id].user.name })),
 );
 
 const getChangeRequest = (state: ApplicationState, changeRequestId: string) => byId(state)[changeRequestId];
 const getAudit = (state: ApplicationState, changeRequestId: string) => auditsByCRId(state)[changeRequestId];
 
-// const makeGetAudit = () => {
-//   return createSelector(
-//     getAudit,
-//     (audits: Audit[] = []) => audits.map((audit) => {
-//       switch (audit.field) {
-//         case "assessments.description":
-//         case "justifications.description":
-//         case "tasks.description":
-//         case "description":
-//           const html = audit.nextValue as string;
-//           audit.nextValue = striptags(html).substring(0, 100);
-//           return audit;
-//         default:
-//           return audit;
-//       }
-//     }),
-//   )
-// }
-
 const makeGetAudit = () => {
   return createSelector(
     getAudit,
     (audits: AuditGroupType = {}) =>  {
-      Object.keys(audits).map((groupId) => {
+      Object.keys(audits).forEach((groupId) => {
         audits[groupId].map((audit: Audit) => {
           switch (audit.field) {
             case "assessments.description":
             case "justifications.description":
             case "tasks.description":
             case "description":
+            case "assessments.process.reasoning":
+            case "assessments.design.reasoning":
+            case "assessments.regulatory.reasoning":
               const html = audit.nextValue as string;
               audit.nextValue = stripTags(html).substring(0, 100);
               return audit;

@@ -22,7 +22,7 @@ export const canCloseTask = (
   currentUserEmail: string,
 ) => {
   return (
-    (task.assigned && task.assigned.email === currentUserEmail) &&
+    (task.assigned && task.assigned.user.email === currentUserEmail) &&
     (task.status === ImplementationPlanTaskStatus.Pending) &&
     (changeRequestStatus === ChangeRequestStatus.InReview ||
       changeRequestStatus === ChangeRequestStatus.Implementation ||
@@ -32,7 +32,7 @@ export const canCloseTask = (
 
 export const changeRequestStatusOption = () => {
   const options: SelectOption[] = [];
-  Object.keys(ChangeRequestStatus).map((key) => {
+  Object.keys(ChangeRequestStatus).forEach((key) => {
     // TODO: Change ChangeRequestStatus status into key = value, value = text
     const keyName = ChangeRequestStatus[key as keyof typeof ChangeRequestStatus];
     options.push({value: keyName, text: keyName});
@@ -43,7 +43,7 @@ export const changeRequestStatusOption = () => {
 export const assessmentStatementOption = (type: AssessmentType) => {
   const options: SelectOption[] = [];
   const typeOptions = AssessmentReasoningOption[type];
-  Object.keys(typeOptions).map((key) => {
+  Object.keys(typeOptions).forEach((key) => {
     // TODO: Change ChangeRequestStatus status into key = value, value = text
     const keyName = typeOptions[key as keyof typeof typeOptions];
     options.push({value: keyName, text: keyName});

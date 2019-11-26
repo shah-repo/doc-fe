@@ -2,6 +2,7 @@ import { Grid } from "@material-ui/core";
 import { shallow } from "enzyme";
 import faker from "faker";
 import React from "react";
+import { getOwner, getUser } from "../../../state/ducks/common/tests/factories";
 import SummaryField from "../../common/summary/base";
 import CloseTask from "./close.task";
 import { ImplementationPlan,   Props } from "./implementation.plan";
@@ -24,11 +25,13 @@ describe("ImplementationPlan with tasks tests", () => {
             status: "PENDING",
             updatedAt: faker.date.recent(),
             closingNote: faker.lorem.word(),
-            assigned: {
+            assigned: getOwner({
+              user: getUser({
                 id: faker.random.uuid(),
                 name: faker.name.firstName(),
                 email: "test@gmail.com",
-              },
+              }),
+            }),
           }],
         attachments: [],
       },
