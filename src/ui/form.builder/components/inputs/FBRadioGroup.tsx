@@ -1,9 +1,9 @@
 import { Box, FormGroup } from "@material-ui/core";
+import { observer } from "mobx-react";
 import React from "react";
 import { withOptionRenderer } from "../../hocs/withOptionRenderer";
-import { FBFormDefaultProps } from "../../types/common";
 import FBValidatorStore from "../../stores/ui/FBValidatorStore";
-import { observer } from "mobx-react";
+import { FBFormDefaultProps } from "../../types/common";
 
 const FBRadioGroup: React.FunctionComponent<FBFormDefaultProps> = ({
   labelRenderer,
