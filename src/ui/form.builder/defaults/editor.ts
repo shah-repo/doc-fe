@@ -7,8 +7,6 @@ import FBLabelEditor from "../components/editors/FBLabelEditor";
 import FBLabelStepperEditor from "../components/editors/FBLabelStepperEditor";
 import FBSelectEditor from "../components/editors/FBSelectEditor";
 import FBTextFieldEditor from "../components/editors/FBTextFieldEditor";
-import FBValidatorEditor from "../components/editors/FBValidatorEditor";
-import FBValidator from "../components/feedback/FBValidator";
 import FBAutocomplete from "../components/inputs/FBAutocomplete";
 import FBCheckbox from "../components/inputs/FBCheckbox";
 import FBCheckboxGroup from "../components/inputs/FBCheckboxGroup";
@@ -60,7 +58,7 @@ export const FBFieldComponent: Dictionary<any> = {
   schemaItem: FBValidatorSchemaItem,
 };
 
-export const FBGroupField: Dictionary<any>  = {
+export const FBGroupField: Dictionary<any> = {
   checkboxgroup: FBCheckbox,
   radiogroup: FBRadio,
 };

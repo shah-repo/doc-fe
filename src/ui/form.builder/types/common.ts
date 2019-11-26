@@ -38,6 +38,7 @@ export type FBFormDefaultProps =
     validatorDelimiter?: FBValidatorDelimiter;
     hasSchemaItem?: boolean;
     fieldName?: string;
+    row?: boolean;
   };
 
 export type FBOnChangeType =

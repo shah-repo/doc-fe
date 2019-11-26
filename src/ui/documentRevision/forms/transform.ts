@@ -7,7 +7,6 @@ import {
 } from "../../../state/ducks/documentRevisions";
 import FBDRStore from "../../form.builder/stores/FBDRStore";
 import FBStore from "../../form.builder/stores/FBStore";
-import FBValidatorStore from "../../form.builder/stores/FBValidatorStore";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -21,7 +20,6 @@ const toRequestFormBuilder = (values: DocumentRevision) => {
           outputDocumentType: {
             id: _.get(values, "formTemplate.outputDocumentType.id"),
           },
-          validators: FBValidatorStore.validators,
           schema: FBStore.getSchema(),
         },
       };
