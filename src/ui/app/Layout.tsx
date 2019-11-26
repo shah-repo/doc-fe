@@ -19,13 +19,13 @@ import DashboardContainer from "../dashboard/Dashboard.container";
 import DocumentRevisionContainer from "../document.revision/container";
 import DocumentRevisionListContainer from "../document.revision/list/container";
 import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisionCreate.container";
+import RemoteValidatorsLoader from "../remoteValidators/RemoteValidators";
 import TrainingDetailContainer from "../training/TrainingDetail.container";
 import AutoLogout from "./AutoLogout";
 import DataFetcherContainer from "./DataFetcher.container";
 import HeaderContainer from "./Header.container";
 import styles from "./Layout.styles";
 import Navigation from "./Navigation";
-import RemoteValidatorsLoader from "./RemoteValidators";
 
 type Props = WithStyles<typeof styles>;
 

@@ -4,6 +4,8 @@ import Config from "../../config";
 import apiClient from "../../state/apiClient";
 import { FETCH_VALIDATORS_REMOTE_URL_URL } from "../../state/ducks/auth/constants";
 import { store } from "../../state/store";
+import { CompanyValidators } from "./interfaces";
+import { RemoteValidatorHelper } from "./remoteValidatorsHelper";
 
 const fetchRemoteValidators = async () => {
   try {
@@ -19,16 +21,18 @@ const fetchRemoteValidators = async () => {
 
     const { data } = await apiClient.request(requestConfig);
     await import(/* webpackIgnore: true */ Config.RemoteValidatorsPath(data.file));
-    (window as any).EnlilValidatorInstance = new (window as any).EnlilRemoteValidators();
+    // (window as any).EnlilValidatorInstance = new (window as any).EnlilRemoteValidators();
+    (window as any).EnlilRemoteValidators.registerHelperCallback(() => RemoteValidatorHelper);
   } catch (exception) {}
 };
 
-export const getValidators = async () => {
-  if ((window as any).EnlilValidatorInstance) {
-    return (window as any).EnlilValidatorInstance;
+export const getRemoteValidatorBundle: () => Promise<CompanyValidators> = async () => {
+  // debugger;
+  if ((window as any).EnlilRemoteValidators) {
+    return (window as any).EnlilRemoteValidators;
   }
   await fetchRemoteValidators();
-  return (window as any).EnlilValidatorInstance;
+  return (window as any).EnlilRemoteValidators;
 };
 
 const RemoteValidatorsLoader: React.FunctionComponent<{}> = ({}) => {

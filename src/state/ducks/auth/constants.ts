@@ -14,5 +14,6 @@ export const PERMISSIONS_URL = "/users/permissions";
 export const PING_SERVER_URL = "/auth/prevent_idle_logout";
 
 export const FETCH_VALIDATORS_REMOTE_URL_URL = "/remoteValidators";
+export const VALIDATORS_HELPER_REMOTE_URL_URL = "/remoteValidators/helper";
 
 export const AUTH_TOKENS_REFRESH_THRESHOLD_SECONDS = 100;
