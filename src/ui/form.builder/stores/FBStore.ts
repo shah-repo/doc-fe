@@ -1,4 +1,4 @@
-import { Dictionary } from "lodash";
+import _, { Dictionary } from "lodash";
 import { action, computed, observable } from "mobx";
 import { FBFormDefaultProps } from "../types/common";
 import { FBTemplateSchema } from "../types/store";
@@ -12,10 +12,6 @@ export class FormBuilderStore {
 
   @computed get isStarter(): boolean {
     return (this.mode === "design") && (this.schema.length === 0);
-  }
-
-  @computed get prefixName() {
-    return `${this.schema.length}_${(this.name || "").replace(" ", "")}`;
   }
 
   @computed get fieldMode(): Partial<FBFormDefaultProps> {
@@ -48,6 +44,13 @@ export class FormBuilderStore {
     index: number,
   ): FBTemplateSchema | undefined => {
     return this.schema[index];
+  }
+
+  @action public getSchemaItemByName = (
+    name: string,
+  ): FBTemplateSchema | undefined => {
+    const filtered = _.filter(this.schema, (schemaItem) => schemaItem.name === name);
+    return filtered[0];
   }
 
   @action public removeSchemaItem = (index?: number) => {

@@ -11,11 +11,11 @@ export interface FBSelectInjectedProps extends FBLabelRendererProps  {
 }
 
 export type FBSelectProps =
-  SelectProps &
-  FBFormDefaultProps &
-  FBSelectInjectedProps &
-  FBOnChangeProps & {
+  & Pick<SelectProps, "variant">
+  & FBFormDefaultProps
+  & FBSelectInjectedProps
+  & FBOnChangeProps
+  & {
   includeEmpty?: boolean;
   showNote?: boolean;
-  variant?: "outlined";
 };

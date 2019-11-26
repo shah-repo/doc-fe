@@ -9,6 +9,14 @@ import { FBSelectInjectedProps, FBSelectProps } from "../types/select";
 import { withLabelRenderer } from "./withLabelRenderer";
 import { withOnChange } from "./withOnChange";
 
+function isArray(value: any) {
+  return value && typeof value === "object" && value.constructor === Array;
+}
+
+function isString(value: any) {
+  return typeof value === "string" || value instanceof String;
+}
+
 export function withSelectDefaults<T extends FBSelectProps>(
   Component: React.ComponentType<T>,
 ) {
@@ -29,7 +37,7 @@ export function withSelectDefaults<T extends FBSelectProps>(
 
     private Items = () => this.options().map((option) => (
       <MenuItem key={option.value} value={option.value}>
-        <Text message={option.text} tagName="em"  />
+        <Text message={option.text} tagName="em" />
       </MenuItem>
     ))
 
@@ -49,8 +57,14 @@ export function withSelectDefaults<T extends FBSelectProps>(
     }
 
     private splitOptions = (): SelectOption[] => {
-      let options = this.props.options;
-      if (!options) { return []; }
+      let options = this.props.options || "";
+      if (options && isArray(options) && isString(options[0])) {
+        options = _.join(options, "\n");
+      }
+
+      if (typeof options !== "string") {
+        return options as SelectOption[];
+      }
 
       if (Array.isArray(options)) {
         options = _.join(options, "\n");
@@ -58,8 +72,8 @@ export function withSelectDefaults<T extends FBSelectProps>(
 
       if (typeof options === "string" ) {
         const optionsArray = _.split(options, "\n");
-        options = optionsArray.map((label, i) => (
-          {value: `gen_${i}`, text: label}) as SelectOption,
+        options = optionsArray.map(
+          (label, i) => ({ value: `gen_${i}`, text: label } as SelectOption),
         );
       }
       return options as SelectOption[];
@@ -69,7 +83,7 @@ export function withSelectDefaults<T extends FBSelectProps>(
       const { field, includeNote } = this.props;
 
       return (
-        FBStore.mode === "form" &&
+        (FBStore.mode === "form" || FBStore.mode === "preview") &&
         field.value === "gen_other" &&
         (includeNote || false)!
       );

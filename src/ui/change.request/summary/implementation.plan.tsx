@@ -89,7 +89,7 @@ export const ImplementationPlan: React.FunctionComponent<Props> = ({
             </Typography>
             <Box>
               <Typography variant="body2">
-                {task.assigned && task.assigned.name}
+                {task.assigned && task.assigned.user.name}
               </Typography>
             </Box>
           </Grid>

@@ -15,22 +15,22 @@ const FBRadio: React.FunctionComponent<FBCheckboxProps> = ({
   readOnly,
   ...props
 }) => (
-  <Box mb={gutter ? 4 : 0}>
-    <FormControlLabel
-      {...props}
-      label={label && <Text message={label} />}
-      control={<Radio checked={field.value === label} value={label} />}
-      disabled={disabled || readOnly}
-    />
-    {FBStore.mode === "form" &&
-      field.value === label &&
-      includeNote && (
-        <FBTextField
-          disabled={disabled || readOnly}
-          name={`${props.name}_optionNote_field`}
-        />
-      )}
-  </Box>
-);
+    <Box mb={gutter ? 4 : 0}>
+      <FormControlLabel
+        {...props}
+        label={label && <Text message={label as string} />}
+        control={<Radio checked={field.value === label} value={label} />}
+        disabled={disabled || readOnly}
+      />
+      {(FBStore.mode === "form" || FBStore.mode === "preview") &&
+        field.value === label &&
+        includeNote && (
+          <FBTextField
+            disabled={disabled || readOnly}
+            name={`${props.name}_optionNote_field`}
+          />
+        )}
+    </Box>
+  );
 
 export default withOnChange(FBRadio);

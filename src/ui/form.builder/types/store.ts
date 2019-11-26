@@ -1,7 +1,8 @@
-import { FBShemaArrayProps } from "./common";
+import { SelectOption } from "../../components/forms/fields/Select";
 import { FBEditorElementType } from "./editor";
+import { FBValidatorDelimiter, FBValidatorTrigger } from "./validation/validator";
 
-export interface FBTemplateSchema extends FBShemaArrayProps {
+export interface FBTemplateSchema {
   type: FBEditorElementType | string;
   name: string;
   index: number;
@@ -11,15 +12,17 @@ export interface FBTemplateSchema extends FBShemaArrayProps {
   checkboxNote?: string;
   disabled?: boolean;
   includeOther?: boolean;
-  options?: string | string[];
+  options?: string | string[] | SelectOption[];
   includeNote?: boolean;
   optionNote?: string;
-  autocompleteValue?: string;
+  autocompleteId?: string;
   isMulti?: boolean;
-  fieldName?: string;
   linkUrl?: string;
-  validatorGroup?: string;
-  metadata?: string;
+  rules?: string;
+  validatorDelimiter?: FBValidatorDelimiter;
+  hasSchemaItem?: boolean;
+  fieldName?: string;
+  validatorTriggers?: FBValidatorTrigger[];
 }
 
 export type FBDocumentRevisionMode =

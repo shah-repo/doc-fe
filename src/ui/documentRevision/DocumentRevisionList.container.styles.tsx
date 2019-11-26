@@ -26,5 +26,10 @@ export const styles = makeStyles((theme: Theme) =>
     selected: {
       background: theme.palette.primary.light,
     },
+    details: {
+      "&.MuiExpansionPanelDetails-root": {
+        display: "block",
+      },
+    },
   }),
 );

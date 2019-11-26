@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 import { Action, Dispatch, Middleware, MiddlewareAPI } from "redux";
 import apiClient from "../../apiClient";
-import mobxApiClient from "../../mobcApiClient";
+import apiXClient from "../../apiXClient";
 import { ApplicationState } from "../../reducers";
 import { ApiAction, AsyncAction, AsyncStatus } from "../../types";
 import { AsyncActionErrorResponse } from "./types";
@@ -57,10 +57,9 @@ const apiMiddleware: Middleware = ({
     if (action.includeAuthorization) {
       const { employeeId, sessionId } = getState().auth.user;
       const authorization = `bearer ${employeeId}:${sessionId}`;
-
       requestConfig.headers.Authorization = authorization;
-      // *Note mobx-rest demo
-      mobxApiClient(authorization);
+      // * Note mobx-rest
+      apiXClient(authorization);
     }
 
     const { data } = await apiClient.request(requestConfig);

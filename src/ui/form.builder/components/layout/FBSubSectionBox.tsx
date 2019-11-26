@@ -18,7 +18,7 @@ const FBSubSectionBox: React.FunctionComponent<FBFormDefaultProps> = ({
       borderLeft={0}
       borderRight={0}
     >
-      <Text message={label!.toUpperCase()} />
+      {label && <Text message={(label as string).toUpperCase()} />}
     </Box>
   );
 };

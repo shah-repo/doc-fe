@@ -4,7 +4,7 @@ import { ThunkAction } from "redux-thunk";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApplicationState } from "../../reducers";
 import { ApiAction, Handlers } from "../../types";
-import { companyActions } from "../company";
+import { companyActions, Employee } from "../company";
 import {
   AUTH_TOKENS,
   AUTH_TOKENS_REFRESH_THRESHOLD_SECONDS,
@@ -16,6 +16,7 @@ import {
   PERMISSIONS_URL,
   PING_SERVER_GET_ASYNC,
   PING_SERVER_URL,
+  SET_EMPLOYEE,
   USER_PERMISSIONS,
   USER_PERMISSIONS_GET_ASYNC,
 } from "./constants";
@@ -28,6 +29,7 @@ import {
   LoginWithCodeRequestBody,
   LogoutRequestBody,
   LogoutUserAction,
+  SelectEmployeeAction,
   Tokens,
   User,
   UserPermissionsAction,
@@ -85,6 +87,7 @@ const login = (loginValues: LoginRequestBody, handlers: Handlers):
         name: data.name, id: data.id,
         sessionId: data.sessionId,
         employeeId: data.employees[0].id,
+        employees: data.employees,
       }));
       dispatch(authTokens(data));
       dispatch(companyActions.selectCompany(data.company));
@@ -105,6 +108,7 @@ const loginWithCode = (loginValues: LoginWithCodeRequestBody, handlers: Handlers
         id: response.id,
         sessionId: response.sessionId,
         employeeId: response.employees[0].id,
+        employees: response.employees,
       }));
       dispatch(authTokens(response));
     },
@@ -146,6 +150,11 @@ const pingServer = ():
     },
   });
 
+const selectEmployee = (employee: Employee): SelectEmployeeAction => ({
+  type: SET_EMPLOYEE,
+  payload: employee,
+});
+
 export default {
   authUser,
   authTokens,
@@ -155,4 +164,5 @@ export default {
   loginWithCode,
   loadPermissions,
   pingServer,
+  selectEmployee,
 };

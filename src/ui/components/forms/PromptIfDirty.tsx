@@ -24,7 +24,7 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
     } else {
       cancelBeforeUnload();
     }
-  }, [dirty]);
+  }, [dirty, doNotPrompt]);
 
   useEffect(() => {
     return () => {

@@ -16,20 +16,20 @@ const FBCheckbox: React.FunctionComponent<FBCheckboxProps> = ({
   labelRenderer,
   ...props
 }) => (
-  <Box mb={gutter ? 4 : 0}>
-    <FormControlLabel
-      {...props}
-      label={label && <Text message={label} />}
-      control={<Checkbox checked={field.value} />}
-      disabled={disabled || readOnly}
-    />
-    {FBStore.mode === "form" && (field.value as boolean) && includeNote && (
-      <FBTextField
-        disabled={disabled}
-        name={`${props.name}_optionNote_field`}
-      />)
-    }
-  </Box>
-);
+    <Box mb={gutter ? 4 : 0}>
+      <FormControlLabel
+        {...props}
+        label={label && <Text message={label as string} />}
+        control={<Checkbox checked={field.value} />}
+        disabled={disabled || readOnly}
+      />
+      {(FBStore.mode === "form" || FBStore.mode === "preview") && (field.value as boolean) && includeNote && (
+        <FBTextField
+          disabled={disabled}
+          name={`${props.name}_optionNote_field`}
+        />)
+      }
+    </Box>
+  );
 
 export default withOnChange(FBCheckbox);

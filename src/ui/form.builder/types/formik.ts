@@ -3,7 +3,6 @@ import { Dictionary } from "lodash";
 import { Id } from "../../../state/ducks/common";
 import { DocumentRevisionDocument } from "../../../state/ducks/documentRevisions";
 import { FBTemplateSchema } from "./store";
-import { FBValidatorRestProps } from "./validator";
 
 export interface FBFormikInjectedProps  {
   render?: ((props: FormikProps<any>) => React.ReactNode);
@@ -24,7 +23,6 @@ export interface FBDocumentFlowProps {
   revision?: number;
   revisionStage?: number;
   releasedAt?: string;
-  validators?: FBValidatorRestProps[];
 }
 
 export interface FBFormTemplateProps {

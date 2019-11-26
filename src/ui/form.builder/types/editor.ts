@@ -40,7 +40,8 @@ export type FBEditorElementType =
   | "autocomplete"
   | "hyperlink"
   | "fileupload"
-  | "validator";
+  | "schemaSelect"
+  | "schemaItem";
 
 export type FBEditorModeType = "create" | "update";
 

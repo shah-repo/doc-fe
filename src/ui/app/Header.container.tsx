@@ -5,7 +5,6 @@ import { authActions, authSelectors } from "../../state/ducks/auth";
 import { ApplicationState } from "../../state/reducers";
 import {
   CHANGE_REQUEST_CREATE_URL,
-  DOCUMENT_REVISION_CREATE_URL,
 } from "../constants/urls";
 import { Translation } from "../translations/types";
 import HeaderPresenter from "./Header.presenter";
@@ -35,12 +34,11 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
   const [pageTitle, setPageTitle] = useState<Translation>(
     "translation.unknown",
   );
-  let unlistenHistory: any;
 
   useEffect(() => {
     setTranslationByPath(location.pathname);
 
-    unlistenHistory = history.listen((location) => {
+    const unlistenHistory = history.listen((location) => {
       setTranslationByPath(location.pathname);
     });
 
@@ -53,9 +51,6 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
     switch (path) {
       case CHANGE_REQUEST_CREATE_URL:
         setPageTitle("page.title.changeRequestCreate");
-        break;
-      case DOCUMENT_REVISION_CREATE_URL:
-        setPageTitle("page.title.documentCreate");
         break;
       default:
         setPageTitle("translation.unknown");
