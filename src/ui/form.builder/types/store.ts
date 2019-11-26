@@ -1,6 +1,6 @@
 import { SelectOption } from "../../components/forms/fields/Select";
 import { FBEditorElementType } from "./editor";
-import { FBValidatorDelimiter } from "./validation/validator";
+import { FBValidatorDelimiter, FBValidatorTrigger } from "./validation/validator";
 
 export interface FBTemplateSchema {
   type: FBEditorElementType | string;
@@ -22,6 +22,7 @@ export interface FBTemplateSchema {
   validatorDelimiter?: FBValidatorDelimiter;
   hasSchemaItem?: boolean;
   fieldName?: string;
+  validatorTriggers?: FBValidatorTrigger[];
 }
 
 export type FBDocumentRevisionMode =

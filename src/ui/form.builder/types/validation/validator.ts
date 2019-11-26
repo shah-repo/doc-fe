@@ -5,6 +5,10 @@ export interface FBValidatorProps {
 
 export type FBValidatorDelimiter = ":" | ",";
 
+export enum FBValidatorTrigger {
+  onRelease = "Validate on Release",
+}
+
 export interface FBValidatorIndicatorValueProps {
   value: any;
   delimiter: FBValidatorDelimiter;

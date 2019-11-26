@@ -4,7 +4,7 @@ import { ValueType } from "react-select/src/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
 import { FBEditorElementType } from "./editor";
-import { FBValidatorDelimiter } from "./validation/validator";
+import { FBValidatorDelimiter, FBValidatorTrigger } from "./validation/validator";
 
 export type Subtract<T, V> = Pick<T, Exclude<keyof T, keyof V>>;
 
@@ -39,6 +39,7 @@ export type FBFormDefaultProps =
     hasSchemaItem?: boolean;
     fieldName?: string;
     row?: boolean;
+    validatorTriggers?: FBValidatorTrigger[];
   };
 
 export type FBOnChangeType =
