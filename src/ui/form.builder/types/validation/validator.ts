@@ -6,7 +6,9 @@ export interface FBValidatorProps {
 export type FBValidatorDelimiter = ":" | ",";
 
 export enum FBValidatorTrigger {
-  onRelease = "Validate on Release",
+  // ON_SUBMIT = "Submit",
+  // ON_CHANGE = "Change",
+  ON_STATE_TO_IN_REVIEW = "ON_STATE_TO_IN_REVIEW",
 }
 
 export interface FBValidatorIndicatorValueProps {

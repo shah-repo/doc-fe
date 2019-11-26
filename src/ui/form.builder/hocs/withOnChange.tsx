@@ -82,7 +82,13 @@ export function withOnChange<T extends FBOnChangeProps>(
         }
       }
 
-      form.setFieldValue(field.name, value);
+      if (field.name.includes("applicableOn")) {
+        // form.setFieldValue("applicableOn", value ? ["ON_STATE_TO_IN_REVIEW"] : []);
+        FBValidatorStore.applicableOn = value;
+      } else {
+        form.setFieldValue(field.name, value);
+      }
+
       form.values[field.name] = value; // workaround for validtors :/
       this.validate();
 

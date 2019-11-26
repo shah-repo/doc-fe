@@ -22,7 +22,7 @@ export interface FBTemplateSchema {
   validatorDelimiter?: FBValidatorDelimiter;
   hasSchemaItem?: boolean;
   fieldName?: string;
-  validatorTriggers?: FBValidatorTrigger[];
+  applicableOn?: FBValidatorTrigger[];
 }
 
 export type FBDocumentRevisionMode =
