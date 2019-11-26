@@ -1,5 +1,5 @@
 import { Formik, FormikProps } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Redirect, RouteComponentProps, useParams } from "react-router-dom";
 import { authSelectors } from "../../../../state/ducks/auth";
@@ -12,9 +12,12 @@ import { ApplicationState } from "../../../../state/reducers";
 import { AsyncState } from "../../../../state/types";
 import AsyncGate from "../../../components/AsyncGate";
 import { HOME_URL } from "../../../constants/urls";
+import FBStore from "../../../form.builder/stores/FBStore";
 import { FBDocumentFlowProps } from "../../../form.builder/types/formik";
+import useAsync from "../../../hooks/useAsync";
 import { toSupplierSurveyFormValues } from "../transform";
 import SupplierSurveyPresenter from "./SupplierSurvey.presenter";
+import SupplierSurveySubmitPresenter from "./SupplierSurveySubmit.presenter";
 
 interface StateProps {
   isUserAuthenticated: boolean;
@@ -24,6 +27,7 @@ interface StateProps {
 
 interface DispatchProps {
   loadSupplierSurvey: typeof supplierSurveyActions.loadSupplierSurveyList;
+  submitSupplierSurvey: typeof supplierSurveyActions.submitSupplierSurvey;
 }
 
 export type SupplierSurveyContainerProps = StateProps &
@@ -46,26 +50,38 @@ export const SupplierSurveyContainer: React.FunctionComponent<
   loadSupplierSurveyListAsyncState,
   supplierSurvey,
   isUserAuthenticated,
+  submitSupplierSurvey,
 }) => {
+  const async = useAsync();
+  const [showMessage, setShowMessage] = useState(false);
+  const toggleShowMessage = () => setShowMessage(!showMessage);
+
   const { from } = location.state || { from: { pathname: HOME_URL } };
   const { token } = useParams();
   const loadAction = () => loadSupplierSurvey(token);
-
   if (isUserAuthenticated) {
     return <Redirect to={from} />;
   }
 
   const onSubmit = () => {
-    return;
+    async.start(submitSupplierSurvey, token, {
+      formInput: JSON.stringify(FBStore.getValues()),
+    }, async);
+    toggleShowMessage();
   };
 
   const render = (props: FormikProps<FBDocumentFlowProps>) => {
+    if (!showMessage) {
     return (
       <SupplierSurveyPresenter
         {...props}
         asyncState={loadSupplierSurveyListAsyncState}
         supplierSurvey={supplierSurvey}
       />
+    );
+    }
+    return (
+      <SupplierSurveySubmitPresenter />
     );
   };
 
@@ -85,9 +101,7 @@ export const SupplierSurveyContainer: React.FunctionComponent<
   );
 };
 
-export default connect<StateProps, DispatchProps, {}, ApplicationState>(
-  mapStateToProps,
-  {
-    loadSupplierSurvey: supplierSurveyActions.loadSupplierSurveyList,
-  },
-)(SupplierSurveyContainer);
+export default connect<StateProps, DispatchProps, {}, ApplicationState>(mapStateToProps, {
+  loadSupplierSurvey: supplierSurveyActions.loadSupplierSurveyList,
+  submitSupplierSurvey: supplierSurveyActions.submitSupplierSurvey,
+})(SupplierSurveyContainer);

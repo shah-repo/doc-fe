@@ -1,16 +1,22 @@
-import { apiAction } from "../../factories";
-import { ApiAction } from "../../types";
+import { apiAction, apiActionWithCallbacks } from "../../factories";
+import { ApiAction, Handlers } from "../../types";
 import {
   SUPPLIER_SURVEY_LIST,
   SUPPLIER_SURVEY_LIST_ASYNC,
   SUPPLIER_SURVEY_ROOT_URL,
+  SUPPLIER_SURVEY_SUBMIT,
 } from "./constants";
-import { SupplierSurveyForm, SupplierSurveyListAction } from "./types";
+import { SubmitSupplierSurvey, SupplierSurveyForm, SupplierSurveyListAction, SupplierSurveySubmitAction } from "./types";
 
 const supplierSurveyList = (
   supplierSurvey: SupplierSurveyForm,
 ): SupplierSurveyListAction => ({
   type: SUPPLIER_SURVEY_LIST,
+  payload: supplierSurvey,
+});
+
+const submitSurvey = (supplierSurvey: SupplierSurveyForm): SupplierSurveySubmitAction => ({
+  type: SUPPLIER_SURVEY_SUBMIT,
   payload: supplierSurvey,
 });
 
@@ -24,7 +30,20 @@ const loadSupplierSurveyList = (token: string): ApiAction<SupplierSurveyForm> =>
     },
   });
 
+const submitSupplierSurvey = (token: string, body: SubmitSupplierSurvey, handlers: Handlers):
+    ApiAction<SupplierSurveyForm> => apiActionWithCallbacks({
+    url: `${SUPPLIER_SURVEY_ROOT_URL}/${token}/submit_survey`,
+    method: "post",
+    data: body,
+    onSuccess: (supplierSurvey, dispatch) => {
+      dispatch(submitSurvey(supplierSurvey));
+    },
+    handlers,
+  });
+
 export default {
   supplierSurveyList,
   loadSupplierSurveyList,
+  submitSupplierSurvey,
+  submitSurvey,
 };

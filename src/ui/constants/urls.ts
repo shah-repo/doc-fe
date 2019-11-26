@@ -28,4 +28,4 @@ export const TRAINING_DETAIL_URL = `${TRAINING_ROOT_URL}/detail/:trainingId`;
 export const SIGNUP_URL = "/signup";
 export const STATUS = "/status";
 
-export const SUPPLIER_SURVEY_URL = "/supplierSurvey/:token";
+export const SUPPLIER_SURVEY_URL = "/supplier_survey/:token";

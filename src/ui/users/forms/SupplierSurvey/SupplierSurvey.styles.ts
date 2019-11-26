@@ -8,7 +8,7 @@ export default (theme: Theme) =>
       position: "absolute",
       top: 0,
       bottom: 0,
-      backgroundColor: theme.palette.grey[300],
+      backgroundColor: theme.palette.common.white,
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
