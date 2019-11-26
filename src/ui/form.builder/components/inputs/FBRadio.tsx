@@ -13,6 +13,7 @@ const FBRadio: React.FunctionComponent<FBCheckboxProps> = ({
   includeNote,
   disabled,
   readOnly,
+  helperText,
   ...props
 }) => (
     <Box mb={gutter ? 4 : 0}>
@@ -30,6 +31,7 @@ const FBRadio: React.FunctionComponent<FBCheckboxProps> = ({
             name={`${props.name}_optionNote_field`}
           />
         )}
+        <Box mt={3} pl={1.5} fontSize="caption.fontSize" color="error.main">{helperText}</Box>
     </Box>
   );
 

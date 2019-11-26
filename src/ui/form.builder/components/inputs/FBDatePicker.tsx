@@ -17,6 +17,7 @@ type Props =
 
 const FBDatePicker: React.FunctionComponent<Props> = ({
   labelRenderer,
+  helperText,
   ...props
 }) => (
   <Box mb={4}>
@@ -32,6 +33,7 @@ const FBDatePicker: React.FunctionComponent<Props> = ({
         autoOk={true}
         label=""
       />
+       <Box mt={3} pl={1.5} fontSize="caption.fontSize" color="error.main">{helperText}</Box>
     </MuiPickersUtilsProvider>
   </Box>
 );

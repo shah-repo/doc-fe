@@ -14,6 +14,7 @@ const FBCheckbox: React.FunctionComponent<FBCheckboxProps> = ({
   disabled,
   readOnly,
   labelRenderer,
+  helperText,
   ...props
 }) => (
     <Box mb={gutter ? 4 : 0}>
@@ -29,6 +30,7 @@ const FBCheckbox: React.FunctionComponent<FBCheckboxProps> = ({
           name={`${props.name}_optionNote_field`}
         />)
       }
+    <Box mt={3} pl={1.5} fontSize="caption.fontSize" color="error.main">{helperText}</Box>
     </Box>
   );
 

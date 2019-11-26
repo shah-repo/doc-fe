@@ -25,6 +25,16 @@ export class FormBuilderValidatorStore {
     return flattenArray.join("|");
   }
 
+  @action public getSchemaRules = (): Dictionary<string> => {
+    const rules: Dictionary<string> = {};
+    _.map(FBStore.getSchema(), (schemaItem) => {
+      if (schemaItem.rules && schemaItem.rules !== "") {
+        rules[schemaItem.name] = schemaItem.rules;
+      }
+    });
+    return rules;
+  }
+
   @action public getRulesBy = (schemaItemName: string): Dictionary<string> | undefined => {
     const schema = FBStore.getSchema();
     const rules: Dictionary<string> = {};

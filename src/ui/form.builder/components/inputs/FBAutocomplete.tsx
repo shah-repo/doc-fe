@@ -29,7 +29,6 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
 
   return (
     <FBLabel label={label}>
-      {/* <Box border={1} borderColor={error ? "error.main" : "transparent"}> */}
       <Select
         {...props}
         inputId={`react-select-${name}`}
@@ -43,7 +42,6 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
         isDisabled={props.disabled}
         options={(options as SelectOption[]) || autocompleteList.data()}
       />
-      {/* </Box> */}
       <Box mt={1} pl={1.5} fontSize="caption.fontSize" color="error.main">
         {helperText}
       </Box>

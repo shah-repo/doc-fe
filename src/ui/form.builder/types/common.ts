@@ -17,7 +17,7 @@ export interface FBOptionRendererProps {
 }
 
 export type FBFormDefaultProps =
-  & Pick<BaseTextFieldProps, "children" | "disabled" | "name">
+  & Pick<BaseTextFieldProps, "children" | "disabled" | "name" | "helperText">
   & FBLabelRendererProps
   & FBOptionRendererProps
   & {
