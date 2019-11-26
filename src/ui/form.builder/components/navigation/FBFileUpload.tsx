@@ -20,10 +20,8 @@ const FBFileUpload: React.FunctionComponent<Props> = ({
 }) => (
   <Box mb={5} width="100%">
     {labelRenderer}
-    <Box border={1} borderColor={error ? "error.main" : "transparent"}>
-      <AttachmentField name={name} component="field" disabled={disabled} />
+    <AttachmentField name={name} component="field" disabled={disabled} />
     <Box mt={3} pl={1.5} fontSize="caption.fontSize" color="error.main">{helperText}</Box>
-    </Box>
     <AttachmentIconField name={name} disabled={disabled}  />
   </Box>
 );

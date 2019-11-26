@@ -27,6 +27,7 @@ export const withEditorRenderer =
       includeNote: includeNote || includeOther,
       rules: FBValidatorStore.getRules(),
     };
+    FBValidatorStore.resetIndicatorValues();
 
     const removeEl = (mode === "create") ? 0 : 1;
     const newSchema = FBStore.schema;

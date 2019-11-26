@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { observer } from "mobx-react";
 import React from "react";
 import Validator from "validatorjs";
 import { SelectOption } from "../../components/forms/fields/Select";
@@ -49,8 +50,8 @@ export function withOnChange<T extends FBOnChangeProps>(
           {...(this.props as T)}
           onChange={((onChange && onChange) || this.handleChange)}
           value={(field.value && field.value) || null}
-          error={FBValidatorStore.hasError(name)}
-          helperText={FBValidatorStore.errorText(name)}
+          error={Boolean(FBValidatorStore.errors[name])}
+          helperText={FBValidatorStore.errors[name] || ""}
         />
       );
     }
@@ -124,5 +125,5 @@ export function withOnChange<T extends FBOnChangeProps>(
     }
   }
 
-  return withFormik(HOC);
+  return withFormik(observer(HOC));
 }

@@ -16,6 +16,7 @@ const FBTextEditorField: React.FunctionComponent<Props> = ({
   form,
   disabled,
   readOnly,
+  helperText,
   ...props
 }) => (
   <Box mb={4}>
@@ -30,6 +31,7 @@ const FBTextEditorField: React.FunctionComponent<Props> = ({
       style={{ minHeight: 120 }}
       id={`field-${props.field.name}`}
     />
+    <Box mt={3} pl={1.5} fontSize="caption.fontSize" color="error.main">{helperText}</Box>
   </Box>
 );
 

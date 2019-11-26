@@ -42,6 +42,7 @@ import {
   documentDetailsPath,
   documentVersionPath,
 } from "../../document.revision/utils/paths";
+import { FBValidate } from "../../form.builder/defaults/validator";
 import FBWorkspace from "../../form.builder/main/workspace/FBWorkspace";
 import FBDRStore from "../../form.builder/stores/FBDRStore";
 import FBStore from "../../form.builder/stores/FBStore";
@@ -51,7 +52,7 @@ import { DocumentRevisionFormValues } from "./types";
 
 export interface Props
   extends WithStyles<typeof styles>,
-  FormikProps<DocumentRevisionFormValues> {
+    FormikProps<DocumentRevisionFormValues> {
   asyncState: AsyncState;
   documentRevisions?: DocumentRevision[];
   availableReferences: OptionType[];
@@ -100,7 +101,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDisabled: boolean = _.get(initialValues, "id") !== undefined;
   const docId = _.get(initialValues, "document.docId");
   const useProposedDocId = (!docId || docId === "") && values.document;
-  values.document!.docId = useProposedDocId ? proposedDocId : values.document!.docId;
+  values.document!.docId = useProposedDocId
+    ? proposedDocId
+    : values.document!.docId;
 
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -160,6 +163,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         </Box>
       );
     }
+  };
+
+  const onFormClick = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    FBValidate();
   };
 
   const renderReferences = () => {
@@ -297,7 +306,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           </Box>
         )}
         {FBStore.active && (
-          <Box mt={5}><FBWorkspace /></Box>
+          <Box mt={5}>
+            <FBWorkspace />
+          </Box>
         )}
         <Box mt={5}>
           <Grid
@@ -309,6 +320,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <SubmitButton
               asyncState={asyncState}
               label={isDisabled ? "common.save" : "navigation.createDocument"}
+              onClick={onFormClick}
             />
           </Grid>
         </Box>

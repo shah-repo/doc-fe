@@ -11,6 +11,7 @@ const FBSelect: React.FunctionComponent<FBSelectProps> = ({
   field,
   includeNote,
   showNote = false,
+  helperText,
   ...props
 }) => (
     <Box mb={4}>
@@ -23,6 +24,7 @@ const FBSelect: React.FunctionComponent<FBSelectProps> = ({
           <FBNoteTextField disabled={props.disabled} name={props.name} />
         </Box>
       )}
+      <Box mt={3} pl={1.5} fontSize="caption.fontSize" color="error.main">{helperText}</Box>
     </Box>
   );
 
