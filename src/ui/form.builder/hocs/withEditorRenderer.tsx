@@ -8,6 +8,7 @@ import FBStore from "../stores/FBStore";
 import FBValidatorStore from "../stores/ui/FBValidatorStore";
 import { FBEditorFormProps } from "../types/editor";
 import { FBTemplateSchema } from "../types/store";
+import { FBValidatorTrigger } from "../types/validation/validator";
 
 export const withEditorRenderer =
 (other: FBEditorFormProps) =>
@@ -26,7 +27,9 @@ export const withEditorRenderer =
       ...props.values as FBTemplateSchema,
       includeNote: includeNote || includeOther,
       rules: FBValidatorStore.getRules(),
+      applicableOn: FBValidatorStore.applicableOn ? [FBValidatorTrigger.ON_STATE_TO_IN_REVIEW] : [],
     };
+    FBValidatorStore.applicableOn = false;
     FBValidatorStore.resetIndicatorValues();
 
     const removeEl = (mode === "create") ? 0 : 1;

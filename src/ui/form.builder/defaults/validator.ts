@@ -1,22 +1,13 @@
 import _ from "lodash";
 import Validator from "validatorjs";
-import { SelectOption } from "../../components/forms/fields/Select";
 import FBStore from "../stores/FBStore";
 import FBValidatorStore from "../stores/ui/FBValidatorStore";
-import { FBValidatorTrigger } from "../types/validation/validator";
 
-export const validatorTriggers = (): SelectOption[] => {
-  return _.map(
-    FBValidatorTrigger,
-    (v, k) => ({ value: k, text: v } as SelectOption),
-  );
-};
-
-export const FBValidate = () => {
+export const FBValidate = (forRelease: boolean = false) => {
   if (FBStore.mode !== "form") {
     return;
   }
-  const rules = FBValidatorStore.getSchemaRules();
+  const rules = forRelease ? FBValidatorStore.getSchemaReleasedRules() : FBValidatorStore.getSchemaRules();
   if (!rules) {
     return;
   }

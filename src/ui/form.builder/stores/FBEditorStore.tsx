@@ -7,6 +7,7 @@ import { withEditorRenderer } from "../hocs/withEditorRenderer";
 import FBEditorSection from "../main/editor/FBEditorSection";
 import { FBEditorElementType, FBEditorModeType } from "../types/editor";
 import { FBTemplateSchema } from "../types/store";
+import FBValidatorStore from "./ui/FBValidatorStore";
 
 export class FBEditorStore {
   @observable public open: boolean = false;
@@ -25,6 +26,7 @@ export class FBEditorStore {
 
   @action public reset = () => {
     this.open = false;
+    FBValidatorStore.applicableOn = false;
     setTimeout(() => {
       this.content = undefined;
       this.title = undefined;

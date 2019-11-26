@@ -1,11 +1,13 @@
 import _ , { Dictionary } from "lodash";
 import { action, computed, observable } from "mobx";
 import { SelectOption } from "../../../components/forms/fields/Select";
+import { FBValidatorTrigger } from "../../types/validation/validator";
 import FBStore from "../FBStore";
 
 export class FormBuilderValidatorStore {
   @observable public errors: Dictionary<string> = {};
   public indicatorValues: Dictionary<Dictionary<string>> = {};
+  public applicableOn: boolean = false;
 
   @computed get schemaItemOptions(): SelectOption[] {
     const schema = FBStore.getSchema();
@@ -28,7 +30,17 @@ export class FormBuilderValidatorStore {
   @action public getSchemaRules = (): Dictionary<string> => {
     const rules: Dictionary<string> = {};
     _.map(FBStore.getSchema(), (schemaItem) => {
-      if (schemaItem.rules && schemaItem.rules !== "") {
+      if (schemaItem.rules && schemaItem.rules !== "" && _.isEmpty(schemaItem.applicableOn)) {
+        rules[schemaItem.name] = schemaItem.rules;
+      }
+    });
+    return rules;
+  }
+
+  @action public getSchemaReleasedRules = (): Dictionary<string> => {
+    const rules: Dictionary<string> = {};
+    _.map(FBStore.getSchema(), (schemaItem) => {
+      if (schemaItem.rules && schemaItem.rules !== "" && !_.isEmpty(schemaItem.applicableOn)) {
         rules[schemaItem.name] = schemaItem.rules;
       }
     });
@@ -74,6 +86,15 @@ export class FormBuilderValidatorStore {
 
   @action public errorText = (name: string): string => {
     return this.errors[name] || "";
+  }
+
+  @action public triggers = (): SelectOption[] => {
+    const t = _.map(
+      FBValidatorTrigger,
+      (v, k) => ({ value: k, text: v } as SelectOption),
+    );
+
+    return t;
   }
 }
 

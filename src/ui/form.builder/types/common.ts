@@ -39,7 +39,7 @@ export type FBFormDefaultProps =
     hasSchemaItem?: boolean;
     fieldName?: string;
     row?: boolean;
-    validatorTriggers?: FBValidatorTrigger[];
+    applicableOn?: FBValidatorTrigger[];
   };
 
 export type FBOnChangeType =
