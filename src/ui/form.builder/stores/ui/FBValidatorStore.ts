@@ -53,8 +53,9 @@ export class FormBuilderValidatorStore {
 
     _.map(schema, (schemaItem) => {
       const isUnderValidation = (
-        schemaItem.name === schemaItemName ||
-        (schemaItem.rules || "").includes(schemaItemName)
+        (schemaItem.name === schemaItemName ||
+        (schemaItem.rules || "").includes(schemaItemName)) &&
+        _.isEmpty(schemaItem.applicableOn)
       );
       if (isUnderValidation) {
         rules[schemaItem.name] = schemaItem.rules || "";
