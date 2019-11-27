@@ -6,7 +6,7 @@ const supplierSurvey = (state: ApplicationState) =>
 
 const getLoadSupplierSurveyListAsyncInfo = (
   state: ApplicationState,
-): AsyncState => state.supplierSurvey.loadSupplierSurveyListAsyncInfo;
+): AsyncState => state.supplierSurvey.loadSupplierSurveyAsyncInfo;
 
 export default {
     getLoadSupplierSurveyListAsyncInfo,

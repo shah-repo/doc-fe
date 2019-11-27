@@ -1,6 +1,6 @@
-import { createStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from "@material-ui/core";
 
-export default (theme: Theme) =>
+export const styles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       margin: "auto",
@@ -16,4 +16,5 @@ export default (theme: Theme) =>
     title: {
       marginBottom: theme.spacing(8),
     },
-  });
+  }),
+);

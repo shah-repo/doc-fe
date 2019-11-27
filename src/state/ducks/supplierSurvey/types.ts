@@ -1,5 +1,5 @@
 import { DocumentRevision } from "../documentRevisions";
-import { SUPPLIER_SURVEY_LIST, SUPPLIER_SURVEY_SUBMIT } from "./constants";
+import { SUPPLIER_SURVEY, SUPPLIER_SURVEY_SUBMIT } from "./constants";
 
 export interface SupplierSurveyForm {
     createdAt: string;
@@ -10,8 +10,8 @@ export interface SupplierSurveyForm {
     surveySubmission: Partial<DocumentRevision> | null;
 }
 
-export interface SupplierSurveyListAction {
-    type: typeof SUPPLIER_SURVEY_LIST;
+export interface SupplierSurveyAction {
+    type: typeof SUPPLIER_SURVEY;
     payload: SupplierSurveyForm;
 }
 export interface SupplierSurveySubmitAction {

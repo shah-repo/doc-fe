@@ -1,4 +1,5 @@
 import { Formik, FormikProps } from "formik";
+import _ from "lodash";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Redirect, RouteComponentProps, useParams } from "react-router-dom";
@@ -17,7 +18,6 @@ import { FBDocumentFlowProps } from "../../../form.builder/types/formik";
 import useAsync from "../../../hooks/useAsync";
 import { toSupplierSurveyFormValues } from "../transform";
 import SupplierSurveyPresenter from "./SupplierSurvey.presenter";
-import SupplierSurveySubmitPresenter from "./SupplierSurveySubmit.presenter";
 
 interface StateProps {
   isUserAuthenticated: boolean;
@@ -70,19 +70,22 @@ export const SupplierSurveyContainer: React.FunctionComponent<
     toggleShowMessage();
   };
 
+  const { name } = supplierSurvey.surveyFormDocumentRevision;
+  const schema =
+  _.get(supplierSurvey, "surveyFormDocumentRevision.formTemplate.schema", []);
+  FBStore.setSchema(schema);
+
   const render = (props: FormikProps<FBDocumentFlowProps>) => {
-    if (!showMessage) {
-    return (
-      <SupplierSurveyPresenter
-        {...props}
-        asyncState={loadSupplierSurveyListAsyncState}
-        supplierSurvey={supplierSurvey}
-      />
-    );
-    }
-    return (
-      <SupplierSurveySubmitPresenter />
-    );
+      return (
+        <SupplierSurveyPresenter
+          {...props}
+          asyncState={loadSupplierSurveyListAsyncState}
+          supplierSurvey={supplierSurvey}
+          name={name}
+          isSubmited={showMessage}
+          message={async.asyncState.message}
+        />
+      );
   };
 
   return (

@@ -346,7 +346,5 @@
 
   "company.switch.title": "Switch Company",
   "company.switch.subtitle": "Select a company below to sign-in to",
-  "company.switch.button": "SWITCH COMPANY",
-
-  "supplier.survey.submitMessage": "Thanks for your resonse!"
+  "company.switch.button": "SWITCH COMPANY"
 }
