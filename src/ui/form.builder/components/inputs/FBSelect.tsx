@@ -1,31 +1,27 @@
-import { Box, FormControl, Select } from "@material-ui/core";
+import { FormControl, Select, FormHelperText } from "@material-ui/core";
 import React from "react";
-import { withSelectDefaults } from "../../hocs/withSelectDefaults";
-import { FBSelectProps } from "../../types/select";
+import { withSelect } from "../../hocs/inputs/withSelect";
+import { FBSelectProps } from "../../types/inputs/select";
+import FBLabel from "../common/FBLabel";
 import FBNoteTextField from "../custom/FBNoteTextField";
 
 const FBSelect: React.FunctionComponent<FBSelectProps> = ({
   variant = "outlined",
-  labelRenderer,
-  items,
-  field,
-  includeNote,
-  showNote = false,
+  label,
+  error,
   helperText,
-  ...props
+  showNote = false,
+  menuItems,
+  disabled,
+  name,
 }) => (
-    <Box mb={4}>
-      {labelRenderer}
-      <FormControl variant={variant} fullWidth={true}>
-        <Select {...props}>{items}</Select>
-      </FormControl>
-      {showNote && (
-        <Box pt={2}>
-          <FBNoteTextField disabled={props.disabled} name={props.name} />
-        </Box>
-      )}
-      <Box mt={3} pl={1.5} fontSize="caption.fontSize" color="error.main">{helperText}</Box>
-    </Box>
-  );
+  <FBLabel label={label}>
+    <FormControl variant={variant} error={error} fullWidth>
+      <Select>{menuItems}</Select>
+      <FormHelperText>{helperText}</FormHelperText>
+      {showNote && <FBNoteTextField disabled={disabled} name={name} />}
+    </FormControl>
+  </FBLabel>
+);
 
-export default withSelectDefaults(FBSelect);
+export default withSelect(FBSelect);

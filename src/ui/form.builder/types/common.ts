@@ -16,14 +16,32 @@ export interface FBOptionRendererProps {
   optionsRenderer?: React.ReactNode[];
 }
 
+export interface FBLabelProps {
+  label?: string | React.ReactNode;
+}
+
+export interface FBOptionProps {
+  options?: any[] | string;
+  optionLabelKey?: string;
+  optionValueKey?: string;
+  includeNone?: boolean;
+}
+
+export type FBInputProps =
+  & Pick<BaseTextFieldProps, "children" | "disabled" | "name" | "error" | "helperText">
+  & FBLabelProps
+  & {
+    index?: number;
+    type?: FBEditorElementType | string;
+  };
+
 export type FBFormDefaultProps =
-  & Pick<BaseTextFieldProps, "children" | "disabled" | "name" | "helperText">
+  & FBInputProps
   & FBLabelRendererProps
   & FBOptionRendererProps
   & {
     index?: number;
     type?: FBEditorElementType | string;
-    label?: string | React.ReactNode;
     readOnly?: boolean;
     className?: string;
     gutter?: boolean;
