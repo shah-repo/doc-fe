@@ -18,16 +18,21 @@ export const EditableSelectPresenter: React.FunctionComponent<Props> = ({
   isActive = false,
   handleBlur,
 }) => {
-
   const classes = styles({ gutter, error: false });
   return (
     <Box className={classes.root}>
       <InputField
         name={name}
         label={label}
-        inputProps={{ multiline: true, rows: 2, value, onChange: handleChange, autoComplete: "off", onBlur: handleBlur }}
+        inputProps={{
+          multiline: true,
+          rows: 2,
+          value,
+          onChange: handleChange,
+          autoComplete: "off",
+          onBlur: handleBlur,
+        }}
         formControlProps={{ className: classes.textField }}
-
       />
       <AutocompleteField
         name={name}
