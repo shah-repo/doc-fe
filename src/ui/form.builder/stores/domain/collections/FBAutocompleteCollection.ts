@@ -22,7 +22,6 @@ export class FBAutocompleteCollection extends Collection<FBAutocompleteModel> {
     return this.models.map((o) => {
       if (o.has(this.keyStr)) {
         return {
-          ...o.toJS(),
           value: o.id,
           text: o.get(this.keyStr),
           label: o.get(this.keyStr),

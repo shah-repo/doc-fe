@@ -1,6 +1,6 @@
 import _ from "lodash";
 import React from "react";
-import FBStore from "../stores/FBStore";
+import FBStore from "../stores/ui/FBStore";
 import { Subtract } from "../types/common";
 import { FBTemplateSchema } from "../types/store";
 import { FBTransportSchemaInjectedProps, FBTransportSchemaProps } from "../types/transport";

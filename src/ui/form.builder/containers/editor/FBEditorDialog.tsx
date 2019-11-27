@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import React from "react";
 import FBDialog from "../../components/feedback/FBDialog";
-import editorStore from "../../stores/FBEditorStore";
+import editorStore from "../../stores/ui/FBEditorStore";
 
 const FBEditorDialog: React.FunctionComponent<{}> = () => (
   <FBDialog

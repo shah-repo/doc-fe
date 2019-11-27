@@ -2,8 +2,8 @@ import { BoxProps } from "@material-ui/core/Box";
 import _ from "lodash";
 import React from "react";
 import { FBEditorSectionConfig } from "../defaults/editor";
-import sortableStore from "../stores/FBSortableStore";
-import FBStore from "../stores/FBStore";
+import sortableStore from "../stores/ui/FBSortableStore";
+import FBStore from "../stores/ui/FBStore";
 import {
   FBEditorWrapperProps,
   FBEditorWrapperSubtractProps,

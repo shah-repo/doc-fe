@@ -42,10 +42,10 @@ import {
   documentDetailsPath,
   documentVersionPath,
 } from "../../document.revision/utils/paths";
+import FBWorkspace from "../../form.builder/containers/workspace/FBWorkspace";
 import { FBValidate } from "../../form.builder/defaults/validator";
-import FBWorkspace from "../../form.builder/main/workspace/FBWorkspace";
-import FBDRStore from "../../form.builder/stores/FBDRStore";
-import FBStore from "../../form.builder/stores/FBStore";
+import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
+import FBStore from "../../form.builder/stores/ui/FBStore";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
 import { DocumentRevisionFormValues } from "./types";

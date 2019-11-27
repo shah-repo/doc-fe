@@ -18,7 +18,7 @@ export interface FBDocumentFlowProps {
   id?: string;
   formTemplate?: FBFormTemplateProps;
   formDocument?: FBDocumentFlowProps;
-  formInput?: string | Dictionary<any>;
+  formInput?: Dictionary<any>;
   document?: Partial<DocumentRevisionDocument>;
   revision?: number;
   revisionStage?: number;

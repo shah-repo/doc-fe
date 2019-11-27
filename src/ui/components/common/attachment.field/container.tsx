@@ -8,7 +8,7 @@ import {
   attachmentsActions,
 } from "../../../../state/ducks/attachments";
 import { ApplicationState } from "../../../../state/reducers";
-import FBStore from "../../../form.builder/stores/FBStore";
+import FBStore from "../../../form.builder/stores/ui/FBStore";
 import useAsync from "../../../hooks/useAsync";
 import FormMessage from "../../forms/FormMessage";
 import FormProgress from "../../forms/FormProgress";

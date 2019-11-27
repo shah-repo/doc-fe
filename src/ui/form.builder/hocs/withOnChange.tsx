@@ -4,7 +4,7 @@ import React from "react";
 import Validator from "validatorjs";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { withFormik } from "../../components/hoc/formik";
-import FBStore from "../stores/FBStore";
+import FBStore from "../stores/ui/FBStore";
 import FBValidatorStore from "../stores/ui/FBValidatorStore";
 import { FBOnChangeProps, Subtract } from "../types/common";
 

@@ -5,8 +5,8 @@ import {
   DocumentRevisionStatus,
   RevisionChangeType,
 } from "../../../state/ducks/documentRevisions";
-import FBDRStore from "../../form.builder/stores/FBDRStore";
-import FBStore from "../../form.builder/stores/FBStore";
+import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
+import FBStore from "../../form.builder/stores/ui/FBStore";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
 import { DocumentRevisionFormValues } from "./types";
 

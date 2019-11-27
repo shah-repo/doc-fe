@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import React from "react";
 import { withFormik } from "../../../components/hoc/formik";
 import { FBFieldComponent } from "../../defaults/editor";
-import FBStore from "../../stores/FBStore";
+import FBStore from "../../stores/ui/FBStore";
 import FBValidatorStore from "../../stores/ui/FBValidatorStore";
 import { FBValidatorSchemaSelectProps } from "../../types/validation/validatorSchemaSelect";
 

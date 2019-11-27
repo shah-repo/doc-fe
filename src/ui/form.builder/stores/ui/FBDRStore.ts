@@ -1,12 +1,12 @@
-import _, { Dictionary } from "lodash";
+import _ from "lodash";
 import { action, computed, observable } from "mobx";
 import {
   DocumentRevision,
   DocumentRevisionStatus,
-} from "../../../state/ducks/documentRevisions";
-import { DocumentGroupType } from "../../../state/ducks/documentRevisions/documentType";
-import { canEditDocumentRevision } from "../../document.revision/utils/helpers";
-import { FBDocumentRevisionMode } from "../types/store";
+} from "../../../../state/ducks/documentRevisions";
+import { DocumentGroupType } from "../../../../state/ducks/documentRevisions/documentType";
+import { canEditDocumentRevision } from "../../../document.revision/utils/helpers";
+import { FBDocumentRevisionMode, FBDRGroupConfig } from "../../types/store";
 import FBStore from "./FBStore";
 
 export class FBDocumentRevisionStore {
@@ -40,8 +40,6 @@ export class FBDocumentRevisionStore {
   @action public setMode = (mode: FBDocumentRevisionMode) => {
     this.mode = mode;
     switch (mode) {
-      case "none":
-        return FBStore.setMode("none");
       case "create":
       case "update":
         return FBStore.setMode("design");
@@ -50,6 +48,8 @@ export class FBDocumentRevisionStore {
         return FBStore.setMode("preview");
       case "outputCreate":
         return FBStore.setMode("form");
+      default:
+        return FBStore.setMode(mode);
     }
   }
 
@@ -57,15 +57,14 @@ export class FBDocumentRevisionStore {
     const schema = _.get(values, "formDocument.formTemplate.schema") || [];
     const { formInput } = values;
 
-    const canEditOutput =
-      values.status === DocumentRevisionStatus.Draft ||
-      values.status === DocumentRevisionStatus.PendingChange;
-
+    const editableIn = [
+      DocumentRevisionStatus.Draft,
+      DocumentRevisionStatus.PendingChange,
+    ];
+    const canEditOutput = editableIn.includes(values.status);
     const docRevMode = canEditOutput ? "outputCreate" : "outputPreview";
 
-    this.setMode(docRevMode);
-    FBStore.setSchema(schema);
-    FBStore.setValues(formInput as Dictionary<any>);
+    this.setGroupConfig({ docRevMode, schema, formInput });
   }
 
   @action private fmConfig = (values: DocumentRevision) => {
@@ -76,10 +75,17 @@ export class FBDocumentRevisionStore {
     if (docRevMode === "update" && !canEditDocumentRevision(values)) {
       docRevMode = "preview";
     }
+    this.setGroupConfig({ docRevMode, schema, formInput });
+  }
 
+  @action private setGroupConfig = ({
+    docRevMode,
+    schema,
+    formInput,
+  }: FBDRGroupConfig) => {
     this.setMode(docRevMode);
     FBStore.setSchema(schema);
-    FBStore.setValues(formInput as Dictionary<any>);
+    FBStore.setValues(formInput);
   }
 }
 

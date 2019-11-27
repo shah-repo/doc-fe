@@ -1,5 +1,7 @@
+
 import { SelectOption } from "../../components/forms/fields/Select";
 import { FBEditorElementType } from "./editor";
+import { FBDocumentFlowProps } from "./formik";
 import { FBValidatorDelimiter, FBValidatorTrigger } from "./validation/validator";
 
 export interface FBTemplateSchema {
@@ -24,6 +26,13 @@ export interface FBTemplateSchema {
   fieldName?: string;
   applicableOn?: FBValidatorTrigger[];
 }
+
+export type FBDRGroupConfig =
+  & Pick<FBDocumentFlowProps, "formInput">
+  & {
+  docRevMode: FBDocumentRevisionMode;
+  schema: FBTemplateSchema[];
+};
 
 export type FBDocumentRevisionMode =
   | "none"
