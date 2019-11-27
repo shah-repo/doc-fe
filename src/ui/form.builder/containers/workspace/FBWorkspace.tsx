@@ -3,10 +3,10 @@ import React from "react";
 import FBAddFieldButton0 from "../../components/custom/FBAddFieldButton0";
 import FBTransportSchema from "../../components/custom/FBTransportSchema";
 import FBForm from "../../components/form/FBForm";
+import FBButton from "../../components/inputs/FBButton";
 import FBStore from "../../stores/ui/FBStore";
 import FBEditorDialog from "../editor/FBEditorDialog";
 import FBSortableContainer from "./FBSortableContainer";
-import FBButton from "../../components/inputs/FBButton";
 
 const FBWorkspace: React.FunctionComponent<{}> = () => {
   const { schema, mode } = FBStore;
