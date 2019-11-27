@@ -6,6 +6,8 @@ import { FormikProps } from "formik";
 import * as React from "react";
 import { SupplierSurveyForm } from "../../../../state/ducks/supplierSurvey";
 import { AsyncState } from "../../../../state/types";
+import FormMessage from "../../../components/forms/FormMessage";
+import FormProgress from "../../../components/forms/FormProgress";
 import FormWrapper from "../../../components/forms/FormWrapper";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import FBWorkspace from "../../../form.builder/main/workspace/FBWorkspace";
@@ -34,6 +36,8 @@ const SupplierSurveyFormBuild: React.FunctionComponent<Props> = ({
         height="100%"
         position="absolute"
       >
+        <FormProgress asyncState={asyncState} />
+        <FormMessage asyncState={asyncState} />
         <FormWrapper
           dirty={dirty}
           initialValues={initialValues}

@@ -54,9 +54,6 @@ export const SupplierSurveyContainer: React.FunctionComponent<
     onSuccess: () => {
       toggleShowMessage();
     },
-    onError: () => {
-      toggleShowMessage();
-    },
   });
   const [showMessage, setShowMessage] = useState(false);
   const toggleShowMessage = () => setShowMessage(!showMessage);
