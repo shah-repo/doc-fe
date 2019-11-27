@@ -81,7 +81,7 @@ const login = (loginValues: LoginRequestBody, handlers: Handlers):
     method: "post",
     data: loginValues,
     includeAuthorization: false,
-    onSuccess: (data, dispatch) => {
+    onSuccess: (data: AuthResponse, dispatch) => {
       dispatch(authUser({
         email: loginValues.email,
         name: data.name, id: data.id,
@@ -90,7 +90,10 @@ const login = (loginValues: LoginRequestBody, handlers: Handlers):
         employees: data.employees,
       }));
       dispatch(authTokens(data));
-      dispatch(companyActions.selectCompany(data.company));
+
+      if ((data.employees || []).length === 1) {
+        dispatch(companyActions.selectCompany(data.employees[0].company));
+      }
     },
     handlers,
   });

@@ -1,4 +1,4 @@
-import { Company, Employee } from "../company";
+import { Employee } from "../company";
 import {
   AUTH_TOKENS,
   AUTH_USER,
@@ -26,9 +26,10 @@ export interface AuthResponse {
   ExpiresIn: number;
   IdToken: string;
   id: string;
-  name: string;
   email: string;
-  company: Company;
+  name: string;
+  sessionId: string;
+  employees: Employee[];
 }
 
 export interface AuthWithCodeResponse extends AuthResponse {
