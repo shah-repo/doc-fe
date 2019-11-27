@@ -10,6 +10,7 @@ import documentRevisions from "./ducks/documentRevisions";
 import documentType from "./ducks/documentRevisions/documentType";
 import documents from "./ducks/documents";
 import formBuilderState from "./ducks/formBuilder";
+import supplierSurvey from "./ducks/supplierSurvey";
 import tableSearch from "./ducks/tableSearch";
 import migrations from "./migrations";
 
@@ -36,6 +37,7 @@ const appReducer = combineReducers({
   documentType,
   company: persistReducer(companyPersistConfig, company),
   tableSearch,
+  supplierSurvey,
 });
 
 const rootReducer = (state: any, action: any) => {
