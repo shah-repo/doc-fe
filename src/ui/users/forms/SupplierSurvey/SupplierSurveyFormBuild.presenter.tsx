@@ -1,0 +1,54 @@
+import {
+    Box,
+    Typography,
+  } from "@material-ui/core";
+import { FormikProps } from "formik";
+import * as React from "react";
+import { SupplierSurveyForm } from "../../../../state/ducks/supplierSurvey";
+import { AsyncState } from "../../../../state/types";
+import FormWrapper from "../../../components/forms/FormWrapper";
+import SubmitButton from "../../../components/forms/SubmitButton";
+import FBWorkspace from "../../../form.builder/main/workspace/FBWorkspace";
+import { FBDocumentFlowProps } from "../../../form.builder/types/formik";
+
+interface Props extends FormikProps<FBDocumentFlowProps> {
+    asyncState: AsyncState;
+    supplierSurvey: SupplierSurveyForm;
+    name?: string;
+}
+
+const SupplierSurveyFormBuild: React.FunctionComponent<Props> = ({
+    asyncState,
+    dirty,
+    resetForm,
+    initialValues,
+    supplierSurvey,
+  }) => {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        bgcolor="white"
+        width="100%"
+        height="100%"
+        position="absolute"
+      >
+        <FormWrapper
+          dirty={dirty}
+          initialValues={initialValues}
+          resetForm={resetForm}
+        >
+          <Box mb={8}>
+            <Typography variant="h4">{supplierSurvey.surveyFormDocumentRevision.name}</Typography>
+          </Box>
+          <FBWorkspace mode="form" includeTransport={false} />
+          <Box>
+            <SubmitButton asyncState={asyncState} label={"common.save"} />
+          </Box>
+        </FormWrapper>
+      </Box>
+    );
+  };
+
+export default SupplierSurveyFormBuild;

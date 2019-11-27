@@ -1,4 +1,3 @@
-import { Formik, FormikProps } from "formik";
 import _ from "lodash";
 import React, { useState } from "react";
 import { connect } from "react-redux";
@@ -14,10 +13,9 @@ import { AsyncState } from "../../../../state/types";
 import AsyncGate from "../../../components/AsyncGate";
 import { HOME_URL } from "../../../constants/urls";
 import FBStore from "../../../form.builder/stores/FBStore";
-import { FBDocumentFlowProps } from "../../../form.builder/types/formik";
 import useAsync from "../../../hooks/useAsync";
-import { toSupplierSurveyFormValues } from "../transform";
 import SupplierSurveyPresenter from "./SupplierSurvey.presenter";
+import SupplierSurveySubmitMessage from "./SupplierSurveySubmitMessage.presenter";
 
 interface StateProps {
   isUserAuthenticated: boolean;
@@ -52,7 +50,14 @@ export const SupplierSurveyContainer: React.FunctionComponent<
   isUserAuthenticated,
   submitSupplierSurvey,
 }) => {
-  const async = useAsync();
+  const async = useAsync({
+    onSuccess: () => {
+      toggleShowMessage();
+    },
+    onError: () => {
+      toggleShowMessage();
+    },
+  });
   const [showMessage, setShowMessage] = useState(false);
   const toggleShowMessage = () => setShowMessage(!showMessage);
 
@@ -67,26 +72,11 @@ export const SupplierSurveyContainer: React.FunctionComponent<
     async.start(submitSupplierSurvey, token, {
       formInput: JSON.stringify(FBStore.getValues()),
     }, async);
-    toggleShowMessage();
   };
 
-  const { name } = supplierSurvey.surveyFormDocumentRevision;
   const schema =
   _.get(supplierSurvey, "surveyFormDocumentRevision.formTemplate.schema", []);
   FBStore.setSchema(schema);
-
-  const render = (props: FormikProps<FBDocumentFlowProps>) => {
-      return (
-        <SupplierSurveyPresenter
-          {...props}
-          asyncState={loadSupplierSurveyListAsyncState}
-          supplierSurvey={supplierSurvey}
-          name={name}
-          isSubmited={showMessage}
-          message={async.asyncState.message}
-        />
-      );
-  };
 
   return (
     <AsyncGate
@@ -94,12 +84,14 @@ export const SupplierSurveyContainer: React.FunctionComponent<
       asyncState={loadSupplierSurveyListAsyncState}
       startActionOnMount={true}
     >
-      <Formik
-        render={render}
-        initialValues={toSupplierSurveyFormValues(supplierSurvey)}
+      {!showMessage && <SupplierSurveyPresenter
         onSubmit={onSubmit}
-        enableReinitialize={true}
-      />
+        supplierSurvey={supplierSurvey}
+        asyncState={loadSupplierSurveyListAsyncState}
+      />}
+      {showMessage && <SupplierSurveySubmitMessage
+        message={async.asyncState.message}
+      />}
     </AsyncGate>
   );
 };

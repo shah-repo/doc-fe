@@ -1,3 +1,4 @@
+import { Dictionary } from "lodash";
 import { DocumentRevision } from "../documentRevisions";
 import { SUPPLIER_SURVEY, SUPPLIER_SURVEY_SUBMIT } from "./constants";
 
@@ -20,7 +21,7 @@ export interface SupplierSurveySubmitAction {
 }
 
 export interface SubmitSupplierSurvey {
-    formInput: {};
+    formInput: Dictionary<any> | string;
 }
 
 export type SupplierSurveyState = SupplierSurveyForm;
