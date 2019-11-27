@@ -7,7 +7,7 @@ import {
 import { DocumentGroupType } from "../../../../state/ducks/documentRevisions/documentType";
 import { canEditDocumentRevision } from "../../../document.revision/utils/helpers";
 import { FBDocumentRevisionMode, FBDRGroupConfig } from "../../types/store";
-import FBStore from "../FBStore";
+import FBStore from "./FBStore";
 
 export class FBDocumentRevisionStore {
   @observable public mode: FBDocumentRevisionMode = "none";

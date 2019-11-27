@@ -3,7 +3,7 @@ import React from "react";
 import FBAddFieldButton0 from "../../components/custom/FBAddFieldButton0";
 import FBTransportSchema from "../../components/custom/FBTransportSchema";
 import FBForm from "../../components/form/FBForm";
-import FBStore from "../../stores/FBStore";
+import FBStore from "../../stores/ui/FBStore";
 import FBEditorDialog from "../editor/FBEditorDialog";
 import FBSortableContainer from "./FBSortableContainer";
 

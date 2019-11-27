@@ -1,8 +1,8 @@
 import _, { Dictionary } from "lodash";
 import { action, computed, observable } from "mobx";
-import { FBFormDefaultProps } from "../types/common";
-import { FBTemplateSchema } from "../types/store";
-import { FBWorkspaceMode } from "../types/workspace";
+import { FBFormDefaultProps } from "../../types/common";
+import { FBTemplateSchema } from "../../types/store";
+import { FBWorkspaceMode } from "../../types/workspace";
 import editorStore from "./FBEditorStore";
 
 export class FormBuilderStore {

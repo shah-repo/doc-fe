@@ -1,6 +1,6 @@
 import _ from "lodash";
 import Validator from "validatorjs";
-import FBStore from "../stores/FBStore";
+import FBStore from "../stores/ui/FBStore";
 import FBValidatorStore from "../stores/ui/FBValidatorStore";
 
 export const FBValidate = (forRelease: boolean = false) => {

@@ -1,13 +1,13 @@
 import { action, observable } from "mobx";
 import React from "react";
-import FBForm from "../components/form/FBForm";
-import FBButton from "../components/inputs/FBButton";
-import { FBEditorSectionConfig } from "../defaults/editor";
-import { withEditorRenderer } from "../hocs/withEditorRenderer";
-import FBEditorSection from "../main/editor/FBEditorSection";
-import { FBEditorElementType, FBEditorModeType } from "../types/editor";
-import { FBTemplateSchema } from "../types/store";
-import FBValidatorStore from "./ui/FBValidatorStore";
+import FBForm from "../../components/form/FBForm";
+import FBButton from "../../components/inputs/FBButton";
+import { FBEditorSectionConfig } from "../../defaults/editor";
+import { withEditorRenderer } from "../../hocs/withEditorRenderer";
+import FBEditorSection from "../../main/editor/FBEditorSection";
+import { FBEditorElementType, FBEditorModeType } from "../../types/editor";
+import { FBTemplateSchema } from "../../types/store";
+import FBValidatorStore from "../ui/FBValidatorStore";
 
 export class FBEditorStore {
   @observable public open: boolean = false;
