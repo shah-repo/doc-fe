@@ -25,7 +25,7 @@ export const EditableSelectPresenter: React.FunctionComponent<Props> = ({
       <InputField
         name={name}
         label={label}
-        inputProps={{ value, onChange: handleChange, autoComplete: "off", onBlur: handleBlur }}
+        inputProps={{ multiline: true, rows: 2, value, onChange: handleChange, autoComplete: "off", onBlur: handleBlur }}
         formControlProps={{ className: classes.textField }}
 
       />
