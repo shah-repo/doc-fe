@@ -43,7 +43,7 @@ import {
   documentVersionPath,
 } from "../../document.revision/utils/paths";
 import { FBValidate } from "../../form.builder/defaults/validator";
-import FBWorkspace from "../../form.builder/main/workspace/FBWorkspace";
+import FBWorkspace from "../../form.builder/containers/workspace/FBWorkspace";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import FBStore from "../../form.builder/stores/ui/FBStore";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";

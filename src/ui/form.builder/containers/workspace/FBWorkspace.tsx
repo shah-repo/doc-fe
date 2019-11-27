@@ -6,18 +6,19 @@ import FBForm from "../../components/form/FBForm";
 import FBStore from "../../stores/ui/FBStore";
 import FBEditorDialog from "../editor/FBEditorDialog";
 import FBSortableContainer from "./FBSortableContainer";
+import FBButton from "../../components/inputs/FBButton";
 
 const FBWorkspace: React.FunctionComponent<{}> = () => {
   const { schema, mode } = FBStore;
   const isStarter = (mode === "design") && (schema.length === 0);
 
-  // const onClick = () => {
-  //   if (FBStore.mode === "form") {
-  //     FBStore.setMode("design");
-  //   } else {
-  //     FBStore.setMode("form");
-  //   }
-  // };
+  const onClick = () => {
+    if (FBStore.mode === "form") {
+      FBStore.setMode("design");
+    } else {
+      FBStore.setMode("form");
+    }
+  };
 
   return (
     <FBForm initialValues={FBStore.values}>
@@ -25,7 +26,7 @@ const FBWorkspace: React.FunctionComponent<{}> = () => {
       {!isStarter && <FBSortableContainer items={schema} />}
       <FBTransportSchema />
       <FBEditorDialog />
-      {/* <FBButton label="View" onClick={onClick} /> */}
+      <FBButton label="View" onClick={onClick} />
       {/* <Box display="flex" flexDirection="row-reverse">
         <FBButton label="Create" onClick={handleSubmit} />
       </Box> */}

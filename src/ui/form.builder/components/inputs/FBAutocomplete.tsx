@@ -27,6 +27,8 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
     }
   }
 
+  // tslint:disable-next-line: no-console
+  console.log(autocompleteList.isRequest('fetching'));
   return (
     <FBLabel label={label}>
       <Select
