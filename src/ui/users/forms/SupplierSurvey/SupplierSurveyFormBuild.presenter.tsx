@@ -36,14 +36,14 @@ const SupplierSurveyFormBuild: React.FunctionComponent<Props> = ({
         height="100%"
         position="absolute"
       >
-        <FormProgress asyncState={asyncState} />
-        <FormMessage asyncState={asyncState} />
         <FormWrapper
           dirty={dirty}
           initialValues={initialValues}
           resetForm={resetForm}
         >
-          <Box mb={8}>
+          <FormProgress asyncState={asyncState} />
+          <FormMessage asyncState={asyncState} />
+          <Box>
             <Typography variant="h4">{supplierSurvey.surveyFormDocumentRevision.name}</Typography>
           </Box>
           <FBWorkspace mode="form" includeTransport={false} />

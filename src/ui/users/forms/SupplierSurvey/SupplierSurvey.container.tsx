@@ -84,7 +84,7 @@ export const SupplierSurveyContainer: React.FunctionComponent<
       {!showMessage && <SupplierSurveyPresenter
         onSubmit={onSubmit}
         supplierSurvey={supplierSurvey}
-        asyncState={loadSupplierSurveyListAsyncState}
+        asyncState={async.asyncState}
       />}
       {showMessage && <SupplierSurveySubmitMessage
         message={async.asyncState.message}
