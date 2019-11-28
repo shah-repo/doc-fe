@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import {
   documentRevisionsSelectors,
 } from "../../../state/ducks/documentRevisions";
-import { ApplicationState } from "../../../state/reducers";
 import { TextFieldSelect } from "../../components/forms/fields/TextFieldSelect/container";
 import { required, validator } from "../../components/forms/fields/validators";
 
@@ -18,9 +17,7 @@ export type Props = OwnProps;
 export const Title: React.FunctionComponent<Props> = ({
   ...props
 }) => {
-  const documents = useSelector((state: ApplicationState) =>
-    documentRevisionsSelectors.getDocumentRevisionsList(state),
-  );
+  const documents = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
   const options = useMemo(
     () =>
       documents.map((document) => ({
