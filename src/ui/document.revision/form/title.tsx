@@ -1,39 +1,23 @@
 import { Field } from "formik";
 import React, { useMemo } from "react";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import {
-  DocumentRevision,
-  documentRevisionsActions,
   documentRevisionsSelectors,
 } from "../../../state/ducks/documentRevisions";
-import { ApplicationState } from "../../../state/reducers";
 import { TextFieldSelect } from "../../components/forms/fields/TextFieldSelect/container";
 import { required, validator } from "../../components/forms/fields/validators";
-
-interface StateProps {
-  documents: DocumentRevision[];
-}
-
-interface DispatchProps {
-  loadDocumentRevisions: typeof documentRevisionsActions.loadList;
-}
 
 interface OwnProps {
   name: string;
   label: string;
 }
 
-export type Props = StateProps & DispatchProps & OwnProps;
-
-const mapStateToProps = (state: ApplicationState): StateProps => ({
-  documents: documentRevisionsSelectors.getDocumentRevisionsList(state),
-});
+export type Props = OwnProps;
 
 export const Title: React.FunctionComponent<Props> = ({
-  documents,
-  loadDocumentRevisions,
   ...props
 }) => {
+  const documents = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
   const options = useMemo(
     () =>
       documents.map((document) => ({
@@ -54,9 +38,4 @@ export const Title: React.FunctionComponent<Props> = ({
   );
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
-  mapStateToProps,
-  {
-    loadDocumentRevisions: documentRevisionsActions.loadList,
-  },
-)(Title);
+export default Title;
