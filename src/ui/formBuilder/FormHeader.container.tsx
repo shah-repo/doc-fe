@@ -1,7 +1,7 @@
 import React from "react";
-import FormHeaderPresenter from "./FormHeader.presenter";
 import { connect } from "react-redux";
 import { formReducerType } from "../../state/ducks/formBuilder/reducer";
+import FormHeaderPresenter from "./FormHeader.presenter";
 
 interface StateProps {
   formNumber: string;

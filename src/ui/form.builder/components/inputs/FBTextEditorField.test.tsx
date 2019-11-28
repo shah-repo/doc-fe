@@ -8,6 +8,7 @@ jest.mock("../../../components/Text");
 
 declare global {
   namespace NodeJS {
+    // tslint:disable-next-line: no-unused-declaration
     interface Global {
       MutationObserver: any;
       document: any;
@@ -17,18 +18,19 @@ declare global {
 
 global.MutationObserver = class {
   constructor() {}
-  disconnect() {}
-  observe() {}
-  takeRecords() {
+  public disconnect() {}
+  public observe() {}
+  public takeRecords() {
     return [];
   }
 };
-global.document.getSelection = function() {};
+global.document.getSelection = () => {};
 
 describe("FBTexEditortField component tests", () => {
   interface TestFormValues {
     label: string;
   }
+  // tslint:disable-next-line: no-unused-declaration
   let formProps: FormikProps<TestFormValues>;
 
   const getWrapper = (props: Partial<Props>): ReactWrapper => {

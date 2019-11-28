@@ -1,6 +1,5 @@
 import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { Field, FieldProps, FormikProps } from "formik";
-import _ from "lodash";
 import React, { useEffect } from "react";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest";
 import { AsyncState } from "../../../../state/types";
@@ -92,13 +91,14 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
         {renderCrId()}
-        <InputField
-          name="title"
-          label="cr.title"
-          inputProps={{ id: "title", multiline: true, rows: "2" }}
-          validate={validator(required)}
-        />
+
         <Box mb={1}>
+          <InputField
+            name="title"
+            label="cr.title"
+            inputProps={{ id: "title", multiline: true, rows: "2" }}
+            validate={validator(required)}
+          />
           <TextEditorField
             name="description"
             label="cr.description"

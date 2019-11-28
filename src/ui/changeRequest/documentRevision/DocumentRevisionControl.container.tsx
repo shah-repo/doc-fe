@@ -1,53 +1,36 @@
-import Button from "@material-ui/core/Button";
+import _ from "lodash";
 import React, { useState } from "react";
-
-import { Fab, Icon, withStyles, WithStyles } from "@material-ui/core";
-import { AddCircleRounded } from "@material-ui/icons";
-import { connect } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import {
   DocumentRevision,
-  documentRevisionsActions,
   DocumentRevisionsByIdState,
   documentRevisionsSelectors,
   DocumentRevisionStatus,
 } from "../../../state/ducks/documentRevisions";
+import { tableSearchActions, tableSearchSelectors } from "../../../state/ducks/tableSearch";
 import { ApplicationState } from "../../../state/reducers";
-import { AsyncState } from "../../../state/types";
-import AsyncGate from "../../components/AsyncGate";
-import Text from "../../components/Text";
 import AddDocumentRevisionContainer from "./AddDocumentRevision.container";
+import DocumentRevisionControlPresenter from "./DocumentRevisionControl.presenter";
 import styles from "./DocumentRevisionControl.styles";
-import DocumentRevisionItemPresenter from "./DocumentRevisionItem.presenter";
 
 interface StateProps {
-  loadDocumentRevisionsAsyncState: AsyncState;
   documentRevisionsList: DocumentRevision[];
   documentRevisionsById: DocumentRevisionsByIdState;
 }
 
-interface DispatchProps {
-  loadDocumentRevisions: typeof documentRevisionsActions.loadList;
-}
-
 interface OwnProps {
-  doneAddingDocuments: (addedDocuments: string[]) => void;
   documentsInChangeRequest: string[];
-  deleteDocumentFromChangeRequest: (documentRevisionId: string) => void;
+  selectedDocumentRevision: string | null;
+  documentsInCrById: { [key: string]: DocumentRevision };
   selectDocumentRevision: (documentRevisionId: string) => void;
   selectAssessmentForm: () => void;
-  selectedDocumentRevision: string | null;
-  documentsInCrById: any;
+  setDocumentRevisionsList: (documents: string[]) => void;
 }
 
 export type DocumentRevisionControlContainerProps = OwnProps &
-  DispatchProps &
-  StateProps &
-  WithStyles<typeof styles>;
+  StateProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
-  loadDocumentRevisionsAsyncState: documentRevisionsSelectors.getLoadListAsyncState(
-    state,
-  ),
   documentRevisionsList: documentRevisionsSelectors.getDocumentRevisionsList(
     state,
   ),
@@ -57,86 +40,71 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 export const DocumentRevisionControlContainer: React.FunctionComponent<
   DocumentRevisionControlContainerProps
 > = ({
-  doneAddingDocuments,
+  setDocumentRevisionsList,
   documentsInChangeRequest,
-  loadDocumentRevisionsAsyncState,
-  loadDocumentRevisions,
   documentRevisionsList,
-  deleteDocumentFromChangeRequest,
   selectDocumentRevision,
   selectAssessmentForm,
-  classes,
   documentRevisionsById,
   selectedDocumentRevision,
   documentsInCrById,
 }) => {
+  const classes = styles();
   const [showAddDocuments, setShowAddDocuments] = useState(false);
 
   const openAddDocuments = () => setShowAddDocuments(true);
   const closeAddDocuments = () => setShowAddDocuments(false);
+  const deleteDocumentFromChangeRequest = (
+    deleteDocumentRevisionId: string,
+  ) => {
+    setDocumentRevisionsList(
+      documentsInChangeRequest.filter(
+        (documentRevisionId) => documentRevisionId !== deleteDocumentRevisionId,
+      ),
+    );
+  };
 
-  const renderDocumentRevisions = () =>
-    documentsInChangeRequest.map((documentRevisionId) => (
-      <DocumentRevisionItemPresenter
-        key={documentRevisionId}
-        documentRevision={documentsInCrById[documentRevisionId] || documentRevisionsById[documentRevisionId]}
-        onDelete={() => deleteDocumentFromChangeRequest(documentRevisionId)}
-        onClick={() => selectDocumentRevision(documentRevisionId)}
-        selectedDocumentRevision={selectedDocumentRevision!}
-      />
+  const TABLE_NAME = "addDocRevTable";
+  const tableState = useSelector((reduxState: ApplicationState) =>
+    tableSearchSelectors.getTableState(reduxState, TABLE_NAME),
+  );
+  const dispatch = useDispatch();
+  if (_.isEmpty(tableState.queryDict)) {
+    dispatch(tableSearchActions.setSearchCriteria(
+      {
+        ...tableState,
+        queryDict: {
+          "status[]": DocumentRevisionStatus.Draft,
+        },
+      },
+      TABLE_NAME,
     ));
-
-  const loadDocumentRevisionsAction = () => loadDocumentRevisions([DocumentRevisionStatus.Draft]);
+  }
 
   return (
-    <AsyncGate
-      asyncState={loadDocumentRevisionsAsyncState}
-      asyncAction={loadDocumentRevisionsAction}
-      startActionOnMount={true}
-    >
-      <div className={classes.container}>
-        <Fab
-          color="primary"
-          variant="extended"
-          size="large"
-          onClick={selectAssessmentForm}
-        >
-          <Text translation="changeRequest.documentControl.changeRequestForm" />
-        </Fab>
-        <div className={classes.documentRevisionContainer}>
-          {renderDocumentRevisions()}
-        </div>
-        <Button
-          variant="text"
-          color="primary"
-          onClick={openAddDocuments}
-          fullWidth={true}
-          className={classes.addDocument}>
-          <Icon className={classes.leftIcon}>
-            <AddCircleRounded />
-          </Icon>
-          <Text translation="changeRequest.documentControl.addDocuments" />
-        </Button>
-        <AddDocumentRevisionContainer
-          isOpen={showAddDocuments}
-          close={closeAddDocuments}
-          doneAddingDocuments={doneAddingDocuments}
-          documentsInChangeRequest={documentsInChangeRequest}
-          documentRevisionsList={documentRevisionsList}
-          documentRevisionsById={documentRevisionsById}
-        />
-      </div>
-    </AsyncGate>
+    <div className={classes.container}>
+      <DocumentRevisionControlPresenter
+        documentsInChangeRequest={documentsInChangeRequest}
+        documentsInCrById={documentsInCrById}
+        documentRevisionsById={documentRevisionsById}
+        deleteDocumentFromChangeRequest={deleteDocumentFromChangeRequest}
+        selectDocumentRevision={selectDocumentRevision}
+        selectedDocumentRevision={selectedDocumentRevision}
+        selectAssessmentForm={selectAssessmentForm}
+        openAddDocuments={openAddDocuments}
+      />
+      <AddDocumentRevisionContainer
+        isOpen={showAddDocuments}
+        close={closeAddDocuments}
+        setDocumentRevisionsList={setDocumentRevisionsList}
+        documentsInChangeRequest={documentsInChangeRequest}
+        documentRevisionsList={documentRevisionsList}
+        documentRevisionsById={documentRevisionsById}
+        tableName={TABLE_NAME}
+        tableState={tableState}
+      />
+    </div>
   );
 };
 
-const DocumentRevisionControlContainerWithStyles = withStyles(styles)(
-  DocumentRevisionControlContainer,
-);
-
-export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
-  mapStateToProps,
-  {
-    loadDocumentRevisions: documentRevisionsActions.loadList,
-  },
-)(DocumentRevisionControlContainerWithStyles);
+export default connect<StateProps, null, OwnProps, ApplicationState>(mapStateToProps)(DocumentRevisionControlContainer);

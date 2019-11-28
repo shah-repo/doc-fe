@@ -33,7 +33,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       return (
         <Box key={groupId} className={classes.changeContainer}>
           <div className={classes.dateContainer}>
-            <div className={classes.owner}>{change.owner.name}</div>
+            <div className={classes.owner}>{change.owner.user.name}</div>
             <DateTime value={change.timestamp} />
           </div>
 
@@ -45,14 +45,15 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const renderChanges = (audits: Audit[]) => {
     const references: Audit[] = [];
     const attachments: Audit[] = [];
+    const singleFields: JSX.Element[] = [];
 
-    const singleFields = audits.map((change, index) => {
+    audits.forEach((change, index) => {
       if (change.field.includes("attachments")) {
         attachments.push(change);
       } else if (change.field.includes("referenceTo")) {
         references.push(change);
       } else {
-        return (
+        singleFields.push(
           <Box mb={1} key={`${change.groupId}-${index}`}>
             <Box>
               <Text
@@ -62,7 +63,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             <div className={classes.auditValue}>
               <AuditFactory audit={change} />
             </div>
-          </Box>
+          </Box>,
         );
       }
     });

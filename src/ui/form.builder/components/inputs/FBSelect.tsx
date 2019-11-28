@@ -13,17 +13,17 @@ const FBSelect: React.FunctionComponent<FBSelectProps> = ({
   showNote = false,
   ...props
 }) => (
-  <Box mb={4}>
-    {labelRenderer}
-    <FormControl variant={variant} fullWidth={true} required={props.required}>
-      <Select {...props}>{items}</Select>
-    </FormControl>
-    {showNote && (
-      <Box pt={2}>
-        <FBNoteTextField name={props.name} />
-      </Box>
-    )}
-  </Box>
-);
+    <Box mb={4}>
+      {labelRenderer}
+      <FormControl variant={variant} fullWidth={true} required={props.required}>
+        <Select {...props}>{items}</Select>
+      </FormControl>
+      {showNote && (
+        <Box pt={2}>
+          <FBNoteTextField disabled={props.disabled} name={props.name} />
+        </Box>
+      )}
+    </Box>
+  );
 
 export default withSelectDefaults(FBSelect);

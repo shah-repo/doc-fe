@@ -26,4 +26,3 @@ export type FBDocumentRevisionMode =
   | "preview"
   | "outputCreate"
   | "outputPreview";
-

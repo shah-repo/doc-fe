@@ -60,7 +60,8 @@ export class FBEditorStore {
   @action private sections = () => Object.keys(FBEditorSectionConfig).map((key, i) => (
     <FBEditorSection
       key={`form.builder.${key as string}-${i}`}
-      label={`form.builder.${key as string}`}>
+      label={`form.builder.${key as string}`}
+    >
       {this.generateElements(FBEditorSectionConfig[key])}
     </FBEditorSection>
   ))

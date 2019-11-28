@@ -29,5 +29,5 @@ export default (theme: Theme) =>
     },
     trainingText: {
       marginRight: 20,
-    }
+    },
   });

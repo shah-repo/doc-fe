@@ -1,16 +1,16 @@
 import {
   Box,
+  Grid,
   ListItem,
   Typography,
   WithStyles,
   withStyles,
-  Grid,
 } from "@material-ui/core";
 import React from "react";
 import { Link } from "react-router-dom";
 import { DataProps } from "../../../state/ducks/common";
-import { ReferenceSummary as Model } from "../utils/types";
 import Text from "../../components/Text";
+import { ReferenceSummary as Model } from "../utils/types";
 import styles from "./styles";
 
 interface OwnProps {

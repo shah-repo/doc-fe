@@ -11,15 +11,15 @@ const ScrollToError: React.FunctionComponent<Props> = ({
   errors, isSubmitting, isValidating,
 }) => {
   useEffect(() => {
-    let keys = Object.keys(errors);
+    const keys = Object.keys(errors);
 
     if (keys.length > 0 && isSubmitting && !isValidating) {
       const selector = `[id="field-${keys[0]}"]`;
       const errorElement = document.querySelector(selector) as HTMLElement;
-  
+
       errorElement && errorElement.scrollIntoView();
     }
-  }, [errors, isSubmitting, isValidating])
+  }, [errors, isSubmitting, isValidating]);
 
   return null;
 };

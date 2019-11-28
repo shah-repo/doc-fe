@@ -46,14 +46,14 @@ export function withEditorWrapper<T extends FBEditorWrapperProps>(
         return -4;
       }
       return 0;
-    };
+    }
 
     private indicatorMargin = (): number => {
       return this.isSection() || !this.hasLabel() ? 4 : 0;
     }
 
     private isSection = (): boolean =>
-      _.includes(FBEditorSectionConfig.section, this.props.type);
+      _.includes(FBEditorSectionConfig.section, this.props.type)
 
     private hasLabel = (): boolean => this.props.label !== undefined;
 
@@ -70,7 +70,7 @@ export function withEditorWrapper<T extends FBEditorWrapperProps>(
         return;
       }
       this.setState({ visibility: "visible" });
-    };
+    }
 
     private onMouseLeave = () => this.setState({ visibility: "hidden" });
   }

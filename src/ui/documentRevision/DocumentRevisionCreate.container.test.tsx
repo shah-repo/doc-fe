@@ -3,7 +3,7 @@ import React from "react";
 import CallbackHandler from "../../common/callbackHandler";
 import { DocumentRevision } from "../../state/ducks/documentRevisions";
 import { getDocumentRevision } from "../../state/ducks/documentRevisions/tests/factories";
-import { getAsyncState } from "../../state/tests/factories";
+import { documentVersionPath } from "../document.revision/utils/paths";
 import { ASYNC_DEFAULT_STATE } from "../hooks/useAsync";
 import getRouteComponentProps from "../tests/helpers/getRouteComponentProps";
 import {
@@ -13,7 +13,6 @@ import {
 } from "./DocumentRevisionCreate.container";
 import DocumentRevisionFormContainer from "./forms/DocumentRevisionForm.container";
 import { toNewVersionRequestBody } from "./forms/transform";
-import { generateDocumentRevisionVersionPath } from "./pathGenerators";
 
 describe("DocumentRevisionCreateContainer tests", () => {
   const defaultProps: DocumentRevisionCreateContainerProps = {
@@ -46,7 +45,7 @@ describe("DocumentRevisionCreateContainer tests", () => {
     (createParameters[1].successHandler as CallbackHandler<DocumentRevision>).execute(documentRevision);
 
     expect(routeComponentProps.history.push).toHaveBeenCalledWith(
-      generateDocumentRevisionVersionPath(documentRevision.id, documentRevision.document.id),
+      documentVersionPath(documentRevision.id, documentRevision.document.id),
     );
   });
 

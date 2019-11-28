@@ -1,4 +1,3 @@
-import SvgIcon from "@material-ui/core/SvgIcon";
 import React from "react";
 import Config from "../../../config";
 import Text from "../../components/Text";
@@ -15,7 +14,10 @@ const Logo: React.FunctionComponent = () => {
 
   return (
     <React.Fragment>
-      <img src={logo} />
+      <img
+        src={logo}
+        alt="Logo"
+      />
       {
         showEnvironment &&
         <div className={classes.envCnt}>

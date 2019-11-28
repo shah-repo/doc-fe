@@ -3,7 +3,7 @@ import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
 
 const isAuthenticated = (state: ApplicationState): boolean => {
-  return Boolean(state.auth.tokens.id.value);
+  return Boolean(state.auth.user.sessionId && state.auth.user.employeeId);
 };
 
 const currentUserEmail = (state: ApplicationState): string => {
@@ -18,17 +18,14 @@ const currentUserId = (state: ApplicationState): string => {
   return state.auth.user.id;
 };
 
-const accessToken = (state: ApplicationState): string => {
-  return state.auth.tokens.access.value;
-};
-
 const getLoadPermissionsAsyncState = (state: ApplicationState): AsyncState => {
   return state.auth.loadPermissionsAsyncInfo;
 };
 
-const getHasPermission = (state: ApplicationState, permission: string): boolean => (
-  state.auth.permissions.includes(permission)
-);
+const getHasPermission = (
+  state: ApplicationState,
+  permission: string,
+): boolean => state.auth.permissions.includes(permission);
 
 const makeGetHasPermission = () => {
   return createSelector(
@@ -37,12 +34,17 @@ const makeGetHasPermission = () => {
   );
 };
 
+const employees = (state: ApplicationState) => state.auth.user.employees;
+
+const hasMultipleCompanies = (state: ApplicationState): boolean => state.auth.user.employees.length > 1;
+
 export default {
   isAuthenticated,
   currentUserEmail,
-  accessToken,
   currentUserName,
   currentUserId,
   getLoadPermissionsAsyncState,
   makeGetHasPermission,
+  employees,
+  hasMultipleCompanies,
 };

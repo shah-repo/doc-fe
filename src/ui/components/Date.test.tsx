@@ -21,10 +21,10 @@ describe("DateFormatter component unit tests", () => {
   ).text();
 
   it("displays null", () => {
-    expect(getDate({ value: undefined })).toEqual('');
+    expect(getDate({ value: undefined })).toEqual("");
   });
 
   it("displays formatted date", () => {
-    expect(getDate({ value: '2019-05-31' })).toEqual('5/31/2019');
+    expect(getDate({ value: "2019-05-31" })).toEqual("5/31/2019");
   });
 });

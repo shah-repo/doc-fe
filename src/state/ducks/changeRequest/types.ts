@@ -1,6 +1,6 @@
 import { Attachment } from "../attachments";
 import { AuditActionPayload } from "../audit/types";
-import { Approval, Id, User } from "../common";
+import { Approval, Id, Owner, User } from "../common";
 import {
   CHANGE_REQUEST_AUDIT_SET,
   CHANGE_REQUEST_LIST,
@@ -49,7 +49,7 @@ export interface ImplementationPlanTask {
   title: string;
   description: string;
   dueDate: Date;
-  assigned?: User;
+  assigned?: Owner;
   createdAt: string;
   closeDate: Date;
   status: string;
@@ -75,13 +75,13 @@ export interface ChangeRequest {
   justifications: Justifications;
   effectiveDate: Date;
   approvals: Approval[];
-  owner: User;
+  owner: Owner;
   documentRevisions: any[];
   closedAt: Date;
 }
 
 export interface Approver {
-  email: string;
+  id: string;
 }
 
 export interface DocumentRevisionRequestBody {
@@ -151,8 +151,7 @@ export interface ChangeRequestTransitionResponse {
 
 export interface ChangeRequestAvailableApprovers {
   id: string;
-  email: string;
-  name: string;
+  user: User;
 }
 
 export interface ChangeRequestAvailableApproversResponse {

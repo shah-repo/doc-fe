@@ -1,13 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Route, RouteComponentProps, Switch } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom";
+import { authSelectors } from "../../state/ducks/auth";
 import { ChangeRequest, changeRequestsActions, changeRequestsSelectors } from "../../state/ducks/changeRequest";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
+import ChangeRequestTable from "./ChangeRequestTable.presenter";
 import { generateChangeRequestEditPath, generateChangeRequestPreviewPath } from "./pathGenerators";
-import ChangeRequestTable from './ChangeRequestTable.presenter';
-import { authSelectors } from "../../state/ducks/auth";
 
 interface StateProps {
   loadAsyncState: AsyncState;
@@ -37,8 +37,12 @@ const ChangeRequestContainer: React.FunctionComponent<ChangeRequestContainerProp
   changeRequests,
 }) => {
   const loadAction = () => loadChangeRequests();
-  const editChangeRequest = (changeRequestId: string) => () => history.push(generateChangeRequestEditPath(changeRequestId));
-  const previewChangeRequest = (changeRequestId: string) => () => history.push(generateChangeRequestPreviewPath(changeRequestId));
+  const editChangeRequest = (
+    changeRequestId: string,
+    ) => () => history.push(generateChangeRequestEditPath(changeRequestId));
+  const previewChangeRequest = (
+    changeRequestId: string,
+    ) => () => history.push(generateChangeRequestPreviewPath(changeRequestId));
 
   return (
     <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>
@@ -52,6 +56,6 @@ const ChangeRequestContainer: React.FunctionComponent<ChangeRequestContainerProp
   );
 };
 
-export default connect<StateProps, DispatchProps, OwnProps,ApplicationState>(mapStateToProps, {
+export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
   loadChangeRequests: changeRequestsActions.loadList,
 })(ChangeRequestContainer);

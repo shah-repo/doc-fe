@@ -2,6 +2,7 @@ export const AUTH_TOKENS = "auth/AUTH_TOKENS";
 export const AUTH_USER = "auth/AUTH_USER";
 export const LOGOUT_USER = "auth/LOGOUT_USER";
 export const USER_PERMISSIONS = "auth/USER_PERMISSIONS";
+export const SET_EMPLOYEE = "auth/SET_EMPLOYEE";
 
 export const USER_PERMISSIONS_GET_ASYNC = "auth/USER_PERMISSIONS_GET_ASYNC";
 export const PING_SERVER_GET_ASYNC = "auth/PING_SERVER_GET_ASYNC";

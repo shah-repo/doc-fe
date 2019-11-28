@@ -11,6 +11,7 @@ const LogoContainer: React.FunctionComponent = () => {
       <img
         src={whiteLabeling.logo}
         style={{ maxWidth: "100%" }}
+        alt="Company logo"
       />
     );
   }

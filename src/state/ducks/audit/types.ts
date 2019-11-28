@@ -1,6 +1,6 @@
 import { Attachment } from "../attachments";
 import { ChangeRequest } from "../changeRequest";
-import { Approval, User } from "../common";
+import { Approval, Owner } from "../common";
 import { DocumentRevision, Reference } from "../documentRevisions";
 import { DocumentType } from "../documentRevisions/documentType";
 
@@ -8,10 +8,18 @@ export interface Audit {
   id: string;
   field: string;
   type: string;
-  nextValue: string | User | Attachment | Approval | Reference | DocumentRevision | ChangeRequest | DocumentType;
+  nextValue:
+    | string
+    | Owner
+    | Attachment
+    | Approval
+    | Reference
+    | DocumentRevision
+    | ChangeRequest
+    | DocumentType;
   timestamp: string;
   groupId: string;
-  owner: User;
+  owner: Owner;
 }
 
 export interface AuditActionPayload {
@@ -19,7 +27,9 @@ export interface AuditActionPayload {
   audit: Audit[];
 }
 
-export interface AuditGroupType { [key: string]: Audit[]; }
+export interface AuditGroupType {
+  [key: string]: Audit[];
+}
 
 export interface AuditByCRIdState {
   [key: string]: AuditGroupType;

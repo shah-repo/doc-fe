@@ -1,11 +1,11 @@
 import React, { useMemo } from "react";
 import { DataProps } from "../../../state/ducks/common";
 import {
-  Reference as Model, DocumentRevisionStatus,
+  DocumentRevisionStatus, Reference as Model,
 } from "../../../state/ducks/documentRevisions";
-import ReferencePresenter from "./reference.presenter";
 import { getReferenceToSummary } from "../utils/references.helpers";
 import { ReferenceSummary } from "../utils/types";
+import ReferencePresenter from "./reference.presenter";
 
 interface OwnProps {
   status: DocumentRevisionStatus;
@@ -21,7 +21,7 @@ export const ReferenceToContainer: React.FunctionComponent<Props> = ({
 }) => {
   const refSummary: ReferenceSummary[] = useMemo(() => {
     return getReferenceToSummary(dataProp, status, deprecatedAt);
-  }, [dataProp]);
+  }, [dataProp, status, deprecatedAt]);
 
   return (
     <ReferencePresenter label="common.references" dataProp={refSummary} />

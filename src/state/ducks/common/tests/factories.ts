@@ -1,5 +1,5 @@
 import faker from "faker";
-import { Approval, ApprovalStatus, User } from "../types";
+import { Approval, ApprovalStatus, Owner, User } from "../types";
 
 export const getUser = (user: Partial<User> = {}): User => ({
   id: faker.random.uuid(),
@@ -8,9 +8,15 @@ export const getUser = (user: Partial<User> = {}): User => ({
   ...user,
 });
 
+export const getOwner = (owner: Partial<Owner> = {}): Owner => ({
+  id: faker.random.uuid(),
+  user: getUser(),
+  ...owner,
+});
+
 export const getApproval = (approval: Partial<Approval> = {}): Approval => ({
   id: faker.random.uuid(),
-  approver: getUser(),
+  approver: getOwner(),
   reviewedAt: undefined,
   status: ApprovalStatus.Approved,
   active: faker.random.boolean(),
