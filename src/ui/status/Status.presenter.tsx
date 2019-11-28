@@ -67,7 +67,7 @@ class StatusPresenter extends React.Component<StatusProps, StatusState> {
       );
     });
     return (
-      <div style={{padding: "10px"}}>
+      <div style={{ padding: "10px", backgroundColor: "white" }}>
         <h1>Build Info [Frontend]</h1>
         <table style={{fontSize: "20px"}}>
           <tbody>
