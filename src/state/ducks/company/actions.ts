@@ -8,12 +8,15 @@ const selectCompany = (company: Company): SelectCompanyAction => ({
   payload: company,
 });
 
-const queryCompany = () =>
+const queryCompany = (employeeId: string) =>
   apiAction({
     url: SESSION_DETAILS_URL,
     method: "get",
     onSuccess: (data: any, dispatch) => {
-      const { company } = data.employees[0];
+      const employee = data.employees.find(
+        (employee: any) => employee.id === employeeId,
+      );
+      const company = employee.company;
       dispatch(selectCompany(company));
     },
     onFailure: (err, dispatch) => {
