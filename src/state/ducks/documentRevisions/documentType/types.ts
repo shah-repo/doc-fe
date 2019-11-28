@@ -1,5 +1,4 @@
 import { DOCUMENT_TYPE_LIST } from "./constants";
-import { DocumentType } from "./types";
 
 export type DocumentGroupType = "FORM" | "OTHER";
 

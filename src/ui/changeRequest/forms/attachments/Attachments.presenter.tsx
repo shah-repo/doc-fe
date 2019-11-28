@@ -9,7 +9,7 @@ import {
   WithStyles,
 } from "@material-ui/core";
 import { Add } from "@material-ui/icons";
-import { Formik, FormikActions, FormikProps } from "formik";
+import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import React from "react";
 import { AsyncState } from "../../../../state/types";
 import FileCard from "../../../components/cards/FileCard";
@@ -66,7 +66,7 @@ const AttachmentsPresenter: React.FunctionComponent<Props> =
           <DialogContent>
             <Formik
               render={renderForm}
-              initialValues={{ file: undefined }}
+              initialValues={{}}
               onSubmit={onSubmit}
             />
           </DialogContent>

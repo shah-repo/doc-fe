@@ -1,6 +1,6 @@
 import { Box, Grid } from "@material-ui/core";
 import classNames from "classnames";
-import { Formik, FormikActions, FormikProps } from "formik";
+import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import { get } from "lodash";
 import React from "react";
 import { connect } from "react-redux";
