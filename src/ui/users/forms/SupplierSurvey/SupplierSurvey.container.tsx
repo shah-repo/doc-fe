@@ -86,9 +86,7 @@ export const SupplierSurveyContainer: React.FunctionComponent<
         supplierSurvey={supplierSurvey}
         asyncState={async.asyncState}
       />}
-      {showMessage && <SupplierSurveySubmitMessage
-        message={async.asyncState.message}
-      />}
+      {showMessage && <SupplierSurveySubmitMessage />}
     </AsyncGate>
   );
 };
