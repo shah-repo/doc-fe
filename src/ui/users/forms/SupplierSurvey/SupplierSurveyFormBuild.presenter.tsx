@@ -30,7 +30,6 @@ const SupplierSurveyFormBuild: React.FunctionComponent<Props> = ({
       <Box
         display="flex"
         justifyContent="center"
-        alignItems="center"
         bgcolor="white"
         width="100%"
         height="100%"
@@ -43,12 +42,15 @@ const SupplierSurveyFormBuild: React.FunctionComponent<Props> = ({
         >
           <FormProgress asyncState={asyncState} />
           <FormMessage asyncState={asyncState} />
-          <Box>
-            <Typography variant="h4">{supplierSurvey.surveyFormDocumentRevision.name}</Typography>
+          <Box width="700px" height="38px" borderBottom={1} borderColor="grey.500" my={5}>
+            <Typography align="center" variant="h4">{supplierSurvey.surveyFormDocumentRevision.name}</Typography>
           </Box>
           <FBWorkspace mode="form" includeTransport={false} />
-          <Box>
-            <SubmitButton asyncState={asyncState} label={"common.save"} />
+          <Box width="700px" display="flex" justifyContent="flex-end">
+            <SubmitButton
+              asyncState={asyncState}
+              label={"common.save"}
+            />
           </Box>
         </FormWrapper>
       </Box>
