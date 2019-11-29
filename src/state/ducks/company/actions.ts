@@ -19,9 +19,6 @@ const queryCompany = (employeeId: string) =>
       const company = employee.company;
       dispatch(selectCompany(company));
     },
-    onFailure: (err, dispatch) => {
-      // console.log(err);
-    },
   });
 
 export default {

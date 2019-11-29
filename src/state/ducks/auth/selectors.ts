@@ -6,25 +6,19 @@ const isAuthenticated = (state: ApplicationState): boolean => {
   return Boolean(state.auth.user.sessionId && state.auth.user.employeeId);
 };
 
-const currentUserEmail = (state: ApplicationState): string => {
-  return state.auth.user.email;
-};
+const currentUserEmail = (state: ApplicationState): string =>
+  state.auth.user.email;
 
-const currentUserName = (state: ApplicationState): string => {
-  return state.auth.user.name;
-};
+const currentUserName = (state: ApplicationState): string =>
+  state.auth.user.name;
 
-const currentUserId = (state: ApplicationState): string => {
-  return state.auth.user.id;
-};
+const currentUserId = (state: ApplicationState): string => state.auth.user.id;
 
-const currentEmployeeId = (state: ApplicationState): string => {
-  return state.auth.user.employeeId;
-};
+const currentEmployeeId = (state: ApplicationState): string =>
+  state.auth.user.employeeId;
 
-const getLoadPermissionsAsyncState = (state: ApplicationState): AsyncState => {
-  return state.auth.loadPermissionsAsyncInfo;
-};
+const getLoadPermissionsAsyncState = (state: ApplicationState): AsyncState =>
+  state.auth.loadPermissionsAsyncInfo;
 
 const getHasPermission = (
   state: ApplicationState,
