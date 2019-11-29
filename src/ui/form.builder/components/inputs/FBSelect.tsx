@@ -1,4 +1,4 @@
-import { FormControl, Select, FormHelperText } from "@material-ui/core";
+import { FormControl, FormHelperText, Select } from "@material-ui/core";
 import React from "react";
 import { withSelect } from "../../hocs/inputs/withSelect";
 import { FBSelectProps } from "../../types/inputs/select";
@@ -14,12 +14,14 @@ const FBSelect: React.FunctionComponent<FBSelectProps> = ({
   menuItems,
   disabled,
   name,
+  onChange,
+  value,
 }) => (
   <FBLabel label={label}>
     <FormControl variant={variant} error={error} fullWidth>
-      <Select>{menuItems}</Select>
+      <Select name={name} value={value} onChange={onChange}>{menuItems}</Select>
       <FormHelperText>{helperText}</FormHelperText>
-      {showNote && <FBNoteTextField disabled={disabled} name={name} />}
+      {showNote && <FBNoteTextField disabled={disabled} name={`note-${name}`} />}
     </FormControl>
   </FBLabel>
 );

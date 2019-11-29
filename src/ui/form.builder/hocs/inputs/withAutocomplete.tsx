@@ -1,44 +1,72 @@
-import { observer } from "mobx-react";
+import TextField from "@material-ui/core/TextField/TextField";
+import { createFilterOptions } from "@material-ui/lab/Autocomplete";
+import { RenderInputParams } from "@material-ui/lab/Autocomplete/Autocomplete";
+import _ from "lodash";
 import React from "react";
-import { FBAutocompleteProps } from "../../types/autocomplete";
-import { withOnChange } from "../withOnChange";
+import autocompleteOptions from "../../../../data/autocompleteOptions.json";
+import FBAutocompleteCollection from "../../stores/domain/collections/FBAutocompleteCollection";
+import { FBAutocompleteProps } from "../../types/inputs/autocomplete";
+import { withInput } from "../common/withInput";
+import Model from "mobx-rest/lib/Model";
 
 export const withAutocomplete = <T extends FBAutocompleteProps>(
   Component: React.FunctionComponent<T>,
 ) => {
-  return withOnChange(observer(
-    ( props: T) => {
-      return Component({...props});
-      // const renderInput = (params: RenderInputParams) => (
-      //   <TextField {...params} variant="outlined" fullWidth />
-      // );
+  return withInput(
+    ({
+      options,
+      optionsId,
+      getOptionLabel,
+      optionLabel = "",
+      error,
+      helperText,
+      filterOptions,
+      ...props
+    }: T) => {
+      let indicators: { path: string, renderKey: string } | undefined;
 
-      // if (autocompleteId && FBStore.mode === 'form') {
-      //   const autocompleteIndicator = autocompleteEditorList.getBy(
-      //     autocompleteId,
-      //   );
-      //   const { path, renderKey } = autocompleteIndicator || {};
-      //   if (path && renderKey) {
-      //     autocompleteList.setArgs(path, renderKey);
-      //     autocompleteList.fetch();
-      //     optionLabel = renderKey;
-      //     options = autocompleteList.data();
-      //   }
-      // }
+      function setIndicators(): boolean {
+        const optionIndicator = _.filter(autocompleteOptions, {
+          id: optionsId,
+        })[0];
+        indicators = optionIndicator || {};
+        return Boolean(indicators);
+      }
 
-      // if (!getOptionLabel) {
-      //   getOptionLabel = (option: any) => option[optionLabel || ''];
-      // }
+      if (_.isEmpty(options) && optionsId && setIndicators()) {
+        const autocompleteList = new FBAutocompleteCollection(indicators!.path);
+        options = autocompleteList.models;
+        optionLabel = indicators!.renderKey;
+      }
 
-      // return Component({
-      //   ...(props as T),
-      //   options,
-      //   optionLabel,
-      //   autocompleteId,
-      //   getOptionLabel,
-      //   renderInput,
-      // });
+      const renderInput = (params: RenderInputParams) => (
+        <TextField
+          {...params}
+          variant="outlined"
+          helperText={helperText}
+          error={error}
+          fullWidth
+        />
+      );
+
+      !getOptionLabel && (getOptionLabel = (option: Model) => {
+        return _.isEmpty(option) ? "" : option.get(optionLabel);
+      });
+
+      !filterOptions && (filterOptions =
+        createFilterOptions({
+          matchFrom: "any",
+          stringify: (option: Model) => option.get(optionLabel),
+        }));
+
+      return Component({
+        ...(props as T),
+        options,
+        optionLabel,
+        getOptionLabel,
+        renderInput,
+        filterOptions,
+      });
     },
-  ),
   );
 };

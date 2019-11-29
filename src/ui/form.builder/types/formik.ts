@@ -1,4 +1,4 @@
-import { FormikConfig, FormikProps } from "formik";
+import { FieldProps, FormikConfig, FormikProps } from "formik";
 import { Dictionary } from "lodash";
 import { Id } from "../../../state/ducks/common";
 import { DocumentRevisionDocument } from "../../../state/ducks/documentRevisions";
@@ -13,6 +13,11 @@ export interface FBFormikProps extends Omit<FormikConfig<any>, "onSubmit"|"initi
   initialValues?: any;
   formComponent?: Element;
 }
+
+export type FBFormikFieldProps = Partial<FieldProps> & {
+  name?: string;
+  onChange?: (e: any) => void;
+};
 
 export interface FBDocumentFlowProps {
   id?: string;

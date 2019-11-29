@@ -21,7 +21,7 @@ const FBWorkspace: React.FunctionComponent<{}> = () => {
   };
 
   return (
-    <FBForm initialValues={FBStore.values}>
+    <FBForm initialValues={FBStore.getValues()}>
       {isStarter && <FBAddFieldButton0 />}
       {!isStarter && <FBSortableContainer items={schema} />}
       <FBTransportSchema />

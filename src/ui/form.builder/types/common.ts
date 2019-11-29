@@ -4,6 +4,7 @@ import { ValueType } from "react-select/src/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
 import { FBEditorElementType } from "./editor";
+import { FBFormikFieldProps } from "./formik";
 import { FBValidatorDelimiter, FBValidatorTrigger } from "./validation/validator";
 
 export type Subtract<T, V> = Pick<T, Exclude<keyof T, keyof V>>;
@@ -28,7 +29,8 @@ export interface FBOptionProps {
 }
 
 export type FBInputProps =
-  & Pick<BaseTextFieldProps, "children" | "disabled" | "name" | "error" | "helperText">
+  & Pick<BaseTextFieldProps, "children" | "value" | "disabled" | "name" | "error" | "helperText">
+  & Omit<FBFormikFieldProps, "name">
   & FBLabelProps
   & {
     index?: number;

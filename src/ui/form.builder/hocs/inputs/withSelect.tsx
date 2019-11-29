@@ -3,12 +3,13 @@ import _ from "lodash";
 import React from "react";
 import Text from "../../../components/Text";
 import { FBSelectProps } from "../../types/inputs/select.js";
+import { withInput } from "../common/withInput";
 import { withOptions } from "../common/withOptions";
 
 export const withSelect = <T extends FBSelectProps>(
   Component: React.FunctionComponent<T>,
 ) => {
-  return withOptions(({
+  return withOptions(withInput(({
       options,
       optionLabelKey,
       optionValueKey,
@@ -28,5 +29,5 @@ export const withSelect = <T extends FBSelectProps>(
       ...(props as T),
       menuItems,
     });
-  });
+  }));
 };
