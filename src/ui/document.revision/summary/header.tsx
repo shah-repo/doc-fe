@@ -21,7 +21,7 @@ export const Header: React.FunctionComponent<Props> = ({
     <Grid
       container={true}
       alignItems="center"
-      spacing={4}
+      spacing={0}
       className={classes.headerContainer}
     >
       <Grid item={true} xs={3}>
