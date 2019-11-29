@@ -10,7 +10,7 @@ export default (theme: Theme) =>
       bottom: 0,
       right: 0,
       overflow: "auto",
-      padding: theme.spacing(5),
+      padding: theme.spacing(4, 5),
       backgroundColor: "white",
     },
   });

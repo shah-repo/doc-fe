@@ -16,7 +16,7 @@ export default (theme: Theme) =>
       width: "100%",
     },
     headerContainer: {
-      padding: "10px 0 60px",
+      padding: "0 0 40px",
     },
     status: {
       color: "#fff",

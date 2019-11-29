@@ -4,6 +4,6 @@ export default (theme: Theme) =>
   createStyles({
     whiteContainer: {
       background: "#fff",
-      padding: theme.spacing(3, 0),
+      padding: theme.spacing(0),
     },
   });
