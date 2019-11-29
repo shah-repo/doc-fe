@@ -2,12 +2,9 @@ import {
     Box,
   } from "@material-ui/core";
 import * as React from "react";
+import Text from "../../../components/Text";
 
-interface Props  {
-    message: string;
-}
-
-const SupplierSurveySubmitMessage: React.FunctionComponent<Props> = ({message}) => {
+const SupplierSurveySubmitMessage: React.FunctionComponent = () => {
     return (
       <Box
         display="flex"
@@ -18,7 +15,7 @@ const SupplierSurveySubmitMessage: React.FunctionComponent<Props> = ({message}) 
         height="100%"
         position="absolute"
       >
-        {message}
+        <Text translation="supplier_survey_success_submit_message" />
       </Box>
     );
   };
