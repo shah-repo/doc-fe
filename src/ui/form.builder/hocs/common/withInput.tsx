@@ -14,7 +14,7 @@ export const withInput = <T extends FBInputProps>(
       const { form, name = "", type = "" } = props;
 
       const value = (): any => {
-        if (form && !_.isEmpty(form.values[name])) {
+        if (form && !_.has(form.values, name)) {
           return form.values[name];
         }
         return FBFormValues[type];

@@ -21,7 +21,7 @@ const FBSelect: React.FunctionComponent<FBSelectProps> = ({
     <FormControl variant={variant} error={error} fullWidth>
       <Select name={name} value={value} onChange={onChange}>{menuItems}</Select>
       <FormHelperText>{helperText}</FormHelperText>
-      {showNote && <FBNoteTextField disabled={disabled} name={`note-${name}`} />}
+      {showNote && <FBNoteTextField disabled={disabled} name={`select-note-${name}`} />}
     </FormControl>
   </FBLabel>
 );

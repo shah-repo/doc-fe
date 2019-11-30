@@ -1,37 +1,33 @@
-import { Box, Checkbox, FormControlLabel } from "@material-ui/core";
-import React from "react";
-import Text from "../../../components/Text";
-import { withOnChange } from "../../hocs/withOnChange";
-import FBStore from "../../stores/ui/FBStore";
-import { FBCheckboxProps } from "../../types/checkbox";
-import FBTextField from "./FBTextField";
+import {
+  Box,
+  FormControlLabel,
+  FormHelperText,
+  FormControl,
+} from '@material-ui/core';
+import React from 'react';
+import { FBCheckboxProps } from '../../types/inputs/checkbox';
+import FBTextField from './FBTextField';
+import { withCheckbox } from '../../hocs/inputs/withCheckbox';
 
 const FBCheckbox: React.FunctionComponent<FBCheckboxProps> = ({
   label,
-  field,
-  gutter = true,
-  includeNote,
-  disabled,
-  readOnly,
-  labelRenderer,
+  control,
+  showNote,
+  error = true,
   helperText,
-  ...props
+  disabled,
+  isGroup,
+  name = '',
 }) => (
-    <Box mb={gutter ? 4 : 0}>
-      <FormControlLabel
-        {...props}
-        label={label && <Text message={label as string} />}
-        control={<Checkbox checked={field.value} />}
-        disabled={disabled || readOnly}
-      />
-      {(FBStore.mode === "form" || FBStore.mode === "preview") && (field.value as boolean) && includeNote && (
-        <FBTextField
-          disabled={disabled}
-          name={`${props.name}_optionNote_field`}
-        />)
-      }
-    <Box mt={3} pl={1.5} fontSize="caption.fontSize" color="error.main">{helperText}</Box>
-    </Box>
-  );
+  <Box mb={isGroup ? 0 : 4}>
+    <FormControl error={error}>
+      <FormControlLabel label={label} control={control} disabled={disabled} />
+      <FormHelperText>{helperText}</FormHelperText>
+      {showNote && (
+        <FBTextField disabled={disabled} name={`checkbox-note-${name}`} />
+      )}
+    </FormControl>
+  </Box>
+);
 
-export default withOnChange(FBCheckbox);
+export default withCheckbox(FBCheckbox);

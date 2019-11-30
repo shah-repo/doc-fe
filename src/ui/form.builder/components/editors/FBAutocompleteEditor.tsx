@@ -18,7 +18,7 @@ const FBAutocompleteEditor: React.FunctionComponent<{}> = () => (
       name="optionsId"
       type="select"
     />
-    <FBCheckbox label="form.builder.multi.select" name="isMulti" />
+    <FBCheckbox type="checkbox" label="form.builder.multi.select" name="isMulti" />
   </FBStepperEditor>
 );
 

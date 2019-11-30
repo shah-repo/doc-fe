@@ -18,11 +18,11 @@ export const withOnChange = <T extends FBFormikFieldProps>(
       return value;
     }
 
-    const handleChange = (event: React.ChangeEvent<{}>, value: any) => {
+    const handleChange = (event: React.ChangeEvent<{}>, value: any = undefined) => {
       if (!form && !field) {
         return;
       }
-      if (value) {
+      if (!_.isUndefined(value)) {
         value =  checkOptions(value);
       }
       form!.setFieldValue(name, value);
