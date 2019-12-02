@@ -22,24 +22,37 @@ export class FBAutocompleteEditorCollection extends Collection<FBAutocompleteEdi
           path: DOCUMENT_REVISION_ROOT_URL,
           label: "Document revisions",
           renderKey: "name",
+          params: {},
         },
         {
           id: "2",
           path: CHANGE_REQUEST_ROOT_URL,
           label: "Change requests",
           renderKey: "title",
+          params: {},
         },
         {
           id: "3",
           path: `${CHANGE_REQUEST_ROOT_URL}/available_approvers`,
           label: "Approvers",
           renderKey: "email",
+          params: {},
         },
         {
           id: "4",
           path: DOCUMENT_TYPE_ROOT_URL,
           label: "Document types",
           renderKey: "documentTypeName",
+          params: {},
+        },
+        {
+          id: "5",
+          path: DOCUMENT_REVISION_ROOT_URL,
+          label: "Suppliers",
+          renderKey: "name",
+          params: {
+            documentTypeAcronym: "SUP",
+          },
         },
       ];
   }

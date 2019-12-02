@@ -13,19 +13,25 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   label,
   autocompleteId,
   name,
-  options,
   error,
   helperText,
   ...props
 }) => {
-  if (!options && autocompleteId) {
-    const autocompleteIndicator = autocompleteEditorList.getBy(autocompleteId!);
-    const { path, renderKey } = autocompleteIndicator || {};
-    if (path && renderKey) {
-      autocompleteList.setArgs(path, renderKey);
-      autocompleteList.fetch();
+  const [options, setOptions] = React.useState(props.options);
+
+  React.useEffect(() => {
+    if (!options && autocompleteId) {
+      const autocompleteIndicator = autocompleteEditorList.getBy(
+        autocompleteId!,
+      );
+      const { path, renderKey } = autocompleteIndicator || {};
+      if (path && renderKey) {
+        autocompleteList.setArgs(path, renderKey);
+        autocompleteList.fetch({ data: autocompleteIndicator!.params });
+        setOptions(autocompleteList.data());
+      }
     }
-  }
+  }, []);
 
   return (
     <FBLabel label={label}>
@@ -40,7 +46,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
           },
         }}
         isDisabled={props.disabled}
-        options={(options as SelectOption[]) || autocompleteList.data()}
+        options={options as SelectOption[]}
       />
       <Box mt={1} pl={1.5} fontSize="caption.fontSize" color="error.main">
         {helperText}
