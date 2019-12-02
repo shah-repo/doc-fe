@@ -1,6 +1,5 @@
 import { Employee } from "../company";
 import {
-  AUTH_TOKENS,
   AUTH_USER,
   LOGOUT_USER,
   SET_EMPLOYEE,
@@ -21,10 +20,8 @@ export interface LogoutRequestBody {
 }
 
 export interface AuthResponse {
-  AccessToken: string;
-  RefreshToken?: string;
+  ExpiresAt: string;
   ExpiresIn: number;
-  IdToken: string;
   id: string;
   email: string;
   name: string;
@@ -32,19 +29,9 @@ export interface AuthResponse {
   employees: Employee[];
 }
 
-export interface AuthWithCodeResponse extends AuthResponse {
-  email: string;
-}
-
 export interface Token {
   value: string;
   expiresAt: string;
-}
-
-export interface Tokens {
-  id: Token;
-  access: Token;
-  refresh?: Token;
 }
 
 export interface User {
@@ -58,15 +45,6 @@ export interface User {
 
 export type AuthUserPayload = User;
 
-export interface AuthTokensPayload {
-  tokens: Tokens;
-}
-
-export interface AuthTokensAction {
-  type: typeof AUTH_TOKENS;
-  payload: AuthTokensPayload;
-}
-
 export interface AuthUserAction {
   type: typeof AUTH_USER;
   payload: AuthUserPayload;
@@ -75,8 +53,6 @@ export interface AuthUserAction {
 export interface LogoutUserAction {
   type: typeof LOGOUT_USER;
 }
-
-export type TokensState = Required<Tokens>;
 
 export interface UserState {
   id: string;

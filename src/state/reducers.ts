@@ -18,7 +18,7 @@ const authPersistConfig = {
   key: "auth",
   storage,
   version: 0,
-  whitelist: ["tokens", "user"],
+  whitelist: ["user"],
   migrate: createMigrate(migrations),
 };
 const companyPersistConfig = {

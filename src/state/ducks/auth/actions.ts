@@ -1,4 +1,3 @@
-import moment from "moment-timezone";
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
@@ -6,8 +5,6 @@ import { ApplicationState } from "../../reducers";
 import { ApiAction, Handlers } from "../../types";
 import { companyActions, Employee } from "../company";
 import {
-  AUTH_TOKENS,
-  AUTH_TOKENS_REFRESH_THRESHOLD_SECONDS,
   AUTH_USER,
   LOGIN_URL,
   LOGIN_WITH_CODE_URL,
@@ -22,40 +19,15 @@ import {
 } from "./constants";
 import {
   AuthResponse,
-  AuthTokensAction,
   AuthUserAction,
-  AuthWithCodeResponse,
   LoginRequestBody,
   LoginWithCodeRequestBody,
   LogoutRequestBody,
   LogoutUserAction,
   SelectEmployeeAction,
-  Tokens,
   User,
   UserPermissionsAction,
 } from "./types";
-
-const authTokens = (authResponse: AuthResponse): AuthTokensAction => {
-  const expiresAt = moment()
-    .add(authResponse.ExpiresIn - AUTH_TOKENS_REFRESH_THRESHOLD_SECONDS, "seconds")
-    .toISOString();
-
-  const tokens: Tokens = {
-    access: {
-      value: authResponse.AccessToken,
-      expiresAt,
-    },
-    id: {
-      value: authResponse.IdToken,
-      expiresAt,
-    },
-  };
-
-  return {
-    type: AUTH_TOKENS,
-    payload: { tokens },
-  };
-};
 
 const authUser = (user: User): AuthUserAction => {
   return {
@@ -89,7 +61,6 @@ const login = (loginValues: LoginRequestBody, handlers: Handlers):
         employeeId: data.employees[0].id,
         employees: data.employees,
       }));
-      dispatch(authTokens(data));
 
       if ((data.employees || []).length === 1) {
         dispatch(companyActions.selectCompany(data.employees[0].company));
@@ -99,7 +70,7 @@ const login = (loginValues: LoginRequestBody, handlers: Handlers):
   });
 
 const loginWithCode = (loginValues: LoginWithCodeRequestBody, handlers: Handlers):
-  ApiAction<AuthWithCodeResponse, LoginWithCodeRequestBody> => apiActionWithCallbacks({
+  ApiAction<AuthResponse, LoginWithCodeRequestBody> => apiActionWithCallbacks({
     url: LOGIN_WITH_CODE_URL,
     method: "post",
     data: loginValues,
@@ -113,7 +84,6 @@ const loginWithCode = (loginValues: LoginWithCodeRequestBody, handlers: Handlers
         employeeId: response.employees[0].id,
         employees: response.employees,
       }));
-      dispatch(authTokens(response));
     },
     onFailure: (m, dispatch) => {
       dispatch(logoutUser());
@@ -124,7 +94,7 @@ const loginWithCode = (loginValues: LoginWithCodeRequestBody, handlers: Handlers
 const logout = (): ThunkAction<void, ApplicationState, any, AnyAction> => (dispatch, getState) => {
   const action: ApiAction<any, LogoutRequestBody> = apiAction({
     url: LOGOUT_URL,
-    method: "post",
+    method: "delete",
     onCompleted: () => {
       dispatch(logoutUser());
     },
@@ -160,7 +130,6 @@ const selectEmployee = (employee: Employee): SelectEmployeeAction => ({
 
 export default {
   authUser,
-  authTokens,
   logoutUser,
   login,
   logout,
