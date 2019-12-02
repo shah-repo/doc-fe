@@ -21,10 +21,8 @@ export interface LogoutRequestBody {
 }
 
 export interface AuthResponse {
-  AccessToken: string;
-  RefreshToken?: string;
+  ExpiresAt: string;
   ExpiresIn: number;
-  IdToken: string;
   id: string;
   email: string;
   name: string;
