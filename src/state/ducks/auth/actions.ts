@@ -20,7 +20,6 @@ import {
 import {
   AuthResponse,
   AuthUserAction,
-  AuthWithCodeResponse,
   LoginRequestBody,
   LoginWithCodeRequestBody,
   LogoutRequestBody,
@@ -71,7 +70,7 @@ const login = (loginValues: LoginRequestBody, handlers: Handlers):
   });
 
 const loginWithCode = (loginValues: LoginWithCodeRequestBody, handlers: Handlers):
-  ApiAction<AuthWithCodeResponse, LoginWithCodeRequestBody> => apiActionWithCallbacks({
+  ApiAction<AuthResponse, LoginWithCodeRequestBody> => apiActionWithCallbacks({
     url: LOGIN_WITH_CODE_URL,
     method: "post",
     data: loginValues,

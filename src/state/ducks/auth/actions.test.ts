@@ -1,16 +1,15 @@
 import { getCallbackHandler } from "../../../common/tests/factories";
 import initialStoreState from "../../tests/helpers/initialStoreState";
 import { Handlers } from "../../types";
-import { getEmployee } from "../company/tests/factories";
 import authActions from "./actions";
 import {
   LOGIN_URL,
   LOGIN_WITH_CODE_URL,
   LOGOUT_URL,
 } from "./constants";
+import { getAuthResponse } from "./tests/factories";
 import {
   AuthResponse,
-  AuthWithCodeResponse,
   LoginRequestBody,
   LoginWithCodeRequestBody,
 } from "./types";
@@ -25,11 +24,7 @@ describe("login action tests", () => {
     errorHandler: getCallbackHandler<string>(),
   };
 
-  const data: AuthResponse = {
-    ExpiresIn: 3600,
-    sessionId: "",
-    employees: [getEmployee()],
-  };
+  const data: AuthResponse = getAuthResponse();
 
   const action = authActions.login(loginValues, handlers);
 
@@ -65,12 +60,7 @@ describe("loginWithCode action tests", () => {
     errorHandler: getCallbackHandler<string>(),
   };
 
-  const response: AuthWithCodeResponse = {
-    ExpiresIn: 3600,
-    email: "dino@codecons.com",
-    sessionId: "",
-    employees: [getEmployee()],
-  };
+  const response: AuthResponse = getAuthResponse();
 
   const action = authActions.loginWithCode(loginValues, handlers);
 

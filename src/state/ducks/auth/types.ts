@@ -29,10 +29,6 @@ export interface AuthResponse {
   employees: Employee[];
 }
 
-export interface AuthWithCodeResponse extends AuthResponse {
-  email: string;
-}
-
 export interface Token {
   value: string;
   expiresAt: string;
