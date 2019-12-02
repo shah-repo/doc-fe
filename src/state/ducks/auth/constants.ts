@@ -1,4 +1,3 @@
-export const AUTH_TOKENS = "auth/AUTH_TOKENS";
 export const AUTH_USER = "auth/AUTH_USER";
 export const LOGOUT_USER = "auth/LOGOUT_USER";
 export const USER_PERMISSIONS = "auth/USER_PERMISSIONS";
