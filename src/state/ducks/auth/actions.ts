@@ -5,6 +5,7 @@ import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApplicationState } from "../../reducers";
 import { ApiAction, Handlers } from "../../types";
 import { companyActions, Employee } from "../company";
+import { IotService } from "../../../common/utils/iot/mqttClient";
 import {
   AUTH_TOKENS,
   AUTH_TOKENS_REFRESH_THRESHOLD_SECONDS,
@@ -14,6 +15,7 @@ import {
   LOGOUT_URL,
   LOGOUT_USER,
   PERMISSIONS_URL,
+  AUTH_AWS_IOT_URL,
   PING_SERVER_GET_ASYNC,
   PING_SERVER_URL,
   SET_EMPLOYEE,
@@ -90,10 +92,10 @@ const login = (loginValues: LoginRequestBody, handlers: Handlers):
         employees: data.employees,
       }));
       dispatch(authTokens(data));
-
       if ((data.employees || []).length === 1) {
         dispatch(companyActions.selectCompany(data.employees[0].company));
       }
+      dispatch(getIotCreds());
     },
     handlers,
   });
@@ -143,6 +145,17 @@ const loadPermissions = (userId: string):
     },
   });
 
+const getIotCreds = ():
+ApiAction => apiAction({
+  url: AUTH_AWS_IOT_URL,
+  method: "get",
+  includeAuthorization: true,
+  onSuccess: (credentials, dispatch) => {
+    IotService.prototype.setMqttCreds(credentials);
+    IotService.prototype.connectToClient();
+  },
+});
+
 const pingServer = ():
   ApiAction => apiAction({
     url: `${PING_SERVER_URL}`,
@@ -166,6 +179,7 @@ export default {
   logout,
   loginWithCode,
   loadPermissions,
+  getIotCreds,
   pingServer,
   selectEmployee,
 };

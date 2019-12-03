@@ -8,6 +8,7 @@ import TaskApproval from "./action.types/TaskApproval";
 import TrainingRequest from "./action.types/TrainingRequest";
 import { styles } from "./Dashboard.styles";
 import { DashboardPresenterParentProps } from "./types";
+import { IotService } from "../../common/utils/iot/mqttClient";
 
 type DashboardPresenterProps = DashboardPresenterParentProps;
 
@@ -36,6 +37,8 @@ const DashboardPresenter: React.FunctionComponent<DashboardPresenterProps> = ({
         <Text translation="dashboard.noPendingActions" />
       </Typography>
     );
+  console.log("DASHBOARD THIS");
+  IotService.prototype.unsubscribeFromTopic("testfe");
 
   return (
     <Grid container={true} className={classes.root} spacing={8}>
