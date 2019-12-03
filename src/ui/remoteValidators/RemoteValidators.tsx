@@ -1,6 +1,5 @@
 import { AxiosRequestConfig } from "axios";
 import React, { useEffect } from "react";
-import Config from "../../config";
 import apiClient from "../../state/apiClient";
 import { FETCH_VALIDATORS_REMOTE_URL_URL } from "../../state/ducks/auth/constants";
 import { store } from "../../state/store";
@@ -20,7 +19,7 @@ const fetchRemoteValidators = async () => {
     }:${store.getState().auth.user.sessionId}`;
 
     const { data } = await apiClient.request(requestConfig);
-    await import(/* webpackIgnore: true */ Config.RemoteValidatorsPath(data.file));
+    await import(/* webpackIgnore: true */ data.url);
     // (window as any).EnlilValidatorInstance = new (window as any).EnlilRemoteValidators();
     (window as any).EnlilRemoteValidators.registerHelperCallback(() => RemoteValidatorHelper);
   } catch (exception) {}
