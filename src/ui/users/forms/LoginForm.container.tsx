@@ -4,16 +4,29 @@ import { connect } from "react-redux";
 import { authActions } from "../../../state/ducks/auth";
 import { ApplicationState } from "../../../state/reducers";
 import useAsync from "../../hooks/useAsync";
+import { Translation } from "../../translations/types";
 import { LoginFormValues } from "../types";
 import LoginFormPresenter from "./LoginForm.presenter";
 
 interface DispatchProps {
   login: typeof authActions.login;
 }
+interface Props {
+  buttonLabel: Translation;
+  signMessage: Translation;
+  signLabel: Translation;
+  route: string;
+}
 
-type LoginFormContainerProps = DispatchProps;
+type LoginFormContainerProps = DispatchProps & Props;
 
-const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({ login }) => {
+const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
+  login,
+  buttonLabel,
+  signMessage,
+  route,
+  signLabel,
+}) => {
   const async = useAsync();
 
   const onSubmit = (values: LoginFormValues): void => {
@@ -26,7 +39,14 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({ 
   };
 
   const render = (props: FormikProps<LoginFormValues>) => (
-    <LoginFormPresenter {...props} asyncState={async.asyncState} />
+    <LoginFormPresenter
+      {...props}
+      asyncState={async.asyncState}
+      buttonLabel={buttonLabel}
+      signMessage={signMessage}
+      route={route}
+      signLabel={signLabel}
+    />
   );
 
   return (

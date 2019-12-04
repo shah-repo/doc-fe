@@ -8,6 +8,7 @@ import {
 import { LockOutlined as LockOutlinedIcon } from "@material-ui/icons";
 import * as React from "react";
 import Text from "../components/Text";
+import { SIGNUP_URL } from "../constants/urls";
 import LoginFormContainer from "./forms/LoginForm.container";
 import styles from "./Login.styles";
 
@@ -22,7 +23,12 @@ const LoginPresenter: React.FunctionComponent<Props> = ({ classes }) => (
       <Typography component="h1" variant="h5">
         <Text translation="login.title" />
       </Typography>
-      <LoginFormContainer />
+      <LoginFormContainer
+        buttonLabel="login.button"
+        signMessage="login.message"
+        signLabel="signup.button"
+        route={SIGNUP_URL}
+      />
     </Paper>
   </div>
 );

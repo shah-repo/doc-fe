@@ -7,5 +7,12 @@ export default (theme: Theme) =>
     },
     submit: {
       marginTop: theme.spacing(3),
+      marginBottom: theme.spacing(3),
+      marginLeft: 0,
+    },
+    navigationLink: {
+      color: theme.palette.primary.main,
+      marginLeft: theme.spacing(1),
+      textDecoration: "none",
     },
   });
