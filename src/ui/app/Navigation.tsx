@@ -20,7 +20,7 @@ import {
 } from "../constants/urls";
 import styles from "./Navigation.styles";
 import NavigationLinkContainer from "./NavigationLink.container";
-import UserManagement from "./routes/UserManagement";
+import UserManagementLink from "./routes/UserManagement";
 
 interface StateProps {
   hasMultipleCompanies: boolean;
@@ -68,7 +68,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
         Icon={Dashboard}
         currentPath={location.pathname}
       />
-      <UserManagement />
+      <UserManagementLink pathname={location.pathname} />
     </List>
     {hasMultipleCompanies &&
     <SwitchCompanyButton location={location} />

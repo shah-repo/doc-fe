@@ -22,6 +22,7 @@
   "navigation.changeRequestList": "Change request list",
   "navigation.documentRevisionList": "Document revisions",
   "navigation.change.request.list": "Change Request List",
+  "navigation.user.management": "User Management",
 
   "validators.required": "Required",
   "validators.requiredAtLeastOne": "At least one input required",

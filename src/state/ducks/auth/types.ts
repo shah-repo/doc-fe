@@ -46,8 +46,8 @@ export interface User {
 
 export interface Group {
   id: string;
-  tags: Nullable<string[]>;
-  permissions: string[];
+  tags: Nullable<GroupTag[]>;
+  permissions: Permission[];
 }
 
 export type AuthUserPayload = User;
@@ -80,8 +80,8 @@ export interface UserGroupsAction {
 }
 
 export interface UserGroupsState {
-  tags: string[];
-  permissions: string[];
+  tags: GroupTag[];
+  permissions: Permission[];
 }
 
 export interface SelectEmployeeAction {
@@ -128,6 +128,6 @@ export enum Permission {
   USERS_ANONYMIZE_EMAILS = "USERS_ANONYMIZE_EMAILS",
 }
 
-export enum GROUP_TAGS {
+export enum GroupTag {
   USER_MANAGEMENT = "USER_MANAGEMENT",
 }

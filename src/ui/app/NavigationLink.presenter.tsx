@@ -7,6 +7,7 @@ import { NavLink } from "react-router-dom";
 import { ReactComponent as ChangeRequestListIcon } from "../../assets/images/change_request_list_icon.svg";
 import { ReactComponent as DashboardIcon } from "../../assets/images/dashboard_icon.svg";
 import { ReactComponent as DocumentListICon } from "../../assets/images/document_list_icon.svg";
+import { ReactComponent as UserManagementIcon } from "../../assets/images/user_management_icon.svg";
 import Text from "../components/Text";
 import { LinkDefinition } from "./NavigationLink.container";
 
@@ -28,6 +29,7 @@ const iconMapping: IconObject = {
   "/": <DashboardIcon />,
   "/document_revision": <DocumentListICon />,
   "/change_request": <ChangeRequestListIcon />,
+  "/user_management": <UserManagementIcon />,
 };
 
 const NavigationLinkPresenter: React.FunctionComponent<

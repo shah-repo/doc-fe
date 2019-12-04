@@ -9,7 +9,9 @@ import {
 } from "./constants";
 import {
   AuthUserAction,
+  GroupTag,
   LogoutUserAction,
+  Permission,
   SelectEmployeeAction,
   UserGroupsAction,
   UserGroupsState,
@@ -62,8 +64,8 @@ export const groups = (
 ): UserGroupsState => {
   switch (action.type) {
     case USER_GROUPS:
-      const tagsSet = new Set<string>();
-      const permissionsSet = new Set<string>();
+      const tagsSet = new Set<GroupTag>();
+      const permissionsSet = new Set<Permission>();
       action.payload.forEach((group) => {
         const { tags, permissions } = group;
 
