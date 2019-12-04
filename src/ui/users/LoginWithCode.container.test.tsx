@@ -5,7 +5,7 @@ import { act } from "react-dom/test-utils";
 import { LoginWithCodeRequestBody } from "../../state/ducks/auth/types";
 import { Handlers } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
-import { HOME_URL, LOGIN_URL } from "../constants/urls";
+import { LOGIN_URL } from "../constants/urls";
 import getRouteComponentProps from "../tests/helpers/getRouteComponentProps";
 import { LoginWithCodeContainer, LoginWithCodeContainerProps } from "./LoginWithCode.container";
 
@@ -62,7 +62,7 @@ describe("LoginWithCodeContainer unit tests", () => {
       getWrapper(props);
     });
 
-    expect(props.history.replace).toHaveBeenCalledWith(HOME_URL);
+    expect(props.history.replace).toHaveBeenCalledWith(LOGIN_URL);
   });
 
   it("redirects to LOGIN_URL on error", () => {
