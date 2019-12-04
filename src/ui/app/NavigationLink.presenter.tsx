@@ -12,6 +12,7 @@ import Text from "../components/Text";
 import { LinkDefinition } from "./NavigationLink.container";
 
 import { ListItemIcon } from "@material-ui/core";
+import { CHANGE_REQUEST_LIST_URL, DOCUMENT_REVISION_LIST_URL, USER_MANAGEMENT_ROOT_URL } from "../constants/urls";
 import styles from "./NavigationLink.styles";
 
 interface NavigationLinkPresenterProps
@@ -27,14 +28,14 @@ interface IconObject {
 
 const iconMapping: IconObject = {
   "/": <DashboardIcon />,
-  "/document_revision": <DocumentListICon />,
-  "/change_request": <ChangeRequestListIcon />,
-  "/user_management": <UserManagementIcon />,
+  [DOCUMENT_REVISION_LIST_URL]: <DocumentListICon />,
+  [CHANGE_REQUEST_LIST_URL]: <ChangeRequestListIcon />,
+  [USER_MANAGEMENT_ROOT_URL]: <UserManagementIcon />,
 };
 
 const NavigationLinkPresenter: React.FunctionComponent<
   NavigationLinkPresenterProps
-> = ({ classes, url, text, Icon, ActionIcon, isChild }) => (
+> = ({ classes, url, text, ActionIcon, isChild }) => (
   <NavLink
     to={url}
     exact={true}
