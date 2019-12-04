@@ -1,7 +1,6 @@
 import {
   Box,
   Grid,
-  Typography,
   withStyles,
   WithStyles,
 } from "@material-ui/core";
@@ -9,10 +8,8 @@ import { FormikProps } from "formik";
 import _ from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
-import { Link } from "react-router-dom";
 import {
   DocumentRevision,
-  RevisionChangeType,
   RevisionStageOptions,
 } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
@@ -22,8 +19,6 @@ import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocom
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
 import CheckboxField from "../../components/forms/fields/Checkbox";
 import InputField from "../../components/forms/fields/Input";
-import RadioButton from "../../components/forms/fields/RadioButton";
-import RadioGroup from "../../components/forms/fields/RadioGroup";
 import SelectField, {
   SelectOption,
 } from "../../components/forms/fields/Select";
@@ -35,18 +30,18 @@ import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
 import SubmitButton from "../../components/forms/SubmitButton";
-import Text from "../../components/Text";
 import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
 import {
   documentDetailsPath,
-  documentVersionPath,
 } from "../../document.revision/utils/paths";
 import FBWorkspace from "../../form.builder/main/workspace/FBWorkspace";
 import FBDRStore from "../../form.builder/stores/FBDRStore";
 import FBStore from "../../form.builder/stores/FBStore";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
+import References from "./presenters/References";
+import RevisionTypeChange from "./presenters/RevisionTypeChange";
 import { DocumentRevisionFormValues } from "./types";
 
 export interface Props
@@ -134,66 +129,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     handleChange(event);
   };
 
-  const renderTypeOfRevisionChange = () => {
-    if (showRevisionTypeChange) {
-      return (
-        <Box mt={7}>
-          <Typography variant="h6">
-            <Text translation="documentRevision.form.typeOfRevisionChange" />
-          </Typography>
-          <RadioGroup name="revisionChangeType" validate={validator(required)}>
-            <RadioButton
-              label={<Text translation="documentRevision.form.nextRevision" />}
-              value={RevisionChangeType.NextRevision}
-            />
-            <RadioButton
-              label={
-                <Text translation="documentRevision.form.nextRevisionStage" />
-              }
-              value={RevisionChangeType.NextRevisionStage}
-            />
-            <RadioButton
-              label={<Text translation="documentRevision.form.obsolete" />}
-              value={RevisionChangeType.Obsolete}
-            />
-          </RadioGroup>
-        </Box>
-      );
-    }
-  };
-
-  const renderReferences = () => {
-    if (
-      initialValues.document &&
-      initialValues.document.referencedBy &&
-      initialValues.document.referencedBy.length > 0
-    ) {
-      return (
-        <React.Fragment>
-          <Typography variant="h6" color="textSecondary">
-            <Text translation="common.referenced.by" />
-          </Typography>
-          <div>
-            {initialValues.document.referencedBy.map((reference) => {
-              return (
-                <div key={reference.id}>
-                  <Link
-                    to={documentVersionPath(
-                      reference.id,
-                      reference.document.id,
-                    )}
-                    target="_blank"
-                  >
-                    {reference.name}
-                  </Link>
-                </div>
-              );
-            })}
-          </div>
-        </React.Fragment>
-      );
-    }
-  };
+  const renderTypeOfRevisionChange = showRevisionTypeChange &&
+    <RevisionTypeChange />;
 
   const renderRevisionStageDropdown = !isDisabled && (
     <SelectField
@@ -275,13 +212,13 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           options={availableReferences}
           onClick={openReference}
         />
-        {renderReferences()}
+        <References document={initialValues.document} />
         <CheckboxField
           name="retrain"
           label="document.revision.trainingRequired"
         />
         <AttachmentsField />
-        {renderTypeOfRevisionChange()}
+        {renderTypeOfRevisionChange}
         {FBStore.active && !FBDRStore.isOutput && (
           <Box mt={4}>
             <SelectField
@@ -301,7 +238,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         )}
         <Box mt={5}>
           <Grid
-            item={true}
             container={true}
             alignItems="flex-end"
             direction="column"

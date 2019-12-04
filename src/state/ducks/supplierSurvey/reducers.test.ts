@@ -1,0 +1,24 @@
+import { SUPPLIER_SURVEY } from "./constants";
+import { SUPPLIER_SURVEY_DEFAULT_STATE, supplierSurvey } from "./reducers";
+import { getSurveyFormDocumentRevision } from "./tests/factories";
+import {
+  SupplierSurveyAction,
+  SupplierSurveyForm,
+} from "./types";
+
+describe("supplier survey reducers tests", () => {
+  const initialState: SupplierSurveyForm = SUPPLIER_SURVEY_DEFAULT_STATE;
+  const supplierSurveyForm = getSurveyFormDocumentRevision();
+  const supplierSurveyAction: SupplierSurveyAction = {
+    type: SUPPLIER_SURVEY,
+    payload: supplierSurveyForm,
+  };
+
+  describe("supplierSurvey reducer test", () => {
+    it("sets supplier survey on SUPPLIER_SURVEY action", () => {
+      expect(supplierSurvey(initialState, supplierSurveyAction)).toEqual({
+        ...supplierSurveyForm,
+      });
+    });
+  });
+});

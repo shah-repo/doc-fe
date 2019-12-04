@@ -7,5 +7,6 @@ export const styles = makeStyles((theme: Theme) => ({
     padding: theme.spacing(2),
     marginTop: theme.spacing(3.5),
     border: `1px solid ${theme.palette.text.hint}`,
+    fontFamily: "Open Sans, sans-serif;",
   },
 }));

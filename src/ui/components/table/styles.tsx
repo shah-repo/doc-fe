@@ -22,6 +22,7 @@ export const styles = makeStyles((theme) => ({
     },
     emptyMsg: {
       padding: theme.spacing(2),
+      fontFamily: "Open Sans, sans-serif;",
     },
     row: (props: TableStyleProps) => ({
       "paddingRight": "0!important",

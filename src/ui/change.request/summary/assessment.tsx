@@ -26,7 +26,7 @@ export const Assessment: React.FunctionComponent<Props> = ({ classes, dataProp }
 
   const reasoningRenderer = (item: AssessmentItem) => (
     <Box>
-      <SummaryFieldWithHtml label="common.justifications" value={`${item.reasoning}` || "—"} />
+      <SummaryFieldWithHtml value={`${item.reasoning}` || "—"} />
     </Box>
   );
 
@@ -34,7 +34,7 @@ export const Assessment: React.FunctionComponent<Props> = ({ classes, dataProp }
     Object.values(AssessmentType).map((type, index) => {
       const item = dataProp[type as keyof typeof AssessmentType];
       return (
-        <Grid key={`${item}-${index}`} className={classes.assessmentItem}>
+        <Grid key={`${item.id}`} className={classes.assessmentItem}>
           <Typography variant="h5">
             <Text message={`change.request.${type}.assessment`} />
           </Typography>

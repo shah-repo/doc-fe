@@ -95,6 +95,7 @@
   "changeRequest.audit.approvals.ARRAY_NEW": "Approver Added",
   "changeRequest.audit.approvals.status.STRING_EDITED": "Approval Status Updated",
   "changeRequest.audit.approvals.status.STRING_NEW": "New Approval Status",
+  "changeRequest.audit.status.updated.by": "Set to {status} by {name}",
   "changeRequest.audit.crHistory": "CR History",
   "changeRequest.audit.description.STRING_NEW": "Description of Changes Added",
   "changeRequest.audit.description.STRING_EDITED": "Description of Changes Updated",
@@ -346,5 +347,7 @@
 
   "company.switch.title": "Switch Company",
   "company.switch.subtitle": "Select a company below to sign-in to",
-  "company.switch.button": "SWITCH COMPANY"
+  "company.switch.button": "SWITCH COMPANY",
+
+  "supplier_survey_success_submit_message": "Survey is filled. Thank you for the response!"
 }

@@ -9,7 +9,7 @@ import {
 import { AttachmentDownloadResponse } from "./types";
 
 describe("attachemnt actions tests", () => {
-  describe("upload action tests", async () => {
+  describe("upload action tests", () => {
     const handlers: Handlers<Attachment> = {
       successHandler: getCallbackHandler<Attachment>(),
       errorHandler: getCallbackHandler<string>(),
@@ -38,7 +38,7 @@ describe("attachemnt actions tests", () => {
     });
   });
 
-  describe("download action tests", async () => {
+  describe("download action tests", () => {
     const handlers: Handlers<AttachmentDownloadResponse> = {
       successHandler: getCallbackHandler<AttachmentDownloadResponse>(),
       errorHandler: getCallbackHandler<string>(),
