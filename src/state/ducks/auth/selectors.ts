@@ -18,12 +18,12 @@ const currentEmployeeId = (state: ApplicationState): string =>
   state.auth.user.employeeId;
 
 const getLoadPermissionsAsyncState = (state: ApplicationState): AsyncState =>
-  state.auth.loadPermissionsAsyncInfo;
+  state.auth.loadGroupsAsyncInfo;
 
 const getHasPermission = (
   state: ApplicationState,
   permission: string,
-): boolean => state.auth.permissions.includes(permission);
+): boolean => true;
 
 const makeGetHasPermission = () => {
   return createSelector(

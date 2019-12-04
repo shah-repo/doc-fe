@@ -4,15 +4,15 @@ import {
   AUTH_USER,
   LOGOUT_USER,
   SET_EMPLOYEE,
-  USER_PERMISSIONS,
-  USER_PERMISSIONS_GET_ASYNC,
+  USER_GROUPS,
+  USER_GROUPS_GET_ASYNC,
 } from "./constants";
 import {
   AuthUserAction,
   LogoutUserAction,
   SelectEmployeeAction,
-  UserPermissionsAction,
-  UserPermissionsState,
+  UserGroupsAction,
+  UserGroupsState,
   UserState,
 } from "./types";
 
@@ -51,14 +51,14 @@ export const user = (state: UserState = USER_DEFAULT_STATE, action: AuthUserActi
   }
 };
 
-export const USER_PERMISSIONS_DEFAULT_STATE: UserPermissionsState = [];
+export const USER_GROUPS_DEFAULT_STATE: UserGroupsState = [];
 
-export const permissions = (
-  state: UserPermissionsState = USER_PERMISSIONS_DEFAULT_STATE,
-  action: UserPermissionsAction,
-): UserPermissionsState => {
+export const groups = (
+  state: UserGroupsState = USER_GROUPS_DEFAULT_STATE,
+  action: UserGroupsAction,
+): UserGroupsState => {
   switch (action.type) {
-    case USER_PERMISSIONS:
+    case USER_GROUPS:
       return action.payload;
     default:
       return state;
@@ -67,8 +67,8 @@ export const permissions = (
 
 const reducer = combineReducers({
   user,
-  loadPermissionsAsyncInfo: asyncReducer(USER_PERMISSIONS_GET_ASYNC),
-  permissions,
+  loadGroupsAsyncInfo: asyncReducer(USER_GROUPS_GET_ASYNC),
+  groups,
 });
 
 export default reducer;

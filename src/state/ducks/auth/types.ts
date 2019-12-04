@@ -3,7 +3,7 @@ import {
   AUTH_USER,
   LOGOUT_USER,
   SET_EMPLOYEE,
-  USER_PERMISSIONS,
+  USER_GROUPS,
 } from "./constants";
 
 export interface LoginRequestBody {
@@ -43,6 +43,12 @@ export interface User {
   employees: Employee[];
 }
 
+export interface Group {
+  id: string;
+  tags: string[];
+  permissions: string[];
+}
+
 export type AuthUserPayload = User;
 
 export interface AuthUserAction {
@@ -67,12 +73,12 @@ export interface AuthProps {
   currentUserEmail: string;
 }
 
-export interface UserPermissionsAction {
-  type: typeof USER_PERMISSIONS;
-  payload: string[];
+export interface UserGroupsAction {
+  type: typeof USER_GROUPS;
+  payload: Group[];
 }
 
-export type UserPermissionsState = string[];
+export type UserGroupsState = Group[];
 
 export interface SelectEmployeeAction {
   type: typeof SET_EMPLOYEE;
