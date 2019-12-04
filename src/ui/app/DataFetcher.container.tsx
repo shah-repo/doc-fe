@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { authSelectors } from "../../state/ducks/auth";
+import { authActions, authSelectors } from "../../state/ducks/auth";
 import { companyActions } from "../../state/ducks/company";
 import { documentTypeActions } from "../../state/ducks/documentRevisions/documentType";
 
@@ -9,8 +9,8 @@ const DataFetcherContainer: React.FunctionComponent = () => {
   const employeeId = useSelector(authSelectors.currentEmployeeId);
   useEffect(() => {
     dispatch(documentTypeActions.loadList());
-
     dispatch(companyActions.queryCompany(employeeId));
+    dispatch(authActions.loadUserGroups(employeeId));
   }, []);
 
   // NOTE: should we show error messages here?

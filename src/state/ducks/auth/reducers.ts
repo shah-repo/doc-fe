@@ -51,7 +51,10 @@ export const user = (state: UserState = USER_DEFAULT_STATE, action: AuthUserActi
   }
 };
 
-export const USER_GROUPS_DEFAULT_STATE: UserGroupsState = [];
+export const USER_GROUPS_DEFAULT_STATE: UserGroupsState = {
+  tags: [],
+  permissions: [],
+};
 
 export const groups = (
   state: UserGroupsState = USER_GROUPS_DEFAULT_STATE,
@@ -59,7 +62,24 @@ export const groups = (
 ): UserGroupsState => {
   switch (action.type) {
     case USER_GROUPS:
-      return action.payload;
+      const tagsSet = new Set<string>();
+      const permissionsSet = new Set<string>();
+      action.payload.forEach((group) => {
+        const { tags, permissions } = group;
+
+        if (tags) {
+          tags.forEach((tag) => tagsSet.add(tag));
+        }
+
+        if (permissions) {
+          permissions.forEach((permission) => permissionsSet.add(permission));
+        }
+      });
+
+      return {
+        tags: Array.from(tagsSet),
+        permissions: Array.from(permissionsSet),
+      };
     default:
       return state;
   }
