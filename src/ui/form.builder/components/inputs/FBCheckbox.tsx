@@ -1,33 +1,21 @@
-import {
-  Box,
-  FormControlLabel,
-  FormHelperText,
-  FormControl,
-} from '@material-ui/core';
-import React from 'react';
-import { FBCheckboxProps } from '../../types/inputs/checkbox';
-import FBTextField from './FBTextField';
-import { withCheckbox } from '../../hocs/inputs/withCheckbox';
+import { FormControlLabel } from "@material-ui/core";
+import React from "react";
+import { withCheck } from "../../hocs/inputs/withCheck";
+import { FBCheckboxProps } from "../../types/inputs/checkbox";
+import FBCheckContext from "../common/FBCheckContext";
+import FBInput from "../common/FBInput";
 
 const FBCheckbox: React.FunctionComponent<FBCheckboxProps> = ({
   label,
   control,
-  showNote,
-  error = true,
-  helperText,
   disabled,
-  isGroup,
-  name = '',
+  includeContext,
+  ...props
 }) => (
-  <Box mb={isGroup ? 0 : 4}>
-    <FormControl error={error}>
-      <FormControlLabel label={label} control={control} disabled={disabled} />
-      <FormHelperText>{helperText}</FormHelperText>
-      {showNote && (
-        <FBTextField disabled={disabled} name={`checkbox-note-${name}`} />
-      )}
-    </FormControl>
-  </Box>
+  <FBInput {...props} type="checkbox">
+    {control && <FormControlLabel {...{label, control, disabled}}/>}
+    <FBCheckContext label="Note" includeContext={includeContext} />
+  </FBInput>
 );
 
-export default withCheckbox(FBCheckbox);
+export default withCheck(FBCheckbox, "checkbox");

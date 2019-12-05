@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React from "react";
 import { SelectOption } from "../../components/forms/fields/Select";
-import { FBGroupField } from "../defaults/editor";
+import { FBCheckControl } from "../defaults/check";
 import {
   FBFormDefaultProps,
   FBOptionRendererProps,
@@ -58,7 +58,7 @@ export function withOptionRenderer<T extends FBFormDefaultProps>(
         return;
       }
 
-      const InputType = FBGroupField[type as string];
+      const InputType = FBCheckControl[type as string];
 
       return optionsArray.map((option) => (
         <InputType

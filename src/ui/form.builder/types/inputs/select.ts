@@ -1,11 +1,10 @@
-import { SelectProps } from "@material-ui/core/Select/Select";
 import { FBInputProps, FBOptionProps } from "../common";
+import { FBCheckContextProps } from "../common/checkcontext";
 
 export type FBSelectProps =
-  & Pick<SelectProps, "variant">
+  & Pick<FBCheckContextProps, "includeContext">
   & FBOptionProps
   & FBInputProps
   & {
     menuItems?: React.ReactNode[];
-    showNote?: boolean;
   };

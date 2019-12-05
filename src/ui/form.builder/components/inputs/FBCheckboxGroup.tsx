@@ -1,23 +1,34 @@
-import { Box, FormGroup } from "@material-ui/core";
+import { Checkbox, FormControlLabel, FormGroup } from "@material-ui/core";
+import _ from "lodash";
 import React from "react";
-import { withOptionRenderer } from "../../hocs/withOptionRenderer";
-import FBValidatorStore from "../../stores/ui/FBValidatorStore";
-import { FBFormDefaultProps } from "../../types/common";
+import Text from "../../../components/Text";
+import { withCheckGroup } from "../../hocs/inputs/withCheckGroup";
+import { FBCheckGroupProps } from "../../types/inputs/check";
+import FBCheckContext from "../common/FBCheckContext";
+import FBInput from "../common/FBInput";
 
-const FBCheckboxGroup: React.FunctionComponent<FBFormDefaultProps> = ({
-  labelRenderer,
-  optionsRenderer,
-  includeNote,
-  name,
-  gutter,
+const FBCheckboxGroup: React.FunctionComponent<FBCheckGroupProps> = ({
+  row = true,
+  includeContext,
+  type = "checkboxgroup",
+  options,
+  optionValueKey = "",
+  optionLabelKey = "",
+  labelValues,
+  ...props
 }) => (
-  <Box mb={gutter ? 0 : 4}>
-    {labelRenderer}
-    <FormGroup row={!includeNote}>{optionsRenderer}</FormGroup>
-    <Box mt={3} pl={1.5} fontSize="caption.fontSize" color="error.main">
-      {FBValidatorStore.errors[name || ""] || ""}
-    </Box>
-  </Box>
+  <FBInput {...props} {...{ type }}>
+    <FormGroup row={row}>
+      {_.map(options, (option) => (
+        <FormControlLabel
+          value={_.get(option, optionValueKey)}
+          control={<Checkbox name={_.get(option, optionValueKey)} onChange={props.onChange} />}
+          label={<Text message={_.get(option, optionLabelKey)}  values={labelValues}/>}
+        />
+      ))}
+    <FBCheckContext label="Note" includeContext={includeContext} />
+    </FormGroup>
+  </FBInput>
 );
 
-export default withOptionRenderer(FBCheckboxGroup);
+export default withCheckGroup(FBCheckboxGroup);

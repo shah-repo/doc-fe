@@ -2,12 +2,12 @@ import TextField from "@material-ui/core/TextField/TextField";
 import { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import { RenderInputParams } from "@material-ui/lab/Autocomplete/Autocomplete";
 import _ from "lodash";
+import Model from "mobx-rest/lib/Model";
 import React from "react";
 import autocompleteOptions from "../../../../data/autocompleteOptions.json";
 import FBAutocompleteCollection from "../../stores/domain/collections/FBAutocompleteCollection";
 import { FBAutocompleteProps } from "../../types/inputs/autocomplete";
 import { withInput } from "../common/withInput";
-import Model from "mobx-rest/lib/Model";
 
 export const withAutocomplete = <T extends FBAutocompleteProps>(
   Component: React.FunctionComponent<T>,
@@ -15,7 +15,7 @@ export const withAutocomplete = <T extends FBAutocompleteProps>(
   return withInput(
     ({
       options,
-      optionsId,
+      optionId,
       getOptionLabel,
       optionLabel = "",
       error,
@@ -27,13 +27,13 @@ export const withAutocomplete = <T extends FBAutocompleteProps>(
 
       function setIndicators(): boolean {
         const optionIndicator = _.filter(autocompleteOptions, {
-          id: optionsId,
+          id: optionId,
         })[0];
         indicators = optionIndicator || {};
         return Boolean(indicators);
       }
 
-      if (_.isEmpty(options) && optionsId && setIndicators()) {
+      if (_.isEmpty(options) && optionId && setIndicators()) {
         const autocompleteList = new FBAutocompleteCollection(indicators!.path);
         options = autocompleteList.models;
         optionLabel = indicators!.renderKey;

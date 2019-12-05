@@ -1,7 +1,7 @@
-import React from 'react';
-import FBCheckbox from '../inputs/FBCheckbox';
-import FBLabelEditor from './FBLabelEditor';
-import FBStepperEditor from './FBStepperEditor';
+import React from "react";
+import FBCheckbox from "../inputs/FBCheckbox";
+import FBLabelEditor from "./FBLabelEditor";
+import FBStepperEditor from "./FBStepperEditor";
 
 const FBControlEditor: React.FunctionComponent<{}> = () => (
   <FBStepperEditor>
@@ -9,7 +9,7 @@ const FBControlEditor: React.FunctionComponent<{}> = () => (
     <FBCheckbox
       type="checkbox"
       label="form.builder.include.note"
-      name="includeNote"
+      name="includeContext"
     />
   </FBStepperEditor>
 );

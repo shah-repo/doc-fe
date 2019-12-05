@@ -13,8 +13,9 @@ export const withOptions = <T extends FBOptionProps>(
   }: T) => {
 
     function mapStringOption(): T["options"] {
-      return _.map(_.split(props.options as string, "\n"), (option, index) => ({
-        [optionValueKey]: `gen-option-${index}`,
+      const splitArray = _.split(props.options as string, "\n");
+      return _.map(splitArray, (option, index) => ({
+        [optionValueKey]: `check-option-${index}`,
         [optionLabelKey]: option,
       }));
     }

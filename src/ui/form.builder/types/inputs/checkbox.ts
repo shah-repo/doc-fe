@@ -1,11 +1,11 @@
-import { FBInputProps } from "../common";
 import { FormControlLabelProps } from "@material-ui/core/FormControlLabel/FormControlLabel";
+import { FBInputProps } from "../common";
+import { FBCheckContextProps } from "../common/checkcontext";
 
 export type FBCheckboxProps =
   & FBInputProps
-  & Pick<FormControlLabelProps, "control">
+  & FBCheckContextProps
   & {
+    control?: FormControlLabelProps["control"];
     isGroup?: boolean;
-    includeNote?: boolean;
-    showNote?: boolean;
   };

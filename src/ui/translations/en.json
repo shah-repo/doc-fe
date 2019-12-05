@@ -337,6 +337,7 @@
   "form.builder.fileupload": "File Upload",
   "form.builder.groups": "Groups",
   "form.builder.validator": "Verified",
+  "form.builder.additions": "Additions",
 
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",

@@ -10,20 +10,43 @@ import { withOnChange } from "./withOnChange";
 export const withInput = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>,
 ) => {
-  return withFormik<any, FBTemplateSchema | Dictionary<any>>(withOnChange((props: T) => {
-      const { form, name = "", type = "" } = props;
 
-      const value = (): any => {
-        if (form && !_.has(form.values, name)) {
-          return form.values[name];
-        }
-        return FBFormValues[type];
-      };
+  const component = ({
+    form,
+    name = "",
+    type = "",
+    children,
+    value,
+    defaultValue,
+    ...props
+  }: T) => {
 
-      return Component({
-        ...(props as T),
-        value: value(),
-      });
-    },
-  ));
+    const elements = React.Children.toArray(children);
+    value = _.get(form, `values.${name}`);
+    value === undefined && (value = defaultValue || _.get(FBFormValues, type));
+
+    if (elements.length === 1) {
+      _.first(elements) && (
+        children = React.cloneElement(_.first(elements) as React.ReactElement, {
+          name,
+          value,
+          type,
+          ..._.pick(props, ["disabled", "onChange"]),
+        })
+      );
+    }
+
+    return Component({
+      ...(props as T),
+      value,
+      form,
+      name,
+      type,
+      children,
+    });
+  };
+
+  return withFormik<any, FBTemplateSchema | Dictionary<any>>(
+    withOnChange((props: T) => component(props)),
+  );
 };

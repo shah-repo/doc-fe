@@ -1,27 +1,19 @@
-import { Box, TextField } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 import React from "react";
-import { withLabelRenderer } from "../../hocs/withLabelRenderer";
-import { withOnChange } from "../../hocs/withOnChange";
-import { FBTextFieldProps } from "../../types/textfield";
+import { FBTextFieldProps } from "../../types/inputs/textfield";
+import FBInput from "../common/FBInput";
 
 const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
-  labelRenderer,
+  rows,
   ...props
 }) => (
-  <Box mb={4} width="100%">
-    {labelRenderer}
+  <FBInput {...props} type="textfield">
     <TextField
-      multiline={Boolean(props.rows && (props.rows as number) > 0)}
-      fullWidth={true}
-      {...props}
+      multiline={Boolean(rows && (rows as number) > 0)}
       variant="outlined"
       label=""
-      InputProps={{
-        readOnly: props.readOnly,
-        className: props.className,
-      }}
     />
-  </Box>
+  </FBInput>
 );
 
-export default withOnChange(withLabelRenderer(FBTextField));
+export default FBTextField;

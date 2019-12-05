@@ -26,8 +26,6 @@ const FBValidatorOption: React.FunctionComponent<FBValidatorOptionProps> = ({
     </Box>
     {checked && indicatorElements}
     <FBCheckboxGroup
-      gutter={true}
-      type="checkboxgroup"
       name={`applicableOn-${name}`}
       options={FBValidatorStore.triggers()}
     />

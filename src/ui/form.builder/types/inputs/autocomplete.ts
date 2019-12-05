@@ -8,8 +8,8 @@ export type FBAutocompleteProps =
   & FBOptionProps
   & Omit<FBFormikFieldProps, "name">
   & Pick<AutocompleteProps, "renderInput">
-  & Pick<UseAutocompleteProps, "getOptionLabel" | "filterOptions" | "onChange">
+  & Pick<UseAutocompleteProps, "getOptionLabel" | "filterOptions" | "onChange" | "multiple">
   & {
-    optionsId?: string;
+    optionId?: string;
     optionLabel?: string;
   };

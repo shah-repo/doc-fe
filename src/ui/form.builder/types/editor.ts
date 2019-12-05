@@ -2,7 +2,7 @@ import { BoxProps } from "@material-ui/core/Box";
 import { FBFormDefaultProps, Subtract } from "./common";
 import { FBTemplateSchema } from "./store";
 
-export interface FBEditorWrapperProps extends BoxProps, Omit<FBFormDefaultProps, "onChange"> {
+export interface FBEditorWrapperProps extends BoxProps, Omit<FBFormDefaultProps, "onChange" | "defaultValue"> {
   indicatorVisibility?: "visible" | "hidden";
   toolbarMargin?: number;
   indicatorMargin?: number;

@@ -1,6 +1,6 @@
+import _ from "lodash";
 import React from "react";
 import { FBFormikFieldProps } from "../../types/formik";
-import _ from "lodash";
 
 export const withOnChange = <T extends FBFormikFieldProps>(
   Component: React.FunctionComponent<T>,
@@ -9,7 +9,7 @@ export const withOnChange = <T extends FBFormikFieldProps>(
     onChange,
     ...props
   }: T) => {
-    const { field, form, name = "" } = props;
+    const { field, form, name } = props;
 
     function checkOptions(value: any): any {
       if (_.has(value, "props")) {
@@ -18,14 +18,29 @@ export const withOnChange = <T extends FBFormikFieldProps>(
       return value;
     }
 
-    const handleChange = (event: React.ChangeEvent<{}>, value: any = undefined) => {
-      if (!form && !field) {
+    function chekcboxGroupValue(fieldName: string, value: boolean): boolean {
+      if (props.type !== "checkboxgroup" || !form) {
+        return false;
+      }
+      if (value) {
+        form.setFieldValue(fieldName!, value);
+      } else {
+        form.values = _.omit(form.values, [fieldName]);
+      }
+      return true;
+    }
+
+    const handleChange = (
+      ev: React.ChangeEvent<{ value: any, checked: boolean }>,
+      value: any = undefined,
+    ) => {
+      if ((!form && !field) || !name) {
         return;
       }
-      if (!_.isUndefined(value)) {
-        value =  checkOptions(value);
+      value = (!_.isUndefined(value)) ? checkOptions(value) : (ev.target.value || ev.target.checked);
+      if (!chekcboxGroupValue(value as string, ev.target.checked)) {
+        form!.setFieldValue(name!, value);
       }
-      form!.setFieldValue(name, value);
     };
 
     return Component({
