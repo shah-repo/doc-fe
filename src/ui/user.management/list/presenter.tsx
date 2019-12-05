@@ -4,8 +4,8 @@ import { Link as RouterLink } from "react-router-dom";
 import {
   DocumentRevision,
 } from "../../../state/ducks/documentRevisions";
-import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
+import { EMPLOYEES_URL } from "../../../state/ducks/userManagement/constants";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
@@ -29,7 +29,7 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
 
   const columns: Array<TableColumnProps<GetEmployeeResponse>> = [
     {
-      key: "user",
+      key: "name" as keyof GetEmployeeResponse,
       label: "common.name",
       columnOptions: {
         cellDataGetter: ({ rowData }) => (rowData.user || {}).name,
@@ -40,7 +40,7 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
       },
     },
     {
-      key: "user",
+      key: "email" as keyof GetEmployeeResponse,
       label: "common.email",
       columnOptions: {
         cellDataGetter: ({ rowData }) => (rowData.user || {}).email,
@@ -53,6 +53,9 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "groups",
       label: "common.groups",
+      columnOptions: {
+        cellDataGetter: ({ rowData }) => "Role",
+      },
       // cellHref: cellHrefRenderer,
       searchOptions: {
         defaultValue: tableState.queryDict.groups,
@@ -72,9 +75,7 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
         searchValueGetter: (value) => value === "true",
       },
       columnOptions: {
-        cellDataGetter: ({ rowData }) => {
-          return rowData.active;
-        },
+        cellDataGetter: ({ rowData }) => rowData.active ? "Active" : "Inactive",
         width: 100,
       },
     },
@@ -107,7 +108,7 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
       <Grid item={true} className={classes.item}>
         <TablePanel<GetEmployeeResponse>
           columns={columns}
-          queryUrl={DOCUMENT_REVISION_ROOT_URL}
+          queryUrl={EMPLOYEES_URL}
           cellMeasure={true}
           tableName={tableName}
         />
