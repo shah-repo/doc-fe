@@ -10,8 +10,7 @@ const DataFetcherContainer: React.FunctionComponent = () => {
   useEffect(() => {
     dispatch(documentTypeActions.loadList());
     dispatch(companyActions.queryCompany(employeeId));
-    // TODO: remove employeeId when endpoint ready
-    dispatch(authActions.loadUserGroups(employeeId));
+    dispatch(authActions.loadUserGroups());
   }, []);
 
   // NOTE: should we show error messages here?

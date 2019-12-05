@@ -21,12 +21,10 @@ import {
   AuthResponse,
   AuthUserAction,
   Group,
-  GroupTag,
   LoginRequestBody,
   LoginWithCodeRequestBody,
   LogoutRequestBody,
   LogoutUserAction,
-  Permission,
   SelectEmployeeAction,
   User,
   UserGroupsAction,
@@ -106,55 +104,13 @@ const logout = (): ThunkAction<void, ApplicationState, any, AnyAction> => (dispa
   dispatch(action);
 };
 
-const withUserManagement: Group[] = [
-  {
-    id: "c628093a-79c0-4d65-9c28-8fe5be4a9d93",
-    tags: null,
-    permissions: [
-      Permission.COMPANY_GET,
-      Permission.SUPPLIER_SURVEY_CREATE,
-    ],
-  },
-  {
-    id: "a20a6714-502f-4585-94db-3cb1134a2951",
-    tags: [GroupTag.USER_MANAGEMENT],
-    permissions: [
-      Permission.CR_ON_APPROVER_LIST,
-    ],
-  },
-];
-
-const withoutUserManagement: Group[] = [
-  {
-    id: "c628093a-79c0-4d65-9c28-8fe5be4a9d93",
-    tags: null,
-    permissions: [
-    ],
-  },
-  {
-    id: "a20a6714-502f-4585-94db-3cb1134a2951",
-    tags: null,
-    permissions: [
-      Permission.CR_ON_APPROVER_LIST,
-    ],
-  },
-];
-
-const loadUserGroups = (employeeId: string): ApiAction<Group[]> =>
+const loadUserGroups = (): ApiAction<Group[]> =>
   apiAction({
     url: `${GROUPS_URL}`,
     asyncType: USER_GROUPS_GET_ASYNC,
     method: "get",
     onSuccess: (groups, dispatch) => {
       dispatch(userGroups(groups));
-    },
-    onFailure: (error, dispatch) => {
-      // TODO: remove once endpoint ready
-      // only for mocking
-      const response = employeeId === "96bf2305-58af-4120-8d7a-06b6e9db8c8c" ?
-        withUserManagement :
-        withoutUserManagement;
-      dispatch(userGroups(response));
     },
   });
 
