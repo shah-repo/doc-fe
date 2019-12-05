@@ -2,23 +2,17 @@ import _ from "lodash";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { authSelectors } from "../../../state/ducks/auth";
+import { getHasTag, getTableState } from "../../../common/utils/helpers";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
-import tableSearchSelectors from "../../../state/ducks/tableSearch/selectors";
-import { ApplicationState } from "../../../state/reducers";
 import { HOME_URL } from "../../constants/urls";
 import ListPresenter from "./presenter";
 
 export const UserManagementListContainer: React.FunctionComponent = () => {
   const TABLE_NAME = "userManagement";
   const dispatch = useDispatch();
-  const tableState = useSelector((reduxState: ApplicationState) =>
-    tableSearchSelectors.getTableState(reduxState, TABLE_NAME),
-  );
-  const canManageUsers = useSelector((state: ApplicationState) =>
-    authSelectors.getHasTag(state, GroupTag.USER_MANAGEMENT),
-  );
+  const tableState = useSelector(getTableState(TABLE_NAME));
+  const canManageUsers = useSelector(getHasTag(GroupTag.USER_MANAGEMENT));
 
   useEffect(() => {
     if (_.isEmpty(tableState.queryDict)) {
