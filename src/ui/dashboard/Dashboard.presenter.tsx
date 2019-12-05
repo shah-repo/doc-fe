@@ -37,8 +37,8 @@ const DashboardPresenter: React.FunctionComponent<DashboardPresenterProps> = ({
         <Text translation="dashboard.noPendingActions" />
       </Typography>
     );
-  console.log("DASHBOARD THIS");
-  IotService.prototype.unsubscribeFromTopic("testfe");
+  // IotService.prototype.unsubscribeFromTopic("testfe");
+  IotService.prototype.unsubscribeAll();
 
   return (
     <Grid container={true} className={classes.root} spacing={8}>

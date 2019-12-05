@@ -5,41 +5,55 @@ import { store } from "../../../state/store";
 const AWSMqttClient = require('aws-mqtt');
 let clientMqtt:any;
 let credentialsMqtt:any;
+let creatingClient:any = false;
 
 export class IotService {
     async setMqttCreds(endpointRedux:any): Promise<any> {
       credentialsMqtt = endpointRedux;
-      console.log(`Credentials for IOT: ${credentialsMqtt}`);
     }
+
     async connectToClient(): Promise<any> {
         try {
-        if(!credentialsMqtt) {
-          await store.dispatch(authActions.getIotCreds());
-        }
-        console.log(`Credentials for IOT: ${credentialsMqtt}`);
-        config.region = 'us-west-2';
-        config.credentials = new Credentials({
-          accessKeyId: credentialsMqtt.credentials.AccessKeyId,
-          secretAccessKey: credentialsMqtt.credentials.SecretAccessKey,
-          sessionToken: credentialsMqtt.credentials.SessionToken,
-        })
-        const randomId = (Math.floor((Math.random() * 100000) + 1));
-        const client = new AWSMqttClient({
-            region: config.region,
-            credentials: config.credentials,
-            endpoint: credentialsMqtt.endpoint,
-            clientId: `mqtt-fe-${credentialsMqtt.environment}-${randomId}`,
-            will: {
-            topic: 'WillMsg',
-            payload: 'Connection Closed abnormally..!',
-            qos: 0,
-            retain: false
-            } 
-        });
-        clientMqtt = client;
-        console.log(`Client Generated: ${clientMqtt}`);
+          if(!credentialsMqtt) {
+            await store.dispatch(authActions.getIotCreds());
+          }
+          if(clientMqtt) {
+            clientMqtt.end();
+          }
+          if(!creatingClient) {
+            creatingClient = true;
+            config.region = 'us-west-2';
+            config.credentials = new Credentials({
+              accessKeyId: credentialsMqtt.credentials.AccessKeyId,
+              secretAccessKey: credentialsMqtt.credentials.SecretAccessKey,
+              sessionToken: credentialsMqtt.credentials.SessionToken,
+            })
+            const randomId = (Math.floor((Math.random() * 100000) + 1));
+            const client = new AWSMqttClient({
+              region: config.region,
+              credentials: config.credentials,
+              endpoint: credentialsMqtt.endpoint,
+              clientId: `mqtt-fe-${credentialsMqtt.environment}-${new Date()}-${randomId}`,
+              will: {
+              topic: 'WillMsg',
+              payload: 'Connection Closed abnormally..!',
+              qos: 0,
+              retain: false,
+              } 
+            });
+            clientMqtt = client;
+            clientMqtt.on('connect', () => {
+              console.log('client connected');
+              creatingClient = false;
+            });
+    
+            clientMqtt.on('close', () => {
+              console.log('client disconnected');
+            });
+            console.log(`Client Generated: ${clientMqtt}`);
+          }
         } catch (err) {
-        return false;
+          return false;
         }
     }
 
@@ -48,7 +62,6 @@ export class IotService {
             if (!clientMqtt) {
               console.log(`Client doesn't exist, Creating Client...`);
               await this.connectToClient();
-              console.log(`Trying to subscribe`);
               this.subscribe(topic);
             } 
             else 
@@ -77,35 +90,54 @@ export class IotService {
         }
     }
 
-    subscribe(topic:string) {
+    async subscribe(topic:string) {
       const fullTopic = `${credentialsMqtt.environment}/company/${credentialsMqtt.companyId}/${topic}`;
-      const noSubscriptions = _.isEmpty(clientMqtt.messageIdToTopic);
-      const alreadySubscribed = _.some(clientMqtt.messageIdToTopic,
-        id => id["0"] === fullTopic,
+      const noSubscriptions = _.isEmpty(Object.keys(clientMqtt._resubscribeTopics));
+      const alreadySubscribed = _.some(Object.keys(clientMqtt._resubscribeTopics),
+        id => id === fullTopic,
       );
-      debugger
       if(noSubscriptions) {
-        clientMqtt.subscribe(fullTopic);
+        console.log(`No subscriptions, Subscribing...`);
+        await clientMqtt.subscribe(fullTopic);
         console.log(`Subscribed to: ${fullTopic}`);
 
       } else if (!alreadySubscribed) {
-        clientMqtt.subscribe(fullTopic);
+        console.log(`Requested Topic not already subscribed, Subscribing...`);
+        await clientMqtt.subscribe(fullTopic);
         console.log(`Subscribed to: ${fullTopic}`);
-      }
+      } 
+    }
+
+    unsubscribeCallback(topic:any) {
+      console.log(`Unsubscribed from: ${topic}`);
     }
 
     async unsubscribeFromTopic(topic:string) {
-      const fullTopic = `${credentialsMqtt.environment}/company/${credentialsMqtt.companyId}/${topic}`;
-      const noSubscriptions = _.isEmpty(clientMqtt.messageIdToTopic);
-      const alreadySubscribed = _.some(clientMqtt.messageIdToTopic,
-        id => id["0"] === fullTopic,
-      );
-      if(noSubscriptions) {
-        console.log("Nothing to unsubscribe from")
-      } else if (alreadySubscribed) {
-        debugger
-        clientMqtt.unsubscribe(fullTopic);
-        console.log(`Subscribed to: ${fullTopic}`);
+      if(credentialsMqtt) {
+        const fullTopic = `${credentialsMqtt.environment}/company/${credentialsMqtt.companyId}/${topic}`;
+        const noSubscriptions = _.isEmpty(Object.keys(clientMqtt._resubscribeTopics));
+        const alreadySubscribed = _.some(Object.keys(clientMqtt._resubscribeTopics),
+          id => id === fullTopic,
+        );
+        if(noSubscriptions) {
+          console.log("Nothing to unsubscribe from")
+        } else if (alreadySubscribed) {
+          clientMqtt.unsubscribe(fullTopic, this.unsubscribeCallback(fullTopic));
+          console.log(`Unsubscribed from: ${fullTopic}`);
+        }
+      }
+    }
+
+    async unsubscribeAll() {
+      if(credentialsMqtt) {
+        const noSubscriptions = _.isEmpty(Object.keys(clientMqtt._resubscribeTopics));
+        if(noSubscriptions) {
+          console.log("Nothing to unsubscribe from")
+        } else {
+          const topics = Object.keys(clientMqtt._resubscribeTopics);
+          clientMqtt.unsubscribe(topics);
+          console.log(`Unsubscribed from all: ${topics}`);
+        }
       }
     }
 }

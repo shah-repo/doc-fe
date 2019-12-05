@@ -153,6 +153,7 @@ ApiAction => apiAction({
   onSuccess: (credentials, dispatch) => {
     IotService.prototype.setMqttCreds(credentials);
     IotService.prototype.connectToClient();
+    // new IotService()
   },
 });
 

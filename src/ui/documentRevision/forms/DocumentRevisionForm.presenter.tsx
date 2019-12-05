@@ -99,6 +99,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   // IotService.prototype.connectToClient();
   IotService.prototype.subscribeToTopic("testfe", notify);
+  IotService.prototype.subscribeToTopic("testfe2", notify);
 
   const isDisabled: boolean = _.get(initialValues, "id") !== undefined;
   const docId = _.get(initialValues, "document.docId");
