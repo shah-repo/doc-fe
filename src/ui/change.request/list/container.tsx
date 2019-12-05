@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
-import { getTableState } from "../../../common/utils/helpers";
+import { getTableState } from "../../../common/utils/selectors";
 import authSelectors from "../../../state/ducks/auth/selectors";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import {

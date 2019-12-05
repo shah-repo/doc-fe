@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React, { useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
-import { getTableState } from "../../../common/utils/helpers";
+import { getTableState } from "../../../common/utils/selectors";
 import {
   DocumentRevision,
   DocumentRevisionsByIdState,

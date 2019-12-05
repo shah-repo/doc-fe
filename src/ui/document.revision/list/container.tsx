@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getTableState } from "../../../common/utils/helpers";
+import { getTableState } from "../../../common/utils/selectors";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import documentTypeSelectors from "../../../state/ducks/documentRevisions/documentType/selectors";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";

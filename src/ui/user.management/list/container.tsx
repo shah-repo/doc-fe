@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { getHasTag, getTableState } from "../../../common/utils/helpers";
+import { getHasTag, getTableState } from "../../../common/utils/selectors";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import { HOME_URL } from "../../constants/urls";
