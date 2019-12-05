@@ -5,7 +5,10 @@ import { Redirect } from "react-router-dom";
 import { getHasTag, getTableState } from "../../../common/utils/selectors";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
+import { userManagementActions } from "../../../state/ducks/userManagement";
 import { HOME_URL } from "../../constants/urls";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
 import ListPresenter from "./presenter";
 
 export const UserManagementListContainer: React.FunctionComponent = () => {
@@ -13,8 +16,15 @@ export const UserManagementListContainer: React.FunctionComponent = () => {
   const dispatch = useDispatch();
   const tableState = useSelector(getTableState(TABLE_NAME));
   const canManageUsers = useSelector(getHasTag(GroupTag.USER_MANAGEMENT));
+  const loadCompanyGroupsAction = useActionCreator(userManagementActions.loadCompanyGroups);
+  const async = useAsync({
+    onSuccess: (data) => {
+    },
+  });
+  const loadCompanyGroups = () => async.start(loadCompanyGroupsAction, async);
 
   useEffect(() => {
+    loadCompanyGroups();
     if (_.isEmpty(tableState.queryDict)) {
       dispatch(
         tableSearchActions.setSearchCriteria(

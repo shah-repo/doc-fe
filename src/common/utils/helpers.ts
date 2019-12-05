@@ -18,5 +18,3 @@ export const stripTagsFromObject = <T extends ChangeRequest | DocumentRevision>(
 
   return copy;
 };
-
-
