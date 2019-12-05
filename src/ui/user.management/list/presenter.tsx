@@ -30,6 +30,21 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
   const cellHrefRenderer = (rowData: GetEmployeeResponse): string => {
     return userManagementDetailsPath(rowData.user.id);
   };
+  const customDataSet = (data: GetEmployeeResponse[]) => {
+    return data.map((employee) => {
+      const groups = employee
+        .groups
+        .map((group) => group.name)
+        .join(", ");
+
+      return {
+        ...employee,
+        groups,
+      } as unknown as GetEmployeeResponse;
+      // hack to avoid doing having to create a new interface
+      // groups should be array
+    });
+  };
 
   const columns: Array<TableColumnProps<GetEmployeeResponse>> = [
     {
@@ -57,12 +72,11 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "groups",
       label: "common.groups",
-      columnOptions: {
-        cellDataGetter: ({ rowData }) => "Role",
-      },
       cellHref: cellHrefRenderer,
       searchOptions: {
-        defaultValue: tableState.queryDict.groups,
+        searchType: "select",
+        selectOptions: [],
+        // TODO: add list of groups
       },
     },
     {
@@ -76,11 +90,10 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
           { text: "Active", value: "true" },
         ],
         defaultValue: tableState.queryDict.active,
-        searchValueGetter: (value) => value === "true",
       },
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.active ? "Active" : "Inactive",
-        width: 100,
+        width: 50,
       },
     },
   ];
@@ -115,6 +128,7 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
           queryUrl={EMPLOYEES_URL}
           cellMeasure={true}
           tableName={tableName}
+          customDataSet={customDataSet}
         />
       </Grid>
     </Grid>

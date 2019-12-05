@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { authSelectors } from "../../../state/ducks/auth";
@@ -20,23 +20,26 @@ export const UserManagementListContainer: React.FunctionComponent = () => {
     authSelectors.getHasTag(state, GroupTag.USER_MANAGEMENT),
   );
 
+  useEffect(() => {
+    if (_.isEmpty(tableState.queryDict)) {
+      dispatch(
+        tableSearchActions.setSearchCriteria(
+          {
+            ...tableState,
+            queryDict: {
+              active: true,
+            },
+          },
+          TABLE_NAME,
+        ),
+      );
+    }
+  }, []);
+
   if (!canManageUsers) {
     return <Redirect to={HOME_URL} />;
   }
 
-  if (_.isEmpty(tableState.queryDict)) {
-    dispatch(
-      tableSearchActions.setSearchCriteria(
-        {
-          ...tableState,
-          queryDict: {
-            active: true,
-          },
-        },
-        TABLE_NAME,
-      ),
-    );
-  }
   const clearFilter = () =>
     dispatch(tableSearchActions.clearSearchCriteria(TABLE_NAME));
 
