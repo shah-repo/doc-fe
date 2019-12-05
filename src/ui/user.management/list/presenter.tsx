@@ -12,6 +12,7 @@ import { TablePanel } from "../../components/table/panel";
 import { TablePanelStateProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
+import { userManagementDetailsPath } from "../utils/paths";
 import { styles } from "./styles";
 
 export interface Props {
@@ -26,15 +27,18 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
   clearFilter,
 }) => {
   const classes = styles();
+  const cellHrefRenderer = (rowData: GetEmployeeResponse): string => {
+    return userManagementDetailsPath(rowData.user.id);
+  };
 
   const columns: Array<TableColumnProps<GetEmployeeResponse>> = [
     {
       key: "name" as keyof GetEmployeeResponse,
       label: "common.name",
       columnOptions: {
-        cellDataGetter: ({ rowData }) => (rowData.user || {}).name,
+        cellDataGetter: ({ rowData }) => rowData.user.name,
       },
-      // cellHref: cellHrefRenderer,
+      cellHref: cellHrefRenderer,
       searchOptions: {
         defaultValue: tableState.queryDict.name,
       },
@@ -43,9 +47,9 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
       key: "email" as keyof GetEmployeeResponse,
       label: "common.email",
       columnOptions: {
-        cellDataGetter: ({ rowData }) => (rowData.user || {}).email,
+        cellDataGetter: ({ rowData }) => rowData.user.email,
       },
-      // cellHref: cellHrefRenderer,
+      cellHref: cellHrefRenderer,
       searchOptions: {
         defaultValue: tableState.queryDict.email,
       },
@@ -56,7 +60,7 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
       columnOptions: {
         cellDataGetter: ({ rowData }) => "Role",
       },
-      // cellHref: cellHrefRenderer,
+      cellHref: cellHrefRenderer,
       searchOptions: {
         defaultValue: tableState.queryDict.groups,
       },
@@ -64,7 +68,7 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "active",
       label: "common.active",
-      // cellHref: cellHrefRenderer,
+      cellHref: cellHrefRenderer,
       searchOptions: {
         searchType: "select",
         selectOptions: [
