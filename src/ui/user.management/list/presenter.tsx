@@ -6,6 +6,7 @@ import {
 } from "../../../state/ducks/documentRevisions";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
 import { EMPLOYEES_URL } from "../../../state/ducks/userManagement/constants";
+import { SelectOption } from "../../components/forms/fields/Select";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
@@ -19,12 +20,14 @@ export interface Props {
   tableName: string;
   tableState: TablePanelStateProps<DocumentRevision>;
   clearFilter?: () => void;
+  groupOptions: SelectOption[];
 }
 
 export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
   tableName,
   tableState,
   clearFilter,
+  groupOptions,
 }) => {
   const classes = styles();
   const cellHrefRenderer = (rowData: GetEmployeeResponse): string => {
@@ -70,13 +73,16 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
       },
     },
     {
-      key: "groups",
+      key: "groupId" as keyof GetEmployeeResponse,
       label: "common.groups",
       cellHref: cellHrefRenderer,
+      columnOptions: {
+        cellDataGetter: ({ rowData }) => rowData.groups,
+      },
       searchOptions: {
         searchType: "select",
-        selectOptions: [],
-        // TODO: add list of groups
+        selectOptions: groupOptions,
+        defaultValue: tableState.queryDict.groupId,
       },
     },
     {
