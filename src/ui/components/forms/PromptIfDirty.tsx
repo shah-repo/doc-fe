@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Prompt } from "react-router-dom";
 
-interface Props {
+export interface Props {
   dirty: boolean;
   doNotPrompt?: boolean;
   onDirtyFlagChange?: (dirty: boolean) => void;
@@ -33,7 +33,7 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
   }, []);
 
   const startBeforeUnload = () => { window.onbeforeunload = (e: Event) => { e.returnValue = true; }; };
-  const cancelBeforeUnload = () => window.onbeforeunload = () => {};
+  const cancelBeforeUnload = () => window.onbeforeunload = () => { };
 
   return (
     <Prompt

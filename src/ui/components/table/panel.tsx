@@ -14,13 +14,12 @@ import {
   Table,
 } from "react-virtualized";
 import { useDebounce } from "use-debounce";
+import { getTableState } from "../../../common/utils/selectors";
 import apiClient from "../../../state/apiClient";
 import {
   tableSearchActions,
-  tableSearchSelectors,
 } from "../../../state/ducks/tableSearch";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
-import { ApplicationState } from "../../../state/reducers";
 import { store } from "../../../state/store";
 import Text from "../../components/Text";
 import useDidMount from "../../hooks/useDidMount";
@@ -54,9 +53,7 @@ export function TablePanel<T extends any>({
   const classes = styles(styleProps);
   const sortDirection = SortDirection.DESC;
 
-  const tableState = useSelector((reduxState: ApplicationState) =>
-    tableSearchSelectors.getTableState(reduxState, tableName),
-  );
+  const tableState = useSelector(getTableState(tableName));
   const [debouncedQuery] = useDebounce(tableState.queryDict, queryDelay);
   const dispatch = useDispatch();
   const queryData = providedData || tableState.queryData;

@@ -36,7 +36,7 @@ export const ChangeRequestFormPresenter: React.FunctionComponent<
   onDirtyFlagChange,
   selectedDocumentRevision,
 }) => {
-  const renderAssessmentForm = (
+    const renderAssessmentForm = (
       <AssessmentFormContainer
         initialValues={initialValues}
         onSubmit={onSubmit}
@@ -48,35 +48,35 @@ export const ChangeRequestFormPresenter: React.FunctionComponent<
       />
     );
 
-  const renderDocumentRevisionForm = selectedDocumentRevision && (
-        <DocumentRevisionLoader
-          documentRevisionId={selectedDocumentRevision || ""}
-          onDirtyFlagChange={onDirtyFlagChange}
-        />
-      );
+    const renderDocumentRevisionForm = selectedDocumentRevision && (
+      <DocumentRevisionLoader
+        documentRevisionId={selectedDocumentRevision || ""}
+        onDirtyFlagChange={onDirtyFlagChange}
+      />
+    );
 
-  const renderChangeRequestAudit = changeRequest &&
-        <ChangeRequestAuditContainer changeRequestId={changeRequest.id} />;
+    const renderChangeRequestAudit = changeRequest &&
+      <ChangeRequestAuditContainer changeRequestId={changeRequest.id} />;
 
-  const renderDocumentRevisionAudit = selectedDocumentRevision && (
-        <DocumentRevisionAuditContainer
-          documentRevisionId={selectedDocumentRevision}
-        />
-      );
+    const renderDocumentRevisionAudit = selectedDocumentRevision && (
+      <DocumentRevisionAuditContainer
+        documentRevisionId={selectedDocumentRevision}
+      />
+    );
 
-  return (
-    <>
-      <Grid item={true} xs={12} sm={6} md={7}>
-        {changeRequest && <ChangeRequestHeader dataProp={changeRequest!} />}
-        {!selectedDocumentRevision && renderAssessmentForm}
-        {renderDocumentRevisionForm}
-      </Grid>
-      <Grid item={true} xs={12} sm={3} md={3}>
-        {renderDocumentRevisionAudit}
-        {renderChangeRequestAudit}
-      </Grid>
-    </>
-  );
-};
+    return (
+      <>
+        <Grid item={true} xs={12} sm={6} md={7}>
+          {changeRequest && !selectedDocumentRevision && <ChangeRequestHeader dataProp={changeRequest!} />}
+          {!selectedDocumentRevision && renderAssessmentForm}
+          {renderDocumentRevisionForm}
+        </Grid>
+        <Grid item={true} xs={12} sm={3} md={3}>
+          {renderDocumentRevisionAudit}
+          {renderChangeRequestAudit}
+        </Grid>
+      </>
+    );
+  };
 
 export default ChangeRequestFormPresenter;
