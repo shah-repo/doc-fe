@@ -6,11 +6,6 @@ export default makeStyles((theme: Theme) =>
       position: "relative",
       backgroundColor: "white",
     },
-    dialogContent: {
-      display: "contents",
-      padding: 50,
-      color: "red",
-    },
     dialogTitle: {
       marginLeft: "50%",
     },

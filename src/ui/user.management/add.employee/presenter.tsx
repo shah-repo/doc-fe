@@ -2,6 +2,7 @@ import { Box, Button } from "@material-ui/core";
 import React from "react";
 import Text from "../../components/Text";
 import AddEmployeeDialogPresenter from "./dialog.presenter";
+import AddEmployeeFormContainer from "./form.container";
 
 interface Props {
   isOpen: boolean;
@@ -26,7 +27,9 @@ export const AddEmployeePresenter: React.FunctionComponent<Props> = ({
       <AddEmployeeDialogPresenter
         isOpen={isOpen}
         closeDialog={closeDialog}
-      />
+      >
+        <AddEmployeeFormContainer />
+      </AddEmployeeDialogPresenter>
     </Box>
   );
 };

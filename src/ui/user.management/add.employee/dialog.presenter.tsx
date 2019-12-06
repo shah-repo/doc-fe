@@ -14,6 +14,7 @@ interface Props {
 export const AddEmployeeDialogPresenter: React.FunctionComponent<Props> = ({
   isOpen,
   closeDialog,
+  children,
 }) => {
   const classes = styles();
 
@@ -29,8 +30,8 @@ export const AddEmployeeDialogPresenter: React.FunctionComponent<Props> = ({
           </Typography>
         </Toolbar>
       </AppBar>
-      <DialogContent className={classes.dialogContent}>
-        Content
+      <DialogContent>
+        {children}
       </DialogContent>
     </Dialog>
   );
