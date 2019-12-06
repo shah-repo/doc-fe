@@ -215,6 +215,9 @@
   "common.released": "Released",
   "common.records.found": "Records found",
   "common.docId": "Doc ID",
+  "common.email": "Email",
+  "common.active": "Active",
+  "common.groups": "Groups",
 
   "output.info": "Form Info",
 
@@ -350,5 +353,7 @@
   "company.switch.subtitle": "Select a company below to sign-in to",
   "company.switch.button": "SWITCH COMPANY",
 
-  "supplier_survey_success_submit_message": "Survey is filled. Thank you for the response!"
+  "supplier_survey_success_submit_message": "Survey is filled. Thank you for the response!",
+
+  "user.management.add.employee": "Add Employee"
 }
