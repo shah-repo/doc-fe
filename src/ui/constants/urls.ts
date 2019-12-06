@@ -29,3 +29,6 @@ export const SIGNUP_URL = "/signup";
 export const STATUS = "/status";
 
 export const SUPPLIER_SURVEY_URL = "/supplier_survey/:token";
+
+export const USER_MANAGEMENT_ROOT_URL = "/user_management";
+export const USER_MANAGEMENT_DETAIL_URL = `${USER_MANAGEMENT_ROOT_URL}/:userId`;
