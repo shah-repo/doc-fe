@@ -1,18 +1,14 @@
 import React from "react";
 import FBOptionsContainer from "../custom/FBOptionsContainer";
-import FBCheckbox from "../inputs/FBCheckbox";
 import FBLabelEditor from "./FBLabelEditor";
 import FBStepperEditor from "./FBStepperEditor";
+import FBAdditionsEditor from "./FBAdditionsEditor";
 
 const FBControlGroupEditor: React.FunctionComponent<{}> = () => (
   <FBStepperEditor>
     <FBLabelEditor />
     <FBOptionsContainer label="form.builder.options" name="options" />
-    <FBCheckbox
-      type="checkbox"
-      label="form.builder.include.other"
-      name="includeContext"
-    />
+    <FBAdditionsEditor type="controlgroup" />
   </FBStepperEditor>
 );
 

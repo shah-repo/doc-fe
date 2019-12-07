@@ -1,6 +1,6 @@
 import { Dictionary } from "lodash";
 
-export const FBCheckContextOptions: Dictionary<string[]> = {
+export const FBContextOptions: Dictionary<string[]> = {
     select: ["fields.select.none"],
     checkbox: [],
 };

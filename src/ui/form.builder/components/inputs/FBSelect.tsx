@@ -6,7 +6,6 @@ import FBInput from "../common/FBInput";
 
 const FBSelect: React.FunctionComponent<FBSelectProps> = ({
   menuItems,
-  includeNone,
   ...props
 }) => (
   <FBInput {...props} type="select">

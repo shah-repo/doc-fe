@@ -3,6 +3,11 @@ import { SelectOption } from "../../components/forms/fields/Select";
 import { FBEditorElementType } from "./editor";
 import { FBDocumentFlowProps } from "./formik";
 import { FBValidatorDelimiter, FBValidatorTrigger } from "./validation/validator";
+import { FBInputProps, FBLabelProps } from "./common";
+
+export type FBSchema =
+  & Pick<FBInputProps, "name" | "type" | "disabled">
+  & FBLabelProps;
 
 export interface FBTemplateSchema {
   type: FBEditorElementType | string;

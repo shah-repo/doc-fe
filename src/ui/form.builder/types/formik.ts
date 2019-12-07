@@ -20,6 +20,8 @@ export type FBFormikFieldProps =
   & {
   name?: string;
   type?: FBEditorElementType | string;
+  includeContext?: boolean;
+  setContext?: React.Dispatch<React.SetStateAction<boolean>>;
   onChange?: (e: any, value: any) => void;
 };
 

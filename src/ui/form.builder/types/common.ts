@@ -6,7 +6,7 @@ import { ValueType } from "react-select/src/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
 import { TextProps } from "../../components/Text";
-import { FBCheckContextProps } from "./common/checkcontext";
+import { FBContextProps } from "./common/context";
 import { FBEditorElementType } from "./editor";
 import { FBFormikFieldProps } from "./formik";
 import { FBValidatorDelimiter, FBValidatorTrigger } from "./validation/validator";
@@ -29,7 +29,7 @@ export type FBLabelProps =
 };
 
 export type FBOptionProps =
-  & Pick<FBCheckContextProps, "includeContext">
+  & Pick<FBContextProps, "includeContext">
   & {
   options?: any[] | string;
   optionLabelKey?: string;
@@ -40,6 +40,7 @@ export type FBOptionProps =
 export type FBInputProps =
   & Omit<FBFormikFieldProps, "name">
   & FBLabelProps
+  & Pick<FBContextProps, "includeContext" | "setContext" | "showContext">
   & Pick<BaseTextFieldProps,
     | "children"
     | "value"
@@ -51,6 +52,7 @@ export type FBInputProps =
   & {
     index?: number;
     type?: FBEditorElementType | string;
+    contextLabel?: string;
   };
 
 export type FBFormDefaultProps =

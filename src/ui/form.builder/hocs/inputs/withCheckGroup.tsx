@@ -9,7 +9,6 @@ export const withCheckGroup = <T extends FBCheckGroupProps>(
   const component = ({
     optionLabelKey = "text",
     optionValueKey = "value",
-    controls,
     ...props
   }: T) => {
 
@@ -17,7 +16,6 @@ export const withCheckGroup = <T extends FBCheckGroupProps>(
       ...(props as T),
       optionLabelKey,
       optionValueKey,
-      controls,
     });
   };
 

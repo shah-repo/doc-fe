@@ -4,7 +4,6 @@ import React from "react";
 import Text from "../../../components/Text";
 import { withCheckGroup } from "../../hocs/inputs/withCheckGroup";
 import { FBCheckGroupProps } from "../../types/inputs/check";
-import FBCheckContext from "../common/FBCheckContext";
 import FBInput from "../common/FBInput";
 
 const FBCheckboxGroup: React.FunctionComponent<FBCheckGroupProps> = ({
@@ -26,7 +25,6 @@ const FBCheckboxGroup: React.FunctionComponent<FBCheckGroupProps> = ({
           label={<Text message={_.get(option, optionLabelKey)}  values={labelValues}/>}
         />
       ))}
-    <FBCheckContext label="Note" includeContext={includeContext} />
     </FormGroup>
   </FBInput>
 );

@@ -1,17 +1,14 @@
-import _ from "lodash";
+
 import React from "react";
 import autocompleteOptions from "../../../../data/autocompleteOptions.json";
-import { FBGroupEditorOptions } from "../../defaults/editor";
-import { FBOptionProps } from "../../types/common.js";
-import FBCheckboxGroup from "../inputs/FBCheckboxGroup";
 import FBSelect from "../inputs/FBSelect";
+import FBAdditionsEditor from "./FBAdditionsEditor";
 import FBLabelEditor from "./FBLabelEditor";
 import FBPlaceholderEditor from "./FBPlaceholderEditor";
 import FBStepperEditor from "./FBStepperEditor";
+import _ from "lodash";
 
-const FBAutocompleteEditor: React.FunctionComponent<
-  Pick<FBOptionProps, "options">
-> = ({ options = _.get(FBGroupEditorOptions, "autocomplete") }) => (
+const FBAutocompleteEditor: React.FunctionComponent<{}> = () => (
   <FBStepperEditor>
     <FBLabelEditor />
     <FBPlaceholderEditor />
@@ -22,7 +19,7 @@ const FBAutocompleteEditor: React.FunctionComponent<
       optionValueKey="id"
       name="optionId"
     />
-    <FBCheckboxGroup label="form.builder.additions" options={options} />
+    <FBAdditionsEditor type="autocomplete" />
   </FBStepperEditor>
 );
 

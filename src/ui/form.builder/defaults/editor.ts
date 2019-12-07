@@ -78,7 +78,9 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
 export const FBGroupEditorOptions: Dictionary<any[]> = {
   autocomplete: [{value: "multiple", text: "form.builder.multi.select"}],
   select: [
-    { value: "includeNone", text: "Include 'None'" },
-    { value: "includeContext", text: "Include 'Other'" },
+    { value: "includeNone", text: "form.builder.include.none" },
+    { value: "includeContext", text: "form.builder.include.other" },
   ],
+  control: [{value: "includeContext", text: "form.builder.include.note"}],
+  controlgroup: [{value: "includeContext", text: "form.builder.include.other"}],
 };

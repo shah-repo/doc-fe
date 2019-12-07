@@ -1,8 +1,8 @@
 import { FBInputProps, FBOptionProps } from "../common";
-import { FBCheckContextProps } from "../common/checkcontext";
+import { FBContextProps } from "../common/context";
 
 export type FBSelectProps =
-  & Pick<FBCheckContextProps, "includeContext">
+  & Pick<FBContextProps, "includeContext">
   & FBOptionProps
   & FBInputProps
   & {

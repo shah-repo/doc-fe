@@ -1,22 +1,23 @@
-import { FormControlLabel } from "@material-ui/core";
+import { FormControlLabel, Radio } from "@material-ui/core";
 import React from "react";
 import { withCheck } from "../../hocs/inputs/withCheck";
 import { FBCheckboxProps } from "../../types/inputs/checkbox";
-import FBCheckContext from "../common/FBCheckContext";
 import FBInput from "../common/FBInput";
 
 const FBRadio: React.FunctionComponent<FBCheckboxProps> = ({
   label,
-  control,
   disabled,
   includeContext,
+  name,
   onChange,
   ...props
 }) => (
-  <FBInput {...props} type="radio">
-    {control && <FormControlLabel {...{label, control, disabled}}/>}
-    <FBCheckContext label="Note" includeContext={includeContext} />
+  <FBInput {...props} {...{name}} type="radio">
+    <FormControlLabel
+      {...{label, disabled, onChange, name}}
+      control={<Radio value={name} />}
+    />
   </FBInput>
 );
 
-export default withCheck(FBRadio, "radio");
+export default withCheck(FBRadio);

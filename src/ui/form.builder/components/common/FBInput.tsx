@@ -5,6 +5,7 @@ import React from "react";
 import { withInput } from "../../hocs/common/withInput";
 import { FBInputProps } from "../../types/common";
 import FBLabel from "./FBLabel";
+import FBTextField from "../inputs/FBTextField";
 
 const FBInput: React.FunctionComponent<FBInputProps> = ({
   label,
@@ -12,6 +13,10 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
   helperText = "",
   labelValues,
   children,
+  showContext,
+  contextLabel,
+  disabled,
+  name,
 }) => {
   return (
     <Box mb={4}>
@@ -19,6 +24,7 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
       <FormControl error={error} fullWidth>
         {children}
         <FormHelperText>{helperText}</FormHelperText>
+        {showContext && <FBTextField label={contextLabel} {...{disabled, name}}/>}
       </FormControl>
     </Box>
   );

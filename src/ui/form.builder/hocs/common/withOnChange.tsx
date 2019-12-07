@@ -1,12 +1,15 @@
 import _ from "lodash";
 import React from "react";
 import { FBFormikFieldProps } from "../../types/formik";
+import FBStore from "../../stores/ui/FBStore";
 
 export const withOnChange = <T extends FBFormikFieldProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   return ({
     onChange,
+    includeContext,
+    setContext,
     ...props
   }: T) => {
     const { field, form, name } = props;
@@ -30,6 +33,16 @@ export const withOnChange = <T extends FBFormikFieldProps>(
       return true;
     }
 
+    function contextValue(value: boolean) {
+      if (!setContext) {
+        return;
+      }
+      const showContext =
+        (FBStore.mode === "form" && (value as boolean) && includeContext) ||
+        FBStore.mode === "preview";
+      setContext(showContext);
+    }
+
     const handleChange = (
       ev: React.ChangeEvent<{ value: any, checked: boolean }>,
       value: any = undefined,
@@ -38,6 +51,7 @@ export const withOnChange = <T extends FBFormikFieldProps>(
         return;
       }
       value = (!_.isUndefined(value)) ? checkOptions(value) : (ev.target.value || ev.target.checked);
+      contextValue(value);
       if (!chekcboxGroupValue(value as string, ev.target.checked)) {
         form!.setFieldValue(name!, value);
       }
@@ -46,6 +60,8 @@ export const withOnChange = <T extends FBFormikFieldProps>(
     return Component({
         ...(props as T),
         onChange: onChange || (handleChange),
+        includeContext,
+        setContext,
       });
     };
 };
