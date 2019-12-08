@@ -48,6 +48,7 @@ export const withOnChange = <T extends FBFormikFieldProps>(
           value = _.get(ev.target, "checked");
           break;
         case "texteditor":
+        case "datepicker":
           value = ev as unknown as string;
           break;
         default:
