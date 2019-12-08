@@ -54,6 +54,7 @@ export type FBInputProps =
     index?: number;
     type?: FBEditorElementType | string;
     contextLabel?: string;
+    linkUrl?: string;
   };
 
 export type FBFormDefaultProps =

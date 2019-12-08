@@ -1,28 +1,25 @@
-import { Box, Link } from "@material-ui/core";
-import { OutlinedTextFieldProps } from "@material-ui/core/TextField";
+import { Link } from "@material-ui/core";
 import React from "react";
-import { withLabelRenderer } from "../../hocs/withLabelRenderer";
-import { withOnChange } from "../../hocs/withOnChange";
-import { FBFormDefaultProps, FBOnChangeProps } from "../../types/common";
+import { FBInputProps } from "../../types/common";
+import FBInput from "../common/FBInput";
 
-export type Props = Omit<OutlinedTextFieldProps, "variant"> &
-  FBFormDefaultProps &
-  FBOnChangeProps;
-
-const FBLink: React.FunctionComponent<Props> = ({ labelRenderer, linkUrl }) => (
-  <Box mb={4} width="100%">
-    {labelRenderer}
+const FBLink: React.FunctionComponent<FBInputProps> = ({
+  linkUrl = "https://",
+...props
+}) => (
+  <FBInput {...props} type="hyperlink">
     <Link
       component="button"
       variant="body2"
       rel="noopener"
+      style={{textAlign: "left"}}
       onClick={() => {
         window.open(linkUrl!.includes("http") ? linkUrl : `https://${linkUrl}`);
       }}
     >
       {linkUrl}
     </Link>
-  </Box>
+  </FBInput>
 );
 
-export default withOnChange(withLabelRenderer(FBLink));
+export default FBLink;
