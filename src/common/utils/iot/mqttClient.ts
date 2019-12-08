@@ -43,10 +43,6 @@ export class IotService {
               clientMqtt.on("connect", () => {
                 creatingClient = false;
               });
-
-              clientMqtt.on("close", () => {
-                console.log("mqtt client connection lost");
-              });
             }
           }
         } catch (err) {
