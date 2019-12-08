@@ -7,7 +7,7 @@ import editorStore from "../stores/ui/FBEditorStore";
 import FBStore from "../stores/ui/FBStore";
 import FBValidatorStore from "../stores/ui/FBValidatorStore";
 import { FBEditorFormProps } from "../types/editor";
-import { FBTemplateSchema, FBSchema } from "../types/store";
+import { FBSchema, FBTemplateSchema } from "../types/store";
 import { FBValidatorTrigger } from "../types/validation/validator";
 
 export const withEditorRenderer =

@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React from "react";
-import { FBFormikFieldProps } from "../../types/formik";
 import FBStore from "../../stores/ui/FBStore";
+import { FBFormikFieldProps } from "../../types/formik";
 
 export const withOnChange = <T extends FBFormikFieldProps>(
   Component: React.FunctionComponent<T>,
@@ -48,7 +48,7 @@ export const withOnChange = <T extends FBFormikFieldProps>(
       switch (type) {
         case "checkboxgroup":
           const checked = _.get(ev.target, "checked");
-          form!.setFieldValue(value as string, checked)
+          form!.setFieldValue(value as string, checked);
           if (_.isEqual(value as string, "includeContext")) {
             form!.setFieldValue("contextLabel", contextLabel);
           }

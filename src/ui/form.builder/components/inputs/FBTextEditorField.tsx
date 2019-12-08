@@ -1,7 +1,7 @@
 import React from "react";
 import ReactQuill from "react-quill";
 import { formats, modules } from "../../../components/forms/fields/TextEditor/configuration";
-import { FBFormDefaultProps, FBOnChangeProps, FBInputProps } from "../../types/common";
+import { FBFormDefaultProps, FBInputProps, FBOnChangeProps } from "../../types/common";
 import FBInput from "../common/FBInput";
 
 export type Props = FBFormDefaultProps & FBOnChangeProps;

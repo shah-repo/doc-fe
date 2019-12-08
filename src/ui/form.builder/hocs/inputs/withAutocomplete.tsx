@@ -6,10 +6,10 @@ import Model from "mobx-rest/lib/Model";
 import React from "react";
 import autocompleteOptions from "../../../../data/autocompleteOptions.json";
 import FBAutocompleteCollection from "../../stores/domain/collections/FBAutocompleteCollection";
+import FBStore from "../../stores/ui/FBStore";
 import { FBAutocompleteProps } from "../../types/inputs/autocomplete";
 import { FBTemplateSchema } from "../../types/store.js";
 import { withFormik } from "../common/withFormik";
-import FBStore from "../../stores/ui/FBStore";
 
 export const withAutocomplete = <T extends FBAutocompleteProps>(
   Component: React.FunctionComponent<T>,
@@ -56,7 +56,7 @@ export const withAutocomplete = <T extends FBAutocompleteProps>(
         if (!form && !field) {
           return;
         }
-        value = _.isArray(value) ? _.map(value, 'id') : _.get(value, "id");
+        value = _.isArray(value) ? _.map(value, "id") : _.get(value, "id");
 
         if (FBStore.mode !== "form") {
           return form!.setFieldValue(field!.name, value);
@@ -65,7 +65,7 @@ export const withAutocomplete = <T extends FBAutocompleteProps>(
           ...FBStore.values,
           [field!.name as string]: value,
         });
-      }
+      };
 
       !getOptionLabel && (getOptionLabel = (option: Model) => {
         return _.isEmpty(option) ? "" : option.get(optionLabel);
@@ -87,6 +87,6 @@ export const withAutocomplete = <T extends FBAutocompleteProps>(
         onChange,
         error,
       });
-    }
+    },
   );
 };

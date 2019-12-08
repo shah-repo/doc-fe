@@ -1,7 +1,7 @@
 import { TextField } from "@material-ui/core";
 import React from "react";
-import FBInput from "../common/FBInput";
 import { FBInputProps } from "../../types/common";
+import FBInput from "../common/FBInput";
 
 const FBTextField: React.FunctionComponent<FBInputProps> = ({
   rows = 1,

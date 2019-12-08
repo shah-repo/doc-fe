@@ -8,14 +8,12 @@ const FBLabel: React.FunctionComponent<FBLabelProps> = ({
   label,
   error,
   labelValues,
-}) => {
-  return (
-    <FormLabel component="legend" error={error}>
-      <Box mb={0.5} fontSize="h6.fontSize" fontWeight={300}>
-        <Text message={label as string} values={labelValues} />
-      </Box>
-    </FormLabel>
-  );
-};
+}) => (
+  <FormLabel component="legend" error={error}>
+    <Box mb={0.5} fontSize="h6.fontSize" fontWeight={300}>
+      <Text message={label as string} values={labelValues} />
+    </Box>
+  </FormLabel>
+);
 
 export default FBLabel;

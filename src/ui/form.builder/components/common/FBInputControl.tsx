@@ -13,14 +13,12 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
   contextLabel,
   disabled,
   name,
-}) => {
-  return (
-    <FormControl error={error} fullWidth>
-      {children}
-      <FormHelperText>{helperText}</FormHelperText>
-      {showContext && <FBTextField label={contextLabel} {...{disabled}} name={`context-${name}`} />}
-    </FormControl>
-  );
-};
+}) => (
+  <FormControl error={error} fullWidth>
+    {children}
+    <FormHelperText>{helperText}</FormHelperText>
+    {showContext && <FBTextField label={contextLabel} {...{disabled}} name={`context-${name}`} />}
+  </FormControl>
+);
 
 export default withInput(FBInput);

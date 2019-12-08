@@ -1,20 +1,21 @@
-import { FormControlLabel, Checkbox } from "@material-ui/core";
+import { Checkbox, FormControlLabel } from "@material-ui/core";
 import React from "react";
-import { withCheck } from "../../hocs/inputs/withCheck";
-import { FBCheckboxProps } from "../../types/inputs/checkbox";
+import Text from "../../../components/Text";
+import { FBInputProps } from "../../types/common";
 import FBInput from "../common/FBInput";
 
-const FBCheckbox: React.FunctionComponent<FBCheckboxProps> = ({
-  label,
+const FBCheckbox: React.FunctionComponent<FBInputProps> = ({
+  label = "",
   disabled,
+  labelValues,
   ...props
 }) => (
   <FBInput {...props} type="checkbox" >
     <FormControlLabel
-      {...{label}}
+      label={<Text message={label as string} values={labelValues} />}
       control={<Checkbox {...{disabled}} value={props.name} />}
     />
   </FBInput>
 );
 
-export default withCheck(FBCheckbox);
+export default FBCheckbox;

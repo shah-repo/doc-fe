@@ -1,7 +1,7 @@
 import React from "react";
+import FBAdditionsEditor from "./FBAdditionsEditor";
 import FBLabelEditor from "./FBLabelEditor";
 import FBStepperEditor from "./FBStepperEditor";
-import FBAdditionsEditor from "./FBAdditionsEditor";
 
 const FBControlEditor: React.FunctionComponent<{}> = () => (
   <FBStepperEditor>

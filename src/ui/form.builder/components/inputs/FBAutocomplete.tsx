@@ -1,9 +1,9 @@
+import Box from "@material-ui/core/Box/Box";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { observer } from "mobx-react";
 import React from "react";
 import { withAutocomplete } from "../../hocs/inputs/withAutocomplete";
 import { FBAutocompleteProps } from "../../types/inputs/autocomplete";
-import Box from "@material-ui/core/Box/Box";
 import FBLabel from "../common/FBLabel";
 
 const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({

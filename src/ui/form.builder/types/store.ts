@@ -1,16 +1,14 @@
 
 import { SelectOption } from "../../components/forms/fields/Select";
+import { FBInputProps, FBLabelProps } from "./common";
+import { FBContextProps } from "./common/context";
 import { FBEditorElementType } from "./editor";
 import { FBDocumentFlowProps } from "./formik";
 import { FBValidatorDelimiter, FBValidatorTrigger } from "./validation/validator";
-import { FBInputProps, FBLabelProps } from "./common";
-import { FBTextFieldProps } from "./inputs/textfield";
-import { FBContextProps } from "./common/context";
 
 export type FBSchema =
-  & Pick<FBInputProps, "index" | "name" | "type" | "disabled">
+  & Pick<FBInputProps, "index" | "name" | "type" | "disabled" | "rows">
   & FBLabelProps
-  & Pick<FBTextFieldProps, "rows">
   & Pick<FBContextProps, "includeContext" | "contextLabel">;
 
 export interface FBTemplateSchema {
