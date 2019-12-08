@@ -1,19 +1,20 @@
 import TextField from "@material-ui/core/TextField/TextField";
 import { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import { RenderInputParams } from "@material-ui/lab/Autocomplete/Autocomplete";
-import _ from "lodash";
+import _, { Dictionary } from "lodash";
 import Model from "mobx-rest/lib/Model";
 import React from "react";
 import autocompleteOptions from "../../../../data/autocompleteOptions.json";
 import FBAutocompleteCollection from "../../stores/domain/collections/FBAutocompleteCollection";
 import { FBAutocompleteProps } from "../../types/inputs/autocomplete";
-import { withInput } from "../common/withInput";
+import { FBTemplateSchema } from "../../types/store.js";
+import { withFormik } from "../common/withFormik";
+import FBStore from "../../stores/ui/FBStore";
 
 export const withAutocomplete = <T extends FBAutocompleteProps>(
   Component: React.FunctionComponent<T>,
 ) => {
-  return withInput(
-    ({
+  return withFormik<any, FBTemplateSchema | Dictionary<any>>(({
       options,
       optionId,
       getOptionLabel,
@@ -21,6 +22,8 @@ export const withAutocomplete = <T extends FBAutocompleteProps>(
       error,
       helperText,
       filterOptions,
+      form,
+      field,
       ...props
     }: T) => {
       let indicators: { path: string, renderKey: string } | undefined;
@@ -49,6 +52,21 @@ export const withAutocomplete = <T extends FBAutocompleteProps>(
         />
       );
 
+      const onChange = (event: React.ChangeEvent<{}>, value: any) => {
+        if (!form && !field) {
+          return;
+        }
+        value = _.isArray(value) ? _.map(value, 'id') : _.get(value, "id");
+
+        if (FBStore.mode !== "form") {
+          return form!.setFieldValue(field!.name, value);
+        }
+        FBStore.setValues({
+          ...FBStore.values,
+          [field!.name as string]: value,
+        });
+      }
+
       !getOptionLabel && (getOptionLabel = (option: Model) => {
         return _.isEmpty(option) ? "" : option.get(optionLabel);
       });
@@ -66,7 +84,9 @@ export const withAutocomplete = <T extends FBAutocompleteProps>(
         getOptionLabel,
         renderInput,
         filterOptions,
+        onChange,
+        error,
       });
-    },
+    }
   );
 };

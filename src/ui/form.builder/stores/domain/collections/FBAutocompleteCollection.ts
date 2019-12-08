@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { Collection } from "mobx-rest";
 import { FBAutocompleteModel } from "../models/FBAutocompleteModel";
 
@@ -17,15 +16,6 @@ export class FBAutocompleteCollection extends Collection<FBAutocompleteModel> {
 
   public model() {
     return FBAutocompleteModel;
-  }
-
-  public data(): any[] {
-    return _.map(this.models, (model) => model.toJS());
-  }
-
-  public getBy(id: string): any {
-    const model = this.find({ id });
-    return model && model.toJS();
   }
 }
 
