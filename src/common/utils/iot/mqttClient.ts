@@ -40,34 +40,29 @@ export class IotService {
             });
             clientMqtt = client;
             clientMqtt.on('connect', () => {
-              console.log('client connected');
               creatingClient = false;
             });
     
             clientMqtt.on('close', () => {
-              console.log('client disconnected');
+              console.log('mqtt client connection lost');
             });
-            console.log(`Client Generated: ${clientMqtt}`);
           }
         } catch (err) {
           return false;
         }
     }
 
-    async subscribeToTopic(topic:string, notif:any): Promise<any> {
+    async subscribeToTopic(topic:any, notif:any): Promise<any> {
         try {
             if (!clientMqtt) {
-              console.log(`Client doesn't exist, Creating Client...`);
               await this.connectToClient();
               this.subscribe(topic);
             } 
             else 
             {
               if (!clientMqtt.connected) {
-                console.log(`Client exists but not connected, Connecting...`);
                 await this.connectToClient();
               }
-              console.log(`Client exists and is connected, Trying to subscribe...`);
               this.subscribe(topic);
             }
           } 
@@ -87,55 +82,46 @@ export class IotService {
         }
     }
 
-    async subscribe(topic:string) {
-      const fullTopic = `${credentialsMqtt.environment}/company/${credentialsMqtt.companyId}/${topic}`;
-      const noSubscriptions = _.isEmpty(Object.keys(clientMqtt._resubscribeTopics));
-      const alreadySubscribed = _.some(Object.keys(clientMqtt._resubscribeTopics),
-        id => id === fullTopic,
-      );
-      if(noSubscriptions) {
-        console.log(`No subscriptions, Subscribing...`);
-        await clientMqtt.subscribe(fullTopic);
-        console.log(`Subscribed to: ${fullTopic}`);
-
-      } else if (!alreadySubscribed) {
-        console.log(`Requested Topic not already subscribed, Subscribing...`);
-        await clientMqtt.subscribe(fullTopic);
-        console.log(`Subscribed to: ${fullTopic}`);
-      } 
-    }
-
-    unsubscribeCallback(topic:any) {
-      console.log(`Unsubscribed from: ${topic}`);
-    }
-
     async unsubscribeFromTopic(topic:string) {
       if(credentialsMqtt) {
         const fullTopic = `${credentialsMqtt.environment}/company/${credentialsMqtt.companyId}/${topic}`;
-        const noSubscriptions = _.isEmpty(Object.keys(clientMqtt._resubscribeTopics));
-        const alreadySubscribed = _.some(Object.keys(clientMqtt._resubscribeTopics),
+        const topicSubscribed = _.some(Object.keys(clientMqtt._resubscribeTopics),
           id => id === fullTopic,
         );
-        if(noSubscriptions) {
-          console.log("Nothing to unsubscribe from")
-        } else if (alreadySubscribed) {
-          clientMqtt.unsubscribe(fullTopic, this.unsubscribeCallback(fullTopic));
-          console.log(`Unsubscribed from: ${fullTopic}`);
+        if (topicSubscribed) {
+          clientMqtt.unsubscribe(fullTopic);
         }
       }
     }
 
     async unsubscribeAll() {
       if(credentialsMqtt) {
-        const noSubscriptions = _.isEmpty(Object.keys(clientMqtt._resubscribeTopics));
-        if(noSubscriptions) {
-          console.log("Nothing to unsubscribe from")
-        } else {
+        const hasSubscriptions = !_.isEmpty(Object.keys(clientMqtt._resubscribeTopics));
+        if (hasSubscriptions) {
           const topics = Object.keys(clientMqtt._resubscribeTopics);
           clientMqtt.unsubscribe(topics);
-          console.log(`Unsubscribed from all: ${topics}`);
-        }
+        } 
       }
+    }
+
+    subscribedTopics() {
+      if(clientMqtt) {
+        return Object.keys(clientMqtt._resubscribeTopics);
+      }
+    }
+
+    private async subscribe(topic:string) {
+      const fullTopic = `${credentialsMqtt.environment}/${credentialsMqtt.companyId}/${topic}`;
+      const noSubscriptions = _.isEmpty(Object.keys(clientMqtt._resubscribeTopics));
+      const alreadySubscribed = _.some(Object.keys(clientMqtt._resubscribeTopics),
+        id => id === fullTopic,
+      );
+      if(noSubscriptions) {
+        await clientMqtt.subscribe(fullTopic);
+
+      } else if (!alreadySubscribed) {
+        await clientMqtt.subscribe(fullTopic);
+      } 
     }
 }
 

@@ -98,6 +98,8 @@ const logout = (): ThunkAction<void, ApplicationState, any, AnyAction> => (dispa
     method: "delete",
     onCompleted: () => {
       dispatch(logoutUser());
+      const iotService = new IotService();
+      iotService.unsubscribeAll();
     },
   });
 
@@ -120,9 +122,9 @@ ApiAction => apiAction({
   method: "get",
   includeAuthorization: true,
   onSuccess: (credentials, dispatch) => {
-    IotService.prototype.setMqttCreds(credentials);
-    IotService.prototype.connectToClient();
-    // new IotService()
+    const iotService = new IotService();
+    iotService.setMqttCreds(credentials);
+    iotService.connectToClient();
   },
 });
 

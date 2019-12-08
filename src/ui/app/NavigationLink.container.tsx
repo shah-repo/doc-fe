@@ -4,6 +4,9 @@ import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import _ from "lodash";
 import React, { ComponentType, useEffect, useState } from "react";
 import { Translation } from "../translations/types";
+import { IotService } from "../../common/utils/iot/mqttClient";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import NavigationLinkPresenter from "./NavigationLink.presenter";
 
 export interface LinkDefinition {
@@ -22,6 +25,27 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
     const isChildActive = () => _.includes(childrenUrls.map((link) => link.url), currentPath);
     const [isOpen, setIsOpen] = useState(isChildActive());
 
+    toast.configure({
+      autoClose: false,
+    });
+
+    const notify = (msg:string) => {
+      const message = JSON.parse(msg).data.message;
+      toast(message);
+    }
+
+    const manageSubscriptionsOnNavigation = () => {
+      const iotService = new IotService();
+      switch (currentPath) {
+        case "/":
+          return iotService.unsubscribeAll();
+        case "/document_revision":
+          return iotService.unsubscribeAll();
+        case "/change_request":
+          return iotService.subscribeToTopic(`change_requests/created`, notify);
+      }
+    }
+    manageSubscriptionsOnNavigation();
     useEffect(() => {
       if (isChildActive()) {
         setIsOpen(true);

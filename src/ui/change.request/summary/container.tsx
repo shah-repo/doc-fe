@@ -22,6 +22,9 @@ import useAsync from "../../hooks/useAsync";
 import { canEditApprovers, canEditChangeRequest } from "../utils/helpers";
 import { changeRequestEditPath } from "../utils/paths";
 import { SummaryDispatchProps } from "../utils/types";
+import { IotService } from "../../../common/utils/iot/mqttClient";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import DocumentRevisionLoader from "./loader";
 import Presenter from "./presenter";
 import styles from "./styles";
@@ -41,11 +44,23 @@ export const Container: React.FunctionComponent<Props> = ({
   currentUserEmail,
   closeTask,
 }) => {
+  toast.configure({
+    autoClose: false,
+  });
   const [docRev, setDocRev] = React.useState<DocumentRevision | null>(null);
   const async = useAsync<ChangeRequest>();
   if (canEditChangeRequest({ dataProp, currentUserEmail })) {
     return <Redirect to={changeRequestEditPath(dataProp.id)} />;
   }
+
+  const notify = (msg:string) => {
+    const message = JSON.parse(msg).data.message;
+    toast(message);
+  }
+
+  const iotService = new IotService();
+  iotService.unsubscribeAll();
+  iotService.subscribeToTopic(`${dataProp.crId}/updated`, notify);
 
   const docRevSummary = (documentRevision: DocumentRevision) =>
     setDocRev(documentRevision);

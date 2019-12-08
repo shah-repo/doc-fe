@@ -43,7 +43,6 @@ import styles from "./DocumentRevisionForm.styles";
 import References from "./presenters/References";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
 import { DocumentRevisionFormValues } from "./types";
-import { IotService } from "../../../common/utils/iot/mqttClient";
 
 export interface Props
   extends WithStyles<typeof styles>,
@@ -92,14 +91,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const openReference = (documentId: string) => {
     window.open(documentDetailsPath(documentId), "_blank");
   };
-
-  const notify = (msg:string) => {
-    console.log(msg);
-  }
-
-  // IotService.prototype.connectToClient();
-  IotService.prototype.subscribeToTopic("testfe", notify);
-  IotService.prototype.subscribeToTopic("testfe2", notify);
 
   const isDisabled: boolean = _.get(initialValues, "id") !== undefined;
   const docId = _.get(initialValues, "document.docId");
