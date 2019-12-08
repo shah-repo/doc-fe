@@ -1,8 +1,8 @@
+import * as AWSMqttClient from "aws-mqtt";
 import { config, Credentials } from "aws-sdk/global";
 import _ from "lodash";
 import { authActions } from "../../../state/ducks/auth";
 import { store } from "../../../state/store";
-const AWSMqttClient = require("aws-mqtt");
 let clientMqtt: any;
 let credentialsMqtt: any;
 let creatingClient: any = false;
