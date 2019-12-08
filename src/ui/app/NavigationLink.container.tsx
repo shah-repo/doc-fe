@@ -38,11 +38,15 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
       const iotService = new IotService();
       switch (currentPath) {
         case "/":
-          return iotService.unsubscribeAll();
+          iotService.unsubscribeAll();
+          return;
         case "/document_revision":
-          return iotService.unsubscribeAll();
+          iotService.unsubscribeAll();
+          return;
         case "/change_request":
-          return iotService.subscribeToTopic(`change_requests/created`, notify);
+          iotService.unsubscribeAll();
+          iotService.subscribeToTopic(`change_requests/created`, notify);
+          return;
       }
     }
     manageSubscriptionsOnNavigation();

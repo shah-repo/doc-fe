@@ -18,34 +18,36 @@ export class IotService {
             await store.dispatch(authActions.getIotCreds());
           }
           if(!creatingClient) {
-            creatingClient = true;
-            config.region = 'us-west-2';
-            config.credentials = new Credentials({
-              accessKeyId: credentialsMqtt.credentials.AccessKeyId,
-              secretAccessKey: credentialsMqtt.credentials.SecretAccessKey,
-              sessionToken: credentialsMqtt.credentials.SessionToken,
-            })
-            const randomId = (Math.floor((Math.random() * 100000) + 1));
-            const client = new AWSMqttClient({
-              region: config.region,
-              credentials: config.credentials,
-              endpoint: credentialsMqtt.endpoint,
-              clientId: `mqtt-fe-${credentialsMqtt.environment}-${new Date()}-${randomId}`,
-              will: {
-              topic: 'WillMsg',
-              payload: 'Connection Closed abnormally..!',
-              qos: 0,
-              retain: false,
-              } 
-            });
-            clientMqtt = client;
-            clientMqtt.on('connect', () => {
-              creatingClient = false;
-            });
-    
-            clientMqtt.on('close', () => {
-              console.log('mqtt client connection lost');
-            });
+            if(!clientMqtt) {
+              creatingClient = true;
+              config.region = 'us-west-2';
+              config.credentials = new Credentials({
+                accessKeyId: credentialsMqtt.credentials.AccessKeyId,
+                secretAccessKey: credentialsMqtt.credentials.SecretAccessKey,
+                sessionToken: credentialsMqtt.credentials.SessionToken,
+              })
+              const randomId = (Math.floor((Math.random() * 100000) + 1));
+              const client = new AWSMqttClient({
+                region: config.region,
+                credentials: config.credentials,
+                endpoint: credentialsMqtt.endpoint,
+                clientId: `mqtt-fe-${credentialsMqtt.environment}-${new Date()}-${randomId}`,
+                will: {
+                topic: 'WillMsg',
+                payload: 'Connection Closed abnormally..!',
+                qos: 0,
+                retain: false,
+                } 
+              });
+              clientMqtt = client;
+              clientMqtt.on('connect', () => {
+                creatingClient = false;
+              });
+      
+              clientMqtt.on('close', () => {
+                console.log('mqtt client connection lost');
+              });
+            }
           }
         } catch (err) {
           return false;
