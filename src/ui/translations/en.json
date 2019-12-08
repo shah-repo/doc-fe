@@ -3,15 +3,20 @@
 
   "autoLogout.timer": "You will be logged out in {time} seconds",
 
-  "login.title": "Sign in",
-  "login.email": "Email address",
-  "login.password": "Password",
-  "login.button": "Sign in",
+  "login.title": "Sign in to Enlil",
+  "login.email": "EMAIL ADDRESS",
+  "login.password": "PASSWORD",
   "login.message": "Don't have an account?",
+  "login.submit": "Sign in",
+  "login.create.account": "Click here to register",
 
-  "signup.title": "Sign up",
-  "signup.button": "Sign up",
+  "signup.submit": "Sign up",
+  "signup.title": "Sign up with a new account",
   "signup.message": "Already have an account?",
+  "signup.verification": "We have sent an email to",
+  "signup.verification.message": "Please check your email and follow the instructions to verify your email address. If you didn't receive an email, check your spam folder.",
+  "signup.sign.in": "Click here to sign in",
+  "signup.close.window": "CLOSE WINDOW",
 
   "header.title": "Enlil",
   "header.welcome": "Welcome", 

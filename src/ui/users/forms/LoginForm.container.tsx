@@ -1,11 +1,14 @@
 import { Formik, FormikProps } from "formik";
 import * as React from "react";
 import { connect } from "react-redux";
-import * as Yup from 'yup';
+import * as Yup from "yup";
+import Config from "../../../config";
 import { authActions } from "../../../state/ducks/auth";
 import { ApplicationState } from "../../../state/reducers";
 import useAsync from "../../hooks/useAsync";
+import { ThemeEnv } from "../../layout/theme/utils/types";
 import { Translation } from "../../translations/types";
+import VerificationEmailPage from "../SignUp/VerificationEmailPage";
 import { LoginFormValues } from "../types";
 import LoginFormPresenter from "./LoginForm.presenter";
 
@@ -13,25 +16,38 @@ interface DispatchProps {
   login: typeof authActions.login;
 }
 interface Props {
-  buttonLabel: Translation;
   signMessage: Translation;
   signLabel: Translation;
   route: string;
+  title: Translation;
 }
 
 type LoginFormContainerProps = DispatchProps & Props;
 
 const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
   login,
-  buttonLabel,
   signMessage,
   route,
   signLabel,
+  title,
 }) => {
   const async = useAsync();
 
   const onSubmit = (values: LoginFormValues): void => {
     async.start(login, values, async);
+  };
+
+  const [verificationState, showVerificationState] = React.useState(false);
+  const [signupEmail, saveSignupEmail] = React.useState("");
+
+  const theme = Config.Theme;
+  const logo = theme === ThemeEnv.DEV_THEME ?
+    "/logo_enlil_dark.svg" :
+    "/logo_enlil.svg";
+
+  const handleVerificationState = (values: LoginFormValues): void => {
+    saveSignupEmail(values.email);
+    showVerificationState(true);
   };
 
   const initialValues: LoginFormValues = {
@@ -43,10 +59,12 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
     <LoginFormPresenter
       {...props}
       asyncState={async.asyncState}
-      buttonLabel={buttonLabel}
       signMessage={signMessage}
       route={route}
       signLabel={signLabel}
+      showVerificationState={handleVerificationState}
+      title={title}
+      logo={logo}
     />
   );
 
@@ -64,12 +82,15 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
   });
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={onSubmit}
-      validationSchema={signLabel === "login.button" ? SignupSchema : null}
-      render={render}
-    />
+    <div>
+      {verificationState && <VerificationEmailPage email={signupEmail} logo={logo} />}
+      {!verificationState && <Formik
+        initialValues={initialValues}
+        onSubmit={onSubmit}
+        validationSchema={signLabel === "login.title" ? SignupSchema : null}
+        render={render}
+      />}
+    </div>
   );
 };
 

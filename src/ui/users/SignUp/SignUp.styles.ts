@@ -11,7 +11,7 @@ export const styles = makeStyles((theme: Theme) =>
       right: 0,
       top: 0,
       bottom: 0,
-      backgroundColor: theme.palette.grey[300],
+      backgroundColor: theme.palette.common.white,
     },
     paper: {
       alignItems: "center",
@@ -19,21 +19,27 @@ export const styles = makeStyles((theme: Theme) =>
       display: "flex",
       flexDirection: "column",
       padding: theme.spacing(2, 3, 3),
+      boxShadow: "none",
+      width: "500px",
     },
-    avatar: {
-      backgroundColor: theme.palette.secondary.main,
-      margin: theme.spacing(1),
-      color: theme.palette.secondary.contrastText,
+    logo: {
+      margin: "10px 0 100px 0",
     },
-    form: {
-      marginTop: theme.spacing(1),
-      width: "100%", // Fix IE 11 issue.
+    title: {
+      width: "500px",
+      lineHeight: 1.5,
     },
-    status: {
-      marginTop: theme.spacing(3),
+    boldTitle: {
+      width: "500px",
+      lineHeight: 1.5,
+      fontWeight: "bolder",
+      marginBottom: "30px",
     },
-    submit: {
-      marginTop: theme.spacing(3),
+    navigationLink: {
+      color: theme.palette.primary.main,
+      textDecoration: "none",
+      marginTop: "80px",
+      fontWeight: "bold",
     },
   }),
   );
