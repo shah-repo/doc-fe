@@ -2,17 +2,16 @@ import { Checkbox, FormControlLabel, FormGroup } from "@material-ui/core";
 import _ from "lodash";
 import React from "react";
 import Text from "../../../components/Text";
-import { withCheckGroup } from "../../hocs/inputs/withCheckGroup";
 import { FBCheckGroupProps } from "../../types/inputs/check";
 import FBInput from "../common/FBInput";
+import { withOptions } from "../../hocs/common/withOptions";
 
 const FBCheckboxGroup: React.FunctionComponent<FBCheckGroupProps> = ({
   row = true,
-  includeContext,
   type = "checkboxgroup",
   options,
-  optionValueKey = "",
-  optionLabelKey = "",
+  optionValueKey = "value",
+  optionLabelKey = "text",
   labelValues,
   ...props
 }) => (
@@ -30,4 +29,4 @@ const FBCheckboxGroup: React.FunctionComponent<FBCheckGroupProps> = ({
   </FBInput>
 );
 
-export default withCheckGroup(FBCheckboxGroup);
+export default withOptions(FBCheckboxGroup);

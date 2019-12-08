@@ -8,7 +8,7 @@ const FBControlGroupEditor: React.FunctionComponent<{}> = () => (
   <FBStepperEditor>
     <FBLabelEditor />
     <FBOptionsContainer label="form.builder.options" name="options" />
-    <FBAdditionsEditor type="controlgroup" />
+    <FBAdditionsEditor type="controlgroup" contextLabel="Note" />
   </FBStepperEditor>
 );
 

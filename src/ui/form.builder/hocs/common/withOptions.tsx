@@ -9,28 +9,38 @@ export const withOptions = <T extends FBOptionProps>(
     includeNone = false,
     optionLabelKey = "text",
     optionValueKey = "value",
+    includeContext,
+    name,
     ...props
   }: T) => {
 
     function mapStringOption(): T["options"] {
       const splitArray = _.split(props.options as string, "\n");
       return _.map(splitArray, (option, index) => ({
-        [optionValueKey]: `check-option-${index}`,
+        [optionValueKey]: `option-${index}-${name}`,
         [optionLabelKey]: option,
       }));
     }
 
-    function unionArrayOption(): T["options"] {
+    function unionNoneOption(options: any[]): T["options"] {
       return _.union([{
         [optionValueKey]: "",
         [optionLabelKey]: "fields.select.none",
-      }], props.options);
+      }], options);
+    }
+
+    function unionContextOption(options: any[]): T["options"] {
+      return _.union(options, [{
+        [optionValueKey]: `other-${name}`,
+        [optionLabelKey]: "form.builder.other",
+      }]);
     }
 
     const optionsSet = (): T["options"] => {
       let options = props.options || "";
       _.isString(options) && (options = mapStringOption());
-      includeNone && (options = unionArrayOption());
+      includeNone && (options = unionNoneOption(options as any[]));
+      includeContext && (options = unionContextOption(options as any[]));
       return options;
     };
 
@@ -40,6 +50,8 @@ export const withOptions = <T extends FBOptionProps>(
       includeNone,
       optionLabelKey,
       optionValueKey,
+      includeContext,
+      name,
     });
   };
 };
