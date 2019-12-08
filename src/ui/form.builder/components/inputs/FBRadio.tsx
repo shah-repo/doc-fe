@@ -7,15 +7,12 @@ import FBInput from "../common/FBInput";
 const FBRadio: React.FunctionComponent<FBCheckboxProps> = ({
   label,
   disabled,
-  includeContext,
-  name,
-  onChange,
   ...props
 }) => (
-  <FBInput {...props} {...{name}} type="radio">
+  <FBInput {...props} type="radio">
     <FormControlLabel
-      {...{label, disabled, onChange, name}}
-      control={<Radio value={name} />}
+      {...{label}}
+      control={<Radio {...{disabled}} value={props.name} />}
     />
   </FBInput>
 );

@@ -2,17 +2,16 @@ import { FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
 import _ from "lodash";
 import React from "react";
 import Text from "../../../components/Text";
-import { withCheckGroup } from "../../hocs/inputs/withCheckGroup";
 import { FBCheckGroupProps } from "../../types/inputs/check";
 import FBInput from "../common/FBInput";
+import { withOptions } from "../../hocs/common/withOptions";
 
 const FBRadioGroup: React.FunctionComponent<FBCheckGroupProps> = ({
   row = true,
-  includeContext,
   type = "radiogroup",
   options,
-  optionValueKey = "",
-  optionLabelKey = "",
+  optionValueKey = "value",
+  optionLabelKey = "text",
   labelValues,
   ...props
 }) => (
@@ -22,7 +21,7 @@ const FBRadioGroup: React.FunctionComponent<FBCheckGroupProps> = ({
         <FormControlLabel
           key={`${_.get(option, optionValueKey)}-${index}`}
           value={_.get(option, optionValueKey)}
-          control={<Radio color="primary" />}
+          control={<Radio />}
           label={<Text message={_.get(option, optionLabelKey)}  values={labelValues}/>}
         />
       ))}
@@ -30,4 +29,4 @@ const FBRadioGroup: React.FunctionComponent<FBCheckGroupProps> = ({
   </FBInput>
 );
 
-export default withCheckGroup(FBRadioGroup);
+export default withOptions(FBRadioGroup);

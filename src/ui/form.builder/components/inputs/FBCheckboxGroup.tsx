@@ -21,7 +21,7 @@ const FBCheckboxGroup: React.FunctionComponent<FBCheckGroupProps> = ({
         <FormControlLabel
           key={`${_.get(option, optionValueKey)}-${index}`}
           value={_.get(option, optionValueKey)}
-          control={<Checkbox name={_.get(option, optionValueKey)} onChange={props.onChange} />}
+          control={<Checkbox />}
           label={<Text message={_.get(option, optionLabelKey)}  values={labelValues}/>}
         />
       ))}

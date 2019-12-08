@@ -54,6 +54,7 @@ export const withOnChange = <T extends FBFormikFieldProps>(
           }
           return;
         case "checkbox":
+        case "radio":
           value = _.get(ev.target, "checked");
           break;
         case "texteditor":
