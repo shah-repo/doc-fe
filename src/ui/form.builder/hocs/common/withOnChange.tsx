@@ -18,9 +18,13 @@ export const withOnChange = <T extends FBFormikFieldProps>(
     ...props
   }: T) => {
 
-    showContext = field &&
-      ((FBStore.mode === "form" && (field.value as boolean) && includeContext) ||
-      FBStore.mode === "preview");
+    function contextValue(): boolean {
+      const contextChecked: boolean = field && form &&
+        ((field.value as boolean) || _.get(form.values, `other-${field.name}`));
+      
+      return ((FBStore.mode === "form" && contextChecked && includeContext) ||
+              FBStore.mode === "preview");
+    }
 
     const handleChange = (
       ev: React.ChangeEvent<{ value: any, checked: boolean }>,
@@ -31,19 +35,20 @@ export const withOnChange = <T extends FBFormikFieldProps>(
       }
 
       value = _.get(ev.target, "value");
-      // contextValue(value);
+
       switch (type) {
         case "checkboxgroup":
           const checked = _.get(ev.target, "checked");
-          checked ? form!.setFieldValue(value as string, checked)
-                  : form!.values = _.omit(form!.values, [value as string]);
-          // context
+          form!.setFieldValue(value as string, checked)
           if (_.isEqual(value as string, "includeContext")) {
             form!.setFieldValue("contextLabel", contextLabel);
           }
           return;
         case "checkbox":
           value = _.get(ev.target, "checked");
+          break;
+        case "texteditor":
+          value = ev as unknown as string;
           break;
         default:
           value = _.get(ev.target, "value");
@@ -55,7 +60,7 @@ export const withOnChange = <T extends FBFormikFieldProps>(
         ...(props as T),
         onChange: onChange || (handleChange),
         includeContext,
-        showContext,
+        showContext: contextValue(),
         contextLabel,
         type,
         field,

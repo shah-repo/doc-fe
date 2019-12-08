@@ -30,6 +30,7 @@ export type FBLabelProps =
 
 export type FBOptionProps =
   & Pick<FBContextProps, "includeContext">
+  & Pick<FBInputProps, "name">
   & {
   options?: any[] | string;
   optionLabelKey?: string;
