@@ -8,7 +8,7 @@ export const withOnChange = <T extends FBFormikFieldProps>(
 ) => {
   return ({
     onChange,
-    includeContext,
+    includeContext = false,
     contextLabel,
     showContext,
     type,
@@ -19,11 +19,20 @@ export const withOnChange = <T extends FBFormikFieldProps>(
   }: T) => {
 
     function contextValue(): boolean {
-      const contextChecked: boolean = field && form &&
-        ((field.value as boolean) || _.get(form.values, `other-${field.name}`));
-      
-      return ((FBStore.mode === "form" && contextChecked && includeContext) ||
-              FBStore.mode === "preview");
+      if (!field && !form) {
+        return false;
+      }
+
+      const fieldValue =
+        Boolean(_.toInteger(field!.value)) ||
+        _.isEqual(field!.value, `other-${field!.name}`);
+      const formValue = _.get(form!.values, `other-${field!.name}`) as boolean;
+      const contextChecked: boolean = fieldValue || formValue;
+
+      return (
+        contextChecked && includeContext &&
+        (FBStore.mode === "form" || FBStore.mode === "preview")
+      );
     }
 
     const handleChange = (

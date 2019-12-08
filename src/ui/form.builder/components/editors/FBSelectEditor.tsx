@@ -7,8 +7,8 @@ import FBStepperEditor from "./FBStepperEditor";
 const FBSelectEditor: React.FunctionComponent<{}> = () => (
   <FBStepperEditor>
     <FBLabelEditor />
-    <FBOptionsContainer label="form.builder.options" name="options" />
-    <FBAdditionsEditor type="select" />
+    <FBOptionsContainer />
+    <FBAdditionsEditor type="select" contextLabel="form.builder.note" />
   </FBStepperEditor>
 );
 

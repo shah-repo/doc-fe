@@ -49,6 +49,8 @@ export type FBInputProps =
     | "name"
     | "helperText"
     | "defaultValue"
+    | "rows"
+    | "placeholder"
   >
   & {
     index?: number;
