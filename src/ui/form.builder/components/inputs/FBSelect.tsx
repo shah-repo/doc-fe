@@ -9,7 +9,7 @@ const FBSelect: React.FunctionComponent<FBSelectProps> = ({
   ...props
 }) => (
   <FBInput {...props} type="select">
-    <Select variant="outlined" {...props}>
+    <Select variant="outlined">
       {menuItems}
     </Select>
   </FBInput>

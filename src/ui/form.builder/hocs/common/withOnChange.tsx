@@ -9,39 +9,18 @@ export const withOnChange = <T extends FBFormikFieldProps>(
   return ({
     onChange,
     includeContext,
-    setContext,
+    contextLabel,
+    showContext,
+    type,
+    field,
+    form,
+    name,
     ...props
   }: T) => {
-    const { field, form, name } = props;
 
-    function checkOptions(value: any): any {
-      if (_.has(value, "props")) {
-        return value.props.value;
-      }
-      return value;
-    }
-
-    function chekcboxGroupValue(fieldName: string, value: boolean): boolean {
-      if (props.type !== "checkboxgroup" || !form) {
-        return false;
-      }
-      if (value) {
-        form.setFieldValue(fieldName!, value);
-      } else {
-        form.values = _.omit(form.values, [fieldName]);
-      }
-      return true;
-    }
-
-    function contextValue(value: boolean) {
-      if (!setContext) {
-        return;
-      }
-      const showContext =
-        (FBStore.mode === "form" && (value as boolean) && includeContext) ||
-        FBStore.mode === "preview";
-      setContext(showContext);
-    }
+    showContext = field &&
+      ((FBStore.mode === "form" && (field.value as boolean) && includeContext) ||
+      FBStore.mode === "preview");
 
     const handleChange = (
       ev: React.ChangeEvent<{ value: any, checked: boolean }>,
@@ -50,18 +29,38 @@ export const withOnChange = <T extends FBFormikFieldProps>(
       if ((!form && !field) || !name) {
         return;
       }
-      value = (!_.isUndefined(value)) ? checkOptions(value) : (ev.target.value || ev.target.checked);
-      contextValue(value);
-      if (!chekcboxGroupValue(value as string, ev.target.checked)) {
-        form!.setFieldValue(name!, value);
+
+      value = _.get(ev.target, "value");
+      // contextValue(value);
+      switch (type) {
+        case "checkboxgroup":
+          const checked = _.get(ev.target, "checked");
+          checked ? form!.setFieldValue(value as string, checked)
+                  : form!.values = _.omit(form!.values, [value as string]);
+          // context
+          if (_.isEqual(value as string, "includeContext")) {
+            form!.setFieldValue("contextLabel", contextLabel);
+          }
+          return;
+        case "checkbox":
+          value = _.get(ev.target, "checked");
+          break;
+        default:
+          value = _.get(ev.target, "value");
       }
+      form!.setFieldValue(name!, value);
     };
 
     return Component({
         ...(props as T),
         onChange: onChange || (handleChange),
         includeContext,
-        setContext,
+        showContext,
+        contextLabel,
+        type,
+        field,
+        form,
+        name,
       });
     };
 };

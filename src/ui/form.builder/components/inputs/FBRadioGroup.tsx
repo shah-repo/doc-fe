@@ -18,8 +18,9 @@ const FBRadioGroup: React.FunctionComponent<FBCheckGroupProps> = ({
 }) => (
   <FBInput {...props} {...{ type }}>
     <RadioGroup row={row}>
-      {_.map(options, (option) => (
+      {_.map(options, (option, index) => (
         <FormControlLabel
+          key={`${_.get(option, optionValueKey)}-${index}`}
           value={_.get(option, optionValueKey)}
           control={<Radio color="primary" />}
           label={<Text message={_.get(option, optionLabelKey)}  values={labelValues}/>}

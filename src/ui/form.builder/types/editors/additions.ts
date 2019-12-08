@@ -1,3 +1,5 @@
+import { FBInputProps } from "../common";
+
 export type FBAdditionEditorType =
     | "autocomplete"
     | "select"
@@ -5,6 +7,4 @@ export type FBAdditionEditorType =
     | "controlgroup"
     | "radio";
 
-export interface FBAdditionEditorProps {
-    type: FBAdditionEditorType;
-}
+export type FBAdditionEditorProps = Pick<FBInputProps, "type" | "contextLabel">;

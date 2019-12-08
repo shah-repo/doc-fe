@@ -7,7 +7,7 @@ import editorStore from "../stores/ui/FBEditorStore";
 import FBStore from "../stores/ui/FBStore";
 import FBValidatorStore from "../stores/ui/FBValidatorStore";
 import { FBEditorFormProps } from "../types/editor";
-import { FBTemplateSchema } from "../types/store";
+import { FBTemplateSchema, FBSchema } from "../types/store";
 import { FBValidatorTrigger } from "../types/validation/validator";
 
 export const withEditorRenderer =
@@ -17,9 +17,20 @@ export const withEditorRenderer =
   const { type, index, mode } = other;
   const { includeNote, includeOther } = props.values;
   const InputType = FBFieldEditorComponent[type as string];
+  const uuidv4 = require("uuid/v4");
+
+  const schemaItem = (): FBSchema => ({
+    type,
+    index,
+    name: uuidv4(),
+    ...props.values,
+  });
 
   const onClick = () => {
-    const uuidv4 = require("uuid/v4");
+
+    const item = schemaItem();
+    console.log(item);
+
     const schema: FBTemplateSchema = {
       type,
       index,

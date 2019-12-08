@@ -324,6 +324,7 @@
   "form.builder.other": "Other",
   "form.builder.options": "Options",
   "form.builder.include.note": "Include 'Note'",
+  "form.builder.note": "Note",
   "form.builder.include.none": "Include 'None'",
   "form.builder.autocomplete": "Autocomplete",
   "form.builder.select.options": "Select Options",

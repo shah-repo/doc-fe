@@ -6,7 +6,6 @@ import { FBInputProps } from "../../types/common";
 import { FBTemplateSchema } from "../../types/store";
 import { withFormik } from "./withFormik";
 import { withOnChange } from "./withOnChange";
-import { withContext } from "./withContext";
 
 export const withInput = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>,
@@ -32,7 +31,7 @@ export const withInput = <T extends FBInputProps>(
           name,
           value,
           type,
-          ..._.pick(props, ["disabled", "onChange", "showContext", "setContext"]),
+          ..._.pick(props, ["disabled", "onChange"]),
         })
       );
     }
@@ -49,8 +48,7 @@ export const withInput = <T extends FBInputProps>(
 
   return (
     withFormik<any, FBTemplateSchema | Dictionary<any>>(
-    withContext(
     withOnChange(
       (props: T) => Comp(props)),
-  )));
+  ));
 };

@@ -40,7 +40,7 @@ export type FBOptionProps =
 export type FBInputProps =
   & Omit<FBFormikFieldProps, "name">
   & FBLabelProps
-  & Pick<FBContextProps, "includeContext" | "setContext" | "showContext">
+  & Pick<FBContextProps, "includeContext" | "showContext">
   & Pick<BaseTextFieldProps,
     | "children"
     | "value"

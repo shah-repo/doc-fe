@@ -4,10 +4,14 @@ import { FBEditorElementType } from "./editor";
 import { FBDocumentFlowProps } from "./formik";
 import { FBValidatorDelimiter, FBValidatorTrigger } from "./validation/validator";
 import { FBInputProps, FBLabelProps } from "./common";
+import { FBTextFieldProps } from "./inputs/textfield";
+import { FBContextProps } from "./common/context";
 
 export type FBSchema =
-  & Pick<FBInputProps, "name" | "type" | "disabled">
-  & FBLabelProps;
+  & Pick<FBInputProps, "index" | "name" | "type" | "disabled">
+  & FBLabelProps
+  & Pick<FBTextFieldProps, "rows">
+  & Pick<FBContextProps, "includeContext" | "contextLabel">;
 
 export interface FBTemplateSchema {
   type: FBEditorElementType | string;

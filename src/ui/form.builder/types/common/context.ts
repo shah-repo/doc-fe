@@ -1,6 +1,5 @@
 export interface FBContextProps {
-  label?: string;
+  contextLabel?: string;
   includeContext?: boolean;
   showContext?: boolean;
-  setContext?: React.Dispatch<React.SetStateAction<boolean>>;
 }

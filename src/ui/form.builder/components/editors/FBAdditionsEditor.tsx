@@ -6,11 +6,13 @@ import FBCheckboxGroup from "../inputs/FBCheckboxGroup";
 
 const FBAdditionsEditor: React.FunctionComponent<FBAdditionEditorProps> = ({
   type = "",
+  contextLabel,
 }) => (
   <FBCheckboxGroup
     name="editor-additions"
     label="form.builder.additions"
     options={_.get(FBGroupEditorOptions, type)}
+    contextLabel={contextLabel}
   />
 );
 

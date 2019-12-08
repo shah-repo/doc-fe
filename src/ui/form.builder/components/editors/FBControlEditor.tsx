@@ -6,7 +6,7 @@ import FBAdditionsEditor from "./FBAdditionsEditor";
 const FBControlEditor: React.FunctionComponent<{}> = () => (
   <FBStepperEditor>
     <FBLabelEditor />
-    <FBAdditionsEditor type="control" />
+    <FBAdditionsEditor type="control" contextLabel="form.builder.note" />
   </FBStepperEditor>
 );
 
