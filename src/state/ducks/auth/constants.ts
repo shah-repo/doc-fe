@@ -10,6 +10,6 @@ export const LOGIN_URL = "/auth/login";
 export const LOGIN_WITH_CODE_URL = "/auth/tokens";
 export const LOGOUT_URL = "/auth/logout";
 export const PERMISSIONS_URL = "/users/permissions";
-export const AUTH_AWS_IOT_URL = "/auth/credentials/iot"
+export const AUTH_AWS_IOT_URL = "/auth/credentials/iot";
 export const PING_SERVER_URL = "/auth/prevent_idle_logout";
 export const SESSION_DETAILS_URL = "/auth/sessionDetails";

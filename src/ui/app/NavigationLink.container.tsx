@@ -3,10 +3,10 @@ import { SvgIconProps } from "@material-ui/core/SvgIcon";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import _ from "lodash";
 import React, { ComponentType, useEffect, useState } from "react";
-import { Translation } from "../translations/types";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { IotService } from "../../common/utils/iot/mqttClient";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Translation } from "../translations/types";
 import NavigationLinkPresenter from "./NavigationLink.presenter";
 
 export interface LinkDefinition {
@@ -29,10 +29,10 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
       autoClose: false,
     });
 
-    const notify = (msg:string) => {
+    const notify = (msg: string) => {
       const message = JSON.parse(msg).data.message;
       toast(message);
-    }
+    };
 
     const manageSubscriptionsOnNavigation = () => {
       const iotService = new IotService();
@@ -48,7 +48,7 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
           iotService.subscribeToTopic(`change_requests/created`, notify);
           return;
       }
-    }
+    };
     manageSubscriptionsOnNavigation();
     useEffect(() => {
       if (isChildActive()) {

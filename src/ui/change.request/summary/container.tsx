@@ -3,6 +3,9 @@ import { Form, Formik, FormikErrors, FormikProps } from "formik";
 import React from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { IotService } from "../../../common/utils/iot/mqttClient";
 import {
   ChangeRequest,
   changeRequestsActions,
@@ -22,9 +25,6 @@ import useAsync from "../../hooks/useAsync";
 import { canEditApprovers, canEditChangeRequest } from "../utils/helpers";
 import { changeRequestEditPath } from "../utils/paths";
 import { SummaryDispatchProps } from "../utils/types";
-import { IotService } from "../../../common/utils/iot/mqttClient";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import DocumentRevisionLoader from "./loader";
 import Presenter from "./presenter";
 import styles from "./styles";
@@ -53,10 +53,10 @@ export const Container: React.FunctionComponent<Props> = ({
     return <Redirect to={changeRequestEditPath(dataProp.id)} />;
   }
 
-  const notify = (msg:string) => {
+  const notify = (msg: string) => {
     const message = JSON.parse(msg).data.message;
     toast(message);
-  }
+  };
 
   const iotService = new IotService();
   iotService.unsubscribeAll();

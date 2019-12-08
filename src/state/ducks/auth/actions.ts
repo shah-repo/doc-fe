@@ -1,18 +1,18 @@
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
+import { IotService } from "../../../common/utils/iot/mqttClient";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApplicationState } from "../../reducers";
 import { ApiAction, Handlers } from "../../types";
 import { companyActions, Employee } from "../company";
-import { IotService } from "../../../common/utils/iot/mqttClient";
 import {
+  AUTH_AWS_IOT_URL,
   AUTH_USER,
   LOGIN_URL,
   LOGIN_WITH_CODE_URL,
   LOGOUT_URL,
   LOGOUT_USER,
   PERMISSIONS_URL,
-  AUTH_AWS_IOT_URL,
   PING_SERVER_GET_ASYNC,
   PING_SERVER_URL,
   SET_EMPLOYEE,

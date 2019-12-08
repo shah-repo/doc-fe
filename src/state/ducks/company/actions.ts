@@ -1,7 +1,7 @@
+import { authActions } from "../../../state/ducks/auth";
 import { apiAction } from "../../factories";
 import { SESSION_DETAILS_URL } from "../auth/constants";
 import { SELECT_COMPANY } from "./constants";
-import { authActions } from "../../../state/ducks/auth";
 import { Company, SelectCompanyAction } from "./types";
 
 const selectCompany = (company: Company): SelectCompanyAction => ({
