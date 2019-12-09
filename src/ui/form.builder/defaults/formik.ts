@@ -7,4 +7,5 @@ export const FBFormValues: Dictionary<any> = {
   radio: false,
   textfield: "",
   radiogroup: "",
+  texteditor: "",
 };
