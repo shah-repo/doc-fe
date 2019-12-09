@@ -5,7 +5,7 @@ import { RouteComponentProps } from "react-router-dom";
 import { authActions } from "../../state/ducks/auth";
 import { ApplicationState } from "../../state/reducers";
 import AsyncGate from "../components/AsyncGate";
-import { HOME_URL, LOGIN_URL } from "../constants/urls";
+import { LOGIN_URL } from "../constants/urls";
 import useAsync from "../hooks/useAsync";
 
 interface DispatchProps {
@@ -20,7 +20,8 @@ export const LoginWithCodeContainer: React.FunctionComponent<LoginWithCodeContai
   const code = queryString.parse(location.search).code as string;
   const async = useAsync({
     onSuccess: () => {
-      history.replace(HOME_URL);
+      // the user will be redirected to company select or dashboard screen
+      history.replace(LOGIN_URL);
     },
     onError: () => {
       history.replace(LOGIN_URL);

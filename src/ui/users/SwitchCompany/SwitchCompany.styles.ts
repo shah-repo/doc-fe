@@ -12,6 +12,7 @@ export const styles = makeStyles((theme: Theme) =>
       top: 0,
       bottom: 0,
       width: "auto",
+      height: "max-content",
       backgroundColor: theme.palette.common.white,
     },
     container: {

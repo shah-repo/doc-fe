@@ -1,6 +1,6 @@
 import { Attachment } from "../attachments";
 import { ChangeRequest } from "../changeRequest";
-import { Approval, Owner, User } from "../common";
+import { Approval, Owner } from "../common";
 import { DocumentRevision, Reference } from "../documentRevisions";
 import { DocumentType } from "../documentRevisions/documentType";
 
@@ -10,7 +10,7 @@ export interface Audit {
   type: string;
   nextValue:
     | string
-    | User
+    | Owner
     | Attachment
     | Approval
     | Reference
@@ -20,6 +20,8 @@ export interface Audit {
   timestamp: string;
   groupId: string;
   owner: Owner;
+  ownerUser?: Owner;
+  ownerThirdParty?: Owner;
 }
 
 export interface AuditActionPayload {

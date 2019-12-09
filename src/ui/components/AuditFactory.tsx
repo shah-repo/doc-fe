@@ -2,10 +2,11 @@ import React, { Fragment } from "react";
 import { Attachment } from "../../state/ducks/attachments";
 import { Audit } from "../../state/ducks/audit";
 import { ChangeRequest } from "../../state/ducks/changeRequest";
-import { Approval, User } from "../../state/ducks/common";
+import { Approval, Owner } from "../../state/ducks/common";
 import { DocumentRevision, Reference } from "../../state/ducks/documentRevisions";
 import { DocumentType } from "../../state/ducks/documentRevisions/documentType";
 import { getAuditDefaultValue } from "../common/utils/audit";
+import Text from "../components/Text";
 import DateTime from "./DateTime";
 import DialogOpener from "./textDiff/DialogOpener";
 
@@ -38,7 +39,7 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
       break;
     case "approvers":
     case "tasks.assigned":
-      returnValue = (audit.nextValue as User).name;
+      returnValue = (audit.nextValue as Owner).user.name;
       break;
     case "documentRevisions":
       returnValue = (audit.nextValue as DocumentRevision).name;
@@ -60,6 +61,18 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
       break;
     case "documentType":
       returnValue = (audit.nextValue as DocumentType).documentTypeName;
+      break;
+    case "approvals.status":
+    case "state":
+      returnValue = (
+        <Text
+          translation="changeRequest.audit.status.updated.by"
+          values={{
+            status: audit.nextValue as string,
+            name: audit.owner.user.name,
+          }}
+        />
+      );
       break;
     default:
       returnValue = getAuditDefaultValue(audit.nextValue);

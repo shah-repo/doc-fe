@@ -21,18 +21,18 @@ export const Header: React.FunctionComponent<Props> = ({
     <Grid
       container={true}
       alignItems="center"
-      spacing={4}
+      spacing={0}
       className={classes.headerContainer}
     >
-      <Grid item={true} xs={3} alignItems="center">
+      <Grid item={true} xs={3}>
         <Chip label={dataProp.status} className={classes.status} />
       </Grid>
-      <Grid item={true} xs={6} alignItems="center">
+      <Grid item={true} xs={6}>
         <Typography variant="h6" align="center">
           <Text message="common.document" />
         </Typography>
       </Grid>
-      <Grid item={true} xs={3} alignItems="center">
+      <Grid item={true} xs={3}>
         <Typography variant="h6" align="right" className={classes.crId}>
           {dataProp.document.docId}
         </Typography>

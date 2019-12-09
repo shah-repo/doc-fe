@@ -39,8 +39,10 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   SetFile = React.createContext(setSelectedFile);
 
   const async = useAsync<AttachmentDownloadResponse>({
-    onSuccess: (downloadInfo) =>
-      window.open(downloadInfo!.url, "_parent"),
+    onSuccess: (downloadInfo) => {
+      window.onbeforeunload = null;
+      window.open(downloadInfo!.url, "_parent");
+    },
   });
 
   const handleRemove = (attachment: Attachment) => () => {

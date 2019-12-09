@@ -44,6 +44,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     h4: {
       color: appTheme.palette.text.primary,
       fontSize: "1.4rem",
+      fontFamily: "Open Sans, sans-serif;",
     },
     h6: {
       fontSize: "1.1rem",
@@ -56,13 +57,14 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       fontSize: "0.75rem",
       borderRadius: 3,
       margin: appTheme.spacing(1),
-      fontFamily: "Open Sans",
       fontWeight: "bold",
+      fontFamily: "Open Sans, sans-serif;",
     },
   },
   MuiFab: {
     root: {
       fontSize: "0.75rem",
+      fontFamily: "Open Sans, sans-serif;",
     },
     label: {
       lineHeight: "1rem",
@@ -72,11 +74,13 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     root: {
       fontSize: "0.8rem",
       color: appTheme.palette.primary.main,
+      fontFamily: "Open Sans, sans-serif;",
     },
   },
   MuiTableCell: {
     root: {
       fontSize: "0.8rem",
+      fontFamily: "Open Sans, sans-serif;",
     },
     head: {
       fontSize: "0.81rem",
@@ -90,6 +94,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   MuiInputBase: {
     root: {
       fontSize: "0.8rem",
+      fontFamily: "Open Sans, sans-serif;",
     },
     input: {
       fontSize: "0.8rem",
@@ -99,6 +104,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     root: {
       fontSize: "0.8rem",
       lineHeight: "1.2rem",
+      fontFamily: "Open Sans, sans-serif;",
     },
     icon: {
       right: "10px",
@@ -114,17 +120,20 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       overflowWrap: "break-word",
       wordWrap: "break-word",
       hyphens: "auto",
+      fontFamily: "Open Sans, sans-serif;",
     },
   },
   MuiMenuItem: {
     root: {
       fontSize: "0.8rem",
+      fontFamily: "Open Sans, sans-serif;",
     },
   },
   MuiListItemText: {
     primary: {
       fontSize: "0.9rem",
       color: appTheme.palette.text.primary,
+      fontFamily: "Open Sans, sans-serif;",
     },
   },
   MuiExpansionPanel: {
@@ -158,6 +167,21 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     root: {
       padding: appTheme.spacing(1, 0),
       margin: appTheme.spacing(0, -1),
+    },
+  },
+  MuiFormControl: {
+    root: {
+      fontFamily: "Open Sans, sans-serif;",
+    },
+  },
+  MuiChip: {
+    root: {
+      fontFamily: "Open Sans, sans-serif;",
+    },
+  },
+  MuiGrid: {
+    root: {
+      fontFamily: "Open Sans, sans-serif;",
     },
   },
 });

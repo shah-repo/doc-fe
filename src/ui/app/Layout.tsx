@@ -14,6 +14,7 @@ import {
   DOCUMENT_REVISION_ROOT_URL,
   HOME_URL,
   TRAINING_DETAIL_URL,
+  USER_MANAGEMENT_ROOT_URL,
 } from "../constants/urls";
 import DashboardContainer from "../dashboard/Dashboard.container";
 import DocumentRevisionContainer from "../document.revision/container";
@@ -21,6 +22,7 @@ import DocumentRevisionListContainer from "../document.revision/list/container";
 import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisionCreate.container";
 import RemoteValidatorsLoader from "../remoteValidators/RemoteValidators";
 import TrainingDetailContainer from "../training/TrainingDetail.container";
+import UserManagementListContainer from "../user.management/list/container";
 import AutoLogout from "./AutoLogout";
 import DataFetcherContainer from "./DataFetcher.container";
 import HeaderContainer from "./Header.container";
@@ -72,6 +74,10 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
           <Route
             path={TRAINING_DETAIL_URL}
             component={TrainingDetailContainer}
+          />
+          <Route
+            path={USER_MANAGEMENT_ROOT_URL}
+            component={UserManagementListContainer}
           />
           <Redirect to={{ pathname: HOME_URL }} />
         </Switch>

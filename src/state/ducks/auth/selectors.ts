@@ -1,50 +1,45 @@
 import { createSelector } from "reselect";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
+import { GroupTag } from "./types";
 
 const isAuthenticated = (state: ApplicationState): boolean => {
   return Boolean(state.auth.user.sessionId && state.auth.user.employeeId);
 };
 
-const currentUserEmail = (state: ApplicationState): string => {
-  return state.auth.user.email;
-};
+const currentUserEmail = (state: ApplicationState): string =>
+  state.auth.user.email;
 
-const currentUserName = (state: ApplicationState): string => {
-  return state.auth.user.name;
-};
+const currentUserName = (state: ApplicationState): string =>
+  state.auth.user.name;
 
-const currentUserId = (state: ApplicationState): string => {
-  return state.auth.user.id;
-};
+const currentUserId = (state: ApplicationState): string => state.auth.user.id;
 
-const getLoadPermissionsAsyncState = (state: ApplicationState): AsyncState => {
-  return state.auth.loadPermissionsAsyncInfo;
-};
+const currentEmployeeId = (state: ApplicationState): string =>
+  state.auth.user.employeeId;
 
-const getHasPermission = (
-  state: ApplicationState,
-  permission: string,
-): boolean => state.auth.permissions.includes(permission);
+const getLoadPermissionsAsyncState = (state: ApplicationState): AsyncState =>
+  state.auth.loadGroupsAsyncInfo;
 
-const makeGetHasPermission = () => {
-  return createSelector(
-    getHasPermission,
-    (hasPermission: boolean) => hasPermission,
-  );
-};
+const getHasTag = createSelector(
+  (state: ApplicationState) => state.auth.groups.tags,
+  (state: ApplicationState, tag: GroupTag) => tag,
+  (tags, tag) => tags.includes(tag),
+);
 
 const employees = (state: ApplicationState) => state.auth.user.employees;
 
-const hasMultipleCompanies = (state: ApplicationState): boolean => state.auth.user.employees.length > 1;
+const hasMultipleCompanies = (state: ApplicationState): boolean =>
+  state.auth.user.employees.length > 1;
 
 export default {
   isAuthenticated,
   currentUserEmail,
   currentUserName,
   currentUserId,
+  currentEmployeeId,
   getLoadPermissionsAsyncState,
-  makeGetHasPermission,
   employees,
   hasMultipleCompanies,
+  getHasTag,
 };

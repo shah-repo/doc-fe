@@ -75,5 +75,7 @@ export const getAudit = (audit: Partial<Audit> = {}): Audit => ({
   groupId: "1",
   timestamp: faker.date.recent().toString(),
   owner: getOwner(),
+  ownerUser: getOwner(),
+  ownerThirdParty: getOwner(),
   ...audit,
 });
