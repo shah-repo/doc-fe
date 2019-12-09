@@ -1,4 +1,4 @@
-import { Box, Grid } from "@material-ui/core";
+import { Box, Button, Grid } from "@material-ui/core";
 import { Form, FormikProps } from "formik";
 import React, { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
@@ -14,6 +14,7 @@ import SubmitButton from "../../components/forms/SubmitButton";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { AddEmployeeFormValues } from "./form.container";
+import Text from "../../components/Text";
 
 interface Props extends FormikProps<AddEmployeeFormValues> {
   asyncState: AsyncState;
@@ -93,9 +94,17 @@ export const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
       <Box mt={5}>
         <Grid
           container={true}
-          alignItems="flex-end"
-          direction="column"
+          alignItems="flex-start"
+          justify="flex-end"
+          direction="row"
         >
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={() => resetForm()}
+          >
+            <Text translation="common.cancel" />
+          </Button>
           <SubmitButton
             asyncState={asyncState}
             label={"common.save"}
