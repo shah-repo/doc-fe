@@ -1,20 +1,24 @@
 import { Box } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
-import _ from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
+import { Nullable } from "../../../state/ducks/common";
 import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
+import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import AddEmployeeFormPresenter from "./form.presenter";
+import { transformToAddEmployeeRequest } from "./utils/transform";
 
 export interface AddEmployeeFormValues {
+  id: Nullable<string>;
   name: string;
   email: string;
-  groups: string[];
+  groups: OptionType[];
 }
 
 const initialValues = {
+  id: null,
   name: "",
   email: "",
   groups: [],
@@ -26,7 +30,7 @@ export const AddEmployeeFormContainer: React.FunctionComponent = ({
   const addEmployeeAction = useActionCreator(userManagementActions.addEmployee);
   const async = useAsync();
   const onSubmit = (values: AddEmployeeFormValues) => {
-    async.start(addEmployeeAction, values, async);
+    async.start(addEmployeeAction, transformToAddEmployeeRequest(values), async);
   };
 
   const renderForm = (props: FormikProps<AddEmployeeFormValues>) => {
@@ -41,7 +45,6 @@ export const AddEmployeeFormContainer: React.FunctionComponent = ({
 
   return (
     <Box
-      display="flex"
       justifyContent="center"
       width="100%"
       height="100%"

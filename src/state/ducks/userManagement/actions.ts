@@ -1,4 +1,3 @@
-import { AddEmployeeFormValues } from "../../../ui/user.management/add.employee/form.container";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import {
@@ -10,6 +9,7 @@ import {
   GROUPS_URL,
 } from "./constants";
 import {
+  AddEmployeeRequest,
   CompanyGroupsListAction,
   GetEmployeeResponse,
   LoadCompanyGroups,
@@ -30,7 +30,7 @@ const loadCompanyGroups = (): ApiAction<LoadCompanyGroups> =>
     },
   });
 
-const addEmployee = (data: AddEmployeeFormValues, handlers: Handlers): ApiAction =>
+const addEmployee = (data: AddEmployeeRequest, handlers: Handlers): ApiAction =>
   apiActionWithCallbacks({
     url: `${EMPLOYEES_URL}`,
     asyncType: ADD_EMPLOYEE_POST_ASYNC,

@@ -1,6 +1,6 @@
 import { Dictionary } from "lodash";
 import { Group, GroupTag, Permission } from "../auth/types";
-import { Nullable, User } from "../common";
+import { Id, Nullable, User } from "../common";
 import { Company, Employee } from "../company";
 import { COMPANY_GROUPS_LIST } from "./constants";
 
@@ -9,6 +9,11 @@ export interface GetEmployeeResponse {
   active: boolean;
   groups: Group[];
   user: User;
+}
+
+export interface AddEmployeeRequest {
+  user: Partial<User>;
+  groups: Nullable<Id[]>;
 }
 
 export interface LoadCompanyGroup {

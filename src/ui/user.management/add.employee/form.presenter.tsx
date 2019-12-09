@@ -1,7 +1,8 @@
 import { Box, Grid } from "@material-ui/core";
 import { Form, FormikProps } from "formik";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
+import { GetEmployeeResponse, userManagementActions } from "../../../state/ducks/userManagement";
 import { AsyncState, AsyncStatus } from "../../../state/types";
 import AutocompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
@@ -10,10 +11,9 @@ import { email, required, validator } from "../../components/forms/fields/valida
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
 import SubmitButton from "../../components/forms/SubmitButton";
-import { AddEmployeeFormValues } from "./form.container";
-import useAsync from "../../hooks/useAsync";
-import { userManagementActions, GetEmployeeResponse } from "../../../state/ducks/userManagement";
 import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
+import { AddEmployeeFormValues } from "./form.container";
 
 interface Props extends FormikProps<AddEmployeeFormValues> {
   asyncState: AsyncState;
@@ -27,6 +27,7 @@ export const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
   values,
   setFieldValue,
 }) => {
+  const [isNameDisabled, setIsNameDisabled] = useState(false);
   useEffect(() => {
     // this shouldn't be here
     // couldn't find a better way to reset form, because of useAsync limitations
@@ -39,16 +40,22 @@ export const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
   const asyncName = useAsync<GetEmployeeResponse[]>({
     onSuccess: (data: GetEmployeeResponse[] = []) => {
       if (data.length === 0) {
+        setIsNameDisabled(false);
+        setFieldValue("id", null);
         return;
       }
 
+      setIsNameDisabled(true);
       setFieldValue("name", data[0].user.name);
+      setFieldValue("id", data[0].user.id);
     },
   });
   const handleEmailChange = (value: string) => {
     const hasErrors = email(value);
 
     if (hasErrors) {
+      setIsNameDisabled(false);
+      setFieldValue("id", null);
       return;
     }
     asyncName.start(getEmployeeAction, { email: value }, asyncName );
@@ -74,13 +81,13 @@ export const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
       <InputField
         name="name"
         label="common.name"
-        inputProps={{ id: "name" }}
+        inputProps={{ id: "name", disabled: isNameDisabled }}
         validate={validator(required)}
       />
       <AutocompleteField
         name="groups"
         label="common.groups"
-        autocompleteProps={{ id: "groups", isClearable: true }}
+        autocompleteProps={{ id: "groups", isClearable: true, isMulti: true }}
         options={groupOptions}
       />
       <Box mt={5}>
