@@ -25,7 +25,6 @@ const ForgotPasswordPage: React.FunctionComponent<Props> = ({
     values,
 }) => {
   const classes = styles();
-  console.log(asyncState);
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>

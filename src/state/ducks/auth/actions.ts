@@ -88,7 +88,7 @@ const signup = (loginValues: LoginRequestBody, handlers: Handlers):
     method: "post",
     data: loginValues,
     includeAuthorization: false,
-    onSuccess: (dispatch) => {
+    onSuccess: (m, dispatch) => {
       dispatch(authSignup());
     },
     handlers,
@@ -100,7 +100,7 @@ const forgotPassword = (values: ForgotPassword, handlers: Handlers):
     method: "post",
     data: values,
     includeAuthorization: false,
-    onSuccess: (dispatch) => {
+    onSuccess: (m, dispatch) => {
       dispatch(authForgotPassword());
     },
     handlers,

@@ -37,6 +37,7 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
 
   const forgotPassAsync = useAsync({
     onSuccess: () => {
+      console.log("here");
       showVerificationState(true);
     },
   });
@@ -108,20 +109,20 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
 
   return (
     <div>
-      {forgotPasswordPage &&
+      {forgotPasswordPage && !verificationState &&
         <Formik
           initialValues={resetInitialValues}
           onSubmit={onForgotPassword}
           render={renderForgotPassword}
         />}
-      {verificationState && !forgotPasswordPage &&
+      {verificationState &&
         <VerificationEmailPage
           email={resetEmail}
           message={message}
           logo={logo}
           isForgotPassword={true}
         />}
-      {!verificationState && !forgotPasswordPage && <Formik
+      {!forgotPasswordPage && <Formik
         initialValues={initialValues}
         onSubmit={onSubmit}
         render={render}

@@ -8,9 +8,9 @@ import { ApplicationState } from "../../../state/reducers";
 import useAsync from "../../hooks/useAsync";
 import { ThemeEnv } from "../../layout/theme/utils/types";
 import { Translation } from "../../translations/types";
-import VerificationEmailPage from "../SignUp/VerificationEmailPage";
+import LoginFormPresenter from "../forms/LoginForm.presenter";
 import { LoginFormValues } from "../types";
-import LoginFormPresenter from "./LoginForm.presenter";
+import VerificationEmailPage from "./VerificationEmailPage";
 
 interface DispatchProps {
   signup: typeof authActions.signup;
