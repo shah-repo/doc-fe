@@ -4,15 +4,17 @@ import {
   AUTH_USER,
   LOGOUT_USER,
   SET_EMPLOYEE,
-  USER_PERMISSIONS,
-  USER_PERMISSIONS_GET_ASYNC,
+  USER_GROUPS,
+  USER_GROUPS_GET_ASYNC,
 } from "./constants";
 import {
   AuthUserAction,
+  GroupTag,
   LogoutUserAction,
+  Permission,
   SelectEmployeeAction,
-  UserPermissionsAction,
-  UserPermissionsState,
+  UserGroupsAction,
+  UserGroupsState,
   UserState,
 } from "./types";
 
@@ -51,15 +53,35 @@ export const user = (state: UserState = USER_DEFAULT_STATE, action: AuthUserActi
   }
 };
 
-export const USER_PERMISSIONS_DEFAULT_STATE: UserPermissionsState = [];
+export const USER_GROUPS_DEFAULT_STATE: UserGroupsState = {
+  tags: [],
+  permissions: [],
+};
 
-export const permissions = (
-  state: UserPermissionsState = USER_PERMISSIONS_DEFAULT_STATE,
-  action: UserPermissionsAction,
-): UserPermissionsState => {
+export const groups = (
+  state: UserGroupsState = USER_GROUPS_DEFAULT_STATE,
+  action: UserGroupsAction,
+): UserGroupsState => {
   switch (action.type) {
-    case USER_PERMISSIONS:
-      return action.payload;
+    case USER_GROUPS:
+      const tagsSet = new Set<GroupTag>();
+      const permissionsSet = new Set<Permission>();
+      action.payload.forEach((group) => {
+        const { tags, permissions } = group;
+
+        if (tags) {
+          tags.forEach((tag) => tagsSet.add(tag));
+        }
+
+        if (permissions) {
+          permissions.forEach((permission) => permissionsSet.add(permission));
+        }
+      });
+
+      return {
+        tags: Array.from(tagsSet),
+        permissions: Array.from(permissionsSet),
+      };
     default:
       return state;
   }
@@ -67,8 +89,8 @@ export const permissions = (
 
 const reducer = combineReducers({
   user,
-  loadPermissionsAsyncInfo: asyncReducer(USER_PERMISSIONS_GET_ASYNC),
-  permissions,
+  loadGroupsAsyncInfo: asyncReducer(USER_GROUPS_GET_ASYNC),
+  groups,
 });
 
 export default reducer;

@@ -1,11 +1,10 @@
 import _ from "lodash";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { getTableState } from "../../../common/utils/selectors";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import documentTypeSelectors from "../../../state/ducks/documentRevisions/documentType/selectors";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
-import tableSearchSelectors from "../../../state/ducks/tableSearch/selectors";
-import { ApplicationState } from "../../../state/reducers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { ListOwnProps } from "../utils/types";
 import ListPresenter from "./presenter";
@@ -15,9 +14,7 @@ export type Props = OwnProps;
 
 export const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
   const TABLE_NAME = "documentRevisions";
-  const tableState = useSelector((reduxState: ApplicationState) =>
-    tableSearchSelectors.getTableState(reduxState, TABLE_NAME),
-  );
+  const tableState = useSelector(getTableState(TABLE_NAME));
   const edit = (documentRevisionId: string, documentId: string) =>
     history.push(documentEditPath(documentRevisionId, documentId));
 

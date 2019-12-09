@@ -8,27 +8,28 @@ import { companyActions, Employee } from "../company";
 import {
   AUTH_AWS_IOT_URL,
   AUTH_USER,
+  GROUPS_URL,
   LOGIN_URL,
   LOGIN_WITH_CODE_URL,
   LOGOUT_URL,
   LOGOUT_USER,
-  PERMISSIONS_URL,
   PING_SERVER_GET_ASYNC,
   PING_SERVER_URL,
   SET_EMPLOYEE,
-  USER_PERMISSIONS,
-  USER_PERMISSIONS_GET_ASYNC,
+  USER_GROUPS,
+  USER_GROUPS_GET_ASYNC,
 } from "./constants";
 import {
   AuthResponse,
   AuthUserAction,
+  Group,
   LoginRequestBody,
   LoginWithCodeRequestBody,
   LogoutRequestBody,
   LogoutUserAction,
   SelectEmployeeAction,
   User,
-  UserPermissionsAction,
+  UserGroupsAction,
 } from "./types";
 
 const authUser = (user: User): AuthUserAction => {
@@ -42,10 +43,10 @@ const logoutUser = (): LogoutUserAction => ({
   type: LOGOUT_USER,
 });
 
-const userPermissions = (permissions: string[]): UserPermissionsAction => {
+const userGroups = (groups: Group[]): UserGroupsAction => {
   return {
-    type: USER_PERMISSIONS,
-    payload: permissions,
+    type: USER_GROUPS,
+    payload: groups,
   };
 };
 
@@ -106,13 +107,13 @@ const logout = (): ThunkAction<void, ApplicationState, any, AnyAction> => (dispa
   dispatch(action);
 };
 
-const loadPermissions = (userId: string):
-  ApiAction<string[]> => apiAction({
-    url: `${PERMISSIONS_URL}/${userId}`,
-    asyncType: USER_PERMISSIONS_GET_ASYNC,
+const loadUserGroups = (): ApiAction<Group[]> =>
+  apiAction({
+    url: `${GROUPS_URL}`,
+    asyncType: USER_GROUPS_GET_ASYNC,
     method: "get",
-    onSuccess: (permissions, dispatch) => {
-      dispatch(userPermissions(permissions));
+    onSuccess: (groups, dispatch) => {
+      dispatch(userGroups(groups));
     },
   });
 
@@ -149,8 +150,8 @@ export default {
   login,
   logout,
   loginWithCode,
-  loadPermissions,
   getIotCreds,
+  loadUserGroups,
   pingServer,
   selectEmployee,
 };
