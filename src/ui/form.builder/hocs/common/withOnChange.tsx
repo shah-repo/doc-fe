@@ -35,6 +35,17 @@ export const withOnChange = <T extends FBFormikFieldProps>(
       );
     }
 
+    function storeValue(fieldName: string, value: any) {
+      form!.setFieldValue(fieldName, value);
+      if (FBStore.mode !== "form") {
+        return;
+      }
+      FBStore.setValues({
+        ...FBStore.values,
+        [fieldName]: value,
+      });
+    }
+
     const handleChange = (
       ev: React.ChangeEvent<{ value: any, checked: boolean }>,
       value: any = undefined,
@@ -48,9 +59,9 @@ export const withOnChange = <T extends FBFormikFieldProps>(
       switch (type) {
         case "checkboxgroup":
           const checked = _.get(ev.target, "checked");
-          form!.setFieldValue(value as string, checked);
+          storeValue(value as string, checked);
           if (_.isEqual(value as string, "includeContext")) {
-            form!.setFieldValue("contextLabel", contextLabel);
+            storeValue("contextLabel", contextLabel);
           }
           return;
         case "checkbox":
@@ -64,7 +75,7 @@ export const withOnChange = <T extends FBFormikFieldProps>(
         default:
           value = _.get(ev.target, "value");
       }
-      form!.setFieldValue(name!, value);
+      storeValue(name!, value);
     };
 
     return Component({
