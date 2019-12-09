@@ -35,19 +35,19 @@ import Title from "../../document.revision/form/title";
 import {
   documentDetailsPath,
 } from "../../document.revision/utils/paths";
-import FBWorkspace from "../../form.builder/containers/workspace/FBWorkspace";
-import { FBValidate } from "../../form.builder/defaults/validator";
-import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
-import FBStore from "../../form.builder/stores/ui/FBStore";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
 import References from "./presenters/References";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
 import { DocumentRevisionFormValues } from "./types";
+import { FBValidate } from "../../form.builder/defaults/validator";
+import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
+import FBStore from "../../form.builder/stores/ui/FBStore";
+import FBWorkspace from "../../form.builder/containers/workspace/FBWorkspace";
 
 export interface Props
   extends WithStyles<typeof styles>,
-    FormikProps<DocumentRevisionFormValues> {
+  FormikProps<DocumentRevisionFormValues> {
   asyncState: AsyncState;
   documentRevisions?: DocumentRevision[];
   availableReferences: OptionType[];
@@ -93,18 +93,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     window.open(documentDetailsPath(documentId), "_blank");
   };
 
-  const onFormClick = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) => {
-    FBValidate();
-  };
-
   const isDisabled: boolean = _.get(initialValues, "id") !== undefined;
   const docId = _.get(initialValues, "document.docId");
   const useProposedDocId = (!docId || docId === "") && values.document;
-  values.document!.docId = useProposedDocId
-    ? proposedDocId
-    : values.document!.docId;
+  values.document!.docId = useProposedDocId ? proposedDocId : values.document!.docId;
 
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -136,6 +128,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
     FBDRStore.setInitialFBMode(type.group);
     handleChange(event);
+  };
+
+  const onFormClick = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    FBValidate();
   };
 
   const renderTypeOfRevisionChange = showRevisionTypeChange &&
@@ -243,9 +241,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           </Box>
         )}
         {FBStore.active && (
-          <Box mt={5}>
-            <FBWorkspace />
-          </Box>
+          <Box mt={5}><FBWorkspace /></Box>
         )}
         <Box mt={5}>
           <Grid
