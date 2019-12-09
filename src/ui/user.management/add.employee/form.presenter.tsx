@@ -2,6 +2,7 @@ import { Box, Grid } from "@material-ui/core";
 import { Form, FormikProps } from "formik";
 import React from "react";
 import { AsyncState } from "../../../state/types";
+import AutocompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import InputField from "../../components/forms/fields/Input";
 import { email, required, validator } from "../../components/forms/fields/validators";
 import FormMessage from "../../components/forms/FormMessage";
@@ -31,6 +32,12 @@ export const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
         label="common.name"
         inputProps={{ id: "name" }}
         validate={validator(required)}
+      />
+      <AutocompleteField
+        name="groups"
+        label="common.groups"
+        autocompleteProps={{ id: "groups", isClearable: true }}
+        options={[]}
       />
       <Box mt={5}>
         <Grid

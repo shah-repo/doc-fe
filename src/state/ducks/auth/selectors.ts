@@ -23,8 +23,8 @@ const getLoadPermissionsAsyncState = (state: ApplicationState): AsyncState =>
 
 const getHasTag = createSelector(
   (state: ApplicationState) => state.auth.groups.tags,
-  (state: ApplicationState, tag: GroupTag) => tag,
-  (tags, tag) => tags.includes(tag),
+  (state: ApplicationState, selectedTag: GroupTag) => selectedTag,
+  (tags, selectedTag) => tags.includes(selectedTag),
 );
 
 const employees = (state: ApplicationState) => state.auth.user.employees;

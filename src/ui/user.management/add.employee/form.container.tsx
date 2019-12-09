@@ -1,5 +1,6 @@
 import { Formik, FormikProps } from "formik";
 import React from "react";
+// import { useSelector } from "react-redux";
 import { userManagementActions } from "../../../state/ducks/userManagement";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -22,6 +23,7 @@ const initialValues = {
 
 export const AddEmployeeFormContainer: React.FunctionComponent<Props> = ({
 }) => {
+  // const groupOptions = useSelector();
   const addEmployeeAction = useActionCreator(userManagementActions.addEmployee);
   const async = useAsync();
   const onSubmit = (values: AddEmployeeFormValues) => {
