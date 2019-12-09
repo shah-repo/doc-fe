@@ -11,10 +11,10 @@ import { email, required, validator } from "../../components/forms/fields/valida
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
 import SubmitButton from "../../components/forms/SubmitButton";
+import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { AddEmployeeFormValues } from "./form.container";
-import Text from "../../components/Text";
 
 interface Props extends FormikProps<AddEmployeeFormValues> {
   asyncState: AsyncState;

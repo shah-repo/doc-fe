@@ -1,4 +1,4 @@
-import { Box } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -44,18 +44,23 @@ export const AddEmployeeFormContainer: React.FunctionComponent = ({
   };
 
   return (
-    <Box
-      justifyContent="center"
-      width="100%"
-      height="100%"
+    <Grid
+      container={true}
+      alignItems="center"
+      justify="center"
     >
-      <Formik
-        render={renderForm}
-        initialValues={initialValues}
-        onSubmit={onSubmit}
-        enableReinitialize={true}
-      />
-    </Box>
+      <Box
+        width="50vw"
+        paddingTop={10}
+      >
+        <Formik
+          render={renderForm}
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+          enableReinitialize={true}
+        />
+      </Box>
+    </Grid>
   );
 };
 
