@@ -14,11 +14,14 @@ import { AddEmployeeFormValues } from "./form.container";
 interface Props extends FormikProps<AddEmployeeFormValues> {
   asyncState: AsyncState;
   groupOptions: OptionType[];
+  handleEmailChange: (evt: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
   asyncState,
   groupOptions,
+  handleEmailChange,
+  handleChange,
 }) => {
   return (
     <Form>
@@ -27,7 +30,13 @@ export const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
       <InputField
         name="email"
         label="common.email"
-        inputProps={{ id: "email" }}
+        inputProps={{
+          id: "email",
+          onChange: (evt: React.ChangeEvent<HTMLInputElement>) => {
+            handleChange(evt);
+            handleEmailChange(evt);
+          },
+        }}
         validate={validator(required, email)}
       />
       <InputField

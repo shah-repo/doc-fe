@@ -1,5 +1,6 @@
 import { Box } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
+import _ from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
@@ -28,12 +29,18 @@ export const AddEmployeeFormContainer: React.FunctionComponent = ({
     async.start(addEmployeeAction, values, async);
   };
 
+  const handleEmailChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(evt.target.value);
+  };
+  const debouncedHandleEmailChange = _.debounce(handleEmailChange, 300);
+
   const renderForm = (props: FormikProps<AddEmployeeFormValues>) => {
     return (
       <AddEmployeeFormPresenter
         {...props}
         asyncState={async.asyncState}
         groupOptions={groupOptions}
+        handleEmailChange={debouncedHandleEmailChange}
       />
     );
   };
