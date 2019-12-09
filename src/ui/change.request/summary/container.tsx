@@ -60,7 +60,7 @@ export const Container: React.FunctionComponent<Props> = ({
 
   const iotService = new IotService();
   iotService.unsubscribeAll();
-  iotService.subscribeToTopic(`${dataProp.crId}/updated`, notify);
+  iotService.subscribeToTopic(`+/change_requests/${dataProp.crId}/updated`, notify);
 
   const docRevSummary = (documentRevision: DocumentRevision) =>
     setDocRev(documentRevision);
