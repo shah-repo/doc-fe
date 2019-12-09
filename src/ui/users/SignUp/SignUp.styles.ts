@@ -18,7 +18,6 @@ export const styles = makeStyles((theme: Theme) =>
       justifyContent: "center",
       display: "flex",
       flexDirection: "column",
-      padding: theme.spacing(2, 3, 3),
       boxShadow: "none",
       width: "500px",
     },
@@ -29,17 +28,28 @@ export const styles = makeStyles((theme: Theme) =>
       width: "500px",
       lineHeight: 1.5,
     },
+    marginTitle: {
+      marginBottom: "50px",
+    },
     boldTitle: {
       width: "500px",
       lineHeight: 1.5,
-      fontWeight: "bolder",
+      fontWeight: "bold",
       marginBottom: "30px",
     },
     navigationLink: {
       color: theme.palette.primary.main,
       textDecoration: "none",
-      marginTop: "80px",
+      marginTop: "30px",
       fontWeight: "bold",
+    },
+    submit: {
+      marginTop: theme.spacing(3),
+      marginBottom: theme.spacing(3),
+      marginLeft: 0,
+      width: "inherit",
+      borderRadius: "50px",
+      height: "50px",
     },
   }),
   );

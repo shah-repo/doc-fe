@@ -8,6 +8,7 @@ import { ApplicationState } from "../../../state/reducers";
 import useAsync from "../../hooks/useAsync";
 import { ThemeEnv } from "../../layout/theme/utils/types";
 import { Translation } from "../../translations/types";
+import ForgotPasswordPage from "../SignUp/ForgotPasswordPage";
 import VerificationEmailPage from "../SignUp/VerificationEmailPage";
 import { LoginFormValues } from "../types";
 import LoginFormPresenter from "./LoginForm.presenter";
@@ -39,6 +40,7 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
 
   const [verificationState, showVerificationState] = React.useState(false);
   const [signupEmail, saveSignupEmail] = React.useState("");
+  const [forgotPassword, showForgotPasswordState] = React.useState(false);
 
   const theme = Config.Theme;
   const logo = theme === ThemeEnv.DEV_THEME ?
@@ -48,6 +50,14 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
   const handleVerificationState = (values: LoginFormValues): void => {
     saveSignupEmail(values.email);
     showVerificationState(true);
+  };
+
+  const handleForgotPassword = (): void => {
+    showForgotPasswordState(true);
+  };
+
+  const handleCloseForgotPassword = (): void => {
+    showForgotPasswordState(false);
   };
 
   const initialValues: LoginFormValues = {
@@ -65,6 +75,7 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
       showVerificationState={handleVerificationState}
       title={title}
       logo={logo}
+      forgotPassword={handleForgotPassword}
     />
   );
 
@@ -81,10 +92,24 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
       .matches(/(?=.*?[^\w\s])/, "Password must contain a special characters"),
   });
 
+  const renderForgotPassword = (props: FormikProps<LoginFormValues>) => (
+    <ForgotPasswordPage
+      logo={logo}
+      closeForgotPasswordPage={handleCloseForgotPassword}
+      asyncState={async.asyncState}
+    />
+  );
+
   return (
     <div>
-      {verificationState && <VerificationEmailPage email={signupEmail} logo={logo} />}
-      {!verificationState && <Formik
+      {forgotPassword &&
+        <Formik
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+          render={renderForgotPassword}
+        />}
+      {verificationState && !forgotPassword && <VerificationEmailPage email={signupEmail} logo={logo} />}
+      {!verificationState && !forgotPassword && <Formik
         initialValues={initialValues}
         onSubmit={onSubmit}
         validationSchema={signLabel === "login.title" ? SignupSchema : null}

@@ -1,4 +1,4 @@
-import { Paper, Typography, withStyles, WithStyles } from "@material-ui/core";
+import { Button, Paper, Typography, withStyles, WithStyles } from "@material-ui/core";
 import { Form, FormikProps } from "formik";
 import * as React from "react";
 import { NavLink } from "react-router-dom";
@@ -20,6 +20,7 @@ interface Props extends WithStyles<typeof styles>, FormikProps<LoginFormValues> 
   showVerificationState: (values: LoginFormValues) => void;
   title: Translation;
   logo: string;
+  forgotPassword: () => void;
 }
 
 const LoginFormPresenter: React.FunctionComponent<Props> = ({
@@ -32,6 +33,7 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({
   values,
   title,
   logo,
+  forgotPassword,
 }) => {
   return (
     <Paper className={classes.paper}>
@@ -54,6 +56,10 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({
         validate={validator(required, email)}
         lpignore={false}
       />
+      <div className={classes.passwordContainer}>
+      <Button color="primary" onClick={forgotPassword} className={classes.forgotPasswordLink} >
+        <Text translation={"forgot.password"} />
+      </Button>
       <InputField
         name="password"
         label="login.password"
@@ -62,7 +68,7 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({
         inputProps={{ autoComplete: "current-password", id: "password", type: "password" }}
         validate={validator(required)}
         lpignore={false}
-      />{
+      /></div>{
         signLabel === "signup.sign.in" ?
         <SubmitButton
           asyncState={asyncState}

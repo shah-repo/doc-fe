@@ -40,4 +40,20 @@ export default (theme: Theme) =>
     formStyle: {
       width: "500px",
     },
+    forgotPasswordLink: {
+      position: "absolute",
+      top: "10px",
+      right: "4px",
+      padding: 0,
+      margin: 0,
+      textTransform: "none",
+      lineHeight: 1.33,
+      letterSpacing: "0em",
+      fontWeight: 500,
+      fontSize: "inherit",
+      zIndex: 1,
+    },
+    passwordContainer: {
+      position: "relative",
+    },
   });
