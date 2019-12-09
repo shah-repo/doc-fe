@@ -1,5 +1,5 @@
 import { AddEmployeeFormValues } from "../../../ui/user.management/add.employee/form.container";
-import { apiActionWithCallbacks } from "../../factories";
+import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import {
   ADD_EMPLOYEE_POST_ASYNC,
@@ -15,15 +15,14 @@ const companyGroupsList = (groups: LoadCompanyGroups): CompanyGroupsListAction =
   payload: groups,
 });
 
-const loadCompanyGroups = (handlers: Handlers): ApiAction<LoadCompanyGroups> =>
-  apiActionWithCallbacks({
+const loadCompanyGroups = (): ApiAction<LoadCompanyGroups> =>
+  apiAction({
     url: `${GROUPS_URL}`,
     asyncType: COMPANY_GROUPS_GET_ASYNC,
     method: "get",
     onSuccess: (groups, dispatch) => {
       dispatch(companyGroupsList(groups));
     },
-    handlers,
   });
 
 const addEmployee = (data: AddEmployeeFormValues, handlers: Handlers): ApiAction =>

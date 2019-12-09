@@ -3,6 +3,7 @@ import { Form, FormikProps } from "formik";
 import React from "react";
 import { AsyncState } from "../../../state/types";
 import AutocompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
+import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import InputField from "../../components/forms/fields/Input";
 import { email, required, validator } from "../../components/forms/fields/validators";
 import FormMessage from "../../components/forms/FormMessage";
@@ -12,10 +13,12 @@ import { AddEmployeeFormValues } from "./form.container";
 
 interface Props extends FormikProps<AddEmployeeFormValues> {
   asyncState: AsyncState;
+  groupOptions: OptionType[];
 }
 
 export const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
   asyncState,
+  groupOptions,
 }) => {
   return (
     <Form>
@@ -37,7 +40,7 @@ export const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
         name="groups"
         label="common.groups"
         autocompleteProps={{ id: "groups", isClearable: true }}
-        options={[]}
+        options={groupOptions}
       />
       <Box mt={5}>
         <Grid
@@ -56,6 +59,3 @@ export const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
 };
 
 export default AddEmployeeFormPresenter;
-
-/*
-*/
