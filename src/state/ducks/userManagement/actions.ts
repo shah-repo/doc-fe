@@ -5,10 +5,15 @@ import {
   ADD_EMPLOYEE_POST_ASYNC,
   COMPANY_GROUPS_GET_ASYNC,
   COMPANY_GROUPS_LIST,
+  EMPLOYEE_GET_ASYNC,
   EMPLOYEES_URL,
   GROUPS_URL,
 } from "./constants";
-import { CompanyGroupsListAction, LoadCompanyGroups } from "./types";
+import {
+  CompanyGroupsListAction,
+  GetEmployeeResponse,
+  LoadCompanyGroups,
+} from "./types";
 
 const companyGroupsList = (groups: LoadCompanyGroups): CompanyGroupsListAction => ({
   type: COMPANY_GROUPS_LIST,
@@ -34,7 +39,17 @@ const addEmployee = (data: AddEmployeeFormValues, handlers: Handlers): ApiAction
     handlers,
   });
 
+const getEmployee = (params: any = {}, handlers: Handlers): ApiAction<GetEmployeeResponse[]> =>
+  apiActionWithCallbacks({
+    url: `${EMPLOYEES_URL}`,
+    asyncType: EMPLOYEE_GET_ASYNC,
+    method: "get",
+    params,
+    handlers,
+  });
+
 export default {
   loadCompanyGroups,
   addEmployee,
+  getEmployee,
 };

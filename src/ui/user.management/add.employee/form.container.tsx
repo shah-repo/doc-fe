@@ -29,18 +29,12 @@ export const AddEmployeeFormContainer: React.FunctionComponent = ({
     async.start(addEmployeeAction, values, async);
   };
 
-  const handleEmailChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(evt.target.value);
-  };
-  const debouncedHandleEmailChange = _.debounce(handleEmailChange, 300);
-
   const renderForm = (props: FormikProps<AddEmployeeFormValues>) => {
     return (
       <AddEmployeeFormPresenter
         {...props}
         asyncState={async.asyncState}
         groupOptions={groupOptions}
-        handleEmailChange={debouncedHandleEmailChange}
       />
     );
   };

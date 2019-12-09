@@ -1,7 +1,8 @@
 import { Box, Grid } from "@material-ui/core";
 import { Form, FormikProps } from "formik";
-import React from "react";
-import { AsyncState } from "../../../state/types";
+import React, { useEffect } from "react";
+import { useDebounce } from "use-debounce";
+import { AsyncState, AsyncStatus } from "../../../state/types";
 import AutocompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import InputField from "../../components/forms/fields/Input";
@@ -10,19 +11,54 @@ import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
 import SubmitButton from "../../components/forms/SubmitButton";
 import { AddEmployeeFormValues } from "./form.container";
+import useAsync from "../../hooks/useAsync";
+import { userManagementActions, GetEmployeeResponse } from "../../../state/ducks/userManagement";
+import useActionCreator from "../../hooks/useActionCreator";
 
 interface Props extends FormikProps<AddEmployeeFormValues> {
   asyncState: AsyncState;
   groupOptions: OptionType[];
-  handleEmailChange: (evt: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
   asyncState,
   groupOptions,
-  handleEmailChange,
-  handleChange,
+  resetForm,
+  values,
+  setFieldValue,
 }) => {
+  useEffect(() => {
+    // this shouldn't be here
+    // couldn't find a better way to reset form, because of useAsync limitations
+    // form submit needs refactoring or maybe this could be handled with formik hooks
+    if (asyncState.status === AsyncStatus.Success) {
+      resetForm();
+    }
+  }, [asyncState]);
+  const getEmployeeAction = useActionCreator(userManagementActions.getEmployee);
+  const asyncName = useAsync<GetEmployeeResponse[]>({
+    onSuccess: (data: GetEmployeeResponse[] = []) => {
+      if (data.length === 0) {
+        return;
+      }
+
+      setFieldValue("name", data[0].user.name);
+    },
+  });
+  const handleEmailChange = (value: string) => {
+    const hasErrors = email(value);
+
+    if (hasErrors) {
+      return;
+    }
+    asyncName.start(getEmployeeAction, { email: value }, asyncName );
+  };
+  const [debouncedEmail] = useDebounce(values.email, 300);
+
+  useEffect(() => {
+    handleEmailChange(values.email);
+  }, [debouncedEmail]);
+
   return (
     <Form>
       <FormMessage asyncState={asyncState} />
@@ -32,10 +68,6 @@ export const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
         label="common.email"
         inputProps={{
           id: "email",
-          onChange: (evt: React.ChangeEvent<HTMLInputElement>) => {
-            handleChange(evt);
-            handleEmailChange(evt);
-          },
         }}
         validate={validator(required, email)}
       />
