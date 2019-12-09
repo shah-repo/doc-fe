@@ -6,6 +6,7 @@ import { ApiAction, Handlers } from "../../types";
 import { companyActions, Employee } from "../company";
 import {
   AUTH_USER,
+  FORGOT_PASSWORD_URL,
   LOGIN_URL,
   LOGIN_WITH_CODE_URL,
   LOGOUT_URL,
@@ -14,20 +15,32 @@ import {
   PING_SERVER_GET_ASYNC,
   PING_SERVER_URL,
   SET_EMPLOYEE,
+  SIGNUP_URL,
   USER_PERMISSIONS,
   USER_PERMISSIONS_GET_ASYNC,
 } from "./constants";
 import {
   AuthResponse,
   AuthUserAction,
+  ForgotPassword,
+  ForgotPasswordAction,
   LoginRequestBody,
   LoginWithCodeRequestBody,
   LogoutRequestBody,
   LogoutUserAction,
   SelectEmployeeAction,
+  SignupAction,
   User,
   UserPermissionsAction,
 } from "./types";
+
+const authSignup = (): SignupAction => ({
+  type: SIGNUP_URL,
+});
+
+const authForgotPassword = (): ForgotPasswordAction => ({
+  type: FORGOT_PASSWORD_URL,
+});
 
 const authUser = (user: User): AuthUserAction => {
   return {
@@ -65,6 +78,30 @@ const login = (loginValues: LoginRequestBody, handlers: Handlers):
       if ((data.employees || []).length === 1) {
         dispatch(companyActions.selectCompany(data.employees[0].company));
       }
+    },
+    handlers,
+  });
+
+const signup = (loginValues: LoginRequestBody, handlers: Handlers):
+  ApiAction<AuthResponse, LoginRequestBody> => apiActionWithCallbacks({
+    url: SIGNUP_URL,
+    method: "post",
+    data: loginValues,
+    includeAuthorization: false,
+    onSuccess: (dispatch) => {
+      dispatch(authSignup());
+    },
+    handlers,
+  });
+
+const forgotPassword = (values: ForgotPassword, handlers: Handlers):
+  ApiAction<AuthResponse, ForgotPassword> => apiActionWithCallbacks({
+    url: FORGOT_PASSWORD_URL,
+    method: "post",
+    data: values,
+    includeAuthorization: false,
+    onSuccess: (dispatch) => {
+      dispatch(authForgotPassword());
     },
     handlers,
   });
@@ -137,4 +174,6 @@ export default {
   loadPermissions,
   pingServer,
   selectEmployee,
+  signup,
+  forgotPassword,
 };

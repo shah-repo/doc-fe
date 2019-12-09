@@ -29,7 +29,10 @@ export const styles = makeStyles((theme: Theme) =>
       lineHeight: 1.5,
     },
     marginTitle: {
-      marginBottom: "50px",
+      marginBottom: "20px",
+    },
+    status: {
+      marginTop: theme.spacing(3),
     },
     boldTitle: {
       width: "500px",

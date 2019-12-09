@@ -1,10 +1,10 @@
 import * as React from "react";
 import { LOGIN_URL } from "../../constants/urls";
-import LoginFormContainer from "../forms/LoginForm.container";
+import SignupFormContainer from "../forms/SignupForm.container";
 
 const SignUpPresenter: React.FunctionComponent = () => {
     return (
-        <LoginFormContainer
+        <SignupFormContainer
             signMessage="signup.message"
             signLabel="signup.sign.in"
             route={LOGIN_URL}

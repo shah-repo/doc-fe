@@ -3,12 +3,18 @@ import {
   AUTH_USER,
   LOGOUT_USER,
   SET_EMPLOYEE,
+  SIGNUP_URL,
   USER_PERMISSIONS,
+  FORGOT_PASSWORD_URL,
 } from "./constants";
 
 export interface LoginRequestBody {
   email: string;
   password: string;
+}
+
+export interface ForgotPassword {
+  email: string;
 }
 
 export interface LoginWithCodeRequestBody {
@@ -48,6 +54,14 @@ export type AuthUserPayload = User;
 export interface AuthUserAction {
   type: typeof AUTH_USER;
   payload: AuthUserPayload;
+}
+
+export interface SignupAction {
+  type: typeof SIGNUP_URL;
+}
+
+export interface ForgotPasswordAction {
+  type: typeof FORGOT_PASSWORD_URL;
 }
 
 export interface LogoutUserAction {
