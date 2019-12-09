@@ -22,6 +22,7 @@
   "forgot.password.message": "Enter yout email address below and we will send you a secure link to reset your password",
   "forgot.password.close": "CLOSE",
   "forgot.password.reset": "Reset my Password",
+  "forgot.password.email": "Click the secure link we sent you to reset your password. If you didn't receive an email, check your spam folder.",
 
   "header.title": "Enlil",
   "header.welcome": "Welcome", 

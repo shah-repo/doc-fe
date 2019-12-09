@@ -40,6 +40,7 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
 
   const [verificationState, showVerificationState] = React.useState(false);
   const [signupEmail, saveSignupEmail] = React.useState("");
+  const [message, saveMessage] = React.useState("");
   const [forgotPassword, showForgotPasswordState] = React.useState(false);
 
   const theme = Config.Theme;
@@ -47,8 +48,10 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
     "/logo_enlil_dark.svg" :
     "/logo_enlil.svg";
 
-  const handleVerificationState = (values: LoginFormValues): void => {
+  const handleVerificationState = (values: LoginFormValues, message: string | Translation): void => {
     saveSignupEmail(values.email);
+    saveMessage(message);
+    showForgotPasswordState(false);
     showVerificationState(true);
   };
 
@@ -94,9 +97,11 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
 
   const renderForgotPassword = (props: FormikProps<LoginFormValues>) => (
     <ForgotPasswordPage
+      {...props}
       logo={logo}
       closeForgotPasswordPage={handleCloseForgotPassword}
       asyncState={async.asyncState}
+      showVerificationState={handleVerificationState}
     />
   );
 
@@ -108,7 +113,13 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
           onSubmit={onSubmit}
           render={renderForgotPassword}
         />}
-      {verificationState && !forgotPassword && <VerificationEmailPage email={signupEmail} logo={logo} />}
+      {verificationState && !forgotPassword &&
+        <VerificationEmailPage
+          email={signupEmail}
+          message={message}
+          logo={logo}
+          isForgotPassword={message === "forgot.password.email"}
+        />}
       {!verificationState && !forgotPassword && <Formik
         initialValues={initialValues}
         onSubmit={onSubmit}

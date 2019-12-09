@@ -7,9 +7,11 @@ import { styles } from "./SignUp.styles";
 interface Props {
   email: string;
   logo: string;
+  message?: any;
+  isForgotPassword: boolean;
 }
 
-const VerificationEmailPage: React.FunctionComponent<Props> = ({ email, logo }) => {
+const VerificationEmailPage: React.FunctionComponent<Props> = ({ email, logo, message, isForgotPassword }) => {
   const classes = styles();
   return (
     <div className={classes.root}>
@@ -26,11 +28,12 @@ const VerificationEmailPage: React.FunctionComponent<Props> = ({ email, logo }) 
           {`"${email}"`}
         </Typography>
         <Typography variant="subtitle1" className={classes.title}>
-        <Text translation={"signup.verification.message"} />
+        <Text translation={message} />
         </Typography>
+        {!isForgotPassword &&
         <NavLink to={"/login"} exact={true} className={classes.navigationLink} >
           <Text translation={"signup.close.window"} />
-        </NavLink>
+        </NavLink>}
       </Paper>
     </div>
   );

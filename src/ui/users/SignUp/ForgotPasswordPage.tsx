@@ -1,19 +1,28 @@
 import { Button, Paper, Typography } from "@material-ui/core";
+import { FormikProps } from "formik";
 import * as React from "react";
 import { AsyncState } from "../../../state/types";
 import InputField from "../../components/forms/fields/Input";
 import { email, required, validator } from "../../components/forms/fields/validators";
 import SubmitButton from "../../components/forms/SubmitButton";
 import Text from "../../components/Text";
+import { LoginFormValues } from "../types";
 import { styles } from "./SignUp.styles";
 
-interface Props {
+interface Props extends FormikProps<LoginFormValues> {
   logo: string;
   closeForgotPasswordPage: () => void;
   asyncState: AsyncState;
+  showVerificationState: (values: LoginFormValues, message: string) => void;
 }
 
-const ForgotPasswordPage: React.FunctionComponent<Props> = ({ logo, closeForgotPasswordPage, asyncState }) => {
+const ForgotPasswordPage: React.FunctionComponent<Props> = ({
+    logo,
+    closeForgotPasswordPage,
+    asyncState,
+    showVerificationState,
+    values,
+}) => {
   const classes = styles();
   return (
     <div className={classes.root}>
@@ -42,6 +51,7 @@ const ForgotPasswordPage: React.FunctionComponent<Props> = ({ logo, closeForgotP
           asyncState={asyncState}
           label={"forgot.password.reset"}
           className={classes.submit}
+          onClick={() => showVerificationState(values, "forgot.password.email")}
         />
         <Button className={classes.navigationLink} onClick={closeForgotPasswordPage} >
           <Text translation={"forgot.password.close"} />
