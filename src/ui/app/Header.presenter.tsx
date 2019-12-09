@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import React from "react";
 import Text from "../components/Text";
 import { Translation } from "../translations/types";
-import UserProfileContainer from "../userManagement/profile/UserProfile.container";
+import UserProfileContainer from "../user.management/profile/UserProfile.container";
 import styles from "./Header.styles";
 
 interface Props extends WithStyles<typeof styles> {

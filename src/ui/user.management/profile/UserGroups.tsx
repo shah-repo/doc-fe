@@ -1,43 +1,47 @@
 import { Box, Button, Icon, Typography } from "@material-ui/core";
 import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Select from "react-select";
+import { LoadCompanyGroups, userManagementActions } from "../../../state/ducks/userManagement";
 import SummaryField from "../../common/summary/base";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import Text from "../../components/Text";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
 
 interface OwnProps {
-    canEditGroups: boolean;
+    canManageUsers: boolean;
+    employeeGroups: OptionType[];
 }
 
 type Props = OwnProps;
 
 export const UserGroups: React.FunctionComponent<Props> = ({
-    canEditGroups,
+    canManageUsers,
+    employeeGroups,
 }) => {
-  // groups mock
-  const availableGroups: OptionType[] = [
-    {
-      label: "5K Club",
-      value: "5kclub",
+
+  const [groupOptions, setGroupOptions] = useState<OptionType[]>([]);
+  const loadCompanyGroupsAction = useActionCreator(userManagementActions.loadCompanyGroups);
+  const employeeGroupsValues: string[] = [];
+
+  const async = useAsync<LoadCompanyGroups>({
+    onSuccess: (data = []) => {
+      const options: OptionType[] = data.map((group) => ({
+        value: group.id,
+        label: group.name,
+      }));
+      setGroupOptions(options);
     },
-    {
-      label: "HR",
-      value: "hr",
-    },
-    {
-      label: "Rockstars",
-      value: "rockstars",
-    },
-    {
-        label: "2K Approvers",
-        value: "2kapprovers",
-    },
-    {
-       label: "General",
-       value: "general",
-    },
-  ];
+  });
+
+  const loadCompanyGroups = () => async.start(loadCompanyGroupsAction, async);
+
+  useEffect(() => {
+    loadCompanyGroups();
+  }, []);
+
+  employeeGroups.map((group) => employeeGroupsValues.push(group.label));
 
   const [showEditGroups, setEditGroups] = useState(false);
 
@@ -69,9 +73,9 @@ export const UserGroups: React.FunctionComponent<Props> = ({
     <Box>
       <SummaryField
         label="user.management.groups"
-        value={"5K Club, HR, Rockstars, 2K Approvers, General"}
+        value={employeeGroupsValues.join(", ")}
       />
-    {canEditGroups && addGroupsRenderer()}
+    {canManageUsers && addGroupsRenderer()}
     </Box>
   );
 
@@ -83,10 +87,10 @@ export const UserGroups: React.FunctionComponent<Props> = ({
       <Select
         id="groups"
         isMulti={true}
-        options={availableGroups}
+        options={groupOptions}
         placeholder="Start typing to see the list of groups…"
         onChange={onChange}
-        defaultValue={availableGroups}
+        defaultValue={employeeGroups}
       />
     <Button
         style={{

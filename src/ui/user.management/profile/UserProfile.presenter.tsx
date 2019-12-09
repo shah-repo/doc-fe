@@ -1,8 +1,10 @@
 import { AppBar, Box, Button, Dialog, IconButton, Toolbar, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
+import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
 import SummaryField from "../../common/summary/base";
-import ProfilePhotoUpload from "../../components/common/profilePhoto.filed/profilePhoto";
+import { OptionType } from "../../components/forms/fields/Autocomplete/types";
+import AvatarContainer from "../../components/icons/avatar/avatar.container";
 import Text from "../../components/Text";
 import UserGroups from "./UserGroups";
 import styles from "./UserProfile.styles";
@@ -10,7 +12,9 @@ import styles from "./UserProfile.styles";
 interface OwnProps {
     isOpen: boolean;
     close: () => void;
-    canEditGroups?: boolean;
+    canManageUsers: boolean;
+    employeeGroups: OptionType[];
+    employee: Partial<GetEmployeeResponse>;
 }
 
 type Props = OwnProps;
@@ -18,7 +22,9 @@ type Props = OwnProps;
 export const UserProfilePresenter: React.FunctionComponent<Props> = ({
     isOpen,
     close,
-    canEditGroups = true,
+    canManageUsers,
+    employeeGroups,
+    employee,
 }) => {
 
     const classes = styles();
@@ -47,9 +53,9 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
                 <Text translation="user.management.profile"/>
             </Typography>
                 <Typography variant="h3" className={classes.userName}>
-                    {"Linda Corsey"}
+                    {employee.user!.name}
                 </Typography>
-                <Button
+{/*                 <Button
                     variant="text"
                     color="primary"
                     fullWidth={true}
@@ -58,7 +64,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
                     }}
                 >
                     <Text translation="common.edit" />
-                </Button>
+                </Button> */}
             </Box>
         </AppBar>
         <Box
@@ -66,17 +72,15 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
             justifyContent="center"
             mt={20}
         >
-            <div className={classes.profilePhoto}>
-            </div>
+            <AvatarContainer/>
         </Box>
-        <ProfilePhotoUpload/>
         <Box
             alignSelf="center"
             mt={12}
         >
             <SummaryField label="user.management.last.training" value={"01/08/2018"}/>
-            <UserGroups canEditGroups={canEditGroups} />
-            {canEditGroups && deactivateButtonRenderer()}
+            <UserGroups canManageUsers={canManageUsers} employeeGroups={employeeGroups}/>
+            {canManageUsers && deactivateButtonRenderer()}
         </Box>
     </Dialog>
     );
