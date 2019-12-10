@@ -6,9 +6,11 @@ import {
   SET_EMPLOYEE,
   USER_GROUPS,
   USER_GROUPS_GET_ASYNC,
+  USERS_ME,
 } from "./constants";
 import {
   AuthUserAction,
+  EditUserMeAction,
   GroupTag,
   LogoutUserAction,
   Permission,
@@ -28,7 +30,7 @@ export const USER_DEFAULT_STATE: UserState = {
   avatar: "",
 };
 
-type AuthUserActions = AuthUserAction | LogoutUserAction | SelectEmployeeAction;
+type AuthUserActions = AuthUserAction | LogoutUserAction | SelectEmployeeAction | EditUserMeAction;
 
 export const user = (state: UserState = USER_DEFAULT_STATE, action: AuthUserActions): UserState => {
   switch (action.type) {
@@ -47,6 +49,12 @@ export const user = (state: UserState = USER_DEFAULT_STATE, action: AuthUserActi
       return {
         ...state,
         employeeId: action.payload.id,
+      };
+    case USERS_ME:
+      return {
+        ...state,
+        name: action.payload.name,
+        avatar: action.payload.avatar,
       };
     case LOGOUT_USER:
       return { ...USER_DEFAULT_STATE };

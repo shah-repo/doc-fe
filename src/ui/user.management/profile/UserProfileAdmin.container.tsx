@@ -1,9 +1,11 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { getHasTag } from "../../../common/utils/selectors";
-import { GroupTag } from "../../../state/ducks/auth/types";
+import { authActions } from "../../../state/ducks/auth";
+import { GroupTag, UserMeEditRequestBody } from "../../../state/ducks/auth/types";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
+import useAsync from "../../hooks/useAsync";
 import UserProfilePresenter from "./UserProfile.presenter";
 
 interface OwnProps {
@@ -12,12 +14,17 @@ interface OwnProps {
     selectedEmployee: GetEmployeeResponse;
 }
 
-export type Props = OwnProps;
+interface DispatchProps {
+    editUserMe: typeof authActions.editUserMe;
+}
+
+export type Props = OwnProps & DispatchProps;
 
 export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
     showUserProfile,
     closeUserProfile,
     selectedEmployee,
+    editUserMe,
 }) => {
     const { groups } = selectedEmployee;
     const { name } = selectedEmployee.user;
@@ -28,7 +35,15 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
         value: group.id,
         label: group.name,
     }));
+    const async = useAsync();
 
+    const onSubmit = (values: UserMeEditRequestBody) => {
+        async.start(
+            editUserMe,
+            values,
+          async,
+        );
+      };
     return (
         <UserProfilePresenter
             isOpen={showUserProfile}
@@ -37,8 +52,11 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
             employeeGroups={employeeGroups}
             name={name}
             avatar={null}
+            editUserMe={onSubmit}
         />
     );
 };
 
-export default UserProfileAdminContainer;
+export default connect<{}, DispatchProps, OwnProps, {}>(null, {
+    editUserMe: authActions.editUserMe,
+  })(UserProfileAdminContainer);

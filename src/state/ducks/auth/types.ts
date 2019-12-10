@@ -5,6 +5,7 @@ import {
   LOGOUT_USER,
   SET_EMPLOYEE,
   USER_GROUPS,
+  USERS_ME,
 } from "./constants";
 
 export interface LoginRequestBody {
@@ -64,6 +65,11 @@ export interface LogoutUserAction {
   type: typeof LOGOUT_USER;
 }
 
+export interface EditUserMeAction {
+  type: typeof USERS_ME;
+  payload: User;
+}
+
 export interface UserState {
   id: string;
   email: string;
@@ -91,6 +97,11 @@ export interface UserGroupsState {
 export interface SelectEmployeeAction {
   type: typeof SET_EMPLOYEE;
   payload: Employee;
+}
+
+export interface UserMeEditRequestBody {
+  name: string;
+  avatar: string | null;
 }
 
 export enum Permission {

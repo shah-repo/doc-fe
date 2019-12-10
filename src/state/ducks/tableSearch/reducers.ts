@@ -1,6 +1,8 @@
+
 import { combineReducers } from "redux";
 import { SELECT_COMPANY } from "../company/constants";
-import { TABLE_SEARCH_CLEAR, TABLE_SEARCH_SET, TABLE_SORT } from "./constants";
+import { GetEmployeeResponse } from "../userManagement";
+import { TABLE_SEARCH_CLEAR, TABLE_SEARCH_SET, TABLE_SET_GROUPS, TABLE_SORT } from "./constants";
 import {
   TableSearchByIdState,
   TableSearchClearAction,
@@ -14,7 +16,6 @@ export const DEFAULT_TABLE_SEARCH = {
   apiError: "",
   scrollToIndex: 0,
 };
-
 type TableSearchActions = TableSearchSetAction<any> &
   TableSearchClearAction &
   TableSortAction<any>;
@@ -38,6 +39,24 @@ export const byTableName = (
       return {
         ...state,
         [action.tableName]: action.payload,
+      };
+    case TABLE_SET_GROUPS:
+      const list = state.userManagement.queryData.filter((employee: GetEmployeeResponse) => {
+        const { payload: updatedEmployee } = action;
+        if (employee.id === (updatedEmployee as unknown as GetEmployeeResponse).id) {
+          return {
+            ...action.payload,
+          };
+        }
+        return employee;
+      });
+
+      return {
+        ...state,
+        userManagement: {
+          ...state.userManagement,
+          queryData: list,
+        },
       };
     case SELECT_COMPANY:
       return {};

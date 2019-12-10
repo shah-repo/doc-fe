@@ -1,6 +1,7 @@
 import { AppBar, Box, Button, Dialog, IconButton, Toolbar, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
+import { UserMeEditRequestBody } from "../../../state/ducks/auth/types";
 import SummaryField from "../../common/summary/base";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import AvatarContainer from "../../components/icons/avatar/avatar.container";
@@ -15,6 +16,7 @@ interface OwnProps {
     employeeGroups: OptionType[];
     name: string;
     avatar: string | null;
+    editUserMe: (values: UserMeEditRequestBody) => void;
 }
 
 type Props = OwnProps;
@@ -26,6 +28,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
     employeeGroups,
     name,
     avatar,
+    editUserMe,
 }) => {
     console.log(avatar);
 
@@ -77,6 +80,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
                 style={{
                 width: "auto",
                 }}
+                onClick={() => editUserMe({name: "MAJA", avatar: null})}
             >
                 <Text translation="common.edit" />
             </Button>

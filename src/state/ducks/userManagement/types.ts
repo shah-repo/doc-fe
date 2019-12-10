@@ -19,4 +19,12 @@ export interface LoadCompanyGroup {
   employees: Employee[];
 }
 
+export interface EmployeeGroupsEditRequestBody {
+  groups: GroupsId[];
+}
+
+interface GroupsId {
+  id: string;
+}
+
 export interface LoadCompanyGroups extends Array<LoadCompanyGroup> {}

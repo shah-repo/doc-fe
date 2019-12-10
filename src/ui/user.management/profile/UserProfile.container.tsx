@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { getHasTag } from "../../../common/utils/selectors";
-import { authSelectors } from "../../../state/ducks/auth";
-import { Group, GroupTag } from "../../../state/ducks/auth/types";
+import { authActions, authSelectors } from "../../../state/ducks/auth";
+import { Group, GroupTag, UserMeEditRequestBody } from "../../../state/ducks/auth/types";
 import { userManagementActions } from "../../../state/ducks/userManagement";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -14,11 +14,16 @@ interface OwnProps {
     showUserProfile: boolean;
 }
 
-export type Props = OwnProps;
+interface DispatchProps {
+  editUserMe: typeof authActions.editUserMe;
+}
+
+export type Props = OwnProps & DispatchProps;
 
 export const UserProfileContainer: React.FunctionComponent<Props> = ({
     closeUserProfile,
     showUserProfile,
+    editUserMe,
 }) => {
     const canManageUsers = useSelector(getHasTag(GroupTag.USER_MANAGEMENT));
     const name = useSelector(authSelectors.currentUserName);
@@ -27,7 +32,7 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
     const [groupMe, setGroupMe] = useState<OptionType[]>([]);
     const loadGroupsMeAction = useActionCreator(userManagementActions.loadGroupsMe);
 
-    const async = useAsync<Group[]>({
+    const asyncGroup = useAsync<Group[]>({
       onSuccess: (data = []) => {
         const options: OptionType[] = data.map((group) => ({
           value: group.id,
@@ -36,9 +41,16 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
         setGroupMe(options);
       },
     });
+    const async = useAsync();
 
-    const loadGroupsMe = () => async.start(loadGroupsMeAction, async);
-
+    const loadGroupsMe = () => asyncGroup.start(loadGroupsMeAction, asyncGroup);
+    const onSubmit = (values: UserMeEditRequestBody) => {
+      async.start(
+          editUserMe,
+          values,
+        async,
+      );
+    };
     useEffect(() => {
         loadGroupsMe();
     }, []);
@@ -51,8 +63,11 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
                 employeeGroups={groupMe}
                 name={name}
                 avatar={avatar}
+                editUserMe={onSubmit}
             />
     );
 };
 
-export default UserProfileContainer;
+export default connect<{}, DispatchProps, OwnProps, {}>(null, {
+  editUserMe: authActions.editUserMe,
+})(UserProfileContainer);

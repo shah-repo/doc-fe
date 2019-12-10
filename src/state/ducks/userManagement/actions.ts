@@ -1,13 +1,15 @@
 import { apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import { Group } from "../auth/types";
+import { tableSearchActions } from "../tableSearch";
 import {
   COMPANY_GROUPS_GET_ASYNC,
+  EMPLOYEES_URL,
   GROUPS_ME_GET_ASYNC,
   GROUPS_ME_URL,
   GROUPS_URL,
 } from "./constants";
-import { LoadCompanyGroups } from "./types";
+import { EmployeeGroupsEditRequestBody, GetEmployeeResponse, LoadCompanyGroups } from "./types";
 
 const loadCompanyGroups = (handlers: Handlers): ApiAction<LoadCompanyGroups> =>
   apiActionWithCallbacks({
@@ -25,7 +27,19 @@ const loadGroupsMe = (handlers: Handlers): ApiAction<Group[]> =>
     handlers,
   });
 
+const editEmployeeGroups = (employeeId: string, body: EmployeeGroupsEditRequestBody, handlers: Handlers):
+  ApiAction<GetEmployeeResponse> => apiActionWithCallbacks({
+    url: `${EMPLOYEES_URL}/${employeeId}`,
+    method: "patch",
+    data: body,
+    onSuccess: (employee, dispatch) => {
+      dispatch(tableSearchActions.editGroups(employee));
+    },
+    handlers,
+  });
+
 export default {
   loadCompanyGroups,
   loadGroupsMe,
+  editEmployeeGroups,
 };

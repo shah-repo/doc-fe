@@ -16,10 +16,12 @@ import {
   SET_EMPLOYEE,
   USER_GROUPS,
   USER_GROUPS_GET_ASYNC,
+  USERS_ME,
 } from "./constants";
 import {
   AuthResponse,
   AuthUserAction,
+  EditUserMeAction,
   Group,
   LoginRequestBody,
   LoginWithCodeRequestBody,
@@ -28,6 +30,7 @@ import {
   SelectEmployeeAction,
   User,
   UserGroupsAction,
+  UserMeEditRequestBody,
 } from "./types";
 
 const authUser = (user: User): AuthUserAction => {
@@ -48,21 +51,54 @@ const userGroups = (groups: Group[]): UserGroupsAction => {
   };
 };
 
-const login = (loginValues: LoginRequestBody, handlers: Handlers):
-  ApiAction<AuthResponse, LoginRequestBody> => apiActionWithCallbacks({
+const editUser = (user: User): EditUserMeAction => {
+  return {
+    type: USERS_ME,
+    payload: user,
+  };
+};
+
+const editUserMe = (
+  body: UserMeEditRequestBody,
+  handlers: Handlers,
+): ApiAction<Partial<AuthResponse>> =>
+  apiActionWithCallbacks({
+    url: `${USERS_ME}`,
+    method: "patch",
+    data: body,
+    onSuccess: (user, dispatch) => {
+      dispatch(
+        editUser({
+          ...user,
+          name: user.name,
+          avatar: user.avatar,
+        }),
+      );
+    },
+    handlers,
+  });
+
+const login = (
+  loginValues: LoginRequestBody,
+  handlers: Handlers,
+): ApiAction<AuthResponse, LoginRequestBody> =>
+  apiActionWithCallbacks({
     url: LOGIN_URL,
     method: "post",
     data: loginValues,
     includeAuthorization: false,
     onSuccess: (data: AuthResponse, dispatch) => {
-      dispatch(authUser({
-        email: loginValues.email,
-        name: data.name, id: data.id,
-        sessionId: data.sessionId,
-        employeeId: data.employees[0].id,
-        employees: data.employees,
-        avatar: data.avatar,
-      }));
+      dispatch(
+        authUser({
+          email: loginValues.email,
+          name: data.name,
+          id: data.id,
+          sessionId: data.sessionId,
+          employeeId: data.employees[0].id,
+          employees: data.employees,
+          avatar: data.avatar,
+        }),
+      );
 
       if ((data.employees || []).length === 1) {
         dispatch(companyActions.selectCompany(data.employees[0].company));
@@ -71,22 +107,27 @@ const login = (loginValues: LoginRequestBody, handlers: Handlers):
     handlers,
   });
 
-const loginWithCode = (loginValues: LoginWithCodeRequestBody, handlers: Handlers):
-  ApiAction<AuthResponse, LoginWithCodeRequestBody> => apiActionWithCallbacks({
+const loginWithCode = (
+  loginValues: LoginWithCodeRequestBody,
+  handlers: Handlers,
+): ApiAction<AuthResponse, LoginWithCodeRequestBody> =>
+  apiActionWithCallbacks({
     url: LOGIN_WITH_CODE_URL,
     method: "post",
     data: loginValues,
     includeAuthorization: false,
     onSuccess: (response, dispatch) => {
-      dispatch(authUser({
-        email: response.email,
-        name: response.name,
-        id: response.id,
-        sessionId: response.sessionId,
-        employeeId: response.employees[0].id,
-        employees: response.employees,
-        avatar: response.avatar,
-      }));
+      dispatch(
+        authUser({
+          email: response.email,
+          name: response.name,
+          id: response.id,
+          sessionId: response.sessionId,
+          employeeId: response.employees[0].id,
+          employees: response.employees,
+          avatar: response.avatar,
+        }),
+      );
     },
     onFailure: (m, dispatch) => {
       dispatch(logoutUser());
@@ -94,7 +135,10 @@ const loginWithCode = (loginValues: LoginWithCodeRequestBody, handlers: Handlers
     handlers,
   });
 
-const logout = (): ThunkAction<void, ApplicationState, any, AnyAction> => (dispatch, getState) => {
+const logout = (): ThunkAction<void, ApplicationState, any, AnyAction> => (
+  dispatch,
+  getState,
+) => {
   const action: ApiAction<any, LogoutRequestBody> = apiAction({
     url: LOGOUT_URL,
     method: "delete",
@@ -116,8 +160,8 @@ const loadUserGroups = (): ApiAction<Group[]> =>
     },
   });
 
-const pingServer = ():
-  ApiAction => apiAction({
+const pingServer = (): ApiAction =>
+  apiAction({
     url: `${PING_SERVER_URL}`,
     asyncType: PING_SERVER_GET_ASYNC,
     method: "get",
@@ -140,4 +184,5 @@ export default {
   loadUserGroups,
   pingServer,
   selectEmployee,
+  editUserMe,
 };

@@ -1,8 +1,10 @@
 import { Box, Button, Icon, Typography } from "@material-ui/core";
 import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
 import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
 import Select from "react-select";
 import {
+  EmployeeGroupsEditRequestBody,
   LoadCompanyGroups,
   userManagementActions,
 } from "../../../state/ducks/userManagement";
@@ -17,19 +19,22 @@ interface OwnProps {
   employeeGroups: OptionType[];
 }
 
-type Props = OwnProps;
+interface DispatchProps {
+  editEmployeeGroups: typeof userManagementActions.editEmployeeGroups;
+}
+type Props = OwnProps & DispatchProps;
 
 export const UserGroups: React.FunctionComponent<Props> = ({
   canManageUsers,
   employeeGroups,
+  editEmployeeGroups,
 }) => {
   const [groupOptions, setGroupOptions] = useState<OptionType[]>([]);
   const loadCompanyGroupsAction = useActionCreator(
     userManagementActions.loadCompanyGroups,
   );
-  const employeeGroupsValues: string[] = [];
 
-  const async = useAsync<LoadCompanyGroups>({
+  const asyncGroup = useAsync<LoadCompanyGroups>({
     onSuccess: (data = []) => {
       const options: OptionType[] = data.map((group) => ({
         value: group.id,
@@ -39,13 +44,24 @@ export const UserGroups: React.FunctionComponent<Props> = ({
     },
   });
 
-  const loadCompanyGroups = () => async.start(loadCompanyGroupsAction, async);
+  const loadCompanyGroups = () => asyncGroup.start(loadCompanyGroupsAction, asyncGroup);
+  const async = useAsync();
+  const onSubmit = (employeeId: string, values: EmployeeGroupsEditRequestBody) => {
+    async.start(
+        editEmployeeGroups,
+        employeeId,
+        values,
+      async,
+    );
+  };
 
   useEffect(() => {
     loadCompanyGroups();
   }, []);
 
-  employeeGroups.map((group) => employeeGroupsValues.push(group.label));
+  const handleGroups = (groups: OptionType[]) => {
+    return groups.map((group) => group.label).join(", ");
+  };
 
   const [showEditGroups, setEditGroups] = useState(false);
 
@@ -53,6 +69,20 @@ export const UserGroups: React.FunctionComponent<Props> = ({
   const closeEditGroups = () => setEditGroups(false);
 
   const onChange = (state: any) => console.log(state);
+
+  const groups = {
+      groups: [
+        {
+          id: "082a1f68-6e68-4133-ab24-43eb25800e4c",
+        },
+        {
+          id: "c628093a-79c0-4d65-9c28-8fe5be4a9d93",
+        },
+        {
+          id: "a20a6714-502f-4585-94db-3cb1134a2951",
+        },
+      ],
+  };
 
   const addGroupsRenderer = () => (
     <Button
@@ -77,7 +107,7 @@ export const UserGroups: React.FunctionComponent<Props> = ({
     <Box>
       <SummaryField
         label="user.management.groups"
-        value={employeeGroupsValues.join(", ")}
+        value={handleGroups(employeeGroups)}
       />
       {canManageUsers && addGroupsRenderer()}
     </Box>
@@ -105,6 +135,7 @@ export const UserGroups: React.FunctionComponent<Props> = ({
         variant="text"
         color="primary"
         fullWidth={true}
+        onClick={() => onSubmit("729e5452-e683-4c5e-866f-acc89e8ed733", groups)}
       >
         <Text translation="common.done" />
       </Button>
@@ -131,4 +162,6 @@ export const UserGroups: React.FunctionComponent<Props> = ({
   );
 };
 
-export default UserGroups;
+export default connect<{}, DispatchProps, OwnProps, {}>(null, {
+  editEmployeeGroups: userManagementActions.editEmployeeGroups,
+})(UserGroups);

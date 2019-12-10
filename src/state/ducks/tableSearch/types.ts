@@ -1,5 +1,6 @@
 import { TablePanelStateProps } from "../../../ui/components/table/types";
-import { TABLE_SEARCH_CLEAR, TABLE_SEARCH_SET, TABLE_SORT } from "./constants";
+import { GetEmployeeResponse } from "../userManagement";
+import { TABLE_SEARCH_CLEAR, TABLE_SEARCH_SET, TABLE_SET_GROUPS, TABLE_SORT } from "./constants";
 
 export interface TableSearchSetAction<T> {
   type: typeof TABLE_SEARCH_SET;
@@ -20,4 +21,9 @@ export interface TableSortAction<T> {
 
 export interface TableSearchByIdState {
   [key: string]: TablePanelStateProps<any>;
+}
+
+export interface EditGroupsAction {
+  type: typeof TABLE_SET_GROUPS;
+  payload: GetEmployeeResponse;
 }

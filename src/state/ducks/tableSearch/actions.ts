@@ -1,6 +1,8 @@
 import { TablePanelStateProps } from "../../../ui/components/table/types";
-import { TABLE_SEARCH_CLEAR, TABLE_SEARCH_SET, TABLE_SORT } from "./constants";
+import { GetEmployeeResponse } from "../userManagement";
+import { TABLE_SEARCH_CLEAR, TABLE_SEARCH_SET, TABLE_SET_GROUPS, TABLE_SORT } from "./constants";
 import {
+  EditGroupsAction,
   TableSearchClearAction,
   TableSearchSetAction,
   TableSortAction,
@@ -29,8 +31,16 @@ const setTableSort = <T>(
   tableName,
 });
 
+const editGroups = (employee: GetEmployeeResponse): EditGroupsAction => {
+  return{
+    type: TABLE_SET_GROUPS,
+    payload: employee,
+  };
+};
+
 export default {
   setTableSort,
   setSearchCriteria,
   clearSearchCriteria,
+  editGroups,
 };
