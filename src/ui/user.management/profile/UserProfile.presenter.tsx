@@ -1,7 +1,6 @@
 import { AppBar, Box, Button, Dialog, IconButton, Toolbar, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
-import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
 import SummaryField from "../../common/summary/base";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import AvatarContainer from "../../components/icons/avatar/avatar.container";
@@ -14,7 +13,8 @@ interface OwnProps {
     close: () => void;
     canManageUsers: boolean;
     employeeGroups: OptionType[];
-    employee: Partial<GetEmployeeResponse>;
+    name: string;
+    avatar: string | null;
 }
 
 type Props = OwnProps;
@@ -24,18 +24,20 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
     close,
     canManageUsers,
     employeeGroups,
-    employee,
+    name,
+    avatar,
 }) => {
+    console.log(avatar);
 
     const classes = styles();
     const deactivateButtonRenderer = () => (
-    <Button
-        variant="text"
-        color="primary"
-        fullWidth={true}
-    >
-        <Text translation="user.management.deactivate" />
-    </Button>
+        <Button
+            variant="text"
+            color="primary"
+            fullWidth={true}
+        >
+            <Text translation="user.management.deactivate" />
+        </Button>
     );
     return (
     <Dialog fullScreen={true} open={isOpen}>
@@ -53,18 +55,8 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
                 <Text translation="user.management.profile"/>
             </Typography>
                 <Typography variant="h3" className={classes.userName}>
-                    {employee.user!.name}
+                    {name}
                 </Typography>
-{/*                 <Button
-                    variant="text"
-                    color="primary"
-                    fullWidth={true}
-                    style={{
-                    width: "auto",
-                    }}
-                >
-                    <Text translation="common.edit" />
-                </Button> */}
             </Box>
         </AppBar>
         <Box
@@ -78,6 +70,16 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
             alignSelf="center"
             mt={12}
         >
+            <Button
+                variant="text"
+                color="primary"
+                fullWidth={true}
+                style={{
+                width: "auto",
+                }}
+            >
+                <Text translation="common.edit" />
+            </Button>
             <SummaryField label="user.management.last.training" value={"01/08/2018"}/>
             <UserGroups canManageUsers={canManageUsers} employeeGroups={employeeGroups}/>
             {canManageUsers && deactivateButtonRenderer()}

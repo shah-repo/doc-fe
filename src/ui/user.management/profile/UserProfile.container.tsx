@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getHasTag } from "../../../common/utils/selectors";
+import { authSelectors } from "../../../state/ducks/auth";
 import { Group, GroupTag } from "../../../state/ducks/auth/types";
 import { userManagementActions } from "../../../state/ducks/userManagement";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
@@ -14,11 +15,14 @@ interface OwnProps {
 }
 
 export type Props = OwnProps;
+
 export const UserProfileContainer: React.FunctionComponent<Props> = ({
     closeUserProfile,
     showUserProfile,
 }) => {
     const canManageUsers = useSelector(getHasTag(GroupTag.USER_MANAGEMENT));
+    const name = useSelector(authSelectors.currentUserName);
+    const avatar = useSelector(authSelectors.currentEmployeeAvatar);
 
     const [groupMe, setGroupMe] = useState<OptionType[]>([]);
     const loadGroupsMeAction = useActionCreator(userManagementActions.loadGroupsMe);
@@ -45,7 +49,8 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
                 close={closeUserProfile}
                 canManageUsers={canManageUsers}
                 employeeGroups={groupMe}
-                employee={{user: {name: "maja", id: "123id", email: "email"}}}
+                name={name}
+                avatar={avatar}
             />
     );
 };

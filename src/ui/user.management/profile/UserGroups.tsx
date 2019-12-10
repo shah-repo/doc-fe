@@ -2,7 +2,10 @@ import { Box, Button, Icon, Typography } from "@material-ui/core";
 import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
-import { LoadCompanyGroups, userManagementActions } from "../../../state/ducks/userManagement";
+import {
+  LoadCompanyGroups,
+  userManagementActions,
+} from "../../../state/ducks/userManagement";
 import SummaryField from "../../common/summary/base";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import Text from "../../components/Text";
@@ -10,19 +13,20 @@ import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 
 interface OwnProps {
-    canManageUsers: boolean;
-    employeeGroups: OptionType[];
+  canManageUsers: boolean;
+  employeeGroups: OptionType[];
 }
 
 type Props = OwnProps;
 
 export const UserGroups: React.FunctionComponent<Props> = ({
-    canManageUsers,
-    employeeGroups,
+  canManageUsers,
+  employeeGroups,
 }) => {
-
   const [groupOptions, setGroupOptions] = useState<OptionType[]>([]);
-  const loadCompanyGroupsAction = useActionCreator(userManagementActions.loadCompanyGroups);
+  const loadCompanyGroupsAction = useActionCreator(
+    userManagementActions.loadCompanyGroups,
+  );
   const employeeGroupsValues: string[] = [];
 
   const async = useAsync<LoadCompanyGroups>({
@@ -52,20 +56,20 @@ export const UserGroups: React.FunctionComponent<Props> = ({
 
   const addGroupsRenderer = () => (
     <Button
-        variant="text"
-        color="primary"
-        onClick={openEditGroups}
-        fullWidth={true}
-        style={{
+      variant="text"
+      color="primary"
+      onClick={openEditGroups}
+      fullWidth={true}
+      style={{
         width: "auto",
         margin: "19px 0 0 0",
         padding: "0",
-        }}
+      }}
     >
-        <Icon style={{ marginRight: "10px" }}>
+      <Icon style={{ marginRight: "10px" }}>
         <AddCircleOutlineOutlinedIcon />
-        </Icon>
-        <Text translation="user.management.add.groups" />
+      </Icon>
+      <Text translation="user.management.add.groups" />
     </Button>
   );
 
@@ -75,7 +79,7 @@ export const UserGroups: React.FunctionComponent<Props> = ({
         label="user.management.groups"
         value={employeeGroupsValues.join(", ")}
       />
-    {canManageUsers && addGroupsRenderer()}
+      {canManageUsers && addGroupsRenderer()}
     </Box>
   );
 
@@ -92,31 +96,31 @@ export const UserGroups: React.FunctionComponent<Props> = ({
         onChange={onChange}
         defaultValue={employeeGroups}
       />
-    <Button
+      <Button
         style={{
-        width: "auto",
-        margin: "19px 0 0 0",
-        padding: "0",
+          width: "auto",
+          margin: "19px 0 0 0",
+          padding: "0",
         }}
         variant="text"
         color="primary"
         fullWidth={true}
-    >
+      >
         <Text translation="common.done" />
-    </Button>
-    <Button
+      </Button>
+      <Button
         style={{
-        width: "auto",
-        margin: "19px 0 0 0",
-        padding: "0",
+          width: "auto",
+          margin: "19px 0 0 0",
+          padding: "0",
         }}
         variant="text"
         color="primary"
         fullWidth={true}
         onClick={closeEditGroups}
-    >
+      >
         <Text translation="common.cancel" />
-    </Button>
+      </Button>
     </Box>
   );
   return (

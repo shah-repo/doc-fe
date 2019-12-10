@@ -25,6 +25,7 @@ export const USER_DEFAULT_STATE: UserState = {
   employeeId: "",
   sessionId: "",
   employees: [],
+  avatar: "",
 };
 
 type AuthUserActions = AuthUserAction | LogoutUserAction | SelectEmployeeAction;
@@ -35,6 +36,7 @@ export const user = (state: UserState = USER_DEFAULT_STATE, action: AuthUserActi
       return {
         ...state,
         email: action.payload.email,
+        avatar: action.payload.avatar,
         name: action.payload.name,
         id: action.payload.id,
         employeeId: action.payload.employeeId,

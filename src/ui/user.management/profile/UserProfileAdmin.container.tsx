@@ -20,6 +20,8 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
     selectedEmployee,
 }) => {
     const { groups } = selectedEmployee;
+    const { name } = selectedEmployee.user;
+
     const canManageUsers = useSelector(getHasTag(GroupTag.USER_MANAGEMENT));
 
     const employeeGroups: OptionType[] = groups.map((group) => ({
@@ -33,7 +35,8 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
             close={closeUserProfile}
             canManageUsers={canManageUsers}
             employeeGroups={employeeGroups}
-            employee={selectedEmployee}
+            name={name}
+            avatar={null}
         />
     );
 };

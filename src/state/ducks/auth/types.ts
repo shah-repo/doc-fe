@@ -28,6 +28,7 @@ export interface AuthResponse {
   name: string;
   sessionId: string;
   employees: Employee[];
+  avatar: string | null;
 }
 
 export interface Token {
@@ -42,6 +43,7 @@ export interface User {
   employeeId: string;
   sessionId: string;
   employees: Employee[];
+  avatar: string | null;
 }
 
 export interface Group {
@@ -69,6 +71,7 @@ export interface UserState {
   employeeId: string;
   sessionId: string;
   employees: Employee[];
+  avatar: string | null;
 }
 
 export interface AuthProps {

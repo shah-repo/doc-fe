@@ -61,6 +61,7 @@ const login = (loginValues: LoginRequestBody, handlers: Handlers):
         sessionId: data.sessionId,
         employeeId: data.employees[0].id,
         employees: data.employees,
+        avatar: data.avatar,
       }));
 
       if ((data.employees || []).length === 1) {
@@ -84,6 +85,7 @@ const loginWithCode = (loginValues: LoginWithCodeRequestBody, handlers: Handlers
         sessionId: response.sessionId,
         employeeId: response.employees[0].id,
         employees: response.employees,
+        avatar: response.avatar,
       }));
     },
     onFailure: (m, dispatch) => {
