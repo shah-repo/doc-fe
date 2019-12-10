@@ -20,6 +20,8 @@ export interface Audit {
   timestamp: string;
   groupId: string;
   owner: Owner;
+  ownerUser?: Owner;
+  ownerThirdParty?: Owner;
 }
 
 export interface AuditActionPayload {
