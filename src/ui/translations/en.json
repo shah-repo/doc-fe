@@ -40,6 +40,7 @@
   "navigation.changeRequestList": "Change request list",
   "navigation.documentRevisionList": "Document revisions",
   "navigation.change.request.list": "Change Request List",
+  "navigation.user.management": "User Management",
 
   "validators.required": "Required",
   "validators.requiredAtLeastOne": "At least one input required",
@@ -239,6 +240,9 @@
   "common.released": "Released",
   "common.records.found": "Records found",
   "common.docId": "Doc ID",
+  "common.email": "Email",
+  "common.active": "Active",
+  "common.groups": "Groups",
 
   "output.info": "Form Info",
 
@@ -374,5 +378,7 @@
   "company.switch.subtitle": "Select a company below to sign-in to",
   "company.switch.button": "SWITCH COMPANY",
 
-  "suppliersurvey.submit.button": "Survey is filled. Thank you for the response!"
+  "suppliersurvey.submit.button": "Survey is filled. Thank you for the response!",
+  
+  "user.management.add.employee": "Add Employee"
 }

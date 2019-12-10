@@ -30,3 +30,6 @@ export const CONFIRM_FORGOT_PASSWORD_URL = "/sign_up/confirm_forgot_password/";
 export const STATUS = "/status";
 
 export const SUPPLIER_SURVEY_URL = "/supplier_survey/:token";
+
+export const USER_MANAGEMENT_ROOT_URL = "/user_management";
+export const USER_MANAGEMENT_DETAIL_URL = `${USER_MANAGEMENT_ROOT_URL}/:userId`;
