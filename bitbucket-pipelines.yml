@@ -120,7 +120,7 @@ pipelines:
       - step: *RUN_LINTER
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEVELOP_1
-    release/19.4.1:
+    release/19.5:
       - step: *RUN_LINTER
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEMO
