@@ -2,7 +2,7 @@ import { fireEvent, wait } from "@testing-library/dom";
 import MockAdapter from "axios-mock-adapter";
 import React from "react";
 import apiInstance from "../../../state/apiClient";
-import render from "../../tests/helpers/rtlRenderer";
+import render from "../../tests/helpers/renderWithStore";
 import ListContainer from "./container";
 
 const apiMock = new MockAdapter(apiInstance);
