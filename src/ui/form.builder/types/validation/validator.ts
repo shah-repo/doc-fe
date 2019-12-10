@@ -1,5 +1,5 @@
-import { FBInputProps } from "../common";
 import { FBValidatorModel } from "../../stores/domain/models/FBValidatorModel";
+import { FBInputProps } from "../common";
 
 export type FBValidatorProps =
   & Partial<FBValidatorModel>
@@ -8,7 +8,7 @@ export type FBValidatorProps =
   index: number;
   indicatorElements?: React.ReactNode[];
   // indicator: FBValidatorIndicatorProps;
-}
+};
 
 export type FBValidatorDelimiter = ":" | ",";
 
@@ -23,7 +23,7 @@ export type FBValidatorIndicatorProps =
   & {
     validatorDelimiter: FBValidatorDelimiter,
     hasSchemaItem: boolean;
-  }
+  };
 
 export interface FBValidatorIndicatorValueProps {
   value: any;

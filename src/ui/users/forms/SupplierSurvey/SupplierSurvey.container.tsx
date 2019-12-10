@@ -12,10 +12,10 @@ import { ApplicationState } from "../../../../state/reducers";
 import { AsyncState } from "../../../../state/types";
 import AsyncGate from "../../../components/AsyncGate";
 import { HOME_URL } from "../../../constants/urls";
+import FBStore from "../../../form.builder/stores/ui/FBStore";
 import useAsync from "../../../hooks/useAsync";
 import SupplierSurveyPresenter from "./SupplierSurvey.presenter";
 import SupplierSurveySubmitMessage from "./SupplierSurveySubmitMessage.presenter";
-import FBStore from "../../../form.builder/stores/ui/FBStore";
 
 interface StateProps {
   isUserAuthenticated: boolean;

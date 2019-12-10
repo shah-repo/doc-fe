@@ -1,8 +1,7 @@
 import Box from "@material-ui/core/Box/Box";
 import React from "react";
-import _ from "lodash";
-import { FBValidatorProps } from "../../types/validation/validator";
 import { withValidator } from "../../hocs/validation/withValidator";
+import { FBValidatorProps } from "../../types/validation/validator";
 import FBLabel from "../common/FBLabel";
 import FBCheckbox from "../inputs/FBCheckbox";
 

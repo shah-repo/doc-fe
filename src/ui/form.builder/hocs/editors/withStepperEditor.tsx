@@ -1,7 +1,7 @@
 import { Step, StepButton } from "@material-ui/core";
 import React from "react";
-import { FBEditorStepperProps } from "../../types/editors/stepper";
 import FBValidatorForm from "../../components/validation/FBValidatorForm";
+import { FBEditorStepperProps } from "../../types/editors/stepper";
 
 export const withStepperEditor = <T extends FBEditorStepperProps>(
   Component: React.FunctionComponent<T>,

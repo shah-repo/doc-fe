@@ -1,9 +1,9 @@
-import React from "react";
-import { FBValidatorProps, FBValidatorIndicatorProps } from "../../types/validation/validator";
 import _ from "lodash";
-import FBValidatorStore from "../../stores/ui/FBValidatorStore";
-import { FBFieldComponent } from "../../defaults/editor";
 import { observer } from "mobx-react";
+import React from "react";
+import { FBFieldComponent } from "../../defaults/editor";
+import FBValidatorStore from "../../stores/ui/FBValidatorStore";
+import { FBValidatorIndicatorProps, FBValidatorProps } from "../../types/validation/validator";
 
 export const withValidator = <T extends FBValidatorProps>(
   Component: React.FunctionComponent<T>,
@@ -19,11 +19,11 @@ export const withValidator = <T extends FBValidatorProps>(
         return FBValidatorStore.indicatorValues[fieldName] = {};
       }
       FBValidatorStore.indicatorValues = _.omit(indicatorValues, fieldName);
-    }
+    };
 
     const indicatorAfterChange = (fieldName: string, value: any) => {
       alert(`${fieldName}- ${value}`);
-    }
+    };
 
     const indicatorElements = (): React.ReactNode[] | undefined => {
       return _.map(indicators, (
@@ -41,7 +41,7 @@ export const withValidator = <T extends FBValidatorProps>(
           />
         );
       });
-    }
+    };
 
     function doRenderIndicators(): boolean {
       if (!props.name) {

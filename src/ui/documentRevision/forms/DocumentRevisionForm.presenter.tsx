@@ -35,15 +35,15 @@ import Title from "../../document.revision/form/title";
 import {
   documentDetailsPath,
 } from "../../document.revision/utils/paths";
+import FBWorkspace from "../../form.builder/containers/workspace/FBWorkspace";
+import { FBValidate } from "../../form.builder/defaults/validator";
+import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
+import FBStore from "../../form.builder/stores/ui/FBStore";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
 import References from "./presenters/References";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
 import { DocumentRevisionFormValues } from "./types";
-import { FBValidate } from "../../form.builder/defaults/validator";
-import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
-import FBStore from "../../form.builder/stores/ui/FBStore";
-import FBWorkspace from "../../form.builder/containers/workspace/FBWorkspace";
 
 export interface Props
   extends WithStyles<typeof styles>,

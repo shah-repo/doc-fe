@@ -1,3 +1,4 @@
+import { BoxProps } from "@material-ui/core/Box/Box";
 import { FormControlProps } from "@material-ui/core/FormControl/FormControl";
 import { SelectProps } from "@material-ui/core/Select";
 import { BaseTextFieldProps, OutlinedTextFieldProps } from "@material-ui/core/TextField";
@@ -10,7 +11,6 @@ import { FBContextProps } from "./common/context";
 import { FBEditorElementType } from "./editor";
 import { FBFormikFieldProps } from "./formik";
 import { FBValidatorDelimiter, FBValidatorTrigger } from "./validation/validator";
-import { BoxProps } from "@material-ui/core/Box/Box";
 
 export type Subtract<T, V> = Pick<T, Exclude<keyof T, keyof V>>;
 

@@ -10,8 +10,8 @@ import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";
 import FormWrapper from "../../../components/forms/FormWrapper";
 import SubmitButton from "../../../components/forms/SubmitButton";
-import { FBDocumentFlowProps } from "../../../form.builder/types/formik";
 import FBWorkspace from "../../../form.builder/containers/workspace/FBWorkspace";
+import { FBDocumentFlowProps } from "../../../form.builder/types/formik";
 
 interface Props extends FormikProps<FBDocumentFlowProps> {
     asyncState: AsyncState;

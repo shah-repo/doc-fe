@@ -8,7 +8,7 @@ export const withValidation = <T extends FBInputProps>(
     const validate = (value: any) => {
       // tslint:disable-next-line: no-console
       console.log(`${props}- ${value}`);
-    }
+    };
 
     return Component({
         ...(props as T),

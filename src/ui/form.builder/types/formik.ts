@@ -1,4 +1,4 @@
-import { FieldProps, FormikConfig, FieldConfig } from "formik";
+import { FieldConfig, FieldProps, FormikConfig } from "formik";
 import { Dictionary } from "lodash";
 import { Id } from "../../../state/ducks/common";
 import { DocumentRevisionDocument } from "../../../state/ducks/documentRevisions";

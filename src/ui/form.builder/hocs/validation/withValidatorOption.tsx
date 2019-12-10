@@ -1,10 +1,10 @@
-import React from "react";
 import _ from "lodash";
-import { FBValidatorOptionProps } from "../../types/validation/validatorOption";
-import { withFormik } from "../common/withFormik";
+import React from "react";
+import { FBFieldComponent } from "../../defaults/editor";
 import FBValidatorStore from "../../stores/ui/FBValidatorStore";
 import { FBTemplateSchema } from "../../types/store";
-import { FBFieldComponent } from "../../defaults/editor";
+import { FBValidatorOptionProps } from "../../types/validation/validatorOption";
+import { withFormik } from "../common/withFormik";
 import { withIndicatorOnChange } from "../validation/withIndicatorOnChange";
 
 export const withValidatorOption = <T extends FBValidatorOptionProps>(
@@ -25,7 +25,7 @@ export const withValidatorOption = <T extends FBValidatorOptionProps>(
       const { name } = field;
       const { indicatorValues } = FBValidatorStore;
       const value = ev.target.checked;
-  
+
       if (value) {
         form && (form.setFieldValue(name, ev.target.value));
         return FBValidatorStore.indicatorValues[name] = {};
@@ -51,7 +51,6 @@ export const withValidatorOption = <T extends FBValidatorOptionProps>(
           />
         );
       });
-
 
       // return (indicators || []).map(
       //   ({ type, ...props }: Partial<FBTemplateSchema>, index) => {
@@ -93,7 +92,6 @@ export const withValidatorOption = <T extends FBValidatorOptionProps>(
 
   return withFormik(withIndicatorOnChange((props: T) => component(props)));
 };
-
 
 // export const withValidatorOption = <T extends FBValidatorOptionProps>(
 //   Component: React.FunctionComponent<T>,

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import React from "react";
-import { FBWorkspaceProps } from "../types/workspace";
 import FBStore from "../stores/ui/FBStore";
+import { FBWorkspaceProps } from "../types/workspace";
 
 export const withWorkspace = <T extends FBWorkspaceProps>(
   Component: React.FunctionComponent<T>,

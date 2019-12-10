@@ -1,8 +1,8 @@
 import _ from "lodash";
 import React from "react";
+import FBValidatorStore from "../../stores/ui/FBValidatorStore";
 import { FBValidatorOptionProps } from "../../types/validation/validatorOption";
 import { withOnChange } from "../common/withOnChange";
-import FBValidatorStore from "../../stores/ui/FBValidatorStore";
 
 export const withIndicatorOnChange = <T extends FBValidatorOptionProps>(
   Component: React.FunctionComponent<T>,
@@ -30,7 +30,7 @@ export const withIndicatorOnChange = <T extends FBValidatorOptionProps>(
             value = value.documentTypeAcronym;
         }
         FBValidatorStore.indicatorValues[field!.name][`${delimiter}`] = value;
-    }
+    };
 
     return Component({
         ...(props as T),
@@ -39,5 +39,5 @@ export const withIndicatorOnChange = <T extends FBValidatorOptionProps>(
       });
     };
 
-    return withOnChange((props: T) => component(props));
+  return withOnChange((props: T) => component(props));
 };
