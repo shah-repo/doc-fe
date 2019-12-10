@@ -11,6 +11,7 @@ import { FBContextProps } from "./common/context";
 import { FBEditorElementType } from "./editor";
 import { FBFormikFieldProps } from "./formik";
 import { FBValidatorDelimiter, FBValidatorTrigger } from "./validation/validator";
+import { FBActionContainerProps } from "./actions/action";
 
 export type Subtract<T, V> = Pick<T, Exclude<keyof T, keyof V>>;
 
@@ -53,6 +54,7 @@ export type FBInputProps =
   & FBLabelProps
   & Pick<FBContextProps, "includeContext" | "showContext" | "contextLabel">
   // & Pick<FBValidatorProps, "rules" | "applicableOn">
+  & Pick<FBActionContainerProps, "actions">
   & Pick<FBOptionProps, "optionId">
   & Pick<BaseTextFieldProps,
     | "children"

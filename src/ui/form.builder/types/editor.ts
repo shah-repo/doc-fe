@@ -41,7 +41,8 @@ export type FBEditorElementType =
   | "hyperlink"
   | "fileupload"
   | "schemaSelect"
-  | "schemaItem";
+  | "schemaItem"
+  | "action";
 
 export type FBEditorModeType = "create" | "update";
 

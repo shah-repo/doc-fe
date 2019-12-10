@@ -1,10 +1,10 @@
 import _, { Dictionary } from "lodash";
 import { action, computed, observable } from "mobx";
 import { FBFormValues } from "../../defaults/formik";
-import { FBFormDefaultProps } from "../../types/common";
 import { FBTemplateSchema } from "../../types/store";
 import { FBWorkspaceMode } from "../../types/workspace";
 import editorStore from "./FBEditorStore";
+import { FBInputProps } from "../../types/common";
 
 export class FormBuilderStore {
   @computed get active(): boolean {
@@ -15,7 +15,7 @@ export class FormBuilderStore {
     return (this.mode === "design") && (this.schema.length === 0);
   }
 
-  @computed get fieldMode(): Partial<FBFormDefaultProps> {
+  @computed get fieldMode(): Pick<FBInputProps, "disabled"> {
     return {
       disabled: this.isDisabled(),
       // readOnly: this.isReadonly(),

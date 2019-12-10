@@ -8,6 +8,7 @@ import FBStore from "../stores/ui/FBStore";
 import FBValidatorStore from "../stores/ui/FBValidatorStore";
 import { FBEditorFormProps } from "../types/editor";
 import { FBTemplateSchema } from "../types/store";
+import _, { Dictionary } from "lodash";
 
 export const withEditorRenderer =
 (other: FBEditorFormProps) =>
@@ -25,15 +26,21 @@ export const withEditorRenderer =
   //   ...props.values,
   // });
 
+  const propsByType = (): Dictionary<FBTemplateSchema | string[]> => {
+    if (type === "action") {
+      return { actions: _.keys(props.values) };
+    }
+    return props.values as FBTemplateSchema;
+  }
+
   const onClick = () => {
 
     // const item = schemaItem();
-
     const schema: FBTemplateSchema = {
       type,
       index,
       name: uuidv4(),
-      ...props.values as FBTemplateSchema,
+      ...propsByType(),
       // rules: FBValidatorStore.getRules(),
       // applicableOn: FBValidatorStore.applicableOn ? [FBValidatorTrigger.ON_STATE_TO_IN_REVIEW] : [],
     };

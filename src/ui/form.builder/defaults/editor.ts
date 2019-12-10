@@ -23,6 +23,8 @@ import FBLink from "../components/navigation/FBLink";
 import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaItem";
 import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
 import { FBEditorElementType } from "../types/editor";
+import FBActionEditor from "../components/editors/FBActionEditor";
+import FBActionContainer from "../components/actions/FBActionContainer";
 
 export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<{}>> = {
   section: FBLabelEditor,
@@ -38,6 +40,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<{}>> = {
   autocomplete: FBAutocompleteEditor,
   hyperlink: FBHyperlinkEditor,
   fileupload: FBLabelStepperEditor,
+  action: FBActionEditor,
 };
 
 export const FBFieldComponent: Dictionary<any> = {
@@ -56,6 +59,7 @@ export const FBFieldComponent: Dictionary<any> = {
   fileupload: FBFileUpload,
   schemaSelect: FBValidatorSchemaSelect,
   schemaItem: FBValidatorSchemaItem,
+  action: FBActionContainer,
 };
 
 export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
@@ -73,6 +77,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "fileupload",
   ],
   lists: ["autocomplete"],
+  actions: ["action"],
 };
 
 export const FBGroupEditorOptions: Dictionary<any[]> = {

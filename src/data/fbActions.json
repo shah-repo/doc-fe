@@ -1,0 +1,33 @@
+[
+    {
+       "name":"SendEmailWithFormToFill",
+       "description":"Send Email with Form to fill in.",
+       "actionLabel": "Send Email",
+       "indicators":[
+          {
+             "type":"textfield",
+             "label":"Email",
+             "name":"email"
+          },
+          {
+             "type":"textfield",
+             "label":"Name",
+             "name":"name"
+          }
+       ],
+       "docIdRequired":true
+    },
+    {
+      "name":"SendToReview",
+      "description":"Send Document to Review.",
+      "actionLabel": "Send to Review",
+      "indicators":[
+         {
+            "type":"autocomplete",
+            "label":"Documents",
+            "optionId":"4",
+            "name": "documentRevision.id"
+         }
+      ]
+   }
+ ]
