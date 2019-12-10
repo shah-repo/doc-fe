@@ -1,11 +1,12 @@
 import { Employee } from "../company";
 import {
   AUTH_USER,
+  CONFIRM_FORGOT_PASSWORD_URL,
+  FORGOT_PASSWORD_URL,
   LOGOUT_USER,
   SET_EMPLOYEE,
   SIGNUP_URL,
   USER_PERMISSIONS,
-  FORGOT_PASSWORD_URL,
 } from "./constants";
 
 export interface LoginRequestBody {
@@ -15,6 +16,12 @@ export interface LoginRequestBody {
 
 export interface ForgotPassword {
   email: string;
+}
+
+export interface ForgotPasswordConfirmation {
+  email: string;
+  code: string;
+  password: string;
 }
 
 export interface LoginWithCodeRequestBody {
@@ -62,6 +69,10 @@ export interface SignupAction {
 
 export interface ForgotPasswordAction {
   type: typeof FORGOT_PASSWORD_URL;
+}
+
+export interface ConfirmPasswordAction {
+  type: typeof CONFIRM_FORGOT_PASSWORD_URL;
 }
 
 export interface LogoutUserAction {

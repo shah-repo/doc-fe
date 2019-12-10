@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import Config from "../../../config";
 import { authActions } from "../../../state/ducks/auth";
 import { ApplicationState } from "../../../state/reducers";
+import { emailSchema, passwordSchema } from "../../components/forms/fields/validators";
 import useAsync from "../../hooks/useAsync";
 import { ThemeEnv } from "../../layout/theme/utils/types";
 import { Translation } from "../../translations/types";
@@ -75,16 +76,8 @@ const SignupFormContainer: React.FunctionComponent<SignupFormContainerProps> = (
   );
 
   const SignupSchema = Yup.object().shape({
-    email: Yup.string()
-      .email("Invalid email")
-      .required("Required"),
-    password: Yup.string()
-      .min(8, "Password must contain at least 8 characters")
-      .required("Required")
-      .matches(/(?=.*?[A-Z])/, "Password must contain an upper case letter")
-      .matches(/(?=.*?[a-z])/, "Password must contain a lower case letter")
-      .matches(/(?=.*?[0-9])/, "Password must contain a number")
-      .matches(/(?=.*?[^\w\s])/, "Password must contain a special characters"),
+    email: emailSchema,
+    password: passwordSchema,
   });
 
   return (

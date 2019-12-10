@@ -6,3 +6,9 @@ export interface LoginFormValues {
 export interface ForgotPasswordEmail {
   email: string;
 }
+
+export interface ForgotPasswordValues {
+  email: string;
+  confirmPass: string;
+  password: string;
+}

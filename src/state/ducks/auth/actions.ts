@@ -6,6 +6,7 @@ import { ApiAction, Handlers } from "../../types";
 import { companyActions, Employee } from "../company";
 import {
   AUTH_USER,
+  CONFIRM_FORGOT_PASSWORD_URL,
   FORGOT_PASSWORD_URL,
   LOGIN_URL,
   LOGIN_WITH_CODE_URL,
@@ -22,8 +23,10 @@ import {
 import {
   AuthResponse,
   AuthUserAction,
+  ConfirmPasswordAction,
   ForgotPassword,
   ForgotPasswordAction,
+  ForgotPasswordConfirmation,
   LoginRequestBody,
   LoginWithCodeRequestBody,
   LogoutRequestBody,
@@ -40,6 +43,10 @@ const authSignup = (): SignupAction => ({
 
 const authForgotPassword = (): ForgotPasswordAction => ({
   type: FORGOT_PASSWORD_URL,
+});
+
+const authConfirmPassword = (): ConfirmPasswordAction => ({
+  type: CONFIRM_FORGOT_PASSWORD_URL,
 });
 
 const authUser = (user: User): AuthUserAction => {
@@ -105,6 +112,19 @@ const forgotPassword = (values: ForgotPassword, handlers: Handlers):
     },
     handlers,
   });
+
+const confirmNewPassword = (confirmValues: ForgotPasswordConfirmation, handlers: Handlers):
+  ApiAction<AuthResponse, ForgotPasswordConfirmation> => apiActionWithCallbacks({
+    url: CONFIRM_FORGOT_PASSWORD_URL,
+    method: "post",
+    data: confirmValues,
+    includeAuthorization: false,
+    onSuccess: (m, dispatch) => {
+      dispatch(authConfirmPassword());
+      dispatch(login({email: confirmValues.email, password: confirmValues.password}, handlers));
+    },
+    handlers,
+});
 
 const loginWithCode = (loginValues: LoginWithCodeRequestBody, handlers: Handlers):
   ApiAction<AuthResponse, LoginWithCodeRequestBody> => apiActionWithCallbacks({
@@ -176,4 +196,5 @@ export default {
   selectEmployee,
   signup,
   forgotPassword,
+  confirmNewPassword,
 };

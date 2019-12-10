@@ -37,7 +37,6 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
 
   const forgotPassAsync = useAsync({
     onSuccess: () => {
-      console.log("here");
       showVerificationState(true);
     },
   });

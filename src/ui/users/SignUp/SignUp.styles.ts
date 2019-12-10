@@ -54,5 +54,9 @@ export const styles = makeStyles((theme: Theme) =>
       borderRadius: "50px",
       height: "50px",
     },
+    formStyle: {
+      width: "500px",
+      marginTop: "50px",
+    },
   }),
   );
