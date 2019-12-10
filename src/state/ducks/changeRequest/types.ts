@@ -40,6 +40,7 @@ export interface Assessment {
 }
 
 export interface AssessmentItem {
+  id?: string;
   reasoning?: string | null;
   attachments?: Attachment[] | null;
 }

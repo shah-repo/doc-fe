@@ -1,17 +1,26 @@
 import Box from "@material-ui/core/Box";
+import FormLabel from "@material-ui/core/FormLabel/FormLabel";
 import React from "react";
-import { withLabel } from "../../hocs/common/withLabel";
-import { FBFormDefaultProps } from "../../types/common";
+import Text from "../../../components/Text";
+import { FBLabelFontSize, FBLabelProps } from "../../types/common";
 
-const FBLabel: React.FunctionComponent<
-  Pick<FBFormDefaultProps, "label" | "children">
-> = ({ label, ...props }) => {
-  return (
-    <Box mb={4}>
-      {label}
-      {props.children}
+const FBLabel: React.FunctionComponent<FBLabelProps> = ({
+  label,
+  error,
+  labelValues,
+  fontSize = "md",
+  ...boxProps
+}) => (
+  <FormLabel component="legend" error={error}>
+    <Box
+      mb={0.5}
+      fontSize={`${FBLabelFontSize[fontSize]}.fontSize`}
+      fontWeight={300}
+      {...boxProps}
+    >
+      <Text message={label as string} values={labelValues} />
     </Box>
-  );
-};
+  </FormLabel>
+);
 
-export default withLabel(FBLabel);
+export default FBLabel;

@@ -1,29 +1,18 @@
-import { Box } from "@material-ui/core";
-import { OutlinedTextFieldProps } from "@material-ui/core/TextField";
 import React from "react";
 import AttachmentField from "../../../components/common/attachment.field/container";
 import AttachmentIconField from "../../../components/common/attachment.icon/container";
-import { withLabelRenderer } from "../../hocs/withLabelRenderer";
-import { withOnChange } from "../../hocs/withOnChange";
-import { FBFormDefaultProps, FBOnChangeProps } from "../../types/common";
+import { FBInputProps } from "../../types/common";
+import FBInput from "../common/FBInput";
 
-export type Props = Omit<OutlinedTextFieldProps, "variant"> &
-  FBFormDefaultProps &
-  FBOnChangeProps;
-
-const FBFileUpload: React.FunctionComponent<Props> = ({
-  labelRenderer,
+const FBFileUpload: React.FunctionComponent<FBInputProps> = ({
   disabled,
   name,
-  error,
-  helperText,
+  ...props
 }) => (
-  <Box mb={5} width="100%">
-    {labelRenderer}
-    <AttachmentField name={name} component="field" disabled={disabled} />
-    <Box mt={3} pl={1.5} fontSize="caption.fontSize" color="error.main">{helperText}</Box>
-    <AttachmentIconField name={name} disabled={disabled}  />
-  </Box>
+  <FBInput {...props} {...{name}} type="fileupload">
+    <AttachmentField {...{name, disabled}} name={name} component="field" />
+    <AttachmentIconField {...{name, disabled}}  />
+  </FBInput>
 );
 
-export default withOnChange(withLabelRenderer(FBFileUpload));
+export default FBFileUpload;

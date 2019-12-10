@@ -2,34 +2,21 @@ import { Collection } from "mobx-rest";
 import { FBAutocompleteModel } from "../models/FBAutocompleteModel";
 
 export class FBAutocompleteCollection extends Collection<FBAutocompleteModel> {
-  private urlStr: string = "";
-  private keyStr: string = "";
+  private path: string = "";
+
+  constructor(path: string) {
+    super();
+    this.path = path;
+    this.fetch();
+  }
 
   public url() {
-    return this.urlStr;
+    return this.path;
   }
 
   public model() {
     return FBAutocompleteModel;
   }
-
-  public setArgs(url: string, key: string) {
-    this.urlStr = url;
-    this.keyStr = key;
-  }
-
-  public data(): any[] {
-    return this.models.map((o) => {
-      if (o.has(this.keyStr)) {
-        return {
-          value: o.id,
-          text: o.get(this.keyStr),
-          label: o.get(this.keyStr),
-        };
-      }
-    });
-  }
 }
 
-const autocompleteList = new FBAutocompleteCollection();
-export default autocompleteList;
+export default FBAutocompleteCollection;

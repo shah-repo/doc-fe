@@ -52,6 +52,9 @@ export class FBEditorStore {
   }
 
   @action public editorTypeEdit = (schema: FBTemplateSchema) => {
+    if (!schema.index) {
+      return;
+    }
     const { type, index } = schema;
     this.editorIndex = index;
     this.editorMode = "update";

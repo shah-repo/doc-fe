@@ -1,7 +1,8 @@
+
 import React from "react";
-import autocompleteEditorList from "../../stores/domain/collections/FBAutocompleteEditorCollection";
-import FBCheckbox from "../inputs/FBCheckbox";
+import autocompleteOptions from "../../../../data/autocompleteOptions.json";
 import FBSelect from "../inputs/FBSelect";
+import FBAdditionsEditor from "./FBAdditionsEditor";
 import FBLabelEditor from "./FBLabelEditor";
 import FBPlaceholderEditor from "./FBPlaceholderEditor";
 import FBStepperEditor from "./FBStepperEditor";
@@ -12,10 +13,12 @@ const FBAutocompleteEditor: React.FunctionComponent<{}> = () => (
     <FBPlaceholderEditor />
     <FBSelect
       label="form.builder.select.options"
-      options={autocompleteEditorList.options()}
-      name="autocompleteId"
+      options={autocompleteOptions}
+      optionLabelKey="label"
+      optionValueKey="id"
+      name="optionId"
     />
-    <FBCheckbox label="form.builder.multi.select" name="isMulti" />
+    <FBAdditionsEditor type="autocomplete" />
   </FBStepperEditor>
 );
 

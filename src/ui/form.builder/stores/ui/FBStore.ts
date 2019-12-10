@@ -1,5 +1,6 @@
 import _, { Dictionary } from "lodash";
 import { action, computed, observable } from "mobx";
+import { FBFormValues } from "../../defaults/formik";
 import { FBFormDefaultProps } from "../../types/common";
 import { FBTemplateSchema } from "../../types/store";
 import { FBWorkspaceMode } from "../../types/workspace";
@@ -82,6 +83,13 @@ export class FormBuilderStore {
   }
 
   @action public getValues = () => {
+    if (_.isEmpty(this.values)) {
+      const initialValues: Dictionary<any> = {};
+      _.map(this.getSchema(), (schemaItem) => {
+        initialValues[schemaItem.name || ""] = FBFormValues[schemaItem.type || ""];
+      });
+      return initialValues;
+    }
     return this.values;
   }
 

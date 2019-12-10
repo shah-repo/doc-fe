@@ -58,11 +58,6 @@ export const FBFieldComponent: Dictionary<any> = {
   schemaItem: FBValidatorSchemaItem,
 };
 
-export const FBGroupField: Dictionary<any> = {
-  checkboxgroup: FBCheckbox,
-  radiogroup: FBRadio,
-};
-
 export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
   section: ["section", "subsection"],
   basics: [
@@ -78,4 +73,14 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "fileupload",
   ],
   lists: ["autocomplete"],
+};
+
+export const FBGroupEditorOptions: Dictionary<any[]> = {
+  autocomplete: [{value: "multiple", text: "form.builder.multi.select"}],
+  select: [
+    { value: "includeNone", text: "form.builder.include.none" },
+    { value: "includeContext", text: "form.builder.include.other" },
+  ],
+  control: [{value: "includeContext", text: "form.builder.include.note"}],
+  controlgroup: [{value: "includeContext", text: "form.builder.include.other"}],
 };

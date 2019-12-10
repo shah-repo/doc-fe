@@ -1,26 +1,32 @@
-import { Box, FormGroup } from "@material-ui/core";
-import { observer } from "mobx-react";
+import { FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
+import _ from "lodash";
 import React from "react";
-import { withOptionRenderer } from "../../hocs/withOptionRenderer";
-import FBValidatorStore from "../../stores/ui/FBValidatorStore";
-import { FBFormDefaultProps } from "../../types/common";
+import Text from "../../../components/Text";
+import { withOptions } from "../../hocs/common/withOptions";
+import { FBCheckGroupProps } from "../../types/inputs/check";
+import FBInput from "../common/FBInput";
 
-const FBRadioGroup: React.FunctionComponent<FBFormDefaultProps> = ({
-  labelRenderer,
-  optionsRenderer,
-  includeNote,
-  row,
-  name,
+const FBRadioGroup: React.FunctionComponent<FBCheckGroupProps> = ({
+  row = true,
+  type = "radiogroup",
+  options,
+  optionValueKey = "value",
+  optionLabelKey = "text",
+  labelValues,
+  ...props
 }) => (
-  <Box mb={4}>
-    {labelRenderer}
-    <FormGroup row={(row !== undefined) ? row : !includeNote}>
-      {optionsRenderer}
-    </FormGroup>
-    <Box mt={3} pl={1.5} fontSize="caption.fontSize" color="error.main">
-      {FBValidatorStore.errors[name || ""] || ""}
-    </Box>
-  </Box>
+  <FBInput {...props} {...{ type }}>
+    <RadioGroup row={row}>
+      {_.map(options, (option, index) => (
+        <FormControlLabel
+          key={`${_.get(option, optionValueKey)}-${index}`}
+          value={_.get(option, optionValueKey)}
+          control={<Radio />}
+          label={<Text message={_.get(option, optionLabelKey)}  values={labelValues}/>}
+        />
+      ))}
+    </RadioGroup>
+  </FBInput>
 );
 
-export default withOptionRenderer(observer(FBRadioGroup));
+export default withOptions(FBRadioGroup);

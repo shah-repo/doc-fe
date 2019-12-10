@@ -1,6 +1,6 @@
 import { Step, StepButton } from "@material-ui/core";
 import React from "react";
-import FBValidator from "../../components/validation/FBValidator";
+import FBValidatorForm from "../../components/validation/FBValidatorForm";
 import { FBEditorStepperProps } from "../../types/editors/stepper";
 
 export const withStepperEditor = <T extends FBEditorStepperProps>(
@@ -14,7 +14,7 @@ export const withStepperEditor = <T extends FBEditorStepperProps>(
         case 0:
           return props.children;
         case 1:
-          return <FBValidator />;
+          return <FBValidatorForm />;
         default:
           return "";
       }
@@ -26,8 +26,13 @@ export const withStepperEditor = <T extends FBEditorStepperProps>(
 
     const steps = (): React.ReactNode[] =>
       stepLabels.map((label, index) => (
-        <Step style={{ padding: 0 }} key={`step-${index}-${label}`}>
-          <StepButton onClick={handleStep(index)}>{label}</StepButton>
+        <Step
+          key={`step-${index}-${label}`}
+          style={{ padding: 0 }}
+        >
+          <StepButton onClick={handleStep(index)}>
+            {label}
+          </StepButton>
         </Step>
       ));
 

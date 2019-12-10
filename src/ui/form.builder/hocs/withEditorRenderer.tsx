@@ -8,26 +8,34 @@ import FBStore from "../stores/ui/FBStore";
 import FBValidatorStore from "../stores/ui/FBValidatorStore";
 import { FBEditorFormProps } from "../types/editor";
 import { FBTemplateSchema } from "../types/store";
-import { FBValidatorTrigger } from "../types/validation/validator";
 
 export const withEditorRenderer =
 (other: FBEditorFormProps) =>
 (props: FormikProps<Partial<FBTemplateSchema>>) => {
 
   const { type, index, mode } = other;
-  const { includeNote, includeOther } = props.values;
   const InputType = FBFieldEditorComponent[type as string];
+  const uuidv4 = require("uuid/v4");
+
+  // const schemaItem = (): FBTemplateSchema => ({
+  //   type,
+  //   index,
+  //   name: uuidv4(),
+  //   // rules: FBValidatorStore.getRules(),
+  //   ...props.values,
+  // });
 
   const onClick = () => {
-    const uuidv4 = require("uuid/v4");
+
+    // const item = schemaItem();
+
     const schema: FBTemplateSchema = {
       type,
       index,
       name: uuidv4(),
       ...props.values as FBTemplateSchema,
-      includeNote: includeNote || includeOther,
-      rules: FBValidatorStore.getRules(),
-      applicableOn: FBValidatorStore.applicableOn ? [FBValidatorTrigger.ON_STATE_TO_IN_REVIEW] : [],
+      // rules: FBValidatorStore.getRules(),
+      // applicableOn: FBValidatorStore.applicableOn ? [FBValidatorTrigger.ON_STATE_TO_IN_REVIEW] : [],
     };
     FBValidatorStore.applicableOn = false;
     FBValidatorStore.resetIndicatorValues();

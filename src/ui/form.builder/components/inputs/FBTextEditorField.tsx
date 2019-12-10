@@ -1,38 +1,27 @@
-import { Box } from "@material-ui/core";
 import React from "react";
 import ReactQuill from "react-quill";
-import {
-  formats,
-  modules,
-} from "../../../components/forms/fields/TextEditor/configuration";
-import { withLabelRenderer } from "../../hocs/withLabelRenderer";
-import { withOnChange } from "../../hocs/withOnChange";
-import { FBFormDefaultProps, FBOnChangeProps } from "../../types/common";
+import { formats, modules } from "../../../components/forms/fields/TextEditor/configuration";
+import { FBFormDefaultProps, FBInputProps, FBOnChangeProps } from "../../types/common";
+import FBInput from "../common/FBInput";
 
 export type Props = FBFormDefaultProps & FBOnChangeProps;
 
-const FBTextEditorField: React.FunctionComponent<Props> = ({
-  labelRenderer,
-  form,
+const FBTextEditorField: React.FunctionComponent<FBInputProps> = ({
   disabled,
-  readOnly,
-  helperText,
+  name,
   ...props
 }) => (
-  <Box mb={4}>
-    {labelRenderer}
+  <FBInput {...props} {...{name}} type="texteditor">
     <ReactQuill
       theme="snow"
       modules={modules}
       formats={formats}
       onChange={props.onChange}
-      value={props.value || ""}
-      readOnly={disabled || readOnly}
-      style={{ minHeight: 120 }}
-      id={`field-${props.field.name}`}
+      readOnly={disabled}
+      style={{ minHeight: 220 }}
+      id={`field-${name}`}
     />
-    <Box mt={3} pl={1.5} fontSize="caption.fontSize" color="error.main">{helperText}</Box>
-  </Box>
+  </FBInput>
 );
 
-export default withLabelRenderer(withOnChange(FBTextEditorField));
+export default FBTextEditorField;

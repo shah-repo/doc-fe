@@ -8,7 +8,7 @@ const FBInfo: React.FunctionComponent<{}> = () => {
 
   return (
     <FBForm>
-      <FBTextField label="form.builder.name" name="name" required={true} />
+      <FBTextField label="form.builder.name" name="name" />
       <Button
         type="submit"
         variant="contained"

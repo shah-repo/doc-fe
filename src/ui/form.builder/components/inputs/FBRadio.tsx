@@ -1,43 +1,21 @@
-import { Box, FormControlLabel, Radio } from "@material-ui/core";
+import { FormControlLabel, Radio } from "@material-ui/core";
 import React from "react";
 import Text from "../../../components/Text";
-import { withOnChange } from "../../hocs/withOnChange";
-import FBStore from "../../stores/ui/FBStore";
-import { FBCheckboxProps } from "../../types/checkbox";
-import FBTextField from "./FBTextField";
+import { FBInputProps } from "../../types/common";
+import FBInput from "../common/FBInput";
 
-const FBRadio: React.FunctionComponent<FBCheckboxProps> = ({
-  label,
-  field,
-  gutter = true,
-  includeNote,
+const FBRadio: React.FunctionComponent<FBInputProps> = ({
+  label = "",
   disabled,
-  readOnly,
-  helperText,
-  isGroup = false,
+  labelValues,
   ...props
 }) => (
-  <Box mb={gutter ? 4 : 0}>
+  <FBInput {...props} type="radio">
     <FormControlLabel
-      {...props}
-      label={label && <Text message={label as string} />}
-      control={<Radio checked={field.value === label} value={label} />}
-      disabled={disabled || readOnly}
+      label={<Text message={label as string} values={labelValues} />}
+      control={<Radio {...{disabled}} value={props.name} />}
     />
-    {(FBStore.mode === "form" || FBStore.mode === "preview") &&
-      field.value === label &&
-      includeNote && (
-        <FBTextField
-          disabled={disabled || readOnly}
-          name={`${props.name}_optionNote_field`}
-        />
-      )}
-    {!isGroup && (
-      <Box mt={3} pl={1.5} fontSize="caption.fontSize" color="error.main">
-        {helperText}
-      </Box>
-    )}
-  </Box>
+  </FBInput>
 );
 
-export default withOnChange(FBRadio);
+export default FBRadio;

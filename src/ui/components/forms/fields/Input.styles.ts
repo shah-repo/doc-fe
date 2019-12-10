@@ -9,6 +9,7 @@ export const InputField = withStyles((theme: Theme) =>
         marginTop: theme.spacing(4),
         padding: "2px 0 0 0",
       },
+      "fontFamily": "Open Sans, sans-serif;",
     },
     input: {
       // "backgroundColor": theme.palette.background.madefaultin,
@@ -19,6 +20,7 @@ export const InputField = withStyles((theme: Theme) =>
       padding: theme.spacing(2),
       flex: 1,
       border: `1px solid ${theme.palette.text.hint}`,
+      fontFamily: "Open Sans, sans-serif;",
     },
   }),
 )(InputBase);
@@ -27,6 +29,7 @@ export const LabelField = withStyles((theme: Theme) =>
   createStyles({
     root: {
       transform: "translate(0, 1px) scale(0.97)",
+      fontFamily: "Open Sans, sans-serif;",
     },
   }),
 )(InputLabel);

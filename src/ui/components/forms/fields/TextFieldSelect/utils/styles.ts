@@ -13,7 +13,7 @@ export const styles = makeStyles((theme) => ({
     "borderRadius": 0,
     "position": "relative",
     "zIndex": 2,
-    "& input": {
+    "& textarea": {
       background: "#fff",
     },
   },
@@ -22,10 +22,13 @@ export const styles = makeStyles((theme) => ({
     "position": "relative",
     "width": "100%",
     "z-index": "1",
-    "top": "19px",
+    "top": "25px",
     "border": 0,
     "& .MuiBox-root": {
       visibility: "hidden",
+    },
+    "& .Mui-error": {
+      display: "none",
     },
     "& [class*=\"-option\"]": {
       color: "#000",

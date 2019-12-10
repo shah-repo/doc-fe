@@ -1,4 +1,3 @@
-import moment from "moment-timezone";
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
@@ -6,56 +5,30 @@ import { ApplicationState } from "../../reducers";
 import { ApiAction, Handlers } from "../../types";
 import { companyActions, Employee } from "../company";
 import {
-  AUTH_TOKENS,
-  AUTH_TOKENS_REFRESH_THRESHOLD_SECONDS,
   AUTH_USER,
+  GROUPS_URL,
   LOGIN_URL,
   LOGIN_WITH_CODE_URL,
   LOGOUT_URL,
   LOGOUT_USER,
-  PERMISSIONS_URL,
   PING_SERVER_GET_ASYNC,
   PING_SERVER_URL,
   SET_EMPLOYEE,
-  USER_PERMISSIONS,
-  USER_PERMISSIONS_GET_ASYNC,
+  USER_GROUPS,
+  USER_GROUPS_GET_ASYNC,
 } from "./constants";
 import {
   AuthResponse,
-  AuthTokensAction,
   AuthUserAction,
-  AuthWithCodeResponse,
+  Group,
   LoginRequestBody,
   LoginWithCodeRequestBody,
   LogoutRequestBody,
   LogoutUserAction,
   SelectEmployeeAction,
-  Tokens,
   User,
-  UserPermissionsAction,
+  UserGroupsAction,
 } from "./types";
-
-const authTokens = (authResponse: AuthResponse): AuthTokensAction => {
-  const expiresAt = moment()
-    .add(authResponse.ExpiresIn - AUTH_TOKENS_REFRESH_THRESHOLD_SECONDS, "seconds")
-    .toISOString();
-
-  const tokens: Tokens = {
-    access: {
-      value: authResponse.AccessToken,
-      expiresAt,
-    },
-    id: {
-      value: authResponse.IdToken,
-      expiresAt,
-    },
-  };
-
-  return {
-    type: AUTH_TOKENS,
-    payload: { tokens },
-  };
-};
 
 const authUser = (user: User): AuthUserAction => {
   return {
@@ -68,10 +41,10 @@ const logoutUser = (): LogoutUserAction => ({
   type: LOGOUT_USER,
 });
 
-const userPermissions = (permissions: string[]): UserPermissionsAction => {
+const userGroups = (groups: Group[]): UserGroupsAction => {
   return {
-    type: USER_PERMISSIONS,
-    payload: permissions,
+    type: USER_GROUPS,
+    payload: groups,
   };
 };
 
@@ -81,7 +54,7 @@ const login = (loginValues: LoginRequestBody, handlers: Handlers):
     method: "post",
     data: loginValues,
     includeAuthorization: false,
-    onSuccess: (data, dispatch) => {
+    onSuccess: (data: AuthResponse, dispatch) => {
       dispatch(authUser({
         email: loginValues.email,
         name: data.name, id: data.id,
@@ -89,14 +62,16 @@ const login = (loginValues: LoginRequestBody, handlers: Handlers):
         employeeId: data.employees[0].id,
         employees: data.employees,
       }));
-      dispatch(authTokens(data));
-      dispatch(companyActions.selectCompany(data.company));
+
+      if ((data.employees || []).length === 1) {
+        dispatch(companyActions.selectCompany(data.employees[0].company));
+      }
     },
     handlers,
   });
 
 const loginWithCode = (loginValues: LoginWithCodeRequestBody, handlers: Handlers):
-  ApiAction<AuthWithCodeResponse, LoginWithCodeRequestBody> => apiActionWithCallbacks({
+  ApiAction<AuthResponse, LoginWithCodeRequestBody> => apiActionWithCallbacks({
     url: LOGIN_WITH_CODE_URL,
     method: "post",
     data: loginValues,
@@ -110,7 +85,6 @@ const loginWithCode = (loginValues: LoginWithCodeRequestBody, handlers: Handlers
         employeeId: response.employees[0].id,
         employees: response.employees,
       }));
-      dispatch(authTokens(response));
     },
     onFailure: (m, dispatch) => {
       dispatch(logoutUser());
@@ -121,7 +95,7 @@ const loginWithCode = (loginValues: LoginWithCodeRequestBody, handlers: Handlers
 const logout = (): ThunkAction<void, ApplicationState, any, AnyAction> => (dispatch, getState) => {
   const action: ApiAction<any, LogoutRequestBody> = apiAction({
     url: LOGOUT_URL,
-    method: "post",
+    method: "delete",
     onCompleted: () => {
       dispatch(logoutUser());
     },
@@ -130,13 +104,13 @@ const logout = (): ThunkAction<void, ApplicationState, any, AnyAction> => (dispa
   dispatch(action);
 };
 
-const loadPermissions = (userId: string):
-  ApiAction<string[]> => apiAction({
-    url: `${PERMISSIONS_URL}/${userId}`,
-    asyncType: USER_PERMISSIONS_GET_ASYNC,
+const loadUserGroups = (): ApiAction<Group[]> =>
+  apiAction({
+    url: `${GROUPS_URL}`,
+    asyncType: USER_GROUPS_GET_ASYNC,
     method: "get",
-    onSuccess: (permissions, dispatch) => {
-      dispatch(userPermissions(permissions));
+    onSuccess: (groups, dispatch) => {
+      dispatch(userGroups(groups));
     },
   });
 
@@ -157,12 +131,11 @@ const selectEmployee = (employee: Employee): SelectEmployeeAction => ({
 
 export default {
   authUser,
-  authTokens,
   logoutUser,
   login,
   logout,
   loginWithCode,
-  loadPermissions,
+  loadUserGroups,
   pingServer,
   selectEmployee,
 };

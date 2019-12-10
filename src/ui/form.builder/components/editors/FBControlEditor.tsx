@@ -1,12 +1,12 @@
 import React from "react";
-import FBCheckbox from "../inputs/FBCheckbox";
+import FBAdditionsEditor from "./FBAdditionsEditor";
 import FBLabelEditor from "./FBLabelEditor";
 import FBStepperEditor from "./FBStepperEditor";
 
 const FBControlEditor: React.FunctionComponent<{}> = () => (
   <FBStepperEditor>
     <FBLabelEditor />
-    <FBCheckbox label="form.builder.include.note" name="includeNote" />
+    <FBAdditionsEditor type="control" contextLabel="form.builder.note" />
   </FBStepperEditor>
 );
 
