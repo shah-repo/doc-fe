@@ -28,7 +28,8 @@ export class FBValidatorCollection extends Collection<FBValidatorModel> {
     //   {
     //     name: "required_with",
     //     pattern: "required_with:foo,bar,...",
-    //     description: "The field under validation must be present and not empty only if any of the other specified fields are present.",
+    //     description: "The field under validation must
+    //     be present and not empty only if any of the other specified fields are present.",
     //     applicableIn: "all",
     //     indicators: [],
     //   },

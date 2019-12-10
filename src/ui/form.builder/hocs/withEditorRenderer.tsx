@@ -17,18 +17,17 @@ export const withEditorRenderer =
   const InputType = FBFieldEditorComponent[type as string];
   const uuidv4 = require("uuid/v4");
 
-  const schemaItem = (): FBTemplateSchema => ({
-    type,
-    index,
-    name: uuidv4(),
-    // rules: FBValidatorStore.getRules(),
-    ...props.values,
-  });
+  // const schemaItem = (): FBTemplateSchema => ({
+  //   type,
+  //   index,
+  //   name: uuidv4(),
+  //   // rules: FBValidatorStore.getRules(),
+  //   ...props.values,
+  // });
 
   const onClick = () => {
 
-    const item = schemaItem();
-    console.log(item);
+    // const item = schemaItem();
 
     const schema: FBTemplateSchema = {
       type,

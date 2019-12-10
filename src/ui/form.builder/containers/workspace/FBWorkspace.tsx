@@ -18,7 +18,9 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
     {isStarter && <FBAddFieldButton0 />}
     {!isStarter && <FBSortableContainer items={schema} />}
     {includeTransport && <FBTransportSchema />}
-    <FBButton label="View" onClick={() => {
+    <FBButton
+      label="View"
+      onClick={() => {
         if (FBStore.mode === "form") {
           FBStore.setMode("design");
         } else {
