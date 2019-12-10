@@ -18,7 +18,7 @@ export const withAutocomplete = <T extends FBAutocompleteProps>(
       options,
       optionId,
       getOptionLabel,
-      optionLabel = "",
+      optionLabelKey = "",
       error,
       helperText,
       filterOptions,
@@ -39,7 +39,7 @@ export const withAutocomplete = <T extends FBAutocompleteProps>(
       if (_.isEmpty(options) && optionId && setIndicators()) {
         const autocompleteList = new FBAutocompleteCollection(indicators!.path);
         options = autocompleteList.models;
-        optionLabel = indicators!.renderKey;
+        optionLabelKey = indicators!.renderKey;
       }
 
       const renderInput = (params: RenderInputParams) => (
@@ -68,19 +68,19 @@ export const withAutocomplete = <T extends FBAutocompleteProps>(
       };
 
       !getOptionLabel && (getOptionLabel = (option: Model) => {
-        return _.isEmpty(option) ? "" : option.get(optionLabel);
+        return _.isEmpty(option) ? "" : option.get(optionLabelKey);
       });
 
       !filterOptions && (filterOptions =
         createFilterOptions({
           matchFrom: "any",
-          stringify: (option: Model) => option.get(optionLabel),
+          stringify: (option: Model) => option.get(optionLabelKey),
         }));
 
       return Component({
         ...(props as T),
         options,
-        optionLabel,
+        optionLabelKey,
         getOptionLabel,
         renderInput,
         filterOptions,

@@ -5,11 +5,7 @@ import { FBFormikFieldProps } from "../formik";
 
 export type FBAutocompleteProps =
   & FBInputProps
-  & FBOptionProps
   & Omit<FBFormikFieldProps, "name">
+  & Pick<FBOptionProps, "options" | "optionLabelKey">
   & Pick<AutocompleteProps, "renderInput">
-  & Pick<UseAutocompleteProps, "getOptionLabel" | "filterOptions" | "onChange" | "multiple">
-  & {
-    optionId?: string;
-    optionLabel?: string;
-  };
+  & Pick<UseAutocompleteProps, "getOptionLabel" | "filterOptions" | "onChange" | "multiple">;

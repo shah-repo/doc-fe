@@ -6,6 +6,7 @@ import FBInput from "../common/FBInput";
 const FBTextField: React.FunctionComponent<FBInputProps> = ({
   rows = 1,
   placeholder,
+  error,
   ...props
 }) => (
   <FBInput {...props} type="textfield">
@@ -13,7 +14,7 @@ const FBTextField: React.FunctionComponent<FBInputProps> = ({
       multiline={Boolean(rows && (rows as number) > 1)}
       variant="outlined"
       label=""
-      {...{rows, placeholder}}
+      {...{rows, placeholder, error}}
     />
   </FBInput>
 );

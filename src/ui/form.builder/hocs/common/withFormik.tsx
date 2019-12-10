@@ -1,15 +1,17 @@
 import { Field as FormikField, FieldProps } from "formik";
 import React from "react";
-import { FBFormikFieldProps } from "../../types/formik";
+import { FBInputProps } from "../../types/common";
 
-export const withFormik = <T extends FBFormikFieldProps, U>(
+export const withFormik = <T extends FBInputProps, U>(
   Component: React.FunctionComponent<T>,
 ) => {
   return (props: T) => {
-
     const render = (fieldProps: FieldProps<U>) =>
       <Component {...fieldProps} {...props as T} />;
 
-    return <FormikField name={props.name}>{render}</FormikField>;
+    return (
+      <FormikField name={props.name} validate={props.validate}>
+        {render}
+      </FormikField>);
   };
 };

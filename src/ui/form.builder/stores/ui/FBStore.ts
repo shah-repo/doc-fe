@@ -86,7 +86,7 @@ export class FormBuilderStore {
     if (_.isEmpty(this.values)) {
       const initialValues: Dictionary<any> = {};
       _.map(this.getSchema(), (schemaItem) => {
-        initialValues[schemaItem.name] = FBFormValues[schemaItem.type];
+        initialValues[schemaItem.name || ""] = FBFormValues[schemaItem.type || ""];
       });
       return initialValues;
     }

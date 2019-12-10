@@ -1,13 +1,14 @@
 import _ from "lodash";
 import React from "react";
 import FBStore from "../../stores/ui/FBStore";
-import { FBFormikFieldProps } from "../../types/formik";
+import { FBInputProps } from "../../types/common";
 
-export const withOnChange = <T extends FBFormikFieldProps>(
+export const withOnChange = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   return ({
     onChange,
+    afterChange,
     includeContext = false,
     contextLabel,
     showContext,
@@ -37,6 +38,7 @@ export const withOnChange = <T extends FBFormikFieldProps>(
 
     function storeValue(fieldName: string, value: any) {
       form!.setFieldValue(fieldName, value);
+      afterChange && afterChange(fieldName, value);
       if (FBStore.mode !== "form") {
         return;
       }
@@ -81,6 +83,7 @@ export const withOnChange = <T extends FBFormikFieldProps>(
     return Component({
         ...(props as T),
         onChange: onChange || (handleChange),
+        afterChange,
         includeContext,
         showContext: contextValue(),
         contextLabel,

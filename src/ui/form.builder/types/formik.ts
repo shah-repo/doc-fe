@@ -1,8 +1,7 @@
-import { FieldProps, FormikConfig } from "formik";
+import { FieldProps, FormikConfig, FieldConfig } from "formik";
 import { Dictionary } from "lodash";
 import { Id } from "../../../state/ducks/common";
 import { DocumentRevisionDocument } from "../../../state/ducks/documentRevisions";
-import { FBEditorElementType } from "./editor";
 import { FBTemplateSchema } from "./store";
 
 export interface FBFormikProps extends Omit<FormikConfig<any>, "onSubmit" | "initialValues"> {
@@ -13,14 +12,7 @@ export interface FBFormikProps extends Omit<FormikConfig<any>, "onSubmit" | "ini
 
 export type FBFormikFieldProps =
   & Partial<FieldProps>
-  & {
-  name?: string;
-  type?: FBEditorElementType | string;
-  includeContext?: boolean;
-  contextLabel?: string;
-  showContext?: boolean;
-  onChange?: (e: any, value: any) => void;
-};
+  & Pick<Partial<FieldConfig>, "validate">;
 
 export interface FBDocumentFlowProps {
   id?: string;
