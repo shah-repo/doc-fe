@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import Select from "react-select";
 import {
-  EmployeeGroupsEditRequestBody,
   LoadCompanyGroups,
   userManagementActions,
 } from "../../../state/ducks/userManagement";
@@ -13,10 +12,12 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
+import { toEmployeeGroupsEditRequestBody } from "../utils/transform";
 
 interface OwnProps {
   canManageUsers: boolean;
   employeeGroups: OptionType[];
+  employeeId: string;
 }
 
 interface DispatchProps {
@@ -29,6 +30,12 @@ export const UserGroups: React.FunctionComponent<Props> = ({
   employeeGroups,
   editEmployeeGroups,
 }) => {
+  let groups: OptionType[] | null = employeeGroups;
+
+  const [showEditGroups, setEditGroups] = useState(false);
+  const openEditGroups = () => setEditGroups(true);
+  const closeEditGroups = () => setEditGroups(false);
+
   const [groupOptions, setGroupOptions] = useState<OptionType[]>([]);
   const loadCompanyGroupsAction = useActionCreator(
     userManagementActions.loadCompanyGroups,
@@ -45,56 +52,32 @@ export const UserGroups: React.FunctionComponent<Props> = ({
   });
 
   const loadCompanyGroups = () => asyncGroup.start(loadCompanyGroupsAction, asyncGroup);
-  const async = useAsync();
-  const onSubmit = (employeeId: string, values: EmployeeGroupsEditRequestBody) => {
-    async.start(
-        editEmployeeGroups,
-        employeeId,
-        values,
-      async,
-    );
-  };
-
   useEffect(() => {
     loadCompanyGroups();
   }, []);
+
+  const async = useAsync();
+  const onSubmit = (employeeId: string, values: OptionType[] | null) => {
+    async.start(
+        editEmployeeGroups,
+        employeeId,
+        toEmployeeGroupsEditRequestBody(values),
+      async,
+    );
+  };
 
   const handleGroups = (groups: OptionType[]) => {
     return groups.map((group) => group.label).join(", ");
   };
 
-  const [showEditGroups, setEditGroups] = useState(false);
-
-  const openEditGroups = () => setEditGroups(true);
-  const closeEditGroups = () => setEditGroups(false);
-
-  const onChange = (state: any) => console.log(state);
-
-  const groups = {
-      groups: [
-        {
-          id: "082a1f68-6e68-4133-ab24-43eb25800e4c",
-        },
-        {
-          id: "c628093a-79c0-4d65-9c28-8fe5be4a9d93",
-        },
-        {
-          id: "a20a6714-502f-4585-94db-3cb1134a2951",
-        },
-      ],
-  };
+  const onChange = (state: any) => groups = state;
 
   const addGroupsRenderer = () => (
     <Button
       variant="text"
       color="primary"
       onClick={openEditGroups}
-      fullWidth={true}
-      style={{
-        width: "auto",
-        margin: "19px 0 0 0",
-        padding: "0",
-      }}
+      style={{ width: "auto", margin: "19px 0 0 0", padding: "0"}}
     >
       <Icon style={{ marginRight: "10px" }}>
         <AddCircleOutlineOutlinedIcon />
@@ -115,7 +98,7 @@ export const UserGroups: React.FunctionComponent<Props> = ({
 
   const editGroupsRenderer = () => (
     <Box>
-      <Typography variant="h6">
+      <Typography variant="h6" style={{ marginBottom: "16px" }}>
         <Text message={"user.management.groups"} />
       </Typography>
       <Select
@@ -127,27 +110,16 @@ export const UserGroups: React.FunctionComponent<Props> = ({
         defaultValue={employeeGroups}
       />
       <Button
-        style={{
-          width: "auto",
-          margin: "19px 0 0 0",
-          padding: "0",
-        }}
-        variant="text"
+        style={{ width: "auto", marginLeft: "0", color: "white", backgroundColor: "#6E09EA"}}
+        variant="contained"
         color="primary"
-        fullWidth={true}
-        onClick={() => onSubmit("729e5452-e683-4c5e-866f-acc89e8ed733", groups)}
+        onClick={() => {onSubmit("729e5452-e683-4c5e-866f-acc89e8ed733", groups); closeEditGroups(); }}
       >
         <Text translation="common.done" />
       </Button>
       <Button
-        style={{
-          width: "auto",
-          margin: "19px 0 0 0",
-          padding: "0",
-        }}
-        variant="text"
-        color="primary"
-        fullWidth={true}
+        variant="outlined"
+        style={{width: "auto", color: "#6E09EA", borderColor: "#6E09EA"}}
         onClick={closeEditGroups}
       >
         <Text translation="common.cancel" />
@@ -155,7 +127,7 @@ export const UserGroups: React.FunctionComponent<Props> = ({
     </Box>
   );
   return (
-    <Box minWidth="500px" mt={7}>
+    <Box minWidth="500px">
       {!showEditGroups && groupsRenderer()}
       {showEditGroups && editGroupsRenderer()}
     </Box>

@@ -33,7 +33,7 @@ const editEmployeeGroups = (employeeId: string, body: EmployeeGroupsEditRequestB
     method: "patch",
     data: body,
     onSuccess: (employee, dispatch) => {
-      dispatch(tableSearchActions.editGroups(employee));
+      dispatch(tableSearchActions.editEmployee(employee));
     },
     handlers,
   });

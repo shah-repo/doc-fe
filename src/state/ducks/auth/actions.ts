@@ -58,7 +58,7 @@ const editUser = (user: User): EditUserMeAction => {
   };
 };
 
-const editUserMe = (
+const editCurrentEmployee = (
   body: UserMeEditRequestBody,
   handlers: Handlers,
 ): ApiAction<Partial<AuthResponse>> =>
@@ -184,5 +184,5 @@ export default {
   loadUserGroups,
   pingServer,
   selectEmployee,
-  editUserMe,
+  editCurrentEmployee,
 };

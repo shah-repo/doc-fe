@@ -360,5 +360,6 @@
   "user.management.groups": "Groups",
   "user.management.add.groups": "Add to other groups",
   "user.management.deactivate": "Deactivate",
-  "user.management.add.employee": "Add Employee"
+  "user.management.add.employee": "Add Employee",
+  "user.management.update.profile": "Update profile"
 }

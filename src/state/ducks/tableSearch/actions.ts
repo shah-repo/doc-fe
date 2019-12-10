@@ -31,7 +31,7 @@ const setTableSort = <T>(
   tableName,
 });
 
-const editGroups = (employee: GetEmployeeResponse): EditGroupsAction => {
+const editEmployee = (employee: GetEmployeeResponse): EditGroupsAction => {
   return{
     type: TABLE_SET_GROUPS,
     payload: employee,
@@ -42,5 +42,5 @@ export default {
   setTableSort,
   setSearchCriteria,
   clearSearchCriteria,
-  editGroups,
+  editEmployee,
 };

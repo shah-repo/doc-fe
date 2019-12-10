@@ -13,12 +13,22 @@ export default makeStyles((theme: Theme) =>
     userProfile: {
         color: "white",
         fontsize: "1.3rem",
-        marginBottom: theme.spacing(2),
     },
     userName: {
       color: "white",
       fontsize: "1.9rem",
-  },
+      marginTop: theme.spacing(1),
+    },
+    userNameEdit: {
+      "color": "white",
+      "& .MuiInputBase-input": {
+        fontSize: "3rem",
+        textAlign: "center",
+        fontFamily: "Open Sans, sans-serif",
+        padding: "0",
+        fontWeight: "400",
+      },
+    },
     profilePhoto: {
         border: `8px solid ${"#76608D"}`,
         width: "213px",

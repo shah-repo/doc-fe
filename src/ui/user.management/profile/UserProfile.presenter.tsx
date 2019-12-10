@@ -1,8 +1,8 @@
-import { AppBar, Box, Button, Dialog, IconButton, Toolbar, Typography } from "@material-ui/core";
+import { AppBar, Box, Button, Dialog, IconButton, InputBase, Toolbar, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
 import { UserMeEditRequestBody } from "../../../state/ducks/auth/types";
-import SummaryField from "../../common/summary/base";
+/* import SummaryField from "../../common/summary/base";*/
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import AvatarContainer from "../../components/icons/avatar/avatar.container";
 import Text from "../../components/Text";
@@ -16,7 +16,11 @@ interface OwnProps {
     employeeGroups: OptionType[];
     name: string;
     avatar: string | null;
-    editUserMe: (values: UserMeEditRequestBody) => void;
+    editCurrentEmployee: (values: UserMeEditRequestBody) => void;
+    showEditUser: boolean;
+    showEdit: () => void;
+    closeEdit: () => void;
+    employeeId: string;
 }
 
 type Props = OwnProps;
@@ -28,19 +32,62 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
     employeeGroups,
     name,
     avatar,
-    editUserMe,
+    editCurrentEmployee,
+    showEditUser,
+    showEdit,
+    closeEdit,
+    employeeId,
 }) => {
-    console.log(avatar);
-
     const classes = styles();
+    let userInfo: UserMeEditRequestBody = {
+        name,
+        avatar,
+    };
+
+    const handleNameChange = (event: React.ChangeEvent<{value: string}>) => userInfo = {...userInfo, name: event.target.value};
+
+    const userNameRenderer = (name: string) => (
+        <Typography variant="h3" className={classes.userName}>
+            {name}
+        </Typography>
+    );
+
+    const editUserNameRenderer = (name: string) => (
+        <InputBase
+            defaultValue={name}
+            onChange={handleNameChange}
+            className={classes.userNameEdit}
+        />
+    );
+
+    const updateProfileButtonsRenderer = () => (
+        <Box display="flex" justifyContent="flex-end">
+            <Button
+                variant="outlined"
+                style={{width: "auto", color: "#6E09EA", borderColor: "#6E09EA"}}
+                onClick={closeEdit}
+            >
+                <Text translation="common.cancel" />
+            </Button>
+            <Button
+                variant="contained"
+                style={{width: "auto", color: "white", backgroundColor: "#6E09EA"}}
+                onClick={() => {editCurrentEmployee(userInfo); closeEdit(); }}
+            >
+                <Text translation="user.management.update.profile" />
+            </Button>
+        </Box>
+    );
     const deactivateButtonRenderer = () => (
-        <Button
-            variant="text"
-            color="primary"
-            fullWidth={true}
-        >
-            <Text translation="user.management.deactivate" />
-        </Button>
+        <Box display="flex" justifyContent="start">
+            <Button
+                variant="outlined"
+                color="primary"
+                style={{margin: "48px 0 0 0"}}
+            >
+                <Text translation="user.management.deactivate" />
+            </Button>
+        </Box>
     );
     return (
     <Dialog fullScreen={true} open={isOpen}>
@@ -57,9 +104,8 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
             <Typography variant="h4" className={classes.userProfile}>
                 <Text translation="user.management.profile"/>
             </Typography>
-                <Typography variant="h3" className={classes.userName}>
-                    {name}
-                </Typography>
+                {!showEditUser && userNameRenderer(name)}
+                {showEditUser && editUserNameRenderer(name)}
             </Box>
         </AppBar>
         <Box
@@ -69,24 +115,24 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
         >
             <AvatarContainer/>
         </Box>
-        <Box
-            alignSelf="center"
-            mt={12}
-        >
+        <Box display="flex" justifyContent="center">
             <Button
                 variant="text"
                 color="primary"
-                fullWidth={true}
-                style={{
-                width: "auto",
-                }}
-                onClick={() => editUserMe({name: "MAJA", avatar: null})}
+                style={{width: "2auto"}}
+                onClick={showEdit}
             >
                 <Text translation="common.edit" />
             </Button>
-            <SummaryField label="user.management.last.training" value={"01/08/2018"}/>
-            <UserGroups canManageUsers={canManageUsers} employeeGroups={employeeGroups}/>
+        </Box>
+        <Box
+            alignSelf="center"
+            mt={7}
+        >
+            {/*<SummaryField label="user.management.last.training" value={"01/08/2018"}/>*/}
+            <UserGroups canManageUsers={canManageUsers} employeeGroups={employeeGroups} employeeId={employeeId}/>
             {canManageUsers && deactivateButtonRenderer()}
+            {showEditUser && updateProfileButtonsRenderer()}
         </Box>
     </Dialog>
     );

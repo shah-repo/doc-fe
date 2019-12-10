@@ -41,13 +41,15 @@ export const byTableName = (
         [action.tableName]: action.payload,
       };
     case TABLE_SET_GROUPS:
-      const list = state.userManagement.queryData.filter((employee: GetEmployeeResponse) => {
+      const list = state.userManagement.queryData.map((employee: GetEmployeeResponse) => {
         const { payload: updatedEmployee } = action;
+
         if (employee.id === (updatedEmployee as unknown as GetEmployeeResponse).id) {
           return {
             ...action.payload,
           };
         }
+
         return employee;
       });
 
