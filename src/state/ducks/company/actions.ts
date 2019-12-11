@@ -1,4 +1,3 @@
-import { authActions } from "../../../state/ducks/auth";
 import { apiAction } from "../../factories";
 import { SESSION_DETAILS_URL } from "../auth/constants";
 import { SELECT_COMPANY } from "./constants";
@@ -19,7 +18,7 @@ const queryCompany = (employeeId: string) =>
       );
       const company = employee.company;
       dispatch(selectCompany(company));
-      dispatch(authActions.getIotCreds());
+      // dispatch(authActions.getIotCreds());
     },
   });
 
