@@ -82,6 +82,12 @@ export class FormBuilderStore {
     this.schema = newSchema;
   }
 
+  @action public setFormSchema = (newSchema: FBTemplateSchema[]) => {
+    const filtered = _.filter(newSchema, (schemaItem) => schemaItem.type !== "action");
+    filtered.map((o, i) => o.index = i);
+    this.schema = filtered;
+  }
+
   @action public getValues = () => {
     if (_.isEmpty(this.values)) {
       const initialValues: Dictionary<any> = {};
