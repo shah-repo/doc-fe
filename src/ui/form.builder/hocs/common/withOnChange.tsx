@@ -38,7 +38,7 @@ export const withOnChange = <T extends FBInputProps>(
 
     function storeValue(fieldName: string, value: any) {
       form!.setFieldValue(fieldName, value);
-      afterChange && afterChange(fieldName, value);
+      afterChange && afterChange(fieldName, value, form!.values || {});
       if (FBStore.mode !== "form") {
         return;
       }

@@ -12,6 +12,7 @@ import { FBEditorElementType } from "./editor";
 import { FBFormikFieldProps } from "./formik";
 import { FBValidatorDelimiter, FBValidatorTrigger } from "./validation/validator";
 import { FBActionContainerProps } from "./actions/action";
+import { Dictionary } from "lodash";
 
 export type Subtract<T, V> = Pick<T, Exclude<keyof T, keyof V>>;
 
@@ -71,7 +72,7 @@ export type FBInputProps =
     type?: FBEditorElementType | string;
     linkUrl?: string;
     onChange?: (e: any, value: any) => void;
-    afterChange?: (fieldName: string, value: any) => void;
+    afterChange?: (fieldName: string, value: any, values: Dictionary<any>) => void;
   };
 
 export type FBFormDefaultProps =

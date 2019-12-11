@@ -1,9 +1,10 @@
 import { action } from "mobx";
 import { FBTemplateSchema } from "../../types/store";
 import FBStore from "./FBStore";
-import _ from "lodash";
+import _, { Dictionary } from "lodash";
 
 export class FormBuilderActionStore {
+  public values: Dictionary<Dictionary<any>> = {}
   // @observable public activeAction: string = "";
   // @observable public activeIndicators: Array<Partial<FBValidatorIndicatorProps>> = [];
 

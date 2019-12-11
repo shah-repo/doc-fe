@@ -23,6 +23,7 @@ export type FBValidatorIndicatorProps =
   & {
     validatorDelimiter: FBValidatorDelimiter,
     hasSchemaItem: boolean;
+    requiredDocId?: boolean;
   };
 
 export interface FBValidatorIndicatorValueProps {

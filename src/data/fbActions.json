@@ -3,7 +3,16 @@
        "name":"SendEmailWithFormToFill",
        "description":"Send Email with Form to fill in.",
        "actionLabel": "Send Email",
+       "url": "",
+       "requestMethod": "put",
        "indicators":[
+         {
+            "type": "textfield",
+            "label": "Document id",
+            "name": "documentRevision.id",
+            "disabled": true,
+            "requiredDocId": true
+         },
           {
              "type":"textfield",
              "label":"Email",
@@ -14,20 +23,6 @@
              "label":"Name",
              "name":"name"
           }
-       ],
-       "docIdRequired":true
-    },
-    {
-      "name":"SendToReview",
-      "description":"Send Document to Review.",
-      "actionLabel": "Send to Review",
-      "indicators":[
-         {
-            "type":"autocomplete",
-            "label":"Documents",
-            "optionId":"4",
-            "name": "documentRevision.id"
-         }
-      ]
-   }
+       ]
+    }
  ]
