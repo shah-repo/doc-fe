@@ -25,17 +25,13 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
     const isChildActive = () => _.includes(childrenUrls.map((link) => link.url), currentPath);
     const [isOpen, setIsOpen] = useState(isChildActive());
 
-    toast.configure({
-      autoClose: false,
-    });
-
     const notify = (msg: string) => {
       const message = JSON.parse(msg).data.message;
       toast(message);
     };
 
     const manageSubscriptionsOnNavigation = () => {
-      const iotService = new IotService();
+      const iotService = IotService.getInstance();
       switch (currentPath) {
         case "/":
           iotService.unsubscribeAll();
@@ -53,8 +49,8 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
           return;
       }
     };
-    manageSubscriptionsOnNavigation();
     useEffect(() => {
+      manageSubscriptionsOnNavigation();
       if (isChildActive()) {
         setIsOpen(true);
       }

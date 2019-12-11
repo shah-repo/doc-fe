@@ -44,9 +44,6 @@ export const Container: React.FunctionComponent<Props> = ({
   currentUserEmail,
   closeTask,
 }) => {
-  toast.configure({
-    autoClose: false,
-  });
   const [docRev, setDocRev] = React.useState<DocumentRevision | null>(null);
   const async = useAsync<ChangeRequest>();
   if (canEditChangeRequest({ dataProp, currentUserEmail })) {
@@ -58,7 +55,7 @@ export const Container: React.FunctionComponent<Props> = ({
     toast(message);
   };
 
-  const iotService = new IotService();
+  const iotService = IotService.getInstance();
   iotService.unsubscribeAll();
   iotService.subscribeToTopic(`+/change_requests/${dataProp.crId}/updated`, notify);
 
