@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import { SELECT_COMPANY } from "../company/constants";
 import { TABLE_SEARCH_CLEAR, TABLE_SEARCH_SET, TABLE_SORT } from "./constants";
 import {
   TableSearchByIdState,
@@ -38,6 +39,8 @@ export const byTableName = (
         ...state,
         [action.tableName]: action.payload,
       };
+    case SELECT_COMPANY:
+      return {};
     default:
       return state;
   }
