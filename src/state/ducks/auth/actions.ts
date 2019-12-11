@@ -4,6 +4,7 @@ import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApplicationState } from "../../reducers";
 import { ApiAction, Handlers } from "../../types";
 import { companyActions, Employee } from "../company";
+import { tableSearchActions } from "../tableSearch";
 import {
   AUTH_USER,
   GROUPS_URL,
@@ -17,11 +18,13 @@ import {
   USER_GROUPS,
   USER_GROUPS_GET_ASYNC,
   USERS_ME,
+  USERS_URL,
 } from "./constants";
 import {
   AuthResponse,
   AuthUserAction,
   EditUserMeAction,
+  EmployeeEditRequestBody,
   Group,
   LoginRequestBody,
   LoginWithCodeRequestBody,
@@ -30,7 +33,6 @@ import {
   SelectEmployeeAction,
   User,
   UserGroupsAction,
-  UserMeEditRequestBody,
 } from "./types";
 
 const authUser = (user: User): AuthUserAction => {
@@ -59,7 +61,7 @@ const editUser = (user: User): EditUserMeAction => {
 };
 
 const editCurrentEmployee = (
-  body: UserMeEditRequestBody,
+  body: EmployeeEditRequestBody,
   handlers: Handlers,
 ): ApiAction<Partial<AuthResponse>> =>
   apiActionWithCallbacks({
@@ -74,6 +76,21 @@ const editCurrentEmployee = (
           avatar: user.avatar,
         }),
       );
+    },
+    handlers,
+  });
+
+const editSelectedEmployee = (
+  id: string,
+  body: EmployeeEditRequestBody,
+  handlers: Handlers,
+): ApiAction<Partial<AuthResponse>> =>
+  apiActionWithCallbacks({
+    url: `${USERS_URL}/${id}`,
+    method: "patch",
+    data: body,
+    onSuccess: (user, dispatch) => {
+      dispatch(tableSearchActions.editEmployeeUserInfo(user));
     },
     handlers,
   });
@@ -185,4 +202,5 @@ export default {
   pingServer,
   selectEmployee,
   editCurrentEmployee,
+  editSelectedEmployee,
 };

@@ -1,7 +1,8 @@
 import { AppBar, Box, Button, Dialog, IconButton, InputBase, Toolbar, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
-import { UserMeEditRequestBody } from "../../../state/ducks/auth/types";
+import { EmployeeEditRequestBody } from "../../../state/ducks/auth/types";
+import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
 /* import SummaryField from "../../common/summary/base";*/
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import AvatarContainer from "../../components/icons/avatar/avatar.container";
@@ -16,11 +17,12 @@ interface OwnProps {
     employeeGroups: OptionType[];
     name: string;
     avatar: string | null;
-    editCurrentEmployee: (values: UserMeEditRequestBody) => void;
+    editCurrentEmployee: (values: EmployeeEditRequestBody) => void;
     showEditUser: boolean;
     showEdit: () => void;
     closeEdit: () => void;
     employeeId: string;
+    callbackUpdateGroups?: (values: GetEmployeeResponse) => void;
 }
 
 type Props = OwnProps;
@@ -37,14 +39,16 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
     showEdit,
     closeEdit,
     employeeId,
+    callbackUpdateGroups,
 }) => {
     const classes = styles();
-    let userInfo: UserMeEditRequestBody = {
+    let userInfo: EmployeeEditRequestBody = {
         name,
         avatar,
     };
 
-    const handleNameChange = (event: React.ChangeEvent<{value: string}>) => userInfo = {...userInfo, name: event.target.value};
+    const handleNameChange = (event: React.ChangeEvent<{value: string}>) =>
+    userInfo = {...userInfo, name: event.target.value};
 
     const userNameRenderer = (name: string) => (
         <Typography variant="h3" className={classes.userName}>
@@ -130,7 +134,12 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
             mt={7}
         >
             {/*<SummaryField label="user.management.last.training" value={"01/08/2018"}/>*/}
-            <UserGroups canManageUsers={canManageUsers} employeeGroups={employeeGroups} employeeId={employeeId}/>
+            <UserGroups
+                canManageUsers={canManageUsers}
+                employeeGroups={employeeGroups}
+                employeeId={employeeId}
+                callbackUpdateGroups={callbackUpdateGroups}
+            />
             {canManageUsers && deactivateButtonRenderer()}
             {showEditUser && updateProfileButtonsRenderer()}
         </Box>

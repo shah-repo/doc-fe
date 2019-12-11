@@ -99,7 +99,7 @@ export interface SelectEmployeeAction {
   payload: Employee;
 }
 
-export interface UserMeEditRequestBody {
+export interface EmployeeEditRequestBody {
   name: string;
   avatar: string | null;
 }

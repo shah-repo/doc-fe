@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect, useSelector } from "react-redux";
 import { getHasTag } from "../../../common/utils/selectors";
 import { authActions } from "../../../state/ducks/auth";
-import { GroupTag, UserMeEditRequestBody } from "../../../state/ducks/auth/types";
+import { EmployeeEditRequestBody, GroupTag } from "../../../state/ducks/auth/types";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import useAsync from "../../hooks/useAsync";
@@ -15,7 +15,7 @@ interface OwnProps {
 }
 
 interface DispatchProps {
-    editCurrentEmployee: typeof authActions.editCurrentEmployee;
+    editSelectedEmployee: typeof authActions.editSelectedEmployee;
 }
 
 export type Props = OwnProps & DispatchProps;
@@ -24,10 +24,14 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
     showUserProfile,
     closeUserProfile,
     selectedEmployee,
-    editCurrentEmployee,
+    editSelectedEmployee,
 }) => {
-    const { groups, id } = selectedEmployee;
-    const { name } = selectedEmployee.user;
+    const [realUser, setRealUser] = useState<any>({ user: {}, groups: []});
+    useEffect(() => {
+        setRealUser(selectedEmployee);
+    }, [selectedEmployee.id]);
+    const { groups, id } = realUser;
+    const { name } = realUser.user;
 
     const [showEditUser, setEditUser] = useState(false);
     const showEdit = () => setEditUser(true);
@@ -35,15 +39,35 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
 
     const canManageUsers = useSelector(getHasTag(GroupTag.USER_MANAGEMENT));
 
-    const employeeGroups: OptionType[] = groups.map((group) => ({
+    const employeeGroups: OptionType[] = groups.map((group: any) => ({
         value: group.id,
         label: group.name,
     }));
-    const async = useAsync();
 
-    const onSubmit = (values: UserMeEditRequestBody) => {
+    const async = useAsync({
+        onSuccess: (data: any) => {
+            setRealUser({
+                ...realUser,
+                user: {
+                    ...realUser.user,
+                    avatar: data!.avatar,
+                    name: data!.name,
+                },
+            });
+        },
+    });
+
+    const callbackUpdateGroups = (employee: GetEmployeeResponse) => {
+        setRealUser({
+            ...realUser,
+            groups: employee.groups,
+        });
+    };
+
+    const submitChanges = (values: EmployeeEditRequestBody) => {
         async.start(
-            editCurrentEmployee,
+            editSelectedEmployee,
+            realUser.user.id,
             values,
           async,
         );
@@ -57,14 +81,15 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
             name={name}
             avatar={null}
             employeeId={id}
-            editCurrentEmployee={onSubmit}
+            editCurrentEmployee={submitChanges}
             showEditUser={showEditUser}
             showEdit={showEdit}
             closeEdit={closeEdit}
+            callbackUpdateGroups={callbackUpdateGroups}
         />
     );
 };
 
 export default connect<{}, DispatchProps, OwnProps, {}>(null, {
-    editCurrentEmployee: authActions.editCurrentEmployee,
+    editSelectedEmployee: authActions.editSelectedEmployee,
   })(UserProfileAdminContainer);

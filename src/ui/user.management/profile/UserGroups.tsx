@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import Select from "react-select";
 import {
+  GetEmployeeResponse,
   LoadCompanyGroups,
   userManagementActions,
 } from "../../../state/ducks/userManagement";
@@ -18,6 +19,7 @@ interface OwnProps {
   canManageUsers: boolean;
   employeeGroups: OptionType[];
   employeeId: string;
+  callbackUpdateGroups?: (values: GetEmployeeResponse) => void;
 }
 
 interface DispatchProps {
@@ -29,6 +31,8 @@ export const UserGroups: React.FunctionComponent<Props> = ({
   canManageUsers,
   employeeGroups,
   editEmployeeGroups,
+  callbackUpdateGroups,
+  employeeId,
 }) => {
   let groups: OptionType[] | null = employeeGroups;
 
@@ -56,7 +60,14 @@ export const UserGroups: React.FunctionComponent<Props> = ({
     loadCompanyGroups();
   }, []);
 
-  const async = useAsync();
+  const async = useAsync({
+    onSuccess: (data: any) => {
+      if (callbackUpdateGroups) {
+        callbackUpdateGroups(data);
+      }
+    },
+  });
+
   const onSubmit = (employeeId: string, values: OptionType[] | null) => {
     async.start(
         editEmployeeGroups,
@@ -113,7 +124,7 @@ export const UserGroups: React.FunctionComponent<Props> = ({
         style={{ width: "auto", marginLeft: "0", color: "white", backgroundColor: "#6E09EA"}}
         variant="contained"
         color="primary"
-        onClick={() => {onSubmit("729e5452-e683-4c5e-866f-acc89e8ed733", groups); closeEditGroups(); }}
+        onClick={() => {onSubmit(employeeId, groups); closeEditGroups(); }}
       >
         <Text translation="common.done" />
       </Button>

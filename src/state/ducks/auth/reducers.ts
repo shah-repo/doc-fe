@@ -1,5 +1,7 @@
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
+import { EditUserInfoAction } from "../tableSearch";
+import { TABLE_SET_USER_INFO } from "../tableSearch/constants";
 import {
   AUTH_USER,
   LOGOUT_USER,
@@ -30,9 +32,17 @@ export const USER_DEFAULT_STATE: UserState = {
   avatar: "",
 };
 
-type AuthUserActions = AuthUserAction | LogoutUserAction | SelectEmployeeAction | EditUserMeAction;
+type AuthUserActions =
+  | AuthUserAction
+  | LogoutUserAction
+  | SelectEmployeeAction
+  | EditUserMeAction
+  | EditUserInfoAction;
 
-export const user = (state: UserState = USER_DEFAULT_STATE, action: AuthUserActions): UserState => {
+export const user = (
+  state: UserState = USER_DEFAULT_STATE,
+  action: AuthUserActions,
+): UserState => {
   switch (action.type) {
     case AUTH_USER:
       return {
@@ -55,6 +65,16 @@ export const user = (state: UserState = USER_DEFAULT_STATE, action: AuthUserActi
         ...state,
         name: action.payload.name,
         avatar: action.payload.avatar,
+      };
+    case TABLE_SET_USER_INFO:
+      if (state.id === action.payload.id) {
+        return {
+          ...state,
+          name: action.payload.name,
+        };
+      }
+      return {
+        ...state,
       };
     case LOGOUT_USER:
       return { ...USER_DEFAULT_STATE };

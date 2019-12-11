@@ -3,9 +3,9 @@ import { connect, useSelector } from "react-redux";
 import { getHasTag } from "../../../common/utils/selectors";
 import { authActions, authSelectors } from "../../../state/ducks/auth";
 import {
+  EmployeeEditRequestBody,
   Group,
   GroupTag,
-  UserMeEditRequestBody,
 } from "../../../state/ducks/auth/types";
 import { userManagementActions } from "../../../state/ducks/userManagement";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
@@ -58,7 +58,7 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
   }, []);
 
   const async = useAsync();
-  const onSubmit = (values: UserMeEditRequestBody) => {
+  const onSubmit = (values: EmployeeEditRequestBody) => {
     async.start(editCurrentEmployee, values, async);
   };
 
