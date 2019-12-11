@@ -1,10 +1,12 @@
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
+import { IotService } from "../../../common/utils/iot/mqttClient";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApplicationState } from "../../reducers";
 import { ApiAction, Handlers } from "../../types";
 import { companyActions, Employee } from "../company";
 import {
+  AUTH_AWS_IOT_URL,
   AUTH_USER,
   GROUPS_URL,
   LOGIN_URL,
@@ -62,7 +64,6 @@ const login = (loginValues: LoginRequestBody, handlers: Handlers):
         employeeId: data.employees[0].id,
         employees: data.employees,
       }));
-
       if ((data.employees || []).length === 1) {
         dispatch(companyActions.selectCompany(data.employees[0].company));
       }
@@ -98,6 +99,8 @@ const logout = (): ThunkAction<void, ApplicationState, any, AnyAction> => (dispa
     method: "delete",
     onCompleted: () => {
       dispatch(logoutUser());
+      const iotService = IotService.getInstance();
+      iotService.unsubscribeAll();
     },
   });
 
@@ -113,6 +116,18 @@ const loadUserGroups = (): ApiAction<Group[]> =>
       dispatch(userGroups(groups));
     },
   });
+
+const getIotCreds = ():
+ApiAction => apiAction({
+  url: AUTH_AWS_IOT_URL,
+  method: "get",
+  includeAuthorization: true,
+  onSuccess: (credentials, dispatch) => {
+    const iotService = IotService.getInstance();
+    iotService.setMqttCreds(credentials);
+    iotService.mqttClient();
+  },
+});
 
 const pingServer = ():
   ApiAction => apiAction({
@@ -135,6 +150,7 @@ export default {
   login,
   logout,
   loginWithCode,
+  getIotCreds,
   loadUserGroups,
   pingServer,
   selectEmployee,
