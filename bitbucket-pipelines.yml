@@ -88,7 +88,6 @@ pipelines:
       - step: *RUN_LINT_AND_TESTS
   tags:
     deploy-to-dev:
-      - step: *RUN_LINT_AND_TESTS
       - step: *DEPLOY_TO_DEVELOP_1
     deploy-to-dev2:
       - step: *RUN_LINT_AND_TESTS
