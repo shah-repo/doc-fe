@@ -1,17 +1,16 @@
 import { Box, Button, Icon, Typography } from "@material-ui/core";
 import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import React, { useState } from "react";
+import { connect, useSelector } from "react-redux";
 import Select from "react-select";
 import {
   GetEmployeeResponse,
-  LoadCompanyGroups,
   userManagementActions,
+  userManagementSelectors,
 } from "../../../state/ducks/userManagement";
 import SummaryField from "../../common/summary/base";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import Text from "../../components/Text";
-import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { toEmployeeGroupsEditRequestBody } from "../utils/transform";
 
@@ -40,25 +39,7 @@ export const UserGroups: React.FunctionComponent<Props> = ({
   const openEditGroups = () => setEditGroups(true);
   const closeEditGroups = () => setEditGroups(false);
 
-  const [groupOptions, setGroupOptions] = useState<OptionType[]>([]);
-  const loadCompanyGroupsAction = useActionCreator(
-    userManagementActions.loadCompanyGroups,
-  );
-
-  const asyncGroup = useAsync<LoadCompanyGroups>({
-    onSuccess: (data = []) => {
-      const options: OptionType[] = data.map((group) => ({
-        value: group.id,
-        label: group.name,
-      }));
-      setGroupOptions(options);
-    },
-  });
-
-  const loadCompanyGroups = () => asyncGroup.start(loadCompanyGroupsAction, asyncGroup);
-  useEffect(() => {
-    loadCompanyGroups();
-  }, []);
+  const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
 
   const async = useAsync({
     onSuccess: (data: any) => {

@@ -82,7 +82,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
             </Button>
         </Box>
     );
-    const deactivateButtonRenderer = () => (
+    /*const deactivateButtonRenderer = () => (
         <Box display="flex" justifyContent="start">
             <Button
                 variant="outlined"
@@ -92,7 +92,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
                 <Text translation="user.management.deactivate" />
             </Button>
         </Box>
-    );
+    ); */
     return (
     <Dialog fullScreen={true} open={isOpen}>
         <AppBar className={classes.appBar}>
@@ -140,7 +140,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
                 employeeId={employeeId}
                 callbackUpdateGroups={callbackUpdateGroups}
             />
-            {canManageUsers && deactivateButtonRenderer()}
+            {/* {canManageUsers && deactivateButtonRenderer()} */}
             {showEditUser && updateProfileButtonsRenderer()}
         </Box>
     </Dialog>
