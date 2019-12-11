@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Redirect, RouteComponentProps } from "react-router-dom";
+import { logo } from "../../common/utils/helpers";
 import { authSelectors } from "../../state/ducks/auth";
 import { Employee } from "../../state/ducks/company";
 import { ApplicationState } from "../../state/reducers";
@@ -31,7 +32,9 @@ export const LoginContainer: React.FunctionComponent<LoginContainerProps> = (pro
   }
 
   return (
-    <LoginPresenter />
+    <LoginPresenter
+      logo={logo}
+    />
   );
 };
 
