@@ -73,7 +73,7 @@ export const SupplierSurveyContainer: React.FunctionComponent<
 
   const schema =
   _.get(supplierSurvey, "surveyFormDocumentRevision.formTemplate.schema", []);
-  FBStore.setSchema(schema);
+  FBStore.setFormSchema(schema);
 
   return (
     <AsyncGate
