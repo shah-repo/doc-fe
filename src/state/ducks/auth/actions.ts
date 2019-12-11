@@ -1,5 +1,6 @@
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
+import { IotService } from "../../../common/utils/iot/mqttClient";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApplicationState } from "../../reducers";
 import { ApiAction, Handlers } from "../../types";
@@ -233,8 +234,8 @@ const logout = (): ThunkAction<void, ApplicationState, any, AnyAction> => (
     method: "delete",
     onCompleted: () => {
       dispatch(logoutUser());
-      // const iotService = IotService.getInstance();
-      // iotService.unsubscribeAll();
+      const iotService = IotService.getInstance();
+      iotService.unsubscribeAll();
     },
   });
 
@@ -257,9 +258,9 @@ ApiAction => apiAction({
   method: "get",
   includeAuthorization: true,
   onSuccess: (credentials, dispatch) => {
-    // const iotService = IotService.getInstance();
-    // iotService.setMqttCreds(credentials);
-    // iotService.mqttClient();
+    const iotService = IotService.getInstance();
+    iotService.setMqttCreds(credentials);
+    iotService.mqttClient();
   },
 });
 
