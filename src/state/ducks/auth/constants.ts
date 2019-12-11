@@ -9,6 +9,7 @@ export const PING_SERVER_GET_ASYNC = "auth/PING_SERVER_GET_ASYNC";
 export const LOGIN_URL = "/auth/login";
 export const LOGIN_WITH_CODE_URL = "/auth/tokens";
 export const LOGOUT_URL = "/auth/logout";
+export const AUTH_AWS_IOT_URL = "/auth/credentials/iot";
 export const GROUPS_URL = "/groups/me";
 export const PING_SERVER_URL = "/auth/prevent_idle_logout";
 export const SESSION_DETAILS_URL = "/auth/sessionDetails";

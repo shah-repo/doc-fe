@@ -1,11 +1,13 @@
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
+import { IotService } from "../../../common/utils/iot/mqttClient";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApplicationState } from "../../reducers";
 import { ApiAction, Handlers } from "../../types";
 import { companyActions, Employee } from "../company";
 import { tableSearchActions } from "../tableSearch";
 import {
+  AUTH_AWS_IOT_URL,
   AUTH_USER,
   GROUPS_URL,
   LOGIN_URL,
@@ -161,6 +163,8 @@ const logout = (): ThunkAction<void, ApplicationState, any, AnyAction> => (
     method: "delete",
     onCompleted: () => {
       dispatch(logoutUser());
+      const iotService = IotService.getInstance();
+      iotService.unsubscribeAll();
     },
   });
 
@@ -174,6 +178,18 @@ const loadUserGroups = (): ApiAction<Group[]> =>
     method: "get",
     onSuccess: (groups, dispatch) => {
       dispatch(userGroups(groups));
+    },
+  });
+
+const getIotCreds = (): ApiAction =>
+  apiAction({
+    url: AUTH_AWS_IOT_URL,
+    method: "get",
+    includeAuthorization: true,
+    onSuccess: (credentials, dispatch) => {
+      const iotService = IotService.getInstance();
+      iotService.setMqttCreds(credentials);
+      iotService.mqttClient();
     },
   });
 
@@ -198,6 +214,7 @@ export default {
   login,
   logout,
   loginWithCode,
+  getIotCreds,
   loadUserGroups,
   pingServer,
   selectEmployee,

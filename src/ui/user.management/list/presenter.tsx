@@ -1,6 +1,5 @@
 import { Button, Grid } from "@material-ui/core";
 import React, { useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
 import { Group } from "../../../state/ducks/auth/types";
 import {
   DocumentRevision,
@@ -13,7 +12,7 @@ import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
 import { TablePanelStateProps } from "../../components/table/types";
 import Text from "../../components/Text";
-import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
+import AddEmployeeContainer from "../add.employee/container";
 import UserProfileAdminContainer from "../profile/UserProfileAdmin.container";
 import { userManagementDetailsPath } from "../utils/paths";
 import { DEFAULT_SELECTED_EMPLOYEE } from "../utils/types";
@@ -136,15 +135,7 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
         <DocumentInfo numberOfRecords={tableState.queryData.length} />
       </Grid>
       <Grid item={true} xs={6} style={{ textAlign: "right" }}>
-        <RouterLink to={DOCUMENT_REVISION_CREATE_URL} className={classes.link}>
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
-          >
-            <Text translation="user.management.add.employee" />
-          </Button>
-        </RouterLink>
+        <AddEmployeeContainer />
       </Grid>
       <Grid item={true} className={classes.item}>
         <TablePanel<GetEmployeeResponse>

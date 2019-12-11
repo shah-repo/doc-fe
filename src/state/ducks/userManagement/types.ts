@@ -1,12 +1,19 @@
+import { Dictionary } from "lodash";
 import { Group, GroupTag, Permission } from "../auth/types";
-import { Nullable, User } from "../common";
+import { Id, Nullable, User } from "../common";
 import { Company, Employee } from "../company";
+import { COMPANY_GROUPS_LIST } from "./constants";
 
 export interface GetEmployeeResponse {
   id: string;
   active: boolean;
   groups: Group[];
   user: User;
+}
+
+export interface AddEmployeeRequest {
+  user: Partial<User>;
+  groups: Nullable<Id[]>;
 }
 
 export interface LoadCompanyGroup {
@@ -28,3 +35,12 @@ interface GroupsId {
 }
 
 export interface LoadCompanyGroups extends Array<LoadCompanyGroup> {}
+
+export interface CompanyGroupsListAction {
+  type: typeof COMPANY_GROUPS_LIST;
+  payload: LoadCompanyGroups;
+}
+
+export type GroupsByIdState = Dictionary<LoadCompanyGroup>;
+
+export type GroupsAllIdsState = string[];
