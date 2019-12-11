@@ -378,7 +378,15 @@
   "company.switch.subtitle": "Select a company below to sign-in to",
   "company.switch.button": "SWITCH COMPANY",
 
+  "supplier_survey_success_submit_message": "Survey is filled. Thank you for the response!",
   "suppliersurvey.submit.button": "Survey is filled. Thank you for the response!",
-  
+
+  "user.management.profile": "User Profile",
+  "user.management.last.training": "Last Training",
+  "user.management.groups": "Groups",
+  "user.management.add.groups": "Add to other groups",
+  "user.management.deactivate": "Deactivate",
+  "user.management.add.employee": "Add Employee",
+  "user.management.update.profile": "Update profile",
   "user.management.add.employee": "Add Employee"
 }

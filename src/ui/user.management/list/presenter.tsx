@@ -1,5 +1,6 @@
 import { Button, Grid } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
+import { Group } from "../../../state/ducks/auth/types";
 import {
   DocumentRevision,
 } from "../../../state/ducks/documentRevisions";
@@ -12,7 +13,9 @@ import { TablePanel } from "../../components/table/panel";
 import { TablePanelStateProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import AddEmployeeContainer from "../add.employee/container";
+import UserProfileAdminContainer from "../profile/UserProfileAdmin.container";
 import { userManagementDetailsPath } from "../utils/paths";
+import { DEFAULT_SELECTED_EMPLOYEE } from "../utils/types";
 import { styles } from "./styles";
 
 export interface Props {
@@ -29,10 +32,22 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
   groupOptions,
 }) => {
   const classes = styles();
+  const [showUserProfile, setUserProfile] = useState(false);
+  const [selectedEmployee, setEmployee] = useState<GetEmployeeResponse>(DEFAULT_SELECTED_EMPLOYEE);
+
+  const setSelectedEmployee = (selectedEmployee: GetEmployeeResponse) => setEmployee(selectedEmployee);
+  const openUserProfile = () => setUserProfile(true);
+  const closeUserProfile = () => setUserProfile(false);
+
+  const handleUserProfileDialog = ( rowData: GetEmployeeResponse ) => {
+    setSelectedEmployee(rowData);
+    openUserProfile();
+  };
+
   const cellHrefRenderer = (rowData: GetEmployeeResponse): string => {
     return userManagementDetailsPath(rowData.user.id);
   };
-  const customDataSet = (data: GetEmployeeResponse[]) => {
+/*   const customDataSet = (data: GetEmployeeResponse[]) => {
     return data.map((employee) => {
       const groups = employee
         .groups
@@ -46,6 +61,9 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
       // hack to avoid doing having to create a new interface
       // groups should be array
     });
+  }; */
+  const handleGroups = (groups: Group[]) => {
+    return groups.map((group) => group.name).join(", ");
   };
 
   const columns: Array<TableColumnProps<GetEmployeeResponse>> = [
@@ -76,7 +94,7 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
       label: "common.groups",
       cellHref: cellHrefRenderer,
       columnOptions: {
-        cellDataGetter: ({ rowData }) => rowData.groups,
+        cellDataGetter: ({ rowData }) => handleGroups(rowData.groups),
       },
       searchOptions: {
         searchType: "select",
@@ -125,9 +143,14 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
           queryUrl={EMPLOYEES_URL}
           cellMeasure={true}
           tableName={tableName}
-          customDataSet={customDataSet}
+          onSelect={({ rowData }) => () => handleUserProfileDialog(rowData)}
         />
       </Grid>
+      <UserProfileAdminContainer
+        closeUserProfile={closeUserProfile}
+        showUserProfile={showUserProfile}
+        selectedEmployee={selectedEmployee}
+      />
     </Grid>
   );
 };

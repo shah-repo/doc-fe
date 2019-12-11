@@ -1,14 +1,18 @@
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
+import { EditUserInfoAction } from "../tableSearch";
+import { TABLE_SET_USER_INFO } from "../tableSearch/constants";
 import {
   AUTH_USER,
   LOGOUT_USER,
   SET_EMPLOYEE,
   USER_GROUPS,
   USER_GROUPS_GET_ASYNC,
+  USERS_ME,
 } from "./constants";
 import {
   AuthUserAction,
+  EditUserMeAction,
   GroupTag,
   LogoutUserAction,
   Permission,
@@ -25,16 +29,26 @@ export const USER_DEFAULT_STATE: UserState = {
   employeeId: "",
   sessionId: "",
   employees: [],
+  avatar: "",
 };
 
-type AuthUserActions = AuthUserAction | LogoutUserAction | SelectEmployeeAction;
+type AuthUserActions =
+  | AuthUserAction
+  | LogoutUserAction
+  | SelectEmployeeAction
+  | EditUserMeAction
+  | EditUserInfoAction;
 
-export const user = (state: UserState = USER_DEFAULT_STATE, action: AuthUserActions): UserState => {
+export const user = (
+  state: UserState = USER_DEFAULT_STATE,
+  action: AuthUserActions,
+): UserState => {
   switch (action.type) {
     case AUTH_USER:
       return {
         ...state,
         email: action.payload.email,
+        avatar: action.payload.avatar,
         name: action.payload.name,
         id: action.payload.id,
         employeeId: action.payload.employeeId,
@@ -45,6 +59,22 @@ export const user = (state: UserState = USER_DEFAULT_STATE, action: AuthUserActi
       return {
         ...state,
         employeeId: action.payload.id,
+      };
+    case USERS_ME:
+      return {
+        ...state,
+        name: action.payload.name,
+        avatar: action.payload.avatar,
+      };
+    case TABLE_SET_USER_INFO:
+      if (state.id === action.payload.id) {
+        return {
+          ...state,
+          name: action.payload.name,
+        };
+      }
+      return {
+        ...state,
       };
     case LOGOUT_USER:
       return { ...USER_DEFAULT_STATE };

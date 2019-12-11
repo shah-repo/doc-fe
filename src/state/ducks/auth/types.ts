@@ -8,6 +8,7 @@ import {
   SET_EMPLOYEE,
   SIGNUP_URL,
   USER_GROUPS,
+  USERS_ME,
 } from "./constants";
 
 export interface LoginRequestBody {
@@ -41,6 +42,7 @@ export interface AuthResponse {
   name: string;
   sessionId: string;
   employees: Employee[];
+  avatar: string | null;
 }
 
 export interface Token {
@@ -55,6 +57,7 @@ export interface User {
   employeeId: string;
   sessionId: string;
   employees: Employee[];
+  avatar: string | null;
 }
 
 export interface Group {
@@ -87,6 +90,11 @@ export interface LogoutUserAction {
   type: typeof LOGOUT_USER;
 }
 
+export interface EditUserMeAction {
+  type: typeof USERS_ME;
+  payload: User;
+}
+
 export interface UserState {
   id: string;
   email: string;
@@ -94,6 +102,7 @@ export interface UserState {
   employeeId: string;
   sessionId: string;
   employees: Employee[];
+  avatar: string | null;
 }
 
 export interface AuthProps {
@@ -113,6 +122,11 @@ export interface UserGroupsState {
 export interface SelectEmployeeAction {
   type: typeof SET_EMPLOYEE;
   payload: Employee;
+}
+
+export interface EmployeeEditRequestBody {
+  name: string;
+  avatar: string | null;
 }
 
 export enum Permission {

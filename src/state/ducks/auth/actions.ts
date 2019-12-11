@@ -4,6 +4,7 @@ import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApplicationState } from "../../reducers";
 import { ApiAction, Handlers } from "../../types";
 import { companyActions, Employee } from "../company";
+import { tableSearchActions } from "../tableSearch";
 import {
   AUTH_AWS_IOT_URL,
   AUTH_USER,
@@ -20,11 +21,15 @@ import {
   SIGNUP_URL,
   USER_GROUPS,
   USER_GROUPS_GET_ASYNC,
+  USERS_ME,
+  USERS_URL,
 } from "./constants";
 import {
   AuthResponse,
   AuthUserAction,
   ConfirmPasswordAction,
+  EditUserMeAction,
+  EmployeeEditRequestBody,
   ForgotPassword,
   ForgotPasswordAction,
   ForgotPasswordConfirmation,
@@ -69,20 +74,70 @@ const userGroups = (groups: Group[]): UserGroupsAction => {
   };
 };
 
-const login = (loginValues: LoginRequestBody, handlers: Handlers):
-  ApiAction<AuthResponse, LoginRequestBody> => apiActionWithCallbacks({
+const editUser = (user: User): EditUserMeAction => {
+  return {
+    type: USERS_ME,
+    payload: user,
+  };
+};
+
+const editCurrentEmployee = (
+  body: EmployeeEditRequestBody,
+  handlers: Handlers,
+): ApiAction<Partial<AuthResponse>> =>
+  apiActionWithCallbacks({
+    url: `${USERS_ME}`,
+    method: "patch",
+    data: body,
+    onSuccess: (user, dispatch) => {
+      dispatch(
+        editUser({
+          ...user,
+          name: user.name,
+          avatar: user.avatar,
+        }),
+      );
+    },
+    handlers,
+  });
+
+const editSelectedEmployee = (
+  id: string,
+  body: EmployeeEditRequestBody,
+  handlers: Handlers,
+): ApiAction<Partial<AuthResponse>> =>
+  apiActionWithCallbacks({
+    url: `${USERS_URL}/${id}`,
+    method: "patch",
+    data: body,
+    onSuccess: (user, dispatch) => {
+      dispatch(tableSearchActions.editEmployeeUserInfo(user));
+    },
+    handlers,
+  });
+
+const login = (
+  loginValues: LoginRequestBody,
+  handlers: Handlers,
+): ApiAction<AuthResponse, LoginRequestBody> =>
+  apiActionWithCallbacks({
     url: LOGIN_URL,
     method: "post",
     data: loginValues,
     includeAuthorization: false,
     onSuccess: (data: AuthResponse, dispatch) => {
-      dispatch(authUser({
-        email: loginValues.email,
-        name: data.name, id: data.id,
-        sessionId: data.sessionId,
-        employeeId: data.employees[0].id,
-        employees: data.employees,
-      }));
+      dispatch(
+        authUser({
+          email: loginValues.email,
+          name: data.name,
+          id: data.id,
+          sessionId: data.sessionId,
+          employeeId: data.employees[0].id,
+          employees: data.employees,
+          avatar: data.avatar,
+        }),
+      );
+
       if ((data.employees || []).length === 1) {
         dispatch(companyActions.selectCompany(data.employees[0].company));
       }
@@ -90,8 +145,11 @@ const login = (loginValues: LoginRequestBody, handlers: Handlers):
     handlers,
   });
 
-const signup = (loginValues: LoginRequestBody, handlers: Handlers):
-  ApiAction<AuthResponse, LoginRequestBody> => apiActionWithCallbacks({
+const signup = (
+  loginValues: LoginRequestBody,
+  handlers: Handlers,
+): ApiAction<AuthResponse, LoginRequestBody> =>
+  apiActionWithCallbacks({
     url: SIGNUP_URL,
     method: "post",
     data: loginValues,
@@ -102,8 +160,11 @@ const signup = (loginValues: LoginRequestBody, handlers: Handlers):
     handlers,
   });
 
-const forgotPassword = (values: ForgotPassword, handlers: Handlers):
-  ApiAction<AuthResponse, ForgotPassword> => apiActionWithCallbacks({
+const forgotPassword = (
+  values: ForgotPassword,
+  handlers: Handlers,
+): ApiAction<AuthResponse, ForgotPassword> =>
+  apiActionWithCallbacks({
     url: FORGOT_PASSWORD_URL,
     method: "post",
     data: values,
@@ -114,34 +175,48 @@ const forgotPassword = (values: ForgotPassword, handlers: Handlers):
     handlers,
   });
 
-const confirmNewPassword = (confirmValues: ForgotPasswordConfirmation, handlers: Handlers):
-  ApiAction<AuthResponse, ForgotPasswordConfirmation> => apiActionWithCallbacks({
+const confirmNewPassword = (
+  confirmValues: ForgotPasswordConfirmation,
+  handlers: Handlers,
+): ApiAction<AuthResponse, ForgotPasswordConfirmation> =>
+  apiActionWithCallbacks({
     url: CONFIRM_FORGOT_PASSWORD_URL,
     method: "post",
     data: confirmValues,
     includeAuthorization: false,
     onSuccess: (m, dispatch) => {
       dispatch(authConfirmPassword());
-      dispatch(login({email: confirmValues.email, password: confirmValues.password}, handlers));
+      dispatch(
+        login(
+          { email: confirmValues.email, password: confirmValues.password },
+          handlers,
+        ),
+      );
     },
     handlers,
-});
+  });
 
-const loginWithCode = (loginValues: LoginWithCodeRequestBody, handlers: Handlers):
-  ApiAction<AuthResponse, LoginWithCodeRequestBody> => apiActionWithCallbacks({
+const loginWithCode = (
+  loginValues: LoginWithCodeRequestBody,
+  handlers: Handlers,
+): ApiAction<AuthResponse, LoginWithCodeRequestBody> =>
+  apiActionWithCallbacks({
     url: LOGIN_WITH_CODE_URL,
     method: "post",
     data: loginValues,
     includeAuthorization: false,
     onSuccess: (response, dispatch) => {
-      dispatch(authUser({
-        email: response.email,
-        name: response.name,
-        id: response.id,
-        sessionId: response.sessionId,
-        employeeId: response.employees[0].id,
-        employees: response.employees,
-      }));
+      dispatch(
+        authUser({
+          email: response.email,
+          name: response.name,
+          id: response.id,
+          sessionId: response.sessionId,
+          employeeId: response.employees[0].id,
+          employees: response.employees,
+          avatar: response.avatar,
+        }),
+      );
     },
     onFailure: (m, dispatch) => {
       dispatch(logoutUser());
@@ -149,7 +224,10 @@ const loginWithCode = (loginValues: LoginWithCodeRequestBody, handlers: Handlers
     handlers,
   });
 
-const logout = (): ThunkAction<void, ApplicationState, any, AnyAction> => (dispatch, getState) => {
+const logout = (): ThunkAction<void, ApplicationState, any, AnyAction> => (
+  dispatch,
+  getState,
+) => {
   const action: ApiAction<any, LogoutRequestBody> = apiAction({
     url: LOGOUT_URL,
     method: "delete",
@@ -185,8 +263,8 @@ ApiAction => apiAction({
   },
 });
 
-const pingServer = ():
-  ApiAction => apiAction({
+const pingServer = (): ApiAction =>
+  apiAction({
     url: `${PING_SERVER_URL}`,
     asyncType: PING_SERVER_GET_ASYNC,
     method: "get",
@@ -210,6 +288,8 @@ export default {
   loadUserGroups,
   pingServer,
   selectEmployee,
+  editCurrentEmployee,
+  editSelectedEmployee,
   signup,
   forgotPassword,
   confirmNewPassword,

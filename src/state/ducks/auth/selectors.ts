@@ -18,6 +18,9 @@ const currentUserId = (state: ApplicationState): string => state.auth.user.id;
 const currentEmployeeId = (state: ApplicationState): string =>
   state.auth.user.employeeId;
 
+const currentEmployeeAvatar = (state: ApplicationState): string | null =>
+  state.auth.user.avatar;
+
 const getLoadPermissionsAsyncState = (state: ApplicationState): AsyncState =>
   state.auth.loadGroupsAsyncInfo;
 
@@ -42,4 +45,5 @@ export default {
   employees,
   hasMultipleCompanies,
   getHasTag,
+  currentEmployeeAvatar,
 };
