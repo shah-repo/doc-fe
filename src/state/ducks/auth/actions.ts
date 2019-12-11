@@ -8,6 +8,8 @@ import { companyActions, Employee } from "../company";
 import {
   AUTH_AWS_IOT_URL,
   AUTH_USER,
+  CONFIRM_FORGOT_PASSWORD_URL,
+  FORGOT_PASSWORD_URL,
   GROUPS_URL,
   LOGIN_URL,
   LOGIN_WITH_CODE_URL,
@@ -16,21 +18,39 @@ import {
   PING_SERVER_GET_ASYNC,
   PING_SERVER_URL,
   SET_EMPLOYEE,
+  SIGNUP_URL,
   USER_GROUPS,
   USER_GROUPS_GET_ASYNC,
 } from "./constants";
 import {
   AuthResponse,
   AuthUserAction,
+  ConfirmPasswordAction,
+  ForgotPassword,
+  ForgotPasswordAction,
+  ForgotPasswordConfirmation,
   Group,
   LoginRequestBody,
   LoginWithCodeRequestBody,
   LogoutRequestBody,
   LogoutUserAction,
   SelectEmployeeAction,
+  SignupAction,
   User,
   UserGroupsAction,
 } from "./types";
+
+const authSignup = (): SignupAction => ({
+  type: SIGNUP_URL,
+});
+
+const authForgotPassword = (): ForgotPasswordAction => ({
+  type: FORGOT_PASSWORD_URL,
+});
+
+const authConfirmPassword = (): ConfirmPasswordAction => ({
+  type: CONFIRM_FORGOT_PASSWORD_URL,
+});
 
 const authUser = (user: User): AuthUserAction => {
   return {
@@ -70,6 +90,43 @@ const login = (loginValues: LoginRequestBody, handlers: Handlers):
     },
     handlers,
   });
+
+const signup = (loginValues: LoginRequestBody, handlers: Handlers):
+  ApiAction<AuthResponse, LoginRequestBody> => apiActionWithCallbacks({
+    url: SIGNUP_URL,
+    method: "post",
+    data: loginValues,
+    includeAuthorization: false,
+    onSuccess: (m, dispatch) => {
+      dispatch(authSignup());
+    },
+    handlers,
+  });
+
+const forgotPassword = (values: ForgotPassword, handlers: Handlers):
+  ApiAction<AuthResponse, ForgotPassword> => apiActionWithCallbacks({
+    url: FORGOT_PASSWORD_URL,
+    method: "post",
+    data: values,
+    includeAuthorization: false,
+    onSuccess: (m, dispatch) => {
+      dispatch(authForgotPassword());
+    },
+    handlers,
+  });
+
+const confirmNewPassword = (confirmValues: ForgotPasswordConfirmation, handlers: Handlers):
+  ApiAction<AuthResponse, ForgotPasswordConfirmation> => apiActionWithCallbacks({
+    url: CONFIRM_FORGOT_PASSWORD_URL,
+    method: "post",
+    data: confirmValues,
+    includeAuthorization: false,
+    onSuccess: (m, dispatch) => {
+      dispatch(authConfirmPassword());
+      dispatch(login({email: confirmValues.email, password: confirmValues.password}, handlers));
+    },
+    handlers,
+});
 
 const loginWithCode = (loginValues: LoginWithCodeRequestBody, handlers: Handlers):
   ApiAction<AuthResponse, LoginWithCodeRequestBody> => apiActionWithCallbacks({
@@ -154,4 +211,7 @@ export default {
   loadUserGroups,
   pingServer,
   selectEmployee,
+  signup,
+  forgotPassword,
+  confirmNewPassword,
 };
