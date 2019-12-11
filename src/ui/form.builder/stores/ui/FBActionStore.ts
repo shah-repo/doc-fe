@@ -1,4 +1,4 @@
-import { AxiosRequestConfig } from "axios";
+import { AxiosRequestConfig, Method } from "axios";
 import _, { Dictionary } from "lodash";
 import { action } from "mobx";
 import apiClient from "../../../../state/apiClient";
@@ -25,10 +25,9 @@ export class FormBuilderActionStore {
     }
     try {
       const requestConfig: AxiosRequestConfig = {
-        // method: requestMethod as Method,
-        method: "post",
+        method: requestMethod as Method,
         url: requestUrl,
-        params: this.values[action.name || ""],
+        data: this.values[action.name || ""],
         // paramsSerializer: (params) => qs.stringify(params),
         headers: {},
       };

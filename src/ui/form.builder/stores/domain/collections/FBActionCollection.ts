@@ -1,13 +1,13 @@
 import _ from "lodash";
 import { Collection } from "mobx-rest";
-import actionData from "../../../../../data/fbActions.json";
+// import actionData from "../../../../../data/fbActions.json";
 import { FBValidatorIndicatorProps } from "../../../types/validation/validator";
 import { FBActionModel } from "../models/FBActionModel";
 
 export class FBActionCollection extends Collection<FBActionModel> {
   public data(): Array<Partial<FBActionModel>> {
-    return actionData;
-    // return (window as any).EnlilRemoteValidators.availableActions;
+    // return actionData;
+    return _.get(window, "EnlilRemoteValidators.avaliableActions");
   }
 
   public url() {

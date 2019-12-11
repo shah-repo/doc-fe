@@ -4,7 +4,7 @@
        "description":"Send Email with Form to fill in.",
        "actionLabel": "Send Email",
        "requestUrl": "/supplier_survey_requests",
-       "requestMethod": "post",
+       "requestMethod": "POST",
        "indicators":[
          {
             "type": "textfield",
