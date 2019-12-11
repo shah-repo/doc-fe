@@ -116,6 +116,7 @@ export class IotService {
           this.mqttClientInstance.unsubscribe(fullTopic);
         }
       }
+      // tslint:disable-next-line: no-console
       console.log("No credentials, tried to unsubscribe from topic");
     }
 
@@ -127,6 +128,7 @@ export class IotService {
           this.mqttClientInstance.unsubscribe(topics);
         }
       }
+      // tslint:disable-next-line: no-console
       console.log("No credentials, tried to unsubscribe from all topics");
     }
 
@@ -134,6 +136,7 @@ export class IotService {
       if (this.mqttClientInstance) {
         return Object.keys(this.mqttClientInstance._resubscribeTopics);
       }
+      // tslint:disable-next-line: no-console
       console.log("No client available");
       return [];
     }
