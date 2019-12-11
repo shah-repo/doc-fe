@@ -1,10 +1,10 @@
 import _ from "lodash";
 import React from "react";
-import { FBActionProps } from "../../types/actions/action";
-import { FBFieldComponent } from "../../defaults/editor";
 import FBButton from "../../components/inputs/FBButton";
-import FBStore from "../../stores/ui/FBStore";
+import { FBFieldComponent } from "../../defaults/editor";
 import FBActionStore from "../../stores/ui/FBActionStore";
+import FBStore from "../../stores/ui/FBStore";
+import { FBActionProps } from "../../types/actions/action";
 import { withFormik } from "../common/withFormik";
 
 export const withAction = <T extends FBActionProps>(
@@ -28,13 +28,13 @@ export const withAction = <T extends FBActionProps>(
       });
 
       if (isValid) {
-        alert("api call");
+        FBActionStore.apiCall(action);
       }
-    }
+    };
 
     const afterChange = (fieldName: string, value: any, values: any) => {
       FBActionStore.values[action.name || ""] = _.get(values, action.name || "");
-    }
+    };
 
     const indicators = _.map(action.indicators, (indicator) => {
       const InputType = FBFieldComponent[indicator.type || ""];

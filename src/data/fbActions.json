@@ -3,8 +3,8 @@
        "name":"SendEmailWithFormToFill",
        "description":"Send Email with Form to fill in.",
        "actionLabel": "Send Email",
-       "url": "",
-       "requestMethod": "put",
+       "requestUrl": "/supplier_survey_requests",
+       "requestMethod": "post",
        "indicators":[
          {
             "type": "textfield",

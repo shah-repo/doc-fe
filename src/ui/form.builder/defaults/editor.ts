@@ -1,4 +1,6 @@
 import { Dictionary } from "lodash";
+import FBActionContainer from "../components/actions/FBActionContainer";
+import FBActionEditor from "../components/editors/FBActionEditor";
 import FBAutocompleteEditor from "../components/editors/FBAutocompleteEditor";
 import FBControlEditor from "../components/editors/FBControlEditor";
 import FBControlGroupEditor from "../components/editors/FBControlGroupEditor";
@@ -23,8 +25,6 @@ import FBLink from "../components/navigation/FBLink";
 import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaItem";
 import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
 import { FBEditorElementType } from "../types/editor";
-import FBActionEditor from "../components/editors/FBActionEditor";
-import FBActionContainer from "../components/actions/FBActionContainer";
 
 export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<{}>> = {
   section: FBLabelEditor,

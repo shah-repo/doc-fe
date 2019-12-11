@@ -11,4 +11,4 @@ export type FBActionProps =
     indicators?: React.ReactNode[];
     actionButton?: React.ReactNode;
     action: Partial<FBActionModel>;
-}
+};

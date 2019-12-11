@@ -1,8 +1,8 @@
-import React from 'react';
-import _ from 'lodash';
-import FBStepper from '../common/FBStepper';
-import FBCheckboxGroup from '../inputs/FBCheckboxGroup';
-import actionCollection from '../../stores/domain/collections/FBActionCollection';
+
+import React from "react";
+import actionCollection from "../../stores/domain/collections/FBActionCollection";
+import FBStepper from "../common/FBStepper";
+import FBCheckboxGroup from "../inputs/FBCheckboxGroup";
 
 const FBActionEditor: React.FunctionComponent<{}> = () => {
   const getStepContent = (step: number) => {
@@ -24,15 +24,15 @@ const FBActionEditor: React.FunctionComponent<{}> = () => {
         //     const InputType = FBActionComponent[actionType];
         //     return <InputType />;
         //   }
-        return 'Please select the action first.';
+        return "Please select the action first.";
       default:
-        return 'Unknown step';
+        return "Unknown step";
     }
   };
 
   return (
     <FBStepper
-      steps={['Select action', 'Set config']}
+      steps={["Select action", "Set config"]}
       getStepContent={getStepContent}
     />
   );

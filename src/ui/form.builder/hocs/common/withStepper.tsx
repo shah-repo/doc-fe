@@ -1,6 +1,6 @@
-import _ from 'lodash';
-import React from 'react';
-import { FBStepperProps } from '../../types/common/stepper';
+
+import React from "react";
+import { FBStepperProps } from "../../types/common/stepper";
 
 export const withStepper = <T extends FBStepperProps>(
   Component: React.FunctionComponent<T>,

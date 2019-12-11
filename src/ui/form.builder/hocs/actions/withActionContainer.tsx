@@ -1,8 +1,8 @@
 import _ from "lodash";
 import React from "react";
-import { FBActionContainerProps } from "../../types/actions/action";
-import actionCollection from "../../stores/domain/collections/FBActionCollection";
 import FBAction from "../../components/actions/FBAction";
+import actionCollection from "../../stores/domain/collections/FBActionCollection";
+import { FBActionContainerProps } from "../../types/actions/action";
 
 export const withActionContainer = <T extends FBActionContainerProps>(
   Component: React.FunctionComponent<T>,
@@ -21,7 +21,7 @@ export const withActionContainer = <T extends FBActionContainerProps>(
             const action = actionCollection.getAction(actionName);
             return (action && <FBAction {...{action}} />);
         })
-    )
+    );
 
     return Component({
       ...(props as T),

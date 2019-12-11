@@ -1,17 +1,16 @@
-import React from 'react';
-import { FBActionProps } from '../../types/actions/action';
-import Box from '@material-ui/core/Box/Box';
-import { withAction } from '../../hocs/actions/withAction';
+import Box from "@material-ui/core/Box/Box";
+import React from "react";
+import { withAction } from "../../hocs/actions/withAction";
+import { FBActionProps } from "../../types/actions/action";
 
 const FBAction: React.FunctionComponent<FBActionProps> = ({
-    indicators,
-    actionButton,
+  indicators,
+  actionButton,
 }) => {
-
   return (
     <Box borderBottom={1} pb={2} mb={4}>
-        {indicators}
-        {actionButton}
+      {indicators}
+      {actionButton}
     </Box>
   );
 };
