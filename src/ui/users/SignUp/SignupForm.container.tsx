@@ -2,12 +2,11 @@ import { Formik, FormikProps } from "formik";
 import * as React from "react";
 import { connect } from "react-redux";
 import * as Yup from "yup";
-import Config from "../../../config";
+import { logo } from "../../../common/utils/helpers";
 import { authActions } from "../../../state/ducks/auth";
 import { ApplicationState } from "../../../state/reducers";
 import { emailSchema, passwordSchema } from "../../components/forms/fields/validators";
 import useAsync from "../../hooks/useAsync";
-import { ThemeEnv } from "../../layout/theme/utils/types";
 import { Translation } from "../../translations/types";
 import LoginFormPresenter from "../forms/LoginForm.presenter";
 import { LoginFormValues } from "../types";
@@ -38,20 +37,11 @@ const SignupFormContainer: React.FunctionComponent<SignupFormContainerProps> = (
     },
   });
 
-  const onSubmit = (values: LoginFormValues): void => {
-    async.start(signup, values, async);
-  };
-
   const [signupEmail, saveSignupEmail] = React.useState("");
   const [message, saveMessage] = React.useState("");
   const [signupSuccess, toggleSignupSuccess] = React.useState(false);
 
-  const theme = Config.Theme;
-  const logo = theme === ThemeEnv.DEV_THEME ?
-    "/logo_enlil_dark.svg" :
-    "/logo_enlil.svg";
-
-  const handleVerificationState = (values: LoginFormValues, message: string | Translation): void => {
+  const handleVerificationState = (values: LoginFormValues): void => {
     saveSignupEmail(values.email);
     saveMessage(message);
     async.start(signup, values, async);
@@ -69,9 +59,9 @@ const SignupFormContainer: React.FunctionComponent<SignupFormContainerProps> = (
       signMessage={signMessage}
       route={route}
       signLabel={signLabel}
-      showVerificationState={handleVerificationState}
       title={title}
       logo={logo}
+      buttonLabel={"signup.submit"}
     />
   );
 
@@ -85,13 +75,13 @@ const SignupFormContainer: React.FunctionComponent<SignupFormContainerProps> = (
       {signupSuccess &&
         <VerificationEmailPage
           email={signupEmail}
-          message={message}
+          message={"signup.verification.message"}
           logo={logo}
           isForgotPassword={false}
         />}
        {!signupSuccess && <Formik
         initialValues={initialValues}
-        onSubmit={onSubmit}
+        onSubmit={handleVerificationState}
         validationSchema={SignupSchema}
         render={render}
        />}

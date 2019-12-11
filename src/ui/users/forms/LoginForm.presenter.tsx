@@ -17,10 +17,10 @@ interface Props extends WithStyles<typeof styles>, FormikProps<LoginFormValues> 
   signMessage: Translation;
   signLabel: Translation;
   route: string;
-  showVerificationState: (values: LoginFormValues, message: string) => void;
   title: Translation;
   logo: string;
   forgotPassword?: () => void;
+  buttonLabel: Translation;
 }
 
 const LoginFormPresenter: React.FunctionComponent<Props> = ({
@@ -29,8 +29,7 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({
   signMessage,
   route,
   signLabel,
-  showVerificationState,
-  values,
+  buttonLabel,
   title,
   logo,
   forgotPassword,
@@ -69,20 +68,12 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({
         inputProps={{ autoComplete: "current-password", id: "password", type: "password" }}
         validate={validator(required)}
         lpignore={false}
-      /></div>{
-        signLabel === "signup.sign.in" ?
+      /></div>
         <SubmitButton
-          type="button"
           asyncState={asyncState}
-          onClick={() => showVerificationState(values, "signup.verification.message")}
-          label={"signup.submit"}
-          className={classes.submit}
-        /> : <SubmitButton
-          asyncState={asyncState}
-          label={"login.submit"}
+          label={buttonLabel}
           className={classes.submit}
         />
-      }
       <Typography component="h1" variant="h5" className={classes.navigationText}>
         <Text translation={signMessage} />
         <NavLink to={route} exact={true} className={classes.navigationLink} >

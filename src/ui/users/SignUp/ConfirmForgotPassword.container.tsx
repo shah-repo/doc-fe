@@ -4,8 +4,8 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { Redirect, RouteComponentProps } from "react-router-dom";
 import * as Yup from "yup";
-import Config from "../../../config";
-import { authActions } from "../../../state/ducks/auth";
+import { logo } from "../../../common/utils/helpers";
+import { authActions, authSelectors } from "../../../state/ducks/auth";
 import { ApplicationState } from "../../../state/reducers";
 import {
   confirmPasswordSchema,
@@ -13,7 +13,6 @@ import {
 } from "../../components/forms/fields/validators";
 import { HOME_URL } from "../../constants/urls";
 import useAsync from "../../hooks/useAsync";
-import { ThemeEnv } from "../../layout/theme/utils/types";
 import { ForgotPasswordValues } from "../types";
 import ConfirmForgotPasswordPresenter from "./ConfirmForgotPassword.presenter";
 
@@ -22,29 +21,23 @@ interface DispatchProps {
   login: typeof authActions.login;
 }
 
-export type ConfirmForgotPasswordContainerProps = DispatchProps &
+interface StateProps {
+  isUserAuthenticated: boolean;
+}
+
+export type ConfirmForgotPasswordContainerProps = DispatchProps & StateProps &
   Pick<RouteComponentProps, "location">;
 
 const ConfirmForgotPasswordContainer: React.FunctionComponent<ConfirmForgotPasswordContainerProps> = ({
   confirmNewPassword,
   location,
-  login,
+  isUserAuthenticated,
 }) => {
   const parsedLocation = parse(location.search);
   const clientCode = parsedLocation.code;
   const clientEmail = (parsedLocation.email as string).split(" ").join("+");
 
-  const theme = Config.Theme;
-  const logo =
-    theme === ThemeEnv.DEV_THEME ? "/logo_enlil_dark.svg" : "/logo_enlil.svg";
-
-  const async = useAsync({
-    onSuccess: () => {
-      isLoggedIn(true);
-    },
-  });
-
-  const [logged, isLoggedIn] = React.useState(false);
+  const async = useAsync();
 
   const onSubmit = (confirmValues: ForgotPasswordValues): void => {
     async.start(
@@ -74,8 +67,8 @@ const ConfirmForgotPasswordContainer: React.FunctionComponent<ConfirmForgotPassw
 
   return (
     <div>
-      {logged && <Redirect to={{ pathname: HOME_URL }} />}}
-      {!logged && (
+      {isUserAuthenticated && <Redirect to={{ pathname: HOME_URL }} />}}
+      {!isUserAuthenticated && (
         <Formik
           initialValues={initialValues}
           onSubmit={onSubmit}
@@ -87,7 +80,11 @@ const ConfirmForgotPasswordContainer: React.FunctionComponent<ConfirmForgotPassw
   );
 };
 
-export default connect<{}, DispatchProps, {}, ApplicationState>(null, {
+const mapStateToProps = (state: ApplicationState): StateProps => ({
+  isUserAuthenticated: authSelectors.isAuthenticated(state),
+});
+
+export default connect<{}, DispatchProps, {}, ApplicationState>(mapStateToProps, {
   confirmNewPassword: authActions.confirmNewPassword,
   login: authActions.login,
 })(ConfirmForgotPasswordContainer);

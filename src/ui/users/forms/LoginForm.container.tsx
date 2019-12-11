@@ -1,11 +1,10 @@
 import { Formik, FormikProps } from "formik";
 import * as React from "react";
 import { connect } from "react-redux";
-import Config from "../../../config";
+import { logo } from "../../../common/utils/helpers";
 import { authActions } from "../../../state/ducks/auth";
 import { ApplicationState } from "../../../state/reducers";
 import useAsync from "../../hooks/useAsync";
-import { ThemeEnv } from "../../layout/theme/utils/types";
 import { Translation } from "../../translations/types";
 import ForgotPasswordPage from "../SignUp/ForgotPasswordPage";
 import VerificationEmailPage from "../SignUp/VerificationEmailPage";
@@ -54,11 +53,6 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
   const [message, saveMessage] = React.useState("");
   const [forgotPasswordPage, showForgotPasswordState] = React.useState(false);
 
-  const theme = Config.Theme;
-  const logo = theme === ThemeEnv.DEV_THEME ?
-    "/logo_enlil_dark.svg" :
-    "/logo_enlil.svg";
-
   const handleVerificationState = (values: any, message: string | Translation): void => {
     saveResetEmail(values.email);
     saveMessage(message);
@@ -89,10 +83,10 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
       signMessage={signMessage}
       route={route}
       signLabel={signLabel}
-      showVerificationState={handleVerificationState}
       title={title}
       logo={logo}
       forgotPassword={handleForgotPassword}
+      buttonLabel={"login.submit"}
     />
   );
 
