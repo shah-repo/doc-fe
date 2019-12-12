@@ -11,7 +11,7 @@ import {
   confirmPasswordSchema,
   passwordSchema,
 } from "../../components/forms/fields/validators";
-import { HOME_URL } from "../../constants/urls";
+import { LOGIN_URL } from "../../constants/urls";
 import useAsync from "../../hooks/useAsync";
 import { ForgotPasswordValues } from "../types";
 import ConfirmForgotPasswordPresenter from "./ConfirmForgotPassword.presenter";
@@ -67,7 +67,7 @@ const ConfirmForgotPasswordContainer: React.FunctionComponent<ConfirmForgotPassw
 
   return (
     <div>
-      {isUserAuthenticated && <Redirect to={{ pathname: HOME_URL }} />}}
+      {isUserAuthenticated && <Redirect to={{ pathname: LOGIN_URL }} />}}
       {!isUserAuthenticated && (
         <Formik
           initialValues={initialValues}
