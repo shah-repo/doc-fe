@@ -2,7 +2,7 @@ import { Box, Grid } from "@material-ui/core";
 import classNames from "classnames";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import { get } from "lodash";
-import React from "react";
+import React, { useMemo } from "react";
 import { connect } from "react-redux";
 import {
   Document,
@@ -11,7 +11,10 @@ import {
   documentRevisionsSelectors,
   DocumentRevisionStatus,
 } from "../../../state/ducks/documentRevisions";
-import { DocumentTypeByIdState, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import {
+  DocumentTypeByIdState,
+  documentTypeSelectors,
+} from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
@@ -53,7 +56,9 @@ interface OwnProps {
   loadDocumentProposedId?: typeof documentsActions.loadDocumentProposedId;
 }
 
-export type DocumentRevisionFormContainerProps = OwnProps & StateProps & DispatchProps;
+export type DocumentRevisionFormContainerProps = OwnProps &
+  StateProps &
+  DispatchProps;
 
 const getAvailableReferences = documentRevisionsSelectors.makeGetAvailableReferences();
 const mapStateToProps = (
@@ -65,7 +70,10 @@ const mapStateToProps = (
   documentRevisions: documentRevisionsSelectors.getDocumentRevisionsList(state),
   documentTypes: documentTypeSelectors.getDocumentTypeFormOptions(state),
   documentTypesById: documentTypeSelectors.byId(state),
-  document: documentRevisionsSelectors.getDocument(state, get(props.initialValues, "document.id")!),
+  document: documentRevisionsSelectors.getDocument(
+    state,
+    get(props.initialValues, "document.id")!,
+  ),
 });
 
 export const DocumentRevisionFormContainer: React.FunctionComponent<
@@ -89,8 +97,11 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
   documentTypesById,
   document,
 }) => {
-
-  document = document || {} as Document;
+  const filteredDocTypes = useMemo(
+    () => documentTypes.filter((doc) => doc.text !== "Form"),
+    [documentTypes],
+  );
+  document = document || ({} as Document);
   const classes = styles();
 
   const render = (props: FormikProps<DocumentRevisionFormValues>) => {
@@ -106,7 +117,7 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
         setDocId={setDocId}
         doNotPrompt={doNotPrompt}
         onDirtyFlagChange={onDirtyFlagChange}
-        documentTypes={documentTypes}
+        documentTypes={filteredDocTypes}
         documentTypesById={documentTypesById}
       />
     );
@@ -133,11 +144,13 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
       {documentRevision && <DocumentHeader dataProp={documentRevision} />}
       <Grid
         className={classNames(classes.container, {
-                  [classes.borderContainer]: documentRevision,
-                })}
+          [classes.borderContainer]: documentRevision,
+        })}
       >
         <Box ml={3}>
-          {!showRevisionTypeChange && <ChangeRequestLink dataProp={documentRevision} />}
+          {!showRevisionTypeChange && (
+            <ChangeRequestLink dataProp={documentRevision} />
+          )}
         </Box>
         <Formik
           render={render}
@@ -150,6 +163,9 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
   );
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
-  loadDocumentRevisions: documentRevisionsActions.loadList,
-})(DocumentRevisionFormContainer);
+export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
+  mapStateToProps,
+  {
+    loadDocumentRevisions: documentRevisionsActions.loadList,
+  },
+)(DocumentRevisionFormContainer);

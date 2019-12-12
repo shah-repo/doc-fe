@@ -18,13 +18,16 @@ const currentUserId = (state: ApplicationState): string => state.auth.user.id;
 const currentEmployeeId = (state: ApplicationState): string =>
   state.auth.user.employeeId;
 
+const currentEmployeeAvatar = (state: ApplicationState): string | null =>
+  state.auth.user.avatar;
+
 const getLoadPermissionsAsyncState = (state: ApplicationState): AsyncState =>
   state.auth.loadGroupsAsyncInfo;
 
 const getHasTag = createSelector(
   (state: ApplicationState) => state.auth.groups.tags,
-  (state: ApplicationState, tag: GroupTag) => tag,
-  (tags, tag) => tags.includes(tag),
+  (state: ApplicationState, selectedTag: GroupTag) => selectedTag,
+  (tags, selectedTag) => tags.includes(selectedTag),
 );
 
 const employees = (state: ApplicationState) => state.auth.user.employees;
@@ -42,4 +45,5 @@ export default {
   employees,
   hasMultipleCompanies,
   getHasTag,
+  currentEmployeeAvatar,
 };
