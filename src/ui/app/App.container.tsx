@@ -5,6 +5,7 @@ import localeEn from "react-intl/locale-data/en";
 import "react-quill/dist/quill.snow.css";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
+import { toast } from "react-toastify";
 import "react-virtualized/styles.css";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistor, store } from "../../state/store";
@@ -20,6 +21,10 @@ const messages = {
 };
 
 const language = "en";
+
+toast.configure({
+  autoClose: false,
+});
 
 const AppContainer: React.FunctionComponent = () => (
   <Provider store={store}>

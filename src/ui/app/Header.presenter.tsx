@@ -7,6 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import React from "react";
 import Text from "../components/Text";
 import { Translation } from "../translations/types";
+import UserProfileContainer from "../user.management/profile/UserProfile.container";
 import styles from "./Header.styles";
 
 interface Props extends WithStyles<typeof styles> {
@@ -14,6 +15,9 @@ interface Props extends WithStyles<typeof styles> {
   name: string;
   pageTitle: Translation;
   onLogout: () => void;
+  openUserProfile: () => void;
+  closeUserProfile: () => void;
+  showUserProfile: boolean;
 }
 
 const Header: React.FunctionComponent<Props> = ({
@@ -21,6 +25,9 @@ const Header: React.FunctionComponent<Props> = ({
   onLogout,
   name,
   pageTitle,
+  openUserProfile,
+  closeUserProfile,
+  showUserProfile,
 }) => (
   <AppBar position="fixed" color="primary" className={classes.appBar}>
     <Toolbar>
@@ -39,16 +46,29 @@ const Header: React.FunctionComponent<Props> = ({
         </Grid>
         <Grid item={true} xs={6}>
           <Grid container={true} justify="flex-end" alignItems="center">
-            <Typography variant="caption" className={classes.welcomeText} noWrap={true}>
+            <Typography
+              variant="caption"
+              className={classes.welcomeText}
+              noWrap={true}
+            >
               <Text translation="header.welcome" />,
             </Typography>
             &nbsp;
-            <Typography variant="caption" className={classes.name} noWrap={true}>
+            <Button
+              className={classes.name}
+              color="primary"
+              variant="text"
+              onClick={openUserProfile}
+            >
               <Text translation="header.name" values={{ name }} />
-            </Typography>
+            </Button>
             <Button color="primary" variant="text" onClick={onLogout}>
               <Text translation="header.logout" />
             </Button>
+            <UserProfileContainer
+              closeUserProfile={closeUserProfile}
+              showUserProfile={showUserProfile}
+            />
           </Grid>
         </Grid>
       </Grid>

@@ -7,8 +7,14 @@ export const USER_GROUPS_GET_ASYNC = "auth/USER_GROUPS_GET_ASYNC";
 export const PING_SERVER_GET_ASYNC = "auth/PING_SERVER_GET_ASYNC";
 
 export const LOGIN_URL = "/auth/login";
+export const SIGNUP_URL = "/auth/sign_up";
+export const FORGOT_PASSWORD_URL = "/auth/forgot_password";
+export const CONFIRM_FORGOT_PASSWORD_URL = "/auth/confirm_forgot_password";
 export const LOGIN_WITH_CODE_URL = "/auth/tokens";
 export const LOGOUT_URL = "/auth/logout";
+export const AUTH_AWS_IOT_URL = "/auth/credentials/iot";
 export const GROUPS_URL = "/groups/me";
 export const PING_SERVER_URL = "/auth/prevent_idle_logout";
 export const SESSION_DETAILS_URL = "/auth/sessionDetails";
+export const USERS_URL = "/users";
+export const USERS_ME = "/users/me";
