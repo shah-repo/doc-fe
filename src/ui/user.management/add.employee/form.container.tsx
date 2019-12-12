@@ -2,7 +2,6 @@ import { Box, Grid } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
 import React from "react";
 import { useSelector } from "react-redux";
-import { Nullable } from "../../../state/ducks/common";
 import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -11,14 +10,13 @@ import AddEmployeeFormPresenter from "./form.presenter";
 import { transformToAddEmployeeRequest } from "./utils/transform";
 
 export interface AddEmployeeFormValues {
-  id: Nullable<string>;
+  id?: string;
   name: string;
   email: string;
   groups: OptionType[];
 }
 
 const initialValues = {
-  id: null,
   name: "",
   email: "",
   groups: [],
