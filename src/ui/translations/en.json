@@ -243,6 +243,7 @@
   "common.email": "Email",
   "common.active": "Active",
   "common.groups": "Groups",
+  "common.redirected.in": "You will be redirected in {time}",
 
   "output.info": "Form Info",
 
@@ -388,5 +389,8 @@
   "user.management.deactivate": "Deactivate",
   "user.management.add.employee": "Add Employee",
   "user.management.update.profile": "Update profile",
-  "user.management.add.employee": "Add Employee"
+
+  "slack.finishing.registration": "Finishing Slack registration",
+  "slack.resgistration.successful": "Slack registration successful",
+  "slack.missing.code": "Slack code is missing"
 }
