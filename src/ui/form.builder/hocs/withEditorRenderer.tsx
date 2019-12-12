@@ -1,5 +1,6 @@
 import { Box } from "@material-ui/core";
 import { FormikProps } from "formik";
+import _, { Dictionary } from "lodash";
 import React from "react";
 import FBButton from "../components/inputs/FBButton";
 import { FBFieldEditorComponent } from "../defaults/editor";
@@ -25,15 +26,21 @@ export const withEditorRenderer =
   //   ...props.values,
   // });
 
+  const propsByType = (): Dictionary<FBTemplateSchema | string[]> => {
+    if (type === "action") {
+      return { actions: _.keys(props.values) };
+    }
+    return props.values as FBTemplateSchema;
+  };
+
   const onClick = () => {
 
     // const item = schemaItem();
-
     const schema: FBTemplateSchema = {
       type,
       index,
       name: uuidv4(),
-      ...props.values as FBTemplateSchema,
+      ...propsByType(),
       // rules: FBValidatorStore.getRules(),
       // applicableOn: FBValidatorStore.applicableOn ? [FBValidatorTrigger.ON_STATE_TO_IN_REVIEW] : [],
     };

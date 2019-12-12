@@ -1,4 +1,6 @@
 import { Dictionary } from "lodash";
+import FBActionContainer from "../components/actions/FBActionContainer";
+import FBActionEditor from "../components/editors/FBActionEditor";
 import FBAutocompleteEditor from "../components/editors/FBAutocompleteEditor";
 import FBControlEditor from "../components/editors/FBControlEditor";
 import FBControlGroupEditor from "../components/editors/FBControlGroupEditor";
@@ -38,6 +40,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<{}>> = {
   autocomplete: FBAutocompleteEditor,
   hyperlink: FBHyperlinkEditor,
   fileupload: FBLabelStepperEditor,
+  action: FBActionEditor,
 };
 
 export const FBFieldComponent: Dictionary<any> = {
@@ -56,6 +59,7 @@ export const FBFieldComponent: Dictionary<any> = {
   fileupload: FBFileUpload,
   schemaSelect: FBValidatorSchemaSelect,
   schemaItem: FBValidatorSchemaItem,
+  action: FBActionContainer,
 };
 
 export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
@@ -73,6 +77,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "fileupload",
   ],
   lists: ["autocomplete"],
+  actions: ["action"],
 };
 
 export const FBGroupEditorOptions: Dictionary<any[]> = {

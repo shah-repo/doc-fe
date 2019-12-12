@@ -8,12 +8,19 @@ const FBCheckbox: React.FunctionComponent<FBInputProps> = ({
   label = "",
   disabled,
   labelValues,
+  defaultValue,
   ...props
 }) => (
   <FBInput {...props} type="checkbox" >
     <FormControlLabel
       label={<Text message={label as string} values={labelValues} />}
-      control={<Checkbox {...{disabled}} value={props.name} />}
+      control={(
+        <Checkbox
+          {...{disabled}}
+          value={props.name}
+          checked={defaultValue as boolean}
+        />
+      )}
     />
   </FBInput>
 );

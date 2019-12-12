@@ -16,12 +16,13 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   label,
   error,
   labelValues,
+  disabled,
 }) => (
   <Box mb={4}>
     {label && <FBLabel {...{error, label, labelValues}} />}
     <Autocomplete
       options={options as any[]}
-      {...{filterOptions, renderInput, getOptionLabel, multiple, onChange}}
+      {...{filterOptions, renderInput, getOptionLabel, multiple, onChange, disabled}}
     />
   </Box>
 );

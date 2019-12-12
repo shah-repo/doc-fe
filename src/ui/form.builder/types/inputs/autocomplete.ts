@@ -8,4 +8,7 @@ export type FBAutocompleteProps =
   & Omit<FBFormikFieldProps, "name">
   & Pick<FBOptionProps, "options" | "optionLabelKey">
   & Pick<AutocompleteProps, "renderInput">
-  & Pick<UseAutocompleteProps, "getOptionLabel" | "filterOptions" | "onChange" | "multiple">;
+  & Pick<UseAutocompleteProps, "getOptionLabel" | "filterOptions" | "onChange" | "multiple">
+  & {
+    disabled?: boolean;
+  };
