@@ -2,7 +2,7 @@ import { Box, Grid } from "@material-ui/core";
 import classNames from "classnames";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import { get } from "lodash";
-import React, { useMemo } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import {
   Document,
@@ -97,10 +97,6 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
   documentTypesById,
   document,
 }) => {
-  const filteredDocTypes = useMemo(
-    () => documentTypes.filter((doc) => doc.text !== "Form"),
-    [documentTypes],
-  );
   document = document || ({} as Document);
   const classes = styles();
 
@@ -117,7 +113,7 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
         setDocId={setDocId}
         doNotPrompt={doNotPrompt}
         onDirtyFlagChange={onDirtyFlagChange}
-        documentTypes={filteredDocTypes}
+        documentTypes={documentTypes}
         documentTypesById={documentTypesById}
       />
     );
