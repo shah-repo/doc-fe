@@ -40,6 +40,7 @@ describe("login action tests", () => {
         sessionId: data.sessionId,
         employeeId: data.employees[0].id,
         employees: data.employees,
+        avatar: data.avatar,
       }),
     );
   });
@@ -77,6 +78,7 @@ describe("loginWithCode action tests", () => {
         sessionId: response.sessionId,
         employeeId: response.employees[0].id,
         employees: response.employees,
+        avatar: response.avatar,
       }),
     );
   });

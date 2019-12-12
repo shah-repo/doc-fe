@@ -34,7 +34,13 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
   const [pageTitle, setPageTitle] = useState<Translation>(
     "translation.unknown",
   );
+  const [showUserProfile, setUserProfile] = useState(false);
 
+  const openUserProfile = () => {
+      setUserProfile(true);
+  };
+
+  const closeUserProfile = () => setUserProfile(false);
   useEffect(() => {
     setTranslationByPath(location.pathname);
 
@@ -64,6 +70,9 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
       name={name}
       onLogout={logout}
       pageTitle={pageTitle}
+      showUserProfile={showUserProfile}
+      openUserProfile={openUserProfile}
+      closeUserProfile={closeUserProfile}
     />
   );
 };

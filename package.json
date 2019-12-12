@@ -25,7 +25,10 @@
     "@types/react-select": "3.0.5",
     "@types/react-virtualized": "9.21.4",
     "@types/validatorjs": "^3.15.0",
+    "@types/yup": "^0.26.26",
     "array-move": "^2.1.0",
+    "aws-mqtt": "^1.0.0",
+    "aws-sdk": "^2.580.0",
     "axios": "0.19.0",
     "classnames": "2.2.6",
     "diff": "4.0.1",
@@ -53,6 +56,7 @@
     "react-scripts": "3.2.0",
     "react-select": "3.0.8",
     "react-sortable-hoc": "^1.10.1",
+    "react-toastify": "^5.4.1",
     "react-virtualized": "9.21.1",
     "react-window": "^1.8.5",
     "redux": "4.0.4",
@@ -66,7 +70,8 @@
     "typescript": "^3.6.3",
     "use-debounce": "3.0.1",
     "uuid": "^3.3.3",
-    "validatorjs": "3.17.1"
+    "validatorjs": "3.17.1",
+    "yup": "^0.27.0"
   },
   "scripts": {
     "start": "react-scripts start",

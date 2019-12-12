@@ -1,0 +1,18 @@
+import { AddEmployeeRequest } from "../../../../state/ducks/userManagement";
+import { AddEmployeeFormValues } from "../form.container";
+
+export const transformToAddEmployeeRequest = (values: AddEmployeeFormValues): AddEmployeeRequest => {
+  const { name, email } = values;
+  const groups = !values.groups || values.groups.length === 0 ?
+    null :
+    values.groups.map((group) => ({ id: group.value }));
+
+  return {
+    user: {
+      id: values.id || undefined,
+      name,
+      email,
+    },
+    groups,
+  };
+};

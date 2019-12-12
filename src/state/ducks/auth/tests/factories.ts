@@ -10,5 +10,6 @@ export const getAuthResponse = (response: Partial<AuthResponse> = {}): AuthRespo
   name: faker.name.findName(),
   sessionId: faker.random.alphaNumeric(),
   employees: [getEmployee()],
+  avatar: null,
   ...response,
 });
