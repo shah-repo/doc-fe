@@ -67,7 +67,7 @@ export const SupplierSurveyContainer: React.FunctionComponent<
 
   const onSubmit = () => {
     async.start(submitSupplierSurvey, token, {
-      formInput: JSON.stringify(FBStore.getValues()),
+      formInput: FBStore.getValues(),
     }, async);
   };
 
