@@ -3,15 +3,16 @@ import React, { useEffect, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { slackActions } from "../../../state/ducks/slack";
 import { SLACK_COMPANY_OAUTH_URL, SLACK_USER_OAUTH_URL } from "../../../state/ducks/slack/constants";
-import { SLACK_COMPANY_URL } from "../../constants/urls";
+import { HOME_URL, SLACK_COMPANY_URL } from "../../constants/urls";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import SlackLandingPresenter from "./Presenter";
 
 type Props = RouteComponentProps;
 
-export const SlackLandingCompanyContainer: React.FunctionComponent<Props> = ({
+export const SlackLandingContainer: React.FunctionComponent<Props> = ({
   location,
+  history,
 }) => {
   const URL = location.pathname === SLACK_COMPANY_URL ?
     SLACK_COMPANY_OAUTH_URL :
@@ -38,7 +39,8 @@ export const SlackLandingCompanyContainer: React.FunctionComponent<Props> = ({
   }, []);
 
   const onCounterFinish = () => {
-    console.log("Redirect");
+    // history.push(HOME_URL);
+    console.log(HOME_URL);
   };
 
   return (
@@ -51,4 +53,4 @@ export const SlackLandingCompanyContainer: React.FunctionComponent<Props> = ({
   );
 };
 
-export default SlackLandingCompanyContainer;
+export default SlackLandingContainer;
