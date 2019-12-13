@@ -76,6 +76,9 @@ export type FBInputProps =
     rules?: string;
     applicable?: boolean;
     checked?: boolean;
+    validatorFieldName?: string;
+    hasSchemaItem?: boolean;
+    applicableOn?: any[];
   };
 
 export type FBFormDefaultProps =

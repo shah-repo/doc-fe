@@ -11,11 +11,12 @@ export const withValidation = <T extends FBInputProps>(
     rules,
     label,
     placeholder,
+    applicableOn,
     ...props
   }: T) => {
 
     const validate = (value: any) => {
-      if (!rules) {
+      if (!rules || !_.isEmpty(applicableOn)) {
         return;
       }
       const data = {[name]: value};
@@ -24,7 +25,7 @@ export const withValidation = <T extends FBInputProps>(
 
       const errors = FBValidatorStore.validate(data, valRules, attributes);
 
-      if (!_.isUndefined(errors)) {
+      if (!_.isUndefined(errors) && !_.isEmpty(errors)) {
         return _.get(errors, name).join("\n");
       }
     };

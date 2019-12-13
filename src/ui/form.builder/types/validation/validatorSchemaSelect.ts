@@ -1,6 +1,5 @@
-import { FBFormDefaultProps, FBOnChangeProps } from "../common";
-import { FBSelectProps } from "../inputs/select";
+import {  FBInputProps } from "../common";
 
-export type FBValidatorSchemaSelectProps = FBSelectProps & FBFormDefaultProps & FBOnChangeProps & {
+export type FBValidatorSchemaSelectProps = FBInputProps & {
   SchemaInputType: React.ReactNode;
 };

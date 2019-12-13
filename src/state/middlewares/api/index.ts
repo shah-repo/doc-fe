@@ -5,6 +5,7 @@ import apiXClient from "../../apiXClient";
 import { ApplicationState } from "../../reducers";
 import { ApiAction, AsyncAction, AsyncStatus } from "../../types";
 import { AsyncActionErrorResponse } from "./types";
+import _ from "lodash";
 
 export const CALL_API = "middlewares/CALL_API";
 
@@ -73,7 +74,11 @@ const apiMiddleware: Middleware = ({
       const {
         data: { message },
       } = exception.response as AsyncActionErrorResponse;
-      responseMessage = Array.isArray(message) ? message.join("; ") : message;
+      if (_.isArray(message) && _.has(_.first(message), "message")) {
+        responseMessage = _.join(_.get(_.first(message), "message"), "\n");
+      } else {
+        responseMessage = Array.isArray(message) ? message.join("; ") : message;
+      }
     }
 
     const errorMessage: string = responseMessage || exception.message;
