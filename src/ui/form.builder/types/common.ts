@@ -56,7 +56,7 @@ export type FBInputProps =
   & Pick<FBContextProps, "includeContext" | "showContext" | "contextLabel">
   // & Pick<FBValidatorProps, "rules" | "applicableOn">
   & Pick<FBActionContainerProps, "actions">
-  & Pick<FBOptionProps, "optionId">
+  & Pick<FBOptionProps, "optionId" | "options">
   & Pick<BaseTextFieldProps,
     | "children"
     | "value"
@@ -79,6 +79,7 @@ export type FBInputProps =
     validatorFieldName?: string;
     hasSchemaItem?: boolean;
     applicableOn?: any[];
+    multiple?: boolean;
   };
 
 export type FBFormDefaultProps =

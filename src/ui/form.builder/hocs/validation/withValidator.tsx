@@ -22,7 +22,8 @@ export const withValidator = <T extends FBValidatorProps>(
     };
 
     const indicatorAfterChange = (fieldName: string, value: any) => {
-      alert(`${fieldName}- ${value}`);
+      const propname = _.get(props, "name");
+      FBValidatorStore.indicatorValues[propname][":"] = value;
     };
 
     const indicatorElements = (): React.ReactNode[] | undefined => {

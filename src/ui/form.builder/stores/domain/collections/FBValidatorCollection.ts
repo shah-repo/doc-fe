@@ -1,9 +1,12 @@
 import { Collection } from "mobx-rest";
 import { SelectOption } from "../../../../components/forms/fields/Select";
 import { FBValidatorModel } from "../models/FBValidatorModel";
+import _ from "lodash";
 
 export class FBValidatorCollection extends Collection<FBValidatorModel> {
   public data(): Array<Partial<FBValidatorModel>> {
+    // tslint:disable-next-line: no-console
+    // console.log(_.get(window, "EnlilRemoteValidators.availableRules"));
     // return (window as any).EnlilRemoteValidators.availableRules;
     return [
       {
@@ -30,14 +33,47 @@ export class FBValidatorCollection extends Collection<FBValidatorModel> {
         pattern: "required_with:foo,bar,...",
         description: "The field under validation must be present and not empty only if any of the other specified fields are present.",
         applicableIn: "all",
-        indicators: [],
+        indicators: [
+          {
+            label: "Required with field value:",
+            type: "schemaSelect",
+            validatorDelimiter: ":",
+          }
+        ],
+      },
+      {
+        name: "required_document_status",
+        pattern: "required_document_status:value",
+        description: "Selected document must be in status.",
+        applicableIn: "textfield|select...",
+        indicators: [
+          {
+            label: "Must be in:",
+            options: [
+              {value: "DRAFT", text: "DRAFT"},
+              {value: "PENDING_CHANGE", text: "PENDING CHANGE"},
+              {value: "IN_REVIEW", text: " IN REVIEW"},
+              {value: "RELEASED", text: "RELEASED"}
+            ],
+            type: "select",
+            validatorDelimiter: ":",
+          }
+        ],
       },
       {
         name: "required_document_type",
         pattern: "required_document_type:anotherfield, value",
-        description: "Selected document must be of value.",
+        description: "Selected document must be of selected type.",
         applicableIn: "textfield|select...",
-        indicators: [],
+        indicators: [
+          {
+            optionId: "4",
+            multiple: false,
+            label: "Must be of type:",
+            type: "autocomplete",
+            validatorDelimiter: ":",
+          }
+        ],
       },
     ];
   }
