@@ -1,12 +1,12 @@
 import _, { Dictionary } from "lodash";
 import React from "react";
 import FBButton from "../../components/inputs/FBButton";
+import { FBFieldComponent } from "../../defaults/editor";
 import FBActionStore from "../../stores/ui/FBActionStore";
 import FBStore from "../../stores/ui/FBStore";
+import FBValidatorStore from "../../stores/ui/FBValidatorStore";
 import { FBActionProps } from "../../types/actions/action";
 import { withFormik } from "../common/withFormik";
-import { FBFieldComponent } from "../../defaults/editor";
-import FBValidatorStore from "../../stores/ui/FBValidatorStore";
 
 export const withAction = <T extends FBActionProps>(
   Component: React.FunctionComponent<T>,
@@ -24,8 +24,8 @@ export const withAction = <T extends FBActionProps>(
       const attributes: Dictionary<string> = {};
 
       _.map(action.indicators, (indicator) => {
-        rules[indicator.name || ''] = indicator.rules || "";
-        attributes[indicator.name || ''] = indicator.label as string || indicator.placeholder || indicator.name || "";
+        rules[indicator.name || ""] = indicator.rules || "";
+        attributes[indicator.name || ""] = indicator.label as string || indicator.placeholder || indicator.name || "";
       });
 
       const errors = FBValidatorStore.validate(values, rules, attributes);

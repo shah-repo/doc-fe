@@ -6,7 +6,7 @@ import { FBWorkspaceProps } from "../types/workspace";
 export const withWorkspace = <T extends FBWorkspaceProps>(
   Component: React.FunctionComponent<T>,
 ) => {
-  return observer((props: T) => {
+  const component = (props: T) => {
     if (props.mode) {
       FBStore.setMode(props.mode);
     }
@@ -20,5 +20,7 @@ export const withWorkspace = <T extends FBWorkspaceProps>(
       schema,
       values,
     });
-  });
+  };
+
+  return observer((props: T) => component(props));
 };

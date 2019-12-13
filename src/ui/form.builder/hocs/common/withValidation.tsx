@@ -1,7 +1,7 @@
-import React from "react";
-import { FBInputProps } from "../../types/common";
 import _ from "lodash";
+import React from "react";
 import FBValidatorStore from "../../stores/ui/FBValidatorStore";
+import { FBInputProps } from "../../types/common";
 
 export const withValidation = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>,

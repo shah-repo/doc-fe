@@ -1,9 +1,9 @@
 import _ , { Dictionary } from "lodash";
 import { action, computed, observable } from "mobx";
+import Validator from "validatorjs";
 import { SelectOption } from "../../../components/forms/fields/Select";
 import { FBValidatorTrigger } from "../../types/validation/validator";
 import FBStore from "./FBStore";
-import Validator from "validatorjs";
 
 export class FormBuilderValidatorStore {
   @observable public errors: Dictionary<string> = {};
@@ -103,7 +103,7 @@ export class FormBuilderValidatorStore {
     rules: Dictionary<any>,
     attributes?: Validator.AttributeNames,
   ): Validator.ValidationErrors => {
-    const flatten = require('flat');
+    const flatten = require("flat");
     Validator.register(
       "", () => {
         return true;

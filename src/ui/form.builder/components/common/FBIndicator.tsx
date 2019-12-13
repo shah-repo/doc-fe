@@ -1,11 +1,9 @@
 import React from "react";
+import { withIndicator } from "../../hocs/common/withIndicator";
 import { FBInputProps } from "../../types/common";
 import FBInput from "./FBInput";
-import { withIndicator } from "../../hocs/common/withIndicator";
 
-const FBIndicator: React.FunctionComponent<FBInputProps> = ({
-  ...props
-}) => (
+const FBIndicator: React.FunctionComponent<FBInputProps> = ({ ...props }) => (
   <FBInput {...props} />
 );
 
