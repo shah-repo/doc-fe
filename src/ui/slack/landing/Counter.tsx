@@ -1,3 +1,4 @@
+import { Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import Text from "../../components/Text";
 import useInterval from "../../hooks/useInterval";
@@ -22,9 +23,12 @@ export const SlackLandingCounter: React.FunctionComponent<Props> = ({
   }, 1000);
 
   return (
-    <div>
-      <Text translation="common.redirected.in" values={{ time: timerValue }} />
-    </div>
+    <Typography variant="h6">
+      <Text
+        translation="common.redirecting.to.enlil"
+        values={{ time: timerValue, name: <b>Enlil</b> }}
+      />
+    </Typography>
   );
 };
 

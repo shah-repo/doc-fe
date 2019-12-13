@@ -26,7 +26,7 @@ export const SlackLandingContainer: React.FunctionComponent<Props> = ({
       setTimeout(() => setSuccessMessage("slack.resgistration.completed"), 1000);
     },
     onError: () => {
-      setTimeout(() => setErrorMessage("slack.resgistration.failed"), 1000);
+      setTimeout(() => setSuccessMessage("slack.resgistration.failed"), 1000);
     },
   });
 
