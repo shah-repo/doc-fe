@@ -26,7 +26,7 @@ export const SlackLandingContainer: React.FunctionComponent<Props> = ({
       setTimeout(() => setSuccessMessage("slack.resgistration.completed"), 1000);
     },
     onError: () => {
-      setTimeout(() => setSuccessMessage("slack.resgistration.failed"), 1000);
+      setTimeout(() => setErrorMessage("slack.resgistration.failed"), 1000);
     },
   });
 
@@ -35,8 +35,7 @@ export const SlackLandingContainer: React.FunctionComponent<Props> = ({
   }, []);
 
   const onCounterFinish = () => {
-    // history.push(HOME_URL);
-    console.log(HOME_URL);
+    history.push(HOME_URL);
   };
   const goToDashboard = () => {
     history.push(HOME_URL);

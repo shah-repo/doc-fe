@@ -29,7 +29,7 @@ export const SlackLandingError: React.FunctionComponent<Props> = ({
         <Typography variant="h6">
           <Text translation="common.error.occured" />
         </Typography>
-        &nbsp;&nbsp;
+        &nbsp;
         <Link
           component="button"
           underline="none"
@@ -45,7 +45,7 @@ export const SlackLandingError: React.FunctionComponent<Props> = ({
         color="primary"
         onClick={goToDashboard}
       >
-        <Text translation="common.go.to.dashboard" />
+        <Text translation="common.go.to.enlil" />
       </Button>
     </Box>
   );

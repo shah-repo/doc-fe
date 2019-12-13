@@ -9,12 +9,14 @@ export const SlackLandingProgress: React.FunctionComponent = ({
 
   return (
     <Box className={classes.alignCenter}>
-      <Box marginBottom="30px">
+      <Box>
         <Typography variant="h6">
           <Text translation="slack.finalising.registration" />
         </Typography>
       </Box>
-      <CircularProgress thickness={1.5} size={60} />
+      <Box margin="30px 0">
+        <CircularProgress thickness={1.5} size={60} />
+      </Box>
     </Box>
   );
 };
