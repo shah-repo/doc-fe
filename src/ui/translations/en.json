@@ -245,7 +245,7 @@
   "common.error.occured": "An error occured.",
   "common.click.to.try.again": "Click here to try again",
   "common.go.to.enlil": "Go to Enlil",
-
+  "common.deactivate": "Deactivate",
   "output.info": "Form Info",
 
   "dashboard.type.PENDING_REVIEW": "is pending your approval",
@@ -385,9 +385,7 @@
 
   "user.management.profile": "User Profile",
   "user.management.last.training": "Last Training",
-  "user.management.groups": "Groups",
   "user.management.add.groups": "Add to other groups",
-  "user.management.deactivate": "Deactivate",
   "user.management.add.employee": "Add Employee",
   "user.management.update.profile": "Update profile",
 

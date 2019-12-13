@@ -89,7 +89,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
                 color="primary"
                 style={{margin: "48px 0 0 0"}}
             >
-                <Text translation="user.management.deactivate" />
+                <Text translation="common.deactivate" />
             </Button>
         </Box>
     ); */

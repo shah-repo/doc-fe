@@ -81,7 +81,7 @@ export const UserGroups: React.FunctionComponent<Props> = ({
   const groupsRenderer = () => (
     <Box>
       <SummaryField
-        label="user.management.groups"
+        label="common.groups"
         value={handleGroups(employeeGroups)}
       />
       {canManageUsers && addGroupsRenderer()}
@@ -91,7 +91,7 @@ export const UserGroups: React.FunctionComponent<Props> = ({
   const editGroupsRenderer = () => (
     <Box>
       <Typography variant="h6" style={{ marginBottom: "16px" }}>
-        <Text message={"user.management.groups"} />
+        <Text message={"common.groups"} />
       </Typography>
       <Select
         id="groups"
