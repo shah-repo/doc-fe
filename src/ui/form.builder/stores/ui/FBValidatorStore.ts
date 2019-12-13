@@ -3,6 +3,7 @@ import { action, computed, observable } from "mobx";
 import { SelectOption } from "../../../components/forms/fields/Select";
 import { FBValidatorTrigger } from "../../types/validation/validator";
 import FBStore from "./FBStore";
+import Validator from "validatorjs";
 
 export class FormBuilderValidatorStore {
   @observable public errors: Dictionary<string> = {};
@@ -95,6 +96,33 @@ export class FormBuilderValidatorStore {
   @action public triggers = (): SelectOption[] => {
     return _.map(FBValidatorTrigger, (k, v) =>
       ({ value: `applicableOn-${v}`, text: k } as SelectOption));
+  }
+
+  @action public validate = (
+    data: any,
+    rules: Dictionary<any>,
+    attributes?: Validator.AttributeNames,
+  ): Validator.ValidationErrors => {
+    const flatten = require('flat');
+    Validator.register(
+      "", () => {
+        return true;
+      }, "",
+    );
+
+    const validator = new Validator(
+      flatten(data),
+      rules,
+    );
+
+    if (!_.isUndefined(attributes)) {
+      validator.setAttributeNames(attributes);
+    }
+
+    if (validator.fails()) {
+      return validator.errors.all();
+    }
+    return {};
   }
 }
 

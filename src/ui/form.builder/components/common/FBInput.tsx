@@ -12,7 +12,7 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
 }) => (
   <Box mb={4}>
     {label && <FBLabel {...{ error, label, labelValues }} />}
-    <FBInputControl {...props} />
+    <FBInputControl {...props} {...{label}} />
   </Box>
 );
 

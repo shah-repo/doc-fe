@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { Collection } from "mobx-rest";
-// import actionData from "../../../../../data/fbActions.json";
+import actionData from "../../../../../data/fbActions.json";
 import { FBValidatorIndicatorProps } from "../../../types/validation/validator";
 import { FBActionModel } from "../models/FBActionModel";
 

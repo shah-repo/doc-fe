@@ -1,34 +1,41 @@
-import _ from "lodash";
+import _, { Dictionary } from "lodash";
 import React from "react";
 import FBButton from "../../components/inputs/FBButton";
-import { FBFieldComponent } from "../../defaults/editor";
 import FBActionStore from "../../stores/ui/FBActionStore";
 import FBStore from "../../stores/ui/FBStore";
 import { FBActionProps } from "../../types/actions/action";
 import { withFormik } from "../common/withFormik";
+import { FBFieldComponent } from "../../defaults/editor";
+import FBValidatorStore from "../../stores/ui/FBValidatorStore";
 
 export const withAction = <T extends FBActionProps>(
   Component: React.FunctionComponent<T>,
 ) => {
-  const component = ({
+  const Comp = ({
     action,
     form,
+    field,
     ...props
   }: T) => {
 
     const onClick = () => {
-      const values = FBActionStore.values[action.name || ""];
-      let isValid = true;
+      const values = _.get(form, `values.${action.name || ""}`);
+      const rules: Dictionary<string> = {};
+      const attributes: Dictionary<string> = {};
+
       _.map(action.indicators, (indicator) => {
-        const valueByName = _.get(values, indicator.name || "");
-        if (_.isUndefined(valueByName) && !indicator.requiredDocId) {
-          form && form.setFieldError(`${action.name}.${indicator.name || ""}`, "Field is required");
-          isValid = false;
-        }
+        rules[indicator.name || ''] = indicator.rules || "";
+        attributes[indicator.name || ''] = indicator.label as string || indicator.placeholder || indicator.name || "";
       });
 
-      if (isValid) {
+      const errors = FBValidatorStore.validate(values, rules, attributes);
+
+      if (_.isEmpty(errors)) {
         FBActionStore.apiCall(action);
+      } else {
+        _.map(errors, (v, k) => {
+          form && form.setFieldError(`${action.name}.${k}`, v.join("\n"));
+        });
       }
     };
 
@@ -49,6 +56,7 @@ export const withAction = <T extends FBActionProps>(
           {...indicator}
           name={`${action.name}.${indicator.name}`}
           afterChange={afterChange}
+          rules=""
         />
       );
     });
@@ -68,5 +76,5 @@ export const withAction = <T extends FBActionProps>(
     });
   };
 
-  return withFormik((props: T) => component(props));
+  return withFormik((props: T) => Comp(props));
 };
