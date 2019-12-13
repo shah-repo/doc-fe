@@ -1,0 +1,19 @@
+.customRows {
+    margin-top: 40px;
+    overflow-y: scroll;
+    height: 500px;
+}
+
+.customRows::-webkit-scrollbar {
+  width: 10px;
+}
+
+.customRows::-webkit-scrollbar-track {
+  background : #e8e9ed;
+  border-radius: 12px;
+}
+
+.customRows::-webkit-scrollbar-thumb {
+  background : #cccccc;
+  border-radius: 10px;
+} 

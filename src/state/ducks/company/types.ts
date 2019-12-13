@@ -12,6 +12,7 @@ export interface WhiteLabelingColors {
 
 export interface WhiteLabeling {
   logo: string;
+  avatar: string;
   colors: WhiteLabelingColors;
 }
 
