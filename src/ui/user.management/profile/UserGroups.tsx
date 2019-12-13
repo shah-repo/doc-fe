@@ -1,8 +1,9 @@
 import { Box, Button, Icon, Typography } from "@material-ui/core";
 import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
 import React, { useState } from "react";
-import { connect, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
+import { Nullable } from "../../../state/ducks/common";
 import {
   GetEmployeeResponse,
   userManagementActions,
@@ -21,20 +22,17 @@ interface OwnProps {
   callbackUpdateGroups?: (values: GetEmployeeResponse) => void;
 }
 
-interface DispatchProps {
-  editEmployeeGroups: typeof userManagementActions.editEmployeeGroups;
-}
-type Props = OwnProps & DispatchProps;
+type Props = OwnProps;
 
 export const UserGroups: React.FunctionComponent<Props> = ({
   canManageUsers,
   employeeGroups,
-  editEmployeeGroups,
   callbackUpdateGroups,
   employeeId,
 }) => {
-  let groups: OptionType[] | null = employeeGroups;
+  const dispatch = useDispatch();
 
+  let groups: Nullable<OptionType[]> = employeeGroups;
   const [showEditGroups, setEditGroups] = useState(false);
   const openEditGroups = () => setEditGroups(true);
   const closeEditGroups = () => setEditGroups(false);
@@ -49,12 +47,13 @@ export const UserGroups: React.FunctionComponent<Props> = ({
     },
   });
 
-  const onSubmit = (employeeId: string, values: OptionType[] | null) => {
-    async.start(
-        editEmployeeGroups,
+  const onSubmit = (employeeId: string, values: Nullable<OptionType[]>) => {
+    dispatch(
+      userManagementActions.editEmployeeGroups(
         employeeId,
         toEmployeeGroupsEditRequestBody(values),
-      async,
+        async,
+      ),
     );
   };
 
@@ -62,14 +61,14 @@ export const UserGroups: React.FunctionComponent<Props> = ({
     return groups.map((group) => group.label).join(", ");
   };
 
-  const onChange = (state: any) => groups = state;
+  const onChange = (state: any) => (groups = state);
 
   const addGroupsRenderer = () => (
     <Button
       variant="text"
       color="primary"
       onClick={openEditGroups}
-      style={{ width: "auto", margin: "19px 0 0 0", padding: "0"}}
+      style={{ width: "auto", margin: "19px 0 0 0", padding: "0" }}
     >
       <Icon style={{ marginRight: "10px" }}>
         <AddCircleOutlineOutlinedIcon />
@@ -102,16 +101,24 @@ export const UserGroups: React.FunctionComponent<Props> = ({
         defaultValue={employeeGroups}
       />
       <Button
-        style={{ width: "auto", marginLeft: "0", color: "white", backgroundColor: "#6E09EA"}}
+        style={{
+          width: "auto",
+          marginLeft: "0",
+          color: "white",
+          backgroundColor: "#6E09EA",
+        }}
         variant="contained"
         color="primary"
-        onClick={() => {onSubmit(employeeId, groups); closeEditGroups(); }}
+        onClick={() => {
+          onSubmit(employeeId, groups);
+          closeEditGroups();
+        }}
       >
         <Text translation="common.done" />
       </Button>
       <Button
         variant="outlined"
-        style={{width: "auto", color: "#6E09EA", borderColor: "#6E09EA"}}
+        style={{ width: "auto", color: "#6E09EA", borderColor: "#6E09EA" }}
         onClick={closeEditGroups}
       >
         <Text translation="common.cancel" />
@@ -126,6 +133,4 @@ export const UserGroups: React.FunctionComponent<Props> = ({
   );
 };
 
-export default connect<{}, DispatchProps, OwnProps, {}>(null, {
-  editEmployeeGroups: userManagementActions.editEmployeeGroups,
-})(UserGroups);
+export default UserGroups;

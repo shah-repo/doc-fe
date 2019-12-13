@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { connect, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getHasTag } from "../../../common/utils/selectors";
 import { authActions, authSelectors } from "../../../state/ducks/auth";
 import {
@@ -18,17 +18,15 @@ interface OwnProps {
   showUserProfile: boolean;
 }
 
-interface DispatchProps {
-  editCurrentEmployee: typeof authActions.editCurrentEmployee;
-}
-
-export type Props = OwnProps & DispatchProps;
+export type Props = OwnProps;
 
 export const UserProfileContainer: React.FunctionComponent<Props> = ({
   closeUserProfile,
   showUserProfile,
-  editCurrentEmployee,
 }) => {
+  const async = useAsync();
+  const dispatch = useDispatch();
+
   const canManageUsers = useSelector(getHasTag(GroupTag.USER_MANAGEMENT));
   const name = useSelector(authSelectors.currentUserName);
   const avatar = useSelector(authSelectors.currentEmployeeAvatar);
@@ -57,10 +55,7 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
     loadGroupsMe();
   }, []);
 
-  const async = useAsync();
-  const onSubmit = (values: EmployeeEditRequestBody) => {
-    async.start(editCurrentEmployee, values, async);
-  };
+  const onSubmit = (values: EmployeeEditRequestBody) => dispatch(authActions.editCurrentEmployee(values, async));
 
   return (
     <UserProfilePresenter
@@ -79,9 +74,4 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
   );
 };
 
-export default connect<{}, DispatchProps, OwnProps, {}>(
-  null,
-  {
-    editCurrentEmployee: authActions.editCurrentEmployee,
-  },
-)(UserProfileContainer);
+export default UserProfileContainer;
