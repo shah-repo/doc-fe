@@ -23,18 +23,14 @@ export const SlackLandingContainer: React.FunctionComponent<Props> = ({
   const [errorMessage, setErrorMessage] = useState("");
   const async = useAsync({
     onSuccess: () => {
-      setSuccessMessage("slack.resgistration.successful");
+      setTimeout(() => setSuccessMessage("slack.resgistration.completed"), 1000);
     },
-    onError: (message) => {
-      setErrorMessage(message!);
+    onError: () => {
+      setTimeout(() => setErrorMessage("slack.resgistration.failed"), 1000);
     },
   });
 
   useEffect(() => {
-    if (!code) {
-      setErrorMessage("slack.missing.code");
-      return;
-    }
     async.start(postSlackCodeAction, URL, { code }, async);
   }, []);
 
@@ -42,13 +38,22 @@ export const SlackLandingContainer: React.FunctionComponent<Props> = ({
     // history.push(HOME_URL);
     console.log(HOME_URL);
   };
+  const goToDashboard = () => {
+    history.push(HOME_URL);
+  };
+  const retry = () => {
+    setSuccessMessage("");
+    setErrorMessage("");
+    async.start(postSlackCodeAction, URL, { code }, async);
+  };
 
   return (
     <SlackLandingPresenter
-      asyncState={async.asyncState}
       successMessage={successMessage}
       errorMessage={errorMessage}
       onCounterFinish={onCounterFinish}
+      goToDashboard={goToDashboard}
+      retry={retry}
     />
   );
 };

@@ -244,6 +244,9 @@
   "common.active": "Active",
   "common.groups": "Groups",
   "common.redirected.in": "You will be redirected in {time}",
+  "common.error.occured": "An error occured.",
+  "common.click.to.try.again": "Click here to try again",
+  "common.go.to.dashboard": "Go to Dashboard",
 
   "output.info": "Form Info",
 
@@ -390,7 +393,7 @@
   "user.management.add.employee": "Add Employee",
   "user.management.update.profile": "Update profile",
 
-  "slack.finishing.registration": "Finishing Slack registration",
-  "slack.resgistration.successful": "Slack registration successful",
-  "slack.missing.code": "Slack code is missing"
+  "slack.finalising.registration": "Finalising Slack registration",
+  "slack.resgistration.completed": "Slack registration completed",
+  "slack.resgistration.failed": "Slack registration failed"
 }

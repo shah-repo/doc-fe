@@ -1,54 +1,59 @@
-import { Typography } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import React from "react";
+import { ReactComponent as SlackLogo } from "../../../assets/images/slack-full-logo.svg";
 import { logo } from "../../../common/utils/helpers";
-import { AsyncState } from "../../../state/types";
-import FormProgress from "../../components/forms/FormProgress";
-import Text from "../../components/Text";
-import SlackLandingCounter from "./Counter";
+import SlackLandingError from "./Error";
+import SlackLandingProgress from "./Progress";
 import { styles } from "./styles";
+import SlackLandingSuccess from "./Success";
 
 interface Props {
-  asyncState: AsyncState;
   successMessage: string;
   errorMessage: string;
   onCounterFinish: () => void;
+  goToDashboard: () => void;
+  retry: () => void;
 }
 
 export const SlackLandingPresenter: React.FunctionComponent<Props> = ({
-  asyncState,
   successMessage,
   errorMessage,
   onCounterFinish,
+  goToDashboard,
+  retry,
 }) => {
   const classes = styles();
   const renderSuccess = successMessage && (
-    <Typography variant="h4">
-      <Text message={successMessage} />
-    </Typography>
+    <SlackLandingSuccess successMessage={successMessage} onCounterFinish={onCounterFinish} />
   );
   const renderError = errorMessage && (
-    <Typography variant="h4" color="error">
-      <Text message={errorMessage} />
-    </Typography>
+    <SlackLandingError
+      errorMessage={errorMessage}
+      goToDashboard={goToDashboard}
+      retry={retry}
+    />
   );
-  const startCounter = (successMessage || errorMessage) && (
-    <SlackLandingCounter onCounterFinish={onCounterFinish} />
+  const renderProgress = (!successMessage && !errorMessage) && (
+    <SlackLandingProgress />
   );
 
   return (
-    <div className={classes.presenter}>
-      <img
-        src={logo}
-        alt="Logo"
-      />
-      <Typography variant="h4">
-        <Text translation="slack.finishing.registration" />
-      </Typography>
-      <FormProgress asyncState={asyncState} />
-      {renderSuccess}
-      {renderError}
-      {startCounter}
-    </div>
+    <Box className={classes.presenter}>
+      <Box marginTop="100px">
+        <img
+          src={logo}
+          alt="Logo"
+        />
+      </Box>
+      <Box marginTop="150px" className={classes.alignCenter}>
+        <Box marginBottom="20px">
+          <SlackLogo />
+        </Box>
+        {renderProgress}
+        {renderSuccess}
+        {renderError}
+      </Box>
+    </Box>
   );
 };
 

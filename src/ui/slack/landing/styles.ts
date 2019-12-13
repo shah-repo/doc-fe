@@ -11,10 +11,14 @@ export const styles = makeStyles((theme: Theme) =>
       zIndex: 9999,
       backgroundColor: theme.palette.common.white,
       alignItems: "center",
-      justifyContent: "center",
       display: "flex",
       flexDirection: "column",
       boxShadow: "none",
+    },
+    alignCenter: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
     },
   }),
 );

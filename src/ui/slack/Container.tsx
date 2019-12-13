@@ -12,10 +12,12 @@ export const SlackContainer: React.FunctionComponent<Props> = () => {
       <Route
         path={SLACK_COMPANY_URL}
         component={SlackLandingContainer}
+        exact={true}
       />
       <Route
         path={SLACK_USER_URL}
         component={SlackLandingContainer}
+        exact={true}
       />
     </Switch>
   );
