@@ -22,22 +22,24 @@ export const withValidator = <T extends FBValidatorProps>(
     };
 
     const indicatorAfterChange = (fieldName: string, value: any) => {
-      alert(`${fieldName}- ${value}`);
+      const propname = _.get(props, "name");
+      FBValidatorStore.indicatorValues[propname][":"] = value;
     };
 
     const indicatorElements = (): React.ReactNode[] | undefined => {
       return _.map(indicators, (
-        { type, ...props }: Partial<FBValidatorIndicatorProps>,
+        { type, ...indicatorProps }: Partial<FBValidatorIndicatorProps>,
         index,
       ) => {
-        const name = `${props}${index}`;
+        const name = `${props.name}${index}`;
         const InputType = FBFieldComponent[type || ""];
         return (
           <InputType
             key={`indicator-${index}-${type}`}
             name={name}
-            {...props}
+            {...indicatorProps}
             afterChange={indicatorAfterChange}
+            validatorFieldName={props.name}
           />
         );
       });

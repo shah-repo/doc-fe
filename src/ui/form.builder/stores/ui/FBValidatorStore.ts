@@ -30,21 +30,21 @@ export class FormBuilderValidatorStore {
 
   @action public getSchemaRules = (): Dictionary<string> => {
     const rules: Dictionary<string> = {};
-    // _.map(FBStore.getSchema(), (schemaItem) => {
-    //   if (schemaItem.rules && schemaItem.rules !== "" && _.isEmpty(schemaItem.applicableOn)) {
-    //     rules[schemaItem.name || ""] = schemaItem.rules;
-    //   }
-    // });
+    _.map(FBStore.getSchema(), (schemaItem) => {
+      if (schemaItem.rules && schemaItem.rules !== "" && _.isEmpty(schemaItem.applicableOn)) {
+        rules[schemaItem.name || ""] = schemaItem.rules;
+      }
+    });
     return rules;
   }
 
   @action public getSchemaReleasedRules = (): Dictionary<string> => {
     const rules: Dictionary<string> = {};
-    // _.map(FBStore.getSchema(), (schemaItem) => {
-    //   if (schemaItem.rules && schemaItem.rules !== "" && !_.isEmpty(schemaItem.applicableOn)) {
-    //     rules[schemaItem.name || ""] = schemaItem.rules;
-    //   }
-    // });
+    _.map(FBStore.getSchema(), (schemaItem) => {
+      if (schemaItem.rules && schemaItem.rules !== "" && !_.isEmpty(schemaItem.applicableOn)) {
+        rules[schemaItem.name || ""] = schemaItem.rules;
+      }
+    });
     return rules;
   }
 

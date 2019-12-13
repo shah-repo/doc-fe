@@ -1,4 +1,5 @@
 import { AxiosRequestConfig } from "axios";
+import _ from "lodash";
 import { Action, Dispatch, Middleware, MiddlewareAPI } from "redux";
 import apiClient from "../../apiClient";
 import apiXClient from "../../apiXClient";
@@ -73,7 +74,11 @@ const apiMiddleware: Middleware = ({
       const {
         data: { message },
       } = exception.response as AsyncActionErrorResponse;
-      responseMessage = Array.isArray(message) ? message.join("; ") : message;
+      if (_.isArray(message) && _.has(_.first(message), "message")) {
+        responseMessage = _.join(_.get(_.first(message), "message"), "\n");
+      } else {
+        responseMessage = Array.isArray(message) ? message.join("; ") : message;
+      }
     }
 
     const errorMessage: string = responseMessage || exception.message;
