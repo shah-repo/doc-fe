@@ -7,7 +7,10 @@ import {
   Group,
   GroupTag,
 } from "../../../state/ducks/auth/types";
+import { companySelectors } from "../../../state/ducks/company";
 import { userManagementActions } from "../../../state/ducks/userManagement";
+import { USER_SLACK_URL } from "../../../state/ducks/userManagement/constants";
+import { ApplicationState } from "../../../state/reducers";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -18,16 +21,23 @@ interface OwnProps {
   showUserProfile: boolean;
 }
 
-interface DispatchProps {
-  editCurrentEmployee: typeof authActions.editCurrentEmployee;
+interface StateProps {
+  isSlackIntegrationEnabled: boolean;
 }
 
-export type Props = OwnProps & DispatchProps;
+interface DispatchProps {
+  editCurrentEmployee: typeof authActions.editCurrentEmployee;
+  getSlackUrl: typeof userManagementActions.getSlackUrl;
+}
+
+export type Props = OwnProps & DispatchProps & StateProps;
 
 export const UserProfileContainer: React.FunctionComponent<Props> = ({
   closeUserProfile,
   showUserProfile,
   editCurrentEmployee,
+  getSlackUrl,
+  isSlackIntegrationEnabled,
 }) => {
   const canManageUsers = useSelector(getHasTag(GroupTag.USER_MANAGEMENT));
   const name = useSelector(authSelectors.currentUserName);
@@ -62,6 +72,12 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
     async.start(editCurrentEmployee, values, async);
   };
 
+  const asyncSlack = useAsync();
+  const onAdd = () => {
+    //string linka ide iz tvog brancha, nije jos mergan u ovaj
+    asyncSlack.start(getSlackUrl, "https://dev.enlil.io/slack/user", USER_SLACK_URL,  asyncSlack);
+  };
+
   return (
     <UserProfilePresenter
       isOpen={showUserProfile}
@@ -75,13 +91,21 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
       showEditUser={showEditUser}
       showEdit={showEdit}
       closeEdit={closeEdit}
+      asyncState={asyncSlack.asyncState}
+      getUrl={onAdd}
+      slackIntegrationEnabled={isSlackIntegrationEnabled}
     />
   );
 };
 
-export default connect<{}, DispatchProps, OwnProps, {}>(
-  null,
+const mapStateToProps = (state: ApplicationState): StateProps => ({
+  isSlackIntegrationEnabled: companySelectors.isSlackIntegrationEnabled(state),
+});
+
+export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
+  mapStateToProps,
   {
     editCurrentEmployee: authActions.editCurrentEmployee,
+    getSlackUrl: userManagementActions.getSlackUrl,
   },
 )(UserProfileContainer);

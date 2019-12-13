@@ -6,6 +6,7 @@ import {
   ADD_EMPLOYEE_POST_ASYNC,
   COMPANY_GROUPS_GET_ASYNC,
   COMPANY_GROUPS_LIST,
+  COMPANY_SLACK_URL,
   EMPLOYEE_GET_ASYNC,
   EMPLOYEES_URL,
   GROUPS_ME_GET_ASYNC,
@@ -16,13 +17,19 @@ import {
   AddEmployeeRequest,
   CompanyGroupsListAction,
   EmployeeGroupsEditRequestBody,
+  GetCompanyUrlAction,
   GetEmployeeResponse,
+  GetSlackUrl,
   LoadCompanyGroups,
 } from "./types";
 
 const companyGroupsList = (groups: LoadCompanyGroups): CompanyGroupsListAction => ({
   type: COMPANY_GROUPS_LIST,
   payload: groups,
+});
+
+const getCompanyUrl = (): GetCompanyUrlAction => ({
+  type: COMPANY_SLACK_URL,
 });
 
 const loadCompanyGroups = (): ApiAction<LoadCompanyGroups> =>
@@ -72,10 +79,22 @@ const editEmployeeGroups = (employeeId: string, body: EmployeeGroupsEditRequestB
     handlers,
   });
 
+const getSlackUrl = (redirectUriEnv: string, url: string, handlers: Handlers):
+  ApiAction<GetSlackUrl> => apiActionWithCallbacks({
+    url: `${url}`,
+    method: "get",
+    data: redirectUriEnv,
+    onSuccess: (m, dispatch) => {
+      dispatch(getCompanyUrl());
+    },
+    handlers,
+  });
+
 export default {
   loadCompanyGroups,
   loadGroupsMe,
   editEmployeeGroups,
   addEmployee,
   getEmployee,
+  getSlackUrl,
 };

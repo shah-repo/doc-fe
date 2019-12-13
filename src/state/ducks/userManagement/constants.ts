@@ -7,3 +7,6 @@ export const EMPLOYEE_GET_ASYNC = "userManagement/EMPLOYEE_GET_ASYNC";
 export const EMPLOYEES_URL = "/employees";
 export const GROUPS_URL = "/groups";
 export const GROUPS_ME_URL = "groups/me";
+
+export const COMPANY_SLACK_URL = "/slack/company_oauth_url";
+export const USER_SLACK_URL = "/slack/user_oauth_url";

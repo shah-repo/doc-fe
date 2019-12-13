@@ -23,6 +23,7 @@ export interface Employee {
 }
 
 export interface Company {
+  slackIntegrationEnabled: boolean;
   id: string;
   name: string;
   maxRevisionStages: number;
