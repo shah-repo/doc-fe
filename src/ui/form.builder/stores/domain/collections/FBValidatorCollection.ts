@@ -1,7 +1,7 @@
+
 import { Collection } from "mobx-rest";
 import { SelectOption } from "../../../../components/forms/fields/Select";
 import { FBValidatorModel } from "../models/FBValidatorModel";
-import _ from "lodash";
 
 export class FBValidatorCollection extends Collection<FBValidatorModel> {
   public data(): Array<Partial<FBValidatorModel>> {
@@ -38,7 +38,7 @@ export class FBValidatorCollection extends Collection<FBValidatorModel> {
             label: "Required with field value:",
             type: "schemaSelect",
             validatorDelimiter: ":",
-          }
+          },
         ],
       },
       {
@@ -53,11 +53,11 @@ export class FBValidatorCollection extends Collection<FBValidatorModel> {
               {value: "DRAFT", text: "DRAFT"},
               {value: "PENDING_CHANGE", text: "PENDING CHANGE"},
               {value: "IN_REVIEW", text: " IN REVIEW"},
-              {value: "RELEASED", text: "RELEASED"}
+              {value: "RELEASED", text: "RELEASED"},
             ],
             type: "select",
             validatorDelimiter: ":",
-          }
+          },
         ],
       },
       {
@@ -72,7 +72,7 @@ export class FBValidatorCollection extends Collection<FBValidatorModel> {
             label: "Must be of type:",
             type: "autocomplete",
             validatorDelimiter: ":",
-          }
+          },
         ],
       },
     ];

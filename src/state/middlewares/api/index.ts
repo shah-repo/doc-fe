@@ -1,11 +1,11 @@
 import { AxiosRequestConfig } from "axios";
+import _ from "lodash";
 import { Action, Dispatch, Middleware, MiddlewareAPI } from "redux";
 import apiClient from "../../apiClient";
 import apiXClient from "../../apiXClient";
 import { ApplicationState } from "../../reducers";
 import { ApiAction, AsyncAction, AsyncStatus } from "../../types";
 import { AsyncActionErrorResponse } from "./types";
-import _ from "lodash";
 
 export const CALL_API = "middlewares/CALL_API";
 

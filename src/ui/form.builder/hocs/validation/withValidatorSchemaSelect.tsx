@@ -14,9 +14,9 @@ export const withValidatorSchemaSelect = <
       const [SchemaInputType, setSchemaItem] = React.useState<
         React.ReactNode | undefined
       >(undefined);
-      
+
       const afterChange = (fieldName: string, value: any) => {
-       
+
         const schemaItemProps = FBStore.getSchemaItemByName(value || "");
         const { type } = schemaItemProps || {};
         if (type && props.hasSchemaItem) {
