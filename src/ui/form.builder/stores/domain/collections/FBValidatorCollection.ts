@@ -1,8 +1,7 @@
-
 import { Collection } from "mobx-rest";
+import validatorData from "../../../../../data/fbValidators.json";
 import { SelectOption } from "../../../../components/forms/fields/Select";
 import { FBValidatorModel } from "../models/FBValidatorModel";
-import validatorData from "../../../../../data/fbValidators.json";
 
 export class FBValidatorCollection extends Collection<FBValidatorModel> {
   public data(): Array<Partial<FBValidatorModel>> {
