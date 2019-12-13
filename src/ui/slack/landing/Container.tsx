@@ -1,6 +1,7 @@
 import { parse } from "query-string";
 import React, { useEffect, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
+import Config from "../../../config";
 import { slackActions } from "../../../state/ducks/slack";
 import { SLACK_COMPANY_OAUTH_URL, SLACK_USER_OAUTH_URL } from "../../../state/ducks/slack/constants";
 import { HOME_URL, SLACK_COMPANY_URL } from "../../constants/urls";
@@ -14,6 +15,9 @@ export const SlackLandingContainer: React.FunctionComponent<Props> = ({
   location,
   history,
 }) => {
+  const redirectUriEnv = location.pathname === SLACK_COMPANY_URL ?
+    Config.SlackCompanyUri :
+    Config.SlackUserUri;
   const URL = location.pathname === SLACK_COMPANY_URL ?
     SLACK_COMPANY_OAUTH_URL :
     SLACK_USER_OAUTH_URL;
@@ -31,7 +35,7 @@ export const SlackLandingContainer: React.FunctionComponent<Props> = ({
   });
 
   useEffect(() => {
-    async.start(postSlackCodeAction, URL, { code }, async);
+    async.start(postSlackCodeAction, URL, { code, redirectUriEnv }, async);
   }, []);
 
   const onCounterFinish = () => {
