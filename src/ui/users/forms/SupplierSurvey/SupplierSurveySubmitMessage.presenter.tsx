@@ -15,7 +15,7 @@ const SupplierSurveySubmitMessage: React.FunctionComponent = () => {
         height="100%"
         position="absolute"
       >
-        <Text translation="supplier_survey_success_submit_message" />
+        <Text translation="suppliersurvey.submit.button" />
       </Box>
     );
   };

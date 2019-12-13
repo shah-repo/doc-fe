@@ -27,7 +27,11 @@ export const withInput = <T extends FBInputProps>(
 
     const elements = React.Children.toArray(children);
     value = _.get(form, `values.${name}`);
-    (value === undefined) && (value = defaultValue || _.get(FBFormValues, type));
+
+    if (_.isUndefined(value)) {
+      value = _.get(form, `values.formInput.${name}`) || defaultValue || _.get(FBFormValues, type);
+    }
+
     error = Boolean(_.get(form, `errors.${name}`));
     helperText = error && _.get(form, `errors.${name}`);
 
