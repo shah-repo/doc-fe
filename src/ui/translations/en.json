@@ -1,8 +1,6 @@
 {
   "translation.unknown": "",
 
-  "autoLogout.timer": "You will be logged out in {time} seconds",
-
   "login.title": "Sign in to Enlil",
   "login.email": "EMAIL ADDRESS",
   "login.password": "PASSWORD",

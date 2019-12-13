@@ -24,18 +24,18 @@ import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisio
 import SlackContainer from "../slack/Container";
 import TrainingDetailContainer from "../training/TrainingDetail.container";
 import UserManagementListContainer from "../user.management/list/container";
-import AutoLogout from "./AutoLogout";
 import DataFetcherContainer from "./DataFetcher.container";
 import HeaderContainer from "./Header.container";
 import styles from "./Layout.styles";
 import Navigation from "./Navigation";
+import PingServer from "./PingServer";
 
 type Props = WithStyles<typeof styles>;
 
 const Layout: React.FunctionComponent<Props> = ({ classes }) => {
   return (
     <div>
-      <AutoLogout />
+      <PingServer />
       <CssBaseline />
       <HeaderContainer />
       <Navigation />
