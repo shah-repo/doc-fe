@@ -243,6 +243,10 @@
   "common.email": "Email",
   "common.active": "Active",
   "common.groups": "Groups",
+  "common.redirecting.to.enlil": "Redirecting to {name} in {time} seconds...",
+  "common.error.occured": "An error occured.",
+  "common.click.to.try.again": "Click here to try again",
+  "common.go.to.enlil": "Go to Enlil",
 
   "output.info": "Form Info",
 
@@ -388,5 +392,8 @@
   "user.management.deactivate": "Deactivate",
   "user.management.add.employee": "Add Employee",
   "user.management.update.profile": "Update profile",
-  "user.management.add.employee": "Add Employee"
+
+  "slack.finalising.registration": "Finalising Slack registration",
+  "slack.resgistration.completed": "Slack registration completed",
+  "slack.resgistration.failed": "Slack registration failed"
 }
