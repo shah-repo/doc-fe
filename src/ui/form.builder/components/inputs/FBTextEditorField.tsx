@@ -18,7 +18,7 @@ const FBTextEditorField: React.FunctionComponent<FBInputProps> = ({
       formats={formats}
       onChange={props.onChange}
       readOnly={disabled}
-      style={{ minHeight: 220 }}
+      // style={{ minHeight: 220 }}
       id={`field-${name}`}
     />
   </FBInput>
