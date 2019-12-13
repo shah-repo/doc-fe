@@ -18,7 +18,7 @@ const FBCheckbox: React.FunctionComponent<FBInputProps> = ({
         <Checkbox
           {...{disabled}}
           value={props.name}
-          checked={defaultValue as boolean}
+          checked={defaultValue as boolean || props.value as boolean}
         />
       )}
     />

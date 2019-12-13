@@ -73,6 +73,8 @@ export type FBInputProps =
     linkUrl?: string;
     onChange?: (e: any, value: any) => void;
     afterChange?: (fieldName: string, value: any, values: Dictionary<any>) => void;
+    rules?: string;
+    applicable?: boolean;
   };
 
 export type FBFormDefaultProps =

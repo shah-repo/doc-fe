@@ -11,17 +11,20 @@
             "label": "Document id",
             "name": "documentRevision.id",
             "disabled": true,
-            "requiredDocId": true
+            "requiredDocId": true,
+            "rules": "required"
          },
           {
              "type":"textfield",
              "label":"Email",
-             "name":"email"
+             "name":"email",
+             "rules": "required"
           },
           {
              "type":"textfield",
              "label":"Name",
-             "name":"name"
+             "name":"name",
+             "rules": "required"
           }
        ]
     }

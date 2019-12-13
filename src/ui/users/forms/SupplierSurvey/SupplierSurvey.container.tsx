@@ -72,7 +72,8 @@ export const SupplierSurveyContainer: React.FunctionComponent<
   };
 
   const schema =
-  _.get(supplierSurvey, "surveyFormDocumentRevision.formTemplate.schema", []);
+  _.get(supplierSurvey, "surveyFormDocumentRevision.formTemplate.schema") ||
+  _.get(supplierSurvey, "surveyFormDocumentRevision.formDocument.formTemplate.schema", []);
   FBStore.setFormSchema(schema);
 
   return (
