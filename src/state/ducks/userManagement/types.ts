@@ -27,11 +27,7 @@ export interface LoadCompanyGroup {
 }
 
 export interface EmployeeGroupsEditRequestBody {
-  groups: GroupsId[];
-}
-
-interface GroupsId {
-  id: string;
+  groups: Id[];
 }
 
 export interface LoadCompanyGroups extends Array<LoadCompanyGroup> {}

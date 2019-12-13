@@ -8,7 +8,7 @@ import {
   SET_EMPLOYEE,
   SIGNUP_URL,
   USER_GROUPS,
-  USERS_ME,
+  USERS_ME_URL,
 } from "./constants";
 
 export interface LoginRequestBody {
@@ -91,7 +91,7 @@ export interface LogoutUserAction {
 }
 
 export interface EditUserMeAction {
-  type: typeof USERS_ME;
+  type: typeof USERS_ME_URL;
   payload: User;
 }
 

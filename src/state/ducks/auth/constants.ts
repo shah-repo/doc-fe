@@ -17,4 +17,4 @@ export const GROUPS_URL = "/groups/me";
 export const PING_SERVER_URL = "/auth/prevent_idle_logout";
 export const SESSION_DETAILS_URL = "/auth/sessionDetails";
 export const USERS_URL = "/users";
-export const USERS_ME = "/users/me";
+export const USERS_ME_URL = "/users/me";

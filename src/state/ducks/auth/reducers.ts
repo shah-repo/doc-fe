@@ -1,14 +1,14 @@
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
 import { EditUserInfoAction } from "../tableSearch";
-import { TABLE_SET_USER_INFO } from "../tableSearch/constants";
+import { EDIT_EMPLOYEE_USER_INFO } from "../tableSearch/constants";
 import {
   AUTH_USER,
   LOGOUT_USER,
   SET_EMPLOYEE,
   USER_GROUPS,
   USER_GROUPS_GET_ASYNC,
-  USERS_ME,
+  USERS_ME_URL,
 } from "./constants";
 import {
   AuthUserAction,
@@ -60,13 +60,13 @@ export const user = (
         ...state,
         employeeId: action.payload.id,
       };
-    case USERS_ME:
+    case USERS_ME_URL:
       return {
         ...state,
         name: action.payload.name,
         avatar: action.payload.avatar,
       };
-    case TABLE_SET_USER_INFO:
+    case EDIT_EMPLOYEE_USER_INFO:
       if (state.id === action.payload.id) {
         return {
           ...state,

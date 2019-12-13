@@ -5,7 +5,7 @@ import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApplicationState } from "../../reducers";
 import { ApiAction, Handlers } from "../../types";
 import { companyActions, Employee } from "../company";
-import { tableSearchActions } from "../tableSearch";
+import { userManagementActions } from "../userManagement";
 import {
   AUTH_AWS_IOT_URL,
   AUTH_USER,
@@ -22,7 +22,7 @@ import {
   SIGNUP_URL,
   USER_GROUPS,
   USER_GROUPS_GET_ASYNC,
-  USERS_ME,
+  USERS_ME_URL,
   USERS_URL,
 } from "./constants";
 import {
@@ -77,7 +77,7 @@ const userGroups = (groups: Group[]): UserGroupsAction => {
 
 const editUser = (user: User): EditUserMeAction => {
   return {
-    type: USERS_ME,
+    type: USERS_ME_URL,
     payload: user,
   };
 };
@@ -87,17 +87,11 @@ const editCurrentEmployee = (
   handlers: Handlers,
 ): ApiAction<Partial<AuthResponse>> =>
   apiActionWithCallbacks({
-    url: `${USERS_ME}`,
+    url: `${USERS_ME_URL}`,
     method: "patch",
     data: body,
     onSuccess: (user, dispatch) => {
-      dispatch(
-        editUser({
-          ...user,
-          name: user.name,
-          avatar: user.avatar,
-        }),
-      );
+      dispatch(editUser(user));
     },
     handlers,
   });
@@ -112,7 +106,7 @@ const editSelectedEmployee = (
     method: "patch",
     data: body,
     onSuccess: (user, dispatch) => {
-      dispatch(tableSearchActions.editEmployeeUserInfo(user));
+      dispatch(userManagementActions.editSelectedEmployeeUserInfo(user));
     },
     handlers,
   });
@@ -252,17 +246,17 @@ const loadUserGroups = (): ApiAction<Group[]> =>
     },
   });
 
-const getIotCreds = ():
-ApiAction => apiAction({
-  url: AUTH_AWS_IOT_URL,
-  method: "get",
-  includeAuthorization: true,
-  onSuccess: (credentials, dispatch) => {
-    const iotService = IotService.getInstance();
-    iotService.setMqttCreds(credentials);
-    iotService.mqttClient();
-  },
-});
+const getIotCreds = (): ApiAction =>
+  apiAction({
+    url: AUTH_AWS_IOT_URL,
+    method: "get",
+    includeAuthorization: true,
+    onSuccess: (credentials, dispatch) => {
+      const iotService = IotService.getInstance();
+      iotService.setMqttCreds(credentials);
+      iotService.mqttClient();
+    },
+  });
 
 const pingServer = (): ApiAction =>
   apiAction({

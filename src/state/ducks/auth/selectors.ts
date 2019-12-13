@@ -1,6 +1,7 @@
 import { createSelector } from "reselect";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
+import { Nullable } from "../common";
 import { GroupTag } from "./types";
 
 const isAuthenticated = (state: ApplicationState): boolean => {
@@ -18,7 +19,7 @@ const currentUserId = (state: ApplicationState): string => state.auth.user.id;
 const currentEmployeeId = (state: ApplicationState): string =>
   state.auth.user.employeeId;
 
-const currentEmployeeAvatar = (state: ApplicationState): string | null =>
+const currentEmployeeAvatar = (state: ApplicationState): Nullable<string> =>
   state.auth.user.avatar;
 
 const getLoadPermissionsAsyncState = (state: ApplicationState): AsyncState =>
