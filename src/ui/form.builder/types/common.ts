@@ -75,6 +75,7 @@ export type FBInputProps =
     afterChange?: (fieldName: string, value: any, values: Dictionary<any>) => void;
     rules?: string;
     applicable?: boolean;
+    checked?: boolean;
   };
 
 export type FBFormDefaultProps =

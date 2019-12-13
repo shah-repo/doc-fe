@@ -13,6 +13,10 @@ export const withWorkspace = <T extends FBWorkspaceProps>(
     const { schema, mode, values } = FBStore;
     const isStarter = (mode === "design" && schema.length === 0);
 
+    if (props.id) {
+      FBStore.docId = props.id;
+    }
+
     return Component({
       ...props,
       isStarter,

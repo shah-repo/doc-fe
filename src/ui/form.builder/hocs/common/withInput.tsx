@@ -29,7 +29,8 @@ export const withInput = <T extends FBInputProps>(
     value = _.get(form, `values.${name}`);
 
     if (_.isUndefined(value)) {
-      value = _.get(form, `values.formInput.${name}`) || defaultValue || _.get(FBFormValues, type);
+      // value = _.get(form, `values.formInput.${name}`) || defaultValue || _.get(FBFormValues, type);
+      value = defaultValue || _.get(FBFormValues, type);
     }
 
     error = Boolean(_.get(form, `errors.${name}`));
@@ -42,6 +43,7 @@ export const withInput = <T extends FBInputProps>(
           value,
           type,
           error,
+          checked: value,
           ..._.pick(props, ["disabled", "onChange", "afterChange"]),
         })
       );
