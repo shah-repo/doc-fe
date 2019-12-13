@@ -24,27 +24,30 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({employees}) => 
 
   const companies =
     employees.map((employee: Employee) => {
-    return (
-      <button
-        key={employee.company.id}
-        className={classes.companyButton}
-        onClick={handleClick(employee)}
-      >
-        <div className={classes.company}>
-          {employee.company.whiteLabeling.avatar && (
-            <img
-              src={employee.company.whiteLabeling.avatar}
-              alt="Avatar"
-              className={classes.avatar}
-            />
-          )}
-          {!employee.company.whiteLabeling.avatar && <CompanyAvatar />}
-          <div className={classes.companyName}>
-            {employee.company.name}
+      const { company } = employee;
+      const whiteLabeling = company.whiteLabeling || {};
+
+      return (
+        <button
+          key={company.id}
+          className={classes.companyButton}
+          onClick={handleClick(employee)}
+        >
+          <div className={classes.company}>
+            {whiteLabeling.avatar && (
+              <img
+                src={whiteLabeling.avatar}
+                alt="Avatar"
+                className={classes.avatar}
+              />
+            )}
+            {!whiteLabeling.avatar && <CompanyAvatar />}
+            <div className={classes.companyName}>
+              {company.name}
+            </div>
           </div>
-        </div>
-      </button>
-    );
+        </button>
+      );
     });
 
   return (
