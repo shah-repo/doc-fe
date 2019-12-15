@@ -57,6 +57,14 @@ class Config {
   public static get Theme() {
     return this.get("THEME");
   }
+
+  public static get SlackCompanyUri(): string {
+    return `${this.FrontendUrl}/slack/company`;
+  }
+
+  public static get SlackUserUri(): string {
+    return `${this.FrontendUrl}/slack/user`;
+  }
 }
 
 export default Config;
