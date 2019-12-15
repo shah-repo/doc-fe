@@ -9,6 +9,11 @@ const isSlackIntegrationEnabled = createSelector(
   (selectedCompany) => selectedCompany.slackIntegrationEnabled,
 );
 
+const slackTeamId = createSelector(
+  getSelectedCompany,
+  (selectedCompany) => selectedCompany.teamId,
+);
+
 const getWhiteLabeling = createSelector(
   getSelectedCompany,
   (selectedCompany) => selectedCompany.whiteLabeling || WHITE_LABEL_DEFAULT,
@@ -17,4 +22,5 @@ const getWhiteLabeling = createSelector(
 export default {
   getWhiteLabeling,
   isSlackIntegrationEnabled,
+  slackTeamId,
 };

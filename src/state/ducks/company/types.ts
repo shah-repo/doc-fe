@@ -30,6 +30,7 @@ export interface Company {
   users: User[];
   documentTypes: DocumentType[];
   whiteLabeling: WhiteLabeling;
+  teamId: string;
 }
 
 export interface SelectCompanyAction {

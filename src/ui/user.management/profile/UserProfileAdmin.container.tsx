@@ -25,6 +25,7 @@ interface DispatchProps {
 interface StateProps {
     isSlackIntegrationEnabled: boolean;
     slackUrl: string;
+    slackTeamId: string;
 }
 
 export type Props = OwnProps & DispatchProps & StateProps;
@@ -37,6 +38,7 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
     getSlackUrl,
     isSlackIntegrationEnabled,
     slackUrl,
+    slackTeamId,
 }) => {
     const [realUser, setRealUser] = useState<any>({ user: {}, groups: []});
     useEffect(() => {
@@ -113,6 +115,7 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
             asyncState={asyncSlack.asyncState}
             getUrl={onAdd}
             slackIntegrationEnabled={isSlackIntegrationEnabled}
+            slackTeamId={slackTeamId}
         />
     );
 };
@@ -120,6 +123,7 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
 const mapStateToProps = (state: ApplicationState): StateProps => ({
     isSlackIntegrationEnabled: companySelectors.isSlackIntegrationEnabled(state),
     slackUrl: userManagementSelectors.slackUrl(state),
+    slackTeamId: companySelectors.slackTeamId(state),
   });
 
 export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {

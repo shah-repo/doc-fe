@@ -29,6 +29,7 @@ interface OwnProps {
     asyncState: AsyncState;
     getUrl: () => void;
     slackIntegrationEnabled: boolean;
+    slackTeamId: string;
 }
 
 type Props = OwnProps;
@@ -49,6 +50,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
     asyncState,
     getUrl,
     slackIntegrationEnabled,
+    slackTeamId,
 }) => {
     const classes = styles();
     let userInfo: EmployeeEditRequestBody = {
@@ -149,7 +151,9 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
                 employeeId={employeeId}
                 callbackUpdateGroups={callbackUpdateGroups}
             />
-            {slackIntegrationEnabled && <div><Typography variant="h4" className={classes.integrations} >
+            {slackIntegrationEnabled && !slackTeamId &&
+            <div>
+            <Typography variant="h4" className={classes.integrations} >
                 <Text translation="integrations.title" />
             </Typography>
             <SlackLogo className={classes.slack} />

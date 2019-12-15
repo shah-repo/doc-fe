@@ -27,6 +27,7 @@ interface OwnProps {
 interface StateProps {
   isSlackIntegrationEnabled: boolean;
   slackUrl: string;
+  slackTeamId: string;
 }
 
 interface DispatchProps {
@@ -43,6 +44,7 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
   getSlackUrl,
   isSlackIntegrationEnabled,
   slackUrl,
+  slackTeamId,
 }) => {
   const canManageUsers = useSelector(getHasTag(GroupTag.USER_MANAGEMENT));
   const name = useSelector(authSelectors.currentUserName);
@@ -109,6 +111,7 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
       asyncState={asyncSlack.asyncState}
       getUrl={onAdd}
       slackIntegrationEnabled={isSlackIntegrationEnabled}
+      slackTeamId={slackTeamId}
     />
   );
 };
@@ -116,6 +119,7 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   isSlackIntegrationEnabled: companySelectors.isSlackIntegrationEnabled(state),
   slackUrl: userManagementSelectors.slackUrl(state),
+  slackTeamId: companySelectors.slackTeamId(state),
 });
 
 export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(

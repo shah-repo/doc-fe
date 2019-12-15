@@ -9,6 +9,7 @@ export const getCompany = (company: Partial<Company> = {}): Company => ({
   documentTypes: [],
   whiteLabeling: {} as WhiteLabeling,
   slackIntegrationEnabled: false,
+  teamId: faker.random.uuid(),
   ...company,
 });
 
