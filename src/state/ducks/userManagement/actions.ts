@@ -1,6 +1,5 @@
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
-import { authActions } from "../auth";
 import { Group } from "../auth/types";
 import { User } from "../common";
 import { EditGroupsAction, EditUserInfoAction } from "../tableSearch";
@@ -78,8 +77,7 @@ const editEmployeeGroups = (employeeId: string, body: EmployeeGroupsEditRequestB
     data: body,
     onSuccess: (employee, dispatch) => {
       dispatch(editSelectedEmployeeGroups(employee));
-      dispatch(authActions.userGroups(employee.groups));
-    },
+   },
     handlers,
   });
 

@@ -18,7 +18,7 @@ const currentUserName = (state: ApplicationState): string =>
 const currentUserId = (state: ApplicationState): string => state.auth.user.id;
 
 const currentUserGroups = (state: ApplicationState): Group[] =>
-  state.auth.groups.groups;
+  state.auth.user.groups;
 
 const currentEmployeeId = (state: ApplicationState): string =>
   state.auth.user.employeeId;

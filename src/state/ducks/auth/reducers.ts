@@ -1,7 +1,10 @@
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
-import { EditUserInfoAction } from "../tableSearch";
-import { EDIT_EMPLOYEE_USER_INFO } from "../tableSearch/constants";
+import { EditGroupsAction, EditUserInfoAction } from "../tableSearch";
+import {
+  EDIT_EMPLOYEE_GROUPS,
+  EDIT_EMPLOYEE_USER_INFO,
+} from "../tableSearch/constants";
 import {
   AUTH_USER,
   LOGOUT_USER,
@@ -30,6 +33,7 @@ export const USER_DEFAULT_STATE: UserState = {
   sessionId: "",
   employees: [],
   avatar: "",
+  groups: [],
 };
 
 type AuthUserActions =
@@ -37,7 +41,9 @@ type AuthUserActions =
   | LogoutUserAction
   | SelectEmployeeAction
   | EditUserMeAction
-  | EditUserInfoAction;
+  | EditUserInfoAction
+  | UserGroupsAction
+  | EditGroupsAction;
 
 export const user = (
   state: UserState = USER_DEFAULT_STATE,
@@ -73,9 +79,20 @@ export const user = (
           name: action.payload.name,
         };
       }
+      return state;
+    case USER_GROUPS:
       return {
         ...state,
+        groups: action.payload,
       };
+    case EDIT_EMPLOYEE_GROUPS:
+      if (state.id === action.payload.user.id) {
+        return {
+          ...state,
+          groups: action.payload.groups,
+        };
+      }
+      return state;
     case LOGOUT_USER:
       return { ...USER_DEFAULT_STATE };
     default:
@@ -86,7 +103,6 @@ export const user = (
 export const USER_GROUPS_DEFAULT_STATE: UserGroupsState = {
   tags: [],
   permissions: [],
-  groups: [],
 };
 
 export const groups = (
@@ -112,7 +128,6 @@ export const groups = (
       return {
         tags: Array.from(tagsSet),
         permissions: Array.from(permissionsSet),
-        groups: action.payload,
       };
     default:
       return state;

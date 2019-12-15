@@ -1,3 +1,4 @@
+import faker from "faker";
 import { AUTH_USER, LOGOUT_USER } from "./constants";
 import { user, USER_DEFAULT_STATE } from "./reducers";
 import { AuthUserAction, AuthUserPayload, LogoutUserAction } from "./types";
@@ -7,6 +8,10 @@ describe("user reducer tests", () => {
     email: "dino@codecons.com",
     id: "1",
     name: "Dino",
+    employeeId: faker.random.uuid(),
+    sessionId: faker.random.uuid(),
+    avatar: null,
+    employees: [],
   };
 
   it("sets user email", () => {
@@ -16,6 +21,11 @@ describe("user reducer tests", () => {
       email: payload.email,
       id: payload.id,
       name: payload.name,
+      employeeId: payload.employeeId,
+      sessionId: payload.sessionId,
+      avatar: payload.avatar,
+      employees: payload.employees,
+      groups: [],
     });
   });
 
