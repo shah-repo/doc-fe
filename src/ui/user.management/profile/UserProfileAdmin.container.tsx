@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { connect, useSelector } from "react-redux";
 import { getHasTag } from "../../../common/utils/selectors";
+import Config from "../../../config";
 import { authActions } from "../../../state/ducks/auth";
 import { EmployeeEditRequestBody, GroupTag } from "../../../state/ducks/auth/types";
 import { companySelectors } from "../../../state/ducks/company";
@@ -94,8 +95,7 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
     });
 
     const onAdd = () => {
-    //  string linka ide iz tvog brancha, nije jos mergan u ovaj
-        asyncSlack.start(getSlackUrl, "https://dev.enlil.io/slack/company", COMPANY_SLACK_URL, asyncSlack);
+        asyncSlack.start(getSlackUrl, Config.SlackCompanyUri, COMPANY_SLACK_URL, asyncSlack);
     };
 
     return (

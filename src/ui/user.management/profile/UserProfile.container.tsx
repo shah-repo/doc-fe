@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { connect, useSelector } from "react-redux";
 import { getHasTag } from "../../../common/utils/selectors";
+import Config from "../../../config";
 import { authActions, authSelectors } from "../../../state/ducks/auth";
 import {
   EmployeeEditRequestBody,
@@ -86,10 +87,9 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
   });
 
   const onAdd = () => {
-    // string linka ide iz tvog brancha, nije jos mergan u ovaj
     asyncSlack.start(
       getSlackUrl,
-      "https://dev.enlil.io/slack/user",
+      Config.SlackUserUri,
       USER_SLACK_URL,
       asyncSlack,
     );
