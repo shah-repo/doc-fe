@@ -117,6 +117,7 @@ export interface UserGroupsAction {
 export interface UserGroupsState {
   tags: GroupTag[];
   permissions: Permission[];
+  groups: Group[];
 }
 
 export interface SelectEmployeeAction {

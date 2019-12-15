@@ -288,4 +288,5 @@ export default {
   signup,
   forgotPassword,
   confirmNewPassword,
+  userGroups,
 };

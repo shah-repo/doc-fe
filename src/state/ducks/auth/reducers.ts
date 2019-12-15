@@ -86,6 +86,7 @@ export const user = (
 export const USER_GROUPS_DEFAULT_STATE: UserGroupsState = {
   tags: [],
   permissions: [],
+  groups: [],
 };
 
 export const groups = (
@@ -111,6 +112,7 @@ export const groups = (
       return {
         tags: Array.from(tagsSet),
         permissions: Array.from(permissionsSet),
+        groups: action.payload,
       };
     default:
       return state;
