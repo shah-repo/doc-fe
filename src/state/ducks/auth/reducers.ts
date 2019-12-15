@@ -77,6 +77,7 @@ export const user = (
         return {
           ...state,
           name: action.payload.name,
+          avatar: action.payload.avatar,
         };
       }
       return state;

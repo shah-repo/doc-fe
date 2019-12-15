@@ -1,7 +1,6 @@
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
-import { Group } from "../auth/types";
-import { User } from "../common";
+import { Group, User } from "../auth/types";
 import { EditGroupsAction, EditUserInfoAction } from "../tableSearch";
 import { EDIT_EMPLOYEE_GROUPS, EDIT_EMPLOYEE_USER_INFO } from "../tableSearch/constants";
 import {
