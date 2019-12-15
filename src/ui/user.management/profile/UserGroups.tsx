@@ -14,6 +14,7 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import Text from "../../components/Text";
 import useAsync from "../../hooks/useAsync";
 import { toEmployeeGroupsEditRequestBody } from "../utils/transform";
+import {styles} from "./UserGroups.style";
 
 interface OwnProps {
   canManageUsers: boolean;
@@ -30,6 +31,8 @@ export const UserGroups: React.FunctionComponent<Props> = ({
   callbackUpdateGroups,
   employeeId,
 }) => {
+  const classes = styles();
+
   const dispatch = useDispatch();
 
   let groups: Nullable<OptionType[]> = employeeGroups;
@@ -68,7 +71,7 @@ export const UserGroups: React.FunctionComponent<Props> = ({
       variant="text"
       color="primary"
       onClick={openEditGroups}
-      style={{ width: "auto", margin: "19px 0 0 0", padding: "0" }}
+      className={classes.addGroupsButton}
     >
       <Icon style={{ marginRight: "10px" }}>
         <AddCircleOutlineOutlinedIcon />
@@ -101,12 +104,7 @@ export const UserGroups: React.FunctionComponent<Props> = ({
         defaultValue={employeeGroups}
       />
       <Button
-        style={{
-          width: "auto",
-          marginLeft: "0",
-          color: "white",
-          backgroundColor: "#6E09EA",
-        }}
+        className={classes.containedButton}
         variant="contained"
         color="primary"
         onClick={() => {
@@ -117,8 +115,8 @@ export const UserGroups: React.FunctionComponent<Props> = ({
         <Text translation="common.done" />
       </Button>
       <Button
+        className={classes.outlinedButton}
         variant="outlined"
-        style={{ width: "auto", color: "#6E09EA", borderColor: "#6E09EA" }}
         onClick={closeEditGroups}
       >
         <Text translation="common.cancel" />
