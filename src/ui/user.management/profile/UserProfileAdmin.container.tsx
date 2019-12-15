@@ -4,7 +4,7 @@ import { getHasTag } from "../../../common/utils/selectors";
 import { authActions } from "../../../state/ducks/auth";
 import { EmployeeEditRequestBody, GroupTag } from "../../../state/ducks/auth/types";
 import { companySelectors } from "../../../state/ducks/company";
-import { GetEmployeeResponse, userManagementActions } from "../../../state/ducks/userManagement";
+import { GetEmployeeResponse, userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
 import { COMPANY_SLACK_URL } from "../../../state/ducks/userManagement/constants";
 import { ApplicationState } from "../../../state/reducers";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
@@ -24,6 +24,7 @@ interface DispatchProps {
 
 interface StateProps {
     isSlackIntegrationEnabled: boolean;
+    slackUrl: string;
 }
 
 export type Props = OwnProps & DispatchProps & StateProps;
@@ -35,6 +36,7 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
     editSelectedEmployee,
     getSlackUrl,
     isSlackIntegrationEnabled,
+    slackUrl,
 }) => {
     const [realUser, setRealUser] = useState<any>({ user: {}, groups: []});
     useEffect(() => {
@@ -83,11 +85,17 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
         );
       };
 
-    const asyncSlack = useAsync();
+    const asyncSlack = useAsync({
+        onSuccess: () => {
+            window.open(slackUrl);
+        },
+    });
+
     const onAdd = () => {
-     // string linka ide iz tvog brancha, nije jos mergan u ovaj
+    //  string linka ide iz tvog brancha, nije jos mergan u ovaj
         asyncSlack.start(getSlackUrl, "https://dev.enlil.io/slack/company", COMPANY_SLACK_URL, asyncSlack);
     };
+
     return (
         <UserProfilePresenter
             isOpen={showUserProfile}
@@ -111,6 +119,7 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
     isSlackIntegrationEnabled: companySelectors.isSlackIntegrationEnabled(state),
+    slackUrl: userManagementSelectors.slackUrl(state),
   });
 
 export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {

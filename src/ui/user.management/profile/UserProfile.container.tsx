@@ -8,7 +8,10 @@ import {
   GroupTag,
 } from "../../../state/ducks/auth/types";
 import { companySelectors } from "../../../state/ducks/company";
-import { userManagementActions } from "../../../state/ducks/userManagement";
+import {
+  userManagementActions,
+  userManagementSelectors,
+} from "../../../state/ducks/userManagement";
 import { USER_SLACK_URL } from "../../../state/ducks/userManagement/constants";
 import { ApplicationState } from "../../../state/reducers";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
@@ -23,6 +26,7 @@ interface OwnProps {
 
 interface StateProps {
   isSlackIntegrationEnabled: boolean;
+  slackUrl: string;
 }
 
 interface DispatchProps {
@@ -38,6 +42,7 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
   editCurrentEmployee,
   getSlackUrl,
   isSlackIntegrationEnabled,
+  slackUrl,
 }) => {
   const canManageUsers = useSelector(getHasTag(GroupTag.USER_MANAGEMENT));
   const name = useSelector(authSelectors.currentUserName);
@@ -72,10 +77,20 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
     async.start(editCurrentEmployee, values, async);
   };
 
-  const asyncSlack = useAsync();
+  const asyncSlack = useAsync({
+    onSuccess: () => {
+      window.open(slackUrl);
+    },
+  });
+
   const onAdd = () => {
-    //string linka ide iz tvog brancha, nije jos mergan u ovaj
-    asyncSlack.start(getSlackUrl, "https://dev.enlil.io/slack/user", USER_SLACK_URL,  asyncSlack);
+    // string linka ide iz tvog brancha, nije jos mergan u ovaj
+    asyncSlack.start(
+      getSlackUrl,
+      "https://dev.enlil.io/slack/user",
+      USER_SLACK_URL,
+      asyncSlack,
+    );
   };
 
   return (
@@ -100,6 +115,7 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   isSlackIntegrationEnabled: companySelectors.isSlackIntegrationEnabled(state),
+  slackUrl: userManagementSelectors.slackUrl(state),
 });
 
 export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
