@@ -20,13 +20,8 @@ describe("user reducer tests", () => {
     const action: AuthUserAction = { type: AUTH_USER, payload };
 
     expect(user(undefined, action)).toEqual({
-      email: payload.email,
-      id: payload.id,
-      name: payload.name,
+      ...payload,
       employeeId: payload.employees[0].id,
-      sessionId: payload.sessionId,
-      avatar: payload.avatar,
-      employees: payload.employees,
       groups: [],
     });
   });
