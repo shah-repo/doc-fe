@@ -57,7 +57,7 @@ export const user = (
         avatar: action.payload.avatar,
         name: action.payload.name,
         id: action.payload.id,
-        employeeId: action.payload.employeeId,
+        employeeId: action.payload.employees[0].id,
         sessionId: action.payload.sessionId,
         employees: action.payload.employees,
       };

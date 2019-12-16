@@ -71,7 +71,7 @@ export type AuthUserPayload = User;
 
 export interface AuthUserAction {
   type: typeof AUTH_USER;
-  payload: AuthUserPayload;
+  payload: AuthResponse;
 }
 
 export interface SignupAction {

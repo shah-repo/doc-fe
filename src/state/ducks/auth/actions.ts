@@ -57,10 +57,10 @@ const authConfirmPassword = (): ConfirmPasswordAction => ({
   type: CONFIRM_FORGOT_PASSWORD_URL,
 });
 
-const authUser = (user: User): AuthUserAction => {
+const authUser = (data: AuthResponse): AuthUserAction => {
   return {
     type: AUTH_USER,
-    payload: user,
+    payload: data,
   };
 };
 
@@ -122,15 +122,7 @@ const login = (
     includeAuthorization: false,
     onSuccess: (data: AuthResponse, dispatch) => {
       dispatch(
-        authUser({
-          email: loginValues.email,
-          name: data.name,
-          id: data.id,
-          sessionId: data.sessionId,
-          employeeId: data.employees[0].id,
-          employees: data.employees,
-          avatar: data.avatar,
-        }),
+        authUser(data),
       );
 
       if ((data.employees || []).length === 1) {
@@ -183,7 +175,7 @@ const confirmNewPassword = (
       dispatch(authConfirmPassword());
       dispatch(
         login(
-          { email: confirmValues.email, password: confirmValues.password },
+          confirmValues,
           handlers,
         ),
       );
@@ -202,15 +194,7 @@ const loginWithCode = (
     includeAuthorization: false,
     onSuccess: (response, dispatch) => {
       dispatch(
-        authUser({
-          email: response.email,
-          name: response.name,
-          id: response.id,
-          sessionId: response.sessionId,
-          employeeId: response.employees[0].id,
-          employees: response.employees,
-          avatar: response.avatar,
-        }),
+        authUser(response),
       );
     },
     onFailure: (m, dispatch) => {

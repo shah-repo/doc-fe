@@ -1,17 +1,19 @@
 import faker from "faker";
+import { getEmployee } from "../company/tests/factories";
 import { AUTH_USER, LOGOUT_USER } from "./constants";
 import { user, USER_DEFAULT_STATE } from "./reducers";
-import { AuthUserAction, AuthUserPayload, LogoutUserAction } from "./types";
+import { AuthResponse, AuthUserAction, LogoutUserAction } from "./types";
 
 describe("user reducer tests", () => {
-  const payload: AuthUserPayload = {
+  const payload: AuthResponse = {
+    ExpiresAt: faker.date.future().toISOString(),
+    ExpiresIn: faker.random.number(),
     email: "dino@codecons.com",
     id: "1",
     name: "Dino",
-    employeeId: faker.random.uuid(),
     sessionId: faker.random.uuid(),
     avatar: null,
-    employees: [],
+    employees: [getEmployee()],
   };
 
   it("sets user email", () => {
@@ -21,7 +23,7 @@ describe("user reducer tests", () => {
       email: payload.email,
       id: payload.id,
       name: payload.name,
-      employeeId: payload.employeeId,
+      employeeId: payload.employees[0].id,
       sessionId: payload.sessionId,
       avatar: payload.avatar,
       employees: payload.employees,
