@@ -1,7 +1,8 @@
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
-import { Group } from "../auth/types";
-import { tableSearchActions } from "../tableSearch";
+import { Group, User } from "../auth/types";
+import { EditGroupsAction, EditUserInfoAction } from "../tableSearch";
+import { EDIT_EMPLOYEE_GROUPS, EDIT_EMPLOYEE_USER_INFO } from "../tableSearch/constants";
 import {
   ADD_EMPLOYEE_POST_ASYNC,
   COMPANY_GROUPS_GET_ASYNC,
@@ -61,16 +62,30 @@ const loadGroupsMe = (handlers: Handlers): ApiAction<Group[]> =>
     handlers,
   });
 
+const editSelectedEmployeeGroups = (employee: GetEmployeeResponse): EditGroupsAction => {
+  return {
+    type: EDIT_EMPLOYEE_GROUPS,
+    payload: employee,
+  };
+};
+
 const editEmployeeGroups = (employeeId: string, body: EmployeeGroupsEditRequestBody, handlers: Handlers):
   ApiAction<GetEmployeeResponse> => apiActionWithCallbacks({
     url: `${EMPLOYEES_URL}/${employeeId}`,
     method: "patch",
     data: body,
     onSuccess: (employee, dispatch) => {
-      dispatch(tableSearchActions.editEmployee(employee));
-    },
+      dispatch(editSelectedEmployeeGroups(employee));
+   },
     handlers,
   });
+
+const editSelectedEmployeeUserInfo = (user: User): EditUserInfoAction => {
+  return {
+    type: EDIT_EMPLOYEE_USER_INFO,
+    payload: user,
+  };
+};
 
 export default {
   loadCompanyGroups,
@@ -78,4 +93,5 @@ export default {
   editEmployeeGroups,
   addEmployee,
   getEmployee,
+  editSelectedEmployeeUserInfo,
 };
