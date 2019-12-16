@@ -43,7 +43,7 @@ const hasMultipleCompanies = (state: ApplicationState): boolean =>
 const getCurrentUserGroups = createSelector(
   [currentUserGroups],
   (groups): OptionType[] => {
-    return groups.map((group) => ({
+    return (groups || []).map((group) => ({
       value: group.id,
       label: group.name,
     }));

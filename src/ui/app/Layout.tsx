@@ -14,6 +14,7 @@ import {
   DOCUMENT_REVISION_ROOT_URL,
   HOME_URL,
   SLACK_ROOT_URL,
+  SUPPLIERS_LIST_URL,
   TRAINING_DETAIL_URL,
   USER_MANAGEMENT_ROOT_URL,
 } from "../constants/urls";
@@ -22,6 +23,7 @@ import DocumentRevisionContainer from "../document.revision/container";
 import DocumentRevisionListContainer from "../document.revision/list/container";
 import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisionCreate.container";
 import SlackContainer from "../slack/Container";
+import SuppliersListContainer from "../supplier/list/container";
 import TrainingDetailContainer from "../training/TrainingDetail.container";
 import UserManagementListContainer from "../user.management/list/container";
 import DataFetcherContainer from "./DataFetcher.container";
@@ -82,6 +84,10 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
           <Route
             path={SLACK_ROOT_URL}
             component={SlackContainer}
+          />
+          <Route
+            path={SUPPLIERS_LIST_URL}
+            component={SuppliersListContainer}
           />
           <Redirect to={{ pathname: HOME_URL }} />
         </Switch>

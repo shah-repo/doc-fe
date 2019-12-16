@@ -37,3 +37,6 @@ export const USER_MANAGEMENT_DETAIL_URL = `${USER_MANAGEMENT_ROOT_URL}/:userId`;
 export const SLACK_ROOT_URL = "/slack";
 export const SLACK_COMPANY_URL = `${SLACK_ROOT_URL}/company`;
 export const SLACK_USER_URL = `${SLACK_ROOT_URL}/user`;
+
+export const SUPPLIERS_ROOT_URL = "/suppliers";
+export const SUPPLIERS_LIST_URL = `${SUPPLIERS_ROOT_URL}/:listId`;
