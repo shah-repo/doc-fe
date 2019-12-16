@@ -20,7 +20,7 @@ const FBExportSchema: React.FunctionComponent<FBExportSchemaProps> = ({
     />
     <FBDialog {...props} title="form.builder.export.template">
       <FBTextField
-        onChange={setSchemaName}
+        afterChange={(setSchemaName)}
         name="export_field"
         label="form.builder.template.name"
       />

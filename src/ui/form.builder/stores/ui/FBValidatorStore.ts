@@ -2,9 +2,9 @@ import _ , { Dictionary } from "lodash";
 import { action, computed, observable } from "mobx";
 import Validator from "validatorjs";
 import { SelectOption } from "../../../components/forms/fields/Select";
+import { FBEditorElementType } from "../../types/editor";
 import { FBValidatorTrigger } from "../../types/validation/validator";
 import FBStore from "./FBStore";
-import { FBEditorElementType } from "../../types/editor";
 
 export class FormBuilderValidatorStore {
   @observable public errors: Dictionary<string> = {};
