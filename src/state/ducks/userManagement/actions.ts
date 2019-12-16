@@ -94,4 +94,6 @@ export default {
   addEmployee,
   getEmployee,
   editSelectedEmployeeUserInfo,
+  companyGroupsList,
+  editSelectedEmployeeGroups,
 };
