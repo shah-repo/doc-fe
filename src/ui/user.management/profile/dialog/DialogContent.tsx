@@ -101,7 +101,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
                 employeeId={employeeId}
                 callbackUpdateGroups={callbackUpdateGroups}
             />
-            {slackIntegrationEnabled && !slackTeamId && hasSlackPermission &&
+            {slackIntegrationEnabled && !slackTeamId &&
             <div>
                 <Typography variant="h4" className={classes.integrations} >
                     <Text translation="integrations.title" />
