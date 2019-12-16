@@ -3,16 +3,8 @@ import { ApplicationState } from "../../reducers";
 import { WHITE_LABEL_DEFAULT } from "./constants";
 
 const getSelectedCompany = (state: ApplicationState) => state.company.selectedCompany;
-
-const isSlackIntegrationEnabled = createSelector(
-  getSelectedCompany,
-  (selectedCompany) => selectedCompany.slackIntegrationEnabled,
-);
-
-const slackTeamId = createSelector(
-  getSelectedCompany,
-  (selectedCompany) => selectedCompany.teamId,
-);
+const slackTeamId = (state: ApplicationState) => state.company.selectedCompany.teamId;
+const isSlackIntegrationEnabled = (state: ApplicationState) => state.company.selectedCompany.slackIntegrationEnabled;
 
 const getWhiteLabeling = createSelector(
   getSelectedCompany,

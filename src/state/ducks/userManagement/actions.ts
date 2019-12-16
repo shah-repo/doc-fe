@@ -11,7 +11,7 @@ import {
   GROUPS_ME_GET_ASYNC,
   GROUPS_ME_URL,
   GROUPS_URL,
-  SLACK_URL_GET_ASYNC,
+  SLACK_URL,
 } from "./constants";
 import {
   AddEmployeeRequest,
@@ -28,9 +28,8 @@ const companyGroupsList = (groups: LoadCompanyGroups): CompanyGroupsListAction =
   payload: groups,
 });
 
-const getRedirectSlackUrl = (slackUrl: string): GetSlackUrlAction => ({
-  type: SLACK_URL_GET_ASYNC,
-  payload: slackUrl,
+const getRedirectSlackUrl = (): GetSlackUrlAction => ({
+  type: SLACK_URL,
 });
 
 const loadCompanyGroups = (): ApiAction<LoadCompanyGroups> =>
@@ -86,7 +85,7 @@ const getSlackUrl = (redirectUriEnv: string, url: string, handlers: Handlers):
     method: "get",
     data: redirectUriEnv,
     onSuccess: (slackUrl, dispatch) => {
-      dispatch(getRedirectSlackUrl(slackUrl));
+      dispatch(getRedirectSlackUrl());
     },
     handlers,
   });

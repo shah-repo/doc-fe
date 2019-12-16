@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { connect, useSelector } from "react-redux";
-import { getHasTag } from "../../../common/utils/selectors";
+import { getHasSlack, getHasTag } from "../../../common/utils/selectors";
 import Config from "../../../config";
 import { authActions } from "../../../state/ducks/auth";
-import { EmployeeEditRequestBody, GroupTag } from "../../../state/ducks/auth/types";
+import { EmployeeEditRequestBody, GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { companySelectors } from "../../../state/ducks/company";
-import { GetEmployeeResponse, userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
+import { GetEmployeeResponse, userManagementActions } from "../../../state/ducks/userManagement";
 import { COMPANY_SLACK_URL } from "../../../state/ducks/userManagement/constants";
 import { ApplicationState } from "../../../state/reducers";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
@@ -25,7 +25,6 @@ interface DispatchProps {
 
 interface StateProps {
     isSlackIntegrationEnabled: boolean;
-    slackUrl: string;
     slackTeamId: string;
 }
 
@@ -38,7 +37,6 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
     editSelectedEmployee,
     getSlackUrl,
     isSlackIntegrationEnabled,
-    slackUrl,
     slackTeamId,
 }) => {
     const [realUser, setRealUser] = useState<any>({ user: {}, groups: []});
@@ -53,6 +51,7 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
     const closeEdit = () => setEditUser(false);
 
     const canManageUsers = useSelector(getHasTag(GroupTag.USER_MANAGEMENT));
+    const hasSlackPermission = useSelector(getHasSlack(Permission.SLACK_APP_INSTALL));
 
     const employeeGroups: OptionType[] = groups.map((group: any) => ({
         value: group.id,
@@ -88,8 +87,8 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
         );
       };
 
-    const asyncSlack = useAsync({
-        onSuccess: () => {
+    const asyncSlack = useAsync<string>({
+        onSuccess: (slackUrl) => {
             window.open(slackUrl);
         },
     });
@@ -116,13 +115,13 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
             getUrl={onAdd}
             slackIntegrationEnabled={isSlackIntegrationEnabled}
             slackTeamId={slackTeamId}
+            hasSlackPermission={hasSlackPermission}
         />
     );
 };
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
     isSlackIntegrationEnabled: companySelectors.isSlackIntegrationEnabled(state),
-    slackUrl: userManagementSelectors.slackUrl(state),
     slackTeamId: companySelectors.slackTeamId(state),
   });
 

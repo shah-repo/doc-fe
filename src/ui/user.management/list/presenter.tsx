@@ -13,6 +13,7 @@ import { TablePanel } from "../../components/table/panel";
 import { TablePanelStateProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import AddEmployeeContainer from "../add.employee/container";
+import AddSlackButtonContainer from "../AddSlackButton/AddSlackButton.container";
 import UserProfileAdminContainer from "../profile/UserProfileAdmin.container";
 import { userManagementDetailsPath } from "../utils/paths";
 import { DEFAULT_SELECTED_EMPLOYEE } from "../utils/types";
@@ -134,7 +135,15 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
         </Button>
         <DocumentInfo numberOfRecords={tableState.queryData.length} />
       </Grid>
-      <Grid item={true} xs={6} style={{ textAlign: "right" }}>
+      <Grid
+        container={true}
+        xs={6}
+        style={{ textAlign: "right" }}
+        alignItems="flex-start"
+        justify="flex-end"
+        direction="row"
+      >
+        <AddSlackButtonContainer />
         <AddEmployeeContainer />
       </Grid>
       <Grid item={true} className={classes.item}>

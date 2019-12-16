@@ -4,11 +4,9 @@ import asyncReducer from "../../reducers/asyncReducer";
 import {
   COMPANY_GROUPS_GET_ASYNC,
   COMPANY_GROUPS_LIST,
-  SLACK_URL_GET_ASYNC,
 } from "./constants";
 import {
   CompanyGroupsListAction,
-  GetSlackUrlAction,
   GroupsAllIdsState,
   GroupsByIdState,
   LoadCompanyGroup,
@@ -43,16 +41,8 @@ export const groupsAllIds = (
   }
 };
 
-const slackUrl = (state: string = "", action: GetSlackUrlAction): string => {
-  if (action.type === SLACK_URL_GET_ASYNC) {
-    return action.payload;
-  }
-  return state;
-};
-
 export default combineReducers({
   loadGroupsListAsyncInfo: asyncReducer(COMPANY_GROUPS_GET_ASYNC),
   groupsById,
   groupsAllIds,
-  slackUrl,
 });

@@ -3,7 +3,6 @@ import { ApplicationState } from "../../reducers";
 
 const groupsById = (state: ApplicationState) => state.userManagement.groupsById;
 const groupsAllIds = (state: ApplicationState) => state.userManagement.groupsAllIds;
-const slackUrl = (state: ApplicationState) => state.userManagement.slackUrl;
 
 const getGroupsOptions = createSelector(
   groupsAllIds, groupsById,
@@ -18,5 +17,4 @@ const getGroupsOptions = createSelector(
 
 export default {
   getGroupsOptions,
-  slackUrl,
 };

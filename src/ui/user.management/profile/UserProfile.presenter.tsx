@@ -30,6 +30,7 @@ interface OwnProps {
     getUrl: () => void;
     slackIntegrationEnabled: boolean;
     slackTeamId: string;
+    hasSlackPermission: boolean;
 }
 
 type Props = OwnProps;
@@ -51,6 +52,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
     getUrl,
     slackIntegrationEnabled,
     slackTeamId,
+    hasSlackPermission,
 }) => {
     const classes = styles();
     let userInfo: EmployeeEditRequestBody = {
@@ -151,7 +153,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
                 employeeId={employeeId}
                 callbackUpdateGroups={callbackUpdateGroups}
             />
-            {slackIntegrationEnabled && !slackTeamId &&
+            {slackIntegrationEnabled && !slackTeamId && hasSlackPermission &&
             <div>
             <Typography variant="h4" className={classes.integrations} >
                 <Text translation="integrations.title" />
