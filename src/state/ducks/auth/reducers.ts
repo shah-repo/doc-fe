@@ -53,13 +53,8 @@ export const user = (
     case AUTH_USER:
       return {
         ...state,
-        email: action.payload.email,
-        avatar: action.payload.avatar,
-        name: action.payload.name,
-        id: action.payload.id,
+        ...action.payload,
         employeeId: action.payload.employees[0].id,
-        sessionId: action.payload.sessionId,
-        employees: action.payload.employees,
       };
     case SET_EMPLOYEE:
       return {
