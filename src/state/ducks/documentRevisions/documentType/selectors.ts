@@ -2,6 +2,7 @@ import _ from "lodash";
 import { createSelector } from "reselect";
 import { ApplicationState } from "../../../reducers";
 import { AsyncState } from "../../../types";
+import { DocumentType } from "./types";
 
 const allIds = (state: ApplicationState) => state.documentType.allIds;
 const byId = (state: ApplicationState) => state.documentType.byId;
@@ -13,6 +14,18 @@ const getDocumentTypeList = createSelector(
   allIds, byId,
   (ids, documentTypes) =>
     ids.map((id) => documentTypes[id]),
+);
+
+const getDocumentTypesWithPageDetails = createSelector(
+  allIds,
+  byId,
+  (ids, documentTypes) =>
+    ids.reduce((documentsWithPageDetails: DocumentType[], id: string) => {
+      if (documentTypes[id].pageDetails) {
+        documentsWithPageDetails.push(documentTypes[id]);
+      }
+      return documentsWithPageDetails;
+    }, []),
 );
 
 const getDocumentTypeFormOptions = createSelector(
@@ -50,4 +63,5 @@ export default {
   getDocumentTypeOptions,
   getLoadListAsyncState,
   getDocumentTypeById,
+  getDocumentTypesWithPageDetails,
 };

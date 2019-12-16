@@ -11,27 +11,27 @@ interface Props {
 const SuppliersListLink: React.FunctionComponent<Props> = ({
   pathname,
 }) => {
-  const docTypes = useSelector(documentTypeSelectors.getDocumentTypeList);
+  const docTypesWithPageDetails: DocumentType[] = useSelector(documentTypeSelectors.getDocumentTypesWithPageDetails);
+
+  if (docTypesWithPageDetails.length === 0) {
+    return null;
+  }
 
   return (
     <>
-      {
-        docTypes.map((docType: DocumentType) => {
-          if (!docType.pageDetails) {
-            return null;
-          }
-
-          return (
-            <NavigationLinkContainer
-              key={docType.id}
-              url={`${SUPPLIERS_ROOT_URL}/${docType.id}`}
-              text={docType.documentTypeName as Translation}
-              currentPath={pathname}
-            />
-          );
-        })
-      }
-    </>
+    {
+      docTypesWithPageDetails.map((docType: DocumentType) => {
+        return (
+          <NavigationLinkContainer
+            key={docType.id}
+            url={`${SUPPLIERS_ROOT_URL}/${docType.id}`}
+            text={docType.documentTypeName as Translation}
+            currentPath={pathname}
+          />
+        );
+      })
+    }
+  </>
   );
 };
 
