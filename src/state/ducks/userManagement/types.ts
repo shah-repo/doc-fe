@@ -11,6 +11,10 @@ export interface GetEmployeeResponse {
   user: User;
 }
 
+export interface GetSlackUrl {
+  url: string;
+}
+
 export interface AddEmployeeRequest {
   user: Partial<User>;
   groups: Nullable<Id[]>;

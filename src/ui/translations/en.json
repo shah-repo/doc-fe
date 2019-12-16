@@ -389,7 +389,11 @@
   "user.management.add.employee": "Add Employee",
   "user.management.update.profile": "Update profile",
 
+  "integrations.title": "Integrations",
+  "integrations.add": "Add",
+
   "slack.finalising.registration": "Finalising Slack registration",
-  "slack.resgistration.completed": "Slack registration completed",
-  "slack.resgistration.failed": "Slack registration failed"
+  "slack.registration.completed": "Slack registration completed",
+  "slack.registration.failed": "Slack registration failed",
+  "slack.integrations.admin.add": "ADD SLACK INTEGRATION"
 }

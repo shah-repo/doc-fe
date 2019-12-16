@@ -12,12 +12,14 @@ import {
   GROUPS_ME_GET_ASYNC,
   GROUPS_ME_URL,
   GROUPS_URL,
+  SLACK_URL,
 } from "./constants";
 import {
   AddEmployeeRequest,
   CompanyGroupsListAction,
   EmployeeGroupsEditRequestBody,
   GetEmployeeResponse,
+  GetSlackUrl,
   LoadCompanyGroups,
 } from "./types";
 
@@ -80,6 +82,15 @@ const editEmployeeGroups = (employeeId: string, body: EmployeeGroupsEditRequestB
     handlers,
   });
 
+const getSlackUrl = (redirectUriEnv: string, url: string, handlers: Handlers):
+  ApiAction<GetSlackUrl> => apiActionWithCallbacks({
+    url: `${url}`,
+    method: "get",
+    data: redirectUriEnv,
+    asyncType: SLACK_URL,
+    handlers,
+  });
+
 const editSelectedEmployeeUserInfo = (user: User): EditUserInfoAction => {
   return {
     type: EDIT_EMPLOYEE_USER_INFO,
@@ -93,5 +104,6 @@ export default {
   editEmployeeGroups,
   addEmployee,
   getEmployee,
+  getSlackUrl,
   editSelectedEmployeeUserInfo,
 };
