@@ -6,6 +6,9 @@ import { AsyncState } from "../../../types";
 const allIds = (state: ApplicationState) => state.documentType.allIds;
 const byId = (state: ApplicationState) => state.documentType.byId;
 
+const getDocumentTypeById = (state: ApplicationState, id: string) =>
+  state.documentType.byId[id];
+
 const getDocumentTypeList = createSelector(
   allIds, byId,
   (ids, documentTypes) =>
@@ -46,4 +49,5 @@ export default {
   getDocumentTypeFormOptions,
   getDocumentTypeOptions,
   getLoadListAsyncState,
+  getDocumentTypeById,
 };

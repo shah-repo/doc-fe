@@ -38,6 +38,7 @@ const SuppliersListLink: React.FunctionComponent<Props> = ({
       {
         docTypes.map((docType: any) => (
           <NavigationLinkContainer
+            key={docType.id}
             url={`${SUPPLIERS_ROOT_URL}/${docType.id}`}
             text={docType.documentTypeName as Translation}
             currentPath={pathname}

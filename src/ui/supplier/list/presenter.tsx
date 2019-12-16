@@ -4,8 +4,11 @@ import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import {
   DocumentRevision,
-} from "../../../state/ducks/documentRevisions";
+} from "../../../state/ducks/documentRevisions"; 
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
+import {
+  DocumentType,
+} from "../../../state/ducks/documentRevisions/documentType";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
@@ -23,40 +26,18 @@ export interface Props {
   tableName: string;
   tableState: TablePanelStateProps<DocumentRevision>;
   clearFilter?: () => void;
+  documentType: DocumentType;
 }
 
 export const SuppliersListPresenter: React.FunctionComponent<Props> = ({
   tableName,
   tableState,
   clearFilter,
+  documentType,
 }) => {
-  const documentType: any = [
-    {
-      createdAt: "2019-12-16T09:19:39.612Z",
-      updatedAt: "2019-12-16T09:19:39.612Z",
-      id: "a7d4537c-935c-45a4-966d-f5266201d680",
-      documentTypeName: "Page Details Example",
-      documentTypeAcronym: "PDE",
-      group: "OTHER",
-      privateNumberPool: false,
-      startingNumber: 1,
-      pageDetails: {
-        addNew: {
-          label: "Label",
-        },
-        columns: [
-          {
-            label: "Label",
-            fieldName: "Field Name",
-          },
-        ],
-      },
-    },
-  ];
   const classes = styles();
   const canEdit = (data: DocumentRevision) => canEditDocumentRevision(data);
-  const queryUrl =
-    DOCUMENT_REVISION_ROOT_URL;
+  const queryUrl = DOCUMENT_REVISION_ROOT_URL;
   // const pageDetailColumns = documentType.pageDetails!.columns;
 
   const cellHrefRenderer = (rowData: DocumentRevision): string => {

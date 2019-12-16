@@ -98,9 +98,7 @@ export const toNewVersionRequestBody = (
     } else {
       // new document
       newValues.document = _.pick(values.document, ["docId", "documentType"]);
-      newValues.document.documentType = _.pick(values.document.documentType, [
-        "id",
-      ]);
+      newValues.document.documentType = { id: values.document.documentType as string };
     }
   }
 
