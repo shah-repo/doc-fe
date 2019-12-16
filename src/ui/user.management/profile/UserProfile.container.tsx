@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect, useSelector } from "react-redux";
-import { getHasTag, getHasSlack } from "../../../common/utils/selectors";
+import { getHasSlack, getHasTag } from "../../../common/utils/selectors";
 import Config from "../../../config";
 import { authActions, authSelectors } from "../../../state/ducks/auth";
 import {
@@ -10,9 +10,7 @@ import {
   Permission,
 } from "../../../state/ducks/auth/types";
 import { companySelectors } from "../../../state/ducks/company";
-import {
-  userManagementActions,
-} from "../../../state/ducks/userManagement";
+import { userManagementActions } from "../../../state/ducks/userManagement";
 import { USER_SLACK_URL } from "../../../state/ducks/userManagement/constants";
 import { ApplicationState } from "../../../state/reducers";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
@@ -69,7 +67,9 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
   });
   const loadGroupsMe = () => asyncGroup.start(loadGroupsMeAction, asyncGroup);
 
-  const hasSlackPermission = useSelector(getHasSlack(Permission.SLACK_APP_INSTALL));
+  const hasSlackPermission = useSelector(
+    getHasSlack(Permission.SLACK_APP_INSTALL),
+  );
 
   useEffect(() => {
     loadGroupsMe();
