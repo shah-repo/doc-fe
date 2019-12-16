@@ -26,9 +26,14 @@ export const withValidatorForm = <T extends FBValidatorFormProps>(
         }
       });
 
+    const onCustomClick = () => {
+      alert("add");
+    }
+
     return Component({
       ...props,
       validators,
+      onCustomClick,
     });
   };
 };

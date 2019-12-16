@@ -371,6 +371,7 @@
   "form.builder.additions": "Additions",
   "form.builder.actions": "Actions",
   "form.builder.action": "Action Button",
+  "form.builder.add.custom.validator": "Add Custom Validator",
 
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
