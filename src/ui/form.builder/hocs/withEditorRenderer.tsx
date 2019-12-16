@@ -17,6 +17,7 @@ export const withEditorRenderer =
   const { type, index, mode } = other;
   const InputType = FBFieldEditorComponent[type as string];
   const uuidv4 = require("uuid/v4");
+  FBValidatorStore.setActiveValidatorType(type);
 
   // const schemaItem = (): FBTemplateSchema => ({
   //   type,

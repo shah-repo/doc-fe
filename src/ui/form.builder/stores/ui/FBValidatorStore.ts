@@ -4,11 +4,13 @@ import Validator from "validatorjs";
 import { SelectOption } from "../../../components/forms/fields/Select";
 import { FBValidatorTrigger } from "../../types/validation/validator";
 import FBStore from "./FBStore";
+import { FBEditorElementType } from "../../types/editor";
 
 export class FormBuilderValidatorStore {
   @observable public errors: Dictionary<string> = {};
   @observable public indicatorValues: Dictionary<Dictionary<string>> = {};
   public applicableOn: boolean = false;
+  public activeValidatorType?: FBEditorElementType;
 
   @computed get schemaItemOptions(): SelectOption[] {
     const schema = FBStore.getSchema();
@@ -18,6 +20,10 @@ export class FormBuilderValidatorStore {
         text: schemaItem.label,
       } as SelectOption;
     });
+  }
+
+  @action public setActiveValidatorType = (type: FBEditorElementType) => {
+    this.activeValidatorType = type;
   }
 
   @action public getRules = (): string | undefined => {

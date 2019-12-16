@@ -3,14 +3,14 @@
       "name": "required",
       "pattern": "required",
       "description": "Check if the length of the String representation of the value is >",
-      "applicableIn": "all",
+      "applicableIn": [],
       "indicators": []
     },
     {
       "name": "required_if",
       "pattern": "required_if",
       "description": "The field must be present and not empty if the anotherfield field is equal to any value.",
-      "applicableIn": "all",
+      "applicableIn": [],
       "indicators": [{
         "type": "schemaSelect",
         "label": "Required if field",
@@ -22,7 +22,20 @@
       "name": "required_with",
       "pattern": "required_with:foo,bar,...",
       "description": "The field under validation must be present and not empty only if any of the other specified fields are present.",
-      "applicableIn": "all",
+      "applicableIn": [],
+      "indicators": [
+        {
+          "label": "Required with field value:",
+          "type": "schemaSelect",
+          "validatorDelimiter": ":"
+        }
+      ]
+    },
+    {
+      "name": "required_with_all",
+      "pattern": "required_with_all:foo,bar,...",
+      "description": "The field under validation must be present and not empty only if one of the other specified fields are present.",
+      "applicableIn": [],
       "indicators": [
         {
           "label": "Required with field value:",
@@ -35,7 +48,7 @@
       "name": "required_document_status",
       "pattern": "required_document_status:value",
       "description": "Selected document must be in status.",
-      "applicableIn": "textfield|select...",
+      "applicableIn": ["autocomplete"],
       "indicators": [
         {
           "label": "Must be in:",
@@ -54,7 +67,7 @@
       "name": "required_document_type",
       "pattern": "required_document_type:anotherfield, value",
       "description": "Selected document must be of selected type.",
-      "applicableIn": "textfield|select...",
+      "applicableIn": ["autocomplete"],
       "indicators": [
         {
           "optionId": "4",

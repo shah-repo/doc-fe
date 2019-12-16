@@ -74,10 +74,11 @@ export type FBInputProps =
     onChange?: (e: any, value: any) => void;
     afterChange?: (fieldName: string, value: any, values: Dictionary<any>) => void;
     rules?: string;
-    applicable?: boolean;
+    applicableIn?: string[];
     checked?: boolean;
     validatorFieldName?: string;
     hasSchemaItem?: boolean;
+    hasSchemaItems?: boolean;
     applicableOn?: any[];
     multiple?: boolean;
   };
