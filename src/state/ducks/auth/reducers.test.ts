@@ -1,21 +1,28 @@
+import faker from "faker";
+import { getEmployee } from "../company/tests/factories";
 import { AUTH_USER, LOGOUT_USER } from "./constants";
 import { user, USER_DEFAULT_STATE } from "./reducers";
-import { AuthUserAction, AuthUserPayload, LogoutUserAction } from "./types";
+import { AuthResponse, AuthUserAction, LogoutUserAction } from "./types";
 
 describe("user reducer tests", () => {
-  const payload: AuthUserPayload = {
+  const payload: AuthResponse = {
+    ExpiresAt: faker.date.future().toISOString(),
+    ExpiresIn: faker.random.number(),
     email: "dino@codecons.com",
     id: "1",
     name: "Dino",
+    sessionId: faker.random.uuid(),
+    avatar: null,
+    employees: [getEmployee()],
   };
 
   it("sets user email", () => {
     const action: AuthUserAction = { type: AUTH_USER, payload };
 
     expect(user(undefined, action)).toEqual({
-      email: payload.email,
-      id: payload.id,
-      name: payload.name,
+      ...payload,
+      employeeId: payload.employees[0].id,
+      groups: [],
     });
   });
 

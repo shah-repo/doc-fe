@@ -15,7 +15,6 @@ import Text from "../../components/Text";
 import AddEmployeeContainer from "../add.employee/container";
 import AddSlackButtonContainer from "../AddSlackButton/AddSlackButton.container";
 import UserProfileAdminContainer from "../profile/UserProfileAdmin.container";
-import { userManagementDetailsPath } from "../utils/paths";
 import { DEFAULT_SELECTED_EMPLOYEE } from "../utils/types";
 import { styles } from "./styles";
 
@@ -36,33 +35,14 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
   const [showUserProfile, setUserProfile] = useState(false);
   const [selectedEmployee, setEmployee] = useState<GetEmployeeResponse>(DEFAULT_SELECTED_EMPLOYEE);
 
-  const setSelectedEmployee = (selectedEmployee: GetEmployeeResponse) => setEmployee(selectedEmployee);
   const openUserProfile = () => setUserProfile(true);
   const closeUserProfile = () => setUserProfile(false);
 
   const handleUserProfileDialog = ( rowData: GetEmployeeResponse ) => {
-    setSelectedEmployee(rowData);
+    setEmployee(rowData);
     openUserProfile();
   };
 
-  const cellHrefRenderer = (rowData: GetEmployeeResponse): string => {
-    return userManagementDetailsPath(rowData.user.id);
-  };
-/*   const customDataSet = (data: GetEmployeeResponse[]) => {
-    return data.map((employee) => {
-      const groups = employee
-        .groups
-        .map((group) => group.name)
-        .join(", ");
-
-      return {
-        ...employee,
-        groups,
-      } as unknown as GetEmployeeResponse;
-      // hack to avoid doing having to create a new interface
-      // groups should be array
-    });
-  }; */
   const handleGroups = (groups: Group[]) => {
     return groups.map((group) => group.name).join(", ");
   };
@@ -74,7 +54,6 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.user.name,
       },
-      cellHref: cellHrefRenderer,
       searchOptions: {
         defaultValue: tableState.queryDict.name,
       },
@@ -85,7 +64,6 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.user.email,
       },
-      cellHref: cellHrefRenderer,
       searchOptions: {
         defaultValue: tableState.queryDict.email,
       },
@@ -93,7 +71,6 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "groupId" as keyof GetEmployeeResponse,
       label: "common.groups",
-      cellHref: cellHrefRenderer,
       columnOptions: {
         cellDataGetter: ({ rowData }) => handleGroups(rowData.groups),
       },
@@ -106,7 +83,6 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "active",
       label: "common.active",
-      cellHref: cellHrefRenderer,
       searchOptions: {
         searchType: "select",
         selectOptions: [
