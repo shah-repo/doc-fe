@@ -4,10 +4,11 @@ import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import {
   DocumentRevision,
-} from "../../../state/ducks/documentRevisions"; 
+} from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import {
   DocumentType,
+  PageDetailsColumn,
 } from "../../../state/ducks/documentRevisions/documentType";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
@@ -20,6 +21,7 @@ import {
   documentRevisionStatusOption,
 } from "../../document.revision/utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
+import { Translation } from "../../translations/types";
 import { styles } from "./styles";
 
 export interface Props {
@@ -37,8 +39,8 @@ export const SuppliersListPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const canEdit = (data: DocumentRevision) => canEditDocumentRevision(data);
-  const queryUrl = DOCUMENT_REVISION_ROOT_URL;
-  // const pageDetailColumns = documentType.pageDetails!.columns;
+  const queryUrl =
+    DOCUMENT_REVISION_ROOT_URL + `?documentTypeId=${documentType.id}`;
 
   const cellHrefRenderer = (rowData: DocumentRevision): string => {
     if (canEdit(rowData)) {
@@ -47,22 +49,21 @@ export const SuppliersListPresenter: React.FunctionComponent<Props> = ({
     return documentPreviewPath(rowData.id, rowData.document.id);
   };
 
-  /*
-  const additionalColumns = pageDetailColumns.map((column: DocumentPageDetailColumn) => ({
-    key: column.label,
-    label: `document.revision.list.${column.label.toLowerCase()}` as Translation,
+  const pageDetailColumns = documentType.pageDetails!.columns;
+  const additionalColumns = pageDetailColumns.map((column: PageDetailsColumn) => ({
+    key: column.label as keyof DocumentRevision,
+    label: column.fieldName as Translation,
     cellHref: cellHrefRenderer,
+    omitSearch: true,
     columnOptions: {
       cellDataGetter: ({ rowData }) => rowData.formInput ? rowData.formInput[column.fieldName] : "",
     },
   }));
-  */
 
   const columns: Array<TableColumnProps<DocumentRevision>> = [
     {
       key: "docId",
-      // label: `document.revision.list.${documentType.documentTypeName.toLowerCase()}.id` as Translation,
-      label: "supplier.id",
+      label: `${documentType.documentTypeName} ID` as Translation,
       cellHref: cellHrefRenderer,
       sortable: true,
       columnOptions: {
@@ -75,7 +76,6 @@ export const SuppliersListPresenter: React.FunctionComponent<Props> = ({
     },
     {
       key: "name",
-      // label: `document.revision.list.${documentType.documentTypeName.toLowerCase()}.name` as Translation,
       label: "supplier.name",
       tooltipKey: "name",
       cellHref: cellHrefRenderer,
@@ -119,6 +119,7 @@ export const SuppliersListPresenter: React.FunctionComponent<Props> = ({
         width: 100,
       },
     },
+    ...additionalColumns,
   ];
 
   return (
