@@ -51,8 +51,8 @@ export const SuppliersListPresenter: React.FunctionComponent<Props> = ({
 
   const pageDetailColumns = documentType.pageDetails!.columns;
   const additionalColumns = pageDetailColumns.map((column: PageDetailsColumn) => ({
-    key: column.label as keyof DocumentRevision,
-    label: column.fieldName as Translation,
+    key: column.fieldName as keyof DocumentRevision,
+    label: column.label as Translation,
     cellHref: cellHrefRenderer,
     omitSearch: true,
     columnOptions: {
