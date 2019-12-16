@@ -1,6 +1,15 @@
 import { combineReducers } from "redux";
+import { USERS_ME_URL } from "../auth/constants";
+import { User } from "../auth/types";
 import { SELECT_COMPANY } from "../company/constants";
-import { TABLE_SEARCH_CLEAR, TABLE_SEARCH_SET, TABLE_SORT } from "./constants";
+import { GetEmployeeResponse } from "../userManagement";
+import {
+  EDIT_EMPLOYEE_GROUPS,
+  EDIT_EMPLOYEE_USER_INFO,
+  TABLE_SEARCH_CLEAR,
+  TABLE_SEARCH_SET,
+  TABLE_SORT,
+} from "./constants";
 import {
   TableSearchByIdState,
   TableSearchClearAction,
@@ -14,7 +23,6 @@ export const DEFAULT_TABLE_SEARCH = {
   apiError: "",
   scrollToIndex: 0,
 };
-
 type TableSearchActions = TableSearchSetAction<any> &
   TableSearchClearAction &
   TableSortAction<any>;
@@ -38,6 +46,66 @@ export const byTableName = (
       return {
         ...state,
         [action.tableName]: action.payload,
+      };
+    case EDIT_EMPLOYEE_GROUPS:
+      if (!state.userManagement) {
+        return state;
+      }
+      const list = state.userManagement.queryData.map(
+        (employee: GetEmployeeResponse) => {
+          const { payload: updatedEmployee } = action;
+
+          if (
+            employee.id ===
+            ((updatedEmployee as unknown) as GetEmployeeResponse).id
+          ) {
+            return {
+              ...action.payload,
+            };
+          }
+
+          return employee;
+        },
+      );
+
+      return {
+        ...state,
+        userManagement: {
+          ...state.userManagement,
+          queryData: list,
+        },
+      };
+    case EDIT_EMPLOYEE_USER_INFO:
+    case USERS_ME_URL:
+      if (!state.userManagement) {
+        return state;
+      }
+      const employees = state.userManagement.queryData.map(
+        (employee: GetEmployeeResponse) => {
+          const { payload: updatedEmployee } = action;
+          if (
+            employee.user.id === ((updatedEmployee as unknown) as User).id
+          ) {
+            return {
+              ...employee,
+              user: {
+                ...employee.user,
+                name: ((updatedEmployee as unknown) as User).name,
+                avatar: ((updatedEmployee as unknown) as User).avatar,
+              },
+            };
+          }
+
+          return employee;
+        },
+      );
+
+      return {
+        ...state,
+        userManagement: {
+          ...state.userManagement,
+          queryData: employees,
+        },
       };
     case SELECT_COMPANY:
       return {};

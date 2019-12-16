@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="213" height="213" viewBox="0 0 213 213">
+<defs>
+<style>
+.a{fill:#dedede;}.b{fill:#fff;}.c{clip-path:url(#a);}.d{fill:#d4dbe1;}.e{stroke:none;}.f{fill:none;}
+</style>
+<clipPath id="a"><circle class="a" cx="98.5" cy="98.5" r="107" transform="translate(542 175)"/></clipPath>
+</defs>
+<g transform="translate(-534 -167)"><g class="b" transform="translate(534 167)">
+<circle class="e" cx="106.5" cy="106.5" r="106.5"/>
+<circle class="f" cx="106.5" cy="106.5" r="102.5"/>
+</g>
+<g class="c">
+<g transform="translate(579 212.323)">
+<path class="d" d="M38.839,78.387h0A34.941,34.941,0,0,1,4,43.548v-8.71A34.941,34.941,0,0,1,38.839,0h0A34.941,34.941,0,0,1,73.677,34.839v8.71A34.941,34.941,0,0,1,38.839,78.387Z" transform="translate(23.129)"/>
+<path class="d" d="M79.387,11H44.548A43.125,43.125,0,0,0,1,54.548H122.935A43.125,43.125,0,0,0,79.387,11Z" transform="translate(0 84.806)"/></g><rect class="d" width="122" height="31" transform="translate(580 350)"/>
+</g>
+</g>
+</svg>

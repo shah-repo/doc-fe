@@ -26,6 +26,14 @@ export const TRAINING_ROOT_URL = "/training";
 export const TRAINING_DETAIL_URL = `${TRAINING_ROOT_URL}/detail/:trainingId`;
 
 export const SIGNUP_URL = "/signup";
+export const CONFIRM_FORGOT_PASSWORD_URL = "/sign_up/confirm_forgot_password/";
 export const STATUS = "/status";
 
 export const SUPPLIER_SURVEY_URL = "/supplier_survey/:token";
+
+export const USER_MANAGEMENT_ROOT_URL = "/user_management";
+export const USER_MANAGEMENT_DETAIL_URL = `${USER_MANAGEMENT_ROOT_URL}/:userId`;
+
+export const SLACK_ROOT_URL = "/slack";
+export const SLACK_COMPANY_URL = `${SLACK_ROOT_URL}/company`;
+export const SLACK_USER_URL = `${SLACK_ROOT_URL}/user`;

@@ -21,7 +21,8 @@
     "jsx": "preserve",
     "removeComments": true,
     "sourceMap": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "noImplicitAny": false,
   },
   "include": [
     "src"

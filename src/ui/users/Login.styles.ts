@@ -11,7 +11,7 @@ export default (theme: Theme) =>
       right: 0,
       top: 0,
       bottom: 0,
-      backgroundColor: theme.palette.grey[300],
+      backgroundColor: theme.palette.common.white,
     },
     paper: {
       alignItems: "center",
@@ -19,11 +19,7 @@ export default (theme: Theme) =>
       display: "flex",
       flexDirection: "column",
       padding: theme.spacing(2, 3, 3),
-    },
-    avatar: {
-      backgroundColor: theme.palette.secondary.main,
-      margin: theme.spacing(1),
-      color: theme.palette.secondary.contrastText,
+      boxShadow: "none",
     },
     form: {
       marginTop: theme.spacing(1),

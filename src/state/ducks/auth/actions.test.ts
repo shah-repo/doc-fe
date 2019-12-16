@@ -33,14 +33,7 @@ describe("login action tests", () => {
 
     action.onSuccess(data, dispatch);
     expect(dispatch.mock.calls[0][0]).toEqual(
-      authActions.authUser({
-        email: loginValues.email,
-        name: data.name,
-        id: data.id,
-        sessionId: data.sessionId,
-        employeeId: data.employees[0].id,
-        employees: data.employees,
-      }),
+      authActions.authUser(data),
     );
   });
 
@@ -70,14 +63,7 @@ describe("loginWithCode action tests", () => {
     action.onSuccess(response, dispatch);
 
     expect(dispatch.mock.calls[0][0]).toEqual(
-      authActions.authUser({
-        email: response.email,
-        name: response.name,
-        id: response.id,
-        sessionId: response.sessionId,
-        employeeId: response.employees[0].id,
-        employees: response.employees,
-      }),
+      authActions.authUser(response),
     );
   });
 
