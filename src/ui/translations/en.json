@@ -177,7 +177,7 @@
   "common.due.date": "Due Date",
   "common.name": "Name",
   "common.description": "Description",
-  "common.state": "Status",
+  "common.state": "State",
   "common.save": "Save",
   "common.type": "Type",
   "common.title": "Title",
@@ -246,6 +246,8 @@
   "common.click.to.try.again": "Click here to try again",
   "common.go.to.enlil": "Go to Enlil",
   "common.deactivate": "Deactivate",
+  "common.approval.id": "Approval ID",
+
   "output.info": "Form Info",
 
   "dashboard.type.PENDING_REVIEW": "is pending your approval",
@@ -391,5 +393,9 @@
 
   "slack.finalising.registration": "Finalising Slack registration",
   "slack.resgistration.completed": "Slack registration completed",
-  "slack.resgistration.failed": "Slack registration failed"
+  "slack.resgistration.failed": "Slack registration failed",
+
+  "supplier.id": "Supplier ID",
+  "supplier.name": "Supplier name",
+  "supplier.status": "Supplier status"
 }

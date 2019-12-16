@@ -1,34 +1,34 @@
 import { Button, Grid } from "@material-ui/core";
+import _ from "lodash";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import {
   DocumentRevision,
 } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
-import { SelectOption } from "../../components/forms/fields/Select";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
 import { TablePanelStateProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
-import { canEditDocumentRevision } from "../../document.revision/utils/helpers";
+import {
+  canEditDocumentRevision,
+  documentRevisionStatusOption,
+} from "../../document.revision/utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
-import { Translation } from "../../translations/types";
 import { styles } from "./styles";
 
 export interface Props {
   tableName: string;
   tableState: TablePanelStateProps<DocumentRevision>;
   clearFilter?: () => void;
-  groupOptions: SelectOption[];
 }
 
 export const SuppliersListPresenter: React.FunctionComponent<Props> = ({
   tableName,
   tableState,
   clearFilter,
-  groupOptions,
 }) => {
   const documentType: any = [
     {
@@ -81,20 +81,26 @@ export const SuppliersListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "docId",
       // label: `document.revision.list.${documentType.documentTypeName.toLowerCase()}.id` as Translation,
-      label: "Doc id" as Translation,
+      label: "supplier.id",
       cellHref: cellHrefRenderer,
       sortable: true,
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.document.docId,
         width: 150,
       },
+      searchOptions: {
+        defaultValue: tableState.queryDict.docId,
+      },
     },
     {
       key: "name",
       // label: `document.revision.list.${documentType.documentTypeName.toLowerCase()}.name` as Translation,
-      label: "Name" as Translation,
+      label: "supplier.name",
       tooltipKey: "name",
       cellHref: cellHrefRenderer,
+      searchOptions: {
+        defaultValue: tableState.queryDict.name,
+      },
     },
     {
       key: "owner",
@@ -106,20 +112,30 @@ export const SuppliersListPresenter: React.FunctionComponent<Props> = ({
     },
     {
       key: "status",
-      label: "document.revision.list.state",
+      label: "common.state",
       columnOptions: { width: 160 },
       cellType: (rowData) => (canEdit(rowData) ? "LINK" : "BASE"),
+      searchOptions: {
+        dataKey: "status[]",
+        defaultValue: _.isString(tableState.queryDict["status[]"])
+            ? tableState.queryDict["status[]"]
+            : undefined,
+        searchType: "select",
+        selectOptions: documentRevisionStatusOption(),
+      },
     },
     {
-      key: "approvalId" as keyof DocumentRevision,
-      label: "document.revision.list.approvalId" as Translation,
-      cellType: (rowData) => (canEdit(rowData) ? "LINK" : "BASE"),
+      key: "changeRequest",
+      label: "common.approval.id",
+      searchOptions: {
+        dataKey: "crId",
+        defaultValue: tableState.queryDict.crId,
+      },
+      cellHref: cellHrefRenderer,
       columnOptions: {
         cellDataGetter: ({ rowData }) =>
-          rowData.document.changeRequest
-            ? rowData.document.changeRequest.crId
-            : "",
-        width: 160,
+          rowData.changeRequest && rowData.changeRequest.crId,
+        width: 100,
       },
     },
   ];
