@@ -2,7 +2,7 @@ import { Dictionary } from "lodash";
 import { Group, GroupTag, Permission } from "../auth/types";
 import { Id, Nullable, User } from "../common";
 import { Company, Employee } from "../company";
-import { COMPANY_GROUPS_LIST, SLACK_URL } from "./constants";
+import { COMPANY_GROUPS_LIST } from "./constants";
 
 export interface GetEmployeeResponse {
   id: string;
@@ -44,7 +44,3 @@ export interface CompanyGroupsListAction {
 export type GroupsByIdState = Dictionary<LoadCompanyGroup>;
 
 export type GroupsAllIdsState = string[];
-
-export interface GetSlackUrlAction {
-  type: typeof SLACK_URL;
-}
