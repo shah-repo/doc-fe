@@ -8,6 +8,7 @@ import { withEditorRenderer } from "../../hocs/withEditorRenderer";
 import { FBEditorElementType, FBEditorModeType } from "../../types/editor";
 import { FBTemplateSchema } from "../../types/store";
 import FBValidatorStore from "../ui/FBValidatorStore";
+import _ from "lodash";
 
 export class FBEditorStore {
   @observable public open: boolean = false;
@@ -53,7 +54,7 @@ export class FBEditorStore {
   }
 
   @action public editorTypeEdit = (schema: FBTemplateSchema) => {
-    if (!schema.index) {
+    if (_.isUndefined(schema.index)) {
       return;
     }
     const { type, index } = schema;
