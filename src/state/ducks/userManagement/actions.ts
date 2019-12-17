@@ -83,13 +83,15 @@ const editEmployeeGroups = (employeeId: string, body: EmployeeGroupsEditRequestB
   });
 
 const getSlackUrl = (redirectUriEnv: string, url: string, handlers: Handlers):
-  ApiAction<GetSlackUrl> => apiActionWithCallbacks({
-    url: `${url}`,
-    method: "get",
-    data: redirectUriEnv,
-    asyncType: SLACK_URL,
-    handlers,
-  });
+  ApiAction<GetSlackUrl> => {
+    return apiActionWithCallbacks({
+      url: `${url}`,
+      method: "get",
+      params: {redirectUriEnv},
+      asyncType: SLACK_URL,
+      handlers,
+    });
+  };
 
 const editSelectedEmployeeUserInfo = (user: User): EditUserInfoAction => {
   return {
