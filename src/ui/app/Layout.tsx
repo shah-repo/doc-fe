@@ -13,6 +13,7 @@ import {
   DOCUMENT_REVISION_LIST_URL,
   DOCUMENT_REVISION_ROOT_URL,
   HOME_URL,
+  SLACK_ROOT_URL,
   TRAINING_DETAIL_URL,
   USER_MANAGEMENT_ROOT_URL,
 } from "../constants/urls";
@@ -20,20 +21,21 @@ import DashboardContainer from "../dashboard/Dashboard.container";
 import DocumentRevisionContainer from "../document.revision/container";
 import DocumentRevisionListContainer from "../document.revision/list/container";
 import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisionCreate.container";
+import SlackContainer from "../slack/Container";
 import TrainingDetailContainer from "../training/TrainingDetail.container";
 import UserManagementListContainer from "../user.management/list/container";
-import AutoLogout from "./AutoLogout";
 import DataFetcherContainer from "./DataFetcher.container";
 import HeaderContainer from "./Header.container";
 import styles from "./Layout.styles";
 import Navigation from "./Navigation";
+import PingServer from "./PingServer";
 
 type Props = WithStyles<typeof styles>;
 
 const Layout: React.FunctionComponent<Props> = ({ classes }) => {
   return (
     <div>
-      <AutoLogout />
+      <PingServer />
       <CssBaseline />
       <HeaderContainer />
       <Navigation />
@@ -76,6 +78,10 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
           <Route
             path={USER_MANAGEMENT_ROOT_URL}
             component={UserManagementListContainer}
+          />
+          <Route
+            path={SLACK_ROOT_URL}
+            component={SlackContainer}
           />
           <Redirect to={{ pathname: HOME_URL }} />
         </Switch>

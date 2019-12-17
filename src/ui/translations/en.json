@@ -1,8 +1,6 @@
 {
   "translation.unknown": "",
 
-  "autoLogout.timer": "You will be logged out in {time} seconds",
-
   "login.title": "Sign in to Enlil",
   "login.email": "EMAIL ADDRESS",
   "login.password": "PASSWORD",
@@ -243,7 +241,11 @@
   "common.email": "Email",
   "common.active": "Active",
   "common.groups": "Groups",
-
+  "common.redirecting.to.enlil": "Redirecting to {name} in {time} seconds...",
+  "common.error.occured": "An error occured.",
+  "common.click.to.try.again": "Click here to try again",
+  "common.go.to.enlil": "Go to Enlil",
+  "common.deactivate": "Deactivate",
   "output.info": "Form Info",
 
   "dashboard.type.PENDING_REVIEW": "is pending your approval",
@@ -383,10 +385,15 @@
 
   "user.management.profile": "User Profile",
   "user.management.last.training": "Last Training",
-  "user.management.groups": "Groups",
   "user.management.add.groups": "Add to other groups",
-  "user.management.deactivate": "Deactivate",
   "user.management.add.employee": "Add Employee",
   "user.management.update.profile": "Update profile",
-  "user.management.add.employee": "Add Employee"
+
+  "integrations.title": "Integrations",
+  "integrations.add": "Add",
+
+  "slack.finalising.registration": "Finalising Slack registration",
+  "slack.registration.completed": "Slack registration completed",
+  "slack.registration.failed": "Slack registration failed",
+  "slack.integrations.admin.add": "ADD SLACK INTEGRATION"
 }

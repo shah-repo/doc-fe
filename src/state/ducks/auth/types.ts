@@ -8,7 +8,7 @@ import {
   SET_EMPLOYEE,
   SIGNUP_URL,
   USER_GROUPS,
-  USERS_ME,
+  USERS_ME_URL,
 } from "./constants";
 
 export interface LoginRequestBody {
@@ -71,7 +71,7 @@ export type AuthUserPayload = User;
 
 export interface AuthUserAction {
   type: typeof AUTH_USER;
-  payload: AuthUserPayload;
+  payload: AuthResponse;
 }
 
 export interface SignupAction {
@@ -91,7 +91,7 @@ export interface LogoutUserAction {
 }
 
 export interface EditUserMeAction {
-  type: typeof USERS_ME;
+  type: typeof USERS_ME_URL;
   payload: User;
 }
 
@@ -103,6 +103,7 @@ export interface UserState {
   sessionId: string;
   employees: Employee[];
   avatar: string | null;
+  groups: Group[];
 }
 
 export interface AuthProps {
@@ -166,6 +167,8 @@ export enum Permission {
   USERS_GET_IN_COMPANY = "USERS_GET_IN_COMPANY",
   USERS_UPDATE_IN_COMPANY = "USERS_UPDATE_IN_COMPANY",
   USERS_ANONYMIZE_EMAILS = "USERS_ANONYMIZE_EMAILS",
+  // Slack
+  SLACK_APP_INSTALL = "SLACK_APP_INSTALL",
 }
 
 export enum GroupTag {

@@ -1,7 +1,13 @@
 import { TablePanelStateProps } from "../../../ui/components/table/types";
-import { User } from "../common";
+import { User } from "../auth/types";
 import { GetEmployeeResponse } from "../userManagement";
-import { TABLE_SEARCH_CLEAR, TABLE_SEARCH_SET, TABLE_SET_GROUPS, TABLE_SET_USER_INFO, TABLE_SORT } from "./constants";
+import {
+  EDIT_EMPLOYEE_GROUPS,
+  EDIT_EMPLOYEE_USER_INFO,
+  TABLE_SEARCH_CLEAR,
+  TABLE_SEARCH_SET,
+  TABLE_SORT,
+} from "./constants";
 
 export interface TableSearchSetAction<T> {
   type: typeof TABLE_SEARCH_SET;
@@ -25,11 +31,11 @@ export interface TableSearchByIdState {
 }
 
 export interface EditGroupsAction {
-  type: typeof TABLE_SET_GROUPS;
+  type: typeof EDIT_EMPLOYEE_GROUPS;
   payload: GetEmployeeResponse;
 }
 
 export interface EditUserInfoAction {
-  type: typeof TABLE_SET_USER_INFO;
+  type: typeof EDIT_EMPLOYEE_USER_INFO;
   payload: User;
 }

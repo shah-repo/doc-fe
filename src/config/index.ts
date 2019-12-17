@@ -8,7 +8,6 @@ const DEFAULTS = {
   SIGNUP_DOMAIN_URL: "/",
   FRONTEND_URL: "/",
   AWS_COGNITO_CLIENT_ID: "default",
-  AUTO_LOGOUT_TIME: "1800000", // 30 minutes in milliseconds
   THEME: ThemeEnv.DEV_THEME,
 };
 
@@ -55,12 +54,16 @@ class Config {
     return `${this.SignUpDomainUrl}/signup?${params}`;
   }
 
-  public static get AutoLogoutTime() {
-    return this.getNumber("AUTO_LOGOUT_TIME");
-  }
-
   public static get Theme() {
     return this.get("THEME");
+  }
+
+  public static get SlackCompanyUri(): string {
+    return `${this.FrontendUrl}/slack/company`;
+  }
+
+  public static get SlackUserUri(): string {
+    return `${this.FrontendUrl}/slack/user`;
   }
 }
 

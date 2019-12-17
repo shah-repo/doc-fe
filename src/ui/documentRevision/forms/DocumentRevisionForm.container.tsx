@@ -12,6 +12,7 @@ import {
   DocumentRevisionStatus,
 } from "../../../state/ducks/documentRevisions";
 import {
+  DocumentType,
   DocumentTypeByIdState,
   documentTypeSelectors,
 } from "../../../state/ducks/documentRevisions/documentType";
@@ -31,7 +32,7 @@ interface StateProps {
   availableReferences: OptionType[];
   loadAsyncState: AsyncState;
   documentRevisions: DocumentRevision[];
-  documentTypes: SelectOption[];
+  documentTypes: DocumentType[];
   documentTypesById: DocumentTypeByIdState;
   document: Document;
 }
@@ -97,10 +98,26 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
   documentTypesById,
   document,
 }) => {
-  const filteredDocTypes = useMemo(
-    () => documentTypes.filter((doc) => doc.text !== "Form"),
+  const docTypes = useMemo(
+    () =>
+      documentTypes.map((document) => ({
+        value: document.id,
+        text: document.documentTypeName,
+      })),
     [documentTypes],
   );
+
+  const otherTypes: SelectOption[] = useMemo(
+    () =>
+      documentTypes.reduce((acc: SelectOption[], document) => {
+        if (document.group === "OTHER") {
+          acc.push({ value: document.id, text: document.documentTypeName });
+        }
+        return acc;
+      }, []),
+    [documentTypes],
+  );
+
   document = document || ({} as Document);
   const classes = styles();
 
@@ -117,7 +134,8 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
         setDocId={setDocId}
         doNotPrompt={doNotPrompt}
         onDirtyFlagChange={onDirtyFlagChange}
-        documentTypes={filteredDocTypes}
+        documentTypes={docTypes}
+        otherDocumentTypes={otherTypes}
         documentTypesById={documentTypesById}
       />
     );

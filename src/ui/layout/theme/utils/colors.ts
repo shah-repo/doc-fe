@@ -6,7 +6,7 @@ export enum Colors {
   medium_gray = "#8A9DAD",
   gray = "#474747",
   // "#b4c0ca",
-  // "#e8e9ed",
+  // "#e8e9ed", Need this grey for scroll on company switch
   // "#ADB6D8"
   // "#f2f2f2"
   // "#eee"
