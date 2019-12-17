@@ -38,7 +38,6 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
   getSlackUrl,
   isSlackIntegrationEnabled,
   slackTeamId,
-  employees,
 }) => {
   const async = useAsync();
   const dispatch = useDispatch();
