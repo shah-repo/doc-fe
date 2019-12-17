@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { action, observable } from "mobx";
 import React from "react";
 import FBForm from "../../components/form/FBForm";
@@ -13,7 +14,7 @@ export class FBEditorStore {
   @observable public open: boolean = false;
   @observable public content?: React.ReactNode = undefined;
   @observable public title?: string = undefined;
-  @observable public  maxWidth?: "sm" | "md" = "sm";
+  @observable public maxWidth?: "sm" | "md" = "sm";
   public editorIndex: number = 0;
   public editorMode: FBEditorModeType = "create";
 
@@ -53,24 +54,29 @@ export class FBEditorStore {
   }
 
   @action public editorTypeEdit = (schema: FBTemplateSchema) => {
-    if (!schema.index) {
+    if (_.isUndefined(schema.index)) {
       return;
     }
     const { type, index } = schema;
     this.editorIndex = index;
     this.editorMode = "update";
     this.open = true;
-    this.editorTypeRenderer(type as FBEditorElementType, schema, "form.builder.edit.field")();
+    this.editorTypeRenderer(
+      type as FBEditorElementType,
+      schema,
+      "form.builder.edit.field",
+    )();
   }
 
-  @action private sections = () => Object.keys(FBEditorSectionConfig).map((key, i) => (
-    <FBEditorSection
-      key={`form.builder.${key as string}-${i}`}
-      label={`form.builder.${key as string}`}
-    >
-      {this.generateElements(FBEditorSectionConfig[key])}
-    </FBEditorSection>
-  ))
+  @action private sections = () =>
+    Object.keys(FBEditorSectionConfig).map((key, i) => (
+      <FBEditorSection
+        key={`form.builder.${key as string}-${i}`}
+        label={`form.builder.${key as string}`}
+      >
+        {this.generateElements(FBEditorSectionConfig[key])}
+      </FBEditorSection>
+    ))
 
   @action private generateElements = (elements: FBEditorElementType[]) =>
     elements.map((el, i) => (
