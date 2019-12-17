@@ -1,3 +1,4 @@
+import Base64 from "Base64";
 import _ , { Dictionary } from "lodash";
 import { action, computed, observable } from "mobx";
 import Validator from "validatorjs";
@@ -6,7 +7,6 @@ import { FBEditorElementType } from "../../types/editor";
 import { FBValidatorTrigger } from "../../types/validation/validator";
 import { FBValidatorConfigProps } from "../../types/validation/validatorDialog";
 import FBStore from "./FBStore";
-import Base64 from "Base64";
 
 export class FormBuilderValidatorStore {
   @observable public errors: Dictionary<string> = {};

@@ -2,12 +2,12 @@ import { Dictionary } from "lodash";
 import _ from "lodash";
 import React from "react";
 import { FBFormValues } from "../../defaults/formik";
+import FBValidatorStore from "../../stores/ui/FBValidatorStore";
 import { FBInputProps } from "../../types/common";
 import { FBTemplateSchema } from "../../types/store";
 import { withFormik } from "./withFormik";
 import { withOnChange } from "./withOnChange";
 import { withValidation } from "./withValidation";
-import FBValidatorStore from "../../stores/ui/FBValidatorStore";
 // import FBStore from "../../stores/ui/FBStore";
 
 export const withInput = <T extends FBInputProps>(

@@ -1,11 +1,11 @@
+import Base64 from "Base64";
+import _ from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
-import FBStore from "../stores/ui/FBStore";
-import { FBWorkspaceProps } from "../types/workspace";
 import Validator from "validatorjs";
-import _ from "lodash";
-import Base64 from "Base64";
+import FBStore from "../stores/ui/FBStore";
 import FBValidatorStore from "../stores/ui/FBValidatorStore";
+import { FBWorkspaceProps } from "../types/workspace";
 
 export const withWorkspace = <T extends FBWorkspaceProps>(
   Component: React.FunctionComponent<T>,
@@ -33,7 +33,7 @@ export const withWorkspace = <T extends FBWorkspaceProps>(
           return true;
         }, "",
       );
-  
+
       _.map(schema, (schemaItem) => {
         const { customValidator } = schemaItem;
         if (!_.isUndefined(customValidator)) {
