@@ -3,7 +3,7 @@ import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/typ
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
 import { Nullable } from "../common";
-import { Group, GroupTag } from "./types";
+import { Group, GroupTag, Permission } from "./types";
 
 const isAuthenticated = (state: ApplicationState): boolean => {
   return Boolean(state.auth.user.sessionId && state.auth.user.employeeId);
@@ -18,7 +18,7 @@ const currentUserName = (state: ApplicationState): string =>
 const currentUserId = (state: ApplicationState): string => state.auth.user.id;
 
 const currentUserGroups = (state: ApplicationState): Group[] =>
-  state.auth.user.groups;
+  state.auth.user.groups || [];
 
 const currentEmployeeId = (state: ApplicationState): string =>
   state.auth.user.employeeId;
@@ -32,6 +32,12 @@ const getLoadPermissionsAsyncState = (state: ApplicationState): AsyncState =>
 const getHasTag = createSelector(
   (state: ApplicationState) => state.auth.groups.tags,
   (state: ApplicationState, selectedTag: GroupTag) => selectedTag,
+  (tags, selectedTag) => tags.includes(selectedTag),
+);
+
+const getHasSlack = createSelector(
+  (state: ApplicationState) => state.auth.groups.permissions,
+  (state: ApplicationState, selectedTag: Permission) => selectedTag,
   (tags, selectedTag) => tags.includes(selectedTag),
 );
 
@@ -61,5 +67,6 @@ export default {
   hasMultipleCompanies,
   getHasTag,
   currentEmployeeAvatar,
+  getHasSlack,
   getCurrentUserGroups,
 };

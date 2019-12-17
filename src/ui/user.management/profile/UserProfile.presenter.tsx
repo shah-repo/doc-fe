@@ -2,6 +2,7 @@ import { Dialog } from "@material-ui/core";
 import React, { useState } from "react";
 import { EmployeeEditRequestBody } from "../../../state/ducks/auth/types";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
+import { AsyncState } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import AvatarContainer from "../../components/icons/avatar/avatar.container";
 import DialogContent from "./dialog/DialogContent";
@@ -20,6 +21,11 @@ interface OwnProps {
     closeEdit: () => void;
     employeeId: string;
     callbackUpdateGroups?: (values: GetEmployeeResponse) => void;
+    asyncState: AsyncState;
+    getUrl: () => void;
+    slackIntegrationEnabled: boolean;
+    slackTeamId: string;
+    hasSlackPermission: boolean;
 }
 
 type Props = OwnProps;
@@ -37,9 +43,13 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
     closeEdit,
     employeeId,
     callbackUpdateGroups,
+    asyncState,
+    getUrl,
+    slackIntegrationEnabled,
+    slackTeamId,
+    hasSlackPermission,
 }) => {
-    const [userInfo, setUserInfo] = useState<EmployeeEditRequestBody>({name, avatar});
-
+    const [userInfo, setUserInfo] = useState<EmployeeEditRequestBody>({ name, avatar });
     return (
     <Dialog fullScreen={true} open={isOpen}>
         <DialogTitle
@@ -60,6 +70,11 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
             closeEdit={closeEdit}
             userInfo={userInfo}
             editCurrentEmployee={editCurrentEmployee}
+            slackIntegrationEnabled={slackIntegrationEnabled}
+            slackTeamId={slackTeamId}
+            hasSlackPermission={hasSlackPermission}
+            asyncState={asyncState}
+            getUrl={getUrl}
         />
     </Dialog>
     );

@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { Attachment } from "../../state/ducks/attachments";
 import { Audit } from "../../state/ducks/audit";
 import { ChangeRequest } from "../../state/ducks/changeRequest";
-import { Approval, Owner } from "../../state/ducks/common";
+import { Approval, Owner, User } from "../../state/ducks/common";
 import { DocumentRevision, Reference } from "../../state/ducks/documentRevisions";
 import { DocumentType } from "../../state/ducks/documentRevisions/documentType";
 import { getAuditDefaultValue } from "../common/utils/audit";
@@ -38,6 +38,8 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
       returnValue = (audit.nextValue as Approval).approver.user.name;
       break;
     case "approvers":
+      returnValue = (audit.nextValue as User).name;
+      break;
     case "tasks.assigned":
       returnValue = (audit.nextValue as Owner).user.name;
       break;

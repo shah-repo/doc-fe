@@ -34,11 +34,13 @@ const getDocumentTypeFormOptions = createSelector(
     _.orderBy(
       ids.map((id) => {
         return {
-          value: documentTypes[id].id,
-          text: documentTypes[id].documentTypeName,
+          id: documentTypes[id].id,
+          documentTypeName: documentTypes[id].documentTypeName,
+          documentTypeAcronym: documentTypes[id].documentTypeAcronym,
+          group: documentTypes[id].group,
         };
       })
-      , ["text"], ["asc"]),
+      , ["documentTypeName"], ["asc"]),
 );
 
 const getDocumentTypeOptions = createSelector(

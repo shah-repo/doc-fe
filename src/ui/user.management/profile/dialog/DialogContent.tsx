@@ -1,9 +1,13 @@
-import { Box, Button } from "@material-ui/core";
+import { Box, Button, Typography } from "@material-ui/core";
 import React from "react";
+import { ReactComponent as SlackLogo } from "../../../../assets/images/slack_full_logo.svg";
 import { EmployeeEditRequestBody } from "../../../../state/ducks/auth/types";
 import { GetEmployeeResponse } from "../../../../state/ducks/userManagement";
+import { AsyncState } from "../../../../state/types";
 import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
+import SubmitButton from "../../../components/forms/SubmitButton";
 import Text from "../../../components/Text";
+import styles from "../../profile/UserProfile.styles";
 import UserGroups from "../groups/UserGroups";
 /* import SummaryField from "../../common/summary/base";*/
 
@@ -17,6 +21,11 @@ interface OwnProps {
     showEdit: () => void;
     closeEdit: () => void;
     userInfo: EmployeeEditRequestBody;
+    asyncState: AsyncState;
+    getUrl: () => void;
+    slackIntegrationEnabled: boolean;
+    slackTeamId: string;
+    hasSlackPermission: boolean;
   }
 
 type Props = OwnProps;
@@ -31,7 +40,13 @@ export const DialogContent: React.FunctionComponent<Props> = ({
     closeEdit,
     userInfo,
     editCurrentEmployee,
+    slackIntegrationEnabled,
+    slackTeamId,
+    hasSlackPermission,
+    getUrl,
+    asyncState,
 }) => {
+    const classes = styles();
     const updateProfileButtonsRenderer = () => (
         <Box display="flex" justifyContent="flex-end">
             <Button
@@ -86,6 +101,19 @@ export const DialogContent: React.FunctionComponent<Props> = ({
                 employeeId={employeeId}
                 callbackUpdateGroups={callbackUpdateGroups}
             />
+            {slackIntegrationEnabled && !slackTeamId &&
+            <div>
+                <Typography variant="h4" className={classes.integrations} >
+                    <Text translation="integrations.title" />
+                </Typography>
+                 <SlackLogo className={classes.slack} />
+                <SubmitButton
+                    onClick={getUrl}
+                    asyncState={asyncState}
+                    label={"integrations.add"}
+                    className={classes.addButton}
+                />
+            </div>}
             {/* {canManageUsers && deactivateButtonRenderer()} */}
             {showEditUser && updateProfileButtonsRenderer()}
         </Box>
