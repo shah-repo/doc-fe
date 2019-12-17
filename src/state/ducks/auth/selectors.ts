@@ -23,6 +23,9 @@ const currentUserGroups = (state: ApplicationState): Group[] =>
 const currentEmployeeId = (state: ApplicationState): string =>
   state.auth.user.employeeId;
 
+const currentSlackUserId = (state: ApplicationState): string =>
+  state.auth.user.employee.slackUserId;
+
 const currentEmployeeAvatar = (state: ApplicationState): Nullable<string> =>
   state.auth.user.avatar;
 
@@ -49,7 +52,7 @@ const hasMultipleCompanies = (state: ApplicationState): boolean =>
 const getCurrentUserGroups = createSelector(
   [currentUserGroups],
   (groups): OptionType[] => {
-    return groups.map((group) => ({
+    return (groups || []).map((group) => ({
       value: group.id,
       label: group.name,
     }));
@@ -69,4 +72,5 @@ export default {
   currentEmployeeAvatar,
   getHasSlack,
   getCurrentUserGroups,
+  currentSlackUserId,
 };

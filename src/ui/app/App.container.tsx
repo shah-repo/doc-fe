@@ -1,3 +1,4 @@
+import { css } from "glamor";
 import * as React from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { addLocaleData, IntlProvider } from "react-intl";
@@ -24,6 +25,12 @@ const language = "en";
 
 toast.configure({
   autoClose: false,
+  toastClassName: css({
+    background: "#eee !important",
+    color: "#333 !important",
+    borderRadius: "10px !important",
+    boxShadow: "0 1px 10px 0 rgba(0, 0, 0, 0.3), 0 2px 15px 0 rgba(0, 0, 0, 0.2) !important",
+  }),
 });
 
 const AppContainer: React.FunctionComponent = () => (

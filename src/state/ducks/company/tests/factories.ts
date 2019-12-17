@@ -17,5 +17,6 @@ export const getEmployee = (employee: Partial<Employee> = {}): Employee => ({
   id: faker.random.uuid(),
   active: true,
   company: getCompany(),
+  slackUserId: faker.random.uuid(),
   ...employee,
 });

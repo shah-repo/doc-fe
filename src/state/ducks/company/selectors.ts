@@ -15,4 +15,5 @@ export default {
   getWhiteLabeling,
   isSlackIntegrationEnabled,
   slackTeamId,
+  getSelectedCompany,
 };

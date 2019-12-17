@@ -20,6 +20,7 @@ export interface Employee {
   id: string;
   active: boolean;
   company: Company;
+  slackUserId: string;
 }
 
 export interface Company {

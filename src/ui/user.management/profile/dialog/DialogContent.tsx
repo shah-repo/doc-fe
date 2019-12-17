@@ -25,7 +25,7 @@ interface OwnProps {
     getUrl: () => void;
     slackIntegrationEnabled: boolean;
     slackTeamId: string;
-    hasSlackPermission: boolean;
+    slackUserId: string;
   }
 
 type Props = OwnProps;
@@ -42,9 +42,9 @@ export const DialogContent: React.FunctionComponent<Props> = ({
     editCurrentEmployee,
     slackIntegrationEnabled,
     slackTeamId,
-    hasSlackPermission,
     getUrl,
     asyncState,
+    slackUserId,
 }) => {
     const classes = styles();
     const updateProfileButtonsRenderer = () => (
@@ -101,7 +101,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
                 employeeId={employeeId}
                 callbackUpdateGroups={callbackUpdateGroups}
             />
-            {slackIntegrationEnabled && !slackTeamId &&
+            {slackIntegrationEnabled && slackTeamId && !slackUserId &&
             <div>
                 <Typography variant="h4" className={classes.integrations} >
                     <Text translation="integrations.title" />

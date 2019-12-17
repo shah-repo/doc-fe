@@ -27,10 +27,10 @@ export const SlackLandingContainer: React.FunctionComponent<Props> = ({
   const [errorMessage, setErrorMessage] = useState("");
   const async = useAsync({
     onSuccess: () => {
-      setTimeout(() => setSuccessMessage("slack.resgistration.completed"), 1000);
+      setTimeout(() => setSuccessMessage("slack.registration.completed"), 1000);
     },
     onError: () => {
-      setTimeout(() => setErrorMessage("slack.resgistration.failed"), 1000);
+      setTimeout(() => setErrorMessage("slack.registration.failed"), 1000);
     },
   });
 
