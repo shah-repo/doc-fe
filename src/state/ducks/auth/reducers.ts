@@ -103,7 +103,7 @@ export const USER_GROUPS_DEFAULT_STATE: UserGroupsState = {
 
 export const groups = (
   state: UserGroupsState = USER_GROUPS_DEFAULT_STATE,
-  action: UserGroupsAction,
+  action: UserGroupsAction | LogoutUserAction,
 ): UserGroupsState => {
   switch (action.type) {
     case USER_GROUPS:
@@ -125,6 +125,8 @@ export const groups = (
         tags: Array.from(tagsSet),
         permissions: Array.from(permissionsSet),
       };
+    case LOGOUT_USER:
+      return {...USER_GROUPS_DEFAULT_STATE};
     default:
       return state;
   }
