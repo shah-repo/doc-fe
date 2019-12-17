@@ -73,4 +73,5 @@ export default {
   getHasSlack,
   getCurrentUserGroups,
   currentSlackUserId,
+  currentUserGroups,
 };
