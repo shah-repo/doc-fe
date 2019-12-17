@@ -41,6 +41,8 @@ export const withEditorRenderer =
       name = _.toLower(props.values.label as string).replace(" ", "_");
     }
     // const item = schemaItem();
+    FBValidatorStore.customValidator &&
+    _.assign(FBValidatorStore.customValidator , {errorMessage: _.get(values, "custom-validator-error-message") || ""});
     const schema: FBTemplateSchema = {
       type,
       index,

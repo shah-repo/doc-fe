@@ -10,6 +10,6 @@ export interface FBValidatorCustomProps {
 
 export interface FBValidatorConfigProps {
   name: string;
-  errorMeesage?: string;
+  errorMessage?: string;
   fn: any;
 }

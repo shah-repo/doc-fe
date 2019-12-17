@@ -90,14 +90,22 @@ export class FormBuilderStore {
   }
 
   @action public getValues = () => {
-    if (_.isEmpty(this.values)) {
-      const initialValues: Dictionary<any> = {};
-      _.map(this.getSchema(), (schemaItem) => {
-        initialValues[schemaItem.name || ""] = FBFormValues[schemaItem.type || ""];
-      });
-      return initialValues;
-    }
-    return this.values;
+    const initialValues: Dictionary<any> = {};
+    _.map(this.getSchema(), (schemaItem) => {
+      initialValues[schemaItem.name || ""] = FBFormValues[schemaItem.type || ""];
+    });
+    return {
+      ...initialValues,
+      ...this.values,
+    };
+  }
+
+  @action public getValidationValues = () => {
+    const values = {};
+    _.map(this.getValues(), (v, k) => {
+      values[k] = (!v || v === "") ? false : _.get(this.values, k);
+    });
+    return values;
   }
 
   @action public setValues = (values: Dictionary<any> | undefined) => {

@@ -7,6 +7,8 @@ import { FBTemplateSchema } from "../../types/store";
 import { withFormik } from "./withFormik";
 import { withOnChange } from "./withOnChange";
 import { withValidation } from "./withValidation";
+import FBValidatorStore from "../../stores/ui/FBValidatorStore";
+// import FBStore from "../../stores/ui/FBStore";
 
 export const withInput = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>,
@@ -34,7 +36,7 @@ export const withInput = <T extends FBInputProps>(
     }
 
     error = Boolean(_.get(form, `errors.${name}`));
-    helperText = error && _.get(form, `errors.${name}`);
+    helperText = (error && _.get(form, `errors.${name}`)) || FBValidatorStore.getErrorText(name);
 
     if (elements.length === 1) {
       _.first(elements) && (

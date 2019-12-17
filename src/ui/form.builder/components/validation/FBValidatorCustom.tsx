@@ -5,6 +5,7 @@ import { withValidatorCustom } from "../../hocs/validation/withValidatorCustom";
 import FBValidatorStore from "../../stores/ui/FBValidatorStore";
 import { FBValidatorCustomProps } from "../../types/validation/validatorDialog";
 import FBButton from "../inputs/FBButton";
+import FBTextField from "../inputs/FBTextField";
 
 const FBValidatorCustom: React.FunctionComponent<FBValidatorCustomProps> = ({
   code,
@@ -13,6 +14,7 @@ const FBValidatorCustom: React.FunctionComponent<FBValidatorCustomProps> = ({
   clear,
 }) => (
   <Box>
+    <FBTextField label="Error Message" name="custom-validator-error-message" />
     <List subheader={<li />}>
       {
         <li>

@@ -34,7 +34,7 @@ export const withValidatorCustom = <T extends FBValidatorCustomProps>(
         setLiveCode(code);
         FBValidatorStore.customValidator = {
           name: validatorName,
-          errorMeesage: "Field is required",
+          errorMessage: "Field is required",
           fn: Base64.btoa(code),
         };
       }

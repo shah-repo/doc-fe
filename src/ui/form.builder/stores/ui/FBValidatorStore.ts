@@ -1,4 +1,3 @@
-import Base64 from "Base64";
 import _ , { Dictionary } from "lodash";
 import { action, computed, observable } from "mobx";
 import Validator from "validatorjs";
@@ -7,10 +6,12 @@ import { FBEditorElementType } from "../../types/editor";
 import { FBValidatorTrigger } from "../../types/validation/validator";
 import { FBValidatorConfigProps } from "../../types/validation/validatorDialog";
 import FBStore from "./FBStore";
+import Base64 from "Base64";
 
 export class FormBuilderValidatorStore {
   @observable public errors: Dictionary<string> = {};
   @observable public indicatorValues: Dictionary<Dictionary<string>> = {};
+  @observable public helperText: Dictionary<string> = {};
   public applicableOn: boolean = false;
   public activeValidatorType?: FBEditorElementType;
   public customValidator?: FBValidatorConfigProps;
@@ -154,37 +155,51 @@ export class FormBuilderValidatorStore {
   }
 
   @action public customValidate = () => {
+
     Validator.register(
       "", () => {
         return true;
       }, "",
     );
 
-    const rules = {};
     _.map(FBStore.getSchema(), (schemaItem) => {
       const { customValidator } = schemaItem;
       if (!_.isUndefined(customValidator)) {
-
         Validator.register(
           customValidator.name,
           // tslint:disable-next-line: no-eval
           eval(Base64.atob(customValidator.fn)),
-          "{errorMessage}",
+          customValidator.errorMessage || "",
         );
-
-        rules[schemaItem.name || ""] = [{ [customValidator.name]: FBStore.getValues() }];
-        const validator = new Validator(
-          FBStore.getValues(),
-          rules,
-        );
-
-        if (validator.fails()) {
-          // tslint:disable-next-line: no-console
-          console.log(validator.errors.all());
-          return validator.errors.all();
-        }
       }
     });
+
+    const rules = {};
+    _.map(FBStore.getSchema(), (schemaItem) => {
+      const { customValidator } = schemaItem;
+      if (!_.isUndefined(customValidator)) {
+        rules[schemaItem.name || ""] = [{ [customValidator.name]: FBStore.getValidationValues()}];
+      } else {
+        rules[schemaItem.name || ""] = "";
+      }
+    });
+
+    const validator = new Validator(
+      FBStore.getValidationValues(),
+      rules,
+    );
+
+    this.helperText = {};
+    if (validator.fails()) {
+      const errors = validator.errors.all();
+      _.map(errors, (v, k) => {
+        this.helperText[k] = _.join(v, "\n");
+      });
+    }
+  }
+
+  @action public getErrorText = (fieldName: string): string | undefined => {
+    return _.get(this.helperText, fieldName);
   }
 }
 
