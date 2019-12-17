@@ -370,6 +370,7 @@
 
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
+  "attachment.download.watermark": "Download watermarked file",
 
   "training.completed": "Training completed",
   "training.certify.completion": "Click the button to certify training completion",

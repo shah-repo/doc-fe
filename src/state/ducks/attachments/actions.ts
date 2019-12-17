@@ -1,6 +1,10 @@
 import { apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
-import { ATTACHMENT_ROOT_URL, ATTACHMENT_UPLOAD_URL } from "./constants";
+import {
+  ATTACHMENT_ROOT_URL,
+  ATTACHMENT_UPLOAD_URL,
+  REQUEST_WATERMARK_ASYNC,
+} from "./constants";
 import {
   Attachment,
   AttachmentDownloadResponse,
@@ -36,7 +40,20 @@ const download = (
   });
 };
 
+const requestWatermarkedFile = (
+  data: any,
+  handlers: Handlers,
+): ApiAction =>
+  apiActionWithCallbacks({
+    url: `${ATTACHMENT_ROOT_URL}/watermark`,
+    method: "post",
+    data,
+    asyncType: REQUEST_WATERMARK_ASYNC,
+    handlers,
+  });
+
 export default {
   upload,
   download,
+  requestWatermarkedFile,
 };
