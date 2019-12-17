@@ -114,14 +114,21 @@ export class FormBuilderValidatorStore {
       if (schemaItem.type === "checkboxgroup") {
         const options = _.split((schemaItem.options || "") as string, "\n");
         _.map(options, (option) => {
-          keys.push(`${schemaItem.name}-${_.toLower(option).replace(" ", "-")}-option`);
+          keys.push(`Field name: ${schemaItem.name}_${_.toLower(option).replace(" ", "_")}_option`);
         });
+      } else if (schemaItem.type === "radiogroup") {
+        const options = _.split((schemaItem.options || "") as string, "\n");
+        const optionValues: string[] = [];
+        _.map(options, (option) => {
+          optionValues.push(`${schemaItem.name}_${_.toLower(option).replace(" ", "_")}_option`);
+        });
+        keys.push(`Field name: ${schemaItem.name || ""}. Field option values: ${_.join(optionValues, ", ")}`);
       } else {
         keys.push(schemaItem.name || "");
       }
 
       if (schemaItem.includeContext) {
-        keys.push(`${schemaItem.name}-other`);
+        keys.push(`Field name: ${schemaItem.name}_other`);
       }
     });
     return keys;
