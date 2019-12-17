@@ -38,5 +38,22 @@ export default makeStyles((theme: Theme) =>
         backgroundColor: "white",
         marginTop: theme.spacing(3.5),
     },
+    integrations: {
+      marginTop: "50px",
+      fontSize: "1.1rem",
+      fontWeight: "normal",
+      lineHeight: "1.6",
+      letterSpacing: "0.0075em",
+    },
+    slack: {
+      height: "40px",
+      width: "139px",
+      marginTop: "15px",
+      marginBottom: "15px",
+    },
+    addButton: {
+      display: "flex",
+      margin: 0,
+    },
   }),
 );

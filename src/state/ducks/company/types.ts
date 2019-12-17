@@ -20,15 +20,18 @@ export interface Employee {
   id: string;
   active: boolean;
   company: Company;
+  slackUserId: string;
 }
 
 export interface Company {
+  slackIntegrationEnabled: boolean;
   id: string;
   name: string;
   maxRevisionStages: number;
   users: User[];
   documentTypes: DocumentType[];
   whiteLabeling: WhiteLabeling;
+  teamId: string;
 }
 
 export interface SelectCompanyAction {

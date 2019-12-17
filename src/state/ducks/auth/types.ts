@@ -104,6 +104,7 @@ export interface UserState {
   employees: Employee[];
   avatar: string | null;
   groups: Group[];
+  employee: Employee;
 }
 
 export interface AuthProps {
@@ -167,6 +168,8 @@ export enum Permission {
   USERS_GET_IN_COMPANY = "USERS_GET_IN_COMPANY",
   USERS_UPDATE_IN_COMPANY = "USERS_UPDATE_IN_COMPANY",
   USERS_ANONYMIZE_EMAILS = "USERS_ANONYMIZE_EMAILS",
+  // Slack
+  SLACK_APP_INSTALL = "SLACK_APP_INSTALL",
 }
 
 export enum GroupTag {

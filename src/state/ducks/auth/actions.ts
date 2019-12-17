@@ -173,12 +173,7 @@ const confirmNewPassword = (
     includeAuthorization: false,
     onSuccess: (m, dispatch) => {
       dispatch(authConfirmPassword());
-      dispatch(
-        login(
-          confirmValues,
-          handlers,
-        ),
-      );
+      dispatch(login({email: confirmValues.email, password: confirmValues.password}, handlers));
     },
     handlers,
   });
