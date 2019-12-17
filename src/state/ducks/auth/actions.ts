@@ -273,4 +273,5 @@ export default {
   forgotPassword,
   confirmNewPassword,
   userGroups,
+  editUser,
 };
