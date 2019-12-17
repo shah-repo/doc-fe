@@ -1,7 +1,9 @@
 import { createSelector } from "reselect";
+import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
-import { GroupTag } from "./types";
+import { Nullable } from "../common";
+import { Group, GroupTag, Permission } from "./types";
 
 const isAuthenticated = (state: ApplicationState): boolean => {
   return Boolean(state.auth.user.sessionId && state.auth.user.employeeId);
@@ -15,10 +17,13 @@ const currentUserName = (state: ApplicationState): string =>
 
 const currentUserId = (state: ApplicationState): string => state.auth.user.id;
 
+const currentUserGroups = (state: ApplicationState): Group[] =>
+  state.auth.user.groups || [];
+
 const currentEmployeeId = (state: ApplicationState): string =>
   state.auth.user.employeeId;
 
-const currentEmployeeAvatar = (state: ApplicationState): string | null =>
+const currentEmployeeAvatar = (state: ApplicationState): Nullable<string> =>
   state.auth.user.avatar;
 
 const getLoadPermissionsAsyncState = (state: ApplicationState): AsyncState =>
@@ -30,10 +35,26 @@ const getHasTag = createSelector(
   (tags, selectedTag) => tags.includes(selectedTag),
 );
 
+const getHasSlack = createSelector(
+  (state: ApplicationState) => state.auth.groups.permissions,
+  (state: ApplicationState, selectedTag: Permission) => selectedTag,
+  (tags, selectedTag) => tags.includes(selectedTag),
+);
+
 const employees = (state: ApplicationState) => state.auth.user.employees;
 
 const hasMultipleCompanies = (state: ApplicationState): boolean =>
   state.auth.user.employees.length > 1;
+
+const getCurrentUserGroups = createSelector(
+  [currentUserGroups],
+  (groups): OptionType[] => {
+    return groups.map((group) => ({
+      value: group.id,
+      label: group.name,
+    }));
+  },
+);
 
 export default {
   isAuthenticated,
@@ -46,4 +67,6 @@ export default {
   hasMultipleCompanies,
   getHasTag,
   currentEmployeeAvatar,
+  getHasSlack,
+  getCurrentUserGroups,
 };

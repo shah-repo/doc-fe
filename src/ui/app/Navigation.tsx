@@ -12,7 +12,7 @@ import { authSelectors } from "../../state/ducks/auth";
 import { ApplicationState } from "../../state/reducers";
 import BottomLogo from "../components/icons/BottomLogo.container";
 import Logo from "../components/icons/Logo.container";
-import SwitchCompanyButton from "../components/icons/SwitchCompanyButton.presenter";
+import SwitchCompanyButtonContainer from "../components/icons/SwitchCompanyButton/SwitchCompanyButton.container";
 import {
   CHANGE_REQUEST_LIST_URL,
   DOCUMENT_REVISION_LIST_URL,
@@ -71,7 +71,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
       <UserManagementLink pathname={location.pathname} />
     </List>
     {hasMultipleCompanies &&
-    <SwitchCompanyButton location={location} />
+    <SwitchCompanyButtonContainer location={location} />
     }
     <BottomLogo />
   </Drawer>

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { authActions, authSelectors } from "../../state/ducks/auth";
 import { companyActions } from "../../state/ducks/company";
 import { documentTypeActions } from "../../state/ducks/documentRevisions/documentType";
+import { userManagementActions } from "../../state/ducks/userManagement";
 
 const DataFetcherContainer: React.FunctionComponent = () => {
   const dispatch = useDispatch();
@@ -11,6 +12,7 @@ const DataFetcherContainer: React.FunctionComponent = () => {
     dispatch(documentTypeActions.loadList());
     dispatch(companyActions.queryCompany(employeeId));
     dispatch(authActions.loadUserGroups());
+    dispatch(userManagementActions.loadCompanyGroups());
   }, []);
 
   // NOTE: should we show error messages here?

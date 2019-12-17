@@ -11,6 +11,8 @@ export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
   users: [],
   documentTypes: [],
   whiteLabeling: WHITE_LABEL_DEFAULT,
+  slackIntegrationEnabled: false,
+  teamId: "",
 };
 
 type CompanyActions = SelectCompanyAction | LogoutUserAction;
