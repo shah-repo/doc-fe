@@ -1,6 +1,4 @@
-import { FBDialogProps } from "../dialog";
 
-export type FBValidatorFormProps = Partial<FBDialogProps> & {
+export interface FBValidatorFormProps {
     validators?: React.ReactNode[];
-    onCustomClick?: () => void;
-};
+}

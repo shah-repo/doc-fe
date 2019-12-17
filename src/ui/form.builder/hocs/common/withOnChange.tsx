@@ -1,6 +1,7 @@
 import _ from "lodash";
 import React from "react";
 import FBStore from "../../stores/ui/FBStore";
+import FBValidatorStore from "../../stores/ui/FBValidatorStore";
 import { FBInputProps } from "../../types/common";
 
 export const withOnChange = <T extends FBInputProps>(
@@ -46,6 +47,8 @@ export const withOnChange = <T extends FBInputProps>(
         ...FBStore.values,
         [fieldName]: value,
       });
+
+      FBValidatorStore.customValidate();
     }
 
     const handleChange = (

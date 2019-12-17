@@ -16,7 +16,7 @@ export const withEditorRenderer =
 
   const { type, index, mode } = other;
   const InputType = FBFieldEditorComponent[type as string];
-  const uuidv4 = require("uuid/v4");
+  const uniqid = require("uniqid");
   FBValidatorStore.setActiveValidatorType(type);
 
   // const schemaItem = (): FBTemplateSchema => ({
@@ -35,19 +35,25 @@ export const withEditorRenderer =
   };
 
   const onClick = () => {
-
+    const values = propsByType();
+    let name = "";
+    if (_.isObject(props.values) && _.has(props.values, "label")) {
+      name = _.toLower(props.values.label as string).replace(" ", "_");
+    }
     // const item = schemaItem();
     const schema: FBTemplateSchema = {
       type,
       index,
-      name: uuidv4(),
-      ...propsByType(),
+      name: `${name}_${uniqid()}`,
+      ...values,
       rules: FBValidatorStore.getRules(),
       // applicableOn: FBValidatorStore.applicableOn ? [FBValidatorTrigger.ON_STATE_TO_IN_REVIEW] : [],
       applicableOn: ["ON_STATE_TO_IN_REVIEW"],
+      customValidator: FBValidatorStore.customValidator,
     };
     FBValidatorStore.applicableOn = false;
     FBValidatorStore.resetIndicatorValues();
+    FBValidatorStore.customValidator = undefined;
 
     const removeEl = (mode === "create") ? 0 : 1;
     const newSchema = FBStore.schema;

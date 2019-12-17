@@ -13,6 +13,7 @@ import { FBContextProps } from "./common/context";
 import { FBEditorElementType } from "./editor";
 import { FBFormikFieldProps } from "./formik";
 import { FBValidatorDelimiter, FBValidatorTrigger } from "./validation/validator";
+import { FBValidatorConfigProps } from "./validation/validatorDialog";
 
 export type Subtract<T, V> = Pick<T, Exclude<keyof T, keyof V>>;
 
@@ -81,6 +82,7 @@ export type FBInputProps =
     hasSchemaItems?: boolean;
     applicableOn?: any[];
     multiple?: boolean;
+    customValidator?: FBValidatorConfigProps;
   };
 
 export type FBFormDefaultProps =

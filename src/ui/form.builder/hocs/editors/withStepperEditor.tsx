@@ -1,6 +1,8 @@
-import { Step, StepButton } from "@material-ui/core";
+import { BottomNavigation, BottomNavigationAction, Box, Step, StepButton } from "@material-ui/core";
 import React from "react";
+import FBValidatorCustom from "../../components/validation/FBValidatorCustom";
 import FBValidatorForm from "../../components/validation/FBValidatorForm";
+import editorStore from "../../stores/ui/FBEditorStore";
 import { FBEditorStepperProps } from "../../types/editors/stepper";
 
 export const withStepperEditor = <T extends FBEditorStepperProps>(
@@ -8,13 +10,33 @@ export const withStepperEditor = <T extends FBEditorStepperProps>(
 ) => {
   return (props: T) => {
     const [activeStep, setActiveStep] = React.useState(0);
+    const [value, setValue] = React.useState(0);
     const stepLabels = ["Field config", "Validation"];
     const getStepContent = (step: number): React.ReactNode => {
       switch (step) {
         case 0:
+          editorStore.maxWidth = "sm";
           return props.children;
         case 1:
-          return <FBValidatorForm />;
+          editorStore.maxWidth = "md";
+          return (
+            <Box>
+              <BottomNavigation
+                value={value}
+                onChange={(event, newValue) => {
+                  setValue(newValue);
+                }}
+                showLabels
+              >
+                <BottomNavigationAction label="Validators" />
+                <BottomNavigationAction label="Custom Validators" />
+              </BottomNavigation>
+                <Box mt={1} py={2}>
+                  {value === 0 && <FBValidatorForm />}
+                  {value === 1 && <FBValidatorCustom />}
+                </Box>
+            </Box>
+          );
         default:
           return "";
       }

@@ -4,7 +4,6 @@ import FBValidator from "../../components/validation/FBValidator";
 import validatorCollection from "../../stores/domain/collections/FBValidatorCollection";
 import FBValidatorStore from "../../stores/ui/FBValidatorStore";
 import { FBValidatorFormProps } from "../../types/validation/validatorForm";
-import { withDialogState } from "../withDialogState";
 
 export const withValidatorForm = <T extends FBValidatorFormProps>(
   Component: React.FunctionComponent<T>,
@@ -27,16 +26,11 @@ export const withValidatorForm = <T extends FBValidatorFormProps>(
         }
       });
 
-    const onCustomClick = () => {
-      props.setDialogOpen && props.setDialogOpen();
-    };
-
     return Component({
       ...props,
       validators,
-      onCustomClick,
     });
   };
 
-  return withDialogState((props: T) => Comp(props));
+  return (props: T) => Comp(props);
 };
