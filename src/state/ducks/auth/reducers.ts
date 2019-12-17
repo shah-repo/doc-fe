@@ -68,6 +68,7 @@ export const user = (
       return {
         ...state,
         employeeId: action.payload.id,
+        employee: action.payload,
       };
     case USERS_ME_URL:
       return {
