@@ -7,18 +7,18 @@ import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import { ApplicationState } from "../../../state/reducers";
 import { HOME_URL } from "../../constants/urls";
 import { RouteParams } from "../utils/types";
-import ListPresenter from "./presenter";
+import DocumentByTypeListPresenter from "./presenter";
 
 type Props = RouteComponentProps<RouteParams>;
 
-export const SuppliersListContainer: React.FunctionComponent<Props> = ({
+export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   match,
 }) => {
   const documentType = useSelector(
     (state: ApplicationState) =>
-      documentTypeSelectors.getDocumentTypeById(state, match.params.listId),
+      documentTypeSelectors.getDocumentTypeByAcronym(state, match.params.acronym),
   );
-  const TABLE_NAME = "suppliersList";
+  const TABLE_NAME = "documentsByTypeList";
   const dispatch = useDispatch();
   const tableState = useSelector(getTableState(TABLE_NAME));
 
@@ -30,7 +30,7 @@ export const SuppliersListContainer: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <ListPresenter
+    <DocumentByTypeListPresenter
       tableName={TABLE_NAME}
       tableState={tableState}
       clearFilter={clearFilter}
@@ -39,4 +39,4 @@ export const SuppliersListContainer: React.FunctionComponent<Props> = ({
   );
 };
 
-export default SuppliersListContainer;
+export default DocumentByTypeListContainer;

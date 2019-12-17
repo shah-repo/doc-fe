@@ -1,14 +1,14 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { DocumentType, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
-import { SUPPLIERS_ROOT_URL } from "../../constants/urls";
+import { DOCUMENT_BY_TYPE_ROOT_URL } from "../../constants/urls";
 import { Translation } from "../../translations/types";
 import NavigationLinkContainer from "../NavigationLink.container";
 
 interface Props {
   pathname: string;
 }
-const SuppliersListLink: React.FunctionComponent<Props> = ({
+const DocumentByTypeListLinks: React.FunctionComponent<Props> = ({
   pathname,
 }) => {
   const docTypesWithPageDetails: DocumentType[] = useSelector(documentTypeSelectors.getDocumentTypesWithPageDetails);
@@ -24,7 +24,7 @@ const SuppliersListLink: React.FunctionComponent<Props> = ({
         return (
           <NavigationLinkContainer
             key={docType.id}
-            url={`${SUPPLIERS_ROOT_URL}/${docType.id}`}
+            url={`${DOCUMENT_BY_TYPE_ROOT_URL}/${docType.documentTypeAcronym.toLowerCase()}`}
             text={docType.documentTypeName as Translation}
             currentPath={pathname}
           />
@@ -35,4 +35,4 @@ const SuppliersListLink: React.FunctionComponent<Props> = ({
   );
 };
 
-export default SuppliersListLink;
+export default DocumentByTypeListLinks;

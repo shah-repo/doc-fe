@@ -58,6 +58,15 @@ const getDocumentTypeOptions = createSelector(
 
 const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.documentType.loadListAsyncInfo;
 
+const getDocumentTypeByAcronym = createSelector(
+  byId,
+  (state, acronym: string) => acronym,
+  (docTypesById, acronym) =>
+    Object
+      .values(docTypesById)
+      .find((docType) => docType.documentTypeAcronym.toLowerCase() === acronym.toLowerCase()),
+);
+
 export default {
   byId,
   getDocumentTypeList,
@@ -66,4 +75,5 @@ export default {
   getLoadListAsyncState,
   getDocumentTypeById,
   getDocumentTypesWithPageDetails,
+  getDocumentTypeByAcronym,
 };

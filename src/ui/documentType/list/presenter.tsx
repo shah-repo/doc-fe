@@ -29,7 +29,7 @@ export interface Props {
   documentType: DocumentType;
 }
 
-export const SuppliersListPresenter: React.FunctionComponent<Props> = ({
+export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   tableName,
   tableState,
   clearFilter,
@@ -145,4 +145,4 @@ export const SuppliersListPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default SuppliersListPresenter;
+export default DocumentByTypeListPresenter;

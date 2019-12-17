@@ -38,5 +38,5 @@ export const SLACK_ROOT_URL = "/slack";
 export const SLACK_COMPANY_URL = `${SLACK_ROOT_URL}/company`;
 export const SLACK_USER_URL = `${SLACK_ROOT_URL}/user`;
 
-export const SUPPLIERS_ROOT_URL = "/suppliers";
-export const SUPPLIERS_LIST_URL = `${SUPPLIERS_ROOT_URL}/:listId`;
+export const DOCUMENT_BY_TYPE_ROOT_URL = "/document_by_type";
+export const DOCUMENT_BY_TYPE_LIST_URL = `${DOCUMENT_BY_TYPE_ROOT_URL}/:acronym`;

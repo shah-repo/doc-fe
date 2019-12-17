@@ -1,3 +1,3 @@
 export interface RouteParams {
-  listId: string;
+  acronym: string;
 }
