@@ -26,6 +26,13 @@ import {
   UserState,
 } from "./types";
 
+export const DEFAULT_EMPLOYEE = {
+  id: "",
+  active: true,
+  company: COMPANY_DEFAULT_STATE,
+  slackUserId: "",
+};
+
 export const USER_DEFAULT_STATE: UserState = {
   email: "",
   name: "",
@@ -35,12 +42,7 @@ export const USER_DEFAULT_STATE: UserState = {
   employees: [],
   avatar: "",
   groups: [],
-  employee: {
-    id: "",
-    active: true,
-    company: COMPANY_DEFAULT_STATE,
-    slackUserId: "",
-  },
+  employee: DEFAULT_EMPLOYEE,
 };
 
 type AuthUserActions =
