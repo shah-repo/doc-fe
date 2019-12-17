@@ -16,8 +16,8 @@ export const withOptions = <T extends FBOptionProps>(
 
     function mapStringOption(): T["options"] {
       const splitArray = _.split(props.options as string, "\n");
-      return _.map(splitArray, (option, index) => ({
-        [optionValueKey]: `option-${index}-${name}`,
+      return _.map(splitArray, (option) => ({
+        [optionValueKey]: `${name}_${_.toLower(option).replace(" ", "_")}_option`,
         [optionLabelKey]: option,
       }));
     }
@@ -31,7 +31,7 @@ export const withOptions = <T extends FBOptionProps>(
 
     function unionContextOption(options: any[]): T["options"] {
       return _.union(options, [{
-        [optionValueKey]: `other-${name}`,
+        [optionValueKey]: `${name}_other`,
         [optionLabelKey]: "form.builder.other",
       }]);
     }

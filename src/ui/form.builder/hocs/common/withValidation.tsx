@@ -16,6 +16,7 @@ export const withValidation = <T extends FBInputProps>(
   }: T) => {
 
     const validate = (value: any) => {
+
       if (!rules || !_.isEmpty(applicableOn)) {
         return;
       }

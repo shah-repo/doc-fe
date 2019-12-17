@@ -1,14 +1,12 @@
-import { AppBar, Box, Button, Dialog, IconButton, InputBase, Toolbar, Typography } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import React from "react";
+import { Dialog } from "@material-ui/core";
+import React, { useState } from "react";
 import { EmployeeEditRequestBody } from "../../../state/ducks/auth/types";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
-/* import SummaryField from "../../common/summary/base";*/
+import { AsyncState } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import AvatarContainer from "../../components/icons/avatar/avatar.container";
-import Text from "../../components/Text";
-import UserGroups from "./UserGroups";
-import styles from "./UserProfile.styles";
+import DialogContent from "./dialog/DialogContent";
+import DialogTitle from "./dialog/DialogTitle";
 
 interface OwnProps {
     isOpen: boolean;
@@ -23,6 +21,11 @@ interface OwnProps {
     closeEdit: () => void;
     employeeId: string;
     callbackUpdateGroups?: (values: GetEmployeeResponse) => void;
+    asyncState: AsyncState;
+    getUrl: () => void;
+    slackIntegrationEnabled: boolean;
+    slackTeamId: string;
+    hasSlackPermission: boolean;
 }
 
 type Props = OwnProps;
@@ -40,109 +43,39 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
     closeEdit,
     employeeId,
     callbackUpdateGroups,
+    asyncState,
+    getUrl,
+    slackIntegrationEnabled,
+    slackTeamId,
+    hasSlackPermission,
 }) => {
-    const classes = styles();
-    let userInfo: EmployeeEditRequestBody = {
-        name,
-        avatar,
-    };
-
-    const handleNameChange = (event: React.ChangeEvent<{value: string}>) =>
-    userInfo = {...userInfo, name: event.target.value};
-
-    const userNameRenderer = (name: string) => (
-        <Typography variant="h3" className={classes.userName}>
-            {name}
-        </Typography>
-    );
-
-    const editUserNameRenderer = (name: string) => (
-        <InputBase
-            defaultValue={name}
-            onChange={handleNameChange}
-            className={classes.userNameEdit}
-        />
-    );
-
-    const updateProfileButtonsRenderer = () => (
-        <Box display="flex" justifyContent="flex-end">
-            <Button
-                variant="outlined"
-                style={{width: "auto", color: "#6E09EA", borderColor: "#6E09EA"}}
-                onClick={closeEdit}
-            >
-                <Text translation="common.cancel" />
-            </Button>
-            <Button
-                variant="contained"
-                style={{width: "auto", color: "white", backgroundColor: "#6E09EA"}}
-                onClick={() => {editCurrentEmployee(userInfo); closeEdit(); }}
-            >
-                <Text translation="user.management.update.profile" />
-            </Button>
-        </Box>
-    );
-    /*const deactivateButtonRenderer = () => (
-        <Box display="flex" justifyContent="start">
-            <Button
-                variant="outlined"
-                color="primary"
-                style={{margin: "48px 0 0 0"}}
-            >
-                <Text translation="user.management.deactivate" />
-            </Button>
-        </Box>
-    ); */
+    const [userInfo, setUserInfo] = useState<EmployeeEditRequestBody>({ name, avatar });
     return (
     <Dialog fullScreen={true} open={isOpen}>
-        <AppBar className={classes.appBar}>
-            <Toolbar>
-                <IconButton className={classes.iconButton} onClick={close} aria-label="Close">
-                    <CloseIcon/>
-                </IconButton>
-            </Toolbar>
-            <Box
-                display="block"
-                textAlign="center"
-            >
-            <Typography variant="h4" className={classes.userProfile}>
-                <Text translation="user.management.profile"/>
-            </Typography>
-                {!showEditUser && userNameRenderer(name)}
-                {showEditUser && editUserNameRenderer(name)}
-            </Box>
-        </AppBar>
-        <Box
-            display="flex"
-            justifyContent="center"
-            mt={20}
-        >
-            <AvatarContainer/>
-        </Box>
-        <Box display="flex" justifyContent="center">
-            <Button
-                variant="text"
-                color="primary"
-                style={{width: "2auto"}}
-                onClick={showEdit}
-            >
-                <Text translation="common.edit" />
-            </Button>
-        </Box>
-        <Box
-            alignSelf="center"
-            mt={7}
-        >
-            {/*<SummaryField label="user.management.last.training" value={"01/08/2018"}/>*/}
-            <UserGroups
-                canManageUsers={canManageUsers}
-                employeeGroups={employeeGroups}
-                employeeId={employeeId}
-                callbackUpdateGroups={callbackUpdateGroups}
-            />
-            {/* {canManageUsers && deactivateButtonRenderer()} */}
-            {showEditUser && updateProfileButtonsRenderer()}
-        </Box>
+        <DialogTitle
+            showEditUser={showEditUser}
+            name={name}
+            userInfo={userInfo}
+            setUserInfo={setUserInfo}
+            close={close}
+        />
+        <AvatarContainer/>
+        <DialogContent
+            canManageUsers={canManageUsers}
+            employeeGroups={employeeGroups}
+            employeeId={employeeId}
+            callbackUpdateGroups={callbackUpdateGroups}
+            showEdit={showEdit}
+            showEditUser={showEditUser}
+            closeEdit={closeEdit}
+            userInfo={userInfo}
+            editCurrentEmployee={editCurrentEmployee}
+            slackIntegrationEnabled={slackIntegrationEnabled}
+            slackTeamId={slackTeamId}
+            hasSlackPermission={hasSlackPermission}
+            asyncState={asyncState}
+            getUrl={getUrl}
+        />
     </Dialog>
     );
 };

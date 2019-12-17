@@ -1,14 +1,20 @@
+import Base64 from "Base64";
 import _ , { Dictionary } from "lodash";
 import { action, computed, observable } from "mobx";
 import Validator from "validatorjs";
 import { SelectOption } from "../../../components/forms/fields/Select";
+import { FBEditorElementType } from "../../types/editor";
 import { FBValidatorTrigger } from "../../types/validation/validator";
+import { FBValidatorConfigProps } from "../../types/validation/validatorDialog";
 import FBStore from "./FBStore";
 
 export class FormBuilderValidatorStore {
   @observable public errors: Dictionary<string> = {};
   @observable public indicatorValues: Dictionary<Dictionary<string>> = {};
+  @observable public helperText: Dictionary<string> = {};
   public applicableOn: boolean = false;
+  public activeValidatorType?: FBEditorElementType;
+  public customValidator?: FBValidatorConfigProps;
 
   @computed get schemaItemOptions(): SelectOption[] {
     const schema = FBStore.getSchema();
@@ -18,6 +24,10 @@ export class FormBuilderValidatorStore {
         text: schemaItem.label,
       } as SelectOption;
     });
+  }
+
+  @action public setActiveValidatorType = (type: FBEditorElementType) => {
+    this.activeValidatorType = type;
   }
 
   @action public getRules = (): string | undefined => {
@@ -98,6 +108,32 @@ export class FormBuilderValidatorStore {
       ({ value: `applicableOn-${v}`, text: k } as SelectOption));
   }
 
+  @action public getFieldNames = (): string[] => {
+    const keys: string[] = [];
+    _.map(FBStore.getSchema(), (schemaItem) => {
+      if (schemaItem.type === "checkboxgroup") {
+        const options = _.split((schemaItem.options || "") as string, "\n");
+        _.map(options, (option) => {
+          keys.push(`Field name: ${schemaItem.name}_${_.toLower(option).replace(" ", "_")}_option`);
+        });
+      } else if (schemaItem.type === "radiogroup") {
+        const options = _.split((schemaItem.options || "") as string, "\n");
+        const optionValues: string[] = [];
+        _.map(options, (option) => {
+          optionValues.push(`${schemaItem.name}_${_.toLower(option).replace(" ", "_")}_option`);
+        });
+        keys.push(`Field name: ${schemaItem.name || ""}. Field option values: ${_.join(optionValues, ", ")}`);
+      } else {
+        keys.push(schemaItem.name || "");
+      }
+
+      if (schemaItem.includeContext) {
+        keys.push(`Field name: ${schemaItem.name}_other`);
+      }
+    });
+    return keys;
+  }
+
   @action public validate = (
     data: any,
     rules: Dictionary<any>,
@@ -123,6 +159,54 @@ export class FormBuilderValidatorStore {
       return validator.errors.all();
     }
     return {};
+  }
+
+  @action public customValidate = () => {
+
+    Validator.register(
+      "", () => {
+        return true;
+      }, "",
+    );
+
+    _.map(FBStore.getSchema(), (schemaItem) => {
+      const { customValidator } = schemaItem;
+      if (!_.isUndefined(customValidator)) {
+        Validator.register(
+          customValidator.name,
+          // tslint:disable-next-line: no-eval
+          eval(Base64.atob(customValidator.fn)),
+          customValidator.errorMessage || "",
+        );
+      }
+    });
+
+    const rules = {};
+    _.map(FBStore.getSchema(), (schemaItem) => {
+      const { customValidator } = schemaItem;
+      if (!_.isUndefined(customValidator)) {
+        rules[schemaItem.name || ""] = [{ [customValidator.name]: FBStore.getValidationValues()}];
+      } else {
+        rules[schemaItem.name || ""] = "";
+      }
+    });
+
+    const validator = new Validator(
+      FBStore.getValidationValues(),
+      rules,
+    );
+
+    this.helperText = {};
+    if (validator.fails()) {
+      const errors = validator.errors.all();
+      _.map(errors, (v, k) => {
+        this.helperText[k] = _.join(v, "\n");
+      });
+    }
+  }
+
+  @action public getErrorText = (fieldName: string): string | undefined => {
+    return _.get(this.helperText, fieldName);
   }
 }
 

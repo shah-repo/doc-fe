@@ -2,7 +2,7 @@ import { Box, Grid } from "@material-ui/core";
 import classNames from "classnames";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import { get } from "lodash";
-import React from "react";
+import React, { useMemo } from "react";
 import { connect } from "react-redux";
 import {
   Document,
@@ -12,6 +12,7 @@ import {
   DocumentRevisionStatus,
 } from "../../../state/ducks/documentRevisions";
 import {
+  DocumentType,
   DocumentTypeByIdState,
   documentTypeSelectors,
 } from "../../../state/ducks/documentRevisions/documentType";
@@ -31,7 +32,7 @@ interface StateProps {
   availableReferences: OptionType[];
   loadAsyncState: AsyncState;
   documentRevisions: DocumentRevision[];
-  documentTypes: SelectOption[];
+  documentTypes: DocumentType[];
   documentTypesById: DocumentTypeByIdState;
   document: Document;
 }
@@ -97,6 +98,27 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
   documentTypesById,
   document,
 }) => {
+
+  const docTypes = useMemo(
+    () =>
+      documentTypes.map((document) => ({
+        value: document.id,
+        text: document.documentTypeName,
+      })),
+    [documentTypes],
+  );
+
+  const otherTypes: SelectOption[] = useMemo(
+    () =>
+      documentTypes.reduce((acc: SelectOption[], document) => {
+        if (document.group === "OTHER") {
+          acc.push({ value: document.id, text: document.documentTypeName });
+        }
+        return acc;
+      }, []),
+    [documentTypes],
+  );
+
   document = document || ({} as Document);
   const classes = styles();
 
@@ -113,7 +135,8 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
         setDocId={setDocId}
         doNotPrompt={doNotPrompt}
         onDirtyFlagChange={onDirtyFlagChange}
-        documentTypes={documentTypes}
+        documentTypes={docTypes}
+        otherDocumentTypes={otherTypes}
         documentTypesById={documentTypesById}
       />
     );

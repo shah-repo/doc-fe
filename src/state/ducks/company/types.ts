@@ -12,6 +12,7 @@ export interface WhiteLabelingColors {
 
 export interface WhiteLabeling {
   logo: string;
+  avatar: string;
   colors: WhiteLabelingColors;
 }
 
@@ -22,12 +23,14 @@ export interface Employee {
 }
 
 export interface Company {
+  slackIntegrationEnabled: boolean;
   id: string;
   name: string;
   maxRevisionStages: number;
   users: User[];
   documentTypes: DocumentType[];
   whiteLabeling: WhiteLabeling;
+  teamId: string;
 }
 
 export interface SelectCompanyAction {

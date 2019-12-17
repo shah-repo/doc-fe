@@ -2,11 +2,13 @@ import { Dictionary } from "lodash";
 import _ from "lodash";
 import React from "react";
 import { FBFormValues } from "../../defaults/formik";
+import FBValidatorStore from "../../stores/ui/FBValidatorStore";
 import { FBInputProps } from "../../types/common";
 import { FBTemplateSchema } from "../../types/store";
 import { withFormik } from "./withFormik";
 import { withOnChange } from "./withOnChange";
 import { withValidation } from "./withValidation";
+// import FBStore from "../../stores/ui/FBStore";
 
 export const withInput = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>,
@@ -34,7 +36,7 @@ export const withInput = <T extends FBInputProps>(
     }
 
     error = Boolean(_.get(form, `errors.${name}`));
-    helperText = error && _.get(form, `errors.${name}`);
+    helperText = (error && _.get(form, `errors.${name}`)) || FBValidatorStore.getErrorText(name);
 
     if (elements.length === 1) {
       _.first(elements) && (

@@ -1,14 +1,17 @@
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
-import { EditUserInfoAction } from "../tableSearch";
-import { TABLE_SET_USER_INFO } from "../tableSearch/constants";
+import { EditGroupsAction, EditUserInfoAction } from "../tableSearch";
+import {
+  EDIT_EMPLOYEE_GROUPS,
+  EDIT_EMPLOYEE_USER_INFO,
+} from "../tableSearch/constants";
 import {
   AUTH_USER,
   LOGOUT_USER,
   SET_EMPLOYEE,
   USER_GROUPS,
   USER_GROUPS_GET_ASYNC,
-  USERS_ME,
+  USERS_ME_URL,
 } from "./constants";
 import {
   AuthUserAction,
@@ -30,6 +33,7 @@ export const USER_DEFAULT_STATE: UserState = {
   sessionId: "",
   employees: [],
   avatar: "",
+  groups: [],
 };
 
 type AuthUserActions =
@@ -37,7 +41,9 @@ type AuthUserActions =
   | LogoutUserAction
   | SelectEmployeeAction
   | EditUserMeAction
-  | EditUserInfoAction;
+  | EditUserInfoAction
+  | UserGroupsAction
+  | EditGroupsAction;
 
 export const user = (
   state: UserState = USER_DEFAULT_STATE,
@@ -47,35 +53,42 @@ export const user = (
     case AUTH_USER:
       return {
         ...state,
-        email: action.payload.email,
-        avatar: action.payload.avatar,
-        name: action.payload.name,
-        id: action.payload.id,
-        employeeId: action.payload.employeeId,
-        sessionId: action.payload.sessionId,
-        employees: action.payload.employees,
+        ...action.payload,
+        employeeId: action.payload.employees[0].id,
       };
     case SET_EMPLOYEE:
       return {
         ...state,
         employeeId: action.payload.id,
       };
-    case USERS_ME:
+    case USERS_ME_URL:
       return {
         ...state,
         name: action.payload.name,
         avatar: action.payload.avatar,
       };
-    case TABLE_SET_USER_INFO:
+    case EDIT_EMPLOYEE_USER_INFO:
       if (state.id === action.payload.id) {
         return {
           ...state,
           name: action.payload.name,
+          avatar: action.payload.avatar,
         };
       }
+      return state;
+    case USER_GROUPS:
       return {
         ...state,
+        groups: action.payload,
       };
+    case EDIT_EMPLOYEE_GROUPS:
+      if (state.id === action.payload.user.id) {
+        return {
+          ...state,
+          groups: action.payload.groups,
+        };
+      }
+      return state;
     case LOGOUT_USER:
       return { ...USER_DEFAULT_STATE };
     default:

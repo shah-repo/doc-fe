@@ -9,6 +9,7 @@ const FBEditorDialog: React.FunctionComponent<{}> = () => (
     content={editorStore.content}
     title={editorStore.title}
     setDialogClose={editorStore.reset}
+    maxWidth={editorStore.maxWidth}
   />
 );
 
