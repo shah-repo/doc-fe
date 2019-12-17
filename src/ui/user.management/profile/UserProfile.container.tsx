@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
-import { getHasSlack, getHasTag } from "../../../common/utils/selectors";
+import { getHasTag } from "../../../common/utils/selectors";
 import Config from "../../../config";
 import { authActions, authSelectors } from "../../../state/ducks/auth";
 import {
   EmployeeEditRequestBody,
   GroupTag,
-  Permission,
 } from "../../../state/ducks/auth/types";
-import { companySelectors } from "../../../state/ducks/company";
+import { companySelectors, Employee } from "../../../state/ducks/company";
 import { userManagementActions } from "../../../state/ducks/userManagement";
 import { USER_SLACK_URL } from "../../../state/ducks/userManagement/constants";
 import { ApplicationState } from "../../../state/reducers";
@@ -23,6 +22,7 @@ interface OwnProps {
 interface StateProps {
   isSlackIntegrationEnabled: boolean;
   slackTeamId: string;
+  employees: Employee[];
 }
 
 interface DispatchProps {
@@ -38,6 +38,7 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
   getSlackUrl,
   isSlackIntegrationEnabled,
   slackTeamId,
+  employees,
 }) => {
   const async = useAsync();
   const dispatch = useDispatch();
@@ -47,16 +48,12 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
   const avatar = useSelector(authSelectors.currentEmployeeAvatar);
   const employeeId = useSelector(authSelectors.currentEmployeeId);
   const groups = useSelector(authSelectors.getCurrentUserGroups);
-
+  const userSlackId =  useSelector(authSelectors.currentSlackUserId);
   const [showEditUser, setEditUser] = useState(false);
   const showEdit = () => setEditUser(true);
   const closeEdit = () => setEditUser(false);
 
   const onSubmit = (values: EmployeeEditRequestBody) => dispatch(authActions.editCurrentEmployee(values, async));
-
-  const hasSlackPermission = useSelector(
-    getHasSlack(Permission.SLACK_APP_INSTALL),
-  );
 
   const asyncSlack = useAsync<string>({
     onSuccess: (slackUrl) => {
@@ -90,7 +87,7 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
       getUrl={onAdd}
       slackIntegrationEnabled={isSlackIntegrationEnabled}
       slackTeamId={slackTeamId}
-      hasSlackPermission={hasSlackPermission}
+      slackUserId={userSlackId}
     />
   );
 };
@@ -98,6 +95,7 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   isSlackIntegrationEnabled: companySelectors.isSlackIntegrationEnabled(state),
   slackTeamId: companySelectors.slackTeamId(state),
+  employees: authSelectors.employees(state),
 });
 
 export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(

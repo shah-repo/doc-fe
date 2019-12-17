@@ -22,6 +22,7 @@ describe("user reducer tests", () => {
     expect(user(undefined, action)).toEqual({
       ...payload,
       employeeId: payload.employees[0].id,
+      employee: payload.employees[0],
       groups: [],
     });
   });
