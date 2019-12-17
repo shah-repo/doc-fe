@@ -104,6 +104,7 @@ export interface UserState {
   employees: Employee[];
   avatar: string | null;
   groups: Group[];
+  employee: Employee;
 }
 
 export interface AuthProps {

@@ -47,7 +47,7 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
     }, [selectedEmployee.id]);
     const { groups, id } = realUser;
     const { name } = realUser.user;
-    const userSlackId =  employees[0].slackUserId;
+    const userSlackId =  useSelector(authSelectors.currentSlackUserId);
 
     const [showEditUser, setEditUser] = useState(false);
     const showEdit = () => setEditUser(true);

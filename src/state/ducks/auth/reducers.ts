@@ -1,5 +1,6 @@
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
+import { COMPANY_DEFAULT_STATE } from "../company/reducers";
 import { EditGroupsAction, EditUserInfoAction } from "../tableSearch";
 import {
   EDIT_EMPLOYEE_GROUPS,
@@ -34,6 +35,12 @@ export const USER_DEFAULT_STATE: UserState = {
   employees: [],
   avatar: "",
   groups: [],
+  employee: {
+    id: "",
+    active: true,
+    company: COMPANY_DEFAULT_STATE,
+    slackUserId: "",
+  },
 };
 
 type AuthUserActions =
@@ -55,6 +62,7 @@ export const user = (
         ...state,
         ...action.payload,
         employeeId: action.payload.employees[0].id,
+        employee: action.payload.employees[0],
       };
     case SET_EMPLOYEE:
       return {
