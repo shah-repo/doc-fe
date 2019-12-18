@@ -38,7 +38,7 @@ export const withEditorRenderer =
     const values = propsByType();
     let name = "";
     if (_.isObject(props.values) && _.has(props.values, "label")) {
-      name = _.toLower(props.values.label as string).replace(" ", "_");
+      name = _.toLower(props.values.label as string);
     }
     // const item = schemaItem();
     FBValidatorStore.customValidator &&
@@ -46,7 +46,7 @@ export const withEditorRenderer =
     const schema: FBTemplateSchema = {
       type,
       index,
-      name: `${name}_${uniqid()}`,
+      name: `${_.replace(name, / /g, "_")}_${uniqid()}`,
       ...values,
       rules: FBValidatorStore.getRules(),
       // applicableOn: FBValidatorStore.applicableOn ? [FBValidatorTrigger.ON_STATE_TO_IN_REVIEW] : [],

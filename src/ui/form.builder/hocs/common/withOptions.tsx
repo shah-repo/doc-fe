@@ -31,7 +31,7 @@ export const withOptions = <T extends FBOptionProps>(
 
     function unionContextOption(options: any[]): T["options"] {
       return _.union(options, [{
-        [optionValueKey]: `other_${name}`,
+        [optionValueKey]: `${name}_context`,
         [optionLabelKey]: "form.builder.other",
       }]);
     }

@@ -65,6 +65,12 @@ const FBValidatorCustom: React.FunctionComponent<FBValidatorCustomProps> = ({
                 <Box>Field name: {schemaItem.name}</Box>
               </Box>
             )}
+          {schemaItem.includeContext && (
+            <Box borderBottom={1} py={1}>
+              <Box>Field: {`${schemaItem.label} note`}</Box>
+              <Box>Field name: {`${schemaItem.name}_input_context`}</Box>
+            </Box>
+          )}
         </Box>
       );
     })}

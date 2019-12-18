@@ -27,8 +27,8 @@ export const withOnChange = <T extends FBInputProps>(
 
       const fieldValue =
         Boolean(_.toInteger(field!.value)) ||
-        _.isEqual(field!.value, `other-${field!.name}`);
-      const formValue = _.get(form!.values, `other-${field!.name}`) as boolean;
+        _.isEqual(field!.value, `${field!.name}_context`);
+      const formValue = _.get(form!.values, `${field!.name}_context`) as boolean;
       const contextChecked: boolean = fieldValue || formValue;
 
       return (
