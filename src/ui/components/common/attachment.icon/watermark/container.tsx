@@ -2,6 +2,7 @@ import { Button } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import useDialog from "../../../../hooks/useDialog";
 import Text from "../../../Text";
+import WatermarkDownload from "./download";
 import WatermarkPresenter from "./presenter";
 
 interface Props {
@@ -18,24 +19,28 @@ export const WatermarkContainer: React.FunctionComponent<Props> = ({
   const dialog = useDialog();
   const handleClose = () => dialog.close();
   useEffect(() => {
-    if (newWatermarkRequest) {
-      setTitle("common.success");
-      setContent({
-        translation: "watermark.successfully.requested",
-        values: {
-          file: newWatermarkRequest.attachment.name,
-          type: newWatermarkRequest.attachment.type,
-        },
-      });
-      dialog.open();
+    if (!newWatermarkRequest) {
+      return;
     }
+
+    setTitle("common.success");
+    setContent({
+      translation: "watermark.successfully.requested",
+      values: {
+        file: newWatermarkRequest.attachment.name,
+        type: newWatermarkRequest.attachment.type,
+      },
+    });
+    dialog.open();
   }, [newWatermarkRequest]);
   useEffect(() => {
-    if (newWatermarkError) {
-      setTitle("common.error");
-      setContent({ message: newWatermarkError });
-      dialog.open();
+    if (!newWatermarkError) {
+      return;
     }
+
+    setTitle("common.error");
+    setContent({ message: newWatermarkError });
+    dialog.open();
   }, [newWatermarkError]);
 
   const renderCloseButton = (newWatermarkError || newWatermarkRequest) && (
@@ -45,14 +50,17 @@ export const WatermarkContainer: React.FunctionComponent<Props> = ({
   );
 
   return (
-    <WatermarkPresenter
-      isOpen={dialog.isOpen}
-      handleClose={handleClose}
-      title={title}
-      content={content}
-    >
-      {renderCloseButton}
-    </WatermarkPresenter>
+    <>
+      <WatermarkDownload newWatermarkRequest={newWatermarkRequest} />
+      <WatermarkPresenter
+        isOpen={dialog.isOpen}
+        handleClose={handleClose}
+        title={title}
+        content={content}
+      >
+        {renderCloseButton}
+      </WatermarkPresenter>
+    </>
   );
 };
 
