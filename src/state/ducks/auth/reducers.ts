@@ -1,5 +1,6 @@
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
+import { COMPANY_DEFAULT_STATE } from "../company/reducers";
 import { EditGroupsAction, EditUserInfoAction } from "../tableSearch";
 import {
   EDIT_EMPLOYEE_GROUPS,
@@ -25,6 +26,13 @@ import {
   UserState,
 } from "./types";
 
+export const DEFAULT_EMPLOYEE = {
+  id: "",
+  active: true,
+  company: COMPANY_DEFAULT_STATE,
+  slackUserId: "",
+};
+
 export const USER_DEFAULT_STATE: UserState = {
   email: "",
   name: "",
@@ -34,6 +42,7 @@ export const USER_DEFAULT_STATE: UserState = {
   employees: [],
   avatar: "",
   groups: [],
+  employee: DEFAULT_EMPLOYEE,
 };
 
 type AuthUserActions =
@@ -55,11 +64,13 @@ export const user = (
         ...state,
         ...action.payload,
         employeeId: action.payload.employees[0].id,
+        employee: action.payload.employees[0],
       };
     case SET_EMPLOYEE:
       return {
         ...state,
         employeeId: action.payload.id,
+        employee: action.payload,
       };
     case USERS_ME_URL:
       return {
@@ -103,7 +114,7 @@ export const USER_GROUPS_DEFAULT_STATE: UserGroupsState = {
 
 export const groups = (
   state: UserGroupsState = USER_GROUPS_DEFAULT_STATE,
-  action: UserGroupsAction,
+  action: UserGroupsAction | LogoutUserAction,
 ): UserGroupsState => {
   switch (action.type) {
     case USER_GROUPS:
@@ -125,6 +136,8 @@ export const groups = (
         tags: Array.from(tagsSet),
         permissions: Array.from(permissionsSet),
       };
+    case LOGOUT_USER:
+      return {...USER_GROUPS_DEFAULT_STATE};
     default:
       return state;
   }

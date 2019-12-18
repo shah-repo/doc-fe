@@ -25,7 +25,7 @@ interface OwnProps {
     getUrl: () => void;
     slackIntegrationEnabled: boolean;
     slackTeamId: string;
-    hasSlackPermission: boolean;
+    slackUserId: string;
 }
 
 type Props = OwnProps;
@@ -47,7 +47,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
     getUrl,
     slackIntegrationEnabled,
     slackTeamId,
-    hasSlackPermission,
+    slackUserId,
 }) => {
     const [userInfo, setUserInfo] = useState<EmployeeEditRequestBody>({ name, avatar });
     return (
@@ -72,9 +72,9 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
             editCurrentEmployee={editCurrentEmployee}
             slackIntegrationEnabled={slackIntegrationEnabled}
             slackTeamId={slackTeamId}
-            hasSlackPermission={hasSlackPermission}
             asyncState={asyncState}
             getUrl={getUrl}
+            slackUserId={slackUserId}
         />
     </Dialog>
     );
