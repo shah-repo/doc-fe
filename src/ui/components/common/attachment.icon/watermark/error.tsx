@@ -1,12 +1,18 @@
-import { Box } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import React from "react";
+import Text from "../../../Text";
 
-export const WatermarkError: React.FunctionComponent = ({
+interface Props {
+  handleClose: () => void;
+}
+
+export const WatermarkError: React.FunctionComponent<Props> = ({
+  handleClose,
 }) => {
   return (
-    <Box>
-      Error
-    </Box>
+    <Button onClick={handleClose} color="primary">
+      <Text translation="common.close" />
+    </Button>
   );
 };
 

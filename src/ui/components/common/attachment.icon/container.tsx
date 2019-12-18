@@ -9,6 +9,7 @@ import {
 } from "../../../../state/ducks/attachments";
 import { ApplicationState } from "../../../../state/reducers";
 import FBStore from "../../../form.builder/stores/FBStore";
+import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
 import { withFormik } from "../../hoc/formik";
@@ -19,7 +20,6 @@ import {
   AttachmentIconContainerProps,
   AttachmentIconDispatchProps,
 } from "./utils/types";
-import useActionCreator from "../../../hooks/useActionCreator";
 import WatermarkContainer from "./watermark/container";
 
 type DispatchProps = AttachmentIconDispatchProps;
@@ -96,6 +96,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
       },
       type: "ATTACHED",
     };
+    setNewWatermarkError("");
     requestWatermarkAsync.start(
       requestWatermarkAction,
       body,

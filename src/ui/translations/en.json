@@ -247,6 +247,8 @@
   "common.go.to.enlil": "Go to Enlil",
   "common.deactivate": "Deactivate",
   "common.approval.id": "Approval ID",
+  "common.error": "Error",
+  "common.success": "Success",
 
   "output.info": "Form Info",
 
