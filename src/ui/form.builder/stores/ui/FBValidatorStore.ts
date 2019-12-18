@@ -177,7 +177,7 @@ export class FormBuilderValidatorStore {
         try {
           // tslint:disable-next-line: no-eval
           customValFn = eval(Base64.atob(customValidator.fn));
-        } catch(error) {
+        } catch (error) {
           alert("An error occurred in validator function body: " + error);
         }
 
