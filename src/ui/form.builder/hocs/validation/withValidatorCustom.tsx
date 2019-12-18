@@ -13,7 +13,12 @@ export const withValidatorCustom = <T extends FBValidatorCustomProps>(
     const validatorName = `validator_${uniqid()}`;
     const originCode = `
       (value, req, attribute) => {
-        return true;
+        try {
+          return true;
+        }
+        catch(error) {
+          alert(error);
+        }
       }
     `;
 

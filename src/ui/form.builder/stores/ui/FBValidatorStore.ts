@@ -172,10 +172,18 @@ export class FormBuilderValidatorStore {
     _.map(FBStore.getSchema(), (schemaItem) => {
       const { customValidator } = schemaItem;
       if (!_.isUndefined(customValidator)) {
+
+        let customValFn = () => true;
+        try {
+          // tslint:disable-next-line: no-eval
+          customValFn = eval(Base64.atob(customValidator.fn));
+        } catch(error) {
+          alert("An error occurred in validator function body: " + error);
+        }
+
         Validator.register(
           customValidator.name,
-          // tslint:disable-next-line: no-eval
-          eval(Base64.atob(customValidator.fn)),
+          customValFn,
           customValidator.errorMessage || "",
         );
       }
