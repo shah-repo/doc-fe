@@ -7,6 +7,7 @@ import React from "react";
 import autocompleteOptions from "../../../../data/autocompleteOptions.json";
 import FBAutocompleteCollection from "../../stores/domain/collections/FBAutocompleteCollection";
 import FBStore from "../../stores/ui/FBStore";
+import FBValidatorStore from "../../stores/ui/FBValidatorStore";
 import { FBAutocompleteProps } from "../../types/inputs/autocomplete";
 import { FBTemplateSchema } from "../../types/store.js";
 import { withFormik } from "../common/withFormik";
@@ -14,7 +15,8 @@ import { withFormik } from "../common/withFormik";
 export const withAutocomplete = <T extends FBAutocompleteProps>(
   Component: React.FunctionComponent<T>,
 ) => {
-  return withFormik<any, FBTemplateSchema | Dictionary<any>>(({
+  return withFormik<any, FBTemplateSchema | Dictionary<any>>(
+    ({
       options,
       optionId,
       getOptionLabel,
@@ -26,7 +28,7 @@ export const withAutocomplete = <T extends FBAutocompleteProps>(
       field,
       ...props
     }: T) => {
-      let indicators: { path: string, renderKey: string } | undefined;
+      let indicators: { path: string; renderKey: string } | undefined;
 
       function setIndicators(): boolean {
         const optionIndicator = _.filter(autocompleteOptions, {
@@ -65,14 +67,17 @@ export const withAutocomplete = <T extends FBAutocompleteProps>(
           ...FBStore.values,
           [field!.name as string]: value,
         });
+
+        FBValidatorStore.customValidate();
       };
 
-      !getOptionLabel && (getOptionLabel = (option: Model) => {
-        return _.isEmpty(option) ? "" : option.get(optionLabelKey);
-      });
+      !getOptionLabel &&
+        (getOptionLabel = (option: Model) => {
+          return _.isEmpty(option) ? "" : option.get(optionLabelKey);
+        });
 
-      !filterOptions && (filterOptions =
-        createFilterOptions({
+      !filterOptions &&
+        (filterOptions = createFilterOptions({
           matchFrom: "any",
           stringify: (option: Model) => option.get(optionLabelKey),
         }));
