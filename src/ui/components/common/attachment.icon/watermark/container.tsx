@@ -1,7 +1,8 @@
+import { Button } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import useDialog from "../../../../hooks/useDialog";
-import WatermarkDialog from "./dialog";
-import WatermarkError from "./error";
+import Text from "../../../Text";
+import WatermarkPresenter from "./presenter";
 
 interface Props {
   newWatermarkRequest: any;
@@ -13,34 +14,45 @@ export const WatermarkContainer: React.FunctionComponent<Props> = ({
   newWatermarkError,
 }) => {
   const [title, setTitle] = useState("");
-  const [contentText, setContentText] = useState("");
+  const [content, setContent] = useState({});
   const dialog = useDialog();
   const handleClose = () => dialog.close();
   useEffect(() => {
-    if (newWatermarkError) {
+    if (newWatermarkRequest) {
       setTitle("common.success");
-      // setContentText(newWatermarkRequest);
-      console.log(newWatermarkRequest);
+      setContent({
+        translation: "watermark.successfully.requested",
+        values: {
+          file: newWatermarkRequest.attachment.name,
+          type: newWatermarkRequest.attachment.type,
+        },
+      });
       dialog.open();
     }
   }, [newWatermarkRequest]);
   useEffect(() => {
     if (newWatermarkError) {
       setTitle("common.error");
-      setContentText(newWatermarkError);
+      setContent({ message: newWatermarkError });
       dialog.open();
     }
   }, [newWatermarkError]);
 
+  const renderCloseButton = (newWatermarkError || newWatermarkRequest) && (
+    <Button onClick={handleClose} color="primary">
+      <Text translation="common.close" />
+    </Button>
+  );
+
   return (
-    <WatermarkDialog
+    <WatermarkPresenter
       isOpen={dialog.isOpen}
       handleClose={handleClose}
       title={title}
-      contentText={contentText}
+      content={content}
     >
-      {newWatermarkError && <WatermarkError handleClose={handleClose} />}
-    </WatermarkDialog>
+      {renderCloseButton}
+    </WatermarkPresenter>
   );
 };
 

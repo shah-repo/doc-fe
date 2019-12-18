@@ -12,14 +12,14 @@ interface Props {
   isOpen: boolean;
   handleClose: () => void;
   title: string;
-  contentText: string;
+  content: any;
 }
 
-export const WatermarkDialog: React.FunctionComponent<Props> = ({
+export const WatermarkPresenter: React.FunctionComponent<Props> = ({
   isOpen,
   handleClose,
   title,
-  contentText,
+  content,
   children,
 }) => {
   return (
@@ -34,7 +34,7 @@ export const WatermarkDialog: React.FunctionComponent<Props> = ({
       </DialogTitle>
       <DialogContent>
         <DialogContentText>
-          <Text message={contentText} />
+          <Text {...content} />
         </DialogContentText>
       </DialogContent>
       <Box textAlign="right">
@@ -44,4 +44,4 @@ export const WatermarkDialog: React.FunctionComponent<Props> = ({
   );
 };
 
-export default WatermarkDialog;
+export default WatermarkPresenter;

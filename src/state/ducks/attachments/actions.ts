@@ -45,7 +45,7 @@ const requestWatermarkedFile = (
   handlers: Handlers,
 ): ApiAction =>
   apiActionWithCallbacks({
-    url: `${ATTACHMENT_ROOT_URL}1/watermark`,
+    url: `${ATTACHMENT_ROOT_URL}/watermark`,
     method: "post",
     data,
     asyncType: REQUEST_WATERMARK_ASYNC,
