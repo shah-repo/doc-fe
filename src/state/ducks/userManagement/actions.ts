@@ -108,4 +108,6 @@ export default {
   getEmployee,
   getSlackUrl,
   editSelectedEmployeeUserInfo,
+  companyGroupsList,
+  editSelectedEmployeeGroups,
 };
