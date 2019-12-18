@@ -17,7 +17,7 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
   <FormControl error={error} fullWidth>
     {children}
     <FormHelperText>{helperText}</FormHelperText>
-    {showContext && <FBTextField label={contextLabel} {...{disabled}} name={`${name}_context`} />}
+    {showContext && <FBTextField label={contextLabel} {...{disabled}} name={`${name}_input_context`} />}
   </FormControl>
 );
 
