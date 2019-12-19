@@ -22,12 +22,12 @@ const AvatarPresenter: React.FunctionComponent<Props> = ({ src }) => {
                 height: "213px",
                 borderRadius: "50%",
                 zIndex: 9999,
-                backgroundColor: "white",
+                backgroundColor: "#76608D",
             }}
         >
             <img
                 src={src}
-                style={{ width: "196px", height: "196px" }}
+                style={{ width: "196px", height: "196px", borderRadius: "50%" }}
                 alt="Profile photo"
             />
         </div>

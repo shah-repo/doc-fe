@@ -26,6 +26,7 @@ interface OwnProps {
     slackIntegrationEnabled: boolean;
     slackTeamId: string;
     slackUserId: string;
+    email: string;
   }
 
 type Props = OwnProps;
@@ -45,6 +46,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
     getUrl,
     asyncState,
     slackUserId,
+    email,
 }) => {
     const classes = styles();
     const updateProfileButtonsRenderer = () => (
@@ -80,6 +82,11 @@ export const DialogContent: React.FunctionComponent<Props> = ({
 
     return (
     <React.Fragment>
+        <Box display="flex" justifyContent="center">
+            <Typography variant="subtitle1" color="primary">
+                {email}
+            </Typography>
+        </Box>
         <Box display="flex" justifyContent="center">
             <Button
                 variant="text"

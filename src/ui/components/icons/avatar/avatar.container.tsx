@@ -1,9 +1,14 @@
 import React from "react";
 import AvatarPresenter from "./avatar.presenter";
 
-const AvatarContainer: React.FunctionComponent = () => {
+interface OwnProps {
+  avatar: string | null;
+}
 
-  const logo = "/avatar_placeholder.svg";
+type Props = OwnProps;
+const AvatarContainer: React.FunctionComponent<Props> = ({avatar}) => {
+
+  const logo = avatar === null ? "/avatar_placeholder.svg" : avatar;
   return (
       <AvatarPresenter src={logo} />
   );

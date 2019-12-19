@@ -46,7 +46,7 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
         setRealUser(selectedEmployee);
     }, [selectedEmployee.id]);
     const { groups, id } = realUser;
-    const { name } = realUser.user;
+    const { name, avatar, email } = realUser.user;
     const userSlackId =  useSelector(authSelectors.currentSlackUserId);
 
     const [showEditUser, setEditUser] = useState(false);
@@ -106,7 +106,8 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
             canManageUsers={canManageUsers}
             employeeGroups={employeeGroups}
             name={name}
-            avatar={null}
+            avatar={avatar}
+            email={email}
             employeeId={id}
             editCurrentEmployee={submitChanges}
             showEditUser={showEditUser}

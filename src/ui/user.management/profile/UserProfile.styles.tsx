@@ -18,6 +18,7 @@ export default makeStyles((theme: Theme) =>
       color: "white",
       fontsize: "1.9rem",
       marginTop: theme.spacing(1),
+      fontFamily: "Open Sans, sans-serif",
     },
     userNameEdit: {
       "color": "white",
@@ -27,6 +28,7 @@ export default makeStyles((theme: Theme) =>
         fontFamily: "Open Sans, sans-serif",
         padding: "0",
         fontWeight: "400",
+        paddingTop: theme.spacing(0.5),
       },
     },
     profilePhoto: {

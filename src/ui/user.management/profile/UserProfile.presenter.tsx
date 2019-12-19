@@ -15,6 +15,7 @@ interface OwnProps {
     employeeGroups: OptionType[];
     name: string;
     avatar: string | null;
+    email: string;
     editCurrentEmployee: (values: EmployeeEditRequestBody) => void;
     showEditUser: boolean;
     showEdit: () => void;
@@ -48,6 +49,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
     slackIntegrationEnabled,
     slackTeamId,
     slackUserId,
+    email,
 }) => {
     const [userInfo, setUserInfo] = useState<EmployeeEditRequestBody>({ name, avatar });
     return (
@@ -59,7 +61,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
             setUserInfo={setUserInfo}
             close={close}
         />
-        <AvatarContainer/>
+        <AvatarContainer avatar={avatar}/>
         <DialogContent
             canManageUsers={canManageUsers}
             employeeGroups={employeeGroups}
@@ -75,6 +77,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
             asyncState={asyncState}
             getUrl={getUrl}
             slackUserId={slackUserId}
+            email={email}
         />
     </Dialog>
     );
