@@ -9,29 +9,35 @@ import {
   CHANGE_REQUEST_CREATE_URL,
   CHANGE_REQUEST_LIST_URL,
   CHANGE_REQUEST_ROOT_URL,
+  DOCUMENT_BY_TYPE_LIST_URL,
   DOCUMENT_REVISION_CREATE_URL,
   DOCUMENT_REVISION_LIST_URL,
   DOCUMENT_REVISION_ROOT_URL,
   HOME_URL,
+  SLACK_ROOT_URL,
   TRAINING_DETAIL_URL,
+  USER_MANAGEMENT_ROOT_URL,
 } from "../constants/urls";
 import DashboardContainer from "../dashboard/Dashboard.container";
 import DocumentRevisionContainer from "../document.revision/container";
 import DocumentRevisionListContainer from "../document.revision/list/container";
 import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisionCreate.container";
+import DocumentTypeListContainer from "../documentType/list/container";
+import SlackContainer from "../slack/Container";
 import TrainingDetailContainer from "../training/TrainingDetail.container";
-import AutoLogout from "./AutoLogout";
+import UserManagementListContainer from "../user.management/list/container";
 import DataFetcherContainer from "./DataFetcher.container";
 import HeaderContainer from "./Header.container";
 import styles from "./Layout.styles";
 import Navigation from "./Navigation";
+import PingServer from "./PingServer";
 
 type Props = WithStyles<typeof styles>;
 
 const Layout: React.FunctionComponent<Props> = ({ classes }) => {
   return (
     <div>
-      <AutoLogout />
+      <PingServer />
       <CssBaseline />
       <HeaderContainer />
       <Navigation />
@@ -70,6 +76,18 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
           <Route
             path={TRAINING_DETAIL_URL}
             component={TrainingDetailContainer}
+          />
+          <Route
+            path={USER_MANAGEMENT_ROOT_URL}
+            component={UserManagementListContainer}
+          />
+          <Route
+            path={SLACK_ROOT_URL}
+            component={SlackContainer}
+          />
+          <Route
+            path={DOCUMENT_BY_TYPE_LIST_URL}
+            component={DocumentTypeListContainer}
           />
           <Redirect to={{ pathname: HOME_URL }} />
         </Switch>

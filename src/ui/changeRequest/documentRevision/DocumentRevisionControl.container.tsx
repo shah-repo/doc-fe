@@ -1,13 +1,14 @@
 import _ from "lodash";
 import React, { useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
+import { getTableState } from "../../../common/utils/selectors";
 import {
   DocumentRevision,
   DocumentRevisionsByIdState,
   documentRevisionsSelectors,
   DocumentRevisionStatus,
 } from "../../../state/ducks/documentRevisions";
-import { tableSearchActions, tableSearchSelectors } from "../../../state/ducks/tableSearch";
+import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { ApplicationState } from "../../../state/reducers";
 import AddDocumentRevisionContainer from "./AddDocumentRevision.container";
 import DocumentRevisionControlPresenter from "./DocumentRevisionControl.presenter";
@@ -65,9 +66,7 @@ export const DocumentRevisionControlContainer: React.FunctionComponent<
   };
 
   const TABLE_NAME = "addDocRevTable";
-  const tableState = useSelector((reduxState: ApplicationState) =>
-    tableSearchSelectors.getTableState(reduxState, TABLE_NAME),
-  );
+  const tableState = useSelector(getTableState(TABLE_NAME));
   const dispatch = useDispatch();
   if (_.isEmpty(tableState.queryDict)) {
     dispatch(tableSearchActions.setSearchCriteria(

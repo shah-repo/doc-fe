@@ -1,12 +1,28 @@
 {
   "translation.unknown": "",
 
-  "autoLogout.timer": "You will be logged out in {time} seconds",
+  "login.title": "Sign in to Enlil",
+  "login.email": "EMAIL ADDRESS",
+  "login.password": "PASSWORD",
+  "confirm.password": "CONFIRM PASSWORD",
+  "login.message": "Don't have an account?",
+  "login.submit": "Sign in",
+  "login.create.account": "Click here to register",
 
-  "login.title": "Sign in",
-  "login.email": "Email address",
-  "login.password": "Password",
-  "login.button": "Sign in",
+  "signup.submit": "Sign up",
+  "signup.title": "Sign up with a new account",
+  "signup.message": "Already have an account?",
+  "signup.verification": "We have sent an email to",
+  "signup.verification.message": "Please check your email and follow the instructions to verify your email address. If you didn't receive an email, check your spam folder.",
+  "signup.sign.in": "Click here to sign in",
+  "signup.close.window": "CLOSE WINDOW",
+
+  "forgot.password": "Forgot your password?",
+  "forgot.password.message": "Enter yout email address below and we will send you a secure link to reset your password",
+  "forgot.password.close": "CLOSE",
+  "forgot.password.reset": "Reset my Password",
+  "forgot.password.email": "Click the secure link we sent you to reset your password. If you didn't receive an email, check your spam folder.",
+  "forgot.password.confirm": "Sign in with your new password",
 
   "header.title": "Enlil",
   "header.welcome": "Welcome", 
@@ -22,11 +38,19 @@
   "navigation.changeRequestList": "Change request list",
   "navigation.documentRevisionList": "Document revisions",
   "navigation.change.request.list": "Change Request List",
+  "navigation.user.management": "User Management",
 
   "validators.required": "Required",
   "validators.requiredAtLeastOne": "At least one input required",
   "validators.email": "Invalid email address",
   "validators.approversRequired": "At least one approver required",
+  "validator.password.min": "Password must contain at least 8 characters",
+  "validator.password.upper.case": "Password must contain an upper case letter",
+  "validator.password.lower.case": "Password must contain a lower case letter",
+  "validator.password.number": "Password must contain a number",
+  "validator.password.spec.char": "Password must contain a special characters",
+  "validator.match.passwords": "Passwords do not match",
+  "validator.confirm": "Password confirm is required",
 
   "errors.tokenRefresh": "Token refresh failed",
   "errors.userNotLoggedIn": "User is not logged in",
@@ -153,7 +177,7 @@
   "common.due.date": "Due Date",
   "common.name": "Name",
   "common.description": "Description",
-  "common.state": "Status",
+  "common.state": "State",
   "common.save": "Save",
   "common.type": "Type",
   "common.title": "Title",
@@ -214,6 +238,15 @@
   "common.released": "Released",
   "common.records.found": "Records found",
   "common.docId": "Doc ID",
+  "common.email": "Email",
+  "common.active": "Active",
+  "common.groups": "Groups",
+  "common.redirecting.to.enlil": "Redirecting to {name} in {time} seconds...",
+  "common.error.occured": "An error occured.",
+  "common.click.to.try.again": "Click here to try again",
+  "common.go.to.enlil": "Go to Enlil",
+  "common.deactivate": "Deactivate",
+  "common.approval.id": "Approval ID",
 
   "output.info": "Form Info",
 
@@ -349,5 +382,24 @@
   "company.switch.subtitle": "Select a company below to sign-in to",
   "company.switch.button": "SWITCH COMPANY",
 
-  "supplier_survey_success_submit_message": "Survey is filled. Thank you for the response!"
+  "supplier_survey_success_submit_message": "Survey is filled. Thank you for the response!",
+  "suppliersurvey.submit.button": "Survey is filled. Thank you for the response!",
+
+  "user.management.profile": "User Profile",
+  "user.management.last.training": "Last Training",
+  "user.management.add.groups": "Add to other groups",
+  "user.management.add.employee": "Add Employee",
+  "user.management.update.profile": "Update profile",
+
+  "integrations.title": "Integrations",
+  "integrations.add": "Add",
+
+  "slack.finalising.registration": "Finalising Slack registration",
+  "slack.registration.completed": "Slack registration completed",
+  "slack.registration.failed": "Slack registration failed",
+  "slack.integrations.admin.add": "ADD SLACK INTEGRATION",
+
+  "supplier.id": "Supplier ID",
+  "supplier.name": "Supplier name",
+  "supplier.status": "Supplier status"
 }

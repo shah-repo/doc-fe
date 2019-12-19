@@ -1,16 +1,12 @@
 import React from "react";
-import Config from "../../../config";
+import { logo, theme } from "../../../common/utils/helpers";
 import Text from "../../components/Text";
 import { ThemeEnv } from "../../layout/theme/utils/types";
 import styles from "./Logo.styles";
 
 const Logo: React.FunctionComponent = () => {
   const classes = styles();
-  const theme = Config.Theme;
   const showEnvironment = theme === ThemeEnv.DEV_THEME || theme === ThemeEnv.DEMO_THEME;
-  const logo = theme === ThemeEnv.DEV_THEME ?
-    "/logo_enlil_dark.svg" :
-    "/logo_enlil.svg";
 
   return (
     <React.Fragment>

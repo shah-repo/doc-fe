@@ -14,8 +14,8 @@ export default (theme: Theme) =>
       fontSize: "0.8rem",
     },
     name: {
-      color: "#0066FF",
-      fontSize: "0.8rem",
-      fontWeight: "bold",
+      margin: theme.spacing(0),
+      padding: theme.spacing(0),
+      textTransform: "none",
     },
   });

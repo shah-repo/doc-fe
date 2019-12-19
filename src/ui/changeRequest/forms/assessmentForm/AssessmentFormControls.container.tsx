@@ -18,7 +18,6 @@ import TransitionButton from "./TransitionButton";
 
 interface StateProps {
   currentUserEmail: string;
-  isCurrentUserDocControl: boolean;
 }
 
 interface OwnProps {
@@ -30,10 +29,8 @@ export type AssessmentFormControlsContainerProps = OwnProps &
   StateProps &
   WithStyles<typeof styles>;
 
-const getHasPermission = authSelectors.makeGetHasPermission();
 const mapStateToProps = (state: ApplicationState) => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
-  isCurrentUserDocControl: getHasPermission(state, "CR_TO_IN_REVIEW"),
 });
 
 const AssessmentFormControlsContainer: React.FunctionComponent<

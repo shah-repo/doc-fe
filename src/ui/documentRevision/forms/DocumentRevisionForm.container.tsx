@@ -57,7 +57,9 @@ interface OwnProps {
   loadDocumentProposedId?: typeof documentsActions.loadDocumentProposedId;
 }
 
-export type DocumentRevisionFormContainerProps = OwnProps & StateProps & DispatchProps;
+export type DocumentRevisionFormContainerProps = OwnProps &
+  StateProps &
+  DispatchProps;
 
 const getAvailableReferences = documentRevisionsSelectors.makeGetAvailableReferences();
 const mapStateToProps = (
@@ -69,7 +71,10 @@ const mapStateToProps = (
   documentRevisions: documentRevisionsSelectors.getDocumentRevisionsList(state),
   documentTypes: documentTypeSelectors.getDocumentTypeFormOptions(state),
   documentTypesById: documentTypeSelectors.byId(state),
-  document: documentRevisionsSelectors.getDocument(state, get(props.initialValues, "document.id")!),
+  document: documentRevisionsSelectors.getDocument(
+    state,
+    get(props.initialValues, "document.id")!,
+  ),
 });
 
 export const DocumentRevisionFormContainer: React.FunctionComponent<
@@ -157,11 +162,13 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
       {documentRevision && <DocumentHeader dataProp={documentRevision} />}
       <Grid
         className={classNames(classes.container, {
-                  [classes.borderContainer]: documentRevision,
-                })}
+          [classes.borderContainer]: documentRevision,
+        })}
       >
         <Box ml={3}>
-          {!showRevisionTypeChange && <ChangeRequestLink dataProp={documentRevision} />}
+          {!showRevisionTypeChange && (
+            <ChangeRequestLink dataProp={documentRevision} />
+          )}
         </Box>
         <Formik
           render={render}
@@ -174,6 +181,9 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
   );
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
-  loadDocumentRevisions: documentRevisionsActions.loadList,
-})(DocumentRevisionFormContainer);
+export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
+  mapStateToProps,
+  {
+    loadDocumentRevisions: documentRevisionsActions.loadList,
+  },
+)(DocumentRevisionFormContainer);
