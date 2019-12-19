@@ -3,6 +3,7 @@ import { ApiAction, Handlers } from "../../types";
 import {
   ATTACHMENT_ROOT_URL,
   ATTACHMENT_UPLOAD_URL,
+  DOWNLOAD_WATERMARK_ASYNC,
   REQUEST_WATERMARK_ASYNC,
 } from "./constants";
 import {
@@ -52,8 +53,20 @@ const requestWatermarkedFile = (
     handlers,
   });
 
+const downloadWatermarkedFile = (
+  id: string,
+  handlers: Handlers,
+): ApiAction =>
+  apiActionWithCallbacks({
+    url: `${ATTACHMENT_ROOT_URL}/watermark/${id}`,
+    method: "get",
+    asyncType: DOWNLOAD_WATERMARK_ASYNC,
+    handlers,
+  });
+
 export default {
   upload,
   download,
   requestWatermarkedFile,
+  downloadWatermarkedFile,
 };
