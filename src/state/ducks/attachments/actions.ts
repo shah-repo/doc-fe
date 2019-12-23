@@ -3,15 +3,15 @@ import { ApiAction, Handlers } from "../../types";
 import {
   ATTACHMENT_ROOT_URL,
   ATTACHMENT_UPLOAD_URL,
-  DOWNLOAD_WATERMARK_ASYNC,
+  CHECK_WATERMARK_ASYNC,
   REQUEST_WATERMARK_ASYNC,
 } from "./constants";
 import {
   Attachment,
   AttachmentDownloadResponse,
   AttachmentType,
-  WatermarkedFile,
   WatermarkRequest,
+  WatermarkRequestBody,
 } from "./types";
 
 const upload = (file: File, handlers: Handlers<Attachment>): ApiAction => {
@@ -44,10 +44,10 @@ const download = (
 };
 
 const requestWatermarkedFile = (
-  data: any,
+  data: WatermarkRequestBody,
   handlers: Handlers,
-): ApiAction<WatermarkedFile, WatermarkRequest> =>
-  apiActionWithCallbacks<WatermarkedFile, WatermarkRequest>({
+): ApiAction<WatermarkRequest, WatermarkRequestBody> =>
+  apiActionWithCallbacks<WatermarkRequest, WatermarkRequestBody>({
     url: `${ATTACHMENT_ROOT_URL}/watermark`,
     method: "post",
     data,
@@ -58,11 +58,11 @@ const requestWatermarkedFile = (
 const checkWatermarkStatus = (
   id: string,
   handlers: Handlers,
-): ApiAction<WatermarkedFile> =>
-  apiActionWithCallbacks<WatermarkedFile, null>({
+): ApiAction<WatermarkRequest> =>
+  apiActionWithCallbacks<WatermarkRequest, null>({
     url: `${ATTACHMENT_ROOT_URL}/watermark/${id}`,
     method: "get",
-    asyncType: DOWNLOAD_WATERMARK_ASYNC,
+    asyncType: CHECK_WATERMARK_ASYNC,
     handlers,
   });
 

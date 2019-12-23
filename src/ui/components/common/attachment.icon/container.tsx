@@ -6,8 +6,8 @@ import {
   AttachmentDownloadResponse,
   attachmentsActions,
   AttachmentType,
-  WatermarkedFile,
   WatermarkRequest,
+  WatermarkRequestBody,
 } from "../../../../state/ducks/attachments";
 import { Nullable } from "../../../../state/ducks/common";
 import { ApplicationState } from "../../../../state/reducers";
@@ -37,7 +37,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   ...other
 }) => {
 
-  const [newWatermarkRequest, setNewWatermarkRequest] = useState<Nullable<WatermarkedFile>>(null);
+  const [newWatermarkRequest, setNewWatermarkRequest] = useState<Nullable<WatermarkRequest>>(null);
   const [newWatermakrError, setNewWatermarkError] = useState<string>("");
   const dialogHandler = useDialog();
   const attachments = field!.value as Attachment[] || [];
@@ -53,7 +53,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   });
   const requestWatermarkAction = useActionCreator(attachmentsActions.requestWatermarkedFile);
   const requestWatermarkAsync = useAsync({
-    onSuccess: (data: WatermarkedFile = {} as WatermarkedFile) => {
+    onSuccess: (data: WatermarkRequest = {} as WatermarkRequest) => {
       setNewWatermarkRequest(data);
     },
     onError: (msg) => {
@@ -95,7 +95,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     setNewWatermarkError("");
     setNewWatermarkRequest(null);
 
-    const body: WatermarkRequest = {
+    const body: WatermarkRequestBody = {
       attachment: {
         id: attachment.id,
       },

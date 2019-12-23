@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
-import { attachmentsActions, WatermarkedFile, WatermarkRequestStatus } from "../../../../../state/ducks/attachments";
+import { attachmentsActions, WatermarkRequest, WatermarkRequestStatus } from "../../../../../state/ducks/attachments";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import { WatermarkResponse } from "../utils/types";
 
 interface Props {
-  requestedFile: WatermarkedFile;
+  requestedFile: WatermarkRequest;
   addRequestResult: (arg: WatermarkResponse) => void;
 }
 
-export const WatermarkRequest: React.FunctionComponent<Props> = ({
+export const WatermarkRequestContainer: React.FunctionComponent<Props> = ({
   requestedFile,
   addRequestResult,
 }) => {
@@ -20,13 +20,17 @@ export const WatermarkRequest: React.FunctionComponent<Props> = ({
   const incrementNumberOfRetries = () => setNumberOfRetries(numberOfRetries + 1);
   const asyncAction = useActionCreator(attachmentsActions.checkWatermarkStatus);
   const async = useAsync({
-    onSuccess: (data: WatermarkedFile = {} as WatermarkedFile) => {
+    onSuccess: (data: WatermarkRequest = {} as WatermarkRequest) => {
       if (data!.status === WatermarkRequestStatus.Done) {
         clearInterval(timer.current);
         addRequestResult({
           success: true,
           message: {
-            message: "Success",
+            translation: "watermark.downlaod.ready",
+            values: {
+              name: data.attachment.name,
+              type: data.attachment.type,
+            },
           },
           data,
         });
@@ -51,7 +55,11 @@ export const WatermarkRequest: React.FunctionComponent<Props> = ({
         addRequestResult({
           success: false,
           message: {
-            message: "Couldn't process",
+            message: "watermark.request.failed",
+            values: {
+              name: requestedFile.attachment.name,
+              type: requestedFile.attachment.type,
+            },
           },
           data: requestedFile,
         });
@@ -68,4 +76,4 @@ export const WatermarkRequest: React.FunctionComponent<Props> = ({
   return null;
 };
 
-export default WatermarkRequest;
+export default WatermarkRequestContainer;

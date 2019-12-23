@@ -34,7 +34,7 @@ export interface WatermarkRequester {
   user: User;
 }
 
-export interface WatermarkedFile {
+export interface WatermarkRequest {
   id: string;
   s3Url: string;
   status: WatermarkRequestStatus;
@@ -45,7 +45,7 @@ export interface WatermarkedFile {
   documentRevision: Nullable<DocumentRevision>;
 }
 
-export interface WatermarkRequest {
+export interface WatermarkRequestBody {
   attachment: Id;
   type: AttachmentType;
 }
