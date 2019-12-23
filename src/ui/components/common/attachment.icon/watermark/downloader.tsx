@@ -9,7 +9,6 @@ import {
 import React, { useEffect, useState } from "react";
 import useDialog from "../../../../hooks/useDialog";
 import Text from "../../../Text";
-// import useActionCreator from "../../../../hooks/useActionCreator";
 
 interface Props {
   isMainDialogOpen: boolean;
@@ -20,8 +19,6 @@ export const WatermarkDownloader: React.FunctionComponent<Props> = ({
   isMainDialogOpen,
   request,
 }) => {
-  // const downloadAction = useActionCreator();
-  // const async = useAsync();
   const [selectedRequest, setSelectedRequest] = useState<any>({});
   const [requests, setRequests] = useState<any>([]);
   const dialog = useDialog();
@@ -30,6 +27,7 @@ export const WatermarkDownloader: React.FunctionComponent<Props> = ({
     setRequests(requests.filter((req) => req.data.id !== selectedRequest.data.id));
   };
   const handleDownload = () => {
+    window.open(selectedRequest.data.presignedUrl, "_blank");
     handleClose();
   };
 

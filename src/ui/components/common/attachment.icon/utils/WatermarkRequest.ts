@@ -15,7 +15,7 @@ class WatermarkRequest {
     private setResult: any,
   ) {
     this.asyncAction = (requestId: string) => {
-      return store.dispatch(attachmentsActions.downloadWatermarkedFile(requestId, this.async));
+      return store.dispatch(attachmentsActions.checkWatermarkStatus(requestId, this.async));
     };
     this.async = useAsync({
       onSuccess: (data: any) => {

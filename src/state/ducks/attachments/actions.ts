@@ -53,7 +53,7 @@ const requestWatermarkedFile = (
     handlers,
   });
 
-const downloadWatermarkedFile = (
+const checkWatermarkStatus = (
   id: string,
   handlers: Handlers,
 ): ApiAction =>
@@ -68,5 +68,5 @@ export default {
   upload,
   download,
   requestWatermarkedFile,
-  downloadWatermarkedFile,
+  checkWatermarkStatus,
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { attachmentsActions } from "../../../../../state/ducks/attachments";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
@@ -17,7 +17,7 @@ export const WatermarkRequest: React.FunctionComponent<Props> = ({
   const RETRY_TIME = 5000;
   const [numberOfRetries, setNumberOfRetries] = useState(0);
   const incrementNumberOfRetries = () => setNumberOfRetries(numberOfRetries + 1);
-  const asyncAction = useActionCreator(attachmentsActions.downloadWatermarkedFile);
+  const asyncAction = useActionCreator(attachmentsActions.checkWatermarkStatus);
   const async = useAsync({
     onSuccess: (data: any) => {
       if (data!.status === "DONE") {
@@ -27,7 +27,7 @@ export const WatermarkRequest: React.FunctionComponent<Props> = ({
           message: {
             message: "Success",
           },
-          data: request,
+          data,
         });
       }
     },
