@@ -52,9 +52,9 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     },
   });
   const requestWatermarkAction = useActionCreator(attachmentsActions.requestWatermarkedFile);
-  const requestWatermarkAsync = useAsync({
-    onSuccess: (data: WatermarkRequest = {} as WatermarkRequest) => {
-      setNewWatermarkRequest(data);
+  const requestWatermarkAsync = useAsync<WatermarkRequest>({
+    onSuccess: (data) => {
+      setNewWatermarkRequest(data!);
     },
     onError: (msg) => {
       setNewWatermarkError(msg!);

@@ -14,25 +14,26 @@ export const WatermarkRequestContainer: React.FunctionComponent<Props> = ({
   addRequestResult,
 }) => {
   const timer = useRef<any>(null);
-  const NUMBER_OF_RETRIES = 3;
-  const RETRY_TIME = 5000;
+  const NUMBER_OF_RETRIES = 10;
+  const RETRY_TIME = 10000;
   const [numberOfRetries, setNumberOfRetries] = useState(0);
   const incrementNumberOfRetries = () => setNumberOfRetries(numberOfRetries + 1);
   const asyncAction = useActionCreator(attachmentsActions.checkWatermarkStatus);
-  const async = useAsync({
-    onSuccess: (data: WatermarkRequest = {} as WatermarkRequest) => {
-      if (data!.status === WatermarkRequestStatus.Done) {
+  const async = useAsync<WatermarkRequest>({
+    onSuccess: (data) => {
+      const watermarkRequest = data!;
+      if (watermarkRequest.status === WatermarkRequestStatus.Done) {
         clearInterval(timer.current);
         addRequestResult({
           success: true,
           message: {
             translation: "watermark.downlaod.ready",
             values: {
-              name: data.attachment.name,
-              type: data.attachment.type,
+              name: watermarkRequest.attachment.name,
+              type: watermarkRequest.attachment.type,
             },
           },
-          data,
+          data: watermarkRequest,
         });
       }
     },
