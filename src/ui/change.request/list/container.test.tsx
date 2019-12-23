@@ -1,4 +1,4 @@
-import { fireEvent, wait } from "@testing-library/dom";
+import { fireEvent, wait } from "@testing-library/react";
 import MockAdapter from "axios-mock-adapter";
 import React from "react";
 import apiInstance from "../../../state/apiClient";
@@ -11,24 +11,21 @@ jest.mock("../../components/Text");
 
 const mockResponse = [
   {
-    createdAt: "2019-11-28T11:15:35.917Z",
-    updatedAt: "2019-11-28T11:15:59.964Z",
     id: "8d785119-e164-4e00-940b-0e049bb4227d",
   },
   {
-    createdAt: "2019-11-21T07:46:56.378Z",
-    updatedAt: "2019-11-21T07:47:41.765Z",
     id: "e6280257-8d30-47ec-8984-d2f46b0535cb",
   },
 ];
 
-describe("RTL test", () => {
+describe("Change Request list container test", () => {
   const url = "/change_requests";
+  const title = "Test search";
 
   beforeEach(() => {
     apiMock.onGet(url).reply((config) => {
       // workaround, couldn't get params to work
-      if (config.params.title) {
+      if (config.params.title === title) {
         return [200, mockResponse.splice(1)];
       } else {
         return [200, mockResponse];
@@ -65,7 +62,7 @@ describe("RTL test", () => {
 
     await wait(() => {});
 
-    fireEvent.change(titleInput!, { target: { value: "Test search" } });
+    fireEvent.change(titleInput!, { target: { value: title } });
 
     await wait(() => {
       expect(numberOfRecords.innerHTML).toEqual("1");
