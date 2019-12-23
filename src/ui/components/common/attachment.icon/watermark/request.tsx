@@ -27,7 +27,7 @@ export const WatermarkRequestContainer: React.FunctionComponent<Props> = ({
         addRequestResult({
           success: true,
           message: {
-            translation: "watermark.downlaod.ready",
+            translation: "watermark.download.ready",
             values: {
               name: watermarkRequest.attachment.name,
               type: watermarkRequest.attachment.type,
