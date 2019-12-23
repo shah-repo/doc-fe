@@ -2,9 +2,9 @@ import { Button } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import useDialog from "../../../../hooks/useDialog";
 import Text from "../../../Text";
-import useWatermarkRequest from "../utils/useWatermarkRequest";
-// import WatermarkDownload from "./download";
+import WatermarkDownloader from "./downloader";
 import WatermarkPresenter from "./presenter";
+import WatermarkRequest from "./request";
 
 interface Props {
   newWatermarkRequest: any;
@@ -17,18 +17,23 @@ export const WatermarkContainer: React.FunctionComponent<Props> = ({
 }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState({});
-  const [requestResults, setRequestResults] = useState([]);
+  const [requestResult, setRequestResult] = useState<any>(null);
+  const [requestedWatermarks, setRequestedWatermarks] = useState<any>([]);
   const dialog = useDialog();
   const handleClose = () => dialog.close();
-  const setRequestResult = (request) => setRequestResults(request);
-  const watermarkRequest = useWatermarkRequest(setRequestResult);
+  const addRequestResult = (result: any) => {
+    setRequestedWatermarks(requestedWatermarks.filter((request: any) =>
+      result.data.id !== requestedWatermarks.id,
+    ));
+    setRequestResult(result);
+  };
 
   useEffect(() => {
     if (!newWatermarkRequest) {
       return;
     }
 
-    watermarkRequest.execute(newWatermarkRequest.id);
+    setRequestedWatermarks([...requestedWatermarks, newWatermarkRequest]);
     setTitle("common.success");
     setContent({
       translation: "watermark.successfully.requested",
@@ -48,14 +53,6 @@ export const WatermarkContainer: React.FunctionComponent<Props> = ({
     setContent({ message: newWatermarkError });
     dialog.open();
   }, [newWatermarkError]);
-  useEffect(() => {
-    if (dialog.isOpen || requestResults.length === 0) {
-      return;
-    }
-
-    console.log(requestResults);
-
-  }, [requestResults, dialog.isOpen]);
 
   const renderCloseButton = (newWatermarkError || newWatermarkRequest) && (
     <Button onClick={handleClose} color="primary">
@@ -65,6 +62,19 @@ export const WatermarkContainer: React.FunctionComponent<Props> = ({
 
   return (
     <>
+      {requestedWatermarks.map((request) => {
+        return (
+          <WatermarkRequest
+            key={request.id}
+            request={request}
+            addRequestResult={addRequestResult}
+          />
+        );
+      })}
+      <WatermarkDownloader
+        isMainDialogOpen={dialog.isOpen}
+        request={requestResult}
+      />
       <WatermarkPresenter
         isOpen={dialog.isOpen}
         handleClose={handleClose}
