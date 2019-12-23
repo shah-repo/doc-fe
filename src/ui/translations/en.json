@@ -247,6 +247,8 @@
   "common.go.to.enlil": "Go to Enlil",
   "common.deactivate": "Deactivate",
   "common.approval.id": "Approval ID",
+  "common.error": "Error",
+  "common.success": "Success",
 
   "output.info": "Form Info",
 
@@ -372,6 +374,7 @@
 
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
+  "attachment.download.watermark": "Download watermarked file",
 
   "training.completed": "Training completed",
   "training.certify.completion": "Click the button to certify training completion",
@@ -401,5 +404,9 @@
 
   "supplier.id": "Supplier ID",
   "supplier.name": "Supplier name",
-  "supplier.status": "Supplier status"
+  "supplier.status": "Supplier status",
+
+  "watermark.successfully.requested": "Watermarked copy of {file}.{type} successfully requested. We will notify you when it's ready to download.",
+  "watermark.download.ready": "Watermarked file {name}.{type} ready to download",
+  "watermark.request.failed": "Request for {name}.{type} failed"
 }
