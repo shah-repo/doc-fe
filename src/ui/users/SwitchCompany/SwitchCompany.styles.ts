@@ -16,7 +16,7 @@ export const styles = makeStyles((theme: Theme) =>
       backgroundColor: theme.palette.common.white,
     },
     container: {
-      width: "400px",
+      width: "500px",
     },
     title: {
       fontSize: "26px",
@@ -24,9 +24,6 @@ export const styles = makeStyles((theme: Theme) =>
     subtitle: {
       fontSize: "16px",
       fontWeight: 300,
-    },
-    companyRows: {
-      marginTop: "40px",
     },
     avatar: {
       width: "58px",
@@ -43,7 +40,7 @@ export const styles = makeStyles((theme: Theme) =>
       cursor: "pointer",
       outline: "inherit",
       fontSize: "18px",
-      width: "400px",
+      width: "480px",
       height: "100px",
       textAlign: "justify",
       borderBottom: "1px solid lightgrey",

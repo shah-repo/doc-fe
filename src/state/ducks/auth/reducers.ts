@@ -1,14 +1,22 @@
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
+import { COMPANY_DEFAULT_STATE } from "../company/reducers";
+import { EditGroupsAction, EditUserInfoAction } from "../tableSearch";
+import {
+  EDIT_EMPLOYEE_GROUPS,
+  EDIT_EMPLOYEE_USER_INFO,
+} from "../tableSearch/constants";
 import {
   AUTH_USER,
   LOGOUT_USER,
   SET_EMPLOYEE,
   USER_GROUPS,
   USER_GROUPS_GET_ASYNC,
+  USERS_ME_URL,
 } from "./constants";
 import {
   AuthUserAction,
+  EditUserMeAction,
   GroupTag,
   LogoutUserAction,
   Permission,
@@ -18,6 +26,13 @@ import {
   UserState,
 } from "./types";
 
+export const DEFAULT_EMPLOYEE = {
+  id: "",
+  active: true,
+  company: COMPANY_DEFAULT_STATE,
+  slackUserId: "",
+};
+
 export const USER_DEFAULT_STATE: UserState = {
   email: "",
   name: "",
@@ -25,27 +40,66 @@ export const USER_DEFAULT_STATE: UserState = {
   employeeId: "",
   sessionId: "",
   employees: [],
+  avatar: "",
+  groups: [],
+  employee: DEFAULT_EMPLOYEE,
 };
 
-type AuthUserActions = AuthUserAction | LogoutUserAction | SelectEmployeeAction;
+type AuthUserActions =
+  | AuthUserAction
+  | LogoutUserAction
+  | SelectEmployeeAction
+  | EditUserMeAction
+  | EditUserInfoAction
+  | UserGroupsAction
+  | EditGroupsAction;
 
-export const user = (state: UserState = USER_DEFAULT_STATE, action: AuthUserActions): UserState => {
+export const user = (
+  state: UserState = USER_DEFAULT_STATE,
+  action: AuthUserActions,
+): UserState => {
   switch (action.type) {
     case AUTH_USER:
       return {
         ...state,
-        email: action.payload.email,
-        name: action.payload.name,
-        id: action.payload.id,
-        employeeId: action.payload.employeeId,
-        sessionId: action.payload.sessionId,
-        employees: action.payload.employees,
+        ...action.payload,
+        employeeId: action.payload.employees[0].id,
+        employee: action.payload.employees[0],
       };
     case SET_EMPLOYEE:
       return {
         ...state,
         employeeId: action.payload.id,
+        employee: action.payload,
       };
+    case USERS_ME_URL:
+      return {
+        ...state,
+        name: action.payload.name,
+        avatar: action.payload.avatar,
+      };
+    case EDIT_EMPLOYEE_USER_INFO:
+      if (state.id === action.payload.id) {
+        return {
+          ...state,
+          name: action.payload.name,
+          avatar: action.payload.avatar,
+        };
+      }
+      return state;
+    case USER_GROUPS:
+      return {
+        ...state,
+        groups: action.payload,
+      };
+    case EDIT_EMPLOYEE_GROUPS:
+      if (state.id === action.payload.user.id) {
+        return {
+          ...state,
+          groups: action.payload.groups,
+        };
+      }
+      return state;
     case LOGOUT_USER:
       return { ...USER_DEFAULT_STATE };
     default:
@@ -60,7 +114,7 @@ export const USER_GROUPS_DEFAULT_STATE: UserGroupsState = {
 
 export const groups = (
   state: UserGroupsState = USER_GROUPS_DEFAULT_STATE,
-  action: UserGroupsAction,
+  action: UserGroupsAction | LogoutUserAction,
 ): UserGroupsState => {
   switch (action.type) {
     case USER_GROUPS:
@@ -82,6 +136,8 @@ export const groups = (
         tags: Array.from(tagsSet),
         permissions: Array.from(permissionsSet),
       };
+    case LOGOUT_USER:
+      return {...USER_GROUPS_DEFAULT_STATE};
     default:
       return state;
   }

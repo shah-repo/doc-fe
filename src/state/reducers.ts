@@ -12,12 +12,13 @@ import documents from "./ducks/documents";
 import formBuilderState from "./ducks/formBuilder";
 import supplierSurvey from "./ducks/supplierSurvey";
 import tableSearch from "./ducks/tableSearch";
+import userManagement from "./ducks/userManagement";
 import migrations from "./migrations";
 
 const authPersistConfig = {
   key: "auth",
   storage,
-  version: 0,
+  version: 1,
   whitelist: ["user"],
   migrate: createMigrate(migrations),
 };
@@ -38,6 +39,7 @@ const appReducer = combineReducers({
   company: persistReducer(companyPersistConfig, company),
   tableSearch,
   supplierSurvey,
+  userManagement,
 });
 
 const rootReducer = (state: any, action: any) => {

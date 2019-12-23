@@ -71,6 +71,7 @@ pipelines:
       script:
         - chmod a+x ./aws/bash_scripts/build.sh
         - ./aws/bash_scripts/build.sh "prod"
+      trigger: manual
 
     deploy_to_demo: &DEPLOY_TO_DEMO
       name: Deploy to Demo
@@ -83,12 +84,12 @@ pipelines:
       script:
         - chmod a+x ./aws/bash_scripts/build.sh
         - ./aws/bash_scripts/build.sh "demo"
+      trigger: manual
 
   default:
       - step: *RUN_LINT_AND_TESTS
   tags:
     deploy-to-dev:
-      - step: *RUN_LINT_AND_TESTS
       - step: *DEPLOY_TO_DEVELOP_1
     deploy-to-dev2:
       - step: *RUN_LINT_AND_TESTS
@@ -118,7 +119,7 @@ pipelines:
       - step: *RUN_LINTER
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEVELOP_1
-    release/19.4:
+    release/19.6:
       - step: *RUN_LINTER
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEMO
@@ -126,4 +127,4 @@ pipelines:
 definitions:
   services:
     docker:
-      memory: 3096
+      memory: 4096

@@ -1,12 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Redirect, RouteComponentProps } from "react-router-dom";
+import { logo } from "../../common/utils/helpers";
 import { authSelectors } from "../../state/ducks/auth";
 import { Employee } from "../../state/ducks/company";
 import { ApplicationState } from "../../state/reducers";
 import { HOME_URL } from "../constants/urls";
 import LoginPresenter from "./Login.presenter";
-import SwitchCompany from "./SwitchCompany/SwitchCompany";
+import SwitchCompanyContainer from "./SwitchCompany/SwitchCompany.container";
 
 interface StateProps {
   isUserAuthenticated: boolean;
@@ -22,7 +23,7 @@ export const LoginContainer: React.FunctionComponent<LoginContainerProps> = (pro
   if (props.isUserAuthenticated) {
     if (props.hasMultipleCompanies) {
       return (
-        <SwitchCompany
+        <SwitchCompanyContainer
           {...props}
         />
       );
@@ -31,7 +32,9 @@ export const LoginContainer: React.FunctionComponent<LoginContainerProps> = (pro
   }
 
   return (
-    <LoginPresenter />
+    <LoginPresenter
+      logo={logo}
+    />
   );
 };
 

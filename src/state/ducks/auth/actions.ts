@@ -1,11 +1,16 @@
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
+import { IotService } from "../../../common/utils/iot/mqttClient";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApplicationState } from "../../reducers";
 import { ApiAction, Handlers } from "../../types";
 import { companyActions, Employee } from "../company";
+import { userManagementActions } from "../userManagement";
 import {
+  AUTH_AWS_IOT_URL,
   AUTH_USER,
+  CONFIRM_FORGOT_PASSWORD_URL,
+  FORGOT_PASSWORD_URL,
   GROUPS_URL,
   LOGIN_URL,
   LOGIN_WITH_CODE_URL,
@@ -14,26 +19,48 @@ import {
   PING_SERVER_GET_ASYNC,
   PING_SERVER_URL,
   SET_EMPLOYEE,
+  SIGNUP_URL,
   USER_GROUPS,
   USER_GROUPS_GET_ASYNC,
+  USERS_ME_URL,
+  USERS_URL,
 } from "./constants";
 import {
   AuthResponse,
   AuthUserAction,
+  ConfirmPasswordAction,
+  EditUserMeAction,
+  EmployeeEditRequestBody,
+  ForgotPassword,
+  ForgotPasswordAction,
+  ForgotPasswordConfirmation,
   Group,
   LoginRequestBody,
   LoginWithCodeRequestBody,
   LogoutRequestBody,
   LogoutUserAction,
   SelectEmployeeAction,
+  SignupAction,
   User,
   UserGroupsAction,
 } from "./types";
 
-const authUser = (user: User): AuthUserAction => {
+const authSignup = (): SignupAction => ({
+  type: SIGNUP_URL,
+});
+
+const authForgotPassword = (): ForgotPasswordAction => ({
+  type: FORGOT_PASSWORD_URL,
+});
+
+const authConfirmPassword = (): ConfirmPasswordAction => ({
+  type: CONFIRM_FORGOT_PASSWORD_URL,
+});
+
+const authUser = (data: AuthResponse): AuthUserAction => {
   return {
     type: AUTH_USER,
-    payload: user,
+    payload: data,
   };
 };
 
@@ -48,20 +75,55 @@ const userGroups = (groups: Group[]): UserGroupsAction => {
   };
 };
 
-const login = (loginValues: LoginRequestBody, handlers: Handlers):
-  ApiAction<AuthResponse, LoginRequestBody> => apiActionWithCallbacks({
+const editUser = (user: User): EditUserMeAction => {
+  return {
+    type: USERS_ME_URL,
+    payload: user,
+  };
+};
+
+const editCurrentEmployee = (
+  body: EmployeeEditRequestBody,
+  handlers: Handlers,
+): ApiAction<Partial<AuthResponse>> =>
+  apiActionWithCallbacks({
+    url: `${USERS_ME_URL}`,
+    method: "patch",
+    data: body,
+    onSuccess: (user, dispatch) => {
+      dispatch(editUser(user));
+    },
+    handlers,
+  });
+
+const editSelectedEmployee = (
+  id: string,
+  body: EmployeeEditRequestBody,
+  handlers: Handlers,
+): ApiAction<Partial<AuthResponse>> =>
+  apiActionWithCallbacks({
+    url: `${USERS_URL}/${id}`,
+    method: "patch",
+    data: body,
+    onSuccess: (user, dispatch) => {
+      dispatch(userManagementActions.editSelectedEmployeeUserInfo(user));
+    },
+    handlers,
+  });
+
+const login = (
+  loginValues: LoginRequestBody,
+  handlers: Handlers,
+): ApiAction<AuthResponse, LoginRequestBody> =>
+  apiActionWithCallbacks({
     url: LOGIN_URL,
     method: "post",
     data: loginValues,
     includeAuthorization: false,
     onSuccess: (data: AuthResponse, dispatch) => {
-      dispatch(authUser({
-        email: loginValues.email,
-        name: data.name, id: data.id,
-        sessionId: data.sessionId,
-        employeeId: data.employees[0].id,
-        employees: data.employees,
-      }));
+      dispatch(
+        authUser(data),
+      );
 
       if ((data.employees || []).length === 1) {
         dispatch(companyActions.selectCompany(data.employees[0].company));
@@ -70,21 +132,65 @@ const login = (loginValues: LoginRequestBody, handlers: Handlers):
     handlers,
   });
 
-const loginWithCode = (loginValues: LoginWithCodeRequestBody, handlers: Handlers):
-  ApiAction<AuthResponse, LoginWithCodeRequestBody> => apiActionWithCallbacks({
+const signup = (
+  loginValues: LoginRequestBody,
+  handlers: Handlers,
+): ApiAction<AuthResponse, LoginRequestBody> =>
+  apiActionWithCallbacks({
+    url: SIGNUP_URL,
+    method: "post",
+    data: loginValues,
+    includeAuthorization: false,
+    onSuccess: (m, dispatch) => {
+      dispatch(authSignup());
+    },
+    handlers,
+  });
+
+const forgotPassword = (
+  values: ForgotPassword,
+  handlers: Handlers,
+): ApiAction<AuthResponse, ForgotPassword> =>
+  apiActionWithCallbacks({
+    url: FORGOT_PASSWORD_URL,
+    method: "post",
+    data: values,
+    includeAuthorization: false,
+    onSuccess: (m, dispatch) => {
+      dispatch(authForgotPassword());
+    },
+    handlers,
+  });
+
+const confirmNewPassword = (
+  confirmValues: ForgotPasswordConfirmation,
+  handlers: Handlers,
+): ApiAction<AuthResponse, ForgotPasswordConfirmation> =>
+  apiActionWithCallbacks({
+    url: CONFIRM_FORGOT_PASSWORD_URL,
+    method: "post",
+    data: confirmValues,
+    includeAuthorization: false,
+    onSuccess: (m, dispatch) => {
+      dispatch(authConfirmPassword());
+      dispatch(login({email: confirmValues.email, password: confirmValues.password}, handlers));
+    },
+    handlers,
+  });
+
+const loginWithCode = (
+  loginValues: LoginWithCodeRequestBody,
+  handlers: Handlers,
+): ApiAction<AuthResponse, LoginWithCodeRequestBody> =>
+  apiActionWithCallbacks({
     url: LOGIN_WITH_CODE_URL,
     method: "post",
     data: loginValues,
     includeAuthorization: false,
     onSuccess: (response, dispatch) => {
-      dispatch(authUser({
-        email: response.email,
-        name: response.name,
-        id: response.id,
-        sessionId: response.sessionId,
-        employeeId: response.employees[0].id,
-        employees: response.employees,
-      }));
+      dispatch(
+        authUser(response),
+      );
     },
     onFailure: (m, dispatch) => {
       dispatch(logoutUser());
@@ -92,12 +198,17 @@ const loginWithCode = (loginValues: LoginWithCodeRequestBody, handlers: Handlers
     handlers,
   });
 
-const logout = (): ThunkAction<void, ApplicationState, any, AnyAction> => (dispatch, getState) => {
+const logout = (): ThunkAction<void, ApplicationState, any, AnyAction> => (
+  dispatch,
+  getState,
+) => {
   const action: ApiAction<any, LogoutRequestBody> = apiAction({
     url: LOGOUT_URL,
     method: "delete",
     onCompleted: () => {
       dispatch(logoutUser());
+      const iotService = IotService.getInstance();
+      iotService.unsubscribeAll();
     },
   });
 
@@ -114,8 +225,20 @@ const loadUserGroups = (): ApiAction<Group[]> =>
     },
   });
 
-const pingServer = ():
-  ApiAction => apiAction({
+const getIotCreds = (): ApiAction =>
+  apiAction({
+    url: AUTH_AWS_IOT_URL,
+    method: "get",
+    includeAuthorization: true,
+    onSuccess: (credentials, dispatch) => {
+      const iotService = IotService.getInstance();
+      iotService.setMqttCreds(credentials);
+      iotService.mqttClient();
+    },
+  });
+
+const pingServer = (): ApiAction =>
+  apiAction({
     url: `${PING_SERVER_URL}`,
     asyncType: PING_SERVER_GET_ASYNC,
     method: "get",
@@ -135,7 +258,15 @@ export default {
   login,
   logout,
   loginWithCode,
+  getIotCreds,
   loadUserGroups,
   pingServer,
   selectEmployee,
+  editCurrentEmployee,
+  editSelectedEmployee,
+  signup,
+  forgotPassword,
+  confirmNewPassword,
+  userGroups,
+  editUser,
 };

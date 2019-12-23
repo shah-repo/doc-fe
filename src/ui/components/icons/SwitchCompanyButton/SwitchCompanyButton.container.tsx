@@ -1,11 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps, useHistory } from "react-router-dom";
-import { authSelectors } from "../../../state/ducks/auth";
-import { Employee } from "../../../state/ducks/company";
-import { ApplicationState } from "../../../state/reducers";
-import { LOGIN_URL } from "../../constants/urls";
-import Text from "../Text";
+import { authSelectors } from "../../../../state/ducks/auth";
+import { Employee } from "../../../../state/ducks/company";
+import { ApplicationState } from "../../../../state/reducers";
+import { LOGIN_URL } from "../../../constants/urls";
+import Text from "../../Text";
 import styles from "./SwitchCompanyButton.styles";
 
 interface StateProps {

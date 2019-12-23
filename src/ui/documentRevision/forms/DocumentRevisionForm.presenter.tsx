@@ -56,6 +56,7 @@ export interface Props
   setDocId?: typeof documentsActions.setDocumentProposedId;
   doNotPrompt?: boolean;
   documentTypes: SelectOption[];
+  otherDocumentTypes: SelectOption[];
   documentTypesById: DocumentTypeByIdState;
   onDirtyFlagChange?: (dirty: boolean) => void;
 }
@@ -80,8 +81,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   errors,
   documentTypes,
   documentTypesById,
+  otherDocumentTypes,
 }) => {
-  if (!values.id && !_.get(values, "document.documentType")) {
+  if (!values.id && !_.get(values, "document.documentType.id")) {
     FBDRStore.setMode("none");
     if (setDocId) {
       setDocId("");
@@ -227,7 +229,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               selectProps={{
                 inputProps: { id: "formTemplate.outputDocumentType" },
               }}
-              options={documentTypes}
+              options={otherDocumentTypes}
               includeEmpty={false}
               validate={validator(required)}
             />
