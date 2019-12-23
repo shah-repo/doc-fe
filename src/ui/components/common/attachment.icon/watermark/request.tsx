@@ -1,15 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
-import { attachmentsActions } from "../../../../../state/ducks/attachments";
+import { attachmentsActions, WatermarkedFile, WatermarkRequestStatus } from "../../../../../state/ducks/attachments";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
+import { WatermarkResponse } from "../utils/types";
 
 interface Props {
-  request: any;
-  addRequestResult: (arg: any) => void;
+  requestedFile: WatermarkedFile;
+  addRequestResult: (arg: WatermarkResponse) => void;
 }
 
 export const WatermarkRequest: React.FunctionComponent<Props> = ({
-  request,
+  requestedFile,
   addRequestResult,
 }) => {
   const timer = useRef<any>(null);
@@ -19,8 +20,8 @@ export const WatermarkRequest: React.FunctionComponent<Props> = ({
   const incrementNumberOfRetries = () => setNumberOfRetries(numberOfRetries + 1);
   const asyncAction = useActionCreator(attachmentsActions.checkWatermarkStatus);
   const async = useAsync({
-    onSuccess: (data: any) => {
-      if (data!.status === "DONE") {
+    onSuccess: (data: WatermarkedFile = {} as WatermarkedFile) => {
+      if (data!.status === WatermarkRequestStatus.Done) {
         clearInterval(timer.current);
         addRequestResult({
           success: true,
@@ -38,7 +39,7 @@ export const WatermarkRequest: React.FunctionComponent<Props> = ({
         message: {
           message,
         },
-        data: request,
+        data: requestedFile,
       });
     },
   });
@@ -52,11 +53,11 @@ export const WatermarkRequest: React.FunctionComponent<Props> = ({
           message: {
             message: "Couldn't process",
           },
-          data: request,
+          data: requestedFile,
         });
         return;
       }
-      async.start(asyncAction, request.id, async);
+      async.start(asyncAction, requestedFile.id, async);
     }, RETRY_TIME);
 
     return () => {

@@ -1,13 +1,16 @@
 import { Button } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
+import { WatermarkedFile } from "../../../../../state/ducks/attachments";
+import { Nullable } from "../../../../../state/ducks/common";
 import useDialog from "../../../../hooks/useDialog";
 import Text from "../../../Text";
+import { WatermarkResponse } from "../utils/types";
 import WatermarkDownloader from "./downloader";
 import WatermarkPresenter from "./presenter";
 import WatermarkRequest from "./request";
 
 interface Props {
-  newWatermarkRequest: any;
+  newWatermarkRequest: Nullable<WatermarkedFile>;
   newWatermarkError: string;
 }
 
@@ -17,13 +20,13 @@ export const WatermarkContainer: React.FunctionComponent<Props> = ({
 }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState({});
-  const [requestResult, setRequestResult] = useState<any>(null);
-  const [requestedWatermarks, setRequestedWatermarks] = useState<any>([]);
+  const [requestResult, setRequestResult] = useState<Nullable<WatermarkResponse>>(null);
+  const [requestedWatermarks, setRequestedWatermarks] = useState<WatermarkedFile[]>([]);
   const dialog = useDialog();
   const handleClose = () => dialog.close();
-  const addRequestResult = (result: any) => {
-    setRequestedWatermarks(requestedWatermarks.filter((request: any) =>
-      result.data.id !== requestedWatermarks.id,
+  const addRequestResult = (result: WatermarkResponse) => {
+    setRequestedWatermarks(requestedWatermarks.filter((request) =>
+      result.data.id !== request.id,
     ));
     setRequestResult(result);
   };
@@ -66,7 +69,7 @@ export const WatermarkContainer: React.FunctionComponent<Props> = ({
         return (
           <WatermarkRequest
             key={request.id}
-            request={request}
+            requestedFile={request}
             addRequestResult={addRequestResult}
           />
         );

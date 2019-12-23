@@ -7,20 +7,22 @@ import {
   DialogTitle,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
+import { Nullable } from "../../../../../state/ducks/common";
 import useDialog from "../../../../hooks/useDialog";
 import Text from "../../../Text";
+import { WatermarkResponse } from "../utils/types";
 
 interface Props {
   isMainDialogOpen: boolean;
-  request: any;
+  request: Nullable<WatermarkResponse>;
 }
 
 export const WatermarkDownloader: React.FunctionComponent<Props> = ({
   isMainDialogOpen,
   request,
 }) => {
-  const [selectedRequest, setSelectedRequest] = useState<any>({});
-  const [requests, setRequests] = useState<any>([]);
+  const [selectedRequest, setSelectedRequest] = useState<WatermarkResponse>({} as WatermarkResponse);
+  const [requests, setRequests] = useState<WatermarkResponse[]>([]);
   const dialog = useDialog();
   const handleClose = () => {
     dialog.close();

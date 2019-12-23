@@ -10,6 +10,8 @@ import {
   Attachment,
   AttachmentDownloadResponse,
   AttachmentType,
+  WatermarkedFile,
+  WatermarkRequest,
 } from "./types";
 
 const upload = (file: File, handlers: Handlers<Attachment>): ApiAction => {
@@ -44,8 +46,8 @@ const download = (
 const requestWatermarkedFile = (
   data: any,
   handlers: Handlers,
-): ApiAction =>
-  apiActionWithCallbacks({
+): ApiAction<WatermarkedFile, WatermarkRequest> =>
+  apiActionWithCallbacks<WatermarkedFile, WatermarkRequest>({
     url: `${ATTACHMENT_ROOT_URL}/watermark`,
     method: "post",
     data,
@@ -56,8 +58,8 @@ const requestWatermarkedFile = (
 const checkWatermarkStatus = (
   id: string,
   handlers: Handlers,
-): ApiAction =>
-  apiActionWithCallbacks({
+): ApiAction<WatermarkedFile> =>
+  apiActionWithCallbacks<WatermarkedFile, null>({
     url: `${ATTACHMENT_ROOT_URL}/watermark/${id}`,
     method: "get",
     asyncType: DOWNLOAD_WATERMARK_ASYNC,

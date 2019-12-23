@@ -1,4 +1,4 @@
-import { Attachment, attachmentsActions, AttachmentType } from "../../../../../state/ducks/attachments";
+import { Attachment, attachmentsActions, AttachmentType, WatermarkedFile } from "../../../../../state/ducks/attachments";
 import { RenderSize } from "../../../../../state/ducks/common";
 import { FormikHybridFieldProps } from "../../../hoc/utils/types";
 
@@ -37,3 +37,9 @@ export interface AttachmentIconStyleProp {
 }
 
 export type AttachmentIconContainerProps = AttachmentIconProps & AttachmentIconDispatchProps;
+
+export interface WatermarkResponse {
+  success: boolean;
+  message: any;
+  data: WatermarkedFile;
+}
