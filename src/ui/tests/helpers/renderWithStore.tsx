@@ -1,20 +1,31 @@
 import { render as rtlRender } from "@testing-library/react";
+import { createMemoryHistory } from "history";
 import React from "react";
 import { Provider } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
+import { Router } from "react-router-dom";
 import { createStoreWithValues } from "../../../state/store";
 
-const render = (ui: any, initialStore = {}, options = {}) => {
-  const store = createStoreWithValues(initialStore);
+const render = (
+  ui: any,
+  {
+    customState = {},
+    store = createStoreWithValues(customState),
+    route = "/",
+    history = createMemoryHistory({ initialEntries: [route] }),
+  }: any = {},
+) => {
   const Providers = ({ children }: any) => (
     <Provider store={store}>
-      <BrowserRouter>
+      <Router history={history}>
         {children}
-      </BrowserRouter>
+      </Router>
     </Provider>
   );
 
-  return rtlRender(ui, { wrapper: Providers, ...options });
-};
+  return {
+    ...rtlRender(ui, { wrapper: Providers }),
+    history,
+  };
+}
 
 export default render;
