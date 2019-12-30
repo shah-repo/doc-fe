@@ -170,7 +170,7 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
                 class="MuiButton-label"
               >
                 <span>
-                  form.builder.add.field
+                  Add a Field
                 </span>
               </span>
               <span
@@ -196,7 +196,7 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
           class="MuiButton-label"
         >
           <span>
-            common.save
+            Save
           </span>
         </span>
         <span

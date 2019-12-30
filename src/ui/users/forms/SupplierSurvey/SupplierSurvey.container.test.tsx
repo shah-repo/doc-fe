@@ -10,8 +10,6 @@ import { submitSurverError, surveyResponse } from "./tests/responses";
 
 const apiMock = new MockAdapter(apiInstance);
 
-jest.mock("../../../components/Text");
-
 describe("Supplier survey container test", () => {
   const SURVEY_TOKEN = "SURVEY_TOKEN";
   const getUrl = `supplier_survey_requests/${SURVEY_TOKEN}`;
