@@ -1,4 +1,5 @@
 import { render as rtlRender } from "@testing-library/react";
+// tslint:disable-next-line: no-implicit-dependencies
 import { createMemoryHistory } from "history";
 import React from "react";
 import { Provider } from "react-redux";
@@ -25,7 +26,8 @@ const render = (
   return {
     ...rtlRender(ui, { wrapper: Providers }),
     history,
+    store,
   };
-}
+};
 
 export default render;

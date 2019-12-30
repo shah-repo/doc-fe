@@ -1,43 +1,30 @@
+import { wait } from "@testing-library/react";
 import MockAdapter from "axios-mock-adapter";
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import apiInstance from "../../../../state/apiClient";
+import { SUPPLIER_SURVEY_URL } from "../../../constants/urls";
 import render from "../../../tests/helpers/renderWithStore";
 import SupplierSurveyContainer from "./SupplierSurvey.container";
+import { surveyResponse } from "./tests/responses";
 
 const apiMock = new MockAdapter(apiInstance);
 
 jest.mock("../../../components/Text");
 
-const mockResponse = [
-  {
-    id: "8d785119-e164-4e00-940b-0e049bb4227d",
-  },
-  {
-    id: "e6280257-8d30-47ec-8984-d2f46b0535cb",
-  },
-];
-
 describe("Supplier survey container test", () => {
-  const url = "/change_requests";
-  const title = "Test search";
+  const SURVEY_TOKEN = "SURVEY_TOKEN";
+  const url = `supplier_survey_requests/${SURVEY_TOKEN}`;
 
   beforeEach(() => {
-    apiMock.onGet(url).reply((config) => {
-      // workaround, couldn't get params to work
-      if (config.params.title === title) {
-        return [200, mockResponse.splice(1)];
-      } else {
-        return [200, mockResponse];
-      }
-    });
+    apiMock.onGet(url).reply(200, surveyResponse);
   });
 
   afterEach(() => {
     apiMock.reset();
   });
 
-  it("redirects to home if user is logged in", async () => {
+  it("redirects to home if user is logged in", () => {
     const customState = {
       auth: {
         user: {
@@ -48,12 +35,30 @@ describe("Supplier survey container test", () => {
     };
     const Routes = () => (
       <Switch>
-        <Route path="/survey" exact={true} render={(props) => <SupplierSurveyContainer {...props} />} />
+        <Route path={SUPPLIER_SURVEY_URL} exact={true} render={(props) => <SupplierSurveyContainer {...props} />} />
         <Route path="/" exact={true} render={() => <div>After redirect</div>} />
       </Switch>
     );
-    const { container } = render(<Routes />, { customState, route: "/survey" });
+    const { container } = render(<Routes />, { customState, route: "/supplier_survey/123" });
 
     expect(container.innerHTML).toMatch("<div>After redirect</div>");
+  });
+
+  it("renders the survey", async () => {
+    const Routes = () => (
+      <Switch>
+        <Route path={SUPPLIER_SURVEY_URL} exact={true} render={(props) => <SupplierSurveyContainer {...props} />} />
+      </Switch>
+    );
+    const { asFragment, getByRole } = render(
+      <Routes />,
+      { route: `/supplier_survey/${SURVEY_TOKEN}` },
+    );
+
+    expect(getByRole("progressbar")).toBeInTheDocument();
+
+    await wait(() => {});
+
+    expect(asFragment()).toMatchSnapshot();
   });
 });
