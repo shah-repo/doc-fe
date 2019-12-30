@@ -97,3 +97,9 @@ export const surveyResponse = {
     whiteLabeling: null,
   },
 };
+
+export const submitSurverError = {
+  statusCode: 409,
+  error: "Conflict",
+  message: "Survey already filled in",
+};

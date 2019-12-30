@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Supplier survey container test renders the survey 1`] = `
+exports[`Supplier survey container test renders the survey and fails on submit 1`] = `
 <DocumentFragment>
   <div
     class="MuiBox-root MuiBox-root-26"
