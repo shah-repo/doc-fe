@@ -15,7 +15,12 @@ export const DocumentInfo: React.FunctionComponent<Props> = ({
     <Box component="span">
         <Text translation="common.records.found"/>
         :&nbsp;
-        <span style={{fontWeight: "bold"}}>{numberOfRecords}</span>
+        <span
+          data-testid="numberOfRecords"
+          style={{fontWeight: "bold"}}
+        >
+          {numberOfRecords}
+        </span>
     </Box>
   );
 };
