@@ -27,6 +27,8 @@ interface OwnProps {
     slackIntegrationEnabled: boolean;
     slackTeamId: string;
     slackUserId: string;
+    previewAvatar: string;
+    setPreviewAvatar: (value: string) => void;
 }
 
 type Props = OwnProps;
@@ -50,8 +52,19 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
     slackTeamId,
     slackUserId,
     email,
+    previewAvatar,
+    setPreviewAvatar,
 }) => {
     const [userInfo, setUserInfo] = useState<EmployeeEditRequestBody>({ name, avatar });
+    const handleCloseEdit = () => {
+        closeEdit();
+        setPreviewAvatar("");
+    };
+    const handleCloseDialog = () => {
+        close();
+        handleCloseEdit();
+    };
+
     return (
     <Dialog fullScreen={true} open={isOpen}>
         <DialogTitle
@@ -59,9 +72,14 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
             name={name}
             userInfo={userInfo}
             setUserInfo={setUserInfo}
-            close={close}
+            close={handleCloseDialog}
         />
-        <AvatarContainer avatar={avatar}/>
+        <AvatarContainer
+            avatar={avatar}
+            showEditUser={showEditUser}
+            previewAvatar={previewAvatar}
+            setPreviewAvatar={setPreviewAvatar}
+        />
         <DialogContent
             canManageUsers={canManageUsers}
             employeeGroups={employeeGroups}
@@ -69,7 +87,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
             callbackUpdateGroups={callbackUpdateGroups}
             showEdit={showEdit}
             showEditUser={showEditUser}
-            closeEdit={closeEdit}
+            closeEdit={handleCloseEdit}
             userInfo={userInfo}
             editCurrentEmployee={editCurrentEmployee}
             slackIntegrationEnabled={slackIntegrationEnabled}

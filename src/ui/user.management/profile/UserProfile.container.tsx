@@ -52,6 +52,7 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
   const [showEditUser, setEditUser] = useState(false);
   const showEdit = () => setEditUser(true);
   const closeEdit = () => setEditUser(false);
+  const [previewAvatar, setPreviewAvatar] = useState("");
 
   const onSubmit = (values: EmployeeEditRequestBody) => dispatch(authActions.editCurrentEmployee(values, async));
 
@@ -89,6 +90,8 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
       slackIntegrationEnabled={isSlackIntegrationEnabled}
       slackTeamId={slackTeamId}
       slackUserId={userSlackId}
+      previewAvatar={previewAvatar}
+      setPreviewAvatar={setPreviewAvatar}
     />
   );
 };

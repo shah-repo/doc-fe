@@ -52,6 +52,7 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
     const [showEditUser, setEditUser] = useState(false);
     const showEdit = () => setEditUser(true);
     const closeEdit = () => setEditUser(false);
+    const [previewAvatar, setPreviewAvatar] = useState("");
 
     const canManageUsers = useSelector(getHasTag(GroupTag.USER_MANAGEMENT));
 
@@ -119,6 +120,8 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
             slackIntegrationEnabled={isSlackIntegrationEnabled}
             slackTeamId={slackTeamId}
             slackUserId={userSlackId}
+            previewAvatar={previewAvatar}
+            setPreviewAvatar={setPreviewAvatar}
         />
     );
 };
