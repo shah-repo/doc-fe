@@ -6,7 +6,7 @@ import apiInstance from "../../../../state/apiClient";
 import { SUPPLIER_SURVEY_URL } from "../../../constants/urls";
 import render from "../../../tests/helpers/renderWithProviders";
 import SupplierSurveyContainer from "./SupplierSurvey.container";
-import { submitSurverError, surveyResponse } from "./tests/responses";
+import { submitSurveyError, surveyResponse } from "./tests/responses";
 
 const apiMock = new MockAdapter(apiInstance);
 
@@ -17,7 +17,7 @@ describe("Supplier survey container test", () => {
 
   beforeEach(() => {
     apiMock.onGet(getUrl).reply(200, surveyResponse);
-    apiMock.onPost(submitUrl).reply(409, submitSurverError);
+    apiMock.onPost(submitUrl).reply(409, submitSurveyError);
   });
 
   afterEach(() => {

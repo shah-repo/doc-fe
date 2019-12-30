@@ -98,7 +98,7 @@ export const surveyResponse = {
   },
 };
 
-export const submitSurverError = {
+export const submitSurveyError = {
   statusCode: 409,
   error: "Conflict",
   message: "Survey already filled in",
