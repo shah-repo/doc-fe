@@ -1,34 +1,71 @@
-import { mount } from "enzyme";
-import faker from "faker";
+import { fireEvent, wait } from "@testing-library/react";
+import MockAdapter from "axios-mock-adapter";
 import React from "react";
-import getRouteComponentProps from "../../tests/helpers/getRouteComponentProps";
-import { ListContainer,  Props } from "./container";
-import { ListPresenter } from "./presenter";
+import apiInstance from "../../../state/apiClient";
+import render from "../../tests/helpers/renderWithStore";
+import ListContainer from "./container";
 
-jest.mock("react-redux", () => ({
-  useDispatch: jest.fn(),
-  useSelector: () => ({
-    queryDict: { docId: "1" },
-    queryData: [],
-  }),
-}));
+const apiMock = new MockAdapter(apiInstance);
 
 jest.mock("../../components/Text");
-jest.mock("react-router-dom", () => ({
-  Link: (props: any) => props.children,
-}));
 
-describe("Change request list container tests", () => {
-  const defaultProps: Props = {
-      currentUserEmail: faker.internet.email(),
-  } as unknown as Props;
+const mockResponse = [
+  {
+    id: "8d785119-e164-4e00-940b-0e049bb4227d",
+  },
+  {
+    id: "e6280257-8d30-47ec-8984-d2f46b0535cb",
+  },
+];
 
-  const getWrapper = (props: Partial<Props>= {}) => mount(
-    <ListContainer {...defaultProps} {...getRouteComponentProps()} {...props}/>,
-  );
+describe("Change Request list container test", () => {
+  const url = "/change_requests";
+  const title = "Test search";
 
-  it("render ListPresenter", () => {
-    const wrapper = getWrapper();
-    expect(wrapper.find(ListPresenter)).toHaveLength(1);
+  beforeEach(() => {
+    apiMock.onGet(url).reply((config) => {
+      // workaround, couldn't get params to work
+      if (config.params.title === title) {
+        return [200, mockResponse.splice(1)];
+      } else {
+        return [200, mockResponse];
+      }
+    });
+  });
+
+  afterEach(() => {
+    apiMock.reset();
+  });
+
+  it("renders empty on mount", async () => {
+    const { asFragment, getByTestId } = render(<ListContainer />);
+    const numberOfRecords = getByTestId("numberOfRecords");
+
+    expect(asFragment()).toMatchSnapshot();
+    expect(numberOfRecords.innerHTML).toEqual("0");
+  });
+
+  it("renders two items after API response", async () => {
+    const { getByTestId } = render(<ListContainer />);
+    const numberOfRecords = getByTestId("numberOfRecords");
+
+    await wait(() => {
+      expect(numberOfRecords.innerHTML).toEqual("2");
+    });
+
+  });
+
+  it("renders one item after search", async () => {
+    const { container, getByTestId } = render(<ListContainer />);
+    const titleInput = container.querySelector("[name='title']");
+    const numberOfRecords = getByTestId("numberOfRecords");
+
+    await wait(() => {});
+
+    fireEvent.change(titleInput!, { target: { value: title } });
+
+    await wait(() => {
+      expect(numberOfRecords.innerHTML).toEqual("1");
+    });
   });
 });
