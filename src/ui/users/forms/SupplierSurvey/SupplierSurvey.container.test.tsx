@@ -4,7 +4,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import apiInstance from "../../../../state/apiClient";
 import { SUPPLIER_SURVEY_URL } from "../../../constants/urls";
-import render from "../../../tests/helpers/renderWithStore";
+import render from "../../../tests/helpers/renderWithProviders";
 import SupplierSurveyContainer from "./SupplierSurvey.container";
 import { submitSurverError, surveyResponse } from "./tests/responses";
 
