@@ -1,11 +1,13 @@
 import { render as rtlRender } from "@testing-library/react";
 // tslint:disable-next-line: no-implicit-dependencies
-import { createMemoryHistory } from "history";
+import { createMemoryHistory, MemoryHistory } from "history";
 import React from "react";
 import { addLocaleData, IntlProvider } from "react-intl";
 import localeEn from "react-intl/locale-data/en";
 import { Provider } from "react-redux";
 import { Router } from "react-router-dom";
+import { DeepPartial, Store } from "redux";
+import { ApplicationState } from "../../../state/reducers";
 import { createStoreWithValues } from "../../../state/store";
 import messagesEn from "../../translations/en.json";
 
@@ -17,14 +19,21 @@ const messages = {
 
 const language = "en";
 
+interface ProviderProps {
+  customState?: DeepPartial<ApplicationState>;
+  store?: Store<ApplicationState>;
+  route?: string;
+  history?: MemoryHistory<any>;
+}
+
 const render = (
-  ui: any,
+  ui: React.ReactElement,
   {
     customState = {},
     store = createStoreWithValues(customState),
     route = "/",
     history = createMemoryHistory({ initialEntries: [route] }),
-  }: any = {},
+  }: ProviderProps = {},
 ) => {
   const Providers = ({ children }: any) => (
     <Provider store={store}>
