@@ -9,7 +9,6 @@ import SubmitButton from "../../../components/forms/SubmitButton";
 import Text from "../../../components/Text";
 import styles from "../../profile/UserProfile.styles";
 import UserGroups from "../groups/UserGroups";
-/* import SummaryField from "../../common/summary/base";*/
 
 interface OwnProps {
     canManageUsers: boolean;
@@ -68,21 +67,22 @@ export const DialogContent: React.FunctionComponent<Props> = ({
         </Box>
     );
 
-    /*const deactivateButtonRenderer = () => (
-        <Box display="flex" justifyContent="start">
+    const deactivateButtonRenderer = () => (
+        <Box display="flex" alignSelf="flex-end" mt={-5} mr={2.5}>
             <Button
                 variant="outlined"
-                color="primary"
-                style={{margin: "48px 0 0 0"}}
+                style={{width: "auto", color: "#6E09EA", borderColor: "#6E09EA"}}
             >
                 <Text translation="common.deactivate" />
             </Button>
         </Box>
-    ); */
+    );
 
     return (
     <React.Fragment>
-        <Box display="flex" justifyContent="center">
+                {canManageUsers && deactivateButtonRenderer()}
+
+        <Box display="flex" alignSelf="center">
             <Typography variant="subtitle1" color="primary">
                 {email}
             </Typography>
@@ -101,7 +101,6 @@ export const DialogContent: React.FunctionComponent<Props> = ({
             alignSelf="center"
             mt={7}
         >
-            {/*<SummaryField label="user.management.last.training" value={"01/08/2018"}/>*/}
             <UserGroups
                 canManageUsers={canManageUsers}
                 employeeGroups={employeeGroups}
@@ -121,7 +120,6 @@ export const DialogContent: React.FunctionComponent<Props> = ({
                     className={classes.addButton}
                 />
             </div>}
-            {/* {canManageUsers && deactivateButtonRenderer()} */}
             {showEditUser && updateProfileButtonsRenderer()}
         </Box>
     </React.Fragment>
