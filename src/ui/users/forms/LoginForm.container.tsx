@@ -102,24 +102,28 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
 
   return (
     <div>
-      {forgotPasswordPage && !verificationState &&
+      {forgotPasswordPage && !verificationState && (
         <Formik
           initialValues={resetInitialValues}
           onSubmit={onForgotPassword}
           render={renderForgotPassword}
-        />}
-      {verificationState &&
+        />
+      )}
+      {verificationState && (
         <VerificationEmailPage
           email={resetEmail}
           message={message}
           logo={logo}
           isForgotPassword={true}
-        />}
-      {!forgotPasswordPage && <Formik
-        initialValues={initialValues}
-        onSubmit={onSubmit}
-        render={render}
-      />}
+        />
+      )}
+      {!forgotPasswordPage && (
+        <Formik
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+          render={render}
+        />
+      )}
     </div>
   );
 };
