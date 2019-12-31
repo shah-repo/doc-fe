@@ -294,7 +294,6 @@ exports[`Change Request list container test renders empty on mount 1`] = `
             </div>
             <div
               aria-label="grid"
-              aria-readonly="true"
               class="ReactVirtualized__Grid ReactVirtualized__Table__Grid"
               role="rowgroup"
               style="box-sizing: border-box; direction: ltr; height: -117px; position: relative; width: 0px; overflow-x: hidden; overflow-y: auto;"
