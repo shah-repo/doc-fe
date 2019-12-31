@@ -15,7 +15,7 @@
     "@types/moment-timezone": "^0.5.12",
     "@types/node": "11.9.4",
     "@types/quill": "1.3.6",
-    "@types/react": "16.8.3",
+    "@types/react": "16.9.17",
     "@types/react-datepicker": "2.10.0",
     "@types/react-dom": "16.9.4",
     "@types/react-intl": "2.3.17",
@@ -41,7 +41,7 @@
     "moment-timezone": "0.5.27",
     "prettier": "^1.18.2",
     "query-string": "6.9.0",
-    "react": "16.9.0",
+    "react": "16.12.0",
     "react-datepicker": "2.10.1",
     "react-dom": "16.12.0",
     "react-idle-timer": "4.2.12",
@@ -50,7 +50,7 @@
     "react-quill": "1.3.3",
     "react-redux": "7.1.3",
     "react-router-dom": "5.1.2",
-    "react-scripts": "3.2.0",
+    "react-scripts": "3.3.0",
     "react-select": "3.0.8",
     "react-sortable-hoc": "^1.10.1",
     "react-toastify": "5.5.0",
@@ -63,7 +63,7 @@
     "striptags": "3.1.1",
     "tslint-etc": "^1.7.0",
     "tslint-junit-formatter-forked": "https://github.com/zorankova/tslint-junit-formatter-forked.git#v5.1.2",
-    "typescript": "3.6.3",
+    "typescript": "3.7.4",
     "use-debounce": "3.3.0",
     "yup": "^0.27.0"
   },
@@ -96,7 +96,7 @@
     "enzyme-to-json": "3.4.3",
     "faker": "4.1.0",
     "redux-mock-store": "1.5.4",
-    "tslint": "5.12.1",
+    "tslint": "5.20.1",
     "tslint-react": "3.6.0"
   }
 }
