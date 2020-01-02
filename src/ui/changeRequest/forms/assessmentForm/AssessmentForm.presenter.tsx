@@ -107,7 +107,9 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
         </Box>
         <JustificationField />
         <AssessmentsField />
-        <Field name="implementationPlan" render={renderimplementationPlan} />
+        <Field name="implementationPlan">
+          {renderimplementationPlan}
+        </Field>
         <DatePickerField
           name="effectiveDate"
           label="common.target.date"
