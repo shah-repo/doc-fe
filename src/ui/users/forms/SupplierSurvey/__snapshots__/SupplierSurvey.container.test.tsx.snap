@@ -5,7 +5,9 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
   <div
     class="MuiBox-root MuiBox-root-26"
   >
-    <form>
+    <form
+      action="#"
+    >
       <div
         class="MuiBox-root MuiBox-root-28"
       >
@@ -84,6 +86,7 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
                   fieldname="checkbox"
                   form="[object Object]"
                   index="0"
+                  meta="[object Object]"
                   type="checkbox"
                 >
                   <span

@@ -30,7 +30,7 @@
     "classnames": "2.2.6",
     "diff": "4.0.1",
     "dompurify": "2.0.7",
-    "formik": "1.5.8",
+    "formik": "2.1.0",
     "glamor": "^2.20.40",
     "jest-junit": "8.0.0",
     "lodash": "4.17.15",
@@ -56,7 +56,7 @@
     "react-virtualized": "9.21.2",
     "redux": "4.0.5",
     "redux-devtools-extension": "2.13.8",
-    "redux-persist": "5.10.0",
+    "redux-persist": "6.0.0",
     "redux-thunk": "2.3.0",
     "reselect": "4.0.0",
     "striptags": "3.1.1",
@@ -64,7 +64,7 @@
     "tslint-junit-formatter-forked": "https://github.com/zorankova/tslint-junit-formatter-forked.git#v5.1.2",
     "typescript": "3.7.4",
     "use-debounce": "3.3.0",
-    "yup": "^0.27.0"
+    "yup": "0.28.0"
   },
   "scripts": {
     "start": "react-scripts start",

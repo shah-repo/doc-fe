@@ -32,7 +32,9 @@ describe("Field component tests", () => {
         initialValues={{ test: "" }}
         onSubmit={jest.fn()}
         render={renderForm}
-      />,
+      >
+        {renderForm}
+      </Formik>,
     );
   };
 

@@ -106,8 +106,9 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
         <Formik
           initialValues={resetInitialValues}
           onSubmit={onForgotPassword}
-          render={renderForgotPassword}
-        />
+        >
+          {renderForgotPassword}
+        </Formik>
       )}
       {verificationState && (
         <VerificationEmailPage
@@ -121,8 +122,9 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
         <Formik
           initialValues={initialValues}
           onSubmit={onSubmit}
-          render={render}
-        />
+        >
+          {render}
+        </Formik>
       )}
     </div>
   );
