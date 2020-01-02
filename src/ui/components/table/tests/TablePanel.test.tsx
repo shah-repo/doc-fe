@@ -1,7 +1,6 @@
 import { mount } from "enzyme";
 import React from "react";
-import { addLocaleData, IntlProvider } from "react-intl";
-import localeEn from "react-intl/locale-data/en";
+import { IntlProvider } from "react-intl";
 import { Document } from "../../../../state/ducks/documents/types";
 import messagesEn from "../../../translations/en.json";
 import { StyledTableHeader } from "../column/styles";
@@ -18,7 +17,6 @@ jest.mock("react-redux", () => ({
 }));
 
 describe("TablePanel component tests", () => {
-  addLocaleData([...localeEn]);
   const messages = { en: messagesEn };
   const language = "en";
 

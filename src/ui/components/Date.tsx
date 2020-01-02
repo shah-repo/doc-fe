@@ -1,7 +1,7 @@
 import * as React from "react";
 import { FormattedDate } from "react-intl";
 
-type FormattedDateProps = FormattedDate.Props;
+type FormattedDateProps = typeof FormattedDate;
 
 export interface DateFormatterProps extends Partial<FormattedDateProps> {
   value?: Date | string | number;

@@ -157,9 +157,7 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
               <span
                 class="MuiButton-label"
               >
-                <span>
-                  Add a Field
-                </span>
+                Add a Field
               </span>
               <span
                 class="MuiTouchRipple-root"
@@ -183,9 +181,7 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
         <span
           class="MuiButton-label"
         >
-          <span>
-            Save
-          </span>
+          Save
         </span>
         <span
           class="MuiTouchRipple-root"
