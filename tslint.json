@@ -20,7 +20,8 @@
         "no-empty": false,
         "no-shadowed-variable": false,
         "no-unused-expression": false,
-        "jsx-no-lambda": false
+        "jsx-no-lambda": false,
+        "jsx-wrap-multiline": false
     },
     "rulesDirectory": [],
     "linterOptions": {

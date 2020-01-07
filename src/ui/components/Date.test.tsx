@@ -1,11 +1,8 @@
 import { mount } from "enzyme";
 import React from "react";
-import { addLocaleData, IntlProvider } from "react-intl";
-import localeEn from "react-intl/locale-data/en";
+import { IntlProvider } from "react-intl";
 import messagesEn from "../translations/en.json";
 import DateFormatter, { DateFormatterProps } from "./Date";
-
-addLocaleData([...localeEn]);
 
 const messages = {
   en: messagesEn,

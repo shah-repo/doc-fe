@@ -2,16 +2,13 @@ import { render as rtlRender } from "@testing-library/react";
 // tslint:disable-next-line: no-implicit-dependencies
 import { createMemoryHistory, MemoryHistory } from "history";
 import React from "react";
-import { addLocaleData, IntlProvider } from "react-intl";
-import localeEn from "react-intl/locale-data/en";
+import { IntlProvider } from "react-intl";
 import { Provider } from "react-redux";
 import { Router } from "react-router-dom";
 import { DeepPartial, Store } from "redux";
 import { ApplicationState } from "../../../state/reducers";
 import { createStoreWithValues } from "../../../state/store";
 import messagesEn from "../../translations/en.json";
-
-addLocaleData([...localeEn]);
 
 const messages = {
   en: messagesEn,
