@@ -1,5 +1,5 @@
 import Base64 from "Base64";
-import _, { Dictionary }  from "lodash";
+import _, { Dictionary } from "lodash";
 import { action, computed, observable } from "mobx";
 import Validator from "validatorjs";
 import {
@@ -9,16 +9,15 @@ import {
 import FBStore from "./FBStore";
 
 export class FormBuilderDynamicValidatorStore {
-
   @computed get dynamicValidator(): FBValidatorConfigProps | undefined {
-      if (_.isUndefined(this.validatorName)) {
-          return;
-      }
-      return {
-          name: this.validatorName,
-          errorMessage: this.errorMessage,
-          fn: Base64.btoa(this.liveCode),
-      };
+    if (_.isUndefined(this.validatorName)) {
+      return;
+    }
+    return {
+      name: this.validatorName,
+      errorMessage: this.errorMessage,
+      fn: Base64.btoa(this.liveCode),
+    };
   }
   public originCode = _.template(`
     (value, req, attribute) => {
@@ -34,7 +33,10 @@ export class FormBuilderDynamicValidatorStore {
   `);
   public validatorName?: string;
   @observable public errorMessage: string = "";
-  @observable public liveCode: string = this.originCode({ interpolation: "", code: ""});
+  @observable public liveCode: string = this.originCode({
+    interpolation: "",
+    code: "",
+  });
   @observable public helperText: Dictionary<string> = {};
   private fieldNames: string[] = [];
 
@@ -49,27 +51,32 @@ export class FormBuilderDynamicValidatorStore {
   }
 
   @action public setLiveCode = (code: string) => {
-      if (this.liveCode === code) {
-          return;
-      }
-      this.liveCode = code;
+    if (this.liveCode === code) {
+      return;
+    }
+    this.liveCode = code;
   }
 
   @action public clearLiveCode = () => {
-    //   this.setLiveCode(this.originCode);
-    //   this.validatorName = undefined;
+    this.setLiveCode(this.originCode({
+      interpolation: "",
+      code: "",
+    }));
   }
 
   @action public setValidatorName = (name: string) => {
-      this.validatorName = name;
+    this.reset();
+    this.validatorName = name;
   }
 
   @action public setErrorMessage = (message: string) => {
-      this.errorMessage = message;
+    this.errorMessage = message;
   }
 
   @action public reset = () => {
     this.validatorName = undefined;
+    this.errorMessage = "";
+    this.clearLiveCode();
   }
 
   @action public validate = () => {
@@ -77,10 +84,7 @@ export class FormBuilderDynamicValidatorStore {
     this.helperText = {};
     const rules = this.generateRules();
 
-    const validator = new Validator(
-      FBStore.getValidationValues(),
-      rules,
-    );
+    const validator = new Validator(FBStore.getValidationValues(), rules);
 
     if (validator.fails()) {
       const errors = validator.errors.all();
@@ -93,9 +97,11 @@ export class FormBuilderDynamicValidatorStore {
   @action public registerValidators = () => {
     // Empty validator
     Validator.register(
-      "", () => {
+      "",
+      () => {
         return true;
-      }, "",
+      },
+      "",
     );
 
     _.map(FBStore.getSchema(), (schemaItem) => {
@@ -106,7 +112,7 @@ export class FormBuilderDynamicValidatorStore {
 
         let customValFn = () => true;
         try {
-        // tslint:disable-next-line: no-eval
+          // tslint:disable-next-line: no-eval
           customValFn = eval(Base64.atob(customValidator!.fn));
         } catch (error) {
           alert("An error occurred in validator function body: " + error);
@@ -114,7 +120,6 @@ export class FormBuilderDynamicValidatorStore {
 
         Validator.register(
           customValidator.name,
-          // tpl() as unknown as RegisterCallback,
           customValFn,
           customValidator.errorMessage || "",
         );
@@ -135,9 +140,10 @@ export class FormBuilderDynamicValidatorStore {
       }
 
       rules[name] = "";
-      !_.isUndefined(customValidator) && (rules[name] =
-        [{ [customValidator.name]: FBStore.getValidationValues()}]
-      );
+      !_.isUndefined(customValidator) &&
+        (rules[name] = [
+          { [customValidator.name]: FBStore.getValidationValues() },
+        ]);
     });
     return rules;
   }
@@ -162,7 +168,10 @@ export class FormBuilderDynamicValidatorStore {
     // Extract the code. This approach executes faster then the regex 'between'.
     const start = "try {\n";
     const end = "return true;";
-    const code = this.liveCode.split(start)[1].split(end)[0].replace("\n", "");
+    const code = this.liveCode
+      .split(start)[1]
+      .split(end)[0]
+      .replace("\n", "");
     return _.trimStart(code);
   }
 
