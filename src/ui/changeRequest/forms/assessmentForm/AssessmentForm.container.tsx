@@ -1,4 +1,4 @@
-import { Formik, FormikActions, FormikProps } from "formik";
+import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import React from "react";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest";
 import { AsyncState } from "../../../../state/types";
@@ -39,11 +39,12 @@ const AssessmentFormContainer: React.FunctionComponent<AssessmentFormContainerPr
 
     return (
       <Formik
-        render={render}
         initialValues={initialValues}
         onSubmit={onSubmit}
         enableReinitialize={true}
-      />
+      >
+        {render}
+      </Formik>
     );
   };
 

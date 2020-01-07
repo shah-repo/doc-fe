@@ -9,7 +9,7 @@ exports[`Change Request list container test renders empty on mount 1`] = `
       class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"
     >
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary ListPresenter-clearButton-5"
+        class="MuiButtonBase-root MuiButton-root MuiButton-outlined ListPresenter-clearButton-5 MuiButton-outlinedPrimary"
         data-testid="clearFilter"
         tabindex="0"
         type="button"
@@ -49,7 +49,7 @@ exports[`Change Request list container test renders empty on mount 1`] = `
         href="/change_request/create"
       >
         <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary ListPresenter-button-4"
+          class="MuiButtonBase-root MuiButton-root MuiButton-contained ListPresenter-button-4 MuiButton-containedPrimary"
           tabindex="0"
           type="button"
         >
@@ -154,17 +154,17 @@ exports[`Change Request list container test renders empty on mount 1`] = `
                   class="MuiTableCell-root MuiTableCell-head WithStyles(ForwardRef(TableCell))-head-151"
                 >
                   <div
-                    class="MuiBox-root MuiBox-root-205 columnBox"
+                    class="MuiBox-root MuiBox-root-207 columnBox"
                   >
                     <div
-                      class="MuiBox-root MuiBox-root-206"
+                      class="MuiBox-root MuiBox-root-208"
                     >
                       <span>
                         cr.title
                       </span>
                     </div>
                     <div
-                      class="MuiBox-root MuiBox-root-207 headerField"
+                      class="MuiBox-root MuiBox-root-209 headerField"
                     >
                       <div
                         class="MuiFormControl-root MuiTextField-root WithStyles(ForwardRef(TextField))-root-167 MuiFormControl-marginNormal"
@@ -194,17 +194,17 @@ exports[`Change Request list container test renders empty on mount 1`] = `
                   class="MuiTableCell-root MuiTableCell-head WithStyles(ForwardRef(TableCell))-head-151"
                 >
                   <div
-                    class="MuiBox-root MuiBox-root-208 columnBox"
+                    class="MuiBox-root MuiBox-root-210 columnBox"
                   >
                     <div
-                      class="MuiBox-root MuiBox-root-209"
+                      class="MuiBox-root MuiBox-root-211"
                     >
                       <span>
                         change.request.list.owner
                       </span>
                     </div>
                     <div
-                      class="MuiBox-root MuiBox-root-210 headerField"
+                      class="MuiBox-root MuiBox-root-212 headerField"
                     >
                       <div
                         class="MuiFormControl-root MuiTextField-root WithStyles(ForwardRef(TextField))-root-167 MuiFormControl-marginNormal"
@@ -234,20 +234,20 @@ exports[`Change Request list container test renders empty on mount 1`] = `
                   class="MuiTableCell-root MuiTableCell-head WithStyles(ForwardRef(TableCell))-head-151"
                 >
                   <div
-                    class="MuiBox-root MuiBox-root-211 columnBox"
+                    class="MuiBox-root MuiBox-root-213 columnBox"
                   >
                     <div
-                      class="MuiBox-root MuiBox-root-212"
+                      class="MuiBox-root MuiBox-root-214"
                     >
                       <span>
                         common.status
                       </span>
                     </div>
                     <div
-                      class="MuiBox-root MuiBox-root-213 headerField"
+                      class="MuiBox-root MuiBox-root-215 headerField"
                     >
                       <div
-                        class="MuiFormControl-root makeStyles-root-214"
+                        class="MuiFormControl-root makeStyles-root-216"
                       >
                         <label
                           class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-filled"
@@ -255,12 +255,13 @@ exports[`Change Request list container test renders empty on mount 1`] = `
                           for="search-select-field"
                         />
                         <div
-                          class="MuiInputBase-root makeStyles-input-215 MuiInputBase-formControl"
+                          class="MuiInputBase-root makeStyles-input-217 MuiInputBase-formControl"
                         >
                           <div
                             aria-haspopup="listbox"
-                            class="MuiSelect-root MuiSelect-select MuiSelect-selectMenu MuiSelect-filled MuiInputBase-input MuiInputBase-inputSelect"
-                            id="select-state"
+                            aria-labelledby=" mui-component-select-state"
+                            class="MuiSelect-root MuiSelect-select MuiSelect-selectMenu MuiSelect-filled MuiInputBase-input"
+                            id="mui-component-select-state"
                             role="button"
                             tabindex="0"
                           >
@@ -294,7 +295,6 @@ exports[`Change Request list container test renders empty on mount 1`] = `
             </div>
             <div
               aria-label="grid"
-              aria-readonly="true"
               class="ReactVirtualized__Grid ReactVirtualized__Table__Grid"
               role="rowgroup"
               style="box-sizing: border-box; direction: ltr; height: -117px; position: relative; width: 0px; overflow-x: hidden; overflow-y: auto;"

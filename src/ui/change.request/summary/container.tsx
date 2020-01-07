@@ -99,12 +99,13 @@ export const Container: React.FunctionComponent<Props> = ({
 
   const summaryFormikRenderer = () => (
     <Formik
-      render={summaryPresenterRenderer}
       initialValues={toChangeRequestFormValues(dataProp)}
       onSubmit={onSubmit}
       enableReinitialize={true}
       validate={validate}
-    />
+    >
+      {summaryPresenterRenderer}
+    </Formik>
   );
   return (
     <Grid

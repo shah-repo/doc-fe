@@ -73,8 +73,9 @@ const ConfirmForgotPasswordContainer: React.FunctionComponent<ConfirmForgotPassw
           initialValues={initialValues}
           onSubmit={onSubmit}
           validationSchema={validationSchema}
-          render={render}
-        />
+        >
+          {render}
+        </Formik>
       )}
     </div>
   );
