@@ -1,4 +1,5 @@
 
+import { FormBuilderDynamicValidatorStore } from "../stores/ui/FBDynamicValidatorStore";
 import { FBInputProps } from "./common";
 import { FBDocumentFlowProps } from "./formik";
 
@@ -44,3 +45,7 @@ export type FBDocumentRevisionMode =
   | "preview"
   | "outputCreate"
   | "outputPreview";
+
+export interface FBStoreProps {
+  dynamicValidatorStore?: FormBuilderDynamicValidatorStore;
+}

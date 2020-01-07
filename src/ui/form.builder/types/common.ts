@@ -83,6 +83,7 @@ export type FBInputProps =
     applicableOn?: any[];
     multiple?: boolean;
     customValidator?: FBValidatorConfigProps;
+    gutter?: boolean;
   };
 
 export type FBFormDefaultProps =
