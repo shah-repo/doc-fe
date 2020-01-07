@@ -2,13 +2,12 @@ import { Dictionary } from "lodash";
 import _ from "lodash";
 import React from "react";
 import { FBFormValues } from "../../defaults/formik";
-import FBValidatorStore from "../../stores/ui/FBValidatorStore";
+import FBDynamicValidatorStore from "../../stores/ui/FBDynamicValidatorStore";
 import { FBInputProps } from "../../types/common";
 import { FBTemplateSchema } from "../../types/store";
 import { withFormik } from "./withFormik";
 import { withOnChange } from "./withOnChange";
 import { withValidation } from "./withValidation";
-// import FBStore from "../../stores/ui/FBStore";
 
 export const withInput = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>,
@@ -30,13 +29,15 @@ export const withInput = <T extends FBInputProps>(
     const elements = React.Children.toArray(children);
     value = _.get(form, `values.${name}`);
 
-    if (_.isUndefined(value)) {
-      // value = _.get(form, `values.formInput.${name}`) || defaultValue || _.get(FBFormValues, type);
-      value = defaultValue || _.get(FBFormValues, type);
-    }
+    _.isUndefined(value) && (value =
+      defaultValue || _.get(FBFormValues, type)
+    );
 
     error = Boolean(_.get(form, `errors.${name}`));
-    helperText = (error && _.get(form, `errors.${name}`)) || FBValidatorStore.getErrorText(name);
+    helperText = (
+      (error && _.get(form, `errors.${name}`)) ||
+      FBDynamicValidatorStore.getHelperText(name)
+    );
 
     if (elements.length === 1) {
       _.first(elements) && (

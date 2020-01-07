@@ -1,3 +1,4 @@
+import { Dictionary } from "lodash";
 import { FBStoreProps } from "../store";
 
 export type FBValidatorDynamicProps = FBStoreProps & {
@@ -8,10 +9,16 @@ export type FBValidatorDynamicProps = FBStoreProps & {
   transformCode?: (code: string) => string;
   clear?: () => void;
   onMessageChange?: (ev: React.ChangeEvent) => void;
+  errorMessage?: string;
 };
 
 export interface FBValidatorConfigProps {
   name: string;
   errorMessage?: string;
   fn: any;
+}
+
+export interface FBValidatorTemplate {
+  interpolation: string;
+  values: Dictionary<string>;
 }

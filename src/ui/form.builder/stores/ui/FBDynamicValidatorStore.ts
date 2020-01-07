@@ -1,7 +1,12 @@
 import Base64 from "Base64";
 import _, { Dictionary }  from "lodash";
 import { action, computed, observable } from "mobx";
-import { FBValidatorConfigProps } from "../../types/validation/validatorDialog";
+import Validator from "validatorjs";
+import {
+  FBValidatorConfigProps,
+  FBValidatorTemplate,
+} from "../../types/validation/validatorDialog";
+import FBStore from "./FBStore";
 
 export class FormBuilderDynamicValidatorStore {
 
@@ -15,12 +20,9 @@ export class FormBuilderDynamicValidatorStore {
           fn: Base64.btoa(this.liveCode),
       };
   }
-  public validatorName?: string;
-  public errorMessage: string = "";
-  @observable public liveCode: string = this.originCode({ vars: "", code: ""});
-    private originCode = _.template(`
+  public originCode = _.template(`
     (value, req, attribute) => {
-      <%= vars %>
+      <%= interpolation %>
       try {
         <%= code %>
         return true;
@@ -30,16 +32,20 @@ export class FormBuilderDynamicValidatorStore {
       }
     }
   `);
+  public validatorName?: string;
+  @observable public errorMessage: string = "";
+  @observable public liveCode: string = this.originCode({ interpolation: "", code: ""});
+  @observable public helperText: Dictionary<string> = {};
   private fieldNames: string[] = [];
 
   @action public setVariable = (fieldName: string) => {
     this.fieldNames = _.concat(this.fieldNames, fieldName);
-    this.generateVariables();
+    this.generateTemplate();
   }
 
   @action public removeVariable = (fieldName: string) => {
     this.fieldNames = _.pull(this.fieldNames, fieldName);
-    this.generateVariables();
+    this.generateTemplate();
   }
 
   @action public setLiveCode = (code: string) => {
@@ -62,30 +68,110 @@ export class FormBuilderDynamicValidatorStore {
       this.errorMessage = message;
   }
 
-  @action private generateVariables = () => {
-    let varsStr = "\n";
-    const varsObj: Dictionary<string> = {};
+  @action public reset = () => {
+    this.validatorName = undefined;
+  }
+
+  @action public validate = () => {
+    // this.registerValidators();
+    this.helperText = {};
+    const rules = this.generateRules();
+
+    const validator = new Validator(
+      FBStore.getValidationValues(),
+      rules,
+    );
+
+    if (validator.fails()) {
+      const errors = validator.errors.all();
+      _.map(errors, (v, k) => {
+        this.helperText[k] = _.join(v, "\n");
+      });
+    }
+  }
+
+  @action public registerValidators = () => {
+    // Empty validator
+    Validator.register(
+      "", () => {
+        return true;
+      }, "",
+    );
+
+    _.map(FBStore.getSchema(), (schemaItem) => {
+      const { customValidator } = schemaItem;
+
+      if (!_.isUndefined(customValidator)) {
+        // const tpl = _.template(`<% ${Base64.atob(customValidator.fn)} %>`);
+
+        let customValFn = () => true;
+        try {
+        // tslint:disable-next-line: no-eval
+          customValFn = eval(Base64.atob(customValidator!.fn));
+        } catch (error) {
+          alert("An error occurred in validator function body: " + error);
+        }
+
+        Validator.register(
+          customValidator.name,
+          // tpl() as unknown as RegisterCallback,
+          customValFn,
+          customValidator.errorMessage || "",
+        );
+      }
+    });
+  }
+
+  @action public getHelperText = (fieldName: string): string | undefined => {
+    return _.get(this.helperText, fieldName);
+  }
+
+  @action private generateRules = (): Dictionary<string> => {
+    const rules = {};
+    _.map(FBStore.getSchema(), (schemaItem) => {
+      const { customValidator, name } = schemaItem;
+      if (_.isUndefined(name)) {
+        return;
+      }
+
+      rules[name] = "";
+      !_.isUndefined(customValidator) && (rules[name] =
+        [{ [customValidator.name]: FBStore.getValidationValues()}]
+      );
+    });
+    return rules;
+  }
+
+  @action private generateVariables = (): FBValidatorTemplate => {
+    let interpolation = "\n";
+    const values: Dictionary<string> = {};
 
     _.map(this.fieldNames, (variable, index) => {
-      varsStr += _.padStart(`<%= var${index} %>`, 17);
-      varsStr += "\n";
+      interpolation += `${_.padStart(`<%= var${index} %>`, 17)}\n`;
 
       // Set obj for tpl values
       let varName = _.dropRight(_.split(variable, "_")).join(" ");
       varName = _.camelCase(varName);
-
-      varsObj[`var${index}`] = `var ${varName} = req["${variable}"];`;
+      values[`var${index}`] = `var ${varName} = req["${variable}"];`;
     });
 
-    // Extract the code. This approach executes faster then the regex between.
+    return { interpolation, values };
+  }
+
+  @action private liveCodeExtraction = (): string => {
+    // Extract the code. This approach executes faster then the regex 'between'.
     const start = "try {\n";
     const end = "return true;";
-    let code = this.liveCode.split(start)[1].split(end)[0].replace("\n", "");
-    code = _.trimStart(code);
+    const code = this.liveCode.split(start)[1].split(end)[0].replace("\n", "");
+    return _.trimStart(code);
+  }
 
-    const tplStr = this.originCode({ vars: varsStr, code });
+  @action private generateTemplate = () => {
+    const { interpolation, values } = this.generateVariables();
+    const code = this.liveCodeExtraction();
+    const tplStr = this.originCode({ interpolation, code });
     const tpl = _.template(tplStr);
-    this.setLiveCode(tpl(varsObj));
+    this.setLiveCode(tpl(values));
   }
 }
 

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import React from "react";
+import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 import FBStore from "../stores/ui/FBStore";
-import FBValidatorStore from "../stores/ui/FBValidatorStore";
 import { FBWorkspaceProps } from "../types/workspace";
 
 export const withWorkspace = <T extends FBWorkspaceProps>(
@@ -10,7 +10,8 @@ export const withWorkspace = <T extends FBWorkspaceProps>(
   const Comp = (props: T) => {
 
     React.useEffect(() => {
-      FBValidatorStore.customValidate();
+      FBDynamicValidatorStore.registerValidators();
+      FBDynamicValidatorStore.validate();
     }, []);
 
     if (props.mode) {
@@ -22,9 +23,6 @@ export const withWorkspace = <T extends FBWorkspaceProps>(
     if (props.id) {
       FBStore.docId = props.id;
     }
-
-    // Validators registration
-    FBValidatorStore.customValidate();
 
     return Component({
       ...props,

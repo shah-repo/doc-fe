@@ -1,3 +1,4 @@
+import { Box } from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl/FormControl";
 import FormHelperText from "@material-ui/core/FormHelperText/FormHelperText";
 import React from "react";
@@ -16,8 +17,16 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
 }) => (
   <FormControl error={error} fullWidth>
     {children}
-    <FormHelperText>{helperText}</FormHelperText>
-    {showContext && <FBTextField label={contextLabel} {...{disabled}} name={`${name}_input_context`} />}
+    <FormHelperText>
+      <Box color={error ? "" : "primary.main"}>{helperText}</Box>
+    </FormHelperText>
+    {showContext && (
+      <FBTextField
+        label={contextLabel}
+        {...{ disabled }}
+        name={`${name}_input_context`}
+      />
+    )}
   </FormControl>
 );
 

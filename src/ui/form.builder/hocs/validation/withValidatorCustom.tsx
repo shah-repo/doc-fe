@@ -39,6 +39,7 @@ export const withValidatorCustom = <T extends FBValidatorDynamicProps>(
 
     return Component({
       ...(props as T),
+      errorMessage: dynamicValidatorStore!.errorMessage,
       code: dynamicValidatorStore!.liveCode,
       scope,
       transformCode,

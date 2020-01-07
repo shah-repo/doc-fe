@@ -11,12 +11,14 @@ const FBValidatorCustom: React.FunctionComponent<FBValidatorDynamicProps> = ({
   scope,
   transformCode,
   onMessageChange,
+  errorMessage,
   clear,
 }) => (
   <Grid container spacing={3}>
     <Grid item xs={8}>
       <FBTextField
         label="form.builder.error.message"
+        defaultValue={errorMessage}
         onChange={onMessageChange}
       />
       <LiveProvider {...{ code, scope, transformCode }}>

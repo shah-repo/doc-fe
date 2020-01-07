@@ -42,8 +42,6 @@ export const withEditorRenderer =
       name = _.snakeCase(props.values.label as string);
     }
     // const item = schemaItem();
-    FBValidatorStore.customValidator &&
-    _.assign(FBValidatorStore.customValidator , {errorMessage: _.get(values, "custom-validator-error-message") || ""});
     const schema: FBTemplateSchema = {
       type,
       index,
@@ -54,9 +52,11 @@ export const withEditorRenderer =
       applicableOn: ["ON_STATE_TO_IN_REVIEW"],
       customValidator: FBDynamicValidatorStore.dynamicValidator,
     };
-    FBValidatorStore.applicableOn = false;
-    FBValidatorStore.resetIndicatorValues();
-    FBValidatorStore.customValidator = undefined;
+
+    FBDynamicValidatorStore.reset();
+    // FBValidatorStore.applicableOn = false;
+    // FBValidatorStore.resetIndicatorValues();
+    // FBValidatorStore.customValidator = undefined;
 
     const removeEl = (mode === "create") ? 0 : 1;
     const newSchema = FBStore.schema;
