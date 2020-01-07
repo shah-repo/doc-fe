@@ -1,4 +1,4 @@
-import { EmployeeGroupsEditRequestBody } from "../../../state/ducks/userManagement";
+import { EmployeeActiveStatusRequestBody, EmployeeGroupsEditRequestBody } from "../../../state/ducks/userManagement";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 
 export const toEmployeeGroupsEditRequestBody = (employeeGroups: OptionType[] | null):
@@ -11,4 +11,10 @@ EmployeeGroupsEditRequestBody => {
         })),
     };
     return employeeGroupsEditRequestBody;
+};
+
+export const toEmployeeActiveStatusEditRequestBody = (active: boolean): EmployeeActiveStatusRequestBody => {
+    return ({
+        active,
+    });
 };

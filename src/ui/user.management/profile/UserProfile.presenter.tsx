@@ -22,6 +22,7 @@ interface OwnProps {
     closeEdit: () => void;
     employeeId: string;
     callbackUpdateGroups?: (values: GetEmployeeResponse) => void;
+    callbackUpdateActiveStatus?: (values: GetEmployeeResponse) => void;
     asyncState: AsyncState;
     getUrl: () => void;
     slackIntegrationEnabled: boolean;
@@ -29,6 +30,7 @@ interface OwnProps {
     slackUserId: string;
     previewAvatar: string;
     setPreviewAvatar: (value: string) => void;
+    activeStatus: boolean;
 }
 
 type Props = OwnProps;
@@ -46,6 +48,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
     closeEdit,
     employeeId,
     callbackUpdateGroups,
+    callbackUpdateActiveStatus,
     asyncState,
     getUrl,
     slackIntegrationEnabled,
@@ -54,6 +57,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
     email,
     previewAvatar,
     setPreviewAvatar,
+    activeStatus,
 }) => {
     const [userInfo, setUserInfo] = useState<EmployeeEditRequestBody>({ name, avatar });
     const handleCloseEdit = () => {
@@ -85,6 +89,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
             employeeGroups={employeeGroups}
             employeeId={employeeId}
             callbackUpdateGroups={callbackUpdateGroups}
+            callbackUpdateActiveStatus={callbackUpdateActiveStatus}
             showEdit={showEdit}
             showEditUser={showEditUser}
             closeEdit={handleCloseEdit}
@@ -96,6 +101,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
             getUrl={getUrl}
             slackUserId={slackUserId}
             email={email}
+            activeStatus={activeStatus}
         />
     </Dialog>
     );

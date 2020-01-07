@@ -45,7 +45,7 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
     useEffect(() => {
         setRealUser(selectedEmployee);
     }, [selectedEmployee.id]);
-    const { groups, id } = realUser;
+    const { groups, id, active } = realUser;
     const { name, avatar, email } = realUser.user;
     const userSlackId =  useSelector(authSelectors.currentSlackUserId);
 
@@ -78,6 +78,13 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
         setRealUser({
             ...realUser,
             groups: employee.groups,
+        });
+    };
+
+    const callbackUpdateActiveStatus = (employee: GetEmployeeResponse) => {
+        setRealUser({
+            ...realUser,
+            active: employee.active,
         });
     };
 
@@ -122,6 +129,8 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
             slackUserId={userSlackId}
             previewAvatar={previewAvatar}
             setPreviewAvatar={setPreviewAvatar}
+            callbackUpdateActiveStatus={callbackUpdateActiveStatus}
+            activeStatus={active}
         />
     );
 };

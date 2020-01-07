@@ -34,6 +34,10 @@ export interface EmployeeGroupsEditRequestBody {
   groups: Id[];
 }
 
+export interface EmployeeActiveStatusRequestBody {
+  active: boolean;
+}
+
 export interface LoadCompanyGroups extends Array<LoadCompanyGroup> {}
 
 export interface CompanyGroupsListAction {
