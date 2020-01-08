@@ -32,16 +32,19 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
       dynamicValidatorStore!.setVariable(fieldName);
     };
 
-    const optionsNode = (options: string[], name: string, type: string) =>
-      _.map(options, (option) => (
+    const optionsNode = (options: string[], name: string, type: string) => {
+      const isValueVar = type === "radiogroup" || type === "select";
+      const valueVar = isValueVar ? "-<-val->" : "";
+      return _.map(options, (option) => (
         <FBCheckbox
           key={`tree-node-${name}-${option}`}
           gutter={false}
-          name={`${_.kebabCase(option)}-${type}-${name}`}
+          name={`${_.kebabCase(option)}${valueVar}-${name}`}
           label={option}
           {...{ afterChange }}
         />
       ));
+    }
 
     const contextNode = (
       name: string,

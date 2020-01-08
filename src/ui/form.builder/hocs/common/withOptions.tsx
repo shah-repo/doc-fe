@@ -17,8 +17,10 @@ export const withOptions = <T extends FBOptionProps>(
 
     function mapStringOption(): T["options"] {
       const splitArray = _.split(props.options as string, "\n");
+      const isValueVar = type === "radiogroup" || type === "select";
+      const valueVar = isValueVar ? "-<-val->" : "";
       return _.map(splitArray, (option) => ({
-        [optionValueKey]: `${_.kebabCase(option)}-${type}-${name}`,
+        [optionValueKey]: `${_.kebabCase(option)}${valueVar}-${name}`,
         [optionLabelKey]: option,
       }));
     }

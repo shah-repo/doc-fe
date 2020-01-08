@@ -159,7 +159,7 @@ export class FormBuilderDynamicValidatorStore {
       // Set obj for tpl values
       let varName = _.dropRight(_.split(variable, "_")).join(" ");
       varName = _.camelCase(varName);
-      const isValueVar = _.includes(variable, "radiogroup");
+      const isValueVar = _.includes(variable, "<-val->");
       const varValue = isValueVar ? `"${variable}"` : `req["${variable}"]`;
       values[`var${index}`] = `var ${varName} = ${varValue};`;
     });
