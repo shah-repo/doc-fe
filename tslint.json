@@ -15,6 +15,13 @@
         "ignore-pattern": "^import [^;]+ from |^} from |^export |class [^,]+ implements |await queryRunner\\.query|`,$"
       }
     ],
+    "variable-name": {
+      "options": [
+        "allow-pascal-case",
+        "check-format",
+        "allow-leading-underscore"
+      ]
+    },
     "ordered-imports": [true],
     "quotemark": [true, "double"],
     "no-unused-declaration": true,
@@ -23,12 +30,14 @@
     "no-shadowed-variable": false,
     "no-unused-expression": false,
     "jsx-no-lambda": false,
-    "variable-name": {
-      "options": [
-        "allow-pascal-case",
-        "check-format",
-        "allow-leading-underscore"
-      ]
+    "jsx-wrap-multiline": false,
+    "rulesDirectory": [],
+    "linterOptions": {
+        "exclude": [
+            "config/**/*.js",
+            "node_modules/**/*.ts",
+            "src/serviceWorker.ts"
+        ]
     }
   },
   "rulesDirectory": [],

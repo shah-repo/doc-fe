@@ -17,11 +17,13 @@ export const styles = makeStyles((theme: Theme) =>
     },
     container: {
       width: "500px",
+      marginTop: "40px",
     },
     title: {
       fontSize: "26px",
     },
     subtitle: {
+      marginBottom: "40px",
       fontSize: "16px",
       fontWeight: 300,
     },

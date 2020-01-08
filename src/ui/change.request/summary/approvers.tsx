@@ -21,12 +21,12 @@ export const Approvers: React.FunctionComponent<Props> = ({ classes, dataProp })
         <Typography variant="subtitle1" component="span">{approver.user.name}</Typography>
         <Typography variant="body2" component="span">
           {` | ${status}`}
-          {reviewedAt &&
+          {reviewedAt && (
             <span>
               {"| "}
               <DateTime value={reviewedAt}/>
             </span>
-          }
+          )}
         </Typography>
       </Box>
     );

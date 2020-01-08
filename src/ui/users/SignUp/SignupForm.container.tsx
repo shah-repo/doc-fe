@@ -79,12 +79,15 @@ const SignupFormContainer: React.FunctionComponent<SignupFormContainerProps> = (
           logo={logo}
           isForgotPassword={false}
         />}
-       {!signupSuccess && <Formik
-        initialValues={initialValues}
-        onSubmit={handleVerificationState}
-        validationSchema={SignupSchema}
-        render={render}
-       />}
+      {!signupSuccess &&
+        <Formik
+          initialValues={initialValues}
+          onSubmit={handleVerificationState}
+          validationSchema={SignupSchema}
+        >
+          {render}
+        </Formik>
+      }
     </div>
   );
 };

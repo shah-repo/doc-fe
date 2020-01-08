@@ -6,9 +6,13 @@ import {
   AttachmentDownloadResponse,
   attachmentsActions,
   AttachmentType,
+  WatermarkRequest,
+  WatermarkRequestBody,
 } from "../../../../state/ducks/attachments";
+import { Nullable } from "../../../../state/ducks/common";
 import { ApplicationState } from "../../../../state/reducers";
 import FBStore from "../../../form.builder/stores/ui/FBStore";
+import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
 import { withFormik } from "../../hoc/formik";
@@ -19,6 +23,7 @@ import {
   AttachmentIconContainerProps,
   AttachmentIconDispatchProps,
 } from "./utils/types";
+import WatermarkContainer from "./watermark/container";
 
 type DispatchProps = AttachmentIconDispatchProps;
 
@@ -32,6 +37,8 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   ...other
 }) => {
 
+  const [newWatermarkRequest, setNewWatermarkRequest] = useState<Nullable<WatermarkRequest>>(null);
+  const [newWatermakrError, setNewWatermarkError] = useState<string>("");
   const dialogHandler = useDialog();
   const attachments = field!.value as Attachment[] || [];
   const [selectedFile, setSelectedFile] = useState<undefined | Attachment>(undefined);
@@ -42,6 +49,15 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     onSuccess: (downloadInfo) => {
       window.onbeforeunload = null;
       window.open(downloadInfo!.url, "_parent");
+    },
+  });
+  const requestWatermarkAction = useActionCreator(attachmentsActions.requestWatermarkedFile);
+  const requestWatermarkAsync = useAsync<WatermarkRequest>({
+    onSuccess: (data) => {
+      setNewWatermarkRequest(data!);
+    },
+    onError: (msg) => {
+      setNewWatermarkError(msg!);
     },
   });
 
@@ -75,6 +91,23 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     openFileView();
   };
 
+  const handleWatermarkRequest = (attachment: Attachment) => {
+    setNewWatermarkError("");
+    setNewWatermarkRequest(null);
+
+    const body: WatermarkRequestBody = {
+      attachment: {
+        id: attachment.id,
+      },
+      type: AttachmentType.Attached,
+    };
+    requestWatermarkAsync.start(
+      requestWatermarkAction,
+      body,
+      requestWatermarkAsync,
+    );
+  };
+
   const openFileView = () => dialogHandler.open();
 
   const attachmentsRenderer = attachments.map((attachment) => (
@@ -100,12 +133,17 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
         attachments={attachments}
         attachment={selectedFile}
       />
+      <WatermarkContainer
+        newWatermarkRequest={newWatermarkRequest}
+        newWatermarkError={newWatermakrError}
+      />
       <Menu
         handleDownload={handleDownload}
         handleClose={closeContextMenu}
         anchorEl={anchorEl}
         attachment={selectedFile}
         openFileView={openFileView}
+        handleWatermarkRequest={handleWatermarkRequest}
       />
       {attachmentsRenderer}
     </Grid>

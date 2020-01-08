@@ -172,11 +172,12 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
           )}
         </Box>
         <Formik
-          render={render}
           initialValues={initialValues}
           onSubmit={onSubmit}
           enableReinitialize={true}
-        />
+        >
+          {render}
+        </Formik>
       </Grid>
     </AsyncGate>
   );

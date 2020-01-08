@@ -12,8 +12,11 @@ export function withFormik<T extends FormikHybridFieldProps, U>(
     public render() {
       const childrenRenderer = (fieldProps: FieldProps<U>) =>
       <Component {...fieldProps} {...this.props as T} />;
-
-      return <FormikField name={this.props.name}>{childrenRenderer}</FormikField>;
+      return (
+        <FormikField name={this.props.name}>
+          {childrenRenderer}
+        </FormikField>
+      );
     }
   };
 }

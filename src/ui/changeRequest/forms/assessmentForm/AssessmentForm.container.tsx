@@ -39,11 +39,12 @@ const AssessmentFormContainer: React.FunctionComponent<AssessmentFormContainerPr
 
     return (
       <Formik
-        render={render}
         initialValues={initialValues}
         onSubmit={onSubmit}
         enableReinitialize={true}
-      />
+      >
+        {render}
+      </Formik>
     );
   };
 

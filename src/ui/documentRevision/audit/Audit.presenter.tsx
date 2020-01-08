@@ -55,7 +55,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       } else if (change.field.includes("referenceTo")) {
         references.push(change);
       } else {
-        singleFields.push(
+        singleFields.push((
           <Box mb={1} key={`${change.groupId}-${index}`}>
             <Box>
               <Text
@@ -65,8 +65,8 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             <div className={classes.auditValue}>
               <AuditFactory audit={change} />
             </div>
-          </Box>,
-        );
+          </Box>
+        ));
       }
     });
 

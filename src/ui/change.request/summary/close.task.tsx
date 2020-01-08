@@ -78,10 +78,11 @@ export const CloseTask: React.FunctionComponent<Props> = ({
         </DialogTitle>
         <DialogContent>
           <Formik
-            render={renderForm}
             initialValues={{ closingNote: "" }}
             onSubmit={onSubmit}
-          />
+          >
+            {renderForm}
+          </Formik>
         </DialogContent>
       </Dialog>
     </Fragment>

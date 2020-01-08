@@ -52,11 +52,12 @@ export const AddEmployeeFormContainer: React.FunctionComponent = ({
         paddingTop={10}
       >
         <Formik
-          render={renderForm}
           initialValues={initialValues}
           onSubmit={onSubmit}
           enableReinitialize={true}
-        />
+        >
+          {renderForm}
+        </Formik>
       </Box>
     </Grid>
   );
