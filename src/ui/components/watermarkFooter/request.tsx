@@ -53,9 +53,6 @@ export const WatermarkFooterRequest: React.FunctionComponent<Props> = ({
   useEffect(() => {
     iotService.subscribeToTopic(`${employeeId}/attachment_watermark/${watermarkId}/update`, checkWatermarkRequest);
   }, [iotService.subscribedTopics()]);
-  useEffect(() => {
-    checkWatermarkRequest();
-  }, []);
 
   return null;
 };
