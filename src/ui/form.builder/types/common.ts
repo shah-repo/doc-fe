@@ -42,7 +42,7 @@ export type FBLabelProps =
 
 export type FBOptionProps =
   & Pick<FBContextProps, "includeContext">
-  & Pick<BaseTextFieldProps, "name">
+  & Pick<BaseTextFieldProps, "name" | "type">
   & {
   options?: any[] | string;
   optionId?: string;

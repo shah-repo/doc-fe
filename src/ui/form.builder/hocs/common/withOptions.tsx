@@ -11,13 +11,14 @@ export const withOptions = <T extends FBOptionProps>(
     optionValueKey = "value",
     includeContext,
     name,
+    type,
     ...props
   }: T) => {
 
     function mapStringOption(): T["options"] {
       const splitArray = _.split(props.options as string, "\n");
       return _.map(splitArray, (option) => ({
-        [optionValueKey]: `${_.kebabCase(option)}-${name}`,
+        [optionValueKey]: `${_.kebabCase(option)}-${type}-${name}`,
         [optionLabelKey]: option,
       }));
     }
@@ -52,6 +53,7 @@ export const withOptions = <T extends FBOptionProps>(
       optionValueKey,
       includeContext,
       name,
+      type,
     });
   };
 };

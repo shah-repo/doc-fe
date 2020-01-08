@@ -12,13 +12,7 @@ import { withFBStores } from "../common/withFBStores";
 export const withValidatorTree = <T extends FBValidatorTreeProps>(
   Component: React.FunctionComponent<T>,
 ) => {
-
-  const Comp = ({
-    expanded,
-    dynamicValidatorStore,
-    ...props
-  }: T) => {
-
+  const Comp = ({ expanded, dynamicValidatorStore, ...props }: T) => {
     let state: Pick<FBValidatorTreeProps, "expanded"> = {};
 
     React.useEffect(() => {
@@ -33,78 +27,86 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
 
     const afterChange = (fieldName: string, value: boolean) => {
       if (_.isUndefined(value) || !value) {
-          return dynamicValidatorStore!.removeVariable(fieldName);
+        return dynamicValidatorStore!.removeVariable(fieldName);
       }
       dynamicValidatorStore!.setVariable(fieldName);
     };
 
-    const optionsNode = (options: string[], name: string) =>
+    const optionsNode = (options: string[], name: string, type: string) =>
       _.map(options, (option) => (
         <FBCheckbox
           key={`tree-node-${name}-${option}`}
           gutter={false}
-          name={`${_.kebabCase(option)}-${name}`}
+          name={`${_.kebabCase(option)}-${type}-${name}`}
           label={option}
           {...{ afterChange }}
         />
       ));
 
-    const contextNode = (name: string, label: string | React.ReactNode) => (
-      <FBCheckbox
-        gutter={false}
-        name={`context-${name}`}
-        {...{ label, afterChange }}
-      />
-    );
+    const contextNode = (
+      name: string,
+      label: string | React.ReactNode,
+      included: boolean = false,
+    ) => {
+      // Workaround for mui treeview bug where it registers the child but do not render it
+      if (included) {
+        return (
+          <FBCheckbox
+            gutter={false}
+            name={`input-context-${name}`}
+            {...{ label, afterChange }}
+          />
+        );
+      }
+      return <div />;
+    };
 
     const labelNode = (name: string, label: string | React.ReactNode) => (
-      <FBCheckbox
-        gutter={false}
-        name={name}
-        {...{ label, afterChange }}
-      />
+      <FBCheckbox gutter={false} name={name} {...{ label, afterChange }} />
     );
 
     const regularNode = (name: string, label: string | React.ReactNode) => (
       <FBCheckbox
         key={`tree-node-${name}`}
         gutter={false}
-        {...{name, label, afterChange}}
+        {...{ name, label, afterChange }}
       />
     );
 
-    const parentNode = (schemaItem: FBInputProps, includeNodeField: boolean = false) => {
+    const parentNode = (
+      schemaItem: FBInputProps,
+      includeNodeField: boolean = false,
+    ) => {
       const { name, includeContext, type } = schemaItem;
       let { label, options } = schemaItem;
       const isOther = type === "select" || _.includes(type, "group");
       const contextLabel = isOther ? "form.builder.other" : "form.builder.note";
 
-      !_.isUndefined(options) && (options = (
-        _.split((schemaItem.options || "") as string, "\n")
-      ));
+      !_.isUndefined(options) &&
+        (options = _.split((schemaItem.options || "") as string, "\n"));
       includeNodeField && (label = labelNode(name!, label));
 
       return (
         <TreeItem nodeId={`tree-node-${name!}`} {...{ label }}>
-          {optionsNode(options || [], name!)}
-          {includeContext && contextNode(name!, contextLabel)}
+          {optionsNode(options || [], name!, type as string)}
+          {contextNode(name!, contextLabel, includeContext)}
         </TreeItem>
       );
     };
 
     const items = _.map(FBStore.getSchema(), (schemaItem) => {
-        const { name, label } = schemaItem;
-        switch (schemaItem.type) {
-          case "checkboxgroup":
-            return parentNode(schemaItem, false);
-          case "radiogroup":
-          case "checkbox":
-          case "radio":
-          case "select":
-            return parentNode(schemaItem, true);
-          default:
-            return regularNode(name!, label);
-        }
+      const { name, label } = schemaItem;
+      switch (schemaItem.type) {
+        case "checkboxgroup":
+          return parentNode(schemaItem, false);
+        case "radiogroup":
+        case "checkbox":
+        case "radio":
+        case "select":
+          return parentNode(schemaItem, true);
+        default:
+          return regularNode(name!, label);
+      }
     });
 
     return Component({
@@ -115,10 +117,5 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
     });
   };
 
-  return (
-    observer(
-    withFBStores(
-      (props: T) => Comp(props),
-    ))
-  );
+  return observer(withFBStores((props: T) => Comp(props)));
 };

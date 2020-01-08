@@ -77,6 +77,7 @@ export class FormBuilderDynamicValidatorStore {
     this.validatorName = undefined;
     this.errorMessage = "";
     this.clearLiveCode();
+    this.fieldNames = [];
   }
 
   @action public validate = () => {
@@ -158,7 +159,9 @@ export class FormBuilderDynamicValidatorStore {
       // Set obj for tpl values
       let varName = _.dropRight(_.split(variable, "_")).join(" ");
       varName = _.camelCase(varName);
-      values[`var${index}`] = `var ${varName} = req["${variable}"];`;
+      const isValueVar = _.includes(variable, "radiogroup");
+      const varValue = isValueVar ? `"${variable}"` : `req["${variable}"]`;
+      values[`var${index}`] = `var ${varName} = ${varValue};`;
     });
 
     return { interpolation, values };

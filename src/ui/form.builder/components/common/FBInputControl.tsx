@@ -24,7 +24,7 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
       <FBTextField
         label={contextLabel}
         {...{ disabled }}
-        name={`${name}_input_context`}
+        name={`input-context-${name}`}
       />
     )}
   </FormControl>
