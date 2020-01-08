@@ -1,7 +1,6 @@
 import { apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import {
-  ATTACHMENT_PUBLIC_UPLOAD_URL,
   ATTACHMENT_ROOT_URL,
   ATTACHMENT_UPLOAD_URL,
   CHECK_WATERMARK_ASYNC,
@@ -11,7 +10,6 @@ import {
   Attachment,
   AttachmentDownloadResponse,
   AttachmentType,
-  AvatarS3linkResponse,
   WatermarkRequest,
   WatermarkRequestBody,
 } from "./types";
@@ -68,45 +66,9 @@ const checkWatermarkStatus = (
     handlers,
   });
 
-const requestAvatarS3link = (
-  file: File,
-  handlers: Handlers,
-): ApiAction<AvatarS3linkResponse> => {
-  const fileName = file.name;
-
-  return apiActionWithCallbacks<
-    AvatarS3linkResponse,
-    AttachmentDownloadResponse
-  >({
-    url: `${ATTACHMENT_PUBLIC_UPLOAD_URL}?filename=${fileName}`,
-    method: "get",
-    onSuccess: (res, dispatch) => {
-      dispatch(uploadAvatarS3link(res, file, handlers));
-    },
-    handlers,
-  });
-};
-
-const uploadAvatarS3link = (
-  url: AvatarS3linkResponse,
-  file: File,
-  handlers: Handlers,
-): ApiAction => {
-  const URL = url.url;
-
-  return apiActionWithCallbacks({
-    url: URL,
-    method: "put",
-    data: file,
-    includeAuthorization: false,
-    contentType: "image/jpeg",
-    handlers,
-  });
-};
 export default {
   upload,
   download,
   requestWatermarkedFile,
   checkWatermarkStatus,
-  requestAvatarS3link,
 };

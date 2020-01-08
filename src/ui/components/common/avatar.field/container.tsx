@@ -1,9 +1,7 @@
 import { Box, Link } from "@material-ui/core";
 import classNames from "classnames";
 import React from "react";
-import { useDispatch } from "react-redux";
-import { attachmentsActions } from "../../../../state/ducks/attachments";
-import useAsync from "../../../hooks/useAsync";
+
 import Text from "../../Text";
 import styles from "./utils/styles";
 
@@ -19,12 +17,10 @@ const AvatarUploadContainer: React.FunctionComponent<Props> = ({
   setPreviewAvatar,
 }) => {
   const classes = styles();
-  const dispatch = useDispatch();
-  const async = useAsync();
+
   const onChange = (event: React.FormEvent<HTMLInputElement>) => {
     const file = event.currentTarget.files![0];
     setPreviewAvatar(URL.createObjectURL(file));
-    dispatch(attachmentsActions.requestAvatarS3link(file, async));
   };
 
   return (
