@@ -44,7 +44,7 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
           {...{ afterChange }}
         />
       ));
-    }
+    };
 
     const contextNode = (
       name: string,
