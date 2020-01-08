@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { IotService } from "../../common/utils/iot/mqttClient";
 import { Translation } from "../translations/types";
 import NavigationLinkPresenter from "./NavigationLink.presenter";
+import ToastMessage from "./ToastMessage";
 
 export interface LinkDefinition {
   url: string;
@@ -27,7 +28,7 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
 
     const notify = (msg: string) => {
       const message = JSON.parse(msg).data.message;
-      toast(message);
+      toast(<ToastMessage message={message}/>);
     };
 
     const manageSubscriptionsOnNavigation = () => {
