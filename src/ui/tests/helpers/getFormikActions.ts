@@ -2,6 +2,7 @@ import { FormikHelpers as FormikActions } from "formik";
 
 const getFormikActions = <T = any>(): FormikActions<T> => ({
   resetForm: jest.fn(),
+  // setError: jest.fn(),
   setErrors: jest.fn(),
   setFieldError: jest.fn(),
   setFieldTouched: jest.fn(),
@@ -11,6 +12,7 @@ const getFormikActions = <T = any>(): FormikActions<T> => ({
   setSubmitting: jest.fn(),
   setTouched: jest.fn(),
   setValues: jest.fn(),
+  // submitForm: jest.fn(),
   validateField: jest.fn(),
   validateForm: jest.fn(),
 });

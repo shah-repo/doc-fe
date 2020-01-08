@@ -77,7 +77,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   documentTypesById,
   otherDocumentTypes,
 }) => {
-  if (!values.id && !_.get(values, "document.documentType")) {
+  if (!values.id && !_.get(values, "document.documentType.id")) {
     FBDRStore.setMode("none");
     if (setDocId) {
       setDocId("");

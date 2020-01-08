@@ -20,6 +20,7 @@ import {
 } from "../constants/urls";
 import styles from "./Navigation.styles";
 import NavigationLinkContainer from "./NavigationLink.container";
+import DocumentByTypeListLinks from "./routes/DocumentByTypeList";
 import UserManagementLink from "./routes/UserManagement";
 
 interface StateProps {
@@ -69,6 +70,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
         currentPath={location.pathname}
       />
       <UserManagementLink pathname={location.pathname} />
+      <DocumentByTypeListLinks pathname={location.pathname} />
     </List>
     {hasMultipleCompanies &&
     <SwitchCompanyButtonContainer location={location} />

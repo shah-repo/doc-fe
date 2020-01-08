@@ -108,11 +108,12 @@ export const Presenter: React.FunctionComponent<Props> = ({
 
   return (
     <Formik
-      render={contentRenderer}
       initialValues={dataProp}
       onSubmit={onSubmit}
       enableReinitialize={true}
-    />
+    >
+      {contentRenderer}
+    </Formik>
   );
 };
 

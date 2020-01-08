@@ -35,7 +35,9 @@ const Container: React.FunctionComponent<Props> = () => {
         <ErrorMessage name="implementationPlan.tasks" />
       </span>
       <HeaderField dataProp="common.implementation.plan" variant="regular" actionsRenderer={actionsRenderer} />
-      <FieldArray name="implementationPlan.tasks" render={renderTasks} />
+      <FieldArray name="implementationPlan.tasks">
+        {renderTasks}
+      </FieldArray>
       <AttachmentIconField name="implementationPlan.attachments" />
     </React.Fragment>
   );

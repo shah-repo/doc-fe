@@ -177,7 +177,7 @@
   "common.due.date": "Due Date",
   "common.name": "Name",
   "common.description": "Description",
-  "common.state": "Status",
+  "common.state": "State",
   "common.save": "Save",
   "common.type": "Type",
   "common.title": "Title",
@@ -246,6 +246,10 @@
   "common.click.to.try.again": "Click here to try again",
   "common.go.to.enlil": "Go to Enlil",
   "common.deactivate": "Deactivate",
+  "common.approval.id": "Approval ID",
+  "common.error": "Error",
+  "common.success": "Success",
+
   "output.info": "Form Info",
 
   "dashboard.type.PENDING_REVIEW": "is pending your approval",
@@ -379,6 +383,7 @@
 
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
+  "attachment.download.watermark": "Download watermarked file",
 
   "training.completed": "Training completed",
   "training.certify.completion": "Click the button to certify training completion",
@@ -404,5 +409,13 @@
   "slack.finalising.registration": "Finalising Slack registration",
   "slack.registration.completed": "Slack registration completed",
   "slack.registration.failed": "Slack registration failed",
-  "slack.integrations.admin.add": "ADD SLACK INTEGRATION"
+  "slack.integrations.admin.add": "ADD SLACK INTEGRATION",
+
+  "supplier.id": "Supplier ID",
+  "supplier.name": "Supplier name",
+  "supplier.status": "Supplier status",
+
+  "watermark.successfully.requested": "Watermarked copy of {file}.{type} successfully requested. We will notify you when it's ready to download.",
+  "watermark.download.ready": "Watermarked file {name}.{type} ready to download",
+  "watermark.request.failed": "Request for {name}.{type} failed"
 }
