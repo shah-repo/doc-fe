@@ -4,6 +4,7 @@ import _, { Dictionary } from "lodash";
 import React from "react";
 import FBButton from "../components/inputs/FBButton";
 import { FBFieldEditorComponent } from "../defaults/editor";
+import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 import editorStore from "../stores/ui/FBEditorStore";
 import FBStore from "../stores/ui/FBStore";
 import FBValidatorStore from "../stores/ui/FBValidatorStore";
@@ -38,24 +39,24 @@ export const withEditorRenderer =
     const values = propsByType();
     let name = "";
     if (_.isObject(props.values) && _.has(props.values, "label")) {
-      name = _.toLower(props.values.label as string);
+      name = _.snakeCase(props.values.label as string);
     }
     // const item = schemaItem();
-    FBValidatorStore.customValidator &&
-    _.assign(FBValidatorStore.customValidator , {errorMessage: _.get(values, "custom-validator-error-message") || ""});
     const schema: FBTemplateSchema = {
       type,
       index,
-      name: `${_.replace(name, / /g, "_")}_${uniqid()}`,
+      name: `${name}_${uniqid()}`,
       ...values,
       rules: FBValidatorStore.getRules(),
       // applicableOn: FBValidatorStore.applicableOn ? [FBValidatorTrigger.ON_STATE_TO_IN_REVIEW] : [],
       applicableOn: ["ON_STATE_TO_IN_REVIEW"],
-      customValidator: FBValidatorStore.customValidator,
+      customValidator: FBDynamicValidatorStore.dynamicValidator,
     };
-    FBValidatorStore.applicableOn = false;
-    FBValidatorStore.resetIndicatorValues();
-    FBValidatorStore.customValidator = undefined;
+
+    FBDynamicValidatorStore.reset();
+    // FBValidatorStore.applicableOn = false;
+    // FBValidatorStore.resetIndicatorValues();
+    // FBValidatorStore.customValidator = undefined;
 
     const removeEl = (mode === "create") ? 0 : 1;
     const newSchema = FBStore.schema;

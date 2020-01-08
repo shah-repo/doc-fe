@@ -8,9 +8,10 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
   label,
   error,
   labelValues,
+  gutter = true,
   ...props
 }) => (
-  <Box mb={4}>
+  <Box mb={gutter ? 4 : -3}>
     {label && <FBLabel {...{ error, label, labelValues }} />}
     <FBInputControl {...props} {...{label}} />
   </Box>

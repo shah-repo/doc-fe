@@ -6,8 +6,8 @@ import Model from "mobx-rest/lib/Model";
 import React from "react";
 import autocompleteOptions from "../../../../data/autocompleteOptions.json";
 import FBAutocompleteCollection from "../../stores/domain/collections/FBAutocompleteCollection";
+import FBDynamicValidatorStore from "../../stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../stores/ui/FBStore";
-import FBValidatorStore from "../../stores/ui/FBValidatorStore";
 import { FBAutocompleteProps } from "../../types/inputs/autocomplete";
 import { FBTemplateSchema } from "../../types/store.js";
 import { withFormik } from "../common/withFormik";
@@ -68,7 +68,7 @@ export const withAutocomplete = <T extends FBAutocompleteProps>(
           [field!.name as string]: value,
         });
 
-        FBValidatorStore.customValidate();
+        FBDynamicValidatorStore.validate();
       };
 
       !getOptionLabel &&

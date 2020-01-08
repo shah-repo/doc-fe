@@ -1,95 +1,37 @@
-import { Box } from "@material-ui/core";
-import _ from "lodash";
+import { Box, Grid } from "@material-ui/core";
 import React from "react";
 import { LiveEditor, LiveError, LiveProvider } from "react-live";
 import { withValidatorCustom } from "../../hocs/validation/withValidatorCustom";
-import FBStore from "../../stores/ui/FBStore";
-import { FBValidatorCustomProps } from "../../types/validation/validatorDialog";
-import FBButton from "../inputs/FBButton";
+import { FBValidatorDynamicProps } from "../../types/validation/validatorDialog";
 import FBTextField from "../inputs/FBTextField";
+import FBValidatorTree from "./FBValidatorTree";
 
-const FBValidatorCustom: React.FunctionComponent<FBValidatorCustomProps> = ({
+const FBValidatorCustom: React.FunctionComponent<FBValidatorDynamicProps> = ({
   code,
   scope,
   transformCode,
+  onMessageChange,
+  errorMessage,
   clear,
 }) => (
-  <Box>
-    {_.map(FBStore.getSchema(), (schemaItem) => {
-      return (
-        <Box>
-          {schemaItem.type === "checkboxgroup" &&
-            _.map(
-              _.split((schemaItem.options || "") as string, "\n"),
-              (option) => {
-                return (
-                  <Box borderBottom={1} py={1}>
-                    <Box>Field: {option}</Box>
-                    <Box>
-                      Field name:{" "}
-                      {`${_.toLower(option).replace(" ", "_")}_${
-                        schemaItem.name
-                      }`}
-                    </Box>
-                  </Box>
-                );
-              },
-            )}
-          {schemaItem.type === "radiogroup" && (
-            <Box borderBottom={1} py={1}>
-              <Box>Field: {schemaItem.label}</Box>
-              <Box>Field name: {schemaItem.name}</Box>
-              <Box>
-                Field option values:{" "}
-                {_.map(
-                  _.split((schemaItem.options || "") as string, "\n"),
-                  (option) => {
-                    return (
-                      <Box>
-                        <Box pl={1}>
-                          {`${_.toLower(option).replace(" ", "_")}_${
-                            schemaItem.name
-                          }`}
-                        </Box>
-                      </Box>
-                    );
-                  },
-                )}
-              </Box>
-            </Box>
-          )}
-          {schemaItem.type !== "radiogroup" &&
-            schemaItem.type !== "checkboxgroup" && (
-              <Box borderBottom={1} py={1}>
-                <Box>Field: {schemaItem.label}</Box>
-                <Box>Field name: {schemaItem.name}</Box>
-              </Box>
-            )}
-          {schemaItem.includeContext && (
-            <Box borderBottom={1} py={1}>
-              <Box>Field: {`${schemaItem.label} note`}</Box>
-              <Box>Field name: {`${schemaItem.name}_input_context`}</Box>
-            </Box>
-          )}
-        </Box>
-      );
-    })}
-    <LiveProvider code={code} scope={scope} transformCode={transformCode}>
-      <Box bgcolor="black">
-        <LiveEditor />
-      </Box>
-      <LiveError />
-    </LiveProvider>
-    <Box mt={5}>
+  <Grid container spacing={3}>
+    <Grid item xs={8}>
       <FBTextField
-        label="Error Message"
-        name="custom-validator-error-message"
+        label="form.builder.error.message"
+        defaultValue={errorMessage}
+        onChange={onMessageChange}
       />
-    </Box>
-    <Box display="flex" flexDirection="row-reverse" mx={-1}>
-      <FBButton label="Clear" onClick={clear} />
-    </Box>
-  </Box>
+      <LiveProvider {...{ code, scope, transformCode }}>
+        <Box bgcolor="black">
+          <LiveEditor />
+        </Box>
+        <LiveError />
+      </LiveProvider>
+    </Grid>
+    <Grid item xs={4}>
+      <FBValidatorTree />
+    </Grid>
+  </Grid>
 );
 
 export default withValidatorCustom(FBValidatorCustom);

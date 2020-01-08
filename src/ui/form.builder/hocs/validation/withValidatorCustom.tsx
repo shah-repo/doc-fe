@@ -1,59 +1,57 @@
-import Base64 from "Base64";
+import _ from "lodash";
+import { observer } from "mobx-react";
 import React from "react";
 import Validator from "validatorjs";
 import FBValidatorStore from "../../stores/ui/FBValidatorStore";
-import { FBValidatorCustomProps } from "../../types/validation/validatorDialog";
+import { FBValidatorDynamicProps } from "../../types/validation/validatorDialog";
+import { withFBStores } from "../common/withFBStores";
 
-export const withValidatorCustom = <T extends FBValidatorCustomProps>(
+export const withValidatorCustom = <T extends FBValidatorDynamicProps>(
   Component: React.FunctionComponent<T>,
 ) => {
 
-  const Comp = ({ ...props }: T) => {
+  const Comp = ({
+    dynamicValidatorStore,
+    ...props
+  }: T) => {
     const uniqid = require("uniqid");
-    const validatorName = `validator_${uniqid()}`;
-    const originCode = `
-      (value, req, attribute) => {
-        try {
-          return true;
-        }
-        catch(error) {
-          alert(error);
-        }
-      }
-    `;
-
-    const [liveCode, setLiveCode] = React.useState(originCode);
-
-    const clear = () => {
-      setLiveCode(originCode);
-      FBValidatorStore.customValidator = undefined;
-    };
-
     const scope = {
       Validator,
       FBValidatorStore,
     };
 
+    React.useEffect(() => {
+      dynamicValidatorStore!.setValidatorName(`validator_${uniqid()}`);
+    }, []);
+
+    const clear = () =>
+      dynamicValidatorStore!.clearLiveCode();
+
     const transformCode = (code: string) => {
-      if (liveCode !== code) {
-        setLiveCode(code);
-        FBValidatorStore.customValidator = {
-          name: validatorName,
-          errorMessage: "Field is required",
-          fn: Base64.btoa(code),
-        };
-      }
+      dynamicValidatorStore!.setLiveCode(code);
       return code;
+    };
+
+    const onMessageChange = (ev: React.ChangeEvent) => {
+      const value = _.get(ev.target, "value");
+      dynamicValidatorStore!.setErrorMessage(value);
     };
 
     return Component({
       ...(props as T),
-      code: liveCode,
+      errorMessage: dynamicValidatorStore!.errorMessage,
+      code: dynamicValidatorStore!.liveCode,
       scope,
       transformCode,
+      onMessageChange,
       clear,
     });
   };
 
-  return (props: T) => Comp(props);
+  return (
+    observer(
+    withFBStores(
+      (props: T) => Comp(props)),
+    )
+  );
 };
