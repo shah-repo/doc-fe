@@ -99,6 +99,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
           variant="outlined"
           className={classes.clearButton}
           onClick={clearFilter}
+          data-testid="clearFilter"
         >
           <Text translation="common.clear.filters" />
         </Button>

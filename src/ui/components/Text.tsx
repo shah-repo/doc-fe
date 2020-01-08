@@ -1,10 +1,9 @@
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
+import { Props } from "react-intl/lib/components/message";
 import { isTranslation, Translation } from "../translations/types";
 
-type FormattedMessageProps = Pick<FormattedMessage.Props, Exclude<keyof FormattedMessage.Props, "id">>;
-
-export interface TextProps extends Partial<FormattedMessageProps> {
+export interface TextProps extends Props {
   /** id of the translation */
   translation?: Translation;
   /** id of the translation or string to display */
@@ -26,7 +25,7 @@ const Text: React.FunctionComponent<TextProps> = ({
     translationId = message;
   }
 
-  return <FormattedMessage id={translationId} {...props} />;
+  return <FormattedMessage  id={translationId} {...props} />;
 };
 
 export default Text;

@@ -17,7 +17,9 @@ const AssessmentFormJustifications: React.FunctionComponent<Props> = () => {
         label="cr.justification"
         inputProps={{ multiline: true, rows: "2" }}
       />
-      <FieldArray name="justifications.attachments" render={renderAttachments} />
+      <FieldArray name="justifications.attachments">
+        {renderAttachments}
+      </FieldArray>
     </React.Fragment>
   );
 };

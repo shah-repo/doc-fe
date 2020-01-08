@@ -1,8 +1,7 @@
 import { css } from "glamor";
 import * as React from "react";
 import "react-datepicker/dist/react-datepicker.css";
-import { addLocaleData, IntlProvider } from "react-intl";
-import localeEn from "react-intl/locale-data/en";
+import { IntlProvider } from "react-intl";
 import "react-quill/dist/quill.snow.css";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
@@ -14,8 +13,6 @@ import Theme from "../layout/theme/provider";
 import messagesEn from "../translations/en.json";
 import "./app.css";
 import AppPresenter from "./App.presenter";
-
-addLocaleData([...localeEn]);
 
 const messages = {
   en: messagesEn,

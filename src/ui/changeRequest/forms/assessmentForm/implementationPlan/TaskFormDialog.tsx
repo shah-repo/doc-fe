@@ -80,10 +80,11 @@ export const TaskFormDialog: React.FunctionComponent<TaskFormDialogProps> =
             classes={{ root: classes.dialogContent }}
           >
             <Formik
-              render={renderForm}
               initialValues={initialValues}
               onSubmit={onSubmit}
-            />
+            >
+              {renderForm}
+            </Formik>
           </DialogContent>
         </Dialog>
       </div>

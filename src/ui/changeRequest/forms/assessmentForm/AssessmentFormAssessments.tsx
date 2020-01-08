@@ -22,7 +22,9 @@ const AssessmentFormAssessments: React.FunctionComponent<Props> = () => {
         label="common.assessments"
         validate={validator(required)}
       />
-      <FieldArray name="assessment.attachments" render={renderAttachments} />
+      <FieldArray name="assessment.attachments">
+        {renderAttachments}
+      </FieldArray>
     </React.Fragment>
   );
 };

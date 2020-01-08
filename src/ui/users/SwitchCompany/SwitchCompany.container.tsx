@@ -53,6 +53,7 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({employees}) => 
   return (
     <SwitchCompanyPresenter
       children={companies}
+      numberOfCompanies={companies.length}
     />
   );
 };

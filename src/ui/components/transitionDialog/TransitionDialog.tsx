@@ -59,10 +59,11 @@ const TransitionDialog: React.FunctionComponent<Props> =
           </DialogTitle>
           <DialogContent>
             <Formik
-              render={renderForm}
               initialValues={{ password: "" }}
               onSubmit={onSubmit}
-            />
+            >
+              {renderForm}
+            </Formik>
           </DialogContent>
         </Dialog>
       </div>
