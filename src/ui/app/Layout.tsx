@@ -22,8 +22,8 @@ import DashboardContainer from "../dashboard/Dashboard.container";
 import DocumentRevisionContainer from "../document.revision/container";
 import DocumentRevisionListContainer from "../document.revision/list/container";
 import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisionCreate.container";
-import RemoteValidatorsLoader from "../remoteValidators/RemoteValidators";
 import DocumentTypeListContainer from "../documentType/list/container";
+import RemoteValidatorsLoader from "../remoteValidators/RemoteValidators";
 import SlackContainer from "../slack/Container";
 import TrainingDetailContainer from "../training/TrainingDetail.container";
 import UserManagementListContainer from "../user.management/list/container";
@@ -83,10 +83,7 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
             path={USER_MANAGEMENT_ROOT_URL}
             component={UserManagementListContainer}
           />
-          <Route
-            path={SLACK_ROOT_URL}
-            component={SlackContainer}
-          />
+          <Route path={SLACK_ROOT_URL} component={SlackContainer} />
           <Route
             path={DOCUMENT_BY_TYPE_LIST_URL}
             component={DocumentTypeListContainer}

@@ -30,15 +30,7 @@
     "no-shadowed-variable": false,
     "no-unused-expression": false,
     "jsx-no-lambda": false,
-    "jsx-wrap-multiline": false,
-    "rulesDirectory": [],
-    "linterOptions": {
-        "exclude": [
-            "config/**/*.js",
-            "node_modules/**/*.ts",
-            "src/serviceWorker.ts"
-        ]
-    }
+    "jsx-wrap-multiline": false
   },
   "rulesDirectory": [],
   "linterOptions": {
