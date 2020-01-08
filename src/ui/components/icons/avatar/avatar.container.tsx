@@ -1,11 +1,28 @@
 import React from "react";
 import AvatarPresenter from "./avatar.presenter";
 
-const AvatarContainer: React.FunctionComponent = () => {
+interface OwnProps {
+  avatar: string | null;
+  showEditUser: boolean;
+  previewAvatar: string;
+  setPreviewAvatar: (value: string) => void;
+}
 
-  const logo = "/avatar_placeholder.svg";
+type Props = OwnProps;
+const AvatarContainer: React.FunctionComponent<Props> = ({
+  avatar,
+  showEditUser,
+  previewAvatar,
+  setPreviewAvatar,
+}) => {
+  const logo = avatar === null ? "/avatar_placeholder.svg" : avatar;
   return (
-      <AvatarPresenter src={logo} />
+    <AvatarPresenter
+      src={logo}
+      showEditUser={showEditUser}
+      previewAvatar={previewAvatar}
+      setPreviewAvatar={setPreviewAvatar}
+    />
   );
 };
 

@@ -1,8 +1,12 @@
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import { Group, User } from "../auth/types";
-import { EditGroupsAction, EditUserInfoAction } from "../tableSearch";
-import { EDIT_EMPLOYEE_GROUPS, EDIT_EMPLOYEE_USER_INFO } from "../tableSearch/constants";
+import { EditActiveStatusAction, EditGroupsAction, EditUserInfoAction } from "../tableSearch";
+import {
+  EDIT_EMPLOYEE_ACTIVE_STATUS,
+  EDIT_EMPLOYEE_GROUPS,
+  EDIT_EMPLOYEE_USER_INFO,
+} from "../tableSearch/constants";
 import {
   ADD_EMPLOYEE_POST_ASYNC,
   COMPANY_GROUPS_GET_ASYNC,
@@ -17,13 +21,16 @@ import {
 import {
   AddEmployeeRequest,
   CompanyGroupsListAction,
+  EmployeeActiveStatusRequestBody,
   EmployeeGroupsEditRequestBody,
   GetEmployeeResponse,
   GetSlackUrl,
   LoadCompanyGroups,
 } from "./types";
 
-const companyGroupsList = (groups: LoadCompanyGroups): CompanyGroupsListAction => ({
+const companyGroupsList = (
+  groups: LoadCompanyGroups,
+): CompanyGroupsListAction => ({
   type: COMPANY_GROUPS_LIST,
   payload: groups,
 });
@@ -47,7 +54,10 @@ const addEmployee = (data: AddEmployeeRequest, handlers: Handlers): ApiAction =>
     handlers,
   });
 
-const getEmployee = (params: any = {}, handlers: Handlers): ApiAction<GetEmployeeResponse[]> =>
+const getEmployee = (
+  params: any = {},
+  handlers: Handlers,
+): ApiAction<GetEmployeeResponse[]> =>
   apiActionWithCallbacks({
     url: `${EMPLOYEES_URL}`,
     asyncType: EMPLOYEE_GET_ASYNC,
@@ -64,34 +74,67 @@ const loadGroupsMe = (handlers: Handlers): ApiAction<Group[]> =>
     handlers,
   });
 
-const editSelectedEmployeeGroups = (employee: GetEmployeeResponse): EditGroupsAction => {
+const editSelectedEmployeeGroups = (
+  employee: GetEmployeeResponse,
+): EditGroupsAction => {
   return {
     type: EDIT_EMPLOYEE_GROUPS,
     payload: employee,
   };
 };
 
-const editEmployeeGroups = (employeeId: string, body: EmployeeGroupsEditRequestBody, handlers: Handlers):
-  ApiAction<GetEmployeeResponse> => apiActionWithCallbacks({
+const editSelectedEmployeeAciveStatus = (
+  employee: GetEmployeeResponse,
+): EditActiveStatusAction => {
+  return {
+    type: EDIT_EMPLOYEE_ACTIVE_STATUS,
+    payload: employee,
+  };
+};
+
+const editEmployeeGroups = (
+  employeeId: string,
+  body: EmployeeGroupsEditRequestBody,
+  handlers: Handlers,
+): ApiAction<GetEmployeeResponse> =>
+  apiActionWithCallbacks({
     url: `${EMPLOYEES_URL}/${employeeId}`,
     method: "patch",
     data: body,
     onSuccess: (employee, dispatch) => {
       dispatch(editSelectedEmployeeGroups(employee));
-   },
+    },
     handlers,
   });
 
-const getSlackUrl = (redirectUriEnv: string, url: string, handlers: Handlers):
-  ApiAction<GetSlackUrl> => {
-    return apiActionWithCallbacks({
-      url: `${url}`,
-      method: "get",
-      params: {redirectUriEnv},
-      asyncType: SLACK_URL,
-      handlers,
-    });
-  };
+const editEmployeeActiveStatus = (
+  employeeId: string,
+  body: EmployeeActiveStatusRequestBody,
+  handlers: Handlers,
+): ApiAction<GetEmployeeResponse> =>
+  apiActionWithCallbacks({
+    url: `${EMPLOYEES_URL}/${employeeId}`,
+    method: "patch",
+    data: body,
+    onSuccess: (employee, dispatch) => {
+      dispatch(editSelectedEmployeeAciveStatus(employee));
+    },
+    handlers,
+  });
+
+const getSlackUrl = (
+  redirectUriEnv: string,
+  url: string,
+  handlers: Handlers,
+): ApiAction<GetSlackUrl> => {
+  return apiActionWithCallbacks({
+    url: `${url}`,
+    method: "get",
+    params: { redirectUriEnv },
+    asyncType: SLACK_URL,
+    handlers,
+  });
+};
 
 const editSelectedEmployeeUserInfo = (user: User): EditUserInfoAction => {
   return {
@@ -110,4 +153,5 @@ export default {
   editSelectedEmployeeUserInfo,
   companyGroupsList,
   editSelectedEmployeeGroups,
+  editEmployeeActiveStatus,
 };

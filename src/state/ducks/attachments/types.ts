@@ -15,6 +15,7 @@ export interface AttachmentDownloadResponse {
 }
 
 export type AttachmentState = Attachment;
+export type AvatarS3linkResponse = AttachmentDownloadResponse;
 
 export enum AttachmentType {
   Attached = "ATTACHED",
