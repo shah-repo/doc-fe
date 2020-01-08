@@ -408,5 +408,7 @@
 
   "watermark.successfully.requested": "Watermarked copy of {file}.{type} successfully requested. We will notify you when it's ready to download.",
   "watermark.download.ready": "Watermarked file {name}.{type} ready to download",
-  "watermark.request.failed": "Request for {name}.{type} failed"
+  "watermark.request.failed": "Request for {name}.{type} failed",
+
+  "mqtt.refresh.page": "Refresh page"
 }
