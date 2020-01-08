@@ -1,9 +1,11 @@
 import { apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import {
+  ADD_WATERMARK,
   ATTACHMENT_ROOT_URL,
   ATTACHMENT_UPLOAD_URL,
   CHECK_WATERMARK_ASYNC,
+  REMOVE_WATERMARK,
   REQUEST_WATERMARK_ASYNC,
 } from "./constants";
 import {
@@ -66,9 +68,21 @@ const checkWatermarkStatus = (
     handlers,
   });
 
+const addWatermark = (id: string): any => ({
+  type: ADD_WATERMARK,
+  payload: id,
+});
+
+const removeWatermark = (id: string): any => ({
+  type: REMOVE_WATERMARK,
+  payload: id,
+});
+
 export default {
   upload,
   download,
   requestWatermarkedFile,
   checkWatermarkStatus,
+  addWatermark,
+  removeWatermark,
 };

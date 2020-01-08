@@ -1,6 +1,7 @@
 import { Button } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { WatermarkRequest } from "../../../../../state/ducks/attachments";
+import { useDispatch } from "react-redux";
+import { attachmentsActions, WatermarkRequest } from "../../../../../state/ducks/attachments";
 import { Nullable } from "../../../../../state/ducks/common";
 import useDialog from "../../../../hooks/useDialog";
 import Text from "../../../Text";
@@ -30,12 +31,14 @@ export const WatermarkContainer: React.FunctionComponent<Props> = ({
     ));
     setRequestResult(result);
   };
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!newWatermarkRequest) {
       return;
     }
 
+    dispatch(attachmentsActions.addWatermark(newWatermarkRequest.id));
     setRequestedWatermarks([...requestedWatermarks, newWatermarkRequest]);
     setTitle("common.success");
     setContent({
