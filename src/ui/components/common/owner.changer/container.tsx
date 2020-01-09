@@ -1,9 +1,11 @@
 import { AxiosRequestConfig } from "axios";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import apiClient from "../../../../state/apiClient";
 import { EMPLOYEES_URL } from "../../../../state/ducks/userManagement/constants";
 import { store } from "../../../../state/store";
 import OwnerChangerPresenter from "./presenter";
+
+// import useAsync from "../../../hooks/useAsync";
 
 export interface OwnProps {
   requestId: string;
@@ -11,7 +13,10 @@ export interface OwnProps {
 }
 
 const OwnerChangerContainer: React.FC<OwnProps> = ({ requestId, ownerId }) => {
+  const [employees, setEmployees] = useState([]);
 
+  // const async = useAsync();
+  const updateOwner = () => {};
   const queryEmployees = async () => {
     const requestConfig: AxiosRequestConfig = {
       method: "get",
@@ -21,13 +26,19 @@ const OwnerChangerContainer: React.FC<OwnProps> = ({ requestId, ownerId }) => {
 
     requestConfig.headers.Authorization = `bearer ${
       store.getState().auth.user.employeeId
-      }:${store.getState().auth.user.sessionId}`;
+    }:${store.getState().auth.user.sessionId}`;
 
     const { data } = await apiClient.request(requestConfig);
-    console.log(data);
+    setEmployees(data);
   };
 
-  return (<OwnerChangerPresenter queryEmployees={queryEmployees} />);
+  useEffect(() => {
+    queryEmployees();
+  }, []);
+
+  return (
+    <OwnerChangerPresenter employees={employees} updateOwner={updateOwner} />
+  );
 };
 
 export default OwnerChangerContainer;
