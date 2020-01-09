@@ -8,12 +8,9 @@ import SummaryPresenter from "../../changeRequest/documentRevision/DocumentRevis
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
 import { Container, Props } from "./container";
 import Presenter from "./presenter";
-import { store } from "../../../state/store";
-import { Provider } from "react-redux";
 
-
-jest.mock('react-redux', () => ({
-  useSelector: jest.fn(fn => fn()),
+jest.mock("react-redux", () => ({
+  useSelector: jest.fn((fn) => fn()),
 }));
 
 describe("Container tests", () => {
@@ -23,14 +20,13 @@ describe("Container tests", () => {
     save: jest.fn(),
     closeTask: jest.fn(),
     classes: {
-        sidebar: "",
-        root: "",
+      sidebar: "",
+      root: "",
     },
   };
 
-  const getWrapper = (props: Partial<Props>= {}) => shallow(
-      <Container {...defaultProps} {...props}/>,
-  );
+  const getWrapper = (props: Partial<Props> = {}) =>
+    shallow(<Container {...defaultProps} {...props} />);
 
   it("Props are set correctly", () => {
     const wrapper = getWrapper();
@@ -47,6 +43,13 @@ describe("Container tests", () => {
 
   it("Formik displays and props are set correctly", () => {
     const wrapper = getWrapper();
-    expect(wrapper.find(Formik).dive().find(Form).find(Presenter).prop("dataProp")).toEqual(defaultProps.dataProp);
+    expect(
+      wrapper
+        .find(Formik)
+        .dive()
+        .find(Form)
+        .find(Presenter)
+        .prop("dataProp"),
+    ).toEqual(defaultProps.dataProp);
   });
 });
