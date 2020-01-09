@@ -1,4 +1,5 @@
 import { Grid } from "@material-ui/core";
+import _ from "lodash";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import {
@@ -11,6 +12,7 @@ import {
 } from "../../../../state/ducks/attachments";
 import { Nullable } from "../../../../state/ducks/common";
 import { ApplicationState } from "../../../../state/reducers";
+import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../../form.builder/stores/ui/FBStore";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
@@ -24,8 +26,6 @@ import {
   AttachmentIconDispatchProps,
 } from "./utils/types";
 import WatermarkContainer from "./watermark/container";
-import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
-import _ from "lodash";
 
 type DispatchProps = AttachmentIconDispatchProps;
 

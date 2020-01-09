@@ -58,11 +58,11 @@ export const withOnChange = <T extends FBInputProps>(
           ...FBStore.values,
           [fieldName]: value,
         };
-  
+
         if (_.isUndefined(value) || _.isEmpty(_.toString(value))) {
           values = _.omit(values, fieldName);
         }
-  
+
         FBStore.setValues(values);
         FBDynamicValidatorStore.validate();
       }
