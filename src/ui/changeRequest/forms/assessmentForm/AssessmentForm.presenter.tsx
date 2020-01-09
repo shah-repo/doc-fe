@@ -1,11 +1,15 @@
 import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { Field, FieldProps, FormikProps } from "formik";
 import React, { useEffect } from "react";
-import { ChangeRequest } from "../../../../state/ducks/changeRequest";
+import { useSelector } from "react-redux";
+import { getHasTag } from "../../../../common/utils/selectors";
+import { GroupTag } from "../../../../state/ducks/auth/types";
+import { ChangeRequest, ChangeRequestStatus } from "../../../../state/ducks/changeRequest";
 import { AsyncState } from "../../../../state/types";
 import ApproversField from "../../../change.request/form/approvers";
 import AssessmentsField from "../../../change.request/form/assessments";
 import JustificationField from "../../../change.request/form/justification";
+import OwnerChanger from "../../../components/common/owner.changer/container";
 import DatePickerField from "../../../components/forms/fields/DatePicker";
 import InputField from "../../../components/forms/fields/Input";
 import TextEditorField from "../../../components/forms/fields/TextEditor";
@@ -52,11 +56,14 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const didMount = useDidMount();
 
+  const isCompanyAdmin = useSelector(getHasTag(GroupTag.COMPANY_ADMIN));
+
   useEffect(() => {
     if (didMount) {
       setFieldValue("documentRevisions", documentRevisionsList);
     }
   }, [documentRevisionsList]);
+  console.log(changeRequest);
 
   const renderCrId = () =>
     changeRequest &&
@@ -124,6 +131,13 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
             direction="column"
           >
             <div>
+              {isCompanyAdmin &&
+              changeRequest!.state === ChangeRequestStatus.Draft && (
+                <OwnerChanger
+                  requestId={changeRequest!.id}
+                  requestType={"change_request"}
+                />
+              )}
               <AssessmentFormControlsContainer changeRequest={changeRequest} />
               <SubmitButton
                 asyncState={asyncState}

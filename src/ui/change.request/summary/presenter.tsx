@@ -1,22 +1,21 @@
-import {
-  Box,
-  Grid,
-  ListItem,
-  WithStyles,
-  withStyles,
-} from "@material-ui/core";
+import { Box, Grid, ListItem, WithStyles, withStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { filter } from "lodash";
 import React, { useMemo } from "react";
+import { useSelector } from "react-redux";
+import { getHasTag } from "../../../common/utils/selectors";
+import { GroupTag } from "../../../state/ducks/auth/types";
 import {
   ChangeRequest,
   changeRequestsActions,
+  ChangeRequestStatus,
 } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
 import { AsyncState } from "../../../state/types";
 import ControlsContainer from "../../changeRequest/forms/assessmentForm/AssessmentFormControls.container";
 import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
+import OwnerChanger from "../../components/common/owner.changer/container";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
 import SubmitButton from "../../components/forms/SubmitButton";
@@ -35,7 +34,9 @@ interface OwnProps extends DataProps<ChangeRequest> {
   closeTask: typeof changeRequestsActions.closeTask;
 }
 
-export type Props = OwnProps & WithStyles<typeof styles> & FormikProps<ChangeRequestFormValues>;
+export type Props = OwnProps &
+  WithStyles<typeof styles> &
+  FormikProps<ChangeRequestFormValues>;
 
 export const Presenter: React.FunctionComponent<Props> = ({
   classes,
@@ -46,23 +47,31 @@ export const Presenter: React.FunctionComponent<Props> = ({
   closeTask,
   errors,
 }) => {
-  const approvedApprovers = useMemo(() => filter(dataProp.approvals, ["status", "APPROVED"] ), [dataProp]);
+  const approvedApprovers = useMemo(
+    () => filter(dataProp.approvals, ["status", "APPROVED"]),
+    [dataProp],
+  );
+  const isCompanyAdmin = useSelector(getHasTag(GroupTag.COMPANY_ADMIN));
 
   const approversFieldRenderer = () => (
     <Box>
       <ListItem>
-        <ApproversField dataProp={approvedApprovers}/>
+        <ApproversField dataProp={approvedApprovers} />
       </ListItem>
     </Box>
   );
 
   const submitButtonRenderer = () => (
-    <SubmitButton asyncState={asyncState} label="document.save" errors={errors} />
+    <SubmitButton
+      asyncState={asyncState}
+      label="document.save"
+      errors={errors}
+    />
   );
 
   const renderImplementationPlan = dataProp.implementationPlan &&
-    (dataProp.implementationPlan.attachments.length > 0 || dataProp.implementationPlan.tasks.length > 0) &&
-    (
+    (dataProp.implementationPlan.attachments.length > 0 ||
+      dataProp.implementationPlan.tasks.length > 0) && (
       <ImplementationPlan
         dataProp={dataProp.implementationPlan}
         currentUserEmail={currentUserEmail}
@@ -104,6 +113,12 @@ export const Presenter: React.FunctionComponent<Props> = ({
           {canEdit && <FormProgress asyncState={asyncState} />}
           {canEdit && <FormMessage asyncState={asyncState} />}
           {canEdit && submitButtonRenderer()}
+          {isCompanyAdmin && dataProp!.state === ChangeRequestStatus.Draft && (
+            <OwnerChanger
+              requestId={dataProp!.id}
+              requestType={"change_request"}
+            />
+          )}
           <ControlsContainer changeRequest={dataProp} errors={errors} />
         </Grid>
       </Box>

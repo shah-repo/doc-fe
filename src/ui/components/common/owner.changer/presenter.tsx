@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogContent,
   DialogTitle,
@@ -19,12 +20,14 @@ export interface OwnProps {
   employees: SelectOption[];
   updateOwner: any;
   currentOwner: Owner;
+  loading: boolean;
 }
 
 const OwnerChangerPresenter: React.FC<OwnProps> = ({
   employees,
   updateOwner,
   currentOwner,
+  loading,
 }) => {
   const dialog = useDialog();
   const openDialog = () => dialog.open();
@@ -54,7 +57,8 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
             </Select>
           </FormControl>
           <Box py={1} display="flex" justifyContent="flex-end" alignItems="flex-end">
-            <Button variant="contained" color="primary" onClick={() => updateOwner(owner)}>
+            <Button disabled={loading} variant="contained" color="primary" onClick={() => updateOwner(owner)}>
+              {loading && <CircularProgress size={15} color="primary" />}
               <Text translation="change.owner.update" />
             </Button>
           </Box>

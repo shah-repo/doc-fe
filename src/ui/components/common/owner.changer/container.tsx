@@ -15,12 +15,14 @@ const OwnerChangerContainer: React.FC<OwnProps> = ({
   requestType,
 }) => {
   const [employees, setEmployees] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [url, selector] = getUrlandSelector(requestType, requestId);
   const current = useSelector((state: ApplicationState) =>
     selector(state, requestId),
   );
 
   const updateOwner = async (ownerId) => {
+    setLoading(true);
     const ownerData = {
       owner: {
         id: ownerId,
@@ -29,6 +31,9 @@ const OwnerChangerContainer: React.FC<OwnProps> = ({
     const response = await asyncRequest("patch", url, ownerData);
     if (response.status === 200) {
       window.location.reload();
+    }
+    if (response) {
+      setLoading(false);
     }
   };
 
@@ -52,6 +57,7 @@ const OwnerChangerContainer: React.FC<OwnProps> = ({
       currentOwner={current.owner}
       employees={employees}
       updateOwner={updateOwner}
+      loading={loading}
     />
   );
 };
