@@ -10,7 +10,7 @@ import DocumentRevisionUpdateContainer from "./DocumentRevisionUpdate.container"
 
 jest.mock("react-redux", () => ({
   useSelector: jest.fn((fn) => fn()),
-  connect: jest.fn((fn) => fn());,
+  connect: jest.fn((fn) => fn()),
 }));
 
 describe("DocumentRevisionDisplayContainer isNewVersion test", () => {
