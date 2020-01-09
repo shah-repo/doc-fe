@@ -250,7 +250,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               asyncState={asyncState}
               label={isDisabled ? "common.save" : "navigation.createDocument"}
             />
-            <ApproveAndRelease />
+            <ApproveAndRelease
+              id={values.id}
+              status={values.status}
+            />
           </Grid>
         </Box>
       </FormWrapper>

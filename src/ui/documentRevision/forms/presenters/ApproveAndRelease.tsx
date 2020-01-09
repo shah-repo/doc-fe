@@ -1,22 +1,24 @@
-import { Button, ButtonProps, Dialog, DialogContent, DialogTitle } from "@material-ui/core";
-import { Formik, FormikProps } from "formik";
+import { Button } from "@material-ui/core";
 import React from "react";
-import PasswordForm from "../../../components/password/form/PasswordForm";
+import { documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import PasswordDialog from "../../../components/password/dialog";
 import Text from "../../../components/Text";
 import { PasswordFormValues } from "../../../components/transitionDialog/types";
+import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
 
 interface Props {
-  buttonProps?: ButtonProps;
-  label?: string;
+  id?: string;
+  status?: DocumentRevisionStatus;
 }
 
 export const ApproveAndRelease: React.FunctionComponent<Props> = ({
-  buttonProps,
-  label,
+  id,
+  status,
 }) => {
   const dialog = useDialog();
+  const releaseAction = useActionCreator(documentRevisionsActions.approveAndRelease);
   const async = useAsync<any>({ onSuccess: dialog.close });
 
   const openDialog = () => {
@@ -28,17 +30,17 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   };
 
   const onSubmit = (values: PasswordFormValues) => {
-    /*
     async.start(
-      applyTransition,
-      changeRequestId, values, transition, async,
+      releaseAction,
+      id,
+      values,
+      async,
     );
-    */
   };
-  const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
-  const renderForm = (props: FormikProps<any>) => (
-    <PasswordForm {...props} asyncState={async.asyncState} cancel={closeDialog} />
-  );
+
+  if (!id || status !== DocumentRevisionStatus.Draft) {
+    return null;
+  }
 
   return (
     <>
@@ -49,24 +51,12 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
       >
         <Text translation="common.approve.and.release" />
       </Button>
-      <Dialog
-        disableEscapeKeyDown={true}
-        disableBackdropClick={true}
-        open={dialog.isOpen}
-        onSubmit={preventPropagation}
-      >
-        <DialogTitle>
-          <Text translation="transition.action.title" />
-        </DialogTitle>
-        <DialogContent>
-          <Formik
-            initialValues={{ password: "" }}
-            onSubmit={onSubmit}
-          >
-            {renderForm}
-          </Formik>
-        </DialogContent>
-      </Dialog>
+      <PasswordDialog
+        asyncState={async.asyncState}
+        closeDialog={closeDialog}
+        isDialogOpen={dialog.isOpen}
+        onSubmit={onSubmit}
+      />
     </>
   );
 };
