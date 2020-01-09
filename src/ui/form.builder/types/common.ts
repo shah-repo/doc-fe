@@ -46,6 +46,8 @@ export type FBOptionProps =
   & {
   options?: any[] | string;
   optionId?: string;
+  optionPath?: string;
+  optionRenderKey?: string;
   optionLabelKey?: string;
   optionValueKey?: string;
   includeNone?: boolean;
