@@ -122,7 +122,9 @@ export const groups = (
       const permissionsSet = new Set<Permission>();
       action.payload.forEach((group) => {
         const { tags, permissions } = group;
-
+        if (group.name === "Company Admin") {
+          tagsSet.add(GroupTag.COMPANY_ADMIN);
+        }
         if (tags) {
           tags.forEach((tag) => tagsSet.add(tag));
         }
@@ -137,7 +139,7 @@ export const groups = (
         permissions: Array.from(permissionsSet),
       };
     case LOGOUT_USER:
-      return {...USER_GROUPS_DEFAULT_STATE};
+      return { ...USER_GROUPS_DEFAULT_STATE };
     default:
       return state;
   }

@@ -8,6 +8,9 @@ import { FormikProps } from "formik";
 import _ from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
+import { useSelector } from "react-redux";
+import { getHasTag } from "../../../common/utils/selectors";
+import { GroupTag } from "../../../state/ducks/auth/types";
 import {
   DocumentRevision,
   RevisionStageOptions,
@@ -15,6 +18,7 @@ import {
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
+import OwnerChanger from "../../components/common/owner.changer/container";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
 import CheckboxField from "../../components/forms/fields/Checkbox";
@@ -94,6 +98,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     window.open(documentDetailsPath(documentId), "_blank");
   };
 
+  const isCompanyAdmin = useSelector(getHasTag(GroupTag.COMPANY_ADMIN));
   const isDisabled: boolean = _.get(initialValues, "id") !== undefined;
   const docId = _.get(initialValues, "document.docId");
   const useProposedDocId = (!docId || docId === "") && values.document;
@@ -243,7 +248,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             container={true}
             alignItems="flex-end"
             direction="column"
-          >
+          >{isCompanyAdmin && <OwnerChanger requestId={values.document!.docId!} ownerId="dasdasd"/>}
             <SubmitButton
               asyncState={asyncState}
               label={isDisabled ? "common.save" : "navigation.createDocument"}

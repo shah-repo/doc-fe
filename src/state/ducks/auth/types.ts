@@ -174,4 +174,5 @@ export enum Permission {
 
 export enum GroupTag {
   USER_MANAGEMENT = "USER_MANAGEMENT",
+  COMPANY_ADMIN = "COMPANY_ADMIN",
 }
