@@ -250,6 +250,7 @@
   "common.error": "Error",
   "common.success": "Success",
   "common.upload.photo": "Upload photo",
+  "common.employees": "Employees",
 
   "output.info": "Form Info",
 
@@ -411,5 +412,9 @@
   "watermark.download.ready": "Watermarked file {name}.{type} ready to download",
   "watermark.request.failed": "Request for {name}.{type} failed",
 
-  "mqtt.refresh.page": "Refresh page"
+  "mqtt.refresh.page": "Refresh page",
+
+  "change.owner": "Change Owner",
+  "change.owner.update": "Update Owner"
+
 }

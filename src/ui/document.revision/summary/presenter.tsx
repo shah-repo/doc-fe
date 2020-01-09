@@ -6,10 +6,14 @@ import {
 } from "@material-ui/core";
 import { Formik } from "formik";
 import React from "react";
+import { useSelector } from "react-redux";
+import { getHasTag } from "../../../common/utils/selectors";
+import { GroupTag } from "../../../state/ducks/auth/types";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
+import OwnerChanger from "../../components/common/owner.changer/container";
 import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
@@ -49,6 +53,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
 }) => {
   const onSubmit = () => void 0;
   FBDRStore.setValues(dataProp);
+
+  const isCompanyAdmin = useSelector(getHasTag(GroupTag.COMPANY_ADMIN));
 
   const renderTrainingControl = status === DocumentRevisionStatus.Released && (
     <TrainingControl
@@ -101,6 +107,13 @@ export const Presenter: React.FunctionComponent<Props> = ({
          </Box>
        )}
       <Box flexDirection="row-reverse" display="flex" px={3}>
+        {isCompanyAdmin &&
+          status === DocumentRevisionStatus.Draft && (
+            <OwnerChanger
+              requestId={id}
+              requestType={"document"}
+            />
+          )}
         <ControlsContainer
           documentRevision={dataProp}
           canShowCreateVersionButton={canShowCreateVersionButton}

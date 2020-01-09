@@ -1,36 +1,37 @@
 import {
+  Box,
   Button,
   Dialog,
   DialogContent,
   DialogTitle,
-  Box,
-  Select,
-  MenuItem,
   FormControl,
   InputLabel,
-} from '@material-ui/core';
-import React, { Fragment } from 'react';
-import useDialog from '../../../hooks/useDialog';
-import { authSelectors } from '../../../../state/ducks/auth';
-import { useSelector } from 'react-redux';
+  MenuItem,
+  Select,
+} from "@material-ui/core";
+import React, { Fragment } from "react";
+import { Owner } from "../../../../state/ducks/common";
+import useDialog from "../../../hooks/useDialog";
+import { SelectOption } from "../../forms/fields/Select";
+import Text from "../../Text";
 
 export interface OwnProps {
-  employees: any;
+  employees: SelectOption[];
   updateOwner: any;
+  currentOwner: Owner;
 }
 
 const OwnerChangerPresenter: React.FC<OwnProps> = ({
   employees,
   updateOwner,
+  currentOwner,
 }) => {
   const dialog = useDialog();
+  const openDialog = () => dialog.open();
   const preventPropagation = (event: React.FormEvent) =>
     event.stopPropagation();
-  const openDialog = () => dialog.open();
 
-  const currentUser = useSelector(authSelectors.currentEmployeeId);
-
-  const [owner, setOwner] = React.useState(currentUser);
+  const [owner, setOwner] = React.useState(currentOwner.id);
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setOwner(event.target.value as string);
   };
@@ -41,20 +42,20 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
       onSubmit={preventPropagation}
       onClose={dialog.close}
     >
-      <DialogTitle>Select Owner</DialogTitle>
+      <DialogTitle><Text  translation="change.owner" /></DialogTitle>
       <DialogContent style={{ width: 500 }}>
         <Box py={4}>
-          <FormControl className="form-control" style={{ width: '100%' }}>
-            <InputLabel id="employee-select">Employees</InputLabel>
-            <Select name="employees" value={owner} onChange={handleChange}>
-              {employees.map(option => (
-                <MenuItem value={option.value}> {option.text}</MenuItem>
+          <FormControl className="form-control" style={{ width: "100%" }}>
+            <InputLabel id="employee-select"><Text translation="common.employees" /></InputLabel>
+            <Select name="employees" defaultValue={owner} onChange={handleChange}>
+              {employees.map((option) => (
+                <MenuItem key={option.value} value={option.value}> {option.text}</MenuItem>
               ))}
             </Select>
           </FormControl>
-          <Box py={1} flex alignItems="flex-end">
-            <Button variant="contained" color="primary" onClick={updateOwner}>
-              Change Owner
+          <Box py={1} display="flex" justifyContent="flex-end" alignItems="flex-end">
+            <Button variant="contained" color="primary" onClick={() => updateOwner(owner)}>
+              <Text translation="change.owner.update" />
             </Button>
           </Box>
         </Box>
@@ -64,7 +65,7 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
 
   return (
     <Fragment>
-      <Button onClick={openDialog}>Change Owner</Button>
+      <Button variant="outlined" onClick={openDialog}> <Text translation="change.owner" /></Button>
       {dialogRenderer()}
     </Fragment>
   );
