@@ -1,19 +1,16 @@
-import { AxiosRequestConfig } from "axios";
-import apiClient from "../../../../../state/apiClient";
-import { changeRequestsSelectors } from "../../../../../state/ducks/changeRequest";
-import { CHANGE_REQUEST_ROOT_URL } from "../../../../../state/ducks/changeRequest/constants";
-import { documentRevisionsSelectors } from "../../../../../state/ducks/documentRevisions";
-import { DOCUMENT_REVISION_ROOT_URL } from "../../../../../state/ducks/documentRevisions/constants";
-import { store } from "../../../../../state/store";
 
-export const getUrlandSelector = (requestType, requestId) => {
+import { changeRequestsActions, changeRequestsSelectors } from "../../../../../state/ducks/changeRequest";
+import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../../state/ducks/documentRevisions";
+import { DOCUMENT_REVISION_ROOT_URL } from "../../../../../state/ducks/documentRevisions/constants";
+
+export const getUrlandActions = (requestType, requestId) => {
   const urlAction = {
     document: [
-      DOCUMENT_REVISION_ROOT_URL + `/${requestId}`,
+      documentRevisionsActions.save,
       documentRevisionsSelectors.getDocumentRevision,
     ],
     change_request: [
-      CHANGE_REQUEST_ROOT_URL + `/${requestId}`,
+      changeRequestsActions.save,
       changeRequestsSelectors.getChangeRequest,
     ],
     task: [
@@ -23,19 +20,4 @@ export const getUrlandSelector = (requestType, requestId) => {
   };
 
   return urlAction[requestType];
-};
-
-export const asyncRequest = async (method, url, data) => {
-  const requestConfig: AxiosRequestConfig = {
-    headers: {},
-    method,
-    url,
-    data,
-  };
-  requestConfig.headers.Authorization = `bearer ${
-    store.getState().auth.user.employeeId
-  }:${store.getState().auth.user.sessionId}`;
-
-  const response = await apiClient.request(requestConfig);
-  return response;
 };

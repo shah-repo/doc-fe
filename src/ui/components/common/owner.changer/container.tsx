@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { EMPLOYEES_URL } from "../../../../state/ducks/userManagement/constants";
+import {
+  GetEmployeeResponse,
+  userManagementActions,
+} from "../../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../../state/reducers";
-import { asyncRequest, getUrlandSelector } from "./helpers";
+import useActionCreator from "../../../hooks/useActionCreator";
+import useAsync from "../../../hooks/useAsync";
+import { SelectOption } from "../../forms/fields/Select";
+import { getUrlandActions } from "./helpers";
 import OwnerChangerPresenter from "./presenter";
 
 export interface OwnProps {
@@ -14,42 +20,43 @@ const OwnerChangerContainer: React.FC<OwnProps> = ({
   requestId,
   requestType,
 }) => {
-  const [employees, setEmployees] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [url, selector] = getUrlandSelector(requestType, requestId);
+  const [employees, setEmployees] = useState<SelectOption[]>([]);
+  const [action, selector] = getUrlandActions(requestType, requestId);
+  const actionCreator = useActionCreator(action);
   const current = useSelector((state: ApplicationState) =>
     selector(state, requestId),
   );
+  const asyncUpdateOwner = useAsync();
 
-  const updateOwner = async (ownerId) => {
-    setLoading(true);
+  const updateOwner = (ownerId) => {
     const ownerData = {
       owner: {
         id: ownerId,
       },
     };
-    const response = await asyncRequest("patch", url, ownerData);
-    if (response.status === 200) {
-      window.location.reload();
-    }
-    if (response) {
-      setLoading(false);
-    }
-  };
-
-  const queryEmployees = async () => {
-    const response = await asyncRequest("get", EMPLOYEES_URL, {});
-
-    setEmployees(
-      response.data.map((employee) => ({
-        value: employee.id,
-        text: employee.user.name,
-      })),
+    asyncUpdateOwner.start(
+      actionCreator,
+      requestId,
+      ownerData,
+      asyncUpdateOwner,
     );
   };
 
+  const getEmployeeAction = useActionCreator(userManagementActions.getEmployee);
+
+  const getEmployees = useAsync<GetEmployeeResponse[]>({
+    onSuccess: (data: GetEmployeeResponse[] = []) => {
+      setEmployees(
+        data.map((employee) => ({
+          value: employee.id,
+          text: employee.user.name,
+        })),
+      );
+    },
+  });
+
   useEffect(() => {
-    queryEmployees();
+    getEmployees.start(getEmployeeAction, null, getEmployees);
   }, []);
 
   return (
@@ -57,7 +64,7 @@ const OwnerChangerContainer: React.FC<OwnProps> = ({
       currentOwner={current.owner}
       employees={employees}
       updateOwner={updateOwner}
-      loading={loading}
+      asyncState={asyncUpdateOwner.asyncState}
     />
   );
 };

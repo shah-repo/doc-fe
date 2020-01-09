@@ -34,6 +34,7 @@ import FBDRStore from "../../form.builder/stores/FBDRStore";
 import FBStore from "../../form.builder/stores/FBStore";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
+import ApproveAndRelease from "./presenters/ApproveAndRelease";
 import References from "./presenters/References";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
 import { DocumentRevisionFormValues } from "./types";
@@ -240,7 +241,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           </Box>
         )}
         <Box mt={5}>
-          <Grid container={true} alignItems="flex-end" direction="column">
+          <Grid
+            container={true}
+            alignItems="flex-end"
+            justify="flex-end"
+            direction="row"
+          >
             {canChangeOwnerShip && (
               <OwnerChanger
                 requestId={values.id!}
@@ -250,6 +256,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <SubmitButton
               asyncState={asyncState}
               label={isDisabled ? "common.save" : "navigation.createDocument"}
+            />
+            <ApproveAndRelease
+              id={values.id}
+              status={values.status}
             />
           </Grid>
         </Box>

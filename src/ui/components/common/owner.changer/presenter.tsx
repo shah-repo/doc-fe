@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 import React, { Fragment } from "react";
 import { Owner } from "../../../../state/ducks/common";
+import { AsyncState, AsyncStatus } from "../../../../state/types";
 import useDialog from "../../../hooks/useDialog";
 import { SelectOption } from "../../forms/fields/Select";
 import Text from "../../Text";
@@ -20,15 +21,16 @@ export interface OwnProps {
   employees: SelectOption[];
   updateOwner: any;
   currentOwner: Owner;
-  loading: boolean;
+  asyncState: AsyncState;
 }
 
 const OwnerChangerPresenter: React.FC<OwnProps> = ({
   employees,
   updateOwner,
   currentOwner,
-  loading,
+  asyncState,
 }) => {
+  const isActive = asyncState.status === AsyncStatus.Active;
   const dialog = useDialog();
   const openDialog = () => dialog.open();
   const preventPropagation = (event: React.FormEvent) =>
@@ -57,8 +59,8 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
             </Select>
           </FormControl>
           <Box py={1} display="flex" justifyContent="flex-end" alignItems="flex-end">
-            <Button disabled={loading} variant="contained" color="primary" onClick={() => updateOwner(owner)}>
-              {loading && <CircularProgress size={15} color="primary" />}
+            <Button disabled={isActive} variant="contained" color="primary" onClick={() => updateOwner(owner)}>
+              {isActive && <CircularProgress size={15} color="primary" />}
               <Text translation="change.owner.update" />
             </Button>
           </Box>
