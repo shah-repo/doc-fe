@@ -8,9 +8,13 @@ import CloneContainer from "./Clone.container";
 import { DocumentRevisionDisplayContainer, DocumentRevisionDisplayContainerProps } from "./DocumentRevisionDisplay.container";
 import DocumentRevisionUpdateContainer from "./DocumentRevisionUpdate.container";
 
+jest.mock('react-redux', () => ({
+  useSelector: jest.fn(fn => fn()),
+  connect: jest.fn(fn => fn());
+}));
+
 describe("DocumentRevisionDisplayContainer isNewVersion test", () => {
   const defaultProps: DocumentRevisionDisplayContainerProps = {
-    documentId: faker.random.uuid(),
     currentUserEmail: faker.internet.email(),
     loadDocumentRevisionAsyncState: ASYNC_DEFAULT_STATE,
     loadDocumentRevision: jest.fn(),
@@ -59,7 +63,6 @@ describe("DocumentRevisionDisplayContainer canEdit test", () => {
 
 describe("DocumentRevisionDisplayContainer canPreview test", () => {
 const defaultProps: DocumentRevisionDisplayContainerProps = {
-    documentId: faker.random.uuid(),
     currentUserEmail: faker.internet.email(),
     loadDocumentRevisionAsyncState: ASYNC_DEFAULT_STATE,
     loadDocumentRevision: jest.fn(),

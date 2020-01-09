@@ -8,6 +8,13 @@ import SummaryPresenter from "../../changeRequest/documentRevision/DocumentRevis
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
 import { Container, Props } from "./container";
 import Presenter from "./presenter";
+import { store } from "../../../state/store";
+import { Provider } from "react-redux";
+
+
+jest.mock('react-redux', () => ({
+  useSelector: jest.fn(fn => fn()),
+}));
 
 describe("Container tests", () => {
   const defaultProps: Props = {
@@ -22,7 +29,7 @@ describe("Container tests", () => {
   };
 
   const getWrapper = (props: Partial<Props>= {}) => shallow(
-    <Container {...defaultProps} {...props}/>,
+      <Container {...defaultProps} {...props}/>,
   );
 
   it("Props are set correctly", () => {
