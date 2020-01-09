@@ -26,7 +26,7 @@ import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaIte
 import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
 import { FBEditorElementType } from "../types/editor";
 
-export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<{}>> = {
+export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = {
   section: FBLabelEditor,
   subsection: FBLabelEditor,
   textfield: FBTextFieldEditor,
