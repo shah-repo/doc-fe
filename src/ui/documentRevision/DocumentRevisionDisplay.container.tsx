@@ -21,6 +21,8 @@ interface StateProps {
   currentUserEmail: string;
   loadDocumentRevisionAsyncState: AsyncState;
   documentRevision: DocumentRevision;
+  currentEmployeeId: string;
+
 }
 
 interface DispatchProps {
@@ -46,6 +48,7 @@ const mapStateToProps = (
   loadDocumentRevisionAsyncState: documentRevisionsSelectors.getLoadAsyncState(
     state,
   ),
+    currentEmployeeId: authSelectors.currentEmployeeId(state),
   documentRevision: documentRevisionsSelectors.getDocumentRevision(
     state,
     props.documentRevisionId,
@@ -63,6 +66,8 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<
   documentRevision,
   loadDocumentRevisionAsyncState,
   documentId,
+  currentEmployeeId,
+
 }) => {
   const loadDocumentRevisionAction = () =>
     loadDocumentRevision(documentRevisionId);
@@ -73,7 +78,6 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<
     }
   }, [documentRevisionId]);
 
-  const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
   const isCompanyAdmin = useSelector(getHasTag(GroupTag.COMPANY_ADMIN));
 
   const canChangeOwnerShip =
