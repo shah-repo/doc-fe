@@ -24,6 +24,8 @@ import {
   AttachmentIconDispatchProps,
 } from "./utils/types";
 import WatermarkContainer from "./watermark/container";
+import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
+import _ from "lodash";
 
 type DispatchProps = AttachmentIconDispatchProps;
 
@@ -64,14 +66,21 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const handleRemove = (attachment: Attachment) => () => {
     if (!form && !field) { return; }
     const filtered = (field!.value as Attachment[]).filter((a) => a.id !== attachment.id);
-    form!.setFieldValue(name, filtered);
 
     if (FBStore.mode === "form") {
-      FBStore.setValues({
+      let values = {
         ...FBStore.values,
         [name as string]: filtered,
-      });
+      };
+
+      if (_.isEmpty(filtered)) {
+        values = _.omit(values, name);
+      }
+
+      FBStore.setValues(values);
+      FBDynamicValidatorStore.validate();
     }
+    form!.setFieldValue(name, filtered);
   };
 
   const handleDownload = (attachment: Attachment, type?: AttachmentType) => () => {

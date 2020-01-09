@@ -20,8 +20,8 @@ export const withOnChange = <T extends FBInputProps>(
     ...props
   }: T) => {
 
-    function contextValue(): boolean {
-      if (!field && !form) {
+    function contextState(): boolean {
+      if (_.isUndefined(field) && _.isUndefined(form)) {
         return false;
       }
 
@@ -31,24 +31,44 @@ export const withOnChange = <T extends FBInputProps>(
       const formValue = _.get(form!.values, `context-${field!.name}`) as boolean;
       const contextChecked: boolean = fieldValue || formValue;
 
-      return (
+      const isContextActive = (
         contextChecked && includeContext &&
         (FBStore.mode === "form" || FBStore.mode === "preview")
       );
+      return isContextActive || false;
     }
 
     function storeValue(fieldName: string, value: any) {
+
+      // Context state check
+      const inputContextName = `input-context-${field!.name}`;
+
+      if (includeContext) {
+
+        switch (true) {
+          case (type !== "checkboxgroup" && value !== `context-${field!.name}`):
+          case (fieldName === `context-${field!.name}` && !value):
+            form!.setFieldValue(inputContextName, "");
+            FBStore.setValues(_.omit(FBStore.getValues(), inputContextName));
+        }
+      }
+
+      if (FBStore.mode === "form") {
+        let values = {
+          ...FBStore.values,
+          [fieldName]: value,
+        };
+  
+        if (_.isUndefined(value) || _.isEmpty(_.toString(value))) {
+          values = _.omit(values, fieldName);
+        }
+  
+        FBStore.setValues(values);
+        FBDynamicValidatorStore.validate();
+      }
+
       form!.setFieldValue(fieldName, value);
       afterChange && afterChange(fieldName, value, form!.values || {});
-      if (FBStore.mode !== "form") {
-        return;
-      }
-      FBStore.setValues({
-        ...FBStore.values,
-        [fieldName]: value,
-      });
-
-      FBDynamicValidatorStore.validate();
     }
 
     const handleChange = (
@@ -88,7 +108,7 @@ export const withOnChange = <T extends FBInputProps>(
         onChange: onChange || (handleChange),
         afterChange,
         includeContext,
-        showContext: contextValue(),
+        showContext: contextState(),
         contextLabel,
         type,
         field,

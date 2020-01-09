@@ -15,6 +15,7 @@ import FormProgress from "../../forms/FormProgress";
 import { withFormik } from "../../hoc/formik";
 import Presenter from "./presenter";
 import { AttachmentContainerProps, AttachmentFieldDispatchProps } from "./utils/types";
+import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
 
 type DispatchProps = AttachmentFieldDispatchProps;
 
@@ -46,14 +47,15 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
       }
       const attachments: Attachment[] = field!.value ? [...field!.value] : [];
       attachments.push(attachment!);
-      form!.setFieldValue(name, attachments);
 
       if (FBStore.mode === "form") {
         FBStore.setValues({
           ...FBStore.values,
           [name as string]: _.map(attachments, (attach) => _.pick(attach, ["id", "name", "s3link"])),
         });
+        FBDynamicValidatorStore.validate();
       }
+      form!.setFieldValue(name, attachments);
     },
   });
 
