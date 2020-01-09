@@ -1,4 +1,4 @@
-import { Box, Button } from "@material-ui/core";
+import { Box, Button, Grid } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as SuccessIcon } from "../../../assets/images/icon_success.svg";
 import { ReactComponent as WarningIcon } from "../../../assets/images/icon_warning.svg";
@@ -40,7 +40,9 @@ export const WatermarkFooterPresenter: React.FunctionComponent<Props> = ({
     <WarningIcon />;
 
   return (
-    <Box
+    <Grid
+      container={true}
+      direction="row"
       style={{
         position: "fixed",
         bottom: 0,
@@ -65,7 +67,7 @@ export const WatermarkFooterPresenter: React.FunctionComponent<Props> = ({
         {renderDownload}
         {renderDismiss}
       </Box>
-    </Box>
+    </Grid>
   );
 };
 
