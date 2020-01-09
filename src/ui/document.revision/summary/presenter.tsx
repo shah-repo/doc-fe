@@ -6,9 +6,6 @@ import {
 } from "@material-ui/core";
 import { Formik } from "formik";
 import React from "react";
-import { useSelector } from "react-redux";
-import { getHasTag } from "../../../common/utils/selectors";
-import { GroupTag } from "../../../state/ducks/auth/types";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import SummaryField from "../../common/summary/base";
@@ -30,6 +27,7 @@ import TrainingControl from "./training.control";
 
 interface OwnProps {
   canShowCreateVersionButton?: boolean;
+  canChangeOwnerShip?: boolean;
 }
 
 export type Props = OwnProps & DataProps<DocumentRevision> & WithStyles<typeof styles>;
@@ -49,12 +47,11 @@ export const Presenter: React.FunctionComponent<Props> = ({
     description,
     trainingRecords,
   },
+  canChangeOwnerShip,
   canShowCreateVersionButton,
 }) => {
   const onSubmit = () => void 0;
   FBDRStore.setValues(dataProp);
-
-  const isCompanyAdmin = useSelector(getHasTag(GroupTag.COMPANY_ADMIN));
 
   const renderTrainingControl = status === DocumentRevisionStatus.Released && (
     <TrainingControl
@@ -107,8 +104,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
          </Box>
        )}
       <Box flexDirection="row-reverse" display="flex" px={3}>
-        {isCompanyAdmin &&
-          status === DocumentRevisionStatus.Draft && (
+        {canChangeOwnerShip && (
             <OwnerChanger
               requestId={id}
               requestType={"document"}

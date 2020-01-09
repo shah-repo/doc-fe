@@ -1,10 +1,13 @@
 import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
+import { getHasTag } from "../../common/utils/selectors";
 import { authSelectors } from "../../state/ducks/auth";
+import { GroupTag } from "../../state/ducks/auth/types";
 import {
   DocumentRevision,
   documentRevisionsActions,
   documentRevisionsSelectors,
+  DocumentRevisionStatus,
 } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
@@ -70,6 +73,15 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<
     }
   }, [documentRevisionId]);
 
+  const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
+  const isCompanyAdmin = useSelector(getHasTag(GroupTag.COMPANY_ADMIN));
+
+  const canChangeOwnerShip =
+  documentRevision &&
+  documentRevision.status === DocumentRevisionStatus.Draft &&
+    (isCompanyAdmin ||
+      documentRevision.owner.id === currentEmployeeId);
+
   const canEdit =
     documentRevision &&
     !isNewVersion &&
@@ -89,11 +101,13 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<
         <DocumentRevisionUpdateContainer
           documentRevision={documentRevision}
           documentId={documentId}
+          canChangeOwnerShip={canChangeOwnerShip}
         />
       )}
       {canPreview && (
         <SummaryPresenter
           dataProp={documentRevision}
+          canChangeOwnerShip={canChangeOwnerShip}
           canShowCreateVersionButton={true}
         />
       )}

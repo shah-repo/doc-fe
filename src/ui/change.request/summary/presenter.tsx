@@ -2,13 +2,9 @@ import { Box, Grid, ListItem, WithStyles, withStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { filter } from "lodash";
 import React, { useMemo } from "react";
-import { useSelector } from "react-redux";
-import { getHasTag } from "../../../common/utils/selectors";
-import { GroupTag } from "../../../state/ducks/auth/types";
 import {
   ChangeRequest,
   changeRequestsActions,
-  ChangeRequestStatus,
 } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
 import { AsyncState } from "../../../state/types";
@@ -32,6 +28,7 @@ interface OwnProps extends DataProps<ChangeRequest> {
   canEdit: boolean;
   currentUserEmail: string;
   closeTask: typeof changeRequestsActions.closeTask;
+  canChangeOwnerShip: boolean;
 }
 
 export type Props = OwnProps &
@@ -45,13 +42,13 @@ export const Presenter: React.FunctionComponent<Props> = ({
   canEdit,
   currentUserEmail,
   closeTask,
+  canChangeOwnerShip,
   errors,
 }) => {
   const approvedApprovers = useMemo(
     () => filter(dataProp.approvals, ["status", "APPROVED"]),
     [dataProp],
   );
-  const isCompanyAdmin = useSelector(getHasTag(GroupTag.COMPANY_ADMIN));
 
   const approversFieldRenderer = () => (
     <Box>
@@ -112,13 +109,13 @@ export const Presenter: React.FunctionComponent<Props> = ({
         >
           {canEdit && <FormProgress asyncState={asyncState} />}
           {canEdit && <FormMessage asyncState={asyncState} />}
-          {canEdit && submitButtonRenderer()}
-          {isCompanyAdmin && dataProp!.state === ChangeRequestStatus.Draft && (
+          {canChangeOwnerShip && (
             <OwnerChanger
               requestId={dataProp!.id}
               requestType={"change_request"}
             />
           )}
+          {canEdit && submitButtonRenderer()}
           <ControlsContainer changeRequest={dataProp} errors={errors} />
         </Grid>
       </Box>

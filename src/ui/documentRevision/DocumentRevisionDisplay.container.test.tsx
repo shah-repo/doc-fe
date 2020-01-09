@@ -10,6 +10,7 @@ import DocumentRevisionUpdateContainer from "./DocumentRevisionUpdate.container"
 
 describe("DocumentRevisionDisplayContainer isNewVersion test", () => {
   const defaultProps: DocumentRevisionDisplayContainerProps = {
+    documentId: faker.random.uuid(),
     currentUserEmail: faker.internet.email(),
     loadDocumentRevisionAsyncState: ASYNC_DEFAULT_STATE,
     loadDocumentRevision: jest.fn(),
@@ -58,6 +59,7 @@ describe("DocumentRevisionDisplayContainer canEdit test", () => {
 
 describe("DocumentRevisionDisplayContainer canPreview test", () => {
 const defaultProps: DocumentRevisionDisplayContainerProps = {
+    documentId: faker.random.uuid(),
     currentUserEmail: faker.internet.email(),
     loadDocumentRevisionAsyncState: ASYNC_DEFAULT_STATE,
     loadDocumentRevision: jest.fn(),

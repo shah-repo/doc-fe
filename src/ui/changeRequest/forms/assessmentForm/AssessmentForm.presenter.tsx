@@ -63,7 +63,6 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
       setFieldValue("documentRevisions", documentRevisionsList);
     }
   }, [documentRevisionsList]);
-  console.log(changeRequest);
 
   const renderCrId = () =>
     changeRequest &&

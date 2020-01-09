@@ -1,14 +1,18 @@
 import { Grid, WithStyles, withStyles } from "@material-ui/core";
 import { Form, Formik, FormikErrors, FormikProps } from "formik";
 import React from "react";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { IotService } from "../../../common/utils/iot/mqttClient";
+import { getHasTag } from "../../../common/utils/selectors";
+import { authSelectors } from "../../../state/ducks/auth";
+import { GroupTag } from "../../../state/ducks/auth/types";
 import {
   ChangeRequest,
   changeRequestsActions,
+  ChangeRequestStatus,
 } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
@@ -44,6 +48,12 @@ export const Container: React.FunctionComponent<Props> = ({
   currentUserEmail,
   closeTask,
 }) => {
+  const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
+  const isCompanyAdmin = useSelector(getHasTag(GroupTag.COMPANY_ADMIN));
+  const canChangeOwnerShip =
+    dataProp!.state === ChangeRequestStatus.Draft &&
+    (currentEmployeeId === dataProp.owner.id || isCompanyAdmin);
+
   const [docRev, setDocRev] = React.useState<DocumentRevision | null>(null);
   const async = useAsync<ChangeRequest>();
   if (canEditChangeRequest({ dataProp, currentUserEmail })) {
@@ -57,7 +67,10 @@ export const Container: React.FunctionComponent<Props> = ({
 
   const iotService = IotService.getInstance();
   iotService.unsubscribeAll();
-  iotService.subscribeToTopic(`+/change_requests/${dataProp.crId}/updated`, notify);
+  iotService.subscribeToTopic(
+    `+/change_requests/${dataProp.crId}/updated`,
+    notify,
+  );
 
   const docRevSummary = (documentRevision: DocumentRevision) =>
     setDocRev(documentRevision);
@@ -74,7 +87,9 @@ export const Container: React.FunctionComponent<Props> = ({
     );
   };
 
-  const summaryPresenterRenderer = (props: FormikProps<ChangeRequestFormValues>) => (
+  const summaryPresenterRenderer = (
+    props: FormikProps<ChangeRequestFormValues>,
+  ) => (
     <Form>
       <Presenter
         dataProp={dataProp}
@@ -82,6 +97,7 @@ export const Container: React.FunctionComponent<Props> = ({
         canEdit={canEdit}
         currentUserEmail={currentUserEmail}
         closeTask={closeTask}
+        canChangeOwnerShip={canChangeOwnerShip}
         {...props}
       />
     </Form>
@@ -124,9 +140,7 @@ export const Container: React.FunctionComponent<Props> = ({
           />
         </Grid>
         <Grid item={true} xs={7} className={classes.root}>
-          {docRev && (
-            <DocumentRevisionLoader documentRevisionId={docRev.id} />
-          )}
+          {docRev && <DocumentRevisionLoader documentRevisionId={docRev.id} />}
           {!docRev && summaryFormikRenderer()}
         </Grid>
         <Grid item={true} xs={3} className={classes.sidebar}>
@@ -144,10 +158,7 @@ export const Container: React.FunctionComponent<Props> = ({
 
 Container.displayName = "ChangeRequestSummaryContainer";
 
-export default connect<{}, DispatchProps, OwnProps, ApplicationState>(
-  null,
-  {
-    save: changeRequestsActions.save,
-    closeTask: changeRequestsActions.closeTask,
-  },
-)(withStyles(styles)(Container));
+export default connect<{}, DispatchProps, OwnProps, ApplicationState>(null, {
+  save: changeRequestsActions.save,
+  closeTask: changeRequestsActions.closeTask,
+})(withStyles(styles)(Container));

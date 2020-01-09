@@ -55,6 +55,7 @@ interface OwnProps {
   documentRevision: DocumentRevision;
   proposedDocId?: string;
   loadDocumentProposedId?: typeof documentsActions.loadDocumentProposedId;
+  canChangeOwnerShip?: boolean;
 }
 
 export type DocumentRevisionFormContainerProps = OwnProps &
@@ -97,6 +98,7 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
   documentTypes,
   documentTypesById,
   document,
+  canChangeOwnerShip,
 }) => {
   const docTypes = useMemo(
     () =>
@@ -137,6 +139,7 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
         documentTypes={docTypes}
         otherDocumentTypes={otherTypes}
         documentTypesById={documentTypesById}
+        canChangeOwnerShip={canChangeOwnerShip!}
       />
     );
   };

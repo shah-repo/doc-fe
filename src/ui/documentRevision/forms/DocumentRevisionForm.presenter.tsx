@@ -3,12 +3,8 @@ import { FormikProps } from "formik";
 import _ from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
-import { useSelector } from "react-redux";
-import { getHasTag } from "../../../common/utils/selectors";
-import { GroupTag } from "../../../state/ducks/auth/types";
 import {
   DocumentRevision,
-  DocumentRevisionStatus,
   RevisionStageOptions,
 } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
@@ -57,6 +53,7 @@ export interface Props
   otherDocumentTypes: SelectOption[];
   documentTypesById: DocumentTypeByIdState;
   onDirtyFlagChange?: (dirty: boolean) => void;
+  canChangeOwnerShip: boolean;
 }
 
 export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
@@ -80,6 +77,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   documentTypes,
   documentTypesById,
   otherDocumentTypes,
+  canChangeOwnerShip,
 }) => {
   if (!values.id && !_.get(values, "document.documentType.id")) {
     FBDRStore.setMode("none");
@@ -92,7 +90,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     window.open(documentDetailsPath(documentId), "_blank");
   };
 
-  const isCompanyAdmin = useSelector(getHasTag(GroupTag.COMPANY_ADMIN));
   const isDisabled: boolean = _.get(initialValues, "id") !== undefined;
   const docId = _.get(initialValues, "document.docId");
   const useProposedDocId = (!docId || docId === "") && values.document;
@@ -244,8 +241,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         )}
         <Box mt={5}>
           <Grid container={true} alignItems="flex-end" direction="column">
-            {isCompanyAdmin &&
-             values.status === DocumentRevisionStatus.Draft && (
+            {canChangeOwnerShip && (
               <OwnerChanger
                 requestId={values.id!}
                 requestType={"document"}
