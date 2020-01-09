@@ -1,56 +1,49 @@
-import {
-  Box,
-  Grid,
-  withStyles,
-  WithStyles,
-} from "@material-ui/core";
-import { FormikProps } from "formik";
-import _ from "lodash";
-import { observer } from "mobx-react";
-import React from "react";
-import { useSelector } from "react-redux";
-import { getHasTag } from "../../../common/utils/selectors";
-import { GroupTag } from "../../../state/ducks/auth/types";
+import { Box, Grid, withStyles, WithStyles } from '@material-ui/core';
+import { FormikProps } from 'formik';
+import _ from 'lodash';
+import { observer } from 'mobx-react';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { getHasTag } from '../../../common/utils/selectors';
+import { GroupTag } from '../../../state/ducks/auth/types';
 import {
   DocumentRevision,
   RevisionStageOptions,
-} from "../../../state/ducks/documentRevisions";
-import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
-import { documentsActions } from "../../../state/ducks/documents";
-import { AsyncState } from "../../../state/types";
-import OwnerChanger from "../../components/common/owner.changer/container";
-import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
-import CheckboxField from "../../components/forms/fields/Checkbox";
-import InputField from "../../components/forms/fields/Input";
+} from '../../../state/ducks/documentRevisions';
+import { DocumentTypeByIdState } from '../../../state/ducks/documentRevisions/documentType';
+import { documentsActions } from '../../../state/ducks/documents';
+import { AsyncState } from '../../../state/types';
+import OwnerChanger from '../../components/common/owner.changer/container';
+import AutcompleteField from '../../components/forms/fields/Autocomplete/Autocomplete';
+import { OptionType } from '../../components/forms/fields/Autocomplete/types.js';
+import CheckboxField from '../../components/forms/fields/Checkbox';
+import InputField from '../../components/forms/fields/Input';
 import SelectField, {
   SelectOption,
-} from "../../components/forms/fields/Select";
-import TextEditorField from "../../components/forms/fields/TextEditor";
-import { required, validator } from "../../components/forms/fields/validators";
-import FormMessage from "../../components/forms/FormMessage";
-import FormProgress from "../../components/forms/FormProgress";
-import FormWrapper from "../../components/forms/FormWrapper";
-import PromptIfDirty from "../../components/forms/PromptIfDirty";
-import ScrollToError from "../../components/forms/ScrollToError";
-import SubmitButton from "../../components/forms/SubmitButton";
-import AttachmentsField from "../../document.revision/form/attachments";
-import Title from "../../document.revision/form/title";
-import {
-  documentDetailsPath,
-} from "../../document.revision/utils/paths";
-import FBWorkspace from "../../form.builder/main/workspace/FBWorkspace";
-import FBDRStore from "../../form.builder/stores/FBDRStore";
-import FBStore from "../../form.builder/stores/FBStore";
-import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
-import styles from "./DocumentRevisionForm.styles";
-import References from "./presenters/References";
-import RevisionTypeChange from "./presenters/RevisionTypeChange";
-import { DocumentRevisionFormValues } from "./types";
+} from '../../components/forms/fields/Select';
+import TextEditorField from '../../components/forms/fields/TextEditor';
+import { required, validator } from '../../components/forms/fields/validators';
+import FormMessage from '../../components/forms/FormMessage';
+import FormProgress from '../../components/forms/FormProgress';
+import FormWrapper from '../../components/forms/FormWrapper';
+import PromptIfDirty from '../../components/forms/PromptIfDirty';
+import ScrollToError from '../../components/forms/ScrollToError';
+import SubmitButton from '../../components/forms/SubmitButton';
+import AttachmentsField from '../../document.revision/form/attachments';
+import Title from '../../document.revision/form/title';
+import { documentDetailsPath } from '../../document.revision/utils/paths';
+import FBWorkspace from '../../form.builder/main/workspace/FBWorkspace';
+import FBDRStore from '../../form.builder/stores/FBDRStore';
+import FBStore from '../../form.builder/stores/FBStore';
+import DocumentRevisionOutputInfo from '../formBuilder/DocumentRevisionOutputInfo';
+import styles from './DocumentRevisionForm.styles';
+import References from './presenters/References';
+import RevisionTypeChange from './presenters/RevisionTypeChange';
+import { DocumentRevisionFormValues } from './types';
 
 export interface Props
   extends WithStyles<typeof styles>,
-  FormikProps<DocumentRevisionFormValues> {
+    FormikProps<DocumentRevisionFormValues> {
   asyncState: AsyncState;
   documentRevisions?: DocumentRevision[];
   availableReferences: OptionType[];
@@ -87,22 +80,24 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   documentTypesById,
   otherDocumentTypes,
 }) => {
-  if (!values.id && !_.get(values, "document.documentType.id")) {
-    FBDRStore.setMode("none");
+  if (!values.id && !_.get(values, 'document.documentType.id')) {
+    FBDRStore.setMode('none');
     if (setDocId) {
-      setDocId("");
+      setDocId('');
     }
   }
 
   const openReference = (documentId: string) => {
-    window.open(documentDetailsPath(documentId), "_blank");
+    window.open(documentDetailsPath(documentId), '_blank');
   };
 
   const isCompanyAdmin = useSelector(getHasTag(GroupTag.COMPANY_ADMIN));
-  const isDisabled: boolean = _.get(initialValues, "id") !== undefined;
-  const docId = _.get(initialValues, "document.docId");
-  const useProposedDocId = (!docId || docId === "") && values.document;
-  values.document!.docId = useProposedDocId ? proposedDocId : values.document!.docId;
+  const isDisabled: boolean = _.get(initialValues, 'id') !== undefined;
+  const docId = _.get(initialValues, 'document.docId');
+  const useProposedDocId = (!docId || docId === '') && values.document;
+  values.document!.docId = useProposedDocId
+    ? proposedDocId
+    : values.document!.docId;
 
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -116,7 +111,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     if (!values.document && !type) {
       return;
     }
-    const pattern = new RegExp("^" + type + "\\d{0," + type!.length + "}", "g");
+    const pattern = new RegExp('^' + type + '\\d{0,' + type!.length + '}', 'g');
 
     if (!pattern.test(value) || !setDocId) {
       return;
@@ -136,14 +131,15 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     handleChange(event);
   };
 
-  const renderTypeOfRevisionChange = showRevisionTypeChange &&
-    <RevisionTypeChange />;
+  const renderTypeOfRevisionChange = showRevisionTypeChange && (
+    <RevisionTypeChange />
+  );
 
   const renderRevisionStageDropdown = !isDisabled && (
     <SelectField
       name="revisionStage"
       label="document.revision.stage"
-      selectProps={{ inputProps: { id: "revisionStage" } }}
+      selectProps={{ inputProps: { id: 'revisionStage' } }}
       options={RevisionStageOptions}
       validate={validator(required)}
       includeEmpty={false}
@@ -190,7 +186,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           name="document.documentType.id"
           label="document.type"
           selectProps={{
-            inputProps: { id: "documentType", disabled: isDisabled },
+            inputProps: { id: 'documentType', disabled: isDisabled },
             onChange: handleTypeChange,
           }}
           options={documentTypes}
@@ -201,7 +197,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           name="document.docId"
           label="common.documentId"
           inputProps={{
-            id: "document.docId",
+            id: 'document.docId',
             value: values.document!.docId,
             disabled: isDisabled,
             onChange: handleDocIdChange,
@@ -212,7 +208,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           name="referenceTo"
           label="documentRevision.form.references"
           autocompleteProps={{
-            id: "referenceTo",
+            id: 'referenceTo',
             isMulti: true,
             closeMenuOnSelect: false,
           }}
@@ -232,7 +228,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               name="formTemplate.outputDocumentType.id"
               label="document.output.type"
               selectProps={{
-                inputProps: { id: "formTemplate.outputDocumentType" },
+                inputProps: { id: 'formTemplate.outputDocumentType' },
               }}
               options={otherDocumentTypes}
               includeEmpty={false}
@@ -241,17 +237,21 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           </Box>
         )}
         {FBStore.active && (
-          <Box mt={5}><FBWorkspace /></Box>
+          <Box mt={5}>
+            <FBWorkspace />
+          </Box>
         )}
         <Box mt={5}>
-          <Grid
-            container={true}
-            alignItems="flex-end"
-            direction="column"
-          >{isCompanyAdmin && <OwnerChanger requestId={values.document!.docId!} ownerId="dasdasd"/>}
+          <Grid container={true} alignItems="flex-end" direction="column">
+            {isCompanyAdmin && (
+              <OwnerChanger
+                requestId={values.document!.id!}
+                requestType={'document'}
+              />
+            )}
             <SubmitButton
               asyncState={asyncState}
-              label={isDisabled ? "common.save" : "navigation.createDocument"}
+              label={isDisabled ? 'common.save' : 'navigation.createDocument'}
             />
           </Grid>
         </Box>
