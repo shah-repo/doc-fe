@@ -8,16 +8,6 @@ import CloneContainer from "./Clone.container";
 import { DocumentRevisionDisplayContainer, DocumentRevisionDisplayContainerProps } from "./DocumentRevisionDisplay.container";
 import DocumentRevisionUpdateContainer from "./DocumentRevisionUpdate.container";
 
-jest.mock("react-redux", () => ({
-  useSelector: jest.fn((fn) => fn()),
-  createSelector: jest.fn((fn) => fn()),
-  connect: (mapStateToProps: any, mapDispatchToProps: any) => (ReactComponent: any) => ({
-    mapStateToProps,
-    mapDispatchToProps,
-    ReactComponent,
-  }),
-}));
-
 describe("DocumentRevisionDisplayContainer isNewVersion test", () => {
   const defaultProps: DocumentRevisionDisplayContainerProps = {
     currentUserEmail: faker.internet.email(),

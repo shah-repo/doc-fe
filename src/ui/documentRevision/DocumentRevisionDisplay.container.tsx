@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import { connect, useSelector } from "react-redux";
-import { getHasTag } from "../../common/utils/selectors";
+import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
 import { GroupTag } from "../../state/ducks/auth/types";
 import {
@@ -22,6 +21,7 @@ interface StateProps {
   loadDocumentRevisionAsyncState: AsyncState;
   documentRevision: DocumentRevision;
   currentEmployeeId: string;
+  isCompanyAdmin: boolean;
 
 }
 
@@ -48,6 +48,7 @@ const mapStateToProps = (
   loadDocumentRevisionAsyncState: documentRevisionsSelectors.getLoadAsyncState(
     state,
   ),
+    isCompanyAdmin: authSelectors.getHasTag(state, GroupTag.COMPANY_ADMIN),
     currentEmployeeId: authSelectors.currentEmployeeId(state),
   documentRevision: documentRevisionsSelectors.getDocumentRevision(
     state,
@@ -67,7 +68,7 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<
   loadDocumentRevisionAsyncState,
   documentId,
   currentEmployeeId,
-
+  isCompanyAdmin,
 }) => {
   const loadDocumentRevisionAction = () =>
     loadDocumentRevision(documentRevisionId);
@@ -77,8 +78,6 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<
       loadDocumentRevisionAction();
     }
   }, [documentRevisionId]);
-
-  const isCompanyAdmin = useSelector(getHasTag(GroupTag.COMPANY_ADMIN));
 
   const canChangeOwnerShip =
   documentRevision &&

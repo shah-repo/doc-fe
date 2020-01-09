@@ -9,10 +9,6 @@ import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.c
 import { Container, Props } from "./container";
 import Presenter from "./presenter";
 
-jest.mock("react-redux", () => ({
-  useSelector: jest.fn((fn) => fn()),
-}));
-
 describe("Container tests", () => {
   const defaultProps: Props = {
     currentUserEmail: faker.internet.email(),

@@ -1,12 +1,11 @@
 import { Grid, WithStyles, withStyles } from "@material-ui/core";
 import { Form, Formik, FormikErrors, FormikProps } from "formik";
 import React from "react";
-import { connect, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { IotService } from "../../../common/utils/iot/mqttClient";
-import { getHasTag } from "../../../common/utils/selectors";
 import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import {
@@ -35,11 +34,24 @@ import styles from "./styles";
 
 type DispatchProps = SummaryDispatchProps;
 
+interface StateProps {
+  currentEmployeeId: string;
+  isCompanyAdmin: boolean;
+}
+
 interface OwnProps extends DataProps<ChangeRequest> {
   currentUserEmail: string;
 }
 
-export type Props = OwnProps & DispatchProps & WithStyles<typeof styles>;
+export type Props = OwnProps &
+  DispatchProps &
+  StateProps &
+  WithStyles<typeof styles>;
+
+const mapStateToProps = (state: ApplicationState): StateProps => ({
+  currentEmployeeId: authSelectors.currentEmployeeId(state),
+  isCompanyAdmin: authSelectors.getHasTag(state, GroupTag.COMPANY_ADMIN),
+});
 
 export const Container: React.FunctionComponent<Props> = ({
   classes,
@@ -47,9 +59,9 @@ export const Container: React.FunctionComponent<Props> = ({
   save,
   currentUserEmail,
   closeTask,
+  currentEmployeeId,
+  isCompanyAdmin,
 }) => {
-  const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
-  const isCompanyAdmin = useSelector(getHasTag(GroupTag.COMPANY_ADMIN));
   const canChangeOwnerShip =
     dataProp!.state === ChangeRequestStatus.Draft &&
     (currentEmployeeId === dataProp.owner.id || isCompanyAdmin);
@@ -158,7 +170,10 @@ export const Container: React.FunctionComponent<Props> = ({
 
 Container.displayName = "ChangeRequestSummaryContainer";
 
-export default connect<{}, DispatchProps, OwnProps, ApplicationState>(null, {
-  save: changeRequestsActions.save,
-  closeTask: changeRequestsActions.closeTask,
-})(withStyles(styles)(Container));
+export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
+  mapStateToProps,
+  {
+    save: changeRequestsActions.save,
+    closeTask: changeRequestsActions.closeTask,
+  },
+)(withStyles(styles)(Container));
