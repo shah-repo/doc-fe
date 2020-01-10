@@ -29,15 +29,10 @@ export default makeStyles((theme: Theme) =>
         padding: theme.spacing(0.5, 0, 0, 0),
       },
     },
-    deactivateButtonEnabled: {
-      display: "block",
+    activeStatusButton: {
       width: "auto",
       color: "#6E09EA",
       borderColor: "#6E09EA",
-    },
-    deactivateButtonDisabled: {
-      color: "#4d4d4d",
-      borderColor: "#4d4d4d",
     },
     integrations: {
       marginTop: "50px",

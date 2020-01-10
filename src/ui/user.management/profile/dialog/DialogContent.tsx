@@ -1,5 +1,4 @@
 import { Box, Button, Typography } from "@material-ui/core";
-import classNames from "classnames";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { ReactComponent as SlackLogo } from "../../../../assets/images/slack_full_logo.svg";
@@ -69,11 +68,11 @@ export const DialogContent: React.FunctionComponent<Props> = ({
     },
   });
 
-  const deactivateUser = () =>
+  const handleActiveStatus = (activeStatus: boolean) =>
     dispatch(
       userManagementActions.editEmployeeActiveStatus(
         employeeId,
-        toEmployeeActiveStatusEditRequestBody(false),
+        toEmployeeActiveStatusEditRequestBody(activeStatus),
         async,
       ),
     );
@@ -100,24 +99,21 @@ export const DialogContent: React.FunctionComponent<Props> = ({
     </Box>
   );
 
-  const deactivateButtonRenderer = () => (
+  const activeStatusButtonRenderer = () => (
     <Box display="flex" alignSelf="flex-end" mt={-5} mr={2.5}>
       <Button
         variant="outlined"
-        disabled={!activeStatus}
-        className={classNames(classes.deactivateButtonEnabled, {
-          [classes.deactivateButtonDisabled]: !activeStatus,
-        })}
-        onClick={() => deactivateUser()}
+        className={classes.activeStatusButton}
+        onClick={() => handleActiveStatus(!activeStatus)}
       >
-        <Text translation="common.deactivate" />
+        <Text translation={activeStatus ? "common.deactivate" : "common.reactivate"} />
       </Button>
     </Box>
   );
 
   return (
     <React.Fragment>
-      {canManageUsers && deactivateButtonRenderer()}
+      {canManageUsers && activeStatusButtonRenderer()}
 
       <Box display="flex" alignSelf="center">
         <Typography variant="subtitle1" color="primary">
