@@ -24,7 +24,7 @@ import { ChangeRequestFormValues } from "../types.js";
 import styles from "./AssessmentForm.styles";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
 import AssessmentFormImplementationPlan from "./implementationPlan/Container";
-import AssessmentFormVoid from "./Void";
+import AssessmentFormVoidContainer from "./Void.container";
 
 interface Props
   extends WithStyles<typeof styles>,
@@ -124,7 +124,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
           justify="flex-end"
           direction="row"
         >
-          <AssessmentFormVoid changeRequest={changeRequest} />
+          <AssessmentFormVoidContainer changeRequest={changeRequest} />
           <AssessmentFormControlsContainer changeRequest={changeRequest} />
           <SubmitButton
             asyncState={asyncState}

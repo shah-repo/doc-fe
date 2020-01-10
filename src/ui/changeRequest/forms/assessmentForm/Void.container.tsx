@@ -3,12 +3,12 @@ import { ChangeRequest, changeRequestsActions } from "../../../../state/ducks/ch
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
-import AssessmentFormVoidPresenter from "./VoidPresenter";
+import AssessmentFormVoidPresenter from "./Void.presenter";
 
 interface Props {
   changeRequest: ChangeRequest | undefined;
 }
-const AssessmentFormVoid: React.FunctionComponent<Props> = ({
+const AssessmentFormVoidContainer: React.FunctionComponent<Props> = ({
   changeRequest,
 }) => {
   const dialog = useDialog();
@@ -42,4 +42,4 @@ const AssessmentFormVoid: React.FunctionComponent<Props> = ({
   );
 };
 
-export default AssessmentFormVoid;
+export default AssessmentFormVoidContainer;
