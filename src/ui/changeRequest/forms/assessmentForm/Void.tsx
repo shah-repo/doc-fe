@@ -1,12 +1,9 @@
-import { Box, Button } from "@material-ui/core";
 import React from "react";
 import { ChangeRequest, changeRequestsActions } from "../../../../state/ducks/changeRequest";
-import { AsyncStatus } from "../../../../state/types";
-import FormMessage from "../../../components/forms/FormMessage";
-import FormProgress from "../../../components/forms/FormProgress";
-import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
+import useDialog from "../../../hooks/useDialog";
+import AssessmentFormVoidPresenter from "./VoidPresenter";
 
 interface Props {
   changeRequest: ChangeRequest | undefined;
@@ -14,9 +11,15 @@ interface Props {
 const AssessmentFormVoid: React.FunctionComponent<Props> = ({
   changeRequest,
 }) => {
+  const dialog = useDialog();
   const appyTransitionAction = useActionCreator(changeRequestsActions.applyTransition);
   const async = useAsync();
-  const handleClick = () => {
+  const voidDocument = () => {
+    if (changeRequest!.documentRevisions.length > 0) {
+      dialog.open();
+      return;
+    }
+
     async.start(
       appyTransitionAction,
       changeRequest!.id,
@@ -31,20 +34,11 @@ const AssessmentFormVoid: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <>
-      <Box position="absolute" marginTop="-50px">
-        <FormMessage asyncState={async.asyncState} />
-        <FormProgress asyncState={async.asyncState} />
-      </Box>
-      <Button
-        variant="outlined"
-        color="primary"
-        onClick={handleClick}
-        disabled={async.asyncState.status === AsyncStatus.Active}
-      >
-        <Text translation="common.void" />
-      </Button>
-    </>
+    <AssessmentFormVoidPresenter
+      asyncState={async.asyncState}
+      voidDocument={voidDocument}
+      dialog={dialog}
+    />
   );
 };
 
