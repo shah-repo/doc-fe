@@ -8,6 +8,7 @@ import { FBTemplateSchema } from "../../types/store";
 import { withFormik } from "./withFormik";
 import { withOnChange } from "./withOnChange";
 import { withValidation } from "./withValidation";
+import { observer } from "mobx-react";
 
 export const withInput = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>,
@@ -65,9 +66,10 @@ export const withInput = <T extends FBInputProps>(
   };
 
   return (
+    observer(
     withValidation(
     withFormik<any, FBTemplateSchema | Dictionary<any>>(
     withOnChange(
       (props: T) => Comp(props)),
-  )));
+  ))));
 };
