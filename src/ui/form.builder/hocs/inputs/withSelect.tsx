@@ -1,3 +1,4 @@
+import { Chip } from "@material-ui/core";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import _ from "lodash";
 import React from "react";
@@ -12,6 +13,7 @@ export const withSelect = <T extends FBSelectProps>(
       options,
       optionLabelKey,
       optionValueKey,
+      multiple,
       ...props
     }: T) => {
 
@@ -24,9 +26,19 @@ export const withSelect = <T extends FBSelectProps>(
       </MenuItem>
     ));
 
+    const renderValue = (selected: string[]) => multiple && (
+      <div>
+        {(selected as string[]).map((value) => (
+          <Chip key={value} label={value} />
+        ))}
+      </div>
+    );
+
     return Component({
       ...(props as T),
       menuItems,
+      renderValue,
+      multiple,
     });
   });
 };

@@ -17,6 +17,7 @@ export const withOnChange = <T extends FBInputProps>(
     field,
     form,
     name,
+    multiple,
     ...props
   }: T) => {
 
@@ -97,6 +98,13 @@ export const withOnChange = <T extends FBInputProps>(
         case "datepicker":
           value = ev as unknown as string;
           break;
+        // case "select":
+        //   if (multiple) {
+        //     const selectValue: string[] = _.get(form, `values.${name}`) as string[] || [];
+        //     value = selectValue.push(_.get(ev.target, "value"));
+        //     // value = _.get(ev.target, "value") as string[];
+        //     break;
+        //   }
         default:
           value = _.get(ev.target, "value");
       }
@@ -114,6 +122,7 @@ export const withOnChange = <T extends FBInputProps>(
         field,
         form,
         name,
+        multiple,
       });
     };
 };

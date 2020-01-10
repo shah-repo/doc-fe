@@ -57,6 +57,7 @@ export type FBInputProps =
   & Omit<FBFormikFieldProps, "name">
   & FBLabelProps
   & Pick<FBContextProps, "includeContext" | "showContext" | "contextLabel">
+  & Pick<SelectProps, "renderValue">
   // & Pick<FBValidatorProps, "rules" | "applicableOn">
   & Pick<FBActionContainerProps, "actions">
   & Pick<FBOptionProps, "optionId" | "options">

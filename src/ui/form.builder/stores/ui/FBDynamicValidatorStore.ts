@@ -7,6 +7,7 @@ import {
   FBValidatorTemplate,
 } from "../../types/validation/validatorDialog";
 import FBStore from "./FBStore";
+import FBValidatorStore from "./FBValidatorStore";
 
 export class FormBuilderDynamicValidatorStore {
   @computed get dynamicValidator(): FBValidatorConfigProps | undefined {
@@ -81,8 +82,17 @@ export class FormBuilderDynamicValidatorStore {
   }
 
   @action public validate = () => {
-    // this.registerValidators();
+    if (FBStore.mode !== "form") {
+      return;
+    }
+
+    // Clear helper text
     this.helperText = {};
+
+    // UI validator
+    FBValidatorStore.uiValidate();
+
+    // Dynamic validator
     const rules = this.generateRules();
 
     const validator = new Validator(FBStore.getValidationValues(), rules);

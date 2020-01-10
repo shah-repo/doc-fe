@@ -6,9 +6,10 @@ import FBInput from "../common/FBInput";
 
 const FBSelect: React.FunctionComponent<FBSelectProps> = ({
   menuItems,
+  renderValue,
   ...props
 }) => (
-  <FBInput {...props} type="select">
+  <FBInput {...props} {...{ renderValue }} type="select">
     <Select variant="outlined">
       {menuItems}
     </Select>
