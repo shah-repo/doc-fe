@@ -1,5 +1,6 @@
 import { Dictionary } from "lodash";
 import _ from "lodash";
+import { observer } from "mobx-react";
 import React from "react";
 import { FBFormValues } from "../../defaults/formik";
 import FBDynamicValidatorStore from "../../stores/ui/FBDynamicValidatorStore";
@@ -8,7 +9,6 @@ import { FBTemplateSchema } from "../../types/store";
 import { withFormik } from "./withFormik";
 import { withOnChange } from "./withOnChange";
 import { withValidation } from "./withValidation";
-import { observer } from "mobx-react";
 
 export const withInput = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>,
