@@ -96,7 +96,8 @@ export class FormBuilderValidatorStored {
     }
     const RemoteValidator = _.get(window, "EnlilRemoteValidators.validator");
     const rules = this.getSchemaReleasedRules();
-    const values = FBStore.getValues();
+    const values = FBStore.getUIValues();
+    //FBStore.getValues();
 
     const validator = new RemoteValidator(values, rules);
     if (validator.fails()) {

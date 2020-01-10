@@ -100,6 +100,22 @@ export class FormBuilderStore {
     };
   }
 
+  @action public getUIValues = () => {
+    const initialValues: Dictionary<any> = {};
+    const uiValues: Dictionary<any> = {};
+    _.map(this.getSchema(), (schemaItem) => {
+      initialValues[schemaItem.name || ""] = FBFormValues[schemaItem.type || ""];
+    });
+
+    _.map(this.getValues(), (v, k) => {
+      uiValues[k] = v ? _.toString(v) : v;
+    });
+    return {
+      ...initialValues,
+      ...uiValues,
+    };
+  }
+
   @action public getValidationValues = () => {
     const values = {};
     _.map(this.getValues(), (v, k) => {
