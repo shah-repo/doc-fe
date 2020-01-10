@@ -8,13 +8,17 @@ import {
   attachmentsActions,
 } from "../../../../state/ducks/attachments";
 import { ApplicationState } from "../../../../state/reducers";
+import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../../form.builder/stores/ui/FBStore";
 import useAsync from "../../../hooks/useAsync";
 import FormMessage from "../../forms/FormMessage";
 import FormProgress from "../../forms/FormProgress";
 import { withFormik } from "../../hoc/formik";
 import Presenter from "./presenter";
-import { AttachmentContainerProps, AttachmentFieldDispatchProps } from "./utils/types";
+import {
+  AttachmentContainerProps,
+  AttachmentFieldDispatchProps,
+} from "./utils/types";
 
 type DispatchProps = AttachmentFieldDispatchProps;
 
@@ -27,12 +31,15 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
   form,
   ...other
 }) => {
-
   const handleUpload = (files: File[]) => {
-    if (files.length === 0) { return; }
+    if (files.length === 0) {
+      return;
+    }
 
     const file = files.pop();
-    if (!file) { return; }
+    if (!file) {
+      return;
+    }
 
     async.start(upload, file, async);
     handleUpload(files);
@@ -40,36 +47,44 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
 
   const async = useAsync<AttachmentModel>({
     onSuccess: (attachment?: AttachmentModel) => {
-      if (!attachment && !form && !field) { return; }
+      if (!attachment && !form && !field) {
+        return;
+      }
       if (!multiple) {
         return form!.setFieldValue(name, attachment);
       }
       const attachments: Attachment[] = field!.value ? [...field!.value] : [];
       attachments.push(attachment!);
-      form!.setFieldValue(name, attachments);
 
       if (FBStore.mode === "form") {
         FBStore.setValues({
           ...FBStore.values,
-          [name as string]: _.map(attachments, (attach) => _.pick(attach, ["id", "name", "s3link"])),
+          [name as string]: _.map(attachments, (attach) =>
+            _.pick(attach, ["id", "name", "s3link"]),
+          ),
         });
+        FBDynamicValidatorStore.validate();
       }
+      form!.setFieldValue(name, attachments);
     },
   });
 
   const onChange = (event: React.FormEvent<HTMLInputElement>) => {
     let isUserAlerted = false;
-    const filteredFiles = Array.from(event.currentTarget.files || []).filter((file) => {
-      const type = file.name.split(".").pop();
+    const filteredFiles = Array.from(event.currentTarget.files || []).filter(
+      (file) => {
+        const type = file.name.split(".").pop();
 
-      if (type === "doc") {
-        // TODO: update react-intl and make use of hooks to translate this message
-        !isUserAlerted && alert(".doc files are not accepted. Please use .docx");
-        isUserAlerted = true;
-        return false;
-      }
-      return true;
-    });
+        if (type === "doc") {
+          // TODO: update react-intl and make use of hooks to translate this message
+          !isUserAlerted &&
+            alert(".doc files are not accepted. Please use .docx");
+          isUserAlerted = true;
+          return false;
+        }
+        return true;
+      },
+    );
 
     if (filteredFiles.length === 0) {
       return;

@@ -39,13 +39,13 @@ export const withEditorRenderer =
     const values = propsByType();
     let name = "";
     if (_.isObject(props.values) && _.has(props.values, "label")) {
-      name = _.snakeCase(props.values.label as string);
+      name = _.kebabCase(props.values.label as string);
     }
     // const item = schemaItem();
     const schema: FBTemplateSchema = {
       type,
       index,
-      name: `${name}_${uniqid()}`,
+      name: `${name}-${uniqid()}`,
       ...values,
       rules: FBValidatorStore.getRules(),
       // applicableOn: FBValidatorStore.applicableOn ? [FBValidatorTrigger.ON_STATE_TO_IN_REVIEW] : [],

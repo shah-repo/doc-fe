@@ -27,7 +27,7 @@ export class FormBuilderDynamicValidatorStore {
         return true;
       }
       catch(error) {
-        alert(error);
+        return false;
       }
     }
   `);
@@ -90,7 +90,7 @@ export class FormBuilderDynamicValidatorStore {
     if (validator.fails()) {
       const errors = validator.errors.all();
       _.map(errors, (v, k) => {
-        this.helperText[k] = _.join(v, "\n");
+        this.setHelperText(k, _.join(v, "\n"));
       });
     }
   }
@@ -132,6 +132,13 @@ export class FormBuilderDynamicValidatorStore {
     return _.get(this.helperText, fieldName);
   }
 
+  @action public setHelperText = (fieldName: string, text: string) => {
+    this.helperText = {
+      ...this.helperText,
+      [fieldName]: text,
+    };
+  }
+
   @action private generateRules = (): Dictionary<string> => {
     const rules = {};
     _.map(FBStore.getSchema(), (schemaItem) => {
@@ -157,7 +164,7 @@ export class FormBuilderDynamicValidatorStore {
       interpolation += `${_.padStart(`<%= var${index} %>`, 17)}\n`;
 
       // Set obj for tpl values
-      let varName = _.dropRight(_.split(variable, "_")).join(" ");
+      let varName = _.dropRight(_.split(variable, "-")).join(" ");
       varName = _.camelCase(varName);
       const isValueVar = _.includes(variable, "<-val->");
       const varValue = isValueVar ? `"${variable}"` : `req["${variable}"]`;
