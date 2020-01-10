@@ -26,6 +26,7 @@ export const withAutocomplete = <T extends FBAutocompleteProps>(
       filterOptions,
       form,
       field,
+      afterChange,
       ...props
     }: T) => {
       let indicators: { path: string; renderKey: string } | undefined;
@@ -59,9 +60,10 @@ export const withAutocomplete = <T extends FBAutocompleteProps>(
           return;
         }
         value = _.isArray(value) ? _.map(value, "id") : _.get(value, "id");
-
+        form!.setFieldValue(field!.name, value);
+        afterChange && afterChange(field!.name, value, form!.values || {});
         if (FBStore.mode !== "form") {
-          return form!.setFieldValue(field!.name, value);
+          return;
         }
         FBStore.setValues({
           ...FBStore.values,
