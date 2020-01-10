@@ -39,7 +39,6 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
     getSlackUrl,
     isSlackIntegrationEnabled,
     slackTeamId,
-    employees,
 }) => {
     const [realUser, setRealUser] = useState<any>({ user: {}, groups: []});
     useEffect(() => {

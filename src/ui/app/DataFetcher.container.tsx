@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getHasTag } from "../../common/utils/selectors";
 import { authActions, authSelectors } from "../../state/ducks/auth";
 import { GroupTag } from "../../state/ducks/auth/types";
-import { companyActions } from "../../state/ducks/company";
 import { documentTypeActions } from "../../state/ducks/documentRevisions/documentType";
 import { userManagementActions } from "../../state/ducks/userManagement";
 
@@ -14,7 +13,7 @@ const DataFetcherContainer: React.FunctionComponent = () => {
 
   useEffect(() => {
     dispatch(documentTypeActions.loadList());
-    dispatch(companyActions.queryCompany(employeeId));
+    dispatch(authActions.getSessionDetails(employeeId));
     dispatch(authActions.loadUserGroups());
   }, []);
 
