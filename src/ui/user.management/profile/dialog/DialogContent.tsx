@@ -1,7 +1,8 @@
 import { Box, Button, Typography } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { ReactComponent as SlackLogo } from "../../../../assets/images/slack_full_logo.svg";
+import { attachmentsActions } from "../../../../state/ducks/attachments";
 import { EmployeeEditRequestBody } from "../../../../state/ducks/auth/types";
 import {
   GetEmployeeResponse,
@@ -23,6 +24,7 @@ interface OwnProps {
   editCurrentEmployee: (values: EmployeeEditRequestBody) => void;
   callbackUpdateGroups?: (values: GetEmployeeResponse) => void;
   callbackUpdateActiveStatus?: (values: GetEmployeeResponse) => void;
+  callbackUpdateWithUpload?: (avatar: string, name: string) => void;
   showEditUser: boolean;
   showEdit: () => void;
   closeEdit: () => void;
@@ -34,6 +36,10 @@ interface OwnProps {
   slackUserId: string;
   email: string;
   activeStatus: boolean;
+  file: File | null;
+  setFile: (value: File | null) => void;
+  setUserInfo: (values: EmployeeEditRequestBody) => void;
+  userId?: string;
 }
 
 type Props = OwnProps;
@@ -56,11 +62,39 @@ export const DialogContent: React.FunctionComponent<Props> = ({
   slackUserId,
   email,
   activeStatus,
+  file,
+  setFile,
+  setUserInfo,
+  userId,
+  callbackUpdateWithUpload,
 }) => {
   const classes = styles();
   const dispatch = useDispatch();
+  const [avatarURL, setAvatarURL] = useState<string>("");
 
-  const async = useAsync({
+  const asyncS3link = useAsync({
+    onSuccess: (data: any) => {
+      setAvatarURL((data.url).substr(0, (data.url).indexOf("?")));
+      if (userId && file) {
+        dispatch(attachmentsActions.uploadAvatar(data.url, userId, userInfo.name, file, asyncUploadAvatar ));
+      }
+      if (!userId && file) {
+        dispatch(attachmentsActions.uploadAvatar(data.url, null, userInfo.name, file, asyncUploadAvatar ));
+      }
+      setFile(null);
+      setUserInfo({...userInfo, avatar: avatarURL});
+    },
+  });
+
+  const asyncUploadAvatar = useAsync({
+    onSuccess: (data: any) => {
+      if (callbackUpdateWithUpload) {
+        callbackUpdateWithUpload(avatarURL, userInfo.name);
+      }
+    },
+  });
+
+  const asyncActiveStatus = useAsync({
     onSuccess: (data: any) => {
       if (callbackUpdateActiveStatus) {
         callbackUpdateActiveStatus(data);
@@ -73,9 +107,21 @@ export const DialogContent: React.FunctionComponent<Props> = ({
       userManagementActions.editEmployeeActiveStatus(
         employeeId,
         toEmployeeActiveStatusEditRequestBody(activeStatus),
-        async,
+        asyncActiveStatus,
       ),
     );
+
+  const updateProfile = () => {
+    if (!file) {
+      editCurrentEmployee(userInfo);
+    }
+    if (file && userId) {
+      dispatch(attachmentsActions.requestAvatarS3link(file.name, asyncS3link));
+    }
+    if (file && !userId) {
+      dispatch(attachmentsActions.requestAvatarS3link(file.name, asyncS3link));
+    }
+  };
 
   const updateProfileButtonsRenderer = () => (
     <Box display="flex" justifyContent="flex-end">
@@ -90,7 +136,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
         variant="contained"
         style={{ width: "auto", color: "white", backgroundColor: "#6E09EA" }}
         onClick={() => {
-          editCurrentEmployee(userInfo);
+          updateProfile();
           closeEdit();
         }}
       >

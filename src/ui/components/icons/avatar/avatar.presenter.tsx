@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-/* import AvatarUploadContainer from "../../common/avatar.field/container";*/
+import AvatarUploadContainer from "../../common/avatar.field/container";
 import styles from "./avatar.styles";
 
 interface OwnProps {
@@ -8,6 +8,7 @@ interface OwnProps {
   showEditUser: boolean;
   previewAvatar: string;
   setPreviewAvatar: (value: string) => void;
+  setFile: (value: File) => void;
 }
 
 type Props = OwnProps;
@@ -17,6 +18,7 @@ const AvatarPresenter: React.FunctionComponent<Props> = ({
   showEditUser,
   previewAvatar,
   setPreviewAvatar,
+  setFile,
 }) => {
   const classes = styles();
 
@@ -34,7 +36,11 @@ const AvatarPresenter: React.FunctionComponent<Props> = ({
         className={classes.container}
       >
         {avatarRenderer()}
-      {/*<AvatarUploadContainer setPreviewAvatar={setPreviewAvatar} showEditUser={showEditUser}/>*/}
+        <AvatarUploadContainer
+          setPreviewAvatar={setPreviewAvatar}
+          showEditUser={showEditUser}
+          setFile={setFile}
+        />
       </Box>
     </Box>
   );

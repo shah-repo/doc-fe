@@ -39,22 +39,23 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
     getSlackUrl,
     isSlackIntegrationEnabled,
     slackTeamId,
-    employees,
 }) => {
+    const canManageUsers = useSelector(getHasTag(GroupTag.USER_MANAGEMENT));
+    const userSlackId =  useSelector(authSelectors.currentSlackUserId);
+
     const [realUser, setRealUser] = useState<any>({ user: {}, groups: []});
+    const [showEditUser, setEditUser] = useState(false);
+    const [previewAvatar, setPreviewAvatar] = useState("");
+
+    const showEdit = () => setEditUser(true);
+    const closeEdit = () => setEditUser(false);
+
     useEffect(() => {
         setRealUser(selectedEmployee);
     }, [selectedEmployee.id]);
+
     const { groups, id, active } = realUser;
     const { name, avatar, email } = realUser.user;
-    const userSlackId =  useSelector(authSelectors.currentSlackUserId);
-
-    const [showEditUser, setEditUser] = useState(false);
-    const showEdit = () => setEditUser(true);
-    const closeEdit = () => setEditUser(false);
-    const [previewAvatar, setPreviewAvatar] = useState("");
-
-    const canManageUsers = useSelector(getHasTag(GroupTag.USER_MANAGEMENT));
 
     const employeeGroups: OptionType[] = groups.map((group: any) => ({
         value: group.id,
@@ -85,6 +86,17 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
         setRealUser({
             ...realUser,
             active: employee.active,
+        });
+    };
+
+    const callbackUpdateWithUpload = (avatar: string, name: string) => {
+        setRealUser({
+            ...realUser,
+            user: {
+                ...realUser.user,
+                avatar,
+                name,
+            },
         });
     };
 
@@ -131,6 +143,8 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
             setPreviewAvatar={setPreviewAvatar}
             callbackUpdateActiveStatus={callbackUpdateActiveStatus}
             activeStatus={active}
+            userId={realUser.user.id}
+            callbackUpdateWithUpload={callbackUpdateWithUpload}
         />
     );
 };
