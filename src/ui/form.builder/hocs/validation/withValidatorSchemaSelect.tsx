@@ -26,7 +26,7 @@ export const withValidatorSchemaSelect = <
               {...schemaItemProps}
               label="Has value:"
               afterChange={onItemChange}
-              name={`${props.name}-item`}
+              name={value}
             />,
           );
         }
