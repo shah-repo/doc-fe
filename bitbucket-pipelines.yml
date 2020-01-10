@@ -92,7 +92,6 @@ pipelines:
     deploy-to-dev:
       - step: *DEPLOY_TO_DEVELOP_1
     deploy-to-dev2:
-      - step: *RUN_LINT_AND_TESTS
       - step: *DEPLOY_TO_DEVELOP_2
     deploy-to-demo:
       - step: *RUN_LINTER
