@@ -111,7 +111,7 @@ export class FormBuilderValidatorStored {
     const values = FBStore.getUIValues();
 
     const validator = new RemoteValidator(values, rules);
-
+    validator.setAttributeNames(FBStore.getValidationAttribute());
     function passes() {
       // Validation passed
     }
