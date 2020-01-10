@@ -13,7 +13,6 @@ import {
 import React, { Fragment } from "react";
 import { Owner } from "../../../../state/ducks/common";
 import { AsyncState, AsyncStatus } from "../../../../state/types";
-import useDialog from "../../../hooks/useDialog";
 import { SelectOption } from "../../forms/fields/Select";
 import Text from "../../Text";
 
@@ -22,6 +21,9 @@ export interface OwnProps {
   updateOwner: any;
   currentOwner: Owner;
   asyncState: AsyncState;
+  isDialogOpen: boolean;
+  closeDialog: () => void;
+  openDialog: () => void;
 }
 
 const OwnerChangerPresenter: React.FC<OwnProps> = ({
@@ -29,10 +31,12 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
   updateOwner,
   currentOwner,
   asyncState,
+  isDialogOpen,
+  closeDialog,
+  openDialog,
 }) => {
   const isActive = asyncState.status === AsyncStatus.Active;
-  const dialog = useDialog();
-  const openDialog = () => dialog.open();
+
   const preventPropagation = (event: React.FormEvent) =>
     event.stopPropagation();
 
@@ -43,9 +47,9 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
 
   const dialogRenderer = () => (
     <Dialog
-      open={dialog.isOpen}
+      open={isDialogOpen}
       onSubmit={preventPropagation}
-      onClose={dialog.close}
+      onClose={closeDialog}
     >
       <DialogTitle><Text  translation="change.owner" /></DialogTitle>
       <DialogContent style={{ width: 500 }}>

@@ -7,6 +7,7 @@ import {
 import { ApplicationState } from "../../../../state/reducers";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
+import useDialog from "../../../hooks/useDialog";
 import { SelectOption } from "../../forms/fields/Select";
 import { getUrlandActions } from "./helpers";
 import OwnerChangerPresenter from "./presenter";
@@ -20,13 +21,24 @@ const OwnerChangerContainer: React.FC<OwnProps> = ({
   requestId,
   requestType,
 }) => {
+
+  const dialog = useDialog();
+  const openDialog = () => {
+    getEmployees.reset();
+    dialog.open();
+  };
+
   const [employees, setEmployees] = useState<SelectOption[]>([]);
-  const [action, selector] = getUrlandActions(requestType, requestId);
-  const actionCreator = useActionCreator(action);
+  const [action, selector] = getUrlandActions(requestType);
+  const createdAction = useActionCreator(action);
   const current = useSelector((state: ApplicationState) =>
     selector(state, requestId),
   );
-  const asyncUpdateOwner = useAsync();
+  const asyncUpdateOwner = useAsync({
+    onSuccess: () => {
+      dialog.close();
+    },
+  });
 
   const updateOwner = (ownerId) => {
     const ownerData = {
@@ -35,7 +47,7 @@ const OwnerChangerContainer: React.FC<OwnProps> = ({
       },
     };
     asyncUpdateOwner.start(
-      actionCreator,
+      createdAction,
       requestId,
       ownerData,
       asyncUpdateOwner,
@@ -65,6 +77,9 @@ const OwnerChangerContainer: React.FC<OwnProps> = ({
       employees={employees}
       updateOwner={updateOwner}
       asyncState={asyncUpdateOwner.asyncState}
+      isDialogOpen={dialog.isOpen}
+      openDialog={openDialog}
+      closeDialog={dialog.close}
     />
   );
 };
