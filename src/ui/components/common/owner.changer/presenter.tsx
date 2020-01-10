@@ -1,19 +1,19 @@
 import {
   Box,
   Button,
-  CircularProgress,
   Dialog,
   DialogContent,
   DialogTitle,
   FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
 } from "@material-ui/core";
+import { Form, Formik } from "formik";
 import React, { Fragment } from "react";
 import { Owner } from "../../../../state/ducks/common";
-import { AsyncState, AsyncStatus } from "../../../../state/types";
-import { SelectOption } from "../../forms/fields/Select";
+import { AsyncState } from "../../../../state/types";
+import SelectField, { SelectOption } from "../../forms/fields/Select";
+import FormMessage from "../../forms/FormMessage";
+import FormProgress from "../../forms/FormProgress";
+import SubmitButton from "../../forms/SubmitButton";
 import Text from "../../Text";
 
 export interface OwnProps {
@@ -35,15 +35,32 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
   closeDialog,
   openDialog,
 }) => {
-  const isActive = asyncState.status === AsyncStatus.Active;
-
   const preventPropagation = (event: React.FormEvent) =>
     event.stopPropagation();
 
-  const [owner, setOwner] = React.useState(currentOwner.id);
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setOwner(event.target.value as string);
-  };
+  const renderForm = () => (
+    <Box py={4}>
+      <Form>
+        <FormProgress asyncState={asyncState} />
+        <FormMessage asyncState={asyncState} />
+        <FormControl className="form-control" style={{ width: "100%" }}>
+          <SelectField
+            name="employee"
+            includeEmpty={false}
+            options={employees}
+          />
+        </FormControl>
+        <Box
+          py={1}
+          display="flex"
+          justifyContent="flex-end"
+          alignItems="flex-end"
+        >
+          <SubmitButton asyncState={asyncState} label="change.owner.update" />
+        </Box>
+      </Form>
+    </Box>
+  );
 
   const dialogRenderer = () => (
     <Dialog
@@ -51,31 +68,26 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
       onSubmit={preventPropagation}
       onClose={closeDialog}
     >
-      <DialogTitle><Text  translation="change.owner" /></DialogTitle>
+      <DialogTitle>
+        <Text translation="change.owner" />
+      </DialogTitle>
       <DialogContent style={{ width: 500 }}>
-        <Box py={4}>
-          <FormControl className="form-control" style={{ width: "100%" }}>
-            <InputLabel id="employee-select"><Text translation="common.employees" /></InputLabel>
-            <Select name="employees" defaultValue={owner} onChange={handleChange}>
-              {employees.map((option) => (
-                <MenuItem key={option.value} value={option.value}> {option.text}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <Box py={1} display="flex" justifyContent="flex-end" alignItems="flex-end">
-            <Button disabled={isActive} variant="contained" color="primary" onClick={() => updateOwner(owner)}>
-              {isActive && <CircularProgress size={15} color="primary" />}
-              <Text translation="change.owner.update" />
-            </Button>
-          </Box>
-        </Box>
+        <Formik
+          initialValues={{ employee: currentOwner.id }}
+          onSubmit={updateOwner}
+        >
+          {renderForm}
+        </Formik>
       </DialogContent>
     </Dialog>
   );
 
   return (
     <Fragment>
-      <Button variant="outlined" onClick={openDialog}> <Text translation="change.owner" /></Button>
+      <Button variant="outlined" onClick={openDialog}>
+        {" "}
+        <Text translation="change.owner" />
+      </Button>
       {dialogRenderer()}
     </Fragment>
   );

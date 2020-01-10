@@ -35,15 +35,15 @@ const OwnerChangerContainer: React.FC<OwnProps> = ({
     selector(state, requestId),
   );
   const asyncUpdateOwner = useAsync({
-    onSuccess: () => {
+    onSuccess: (response) => {
       dialog.close();
     },
   });
 
-  const updateOwner = (ownerId) => {
+  const updateOwner = (values) => {
     const ownerData = {
       owner: {
-        id: ownerId,
+        id: values.employee,
       },
     };
     asyncUpdateOwner.start(
