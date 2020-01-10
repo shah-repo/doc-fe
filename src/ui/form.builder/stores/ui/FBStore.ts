@@ -124,6 +124,18 @@ export class FormBuilderStore {
     return values;
   }
 
+  @action public getValidationAttribute = () => {
+    const attributes: Dictionary<string> = {};
+    _.map(this.getSchema(), (schemaItem) => {
+      attributes[schemaItem.name || ""] =
+          (schemaItem.label as string) ||
+          schemaItem.placeholder ||
+          schemaItem.name ||
+          "";
+    });
+    return attributes;
+  }
+
   @action public setValues = (values: Dictionary<any> | undefined) => {
     this.values = values || {};
   }

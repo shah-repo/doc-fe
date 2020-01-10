@@ -109,15 +109,21 @@ export class FormBuilderValidatorStored {
     const RemoteValidator = _.get(window, "EnlilRemoteValidators.validator");
     const rules = this.getSchemaReleasedRules();
     const values = FBStore.getUIValues();
-    // FBStore.getValues();
 
     const validator = new RemoteValidator(values, rules);
-    if (validator.fails()) {
+    validator.setAttributeNames(FBStore.getValidationAttribute());
+    function passes() {
+      // Validation passed
+    }
+
+    function fails() {
       const errors = validator.errors.all();
       _.map(errors, (v, k) => {
         FBDynamicValidatorStore.setHelperText(k, _.join(v, "\n"));
       });
     }
+
+    validator.checkAsync(passes, fails);
   }
 
   @action public validate = (
