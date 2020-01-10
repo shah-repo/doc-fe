@@ -18,13 +18,13 @@ import {
   LOGOUT_USER,
   PING_SERVER_GET_ASYNC,
   PING_SERVER_URL,
+  SESSION_DETAILS_URL,
   SET_EMPLOYEE,
   SIGNUP_URL,
   USER_GROUPS,
   USER_GROUPS_GET_ASYNC,
   USERS_ME_URL,
   USERS_URL,
-  SESSION_DETAILS_URL,
 } from "./constants";
 import {
   AuthResponse,
@@ -122,9 +122,7 @@ const login = (
     data: loginValues,
     includeAuthorization: false,
     onSuccess: (data: AuthResponse, dispatch) => {
-      dispatch(
-        authUser(data),
-      );
+      dispatch(authUser(data));
 
       if ((data.employees || []).length === 1) {
         dispatch(companyActions.selectCompany(data.employees[0].company));
@@ -174,7 +172,12 @@ const confirmNewPassword = (
     includeAuthorization: false,
     onSuccess: (m, dispatch) => {
       dispatch(authConfirmPassword());
-      dispatch(login({email: confirmValues.email, password: confirmValues.password}, handlers));
+      dispatch(
+        login(
+          { email: confirmValues.email, password: confirmValues.password },
+          handlers,
+        ),
+      );
     },
     handlers,
   });
@@ -189,9 +192,7 @@ const loginWithCode = (
     data: loginValues,
     includeAuthorization: false,
     onSuccess: (response, dispatch) => {
-      dispatch(
-        authUser(response),
-      );
+      dispatch(authUser(response));
     },
     onFailure: (m, dispatch) => {
       dispatch(logoutUser());
@@ -258,9 +259,7 @@ const getSessionDetails = (employeeId: string) =>
     url: SESSION_DETAILS_URL,
     method: "get",
     onSuccess: (data: any, dispatch) => {
-      dispatch(
-        authUser(data),
-      );
+      dispatch(authUser(data));
       const employee = data.employees.find(
         (employee: any) => employee.id === employeeId,
       );
