@@ -1,4 +1,4 @@
-import _ , { Dictionary } from "lodash";
+import _, { Dictionary } from "lodash";
 import { action, computed, observable } from "mobx";
 import Validator from "validatorjs";
 import { SelectOption } from "../../../components/forms/fields/Select";
@@ -31,7 +31,7 @@ export class FormBuilderValidatorStored {
 
   @action public getRules = (): string | undefined => {
     const flattenArray = _.map(this.indicatorValues, (v, k) => {
-      _.map(v, (val, key) => k += `${key}${val}`);
+      _.map(v, (val, key) => (k += `${key}${val}`));
       return k;
     });
     return flattenArray.join("|");
@@ -40,7 +40,11 @@ export class FormBuilderValidatorStored {
   @action public getSchemaRules = (): Dictionary<string> => {
     const rules: Dictionary<string> = {};
     _.map(FBStore.getSchema(), (schemaItem) => {
-      if (schemaItem.rules && schemaItem.rules !== "" && _.isEmpty(schemaItem.applicableOn)) {
+      if (
+        schemaItem.rules &&
+        schemaItem.rules !== "" &&
+        _.isEmpty(schemaItem.applicableOn)
+      ) {
         rules[schemaItem.name || ""] = schemaItem.rules;
       }
     });
@@ -50,14 +54,20 @@ export class FormBuilderValidatorStored {
   @action public getSchemaReleasedRules = (): Dictionary<string> => {
     const rules: Dictionary<string> = {};
     _.map(FBStore.getSchema(), (schemaItem) => {
-      if (schemaItem.rules && schemaItem.rules !== "" && !_.isEmpty(schemaItem.applicableOn)) {
+      if (
+        schemaItem.rules &&
+        schemaItem.rules !== "" &&
+        !_.isEmpty(schemaItem.applicableOn)
+      ) {
         rules[schemaItem.name || ""] = schemaItem.rules;
       }
     });
     return rules;
   }
 
-  @action public getRulesBy = (schemaItemName: string): Dictionary<string> | undefined => {
+  @action public getRulesBy = (
+    schemaItemName: string,
+  ): Dictionary<string> | undefined => {
     const rules: Dictionary<string> = {};
     return rules;
   }
@@ -67,14 +77,14 @@ export class FormBuilderValidatorStored {
     _.map(FBStore.getSchema(), (schemaItem) => {
       const { label, placeholder, name } = schemaItem;
       if (!_.isUndefined(name)) {
-        _.assign(names, {[name]: label || placeholder || name});
+        _.assign(names, { [name]: label || placeholder || name });
       }
     });
     return names;
   }
 
   @action public resetIndicatorValues = () => {
-      this.indicatorValues = {};
+    this.indicatorValues = {};
   }
 
   @action public hasError = (name: string): boolean => {
@@ -86,8 +96,10 @@ export class FormBuilderValidatorStored {
   }
 
   @action public triggers = (): SelectOption[] => {
-    return _.map(FBValidatorTrigger, (k, v) =>
-      ({ value: `applicableOn-${v}`, text: k } as SelectOption));
+    return _.map(
+      FBValidatorTrigger,
+      (k, v) => ({ value: `applicableOn-${v}`, text: k } as SelectOption),
+    );
   }
 
   @action public uiValidate = () => {
@@ -97,7 +109,7 @@ export class FormBuilderValidatorStored {
     const RemoteValidator = _.get(window, "EnlilRemoteValidators.validator");
     const rules = this.getSchemaReleasedRules();
     const values = FBStore.getUIValues();
-    //FBStore.getValues();
+    // FBStore.getValues();
 
     const validator = new RemoteValidator(values, rules);
     if (validator.fails()) {
@@ -115,15 +127,14 @@ export class FormBuilderValidatorStored {
   ): Validator.ValidationErrors => {
     const flatten = require("flat");
     Validator.register(
-      "", () => {
+      "",
+      () => {
         return true;
-      }, "",
+      },
+      "",
     );
 
-    const validator = new Validator(
-      flatten(data),
-      rules,
-    );
+    const validator = new Validator(flatten(data), rules);
 
     if (!_.isUndefined(attributes)) {
       validator.setAttributeNames(attributes);

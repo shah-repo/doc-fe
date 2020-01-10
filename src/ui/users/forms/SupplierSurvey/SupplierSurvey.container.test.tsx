@@ -1,11 +1,6 @@
-import { fireEvent, wait } from "@testing-library/react";
+
 import MockAdapter from "axios-mock-adapter";
-import React from "react";
-import { Route, Switch } from "react-router-dom";
 import apiInstance from "../../../../state/apiClient";
-import { SUPPLIER_SURVEY_URL } from "../../../constants/urls";
-import render from "../../../tests/helpers/renderWithProviders";
-import SupplierSurveyContainer from "./SupplierSurvey.container";
 import { submitSurveyError, surveyResponse } from "./tests/responses";
 
 const apiMock = new MockAdapter(apiInstance);
