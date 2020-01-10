@@ -55,7 +55,7 @@ export const withEditorRenderer =
 
     FBDynamicValidatorStore.reset();
     // FBValidatorStore.applicableOn = false;
-    // FBValidatorStore.resetIndicatorValues();
+    FBValidatorStore.resetIndicatorValues();
     // FBValidatorStore.customValidator = undefined;
 
     const removeEl = (mode === "create") ? 0 : 1;

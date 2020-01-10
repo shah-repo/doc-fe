@@ -32,19 +32,6 @@
       ]
     },
     {
-      "name": "required_with_all",
-      "pattern": "required_with_all:foo,bar,...",
-      "description": "The field under validation must be present and not empty only if one of the other specified fields are present.",
-      "applicableIn": [],
-      "indicators": [
-        {
-          "label": "Required with field value:",
-          "type": "schemaSelect",
-          "validatorDelimiter": ":"
-        }
-      ]
-    },
-    {
       "name": "required_document_status",
       "pattern": "required_document_status:value",
       "description": "Selected document must be in status.",

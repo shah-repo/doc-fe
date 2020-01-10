@@ -14,8 +14,9 @@ const FBValidatorSchemaSelect: React.FunctionComponent<FBValidatorSchemaSelectPr
     <FBSelect
       {...props}
       options={FBValidatorStore.schemaItemOptions}
+      multiple={true}
     />
-  {SchemaInputType && SchemaInputType}
+    {SchemaInputType && SchemaInputType}
   </Box>
 );
 
