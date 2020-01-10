@@ -24,6 +24,7 @@ import {
   USER_GROUPS_GET_ASYNC,
   USERS_ME_URL,
   USERS_URL,
+  SESSION_DETAILS_URL,
 } from "./constants";
 import {
   AuthResponse,
@@ -252,6 +253,23 @@ const selectEmployee = (employee: Employee): SelectEmployeeAction => ({
   payload: employee,
 });
 
+const getSessionDetails = (employeeId: string) =>
+  apiAction({
+    url: SESSION_DETAILS_URL,
+    method: "get",
+    onSuccess: (data: any, dispatch) => {
+      dispatch(
+        authUser(data),
+      );
+      const employee = data.employees.find(
+        (employee: any) => employee.id === employeeId,
+      );
+      const company = employee.company;
+      dispatch(companyActions.selectCompany(company));
+      dispatch(getIotCreds());
+    },
+  });
+
 export default {
   authUser,
   logoutUser,
@@ -269,4 +287,5 @@ export default {
   confirmNewPassword,
   userGroups,
   editUser,
+  getSessionDetails,
 };
