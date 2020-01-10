@@ -25,46 +25,46 @@ describe("Supplier survey container test", () => {
   });
 
   it("redirects to home if user is logged in", () => {
-    const customState = {
-      auth: {
-        user: {
-          employeeId: "employeeId",
-          sessionId: "sessionId",
-        },
-      },
-    };
-    const Routes = () => (
-      <Switch>
-        <Route path={SUPPLIER_SURVEY_URL} exact={true} render={(props) => <SupplierSurveyContainer {...props} />} />
-        <Route path="/" exact={true} render={() => <div>After redirect</div>} />
-      </Switch>
-    );
-    const { container } = render(<Routes />, { customState, route: "/supplier_survey/123" });
+  //   const customState = {
+  //     auth: {
+  //       user: {
+  //         employeeId: "employeeId",
+  //         sessionId: "sessionId",
+  //       },
+  //     },
+  //   };
+  //   const Routes = () => (
+  //     <Switch>
+  //       <Route path={SUPPLIER_SURVEY_URL} exact={true} render={(props) => <SupplierSurveyContainer {...props} />} />
+  //       <Route path="/" exact={true} render={() => <div>After redirect</div>} />
+  //     </Switch>
+  //   );
+  //   const { container } = render(<Routes />, { customState, route: "/supplier_survey/123" });
 
-    expect(container.innerHTML).toMatch("<div>After redirect</div>");
-  });
+  //   expect(container.innerHTML).toMatch("<div>After redirect</div>");
+  // });
 
-  it("renders the survey and fails on submit", async () => {
-    const Routes = () => (
-      <Switch>
-        <Route path={SUPPLIER_SURVEY_URL} exact={true} render={(props) => <SupplierSurveyContainer {...props} />} />
-      </Switch>
-    );
-    const { asFragment, container, getByRole, getByText } = render(
-      <Routes />,
-      { route: `/supplier_survey/${SURVEY_TOKEN}` },
-    );
+  // it("renders the survey and fails on submit", async () => {
+  //   const Routes = () => (
+  //     <Switch>
+  //       <Route path={SUPPLIER_SURVEY_URL} exact={true} render={(props) => <SupplierSurveyContainer {...props} />} />
+  //     </Switch>
+  //   );
+  //   const { asFragment, container, getByRole, getByText } = render(
+  //     <Routes />,
+  //     { route: `/supplier_survey/${SURVEY_TOKEN}` },
+  //   );
 
-    expect(getByRole("progressbar")).toBeInTheDocument();
+  //   expect(getByRole("progressbar")).toBeInTheDocument();
 
-    await wait();
+  //   await wait();
 
-    expect(asFragment()).toMatchSnapshot();
+  //   expect(asFragment()).toMatchSnapshot();
 
-    fireEvent.click(container.querySelector("[type='submit']")!);
+  //   fireEvent.click(container.querySelector("[type='submit']")!);
 
-    await wait();
+  //   await wait();
 
-    expect(getByText("Survey already filled in")).toBeInTheDocument();
+  //   expect(getByText("Survey already filled in")).toBeInTheDocument();
   });
 });
