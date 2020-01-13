@@ -1,6 +1,7 @@
 import { Button, Grid } from "@material-ui/core";
 import _ from "lodash";
 import React from "react";
+import { Link as RouterLink } from "react-router-dom";
 import {
   DocumentRevision,
 } from "../../../state/ducks/documentRevisions";
@@ -14,6 +15,7 @@ import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
 import { TablePanelStateProps } from "../../components/table/types";
 import Text from "../../components/Text";
+import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import {
   canEditDocumentRevision,
   documentRevisionStatusOption,
@@ -21,6 +23,7 @@ import {
 import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
 import { Translation } from "../../translations/types";
 import { styles } from "./styles";
+
 
 export interface Props {
   tableName: string;
@@ -132,6 +135,17 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
           <Text translation="common.clear.filters" />
         </Button>
         <DocumentInfo numberOfRecords={tableState.queryData.length} />
+      </Grid>
+      <Grid item={true} xs={6} style={{ textAlign: "right" }}>
+        <RouterLink to={DOCUMENT_REVISION_CREATE_URL} className={classes.link}>
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+          >
+            <Text translation="supplier.add.new" />
+          </Button>
+        </RouterLink>
       </Grid>
       <Grid item={true} className={classes.item}>
         <TablePanel<DocumentRevision>
