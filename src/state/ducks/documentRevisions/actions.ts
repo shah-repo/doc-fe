@@ -1,3 +1,4 @@
+import { Password } from "../../../ui/components/password/types";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import { Audit, AuditActionPayload } from "../audit/types";
@@ -135,6 +136,20 @@ const loadAudit = (id: string): ApiAction<Audit[]> => apiAction({
   },
 });
 
+const approveAndRelease = (
+  id: string,
+  body: Password,
+  handlers: Handlers,
+): ApiAction => apiActionWithCallbacks({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/release/${id}`,
+  method: "post",
+  data: body,
+  onSuccess: (d, dispatch) => {
+    dispatch(load(id));
+  },
+  handlers,
+});
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
@@ -147,4 +162,5 @@ export default {
   applyTransition,
   auditSet,
   loadAudit,
+  approveAndRelease,
 };

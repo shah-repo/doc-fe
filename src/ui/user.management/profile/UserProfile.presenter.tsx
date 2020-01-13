@@ -1,5 +1,5 @@
 import { Dialog } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { EmployeeEditRequestBody } from "../../../state/ducks/auth/types";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
 import { AsyncState } from "../../../state/types";
@@ -23,6 +23,7 @@ interface OwnProps {
     employeeId: string;
     callbackUpdateGroups?: (values: GetEmployeeResponse) => void;
     callbackUpdateActiveStatus?: (values: GetEmployeeResponse) => void;
+    callbackUpdateWithUpload?: (avatar: string, name: string) => void;
     asyncState: AsyncState;
     getUrl: () => void;
     slackIntegrationEnabled: boolean;
@@ -31,6 +32,7 @@ interface OwnProps {
     previewAvatar: string;
     setPreviewAvatar: (value: string) => void;
     activeStatus: boolean;
+    userId?: string;
 }
 
 type Props = OwnProps;
@@ -58,8 +60,16 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
     previewAvatar,
     setPreviewAvatar,
     activeStatus,
+    userId,
+    callbackUpdateWithUpload,
 }) => {
     const [userInfo, setUserInfo] = useState<EmployeeEditRequestBody>({ name, avatar });
+    const [file, setFile] = useState<File | null>(null);
+
+    useEffect(() => {
+        setUserInfo({name, avatar});
+      }, [avatar, name]);
+
     const handleCloseEdit = () => {
         closeEdit();
         setPreviewAvatar("");
@@ -83,6 +93,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
             showEditUser={showEditUser}
             previewAvatar={previewAvatar}
             setPreviewAvatar={setPreviewAvatar}
+            setFile={setFile}
         />
         <DialogContent
             canManageUsers={canManageUsers}
@@ -90,6 +101,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
             employeeId={employeeId}
             callbackUpdateGroups={callbackUpdateGroups}
             callbackUpdateActiveStatus={callbackUpdateActiveStatus}
+            callbackUpdateWithUpload={callbackUpdateWithUpload}
             showEdit={showEdit}
             showEditUser={showEditUser}
             closeEdit={handleCloseEdit}
@@ -102,6 +114,10 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
             slackUserId={slackUserId}
             email={email}
             activeStatus={activeStatus}
+            file={file}
+            setFile={setFile}
+            setUserInfo={setUserInfo}
+            userId={userId}
         />
     </Dialog>
     );

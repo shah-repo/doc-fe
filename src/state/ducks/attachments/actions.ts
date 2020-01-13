@@ -1,7 +1,10 @@
 import { apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
+import { authActions } from "../auth";
+import { EmployeeEditRequestBody } from "../auth/types";
 import {
   ADD_WATERMARK,
+  ATTACHMENT_PUBLIC_UPLOAD_URL,
   ATTACHMENT_ROOT_URL,
   ATTACHMENT_UPLOAD_URL,
   CHECK_WATERMARK_ASYNC,
@@ -12,6 +15,7 @@ import {
   Attachment,
   AttachmentDownloadResponse,
   AttachmentType,
+  AvatarS3linkResponse,
   WatermarkRequest,
   WatermarkRequestBody,
 } from "./types";
@@ -77,6 +81,45 @@ const removeWatermark = (id: string): any => ({
   type: REMOVE_WATERMARK,
   payload: id,
 });
+const requestAvatarS3link = (
+  fileName: string,
+  handlers: Handlers,
+): ApiAction<AvatarS3linkResponse> =>
+  apiActionWithCallbacks< AvatarS3linkResponse, AttachmentDownloadResponse>({
+    url: `${ATTACHMENT_PUBLIC_UPLOAD_URL}?filename=${fileName}`,
+    method: "get",
+    handlers,
+  });
+
+const uploadAvatar = (
+  url: string,
+  id: string | null,
+  name: string,
+  file: File,
+  handlers: Handlers,
+): ApiAction => {
+  const avatarURL = url.substr(0, url.indexOf("?"));
+  const userInfo: EmployeeEditRequestBody = {
+    name,
+    avatar: avatarURL,
+  };
+  return apiActionWithCallbacks({
+    url,
+    method: "put",
+    data: file,
+    includeAuthorization: false,
+    contentType: "image/jpeg",
+    onSuccess: (res, dispatch) => {
+      if (id) {
+        dispatch(authActions.editSelectedEmployee(id, userInfo, handlers));
+      }
+      if (!id) {
+        dispatch(authActions.editCurrentEmployee(userInfo, handlers));
+      }
+    },
+    handlers,
+  });
+};
 
 export default {
   upload,
@@ -85,4 +128,6 @@ export default {
   checkWatermarkStatus,
   addWatermark,
   removeWatermark,
+  requestAvatarS3link,
+  uploadAvatar,
 };

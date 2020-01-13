@@ -6,6 +6,7 @@ interface OwnProps {
   showEditUser: boolean;
   previewAvatar: string;
   setPreviewAvatar: (value: string) => void;
+  setFile: (value: File) => void;
 }
 
 type Props = OwnProps;
@@ -14,14 +15,16 @@ const AvatarContainer: React.FunctionComponent<Props> = ({
   showEditUser,
   previewAvatar,
   setPreviewAvatar,
+  setFile,
 }) => {
-  const logo = avatar === null ? "/avatar_placeholder.svg" : avatar;
+  const logo = !avatar ? "/avatar_placeholder.svg" : avatar;
   return (
     <AvatarPresenter
       src={logo}
       showEditUser={showEditUser}
       previewAvatar={previewAvatar}
       setPreviewAvatar={setPreviewAvatar}
+      setFile={setFile}
     />
   );
 };
