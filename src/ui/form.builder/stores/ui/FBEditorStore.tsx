@@ -14,7 +14,7 @@ export class FBEditorStore {
   @observable public open: boolean = false;
   @observable public content?: React.ReactNode = undefined;
   @observable public title?: string = undefined;
-  @observable public maxWidth?: "sm" | "md" = "sm";
+  @observable public maxWidth?: "sm" | "md" | "lg" = "sm";
   public editorIndex: number = 0;
   public editorMode: FBEditorModeType = "create";
 

@@ -1,6 +1,7 @@
-import { Box } from "@material-ui/core";
+import { Box, Tooltip } from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl/FormControl";
 import FormHelperText from "@material-ui/core/FormHelperText/FormHelperText";
+import _ from "lodash";
 import React from "react";
 import { withInput } from "../../hocs/common/withInput";
 import { FBInputProps } from "../../types/common";
@@ -14,20 +15,25 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
   contextLabel,
   disabled,
   name,
+  tooltip = "",
 }) => (
-  <FormControl error={error} fullWidth>
-    {children}
-    <FormHelperText>
-      <Box color={error ? "" : "primary.main"}>{helperText}</Box>
-    </FormHelperText>
-    {showContext && (
-      <FBTextField
-        label={contextLabel}
-        {...{ disabled }}
-        name={`input-context-${name}`}
-      />
-    )}
-  </FormControl>
+  <Tooltip title={tooltip} placement="bottom-start">
+    <FormControl error={error} fullWidth>
+      {children}
+      {!_.isEmpty(helperText) && (
+        <FormHelperText>
+          <Box color={error ? "" : "primary.main"}>{helperText}</Box>
+        </FormHelperText>
+      )}
+      {showContext && (
+        <FBTextField
+          label={contextLabel}
+          {...{ disabled }}
+          name={`input-context-${name}`}
+        />
+      )}
+    </FormControl>
+  </Tooltip>
 );
 
 export default withInput(FBInput);

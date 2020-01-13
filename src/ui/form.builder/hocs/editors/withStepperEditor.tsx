@@ -18,7 +18,7 @@ export const withStepperEditor = <T extends FBEditorStepperProps>(
           editorStore.maxWidth = "sm";
           return props.children;
         case 1:
-          editorStore.maxWidth = "md";
+          editorStore.maxWidth = "lg";
           return (
             <Box>
               <BottomNavigation

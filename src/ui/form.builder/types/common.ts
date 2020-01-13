@@ -87,6 +87,7 @@ export type FBInputProps =
     multiple?: boolean;
     customValidator?: FBValidatorConfigProps;
     gutter?: boolean;
+    tooltip?: string;
   };
 
 export type FBFormDefaultProps =

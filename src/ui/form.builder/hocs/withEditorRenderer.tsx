@@ -39,7 +39,11 @@ export const withEditorRenderer =
     const values = propsByType();
     let name = "";
     if (_.isObject(props.values) && _.has(props.values, "label")) {
-      name = _.kebabCase(props.values.label as string);
+      name = _.truncate(props.values.label as string, {
+        length: 22,
+        separator: " ",
+      });
+      name = _.kebabCase(name);
     }
     // const item = schemaItem();
     const schema: FBTemplateSchema = {
