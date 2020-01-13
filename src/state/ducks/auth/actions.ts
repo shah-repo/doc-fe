@@ -259,12 +259,12 @@ const getSessionDetails = (employeeId: string) =>
     url: SESSION_DETAILS_URL,
     method: "get",
     onSuccess: (data: any, dispatch) => {
-      dispatch(authUser(data));
       const employee = data.employees.find(
         (employee: any) => employee.id === employeeId,
       );
       const company = employee.company;
       dispatch(companyActions.selectCompany(company));
+      dispatch(selectEmployee(employee));
       dispatch(getIotCreds());
     },
   });

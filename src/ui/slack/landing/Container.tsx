@@ -1,7 +1,9 @@
 import { parse } from "query-string";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
 import Config from "../../../config";
+import { authActions, authSelectors } from "../../../state/ducks/auth";
 import { slackActions } from "../../../state/ducks/slack";
 import { SLACK_COMPANY_OAUTH_URL, SLACK_USER_OAUTH_URL } from "../../../state/ducks/slack/constants";
 import { HOME_URL, SLACK_COMPANY_URL } from "../../constants/urls";
@@ -23,6 +25,7 @@ export const SlackLandingContainer: React.FunctionComponent<Props> = ({
     SLACK_USER_OAUTH_URL;
   const { code } = parse(location.search);
   const postSlackCodeAction = useActionCreator(slackActions.postSlackCode);
+  const employeeId = useSelector(authSelectors.currentEmployeeId);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const async = useAsync({
@@ -38,7 +41,10 @@ export const SlackLandingContainer: React.FunctionComponent<Props> = ({
     async.start(postSlackCodeAction, URL, { code, redirectUriEnv }, async);
   }, []);
 
+  const dispatch = useDispatch();
+
   const onCounterFinish = () => {
+    dispatch(authActions.getSessionDetails(employeeId));
     history.push(HOME_URL);
   };
   const goToDashboard = () => {
