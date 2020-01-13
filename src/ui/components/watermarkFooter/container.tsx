@@ -19,7 +19,7 @@ export const WatermarkFooterContainer: React.FunctionComponent = () => {
     window.open(file.data.presignedUrl, "_blank");
     closeMessage();
   };
-  const watermarks = useSelector(attachmentsSelectors.getWatermarks);
+  const watermarkIds = useSelector(attachmentsSelectors.getWatermarks);
   const addRequestResult = (data) => {
     setRequestResult([
       ...requestResults,
@@ -34,19 +34,13 @@ export const WatermarkFooterContainer: React.FunctionComponent = () => {
       download={downloadWatermark}
     />
   );
-  const renderRequest = watermarks.map((watermarkId) => {
-    return (
-      <WatermarkFooterRequest
-        key={watermarkId}
-        watermarkId={watermarkId}
-        addRequestResult={addRequestResult}
-      />
-    );
-  });
 
   return (
     <>
-      {renderRequest}
+      <WatermarkFooterRequest
+        watermarkIds={watermarkIds}
+        addRequestResult={addRequestResult}
+      />
       {renderFooter}
     </>
   );
