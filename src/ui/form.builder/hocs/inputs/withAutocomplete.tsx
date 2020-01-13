@@ -1,10 +1,10 @@
-import TextField from "@material-ui/core/TextField/TextField";
 import { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import { RenderInputParams } from "@material-ui/lab/Autocomplete/Autocomplete";
 import _, { Dictionary } from "lodash";
 import Model from "mobx-rest/lib/Model";
 import React from "react";
 import autocompleteOptions from "../../../../data/autocompleteOptions.json";
+import FBAutocompleteInput from "../../components/inputs/FBAutocompleteInput";
 import FBAutocompleteCollection from "../../stores/domain/collections/FBAutocompleteCollection";
 import FBDynamicValidatorStore from "../../stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../stores/ui/FBStore";
@@ -46,13 +46,7 @@ export const withAutocomplete = <T extends FBAutocompleteProps>(
       }
 
       const renderInput = (params: RenderInputParams) => (
-        <TextField
-          {...params}
-          variant="outlined"
-          helperText={helperText}
-          error={error}
-          fullWidth
-        />
+        <FBAutocompleteInput {...params} name={field!.name} />
       );
 
       const onChange = (event: React.ChangeEvent<{}>, value: any) => {

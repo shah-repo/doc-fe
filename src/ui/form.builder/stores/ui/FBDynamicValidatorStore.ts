@@ -1,6 +1,6 @@
 import Base64 from "Base64";
 import _, { Dictionary } from "lodash";
-import { action, computed, observable } from "mobx";
+import { action, computed, observable, set } from "mobx";
 import Validator from "validatorjs";
 import {
   FBValidatorConfigProps,
@@ -87,7 +87,7 @@ export class FormBuilderDynamicValidatorStore {
     }
 
     // Clear helper text
-    this.helperText = {};
+    set(this, "helperText", {});
 
     // UI validator
     FBValidatorStore.uiValidate();
@@ -99,10 +99,18 @@ export class FormBuilderDynamicValidatorStore {
 
     if (validator.fails()) {
       const errors = validator.errors.all();
-      _.map(errors, (v, k) => {
-        this.setHelperText(k, _.join(v, "\n"));
-      });
+      this.setHelperText(errors);
     }
+  }
+
+  @action public setHelperText = (errors: Validator.ValidationErrors) => {
+    _.map(errors, (v, k) => {
+      set(this.helperText, k, _.join(v, "\n"));
+    });
+  }
+
+  @action public getHelperText = (fieldName: string): string | undefined => {
+    return _.get(this.helperText, fieldName);
   }
 
   @action public registerValidators = () => {
@@ -136,17 +144,6 @@ export class FormBuilderDynamicValidatorStore {
         );
       }
     });
-  }
-
-  @action public getHelperText = (fieldName: string): string | undefined => {
-    return _.get(this.helperText, fieldName);
-  }
-
-  @action public setHelperText = (fieldName: string, text: string) => {
-    this.helperText = {
-      ...this.helperText,
-      [fieldName]: text,
-    };
   }
 
   @action private generateRules = (): Dictionary<string> => {

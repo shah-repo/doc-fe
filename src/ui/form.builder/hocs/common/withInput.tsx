@@ -37,7 +37,7 @@ export const withInput = <T extends FBInputProps>(
     error = Boolean(_.get(form, `errors.${name}`));
     helperText = (
       (error && _.get(form, `errors.${name}`)) ||
-      FBDynamicValidatorStore.getHelperText(name)
+      FBDynamicValidatorStore.helperText[name]
     );
 
     if (elements.length === 1) {

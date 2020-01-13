@@ -118,9 +118,7 @@ export class FormBuilderValidatorStored {
 
     function fails() {
       const errors = validator.errors.all();
-      _.map(errors, (v, k) => {
-        FBDynamicValidatorStore.setHelperText(k, _.join(v, "\n"));
-      });
+      FBDynamicValidatorStore.setHelperText(errors);
     }
 
     validator.checkAsync(passes, fails);
