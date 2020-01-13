@@ -50,7 +50,7 @@ export type Props = OwnProps &
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   currentEmployeeId: authSelectors.currentEmployeeId(state),
-  isCompanyAdmin: authSelectors.getHasTag(state, GroupTag.COMPANY_ADMIN),
+  isCompanyAdmin: authSelectors.getHasTag(state, GroupTag.OWNERSHIP_CHANGE),
 });
 
 export const Container: React.FunctionComponent<Props> = ({

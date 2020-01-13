@@ -48,7 +48,7 @@ const mapStateToProps = (
   loadDocumentRevisionAsyncState: documentRevisionsSelectors.getLoadAsyncState(
     state,
   ),
-    isCompanyAdmin: authSelectors.getHasTag(state, GroupTag.COMPANY_ADMIN),
+    isCompanyAdmin: authSelectors.getHasTag(state, GroupTag.OWNERSHIP_CHANGE),
     currentEmployeeId: authSelectors.currentEmployeeId(state),
   documentRevision: documentRevisionsSelectors.getDocumentRevision(
     state,

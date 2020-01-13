@@ -122,9 +122,7 @@ export const groups = (
       const permissionsSet = new Set<Permission>();
       action.payload.forEach((group) => {
         const { tags, permissions } = group;
-        if (group.name === "Company Admin") {
-          tagsSet.add(GroupTag.COMPANY_ADMIN);
-        }
+
         if (tags) {
           tags.forEach((tag) => tagsSet.add(tag));
         }
