@@ -5,6 +5,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import ChangeRequestContainer from "../change.request/Container";
 import ChangeRequestListContainer from "../change.request/list/container";
 import ChangeRequestCreateContainer from "../changeRequest/ChangeRequestCreate.container";
+import WatermarkFooterContainer from "../components/watermarkFooter/container";
 import {
   CHANGE_REQUEST_CREATE_URL,
   CHANGE_REQUEST_LIST_URL,
@@ -41,6 +42,7 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
       <CssBaseline />
       <HeaderContainer />
       <Navigation />
+      <WatermarkFooterContainer />
       <main className={classes.content}>
         <DataFetcherContainer />
         <Switch>

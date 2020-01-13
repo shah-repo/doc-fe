@@ -3,10 +3,12 @@ import { ApiAction, Handlers } from "../../types";
 import { authActions } from "../auth";
 import { EmployeeEditRequestBody } from "../auth/types";
 import {
+  ADD_WATERMARK,
   ATTACHMENT_PUBLIC_UPLOAD_URL,
   ATTACHMENT_ROOT_URL,
   ATTACHMENT_UPLOAD_URL,
   CHECK_WATERMARK_ASYNC,
+  REMOVE_WATERMARK,
   REQUEST_WATERMARK_ASYNC,
 } from "./constants";
 import {
@@ -70,6 +72,15 @@ const checkWatermarkStatus = (
     handlers,
   });
 
+const addWatermark = (id: string): any => ({
+  type: ADD_WATERMARK,
+  payload: id,
+});
+
+const removeWatermark = (id: string): any => ({
+  type: REMOVE_WATERMARK,
+  payload: id,
+});
 const requestAvatarS3link = (
   fileName: string,
   handlers: Handlers,
@@ -115,6 +126,8 @@ export default {
   download,
   requestWatermarkedFile,
   checkWatermarkStatus,
+  addWatermark,
+  removeWatermark,
   requestAvatarS3link,
   uploadAvatar,
 };

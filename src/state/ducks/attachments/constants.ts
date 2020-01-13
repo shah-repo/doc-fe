@@ -4,3 +4,5 @@ export const ATTACHMENT_PUBLIC_UPLOAD_URL = `${ATTACHMENT_ROOT_URL}/public_uploa
 
 export const REQUEST_WATERMARK_ASYNC = "attachments/REQUEST_WATERMARK_ASYNC";
 export const CHECK_WATERMARK_ASYNC = "attachments/CHECK_WATERMARK_ASYNC";
+export const ADD_WATERMARK = "attachments/ADD_WATERMARK";
+export const REMOVE_WATERMARK = "attachments/REMOVE_WATERMARK";
