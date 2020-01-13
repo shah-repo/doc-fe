@@ -15,7 +15,7 @@ const FBValidatorCustom: React.FunctionComponent<FBValidatorDynamicProps> = ({
   clear,
 }) => (
   <Grid container spacing={3}>
-    <Grid item xs={8}>
+    <Grid item xs={6}>
       <FBTextField
         label="form.builder.error.message"
         defaultValue={errorMessage}
@@ -28,7 +28,7 @@ const FBValidatorCustom: React.FunctionComponent<FBValidatorDynamicProps> = ({
         <LiveError />
       </LiveProvider>
     </Grid>
-    <Grid item xs={4}>
+    <Grid item xs={6}>
       <FBValidatorTree />
     </Grid>
   </Grid>

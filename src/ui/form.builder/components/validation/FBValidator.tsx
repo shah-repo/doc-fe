@@ -9,7 +9,6 @@ const FBValidator: React.FunctionComponent<FBValidatorProps> = ({
   name,
   description,
   afterChange,
-  // onChange,
   index,
   indicatorElements,
   pattern,
@@ -21,12 +20,6 @@ const FBValidator: React.FunctionComponent<FBValidatorProps> = ({
       label={pattern}
       afterChange={afterChange}
     />
-    {/* <FBLabel label="Custom triggers" fontSize="sm" mt={-3.5} />
-    <FBCheckboxGroup
-      name="applicableOn"
-      options={FBValidatorStore.triggers()}
-      afterChange={afterChange}
-    /> */}
     {indicatorElements}
   </Box>
 );
