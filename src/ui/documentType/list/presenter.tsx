@@ -2,9 +2,7 @@ import { Button, Grid } from "@material-ui/core";
 import _ from "lodash";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
-import {
-  DocumentRevision,
-} from "../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import {
   DocumentType,
@@ -20,10 +18,12 @@ import {
   canEditDocumentRevision,
   documentRevisionStatusOption,
 } from "../../document.revision/utils/helpers";
-import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
+import {
+  documentEditPath,
+  documentPreviewPath,
+} from "../../document.revision/utils/paths";
 import { Translation } from "../../translations/types";
 import { styles } from "./styles";
-
 
 export interface Props {
   tableName: string;
@@ -51,15 +51,18 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   };
 
   const pageDetailColumns = documentType.pageDetails!.columns;
-  const additionalColumns = pageDetailColumns.map((column: PageDetailsColumn) => ({
-    key: column.fieldName as keyof DocumentRevision,
-    label: column.label as Translation,
-    cellHref: cellHrefRenderer,
-    omitSearch: true,
-    columnOptions: {
-      cellDataGetter: ({ rowData }) => rowData.formInput ? rowData.formInput[column.fieldName] : "",
-    },
-  }));
+  const additionalColumns = pageDetailColumns.map(
+    (column: PageDetailsColumn) => ({
+      key: column.fieldName as keyof DocumentRevision,
+      label: column.label as Translation,
+      cellHref: cellHrefRenderer,
+      omitSearch: true,
+      columnOptions: {
+        cellDataGetter: ({ rowData }) =>
+          rowData.formInput ? rowData.formInput[column.fieldName] : "",
+      },
+    }),
+  );
 
   const columns: Array<TableColumnProps<DocumentRevision>> = [
     {
@@ -100,8 +103,8 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       searchOptions: {
         dataKey: "status[]",
         defaultValue: _.isString(tableState.queryDict["status[]"])
-            ? tableState.queryDict["status[]"]
-            : undefined,
+          ? tableState.queryDict["status[]"]
+          : undefined,
         searchType: "select",
         selectOptions: documentRevisionStatusOption(),
       },
