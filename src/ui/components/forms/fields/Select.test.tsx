@@ -35,8 +35,9 @@ describe("Select component tests", () => {
       <Formik
         initialValues={{ test: "" }}
         onSubmit={jest.fn()}
-        render={renderForm}
-      />,
+      >
+        {renderForm}
+      </Formik>,
     );
   };
 

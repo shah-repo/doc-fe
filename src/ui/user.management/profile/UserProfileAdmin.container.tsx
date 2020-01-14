@@ -39,21 +39,23 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
     getSlackUrl,
     isSlackIntegrationEnabled,
     slackTeamId,
-    employees,
 }) => {
-    const [realUser, setRealUser] = useState<any>({ user: {}, groups: []});
-    useEffect(() => {
-        setRealUser(selectedEmployee);
-    }, [selectedEmployee.id]);
-    const { groups, id } = realUser;
-    const { name } = realUser.user;
+    const canManageUsers = useSelector(getHasTag(GroupTag.USER_MANAGEMENT));
     const userSlackId =  useSelector(authSelectors.currentSlackUserId);
 
+    const [realUser, setRealUser] = useState<any>({ user: {}, groups: []});
     const [showEditUser, setEditUser] = useState(false);
+    const [previewAvatar, setPreviewAvatar] = useState("");
+
     const showEdit = () => setEditUser(true);
     const closeEdit = () => setEditUser(false);
 
-    const canManageUsers = useSelector(getHasTag(GroupTag.USER_MANAGEMENT));
+    useEffect(() => {
+        setRealUser(selectedEmployee);
+    }, [selectedEmployee.id]);
+
+    const { groups, id, active } = realUser;
+    const { name, avatar, email } = realUser.user;
 
     const employeeGroups: OptionType[] = groups.map((group: any) => ({
         value: group.id,
@@ -77,6 +79,24 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
         setRealUser({
             ...realUser,
             groups: employee.groups,
+        });
+    };
+
+    const callbackUpdateActiveStatus = (employee: GetEmployeeResponse) => {
+        setRealUser({
+            ...realUser,
+            active: employee.active,
+        });
+    };
+
+    const callbackUpdateWithUpload = (avatar: string, name: string) => {
+        setRealUser({
+            ...realUser,
+            user: {
+                ...realUser.user,
+                avatar,
+                name,
+            },
         });
     };
 
@@ -106,7 +126,8 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
             canManageUsers={canManageUsers}
             employeeGroups={employeeGroups}
             name={name}
-            avatar={null}
+            avatar={avatar}
+            email={email}
             employeeId={id}
             editCurrentEmployee={submitChanges}
             showEditUser={showEditUser}
@@ -118,6 +139,12 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
             slackIntegrationEnabled={isSlackIntegrationEnabled}
             slackTeamId={slackTeamId}
             slackUserId={userSlackId}
+            previewAvatar={previewAvatar}
+            setPreviewAvatar={setPreviewAvatar}
+            callbackUpdateActiveStatus={callbackUpdateActiveStatus}
+            activeStatus={active}
+            userId={realUser.user.id}
+            callbackUpdateWithUpload={callbackUpdateWithUpload}
         />
     );
 };

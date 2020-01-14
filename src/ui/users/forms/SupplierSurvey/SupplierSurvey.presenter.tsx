@@ -25,11 +25,12 @@ const SupplierSurveyPresenter: React.FunctionComponent<Props> = ({onSubmit, supp
 
   return (
     <Formik
-        render={renderForm}
         initialValues={toSupplierSurveyFormValues(supplierSurvey)}
         onSubmit={onSubmit}
         enableReinitialize={true}
-    />
+    >
+      {renderForm}
+    </Formik>
   );
 };
 

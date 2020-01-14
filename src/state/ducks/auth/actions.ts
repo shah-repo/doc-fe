@@ -18,6 +18,7 @@ import {
   LOGOUT_USER,
   PING_SERVER_GET_ASYNC,
   PING_SERVER_URL,
+  SESSION_DETAILS_URL,
   SET_EMPLOYEE,
   SIGNUP_URL,
   USER_GROUPS,
@@ -121,9 +122,7 @@ const login = (
     data: loginValues,
     includeAuthorization: false,
     onSuccess: (data: AuthResponse, dispatch) => {
-      dispatch(
-        authUser(data),
-      );
+      dispatch(authUser(data));
 
       if ((data.employees || []).length === 1) {
         dispatch(companyActions.selectCompany(data.employees[0].company));
@@ -173,7 +172,12 @@ const confirmNewPassword = (
     includeAuthorization: false,
     onSuccess: (m, dispatch) => {
       dispatch(authConfirmPassword());
-      dispatch(login({email: confirmValues.email, password: confirmValues.password}, handlers));
+      dispatch(
+        login(
+          { email: confirmValues.email, password: confirmValues.password },
+          handlers,
+        ),
+      );
     },
     handlers,
   });
@@ -188,9 +192,7 @@ const loginWithCode = (
     data: loginValues,
     includeAuthorization: false,
     onSuccess: (response, dispatch) => {
-      dispatch(
-        authUser(response),
-      );
+      dispatch(authUser(response));
     },
     onFailure: (m, dispatch) => {
       dispatch(logoutUser());
@@ -252,6 +254,21 @@ const selectEmployee = (employee: Employee): SelectEmployeeAction => ({
   payload: employee,
 });
 
+const getSessionDetails = (employeeId: string) =>
+  apiAction({
+    url: SESSION_DETAILS_URL,
+    method: "get",
+    onSuccess: (data: any, dispatch) => {
+      const employee = data.employees.find(
+        (employee: any) => employee.id === employeeId,
+      );
+      const company = employee.company;
+      dispatch(companyActions.selectCompany(company));
+      dispatch(selectEmployee(employee));
+      dispatch(getIotCreds());
+    },
+  });
+
 export default {
   authUser,
   logoutUser,
@@ -268,4 +285,6 @@ export default {
   forgotPassword,
   confirmNewPassword,
   userGroups,
+  editUser,
+  getSessionDetails,
 };

@@ -1,31 +1,100 @@
 import _ from "lodash";
 import { ApplicationState } from "../../reducers";
+import { getAsyncState } from "../../tests/factories";
 import initialStoreState from "../../tests/helpers/initialStoreState";
-import authSelectors from "./selectors";
+import { getEmployee } from "../company/tests/factories";
+import { getGroup } from "../userManagement/tests/factories";
+import selectors from "./selectors";
+import { getUser } from "./tests/factories";
+import { GroupTag, Permission } from "./types";
 
 describe("auth selectors tests", () => {
   let state: ApplicationState;
+  const user = getUser();
+  const groups = [getGroup()];
+  const employee = getEmployee();
 
   beforeEach(() => {
     state = _.cloneDeep(initialStoreState);
+    state.auth.user = {
+      ...user,
+      groups,
+      employee,
+    };
+    state.auth.groups = { tags: [], permissions: [] };
+    state.auth.loadGroupsAsyncInfo = getAsyncState();
   });
 
-  describe("isAutenticated selector tests", () => {
-    it("user is not authenticated", () => {
-      expect(authSelectors.isAuthenticated(state)).toBe(false);
-    });
-
-    it("user is authenticated", () => {
-      state.auth.user.sessionId = "SESSION_ID";
-      state.auth.user.employeeId = "EMPLOYEE_ID";
-      expect(authSelectors.isAuthenticated(state)).toBe(true);
-    });
+  it("isAuthenticated", () => {
+    expect(selectors.isAuthenticated(state)).toEqual(true);
   });
 
-  describe("currentUserEmail selector tests", () => {
-    it("it returns email address", () => {
-      state.auth.user.email = "dino@codecons.com";
-      expect(authSelectors.currentUserEmail(state)).toEqual("dino@codecons.com");
-    });
+  it("currentUserName", () => {
+    expect(selectors.currentUserName(state)).toEqual(state.auth.user.name);
+  });
+
+  it("currentUserEmail", () => {
+    expect(selectors.currentUserEmail(state)).toEqual(state.auth.user.email);
+  });
+
+  it("currentUserId", () => {
+    expect(selectors.currentUserId(state)).toEqual(state.auth.user.id);
+  });
+
+  it("currentUserGroups", () => {
+    expect(selectors.currentUserGroups(state)).toEqual(state.auth.user.groups);
+  });
+
+  it("currentEmployeeId", () => {
+    expect(selectors.currentEmployeeId(state)).toEqual(
+      state.auth.user.employeeId,
+    );
+  });
+
+  it("currentSlackUserId", () => {
+    expect(selectors.currentSlackUserId(state)).toEqual(
+      state.auth.user.employee.slackUserId,
+    );
+  });
+
+  it("currentEmployeeAvatar", () => {
+    expect(selectors.currentEmployeeAvatar(state)).toEqual(
+      state.auth.user.avatar,
+    );
+  });
+
+  it("getLoadPermissionsAsyncState", () => {
+    expect(selectors.getLoadPermissionsAsyncState(state)).toEqual(
+      state.auth.loadGroupsAsyncInfo,
+    );
+  });
+
+  it("getHasTag", () => {
+    expect(selectors.getHasTag(state, GroupTag.USER_MANAGEMENT)).toBe(false);
+  });
+
+  it("getHasSlack", () => {
+    expect(selectors.getHasSlack(state, Permission.SLACK_APP_INSTALL)).toBe(
+      false,
+    );
+  });
+
+  it("employees", () => {
+    expect(selectors.employees(state)).toEqual(state.auth.user.employees);
+  });
+
+  it("hasMultipleCompanies", () => {
+    expect(selectors.hasMultipleCompanies(state)).toEqual(false);
+  });
+
+  it("getCurrentUserGroups", () => {
+    const expectedState = [
+      {
+        value: state.auth.user.groups[0].id,
+        label: state.auth.user.groups[0].name,
+      },
+    ];
+
+    expect(selectors.getCurrentUserGroups(state)).toEqual(expectedState);
   });
 });

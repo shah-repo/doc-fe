@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 import { createMigrate, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import attachments from "./ducks/attachments";
 import auth from "./ducks/auth";
 import { LOGOUT_USER } from "./ducks/auth/constants";
 import changeRequests from "./ducks/changeRequest";
@@ -29,6 +30,7 @@ const companyPersistConfig = {
 };
 
 const appReducer = combineReducers({
+  attachments,
   auth: persistReducer(authPersistConfig, auth),
   documents,
   changeRequests,

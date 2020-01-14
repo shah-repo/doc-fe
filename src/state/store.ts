@@ -15,4 +15,11 @@ const store = createStore(
 
 const persistor = persistStore(store);
 
+export const createStoreWithValues = (customState: {}) =>
+  createStore(
+    reducers,
+    customState,
+    composeWithDevTools(applyMiddleware(...middlewares)),
+  );
+
 export { store, persistor };

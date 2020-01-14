@@ -1,15 +1,22 @@
+import faker from "faker";
 import { getCallbackHandler } from "../../../common/tests/factories";
 import initialStoreState from "../../tests/helpers/initialStoreState";
 import { Handlers } from "../../types";
+import { userManagementActions } from "../userManagement";
+import { getGroup } from "../userManagement/tests/factories";
 import authActions from "./actions";
 import {
+  GROUPS_URL,
   LOGIN_URL,
   LOGIN_WITH_CODE_URL,
   LOGOUT_URL,
+  USERS_ME_URL,
+  USERS_URL,
 } from "./constants";
-import { getAuthResponse } from "./tests/factories";
+import { getAuthResponse, getUser } from "./tests/factories";
 import {
   AuthResponse,
+  EmployeeEditRequestBody,
   LoginRequestBody,
   LoginWithCodeRequestBody,
 } from "./types";
@@ -32,9 +39,7 @@ describe("login action tests", () => {
     const dispatch = jest.fn();
 
     action.onSuccess(data, dispatch);
-    expect(dispatch.mock.calls[0][0]).toEqual(
-      authActions.authUser(data),
-    );
+    expect(dispatch.mock.calls[0][0]).toEqual(authActions.authUser(data));
   });
 
   it("calls POST on LOGIN_URL", () => {
@@ -62,9 +67,7 @@ describe("loginWithCode action tests", () => {
 
     action.onSuccess(response, dispatch);
 
-    expect(dispatch.mock.calls[0][0]).toEqual(
-      authActions.authUser(response),
-    );
+    expect(dispatch.mock.calls[0][0]).toEqual(authActions.authUser(response));
   });
 
   it("dispatches actions onFailure", () => {
@@ -95,5 +98,72 @@ describe("logout action tests", () => {
   it("calls POST on LOGOUT_URL", () => {
     expect(action.url).toBe(LOGOUT_URL);
     expect(action.method).toBe("delete");
+  });
+});
+
+describe("editCurrentEmployee tests", () => {
+  const body: EmployeeEditRequestBody = {
+    name: faker.random.word(),
+    avatar: null,
+  };
+  const handlers: Handlers<Partial<AuthResponse>> = {
+    successHandler: getCallbackHandler<Partial<AuthResponse>>(),
+    errorHandler: getCallbackHandler<string>(),
+  };
+  const action = authActions.editCurrentEmployee(body, handlers);
+
+  it("calls PATCH on USERS_ME_URL", () => {
+    expect(action.url).toBe(`${USERS_ME_URL}`);
+    expect(action.method).toBe("patch");
+  });
+
+  it("calls dispatch with editUser action on success", () => {
+    const dispatch = jest.fn();
+    const user = getUser();
+    action.onSuccess(user, dispatch);
+    expect(dispatch).toHaveBeenLastCalledWith(authActions.editUser(user));
+  });
+});
+
+describe("editSelectedEmployee tests", () => {
+  const id = faker.random.uuid();
+  const body: EmployeeEditRequestBody = {
+    name: faker.random.word(),
+    avatar: null,
+  };
+  const handlers: Handlers<Partial<AuthResponse>> = {
+    successHandler: getCallbackHandler<Partial<AuthResponse>>(),
+    errorHandler: getCallbackHandler<string>(),
+  };
+  const action = authActions.editSelectedEmployee(id, body, handlers);
+
+  it("calls PATCH on USERS_URL/id", () => {
+    expect(action.url).toBe(`${USERS_URL}/${id}`);
+    expect(action.method).toBe("patch");
+  });
+
+  it("calls dispatch with editSelectedEmployeeUserInfo action on success", () => {
+    const dispatch = jest.fn();
+    const user = getUser();
+    action.onSuccess(user, dispatch);
+    expect(dispatch).toHaveBeenLastCalledWith(
+      userManagementActions.editSelectedEmployeeUserInfo(user),
+    );
+  });
+});
+
+describe("loadUserGroups tests", () => {
+  const action = authActions.loadUserGroups();
+
+  it("calls GET on GROUPS_URL", () => {
+    expect(action.url).toBe(`${GROUPS_URL}`);
+    expect(action.method).toBe("get");
+  });
+
+  it("calls dispatch with userGroups action on success", () => {
+    const dispatch = jest.fn();
+    const groups = [getGroup()];
+    action.onSuccess(groups, dispatch);
+    expect(dispatch).toHaveBeenLastCalledWith(authActions.userGroups(groups));
   });
 });

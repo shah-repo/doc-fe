@@ -133,7 +133,7 @@ export class IotService {
     }
 
     public subscribedTopics() {
-      if (this.mqttClientInstance) {
+      if (this.mqttClientInstance && this.mqttClientInstance._resubscribeTopics) {
         return Object.keys(this.mqttClientInstance._resubscribeTopics);
       }
       // tslint:disable-next-line: no-console

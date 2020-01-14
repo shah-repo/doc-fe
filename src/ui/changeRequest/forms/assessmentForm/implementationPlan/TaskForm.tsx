@@ -2,14 +2,12 @@ import { Button, createStyles, Grid, makeStyles } from "@material-ui/core";
 import { Form, FormikProps } from "formik";
 import React from "react";
 import { connect } from "react-redux";
-import implementationPlanTaskStates from "../../../../../data/implementationPlanTaskStates.json";
 import { changeRequestsSelectors } from "../../../../../state/ducks/changeRequest";
 import { ApplicationState } from "../../../../../state/reducers";
 import AutocompleteField from "../../../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../../../components/forms/fields/Autocomplete/types";
 import DatePickerField from "../../../../components/forms/fields/DatePicker";
 import InputField from "../../../../components/forms/fields/Input";
-import SelectField from "../../../../components/forms/fields/Select";
 import TextEditorField from "../../../../components/forms/fields/TextEditor";
 import { required, validator } from "../../../../components/forms/fields/validators";
 import Text from "../../../../components/Text";
@@ -42,15 +40,9 @@ export const styles = makeStyles(() =>
 ));
 
 export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
-  cancel, availableAssignees, values,
+  cancel, availableAssignees,
 }) => {
   const classes = styles();
-  const isNew = values.id === undefined;
-  let planStateOptions = implementationPlanTaskStates;
-
-  if (isNew) {
-    planStateOptions = implementationPlanTaskStates.filter((option) => option.value !== "DONE");
-  }
 
   return (
     <Form>
@@ -89,14 +81,14 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
           />
         </Grid>
         <Grid item={true} xs={4}>
-          <SelectField
+          <InputField
             name="status"
             label="common.status"
-            size="sm"
-            selectProps={{inputProps: { id: "status" }}}
-            options={planStateOptions}
-            validate={validator(required)}
-            includeEmpty={false}
+            inputProps={{
+              id: "statusId",
+              value: "PENDING",
+              disabled: true,
+            }}
           />
         </Grid>
       </Grid>

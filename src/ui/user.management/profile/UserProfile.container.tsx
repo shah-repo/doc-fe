@@ -45,12 +45,15 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
   const canManageUsers = useSelector(getHasTag(GroupTag.USER_MANAGEMENT));
   const name = useSelector(authSelectors.currentUserName);
   const avatar = useSelector(authSelectors.currentEmployeeAvatar);
+  const email = useSelector(authSelectors.currentUserEmail);
   const employeeId = useSelector(authSelectors.currentEmployeeId);
   const groups = useSelector(authSelectors.getCurrentUserGroups);
+  const activeStatus = useSelector(authSelectors.currentUserActiveStatus);
   const userSlackId =  useSelector(authSelectors.currentSlackUserId);
   const [showEditUser, setEditUser] = useState(false);
   const showEdit = () => setEditUser(true);
   const closeEdit = () => setEditUser(false);
+  const [previewAvatar, setPreviewAvatar] = useState("");
 
   const onSubmit = (values: EmployeeEditRequestBody) => dispatch(authActions.editCurrentEmployee(values, async));
 
@@ -77,6 +80,7 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
       employeeGroups={groups}
       name={name}
       avatar={avatar}
+      email={email}
       employeeId={employeeId}
       editCurrentEmployee={onSubmit}
       showEditUser={showEditUser}
@@ -87,6 +91,9 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
       slackIntegrationEnabled={isSlackIntegrationEnabled}
       slackTeamId={slackTeamId}
       slackUserId={userSlackId}
+      previewAvatar={previewAvatar}
+      setPreviewAvatar={setPreviewAvatar}
+      activeStatus={activeStatus}
     />
   );
 };

@@ -30,3 +30,10 @@ export const VIEWABLE_FILES = [
   ...SUPPORTED_VIDEO_FILES,
   PDF,
 ];
+
+export const WATERMARK_FILES = [
+  "txt",
+  "doc",
+  "docx",
+  "pdf",
+];

@@ -26,6 +26,9 @@ const currentEmployeeId = (state: ApplicationState): string =>
 const currentSlackUserId = (state: ApplicationState): string =>
   state.auth.user.employee.slackUserId;
 
+const currentUserActiveStatus = ( state: ApplicationState): boolean =>
+  state.auth.user.employee.active;
+
 const currentEmployeeAvatar = (state: ApplicationState): Nullable<string> =>
   state.auth.user.avatar;
 
@@ -73,4 +76,6 @@ export default {
   getHasSlack,
   getCurrentUserGroups,
   currentSlackUserId,
+  currentUserGroups,
+  currentUserActiveStatus,
 };

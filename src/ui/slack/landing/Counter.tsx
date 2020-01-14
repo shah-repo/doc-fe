@@ -10,7 +10,7 @@ interface Props {
 export const SlackLandingCounter: React.FunctionComponent<Props> = ({
   onCounterFinish,
 }) => {
-  const [timerValue, updateTimerValue] = useState(5);
+  const [timerValue, updateTimerValue] = useState(3);
   useEffect(() => {
     if (timerValue === 0) {
       onCounterFinish();

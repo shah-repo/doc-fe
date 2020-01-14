@@ -46,7 +46,7 @@ const ApprovalCollection: React.FunctionComponent<ApprovalCollectionProps> = ({
       <div className={styles.linksContainer}>
         {approvalButtons &&
           approvalButtons.map((button: string, i: number) => (
-            <button> {button} </button>
+            <button key={i}> {button} </button>
           ))}
       </div>
       {showInput && hyperLinkInput}
