@@ -5,7 +5,7 @@ import { css } from "glamor";
 import _ from "lodash";
 import React, { ComponentType, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
+import "react-toastify/dist/ReactToastify.css";
 import { IotService } from "../../common/utils/iot/mqttClient";
 import { Translation } from "../translations/types";
 import NavigationLinkPresenter from "./NavigationLink.presenter";
