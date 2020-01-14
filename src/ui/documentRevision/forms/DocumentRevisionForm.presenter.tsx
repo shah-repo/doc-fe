@@ -19,7 +19,7 @@ import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocom
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
 import CheckboxField from "../../components/forms/fields/Checkbox";
 import InputField from "../../components/forms/fields/Input";
-import RichTextEditor from "../../components/forms/fields/RTE";
+import RichTextEditor from "../../components/forms/fields/RichTextEditor";
 import SelectField, {
   SelectOption,
 } from "../../components/forms/fields/Select";

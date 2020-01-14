@@ -13,6 +13,7 @@ import useDebounce from "use-debounce/lib/useDebounce";
 import "../../../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { RenderSize } from "../../../../../state/ducks/common";
 import Field, { FieldOwnProps } from "../Field";
+import "./rte.css";
 
 export interface RichTextEditorOwnProps extends FieldOwnProps {
   size?: RenderSize;
@@ -69,11 +70,20 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
       {...fieldProps}
       inputLabelProps={{ shrink: true }}
     >
-      <Editor
-        editorState={value}
-        onEditorStateChange={setValue}
-        onBlur={handleBlur}
-      />
+      <div>
+        <Editor
+          toolbarClassName="rte-toolbar-absolute"
+          wrapperClassName="rte-wrapper"
+          editorClassName="rte-editor"
+          editorState={value}
+          onEditorStateChange={setValue}
+          onBlur={handleBlur}
+          toolbarOnFocus
+          toolbar={{
+            options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded', 'emoji', 'image', 'remove', 'history'],
+          }}
+        />
+      </div>
     </Field>
   );
 };

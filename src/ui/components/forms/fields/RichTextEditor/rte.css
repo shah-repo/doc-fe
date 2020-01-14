@@ -1,0 +1,21 @@
+.rte-editor {
+  border: 1px solid #B4C0CA;
+  min-height: 200px;
+  max-height: 500px;
+}
+
+.rte-wrapper {
+  position: relative;
+  top: 40px;
+  margin-bottom: 50px;
+}
+
+.rte-toolbar-absolute {
+  border: 1px solid #B4C0CA;
+  position: absolute !important;
+  top: -120px !important;
+  border-radius: 3px !important;
+  background: #f3f3f3 !important;
+  border: 1px solid #B4C0CA !important;
+  z-index: 9999;
+}
