@@ -15,6 +15,19 @@ import { RenderSize } from "../../../../../state/ducks/common";
 import Field, { FieldOwnProps } from "../Field";
 import "./rte.css";
 
+const toolbarOptions = [
+  "inline",
+  "blockType",
+  "fontSize",
+  "fontFamily",
+  "list",
+  "textAlign",
+  "colorPicker",
+  "link",
+  "remove",
+  "history",
+];
+
 export interface RichTextEditorOwnProps extends FieldOwnProps {
   size?: RenderSize;
   customToolbarAction?: () => void;
@@ -80,7 +93,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
           onBlur={handleBlur}
           toolbarOnFocus
           toolbar={{
-            options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded', 'emoji', 'image', 'remove', 'history'],
+            options: toolbarOptions,
           }}
         />
       </div>
