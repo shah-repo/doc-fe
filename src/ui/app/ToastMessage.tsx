@@ -1,6 +1,6 @@
 import Button from "@material-ui/core/Button";
 import React from "react";
-// import Text from "../components/Text";
+import Text from "../components/Text";
 import { styles } from "./ToastMessage.styles";
 
 export interface MsgProps {
@@ -19,8 +19,7 @@ const ToastMessage: React.FunctionComponent<MsgProps> = ({ message }) => {
         onClick={() => window.location.reload(false)}
         className={classes.buttonStyle}
       >
-        {/* TODO get rid of toastify, cannot read translations */}
-        Refresh page
+        <Text translation="mqtt.refresh.page" />
       </Button>
     </div>
   );
