@@ -32,10 +32,11 @@ import { ChangeRequestFormValues } from "../types.js";
 import styles from "./AssessmentForm.styles";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
 import AssessmentFormImplementationPlan from "./implementationPlan/Container";
+import AssessmentFormVoidContainer from "./Void.container";
 
 interface Props
   extends WithStyles<typeof styles>,
-    FormikProps<ChangeRequestFormValues> {
+  FormikProps<ChangeRequestFormValues> {
   asyncState: AsyncState;
   changeRequest?: ChangeRequest;
   documentRevisionsList: string[];
@@ -129,32 +130,29 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
           datePickerProps={{ minDate: new Date() }}
         />
         <ApproversField />
-        <Box mt={4}>
-          <Grid
-            item={true}
-            container={true}
-            alignItems="flex-end"
-            direction="column"
-          >
-            <div>
-              {canChangeOwnerShip && (
-                <OwnerChanger
-                  requestId={changeRequest!.id}
-                  requestType={"change_request"}
-                />
-              )}
-              <AssessmentFormControlsContainer changeRequest={changeRequest} />
-              <SubmitButton
-                asyncState={asyncState}
-                label={
-                  changeRequest
-                    ? "common.save"
-                    : "navigation.createChangeRequest"
-                }
-              />
-            </div>
-          </Grid>
-        </Box>
+        <Grid
+          item={true}
+          container={true}
+          alignItems="flex-end"
+          justify="flex-end"
+          direction="row"
+        > {canChangeOwnerShip && (
+          <OwnerChanger
+            requestId={changeRequest!.id}
+            requestType={"change_request"}
+          />
+        )}
+          <AssessmentFormVoidContainer changeRequest={changeRequest} />
+          <AssessmentFormControlsContainer changeRequest={changeRequest} />
+          <SubmitButton
+            asyncState={asyncState}
+            label={
+              changeRequest
+                ? "common.save"
+                : "navigation.createChangeRequest"
+            }
+          />
+        </Grid>
       </FormWrapper>
     </div>
   );

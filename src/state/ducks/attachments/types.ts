@@ -1,5 +1,6 @@
 import { Id, Nullable, User } from "../common";
 import { DocumentRevision } from "../documentRevisions";
+import { ADD_WATERMARK, REMOVE_WATERMARK } from "./constants";
 
 export interface Attachment {
   id: string;
@@ -50,3 +51,14 @@ export interface WatermarkRequestBody {
   attachment: Id;
   type: AttachmentType;
 }
+
+export interface AddWatermarkAction {
+  type: typeof ADD_WATERMARK;
+  payload: string;
+}
+export interface RemoveWatermarkAction {
+  type: typeof REMOVE_WATERMARK;
+  payload: string;
+}
+export type WatermarkActions = AddWatermarkAction & RemoveWatermarkAction;
+export type WatermarkState = string[];
