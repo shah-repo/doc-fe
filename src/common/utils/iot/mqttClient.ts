@@ -93,18 +93,22 @@ export class IotService {
           } catch (err) {
             return false;
         }
-        // turn off notifications
-        // if (this.mqttClientInstance._events.message) {
-        //   if (this.mqttClientInstance._events.message.length < 1) {
-        //     this.mqttClientInstance.on("message", (topic: string, message: ArrayBufferView) => {
-        //       notif(new TextDecoder("utf-8").decode(message));
-        //     });
-        //   }
-        // } else {
-        //   this.mqttClientInstance.on("message", (topic: string, message: ArrayBufferView) => {
-        //     notif(new TextDecoder("utf-8").decode(message));
-        //   });
-        // }
+        if (this.mqttClientInstance._events.message) {
+          if (this.mqttClientInstance._events.message.length < 1) {
+            this.mqttClientInstance.on("message", (topic: string, message: ArrayBufferView) => {
+              // notifications shown only for watermarking
+              if (topic.includes("attachment_watermark")) {
+                notif(new TextDecoder("utf-8").decode(message));
+              }
+            });
+          }
+        } else {
+          this.mqttClientInstance.on("message", (topic: string, message: ArrayBufferView) => {
+            if (topic.includes("attachment_watermark")) {
+              notif(new TextDecoder("utf-8").decode(message));
+            }
+          });
+        }
     }
 
     public async unsubscribeFromTopic(topic: string) {
