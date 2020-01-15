@@ -1,8 +1,10 @@
 import { Box, Grid } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getTableState } from "../../../common/utils/selectors";
 import { Nullable } from "../../../state/ducks/common";
+import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -29,8 +31,22 @@ export const AddEmployeeFormContainer: React.FunctionComponent = ({
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const addEmployeeAction = useActionCreator(userManagementActions.addEmployee);
   const async = useAsync();
+  const dispatch = useDispatch();
+  const TABLE_NAME = "userManagement";
+  const tableState = useSelector(getTableState(TABLE_NAME));
   const onSubmit = (values: AddEmployeeFormValues) => {
     async.start(addEmployeeAction, transformToAddEmployeeRequest(values), async);
+    dispatch(
+        tableSearchActions.setSearchCriteria(
+          {
+            ...tableState,
+            queryDict: {
+              active: true,
+            },
+          },
+          TABLE_NAME,
+        ),
+      );
   };
 
   const renderForm = (props: FormikProps<AddEmployeeFormValues>) => {
