@@ -1,3 +1,4 @@
+import { Box } from "@material-ui/core";
 import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import {
@@ -6,7 +7,6 @@ import {
   FieldProps as FormikFieldProps,
 } from "formik";
 import htmlToDraft from "html-to-draftjs";
-// tslint:disable-next-line: no-implicit-dependencies
 import React, { useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import useDebounce from "use-debounce/lib/useDebounce";
@@ -83,7 +83,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
       {...fieldProps}
       inputLabelProps={{ shrink: true }}
     >
-      <div>
+      <Box hidden={hidden}>
         <Editor
           toolbarClassName="rte-toolbar-absolute"
           wrapperClassName="rte-wrapper"
@@ -96,7 +96,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
             options: toolbarOptions,
           }}
         />
-      </div>
+      </Box>
     </Field>
   );
 };

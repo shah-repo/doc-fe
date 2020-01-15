@@ -8,7 +8,7 @@ import AssessmentsField from "../../../change.request/form/assessments";
 import JustificationField from "../../../change.request/form/justification";
 import DatePickerField from "../../../components/forms/fields/DatePicker";
 import InputField from "../../../components/forms/fields/Input";
-import TextEditorField from "../../../components/forms/fields/TextEditor";
+import TextEditorField from "../../../components/forms/fields/RichTextEditor";
 import {
   required,
   validator,
