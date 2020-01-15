@@ -8,7 +8,7 @@ import {
 } from "formik";
 import htmlToDraft from "html-to-draftjs";
 import React, { useEffect, useState } from "react";
-import { Editor } from "react-draft-wysiwyg";
+import { Editor, EditorProps } from "react-draft-wysiwyg";
 import useDebounce from "use-debounce/lib/useDebounce";
 import "../../../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { RenderSize } from "../../../../../state/ducks/common";
@@ -33,6 +33,7 @@ export interface RichTextEditorOwnProps extends FieldOwnProps {
   customToolbarAction?: () => void;
   actionsRenderer?: () => any;
   hidden?: boolean;
+  editorProps?: EditorProps;
 }
 
 export type RichTextEditorPropsWithFormik = RichTextEditorOwnProps & FormikFieldProps;
@@ -41,6 +42,10 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
   actionsRenderer,
   size,
   hidden = false,
+  editorProps,
+  editorProps: {
+    toolbarOnFocus = true,
+  } = {},
   ...fieldProps
 }) => {
 
@@ -85,16 +90,17 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
     >
       <Box hidden={hidden}>
         <Editor
-          toolbarClassName="rte-toolbar-absolute"
-          wrapperClassName="rte-wrapper"
-          editorClassName="rte-editor"
           editorState={value}
           onEditorStateChange={setValue}
           onBlur={handleBlur}
-          toolbarOnFocus
+          toolbarClassName="rte-toolbar-absolute"
+          wrapperClassName="rte-wrapper"
+          editorClassName="rte-editor"
           toolbar={{
             options: toolbarOptions,
           }}
+          {...editorProps}
+          toolbarOnFocus={toolbarOnFocus}
         />
       </Box>
     </Field>
