@@ -1,5 +1,5 @@
 import { EditorState, Modifier } from "draft-js";
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 // WORKAROUND: couldn't find the interface for the props that are injected here
 // https://github.com/jpuri/react-draft-wysiwyg/blob/master/src/Editor/index.js#L470
@@ -12,21 +12,58 @@ const AssessmentsOptions: React.FunctionComponent<Props> = ({
   editorState,
   onChange,
 }) => {
-  const assessmentOptions = (): void => {
+  // console.log(modalHandler);
+  const [showDropdown, setShowDropdown] = useState(false);
+  useEffect(() => {
+    setShowDropdown(false);
+  }, []);
+  const openPlaceholderDropdown = () => setShowDropdown(!showDropdown);
+
+  const addPlaceholder = (placeholder) => {
     const contentState = Modifier.replaceText(
-      editorState!.getCurrentContent(),
-      editorState!.getSelection(),
-      "⭐",
-      editorState!.getCurrentInlineStyle(),
+    editorState!.getCurrentContent(),
+    editorState!.getSelection(),
+    placeholder,
+    editorState!.getCurrentInlineStyle(),
     );
     onChange!(EditorState.push(editorState!, contentState, "insert-characters"));
   };
 
+  const placeholderOptions = [
+    {key: "firstName", value: "{{firstName}}", text: "First Name"},
+    {key: "lastName", value: "{{lastName}}", text: "Last name"},
+    {key: "company", value: "{{company}}", text: "Company"},
+    {key: "address", value: "{{address}}", text: "Address"},
+    {key: "zip", value: "{{zip}}", text: "Zip"},
+    {key: "city", value: "{{city}}", text: "City"},
+  ];
+
+  const listItem = placeholderOptions.map((item) => (
+    <li
+      onClick={() => addPlaceholder(item.value)}
+      key={item.key}
+      className="rdw-dropdownoption-default placeholder-li"
+    >
+      {item.text}
+    </li>
+  ));
+
   return (
-    <div onClick={assessmentOptions}>
-      Test
-    </div>
-  );
+      <div onClick={openPlaceholderDropdown} className="rdw-block-wrapper" aria-label="rdw-block-control">
+        <div className="rdw-dropdown-wrapper rdw-block-dropdown" aria-label="rdw-dropdown">
+          <div className="rdw-dropdown-selectedtext" title="Placeholders">
+            <span>Placeholder</span>
+            <div className={`rdw-dropdown-caretto${showDropdown ? "close" : "open"}`}/>
+          </div>
+          {
+            showDropdown &&
+            <ul className={`rdw-dropdown-optionwrapper ${showDropdown ? "" : "placeholder-ul"}`}>
+              {listItem}
+            </ul>
+          }
+        </div>
+      </div>
+    );
 };
 
 export default AssessmentsOptions;
