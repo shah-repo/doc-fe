@@ -1,4 +1,5 @@
 import { Box } from "@material-ui/core";
+import classNames from "classnames";
 import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import {
@@ -12,7 +13,6 @@ import { Editor, EditorProps } from "react-draft-wysiwyg";
 import useDebounce from "use-debounce/lib/useDebounce";
 import "../../../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { RenderSize } from "../../../../../state/ducks/common";
-import useDidMount from "../../../../hooks/useDidMount";
 import Field, { FieldOwnProps } from "../Field";
 import "./rte.css";
 
@@ -48,11 +48,9 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
   toggleToolbar = true,
   ...fieldProps
 }) => {
-  const didMount = useDidMount();
   const { field, form } = fieldProps;
   const [value, setValue] = useState();
   const [toolbarHidden, setToolbarHidden] = useState(toggleToolbar);
-  const [toolbarHiddenDebounced, setToolbarHiddenDebounced] = useState(toggleToolbar);
 
   useEffect(() => {
     const contentBlock = htmlToDraft(field.value);
@@ -74,19 +72,15 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
     form.setFieldValue(field.name, fieldValue);
   }, [debouncedUpdate]);
 
-  const [debouncedToggle] = useDebounce(toolbarHidden, 150);
-  useEffect(() => {
-    if (didMount) {
-      setToolbarHiddenDebounced(!toolbarHiddenDebounced);
-    }
-  }, [debouncedToggle]);
-
   const handleBlur = () => {
     const  { name } = field;
     const { touched, setFieldTouched } = form;
 
     if (toggleToolbar) {
-      setToolbarHidden(true);
+      // smoother transition
+      setTimeout(() => {
+        setToolbarHidden(true);
+      }, 400);
     }
 
     if (!touched[name]) {
@@ -113,14 +107,20 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
           onEditorStateChange={setValue}
           onBlur={handleBlur}
           onFocus={handleFocus}
-          toolbarClassName="rte-toolbar-absolute"
+          toolbarClassName={
+            classNames(
+              "rte-toolbar",
+              {
+                "rte-toolbar-hide": toolbarHidden,
+              },
+            )
+          }
           wrapperClassName="rte-wrapper"
           editorClassName="rte-editor"
           toolbar={{
             options: toolbarOptions,
           }}
           {...editorProps}
-          toolbarHidden={toolbarHiddenDebounced}
         />
       </Box>
     </Field>

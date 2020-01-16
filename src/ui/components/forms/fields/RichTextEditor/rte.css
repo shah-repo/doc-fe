@@ -11,12 +11,14 @@
   margin-bottom: 50px;
 }
 
-.rte-toolbar-absolute {
-  position: absolute !important;
-  top: -80px !important;
+.rte-toolbar {
   border-radius: 3px !important;
   border: 1px solid #B4C0CA !important;
   z-index: 9999;
+}
+
+.rte-toolbar-hide {
+  display: none;
 }
 
 .rte-select-reasoning {
