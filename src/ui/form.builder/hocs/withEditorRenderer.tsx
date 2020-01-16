@@ -45,16 +45,22 @@ export const withEditorRenderer =
       });
       name = _.kebabCase(name);
     }
+    name = `${name}-${uniqid()}`;
     // const item = schemaItem();
+    const customValidator = FBDynamicValidatorStore.dynamicValidator;
+
+    let rules = FBValidatorStore.getRules();
+    const customValidatorRule = customValidator && customValidator.name;
+    customValidatorRule && (rules += `${!_.isEmpty(rules) ? "|" : ""}${customValidatorRule}`);
     const schema: FBTemplateSchema = {
       type,
       index,
-      name: `${name}-${uniqid()}`,
+      name,
       ...values,
-      rules: FBValidatorStore.getRules(),
+      rules,
       // applicableOn: FBValidatorStore.applicableOn ? [FBValidatorTrigger.ON_STATE_TO_IN_REVIEW] : [],
       applicableOn: ["ON_STATE_TO_IN_REVIEW"],
-      customValidator: FBDynamicValidatorStore.dynamicValidator,
+      customValidator,
     };
 
     FBDynamicValidatorStore.reset();

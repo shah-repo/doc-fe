@@ -10,6 +10,9 @@ import FBStore from "./FBStore";
 import FBValidatorStore from "./FBValidatorStore";
 
 export class FormBuilderDynamicValidatorStore {
+  @computed get Validator(): any {
+    return _.get(window, "EnlilRemoteValidators.validator");
+  }
   @computed get dynamicValidator(): FBValidatorConfigProps | undefined {
     if (_.isUndefined(this.validatorName)) {
       return;
@@ -21,7 +24,8 @@ export class FormBuilderDynamicValidatorStore {
     };
   }
   public originCode = _.template(`
-    (value, req, attribute) => {
+    (function(value, req, attribute) {
+      req = this.validator.input;
       <%= interpolation %>
       try {
         <%= code %>
@@ -30,7 +34,7 @@ export class FormBuilderDynamicValidatorStore {
       catch(error) {
         return false;
       }
-    }
+    })
   `);
   public validatorName?: string;
   @observable public errorMessage: string = "";
@@ -82,25 +86,24 @@ export class FormBuilderDynamicValidatorStore {
   }
 
   @action public validate = () => {
-    if (FBStore.mode !== "form") {
+    if (FBStore.mode !== "form" || _.isUndefined(this.Validator)) {
       return;
     }
 
     // Clear helper text
     set(this, "helperText", {});
 
-    // UI validator
-    FBValidatorStore.uiValidate();
+    const rules = FBValidatorStore.getSchemaReleasedRules();
+    const values = FBStore.getValues();
+    const validator = new this.Validator(values, rules);
 
-    // Dynamic validator
-    const rules = this.generateRules();
-
-    const validator = new Validator(FBStore.getValidationValues(), rules);
-
-    if (validator.fails()) {
+    function passes() {}
+    function fails() {
       const errors = validator.errors.all();
-      this.setHelperText(errors);
+      FBDynamicValidatorStore.setHelperText(errors);
     }
+    validator.setAttributeNames(FBStore.getValidationAttribute());
+    validator.checkAsync(passes, fails);
   }
 
   @action public setHelperText = (errors: Validator.ValidationErrors) => {
@@ -114,14 +117,9 @@ export class FormBuilderDynamicValidatorStore {
   }
 
   @action public registerValidators = () => {
-    // Empty validator
-    Validator.register(
-      "",
-      () => {
-        return true;
-      },
-      "",
-    );
+    if (_.isUndefined(this.Validator)) {
+      return;
+    }
 
     _.map(FBStore.getSchema(), (schemaItem) => {
       const { customValidator } = schemaItem;
@@ -137,30 +135,13 @@ export class FormBuilderDynamicValidatorStore {
           alert("An error occurred in validator function body: " + error);
         }
 
-        Validator.register(
+        this.Validator.registerImplicit(
           customValidator.name,
           customValFn,
           customValidator.errorMessage || "",
         );
       }
     });
-  }
-
-  @action private generateRules = (): Dictionary<string> => {
-    const rules = {};
-    _.map(FBStore.getSchema(), (schemaItem) => {
-      const { customValidator, name } = schemaItem;
-      if (_.isUndefined(name)) {
-        return;
-      }
-
-      rules[name] = "";
-      !_.isUndefined(customValidator) &&
-        (rules[name] = [
-          { [customValidator.name]: FBStore.getValidationValues() },
-        ]);
-    });
-    return rules;
   }
 
   @action private generateVariables = (): FBValidatorTemplate => {
