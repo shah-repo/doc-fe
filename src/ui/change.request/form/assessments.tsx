@@ -12,6 +12,23 @@ import AssessmentsOptions from "./assessments.options";
 
 type Props = Partial<FormikHybridFieldProps>;
 
+const REASONING_OPTIONS = {
+  [AssessmentType.design]: [
+    {
+      key: "not_affect_changes",
+      value: "cr.assessment.reasoning.design.not_affect_changes",
+      text: "cr.assessment.reasoning.design.not_affect_changes",
+    },
+    {
+      key: "equivalent_changes",
+      value: "cr.assessment.reasoning.design.equivalent_changes",
+      text: "cr.assessment.reasoning.design.equivalent_changes",
+    },
+  ],
+  [AssessmentType.process]: [],
+  [AssessmentType.regulatory]: [],
+};
+
 const Assessments: React.FunctionComponent<Props> = ({ form }) => {
   const itemRenderer = () =>
     Object.values(AssessmentType).map((type) => {
@@ -28,6 +45,8 @@ const Assessments: React.FunctionComponent<Props> = ({ form }) => {
         form!.setFieldValue(`assessments.${type}.reasoning`, undefined);
       }
 
+      const reasoningOptions = REASONING_OPTIONS[type];
+
       return (
         <Box key={type} mb={4}>
           <TextEditorField
@@ -37,7 +56,7 @@ const Assessments: React.FunctionComponent<Props> = ({ form }) => {
             hidden={(attachments || []).length > 0}
             editorProps={{
               // tslint:disable-next-line: jsx-key
-              toolbarCustomButtons: [<AssessmentsOptions />],
+              toolbarCustomButtons: [<AssessmentsOptions reasoningOptions={reasoningOptions} />],
             }}
           />
           <AttachmentIconField name={`assessments.${type}.attachments`} />
