@@ -45,6 +45,15 @@ export class FormBuilderDynamicValidatorStore {
   @observable public helperText: Dictionary<string> = {};
   private fieldNames: string[] = [];
 
+  @action public setDynamicValidator = (customValidator: FBValidatorConfigProps | undefined) => {
+    if (_.isUndefined(customValidator)) {
+      return;
+    }
+    this.setLiveCode(Base64.atob(customValidator!.fn));
+    this.validatorName = customValidator.name;
+    this.errorMessage = customValidator.errorMessage || "";
+  }
+
   @action public setVariable = (fieldName: string) => {
     this.fieldNames = _.concat(this.fieldNames, fieldName);
     this.generateTemplate();

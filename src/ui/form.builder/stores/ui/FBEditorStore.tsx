@@ -9,6 +9,7 @@ import { withEditorRenderer } from "../../hocs/withEditorRenderer";
 import { FBEditorElementType, FBEditorModeType } from "../../types/editor";
 import { FBTemplateSchema } from "../../types/store";
 import FBValidatorStore from "../ui/FBValidatorStore";
+import FBDynamicValidatorStore from "./FBDynamicValidatorStore";
 
 export class FBEditorStore {
   @observable public open: boolean = false;
@@ -29,6 +30,8 @@ export class FBEditorStore {
   @action public reset = () => {
     this.open = false;
     FBValidatorStore.applicableOn = false;
+    FBDynamicValidatorStore.reset();
+    FBValidatorStore.resetIndicatorValues();
     setTimeout(() => {
       this.content = undefined;
       this.title = undefined;
@@ -57,10 +60,11 @@ export class FBEditorStore {
     if (_.isUndefined(schema.index)) {
       return;
     }
-    const { type, index } = schema;
+    const { type, index, customValidator } = schema;
     this.editorIndex = index;
     this.editorMode = "update";
     this.open = true;
+    FBDynamicValidatorStore.setDynamicValidator(customValidator);
     this.editorTypeRenderer(
       type as FBEditorElementType,
       schema,

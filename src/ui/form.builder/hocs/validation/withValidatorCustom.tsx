@@ -22,6 +22,9 @@ export const withValidatorCustom = <T extends FBValidatorDynamicProps>(
     };
 
     React.useEffect(() => {
+      if (!_.isUndefined(dynamicValidatorStore?.dynamicValidator)) {
+        return;
+      }
       dynamicValidatorStore!.setValidatorName(`validator_${uniqid()}`);
     }, []);
 
