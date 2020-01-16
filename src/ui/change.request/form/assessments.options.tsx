@@ -1,5 +1,6 @@
 import { EditorState, Modifier } from "draft-js";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import Text from "../../components/Text";
 
 // WORKAROUND: couldn't find the interface for the props that are injected here
 // https://github.com/jpuri/react-draft-wysiwyg/blob/master/src/Editor/index.js#L470
@@ -19,7 +20,7 @@ const AssessmentsOptions: React.FunctionComponent<Props> = ({
   }, []);
   const openPlaceholderDropdown = () => setShowDropdown(!showDropdown);
 
-  const addPlaceholder = (placeholder) => {
+  const addPlaceholder = (placeholder: string) => {
     const contentState = Modifier.replaceText(
     editorState!.getCurrentContent(),
     editorState!.getSelection(),
@@ -50,9 +51,9 @@ const AssessmentsOptions: React.FunctionComponent<Props> = ({
 
   return (
       <div onClick={openPlaceholderDropdown} className="rdw-block-wrapper" aria-label="rdw-block-control">
-        <div className="rdw-dropdown-wrapper rdw-block-dropdown" aria-label="rdw-dropdown">
+        <div className="rdw-dropdown-wrapper rdw-block-dropdown rte-select-reasoning" aria-label="rdw-dropdown">
           <div className="rdw-dropdown-selectedtext" title="Placeholders">
-            <span>Placeholder</span>
+            <Text translation="change.request.select.reasoning" />
             <div className={`rdw-dropdown-caretto${showDropdown ? "close" : "open"}`}/>
           </div>
           {

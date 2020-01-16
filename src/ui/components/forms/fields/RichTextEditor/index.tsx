@@ -34,6 +34,7 @@ export interface RichTextEditorOwnProps extends FieldOwnProps {
   actionsRenderer?: () => any;
   hidden?: boolean;
   editorProps?: EditorProps;
+  toggleToolbar?: boolean;
 }
 
 export type RichTextEditorPropsWithFormik = RichTextEditorOwnProps & FormikFieldProps;
@@ -43,14 +44,13 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
   size,
   hidden = false,
   editorProps,
-  editorProps: {
-    toolbarOnFocus = true,
-  } = {},
+  toggleToolbar = true,
   ...fieldProps
 }) => {
 
   const { field, form } = fieldProps;
   const [value, setValue] = useState();
+  const [toolbarHidden, setToolbarHidden] = useState(toggleToolbar);
 
   useEffect(() => {
     const contentBlock = htmlToDraft(field.value);
@@ -76,8 +76,18 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
     const  { name } = field;
     const { touched, setFieldTouched } = form;
 
+    if (toggleToolbar) {
+      setToolbarHidden(true);
+    }
+
     if (!touched[name]) {
       setFieldTouched(name, true);
+    }
+  };
+
+  const handleFocus = () => {
+    if (toggleToolbar) {
+      setToolbarHidden(false);
     }
   };
 
@@ -93,6 +103,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
           editorState={value}
           onEditorStateChange={setValue}
           onBlur={handleBlur}
+          onFocus={handleFocus}
           toolbarClassName="rte-toolbar-absolute"
           wrapperClassName="rte-wrapper"
           editorClassName="rte-editor"
@@ -100,7 +111,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
             options: toolbarOptions,
           }}
           {...editorProps}
-          toolbarOnFocus={toolbarOnFocus}
+          toolbarHidden={toolbarHidden}
         />
       </Box>
     </Field>

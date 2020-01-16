@@ -102,6 +102,7 @@
   "change.request.regulatory.assessment": "Regulatory Assessment",
   "change.request.assessments.error": "Please provide attachment or reasoning for each assessment",
   "changeRequest.void.alert": "All linked documents should be removed before voiding the change request.",
+  "change.request.select.reasoning": "Select reasoning",
 
   "changeRequest.transition.submitted": "Submit change request",
   "changeRequest.transition.approve": "Approve submission",
