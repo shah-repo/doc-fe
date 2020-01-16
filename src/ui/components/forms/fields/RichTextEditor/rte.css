@@ -22,3 +22,7 @@
 .rte-select-reasoning {
   width: 180px !important;
 }
+
+.placeholder-li:hover {
+  background: #F1F1F1;
+}

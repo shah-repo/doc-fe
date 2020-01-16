@@ -25,8 +25,30 @@ const REASONING_OPTIONS = {
       text: "cr.assessment.reasoning.design.equivalent_changes",
     },
   ],
-  [AssessmentType.process]: [],
-  [AssessmentType.regulatory]: [],
+  [AssessmentType.process]: [
+    {
+      key: "equivalent_changes",
+      value: "cr.assessment.reasoning.process.equivalent_changes",
+      text: "cr.assessment.reasoning.process.equivalent_changes",
+    },
+  ],
+  [AssessmentType.regulatory]: [
+    {
+      key: "no_approvals",
+      value: "cr.assessment.reasoning.regulatory.no_approvals",
+      text: "cr.assessment.reasoning.regulatory.no_approvals",
+    },
+    {
+      key: "no_submissions",
+      value: "cr.assessment.reasoning.regulatory.no_submissions",
+      text: "cr.assessment.reasoning.regulatory.no_submissions",
+    },
+    {
+      key: "not_certified",
+      value: "cr.assessment.reasoning.regulatory.not_certified",
+      text: "cr.assessment.reasoning.regulatory.not_certified",
+    },
+  ],
 };
 
 const Assessments: React.FunctionComponent<Props> = ({ form }) => {

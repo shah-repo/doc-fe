@@ -1,5 +1,5 @@
 import { Box } from "@material-ui/core";
-import { EditorState, Modifier } from "draft-js";
+import { EditorState, ContentState } from "draft-js";
 import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
 import Text from "../../components/Text";
@@ -37,13 +37,13 @@ const AssessmentsOptions: React.FunctionComponent<Props> = ({
   } = useComponentVisible(false);
 
   const addPlaceholder = (placeholder: string) => {
-    const contentState = Modifier.replaceText(
-      editorState!.getCurrentContent(),
-      editorState!.getSelection(),
-      intl.formatMessage({ id: placeholder }),
-      editorState!.getCurrentInlineStyle(),
+    onChange!(
+      EditorState.push(
+        editorState!,
+        ContentState.createFromText(intl.formatMessage({ id: placeholder })),
+        "insert-characters",
+      ),
     );
-    onChange!(EditorState.push(editorState!, contentState, "insert-characters"));
   };
 
   const listItem = reasoningOptions.map((item) => (

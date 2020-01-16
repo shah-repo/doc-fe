@@ -120,7 +120,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
             options: toolbarOptions,
           }}
           {...editorProps}
-          toolbarHidden={false}
+          toolbarHidden={toolbarHiddenDebounced}
         />
       </Box>
     </Field>
