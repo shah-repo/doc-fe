@@ -47,7 +47,7 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
 
       return _.map(options, (option) => {
         const optionName = `${_.kebabCase(option)}${valueVar}-${name}`;
-        const tooltip = (_.size(option) >= truncateValue) ? option : "";
+        const tooltip = _.size(option) >= truncateValue ? option : "";
         const key = `tree-node-${name}-${option}`;
         const label = truncate(option);
 
@@ -67,7 +67,8 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
       included: boolean = false,
     ) => {
       const contextLabel = truncate(label as string);
-      const tooltip = (_.size(contextLabel) >= truncateValue) ? (label as string) : "";
+      const tooltip =
+        _.size(contextLabel) >= truncateValue ? (label as string) : "";
       // Workaround for mui treeview bug where it registers the child but do not render it
       if (!included) {
         return <div />;
@@ -84,7 +85,8 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
 
     const labelNode = (name: string, label: string | React.ReactNode) => {
       const nodeLabel = truncate(label as string);
-      const tooltip = (_.size(nodeLabel) >= truncateValue) ? (label as string) : "";
+      const tooltip =
+        _.size(nodeLabel) >= truncateValue ? (label as string) : "";
       return (
         <FBCheckbox
           label={nodeLabel}
@@ -96,7 +98,8 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
 
     const regularNode = (name: string, label: string | React.ReactNode) => {
       const regularLabel = truncate(label as string);
-      const tooltip = (_.size(regularLabel) >= truncateValue) ? (label as string) : "";
+      const tooltip =
+        _.size(regularLabel) >= truncateValue ? (label as string) : "";
       return (
         <FBCheckbox
           key={`tree-node-${name}`}
@@ -111,12 +114,13 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
       schemaItem: FBInputProps,
       includeNodeField: boolean = false,
     ) => {
-      const { name, includeContext, type } = schemaItem;
-      let { label, options } = schemaItem;
+      const { name, includeContext, type, label } = schemaItem;
+      let { options } = schemaItem;
       const isOther = type === "select" || _.includes(type, "group");
       const contextLabel = isOther ? "form.builder.other" : "form.builder.note";
       let treeLabel: string | React.ReactNode = truncate(label as string);
-      const tooltip = (_.size(treeLabel) >= truncateValue) ? (label as string) : "";
+      const tooltip =
+        _.size(treeLabel) >= truncateValue ? (label as string) : "";
 
       !_.isUndefined(options) &&
         (options = _.split((schemaItem.options || "") as string, "\n"));
@@ -124,10 +128,7 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
 
       return (
         <Tooltip title={tooltip} placement="bottom-start">
-          <TreeItem
-            nodeId={`tree-node-${name!}`}
-            label={treeLabel}
-          >
+          <TreeItem nodeId={`tree-node-${name!}`} label={treeLabel}>
             {optionsNode(options || [], name!, type as string)}
             {contextNode(name!, contextLabel, includeContext)}
           </TreeItem>
