@@ -1,15 +1,10 @@
 import { Box } from "@material-ui/core";
-import { EditorState, ContentState } from "draft-js";
+import { ContentState, EditorState } from "draft-js";
 import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
 import Text from "../../components/Text";
 import useComponentVisible from "../../hooks/useComponentVisible";
-
-interface ReasoningOption {
-  key: string;
-  value: string;
-  text: string;
-}
+import { ReasoningOption } from "../utils/types";
 
 // WORKAROUND: couldn't find the interface for the props that are injected here
 // https://github.com/jpuri/react-draft-wysiwyg/blob/master/src/Editor/index.js#L470
@@ -19,7 +14,7 @@ interface Props {
   reasoningOptions: ReasoningOption[];
 }
 
-const AssessmentsOptions: React.FunctionComponent<Props> = ({
+const AssessmentsReasoning: React.FunctionComponent<Props> = ({
   editorState,
   onChange,
   reasoningOptions = [],
@@ -83,4 +78,4 @@ const AssessmentsOptions: React.FunctionComponent<Props> = ({
     );
 };
 
-export default AssessmentsOptions;
+export default AssessmentsReasoning;

@@ -88,3 +88,9 @@ export interface ActionProps {
   editChangeRequest: (changeRequestId: string) => void;
   previewChangeRequest: (changeRequestId: string) => void;
 }
+
+export interface ReasoningOption {
+  key: string;
+  value: string;
+  text: string;
+}

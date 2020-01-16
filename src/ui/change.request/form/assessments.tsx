@@ -8,48 +8,10 @@ import HeaderField from "../../components/common/header.field/field";
 import TextEditorField from "../../components/forms/fields/RichTextEditor";
 import { withFormik } from "../../components/hoc/formik";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
-import AssessmentsOptions from "./assessments.options";
+import { REASONING_OPTIONS } from "../utils/constants";
+import AssessmentsReasoning from "./assessments.reasoning";
 
 type Props = Partial<FormikHybridFieldProps>;
-
-const REASONING_OPTIONS = {
-  [AssessmentType.design]: [
-    {
-      key: "not_affect_changes",
-      value: "cr.assessment.reasoning.design.not_affect_changes",
-      text: "cr.assessment.reasoning.design.not_affect_changes",
-    },
-    {
-      key: "equivalent_changes",
-      value: "cr.assessment.reasoning.design.equivalent_changes",
-      text: "cr.assessment.reasoning.design.equivalent_changes",
-    },
-  ],
-  [AssessmentType.process]: [
-    {
-      key: "equivalent_changes",
-      value: "cr.assessment.reasoning.process.equivalent_changes",
-      text: "cr.assessment.reasoning.process.equivalent_changes",
-    },
-  ],
-  [AssessmentType.regulatory]: [
-    {
-      key: "no_approvals",
-      value: "cr.assessment.reasoning.regulatory.no_approvals",
-      text: "cr.assessment.reasoning.regulatory.no_approvals",
-    },
-    {
-      key: "no_submissions",
-      value: "cr.assessment.reasoning.regulatory.no_submissions",
-      text: "cr.assessment.reasoning.regulatory.no_submissions",
-    },
-    {
-      key: "not_certified",
-      value: "cr.assessment.reasoning.regulatory.not_certified",
-      text: "cr.assessment.reasoning.regulatory.not_certified",
-    },
-  ],
-};
 
 const Assessments: React.FunctionComponent<Props> = ({ form }) => {
   const itemRenderer = () =>
@@ -78,7 +40,7 @@ const Assessments: React.FunctionComponent<Props> = ({ form }) => {
             hidden={(attachments || []).length > 0}
             editorProps={{
               // tslint:disable-next-line: jsx-key
-              toolbarCustomButtons: [<AssessmentsOptions reasoningOptions={reasoningOptions} />],
+              toolbarCustomButtons: [<AssessmentsReasoning reasoningOptions={reasoningOptions} />],
             }}
           />
           <AttachmentIconField name={`assessments.${type}.attachments`} />
