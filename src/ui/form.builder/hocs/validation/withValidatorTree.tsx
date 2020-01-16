@@ -115,12 +115,12 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
       let { label, options } = schemaItem;
       const isOther = type === "select" || _.includes(type, "group");
       const contextLabel = isOther ? "form.builder.other" : "form.builder.note";
-      const treeLabel = truncate(label as string);
+      let treeLabel: string | React.ReactNode = truncate(label as string);
       const tooltip = (_.size(treeLabel) >= truncateValue) ? (label as string) : "";
 
       !_.isUndefined(options) &&
         (options = _.split((schemaItem.options || "") as string, "\n"));
-      includeNodeField && (label = labelNode(name!, label));
+      includeNodeField && (treeLabel = labelNode(name!, label));
 
       return (
         <Tooltip title={tooltip} placement="bottom-start">

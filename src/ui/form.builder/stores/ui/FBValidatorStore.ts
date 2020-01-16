@@ -5,7 +5,6 @@ import { SelectOption } from "../../../components/forms/fields/Select";
 import { FBEditorElementType } from "../../types/editor";
 import { FBValidatorTrigger } from "../../types/validation/validator";
 import { FBValidatorConfigProps } from "../../types/validation/validatorDialog";
-import FBDynamicValidatorStore from "./FBDynamicValidatorStore";
 import FBStore from "./FBStore";
 
 export class FormBuilderValidatorStored {
@@ -100,28 +99,6 @@ export class FormBuilderValidatorStored {
       FBValidatorTrigger,
       (k, v) => ({ value: `applicableOn-${v}`, text: k } as SelectOption),
     );
-  }
-
-  @action public uiValidate = () => {
-    if (FBStore.mode !== "form") {
-      return;
-    }
-    const RemoteValidator = _.get(window, "EnlilRemoteValidators.validator");
-    const rules = this.getSchemaReleasedRules();
-    const values = FBStore.getUIValues();
-
-    const validator = new RemoteValidator(values, rules);
-    validator.setAttributeNames(FBStore.getValidationAttribute());
-    function passes() {
-      // Validation passed
-    }
-
-    function fails() {
-      const errors = validator.errors.all();
-      FBDynamicValidatorStore.setHelperText(errors);
-    }
-
-    validator.checkAsync(passes, fails);
   }
 
   @action public validate = (
