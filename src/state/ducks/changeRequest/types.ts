@@ -14,6 +14,7 @@ export enum ChangeRequestStatus {
   Implementation = "IMPLEMENTATION",
   Approved = "APPROVED",
   Closed = "CLOSED",
+  Voided = "VOIDED",
 }
 
 export enum ImplementationPlanTaskStatus {

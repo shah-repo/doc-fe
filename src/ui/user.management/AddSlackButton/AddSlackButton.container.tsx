@@ -17,6 +17,7 @@ interface DispatchProps {
 
 interface StateProps {
   isSlackIntegrationEnabled: boolean;
+  slackTeamId: string;
 }
 
 export type Props = DispatchProps & StateProps;
@@ -24,6 +25,7 @@ export type Props = DispatchProps & StateProps;
 export const AddSlackButtonContainer: React.FunctionComponent<Props> = ({
   isSlackIntegrationEnabled,
   getSlackUrl,
+  slackTeamId,
 }) => {
   const hasSlackPermission = useSelector(getHasSlack(Permission.SLACK_APP_INSTALL));
 
@@ -39,7 +41,7 @@ export const AddSlackButtonContainer: React.FunctionComponent<Props> = ({
 
   return (
     <Box>
-      {hasSlackPermission && isSlackIntegrationEnabled &&
+      {hasSlackPermission && isSlackIntegrationEnabled && !slackTeamId &&
         <AddSlackButtonPresenter
           addSlack={onAdd}
         />
@@ -50,6 +52,7 @@ export const AddSlackButtonContainer: React.FunctionComponent<Props> = ({
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   isSlackIntegrationEnabled: companySelectors.isSlackIntegrationEnabled(state),
+  slackTeamId: companySelectors.slackTeamId(state),
 });
 
 export default connect<StateProps, DispatchProps, {}, ApplicationState>(mapStateToProps, {

@@ -1,3 +1,7 @@
+import { Id, Nullable, User } from "../common";
+import { DocumentRevision } from "../documentRevisions";
+import { ADD_WATERMARK, REMOVE_WATERMARK } from "./constants";
+
 export interface Attachment {
   id: string;
   name: string;
@@ -12,8 +16,49 @@ export interface AttachmentDownloadResponse {
 }
 
 export type AttachmentState = Attachment;
+export type AvatarS3linkResponse = AttachmentDownloadResponse;
 
 export enum AttachmentType {
   Attached = "ATTACHED",
   CleanCopy = "CLEAN_COPY",
 }
+
+export enum WatermarkRequestStatus {
+  Pending = "PENDING",
+  Failed = "FAILED",
+  Done = "DONE",
+}
+
+export interface WatermarkRequester {
+  id: string;
+  active: boolean;
+  slackUserId: Nullable<string>;
+  user: User;
+}
+
+export interface WatermarkRequest {
+  id: string;
+  s3Url: string;
+  status: WatermarkRequestStatus;
+  cleanCopy: boolean;
+  attachment: Attachment;
+  requestedBy: WatermarkRequester;
+  presignedUrl?: string;
+  documentRevision: Nullable<DocumentRevision>;
+}
+
+export interface WatermarkRequestBody {
+  attachment: Id;
+  type: AttachmentType;
+}
+
+export interface AddWatermarkAction {
+  type: typeof ADD_WATERMARK;
+  payload: string;
+}
+export interface RemoveWatermarkAction {
+  type: typeof REMOVE_WATERMARK;
+  payload: string;
+}
+export type WatermarkActions = AddWatermarkAction & RemoveWatermarkAction;
+export type WatermarkState = string[];

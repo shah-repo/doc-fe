@@ -26,8 +26,9 @@ describe("File component tests", () => {
       <Formik
         initialValues={{ test: null }}
         onSubmit={jest.fn()}
-        render={renderForm}
-      />,
+      >
+        {renderForm}
+      </Formik>,
     );
   };
 

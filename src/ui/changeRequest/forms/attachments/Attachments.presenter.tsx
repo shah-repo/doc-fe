@@ -9,7 +9,7 @@ import {
   WithStyles,
 } from "@material-ui/core";
 import { Add } from "@material-ui/icons";
-import { Formik, FormikActions, FormikProps } from "formik";
+import { Formik, FormikProps } from "formik";
 import React from "react";
 import { AsyncState } from "../../../../state/types";
 import FileCard from "../../../components/cards/FileCard";
@@ -21,7 +21,7 @@ import FileUploadForm from "./FileUploadForm";
 interface Props extends WithStyles<typeof styles> {
   removeAttachment: (index: number) => () => void;
   attachments: Attachment[];
-  onSubmit: (values: FileUploadFormValues, actions: FormikActions<FileUploadFormValues>) => void;
+  onSubmit: (values: FileUploadFormValues) => void;
   closeDialog: () => void;
   openDialog: () => void;
   isDialogOpen: boolean;
@@ -65,10 +65,11 @@ const AttachmentsPresenter: React.FunctionComponent<Props> =
           </DialogTitle>
           <DialogContent>
             <Formik
-              render={renderForm}
               initialValues={{ file: undefined }}
               onSubmit={onSubmit}
-            />
+            >
+              {renderForm}
+            </Formik>
           </DialogContent>
         </Dialog>
       </div>
