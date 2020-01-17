@@ -67,6 +67,9 @@ const getDocumentTypeByAcronym = createSelector(
       .find((docType) => docType.documentTypeAcronym.toLowerCase() === acronym.toLowerCase()),
 );
 
+const isSingleDocRevId = (state: ApplicationState): boolean => state.documentType.docRevTypeId.forms.length === 1;
+const docRevTypeById = (state: ApplicationState) => state.documentType.docRevTypeId.forms[0].id;
+
 export default {
   byId,
   getDocumentTypeList,
@@ -76,4 +79,6 @@ export default {
   getDocumentTypeById,
   getDocumentTypesWithPageDetails,
   getDocumentTypeByAcronym,
+  isSingleDocRevId,
+  docRevTypeById,
 };

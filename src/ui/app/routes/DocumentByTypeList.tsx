@@ -12,6 +12,7 @@ const DocumentByTypeListLinks: React.FunctionComponent<Props> = ({
   pathname,
 }) => {
   const docTypesWithPageDetails: DocumentType[] = useSelector(documentTypeSelectors.getDocumentTypesWithPageDetails);
+  console.log(docTypesWithPageDetails);
 
   if (docTypesWithPageDetails.length === 0) {
     return null;
