@@ -8,8 +8,8 @@ import { WatermarkResponse } from "./types";
 export const WatermarkFooterContainer: React.FunctionComponent = () => {
   const dispatch = useDispatch();
   const [requestResults, setRequestResult] = useState<WatermarkResponse[]>([]);
+  const removeWatermark = (id: string) => dispatch(attachmentsActions.removeWatermark(id));
   const closeMessage = () => {
-    dispatch(attachmentsActions.removeWatermark(requestResults[0].data.id));
     setRequestResult([
       ...requestResults.slice(1),
     ]);
@@ -40,6 +40,7 @@ export const WatermarkFooterContainer: React.FunctionComponent = () => {
       <WatermarkFooterRequest
         watermarkIds={watermarkIds}
         addRequestResult={addRequestResult}
+        removeWatermark={removeWatermark}
       />
       {renderFooter}
     </>
