@@ -54,6 +54,7 @@ export const ImplementationPlan: React.FunctionComponent<Props> = ({
       <CloseTask crId={crId} taskId={task.id} closeTask={closeTask} />
     );
 
+    // TODO: replace react quill
   const taskRenderer = () =>
     tasks.map((task, index) => (
       <Grid
