@@ -24,6 +24,10 @@ const upload = (file: File, handlers: Handlers<Attachment>): ApiAction => {
   const formData = new FormData();
   formData.append("file", file);
 
+  const type = file.name.split(".").pop();
+  const isCleanCopyRequired = type === "docx";
+  formData.append("isCleanCopyRequired", isCleanCopyRequired.toString());
+
   return apiActionWithCallbacks<Attachment, FormData>({
     url: ATTACHMENT_UPLOAD_URL,
     method: "post",

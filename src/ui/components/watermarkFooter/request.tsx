@@ -43,6 +43,17 @@ export const WatermarkFooterRequest: React.FunctionComponent<Props> = ({
         },
       );
     },
+    onError: (msg) => {
+      addRequestResult(
+        {
+          success: false,
+          message: {
+            translation: msg as Translation,
+          },
+          data: {} as WatermarkRequest,
+        },
+      );
+    },
   });
   const checkWatermarkRequest = (msg: string) => {
     // NOTE: I couldn't the function to take the correct scope.
