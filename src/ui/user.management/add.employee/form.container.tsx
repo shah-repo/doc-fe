@@ -30,13 +30,9 @@ export const AddEmployeeFormContainer: React.FunctionComponent = ({
 }) => {
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const addEmployeeAction = useActionCreator(userManagementActions.addEmployee);
-  const async = useAsync();
-  const dispatch = useDispatch();
-  const TABLE_NAME = "userManagement";
-  const tableState = useSelector(getTableState(TABLE_NAME));
-  const onSubmit = (values: AddEmployeeFormValues) => {
-    async.start(addEmployeeAction, transformToAddEmployeeRequest(values), async);
-    dispatch(
+  const async = useAsync({
+    onSuccess: () => {
+      dispatch(
         tableSearchActions.setSearchCriteria(
           {
             ...tableState,
@@ -47,6 +43,13 @@ export const AddEmployeeFormContainer: React.FunctionComponent = ({
           TABLE_NAME,
         ),
       );
+    },
+  });
+  const dispatch = useDispatch();
+  const TABLE_NAME = "userManagement";
+  const tableState = useSelector(getTableState(TABLE_NAME));
+  const onSubmit = (values: AddEmployeeFormValues) => {
+    async.start(addEmployeeAction, transformToAddEmployeeRequest(values), async);
   };
 
   const renderForm = (props: FormikProps<AddEmployeeFormValues>) => {
