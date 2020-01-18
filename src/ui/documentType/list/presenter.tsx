@@ -152,7 +152,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
         </Button>
       </Grid>
       {showError && <div style={{color: "red"}}>
-        Multiple forms
+        <Text translation="supplier.form.error" values={{name: documentType.documentTypeName}} />
       </div>}
       <Grid item={true} className={classes.item}>
         <TablePanel<DocumentRevision>
