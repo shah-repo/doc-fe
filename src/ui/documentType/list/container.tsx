@@ -22,7 +22,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const documentType = useSelector(
     (state: ApplicationState) =>
       documentTypeSelectors.getDocumentTypeByAcronym(state, acronym),
-  ) as any;
+  );
   const TABLE_NAME = `documentsByTypeList-${acronym}`;
   const dispatch = useDispatch();
   const isSingleId = useSelector(documentTypeSelectors.isSingleDocRevId) ;
