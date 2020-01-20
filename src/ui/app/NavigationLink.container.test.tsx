@@ -16,13 +16,6 @@ jest.mock("react-redux", () => ({
     queryData: [],
   }),
 }));
-jest.mock("react-redux", () => ({
-  useDispatch: jest.fn(),
-  useSelector: () => ({
-    queryDict: {},
-    queryData: [],
-  }),
-}));
 
 describe("NavigationLinkContainer component unit tests", () => {
   const defaultProps: NavigationLinkContainerProps = {
