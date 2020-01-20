@@ -8,13 +8,13 @@ import { ValueType } from "react-select/src/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
 import { TextProps } from "../../components/Text";
+import { FBValidationModeType } from "../FBValidationMode";
 import { FBActionContainerProps } from "./actions/action";
 import { FBContextProps } from "./common/context";
 import { FBEditorElementType } from "./editor";
 import { FBFormikFieldProps } from "./formik";
 import { FBValidatorDelimiter, FBValidatorTrigger } from "./validation/validator";
 import { FBValidatorConfigProps } from "./validation/validatorDialog";
-import { FBValidationModeType } from "../FBValidationMode";
 
 export type Subtract<T, V> = Pick<T, Exclude<keyof T, keyof V>>;
 

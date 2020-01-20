@@ -1,9 +1,9 @@
 import Box from "@material-ui/core/Box";
 import React from "react";
+import { withInput } from "../../hocs/common/withInput";
 import { FBInputProps } from "../../types/common";
 import FBInputControl from "./FBInputControl";
 import FBLabel from "./FBLabel";
-import { withInput } from "../../hocs/common/withInput";
 
 const FBInput: React.FunctionComponent<FBInputProps> = ({
   label,
