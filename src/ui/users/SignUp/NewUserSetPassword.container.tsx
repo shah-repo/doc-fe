@@ -1,31 +1,23 @@
-import { Formik, FormikProps } from "formik";
 import { parse } from "query-string";
 import * as React from "react";
 import { connect } from "react-redux";
-import { Redirect, RouteComponentProps } from "react-router-dom";
-import * as Yup from "yup";
-import { logo } from "../../../common/utils/helpers";
+import { RouteComponentProps } from "react-router-dom";
 import { authActions, authSelectors } from "../../../state/ducks/auth";
 import { ApplicationState } from "../../../state/reducers";
-import {
-  confirmPasswordSchema,
-  passwordSchema,
-} from "../../components/forms/fields/validators";
-import { LOGIN_URL } from "../../constants/urls";
 import useAsync from "../../hooks/useAsync";
 import { PasswordValues } from "../types";
-import ConfirmPasswordPresenter from "./ConfirmPassword.presenter";
+import ConfirmPasswordContainer from "./ConfirmPassword.container";
+
+interface StateProps {
+  isUserAuthenticated: boolean;
+}
 
 interface DispatchProps {
   newUserSetPassword: typeof authActions.newUserSetPassword;
   login: typeof authActions.login;
 }
 
-interface StateProps {
-  isUserAuthenticated: boolean;
-}
-
-export type NewUserSetPasswordContainerProps = DispatchProps & StateProps &
+export type NewUserSetPasswordContainerProps = StateProps & DispatchProps &
   Pick<RouteComponentProps, "location">;
 
 const NewUserSetPasswordContainer: React.FunctionComponent<NewUserSetPasswordContainerProps> = ({
@@ -51,37 +43,14 @@ const NewUserSetPasswordContainer: React.FunctionComponent<NewUserSetPasswordCon
     );
   };
 
-  const initialValues: PasswordValues = {
-    email: clientEmail,
-    confirmPass: "",
-    password: "",
-  };
-
-  const render = (props: FormikProps<PasswordValues>) => (
-    <ConfirmPasswordPresenter
-      logo={logo}
+  return (
+    <ConfirmPasswordContainer
+      clientEmail={clientEmail}
+      onSubmit={onSubmit}
       asyncState={async.asyncState}
+      isUserAuthenticated={isUserAuthenticated}
       title="new.user.set.password"
     />
-  );
-  const validationSchema = Yup.object({
-    password: passwordSchema,
-    confirmPass: confirmPasswordSchema,
-  });
-
-  return (
-    <div>
-      {isUserAuthenticated && <Redirect to={{ pathname: LOGIN_URL }} />}}
-      {!isUserAuthenticated && (
-        <Formik
-          initialValues={initialValues}
-          onSubmit={onSubmit}
-          validationSchema={validationSchema}
-        >
-          {render}
-        </Formik>
-      )}
-    </div>
   );
 };
 

@@ -1,34 +1,26 @@
-import { Formik, FormikProps } from "formik";
 import { parse } from "query-string";
 import * as React from "react";
 import { connect } from "react-redux";
-import { Redirect, RouteComponentProps } from "react-router-dom";
-import * as Yup from "yup";
-import { logo } from "../../../common/utils/helpers";
+import { RouteComponentProps } from "react-router-dom";
 import { authActions, authSelectors } from "../../../state/ducks/auth";
 import { ApplicationState } from "../../../state/reducers";
-import {
-  confirmPasswordSchema,
-  passwordSchema,
-} from "../../components/forms/fields/validators";
-import { LOGIN_URL } from "../../constants/urls";
 import useAsync from "../../hooks/useAsync";
 import { PasswordValues } from "../types";
-import ConfirmPasswordPresenter from "./ConfirmPassword.presenter";
+import ConfirmPasswordContainer from "./ConfirmPassword.container";
+
+interface StateProps {
+  isUserAuthenticated: boolean;
+}
 
 interface DispatchProps {
   confirmNewPassword: typeof authActions.confirmNewPassword;
   login: typeof authActions.login;
 }
 
-interface StateProps {
-  isUserAuthenticated: boolean;
-}
-
-export type ConfirmForgotPasswordContainerProps = DispatchProps & StateProps &
+export type SetForgotPasswordContainerProps = StateProps & DispatchProps &
   Pick<RouteComponentProps, "location">;
 
-const ConfirmForgotPasswordContainer: React.FunctionComponent<ConfirmForgotPasswordContainerProps> = ({
+const SetForgotPasswordContainer: React.FunctionComponent<SetForgotPasswordContainerProps> = ({
   confirmNewPassword,
   location,
   isUserAuthenticated,
@@ -51,37 +43,14 @@ const ConfirmForgotPasswordContainer: React.FunctionComponent<ConfirmForgotPassw
     );
   };
 
-  const initialValues: PasswordValues = {
-    email: clientEmail,
-    confirmPass: "",
-    password: "",
-  };
-
-  const render = (props: FormikProps<PasswordValues>) => (
-    <ConfirmPasswordPresenter
-      logo={logo}
+  return (
+    <ConfirmPasswordContainer
+      clientEmail={clientEmail}
+      onSubmit={onSubmit}
       asyncState={async.asyncState}
+      isUserAuthenticated={isUserAuthenticated}
       title="forgot.password.confirm"
     />
-  );
-  const validationSchema = Yup.object({
-    password: passwordSchema,
-    confirmPass: confirmPasswordSchema,
-  });
-
-  return (
-    <div>
-      {isUserAuthenticated && <Redirect to={{ pathname: LOGIN_URL }} />}}
-      {!isUserAuthenticated && (
-        <Formik
-          initialValues={initialValues}
-          onSubmit={onSubmit}
-          validationSchema={validationSchema}
-        >
-          {render}
-        </Formik>
-      )}
-    </div>
   );
 };
 
@@ -92,4 +61,4 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 export default connect<{}, DispatchProps, {}, ApplicationState>(mapStateToProps, {
   confirmNewPassword: authActions.confirmNewPassword,
   login: authActions.login,
-})(ConfirmForgotPasswordContainer);
+})(SetForgotPasswordContainer);

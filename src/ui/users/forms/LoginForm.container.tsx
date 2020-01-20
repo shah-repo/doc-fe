@@ -8,7 +8,7 @@ import useAsync from "../../hooks/useAsync";
 import { Translation } from "../../translations/types";
 import ForgotPasswordPage from "../SignUp/ForgotPasswordPage";
 import VerificationEmailPage from "../SignUp/VerificationEmailPage";
-import { PasswordEmail, LoginFormValues } from "../types";
+import { LoginFormValues, PasswordEmail } from "../types";
 import LoginFormPresenter from "./LoginForm.presenter";
 
 interface DispatchProps {
@@ -53,10 +53,17 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
   const [message, saveMessage] = React.useState("");
   const [forgotPasswordPage, showForgotPasswordState] = React.useState(false);
 
-  const handleVerificationState = (values: any, message: string | Translation): void => {
+  const handleVerificationState = (
+    values: any,
+    message: string | Translation,
+  ): void => {
     saveResetEmail(values.email);
     saveMessage(message);
-    forgotPassAsync.start(forgotPassword, {email: values.email}, forgotPassAsync);
+    forgotPassAsync.start(
+      forgotPassword,
+      { email: values.email },
+      forgotPassAsync,
+    );
   };
 
   const handleForgotPassword = (): void => {
@@ -103,10 +110,7 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
   return (
     <div>
       {forgotPasswordPage && !verificationState && (
-        <Formik
-          initialValues={resetInitialValues}
-          onSubmit={onForgotPassword}
-        >
+        <Formik initialValues={resetInitialValues} onSubmit={onForgotPassword}>
           {renderForgotPassword}
         </Formik>
       )}
@@ -119,10 +123,7 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
         />
       )}
       {!forgotPasswordPage && (
-        <Formik
-          initialValues={initialValues}
-          onSubmit={onSubmit}
-        >
+        <Formik initialValues={initialValues} onSubmit={onSubmit}>
           {render}
         </Formik>
       )}

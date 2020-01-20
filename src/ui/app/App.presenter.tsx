@@ -14,8 +14,8 @@ import StatusPresenter from "../status/Status.presenter";
 import SupplierSurveyContainer from "../users/forms/SupplierSurvey/SupplierSurvey.container";
 import LoginContainer from "../users/Login.container";
 import LoginWithCodeContainer from "../users/LoginWithCode.container";
-import ConfirmForgotPasswordContainer from "../users/SignUp/ConfirmForgotPassword.container";
 import NewUserSetPasswordContainer from "../users/SignUp/NewUserSetPassword.container";
+import SetForgotPasswordContainer from "../users/SignUp/SetForgotPassword.container";
 import SignUpContainer from "../users/SignUp/SignUp.container";
 import styles from "./App.styles";
 import Layout from "./Layout";
@@ -35,7 +35,7 @@ const AppPresenter: React.FunctionComponent<Props> = ({ classes }) => (
       <Route
         path={CONFIRM_FORGOT_PASSWORD_URL}
         exact={true}
-        component={ConfirmForgotPasswordContainer}
+        component={SetForgotPasswordContainer}
       />
       <Route
         path={NEW_USER_SET_PASSWORD}
