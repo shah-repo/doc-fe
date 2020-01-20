@@ -104,7 +104,7 @@ export class IotService {
           }
         } else {
           this.mqttClientInstance.on("message", (topic: string, message: ArrayBufferView) => {
-            if (!topic.includes("attachment_watermark")) {
+            if (topic.includes("attachment_watermark")) {
               notif(new TextDecoder("utf-8").decode(message));
             }
           });
