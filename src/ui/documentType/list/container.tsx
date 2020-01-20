@@ -34,6 +34,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
     onSuccess: () => {
       if (isSingleId) {
         toggleEnableRedirect(true);
+        return;
       }
       toggleShowError(true);
       setTimeout(() => toggleShowError(false), 1000 );
