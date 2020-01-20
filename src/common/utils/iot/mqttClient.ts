@@ -28,6 +28,9 @@ interface IAwsMqttClient {
   };
 }
 
+// TODO: try mqtt-emitter
+// If we create multiple clients, all of them will use this emitter
+let emitter: any = {};
 export class IotService {
     public static getInstance(): IotService {
       if (!IotService.instance) {
@@ -36,8 +39,10 @@ export class IotService {
 
       return IotService.instance;
     }
+
     private static instance: IotService;
-      private constructor(
+
+    private constructor(
       private mqttClientInstance: AwsMqttClient,
     ) {}
 
@@ -83,12 +88,12 @@ export class IotService {
         try {
             if (!this.mqttClientInstance) {
               await this.mqttClient();
-              this.subscribe(topic);
+              this.subscribe(topic, notif);
             } else {
               if (!this.mqttClientInstance.connected) {
                 await this.mqttClient();
               }
-              this.subscribe(topic);
+              this.subscribe(topic, notif);
             }
           } catch (err) {
             return false;
@@ -98,14 +103,14 @@ export class IotService {
             this.mqttClientInstance.on("message", (topic: string, message: ArrayBufferView) => {
               // notifications shown only for watermarking
               if (topic.includes("attachment_watermark")) {
-                notif(new TextDecoder("utf-8").decode(message));
+                emitter[topic] && emitter[topic](new TextDecoder("utf-8").decode(message));
               }
             });
           }
         } else {
           this.mqttClientInstance.on("message", (topic: string, message: ArrayBufferView) => {
             if (topic.includes("attachment_watermark")) {
-              notif(new TextDecoder("utf-8").decode(message));
+              emitter[topic] && emitter[topic](new TextDecoder("utf-8").decode(message));
             }
           });
         }
@@ -113,12 +118,13 @@ export class IotService {
 
     public async unsubscribeFromTopic(topic: string) {
       if (credentialsMqtt) {
-        const fullTopic = `${credentialsMqtt.environment}/company/${credentialsMqtt.companyId}/${topic}`;
+        const fullTopic = `${credentialsMqtt.environment}/${credentialsMqtt.companyId}/${topic}`;
         const topicSubscribed = _.some(Object.keys(this.mqttClientInstance._resubscribeTopics),
           (id) => id === fullTopic,
         );
         if (topicSubscribed) {
           this.mqttClientInstance.unsubscribe(fullTopic);
+          delete emitter[fullTopic];
         }
       }
       // tslint:disable-next-line: no-console
@@ -131,6 +137,7 @@ export class IotService {
         if (hasSubscriptions) {
           const topics = Object.keys(this.mqttClientInstance._resubscribeTopics);
           this.mqttClientInstance.unsubscribe(topics);
+          emitter = {};
         }
       }
       // tslint:disable-next-line: no-console
@@ -146,7 +153,7 @@ export class IotService {
       return [];
     }
 
-    private async subscribe(topic: string) {
+    private async subscribe(topic: string, notif: any) {
       const fullTopic = `${credentialsMqtt.environment}/${credentialsMqtt.companyId}/${topic}`;
       const noSubscriptions = _.isEmpty(Object.keys(this.mqttClientInstance._resubscribeTopics));
       const alreadySubscribed = _.some(Object.keys(this.mqttClientInstance._resubscribeTopics),
@@ -154,9 +161,10 @@ export class IotService {
       );
       if (noSubscriptions) {
         await this.mqttClientInstance.subscribe(fullTopic);
-
+        emitter[fullTopic] = notif;
       } else if (!alreadySubscribed) {
         await this.mqttClientInstance.subscribe(fullTopic);
+        emitter[fullTopic] = notif;
       }
     }
 }
