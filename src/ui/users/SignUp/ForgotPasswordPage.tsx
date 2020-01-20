@@ -7,14 +7,14 @@ import { email, required, validator } from "../../components/forms/fields/valida
 import FormMessage from "../../components/forms/FormMessage";
 import SubmitButton from "../../components/forms/SubmitButton";
 import Text from "../../components/Text";
-import { ForgotPasswordEmail } from "../types";
+import { PasswordEmail } from "../types";
 import { styles } from "./SignUp.styles";
 
-interface Props extends FormikProps<ForgotPasswordEmail> {
+interface Props extends FormikProps<PasswordEmail> {
   logo: string;
   closeForgotPasswordPage: () => void;
   asyncState: AsyncState;
-  showVerificationState: (values: ForgotPasswordEmail, message: string) => void;
+  showVerificationState: (values: PasswordEmail, message: string) => void;
 }
 
 const ForgotPasswordPage: React.FunctionComponent<Props> = ({

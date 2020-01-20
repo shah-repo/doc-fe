@@ -10,6 +10,7 @@ import {
   AUTH_AWS_IOT_URL,
   AUTH_USER,
   CONFIRM_FORGOT_PASSWORD_URL,
+  CONFIRM_SET_NEW_PASSWORD_URL,
   FORGOT_PASSWORD_URL,
   GROUPS_URL,
   LOGIN_URL,
@@ -40,6 +41,8 @@ import {
   LoginWithCodeRequestBody,
   LogoutRequestBody,
   LogoutUserAction,
+  NewPasswordConfiramation,
+  NewUserSetPasswordAction,
   SelectEmployeeAction,
   SignupAction,
   User,
@@ -56,6 +59,10 @@ const authForgotPassword = (): ForgotPasswordAction => ({
 
 const authConfirmPassword = (): ConfirmPasswordAction => ({
   type: CONFIRM_FORGOT_PASSWORD_URL,
+});
+
+const authNewUserSetPassword = (): NewUserSetPasswordAction => ({
+  type: CONFIRM_SET_NEW_PASSWORD_URL,
 });
 
 const authUser = (data: AuthResponse): AuthUserAction => {
@@ -182,6 +189,27 @@ const confirmNewPassword = (
     handlers,
   });
 
+const newUserSetPassword = (
+  confirmValues: NewPasswordConfiramation,
+  handlers: Handlers,
+  ): ApiAction<AuthResponse, NewPasswordConfiramation> =>
+  apiActionWithCallbacks({
+    url: CONFIRM_SET_NEW_PASSWORD_URL,
+    method: "post",
+    data: confirmValues,
+    includeAuthorization: false,
+    onSuccess: (m, dispatch) => {
+      dispatch(authNewUserSetPassword());
+      dispatch(
+        login(
+          { email: confirmValues.email, password: confirmValues.newPassword },
+          handlers,
+        ),
+      );
+    },
+    handlers,
+  });
+
 const loginWithCode = (
   loginValues: LoginWithCodeRequestBody,
   handlers: Handlers,
@@ -287,4 +315,5 @@ export default {
   userGroups,
   editUser,
   getSessionDetails,
+  newUserSetPassword,
 };

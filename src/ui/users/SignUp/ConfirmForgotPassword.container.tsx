@@ -13,8 +13,8 @@ import {
 } from "../../components/forms/fields/validators";
 import { LOGIN_URL } from "../../constants/urls";
 import useAsync from "../../hooks/useAsync";
-import { ForgotPasswordValues } from "../types";
-import ConfirmForgotPasswordPresenter from "./ConfirmForgotPassword.presenter";
+import { PasswordValues } from "../types";
+import ConfirmPasswordPresenter from "./ConfirmPassword.presenter";
 
 interface DispatchProps {
   confirmNewPassword: typeof authActions.confirmNewPassword;
@@ -39,7 +39,7 @@ const ConfirmForgotPasswordContainer: React.FunctionComponent<ConfirmForgotPassw
 
   const async = useAsync();
 
-  const onSubmit = (confirmValues: ForgotPasswordValues): void => {
+  const onSubmit = (confirmValues: PasswordValues): void => {
     async.start(
       confirmNewPassword,
       {
@@ -51,14 +51,18 @@ const ConfirmForgotPasswordContainer: React.FunctionComponent<ConfirmForgotPassw
     );
   };
 
-  const initialValues: ForgotPasswordValues = {
+  const initialValues: PasswordValues = {
     email: clientEmail,
     confirmPass: "",
     password: "",
   };
 
-  const render = (props: FormikProps<ForgotPasswordValues>) => (
-    <ConfirmForgotPasswordPresenter logo={logo} asyncState={async.asyncState} />
+  const render = (props: FormikProps<PasswordValues>) => (
+    <ConfirmPasswordPresenter
+      logo={logo}
+      asyncState={async.asyncState}
+      title="forgot.password.confirm"
+    />
   );
   const validationSchema = Yup.object({
     password: passwordSchema,

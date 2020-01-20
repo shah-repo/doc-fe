@@ -7,15 +7,17 @@ import { email, required, validator } from "../../components/forms/fields/valida
 import FormMessage from "../../components/forms/FormMessage";
 import SubmitButton from "../../components/forms/SubmitButton";
 import Text from "../../components/Text";
+import { Translation } from "../../translations/types";
 import { styles } from "./SignUp.styles";
 
-interface ConfirmForgotPasswordPresenter {
+interface ConfirmPasswordPresenter {
     asyncState: AsyncState;
     logo: string;
+    title: Translation;
 }
 
-const ConfirmForgotPasswordPresenter: React.FunctionComponent<ConfirmForgotPasswordPresenter> = ({
-    asyncState, logo,
+const ConfirmPasswordPresenter: React.FunctionComponent<ConfirmPasswordPresenter> = ({
+    asyncState, logo, title,
 }) => {
   const classes = styles();
   return (
@@ -27,7 +29,7 @@ const ConfirmForgotPasswordPresenter: React.FunctionComponent<ConfirmForgotPassw
               className={classes.logo}
             />
             <Typography variant="h4" className={classes.title}>
-                <Text translation={"forgot.password.confirm"} />
+                <Text translation={title} />
             </Typography>
             <Form className={classes.formStyle}>
             <FormMessage asyncState={asyncState} className={classes.status} />
@@ -36,7 +38,7 @@ const ConfirmForgotPasswordPresenter: React.FunctionComponent<ConfirmForgotPassw
                     label="login.email"
                     size="sm"
                     gutter={false}
-                    inputProps={{ autoComplete: "email", autoFocus: true, id: "email" }}
+                    inputProps={{ autoComplete: "email", autoFocus: true, id: "email", readOnly: true }}
                     validate={validator(required, email)}
                     lpignore={false}
                 />
@@ -69,4 +71,4 @@ const ConfirmForgotPasswordPresenter: React.FunctionComponent<ConfirmForgotPassw
   );
 };
 
-export default ConfirmForgotPasswordPresenter;
+export default ConfirmPasswordPresenter;

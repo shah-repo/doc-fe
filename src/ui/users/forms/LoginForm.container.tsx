@@ -8,7 +8,7 @@ import useAsync from "../../hooks/useAsync";
 import { Translation } from "../../translations/types";
 import ForgotPasswordPage from "../SignUp/ForgotPasswordPage";
 import VerificationEmailPage from "../SignUp/VerificationEmailPage";
-import { ForgotPasswordEmail, LoginFormValues } from "../types";
+import { PasswordEmail, LoginFormValues } from "../types";
 import LoginFormPresenter from "./LoginForm.presenter";
 
 interface DispatchProps {
@@ -44,7 +44,7 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
     async.start(login, values, async);
   };
 
-  const onForgotPassword = (email: ForgotPasswordEmail): void => {
+  const onForgotPassword = (email: PasswordEmail): void => {
     forgotPassAsync.start(forgotPassword, email, forgotPassAsync);
   };
 
@@ -72,7 +72,7 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
     password: "",
   };
 
-  const resetInitialValues: ForgotPasswordEmail = {
+  const resetInitialValues: PasswordEmail = {
     email: "",
   };
 
@@ -90,7 +90,7 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
     />
   );
 
-  const renderForgotPassword = (props: FormikProps<ForgotPasswordEmail>) => (
+  const renderForgotPassword = (props: FormikProps<PasswordEmail>) => (
     <ForgotPasswordPage
       {...props}
       logo={logo}
