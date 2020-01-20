@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React from "react";
 import { FBStepperEditorProps } from ".";
-import { FBValidationEditor } from "..";
+import { FBValidationEditor, FBValidationMode } from "..";
 import editorStore from "../stores/ui/FBEditorStore";
 
 export const withFBStepperEditor = <T extends FBStepperEditorProps>(
@@ -21,6 +21,9 @@ export const withFBStepperEditor = <T extends FBStepperEditorProps>(
       }, {
         title: "form.builder.validation",
         content: <FBValidationEditor />,
+      }, {
+        title: "form.builder.validation.mode",
+        content: <FBValidationMode />,
       },
     ]);
 

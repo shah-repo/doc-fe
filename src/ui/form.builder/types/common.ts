@@ -14,6 +14,7 @@ import { FBEditorElementType } from "./editor";
 import { FBFormikFieldProps } from "./formik";
 import { FBValidatorDelimiter, FBValidatorTrigger } from "./validation/validator";
 import { FBValidatorConfigProps } from "./validation/validatorDialog";
+import { FBValidationModeType } from "../FBValidationMode";
 
 export type Subtract<T, V> = Pick<T, Exclude<keyof T, keyof V>>;
 
@@ -70,6 +71,7 @@ export type FBInputProps =
     | "defaultValue"
     | "rows"
     | "placeholder"
+    | "hidden"
   >
   & {
     index?: number;
@@ -88,6 +90,7 @@ export type FBInputProps =
     customValidator?: FBValidatorConfigProps;
     gutter?: boolean;
     tooltip?: string;
+    validationMode?: FBValidationModeType[];
   };
 
 export type FBFormDefaultProps =

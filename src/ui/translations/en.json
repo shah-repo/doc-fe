@@ -384,6 +384,7 @@
   "form.builder.validation": "Validation",
   "form.builder.predefined.validation": "Predefined Validation",
   "form.builder.custom.validation": "Custom Validation",
+  "form.builder.validation.mode": "Validation Mode",
 
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",

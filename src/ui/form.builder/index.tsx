@@ -14,3 +14,6 @@ export * from "./FBStepperEditor/FBStepperEditor.types";
 
 export { default as FBValidationEditor } from "./FBValidationEditor/FBValidationEditor";
 export * from "./FBValidationEditor/FBValidationEditor.types";
+
+export { default as FBValidationMode } from "./FBValidationMode/FBValidationMode";
+export * from "./FBValidationMode/FBValidationMode.types";

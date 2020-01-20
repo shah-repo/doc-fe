@@ -3,7 +3,6 @@ import FormControl from "@material-ui/core/FormControl/FormControl";
 import FormHelperText from "@material-ui/core/FormHelperText/FormHelperText";
 import _ from "lodash";
 import React from "react";
-import { withInput } from "../../hocs/common/withInput";
 import { FBInputProps } from "../../types/common";
 import FBTextField from "../inputs/FBTextField";
 
@@ -36,4 +35,4 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
   </Tooltip>
 );
 
-export default withInput(FBInput);
+export default FBInput;

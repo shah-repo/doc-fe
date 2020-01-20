@@ -9,6 +9,7 @@ import { FBTemplateSchema } from "../../types/store";
 import { withFormik } from "./withFormik";
 import { withOnChange } from "./withOnChange";
 import { withValidation } from "./withValidation";
+import FBStore from "../../stores/ui/FBStore";
 
 export const withInput = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>,
@@ -24,6 +25,9 @@ export const withInput = <T extends FBInputProps>(
     defaultValue,
     error,
     helperText,
+    validationMode,
+    hidden = false,
+    disabled,
     ...props
   }: T) => {
 
@@ -40,6 +44,11 @@ export const withInput = <T extends FBInputProps>(
       FBDynamicValidatorStore.helperText[name]
     );
 
+    if (FBStore.mode === "form") {
+      hidden = (_.includes(validationMode, "ValidationHidden") && _.isEmpty(helperText));
+      disabled = (_.includes(validationMode, "ValidationDisabled") && _.isEmpty(helperText));
+    }
+
     if (elements.length === 1) {
       _.first(elements) && (
         children = React.cloneElement(_.first(elements) as React.ReactElement, {
@@ -48,11 +57,12 @@ export const withInput = <T extends FBInputProps>(
           type,
           error,
           checked: value,
-          ..._.pick(props, ["disabled", "onChange", "afterChange"]),
+          disabled,
+          ..._.pick(props, ["onChange", "afterChange"]),
         })
       );
     }
-
+  
     return Component({
       ...(props as T),
       value,
@@ -62,6 +72,8 @@ export const withInput = <T extends FBInputProps>(
       children,
       error,
       helperText,
+      validationMode,
+      hidden,
     });
   };
 
