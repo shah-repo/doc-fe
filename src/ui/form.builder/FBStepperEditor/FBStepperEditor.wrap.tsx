@@ -28,7 +28,7 @@ export const withFBStepperEditor = <T extends FBStepperEditorProps>(
     ]);
 
     _.isUndefined(beforeStepChange) && (beforeStepChange =
-      (step: number) => editorStore.maxWidth = step ? "lg" : "md"
+      (step: number) => editorStore.maxWidth = (step === 1) ? "lg" : "md"
     );
 
     return Component({
