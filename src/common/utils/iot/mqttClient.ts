@@ -170,7 +170,6 @@ export class IotService {
         this.mqttClientInstance = await new AWSMqttClient(clientConfig);
         creatingClient = true;
         this.mqttClientInstance.on("connect", () => {
-          console.log("on connected");
           creatingClient = false;
         });
       }
