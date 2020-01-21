@@ -146,6 +146,10 @@ export class IotService {
       return [];
     }
 
+    public isConnected() {
+      return this.mqttClientInstance.connected;
+    }
+
     private async subscribe(topic: string) {
       const fullTopic = `${credentialsMqtt.environment}/${credentialsMqtt.companyId}/${topic}`;
       const noSubscriptions = _.isEmpty(Object.keys(this.mqttClientInstance._resubscribeTopics));
