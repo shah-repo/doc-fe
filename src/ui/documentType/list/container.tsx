@@ -54,7 +54,8 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
 
   return (
     <div style={{height: "100%"}}>
-      {enableRedirect && <Redirect to={{ pathname: `/document_revision/${docRevId}/details` }} />}
+      {enableRedirect &&
+      <Redirect to={{ pathname: `/document_revision/${documentType.id}/output_document/${docRevId}` }} />}
       <DocumentByTypeListPresenter
         tableName={TABLE_NAME}
         tableState={tableState}
