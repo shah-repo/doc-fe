@@ -47,9 +47,8 @@ export class IotService {
     ) {}
 
     public async setMqttCreds(endpointRedux: any): Promise<any> {
-      this.unsubscribeAll();
       credentialsMqtt = endpointRedux;
-      this.newClient();
+      await this.createMqttClient();
     }
 
     public async mqttClient(): Promise<AwsMqttClient> {
@@ -59,9 +58,9 @@ export class IotService {
       if (!credentialsMqtt) {
         store.dispatch(authActions.getIotCreds());
       }
-      if (!creatingClient) {
-        this.newClient();
-      }
+
+      await this.createMqttClient();
+
       return this.mqttClientInstance;
     }
 
@@ -98,33 +97,31 @@ export class IotService {
     }
 
     public async unsubscribeFromTopic(topic: string) {
-      if (!credentialsMqtt) {
-        // tslint:disable-next-line: no-console
-        console.log("No credentials, tried to unsubscribe from topic");
-        return;
+      if (credentialsMqtt) {
+        const fullTopic = `${credentialsMqtt.environment}/${credentialsMqtt.companyId}/${topic}`;
+        const topicSubscribed = _.some(Object.keys(this.mqttClientInstance._resubscribeTopics),
+          (id) => id === fullTopic,
+        );
+        if (topicSubscribed) {
+          this.mqttClientInstance.unsubscribe(fullTopic);
+          delete emitter[fullTopic];
+        }
       }
-      const fullTopic = `${credentialsMqtt.environment}/${credentialsMqtt.companyId}/${topic}`;
-      const topicSubscribed = _.some(Object.keys(this.mqttClientInstance._resubscribeTopics),
-        (id) => id === fullTopic,
-      );
-      if (topicSubscribed) {
-        this.mqttClientInstance.unsubscribe(fullTopic);
-        delete emitter[fullTopic];
-      }
+      // tslint:disable-next-line: no-console
+      console.log("No credentials, tried to unsubscribe from topic");
     }
 
     public async unsubscribeAll() {
-      if (!credentialsMqtt) {
-        // tslint:disable-next-line: no-console
-        console.log("No credentials, tried to unsubscribe from all topics");
-        return;
+      if (credentialsMqtt) {
+        const hasSubscriptions = !_.isEmpty(Object.keys(this.mqttClientInstance._resubscribeTopics));
+        if (hasSubscriptions) {
+          const topics = Object.keys(this.mqttClientInstance._resubscribeTopics);
+          this.mqttClientInstance.unsubscribe(topics);
+          emitter = {};
+        }
       }
-      const hasSubscriptions = !_.isEmpty(Object.keys(this.mqttClientInstance._resubscribeTopics));
-      if (hasSubscriptions) {
-        const topics = Object.keys(this.mqttClientInstance._resubscribeTopics);
-        this.mqttClientInstance.unsubscribe(topics);
-        emitter = {};
-      }
+      // tslint:disable-next-line: no-console
+      console.log("No credentials, tried to unsubscribe from all topics");
     }
 
     public subscribedTopics() {
@@ -142,14 +139,16 @@ export class IotService {
       const alreadySubscribed = _.some(Object.keys(this.mqttClientInstance._resubscribeTopics),
         (id) => id === fullTopic,
       );
-
-      if (noSubscriptions || !alreadySubscribed) {
+      if (noSubscriptions) {
+        await this.mqttClientInstance.subscribe(fullTopic);
+        emitter[fullTopic] = notif;
+      } else if (!alreadySubscribed) {
         await this.mqttClientInstance.subscribe(fullTopic);
         emitter[fullTopic] = notif;
       }
     }
 
-    private async newClient() {
+    private async createMqttClient() {
       const clientConfig: IAwsMqttClient = {
         region: credentialsMqtt.region,
         credentials: new Credentials({
@@ -167,10 +166,13 @@ export class IotService {
         },
       };
 
-      this.mqttClientInstance = await new AWSMqttClient(clientConfig);
-      creatingClient = true;
-      this.mqttClientInstance.on("connect", () => {
-        creatingClient = false;
-      });
+      if (!creatingClient) {
+        this.mqttClientInstance = await new AWSMqttClient(clientConfig);
+        creatingClient = true;
+        this.mqttClientInstance.on("connect", () => {
+          console.log("on connected");
+          creatingClient = false;
+        });
+      }
     }
 }
