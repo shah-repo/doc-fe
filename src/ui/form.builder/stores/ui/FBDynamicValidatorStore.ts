@@ -2,6 +2,7 @@ import Base64 from "Base64";
 import _, { Dictionary } from "lodash";
 import { action, computed, observable, set } from "mobx";
 import Validator from "validatorjs";
+import { DATA_HELPER_CALLBACK_NAME } from "../../../remoteValidators/interfaces";
 import {
   FBValidatorConfigProps,
   FBValidatorTemplate,
@@ -24,15 +25,28 @@ export class FormBuilderDynamicValidatorStore {
     };
   }
   public originCode = _.template(`
-    (function(value, req, attribute) {
-      req = this.validator.input;
-      <%= interpolation %>
+    // Available Variables:
+
+    // value: any
+    // formInput: {
+    //   [key: string]: any,
+    // }
+    // attribute: string
+    // passes: (valid: boolean, message?: string) => void
+    // dataHelper: {
+    //   getDocumentRevById: async (id: string) => DocumentRevision,
+    // },
+    // context: {
+    //   documentId: string,
+    // },
+
+    (async function(value, req, attribute, passes, dataHelper, context) {
       try {
+        <%= interpolation %>
         <%= code %>
-        return true;
       }
       catch(error) {
-        return false;
+        return passes(false, "Validator failed unexpectedly!!");
       }
     })
   `);
@@ -45,7 +59,9 @@ export class FormBuilderDynamicValidatorStore {
   @observable public helperText: Dictionary<string> = {};
   private fieldNames: string[] = [];
 
-  @action public setDynamicValidator = (customValidator: FBValidatorConfigProps | undefined) => {
+  @action public setDynamicValidator = (
+    customValidator: FBValidatorConfigProps | undefined,
+  ) => {
     if (_.isUndefined(customValidator)) {
       return;
     }
@@ -72,10 +88,12 @@ export class FormBuilderDynamicValidatorStore {
   }
 
   @action public clearLiveCode = () => {
-    this.setLiveCode(this.originCode({
-      interpolation: "",
-      code: "",
-    }));
+    this.setLiveCode(
+      this.originCode({
+        interpolation: "",
+        code: "",
+      }),
+    );
   }
 
   @action public setValidatorName = (name: string) => {
@@ -136,7 +154,7 @@ export class FormBuilderDynamicValidatorStore {
       if (!_.isUndefined(customValidator)) {
         // const tpl = _.template(`<% ${Base64.atob(customValidator.fn)} %>`);
 
-        let customValFn = () => true;
+        let customValFn = async (...args) => true;
         try {
           // tslint:disable-next-line: no-eval
           customValFn = eval(Base64.atob(customValidator!.fn));
@@ -144,9 +162,25 @@ export class FormBuilderDynamicValidatorStore {
           alert("An error occurred in validator function body: " + error);
         }
 
-        this.Validator.registerImplicit(
+        this.Validator.registerAsyncImplicit(
           customValidator.name,
-          customValFn,
+          async function f(this: any, value, input, attribute, passes) {
+            const dataHelper = this.validator.constructor[
+              DATA_HELPER_CALLBACK_NAME
+            ]();
+            // const context = (this as any).validator.context;
+            const context = {
+              documentId: FBStore.docId,
+            };
+            await customValFn(
+              value,
+              this.validator.input,
+              attribute,
+              passes,
+              dataHelper,
+              context,
+            );
+          },
           customValidator.errorMessage || "",
         );
       }
