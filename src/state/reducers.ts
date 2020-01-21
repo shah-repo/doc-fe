@@ -19,10 +19,11 @@ import migrations from "./migrations";
 const authPersistConfig = {
   key: "auth",
   storage,
-  version: 1,
-  whitelist: ["user"],
+  version: 2,
+  whitelist: ["user", "groups"],
   migrate: createMigrate(migrations),
 };
+
 const companyPersistConfig = {
   key: "company",
   storage,

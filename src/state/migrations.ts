@@ -25,4 +25,19 @@ export default {
       },
     };
   },
+  2: (state: any) => {
+    return {
+      ...state,
+      auth: {
+        ...state.auth,
+        user: {
+          ...state.auth.user,
+          employee: DEFAULT_EMPLOYEE,
+        },
+        groups: {
+          ...state.auth.groups,
+        },
+      },
+    };
+  },
 };

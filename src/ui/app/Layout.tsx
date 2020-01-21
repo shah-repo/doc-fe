@@ -2,6 +2,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import ChangeRequestContainer from "../change.request/Container";
 import ChangeRequestListContainer from "../change.request/list/container";
 import ChangeRequestCreateContainer from "../changeRequest/ChangeRequestCreate.container";
@@ -42,6 +43,7 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
       <CssBaseline />
       <HeaderContainer />
       <Navigation />
+      <ToastContainer autoClose={false} />
       <WatermarkFooterContainer />
       <main className={classes.content}>
         <DataFetcherContainer />
@@ -83,10 +85,7 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
             path={USER_MANAGEMENT_ROOT_URL}
             component={UserManagementListContainer}
           />
-          <Route
-            path={SLACK_ROOT_URL}
-            component={SlackContainer}
-          />
+          <Route path={SLACK_ROOT_URL} component={SlackContainer} />
           <Route
             path={DOCUMENT_BY_TYPE_LIST_URL}
             component={DocumentTypeListContainer}

@@ -32,7 +32,7 @@ export const WatermarkFooterPresenter: React.FunctionComponent<Props> = ({
       variant="outlined"
       onClick={close}
     >
-      <Text translation="common.cancel" />
+      <Text translation="common.dismiss" />
     </Button>
   );
   const renderIcon = result.success ?
