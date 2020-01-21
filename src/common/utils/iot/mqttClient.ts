@@ -47,27 +47,12 @@ export class IotService {
     ) {}
 
     public async setMqttCreds(endpointRedux: any): Promise<any> {
+      this.unsubscribeAll();
       credentialsMqtt = endpointRedux;
+      this.newClient();
     }
 
     public async mqttClient(): Promise<AwsMqttClient> {
-      const clientConfig: IAwsMqttClient = {
-        region: credentialsMqtt.region,
-        credentials: new Credentials({
-                      accessKeyId: credentialsMqtt.credentials.AccessKeyId,
-                      secretAccessKey: credentialsMqtt.credentials.SecretAccessKey,
-                      sessionToken: credentialsMqtt.credentials.SessionToken,
-                    }),
-        clientId: `mqtt-client-${credentialsMqtt.environment}-${(Math.floor((Math.random() * 100000) + 1))}`,
-        endpoint: credentialsMqtt.endpoint,
-        will: {
-          topic: "WillMsg",
-          payload: "Connection Closed abnormally..!",
-          qos: 0,
-          retain: false,
-        },
-      };
-
       if (this.mqttClientInstance && this.mqttClientInstance.connected) {
         return this.mqttClientInstance;
       }
@@ -75,11 +60,7 @@ export class IotService {
         store.dispatch(authActions.getIotCreds());
       }
       if (!creatingClient) {
-        this.mqttClientInstance = await new AWSMqttClient(clientConfig);
-        creatingClient = true;
-        this.mqttClientInstance.on("connect", () => {
-          creatingClient = false;
-        });
+        this.newClient();
       }
       return this.mqttClientInstance;
     }
@@ -117,31 +98,33 @@ export class IotService {
     }
 
     public async unsubscribeFromTopic(topic: string) {
-      if (credentialsMqtt) {
-        const fullTopic = `${credentialsMqtt.environment}/${credentialsMqtt.companyId}/${topic}`;
-        const topicSubscribed = _.some(Object.keys(this.mqttClientInstance._resubscribeTopics),
-          (id) => id === fullTopic,
-        );
-        if (topicSubscribed) {
-          this.mqttClientInstance.unsubscribe(fullTopic);
-          delete emitter[fullTopic];
-        }
+      if (!credentialsMqtt) {
+        // tslint:disable-next-line: no-console
+        console.log("No credentials, tried to unsubscribe from topic");
+        return;
       }
-      // tslint:disable-next-line: no-console
-      console.log("No credentials, tried to unsubscribe from topic");
+      const fullTopic = `${credentialsMqtt.environment}/${credentialsMqtt.companyId}/${topic}`;
+      const topicSubscribed = _.some(Object.keys(this.mqttClientInstance._resubscribeTopics),
+        (id) => id === fullTopic,
+      );
+      if (topicSubscribed) {
+        this.mqttClientInstance.unsubscribe(fullTopic);
+        delete emitter[fullTopic];
+      }
     }
 
     public async unsubscribeAll() {
-      if (credentialsMqtt) {
-        const hasSubscriptions = !_.isEmpty(Object.keys(this.mqttClientInstance._resubscribeTopics));
-        if (hasSubscriptions) {
-          const topics = Object.keys(this.mqttClientInstance._resubscribeTopics);
-          this.mqttClientInstance.unsubscribe(topics);
-          emitter = {};
-        }
+      if (!credentialsMqtt) {
+        // tslint:disable-next-line: no-console
+        console.log("No credentials, tried to unsubscribe from all topics");
+        return;
       }
-      // tslint:disable-next-line: no-console
-      console.log("No credentials, tried to unsubscribe from all topics");
+      const hasSubscriptions = !_.isEmpty(Object.keys(this.mqttClientInstance._resubscribeTopics));
+      if (hasSubscriptions) {
+        const topics = Object.keys(this.mqttClientInstance._resubscribeTopics);
+        this.mqttClientInstance.unsubscribe(topics);
+        emitter = {};
+      }
     }
 
     public subscribedTopics() {
@@ -159,12 +142,35 @@ export class IotService {
       const alreadySubscribed = _.some(Object.keys(this.mqttClientInstance._resubscribeTopics),
         (id) => id === fullTopic,
       );
-      if (noSubscriptions) {
-        await this.mqttClientInstance.subscribe(fullTopic);
-        emitter[fullTopic] = notif;
-      } else if (!alreadySubscribed) {
+
+      if (noSubscriptions || !alreadySubscribed) {
         await this.mqttClientInstance.subscribe(fullTopic);
         emitter[fullTopic] = notif;
       }
+    }
+
+    private async newClient() {
+      const clientConfig: IAwsMqttClient = {
+        region: credentialsMqtt.region,
+        credentials: new Credentials({
+                      accessKeyId: credentialsMqtt.credentials.AccessKeyId,
+                      secretAccessKey: credentialsMqtt.credentials.SecretAccessKey,
+                      sessionToken: credentialsMqtt.credentials.SessionToken,
+                    }),
+        clientId: `mqtt-client-${credentialsMqtt.environment}-${(Math.floor((Math.random() * 100000) + 1))}`,
+        endpoint: credentialsMqtt.endpoint,
+        will: {
+          topic: "WillMsg",
+          payload: "Connection Closed abnormally..!",
+          qos: 0,
+          retain: false,
+        },
+      };
+
+      this.mqttClientInstance = await new AWSMqttClient(clientConfig);
+      creatingClient = true;
+      this.mqttClientInstance.on("connect", () => {
+        creatingClient = false;
+      });
     }
 }
