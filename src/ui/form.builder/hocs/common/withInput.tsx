@@ -45,8 +45,9 @@ export const withInput = <T extends FBInputProps>(
     );
 
     if (FBStore.mode === "form") {
-      hidden = (_.includes(validationMode, "ValidationHidden") && _.isEmpty(helperText));
-      disabled = (_.includes(validationMode, "ValidationDisabled") && _.isEmpty(helperText));
+      const isFieldHidden = _.isEmpty(helperText) && _.isEmpty(field?.value);
+      hidden = (_.includes(validationMode, "ValidationHidden") && isFieldHidden);
+      disabled = (_.includes(validationMode, "ValidationDisabled") && isFieldHidden);
     }
 
     if (elements.length === 1) {

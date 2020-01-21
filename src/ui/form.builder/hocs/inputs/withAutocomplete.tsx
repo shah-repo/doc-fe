@@ -1,10 +1,11 @@
 import { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import { RenderInputParams } from "@material-ui/lab/Autocomplete/Autocomplete";
 import _, { Dictionary } from "lodash";
+import { useObserver } from "mobx-react";
 import Model from "mobx-rest/lib/Model";
 import React from "react";
 import autocompleteOptions from "../../../../data/autocompleteOptions.json";
-import FBAutocompleteInput from "../../components/inputs/FBAutocompleteInput";
+import FBTextField from "../../components/inputs/FBTextField";
 import FBAutocompleteCollection from "../../stores/domain/collections/FBAutocompleteCollection";
 import FBDynamicValidatorStore from "../../stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../stores/ui/FBStore";
@@ -22,11 +23,15 @@ export const withAutocomplete = <T extends FBAutocompleteProps>(
       getOptionLabel,
       optionLabelKey = "",
       error,
-      helperText,
+      name = "",
+      helperText = FBDynamicValidatorStore.helperText[name],
       filterOptions,
       form,
       field,
       afterChange,
+      validationMode,
+      hidden = false,
+      disabled,
       ...props
     }: T) => {
       let indicators: { path: string; renderKey: string } | undefined;
@@ -46,7 +51,7 @@ export const withAutocomplete = <T extends FBAutocompleteProps>(
       }
 
       const renderInput = (params: RenderInputParams) => (
-        <FBAutocompleteInput {...params} name={field!.name} />
+        <FBTextField {...params} {...{ name }} />
       );
 
       const onChange = (event: React.ChangeEvent<{}>, value: any) => {
@@ -78,16 +83,28 @@ export const withAutocomplete = <T extends FBAutocompleteProps>(
           stringify: (option: Model) => option.get(optionLabelKey),
         }));
 
-      return Component({
-        ...(props as T),
-        options,
-        optionLabelKey,
-        getOptionLabel,
-        renderInput,
-        filterOptions,
-        onChange,
-        error,
-      });
+      if (FBStore.mode === "form") {
+        const isFieldHidden = _.isEmpty(helperText) && _.isEmpty(field?.value);
+        hidden =
+          _.includes(validationMode, "ValidationHidden") && isFieldHidden;
+        disabled =
+          _.includes(validationMode, "ValidationDisabled") && isFieldHidden;
+      }
+
+      return useObserver(() =>
+        Component({
+          ...(props as T),
+          options,
+          optionLabelKey,
+          getOptionLabel,
+          renderInput,
+          filterOptions,
+          onChange,
+          error,
+          hidden,
+          disabled,
+        }),
+      );
     },
   );
 };
