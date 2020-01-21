@@ -1,6 +1,9 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { DocumentType, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import {
+  DocumentType,
+  documentTypeSelectors,
+} from "../../../state/ducks/documentRevisions/documentType";
 import { DOCUMENT_BY_TYPE_ROOT_URL } from "../../constants/urls";
 import { Translation } from "../../translations/types";
 import NavigationLinkContainer from "../NavigationLink.container";
@@ -11,7 +14,9 @@ interface Props {
 const DocumentByTypeListLinks: React.FunctionComponent<Props> = ({
   pathname,
 }) => {
-  const docTypesWithPageDetails: DocumentType[] = useSelector(documentTypeSelectors.getDocumentTypesWithPageDetails);
+  const docTypesWithPageDetails: DocumentType[] = useSelector(
+    documentTypeSelectors.getDocumentTypesWithPageDetails,
+  );
 
   if (docTypesWithPageDetails.length === 0) {
     return null;
@@ -19,8 +24,7 @@ const DocumentByTypeListLinks: React.FunctionComponent<Props> = ({
 
   return (
     <>
-    {
-      docTypesWithPageDetails.map((docType: DocumentType) => {
+      {docTypesWithPageDetails.map((docType: DocumentType) => {
         return (
           <NavigationLinkContainer
             key={docType.id}
@@ -29,9 +33,8 @@ const DocumentByTypeListLinks: React.FunctionComponent<Props> = ({
             currentPath={pathname}
           />
         );
-      })
-    }
-  </>
+      })}
+    </>
   );
 };
 
