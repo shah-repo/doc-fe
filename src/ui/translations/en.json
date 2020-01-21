@@ -256,6 +256,7 @@
   "common.void": "Void",
   "common.alert": "Alert",
   "common.dismiss": "Dismiss",
+  "common.reset": "Reset",
 
   "output.info": "Form Info",
 
