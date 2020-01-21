@@ -79,56 +79,60 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
                   class="MuiBox-root MuiBox-root-76"
                 >
                   <div
-                    class="MuiFormControl-root MuiFormControl-fullWidth"
-                    title=""
+                    class="MuiBox-root MuiBox-root-77"
                   >
-                    <label
-                      class="MuiFormControlLabel-root"
-                      type="checkbox"
+                    <div
+                      class="MuiFormControl-root MuiFormControl-fullWidth"
+                      title=""
                     >
-                      <span
-                        aria-disabled="false"
-                        class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-104 MuiCheckbox-root MuiCheckbox-colorSecondary MuiIconButton-colorSecondary"
+                      <label
+                        class="MuiFormControlLabel-root"
+                        type="checkbox"
                       >
                         <span
-                          class="MuiIconButton-label"
+                          aria-disabled="false"
+                          class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-105 MuiCheckbox-root MuiCheckbox-colorSecondary MuiIconButton-colorSecondary"
                         >
-                          <input
-                            class="PrivateSwitchBase-input-107"
-                            data-indeterminate="false"
-                            name="checkbox"
-                            type="checkbox"
-                            value="checkbox"
-                          />
-                          <svg
-                            aria-hidden="true"
-                            class="MuiSvgIcon-root"
-                            focusable="false"
-                            role="presentation"
-                            viewBox="0 0 24 24"
+                          <span
+                            class="MuiIconButton-label"
                           >
-                            <path
-                              d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
+                            <input
+                              class="PrivateSwitchBase-input-108"
+                              data-indeterminate="false"
+                              name="checkbox"
+                              type="checkbox"
+                              value="checkbox"
                             />
-                          </svg>
+                            <svg
+                              aria-hidden="true"
+                              class="MuiSvgIcon-root"
+                              focusable="false"
+                              role="presentation"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
+                              />
+                            </svg>
+                          </span>
+                          <span
+                            class="MuiTouchRipple-root"
+                          />
                         </span>
                         <span
-                          class="MuiTouchRipple-root"
-                        />
-                      </span>
-                      <span
-                        class="MuiTypography-root MuiFormControlLabel-label MuiTypography-body1"
-                      >
-                        <span>
-                          Test checbox
+                          class="MuiTypography-root MuiFormControlLabel-label MuiTypography-body1"
+                        >
+                          <span>
+                            Test checbox
+                          </span>
                         </span>
-                      </span>
-                    </label>
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>
               <div
-                class="MuiBox-root MuiBox-root-120"
+                class="MuiBox-root MuiBox-root-121"
                 style="cursor: grab;"
               >
                 <svg
@@ -145,10 +149,10 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
               </div>
             </div>
             <div
-              class="MuiBox-root MuiBox-root-121"
+              class="MuiBox-root MuiBox-root-122"
             >
               <div
-                class="MuiBox-root MuiBox-root-122"
+                class="MuiBox-root MuiBox-root-123"
               />
               <button
                 class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-fullWidth"
@@ -165,7 +169,7 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
                 />
               </button>
               <div
-                class="MuiBox-root MuiBox-root-151"
+                class="MuiBox-root MuiBox-root-152"
               />
             </div>
           </div>
@@ -188,7 +192,7 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
         </button>
       </div>
       <div
-        class="MuiBox-root MuiBox-root-167"
+        class="MuiBox-root MuiBox-root-168"
       >
         <button
           class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary"

@@ -86,12 +86,11 @@ export const withOnChange = <T extends FBInputProps>(
         case "checkboxgroup":
           const checked = _.get(ev.target, "checked");
           storeValue(value as string, checked);
-          const groupValue: string = _.get(form, `values.${name}`) || "";
-          let groupValueArray: string[] = _.split(groupValue, "\n");
-          groupValueArray = (checked)
-            ? _.union(groupValueArray, [value as string])
-            : _.filter(groupValueArray, (v) => v !== value as string);
-          storeValue(name, _.join(groupValueArray, "\n"));
+          let groupValue: string[] = _.get(form, `values.${name}`) || [];
+          groupValue = (checked)
+            ? _.union(groupValue, [value as string])
+            : _.filter(groupValue, (v) => v !== value as string);
+          storeValue(name, groupValue);
 
           if (_.isEqual(value as string, "includeContext")) {
             storeValue("contextLabel", contextLabel);

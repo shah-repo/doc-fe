@@ -4,6 +4,7 @@ import { observer } from "mobx-react";
 import React from "react";
 import { FBFormValues } from "../../defaults/formik";
 import FBDynamicValidatorStore from "../../stores/ui/FBDynamicValidatorStore";
+import FBStore from "../../stores/ui/FBStore";
 import { FBInputProps } from "../../types/common";
 import { FBTemplateSchema } from "../../types/store";
 import { withFormik } from "./withFormik";
@@ -24,6 +25,9 @@ export const withInput = <T extends FBInputProps>(
     defaultValue,
     error,
     helperText,
+    validationMode,
+    hidden = false,
+    disabled,
     ...props
   }: T) => {
 
@@ -40,6 +44,12 @@ export const withInput = <T extends FBInputProps>(
       FBDynamicValidatorStore.helperText[name]
     );
 
+    if (FBStore.mode === "form") {
+      const isFieldHidden = _.isEmpty(helperText) && _.isEmpty(field?.value);
+      hidden = (_.includes(validationMode, "ValidationHidden") && isFieldHidden);
+      disabled = (_.includes(validationMode, "ValidationDisabled") && isFieldHidden);
+    }
+
     if (elements.length === 1) {
       _.first(elements) && (
         children = React.cloneElement(_.first(elements) as React.ReactElement, {
@@ -48,7 +58,8 @@ export const withInput = <T extends FBInputProps>(
           type,
           error,
           checked: value,
-          ..._.pick(props, ["disabled", "onChange", "afterChange"]),
+          disabled,
+          ..._.pick(props, ["onChange", "afterChange"]),
         })
       );
     }
@@ -62,6 +73,8 @@ export const withInput = <T extends FBInputProps>(
       children,
       error,
       helperText,
+      validationMode,
+      hidden,
     });
   };
 

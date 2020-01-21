@@ -52,6 +52,7 @@ export const withEditorRenderer =
     let rules = FBValidatorStore.getRules();
     const customValidatorRule = customValidator && customValidator.name;
     customValidatorRule && (rules += `${!_.isEmpty(rules) ? "|" : ""}${customValidatorRule}`);
+
     const schema: FBTemplateSchema = {
       type,
       index,

@@ -2,9 +2,8 @@ import { Dictionary } from "lodash";
 
 export const FBFormValues: Dictionary<any> = {
   select: "",
-  autocomplete: "",
-  checkbox: false,
-  radio: false,
+  checkbox: "",
+  radio: "",
   textfield: "",
   radiogroup: "",
   texteditor: "",
