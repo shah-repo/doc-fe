@@ -40,13 +40,14 @@ export class FormBuilderDynamicValidatorStore {
     //   documentId: string,
     // },
 
-    (async function(value, req, attribute, passes, dataHelper, context) {
+    (async function(value, req, attribute, dataHelper, context) {
       try {
         <%= interpolation %>
         <%= code %>
+        return true;
       }
       catch(error) {
-        return passes(false, "Validator failed unexpectedly!!");
+        return false;
       }
     })
   `);
@@ -165,21 +166,25 @@ export class FormBuilderDynamicValidatorStore {
         this.Validator.registerAsyncImplicit(
           customValidator.name,
           async function f(this: any, value, input, attribute, passes) {
-            const dataHelper = this.validator.constructor[
-              DATA_HELPER_CALLBACK_NAME
-            ]();
-            // const context = (this as any).validator.context;
-            const context = {
-              documentId: FBStore.docId,
-            };
-            await customValFn(
-              value,
-              this.validator.input,
-              attribute,
-              passes,
-              dataHelper,
-              context,
-            );
+            try {
+              const dataHelper = this.validator.constructor[
+                DATA_HELPER_CALLBACK_NAME
+              ]();
+              // const context = (this as any).validator.context;
+              const context = {
+                documentId: FBStore.docId,
+              };
+              const passed = await customValFn(
+                value,
+                this.validator.input,
+                attribute,
+                dataHelper,
+                context,
+              );
+              passes(passed);
+            } catch (error) {
+              passes(false);
+            }
           },
           customValidator.errorMessage || "",
         );
