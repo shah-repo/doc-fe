@@ -6,7 +6,7 @@ pipelines:
   const:
     tests: &RUN_TESTS
       name: Tests
-      image: node:10.16.3
+      image: node:10.18.1
       services:
         - docker
       caches:
@@ -18,7 +18,7 @@ pipelines:
 
     lint_tests: &RUN_LINT_AND_TESTS
       name: Linter & Tests
-      image: node:10
+      image: node:10.18.1
       services:
         - docker
       caches:
@@ -32,7 +32,7 @@ pipelines:
 
     lint: &RUN_LINTER
       name: Linter
-      image: node:10
+      image: node:10.18.1
       services:
         - docker
       caches:
