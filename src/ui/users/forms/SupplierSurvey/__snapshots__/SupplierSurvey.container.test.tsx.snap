@@ -68,18 +68,33 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
                   />
                 </svg>
               </div>
+              <div
+                class="MuiBox-root MuiBox-root-74"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-colorPrimary"
+                  focusable="false"
+                  role="presentation"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"
+                  />
+                </svg>
+              </div>
             </div>
             <div
-              class="MuiBox-root MuiBox-root-74"
+              class="MuiBox-root MuiBox-root-75"
             >
               <div
-                class="MuiBox-root MuiBox-root-75"
+                class="MuiBox-root MuiBox-root-76"
               >
                 <div
-                  class="MuiBox-root MuiBox-root-76"
+                  class="MuiBox-root MuiBox-root-77"
                 >
                   <div
-                    class="MuiBox-root MuiBox-root-77"
+                    class="MuiBox-root MuiBox-root-78"
                   >
                     <div
                       class="MuiFormControl-root MuiFormControl-fullWidth"
@@ -91,13 +106,13 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
                       >
                         <span
                           aria-disabled="false"
-                          class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-105 MuiCheckbox-root MuiCheckbox-colorSecondary MuiIconButton-colorSecondary"
+                          class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-106 MuiCheckbox-root MuiCheckbox-colorSecondary MuiIconButton-colorSecondary"
                         >
                           <span
                             class="MuiIconButton-label"
                           >
                             <input
-                              class="PrivateSwitchBase-input-108"
+                              class="PrivateSwitchBase-input-109"
                               data-indeterminate="false"
                               name="checkbox"
                               type="checkbox"
@@ -132,7 +147,7 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
                 </div>
               </div>
               <div
-                class="MuiBox-root MuiBox-root-121"
+                class="MuiBox-root MuiBox-root-122"
                 style="cursor: grab;"
               >
                 <svg
@@ -149,10 +164,10 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
               </div>
             </div>
             <div
-              class="MuiBox-root MuiBox-root-122"
+              class="MuiBox-root MuiBox-root-123"
             >
               <div
-                class="MuiBox-root MuiBox-root-123"
+                class="MuiBox-root MuiBox-root-124"
               />
               <button
                 class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-fullWidth"
@@ -169,7 +184,7 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
                 />
               </button>
               <div
-                class="MuiBox-root MuiBox-root-152"
+                class="MuiBox-root MuiBox-root-153"
               />
             </div>
           </div>
@@ -190,9 +205,25 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
             class="MuiTouchRipple-root"
           />
         </button>
+        <button
+          class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="MuiButton-label"
+          >
+            <span>
+              Source
+            </span>
+          </span>
+          <span
+            class="MuiTouchRipple-root"
+          />
+        </button>
       </div>
       <div
-        class="MuiBox-root MuiBox-root-168"
+        class="MuiBox-root MuiBox-root-169"
       >
         <button
           class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary"
