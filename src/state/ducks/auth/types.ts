@@ -27,7 +27,7 @@ export interface ForgotPasswordConfirmation {
   password: string;
 }
 
-export interface  NewPasswordConfiramation {
+export interface  NewPasswordConfirmation {
   email: string;
   newPassword: string;
   oldPassword: string;

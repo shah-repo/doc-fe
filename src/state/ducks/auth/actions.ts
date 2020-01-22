@@ -41,7 +41,7 @@ import {
   LoginWithCodeRequestBody,
   LogoutRequestBody,
   LogoutUserAction,
-  NewPasswordConfiramation,
+  NewPasswordConfirmation,
   NewUserSetPasswordAction,
   SelectEmployeeAction,
   SignupAction,
@@ -190,9 +190,9 @@ const confirmNewPassword = (
   });
 
 const newUserSetPassword = (
-  confirmValues: NewPasswordConfiramation,
+  confirmValues: NewPasswordConfirmation,
   handlers: Handlers,
-  ): ApiAction<AuthResponse, NewPasswordConfiramation> =>
+  ): ApiAction<AuthResponse, NewPasswordConfirmation> =>
   apiActionWithCallbacks({
     url: CONFIRM_SET_NEW_PASSWORD_URL,
     method: "post",
