@@ -83,10 +83,6 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
       switch (currentPath) {
         case "/":
           iotService.unsubscribeAll();
-          // iotService.subscribeToTopic(`+/training_records/+/created`, notify);
-          // iotService.subscribeToTopic(`+/training_records/+/updated`, notify);
-          // iotService.subscribeToTopic(`+/implementation_plan_task/+/created`, notify);
-          // iotService.subscribeToTopic(`+/implementation_plan_task/+/updated`, notify);
           return;
         case "/document_revision":
           iotService.unsubscribeAll();
