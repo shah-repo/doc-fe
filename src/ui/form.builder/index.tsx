@@ -17,3 +17,9 @@ export * from "./FBValidationEditor/FBValidationEditor.types";
 
 export { default as FBValidationMode } from "./FBValidationMode/FBValidationMode";
 export * from "./FBValidationMode/FBValidationMode.types";
+
+export { default as FBFormMarkDown } from "./FBFormMarkDown/FBFormMarkDown";
+export * from "./FBFormMarkDown/FBFormMarkDown.types";
+
+export { default as FBFieldMarkDown } from "./FBFieldMarkDown/FBFieldMarkDown";
+export * from "./FBFieldMarkDown/FBFieldMarkDown.types";

@@ -3,6 +3,7 @@ import React from "react";
 import FBAddFieldButton0 from "../../components/custom/FBAddFieldButton0";
 import FBTransportSchema from "../../components/custom/FBTransportSchema";
 import FBButton from "../../components/inputs/FBButton";
+import FBFormMarkDown from "../../FBFormMarkDown";
 import { withWorkspace } from "../../hocs/withWorkspace";
 import FBDynamicValidatorStore from "../../stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../stores/ui/FBStore";
@@ -19,7 +20,6 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
     {isStarter && <FBAddFieldButton0 />}
     {!isStarter && <FBSortableContainer items={schema} />}
     {includeTransport && <FBTransportSchema />}
-    <FBEditorDialog />
     <FBButton
       label="View"
       onClick={() => {
@@ -32,6 +32,8 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
         }
       }}
     />
+    <FBFormMarkDown />
+    <FBEditorDialog />
   </Box>
 );
 
