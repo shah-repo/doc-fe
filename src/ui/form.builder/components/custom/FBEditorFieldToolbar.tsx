@@ -1,5 +1,6 @@
 import { Box } from "@material-ui/core";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
+import CodeIcon from "@material-ui/icons/Code";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import React from "react";
 import { FBEditorWrapperProps } from "../../types/editor";
@@ -7,6 +8,7 @@ import { FBEditorWrapperProps } from "../../types/editor";
 const FBEditorFieldToolbar: React.FunctionComponent<FBEditorWrapperProps> = ({
   removeSchemaItem,
   editSchemaItem,
+  mdSchemaItem,
   toolbarMargin,
   ...props
 }) => (
@@ -25,6 +27,12 @@ const FBEditorFieldToolbar: React.FunctionComponent<FBEditorWrapperProps> = ({
     <Box pr={2} zIndex="tooltip">
       <BorderColorIcon
         onClick={editSchemaItem}
+        color="primary"
+      />
+    </Box>
+    <Box pr={2} zIndex="tooltip">
+      <CodeIcon
+        onClick={mdSchemaItem}
         color="primary"
       />
     </Box>

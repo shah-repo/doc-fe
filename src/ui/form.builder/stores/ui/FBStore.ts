@@ -43,8 +43,11 @@ export class FormBuilderStore {
   }
 
   @action public getSchemaItem = (
-    index: number,
+    index?: number,
   ): FBTemplateSchema | undefined => {
+    if (_.isUndefined(index)) {
+      return;
+    }
     return this.schema[index];
   }
 

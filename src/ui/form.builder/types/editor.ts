@@ -8,6 +8,9 @@ export interface FBEditorWrapperProps extends Omit<BoxProps, "fontSize">, Omit<F
   indicatorMargin?: number;
   removeSchemaItem?: () => any;
   editSchemaItem?: () => any;
+  mdSchemaItem?: () => any;
+  mdHidden?: boolean;
+  schemaItem?: FBTemplateSchema;
 }
 
 export type FBEditorWrapperSubtractProps<T> = Subtract<
