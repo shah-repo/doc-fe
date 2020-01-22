@@ -12,6 +12,7 @@ export interface ApiAction<Response = any, Body = any> extends Action {
   includeAuthorization?: boolean;
   asyncType?: string;
   contentType?: string;
+  password?: string;
   onSuccess: (data: Response, dispatch: Dispatch) => void;
   onFailure: (error: any,  dispatch: Dispatch) => void;
   onCompleted: (dispatch: Dispatch) => void;
