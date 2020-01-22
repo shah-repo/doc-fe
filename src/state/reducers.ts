@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 import { createMigrate, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import attachments from "./ducks/attachments";
 import auth from "./ducks/auth";
 import { LOGOUT_USER } from "./ducks/auth/constants";
 import changeRequests from "./ducks/changeRequest";
@@ -18,10 +19,11 @@ import migrations from "./migrations";
 const authPersistConfig = {
   key: "auth",
   storage,
-  version: 1,
-  whitelist: ["user"],
+  version: 2,
+  whitelist: ["user", "groups"],
   migrate: createMigrate(migrations),
 };
+
 const companyPersistConfig = {
   key: "company",
   storage,
@@ -29,6 +31,7 @@ const companyPersistConfig = {
 };
 
 const appReducer = combineReducers({
+  attachments,
   auth: persistReducer(authPersistConfig, auth),
   documents,
   changeRequests,

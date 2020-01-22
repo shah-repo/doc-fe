@@ -1,36 +1,47 @@
 import { Box } from "@material-ui/core";
 import React from "react";
+import AvatarUploadContainer from "../../common/avatar.field/container";
+import styles from "./avatar.styles";
 
 interface OwnProps {
-    src: string;
+  src: string;
+  showEditUser: boolean;
+  previewAvatar: string;
+  setPreviewAvatar: (value: string) => void;
+  setFile: (value: File) => void;
 }
 
 type Props = OwnProps;
 
-const AvatarPresenter: React.FunctionComponent<Props> = ({ src }) => {
+const AvatarPresenter: React.FunctionComponent<Props> = ({
+  src,
+  showEditUser,
+  previewAvatar,
+  setPreviewAvatar,
+  setFile,
+}) => {
+  const classes = styles();
 
+  const avatarRenderer = () => (
+    <Box zIndex="modal" position="absolute" alignSelf="baseline">
+      <img src={previewAvatar || src} className={classes.image} alt="Profile photo" />
+    </Box>
+  );
   return (
-    <Box
+    <Box display="flex" justifyContent="center" mt={20}>
+      <Box
         display="flex"
+        alignItems="flex-end"
         justifyContent="center"
-        mt={20}
-    >
-        <div
-            style={{
-                border: `8px solid ${"#76608D"}`,
-                width: "213px",
-                height: "213px",
-                borderRadius: "50%",
-                zIndex: 9999,
-                backgroundColor: "white",
-            }}
-        >
-            <img
-                src={src}
-                style={{ width: "196px", height: "196px" }}
-                alt="Profile photo"
-            />
-        </div>
+        className={classes.container}
+      >
+        {avatarRenderer()}
+        <AvatarUploadContainer
+          setPreviewAvatar={setPreviewAvatar}
+          showEditUser={showEditUser}
+          setFile={setFile}
+        />
+      </Box>
     </Box>
   );
 };

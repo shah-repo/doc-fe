@@ -101,6 +101,7 @@
   "change.request.process.assessment": "Process Assessment",
   "change.request.regulatory.assessment": "Regulatory Assessment",
   "change.request.assessments.error": "Please provide attachment or reasoning for each assessment",
+  "changeRequest.void.alert": "All linked documents should be removed before voiding the change request.",
 
   "changeRequest.transition.submitted": "Submit change request",
   "changeRequest.transition.approve": "Approve submission",
@@ -245,10 +246,17 @@
   "common.error.occured": "An error occured.",
   "common.click.to.try.again": "Click here to try again",
   "common.go.to.enlil": "Go to Enlil",
-  "common.deactivate": "Deactivate",
+  "common.deactivate": "Deactivate user",
+  "common.reactivate": "Reactivate user",
   "common.approval.id": "Approval ID",
   "common.error": "Error",
   "common.success": "Success",
+  "common.upload.photo": "Upload photo",
+  "common.approve.and.release": "Approve and Release",
+  "common.void": "Void",
+  "common.alert": "Alert",
+  "common.dismiss": "Dismiss",
+  "common.reset": "Reset",
 
   "output.info": "Form Info",
 
@@ -405,8 +413,12 @@
   "supplier.id": "Supplier ID",
   "supplier.name": "Supplier name",
   "supplier.status": "Supplier status",
+  "supplier.add.new": "Add {name}",
+  "supplier.form.error": "Cannot open multiple forms.",
 
   "watermark.successfully.requested": "Watermarked copy of {file}.{type} successfully requested. We will notify you when it's ready to download.",
   "watermark.download.ready": "Watermarked file {name}.{type} ready to download",
-  "watermark.request.failed": "Request for {name}.{type} failed"
+  "watermark.request.failed": "Request for {name}.{type} failed",
+
+  "mqtt.refresh.page": "Refresh page"
 }
