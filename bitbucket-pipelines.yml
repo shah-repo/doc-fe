@@ -11,6 +11,7 @@ pipelines:
         - docker
       caches:
         - docker
+        - node
       script:
         - chmod a+x ./aws/bash_scripts/runTests.sh
         - ./aws/bash_scripts/runTests.sh
@@ -123,7 +124,7 @@ pipelines:
       - step: *RUN_TESTS
       - step: *DEPLOY_TO_DEMO
       
-definitions:
-  services:
-    docker:
-      memory: 3096
+# definitions:
+#   services:
+#     docker:
+#       memory: 3096
