@@ -96,14 +96,11 @@ export class IotService {
         if (this.mqttClientInstance._events.message) {
           if (this.mqttClientInstance._events.message.length < 1) {
             this.mqttClientInstance.on("message", (topic: string, message: ArrayBufferView) => {
-              console.log(new TextDecoder("utf-8").decode(message));
               notif(new TextDecoder("utf-8").decode(message));
             });
           }
         } else {
           this.mqttClientInstance.on("message", (topic: string, message: ArrayBufferView) => {
-            console.log(new TextDecoder("utf-8").decode(message));
-            console.log(topic);
             notif(new TextDecoder("utf-8").decode(message));
           });
         }
@@ -154,13 +151,10 @@ export class IotService {
       const alreadySubscribed = _.some(Object.keys(this.mqttClientInstance._resubscribeTopics),
         (id) => id === fullTopic,
       );
-      console.log(fullTopic);
       if (noSubscriptions) {
-        console.log("subscribed");
         await this.mqttClientInstance.subscribe(fullTopic);
 
       } else if (!alreadySubscribed) {
-        console.log("subscribed");
         await this.mqttClientInstance.subscribe(fullTopic);
       }
     }

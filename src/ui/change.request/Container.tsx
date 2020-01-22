@@ -48,7 +48,7 @@ const Container: React.FunctionComponent<Props> = ({
 
   return (
     <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>
-      <ChangeRequestSockets changeRequestId={changeRequestId} />
+      {dataProp && <ChangeRequestSockets changeRequest={dataProp} />}
       <Switch>
         <Route path={CHANGE_REQUEST_UPDATE_URL} exact={true} render={updateRenderer} />
         <Route path={CHANGE_REQUEST_PREVIEW_URL} exact={true} render={summaryRenderer} />
