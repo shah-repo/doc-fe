@@ -1,13 +1,19 @@
 import { Collapse, List } from "@material-ui/core";
 import { SvgIconProps } from "@material-ui/core/SvgIcon";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
+import { css } from "glamor";
 import _ from "lodash";
 import React, { ComponentType, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { IotService } from "../../common/utils/iot/mqttClient";
+import { getTableState } from "../../common/utils/selectors";
+import { DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
+import { tableSearchActions } from "../../state/ducks/tableSearch";
 import { Translation } from "../translations/types";
 import NavigationLinkPresenter from "./NavigationLink.presenter";
+import ToastMessage from "./ToastMessage";
 
 export interface LinkDefinition {
   url: string;
@@ -24,28 +30,70 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
   ({ url, text, Icon, childrenUrls = [], currentPath }) => {
     const isChildActive = () => _.includes(childrenUrls.map((link) => link.url), currentPath);
     const [isOpen, setIsOpen] = useState(isChildActive());
+    const CR_TABLE_NAME = "changeRequests";
+    const crTableState = useSelector(getTableState(CR_TABLE_NAME));
+    const dispatch = useDispatch();
 
     const notify = (msg: string) => {
       const message = JSON.parse(msg).data.message;
-      toast(message);
+      toast(<ToastMessage message={message} />, {
+        className: css({
+          background: "#eee !important",
+          color: "#333 !important",
+          borderRadius: "10px !important",
+          boxShadow: "0 1px 10px 0 rgba(0, 0, 0, 0.3), 0 2px 15px 0 rgba(0, 0, 0, 0.2) !important",
+        }),
+      },
+      );
     };
+
+    const CRNotify = (msg: string) => {
+      dispatch(tableSearchActions.setSearchCriteria(
+        {
+          ...crTableState,
+          queryDict: {
+            "status[]": DocumentRevisionStatus.Draft,
+          },
+        },
+        CR_TABLE_NAME,
+      ),
+    );
+      notify(msg);
+    };
+
+    // currently we do not have subscription for docRev
+    // const DOCREV_TABLE_NAME = "documentRevisions";
+    // const docRevTableState = useSelector(getTableState(DOCREV_TABLE_NAME));
+    // const docRevNotify = (msg: string) => {
+    //   dispatch(tableSearchActions.setSearchCriteria(
+    //     {
+    //       ...docRevTableState,
+    //       queryDict: {
+    //         "status[]": DocumentRevisionStatus.Released,
+    //       },
+    //     },
+    //     DOCREV_TABLE_NAME,
+    //   ),
+    // );
+    //   notify(msg);
+    // };
 
     const manageSubscriptionsOnNavigation = () => {
       const iotService = IotService.getInstance();
       switch (currentPath) {
         case "/":
           iotService.unsubscribeAll();
-          iotService.subscribeToTopic(`+/training_records/+/created`, notify);
-          iotService.subscribeToTopic(`+/training_records/+/updated`, notify);
-          iotService.subscribeToTopic(`+/implementation_plan_task/+/created`, notify);
-          iotService.subscribeToTopic(`+/implementation_plan_task/+/updated`, notify);
+          // iotService.subscribeToTopic(`+/training_records/+/created`, notify);
+          // iotService.subscribeToTopic(`+/training_records/+/updated`, notify);
+          // iotService.subscribeToTopic(`+/implementation_plan_task/+/created`, notify);
+          // iotService.subscribeToTopic(`+/implementation_plan_task/+/updated`, notify);
           return;
         case "/document_revision":
           iotService.unsubscribeAll();
           return;
         case "/change_request":
           iotService.unsubscribeAll();
-          iotService.subscribeToTopic(`+/change_requests/+/created`, notify);
+          iotService.subscribeToTopic(`+/change_requests/+/created`, CRNotify);
           return;
       }
     };

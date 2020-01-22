@@ -18,6 +18,7 @@ export default makeStyles((theme: Theme) =>
       color: "white",
       fontsize: "1.9rem",
       marginTop: theme.spacing(1),
+      fontFamily: "Open Sans, sans-serif",
     },
     userNameEdit: {
       "color": "white",
@@ -25,18 +26,13 @@ export default makeStyles((theme: Theme) =>
         fontSize: "3rem",
         textAlign: "center",
         fontFamily: "Open Sans, sans-serif",
-        padding: "0",
-        fontWeight: "400",
+        padding: theme.spacing(0.5, 0, 0, 0),
       },
     },
-    profilePhoto: {
-        border: `8px solid ${"#76608D"}`,
-        width: "213px",
-        height: "213px",
-        borderRadius: "50%",
-        zIndex: 9999,
-        backgroundColor: "white",
-        marginTop: theme.spacing(3.5),
+    activeStatusButton: {
+      width: "auto",
+      color: "#6E09EA",
+      borderColor: "#6E09EA",
     },
     integrations: {
       marginTop: "50px",

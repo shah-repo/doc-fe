@@ -34,6 +34,7 @@ import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import FBStore from "../../form.builder/stores/ui/FBStore";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
+import ApproveAndRelease from "./presenters/ApproveAndRelease";
 import References from "./presenters/References";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
 import { DocumentRevisionFormValues } from "./types";
@@ -244,11 +245,20 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           </Box>
         )}
         <Box mt={5}>
-          <Grid container={true} alignItems="flex-end" direction="column">
+          <Grid
+            container={true}
+            alignItems="flex-end"
+            justify="flex-end"
+            direction="row"
+          >
             <SubmitButton
               asyncState={asyncState}
               label={isDisabled ? "common.save" : "navigation.createDocument"}
               onClick={onFormClick}
+            />
+            <ApproveAndRelease
+              id={values.id}
+              status={values.status}
             />
           </Grid>
         </Box>
