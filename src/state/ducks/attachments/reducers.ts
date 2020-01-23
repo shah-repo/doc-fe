@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { ADD_WATERMARK, REMOVE_WATERMARK, CLEAR_WATERMARKS } from "./constants";
+import { ADD_WATERMARK, CLEAR_WATERMARKS, REMOVE_WATERMARK } from "./constants";
 import { WatermarkActions, WatermarkState } from "./types";
 
 export const WATERMARKS_DEFAULT_STATE: WatermarkState = [];
