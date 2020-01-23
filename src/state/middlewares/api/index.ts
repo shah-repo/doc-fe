@@ -63,6 +63,12 @@ const apiMiddleware: Middleware = ({
       apiXClient(authorization);
     }
 
+    if (action.password) {
+      const authorization = `bearer_password ${getState().auth.user.employeeId}:${getState().auth.user.sessionId}:${action.password}`;
+
+      requestConfig.headers.Authorization = authorization;
+    }
+
     const { data } = await apiClient.request(requestConfig);
 
     action.onSuccess(data, dispatch);
