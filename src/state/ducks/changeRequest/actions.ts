@@ -101,6 +101,7 @@ const applyTransition = (
   url: `${CHANGE_REQUEST_ROOT_URL}/${id}/${transition}`,
   method: "post",
   data: body,
+  password: body.password,
   onSuccess: (d, dispatch) => {
     dispatch(load(id));
   },

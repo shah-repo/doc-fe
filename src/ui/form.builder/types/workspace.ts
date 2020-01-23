@@ -8,6 +8,7 @@ export type FBWorkspaceMode =
 | "preview";
 
 export interface FBWorkspaceProps {
+    id?: string;
     mode?: FBWorkspaceMode;
     includeTransport?: boolean;
     isStarter?: boolean;

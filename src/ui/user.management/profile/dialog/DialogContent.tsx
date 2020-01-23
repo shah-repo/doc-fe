@@ -39,7 +39,8 @@ interface OwnProps {
   file: File | null;
   setFile: (value: File | null) => void;
   setUserInfo: (values: EmployeeEditRequestBody) => void;
-  userId?: string;
+  userId: string;
+  isCurrentUser: boolean;
 }
 
 type Props = OwnProps;
@@ -67,6 +68,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
   setUserInfo,
   userId,
   callbackUpdateWithUpload,
+  isCurrentUser,
 }) => {
   const classes = styles();
   const dispatch = useDispatch();
@@ -75,10 +77,10 @@ export const DialogContent: React.FunctionComponent<Props> = ({
   const asyncS3link = useAsync({
     onSuccess: (data: any) => {
       setAvatarURL((data.url).substr(0, (data.url).indexOf("?")));
-      if (userId && file) {
+      if (!isCurrentUser && file) {
         dispatch(attachmentsActions.uploadAvatar(data.url, userId, userInfo.name, file, asyncUploadAvatar ));
       }
-      if (!userId && file) {
+      if (isCurrentUser && file) {
         dispatch(attachmentsActions.uploadAvatar(data.url, null, userInfo.name, file, asyncUploadAvatar ));
       }
       setFile(null);
@@ -115,10 +117,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
     if (!file) {
       editCurrentEmployee(userInfo);
     }
-    if (file && userId) {
-      dispatch(attachmentsActions.requestAvatarS3link(file.name, asyncS3link));
-    }
-    if (file && !userId) {
+    if (file) {
       dispatch(attachmentsActions.requestAvatarS3link(file.name, asyncS3link));
     }
   };
@@ -159,8 +158,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
 
   return (
     <React.Fragment>
-      {canManageUsers && activeStatusButtonRenderer()}
-
+      {!isCurrentUser && activeStatusButtonRenderer()}
       <Box display="flex" alignSelf="center">
         <Typography variant="subtitle1" color="primary">
           {email}

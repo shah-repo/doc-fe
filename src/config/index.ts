@@ -9,6 +9,9 @@ const DEFAULTS = {
   FRONTEND_URL: "/",
   AWS_COGNITO_CLIENT_ID: "default",
   THEME: ThemeEnv.DEV_THEME,
+  VALIDATORS_S3_FOLDER_NAME: "",
+  AWS_BUCKET_PUBLIC: "",
+  AWS_REGION: "",
 };
 
 type ConfigKey = keyof typeof DEFAULTS;

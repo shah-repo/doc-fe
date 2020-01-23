@@ -13,7 +13,7 @@ const FBImportSchema: React.FunctionComponent<FBImportSchemaProps> = ({
       id="fb-upload-file"
       type="file"
       accept=".json"
-      onChange={importSchema}
+      onChange={(importSchema)}
     />
     <label htmlFor="fb-upload-file">
       <FBButton

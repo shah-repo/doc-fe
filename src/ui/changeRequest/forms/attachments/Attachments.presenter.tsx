@@ -65,6 +65,7 @@ const AttachmentsPresenter: React.FunctionComponent<Props> =
           </DialogTitle>
           <DialogContent>
             <Formik
+              render={renderForm}
               initialValues={{ file: undefined }}
               onSubmit={onSubmit}
             >

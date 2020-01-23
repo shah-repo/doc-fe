@@ -144,6 +144,7 @@ const approveAndRelease = (
   url: `${DOCUMENT_REVISION_ROOT_URL}/release/${id}`,
   method: "post",
   data: body,
+  password: body.password,
   onSuccess: (d, dispatch) => {
     dispatch(load(id));
   },

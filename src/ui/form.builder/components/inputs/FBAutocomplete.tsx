@@ -1,37 +1,41 @@
-import { Box } from "@material-ui/core";
-import React, { useState } from "react";
-import Select from "react-select";
-import { SelectOption } from "../../../components/forms/fields/Select";
-import { withAutocompleteDefaults } from "../../hocs/withAutocompleteDefaults";
-import { FBAutocompleteProps } from "../../types/autocomplete";
+import Box from "@material-ui/core/Box/Box";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import React from "react";
+import { withAutocomplete } from "../../hocs/inputs/withAutocomplete";
+import { FBAutocompleteProps } from "../../types/inputs/autocomplete";
+import FBLabel from "../common/FBLabel";
 
 const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
-  labelRenderer,
-  autocompleteList,
+  options,
+  filterOptions,
+  renderInput,
+  getOptionLabel,
+  multiple,
+  onChange,
+  label,
+  error,
+  labelValues,
   disabled,
-  readOnly,
-  ...props
-}) => {
+  hidden,
+}) => (
+  <Box mb={4}>
+    {!hidden && (
+      <Box>
+        {label && <FBLabel {...{ error, label, labelValues }} />}
+        <Autocomplete
+          options={options as any[]}
+          {...{
+            filterOptions,
+            renderInput,
+            getOptionLabel,
+            multiple,
+            onChange,
+            disabled,
+          }}
+        />
+      </Box>
+    )}
+  </Box>
+);
 
-  // *NOTE: For demo only. Will be removed
-  const [options] = useState<SelectOption[]>([]);
-  return (
-    <Box mb={4}>
-      {labelRenderer}
-      <Select
-        inputId={`react-select-${props.name}`}
-        TextFieldProps={{
-          InputLabelProps: {
-            htmlFor: `react-select-${props.name}`,
-            shrink: true,
-          },
-        }}
-        isDisabled={disabled || readOnly}
-        {...props}
-        options={options}
-      />
-    </Box>
-  );
-};
-
-export default withAutocompleteDefaults(FBAutocomplete);
+export default withAutocomplete(FBAutocomplete);

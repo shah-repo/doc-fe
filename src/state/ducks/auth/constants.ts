@@ -15,6 +15,12 @@ export const LOGOUT_URL = "/auth/logout";
 export const AUTH_AWS_IOT_URL = "/auth/credentials/iot";
 export const GROUPS_URL = "/groups/me";
 export const PING_SERVER_URL = "/auth/prevent_idle_logout";
+
+export const FETCH_VALIDATORS_REMOTE_URL_URL = "/remoteValidators";
+export const VALIDATORS_HELPER_REMOTE_URL_URL = "/remoteValidators/helper";
+
+export const AUTH_TOKENS_REFRESH_THRESHOLD_SECONDS = 100;
+
 export const SESSION_DETAILS_URL = "/auth/sessionDetails";
 export const USERS_URL = "/users";
 export const USERS_ME_URL = "/users/me";

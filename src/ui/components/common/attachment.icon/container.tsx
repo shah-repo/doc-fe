@@ -1,4 +1,5 @@
 import { Grid } from "@material-ui/core";
+import _ from "lodash";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import {
@@ -11,7 +12,8 @@ import {
 } from "../../../../state/ducks/attachments";
 import { Nullable } from "../../../../state/ducks/common";
 import { ApplicationState } from "../../../../state/reducers";
-import FBStore from "../../../form.builder/stores/FBStore";
+import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
+import FBStore from "../../../form.builder/stores/ui/FBStore";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
@@ -64,14 +66,21 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const handleRemove = (attachment: Attachment) => () => {
     if (!form && !field) { return; }
     const filtered = (field!.value as Attachment[]).filter((a) => a.id !== attachment.id);
-    form!.setFieldValue(name, filtered);
 
     if (FBStore.mode === "form") {
-      FBStore.setValues({
+      let values = {
         ...FBStore.values,
         [name as string]: filtered,
-      });
+      };
+
+      if (_.isEmpty(filtered)) {
+        values = _.omit(values, name);
+      }
+
+      FBStore.setValues(values);
+      FBDynamicValidatorStore.validate();
     }
+    form!.setFieldValue(name, filtered);
   };
 
   const handleDownload = (attachment: Attachment, type?: AttachmentType) => () => {
