@@ -24,8 +24,13 @@ export interface DocumentType {
   pageDetails?: Nullable<PageDetails>;
 }
 
+export interface DocumentForms {
+  id: string;
+}
+
 export interface DocumentTypeByIdForm {
   id: string;
+  document: DocumentForms;
 }
 
 export interface DocumentTypeById {
