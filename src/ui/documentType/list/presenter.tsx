@@ -22,6 +22,7 @@ import {
 } from "../../document.revision/utils/paths";
 import { Translation } from "../../translations/types";
 import { styles } from "./styles";
+// import { FBTemplateSchema } from "../../form.builder/types/store";
 
 export interface Props {
   tableName: string;
@@ -60,8 +61,14 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       cellHref: cellHrefRenderer,
       omitSearch: true,
       columnOptions: {
-        cellDataGetter: ({ rowData }) =>
-          rowData.formInput ? rowData.formInput[column.fieldName] : "",
+        cellDataGetter: ({ rowData }) => {
+          if (_.isUndefined(rowData.formInput)) {
+            return "";
+          }
+          let fieldValue = rowData.formInput[column.fieldName] || "";
+          fieldValue = fieldValue.replace(column.fieldName, "").replace("-<-val->", "");
+          return _.startCase(fieldValue);
+        }
       },
     }),
   );
