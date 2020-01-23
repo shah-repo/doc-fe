@@ -1,6 +1,7 @@
 import * as AWSMqttClient from "aws-mqtt";
 import { Credentials } from "aws-sdk/global";
 import _, { Dictionary } from "lodash";
+import MQTTPattern from "mqtt-pattern";
 
 interface AwsMqttClient {
   connected: boolean;
@@ -150,9 +151,10 @@ export class IotService {
         creatingClient = false;
       });
       this.mqttClientInstance.on("message", (topic: string, message: ArrayBufferView) => {
-        if (topic.includes("attachment_watermark")) {
-          this.emitter[topic] && this.emitter[topic](new TextDecoder("utf-8").decode(message));
-        }
+        const emitterKey = Object.keys(this.emitter).find((pattern: string) =>
+          MQTTPattern.matches(pattern, topic),
+        ) || "";
+        this.emitter[emitterKey] && this.emitter[emitterKey](new TextDecoder("utf-8").decode(message));
       });
     }
 }

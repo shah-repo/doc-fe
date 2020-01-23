@@ -45,6 +45,7 @@
     "mobx-rest-axios-adapter": "2.1.1",
     "moment": "2.24.0",
     "moment-timezone": "0.5.27",
+    "mqtt-pattern": "1.2.0",
     "prettier": "^1.18.2",
     "query-string": "6.9.0",
     "react": "16.12.0",
