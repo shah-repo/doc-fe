@@ -8,6 +8,7 @@ import {
   ATTACHMENT_ROOT_URL,
   ATTACHMENT_UPLOAD_URL,
   CHECK_WATERMARK_ASYNC,
+  CLEAR_WATERMARKS,
   REMOVE_WATERMARK,
   REQUEST_WATERMARK_ASYNC,
 } from "./constants";
@@ -85,6 +86,11 @@ const removeWatermark = (id: string): any => ({
   type: REMOVE_WATERMARK,
   payload: id,
 });
+
+const clearWatermarks = () => ({
+  type: CLEAR_WATERMARKS,
+});
+
 const requestAvatarS3link = (
   fileName: string,
   handlers: Handlers,
@@ -132,6 +138,7 @@ export default {
   checkWatermarkStatus,
   addWatermark,
   removeWatermark,
+  clearWatermarks,
   requestAvatarS3link,
   uploadAvatar,
 };
