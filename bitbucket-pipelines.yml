@@ -6,18 +6,19 @@ pipelines:
   const:
     tests: &RUN_TESTS
       name: Tests
-      image: node:10.16.3
+      image: node:10.18.1
       services:
         - docker
       caches:
         - docker
+        - node
       script:
         - chmod a+x ./aws/bash_scripts/runTests.sh
         - ./aws/bash_scripts/runTests.sh
 
     lint_tests: &RUN_LINT_AND_TESTS
       name: Linter & Tests
-      image: node:10
+      image: node:10.18.1
       services:
         - docker
       caches:
@@ -31,7 +32,7 @@ pipelines:
 
     lint: &RUN_LINTER
       name: Linter
-      image: node:10
+      image: node:10.18.1
       services:
         - docker
       caches:
@@ -126,4 +127,4 @@ pipelines:
 definitions:
   services:
     docker:
-      memory: 5096
+      memory: 6096
