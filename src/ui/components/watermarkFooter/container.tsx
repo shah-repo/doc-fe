@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { attachmentsActions, attachmentsSelectors } from "../../../state/ducks/attachments";
 import WatermarkFooterPresenter from "./presenter";
@@ -26,6 +26,12 @@ export const WatermarkFooterContainer: React.FunctionComponent = () => {
       data,
     ]);
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch(attachmentsActions.clearWatermarks());
+    };
+  }, []);
 
   const renderFooter = requestResults.length > 0 && (
     <WatermarkFooterPresenter
