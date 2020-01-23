@@ -1,0 +1,44 @@
+import React, { useEffect } from "react";
+import { IotService } from "../../common/utils/iot/mqttClient";
+import { ChangeRequest, changeRequestsActions } from "../../state/ducks/changeRequest";
+import useActionCreator from "../hooks/useActionCreator";
+import useAsync from "../hooks/useAsync";
+import useDidMqttConnect from "../hooks/useDidMqttConnect";
+
+interface Props {
+  changeRequest: ChangeRequest;
+}
+
+const ChangeRequestSockets: React.FunctionComponent<Props> = ({
+  changeRequest: {
+    crId,
+    id,
+  },
+}) => {
+  const didMqttConnect = useDidMqttConnect();
+  const iotService = IotService.getInstance();
+  const subscribe = () => {
+    iotService.subscribeToTopic(`+/change_requests/${crId}/updated`, loadData);
+  };
+  const unsubscribe = () => {
+    iotService.unsubscribeFromTopic(`+/change_requests/${crId}/updated`);
+  };
+  const loadAction = useActionCreator(changeRequestsActions.load);
+  const async = useAsync();
+  const loadData = (msg: string) => {
+    async.start(loadAction, id);
+  };
+  useEffect(() => {
+    subscribe();
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+  useEffect(() => {
+    subscribe();
+  }, [didMqttConnect]);
+
+  return null;
+};
+
+export default ChangeRequestSockets;
