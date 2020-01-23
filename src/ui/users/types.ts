@@ -3,11 +3,11 @@ export interface LoginFormValues {
   password: string;
 }
 
-export interface ForgotPasswordEmail {
+export interface PasswordEmail {
   email: string;
 }
 
-export interface ForgotPasswordValues {
+export interface PasswordValues {
   email: string;
   confirmPass: string;
   password: string;

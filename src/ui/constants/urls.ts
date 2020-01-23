@@ -27,6 +27,7 @@ export const TRAINING_DETAIL_URL = `${TRAINING_ROOT_URL}/detail/:trainingId`;
 
 export const SIGNUP_URL = "/signup";
 export const CONFIRM_FORGOT_PASSWORD_URL = "/sign_up/confirm_forgot_password/";
+export const NEW_USER_SET_PASSWORD = "/new_user_set_password/";
 export const STATUS = "/status";
 
 export const SUPPLIER_SURVEY_URL = "/supplier_survey/:token";
