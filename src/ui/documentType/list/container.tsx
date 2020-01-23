@@ -29,6 +29,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const docRevId = useSelector(documentTypeSelectors.docRevTypeById);
   const tableState = useSelector(getTableState(TABLE_NAME));
   const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
+  const docId = useSelector(documentTypeSelectors.docId);
 
   const async = useAsync<DocumentTypeById>({
     onSuccess: () => {
@@ -55,7 +56,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   return (
     <div style={{height: "100%"}}>
       {enableRedirect &&
-      <Redirect to={{ pathname: `/document_revision/${documentType.id}/output_document/${docRevId}` }} />}
+      <Redirect to={{ pathname: `/document_revision/${docId}/output_document/${docRevId}` }} />}
       <DocumentByTypeListPresenter
         tableName={TABLE_NAME}
         tableState={tableState}
