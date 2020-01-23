@@ -22,7 +22,6 @@ import {
 } from "../../document.revision/utils/paths";
 import { Translation } from "../../translations/types";
 import { styles } from "./styles";
-// import { FBTemplateSchema } from "../../form.builder/types/store";
 
 export interface Props {
   tableName: string;
@@ -66,9 +65,11 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
             return "";
           }
           let fieldValue = rowData.formInput[column.fieldName] || "";
-          fieldValue = fieldValue.replace(column.fieldName, "").replace("-<-val->", "");
+          fieldValue = fieldValue
+            .replace(column.fieldName, "")
+            .replace("-<-val->", "");
           return _.startCase(fieldValue);
-        }
+        },
       },
     }),
   );
@@ -155,12 +156,20 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
           className={classes.button}
           onClick={openDocRev}
         >
-          <Text translation="supplier.add.new" values={{name: documentType.documentTypeName}} />
+          <Text
+            translation="supplier.add.new"
+            values={{ name: documentType.documentTypeName }}
+          />
         </Button>
       </Grid>
-      {showError && <div style={{color: "red"}}>
-        <Text translation="supplier.form.error" values={{name: documentType.documentTypeName}} />
-      </div>}
+      {showError && (
+        <div style={{ color: "red" }}>
+          <Text
+            translation="supplier.form.error"
+            values={{ name: documentType.documentTypeName }}
+          />
+        </div>
+      )}
       <Grid item={true} className={classes.item}>
         <TablePanel<DocumentRevision>
           columns={columns}
