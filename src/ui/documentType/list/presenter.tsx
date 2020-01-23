@@ -20,6 +20,7 @@ import {
   documentEditPath,
   documentPreviewPath,
 } from "../../document.revision/utils/paths";
+import { FB } from "../../form.builder";
 import { Translation } from "../../translations/types";
 import { styles } from "./styles";
 
@@ -61,14 +62,11 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       omitSearch: true,
       columnOptions: {
         cellDataGetter: ({ rowData }) => {
-          if (_.isUndefined(rowData.formInput)) {
-            return "";
-          }
-          let fieldValue = rowData.formInput[column.fieldName] || "";
-          fieldValue = fieldValue
-            .replace(column.fieldName, "")
-            .replace("-<-val->", "");
-          return _.startCase(fieldValue);
+          const { fieldName } = column;
+          return FB.stripOption(
+            fieldName,
+            _.get(rowData, `formInput.${fieldName}`),
+          );
         },
       },
     }),
