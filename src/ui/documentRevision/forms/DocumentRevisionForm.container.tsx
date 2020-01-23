@@ -98,6 +98,7 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
   documentTypesById,
   document,
 }) => {
+
   const docTypes = useMemo(
     () =>
       documentTypes.map((document) => ({

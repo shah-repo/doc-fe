@@ -24,8 +24,13 @@ export enum FBDialogActionLabel {
 export type FBDialogAction = "create";
 
 export interface FBDialogProps extends
-  Omit<DialogProps, "title">,
-  FBDialogInjectedProps {
+  Pick<DialogProps, "fullScreen" | "children"> {
+  open?: boolean;
+  content?: React.ReactNode;
+  title?: string | Translation | false;
+  setDialogOpen?: () => any;
+  setDialogClose?: () => any;
+  setDialogContent?: (content: React.ReactNode, title?: string | Translation | false) => any;
   maxWidth?: Breakpoint;
   actions?: FBDialogAction[] | false;
   onActionClick?: (action: FBDialogAction) => any;

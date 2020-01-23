@@ -3,7 +3,6 @@ import { Formik, FormikProps } from "formik";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTableState } from "../../../common/utils/selectors";
-import { Nullable } from "../../../state/ducks/common";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
@@ -13,14 +12,13 @@ import AddEmployeeFormPresenter from "./form.presenter";
 import { transformToAddEmployeeRequest } from "./utils/transform";
 
 export interface AddEmployeeFormValues {
-  id: Nullable<string>;
+  id?: string;
   name: string;
   email: string;
   groups: OptionType[];
 }
 
 const initialValues = {
-  id: null,
   name: "",
   email: "",
   groups: [],

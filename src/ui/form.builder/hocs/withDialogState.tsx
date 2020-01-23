@@ -1,37 +1,40 @@
 import React from "react";
 import { Translation } from "../../translations/types";
-import { Subtract } from "../types/common";
-import { FBDialogInjectedProps, FBDialogStateProps } from "../types/dialog";
+import { FBDialogProps } from "../types/dialog";
 
-export function withDialogState<T extends FBDialogInjectedProps>(
-  Component: React.ComponentType<T>,
-) {
-  return class extends React.Component<Subtract<T, FBDialogInjectedProps>> {
-    public state: FBDialogStateProps = {
-      open: false,
-      content: undefined,
-      title: (this.props as T).title || false,
+export const withDialogState = <T extends FBDialogProps>(
+  Component: React.FunctionComponent<T>,
+) => {
+  const Comp = ({
+    ...props
+  }: T) => {
+
+    const [open, setOpen] = React.useState(false);
+    const [content, setContent] = React.useState<React.ReactNode | undefined>(undefined);
+    const [title, setTitle] = React.useState<React.ReactNode | false>(
+      props.title || false,
+    );
+
+    const setDialogOpen = () => setOpen(true);
+    const setDialogClose = () => setOpen(false);
+    const setDialogContent = (
+      content: React.ReactNode,
+      title: string | Translation | false | undefined = props.title,
+    ) => {
+      setContent(content);
+      setTitle(title);
     };
 
-    public setOpen = () => this.setState({ open: true });
-    public setClose = () => this.setState({ open: false });
-    public setContent = (
-      content: React.ReactNode,
-      title: string | Translation | false | undefined = (this.props as T).title,
-    ) => this.setState({ ...this.state, content, title })
-
-    public render() {
-      return (
-        <Component
-          title={this.state.title}
-          {...this.props as T}
-          setDialogOpen={this.setOpen}
-          setDialogClose={this.setClose}
-          setDialogContent={this.setContent}
-          open={this.state.open}
-          content={this.state.content}
-        />
-      );
-    }
+    return Component({
+      ...(props as T),
+      setDialogOpen,
+      setDialogClose,
+      setDialogContent,
+      open,
+      content,
+      title,
+    });
   };
-}
+
+  return (props: T) => Comp(props);
+};

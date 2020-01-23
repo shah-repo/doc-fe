@@ -1,29 +1,19 @@
-import { Box, FormControl, Select } from "@material-ui/core";
+import { Select } from "@material-ui/core";
 import React from "react";
-import { withSelectDefaults } from "../../hocs/withSelectDefaults";
-import { FBSelectProps } from "../../types/select";
-import FBNoteTextField from "../custom/FBNoteTextField";
+import { withSelect } from "../../hocs/inputs/withSelect";
+import { FBSelectProps } from "../../types/inputs/select";
+import FBInput from "../common/FBInput";
 
 const FBSelect: React.FunctionComponent<FBSelectProps> = ({
-  variant,
-  labelRenderer,
-  items,
-  field,
-  includeNote,
-  showNote = false,
+  menuItems,
+  renderValue,
   ...props
 }) => (
-    <Box mb={4}>
-      {labelRenderer}
-      <FormControl variant={variant} fullWidth={true} required={props.required}>
-        <Select {...props}>{items}</Select>
-      </FormControl>
-      {showNote && (
-        <Box pt={2}>
-          <FBNoteTextField disabled={props.disabled} name={props.name} />
-        </Box>
-      )}
-    </Box>
-  );
+  <FBInput {...props} {...{ renderValue }} type="select">
+    <Select variant="outlined">
+      {menuItems}
+    </Select>
+  </FBInput>
+);
 
-export default withSelectDefaults(FBSelect);
+export default withSelect(FBSelect);

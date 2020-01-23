@@ -2,8 +2,8 @@ import { BoxProps } from "@material-ui/core/Box";
 import _ from "lodash";
 import React from "react";
 import { FBEditorSectionConfig } from "../defaults/editor";
-import sortableStore from "../stores/FBSortableStore";
-import FBStore from "../stores/FBStore";
+import sortableStore from "../stores/ui/FBSortableStore";
+import FBStore from "../stores/ui/FBStore";
 import {
   FBEditorWrapperProps,
   FBEditorWrapperSubtractProps,
@@ -13,8 +13,9 @@ export function withEditorWrapper<T extends FBEditorWrapperProps>(
   Component: React.ComponentType<T>,
 ) {
   class HOC extends React.Component<FBEditorWrapperSubtractProps<T>> {
-    public state: Pick<BoxProps, "visibility"> = {
+    public state: Pick<BoxProps, "visibility"> & { mdHidden: boolean } = {
       visibility: "hidden",
+      mdHidden: true,
     };
 
     public render() {
@@ -22,10 +23,13 @@ export function withEditorWrapper<T extends FBEditorWrapperProps>(
         <Component
           {...(this.props as T)}
           visibility={this.state.visibility}
+          mdHidden={this.state.mdHidden}
+          schemaItem={FBStore.getSchemaItem(this.props.index)}
           indicatorVisibility={this.isIndicatorVisible()}
           toolbarMargin={this.toolbarMargin()}
           indicatorMargin={this.indicatorMargin()}
           removeSchemaItem={this.removeSchemaItem}
+          mdSchemaItem={this.mdSchemaItem}
           editSchemaItem={this.editSchemaItem}
           onMouseOver={this.onMouseOver}
           onMouseLeave={this.onMouseLeave}
@@ -39,6 +43,10 @@ export function withEditorWrapper<T extends FBEditorWrapperProps>(
 
     private editSchemaItem = () => {
       FBStore.editSchemaItem(this.props.index);
+    }
+
+    private mdSchemaItem = () => {
+      this.setState({ mdHidden: !this.state.mdHidden });
     }
 
     private toolbarMargin = (): number => {

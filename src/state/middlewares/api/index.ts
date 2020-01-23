@@ -1,6 +1,8 @@
 import { AxiosRequestConfig } from "axios";
+import _ from "lodash";
 import { Action, Dispatch, Middleware, MiddlewareAPI } from "redux";
 import apiClient from "../../apiClient";
+import apiXClient from "../../apiXClient";
 import { ApplicationState } from "../../reducers";
 import { ApiAction, AsyncAction, AsyncStatus } from "../../types";
 import { AsyncActionErrorResponse } from "./types";
@@ -25,60 +27,78 @@ const dispatchAsyncStatusAction = (
   dispatch(action);
 };
 
-const apiMiddleware: Middleware =
-  ({ dispatch, getState }: MiddlewareAPI<Dispatch, ApplicationState>) =>
-    (next: Dispatch) =>
-      async <A extends Action>(action: A) => {
+const apiMiddleware: Middleware = ({
+  dispatch,
+  getState,
+}: MiddlewareAPI<Dispatch, ApplicationState>) => (next: Dispatch) => async <
+  A extends Action
+>(
+  action: A,
+) => {
+  if (!isApiAction(action)) {
+    next(action);
+    return;
+  }
 
-        if (!(isApiAction(action))) {
-          next(action);
-          return;
-        }
+  dispatchAsyncStatusAction(dispatch, action.asyncType, AsyncStatus.Active);
 
-        dispatchAsyncStatusAction(dispatch, action.asyncType, AsyncStatus.Active);
+  try {
+    const requestConfig: AxiosRequestConfig = {
+      data: action.data,
+      method: action.method,
+      params: action.params,
+      url: action.url,
+      headers: {},
+    };
 
-        try {
-          const requestConfig: AxiosRequestConfig = {
-            data: action.data,
-            method: action.method,
-            params: action.params,
-            url: action.url,
-            headers: {},
-          };
+    if (action.contentType) {
+      requestConfig.headers["Content-Type"] = action.contentType;
+    }
 
-          if (action.contentType) {
-            requestConfig.headers["Content-Type"] = action.contentType;
-          }
+    if (action.includeAuthorization) {
+      const { employeeId, sessionId } = getState().auth.user;
+      const authorization = `bearer ${employeeId}:${sessionId}`;
+      requestConfig.headers.Authorization = authorization;
+      // * Note mobx-rest
+      apiXClient(authorization);
+    }
 
-          if (action.includeAuthorization) {
-            requestConfig.headers.Authorization =
-            `bearer ${getState().auth.user.employeeId}:${getState().auth.user.sessionId}`;
-          }
+    if (action.password) {
+      const authorization = `bearer_password ${getState().auth.user.employeeId}:${getState().auth.user.sessionId}:${action.password}`;
 
-          if (action.password) {
-            requestConfig.headers.Authorization =
-            `bearer_password ${getState().auth.user.employeeId}:${getState().auth.user.sessionId}:${action.password}`;
-          }
+      requestConfig.headers.Authorization = authorization;
+    }
 
-          const { data } = await apiClient.request(requestConfig);
+    const { data } = await apiClient.request(requestConfig);
 
-          action.onSuccess(data, dispatch);
-          dispatchAsyncStatusAction(dispatch, action.asyncType, AsyncStatus.Success);
-        } catch (exception) {
-          let responseMessage: string = "";
+    action.onSuccess(data, dispatch);
+    dispatchAsyncStatusAction(dispatch, action.asyncType, AsyncStatus.Success);
+  } catch (exception) {
+    let responseMessage: string = "";
 
-          if (exception.response) {
-            const { data: { message } } = exception.response as AsyncActionErrorResponse;
-            responseMessage = (Array.isArray(message)) ? message.join("; ") : message;
-          }
+    if (exception.response) {
+      const {
+        data: { message },
+      } = exception.response as AsyncActionErrorResponse;
+      if (_.isArray(message) && _.has(_.first(message), "message")) {
+        responseMessage = _.join(_.get(_.first(message), "message"), "\n");
+      } else {
+        responseMessage = Array.isArray(message) ? message.join("; ") : message;
+      }
+    }
 
-          const errorMessage: string = responseMessage || exception.message;
+    const errorMessage: string = responseMessage || exception.message;
 
-          action.onFailure(errorMessage, dispatch);
-          dispatchAsyncStatusAction(dispatch, action.asyncType, AsyncStatus.Error, errorMessage);
-        } finally {
-          action.onCompleted(dispatch);
-        }
-      };
+    action.onFailure(errorMessage, dispatch);
+    dispatchAsyncStatusAction(
+      dispatch,
+      action.asyncType,
+      AsyncStatus.Error,
+      errorMessage,
+    );
+  } finally {
+    action.onCompleted(dispatch);
+  }
+};
 
 export default apiMiddleware;

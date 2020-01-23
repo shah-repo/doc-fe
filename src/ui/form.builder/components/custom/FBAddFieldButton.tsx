@@ -1,7 +1,7 @@
 import { Box, Button } from "@material-ui/core";
 import React from "react";
 import Text from "../../../components/Text";
-import editorStore from "../../stores/FBEditorStore";
+import editorStore from "../../stores/ui/FBEditorStore";
 import { FBEditorWrapperProps } from "../../types/editor";
 
 const FBAddFieldButton: React.FunctionComponent<FBEditorWrapperProps> = ({
