@@ -235,7 +235,6 @@ const getIotCreds = (): ApiAction =>
     onSuccess: (credentials, dispatch) => {
       const iotService = IotService.getInstance();
       iotService.setMqttCreds(credentials);
-      iotService.mqttClient();
     },
   });
 
