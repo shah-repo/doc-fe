@@ -1,6 +1,6 @@
 import * as AWSMqttClient from "aws-mqtt";
 import { Credentials } from "aws-sdk/global";
-import _ from "lodash";
+import _, { Dictionary } from "lodash";
 
 interface AwsMqttClient {
   connected: boolean;
@@ -25,7 +25,8 @@ interface IAwsMqttClient {
 }
 
 let credentialsMqtt: any;
-let creatingClient: any = false;
+let creatingClient: boolean = false;
+let retrySubscriptions: Dictionary<any> = {};
 
 export class IotService {
     public static getInstance(): IotService {
@@ -45,15 +46,17 @@ export class IotService {
       private mqttClientInstance: AwsMqttClient,
     ) {}
 
-    public async setMqttCreds(endpointRedux: any): Promise<any> {
+    public async updateMqttClient(endpointRedux: any): Promise<any> {
       credentialsMqtt = endpointRedux;
       this.createMqttClient();
     }
 
-    public async subscribeToTopic(topic: any, notif: any): Promise<any> {
+    public async subscribeToTopic(topic: string, notif: any): Promise<any> {
       if (this.isConnected()) {
         this.subscribe(topic, notif);
+        return;
       }
+      retrySubscriptions[topic] = notif;
     }
 
     public async unsubscribeFromTopic(topic: string) {
@@ -141,12 +144,15 @@ export class IotService {
       creatingClient = true;
       this.mqttClientInstance = await new AWSMqttClient(clientConfig);
       this.mqttClientInstance.on("connect", () => {
+        const retry = { ...retrySubscriptions };
+        retrySubscriptions = {};
+        Object.keys(retry).forEach((topic) => this.subscribeToTopic(topic, retry[topic]));
         creatingClient = false;
-        this.mqttClientInstance.on("message", (topic: string, message: ArrayBufferView) => {
-          if (topic.includes("attachment_watermark")) {
-            this.emitter[topic] && this.emitter[topic](new TextDecoder("utf-8").decode(message));
-          }
-        });
+      });
+      this.mqttClientInstance.on("message", (topic: string, message: ArrayBufferView) => {
+        if (topic.includes("attachment_watermark")) {
+          this.emitter[topic] && this.emitter[topic](new TextDecoder("utf-8").decode(message));
+        }
       });
     }
 }
