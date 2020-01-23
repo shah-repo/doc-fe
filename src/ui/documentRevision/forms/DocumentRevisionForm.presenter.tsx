@@ -231,7 +231,11 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               name="formTemplate.outputDocumentType.id"
               label="document.output.type"
               selectProps={{
-                inputProps: { id: "formTemplate.outputDocumentType" },
+                inputProps: {
+                  id: "formTemplate.outputDocumentType",
+                  disabled: isDisabled,
+                  className: isDisabled ? classes.outputGrey : "",
+                },
               }}
               options={otherDocumentTypes}
               includeEmpty={false}
