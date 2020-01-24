@@ -1,4 +1,3 @@
-import { Password } from "../../../ui/components/password/types";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import { Audit, AuditActionPayload } from "../audit/types";
