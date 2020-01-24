@@ -20,6 +20,7 @@ import {
   documentEditPath,
   documentPreviewPath,
 } from "../../document.revision/utils/paths";
+import { FB } from "../../form.builder";
 import { Translation } from "../../translations/types";
 import { styles } from "./styles";
 
@@ -60,8 +61,13 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       cellHref: cellHrefRenderer,
       omitSearch: true,
       columnOptions: {
-        cellDataGetter: ({ rowData }) =>
-          rowData.formInput ? rowData.formInput[column.fieldName] : "",
+        cellDataGetter: ({ rowData }) => {
+          const { fieldName } = column;
+          return FB.stripOption(
+            fieldName,
+            _.get(rowData, `formInput.${fieldName}`),
+          );
+        },
       },
     }),
   );
@@ -148,12 +154,20 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
           className={classes.button}
           onClick={openDocRev}
         >
-          <Text translation="supplier.add.new" values={{name: documentType.documentTypeName}} />
+          <Text
+            translation="supplier.add.new"
+            values={{ name: documentType.documentTypeName }}
+          />
         </Button>
       </Grid>
-      {showError && <div style={{color: "red"}}>
-        <Text translation="supplier.form.error" values={{name: documentType.documentTypeName}} />
-      </div>}
+      {showError && (
+        <div style={{ color: "red" }}>
+          <Text
+            translation="supplier.form.error"
+            values={{ name: documentType.documentTypeName }}
+          />
+        </div>
+      )}
       <Grid item={true} className={classes.item}>
         <TablePanel<DocumentRevision>
           columns={columns}
