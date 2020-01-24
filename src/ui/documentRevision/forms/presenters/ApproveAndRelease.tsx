@@ -3,7 +3,6 @@ import { Formik, FormikProps } from "formik";
 import React from "react";
 import { documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import Text from "../../../components/Text";
-import { PasswordFormValues } from "../../../components/transitionDialog/types";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
@@ -42,11 +41,16 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
     dialog.close();
   };
 
-  const onSubmit = (values: PasswordFormValues) => {
+  const onSubmit = (values: any) => {
+    const approvers = !values.approvals || values.approvals.length === 0 ?
+      undefined :
+      values.approvals.map((approver) => ({ id: approver.value }));
+
     async.start(
       releaseAction,
       id,
-      values,
+      { approvers },
+      values.password,
       async,
     );
   };
