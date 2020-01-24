@@ -23,6 +23,7 @@
   "forgot.password.reset": "Reset my Password",
   "forgot.password.email": "Click the secure link we sent you to reset your password. If you didn't receive an email, check your spam folder.",
   "forgot.password.confirm": "Sign in with your new password",
+  "new.user.set.password": "Set your new password",
 
   "header.title": "Enlil",
   "header.welcome": "Welcome", 

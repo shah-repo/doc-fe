@@ -45,6 +45,9 @@ export const DOC_REV_BY_ID_DEFAULT_STATE: DocRevByIdState = {
   forms: [
     {
       id: "",
+      document: {
+        id: "",
+      },
     },
   ],
 };
