@@ -35,7 +35,9 @@ const ChangeRequestSockets: React.FunctionComponent<Props> = ({
     };
   }, []);
   useEffect(() => {
-    subscribe();
+    if (didMqttConnect) {
+      subscribe();
+    }
   }, [didMqttConnect]);
 
   return null;
