@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { IotService } from "../../../common/utils/iot/mqttClient";
 import { getTableState } from "../../../common/utils/selectors";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
-import useDidMqttConnect from "../../hooks/useDidMqttConnect";
+import useMqttSubscription from "../../hooks/useMqttSubscription";
 
 const ChangeRequestListSockets: React.FunctionComponent = () => {
   /*
@@ -24,7 +24,6 @@ const ChangeRequestListSockets: React.FunctionComponent = () => {
   const CR_TABLE_NAME = "changeRequests";
   const crTableState = useSelector(getTableState(CR_TABLE_NAME));
   const dispatch = useDispatch();
-  const didMqttConnect = useDidMqttConnect();
   const iotService = IotService.getInstance();
   const subscribe = () => {
     iotService.subscribeToTopic(`+/change_requests/+/created`, loadData);
@@ -44,17 +43,7 @@ const ChangeRequestListSockets: React.FunctionComponent = () => {
     ),
   );
   };
-  useEffect(() => {
-    subscribe();
-    return () => {
-      unsubscribe();
-    };
-  }, []);
-  useEffect(() => {
-    if (didMqttConnect) {
-      subscribe();
-    }
-  }, [didMqttConnect]);
+  useMqttSubscription(subscribe, unsubscribe);
 
   return null;
 };
