@@ -1,7 +1,6 @@
 import arrayMove from "array-move";
 import React from "react";
 import { SortEnd } from "react-sortable-hoc";
-import FBEditorWrapper from "../components/custom/FBEditorWrapper";
 import { FBFieldComponent } from "../defaults/editor";
 import sortableStore from "../stores/ui/FBSortableStore";
 import FBStore from "../stores/ui/FBStore";
@@ -27,14 +26,8 @@ export function withSortable<T extends FBSortableProps>(
       );
     }
     private wrapperRenderer = (schema: FBTemplateSchema) => {
-      const { type, name, index } = schema;
-      const InputType = FBFieldComponent[type as string];
-
-      return (
-        <FBEditorWrapper key={`${name}_${index}`} {...schema}>
-          <InputType {...schema} {...FBStore.fieldMode} />
-        </FBEditorWrapper>
-      );
+      const InputType = FBFieldComponent[schema.type as string];
+      return <InputType {...schema} {...FBStore.fieldMode} />;
     }
 
     private onSortEnd = ({ oldIndex, newIndex }: SortEnd) => {

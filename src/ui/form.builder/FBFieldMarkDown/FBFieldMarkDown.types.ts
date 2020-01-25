@@ -1,6 +1,9 @@
+import { BoxProps } from "@material-ui/core";
 import { FBInputProps } from "../types/common";
 
-export interface FBFieldMarkDownProps {
-  schemaItem?: FBInputProps;
-  source?: string;
-}
+export type FBFieldMarkDownProps =
+  & Pick<FBInputProps, "index">
+  & Pick<BoxProps, "mt" | "mb">
+  & {
+    source?: string;
+  };

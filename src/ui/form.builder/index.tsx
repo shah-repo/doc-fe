@@ -23,3 +23,13 @@ export * from "./FBFormMarkDown/FBFormMarkDown.types";
 
 export { default as FBFieldMarkDown } from "./FBFieldMarkDown/FBFieldMarkDown";
 export * from "./FBFieldMarkDown/FBFieldMarkDown.types";
+
+export { default as FBFieldWrapper } from "./FBFieldWrapper/FBFieldWrapper";
+export { default as FBFieldWrapperState } from "./FBFieldWrapper/FBFieldWrapper.state";
+export * from "./FBFieldWrapper/FBFieldWrapper.types";
+
+export { default as FBFieldTopBar } from "./FBFieldTopBar/FBFieldTopBar";
+export * from "./FBFieldTopBar/FBFieldTopBar.types";
+
+export { default as FBFieldBottomBar } from "./FBFieldBottomBar/FBFieldBottomBar";
+export * from "./FBFieldBottomBar/FBFieldBottomBar.types";

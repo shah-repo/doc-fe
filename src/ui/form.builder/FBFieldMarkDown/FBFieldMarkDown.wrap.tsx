@@ -8,10 +8,11 @@ export const withFBFieldMarkDown = <T extends FBFieldMarkDownProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    schemaItem = {},
+    index = 0,
     ...props
   }: T) => {
 
+    const schemaItem = FBStore.getSchemaItem(index) || {};
     let { customValidator } = schemaItem;
     const { name } = schemaItem;
     customValidator = customValidator ? Base64.atob(customValidator.fn || "") : "";
