@@ -65,6 +65,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
   userId,
   callbackUpdateWithUpload,
 }) => {
+  const [isUsernameEmpty, setUsernameError] = useState<boolean>(false);
   const currentUserId = useSelector(authSelectors.currentUserId);
   const isCurrentUser = userId === currentUserId;
 
@@ -81,6 +82,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
   const handleCloseEdit = () => {
     closeEdit();
     setPreviewAvatar("");
+    setUsernameError(false);
   };
   const handleCloseDialog = () => {
     close();
@@ -95,6 +97,8 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
         userInfo={userInfo}
         setUserInfo={setUserInfo}
         close={handleCloseDialog}
+        isUsernameEmpty={isUsernameEmpty}
+        setUsernameError={setUsernameError}
       />
       <AvatarContainer
         avatar={avatar}
@@ -127,6 +131,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
         setUserInfo={setUserInfo}
         userId={userId}
         isCurrentUser={isCurrentUser}
+        isUsernameEmpty={isUsernameEmpty}
       />
     </Dialog>
   );

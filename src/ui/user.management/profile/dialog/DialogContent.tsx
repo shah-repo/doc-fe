@@ -43,6 +43,7 @@ interface OwnProps {
   setUserInfo: (values: EmployeeEditRequestBody) => void;
   userId: string;
   isCurrentUser: boolean;
+  isUsernameEmpty: boolean;
 }
 
 type Props = OwnProps;
@@ -71,6 +72,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
   userId,
   callbackUpdateWithUpload,
   isCurrentUser,
+  isUsernameEmpty,
 }) => {
   const TABLE_NAME = "userManagement";
   const classes = styles();
@@ -164,6 +166,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
       </Button>
       <Button
         variant="contained"
+        disabled={isUsernameEmpty}
         style={{ width: "auto", color: "white", backgroundColor: "#6E09EA" }}
         onClick={() => {
           updateProfile();
