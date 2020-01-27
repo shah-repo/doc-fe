@@ -82,7 +82,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts --max_old_space_size=3096 build",
-    "test": "react-scripts --expose-gc --inspect-brk=9231 test",
+    "test": "react-scripts --max_old_space_size=1000 --expose-gc test --logHeapUsage",
     "eject": "react-scripts eject",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "lint:fix": "tslint --fix -p tsconfig.json -c tslint.json"

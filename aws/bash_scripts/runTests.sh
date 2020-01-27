@@ -28,21 +28,16 @@ echo "-------- Executing Tests --------"
 mkdir -p ${TEST_RESULTS_DIR}
 mkdir -p ${JEST_CONFIG_LOG_DIR}
 export JEST_JUNIT_OUTPUT_DIR="${TEST_RESULTS_DIR}"
+export CI="true"
 
 yarn test \
-  --no-watch \
   --reporters="default" \
   --reporters="jest-junit" \
-  --forceExit \
   --silent \
-  --maxWorkers=$MAX_WORKERS \
   --showConfig \
   > "${JEST_CONFIG_LOG_DIR}/config.txt"
 
 yarn test \
-  --no-watch \
   --reporters="default" \
   --reporters="jest-junit" \
-  --forceExit \
   --silent \
-  --maxWorkers=$MAX_WORKERS
