@@ -34,6 +34,7 @@ yarn test \
   --reporters="jest-junit" \
   --silent \
   --maxWorkers=$MAX_WORKERS \
+  --forceExit \
   --showConfig \
   > "${JEST_CONFIG_LOG_DIR}/config.txt"
 
@@ -41,4 +42,5 @@ yarn test \
   --reporters="default" \
   --reporters="jest-junit" \
   --silent \
-  --maxWorkers=$MAX_WORKERS
+  --maxWorkers=$MAX_WORKERS \
+  --forceExit
