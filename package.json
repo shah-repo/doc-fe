@@ -76,12 +76,13 @@
     "uniqid": "^5.2.0",
     "use-debounce": "3.3.0",
     "validatorjs": "3.17.1",
+    "weak": "^1.0.1",
     "yup": "0.28.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts --max_old_space_size=3096 build",
-    "test": "react-scripts test",
+    "test": "react-scripts --expose-gc --inspect-brk=9231 test",
     "eject": "react-scripts eject",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "lint:fix": "tslint --fix -p tsconfig.json -c tslint.json"
