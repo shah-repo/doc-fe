@@ -30,5 +30,5 @@ yarn test \
 	--no-watch \
 	--reporters="default" \
 	--reporters="jest-junit" \
-	--forceExit
+	--forceExit \
   --showConfig
