@@ -16,6 +16,7 @@ import {
 import { useDebounce } from "use-debounce";
 import { getTableState } from "../../../common/utils/selectors";
 import apiClient from "../../../state/apiClient";
+import { authActions } from "../../../state/ducks/auth";
 import {
   tableSearchActions,
 } from "../../../state/ducks/tableSearch";
@@ -137,6 +138,12 @@ export function TablePanel<T extends any>({
       );
     } catch (exception) {
       let responseMessage: string = "";
+      const isUnauthorizedRequest = exception.response.status === 401;
+
+      if (isUnauthorizedRequest) {
+        dispatch(authActions.logoutUser());
+        return;
+      }
 
       if (exception.response) {
         const {
