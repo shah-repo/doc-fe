@@ -52,6 +52,7 @@
   "validator.password.spec.char": "Password must contain a special characters",
   "validator.match.passwords": "Passwords do not match",
   "validator.confirm": "Password confirm is required",
+  "validator.user.name.required": "User name is required",
 
   "errors.tokenRefresh": "Token refresh failed",
   "errors.userNotLoggedIn": "User is not logged in",

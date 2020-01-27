@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
-import _ from "lodash";
+import { isEmpty } from "lodash";
 import React from "react";
 import { EmployeeEditRequestBody } from "../../../../state/ducks/auth/types";
 import Text from "../../../components/Text";
@@ -36,7 +36,7 @@ export const DialogTitle: React.FunctionComponent<Props> = ({
   const classes = styles();
 
   const handleNameChange = (event: React.ChangeEvent<{ value: string }>) => {
-    if (_.isEmpty(event.target.value)) {
+    if (isEmpty(event.target.value)) {
       setUsernameError(true);
       return;
     }
@@ -50,13 +50,13 @@ export const DialogTitle: React.FunctionComponent<Props> = ({
     </Typography>
   );
 
-  const inputfield = (name: string) => (
+  const editUserNameRenderer = (name: string) => (
     <TextField
       error={isUsernameEmpty}
       defaultValue={name}
       onChange={handleNameChange}
       className={classes.userNameEdit}
-      helperText={isUsernameEmpty ? "User name is required" : ""}
+      helperText={isUsernameEmpty ? <Text translation="validator.user.name.required"/> : ""}
     />
   );
   return (
@@ -75,8 +75,7 @@ export const DialogTitle: React.FunctionComponent<Props> = ({
           <Text translation="user.management.profile" />
         </Typography>
         {!showEditUser && userNameRenderer(name)}
-        {/* {showEditUser && editUserNameRenderer(name)} */}
-        {showEditUser && inputfield(name)}
+        {showEditUser && editUserNameRenderer(name)}
       </Box>
     </AppBar>
   );

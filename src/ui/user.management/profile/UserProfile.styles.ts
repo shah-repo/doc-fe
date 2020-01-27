@@ -22,7 +22,7 @@ export default makeStyles((theme: Theme) =>
     },
     userNameEdit: {
       "& .MuiInputBase-input": {
-        color: "white",
+        color: theme.palette.common.white,
         fontSize: "3rem",
         textAlign: "center",
         fontFamily: "Open Sans, sans-serif",
@@ -30,15 +30,15 @@ export default makeStyles((theme: Theme) =>
       },
       "& .MuiInput-underline": {
         "&:before": {
-          borderBottom: `1px solid ${"#fff"}`,
+          borderBottom: `1px solid ${theme.palette.common.white}`,
           transition: "none",
         },
         "&:after": {
-          borderBottom: `1px solid ${"#fff"}`,
+          borderBottom: `1px solid ${theme.palette.common.white}`,
           transition: "none",
         },
         "&:hover:not(.Mui-disabled):before": {
-          borderBottom: `1px solid ${"#fff"}`,
+          borderBottom: `1px solid ${theme.palette.common.white}`,
         },
         "&.Mui-error:after": {
           borderBottom: `1px solid ${"#c40000"}`,
