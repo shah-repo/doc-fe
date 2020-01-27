@@ -27,7 +27,6 @@ mkdir -p ${TEST_RESULTS_DIR}
 export JEST_JUNIT_OUTPUT_DIR="${TEST_RESULTS_DIR}"
 
 yarn test \
-	--verbose \
 	--no-watch \
 	--reporters="default" \
 	--reporters="jest-junit" \
