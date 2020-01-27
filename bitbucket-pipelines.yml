@@ -7,7 +7,7 @@ pipelines:
     tests: &RUN_TESTS
       name: Tests
       image: node:10.18.1
-      max-time: 1
+      max-time: 10
       services:
         - docker
       caches:
