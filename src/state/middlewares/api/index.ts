@@ -82,6 +82,7 @@ const apiMiddleware: Middleware = ({
 
     if (isUnauthorizedRequest) {
       dispatch(authActions.logoutUser());
+      return;
     }
 
     if (exception.response) {

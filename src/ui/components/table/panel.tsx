@@ -142,6 +142,7 @@ export function TablePanel<T extends any>({
 
       if (isUnauthorizedRequest) {
         dispatch(authActions.logoutUser());
+        return;
       }
 
       if (exception.response) {
