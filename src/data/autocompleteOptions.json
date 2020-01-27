@@ -22,5 +22,11 @@
     "path": "/document_type",
     "label": "Document types",
     "renderKey": "documentTypeName"
+  },
+  {
+    "id": "5",
+    "path": "/document_revisions?documentTypeId=a605751f-890b-4864-9091-5407a2200e56",
+    "label": "Supplier list",
+    "renderKey": "name"
   }
 ]
