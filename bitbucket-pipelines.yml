@@ -90,6 +90,8 @@ pipelines:
   default:
       - step: *RUN_LINT_AND_TESTS
   tags:
+    test-log-config:
+      - step: *RUN_TESTS
     deploy-to-dev:
       - step: *DEPLOY_TO_DEVELOP_1
     deploy-to-dev2:

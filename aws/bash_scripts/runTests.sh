@@ -32,3 +32,4 @@ yarn test \
 	--reporters="default" \
 	--reporters="jest-junit" \
 	--forceExit
+  --showConfig
