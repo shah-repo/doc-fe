@@ -1,40 +1,34 @@
 import React from "react";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
+import { authSelectors } from "../../../state/ducks/auth";
 import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
 import { Approval } from "../../../state/ducks/common";
 import { ApplicationState } from "../../../state/reducers";
-import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-
-interface StateProps {
-  loadApproversAsyncState: AsyncState;
-  availableApprovers: OptionType[];
-}
-
-interface DispatchProps {
-  loadAvailableApprovers: typeof changeRequestsActions.loadAvailableApprovers;
-}
+import useActionCreator from "../../hooks/useActionCreator";
 
 interface OwnProps {
   dataProp?: Approval[];
+  withoutOwner?: boolean;
 }
 
-export type Props = StateProps & DispatchProps & OwnProps;
-
-const mapStateToProps = (state: ApplicationState): StateProps => ({
-  loadApproversAsyncState: changeRequestsSelectors.getLoadApproversAsyncState(state),
-  availableApprovers: changeRequestsSelectors.getApproversListForAssessmentForm(state),
-});
+export type Props = OwnProps;
 
 export const Approvers: React.FunctionComponent<Props> = ({
-  availableApprovers,
-  loadApproversAsyncState,
-  loadAvailableApprovers,
   dataProp,
+  withoutOwner = false,
 }) => {
 
+  const loadApproversAsyncState = useSelector(changeRequestsSelectors.getLoadApproversAsyncState);
+  const availableApprovers = useSelector((state: ApplicationState) => {
+    if (withoutOwner) {
+      const currentUserId = authSelectors.currentUserId(state);
+      return changeRequestsSelectors.getApproversListWithoutCurrentUser(state, currentUserId);
+    }
+    return changeRequestsSelectors.getApproversListForAssessmentForm(state);
+  });
+  const loadAvailableApproversAction = useActionCreator(changeRequestsActions.loadAvailableApprovers);
   const styles = {
       multiValueRemove: (base: React.CSSProperties, state: any) => {
         return (dataProp! && dataProp!.some((approver) => approver.approver.id === state.data.value)) ?
@@ -46,7 +40,7 @@ export const Approvers: React.FunctionComponent<Props> = ({
   return (
     <AsyncGate
       asyncState={loadApproversAsyncState}
-      asyncAction={loadAvailableApprovers}
+      asyncAction={loadAvailableApproversAction}
       startActionOnMount={true}
     >
       <AutcompleteField
@@ -65,6 +59,4 @@ export const Approvers: React.FunctionComponent<Props> = ({
   );
 };
 
-export default connect<StateProps, DispatchProps, {}, ApplicationState>(mapStateToProps, {
-  loadAvailableApprovers: changeRequestsActions.loadAvailableApprovers,
-})(Approvers);
+export default Approvers;
