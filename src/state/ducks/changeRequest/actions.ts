@@ -45,6 +45,14 @@ const loadList = (searchTerms: string = ""): ApiAction<ChangeRequest[]> => apiAc
   },
 });
 
+const loadListWithCallback = (params: any, handlers: Handlers): ApiAction<ChangeRequest[]> =>
+  apiActionWithCallbacks({
+    url: `${CHANGE_REQUEST_ROOT_URL}`,
+    method: "get",
+    params,
+    handlers,
+  });
+
 const load = (id: string): ApiAction<ChangeRequest> => apiAction({
   url: `${CHANGE_REQUEST_ROOT_URL}/${id}`,
   method: "get",
@@ -140,6 +148,7 @@ export default {
   changeRequestsList,
   changeRequestSet,
   loadList,
+  loadListWithCallback,
   load,
   create,
   save,
