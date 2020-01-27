@@ -18,6 +18,7 @@ pipelines:
         - ./aws/bash_scripts/runTests.sh
       artifacts:
         - test-results/**
+        - jest-config/**
 
     lint_tests: &RUN_LINT_AND_TESTS
       name: Linter & Tests
@@ -35,6 +36,7 @@ pipelines:
         - ./aws/bash_scripts/runTests.sh
       artifacts:
         - test-results/**
+        - jest-config/**
 
     lint: &RUN_LINTER
       name: Linter
