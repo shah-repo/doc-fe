@@ -37,7 +37,7 @@ yarn test \
   --showConfig \
   > "${JEST_CONFIG_LOG_DIR}/config.txt"
 
-yarn test \
-  --reporters="default" \
-  --reporters="jest-junit" \
-  --silent \
+# yarn test \
+#   --reporters="default" \
+#   --reporters="jest-junit" \
+#   --silent \
