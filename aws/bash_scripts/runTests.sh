@@ -34,10 +34,12 @@ yarn test \
   --reporters="default" \
   --reporters="jest-junit" \
   --silent \
+  --maxWorkers=5 \
   --showConfig \
   > "${JEST_CONFIG_LOG_DIR}/config.txt"
 
-# yarn test \
-#   --reporters="default" \
-#   --reporters="jest-junit" \
-#   --silent \
+yarn test \
+  --reporters="default" \
+  --reporters="jest-junit" \
+  --silent \
+  --maxWorkers=5
