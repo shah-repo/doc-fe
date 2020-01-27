@@ -7,7 +7,7 @@ ENVIRONMENT_DIR="${AWS_DIR}/environments"
 PYTHON_SCRIPTS_DIR="${AWS_DIR}/python_scripts"
 TEST_RESULTS_DIR="${BASE_DIR}/test-results"
 JEST_CONFIG_LOG_DIR="${BASE_DIR}/jest-config"
-MAX_WORKERS="5"
+MAX_WORKERS="4"
 
 # Install Dependencies
 echo "-------- Installing Dependencies --------"
