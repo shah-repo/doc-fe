@@ -22,7 +22,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({ cancel, asyncSt
   return (
     <Form className={classes.form}>
       <FormMessage asyncState={asyncState} />
-      <Approvers withoutOwner={true} />
+      <Approvers withoutCurrentUser={true} />
       <InputField
         name="password"
         label="transition.action.password"

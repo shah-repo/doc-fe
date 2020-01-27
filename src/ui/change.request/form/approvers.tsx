@@ -10,19 +10,19 @@ import useActionCreator from "../../hooks/useActionCreator";
 
 interface OwnProps {
   dataProp?: Approval[];
-  withoutOwner?: boolean;
+  withoutCurrentUser?: boolean;
 }
 
 export type Props = OwnProps;
 
 export const Approvers: React.FunctionComponent<Props> = ({
   dataProp,
-  withoutOwner = false,
+  withoutCurrentUser = false,
 }) => {
 
   const loadApproversAsyncState = useSelector(changeRequestsSelectors.getLoadApproversAsyncState);
   const availableApprovers = useSelector((state: ApplicationState) => {
-    if (withoutOwner) {
+    if (withoutCurrentUser) {
       const currentUserId = authSelectors.currentUserId(state);
       return changeRequestsSelectors.getApproversListWithoutCurrentUser(state, currentUserId);
     }
