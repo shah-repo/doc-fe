@@ -27,7 +27,7 @@ export function withSortable<T extends FBSortableProps>(
     }
     private wrapperRenderer = (schema: FBTemplateSchema) => {
       const InputType = FBFieldComponent[schema.type as string];
-      return <InputType {...schema} {...FBStore.fieldMode} />;
+      return <InputType key={schema.name} {...schema} {...FBStore.fieldMode} />;
     }
 
     private onSortEnd = ({ oldIndex, newIndex }: SortEnd) => {
