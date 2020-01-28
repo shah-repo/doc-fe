@@ -24,6 +24,31 @@ const getApproversListForAssessmentForm = createSelector(
     ids.map((id) => ({ value: approvers[id].id, label: approvers[id].user.name })),
 );
 
+const getApproversListWithoutCurrentUser = createSelector(
+  (state: ApplicationState) => ({
+    ids: approversAllIds(state),
+    approvers: approversById(state),
+  }),
+  (state, owner) => owner,
+  ({ids, approvers}, currentUserId): OptionType[] => {
+    const list: OptionType[] = [];
+
+    ids.map((id) => {
+      if (id === currentUserId) {
+        return;
+      }
+
+      list.push(
+        {
+          value: approvers[id].id,
+          label: approvers[id].user.name,
+        },
+      );
+    });
+    return list;
+  },
+);
+
 const getAssignessList = createSelector(
   approversAllIds, approversById,
   (ids, approvers): OptionType[] =>
@@ -73,6 +98,7 @@ export default {
   getLoadListAsyncState,
   getLoadApproversAsyncState,
   getApproversListForAssessmentForm,
+  getApproversListWithoutCurrentUser,
   getLoadAuditAsyncState,
   getAudit,
   getAssignessList,

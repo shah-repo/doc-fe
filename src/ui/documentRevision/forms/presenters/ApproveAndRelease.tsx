@@ -1,6 +1,9 @@
 import { Button, createStyles, Dialog, DialogContent, DialogTitle, makeStyles } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
 import React from "react";
+import { useSelector } from "react-redux";
+import { getHasPermission } from "../../../../common/utils/selectors";
+import { Permission } from "../../../../state/ducks/auth/types";
 import { documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
@@ -32,6 +35,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const dialog = useDialog();
   const releaseAction = useActionCreator(documentRevisionsActions.approveAndRelease);
   const async = useAsync<any>({ onSuccess: dialog.close });
+  const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
 
   const openDialog = () => {
     async.reset();
@@ -55,7 +59,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
     );
   };
 
-  if (!id || status !== DocumentRevisionStatus.Draft) {
+  if (!id || status !== DocumentRevisionStatus.Draft || !canApprove) {
     return null;
   }
 

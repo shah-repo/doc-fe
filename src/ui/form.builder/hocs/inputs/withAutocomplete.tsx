@@ -1,3 +1,4 @@
+import { TextField } from "@material-ui/core";
 import { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import { RenderInputParams } from "@material-ui/lab/Autocomplete/Autocomplete";
 import _, { Dictionary } from "lodash";
@@ -5,7 +6,6 @@ import { useObserver } from "mobx-react";
 import Model from "mobx-rest/lib/Model";
 import React from "react";
 import autocompleteOptions from "../../../../data/autocompleteOptions.json";
-import FBTextField from "../../components/inputs/FBTextField";
 import FBAutocompleteCollection from "../../stores/domain/collections/FBAutocompleteCollection";
 import FBDynamicValidatorStore from "../../stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../stores/ui/FBStore";
@@ -24,7 +24,7 @@ export const withAutocomplete = <T extends FBAutocompleteProps>(
       optionLabelKey = "",
       error,
       name = "",
-      helperText = FBDynamicValidatorStore.helperText[name],
+      helperText,
       filterOptions,
       form,
       field,
@@ -51,7 +51,12 @@ export const withAutocomplete = <T extends FBAutocompleteProps>(
       }
 
       const renderInput = (params: RenderInputParams) => (
-        <FBTextField {...params} {...{ name }} />
+        <TextField
+          {...params}
+          variant="outlined"
+          error={error}
+          fullWidth
+        />
       );
 
       const onChange = (event: React.ChangeEvent<{}>, value: any) => {
@@ -103,6 +108,7 @@ export const withAutocomplete = <T extends FBAutocompleteProps>(
           error,
           hidden,
           disabled,
+          helperText: FBDynamicValidatorStore.helperText[name],
         }),
       );
     },

@@ -1,28 +1,34 @@
-import { shallow } from "enzyme";
-import faker from "faker";
+import { wait } from "@testing-library/react";
+import MockAdapter from "axios-mock-adapter";
 import React from "react";
-import { getApproval } from "../../../state/ducks/common/tests/factories";
-import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
-import { ASYNC_DEFAULT_STATE } from "../../hooks/useAsync";
-import { Approvers, Props } from "./approvers";
+import apiInstance from "../../../state/apiClient";
+import render from "../../tests/helpers/renderWithProviders";
+import Approvers from "./approvers";
+import { approversResponse } from "./tests/response";
 
+jest.mock("../../components/forms/fields/Autocomplete/Autocomplete.tsx",
+  () => () => <div data-testid="autocomplete">Autocomplete</div>,
+);
 describe("Change request form Approvers tests", () => {
-  const defaultProps: Props = {
-    availableApprovers: [{
-      label: faker.name.firstName(),
-      value: faker.internet.email(),
-    }],
-    dataProp: [getApproval()],
-    loadApproversAsyncState: ASYNC_DEFAULT_STATE,
-    loadAvailableApprovers: jest.fn(),
-  };
+  const apiMock = new MockAdapter(apiInstance);
 
-  const getWrapper = (props: Partial<Props>= {}) => shallow(
-    <Approvers {...defaultProps} {...props}/>,
-  ).find(AutcompleteField);
+  beforeEach(() => {
+    apiMock.onGet("change_requests/available_approvers").reply(200, approversResponse);
+  });
 
-  it("Sets options prop correctly", () => {
-    const wrapper = getWrapper();
-    expect(wrapper.prop("options")).toEqual(defaultProps.availableApprovers);
+  afterEach(() => {
+    apiMock.reset();
+  });
+
+  it("Sets options prop correctly", async () => {
+    const { getByRole, getByTestId } = render(<Approvers />);
+
+    expect(getByRole("progressbar")).toBeInTheDocument();
+
+    await wait();
+
+    // TODO: component needs formik in context
+    // this is a quick refactoring of the original test
+    expect(getByTestId("autocomplete")).toBeInTheDocument();
   });
 });

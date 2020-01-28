@@ -7,6 +7,7 @@ pipelines:
     tests: &RUN_TESTS
       name: Tests
       image: node:10.18.1
+      max-time: 10
       services:
         - docker
       caches:
@@ -15,10 +16,14 @@ pipelines:
       script:
         - chmod a+x ./aws/bash_scripts/runTests.sh
         - ./aws/bash_scripts/runTests.sh
+      artifacts:
+        - test-results/**
+        - jest-config/**
 
     lint_tests: &RUN_LINT_AND_TESTS
       name: Linter & Tests
       image: node:10.18.1
+      max-time: 10
       services:
         - docker
       caches:
@@ -29,6 +34,9 @@ pipelines:
         - ./aws/bash_scripts/runLinter.sh
         - chmod a+x ./aws/bash_scripts/runTests.sh
         - ./aws/bash_scripts/runTests.sh
+      artifacts:
+        - test-results/**
+        - jest-config/**
 
     lint: &RUN_LINTER
       name: Linter
@@ -88,7 +96,7 @@ pipelines:
       trigger: manual
 
   default:
-      - step: *RUN_LINT_AND_TESTS
+      - step: *RUN_TESTS
   tags:
     deploy-to-dev:
       - step: *DEPLOY_TO_DEVELOP_1
