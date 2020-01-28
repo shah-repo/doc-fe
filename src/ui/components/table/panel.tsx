@@ -81,6 +81,11 @@ export function TablePanel<T extends any>({
   useEffect(() => {
     queryApi();
   }, []);
+  useEffect(() => {
+    if (tableState.forceUpdate) {
+      queryApi();
+    }
+  }, [tableState.forceUpdate]);
 
   const queryGetter = (key: string, value: string) => {
     if (!queryUrl) {
@@ -132,6 +137,7 @@ export function TablePanel<T extends any>({
             queryData: data as T[],
             apiError: "",
             scrollToIndex: 0,
+            forceUpdate: false,
           },
           tableName,
         ),
@@ -156,7 +162,11 @@ export function TablePanel<T extends any>({
 
       dispatch(
         tableSearchActions.setSearchCriteria(
-          { ...tableState, apiError: "Error: " + errorMessage },
+          {
+            ...tableState,
+            apiError: "Error: " + errorMessage,
+            forceUpdate: false,
+          },
           tableName,
         ),
       );

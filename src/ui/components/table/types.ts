@@ -40,6 +40,7 @@ export interface TablePanelStateProps<T> {
   apiError: string;
   scrollToIndex: number;
   sortDirection?: SortDirectionType;
+  forceUpdate: boolean;
 }
 
 // CSS
