@@ -37,7 +37,6 @@ const PrivateRouteContainer: React.FunctionComponent<Props> = ({
     }
 
     history.replace(location.pathname);
-    return null;
   }
 
   return (
