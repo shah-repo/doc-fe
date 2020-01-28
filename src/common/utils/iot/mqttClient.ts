@@ -113,7 +113,9 @@ export class IotService {
       );
 
       if (noSubscriptions || !alreadySubscribed) {
-        await this.mqttClientInstance.subscribe(fullTopic);
+        await this.mqttClientInstance.subscribe(
+          MQTTPattern.clean(fullTopic),
+        );
         this.emitter[fullTopic] = notif;
       }
     }
@@ -153,8 +155,15 @@ export class IotService {
       this.mqttClientInstance.on("message", (topic: string, message: ArrayBufferView) => {
         const emitterKey = Object.keys(this.emitter).find((pattern: string) =>
           MQTTPattern.matches(pattern, topic),
-        ) || "";
-        this.emitter[emitterKey] && this.emitter[emitterKey](new TextDecoder("utf-8").decode(message));
+        );
+
+        if (!emitterKey) {
+          return;
+        }
+
+        const params = MQTTPattern.extract(emitterKey, topic);
+
+        this.emitter[emitterKey] && this.emitter[emitterKey](new TextDecoder("utf-8").decode(message), params);
       });
     }
 }
