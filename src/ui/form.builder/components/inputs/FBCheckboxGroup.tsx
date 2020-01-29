@@ -14,7 +14,6 @@ const FBCheckboxGroup: React.FunctionComponent<FBCheckGroupProps> = ({
   optionValueKey = "value",
   optionLabelKey = "text",
   labelValues,
-  disabled,
   ...props
 }) => (
   <FBInput {...props} {...{ type }}>
@@ -25,11 +24,8 @@ const FBCheckboxGroup: React.FunctionComponent<FBCheckGroupProps> = ({
           value={_.get(option, optionValueKey)}
           control={
             <Checkbox
-              checked={_.get(
-                FBStore.getValues(),
-                _.get(option, optionValueKey),
-              )}
-              {...{ disabled }}
+              disabled={props.disabled}
+              checked={FBStore.getValue(_.get(option, optionValueKey))}
             />
           }
           label={

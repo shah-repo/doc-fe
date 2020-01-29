@@ -25,11 +25,13 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
         </FormHelperText>
       )}
       {showContext && (
-        <FBTextField
-          label={contextLabel}
-          {...{ disabled }}
-          name={`input-context-${name}`}
-        />
+        <Box mt={3}>
+          <FBTextField
+            label={contextLabel}
+            {...{disabled}}
+            name={`input-context-${name}`}
+          />
+        </Box>
       )}
     </FormControl>
   </Tooltip>
