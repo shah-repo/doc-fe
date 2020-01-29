@@ -78,9 +78,10 @@ const apiMiddleware: Middleware = ({
     dispatchAsyncStatusAction(dispatch, action.asyncType, AsyncStatus.Success);
   } catch (exception) {
     let responseMessage: string = "";
-    const isUnauthorizedRequest = exception.response.status === 401;
+    const isUnauthorizedRequest = exception.response.status === 401 && action.includeAuthorization;
+    const isPasswordAction = exception.response.status === 401 && !action.password;
 
-    if (isUnauthorizedRequest) {
+    if (isUnauthorizedRequest && isPasswordAction) {
       dispatch(authActions.logoutUser());
       return;
     }
