@@ -80,7 +80,9 @@ export const withOnChange = <T extends FBInputProps>(
         return;
       }
 
-      value = _.get(ev.target, "value");
+      if (type !== "autocomplete") {
+        value = _.get(ev.target, "value");
+      }
 
       switch (type) {
         case "checkboxgroup":
@@ -103,6 +105,13 @@ export const withOnChange = <T extends FBInputProps>(
         case "texteditor":
         case "datepicker":
           value = ev as unknown as string;
+          break;
+        case "autocomplete":
+          if (_.isArray(value)) {
+            value = _.map(value, (v) => _.isString(v) ? v : v.id);
+          } else {
+            value = _.get(value, "id");
+          }
           break;
         // case "select":
         //   if (multiple) {

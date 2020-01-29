@@ -1,7 +1,5 @@
-import { FormHelperText } from "@material-ui/core";
+// import { FormHelperText } from "@material-ui/core";
 import Box from "@material-ui/core/Box/Box";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import _ from "lodash";
 import React from "react";
 import { withAutocomplete } from "../../hocs/inputs/withAutocomplete";
 import { FBAutocompleteProps } from "../../types/inputs/autocomplete";
@@ -25,7 +23,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
     {!hidden && (
       <Box>
         {label && <FBLabel {...{ error, label, labelValues }} />}
-        <Autocomplete
+        {/* <Autocomplete
           options={options as any[]}
           {...{
             filterOptions,
@@ -40,7 +38,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
           <FormHelperText>
             <Box color={error ? "" : "primary.main"}>{helperText}</Box>
           </FormHelperText>
-        )}
+        )} */}
       </Box>
     )}
   </Box>

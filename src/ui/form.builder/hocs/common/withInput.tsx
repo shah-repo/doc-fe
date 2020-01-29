@@ -49,16 +49,29 @@ export const withInput = <T extends FBInputProps>(
       disabled = (_.includes(validationMode, "ValidationDisabled") && isFieldHidden);
     }
 
-    if (elements.length === 1) {
-      _.first(elements) && (
-        children = React.cloneElement(_.first(elements) as React.ReactElement, {
-          name,
+    function paramsByType(): Dictionary<any> {
+      const params = {
+        name,
           value,
           type,
           error,
           checked: value,
           disabled,
           ..._.pick(props, ["onChange", "afterChange"]),
+      };
+      switch (type) {
+        case "autocomplete":
+          // return _.omit(params, ["value", "afterChange", "checked"]);
+          return params;
+        default:
+          return params;
+      }
+    }
+
+    if (elements.length === 1) {
+      _.first(elements) && (
+        children = React.cloneElement(_.first(elements) as React.ReactElement, {
+          ...paramsByType(),
         })
       );
     }
