@@ -1,7 +1,13 @@
 import { TablePanelStateProps } from "../../../ui/components/table/types";
-import { TABLE_SEARCH_CLEAR, TABLE_SEARCH_SET, TABLE_SORT } from "./constants";
+import {
+  TABLE_FORCE_UPDATE_SET,
+  TABLE_SEARCH_CLEAR,
+  TABLE_SEARCH_SET,
+  TABLE_SORT,
+} from "./constants";
 import {
   TableSearchClearAction,
+  TableSearchForceUpdateAction,
   TableSearchSetAction,
   TableSortAction,
 } from "./types";
@@ -29,8 +35,15 @@ const setTableSort = <T>(
   tableName,
 });
 
+const setForceUpdate = (tableName: string, forceUpdate: boolean): TableSearchForceUpdateAction => ({
+  type: TABLE_FORCE_UPDATE_SET,
+  tableName,
+  forceUpdate,
+});
+
 export default {
   setTableSort,
   setSearchCriteria,
   clearSearchCriteria,
+  setForceUpdate,
 };
