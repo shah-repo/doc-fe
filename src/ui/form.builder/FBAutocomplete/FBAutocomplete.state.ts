@@ -24,7 +24,7 @@ export class FBAutocompleteState extends FBRequest {
     if (_.isUndefined(id)) {
       return;
     }
-    return _.first(_.filter(autocompleteOptions, { id }));
+    return _.find(autocompleteOptions, { id });
   }
 
   @action public setDefaultValue = (id: string | undefined) => {
@@ -32,9 +32,8 @@ export class FBAutocompleteState extends FBRequest {
      return;
     }
     this.setLoading(true);
-    const obj = _.first(_.filter(this.data, (rec) => rec.id === id));
+    set(this, "defaultValue", _.find(this.data, (rec) => rec.id === id));
     this.setLoading(false);
-    set(this, "defaultValue", obj);
   }
 
   @action public setName = (name: string) => {
