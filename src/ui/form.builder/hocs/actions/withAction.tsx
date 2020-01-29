@@ -17,12 +17,17 @@ export const withAction = <T extends FBActionProps>(
       let values = _.get(form, `values.${action.name || ""}`);
       const addition: Dictionary<string> = {};
       _.map(form!.values, (v, k) => {
-        addition[k.split(".")[1]] = v;
+        if (!_.isUndefined(k.split(".")[1])) {
+          addition[k.split(".")[1]] = v;
+        }
       });
       values = {
         ...values,
         ...addition,
       };
+      FBActionStore.values[action.name || ""] = _.omit(values, [
+        "send-email-action-supplier-field",
+      ]);
       const rules: Dictionary<string> = {};
       const attributes: Dictionary<string> = {};
 
@@ -36,7 +41,9 @@ export const withAction = <T extends FBActionProps>(
       });
 
       const validator = new FBDynamicValidatorStore.Validator(values, rules);
-      function passes() {}
+      function passes() {
+        FBActionStore.apiCall(action);
+      }
       function fails() {
         const errors = validator.errors.all();
         const t: Dictionary<string> = {};

@@ -20,7 +20,7 @@ const FBFieldWrapper: React.FunctionComponent<FBFieldWrapperProps> = ({
   return (
     <Provider fieldWrapper={state}>
       <Box {...{onMouseOver, onMouseLeave}}>
-        <FBFieldTopBar visibility={toolsVisible} mb={topBarMargin}/>
+        <FBFieldTopBar visibility={toolsVisible} mb={topBarMargin} index={index}/>
         <Box display="flex" flexDirection="row">
           <Box width="100%">{props.children}</Box>
           <Box
