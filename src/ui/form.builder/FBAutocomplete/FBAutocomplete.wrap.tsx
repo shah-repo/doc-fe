@@ -18,19 +18,21 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     optionPath = "",
     name = "",
     multiple,
+    placeholder,
     ...props
   }: T) => {
 
     state = FB.useRef<FBAutocompleteState>(FBAutocompleteState);
     state.setRenderKey(optionRenderKey);
-    const value = _.get(FBStore.getValues(), name);
-    if (!multiple && !_.isUndefined(value)) {
-      state.defaultValueId = value;
-    }
 
     React.useEffect(() => {
       if (FBStore.mode !== "form") {
         return;
+      }
+
+      const value = _.get(FBStore.getValues(), name);
+      if (!multiple && !_.isUndefined(value)) {
+        state && (state.defaultValueId = value);
       }
 
       // Old version support
@@ -50,10 +52,10 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     // Default value is not working with async autocomplete
     // This is a workaround
     function prepareValue(params: RenderInputParams): RenderInputParams {
+      const defaultValue = state?.isDirty ? "" : _.get(state?.defaultValue, state?.renderKey || "");
       const value = (
         _.get(params, "inputProps.value") ||
-        _.get(state?.defaultValue, state?.renderKey || "") ||
-        ""
+        defaultValue
       );
 
       return ({
@@ -65,22 +67,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       });
     }
 
-    const renderTags = (value: any[], getTagProps: any) => {
-      return state?.data.map((option: any, index: number) => {
-        let optionIDS = _.without(_.map(value, "id"), undefined);
-        _.isEmpty(optionIDS) && (optionIDS = value);
-        if (!_.includes(optionIDS, _.get(option, "id"))) {
-          return;
-        }
-        return (
-          <Chip
-            key={`autocomplete-chip-${_.get(option, "id")}`}
-            label={_.get(option, state?.renderKey || "id")}
-            {...getTagProps({ index })}
-          />
-        );
-      });
-    };
+    const onOpen = () => state?.setDirty();
 
     return useObserver(() => {
 
@@ -89,6 +76,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
           {...prepareValue(params)}
           fullWidth
           variant="outlined"
+          placeholder={placeholder}
           InputProps={{
             ...params.InputProps,
             endAdornment: (
@@ -101,16 +89,33 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
         />
       );
 
+      const renderTags = (value: any[], getTagProps: any) => 
+    
+        state?.data.map((option: any, index: number) => {
+          let optionIDS = _.without(_.map(value, "id"), undefined);
+          _.isEmpty(optionIDS) && (optionIDS = value);
+          if (!_.includes(optionIDS, _.get(option, "id"))) {
+            return;
+          }
+          return (
+            <Chip
+              key={`autocomplete-chip-${_.get(option, "id")}`}
+              label={_.get(option, state?.renderKey || "id")}
+              {...getTagProps({ index })}
+            />
+          );
+        });
+
       return Component({
         ...(props as T),
         getOptionLabel: (option) => _.get(option, state?.renderKey || "id") || "",
         options: state?.data,
         loading: state?.loading,
-        defaultValue: state?.defaultValue,
         name,
         renderInput,
         multiple,
         renderTags,
+        onOpen,
       });
     });
   };

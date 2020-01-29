@@ -9,6 +9,7 @@ export class FBAutocompleteState extends FBRequest {
   @observable public defaultValue: any;
   public name: string = "";
   public defaultValueId: string | undefined;
+  public isDirty: boolean = false;
 
   @action public setUrl = (url: string) => {
     set(this, "url", url);
@@ -45,6 +46,10 @@ export class FBAutocompleteState extends FBRequest {
       return;
     }
     this.setDefaultValue(this.defaultValueId);
+  }
+
+  @action public setDirty = () => {
+    set(this, "isDirty", true);
   }
 }
 

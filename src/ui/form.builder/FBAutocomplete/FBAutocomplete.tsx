@@ -12,13 +12,13 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   renderTags,
   onChange,
   loading,
-  defaultValue,
+  onOpen,
   ...props
 }) =>  {
 return (
   <FBInput {...props} type="autocomplete">
     <Autocomplete
-      {...{options, multiple, getOptionLabel, onChange, loading, renderInput, renderTags, defaultValue}}
+      {...{options, multiple, getOptionLabel, onChange, loading, renderInput, renderTags, onOpen}}
     />
   </FBInput>
 );
