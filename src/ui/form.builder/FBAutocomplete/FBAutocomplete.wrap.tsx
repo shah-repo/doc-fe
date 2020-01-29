@@ -21,7 +21,6 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     placeholder,
     ...props
   }: T) => {
-
     state = FB.useRef<FBAutocompleteState>(FBAutocompleteState);
     state.setRenderKey(optionRenderKey);
 
@@ -52,25 +51,23 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     // Default value is not working with async autocomplete
     // This is a workaround
     function prepareValue(params: RenderInputParams): RenderInputParams {
-      const defaultValue = state?.isDirty ? "" : _.get(state?.defaultValue, state?.renderKey || "");
-      const value = (
-        _.get(params, "inputProps.value") ||
-        defaultValue
-      );
+      const defaultValue = state?.isDirty
+        ? ""
+        : _.get(state?.defaultValue, state?.renderKey || "");
+      const value = _.get(params, "inputProps.value") || defaultValue;
 
-      return ({
+      return {
         ...params,
         inputProps: {
           ...params.inputProps,
           value,
         },
-      });
+      };
     }
 
     const onOpen = () => state?.setDirty();
 
     return useObserver(() => {
-
       const renderInput = (params: RenderInputParams) => (
         <TextField
           {...prepareValue(params)}
@@ -89,8 +86,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
         />
       );
 
-      const renderTags = (value: any[], getTagProps: any) => 
-    
+      const renderTags = (value: any[], getTagProps: any) =>
         state?.data.map((option: any, index: number) => {
           let optionIDS = _.without(_.map(value, "id"), undefined);
           _.isEmpty(optionIDS) && (optionIDS = value);
