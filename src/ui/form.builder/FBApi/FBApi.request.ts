@@ -28,5 +28,5 @@ export default class FBRequest {
       });
   }
 
-  @action public onDataLoaded = () => {}
+  @action public onDataLoaded = () => {};
 }
