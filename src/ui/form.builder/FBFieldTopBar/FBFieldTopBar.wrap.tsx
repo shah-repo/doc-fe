@@ -7,7 +7,7 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    index = 0,
+    index,
     fieldWrapper,
     ...props
   }: T) => {
