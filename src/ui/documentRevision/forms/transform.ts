@@ -58,7 +58,7 @@ export const toDocumentRevisionFormValues = (
     formInput: documentRevision.formInput,
     formDocument: documentRevision.formDocument,
     status: documentRevision.status,
-    revisionChangeType: RevisionChangeType.NextRevision,
+    revisionChangeType: documentRevision.revisionChangeType,
   };
   FBDRStore.setValues(documentRevision);
   return values;
