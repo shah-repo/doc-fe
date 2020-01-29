@@ -38,6 +38,6 @@ export function withSortable<T extends FBSortableProps>(
 
     private onSortStart = () => sortableStore.setMode("active");
 
-    private isSortable = (): boolean => FBStore.mode !== "form";
+    private isSortable = (): boolean => FBStore.mode === "design";
   };
 }
