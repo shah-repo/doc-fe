@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React from "react";
+import { FBAutocompleteIndicator } from "../..";
 import autocompleteOptions from "../../../../data/autocompleteOptions.json";
-import { FBAutocompleteModel } from "../../stores/domain/models/FBAutocompleteModel";
 import { FBAutocompleteEditorProps } from "../../types/editors/autocomplete";
 import { withFormik } from "../common/withFormik";
 
@@ -13,7 +13,7 @@ export const withAutocompleteEditor = <T extends FBAutocompleteEditorProps>(
     ...props
   }: T) => {
 
-    function getOption(id: string): Partial<FBAutocompleteModel> {
+    function getOption(id: string): Partial<FBAutocompleteIndicator> {
       const option = _.filter(autocompleteOptions, { id })[0];
       return option;
     }
