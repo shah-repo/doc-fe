@@ -120,7 +120,6 @@ export class FormBuilderStore {
   }
 
   @action public setValues = (values: Dictionary<any> | undefined) => {
-    console.log(values, this.values);
     this.values = values || {};
   }
 
