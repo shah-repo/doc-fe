@@ -36,8 +36,4 @@ export const WATERMARK_FILES = [
   "doc",
   "docx",
   "pdf",
-  "xls",
-  "xlsx",
-  "ppt",
-  "pptx",
 ];

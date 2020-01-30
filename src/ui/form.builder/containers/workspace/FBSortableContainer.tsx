@@ -1,6 +1,7 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import { SortableContainer, SortableElement } from "react-sortable-hoc";
+import { FBFieldWrapper } from "../..";
 import { withSortable } from "../../hocs/withSortable";
 import { FBSortableProps } from "../../types/sortable";
 import { FBTemplateSchema } from "../../types/store";
@@ -13,7 +14,11 @@ const FBSortableContainer: React.FunctionComponent<FBSortableProps> = ({
 }) => {
   const SortableItem = SortableElement(
     ({ value }: { value: FBTemplateSchema }) => (
-      <li style={{ listStyleType: "none" }}>{wrapperRenderer(value)}</li>
+      <li style={{ listStyleType: "none" }}>
+        <FBFieldWrapper key={`${value.name}_${value.index}`} index={value.index}>
+          {wrapperRenderer(value)}
+        </FBFieldWrapper>
+      </li>
     ),
   );
 

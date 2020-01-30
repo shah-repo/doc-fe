@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { IotService } from "../../common/utils/iot/mqttClient";
 import { dashboardActions } from "../../state/ducks/dashboard";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
-import useDidMqttConnect from "../hooks/useDidMqttConnect";
+import useMqttSubscription from "../hooks/useMqttSubscription";
 
 const TOPICS = [
   `+/training_records/+/created`,
@@ -13,14 +13,11 @@ const TOPICS = [
 ];
 
 const DashboardSockets: React.FunctionComponent = () => {
-  const didMqttConnect = useDidMqttConnect();
   const iotService = IotService.getInstance();
   const subscribe = () => {
-    if (didMqttConnect) {
-      TOPICS.forEach((topic) => {
-        iotService.subscribeToTopic(topic, loadData);
-      });
-    }
+    TOPICS.forEach((topic) => {
+      iotService.subscribeToTopic(topic, loadData);
+    });
   };
   const unsubscribe = () => {
     TOPICS.forEach((topic) => {
@@ -32,17 +29,7 @@ const DashboardSockets: React.FunctionComponent = () => {
   const loadData = (msg: string) => {
     async.start(loadAction);
   };
-  useEffect(() => {
-    subscribe();
-    return () => {
-      // component will unsubscribe on unmount, no need for unsubscribeAll
-      unsubscribe();
-    };
-  }, []);
-  useEffect(() => {
-    subscribe();
-    // WORKAROUND because we use unsubscribeAll in NavigationLinkContainer
-  }, [didMqttConnect]);
+  useMqttSubscription(subscribe, unsubscribe);
 
   return null;
 };

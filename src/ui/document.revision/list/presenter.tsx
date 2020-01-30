@@ -83,8 +83,8 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       cellOptions: { align: "center" },
       cellHref: cellHrefRenderer,
       columnOptions: {
-        cellDataGetter: ({ rowData: { revision, revisionStage } }) =>
-          generateVersionNumber(revision, revisionStage),
+        cellDataGetter: ({ rowData: { revision, revisionStage, revisionChangeType } }) =>
+          generateVersionNumber(revision, revisionStage, revisionChangeType),
         width: 80,
         flexShrink: 1,
       },

@@ -27,7 +27,7 @@ export class FormBuilderActionStore {
       const requestConfig: AxiosRequestConfig = {
         method: requestMethod as Method,
         url: requestUrl,
-        data: this.values[action.name || ""],
+        data: _.omit(this.values[action.name || ""], "send-email-action-supplier-field"),
         // paramsSerializer: (params) => qs.stringify(params),
         headers: {},
       };

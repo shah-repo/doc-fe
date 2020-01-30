@@ -4,8 +4,8 @@ import React from "react";
 import FBButton from "../../components/inputs/FBButton";
 import { FBFieldComponent } from "../../defaults/editor";
 import FBActionStore from "../../stores/ui/FBActionStore";
+import FBDynamicValidatorStore from "../../stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../stores/ui/FBStore";
-import FBValidatorStore from "../../stores/ui/FBValidatorStore";
 import { FBActionProps } from "../../types/actions/action";
 import { withFormik } from "../common/withFormik";
 
@@ -14,7 +14,20 @@ export const withAction = <T extends FBActionProps>(
 ) => {
   const Comp = ({ action, form, field, ...props }: T) => {
     const onClick = () => {
-      const values = _.get(form, `values.${action.name || ""}`);
+      let values = _.get(form, `values.${action.name || ""}`);
+      const addition: Dictionary<string> = {};
+      _.map(form!.values, (v, k) => {
+        if (!_.isUndefined(k.split(".")[1])) {
+          addition[k.split(".")[1]] = v;
+        }
+      });
+      values = {
+        ...values,
+        ...addition,
+      };
+      FBActionStore.values[action.name || ""] = _.omit(values, [
+        "send-email-action-supplier-field",
+      ]);
       const rules: Dictionary<string> = {};
       const attributes: Dictionary<string> = {};
 
@@ -27,15 +40,20 @@ export const withAction = <T extends FBActionProps>(
           "";
       });
 
-      const errors = FBValidatorStore.validate(values, rules, attributes);
-
-      if (_.isEmpty(errors)) {
+      const validator = new FBDynamicValidatorStore.Validator(values, rules);
+      function passes() {
         FBActionStore.apiCall(action);
-      } else {
-        _.map(errors, (v, k) => {
-          form && form.setFieldError(`${action.name}.${k}`, v.join("\n"));
-        });
       }
+      function fails() {
+        const errors = validator.errors.all();
+        const t: Dictionary<string> = {};
+        _.map(errors, (v, k) => {
+          t[`${action.name}.${k}`] = v;
+        });
+        FBDynamicValidatorStore.setHelperText(t);
+      }
+      validator.setAttributeNames(attributes);
+      validator.checkAsync(passes, fails);
     };
 
     const afterChange = (fieldName: string, value: any, values: any) => {

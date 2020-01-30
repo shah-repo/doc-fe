@@ -1,6 +1,7 @@
 export const TABLE_SEARCH_SET = "tableSearch/SET";
 export const TABLE_SEARCH_CLEAR = "tableSearch/CLEAR";
 export const TABLE_SORT = "tableSearch/SORT";
+export const TABLE_FORCE_UPDATE_SET = "tableSearch/FORCE_UPDATE_SET";
 export const EDIT_EMPLOYEE_GROUPS = "tableSearch/EDIT_EMPLOYEE_GROUPS";
 export const EDIT_EMPLOYEE_ACTIVE_STATUS = "tableSearch/EDIT_EMPLOYEE_ACTIVE_STATUS";
 export const EDIT_EMPLOYEE_USER_INFO = "tableSearch/EDIT_EMPLOYEE_USER_INFO";

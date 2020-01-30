@@ -16,6 +16,7 @@ import {
 import { useDebounce } from "use-debounce";
 import { getTableState } from "../../../common/utils/selectors";
 import apiClient from "../../../state/apiClient";
+import { authActions } from "../../../state/ducks/auth";
 import {
   tableSearchActions,
 } from "../../../state/ducks/tableSearch";
@@ -80,6 +81,11 @@ export function TablePanel<T extends any>({
   useEffect(() => {
     queryApi();
   }, []);
+  useEffect(() => {
+    if (tableState.forceUpdate) {
+      queryApi();
+    }
+  }, [tableState.forceUpdate]);
 
   const queryGetter = (key: string, value: string) => {
     if (!queryUrl) {
@@ -131,12 +137,19 @@ export function TablePanel<T extends any>({
             queryData: data as T[],
             apiError: "",
             scrollToIndex: 0,
+            forceUpdate: false,
           },
           tableName,
         ),
       );
     } catch (exception) {
       let responseMessage: string = "";
+      const isUnauthorizedRequest = exception.response.status === 401;
+
+      if (isUnauthorizedRequest) {
+        dispatch(authActions.logoutUser());
+        return;
+      }
 
       if (exception.response) {
         const {
@@ -149,7 +162,11 @@ export function TablePanel<T extends any>({
 
       dispatch(
         tableSearchActions.setSearchCriteria(
-          { ...tableState, apiError: "Error: " + errorMessage },
+          {
+            ...tableState,
+            apiError: "Error: " + errorMessage,
+            forceUpdate: false,
+          },
           tableName,
         ),
       );

@@ -3,6 +3,7 @@ import _ from "lodash";
 import { Action, Dispatch, Middleware, MiddlewareAPI } from "redux";
 import apiClient from "../../apiClient";
 import apiXClient from "../../apiXClient";
+import { authActions } from "../../ducks/auth";
 import { ApplicationState } from "../../reducers";
 import { ApiAction, AsyncAction, AsyncStatus } from "../../types";
 import { AsyncActionErrorResponse } from "./types";
@@ -64,7 +65,9 @@ const apiMiddleware: Middleware = ({
     }
 
     if (action.password) {
-      const authorization = `bearer_password ${getState().auth.user.employeeId}:${getState().auth.user.sessionId}:${action.password}`;
+      const authorization = `bearer_password ${
+        getState().auth.user.employeeId
+      }:${getState().auth.user.sessionId}:${action.password}`;
 
       requestConfig.headers.Authorization = authorization;
     }
@@ -75,6 +78,13 @@ const apiMiddleware: Middleware = ({
     dispatchAsyncStatusAction(dispatch, action.asyncType, AsyncStatus.Success);
   } catch (exception) {
     let responseMessage: string = "";
+    const isUnauthorizedRequest = exception.response.status === 401 && action.includeAuthorization;
+    const isPasswordAction = exception.response.status === 401 && action.password;
+
+    if (isUnauthorizedRequest && !isPasswordAction) {
+      dispatch(authActions.logoutUser());
+      return;
+    }
 
     if (exception.response) {
       const {

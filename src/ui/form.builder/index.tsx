@@ -1,5 +1,8 @@
 export { default as FB } from "./helpers/FB";
 
+export { default as apiClient } from "./FBApi/FBApi.client";
+export * from "./FBApi/FBApi.types";
+
 export * from "./FBSwitchPanel//FBSwitchPanel.types";
 export { default as FBSwitchPanelState } from "./FBSwitchPanel//FBSwitchPanel.state";
 
@@ -23,3 +26,17 @@ export * from "./FBFormMarkDown/FBFormMarkDown.types";
 
 export { default as FBFieldMarkDown } from "./FBFieldMarkDown/FBFieldMarkDown";
 export * from "./FBFieldMarkDown/FBFieldMarkDown.types";
+
+export { default as FBFieldWrapper } from "./FBFieldWrapper/FBFieldWrapper";
+export { default as FBFieldWrapperState } from "./FBFieldWrapper/FBFieldWrapper.state";
+export * from "./FBFieldWrapper/FBFieldWrapper.types";
+
+export { default as FBAutocomplete } from "./FBAutocomplete/FBAutocomplete";
+export { default as FBAutocompleteState } from "./FBAutocomplete/FBAutocomplete.state";
+export * from "./FBAutocomplete/FBAutocomplete.types";
+
+export { default as FBFieldTopBar } from "./FBFieldTopBar/FBFieldTopBar";
+export * from "./FBFieldTopBar/FBFieldTopBar.types";
+
+export { default as FBFieldBottomBar } from "./FBFieldBottomBar/FBFieldBottomBar";
+export * from "./FBFieldBottomBar/FBFieldBottomBar.types";

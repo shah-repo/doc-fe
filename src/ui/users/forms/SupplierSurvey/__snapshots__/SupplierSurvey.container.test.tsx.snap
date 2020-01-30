@@ -28,164 +28,54 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
           >
             <div
               class="MuiBox-root MuiBox-root-62"
-              fieldname="checkbox"
-              index="0"
-              label="Test checbox"
-              name="checkbox"
-              type="checkbox"
             >
               <div
-                class="MuiBox-root MuiBox-root-63"
+                class="MuiFormControl-root MuiFormControl-fullWidth"
+                title=""
               >
-                <svg
-                  aria-hidden="true"
-                  class="MuiSvgIcon-root MuiSvgIcon-colorError"
-                  focusable="false"
-                  role="presentation"
-                  viewBox="0 0 24 24"
+                <label
+                  class="MuiFormControlLabel-root"
+                  type="checkbox"
                 >
-                  <path
-                    d="M7 11v2h10v-2H7zm5-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
-                  />
-                </svg>
-              </div>
-              <div
-                class="MuiBox-root MuiBox-root-73"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="MuiSvgIcon-root MuiSvgIcon-colorPrimary"
-                  focusable="false"
-                  role="presentation"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M17.75 7L14 3.25l-10 10V17h3.75l10-10zm2.96-2.96c.39-.39.39-1.02 0-1.41L18.37.29a.9959.9959 0 0 0-1.41 0L15 2.25 18.75 6l1.96-1.96z"
-                  />
-                  <path
-                    d="M0 20h24v4H0z"
-                    fill-opacity=".36"
-                  />
-                </svg>
-              </div>
-              <div
-                class="MuiBox-root MuiBox-root-74"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="MuiSvgIcon-root MuiSvgIcon-colorPrimary"
-                  focusable="false"
-                  role="presentation"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"
-                  />
-                </svg>
-              </div>
-            </div>
-            <div
-              class="MuiBox-root MuiBox-root-75"
-            >
-              <div
-                class="MuiBox-root MuiBox-root-76"
-              >
-                <div
-                  class="MuiBox-root MuiBox-root-77"
-                >
-                  <div
-                    class="MuiBox-root MuiBox-root-78"
+                  <span
+                    aria-disabled="false"
+                    class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-90 MuiCheckbox-root MuiCheckbox-colorSecondary MuiIconButton-colorSecondary"
                   >
-                    <div
-                      class="MuiFormControl-root MuiFormControl-fullWidth"
-                      title=""
+                    <span
+                      class="MuiIconButton-label"
                     >
-                      <label
-                        class="MuiFormControlLabel-root"
+                      <input
+                        class="PrivateSwitchBase-input-93"
+                        data-indeterminate="false"
+                        name="checkbox"
                         type="checkbox"
+                        value="checkbox"
+                      />
+                      <svg
+                        aria-hidden="true"
+                        class="MuiSvgIcon-root"
+                        focusable="false"
+                        role="presentation"
+                        viewBox="0 0 24 24"
                       >
-                        <span
-                          aria-disabled="false"
-                          class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-106 MuiCheckbox-root MuiCheckbox-colorSecondary MuiIconButton-colorSecondary"
-                        >
-                          <span
-                            class="MuiIconButton-label"
-                          >
-                            <input
-                              class="PrivateSwitchBase-input-109"
-                              data-indeterminate="false"
-                              name="checkbox"
-                              type="checkbox"
-                              value="checkbox"
-                            />
-                            <svg
-                              aria-hidden="true"
-                              class="MuiSvgIcon-root"
-                              focusable="false"
-                              role="presentation"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
-                              />
-                            </svg>
-                          </span>
-                          <span
-                            class="MuiTouchRipple-root"
-                          />
-                        </span>
-                        <span
-                          class="MuiTypography-root MuiFormControlLabel-label MuiTypography-body1"
-                        >
-                          <span>
-                            Test checbox
-                          </span>
-                        </span>
-                      </label>
-                    </div>
-                  </div>
-                </div>
+                        <path
+                          d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
+                        />
+                      </svg>
+                    </span>
+                    <span
+                      class="MuiTouchRipple-root"
+                    />
+                  </span>
+                  <span
+                    class="MuiTypography-root MuiFormControlLabel-label MuiTypography-body1"
+                  >
+                    <span>
+                      Test checbox
+                    </span>
+                  </span>
+                </label>
               </div>
-              <div
-                class="MuiBox-root MuiBox-root-122"
-                style="cursor: grab;"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="MuiSvgIcon-root"
-                  focusable="false"
-                  role="presentation"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
-                  />
-                </svg>
-              </div>
-            </div>
-            <div
-              class="MuiBox-root MuiBox-root-123"
-            >
-              <div
-                class="MuiBox-root MuiBox-root-124"
-              />
-              <button
-                class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-fullWidth"
-                tabindex="0"
-                type="button"
-              >
-                <span
-                  class="MuiButton-label"
-                >
-                  Add a Field
-                </span>
-                <span
-                  class="MuiTouchRipple-root"
-                />
-              </button>
-              <div
-                class="MuiBox-root MuiBox-root-153"
-              />
             </div>
           </div>
         </div>
@@ -223,7 +113,7 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
         </button>
       </div>
       <div
-        class="MuiBox-root MuiBox-root-169"
+        class="MuiBox-root MuiBox-root-158"
       >
         <button
           class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary"

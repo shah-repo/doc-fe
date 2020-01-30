@@ -35,9 +35,8 @@ export const withInput = <T extends FBInputProps>(
     value = _.get(form, `values.${name}`);
 
     _.isUndefined(value) && (value =
-      defaultValue || _.get(FBFormValues, type)
+      _.get(FBStore.getValues(), name) || defaultValue || _.get(FBFormValues, type)
     );
-
     error = Boolean(_.get(form, `errors.${name}`));
     helperText = (
       (error && _.get(form, `errors.${name}`)) ||
@@ -54,7 +53,7 @@ export const withInput = <T extends FBInputProps>(
       _.first(elements) && (
         children = React.cloneElement(_.first(elements) as React.ReactElement, {
           name,
-          value,
+          ...(type !== "autocomplete" && { value }),
           type,
           error,
           checked: value,
@@ -75,6 +74,7 @@ export const withInput = <T extends FBInputProps>(
       helperText: FBDynamicValidatorStore.helperText[name],
       validationMode,
       hidden,
+      disabled,
     }));
   };
 
