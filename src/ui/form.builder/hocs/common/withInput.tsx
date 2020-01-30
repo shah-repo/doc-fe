@@ -86,6 +86,7 @@ export const withInput = <T extends FBInputProps>(
       helperText: FBDynamicValidatorStore.helperText[name],
       validationMode,
       hidden,
+      disabled,
     }));
   };
 

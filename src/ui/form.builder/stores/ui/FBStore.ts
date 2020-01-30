@@ -103,6 +103,10 @@ export class FormBuilderStore {
     };
   }
 
+  @action public getValue = (name: string): any => {
+    return _.get(this.getValues(), name);
+  }
+
   @action public getValidationAttribute = () => {
     const attributes: Dictionary<string> = {};
     _.map(this.getSchema(), (schemaItem) => {
