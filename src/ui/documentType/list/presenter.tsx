@@ -102,6 +102,9 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.owner.user.name,
       },
+      searchOptions: {
+        defaultValue: tableState.queryDict.owner,
+      },
     },
     {
       key: "status",
