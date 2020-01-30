@@ -1,3 +1,4 @@
+import { orderBy } from "lodash";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -11,7 +12,9 @@ import { styles } from "./SwitchCompany.styles";
 
 export type Props = LoginContainerProps;
 
-const SwitchCompanyContainer: React.FunctionComponent<Props> = ({employees}) => {
+const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
+  employees,
+}) => {
   const classes = styles();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -22,8 +25,8 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({employees}) => 
     history.push(HOME_URL);
   };
 
-  const companies =
-    employees.map((employee: Employee) => {
+  const companies = orderBy(employees, ["company.name"], ["asc"]).map(
+    (employee: Employee) => {
       const { company } = employee;
       const whiteLabeling = company.whiteLabeling || {};
 
@@ -42,13 +45,12 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({employees}) => 
               />
             )}
             {!whiteLabeling.avatar && <CompanyAvatar />}
-            <div className={classes.companyName}>
-              {company.name}
-            </div>
+            <div className={classes.companyName}>{company.name}</div>
           </div>
         </button>
       );
-    });
+    },
+  );
 
   return (
     <SwitchCompanyPresenter
