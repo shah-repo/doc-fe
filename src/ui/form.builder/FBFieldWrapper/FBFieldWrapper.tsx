@@ -3,7 +3,7 @@ import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
 import { Provider } from "mobx-react";
 import React from "react";
 import { FBFieldWrapperProps } from ".";
-import { FBFieldBottomBar, FBFieldMarkDown, FBFieldTopBar } from "..";
+import { FBFieldMarkDown, FBFieldTopBar, FBFieldBottomBar } from "..";
 import { withFBFieldWrapper } from "./FBFieldWrapper.wrap";
 
 const FBFieldWrapper: React.FunctionComponent<FBFieldWrapperProps> = ({
