@@ -28,7 +28,7 @@ RUN apk add git
 RUN apk add --no-cache --virtual .gyp python make g++
 RUN rm -rf /var/cache/apk/*
 RUN yarn global add node-gyp
-RUN NODE_ENV=production yarn install --pure-lockfile --production
+RUN yarn install --pure-lockfile
 RUN apk del .gyp
 
 # build the app
