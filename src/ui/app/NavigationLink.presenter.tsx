@@ -1,7 +1,9 @@
+import { ListItemIcon } from "@material-ui/core";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
+import _ from "lodash";
 import React, { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 import { ReactComponent as ChangeRequestListIcon } from "../../assets/images/change_request_list_icon.svg";
@@ -9,10 +11,12 @@ import { ReactComponent as DashboardIcon } from "../../assets/images/dashboard_i
 import { ReactComponent as DocumentListICon } from "../../assets/images/document_list_icon.svg";
 import { ReactComponent as UserManagementIcon } from "../../assets/images/user_management_icon.svg";
 import Text from "../components/Text";
+import {
+  CHANGE_REQUEST_LIST_URL,
+  DOCUMENT_REVISION_LIST_URL,
+  USER_MANAGEMENT_ROOT_URL,
+} from "../constants/urls";
 import { LinkDefinition } from "./NavigationLink.container";
-
-import { ListItemIcon } from "@material-ui/core";
-import { CHANGE_REQUEST_LIST_URL, DOCUMENT_REVISION_LIST_URL, USER_MANAGEMENT_ROOT_URL } from "../constants/urls";
 import styles from "./NavigationLink.styles";
 
 interface NavigationLinkPresenterProps
@@ -33,9 +37,13 @@ const iconMapping: IconObject = {
   [USER_MANAGEMENT_ROOT_URL]: <UserManagementIcon />,
 };
 
-const NavigationLinkPresenter: React.FunctionComponent<
-  NavigationLinkPresenterProps
-> = ({ classes, url, text, ActionIcon, isChild }) => (
+const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterProps> = ({
+  classes,
+  url,
+  text,
+  ActionIcon,
+  isChild,
+}) => (
   <NavLink
     to={url}
     exact={true}
@@ -44,7 +52,7 @@ const NavigationLinkPresenter: React.FunctionComponent<
   >
     <ListItem button={true} className={classes.itemButton}>
       <ListItemIcon className={classes.itemIcon}>
-        {iconMapping[url]}
+        {_.get(iconMapping, url) || <div />}
       </ListItemIcon>
       <ListItemText
         primary={<Text translation={text} />}
