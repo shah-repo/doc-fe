@@ -17,20 +17,23 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
   includeTransport = true,
   isStarter = true,
   schema = [],
+  form,
 }) => {
   const dialog = useDialog();
   const openDialog = () => dialog.open();
   const closeDialog = () => {
     FBStore.setMode("design");
-    FBStore.setValues([]);
+    FBDynamicValidatorStore.helperText = {};
+    form?.setValues({});
+    FBStore.setValues({});
     FBStore.setSchema(schema);
     dialog.close();
   };
   const onClickView = () => {
-    FBDynamicValidatorStore.registerValidators();
-    FBDynamicValidatorStore.validate();
     FBStore.setMode("form");
     openDialog();
+    FBDynamicValidatorStore.registerValidators();
+    FBDynamicValidatorStore.validate();
   };
 
   return (

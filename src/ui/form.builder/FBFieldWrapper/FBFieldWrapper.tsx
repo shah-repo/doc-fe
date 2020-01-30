@@ -3,7 +3,7 @@ import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
 import { Provider } from "mobx-react";
 import React from "react";
 import { FBFieldWrapperProps } from ".";
-import { FBFieldMarkDown, FBFieldTopBar, FBFieldBottomBar } from "..";
+import { FBFieldBottomBar, FBFieldMarkDown, FBFieldTopBar } from "..";
 import { withFBFieldWrapper } from "./FBFieldWrapper.wrap";
 
 const FBFieldWrapper: React.FunctionComponent<FBFieldWrapperProps> = ({
@@ -19,21 +19,29 @@ const FBFieldWrapper: React.FunctionComponent<FBFieldWrapperProps> = ({
 }) => {
   return (
     <Provider fieldWrapper={state}>
-      <Box {...{onMouseOver, onMouseLeave}}>
-        <FBFieldTopBar visibility={toolsVisible} mb={topBarMargin} index={index}/>
+      <Box {...{ onMouseOver, onMouseLeave }}>
+        <FBFieldTopBar
+          visibility={toolsVisible}
+          mb={topBarMargin}
+          index={index}
+        />
         <Box display="flex" flexDirection="row">
           <Box width="100%">{props.children}</Box>
           <Box
             display="flex"
             width="0"
             alignItems="center"
-            style={{cursor: "grab"}}
+            style={{ cursor: "grab" }}
           >
-            <DragIndicatorIcon  />
+            <DragIndicatorIcon />
           </Box>
         </Box>
-        {markDownVisible && <FBFieldMarkDown mt={-3.5} {...{index}} />}
-        <FBFieldBottomBar visibility={toolsVisible} mt={bottomBarMargin} {...{index}} />
+        {markDownVisible && <FBFieldMarkDown mt={-3.5} {...{ index }} />}
+        <FBFieldBottomBar
+          visibility={toolsVisible}
+          mt={bottomBarMargin}
+          {...{ index }}
+        />
       </Box>
     </Provider>
   );
