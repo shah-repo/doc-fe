@@ -52,6 +52,7 @@
   "validator.password.spec.char": "Password must contain a special characters",
   "validator.match.passwords": "Passwords do not match",
   "validator.confirm": "Password confirm is required",
+  "validator.user.name.required": "User name is required",
 
   "errors.tokenRefresh": "Token refresh failed",
   "errors.userNotLoggedIn": "User is not logged in",
@@ -413,9 +414,10 @@
 
   "user.management.profile": "User Profile",
   "user.management.last.training": "Last Training",
-  "user.management.add.groups": "Add to other groups",
+  "user.management.add.to.groups": "Add to groups",
   "user.management.add.employee": "Add Employee",
   "user.management.update.profile": "Update profile",
+  "user.management.no.groups.specified": "No groups specified",
 
   "integrations.title": "Integrations",
   "integrations.add": "Add",

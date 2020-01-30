@@ -76,7 +76,7 @@ export const UserGroups: React.FunctionComponent<Props> = ({
       <Icon style={{ marginRight: "10px" }}>
         <AddCircleOutlineOutlinedIcon />
       </Icon>
-      <Text translation="user.management.add.groups" />
+      <Text translation="user.management.add.to.groups" />
     </Button>
   );
 
@@ -85,6 +85,7 @@ export const UserGroups: React.FunctionComponent<Props> = ({
       <SummaryField
         label="common.groups"
         value={handleGroups(employeeGroups)}
+        noValueOption={<Text translation="user.management.no.groups.specified" />}
       />
       {canManageUsers && addGroupsRenderer()}
     </Box>

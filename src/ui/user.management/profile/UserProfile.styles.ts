@@ -21,12 +21,28 @@ export default makeStyles((theme: Theme) =>
       fontFamily: "Open Sans, sans-serif",
     },
     userNameEdit: {
-      "color": "white",
       "& .MuiInputBase-input": {
+        color: theme.palette.common.white,
         fontSize: "3rem",
         textAlign: "center",
         fontFamily: "Open Sans, sans-serif",
-        padding: theme.spacing(0.5, 0, 0, 0),
+        padding: theme.spacing(0.5, 0, 0.5, 0),
+      },
+      "& .MuiInput-underline": {
+        "&:before": {
+          borderBottom: `1px solid ${theme.palette.common.white}`,
+          transition: "none",
+        },
+        "&:after": {
+          borderBottom: `1px solid ${theme.palette.common.white}`,
+          transition: "none",
+        },
+        "&:hover:not(.Mui-disabled):before": {
+          borderBottom: `1px solid ${theme.palette.common.white}`,
+        },
+        "&.Mui-error:after": {
+          borderBottom: `1px solid ${"#c40000"}`,
+        },
       },
     },
     activeStatusButton: {
