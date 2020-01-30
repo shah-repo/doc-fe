@@ -25,6 +25,7 @@ RUN chmod a+x runTests.sh
 
 # install dependencies
 RUN apk add git
+RUN yarn global add node-gyp
 RUN yarn install --pure-lockfile
 
 # build the app
