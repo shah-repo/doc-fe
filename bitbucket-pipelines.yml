@@ -96,7 +96,7 @@ pipelines:
       trigger: manual
 
   default:
-      - step: *RUN_TESTS
+      - step: *RUN_LINT_AND_TESTS
   tags:
     deploy-to-dev:
       - step: *DEPLOY_TO_DEVELOP_1

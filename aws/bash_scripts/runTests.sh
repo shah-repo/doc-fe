@@ -7,7 +7,7 @@ ENVIRONMENT_DIR="${AWS_DIR}/environments"
 PYTHON_SCRIPTS_DIR="${AWS_DIR}/python_scripts"
 TEST_RESULTS_DIR="${BASE_DIR}/test-results"
 JEST_CONFIG_LOG_DIR="${BASE_DIR}/jest-config"
-MAX_WORKERS="3"
+MAX_WORKERS="4"
 
 # Install Dependencies
 echo "-------- Installing Dependencies --------"
@@ -30,19 +30,17 @@ mkdir -p ${JEST_CONFIG_LOG_DIR}
 export JEST_JUNIT_OUTPUT_DIR="${TEST_RESULTS_DIR}"
 
 yarn test \
-  --no-watch \
   --reporters="default" \
   --reporters="jest-junit" \
-  --forceExit \
   --silent \
   --maxWorkers=$MAX_WORKERS \
+  --forceExit \
   --showConfig \
   > "${JEST_CONFIG_LOG_DIR}/config.txt"
 
 yarn test \
-  --no-watch \
   --reporters="default" \
   --reporters="jest-junit" \
-  --forceExit \
   --silent \
-  --maxWorkers=$MAX_WORKERS
+  --maxWorkers=$MAX_WORKERS \
+  --forceExit
