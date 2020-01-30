@@ -17,17 +17,18 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     optionPath = "",
     name = "",
     placeholder,
-    renderEl = false,
+    renderEl,
     ...props
   }: T) => {
 
     state = FB.useRef<FBAutocompleteState>(FBAutocompleteState);
+    renderEl = (FBStore.mode === "design" || FBStore.mode === "preview");
 
     React.useEffect(() => {
       if (FBStore.mode !== "form") {
         return;
       }
-      const value = _.get(FBStore.getValues(), name);
+      const value = _.get(FBStore.getValues(), name) || "";
       state?.setDefaultState(value);
       state?.setUrl(optionPath);
     }, []);
@@ -46,7 +47,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     return useObserver(() => Component({
       ...(props as T),
       getOptionLabel,
-      renderEl: (!_.isEmpty(state?.data) && !_.isUndefined(state?.defaultValue)),
+      renderEl: renderEl || state?.loaded,
       options: state?.data,
       loading: state?.loading,
       defaultValue: state?.defaultValue,
