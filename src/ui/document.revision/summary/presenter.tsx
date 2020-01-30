@@ -1,11 +1,14 @@
 import { Box, Grid, WithStyles, withStyles } from "@material-ui/core";
 import { Formik } from "formik";
 import React from "react";
+import { useSelector } from "react-redux";
 import { DataProps } from "../../../state/ducks/common";
 import {
   DocumentRevision,
   DocumentRevisionStatus,
 } from "../../../state/ducks/documentRevisions";
+import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import Text from "../../components/Text";
@@ -44,11 +47,22 @@ export const Presenter: React.FunctionComponent<Props> = ({
     deprecatedAt,
     description,
     trainingRecords,
+    formTemplate,
   },
   canShowCreateVersionButton,
 }) => {
+  let outputDocumentTypeName;
   const onSubmit = () => void 0;
   FBDRStore.setValues(dataProp);
+  const documentTypesById = useSelector((state: ApplicationState) =>
+    documentTypeSelectors.byId(state),
+  );
+
+  if (formTemplate) {
+    const outputDocumentTypeId = formTemplate!.outputDocumentType.id;
+    outputDocumentTypeName =
+      documentTypesById[outputDocumentTypeId!].documentTypeName;
+  }
 
   const renderTrainingControl = status === DocumentRevisionStatus.Released && (
     <TrainingControl
@@ -79,6 +93,12 @@ export const Presenter: React.FunctionComponent<Props> = ({
           value={<Text translation={retrain ? "common.yes" : "common.no"} />}
         />
         <SummaryFieldWithHtml label="common.description" value={description} />
+        {formTemplate && (
+          <SummaryField
+            label="document.output.type"
+            value={outputDocumentTypeName}
+          />
+        )}
         {referenceTo && (
           <ReferenceToContainer
             dataProp={referenceTo}
@@ -92,6 +112,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         {attachments && <Attachment />}
         {renderTrainingControl}
       </Grid>
+
       {FBStore.active && (
         <Box px={5}>
           <FBWorkspace />
