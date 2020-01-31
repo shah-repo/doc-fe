@@ -34,7 +34,8 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   editDocumentRevision,
   documentTypeOptions,
   tableName,
-  tableState,
+  tableCriteria,
+  tableData,
   clearFilter,
 }) => {
   const canEdit = (data: DocumentRevision) => canEditDocumentRevision(data);
@@ -70,7 +71,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         width: 150,
       },
       searchOptions: {
-        defaultValue: tableState.queryDict.docId,
+        defaultValue: tableCriteria.queryDict.docId,
       },
     },
     {
@@ -78,7 +79,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       label: "common.version",
       searchOptions: {
         searchValueGetter: (value) => unmaskId(value),
-        defaultValue: tableState.queryDict.version,
+        defaultValue: tableCriteria.queryDict.version,
       },
       cellOptions: { align: "center" },
       cellHref: cellHrefRenderer,
@@ -95,7 +96,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       tooltipKey: "description",
       cellHref: cellHrefRenderer,
       searchOptions: {
-        defaultValue: tableState.queryDict.name,
+        defaultValue: tableCriteria.queryDict.name,
       },
     },
     {
@@ -106,7 +107,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       searchOptions: {
         searchType: "select",
         selectOptions: documentTypeOptions,
-        defaultValue: tableState.queryDict.documentTypeId,
+        defaultValue: tableCriteria.queryDict.documentTypeId,
       },
       columnOptions: {
         cellDataGetter: ({ rowData }) => {
@@ -123,7 +124,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         cellDataGetter: ({ rowData }) => rowData.owner.user.name,
       },
       searchOptions: {
-        defaultValue: tableState.queryDict.owner,
+        defaultValue: tableCriteria.queryDict.owner,
       },
     },
     {
@@ -131,7 +132,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       label: "common.crid",
       searchOptions: {
         dataKey: "crId",
-        defaultValue: tableState.queryDict.crId,
+        defaultValue: tableCriteria.queryDict.crId,
       },
       cellHref: cellHrefRenderer,
       columnOptions: {
@@ -149,10 +150,10 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         editDocumentRevision(rowData.id, rowData.document.id),
       searchOptions: {
         dataKey: "status[]",
-        defaultValue: !tableState.queryDict["status[]"]
+        defaultValue: !tableCriteria.queryDict["status[]"]
           ? DocumentRevisionStatus.Released
-          : _.isString(tableState.queryDict["status[]"])
-            ? tableState.queryDict["status[]"]
+          : _.isString(tableCriteria.queryDict["status[]"])
+            ? tableCriteria.queryDict["status[]"]
             : undefined,
         searchType: "select",
         selectOptions: documentRevisionStatusOption(),
@@ -171,7 +172,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         dataKey: "releasedAfter",
         searchType: "select",
         selectOptions: documentRevisionReleasedDateOption(),
-        defaultValue: tableState.queryDict.releasedAfter,
+        defaultValue: tableCriteria.queryDict.releasedAfter,
       },
     },
   ];
@@ -190,7 +191,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         >
           <Text translation="common.clear.filters" />
         </Button>
-        <DocumentInfo numberOfRecords={tableState.queryData.length} />
+        <DocumentInfo numberOfRecords={tableData.length} />
       </Grid>
       <Grid item={true} xs={6} style={{ textAlign: "right" }}>
         <RouterLink to={DOCUMENT_REVISION_CREATE_URL} className={classes.link}>

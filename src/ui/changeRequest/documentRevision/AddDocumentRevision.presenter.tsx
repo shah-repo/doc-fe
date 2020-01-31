@@ -6,7 +6,7 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
 import { DocumentRevision, DocumentRevisionsByIdState } from "../../../state/ducks/documentRevisions";
-import { TablePanelStateProps } from "../../components/table/types";
+import { TablePanelStateProps, TableDataProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import styles from "./AddDocumentRevision.styles";
 import DocumentRevisionTable from "./DocumentRevisionTable.presenter";
@@ -17,7 +17,8 @@ interface AddDocumentRevisionPresenterProps {
   addedDocuments: string[];
   documentRevisionsToShow: DocumentRevision[];
   tableName: string;
-  tableState: TablePanelStateProps;
+  tableCriteria: TablePanelStateProps;
+  tableData: TableDataProps<DocumentRevision>;
   close: () => void;
   closeDialogAddDocuments: () => void;
   addDocument: (documentRevisionId: string) => void;
@@ -34,7 +35,8 @@ export const AddDocumentRevisionPresenter: React.FunctionComponent<AddDocumentRe
   handleDelete,
   documentRevisionsToShow,
   tableName,
-  tableState,
+  tableCriteria,
+  tableData,
 }) => {
   const classes = styles();
 
@@ -75,7 +77,8 @@ export const AddDocumentRevisionPresenter: React.FunctionComponent<AddDocumentRe
           addDocument={addDocument}
           addedDocuments={addedDocuments}
           tableName={tableName}
-          tableState={tableState}
+          tableCriteria={tableCriteria}
+          tableData={tableData}
         />
       </DialogContent>
     </Dialog>

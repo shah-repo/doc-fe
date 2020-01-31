@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getTableCriteria } from "../../../common/utils/selectors";
+import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import documentTypeSelectors from "../../../state/ducks/documentRevisions/documentType/selectors";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
@@ -14,7 +14,8 @@ export type Props = OwnProps;
 
 export const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
   const TABLE_NAME = "documentRevisions";
-  const tableState = useSelector(getTableCriteria(TABLE_NAME));
+  const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
+  const tableData = useSelector(getTableData(TABLE_NAME));
   const edit = (documentRevisionId: string, documentId: string) =>
     history.push(documentEditPath(documentRevisionId, documentId));
 
@@ -22,11 +23,11 @@ export const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
     history.push(documentPreviewPath(documentRevisionId, documentId));
 
   const dispatch = useDispatch();
-  if (_.isEmpty(tableState.queryDict)) {
+  if (_.isEmpty(tableCriteria.queryDict)) {
     dispatch(
       tableSearchActions.setSearchCriteria(
         {
-          ...tableState,
+          ...tableCriteria,
           queryDict: {
             "status[]": DocumentRevisionStatus.Released,
           },
@@ -47,7 +48,8 @@ export const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
       previewDocumentRevision={preview}
       documentTypeOptions={documentTypeOptions}
       tableName={TABLE_NAME}
-      tableState={tableState}
+      tableCriteria={tableCriteria}
+      tableData={tableData}
       clearFilter={clearFilter}
     />
   );

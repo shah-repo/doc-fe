@@ -4,7 +4,7 @@ import {
   DocumentRevisionsByIdState,
   DocumentRevisionStatus,
 } from "../../../state/ducks/documentRevisions";
-import { TablePanelStateProps } from "../../components/table/types";
+import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
 import { AddDocumentRevisionPresenter } from "./AddDocumentRevision.presenter";
 
 interface AddDocumentRevisionContainerProps {
@@ -15,7 +15,8 @@ interface AddDocumentRevisionContainerProps {
   documentRevisionsList: DocumentRevision[];
   documentRevisionsById: DocumentRevisionsByIdState;
   tableName: string;
-  tableState: TablePanelStateProps;
+  tableCriteria: TablePanelStateProps;
+  tableData: TableDataProps<DocumentRevision>;
 }
 
 export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRevisionContainerProps> = ({
@@ -25,7 +26,8 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
   documentsInChangeRequest,
   documentRevisionsById,
   tableName,
-  tableState,
+  tableCriteria,
+  tableData,
 }) => {
   const [documentRevisionsToShow, setDocumentRevisionsToShow] = useState<
     DocumentRevision[]
@@ -41,10 +43,10 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
   useEffect(() => {
     const documentsToIgnore = [...addedDocuments, ...documentsInChangeRequest].map((documentRevisionId) =>
       documentRevisionId);
-    const filteredArray = tableState.queryData.filter((documentRevision) =>
+    const filteredArray = tableData.filter((documentRevision) =>
       documentsToIgnore.indexOf(documentRevision.id) < 0 && documentRevision.status === DocumentRevisionStatus.Draft);
     setDocumentRevisionsToShow(filteredArray);
-  }, [addedDocuments, documentsInChangeRequest, tableState.queryData]);
+  }, [addedDocuments, documentsInChangeRequest, tableData]);
 
   const closeDialogAddDocuments = () => {
     const documentRevisions = new Set([
@@ -68,7 +70,8 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
       handleDelete={handleDelete}
       documentRevisionsToShow={documentRevisionsToShow}
       tableName={tableName}
-      tableState={tableState}
+      tableCriteria={tableCriteria}
+      tableData={tableData}
     />
   );
 };
