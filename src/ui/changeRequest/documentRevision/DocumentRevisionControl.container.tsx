@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React, { useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
-import { getTableState } from "../../../common/utils/selectors";
+import { getTableCriteria } from "../../../common/utils/selectors";
 import {
   DocumentRevision,
   DocumentRevisionsByIdState,
@@ -66,7 +66,7 @@ export const DocumentRevisionControlContainer: React.FunctionComponent<
   };
 
   const TABLE_NAME = "addDocRevTable";
-  const tableState = useSelector(getTableState(TABLE_NAME));
+  const tableState = useSelector(getTableCriteria(TABLE_NAME));
   const dispatch = useDispatch();
   if (_.isEmpty(tableState.queryDict)) {
     dispatch(tableSearchActions.setSearchCriteria(

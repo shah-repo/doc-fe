@@ -2,7 +2,7 @@ import _ from "lodash";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { getHasTag, getTableState } from "../../../common/utils/selectors";
+import { getHasTag, getTableCriteria } from "../../../common/utils/selectors";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
@@ -14,7 +14,7 @@ export const UserManagementListContainer: React.FunctionComponent = () => {
   const TABLE_NAME = "userManagement";
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const dispatch = useDispatch();
-  const tableState = useSelector(getTableState(TABLE_NAME));
+  const tableState = useSelector(getTableCriteria(TABLE_NAME));
   const canManageUsers = useSelector(getHasTag(GroupTag.USER_MANAGEMENT));
   const didMount = useDidMount();
 

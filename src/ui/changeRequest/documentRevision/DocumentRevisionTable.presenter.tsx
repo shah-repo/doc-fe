@@ -23,7 +23,7 @@ interface DocumentRevisionTableProps extends WithStyles<typeof styles> {
   addDocument: (documentRevisionId: string) => void;
   addedDocuments: string[];
   tableName: string;
-  tableState: TablePanelStateProps<DocumentRevision>;
+  tableState: TablePanelStateProps;
 }
 
 const DocumentRevisionTable: React.FunctionComponent<

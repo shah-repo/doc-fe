@@ -50,7 +50,7 @@ export interface SummaryOwnProps {
 export type DocumentRevisionsUserProps = ActionProps & {
   documentTypeOptions: SelectOption[];
   tableName: string;
-  tableState: TablePanelStateProps<DocumentRevision>;
+  tableState: TablePanelStateProps;
   clearFilter?: () => void;
 };
 

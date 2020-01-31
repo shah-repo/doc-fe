@@ -1,4 +1,5 @@
 export const TABLE_SEARCH_SET = "tableSearch/SET";
+export const TABLE_DATA_SET = "tableSearch/DATA_SET";
 export const TABLE_SEARCH_CLEAR = "tableSearch/CLEAR";
 export const TABLE_SORT = "tableSearch/SORT";
 export const TABLE_FORCE_UPDATE_SET = "tableSearch/FORCE_UPDATE_SET";

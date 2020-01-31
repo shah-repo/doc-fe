@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, RouteComponentProps } from "react-router-dom";
-import { getTableState } from "../../../common/utils/selectors";
+import { getTableCriteria } from "../../../common/utils/selectors";
 import { documentTypeActions, DocumentTypeById, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import { ApplicationState } from "../../../state/reducers";
@@ -27,7 +27,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const dispatch = useDispatch();
   const isSingleId = useSelector(documentTypeSelectors.isSingleDocRevId) ;
   const docRevId = useSelector(documentTypeSelectors.docRevTypeById);
-  const tableState = useSelector(getTableState(TABLE_NAME));
+  const tableState = useSelector(getTableCriteria(TABLE_NAME));
   const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
   const docId = useSelector(documentTypeSelectors.docId);
 

@@ -26,7 +26,7 @@ import { styles } from "./styles";
 
 export interface Props {
   tableName: string;
-  tableState: TablePanelStateProps<DocumentRevision>;
+  tableState: TablePanelStateProps;
   clearFilter?: () => void;
   documentType: DocumentType;
   openDocRev: () => void;

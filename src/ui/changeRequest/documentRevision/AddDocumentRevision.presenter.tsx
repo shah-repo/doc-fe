@@ -17,7 +17,7 @@ interface AddDocumentRevisionPresenterProps {
   addedDocuments: string[];
   documentRevisionsToShow: DocumentRevision[];
   tableName: string;
-  tableState: TablePanelStateProps<DocumentRevision>;
+  tableState: TablePanelStateProps;
   close: () => void;
   closeDialogAddDocuments: () => void;
   addDocument: (documentRevisionId: string) => void;

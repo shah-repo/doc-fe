@@ -15,7 +15,7 @@ interface AddDocumentRevisionContainerProps {
   documentRevisionsList: DocumentRevision[];
   documentRevisionsById: DocumentRevisionsByIdState;
   tableName: string;
-  tableState: TablePanelStateProps<DocumentRevision>;
+  tableState: TablePanelStateProps;
 }
 
 export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRevisionContainerProps> = ({

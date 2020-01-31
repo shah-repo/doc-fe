@@ -1,9 +1,6 @@
 import { Button, Grid } from "@material-ui/core";
 import React, { useState } from "react";
 import { Group } from "../../../state/ducks/auth/types";
-import {
-  DocumentRevision,
-} from "../../../state/ducks/documentRevisions";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
 import { EMPLOYEES_URL } from "../../../state/ducks/userManagement/constants";
 import { SelectOption } from "../../components/forms/fields/Select";
@@ -20,7 +17,7 @@ import { styles } from "./styles";
 
 export interface Props {
   tableName: string;
-  tableState: TablePanelStateProps<DocumentRevision>;
+  tableState: TablePanelStateProps;
   clearFilter?: () => void;
   groupOptions: SelectOption[];
 }

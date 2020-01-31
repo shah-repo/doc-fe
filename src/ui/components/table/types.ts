@@ -34,14 +34,16 @@ export interface TablePanelProps<T> {
   providedData?: T[];
 }
 
-export interface TablePanelStateProps<T> {
-  queryData: T[];
+export interface TablePanelStateProps {
+  queryData: any[];
   queryDict: TableSearchQueryType;
   apiError: string;
   scrollToIndex: number;
   sortDirection?: SortDirectionType;
   forceUpdate: boolean;
 }
+
+export type TableDataProps<T> = T[];
 
 // CSS
 export interface TableStyleProps {

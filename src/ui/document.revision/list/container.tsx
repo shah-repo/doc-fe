@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getTableState } from "../../../common/utils/selectors";
+import { getTableCriteria } from "../../../common/utils/selectors";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import documentTypeSelectors from "../../../state/ducks/documentRevisions/documentType/selectors";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
@@ -14,7 +14,7 @@ export type Props = OwnProps;
 
 export const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
   const TABLE_NAME = "documentRevisions";
-  const tableState = useSelector(getTableState(TABLE_NAME));
+  const tableState = useSelector(getTableCriteria(TABLE_NAME));
   const edit = (documentRevisionId: string, documentId: string) =>
     history.push(documentEditPath(documentRevisionId, documentId));
 
