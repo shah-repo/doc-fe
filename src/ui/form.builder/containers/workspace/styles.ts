@@ -12,11 +12,9 @@ export default makeStyles((theme: Theme) =>
       width: "100%",
       height: "100%",
     },
-    slackButton: {
-      border: "1px solid" + theme.palette.primary.main,
-    },
-    slackLogo: {
-      marginRight: "5px",
+    schemaContainer: {
+      display: "flex",
+      justifyContent: "center",
     },
   }),
 );

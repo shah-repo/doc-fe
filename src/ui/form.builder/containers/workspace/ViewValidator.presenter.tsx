@@ -31,12 +31,7 @@ export const ViewValidatorPresenter: React.FunctionComponent<Props> = ({
             <Text message="form.builder.form.preview" />
           </Typography>
         </Toolbar>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
+        <div className={classes.schemaContainer} >
           <Box width={500}>
             <FBSortableContainer items={schema} />
           </Box>
