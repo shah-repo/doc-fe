@@ -11,7 +11,6 @@ describe("ListPresenter tests", () => {
     tableName: faker.name.firstName(),
     tableCriteria: {
       queryDict: {},
-      queryData: [],
     },
     tableData: [],
     currentUserEmail: faker.internet.email(),

@@ -35,7 +35,6 @@ export interface TablePanelProps<T> {
 }
 
 export interface TablePanelStateProps {
-  queryData: any[];
   queryDict: TableSearchQueryType;
   apiError: string;
   scrollToIndex: number;

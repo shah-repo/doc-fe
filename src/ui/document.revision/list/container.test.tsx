@@ -23,7 +23,6 @@ jest.mock("../../../state/ducks/tableSearch/actions.ts", () => ({
 jest.mock("../../../state/ducks/tableSearch/selectors.ts", () => ({
   getTableCriteria: () => ({
     queryDict: { docId: "1" },
-    queryData: [],
   }),
   getTableData: () => ([]),
 }));

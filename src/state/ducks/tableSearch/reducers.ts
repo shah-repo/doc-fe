@@ -25,7 +25,6 @@ import {
 } from "./types";
 
 export const DEFAULT_TABLE_SEARCH = {
-  queryData: [],
   queryDict: {},
   apiError: "",
   scrollToIndex: 0,

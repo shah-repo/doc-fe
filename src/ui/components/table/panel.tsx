@@ -100,6 +100,11 @@ export function TablePanel<T extends any>({
     if (lastQueryValue !== value) {
       return;
     }
+
+    if (call) {
+      call.cancel();
+    }
+
     let dict = { ...tableCriteria.queryDict };
     value === "" ? delete dict[key] : (dict[key] = value);
 
@@ -147,7 +152,6 @@ export function TablePanel<T extends any>({
         tableSearchActions.setSearchCriteria(
           {
             ...tableCriteria,
-            // queryData: data,
             apiError: "",
             scrollToIndex: 0,
             forceUpdate: false,
@@ -242,6 +246,8 @@ export function TablePanel<T extends any>({
       sortBy!,
       sortDirection!,
     );
+
+    console.log("sort");
 
     dispatch(
       tableSearchActions.setTableSort(
