@@ -1,6 +1,9 @@
 import _ from "lodash";
 import React from "react";
+import { useSelector } from "react-redux";
 import { FBValidationEditorProps } from ".";
+import { getHasPermission } from "../../../common/utils/selectors";
+import { Permission } from "../../../state/ducks/auth/types";
 import FBValidatorCustom from "../components/validation/FBValidatorCustom";
 import FBValidatorForm from "../components/validation/FBValidatorForm";
 
@@ -16,11 +19,21 @@ export const withFBValidationEditor = <T extends FBValidationEditorProps>(
       {
         title: "form.builder.predefined.validation",
         content: <FBValidatorForm />,
-      }, {
-        title: "form.builder.custom.validation",
-        content: <FBValidatorCustom />,
       },
     ]);
+
+    const customValidator = {
+      title: "form.builder.custom.validation",
+      content: <FBValidatorCustom/>,
+    };
+
+    const enableCustomValidator = useSelector(
+      getHasPermission(Permission.FORM_BUILDER_CUSTOM_VALIDATORS_ENABLED),
+    );
+
+    if (enableCustomValidator) {
+      config.push(customValidator);
+    }
 
     return Component({
       ...(props as T),
