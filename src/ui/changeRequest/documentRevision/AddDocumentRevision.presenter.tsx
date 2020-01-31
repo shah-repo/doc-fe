@@ -6,7 +6,7 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
 import { DocumentRevision, DocumentRevisionsByIdState } from "../../../state/ducks/documentRevisions";
-import { TablePanelStateProps, TableDataProps } from "../../components/table/types";
+import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import styles from "./AddDocumentRevision.styles";
 import DocumentRevisionTable from "./DocumentRevisionTable.presenter";
