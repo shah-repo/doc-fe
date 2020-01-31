@@ -2,7 +2,7 @@ import _ from "lodash";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { getHasTag, getTableCriteria } from "../../../common/utils/selectors";
+import { getHasTag, getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
@@ -14,15 +14,16 @@ export const UserManagementListContainer: React.FunctionComponent = () => {
   const TABLE_NAME = "userManagement";
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const dispatch = useDispatch();
-  const tableState = useSelector(getTableCriteria(TABLE_NAME));
+  const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
+  const tableData = useSelector(getTableData(TABLE_NAME));
   const canManageUsers = useSelector(getHasTag(GroupTag.USER_MANAGEMENT));
   const didMount = useDidMount();
 
-  if (_.isEmpty(tableState.queryDict) && !didMount) {
+  if (_.isEmpty(tableCriteria.queryDict) && !didMount) {
     dispatch(
       tableSearchActions.setSearchCriteria(
         {
-          ...tableState,
+          ...tableCriteria,
           queryDict: {
             active: true,
           },
@@ -42,7 +43,8 @@ export const UserManagementListContainer: React.FunctionComponent = () => {
   return (
     <ListPresenter
       tableName={TABLE_NAME}
-      tableState={tableState}
+      tableCriteria={tableCriteria}
+      tableData={tableData}
       clearFilter={clearFilter}
       groupOptions={groupOptions}
     />
