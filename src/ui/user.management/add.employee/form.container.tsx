@@ -33,7 +33,7 @@ export const AddEmployeeFormContainer: React.FunctionComponent = ({
       dispatch(
         tableSearchActions.setSearchCriteria(
           {
-            ...tableState,
+            ...tableCriteria,
             queryDict: {
               active: true,
             },
@@ -45,7 +45,7 @@ export const AddEmployeeFormContainer: React.FunctionComponent = ({
   });
   const dispatch = useDispatch();
   const TABLE_NAME = "userManagement";
-  const tableState = useSelector(getTableCriteria(TABLE_NAME));
+  const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const onSubmit = (values: AddEmployeeFormValues) => {
     async.start(addEmployeeAction, transformToAddEmployeeRequest(values), async);
   };

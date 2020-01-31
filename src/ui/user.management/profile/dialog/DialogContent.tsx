@@ -78,7 +78,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
   const classes = styles();
   const dispatch = useDispatch();
   const [avatarURL, setAvatarURL] = useState<string>("");
-  const tableState = useSelector(getTableCriteria(TABLE_NAME));
+  const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
 
   const asyncS3link = useAsync({
     onSuccess: (data: any) => {
@@ -126,7 +126,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
       dispatch(
         tableSearchActions.setSearchCriteria(
           {
-            ...tableState,
+            ...tableCriteria,
             queryDict: {
               active: true,
             },
