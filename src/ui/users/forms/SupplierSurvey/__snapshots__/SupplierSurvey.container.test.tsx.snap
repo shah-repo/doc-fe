@@ -97,7 +97,7 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
         </button>
       </div>
       <div
-        class="MuiBox-root MuiBox-root-162"
+        class="MuiBox-root MuiBox-root-161"
       >
         <button
           class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary"
