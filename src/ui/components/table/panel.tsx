@@ -247,8 +247,6 @@ export function TablePanel<T extends any>({
       sortDirection!,
     );
 
-    console.log("sort");
-
     dispatch(
       tableSearchActions.setTableSort(
         {

@@ -5,6 +5,7 @@ import {
   EDIT_EMPLOYEE_ACTIVE_STATUS,
   EDIT_EMPLOYEE_GROUPS,
   EDIT_EMPLOYEE_USER_INFO,
+  TABLE_CLEAR_ALL,
   TABLE_DATA_SET,
   TABLE_FORCE_UPDATE_SET,
   TABLE_SEARCH_CLEAR,
@@ -27,6 +28,10 @@ export interface TableDataSetAction<T> {
 export interface TableSearchClearAction {
   type: typeof TABLE_SEARCH_CLEAR;
   tableName: string;
+}
+
+export interface TableSearchClearAllAction {
+  type: typeof TABLE_CLEAR_ALL;
 }
 
 export interface TableSearchForceUpdateAction {

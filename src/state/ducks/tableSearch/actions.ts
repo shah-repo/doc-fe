@@ -1,5 +1,6 @@
 import { TableDataProps, TablePanelStateProps } from "../../../ui/components/table/types";
 import {
+  TABLE_CLEAR_ALL,
   TABLE_DATA_SET,
   TABLE_FORCE_UPDATE_SET,
   TABLE_SEARCH_CLEAR,
@@ -9,6 +10,7 @@ import {
 import {
   TableDataSetAction,
   TableSearchClearAction,
+  TableSearchClearAllAction,
   TableSearchForceUpdateAction,
   TableSearchSetAction,
   TableSortAction,
@@ -52,10 +54,15 @@ const setData = <T>(
   tableName,
 });
 
+const clearAllTables = (): TableSearchClearAllAction => ({
+  type: TABLE_CLEAR_ALL,
+});
+
 export default {
   setTableSort,
   setSearchCriteria,
   clearSearchCriteria,
   setForceUpdate,
   setData,
+  clearAllTables,
 };

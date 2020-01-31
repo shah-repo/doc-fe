@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import { ReactComponent as CompanyAvatar } from "../../../assets/images/company_avatar.svg";
 import { authActions } from "../../../state/ducks/auth";
 import { companyActions, Employee } from "../../../state/ducks/company";
+import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { HOME_URL } from "../../constants/urls";
 import { LoginContainerProps } from "../Login.container";
 import SwitchCompanyPresenter from "./SwitchCompany.presenter";
@@ -22,6 +23,7 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
   const handleClick = (employee: Employee) => () => {
     dispatch(companyActions.selectCompany(employee.company));
     dispatch(authActions.selectEmployee(employee));
+    dispatch(tableSearchActions.clearAllTables());
     history.push(HOME_URL);
   };
 

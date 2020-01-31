@@ -1,12 +1,12 @@
 import { combineReducers } from "redux";
 import { USERS_ME_URL } from "../auth/constants";
 import { User } from "../auth/types";
-import { SELECT_COMPANY } from "../company/constants";
 import { GetEmployeeResponse } from "../userManagement";
 import {
   EDIT_EMPLOYEE_ACTIVE_STATUS,
   EDIT_EMPLOYEE_GROUPS,
   EDIT_EMPLOYEE_USER_INFO,
+  TABLE_CLEAR_ALL,
   TABLE_DATA_SET,
   TABLE_FORCE_UPDATE_SET,
   TABLE_SEARCH_CLEAR,
@@ -18,6 +18,7 @@ import {
   TableDataSetAction,
   TableSearchByIdState,
   TableSearchClearAction,
+  TableSearchClearAllAction,
   TableSearchDataState,
   TableSearchForceUpdateAction,
   TableSearchSetAction,
@@ -33,9 +34,10 @@ export const DEFAULT_TABLE_SEARCH = {
 type TableSearchActions = TableSearchSetAction &
   TableSearchClearAction &
   TableSearchForceUpdateAction &
-  TableSortAction;
+  TableSortAction &
+  TableSearchClearAllAction;
 
-type TableDataActions = TableDataSetAction<any> & EditActiveStatusAction;
+type TableDataActions = TableDataSetAction<any> & EditActiveStatusAction & TableSearchClearAllAction;
 
 export const criteria = (
   state: TableSearchByIdState = {},
@@ -65,7 +67,7 @@ export const criteria = (
         ...state,
         [action.tableName]: action.payload,
       };
-    case SELECT_COMPANY:
+    case TABLE_CLEAR_ALL:
       return {};
     default:
       return state;
@@ -137,7 +139,7 @@ export const data = (
         ...state,
         userManagement: employees,
       };
-    case SELECT_COMPANY:
+    case TABLE_CLEAR_ALL:
       return {};
     default:
       return state;
