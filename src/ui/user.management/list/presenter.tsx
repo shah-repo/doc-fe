@@ -1,16 +1,13 @@
 import { Button, Grid } from "@material-ui/core";
 import React, { useState } from "react";
 import { Group } from "../../../state/ducks/auth/types";
-import {
-  DocumentRevision,
-} from "../../../state/ducks/documentRevisions";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
 import { EMPLOYEES_URL } from "../../../state/ducks/userManagement/constants";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
-import { TablePanelStateProps } from "../../components/table/types";
+import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import AddEmployeeContainer from "../add.employee/container";
 import AddSlackButtonContainer from "../AddSlackButton/AddSlackButton.container";
@@ -20,14 +17,16 @@ import { styles } from "./styles";
 
 export interface Props {
   tableName: string;
-  tableState: TablePanelStateProps<DocumentRevision>;
+  tableCriteria: TablePanelStateProps;
+  tableData: TableDataProps<any>;
   clearFilter?: () => void;
   groupOptions: SelectOption[];
 }
 
 export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
   tableName,
-  tableState,
+  tableCriteria,
+  tableData,
   clearFilter,
   groupOptions,
 }) => {
@@ -55,7 +54,7 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
         cellDataGetter: ({ rowData }) => rowData.user.name,
       },
       searchOptions: {
-        defaultValue: tableState.queryDict.name,
+        defaultValue: tableCriteria.queryDict.name,
       },
     },
     {
@@ -65,7 +64,7 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
         cellDataGetter: ({ rowData }) => rowData.user.email,
       },
       searchOptions: {
-        defaultValue: tableState.queryDict.email,
+        defaultValue: tableCriteria.queryDict.email,
       },
     },
     {
@@ -77,7 +76,7 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
       searchOptions: {
         searchType: "select",
         selectOptions: groupOptions,
-        defaultValue: tableState.queryDict.groupId,
+        defaultValue: tableCriteria.queryDict.groupId,
       },
     },
     {
@@ -89,7 +88,7 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
           { text: "Inactive", value: "false" },
           { text: "Active", value: "true" },
         ],
-        defaultValue: tableState.queryDict.active,
+        defaultValue: tableCriteria.queryDict.active,
       },
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.active ? "Active" : "Inactive",
@@ -109,7 +108,7 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
         >
           <Text translation="common.clear.filters" />
         </Button>
-        <DocumentInfo numberOfRecords={tableState.queryData.length} />
+        <DocumentInfo numberOfRecords={tableData.length} />
       </Grid>
       <Grid
         container={true}

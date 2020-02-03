@@ -28,7 +28,8 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   editChangeRequest,
   tableName,
   clearFilter,
-  tableState,
+  tableCriteria,
+  tableData,
 }) => {
   const canEdit = (data: ChangeRequest) =>
     canEditChangeRequest({ dataProp: data, currentUserEmail });
@@ -48,7 +49,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       columnOptions: { width: 100 },
       sortable: true,
       searchOptions: {
-        defaultValue: tableState.queryDict.crId,
+        defaultValue: tableCriteria.queryDict.crId,
       },
     },
     {
@@ -58,7 +59,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       columnOptions: { flexGrow: 2 },
       tooltipKey: "description",
       searchOptions: {
-        defaultValue: tableState.queryDict.title,
+        defaultValue: tableCriteria.queryDict.title,
       },
     },
     {
@@ -70,7 +71,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         flexGrow: 1,
       },
       searchOptions: {
-        defaultValue: tableState.queryDict.owner,
+        defaultValue: tableCriteria.queryDict.owner,
       },
     },
     {
@@ -83,7 +84,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       searchOptions: {
         searchType: "select",
         selectOptions: changeRequestStatusOption(),
-        defaultValue: tableState.queryDict.state,
+        defaultValue: tableCriteria.queryDict.state,
       },
     },
   ];
@@ -103,7 +104,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         >
           <Text translation="common.clear.filters" />
         </Button>
-        <DocumentInfo numberOfRecords={tableState.queryData.length} />
+        <DocumentInfo numberOfRecords={tableData.length} />
       </Grid>
       <Grid item={true} xs={6} style={{ textAlign: "right" }}>
         <RouterLink to={CHANGE_REQUEST_CREATE_URL} className={classes.link}>
