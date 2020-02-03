@@ -22,10 +22,10 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
   }: T) => {
 
     state = FB.useRef<FBAutocompleteState>(FBAutocompleteState);
-    renderEl = (FBStore.mode === "design" || FBStore.mode === "preview");
+    renderEl = FBStore.mode === "design";
 
     React.useEffect(() => {
-      if (FBStore.mode !== "form") {
+      if (FBStore.mode === "design") {
         return;
       }
       const value = _.get(FBStore.getValues(), name) || "";
