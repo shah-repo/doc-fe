@@ -1,9 +1,11 @@
 import { Box, Button, Typography } from "@material-ui/core";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as SlackLogo } from "../../../../assets/images/slack_full_logo.svg";
+import { getTableState } from "../../../../common/utils/selectors";
 import { attachmentsActions } from "../../../../state/ducks/attachments";
 import { EmployeeEditRequestBody } from "../../../../state/ducks/auth/types";
+import { tableSearchActions } from "../../../../state/ducks/tableSearch";
 import {
   GetEmployeeResponse,
   userManagementActions,
@@ -39,7 +41,9 @@ interface OwnProps {
   file: File | null;
   setFile: (value: File | null) => void;
   setUserInfo: (values: EmployeeEditRequestBody) => void;
-  userId?: string;
+  userId: string;
+  isCurrentUser: boolean;
+  isUsernameEmpty: boolean;
 }
 
 type Props = OwnProps;
@@ -67,22 +71,42 @@ export const DialogContent: React.FunctionComponent<Props> = ({
   setUserInfo,
   userId,
   callbackUpdateWithUpload,
+  isCurrentUser,
+  isUsernameEmpty,
 }) => {
+  const TABLE_NAME = "userManagement";
   const classes = styles();
   const dispatch = useDispatch();
   const [avatarURL, setAvatarURL] = useState<string>("");
+  const tableState = useSelector(getTableState(TABLE_NAME));
 
   const asyncS3link = useAsync({
     onSuccess: (data: any) => {
-      setAvatarURL((data.url).substr(0, (data.url).indexOf("?")));
-      if (userId && file) {
-        dispatch(attachmentsActions.uploadAvatar(data.url, userId, userInfo.name, file, asyncUploadAvatar ));
+      setAvatarURL(data.url.substr(0, data.url.indexOf("?")));
+      if (!isCurrentUser && file) {
+        dispatch(
+          attachmentsActions.uploadAvatar(
+            data.url,
+            userId,
+            userInfo.name,
+            file,
+            asyncUploadAvatar,
+          ),
+        );
       }
-      if (!userId && file) {
-        dispatch(attachmentsActions.uploadAvatar(data.url, null, userInfo.name, file, asyncUploadAvatar ));
+      if (isCurrentUser && file) {
+        dispatch(
+          attachmentsActions.uploadAvatar(
+            data.url,
+            null,
+            userInfo.name,
+            file,
+            asyncUploadAvatar,
+          ),
+        );
       }
       setFile(null);
-      setUserInfo({...userInfo, avatar: avatarURL});
+      setUserInfo({ ...userInfo, avatar: avatarURL });
     },
   });
 
@@ -99,6 +123,17 @@ export const DialogContent: React.FunctionComponent<Props> = ({
       if (callbackUpdateActiveStatus) {
         callbackUpdateActiveStatus(data);
       }
+      dispatch(
+        tableSearchActions.setSearchCriteria(
+          {
+            ...tableState,
+            queryDict: {
+              active: true,
+            },
+          },
+          TABLE_NAME,
+        ),
+      );
     },
   });
 
@@ -115,10 +150,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
     if (!file) {
       editCurrentEmployee(userInfo);
     }
-    if (file && userId) {
-      dispatch(attachmentsActions.requestAvatarS3link(file.name, asyncS3link));
-    }
-    if (file && !userId) {
+    if (file) {
       dispatch(attachmentsActions.requestAvatarS3link(file.name, asyncS3link));
     }
   };
@@ -134,6 +166,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
       </Button>
       <Button
         variant="contained"
+        disabled={isUsernameEmpty}
         style={{ width: "auto", color: "white", backgroundColor: "#6E09EA" }}
         onClick={() => {
           updateProfile();
@@ -152,15 +185,16 @@ export const DialogContent: React.FunctionComponent<Props> = ({
         className={classes.activeStatusButton}
         onClick={() => handleActiveStatus(!activeStatus)}
       >
-        <Text translation={activeStatus ? "common.deactivate" : "common.reactivate"} />
+        <Text
+          translation={activeStatus ? "common.deactivate" : "common.reactivate"}
+        />
       </Button>
     </Box>
   );
 
   return (
     <React.Fragment>
-      {canManageUsers && activeStatusButtonRenderer()}
-
+      {!isCurrentUser && activeStatusButtonRenderer()}
       <Box display="flex" alignSelf="center">
         <Typography variant="subtitle1" color="primary">
           {email}

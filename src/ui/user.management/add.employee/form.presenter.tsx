@@ -103,7 +103,7 @@ export const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
             color="secondary"
             onClick={() => resetForm()}
           >
-            <Text translation="common.cancel" />
+            <Text translation="common.reset" />
           </Button>
           <SubmitButton
             asyncState={asyncState}

@@ -77,8 +77,8 @@ const DocumentRevisionTable: React.FunctionComponent<
       key: "version",
       label: "changeRequest.documentRevisionTable.version",
       columnOptions: {
-        cellDataGetter: ({ rowData: { revision, revisionStage } }) =>
-          generateVersionNumber(revision, revisionStage),
+        cellDataGetter: ({ rowData: { revision, revisionStage, revisionChangeType } }) =>
+          generateVersionNumber(revision, revisionStage, revisionChangeType),
         width: 50,
       },
       searchOptions: {

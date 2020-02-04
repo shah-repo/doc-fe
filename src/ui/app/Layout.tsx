@@ -25,6 +25,7 @@ import DocumentRevisionContainer from "../document.revision/container";
 import DocumentRevisionListContainer from "../document.revision/list/container";
 import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisionCreate.container";
 import DocumentTypeListContainer from "../documentType/list/container";
+import RemoteValidatorsLoader from "../remoteValidators/RemoteValidators";
 import SlackContainer from "../slack/Container";
 import TrainingDetailContainer from "../training/TrainingDetail.container";
 import UserManagementListContainer from "../user.management/list/container";
@@ -33,17 +34,20 @@ import HeaderContainer from "./Header.container";
 import styles from "./Layout.styles";
 import Navigation from "./Navigation";
 import PingServer from "./PingServer";
+import SocketsContainer from "./sockets/container";
 
 type Props = WithStyles<typeof styles>;
 
 const Layout: React.FunctionComponent<Props> = ({ classes }) => {
   return (
     <div>
+      <RemoteValidatorsLoader />
       <PingServer />
       <CssBaseline />
       <HeaderContainer />
       <Navigation />
       <ToastContainer autoClose={false} />
+      <SocketsContainer />
       <WatermarkFooterContainer />
       <main className={classes.content}>
         <DataFetcherContainer />

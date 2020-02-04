@@ -14,6 +14,7 @@ import {
   CHANGE_REQUEST_PREVIEW_URL,
   CHANGE_REQUEST_UPDATE_URL,
 } from "../constants/urls";
+import ChangeRequestSockets from "./Sockets";
 import SummaryContainer from "./summary/container";
 import {
   ContainerDispatchProps,
@@ -47,6 +48,7 @@ const Container: React.FunctionComponent<Props> = ({
 
   return (
     <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>
+      {dataProp && <ChangeRequestSockets changeRequest={dataProp} />}
       <Switch>
         <Route path={CHANGE_REQUEST_UPDATE_URL} exact={true} render={updateRenderer} />
         <Route path={CHANGE_REQUEST_PREVIEW_URL} exact={true} render={summaryRenderer} />

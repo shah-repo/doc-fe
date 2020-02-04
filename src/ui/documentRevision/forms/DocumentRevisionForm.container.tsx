@@ -98,6 +98,7 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
   documentTypesById,
   document,
 }) => {
+
   const docTypes = useMemo(
     () =>
       documentTypes.map((document) => ({
@@ -127,6 +128,7 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
         {...props}
         asyncState={asyncState}
         documentRevisions={documentRevisions}
+        documentRevision={documentRevision}
         availableReferences={availableReferences}
         showRevisionTypeChange={showRevisionTypeChange}
         loadDocumentProposedId={loadDocumentProposedId}

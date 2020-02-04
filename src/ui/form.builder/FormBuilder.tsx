@@ -3,8 +3,8 @@ import NavigationIcon from "@material-ui/icons/Navigation";
 import React from "react";
 import Text from "../components/Text";
 import FBDialog from "./components/feedback/FBDialog";
+import FBInfo from "./containers/workspace/FBInfo";
 import { withDialogState } from "./hocs/withDialogState";
-import FBInfo from "./main/workspace/FBInfo";
 import { FBDialogProps } from "./types/dialog";
 
 const FormBuilder: React.FunctionComponent<FBDialogProps> = ({

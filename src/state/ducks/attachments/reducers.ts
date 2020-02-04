@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { ADD_WATERMARK, REMOVE_WATERMARK } from "./constants";
+import { ADD_WATERMARK, CLEAR_WATERMARKS, REMOVE_WATERMARK } from "./constants";
 import { WatermarkActions, WatermarkState } from "./types";
 
 export const WATERMARKS_DEFAULT_STATE: WatermarkState = [];
@@ -13,6 +13,8 @@ export const watermarks = (
       return [...state, action.payload];
     case REMOVE_WATERMARK:
       return state.filter((id) => id !== action.payload);
+    case CLEAR_WATERMARKS:
+      return [];
     default:
       return state;
   }

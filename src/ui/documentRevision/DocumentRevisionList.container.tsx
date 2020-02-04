@@ -70,6 +70,7 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
                       {generateVersionNumber(
                         documentRevision.revision,
                         documentRevision.revisionStage,
+                        documentRevision.revisionChangeType,
                       )}
                       &nbsp; - {documentRevision.status}
                     </div>

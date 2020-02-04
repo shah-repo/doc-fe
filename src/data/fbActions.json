@@ -1,0 +1,31 @@
+[
+    {
+       "name":"SendEmailWithFormToFill",
+       "description":"Send Email with Form to fill in.",
+       "actionLabel": "Send Email",
+       "requestUrl": "/supplier_survey_requests",
+       "requestMethod": "POST",
+       "indicators":[
+         {
+            "type": "textfield",
+            "label": "Document id",
+            "name": "documentRevision.id",
+            "disabled": true,
+            "requiredDocId": true,
+            "rules": "required"
+         },
+          {
+             "type":"textfield",
+             "label":"Email",
+             "name":"email",
+             "rules": "required"
+          },
+          {
+             "type":"textfield",
+             "label":"Name",
+             "name":"name",
+             "rules": "required"
+          }
+       ]
+    }
+ ]

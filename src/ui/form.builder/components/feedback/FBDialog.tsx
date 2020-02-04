@@ -12,7 +12,7 @@ const FBDialog: React.FunctionComponent<FBDialogProps> = ({
   content,
   ...props
 }) => (
-  <Dialog fullWidth={true} {...props}>
+  <Dialog fullWidth={true} {...props} open={props.open || false}>
     <DialogTitle>
       <CloseIcon fontSize="large" onClick={setDialogClose} />
       <Box

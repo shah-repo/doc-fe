@@ -51,9 +51,10 @@ export const DocumentRevisionUpdateContainer: React.FunctionComponent<
   documentId,
   loadDocument,
 }) => {
-
+    const [doNotPrompt, setDoNotPrompt] = React.useState(false);
     const async = useAsync<DocumentRevision>({
       onSuccess: () => {
+        setDoNotPrompt(true);
         loadAudit(documentRevision.id);
         if (documentId) {
           loadDocument(documentId!);
@@ -81,11 +82,13 @@ export const DocumentRevisionUpdateContainer: React.FunctionComponent<
 
     return (
       <DocumentRevisionForm
+        doNotPrompt={doNotPrompt}
         asyncState={async.asyncState}
         onSubmit={onSubmit}
         initialValues={toDocumentRevisionFormValues(documentRevision)}
         onDirtyFlagChange={onDirtyFlagChange}
         documentRevision={documentRevision}
+        showRevisionTypeChange
       />
     );
   };

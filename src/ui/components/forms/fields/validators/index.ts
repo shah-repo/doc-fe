@@ -12,7 +12,8 @@ export const required: Validator = (value) => {
 };
 
 export const email: Validator = (value: string) => {
-  if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
+  // https://stackoverflow.com/a/34096956
+  if (!/^[a-z0-9!'#$%&*+\/=?^_`{|}~-]+(?:\.[a-z0-9!'#$%&*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-zA-Z]{2,}$/i.test(value)) {
     return "validators.email";
   }
 };

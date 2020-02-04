@@ -16,6 +16,7 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
     }
 
     if (doNotPrompt) {
+      cancelBeforeUnload();
       return;
     }
 

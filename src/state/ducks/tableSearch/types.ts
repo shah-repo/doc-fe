@@ -5,6 +5,7 @@ import {
   EDIT_EMPLOYEE_ACTIVE_STATUS,
   EDIT_EMPLOYEE_GROUPS,
   EDIT_EMPLOYEE_USER_INFO,
+  TABLE_FORCE_UPDATE_SET,
   TABLE_SEARCH_CLEAR,
   TABLE_SEARCH_SET,
   TABLE_SORT,
@@ -19,6 +20,12 @@ export interface TableSearchSetAction<T> {
 export interface TableSearchClearAction {
   type: typeof TABLE_SEARCH_CLEAR;
   tableName: string;
+}
+
+export interface TableSearchForceUpdateAction {
+  type: typeof TABLE_FORCE_UPDATE_SET;
+  tableName: string;
+  forceUpdate: boolean;
 }
 
 export interface TableSortAction<T> {

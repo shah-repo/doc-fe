@@ -3,6 +3,7 @@ import { Employee } from "../company";
 import {
   AUTH_USER,
   CONFIRM_FORGOT_PASSWORD_URL,
+  CONFIRM_SET_NEW_PASSWORD_URL,
   FORGOT_PASSWORD_URL,
   LOGOUT_USER,
   SET_EMPLOYEE,
@@ -24,6 +25,12 @@ export interface ForgotPasswordConfirmation {
   email: string;
   code: string;
   password: string;
+}
+
+export interface  NewPasswordConfirmation {
+  email: string;
+  newPassword: string;
+  oldPassword: string;
 }
 
 export interface LoginWithCodeRequestBody {
@@ -84,6 +91,10 @@ export interface ForgotPasswordAction {
 
 export interface ConfirmPasswordAction {
   type: typeof CONFIRM_FORGOT_PASSWORD_URL;
+}
+
+export interface NewUserSetPasswordAction {
+  type: typeof CONFIRM_SET_NEW_PASSWORD_URL;
 }
 
 export interface LogoutUserAction {
@@ -152,6 +163,7 @@ export enum Permission {
   EMPLOYEE_ADMIN_DELETE = "EMPLOYEE_ADMIN_DELETE",
   EMPLOYEE_ADMIN_UPDATE = "EMPLOYEE_ADMIN_UPDATE",
   EMPLOYEE_ADMIN_GET = "EMPLOYEE_ADMIN_GET",
+  FORM_BUILDER_CUSTOM_VALIDATORS_ENABLED = "FORM_BUILDER_CUSTOM_VALIDATORS_ENABLED",
   // Group
   GROUP_CREATE = "GROUP_CREATE",
   GROUP_DELETE = "GROUP_DELETE",

@@ -1,17 +1,17 @@
-import { Box } from "@material-ui/core";
 import React from "react";
+import FBStepperEditor from "../../FBStepperEditor";
 import FBTextField from "../inputs/FBTextField";
 import FBLabelEditor from "./FBLabelEditor";
 
 const FBHyperlinkEditor: React.FunctionComponent<{}> = () => (
-  <Box>
+  <FBStepperEditor>
     <FBLabelEditor />
     <FBTextField
       type="url"
       label="URL"
       name="linkUrl"
     />
-  </Box>
+  </FBStepperEditor>
 );
 
 export default FBHyperlinkEditor;

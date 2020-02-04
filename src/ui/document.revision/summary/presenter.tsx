@@ -1,21 +1,22 @@
-import {
-  Box,
-  Grid,
-  WithStyles,
-  withStyles,
-} from "@material-ui/core";
+import { Box, Grid, WithStyles, withStyles } from "@material-ui/core";
 import { Formik } from "formik";
 import React from "react";
+import { useSelector } from "react-redux";
 import { DataProps } from "../../../state/ducks/common";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import {
+  DocumentRevision,
+  DocumentRevisionStatus,
+} from "../../../state/ducks/documentRevisions";
+import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
-import FBWorkspace from "../../form.builder/main/workspace/FBWorkspace";
-import FBDRStore from "../../form.builder/stores/FBDRStore";
-import FBStore from "../../form.builder/stores/FBStore";
+import FBWorkspace from "../../form.builder/containers/workspace/FBWorkspace";
+import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
+import FBStore from "../../form.builder/stores/ui/FBStore";
 import Attachment from "./attachment";
 import ChangeRequestLink from "./changeRequestLink";
 import DocumentHeader from "./header";
@@ -28,7 +29,9 @@ interface OwnProps {
   canShowCreateVersionButton?: boolean;
 }
 
-export type Props = OwnProps & DataProps<DocumentRevision> & WithStyles<typeof styles>;
+export type Props = OwnProps &
+  DataProps<DocumentRevision> &
+  WithStyles<typeof styles>;
 
 export const Presenter: React.FunctionComponent<Props> = ({
   classes,
@@ -44,11 +47,22 @@ export const Presenter: React.FunctionComponent<Props> = ({
     deprecatedAt,
     description,
     trainingRecords,
+    formTemplate,
   },
   canShowCreateVersionButton,
 }) => {
+  let outputDocumentTypeName;
   const onSubmit = () => void 0;
   FBDRStore.setValues(dataProp);
+  const documentTypesById = useSelector((state: ApplicationState) =>
+    documentTypeSelectors.byId(state),
+  );
+
+  if (formTemplate) {
+    const outputDocumentTypeId = formTemplate!.outputDocumentType.id;
+    outputDocumentTypeName =
+      documentTypesById[outputDocumentTypeId!].documentTypeName;
+  }
 
   const renderTrainingControl = status === DocumentRevisionStatus.Released && (
     <TrainingControl
@@ -79,27 +93,31 @@ export const Presenter: React.FunctionComponent<Props> = ({
           value={<Text translation={retrain ? "common.yes" : "common.no"} />}
         />
         <SummaryFieldWithHtml label="common.description" value={description} />
-        {
-          referenceTo &&
+        {formTemplate && (
+          <SummaryField
+            label="document.output.type"
+            value={outputDocumentTypeName}
+          />
+        )}
+        {referenceTo && (
           <ReferenceToContainer
             dataProp={referenceTo}
             status={status}
             deprecatedAt={deprecatedAt}
           />
-        }
+        )}
         {document.referencedBy && (
-          <ReferencedByContainer
-            dataProp={document.referencedBy}
-          />
+          <ReferencedByContainer dataProp={document.referencedBy} />
         )}
         {attachments && <Attachment />}
         {renderTrainingControl}
       </Grid>
+
       {FBStore.active && (
-         <Box px={5}>
-           <FBWorkspace />
-         </Box>
-       )}
+        <Box px={5}>
+          <FBWorkspace />
+        </Box>
+      )}
       <Box flexDirection="row-reverse" display="flex" px={3}>
         <ControlsContainer
           documentRevision={dataProp}

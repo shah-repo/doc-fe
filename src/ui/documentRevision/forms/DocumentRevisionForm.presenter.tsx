@@ -1,15 +1,11 @@
-import {
-  Box,
-  Grid,
-  withStyles,
-  WithStyles,
-} from "@material-ui/core";
+import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import _ from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
 import {
   DocumentRevision,
+  DocumentRevisionStatus,
   RevisionStageOptions,
 } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
@@ -32,12 +28,11 @@ import ScrollToError from "../../components/forms/ScrollToError";
 import SubmitButton from "../../components/forms/SubmitButton";
 import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
-import {
-  documentDetailsPath,
-} from "../../document.revision/utils/paths";
-import FBWorkspace from "../../form.builder/main/workspace/FBWorkspace";
-import FBDRStore from "../../form.builder/stores/FBDRStore";
-import FBStore from "../../form.builder/stores/FBStore";
+import { documentDetailsPath } from "../../document.revision/utils/paths";
+import FBWorkspaceForm from "../../form.builder/containers/workspace/FBWorkspaceForm";
+import { FBValidate } from "../../form.builder/defaults/validator";
+import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
+import FBStore from "../../form.builder/stores/ui/FBStore";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
 import ApproveAndRelease from "./presenters/ApproveAndRelease";
@@ -47,8 +42,9 @@ import { DocumentRevisionFormValues } from "./types";
 
 export interface Props
   extends WithStyles<typeof styles>,
-  FormikProps<DocumentRevisionFormValues> {
+    FormikProps<DocumentRevisionFormValues> {
   asyncState: AsyncState;
+  documentRevision: DocumentRevision;
   documentRevisions?: DocumentRevision[];
   availableReferences: OptionType[];
   showRevisionTypeChange?: boolean;
@@ -83,6 +79,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   documentTypes,
   documentTypesById,
   otherDocumentTypes,
+  documentRevision,
 }) => {
   if (!values.id && !_.get(values, "document.documentType.id")) {
     FBDRStore.setMode("none");
@@ -97,9 +94,13 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   const isDisabled: boolean = _.get(initialValues, "id") !== undefined;
   const docId = _.get(initialValues, "document.docId");
+  const isdocRevVersionOne = _.get(documentRevision, "version") === 1;
+  const isdocRevStatusDraft = _.get(documentRevision, "status") === DocumentRevisionStatus.Draft;
+  const outputDocEnabled: boolean = isdocRevVersionOne && isdocRevStatusDraft || !isDisabled;
   const useProposedDocId = (!docId || docId === "") && values.document;
-  values.document!.docId = useProposedDocId ? proposedDocId : values.document!.docId;
-
+  values.document!.docId = useProposedDocId
+    ? proposedDocId
+    : values.document!.docId;
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     const { documentType } = values.document || {};
@@ -132,8 +133,15 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     handleChange(event);
   };
 
-  const renderTypeOfRevisionChange = showRevisionTypeChange &&
-    <RevisionTypeChange />;
+  const onFormClick = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    FBValidate();
+  };
+
+  const renderTypeOfRevisionChange = showRevisionTypeChange && (
+    <RevisionTypeChange />
+  );
 
   const renderRevisionStageDropdown = !isDisabled && (
     <SelectField
@@ -228,7 +236,11 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               name="formTemplate.outputDocumentType.id"
               label="document.output.type"
               selectProps={{
-                inputProps: { id: "formTemplate.outputDocumentType" },
+                inputProps: {
+                  id: "formTemplate.outputDocumentType",
+                  disabled: !outputDocEnabled,
+                  className: !outputDocEnabled ? classes.outputGrey : "",
+                },
               }}
               options={otherDocumentTypes}
               includeEmpty={false}
@@ -237,7 +249,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           </Box>
         )}
         {FBStore.active && (
-          <Box mt={5}><FBWorkspace /></Box>
+          <Box mt={5}>
+            <FBWorkspaceForm id={_.get(values, "id")} />
+          </Box>
         )}
         <Box mt={5}>
           <Grid
@@ -249,6 +263,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <SubmitButton
               asyncState={asyncState}
               label={isDisabled ? "common.save" : "navigation.createDocument"}
+              onClick={onFormClick}
             />
             <ApproveAndRelease
               id={values.id}

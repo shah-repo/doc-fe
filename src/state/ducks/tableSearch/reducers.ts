@@ -7,6 +7,7 @@ import {
   EDIT_EMPLOYEE_ACTIVE_STATUS,
   EDIT_EMPLOYEE_GROUPS,
   EDIT_EMPLOYEE_USER_INFO,
+  TABLE_FORCE_UPDATE_SET,
   TABLE_SEARCH_CLEAR,
   TABLE_SEARCH_SET,
   TABLE_SORT,
@@ -14,6 +15,7 @@ import {
 import {
   TableSearchByIdState,
   TableSearchClearAction,
+  TableSearchForceUpdateAction,
   TableSearchSetAction,
   TableSortAction,
 } from "./types";
@@ -23,9 +25,11 @@ export const DEFAULT_TABLE_SEARCH = {
   queryDict: {},
   apiError: "",
   scrollToIndex: 0,
+  forceUpdate: false,
 };
 type TableSearchActions = TableSearchSetAction<any> &
   TableSearchClearAction &
+  TableSearchForceUpdateAction &
   TableSortAction<any>;
 
 export const byTableName = (
@@ -33,6 +37,14 @@ export const byTableName = (
   action: TableSearchActions,
 ): TableSearchByIdState => {
   switch (action.type) {
+    case TABLE_FORCE_UPDATE_SET:
+      return {
+        ...state,
+        [action.tableName]: {
+          ...(state[action.tableName] || DEFAULT_TABLE_SEARCH),
+          forceUpdate: action.forceUpdate,
+        },
+      };
     case TABLE_SEARCH_SET:
       return {
         ...state,

@@ -5,6 +5,7 @@ import { dashboardActions, dashboardSelectors, PendingAction } from "../../state
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
 import DashboardPresenter from "./Dashboard.presenter";
+import DashboardSockets from "./DashboardSockets";
 
 export interface StateProps {
   loadPendingActionsListAsyncState: AsyncState;
@@ -28,11 +29,14 @@ const DashboardContainer: React.FunctionComponent<DashboardContainerProps> = ({
   loadPendingActions, loadPendingActionsListAsyncState, pendingActions,
 }) => {
   return (
-    <DashboardPresenter
-      loadPendingActions={loadPendingActions}
-      loadPendingActionsListAsyncState={loadPendingActionsListAsyncState}
-      pendingActions={pendingActions}
-    />
+    <>
+      <DashboardSockets />
+      <DashboardPresenter
+        loadPendingActions={loadPendingActions}
+        loadPendingActionsListAsyncState={loadPendingActionsListAsyncState}
+        pendingActions={pendingActions}
+      />
+    </>
   );
 };
 

@@ -1,35 +1,24 @@
 import _ from "lodash";
 import React from "react";
-import FBStore from "../stores/FBStore";
-import { Subtract } from "../types/common";
+import FBStore from "../stores/ui/FBStore";
 import { FBTemplateSchema } from "../types/store";
-import { FBTransportSchemaInjectedProps, FBTransportSchemaProps } from "../types/transport";
+import { FBTransportSchemaProps } from "../types/transport";
 import { withDialogState } from "./withDialogState";
 
-export function withTransport<T extends FBTransportSchemaProps>(
-  Component: React.ComponentType<T>,
-) {
-  class HOC extends React.Component<
-    Subtract<T, FBTransportSchemaInjectedProps>
-  > {
-    public render() {
-      return (
-        <Component
-          {...(this.props as T)}
-          importSchema={this.importSchema}
-          exportSchema={this.exportSchema}
-          setSchemaName={(this.setSchemaName)}
-        />
-      );
-    }
+export const withTransport = <T extends FBTransportSchemaProps>(
+  Component: React.FunctionComponent<T>,
+) => {
+  const Comp = ({
+    ...props
+  }: T) => {
 
-    private readFile = (file: Blob) => {
+    const readFile = (file: Blob) => {
       const reader = new FileReader();
       reader.readAsText(file);
-      reader.onload = () => this.setFileContent(reader.result);
-    }
+      reader.onload = () => setFileContent(reader.result);
+    };
 
-    private setFileContent = (result: string | ArrayBuffer | null) => {
+    const setFileContent = (result: string | ArrayBuffer | null) => {
       if (!result as unknown as string) {
         return alert("Not a valid template.");
       }
@@ -40,17 +29,18 @@ export function withTransport<T extends FBTransportSchemaProps>(
       }
 
       FBStore.setSchema(schema);
-    }
+    };
 
-    private importSchema = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const importSchema = (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = _.get(event, "currentTarget.files[0]");
       if (!file) {
         return alert("Invalid file.");
       }
-      return this.readFile(file);
-    }
+      return readFile(file);
+    };
 
-    private exportSchema = () => {
+    const exportSchema = () => {
+      const { setDialogClose } = props;
       const schema = JSON.stringify(FBStore.getSchema());
       const dataStr = `data:text/json;charset=utf-8, ${encodeURIComponent(schema)}`;
       const anchor = document.createElement("a");
@@ -59,14 +49,20 @@ export function withTransport<T extends FBTransportSchemaProps>(
       anchor.download = `${FBStore.getName() || "template"}.json`;
       anchor.href = dataStr;
       anchor.click();
-      this.props.setDialogClose();
-    }
+      setDialogClose && setDialogClose();
+    };
 
-    private setSchemaName = (trigger: any) => {
-      const value = (trigger as React.ChangeEvent<HTMLInputElement>).target.value;
+    const setSchemaName = (filedName: string, value: any) => {
       FBStore.setName(value);
-    }
-  }
+    };
 
-  return withDialogState(HOC);
-}
+    return Component({
+      ...(props as T),
+      importSchema,
+      exportSchema,
+      setSchemaName,
+    });
+  };
+
+  return withDialogState((props: T) => Comp(props));
+};
