@@ -41,7 +41,7 @@ export const byTableName = (
       return {
         ...state,
         [action.tableName]: {
-          ...state[action.tableName],
+          ...(state[action.tableName] || DEFAULT_TABLE_SEARCH),
           forceUpdate: action.forceUpdate,
         },
       };
