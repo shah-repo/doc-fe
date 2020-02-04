@@ -117,6 +117,7 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
       >
         <button
           class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary"
+          id="SupplierSurveyFormBuild-saveSurveyForm"
           tabindex="0"
           type="submit"
         >

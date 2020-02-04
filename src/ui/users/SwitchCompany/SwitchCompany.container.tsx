@@ -37,6 +37,7 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
           key={company.id}
           className={classes.companyButton}
           onClick={handleClick(employee)}
+          id="SwitchCompanyContainer-companies"
         >
           <div className={classes.company}>
             {whiteLabeling.avatar && (

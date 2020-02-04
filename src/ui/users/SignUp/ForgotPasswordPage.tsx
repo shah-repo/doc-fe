@@ -45,7 +45,7 @@ const ForgotPasswordPage: React.FunctionComponent<Props> = ({
             label="login.email"
             size="sm"
             gutter={false}
-            inputProps={{ autoComplete: "email", autoFocus: true, id: "email" }}
+            inputProps={{ autoComplete: "email", autoFocus: true, id: "ForgotPasswordPage-email" }}
             validate={validator(required, email)}
             lpignore={false}
         />
@@ -54,8 +54,9 @@ const ForgotPasswordPage: React.FunctionComponent<Props> = ({
           asyncState={asyncState}
           label={"forgot.password.reset"}
           className={classes.submit}
+          id="ForgotPasswordPage-submitNewPassword"
         />
-        <Button className={classes.navigationLink} onClick={closeForgotPasswordPage} >
+        <Button className={classes.navigationLink} onClick={closeForgotPasswordPage} id="ForgotPasswordPage-linkRoute" >
           <Text translation={"forgot.password.close"} />
         </Button>
       </Paper>
