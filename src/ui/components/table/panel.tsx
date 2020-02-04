@@ -1,5 +1,5 @@
 import { Box } from "@material-ui/core";
-import { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import _ from "lodash";
 import qs from "query-string";
 import React, { useEffect } from "react";
@@ -13,9 +13,9 @@ import {
   SortDirectionType,
   Table,
 } from "react-virtualized";
-import { useDebounce } from "use-debounce";
-import { getTableState } from "../../../common/utils/selectors";
+import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import apiClient from "../../../state/apiClient";
+import { authActions } from "../../../state/ducks/auth";
 import {
   tableSearchActions,
 } from "../../../state/ducks/tableSearch";
@@ -28,6 +28,8 @@ import { styles } from "./styles";
 import { TablePanelProps, TableSortProps, TableStyleProps } from "./types";
 
 type Props<T> = TablePanelProps<T>;
+
+let call;
 
 export function TablePanel<T extends any>({
   columns,
@@ -43,7 +45,6 @@ export function TablePanel<T extends any>({
   providedData,
 }: Props<T>) {
   const didMount = useDidMount();
-  const queryDelay = 300;
   let lastQueryValue: string = "";
   const headerHeight = searchable ? 117 : 50;
   const styleProps: TableStyleProps = {
@@ -53,10 +54,10 @@ export function TablePanel<T extends any>({
   const classes = styles(styleProps);
   const sortDirection = SortDirection.DESC;
 
-  const tableState = useSelector(getTableState(tableName));
-  const [debouncedQuery] = useDebounce(tableState.queryDict, queryDelay);
+  const tableCriteria = useSelector(getTableCriteria(tableName));
+  const tableData = useSelector(getTableData(tableName));
   const dispatch = useDispatch();
-  const queryData = providedData || tableState.queryData;
+  const queryData = providedData || tableData;
 
   const processData = (
     data: T[],
@@ -76,10 +77,19 @@ export function TablePanel<T extends any>({
     if (didMount) {
       queryApi();
     }
-  }, [debouncedQuery]);
+  }, [tableCriteria.queryDict]);
   useEffect(() => {
     queryApi();
   }, []);
+  useEffect(() => {
+    if (tableCriteria.forceUpdate) {
+      queryApi();
+    }
+  }, [tableCriteria.forceUpdate]);
+
+  const debounced = _.debounce((f) => {
+    f();
+  }, 300);
 
   const queryGetter = (key: string, value: string) => {
     if (!queryUrl) {
@@ -90,29 +100,43 @@ export function TablePanel<T extends any>({
     if (lastQueryValue !== value) {
       return;
     }
-    let dict = { ...tableState.queryDict };
+
+    if (call) {
+      call.cancel();
+    }
+
+    let dict = { ...tableCriteria.queryDict };
     value === "" ? delete dict[key] : (dict[key] = value);
 
     if (customQuerySet) {
       dict = customQuerySet(dict);
     }
 
-    dispatch(
-      tableSearchActions.setSearchCriteria(
-        { ...tableState, queryDict: dict, sortDirection },
-        tableName,
-      ),
-    );
+    debounced(() => {
+      dispatch(
+        tableSearchActions.setSearchCriteria(
+          { ...tableCriteria, queryDict: dict, sortDirection },
+          tableName,
+        ),
+      );
+    });
   };
 
   const queryApi = async () => {
     try {
+      if (call) {
+        call.cancel();
+      }
+
+      call = axios.CancelToken.source();
+
       const requestConfig: AxiosRequestConfig = {
         method: "get",
         url: queryUrl,
-        params: tableState.queryDict,
+        params: tableCriteria.queryDict,
         paramsSerializer: (params) => qs.stringify(params),
         headers: {},
+        cancelToken: call.token,
       };
 
       requestConfig.headers.Authorization = `bearer ${
@@ -127,16 +151,31 @@ export function TablePanel<T extends any>({
       dispatch(
         tableSearchActions.setSearchCriteria(
           {
-            ...tableState,
-            queryData: data as T[],
+            ...tableCriteria,
             apiError: "",
             scrollToIndex: 0,
+            forceUpdate: false,
           },
           tableName,
         ),
       );
+      dispatch(
+        tableSearchActions.setData(
+          data,
+          tableName,
+        ),
+      );
     } catch (exception) {
+      if (axios.isCancel(exception)) {
+        return;
+      }
       let responseMessage: string = "";
+      const isUnauthorizedRequest = exception.response.status === 401;
+
+      if (isUnauthorizedRequest) {
+        dispatch(authActions.logoutUser());
+        return;
+      }
 
       if (exception.response) {
         const {
@@ -149,7 +188,11 @@ export function TablePanel<T extends any>({
 
       dispatch(
         tableSearchActions.setSearchCriteria(
-          { ...tableState, apiError: "Error: " + errorMessage },
+          {
+            ...tableCriteria,
+            apiError: "Error: " + errorMessage,
+            forceUpdate: false,
+          },
           tableName,
         ),
       );
@@ -185,10 +228,10 @@ export function TablePanel<T extends any>({
         rowGetter={rowGetter}
         sortBy={sortBy}
         sort={sort}
-        sortDirection={tableState.sortDirection}
+        sortDirection={tableCriteria.sortDirection}
         noRowsRenderer={noRowsRenderer}
         onRowClick={onSelect && (({ rowData }) => onSelect({ rowData })())}
-        scrollToIndex={tableState.scrollToIndex}
+        scrollToIndex={tableCriteria.scrollToIndex}
       >
         {columns.map((item) =>
           TableColumn<T>(item, { measurerCache, searchable, queryGetter }),
@@ -199,7 +242,7 @@ export function TablePanel<T extends any>({
 
   const sort = ({ sortBy, sortDirection }: TableSortProps<T>) => {
     const sortedTableData = processData(
-      tableState.queryData,
+      tableData,
       sortBy!,
       sortDirection!,
     );
@@ -207,12 +250,15 @@ export function TablePanel<T extends any>({
     dispatch(
       tableSearchActions.setTableSort(
         {
-          ...tableState,
-          queryData: sortedTableData as T[],
-          apiError: "",
-          scrollToIndex: 0,
+          ...tableCriteria,
           sortDirection,
         },
+        tableName,
+      ),
+    );
+    dispatch(
+      tableSearchActions.setData(
+        sortedTableData,
         tableName,
       ),
     );
@@ -224,7 +270,7 @@ export function TablePanel<T extends any>({
 
   return (
     <Box className={classes.root}>
-      <div style={{ color: "red" }}>{tableState.apiError}</div>
+      <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
       {bodyRenderer()}
     </Box>
   );

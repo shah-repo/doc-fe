@@ -12,7 +12,8 @@ export const required: Validator = (value) => {
 };
 
 export const email: Validator = (value: string) => {
-  if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
+  // https://stackoverflow.com/a/34096956
+  if (!/^[a-z0-9!'#$%&*+\/=?^_`{|}~-]+(?:\.[a-z0-9!'#$%&*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-zA-Z]{2,}$/i.test(value)) {
     return "validators.email";
   }
 };
@@ -29,7 +30,7 @@ export const passwordSchema = Yup.string()
   .matches(/(?=.*?[A-Z])/, "validator.password.upper.case")
   .matches(/(?=.*?[a-z])/, "validator.password.lower.case")
   .matches(/(?=.*?[0-9])/, "validator.password.number")
-  .matches(/(?=.*?[^\w\s])/, "validator.password.spec.char");
+  .matches(/(?=.*?[$*.{}?"!@#%&\/,><\':;|_~`\\^\[\]\(\)-])/, "validator.password.spec.char");
 
 export const confirmPasswordSchema = Yup.string()
   .oneOf([Yup.ref("password"), null], "validator.match.passwords")

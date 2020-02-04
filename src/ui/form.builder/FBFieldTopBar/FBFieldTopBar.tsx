@@ -1,0 +1,31 @@
+import { Box } from "@material-ui/core";
+import BorderColorIcon from "@material-ui/icons/BorderColor";
+import CodeIcon from "@material-ui/icons/Code";
+import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
+import React from "react";
+import { FBFieldTopBarProps } from ".";
+import { withFBFieldTopBar } from "./FBFieldTopBar.wrap";
+
+const FBFieldTopBar: React.FunctionComponent<FBFieldTopBarProps> = ({
+  visibility,
+  mb,
+  editSchemaItem,
+  removeSchemaItem,
+  markDownSchemaItem,
+}) => {
+  return (
+    <Box display="flex" flexDirection="row-reverse" {...{visibility, mb}}>
+      <Box zIndex="tooltip">
+        <RemoveCircleOutlineIcon color="error" onClick={removeSchemaItem} />
+      </Box>
+      <Box pr={2} zIndex="tooltip">
+        <BorderColorIcon color="primary" onClick={editSchemaItem} />
+      </Box>
+      <Box pr={2} zIndex="tooltip">
+        <CodeIcon color="primary" onClick={markDownSchemaItem} />
+      </Box>
+    </Box>
+  );
+};
+
+export default withFBFieldTopBar(FBFieldTopBar);

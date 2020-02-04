@@ -10,12 +10,14 @@ import { WatermarkResponse } from "./types";
 
 interface Props {
   addRequestResult: (data: WatermarkResponse) => void;
+  removeWatermark: (id: string) => void;
   watermarkIds: WatermarkState;
 }
 
 export const WatermarkFooterRequest: React.FunctionComponent<Props> = ({
   watermarkIds,
   addRequestResult,
+  removeWatermark,
 }) => {
   const asyncAction = useActionCreator(attachmentsActions.checkWatermarkStatus);
   const async = useAsync<WatermarkRequest>({
@@ -42,6 +44,19 @@ export const WatermarkFooterRequest: React.FunctionComponent<Props> = ({
           data: watermarkRequest,
         },
       );
+      removeWatermark(watermarkRequest.id);
+      iotService.unsubscribeFromTopic(`${employeeId}/attachment_watermark/${watermarkRequest.id}/update`);
+    },
+    onError: (msg) => {
+      addRequestResult(
+        {
+          success: false,
+          message: {
+            translation: msg as Translation,
+          },
+          data: {} as WatermarkRequest,
+        },
+      );
     },
   });
   const checkWatermarkRequest = (msg: string) => {
@@ -59,6 +74,13 @@ export const WatermarkFooterRequest: React.FunctionComponent<Props> = ({
       iotService.subscribeToTopic(`${employeeId}/attachment_watermark/${watermarkId}/update`, checkWatermarkRequest);
     });
   }, [iotService.subscribedTopics()]);
+  useEffect(() => {
+    return () => {
+      watermarkIds.forEach((watermarkId) => {
+        iotService.unsubscribeFromTopic(`${employeeId}/attachment_watermark/${watermarkId}/update`);
+      });
+    };
+  }, []);
 
   return null;
 };

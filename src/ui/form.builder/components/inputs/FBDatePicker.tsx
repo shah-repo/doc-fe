@@ -1,39 +1,29 @@
 import DateFnsUtils from "@date-io/date-fns";
-import { Box } from "@material-ui/core";
-import {
-  KeyboardDatePicker,
-  KeyboardDatePickerProps,
-  MuiPickersUtilsProvider,
-} from "@material-ui/pickers";
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import React from "react";
-import { withLabelRenderer } from "../../hocs/withLabelRenderer";
-import { withOnChange } from "../../hocs/withOnChange";
-import { FBFormDefaultProps, FBOnChangeProps } from "../../types/common";
+import { FBInputProps } from "../../types/common";
+import FBInput from "../common/FBInput";
 
-type Props =
-  & KeyboardDatePickerProps
-  & FBFormDefaultProps
-  & FBOnChangeProps;
-
-const FBDatePicker: React.FunctionComponent<Props> = ({
-  labelRenderer,
+const FBDatePicker: React.FunctionComponent<FBInputProps> = ({
+  onChange,
+  value,
   ...props
 }) => (
-  <Box mb={4}>
-    {labelRenderer}
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <KeyboardDatePicker
-        fullWidth={true}
-        disableToolbar={true}
-        {...props}
-        variant="inline"
-        inputVariant="outlined"
-        format="MM/dd/yyyy"
-        autoOk={true}
-        label=""
-      />
-    </MuiPickersUtilsProvider>
-  </Box>
+  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+    <FBInput {...props} type="datepicker">
+        <KeyboardDatePicker
+          fullWidth={true}
+          disableToolbar={true}
+          variant="inline"
+          inputVariant="outlined"
+          format="MM/dd/yyyy"
+          autoOk={true}
+          label=""
+          value={value as Date}
+          onChange={(date) => onChange && onChange(null, date)}
+        />
+    </FBInput>
+  </MuiPickersUtilsProvider>
 );
 
-export default withOnChange(withLabelRenderer(FBDatePicker));
+export default FBDatePicker;

@@ -7,6 +7,17 @@ import DocumentHeader from "./header";
 import { Presenter, Props } from "./presenter";
 import TrainingControl from "./training.control";
 
+jest.mock("react-redux", () => ({
+    useSelector: () => ({
+        documentTypesById: [],
+    }),
+    connect: (mapStateToProps: any, mapDispatchToProps: any) => (ReactComponent: any) => ({
+        mapStateToProps,
+        mapDispatchToProps,
+        ReactComponent,
+      }),
+  }));
+
 describe("Presenter tests", () => {
     const defaultProps: Props = {
         dataProp: { ...getDocumentRevision(), status: "RELEASED" },

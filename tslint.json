@@ -1,34 +1,43 @@
 {
-    "defaultSeverity": "error",
-    "extends": [
-        "tslint-etc",
-        "tslint:recommended",
-        "tslint-react"
+  "defaultSeverity": "error",
+  "extends": ["tslint-etc", "tslint:recommended", "tslint-react"],
+  "jsRules": {},
+  "rules": {
+    "no-implicit-dependencies": [true, "dev"],
+    "object-literal-sort-keys": false,
+    "interface-name": false,
+    "jsx-no-multiline-js": false,
+    "arrow-parens": true,
+    "max-line-length": [
+      true,
+      {
+        "limit": 120,
+        "ignore-pattern": "^import [^;]+ from |^} from |^export |class [^,]+ implements |await queryRunner\\.query|`,$"
+      }
     ],
-    "jsRules": {},
-    "rules": {
-        "no-implicit-dependencies": [true, "dev"],
-        "object-literal-sort-keys": false,
-        "interface-name": false,
-        "jsx-no-multiline-js": false,
-        "arrow-parens": true,
-        "max-line-length": [true, {"limit": 120, "ignore-pattern": "^import [^;]+ from |^} from |^export |class [^,]+ implements |await queryRunner\\.query|`,$"}],
-        "ordered-imports": [true],
-        "quotemark": [true, "double"],
-        "no-unused-declaration": true,
-        "jsx-boolean-value": false,
-        "no-empty": false,
-        "no-shadowed-variable": false,
-        "no-unused-expression": false,
-        "jsx-no-lambda": false,
-        "jsx-wrap-multiline": false
+    "variable-name": {
+      "options": [
+        "allow-pascal-case",
+        "check-format",
+        "allow-leading-underscore"
+      ]
     },
-    "rulesDirectory": [],
-    "linterOptions": {
-        "exclude": [
-            "config/**/*.js",
-            "node_modules/**/*.ts",
-            "src/serviceWorker.ts"
-        ]
-    }
+    "ordered-imports": [true],
+    "quotemark": [true, "double"],
+    "no-unused-declaration": true,
+    "jsx-boolean-value": false,
+    "no-empty": false,
+    "no-shadowed-variable": false,
+    "no-unused-expression": false,
+    "jsx-no-lambda": false,
+    "jsx-wrap-multiline": false
+  },
+  "rulesDirectory": [],
+  "linterOptions": {
+    "exclude": [
+      "config/**/*.js",
+      "node_modules/**/*.ts",
+      "src/serviceWorker.ts"
+    ]
+  }
 }

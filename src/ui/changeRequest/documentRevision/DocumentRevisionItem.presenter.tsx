@@ -48,6 +48,7 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<
               value={generateVersionNumber(
                 documentRevision.revision,
                 documentRevision.revisionStage,
+                documentRevision.revisionChangeType,
               )}
             />
             <SummaryInfo

@@ -1,0 +1,234 @@
+import Base64 from "Base64";
+import _, { Dictionary } from "lodash";
+import { action, computed, observable, set } from "mobx";
+import Validator from "validatorjs";
+import { DATA_HELPER_CALLBACK_NAME } from "../../../remoteValidators/interfaces";
+import {
+  FBValidatorConfigProps,
+  FBValidatorTemplate,
+} from "../../types/validation/validatorDialog";
+import FBStore from "./FBStore";
+import FBValidatorStore from "./FBValidatorStore";
+
+export class FormBuilderDynamicValidatorStore {
+  @computed get Validator(): any {
+    return _.get(window, "EnlilRemoteValidators.validator");
+  }
+  @computed get dynamicValidator(): FBValidatorConfigProps | undefined {
+    if (_.isUndefined(this.validatorName)) {
+      return;
+    }
+    return {
+      name: this.validatorName,
+      errorMessage: this.errorMessage,
+      fn: Base64.btoa(this.liveCode),
+    };
+  }
+  public originCode = _.template(`
+    // Available Variables:
+
+    // value: any
+    // formInput: {
+    //   [key: string]: any,
+    // }
+    // attribute: string
+    // passes: (valid: boolean, message?: string) => void
+    // dataHelper: {
+    //   getDocumentRevById: async (id: string) => DocumentRevision,
+    // },
+    // context: {
+    //   documentId: string,
+    // },
+
+    (async function(value, req, attribute, dataHelper, context) {
+      try {
+        <%= interpolation %>
+        <%= code %>
+        return true;
+      }
+      catch(error) {
+        return false;
+      }
+    })
+  `);
+  public validatorName?: string;
+  @observable public errorMessage: string = "";
+  @observable public liveCode: string = this.originCode({
+    interpolation: "",
+    code: "",
+  });
+  @observable public helperText: Dictionary<string> = {};
+  private fieldNames: string[] = [];
+
+  @action public setDynamicValidator = (
+    customValidator: FBValidatorConfigProps | undefined,
+  ) => {
+    if (_.isUndefined(customValidator)) {
+      return;
+    }
+    this.setLiveCode(Base64.atob(customValidator!.fn));
+    this.validatorName = customValidator.name;
+    this.errorMessage = customValidator.errorMessage || "";
+  }
+
+  @action public setVariable = (fieldName: string) => {
+    this.fieldNames = _.concat(this.fieldNames, fieldName);
+    this.generateTemplate();
+  }
+
+  @action public removeVariable = (fieldName: string) => {
+    this.fieldNames = _.pull(this.fieldNames, fieldName);
+    this.generateTemplate();
+  }
+
+  @action public setLiveCode = (code: string) => {
+    if (this.liveCode === code) {
+      return;
+    }
+    this.liveCode = code;
+  }
+
+  @action public clearLiveCode = () => {
+    this.setLiveCode(
+      this.originCode({
+        interpolation: "",
+        code: "",
+      }),
+    );
+  }
+
+  @action public setValidatorName = (name: string) => {
+    this.reset();
+    this.validatorName = name;
+  }
+
+  @action public setErrorMessage = (message: string) => {
+    this.errorMessage = message;
+  }
+
+  @action public reset = () => {
+    this.validatorName = undefined;
+    this.errorMessage = "";
+    this.clearLiveCode();
+    this.fieldNames = [];
+  }
+
+  @action public validate = () => {
+    if (FBStore.mode !== "form" || _.isUndefined(this.Validator)) {
+      return;
+    }
+
+    // Clear helper text
+    set(this, "helperText", {});
+
+    const rules = FBValidatorStore.getSchemaReleasedRules();
+    const values = FBStore.getValues();
+    const validator = new this.Validator(values, rules);
+
+    function passes() {}
+    function fails() {
+      const errors = validator.errors.all();
+      FBDynamicValidatorStore.setHelperText(errors);
+    }
+    validator.setAttributeNames(FBStore.getValidationAttribute());
+    validator.checkAsync(passes, fails);
+  }
+
+  @action public setHelperText = (errors: Validator.ValidationErrors | Dictionary<string>) => {
+    _.map(errors, (v, k) => {
+      set(this.helperText, k, _.join(v, "\n"));
+    });
+  }
+
+  @action public getHelperText = (fieldName: string): string | undefined => {
+    return _.get(this.helperText, fieldName);
+  }
+
+  @action public registerValidators = () => {
+    if (_.isUndefined(this.Validator)) {
+      return;
+    }
+
+    _.map(FBStore.getSchema(), (schemaItem) => {
+      const { customValidator } = schemaItem;
+
+      if (!_.isUndefined(customValidator)) {
+        // const tpl = _.template(`<% ${Base64.atob(customValidator.fn)} %>`);
+
+        let customValFn = async (...args) => true;
+        try {
+          // tslint:disable-next-line: no-eval
+          customValFn = eval(Base64.atob(customValidator!.fn));
+        } catch (error) {
+          alert("An error occurred in validator function body: " + error);
+        }
+
+        this.Validator.registerAsyncImplicit(
+          customValidator.name,
+          async function f(this: any, value, input, attribute, passes) {
+            try {
+              const dataHelper = this.validator.constructor[
+                DATA_HELPER_CALLBACK_NAME
+              ]();
+              // const context = (this as any).validator.context;
+              const context = {
+                documentId: FBStore.docId,
+              };
+              const passed = await customValFn(
+                value,
+                this.validator.input,
+                attribute,
+                dataHelper,
+                context,
+              );
+              passes(passed);
+            } catch (error) {
+              passes(false);
+            }
+          },
+          customValidator.errorMessage || "",
+        );
+      }
+    });
+  }
+
+  @action private generateVariables = (): FBValidatorTemplate => {
+    let interpolation = "\n";
+    const values: Dictionary<string> = {};
+
+    _.map(this.fieldNames, (variable, index) => {
+      interpolation += `${_.padStart(`<%= var${index} %>`, 17)}\n`;
+
+      // Set obj for tpl values
+      let varName = _.dropRight(_.split(variable, "-")).join(" ");
+      varName = _.camelCase(varName);
+      const isValueVar = _.includes(variable, "<-val->");
+      const varValue = isValueVar ? `"${variable}"` : `req["${variable}"]`;
+      values[`var${index}`] = `var ${varName} = ${varValue};`;
+    });
+
+    return { interpolation, values };
+  }
+
+  @action private liveCodeExtraction = (): string => {
+    // Extract the code. This approach executes faster then the regex 'between'.
+    const start = "try {\n";
+    const end = "return true;";
+    const code = this.liveCode
+      .split(start)[1]
+      .split(end)[0]
+      .replace("\n", "");
+    return _.trimStart(code);
+  }
+
+  @action private generateTemplate = () => {
+    const { interpolation, values } = this.generateVariables();
+    const code = this.liveCodeExtraction();
+    const tplStr = this.originCode({ interpolation, code });
+    const tpl = _.template(tplStr);
+    this.setLiveCode(tpl(values));
+  }
+}
+
+const FBDynamicValidatorStore = new FormBuilderDynamicValidatorStore();
+export default FBDynamicValidatorStore;

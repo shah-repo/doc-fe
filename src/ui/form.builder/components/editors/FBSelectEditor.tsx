@@ -1,16 +1,15 @@
-import { Box } from "@material-ui/core";
 import React from "react";
+import FBStepperEditor from "../../FBStepperEditor";
 import FBOptionsContainer from "../custom/FBOptionsContainer";
-import FBCheckbox from "../inputs/FBCheckbox";
+import FBAdditionsEditor from "./FBAdditionsEditor";
 import FBLabelEditor from "./FBLabelEditor";
 
 const FBSelectEditor: React.FunctionComponent<{}> = () => (
-  <Box>
+  <FBStepperEditor>
     <FBLabelEditor />
-    <FBOptionsContainer label="form.builder.options" name="options" />
-    <FBCheckbox label="form.builder.include.empty" name="includeEmpty" gutter={false} />
-    <FBCheckbox label="form.builder.include.other" name="includeOther" />
-  </Box>
+    <FBOptionsContainer />
+    <FBAdditionsEditor type="select" contextLabel="form.builder.note" />
+  </FBStepperEditor>
 );
 
 export default FBSelectEditor;

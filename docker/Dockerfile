@@ -7,6 +7,7 @@ ARG REACT_APP_AWS_COGNITO_CLIENT_ID
 ARG REACT_APP_FRONTEND_URL
 ARG REACT_APP_SIGNUP_DOMAIN_URL
 ARG REACT_APP_THEME
+
 ENV NPM_CONFIG_LOGLEVEL warn
 
 RUN mkdir -pv /usr/src/app
@@ -24,7 +25,11 @@ RUN chmod a+x runTests.sh
 
 # install dependencies
 RUN apk add git
+RUN apk add --no-cache --virtual .gyp python make g++
+RUN rm -rf /var/cache/apk/*
+RUN yarn global add node-gyp
 RUN yarn install --pure-lockfile
+RUN apk del .gyp
 
 # build the app
 RUN yarn build

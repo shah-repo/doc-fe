@@ -12,7 +12,6 @@ jest.mock("react-redux", () => ({
   useDispatch: jest.fn(),
   useSelector: () => ({
     queryDict: {},
-    queryData: [],
   }),
 }));
 

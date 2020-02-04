@@ -1,5 +1,5 @@
 import { Nullable } from "../../common";
-import { DOCUMENT_TYPE_LIST } from "./constants";
+import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST } from "./constants";
 
 export type DocumentGroupType = "FORM" | "OTHER";
 
@@ -24,6 +24,25 @@ export interface DocumentType {
   pageDetails?: Nullable<PageDetails>;
 }
 
+export interface DocumentForms {
+  id: string;
+}
+
+export interface DocumentTypeByIdForm {
+  id: string;
+  document: DocumentForms;
+}
+
+export interface DocumentTypeById {
+  documentType: DocumentType;
+  forms: DocumentTypeByIdForm[];
+}
+
+export interface DocumentTypeByIdAction {
+  type: typeof DOCUMENT_TYPE_BY_ID;
+  payload: DocumentTypeById;
+}
+
 export interface DocumentTypeListAction {
   type: typeof DOCUMENT_TYPE_LIST;
   payload: DocumentType[];
@@ -32,5 +51,7 @@ export interface DocumentTypeListAction {
 export interface DocumentTypeByIdState {
   [key: string]: DocumentType;
 }
+
+export type DocRevByIdState = DocumentTypeById;
 
 export type DocumentTypeAllIdsState = string[];

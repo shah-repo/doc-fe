@@ -4,12 +4,12 @@ import Text from "../../../components/Text";
 import { FBButtonProps } from "../../types/button";
 
 const FBButton: React.FunctionComponent<FBButtonProps> = ({
-  label,
+  label = "",
   variant = "contained",
   color = "secondary",
   ...props
 }) => (
-  <Button variant={variant} color={color} {...props}>
+  <Button {...{color, variant}} {...props}>
     <Text message={label} />
   </Button>
 );

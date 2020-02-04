@@ -2,6 +2,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import ChangeRequestContainer from "../change.request/Container";
 import ChangeRequestListContainer from "../change.request/list/container";
 import ChangeRequestCreateContainer from "../changeRequest/ChangeRequestCreate.container";
@@ -24,6 +25,7 @@ import DocumentRevisionContainer from "../document.revision/container";
 import DocumentRevisionListContainer from "../document.revision/list/container";
 import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisionCreate.container";
 import DocumentTypeListContainer from "../documentType/list/container";
+import RemoteValidatorsLoader from "../remoteValidators/RemoteValidators";
 import SlackContainer from "../slack/Container";
 import TrainingDetailContainer from "../training/TrainingDetail.container";
 import UserManagementListContainer from "../user.management/list/container";
@@ -32,16 +34,20 @@ import HeaderContainer from "./Header.container";
 import styles from "./Layout.styles";
 import Navigation from "./Navigation";
 import PingServer from "./PingServer";
+import SocketsContainer from "./sockets/container";
 
 type Props = WithStyles<typeof styles>;
 
 const Layout: React.FunctionComponent<Props> = ({ classes }) => {
   return (
     <div>
+      <RemoteValidatorsLoader />
       <PingServer />
       <CssBaseline />
       <HeaderContainer />
       <Navigation />
+      <ToastContainer autoClose={false} />
+      <SocketsContainer />
       <WatermarkFooterContainer />
       <main className={classes.content}>
         <DataFetcherContainer />
@@ -83,10 +89,7 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
             path={USER_MANAGEMENT_ROOT_URL}
             component={UserManagementListContainer}
           />
-          <Route
-            path={SLACK_ROOT_URL}
-            component={SlackContainer}
-          />
+          <Route path={SLACK_ROOT_URL} component={SlackContainer} />
           <Route
             path={DOCUMENT_BY_TYPE_LIST_URL}
             component={DocumentTypeListContainer}

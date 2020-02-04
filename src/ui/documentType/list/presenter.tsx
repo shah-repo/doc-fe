@@ -1,9 +1,7 @@
 import { Button, Grid } from "@material-ui/core";
 import _ from "lodash";
 import React from "react";
-import {
-  DocumentRevision,
-} from "../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import {
   DocumentType,
@@ -12,28 +10,38 @@ import {
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
-import { TablePanelStateProps } from "../../components/table/types";
+import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import {
   canEditDocumentRevision,
   documentRevisionStatusOption,
 } from "../../document.revision/utils/helpers";
-import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
+import {
+  documentEditPath,
+  documentPreviewPath,
+} from "../../document.revision/utils/paths";
+import { FB } from "../../form.builder";
 import { Translation } from "../../translations/types";
 import { styles } from "./styles";
 
 export interface Props {
   tableName: string;
-  tableState: TablePanelStateProps<DocumentRevision>;
+  tableCriteria: TablePanelStateProps;
+  tableData: TableDataProps<DocumentRevision>;
   clearFilter?: () => void;
   documentType: DocumentType;
+  openDocRev: () => void;
+  showError: boolean;
 }
 
 export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   tableName,
-  tableState,
+  tableCriteria,
+  tableData,
   clearFilter,
   documentType,
+  openDocRev,
+  showError,
 }) => {
   const classes = styles();
   const canEdit = (data: DocumentRevision) => canEditDocumentRevision(data);
@@ -48,15 +56,23 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   };
 
   const pageDetailColumns = documentType.pageDetails!.columns;
-  const additionalColumns = pageDetailColumns.map((column: PageDetailsColumn) => ({
-    key: column.fieldName as keyof DocumentRevision,
-    label: column.label as Translation,
-    cellHref: cellHrefRenderer,
-    omitSearch: true,
-    columnOptions: {
-      cellDataGetter: ({ rowData }) => rowData.formInput ? rowData.formInput[column.fieldName] : "",
-    },
-  }));
+  const additionalColumns = pageDetailColumns.map(
+    (column: PageDetailsColumn) => ({
+      key: column.fieldName as keyof DocumentRevision,
+      label: column.label as Translation,
+      cellHref: cellHrefRenderer,
+      omitSearch: true,
+      columnOptions: {
+        cellDataGetter: ({ rowData }) => {
+          const { fieldName } = column;
+          return FB.stripOption(
+            fieldName,
+            _.get(rowData, `formInput.${fieldName}`),
+          );
+        },
+      },
+    }),
+  );
 
   const columns: Array<TableColumnProps<DocumentRevision>> = [
     {
@@ -69,7 +85,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
         width: 150,
       },
       searchOptions: {
-        defaultValue: tableState.queryDict.docId,
+        defaultValue: tableCriteria.queryDict.docId,
       },
     },
     {
@@ -78,7 +94,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       tooltipKey: "name",
       cellHref: cellHrefRenderer,
       searchOptions: {
-        defaultValue: tableState.queryDict.name,
+        defaultValue: tableCriteria.queryDict.name,
       },
     },
     {
@@ -88,6 +104,9 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.owner.user.name,
       },
+      searchOptions: {
+        defaultValue: tableCriteria.queryDict.owner,
+      },
     },
     {
       key: "status",
@@ -96,9 +115,9 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       cellType: (rowData) => (canEdit(rowData) ? "LINK" : "BASE"),
       searchOptions: {
         dataKey: "status[]",
-        defaultValue: _.isString(tableState.queryDict["status[]"])
-            ? tableState.queryDict["status[]"]
-            : undefined,
+        defaultValue: _.isString(tableCriteria.queryDict["status[]"])
+          ? tableCriteria.queryDict["status[]"]
+          : undefined,
         searchType: "select",
         selectOptions: documentRevisionStatusOption(),
       },
@@ -108,7 +127,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       label: "common.approval.id",
       searchOptions: {
         dataKey: "crId",
-        defaultValue: tableState.queryDict.crId,
+        defaultValue: tableCriteria.queryDict.crId,
       },
       cellHref: cellHrefRenderer,
       columnOptions: {
@@ -131,8 +150,29 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
         >
           <Text translation="common.clear.filters" />
         </Button>
-        <DocumentInfo numberOfRecords={tableState.queryData.length} />
+        <DocumentInfo numberOfRecords={tableData.length} />
       </Grid>
+      <Grid item={true} xs={6} style={{ textAlign: "right" }}>
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.button}
+          onClick={openDocRev}
+        >
+          <Text
+            translation="supplier.add.new"
+            values={{ name: documentType.documentTypeName }}
+          />
+        </Button>
+      </Grid>
+      {showError && (
+        <div style={{ color: "red" }}>
+          <Text
+            translation="supplier.form.error"
+            values={{ name: documentType.documentTypeName }}
+          />
+        </div>
+      )}
       <Grid item={true} className={classes.item}>
         <TablePanel<DocumentRevision>
           columns={columns}

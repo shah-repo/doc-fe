@@ -50,6 +50,7 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
   const groups = useSelector(authSelectors.getCurrentUserGroups);
   const activeStatus = useSelector(authSelectors.currentUserActiveStatus);
   const userSlackId =  useSelector(authSelectors.currentSlackUserId);
+  const userId = useSelector(authSelectors.currentUserId);
   const [showEditUser, setEditUser] = useState(false);
   const showEdit = () => setEditUser(true);
   const closeEdit = () => setEditUser(false);
@@ -94,6 +95,7 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
       previewAvatar={previewAvatar}
       setPreviewAvatar={setPreviewAvatar}
       activeStatus={activeStatus}
+      userId={userId}
     />
   );
 };
