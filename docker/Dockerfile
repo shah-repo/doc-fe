@@ -10,25 +10,16 @@ ARG REACT_APP_THEME
 
 ENV NPM_CONFIG_LOGLEVEL warn
 
-RUN mkdir -pv /usr/src/app
 WORKDIR /usr/src/app
 
-COPY src ./src/
-COPY public ./public/
-COPY package.json .
-COPY tsconfig.json .
-COPY tslint.json .
-COPY yarn.lock .
-COPY aws/bash_scripts/runTests.sh runTests.sh
-
-RUN chmod a+x runTests.sh
+ADD compiled/ /opt/app/
 
 # install dependencies
 RUN apk add git
 RUN apk add --no-cache --virtual .gyp python make g++
 RUN rm -rf /var/cache/apk/*
 RUN yarn global add node-gyp
-RUN yarn install --pure-lockfile
+#RUN yarn install --pure-lockfile
 RUN apk del .gyp
 
 # build the app
