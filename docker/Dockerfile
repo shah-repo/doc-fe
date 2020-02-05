@@ -13,10 +13,6 @@ ENV NPM_CONFIG_LOGLEVEL warn
 WORKDIR /usr/src/app
 ADD compiled/ /opt/app/
 
-# build the app
-RUN yarn install --pure-lockfile
-RUN yarn build
-
 # expose port
 EXPOSE 5000
 
