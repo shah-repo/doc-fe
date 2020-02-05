@@ -31,7 +31,7 @@ const VerificationEmailPage: React.FunctionComponent<Props> = ({ email, logo, me
         <Text translation={message} />
         </Typography>
         {!isForgotPassword &&
-        <NavLink to={"/login"} exact={true} className={classes.navigationLink} >
+        <NavLink to={"/login"} exact={true} className={classes.navigationLink} id="VerificationEmailPage-loginLink">
           <Text translation={"signup.close.window"} />
         </NavLink>}
       </Paper>

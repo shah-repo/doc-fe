@@ -50,6 +50,7 @@ const SupplierSurveyFormBuild: React.FunctionComponent<Props> = ({
             <SubmitButton
               asyncState={asyncState}
               label={"common.save"}
+              id="SupplierSurveyFormBuild-saveSurveyForm"
             />
           </Box>
         </FormWrapper>
