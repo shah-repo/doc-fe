@@ -16,8 +16,6 @@ chmod a+x "${BASH_SCRIPTS_DIR}/status.sh"
 # Building
 echo "-------- Building Application --------"
 
-yarn install --pure-lockfile
-
 mkdir compiled
 rsync -avr \
 --exclude="aws" \
