@@ -16,7 +16,7 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
 }) => {
   const [editor, setEditor] = useState();
   useEffect(() => {
-    const contentBlock = htmlToDraft(value);
+    const contentBlock = htmlToDraft(value || "");
     if (contentBlock) {
       const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
       const editorState = EditorState.createWithContent(contentState);

@@ -56,13 +56,24 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
   const [toolbarHiddenDebounced, setToolbarHiddenDebounced] = useState(toggleToolbar);
 
   useEffect(() => {
-    const contentBlock = htmlToDraft(field.value);
+    const contentBlock = htmlToDraft(field.value || "");
     if (contentBlock) {
       const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
       const editorState = EditorState.createWithContent(contentState);
       setValue(editorState);
     }
   }, []);
+
+  useEffect(() => {
+    if (!field.value) {
+      const contentBlock = htmlToDraft("");
+      if (contentBlock) {
+        const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+        const editorState = EditorState.createWithContent(contentState);
+        setValue(editorState);
+      }
+    }
+  }, [field.value]);
 
   const [debouncedUpdate] = useDebounce(value, 300);
   useEffect(() => {
