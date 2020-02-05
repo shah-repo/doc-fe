@@ -172,7 +172,7 @@ pipelines:
 #
 
   default:
-    - parallel: *TEST_AND_BUILD_FOR_DEMO
+    - parallel: *TEST_AND_BUILD_FOR_DEV
     - step: *DEPLOY_TO_DEV
 
   tags:
