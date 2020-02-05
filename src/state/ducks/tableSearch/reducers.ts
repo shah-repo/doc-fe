@@ -48,7 +48,7 @@ export const criteria = (
       return {
         ...state,
         [action.tableName]: {
-          ...state[action.tableName],
+          ...(state[action.tableName] || DEFAULT_TABLE_SEARCH),
           forceUpdate: action.forceUpdate,
         },
       };

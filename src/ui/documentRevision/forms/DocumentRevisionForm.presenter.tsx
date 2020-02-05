@@ -5,6 +5,7 @@ import { observer } from "mobx-react";
 import React from "react";
 import {
   DocumentRevision,
+  DocumentRevisionStatus,
   RevisionStageOptions,
 } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
@@ -43,6 +44,7 @@ export interface Props
   extends WithStyles<typeof styles>,
     FormikProps<DocumentRevisionFormValues> {
   asyncState: AsyncState;
+  documentRevision: DocumentRevision;
   documentRevisions?: DocumentRevision[];
   availableReferences: OptionType[];
   showRevisionTypeChange?: boolean;
@@ -77,6 +79,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   documentTypes,
   documentTypesById,
   otherDocumentTypes,
+  documentRevision,
 }) => {
   if (!values.id && !_.get(values, "document.documentType.id")) {
     FBDRStore.setMode("none");
@@ -91,11 +94,13 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   const isDisabled: boolean = _.get(initialValues, "id") !== undefined;
   const docId = _.get(initialValues, "document.docId");
+  const isdocRevVersionOne = _.get(documentRevision, "version") === 1;
+  const isdocRevStatusDraft = _.get(documentRevision, "status") === DocumentRevisionStatus.Draft;
+  const outputDocEnabled: boolean = isdocRevVersionOne && isdocRevStatusDraft || !isDisabled;
   const useProposedDocId = (!docId || docId === "") && values.document;
   values.document!.docId = useProposedDocId
     ? proposedDocId
     : values.document!.docId;
-
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     const { documentType } = values.document || {};
@@ -233,8 +238,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               selectProps={{
                 inputProps: {
                   id: "formTemplate.outputDocumentType",
-                  disabled: isDisabled,
-                  className: isDisabled ? classes.outputGrey : "",
+                  disabled: !outputDocEnabled,
+                  className: !outputDocEnabled ? classes.outputGrey : "",
                 },
               }}
               options={otherDocumentTypes}

@@ -88,22 +88,6 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
             class="MuiButton-label"
           >
             <span>
-              View
-            </span>
-          </span>
-          <span
-            class="MuiTouchRipple-root"
-          />
-        </button>
-        <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary"
-          tabindex="0"
-          type="button"
-        >
-          <span
-            class="MuiButton-label"
-          >
-            <span>
               Source
             </span>
           </span>
@@ -113,7 +97,7 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
         </button>
       </div>
       <div
-        class="MuiBox-root MuiBox-root-158"
+        class="MuiBox-root MuiBox-root-161"
       >
         <button
           class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary"
