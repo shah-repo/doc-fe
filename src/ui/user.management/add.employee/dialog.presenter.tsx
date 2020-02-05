@@ -22,7 +22,7 @@ export const AddEmployeeDialogPresenter: React.FunctionComponent<Props> = ({
     <Dialog fullScreen={true} open={isOpen}>
       <AppBar className={classes.appBar}>
         <Toolbar>
-          <IconButton color="default" onClick={closeDialog} aria-label="Close">
+          <IconButton color="default" onClick={closeDialog} aria-label="Close" id="AddEmployeeDialogPresenter-closeDialog">
             <CloseIcon />
           </IconButton>
           <Typography variant="h6" className={classes.dialogTitle}>

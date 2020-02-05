@@ -105,6 +105,7 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
           variant="outlined"
           className={classes.clearButton}
           onClick={clearFilter}
+          id="UserManagementListPresenter-clearButton"
         >
           <Text translation="common.clear.filters" />
         </Button>

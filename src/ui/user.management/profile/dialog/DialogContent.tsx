@@ -161,6 +161,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
         variant="outlined"
         style={{ width: "auto", color: "#6E09EA", borderColor: "#6E09EA" }}
         onClick={closeEdit}
+        id="DialogContent-closeEdit"
       >
         <Text translation="common.cancel" />
       </Button>
@@ -172,6 +173,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
           updateProfile();
           closeEdit();
         }}
+        id="DialogContent-updateProfile"
       >
         <Text translation="user.management.update.profile" />
       </Button>
@@ -184,6 +186,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
         variant="outlined"
         className={classes.activeStatusButton}
         onClick={() => handleActiveStatus(!activeStatus)}
+        id="DialogContent-activeStatusButton"
       >
         <Text
           translation={activeStatus ? "common.deactivate" : "common.reactivate"}
@@ -206,6 +209,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
           color="primary"
           style={{ width: "auto" }}
           onClick={showEdit}
+          id="DialogContent-showEdit"
         >
           <Text translation="common.edit" />
         </Button>
@@ -228,6 +232,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
               asyncState={asyncState}
               label={"integrations.add"}
               className={classes.addButton}
+              id="DialogContent-addEmployee"
             />
           </div>
         )}

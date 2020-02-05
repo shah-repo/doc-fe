@@ -75,20 +75,20 @@ export const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
         name="email"
         label="common.email"
         inputProps={{
-          id: "email",
+          id: "AddEmployeeFormPresenter-commonEmail",
         }}
         validate={validator(required, email)}
       />
       <InputField
         name="name"
         label="common.name"
-        inputProps={{ id: "name", disabled: isNameDisabled }}
+        inputProps={{ id: "AddEmployeeFormPresenter-commonName", disabled: isNameDisabled }}
         validate={validator(required)}
       />
       <AutocompleteField
         name="groups"
         label="common.groups"
-        autocompleteProps={{ id: "groups", isClearable: true, isMulti: true }}
+        autocompleteProps={{ id: "AddEmployeeFormPresenter-commonGroups", isClearable: true, isMulti: true }}
         options={groupOptions}
       />
       <Box mt={5}>
@@ -102,12 +102,14 @@ export const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
             variant="outlined"
             color="secondary"
             onClick={() => resetForm()}
+            id="AddEmployeeFormPresenter-resetForm"
           >
             <Text translation="common.reset" />
           </Button>
           <SubmitButton
             asyncState={asyncState}
             label={"common.save"}
+            id="AddEmployeeFormPresenter-submitForm"
           />
         </Grid>
       </Box>

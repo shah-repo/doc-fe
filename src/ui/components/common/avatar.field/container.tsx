@@ -34,13 +34,13 @@ const AvatarUploadContainer: React.FunctionComponent<Props> = ({
     >
       <input
         accept="image/png, image/jpeg"
-        id={"avatar"}
+        id={"AvatarUploadContainer-avatar"}
         type="file"
         style={{ display: "none" }}
         onChange={onChange}
       />
       <label htmlFor={"avatar"}>
-        <Link variant="button" className={classes.link}>
+        <Link variant="button" className={classes.link} id="AvatarUploadContainer-uploadPhoto">
           <Text translation="common.upload.photo" />
         </Link>
       </label>
