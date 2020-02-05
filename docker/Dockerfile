@@ -11,16 +11,7 @@ ARG REACT_APP_THEME
 ENV NPM_CONFIG_LOGLEVEL warn
 
 WORKDIR /usr/src/app
-
 ADD compiled/ /opt/app/
-
-# install dependencies
-RUN apk add git
-RUN apk add --no-cache --virtual .gyp make g++
-RUN rm -rf /var/cache/apk/*
-RUN yarn global add node-gyp
-#RUN yarn install --pure-lockfile
-RUN apk del .gyp
 
 # build the app
 RUN yarn build
