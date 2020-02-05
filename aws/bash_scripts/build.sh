@@ -16,8 +16,8 @@ chmod a+x "${BASH_SCRIPTS_DIR}/status.sh"
 # Building
 echo "-------- Building Application --------"
 
-RUN yarn install --pure-lockfile
-RUN yarn build
+yarn install --pure-lockfile
+yarn build
 
 mkdir compiled
 rsync -avr \
