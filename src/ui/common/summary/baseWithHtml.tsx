@@ -43,6 +43,6 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
       </Grid>
     </Grid>
   );
-}
+};
 
 export default withStyles(styles)(BaseWithhtml);
