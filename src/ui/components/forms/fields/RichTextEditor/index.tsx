@@ -1,13 +1,12 @@
 import { Box } from "@material-ui/core";
 import classNames from "classnames";
-import { ContentState, convertToRaw, EditorState } from "draft-js";
+import { convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import {
   Field as FormikField,
   FieldConfig,
   FieldProps as FormikFieldProps,
 } from "formik";
-import htmlToDraft from "html-to-draftjs";
 import React, { useEffect, useState } from "react";
 import { Editor, EditorProps } from "react-draft-wysiwyg";
 import useDebounce from "use-debounce/lib/useDebounce";
@@ -15,6 +14,7 @@ import "../../../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysi
 import { RenderSize } from "../../../../../state/ducks/common";
 import useDidMount from "../../../../hooks/useDidMount";
 import Field, { FieldOwnProps } from "../Field";
+import { convertHtmlToDraft } from "./helpers";
 import "./rte.css";
 
 const toolbarOptions = [
@@ -29,6 +29,8 @@ const toolbarOptions = [
   "remove",
   "history",
 ];
+
+const inline = { options: ["bold", "italic", "underline", "monospace"] };
 
 export interface RichTextEditorOwnProps extends FieldOwnProps {
   size?: RenderSize;
@@ -56,22 +58,12 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
   const [toolbarHiddenDebounced, setToolbarHiddenDebounced] = useState(toggleToolbar);
 
   useEffect(() => {
-    const contentBlock = htmlToDraft(field.value || "");
-    if (contentBlock) {
-      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-      const editorState = EditorState.createWithContent(contentState);
-      setValue(editorState);
-    }
+    setValue(convertHtmlToDraft(field.value));
   }, []);
 
   useEffect(() => {
     if (!field.value) {
-      const contentBlock = htmlToDraft("");
-      if (contentBlock) {
-        const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-        const editorState = EditorState.createWithContent(contentState);
-        setValue(editorState);
-      }
+      setValue(convertHtmlToDraft(""));
     }
   }, [field.value]);
 
@@ -144,6 +136,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
           editorClassName="rte-editor"
           toolbar={{
             options: toolbarOptions,
+            inline,
           }}
           {...editorProps}
         />

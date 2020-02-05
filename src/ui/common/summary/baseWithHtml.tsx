@@ -1,8 +1,7 @@
 import { Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
-import { ContentState, EditorState } from "draft-js";
-import htmlToDraft from "html-to-draftjs";
 import React, { useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
+import { convertHtmlToDraft } from "../../components/forms/fields/RichTextEditor/helpers";
 import Text from "../../components/Text";
 import styles from "./styles";
 import { SummaryBaseProps } from "./types";
@@ -16,13 +15,8 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
 }) => {
   const [editor, setEditor] = useState();
   useEffect(() => {
-    const contentBlock = htmlToDraft(value || "");
-    if (contentBlock) {
-      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-      const editorState = EditorState.createWithContent(contentState);
-      setEditor(editorState);
-    }
-  }, []);
+    setEditor(convertHtmlToDraft(value));
+  }, [value]);
 
   return (
     <Grid item={true} xs={12}>

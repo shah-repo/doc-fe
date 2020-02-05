@@ -6,9 +6,8 @@ import {
   withStyles,
 } from "@material-ui/core";
 import React from "react";
-import ReactQuill from "react-quill";
+import { Editor } from "react-draft-wysiwyg";
 import { getFormattedDateString } from "../../../common/utils/date";
-import { sanitizeHtml } from "../../../common/utils/helpers";
 import {
   changeRequestsActions,
   ChangeRequestStatus,
@@ -18,6 +17,7 @@ import {
 import { DataProps } from "../../../state/ducks/common";
 import SummaryField from "../../common/summary/base";
 import AttachmentIconField from "../../components/common/attachment.icon/container";
+import { convertHtmlToDraft } from "../../components/forms/fields/RichTextEditor/helpers";
 import Text from "../../components/Text";
 import { canCloseTask } from "../utils/helpers";
 import CloseTask from "./close.task";
@@ -66,13 +66,12 @@ export const ImplementationPlan: React.FunctionComponent<Props> = ({
         <Typography variant="h5">
           <Text message={task.title} />
         </Typography>
-        <ReactQuill
+        <Editor
           readOnly={true}
-          value={sanitizeHtml(task.description)}
-          modules={{ toolbar: false }}
-        >
-          <div className={classes.taskDescription} />
-        </ReactQuill>
+          editorState={convertHtmlToDraft(task.description)}
+          toolbarHidden={true}
+          editorClassName={classes.taskDescription}
+        />
         <Grid container={true} className={classes.taskBasicInformation}>
           <Grid item={true} xs={4}>
             <Typography variant="body2">
