@@ -13,9 +13,9 @@
   },
   {
     "id": "3",
-    "path": "change_requests/available_approvers",
+    "path": "/change_requests/available_approvers",
     "label": "Approvers",
-    "renderKey": "email"
+    "renderKey": "user.email"
   },
   {
     "id": "4",
@@ -25,7 +25,7 @@
   },
   {
     "id": "5",
-    "path": "/document_revisions?documentTypeId=a605751f-890b-4864-9091-5407a2200e56",
+    "path": "/document_revisions?documentTypeAcronym=SUPP",
     "label": "Supplier list",
     "renderKey": "name"
   }

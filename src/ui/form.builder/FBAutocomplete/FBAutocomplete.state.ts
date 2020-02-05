@@ -3,7 +3,8 @@ import { action, observable, set } from "mobx";
 import FBRequest from "../FBApi/FBApi.request";
 
 export class FBAutocompleteState extends FBRequest {
-  @observable public defaultValue: any;
+  public defaultValue: any;
+  @observable public loaded: boolean = false;
   public defaultState: string | string[] | undefined;
 
   @action public setUrl = (url: string) => {
@@ -12,7 +13,7 @@ export class FBAutocompleteState extends FBRequest {
   }
 
   @action public onDataLoaded = () => {
-    this.defaultState && (this.setDefaultValue(this.defaultState));
+    !_.isUndefined(this.defaultState) && (this.setDefaultValue(this.defaultState));
   }
 
   @action public setDefaultState = (state: string | string[] | undefined) => {
@@ -21,13 +22,15 @@ export class FBAutocompleteState extends FBRequest {
 
   @action private setDefaultValue = (value: string | string[] | undefined) => {
     if (_.isUndefined(value) || _.isEmpty(this.data)) {
-     return;
+      set(this, "loaded", true);
+      return;
     }
     this.setLoading(true);
     const defaultValue = _.isArray(value) ? value : [value];
     const filtered = _.filter(this.data, (rec) => _.includes(defaultValue, rec.id));
     set(this, "defaultValue", (_.isArray(value) ? filtered : _.first(filtered)));
     this.setLoading(false);
+    set(this, "loaded", true);
   }
 }
 
