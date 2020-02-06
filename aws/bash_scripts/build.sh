@@ -21,12 +21,14 @@ chmod a+x "${BASH_SCRIPTS_DIR}/status.sh"
 # Building
 echo "-------- Building Application --------"
 
+# loading env variables that are required during 'yarn build'
 SCRIPT="${PYTHON_SCRIPTS_DIR}/getEnvValue.py"
 export REACT_APP_API_ENDPOINT=$(python3 $SCRIPT $ENV $ENVIRONMENT_DIR REACT_APP_API_ENDPOINT 2>&1)
 export REACT_APP_AWS_COGNITO_CLIENT_ID=$(python3 $SCRIPT $ENV $ENVIRONMENT_DIR REACT_APP_AWS_COGNITO_CLIENT_ID 2>&1)
 export REACT_APP_FRONTEND_URL=$(python3 $SCRIPT $ENV $ENVIRONMENT_DIR REACT_APP_FRONTEND_URL 2>&1)
 export REACT_APP_SIGNUP_DOMAIN_URL=$(python3 $SCRIPT $ENV $ENVIRONMENT_DIR REACT_APP_SIGNUP_DOMAIN_URL 2>&1)
 export REACT_APP_THEME=$(python3 $SCRIPT $ENV $ENVIRONMENT_DIR REACT_APP_THEME 2>&1)
+
 export CI=false # had to do this to make the build process not treat warnings as errors
 
 yarn install --pure-lockfile
