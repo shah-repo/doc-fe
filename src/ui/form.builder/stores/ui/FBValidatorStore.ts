@@ -13,6 +13,7 @@ export class FormBuilderValidatorStored {
   public applicableOn: boolean = false;
   public activeValidatorType?: FBEditorElementType;
   public customValidator?: FBValidatorConfigProps;
+  public formValues: Dictionary<any> = {};
 
   @computed get schemaItemOptions(): SelectOption[] {
     const schema = FBStore.getSchema();
