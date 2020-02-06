@@ -24,13 +24,12 @@ export CI=false # had to do this to make the build process not treat warnings as
 yarn install --pure-lockfile
 yarn build
 
+rm -rf compiled
 mkdir compiled
-rsync -avr \
---exclude="/aws" \
---exclude="/docker" \
---exclude="/compiled" \
---exclude="/bitbucket-pipelines.yml" \
---exclude="/test" \
---exclude="/test-results" \
+rsync -av \
+--include="/build" \
+--include="/public" \
+--include="*.json" \
+--exclude="*" \
 * compiled/
 tar -czvf compiled.tar.gz compiled
