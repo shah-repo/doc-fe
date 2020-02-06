@@ -57,7 +57,6 @@ definitions:
           - test-results/**
         script:
           - ./aws/bash_scripts/runTests.sh
-
 #
 # DEV
 #
@@ -135,8 +134,6 @@ pipelines:
       - parallel:
           - step: *RUN_TESTS
           - step: *RUN_LINTER
-          - step: *BUILD_DEV
-      - step: *DEPLOY_DEV
 
   tags:
     deploy-to-dev:
