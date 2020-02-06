@@ -20,7 +20,7 @@ chmod a+x "${BASH_SCRIPTS_DIR}/status.sh"
 # Building
 echo "-------- Building Application --------"
 
-export CI=false
+export CI=false # had to do this to make the build process not treat warnings as errors
 yarn install --pure-lockfile
 yarn build
 
