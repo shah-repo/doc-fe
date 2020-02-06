@@ -432,7 +432,7 @@
   "supplier.name": "Supplier name",
   "supplier.status": "Supplier status",
   "supplier.add.new": "Add {name}",
-  "supplier.form.error": "Cannot open multiple forms.",
+  "supplier.form.error": "There is no form or multiple forms exsist. Please create a new supplier through the Document list.",
 
   "watermark.successfully.requested": "Watermarked copy of {file}.{type} successfully requested. We will notify you when it's ready to download.",
   "watermark.download.ready": "Watermarked file {name}.{type} ready to download",
