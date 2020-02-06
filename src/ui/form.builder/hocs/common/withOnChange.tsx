@@ -71,8 +71,10 @@ export const withOnChange = <T extends FBInputProps>(
         FBDynamicValidatorStore.validate();
       }
 
-      form!.setFieldValue(fieldName, value);
-      afterChange && afterChange(fieldName, value, form!.values || {});
+      if (type !== "texteditor") {
+        form!.setFieldValue(fieldName, value);
+        afterChange && afterChange(fieldName, value, form!.values || {});
+      }
     }
 
     const handleChange = (
