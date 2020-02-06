@@ -20,6 +20,7 @@ chmod a+x "${BASH_SCRIPTS_DIR}/status.sh"
 # Building
 echo "-------- Building Application --------"
 
+export CI=false
 yarn install --pure-lockfile
 yarn build
 
