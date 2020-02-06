@@ -21,10 +21,12 @@ yarn build
 
 mkdir compiled
 rsync -avr \
---exclude="aws" \
---exclude="docker" \
---exclude="compiled" \
---exclude="bitbucket-pipelines.yml" \
---exclude="docker*" \
+--exclude="/aws" \
+--exclude="/docker" \
+--exclude="/compiled" \
+--exclude="/bitbucket-pipelines.yml" \
+--exclude="/src" \
+--exclude="/test" \
+--exclude="/test-results" \
 * compiled/
 tar -czvf compiled.tar.gz compiled
