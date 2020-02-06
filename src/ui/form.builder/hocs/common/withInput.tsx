@@ -33,8 +33,6 @@ export const withInput = <T extends FBInputProps>(
     const elements = React.Children.toArray(children);
     value = _.get(form, `values.${name}`);
 
-    console.log(name);
-    console.log(FBValidatorStore.formValues);
     _.isUndefined(value) &&
       (value =
         _.get(FBStore.getValues(), name) ||
