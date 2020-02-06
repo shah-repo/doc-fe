@@ -1,5 +1,5 @@
 clone:
-  depth: 1
+  depth: 10
 
 definitions:
   caches:
