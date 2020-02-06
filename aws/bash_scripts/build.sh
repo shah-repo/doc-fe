@@ -35,5 +35,6 @@ rm -rf compiled compiled.tar.gz
 mkdir compiled
 cp -R "build" "compiled/"
 cp -R "public" "compiled/"
+cp -R "node_modules" "compiled/"
 cp *.json "compiled/"
 tar -czvf compiled.tar.gz compiled
