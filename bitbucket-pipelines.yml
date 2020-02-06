@@ -55,6 +55,7 @@ definitions:
           - jest-cache
         artifacts:
           - test-results/**
+          - jest-config/**
         script:
           - ./aws/bash_scripts/runTests.sh
 #
