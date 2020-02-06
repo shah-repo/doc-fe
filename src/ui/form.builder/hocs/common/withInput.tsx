@@ -57,7 +57,8 @@ export const withInput = <T extends FBInputProps>(
           _.first(elements) as React.ReactElement,
           {
             name,
-            ...(type !== "autocomplete" && { value }),
+            ...((type !== "autocomplete" && type !== "texteditor") && { value }),
+            ...(type === "texteditor" && { defaultValue: value }),
             type,
             error,
             checked: value,
