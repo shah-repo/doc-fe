@@ -43,6 +43,9 @@ export class FBEditorStore {
     initialValues?: FBTemplateSchema,
     title?: string,
   ) => () => {
+
+    FBValidatorStore.formValues = _.get(initialValues, "formValuesRules") || {};
+
     this.content = (
       <FBForm
         initialValues={initialValues || {}}

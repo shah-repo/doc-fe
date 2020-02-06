@@ -111,6 +111,7 @@ export class FormBuilderDynamicValidatorStore {
     this.errorMessage = "";
     this.clearLiveCode();
     this.fieldNames = [];
+    FBValidatorStore.formValues = {};
   }
 
   @action public validate = () => {
