@@ -71,6 +71,12 @@ const isSingleDocRevId = (state: ApplicationState): boolean => state.documentTyp
 const docRevTypeById = (state: ApplicationState) => state.documentType.docRevTypeId.forms[0].id;
 const docId = (state: ApplicationState) => state.documentType.docRevTypeId.forms[0].document.id;
 
+const getDocTypeName = createSelector(
+  byId,
+  (state, docTypeId) => docTypeId,
+  (byIds, docTypeId) => _.get(byIds[docTypeId], "documentTypeName", "N/A"),
+);
+
 export default {
   byId,
   getDocumentTypeList,
@@ -83,4 +89,5 @@ export default {
   isSingleDocRevId,
   docRevTypeById,
   docId,
+  getDocTypeName,
 };
