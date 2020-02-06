@@ -23,7 +23,7 @@ export REACT_APP_THEME=$(python3 $SCRIPT $ENV $ENVIRONMENT_DIR REACT_APP_THEME 2
 
 yarn install --pure-lockfile
 
-# execute tests
+# Executing Test
 echo "-------- Executing Tests --------"
 
 mkdir -p "${TEST_RESULTS_DIR}"
