@@ -69,9 +69,9 @@ const getDocumentTypeByAcronym = createSelector(
 
 const isSingleDocRevId = (state: ApplicationState): boolean => state.documentType.docRevTypeId.forms.length === 1;
 const docRevTypeById = (state: ApplicationState) => state.documentType.docRevTypeId.forms[0] ?
-  state.documentType.docRevTypeId.forms[0].id : [];
+  state.documentType.docRevTypeId.forms[0].id : "";
 const docId = (state: ApplicationState) => state.documentType.docRevTypeId.forms[0] ?
-  state.documentType.docRevTypeId.forms[0].document.id : [];
+  state.documentType.docRevTypeId.forms[0].document.id : "";
 
 export default {
   byId,
