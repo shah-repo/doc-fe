@@ -1,4 +1,4 @@
-FROM node:10-alpine
+FROM 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe-1.1
 LABEL Name=shifamed_frontend Version=0.0.1
 
 ARG REACT_APP_API_ENDPOINT

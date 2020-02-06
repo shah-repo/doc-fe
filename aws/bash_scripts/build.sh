@@ -7,6 +7,10 @@ AWS_DIR="${BITBUCKET_CLONE_DIR}/aws"
 ENVIRONMENT_DIR="${AWS_DIR}/environments"
 BASH_SCRIPTS_DIR="${AWS_DIR}/bash_scripts"
 
+set -o allexport
+[[ -f "${ENVIRONMENT_DIR}/pipelines/${ENV}.env" ]] && source "${ENVIRONMENT_DIR}/pipelines/${ENV}.env"
+set +o allexport
+
 # Generating Build Info
 echo "-------- Generating Build Info --------"
 
@@ -25,7 +29,6 @@ rsync -avr \
 --exclude="/docker" \
 --exclude="/compiled" \
 --exclude="/bitbucket-pipelines.yml" \
---exclude="/src" \
 --exclude="/test" \
 --exclude="/test-results" \
 * compiled/
