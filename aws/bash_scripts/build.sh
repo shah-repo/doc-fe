@@ -24,12 +24,9 @@ export CI=false # had to do this to make the build process not treat warnings as
 yarn install --pure-lockfile
 yarn build
 
-rm -rf compiled
+rm -rf compiled compiled.tar.gz
 mkdir compiled
-rsync -av \
---include="/build" \
---include="/public" \
---include="*.json" \
---exclude="*" \
-* compiled/
+cp -R "build" "compiled/"
+cp -R "public" "compiled/"
+cp *.json "compiled/"
 tar -czvf compiled.tar.gz compiled
