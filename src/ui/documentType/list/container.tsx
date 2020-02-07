@@ -1,4 +1,5 @@
-import React from "react";
+import { isEmpty } from "lodash";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, RouteComponentProps } from "react-router-dom";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
@@ -10,6 +11,7 @@ import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { RouteParams } from "../utils/types";
 import DocumentByTypeListPresenter from "./presenter";
+import { documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
 
 type Props = RouteComponentProps<RouteParams>;
 
@@ -31,6 +33,22 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const tableData = useSelector(getTableData(TABLE_NAME));
   const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
   const docId = useSelector(documentTypeSelectors.docId);
+
+  useEffect(() => {
+    if (isEmpty(tableCriteria.queryDict)) {
+      dispatch(
+        tableSearchActions.setSearchCriteria(
+          {
+            ...tableCriteria,
+            queryDict: {
+              "status[]": documentRevisionQueryStatus(),
+            },
+          },
+          TABLE_NAME,
+        ),
+      );
+    }
+  }, [acronym]);
 
   const async = useAsync<DocumentTypeById>({
     onSuccess: () => {
