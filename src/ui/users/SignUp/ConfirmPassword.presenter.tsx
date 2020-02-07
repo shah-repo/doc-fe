@@ -28,11 +28,11 @@ const ConfirmPasswordPresenter: React.FunctionComponent<ConfirmPasswordPresenter
               alt="Logo"
               className={classes.logo}
             />
-            <Typography variant="h4" className={classes.title}>
+            <Typography variant="h4" className={classes.title} id="ConfirmPasswordPresenter-title">
                 <Text translation={title} />
             </Typography>
             <Form className={classes.formStyle}>
-            <FormMessage asyncState={asyncState} className={classes.status} />
+            <FormMessage asyncState={asyncState} className={classes.status} id="ConfirmPasswordPresenter-formError"/>
                 <InputField
                     name="email"
                     label="login.email"
