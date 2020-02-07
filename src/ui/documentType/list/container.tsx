@@ -7,11 +7,11 @@ import { documentTypeActions, DocumentTypeById, documentTypeSelectors } from "..
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import { ApplicationState } from "../../../state/reducers";
 import { HOME_URL } from "../../constants/urls";
+import { documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { RouteParams } from "../utils/types";
 import DocumentByTypeListPresenter from "./presenter";
-import { documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
 
 type Props = RouteComponentProps<RouteParams>;
 

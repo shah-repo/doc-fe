@@ -14,8 +14,8 @@ import { TableDataProps, TablePanelStateProps, TableSearchQueryType } from "../.
 import Text from "../../components/Text";
 import {
   canEditDocumentRevision,
-  documentRevisionStatusOption,
   documentRevisionQueryStatus,
+  documentRevisionStatusOption,
 } from "../../document.revision/utils/helpers";
 import {
   documentEditPath,
@@ -50,7 +50,6 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
     DOCUMENT_REVISION_ROOT_URL + `?documentTypeId=${documentType.id}`;
 
   const customQuerySet = (queryDict: TableSearchQueryType) => {
-    console.log(queryDict);
     if (!queryDict["status[]"]) {
       queryDict["status[]"] = documentRevisionQueryStatus();
     }
