@@ -91,6 +91,7 @@ export type FBInputProps =
     gutter?: boolean;
     tooltip?: string;
     validationMode?: FBValidationModeType[];
+    formValuesRules?: Dictionary<any>;
   };
 
 export type FBFormDefaultProps =
