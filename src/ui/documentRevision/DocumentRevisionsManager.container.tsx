@@ -64,12 +64,12 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
       <Grid container={true} spacing={2} className={classes.whiteContainer}>
         <Grid item={true} xs={2} className={classes.sidebar}>
           <DocumentRevisionListContainer
-                documentRevisions={documentRevisions}
-                documentId={documentId}
-                docId={docId}
-                selectedDocumentRevision={documentRevisionId!}
-                documentRevisionId={documentRevisionId}
-              />
+            documentRevisions={documentRevisions}
+            documentId={documentId}
+            docId={docId}
+            selectedDocumentRevision={documentRevisionId!}
+            documentRevisionId={documentRevisionId}
+          />
           </Grid>
         {documentRevisionId && !isNewOutput && (
           <Grid item={true} xs={7}>
