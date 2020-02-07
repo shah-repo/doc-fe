@@ -335,6 +335,8 @@
   "document.revision.trainingRequired": "Training Required",
   "document.revision.released.date": "Released Date",
   "document.revision.docVersion": "Doc Versions",
+  "document.revision.user.permissions": "User Permissions",
+  "document.revision.group.permissions": "Group Permissions",
 
   "page.title.changeRequest": "Change Request List",
   "page.title.documentList": "Document List",

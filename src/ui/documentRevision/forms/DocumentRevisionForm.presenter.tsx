@@ -230,6 +230,28 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         />
         <AttachmentsField />
         {renderTypeOfRevisionChange}
+        <AutcompleteField
+          name="grantAccessToUser"
+          label="document.revision.user.permissions"
+          autocompleteProps={{
+            id: "grantAccessToUser",
+            isMulti: true,
+            closeMenuOnSelect: false,
+          }}
+          options={availableReferences}
+          onClick={openReference}
+        />
+        <AutcompleteField
+          name="grantAccessToGroup"
+          label="document.revision.group.permissions"
+          autocompleteProps={{
+            id: "grantAccessToGroup",
+            isMulti: true,
+            closeMenuOnSelect: false,
+          }}
+          options={availableReferences}
+          onClick={openReference}
+        />
         {FBStore.active && !FBDRStore.isOutput && (
           <Box mt={4}>
             <SelectField
