@@ -2,6 +2,8 @@ import { Button, Grid, WithStyles, withStyles } from "@material-ui/core";
 import _ from "lodash";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
+import { ReactComponent as LockIcon } from "../../../assets/images/icon_lock.svg";
+import { ReactComponent as UnlockIcon } from "../../../assets/images/icon_unlock.svg";
 import { stripTagsFromObject } from "../../../common/utils/helpers";
 import { unmaskId } from "../../../state/ducks/common/helpers";
 import {
@@ -174,6 +176,20 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         selectOptions: documentRevisionReleasedDateOption(),
         defaultValue: tableCriteria.queryDict.releasedAfter,
       },
+    },
+    {
+      key: "grantAccess",
+      label: "common.security",
+      columnOptions: {
+        cellDataGetter: ({ rowData }) => {
+          if (rowData.document.canAccess) {
+            return <UnlockIcon style={{marginLeft: 6}}/>;
+          }
+          return <LockIcon style={{marginLeft: 6}}/>;
+        },
+        width: 100,
+      },
+      withoutSearchRender: true,
     },
   ];
 
