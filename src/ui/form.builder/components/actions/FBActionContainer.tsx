@@ -5,13 +5,10 @@ import { FBActionContainerProps } from "../../types/actions/action";
 
 const FBActionContainer: React.FunctionComponent<FBActionContainerProps> = ({
     actions,
-}) => {
-
-  return (
-      <Box>
-          {actions}
-      </Box>
-  );
-};
+}) => (
+  <Box>
+    {actions}
+  </Box>
+);
 
 export default withActionContainer(FBActionContainer);

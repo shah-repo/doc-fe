@@ -1,6 +1,7 @@
 import _, { Dictionary } from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
+import { FB } from "../..";
 import FBButton from "../../components/inputs/FBButton";
 import { FBFieldComponent } from "../../defaults/editor";
 import FBActionStore from "../../stores/ui/FBActionStore";
@@ -76,6 +77,7 @@ export const withAction = <T extends FBActionProps>(
           name={`${action.name}.${indicator.name}`}
           afterChange={afterChange}
           rules=""
+          key={FB.uniqid()}
         />
       );
     });
