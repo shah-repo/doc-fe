@@ -40,3 +40,6 @@ export * from "./FBFieldTopBar/FBFieldTopBar.types";
 
 export { default as FBFieldBottomBar } from "./FBFieldBottomBar/FBFieldBottomBar";
 export * from "./FBFieldBottomBar/FBFieldBottomBar.types";
+
+export { default as FBHelloSign } from "./FBHelloSign/FBHelloSign";
+export * from "./FBHelloSign/FBHelloSign.types";

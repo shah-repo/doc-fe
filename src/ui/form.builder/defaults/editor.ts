@@ -24,6 +24,7 @@ import FBFileUpload from "../components/navigation/FBFileUpload";
 import FBLink from "../components/navigation/FBLink";
 import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaItem";
 import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
+import FBHelloSign from "../FBHelloSign";
 import { FBEditorElementType } from "../types/editor";
 
 export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = {
@@ -41,6 +42,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   hyperlink: FBHyperlinkEditor,
   fileupload: FBLabelStepperEditor,
   action: FBActionEditor,
+  hellosign: FBLabelEditor,
 };
 
 export const FBFieldComponent: Dictionary<any> = {
@@ -60,6 +62,7 @@ export const FBFieldComponent: Dictionary<any> = {
   schemaSelect: FBValidatorSchemaSelect,
   schemaItem: FBValidatorSchemaItem,
   action: FBActionContainer,
+  hellosign: FBHelloSign,
 };
 
 export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
@@ -76,6 +79,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "radiogroup",
     "fileupload",
   ],
+  approvals: ["hellosign"],
   lists: ["autocomplete"],
   actions: ["action"],
 };

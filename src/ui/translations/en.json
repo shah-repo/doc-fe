@@ -352,6 +352,7 @@
   "form.builder.subsection": "Subsection",
   "form.builder.basics": "Basic Fields",
   "form.builder.lists": "Lists",
+  "form.builder.approvals": "Approvals",
   "form.builder.textfield": "Text field",
   "form.builder.checkbox": "Checkbox",
   "form.builder.checkboxgroup": "Checkbox group",
@@ -396,6 +397,8 @@
   "form.builder.predefined.validation": "Predefined Validation",
   "form.builder.custom.validation": "Custom Validation",
   "form.builder.validation.mode": "Validation Mode",
+  "form.builder.create.template": "Create Template",
+  "form.builder.hellosign": "Hellosign",
 
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",

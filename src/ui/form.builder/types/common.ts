@@ -72,6 +72,7 @@ export type FBInputProps =
     | "rows"
     | "placeholder"
     | "hidden"
+    | "fullWidth"
   >
   & {
     index?: number;

@@ -1,0 +1,32 @@
+import { Dictionary } from "lodash";
+import { FBButtonProps } from "../types/button";
+import { FBInputProps } from "../types/common";
+
+export type FBHelloSignFieldType =
+  | "text"
+  | "checkbox"
+  | "radio"
+  | "date_signed"
+  | "dropdown";
+
+export interface FBHelloSignFieldProps {
+  name: string;
+  type: FBHelloSignFieldType;
+}
+
+export interface FBHelloSignPayload {
+  files?: string[];
+  mergeFields?: FBHelloSignFieldProps[];
+}
+
+export type FBHelloSignProps =
+  & Pick<FBInputProps, "label" | "name">
+  & Pick<FBButtonProps, "onClick">;
+
+export const FBHelloSignTypeMap: Dictionary<FBHelloSignFieldType> = {
+  textfield: "text",
+  checkbox: "checkbox",
+  radio: "radio",
+  datepicker: "date_signed",
+  select: "dropdown",
+};
