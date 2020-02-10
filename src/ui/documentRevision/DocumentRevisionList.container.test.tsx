@@ -3,6 +3,12 @@ import React from "react";
 import { getDocumentRevision } from "../../state/ducks/documentRevisions/tests/factories";
 import { DocumentRevisionListContainer, DocumentRevisionListContainerProps} from "./DocumentRevisionList.container";
 
+jest.mock("react-redux", () => ({
+  useDispatch: jest.fn(),
+  useSelector: () => ({
+  }),
+}));
+
 describe("DocumentRevisionListContainer component tests", () => {
   const documentRevisions = [
     getDocumentRevision(),
