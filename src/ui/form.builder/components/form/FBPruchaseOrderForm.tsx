@@ -1,6 +1,7 @@
 import { Form, Formik } from "formik";
 import React from "react";
 import FBButton from "../inputs/FBButton";
+import FBCheckbox from "../inputs/FBCheckbox";
 import FBTextField from "../inputs/FBTextField";
 
 interface Props {
@@ -21,6 +22,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
     >
       <Form>
         <FBTextField
+          type="number"
           label="Order"
           name="order"
         />
@@ -31,6 +33,23 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
         <FBTextField
           label="PN/Date Required"
           name="date"
+        />
+        <FBTextField
+          label="Description"
+          name="description"
+        />
+        <FBTextField
+          type="number"
+          label="Price"
+          name="price"
+        />
+        <FBCheckbox
+          label="Tax"
+          name="tax"
+        />
+        <FBCheckbox
+          label="Is Traceability Required"
+          name="traceability"
         />
         <FBButton
           type="button"

@@ -1,8 +1,9 @@
-import { Box, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import _ from "lodash";
 import React from "react";
 import { withFormik } from "../../../components/hoc/formik";
 import FBPurchaseOrderDialog from "../custom/FBPurchaseOrderDialog";
+import FBPurchaseOrderTable from "../custom/FBPurchaseOrderTable";
 
 const FBPurchaseOrderField: React.FunctionComponent<any> = ({
   options = [],
@@ -31,32 +32,8 @@ const FBPurchaseOrderField: React.FunctionComponent<any> = ({
     <>
       <div>{label}</div>
       {
-        (props.field.value || []).map((option, index) => {
-          /*
-          const suffix = option.replace(" ", "_");
-          const unitPriceName = `${props.name}-unit-price-${suffix}`;
-          const quantityName = `${props.name}-quantity-${suffix}`;
-
-          const cost = Number(props.form.values[unitPriceName]) * Number(props.form.values[quantityName]) || 0;
-          console.log(cost);
-          */
-
-          return (
-            <Box key={index}>
-              <Typography component="span">
-                {option.order}
-              </Typography>
-              {" - "}
-              <Typography component="span">
-                {option.units}
-              </Typography>
-              {" - "}
-              <Typography component="span">
-                {option.date}
-              </Typography>
-            </Box>
-          );
-        })
+        props.field.value &&
+        <FBPurchaseOrderTable values={props.field.value} />
       }
       <FBPurchaseOrderDialog
         disabled={disabled}

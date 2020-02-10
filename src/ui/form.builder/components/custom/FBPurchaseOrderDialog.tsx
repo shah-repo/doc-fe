@@ -55,6 +55,8 @@ const FBPurchaseOrderDialog: React.FunctionComponent<Props> = ({
         disabled={disabled}
         label="form.builder.add.item"
         onClick={addItem}
+        variant="outlined"
+        style={{ margin: "8px 0" }}
       />
       {renderDialog}
     </>
