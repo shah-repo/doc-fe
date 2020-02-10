@@ -1,20 +1,20 @@
 import { Dialog, DialogContent, DialogTitle, Typography } from "@material-ui/core";
 import React from "react";
-import useDialog from "../../../hooks/useDialog";
+import { DialogHandler } from "../../../hooks/useDialog";
 import FBPurchaseOrderForm from "../form/FBPruchaseOrderForm";
 import FBButton from "../inputs/FBButton";
 
 interface Props {
+  dialog: DialogHandler;
   onSubmit: (values: any) => void;
   disabled: boolean;
 }
 
 const FBPurchaseOrderDialog: React.FunctionComponent<Props> = ({
+  dialog,
   onSubmit,
   disabled,
 }) => {
-  const dialog = useDialog();
-
   const addItem = () => {
     dialog.open();
   };

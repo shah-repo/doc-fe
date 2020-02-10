@@ -9,11 +9,14 @@ import {
   TableRow,
   withStyles,
 } from "@material-ui/core";
-import React from "react";
+import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
+import React, { useEffect, useState } from "react";
 import Colors from "../../../layout/theme/utils/colors";
 
 interface Props {
   values: any[];
+  editItem: (index: number) => void;
+  deleteItem: (index: number) => void;
 }
 
 const StyledTableCell = withStyles((theme) => ({
@@ -38,8 +41,31 @@ const useStyles = makeStyles({
 
 const FBPurchaseOrderTable: React.FunctionComponent<Props> = ({
   values,
+  editItem,
+  deleteItem,
 }) => {
   const classes = useStyles();
+  const handleEdit = (index) => () => editItem(index);
+  const handleDelete = (index) => (e) => {
+    e.stopPropagation();
+    deleteItem(index);
+  };
+  const [preCalc, setPreCalc] = useState<any[]>([]);
+  useEffect(() => {
+    if (!values) {
+      return;
+    }
+
+    const preCalcValues = values.map((value) => {
+      return {
+        ...value,
+        price: Number(value.price || 0).toFixed(2),
+        amount: (Number(value.price || 0) * Number(value.order || 0)).toFixed(2),
+      };
+    });
+
+    setPreCalc(preCalcValues);
+  }, [values]);
 
   return (
     <Box className={classes.root}>
@@ -54,20 +80,24 @@ const FBPurchaseOrderTable: React.FunctionComponent<Props> = ({
             <StyledTableCell>Price</StyledTableCell>
             <StyledTableCell>Ext. Amount</StyledTableCell>
             <StyledTableCell padding="checkbox" align="center">Tax</StyledTableCell>
+            <StyledTableCell />
           </TableRow>
         </TableHead>
         <TableBody>
-          {values.map((row, index) => (
-            <TableRow key={index}>
+          {preCalc.map((row, index) => (
+            <TableRow key={index} onClick={handleEdit(index)}>
               <StyledTableCell align="left">{index + 1}</StyledTableCell>
               <StyledTableCell>{row.order}</StyledTableCell>
               <StyledTableCell>{row.units}</StyledTableCell>
               <StyledTableCell>{row.date}</StyledTableCell>
               <StyledTableCell>{row.description}</StyledTableCell>
               <StyledTableCell>${row.price}</StyledTableCell>
-              <StyledTableCell>${row.price * row.order}</StyledTableCell>
+              <StyledTableCell>${row.amount}</StyledTableCell>
               <StyledTableCell padding="checkbox" align="center">
                 <Checkbox disabled checked={row.tax} />
+              </StyledTableCell>
+              <StyledTableCell>
+                <RemoveCircleOutlineIcon color="error" onClick={handleDelete(index)} />
               </StyledTableCell>
             </TableRow>
           ))}
