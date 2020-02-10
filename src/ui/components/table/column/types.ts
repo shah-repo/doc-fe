@@ -32,6 +32,7 @@ export interface TableColumnProps<T> {
   sortable?: boolean;
   sortDirection?: SortDirectionType | undefined;
   cellHref?: (rowData: T) => string;
+  withoutSearchRender?: boolean;
 }
 
 export interface TableColumnActionProps<T> {

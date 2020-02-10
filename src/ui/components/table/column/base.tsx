@@ -38,6 +38,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
     omitSearch,
     cellHref,
     sortable,
+    withoutSearchRender,
   } = props;
   const { measurerCache, searchable, queryGetter } = innerProps;
 
@@ -145,7 +146,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
         </Box>
         {searchable && (
           <Box height="65px" component="div" className="headerField">
-            {searchFieldRenderer()}
+            {withoutSearchRender ? null : searchFieldRenderer()}
           </Box>
         )}
       </Box>

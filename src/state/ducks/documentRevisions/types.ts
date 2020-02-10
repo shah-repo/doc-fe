@@ -33,6 +33,7 @@ export interface DocumentRevisionDocument {
   docId: string;
   documentType: Partial<DocumentType>;
   referencedBy: DocumentRevision[];
+  canAccess: boolean;
 }
 
 export interface Document {
@@ -74,6 +75,7 @@ export interface DocumentRevision extends FBDocumentFlowProps {
   releasedAt?: string;
   trainingRecords: TrainingRecord[];
   retrain?: boolean;
+  grantAccess?: boolean;
 }
 
 export const RevisionStageOptions = [
