@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import React, { useEffect, useState } from "react";
+import Date from "../../../components/Date"; // we shouldn't use anything outside the formbuilder
 import Colors from "../../../layout/theme/utils/colors";
 
 interface Props {
@@ -92,7 +93,9 @@ const FBPurchaseOrderTable: React.FunctionComponent<Props> = ({
               <StyledTableCell align="left">{index + 1}</StyledTableCell>
               <StyledTableCell>{row.order}</StyledTableCell>
               <StyledTableCell>{row.units}</StyledTableCell>
-              <StyledTableCell>{row.date}</StyledTableCell>
+              <StyledTableCell>
+                <Date value={row.date} />
+              </StyledTableCell>
               <StyledTableCell>{row.description}</StyledTableCell>
               <StyledTableCell>${row.price}</StyledTableCell>
               <StyledTableCell>${row.amount}</StyledTableCell>

@@ -3,6 +3,7 @@ import { Form, Formik } from "formik";
 import React from "react";
 import FBButton from "../inputs/FBButton";
 import FBCheckbox from "../inputs/FBCheckbox";
+import FBDatePicker from "../inputs/FBDatePicker";
 import FBTextField from "../inputs/FBTextField";
 
 interface Props {
@@ -31,7 +32,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
           label="Units"
           name="units"
         />
-        <FBTextField
+        <FBDatePicker
           label="PN/Date Required"
           name="date"
         />
