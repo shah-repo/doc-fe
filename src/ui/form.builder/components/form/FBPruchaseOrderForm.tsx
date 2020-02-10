@@ -1,3 +1,4 @@
+import { Box } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import React from "react";
 import FBButton from "../inputs/FBButton";
@@ -51,16 +52,18 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
           label="Is Traceability Required"
           name="traceability"
         />
-        <FBButton
-          type="button"
-          variant="outlined"
-          onClick={closeDialog}
-          label="Cancel"
-        />
-        <FBButton
-          type="submit"
-          label="Done"
-        />
+        <Box textAlign="right">
+          <FBButton
+            type="button"
+            variant="outlined"
+            onClick={closeDialog}
+            label="Cancel"
+          />
+          <FBButton
+            type="submit"
+            label="Done"
+          />
+        </Box>
       </Form>
     </Formik>
   );

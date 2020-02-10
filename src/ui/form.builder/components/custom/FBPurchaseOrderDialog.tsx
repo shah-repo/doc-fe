@@ -6,6 +6,7 @@ import FBButton from "../inputs/FBButton";
 
 interface Props {
   dialog: DialogHandler;
+  initialValues: {};
   onSubmit: (values: any) => void;
   disabled: boolean;
 }
@@ -14,6 +15,7 @@ const FBPurchaseOrderDialog: React.FunctionComponent<Props> = ({
   dialog,
   onSubmit,
   disabled,
+  initialValues,
 }) => {
   const addItem = () => {
     dialog.open();
@@ -43,6 +45,7 @@ const FBPurchaseOrderDialog: React.FunctionComponent<Props> = ({
         <FBPurchaseOrderForm
           closeDialog={closeDialog}
           onSubmit={handleSubmit}
+          initialValues={initialValues}
         />
       </DialogContent>
     </Dialog>

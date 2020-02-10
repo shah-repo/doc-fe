@@ -1,4 +1,5 @@
-import React from "react";
+import { isUndefined } from "lodash";
+import React, { useEffect, useState } from "react";
 import { withFormik } from "../../../components/hoc/formik";
 import useDialog from "../../../hooks/useDialog";
 import FBPurchaseOrderDialog from "../custom/FBPurchaseOrderDialog";
@@ -11,15 +12,34 @@ const FBPurchaseOrderField: React.FunctionComponent<any> = ({
   disabled,
   ...props
 }) => {
+  const [initialValues, setInitialValues] = useState({});
+  const [rowIndex, setRowIndex] = useState();
   const dialog = useDialog();
+
+  useEffect(() => {
+    if (!dialog.isOpen) {
+      setRowIndex(undefined);
+      setInitialValues({});
+    }
+  }, [dialog.isOpen]);
 
   const onSubmit = (values: any) => {
     const purchaseOrders = props.field.value || [];
-    props.form.setFieldValue(props.name, [...purchaseOrders, values]);
+    if (isUndefined(rowIndex)) {
+      props.form.setFieldValue(props.name, [...purchaseOrders, values]);
+      return;
+    }
+
+    purchaseOrders[rowIndex] = values;
+    props.form.setFieldValue(props.name, [...purchaseOrders]);
+    setRowIndex(undefined);
+    setInitialValues({});
   };
 
   const editItem = (index: number) => {
-    console.log("edit item", index);
+    setInitialValues(props.field.value[index]);
+    setRowIndex(index);
+    dialog.open();
   };
 
   const deleteItem = (index: number) => {
@@ -42,6 +62,7 @@ const FBPurchaseOrderField: React.FunctionComponent<any> = ({
         dialog={dialog}
         disabled={disabled}
         onSubmit={onSubmit}
+        initialValues={initialValues}
       />
       <FBPurchaseOrderTotal values={props.field.value} />
     </>

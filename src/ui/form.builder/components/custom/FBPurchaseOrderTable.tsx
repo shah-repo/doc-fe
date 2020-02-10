@@ -37,6 +37,9 @@ const useStyles = makeStyles({
   table: {
     minWidth: 700,
   },
+  row: {
+    cursor: "pointer",
+  },
 });
 
 const FBPurchaseOrderTable: React.FunctionComponent<Props> = ({
@@ -85,7 +88,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<Props> = ({
         </TableHead>
         <TableBody>
           {preCalc.map((row, index) => (
-            <TableRow key={index} onClick={handleEdit(index)}>
+            <TableRow key={index} onClick={handleEdit(index)} className={classes.row}>
               <StyledTableCell align="left">{index + 1}</StyledTableCell>
               <StyledTableCell>{row.order}</StyledTableCell>
               <StyledTableCell>{row.units}</StyledTableCell>
