@@ -396,6 +396,9 @@
   "form.builder.predefined.validation": "Predefined Validation",
   "form.builder.custom.validation": "Custom Validation",
   "form.builder.validation.mode": "Validation Mode",
+  "form.builder.purchaseorder": "Purchase Order",
+  "form.builder.purhcase.order.items.placeholder": "Item A\nItem B\nItem C\n...",
+  "form.builder.add.item": "Add item",
 
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
