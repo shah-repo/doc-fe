@@ -37,8 +37,9 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
           name="date"
         />
         <FBTextField
-          label="Description"
+          label="Description/PN"
           name="description"
+          rows="3"
         />
         <FBTextField
           type="number"
