@@ -118,10 +118,11 @@ export const Presenter: React.FunctionComponent<Props> = ({
           <FBWorkspace />
         </Box>
       )}
-      <Box flexDirection="row-reverse" display="flex" px={3}>
+      <Box flexDirection={document.canAccess ? "row-reverse" : "row"} display="flex" px={3}>
         <ControlsContainer
           documentRevision={dataProp}
           canShowCreateVersionButton={canShowCreateVersionButton}
+          hasAccess={document.canAccess}
         />
       </Box>
     </Box>

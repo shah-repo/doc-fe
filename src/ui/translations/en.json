@@ -288,6 +288,7 @@
   "document.action.to_review": "Send to review",
   "document.action.withdraw": "Withdraw",
   "document.revision.stage": "Document Revision Stage",
+  "document.security.warning": "You do not have access to this document.",
 
   "documentRevision.revise": "Revise Document",
   "documentRevision.form.references": "References",
