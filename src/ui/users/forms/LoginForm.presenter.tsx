@@ -41,11 +41,11 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({
         alt="Logo"
         className={classes.logo}
       />
-      <Typography variant="h4" className={classes.title}>
+      <Typography variant="h4" className={classes.title} id="LoginFormPresenter-title">
         <Text translation={title} />
       </Typography>
       <Form className={classes.formStyle}>
-      <FormMessage asyncState={asyncState} className={classes.status} />
+      <FormMessage asyncState={asyncState} className={classes.status} id="LoginFormPresenter-formError" />
       <InputField
         name="email"
         label="login.email"
