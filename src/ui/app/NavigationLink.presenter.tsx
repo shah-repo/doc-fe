@@ -10,11 +10,13 @@ import { ReactComponent as ChangeRequestListIcon } from "../../assets/images/cha
 import { ReactComponent as DashboardIcon } from "../../assets/images/dashboard_icon.svg";
 import { ReactComponent as DocumentListICon } from "../../assets/images/document_list_icon.svg";
 import { ReactComponent as UserManagementIcon } from "../../assets/images/user_management_icon.svg";
+import { ReactComponent as GroupManagementIcon } from "../../assets/images/group_management_icon.svg";
 import Text from "../components/Text";
 import {
   CHANGE_REQUEST_LIST_URL,
   DOCUMENT_REVISION_LIST_URL,
   USER_MANAGEMENT_ROOT_URL,
+  GROUP_MANAGEMENT_ROOT_URL,
 } from "../constants/urls";
 import { LinkDefinition } from "./NavigationLink.container";
 import styles from "./NavigationLink.styles";
@@ -35,6 +37,7 @@ const iconMapping: IconObject = {
   [DOCUMENT_REVISION_LIST_URL]: <DocumentListICon />,
   [CHANGE_REQUEST_LIST_URL]: <ChangeRequestListIcon />,
   [USER_MANAGEMENT_ROOT_URL]: <UserManagementIcon />,
+  [GROUP_MANAGEMENT_ROOT_URL]: <GroupManagementIcon />,
 };
 
 const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterProps> = ({

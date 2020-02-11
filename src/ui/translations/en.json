@@ -40,6 +40,7 @@
   "navigation.documentRevisionList": "Document revisions",
   "navigation.change.request.list": "Change Request List",
   "navigation.user.management": "User Management",
+  "navigation.group.management": "Group Management",
 
   "validators.required": "Required",
   "validators.requiredAtLeastOne": "At least one input required",
@@ -259,6 +260,7 @@
   "common.alert": "Alert",
   "common.dismiss": "Dismiss",
   "common.reset": "Reset",
+  "common.members": "Members",
 
   "output.info": "Form Info",
 

@@ -17,6 +17,7 @@ import {
   CHANGE_REQUEST_LIST_URL,
   DOCUMENT_REVISION_LIST_URL,
   HOME_URL,
+  GROUP_MANAGEMENT_ROOT_URL,
 } from "../constants/urls";
 import styles from "./Navigation.styles";
 import NavigationLinkContainer from "./NavigationLink.container";
@@ -70,11 +71,17 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
         currentPath={location.pathname}
       />
       <UserManagementLink pathname={location.pathname} />
+      <NavigationLinkContainer
+        url={GROUP_MANAGEMENT_ROOT_URL}
+        text="navigation.group.management"
+        currentPath={location.pathname}
+      />
       <DocumentByTypeListLinks pathname={location.pathname} />
     </List>
     {hasMultipleCompanies &&
     <SwitchCompanyButtonContainer location={location} />
     }
+
     <BottomLogo />
   </Drawer>
 );

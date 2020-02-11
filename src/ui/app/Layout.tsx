@@ -19,6 +19,7 @@ import {
   SLACK_ROOT_URL,
   TRAINING_DETAIL_URL,
   USER_MANAGEMENT_ROOT_URL,
+  GROUP_MANAGEMENT_ROOT_URL,
 } from "../constants/urls";
 import DashboardContainer from "../dashboard/Dashboard.container";
 import DocumentRevisionContainer from "../document.revision/container";
@@ -35,6 +36,7 @@ import styles from "./Layout.styles";
 import Navigation from "./Navigation";
 import PingServer from "./PingServer";
 import SocketsContainer from "./sockets/container";
+import GroupManagementListContainer from "../group.management/list/container";
 
 type Props = WithStyles<typeof styles>;
 
@@ -88,6 +90,10 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
           <Route
             path={USER_MANAGEMENT_ROOT_URL}
             component={UserManagementListContainer}
+          />
+          <Route
+            path={GROUP_MANAGEMENT_ROOT_URL}
+            component={GroupManagementListContainer}
           />
           <Route path={SLACK_ROOT_URL} component={SlackContainer} />
           <Route
