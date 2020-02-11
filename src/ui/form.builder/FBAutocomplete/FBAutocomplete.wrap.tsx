@@ -41,7 +41,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     renderTags = (value, getTagProps) =>
       value.map((option, index) => (
         <Chip
-          key={FB.uniqid()}
+          key={`${_.kebabCase(option)}-${index}`}
           label={_.get(option, optionLabelKey, "")}
           {...getTagProps({ index })}
           {...{ disabled }}
