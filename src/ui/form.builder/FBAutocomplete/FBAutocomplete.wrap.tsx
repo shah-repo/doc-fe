@@ -14,18 +14,20 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     state,
     getOptionLabel,
     optionRenderKey = "id",
+    optionLabelKey = "label",
     optionPath = "",
     name = "",
     placeholder,
     renderEl,
+    options,
     ...props
   }: T) => {
 
     state = FB.useRef<FBAutocompleteState>(FBAutocompleteState);
-    renderEl = FBStore.mode === "design";
+    renderEl = FBStore.mode === "design" || !_.isUndefined(options);
 
     React.useEffect(() => {
-      if (FBStore.mode === "design") {
+      if (FBStore.mode === "design" || _.isEmpty(optionPath)) {
         return;
       }
       const value = _.get(FBStore.getValues(), name) || "";
@@ -33,7 +35,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       state?.setUrl(optionPath);
     }, []);
 
-    getOptionLabel = (option) => _.get(option, optionRenderKey) || "";
+    getOptionLabel = (option) => _.get(option, optionLabelKey) || "";
 
     const renderInput = (params: RenderInputParams) => (
       <TextField
@@ -48,11 +50,13 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       ...(props as T),
       getOptionLabel,
       renderEl: renderEl || state?.loaded,
-      options: state?.data,
+      options: options || state?.data,
       loading: state?.loading,
       defaultValue: state?.defaultValue,
       name,
       renderInput,
+      optionRenderKey,
+      optionLabelKey,
     }));
   };
 
