@@ -290,6 +290,9 @@
   "document.action.withdraw": "Withdraw",
   "document.revision.stage": "Document Revision Stage",
   "document.security.warning": "You do not have access to this document.",
+  "document.access.permissions": "Access Permissions",
+  "document.access.user.permissions": "User Permissions",
+  "document.access.group.permissions": "Group Permissions",
 
   "documentRevision.revise": "Revise Document",
   "documentRevision.form.references": "References",

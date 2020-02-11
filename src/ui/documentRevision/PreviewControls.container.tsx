@@ -56,13 +56,13 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
     };
 
     return (
-      <Box component="span" style={{verticalAlign: "center"}}>
+      <Box component="span" style={{paddingTop: 30}}>
         {hasAccess && canCreate() && renderCloneButton()}
         {hasAccess && canCreateOutput(documentRevision) && renderOutputButton()}
-        {!hasAccess && <Typography variant="h6">
-          <WarningIcon style={{marginRight: 10}}/>
+        {!hasAccess && <div style={{display: "flex"}}><WarningIcon style={{marginRight: 10}}/>
+        <Typography variant="h6">
           <Text translation="document.security.warning" />
-        </Typography>}
+        </Typography></div>}
       </Box>
     );
   };

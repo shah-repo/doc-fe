@@ -41,6 +41,14 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
       documentTypeName: faker.random.word(),
       group: "OTHER",
     },
+    securityList: {
+      securityEmployees: {
+        id: faker.random.uuid(),
+      },
+      securityGroups: {
+        id: faker.random.uuid(),
+      },
+    },
     canAccess: true,
   },
   released: faker.date.future(undefined, "2019-05-31"),

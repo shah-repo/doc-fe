@@ -11,6 +11,7 @@ import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
 import { documentVersionPath } from "../document.revision/utils/paths";
+import AccessPermissionsContainer from "./accessPermissions/AccessPermissions.container";
 import DocumentRevisionAuditContainer from "./audit/Audit.container";
 import DocumentRevisionDisplayContainer from "./DocumentRevisionDisplay.container";
 import DocumentRevisionListContainer from "./DocumentRevisionList.container";
@@ -113,6 +114,12 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
           {documentRevisionId && (
             <DocumentRevisionAuditContainer
               documentRevisionId={documentRevisionId}
+            />
+          )}
+          {documentRevisionId && (
+            <AccessPermissionsContainer
+              canAccess={false}
+              withoutCurrentUser={true}
             />
           )}
         </Grid>

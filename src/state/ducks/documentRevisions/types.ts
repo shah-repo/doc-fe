@@ -34,6 +34,16 @@ export interface DocumentRevisionDocument {
   documentType: Partial<DocumentType>;
   referencedBy: DocumentRevision[];
   canAccess: boolean;
+  securityList: SecurityAccess;
+}
+
+export interface SecurityAccess {
+  securityGroups: SecurityData;
+  securityEmployees: SecurityData;
+}
+
+export interface SecurityData {
+  id: string;
 }
 
 export interface Document {
