@@ -1,6 +1,5 @@
 import { Box, Typography } from "@material-ui/core";
 import { Form, Formik } from "formik";
-import { isEmpty } from "lodash";
 import React, { useEffect, useState } from "react";
 import FBStore from "../../stores/ui/FBStore";
 import FBButton from "../inputs/FBButton";
@@ -46,7 +45,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
 
     let missingFields = "";
     fields.forEach((field) => {
-      if (isEmpty(values[field])) {
+      if (!values[field]) {
         missingFields += `${field} is required; `;
       }
     });

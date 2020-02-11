@@ -80,10 +80,10 @@ const FBPurchaseOrderTable: React.FunctionComponent<Props> = ({
           <TableRow>
             <StyledTableCell size="small" align="left">Item</StyledTableCell>
             <StyledTableCell>
-              <Text message="form.builder.field.item" />
+              <Text message="form.builder.field.order" />
             </StyledTableCell>
             <StyledTableCell>
-              <Text message="form.builder.field.order" />
+              <Text message="form.builder.field.units" />
             </StyledTableCell>
             <StyledTableCell>
               <Text message="form.builder.field.pn.date" />

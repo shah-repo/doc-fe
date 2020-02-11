@@ -61,14 +61,11 @@ const FBPurchaseOrderField: React.FunctionComponent<any> = ({
   return (
     <>
       <FBSectionBox label={label} />
-      {
-        storeValue &&
-        <FBPurchaseOrderTable
-          values={FBStore.getValues()[props.name]}
-          editItem={editItem}
-          deleteItem={deleteItem}
-        />
-      }
+      <FBPurchaseOrderTable
+        values={storeValue}
+        editItem={editItem}
+        deleteItem={deleteItem}
+      />
       <FBPurchaseOrderDialog
         dialog={dialog}
         disabled={disabled}
