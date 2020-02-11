@@ -6,6 +6,7 @@ import FBStore from "../../stores/ui/FBStore";
 import FBPurchaseOrderDialog from "../custom/FBPurchaseOrderDialog";
 import FBPurchaseOrderTable from "../custom/FBPurchaseOrderTable";
 import FBPurchaseOrderTotal from "../custom/FBPurchaseOrderTotal";
+import FBSectionBox from "../layout/FBSectionBox";
 
 const FBPurchaseOrderField: React.FunctionComponent<any> = ({
   options = [],
@@ -28,7 +29,6 @@ const FBPurchaseOrderField: React.FunctionComponent<any> = ({
   const onSubmit = (values: any) => {
     const purchaseOrders = storeValue || [];
     if (isUndefined(rowIndex)) {
-      // props.form.setFieldValue(props.name, [...purchaseOrders, values]);
       FBStore.setValues({
         ...FBStore.getValues(),
         [props.name]: [...purchaseOrders, values],
@@ -37,7 +37,6 @@ const FBPurchaseOrderField: React.FunctionComponent<any> = ({
     }
 
     purchaseOrders[rowIndex] = values;
-    // props.form.setFieldValue(props.name, [...purchaseOrders]);
     FBStore.setValues({
       ...FBStore.getValues(),
       [props.name]: [...purchaseOrders],
@@ -54,7 +53,6 @@ const FBPurchaseOrderField: React.FunctionComponent<any> = ({
 
   const deleteItem = (index: number) => {
     const filtered = storeValue.filter((order, i) => i !== index);
-    // props.form.setFieldValue(props.name, filtered);
     FBStore.setValues({
       ...FBStore.getValues(),
       [props.name]: [...filtered],
@@ -63,7 +61,7 @@ const FBPurchaseOrderField: React.FunctionComponent<any> = ({
 
   return (
     <>
-      <div>{label}</div>
+      <FBSectionBox label={label} />
       {
         storeValue &&
         <FBPurchaseOrderTable

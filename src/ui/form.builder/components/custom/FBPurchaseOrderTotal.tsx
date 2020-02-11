@@ -1,5 +1,6 @@
-import { Typography } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
+import Text from "../../../components/Text";
 
 interface Props {
   values: any[];
@@ -26,9 +27,11 @@ const FBPurchaseOrderTotal: React.FunctionComponent<Props> = ({
   }, [values]);
 
   return (
-    <Typography variant="h5" align="right">
-      Total amount: ${totalAmount}
-    </Typography>
+    <Box margin="10px 0">
+      <Typography variant="h5" align="right">
+        <Text translation="form.builder.total.amount" values={{ totalAmount }} />
+      </Typography>
+    </Box>
   );
 };
 

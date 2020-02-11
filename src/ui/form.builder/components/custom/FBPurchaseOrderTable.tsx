@@ -12,6 +12,7 @@ import {
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import React, { useEffect, useState } from "react";
 import Date from "../../../components/Date"; // we shouldn't use anything outside the formbuilder
+import Text from "../../../components/Text";
 import Colors from "../../../layout/theme/utils/colors";
 
 interface Props {
@@ -24,6 +25,7 @@ const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: Colors.light_gray,
     color: theme.palette.common.black,
+    textTransform: "uppercase",
   },
   body: {
     fontSize: 14,
@@ -77,13 +79,27 @@ const FBPurchaseOrderTable: React.FunctionComponent<Props> = ({
         <TableHead>
           <TableRow>
             <StyledTableCell size="small" align="left">Item</StyledTableCell>
-            <StyledTableCell>Order</StyledTableCell>
-            <StyledTableCell>Units</StyledTableCell>
-            <StyledTableCell>PN/Date Required</StyledTableCell>
-            <StyledTableCell>Description</StyledTableCell>
-            <StyledTableCell>Price</StyledTableCell>
-            <StyledTableCell>Ext. Amount</StyledTableCell>
-            <StyledTableCell padding="checkbox" align="center">Tax</StyledTableCell>
+            <StyledTableCell>
+              <Text message="form.builder.field.item" />
+            </StyledTableCell>
+            <StyledTableCell>
+              <Text message="form.builder.field.order" />
+            </StyledTableCell>
+            <StyledTableCell>
+              <Text message="form.builder.field.pn.date" />
+            </StyledTableCell>
+            <StyledTableCell>
+              <Text message="form.builder.field.pn.description" />
+            </StyledTableCell>
+            <StyledTableCell>
+              <Text message="form.builder.field.price" />
+            </StyledTableCell>
+            <StyledTableCell>
+              <Text message="form.builder.field.ext.amount" />
+            </StyledTableCell>
+            <StyledTableCell padding="checkbox" align="center">
+              <Text message="form.builder.field.tax" />
+            </StyledTableCell>
             <StyledTableCell />
           </TableRow>
         </TableHead>
