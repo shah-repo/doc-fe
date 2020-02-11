@@ -13,6 +13,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   loading,
   defaultValue,
   renderEl,
+  renderTags,
   ...props
 }) =>  {
 return (
@@ -20,7 +21,7 @@ return (
     {loading && <CircularProgress size={20} />}
     {renderEl && (
       <Autocomplete
-        {...{options, multiple, getOptionLabel, loading, renderInput, defaultValue}}
+        {...{options, multiple, getOptionLabel, loading, renderInput, defaultValue, renderTags}}
       />
     )}
   </FBInput>
