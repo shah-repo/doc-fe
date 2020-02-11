@@ -1,4 +1,4 @@
-import { TextField } from "@material-ui/core";
+import { Chip, TextField } from "@material-ui/core";
 import { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import _ from "lodash";
 import { useObserver } from "mobx-react";
@@ -13,16 +13,17 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
   const Comp = ({
     state,
     getOptionLabel,
-    optionRenderKey = "id",
-    optionLabelKey = "label",
+    optionValueKey = "value",
+    optionLabelKey = "text",
     optionPath = "",
     name = "",
     placeholder,
     renderEl,
     options,
+    renderTags,
+    disabled,
     ...props
   }: T) => {
-
     state = FB.useRef<FBAutocompleteState>(FBAutocompleteState);
     renderEl = FBStore.mode === "design" || !_.isUndefined(options);
 
@@ -37,6 +38,16 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
 
     getOptionLabel = (option) => _.get(option, optionLabelKey) || "";
 
+    renderTags = (value, getTagProps) =>
+      value.map((option, index) => (
+        <Chip
+          key={FB.uniqid()}
+          label={_.get(option, optionLabelKey, "")}
+          {...getTagProps({ index })}
+          {...{ disabled }}
+        />
+      ));
+
     const renderInput = (params: RenderInputParams) => (
       <TextField
         {...params}
@@ -46,18 +57,22 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       />
     );
 
-    return useObserver(() => Component({
-      ...(props as T),
-      getOptionLabel,
-      renderEl: renderEl || state?.loaded,
-      options: options || state?.data,
-      loading: state?.loading,
-      defaultValue: state?.defaultValue,
-      name,
-      renderInput,
-      optionRenderKey,
-      optionLabelKey,
-    }));
+    return useObserver(() =>
+      Component({
+        ...(props as T),
+        getOptionLabel,
+        renderEl: renderEl || state?.loaded,
+        options: options || state?.data,
+        loading: state?.loading,
+        defaultValue: state?.defaultValue,
+        name,
+        renderInput,
+        optionValueKey,
+        optionLabelKey,
+        disabled,
+        renderTags,
+      }),
+    );
   };
 
   return (props: T) => Comp(props);
