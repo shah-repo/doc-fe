@@ -86,7 +86,7 @@ export const withOnChange = <T extends FBInputProps>(
       }
 
       if (type !== "autocomplete") {
-        value = _.get(ev.target, "value");
+        value = _.get(ev, "target.value", "");
       }
 
       switch (type) {
