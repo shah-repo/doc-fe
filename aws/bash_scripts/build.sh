@@ -15,7 +15,6 @@ set +o allexport
 # Generating Build Info
 echo "-------- Generating Build Info --------"
 
-chmod a+x "${BASH_SCRIPTS_DIR}/status.sh"
 "${BASH_SCRIPTS_DIR}/status.sh"
 
 # Building
