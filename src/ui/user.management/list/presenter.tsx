@@ -49,6 +49,7 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
   const columns: Array<TableColumnProps<GetEmployeeResponse>> = [
     {
       key: "name" as keyof GetEmployeeResponse,
+      id: "UserManagementListPresenter-name",
       label: "common.name",
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.user.name,
@@ -59,6 +60,7 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
     },
     {
       key: "email" as keyof GetEmployeeResponse,
+      id: "UserManagementListPresenter-email",
       label: "common.email",
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.user.email,
@@ -69,6 +71,7 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
     },
     {
       key: "groupId" as keyof GetEmployeeResponse,
+      id: "UserManagementListPresenter-groupId",
       label: "common.groups",
       columnOptions: {
         cellDataGetter: ({ rowData }) => handleGroups(rowData.groups),
@@ -81,6 +84,7 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
     },
     {
       key: "active",
+      id: "UserManagementListPresenter-active",
       label: "common.active",
       searchOptions: {
         searchType: "select",

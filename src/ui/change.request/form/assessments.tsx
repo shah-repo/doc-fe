@@ -5,10 +5,11 @@ import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
 import AttachmentField from "../../components/common/attachment.field/container";
 import AttachmentIconField from "../../components/common/attachment.icon/container";
 import HeaderField from "../../components/common/header.field/field";
-import TextEditorField from "../../components/forms/fields/TextEditor";
+import TextEditorField from "../../components/forms/fields/RichTextEditor";
 import { withFormik } from "../../components/hoc/formik";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
-import { customHandlers, customToolbarAction, getCustomContainers } from "../utils/assessment";
+import { REASONING_OPTIONS } from "../utils/constants";
+import AssessmentsReasoning from "./assessments.reasoning";
 
 type Props = Partial<FormikHybridFieldProps>;
 
@@ -28,6 +29,8 @@ const Assessments: React.FunctionComponent<Props> = ({ form }) => {
         form!.setFieldValue(`assessments.${type}.reasoning`, undefined);
       }
 
+      const reasoningOptions = REASONING_OPTIONS[type];
+
       return (
         <Box key={type} mb={4}>
           <TextEditorField
@@ -35,9 +38,10 @@ const Assessments: React.FunctionComponent<Props> = ({ form }) => {
             label={`change.request.${type}.assessment`}
             actionsRenderer={actionsRenderer}
             hidden={(attachments || []).length > 0}
-            customHandlers={customHandlers(type)}
-            customToolbarAction={customToolbarAction(type)}
-            customContainers={getCustomContainers(type)}
+            editorProps={{
+              // tslint:disable-next-line: jsx-key
+              toolbarCustomButtons: [<AssessmentsReasoning reasoningOptions={reasoningOptions} />],
+            }}
           />
           <AttachmentIconField name={`assessments.${type}.attachments`} />
         </Box>

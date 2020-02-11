@@ -15,6 +15,7 @@ export const withValidator = <T extends FBValidatorProps>(
 
     const afterChange = (fieldName: string, value: boolean) => {
       const { indicatorValues } = FBValidatorStore;
+      FBValidatorStore.formValues[fieldName] = value;
       if (value) {
         return FBValidatorStore.indicatorValues[fieldName] = {};
       }
@@ -24,6 +25,7 @@ export const withValidator = <T extends FBValidatorProps>(
     const indicatorAfterChange = (fieldName: string, value: any) => {
       const propname = _.get(props, "name");
       FBValidatorStore.indicatorValues[propname][":"] = value;
+      FBValidatorStore.formValues[fieldName] = value;
     };
 
     const indicatorElements = (): React.ReactNode[] | undefined => {

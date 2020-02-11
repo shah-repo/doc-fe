@@ -56,6 +56,7 @@ const Header: React.FunctionComponent<Props> = ({
             &nbsp;
             <Button
               className={classes.name}
+              id="Header-userProfile"
               color="primary"
               variant="text"
               onClick={openUserProfile}

@@ -51,18 +51,12 @@ export const Presenter: React.FunctionComponent<Props> = ({
   },
   canShowCreateVersionButton,
 }) => {
-  let outputDocumentTypeName;
   const onSubmit = () => void 0;
   FBDRStore.setValues(dataProp);
-  const documentTypesById = useSelector((state: ApplicationState) =>
-    documentTypeSelectors.byId(state),
-  );
-
-  if (formTemplate) {
-    const outputDocumentTypeId = formTemplate!.outputDocumentType.id;
-    outputDocumentTypeName =
-      documentTypesById[outputDocumentTypeId!].documentTypeName;
-  }
+  const outputDocumentTypeName = useSelector((state: ApplicationState) => {
+    const outputDocumentTypeId = formTemplate ? formTemplate!.outputDocumentType.id : "";
+    return documentTypeSelectors.getDocTypeName(state, outputDocumentTypeId);
+  });
 
   const renderTrainingControl = status === DocumentRevisionStatus.Released && (
     <TrainingControl

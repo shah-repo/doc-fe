@@ -1,9 +1,13 @@
+import FBActionContainerState from "../../components/actions/FBActionContainer.state";
+import { FBStateProps } from "../../helpers/FBStateProps";
 import { FBActionModel } from "../../stores/domain/models/FBActionModel";
 import { FBFormikFieldProps } from "../formik";
 
-export interface FBActionContainerProps {
+export type FBActionContainerProps =
+  & FBStateProps<FBActionContainerState>
+  & {
     actions?: string[] | React.ReactNode[];
-}
+  };
 
 export type FBActionProps =
     & Omit<FBFormikFieldProps, "name">

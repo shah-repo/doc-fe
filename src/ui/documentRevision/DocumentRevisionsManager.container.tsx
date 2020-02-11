@@ -4,12 +4,9 @@ import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import {
   DocumentRevision,
-  documentRevisionsActions,
   documentRevisionsSelectors,
 } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
-import { AsyncState } from "../../state/types";
-import AsyncGate from "../components/AsyncGate";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import AccessPermissionsContainer from "./accessPermissions/AccessPermissions.container";
 import DocumentRevisionAuditContainer from "./audit/Audit.container";
@@ -19,13 +16,8 @@ import { getDocRevIdToRedirect, shouldRedircetToLatestReleasd } from "./helpers"
 import styles from "./styles";
 
 interface StateProps {
-  loadDocumentAsyncState: AsyncState;
   documentRevisions: DocumentRevision[];
   docId: string;
-}
-
-interface DispatchProps {
-  loadDocument: typeof documentRevisionsActions.loadDocument;
 }
 
 interface OwnProps {
@@ -37,7 +29,6 @@ interface OwnProps {
 }
 
 export type DocumentRevisionManagerContainerProps = OwnProps &
-  DispatchProps &
   StateProps &
   WithStyles<typeof styles>;
 
@@ -46,9 +37,6 @@ const mapStateToProps = (
   state: ApplicationState,
   props: OwnProps,
 ): StateProps => ({
-  loadDocumentAsyncState: documentRevisionsSelectors.getLoadDocumentAsyncState(
-    state,
-  ),
   documentRevisions: getDocumentRevisions(state, props.documentId),
   docId: documentRevisionsSelectors.getDocId(state, props.documentId),
 });
@@ -57,8 +45,6 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
   DocumentRevisionManagerContainerProps
 > = ({
   classes,
-  loadDocumentAsyncState,
-  loadDocument,
   isNewVersion,
   isNewOutput,
   documentId,
@@ -67,7 +53,6 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
   deprecatedAt,
   docId,
 }) => {
-    const loadDocumentAction = () => loadDocument(documentId);
 
     if (shouldRedircetToLatestReleasd(documentRevisions, documentRevisionId)) {
       const docRevIdToRedirect = getDocRevIdToRedirect(documentRevisions, deprecatedAt);
@@ -79,19 +64,14 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
     return (
       <Grid container={true} spacing={2} className={classes.whiteContainer}>
         <Grid item={true} xs={2} className={classes.sidebar}>
-          <AsyncGate
-            asyncState={loadDocumentAsyncState}
-            asyncAction={loadDocumentAction}
-            startActionOnMount={true}
-          >
-            <DocumentRevisionListContainer
-              documentRevisions={documentRevisions}
-              documentId={documentId}
-              docId={docId}
-              selectedDocumentRevision={documentRevisionId!}
-            />
-          </AsyncGate>
-        </Grid>
+          <DocumentRevisionListContainer
+            documentRevisions={documentRevisions}
+            documentId={documentId}
+            docId={docId}
+            selectedDocumentRevision={documentRevisionId!}
+            documentRevisionId={documentRevisionId}
+          />
+          </Grid>
         {documentRevisionId && !isNewOutput && (
           <Grid item={true} xs={7}>
             <DocumentRevisionDisplayContainer
@@ -127,9 +107,6 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
     );
   };
 
-export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
-  mapStateToProps,
-  {
-    loadDocument: documentRevisionsActions.loadDocument,
-  },
-)(withStyles(styles)(DocumentRevisionManagerContainer));
+export default connect<StateProps, {}, OwnProps, ApplicationState>(mapStateToProps)(
+  withStyles(styles)(DocumentRevisionManagerContainer),
+);
