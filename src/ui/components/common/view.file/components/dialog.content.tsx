@@ -33,6 +33,7 @@ const ViewFileContent: React.FunctionComponent<ViewFileContentProps> = ({
       setFileType(PDF);
       return;
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url]);
 
   const renderVideo = fileType === VIDEO && (
