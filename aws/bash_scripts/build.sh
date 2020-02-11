@@ -29,7 +29,7 @@ export REACT_APP_FRONTEND_URL=$(python3 $SCRIPT $ENV $ENVIRONMENT_DIR REACT_APP_
 export REACT_APP_SIGNUP_DOMAIN_URL=$(python3 $SCRIPT $ENV $ENVIRONMENT_DIR REACT_APP_SIGNUP_DOMAIN_URL 2>&1)
 export REACT_APP_THEME=$(python3 $SCRIPT $ENV $ENVIRONMENT_DIR REACT_APP_THEME 2>&1)
 
-#export CI=false # had to do this to make the build process not treat warnings as errors
+export CI=false # had to do this to make the build process not treat warnings as errors
 
 yarn install --pure-lockfile
 yarn build
