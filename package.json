@@ -41,6 +41,7 @@
     "marked": "^0.8.0",
     "mobx": "^5.14.0",
     "mobx-react": "6.1.4",
+    "react-iframe": "1.8.0",
     "mobx-rest": "5.0.6",
     "mobx-rest-axios-adapter": "2.1.1",
     "moment": "2.24.0",

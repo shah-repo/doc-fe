@@ -1,8 +1,9 @@
 import _ from "lodash";
 import React from "react";
+import Iframe from "react-iframe";
 import { FBHelloSignPayload, FBHelloSignProps, FBHelloSignTypeMap } from ".";
-import { FBActionModel } from "../stores/domain/models/FBActionModel";
-import FBActionStore from "../stores/ui/FBActionStore";
+import { FB } from "..";
+import { FBDialogState } from "../FBDialog";
 import FBStore from "../stores/ui/FBStore";
 
 export const withFBHelloSign = <T extends FBHelloSignProps>(
@@ -10,8 +11,11 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
 ) => {
   const Comp = ({
     onClick,
+    state,
     ...props
   }: T) => {
+
+    state = FB.useRef<FBDialogState>(FBDialogState);
 
     function renderFilesPayload(payloadFiles: string[] = [], name: string = "files"): string[] {
       const uploadedFiles = _.get(FBStore.getValues(), name!, []);
@@ -19,14 +23,21 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     }
 
     function apiCall(payload: FBHelloSignPayload) {
-      const apiCall = new FBActionModel();
-      apiCall.set({
-        requestMethod: "POST",
-        requestUrl: "",
-        payload,
-      });
+      // const apiCall = new FBActionModel();
+      // apiCall.set({
+      //   requestMethod: "POST",
+      //   requestUrl: "",
+      //   payload,
+      // });
 
-      FBActionStore.apiCall(apiCall.toJS() as unknown as FBActionModel);
+      // FBActionStore.apiCall(apiCall.toJS() as unknown as FBActionModel);
+      state?.openDialog();
+      state?.config({
+        maxWidth: "lg",
+        content: (
+          <Iframe url="" width="100%" height="100%" />
+        ),
+      });
     }
 
     onClick = () => {
@@ -64,6 +75,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     return Component({
       ...(props as T),
       onClick,
+      state,
     });
   };
 
