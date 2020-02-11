@@ -1,6 +1,5 @@
 import { isUndefined } from "lodash";
 import React, { useEffect, useState } from "react";
-import { withFormik } from "../../../components/hoc/formik";
 import useDialog from "../../../hooks/useDialog";
 import FBStore from "../../stores/ui/FBStore";
 import FBPurchaseOrderDialog from "../custom/FBPurchaseOrderDialog";
@@ -81,4 +80,4 @@ const FBPurchaseOrderField: React.FunctionComponent<any> = ({
   );
 };
 
-export default withFormik(FBPurchaseOrderField);
+export default FBPurchaseOrderField;

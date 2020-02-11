@@ -1,5 +1,6 @@
 import { Dialog, DialogContent, DialogTitle, Typography } from "@material-ui/core";
 import React from "react";
+import Text from "../../../components/Text";
 import { DialogHandler } from "../../../hooks/useDialog";
 import FBPurchaseOrderForm from "../form/FBPruchaseOrderForm";
 import FBButton from "../inputs/FBButton";
@@ -37,8 +38,8 @@ const FBPurchaseOrderDialog: React.FunctionComponent<Props> = ({
       fullWidth={true}
     >
       <DialogTitle >
-        <Typography align="center">
-          Add an item
+        <Typography align="center" variant="h4">
+          <Text translation="form.builder.add.item" />
         </Typography>
       </DialogTitle>
       <DialogContent>
