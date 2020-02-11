@@ -8,7 +8,6 @@ import FBControlGroupEditor from "../components/editors/FBControlGroupEditor";
 import FBHyperlinkEditor from "../components/editors/FBHyperlinkEditor";
 import FBLabelEditor from "../components/editors/FBLabelEditor";
 import FBLabelStepperEditor from "../components/editors/FBLabelStepperEditor";
-import FBPurchaseOrderEditor from "../components/editors/FBPurchaseOrderEditor";
 import FBSelectEditor from "../components/editors/FBSelectEditor";
 import FBTextFieldEditor from "../components/editors/FBTextFieldEditor";
 import FBCheckbox from "../components/inputs/FBCheckbox";
@@ -43,7 +42,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   hyperlink: FBHyperlinkEditor,
   fileupload: FBLabelStepperEditor,
   action: FBActionEditor,
-  purchaseorder: FBPurchaseOrderEditor,
+  purchaseorder: FBLabelStepperEditor,
 };
 
 export const FBFieldComponent: Dictionary<any> = {
