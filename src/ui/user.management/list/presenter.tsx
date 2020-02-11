@@ -119,9 +119,6 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
         item={true}
         xs={6}
         style={{ textAlign: "right" }}
-        alignItems="flex-start"
-        justify="flex-end"
-        direction="row"
       >
         <AddSlackButtonContainer />
         <AddEmployeeContainer />

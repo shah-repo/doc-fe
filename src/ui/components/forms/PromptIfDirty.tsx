@@ -11,6 +11,9 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
   dirty, doNotPrompt, onDirtyFlagChange,
 }) => {
   useEffect(() => {
+    const startBeforeUnload = () => { window.onbeforeunload = (e: Event) => { e.returnValue = true; }; };
+    const cancelBeforeUnload = () => window.onbeforeunload = () => { };
+
     if (onDirtyFlagChange) {
       onDirtyFlagChange(dirty);
     }
@@ -25,16 +28,11 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
     } else {
       cancelBeforeUnload();
     }
-  }, [dirty, doNotPrompt]);
 
-  useEffect(() => {
     return () => {
       cancelBeforeUnload();
     };
-  }, []);
-
-  const startBeforeUnload = () => { window.onbeforeunload = (e: Event) => { e.returnValue = true; }; };
-  const cancelBeforeUnload = () => window.onbeforeunload = () => { };
+  }, [dirty, doNotPrompt, onDirtyFlagChange]);
 
   return (
     <Prompt
