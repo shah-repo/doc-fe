@@ -82,8 +82,14 @@ export const toDocumentRevisionEditRequestBody = (
     revisionStage: values.revisionStage,
     revisionChangeType: values.revisionChangeType,
     retrain: values.retrain,
+    document: {
+      securityList: {
+        securityEmployees: _.get(values.document, "securityEmployees", []),
+        securityGroups: _.get(values.document, "securityGroups", []),
+      },
+    },
   } as DocumentRevisionEditRequestBody;
-
+  console.log(values, data);
   return data;
 };
 
@@ -99,7 +105,7 @@ export const toNewVersionRequestBody = (
       newValues.document = _.pick(values.document, ["id"]);
     } else {
       // new document
-      newValues.document = _.pick(values.document, ["docId", "documentType"]);
+      newValues.document = _.pick(values.document, ["docId", "documentType", "securityList"]);
       newValues.document.documentType = { id: values.document.documentType!.id as string };
     }
   }

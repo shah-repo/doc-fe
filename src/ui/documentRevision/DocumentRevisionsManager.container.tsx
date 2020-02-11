@@ -98,6 +98,8 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
           )}
           {documentRevisionId && (
             <AccessPermissionsContainer
+              documentRevisionId={documentRevisionId}
+              documentId={documentId}
               canAccess={false}
               withoutCurrentUser={true}
             />

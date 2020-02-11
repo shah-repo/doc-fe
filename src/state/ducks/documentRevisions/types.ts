@@ -1,4 +1,5 @@
 import { TableColumnActionType } from "../../../ui/components/table/column/types";
+import { SecurityId } from "../../../ui/documentRevision/forms/types";
 import { FBDocumentFlowProps } from "../../../ui/form.builder/types/formik";
 import { Attachment } from "../attachments";
 import { AuditActionPayload } from "../audit/types";
@@ -34,16 +35,14 @@ export interface DocumentRevisionDocument {
   documentType: Partial<DocumentType>;
   referencedBy: DocumentRevision[];
   canAccess: boolean;
-  securityList: SecurityAccess;
+  securityList: SecurityList;
+  securityGroups: SecurityId[];
+  securityEmployees: SecurityId[];
 }
 
-export interface SecurityAccess {
-  securityGroups: SecurityData;
-  securityEmployees: SecurityData;
-}
-
-export interface SecurityData {
-  id: string;
+export interface SecurityList {
+  securityGroups: SecurityId[];
+  securityEmployees: SecurityId[];
 }
 
 export interface Document {
@@ -51,6 +50,7 @@ export interface Document {
   docId: string;
   documentType: DocumentType;
   documentRevisions: DocumentRevision[];
+  securityList: SecurityList;
 }
 
 export interface Reference {

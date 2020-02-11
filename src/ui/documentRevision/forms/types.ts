@@ -21,3 +21,7 @@ export interface DocumentRevisionFormValues extends FBDocumentFlowProps {
   retrain?: boolean;
   status?: DocumentRevisionStatus;
 }
+
+export interface SecurityId {
+  id: string;
+}

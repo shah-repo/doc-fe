@@ -51,7 +51,22 @@ export const DEFAULT_INITIAL_VALUES = (): DocumentRevisionFormValues => ({
   attachments: [],
   referenceTo: [],
   revisionChangeType: RevisionChangeType.NextRevision,
-  document: { docId: "", documentType: { id: "" } },
+  document: {
+    docId: "",
+    documentType: { id: "" },
+    securityList: {
+      securityEmployees: [
+        {
+          id: "",
+        },
+      ],
+      securityGroups: [
+        {
+          id: "",
+        },
+      ],
+    },
+  },
   revisionStage: 1,
   formTemplate: {outputDocumentType: { id: "" }, schema: []},
 });

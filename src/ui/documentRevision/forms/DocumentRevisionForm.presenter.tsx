@@ -3,6 +3,9 @@ import { FormikProps } from "formik";
 import _ from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
+import { useSelector } from "react-redux";
+import { authSelectors } from "../../../state/ducks/auth";
+import { changeRequestsSelectors } from "../../../state/ducks/changeRequest";
 import {
   DocumentRevision,
   DocumentRevisionStatus,
@@ -10,6 +13,8 @@ import {
 } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
+import { userManagementSelectors } from "../../../state/ducks/userManagement";
+import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
@@ -143,6 +148,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     <RevisionTypeChange />
   );
 
+  const availableApprovers = useSelector((state: ApplicationState) => {
+    const currentUserId = authSelectors.currentUserId(state);
+    return changeRequestsSelectors.getApproversListWithoutCurrentUser(state, currentUserId);
+  });
+  const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
+
   const renderRevisionStageDropdown = !isDisabled && (
     <SelectField
       name="revisionStage"
@@ -231,26 +242,24 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         <AttachmentsField />
         {renderTypeOfRevisionChange}
         <AutcompleteField
-          name="grantAccessToUser"
+          name="securityEmployees"
           label="document.revision.user.permissions"
           autocompleteProps={{
-            id: "grantAccessToUser",
+            id: "securityEmployees",
             isMulti: true,
             closeMenuOnSelect: false,
           }}
-          options={availableReferences}
-          onClick={openReference}
+          options={availableApprovers}
         />
         <AutcompleteField
-          name="grantAccessToGroup"
+          name="securityGroups"
           label="document.revision.group.permissions"
           autocompleteProps={{
-            id: "grantAccessToGroup",
+            id: "securityGroups",
             isMulti: true,
             closeMenuOnSelect: false,
           }}
-          options={availableReferences}
-          onClick={openReference}
+          options={groupOptions}
         />
         {FBStore.active && !FBDRStore.isOutput && (
           <Box mt={4}>
