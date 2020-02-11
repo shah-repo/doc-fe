@@ -10,10 +10,11 @@ import {
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
-import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
+import { TableDataProps, TablePanelStateProps, TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import {
   canEditDocumentRevision,
+  documentRevisionQueryStatus,
   documentRevisionStatusOption,
 } from "../../document.revision/utils/helpers";
 import {
@@ -47,6 +48,14 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   const canEdit = (data: DocumentRevision) => canEditDocumentRevision(data);
   const queryUrl =
     DOCUMENT_REVISION_ROOT_URL + `?documentTypeId=${documentType.id}`;
+
+  const customQuerySet = (queryDict: TableSearchQueryType) => {
+    if (!queryDict["status[]"]) {
+      queryDict["status[]"] = documentRevisionQueryStatus();
+    }
+
+    return queryDict;
+  };
 
   const cellHrefRenderer = (rowData: DocumentRevision): string => {
     if (canEdit(rowData)) {
@@ -179,6 +188,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
           queryUrl={queryUrl}
           cellMeasure={true}
           tableName={tableName}
+          customQuerySet={customQuerySet}
         />
       </Grid>
     </Grid>
