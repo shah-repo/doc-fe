@@ -3,7 +3,7 @@ import faker from "faker";
 import React from "react";
 import { getAttachment } from "../../../state/ducks/attachments/tests/factories";
 import AttachmentIconField from "../../components/common/attachment.icon/container";
-import TextEditorField from "../../components/forms/fields/TextEditor";
+import TextEditorField from "../../components/forms/fields/RichTextEditor";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
 import { Justification } from "./justification";
 
