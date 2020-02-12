@@ -27,6 +27,8 @@ import DocumentHeader from "../../document.revision/summary/header";
 import styles from "./DocumentRevisionForm.container.style";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
+import useActionCreator from "../../hooks/useActionCreator";
+import { changeRequestsActions } from "../../../state/ducks/changeRequest";
 
 interface StateProps {
   availableReferences: OptionType[];
@@ -121,6 +123,7 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
 
   document = document || ({} as Document);
   const classes = styles();
+  const loadAvailableApproversAction = useActionCreator(changeRequestsActions.loadAvailableApprovers);
 
   const render = (props: FormikProps<DocumentRevisionFormValues>) => {
     return (
@@ -154,6 +157,7 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
       DocumentRevisionStatus.PendingChange,
       DocumentRevisionStatus.Draft,
     ]);
+  loadAvailableApproversAction();
 
   return (
     <AsyncGate

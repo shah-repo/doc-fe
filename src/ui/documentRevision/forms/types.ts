@@ -20,6 +20,8 @@ export interface DocumentRevisionFormValues extends FBDocumentFlowProps {
   revisionStage?: number;
   retrain?: boolean;
   status?: DocumentRevisionStatus;
+  securityEmployees: OptionType[];
+  securityGroups: OptionType[];
 }
 
 export interface SecurityId {

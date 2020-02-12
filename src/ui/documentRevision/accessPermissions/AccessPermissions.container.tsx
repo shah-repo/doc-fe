@@ -47,6 +47,7 @@ export const AccessPermissionsContainer: React.FunctionComponent<AccessPermissio
             securityGroups={securityGroups}
             securityEmployees={securityEmployees}
             documentId={documentId}
+            documentRevisionId={documentRevisionId}
         />
  );
 };

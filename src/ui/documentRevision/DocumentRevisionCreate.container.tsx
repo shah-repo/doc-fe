@@ -54,21 +54,11 @@ export const DEFAULT_INITIAL_VALUES = (): DocumentRevisionFormValues => ({
   document: {
     docId: "",
     documentType: { id: "" },
-    securityList: {
-      securityEmployees: [
-        {
-          id: "",
-        },
-      ],
-      securityGroups: [
-        {
-          id: "",
-        },
-      ],
-    },
   },
   revisionStage: 1,
   formTemplate: {outputDocumentType: { id: "" }, schema: []},
+  securityGroups: [],
+  securityEmployees: [],
 });
 
 export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionCreateContainerProps> = ({

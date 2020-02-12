@@ -1,6 +1,7 @@
 import { Grid, withStyles, WithStyles } from "@material-ui/core";
+import _ from "lodash";
 import React from "react";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import {
   DocumentRevision,
@@ -53,15 +54,18 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
   deprecatedAt,
   docId,
 }) => {
+  const selectedDocument = useSelector((state: ApplicationState) =>
+  documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId as string));
 
-    if (shouldRedircetToLatestReleasd(documentRevisions, documentRevisionId)) {
+  if (shouldRedircetToLatestReleasd(documentRevisions, documentRevisionId)) {
       const docRevIdToRedirect = getDocRevIdToRedirect(documentRevisions, deprecatedAt);
       return (
         <Redirect to={documentVersionPath(docRevIdToRedirect, documentId)} />
       );
     }
+  const canAccess = _.get(selectedDocument, "document.canAccess", []);
 
-    return (
+  return (
       <Grid container={true} spacing={2} className={classes.whiteContainer}>
         <Grid item={true} xs={2} className={classes.sidebar}>
           <DocumentRevisionListContainer
@@ -96,11 +100,11 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
               documentRevisionId={documentRevisionId}
             />
           )}
-          {documentRevisionId && (
+          {documentRevisionId && canAccess && (
             <AccessPermissionsContainer
               documentRevisionId={documentRevisionId}
               documentId={documentId}
-              canAccess={false}
+              canAccess={canAccess}
               withoutCurrentUser={true}
             />
           )}

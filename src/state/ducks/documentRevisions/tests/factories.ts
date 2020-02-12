@@ -45,24 +45,19 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
       securityEmployees: [
         {
           id: faker.random.uuid(),
+          email: faker.random.word(),
+          name: faker.random.word(),
         },
       ],
       securityGroups: [
         {
           id: faker.random.uuid(),
+          name: faker.random.word(),
+          tags: [],
+          permissions: [],
         },
       ],
     },
-    securityEmployees: [
-      {
-        id: faker.random.uuid(),
-      },
-    ],
-    securityGroups: [
-      {
-        id: faker.random.uuid(),
-      },
-    ],
     canAccess: true,
   },
   released: faker.date.future(undefined, "2019-05-31"),
@@ -92,11 +87,16 @@ export const getDocument = (document: Partial<Document> = {}): Document => ({
     securityEmployees: [
       {
         id: faker.random.uuid(),
+        email: faker.random.word(),
+        name: faker.random.word(),
       },
     ],
     securityGroups: [
       {
         id: faker.random.uuid(),
+        name: faker.random.word(),
+        tags: [],
+        permissions: [],
       },
     ],
   },

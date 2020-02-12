@@ -1,10 +1,10 @@
 import { TableColumnActionType } from "../../../ui/components/table/column/types";
-import { SecurityId } from "../../../ui/documentRevision/forms/types";
 import { FBDocumentFlowProps } from "../../../ui/form.builder/types/formik";
 import { Attachment } from "../attachments";
 import { AuditActionPayload } from "../audit/types";
+import { Group } from "../auth/types";
 import { ChangeRequest } from "../changeRequest";
-import { Owner } from "../common";
+import { Id, Owner, User } from "../common";
 import { TrainingRecord } from "../training";
 import {
   DOCUMENT_REVISION_AUDIT_SET,
@@ -36,13 +36,11 @@ export interface DocumentRevisionDocument {
   referencedBy: DocumentRevision[];
   canAccess: boolean;
   securityList: SecurityList;
-  securityGroups: SecurityId[];
-  securityEmployees: SecurityId[];
 }
 
 export interface SecurityList {
-  securityGroups: SecurityId[];
-  securityEmployees: SecurityId[];
+  securityGroups: Group[];
+  securityEmployees: User[];
 }
 
 export interface Document {
@@ -98,6 +96,18 @@ export interface ReferenceToEditRequest {
   id: string;
 }
 
+export interface SecurityListRequest {
+  securityEmployees: Id[];
+  securityGroups: Id[];
+}
+
+export interface DocumentRevisionDocumentRequest {
+  docId?: string;
+  id?: string;
+  documentType?: Partial<DocumentType>;
+  securityList: SecurityListRequest;
+}
+
 export interface DocumentRevisionEditRequestBody extends FBDocumentFlowProps {
   name: string;
   docId?: string;
@@ -105,7 +115,7 @@ export interface DocumentRevisionEditRequestBody extends FBDocumentFlowProps {
   attachments: Attachment[];
   type?: string;
   referenceTo: ReferenceToEditRequest[];
-  document?: Partial<DocumentRevisionDocument>;
+  document?: Partial<DocumentRevisionDocumentRequest>;
   revisionChangeType?: RevisionChangeType;
   revisionStage?: number;
   retrain?: boolean;

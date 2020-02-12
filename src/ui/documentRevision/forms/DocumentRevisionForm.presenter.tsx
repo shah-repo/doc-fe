@@ -241,6 +241,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         />
         <AttachmentsField />
         {renderTypeOfRevisionChange}
+        {!values.status &&
         <AutcompleteField
           name="securityEmployees"
           label="document.revision.user.permissions"
@@ -250,7 +251,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             closeMenuOnSelect: false,
           }}
           options={availableApprovers}
-        />
+        />}
+        {!values.status &&
         <AutcompleteField
           name="securityGroups"
           label="document.revision.group.permissions"
@@ -260,7 +262,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             closeMenuOnSelect: false,
           }}
           options={groupOptions}
-        />
+        />}
         {FBStore.active && !FBDRStore.isOutput && (
           <Box mt={4}>
             <SelectField

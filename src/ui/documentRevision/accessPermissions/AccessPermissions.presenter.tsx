@@ -13,7 +13,7 @@ import { ReactComponent as CloseIcon } from "../../../assets/images/close_delete
 import { ReactComponent as PlusIcon } from "../../../assets/images/plus_add_icon.svg";
 import { Group } from "../../../state/ducks/auth/types";
 import { changeRequestsActions } from "../../../state/ducks/changeRequest";
-import { TypographySize } from "../../../state/ducks/common";
+import { Owner, TypographySize } from "../../../state/ducks/common";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { AsyncState } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
@@ -31,6 +31,7 @@ interface OwnProps {
   securityEmployees: [];
   securityGroups: [];
   documentId: string;
+  documentRevisionId: string;
 }
 
 export type AccessPermissionsPresenterProps = OwnProps;
@@ -41,6 +42,8 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
   securityGroups,
   securityEmployees,
   documentId,
+  loadAvailableApproversAction,
+  documentRevisionId,
 }) => {
   const classes = styles();
   const [expanded, setExpanded] = React.useState<boolean>(false);
@@ -79,10 +82,16 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
       async,
     );
   };
+  const getList = useActionCreator(documentRevisionsActions.load);
   const updateAction = useActionCreator(documentRevisionsActions.updateAccess);
-  const async = useAsync();
+  const async = useAsync({onSuccess: () => {
+    loadAvailableApproversAction();
+    getList(documentRevisionId);
+  },
+});
 
-  const [accessElement, saveAccessElement] = React.useState({value: "", text: "", label: ""});
+  const initialElements = {value: "", text: "", label: ""}
+  const [accessElement, saveAccessElement] = React.useState(initialElements);
   const handleUpdate = () => {
     const isGroup = _.some(groupOptions, {
      label: accessElement.label, text: accessElement.text, value: accessElement.value });
@@ -109,6 +118,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
         async,
       );
     }
+    saveAccessElement(initialElements);
   };
 
   const saveValue = (value) => {
@@ -126,6 +136,11 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
       </components.DropdownIndicator>
     );
   };
+  const securityGroupsIds = securityGroups.map((e: Group) => e.id);
+  const groupSelectOptions = groupOptions.filter((val) => !securityGroupsIds.includes(val.value));
+  const securityEmployeesIds = securityEmployees.map((e: Owner) => e.id);
+  const employeeSelectOptions = availableApprovers.filter((val) => !securityEmployeesIds.includes(val.value));
+
   return (
     <div className={classes.container}>
       <ExpansionPanel expanded={expanded} onChange={handleChange()}>
@@ -150,13 +165,13 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
           >
             <div style={{ width: 272 }}>
               {!_.isEmpty(securityEmployees) &&
-              <List className={rowStyles.customRows}>
-                {securityEmployees.map((e: Group, index) => (
+              <List className={securityGroups.length > 3 ? rowStyles.customRows : undefined}>
+                {securityEmployees.map((e: Owner, index) => (
                   <div
                     key={index}
                     style={{ display: "flex", marginTop: 16, marginBottom: 16 }}
                   >
-                    <div style={{ width: 230 }}>{e.name}</div>
+                    <div style={{ width: 230 }}>{e.user.name}</div>
                     <button className={classes.accessButton} onClick={() => handleDelete(e.id)} >
                       <CloseIcon />
                     </button>
@@ -164,10 +179,11 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
                 ))}
               </List>}
               <Select
-                options={availableApprovers}
+                options={employeeSelectOptions}
                 onChange={(e) => saveValue(e)}
                 placeholder="Enter name to invite people"
                 components={{ DropdownIndicator }}
+                value={accessElement.value === "" ? null : accessElement}
               />
             </div>
           </ExpansionPanelDetails>
@@ -202,10 +218,11 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
                 ))}
               </List>}
               <Select
-                options={groupOptions}
+                options={groupSelectOptions}
                 placeholder="Enter name to invite group"
                 components={{ DropdownIndicator }}
                 onChange={(e) => saveValue(e)}
+                value={accessElement.value === "" ? null : accessElement}
               />
             </div>
           </ExpansionPanelDetails>

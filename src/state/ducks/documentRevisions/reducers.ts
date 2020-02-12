@@ -41,6 +41,7 @@ export const byId = (
             [docRev.id]: {
               ...state[docRev.id],
               ...docRev,
+              document: { ...(state[docRev.id] || {}).document, ...docRev.document },
             },
           };
         },
@@ -48,6 +49,7 @@ export const byId = (
       );
     // return { ...(_.keyBy<DocumentRevision>(action.payload, (documentRevision) => documentRevision.id)) };
     case DOCUMENT_REVISION_SET:
+      console.log(action.payload);
       return { ...state, [action.payload.id]: action.payload };
     default:
       return state;
