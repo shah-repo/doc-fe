@@ -19,6 +19,15 @@ const FBPurchaseOrderField: React.FunctionComponent<any> = ({
   const dialog = useDialog();
 
   useEffect(() => {
+    if (!storeValue) {
+      FBStore.setValues({
+        ...FBStore.getValues(),
+        [props.name]: { items: [], shippingCost: undefined },
+      });
+    }
+  }, []);
+
+  useEffect(() => {
     if (!dialog.isOpen) {
       setRowIndex(undefined);
       setInitialValues({});
@@ -26,35 +35,44 @@ const FBPurchaseOrderField: React.FunctionComponent<any> = ({
   }, [dialog.isOpen]);
 
   const onSubmit = (values: any) => {
-    const purchaseOrders = storeValue || [];
+    const items = storeValue.items || [];
     if (isUndefined(rowIndex)) {
       FBStore.setValues({
         ...FBStore.getValues(),
-        [props.name]: [...purchaseOrders, values],
+        [props.name]: {
+          ...storeValue,
+          items: [...items, values],
+        },
       });
       return;
     }
 
-    purchaseOrders[rowIndex] = values;
+    items[rowIndex] = values;
     FBStore.setValues({
       ...FBStore.getValues(),
-      [props.name]: [...purchaseOrders],
+      [props.name]: {
+        ...storeValue,
+        items: [...items],
+      },
     });
     setRowIndex(undefined);
     setInitialValues({});
   };
 
   const editItem = (index: number) => {
-    setInitialValues(storeValue[index]);
+    setInitialValues(storeValue.items[index]);
     setRowIndex(index);
     dialog.open();
   };
 
   const deleteItem = (index: number) => {
-    const filtered = storeValue.filter((order, i) => i !== index);
+    const filtered = (storeValue.items || []).filter((order, i) => i !== index);
     FBStore.setValues({
       ...FBStore.getValues(),
-      [props.name]: [...filtered],
+      [props.name]: {
+        ...storeValue,
+        items: [...filtered],
+      },
     });
   };
 
@@ -62,7 +80,7 @@ const FBPurchaseOrderField: React.FunctionComponent<any> = ({
     <>
       <FBSectionBox label={label} />
       <FBPurchaseOrderTable
-        values={storeValue}
+        values={storeValue.items}
         editItem={editItem}
         deleteItem={deleteItem}
       />
@@ -72,7 +90,10 @@ const FBPurchaseOrderField: React.FunctionComponent<any> = ({
         onSubmit={onSubmit}
         initialValues={initialValues}
       />
-      <FBPurchaseOrderTotal values={storeValue} />
+      <FBPurchaseOrderTotal
+        values={storeValue}
+        name={props.name}
+      />
     </>
   );
 };
