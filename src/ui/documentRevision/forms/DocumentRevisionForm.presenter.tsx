@@ -11,6 +11,7 @@ import {
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
+import OwnerChanger from "../../components/common/owner.changer/container";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
 import CheckboxField from "../../components/forms/fields/Checkbox";
@@ -56,6 +57,7 @@ export interface Props
   otherDocumentTypes: SelectOption[];
   documentTypesById: DocumentTypeByIdState;
   onDirtyFlagChange?: (dirty: boolean) => void;
+  canChangeOwnerShip: boolean;
 }
 
 export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
@@ -79,6 +81,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   documentTypes,
   documentTypesById,
   otherDocumentTypes,
+  canChangeOwnerShip,
   documentRevision,
 }) => {
   if (!values.id && !_.get(values, "document.documentType.id")) {
@@ -101,6 +104,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   values.document!.docId = useProposedDocId
     ? proposedDocId
     : values.document!.docId;
+
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     const { documentType } = values.document || {};
@@ -260,6 +264,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             justify="flex-end"
             direction="row"
           >
+            {canChangeOwnerShip && (
+              <OwnerChanger
+                requestId={values.id!}
+                requestType={"document"}
+              />
+            )}
             <SubmitButton
               asyncState={asyncState}
               label={isDisabled ? "common.save" : "navigation.createDocument"}

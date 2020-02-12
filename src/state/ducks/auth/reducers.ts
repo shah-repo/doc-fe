@@ -137,7 +137,7 @@ export const groups = (
         permissions: Array.from(permissionsSet),
       };
     case LOGOUT_USER:
-      return {...USER_GROUPS_DEFAULT_STATE};
+      return { ...USER_GROUPS_DEFAULT_STATE };
     default:
       return state;
   }
