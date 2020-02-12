@@ -1,5 +1,6 @@
-import { Box, Typography } from "@material-ui/core";
+import { Box, TextField, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
+import { FormattedNumber } from "react-intl";
 import Text from "../../../components/Text";
 
 interface Props {
@@ -13,6 +14,16 @@ const FBPurchaseOrderTotal: React.FunctionComponent<Props> = ({
 }) => {
   const INITIAL_COST = { tax: 0, subTotal: 0 };
   const [cost, setCost] = useState(INITIAL_COST);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [shippingCost, setShippingCost] = useState(0);
+  const handleChange = (e) => {
+    setShippingCost(e.target.value);
+  };
+
+  useEffect(() => {
+    const total = cost.subTotal + cost.tax + Number(shippingCost || 0);
+    setTotalAmount(total);
+  }, [cost, shippingCost]);
   useEffect(() => {
     if (!values) {
       setCost(INITIAL_COST);
@@ -33,21 +44,44 @@ const FBPurchaseOrderTotal: React.FunctionComponent<Props> = ({
         return { subTotal, tax };
       }, { tax: 0, subTotal: 0 },
     );
-    setCost({
-      subTotal: sum.subTotal.toFixed(2),
-      tax: sum.tax.toFixed(2),
-    });
+    setCost(sum);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values]);
 
+  const renderCost = (translation: string, value: number) => (
+    <Box margin="5px 0">
+      <Typography variant="h5" align="right">
+        <Box minWidth="150px" component="span">
+          <Text message={translation} />
+        </Box>
+        <Box minWidth="150px" component="span">
+          <FormattedNumber value={value} style="currency" currency="USD" />
+        </Box>
+      </Typography>
+    </Box>
+  );
+  const renderShippingCost = (
+    <Box display="flex" alignItems="flex-end" justifyContent="flex-end" margin="5px 0 10px 0">
+      <Typography variant="h5">
+        <Text translation="form.builder.shipping.cost" />
+      </Typography>
+      <Box marginLeft="10px" maxWidth="60px">
+        <TextField
+          onChange={handleChange}
+          type="number"
+          size="small"
+          inputProps={{ style: { textAlign: "right", fontSize: 16, padding: 0 }}}
+        />
+      </Box>
+    </Box>
+  );
+
   return (
     <Box margin="10px 0">
-      <Typography variant="h5" align="right">
-        <Text translation="form.builder.sub.total" values={{ subTotal: cost.subTotal }} />
-      </Typography>
-      <Typography variant="h5" align="right">
-        <Text translation="form.builder.tax" values={{ tax: cost.tax }} />
-      </Typography>
+      {renderCost("form.builder.sub.total", cost.subTotal)}
+      {renderCost("form.builder.tax", cost.tax)}
+      {renderShippingCost}
+      {renderCost("form.builder.total", totalAmount)}
     </Box>
   );
 };
