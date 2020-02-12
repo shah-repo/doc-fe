@@ -13,16 +13,20 @@ export const TableSearchTextField: React.FunctionComponent<Props> = ({
   defaultValue,
 }) => {
 
+  const [value, setValue] = React.useState<string | number>(defaultValue || "");
+
   const handleChange = (event: React.ChangeEvent<{ value: string }>) => {
     if (!queryGetter) { return; }
+    const query = event.target.value;
+    setValue(query);
 
-    const finalQuery = searchQueryString({ query: event.target.value, searchValueGetter });
+    const finalQuery = searchQueryString({ query, searchValueGetter });
     queryGetter(dataKey, finalQuery);
   };
 
   return (
     <StyledSearchTextField
-      value={defaultValue || ""}
+      value={value}
       name={dataKey}
       onChange={handleChange}
       margin="normal"

@@ -3,7 +3,6 @@ import { Form, Formik, FormikErrors, FormikProps } from "formik";
 import React from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { IotService } from "../../../common/utils/iot/mqttClient";
 import { authSelectors } from "../../../state/ducks/auth";

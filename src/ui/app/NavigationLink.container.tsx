@@ -3,12 +3,9 @@ import { SvgIconProps } from "@material-ui/core/SvgIcon";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import _ from "lodash";
 import React, { ComponentType, useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { IotService } from "../../common/utils/iot/mqttClient";
 import { Translation } from "../translations/types";
 import NavigationLinkPresenter from "./NavigationLink.presenter";
-import ToastMessage from "./ToastMessage";
 
 export interface LinkDefinition {
   url: string;
@@ -26,32 +23,7 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
     const isChildActive = () => _.includes(childrenUrls.map((link) => link.url), currentPath);
     const [isOpen, setIsOpen] = useState(isChildActive());
 
-    const notify = (msg: string) => {
-      const message = JSON.parse(msg).data.message;
-      toast(<ToastMessage message={message}/>);
-    };
-
-    const manageSubscriptionsOnNavigation = () => {
-      const iotService = IotService.getInstance();
-      switch (currentPath) {
-        case "/":
-          iotService.unsubscribeAll();
-          iotService.subscribeToTopic(`+/training_records/+/created`, notify);
-          iotService.subscribeToTopic(`+/training_records/+/updated`, notify);
-          iotService.subscribeToTopic(`+/implementation_plan_task/+/created`, notify);
-          iotService.subscribeToTopic(`+/implementation_plan_task/+/updated`, notify);
-          return;
-        case "/document_revision":
-          iotService.unsubscribeAll();
-          return;
-        case "/change_request":
-          iotService.unsubscribeAll();
-          iotService.subscribeToTopic(`+/change_requests/+/created`, notify);
-          return;
-      }
-    };
     useEffect(() => {
-      manageSubscriptionsOnNavigation();
       if (isChildActive()) {
         setIsOpen(true);
       }

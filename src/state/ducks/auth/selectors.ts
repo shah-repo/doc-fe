@@ -62,6 +62,12 @@ const getCurrentUserGroups = createSelector(
   },
 );
 
+const getHasPermission = createSelector(
+  (state: ApplicationState) => state.auth.groups.permissions,
+  (state: ApplicationState, selectedPermission: Permission) => selectedPermission,
+  (permissions, selectedPermission) => permissions.includes(selectedPermission),
+);
+
 export default {
   isAuthenticated,
   currentUserEmail,
@@ -78,4 +84,5 @@ export default {
   currentSlackUserId,
   currentUserGroups,
   currentUserActiveStatus,
+  getHasPermission,
 };

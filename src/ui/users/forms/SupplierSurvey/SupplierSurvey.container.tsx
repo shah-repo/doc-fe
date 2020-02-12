@@ -12,7 +12,7 @@ import { ApplicationState } from "../../../../state/reducers";
 import { AsyncState } from "../../../../state/types";
 import AsyncGate from "../../../components/AsyncGate";
 import { HOME_URL } from "../../../constants/urls";
-import FBStore from "../../../form.builder/stores/FBStore";
+import FBStore from "../../../form.builder/stores/ui/FBStore";
 import useAsync from "../../../hooks/useAsync";
 import SupplierSurveyPresenter from "./SupplierSurvey.presenter";
 import SupplierSurveySubmitMessage from "./SupplierSurveySubmitMessage.presenter";
@@ -67,13 +67,14 @@ export const SupplierSurveyContainer: React.FunctionComponent<
 
   const onSubmit = () => {
     async.start(submitSupplierSurvey, token, {
-      formInput: JSON.stringify(FBStore.getValues()),
+      formInput: FBStore.getValues(),
     }, async);
   };
 
   const schema =
-  _.get(supplierSurvey, "surveyFormDocumentRevision.formTemplate.schema", []);
-  FBStore.setSchema(schema);
+  _.get(supplierSurvey, "surveyFormDocumentRevision.formTemplate.schema") ||
+  _.get(supplierSurvey, "surveyFormDocumentRevision.formDocument.formTemplate.schema", []);
+  FBStore.setFormSchema(schema);
 
   return (
     <AsyncGate

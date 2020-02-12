@@ -3,12 +3,12 @@ set -e
 
 TEST_RESULTS_DIR="${BITBUCKET_CLONE_DIR}/test-results"
 
-# build the app
-echo "-------- Building Application --------"
+# Install Dependencies
+echo "-------- Installing Dependencies --------"
 
 yarn install --pure-lockfile
 
-# execute tests
+# Executing Test
 echo "-------- Executing Lint Tests --------"
 
 mkdir -p ${TEST_RESULTS_DIR}

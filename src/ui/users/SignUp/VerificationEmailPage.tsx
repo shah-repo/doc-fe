@@ -21,17 +21,17 @@ const VerificationEmailPage: React.FunctionComponent<Props> = ({ email, logo, me
           alt="Logo"
           className={classes.logo}
         />
-        <Typography variant="h4" className={classes.title}>
+        <Typography id="VerificationEmailPage-title" variant="h4" className={classes.title}>
           <Text translation={"signup.verification"} />
         </Typography>
-        <Typography variant="h4" className={classes.boldTitle}>
+        <Typography id="VerificationEmailPage-email" variant="h4" className={classes.boldTitle}>
           {`"${email}"`}
         </Typography>
-        <Typography variant="subtitle1" className={classes.title}>
+        <Typography id="VerificationEmailPage-message" variant="subtitle1" className={classes.title}>
         <Text translation={message} />
         </Typography>
         {!isForgotPassword &&
-        <NavLink to={"/login"} exact={true} className={classes.navigationLink} >
+        <NavLink to={"/login"} exact={true} className={classes.navigationLink} id="VerificationEmailPage-loginLink">
           <Text translation={"signup.close.window"} />
         </NavLink>}
       </Paper>

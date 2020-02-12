@@ -3,6 +3,7 @@ import moment from "moment";
 import {
   DocumentRevision,
   DocumentRevisionStatus,
+  RevisionChangeType,
 } from "../../state/ducks/documentRevisions";
 
 export const canEditDocumentRevision = (
@@ -71,7 +72,11 @@ const getAlphabetFromNumber = (num: number) => {
 export const generateVersionNumber = (
   revision: number,
   revisionStage: number,
+  revisionChangeType: RevisionChangeType,
 ) => {
+  if (revisionChangeType === RevisionChangeType.Obsolete) {
+    return "OBS";
+  }
   switch (revisionStage) {
     case 1:
       return revision;

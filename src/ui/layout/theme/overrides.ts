@@ -184,6 +184,11 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       fontFamily: "Open Sans, sans-serif;",
     },
   },
+  MuiFormHelperText: {
+    root: {
+      fontFamily: "Open Sans, sans-serif;",
+    },
+  },
 });
 
 export default ThemeOverrides;

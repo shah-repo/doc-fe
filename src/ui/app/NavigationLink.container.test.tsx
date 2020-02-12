@@ -9,6 +9,12 @@ jest.mock("../components/Text");
 jest.mock("react-router-dom", () => ({
   NavLink: (props: any) => props.children,
 }));
+jest.mock("react-redux", () => ({
+  useDispatch: jest.fn(),
+  useSelector: () => ({
+    queryDict: {},
+  }),
+}));
 
 describe("NavigationLinkContainer component unit tests", () => {
   const defaultProps: NavigationLinkContainerProps = {

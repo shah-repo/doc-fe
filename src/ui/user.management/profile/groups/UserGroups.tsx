@@ -72,11 +72,12 @@ export const UserGroups: React.FunctionComponent<Props> = ({
       color="primary"
       onClick={openEditGroups}
       className={classes.addGroupsButton}
+      id="UserGroups-addGroups"
     >
       <Icon style={{ marginRight: "10px" }}>
         <AddCircleOutlineOutlinedIcon />
       </Icon>
-      <Text translation="user.management.add.groups" />
+      <Text translation="user.management.add.to.groups" />
     </Button>
   );
 
@@ -85,6 +86,7 @@ export const UserGroups: React.FunctionComponent<Props> = ({
       <SummaryField
         label="common.groups"
         value={handleGroups(employeeGroups)}
+        noValueOption={<Text translation="user.management.no.groups.specified" />}
       />
       {canManageUsers && addGroupsRenderer()}
     </Box>
@@ -96,7 +98,7 @@ export const UserGroups: React.FunctionComponent<Props> = ({
         <Text message={"common.groups"} />
       </Typography>
       <Select
-        id="groups"
+        id="UserGroups-groups"
         isMulti={true}
         options={groupOptions}
         placeholder="Start typing to see the list of groups…"
@@ -111,6 +113,7 @@ export const UserGroups: React.FunctionComponent<Props> = ({
           onSubmit(employeeId, groups);
           closeEditGroups();
         }}
+        id="UserGroups-done"
       >
         <Text translation="common.done" />
       </Button>
@@ -118,6 +121,7 @@ export const UserGroups: React.FunctionComponent<Props> = ({
         className={classes.outlinedButton}
         variant="outlined"
         onClick={closeEditGroups}
+        id="UserGroups-cancel"
       >
         <Text translation="common.cancel" />
       </Button>

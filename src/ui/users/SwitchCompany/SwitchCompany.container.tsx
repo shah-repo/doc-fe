@@ -1,9 +1,11 @@
+import { orderBy } from "lodash";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { ReactComponent as CompanyAvatar } from "../../../assets/images/company_avatar.svg";
 import { authActions } from "../../../state/ducks/auth";
 import { companyActions, Employee } from "../../../state/ducks/company";
+import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { HOME_URL } from "../../constants/urls";
 import { LoginContainerProps } from "../Login.container";
 import SwitchCompanyPresenter from "./SwitchCompany.presenter";
@@ -11,7 +13,9 @@ import { styles } from "./SwitchCompany.styles";
 
 export type Props = LoginContainerProps;
 
-const SwitchCompanyContainer: React.FunctionComponent<Props> = ({employees}) => {
+const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
+  employees,
+}) => {
   const classes = styles();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -19,11 +23,12 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({employees}) => 
   const handleClick = (employee: Employee) => () => {
     dispatch(companyActions.selectCompany(employee.company));
     dispatch(authActions.selectEmployee(employee));
+    dispatch(tableSearchActions.clearAllTables());
     history.push(HOME_URL);
   };
 
-  const companies =
-    employees.map((employee: Employee) => {
+  const companies = orderBy(employees, ["company.name"], ["asc"]).map(
+    (employee: Employee) => {
       const { company } = employee;
       const whiteLabeling = company.whiteLabeling || {};
 
@@ -32,6 +37,7 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({employees}) => 
           key={company.id}
           className={classes.companyButton}
           onClick={handleClick(employee)}
+          id="SwitchCompanyContainer-companies"
         >
           <div className={classes.company}>
             {whiteLabeling.avatar && (
@@ -42,13 +48,12 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({employees}) => 
               />
             )}
             {!whiteLabeling.avatar && <CompanyAvatar />}
-            <div className={classes.companyName}>
-              {company.name}
-            </div>
+            <div className={classes.companyName}>{company.name}</div>
           </div>
         </button>
       );
-    });
+    },
+  );
 
   return (
     <SwitchCompanyPresenter

@@ -1,12 +1,15 @@
 import { Dictionary } from "lodash";
+import { FBAutocomplete } from "..";
+import FBActionContainer from "../components/actions/FBActionContainer";
+import FBActionEditor from "../components/editors/FBActionEditor";
 import FBAutocompleteEditor from "../components/editors/FBAutocompleteEditor";
 import FBControlEditor from "../components/editors/FBControlEditor";
 import FBControlGroupEditor from "../components/editors/FBControlGroupEditor";
 import FBHyperlinkEditor from "../components/editors/FBHyperlinkEditor";
 import FBLabelEditor from "../components/editors/FBLabelEditor";
+import FBLabelStepperEditor from "../components/editors/FBLabelStepperEditor";
 import FBSelectEditor from "../components/editors/FBSelectEditor";
 import FBTextFieldEditor from "../components/editors/FBTextFieldEditor";
-import FBAutocomplete from "../components/inputs/FBAutocomplete";
 import FBCheckbox from "../components/inputs/FBCheckbox";
 import FBCheckboxGroup from "../components/inputs/FBCheckboxGroup";
 import FBDatePicker from "../components/inputs/FBDatePicker";
@@ -19,24 +22,25 @@ import FBSectionBox from "../components/layout/FBSectionBox";
 import FBSubSectionBox from "../components/layout/FBSubSectionBox";
 import FBFileUpload from "../components/navigation/FBFileUpload";
 import FBLink from "../components/navigation/FBLink";
+import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaItem";
+import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
 import { FBEditorElementType } from "../types/editor";
 
-export const FBFieldEditorComponent: {
-  [key: string]: React.FunctionComponent<{}>;
-} = {
+export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = {
   section: FBLabelEditor,
   subsection: FBLabelEditor,
   textfield: FBTextFieldEditor,
   checkbox: FBControlEditor,
   checkboxgroup: FBControlGroupEditor,
-  datepicker: FBLabelEditor,
-  texteditor: FBLabelEditor,
+  datepicker: FBLabelStepperEditor,
+  texteditor: FBLabelStepperEditor,
   select: FBSelectEditor,
   radio: FBControlEditor,
   radiogroup: FBControlGroupEditor,
   autocomplete: FBAutocompleteEditor,
   hyperlink: FBHyperlinkEditor,
-  fileupload: FBLabelEditor,
+  fileupload: FBLabelStepperEditor,
+  action: FBActionEditor,
 };
 
 export const FBFieldComponent: Dictionary<any> = {
@@ -53,14 +57,12 @@ export const FBFieldComponent: Dictionary<any> = {
   autocomplete: FBAutocomplete,
   hyperlink: FBLink,
   fileupload: FBFileUpload,
+  schemaSelect: FBValidatorSchemaSelect,
+  schemaItem: FBValidatorSchemaItem,
+  action: FBActionContainer,
 };
 
-export const FBGroupField: Dictionary<any>  = {
-  checkboxgroup: FBCheckbox,
-  radiogroup: FBRadio,
-};
-
-export const FBEditorSectionConfig: { [key: string]: FBEditorElementType[] } = {
+export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
   section: ["section", "subsection"],
   basics: [
     "textfield",
@@ -75,4 +77,15 @@ export const FBEditorSectionConfig: { [key: string]: FBEditorElementType[] } = {
     "fileupload",
   ],
   lists: ["autocomplete"],
+  actions: ["action"],
+};
+
+export const FBGroupEditorOptions: Dictionary<any[]> = {
+  autocomplete: [{value: "multiple", text: "form.builder.multi.select"}],
+  select: [
+    { value: "includeNone", text: "form.builder.include.none" },
+    { value: "includeContext", text: "form.builder.include.other" },
+  ],
+  control: [{value: "includeContext", text: "form.builder.include.note"}],
+  controlgroup: [{value: "includeContext", text: "form.builder.include.other"}],
 };

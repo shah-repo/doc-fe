@@ -1,19 +1,43 @@
-import { Box, FormGroup } from "@material-ui/core";
+import { Checkbox, FormControlLabel, FormGroup } from "@material-ui/core";
+import _ from "lodash";
 import React from "react";
-import { withOptionRenderer } from "../../hocs/withOptionRenderer";
-import { FBFormDefaultProps } from "../../types/common";
+import Text from "../../../components/Text";
+import { withOptions } from "../../hocs/common/withOptions";
+import FBStore from "../../stores/ui/FBStore";
+import { FBCheckGroupProps } from "../../types/inputs/check";
+import FBInput from "../common/FBInput";
 
-const FBCheckboxGroup: React.FunctionComponent<FBFormDefaultProps> = ({
-  labelRenderer,
-  optionsRenderer,
-  includeNote,
+const FBCheckboxGroup: React.FunctionComponent<FBCheckGroupProps> = ({
+  row = true,
+  type = "checkboxgroup",
+  options,
+  optionValueKey = "value",
+  optionLabelKey = "text",
+  labelValues,
+  ...props
 }) => (
-  <Box mb={4}>
-    {labelRenderer}
-    <FormGroup row={!includeNote}>
-      {optionsRenderer}
+  <FBInput {...props} {...{ type }}>
+    <FormGroup row={row}>
+      {_.map(options, (option, index) => (
+        <FormControlLabel
+          key={`${_.get(option, optionValueKey)}-${index}`}
+          value={_.get(option, optionValueKey)}
+          control={
+            <Checkbox
+              disabled={props.disabled}
+              checked={FBStore.getValue(_.get(option, optionValueKey))}
+            />
+          }
+          label={
+            <Text
+              message={_.get(option, optionLabelKey)}
+              values={labelValues}
+            />
+          }
+        />
+      ))}
     </FormGroup>
-  </Box>
+  </FBInput>
 );
 
-export default withOptionRenderer(FBCheckboxGroup);
+export default withOptions(FBCheckboxGroup);

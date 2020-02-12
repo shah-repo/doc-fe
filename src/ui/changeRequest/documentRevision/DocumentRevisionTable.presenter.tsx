@@ -11,6 +11,7 @@ import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
 import {
+  TableDataProps,
   TablePanelStateProps,
   TableSearchQueryType,
   TableSelectionProps,
@@ -23,7 +24,8 @@ interface DocumentRevisionTableProps extends WithStyles<typeof styles> {
   addDocument: (documentRevisionId: string) => void;
   addedDocuments: string[];
   tableName: string;
-  tableState: TablePanelStateProps<DocumentRevision>;
+  tableCriteria: TablePanelStateProps;
+  tableData: TableDataProps<DocumentRevision>;
 }
 
 const DocumentRevisionTable: React.FunctionComponent<
@@ -33,8 +35,9 @@ const DocumentRevisionTable: React.FunctionComponent<
   tableName,
   addDocument,
   addedDocuments,
-  tableState,
+  tableCriteria,
   documentRevisionsToShow,
+  tableData,
 }) => {
   const dispatch = useDispatch();
   const onStateSelect = ({
@@ -62,7 +65,7 @@ const DocumentRevisionTable: React.FunctionComponent<
         width: 100,
       },
       searchOptions: {
-        defaultValue: tableState.queryDict.docId,
+        defaultValue: tableCriteria.queryDict.docId,
       },
     },
     {
@@ -70,19 +73,19 @@ const DocumentRevisionTable: React.FunctionComponent<
       label: "changeRequest.documentRevisionTable.name",
       columnOptions: { flexGrow: 1 },
       searchOptions: {
-        defaultValue: tableState.queryDict.name,
+        defaultValue: tableCriteria.queryDict.name,
       },
     },
     {
       key: "version",
       label: "changeRequest.documentRevisionTable.version",
       columnOptions: {
-        cellDataGetter: ({ rowData: { revision, revisionStage } }) =>
-          generateVersionNumber(revision, revisionStage),
+        cellDataGetter: ({ rowData: { revision, revisionStage, revisionChangeType } }) =>
+          generateVersionNumber(revision, revisionStage, revisionChangeType),
         width: 50,
       },
       searchOptions: {
-        defaultValue: tableState.queryDict.version,
+        defaultValue: tableCriteria.queryDict.version,
       },
     },
     {
@@ -93,7 +96,7 @@ const DocumentRevisionTable: React.FunctionComponent<
         flexGrow: 2,
       },
       searchOptions: {
-        defaultValue: tableState.queryDict.owner,
+        defaultValue: tableCriteria.queryDict.owner,
       },
     },
     {
@@ -128,7 +131,7 @@ const DocumentRevisionTable: React.FunctionComponent<
 
   return (
     <Paper className={classes.root}>
-      <DocumentInfo numberOfRecords={tableState.queryData.length} />
+      <DocumentInfo numberOfRecords={tableData.length} />
       {bodyRenderer()}
     </Paper>
   );

@@ -1,0 +1,30 @@
+[
+    {
+        "name": "Suppliers",
+        "fields": [
+            {
+                "type": "autocomplete",
+                "label": "Suppliers",
+                "placeholder": "Select supplier",
+                "isMulti": true,
+                "autocompleteValue": "documentRevision"
+            },
+            {
+                "type": "textfield",
+                "label": "Suppliers textfield",
+                "placeholder": "This is Suppliers placeholder"
+            }
+        ]
+    },
+    {
+        "name": "Documents",
+        "fields":
+        [
+            {
+                "type": "textfield",
+                "label": "Documents textfield",
+                "placeholder": "This is Documents placeholder"
+            }
+        ] 
+    }
+]

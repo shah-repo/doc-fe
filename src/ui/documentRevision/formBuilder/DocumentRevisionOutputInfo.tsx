@@ -11,10 +11,10 @@ const DocumentRevisionOutputInfo: React.FunctionComponent<DataProps<DocumentRevi
   dataProp,
 }) => {
 
-  const { revision, revisionStage, releasedAt } = _.get(dataProp, "formDocument") || {};
+  const { revision, revisionStage, revisionChangeType, releasedAt } = _.get(dataProp, "formDocument") || {};
   const hasVersion = revision && revisionStage;
   const version = hasVersion
-    ? generateVersionNumber(revision!, revisionStage!)
+    ? generateVersionNumber(revision!, revisionStage!, revisionChangeType!)
     : "";
 
   const docId = _.get(dataProp, "formDocument.document.docId");

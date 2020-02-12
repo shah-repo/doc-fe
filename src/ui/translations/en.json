@@ -23,6 +23,7 @@
   "forgot.password.reset": "Reset my Password",
   "forgot.password.email": "Click the secure link we sent you to reset your password. If you didn't receive an email, check your spam folder.",
   "forgot.password.confirm": "Sign in with your new password",
+  "new.user.set.password": "Set your new password",
 
   "header.title": "Enlil",
   "header.welcome": "Welcome", 
@@ -51,6 +52,7 @@
   "validator.password.spec.char": "Password must contain a special characters",
   "validator.match.passwords": "Passwords do not match",
   "validator.confirm": "Password confirm is required",
+  "validator.user.name.required": "User name is required",
 
   "errors.tokenRefresh": "Token refresh failed",
   "errors.userNotLoggedIn": "User is not logged in",
@@ -102,6 +104,7 @@
   "change.request.regulatory.assessment": "Regulatory Assessment",
   "change.request.assessments.error": "Please provide attachment or reasoning for each assessment",
   "changeRequest.void.alert": "All linked documents should be removed before voiding the change request.",
+  "change.request.select.reasoning": "Select reasoning",
 
   "changeRequest.transition.submitted": "Submit change request",
   "changeRequest.transition.approve": "Approve submission",
@@ -169,6 +172,13 @@
   "changeRequest.audit.assessments.process.attachment.OBJECT_NEW": "Process Assessment Attachment Added",
   "changeRequest.audit.assessments.regulatory.attachment.OBJECT_NEW": "Regulatory Assessment Attachment Added",
   "changeRequest.audit.tasks.ARRAY_DELETED": "Implementation plan tasks deleted",
+  
+  "cr.assessment.reasoning.design.not_affect_changes": "Changes do not affect form, fit, function or materials with no impact on risk, safety or effectiveness",
+  "cr.assessment.reasoning.design.equivalent_changes": "Changes are equivalent to current design with no impact on risk, safety or effectiveness. Equivalency established through design verification",
+  "cr.assessment.reasoning.process.equivalent_changes": "Changes do not affect bioburden, sterilization, or validated state and are covered by existing QC methods",
+  "cr.assessment.reasoning.regulatory.no_approvals": "No current product approvals",
+  "cr.assessment.reasoning.regulatory.no_submissions": "No current submissions",
+  "cr.assessment.reasoning.regulatory.not_certified": "Quality System not certified",
 
   "cr.description": "Description Of Change Request",
   "cr.justification": "Justification Of Changes",
@@ -256,6 +266,8 @@
   "common.approve.and.release": "Approve and Release",
   "common.void": "Void",
   "common.alert": "Alert",
+  "common.dismiss": "Dismiss",
+  "common.reset": "Reset",
 
   "output.info": "Form Info",
 
@@ -367,7 +379,8 @@
   "form.builder.other": "Other",
   "form.builder.options": "Options",
   "form.builder.include.note": "Include 'Note'",
-  "form.builder.include.empty": "Include 'Empty'",
+  "form.builder.note": "Note",
+  "form.builder.include.none": "Include 'None'",
   "form.builder.autocomplete": "Autocomplete",
   "form.builder.select.options": "Select Options",
   "form.builder.multi.select": "Multi Select",
@@ -378,6 +391,20 @@
   "form.builder.field.name": "Field Name",
   "form.builder.hyperlink": "Hyperlink",
   "form.builder.fileupload": "File Upload",
+  "form.builder.groups": "Groups",
+  "form.builder.validator": "Verified",
+  "form.builder.additions": "Additions",
+  "form.builder.actions": "Actions",
+  "form.builder.action": "Action Button",
+  "form.builder.add.custom.validator": "Add Custom Validator",
+  "form.builder.custom.validator": "Custom Validator",
+  "form.builder.error.message": "Error Message",
+  "form.builder.field.config": "Field Config",
+  "form.builder.validation": "Validation",
+  "form.builder.form.preview": "Form preview",
+  "form.builder.predefined.validation": "Predefined Validation",
+  "form.builder.custom.validation": "Custom Validation",
+  "form.builder.validation.mode": "Validation Mode",
 
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
@@ -397,9 +424,10 @@
 
   "user.management.profile": "User Profile",
   "user.management.last.training": "Last Training",
-  "user.management.add.groups": "Add to other groups",
+  "user.management.add.to.groups": "Add to groups",
   "user.management.add.employee": "Add Employee",
   "user.management.update.profile": "Update profile",
+  "user.management.no.groups.specified": "No groups specified",
 
   "integrations.title": "Integrations",
   "integrations.add": "Add",
@@ -412,6 +440,8 @@
   "supplier.id": "Supplier ID",
   "supplier.name": "Supplier name",
   "supplier.status": "Supplier status",
+  "supplier.add.new": "Add {name}",
+  "supplier.form.error": "There is no form or multiple forms exsist. Please create a new supplier through the Document list.",
 
   "watermark.successfully.requested": "Watermarked copy of {file}.{type} successfully requested. We will notify you when it's ready to download.",
   "watermark.download.ready": "Watermarked file {name}.{type} ready to download",

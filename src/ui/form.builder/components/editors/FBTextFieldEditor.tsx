@@ -1,12 +1,13 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import FBCheckbox from "../inputs/FBCheckbox";
+import FBStepperEditor from "../../FBStepperEditor";
 import FBTextField from "../inputs/FBTextField";
 import FBLabelEditor from "./FBLabelEditor";
 import FBPlaceholderEditor from "./FBPlaceholderEditor";
 
 const FBTextFieldEditor: React.FunctionComponent<{}> = () => (
   <Box>
+  <FBStepperEditor>
     <FBLabelEditor />
     <FBPlaceholderEditor />
     <FBTextField
@@ -15,7 +16,7 @@ const FBTextFieldEditor: React.FunctionComponent<{}> = () => (
       defaultValue={1}
       name="rows"
     />
-    <FBCheckbox label="form.builder.required" name="required" />
+  </FBStepperEditor>
   </Box>
 );
 

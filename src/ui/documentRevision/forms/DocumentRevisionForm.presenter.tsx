@@ -5,6 +5,7 @@ import { observer } from "mobx-react";
 import React from "react";
 import {
   DocumentRevision,
+  DocumentRevisionStatus,
   RevisionStageOptions,
 } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
@@ -15,10 +16,10 @@ import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocom
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
 import CheckboxField from "../../components/forms/fields/Checkbox";
 import InputField from "../../components/forms/fields/Input";
+import RichTextEditor from "../../components/forms/fields/RichTextEditor";
 import SelectField, {
   SelectOption,
 } from "../../components/forms/fields/Select";
-import TextEditorField from "../../components/forms/fields/TextEditor";
 import { required, validator } from "../../components/forms/fields/validators";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
@@ -29,9 +30,10 @@ import SubmitButton from "../../components/forms/SubmitButton";
 import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
 import { documentDetailsPath } from "../../document.revision/utils/paths";
-import FBWorkspace from "../../form.builder/main/workspace/FBWorkspace";
-import FBDRStore from "../../form.builder/stores/FBDRStore";
-import FBStore from "../../form.builder/stores/FBStore";
+import FBWorkspaceForm from "../../form.builder/containers/workspace/FBWorkspaceForm";
+import { FBValidate } from "../../form.builder/defaults/validator";
+import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
+import FBStore from "../../form.builder/stores/ui/FBStore";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
 import ApproveAndRelease from "./presenters/ApproveAndRelease";
@@ -43,6 +45,7 @@ export interface Props
   extends WithStyles<typeof styles>,
     FormikProps<DocumentRevisionFormValues> {
   asyncState: AsyncState;
+  documentRevision: DocumentRevision;
   documentRevisions?: DocumentRevision[];
   availableReferences: OptionType[];
   showRevisionTypeChange?: boolean;
@@ -77,8 +80,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   errors,
   documentTypes,
   documentTypesById,
-  otherDocumentTypes,
+  otherDocumentTypes,EAD
   canChangeOwnerShip,
+  documentRevision,
 }) => {
   if (!values.id && !_.get(values, "document.documentType.id")) {
     FBDRStore.setMode("none");
@@ -93,6 +97,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   const isDisabled: boolean = _.get(initialValues, "id") !== undefined;
   const docId = _.get(initialValues, "document.docId");
+  const isdocRevVersionOne = _.get(documentRevision, "version") === 1;
+  const isdocRevStatusDraft = _.get(documentRevision, "status") === DocumentRevisionStatus.Draft;
+  const outputDocEnabled: boolean = isdocRevVersionOne && isdocRevStatusDraft || !isDisabled;
   const useProposedDocId = (!docId || docId === "") && values.document;
   values.document!.docId = useProposedDocId
     ? proposedDocId
@@ -128,6 +135,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
     FBDRStore.setInitialFBMode(type.group);
     handleChange(event);
+  };
+
+  const onFormClick = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    FBValidate();
   };
 
   const renderTypeOfRevisionChange = showRevisionTypeChange && (
@@ -176,7 +189,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
         <Title name="name" label="common.title" />
-        <TextEditorField
+        <RichTextEditor
           name="description"
           label="common.description"
           validate={validator(required)}
@@ -227,7 +240,11 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               name="formTemplate.outputDocumentType.id"
               label="document.output.type"
               selectProps={{
-                inputProps: { id: "formTemplate.outputDocumentType" },
+                inputProps: {
+                  id: "formTemplate.outputDocumentType",
+                  disabled: !outputDocEnabled,
+                  className: !outputDocEnabled ? classes.outputGrey : "",
+                },
               }}
               options={otherDocumentTypes}
               includeEmpty={false}
@@ -237,7 +254,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         )}
         {FBStore.active && (
           <Box mt={5}>
-            <FBWorkspace />
+            <FBWorkspaceForm id={_.get(values, "id")} />
           </Box>
         )}
         <Box mt={5}>
@@ -256,6 +273,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <SubmitButton
               asyncState={asyncState}
               label={isDisabled ? "common.save" : "navigation.createDocument"}
+              onClick={onFormClick}
             />
             <ApproveAndRelease
               id={values.id}

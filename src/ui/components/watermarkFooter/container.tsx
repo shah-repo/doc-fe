@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { attachmentsActions, attachmentsSelectors } from "../../../state/ducks/attachments";
 import WatermarkFooterPresenter from "./presenter";
@@ -8,8 +8,8 @@ import { WatermarkResponse } from "./types";
 export const WatermarkFooterContainer: React.FunctionComponent = () => {
   const dispatch = useDispatch();
   const [requestResults, setRequestResult] = useState<WatermarkResponse[]>([]);
+  const removeWatermark = (id: string) => dispatch(attachmentsActions.removeWatermark(id));
   const closeMessage = () => {
-    dispatch(attachmentsActions.removeWatermark(requestResults[0].data.id));
     setRequestResult([
       ...requestResults.slice(1),
     ]);
@@ -27,6 +27,12 @@ export const WatermarkFooterContainer: React.FunctionComponent = () => {
     ]);
   };
 
+  useEffect(() => {
+    return () => {
+      dispatch(attachmentsActions.clearWatermarks());
+    };
+  }, []);
+
   const renderFooter = requestResults.length > 0 && (
     <WatermarkFooterPresenter
       result={requestResults[0]}
@@ -40,6 +46,7 @@ export const WatermarkFooterContainer: React.FunctionComponent = () => {
       <WatermarkFooterRequest
         watermarkIds={watermarkIds}
         addRequestResult={addRequestResult}
+        removeWatermark={removeWatermark}
       />
       {renderFooter}
     </>

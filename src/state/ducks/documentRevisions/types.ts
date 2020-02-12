@@ -57,6 +57,7 @@ export interface DocumentRevision extends FBDocumentFlowProps {
   version: number;
   revision: number;
   revisionStage: number;
+  revisionChangeType: RevisionChangeType;
   name: string;
   description: string;
   owner: Owner;
