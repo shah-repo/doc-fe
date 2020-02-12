@@ -418,7 +418,8 @@
   "form.builder.field.is.traceability.required": "Is Traceability Required",
   "form.builder.field.item": "Item",
   "form.builder.field.ext.amount": "Ext. Amount",
-  "form.builder.total.amount": "Total amount: {totalAmount}",
+  "form.builder.sub.total": "Sub Total: ${subTotal}",
+  "form.builder.tax": "Tax: ${tax}",
 
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",

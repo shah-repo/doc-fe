@@ -37,6 +37,8 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
   }, []);
   const handleSubmit = (values) => {
     values.date = values.date || new Date();
+    values.tax = values.tax || false;
+    values.isTraceabilityRequired = values.isTraceabilityRequired || false;
     const fields = [
       "order",
       "units",
@@ -73,7 +75,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
           </Typography>
         </Box>
         <FBTextField
-          type="number"
+          inputProps={{ type: "number" }}
           label="form.builder.field.order"
           name="order"
         />
@@ -95,7 +97,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
           rows="3"
         />
         <FBTextField
-          type="number"
+          inputProps={{ type: "number" }}
           label="form.builder.field.unit.price"
           name="unitPrice"
         />
