@@ -6,20 +6,22 @@ import { FBInputProps, FBOptionProps } from "../types/common";
 
 export type FBAutocompleteProps =
   & FBInputProps
-  & Pick<AutocompleteProps, "renderInput" | "loading" | "defaultValue">
+  & Pick<AutocompleteProps, "renderInput" | "loading" | "defaultValue" | "renderTags">
   & Pick<UseAutocompleteProps, "getOptionLabel" | "filterOptions">
   & FBStateProps<FBAutocompleteState>
-  & Pick<FBOptionProps, "optionLabelKey">
+  & Pick<FBOptionProps, "optionLabelKey" | "optionValueKey">
   & {
     options?: any[];
     optionPath?: string;
     optionRenderKey?: string;
     renderEl?: boolean;
+    valueType?: "object" | "key";
   };
 
 export interface FBAutocompleteIndicator {
   id: string;
   path: string;
   label: string;
-  renderKey: string;
+  optionLabelKey: string;
+  optionValueKey?: string;
 }

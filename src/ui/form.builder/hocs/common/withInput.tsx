@@ -48,7 +48,8 @@ export const withInput = <T extends FBInputProps>(
       const isFieldHidden = _.isEmpty(helperText) && _.isEmpty(field?.value);
       hidden = _.includes(validationMode, "ValidationHidden") && isFieldHidden;
       disabled =
-        _.includes(validationMode, "ValidationDisabled") && isFieldHidden;
+        (_.includes(validationMode, "ValidationDisabled") && isFieldHidden) ||
+        disabled;
     }
 
     if (elements.length === 1) {
