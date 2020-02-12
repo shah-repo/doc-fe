@@ -19,7 +19,7 @@ const FBPurchaseOrderTotal: React.FunctionComponent<Props> = ({
     const sum = values.reduce(
       (agg, value) =>
         agg + (
-          Number(value.price || 0) *
+          Number(value.unitPrice || 0) *
           Number(value.order || 0)
         ), 0,
     );

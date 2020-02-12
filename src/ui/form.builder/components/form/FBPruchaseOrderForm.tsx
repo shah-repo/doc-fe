@@ -24,11 +24,13 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
       FBStore.setValues({
         ...FBStore.getValues(),
         units: undefined,
+        partNumber: undefined,
         date: undefined,
         description: undefined,
-        price: undefined,
+        unitPrice: undefined,
         tax: undefined,
         order: undefined,
+        isTraceabilityRequired: undefined,
       });
       setErrorMessage("");
     };
@@ -38,15 +40,17 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
     const fields = [
       "order",
       "units",
+      "partNumber",
       "date",
       "description",
-      "price",
+      "unitPrice",
     ];
 
     let missingFields = "";
     fields.forEach((field) => {
       if (!values[field]) {
-        missingFields += `${field} is required; `;
+        const fieldName = field.split(/(?=[A-Z])/).join(" ").toUpperCase();
+        missingFields += `${fieldName} is required; `;
       }
     });
 
@@ -77,8 +81,12 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
           label="form.builder.field.units"
           name="units"
         />
+        <FBTextField
+          label="form.builder.field.pn"
+          name="partNumber"
+        />
         <FBDatePicker
-          label="form.builder.field.pn.date"
+          label="form.builder.field.date"
           name="date"
         />
         <FBTextField
@@ -88,8 +96,8 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
         />
         <FBTextField
           type="number"
-          label="form.builder.field.price"
-          name="price"
+          label="form.builder.field.unit.price"
+          name="unitPrice"
         />
         <FBCheckbox
           label="form.builder.field.tax"
@@ -97,7 +105,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
         />
         <FBCheckbox
           label="form.builder.field.is.traceability.required"
-          name="traceability"
+          name="isTraceabilityRequired"
         />
         <Box textAlign="right">
           <FBButton

@@ -65,8 +65,8 @@ const FBPurchaseOrderTable: React.FunctionComponent<Props> = ({
     const preCalcValues = values.map((value) => {
       return {
         ...value,
-        price: Number(value.price || 0).toFixed(2),
-        amount: (Number(value.price || 0) * Number(value.order || 0)).toFixed(2),
+        unitPrice: Number(value.unitPrice || 0).toFixed(2),
+        amount: (Number(value.unitPrice || 0) * Number(value.order || 0)).toFixed(2),
       };
     });
 
@@ -86,13 +86,16 @@ const FBPurchaseOrderTable: React.FunctionComponent<Props> = ({
               <Text message="form.builder.field.units" />
             </StyledTableCell>
             <StyledTableCell>
-              <Text message="form.builder.field.pn.date" />
+              <Text message="form.builder.field.pn" />
+            </StyledTableCell>
+            <StyledTableCell>
+              <Text message="form.builder.field.date" />
             </StyledTableCell>
             <StyledTableCell>
               <Text message="form.builder.field.pn.description" />
             </StyledTableCell>
             <StyledTableCell>
-              <Text message="form.builder.field.price" />
+              <Text message="form.builder.field.unit.price" />
             </StyledTableCell>
             <StyledTableCell>
               <Text message="form.builder.field.ext.amount" />
@@ -109,11 +112,12 @@ const FBPurchaseOrderTable: React.FunctionComponent<Props> = ({
               <StyledTableCell align="left">{index + 1}</StyledTableCell>
               <StyledTableCell>{row.order}</StyledTableCell>
               <StyledTableCell>{row.units}</StyledTableCell>
+              <StyledTableCell>{row.partNumber}</StyledTableCell>
               <StyledTableCell>
                 <Date value={row.date} />
               </StyledTableCell>
               <StyledTableCell>{row.description}</StyledTableCell>
-              <StyledTableCell>${row.price}</StyledTableCell>
+              <StyledTableCell>${row.unitPrice}</StyledTableCell>
               <StyledTableCell>${row.amount}</StyledTableCell>
               <StyledTableCell padding="checkbox" align="center">
                 <Checkbox disabled checked={row.tax} />
