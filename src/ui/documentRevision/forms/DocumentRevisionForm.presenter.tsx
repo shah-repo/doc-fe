@@ -80,7 +80,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   errors,
   documentTypes,
   documentTypesById,
-  otherDocumentTypes,EAD
+  otherDocumentTypes,
   canChangeOwnerShip,
   documentRevision,
 }) => {
