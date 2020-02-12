@@ -52,22 +52,18 @@ export const withInput = <T extends FBInputProps>(
         disabled;
     }
 
-    if (elements.length === 1) {
-      _.first(elements) &&
-        (children = React.cloneElement(
-          _.first(elements) as React.ReactElement,
-          {
-            name,
-            ...((type !== "autocomplete" && type !== "texteditor") && { value }),
-            ...(type === "texteditor" && { defaultValue: value }),
-            type,
-            error,
-            checked: value,
-            disabled,
-            ..._.pick(props, ["onChange", "afterChange"]),
-          },
-        ));
-    }
+    children = _.map(elements, (el) => React.cloneElement(
+      el as React.ReactElement, {
+        name,
+        ...((type !== "autocomplete" && type !== "texteditor") && { value }),
+        ...(type === "texteditor" && { defaultValue: value }),
+        type,
+        error,
+        checked: value,
+        disabled,
+        ..._.pick(props, ["onChange", "afterChange"]),
+      },
+    ));
 
     return useObserver(() =>
       Component({

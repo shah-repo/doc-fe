@@ -15,6 +15,7 @@ export interface AttachmentIconFactoryProps extends FormikHybridFieldProps {
   handleDownload?: (attachment: Attachment, type?: AttachmentType) => () => any;
   handleContextMenu?: (file: Attachment) => (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   handleViewFile?: (attachment: Attachment) => () => any;
+  value?: Attachment[];
 }
 
 export interface AttachmentIconProps extends AttachmentIconFactoryProps {
