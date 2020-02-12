@@ -90,7 +90,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
   },
 });
 
-  const initialElements = {value: "", text: "", label: ""}
+  const initialElements = {value: "", text: "", label: ""};
   const [accessElement, saveAccessElement] = React.useState(initialElements);
   const handleUpdate = () => {
     const isGroup = _.some(groupOptions, {

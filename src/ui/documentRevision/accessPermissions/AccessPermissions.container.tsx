@@ -33,7 +33,7 @@ export const AccessPermissionsContainer: React.FunctionComponent<AccessPermissio
     });
     const loadAvailableApproversAction = useActionCreator(changeRequestsActions.loadAvailableApprovers);
     const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
-    const selectedDocument = useSelector((state: ApplicationState) => 
+    const selectedDocument = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId));
     const securityGroups = _.get(selectedDocument, "document.securityGroups", []);
     const securityEmployees = _.get(selectedDocument, "document.securityEmployees", []);
