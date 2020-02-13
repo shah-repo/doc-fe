@@ -37,7 +37,7 @@ export const withEditorRenderer =
 
   const onClick = () => {
     const label = _.get(props, "values.label", "");
-    if (_.isEmpty(label)) {
+    if (type !== "action" && _.isEmpty(label)) {
       FBDynamicValidatorStore.setHelperText({
         label: ["The Label field is required."],
       });
