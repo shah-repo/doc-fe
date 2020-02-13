@@ -16,6 +16,12 @@ import ScrollToError from "../../components/forms/ScrollToError";
 import { ASYNC_DEFAULT_STATE } from "../../hooks/useAsync";
 import { DocumentRevisionFormPresenter, Props } from "./DocumentRevisionForm.presenter";
 
+jest.mock("react-redux", () => ({
+    useSelector: () => ({
+      queryDict: {},
+    }),
+}));
+
 describe("DocumentRevisionFormPresenter tests", () => {
     const defaultProps: Props = {
         asyncState: ASYNC_DEFAULT_STATE,

@@ -12,11 +12,14 @@ import {
     DocumentRevisionManagerContainerProps,
 } from "./DocumentRevisionsManager.container";
 
+jest.mock("react-redux", () => ({
+    useSelector: () => ({}),
+}));
+
 describe("DocumentRevisionManagerContainer with documentRevisionId test", () => {
     const defaultProps: DocumentRevisionManagerContainerProps = {
-        loadDocumentAsyncState: ASYNC_DEFAULT_STATE,
         documentRevisions: [getDocumentRevision()],
-        loadDocument: jest.fn(),
+        document: getDocumentRevision(),
         documentId: faker.random.uuid(),
         documentRevisionId: faker.random.uuid(),
         isNewVersion: false,

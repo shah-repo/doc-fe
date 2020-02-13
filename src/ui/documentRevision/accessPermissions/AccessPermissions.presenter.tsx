@@ -92,9 +92,9 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
 
   const initialElements = {value: "", text: "", label: ""};
   const [accessElement, saveAccessElement] = React.useState(initialElements);
+  const isGroup = _.some(groupOptions, {
+    label: accessElement.label, text: accessElement.text, value: accessElement.value });
   const handleUpdate = () => {
-    const isGroup = _.some(groupOptions, {
-     label: accessElement.label, text: accessElement.text, value: accessElement.value });
     if (isGroup) {
       const securityUpdateGroup = {
         securityEmployees: [...security.securityEmployees],
@@ -183,7 +183,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
                 onChange={(e) => saveValue(e)}
                 placeholder="Enter name to invite people"
                 components={{ DropdownIndicator }}
-                value={accessElement.value === "" ? null : accessElement}
+                value={(accessElement.value === "" || isGroup) ? null : accessElement}
               />
             </div>
           </ExpansionPanelDetails>
@@ -222,7 +222,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
                 placeholder="Enter name to invite group"
                 components={{ DropdownIndicator }}
                 onChange={(e) => saveValue(e)}
-                value={accessElement.value === "" ? null : accessElement}
+                value={(accessElement.value === "" || !isGroup) ? null : accessElement}
               />
             </div>
           </ExpansionPanelDetails>

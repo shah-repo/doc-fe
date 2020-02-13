@@ -10,6 +10,11 @@ import { ASYNC_DEFAULT_STATE } from "../../hooks/useAsync";
 import { DocumentRevisionFormContainer, DocumentRevisionFormContainerProps} from "./DocumentRevisionForm.container";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 
+jest.mock("react-redux", () => ({
+    useDispatch: jest.fn(),
+    useSelector: () => ({}),
+}));
+
 describe("DocumentRevisionFormContainer tests", () => {
     const defaultProps: DocumentRevisionFormContainerProps = {
         onSubmit: jest.fn(),
@@ -21,6 +26,8 @@ describe("DocumentRevisionFormContainer tests", () => {
                 label: faker.lorem.word(),
                 value: faker.lorem.word(),
             }],
+            securityGroups: [],
+            securityEmployees: [],
         },
         asyncState: ASYNC_DEFAULT_STATE,
         documentRevision: getDocumentRevision(),
@@ -35,13 +42,12 @@ describe("DocumentRevisionFormContainer tests", () => {
         loadAsyncState: ASYNC_DEFAULT_STATE,
         documentRevisions: [getDocumentRevision()],
         proposedDocId: faker.random.uuid(),
-        documentTypes: [{
-            value: faker.lorem.word(),
-            text: faker.lorem.word(),
-        }],
+        documentTypes: [],
         documentTypesById: {},
         document: getDocument(),
         showRevisionTypeChange: false,
+        securityGroups: [],
+        securityEmployees: [],
     };
 
     const getWrapper = (props: Partial<DocumentRevisionFormContainerProps>= {}) => shallow(
