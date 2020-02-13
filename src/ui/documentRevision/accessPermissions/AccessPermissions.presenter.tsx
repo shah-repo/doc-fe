@@ -15,7 +15,9 @@ import { Group } from "../../../state/ducks/auth/types";
 import { changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { Owner, TypographySize } from "../../../state/ducks/common";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { userManagementActions } from "../../../state/ducks/userManagement";
 import { AsyncState } from "../../../state/types";
+import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -32,6 +34,8 @@ interface OwnProps {
   securityGroups: [];
   documentId: string;
   documentRevisionId: string;
+  loadGroupsAction: typeof userManagementActions.loadCompanyGroups;
+  loadGroupAsyncState: AsyncState;
 }
 
 export type AccessPermissionsPresenterProps = OwnProps;
@@ -44,6 +48,9 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
   documentId,
   loadAvailableApproversAction,
   documentRevisionId,
+  loadApproversAsyncState,
+  loadGroupAsyncState,
+  loadGroupsAction,
 }) => {
   const classes = styles();
   const [expanded, setExpanded] = React.useState<boolean>(false);
@@ -85,7 +92,6 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
   const getList = useActionCreator(documentRevisionsActions.load);
   const updateAction = useActionCreator(documentRevisionsActions.updateAccess);
   const async = useAsync({onSuccess: () => {
-    loadAvailableApproversAction();
     getList(documentRevisionId);
   },
 });
@@ -178,6 +184,11 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
                   </div>
                 ))}
               </List>}
+              <AsyncGate
+                asyncState={loadApproversAsyncState}
+                asyncAction={loadAvailableApproversAction}
+                startActionOnMount={true}
+              >
               <Select
                 options={employeeSelectOptions}
                 onChange={(e) => saveValue(e)}
@@ -185,6 +196,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
                 components={{ DropdownIndicator }}
                 value={(accessElement.value === "" || isGroup) ? null : accessElement}
               />
+              </AsyncGate>
             </div>
           </ExpansionPanelDetails>
         </ExpansionPanel>
@@ -217,13 +229,19 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
                   </div>
                 ))}
               </List>}
-              <Select
-                options={groupSelectOptions}
-                placeholder="Enter name to invite group"
-                components={{ DropdownIndicator }}
-                onChange={(e) => saveValue(e)}
-                value={(accessElement.value === "" || !isGroup) ? null : accessElement}
-              />
+              <AsyncGate
+                asyncState={loadGroupAsyncState}
+                asyncAction={loadGroupsAction}
+                startActionOnMount={true}
+              >
+                <Select
+                  options={groupSelectOptions}
+                  placeholder="Enter name to invite group"
+                  components={{ DropdownIndicator }}
+                  onChange={(e) => saveValue(e)}
+                  value={(accessElement.value === "" || !isGroup) ? null : accessElement}
+                />
+              </AsyncGate>
             </div>
           </ExpansionPanelDetails>
         </ExpansionPanel>
