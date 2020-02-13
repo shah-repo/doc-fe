@@ -41,6 +41,24 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
       documentTypeName: faker.random.word(),
       group: "OTHER",
     },
+    securityList: {
+      securityEmployees: [
+        {
+          id: faker.random.uuid(),
+          email: faker.random.word(),
+          name: faker.random.word(),
+        },
+      ],
+      securityGroups: [
+        {
+          id: faker.random.uuid(),
+          name: faker.random.word(),
+          tags: [],
+          permissions: [],
+        },
+      ],
+    },
+    canAccess: true,
   },
   released: faker.date.future(undefined, "2019-05-31"),
   referenceTo: [],
@@ -65,6 +83,23 @@ export const getDocument = (document: Partial<Document> = {}): Document => ({
   docId: faker.random.word(),
   documentRevisions: [getDocumentRevision()],
   documentType: generateDocumentType(),
+  securityList: {
+    securityEmployees: [
+      {
+        id: faker.random.uuid(),
+        email: faker.random.word(),
+        name: faker.random.word(),
+      },
+    ],
+    securityGroups: [
+      {
+        id: faker.random.uuid(),
+        name: faker.random.word(),
+        tags: [],
+        permissions: [],
+      },
+    ],
+  },
   ...document,
 });
 

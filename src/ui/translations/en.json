@@ -268,6 +268,7 @@
   "common.alert": "Alert",
   "common.dismiss": "Dismiss",
   "common.reset": "Reset",
+  "common.security": "Access",
 
   "output.info": "Form Info",
 
@@ -297,6 +298,10 @@
   "document.action.to_review": "Send to review",
   "document.action.withdraw": "Withdraw",
   "document.revision.stage": "Document Revision Stage",
+  "document.security.warning": "You do not have access to this document.",
+  "document.access.permissions": "Access Permissions",
+  "document.access.user.permissions": "User Permissions",
+  "document.access.group.permissions": "Group Permissions",
 
   "documentRevision.revise": "Revise Document",
   "documentRevision.form.references": "References",
@@ -344,6 +349,8 @@
   "document.revision.trainingRequired": "Training Required",
   "document.revision.released.date": "Released Date",
   "document.revision.docVersion": "Doc Versions",
+  "document.revision.user.permissions": "User Permissions",
+  "document.revision.group.permissions": "Group Permissions",
 
   "page.title.changeRequest": "Change Request List",
   "page.title.documentList": "Document List",

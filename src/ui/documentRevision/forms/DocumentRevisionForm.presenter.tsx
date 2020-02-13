@@ -3,6 +3,12 @@ import { FormikProps } from "formik";
 import _ from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
+import { useSelector } from "react-redux";
+import { authSelectors } from "../../../state/ducks/auth";
+import {
+  changeRequestsActions,
+  changeRequestsSelectors,
+} from "../../../state/ducks/changeRequest";
 import {
   DocumentRevision,
   DocumentRevisionStatus,
@@ -10,7 +16,13 @@ import {
 } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
+import {
+  userManagementActions,
+  userManagementSelectors,
+} from "../../../state/ducks/userManagement";
+import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
+import AsyncGate from "../../components/AsyncGate";
 import OwnerChanger from "../../components/common/owner.changer/container";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
@@ -34,6 +46,7 @@ import FBWorkspaceForm from "../../form.builder/containers/workspace/FBWorkspace
 import { FBValidate } from "../../form.builder/defaults/validator";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import FBStore from "../../form.builder/stores/ui/FBStore";
+import useActionCreator from "../../hooks/useActionCreator";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
 import ApproveAndRelease from "./presenters/ApproveAndRelease";
@@ -84,6 +97,18 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   canChangeOwnerShip,
   documentRevision,
 }) => {
+  const loadAvailableApproversAction = useActionCreator(
+    changeRequestsActions.loadAvailableApprovers,
+  );
+  const loadApproversAsyncState = useSelector(
+    changeRequestsSelectors.getLoadApproversAsyncState,
+  );
+  const loadGroupsAction = useActionCreator(
+    userManagementActions.loadCompanyGroups,
+  );
+  const loadGroupAsyncState = useSelector(
+    userManagementSelectors.getLoadGroupsAsyncState,
+  );
   if (!values.id && !_.get(values, "document.documentType.id")) {
     FBDRStore.setMode("none");
     if (setDocId) {
@@ -146,6 +171,15 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const renderTypeOfRevisionChange = showRevisionTypeChange && (
     <RevisionTypeChange />
   );
+
+  const availableApprovers = useSelector((state: ApplicationState) => {
+    const currentUserId = authSelectors.currentUserId(state);
+    return changeRequestsSelectors.getApproversListWithoutCurrentUser(
+      state,
+      currentUserId,
+    );
+  });
+  const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
 
   const renderRevisionStageDropdown = !isDisabled && (
     <SelectField
@@ -234,6 +268,42 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         />
         <AttachmentsField />
         {renderTypeOfRevisionChange}
+        {!values.status && (
+          <AsyncGate
+            asyncState={loadApproversAsyncState}
+            asyncAction={loadAvailableApproversAction}
+            startActionOnMount={true}
+          >
+            <AutcompleteField
+              name="securityEmployees"
+              label="document.revision.user.permissions"
+              autocompleteProps={{
+                id: "securityEmployees",
+                isMulti: true,
+                closeMenuOnSelect: false,
+              }}
+              options={availableApprovers}
+            />
+          </AsyncGate>
+        )}
+        {!values.status && (
+          <AsyncGate
+            asyncState={loadGroupAsyncState}
+            asyncAction={loadGroupsAction}
+            startActionOnMount={true}
+          >
+            <AutcompleteField
+              name="securityGroups"
+              label="document.revision.group.permissions"
+              autocompleteProps={{
+                id: "securityGroups",
+                isMulti: true,
+                closeMenuOnSelect: false,
+              }}
+              options={groupOptions}
+            />
+          </AsyncGate>
+        )}
         {FBStore.active && !FBDRStore.isOutput && (
           <Box mt={4}>
             <SelectField
@@ -265,20 +335,14 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             direction="row"
           >
             {canChangeOwnerShip && (
-              <OwnerChanger
-                requestId={values.id!}
-                requestType={"document"}
-              />
+              <OwnerChanger requestId={values.id!} requestType={"document"} />
             )}
             <SubmitButton
               asyncState={asyncState}
               label={isDisabled ? "common.save" : "navigation.createDocument"}
               onClick={onFormClick}
             />
-            <ApproveAndRelease
-              id={values.id}
-              status={values.status}
-            />
+            <ApproveAndRelease id={values.id} status={values.status} />
           </Grid>
         </Box>
       </FormWrapper>
