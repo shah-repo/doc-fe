@@ -7,14 +7,29 @@ import FBPurchaseOrderTable from "../custom/FBPurchaseOrderTable";
 import FBPurchaseOrderTotal from "../custom/FBPurchaseOrderTotal";
 import FBSectionBox from "../layout/FBSectionBox";
 
+export interface PurchaseOrderItem {
+  order: number;
+  units: string;
+  partNumber: string;
+  date: Date;
+  description: string;
+  unitPrice: number;
+  tax: boolean;
+  isTraceabilityRequired: boolean;
+}
+
+export interface PurchaseOrder {
+  items: PurchaseOrderItem[];
+  shippingCost: number | undefined;
+}
+
 const FBPurchaseOrderField: React.FunctionComponent<any> = ({
-  options = [],
   label,
   disabled,
   ...props
 }) => {
-  const storeValue = FBStore.getValues()[props.name];
-  const [initialValues, setInitialValues] = useState({});
+  const storeValue = FBStore.getValues()[props.name] || { items: [], shippingCost: undefined };
+  const [initialValues, setInitialValues] = useState<PurchaseOrderItem | undefined>();
   const [rowIndex, setRowIndex] = useState();
   const dialog = useDialog();
 
@@ -25,12 +40,13 @@ const FBPurchaseOrderField: React.FunctionComponent<any> = ({
         [props.name]: { items: [], shippingCost: undefined },
       });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (!dialog.isOpen) {
       setRowIndex(undefined);
-      setInitialValues({});
+      setInitialValues(undefined);
     }
   }, [dialog.isOpen]);
 
@@ -56,7 +72,7 @@ const FBPurchaseOrderField: React.FunctionComponent<any> = ({
       },
     });
     setRowIndex(undefined);
-    setInitialValues({});
+    setInitialValues(undefined);
   };
 
   const editItem = (index: number) => {

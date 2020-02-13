@@ -5,16 +5,17 @@ import FBStore from "../../stores/ui/FBStore";
 import FBButton from "../inputs/FBButton";
 import FBCheckbox from "../inputs/FBCheckbox";
 import FBDatePicker from "../inputs/FBDatePicker";
+import { PurchaseOrderItem } from "../inputs/FBPurchaseOrderField";
 import FBTextField from "../inputs/FBTextField";
 
 interface Props {
-  initialValues?: any;
+  initialValues?: PurchaseOrderItem;
   onSubmit: (values: any) => void;
   closeDialog: () => void;
 }
 
 const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
-  initialValues = {},
+  initialValues = {} as PurchaseOrderItem,
   onSubmit,
   closeDialog,
 }) => {
@@ -35,7 +36,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
       setErrorMessage("");
     };
   }, []);
-  const handleSubmit = (values) => {
+  const handleSubmit = (values: PurchaseOrderItem) => {
     values.date = values.date || new Date();
     values.tax = values.tax || false;
     values.isTraceabilityRequired = values.isTraceabilityRequired || false;

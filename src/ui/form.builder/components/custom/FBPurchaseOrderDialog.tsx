@@ -2,12 +2,13 @@ import { Dialog, DialogContent, DialogTitle, Typography } from "@material-ui/cor
 import React from "react";
 import Text from "../../../components/Text";
 import { DialogHandler } from "../../../hooks/useDialog";
-import FBPurchaseOrderForm from "../form/FBPruchaseOrderForm";
+import FBPurchaseOrderForm from "../form/FBPurchaseOrderForm";
 import FBButton from "../inputs/FBButton";
+import { PurchaseOrderItem } from "../inputs/FBPurchaseOrderField";
 
 interface Props {
   dialog: DialogHandler;
-  initialValues: {};
+  initialValues?: PurchaseOrderItem;
   onSubmit: (values: any) => void;
   disabled: boolean;
 }
