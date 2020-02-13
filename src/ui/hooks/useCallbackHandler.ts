@@ -9,6 +9,7 @@ const useCallbackHandler = <T>(handler: CallbackHandlerFn<T>) => {
 
   useEffect(() => () => {
     callbackHandler.disconnect(); // disconnect on unmount
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return callbackHandler;

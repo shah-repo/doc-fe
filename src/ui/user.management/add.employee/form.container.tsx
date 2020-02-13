@@ -24,8 +24,7 @@ const initialValues = {
   groups: [],
 };
 
-export const AddEmployeeFormContainer: React.FunctionComponent = ({
-}) => {
+export const AddEmployeeFormContainer: React.FunctionComponent = () => {
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const addEmployeeAction = useActionCreator(userManagementActions.addEmployee);
   const async = useAsync({

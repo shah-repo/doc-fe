@@ -39,6 +39,7 @@ export const SlackLandingContainer: React.FunctionComponent<Props> = ({
 
   useEffect(() => {
     async.start(postSlackCodeAction, URL, { code, redirectUriEnv }, async);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const dispatch = useDispatch();

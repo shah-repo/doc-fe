@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { IotService } from "../../../common/utils/iot/mqttClient";
@@ -14,6 +15,7 @@ interface Props {
   watermarkIds: WatermarkState;
 }
 
+// TODO: refactor component to so that a single component handles one request
 export const WatermarkFooterRequest: React.FunctionComponent<Props> = ({
   watermarkIds,
   addRequestResult,

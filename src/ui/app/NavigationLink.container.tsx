@@ -4,12 +4,11 @@ import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import _ from "lodash";
 import React, { ComponentType, useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import { Translation } from "../translations/types";
 import NavigationLinkPresenter from "./NavigationLink.presenter";
 
 export interface LinkDefinition {
   url: string;
-  text: Translation;
+  text: string;
   Icon?: ComponentType<SvgIconProps>;
 }
 
@@ -20,14 +19,12 @@ export interface NavigationLinkContainerProps extends LinkDefinition {
 
 const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerProps> =
   ({ url, text, Icon, childrenUrls = [], currentPath }) => {
-    const isChildActive = () => _.includes(childrenUrls.map((link) => link.url), currentPath);
-    const [isOpen, setIsOpen] = useState(isChildActive());
+    const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
-      if (isChildActive()) {
-        setIsOpen(true);
-      }
-    }, [currentPath]);
+      const isChildActive = _.includes(childrenUrls.map((link) => link.url), currentPath);
+      setIsOpen(isChildActive);
+    }, [currentPath, childrenUrls]);
 
     const toggleChildren = (event: React.MouseEvent) => {
       event.preventDefault();

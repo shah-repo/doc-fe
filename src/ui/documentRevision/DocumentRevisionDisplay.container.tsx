@@ -77,6 +77,7 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<
     if (documentRevisionId) {
       loadDocumentRevisionAction();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentRevisionId]);
 
   const canChangeOwnerShip =

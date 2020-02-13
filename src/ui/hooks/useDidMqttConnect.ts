@@ -3,7 +3,6 @@ import { IotService } from "../../common/utils/iot/mqttClient";
 
 const useDidMqttConnect = () => {
   const [didConnect, setDidConnect] = useState(false);
-  let interval;
   useEffect(() => {
     const iotService = IotService.getInstance();
 
@@ -12,7 +11,7 @@ const useDidMqttConnect = () => {
       return;
     }
 
-    interval = setInterval(() => {
+    const interval = setInterval(() => {
       if (iotService.isConnected()) {
         setDidConnect(true);
         clearInterval(interval);
