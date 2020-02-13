@@ -3,30 +3,35 @@
     "id": "1",
     "path": "/document_revisions",
     "label": "Document revisions",
-    "renderKey": "name"
+    "optionValueKey": "id",
+    "optionLabelKey": "name"
   },
   {
     "id": "2",
     "path": "/change_requests",
     "label": "Change requests",
-    "renderKey": "title"
+    "optionValueKey": "id",
+    "optionLabelKey": "title"
   },
   {
     "id": "3",
     "path": "/change_requests/available_approvers",
     "label": "Approvers",
-    "renderKey": "user.email"
+    "optionValueKey": "id",
+    "optionLabelKey": "user.email"
   },
   {
     "id": "4",
     "path": "/document_type",
     "label": "Document types",
-    "renderKey": "documentTypeName"
+    "optionValueKey": "id",
+    "optionLabelKey": "documentTypeName"
   },
   {
     "id": "5",
     "path": "/document_revisions?documentTypeAcronym=SUPP",
     "label": "Supplier list",
-    "renderKey": "name"
+    "optionValueKey": "id",
+    "optionLabelKey": "name"
   }
 ]

@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
+import { GroupTag } from "../../state/ducks/auth/types";
 import {
   DocumentRevision,
   documentRevisionsActions,
   documentRevisionsSelectors,
+  DocumentRevisionStatus,
 } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
@@ -18,6 +20,9 @@ interface StateProps {
   currentUserEmail: string;
   loadDocumentRevisionAsyncState: AsyncState;
   documentRevision: DocumentRevision;
+  currentEmployeeId: string;
+  isCompanyAdmin: boolean;
+
 }
 
 interface DispatchProps {
@@ -43,6 +48,8 @@ const mapStateToProps = (
   loadDocumentRevisionAsyncState: documentRevisionsSelectors.getLoadAsyncState(
     state,
   ),
+    isCompanyAdmin: authSelectors.getHasTag(state, GroupTag.OWNERSHIP_CHANGE),
+    currentEmployeeId: authSelectors.currentEmployeeId(state),
   documentRevision: documentRevisionsSelectors.getDocumentRevision(
     state,
     props.documentRevisionId,
@@ -60,6 +67,8 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<
   documentRevision,
   loadDocumentRevisionAsyncState,
   documentId,
+  currentEmployeeId,
+  isCompanyAdmin,
 }) => {
   const loadDocumentRevisionAction = () =>
     loadDocumentRevision(documentRevisionId);
@@ -69,6 +78,12 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<
       loadDocumentRevisionAction();
     }
   }, [documentRevisionId]);
+
+  const canChangeOwnerShip =
+  documentRevision &&
+  documentRevision.status === DocumentRevisionStatus.Draft &&
+    (isCompanyAdmin ||
+      documentRevision.owner.id === currentEmployeeId);
 
   const canEdit =
     documentRevision &&
@@ -89,11 +104,13 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<
         <DocumentRevisionUpdateContainer
           documentRevision={documentRevision}
           documentId={documentId}
+          canChangeOwnerShip={canChangeOwnerShip}
         />
       )}
       {canPreview && (
         <SummaryPresenter
           dataProp={documentRevision}
+          canChangeOwnerShip={canChangeOwnerShip}
           canShowCreateVersionButton={true}
         />
       )}
