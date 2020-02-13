@@ -1,3 +1,4 @@
+import { Box } from "@material-ui/core";
 import { isUndefined } from "lodash";
 import React, { useEffect, useState } from "react";
 import useDialog from "../../../hooks/useDialog";
@@ -93,12 +94,13 @@ const FBPurchaseOrderField: React.FunctionComponent<any> = ({
   };
 
   return (
-    <>
+    <Box mt={3}>
       <FBSectionBox label={label} />
       <FBPurchaseOrderTable
         values={storeValue.items}
         editItem={editItem}
         deleteItem={deleteItem}
+        disabled={disabled}
       />
       <FBPurchaseOrderDialog
         dialog={dialog}
@@ -109,8 +111,9 @@ const FBPurchaseOrderField: React.FunctionComponent<any> = ({
       <FBPurchaseOrderTotal
         values={storeValue}
         name={props.name}
+        disabled={disabled}
       />
-    </>
+    </Box>
   );
 };
 

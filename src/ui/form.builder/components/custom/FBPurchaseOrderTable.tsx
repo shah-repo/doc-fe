@@ -17,6 +17,7 @@ import Colors from "../../../layout/theme/utils/colors";
 
 interface Props {
   values: any[];
+  disabled: boolean;
   editItem: (index: number) => void;
   deleteItem: (index: number) => void;
 }
@@ -49,6 +50,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<Props> = ({
   values,
   editItem,
   deleteItem,
+  disabled,
 }) => {
   const classes = useStyles();
   const handleEdit = (index) => () => editItem(index);
@@ -100,9 +102,12 @@ const FBPurchaseOrderTable: React.FunctionComponent<Props> = ({
             <StyledTableCell>
               <Text message="form.builder.field.ext.amount" />
             </StyledTableCell>
-            <StyledTableCell padding="checkbox" align="center">
-              <Text message="form.builder.field.tax" />
-            </StyledTableCell>
+            {
+              !disabled &&
+              <StyledTableCell padding="checkbox" align="center">
+                <Text message="form.builder.field.tax" />
+              </StyledTableCell>
+            }
             <StyledTableCell />
           </TableRow>
         </TableHead>
@@ -122,9 +127,12 @@ const FBPurchaseOrderTable: React.FunctionComponent<Props> = ({
               <StyledTableCell padding="checkbox" align="center">
                 <Checkbox disabled checked={row.tax} />
               </StyledTableCell>
-              <StyledTableCell>
-                <RemoveCircleOutlineIcon color="error" onClick={handleDelete(index)} />
-              </StyledTableCell>
+              {
+                !disabled &&
+                <StyledTableCell>
+                  <RemoveCircleOutlineIcon color="error" onClick={handleDelete(index)} />
+                </StyledTableCell>
+              }
             </TableRow>
           ))}
         </TableBody>

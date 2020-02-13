@@ -42,7 +42,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   hyperlink: FBHyperlinkEditor,
   fileupload: FBLabelStepperEditor,
   action: FBActionEditor,
-  purchaseorder: FBLabelStepperEditor,
+  purchaseorder: FBLabelEditor,
 };
 
 export const FBFieldComponent: Dictionary<any> = {
