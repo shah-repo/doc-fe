@@ -6,6 +6,7 @@ TEST_RESULTS_DIR="${BITBUCKET_CLONE_DIR}/test-results"
 # Install Dependencies
 echo "-------- Installing Dependencies --------"
 
+yarn global add node-gyp@5.0.5
 yarn install --pure-lockfile
 
 # Executing Test

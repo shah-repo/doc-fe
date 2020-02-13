@@ -30,6 +30,7 @@ export REACT_APP_THEME=$(python3 $SCRIPT $ENV $ENVIRONMENT_DIR REACT_APP_THEME 2
 
 export CI=false # had to do this to make the build process not treat warnings as errors
 
+yarn global add node-gyp@5.0.5
 yarn install --pure-lockfile
 yarn build
 
