@@ -9,6 +9,7 @@ import { PurchaseOrder } from "../inputs/FBPurchaseOrderField";
 interface Props {
   values: PurchaseOrder;
   name: string;
+  disabled: boolean;
 }
 
 const TAX_RATE = 0.065;
@@ -16,6 +17,7 @@ const TAX_RATE = 0.065;
 const FBPurchaseOrderTotal: React.FunctionComponent<Props> = ({
   values,
   name,
+  disabled,
 }) => {
   const inputEl = useRef<HTMLInputElement>(null);
   const INITIAL_COST = { tax: 0, subTotal: 0 };
@@ -88,6 +90,7 @@ const FBPurchaseOrderTotal: React.FunctionComponent<Props> = ({
       </Typography>
       <Box marginLeft="10px" maxWidth="60px">
         <TextField
+          disabled={disabled}
           inputRef={inputEl}
           onChange={handleChange}
           type="number"
