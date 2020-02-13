@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Box } from "@material-ui/core";
 import axios, { AxiosRequestConfig } from "axios";
 import _ from "lodash";

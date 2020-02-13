@@ -22,6 +22,7 @@ const ViewFileContainer: React.FunctionComponent<ViewFileContainerProps> = ({
       return;
     }
     setSignedUrl("");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, attachment]);
 
   return (

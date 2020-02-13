@@ -52,7 +52,7 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
 
     useEffect(() => {
         setRealUser(selectedEmployee);
-    }, [selectedEmployee.id]);
+    }, [selectedEmployee, setRealUser]);
 
     const { groups, id, active } = realUser;
     const { name, avatar, email } = realUser.user;

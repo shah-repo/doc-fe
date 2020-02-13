@@ -51,6 +51,7 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
     return () => {
       unlistenHistory();
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const setTranslationByPath = (path: any) => {

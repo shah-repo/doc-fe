@@ -20,6 +20,7 @@ const PingServer: React.FunctionComponent<Props> = ({
 
   useEffect(() => {
     pingServer();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onActive = () => {

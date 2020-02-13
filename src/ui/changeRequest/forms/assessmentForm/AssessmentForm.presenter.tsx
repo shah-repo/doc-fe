@@ -72,6 +72,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
     if (didMount) {
       setFieldValue("documentRevisions", documentRevisionsList);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentRevisionsList]);
 
   const renderCrId = () =>

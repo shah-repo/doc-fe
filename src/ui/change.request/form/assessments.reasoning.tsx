@@ -22,6 +22,7 @@ const AssessmentsReasoning: React.FunctionComponent<Props> = ({
   const intl = useIntl();
   useEffect(() => {
     setIsComponentVisible(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const openPlaceholderDropdown = () => setIsComponentVisible(!isComponentVisible);
 

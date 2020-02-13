@@ -123,10 +123,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDisabled: boolean = _.get(initialValues, "id") !== undefined;
   const docId = _.get(initialValues, "document.docId");
   const isdocRevVersionOne = _.get(documentRevision, "version") === 1;
-  const isdocRevStatusDraft =
-    _.get(documentRevision, "status") === DocumentRevisionStatus.Draft;
-  const outputDocEnabled: boolean =
-    (isdocRevVersionOne && isdocRevStatusDraft) || !isDisabled;
+  const isdocRevStatusDraft = _.get(documentRevision, "status") === DocumentRevisionStatus.Draft;
+  const outputDocEnabled: boolean = (isdocRevVersionOne && isdocRevStatusDraft) || !isDisabled;
   const useProposedDocId = (!docId || docId === "") && values.document;
   values.document!.docId = useProposedDocId
     ? proposedDocId

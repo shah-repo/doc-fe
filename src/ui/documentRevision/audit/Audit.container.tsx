@@ -36,12 +36,11 @@ export const AuditContainer: React.FunctionComponent<AuditContainerProps> = ({
   loadAudit,
   documentRevisionId,
 }) => {
-  const loadAuditAction = () => loadAudit(documentRevisionId);
   useEffect(() => {
     if (documentRevisionId) {
-      loadAuditAction();
+      loadAudit(documentRevisionId);
     }
-  }, [documentRevisionId]);
+  }, [documentRevisionId, loadAudit]);
 
   return <AuditPresenter audit={audit} />;
 };

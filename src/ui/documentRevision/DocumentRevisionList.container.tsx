@@ -49,6 +49,7 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
 
   useEffect(() => {
     loadDocumentAction();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentRevisionId, documentId]);
 
   return (

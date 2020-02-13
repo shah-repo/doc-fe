@@ -13,7 +13,7 @@ const PrivateRoutePresenter: React.FunctionComponent<PrivateRoutePresenterProps>
       if (!isAuthenticated) {
         rest.history.replace("/");
       }
-    }, [isAuthenticated]);
+    }, [isAuthenticated, rest.history]);
 
     if (isAuthenticated) {
       return <Component {...rest} />;

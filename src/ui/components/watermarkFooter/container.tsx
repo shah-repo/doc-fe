@@ -31,6 +31,7 @@ export const WatermarkFooterContainer: React.FunctionComponent = () => {
     return () => {
       dispatch(attachmentsActions.clearWatermarks());
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const renderFooter = requestResults.length > 0 && (
