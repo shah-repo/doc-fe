@@ -15,10 +15,10 @@ import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocom
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
 import CheckboxField from "../../components/forms/fields/Checkbox";
 import InputField from "../../components/forms/fields/Input";
+import RichTextEditor from "../../components/forms/fields/RichTextEditor";
 import SelectField, {
   SelectOption,
 } from "../../components/forms/fields/Select";
-import TextEditorField from "../../components/forms/fields/TextEditor";
 import { required, validator } from "../../components/forms/fields/validators";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
@@ -185,7 +185,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
         <Title name="name" label="common.title" />
-        <TextEditorField
+        <RichTextEditor
           name="description"
           label="common.description"
           validate={validator(required)}

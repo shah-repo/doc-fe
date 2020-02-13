@@ -1,3 +1,4 @@
+
 import { observer } from "mobx-react";
 import React from "react";
 import { FBFieldComponent } from "../../defaults/editor";
@@ -31,6 +32,7 @@ export const withValidatorSchemaSelect = <
           );
         }
         FBValidatorStore.indicatorValues[props.validatorFieldName || ""][":"] = value;
+        FBValidatorStore.formValues[fieldName] = value;
       };
 
       const onItemChange = (fieldName: string, value: any) => {

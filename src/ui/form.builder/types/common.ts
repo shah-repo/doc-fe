@@ -48,7 +48,6 @@ export type FBOptionProps =
   options?: any[] | string;
   optionId?: string;
   optionPath?: string;
-  optionRenderKey?: string;
   optionLabelKey?: string;
   optionValueKey?: string;
   includeNone?: boolean;
@@ -91,6 +90,7 @@ export type FBInputProps =
     gutter?: boolean;
     tooltip?: string;
     validationMode?: FBValidationModeType[];
+    formValuesRules?: Dictionary<any>;
   };
 
 export type FBFormDefaultProps =

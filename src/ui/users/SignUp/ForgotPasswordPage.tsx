@@ -36,9 +36,9 @@ const ForgotPasswordPage: React.FunctionComponent<Props> = ({
         <Typography variant="h4" className={classes.boldTitle}>
           <Text translation={"forgot.password"} />
         </Typography>
-        <Typography variant="subtitle1" className={classes.marginTitle}>
+        <Typography variant="subtitle1" className={classes.marginTitle} id="ForgotPasswordPage-title">
           <Text translation={"forgot.password.message"} />
-          <FormMessage asyncState={asyncState} className={classes.status} />
+          <FormMessage asyncState={asyncState} className={classes.status} id="ForgotPasswordPage-formError" />
         </Typography>
         <InputField
             name="email"

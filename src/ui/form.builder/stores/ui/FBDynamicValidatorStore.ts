@@ -111,10 +111,11 @@ export class FormBuilderDynamicValidatorStore {
     this.errorMessage = "";
     this.clearLiveCode();
     this.fieldNames = [];
+    FBValidatorStore.formValues = {};
   }
 
   @action public validate = () => {
-    if (FBStore.mode !== "form" || _.isUndefined(this.Validator)) {
+    if (_.isUndefined(this.Validator)) {
       return;
     }
 
@@ -134,7 +135,9 @@ export class FormBuilderDynamicValidatorStore {
     validator.checkAsync(passes, fails);
   }
 
-  @action public setHelperText = (errors: Validator.ValidationErrors | Dictionary<string>) => {
+  @action public setHelperText = (
+    errors: Validator.ValidationErrors | Dictionary<string>,
+  ) => {
     _.map(errors, (v, k) => {
       set(this.helperText, k, _.join(v, "\n"));
     });

@@ -1,7 +1,10 @@
 import _ from "lodash";
+import { useObserver } from "mobx-react";
 import React from "react";
+import { FB } from "../..";
 import FBAction from "../../components/actions/FBAction";
-import actionCollection from "../../stores/domain/collections/FBActionCollection";
+import FBActionContainerState from "../../components/actions/FBActionContainer.state";
+import { FBActionModel } from "../../stores/domain/models/FBActionModel";
 import { FBActionContainerProps } from "../../types/actions/action";
 
 export const withActionContainer = <T extends FBActionContainerProps>(
@@ -9,23 +12,28 @@ export const withActionContainer = <T extends FBActionContainerProps>(
 ) => {
   return ({
       actions,
+      state,
       ...props
   }: T) => {
 
+    state = FB.useRef<FBActionContainerState>(FBActionContainerState);
     function doRenderActions(): boolean {
         return Boolean(actions && _.isString(_.first(actions)));
     }
 
-    doRenderActions() && (actions =
-        _.map(actions, (actionName: string) => {
-            const action = actionCollection.getAction(actionName);
-            return (action && <FBAction {...{action}} />);
-        })
-    );
+    return useObserver(() => {
 
-    return Component({
-      ...(props as T),
-      actions,
+      doRenderActions() && (actions =
+        _.map(actions, (actionName: string) => {
+            const action = _.find(state?.data, (d: FBActionModel) => d.name === actionName);
+            return (action && <FBAction key={FB.uniqid()} {...{action}} />);
+        })
+      );
+
+      return Component({
+        ...(props as T),
+        actions,
+      });
     });
   };
 };

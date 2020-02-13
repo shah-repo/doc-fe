@@ -36,6 +36,14 @@ export const withEditorRenderer =
   };
 
   const onClick = () => {
+    const label = _.get(props, "values.label", "");
+    if (_.isEmpty(label)) {
+      FBDynamicValidatorStore.setHelperText({
+        label: ["The Label field is required."],
+      });
+      return;
+    }
+
     const values = propsByType();
     let name = "";
     if (_.isObject(props.values) && _.has(props.values, "label")) {
@@ -62,6 +70,7 @@ export const withEditorRenderer =
       // applicableOn: FBValidatorStore.applicableOn ? [FBValidatorTrigger.ON_STATE_TO_IN_REVIEW] : [],
       applicableOn: ["ON_STATE_TO_IN_REVIEW"],
       customValidator,
+      formValuesRules: FBValidatorStore.formValues,
     };
 
     FBDynamicValidatorStore.reset();

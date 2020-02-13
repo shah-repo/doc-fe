@@ -13,9 +13,9 @@ const Base: React.FunctionComponent<Props> = ({ label, value, noValueOption = "-
           {label && <Text message={label} />}
         </Typography>
       </Grid>
-      <Grid item={true} xs={12} id="SummaryBaseProps-values">
-        {value && <Typography variant="subtitle1">{value}</Typography>}
-        {!value && <Typography variant="subtitle1">{noValueOption}</Typography>}
+      <Grid item={true} xs={12}>
+        {value && <Typography id="SummaryBaseProps-values" variant="subtitle1">{value}</Typography>}
+        {!value && <Typography id="SummaryBaseProps-noValues"variant="subtitle1">{noValueOption}</Typography>}
       </Grid>
     </Grid>
   </Grid>
