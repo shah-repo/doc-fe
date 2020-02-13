@@ -28,7 +28,7 @@ const FBPurchaseOrderField: React.FunctionComponent<any> = ({
   disabled,
   ...props
 }) => {
-  const storeValue = FBStore.getValues()[props.name];
+  const storeValue = FBStore.getValues()[props.name] || { items: [], shippingCost: undefined };
   const [initialValues, setInitialValues] = useState<PurchaseOrderItem | undefined>();
   const [rowIndex, setRowIndex] = useState();
   const dialog = useDialog();
