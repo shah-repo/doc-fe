@@ -4,9 +4,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { FormattedNumber } from "react-intl";
 import Text from "../../../components/Text";
 import FBStore from "../../stores/ui/FBStore";
+import { PurchaseOrder } from "../inputs/FBPurchaseOrderField";
 
 interface Props {
-  values: any;
+  values: PurchaseOrder;
   name: string;
 }
 
@@ -35,8 +36,8 @@ const FBPurchaseOrderTotal: React.FunctionComponent<Props> = ({
   };
 
   useEffect(() => {
-    if (inputEl && inputEl.current) {
-      inputEl.current.value = values.shippingCost;
+    if (inputEl && inputEl.current && values.shippingCost) {
+      inputEl.current.value = values.shippingCost as unknown as string;
     }
   }, [inputEl, values.shippingCost]);
 
