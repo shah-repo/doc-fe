@@ -75,7 +75,7 @@ const makeGetAvailableReferences = () => {
         const { status, changeRequest } = docRevs[id];
 
         if (
-          currentDocRev.document
+          currentDocRev.document && currentDocRev.document.id === docRevs[id].id
         ) {
           return false;
         }
