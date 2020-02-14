@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { TableDataProps } from "../../components/table/types";
 import { Grid, Button } from "@material-ui/core";
 import { styles } from "./styles";
@@ -9,6 +9,8 @@ import { LoadCompanyGroup } from "../../../state/ducks/userManagement";
 import { TableColumnProps } from "../../components/table/column/types";
 import { GROUPS_URL } from "../../../state/ducks/userManagement/constants";
 import { Employee } from "../../../state/ducks/company";
+import { GroupsDisplay } from "../groups/GroupsDisplay";
+import { DEFAULT_SELECTED_GROUP } from "../utils/types";
 
 
 export interface Props {
@@ -23,11 +25,21 @@ export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
     clearFilter,
 }) => {
   const classes = styles();
+  //should move usetState to container
+  const [selectedGroup, setGroup] = useState<LoadCompanyGroup>(DEFAULT_SELECTED_GROUP);
+  const [showGroupsPreview, setGroupsPreview] = useState(false);
 
+  const openGroupsPreview = () => setGroupsPreview(true);
+  const closeGroupsPreview = () => setGroupsPreview(false);
+
+  const handleGroupsPreview = (rowData: LoadCompanyGroup) => {
+    setGroup(rowData);
+    openGroupsPreview();
+  }
   const handleMembers = (members: Employee[]) => {
     return members.map((member) => member.user!.name).join(", ");
   };
-
+//column for official/unofficial group needs to be added after BE is done
   const columns: Array<TableColumnProps<LoadCompanyGroup>> = [
     {
       key: "name" as keyof LoadCompanyGroup,
@@ -67,9 +79,15 @@ export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
             queryUrl={GROUPS_URL}
             cellMeasure={true}
             tableName={tableName}
-            /* onSelect={({ rowData }) => () => handleUserProfileDialog(rowData)} */
+            //for now click on table row opens grop preview, after permission conditon will be added
+            onSelect={({ rowData }) => () => handleGroupsPreview(rowData)}
         />
         </Grid>
+        <GroupsDisplay
+          closeDialog={closeGroupsPreview}
+          isOpen={showGroupsPreview}
+          selectedGroup={selectedGroup}
+        />
     </Grid>
   );
 };
