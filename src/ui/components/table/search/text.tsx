@@ -12,8 +12,13 @@ export const TableSearchTextField: React.FunctionComponent<Props> = ({
   queryGetter,
   defaultValue,
 }) => {
-
   const [value, setValue] = React.useState<string | number>(defaultValue || "");
+
+  React.useEffect(() => {
+    if (!defaultValue) {
+      setValue("");
+    }
+  }, [defaultValue]);
 
   const handleChange = (event: React.ChangeEvent<{ value: string }>) => {
     if (!queryGetter) { return; }
