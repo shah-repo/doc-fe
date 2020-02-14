@@ -1,6 +1,6 @@
 import { FieldArrayRenderProps } from "formik";
 import React, { useState } from "react";
-import { applyTimezoneToDate } from "../../../../../common/utils/date";
+import { toStartOfDay } from "../../../../../common/utils/date";
 import useDialog from "../../../../hooks/useDialog";
 import { ImplementationPlanTaskFormValues } from "../../types";
 import TasksPresenter from "./Tasks.presenter";
@@ -43,7 +43,7 @@ export const TasksContainer: React.FunctionComponent<Props> = ({
     changeSelectedIndex(index);
     changeSelectedTask({
       ...task,
-      dueDate: task.dueDate ? applyTimezoneToDate(task.dueDate) : undefined,
+      dueDate: task.dueDate ? toStartOfDay(task.dueDate) : undefined,
     });
     dialog.open();
   };

@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import { Editor } from "react-draft-wysiwyg";
-import { getFormattedDateString } from "../../../common/utils/date";
+import { getFormattedStartOfDayDateString } from "../../../common/utils/date";
 import {
   changeRequestsActions,
   ChangeRequestStatus,
@@ -79,7 +79,7 @@ export const ImplementationPlan: React.FunctionComponent<Props> = ({
             </Typography>
             <Box>
               <Typography variant="body2">
-                <Text message={getFormattedDateString(task.dueDate)} />
+                <Text message={getFormattedStartOfDayDateString(task.dueDate)} />
               </Typography>
             </Box>
           </Grid>
@@ -102,7 +102,7 @@ export const ImplementationPlan: React.FunctionComponent<Props> = ({
                 <Text message={task.status} />
                 {task.closeDate && (
                   <Text
-                    message={`, ${getFormattedDateString(task.closeDate)}`}
+                    message={`, ${getFormattedStartOfDayDateString(task.closeDate)}`}
                   />
                 )}
               </Typography>
