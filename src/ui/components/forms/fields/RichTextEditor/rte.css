@@ -1,0 +1,30 @@
+.rte-editor {
+  padding: 0 15px;
+  border: 1px solid #B4C0CA;
+  min-height: 200px;
+  max-height: 500px;
+}
+
+.rte-wrapper {
+  position: relative;
+  top: 40px;
+  margin-bottom: 50px;
+}
+
+.rte-toolbar {
+  border-radius: 3px !important;
+  border: 1px solid #B4C0CA !important;
+  z-index: 9999;
+}
+
+.rte-toolbar-hide {
+  display: none;
+}
+
+.rte-select-reasoning {
+  width: 180px !important;
+}
+
+.placeholder-li:hover {
+  background: #F1F1F1;
+}

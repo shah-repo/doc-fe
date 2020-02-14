@@ -1,7 +1,7 @@
 import { Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
-import React from "react";
-import ReactQuill from "react-quill";
-import { sanitizeHtml } from "../../../common/utils/helpers";
+import React, { useEffect, useState } from "react";
+import { Editor } from "react-draft-wysiwyg";
+import { convertHtmlToDraft } from "../../components/forms/fields/RichTextEditor/helpers";
 import Text from "../../components/Text";
 import styles from "./styles";
 import { SummaryBaseProps } from "./types";
@@ -12,25 +12,31 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
   label,
   value,
   classes,
-}) => (
-  <Grid item={true} xs={12}>
-    {label && (
-      <Grid item={true} xs={12}>
-        <Typography variant="h6">
-          <Text message={label} />
-        </Typography>
-      </Grid>
-    )}
+}) => {
+  const [editor, setEditor] = useState();
+  useEffect(() => {
+    setEditor(convertHtmlToDraft(value));
+  }, [value]);
+
+  return (
     <Grid item={true} xs={12}>
-      <ReactQuill
-        readOnly={true}
-        value={sanitizeHtml(value)}
-        modules={{ toolbar: false }}
-      >
-        <div className={classes.descriptionContainer} />
-      </ReactQuill>
+      {label && (
+        <Grid item={true} xs={12}>
+          <Typography variant="h6">
+            <Text message={label} />
+          </Typography>
+        </Grid>
+      )}
+      <Grid item={true} xs={12}>
+        <Editor
+          readOnly={true}
+          editorState={editor}
+          toolbarHidden={true}
+          editorClassName={classes.descriptionContainer}
+        />
+      </Grid>
     </Grid>
-  </Grid>
-);
+  );
+};
 
 export default withStyles(styles)(BaseWithhtml);

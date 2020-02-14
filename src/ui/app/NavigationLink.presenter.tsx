@@ -58,7 +58,7 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
         {_.get(iconMapping, url) || <div />}
       </ListItemIcon>
       <ListItemText
-        primary={<Text translation={text} />}
+        primary={<Text message={text} />}
         classes={{
           primary: classes.itemText,
         }}

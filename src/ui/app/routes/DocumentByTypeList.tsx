@@ -5,7 +5,6 @@ import {
   documentTypeSelectors,
 } from "../../../state/ducks/documentRevisions/documentType";
 import { DOCUMENT_BY_TYPE_ROOT_URL } from "../../constants/urls";
-import { Translation } from "../../translations/types";
 import NavigationLinkContainer from "../NavigationLink.container";
 
 interface Props {
@@ -29,7 +28,7 @@ const DocumentByTypeListLinks: React.FunctionComponent<Props> = ({
           <NavigationLinkContainer
             key={docType.id}
             url={`${DOCUMENT_BY_TYPE_ROOT_URL}/${docType.documentTypeAcronym.toLowerCase()}`}
-            text={docType.documentTypeName as Translation}
+            text={docType.documentTypeName}
             currentPath={pathname}
           />
         );

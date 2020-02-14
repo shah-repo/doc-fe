@@ -36,13 +36,14 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   download,
   form,
   field,
+  value,
   ...other
 }) => {
 
   const [newWatermarkRequest, setNewWatermarkRequest] = useState<Nullable<WatermarkRequest>>(null);
   const [newWatermakrError, setNewWatermarkError] = useState<string>("");
   const dialogHandler = useDialog();
-  const attachments = field!.value as Attachment[] || [];
+  const attachments = value || field?.value as Attachment[] || [];
   const [selectedFile, setSelectedFile] = useState<undefined | Attachment>(undefined);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   SetFile = React.createContext(setSelectedFile);

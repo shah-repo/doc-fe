@@ -22,9 +22,10 @@ export const withAutocompleteEditor = <T extends FBAutocompleteEditorProps>(
         if (!form) {
           return;
         }
-        const { path, renderKey } = getOption(value);
+        const { path, optionLabelKey, optionValueKey } = getOption(value);
         form!.setFieldValue("optionPath", path);
-        form!.setFieldValue("optionRenderKey", renderKey);
+        form!.setFieldValue("optionLabelKey", optionLabelKey);
+        form!.setFieldValue("optionValueKey", optionValueKey);
     };
 
     return Component({

@@ -41,6 +41,10 @@ export const byId = (
             [docRev.id]: {
               ...state[docRev.id],
               ...docRev,
+              document: {
+                ...(state[docRev.id] || {}).document,
+                ...docRev.document,
+              },
             },
           };
         },

@@ -52,6 +52,7 @@ export const ChangeRequestFormContainer: React.FunctionComponent<
         ),
       );
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [(changeRequest || {}).documentRevisions]);
 
   const alertIfFormDirty = () => {

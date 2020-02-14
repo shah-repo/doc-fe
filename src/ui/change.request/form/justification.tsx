@@ -3,7 +3,7 @@ import React from "react";
 import { Justifications } from "../../../state/ducks/changeRequest";
 import AttachmentField from "../../components/common/attachment.field/container";
 import AttachmentIconField from "../../components/common/attachment.icon/container";
-import TextEditorField from "../../components/forms/fields/TextEditor";
+import TextEditorField from "../../components/forms/fields/RichTextEditor";
 import { withFormik } from "../../components/hoc/formik";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
 

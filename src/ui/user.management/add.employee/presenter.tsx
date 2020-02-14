@@ -22,6 +22,7 @@ export const AddEmployeePresenter: React.FunctionComponent<Props> = ({
         variant="contained"
         onClick={openDialog}
         id="AddEmployeePresenter-openDialog"
+        style={{ margin: 0 }}
       >
         <Text message="user.management.add.employee" />
       </Button>

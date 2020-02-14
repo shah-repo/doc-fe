@@ -68,8 +68,9 @@ export const withOnChange = <T extends FBInputProps>(
         }
 
         FBStore.setValues(values);
-        FBDynamicValidatorStore.validate();
       }
+
+      FBDynamicValidatorStore.validate();
 
       if (type !== "texteditor") {
         form!.setFieldValue(fieldName, value);
@@ -86,7 +87,7 @@ export const withOnChange = <T extends FBInputProps>(
       }
 
       if (type !== "autocomplete") {
-        value = _.get(ev.target, "value");
+        value = _.get(ev, "target.value", "");
       }
 
       switch (type) {
@@ -112,10 +113,15 @@ export const withOnChange = <T extends FBInputProps>(
           value = (ev as unknown) as string;
           break;
         case "autocomplete":
+          const valueKey = _.get(props, "optionValueKey", "id");
+
           if (_.isArray(value)) {
-            value = _.map(value, (v) => (_.isString(v) ? v : v.id));
+            const valueType = _.get(props, "valueType", "key");
+            value = (valueType === "object")
+              ? value
+              : _.map(value, (v) => (_.isString(v) ? v : _.get(v, valueKey)));
           } else {
-            value = _.get(value, "id");
+            value = _.get(value, valueKey);
           }
           break;
         // case "select":

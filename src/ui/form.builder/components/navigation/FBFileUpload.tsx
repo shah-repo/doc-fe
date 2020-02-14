@@ -5,13 +5,11 @@ import { FBInputProps } from "../../types/common";
 import FBInput from "../common/FBInput";
 
 const FBFileUpload: React.FunctionComponent<FBInputProps> = ({
-  disabled,
-  name,
   ...props
 }) => (
-  <FBInput {...props} {...{name}} type="fileupload">
-    <AttachmentField {...{name, disabled}} name={name} component="field" />
-    <AttachmentIconField {...{name, disabled}}  />
+  <FBInput {...props} type="fileupload">
+    <AttachmentField component="field" />
+    <AttachmentIconField  />
   </FBInput>
 );
 

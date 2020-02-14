@@ -1,5 +1,5 @@
 {
-  "translation.unknown": "",
+  "translation.unknown": "&nbsp;",
 
   "login.title": "Sign in to Enlil",
   "login.email": "EMAIL ADDRESS",
@@ -105,6 +105,7 @@
   "change.request.regulatory.assessment": "Regulatory Assessment",
   "change.request.assessments.error": "Please provide attachment or reasoning for each assessment",
   "changeRequest.void.alert": "All linked documents should be removed before voiding the change request.",
+  "change.request.select.reasoning": "Select reasoning",
 
   "changeRequest.transition.submitted": "Submit change request",
   "changeRequest.transition.approve": "Approve submission",
@@ -172,6 +173,13 @@
   "changeRequest.audit.assessments.process.attachment.OBJECT_NEW": "Process Assessment Attachment Added",
   "changeRequest.audit.assessments.regulatory.attachment.OBJECT_NEW": "Regulatory Assessment Attachment Added",
   "changeRequest.audit.tasks.ARRAY_DELETED": "Implementation plan tasks deleted",
+  
+  "cr.assessment.reasoning.design.not_affect_changes": "Changes do not affect form, fit, function or materials with no impact on risk, safety or effectiveness",
+  "cr.assessment.reasoning.design.equivalent_changes": "Changes are equivalent to current design with no impact on risk, safety or effectiveness. Equivalency established through design verification",
+  "cr.assessment.reasoning.process.equivalent_changes": "Changes do not affect bioburden, sterilization, or validated state and are covered by existing QC methods",
+  "cr.assessment.reasoning.regulatory.no_approvals": "No current product approvals",
+  "cr.assessment.reasoning.regulatory.no_submissions": "No current submissions",
+  "cr.assessment.reasoning.regulatory.not_certified": "Quality System not certified",
 
   "cr.description": "Description Of Change Request",
   "cr.justification": "Justification Of Changes",
@@ -255,6 +263,7 @@
   "common.error": "Error",
   "common.success": "Success",
   "common.upload.photo": "Upload photo",
+  "common.employees": "Employees",
   "common.approve.and.release": "Approve and Release",
   "common.void": "Void",
   "common.alert": "Alert",
@@ -262,6 +271,7 @@
   "common.reset": "Reset",
   "common.members": "Members",
   "common.group.name": "Group Name",
+  "common.security": "Access",
 
   "output.info": "Form Info",
 
@@ -291,6 +301,10 @@
   "document.action.to_review": "Send to review",
   "document.action.withdraw": "Withdraw",
   "document.revision.stage": "Document Revision Stage",
+  "document.security.warning": "You do not have access to this document.",
+  "document.access.permissions": "Access Permissions",
+  "document.access.user.permissions": "User Permissions",
+  "document.access.group.permissions": "Group Permissions",
 
   "documentRevision.revise": "Revise Document",
   "documentRevision.form.references": "References",
@@ -338,6 +352,8 @@
   "document.revision.trainingRequired": "Training Required",
   "document.revision.released.date": "Released Date",
   "document.revision.docVersion": "Doc Versions",
+  "document.revision.user.permissions": "User Permissions",
+  "document.revision.group.permissions": "Group Permissions",
 
   "page.title.changeRequest": "Change Request List",
   "page.title.documentList": "Document List",
@@ -399,6 +415,24 @@
   "form.builder.predefined.validation": "Predefined Validation",
   "form.builder.custom.validation": "Custom Validation",
   "form.builder.validation.mode": "Validation Mode",
+  "form.builder.purchaseorder": "Purchase Order",
+  "form.builder.purhcase.order.items.placeholder": "Item A\nItem B\nItem C\n...",
+  "form.builder.add.item": "Add item",
+  "form.builder.field.order": "Order",
+  "form.builder.field.units": "Units",
+  "form.builder.field.date": "Date",
+  "form.builder.field.pn": "PN",
+  "form.builder.field.pn.description": "Description/PN",
+  "form.builder.field.price": "Price",
+  "form.builder.field.unit.price": "Unit Price",
+  "form.builder.field.tax": "Tax",
+  "form.builder.field.is.traceability.required": "Is Traceability Required",
+  "form.builder.field.item": "Item",
+  "form.builder.field.ext.amount": "Ext. Amount",
+  "form.builder.sub.total": "Sub Total: ",
+  "form.builder.tax": "Tax: ",
+  "form.builder.shipping.cost": "Shipping cost: ",
+  "form.builder.total": "Total: ",
 
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
@@ -443,5 +477,9 @@
 
   "mqtt.refresh.page": "Refresh page",
 
-  "group.management.group.details": "Group Details"
+  "group.management.group.details": "Group Details",
+  
+  "change.owner": "Change Owner",
+  "change.owner.update": "Update Owner"
+
 }

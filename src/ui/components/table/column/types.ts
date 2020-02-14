@@ -32,6 +32,7 @@ export interface TableColumnProps<T> {
   sortable?: boolean;
   sortDirection?: SortDirectionType | undefined;
   cellHref?: (rowData: T) => string;
+  withoutSearchRender?: boolean;
   // we will remove optional form id when we fill out all ids
   id?: string;
 }

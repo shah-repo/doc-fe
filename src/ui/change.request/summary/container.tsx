@@ -3,10 +3,15 @@ import { Form, Formik, FormikErrors, FormikProps } from "formik";
 import React from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { IotService } from "../../../common/utils/iot/mqttClient";
+import { authSelectors } from "../../../state/ducks/auth";
+import { GroupTag } from "../../../state/ducks/auth/types";
 import {
   ChangeRequest,
   changeRequestsActions,
+  ChangeRequestStatus,
 } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
@@ -29,11 +34,24 @@ import styles from "./styles";
 
 type DispatchProps = SummaryDispatchProps;
 
+interface StateProps {
+  currentEmployeeId: string;
+  isCompanyAdmin: boolean;
+}
+
 interface OwnProps extends DataProps<ChangeRequest> {
   currentUserEmail: string;
 }
 
-export type Props = OwnProps & DispatchProps & WithStyles<typeof styles>;
+export type Props = OwnProps &
+  DispatchProps &
+  StateProps &
+  WithStyles<typeof styles>;
+
+const mapStateToProps = (state: ApplicationState): StateProps => ({
+  currentEmployeeId: authSelectors.currentEmployeeId(state),
+  isCompanyAdmin: authSelectors.getHasTag(state, GroupTag.OWNERSHIP_CHANGE),
+});
 
 export const Container: React.FunctionComponent<Props> = ({
   classes,
@@ -41,12 +59,30 @@ export const Container: React.FunctionComponent<Props> = ({
   save,
   currentUserEmail,
   closeTask,
+  currentEmployeeId,
+  isCompanyAdmin,
 }) => {
+  const canChangeOwnerShip =
+    dataProp!.state === ChangeRequestStatus.Draft &&
+    (currentEmployeeId === dataProp.owner.id || isCompanyAdmin);
+
   const [docRev, setDocRev] = React.useState<DocumentRevision | null>(null);
   const async = useAsync<ChangeRequest>();
   if (canEditChangeRequest({ dataProp, currentUserEmail })) {
     return <Redirect to={changeRequestEditPath(dataProp.id)} />;
   }
+
+  const notify = (msg: string) => {
+    const message = JSON.parse(msg).data.message;
+    toast(message);
+  };
+
+  const iotService = IotService.getInstance();
+  iotService.unsubscribeAll();
+  iotService.subscribeToTopic(
+    `+/change_requests/${dataProp.crId}/updated`,
+    notify,
+  );
 
   const docRevSummary = (documentRevision: DocumentRevision) =>
     setDocRev(documentRevision);
@@ -63,7 +99,9 @@ export const Container: React.FunctionComponent<Props> = ({
     );
   };
 
-  const summaryPresenterRenderer = (props: FormikProps<ChangeRequestFormValues>) => (
+  const summaryPresenterRenderer = (
+    props: FormikProps<ChangeRequestFormValues>,
+  ) => (
     <Form>
       <Presenter
         dataProp={dataProp}
@@ -71,6 +109,7 @@ export const Container: React.FunctionComponent<Props> = ({
         canEdit={canEdit}
         currentUserEmail={currentUserEmail}
         closeTask={closeTask}
+        canChangeOwnerShip={canChangeOwnerShip}
         {...props}
       />
     </Form>
@@ -113,9 +152,7 @@ export const Container: React.FunctionComponent<Props> = ({
           />
         </Grid>
         <Grid item={true} xs={7} className={classes.root}>
-          {docRev && (
-            <DocumentRevisionLoader documentRevisionId={docRev.id} />
-          )}
+          {docRev && <DocumentRevisionLoader documentRevisionId={docRev.id} />}
           {!docRev && summaryFormikRenderer()}
         </Grid>
         <Grid item={true} xs={3} className={classes.sidebar}>
@@ -133,8 +170,8 @@ export const Container: React.FunctionComponent<Props> = ({
 
 Container.displayName = "ChangeRequestSummaryContainer";
 
-export default connect<{}, DispatchProps, OwnProps, ApplicationState>(
-  null,
+export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
+  mapStateToProps,
   {
     save: changeRequestsActions.save,
     closeTask: changeRequestsActions.closeTask,
