@@ -1,9 +1,9 @@
-import React from "react";
 import { Dialog } from "@material-ui/core";
-import DialogTitle from "../dialog/DialogTitle";
-import Text from "../../components/Text";
-import { GroupsDisplayContent } from "./GroupsDisplayContent";
+import React from "react";
 import { LoadCompanyGroup } from "../../../state/ducks/userManagement";
+import Text from "../../components/Text";
+import DialogTitle from "../dialog/DialogTitle";
+import { GroupsDisplayContent } from "./GroupsDisplayContent";
 
 interface OwnProps {
     closeDialog: () => void;
@@ -19,7 +19,7 @@ export const GroupsDisplay: React.FunctionComponent<Props> = ({
     selectedGroup,
 }) => {
     const { name, employees } = selectedGroup;
-    
+
     return (
         <Dialog fullScreen={true} open={isOpen}>
             <DialogTitle
@@ -32,6 +32,6 @@ export const GroupsDisplay: React.FunctionComponent<Props> = ({
             />
         </Dialog>
     );
-}
+};
 
 export default GroupsDisplay;

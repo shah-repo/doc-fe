@@ -16,8 +16,8 @@ import SwitchCompanyButtonContainer from "../components/icons/SwitchCompanyButto
 import {
   CHANGE_REQUEST_LIST_URL,
   DOCUMENT_REVISION_LIST_URL,
-  HOME_URL,
   GROUP_MANAGEMENT_ROOT_URL,
+  HOME_URL,
 } from "../constants/urls";
 import styles from "./Navigation.styles";
 import NavigationLinkContainer from "./NavigationLink.container";

@@ -1,7 +1,7 @@
+import { Box, Chip, Grid, Typography } from "@material-ui/core";
 import React from "react";
-import { Box, Typography, Chip, Grid } from "@material-ui/core";
-import Text from "../../components/Text";
 import { Employee } from "../../../state/ducks/company";
+import Text from "../../components/Text";
 import styles from "./styles";
 
 interface OwnProps {
@@ -39,7 +39,7 @@ export const GroupsDisplayContent: React.FunctionComponent<Props> = ({
 
     const groupNameRenderer = () => (
         <Box width={700}>
-            <Typography variant="h4" style={{marginBottom:"16px"}} >
+            <Typography variant="h4" style={{marginBottom: "16px"}} >
                 <Text translation={"common.group.name"} />
             </Typography>
             <Text message={groupName} />
@@ -57,6 +57,6 @@ export const GroupsDisplayContent: React.FunctionComponent<Props> = ({
         {membersRenderer(employees)}
     </Grid>
     );
-}
+};
 
 export default GroupsDisplayContent;
