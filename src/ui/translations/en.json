@@ -1,5 +1,5 @@
 {
-  "translation.unknown": "",
+  "translation.unknown": "&nbsp;",
 
   "login.title": "Sign in to Enlil",
   "login.email": "EMAIL ADDRESS",
@@ -262,11 +262,13 @@
   "common.error": "Error",
   "common.success": "Success",
   "common.upload.photo": "Upload photo",
+  "common.employees": "Employees",
   "common.approve.and.release": "Approve and Release",
   "common.void": "Void",
   "common.alert": "Alert",
   "common.dismiss": "Dismiss",
   "common.reset": "Reset",
+  "common.security": "Access",
 
   "output.info": "Form Info",
 
@@ -296,6 +298,10 @@
   "document.action.to_review": "Send to review",
   "document.action.withdraw": "Withdraw",
   "document.revision.stage": "Document Revision Stage",
+  "document.security.warning": "You do not have access to this document.",
+  "document.access.permissions": "Access Permissions",
+  "document.access.user.permissions": "User Permissions",
+  "document.access.group.permissions": "Group Permissions",
 
   "documentRevision.revise": "Revise Document",
   "documentRevision.form.references": "References",
@@ -343,6 +349,8 @@
   "document.revision.trainingRequired": "Training Required",
   "document.revision.released.date": "Released Date",
   "document.revision.docVersion": "Doc Versions",
+  "document.revision.user.permissions": "User Permissions",
+  "document.revision.group.permissions": "Group Permissions",
 
   "page.title.changeRequest": "Change Request List",
   "page.title.documentList": "Document List",
@@ -404,6 +412,24 @@
   "form.builder.predefined.validation": "Predefined Validation",
   "form.builder.custom.validation": "Custom Validation",
   "form.builder.validation.mode": "Validation Mode",
+  "form.builder.purchaseorder": "Purchase Order",
+  "form.builder.purhcase.order.items.placeholder": "Item A\nItem B\nItem C\n...",
+  "form.builder.add.item": "Add item",
+  "form.builder.field.order": "Order",
+  "form.builder.field.units": "Units",
+  "form.builder.field.date": "Date",
+  "form.builder.field.pn": "PN",
+  "form.builder.field.pn.description": "Description/PN",
+  "form.builder.field.price": "Price",
+  "form.builder.field.unit.price": "Unit Price",
+  "form.builder.field.tax": "Tax",
+  "form.builder.field.is.traceability.required": "Is Traceability Required",
+  "form.builder.field.item": "Item",
+  "form.builder.field.ext.amount": "Ext. Amount",
+  "form.builder.sub.total": "Sub Total: ",
+  "form.builder.tax": "Tax: ",
+  "form.builder.shipping.cost": "Shipping cost: ",
+  "form.builder.total": "Total: ",
 
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
@@ -446,5 +472,9 @@
   "watermark.download.ready": "Watermarked file {name}.{type} ready to download",
   "watermark.request.failed": "Request for {name}.{type} failed",
 
-  "mqtt.refresh.page": "Refresh page"
+  "mqtt.refresh.page": "Refresh page",
+
+  "change.owner": "Change Owner",
+  "change.owner.update": "Update Owner"
+
 }

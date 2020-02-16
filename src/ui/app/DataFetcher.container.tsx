@@ -15,10 +15,12 @@ const DataFetcherContainer: React.FunctionComponent = () => {
     dispatch(documentTypeActions.loadList());
     dispatch(authActions.getSessionDetails(employeeId));
     dispatch(authActions.loadUserGroups());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     canManageUsers && dispatch(userManagementActions.loadCompanyGroups());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canManageUsers]);
 
   // NOTE: should we show error messages here?

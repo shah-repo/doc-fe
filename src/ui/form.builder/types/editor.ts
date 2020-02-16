@@ -22,7 +22,8 @@ export type FBEditorElementType =
   | "fileupload"
   | "schemaSelect"
   | "schemaItem"
-  | "action";
+  | "action"
+  | "purchaseorder";
 
 export type FBEditorModeType = "create" | "update";
 

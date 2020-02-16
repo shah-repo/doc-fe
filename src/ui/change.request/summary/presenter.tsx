@@ -1,10 +1,4 @@
-import {
-  Box,
-  Grid,
-  ListItem,
-  WithStyles,
-  withStyles,
-} from "@material-ui/core";
+import { Box, Grid, ListItem, WithStyles, withStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { filter } from "lodash";
 import React, { useMemo } from "react";
@@ -17,6 +11,7 @@ import { AsyncState } from "../../../state/types";
 import ControlsContainer from "../../changeRequest/forms/assessmentForm/AssessmentFormControls.container";
 import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
+import OwnerChanger from "../../components/common/owner.changer/container";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
 import SubmitButton from "../../components/forms/SubmitButton";
@@ -33,9 +28,12 @@ interface OwnProps extends DataProps<ChangeRequest> {
   canEdit: boolean;
   currentUserEmail: string;
   closeTask: typeof changeRequestsActions.closeTask;
+  canChangeOwnerShip: boolean;
 }
 
-export type Props = OwnProps & WithStyles<typeof styles> & FormikProps<ChangeRequestFormValues>;
+export type Props = OwnProps &
+  WithStyles<typeof styles> &
+  FormikProps<ChangeRequestFormValues>;
 
 export const Presenter: React.FunctionComponent<Props> = ({
   classes,
@@ -44,25 +42,33 @@ export const Presenter: React.FunctionComponent<Props> = ({
   canEdit,
   currentUserEmail,
   closeTask,
+  canChangeOwnerShip,
   errors,
 }) => {
-  const approvedApprovers = useMemo(() => filter(dataProp.approvals, ["status", "APPROVED"] ), [dataProp]);
+  const approvedApprovers = useMemo(
+    () => filter(dataProp.approvals, ["status", "APPROVED"]),
+    [dataProp],
+  );
 
   const approversFieldRenderer = () => (
     <Box>
       <ListItem>
-        <ApproversField dataProp={approvedApprovers}/>
+        <ApproversField dataProp={approvedApprovers} />
       </ListItem>
     </Box>
   );
 
   const submitButtonRenderer = () => (
-    <SubmitButton asyncState={asyncState} label="document.save" errors={errors} />
+    <SubmitButton
+      asyncState={asyncState}
+      label="document.save"
+      errors={errors}
+    />
   );
 
   const renderImplementationPlan = dataProp.implementationPlan &&
-    (dataProp.implementationPlan.attachments.length > 0 || dataProp.implementationPlan.tasks.length > 0) &&
-    (
+    (dataProp.implementationPlan.attachments.length > 0 ||
+      dataProp.implementationPlan.tasks.length > 0) && (
       <ImplementationPlan
         dataProp={dataProp.implementationPlan}
         currentUserEmail={currentUserEmail}
@@ -103,6 +109,12 @@ export const Presenter: React.FunctionComponent<Props> = ({
         >
           {canEdit && <FormProgress asyncState={asyncState} />}
           {canEdit && <FormMessage asyncState={asyncState} />}
+          {canChangeOwnerShip && (
+            <OwnerChanger
+              requestId={dataProp!.id}
+              requestType={"change_request"}
+            />
+          )}
           {canEdit && submitButtonRenderer()}
           <ControlsContainer changeRequest={dataProp} errors={errors} />
         </Grid>

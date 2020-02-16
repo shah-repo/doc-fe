@@ -38,7 +38,6 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
     omitSearch,
     cellHref,
     sortable,
-    id,
   } = props;
   const { measurerCache, searchable, queryGetter } = innerProps;
 
@@ -145,7 +144,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
           {sortable && <SortIndicator sortDirection={props.sortDirection} />}
         </Box>
         {searchable && (
-          <Box height="65px" component="div" className="headerField" id={id}>
+          <Box height="65px" component="div" className="headerField">
             {searchFieldRenderer()}
           </Box>
         )}

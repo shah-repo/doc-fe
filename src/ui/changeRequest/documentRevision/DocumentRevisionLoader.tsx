@@ -32,6 +32,7 @@ export const DocumentRevisionLoader: React.FunctionComponent<Props> = ({
     if (documentRevisionId) {
       loadDocumentRevision();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentRevisionId]);
 
   return (

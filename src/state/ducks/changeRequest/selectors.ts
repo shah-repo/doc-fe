@@ -33,7 +33,7 @@ const getApproversListWithoutCurrentUser = createSelector(
   ({ids, approvers}, currentUserId): OptionType[] => {
     const list: OptionType[] = [];
 
-    ids.map((id) => {
+    ids.forEach((id) => {
       if (id === currentUserId) {
         return;
       }

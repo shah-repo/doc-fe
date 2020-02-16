@@ -32,6 +32,7 @@ export const LoginWithCodeContainer: React.FunctionComponent<LoginWithCodeContai
     if (code) {
       async.start(loginWithCode, { code }, async);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code]);
 
   if (!code) {

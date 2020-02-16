@@ -72,11 +72,10 @@ const makeGetAvailableReferences = () => {
     [allIds, byId, getCurrentDocumentValues],
     (ids, docRevs, currentDocRev): OptionType[] => {
       const filteredIds = ids.filter((id) => {
-        const { status, changeRequest, document } = docRevs[id];
+        const { status, changeRequest } = docRevs[id];
 
         if (
-          currentDocRev.document &&
-          currentDocRev.document.id === document.id
+          currentDocRev.document
         ) {
           return false;
         }

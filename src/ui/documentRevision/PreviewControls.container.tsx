@@ -1,8 +1,8 @@
-import { Box, Button } from "@material-ui/core";
+import { Box, Button, Typography } from "@material-ui/core";
 import React from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-
+import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
 import {
   DocumentRevision,
   documentRevisionsSelectors,
@@ -15,6 +15,7 @@ import { canCreateNewVersion, canCreateOutput } from "./helpers";
 interface OwnProps {
   documentRevision: DocumentRevision;
   canShowCreateVersionButton?: boolean;
+  hasAccess: boolean;
 }
 
 interface StateProps {
@@ -29,7 +30,7 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 });
 
 export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainerProps> = ({
-  documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton,
+  documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton, hasAccess,
 }) => {
 
     const cloneDocument = () => history.push(documentNewVersionPath(documentRevision.id, documentRevision.document.id));
@@ -55,9 +56,13 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
     };
 
     return (
-      <Box component="span">
-        {canCreate() && renderCloneButton()}
-        {canCreateOutput(documentRevision) && renderOutputButton()}
+      <Box component="span" style={{paddingTop: 30}}>
+        {hasAccess && canCreate() && renderCloneButton()}
+        {hasAccess && canCreateOutput(documentRevision) && renderOutputButton()}
+        {!hasAccess && <div style={{display: "flex"}}><WarningIcon style={{marginRight: 10}}/>
+        <Typography variant="h6">
+          <Text translation="document.security.warning" />
+        </Typography></div>}
       </Box>
     );
   };
