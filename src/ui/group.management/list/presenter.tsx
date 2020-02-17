@@ -8,6 +8,8 @@ import DocumentInfo from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
 import { TableDataProps } from "../../components/table/types";
 import Text from "../../components/Text";
+import AddGroup from "../add.group/AddGroup";
+import AddGroupContainer from "../add.group/container";
 import { GroupsDisplay } from "../groups/GroupsDisplay";
 import { DEFAULT_SELECTED_GROUP } from "../utils/types";
 import { styles } from "./styles";
@@ -35,9 +37,20 @@ export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
     setGroup(rowData);
     openGroupsPreview();
   };
+
+  const handleGroupsEdit = (rowData: LoadCompanyGroup) => {
+    setGroup(rowData);
+    openGroupsEdit();
+  };
+
   const handleMembers = (members: Employee[]) => {
     return members.map((member) => member.user!.name).join(", ");
   };
+
+  const [showGroupsEdit, setGroupsEdit] = useState(false);
+  const openGroupsEdit = () => setGroupsEdit(true);
+  const closeGroupsEdit = () => setGroupsEdit(false);
+
 // column for official/unofficial group needs to be added after BE is done
   const columns: Array<TableColumnProps<LoadCompanyGroup>> = [
     {
@@ -72,20 +85,34 @@ export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
         </Button>
         <DocumentInfo numberOfRecords={tableData.length} />
         </Grid>
+        <Grid
+          item={true}
+          xs={6}
+          style={{ textAlign: "right" }}
+        >
+        <AddGroupContainer />
+        </Grid>
         <Grid item={true} className={classes.item}>
         <TablePanel<LoadCompanyGroup>
             columns={columns}
             queryUrl={GROUPS_URL}
             cellMeasure={true}
             tableName={tableName}
-            // for now click on table row opens grop preview, after permission conditon will be added
-            onSelect={({ rowData }) => () => handleGroupsPreview(rowData)}
+            // here should go condition related to the permissions
+            // for now it only opens edit groups
+            onSelect={({ rowData }) => () => true ? handleGroupsEdit(rowData) : handleGroupsPreview(rowData)}
         />
         </Grid>
         <GroupsDisplay
           closeDialog={closeGroupsPreview}
           isOpen={showGroupsPreview}
           selectedGroup={selectedGroup}
+        />
+        <AddGroup
+          isOpen={showGroupsEdit}
+          closeDialog={closeGroupsEdit}
+          selectedGroup={selectedGroup}
+          title={<Text translation={"group.management.edit.group"} />}
         />
     </Grid>
   );

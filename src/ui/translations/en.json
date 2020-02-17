@@ -478,7 +478,10 @@
   "mqtt.refresh.page": "Refresh page",
 
   "group.management.group.details": "Group Details",
-  
+  "group.management.add.group": "Add Group",
+  "group.management.create.group": "Create Group",
+  "group.management.edit.group": "Edit Group",
+
   "change.owner": "Change Owner",
   "change.owner.update": "Update Owner"
 
