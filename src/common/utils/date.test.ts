@@ -5,22 +5,22 @@ import {
 } from "./date";
 
 describe("common/utils/date", () => {
-  it("getDateString - convert date to start of day America/Los_Angeles", () => {
+  it("getStartOfDayDateString - convert date to start of day America/Los_Angeles", () => {
     const date = "2019-09-27T07:00:00.000Z";
     const dateString = getStartOfDayDateString(date);
 
     expect(dateString).toBe("2019-09-27T00:00:00-07:00");
   });
 
-  it("applyTimezoneToDate", () => {
+  it("toStartOfDay", () => {
     const date = "2019-09-27T00:00:00.000Z";
     const dateString = toStartOfDay(date);
-    const expected = moment("2019-09-27T07:00:00.000Z").toDate();
+    const expected = moment("2019-09-26T07:00:00.000Z").toDate();
 
     expect(dateString).toMatchObject(expected);
   });
 
-  it("getFormattedDateString - date string in LL format", () => {
+  it("getStartOfDayDateString - date string in LL format", () => {
     const date = "2019-09-27T07:00:00.000Z";
     const dateString = getStartOfDayDateString(date, "LL");
 
