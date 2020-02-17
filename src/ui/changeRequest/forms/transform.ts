@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { applyTimezoneToDate, getDateString } from "../../../common/utils/date";
+import { getStartOfDayDateString, toStartOfDay } from "../../../common/utils/date";
 import { Attachment } from "../../../state/ducks/attachments";
 import {
   Approver,
@@ -67,7 +67,7 @@ export const toChangeRequestFormValues = (changeRequest: ChangeRequest): ChangeR
     approvals: changeRequest.approvals.map((approval) => ({
       label: approval.approver.user.name, value: approval.approver.id,
     })),
-    effectiveDate: changeRequest.effectiveDate && applyTimezoneToDate(changeRequest.effectiveDate),
+    effectiveDate: changeRequest.effectiveDate && toStartOfDay(changeRequest.effectiveDate),
     documentRevisions: changeRequest.documentRevisions.map((documentRevision) => documentRevision.id ),
     description: changeRequest.description || reactQuillEmptyString,
   };
@@ -83,7 +83,7 @@ const createNestedObjectForRequestBody = (value: NestedObject) => ({
 const toImplementationPlanEditRequestBody = (values: ImplementationPlanFormValues): ImplementationPlanRequest => {
   const valuesTasks: ImplementationPlanTaskRequest[] = values.tasks.map((t) => {
     const { assigned, dueDate, ...excluded } = t;
-    const normalizedDueDate = getDateString(dueDate);
+    const normalizedDueDate = getStartOfDayDateString(dueDate);
     if (assigned) {
       return ({ assigned: { id: assigned.value }, dueDate: normalizedDueDate, ...excluded });
     } else {
@@ -118,7 +118,7 @@ export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues):
     implementationPlan: toImplementationPlanEditRequestBody(values.implementationPlan),
     justifications: createNestedObjectForRequestBody(values.justifications),
     approvals: (values.approvals || []).map((approver): Approver => ({ id: approver.value })),
-    effectiveDate: values.effectiveDate && getDateString(values.effectiveDate),
+    effectiveDate: values.effectiveDate && getStartOfDayDateString(values.effectiveDate),
     documentRevisions: values.documentRevisions.map((documentRevisionId) => ({ id: documentRevisionId })),
   };
 

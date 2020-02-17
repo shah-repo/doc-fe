@@ -1,6 +1,6 @@
 import React from "react";
 import { default as ReactDatePicker } from "react-datepicker";
-import { getDateString } from "../../../../common/utils/date";
+import { getStartOfDayDateString } from "../../../../common/utils/date";
 import styles from "./BasicFields.module.css";
 
 interface DatePickerProps {
@@ -21,7 +21,7 @@ const DatePicker: React.FunctionComponent<DatePickerProps> = ({
 }) => {
   const handleDayChange = (day: Date) => {
     if (!editMode) {
-      updateValue(currentIndex, title, getDateString(day, "L"));
+      updateValue(currentIndex, title, getStartOfDayDateString(day, "L"));
     }
   };
 
