@@ -23,7 +23,8 @@ export type FBEditorElementType =
   | "schemaSelect"
   | "schemaItem"
   | "action"
-  | "hellosign";
+  | "hellosign"
+  | "purchaseorder";
 
 export type FBEditorModeType = "create" | "update";
 

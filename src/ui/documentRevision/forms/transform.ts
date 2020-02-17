@@ -59,6 +59,10 @@ export const toDocumentRevisionFormValues = (
     formDocument: documentRevision.formDocument,
     status: documentRevision.status,
     revisionChangeType: documentRevision.revisionChangeType,
+    securityEmployees: _.get(documentRevision, "document.securityList.securityEmployees", [])
+      .map((employee) => ({ label: employee.name, value: employee.id })),
+    securityGroups: _.get(documentRevision, "document.securityList.securityGroups", [])
+      .map((group) => ({ label: group.name, value: group.id })),
   };
   FBDRStore.setValues(documentRevision);
   return values;
@@ -83,7 +87,6 @@ export const toDocumentRevisionEditRequestBody = (
     revisionChangeType: values.revisionChangeType,
     retrain: values.retrain,
   } as DocumentRevisionEditRequestBody;
-
   return data;
 };
 
@@ -96,10 +99,21 @@ export const toNewVersionRequestBody = (
   if (values.document) {
     if (values.document.id) {
       // new revision
-      newValues.document = _.pick(values.document, ["id"]);
+      newValues.document = {
+        ...newValues.document,
+        id: _.get(values, "document.id"),
+      };
     } else {
       // new document
-      newValues.document = _.pick(values.document, ["docId", "documentType"]);
+      newValues.document = {
+        ...newValues.document,
+        id: _.get(values, "document.id"),
+        docId: _.get(values, "document.docId"),
+        securityList: {
+          securityEmployees:  values.securityEmployees.map((employee) => ({ id: employee.value })),
+          securityGroups: values.securityGroups.map((group) => ({ id: group.value })),
+        },
+      };
       newValues.document.documentType = { id: values.document.documentType!.id as string };
     }
   }

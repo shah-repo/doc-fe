@@ -26,7 +26,7 @@ const ViewFileTitleControls: React.FunctionComponent<ViewFileTitleControlsProps>
       : () => setFile(viewableFiles[currentIndex + 1]);
 
     return { setPreviousAttachment: setPrevious, setNextAttachment: setNext };
-  }, [attachment, attachments]);
+  }, [attachment, attachments, setFile]);
   const classes = styles();
   return (
     <span className={classes.buttonsContainer}>

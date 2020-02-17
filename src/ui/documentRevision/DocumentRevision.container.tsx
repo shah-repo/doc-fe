@@ -37,13 +37,15 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 
 export const DocumentRevisionContainer: React.FunctionComponent<DocumentRevisionContainerProps> = ({
   match,
+  documentRevision,
 }) => {
   const documentId = match.params.documentId;
   const renderWrapper = (props: any) => {
     const documentRevisionId = props.match.params.documentRevisionId;
+    const canAccess = documentRevision.document.canAccess;
 
     return (
-      <props.component documentRevisionId={documentRevisionId} documentId={documentId} />
+      <props.component documentRevisionId={documentRevisionId} documentId={documentId} canAccess={canAccess}/>
     );
   };
   const renderDocumentRevisionManagerContainer = (props: any) => renderWrapper({

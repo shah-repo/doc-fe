@@ -11,12 +11,12 @@ const useMqttSubscription = (
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [subscribe, unsubscribe]);
   useEffect(() => {
     if (didMqttConnect) {
       subscribe();
     }
-  }, [didMqttConnect]);
+  }, [didMqttConnect, subscribe]);
 };
 
 export default useMqttSubscription;

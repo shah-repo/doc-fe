@@ -12,6 +12,11 @@ export class FB {
     return React.useContext(MobXProviderContext);
   }
 
+  public static uniqid(): string {
+    const uniqid = require("uniqid");
+    return uniqid();
+  }
+
   public static stripOption(fielddName: string, optionName?: string): string {
     if (_.isUndefined(optionName)) {
       return "";

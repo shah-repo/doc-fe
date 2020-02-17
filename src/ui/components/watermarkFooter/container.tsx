@@ -31,6 +31,7 @@ export const WatermarkFooterContainer: React.FunctionComponent = () => {
     return () => {
       dispatch(attachmentsActions.clearWatermarks());
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const renderFooter = requestResults.length > 0 && (
@@ -43,11 +44,16 @@ export const WatermarkFooterContainer: React.FunctionComponent = () => {
 
   return (
     <>
-      <WatermarkFooterRequest
-        watermarkIds={watermarkIds}
-        addRequestResult={addRequestResult}
-        removeWatermark={removeWatermark}
-      />
+      {
+        watermarkIds.map((watermarkId) => (
+          <WatermarkFooterRequest
+            key={watermarkId}
+            watermarkId={watermarkId}
+            addRequestResult={addRequestResult}
+            removeWatermark={removeWatermark}
+          />
+        ))
+      }
       {renderFooter}
     </>
   );

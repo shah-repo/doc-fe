@@ -48,6 +48,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
         ),
       );
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [acronym]);
 
   const async = useAsync<DocumentTypeById>({

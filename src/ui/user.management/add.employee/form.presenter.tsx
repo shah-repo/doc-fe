@@ -36,6 +36,7 @@ export const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
     if (asyncState.status === AsyncStatus.Success) {
       resetForm();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [asyncState]);
   const getEmployeeAction = useActionCreator(userManagementActions.getEmployee);
   const asyncName = useAsync<GetEmployeeResponse[]>({
@@ -65,6 +66,7 @@ export const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
 
   useEffect(() => {
     handleEmailChange(values.email);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedEmail]);
 
   return (

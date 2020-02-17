@@ -7,7 +7,7 @@ import {
   withStyles,
 } from "@material-ui/core";
 import React from "react";
-import { getFormattedDateString } from "../../../common/utils/date";
+import { getFormattedStartOfDayDateString } from "../../../common/utils/date";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
 import Text from "../../components/Text";
@@ -24,7 +24,7 @@ export const Header: React.FunctionComponent<Props> = ({
   const status = (
     <Box>
       {state}
-      {closedAt && <Text message={`, ${getFormattedDateString(closedAt)}`} />}
+      {closedAt && <Text message={`, ${getFormattedStartOfDayDateString(closedAt)}`} />}
     </Box>
   );
 

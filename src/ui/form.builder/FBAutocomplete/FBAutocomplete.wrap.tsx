@@ -1,4 +1,4 @@
-import { TextField } from "@material-ui/core";
+import { Chip, TextField } from "@material-ui/core";
 import { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import _ from "lodash";
 import { useObserver } from "mobx-react";
@@ -13,19 +13,22 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
   const Comp = ({
     state,
     getOptionLabel,
-    optionRenderKey = "id",
+    optionValueKey = "value",
+    optionLabelKey = "text",
     optionPath = "",
     name = "",
     placeholder,
     renderEl,
+    options,
+    renderTags,
+    disabled,
     ...props
   }: T) => {
-
     state = FB.useRef<FBAutocompleteState>(FBAutocompleteState);
-    renderEl = FBStore.mode === "design";
+    renderEl = FBStore.mode === "design" || !_.isUndefined(options);
 
     React.useEffect(() => {
-      if (FBStore.mode === "design") {
+      if (FBStore.mode === "design" || _.isEmpty(optionPath)) {
         return;
       }
       const value = _.get(FBStore.getValues(), name) || "";
@@ -33,7 +36,17 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       state?.setUrl(optionPath);
     }, []);
 
-    getOptionLabel = (option) => _.get(option, optionRenderKey) || "";
+    getOptionLabel = (option) => _.get(option, optionLabelKey) || "";
+
+    renderTags = (value, getTagProps) =>
+      value.map((option, index) => (
+        <Chip
+          key={`${_.kebabCase(option)}-${index}`}
+          label={_.get(option, optionLabelKey, "")}
+          {...getTagProps({ index })}
+          {...{ disabled }}
+        />
+      ));
 
     const renderInput = (params: RenderInputParams) => (
       <TextField
@@ -44,16 +57,22 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       />
     );
 
-    return useObserver(() => Component({
-      ...(props as T),
-      getOptionLabel,
-      renderEl: renderEl || state?.loaded,
-      options: state?.data,
-      loading: state?.loading,
-      defaultValue: state?.defaultValue,
-      name,
-      renderInput,
-    }));
+    return useObserver(() =>
+      Component({
+        ...(props as T),
+        getOptionLabel,
+        renderEl: renderEl || state?.loaded,
+        options: options || state?.data,
+        loading: state?.loading,
+        defaultValue: state?.defaultValue,
+        name,
+        renderInput,
+        optionValueKey,
+        optionLabelKey,
+        disabled,
+        renderTags,
+      }),
+    );
   };
 
   return (props: T) => Comp(props);

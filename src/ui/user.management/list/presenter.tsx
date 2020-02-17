@@ -116,12 +116,9 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
         <DocumentInfo numberOfRecords={tableData.length} />
       </Grid>
       <Grid
-        container={true}
+        item={true}
         xs={6}
         style={{ textAlign: "right" }}
-        alignItems="flex-start"
-        justify="flex-end"
-        direction="row"
       >
         <AddSlackButtonContainer />
         <AddEmployeeContainer />

@@ -3,8 +3,7 @@ import React from "react";
 import Text from "../../components/Text";
 import { styles } from "./styles";
 
-export const SlackLandingProgress: React.FunctionComponent = ({
-}) => {
+export const SlackLandingProgress: React.FunctionComponent = () => {
   const classes = styles();
 
   return (

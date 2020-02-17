@@ -11,6 +11,7 @@ import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/do
 import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
+import OwnerChanger from "../../components/common/owner.changer/container";
 import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
@@ -27,6 +28,7 @@ import TrainingControl from "./training.control";
 
 interface OwnProps {
   canShowCreateVersionButton?: boolean;
+  canChangeOwnerShip?: boolean;
 }
 
 export type Props = OwnProps &
@@ -49,6 +51,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
     trainingRecords,
     formTemplate,
   },
+  canChangeOwnerShip,
   canShowCreateVersionButton,
 }) => {
   const onSubmit = () => void 0;
@@ -112,10 +115,17 @@ export const Presenter: React.FunctionComponent<Props> = ({
           <FBWorkspace />
         </Box>
       )}
-      <Box flexDirection="row-reverse" display="flex" px={3}>
+      <Box flexDirection={document.canAccess ? "row-reverse" : "row"} display="flex" px={3}>
+        {canChangeOwnerShip && (
+            <OwnerChanger
+              requestId={id}
+              requestType={"document"}
+            />
+          )}
         <ControlsContainer
           documentRevision={dataProp}
           canShowCreateVersionButton={canShowCreateVersionButton}
+          hasAccess={document.canAccess}
         />
       </Box>
     </Box>

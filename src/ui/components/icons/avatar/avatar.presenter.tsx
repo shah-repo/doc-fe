@@ -24,7 +24,7 @@ const AvatarPresenter: React.FunctionComponent<Props> = ({
 
   const avatarRenderer = () => (
     <Box zIndex="modal" position="absolute" alignSelf="baseline">
-      <img src={previewAvatar || src} className={classes.image} alt="Profile photo" />
+      <img src={previewAvatar || src} className={classes.image} alt="Profile" />
     </Box>
   );
   return (
