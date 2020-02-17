@@ -302,6 +302,8 @@
   "document.access.permissions": "Access Permissions",
   "document.access.user.permissions": "User Permissions",
   "document.access.group.permissions": "Group Permissions",
+  "document.request.access": "Request access",
+  "document.email.sent": "An email with your request has been sent.",
 
   "documentRevision.revise": "Revise Document",
   "documentRevision.form.references": "References",
