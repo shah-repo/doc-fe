@@ -14,6 +14,7 @@ import {
   DOCUMENTS_TO_REVIEW_URL,
 } from "./constants";
 import {
+  AccessRequestBody,
   Document,
   DocumentEditRequestBody,
   DocumentListAction,
@@ -125,6 +126,17 @@ const applyTransition = (
   handlers,
 });
 
+const sendEmailAccessRequest = (
+  id: string,
+  body: AccessRequestBody,
+  handlers: Handlers,
+): ApiAction<AccessRequestBody> => apiActionWithCallbacks({
+  url: `${DOCUMENTS_ROOT_URL}/${id}/request_access`,
+  method: "post",
+  data: body,
+  handlers,
+});
+
 export default {
   documentsList,
   documentsToReviewList,
@@ -137,4 +149,5 @@ export default {
   applyTransition,
   loadDocumentProposedId,
   setDocumentProposedId,
+  sendEmailAccessRequest,
 };
