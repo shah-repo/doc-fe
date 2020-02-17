@@ -6,10 +6,10 @@ import {
 
 describe("common/utils/date", () => {
   it("getStartOfDayDateString - convert date to start of day America/Los_Angeles", () => {
-    const date = "2019-09-27T07:00:00.000Z";
+    const date = "2019-09-27T00:00:00.000Z";
     const dateString = getStartOfDayDateString(date);
 
-    expect(dateString).toBe("2019-09-27T00:00:00-07:00");
+    expect(dateString).toBe("2019-09-26T00:00:00-07:00");
   });
 
   it("toStartOfDay", () => {
@@ -21,9 +21,9 @@ describe("common/utils/date", () => {
   });
 
   it("getStartOfDayDateString - date string in LL format", () => {
-    const date = "2019-09-27T07:00:00.000Z";
+    const date = "2019-09-27T00:00:00.000Z";
     const dateString = getStartOfDayDateString(date, "LL");
 
-    expect(dateString).toBe("September 27, 2019");
+    expect(dateString).toBe("September 26, 2019");
   });
 });
