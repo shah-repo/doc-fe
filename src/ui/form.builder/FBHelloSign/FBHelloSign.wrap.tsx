@@ -1,4 +1,4 @@
-import _ from "lodash";
+
 import React from "react";
 import Iframe from "react-iframe";
 import { FBHelloSignPayload, FBHelloSignProps } from ".";
@@ -23,11 +23,10 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
       apiCall.set({
         requestMethod: "POST",
         requestUrl: "/hello_sign/template",
-        payload
+        payload,
       });
 
       FBActionStore.apiCall(apiCall.toJS() as unknown as FBActionModel);
-      debugger
       state?.openDialog();
       state?.config({
         maxWidth: "lg",
@@ -40,7 +39,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     onClick = () => {
       const payload: FBHelloSignPayload = {
         testMode: 1,
-        documentRevisionId: "c46eaa47-e257-4eb5-bb5a-94e083d0cc94"
+        documentRevisionId: "c46eaa47-e257-4eb5-bb5a-94e083d0cc94",
       };
 
       apiCall(payload);
