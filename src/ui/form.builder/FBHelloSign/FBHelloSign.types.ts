@@ -17,6 +17,8 @@ export interface FBHelloSignFieldProps {
 }
 
 export interface FBHelloSignPayload {
+  testMode: number;
+  clientId: string;
   files?: string[];
   mergeFields?: FBHelloSignFieldProps[];
 }
