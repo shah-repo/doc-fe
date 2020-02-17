@@ -435,8 +435,8 @@
 
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
-  "attachment.download.watermark": "Download watermarked file",
-  "attachment.download.watermark.clean.copy": "Download watermarked clean copy",
+  "attachment.download.watermark": "Download PDF file",
+  "attachment.download.watermark.clean.copy": "Download PDF clean copy",
 
   "training.completed": "Training completed",
   "training.certify.completion": "Click the button to certify training completion",
