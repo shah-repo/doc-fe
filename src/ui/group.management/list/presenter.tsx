@@ -6,7 +6,7 @@ import { GROUPS_URL } from "../../../state/ducks/userManagement/constants";
 import { TableColumnProps } from "../../components/table/column/types";
 import DocumentInfo from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
-import { TableDataProps } from "../../components/table/types";
+import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import AddGroup from "../add.group/AddGroup";
 import AddGroupContainer from "../add.group/container";
@@ -18,12 +18,14 @@ export interface Props {
     tableName: string;
     tableData: TableDataProps<any>;
     clearFilter?: () => void;
+    tableCriteria: TablePanelStateProps;
   }
 
 export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
     tableName,
     tableData,
     clearFilter,
+    tableCriteria,
 }) => {
   const classes = styles();
   // should move usetState to container
@@ -54,19 +56,41 @@ export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
 // column for official/unofficial group needs to be added after BE is done
   const columns: Array<TableColumnProps<LoadCompanyGroup>> = [
     {
-      key: "name" as keyof LoadCompanyGroup,
+      key: "groupName" as keyof LoadCompanyGroup,
       id: "GroupManagementListPresenter-name",
       label: "common.name",
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.name,
       },
+      searchOptions: {
+        defaultValue: tableCriteria.queryDict.groupName,
+      },
     },
     {
-      key: "employees" as keyof LoadCompanyGroup,
+      key: "userName" as keyof LoadCompanyGroup,
       id: "GroupManagementListPresenter-employees",
       label: "common.members",
       columnOptions: {
         cellDataGetter: ({ rowData }) => handleMembers(rowData.employees),
+      },
+      searchOptions: {
+        defaultValue: tableCriteria.queryDict.userName,
+      },
+    },
+    {
+      key: "isOfficial",
+      id: "GroupManagementListPresenter-groupType",
+      label: "group.management.group.type",
+      searchOptions: {
+        searchType: "select",
+        selectOptions: [
+          { text: "Official", value: "true" },
+          { text: "Unofficial", value: "false" },
+        ],
+        defaultValue: tableCriteria.queryDict.isOfficial,
+      },
+      columnOptions: {
+        cellDataGetter: ({ rowData }) => rowData.isOfficial ? "Official" : "Unofficial",
       },
     },
   ];

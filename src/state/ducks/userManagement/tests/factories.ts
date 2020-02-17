@@ -15,4 +15,5 @@ export const getCompanyGroup = (): LoadCompanyGroup => ({
     defaultForNewUsers: true,
     company: getCompany(),
     employees: [getEmployee()],
+    isOfficial: true,
 });

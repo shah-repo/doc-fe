@@ -9,6 +9,7 @@ export const DEFAULT_SELECTED_GROUP: LoadCompanyGroup = {
     tags: null,
     company: COMPANY_DEFAULT_STATE,
     employees: [],
+    isOfficial: true,
   };
 
 export const DEFAULT_ACTIVE_EMPLOYEE: GetEmployeeResponse[] = [{

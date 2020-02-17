@@ -484,6 +484,7 @@
   "group.management.add.group": "Add Group",
   "group.management.create.group": "Create Group",
   "group.management.edit.group": "Edit Group",
+  "group.management.group.type": "Group Type",
 
   "change.owner": "Change Owner",
   "change.owner.update": "Update Owner"
