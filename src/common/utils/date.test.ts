@@ -1,7 +1,7 @@
 import moment from "moment-timezone";
 import {
-  toStartOfDay,
   getStartOfDayDateString,
+  toStartOfDay,
 } from "./date";
 
 describe("common/utils/date", () => {

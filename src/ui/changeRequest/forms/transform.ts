@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { toStartOfDay, getStartOfDayDateString } from "../../../common/utils/date";
+import { getStartOfDayDateString, toStartOfDay } from "../../../common/utils/date";
 import { Attachment } from "../../../state/ducks/attachments";
 import {
   Approver,
