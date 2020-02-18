@@ -29,7 +29,7 @@
   },
   {
     "id": "5",
-    "path": "/document_revisions?documentTypeAcronym=SUPP",
+    "path": "/document_revisions?documentTypeAcronym=SUP",
     "label": "Supplier list",
     "optionValueKey": "id",
     "optionLabelKey": "name"

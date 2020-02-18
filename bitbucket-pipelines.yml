@@ -174,7 +174,7 @@ pipelines:
           - step: *BUILD_DEV
       - step: *DEPLOY_DEV
 
-    release/20.2:
+    release/20.3:
       - parallel:
           - step: *RUN_TESTS
           - step: *RUN_LINTER

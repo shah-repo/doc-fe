@@ -1,7 +1,6 @@
 import _, { Dictionary } from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
-import { FB } from "../..";
 import FBButton from "../../components/inputs/FBButton";
 import { FBFieldComponent } from "../../defaults/editor";
 import FBActionStore from "../../stores/ui/FBActionStore";
@@ -64,7 +63,7 @@ export const withAction = <T extends FBActionProps>(
       );
     };
 
-    const indicators = _.map(action.indicators, (indicator) => {
+    const indicators = (action.indicators || []).map((indicator, index) => {
       const InputType = FBFieldComponent[indicator.type || ""];
       const docId = _.get(form, `values.${action.name}.${indicator.name}`);
       if (indicator.requiredDocId && _.isUndefined(docId)) {
@@ -77,7 +76,7 @@ export const withAction = <T extends FBActionProps>(
           name={`${action.name}.${indicator.name}`}
           afterChange={afterChange}
           rules=""
-          key={FB.uniqid()}
+          key={`${action.name}.${indicator.name}-${index}`}
         />
       );
     });
