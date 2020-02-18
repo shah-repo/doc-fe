@@ -29,6 +29,7 @@ export interface DocumentForms {
 }
 
 export interface DocumentTypeByIdForm {
+  name: string;
   id: string;
   document: DocumentForms;
 }
