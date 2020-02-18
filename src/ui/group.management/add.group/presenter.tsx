@@ -31,6 +31,7 @@ export const AddGroupPresenter: React.FunctionComponent<Props> = ({
             isOpen={isOpen}
             closeDialog={closeDialog}
             title={<Text translation={"group.management.create.group"} />}
+            isCreateMode={true}
         />
     </Box>
   );

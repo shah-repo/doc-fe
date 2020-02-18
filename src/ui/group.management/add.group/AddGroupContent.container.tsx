@@ -1,45 +1,47 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { authSelectors } from "../../../state/ducks/auth";
 import {
   GetEmployeeResponse,
   LoadCompanyGroup,
-  userManagementActions,
 } from "../../../state/ducks/userManagement";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
+import { getHasOfficialPermissions } from "../utils/helpers";
 import { transformToEmployeesOptions } from "../utils/transform";
-import { DEFAULT_ACTIVE_EMPLOYEE } from "../utils/types";
+import { DEFAULT_GROUP, GroupRequestBody } from "../utils/types";
 import AddGroupContentPresenter from "./AddGroupContent.presenter";
 
 interface Props {
   selectedGroup?: LoadCompanyGroup;
+  isCreateMode?: boolean;
+  employees: GetEmployeeResponse[];
 }
 
 export const AddGroupContentContainer: React.FunctionComponent<Props> = ({
   selectedGroup,
+  isCreateMode,
+  employees,
 }) => {
-  const [groupName, setGroupName] = useState<string>("");
+  const [group, setGroup] = useState<GroupRequestBody>(DEFAULT_GROUP);
   const [members, setMembers] = useState<OptionType[]>([]);
-  const [activeEmployees, setActiveEmployees] = useState<GetEmployeeResponse[]>(
-    DEFAULT_ACTIVE_EMPLOYEE,
+
+  const currentEmployeePermissions = useSelector(
+    authSelectors.currentEmployeePermissions,
   );
-  const getEmployeeAction = useActionCreator(userManagementActions.getEmployee);
-  const asyncGetActiveEmployees = useAsync<GetEmployeeResponse[]>({
-    onSuccess: (data: GetEmployeeResponse[] = []) => {
-      setActiveEmployees(data);
-    },
-  });
-  useEffect(() => {
-    asyncGetActiveEmployees.start(
-      getEmployeeAction,
-      { active: true },
-      asyncGetActiveEmployees,
-    );
-  }, []);
+  const currentEmployeeTags = useSelector(authSelectors.currentEmployeeTags);
+  const hasOfficialPermission = getHasOfficialPermissions(
+    currentEmployeePermissions,
+  );
 
   useEffect(() => {
     if (selectedGroup) {
-      setGroupName(selectedGroup.name);
+      setGroup({
+        name: selectedGroup.name,
+        permissions: selectedGroup.permissions,
+        defaultForNewUsers: selectedGroup.defaultForNewUsers,
+        isOfficial: selectedGroup.isOfficial,
+        tags: selectedGroup.tags || [],
+      });
       setMembers(
         transformToEmployeesOptions(
           (selectedGroup.employees as unknown) as GetEmployeeResponse[],
@@ -47,33 +49,33 @@ export const AddGroupContentContainer: React.FunctionComponent<Props> = ({
       );
     }
   }, [selectedGroup]);
-  const handleGroupNameChange = (
-    event: React.ChangeEvent<{ value: string }>,
-  ) => {
-    setGroupName(event.target.value);
-  };
-  const handleMembersChange = (state: any) => {
-    setMembers(state);
-  };
+
+  // handle actions
   const handleReset = () => {
-    setGroupName("");
+    setGroup(DEFAULT_GROUP);
     setMembers([]);
   };
+
   const handleSubmit = () => {
     // should call handleReset onSuccess
     handleReset();
     return;
   };
+  console.log(group);
 
   return (
     <AddGroupContentPresenter
-      employees={activeEmployees}
-      groupName={groupName}
+      employees={employees}
       members={members}
-      handleGroupNameChange={handleGroupNameChange}
-      handleMembersChange={handleMembersChange}
+      setMembers={setMembers}
       handleReset={handleReset}
       handleSubmit={handleSubmit}
+      hasOfficialPermission={hasOfficialPermission}
+      currentEmployeePermissions={currentEmployeePermissions}
+      isCreateMode={isCreateMode}
+      currentEmployeeTags={currentEmployeeTags}
+      group={group}
+      setGroup={setGroup}
     />
   );
 };

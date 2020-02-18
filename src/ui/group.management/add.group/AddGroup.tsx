@@ -1,7 +1,10 @@
 import { Dialog } from "@material-ui/core";
-import React from "react";
-import { LoadCompanyGroup } from "../../../state/ducks/userManagement";
+import React, { useEffect, useState } from "react";
+import { GetEmployeeResponse, LoadCompanyGroup, userManagementActions } from "../../../state/ducks/userManagement";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
 import DialogTitle from "../dialog/DialogTitle";
+import { DEFAULT_ACTIVE_EMPLOYEE } from "../utils/types";
 import AddGroupContentContainer from "./AddGroupContent.container";
 
 interface Props {
@@ -9,6 +12,7 @@ interface Props {
   closeDialog: () => void;
   selectedGroup?: LoadCompanyGroup;
   title: any;
+  isCreateMode?: boolean;
 }
 
 export const AddGroup: React.FunctionComponent<Props> = ({
@@ -16,7 +20,26 @@ export const AddGroup: React.FunctionComponent<Props> = ({
   closeDialog,
   selectedGroup,
   title,
+  isCreateMode,
 }) => {
+  const [activeEmployees, setActiveEmployees] = useState<GetEmployeeResponse[]>(
+    DEFAULT_ACTIVE_EMPLOYEE,
+  );
+
+  const getEmployeeAction = useActionCreator(userManagementActions.getEmployee);
+  const asyncGetActiveEmployees = useAsync<GetEmployeeResponse[]>({
+    onSuccess: (data: GetEmployeeResponse[] = []) => {
+      setActiveEmployees(data);
+    },
+  });
+
+  useEffect(() => {
+    asyncGetActiveEmployees.start(
+      getEmployeeAction,
+      { active: true },
+      asyncGetActiveEmployees,
+    );
+  }, []);
 
   return (
     <Dialog fullScreen={true} open={isOpen}>
@@ -26,6 +49,8 @@ export const AddGroup: React.FunctionComponent<Props> = ({
         />
         <AddGroupContentContainer
           selectedGroup={selectedGroup}
+          isCreateMode={isCreateMode}
+          employees={activeEmployees}
         />
     </Dialog>
   );

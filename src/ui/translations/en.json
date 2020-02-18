@@ -272,6 +272,8 @@
   "common.members": "Members",
   "common.group.name": "Group Name",
   "common.security": "Access",
+  "common.permissions": "Permissions",
+  "common.tags": "Tags",
 
   "output.info": "Form Info",
 

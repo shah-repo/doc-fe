@@ -1,5 +1,5 @@
 import { Button, Grid } from "@material-ui/core";
-import React, { useState } from "react";
+import React from "react";
 import { Employee } from "../../../state/ducks/company";
 import { LoadCompanyGroup } from "../../../state/ducks/userManagement";
 import { GROUPS_URL } from "../../../state/ducks/userManagement/constants";
@@ -11,7 +11,6 @@ import Text from "../../components/Text";
 import AddGroup from "../add.group/AddGroup";
 import AddGroupContainer from "../add.group/container";
 import { GroupsDisplay } from "../groups/GroupsDisplay";
-import { DEFAULT_SELECTED_GROUP } from "../utils/types";
 import { styles } from "./styles";
 
 export interface Props {
@@ -19,6 +18,10 @@ export interface Props {
     tableData: TableDataProps<any>;
     clearFilter?: () => void;
     tableCriteria: TablePanelStateProps;
+    handlePermission: (rowData: LoadCompanyGroup) => void;
+    previewGroupsDialog: any;
+    editGroupsDialog: any;
+    selectedGroup: LoadCompanyGroup;
   }
 
 export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
@@ -26,34 +29,16 @@ export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
     tableData,
     clearFilter,
     tableCriteria,
+    handlePermission,
+    previewGroupsDialog,
+    editGroupsDialog,
+    selectedGroup,
 }) => {
   const classes = styles();
-  // should move usetState to container
-  const [selectedGroup, setGroup] = useState<LoadCompanyGroup>(DEFAULT_SELECTED_GROUP);
-  const [showGroupsPreview, setGroupsPreview] = useState(false);
-
-  const openGroupsPreview = () => setGroupsPreview(true);
-  const closeGroupsPreview = () => setGroupsPreview(false);
-
-  const handleGroupsPreview = (rowData: LoadCompanyGroup) => {
-    setGroup(rowData);
-    openGroupsPreview();
-  };
-
-  const handleGroupsEdit = (rowData: LoadCompanyGroup) => {
-    setGroup(rowData);
-    openGroupsEdit();
-  };
-
   const handleMembers = (members: Employee[]) => {
     return members.map((member) => member.user!.name).join(", ");
   };
 
-  const [showGroupsEdit, setGroupsEdit] = useState(false);
-  const openGroupsEdit = () => setGroupsEdit(true);
-  const closeGroupsEdit = () => setGroupsEdit(false);
-
-// column for official/unofficial group needs to be added after BE is done
   const columns: Array<TableColumnProps<LoadCompanyGroup>> = [
     {
       key: "groupName" as keyof LoadCompanyGroup,
@@ -122,19 +107,17 @@ export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
             queryUrl={GROUPS_URL}
             cellMeasure={true}
             tableName={tableName}
-            // here should go condition related to the permissions
-            // for now it only opens edit groups
-            onSelect={({ rowData }) => () => true ? handleGroupsEdit(rowData) : handleGroupsPreview(rowData)}
+            onSelect={({ rowData }) => () => handlePermission(rowData)}
         />
         </Grid>
         <GroupsDisplay
-          closeDialog={closeGroupsPreview}
-          isOpen={showGroupsPreview}
+          closeDialog={previewGroupsDialog.close}
+          isOpen={previewGroupsDialog.isOpen}
           selectedGroup={selectedGroup}
         />
         <AddGroup
-          isOpen={showGroupsEdit}
-          closeDialog={closeGroupsEdit}
+          isOpen={editGroupsDialog.isOpen}
+          closeDialog={editGroupsDialog.close}
           selectedGroup={selectedGroup}
           title={<Text translation={"group.management.edit.group"} />}
         />
