@@ -16,6 +16,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     optionValueKey = "value",
     optionLabelKey = "text",
     optionPath = "",
+    optionId = "",
     name = "",
     placeholder,
     renderEl,
@@ -27,8 +28,19 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     state = FB.useRef<FBAutocompleteState>(FBAutocompleteState);
     renderEl = FBStore.mode === "design" || !_.isUndefined(options);
 
+    // Old version support
+    // Will be removed after we update be indicators
+    if (!_.isEmpty(optionId)) {
+      const indicator = state?.getIndicator(optionId);
+      if (!_.isUndefined(indicator)) {
+        optionPath = _.get(indicator, "path");
+        optionValueKey = _.get(indicator, "optionValueKey", "");
+        optionLabelKey = _.get(indicator, "optionLabelKey", "");
+      }
+    }
+
     React.useEffect(() => {
-      if (FBStore.mode === "design" || _.isEmpty(optionPath)) {
+      if (FBStore.mode === "design") {
         return;
       }
       const value = _.get(FBStore.getValues(), name) || "";
