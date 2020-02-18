@@ -146,8 +146,9 @@ const approveAndRelease = (
   method: "post",
   data: body,
   password,
-  onSuccess: (d, dispatch) => {
+  onSuccess: (docRev: DocumentRevision, dispatch) => {
     dispatch(load(id));
+    dispatch(loadDocument(docRev.document.id));
   },
   handlers,
 });

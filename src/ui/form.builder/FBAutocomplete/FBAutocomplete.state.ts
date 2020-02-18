@@ -1,5 +1,7 @@
 import _ from "lodash";
 import { action, observable, set } from "mobx";
+import { FBAutocompleteIndicator } from ".";
+import autocompleteOptions from "../../../data/autocompleteOptions.json";
 import FBRequest from "../FBApi/FBApi.request";
 
 export class FBAutocompleteState extends FBRequest {
@@ -13,11 +15,21 @@ export class FBAutocompleteState extends FBRequest {
   }
 
   @action public onDataLoaded = () => {
-    !_.isUndefined(this.defaultState) && (this.setDefaultValue(this.defaultState));
+    !_.isUndefined(this.defaultState) &&
+      this.setDefaultValue(this.defaultState);
   }
 
   @action public setDefaultState = (state: string | string[] | undefined) => {
     set(this, "defaultState", state);
+  }
+
+  @action public getIndicator = (
+    id: string | undefined,
+  ): FBAutocompleteIndicator | undefined => {
+    if (_.isUndefined(id)) {
+      return;
+    }
+    return _.find(autocompleteOptions, { id });
   }
 
   @action private setDefaultValue = (value: string | string[] | undefined) => {
@@ -27,8 +39,10 @@ export class FBAutocompleteState extends FBRequest {
     }
     this.setLoading(true);
     const defaultValue = _.isArray(value) ? value : [value];
-    const filtered = _.filter(this.data, (rec) => _.includes(defaultValue, rec.id));
-    set(this, "defaultValue", (_.isArray(value) ? filtered : _.first(filtered)));
+    const filtered = _.filter(this.data, (rec) =>
+      _.includes(defaultValue, rec.id),
+    );
+    set(this, "defaultValue", _.isArray(value) ? filtered : _.first(filtered));
     this.setLoading(false);
     set(this, "loaded", true);
   }

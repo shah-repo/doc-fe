@@ -24,9 +24,9 @@ export const withActionContainer = <T extends FBActionContainerProps>(
     return useObserver(() => {
 
       doRenderActions() && (actions =
-        _.map(actions, (actionName: string) => {
-            const action = _.find(state?.data, (d: FBActionModel) => d.name === actionName);
-            return (action && <FBAction key={FB.uniqid()} {...{action}} />);
+        (actions || []).map((actionName, index) => {
+          const action = _.find(state?.data, (d: FBActionModel) => d.name === actionName);
+          return (action && <FBAction key={`${actionName}-${index}`} {...{action}} />);
         })
       );
 
