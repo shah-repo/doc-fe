@@ -1,11 +1,11 @@
 
+import HelloSign from "hellosign-embedded";
 import React from "react";
 import { FBHelloSignPayload, FBHelloSignProps } from ".";
+import { store } from "../../../state/store";
 import { FBActionModel } from "../stores/domain/models/FBActionModel";
 import FBActionStore from "../stores/ui/FBActionStore";
 import FBStore from "../stores/ui/FBStore";
-import { store } from "../../../state/store";
-import HelloSign from "hellosign-embedded";
 
 export const withFBHelloSign = <T extends FBHelloSignProps>(
   Component: React.FunctionComponent<T>,
@@ -30,7 +30,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     function helloSignIframe(data: any) {
       const clientId = store.getState().company.selectedCompany.helloSignAppId;
       const editUrl = data.template.edit_url;
-      let client = new HelloSign({
+      const client = new HelloSign({
         clientId,
         skipDomainVerification: true,
       });
