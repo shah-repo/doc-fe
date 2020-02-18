@@ -1,6 +1,6 @@
 import moment from "moment-timezone";
 
-const TIME_ZONE = "America/Los_Angeles";
+export const TIME_ZONE = "America/Los_Angeles";
 
 type DateTypes = Date | string | number | undefined;
 
