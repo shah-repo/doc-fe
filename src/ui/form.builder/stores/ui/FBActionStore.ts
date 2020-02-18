@@ -38,6 +38,9 @@ export class FormBuilderActionStore {
 
       const { data } = await apiClient.request(requestConfig);
       if (!_.isUndefined(data)) {
+        if (requestUrl === "/hello_sign/template") {
+          return data;
+        }
         alert("Success");
       }
     } catch (exception) {
