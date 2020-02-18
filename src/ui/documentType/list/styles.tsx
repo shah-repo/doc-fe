@@ -20,16 +20,5 @@ export const styles = makeStyles((theme: Theme) =>
       margin: "0px 16px 0px 0px",
       backgroundColor: theme.palette.common.white,
     },
-    form: {
-      minWidth: 400,
-    },
-    submitButton: {
-      float: "right",
-      clear: "right",
-    },
-    cancelButton: {
-      float: "right",
-      marginRight: theme.spacing(1),
-    },
   }),
 );
