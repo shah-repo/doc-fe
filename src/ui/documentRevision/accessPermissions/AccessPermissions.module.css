@@ -1,0 +1,21 @@
+.customRows {
+    overflow-y: scroll;
+    height: 100px;
+    display: table-caption;
+    width: inherit;
+    margin-bottom: 23px !important;
+}
+
+.customRows::-webkit-scrollbar {
+  width: 10px;
+}
+
+.customRows::-webkit-scrollbar-track {
+  background : #e8e9ed;
+  border-radius: 12px;
+}
+
+.customRows::-webkit-scrollbar-thumb {
+  background : #cccccc;
+  border-radius: 10px;
+} 

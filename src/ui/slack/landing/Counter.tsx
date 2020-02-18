@@ -15,7 +15,7 @@ export const SlackLandingCounter: React.FunctionComponent<Props> = ({
     if (timerValue === 0) {
       onCounterFinish();
     }
-  }, [timerValue]);
+  }, [timerValue, onCounterFinish]);
   useInterval(() => {
     if (timerValue > 0) {
       updateTimerValue(timerValue - 1);

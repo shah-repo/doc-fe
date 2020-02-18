@@ -28,17 +28,19 @@ const ConfirmPasswordPresenter: React.FunctionComponent<ConfirmPasswordPresenter
               alt="Logo"
               className={classes.logo}
             />
-            <Typography variant="h4" className={classes.title}>
+            <Typography variant="h4" className={classes.title} id="ConfirmPasswordPresenter-title">
                 <Text translation={title} />
             </Typography>
             <Form className={classes.formStyle}>
-            <FormMessage asyncState={asyncState} className={classes.status} />
+            <FormMessage asyncState={asyncState} className={classes.status} id="ConfirmPasswordPresenter-formError"/>
                 <InputField
                     name="email"
                     label="login.email"
                     size="sm"
                     gutter={false}
-                    inputProps={{ autoComplete: "email", autoFocus: true, id: "email", readOnly: true }}
+                    inputProps={{
+                        autoComplete: "email", autoFocus: true, id: "ConfirmPasswordPresenter-email", readOnly: true,
+                    }}
                     validate={validator(required, email)}
                     lpignore={false}
                 />
@@ -47,7 +49,9 @@ const ConfirmPasswordPresenter: React.FunctionComponent<ConfirmPasswordPresenter
                     label="login.password"
                     size="sm"
                     gutter={false}
-                    inputProps={{ autoComplete: "current-password", id: "password", type: "password" }}
+                    inputProps={{
+                        autoComplete: "current-password", id: "ConfirmPasswordPresenter-password", type: "password",
+                    }}
                     validate={validator(required)}
                     lpignore={false}
                 />
@@ -56,7 +60,9 @@ const ConfirmPasswordPresenter: React.FunctionComponent<ConfirmPasswordPresenter
                     label="confirm.password"
                     size="sm"
                     gutter={false}
-                    inputProps={{ autoComplete: "current-password", id: "confirmPass", type: "password" }}
+                    inputProps={{
+                        autoComplete: "current-password", id: "ConfirmPasswordPresenter-confirmPass", type: "password",
+                    }}
                     validate={validator(required)}
                     lpignore={false}
                 />
@@ -64,6 +70,7 @@ const ConfirmPasswordPresenter: React.FunctionComponent<ConfirmPasswordPresenter
                     asyncState={asyncState}
                     label={"login.submit"}
                     className={classes.submit}
+                    id="ConfirmPasswordPresenter-loginSubmit"
                 />
                 </Form>
         </Paper>

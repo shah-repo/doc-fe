@@ -26,6 +26,7 @@ import {
   DocumentRevisionTransitionRequestBody,
   DocumentRevisionTransitionResponse,
   DocumentSetAction,
+  SecurityList,
 } from "./types";
 
 const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentRevisionsListAction => ({
@@ -145,11 +146,23 @@ const approveAndRelease = (
   method: "post",
   data: body,
   password,
-  onSuccess: (d, dispatch) => {
+  onSuccess: (docRev: DocumentRevision, dispatch) => {
     dispatch(load(id));
+    dispatch(loadDocument(docRev.document.id));
   },
   handlers,
 });
+
+const updateAccess = (id: string, body: SecurityList, handlers: Handlers<DocumentRevision>):
+  ApiAction<DocumentRevision, SecurityList> => apiActionWithCallbacks({
+    url: `${DOCUMENT_ROOT_URL}/${id}/update_security`,
+    method: "patch",
+    data: body,
+    onSuccess: (documentRevision, dispatch) => {
+      dispatch(documentRevisionSet(documentRevision));
+    },
+    handlers,
+  });
 
 export default {
   documentRevisionsList,
@@ -164,4 +177,5 @@ export default {
   auditSet,
   loadAudit,
   approveAndRelease,
+  updateAccess,
 };

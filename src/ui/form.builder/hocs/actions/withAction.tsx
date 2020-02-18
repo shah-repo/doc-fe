@@ -63,7 +63,7 @@ export const withAction = <T extends FBActionProps>(
       );
     };
 
-    const indicators = _.map(action.indicators, (indicator) => {
+    const indicators = (action.indicators || []).map((indicator, index) => {
       const InputType = FBFieldComponent[indicator.type || ""];
       const docId = _.get(form, `values.${action.name}.${indicator.name}`);
       if (indicator.requiredDocId && _.isUndefined(docId)) {
@@ -76,6 +76,7 @@ export const withAction = <T extends FBActionProps>(
           name={`${action.name}.${indicator.name}`}
           afterChange={afterChange}
           rules=""
+          key={`${action.name}.${indicator.name}-${index}`}
         />
       );
     });

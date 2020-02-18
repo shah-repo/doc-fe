@@ -8,7 +8,7 @@ import AutocompleteField from "../../../../components/forms/fields/Autocomplete/
 import { OptionType } from "../../../../components/forms/fields/Autocomplete/types";
 import DatePickerField from "../../../../components/forms/fields/DatePicker";
 import InputField from "../../../../components/forms/fields/Input";
-import TextEditorField from "../../../../components/forms/fields/TextEditor";
+import TextEditorField from "../../../../components/forms/fields/RichTextEditor";
 import { required, validator } from "../../../../components/forms/fields/validators";
 import Text from "../../../../components/Text";
 import { ImplementationPlanTaskFormValues } from "../../types.js";

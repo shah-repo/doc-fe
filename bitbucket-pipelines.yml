@@ -1,138 +1,182 @@
-options:
-  size: 2x
-  docker: true
+clone:
+  depth: 10
 
+definitions:
+  caches:
+    jest-cache: ./jest-cache
+
+  steps:
+    - step: &COMMON
+        image: 
+          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe_test-1.1
+          aws:
+            access-key: $AWS_ACCESS_KEY_ID
+            secret-key: $AWS_SECRET_ACCESS_KEY
+        max-time: 20
+        caches:
+          - node
+
+    - step: &COMMON_BUILD
+        image: 
+          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe-1.1
+          aws:
+            access-key: $AWS_ACCESS_KEY_ID
+            secret-key: $AWS_SECRET_ACCESS_KEY
+        max-time: 20
+        caches:
+          - node
+
+    - step: &COMMON_DEPLOY
+        image: 
+          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe-1.1
+          aws:
+            access-key: $AWS_ACCESS_KEY_ID
+            secret-key: $AWS_SECRET_ACCESS_KEY
+        max-time: 10
+        caches:
+          - docker
+        services:
+          - docker
+
+    - step: &RUN_LINTER
+        <<: *COMMON
+        name: Linter
+        artifacts:
+          - tslint-results/**
+        script:
+          - ./aws/bash_scripts/runLinter.sh
+
+    - step: &RUN_TESTS
+        <<: *COMMON
+        name: Tests
+        size: 2x
+        caches:
+          - node
+          - jest-cache
+        artifacts:
+          - test-results/**
+          - jest-config/**
+        script:
+          - ./aws/bash_scripts/runTests.sh
+#
+# DEV
+#
+    - step: &BUILD_DEV
+        <<: *COMMON_BUILD
+        name: Building for Dev
+        script:
+          - ./aws/bash_scripts/build.sh "dev"
+        artifacts:
+          - compiled.tar.gz
+
+    - step: &DEPLOY_DEV
+        <<: *COMMON_DEPLOY 
+        name: Deploy to Dev
+        deployment: Development
+        script:
+          - ./aws/bash_scripts/publish.sh "dev"
+#
+# DEV2
+#
+    - step: &BUILD_DEV2
+        <<: *COMMON_BUILD
+        name: Building for Dev2
+        script:
+          - ./aws/bash_scripts/build.sh "dev2"
+        artifacts:
+          - compiled.tar.gz
+
+    - step: &DEPLOY_DEV2
+        <<: *COMMON_DEPLOY 
+        name: Deploy to Dev2
+        deployment: Development
+        script:
+          - ./aws/bash_scripts/publish.sh "dev2"
+#
+# DEMO
+#
+    - step: &BUILD_DEMO
+        <<: *COMMON_BUILD
+        name: Building for Demo
+        script:
+          - ./aws/bash_scripts/build.sh "demo"
+        artifacts:
+          - compiled.tar.gz
+
+    - step: &DEPLOY_DEMO
+        <<: *COMMON_DEPLOY 
+        name: Deploy to Demo
+        deployment: Demo
+        script:
+          - ./aws/bash_scripts/publish.sh "demo"
+#
+# PROD
+#
+    - step: &BUILD_PROD
+        <<: *COMMON_BUILD
+        name: Building for Prod
+        script:
+          - ./aws/bash_scripts/build.sh "prod"
+        artifacts:
+          - compiled.tar.gz
+
+    - step: &DEPLOY_PROD
+        <<: *COMMON_DEPLOY 
+        name: Deploy to Prod
+        deployment: Production
+        script:
+          - ./aws/bash_scripts/publish.sh "prod"
+        trigger: manual
+#
+# Pipelines
+#
 pipelines:
-  const:
-    tests: &RUN_TESTS
-      name: Tests
-      image: node:10.18.1
-      max-time: 10
-      services:
-        - docker
-      caches:
-        - docker
-        - node
-      script:
-        - chmod a+x ./aws/bash_scripts/runTests.sh
-        - ./aws/bash_scripts/runTests.sh
-      artifacts:
-        - test-results/**
-        - jest-config/**
-
-    lint_tests: &RUN_LINT_AND_TESTS
-      name: Linter & Tests
-      image: node:10.18.1
-      max-time: 10
-      services:
-        - docker
-      caches:
-        - docker
-        - node
-      script:
-        - chmod a+x ./aws/bash_scripts/runLinter.sh
-        - ./aws/bash_scripts/runLinter.sh
-        - chmod a+x ./aws/bash_scripts/runTests.sh
-        - ./aws/bash_scripts/runTests.sh
-      artifacts:
-        - test-results/**
-        - jest-config/**
-
-    lint: &RUN_LINTER
-      name: Linter
-      image: node:10.18.1
-      services:
-        - docker
-      caches:
-        - docker
-        - node
-      script:
-        - chmod a+x ./aws/bash_scripts/runLinter.sh
-        - ./aws/bash_scripts/runLinter.sh
-
-    deploy_to_development: &DEPLOY_TO_DEVELOP_1
-      name: Deploy to Development 1
-      image: python:3   
-      deployment: Development
-      services:
-        - docker
-      caches:
-        - docker
-      script:
-        - chmod a+x ./aws/bash_scripts/build.sh
-        - ./aws/bash_scripts/build.sh "dev"
-
-    deploy_to_development: &DEPLOY_TO_DEVELOP_2
-      <<: *DEPLOY_TO_DEVELOP_1
-      name: Deploy to Development 2
-      script:
-        - chmod a+x ./aws/bash_scripts/build.sh
-        - ./aws/bash_scripts/build.sh "dev2"
-
-    deploy_to_production: &DEPLOY_TO_PRODUCTION
-      name: Deploy to Production
-      image: python:3   
-      deployment: Production
-      services:
-        - docker
-      caches:
-        - docker
-      script:
-        - chmod a+x ./aws/bash_scripts/build.sh
-        - ./aws/bash_scripts/build.sh "prod"
-      trigger: manual
-
-    deploy_to_demo: &DEPLOY_TO_DEMO
-      name: Deploy to Demo
-      image: python:3   
-      deployment: Demo
-      services:
-        - docker
-      caches:
-        - docker
-      script:
-        - chmod a+x ./aws/bash_scripts/build.sh
-        - ./aws/bash_scripts/build.sh "demo"
-      trigger: manual
-
   default:
-      - step: *RUN_LINT_AND_TESTS
+      - parallel:
+          - step: *RUN_TESTS
+          - step: *RUN_LINTER
+
   tags:
     deploy-to-dev:
-      - step: *DEPLOY_TO_DEVELOP_1
+      - step: *BUILD_DEV
+      - step: *DEPLOY_DEV
+
     deploy-to-dev2:
-      - step: *DEPLOY_TO_DEVELOP_2
+      - step: *BUILD_DEV2
+      - step: *DEPLOY_DEV2
+
     deploy-to-demo:
-      - step: *RUN_LINTER
-      - step: *RUN_TESTS
-      - step: *DEPLOY_TO_DEMO
+      - parallel:
+          - step: *RUN_TESTS
+          - step: *RUN_LINTER
+          - step: *BUILD_DEMO
+      - step: *DEPLOY_DEMO
+
     deploy-to-prod:
-      - step: *RUN_LINTER
-      - step: *RUN_TESTS
-      - step: *DEPLOY_TO_PRODUCTION
+      - parallel:
+          - step: *RUN_TESTS
+          - step: *RUN_LINTER
+          - step: *BUILD_PROD
+      - step: *DEPLOY_PROD
+
   branches:
     master:
-      - step: *RUN_LINTER
-      - step: *RUN_TESTS
-      - step: *DEPLOY_TO_PRODUCTION
+      - parallel:
+          - step: *RUN_TESTS
+          - step: *RUN_LINTER
+          - step: *BUILD_PROD
+      - step: *DEPLOY_PROD
+
     develop:
-      - step: *RUN_LINTER
-      - step: *RUN_TESTS
-      - step: *DEPLOY_TO_DEVELOP_1
-    develop2:
-      - step: *RUN_LINTER
-      - step: *RUN_TESTS
-      - step: *DEPLOY_TO_DEVELOP_2
-    infrastructure:
-      - step: *RUN_LINTER
-      - step: *RUN_TESTS
-      - step: *DEPLOY_TO_DEVELOP_1
-    release/20.2:
-      - step: *RUN_LINTER
-      - step: *RUN_TESTS
-      - step: *DEPLOY_TO_DEMO
-      
-definitions:
-  services:
-    docker:
-      memory: 6096
+      - parallel:
+          - step: *RUN_TESTS
+          - step: *RUN_LINTER
+          - step: *BUILD_DEV
+      - step: *DEPLOY_DEV
+
+    release/20.3:
+      - parallel:
+          - step: *RUN_TESTS
+          - step: *RUN_LINTER
+          - step: *BUILD_DEMO
+      - step: *DEPLOY_DEMO

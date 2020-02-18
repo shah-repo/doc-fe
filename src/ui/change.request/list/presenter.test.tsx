@@ -9,10 +9,10 @@ import { ListPresenter,  Props } from "./presenter";
 describe("Change request list presenter tests", () => {
   const defaultProps: Props = {
       tableName: faker.name.firstName(),
-      tableState: {
+      tableCriteria: {
         queryDict: {},
-        queryData: [],
       },
+      tableData: [],
       clearFilter: jest.fn(),
       currentUserEmail: faker.internet.email(),
       editChangeRequest: jest.fn(),

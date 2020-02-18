@@ -41,23 +41,23 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({
         alt="Logo"
         className={classes.logo}
       />
-      <Typography variant="h4" className={classes.title}>
+      <Typography variant="h4" className={classes.title} id="LoginFormPresenter-title">
         <Text translation={title} />
       </Typography>
       <Form className={classes.formStyle}>
-      <FormMessage asyncState={asyncState} className={classes.status} />
+      <FormMessage asyncState={asyncState} className={classes.status} id="LoginFormPresenter-formError" />
       <InputField
         name="email"
         label="login.email"
         size="sm"
         gutter={false}
-        inputProps={{ autoComplete: "email", autoFocus: true, id: "email" }}
+        inputProps={{ autoComplete: "email", autoFocus: true, id: "LoginFormPresenter-email" }}
         validate={validator(required, email)}
         lpignore={false}
       />
       <div className={classes.passwordContainer}>
         {signLabel !== "signup.sign.in" &&
-        <Button color="primary" onClick={forgotPassword} className={classes.forgotPasswordLink} >
+        <Button color="primary" onClick={forgotPassword} className={classes.forgotPasswordLink} id="LoginFormPresenter-forgotLink">
           <Text translation={"forgot.password"} />
         </Button>}
       <InputField
@@ -65,7 +65,7 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({
         label="login.password"
         size="sm"
         gutter={false}
-        inputProps={{ autoComplete: "current-password", id: "password", type: "password" }}
+        inputProps={{ autoComplete: "current-password", id: "LoginFormPresenter-password", type: "password" }}
         validate={validator(required)}
         lpignore={false}
       /></div>
@@ -73,10 +73,11 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({
           asyncState={asyncState}
           label={buttonLabel}
           className={classes.submit}
+          id="LoginFormPresenter-submit"
         />
       <Typography component="h1" variant="h5" className={classes.navigationText}>
         <Text translation={signMessage} />
-        <NavLink to={route} exact={true} className={classes.navigationLink} >
+        <NavLink to={route} exact={true} className={classes.navigationLink} id="LoginFormPresenter-linkRoute">
           <Text translation={signLabel} />
         </NavLink>
       </Typography>

@@ -21,10 +21,10 @@ jest.mock("../../../state/ducks/tableSearch/actions.ts", () => ({
   setSearchCriteria: jest.fn(),
 }));
 jest.mock("../../../state/ducks/tableSearch/selectors.ts", () => ({
-  getTableState: () => ({
+  getTableCriteria: () => ({
     queryDict: { docId: "1" },
-    queryData: [],
   }),
+  getTableData: () => ([]),
 }));
 jest.mock("../../../state/ducks/auth/selectors.ts", () => ({
   currentUserEmail: () => "test@test.com",

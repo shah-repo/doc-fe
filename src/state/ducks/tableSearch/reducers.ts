@@ -1,38 +1,45 @@
 import { combineReducers } from "redux";
 import { USERS_ME_URL } from "../auth/constants";
 import { User } from "../auth/types";
-import { SELECT_COMPANY } from "../company/constants";
 import { GetEmployeeResponse } from "../userManagement";
 import {
   EDIT_EMPLOYEE_ACTIVE_STATUS,
   EDIT_EMPLOYEE_GROUPS,
   EDIT_EMPLOYEE_USER_INFO,
+  TABLE_CLEAR_ALL,
+  TABLE_DATA_SET,
   TABLE_FORCE_UPDATE_SET,
   TABLE_SEARCH_CLEAR,
   TABLE_SEARCH_SET,
   TABLE_SORT,
 } from "./constants";
 import {
+  EditActiveStatusAction,
+  TableDataSetAction,
   TableSearchByIdState,
   TableSearchClearAction,
+  TableSearchClearAllAction,
+  TableSearchDataState,
   TableSearchForceUpdateAction,
   TableSearchSetAction,
   TableSortAction,
 } from "./types";
 
 export const DEFAULT_TABLE_SEARCH = {
-  queryData: [],
   queryDict: {},
   apiError: "",
   scrollToIndex: 0,
   forceUpdate: false,
 };
-type TableSearchActions = TableSearchSetAction<any> &
+type TableSearchActions = TableSearchSetAction &
   TableSearchClearAction &
   TableSearchForceUpdateAction &
-  TableSortAction<any>;
+  TableSortAction &
+  TableSearchClearAllAction;
 
-export const byTableName = (
+type TableDataActions = TableDataSetAction<any> & EditActiveStatusAction & TableSearchClearAllAction;
+
+export const criteria = (
   state: TableSearchByIdState = {},
   action: TableSearchActions,
 ): TableSearchByIdState => {
@@ -60,12 +67,29 @@ export const byTableName = (
         ...state,
         [action.tableName]: action.payload,
       };
+    case TABLE_CLEAR_ALL:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const data = (
+  state: TableSearchDataState = {},
+  action: TableDataActions,
+): TableSearchDataState => {
+  switch (action.type) {
+    case TABLE_DATA_SET:
+      return {
+        ...state,
+        [action.tableName]: action.payload,
+      };
     case EDIT_EMPLOYEE_GROUPS:
     case EDIT_EMPLOYEE_ACTIVE_STATUS:
       if (!state.userManagement) {
         return state;
       }
-      const list = state.userManagement.queryData.map(
+      const list = state.userManagement.map(
         (employee: GetEmployeeResponse) => {
           const { payload: updatedEmployee } = action;
 
@@ -84,17 +108,14 @@ export const byTableName = (
 
       return {
         ...state,
-        userManagement: {
-          ...state.userManagement,
-          queryData: list,
-        },
+        userManagement: list,
       };
     case EDIT_EMPLOYEE_USER_INFO:
     case USERS_ME_URL:
       if (!state.userManagement) {
         return state;
       }
-      const employees = state.userManagement.queryData.map(
+      const employees = state.userManagement.map(
         (employee: GetEmployeeResponse) => {
           const { payload: updatedEmployee } = action;
           if (
@@ -116,12 +137,9 @@ export const byTableName = (
 
       return {
         ...state,
-        userManagement: {
-          ...state.userManagement,
-          queryData: employees,
-        },
+        userManagement: employees,
       };
-    case SELECT_COMPANY:
+    case TABLE_CLEAR_ALL:
       return {};
     default:
       return state;
@@ -129,5 +147,6 @@ export const byTableName = (
 };
 
 export default combineReducers({
-  byTableName,
+  criteria,
+  data,
 });

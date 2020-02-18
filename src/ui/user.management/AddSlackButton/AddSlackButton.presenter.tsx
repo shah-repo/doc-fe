@@ -16,6 +16,7 @@ export const AddSlackButtonPresenter: React.FunctionComponent<Props> = ({
     <Button
       onClick={addSlack}
       className={classes.slackButton}
+      id="AddSlackButtonPresenter-slackButton"
     >
       <SlackLogo className={classes.slackLogo}/>
       <Text translation="slack.integrations.admin.add" />

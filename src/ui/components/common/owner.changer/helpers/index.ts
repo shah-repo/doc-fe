@@ -1,0 +1,22 @@
+
+import { changeRequestsActions, changeRequestsSelectors } from "../../../../../state/ducks/changeRequest";
+import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../../state/ducks/documentRevisions";
+
+export const getUrlandActions = (requestType) => {
+  const urlAction = {
+    document: [
+      documentRevisionsActions.save,
+      documentRevisionsSelectors.getDocumentRevision,
+    ],
+    change_request: [
+      changeRequestsActions.save,
+      changeRequestsSelectors.getChangeRequest,
+    ],
+    // task: [
+    //   DOCUMENT_REVISION_ROOT_URL + `/implementation_plan_task/${requestId}`,
+    //   changeRequestsSelectors.getChangeRequest,
+    // ],
+  };
+
+  return urlAction[requestType];
+};

@@ -10,10 +10,11 @@ import {
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
-import { TablePanelStateProps } from "../../components/table/types";
+import { TableDataProps, TablePanelStateProps, TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import {
   canEditDocumentRevision,
+  documentRevisionQueryStatus,
   documentRevisionStatusOption,
 } from "../../document.revision/utils/helpers";
 import {
@@ -26,7 +27,8 @@ import { styles } from "./styles";
 
 export interface Props {
   tableName: string;
-  tableState: TablePanelStateProps<DocumentRevision>;
+  tableCriteria: TablePanelStateProps;
+  tableData: TableDataProps<DocumentRevision>;
   clearFilter?: () => void;
   documentType: DocumentType;
   openDocRev: () => void;
@@ -35,7 +37,8 @@ export interface Props {
 
 export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   tableName,
-  tableState,
+  tableCriteria,
+  tableData,
   clearFilter,
   documentType,
   openDocRev,
@@ -45,6 +48,14 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   const canEdit = (data: DocumentRevision) => canEditDocumentRevision(data);
   const queryUrl =
     DOCUMENT_REVISION_ROOT_URL + `?documentTypeId=${documentType.id}`;
+
+  const customQuerySet = (queryDict: TableSearchQueryType) => {
+    if (!queryDict["status[]"]) {
+      queryDict["status[]"] = documentRevisionQueryStatus();
+    }
+
+    return queryDict;
+  };
 
   const cellHrefRenderer = (rowData: DocumentRevision): string => {
     if (canEdit(rowData)) {
@@ -83,7 +94,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
         width: 150,
       },
       searchOptions: {
-        defaultValue: tableState.queryDict.docId,
+        defaultValue: tableCriteria.queryDict.docId,
       },
     },
     {
@@ -92,7 +103,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       tooltipKey: "name",
       cellHref: cellHrefRenderer,
       searchOptions: {
-        defaultValue: tableState.queryDict.name,
+        defaultValue: tableCriteria.queryDict.name,
       },
     },
     {
@@ -103,7 +114,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
         cellDataGetter: ({ rowData }) => rowData.owner.user.name,
       },
       searchOptions: {
-        defaultValue: tableState.queryDict.owner,
+        defaultValue: tableCriteria.queryDict.owner,
       },
     },
     {
@@ -113,8 +124,8 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       cellType: (rowData) => (canEdit(rowData) ? "LINK" : "BASE"),
       searchOptions: {
         dataKey: "status[]",
-        defaultValue: _.isString(tableState.queryDict["status[]"])
-          ? tableState.queryDict["status[]"]
+        defaultValue: _.isString(tableCriteria.queryDict["status[]"])
+          ? tableCriteria.queryDict["status[]"]
           : undefined,
         searchType: "select",
         selectOptions: documentRevisionStatusOption(),
@@ -125,7 +136,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       label: "common.approval.id",
       searchOptions: {
         dataKey: "crId",
-        defaultValue: tableState.queryDict.crId,
+        defaultValue: tableCriteria.queryDict.crId,
       },
       cellHref: cellHrefRenderer,
       columnOptions: {
@@ -148,7 +159,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
         >
           <Text translation="common.clear.filters" />
         </Button>
-        <DocumentInfo numberOfRecords={tableState.queryData.length} />
+        <DocumentInfo numberOfRecords={tableData.length} />
       </Grid>
       <Grid item={true} xs={6} style={{ textAlign: "right" }}>
         <Button
@@ -177,6 +188,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
           queryUrl={queryUrl}
           cellMeasure={true}
           tableName={tableName}
+          customQuerySet={customQuerySet}
         />
       </Grid>
     </Grid>

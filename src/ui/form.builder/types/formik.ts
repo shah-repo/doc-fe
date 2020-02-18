@@ -1,7 +1,7 @@
 import { FieldConfig, FieldProps, FormikConfig } from "formik";
 import { Dictionary } from "lodash";
 import { Id } from "../../../state/ducks/common";
-import { DocumentRevisionDocument, RevisionChangeType } from "../../../state/ducks/documentRevisions";
+import { DocumentRevisionDocumentRequest, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { FBTemplateSchema } from "./store";
 
 export interface FBFormikProps extends Omit<FormikConfig<any>, "onSubmit" | "initialValues"> {
@@ -19,7 +19,7 @@ export interface FBDocumentFlowProps {
   formTemplate?: FBFormTemplateProps;
   formDocument?: FBDocumentFlowProps;
   formInput?: Dictionary<any>;
-  document?: Partial<DocumentRevisionDocument>;
+  document?: Partial<DocumentRevisionDocumentRequest>;
   revision?: number;
   revisionStage?: number;
   revisionChangeType?: RevisionChangeType;

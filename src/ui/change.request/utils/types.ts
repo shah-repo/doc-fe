@@ -7,7 +7,7 @@ import { AssessmentType, ChangeRequest } from "../../../state/ducks/changeReques
 import { DataProps } from "../../../state/ducks/common";
 import { LoadAsyncState } from "../../../state/types";
 import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
-import { TablePanelStateProps } from "../../components/table/types";
+import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
 
 // Container
 export type ContainerStateProps = LoadAsyncState & DataProps<ChangeRequest> & AuthProps;
@@ -76,7 +76,8 @@ export interface SummaryDispatchProps {
 export type ChangeRequestsUserProps = ActionProps & AuthProps & {
   tableName: string;
   clearFilter: () => void,
-  tableState: TablePanelStateProps<ChangeRequest>,
+  tableCriteria: TablePanelStateProps,
+  tableData: TableDataProps<ChangeRequest>
 };
 export type ChangeRequestUserProps = DataProps<ChangeRequest> & AuthProps;
 
@@ -87,4 +88,10 @@ export interface RouteParams {
 export interface ActionProps {
   editChangeRequest: (changeRequestId: string) => void;
   previewChangeRequest: (changeRequestId: string) => void;
+}
+
+export interface ReasoningOption {
+  key: string;
+  value: string;
+  text: string;
 }

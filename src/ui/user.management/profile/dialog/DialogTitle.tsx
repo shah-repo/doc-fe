@@ -45,7 +45,7 @@ export const DialogTitle: React.FunctionComponent<Props> = ({
   };
 
   const userNameRenderer = (name: string) => (
-    <Typography variant="h3" className={classes.userName}>
+    <Typography variant="h3" className={classes.userName} id="DialogTitle-name">
       {name}
     </Typography>
   );
@@ -56,6 +56,7 @@ export const DialogTitle: React.FunctionComponent<Props> = ({
       defaultValue={name}
       onChange={handleNameChange}
       className={classes.userNameEdit}
+      id="DialogTitle-nameEdit"
       helperText={isUsernameEmpty ? <Text translation="validator.user.name.required"/> : ""}
     />
   );
@@ -66,6 +67,7 @@ export const DialogTitle: React.FunctionComponent<Props> = ({
           className={classes.iconButton}
           onClick={close}
           aria-label="Close"
+          id="DialogContent-close"
         >
           <CloseIcon />
         </IconButton>

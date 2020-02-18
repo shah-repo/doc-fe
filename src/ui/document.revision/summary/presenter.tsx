@@ -11,6 +11,7 @@ import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/do
 import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
+import OwnerChanger from "../../components/common/owner.changer/container";
 import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
@@ -27,6 +28,7 @@ import TrainingControl from "./training.control";
 
 interface OwnProps {
   canShowCreateVersionButton?: boolean;
+  canChangeOwnerShip?: boolean;
 }
 
 export type Props = OwnProps &
@@ -49,20 +51,15 @@ export const Presenter: React.FunctionComponent<Props> = ({
     trainingRecords,
     formTemplate,
   },
+  canChangeOwnerShip,
   canShowCreateVersionButton,
 }) => {
-  let outputDocumentTypeName;
   const onSubmit = () => void 0;
   FBDRStore.setValues(dataProp);
-  const documentTypesById = useSelector((state: ApplicationState) =>
-    documentTypeSelectors.byId(state),
-  );
-
-  if (formTemplate) {
-    const outputDocumentTypeId = formTemplate!.outputDocumentType.id;
-    outputDocumentTypeName =
-      documentTypesById[outputDocumentTypeId!].documentTypeName;
-  }
+  const outputDocumentTypeName = useSelector((state: ApplicationState) => {
+    const outputDocumentTypeId = formTemplate ? formTemplate!.outputDocumentType.id : "";
+    return documentTypeSelectors.getDocTypeName(state, outputDocumentTypeId);
+  });
 
   const renderTrainingControl = status === DocumentRevisionStatus.Released && (
     <TrainingControl
@@ -118,10 +115,17 @@ export const Presenter: React.FunctionComponent<Props> = ({
           <FBWorkspace />
         </Box>
       )}
-      <Box flexDirection="row-reverse" display="flex" px={3}>
+      <Box flexDirection={document.canAccess ? "row-reverse" : "row"} display="flex" px={3}>
+        {canChangeOwnerShip && (
+            <OwnerChanger
+              requestId={id}
+              requestType={"document"}
+            />
+          )}
         <ControlsContainer
           documentRevision={dataProp}
           canShowCreateVersionButton={canShowCreateVersionButton}
+          hasAccess={document.canAccess}
         />
       </Box>
     </Box>

@@ -2,7 +2,7 @@ import { Box, Button, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as SlackLogo } from "../../../../assets/images/slack_full_logo.svg";
-import { getTableState } from "../../../../common/utils/selectors";
+import { getTableCriteria } from "../../../../common/utils/selectors";
 import { attachmentsActions } from "../../../../state/ducks/attachments";
 import { EmployeeEditRequestBody } from "../../../../state/ducks/auth/types";
 import { tableSearchActions } from "../../../../state/ducks/tableSearch";
@@ -78,7 +78,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
   const classes = styles();
   const dispatch = useDispatch();
   const [avatarURL, setAvatarURL] = useState<string>("");
-  const tableState = useSelector(getTableState(TABLE_NAME));
+  const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
 
   const asyncS3link = useAsync({
     onSuccess: (data: any) => {
@@ -126,7 +126,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
       dispatch(
         tableSearchActions.setSearchCriteria(
           {
-            ...tableState,
+            ...tableCriteria,
             queryDict: {
               active: true,
             },
@@ -161,6 +161,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
         variant="outlined"
         style={{ width: "auto", color: "#6E09EA", borderColor: "#6E09EA" }}
         onClick={closeEdit}
+        id="DialogContent-closeEdit"
       >
         <Text translation="common.cancel" />
       </Button>
@@ -172,6 +173,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
           updateProfile();
           closeEdit();
         }}
+        id="DialogContent-updateProfile"
       >
         <Text translation="user.management.update.profile" />
       </Button>
@@ -184,6 +186,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
         variant="outlined"
         className={classes.activeStatusButton}
         onClick={() => handleActiveStatus(!activeStatus)}
+        id="DialogContent-activeStatusButton"
       >
         <Text
           translation={activeStatus ? "common.deactivate" : "common.reactivate"}
@@ -206,6 +209,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
           color="primary"
           style={{ width: "auto" }}
           onClick={showEdit}
+          id="DialogContent-showEdit"
         >
           <Text translation="common.edit" />
         </Button>
@@ -228,6 +232,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
               asyncState={asyncState}
               label={"integrations.add"}
               className={classes.addButton}
+              id="DialogContent-addEmployee"
             />
           </div>
         )}

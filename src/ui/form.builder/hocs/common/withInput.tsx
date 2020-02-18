@@ -48,25 +48,22 @@ export const withInput = <T extends FBInputProps>(
       const isFieldHidden = _.isEmpty(helperText) && _.isEmpty(field?.value);
       hidden = _.includes(validationMode, "ValidationHidden") && isFieldHidden;
       disabled =
-        _.includes(validationMode, "ValidationDisabled") && isFieldHidden;
+        (_.includes(validationMode, "ValidationDisabled") && isFieldHidden) ||
+        disabled;
     }
 
-    if (elements.length === 1) {
-      _.first(elements) &&
-        (children = React.cloneElement(
-          _.first(elements) as React.ReactElement,
-          {
-            name,
-            ...((type !== "autocomplete" && type !== "texteditor") && { value }),
-            ...(type === "texteditor" && { defaultValue: value }),
-            type,
-            error,
-            checked: value,
-            disabled,
-            ..._.pick(props, ["onChange", "afterChange"]),
-          },
-        ));
-    }
+    children = _.map(elements, (el) => React.cloneElement(
+      el as React.ReactElement, {
+        name,
+        ...((type !== "autocomplete" && type !== "texteditor") && { value }),
+        ...(type === "texteditor" && { defaultValue: value }),
+        type,
+        error,
+        checked: value,
+        disabled,
+        ..._.pick(props, ["onChange", "afterChange"]),
+      },
+    ));
 
     return useObserver(() =>
       Component({

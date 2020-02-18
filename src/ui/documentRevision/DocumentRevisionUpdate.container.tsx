@@ -30,6 +30,7 @@ interface OwnProps {
   documentId?: string;
   documentRevision: DocumentRevision;
   onDirtyFlagChange?: (dirty: boolean) => void;
+  canChangeOwnerShip?: boolean;
 }
 
 export type DocumentRevisionUpdateContainerProps = OwnProps &
@@ -50,6 +51,7 @@ export const DocumentRevisionUpdateContainer: React.FunctionComponent<
   loadAudit,
   documentId,
   loadDocument,
+  canChangeOwnerShip,
 }) => {
     const [doNotPrompt, setDoNotPrompt] = React.useState(false);
     const async = useAsync<DocumentRevision>({
@@ -67,6 +69,7 @@ export const DocumentRevisionUpdateContainer: React.FunctionComponent<
         <DocumentRevisionSummaryPresenter
           dataProp={documentRevision}
           canShowCreateVersionButton={true}
+          canChangeOwnerShip={canChangeOwnerShip}
         />
       );
     }
@@ -88,6 +91,7 @@ export const DocumentRevisionUpdateContainer: React.FunctionComponent<
         initialValues={toDocumentRevisionFormValues(documentRevision)}
         onDirtyFlagChange={onDirtyFlagChange}
         documentRevision={documentRevision}
+        canChangeOwnerShip={canChangeOwnerShip}
         showRevisionTypeChange
       />
     );

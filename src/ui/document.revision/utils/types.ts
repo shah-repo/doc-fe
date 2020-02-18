@@ -6,7 +6,7 @@ import { documentsActions } from "../../../state/ducks/documents";
 import { TrainingRecord } from "../../../state/ducks/training";
 import { LoadAsyncState } from "../../../state/types";
 import { SelectOption } from "../../components/forms/fields/Select";
-import { TablePanelStateProps } from "../../components/table/types";
+import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
 
 // Container
 export type ContainerProps = ContainerOwnProps & ContainerDispatchProps & ContainerStateProps;
@@ -50,7 +50,8 @@ export interface SummaryOwnProps {
 export type DocumentRevisionsUserProps = ActionProps & {
   documentTypeOptions: SelectOption[];
   tableName: string;
-  tableState: TablePanelStateProps<DocumentRevision>;
+  tableCriteria: TablePanelStateProps;
+  tableData: TableDataProps<DocumentRevision>;
   clearFilter?: () => void;
 };
 

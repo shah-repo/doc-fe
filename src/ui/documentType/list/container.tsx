@@ -1,11 +1,13 @@
-import React from "react";
+import { isEmpty } from "lodash";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, RouteComponentProps } from "react-router-dom";
-import { getTableState } from "../../../common/utils/selectors";
+import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import { documentTypeActions, DocumentTypeById, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import { ApplicationState } from "../../../state/reducers";
 import { HOME_URL } from "../../constants/urls";
+import { documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { RouteParams } from "../utils/types";
@@ -27,9 +29,27 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const dispatch = useDispatch();
   const isSingleId = useSelector(documentTypeSelectors.isSingleDocRevId) ;
   const docRevId = useSelector(documentTypeSelectors.docRevTypeById);
-  const tableState = useSelector(getTableState(TABLE_NAME));
+  const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
+  const tableData = useSelector(getTableData(TABLE_NAME));
   const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
   const docId = useSelector(documentTypeSelectors.docId);
+
+  useEffect(() => {
+    if (isEmpty(tableCriteria.queryDict)) {
+      dispatch(
+        tableSearchActions.setSearchCriteria(
+          {
+            ...tableCriteria,
+            queryDict: {
+              "status[]": documentRevisionQueryStatus(),
+            },
+          },
+          TABLE_NAME,
+        ),
+      );
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [acronym]);
 
   const async = useAsync<DocumentTypeById>({
     onSuccess: () => {
@@ -59,7 +79,8 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
       <Redirect to={{ pathname: `/document_revision/${docId}/output_document/${docRevId}` }} />}
       <DocumentByTypeListPresenter
         tableName={TABLE_NAME}
-        tableState={tableState}
+        tableCriteria={tableCriteria}
+        tableData={tableData}
         clearFilter={clearFilter}
         documentType={documentType}
         openDocRev={openDocRev}

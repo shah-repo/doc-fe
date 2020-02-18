@@ -13,6 +13,7 @@ import FBTextFieldEditor from "../components/editors/FBTextFieldEditor";
 import FBCheckbox from "../components/inputs/FBCheckbox";
 import FBCheckboxGroup from "../components/inputs/FBCheckboxGroup";
 import FBDatePicker from "../components/inputs/FBDatePicker";
+import FBPurchaseOrderField from "../components/inputs/FBPurchaseOrderField";
 import FBRadio from "../components/inputs/FBRadio";
 import FBRadioGroup from "../components/inputs/FBRadioGroup";
 import FBSelect from "../components/inputs/FBSelect";
@@ -41,6 +42,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   hyperlink: FBHyperlinkEditor,
   fileupload: FBLabelStepperEditor,
   action: FBActionEditor,
+  purchaseorder: FBLabelEditor,
 };
 
 export const FBFieldComponent: Dictionary<any> = {
@@ -60,6 +62,7 @@ export const FBFieldComponent: Dictionary<any> = {
   schemaSelect: FBValidatorSchemaSelect,
   schemaItem: FBValidatorSchemaItem,
   action: FBActionContainer,
+  purchaseorder: FBPurchaseOrderField,
 };
 
 export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
@@ -75,6 +78,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "radio",
     "radiogroup",
     "fileupload",
+    "purchaseorder",
   ],
   lists: ["autocomplete"],
   actions: ["action"],
