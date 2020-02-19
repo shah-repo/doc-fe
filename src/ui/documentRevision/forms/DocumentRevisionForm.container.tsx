@@ -182,7 +182,6 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
         <Formik
           initialValues={initialValues}
           onSubmit={onSubmit}
-          enableReinitialize={true}
         >
           {render}
         </Formik>
