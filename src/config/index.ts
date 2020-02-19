@@ -1,6 +1,7 @@
 import queryString from "query-string";
 import { LOGIN_WITH_CODE_URL } from "../ui/constants/urls";
 import { ThemeEnv } from "../ui/layout/theme/utils/types";
+import { SM_APP_CONFIG } from "../common/constants"
 
 const DEFAULTS = {
   API_ENDPOINT: "/",
@@ -20,7 +21,7 @@ class Config {
   private static PREFIX = "REACT_APP";
 
   private static get(name: ConfigKey): string {
-    return process.env[`${this.PREFIX}_${name}`] || DEFAULTS[name];
+    return SM_APP_CONFIG[`${this.PREFIX}_${name}`] || DEFAULTS[name];
   }
 
   private static getNumber(name: ConfigKey): number {

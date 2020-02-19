@@ -1,6 +1,7 @@
 import React from "react";
+import { SM_APP_CONFIG } from "../../common/constants";
 
-const API = process.env.REACT_APP_API_ENDPOINT;
+const API = SM_APP_CONFIG['REACT_APP_API_ENDPOINT'];
 const STATUS_QUERY = "/v1/status";
 const MICRO_STATUS_QUERY = "/v1/micro/healthcheck";
 
