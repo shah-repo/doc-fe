@@ -67,4 +67,4 @@ tar -zxvf "compiled.tar.gz"
 
 echo "s3://${DEPLOYMENT_BUCKET_NAME}"
 
-aws s3 sync "compiled/" "s3://${DEPLOYMENT_BUCKET_NAME}"
+aws s3 sync "compiled/build/" "s3://${DEPLOYMENT_BUCKET_NAME}"
