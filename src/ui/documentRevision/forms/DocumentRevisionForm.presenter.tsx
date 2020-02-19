@@ -2,9 +2,10 @@ import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import _ from "lodash";
 import { observer } from "mobx-react";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
+import { GroupTag } from "../../../state/ducks/auth/types";
 import {
   changeRequestsActions,
   changeRequestsSelectors,
@@ -96,6 +97,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   otherDocumentTypes,
   canChangeOwnerShip,
   documentRevision,
+  setFieldValue,
 }) => {
   const loadAvailableApproversAction = useActionCreator(
     changeRequestsActions.loadAvailableApprovers,
@@ -109,6 +111,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const loadGroupAsyncState = useSelector(
     userManagementSelectors.getLoadGroupsAsyncState,
   );
+
   if (!values.id && !_.get(values, "document.documentType.id")) {
     FBDRStore.setMode("none");
     if (setDocId) {
@@ -149,6 +152,13 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
     setDocId!(value);
   };
+  const [docInfo, savedocInfo] = useState({name: "", isQms: false});
+
+  useEffect(() => {
+    if (isdocRevStatusDraft) {
+      savedocInfo({name: values.name, isQms: values.document?.documentType?.isQms || false});
+    }
+  }, []);
 
   const handleTypeChange = (
     event: React.ChangeEvent<{ name?: string; value: unknown }>,
@@ -159,6 +169,13 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       loadDocumentProposedId(type.documentTypeAcronym);
     }
     FBDRStore.setInitialFBMode(type.group);
+    if (type.isQms) {
+      groupOptions.forEach((group) => {
+        if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
+          setFieldValue("securityGroups", [{value: group.value, label: group.label}]);
+        }
+      });
+    }
     handleChange(event);
   };
 
@@ -180,6 +197,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     );
   });
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
+
 
   const renderRevisionStageDropdown = !isDisabled && (
     <SelectField
@@ -342,7 +360,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               label={isDisabled ? "common.save" : "navigation.createDocument"}
               onClick={onFormClick}
             />
-            <ApproveAndRelease id={values.id} status={values.status} />
+            <ApproveAndRelease
+              id={values.id}
+              status={values.status}
+              isQms={docInfo.isQms}
+              documentName={docInfo.name}
+            />
           </Grid>
         </Box>
       </FormWrapper>
