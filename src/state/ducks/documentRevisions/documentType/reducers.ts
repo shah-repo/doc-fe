@@ -41,6 +41,7 @@ export const DOC_REV_BY_ID_DEFAULT_STATE: DocRevByIdState = {
     documentTypeAcronym: "",
     documentTypeName: "",
     group: "OTHER",
+    isQms: true,
   },
   forms: [
     {

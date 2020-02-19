@@ -159,6 +159,11 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       loadDocumentProposedId(type.documentTypeAcronym);
     }
     FBDRStore.setInitialFBMode(type.group);
+    if (type.isQms) {
+      // condition will be tags === QMS in next task
+      groupOptions.map((group) => group.label === "Everyone" ?
+        initialValues.securityGroups = [{value: group.value, label: group.label}] : null);
+    }
     handleChange(event);
   };
 
