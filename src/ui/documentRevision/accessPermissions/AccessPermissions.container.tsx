@@ -27,12 +27,12 @@ export const AccessPermissionsContainer: React.FunctionComponent<AccessPermissio
 
   const loadApproversAsyncState = useSelector(changeRequestsSelectors.getLoadApproversAsyncState);
   const availableApprovers = useSelector((state: ApplicationState) => {
-        if (withoutCurrentUser) {
-        const currentUserId = authSelectors.currentUserId(state);
-        return changeRequestsSelectors.getApproversListWithoutCurrentUser(state, currentUserId);
-        }
-        return changeRequestsSelectors.getApproversListForAssessmentForm(state);
-    });
+    if (withoutCurrentUser) {
+      const currentUserId = authSelectors.currentUserId(state);
+      return changeRequestsSelectors.getApproversListWithoutCurrentUser(state, currentUserId);
+    }
+    return changeRequestsSelectors.getApproversListForAssessmentForm(state);
+  });
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const loadGroupsAction = useActionCreator(userManagementActions.loadCompanyGroups);
   const loadGroupAsyncState = useSelector(userManagementSelectors.getLoadGroupsAsyncState);
@@ -42,19 +42,19 @@ export const AccessPermissionsContainer: React.FunctionComponent<AccessPermissio
   const securityEmployees = _.get(selectedDocument, "document.securityEmployees", []);
 
   return (
-        <AccessPermissionsPresenter
-            loadAvailableApproversAction={loadAvailableApproversAction}
-            availableApprovers={availableApprovers}
-            loadApproversAsyncState={loadApproversAsyncState}
-            groupOptions={groupOptions}
-            securityGroups={securityGroups}
-            securityEmployees={securityEmployees}
-            documentId={documentId}
-            documentRevisionId={documentRevisionId}
-            loadGroupsAction={loadGroupsAction}
-            loadGroupAsyncState={loadGroupAsyncState}
-        />
- );
+    <AccessPermissionsPresenter
+      loadAvailableApproversAction={loadAvailableApproversAction}
+      availableApprovers={availableApprovers}
+      loadApproversAsyncState={loadApproversAsyncState}
+      groupOptions={groupOptions}
+      securityGroups={securityGroups}
+      securityEmployees={securityEmployees}
+      documentId={documentId}
+      documentRevisionId={documentRevisionId}
+      loadGroupsAction={loadGroupsAction}
+      loadGroupAsyncState={loadGroupAsyncState}
+    />
+  );
 };
 
 export default AccessPermissionsContainer;

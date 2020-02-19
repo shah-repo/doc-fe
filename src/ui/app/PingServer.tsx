@@ -1,27 +1,19 @@
 import _ from "lodash";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import IdleTimer from "react-idle-timer";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 import { authActions } from "../../state/ducks/auth";
-import { ApplicationState } from "../../state/reducers";
 import useDialog from "../hooks/useDialog";
 
-interface DispatchProps {
-  pingServer: typeof authActions.pingServer;
-}
-
-type Props = DispatchProps;
-
-const PingServer: React.FunctionComponent<Props> = ({
-  pingServer,
-}) => {
+const PingServer: React.FunctionComponent = () => {
+  const dispatch = useDispatch();
+  const pingServer = useCallback(() => dispatch(authActions.pingServer()), [dispatch]);
   const tenMinutes = 1000 * 60 * 10;
   const dialogHandler = useDialog();
 
   useEffect(() => {
     pingServer();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [pingServer]);
 
   const onActive = () => {
     dialogHandler.close();
@@ -45,6 +37,4 @@ const PingServer: React.FunctionComponent<Props> = ({
   );
 };
 
-export default connect<{}, DispatchProps, {}, ApplicationState>(null, {
-  pingServer: authActions.pingServer,
-})(PingServer);
+export default PingServer;

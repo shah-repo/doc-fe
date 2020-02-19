@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
 import { GroupTag } from "../../state/ducks/auth/types";
@@ -70,15 +70,15 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<
   currentEmployeeId,
   isCompanyAdmin,
 }) => {
-  const loadDocumentRevisionAction = () =>
-    loadDocumentRevision(documentRevisionId);
+  const loadDocumentRevisionAction = useCallback(() => {
+    if (documentRevisionId) {
+      loadDocumentRevision(documentRevisionId);
+    }
+  }, [documentRevisionId, loadDocumentRevision]);
 
   useEffect(() => {
-    if (documentRevisionId) {
-      loadDocumentRevisionAction();
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [documentRevisionId]);
+    loadDocumentRevisionAction();
+  }, [loadDocumentRevisionAction]);
 
   const canChangeOwnerShip =
   documentRevision &&

@@ -69,6 +69,7 @@ const OwnerChangerContainer: React.FC<OwnProps> = ({
 
   useEffect(() => {
     getEmployees.start(getEmployeeAction, null, getEmployees);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
