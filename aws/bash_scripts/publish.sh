@@ -65,4 +65,6 @@ aws ecr get-login --no-include-email --region "${AWS_DEFAULT_REGION}" | bash
 
 tar -zxvf "compiled.tar.gz"
 
+echo "s3://${DEPLOYMENT_BUCKET_NAME}"
+
 aws s3 sync "compiled/" "s3://${DEPLOYMENT_BUCKET_NAME}"
