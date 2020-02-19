@@ -12,6 +12,7 @@ import ControlsContainer from "../../changeRequest/forms/assessmentForm/Assessme
 import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import OwnerChanger from "../../components/common/owner.changer/container";
+import { RequestType } from "../../components/common/owner.changer/helpers/types";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
 import SubmitButton from "../../components/forms/SubmitButton";
@@ -78,6 +79,13 @@ export const Presenter: React.FunctionComponent<Props> = ({
       />
     );
 
+  const renderChangeOwnership = canChangeOwnerShip && (
+    <OwnerChanger
+      requestId={dataProp!.id}
+      requestType={RequestType.ChangeRequest}
+    />
+  );
+
   return (
     <Box>
       <ChangeRequestHeader dataProp={dataProp} />
@@ -109,12 +117,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         >
           {canEdit && <FormProgress asyncState={asyncState} />}
           {canEdit && <FormMessage asyncState={asyncState} />}
-          {canChangeOwnerShip && (
-            <OwnerChanger
-              requestId={dataProp!.id}
-              requestType={"change_request"}
-            />
-          )}
+          {renderChangeOwnership}
           {canEdit && submitButtonRenderer()}
           <ControlsContainer changeRequest={dataProp} errors={errors} />
         </Grid>

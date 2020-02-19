@@ -1,19 +1,20 @@
 import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { Field, FieldProps, FormikProps } from "formik";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { getHasTag } from "../../../../common/utils/selectors";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { GroupTag } from "../../../../state/ducks/auth/types";
 import {
   ChangeRequest,
-  ChangeRequestStatus,
 } from "../../../../state/ducks/changeRequest";
 import { AsyncState } from "../../../../state/types";
 import ApproversField from "../../../change.request/form/approvers";
 import AssessmentsField from "../../../change.request/form/assessments";
 import JustificationField from "../../../change.request/form/justification";
+import { canChangeCROwner } from "../../../change.request/utils/helpers";
 import OwnerChanger from "../../../components/common/owner.changer/container";
+import { RequestType } from "../../../components/common/owner.changer/helpers/types";
 import DatePickerField from "../../../components/forms/fields/DatePicker";
 import InputField from "../../../components/forms/fields/Input";
 import TextEditorField from "../../../components/forms/fields/RichTextEditor";
@@ -63,10 +64,12 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
 
   const isCompanyAdmin = useSelector(getHasTag(GroupTag.OWNERSHIP_CHANGE));
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
-  const canChangeOwnerShip =
-    (isCompanyAdmin || changeRequest?.owner.id === currentEmployeeId) &&
-    changeRequest &&
-    changeRequest!.state === ChangeRequestStatus.Draft;
+  const canChangeOwnerShip = useMemo(() => {
+    if (!changeRequest) {
+      return false;
+    }
+    return canChangeCROwner(changeRequest!.state, currentEmployeeId, changeRequest?.owner.id, isCompanyAdmin);
+  }, [changeRequest, currentEmployeeId, isCompanyAdmin]);
 
   useEffect(() => {
     if (didMount) {
@@ -140,7 +143,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
         > {canChangeOwnerShip && (
           <OwnerChanger
             requestId={changeRequest!.id}
-            requestType={"change_request"}
+            requestType={RequestType.ChangeRequest}
           />
         )}
           <AssessmentFormVoidContainer changeRequest={changeRequest} />
