@@ -1,5 +1,5 @@
-import { GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { COMPANY_DEFAULT_STATE } from "../../../state/ducks/company/reducers";
+import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
 import { GetEmployeeResponse, LoadCompanyGroup } from "../../../state/ducks/userManagement";
 
 export const DEFAULT_SELECTED_GROUP: LoadCompanyGroup = {
@@ -13,7 +13,7 @@ export const DEFAULT_SELECTED_GROUP: LoadCompanyGroup = {
     isOfficial: true,
   };
 
-export const DEFAULT_ACTIVE_EMPLOYEE: GetEmployeeResponse[] = [{
+export const DEFAULT_ACTIVE_EMPLOYEES: GetEmployeeResponse[] = [{
     id: "",
     active: true,
     groups: [],
@@ -23,14 +23,6 @@ export const DEFAULT_ACTIVE_EMPLOYEE: GetEmployeeResponse[] = [{
         name: "",
     },
   }];
-// should move to ducks
-export interface GroupRequestBody {
-  name: string;
-  permissions: Permission[];
-  defaultForNewUsers: boolean;
-  isOfficial: boolean;
-  tags: GroupTag[];
-}
 
 export const DEFAULT_GROUP: GroupRequestBody = {
   name: "",
@@ -38,4 +30,5 @@ export const DEFAULT_GROUP: GroupRequestBody = {
   defaultForNewUsers: false,
   isOfficial: false,
   tags: [],
+  employees: [],
 };

@@ -1,13 +1,14 @@
-import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup, TextField, Typography } from "@material-ui/core";
+import { Box, Button, Grid, TextField, Typography } from "@material-ui/core";
 import { isEmpty } from "lodash";
 import React from "react";
 import Select from "react-select";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
+import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import Text from "../../components/Text";
-import { transformToArray, transformToEmployeesOptions, transformToOptions } from "../utils/transform";
-import { GroupRequestBody } from "../utils/types";
+import { toArray, toMembersOptions, toOptions } from "../utils/transform";
+import GroupType from "./GroupType";
 
 interface Props {
   employees: GetEmployeeResponse[];
@@ -23,7 +24,7 @@ interface Props {
   setGroup: (values: GroupRequestBody) => void;
 }
 
-export const AddGroupContentPresenter: React.FunctionComponent<Props> = ({
+export const GroupContentPresenter: React.FunctionComponent<Props> = ({
   employees,
   members,
   setMembers,
@@ -36,6 +37,8 @@ export const AddGroupContentPresenter: React.FunctionComponent<Props> = ({
   group,
   setGroup,
 }) => {
+  const canCreateOfficialGroup = hasOfficialPermission && isCreateMode && group.isOfficial;
+
   const groupNameRenderer = () => (
     <Box width={700}>
       <Typography variant="h4">
@@ -43,7 +46,7 @@ export const AddGroupContentPresenter: React.FunctionComponent<Props> = ({
       </Typography>
       <TextField
         variant="outlined"
-        id="AddGroup-groupName"
+        id="Group-groupName"
         value={group.name}
         onChange={(event: any) => setGroup({...group, name: event.target.value})}
         style={{ width: "700px", marginTop: "16px" }}
@@ -57,9 +60,9 @@ export const AddGroupContentPresenter: React.FunctionComponent<Props> = ({
         <Text message={"common.members"} />
       </Typography>
       <Select
-        id="AddGroup-members"
+        id="Group-members"
         isMulti={true}
-        options={transformToEmployeesOptions(employees)}
+        options={toMembersOptions(employees)}
         onChange={(state: any) => setMembers(state)}
         value={members}
         placeholder="Start typing to see the list of users…"
@@ -73,10 +76,10 @@ export const AddGroupContentPresenter: React.FunctionComponent<Props> = ({
         <Text message={"common.permissions"} />
       </Typography>
       <Select
-        id="AddGroup-permissions"
+        id="Group-permissions"
         isMulti={true}
-        options={transformToOptions(currentEmployeePermissions)}
-        onChange={(state: any) => setGroup({...group, permissions: transformToArray(state)})}
+        options={toOptions(currentEmployeePermissions)}
+        onChange={(state: any) => setGroup({...group, permissions: toArray(state)})}
       />
     </Box>
   );
@@ -87,53 +90,31 @@ export const AddGroupContentPresenter: React.FunctionComponent<Props> = ({
         <Text message={"common.tags"} />
       </Typography>
       <Select
-        id="AddGroup-addTags"
+        id="Group-addTags"
         isMulti={true}
-        options={transformToOptions(currentEmployeeTags)}
-        onChange={(state: any) => setGroup({...group, tags: transformToArray(state)})}
+        options={toOptions(currentEmployeeTags)}
+        onChange={(state: any) => setGroup({...group, tags: toArray(state)})}
       />
     </Box>
   );
 
   const buttonsRenderer = () => (
-    <Box mt={5}>
-      <Button variant="outlined" onClick={handleReset} id="AddGroup-reset">
+    <Grid
+      item={true}
+      style={{ textAlign: "right" }}
+    >
+      <Button variant="outlined" onClick={handleReset} id="Group-reset">
         <Text translation="common.reset" />
       </Button>
       <Button
-        id="AddGroup-createGroup"
+        id="Group-createGroup"
         variant="contained"
         onClick={handleSubmit}
         disabled={isEmpty(group.name)}
       >
         <Text translation="common.save" />
       </Button>
-    </Box>
-  );
-
-  const groupTypeRenderer = () => (
-    <Box width={700} mt={-6} mb={2}>
-      <Typography variant="h4" style={{ marginBottom: "16px" }}>
-        <Text message={"group.management.group.type"} />
-      </Typography>
-      <RadioGroup
-        id="AddGroup-groupType"
-        name="groupType"
-        onChange={(event: any) => setGroup({...group, isOfficial: event.target.value === "official" ? true : false })}>
-        <FormControlLabel
-          id="AddGroup-officialOption"
-          label="Official"
-          value="official"
-          control={<Radio/>}
-        />
-        <FormControlLabel
-          id="AddGroup-unofficialOption"
-          label="Unofficial"
-          value="unofficial"
-          control={<Radio/>}
-        />
-      </RadioGroup>
-    </Box>
+    </Grid>
   );
 
   return (
@@ -143,14 +124,16 @@ export const AddGroupContentPresenter: React.FunctionComponent<Props> = ({
       direction="column"
       style={{ marginTop: "250px" }}
     >
-      {hasOfficialPermission && isCreateMode && groupTypeRenderer()}
-      {groupNameRenderer()}
-      {addMembersRenderer()}
-      {hasOfficialPermission && isCreateMode && permissionsRenderer()}
-      {hasOfficialPermission && isCreateMode && tagsRenderer()}
-      {buttonsRenderer()}
+      <Grid>
+        {hasOfficialPermission && isCreateMode && <GroupType group={group} setGroup={setGroup}/>}
+        {groupNameRenderer()}
+        {addMembersRenderer()}
+        {canCreateOfficialGroup && permissionsRenderer()}
+        {canCreateOfficialGroup && tagsRenderer()}
+        {buttonsRenderer()}
+      </Grid>
     </Grid>
   );
 };
 
-export default AddGroupContentPresenter;
+export default GroupContentPresenter;

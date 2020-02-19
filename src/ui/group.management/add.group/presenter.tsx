@@ -1,7 +1,7 @@
 import { Box, Button } from "@material-ui/core";
 import React from "react";
 import Text from "../../components/Text";
-import AddGroup from "./AddGroup";
+import AddGroup from "./Group";
 
 interface OwnProps {
   isOpen: boolean;
@@ -22,7 +22,7 @@ export const AddGroupPresenter: React.FunctionComponent<Props> = ({
         color="primary"
         variant="contained"
         onClick={openDialog}
-        id="AddGroupPresenter-openDialog"
+        id="Group-openDialog"
         style={{ margin: 0 }}
       >
         <Text message="group.management.add.group" />
