@@ -97,6 +97,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   otherDocumentTypes,
   canChangeOwnerShip,
   documentRevision,
+  setFieldValue,
 }) => {
   const loadAvailableApproversAction = useActionCreator(
     changeRequestsActions.loadAvailableApprovers,
@@ -158,18 +159,18 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   ) => {
     const typeId = event.target.value as string;
     const type = documentTypesById[typeId] || {};
+    // condition will be tags === QMS in next task
+    groupOptions.forEach((group) => {
+      if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
+        setFieldValue("securityGroups", [
+          { value: group.value, label: group.label },
+        ]);
+      }
+    });
     if (loadDocumentProposedId) {
       loadDocumentProposedId(type.documentTypeAcronym);
     }
     FBDRStore.setInitialFBMode(type.group);
-    // condition will be tags === QMS in next task
-    groupOptions.forEach((group) => {
-      if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
-        initialValues.securityGroups = [
-          { value: group.value, label: group.label },
-        ];
-      }
-    });
     handleChange(event);
   };
 
