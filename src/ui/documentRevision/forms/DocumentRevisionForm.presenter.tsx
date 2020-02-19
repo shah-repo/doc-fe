@@ -5,6 +5,7 @@ import { observer } from "mobx-react";
 import React from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
+import { GroupTag } from "../../../state/ducks/auth/types";
 import {
   changeRequestsActions,
   changeRequestsSelectors,
@@ -123,8 +124,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDisabled: boolean = _.get(initialValues, "id") !== undefined;
   const docId = _.get(initialValues, "document.docId");
   const isdocRevVersionOne = _.get(documentRevision, "version") === 1;
-  const isdocRevStatusDraft = _.get(documentRevision, "status") === DocumentRevisionStatus.Draft;
-  const outputDocEnabled: boolean = (isdocRevVersionOne && isdocRevStatusDraft) || !isDisabled;
+  const isdocRevStatusDraft =
+    _.get(documentRevision, "status") === DocumentRevisionStatus.Draft;
+  const outputDocEnabled: boolean =
+    (isdocRevVersionOne && isdocRevStatusDraft) || !isDisabled;
   const useProposedDocId = (!docId || docId === "") && values.document;
   values.document!.docId = useProposedDocId
     ? proposedDocId
@@ -159,14 +162,14 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       loadDocumentProposedId(type.documentTypeAcronym);
     }
     FBDRStore.setInitialFBMode(type.group);
-    if (type.isQms) {
-      // condition will be tags === QMS in next task
-      groupOptions.forEach((group) => {
-        if (group.label === "Everyone") {
-          initialValues.securityGroups = [{value: group.value, label: group.label}];
-        }
-      });
-    }
+    // condition will be tags === QMS in next task
+    groupOptions.forEach((group) => {
+      if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
+        initialValues.securityGroups = [
+          { value: group.value, label: group.label },
+        ];
+      }
+    });
     handleChange(event);
   };
 
