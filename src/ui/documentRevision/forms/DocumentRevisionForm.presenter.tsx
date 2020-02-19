@@ -97,7 +97,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   otherDocumentTypes,
   canChangeOwnerShip,
   documentRevision,
-  setFieldValue,
 }) => {
   const loadAvailableApproversAction = useActionCreator(
     changeRequestsActions.loadAvailableApprovers,
