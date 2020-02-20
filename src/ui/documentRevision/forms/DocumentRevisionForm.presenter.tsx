@@ -152,7 +152,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
     setDocId!(value);
   };
-  const [docInfo, savedocInfo] = useState({name: "", isQms: false});
+  const [docInfo, savedocInfo] = useState({name: "", isQms: true});
 
   useEffect(() => {
     if (isdocRevStatusDraft) {
@@ -165,6 +165,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   ) => {
     const typeId = event.target.value as string;
     const type = documentTypesById[typeId] || {};
+    savedocInfo({name: event.target.name || "", isQms: type.isQms});
     if (loadDocumentProposedId) {
       loadDocumentProposedId(type.documentTypeAcronym);
     }
@@ -244,7 +245,11 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         <RichTextEditor
           name="description"
           label="common.description"
-          validate={validator(required)}
+          validate={docInfo.isQms ? validator(required) : undefined}
+          editorProps={{placeholder:
+            docInfo.isQms ? "" : "Optional: Title will be used if description not provided.",
+          }}
+
         />
         <SelectField
           name="document.documentType.id"

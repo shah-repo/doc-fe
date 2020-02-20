@@ -54,19 +54,20 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
     const approvers = !values.approvals || values.approvals.length === 0 ?
       undefined :
       values.approvals.map((approver) => ({ id: approver.value }));
-    if (isQms) {
+    if (!isQms) {
       async.start(
-        releaseAction,
+        releaseNonQmsAction,
         id,
         { approvers },
-        values.password,
         async,
       );
+      return;
     }
     async.start(
-      releaseNonQmsAction,
+      releaseAction,
       id,
       { approvers },
+      values.password,
       async,
     );
   };
