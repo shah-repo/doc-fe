@@ -416,6 +416,7 @@
   "form.builder.custom.validation": "Custom Validation",
   "form.builder.validation.mode": "Validation Mode",
   "form.builder.create.template": "Create Template",
+  "form.builder.send.signature": "Send Signature Request",
   "form.builder.hellosign": "Hellosign",
   "form.builder.purchaseorder": "Purchase Order",
   "form.builder.purhcase.order.items.placeholder": "Item A\nItem B\nItem C\n...",
