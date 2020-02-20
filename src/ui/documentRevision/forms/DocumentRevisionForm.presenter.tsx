@@ -2,7 +2,7 @@ import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import _ from "lodash";
 import { observer } from "mobx-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
 import {
@@ -27,7 +27,6 @@ import OwnerChanger from "../../components/common/owner.changer/container";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
 import CheckboxField from "../../components/forms/fields/Checkbox";
-import InputField from "../../components/forms/fields/Input";
 import RichTextEditor from "../../components/forms/fields/RichTextEditor";
 import SelectField, {
   SelectOption,
@@ -53,6 +52,7 @@ import ApproveAndRelease from "./presenters/ApproveAndRelease";
 import References from "./presenters/References";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
 import { DocumentRevisionFormValues } from "./types";
+import DocIdInput from "./presenters/DocIdInput";
 
 export interface Props
   extends WithStyles<typeof styles>,
@@ -96,6 +96,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   otherDocumentTypes,
   canChangeOwnerShip,
   documentRevision,
+  setFieldValue,
 }) => {
   const loadAvailableApproversAction = useActionCreator(
     changeRequestsActions.loadAvailableApprovers,
@@ -121,34 +122,15 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   };
 
   const isDisabled: boolean = _.get(initialValues, "id") !== undefined;
-  const docId = _.get(initialValues, "document.docId");
   const isdocRevVersionOne = _.get(documentRevision, "version") === 1;
   const isdocRevStatusDraft = _.get(documentRevision, "status") === DocumentRevisionStatus.Draft;
   const outputDocEnabled: boolean = (isdocRevVersionOne && isdocRevStatusDraft) || !isDisabled;
-  const useProposedDocId = (!docId || docId === "") && values.document;
-  values.document!.docId = useProposedDocId
-    ? proposedDocId
-    : values.document!.docId;
 
-  const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    const { documentType } = values.document || {};
-
-    if (!documentType) {
-      return;
+  useEffect(() => {
+    if (proposedDocId) {
+      setFieldValue("document.docId", proposedDocId);
     }
-    const type = documentTypesById[documentType.id!].documentTypeAcronym;
-
-    if (!values.document && !type) {
-      return;
-    }
-    const pattern = new RegExp("^" + type + "\\d{0," + type.length + "}", "g");
-
-    if (!pattern.test(value) || !setDocId) {
-      return;
-    }
-    setDocId(value);
-  };
+  }, [proposedDocId, setFieldValue]);
 
   const handleTypeChange = (
     event: React.ChangeEvent<{ name?: string; value: unknown }>,
@@ -190,6 +172,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       validate={validator(required)}
       includeEmpty={false}
     />
+  );
+
+  const renderOwnerChanger = canChangeOwnerShip && values.id && (
+    <OwnerChanger requestId={values.id} requestType={"document"} />
   );
 
   return (
@@ -239,15 +225,11 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           validate={validator(required)}
           includeEmpty={false}
         />
-        <InputField
-          name="document.docId"
-          label="common.documentId"
-          inputProps={{
-            id: "document.docId",
-            value: values.document!.docId,
-            disabled: isDisabled,
-            onChange: handleDocIdChange,
-          }}
+        <DocIdInput
+          document={values.document}
+          isDisabled={isDisabled}
+          documentTypesById={documentTypesById}
+          setDocId={setDocId}
         />
         {renderRevisionStageDropdown}
         <AutcompleteField
@@ -334,9 +316,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             justify="flex-end"
             direction="row"
           >
-            {canChangeOwnerShip && (
-              <OwnerChanger requestId={values.id!} requestType={"document"} />
-            )}
+            {renderOwnerChanger}
             <SubmitButton
               asyncState={asyncState}
               label={isDisabled ? "common.save" : "navigation.createDocument"}
