@@ -134,7 +134,7 @@ pipelines:
   default:
       - parallel:
           - step: *RUN_TESTS
-          - step: *RUN_LINTER
+          # - step: *RUN_LINTER
 
   tags:
     deploy-to-dev:
@@ -148,14 +148,14 @@ pipelines:
     deploy-to-demo:
       - parallel:
           - step: *RUN_TESTS
-          - step: *RUN_LINTER
+          # - step: *RUN_LINTER
           - step: *BUILD_DEMO
       - step: *DEPLOY_DEMO
 
     deploy-to-prod:
       - parallel:
           - step: *RUN_TESTS
-          - step: *RUN_LINTER
+          # - step: *RUN_LINTER
           - step: *BUILD_PROD
       - step: *DEPLOY_PROD
 
@@ -163,20 +163,20 @@ pipelines:
     master:
       - parallel:
           - step: *RUN_TESTS
-          - step: *RUN_LINTER
+          # - step: *RUN_LINTER
           - step: *BUILD_PROD
       - step: *DEPLOY_PROD
 
     develop:
       - parallel:
           - step: *RUN_TESTS
-          - step: *RUN_LINTER
+          # - step: *RUN_LINTER
           - step: *BUILD_DEV
       - step: *DEPLOY_DEV
 
     release/20.3:
       - parallel:
           - step: *RUN_TESTS
-          - step: *RUN_LINTER
+          # - step: *RUN_LINTER
           - step: *BUILD_DEMO
       - step: *DEPLOY_DEMO

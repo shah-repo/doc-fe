@@ -12,4 +12,4 @@ yarn install --pure-lockfile
 echo "-------- Executing Lint Tests --------"
 
 mkdir -p ${TEST_RESULTS_DIR}
-yarn tslint -p tsconfig.json -c tslint.json --formatters-dir ${BITBUCKET_CLONE_DIR}/node_modules/tslint-junit-formatter-forked/formatters --format customJunit --out ${TEST_RESULTS_DIR}/tslint-results.xml
+yarn lint --format junit -o ${TEST_RESULTS_DIR}/eslint-results.xml
