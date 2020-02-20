@@ -13,6 +13,7 @@ const getGroupsOptions = createSelector(
       label: groups[id].name,
       text: groups[id].name,
       value: groups[id].id,
+      tags: groups[id].tags,
     }))
   ),
 );

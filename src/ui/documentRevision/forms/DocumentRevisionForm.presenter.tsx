@@ -5,6 +5,7 @@ import { observer } from "mobx-react";
 import React from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
+import { GroupTag } from "../../../state/ducks/auth/types";
 import {
   changeRequestsActions,
   changeRequestsSelectors,
@@ -96,6 +97,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   otherDocumentTypes,
   canChangeOwnerShip,
   documentRevision,
+  setFieldValue,
 }) => {
   const loadAvailableApproversAction = useActionCreator(
     changeRequestsActions.loadAvailableApprovers,
@@ -123,8 +125,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDisabled: boolean = _.get(initialValues, "id") !== undefined;
   const docId = _.get(initialValues, "document.docId");
   const isdocRevVersionOne = _.get(documentRevision, "version") === 1;
-  const isdocRevStatusDraft = _.get(documentRevision, "status") === DocumentRevisionStatus.Draft;
-  const outputDocEnabled: boolean = (isdocRevVersionOne && isdocRevStatusDraft) || !isDisabled;
+  const isdocRevStatusDraft =
+    _.get(documentRevision, "status") === DocumentRevisionStatus.Draft;
+  const outputDocEnabled: boolean =
+    (isdocRevVersionOne && isdocRevStatusDraft) || !isDisabled;
   const useProposedDocId = (!docId || docId === "") && values.document;
   values.document!.docId = useProposedDocId
     ? proposedDocId
@@ -155,6 +159,14 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   ) => {
     const typeId = event.target.value as string;
     const type = documentTypesById[typeId] || {};
+    // condition will be tags === QMS in next task
+    groupOptions.forEach((group) => {
+      if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
+        setFieldValue("securityGroups", [
+          { value: group.value, label: group.label },
+        ]);
+      }
+    });
     if (loadDocumentProposedId) {
       loadDocumentProposedId(type.documentTypeAcronym);
     }

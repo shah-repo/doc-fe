@@ -187,4 +187,5 @@ export enum Permission {
 export enum GroupTag {
   USER_MANAGEMENT = "USER_MANAGEMENT",
   OWNERSHIP_CHANGE = "OWNERSHIP_CHANGE ",
+  QMS_DEFAULT = "QMS_DEFAULT",
 }
