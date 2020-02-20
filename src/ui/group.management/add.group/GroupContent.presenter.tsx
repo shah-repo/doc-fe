@@ -5,7 +5,9 @@ import Select from "react-select";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
+import { AsyncActionPayload } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
+import FormMessage from "../../components/forms/FormMessage";
 import Text from "../../components/Text";
 import { toArray, toMembersOptions, toOptions } from "../utils/transform";
 import GroupType from "./GroupType";
@@ -22,6 +24,7 @@ interface Props {
   isCreateMode?: boolean;
   group: GroupRequestBody;
   setGroup: (values: GroupRequestBody) => void;
+  handleAsyncState: () => AsyncActionPayload;
 }
 
 export const GroupContentPresenter: React.FunctionComponent<Props> = ({
@@ -36,8 +39,10 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
   currentEmployeeTags,
   group,
   setGroup,
+  handleAsyncState,
 }) => {
-  const canCreateOfficialGroup = hasOfficialPermission && isCreateMode && group.isOfficial;
+  const canCreateOfficialGroup =
+    hasOfficialPermission && isCreateMode && group.isOfficial;
 
   const groupNameRenderer = () => (
     <Box width={700}>
@@ -48,9 +53,12 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
         variant="outlined"
         id="Group-groupName"
         value={group.name}
-        onChange={(event: any) => setGroup({...group, name: event.target.value})}
+        onChange={(event: any) =>
+          setGroup({ ...group, name: event.target.value })
+        }
         style={{ width: "700px", marginTop: "16px" }}
       />
+      <FormMessage asyncState={handleAsyncState()} />
     </Box>
   );
 
@@ -79,7 +87,9 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
         id="Group-permissions"
         isMulti={true}
         options={toOptions(currentEmployeePermissions)}
-        onChange={(state: any) => setGroup({...group, permissions: toArray(state)})}
+        onChange={(state: any) =>
+          setGroup({ ...group, permissions: toArray(state) })
+        }
       />
     </Box>
   );
@@ -93,16 +103,13 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
         id="Group-addTags"
         isMulti={true}
         options={toOptions(currentEmployeeTags)}
-        onChange={(state: any) => setGroup({...group, tags: toArray(state)})}
+        onChange={(state: any) => setGroup({ ...group, tags: toArray(state) })}
       />
     </Box>
   );
 
   const buttonsRenderer = () => (
-    <Grid
-      item={true}
-      style={{ textAlign: "right" }}
-    >
+    <Grid item={true} style={{ textAlign: "right" }}>
       <Button variant="outlined" onClick={handleReset} id="Group-reset">
         <Text translation="common.reset" />
       </Button>
@@ -125,7 +132,9 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
       style={{ marginTop: "250px" }}
     >
       <Grid>
-        {hasOfficialPermission && isCreateMode && <GroupType group={group} setGroup={setGroup}/>}
+        {hasOfficialPermission && isCreateMode && (
+          <GroupType group={group} setGroup={setGroup} />
+        )}
         {groupNameRenderer()}
         {addMembersRenderer()}
         {canCreateOfficialGroup && permissionsRenderer()}

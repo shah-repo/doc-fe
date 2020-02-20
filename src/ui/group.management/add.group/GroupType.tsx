@@ -12,8 +12,10 @@ export const GroupType: React.FunctionComponent<Props> = ({
     group,
     setGroup,
 }) => {
+
     const handleGroupTypeChange = (event: any) => {
         const isOfficial = event.target.value === "official";
+
         setGroup({
             ...group,
             isOfficial: isOfficial ? true : false,
@@ -31,6 +33,7 @@ export const GroupType: React.FunctionComponent<Props> = ({
                 id="Group-groupType"
                 name="groupType"
                 onChange={handleGroupTypeChange}
+                value={group.isOfficial ? "official" : "unofficial"}
             >
                 <FormControlLabel
                     id="Group-officialOption"

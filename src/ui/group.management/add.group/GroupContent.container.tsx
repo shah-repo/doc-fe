@@ -7,6 +7,7 @@ import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
 import {
   GetEmployeeResponse,
   LoadCompanyGroup,
+  userManagementActions,
 
 } from "../../../state/ducks/userManagement";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
@@ -44,12 +45,13 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
       onSuccess: (response) => {
         handleTableRefresh();
         handleReset();
+        dispatch(userManagementActions.loadCompanyGroups());
       },
     });
   const editGroupAsync = useAsync({
     onSuccess: (response) => {
       handleTableRefresh();
-      handleReset();
+      dispatch(userManagementActions.loadCompanyGroups());
     },
   });
 
@@ -102,6 +104,10 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
     isCreateMode ?  handleCreateGroup(group) : handleEditGroup(selectedGroup!.id, group);
   };
 
+  const  handleAsyncState = () => {
+    return isCreateMode ? createGroupAsync.asyncState : editGroupAsync.asyncState;
+  };
+
   return (
     <GroupContentPresenter
       employees={employees}
@@ -115,6 +121,7 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
       currentEmployeeTags={currentEmployeeTags}
       group={group}
       setGroup={setGroup}
+      handleAsyncState={handleAsyncState}
     />
   );
 };
