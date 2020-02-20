@@ -2,7 +2,7 @@ import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import _ from "lodash";
 import { observer } from "mobx-react";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
@@ -126,8 +126,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDisabled: boolean = _.get(initialValues, "id") !== undefined;
   const docId = _.get(initialValues, "document.docId");
   const isdocRevVersionOne = _.get(documentRevision, "version") === 1;
-  const isdocRevStatusDraft = _.get(documentRevision, "status") === DocumentRevisionStatus.Draft;
-  const outputDocEnabled: boolean = (isdocRevVersionOne && isdocRevStatusDraft) || !isDisabled;
+  const isdocRevStatusDraft =
+    _.get(documentRevision, "status") === DocumentRevisionStatus.Draft;
+  const outputDocEnabled: boolean =
+    (isdocRevVersionOne && isdocRevStatusDraft) || !isDisabled;
   const useProposedDocId = (!docId || docId === "") && values.document;
   values.document!.docId = useProposedDocId
     ? proposedDocId
@@ -152,11 +154,14 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
     setDocId!(value);
   };
-  const [docInfo, savedocInfo] = useState({name: "", isQms: true});
+  const [docInfo, savedocInfo] = useState({ name: "", isQms: true });
 
   useEffect(() => {
     if (isdocRevStatusDraft) {
-      savedocInfo({name: values.name, isQms: values.document?.documentType?.isQms || false});
+      savedocInfo({
+        name: values.name,
+        isQms: values.document?.documentType?.isQms || false,
+      });
     }
   }, []);
 
@@ -165,7 +170,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   ) => {
     const typeId = event.target.value as string;
     const type = documentTypesById[typeId] || {};
-    savedocInfo({name: event.target.name || "", isQms: type.isQms});
+    savedocInfo({ name: event.target.name || "", isQms: type.isQms });
     if (loadDocumentProposedId) {
       loadDocumentProposedId(type.documentTypeAcronym);
     }
@@ -173,7 +178,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     if (type.isQms) {
       groupOptions.forEach((group) => {
         if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
-          setFieldValue("securityGroups", [{value: group.value, label: group.label}]);
+          setFieldValue("securityGroups", [
+            { value: group.value, label: group.label },
+          ]);
         }
       });
     }
@@ -198,7 +205,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     );
   });
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
-
 
   const renderRevisionStageDropdown = !isDisabled && (
     <SelectField
@@ -246,10 +252,11 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           name="description"
           label="common.description"
           validate={docInfo.isQms ? validator(required) : undefined}
-          editorProps={{placeholder:
-            docInfo.isQms ? "" : "Optional: Title will be used if description not provided.",
+          editorProps={{
+            placeholder: docInfo.isQms
+              ? ""
+              : "Optional: Title will be used if description not provided.",
           }}
-
         />
         <SelectField
           name="document.documentType.id"
