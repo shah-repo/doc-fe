@@ -61,8 +61,8 @@ interface OwnProps {
 }
 
 export type DocumentRevisionFormContainerProps = OwnProps &
-  StateProps &
-  DispatchProps;
+StateProps &
+DispatchProps;
 
 const getAvailableReferences = documentRevisionsSelectors.makeGetAvailableReferences();
 const mapStateToProps = (
@@ -76,12 +76,12 @@ const mapStateToProps = (
   documentTypesById: documentTypeSelectors.byId(state),
   document: documentRevisionsSelectors.getDocument(
     state,
-    get(props.initialValues, "document.id")!,
+    get(props.initialValues, "document.id"),
   ),
 });
 
 export const DocumentRevisionFormContainer: React.FunctionComponent<
-  DocumentRevisionFormContainerProps
+DocumentRevisionFormContainerProps
 > = ({
   onSubmit,
   initialValues,
@@ -100,7 +100,7 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
   documentTypes,
   documentTypesById,
   document,
-  canChangeOwnerShip,
+  canChangeOwnerShip = false,
 }) => {
 
   const docTypes = useMemo(
@@ -127,27 +127,25 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
   const classes = styles();
   const loadAvailableApproversAction = useActionCreator(changeRequestsActions.loadAvailableApprovers);
 
-  const render = (props: FormikProps<DocumentRevisionFormValues>) => {
-    return (
-      <DocumentRevisionFormPresenter
-        {...props}
-        asyncState={asyncState}
-        documentRevisions={documentRevisions}
-        documentRevision={documentRevision}
-        availableReferences={availableReferences}
-        showRevisionTypeChange={showRevisionTypeChange}
-        loadDocumentProposedId={loadDocumentProposedId}
-        proposedDocId={proposedDocId}
-        setDocId={setDocId}
-        doNotPrompt={doNotPrompt}
-        onDirtyFlagChange={onDirtyFlagChange}
-        documentTypes={docTypes}
-        otherDocumentTypes={otherTypes}
-        documentTypesById={documentTypesById}
-        canChangeOwnerShip={canChangeOwnerShip!}
-      />
-    );
-  };
+  const render = (props: FormikProps<DocumentRevisionFormValues>) => (
+    <DocumentRevisionFormPresenter
+      {...props}
+      asyncState={asyncState}
+      documentRevisions={documentRevisions}
+      documentRevision={documentRevision}
+      availableReferences={availableReferences}
+      showRevisionTypeChange={showRevisionTypeChange}
+      loadDocumentProposedId={loadDocumentProposedId}
+      proposedDocId={proposedDocId}
+      setDocId={setDocId}
+      doNotPrompt={doNotPrompt}
+      onDirtyFlagChange={onDirtyFlagChange}
+      documentTypes={docTypes}
+      otherDocumentTypes={otherTypes}
+      documentTypesById={documentTypesById}
+      canChangeOwnerShip={canChangeOwnerShip}
+    />
+  );
 
   // TODO: check why are we loading all document revisions
   // if it's really necessary maybe it can be loaded through the DataFetcherContainer

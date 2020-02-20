@@ -3,19 +3,19 @@ import React from "react";
 import { Route } from "react-router-dom";
 import { getDocumentRevision } from "../../state/ducks/documentRevisions/tests/factories";
 import {
-    DOCUMENT_REVISION_DETAILS_URL,
-    DOCUMENT_REVISION_VERSION_URL,
-  } from "../constants/urls";
+  DOCUMENT_REVISION_DETAILS_URL,
+  DOCUMENT_REVISION_VERSION_URL,
+} from "../constants/urls";
 import { ASYNC_DEFAULT_STATE } from "../hooks/useAsync";
 import getRouteComponentProps from "../tests/helpers/getRouteComponentProps";
 import { DocumentRevisionContainer, DocumentRevisionContainerProps } from "./DocumentRevision.container";
 
 describe("DocumentRevisionContainer test", () => {
   const defaultProps: DocumentRevisionContainerProps = {
-      ...getRouteComponentProps(),
-      documentRevision: getDocumentRevision(),
-      loadAsyncState: ASYNC_DEFAULT_STATE,
-      load: jest.fn(),
+    ...getRouteComponentProps(),
+    documentRevision: getDocumentRevision(),
+    loadAsyncState: ASYNC_DEFAULT_STATE,
+    load: jest.fn(),
   };
 
   const getWrapper = (props: Partial<DocumentRevisionContainerProps>= {}) => shallow (

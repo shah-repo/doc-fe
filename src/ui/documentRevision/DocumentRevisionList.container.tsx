@@ -32,7 +32,7 @@ export type DocumentRevisionListContainerProps = OwnProps;
 
 // used by the document revision manager container
 export const DocumentRevisionListContainer: React.FunctionComponent<
-  DocumentRevisionListContainerProps
+DocumentRevisionListContainerProps
 > = ({
   documentRevisions,
   documentId,
@@ -89,7 +89,7 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
                       <div>
                         <Text translation="common.version" />
                         &nbsp;
-                      {generateVersionNumber(
+                        {generateVersionNumber(
                           documentRevision.revision,
                           documentRevision.revisionStage,
                           documentRevision.revisionChangeType,

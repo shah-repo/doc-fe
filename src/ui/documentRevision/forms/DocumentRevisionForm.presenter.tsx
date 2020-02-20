@@ -56,7 +56,7 @@ import { DocumentRevisionFormValues } from "./types";
 
 export interface Props
   extends WithStyles<typeof styles>,
-    FormikProps<DocumentRevisionFormValues> {
+  FormikProps<DocumentRevisionFormValues> {
   asyncState: AsyncState;
   documentRevision: DocumentRevision;
   documentRevisions?: DocumentRevision[];
@@ -142,12 +142,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     if (!values.document && !type) {
       return;
     }
-    const pattern = new RegExp("^" + type + "\\d{0," + type!.length + "}", "g");
+    const pattern = new RegExp("^" + type + "\\d{0," + type.length + "}", "g");
 
     if (!pattern.test(value) || !setDocId) {
       return;
     }
-    setDocId!(value);
+    setDocId(value);
   };
 
   const handleTypeChange = (

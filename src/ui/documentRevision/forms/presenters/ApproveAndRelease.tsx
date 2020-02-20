@@ -25,7 +25,7 @@ const styles = makeStyles(() =>
       overflowY: "unset",
     },
   },
-));
+  ));
 
 export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   id,
