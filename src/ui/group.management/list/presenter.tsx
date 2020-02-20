@@ -25,6 +25,7 @@ export interface Props {
   previewGroupsDialog: any;
   editGroupsDialog: any;
   selectedGroup: LoadCompanyGroup;
+  canCreateGroups: boolean;
 }
 
 export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
@@ -36,6 +37,7 @@ export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
   previewGroupsDialog,
   editGroupsDialog,
   selectedGroup,
+  canCreateGroups,
 }) => {
   const classes = styles();
   const handleMembers = (members: Employee[]) => {
@@ -99,7 +101,7 @@ export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
         <DocumentInfo numberOfRecords={tableData.length} />
       </Grid>
       <Grid item={true} xs={6} style={{ textAlign: "right" }}>
-        <AddGroupContainer />
+        {canCreateGroups && <AddGroupContainer />}
       </Grid>
       <Grid item={true} className={classes.item}>
         <TablePanel<LoadCompanyGroup>

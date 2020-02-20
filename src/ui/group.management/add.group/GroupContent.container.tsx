@@ -43,11 +43,13 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
   const createGroupAsync = useAsync({
       onSuccess: (response) => {
         handleTableRefresh();
+        handleReset();
       },
     });
   const editGroupAsync = useAsync({
     onSuccess: (response) => {
       handleTableRefresh();
+      handleReset();
     },
   });
 

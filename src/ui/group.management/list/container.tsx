@@ -32,6 +32,7 @@ export const ListContainer: React.FunctionComponent<Props> = () => {
   const currentEmployeePermissions = useSelector(authSelectors.currentEmployeePermissions);
   const hasOfficialPermissions = getHasOfficialPermissions(currentEmployeePermissions);
   const hasUnofficialPermissions = getHasUnofficialPermissions(currentEmployeePermissions);
+  const canCreateGroups = hasOfficialPermissions || hasUnofficialPermissions;
 
   const handleGroupsPreview = (rowData: LoadCompanyGroup) => {
     setGroup(rowData);
@@ -62,6 +63,7 @@ export const ListContainer: React.FunctionComponent<Props> = () => {
       previewGroupsDialog={previewGroupsDialog}
       editGroupsDialog={editGroupsDialog}
       selectedGroup={selectedGroup}
+      canCreateGroups={canCreateGroups}
     />
   );
 };
