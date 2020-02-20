@@ -24,7 +24,7 @@ interface OwnProps {
   documentRevisions: DocumentRevision[];
   documentId: string;
   docId: string;
-  selectedDocumentRevision: string;
+  selectedDocumentRevision: Nullable<string>;
   documentRevisionId: Nullable<string>;
 }
 

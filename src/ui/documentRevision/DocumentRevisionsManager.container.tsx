@@ -72,7 +72,7 @@ DocumentRevisionManagerContainerProps
           documentRevisions={documentRevisions}
           documentId={documentId}
           docId={docId}
-          selectedDocumentRevision={documentRevisionId!}
+          selectedDocumentRevision={documentRevisionId}
           documentRevisionId={documentRevisionId}
         />
       </Grid>

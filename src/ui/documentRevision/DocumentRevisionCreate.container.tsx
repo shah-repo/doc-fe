@@ -77,12 +77,15 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
     case "newVersion":
       initialValues = toDocumentRevisionFormValuesWithRevisionChange(documentRevision);
       break;
-    case "newOutput":
+    case "newOutput": {
       initialValues = toDocumentRevisionFormValuesForOutput(documentRevision);
       const documentTypeAcronym = _.get(initialValues, "document.documentType.documentTypeAcronym");
       if (documentTypeAcronym) {
         loadDocumentProposedId(documentTypeAcronym);
       }
+      break;
+    }
+    default:
       break;
   }
 
