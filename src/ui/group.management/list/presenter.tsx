@@ -121,7 +121,7 @@ export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
         isOpen={editGroupsDialog.isOpen}
         closeDialog={editGroupsDialog.close}
         selectedGroup={selectedGroup}
-        title={<Text translation={"group.management.edit.group"} />}
+        title={"group.management.edit.group"}
       />
     </Grid>
   );

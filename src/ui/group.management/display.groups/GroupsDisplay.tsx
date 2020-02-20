@@ -1,7 +1,6 @@
 import { Dialog } from "@material-ui/core";
 import React from "react";
 import { LoadCompanyGroup } from "../../../state/ducks/userManagement";
-import Text from "../../components/Text";
 import DialogTitle from "../dialog/DialogTitle";
 import { GroupsDisplayContent } from "./GroupsDisplayContent";
 
@@ -24,7 +23,7 @@ export const GroupsDisplay: React.FunctionComponent<Props> = ({
         <Dialog fullScreen={true} open={isOpen}>
             <DialogTitle
                 closeDialog={closeDialog}
-                title={<Text translation={"group.management.group.details"} />}
+                title={"group.management.group.details"}
             />
             <GroupsDisplayContent
                 groupName={name}

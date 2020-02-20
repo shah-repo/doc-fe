@@ -8,10 +8,12 @@ import {
 import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
 import styles from "./styles";
+import { Translation } from "../../translations/types";
+import Text from "../../components/Text";
 
 interface OwnProps {
   closeDialog: () => void;
-  title: any;
+  title: Translation;
 }
 
 type Props = OwnProps;
@@ -35,7 +37,7 @@ export const DialogTitle: React.FunctionComponent<Props> = ({
       </Toolbar>
       <Box display="block" textAlign="center">
         <Typography variant="h4" className={classes.title}>
-          {title}
+          <Text translation={title} />
         </Typography>
       </Box>
     </AppBar>

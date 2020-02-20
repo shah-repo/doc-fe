@@ -11,6 +11,7 @@ import FormMessage from "../../components/forms/FormMessage";
 import Text from "../../components/Text";
 import { toArray, toMembersOptions, toOptions } from "../utils/transform";
 import GroupType from "./GroupType";
+import { useIntl } from "react-intl";
 
 interface Props {
   employees: GetEmployeeResponse[];
@@ -41,8 +42,9 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
   setGroup,
   handleAsyncState,
 }) => {
+  const intl = useIntl();
   const canCreateOfficialGroup =
-    hasOfficialPermission && isCreateMode && group.isOfficial;
+    hasOfficialPermission && group.isOfficial;
 
   const groupNameRenderer = () => (
     <Box width={700}>
@@ -73,7 +75,7 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
         options={toMembersOptions(employees)}
         onChange={(state: any) => setMembers(state)}
         value={members}
-        placeholder="Start typing to see the list of users…"
+        placeholder={intl.formatMessage({id: "group.management.list.of.users"})}
       />
     </Box>
   );
@@ -87,6 +89,7 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
         id="Group-permissions"
         isMulti={true}
         options={toOptions(currentEmployeePermissions)}
+        value={toOptions(group.permissions)}
         onChange={(state: any) =>
           setGroup({ ...group, permissions: toArray(state) })
         }
@@ -104,6 +107,7 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
         isMulti={true}
         options={toOptions(currentEmployeeTags)}
         onChange={(state: any) => setGroup({ ...group, tags: toArray(state) })}
+        value={toOptions(group.tags)}
       />
     </Box>
   );
