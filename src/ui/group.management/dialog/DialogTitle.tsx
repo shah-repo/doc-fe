@@ -7,9 +7,9 @@ import {
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
-import styles from "./styles";
-import { Translation } from "../../translations/types";
 import Text from "../../components/Text";
+import { Translation } from "../../translations/types";
+import styles from "./styles";
 
 interface OwnProps {
   closeDialog: () => void;

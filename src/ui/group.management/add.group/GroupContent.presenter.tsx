@@ -1,6 +1,7 @@
 import { Box, Button, Grid, TextField, Typography } from "@material-ui/core";
 import { isEmpty } from "lodash";
 import React from "react";
+import { useIntl } from "react-intl";
 import Select from "react-select";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
@@ -11,7 +12,6 @@ import FormMessage from "../../components/forms/FormMessage";
 import Text from "../../components/Text";
 import { toArray, toMembersOptions, toOptions } from "../utils/transform";
 import GroupType from "./GroupType";
-import { useIntl } from "react-intl";
 
 interface Props {
   employees: GetEmployeeResponse[];
@@ -43,8 +43,7 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
   handleAsyncState,
 }) => {
   const intl = useIntl();
-  const canCreateOfficialGroup =
-    hasOfficialPermission && group.isOfficial;
+  const canCreateOfficialGroup = hasOfficialPermission && group.isOfficial;
 
   const groupNameRenderer = () => (
     <Box width={700}>
@@ -75,7 +74,9 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
         options={toMembersOptions(employees)}
         onChange={(state: any) => setMembers(state)}
         value={members}
-        placeholder={intl.formatMessage({id: "group.management.list.of.users"})}
+        placeholder={intl.formatMessage({
+          id: "group.management.list.of.users",
+        })}
       />
     </Box>
   );
