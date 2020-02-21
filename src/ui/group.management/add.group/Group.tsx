@@ -72,6 +72,7 @@ export const AddGroup: React.FunctionComponent<Props> = ({
           isCreateMode={isCreateMode}
           employees={activeEmployees}
           handleTableRefresh={handleTableRefresh}
+          closeDialog={closeDialog}
         />
     </Dialog>
   );
