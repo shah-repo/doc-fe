@@ -22,6 +22,7 @@ interface Props {
   isCreateMode?: boolean;
   employees: GetEmployeeResponse[];
   handleTableRefresh: () => void;
+  closeDialog: () => void;
 }
 
 export const GroupContentContainer: React.FunctionComponent<Props> = ({
@@ -29,6 +30,7 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
   isCreateMode,
   employees,
   handleTableRefresh,
+  closeDialog,
 }) => {
   const [group, setGroup] = useState<GroupRequestBody>(DEFAULT_GROUP);
   const [members, setMembers] = useState<OptionType[]>([]);
@@ -52,6 +54,7 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
     onSuccess: (response) => {
       handleTableRefresh();
       dispatch(userManagementActions.loadCompanyGroups());
+      closeDialog();
     },
   });
 
