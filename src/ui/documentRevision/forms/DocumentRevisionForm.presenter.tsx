@@ -24,6 +24,7 @@ import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import OwnerChanger from "../../components/common/owner.changer/container";
+import { RequestType } from "../../components/common/owner.changer/helpers/types";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
 import CheckboxField from "../../components/forms/fields/Checkbox";
@@ -163,6 +164,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   });
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
 
+  const renderChangeOwnership = canChangeOwnerShip && values.id && (
+    <OwnerChanger requestId={values.id} requestType={RequestType.Document} />
+  );
+
   const renderRevisionStageDropdown = !isDisabled && (
     <SelectField
       name="revisionStage"
@@ -172,10 +177,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       validate={validator(required)}
       includeEmpty={false}
     />
-  );
-
-  const renderOwnerChanger = canChangeOwnerShip && values.id && (
-    <OwnerChanger requestId={values.id} requestType={"document"} />
   );
 
   return (
@@ -316,7 +317,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             justify="flex-end"
             direction="row"
           >
-            {renderOwnerChanger}
+            {renderChangeOwnership}
             <SubmitButton
               asyncState={asyncState}
               label={isDisabled ? "common.save" : "navigation.createDocument"}

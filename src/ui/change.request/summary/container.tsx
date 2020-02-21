@@ -3,15 +3,11 @@ import { Form, Formik, FormikErrors, FormikProps } from "formik";
 import React from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { IotService } from "../../../common/utils/iot/mqttClient";
 import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import {
   ChangeRequest,
   changeRequestsActions,
-  ChangeRequestStatus,
 } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
@@ -25,11 +21,12 @@ import {
 import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
 import useAsync from "../../hooks/useAsync";
-import { canEditApprovers, canEditChangeRequest } from "../utils/helpers";
+import { canChangeCROwner, canEditApprovers, canEditChangeRequest } from "../utils/helpers";
 import { changeRequestEditPath } from "../utils/paths";
 import { SummaryDispatchProps } from "../utils/types";
 import DocumentRevisionLoader from "./loader";
 import Presenter from "./presenter";
+import ChangeRequestSummarySockets from "./sockets";
 import styles from "./styles";
 
 type DispatchProps = SummaryDispatchProps;
@@ -62,27 +59,13 @@ export const Container: React.FunctionComponent<Props> = ({
   currentEmployeeId,
   isCompanyAdmin,
 }) => {
-  const canChangeOwnerShip =
-    dataProp!.state === ChangeRequestStatus.Draft &&
-    (currentEmployeeId === dataProp.owner.id || isCompanyAdmin);
+  const canChangeOwnerShip = canChangeCROwner(dataProp!.state, currentEmployeeId, dataProp.owner.id, isCompanyAdmin);
 
   const [docRev, setDocRev] = React.useState<DocumentRevision | null>(null);
   const async = useAsync<ChangeRequest>();
   if (canEditChangeRequest({ dataProp, currentUserEmail })) {
     return <Redirect to={changeRequestEditPath(dataProp.id)} />;
   }
-
-  const notify = (msg: string) => {
-    const message = JSON.parse(msg).data.message;
-    toast(message);
-  };
-
-  const iotService = IotService.getInstance();
-  iotService.unsubscribeAll();
-  iotService.subscribeToTopic(
-    `+/change_requests/${dataProp.crId}/updated`,
-    notify,
-  );
 
   const docRevSummary = (documentRevision: DocumentRevision) =>
     setDocRev(documentRevision);
@@ -142,6 +125,7 @@ export const Container: React.FunctionComponent<Props> = ({
       spacing={2}
       className={classes.whiteContainer}
     >
+      <ChangeRequestSummarySockets crId={dataProp.crId} />
       <Grid container={true} spacing={1}>
         <Grid item={true} xs={2} className={classes.sidebar}>
           <SummaryPresenter
