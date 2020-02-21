@@ -272,6 +272,7 @@
   "common.members": "Members",
   "common.group.name": "Group Name",
   "common.security": "Access",
+  "common.warning.message": "Are you sure you want to approve and release {name}?",
   "common.permissions": "Permissions",
   "common.tags": "Tags",
 

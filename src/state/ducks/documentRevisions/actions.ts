@@ -119,6 +119,21 @@ const applyTransition = (
   handlers,
 });
 
+const approveAndReleaseNonQms = (
+  id: string,
+  body: any,
+  handlers: Handlers,
+): ApiAction => apiActionWithCallbacks({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/release/release_non_qms/${id}`,
+  method: "post",
+  data: body,
+  onSuccess: (docRev: DocumentRevision, dispatch) => {
+    dispatch(load(id));
+    dispatch(loadDocument(docRev.document.id));
+  },
+  handlers,
+});
+
 const auditSet = (audit: AuditActionPayload): DocumentRevisionAuditSetAction => ({
   type: DOCUMENT_REVISION_AUDIT_SET,
   payload: audit,
@@ -178,4 +193,5 @@ export default {
   loadAudit,
   approveAndRelease,
   updateAccess,
+  approveAndReleaseNonQms,
 };
