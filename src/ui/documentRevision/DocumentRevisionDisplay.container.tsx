@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
 import { GroupTag } from "../../state/ducks/auth/types";
@@ -6,7 +6,6 @@ import {
   DocumentRevision,
   documentRevisionsActions,
   documentRevisionsSelectors,
-  DocumentRevisionStatus,
 } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
@@ -14,7 +13,7 @@ import AsyncGate from "../components/AsyncGate";
 import SummaryPresenter from "../document.revision/summary/presenter";
 import CloneContainer from "./Clone.container";
 import DocumentRevisionUpdateContainer from "./DocumentRevisionUpdate.container";
-import { canEditDocumentRevision } from "./helpers";
+import { canChangeDocumentOwner, canEditDocumentRevision } from "./helpers";
 
 interface StateProps {
   currentUserEmail: string;
@@ -80,11 +79,17 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentRevisionId]);
 
-  const canChangeOwnerShip =
-  documentRevision &&
-  documentRevision.status === DocumentRevisionStatus.Draft &&
-    (isCompanyAdmin ||
-      documentRevision.owner.id === currentEmployeeId);
+  const canChangeOwnerShip = useMemo(() => {
+    if (!documentRevision) {
+      return false;
+    }
+    return canChangeDocumentOwner(
+      documentRevision.status,
+      currentEmployeeId,
+      documentRevision.owner.id,
+      isCompanyAdmin,
+    );
+  }, [currentEmployeeId, documentRevision, isCompanyAdmin]);
 
   const canEdit =
     documentRevision &&
