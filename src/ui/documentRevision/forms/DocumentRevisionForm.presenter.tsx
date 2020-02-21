@@ -185,6 +185,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         }
       });
     }
+    if (!type.isQms) {
+      setFieldValue("securityGroups", []);
+    }
     handleChange(event);
   };
 
