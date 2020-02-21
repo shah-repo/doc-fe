@@ -26,6 +26,7 @@ describe("user management selectors test", () => {
             label: companyGroups[0].name,
             text: companyGroups[0].name,
             value: companyGroups[0].id,
+            tags: companyGroups[0].tags,
         }];
         expect(selectors.getGroupsOptions(state)).toEqual(expectedGroupOptions);
     });

@@ -2,9 +2,10 @@ import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import _ from "lodash";
 import { observer } from "mobx-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
+import { GroupTag } from "../../../state/ducks/auth/types";
 import {
   changeRequestsActions,
   changeRequestsSelectors,
@@ -97,6 +98,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   otherDocumentTypes,
   canChangeOwnerShip,
   documentRevision,
+  setFieldValue,
 }) => {
   const loadAvailableApproversAction = useActionCreator(
     changeRequestsActions.loadAvailableApprovers,
@@ -110,6 +112,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const loadGroupAsyncState = useSelector(
     userManagementSelectors.getLoadGroupsAsyncState,
   );
+
   if (!values.id && !_.get(values, "document.documentType.id")) {
     FBDRStore.setMode("none");
     if (setDocId) {
@@ -124,8 +127,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDisabled: boolean = _.get(initialValues, "id") !== undefined;
   const docId = _.get(initialValues, "document.docId");
   const isdocRevVersionOne = _.get(documentRevision, "version") === 1;
-  const isdocRevStatusDraft = _.get(documentRevision, "status") === DocumentRevisionStatus.Draft;
-  const outputDocEnabled: boolean = (isdocRevVersionOne && isdocRevStatusDraft) || !isDisabled;
+  const isdocRevStatusDraft =
+    _.get(documentRevision, "status") === DocumentRevisionStatus.Draft;
+  const outputDocEnabled: boolean =
+    (isdocRevVersionOne && isdocRevStatusDraft) || !isDisabled;
   const useProposedDocId = (!docId || docId === "") && values.document;
   values.document!.docId = useProposedDocId
     ? proposedDocId
@@ -150,16 +155,36 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
     setDocId!(value);
   };
+  const [docInfo, savedocInfo] = useState({ name: "", isQms: true });
+
+  useEffect(() => {
+    if (isdocRevStatusDraft) {
+      savedocInfo({
+        name: values.name,
+        isQms: values.document?.documentType?.isQms || false,
+      });
+    }
+  }, []);
 
   const handleTypeChange = (
     event: React.ChangeEvent<{ name?: string; value: unknown }>,
   ) => {
     const typeId = event.target.value as string;
     const type = documentTypesById[typeId] || {};
+    savedocInfo({ name: event.target.name || "", isQms: type.isQms });
     if (loadDocumentProposedId) {
       loadDocumentProposedId(type.documentTypeAcronym);
     }
     FBDRStore.setInitialFBMode(type.group);
+    if (type.isQms) {
+      groupOptions.forEach((group) => {
+        if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
+          setFieldValue("securityGroups", [
+            { value: group.value, label: group.label },
+          ]);
+        }
+      });
+    }
     handleChange(event);
   };
 
@@ -231,7 +256,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         <RichTextEditor
           name="description"
           label="common.description"
-          validate={validator(required)}
+          validate={docInfo.isQms ? validator(required) : undefined}
+          editorProps={{
+            placeholder: docInfo.isQms
+              ? ""
+              : "Optional: Title will be used if description not provided.",
+          }}
         />
         <SelectField
           name="document.documentType.id"
@@ -345,7 +375,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               label={isDisabled ? "common.save" : "navigation.createDocument"}
               onClick={onFormClick}
             />
-            <ApproveAndRelease id={values.id} status={values.status} />
+            <ApproveAndRelease
+              id={values.id}
+              status={values.status}
+              isQms={docInfo.isQms}
+              documentName={docInfo.name}
+            />
           </Grid>
         </Box>
       </FormWrapper>
