@@ -12,6 +12,7 @@ import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import OwnerChanger from "../../components/common/owner.changer/container";
+import { RequestType } from "../../components/common/owner.changer/helpers/types";
 import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
@@ -119,7 +120,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         {canChangeOwnerShip && (
             <OwnerChanger
               requestId={id}
-              requestType={"document"}
+              requestType={RequestType.Document}
             />
           )}
         <ControlsContainer
