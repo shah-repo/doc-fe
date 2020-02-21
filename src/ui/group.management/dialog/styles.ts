@@ -3,7 +3,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core";
 export default makeStyles((theme: Theme) =>
   createStyles({
     closeIcon: {
-      color: "#8A9DAD",
+      color: theme.palette.text.hint,
 
     },
     title: {
