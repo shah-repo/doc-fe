@@ -113,20 +113,21 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
     </Box>
   );
 
-  const buttonsRenderer = () => (
-    <Grid item={true} style={{ textAlign: "right" }}>
-      <Button variant="outlined" onClick={handleReset} id="Group-reset">
-        <Text translation="common.reset" />
-      </Button>
-      <Button
-        id="Group-createGroup"
-        variant="contained"
-        onClick={handleSubmit}
-        disabled={isEmpty(group.name)}
-      >
-        <Text translation="common.save" />
-      </Button>
-    </Grid>
+  const resetButtonRenderer = () => (
+    <Button variant="outlined" onClick={handleReset} id="Group-reset">
+      <Text translation="common.reset" />
+    </Button>
+  );
+
+  const submitButtonRenderer = () => (
+    <Button
+      id="Group-createGroup"
+      variant="contained"
+      onClick={handleSubmit}
+      disabled={isEmpty(group.name)}
+    >
+      <Text translation="common.save" />
+    </Button>
   );
 
   return (
@@ -144,7 +145,10 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
         {addMembersRenderer()}
         {canCreateOfficialGroup && permissionsRenderer()}
         {canCreateOfficialGroup && tagsRenderer()}
-        {buttonsRenderer()}
+        <Grid item={true} style={{ textAlign: "right" }}>
+          {isCreateMode && resetButtonRenderer()}
+          {submitButtonRenderer()}
+        </Grid>
       </Grid>
     </Grid>
   );
