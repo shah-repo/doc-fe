@@ -1,0 +1,36 @@
+import { Dialog } from "@material-ui/core";
+import React from "react";
+import { LoadCompanyGroup } from "../../../state/ducks/userManagement";
+import DialogTitle from "../dialog/DialogTitle";
+import { GroupsDisplayContent } from "./GroupsDisplayContent";
+
+interface OwnProps {
+    closeDialog: () => void;
+    isOpen: boolean;
+    selectedGroup: LoadCompanyGroup;
+}
+
+export type Props = OwnProps;
+
+export const GroupsDisplay: React.FunctionComponent<Props> = ({
+    closeDialog,
+    isOpen,
+    selectedGroup,
+}) => {
+    const { name, employees } = selectedGroup;
+
+    return (
+        <Dialog fullScreen={true} open={isOpen}>
+            <DialogTitle
+                closeDialog={closeDialog}
+                title={"group.management.group.details"}
+            />
+            <GroupsDisplayContent
+                groupName={name}
+                employees={employees}
+            />
+        </Dialog>
+    );
+};
+
+export default GroupsDisplay;
