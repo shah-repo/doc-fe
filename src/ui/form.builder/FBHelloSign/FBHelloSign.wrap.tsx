@@ -1,5 +1,6 @@
 
 import HelloSign from "hellosign-embedded";
+import _ from "lodash";
 import React from "react";
 import { FBHelloSignPayload, FBHelloSignProps } from ".";
 import { store } from "../../../state/store";
@@ -54,20 +55,20 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
       };
 
       if (FBStore.mode === "form") {
-        // const items = FBStore.getValues();
         if (FBStore.docId === "") {
+          return alert("Please fill out fields for signature request and save document");
+        }
+        const items = store.getState().documentRevisions.byId[FBStore.docId].formInput;
+        if (_.values(items).some((x) => x === "") || items === null) {
           return alert("Signature Request can be sent only after the fields are filled in and document is saved");
         }
-        // if (_.values(items).some((x) => x !== "")) {
-        //   return alert("Signature Request can be sent only after the fields are filled in and document is saved");
-        // }
         apiCallSig(payload);
       } else {
-        if (store.getState().documentRevisions.byId[FBStore.docId].attachments.length === 0) {
-          return alert("No attachments uploaded, upload attachment to create template");
-        }
         if (FBStore.docId === "") {
           return alert("Template creation is available only after the document is created");
+        }
+        if (store.getState().documentRevisions.byId[FBStore.docId].attachments.length === 0) {
+          return alert("No attachments uploaded, upload attachment and save document to create template");
         }
         apiCall(payload);
       }

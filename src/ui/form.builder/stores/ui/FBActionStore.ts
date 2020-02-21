@@ -41,6 +41,9 @@ export class FormBuilderActionStore {
         if (requestUrl === "/hello_sign/template") {
           return data;
         }
+        if (requestUrl === "/hello_sign/send_signature_request") {
+          return alert("Signature request sent");
+        }
         alert("Success");
       }
     } catch (exception) {
