@@ -10,24 +10,25 @@ import FBStore from "./FBStore";
 export class FormBuilderValidatorStored {
   @observable public errors: Dictionary<string> = {};
   @observable public indicatorValues: Dictionary<Dictionary<string>> = {};
-  public applicableOn: boolean = false;
+  public applicableOn = false;
   public activeValidatorType?: FBEditorElementType;
   public customValidator?: FBValidatorConfigProps;
   public formValues: Dictionary<any> = {};
+  public selectedFieldIndex: number | null = null;
 
   @computed get schemaItemOptions(): SelectOption[] {
-    const schema = FBStore.getSchema();
-    return schema.map((schemaItem) => {
-      return {
-        value: schemaItem.name,
-        text: schemaItem.label,
-      } as SelectOption;
-    });
+    const schema = _.isNull(this.selectedFieldIndex) ?
+      FBStore.getSchema() :
+      (FBStore.getSchema()).filter((item) => item.index !== this.selectedFieldIndex);
+    return schema.map((schemaItem) => ({
+      value: schemaItem.name,
+      text: schemaItem.label,
+    } as SelectOption));
   }
 
   @action public setActiveValidatorType = (type: FBEditorElementType) => {
     this.activeValidatorType = type;
-  }
+  };
 
   @action public getRules = (): string | undefined => {
     const flattenArray = _.map(this.indicatorValues, (v, k) => {
@@ -35,7 +36,7 @@ export class FormBuilderValidatorStored {
       return k;
     });
     return flattenArray.join("|");
-  }
+  };
 
   @action public getSchemaRules = (): Dictionary<string> => {
     const rules: Dictionary<string> = {};
@@ -49,7 +50,7 @@ export class FormBuilderValidatorStored {
       }
     });
     return rules;
-  }
+  };
 
   @action public getSchemaReleasedRules = (): Dictionary<string> => {
     const rules: Dictionary<string> = {};
@@ -63,14 +64,14 @@ export class FormBuilderValidatorStored {
       }
     });
     return rules;
-  }
+  };
 
   @action public getRulesBy = (
     schemaItemName: string,
   ): Dictionary<string> | undefined => {
     const rules: Dictionary<string> = {};
     return rules;
-  }
+  };
 
   @action public getValidatorNames = (): Dictionary<string> => {
     const names: Dictionary<string> = {};
@@ -81,26 +82,20 @@ export class FormBuilderValidatorStored {
       }
     });
     return names;
-  }
+  };
 
   @action public resetIndicatorValues = () => {
     this.indicatorValues = {};
-  }
+  };
 
-  @action public hasError = (name: string): boolean => {
-    return Boolean(this.errors[name]);
-  }
+  @action public hasError = (name: string): boolean => Boolean(this.errors[name]);
 
-  @action public errorText = (name: string): string => {
-    return this.errors[name] || "";
-  }
+  @action public errorText = (name: string): string => this.errors[name] || "";
 
-  @action public triggers = (): SelectOption[] => {
-    return _.map(
-      FBValidatorTrigger,
-      (k, v) => ({ value: `applicableOn-${v}`, text: k } as SelectOption),
-    );
-  }
+  @action public triggers = (): SelectOption[] => _.map(
+    FBValidatorTrigger,
+    (k, v) => ({ value: `applicableOn-${v}`, text: k } as SelectOption),
+  );
 
   @action public validate = (
     data: any,
@@ -110,9 +105,7 @@ export class FormBuilderValidatorStored {
     const flatten = require("flat");
     Validator.register(
       "",
-      () => {
-        return true;
-      },
+      () => true,
       "",
     );
 
@@ -126,7 +119,7 @@ export class FormBuilderValidatorStored {
       return validator.errors.all();
     }
     return {};
-  }
+  };
 }
 
 const FBValidatorStore = new FormBuilderValidatorStored();
