@@ -70,10 +70,13 @@ const getAlphabetFromNumber = (num: number) => {
 };
 
 export const generateVersionNumber = (
-  revision: number,
-  revisionStage: number,
-  revisionChangeType: RevisionChangeType,
+  revision?: number,
+  revisionStage?: number,
+  revisionChangeType?: RevisionChangeType,
 ) => {
+  if (!revision || !revisionStage) {
+    return "";
+  }
   if (revisionChangeType === RevisionChangeType.Obsolete) {
     return "OBS";
   }
@@ -120,7 +123,7 @@ export const getDocRevIdToRedirect = (
 
   const sortedList = _.orderBy(
     filteredList,
-    [({ releasedAt }) => new Date(releasedAt!)],
+    [({ releasedAt }) => releasedAt ? new Date(releasedAt) : new Date()],
     "desc",
   );
 
@@ -128,5 +131,5 @@ export const getDocRevIdToRedirect = (
 };
 
 export const canChangeDocumentOwner = (status: DocumentRevisionStatus, currentEmployeeId: string, ownerId: string, isCompanyAdmin: boolean) =>
-    (status === DocumentRevisionStatus.Draft || status === DocumentRevisionStatus.PendingChange) &&
+  (status === DocumentRevisionStatus.Draft || status === DocumentRevisionStatus.PendingChange) &&
     (isCompanyAdmin || ownerId === currentEmployeeId);

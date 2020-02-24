@@ -36,8 +36,8 @@ interface OwnProps {
 }
 
 export type DocumentRevisionDisplayContainerProps = OwnProps &
-  DispatchProps &
-  StateProps;
+DispatchProps &
+StateProps;
 
 const mapStateToProps = (
   state: ApplicationState,
@@ -47,8 +47,8 @@ const mapStateToProps = (
   loadDocumentRevisionAsyncState: documentRevisionsSelectors.getLoadAsyncState(
     state,
   ),
-    isCompanyAdmin: authSelectors.getHasTag(state, GroupTag.OWNERSHIP_CHANGE),
-    currentEmployeeId: authSelectors.currentEmployeeId(state),
+  isCompanyAdmin: authSelectors.getHasTag(state, GroupTag.OWNERSHIP_CHANGE),
+  currentEmployeeId: authSelectors.currentEmployeeId(state),
   documentRevision: documentRevisionsSelectors.getDocumentRevision(
     state,
     props.documentRevisionId,
@@ -56,7 +56,7 @@ const mapStateToProps = (
 });
 
 export const DocumentRevisionDisplayContainer: React.FunctionComponent<
-  DocumentRevisionDisplayContainerProps
+DocumentRevisionDisplayContainerProps
 > = ({
   currentUserEmail,
   loadDocumentRevision,

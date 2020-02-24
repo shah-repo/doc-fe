@@ -30,8 +30,8 @@ interface OwnProps {
 }
 
 export type DocumentRevisionManagerContainerProps = OwnProps &
-  StateProps &
-  WithStyles<typeof styles>;
+StateProps &
+WithStyles<typeof styles>;
 
 const getDocumentRevisions = documentRevisionsSelectors.makeGetDocumentRevisions();
 const mapStateToProps = (
@@ -43,7 +43,7 @@ const mapStateToProps = (
 });
 
 export const DocumentRevisionManagerContainer: React.FunctionComponent<
-  DocumentRevisionManagerContainerProps
+DocumentRevisionManagerContainerProps
 > = ({
   classes,
   isNewVersion,
@@ -55,63 +55,63 @@ export const DocumentRevisionManagerContainer: React.FunctionComponent<
   docId,
 }) => {
   const selectedDocument = useSelector((state: ApplicationState) =>
-  documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId as string));
+    documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId as string));
 
   if (shouldRedircetToLatestReleasd(documentRevisions, documentRevisionId)) {
-      const docRevIdToRedirect = getDocRevIdToRedirect(documentRevisions, deprecatedAt);
-      return (
-        <Redirect to={documentVersionPath(docRevIdToRedirect, documentId)} />
-      );
-    }
+    const docRevIdToRedirect = getDocRevIdToRedirect(documentRevisions, deprecatedAt);
+    return (
+      <Redirect to={documentVersionPath(docRevIdToRedirect, documentId)} />
+    );
+  }
   const canAccess = _.get(selectedDocument, "document.canAccess", []);
 
   return (
-      <Grid container={true} spacing={2} className={classes.whiteContainer}>
-        <Grid item={true} xs={2} className={classes.sidebar}>
-          <DocumentRevisionListContainer
-            documentRevisions={documentRevisions}
+    <Grid container={true} spacing={2} className={classes.whiteContainer}>
+      <Grid item={true} xs={2} className={classes.sidebar}>
+        <DocumentRevisionListContainer
+          documentRevisions={documentRevisions}
+          documentId={documentId}
+          docId={docId}
+          selectedDocumentRevision={documentRevisionId}
+          documentRevisionId={documentRevisionId}
+        />
+      </Grid>
+      {documentRevisionId && !isNewOutput && (
+        <Grid item={true} xs={7}>
+          <DocumentRevisionDisplayContainer
+            documentRevisionId={documentRevisionId}
+            isNewVersion={isNewVersion}
             documentId={documentId}
-            docId={docId}
-            selectedDocumentRevision={documentRevisionId!}
+          />
+        </Grid>
+      )}
+      {documentRevisionId && isNewOutput && (
+        <Grid item={true} xs={7}>
+          <DocumentRevisionDisplayContainer
+            documentRevisionId={documentRevisionId}
+            isNewOutput={isNewOutput}
+            documentId={documentId}
+          />
+        </Grid>
+      )}
+      <Grid item={true} xs={3} className={classes.sidebar}>
+        {documentRevisionId && (
+          <DocumentRevisionAuditContainer
             documentRevisionId={documentRevisionId}
           />
-          </Grid>
-        {documentRevisionId && !isNewOutput && (
-          <Grid item={true} xs={7}>
-            <DocumentRevisionDisplayContainer
-              documentRevisionId={documentRevisionId}
-              isNewVersion={isNewVersion}
-              documentId={documentId}
-            />
-          </Grid>
         )}
-        {documentRevisionId && isNewOutput && (
-          <Grid item={true} xs={7}>
-            <DocumentRevisionDisplayContainer
-              documentRevisionId={documentRevisionId}
-              isNewOutput={isNewOutput}
-              documentId={documentId}
-            />
-          </Grid>
+        {documentRevisionId && canAccess && (
+          <AccessPermissionsContainer
+            documentRevisionId={documentRevisionId}
+            documentId={documentId}
+            canAccess={canAccess}
+            withoutCurrentUser={true}
+          />
         )}
-        <Grid item={true} xs={3} className={classes.sidebar}>
-          {documentRevisionId && (
-            <DocumentRevisionAuditContainer
-              documentRevisionId={documentRevisionId}
-            />
-          )}
-          {documentRevisionId && canAccess && (
-            <AccessPermissionsContainer
-              documentRevisionId={documentRevisionId}
-              documentId={documentId}
-              canAccess={canAccess}
-              withoutCurrentUser={true}
-            />
-          )}
-        </Grid>
       </Grid>
-    );
-  };
+    </Grid>
+  );
+};
 
 export default connect<StateProps, {}, OwnProps, ApplicationState>(mapStateToProps)(
   withStyles(styles)(DocumentRevisionManagerContainer),

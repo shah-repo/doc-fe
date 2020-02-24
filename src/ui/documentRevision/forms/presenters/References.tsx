@@ -22,8 +22,8 @@ export const References: React.FunctionComponent<Props> = ({
           <Text translation="common.referenced.by" />
         </Typography>
         <div>
-          {document.referencedBy.map((reference) => {
-            return (
+          {
+            document.referencedBy.map((reference) => (
               <div key={reference.id}>
                 <Link
                   to={documentVersionPath(
@@ -35,8 +35,8 @@ export const References: React.FunctionComponent<Props> = ({
                   {reference.name}
                 </Link>
               </div>
-            );
-          })}
+            ))
+          }
         </div>
       </React.Fragment>
     );

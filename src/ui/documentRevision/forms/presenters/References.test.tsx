@@ -6,7 +6,7 @@ import { documentVersionPath } from "../../../document.revision/utils/paths";
 import { Props, References } from "./References";
 
 describe("Document revision form - References", () => {
-  const getWrapper = (props: Partial<Props>= {}) => shallow(
+  const getWrapper = (props: Partial<Props> = {}) => shallow(
     <References {...props}/>,
   );
 

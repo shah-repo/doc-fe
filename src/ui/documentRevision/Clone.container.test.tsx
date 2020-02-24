@@ -13,7 +13,7 @@ describe("Clone container redirect test", () => {
     type: "newVersion",
   };
 
-  const getWrapper = (props: Partial<CloneContainerProps>= {}) => shallow (
+  const getWrapper = (props: Partial<CloneContainerProps> = {}) => shallow (
     <CloneContainer {...defaultProps} {...props}/>,
   );
 
@@ -34,7 +34,7 @@ describe("Clone container test", () => {
     type: "newVersion",
   };
 
-  const getWrapper = (props: Partial<CloneContainerProps>= {}) => shallow (
+  const getWrapper = (props: Partial<CloneContainerProps> = {}) => shallow (
     <CloneContainer {...defaultProps} {...props}/>,
   );
 
