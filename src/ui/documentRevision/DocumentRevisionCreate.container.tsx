@@ -77,25 +77,28 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
     case "newVersion":
       initialValues = toDocumentRevisionFormValuesWithRevisionChange(documentRevision);
       break;
-    case "newOutput":
+    case "newOutput": {
       initialValues = toDocumentRevisionFormValuesForOutput(documentRevision);
       const documentTypeAcronym = _.get(initialValues, "document.documentType.documentTypeAcronym");
       if (documentTypeAcronym) {
         loadDocumentProposedId(documentTypeAcronym);
       }
       break;
+    }
+    default:
+      break;
   }
 
   const async = useAsync<DocumentRevision>({
-      onSuccess: (createdDocumentRevision?) => {
-        if (createdDocumentRevision) {
-          setDoNotPrompt(true);
-          history.push(
-            documentVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id),
-          );
-        }
-      },
-    });
+    onSuccess: (createdDocumentRevision?) => {
+      if (createdDocumentRevision) {
+        setDoNotPrompt(true);
+        history.push(
+          documentVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id),
+        );
+      }
+    },
+  });
 
   const onSubmit = (values: DocumentRevisionFormValues) => {
     async.start(create, toNewVersionRequestBody(values), async);
@@ -104,19 +107,19 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   const showRevisionTypeChange = type === "newVersion" && !!documentRevision;
 
   return (
-      <DocumentRevisionForm
-        asyncState={async.asyncState}
-        onSubmit={onSubmit}
-        initialValues={initialValues}
-        showRevisionTypeChange={showRevisionTypeChange}
-        setDocId={setDocId}
-        doNotPrompt={doNotPrompt}
-        documentRevision={documentRevision}
-        loadDocumentProposedId={loadDocumentProposedId}
-        proposedDocId={proposedDocId}
-      />
-    );
-  };
+    <DocumentRevisionForm
+      asyncState={async.asyncState}
+      onSubmit={onSubmit}
+      initialValues={initialValues}
+      showRevisionTypeChange={showRevisionTypeChange}
+      setDocId={setDocId}
+      doNotPrompt={doNotPrompt}
+      documentRevision={documentRevision}
+      loadDocumentProposedId={loadDocumentProposedId}
+      proposedDocId={proposedDocId}
+    />
+  );
+};
 
 const DocumentRevisionCreateContainerWithRouter = withRouter(DocumentRevisionCreateContainer);
 
