@@ -35,7 +35,7 @@ export const TableSearchSelectField: React.FunctionComponent<Props> = ({
       <Select
         value={defaultValue || ""}
         onChange={handleChange}
-        input={<InputBase name={dataKey} id="search-select-field" className={classes.input} />}
+        input={<InputBase name={dataKey} id={dataKey} className={classes.input} />}
       >
         <MenuItem value=""><em>None</em></MenuItem>
         {selectOptions.map((o) => menuItemRenderer(o))}
