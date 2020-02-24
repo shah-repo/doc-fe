@@ -33,7 +33,6 @@
     "moment": "2.24.0",
     "moment-timezone": "0.5.27",
     "mqtt-pattern": "1.2.0",
-    "prettier": "^1.18.2",
     "query-string": "6.9.0",
     "react": "16.12.0",
     "react-datepicker": "2.10.1",
@@ -65,9 +64,12 @@
     "weak": "^1.0.1",
     "yup": "0.28.0"
   },
+  "engines": {
+    "node": "v10.19.0"
+  },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts --max_old_space_size=3096 build",
+    "build": "react-scripts --max_old_space_size=4096 build",
     "test": "react-scripts --max_old_space_size=500 --expose-gc test --logHeapUsage",
     "eject": "react-scripts eject",
     "lint": "eslint -c .eslintrc.js --ext .ts --ext .tsx  src",

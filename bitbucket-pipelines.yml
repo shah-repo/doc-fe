@@ -42,7 +42,7 @@ definitions:
         <<: *COMMON
         name: Linter
         artifacts:
-          - tslint-results/**
+          - eslint-results/**
         script:
           - ./aws/bash_scripts/runLinter.sh
 

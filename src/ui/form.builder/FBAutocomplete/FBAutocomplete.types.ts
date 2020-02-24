@@ -16,6 +16,7 @@ export type FBAutocompleteProps =
     optionRenderKey?: string;
     renderEl?: boolean;
     valueType?: "object" | "key";
+    root?: string;
   };
 
 export interface FBAutocompleteIndicator {
@@ -24,4 +25,5 @@ export interface FBAutocompleteIndicator {
   label: string;
   optionLabelKey: string;
   optionValueKey?: string;
+  root?: string;
 }
