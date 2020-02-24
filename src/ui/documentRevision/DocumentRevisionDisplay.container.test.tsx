@@ -18,7 +18,7 @@ describe("DocumentRevisionDisplayContainer isNewVersion test", () => {
     documentRevision: getDocumentRevision(),
   };
 
-  const getWrapper = (props: Partial<DocumentRevisionDisplayContainerProps>= {}) => shallow (
+  const getWrapper = (props: Partial<DocumentRevisionDisplayContainerProps> = {}) => shallow (
     <DocumentRevisionDisplayContainer {...defaultProps} {...props}/>,
   );
 
@@ -42,7 +42,7 @@ describe("DocumentRevisionDisplayContainer canEdit test", () => {
     isNewVersion: false,
   }as unknown as DocumentRevisionDisplayContainerProps;
 
-  const getWrapper = (props: Partial<DocumentRevisionDisplayContainerProps>= {}) => shallow (
+  const getWrapper = (props: Partial<DocumentRevisionDisplayContainerProps> = {}) => shallow (
     <DocumentRevisionDisplayContainer documentRevision={documentRevision} {...defaultProps} {...props}/>,
   );
 
@@ -66,7 +66,7 @@ describe("DocumentRevisionDisplayContainer canPreview test", () => {
     documentRevision: getDocumentRevision(),
   };
 
-  const getWrapper = (props: Partial<DocumentRevisionDisplayContainerProps>= {}) => shallow (
+  const getWrapper = (props: Partial<DocumentRevisionDisplayContainerProps> = {}) => shallow (
     <DocumentRevisionDisplayContainer {...defaultProps} {...props}/>,
   );
 

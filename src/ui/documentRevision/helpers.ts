@@ -131,5 +131,5 @@ export const getDocRevIdToRedirect = (
 };
 
 export const canChangeDocumentOwner = (status: DocumentRevisionStatus, currentEmployeeId: string, ownerId: string, isCompanyAdmin: boolean) =>
-    (status === DocumentRevisionStatus.Draft || status === DocumentRevisionStatus.PendingChange) &&
+  (status === DocumentRevisionStatus.Draft || status === DocumentRevisionStatus.PendingChange) &&
     (isCompanyAdmin || ownerId === currentEmployeeId);

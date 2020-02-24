@@ -18,7 +18,7 @@ describe("DocumentRevisionContainer test", () => {
     load: jest.fn(),
   };
 
-  const getWrapper = (props: Partial<DocumentRevisionContainerProps>= {}) => shallow (
+  const getWrapper = (props: Partial<DocumentRevisionContainerProps> = {}) => shallow (
     <DocumentRevisionContainer {...defaultProps} {...props}/>,
   );
 
