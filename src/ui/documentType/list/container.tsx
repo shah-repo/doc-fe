@@ -18,7 +18,7 @@ import DocumentByTypeListPresenter from "./presenter";
 type Props = RouteComponentProps<RouteParams>;
 
 export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
-  match,
+  match, history,
 }) => {
   const dialog = useDialog();
   const { acronym } = match.params;
@@ -38,6 +38,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
   const docId = useSelector(documentTypeSelectors.docId);
   const formIds = useSelector(documentTypeSelectors.formIds);
+  const documentUrl = `/document_revision/${docId}/output_document/${selectedFormId}`;
 
   useEffect(() => {
     if (isEmpty(tableCriteria.queryDict)) {
@@ -53,7 +54,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
         ),
       );
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [acronym]);
 
   const async = useAsync<DocumentTypeById>({
@@ -64,7 +65,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
         return;
       } else if (isEmpty(formIds)) {
         toggleNoForm(true);
-        setTimeout(() => toggleNoForm(false), 1000 );
+        setTimeout(() => toggleNoForm(false), 1000);
         return;
       }
       toggleMultipleForm(true);
@@ -83,7 +84,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
     async.start(getDocRevByIds, documentType.id, async);
   };
 
-  const preventPropagation = (event: React.FormEvent) =>  event.stopPropagation();
+  const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
 
   const handleSelection = (event) => {
     saveSelectedFormId(event.target.value);
@@ -94,9 +95,9 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <div style={{height: "100%"}}>
-      {enableRedirect &&
-      <Redirect to={{ pathname: `/document_revision/${docId}/output_document/${selectedFormId}` }} />}
+    <div style={{ height: "100%" }}>
+      {enableRedirect && history.push(documentUrl) &&
+        <Redirect to={{ pathname: documentUrl }} />}
       {multipleForm && <FormListDialog
         dialog={dialog}
         preventPropagation={preventPropagation}
