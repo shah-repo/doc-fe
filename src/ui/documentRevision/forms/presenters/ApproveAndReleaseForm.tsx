@@ -14,21 +14,22 @@ import { styles } from "./ApproveAndRelease.styles";
 interface Props {
   asyncState: AsyncState;
   cancel: () => void;
+  isQms: boolean;
 }
 
-const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({ cancel, asyncState }) => {
+const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({ cancel, asyncState, isQms }) => {
   const classes = styles();
 
   return (
     <Form className={classes.form}>
       <FormMessage asyncState={asyncState} />
-      <Approvers withoutCurrentUser={true} />
-      <InputField
+      {isQms && <Approvers withoutCurrentUser={true} />}
+      {isQms && <InputField
         name="password"
         label="transition.action.password"
         inputProps={{ type: "password" }}
         validate={validator(required)}
-      />
+      />}
       <FormProgress asyncState={asyncState} />
       <SubmitButton
         asyncState={asyncState}

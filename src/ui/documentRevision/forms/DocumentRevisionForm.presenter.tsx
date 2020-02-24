@@ -5,21 +5,12 @@ import { observer } from "mobx-react";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
-import {
-  changeRequestsActions,
-  changeRequestsSelectors,
-} from "../../../state/ducks/changeRequest";
-import {
-  DocumentRevision,
-  DocumentRevisionStatus,
-  RevisionStageOptions,
-} from "../../../state/ducks/documentRevisions";
+import { GroupTag } from "../../../state/ducks/auth/types";
+import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
+import { DocumentRevision, DocumentRevisionStatus, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
-import {
-  userManagementActions,
-  userManagementSelectors,
-} from "../../../state/ducks/userManagement";
+import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
@@ -29,9 +20,7 @@ import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocom
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
 import CheckboxField from "../../components/forms/fields/Checkbox";
 import RichTextEditor from "../../components/forms/fields/RichTextEditor";
-import SelectField, {
-  SelectOption,
-} from "../../components/forms/fields/Select";
+import SelectField, { SelectOption } from "../../components/forms/fields/Select";
 import { required, validator } from "../../components/forms/fields/validators";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
@@ -50,10 +39,10 @@ import useActionCreator from "../../hooks/useActionCreator";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
 import ApproveAndRelease from "./presenters/ApproveAndRelease";
+import DocIdInput from "./presenters/DocIdInput";
 import References from "./presenters/References";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
 import { DocumentRevisionFormValues } from "./types";
-import DocIdInput from "./presenters/DocIdInput";
 
 export interface Props
   extends WithStyles<typeof styles>,
@@ -111,6 +100,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const loadGroupAsyncState = useSelector(
     userManagementSelectors.getLoadGroupsAsyncState,
   );
+
   if (!values.id && !_.get(values, "document.documentType.id")) {
     FBDRStore.setMode("none");
     if (setDocId) {
@@ -133,15 +123,39 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
   }, [proposedDocId, setFieldValue]);
 
+  const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
+
+  useEffect(() => {
+    if (isdocRevStatusDraft) {
+      savedocInfo({
+        name: values.name,
+        isQms: values.document?.documentType?.isQms || false,
+      });
+    }
+  }, [isdocRevStatusDraft, values.document, values.name]);
+
   const handleTypeChange = (
     event: React.ChangeEvent<{ name?: string; value: unknown }>,
   ) => {
     const typeId = event.target.value as string;
     const type = documentTypesById[typeId] || {};
+    savedocInfo({ name: event.target.name || "", isQms: type.isQms });
     if (loadDocumentProposedId) {
       loadDocumentProposedId(type.documentTypeAcronym);
     }
     FBDRStore.setInitialFBMode(type.group);
+    if (type.isQms) {
+      groupOptions.forEach((group) => {
+        if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
+          setFieldValue("securityGroups", [
+            { value: group.value, label: group.label },
+          ]);
+        }
+      });
+    }
+    if (!type.isQms) {
+      setFieldValue("securityGroups", []);
+    }
     handleChange(event);
   };
 
@@ -213,7 +227,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         <RichTextEditor
           name="description"
           label="common.description"
-          validate={validator(required)}
+          validate={docInfo.isQms ? validator(required) : undefined}
+          editorProps={{
+            placeholder: docInfo.isQms
+              ? ""
+              : "Optional: Title will be used if description not provided.",
+          }}
         />
         <SelectField
           name="document.documentType.id"
@@ -323,7 +342,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               label={isDisabled ? "common.save" : "navigation.createDocument"}
               onClick={onFormClick}
             />
-            <ApproveAndRelease id={values.id} status={values.status} />
+            <ApproveAndRelease
+              id={values.id}
+              status={values.status}
+              isQms={docInfo.isQms}
+              documentName={docInfo.name}
+            />
           </Grid>
         </Box>
       </FormWrapper>

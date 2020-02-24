@@ -2,14 +2,12 @@
 set -e
 NUMBER_OF_THREADS=${1:-6}
 
-DIRTY_FILES=($(yarn lint | grep ERROR | cut -d ' ' -f 2 | cut -d ':' -f1 | sort -u))
+DIRTY_FILES=($(yarn lint --format unix --quiet --no-color 2>/dev/null | grep $(pwd) | cut -d ':' -f 1 | sort -u))
 
 if [ ${#DIRTY_FILES[@]} -eq 0 ]; then
   echo "All files are good!"
   exit;
 fi
-
-yarn prettier --write $DIRTY_FILES
 
 FILES_PER_THREAD=$((${#DIRTY_FILES[@]} / $NUMBER_OF_THREADS))
 
@@ -27,5 +25,4 @@ done
 for pid in ${pids[*]}; do
     wait $pid
 done
-
-echo "All done"
+yarn lint

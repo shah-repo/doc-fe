@@ -26,11 +26,17 @@ const currentEmployeeId = (state: ApplicationState): string =>
 const currentSlackUserId = (state: ApplicationState): string =>
   state.auth.user.employee.slackUserId;
 
-const currentUserActiveStatus = ( state: ApplicationState): boolean =>
+const currentUserActiveStatus = (state: ApplicationState): boolean =>
   state.auth.user.employee.active;
 
 const currentEmployeeAvatar = (state: ApplicationState): Nullable<string> =>
   state.auth.user.avatar;
+
+const currentEmployeePermissions = (state: ApplicationState): Permission[] =>
+  state.auth.groups.permissions;
+
+const currentEmployeeTags = (state: ApplicationState): GroupTag[] =>
+  state.auth.groups.tags;
 
 const getLoadPermissionsAsyncState = (state: ApplicationState): AsyncState =>
   state.auth.loadGroupsAsyncInfo;
@@ -64,7 +70,8 @@ const getCurrentUserGroups = createSelector(
 
 const getHasPermission = createSelector(
   (state: ApplicationState) => state.auth.groups.permissions,
-  (state: ApplicationState, selectedPermission: Permission) => selectedPermission,
+  (state: ApplicationState, selectedPermission: Permission) =>
+    selectedPermission,
   (permissions, selectedPermission) => permissions.includes(selectedPermission),
 );
 
@@ -85,4 +92,6 @@ export default {
   currentUserGroups,
   currentUserActiveStatus,
   getHasPermission,
+  currentEmployeePermissions,
+  currentEmployeeTags,
 };

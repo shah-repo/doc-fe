@@ -30,6 +30,12 @@ const companyPersistConfig = {
   whitelist: ["selectedCompany"],
 };
 
+const documentTypePersistConfig = {
+  key: "documentType",
+  storage,
+  whitelist: ["byId"],
+};
+
 const appReducer = combineReducers({
   attachments,
   auth: persistReducer(authPersistConfig, auth),
@@ -38,7 +44,7 @@ const appReducer = combineReducers({
   documentRevisions,
   dashboard,
   formBuilderState,
-  documentType,
+  documentType: persistReducer(documentTypePersistConfig, documentType),
   company: persistReducer(companyPersistConfig, company),
   tableSearch,
   supplierSurvey,

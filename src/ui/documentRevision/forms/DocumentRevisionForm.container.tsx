@@ -4,7 +4,6 @@ import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import { get } from "lodash";
 import React, { useMemo } from "react";
 import { connect } from "react-redux";
-import { changeRequestsActions } from "../../../state/ducks/changeRequest";
 import {
   Document,
   DocumentRevision,
@@ -25,7 +24,6 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 import DocumentHeader from "../../document.revision/summary/header";
-import useActionCreator from "../../hooks/useActionCreator";
 import styles from "./DocumentRevisionForm.container.style";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
@@ -125,7 +123,6 @@ DocumentRevisionFormContainerProps
 
   document = document || ({} as Document);
   const classes = styles();
-  const loadAvailableApproversAction = useActionCreator(changeRequestsActions.loadAvailableApprovers);
 
   const render = (props: FormikProps<DocumentRevisionFormValues>) => (
     <DocumentRevisionFormPresenter
@@ -158,7 +155,6 @@ DocumentRevisionFormContainerProps
       DocumentRevisionStatus.PendingChange,
       DocumentRevisionStatus.Draft,
     ]);
-  loadAvailableApproversAction();
 
   return (
     <AsyncGate

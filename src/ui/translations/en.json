@@ -40,6 +40,7 @@
   "navigation.documentRevisionList": "Document revisions",
   "navigation.change.request.list": "Change Request List",
   "navigation.user.management": "User Management",
+  "navigation.group.management": "Group Management",
 
   "validators.required": "Required",
   "validators.requiredAtLeastOne": "At least one input required",
@@ -268,7 +269,12 @@
   "common.alert": "Alert",
   "common.dismiss": "Dismiss",
   "common.reset": "Reset",
+  "common.members": "Members",
+  "common.group.name": "Group Name",
   "common.security": "Access",
+  "common.warning.message": "Are you sure you want to approve and release {name}?",
+  "common.permissions": "Permissions",
+  "common.tags": "Tags",
 
   "output.info": "Form Info",
 
@@ -478,6 +484,13 @@
   "watermark.request.failed": "Request for {name}.{type} failed",
 
   "mqtt.refresh.page": "Refresh page",
+
+  "group.management.group.details": "Group Details",
+  "group.management.add.group": "Add Group",
+  "group.management.create.group": "Create Group",
+  "group.management.edit.group": "Edit Group",
+  "group.management.group.type": "Group Type",
+  "group.management.list.of.users": "Start typing to see the list of users…",
 
   "change.owner": "Change Owner",
   "change.owner.update": "Update Owner"

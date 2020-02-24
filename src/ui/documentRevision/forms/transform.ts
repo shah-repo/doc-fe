@@ -87,6 +87,9 @@ export const toDocumentRevisionEditRequestBody = (
     revisionChangeType: values.revisionChangeType,
     retrain: values.retrain,
   } as DocumentRevisionEditRequestBody;
+  if (!values.document?.documentType?.isQms) {
+    data.description = data.description || data.name;
+  }
   return data;
 };
 

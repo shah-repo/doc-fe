@@ -1,8 +1,8 @@
 import * as React from "react";
-import InputField from "../../../components/forms/fields/Input";
 import { DocumentRevisionDocument } from "../../../../state/ducks/documentRevisions";
-import { DocumentProposedIdSetAction } from "../../../../state/ducks/documents";
 import { DocumentTypeByIdState } from "../../../../state/ducks/documentRevisions/documentType";
+import { DocumentProposedIdSetAction } from "../../../../state/ducks/documents";
+import InputField from "../../../components/forms/fields/Input";
 
 interface Props {
   isDisabled: boolean;
