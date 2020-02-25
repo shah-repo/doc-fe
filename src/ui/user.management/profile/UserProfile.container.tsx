@@ -8,6 +8,7 @@ import { userManagementActions } from "../../../state/ducks/userManagement";
 import { USER_SLACK_URL } from "../../../state/ducks/userManagement/constants";
 import { ApplicationState } from "../../../state/reducers";
 import useAsync from "../../hooks/useAsync";
+import useGetHasTag from "../../hooks/useGetHasTag";
 import UserProfilePresenter from "./UserProfile.presenter";
 
 interface OwnProps {
@@ -38,10 +39,7 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
   const async = useAsync();
   const dispatch = useDispatch();
 
-  const selectCanManageUsers = React.useMemo(() => authSelectors.makeGetHasTag(), []);
-  const canManageUsers = useSelector(
-    (state: ApplicationState) => selectCanManageUsers(state, GroupTag.USER_MANAGEMENT)
-  );
+  const canManageUsers = useGetHasTag(GroupTag.USER_MANAGEMENT);
   const name = useSelector(authSelectors.currentUserName);
   const avatar = useSelector(authSelectors.currentEmployeeAvatar);
   const email = useSelector(authSelectors.currentUserEmail);

@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { GroupTag } from "../../../../state/ducks/auth/types";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest";
-import { ApplicationState } from "../../../../state/reducers";
 import { AsyncState } from "../../../../state/types";
 import ApproversField from "../../../change.request/form/approvers";
 import AssessmentsField from "../../../change.request/form/assessments";
@@ -24,6 +23,7 @@ import PromptIfDirty from "../../../components/forms/PromptIfDirty";
 import ScrollToError from "../../../components/forms/ScrollToError";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import useDidMount from "../../../hooks/useDidMount";
+import useGetHasTag from "../../../hooks/useGetHasTag";
 import { ChangeRequestFormValues } from "../types.js";
 import styles from "./AssessmentForm.styles";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
@@ -57,10 +57,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const didMount = useDidMount();
 
-  const selectIsCompanyAdmin = React.useMemo(() => authSelectors.makeGetHasTag(), []);
-  const isCompanyAdmin = useSelector(
-    (state: ApplicationState) => selectIsCompanyAdmin(state, GroupTag.OWNERSHIP_CHANGE)
-  );
+  const isCompanyAdmin = useGetHasTag(GroupTag.OWNERSHIP_CHANGE);
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
   const canChangeOwnerShip = useMemo(() => {
     if (!changeRequest) {

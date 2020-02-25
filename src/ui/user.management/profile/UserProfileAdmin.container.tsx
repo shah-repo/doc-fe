@@ -9,6 +9,7 @@ import { USER_SLACK_URL } from "../../../state/ducks/userManagement/constants";
 import { ApplicationState } from "../../../state/reducers";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import useAsync from "../../hooks/useAsync";
+import useGetHasTag from "../../hooks/useGetHasTag";
 import UserProfilePresenter from "./UserProfile.presenter";
 
 interface OwnProps {
@@ -39,10 +40,7 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
   isSlackIntegrationEnabled,
   slackTeamId,
 }) => {
-  const selectCanManageUsers = React.useMemo(() => authSelectors.makeGetHasTag(), []);
-  const canManageUsers = useSelector(
-    (state: ApplicationState) => selectCanManageUsers(state, GroupTag.USER_MANAGEMENT)
-  );
+  const canManageUsers = useGetHasTag(GroupTag.USER_MANAGEMENT);
   const userSlackId = useSelector(authSelectors.currentSlackUserId);
 
   const [realUser, setRealUser] = useState<any>({ user: {}, groups: [] });

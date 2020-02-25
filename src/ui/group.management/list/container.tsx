@@ -6,9 +6,9 @@ import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import { LoadCompanyGroup } from "../../../state/ducks/userManagement";
-import { ApplicationState } from "../../../state/reducers";
 import { HOME_URL } from "../../constants/urls";
 import useDialog from "../../hooks/useDialog";
+import useGetHasTag from "../../hooks/useGetHasTag";
 import { getHasOfficialPermissions, getHasUnofficialPermissions } from "../utils/helpers";
 import { DEFAULT_SELECTED_GROUP } from "../utils/types";
 import ListPresenter from "./presenter";
@@ -25,10 +25,7 @@ export const ListContainer: React.FunctionComponent<Props> = () => {
   const TABLE_NAME = "groupManagement";
   const tableData = useSelector(getTableData(TABLE_NAME));
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
-  const selectCanManageGroups = React.useMemo(() => authSelectors.makeGetHasTag(), []);
-  const canManageGroups = useSelector(
-    (state: ApplicationState) => selectCanManageGroups(state, GroupTag.GROUP_MANAGEMENT)
-  );
+  const canManageGroups = useGetHasTag(GroupTag.GROUP_MANAGEMENT);
 
   const clearFilter = () =>
     dispatch(tableSearchActions.clearSearchCriteria(TABLE_NAME));

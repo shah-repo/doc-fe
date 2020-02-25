@@ -4,15 +4,12 @@ import { authActions, authSelectors } from "../../state/ducks/auth";
 import { GroupTag } from "../../state/ducks/auth/types";
 import { documentTypeActions } from "../../state/ducks/documentRevisions/documentType";
 import { userManagementActions } from "../../state/ducks/userManagement";
-import { ApplicationState } from "../../state/reducers";
+import useGetHasTag from "../hooks/useGetHasTag";
 
 const DataFetcherContainer: React.FunctionComponent = () => {
   const dispatch = useDispatch();
   const employeeId = useSelector(authSelectors.currentEmployeeId);
-  const selectCanManageUsers = React.useMemo(() => authSelectors.makeGetHasTag(), []);
-  const canManageUsers = useSelector(
-    (state: ApplicationState) => selectCanManageUsers(state, GroupTag.USER_MANAGEMENT)
-  );
+  const canManageUsers = useGetHasTag(GroupTag.USER_MANAGEMENT);
 
   useEffect(() => {
     dispatch(documentTypeActions.loadList());
