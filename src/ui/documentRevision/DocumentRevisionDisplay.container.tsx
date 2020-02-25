@@ -43,7 +43,7 @@ const mapStateToProps = (
 ): StateProps => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
   loadDocumentRevisionAsyncState: documentRevisionsSelectors.getLoadAsyncState(state),
-  isCompanyAdmin: selectCanChangeOwnership(state, GroupTag.OWNERSHIP_CHANGE),
+  isCompanyAdmin: selectCanChangeOwnership(state, GroupTag.USER_MANAGEMENT),
   currentEmployeeId: authSelectors.currentEmployeeId(state),
   documentRevision: documentRevisionsSelectors.getDocumentRevision(
     state,

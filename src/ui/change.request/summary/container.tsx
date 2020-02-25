@@ -43,7 +43,7 @@ export type Props =
 const selectCanChangeOwnership = authSelectors.makeGetHasTag();
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   currentEmployeeId: authSelectors.currentEmployeeId(state),
-  isCompanyAdmin: selectCanChangeOwnership(state, GroupTag.OWNERSHIP_CHANGE),
+  isCompanyAdmin: selectCanChangeOwnership(state, GroupTag.USER_MANAGEMENT),
 });
 
 export const Container: React.FunctionComponent<Props> = ({

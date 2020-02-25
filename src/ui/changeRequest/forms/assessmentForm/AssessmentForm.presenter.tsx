@@ -57,7 +57,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const didMount = useDidMount();
 
-  const isCompanyAdmin = useGetHasTag(GroupTag.OWNERSHIP_CHANGE);
+  const isCompanyAdmin = useGetHasTag(GroupTag.USER_MANAGEMENT);
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
   const canChangeOwnerShip = useMemo(() => {
     if (!changeRequest) {
