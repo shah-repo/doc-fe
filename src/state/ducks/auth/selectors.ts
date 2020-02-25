@@ -42,25 +42,7 @@ const getLoadPermissionsAsyncState = (state: ApplicationState): AsyncState =>
 const makeGetHasTag = () => createSelector(
   (state: ApplicationState) => state.auth.groups.tags,
   (state: ApplicationState, selectedTag: GroupTag) => selectedTag,
-  (tags, selectedTag) => {
-    console.log(tags);
-    console.log(selectedTag);
-    console.log(tags.includes(selectedTag));
-    console.log("----");
-    return tags.includes(selectedTag);
-  },
-);
-
-const getHasTag = createSelector(
-  (state: ApplicationState) => state.auth.groups.tags,
-  (state: ApplicationState, selectedTag: GroupTag) => selectedTag,
-  (tags, selectedTag) => {
-    console.log(tags);
-    console.log(selectedTag);
-    console.log(tags.includes(selectedTag));
-    console.log("----");
-    return tags.includes(selectedTag);
-  },
+  (tags, selectedTag) => tags.includes(selectedTag),
 );
 
 const getHasSlack = createSelector(
@@ -98,7 +80,6 @@ export default {
   getLoadPermissionsAsyncState,
   employees,
   hasMultipleCompanies,
-  getHasTag,
   currentEmployeeAvatar,
   getHasSlack,
   getCurrentUserGroups,
