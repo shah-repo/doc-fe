@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { connect, useSelector } from "react-redux";
-import { getHasTag } from "../../../common/utils/selectors";
 import Config from "../../../config";
 import { authActions, authSelectors } from "../../../state/ducks/auth";
 import { EmployeeEditRequestBody, GroupTag } from "../../../state/ducks/auth/types";
@@ -13,149 +12,152 @@ import useAsync from "../../hooks/useAsync";
 import UserProfilePresenter from "./UserProfile.presenter";
 
 interface OwnProps {
-    closeUserProfile: () => void;
-    showUserProfile: boolean;
-    selectedEmployee: GetEmployeeResponse;
+  closeUserProfile: () => void;
+  showUserProfile: boolean;
+  selectedEmployee: GetEmployeeResponse;
 }
 
 interface DispatchProps {
-    editSelectedEmployee: typeof authActions.editSelectedEmployee;
-    getSlackUrl: typeof userManagementActions.getSlackUrl;
+  editSelectedEmployee: typeof authActions.editSelectedEmployee;
+  getSlackUrl: typeof userManagementActions.getSlackUrl;
 }
 
 interface StateProps {
-    isSlackIntegrationEnabled: boolean;
-    slackTeamId: string;
-    employees: Employee[];
+  isSlackIntegrationEnabled: boolean;
+  slackTeamId: string;
+  employees: Employee[];
 }
 
 export type Props = OwnProps & DispatchProps & StateProps;
 
 export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
-    showUserProfile,
-    closeUserProfile,
-    selectedEmployee,
-    editSelectedEmployee,
-    getSlackUrl,
-    isSlackIntegrationEnabled,
-    slackTeamId,
+  showUserProfile,
+  closeUserProfile,
+  selectedEmployee,
+  editSelectedEmployee,
+  getSlackUrl,
+  isSlackIntegrationEnabled,
+  slackTeamId,
 }) => {
-    const canManageUsers = useSelector(getHasTag(GroupTag.USER_MANAGEMENT));
-    const userSlackId =  useSelector(authSelectors.currentSlackUserId);
+  const selectCanManageUsers = React.useMemo(() => authSelectors.makeGetHasTag(), []);
+  const canManageUsers = useSelector(
+    (state: ApplicationState) => selectCanManageUsers(state, GroupTag.USER_MANAGEMENT)
+  );
+  const userSlackId = useSelector(authSelectors.currentSlackUserId);
 
-    const [realUser, setRealUser] = useState<any>({ user: {}, groups: []});
-    const [showEditUser, setEditUser] = useState(false);
-    const [previewAvatar, setPreviewAvatar] = useState("");
+  const [realUser, setRealUser] = useState<any>({ user: {}, groups: [] });
+  const [showEditUser, setEditUser] = useState(false);
+  const [previewAvatar, setPreviewAvatar] = useState("");
 
-    const showEdit = () => setEditUser(true);
-    const closeEdit = () => setEditUser(false);
+  const showEdit = () => setEditUser(true);
+  const closeEdit = () => setEditUser(false);
 
-    useEffect(() => {
-        setRealUser(selectedEmployee);
-    }, [selectedEmployee, setRealUser]);
+  useEffect(() => {
+    setRealUser(selectedEmployee);
+  }, [selectedEmployee, setRealUser]);
 
-    const { groups, id, active } = realUser;
-    const { name, avatar, email } = realUser.user;
+  const { groups, id, active } = realUser;
+  const { name, avatar, email } = realUser.user;
 
-    const employeeGroups: OptionType[] = groups.map((group: any) => ({
-        value: group.id,
-        label: group.name,
-    }));
+  const employeeGroups: OptionType[] = groups.map((group: any) => ({
+    value: group.id,
+    label: group.name,
+  }));
 
-    const async = useAsync({
-        onSuccess: (data: any) => {
-            setRealUser({
-                ...realUser,
-                user: {
-                    ...realUser.user,
-                    avatar: data!.avatar,
-                    name: data!.name,
-                },
-            });
+  const async = useAsync({
+    onSuccess: (data: any) => {
+      setRealUser({
+        ...realUser,
+        user: {
+          ...realUser.user,
+          avatar: data.avatar,
+          name: data.name,
         },
+      });
+    },
+  });
+
+  const callbackUpdateGroups = (employee: GetEmployeeResponse) => {
+    setRealUser({
+      ...realUser,
+      groups: employee.groups,
     });
+  };
 
-    const callbackUpdateGroups = (employee: GetEmployeeResponse) => {
-        setRealUser({
-            ...realUser,
-            groups: employee.groups,
-        });
-    };
-
-    const callbackUpdateActiveStatus = (employee: GetEmployeeResponse) => {
-        setRealUser({
-            ...realUser,
-            active: employee.active,
-        });
-    };
-
-    const callbackUpdateWithUpload = (avatar: string, name: string) => {
-        setRealUser({
-            ...realUser,
-            user: {
-                ...realUser.user,
-                avatar,
-                name,
-            },
-        });
-    };
-
-    const submitChanges = (values: EmployeeEditRequestBody) => {
-        async.start(
-            editSelectedEmployee,
-            realUser.user.id,
-            values,
-          async,
-        );
-      };
-
-    const asyncSlack = useAsync<string>({
-        onSuccess: (slackUrl) => {
-            window.open(slackUrl);
-        },
+  const callbackUpdateActiveStatus = (employee: GetEmployeeResponse) => {
+    setRealUser({
+      ...realUser,
+      active: employee.active,
     });
+  };
 
-    const onAdd = () => {
-        asyncSlack.start(getSlackUrl, Config.SlackUserUri, USER_SLACK_URL, asyncSlack);
-    };
+  const callbackUpdateWithUpload = (avatar: string, name: string) => {
+    setRealUser({
+      ...realUser,
+      user: {
+        ...realUser.user,
+        avatar,
+        name,
+      },
+    });
+  };
 
-    return (
-        <UserProfilePresenter
-            isOpen={showUserProfile}
-            close={closeUserProfile}
-            canManageUsers={canManageUsers}
-            employeeGroups={employeeGroups}
-            name={name}
-            avatar={avatar}
-            email={email}
-            employeeId={id}
-            editCurrentEmployee={submitChanges}
-            showEditUser={showEditUser}
-            showEdit={showEdit}
-            closeEdit={closeEdit}
-            callbackUpdateGroups={callbackUpdateGroups}
-            asyncState={asyncSlack.asyncState}
-            getUrl={onAdd}
-            slackIntegrationEnabled={isSlackIntegrationEnabled}
-            slackTeamId={slackTeamId}
-            slackUserId={userSlackId}
-            previewAvatar={previewAvatar}
-            setPreviewAvatar={setPreviewAvatar}
-            callbackUpdateActiveStatus={callbackUpdateActiveStatus}
-            activeStatus={active}
-            userId={realUser.user.id}
-            callbackUpdateWithUpload={callbackUpdateWithUpload}
-        />
+  const submitChanges = (values: EmployeeEditRequestBody) => {
+    async.start(
+      editSelectedEmployee,
+      realUser.user.id,
+      values,
+      async,
     );
+  };
+
+  const asyncSlack = useAsync<string>({
+    onSuccess: (slackUrl) => {
+      window.open(slackUrl);
+    },
+  });
+
+  const onAdd = () => {
+    asyncSlack.start(getSlackUrl, Config.SlackUserUri, USER_SLACK_URL, asyncSlack);
+  };
+
+  return (
+    <UserProfilePresenter
+      isOpen={showUserProfile}
+      close={closeUserProfile}
+      canManageUsers={canManageUsers}
+      employeeGroups={employeeGroups}
+      name={name}
+      avatar={avatar}
+      email={email}
+      employeeId={id}
+      editCurrentEmployee={submitChanges}
+      showEditUser={showEditUser}
+      showEdit={showEdit}
+      closeEdit={closeEdit}
+      callbackUpdateGroups={callbackUpdateGroups}
+      asyncState={asyncSlack.asyncState}
+      getUrl={onAdd}
+      slackIntegrationEnabled={isSlackIntegrationEnabled}
+      slackTeamId={slackTeamId}
+      slackUserId={userSlackId}
+      previewAvatar={previewAvatar}
+      setPreviewAvatar={setPreviewAvatar}
+      callbackUpdateActiveStatus={callbackUpdateActiveStatus}
+      activeStatus={active}
+      userId={realUser.user.id}
+      callbackUpdateWithUpload={callbackUpdateWithUpload}
+    />
+  );
 };
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
-    isSlackIntegrationEnabled: companySelectors.isSlackIntegrationEnabled(state),
-    slackTeamId: companySelectors.slackTeamId(state),
-    employees: authSelectors.employees(state),
-  });
+  isSlackIntegrationEnabled: companySelectors.isSlackIntegrationEnabled(state),
+  slackTeamId: companySelectors.slackTeamId(state),
+  employees: authSelectors.employees(state),
+});
 
 export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
-    editSelectedEmployee: authActions.editSelectedEmployee,
-    getSlackUrl: userManagementActions.getSlackUrl,
-  })(UserProfileAdminContainer);
+  editSelectedEmployee: authActions.editSelectedEmployee,
+  getSlackUrl: userManagementActions.getSlackUrl,
+})(UserProfileAdminContainer);

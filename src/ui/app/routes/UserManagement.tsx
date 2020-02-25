@@ -1,7 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { getHasTag } from "../../../common/utils/selectors";
+import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
+import { ApplicationState } from "../../../state/reducers";
 import { USER_MANAGEMENT_ROOT_URL } from "../../constants/urls";
 import NavigationLinkContainer from "../NavigationLink.container";
 
@@ -11,7 +12,10 @@ interface Props {
 const UserManagementLink: React.FunctionComponent<Props> = ({
   pathname,
 }) => {
-  const canManageUsers = useSelector(getHasTag(GroupTag.USER_MANAGEMENT));
+  const selectCanManageUsers = React.useMemo(() => authSelectors.makeGetHasTag(), []);
+  const canManageUsers = useSelector(
+    (state: ApplicationState) => selectCanManageUsers(state, GroupTag.USER_MANAGEMENT)
+  );
 
   if (!canManageUsers) {
     return null;
