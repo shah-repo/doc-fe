@@ -1,11 +1,4 @@
-import {
-  Box,
-  Grid,
-  ListItem,
-  Typography,
-  WithStyles,
-  withStyles,
-} from "@material-ui/core";
+import { Box, Grid, ListItem, Typography, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import { Link } from "react-router-dom";
 import { DataProps } from "../../../state/ducks/common";
@@ -32,7 +25,7 @@ export const ReferencePresenter: React.FunctionComponent<Props> = ({
             <Grid item={true} xs={12}>
               <Typography variant="body1">
                 <Text message={`${index + 1}`} />.{" "}
-                <Link to={reference.url} target="_blank">
+                <Link to={reference.url} target="_blank" id="ReferencePresenter-link">
                   {reference.title}
                 </Link>
               </Typography>
@@ -44,7 +37,7 @@ export const ReferencePresenter: React.FunctionComponent<Props> = ({
 
   return (
     <Box className={classes.box}>
-      <ListItem>
+      <ListItem id="ReferencePresenter-label">
         <Typography variant="h6">
           <Text message={label} />
         </Typography>

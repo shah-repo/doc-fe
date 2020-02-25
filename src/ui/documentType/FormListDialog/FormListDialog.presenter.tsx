@@ -1,12 +1,4 @@
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-} from "@material-ui/core";
+import { Button, Dialog, DialogContent, DialogTitle, FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
 import { isEmpty } from "lodash";
 import React from "react";
 import { DocumentTypeByIdForm } from "../../../state/ducks/documentRevisions/documentType/types";
@@ -46,6 +38,7 @@ export const FormListDialog: React.FunctionComponent<FormListDialogProps> = ({
           name="select-form"
           onChange={(e) => handleSelection(e)}
           value={selectedFormId}
+          id="FormListDialog-selectForm"
         >
           {formIds.map((form) => (
             <FormControlLabel
@@ -63,6 +56,7 @@ export const FormListDialog: React.FunctionComponent<FormListDialogProps> = ({
           className={classes.submitButton}
           onClick={redirectToForm}
           disabled={isEmpty(selectedFormId)}
+          id="FormListDialog-submitButton"
         >
           <Text translation="common.open" />
         </Button>
@@ -71,6 +65,7 @@ export const FormListDialog: React.FunctionComponent<FormListDialogProps> = ({
           color="secondary"
           className={classes.cancelButton}
           onClick={dialog.close}
+          id="FormListDialog-cancelButton"
         >
           <Text translation="transition.action.cancel" />
         </Button>

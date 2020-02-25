@@ -15,16 +15,19 @@ export const RevisionTypeChange: React.FunctionComponent = () => (
       <RadioButton
         label={<Text translation="documentRevision.form.nextRevision" />}
         value={RevisionChangeType.NextRevision}
+        id="RevisionTypeChange-nextRevision"
       />
       <RadioButton
         label={
           <Text translation="documentRevision.form.nextRevisionStage" />
         }
         value={RevisionChangeType.NextRevisionStage}
+        id="RevisionTypeChange-nextRevisionStage"
       />
       <RadioButton
         label={<Text translation="documentRevision.form.obsolete" />}
         value={RevisionChangeType.Obsolete}
+        id="RevisionTypeChange-obsolete"
       />
     </RadioGroup>
   </Box>

@@ -13,7 +13,7 @@ export const AttachmentFieldPresenter: React.FunctionComponent<
   const classes = styles({ isField });
 
   return (
-    <Box mt={0.2} className={classes.root}>
+    <Box mt={0.2} className={classes.root} id="AttachmentFieldPresenter-field">
       <input
         accept="*"
         className={classes.input}
@@ -25,7 +25,7 @@ export const AttachmentFieldPresenter: React.FunctionComponent<
         disabled={disabled}
       />
       <label htmlFor={`${name}-button-file`}>
-        <Link component="span" variant="button" className={classes.link}>
+        <Link component="span" variant="button" className={classes.link} id="AttachmentFieldPresenter-linkButton" >
           <AttachFile className={classes.icon} />
           <Text translation={text} />
         </Link>

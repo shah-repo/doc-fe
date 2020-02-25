@@ -341,6 +341,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               asyncState={asyncState}
               label={isDisabled ? "common.save" : "navigation.createDocument"}
               onClick={onFormClick}
+              id="DocumentRevisionForm-submit"
             />
             <ApproveAndRelease
               id={values.id}

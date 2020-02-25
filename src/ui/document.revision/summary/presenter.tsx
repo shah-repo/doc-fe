@@ -3,10 +3,7 @@ import { Formik } from "formik";
 import React from "react";
 import { useSelector } from "react-redux";
 import { DataProps } from "../../../state/ducks/common";
-import {
-  DocumentRevision,
-  DocumentRevisionStatus,
-} from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
@@ -112,17 +109,17 @@ export const Presenter: React.FunctionComponent<Props> = ({
       </Grid>
 
       {FBStore.active && (
-        <Box px={5}>
+        <Box px={5} id="Presenter-FBWorkspace">
           <FBWorkspace />
         </Box>
       )}
       <Box flexDirection={document.canAccess ? "row-reverse" : "row"} display="flex" px={3}>
         {canChangeOwnerShip && (
-            <OwnerChanger
-              requestId={id}
-              requestType={RequestType.Document}
-            />
-          )}
+          <OwnerChanger
+            requestId={id}
+            requestType={RequestType.Document}
+          />
+        )}
         <ControlsContainer
           documentRevision={dataProp}
           canShowCreateVersionButton={canShowCreateVersionButton}

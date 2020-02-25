@@ -3,10 +3,7 @@ import React, { useState } from "react";
 import { connect, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
-import {
-  DocumentRevision,
-  documentRevisionsSelectors,
-} from "../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import Text from "../components/Text";
@@ -57,7 +54,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const renderCloneButton = () => {
     if (hasAccess && canCreate()) {
       return (
-        <Button color="primary" onClick={cloneDocument}>
+        <Button color="primary" onClick={cloneDocument} id="PreviewControlsContainer-revise" >
           <Text translation="documentRevision.revise" />
         </Button>
       );
@@ -67,7 +64,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const renderOutputButton = () => {
     if (hasAccess && canCreateOutput(documentRevision)) {
       return (
-        <Button color="primary" onClick={cloneOutputDocument}>
+        <Button color="primary" onClick={cloneOutputDocument} id="PreviewControlsContainer-createNew">
           <Text translation="common.create.new" />
         </Button>
       );
@@ -92,20 +89,20 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
     if (!hasAccess) {
       return (
         <div>
-          <div style={{display: "flex"}}>
-            <WarningIcon style={{marginRight: 10}}/>
+          <div style={{ display: "flex" }} id="PreviewControlsContainer-warning">
+            <WarningIcon style={{ marginRight: 10 }} />
             <Typography variant="h6">
               <Text translation="document.security.warning" />
             </Typography>
           </div>
           {!isEmailSent &&
             <div className={classes.requestEmail}>
-              <Button color="primary" onClick={onSubmit}>
+              <Button color="primary" onClick={onSubmit} id="PreviewControlsContainer-access" >
                 <Text translation="document.request.access" />
               </Button>
             </div>}
           {isEmailSent &&
-            <div className={classes.emailMessage}>
+            <div className={classes.emailMessage} id="PreviewControlsContainer-emailSent">
               <Typography variant="h6">
                 <Text translation="document.email.sent" />
               </Typography>
@@ -117,7 +114,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   };
 
   return (
-    <Box component="span" style={{paddingTop: 30, width: "100%"}}>
+    <Box component="span" style={{ paddingTop: 30, width: "100%" }}>
       {renderCloneButton()}
       {renderOutputButton()}
       {renderNoAccessWarning()}

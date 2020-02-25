@@ -30,6 +30,7 @@ export const References: React.FunctionComponent<Props> = ({
                     reference.id,
                     reference.document.id,
                   )}
+                  id="References-linkButton"
                   target="_blank"
                 >
                   {reference.name}
