@@ -14,14 +14,15 @@ const FBTextField: React.FunctionComponent<FBInputProps & Partial<RenderInputPar
   inputProps,
   ...props
 }) => (
-  <FBInput {...props} type="textfield">
-    <TextField
-      multiline={Boolean(rows && (rows as number) > 1)}
-      variant="outlined"
-      label=""
-      {...{rows, placeholder, error, id, InputLabelProps, InputProps, inputProps}}
-    />
-  </FBInput>
-);
+    <FBInput {...props} type="textfield">
+      <TextField
+        multiline={Boolean(rows && (rows as number) > 1)}
+        variant="outlined"
+        label=""
+        id="FBTextField-input"
+        {...{ rows, placeholder, error, id, InputLabelProps, InputProps, inputProps }}
+      />
+    </FBInput>
+  );
 
 export default FBTextField;

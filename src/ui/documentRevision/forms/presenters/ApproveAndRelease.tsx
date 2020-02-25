@@ -103,13 +103,15 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
         open={dialog.isOpen}
         onSubmit={preventPropagation}
         classes={{ paper: classes.dialogContent }}
+        id="ApproveAndRelease-dialog"
       >
         <DialogTitle>
           {isQms && <Text translation="transition.action.title" />}
-          {!isQms && <Text translation="common.warning.message"  values={{ name: documentName }}/>}
+          {!isQms && <Text translation="common.warning.message" values={{ name: documentName }} />}
         </DialogTitle>
         <DialogContent
           classes={{ root: classes.dialogContent }}
+          id="ApproveAndRelease-content"
         >
           <Formik
             initialValues={{ password: "" }}

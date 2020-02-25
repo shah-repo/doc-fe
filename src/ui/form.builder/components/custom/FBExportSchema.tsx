@@ -11,24 +11,26 @@ const FBExportSchema: React.FunctionComponent<FBExportSchemaProps> = ({
   setSchemaName,
   ...props
 }) => (
-  <Box>
-    <FBButton
-      color="default"
-      onClick={props.setDialogOpen}
-      startIcon={<VerticalAlignTopIcon />}
-      label="form.builder.export.template"
-    />
-    <FBDialog {...props} title="form.builder.export.template">
-      <FBTextField
-        afterChange={(setSchemaName)}
-        name="export_field"
-        label="form.builder.template.name"
+    <Box>
+      <FBButton
+        color="default"
+        onClick={props.setDialogOpen}
+        startIcon={<VerticalAlignTopIcon />}
+        label="form.builder.export.template"
+        id="FBExportSchema-export"
       />
-      <Box display="flex" justifyContent="flex-end">
-        <FBButton onClick={exportSchema} label="common.export" />
-      </Box>
-    </FBDialog>
-  </Box>
-);
+      <FBDialog {...props} title="form.builder.export.template">
+        <FBTextField
+          afterChange={(setSchemaName)}
+          name="export_field"
+          label="form.builder.template.name"
+          id="FBExportSchema-name"
+        />
+        <Box display="flex" justifyContent="flex-end">
+          <FBButton onClick={exportSchema} label="common.export" id="FBExportSchema-exportSchema" />
+        </Box>
+      </FBDialog>
+    </Box>
+  );
 
 export default FBExportSchema;
