@@ -36,13 +36,14 @@ export type DocumentRevisionDisplayContainerProps =
   DispatchProps &
   StateProps;
 
+const selectCanChangeOwnership = authSelectors.makeGetHasTag();
 const mapStateToProps = (
   state: ApplicationState,
   props: OwnProps,
 ): StateProps => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
   loadDocumentRevisionAsyncState: documentRevisionsSelectors.getLoadAsyncState(state),
-  isCompanyAdmin: authSelectors.getHasTag(state, GroupTag.OWNERSHIP_CHANGE),
+  isCompanyAdmin: selectCanChangeOwnership(state, GroupTag.OWNERSHIP_CHANGE),
   currentEmployeeId: authSelectors.currentEmployeeId(state),
   documentRevision: documentRevisionsSelectors.getDocumentRevision(
     state,
