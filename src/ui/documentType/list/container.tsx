@@ -22,7 +22,6 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
 }) => {
   const dialog = useDialog();
   const { acronym } = match.params;
-  const [enableRedirect, toggleEnableRedirect] = React.useState(false);
   const [noForm, toggleNoForm] = React.useState(false);
   const [multipleForm, toggleMultipleForm] = React.useState(false);
   const [selectedFormId, saveSelectedFormId] = React.useState("");
@@ -38,7 +37,6 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
   const docId = useSelector(documentTypeSelectors.docId);
   const formIds = useSelector(documentTypeSelectors.formIds);
-  const documentUrl = `/document_revision/${docId}/output_document/${selectedFormId}`;
 
   useEffect(() => {
     if (isEmpty(tableCriteria.queryDict)) {
@@ -60,8 +58,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const async = useAsync<DocumentTypeById>({
     onSuccess: () => {
       if (formIds.length === 1) {
-        saveSelectedFormId(docRevId);
-        toggleEnableRedirect(true);
+        history.push(`/document_revision/${docId}/output_document/${docRevId}`);
         return;
       } else if (isEmpty(formIds)) {
         toggleNoForm(true);
@@ -91,13 +88,11 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   };
 
   const redirectToForm = () => {
-    toggleEnableRedirect(true);
+    history.push(`/document_revision/${docId}/output_document/${selectedFormId}`);
   };
 
   return (
     <div style={{ height: "100%" }}>
-      {enableRedirect && history.push(documentUrl) &&
-        <Redirect to={{ pathname: documentUrl }} />}
       {multipleForm && <FormListDialog
         dialog={dialog}
         preventPropagation={preventPropagation}
