@@ -1,6 +1,6 @@
 import { Nullable } from "../common";
 import { Employee } from "../company";
-import { AUTH_USER, CONFIRM_FORGOT_PASSWORD_URL, CONFIRM_SET_NEW_PASSWORD_URL, FORGOT_PASSWORD_URL, LOGOUT_USER, SET_EMPLOYEE, SIGNUP_URL, USERS_ME_URL, USER_GROUPS } from "./constants";
+import { AUTH_USER, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, CONFIRM_SET_NEW_PASSWORD_URL, FORGOT_PASSWORD_URL, LOGOUT_USER, SET_EMPLOYEE, SIGNUP_URL, USERS_ME_URL, USER_GROUPS } from "./constants";
 
 export interface LoginRequestBody {
   email: string;
@@ -130,6 +130,10 @@ export interface SelectEmployeeAction {
 export interface EmployeeEditRequestBody {
   name: string;
   avatar: string | null;
+}
+
+export interface ClearNonAuthDataAction {
+  type: typeof CLEAR_NON_AUTH_DATA;
 }
 
 export enum Permission {
