@@ -126,3 +126,7 @@ export const getDocRevIdToRedirect = (
 
   return sortedList[0].id;
 };
+
+export const canChangeDocumentOwner = (status: DocumentRevisionStatus, currentEmployeeId: string, ownerId: string, isCompanyAdmin: boolean) =>
+    (status === DocumentRevisionStatus.Draft || status === DocumentRevisionStatus.PendingChange) &&
+    (isCompanyAdmin || ownerId === currentEmployeeId);

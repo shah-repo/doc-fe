@@ -88,3 +88,7 @@ export interface DocumentTransitionRequestBody {
 export interface DocumentTransitionResponse {
   id: string;
 }
+
+export interface AccessRequestBody {
+  employee: DocumentTransitionResponse;
+}

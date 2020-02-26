@@ -1,23 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { IotService } from "../../../common/utils/iot/mqttClient";
-import { attachmentsActions, WatermarkRequest, WatermarkRequestStatus, WatermarkState } from "../../../state/ducks/attachments";
+import { attachmentsActions, WatermarkRequest, WatermarkRequestStatus } from "../../../state/ducks/attachments";
 import { authSelectors } from "../../../state/ducks/auth";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
+import useMqttSubscription from "../../hooks/useMqttSubscription";
 import { Translation } from "../../translations/types";
 import { WatermarkResponse } from "./types";
 
 interface Props {
   addRequestResult: (data: WatermarkResponse) => void;
   removeWatermark: (id: string) => void;
-  watermarkIds: WatermarkState;
+  watermarkId: string;
 }
 
-// TODO: refactor component to so that a single component handles one request
 export const WatermarkFooterRequest: React.FunctionComponent<Props> = ({
-  watermarkIds,
+  watermarkId,
   addRequestResult,
   removeWatermark,
 }) => {
@@ -62,27 +62,19 @@ export const WatermarkFooterRequest: React.FunctionComponent<Props> = ({
     },
   });
   const checkWatermarkRequest = (msg: string) => {
-    // NOTE: I couldn't the function to take the correct scope.
-    // It was always using the ID of the file that's been requested first
-    // We'll have to check if BE can send the correct values in the message
-    const id = (msg.split("Attachment watermark ")[1].split(" ")[0]);
-    async.start(asyncAction, id, async);
+    async.start(asyncAction, watermarkId, async);
   };
   const employeeId = useSelector(authSelectors.currentEmployeeId);
 
   const iotService = IotService.getInstance();
-  useEffect(() => {
-    watermarkIds.forEach((watermarkId) => {
-      iotService.subscribeToTopic(`${employeeId}/attachment_watermark/${watermarkId}/update`, checkWatermarkRequest);
-    });
-  }, [iotService.subscribedTopics()]);
-  useEffect(() => {
-    return () => {
-      watermarkIds.forEach((watermarkId) => {
-        iotService.unsubscribeFromTopic(`${employeeId}/attachment_watermark/${watermarkId}/update`);
-      });
-    };
-  }, []);
+  const subscribe = () => {
+    iotService.subscribeToTopic(`${employeeId}/attachment_watermark/${watermarkId}/update`, checkWatermarkRequest);
+  };
+  const unsubscribe = () => {
+    iotService.unsubscribeFromTopic(`${employeeId}/attachment_watermark/${watermarkId}/update`);
+  };
+
+  useMqttSubscription(subscribe, unsubscribe);
 
   return null;
 };

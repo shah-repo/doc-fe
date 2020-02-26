@@ -1,16 +1,6 @@
 import { Nullable } from "../common";
 import { Employee } from "../company";
-import {
-  AUTH_USER,
-  CONFIRM_FORGOT_PASSWORD_URL,
-  CONFIRM_SET_NEW_PASSWORD_URL,
-  FORGOT_PASSWORD_URL,
-  LOGOUT_USER,
-  SET_EMPLOYEE,
-  SIGNUP_URL,
-  USER_GROUPS,
-  USERS_ME_URL,
-} from "./constants";
+import { AUTH_USER, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, CONFIRM_SET_NEW_PASSWORD_URL, FORGOT_PASSWORD_URL, LOGOUT_USER, SET_EMPLOYEE, SIGNUP_URL, USERS_ME_URL, USER_GROUPS } from "./constants";
 
 export interface LoginRequestBody {
   email: string;
@@ -142,6 +132,10 @@ export interface EmployeeEditRequestBody {
   avatar: string | null;
 }
 
+export interface ClearNonAuthDataAction {
+  type: typeof CLEAR_NON_AUTH_DATA;
+}
+
 export enum Permission {
   // Company
   COMPANY_BOOTSTRAP = "COMPANY_BOOTSTRAP",
@@ -165,10 +159,14 @@ export enum Permission {
   EMPLOYEE_ADMIN_GET = "EMPLOYEE_ADMIN_GET",
   FORM_BUILDER_CUSTOM_VALIDATORS_ENABLED = "FORM_BUILDER_CUSTOM_VALIDATORS_ENABLED",
   // Group
-  GROUP_CREATE = "GROUP_CREATE",
-  GROUP_DELETE = "GROUP_DELETE",
   GROUP_GET = "GROUP_GET",
+  GROUP_DELETE = "GROUP_DELETE",
+  // Group Official
+  GROUP_CREATE = "GROUP_CREATE",
   GROUP_UPDATE = "GROUP_UPDATE",
+  // Group unofficial
+  GROUP_CREATE_UNOFFICIAL = "GROUP_CREATE_UNOFFICIAL",
+  GROUP_UPDATE_UNOFFICIAL = "GROUP_UPDATE_UNOFFICIAL",
   // Users
   USERS_CREATE = "USERS_CREATE",
   USERS_GET = "USERS_GET",
@@ -186,6 +184,7 @@ export enum Permission {
 
 export enum GroupTag {
   USER_MANAGEMENT = "USER_MANAGEMENT",
-  OWNERSHIP_CHANGE = "OWNERSHIP_CHANGE ",
+  OWNERSHIP_CHANGE = "OWNERSHIP_CHANGE",
   QMS_DEFAULT = "QMS_DEFAULT",
+  GROUP_MANAGEMENT = "GROUP_MANAGEMENT",
 }

@@ -22,6 +22,6 @@ describe("DateFormatter component unit tests", () => {
   });
 
   it("displays formatted date", () => {
-    expect(getDate({ value: "2019-05-31" })).toEqual("5/31/2019");
+    expect(getDate({ value: "2019-05-31" })).toEqual("5/30/2019");
   });
 });

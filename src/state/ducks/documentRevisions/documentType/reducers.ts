@@ -1,19 +1,8 @@
 import _ from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../../reducers/asyncReducer";
-import {
-  DOCUMENT_TYPE_BY_ID,
-  DOCUMENT_TYPE_LIST,
-  DOCUMENT_TYPE_LIST_ASYNC,
-} from "./constants";
-import {
-  DocRevByIdState,
-  DocumentType,
-  DocumentTypeAllIdsState,
-  DocumentTypeByIdAction,
-  DocumentTypeByIdState,
-  DocumentTypeListAction,
-} from "./types";
+import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST, DOCUMENT_TYPE_LIST_ASYNC } from "./constants";
+import { DocRevByIdState, DocumentType, DocumentTypeAllIdsState, DocumentTypeByIdAction, DocumentTypeByIdState, DocumentTypeListAction } from "./types";
 
 type DocumentTypeActions =  DocumentTypeListAction;
 
@@ -46,6 +35,7 @@ export const DOC_REV_BY_ID_DEFAULT_STATE: DocRevByIdState = {
   forms: [
     {
       id: "",
+      name: "",
       document: {
         id: "",
       },

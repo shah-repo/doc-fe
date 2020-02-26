@@ -6,7 +6,7 @@ import { getEmployee } from "../company/tests/factories";
 import { getGroup } from "../userManagement/tests/factories";
 import selectors from "./selectors";
 import { getUser } from "./tests/factories";
-import { GroupTag, Permission } from "./types";
+import { Permission } from "./types";
 
 describe("auth selectors tests", () => {
   let state: ApplicationState;
@@ -67,10 +67,6 @@ describe("auth selectors tests", () => {
     expect(selectors.getLoadPermissionsAsyncState(state)).toEqual(
       state.auth.loadGroupsAsyncInfo,
     );
-  });
-
-  it("getHasTag", () => {
-    expect(selectors.getHasTag(state, GroupTag.USER_MANAGEMENT)).toBe(false);
   });
 
   it("getHasSlack", () => {

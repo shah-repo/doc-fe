@@ -1,13 +1,13 @@
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import React from "react";
+import React, { useMemo } from "react";
 import { Attachment, AttachmentType } from "../../../../state/ducks/attachments";
 import Text from "../../Text";
 import { VIEWABLE_FILES, WATERMARK_FILES } from "../view.file/utils/constants";
 import { AttachmentMenuProps } from "./utils/types";
 
 interface OwnProps {
-  handleWatermarkRequest?: (attachment: Attachment) => any;
+  handleWatermarkRequest?: (attachment: Attachment, attachmentType: AttachmentType) => void;
 }
 
 type Props = AttachmentMenuProps & OwnProps;
@@ -20,9 +20,9 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
   openFileView,
   handleWatermarkRequest,
 }) => {
-  const file = attachment || {} as Attachment;
-  const isFileViewable =  VIEWABLE_FILES.includes(file.type);
-  const canWatermark = WATERMARK_FILES.includes(file.type);
+  const file = useMemo(() => (attachment || {} as Attachment), [attachment]);
+  const isFileViewable =  useMemo(() => VIEWABLE_FILES.includes(file.type), [file.type]);
+  const canWatermark = useMemo(() => WATERMARK_FILES.includes(file.type), [file.type]);
   const {
     name: fileName,
     type: fileType,
@@ -36,10 +36,32 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
     handleClose && handleClose();
     openFileView && openFileView();
   };
-  const handleWatermarkClick = () => {
+  const handleWatermarkClick = (attachmentType: AttachmentType) => () => {
     handleClose && handleClose();
-    handleWatermarkRequest && handleWatermarkRequest(file);
+    handleWatermarkRequest && handleWatermarkRequest(file, attachmentType);
   };
+
+  const renderDownloadFile =
+    <MenuItem onClick={handleClick(AttachmentType.Attached)}>
+      <Text translation="attachment.download.file" values={{ fileName, fileType }} />
+    </MenuItem>;
+  const renderDownloadCleanCopy = s3linkCleanCopy &&
+    <MenuItem onClick={handleClick(AttachmentType.CleanCopy)}>
+      <Text translation="attachment.download.clean.copy" values={{ fileName, fileType }} />
+    </MenuItem>;
+  const renderWatermarkFile = canWatermark &&
+    <MenuItem onClick={handleWatermarkClick(AttachmentType.Attached)}>
+      <Text translation="attachment.download.watermark" />
+    </MenuItem>;
+  const renderWatermarkCleanCopy = canWatermark && s3linkCleanCopy &&
+    <MenuItem onClick={handleWatermarkClick(AttachmentType.CleanCopy)}>
+      <Text translation="attachment.download.watermark.clean.copy" />
+    </MenuItem>;
+  const renderPreviewFile = isFileViewable &&
+    <MenuItem onClick={handleViewFileClick}>
+      <Text translation="common.view.file" />
+    </MenuItem>;
+
   return (
     <Menu
       id="simple-menu"
@@ -48,27 +70,11 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
       open={Boolean(anchorEl)}
       onClose={handleClose}
     >
-      <MenuItem onClick={handleClick(AttachmentType.Attached)}>
-        <Text translation="attachment.download.file" values={{ fileName, fileType }} />
-      </MenuItem>
-      {
-        s3linkCleanCopy &&
-        <MenuItem onClick={handleClick(AttachmentType.CleanCopy)}>
-          <Text translation="attachment.download.clean.copy" values={{ fileName, fileType }} />
-        </MenuItem>
-      }
-      {
-        canWatermark &&
-        <MenuItem onClick={handleWatermarkClick}>
-          <Text translation="attachment.download.watermark" />
-        </MenuItem>
-      }
-      {
-        isFileViewable &&
-        <MenuItem onClick={handleViewFileClick}>
-          <Text translation="common.view.file" />
-        </MenuItem>
-      }
+      {renderDownloadFile}
+      {renderDownloadCleanCopy}
+      {renderWatermarkFile}
+      {renderWatermarkCleanCopy}
+      {renderPreviewFile}
     </Menu>
   );
 };

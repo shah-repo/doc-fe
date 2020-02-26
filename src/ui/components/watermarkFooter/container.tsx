@@ -44,11 +44,16 @@ export const WatermarkFooterContainer: React.FunctionComponent = () => {
 
   return (
     <>
-      <WatermarkFooterRequest
-        watermarkIds={watermarkIds}
-        addRequestResult={addRequestResult}
-        removeWatermark={removeWatermark}
-      />
+      {
+        watermarkIds.map((watermarkId) => (
+          <WatermarkFooterRequest
+            key={watermarkId}
+            watermarkId={watermarkId}
+            addRequestResult={addRequestResult}
+            removeWatermark={removeWatermark}
+          />
+        ))
+      }
       {renderFooter}
     </>
   );

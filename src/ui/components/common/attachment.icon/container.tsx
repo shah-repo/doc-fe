@@ -101,7 +101,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     openFileView();
   };
 
-  const handleWatermarkRequest = (attachment: Attachment) => {
+  const handleWatermarkRequest = (attachment: Attachment, attachmentType: AttachmentType) => {
     setNewWatermarkError("");
     setNewWatermarkRequest(null);
 
@@ -109,7 +109,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
       attachment: {
         id: attachment.id,
       },
-      type: AttachmentType.Attached,
+      type: attachmentType,
     };
     requestWatermarkAsync.start(
       requestWatermarkAction,

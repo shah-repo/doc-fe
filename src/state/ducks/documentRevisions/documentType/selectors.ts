@@ -67,12 +67,11 @@ const getDocumentTypeByAcronym = createSelector(
       .values(docTypesById)
       .find((docType) => docType.documentTypeAcronym.toLowerCase() === acronym.toLowerCase()),
 );
-
-const isSingleDocRevId = (state: ApplicationState): boolean => state.documentType.docRevTypeId.forms.length === 1;
 const docRevTypeById = (state: ApplicationState) => state.documentType.docRevTypeId.forms[0] ?
   state.documentType.docRevTypeId.forms[0].id : "";
 const docId = (state: ApplicationState) => state.documentType.docRevTypeId.forms[0] ?
   state.documentType.docRevTypeId.forms[0].document.id : "";
+const formIds = (state: ApplicationState) => state.documentType.docRevTypeId.forms;
 
 const getDocTypeName = createSelector(
   byId,
@@ -89,8 +88,8 @@ export default {
   getDocumentTypeById,
   getDocumentTypesWithPageDetails,
   getDocumentTypeByAcronym,
-  isSingleDocRevId,
   docRevTypeById,
   docId,
   getDocTypeName,
+  formIds,
 };

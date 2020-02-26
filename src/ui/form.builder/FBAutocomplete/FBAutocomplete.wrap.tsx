@@ -36,6 +36,8 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
         optionPath = _.get(indicator, "path");
         optionValueKey = _.get(indicator, "optionValueKey", "");
         optionLabelKey = _.get(indicator, "optionLabelKey", "");
+        const { root } = indicator;
+        state.setRoot(root || "");
       }
     }
 

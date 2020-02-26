@@ -8,7 +8,7 @@ definitions:
   steps:
     - step: &COMMON
         image: 
-          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe_test-1.1
+          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe_test-1.2
           aws:
             access-key: $AWS_ACCESS_KEY_ID
             secret-key: $AWS_SECRET_ACCESS_KEY
@@ -18,7 +18,7 @@ definitions:
 
     - step: &COMMON_BUILD
         image: 
-          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe-1.1
+          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe-1.2
           aws:
             access-key: $AWS_ACCESS_KEY_ID
             secret-key: $AWS_SECRET_ACCESS_KEY
@@ -28,7 +28,7 @@ definitions:
 
     - step: &COMMON_DEPLOY
         image: 
-          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe-1.1
+          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe-1.2
           aws:
             access-key: $AWS_ACCESS_KEY_ID
             secret-key: $AWS_SECRET_ACCESS_KEY
@@ -42,7 +42,7 @@ definitions:
         <<: *COMMON
         name: Linter
         artifacts:
-          - tslint-results/**
+          - eslint-results/**
         script:
           - ./aws/bash_scripts/runLinter.sh
 
@@ -134,7 +134,7 @@ pipelines:
   default:
       - parallel:
           - step: *RUN_TESTS
-          - step: *RUN_LINTER
+          # - step: *RUN_LINTER
 
   tags:
     deploy-to-dev:
@@ -148,14 +148,14 @@ pipelines:
     deploy-to-demo:
       - parallel:
           - step: *RUN_TESTS
-          - step: *RUN_LINTER
+          # - step: *RUN_LINTER
           - step: *BUILD_DEMO
       - step: *DEPLOY_DEMO
 
     deploy-to-prod:
       - parallel:
           - step: *RUN_TESTS
-          - step: *RUN_LINTER
+          # - step: *RUN_LINTER
           - step: *BUILD_PROD
       - step: *DEPLOY_PROD
 
@@ -163,20 +163,20 @@ pipelines:
     master:
       - parallel:
           - step: *RUN_TESTS
-          - step: *RUN_LINTER
+          # - step: *RUN_LINTER
           - step: *BUILD_PROD
       - step: *DEPLOY_PROD
 
     develop:
       - parallel:
           - step: *RUN_TESTS
-          - step: *RUN_LINTER
+          # - step: *RUN_LINTER
           - step: *BUILD_DEV
       - step: *DEPLOY_DEV
 
-    release/20.3:
+    release/20.3.1:
       - parallel:
           - step: *RUN_TESTS
-          - step: *RUN_LINTER
+          # - step: *RUN_LINTER
           - step: *BUILD_DEMO
       - step: *DEPLOY_DEMO
