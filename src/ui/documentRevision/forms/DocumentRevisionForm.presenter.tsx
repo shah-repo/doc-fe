@@ -6,21 +6,11 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
-import {
-  changeRequestsActions,
-  changeRequestsSelectors,
-} from "../../../state/ducks/changeRequest";
-import {
-  DocumentRevision,
-  DocumentRevisionStatus,
-  RevisionStageOptions,
-} from "../../../state/ducks/documentRevisions";
+import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
+import { DocumentRevision, DocumentRevisionStatus, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
-import {
-  userManagementActions,
-  userManagementSelectors,
-} from "../../../state/ducks/userManagement";
+import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
@@ -31,9 +21,7 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types.js"
 import CheckboxField from "../../components/forms/fields/Checkbox";
 import InputField from "../../components/forms/fields/Input";
 import RichTextEditor from "../../components/forms/fields/RichTextEditor";
-import SelectField, {
-  SelectOption,
-} from "../../components/forms/fields/Select";
+import SelectField, { SelectOption } from "../../components/forms/fields/Select";
 import { required, validator } from "../../components/forms/fields/validators";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
@@ -58,7 +46,7 @@ import { DocumentRevisionFormValues } from "./types";
 
 export interface Props
   extends WithStyles<typeof styles>,
-    FormikProps<DocumentRevisionFormValues> {
+  FormikProps<DocumentRevisionFormValues> {
   asyncState: AsyncState;
   documentRevision: DocumentRevision;
   documentRevisions?: DocumentRevision[];
@@ -148,12 +136,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     if (!values.document && !type) {
       return;
     }
-    const pattern = new RegExp("^" + type + "\\d{0," + type!.length + "}", "g");
+    const pattern = new RegExp("^" + type + "\\d{0," + type.length + "}", "g");
 
     if (!pattern.test(value) || !setDocId) {
       return;
     }
-    setDocId!(value);
+    setDocId(value);
   };
   const [docInfo, savedocInfo] = useState({ name: "", isQms: true });
 
@@ -172,6 +160,13 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     const typeId = event.target.value as string;
     const type = documentTypesById[typeId] || {};
     savedocInfo({ name: event.target.name || "", isQms: type.isQms });
+    groupOptions.forEach((group) => {
+      if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
+        setFieldValue("securityGroups", [
+          { value: group.value, label: group.label },
+        ]);
+      }
+    });
     if (loadDocumentProposedId) {
       loadDocumentProposedId(type.documentTypeAcronym);
     }
