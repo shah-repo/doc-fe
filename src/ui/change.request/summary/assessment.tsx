@@ -1,16 +1,6 @@
-import {
-  Box,
-  Grid,
-  Typography,
-  WithStyles,
-  withStyles,
-} from "@material-ui/core";
+import { Box, Grid, Typography, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
-import {
-  Assessment as Model,
-  AssessmentItem,
-  AssessmentType,
-} from "../../../state/ducks/changeRequest";
+import { Assessment as Model, AssessmentItem, AssessmentType } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import AttachmentField from "../../components/common/attachment.icon/container";

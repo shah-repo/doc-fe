@@ -1,6 +1,4 @@
-import {
-  Button, Dialog, DialogContent, DialogTitle,
-} from "@material-ui/core";
+import { Button, Dialog, DialogContent, DialogTitle } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import React, { Fragment } from "react";
 import { changeRequestsActions } from "../../../state/ducks/changeRequest";
@@ -28,39 +26,39 @@ export const CloseTask: React.FunctionComponent<Props> = ({
 
   const openDialog = () => dialog.open();
 
-  const renderForm = () => {
-    return (
-      <Form>
-        <InputField
-          name="closingNote"
-          label="common.description"
-          inputProps={{ id: "closingNote", multiline: true, rows: "2" }}
-          validate={validator(required)}
-        />
-        <Button
-          type="submit"
-          variant="contained"
-          color="secondary"
-          fullWidth={true}
-        >
-          <Text translation="common.close.task" />
-        </Button>
-      </Form>
-    );
-  };
+  const renderForm = () => (
+    <Form>
+      <InputField
+        name="closingNote"
+        label="common.description"
+        inputProps={{ id: "closingNote", multiline: true, rows: "2" }}
+        validate={validator(required)}
+      />
+      <Button
+        id="submit"
+        type="submit"
+        variant="contained"
+        color="secondary"
+        fullWidth={true}
+      >
+        <Text translation="common.close.task" />
+      </Button>
+    </Form>
+  );
 
   const onSubmit = (values: any) => {
     dialog.close();
     async.start(closeTask, crId, taskId, values, async);
   };
 
-  const preventPropagation = (event: React.FormEvent) =>  event.stopPropagation();
+  const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
 
   return (
     <Fragment>
       <FormProgress asyncState={async.asyncState} />
       <FormMessage asyncState={async.asyncState} />
       <Button
+        id="done"
         variant="contained"
         color="secondary"
         fullWidth={true}

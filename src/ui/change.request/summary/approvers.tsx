@@ -1,9 +1,4 @@
-import {
-  Box,
-  Typography,
-  WithStyles,
-  withStyles,
-} from "@material-ui/core";
+import { Box, Typography, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import { Approval, DataProps } from "../../../state/ducks/common";
 import SummaryField from "../../common/summary/base";
@@ -18,13 +13,13 @@ export const Approvers: React.FunctionComponent<Props> = ({ classes, dataProp })
     const { approver, status, reviewedAt } = approval;
     const value = (
       <Box pl={2}>
-        <Typography variant="subtitle1" component="span">{approver.user.name}</Typography>
-        <Typography variant="body2" component="span">
+        <Typography id="userName" variant="subtitle1" component="span">{approver.user.name}</Typography>
+        <Typography id="status-date" variant="body2" component="span">
           {` | ${status}`}
           {reviewedAt && (
             <span>
               {"| "}
-              <DateTime value={reviewedAt}/>
+              <DateTime value={reviewedAt} />
             </span>
           )}
         </Typography>
