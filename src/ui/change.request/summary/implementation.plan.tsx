@@ -1,19 +1,8 @@
-import {
-  Box,
-  Grid,
-  Typography,
-  WithStyles,
-  withStyles,
-} from "@material-ui/core";
+import { Box, Grid, Typography, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { getFormattedStartOfDayDateString } from "../../../common/utils/date";
-import {
-  changeRequestsActions,
-  ChangeRequestStatus,
-  ImplementationPlan as Model,
-  ImplementationPlanTask,
-} from "../../../state/ducks/changeRequest";
+import { changeRequestsActions, ChangeRequestStatus, ImplementationPlan as Model, ImplementationPlanTask } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
 import SummaryField from "../../common/summary/base";
 import AttachmentIconField from "../../components/common/attachment.icon/container";
@@ -54,7 +43,7 @@ export const ImplementationPlan: React.FunctionComponent<Props> = ({
       <CloseTask crId={crId} taskId={task.id} closeTask={closeTask} />
     );
 
-    // TODO: replace react quill
+  // TODO: replace react quill
   const taskRenderer = () =>
     tasks.map((task, index) => (
       <Grid
@@ -78,7 +67,7 @@ export const ImplementationPlan: React.FunctionComponent<Props> = ({
               <Text message="common.due.date" />:{" "}
             </Typography>
             <Box>
-              <Typography variant="body2">
+              <Typography id="dueDate" variant="body2">
                 <Text message={getFormattedStartOfDayDateString(task.dueDate)} />
               </Typography>
             </Box>
@@ -88,7 +77,7 @@ export const ImplementationPlan: React.FunctionComponent<Props> = ({
               <Text message="common.assigned.to" />:{" "}
             </Typography>
             <Box>
-              <Typography variant="body2">
+              <Typography id="assignedTo" variant="body2">
                 {task.assigned && task.assigned.user.name}
               </Typography>
             </Box>
@@ -98,7 +87,7 @@ export const ImplementationPlan: React.FunctionComponent<Props> = ({
               <Text message="common.state" />:
             </Typography>
             <Box>
-              <Typography variant="body2">
+              <Typography id="status" variant="body2">
                 <Text message={task.status} />
                 {task.closeDate && (
                   <Text
