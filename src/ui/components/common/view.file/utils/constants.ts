@@ -1,5 +1,4 @@
 export const SUPPORTED_VIDEO_FILES = [
-  "avi",
   "mkv",
   "m4v",
   "mp4",
