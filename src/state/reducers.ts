@@ -3,10 +3,9 @@ import { createMigrate, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import attachments from "./ducks/attachments";
 import auth from "./ducks/auth";
-import { LOGOUT_USER } from "./ducks/auth/constants";
+import { CLEAR_NON_AUTH_DATA, LOGOUT_USER } from "./ducks/auth/constants";
 import changeRequests from "./ducks/changeRequest";
 import company from "./ducks/company";
-import { SELECT_COMPANY } from "./ducks/company/constants";
 import dashboard from "./ducks/dashboard";
 import documentRevisions from "./ducks/documentRevisions";
 import documentType from "./ducks/documentRevisions/documentType";
@@ -53,7 +52,7 @@ const appReducer = combineReducers({
 });
 
 const rootReducer = (state: any, action: any) => {
-  if (action.type === LOGOUT_USER || action.type === SELECT_COMPANY) {
+  if (action.type === LOGOUT_USER || action.type === CLEAR_NON_AUTH_DATA) {
     const { auth: authState } = state;
     const { company: companyState } = state;
     state = {
