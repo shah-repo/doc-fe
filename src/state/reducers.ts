@@ -6,6 +6,7 @@ import auth from "./ducks/auth";
 import { LOGOUT_USER } from "./ducks/auth/constants";
 import changeRequests from "./ducks/changeRequest";
 import company from "./ducks/company";
+import { SELECT_COMPANY } from "./ducks/company/constants";
 import dashboard from "./ducks/dashboard";
 import documentRevisions from "./ducks/documentRevisions";
 import documentType from "./ducks/documentRevisions/documentType";
@@ -52,7 +53,7 @@ const appReducer = combineReducers({
 });
 
 const rootReducer = (state: any, action: any) => {
-  if (action.type === LOGOUT_USER) {
+  if (action.type === LOGOUT_USER || action.type === SELECT_COMPANY) {
     const { auth: authState } = state;
     const { company: companyState } = state;
     state = {
