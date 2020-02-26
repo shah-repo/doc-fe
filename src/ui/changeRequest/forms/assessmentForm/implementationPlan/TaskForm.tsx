@@ -37,7 +37,7 @@ export const styles = makeStyles(() =>
       float: "right",
     },
   },
-));
+  ));
 
 export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
   cancel, availableAssignees,
@@ -55,6 +55,7 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
       />
       <div className="task-description">
         <TextEditorField
+          data-testid="addTask-title"
           name="description"
           size="sm"
           label="common.description"
@@ -62,21 +63,21 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
         />
       </div>
       <Grid container={true} spacing={3}>
-      <Grid item={true} xs={4}>
-        <AutocompleteField
-          name="assigned"
-          size="sm"
-          label="common.assigned.to"
-          autocompleteProps={{ id: "assigned", isClearable: true }}
-          options={availableAssignees}
-        />
+        <Grid item={true} xs={4}>
+          <AutocompleteField
+            name="assigned"
+            size="sm"
+            label="common.assigned.to"
+            autocompleteProps={{ id: "assigned", isClearable: true }}
+            options={availableAssignees}
+          />
         </Grid>
         <Grid item={true} xs={4}>
           <DatePickerField
             name="dueDate"
             label="common.due.date"
             size="sm"
-            datePickerProps={{ minDate: new Date() }}
+            datePickerProps={{ id: "dueDate", minDate: new Date() }}
             validate={validator(required)}
           />
         </Grid>
@@ -93,6 +94,7 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
         </Grid>
       </Grid>
       <Button
+        id="confirm"
         type="submit"
         color="primary"
         className={classes.submitBtn}
@@ -101,6 +103,7 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
         <Text translation="transition.action.confirm" />
       </Button>
       <Button
+        id="cancel"
         variant="outlined"
         color="primary"
         onClick={cancel}

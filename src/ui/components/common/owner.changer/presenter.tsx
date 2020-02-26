@@ -38,6 +38,7 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
         <FormMessage asyncState={asyncState} />
         <FormControl className="form-control" style={{ width: "100%" }} id="OwnerChangerPresenter-selectField">
           <SelectField
+            selectProps={{ id: "employee" }}
             name="employee"
             includeEmpty={false}
             options={employees}
