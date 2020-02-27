@@ -67,4 +67,10 @@ tar -zxvf "compiled.tar.gz"
 
 echo "s3://${DEPLOYMENT_BUCKET_NAME}"
 
-aws s3 sync "compiled/build/" "s3://${DEPLOYMENT_BUCKET_NAME}" --acl public-read
+aws s3 sync "compiled/build/" \
+	"s3://${DEPLOYMENT_BUCKET_NAME}" \
+ 	--acl public-read
+
+aws cloudfront create-invalidation \
+    --distribution-id "${CLOUDFRONT_DISTRIBUTION_ID}" \
+    --paths "/*"
