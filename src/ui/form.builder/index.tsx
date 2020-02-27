@@ -24,6 +24,8 @@ export { default as FBMediaCarouselState } from "./FBMediaCarousel/FBMediaCarous
 export * from "./FBMediaCarousel/FBMediaCarousel.types";
 export { default as FBMediaGallery } from "./FBMediaGallery/FBMediaGallery";
 export * from "./FBMediaGallery/FBMediaGallery.types";
+export { default as FBMediaQR } from "./FBMediaQR/FBMediaQR";
+export * from "./FBMediaQR/FBMediaQR.types";
 export { default as FBStepper } from "./FBStepper/FBStepper";
 export * from "./FBStepper/FBStepper.types";
 export { default as FBStepperEditor } from "./FBStepperEditor/FBStepperEditor";
