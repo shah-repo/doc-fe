@@ -1,10 +1,4 @@
-import {
-  Chip,
-  Grid,
-  Typography,
-  WithStyles,
-  withStyles,
-} from "@material-ui/core";
+import { Chip, Grid, Typography, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
@@ -25,15 +19,15 @@ export const Header: React.FunctionComponent<Props> = ({
       className={classes.headerContainer}
     >
       <Grid item={true} xs={3}>
-        <Chip label={dataProp.status} className={classes.status} />
+        <Chip label={dataProp.status} className={classes.status} id="Header-chip" />
       </Grid>
       <Grid item={true} xs={6}>
         <Typography variant="h6" align="center">
           <Text message="common.document" />
         </Typography>
       </Grid>
-      <Grid item={true} xs={3}>
-        <Typography variant="h6" align="right" className={classes.crId}>
+      <Grid item={true} xs={3} id="Header-docId" >
+        <Typography variant="h6" align="right" className={classes.crId} >
           {dataProp.document.docId}
         </Typography>
       </Grid>

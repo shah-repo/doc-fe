@@ -10,29 +10,33 @@ import { HOME_URL } from "../../constants/urls";
 import { documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
+import useDialog from "../../hooks/useDialog";
+import FormListDialog from "../FormListDialog/FormListDialog.presenter";
 import { RouteParams } from "../utils/types";
 import DocumentByTypeListPresenter from "./presenter";
 
 type Props = RouteComponentProps<RouteParams>;
 
 export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
-  match,
+  match, history,
 }) => {
+  const dialog = useDialog();
   const { acronym } = match.params;
-  const [enableRedirect, toggleEnableRedirect] = React.useState(false);
-  const [showError, toggleShowError] = React.useState(false);
+  const [noForm, toggleNoForm] = React.useState(false);
+  const [multipleForm, toggleMultipleForm] = React.useState(false);
+  const [selectedFormId, saveSelectedFormId] = React.useState("");
   const documentType = useSelector(
     (state: ApplicationState) =>
       documentTypeSelectors.getDocumentTypeByAcronym(state, acronym),
   );
   const TABLE_NAME = `documentsByTypeList-${acronym}`;
   const dispatch = useDispatch();
-  const isSingleId = useSelector(documentTypeSelectors.isSingleDocRevId) ;
   const docRevId = useSelector(documentTypeSelectors.docRevTypeById);
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const tableData = useSelector(getTableData(TABLE_NAME));
   const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
   const docId = useSelector(documentTypeSelectors.docId);
+  const formIds = useSelector(documentTypeSelectors.formIds);
 
   useEffect(() => {
     if (isEmpty(tableCriteria.queryDict)) {
@@ -48,17 +52,21 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
         ),
       );
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [acronym]);
 
   const async = useAsync<DocumentTypeById>({
     onSuccess: () => {
-      if (isSingleId) {
-        toggleEnableRedirect(true);
+      if (formIds.length === 1) {
+        history.push(`/document_revision/${docId}/output_document/${docRevId}`);
+        return;
+      } else if (isEmpty(formIds)) {
+        toggleNoForm(true);
+        setTimeout(() => toggleNoForm(false), 1000);
         return;
       }
-      toggleShowError(true);
-      setTimeout(() => toggleShowError(false), 1000 );
+      toggleMultipleForm(true);
+      dialog.open();
     },
   });
 
@@ -73,10 +81,26 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
     async.start(getDocRevByIds, documentType.id, async);
   };
 
+  const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
+
+  const handleSelection = (event) => {
+    saveSelectedFormId(event.target.value);
+  };
+
+  const redirectToForm = () => {
+    history.push(`/document_revision/${docId}/output_document/${selectedFormId}`);
+  };
+
   return (
-    <div style={{height: "100%"}}>
-      {enableRedirect &&
-      <Redirect to={{ pathname: `/document_revision/${docId}/output_document/${docRevId}` }} />}
+    <div style={{ height: "100%" }}>
+      {multipleForm && <FormListDialog
+        dialog={dialog}
+        preventPropagation={preventPropagation}
+        selectedFormId={selectedFormId}
+        handleSelection={handleSelection}
+        formIds={formIds}
+        redirectToForm={redirectToForm}
+      />}
       <DocumentByTypeListPresenter
         tableName={TABLE_NAME}
         tableCriteria={tableCriteria}
@@ -84,7 +108,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
         clearFilter={clearFilter}
         documentType={documentType}
         openDocRev={openDocRev}
-        showError={showError}
+        showError={noForm}
       />
     </div>
   );

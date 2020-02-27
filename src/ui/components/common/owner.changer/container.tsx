@@ -10,11 +10,12 @@ import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
 import { SelectOption } from "../../forms/fields/Select";
 import { getUrlandActions } from "./helpers";
+import { RequestType } from "./helpers/types";
 import OwnerChangerPresenter from "./presenter";
 
 export interface OwnProps {
   requestId: string;
-  requestType: string;
+  requestType: RequestType;
 }
 
 const OwnerChangerContainer: React.FC<OwnProps> = ({

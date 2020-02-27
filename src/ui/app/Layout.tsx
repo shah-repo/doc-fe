@@ -15,6 +15,7 @@ import {
   DOCUMENT_REVISION_CREATE_URL,
   DOCUMENT_REVISION_LIST_URL,
   DOCUMENT_REVISION_ROOT_URL,
+  GROUP_MANAGEMENT_ROOT_URL,
   HOME_URL,
   SLACK_ROOT_URL,
   TRAINING_DETAIL_URL,
@@ -25,6 +26,7 @@ import DocumentRevisionContainer from "../document.revision/container";
 import DocumentRevisionListContainer from "../document.revision/list/container";
 import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisionCreate.container";
 import DocumentTypeListContainer from "../documentType/list/container";
+import GroupManagementListContainer from "../group.management/list/container";
 import RemoteValidatorsLoader from "../remoteValidators/RemoteValidators";
 import SlackContainer from "../slack/Container";
 import TrainingDetailContainer from "../training/TrainingDetail.container";
@@ -88,6 +90,10 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
           <Route
             path={USER_MANAGEMENT_ROOT_URL}
             component={UserManagementListContainer}
+          />
+          <Route
+            path={GROUP_MANAGEMENT_ROOT_URL}
+            component={GroupManagementListContainer}
           />
           <Route path={SLACK_ROOT_URL} component={SlackContainer} />
           <Route

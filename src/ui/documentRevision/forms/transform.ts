@@ -87,6 +87,9 @@ export const toDocumentRevisionEditRequestBody = (
     revisionChangeType: values.revisionChangeType,
     retrain: values.retrain,
   } as DocumentRevisionEditRequestBody;
+  if (!values.document?.documentType?.isQms) {
+    data.description = data.description || data.name;
+  }
   return data;
 };
 
@@ -114,7 +117,7 @@ export const toNewVersionRequestBody = (
           securityGroups: values.securityGroups.map((group) => ({ id: group.value })),
         },
       };
-      newValues.document.documentType = { id: values.document.documentType!.id as string };
+      newValues.document.documentType = { id: _.get(values, "document.documentType.id") };
     }
   }
 

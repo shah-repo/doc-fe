@@ -17,6 +17,7 @@ export interface PageDetails {
   columns: PageDetailsColumn[];
 }
 export interface DocumentType {
+  isQms: boolean;
   id: string;
   documentTypeAcronym: string;
   documentTypeName: string;
@@ -29,6 +30,7 @@ export interface DocumentForms {
 }
 
 export interface DocumentTypeByIdForm {
+  name: string;
   id: string;
   document: DocumentForms;
 }

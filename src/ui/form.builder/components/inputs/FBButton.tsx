@@ -9,9 +9,9 @@ const FBButton: React.FunctionComponent<FBButtonProps> = ({
   color = "secondary",
   ...props
 }) => (
-  <Button {...{color, variant}} {...props}>
-    <Text message={label} />
-  </Button>
-);
+    <Button {...{ color, variant }} {...props} id="FBButton-label">
+      <Text message={label} />
+    </Button>
+  );
 
 export default FBButton;

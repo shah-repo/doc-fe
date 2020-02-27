@@ -6,10 +6,7 @@ import { Link as RouterLink } from "react-router-dom";
 // import { ReactComponent as UnlockIcon } from "../../../assets/images/icon_unlock.svg";
 import { stripTagsFromObject } from "../../../common/utils/helpers";
 import { unmaskId } from "../../../state/ducks/common/helpers";
-import {
-  DocumentRevision,
-  DocumentRevisionStatus,
-} from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import Date from "../../components/Date";
 import { TableColumnProps } from "../../components/table/column/types";
@@ -19,12 +16,7 @@ import { TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import { generateVersionNumber } from "../../documentRevision/helpers";
-import {
-  canEditDocumentRevision,
-  documentRevisionQueryStatus,
-  documentRevisionReleasedDateOption,
-  documentRevisionStatusOption,
-} from "../utils/helpers";
+import { canEditDocumentRevision, documentRevisionQueryStatus, documentRevisionReleasedDateOption, documentRevisionStatusOption } from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
 import styles from "./styles";
@@ -205,6 +197,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
           variant="outlined"
           className={classes.clearButton}
           onClick={clearFilter}
+          id="ListPresenter-clearButton"
         >
           <Text translation="common.clear.filters" />
         </Button>
@@ -216,6 +209,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
             variant="contained"
             color="primary"
             className={classes.button}
+            id="ListPresenter-create"
           >
             <Text translation="document.revision.create" />
           </Button>

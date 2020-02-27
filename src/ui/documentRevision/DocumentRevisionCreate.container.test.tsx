@@ -44,6 +44,8 @@ describe("DocumentRevisionCreateContainer tests", () => {
     const documentRevision = getDocumentRevision();
     (createParameters[1].successHandler as CallbackHandler<DocumentRevision>).execute(documentRevision);
 
+    // TODO: test needs refactoring
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(routeComponentProps.history.push).toHaveBeenCalledWith(
       documentVersionPath(documentRevision.id, documentRevision.document.id),
     );

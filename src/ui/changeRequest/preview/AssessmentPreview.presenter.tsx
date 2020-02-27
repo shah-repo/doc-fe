@@ -2,10 +2,7 @@ import { Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
 import moment from "moment-timezone";
 import React from "react";
 import { Attachment } from "../../../state/ducks/attachments";
-import {
-  ChangeRequest,
-  ImplementationPlanTask,
-} from "../../../state/ducks/changeRequest";
+import { ChangeRequest, ImplementationPlanTask } from "../../../state/ducks/changeRequest";
 import FileCard from "../../components/cards/FileCard";
 import Text from "../../components/Text";
 import styles from "../ChangeRequestPreview.styles";
@@ -22,15 +19,15 @@ const AssessmentPreviewPresenter: React.FunctionComponent<
     <Grid item={true} xs={12} key={index}>
       <Grid container={true}>
         <Grid item={true} xs={3}>
-          <Typography>
+          <Typography id="user">
             {index + 1}. <strong>{approval.approver.user.name}</strong>
           </Typography>
         </Grid>
         <Grid item={true} xs={3}>
-          <Typography>{approval.status}</Typography>
+          <Typography id="status">{approval.status}</Typography>
         </Grid>
         <Grid item={true} xs={6}>
-          <Typography>
+          <Typography id="date">
             {approval.reviewedAt && moment(approval.reviewedAt).calendar()}
           </Typography>
         </Grid>
@@ -46,40 +43,38 @@ const AssessmentPreviewPresenter: React.FunctionComponent<
     </Grid>
   );
 
-  const renderImplementationPlanTasks = (tasks: ImplementationPlanTask[]) => {
-    return (
-      <Grid item={true} xs={12}>
-        {tasks.map((task) => (
-          <Grid item={true} xs={12} key={task.id}>
-            <Typography variant="h6" gutterBottom={true}>
-              <Text translation="common.title" />:
-            </Typography>
-            <Typography variant="h5" gutterBottom={true}>
-              {task.title}
-            </Typography>
-            <Typography variant="h6" gutterBottom={true}>
-              <Text translation="common.description" />:
-            </Typography>
-            <Typography variant="h5" gutterBottom={true}>
-              {task.description}
-            </Typography>
-            <Typography variant="h6" gutterBottom={true}>
-              <Text translation="common.status" />:
-            </Typography>
-            <Typography variant="h5" gutterBottom={true}>
-              {task.status}
-            </Typography>
-            <Typography variant="h6" gutterBottom={true}>
-              <Text translation="common.due.date" />:
-            </Typography>
-            <Typography variant="h5" gutterBottom={true}>
-              {task.dueDate}
-            </Typography>
-          </Grid>
-        ))}
-      </Grid>
-    );
-  };
+  const renderImplementationPlanTasks = (tasks: ImplementationPlanTask[]) => (
+    <Grid item={true} xs={12}>
+      {tasks.map((task) => (
+        <Grid item={true} xs={12} key={task.id}>
+          <Typography variant="h6" gutterBottom={true}>
+            <Text translation="common.title" />:
+          </Typography>
+          <Typography id="ImplementationPlan-title" variant="h5" gutterBottom={true}>
+            {task.title}
+          </Typography>
+          <Typography variant="h6" gutterBottom={true}>
+            <Text translation="common.description" />:
+          </Typography>
+          <Typography id="ImplementationPlan-description" variant="h5" gutterBottom={true}>
+            {task.description}
+          </Typography>
+          <Typography variant="h6" gutterBottom={true}>
+            <Text translation="common.status" />:
+          </Typography>
+          <Typography id="ImplementationPlan-status" variant="h5" gutterBottom={true}>
+            {task.status}
+          </Typography>
+          <Typography variant="h6" gutterBottom={true}>
+            <Text translation="common.due.date" />:
+          </Typography>
+          <Typography id="ImplementationPlan-dueDate" variant="h5" gutterBottom={true}>
+            {task.dueDate}
+          </Typography>
+        </Grid>
+      ))}
+    </Grid>
+  );
 
   return (
     <Grid container={true} className={classes.container} spacing={8}>
@@ -87,19 +82,19 @@ const AssessmentPreviewPresenter: React.FunctionComponent<
         <Typography variant="h6" gutterBottom={true}>
           <Text translation="common.status" />:
         </Typography>
-        <Typography variant="h5">{changeRequest.state}</Typography>
+        <Typography id="status" variant="h5">{changeRequest.state}</Typography>
       </Grid>
       <Grid item={true} xs={12}>
         <Typography variant="h6" gutterBottom={true}>
           <Text translation="common.description" />:
         </Typography>
-        <Typography variant="h5">{changeRequest.description}</Typography>
+        <Typography id="description" variant="h5">{changeRequest.description}</Typography>
       </Grid>
       <Grid item={true} xs={12}>
         <Typography variant="h6" gutterBottom={true}>
           <Text translation="common.justifications" />:
         </Typography>
-        <Typography variant="h5">
+        <Typography id="justifications" variant="h5">
           {changeRequest.justifications.description}
         </Typography>
       </Grid>
@@ -111,7 +106,7 @@ const AssessmentPreviewPresenter: React.FunctionComponent<
         <Typography variant="h6" gutterBottom={true}>
           <Text translation="common.design" />:
         </Typography>
-        <Typography variant="h5" gutterBottom={true}>
+        <Typography id="designReasoning" variant="h5" gutterBottom={true}>
           {changeRequest.assessments.design.reasoning}
         </Typography>
         {changeRequest.assessments.design.attachments &&
@@ -119,7 +114,7 @@ const AssessmentPreviewPresenter: React.FunctionComponent<
         <Typography variant="h6" gutterBottom={true}>
           <Text translation="common.regulatory" />:
         </Typography>
-        <Typography variant="h5">
+        <Typography id="requlatoryReasoning" variant="h5">
           {changeRequest.assessments.regulatory.reasoning}
         </Typography>
         {changeRequest.assessments.regulatory.attachments &&
@@ -127,7 +122,7 @@ const AssessmentPreviewPresenter: React.FunctionComponent<
         <Typography variant="h6" gutterBottom={true}>
           <Text translation="common.process" />:
         </Typography>
-        <Typography variant="h5" gutterBottom={true}>
+        <Typography id="procesReasoning" variant="h5" gutterBottom={true}>
           {changeRequest.assessments.process.reasoning}
         </Typography>
         {changeRequest.assessments.process.attachments &&

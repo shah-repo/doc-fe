@@ -1,20 +1,15 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
 import { GroupTag } from "../../state/ducks/auth/types";
-import {
-  DocumentRevision,
-  documentRevisionsActions,
-  documentRevisionsSelectors,
-  DocumentRevisionStatus,
-} from "../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
 import SummaryPresenter from "../document.revision/summary/presenter";
 import CloneContainer from "./Clone.container";
 import DocumentRevisionUpdateContainer from "./DocumentRevisionUpdate.container";
-import { canEditDocumentRevision } from "./helpers";
+import { canChangeDocumentOwner, canEditDocumentRevision } from "./helpers";
 
 interface StateProps {
   currentUserEmail: string;
@@ -37,8 +32,8 @@ interface OwnProps {
 }
 
 export type DocumentRevisionDisplayContainerProps = OwnProps &
-  DispatchProps &
-  StateProps;
+DispatchProps &
+StateProps;
 
 const mapStateToProps = (
   state: ApplicationState,
@@ -48,8 +43,8 @@ const mapStateToProps = (
   loadDocumentRevisionAsyncState: documentRevisionsSelectors.getLoadAsyncState(
     state,
   ),
-    isCompanyAdmin: authSelectors.getHasTag(state, GroupTag.OWNERSHIP_CHANGE),
-    currentEmployeeId: authSelectors.currentEmployeeId(state),
+  isCompanyAdmin: authSelectors.getHasTag(state, GroupTag.OWNERSHIP_CHANGE),
+  currentEmployeeId: authSelectors.currentEmployeeId(state),
   documentRevision: documentRevisionsSelectors.getDocumentRevision(
     state,
     props.documentRevisionId,
@@ -57,7 +52,7 @@ const mapStateToProps = (
 });
 
 export const DocumentRevisionDisplayContainer: React.FunctionComponent<
-  DocumentRevisionDisplayContainerProps
+DocumentRevisionDisplayContainerProps
 > = ({
   currentUserEmail,
   loadDocumentRevision,
@@ -80,20 +75,26 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<
     loadDocumentRevisionAction();
   }, [loadDocumentRevisionAction]);
 
-  const canChangeOwnerShip =
-  documentRevision &&
-  documentRevision.status === DocumentRevisionStatus.Draft &&
-    (isCompanyAdmin ||
-      documentRevision.owner.id === currentEmployeeId);
+  const canChangeOwnerShip = useMemo(() => {
+    if (!documentRevision) {
+      return false;
+    }
+    return canChangeDocumentOwner(
+      documentRevision.status,
+      currentEmployeeId,
+      documentRevision.owner.id,
+      isCompanyAdmin,
+    );
+  }, [currentEmployeeId, documentRevision, isCompanyAdmin]);
 
   const canEdit =
-    documentRevision &&
-    !isNewVersion &&
-    !isNewOutput &&
-    canEditDocumentRevision(documentRevision, currentUserEmail);
+      documentRevision &&
+      !isNewVersion &&
+      !isNewOutput &&
+      canEditDocumentRevision(documentRevision, currentUserEmail);
 
   const canPreview =
-    documentRevision && !(canEdit || isNewVersion || isNewOutput);
+      documentRevision && !(canEdit || isNewVersion || isNewOutput);
 
   return (
     <AsyncGate

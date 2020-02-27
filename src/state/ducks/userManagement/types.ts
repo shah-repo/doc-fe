@@ -28,6 +28,7 @@ export interface LoadCompanyGroup {
   tags: Nullable<GroupTag[]>;
   company: Company;
   employees: Employee[];
+  isOfficial: boolean;
 }
 
 export interface EmployeeGroupsEditRequestBody {

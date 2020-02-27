@@ -15,11 +15,6 @@ set +o allexport
 export COMMIT_HASH="${BITBUCKET_COMMIT::7}"
 export IMAGE_NAME="${REPOSITORY_URL}:${COMMIT_HASH}"
 
-if [ "${ENV}" == "prod" ]; then
-	export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_PROD
-	export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_PROD
-fi
-
 # Login to AWS
 echo "-------- Logging into AWS --------"
 
@@ -31,6 +26,16 @@ echo "-------- Creating Docker Image --------"
 tar -zxvf "compiled.tar.gz"
 
 docker build -f ./docker/Dockerfile -t "${IMAGE_NAME}" .
+
+# Login to AWS
+echo "-------- Logging into AWS (Incase of prod) --------"
+
+if [ "${ENV}" == "prod" ]; then
+	export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_PROD
+	export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_PROD
+
+	aws ecr get-login --no-include-email --region "${AWS_DEFAULT_REGION}" | bash
+fi
 
 # Pusing to ECS
 echo "-------- Pushing Image to AWS ECR --------"
