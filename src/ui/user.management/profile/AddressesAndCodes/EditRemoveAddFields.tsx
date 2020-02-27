@@ -3,7 +3,6 @@ import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOut
 import { isEmpty } from "lodash";
 import React, { useState } from "react";
 import { ReactComponent as CloseIcon } from "../../../../assets/images/close_delete.svg";
-import SummaryField from "../../../common/summary/base";
 import Text from "../../../components/Text";
 import { Translation } from "../../../translations/types";
 import styles from "./EditRemoveAddFields.styles";
@@ -11,8 +10,6 @@ import styles from "./EditRemoveAddFields.styles";
 
 interface OwnProps {
   canUpdateCompany: boolean;
-  saveChanges: () => void;
-  label: Translation;
   noValueLabel: Translation;
   addLabel: Translation;
   editLabel: Translation;
@@ -20,14 +17,14 @@ interface OwnProps {
   placeholder: string;
   addFieldButtonLabel: Translation;
   fields: any[];
+  saveChanges: (fields) => void;
+  numberValues?: boolean;
 }
 
 type Props = OwnProps;
 
 export const EditRemoveAddFields: React.FunctionComponent<Props> = ({
   canUpdateCompany,
-  saveChanges,
-  label,
   noValueLabel,
   editLabel,
   addLabel,
@@ -35,47 +32,138 @@ export const EditRemoveAddFields: React.FunctionComponent<Props> = ({
   placeholder,
   addFieldButtonLabel,
   fields,
+  saveChanges,
+  numberValues,
 }) => {
   const classes = styles();
 
-  const [shareholders, saveShareHolders] = useState(fields);
+  const [values, saveValues] = useState(fields);
   const [isAdding, toggleAdd] = useState(false);
+  const [showError, toogleError] = useState(false);
 
-  const handleRemoveShareholder = (idx) => {
-    saveShareHolders(shareholders.filter((s, sidx) => idx !== sidx));
+
+  const handleRemove = (idx) => {
+    saveValues(values.filter((s, sidx) => idx !== sidx));
   };
 
-  const handleShareholderNameChange = (idx, evt) => {
-    const newShareholders = shareholders.map((shareholder, sidx) => {
+  const handleNameChange = (idx, evt) => {
+    const newValues = values.map((value, sidx) => {
       if (idx !== sidx) {
-        return shareholder;
+        return value;
+      }
+      const regex = /^[0-9]*$/;
+      if (regex.test(evt.target.value)) {
+        toogleError(false);
+        return evt.target.value;
+      } if (!regex.test(evt.target.value)) {
+        toogleError(true);
       }
       return evt.target.value;
     });
-
-    saveShareHolders(newShareholders);
+    saveValues(newValues);
   };
 
-  const handleAddShareholder = () => {
-    saveShareHolders(shareholders.concat([""]));
+  const handleAdd = () => {
+    saveValues(values.concat([""]));
   };
   const handleOpenEdit = () => {
     toggleAdd(true);
-    if (isEmpty(shareholders)) {
-      saveShareHolders(shareholders.concat([""]));
+    if (isEmpty(values)) {
+      saveValues(values.concat([""]));
+    }
+  };
+
+  const onCancel = () => {
+    toggleAdd(false);
+    saveValues(fields);
+  };
+
+  const renderInputFields = () => {
+    if (isAdding && !isEmpty(values)) {
+      return values.map((value, idx) => (
+        <div className={classes.values} key={idx} >
+          <input
+            placeholder={placeholder}
+            value={value}
+            onChange={(e) => handleNameChange(idx, e)}
+            className={classes.inputField}
+            type="text"
+            required={true}
+          />
+          <button
+            type="button"
+            id="EditRemoveAddFields-removeField"
+            onClick={() => handleRemove(idx)}
+            className={classes.removeButton}
+          >
+            <CloseIcon />
+          </button>
+        </div>
+      ));
+    }
+  };
+
+  const renderEditButton = () => {
+    if (isAdding) {
+      return (
+        <div>
+          {numberValues && showError &&
+            <Typography variant="subtitle2" style={{ color: "red" }}>
+              <Text message="Must be a number" />
+            </Typography>}
+          <Box>
+            <Button
+              variant="text"
+              color="primary"
+              onClick={handleAdd}
+              id="EditRemoveAddFields-add"
+              className={classes.addButton}
+              style={{ marginLeft: 0 }}
+            >
+              <Icon style={{ marginRight: "10px" }}>
+                <AddCircleOutlineOutlinedIcon />
+              </Icon>
+              <Text translation={addFieldButtonLabel} />
+            </Button>
+          </Box>
+          <Box width="507px" display="flex" justifyContent="flex-end">
+            <Button
+              className={classes.containedButton}
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                if (numberValues && showError) {
+                  return;
+                }
+                toggleAdd(false);
+                saveChanges(values);
+              }}
+              id="EditRemoveAddFields-done"
+            >
+              <Text translation="common.done" />
+            </Button>
+            <Button
+              className={classes.outlinedButton}
+              variant="outlined"
+              onClick={() => onCancel()}
+              id="EditRemoveAddFields-cancel"
+            >
+              <Text translation="common.cancel" />
+            </Button>
+          </Box>
+        </div>
+      );
     }
   };
 
 
   return (
     <Box>
-      {canUpdateCompany && !isAdding &&
-        <Box marginTop={4} >
-          <SummaryField
-            label={label}
-            value={shareholders.map((input) => input).join(", ")}
-            noValueOption={<Text translation={noValueLabel} />}
-          />
+      <Box display="inline-flex" >
+        <Typography variant="h6" className={classes.title}>
+          <Text message={title} />
+        </Typography>
+        {canUpdateCompany && !isAdding &&
           <Button
             variant="text"
             color="primary"
@@ -83,75 +171,27 @@ export const EditRemoveAddFields: React.FunctionComponent<Props> = ({
             id="EditRemoveAddFields-add"
             className={classes.addButton}
           >
-            {isEmpty(shareholders) &&
+            {isEmpty(values) &&
               <Icon style={{ marginRight: "10px" }}>
                 <AddCircleOutlineOutlinedIcon />
               </Icon>
             }
-            <Text translation={isEmpty(shareholders) ? addLabel : editLabel} />
+            <Text translation={isEmpty(values) ? addLabel : editLabel} />
           </Button>
-        </Box>
-      }
-      {isAdding &&
-        <Typography variant="h6" className={classes.title}>
-          <Text message={title} />
+        }
+      </Box>
+      {!isAdding && fields.map((input, index) => (
+        <Typography variant="subtitle1" className={classes.title} key={index}>
+          <Text message={input} />
+        </Typography>
+      ))}
+      {isEmpty(fields) &&
+        <Typography variant="subtitle1" className={classes.title}>
+          <Text translation={noValueLabel} />
         </Typography>
       }
-      {isAdding && canUpdateCompany && !isEmpty(shareholders) && shareholders.map((shareholder, idx) => (
-        <div className={classes.shareholder} key={idx} >
-          <input
-            type="text"
-            placeholder={placeholder}
-            value={shareholder}
-            onChange={(e) => handleShareholderNameChange(idx, e)}
-            className={classes.inputField}
-          />
-          <button
-            type="button"
-            id="EditRemoveAddFields-removeField"
-            onClick={() => handleRemoveShareholder(idx)}
-            className={classes.removeButton}
-          >
-            <CloseIcon />
-          </button>
-        </div>
-      ))}
-      {isAdding && <div>
-        <Box>
-          <Button
-            variant="text"
-            color="primary"
-            onClick={handleAddShareholder}
-            id="EditRemoveAddFields-add"
-            className={classes.addButton}
-          >
-            <Icon style={{ marginRight: "10px" }}>
-              <AddCircleOutlineOutlinedIcon />
-            </Icon>
-            <Text translation={addFieldButtonLabel} />
-          </Button>
-        </Box>
-        <Box width="507px" display="flex" justifyContent="flex-end">
-          <Button
-            className={classes.containedButton}
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              toggleAdd(false);
-              saveChanges();
-            }}
-            id="EditRemoveAddFields-done"
-          >
-            <Text translation="common.done" />
-          </Button>
-          <Button
-            className={classes.outlinedButton}
-            variant="outlined"
-            onClick={() => { toggleAdd(false); }}
-            id="EditRemoveAddFields-cancel"
-          >
-            <Text translation="common.cancel" />
-          </Button></Box></div>}
+      {renderInputFields()}
+      {renderEditButton()}
     </Box>
   );
 };

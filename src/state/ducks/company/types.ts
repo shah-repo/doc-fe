@@ -47,4 +47,10 @@ export interface CompanyMineAction {
   payload: Company;
 }
 
+export interface CompanyMineRequest {
+  name?: string;
+  addresses?: string[];
+  acctCodes?: string[];
+}
+
 export type SelectCompanyState = Company;

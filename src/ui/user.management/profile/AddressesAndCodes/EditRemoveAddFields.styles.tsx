@@ -4,9 +4,8 @@ export default makeStyles((theme: Theme) =>
   createStyles({
     addButton: {
       width: "auto",
-      margin: theme.spacing(2.5, 0, 0, 0),
+      margin: theme.spacing(2.5, 0, 0, 2.5),
       padding: theme.spacing(0),
-      marginBottom: "10px",
     },
     containedButton: {
       width: "auto",
@@ -19,7 +18,7 @@ export default makeStyles((theme: Theme) =>
       color: "#6E09EA",
       borderColor: "#6E09EA",
     },
-    shareholder: {
+    values: {
       marginTop: "16px",
     },
     inputField: {
@@ -33,7 +32,6 @@ export default makeStyles((theme: Theme) =>
       borderStyle: "ridge",
     },
     title: {
-      marginBottom: "16px",
       marginTop: "16px",
     },
     removeButton: {

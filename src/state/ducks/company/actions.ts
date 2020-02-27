@@ -1,7 +1,8 @@
 import { COMPANY_MINE_URL } from "../../../ui/constants/urls";
-import { apiAction } from "../../factories";
+import { apiAction, apiActionWithCallbacks } from "../../factories";
+import { ApiAction, Handlers } from "../../types";
 import { GET_COMPANY_MINE, SELECT_COMPANY } from "./constants";
-import { Company, CompanyMineAction, SelectCompanyAction } from "./types";
+import { Company, CompanyMineAction, CompanyMineRequest, SelectCompanyAction } from "./types";
 
 const selectCompany = (company: Company): SelectCompanyAction => ({
   type: SELECT_COMPANY,
@@ -22,7 +23,18 @@ const getCompanyMine = () =>
     },
   });
 
+const changeCompanyMine = (body: CompanyMineRequest, handlers: Handlers):
+ApiAction<Company> => apiActionWithCallbacks({
+  url: COMPANY_MINE_URL,
+  method: "patch",
+  data: body,
+  onSuccess: (data, dispatch) => {
+    dispatch(getCompanyMine());
+  },
+  handlers,
+});
 export default {
   selectCompany,
   getCompanyMine,
+  changeCompanyMine,
 };

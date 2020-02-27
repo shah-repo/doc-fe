@@ -1,4 +1,7 @@
 import React from "react";
+import { companyActions } from "../../../../state/ducks/company";
+import useActionCreator from "../../../hooks/useActionCreator";
+import useAsync from "../../../hooks/useAsync";
 import EditRemoveAddFields from "./EditRemoveAddFields";
 
 
@@ -13,16 +16,18 @@ export const Addresses: React.FunctionComponent<Props> = ({
   canUpdateCompany,
   addresses,
 }) => {
-  const saveChanges = () => {
-    console.log(addresses);
+  const async = useAsync();
+  const changeCompanyAction = useActionCreator(companyActions.changeCompanyMine);
+
+  const saveChanges = (newAddresses) => {
+    async.start(changeCompanyAction, { addresses: newAddresses }, async);
   };
 
   return (
     <EditRemoveAddFields
-      canUpdateCompany={canUpdateCompany}
       saveChanges={saveChanges}
+      canUpdateCompany={canUpdateCompany}
       noValueLabel="user.management.no.addresses.specified"
-      label="user.management.addresses"
       editLabel="user.management.edit.address"
       addLabel="user.management.add.addresses"
       title="user.management.addresses"

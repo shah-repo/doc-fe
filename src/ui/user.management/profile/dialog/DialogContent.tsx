@@ -83,7 +83,6 @@ export const DialogContent: React.FunctionComponent<Props> = ({
   const [avatarURL, setAvatarURL] = useState<string>("");
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const companyMine = useSelector(companySelectors.getCompanyMine);
-  console.log(companyMine);
 
   const asyncS3link = useAsync({
     onSuccess: (data: any) => {

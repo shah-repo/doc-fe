@@ -70,7 +70,6 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
   const [isUsernameEmpty, setUsernameError] = useState<boolean>(false);
   const currentUserId = useSelector(authSelectors.currentUserId);
   const isCurrentUser = userId === currentUserId;
-  console.log(canUpdateCompany);
 
   const [userInfo, setUserInfo] = useState<EmployeeEditRequestBody>({
     name,
