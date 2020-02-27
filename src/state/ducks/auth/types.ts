@@ -1,16 +1,6 @@
 import { Nullable } from "../common";
 import { Employee } from "../company";
-import {
-  AUTH_USER,
-  CONFIRM_FORGOT_PASSWORD_URL,
-  CONFIRM_SET_NEW_PASSWORD_URL,
-  FORGOT_PASSWORD_URL,
-  LOGOUT_USER,
-  SET_EMPLOYEE,
-  SIGNUP_URL,
-  USER_GROUPS,
-  USERS_ME_URL,
-} from "./constants";
+import { AUTH_USER, CONFIRM_FORGOT_PASSWORD_URL, CONFIRM_SET_NEW_PASSWORD_URL, FORGOT_PASSWORD_URL, LOGOUT_USER, SET_EMPLOYEE, SIGNUP_URL, USERS_ME_URL, USER_GROUPS } from "./constants";
 
 export interface LoginRequestBody {
   email: string;

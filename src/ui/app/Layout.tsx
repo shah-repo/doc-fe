@@ -7,20 +7,7 @@ import ChangeRequestContainer from "../change.request/Container";
 import ChangeRequestListContainer from "../change.request/list/container";
 import ChangeRequestCreateContainer from "../changeRequest/ChangeRequestCreate.container";
 import WatermarkFooterContainer from "../components/watermarkFooter/container";
-import {
-  CHANGE_REQUEST_CREATE_URL,
-  CHANGE_REQUEST_LIST_URL,
-  CHANGE_REQUEST_ROOT_URL,
-  DOCUMENT_BY_TYPE_LIST_URL,
-  DOCUMENT_REVISION_CREATE_URL,
-  DOCUMENT_REVISION_LIST_URL,
-  DOCUMENT_REVISION_ROOT_URL,
-  GROUP_MANAGEMENT_ROOT_URL,
-  HOME_URL,
-  SLACK_ROOT_URL,
-  TRAINING_DETAIL_URL,
-  USER_MANAGEMENT_ROOT_URL,
-} from "../constants/urls";
+import { CHANGE_REQUEST_CREATE_URL, CHANGE_REQUEST_LIST_URL, CHANGE_REQUEST_ROOT_URL, DOCUMENT_BY_TYPE_LIST_URL, DOCUMENT_REVISION_CREATE_URL, DOCUMENT_REVISION_LIST_URL, DOCUMENT_REVISION_ROOT_URL, GROUP_MANAGEMENT_ROOT_URL, HOME_URL, SLACK_ROOT_URL, TRAINING_DETAIL_URL, USER_MANAGEMENT_ROOT_URL } from "../constants/urls";
 import DashboardContainer from "../dashboard/Dashboard.container";
 import DocumentRevisionContainer from "../document.revision/container";
 import DocumentRevisionListContainer from "../document.revision/list/container";
@@ -40,71 +27,69 @@ import SocketsContainer from "./sockets/container";
 
 type Props = WithStyles<typeof styles>;
 
-const Layout: React.FunctionComponent<Props> = ({ classes }) => {
-  return (
-    <div>
-      <RemoteValidatorsLoader />
-      <PingServer />
-      <CssBaseline />
-      <HeaderContainer />
-      <Navigation />
-      <ToastContainer autoClose={false} />
-      <SocketsContainer />
-      <WatermarkFooterContainer />
-      <main className={classes.content}>
-        <DataFetcherContainer />
-        <Switch>
-          <Route path={HOME_URL} exact={true} component={DashboardContainer} />
-          <Route
-            path={CHANGE_REQUEST_CREATE_URL}
-            exact={true}
-            component={ChangeRequestCreateContainer}
-          />
-          <Route
-            path={CHANGE_REQUEST_ROOT_URL}
-            component={ChangeRequestContainer}
-          />
-          <Route
-            path={CHANGE_REQUEST_LIST_URL}
-            exact={true}
-            component={ChangeRequestListContainer}
-          />
-          <Route
-            path={DOCUMENT_REVISION_LIST_URL}
-            exact={true}
-            component={DocumentRevisionListContainer}
-          />
-          <Route
-            path={DOCUMENT_REVISION_CREATE_URL}
-            exact={true}
-            component={DocumentRevisionCreateContainer}
-          />
-          <Route
-            path={DOCUMENT_REVISION_ROOT_URL}
-            component={DocumentRevisionContainer}
-          />
-          <Route
-            path={TRAINING_DETAIL_URL}
-            component={TrainingDetailContainer}
-          />
-          <Route
-            path={USER_MANAGEMENT_ROOT_URL}
-            component={UserManagementListContainer}
-          />
-          <Route
-            path={GROUP_MANAGEMENT_ROOT_URL}
-            component={GroupManagementListContainer}
-          />
-          <Route path={SLACK_ROOT_URL} component={SlackContainer} />
-          <Route
-            path={DOCUMENT_BY_TYPE_LIST_URL}
-            component={DocumentTypeListContainer}
-          />
-          <Redirect to={{ pathname: HOME_URL }} />
-        </Switch>
-      </main>
-    </div>
-  );
-};
+const Layout: React.FunctionComponent<Props> = ({ classes }) => (
+  <div>
+    <RemoteValidatorsLoader />
+    <PingServer />
+    <CssBaseline />
+    <HeaderContainer />
+    <Navigation />
+    <ToastContainer autoClose={false} />
+    <SocketsContainer />
+    <WatermarkFooterContainer />
+    <main className={classes.content}>
+      <DataFetcherContainer />
+      <Switch>
+        <Route path={HOME_URL} exact={true} component={DashboardContainer} />
+        <Route
+          path={CHANGE_REQUEST_CREATE_URL}
+          exact={true}
+          component={ChangeRequestCreateContainer}
+        />
+        <Route
+          path={CHANGE_REQUEST_ROOT_URL}
+          component={ChangeRequestContainer}
+        />
+        <Route
+          path={CHANGE_REQUEST_LIST_URL}
+          exact={true}
+          component={ChangeRequestListContainer}
+        />
+        <Route
+          path={DOCUMENT_REVISION_LIST_URL}
+          exact={true}
+          component={DocumentRevisionListContainer}
+        />
+        <Route
+          path={DOCUMENT_REVISION_CREATE_URL}
+          exact={true}
+          component={DocumentRevisionCreateContainer}
+        />
+        <Route
+          path={DOCUMENT_REVISION_ROOT_URL}
+          component={DocumentRevisionContainer}
+        />
+        <Route
+          path={TRAINING_DETAIL_URL}
+          component={TrainingDetailContainer}
+        />
+        <Route
+          path={USER_MANAGEMENT_ROOT_URL}
+          component={UserManagementListContainer}
+        />
+        <Route
+          path={GROUP_MANAGEMENT_ROOT_URL}
+          component={GroupManagementListContainer}
+        />
+        <Route path={SLACK_ROOT_URL} component={SlackContainer} />
+        <Route
+          path={DOCUMENT_BY_TYPE_LIST_URL}
+          component={DocumentTypeListContainer}
+        />
+        <Redirect to={{ pathname: HOME_URL }} />
+      </Switch>
+    </main>
+  </div>
+);
 
 export default withStyles(styles)(Layout);

@@ -1,4 +1,5 @@
 export const SELECT_COMPANY = "company/SELECT_COMPANY";
+export const GET_COMPANY_MINE = "company/GET_COMPANY_MINE";
 
 export const WHITE_LABEL_DEFAULT = {
   logo: "",
