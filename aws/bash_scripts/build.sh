@@ -32,7 +32,7 @@ export REACT_APP_THEME=$(python3 $SCRIPT $ENV $ENVIRONMENT_DIR REACT_APP_THEME 2
 export CI=false # had to do this to make the build process not treat warnings as errors
 
 SCRIPT="${PYTHON_SCRIPTS_DIR}/setConfigValues.py"
-python3 $SCRIPT "${ENVIRONMENT_DIR}/${ENV}.json" "${BASE_DIR}/src/common/constants.ts"
+python3 $SCRIPT "${ENV}"
 
 yarn install --pure-lockfile
 yarn build

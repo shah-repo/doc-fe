@@ -2,14 +2,14 @@ import sys
 import json
 from environs import Env
 
-if len(sys.argv) >= 4:
+if len(sys.argv) >= 2:
 	env = sys.argv[1]
-	jsonFile = sys.argv[2]
-	configFile = sys.argv[3]
+	configFile = 'src/common/constants.ts'
+	jsonFile = 'aws/environments/%s.json' % env
 
 	with open(jsonFile) as _jsonFile:
 		jsonData = json.load(_jsonFile)		
-		string = ""
+		string = ''
 		with open(configFile) as _configFile:
 			string = _configFile.read()
 			for key in jsonData.keys():
