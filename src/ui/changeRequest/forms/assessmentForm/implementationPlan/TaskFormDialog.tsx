@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  createStyles,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  makeStyles,
-} from "@material-ui/core";
+import { Box, Button, createStyles, Dialog, DialogContent, DialogTitle, makeStyles } from "@material-ui/core";
 import { ButtonProps } from "@material-ui/core/Button";
 import { Formik, FormikProps } from "formik";
 import React from "react";
@@ -40,7 +32,7 @@ const styles = makeStyles(() =>
       overflowY: "unset",
     },
   },
-));
+  ));
 
 export const TaskFormDialog: React.FunctionComponent<TaskFormDialogProps> =
   ({ onSubmit, closeDialog, openDialog, isDialogOpen, buttonProps, task }) => {
@@ -49,13 +41,14 @@ export const TaskFormDialog: React.FunctionComponent<TaskFormDialogProps> =
       <TaskForm cancel={closeDialog} {...props} />
     );
 
-    const preventPropagation = (event: React.FormEvent) =>  event.stopPropagation();
+    const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
     const initialValues = task || INITIAL_VALUES;
 
     return (
       <div>
         <Box mt={2} mb={task ? 2 : 6}>
           <Button
+            id="addTask"
             color="primary"
             variant="contained"
             onClick={openDialog}

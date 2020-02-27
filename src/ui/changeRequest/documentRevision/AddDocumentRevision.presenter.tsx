@@ -47,6 +47,7 @@ export const AddDocumentRevisionPresenter: React.FunctionComponent<AddDocumentRe
         key={documentRevisionId}
         label={(documentRevisionsById[documentRevisionId] || {}).name}
         onDelete={handleDelete(documentRevisionId)}
+        id="AddDocument-chip"
       />
     ))
   );
@@ -55,7 +56,7 @@ export const AddDocumentRevisionPresenter: React.FunctionComponent<AddDocumentRe
     <Dialog fullScreen={true} open={isOpen}>
       <AppBar className={classes.appBar}>
         <Toolbar>
-          <IconButton color="primary" onClick={close} aria-label="Close">
+          <IconButton color="primary" onClick={close} aria-label="Close" id="AddDocument-closeDialog">
             <CloseIcon />
           </IconButton>
         </Toolbar>
@@ -66,6 +67,7 @@ export const AddDocumentRevisionPresenter: React.FunctionComponent<AddDocumentRe
           color="primary"
           onClick={closeDialogAddDocuments}
           className={classes.doneButton}
+          id="AddDocuments-done"
         >
           <Text translation="changeRequest.documentControl.done" />
         </Button>

@@ -3,24 +3,14 @@ import _ from "lodash";
 import React from "react";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
-import {
-  DocumentType,
-  PageDetailsColumn,
-} from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentType, PageDetailsColumn } from "../../../state/ducks/documentRevisions/documentType";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
 import { TableDataProps, TablePanelStateProps, TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
-import {
-  canEditDocumentRevision,
-  documentRevisionQueryStatus,
-  documentRevisionStatusOption,
-} from "../../document.revision/utils/helpers";
-import {
-  documentEditPath,
-  documentPreviewPath,
-} from "../../document.revision/utils/paths";
+import { canEditDocumentRevision, documentRevisionQueryStatus, documentRevisionStatusOption } from "../../document.revision/utils/helpers";
+import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
 import { FB } from "../../form.builder";
 import { Translation } from "../../translations/types";
 import { styles } from "./styles";
@@ -156,6 +146,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
           variant="outlined"
           className={classes.clearButton}
           onClick={clearFilter}
+          id="DocumentByTypeListPresenter-clearButton"
         >
           <Text translation="common.clear.filters" />
         </Button>
@@ -167,6 +158,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
           color="primary"
           className={classes.button}
           onClick={openDocRev}
+          id="DocumentByTypeListPresenter-openDocRev"
         >
           <Text
             translation="supplier.add.new"
@@ -175,7 +167,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
         </Button>
       </Grid>
       {showError && (
-        <div style={{ color: "red" }}>
+        <div style={{ color: "red" }} id="DocumentByTypeListPresenter-showError">
           <Text
             translation="supplier.form.error"
             values={{ name: documentType.documentTypeName }}

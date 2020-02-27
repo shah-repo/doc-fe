@@ -17,7 +17,7 @@ const Assessments: React.FunctionComponent<Props> = ({ form }) => {
   const itemRenderer = () =>
     Object.values(AssessmentType).map((type) => {
       const { attachments, reasoning }: AssessmentItem = form!.values.assessments[
-        type as AssessmentType
+        type
       ];
 
       const actionsRenderer = () => (
@@ -34,6 +34,7 @@ const Assessments: React.FunctionComponent<Props> = ({ form }) => {
       return (
         <Box key={type} mb={4}>
           <TextEditorField
+            data-testid={`change.request.${type}.assessment`}
             name={`assessments.${type}.reasoning`}
             label={`change.request.${type}.assessment`}
             actionsRenderer={actionsRenderer}

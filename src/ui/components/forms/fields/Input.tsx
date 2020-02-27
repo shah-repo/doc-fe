@@ -29,6 +29,7 @@ const Input: React.FunctionComponent<InputPropsWithFormik> = ({
         inputProps={{ "data-lpignore": lpignore }}
         {...fieldProps.field}
         {...inputProps}
+        id="Input-data"
       />
     </Field>
   );

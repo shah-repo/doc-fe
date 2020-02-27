@@ -15,6 +15,7 @@ const FBAddFieldButton0: React.FunctionComponent<{}> = () => (
       size="medium"
       fullWidth={true}
       onClick={editorStore.setOpen()}
+      id="FBAddFieldButton0-setOpen"
     >
       <Text translation="form.builder.add.field" />
     </Button>

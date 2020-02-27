@@ -18,11 +18,10 @@ import DocumentByTypeListPresenter from "./presenter";
 type Props = RouteComponentProps<RouteParams>;
 
 export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
-  match,
+  match, history,
 }) => {
   const dialog = useDialog();
   const { acronym } = match.params;
-  const [enableRedirect, toggleEnableRedirect] = React.useState(false);
   const [noForm, toggleNoForm] = React.useState(false);
   const [multipleForm, toggleMultipleForm] = React.useState(false);
   const [selectedFormId, saveSelectedFormId] = React.useState("");
@@ -53,18 +52,17 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
         ),
       );
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [acronym]);
 
   const async = useAsync<DocumentTypeById>({
     onSuccess: () => {
       if (formIds.length === 1) {
-        saveSelectedFormId(docRevId);
-        toggleEnableRedirect(true);
+        history.push(`/document_revision/${docId}/output_document/${docRevId}`);
         return;
       } else if (isEmpty(formIds)) {
         toggleNoForm(true);
-        setTimeout(() => toggleNoForm(false), 1000 );
+        setTimeout(() => toggleNoForm(false), 1000);
         return;
       }
       toggleMultipleForm(true);
@@ -83,20 +81,18 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
     async.start(getDocRevByIds, documentType.id, async);
   };
 
-  const preventPropagation = (event: React.FormEvent) =>  event.stopPropagation();
+  const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
 
   const handleSelection = (event) => {
     saveSelectedFormId(event.target.value);
   };
 
   const redirectToForm = () => {
-    toggleEnableRedirect(true);
+    history.push(`/document_revision/${docId}/output_document/${selectedFormId}`);
   };
 
   return (
-    <div style={{height: "100%"}}>
-      {enableRedirect &&
-      <Redirect to={{ pathname: `/document_revision/${docId}/output_document/${selectedFormId}` }} />}
+    <div style={{ height: "100%" }}>
       {multipleForm && <FormListDialog
         dialog={dialog}
         preventPropagation={preventPropagation}

@@ -3,7 +3,7 @@ import Text from "../../../components/Text";
 import FBTextField from "../inputs/FBTextField";
 
 const FBOptionsContainer: React.FunctionComponent<{}> = () => (
-  <Text message="form.builder.options.placeholder">
+  <Text message="form.builder.options.placeholder" id="FBOptionsContainer-text" >
     {(placeholder) => (
       <Text message="form.builder.options.note">
         {(helperText) => (

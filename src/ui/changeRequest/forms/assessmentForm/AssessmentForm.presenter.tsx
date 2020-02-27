@@ -115,6 +115,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
             validate={validator(required)}
           />
           <TextEditorField
+            data-testid="description"
             name="description"
             label="cr.description"
             validate={validator(required)}
@@ -126,7 +127,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
         <DatePickerField
           name="effectiveDate"
           label="common.target.date"
-          datePickerProps={{ minDate: new Date() }}
+          datePickerProps={{ id: "targetDate", minDate: new Date() }}
         />
         <ApproversField />
         <Grid
@@ -146,6 +147,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
           <AssessmentFormVoidContainer changeRequest={changeRequest} />
           <AssessmentFormControlsContainer changeRequest={changeRequest} />
           <SubmitButton
+            id="submit"
             asyncState={asyncState}
             label={
               changeRequest
