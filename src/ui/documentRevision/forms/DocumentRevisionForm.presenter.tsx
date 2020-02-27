@@ -140,6 +140,13 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     const typeId = event.target.value as string;
     const type = documentTypesById[typeId] || {};
     savedocInfo({ name: event.target.name || "", isQms: type.isQms });
+    groupOptions.forEach((group) => {
+      if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
+        setFieldValue("securityGroups", [
+          { value: group.value, label: group.label },
+        ]);
+      }
+    });
     if (loadDocumentProposedId) {
       loadDocumentProposedId(type.documentTypeAcronym);
     }

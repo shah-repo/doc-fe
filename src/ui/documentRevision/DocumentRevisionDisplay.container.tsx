@@ -31,19 +31,19 @@ interface OwnProps {
   isNewOutput?: boolean;
 }
 
-export type DocumentRevisionDisplayContainerProps = OwnProps &
-DispatchProps &
-StateProps;
+export type DocumentRevisionDisplayContainerProps =
+  OwnProps &
+  DispatchProps &
+  StateProps;
 
+const selectCanChangeOwnership = authSelectors.makeGetHasTag();
 const mapStateToProps = (
   state: ApplicationState,
   props: OwnProps,
 ): StateProps => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
-  loadDocumentRevisionAsyncState: documentRevisionsSelectors.getLoadAsyncState(
-    state,
-  ),
-  isCompanyAdmin: authSelectors.getHasTag(state, GroupTag.OWNERSHIP_CHANGE),
+  loadDocumentRevisionAsyncState: documentRevisionsSelectors.getLoadAsyncState(state),
+  isCompanyAdmin: selectCanChangeOwnership(state, GroupTag.USER_MANAGEMENT),
   currentEmployeeId: authSelectors.currentEmployeeId(state),
   documentRevision: documentRevisionsSelectors.getDocumentRevision(
     state,
@@ -51,9 +51,7 @@ const mapStateToProps = (
   ),
 });
 
-export const DocumentRevisionDisplayContainer: React.FunctionComponent<
-DocumentRevisionDisplayContainerProps
-> = ({
+export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevisionDisplayContainerProps> = ({
   currentUserEmail,
   loadDocumentRevision,
   isNewVersion,

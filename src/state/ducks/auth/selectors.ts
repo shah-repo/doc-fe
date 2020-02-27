@@ -5,9 +5,7 @@ import { AsyncState } from "../../types";
 import { Nullable } from "../common";
 import { Group, GroupTag, Permission } from "./types";
 
-const isAuthenticated = (state: ApplicationState): boolean => {
-  return Boolean(state.auth.user.sessionId && state.auth.user.employeeId);
-};
+const isAuthenticated = (state: ApplicationState): boolean => Boolean(state.auth.user.sessionId && state.auth.user.employeeId);
 
 const currentUserEmail = (state: ApplicationState): string =>
   state.auth.user.email;
@@ -41,7 +39,7 @@ const currentEmployeeTags = (state: ApplicationState): GroupTag[] =>
 const getLoadPermissionsAsyncState = (state: ApplicationState): AsyncState =>
   state.auth.loadGroupsAsyncInfo;
 
-const getHasTag = createSelector(
+const makeGetHasTag = () => createSelector(
   (state: ApplicationState) => state.auth.groups.tags,
   (state: ApplicationState, selectedTag: GroupTag) => selectedTag,
   (tags, selectedTag) => tags.includes(selectedTag),
@@ -60,12 +58,10 @@ const hasMultipleCompanies = (state: ApplicationState): boolean =>
 
 const getCurrentUserGroups = createSelector(
   [currentUserGroups],
-  (groups): OptionType[] => {
-    return (groups || []).map((group) => ({
-      value: group.id,
-      label: group.name,
-    }));
-  },
+  (groups): OptionType[] => (groups || []).map((group) => ({
+    value: group.id,
+    label: group.name,
+  })),
 );
 
 const getHasPermission = createSelector(
@@ -84,7 +80,6 @@ export default {
   getLoadPermissionsAsyncState,
   employees,
   hasMultipleCompanies,
-  getHasTag,
   currentEmployeeAvatar,
   getHasSlack,
   getCurrentUserGroups,
@@ -94,4 +89,5 @@ export default {
   getHasPermission,
   currentEmployeePermissions,
   currentEmployeeTags,
+  makeGetHasTag,
 };
