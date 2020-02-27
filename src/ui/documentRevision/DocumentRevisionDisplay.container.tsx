@@ -2,11 +2,7 @@ import React, { useEffect, useMemo } from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
 import { GroupTag } from "../../state/ducks/auth/types";
-import {
-  DocumentRevision,
-  documentRevisionsActions,
-  documentRevisionsSelectors,
-} from "../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
@@ -35,19 +31,19 @@ interface OwnProps {
   isNewOutput?: boolean;
 }
 
-export type DocumentRevisionDisplayContainerProps = OwnProps &
-DispatchProps &
-StateProps;
+export type DocumentRevisionDisplayContainerProps =
+  OwnProps &
+  DispatchProps &
+  StateProps;
 
+const selectCanChangeOwnership = authSelectors.makeGetHasTag();
 const mapStateToProps = (
   state: ApplicationState,
   props: OwnProps,
 ): StateProps => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
-  loadDocumentRevisionAsyncState: documentRevisionsSelectors.getLoadAsyncState(
-    state,
-  ),
-  isCompanyAdmin: authSelectors.getHasTag(state, GroupTag.OWNERSHIP_CHANGE),
+  loadDocumentRevisionAsyncState: documentRevisionsSelectors.getLoadAsyncState(state),
+  isCompanyAdmin: selectCanChangeOwnership(state, GroupTag.USER_MANAGEMENT),
   currentEmployeeId: authSelectors.currentEmployeeId(state),
   documentRevision: documentRevisionsSelectors.getDocumentRevision(
     state,
@@ -55,9 +51,7 @@ const mapStateToProps = (
   ),
 });
 
-export const DocumentRevisionDisplayContainer: React.FunctionComponent<
-DocumentRevisionDisplayContainerProps
-> = ({
+export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevisionDisplayContainerProps> = ({
   currentUserEmail,
   loadDocumentRevision,
   isNewVersion,
@@ -76,7 +70,7 @@ DocumentRevisionDisplayContainerProps
     if (documentRevisionId) {
       loadDocumentRevisionAction();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentRevisionId]);
 
   const canChangeOwnerShip = useMemo(() => {

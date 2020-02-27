@@ -2,7 +2,6 @@ import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { Field, FieldProps, FormikProps } from "formik";
 import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
-import { getHasTag } from "../../../../common/utils/selectors";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { GroupTag } from "../../../../state/ducks/auth/types";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest";
@@ -24,6 +23,7 @@ import PromptIfDirty from "../../../components/forms/PromptIfDirty";
 import ScrollToError from "../../../components/forms/ScrollToError";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import useDidMount from "../../../hooks/useDidMount";
+import useGetHasTag from "../../../hooks/useGetHasTag";
 import { ChangeRequestFormValues } from "../types.js";
 import styles from "./AssessmentForm.styles";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
@@ -57,7 +57,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const didMount = useDidMount();
 
-  const isCompanyAdmin = useSelector(getHasTag(GroupTag.OWNERSHIP_CHANGE));
+  const isCompanyAdmin = useGetHasTag(GroupTag.USER_MANAGEMENT);
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
   const canChangeOwnerShip = useMemo(() => {
     if (!changeRequest) {
@@ -136,12 +136,14 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
           alignItems="flex-end"
           justify="flex-end"
           direction="row"
-        > {canChangeOwnerShip && (
-          <OwnerChanger
-            requestId={changeRequest!.id}
-            requestType={RequestType.ChangeRequest}
-          />
-        )}
+        >
+          {
+            canChangeOwnerShip &&
+            <OwnerChanger
+              requestId={changeRequest!.id}
+              requestType={RequestType.ChangeRequest}
+            />
+          }
           <AssessmentFormVoidContainer changeRequest={changeRequest} />
           <AssessmentFormControlsContainer changeRequest={changeRequest} />
           <SubmitButton
