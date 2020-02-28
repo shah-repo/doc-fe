@@ -16,6 +16,7 @@ export const styles = makeStyles((theme) => ({
   },
   content: {
     overflow: "hidden",
+    height: "85%",
   },
   contentRoot: {
     textAlign: "center",

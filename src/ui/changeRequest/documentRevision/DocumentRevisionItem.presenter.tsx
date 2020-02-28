@@ -40,9 +40,10 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<
               <SummaryInfo
                 label="common.docId"
                 value={documentRevision.document.docId}
+                data-testid="Document-id"
               />
             </div>
-            <SummaryInfo label="common.title" value={documentRevision.name} />
+            <SummaryInfo label="common.title" value={documentRevision.name} data-testid="Document-title" />
             <SummaryInfo
               label="common.version"
               value={generateVersionNumber(
@@ -50,10 +51,12 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<
                 documentRevision.revisionStage,
                 documentRevision.revisionChangeType,
               )}
+              data-testid="Document-version"
             />
             <SummaryInfo
               label="common.owner"
               value={documentRevision.owner && documentRevision.owner.user.name}
+              data-testid="Document-owner"
             />
             <SummaryInfo
               label="common.released"
@@ -64,12 +67,13 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<
                   }
                 />
               }
+              data-testid="Document-released"
             />
           </div>
         </Grid>
         <Grid item={true} xs={1}>
           {onDelete && (
-            <IconButton color="secondary" onClick={onDelete} aria-label="Close">
+            <IconButton color="secondary" onClick={onDelete} aria-label="Close" id="Document-close">
               <RemoveCircleOutline />
             </IconButton>
           )}

@@ -20,7 +20,7 @@ export const TrainingRequest: React.FunctionComponent<Props> = ({
   const trainingRecord = pendingAction.trainingRecord as TrainingRecord;
 
   return (
-    <Grid container={true} spacing={10} justify="space-between" alignItems="baseline">
+    <Grid container={true} spacing={10} justify="space-between" alignItems="baseline" id="TrainingRequest-pendingActions" >
       <Grid item={true} xs={8}>
         <span className={classes.crId}>
           <Text message={`dashboard.type.${pendingAction.type}`} />
@@ -39,6 +39,7 @@ export const TrainingRequest: React.FunctionComponent<Props> = ({
           target="_blank"
           href={documentDetailsPath(trainingRecord.trainingPlan!.document.id)}
           color="secondary"
+          id="TrainingRequest-button"
         >
           <Text translation="common.open" />
         </Button>

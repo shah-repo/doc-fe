@@ -18,7 +18,7 @@ describe("DocumentRevisionDisplayContainer isNewVersion test", () => {
     documentRevision: getDocumentRevision(),
   };
 
-  const getWrapper = (props: Partial<DocumentRevisionDisplayContainerProps>= {}) => shallow (
+  const getWrapper = (props: Partial<DocumentRevisionDisplayContainerProps> = {}) => shallow (
     <DocumentRevisionDisplayContainer {...defaultProps} {...props}/>,
   );
 
@@ -33,49 +33,49 @@ describe("DocumentRevisionDisplayContainer isNewVersion test", () => {
 });
 
 describe("DocumentRevisionDisplayContainer canEdit test", () => {
-    const documentRevision = getDocumentRevision();
-    const defaultProps: DocumentRevisionDisplayContainerProps = {
-        currentUserEmail: documentRevision.owner.user.email,
-        loadDocumentRevisionAsyncState: ASYNC_DEFAULT_STATE,
-        loadDocumentRevision: jest.fn(),
-        documentRevisionId: faker.random.uuid(),
-        isNewVersion: false,
-      }as unknown as DocumentRevisionDisplayContainerProps;
+  const documentRevision = getDocumentRevision();
+  const defaultProps: DocumentRevisionDisplayContainerProps = {
+    currentUserEmail: documentRevision.owner.user.email,
+    loadDocumentRevisionAsyncState: ASYNC_DEFAULT_STATE,
+    loadDocumentRevision: jest.fn(),
+    documentRevisionId: faker.random.uuid(),
+    isNewVersion: false,
+  }as unknown as DocumentRevisionDisplayContainerProps;
 
-    const getWrapper = (props: Partial<DocumentRevisionDisplayContainerProps>= {}) => shallow (
-      <DocumentRevisionDisplayContainer documentRevision={documentRevision} {...defaultProps} {...props}/>,
-    );
+  const getWrapper = (props: Partial<DocumentRevisionDisplayContainerProps> = {}) => shallow (
+    <DocumentRevisionDisplayContainer documentRevision={documentRevision} {...defaultProps} {...props}/>,
+  );
 
-    it("Displays DocumentRevisionUpdateContainer and sets props when user canEdit", () => {
-      const wrapper = getWrapper();
+  it("Displays DocumentRevisionUpdateContainer and sets props when user canEdit", () => {
+    const wrapper = getWrapper();
 
-      expect(wrapper.find(DocumentRevisionUpdateContainer).prop("documentRevision")).toEqual(documentRevision);
-      expect(wrapper.find(DocumentRevisionUpdateContainer).exists()).toBe(true);
-      expect(wrapper.find(SummaryPresenter).exists()).toBe(false);
-      expect(wrapper.find(CloneContainer).exists()).toBe(false);
-    });
+    expect(wrapper.find(DocumentRevisionUpdateContainer).prop("documentRevision")).toEqual(documentRevision);
+    expect(wrapper.find(DocumentRevisionUpdateContainer).exists()).toBe(true);
+    expect(wrapper.find(SummaryPresenter).exists()).toBe(false);
+    expect(wrapper.find(CloneContainer).exists()).toBe(false);
   });
+});
 
 describe("DocumentRevisionDisplayContainer canPreview test", () => {
-const defaultProps: DocumentRevisionDisplayContainerProps = {
+  const defaultProps: DocumentRevisionDisplayContainerProps = {
     currentUserEmail: faker.internet.email(),
     loadDocumentRevisionAsyncState: ASYNC_DEFAULT_STATE,
     loadDocumentRevision: jest.fn(),
     documentRevisionId: faker.random.uuid(),
     isNewVersion: false,
     documentRevision: getDocumentRevision(),
-};
+  };
 
-const getWrapper = (props: Partial<DocumentRevisionDisplayContainerProps>= {}) => shallow (
+  const getWrapper = (props: Partial<DocumentRevisionDisplayContainerProps> = {}) => shallow (
     <DocumentRevisionDisplayContainer {...defaultProps} {...props}/>,
-);
+  );
 
-it("Displays SummaryPresenter when user canPreview", () => {
+  it("Displays SummaryPresenter when user canPreview", () => {
     const wrapper = getWrapper();
 
     expect(wrapper.find(SummaryPresenter).prop("dataProp")).toEqual(defaultProps.documentRevision);
     expect(wrapper.find(SummaryPresenter).exists()).toBe(true);
     expect(wrapper.find(CloneContainer).exists()).toBe(false);
     expect(wrapper.find(DocumentRevisionUpdateContainer).exists()).toBe(false);
-});
+  });
 });

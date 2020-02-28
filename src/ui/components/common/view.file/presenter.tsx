@@ -24,6 +24,7 @@ const ViewFilePresenter: React.FunctionComponent<ViewFilePresenterProps> = ({
       classes={{ paper: classes.paper }}
       maxWidth="lg"
       fullWidth={isPDF}
+      scroll="body"
     >
       <ViewFileTitle
         attachment={attachment}

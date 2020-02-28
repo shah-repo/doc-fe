@@ -15,14 +15,14 @@ const AssessmentFormVoidPresenter: React.FunctionComponent<Props> = ({
   asyncState,
   voidDocument,
   dialog,
-}) => {
-  return (
+}) => (
     <>
       <Box position="absolute" marginTop="-50px">
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
       </Box>
       <Button
+        id="void"
         variant="outlined"
         color="primary"
         onClick={voidDocument}
@@ -50,6 +50,7 @@ const AssessmentFormVoidPresenter: React.FunctionComponent<Props> = ({
         </DialogContent>
         <Box textAlign="center" marginBottom="10px">
           <Button
+            id="close"
             color="primary"
             variant="contained"
             onClick={dialog.close}
@@ -60,6 +61,5 @@ const AssessmentFormVoidPresenter: React.FunctionComponent<Props> = ({
       </Dialog>
     </>
   );
-};
 
 export default AssessmentFormVoidPresenter;

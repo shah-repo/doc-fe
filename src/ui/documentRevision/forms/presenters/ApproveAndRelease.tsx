@@ -14,6 +14,8 @@ import ApproveAndReleaseForm from "./ApproveAndReleaseForm";
 interface Props {
   id?: string;
   status?: DocumentRevisionStatus;
+  isQms: boolean;
+  documentName: string;
 }
 
 const styles = makeStyles(() =>
@@ -25,15 +27,18 @@ const styles = makeStyles(() =>
       overflowY: "unset",
     },
   },
-));
+  ));
 
 export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   id,
   status,
+  isQms,
+  documentName,
 }) => {
   const classes = styles();
   const dialog = useDialog();
   const releaseAction = useActionCreator(documentRevisionsActions.approveAndRelease);
+  const releaseNonQmsAction = useActionCreator(documentRevisionsActions.approveAndReleaseNonQms);
   const async = useAsync<any>({ onSuccess: dialog.close });
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
 
@@ -49,7 +54,15 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
     const approvers = !values.approvals || values.approvals.length === 0 ?
       undefined :
       values.approvals.map((approver) => ({ id: approver.value }));
-
+    if (!isQms) {
+      async.start(
+        releaseNonQmsAction,
+        id,
+        { approvers },
+        async,
+      );
+      return;
+    }
     async.start(
       releaseAction,
       id,
@@ -65,7 +78,12 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
 
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
   const renderForm = (props: FormikProps<any>) => (
-    <ApproveAndReleaseForm {...props} asyncState={async.asyncState} cancel={closeDialog} />
+    <ApproveAndReleaseForm
+      {...props}
+      asyncState={async.asyncState}
+      cancel={closeDialog}
+      isQms={isQms}
+    />
   );
 
   return (
@@ -85,12 +103,15 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
         open={dialog.isOpen}
         onSubmit={preventPropagation}
         classes={{ paper: classes.dialogContent }}
+        id="ApproveAndRelease-dialog"
       >
         <DialogTitle>
-          <Text translation="transition.action.title" />
+          {isQms && <Text translation="transition.action.title" />}
+          {!isQms && <Text translation="common.warning.message" values={{ name: documentName }} />}
         </DialogTitle>
         <DialogContent
           classes={{ root: classes.dialogContent }}
+          id="ApproveAndRelease-content"
         >
           <Formik
             initialValues={{ password: "" }}
@@ -99,6 +120,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
             {renderForm}
           </Formik>
         </DialogContent>
+        }
       </Dialog>
     </>
   );

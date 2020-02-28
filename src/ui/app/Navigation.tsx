@@ -21,13 +21,16 @@ import {
 import styles from "./Navigation.styles";
 import NavigationLinkContainer from "./NavigationLink.container";
 import DocumentByTypeListLinks from "./routes/DocumentByTypeList";
+import GroupManagementLink from "./routes/GroupManagement";
 import UserManagementLink from "./routes/UserManagement";
 
 interface StateProps {
   hasMultipleCompanies: boolean;
 }
 
-type NavigationProps = StateProps & WithStyles<typeof styles> & RouteComponentProps;
+type NavigationProps = StateProps &
+  WithStyles<typeof styles> &
+  RouteComponentProps;
 
 const Navigation: React.FunctionComponent<NavigationProps> = ({
   classes,
@@ -41,21 +44,23 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
     anchor="left"
   >
     <Toolbar className={classes.toolbar}>
-      <Typography variant="h6"  className={classes.toolbarTitle}>
+      <Typography variant="h6" className={classes.toolbarTitle}>
         <Link to={HOME_URL} className={classes.headerLink}>
           <Logo />
         </Link>
       </Typography>
-    </ Toolbar>
+    </Toolbar>
     <List className={classes.list}>
       <NavigationLinkContainer
         url={HOME_URL}
         text="navigation.dashboard"
         Icon={Dashboard}
         currentPath={location.pathname}
-        childrenUrls={[
-          // { url: CHANGE_REQUEST_CREATE_URL, text: "navigation.createChangeRequest" },
-        ]}
+        childrenUrls={
+          [
+            // { url: CHANGE_REQUEST_CREATE_URL, text: "navigation.createChangeRequest" },
+          ]
+        }
       />
       <NavigationLinkContainer
         url={DOCUMENT_REVISION_LIST_URL}
@@ -70,11 +75,13 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
         currentPath={location.pathname}
       />
       <UserManagementLink pathname={location.pathname} />
+      <GroupManagementLink pathname={location.pathname} />
       <DocumentByTypeListLinks pathname={location.pathname} />
     </List>
-    {hasMultipleCompanies &&
-    <SwitchCompanyButtonContainer location={location} />
-    }
+    {hasMultipleCompanies && (
+      <SwitchCompanyButtonContainer location={location} />
+    )}
+
     <BottomLogo />
   </Drawer>
 );
@@ -83,6 +90,6 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
   hasMultipleCompanies: authSelectors.hasMultipleCompanies(state),
 });
 
-export default connect<StateProps, {}, {}, ApplicationState>(
-  mapStateToProps,
-)(withRouter(withStyles(styles)(Navigation)));
+export default connect<StateProps, {}, {}, ApplicationState>(mapStateToProps)(
+  withRouter(withStyles(styles)(Navigation)),
+);

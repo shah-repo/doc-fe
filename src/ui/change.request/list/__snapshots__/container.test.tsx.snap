@@ -10,7 +10,7 @@ exports[`Change Request list container test renders empty on mount 1`] = `
     >
       <button
         class="MuiButtonBase-root MuiButton-root MuiButton-outlined ListPresenter-clearButton-5 MuiButton-outlinedPrimary"
-        data-testid="clearFilter"
+        id="ChangeRequest-clearFilter"
         tabindex="0"
         type="button"
       >
@@ -50,6 +50,7 @@ exports[`Change Request list container test renders empty on mount 1`] = `
       >
         <button
           class="MuiButtonBase-root MuiButton-root MuiButton-contained ListPresenter-button-4 MuiButton-containedPrimary"
+          id="ChangeRequest-create"
           tabindex="0"
           type="button"
         >
@@ -136,6 +137,7 @@ exports[`Change Request list container test renders empty on mount 1`] = `
                             aria-invalid="false"
                             class="MuiInputBase-input MuiInput-input"
                             data-lpignore="true"
+                            id="crId"
                             name="crId"
                             type="text"
                             value=""
@@ -176,6 +178,7 @@ exports[`Change Request list container test renders empty on mount 1`] = `
                             aria-invalid="false"
                             class="MuiInputBase-input MuiInput-input"
                             data-lpignore="true"
+                            id="title"
                             name="title"
                             type="text"
                             value=""
@@ -216,6 +219,7 @@ exports[`Change Request list container test renders empty on mount 1`] = `
                             aria-invalid="false"
                             class="MuiInputBase-input MuiInput-input"
                             data-lpignore="true"
+                            id="owner"
                             name="owner"
                             type="text"
                             value=""
@@ -270,7 +274,7 @@ exports[`Change Request list container test renders empty on mount 1`] = `
                             </span>
                           </div>
                           <input
-                            id="search-select-field"
+                            id="state"
                             name="state"
                             type="hidden"
                             value=""

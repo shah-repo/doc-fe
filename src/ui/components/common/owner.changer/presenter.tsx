@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-} from "@material-ui/core";
+import { Box, Button, Dialog, DialogContent, DialogTitle, FormControl } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import React, { Fragment } from "react";
 import { Owner } from "../../../../state/ducks/common";
@@ -43,8 +36,9 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
       <Form>
         <FormProgress asyncState={asyncState} />
         <FormMessage asyncState={asyncState} />
-        <FormControl className="form-control" style={{ width: "100%" }}>
+        <FormControl className="form-control" style={{ width: "100%" }} id="OwnerChangerPresenter-selectField">
           <SelectField
+            selectProps={{ id: "employee" }}
             name="employee"
             includeEmpty={false}
             options={employees}
@@ -56,7 +50,7 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
           justifyContent="flex-end"
           alignItems="flex-end"
         >
-          <SubmitButton asyncState={asyncState} label="change.owner.update" />
+          <SubmitButton asyncState={asyncState} label="change.owner.update" id="OwnerChangerPresenter-submitButton" />
         </Box>
       </Form>
     </Box>
@@ -84,7 +78,7 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
 
   return (
     <Fragment>
-      <Button variant="outlined" onClick={openDialog}>
+      <Button variant="outlined" onClick={openDialog} id="OwnerChangerPresenter-changeOwner" >
         {" "}
         <Text translation="change.owner" />
       </Button>
