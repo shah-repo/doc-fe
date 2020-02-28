@@ -24,7 +24,10 @@ export interface FBHelloSignPayload {
 export type FBHelloSignProps =
   & FBStateProps<FBDialogState>
   & Pick<FBInputProps, "label" | "name">
-  & Pick<FBButtonProps, "onClick">;
+  & Pick<FBButtonProps, "onClick">
+  & {
+    buttonLabel?: string
+  };
 
 export const FBHelloSignTypeMap: Dictionary<FBHelloSignFieldType> = {
   textfield: "text",

@@ -12,10 +12,22 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
+    buttonLabel,
     onClick,
     state,
     ...props
   }: T) => {
+    
+    const signatureId = _.get(store.getState().documentRevisions.byId[FBStore.docId], "formInput.signatureRequestId");
+    if (FBStore.mode === "form") {
+      if (signatureId === "" || signatureId === undefined) {
+        buttonLabel = "form.builder.send.signature";
+      } else {
+        buttonLabel = "Cancel Signature Request";
+      }
+    } else {
+      buttonLabel = "form.builder.create.template";
+    }
 
     async function apiCall(payload: FBHelloSignPayload) {
       const apiCall = new FBActionModel();
@@ -34,6 +46,17 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
         requestMethod: "POST",
         requestUrl: "/hello_sign/send_signature_request",
         payload,
+      });
+      FBActionStore.apiCall(apiCallSig.toJS() as unknown as FBActionModel);
+    }
+
+    function apiCallCancelSig() {
+      const apiCallSig = new FBActionModel();
+      const signatureId = _.get(store.getState().documentRevisions.byId[FBStore.docId], "formInput.signatureRequestId");
+      console.log(signatureId);
+      apiCallSig.set({
+        requestMethod: "POST",
+        requestUrl: "/hello_sign/cancel_signature_request/" + signatureId,
       });
       FBActionStore.apiCall(apiCallSig.toJS() as unknown as FBActionModel);
     }
@@ -62,7 +85,11 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
         if (_.values(items).some((x) => x === "") || items === null) {
           return alert("Signature Request can be sent only after the fields are filled in and document is saved");
         }
-        apiCallSig(payload);
+        if (signatureId === "" || signatureId === undefined) {
+          apiCallSig(payload);
+        } else {
+          apiCallCancelSig();
+        }
       } else {
         if (FBStore.docId === "") {
           return alert("Template creation is available only after the document is created");
@@ -78,6 +105,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
       ...(props as T),
       onClick,
       state,
+      buttonLabel,
     });
   };
 
