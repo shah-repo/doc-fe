@@ -14,6 +14,16 @@ export { default as FBFieldWrapperState } from "./FBFieldWrapper/FBFieldWrapper.
 export * from "./FBFieldWrapper/FBFieldWrapper.types";
 export { default as FBFormMarkDown } from "./FBFormMarkDown/FBFormMarkDown";
 export * from "./FBFormMarkDown/FBFormMarkDown.types";
+export { default as FBMapWrapper } from "./FBMapWrapper/FBMapWrapper";
+export * from "./FBMapWrapper/FBMapWrapper.types";
+export { default as FBMediaAlbum } from "./FBMediaAlbum/FBMediaAlbum";
+export { default as FBMediaAlbumState } from "./FBMediaAlbum/FBMediaAlbum.state";
+export * from "./FBMediaAlbum/FBMediaAlbum.types";
+export { default as FBMediaCarousel } from "./FBMediaCarousel/FBMediaCarousel";
+export { default as FBMediaCarouselState } from "./FBMediaCarousel/FBMediaCarousel.state";
+export * from "./FBMediaCarousel/FBMediaCarousel.types";
+export { default as FBMediaGallery } from "./FBMediaGallery/FBMediaGallery";
+export * from "./FBMediaGallery/FBMediaGallery.types";
 export { default as FBMediaQR } from "./FBMediaQR/FBMediaQR";
 export * from "./FBMediaQR/FBMediaQR.types";
 export { default as FBStepper } from "./FBStepper/FBStepper";
