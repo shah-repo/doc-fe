@@ -52,10 +52,10 @@ export const DocumentRevisionContainer: React.FunctionComponent<DocumentRevision
     component: DocumentRevisionManagerContainer, ...props});
 
   return (
-      <Switch>
-        <Route path={DOCUMENT_REVISION_VERSION_URL} exact={true} render={renderDocumentRevisionManagerContainer} />
-        <Route path={DOCUMENT_REVISION_DETAILS_URL} exact={true} render={renderDocumentRevisionManagerContainer} />
-      </Switch>
+    <Switch>
+      <Route path={DOCUMENT_REVISION_VERSION_URL} exact={true} render={renderDocumentRevisionManagerContainer} />
+      <Route path={DOCUMENT_REVISION_DETAILS_URL} exact={true} render={renderDocumentRevisionManagerContainer} />
+    </Switch>
   );
 };
 

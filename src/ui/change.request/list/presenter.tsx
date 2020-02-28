@@ -9,14 +9,8 @@ import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
 import Text from "../../components/Text";
 import { CHANGE_REQUEST_CREATE_URL } from "../../constants/urls";
-import {
-  canEditChangeRequest,
-  changeRequestStatusOption,
-} from "../utils/helpers";
-import {
-  changeRequestEditPath,
-  changeRequestPreviewPath,
-} from "../utils/paths";
+import { canEditChangeRequest, changeRequestStatusOption } from "../utils/helpers";
+import { changeRequestEditPath, changeRequestPreviewPath } from "../utils/paths";
 import { ChangeRequestsUserProps } from "../utils/types";
 import styles from "./styles";
 
@@ -41,7 +35,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     return changeRequestPreviewPath(rowData.id);
   };
 
-  const columns: Array<TableColumnProps<ChangeRequest>> = [
+  const columns: TableColumnProps<ChangeRequest>[] = [
     {
       key: "crId",
       label: "common.crid",
@@ -100,7 +94,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
           variant="outlined"
           className={classes.clearButton}
           onClick={clearFilter}
-          data-testid="clearFilter"
+          id="ChangeRequest-clearFilter"
         >
           <Text translation="common.clear.filters" />
         </Button>
@@ -112,6 +106,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
             variant="contained"
             color="primary"
             className={classes.button}
+            id="ChangeRequest-create"
           >
             <Text translation="change.request.create" />
           </Button>

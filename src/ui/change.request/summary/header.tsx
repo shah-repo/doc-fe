@@ -1,11 +1,4 @@
-import {
-  Box,
-  Chip,
-  Grid,
-  Typography,
-  WithStyles,
-  withStyles,
-} from "@material-ui/core";
+import { Box, Chip, Grid, Typography, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import { getFormattedStartOfDayDateString } from "../../../common/utils/date";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
@@ -36,15 +29,15 @@ export const Header: React.FunctionComponent<Props> = ({
       className={classes.headerContainer}
     >
       <Grid item={true} xs={3}>
-        <Chip label={status} className={classes.status} />
+        <Chip label={status} className={classes.status} id="ChangeRequestHeader-status" />
       </Grid>
       <Grid item={true} xs={6}>
-        <Typography variant="h6" align="center">
+        <Typography variant="h6" align="center" id="ChangeRequestHeader-title">
           {dataProp.title}
         </Typography>
       </Grid>
       <Grid item={true} xs={3}>
-        <Typography variant="h6" align="right" className={classes.crId}>
+        <Typography variant="h6" align="right" className={classes.crId} id="ChangeRequestHeader-id">
           <Text translation="common.crid" />: {dataProp.crId}
         </Typography>
       </Grid>

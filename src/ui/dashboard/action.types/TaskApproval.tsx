@@ -17,7 +17,7 @@ export const TaskApproval: React.FunctionComponent<Props> = ({
   const classes = styles();
 
   return (
-    <Grid container spacing={10} justify="space-between" alignItems="baseline">
+    <Grid container spacing={10} justify="space-between" alignItems="baseline" id="TaslApproval-tasks">
       <Grid item xs={9}>
         <span className={classes.crId}>{`CRID: ${pendingAction.changeReq.crId} `}</span>
         <span>{`"${pendingAction.changeReq.title}"`}</span>
@@ -29,6 +29,7 @@ export const TaskApproval: React.FunctionComponent<Props> = ({
           target="_blank"
           href={changeRequestEditPath(pendingAction.changeReq.id)}
           color="secondary"
+          id="TaskApproval-button"
         >
           <Text translation="common.open" />
         </Button>

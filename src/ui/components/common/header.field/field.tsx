@@ -1,11 +1,6 @@
 import { Toolbar, Typography } from "@material-ui/core";
 import React from "react";
-import {
-  DataProps,
-  TypographyColor,
-  TypographyProps,
-  TypographySize,
-} from "../../../../state/ducks/common";
+import { DataProps, TypographyColor, TypographyProps, TypographySize } from "../../../../state/ducks/common";
 import { Translation } from "../../../translations/types";
 import Text from "../../Text";
 import { styles } from "./utils/styles";
@@ -25,7 +20,7 @@ const HeaderField: React.FunctionComponent<Props> = ({
   const classes = styles({ size, color });
 
   return (
-    <Toolbar disableGutters={true} className={classes.toolbar}>
+    <Toolbar disableGutters={true} className={classes.toolbar} id="HeaderField-toolbar">
       <Typography
         variant={TypographySize[size]}
         color={TypographyColor[color]}

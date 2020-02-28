@@ -2,12 +2,9 @@ import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { Field, FieldProps, FormikProps } from "formik";
 import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
-import { getHasTag } from "../../../../common/utils/selectors";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { GroupTag } from "../../../../state/ducks/auth/types";
-import {
-  ChangeRequest,
-} from "../../../../state/ducks/changeRequest";
+import { ChangeRequest } from "../../../../state/ducks/changeRequest";
 import { AsyncState } from "../../../../state/types";
 import ApproversField from "../../../change.request/form/approvers";
 import AssessmentsField from "../../../change.request/form/assessments";
@@ -18,10 +15,7 @@ import { RequestType } from "../../../components/common/owner.changer/helpers/ty
 import DatePickerField from "../../../components/forms/fields/DatePicker";
 import InputField from "../../../components/forms/fields/Input";
 import TextEditorField from "../../../components/forms/fields/RichTextEditor";
-import {
-  required,
-  validator,
-} from "../../../components/forms/fields/validators";
+import { required, validator } from "../../../components/forms/fields/validators";
 import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";
 import FormWrapper from "../../../components/forms/FormWrapper";
@@ -29,6 +23,7 @@ import PromptIfDirty from "../../../components/forms/PromptIfDirty";
 import ScrollToError from "../../../components/forms/ScrollToError";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import useDidMount from "../../../hooks/useDidMount";
+import useGetHasTag from "../../../hooks/useGetHasTag";
 import { ChangeRequestFormValues } from "../types.js";
 import styles from "./AssessmentForm.styles";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
@@ -62,20 +57,20 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const didMount = useDidMount();
 
-  const isCompanyAdmin = useSelector(getHasTag(GroupTag.OWNERSHIP_CHANGE));
+  const isCompanyAdmin = useGetHasTag(GroupTag.USER_MANAGEMENT);
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
   const canChangeOwnerShip = useMemo(() => {
     if (!changeRequest) {
       return false;
     }
-    return canChangeCROwner(changeRequest!.state, currentEmployeeId, changeRequest?.owner.id, isCompanyAdmin);
+    return canChangeCROwner(changeRequest.state, currentEmployeeId, changeRequest?.owner.id, isCompanyAdmin);
   }, [changeRequest, currentEmployeeId, isCompanyAdmin]);
 
   useEffect(() => {
     if (didMount) {
       setFieldValue("documentRevisions", documentRevisionsList);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentRevisionsList]);
 
   const renderCrId = () =>
@@ -120,6 +115,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
             validate={validator(required)}
           />
           <TextEditorField
+            data-testid="description"
             name="description"
             label="cr.description"
             validate={validator(required)}
@@ -131,7 +127,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
         <DatePickerField
           name="effectiveDate"
           label="common.target.date"
-          datePickerProps={{ minDate: new Date() }}
+          datePickerProps={{ id: "targetDate", minDate: new Date() }}
         />
         <ApproversField />
         <Grid
@@ -140,15 +136,18 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
           alignItems="flex-end"
           justify="flex-end"
           direction="row"
-        > {canChangeOwnerShip && (
-          <OwnerChanger
-            requestId={changeRequest!.id}
-            requestType={RequestType.ChangeRequest}
-          />
-        )}
+        >
+          {
+            canChangeOwnerShip &&
+            <OwnerChanger
+              requestId={changeRequest!.id}
+              requestType={RequestType.ChangeRequest}
+            />
+          }
           <AssessmentFormVoidContainer changeRequest={changeRequest} />
           <AssessmentFormControlsContainer changeRequest={changeRequest} />
           <SubmitButton
+            id="submit"
             asyncState={asyncState}
             label={
               changeRequest

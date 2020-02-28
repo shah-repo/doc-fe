@@ -1,12 +1,4 @@
-import {
-  Card,
-  CardActions,
-  CardContent,
-  Grid,
-  IconButton,
-  Tooltip,
-  Typography,
-} from "@material-ui/core";
+import { Card, CardActions, CardContent, Grid, IconButton, Tooltip, Typography } from "@material-ui/core";
 import { Delete } from "@material-ui/icons";
 import React from "react";
 import { Attachment } from "../../../state/ducks/attachments";
@@ -19,20 +11,20 @@ export interface FileCardProps {
 
 const FileCard: React.FunctionComponent<FileCardProps> = ({ removeAttachment, attachment }) => {
   const removeButton = removeAttachment && (
-    <IconButton aria-label="Delete" onClick={removeAttachment}>
+    <IconButton id="delete" aria-label="Delete" onClick={removeAttachment}>
       <Delete fontSize="small" />
     </IconButton>
   );
 
   return (
     <Grid item={true} xs={12} md={6} lg={3}>
-      <Tooltip title={`${attachment.name}.${attachment.type}`}>
+      <Tooltip id="tooltip-attachmentName" title={`${attachment.name}.${attachment.type}`}>
         <Card>
           <CardContent>
-            <Typography variant="h5" component="h2" noWrap={true}>
+            <Typography id="name" variant="h5" component="h2" noWrap={true}>
               {attachment.name}
             </Typography>
-            <Typography color="textSecondary">
+            <Typography id="type" color="textSecondary">
               {attachment.type}
             </Typography>
           </CardContent>

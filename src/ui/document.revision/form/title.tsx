@@ -1,9 +1,7 @@
 import { Field } from "formik";
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
-import {
-  documentRevisionsSelectors,
-} from "../../../state/ducks/documentRevisions";
+import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { TextFieldSelect } from "../../components/forms/fields/TextFieldSelect/container";
 import { required, validator } from "../../components/forms/fields/validators";
 
@@ -34,6 +32,7 @@ export const Title: React.FunctionComponent<Props> = ({
       options={options}
       component={TextFieldSelect}
       validate={validator(required)}
+      id="Title-field"
     />
   );
 };
