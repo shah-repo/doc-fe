@@ -11,6 +11,7 @@ import {
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
+import HelloSignAllSignedRefreshSockets from "../document.revision/HelloSignAllSignedRefreshSockets";
 import SummaryPresenter from "../document.revision/summary/presenter";
 import CloneContainer from "./Clone.container";
 import DocumentRevisionUpdateContainer from "./DocumentRevisionUpdate.container";
@@ -22,7 +23,6 @@ interface StateProps {
   documentRevision: DocumentRevision;
   currentEmployeeId: string;
   isCompanyAdmin: boolean;
-
 }
 
 interface DispatchProps {
@@ -48,17 +48,15 @@ const mapStateToProps = (
   loadDocumentRevisionAsyncState: documentRevisionsSelectors.getLoadAsyncState(
     state,
   ),
-    isCompanyAdmin: authSelectors.getHasTag(state, GroupTag.OWNERSHIP_CHANGE),
-    currentEmployeeId: authSelectors.currentEmployeeId(state),
+  isCompanyAdmin: authSelectors.getHasTag(state, GroupTag.OWNERSHIP_CHANGE),
+  currentEmployeeId: authSelectors.currentEmployeeId(state),
   documentRevision: documentRevisionsSelectors.getDocumentRevision(
     state,
     props.documentRevisionId,
   ),
 });
 
-export const DocumentRevisionDisplayContainer: React.FunctionComponent<
-  DocumentRevisionDisplayContainerProps
-> = ({
+export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevisionDisplayContainerProps> = ({
   currentUserEmail,
   loadDocumentRevision,
   isNewVersion,
@@ -77,14 +75,13 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<
     if (documentRevisionId) {
       loadDocumentRevisionAction();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentRevisionId]);
 
   const canChangeOwnerShip =
-  documentRevision &&
-  documentRevision.status === DocumentRevisionStatus.Draft &&
-    (isCompanyAdmin ||
-      documentRevision.owner.id === currentEmployeeId);
+    documentRevision &&
+    documentRevision.status === DocumentRevisionStatus.Draft &&
+    (isCompanyAdmin || documentRevision.owner.id === currentEmployeeId);
 
   const canEdit =
     documentRevision &&
@@ -101,6 +98,7 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<
       asyncAction={loadDocumentRevisionAction}
       startActionOnMount={false}
     >
+      <HelloSignAllSignedRefreshSockets documentRevision={documentRevision} />
       {canEdit && (
         <DocumentRevisionUpdateContainer
           documentRevision={documentRevision}
