@@ -418,6 +418,7 @@
   "form.builder.create.template": "Create Template",
   "form.builder.send.signature": "Send Signature Request",
   "form.builder.hellosign": "Hellosign",
+  "form.builder.hellosignPremade": "Hellosign Premade",
   "form.builder.purchaseorder": "Purchase Order",
   "form.builder.purhcase.order.items.placeholder": "Item A\nItem B\nItem C\n...",
   "form.builder.add.item": "Add item",

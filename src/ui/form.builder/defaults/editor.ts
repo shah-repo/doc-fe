@@ -5,6 +5,7 @@ import FBActionEditor from "../components/editors/FBActionEditor";
 import FBAutocompleteEditor from "../components/editors/FBAutocompleteEditor";
 import FBControlEditor from "../components/editors/FBControlEditor";
 import FBControlGroupEditor from "../components/editors/FBControlGroupEditor";
+import FBHelloSignTemplateEditor from "../components/editors/FBHelloSignTemplateEditor";
 import FBHyperlinkEditor from "../components/editors/FBHyperlinkEditor";
 import FBLabelEditor from "../components/editors/FBLabelEditor";
 import FBLabelStepperEditor from "../components/editors/FBLabelStepperEditor";
@@ -26,6 +27,7 @@ import FBLink from "../components/navigation/FBLink";
 import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaItem";
 import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
 import FBHelloSign from "../FBHelloSign";
+import FBHelloSignPremade from "../FBHelloSignPremade";
 import { FBEditorElementType } from "../types/editor";
 
 export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = {
@@ -44,6 +46,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   fileupload: FBLabelStepperEditor,
   action: FBActionEditor,
   hellosign: FBLabelEditor,
+  hellosignPremade: FBHelloSignTemplateEditor,
   purchaseorder: FBLabelEditor,
 };
 
@@ -65,6 +68,7 @@ export const FBFieldComponent: Dictionary<any> = {
   schemaItem: FBValidatorSchemaItem,
   action: FBActionContainer,
   hellosign: FBHelloSign,
+  hellosignPremade: FBHelloSignPremade,
   purchaseorder: FBPurchaseOrderField,
 };
 
@@ -83,7 +87,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "fileupload",
     "purchaseorder",
   ],
-  approvals: ["hellosign"],
+  approvals: ["hellosign", "hellosignPremade"],
   lists: ["autocomplete"],
   actions: ["action"],
 };

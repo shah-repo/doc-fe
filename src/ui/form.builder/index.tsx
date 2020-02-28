@@ -44,6 +44,8 @@ export * from "./FBFieldBottomBar/FBFieldBottomBar.types";
 export { default as FBHelloSign } from "./FBHelloSign/FBHelloSign";
 export * from "./FBHelloSign/FBHelloSign.types";
 
+export { default as FBHelloSignPremade } from "./FBHelloSignPremade/FBHelloSignPremade";
+
 export { default as FBDialog } from "./FBDialog/FBDialog";
 export { default as FBDialogState } from "./FBDialog/FBDialog.state";
 export * from "./FBDialog/FBDialog.types";

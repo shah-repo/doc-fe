@@ -24,6 +24,7 @@ export type FBEditorElementType =
   | "schemaItem"
   | "action"
   | "hellosign"
+  | "hellosignPremade"
   | "purchaseorder";
 
 export type FBEditorModeType = "create" | "update";
