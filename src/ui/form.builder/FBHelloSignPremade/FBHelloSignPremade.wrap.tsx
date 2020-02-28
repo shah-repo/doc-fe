@@ -51,7 +51,6 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     function apiCallCancelSig() {
       const apiCallSig = new FBActionModel();
       const signatureId = _.get(store.getState().documentRevisions.byId[FBStore.docId], "formInput.signatureRequestId");
-      console.log(signatureId);
       apiCallSig.set({
         requestMethod: "POST",
         requestUrl: "/hello_sign/cancel_signature_request/" + signatureId,
@@ -80,11 +79,9 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
         }
       } else {
         if (FBStore.docId === "") {
-          debugger;
           return alert("Template creation is available only after the document is created");
         }
         if (store.getState().documentRevisions.byId[FBStore.docId].attachments.length === 0) {
-          debugger;
           return alert("No attachments uploaded, upload attachment and save document to create template");
         }
         apiCall(payload);

@@ -54,7 +54,6 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     function apiCallCancelSig() {
       const apiCallSig = new FBActionModel();
       const signatureId = _.get(store.getState().documentRevisions.byId[FBStore.docId], "formInput.signatureRequestId");
-      console.log(signatureId);
       apiCallSig.set({
         requestMethod: "POST",
         requestUrl: "/hello_sign/cancel_signature_request/" + signatureId,
