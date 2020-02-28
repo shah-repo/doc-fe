@@ -26,7 +26,7 @@
   "new.user.set.password": "Set your new password",
 
   "header.title": "Enlil",
-  "header.welcome": "Welcome", 
+  "header.welcome": "Welcome",
   "header.name": "{name}",
   "header.logout": "Logout",
 
@@ -173,7 +173,7 @@
   "changeRequest.audit.assessments.process.attachment.OBJECT_NEW": "Process Assessment Attachment Added",
   "changeRequest.audit.assessments.regulatory.attachment.OBJECT_NEW": "Regulatory Assessment Attachment Added",
   "changeRequest.audit.tasks.ARRAY_DELETED": "Implementation plan tasks deleted",
-  
+
   "cr.assessment.reasoning.design.not_affect_changes": "Changes do not affect form, fit, function or materials with no impact on risk, safety or effectiveness",
   "cr.assessment.reasoning.design.equivalent_changes": "Changes are equivalent to current design with no impact on risk, safety or effectiveness. Equivalency established through design verification",
   "cr.assessment.reasoning.process.equivalent_changes": "Changes do not affect bioburden, sterilization, or validated state and are covered by existing QC methods",
@@ -386,6 +386,7 @@
   "form.builder.radiogroup": "Radio Button group",
   "form.builder.label": "Label",
   "form.builder.placeholder": "Placeholder",
+  "form.builder.mediaQR": "Image QR",
   "form.builder.rowNumber": "Row Number",
   "form.builder.required": "Required",
   "form.builder.options.placeholder": "Option 1\nOption 2\nOption 3\n...",
@@ -477,7 +478,6 @@
   "supplier.add.new": "Add {name}",
   "supplier.form.error": "There is no form. Please create a new supplier through the Document list.",
   "supplier.select.form": "Select a form",
-  
 
   "watermark.successfully.requested": "Watermarked copy of {file}.{type} successfully requested. We will notify you when it's ready to download.",
   "watermark.download.ready": "Watermarked file {name}.{type} ready to download",
@@ -494,5 +494,4 @@
 
   "change.owner": "Change Owner",
   "change.owner.update": "Update Owner"
-
 }

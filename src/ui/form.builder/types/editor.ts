@@ -23,7 +23,8 @@ export type FBEditorElementType =
   | "schemaSelect"
   | "schemaItem"
   | "action"
-  | "purchaseorder";
+  | "purchaseorder"
+  | "mediaQR";
 
 export type FBEditorModeType = "create" | "update";
 
