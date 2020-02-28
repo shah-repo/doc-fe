@@ -16,7 +16,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     state,
     ...props
   }: T) => {
-    
+
     const signatureId = _.get(store.getState().documentRevisions.byId[FBStore.docId], "formInput.signatureRequestId");
     if (FBStore.mode === "form") {
       if (signatureId === "" || signatureId === undefined) {
@@ -80,11 +80,11 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
         }
       } else {
         if (FBStore.docId === "") {
-          debugger
+          debugger;
           return alert("Template creation is available only after the document is created");
         }
         if (store.getState().documentRevisions.byId[FBStore.docId].attachments.length === 0) {
-          debugger
+          debugger;
           return alert("No attachments uploaded, upload attachment and save document to create template");
         }
         apiCall(payload);

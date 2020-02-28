@@ -17,8 +17,9 @@ export interface FBHelloSignFieldProps {
 }
 
 export interface FBHelloSignPayload {
-  testMode: number;
-  documentRevisionId: string;
+  documentRevision: {
+    id: string,
+  };
 }
 
 export type FBHelloSignProps =
@@ -26,7 +27,7 @@ export type FBHelloSignProps =
   & Pick<FBInputProps, "label" | "name">
   & Pick<FBButtonProps, "onClick">
   & {
-    buttonLabel?: string
+    buttonLabel?: string,
   };
 
 export const FBHelloSignTypeMap: Dictionary<FBHelloSignFieldType> = {

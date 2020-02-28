@@ -3,8 +3,8 @@ import React from "react";
 import { FBHelloSignProps } from ".";
 import FBInput from "../components/common/FBInput";
 import FBButton from "../components/inputs/FBButton";
-import { withFBHelloSign } from "./FBHelloSignPremade.wrap";
 import FBTextField from "../components/inputs/FBTextField";
+import { withFBHelloSign } from "./FBHelloSignPremade.wrap";
 
 const FBHelloSignPremade: React.FunctionComponent<FBHelloSignProps> = ({
   onClick,

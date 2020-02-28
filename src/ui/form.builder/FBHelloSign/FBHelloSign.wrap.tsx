@@ -17,7 +17,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     state,
     ...props
   }: T) => {
-    
+
     const signatureId = _.get(store.getState().documentRevisions.byId[FBStore.docId], "formInput.signatureRequestId");
     if (FBStore.mode === "form") {
       if (signatureId === "" || signatureId === undefined) {
@@ -45,6 +45,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
       apiCallSig.set({
         requestMethod: "POST",
         requestUrl: "/hello_sign/send_signature_request",
+        testMode: 1,
         payload,
       });
       FBActionStore.apiCall(apiCallSig.toJS() as unknown as FBActionModel);
@@ -73,8 +74,9 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
 
     onClick = () => {
       const payload: FBHelloSignPayload = {
-        testMode: 1,
-        documentRevisionId: FBStore.docId,
+        documentRevision: {
+          id: FBStore.docId,
+        },
       };
 
       if (FBStore.mode === "form") {

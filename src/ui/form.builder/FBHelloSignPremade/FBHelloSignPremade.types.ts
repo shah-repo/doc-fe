@@ -28,7 +28,7 @@ export type FBHelloSignProps =
   & Pick<FBButtonProps, "onClick">
   & {
     buttonLabel?: string,
-    templateId?: string
+    templateId?: string,
   };
 
 export const FBHelloSignTypeMap: Dictionary<FBHelloSignFieldType> = {
