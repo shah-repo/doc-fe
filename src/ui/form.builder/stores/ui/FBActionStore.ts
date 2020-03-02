@@ -56,7 +56,6 @@ export class FormBuilderActionStore {
           data: { message },
         } = exception.response as AsyncActionErrorResponse;
         responseMessage = Array.isArray(message) ? message.join("; ") : message;
-        console.log(exception);
       }
       const errorMessage: string = responseMessage || exception.message;
       if (requestUrl === "/hello_sign/template/attach_predefined") {
