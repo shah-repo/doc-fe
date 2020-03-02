@@ -17,7 +17,7 @@ export const AcctCodes: React.FunctionComponent<Props> = ({
   acctCodes,
 }) => {
   const async = useAsync();
-  const changeCompanyAction = useActionCreator(companyActions.changeCompanyMine);
+  const changeCompanyAction = useActionCreator(companyActions.updateCompanyMine);
 
   const saveChanges = (newAcctCodes) => {
     async.start(changeCompanyAction, { acctCodes: newAcctCodes }, async);
@@ -32,7 +32,6 @@ export const AcctCodes: React.FunctionComponent<Props> = ({
       addLabel="user.management.add.codes"
       title="user.management.codes"
       placeholder="New Acct Code"
-      addFieldButtonLabel="user.management.add.code"
       fields={acctCodes}
       numberValues={true}
     />

@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 import { LOGOUT_USER } from "../auth/constants";
 import { LogoutUserAction } from "../auth/types";
-import { GET_COMPANY_MINE, SELECT_COMPANY, WHITE_LABEL_DEFAULT } from "./constants";
+import { SELECT_COMPANY, SET_COMPANY_MINE, WHITE_LABEL_DEFAULT } from "./constants";
 import { CompanyMineAction, SelectCompanyAction, SelectCompanyState } from "./types";
 
 export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
@@ -38,7 +38,7 @@ export const companyMine = (
   action: CompanyMineAction,
 ): SelectCompanyState => {
   switch (action.type) {
-    case GET_COMPANY_MINE:
+    case SET_COMPANY_MINE:
       return { ...action.payload };
     default:
       return state;

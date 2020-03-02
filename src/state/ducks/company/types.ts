@@ -1,6 +1,6 @@
 import { User } from "../common";
 import { DocumentType } from "../documentRevisions/documentType";
-import { GET_COMPANY_MINE, SELECT_COMPANY } from "./constants";
+import { SELECT_COMPANY, SET_COMPANY_MINE } from "./constants";
 
 export interface WhiteLabelingColors {
   defaultBackground: string;
@@ -43,7 +43,7 @@ export interface SelectCompanyAction {
 }
 
 export interface CompanyMineAction {
-  type: typeof GET_COMPANY_MINE;
+  type: typeof SET_COMPANY_MINE;
   payload: Company;
 }
 

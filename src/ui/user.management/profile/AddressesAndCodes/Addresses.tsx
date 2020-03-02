@@ -17,7 +17,7 @@ export const Addresses: React.FunctionComponent<Props> = ({
   addresses,
 }) => {
   const async = useAsync();
-  const changeCompanyAction = useActionCreator(companyActions.changeCompanyMine);
+  const changeCompanyAction = useActionCreator(companyActions.updateCompanyMine);
 
   const saveChanges = (newAddresses) => {
     async.start(changeCompanyAction, { addresses: newAddresses }, async);
@@ -32,7 +32,6 @@ export const Addresses: React.FunctionComponent<Props> = ({
       addLabel="user.management.add.addresses"
       title="user.management.addresses"
       placeholder="New Address"
-      addFieldButtonLabel="user.management.add.address"
       fields={addresses}
     />
   );

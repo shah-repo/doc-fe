@@ -10,13 +10,13 @@ export default makeStyles((theme: Theme) =>
     containedButton: {
       width: "auto",
       marginLeft: theme.spacing(0),
-      color: "#fff",
-      backgroundColor: "#6E09EA",
+      color: theme.palette.common.white,
+      backgroundColor: theme.palette.secondary.main,
     },
     outlinedButton: {
       width: "auto",
-      color: "#6E09EA",
-      borderColor: "#6E09EA",
+      color: theme.palette.secondary.main,
+      borderColor: theme.palette.secondary.main,
     },
     values: {
       marginTop: "16px",
@@ -25,7 +25,7 @@ export default makeStyles((theme: Theme) =>
       height: "36px",
       width: "500px",
       paddingLeft: "5px",
-      color: "#4d4d4d",
+      color: theme.palette.text.primary,
       fontSize: "0.885rem",
       fontFamily: "Open Sans, sans-serif",
       borderRadius: "4px",
