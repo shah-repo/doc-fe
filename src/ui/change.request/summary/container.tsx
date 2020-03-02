@@ -5,19 +5,13 @@ import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
-import {
-  ChangeRequest,
-  changeRequestsActions,
-} from "../../../state/ducks/changeRequest";
+import { ChangeRequest, changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../../state/reducers";
 import ChangeRequestAuditContainer from "../../changeRequest/audit/Audit.container";
 import SummaryPresenter from "../../changeRequest/documentRevision/DocumentRevisionControlPreview.presenter";
-import {
-  toChangeRequestEditRequestBody,
-  toChangeRequestFormValues,
-} from "../../changeRequest/forms/transform";
+import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "../../changeRequest/forms/transform";
 import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
 import useAsync from "../../hooks/useAsync";
@@ -40,14 +34,16 @@ interface OwnProps extends DataProps<ChangeRequest> {
   currentUserEmail: string;
 }
 
-export type Props = OwnProps &
+export type Props =
+  OwnProps &
   DispatchProps &
   StateProps &
   WithStyles<typeof styles>;
 
+const selectCanChangeOwnership = authSelectors.makeGetHasTag();
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   currentEmployeeId: authSelectors.currentEmployeeId(state),
-  isCompanyAdmin: authSelectors.getHasTag(state, GroupTag.OWNERSHIP_CHANGE),
+  isCompanyAdmin: selectCanChangeOwnership(state, GroupTag.USER_MANAGEMENT),
 });
 
 export const Container: React.FunctionComponent<Props> = ({
@@ -59,7 +55,7 @@ export const Container: React.FunctionComponent<Props> = ({
   currentEmployeeId,
   isCompanyAdmin,
 }) => {
-  const canChangeOwnerShip = canChangeCROwner(dataProp!.state, currentEmployeeId, dataProp.owner.id, isCompanyAdmin);
+  const canChangeOwnerShip = canChangeCROwner(dataProp.state, currentEmployeeId, dataProp.owner.id, isCompanyAdmin);
 
   const [docRev, setDocRev] = React.useState<DocumentRevision | null>(null);
   const async = useAsync<ChangeRequest>();
@@ -85,18 +81,18 @@ export const Container: React.FunctionComponent<Props> = ({
   const summaryPresenterRenderer = (
     props: FormikProps<ChangeRequestFormValues>,
   ) => (
-    <Form>
-      <Presenter
-        dataProp={dataProp}
-        asyncState={async.asyncState}
-        canEdit={canEdit}
-        currentUserEmail={currentUserEmail}
-        closeTask={closeTask}
-        canChangeOwnerShip={canChangeOwnerShip}
-        {...props}
-      />
-    </Form>
-  );
+      <Form>
+        <Presenter
+          dataProp={dataProp}
+          asyncState={async.asyncState}
+          canEdit={canEdit}
+          currentUserEmail={currentUserEmail}
+          closeTask={closeTask}
+          canChangeOwnerShip={canChangeOwnerShip}
+          {...props}
+        />
+      </Form>
+    );
 
   const validate = (values: ChangeRequestFormValues) => {
     const errors: FormikErrors<any> = {};

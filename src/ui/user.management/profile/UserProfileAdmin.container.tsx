@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect, useSelector } from "react-redux";
-import { getHasPermission, getHasTag } from "../../../common/utils/selectors";
+import { getHasPermission } from "../../../common/utils/selectors";
 import Config from "../../../config";
 import { authActions, authSelectors } from "../../../state/ducks/auth";
 import { EmployeeEditRequestBody, GroupTag, Permission } from "../../../state/ducks/auth/types";
@@ -10,6 +10,7 @@ import { USER_SLACK_URL } from "../../../state/ducks/userManagement/constants";
 import { ApplicationState } from "../../../state/reducers";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import useAsync from "../../hooks/useAsync";
+import useGetHasTag from "../../hooks/useGetHasTag";
 import UserProfilePresenter from "./UserProfile.presenter";
 
 interface OwnProps {
@@ -40,9 +41,9 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
   isSlackIntegrationEnabled,
   slackTeamId,
 }) => {
-  const canManageUsers = useSelector(getHasTag(GroupTag.USER_MANAGEMENT));
   const userSlackId = useSelector(authSelectors.currentSlackUserId);
   const canUpdateCompany = useSelector(getHasPermission(Permission.COMPANY_UPDATE_CURRENT));
+  const canManageUsers = useGetHasTag(GroupTag.USER_MANAGEMENT);
 
   const [realUser, setRealUser] = useState<any>({ user: {}, groups: [] });
   const [showEditUser, setEditUser] = useState(false);

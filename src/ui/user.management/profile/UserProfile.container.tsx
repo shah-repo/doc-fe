@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
-import { getHasPermission, getHasTag } from "../../../common/utils/selectors";
+import { getHasPermission } from "../../../common/utils/selectors";
 import Config from "../../../config";
 import { authActions, authSelectors } from "../../../state/ducks/auth";
 import { EmployeeEditRequestBody, GroupTag, Permission } from "../../../state/ducks/auth/types";
@@ -9,6 +9,7 @@ import { userManagementActions } from "../../../state/ducks/userManagement";
 import { USER_SLACK_URL } from "../../../state/ducks/userManagement/constants";
 import { ApplicationState } from "../../../state/reducers";
 import useAsync from "../../hooks/useAsync";
+import useGetHasTag from "../../hooks/useGetHasTag";
 import UserProfilePresenter from "./UserProfile.presenter";
 
 interface OwnProps {
@@ -39,8 +40,8 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
   const async = useAsync();
   const dispatch = useDispatch();
 
-  const canManageUsers = useSelector(getHasTag(GroupTag.USER_MANAGEMENT));
   const canUpdateCompany = useSelector(getHasPermission(Permission.COMPANY_UPDATE_CURRENT));
+  const canManageUsers = useGetHasTag(GroupTag.USER_MANAGEMENT);
   const name = useSelector(authSelectors.currentUserName);
   const avatar = useSelector(authSelectors.currentEmployeeAvatar);
   const email = useSelector(authSelectors.currentUserEmail);

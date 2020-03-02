@@ -364,6 +364,7 @@
   "form.builder.radiogroup": "Radio Button group",
   "form.builder.label": "Label",
   "form.builder.placeholder": "Placeholder",
+  "form.builder.mediaQR": "Image QR",
   "form.builder.rowNumber": "Row Number",
   "form.builder.required": "Required",
   "form.builder.options.placeholder": "Option 1\nOption 2\nOption 3\n...",

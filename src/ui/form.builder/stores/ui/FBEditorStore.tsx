@@ -12,31 +12,32 @@ import FBValidatorStore from "../ui/FBValidatorStore";
 import FBDynamicValidatorStore from "./FBDynamicValidatorStore";
 
 export class FBEditorStore {
-  @observable public open: boolean = false;
+  @observable public open = false;
   @observable public content?: React.ReactNode = undefined;
   @observable public title?: string = undefined;
   @observable public maxWidth?: "sm" | "md" | "lg" = "md";
-  public editorIndex: number = 0;
+  public editorIndex = 0;
   public editorMode: FBEditorModeType = "create";
 
-  @action public setOpen = (forIndex: number = -1) => () => {
+  @action public setOpen = (forIndex = -1) => () => {
     this.open = true;
     this.content = this.sections();
     this.title = "";
     this.editorIndex = forIndex + 1;
     this.editorMode = "create";
-  }
+  };
 
   @action public reset = () => {
     this.open = false;
     FBValidatorStore.applicableOn = false;
     FBDynamicValidatorStore.reset();
     FBValidatorStore.resetIndicatorValues();
+    FBValidatorStore.selectedFieldIndex = null;
     setTimeout(() => {
       this.content = undefined;
       this.title = undefined;
     }, 500);
-  }
+  };
 
   @action public editorTypeRenderer = (
     type: FBEditorElementType,
@@ -57,7 +58,7 @@ export class FBEditorStore {
       />
     );
     this.title = title || "form.builder.create.field";
-  }
+  };
 
   @action public editorTypeEdit = (schema: FBTemplateSchema) => {
     if (_.isUndefined(schema.index)) {
@@ -73,17 +74,17 @@ export class FBEditorStore {
       schema,
       "form.builder.edit.field",
     )();
-  }
+  };
 
   @action private sections = () =>
     Object.keys(FBEditorSectionConfig).map((key, i) => (
       <FBEditorSection
-        key={`form.builder.${key as string}-${i}`}
-        label={`form.builder.${key as string}`}
+        key={`form.builder.${key}-${i}`}
+        label={`form.builder.${key}`}
       >
         {this.generateElements(FBEditorSectionConfig[key])}
       </FBEditorSection>
-    ))
+    ));
 
   @action private generateElements = (elements: FBEditorElementType[]) =>
     elements.map((el, i) => (
@@ -92,7 +93,7 @@ export class FBEditorStore {
         label={`form.builder.${el as string}`}
         onClick={this.editorTypeRenderer(el)}
       />
-    ))
+    ));
 }
 
 const editorStore = new FBEditorStore();
