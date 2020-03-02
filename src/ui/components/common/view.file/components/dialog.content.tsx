@@ -1,5 +1,6 @@
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import React, { useEffect, useState } from "react";
+import PrismaZoom from "react-prismazoom";
 import AsyncGate from "../../../AsyncGate";
 import Text from "../../../Text";
 import { IMAGE, PDF, SUPPORTED_IMAGE_FILES, SUPPORTED_VIDEO_FILES, VIDEO } from "../utils/constants";
@@ -41,7 +42,12 @@ const ViewFileContent: React.FunctionComponent<ViewFileContentProps> = ({
     </object>
   );
   const renderImage = fileType === IMAGE && (
-    <img src={url} alt={url} style={{ maxWidth: "100%" }} />
+    <PrismaZoom
+      style={{ maxWidth: "45vw", width: "100%", maxHeight: "90vh", margin: "0 auto" }}
+      topBoundary={180}
+    >
+      <img src={url} alt={url} width="100%" />
+    </PrismaZoom>
   );
 
   return (
