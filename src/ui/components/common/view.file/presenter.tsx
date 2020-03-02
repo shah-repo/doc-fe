@@ -36,6 +36,7 @@ const ViewFilePresenter: React.FunctionComponent<ViewFilePresenterProps> = ({
         asyncState={asyncState}
         url={url}
         type={attachment.type}
+        handleClose={handleClose}
       />
     </Dialog>
   );

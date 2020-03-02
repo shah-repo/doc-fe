@@ -11,6 +11,7 @@ const ViewFileContent: React.FunctionComponent<ViewFileContentProps> = ({
   asyncState,
   url,
   type,
+  handleClose,
 }) => {
   const classes = styles();
   const [fileType, setFileType] = useState("");
@@ -43,17 +44,24 @@ const ViewFileContent: React.FunctionComponent<ViewFileContentProps> = ({
   );
   const renderImage = fileType === IMAGE && (
     <PrismaZoom
-      style={{ maxWidth: "45vw", width: "100%", maxHeight: "90vh", margin: "0 auto" }}
+      className={classes.zoom}
       topBoundary={180}
     >
       <img src={url} alt={url} width="100%" />
     </PrismaZoom>
   );
 
+  const handleClick = (evt) => {
+    if (evt.target.tagName === "DIV") {
+      handleClose();
+    }
+  };
+
   return (
     <MuiDialogContent
       className={classes.content}
       classes={{ root: classes.contentRoot }}
+      onClick={handleClick}
     >
       <AsyncGate asyncState={asyncState}>
         {renderVideo}
