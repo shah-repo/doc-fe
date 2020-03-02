@@ -1,6 +1,6 @@
-import { User } from '../common';
-import { DocumentType } from '../documentRevisions/documentType';
-import { SELECT_COMPANY } from './constants';
+import { User } from "../common";
+import { DocumentType } from "../documentRevisions/documentType";
+import { SELECT_COMPANY } from "./constants";
 
 export interface WhiteLabelingColors {
   defaultBackground: string;

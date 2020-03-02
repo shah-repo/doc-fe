@@ -44,6 +44,9 @@ export class FormBuilderActionStore {
         if (requestUrl === "/hello_sign/send_signature_request") {
           return alert("Signature request sent");
         }
+        if (requestUrl === "/hello_sign/template/attach_predefined") {
+          return alert("Template Attached Successfully");
+        }
         alert("Success");
       }
     } catch (exception) {
@@ -53,8 +56,12 @@ export class FormBuilderActionStore {
           data: { message },
         } = exception.response as AsyncActionErrorResponse;
         responseMessage = Array.isArray(message) ? message.join("; ") : message;
+        console.log(exception);
       }
       const errorMessage: string = responseMessage || exception.message;
+      if (requestUrl === "/hello_sign/template/attach_predefined") {
+        return alert("Template doesn't exist, enter existing TemplateID and save document");
+      }
       alert(errorMessage);
     }
   }

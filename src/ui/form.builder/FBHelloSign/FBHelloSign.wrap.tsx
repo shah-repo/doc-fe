@@ -23,7 +23,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
       if (signatureId === "" || signatureId === undefined) {
         buttonLabel = "form.builder.send.signature";
       } else {
-        buttonLabel = "Cancel Signature Request";
+        buttonLabel = "form.builder.cancel.signature";
       }
     } else {
       buttonLabel = "form.builder.create.template";
