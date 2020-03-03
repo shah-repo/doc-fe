@@ -6,21 +6,11 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
-import {
-  changeRequestsActions,
-  changeRequestsSelectors,
-} from "../../../state/ducks/changeRequest";
-import {
-  DocumentRevision,
-  DocumentRevisionStatus,
-  RevisionStageOptions,
-} from "../../../state/ducks/documentRevisions";
+import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
+import { DocumentRevision, DocumentRevisionStatus, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
-import {
-  userManagementActions,
-  userManagementSelectors,
-} from "../../../state/ducks/userManagement";
+import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
@@ -30,9 +20,7 @@ import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocom
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
 import CheckboxField from "../../components/forms/fields/Checkbox";
 import RichTextEditor from "../../components/forms/fields/RichTextEditor";
-import SelectField, {
-  SelectOption,
-} from "../../components/forms/fields/Select";
+import SelectField, { SelectOption } from "../../components/forms/fields/Select";
 import { required, validator } from "../../components/forms/fields/validators";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
