@@ -35,6 +35,7 @@ interface OwnProps {
   setPreviewAvatar: (value: string) => void;
   activeStatus: boolean;
   userId: string;
+  isDeveloper: boolean;
 }
 
 type Props = OwnProps;
@@ -64,6 +65,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
   activeStatus,
   userId,
   callbackUpdateWithUpload,
+  isDeveloper,
 }) => {
   const [isUsernameEmpty, setUsernameError] = useState<boolean>(false);
   const currentUserId = useSelector(authSelectors.currentUserId);
@@ -132,6 +134,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
         userId={userId}
         isCurrentUser={isCurrentUser}
         isUsernameEmpty={isUsernameEmpty}
+        isDeveloper={isDeveloper}
       />
     </Dialog>
   );

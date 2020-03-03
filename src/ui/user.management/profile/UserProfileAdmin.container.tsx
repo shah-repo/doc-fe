@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { connect, useSelector } from "react-redux";
+import { getHasPermission } from "../../../common/utils/selectors";
 import Config from "../../../config";
 import { authActions, authSelectors } from "../../../state/ducks/auth";
-import { EmployeeEditRequestBody, GroupTag } from "../../../state/ducks/auth/types";
+import { EmployeeEditRequestBody, GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { companySelectors, Employee } from "../../../state/ducks/company";
 import { GetEmployeeResponse, userManagementActions } from "../../../state/ducks/userManagement";
 import { USER_SLACK_URL } from "../../../state/ducks/userManagement/constants";
@@ -42,6 +43,7 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
 }) => {
   const canManageUsers = useGetHasTag(GroupTag.USER_MANAGEMENT);
   const userSlackId = useSelector(authSelectors.currentSlackUserId);
+  const isDeveloper = useSelector(getHasPermission(Permission.DEVELOPER));
 
   const [realUser, setRealUser] = useState<any>({ user: {}, groups: [] });
   const [showEditUser, setEditUser] = useState(false);
@@ -145,6 +147,7 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
       activeStatus={active}
       userId={realUser.user.id}
       callbackUpdateWithUpload={callbackUpdateWithUpload}
+      isDeveloper={isDeveloper}
     />
   );
 };

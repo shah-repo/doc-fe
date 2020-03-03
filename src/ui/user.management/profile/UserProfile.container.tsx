@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
+import { getHasPermission } from "../../../common/utils/selectors";
 import Config from "../../../config";
 import { authActions, authSelectors } from "../../../state/ducks/auth";
-import { EmployeeEditRequestBody, GroupTag } from "../../../state/ducks/auth/types";
+import { EmployeeEditRequestBody, GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { companySelectors, Employee } from "../../../state/ducks/company";
 import { userManagementActions } from "../../../state/ducks/userManagement";
 import { USER_SLACK_URL } from "../../../state/ducks/userManagement/constants";
@@ -40,6 +41,7 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
   const dispatch = useDispatch();
 
   const canManageUsers = useGetHasTag(GroupTag.USER_MANAGEMENT);
+  const isDeveloper = useSelector(getHasPermission(Permission.DEVELOPER));
   const name = useSelector(authSelectors.currentUserName);
   const avatar = useSelector(authSelectors.currentEmployeeAvatar);
   const email = useSelector(authSelectors.currentUserEmail);
@@ -93,6 +95,7 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
       setPreviewAvatar={setPreviewAvatar}
       activeStatus={activeStatus}
       userId={userId}
+      isDeveloper={isDeveloper}
     />
   );
 };

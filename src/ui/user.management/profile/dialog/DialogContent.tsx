@@ -6,10 +6,7 @@ import { getTableCriteria } from "../../../../common/utils/selectors";
 import { attachmentsActions } from "../../../../state/ducks/attachments";
 import { EmployeeEditRequestBody } from "../../../../state/ducks/auth/types";
 import { tableSearchActions } from "../../../../state/ducks/tableSearch";
-import {
-  GetEmployeeResponse,
-  userManagementActions,
-} from "../../../../state/ducks/userManagement";
+import { GetEmployeeResponse, userManagementActions } from "../../../../state/ducks/userManagement";
 import { AsyncState } from "../../../../state/types";
 import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
 import SubmitButton from "../../../components/forms/SubmitButton";
@@ -17,6 +14,7 @@ import Text from "../../../components/Text";
 import useAsync from "../../../hooks/useAsync";
 import styles from "../../profile/UserProfile.styles";
 import { toEmployeeActiveStatusEditRequestBody } from "../../utils/transform";
+import ApiTokenContent from "../apiTokenContent/ApiTokenContent";
 import UserGroups from "../groups/UserGroups";
 
 interface OwnProps {
@@ -44,6 +42,7 @@ interface OwnProps {
   userId: string;
   isCurrentUser: boolean;
   isUsernameEmpty: boolean;
+  isDeveloper: boolean;
 }
 
 type Props = OwnProps;
@@ -73,6 +72,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
   callbackUpdateWithUpload,
   isCurrentUser,
   isUsernameEmpty,
+  isDeveloper,
 }) => {
   const TABLE_NAME = "userManagement";
   const classes = styles();
@@ -236,6 +236,8 @@ export const DialogContent: React.FunctionComponent<Props> = ({
             />
           </div>
         )}
+        {!isDeveloper &&
+          <ApiTokenContent />}
         {showEditUser && updateProfileButtonsRenderer()}
       </Box>
     </React.Fragment>
