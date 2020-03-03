@@ -11,8 +11,8 @@ export default makeStyles((theme: Theme) =>
 
     },
     userProfile: {
-        color: "white",
-        fontsize: "1.3rem",
+      color: "white",
+      fontsize: "1.3rem",
     },
     userName: {
       color: "white",

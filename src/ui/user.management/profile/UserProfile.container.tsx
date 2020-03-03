@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
+import { getHasPermission } from "../../../common/utils/selectors";
 import Config from "../../../config";
 import { authActions, authSelectors } from "../../../state/ducks/auth";
-import { EmployeeEditRequestBody, GroupTag } from "../../../state/ducks/auth/types";
+import { EmployeeEditRequestBody, GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { companySelectors, Employee } from "../../../state/ducks/company";
 import { userManagementActions } from "../../../state/ducks/userManagement";
 import { USER_SLACK_URL } from "../../../state/ducks/userManagement/constants";
@@ -39,6 +40,7 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
   const async = useAsync();
   const dispatch = useDispatch();
 
+  const canUpdateCompany = useSelector(getHasPermission(Permission.COMPANY_UPDATE_CURRENT));
   const canManageUsers = useGetHasTag(GroupTag.USER_MANAGEMENT);
   const name = useSelector(authSelectors.currentUserName);
   const avatar = useSelector(authSelectors.currentEmployeeAvatar);
@@ -75,6 +77,7 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
       isOpen={showUserProfile}
       close={closeUserProfile}
       canManageUsers={canManageUsers}
+      canUpdateCompany={canUpdateCompany}
       employeeGroups={groups}
       name={name}
       avatar={avatar}
