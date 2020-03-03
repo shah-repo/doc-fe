@@ -24,11 +24,3 @@ export type FBMediaAlbumProps = Pick<BoxProps, "height" | "width"> & {
   actionIcons?: FBMediaAlbumActionProps[];
   onClick?: () => any;
 };
-
-export interface FBMediaAssetBodyProps {
-  s3link: string;
-}
-
-export interface FBMediaAssetDataProps {
-  url: string;
-}
