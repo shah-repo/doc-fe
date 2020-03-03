@@ -30,10 +30,11 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
     case "justifications.attachments":
     case "assessments.process.attachments":
     case "assessments.design.attachments":
-    case "assessments.regulatory.attachments":
+    case "assessments.regulatory.attachments":{
       const { name, type } = audit.nextValue as Attachment;
       returnValue = `${name}.${type}`;
       break;
+    }
     case "approvals":
       returnValue = (audit.nextValue as Approval).approver.user.name;
       break;
@@ -41,6 +42,7 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
       returnValue = (audit.nextValue as User).name;
       break;
     case "tasks.assigned":
+    case "owner":
       returnValue = (audit.nextValue as Owner).user.name;
       break;
     case "documentRevisions":
