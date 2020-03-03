@@ -1,5 +1,6 @@
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import React, { useEffect, useState } from "react";
+import PrismaZoom from "react-prismazoom";
 import AsyncGate from "../../../AsyncGate";
 import Text from "../../../Text";
 import { IMAGE, PDF, SUPPORTED_IMAGE_FILES, SUPPORTED_VIDEO_FILES, VIDEO } from "../utils/constants";
@@ -10,6 +11,7 @@ const ViewFileContent: React.FunctionComponent<ViewFileContentProps> = ({
   asyncState,
   url,
   type,
+  handleClose,
 }) => {
   const classes = styles();
   const [fileType, setFileType] = useState("");
@@ -41,13 +43,25 @@ const ViewFileContent: React.FunctionComponent<ViewFileContentProps> = ({
     </object>
   );
   const renderImage = fileType === IMAGE && (
-    <img src={url} alt={url} style={{ maxWidth: "100%" }} />
+    <PrismaZoom
+      className={classes.zoom}
+      topBoundary={180}
+    >
+      <img src={url} alt={url} width="100%" />
+    </PrismaZoom>
   );
+
+  const handleClick = (evt) => {
+    if (evt.target.tagName === "DIV") {
+      handleClose();
+    }
+  };
 
   return (
     <MuiDialogContent
       className={classes.content}
       classes={{ root: classes.contentRoot }}
+      onClick={handleClick}
     >
       <AsyncGate asyncState={asyncState}>
         {renderVideo}

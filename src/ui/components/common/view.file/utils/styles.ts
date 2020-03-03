@@ -27,4 +27,10 @@ export const styles = makeStyles((theme) => ({
     top: theme.spacing(1),
     marginRight: 30,
   },
+  zoom: {
+    maxWidth: "45vw",
+    width: "100%",
+    maxHeight: "90vh",
+    margin: "0 auto",
+  },
 }));
