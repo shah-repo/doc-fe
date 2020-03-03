@@ -18,8 +18,6 @@ if [ "${ENV}" == "prod" ]; then
 	export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_PROD
 fi
 
-aws ecr get-login --no-include-email --region "${AWS_DEFAULT_REGION}" | bash
-
 tar -zxvf "compiled.tar.gz"
 
 aws s3 sync "compiled/build/" \
