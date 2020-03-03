@@ -6,11 +6,21 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
-import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
-import { DocumentRevision, DocumentRevisionStatus, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
+import {
+  changeRequestsActions,
+  changeRequestsSelectors
+} from "../../../state/ducks/changeRequest";
+import {
+  DocumentRevision,
+  DocumentRevisionStatus,
+  RevisionStageOptions
+} from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
-import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
+import {
+  userManagementActions,
+  userManagementSelectors
+} from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
@@ -20,7 +30,9 @@ import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocom
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
 import CheckboxField from "../../components/forms/fields/Checkbox";
 import RichTextEditor from "../../components/forms/fields/RichTextEditor";
-import SelectField, { SelectOption } from "../../components/forms/fields/Select";
+import SelectField, {
+  SelectOption
+} from "../../components/forms/fields/Select";
 import { required, validator } from "../../components/forms/fields/validators";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
@@ -46,7 +58,7 @@ import { DocumentRevisionFormValues } from "./types";
 
 export interface Props
   extends WithStyles<typeof styles>,
-  FormikProps<DocumentRevisionFormValues> {
+    FormikProps<DocumentRevisionFormValues> {
   asyncState: AsyncState;
   documentRevision: DocumentRevision;
   documentRevisions?: DocumentRevision[];
@@ -86,19 +98,19 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   otherDocumentTypes,
   canChangeOwnerShip,
   documentRevision,
-  setFieldValue,
+  setFieldValue
 }) => {
   const loadAvailableApproversAction = useActionCreator(
-    changeRequestsActions.loadAvailableApprovers,
+    changeRequestsActions.loadAvailableApprovers
   );
   const loadApproversAsyncState = useSelector(
-    changeRequestsSelectors.getLoadApproversAsyncState,
+    changeRequestsSelectors.getLoadApproversAsyncState
   );
   const loadGroupsAction = useActionCreator(
-    userManagementActions.loadCompanyGroups,
+    userManagementActions.loadCompanyGroups
   );
   const loadGroupAsyncState = useSelector(
-    userManagementSelectors.getLoadGroupsAsyncState,
+    userManagementSelectors.getLoadGroupsAsyncState
   );
 
   if (!values.id && !_.get(values, "document.documentType.id")) {
@@ -114,8 +126,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   const isDisabled: boolean = _.get(initialValues, "id") !== undefined;
   const isdocRevVersionOne = _.get(documentRevision, "version") === 1;
-  const isdocRevStatusDraft = _.get(documentRevision, "status") === DocumentRevisionStatus.Draft;
-  const outputDocEnabled: boolean = (isdocRevVersionOne && isdocRevStatusDraft) || !isDisabled;
+  const isdocRevStatusDraft =
+    _.get(documentRevision, "status") === DocumentRevisionStatus.Draft;
+  const outputDocEnabled: boolean =
+    (isdocRevVersionOne && isdocRevStatusDraft) || !isDisabled;
 
   useEffect(() => {
     if (proposedDocId) {
@@ -129,21 +143,21 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     if (isdocRevStatusDraft) {
       savedocInfo({
         name: values.name,
-        isQms: values.document?.documentType?.isQms || false,
+        isQms: values.document?.documentType?.isQms || false
       });
     }
   }, [isdocRevStatusDraft, values.document, values.name]);
 
   const handleTypeChange = (
-    event: React.ChangeEvent<{ name?: string; value: unknown }>,
+    event: React.ChangeEvent<{ name?: string; value: unknown }>
   ) => {
     const typeId = event.target.value as string;
     const type = documentTypesById[typeId] || {};
     savedocInfo({ name: event.target.name || "", isQms: type.isQms });
-    groupOptions.forEach((group) => {
+    groupOptions.forEach(group => {
       if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
         setFieldValue("securityGroups", [
-          { value: group.value, label: group.label },
+          { value: group.value, label: group.label }
         ]);
       }
     });
@@ -152,10 +166,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
     FBDRStore.setInitialFBMode(type.group);
     if (type.isQms) {
-      groupOptions.forEach((group) => {
+      groupOptions.forEach(group => {
         if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
           setFieldValue("securityGroups", [
-            { value: group.value, label: group.label },
+            { value: group.value, label: group.label }
           ]);
         }
       });
@@ -167,7 +181,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   };
 
   const onFormClick = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     FBValidate();
   };
@@ -180,7 +194,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     const currentUserId = authSelectors.currentUserId(state);
     return changeRequestsSelectors.getApproversListWithoutCurrentUser(
       state,
-      currentUserId,
+      currentUserId
     );
   });
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
@@ -238,7 +252,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           editorProps={{
             placeholder: docInfo.isQms
               ? ""
-              : "Optional: Title will be used if description not provided.",
+              : "Optional: Title will be used if description not provided."
           }}
         />
         <SelectField
@@ -246,7 +260,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           label="document.type"
           selectProps={{
             inputProps: { id: "documentType", disabled: isDisabled },
-            onChange: handleTypeChange,
+            onChange: handleTypeChange
           }}
           options={documentTypes}
           validate={validator(required)}
@@ -265,7 +279,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           autocompleteProps={{
             id: "referenceTo",
             isMulti: true,
-            closeMenuOnSelect: false,
+            closeMenuOnSelect: false
           }}
           options={availableReferences}
           onClick={openReference}
@@ -289,7 +303,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               autocompleteProps={{
                 id: "securityEmployees",
                 isMulti: true,
-                closeMenuOnSelect: false,
+                closeMenuOnSelect: false
               }}
               options={availableApprovers}
             />
@@ -307,7 +321,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               autocompleteProps={{
                 id: "securityGroups",
                 isMulti: true,
-                closeMenuOnSelect: false,
+                closeMenuOnSelect: false
               }}
               options={groupOptions}
             />
@@ -322,8 +336,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 inputProps: {
                   id: "formTemplate.outputDocumentType",
                   disabled: !outputDocEnabled,
-                  className: !outputDocEnabled ? classes.outputGrey : "",
-                },
+                  className: !outputDocEnabled ? classes.outputGrey : ""
+                }
               }}
               options={otherDocumentTypes}
               includeEmpty={false}
@@ -333,7 +347,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         )}
         {FBStore.active && (
           <Box mt={5}>
-            <FBWorkspaceForm id={_.get(values, "id")} />
+            <FBWorkspaceForm
+              id={_.get(values, "id")}
+              documentId={_.get(values, "document.id")}
+            />
           </Box>
         )}
         <Box mt={5}>

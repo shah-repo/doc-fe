@@ -4,33 +4,33 @@ import { FBAutocompleteIndicator } from ".";
 import autocompleteOptions from "../../../data/autocompleteOptions.json";
 import FBRequest from "../FBApi/FBApi.request";
 
-export class FBAutocompleteState extends FBRequest {
+export class FBAutocompleteState extends FBRequest<any, any> {
   public defaultValue: any;
-  @observable public loaded: boolean = false;
+  @observable public loaded = false;
   public defaultState: string | string[] | undefined;
 
   @action public setUrl = (url: string) => {
     set(this, "url", url);
     this.fetch();
-  }
+  };
 
-  @action public onDataLoaded = () => {
+  @action public onSuccess = () => {
     !_.isUndefined(this.defaultState) &&
       this.setDefaultValue(this.defaultState);
-  }
+  };
 
   @action public setDefaultState = (state: string | string[] | undefined) => {
     set(this, "defaultState", state);
-  }
+  };
 
   @action public getIndicator = (
-    id: string | undefined,
+    id: string | undefined
   ): FBAutocompleteIndicator | undefined => {
     if (_.isUndefined(id)) {
       return;
     }
     return _.find(autocompleteOptions, { id });
-  }
+  };
 
   @action private setDefaultValue = (value: string | string[] | undefined) => {
     if (_.isUndefined(value) || _.isEmpty(this.data)) {
@@ -40,12 +40,12 @@ export class FBAutocompleteState extends FBRequest {
     this.setLoading(true);
     const defaultValue = _.isArray(value) ? value : [value];
     const filtered = _.filter(this.data, (rec) =>
-      _.includes(defaultValue, rec.id),
+      _.includes(defaultValue, rec.id)
     );
     set(this, "defaultValue", _.isArray(value) ? filtered : _.first(filtered));
     this.setLoading(false);
     set(this, "loaded", true);
-  }
+  };
 }
 
 export default FBAutocompleteState;
