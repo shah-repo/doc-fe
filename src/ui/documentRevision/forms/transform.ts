@@ -1,10 +1,5 @@
 import _ from "lodash";
-import {
-  DocumentRevision,
-  DocumentRevisionEditRequestBody,
-  DocumentRevisionStatus,
-  RevisionChangeType,
-} from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import FBStore from "../../form.builder/stores/ui/FBStore";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
@@ -63,6 +58,7 @@ export const toDocumentRevisionFormValues = (
       .map((employee) => ({ label: employee.name, value: employee.id })),
     securityGroups: _.get(documentRevision, "document.securityList.securityGroups", [])
       .map((group) => ({ label: group.name, value: group.id })),
+    renderHTML: documentRevision.renderHTML,
   };
   FBDRStore.setValues(documentRevision);
   return values;
@@ -86,6 +82,7 @@ export const toDocumentRevisionEditRequestBody = (
     revisionStage: values.revisionStage,
     revisionChangeType: values.revisionChangeType,
     retrain: values.retrain,
+    renderHTML: values.renderHTML ? values.renderHTML.replace(/(\r\n|\n|\r)/gm, "") : values.renderHTML,
   } as DocumentRevisionEditRequestBody;
   if (!values.document?.documentType?.isQms) {
     data.description = data.description || data.name;

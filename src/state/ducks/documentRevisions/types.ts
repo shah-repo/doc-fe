@@ -6,12 +6,7 @@ import { Group } from "../auth/types";
 import { ChangeRequest } from "../changeRequest";
 import { Id, Owner, User } from "../common";
 import { TrainingRecord } from "../training";
-import {
-  DOCUMENT_REVISION_AUDIT_SET,
-  DOCUMENT_REVISION_LIST,
-  DOCUMENT_REVISION_SET,
-  DOCUMENT_SET,
-} from "./constants";
+import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
 import { DocumentType } from "./documentType";
 
 export enum DocumentRevisionStatus {
@@ -84,6 +79,7 @@ export interface DocumentRevision extends FBDocumentFlowProps {
   trainingRecords: TrainingRecord[];
   retrain?: boolean;
   grantAccess?: boolean;
+  renderHTML?: string;
 }
 
 export const RevisionStageOptions = [
@@ -119,6 +115,7 @@ export interface DocumentRevisionEditRequestBody extends FBDocumentFlowProps {
   revisionChangeType?: RevisionChangeType;
   revisionStage?: number;
   retrain?: boolean;
+  renderHTML?: string;
 }
 
 export interface DocumentRevisionSetAction {

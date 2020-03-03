@@ -262,6 +262,7 @@
   "common.warning.message": "Are you sure you want to approve and release {name}?",
   "common.permissions": "Permissions",
   "common.tags": "Tags",
+  "common.renderHTML": "Render HTML",
   "output.info": "Form Info",
   "dashboard.type.PENDING_REVIEW": "is pending your approval",
   "dashboard.type.PENDING_IMPL_PLAN_TASK": " task is pending your approval",
