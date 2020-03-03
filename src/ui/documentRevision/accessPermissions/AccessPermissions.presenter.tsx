@@ -1,10 +1,4 @@
-import {
-  ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
-  List,
-  Typography,
-} from "@material-ui/core";
+import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, List, Typography } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import _ from "lodash";
 import React from "react";
@@ -87,20 +81,25 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
   };
   const getList = useActionCreator(documentRevisionsActions.load);
   const updateAction = useActionCreator(documentRevisionsActions.updateAccess);
-  const async = useAsync({onSuccess: () => {
-    getList(documentRevisionId);
-  },
+  const async = useAsync({
+    onSuccess: () => {
+      getList(documentRevisionId);
+    },
   });
 
-  const initialElements = {value: "", text: "", label: ""};
+  const initialElements = { value: "", text: "", label: "" };
   const [accessElement, saveAccessElement] = React.useState(initialElements);
   const isGroup = _.some(groupOptions, {
-    label: accessElement.label, text: accessElement.text, value: accessElement.value });
-  const handleUpdate = () => {
+    label: accessElement.label, text: accessElement.text, value: accessElement.value,
+  });
+  const handleUpdate = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
     if (isGroup) {
       const securityUpdateGroup = {
         securityEmployees: [...security.securityEmployees],
-        securityGroups: [...security.securityGroups, {id: accessElement.value}],
+        securityGroups: [...security.securityGroups, { id: accessElement.value }],
       };
       async.start(
         updateAction,
@@ -110,7 +109,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
       );
     } else {
       const securityUpdateEmployee = {
-        securityEmployees: [...security.securityEmployees, {id: accessElement.value}],
+        securityEmployees: [...security.securityEmployees, { id: accessElement.value }],
         securityGroups: [...security.securityGroups],
       };
       async.start(
@@ -131,7 +130,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
     <components.DropdownIndicator
       {...props}
     >
-      <button onClick={handleUpdate} className={classes.accessButton}>
+      <button onMouseDown={(e) => handleUpdate(e)} className={classes.accessButton}>
         <PlusIcon width="15" height="15" />
       </button>
     </components.DropdownIndicator>
@@ -165,19 +164,19 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
           >
             <div style={{ width: 272 }}>
               {!_.isEmpty(securityEmployees) &&
-              <List className={securityGroups.length > 3 ? rowStyles.customRows : undefined}>
-                {securityEmployees.map((e: Owner, index) => (
-                  <div
-                    key={index}
-                    style={{ display: "flex", marginTop: 16, marginBottom: 16 }}
-                  >
-                    <div style={{ width: 230 }}>{e.user.name}</div>
-                    <button className={classes.accessButton} onClick={() => handleDelete(e.id)} >
-                      <CloseIcon />
-                    </button>
-                  </div>
-                ))}
-              </List>}
+                <List className={securityGroups.length > 3 ? rowStyles.customRows : undefined}>
+                  {securityEmployees.map((e: Owner, index) => (
+                    <div
+                      key={index}
+                      style={{ display: "flex", marginTop: 16, marginBottom: 16 }}
+                    >
+                      <div style={{ width: 230 }}>{e.user.name}</div>
+                      <button className={classes.accessButton} onClick={() => handleDelete(e.id)} >
+                        <CloseIcon />
+                      </button>
+                    </div>
+                  ))}
+                </List>}
               <AsyncGate
                 asyncState={loadApproversAsyncState}
                 asyncAction={loadAvailableApproversAction}
@@ -210,19 +209,19 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
           >
             <div style={{ width: 272 }}>
               {!_.isEmpty(securityGroups) &&
-              <List className={securityGroups.length > 3 ? rowStyles.customRows : undefined}>
-                {securityGroups.map((e: Group, index) => (
-                  <div
-                    key={index}
-                    style={{ display: "flex", marginTop: 16, marginBottom: 16 }}
-                  >
-                    <div style={{ width: 230 }}>{e.name}</div>
-                    <button className={classes.accessButton} onClick={() => handleDelete(e.id)}>
-                      <CloseIcon />
-                    </button>
-                  </div>
-                ))}
-              </List>}
+                <List className={securityGroups.length > 3 ? rowStyles.customRows : undefined}>
+                  {securityGroups.map((e: Group, index) => (
+                    <div
+                      key={index}
+                      style={{ display: "flex", marginTop: 16, marginBottom: 16 }}
+                    >
+                      <div style={{ width: 230 }}>{e.name}</div>
+                      <button className={classes.accessButton} onClick={() => handleDelete(e.id)}>
+                        <CloseIcon />
+                      </button>
+                    </div>
+                  ))}
+                </List>}
               <AsyncGate
                 asyncState={loadGroupAsyncState}
                 asyncAction={loadGroupsAction}

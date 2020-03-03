@@ -5,8 +5,10 @@ export type FBMediaAlbumMode = "carousel" | "gallery";
 
 export interface FBMediaProps {
   id: string;
-  label: string;
-  path: string;
+  s3link: string;
+  fieldNameFromSchema: string;
+  type: string;
+  name: string;
 }
 
 export interface FBMediaAlbumActionProps {
@@ -22,3 +24,11 @@ export type FBMediaAlbumProps = Pick<BoxProps, "height" | "width"> & {
   actionIcons?: FBMediaAlbumActionProps[];
   onClick?: () => any;
 };
+
+export interface FBMediaAssetBodyProps {
+  s3link: string;
+}
+
+export interface FBMediaAssetDataProps {
+  url: string;
+}

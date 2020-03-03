@@ -1,6 +1,7 @@
+import _ from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FBMediaAlbumFieldProps, FBMediaAlbumFieldState } from ".";
+import { FBMediaAlbumFieldProps, FBMediaAlbumFieldState, FBMediaAlbumFieldUpload } from ".";
 import { FB } from "..";
 import FBStore from "../stores/ui/FBStore";
 
@@ -9,15 +10,31 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
 ) => {
   const Comp = ({
     mediaAlbumFieldState,
+    mediaAlbumFieldUpload,
     onClick,
+    onFileUploadChange,
     mode,
-    name,
+    name = "",
     qrValue,
+    collection,
     ...props
   }: T) => {
     mediaAlbumFieldState = FB.useRef<FBMediaAlbumFieldState>(
       FBMediaAlbumFieldState
     );
+
+    mediaAlbumFieldUpload = FB.useRef<FBMediaAlbumFieldUpload>(
+      FBMediaAlbumFieldUpload
+    );
+
+    const documentId = FBStore.documentId;
+
+    React.useEffect(() => {
+      if (!_.isEmpty(documentId)) {
+        mediaAlbumFieldUpload?.setFieldName(name);
+        mediaAlbumFieldUpload?.downloadCandidates();
+      }
+    }, [documentId, mediaAlbumFieldState, name]);
 
     // Handle mode
     onClick = () => {
@@ -26,8 +43,17 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       mediaAlbumFieldState?.setMode(mode);
     };
 
+    // Handle image upload
+    onFileUploadChange = (event: React.FormEvent<HTMLInputElement>) => {
+      const files = (event.currentTarget.files as unknown) as
+        | File[]
+        | undefined;
+      mediaAlbumFieldUpload?.setFiles(files);
+    };
+
     useObserver(() => {
       mode = mediaAlbumFieldState?.mode;
+      collection = mediaAlbumFieldUpload?.collection;
     });
 
     qrValue = `https://enlil.io/fileupload?document=${FBStore.documentId}&fieldname=${name}`;
@@ -37,6 +63,9 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       mode,
       onClick,
       qrValue,
+      onFileUploadChange,
+      collection,
+      mediaAlbumFieldUpload,
     });
   };
 

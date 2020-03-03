@@ -110,8 +110,8 @@ export const toNewVersionRequestBody = (
         id: _.get(values, "document.id"),
         docId: _.get(values, "document.docId"),
         securityList: {
-          securityEmployees:  values.securityEmployees.map((employee) => ({ id: employee.value })),
-          securityGroups: values.securityGroups.map((group) => ({ id: group.value })),
+          securityEmployees:  (values.securityEmployees || []).map((employee) => ({ id: employee.value })),
+          securityGroups: (values.securityGroups || []).map((group) => ({ id: group.value })),
         },
       };
       newValues.document.documentType = { id: _.get(values, "document.documentType.id") };
