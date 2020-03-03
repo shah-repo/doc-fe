@@ -70,6 +70,7 @@ export const EditRemoveAddFields: React.FunctionComponent<Props> = ({
 
   const onCancel = () => {
     toggleAdd(false);
+    toggleError(false);
     saveValues(fields);
   };
 
