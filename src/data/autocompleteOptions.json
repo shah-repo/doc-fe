@@ -5,6 +5,7 @@
     "label": "Document revisions",
     "optionValueKey": "id",
     "optionLabelKey": "name",
+    "useValueKeyLabel": true,
     "root": ""
   },
   {
@@ -13,6 +14,7 @@
     "label": "Change requests",
     "optionValueKey": "id",
     "optionLabelKey": "title",
+    "useValueKeyLabel": true,
     "root": ""
   },
   {
@@ -37,6 +39,7 @@
     "label": "Supplier list",
     "optionValueKey": "id",
     "optionLabelKey": "name",
+    "useValueKeyLabel": true,
     "root": ""
   }
 ]

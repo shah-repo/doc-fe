@@ -11,9 +11,12 @@ const getWhiteLabeling = createSelector(
   (selectedCompany) => selectedCompany.whiteLabeling || WHITE_LABEL_DEFAULT,
 );
 
+const getCompanyMine = (state: ApplicationState) => state.company.companyMine;
+
 export default {
   getWhiteLabeling,
   isSlackIntegrationEnabled,
   slackTeamId,
   getSelectedCompany,
+  getCompanyMine,
 };

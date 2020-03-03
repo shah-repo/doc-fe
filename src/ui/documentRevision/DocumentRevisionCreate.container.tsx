@@ -2,22 +2,14 @@ import _ from "lodash";
 import React from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import {
-  DocumentRevision,
-  documentRevisionsActions,
-  RevisionChangeType,
-} from "../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsActions, RevisionChangeType } from "../../state/ducks/documentRevisions";
 import { documentsActions, documentsSelectors } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import useAsync from "../hooks/useAsync";
 import { DocumentCloneType } from "./Clone.container";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
-import {
-  toDocumentRevisionFormValuesForOutput,
-  toDocumentRevisionFormValuesWithRevisionChange,
-  toNewVersionRequestBody,
-} from "./forms/transform";
+import { toDocumentRevisionFormValuesForOutput, toDocumentRevisionFormValuesWithRevisionChange, toNewVersionRequestBody } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
 
 interface DispatchProps {
