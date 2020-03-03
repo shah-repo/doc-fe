@@ -21,8 +21,10 @@ export { default as FBMediaAlbum } from "./FBMediaAlbum/FBMediaAlbum";
 export { default as FBMediaAlbumState } from "./FBMediaAlbum/FBMediaAlbum.state";
 export * from "./FBMediaAlbum/FBMediaAlbum.types";
 export { default as FBMediaAlbumField } from "./FBMediaAlbumField/FBMediaAlbumField";
+export { default as FBMediaAlbumFieldSockets } from "./FBMediaAlbumField/FBMediaAlbumField.sockets";
 export { default as FBMediaAlbumFieldState } from "./FBMediaAlbumField/FBMediaAlbumField.state";
 export * from "./FBMediaAlbumField/FBMediaAlbumField.types";
+export { default as FBMediaAlbumFieldUpload } from "./FBMediaAlbumField/FBMediaAlbumField.upload";
 export { default as FBMediaCarousel } from "./FBMediaCarousel/FBMediaCarousel";
 export { default as FBMediaCarouselState } from "./FBMediaCarousel/FBMediaCarousel.state";
 export * from "./FBMediaCarousel/FBMediaCarousel.types";
@@ -43,3 +45,4 @@ export * from "./FBValidationEditor/FBValidationEditor.types";
 export { default as FBValidationMode } from "./FBValidationMode/FBValidationMode";
 export * from "./FBValidationMode/FBValidationMode.types";
 export { default as FB } from "./helpers/FB";
+

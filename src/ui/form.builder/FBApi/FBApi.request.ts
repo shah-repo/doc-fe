@@ -1,39 +1,79 @@
+import _ from "lodash";
 import { action, observable, set } from "mobx";
 import apiClient from ".";
-import _ from "lodash";
+import { ApiActionMethod } from "../../../state/types";
 
-export default class FBRequest {
-  @observable public data: any = [];
-  @observable public loading: boolean = false;
-  public url: string = "";
-  public root: string = "";
+export default class FBRequest<Data, Body> {
+  @observable public data: Data | undefined;
+  @observable public body: Body | undefined;
+  @observable public loading = false;
+  public url = "";
+  public root = "";
+
+  @action public setUrl = (url: string) => {
+    set(this, "url", url);
+  };
 
   @action public setLoading = (state: boolean) => {
     set(this, "loading", state);
-  }
+  };
 
-  @action public setData = (data: any[]) => {
+  @action public setData = (data: Data) => {
     set(this, "data", data);
-  }
+  };
+
+  @action public setBody = (body: Body) => {
+    set(this, "body", body);
+  };
 
   @action public setRoot = (root: string) => {
     set(this, "root", root);
-  }
+  };
 
   @action public fetch = () => {
+    this.start("get");
+  };
+
+  @action public post = () => {
+    this.start("post");
+  };
+
+  @action public onSuccess = () => {};
+
+  @action public dataFilter = (data: Data): Data | undefined => data;
+  @action public onError = (_error) => {
+    alert(_error);
+  };
+
+  @action private start = (method: ApiActionMethod) => {
     this.setLoading(true);
-    const { promise } = apiClient().get(this.url);
+    let promise: Promise<any> | undefined;
+    switch (method) {
+      case "get":
+        promise = apiClient().get(this.url, this.body).promise;
+        break;
+      case "post":
+        promise = apiClient().post(this.url, this.body).promise;
+        break;
+      default:
+        return;
+    }
+
+    if (_.isUndefined(promise)) {
+      return this.setLoading(false);
+    }
+
     promise
       .then((data) => {
-        (!_.isEmpty(this.root)) && (data = _.get(data, this.root));
-        this.setData(data);
+        !_.isEmpty(this.root) && (data = _.get(data as Data, this.root));
+        data = this.dataFilter(data);
+        this.setData(data as Data);
         this.setLoading(false);
-        this.onDataLoaded();
+        this.onSuccess();
       })
       .catch((_error) => {
         this.setLoading(false);
+        this.onError(_error);
       });
-  }
-
-  @action public onDataLoaded = () => {};
+  };
 }
