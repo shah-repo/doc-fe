@@ -29,6 +29,7 @@ export class FormBuilderStore {
   @observable public values: Dictionary<any> = {};
   @observable public mode: FBWorkspaceMode = "none";
   public docId = "";
+  public documentId = "";
 
   @action public setMode = (mode: FBWorkspaceMode) => {
     this.mode = mode;

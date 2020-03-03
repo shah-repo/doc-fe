@@ -21,6 +21,7 @@ export interface ViewFileContentProps {
   asyncState: AsyncState;
   url: string;
   type: string;
+  handleClose(): void;
 }
 
 export interface ViewFileTitleProps {

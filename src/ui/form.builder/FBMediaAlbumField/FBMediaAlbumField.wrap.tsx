@@ -30,13 +30,13 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       mode = mediaAlbumFieldState?.mode;
     });
 
-    qrValue = `https://enlil.io/fileupload?document=${FBStore.docId}&fieldname=${name}`;
+    qrValue = `https://enlil.io/fileupload?document=${FBStore.documentId}&fieldname=${name}`;
 
     return Component({
       ...(props as T),
       mode,
       onClick,
-      qrValue
+      qrValue,
     });
   };
 
