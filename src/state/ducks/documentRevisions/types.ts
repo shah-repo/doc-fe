@@ -54,6 +54,15 @@ export interface Reference {
   document: DocumentRevisionDocument;
 }
 
+export interface PDF {
+  createdAt: string;
+  updatedAt: string;
+  id: string;
+  s3Url: string;
+  name: string;
+  type: string;
+}
+
 export interface DocumentRevision extends FBDocumentFlowProps {
   id: string;
   docId?: string;
@@ -80,6 +89,7 @@ export interface DocumentRevision extends FBDocumentFlowProps {
   retrain?: boolean;
   grantAccess?: boolean;
   renderHTML?: string;
+  pdf?: PDF;
 }
 
 export const RevisionStageOptions = [
