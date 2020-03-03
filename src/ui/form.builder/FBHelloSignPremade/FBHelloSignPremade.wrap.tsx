@@ -52,12 +52,12 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
       FBActionStore.apiCall(apiCallSig.toJS() as unknown as FBActionModel);
     }
 
-    function apiCallCancelSig() {
+    function apiCallCancelSig(payload: FBHelloSignPayloadSignature) {
       const apiCallSig = new FBActionModel();
-      const signatureId = _.get(store.getState().documentRevisions.byId[FBStore.docId], "formInput.signatureRequestId");
       apiCallSig.set({
-        requestMethod: "POST",
-        requestUrl: "/hello_sign/cancel_signature_request/" + signatureId,
+        requestMethod: "PATCH",
+        requestUrl: "/hello_sign/cancel_signature_request",
+        payload,
       });
       FBActionStore.apiCall(apiCallSig.toJS() as unknown as FBActionModel);
     }
@@ -71,15 +71,15 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
         if (_.values(items).some((x) => x === "") || items === null) {
           return alert("Signature Request can be sent only after the fields are filled in and document is saved");
         }
+        const payloadSig: FBHelloSignPayloadSignature = {
+          documentRevision: {
+            id: FBStore.docId,
+          },
+        };
         if (signatureId === "" || signatureId === undefined) {
-          const payloadSig: FBHelloSignPayloadSignature = {
-            documentRevision: {
-              id: FBStore.docId,
-            },
-          };
           apiCallSig(payloadSig);
         } else {
-          apiCallCancelSig();
+          apiCallCancelSig(payloadSig);
         }
       } else {
         if (FBStore.docId === "") {

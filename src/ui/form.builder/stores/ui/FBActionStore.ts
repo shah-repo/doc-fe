@@ -47,6 +47,9 @@ export class FormBuilderActionStore {
         if (requestUrl === "/hello_sign/template/attach_predefined") {
           return alert("Template Attached Successfully");
         }
+        if (requestUrl === "/hello_sign/cancel_signature_request") {
+          return alert("Signature request cancelled successfully");
+        }
         alert("Success");
       }
     } catch (exception) {
