@@ -43,7 +43,7 @@ export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
 
     useObserver(() => {
       activeStep = mediaAlbumState?.activeMedia || 0;
-      activeMediaPath = _.get(collection[activeStep!], "path", "");
+      activeMediaPath = _.get(collection[activeStep!], "s3link", "");
     });
 
     return Component({
@@ -52,7 +52,7 @@ export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
       activeStep,
       activeMediaPath,
       handleNext,
-      handleBack
+      handleBack,
     });
   };
 
