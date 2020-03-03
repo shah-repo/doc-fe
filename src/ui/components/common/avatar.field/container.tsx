@@ -1,9 +1,9 @@
 import { Box, Link } from "@material-ui/core";
 import classNames from "classnames";
 import React from "react";
-
 import Text from "../../Text";
 import styles from "./utils/styles";
+
 
 interface OwnProps {
   showEditUser: boolean;
@@ -39,7 +39,7 @@ const AvatarUploadContainer: React.FunctionComponent<Props> = ({
         style={{ display: "none" }}
         onChange={onChange}
       />
-      <label htmlFor={"avatar"}>
+      <label htmlFor={"AvatarUploadContainer-avatar"}>
         <Link variant="button" className={classes.link} id="AvatarUploadContainer-uploadPhoto">
           <Text translation="common.upload.photo" />
         </Link>
