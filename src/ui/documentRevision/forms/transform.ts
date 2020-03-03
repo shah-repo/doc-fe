@@ -1,10 +1,5 @@
 import _ from "lodash";
-import {
-  DocumentRevision,
-  DocumentRevisionEditRequestBody,
-  DocumentRevisionStatus,
-  RevisionChangeType,
-} from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import FBStore from "../../form.builder/stores/ui/FBStore";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
@@ -113,8 +108,8 @@ export const toNewVersionRequestBody = (
         id: _.get(values, "document.id"),
         docId: _.get(values, "document.docId"),
         securityList: {
-          securityEmployees:  values.securityEmployees.map((employee) => ({ id: employee.value })),
-          securityGroups: values.securityGroups.map((group) => ({ id: group.value })),
+          securityEmployees:  (values.securityEmployees || []).map((employee) => ({ id: employee.value })),
+          securityGroups: (values.securityGroups || []).map((group) => ({ id: group.value })),
         },
       };
       newValues.document.documentType = { id: _.get(values, "document.documentType.id") };
