@@ -1,8 +1,10 @@
 import { Box, Button } from "@material-ui/core";
 import * as React from "react";
 import { useIntl } from "react-intl";
+import { useSelector } from "react-redux";
 import { IotService } from "../../../../common/utils/iot/mqttClient";
 import { AttachmentDownloadResponse, attachmentsActions } from "../../../../state/ducks/attachments";
+import { authSelectors } from "../../../../state/ducks/auth";
 import { Permission } from "../../../../state/ducks/auth/types";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import InputField from "../../../components/forms/fields/Input";
@@ -18,6 +20,7 @@ const RenderHtmlField: React.FunctionComponent<Props> = ({
   id,
 }) => {
   const intl = useIntl();
+  const employeeId = useSelector(authSelectors.currentEmployeeId);
   const [htmlRequested, setHtmlRequested] = React.useState(false);
 
   const templateAction = useActionCreator(documentRevisionsActions.getRenderTemplatePreview);
@@ -37,9 +40,9 @@ const RenderHtmlField: React.FunctionComponent<Props> = ({
   };
 
   const iotService = IotService.getInstance();
-  const subscribe = () => iotService.subscribeToTopic(`+/document_revisions/${id}/pdf`, getAssetUrl);
+  const subscribe = () => iotService.subscribeToTopic(`${employeeId}/document_revisions/${id}/pdf`, getAssetUrl);
   const unsubscribe = () => {
-    iotService.unsubscribeFromTopic(`+/document_revisions/${id}/pdf`);
+    iotService.unsubscribeFromTopic(`${employeeId}/document_revisions/${id}/pdf`);
     setHtmlRequested(false);
   };
 
