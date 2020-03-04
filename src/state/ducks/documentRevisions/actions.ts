@@ -2,32 +2,8 @@ import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import { Audit, AuditActionPayload } from "../audit/types";
 import { documentsActions } from "../documents";
-import {
-  DOCUMENT_GET_ASYNC,
-  DOCUMENT_REVISION_AUDIT_SET,
-  DOCUMENT_REVISION_GET_ASYNC,
-  DOCUMENT_REVISION_GET_AUDIT_ASYNC,
-  DOCUMENT_REVISION_LIST,
-  DOCUMENT_REVISION_LIST_ASYNC,
-  DOCUMENT_REVISION_ROOT_URL,
-  DOCUMENT_REVISION_SET,
-  DOCUMENT_ROOT_URL,
-  DOCUMENT_SET,
-} from "./constants";
-import {
-  Document,
-  DocumentRevision,
-  DocumentRevisionAuditSetAction,
-  DocumentRevisionEditRequestBody,
-  DocumentRevisionSetAction,
-  DocumentRevisionsListAction,
-  DocumentRevisionStatus,
-  DocumentRevisionTransition,
-  DocumentRevisionTransitionRequestBody,
-  DocumentRevisionTransitionResponse,
-  DocumentSetAction,
-  SecurityList,
-} from "./types";
+import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_ROOT_URL, DOCUMENT_SET } from "./constants";
+import { Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, SecurityList } from "./types";
 
 const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentRevisionsListAction => ({
   type: DOCUMENT_REVISION_LIST,
@@ -64,31 +40,31 @@ const load = (id: string): ApiAction<DocumentRevision> => apiAction({
 });
 
 const save = (id: string, body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>):
-  ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCallbacks({
-    url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
-    method: "patch",
-    data: body,
-    onSuccess: (documentRevision, dispatch) => {
-      dispatch(documentRevisionSet(documentRevision));
-    },
-    handlers,
-  });
+ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCallbacks({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
+  method: "patch",
+  data: body,
+  onSuccess: (documentRevision, dispatch) => {
+    dispatch(documentRevisionSet(documentRevision));
+  },
+  handlers,
+});
 
 const create = (body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>):
-  ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCallbacks({
-    url: DOCUMENT_REVISION_ROOT_URL,
-    method: "post",
-    data: body,
-    onSuccess: (documentRevision, dispatch) => {
-      documentsActions.setDocumentProposedId("");
-      dispatch(documentRevisionSet(documentRevision));
-    },
-    onFailure: () => {
-      const { docId } = body.document || { docId: "" };
-      documentsActions.setDocumentProposedId(docId || "");
-    },
-    handlers,
-  });
+ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCallbacks({
+  url: DOCUMENT_REVISION_ROOT_URL,
+  method: "post",
+  data: body,
+  onSuccess: (documentRevision, dispatch) => {
+    documentsActions.setDocumentProposedId("");
+    dispatch(documentRevisionSet(documentRevision));
+  },
+  onFailure: () => {
+    const { docId } = body.document || { docId: "" };
+    documentsActions.setDocumentProposedId(docId || "");
+  },
+  handlers,
+});
 
 const documentSet = (document: Document): DocumentSetAction => ({
   type: DOCUMENT_SET,
@@ -169,15 +145,24 @@ const approveAndRelease = (
 });
 
 const updateAccess = (id: string, body: SecurityList, handlers: Handlers<DocumentRevision>):
-  ApiAction<DocumentRevision, SecurityList> => apiActionWithCallbacks({
-    url: `${DOCUMENT_ROOT_URL}/${id}/update_security`,
-    method: "patch",
-    data: body,
-    onSuccess: (documentRevision, dispatch) => {
-      dispatch(documentRevisionSet(documentRevision));
-    },
-    handlers,
-  });
+ApiAction<DocumentRevision, SecurityList> => apiActionWithCallbacks({
+  url: `${DOCUMENT_ROOT_URL}/${id}/update_security`,
+  method: "patch",
+  data: body,
+  onSuccess: (documentRevision, dispatch) => {
+    dispatch(documentRevisionSet(documentRevision));
+  },
+  handlers,
+});
+
+const getRenderTemplatePreview = (
+  id: string,
+  handlers: Handlers,
+): ApiAction => apiActionWithCallbacks({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/renderTemplatePreview/${id}`,
+  method: "get",
+  handlers,
+});
 
 export default {
   documentRevisionsList,
@@ -194,4 +179,5 @@ export default {
   approveAndRelease,
   updateAccess,
   approveAndReleaseNonQms,
+  getRenderTemplatePreview,
 };

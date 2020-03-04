@@ -21,7 +21,7 @@ export const DownloadPDF: React.FunctionComponent<Props> = ({
       window.open(downloadInfo?.url, "_blank");
     },
     onError: () => {
-      toast(intl.formatMessage({ id: "document.revision.download.pdf.error" }));
+      toast(intl.formatMessage({ id: "document.revision.download.html.error" }));
     },
   });
 
@@ -35,7 +35,7 @@ export const DownloadPDF: React.FunctionComponent<Props> = ({
 
   return (
     <AsyncButton
-      label="common.download.pdf"
+      label="common.download.html"
       onClick={handleClick}
       asyncState={async.asyncState}
       color="primary"

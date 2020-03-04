@@ -332,11 +332,11 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               includeEmpty={false}
               validate={validator(required)}
             />
-            <RenderHtmlField />
           </Box>
         )}
         {FBStore.active && (
           <Box mt={5}>
+            <RenderHtmlField id={values.id} />
             <FBWorkspaceForm
               id={_.get(values, "id")}
               documentId={_.get(values, "document.id")}
