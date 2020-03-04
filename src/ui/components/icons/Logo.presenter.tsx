@@ -11,6 +11,7 @@ const Logo: React.FunctionComponent = () => {
   return (
     <React.Fragment>
       <img
+        id="logo"
         src={logo}
         alt="Logo"
       />
