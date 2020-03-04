@@ -20,6 +20,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     loading = false,
     qrMode = "qr",
     isTemplate,
+    removeMedia,
     ...props
   }: T) => {
     mediaAlbumFieldState = FB.useRef<FBMediaAlbumFieldState>(FBMediaAlbumFieldState);
@@ -68,6 +69,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       name,
       loading,
       isTemplate,
+      removeMedia: mediaAlbumFieldState?.removeCandidate,
     });
   };
 

@@ -8,7 +8,6 @@ import { withFBMediaQR } from "./FBMediaQR.wrap";
 
 const FBMediaQR: React.FunctionComponent<FBMediaQRProps> = ({
   qrValue,
-  disabled,
   handleClose,
   mode,
 }) => (
@@ -30,10 +29,14 @@ const FBMediaQR: React.FunctionComponent<FBMediaQRProps> = ({
       </Box>
     )}
     {mode === "placeholder" && (
-      <Box><Text message="form.builder.media.album.placeholder" /></Box>
+      <Box>
+        <Text message="form.builder.media.album.placeholder" />
+      </Box>
     )}
     {mode === "preupload" && (
-      <Box><Text message="form.builder.media.album.output.placeholder" /></Box>
+      <Box>
+        <Text message="form.builder.media.album.output.placeholder" />
+      </Box>
     )}
   </Box>
 );
