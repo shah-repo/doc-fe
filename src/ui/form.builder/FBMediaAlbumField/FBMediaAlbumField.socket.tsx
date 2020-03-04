@@ -1,10 +1,13 @@
+import _ from "lodash";
 import React from "react";
 import { FB, FBMediaProps } from "..";
 import { IotService } from "../../../common/utils/iot/mqttClient";
 import useMqttSubscription from "../../hooks/useMqttSubscription";
 
-const FBMediaAlbumFieldSockets: React.FunctionComponent = () => {
-  const { mediaAlbumFieldUpload } = FB.useStores();
+const FBMediaAlbumFieldSocket: React.FunctionComponent<Pick<FBMediaProps, "fieldNameFromSchema">> = ({
+  fieldNameFromSchema,
+}) => {
+  const mediaAlbumFieldState = _.get(FB.useStores(), `mediaAlbumFieldState_${fieldNameFromSchema}`);
   const iotService = IotService.getInstance();
   const subscribe = () => {
     iotService.subscribeToTopic(
@@ -19,11 +22,11 @@ const FBMediaAlbumFieldSockets: React.FunctionComponent = () => {
     );
   };
   const notify = (msg: FBMediaProps) => {
-    mediaAlbumFieldUpload?.downloadCandidates();
+    mediaAlbumFieldState?.downloadCandidates();
   };
   useMqttSubscription(subscribe, unsubscribe);
 
   return null;
 };
 
-export default FBMediaAlbumFieldSockets;
+export default FBMediaAlbumFieldSocket;

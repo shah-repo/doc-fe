@@ -19,27 +19,29 @@ const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({
   ...props
 }) => (
   <Provider {...{ mediaAlbumState }}>
-    <Box bgcolor="black" {...props}>
+    <Box bgcolor="black" borderColor="white" borderBottom={0.5} {...props}>
       <Box display="flex" p={1}>
         <Box p={1} flexGrow={1} color="white">
           {title}
         </Box>
-        <Box p={1} color="white">
-          <IconButton size="small" {...{ onClick }} style={{ color: "white" }}>
+        <Box px={0.3} color="white">
+          <IconButton size="small" {...{ onClick }} color="inherit">
             {mode === "carousel" && <AppsIcon />}
             {mode === "gallery" && <AllOutIcon />}
           </IconButton>
         </Box>
         <FBMapWrapper<FBMediaAlbumActionProps> collection={actionIcons}>
           {(item, index) => (
-            <IconButton
-              key={`fb-media-action-${index}`}
-              size="small"
-              style={{ color: "white" }}
-              onClick={item.onClick}
-            >
-              {item.icon}
-            </IconButton>
+            <Box px={0.3} color="white">
+              <IconButton
+                key={`fb-media-action-${index}`}
+                size="small"
+                color="inherit"
+                onClick={item.onClick}
+              >
+                {item.icon}
+              </IconButton>
+            </Box>
           )}
         </FBMapWrapper>
       </Box>

@@ -1,9 +1,9 @@
-import { Box } from "@material-ui/core";
+import { Box, CircularProgress } from "@material-ui/core";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import CropFreeIcon from "@material-ui/icons/CropFree";
-import PublishIcon from "@material-ui/icons/Publish";
 import { Provider } from "mobx-react";
 import React from "react";
-import { FBMediaAlbum, FBMediaAlbumFieldProps, FBMediaAlbumFieldSockets, FBMediaQR } from "..";
+import { FBMediaAlbum, FBMediaAlbumFieldProps, FBMediaAlbumFieldSocket, FBMediaQR } from "..";
 import FBInput from "../components/common/FBInput";
 import { withFBMediaAlbumField } from "./FBMediaAlbumField.wrap";
 
@@ -12,17 +12,19 @@ const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
   onClick,
   qrValue = "",
   onFileUploadChange,
-  mediaAlbumFieldUpload,
+  mediaAlbumFieldState,
   collection,
+  name = "",
+  loading,
   ...props
 }) => (
-  <Provider {...{mediaAlbumFieldUpload}} >
+  <Provider {...{ [`mediaAlbumFieldState_${name}`]: mediaAlbumFieldState }} >
     <Box mt={4}>
-      <FBMediaAlbumFieldSockets />
+      <FBMediaAlbumFieldSocket fieldNameFromSchema={name} />
       <input
         accept="image/*"
         style={{ display: "none" }}
-        id="fb-mediaalbum-upload-button"
+        id={`fb-mediaalbum-upload-${name}`}
         onChange={onFileUploadChange}
         multiple
         type="file"
@@ -38,9 +40,14 @@ const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
               },
               {
                 icon: (
-                  <label htmlFor="fb-mediaalbum-upload-button">
-                    <PublishIcon />
-                  </label>
+                  <>
+                    {loading && <CircularProgress color="inherit" size={20} />}
+                    {!loading && (
+                      <label htmlFor={`fb-mediaalbum-upload-${name}`}>
+                        <CloudUploadIcon />
+                      </label>
+                    )}
+                  </>
                 ),
               },
             ]}

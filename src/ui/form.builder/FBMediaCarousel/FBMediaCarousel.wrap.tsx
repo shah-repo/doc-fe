@@ -36,7 +36,7 @@ export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
       if (_.isUndefined(mediaAlbumState)) {
         return;
       }
-      let prevStep = mediaAlbumState?.activeStep - 1;
+      let prevStep = mediaAlbumState?.activeMedia - 1;
       prevStep < 0 && (prevStep = _.size(collection) - 1);
       mediaAlbumState?.setActiveMedia(prevStep);
     };
