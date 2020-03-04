@@ -2,20 +2,14 @@ import React from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { authSelectors } from "../../state/ducks/auth";
-import {
-  ChangeRequest,
-  changeRequestsActions,
-} from "../../state/ducks/changeRequest";
+import { ChangeRequest, changeRequestsActions } from "../../state/ducks/changeRequest";
 import { ApplicationState } from "../../state/reducers";
+import { changeRequestPreviewPath } from "../change.request/utils/paths";
 import useAsync from "../hooks/useAsync";
 import ChangeRequestFormContainer from "./forms/ChangeRequestForm.container";
-import {
-  toChangeRequestEditRequestBody,
-  toChangeRequestFormValues,
-} from "./forms/transform";
+import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "./forms/transform";
 import { ChangeRequestFormValues } from "./forms/types";
 import { canEditChangeRequest } from "./helpers";
-import { generateChangeRequestPreviewPath } from "./pathGenerators";
 
 interface StateProps {
   currentUserEmail: string;
@@ -31,15 +25,15 @@ interface OwnProps {
 }
 
 export type ChangeRequestUpdateContainerProps = OwnProps &
-  DispatchProps &
-  StateProps;
+DispatchProps &
+StateProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
 });
 
 export const ChangeRequestUpdateContainer: React.FunctionComponent<
-  ChangeRequestUpdateContainerProps
+ChangeRequestUpdateContainerProps
 > = ({ save, changeRequest, currentUserEmail, loadAudit }) => {
   const async = useAsync<ChangeRequest>({
     onSuccess: () => {
@@ -47,7 +41,7 @@ export const ChangeRequestUpdateContainer: React.FunctionComponent<
     },
   });
   if (!canEditChangeRequest(changeRequest, currentUserEmail)) {
-    return <Redirect to={generateChangeRequestPreviewPath(changeRequest.id)} />;
+    return <Redirect to={changeRequestPreviewPath(changeRequest.id)} />;
   }
 
   const onSubmit = (values: ChangeRequestFormValues) => {
