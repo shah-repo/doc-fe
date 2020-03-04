@@ -33,6 +33,7 @@ export const Addresses: React.FunctionComponent<Props> = ({
       title="user.management.addresses"
       placeholder="New Address"
       fields={addresses}
+      asyncState={async.asyncState}
     />
   );
 };
