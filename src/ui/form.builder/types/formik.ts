@@ -24,6 +24,7 @@ export interface FBDocumentFlowProps {
   revisionStage?: number;
   revisionChangeType?: RevisionChangeType;
   releasedAt?: string;
+  renderHTML?: string;
 }
 
 export interface FBFormTemplateProps {

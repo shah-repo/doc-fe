@@ -7,7 +7,7 @@ import { DocumentRevision, documentRevisionsSelectors } from "../../state/ducks/
 import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import Text from "../components/Text";
-import DownloadPDF from "../document.revision/summary/download.pdf";
+import DownloadHTML from "../document.revision/summary/download.html";
 import { documentNewVersionPath, documentOutputPath } from "../document.revision/utils/paths";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
@@ -119,7 +119,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
       {renderCloneButton()}
       {renderOutputButton()}
       {renderNoAccessWarning()}
-      <DownloadPDF pdf={documentRevision.pdf} />
+      <DownloadHTML pdf={documentRevision.pdf} />
     </Box>
   );
 };
