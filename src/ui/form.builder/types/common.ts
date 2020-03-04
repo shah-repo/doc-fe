@@ -36,22 +36,23 @@ export type FBLabelProps =
   & Pick<FormControlProps, "error">
   & Pick<BoxProps, "m" | "mb" | "ml" | "mr" | "mt" | "mx" | "my" | "p" | "pb" | "pl" | "pr" | "pt" | "px" | "py">
   & {
-  label?: string | ReactNode;
-  labelValues?: TextProps["values"];
-  fontSize?: "sm" | "md" | "lg";
-};
+    label?: string | ReactNode;
+    labelValues?: TextProps["values"];
+    fontSize?: "sm" | "md" | "lg";
+  };
 
 export type FBOptionProps =
   & Pick<FBContextProps, "includeContext">
   & Pick<BaseTextFieldProps, "name" | "type">
   & {
-  options?: any[] | string;
-  optionId?: string;
-  optionPath?: string;
-  optionLabelKey?: string;
-  optionValueKey?: string;
-  includeNone?: boolean;
-};
+    options?: any[] | string;
+    optionId?: string;
+    optionPath?: string;
+    optionLabelKey?: string;
+    optionValueKey?: string;
+    includeNone?: boolean;
+    value?: any;
+  };
 
 export type FBInputProps =
   & Omit<FBFormikFieldProps, "name">
@@ -62,15 +63,15 @@ export type FBInputProps =
   & Pick<FBActionContainerProps, "actions">
   & Pick<FBOptionProps, "optionId" | "options">
   & Pick<BaseTextFieldProps,
-    | "children"
-    | "value"
-    | "disabled"
-    | "name"
-    | "helperText"
-    | "defaultValue"
-    | "rows"
-    | "placeholder"
-    | "hidden"
+  | "children"
+  | "value"
+  | "disabled"
+  | "name"
+  | "helperText"
+  | "defaultValue"
+  | "rows"
+  | "placeholder"
+  | "hidden"
   >
   & {
     index?: number;
@@ -91,6 +92,7 @@ export type FBInputProps =
     tooltip?: string;
     validationMode?: FBValidationModeType[];
     formValuesRules?: Dictionary<any>;
+    isTemplate?: boolean;
   };
 
 export type FBFormDefaultProps =

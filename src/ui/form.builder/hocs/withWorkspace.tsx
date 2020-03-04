@@ -16,7 +16,7 @@ export const withWorkspace = <T extends FBWorkspaceProps>(
       FBDynamicValidatorStore.validate();
       FBStore.docId = props.id || "";
       FBStore.documentId = props.documentId || "";
-    }, []);
+    }, [props.documentId, props.id]);
 
     if (props.mode) {
       FBStore.setMode(props.mode);
@@ -30,7 +30,7 @@ export const withWorkspace = <T extends FBWorkspaceProps>(
       mode,
       schema,
       values,
-      form: props.form
+      form: props.form,
     });
   };
 

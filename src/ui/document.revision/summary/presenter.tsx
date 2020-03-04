@@ -1,5 +1,6 @@
 import { Box, Grid, WithStyles, withStyles } from "@material-ui/core";
 import { Formik } from "formik";
+import _ from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { DataProps } from "../../../state/ducks/common";
@@ -30,8 +31,8 @@ interface OwnProps {
 }
 
 export type Props = OwnProps &
-  DataProps<DocumentRevision> &
-  WithStyles<typeof styles>;
+DataProps<DocumentRevision> &
+WithStyles<typeof styles>;
 
 export const Presenter: React.FunctionComponent<Props> = ({
   classes,
@@ -48,6 +49,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
     description,
     trainingRecords,
     formTemplate,
+    formDocument,
   },
   canChangeOwnerShip,
   canShowCreateVersionButton,
@@ -55,7 +57,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const onSubmit = () => void 0;
   FBDRStore.setValues(dataProp);
   const outputDocumentTypeName = useSelector((state: ApplicationState) => {
-    const outputDocumentTypeId = formTemplate ? formTemplate!.outputDocumentType.id : "";
+    const outputDocumentTypeId = formTemplate ? formTemplate.outputDocumentType.id : "";
     return documentTypeSelectors.getDocTypeName(state, outputDocumentTypeId);
   });
 
@@ -110,7 +112,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
 
       {FBStore.active && (
         <Box px={5} id="Presenter-FBWorkspace">
-          <FBWorkspace />
+          <FBWorkspace documentId={_.get(formDocument, "document.id") || _.get(document, "id")} />
         </Box>
       )}
       <Box flexDirection={document.canAccess ? "row-reverse" : "row"} display="flex" px={3}>

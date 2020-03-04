@@ -130,6 +130,7 @@ export class FBMediaAlbumFieldState {
       .then((data: FBMediaUrlProps) => {
         s3link = data.url;
         const collection = _.union(this.collection, [{ ...img, s3link }]);
+        this.mode !== "preview" && (this.setMode("mediaMode"));
         set(this, "collection", collection);
       })
       .catch((_error) => this.error(_error));
