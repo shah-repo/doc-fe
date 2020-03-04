@@ -4,6 +4,9 @@ import { Form, Formik } from "formik";
 import { isEmpty } from "lodash";
 import React, { useState } from "react";
 import { ReactComponent as CloseIcon } from "../../../../assets/images/close_delete.svg";
+import { AsyncState } from "../../../../state/types";
+import FormMessage from "../../../components/forms/FormMessage";
+import FormProgress from "../../../components/forms/FormProgress";
 import Text from "../../../components/Text";
 import { Translation } from "../../../translations/types";
 import styles from "./EditRemoveAddFields.styles";
@@ -18,7 +21,7 @@ interface OwnProps {
   placeholder: string;
   fields: any[];
   saveChanges: (fields) => void;
-  numberValues?: boolean;
+  asyncState: AsyncState;
 }
 
 type Props = OwnProps;
@@ -32,13 +35,12 @@ export const EditRemoveAddFields: React.FunctionComponent<Props> = ({
   placeholder,
   fields,
   saveChanges,
-  numberValues,
+  asyncState,
 }) => {
   const classes = styles();
 
   const [values, saveValues] = useState(fields);
   const [isAdding, toggleAdd] = useState(false);
-  const [showError, toggleError] = useState(false);
 
 
   const handleRemove = (idx) => {
@@ -50,8 +52,6 @@ export const EditRemoveAddFields: React.FunctionComponent<Props> = ({
       if (idx !== sidx) {
         return value;
       }
-      const regex = /^[0-9]*$/;
-      toggleError(!regex.test(evt.target.value));
       return evt.target.value;
     });
     saveValues(newValues);
@@ -70,7 +70,6 @@ export const EditRemoveAddFields: React.FunctionComponent<Props> = ({
 
   const onCancel = () => {
     toggleAdd(false);
-    toggleError(false);
     saveValues(fields);
   };
 
@@ -105,7 +104,6 @@ export const EditRemoveAddFields: React.FunctionComponent<Props> = ({
               color="primary"
               type="submit"
               id="EditRemoveAddFields-done"
-              disabled={showError && numberValues}
             >
               <Text translation="common.done" />
             </Button>
@@ -160,6 +158,8 @@ export const EditRemoveAddFields: React.FunctionComponent<Props> = ({
           </Button>
         }
       </Box>
+      <FormProgress asyncState={asyncState} />
+      <FormMessage asyncState={asyncState} />
       {!isAdding && fields.map((input, index) => (
         <Typography variant="subtitle1" className={classes.title} key={index}>
           <Text message={input} />
@@ -168,11 +168,6 @@ export const EditRemoveAddFields: React.FunctionComponent<Props> = ({
       {isEmpty(fields) && !isAdding &&
         <Typography variant="subtitle1" className={classes.title}>
           <Text translation={noValueLabel} />
-        </Typography>
-      }
-      {numberValues && showError &&
-        <Typography variant="subtitle2" style={{ color: "red" }}>
-          <Text translation="validator.must.be.number" />
         </Typography>
       }
       {renderForm()}
