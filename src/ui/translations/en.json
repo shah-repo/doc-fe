@@ -348,6 +348,7 @@
   "document.revision.group.permissions": "Group Permissions",
   "document.revision.download.html.error": "HTML can't be downloaded",
   "document.revision.download.html.request": "HTML has been requested. Download will start automatically once the file is ready.",
+  "document.revision.generate.html.preview": "Generate HTML preview",
   "page.title.changeRequest": "Change Request List",
   "page.title.documentList": "Document List",
   "page.title.documentCreate": "Create New Document",

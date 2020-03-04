@@ -40,6 +40,7 @@ import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInf
 import styles from "./DocumentRevisionForm.styles";
 import ApproveAndRelease from "./presenters/ApproveAndRelease";
 import DocIdInput from "./presenters/DocIdInput";
+import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
 import References from "./presenters/References";
 import RenderHtmlField from "./presenters/RenderHtmlField";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
@@ -332,11 +333,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               includeEmpty={false}
               validate={validator(required)}
             />
+            <RenderHtmlField />
           </Box>
         )}
         {FBStore.active && (
           <Box mt={5}>
-            <RenderHtmlField id={values.id} />
+            <GenerateHtmlPreview id={values.id} renderHTML={values.formDocument?.renderHTML} />
             <FBWorkspaceForm
               id={_.get(values, "id")}
               documentId={_.get(values, "document.id")}
