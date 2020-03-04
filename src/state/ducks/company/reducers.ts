@@ -1,8 +1,8 @@
 import { combineReducers } from "redux";
 import { LOGOUT_USER } from "../auth/constants";
 import { LogoutUserAction } from "../auth/types";
-import { SELECT_COMPANY, WHITE_LABEL_DEFAULT } from "./constants";
-import { SelectCompanyAction, SelectCompanyState } from "./types";
+import { SELECT_COMPANY, SET_COMPANY_MINE, WHITE_LABEL_DEFAULT } from "./constants";
+import { CompanyMineAction, SelectCompanyAction, SelectCompanyState } from "./types";
 
 export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
   id: "",
@@ -14,6 +14,8 @@ export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
   slackIntegrationEnabled: false,
   helloSignAppId: "",
   teamId: "",
+  addresses: [],
+  acctCodes: [],
 };
 
 type CompanyActions = SelectCompanyAction | LogoutUserAction;
@@ -32,6 +34,19 @@ export const selectedCompany = (
   }
 };
 
+export const companyMine = (
+  state: SelectCompanyState = COMPANY_DEFAULT_STATE,
+  action: CompanyMineAction,
+): SelectCompanyState => {
+  switch (action.type) {
+    case SET_COMPANY_MINE:
+      return { ...action.payload };
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   selectedCompany,
+  companyMine,
 });

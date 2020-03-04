@@ -1,6 +1,5 @@
 {
   "translation.unknown": "&nbsp;",
-
   "login.title": "Sign in to Enlil",
   "login.email": "EMAIL ADDRESS",
   "login.password": "PASSWORD",
@@ -8,7 +7,6 @@
   "login.message": "Don't have an account?",
   "login.submit": "Sign in",
   "login.create.account": "Click here to register",
-
   "signup.submit": "Sign up",
   "signup.title": "Sign up with a new account",
   "signup.message": "Already have an account?",
@@ -16,7 +14,6 @@
   "signup.verification.message": "Please check your email and follow the instructions to verify your email address. If you didn't receive an email, check your spam folder.",
   "signup.sign.in": "Click here to sign in",
   "signup.close.window": "CLOSE WINDOW",
-
   "forgot.password": "Forgot your password?",
   "forgot.password.message": "Enter yout email address below and we will send you a secure link to reset your password",
   "forgot.password.close": "CLOSE",
@@ -24,12 +21,10 @@
   "forgot.password.email": "Click the secure link we sent you to reset your password. If you didn't receive an email, check your spam folder.",
   "forgot.password.confirm": "Sign in with your new password",
   "new.user.set.password": "Set your new password",
-
   "header.title": "Enlil",
-  "header.welcome": "Welcome", 
+  "header.welcome": "Welcome",
   "header.name": "{name}",
   "header.logout": "Logout",
-
   "navigation.dashboard": "Dashboard",
   "navigation.documents": "Documents",
   "navigation.document.list": "Document List",
@@ -40,7 +35,7 @@
   "navigation.documentRevisionList": "Document revisions",
   "navigation.change.request.list": "Change Request List",
   "navigation.user.management": "User Management",
-
+  "navigation.group.management": "Group Management",
   "validators.required": "Required",
   "validators.requiredAtLeastOne": "At least one input required",
   "validators.email": "Invalid email address",
@@ -52,20 +47,16 @@
   "validator.password.spec.char": "Password must contain a special characters",
   "validator.match.passwords": "Passwords do not match",
   "validator.confirm": "Password confirm is required",
+  "validator.must.be.number": "Must be a number",
   "validator.user.name.required": "User name is required",
-
   "errors.tokenRefresh": "Token refresh failed",
   "errors.userNotLoggedIn": "User is not logged in",
   "errors.fetch.tryAgain": "Try again",
-
   "fields.select.none": "None",
-
   "table.column.actions": "Actions",
   "table.no.results.found": "No results found",
-
   "environment.DEV_THEME": "DEVELOPMENT",
   "environment.DEMO_THEME": "DEMO",
-
   "changeRequest.title": "Document - Change Request",
   "changeRequest.state": "Status",
   "changeRequest.assessmentsDescription": "Assessments description",
@@ -105,7 +96,6 @@
   "change.request.assessments.error": "Please provide attachment or reasoning for each assessment",
   "changeRequest.void.alert": "All linked documents should be removed before voiding the change request.",
   "change.request.select.reasoning": "Select reasoning",
-
   "changeRequest.transition.submitted": "Submit change request",
   "changeRequest.transition.approve": "Approve submission",
   "changeRequest.transition.reject": "Reject submission",
@@ -172,18 +162,17 @@
   "changeRequest.audit.assessments.process.attachment.OBJECT_NEW": "Process Assessment Attachment Added",
   "changeRequest.audit.assessments.regulatory.attachment.OBJECT_NEW": "Regulatory Assessment Attachment Added",
   "changeRequest.audit.tasks.ARRAY_DELETED": "Implementation plan tasks deleted",
-  
+  "changeRequest.audit.owner.STRING_EDITED": "Owner changed",
+  "changeRequest.audit.owner.STRING_NEW": "New owner",
   "cr.assessment.reasoning.design.not_affect_changes": "Changes do not affect form, fit, function or materials with no impact on risk, safety or effectiveness",
   "cr.assessment.reasoning.design.equivalent_changes": "Changes are equivalent to current design with no impact on risk, safety or effectiveness. Equivalency established through design verification",
   "cr.assessment.reasoning.process.equivalent_changes": "Changes do not affect bioburden, sterilization, or validated state and are covered by existing QC methods",
   "cr.assessment.reasoning.regulatory.no_approvals": "No current product approvals",
   "cr.assessment.reasoning.regulatory.no_submissions": "No current submissions",
   "cr.assessment.reasoning.regulatory.not_certified": "Quality System not certified",
-
   "cr.description": "Description Of Change Request",
   "cr.justification": "Justification Of Changes",
   "cr.title": "CR Title",
-
   "common.assigned.to": "Assigned To",
   "common.due.date": "Due Date",
   "common.name": "Name",
@@ -268,16 +257,20 @@
   "common.alert": "Alert",
   "common.dismiss": "Dismiss",
   "common.reset": "Reset",
+  "common.members": "Members",
+  "common.group.name": "Group Name",
   "common.security": "Access",
-
+  "common.warning.message": "Are you sure you want to approve and release {name}?",
+  "common.permissions": "Permissions",
+  "common.tags": "Tags",
+  "common.renderHTML": "Render HTML",
+  "common.download.pdf": "Download PDF",
   "output.info": "Form Info",
-
   "dashboard.type.PENDING_REVIEW": "is pending your approval",
   "dashboard.type.PENDING_IMPL_PLAN_TASK": " task is pending your approval",
   "dashboard.type.PENDING_TRAINING_RECORDS": "Training",
   "dashboard.noPendingActions": "No pending actions",
   "dashboard.is.due.on": " for doc id: {docId} is due on ",
-
   "document.title": "Document Title",
   "document.type": "Document Type",
   "document.output.type": "Output Document Type",
@@ -304,7 +297,6 @@
   "document.access.group.permissions": "Group Permissions",
   "document.request.access": "Request access",
   "document.email.sent": "An email with your request has been sent.",
-
   "documentRevision.revise": "Revise Document",
   "documentRevision.form.references": "References",
   "documentRevision.form.processChange": "Process change",
@@ -329,7 +321,9 @@
   "documentRevision.audit.referenceTo.ARRAY_DELETED": "Reference removed",
   "documentRevision.audit.changeRequest.STRING_NEW": "New change request",
   "documentRevision.audit.documentType.STRING_NEW": "New document type",
-
+  "documentRevision.audit.owner.STRING_EDITED": "Owner changed",
+  "documentRevision.audit.owner.STRING_NEW": "New owner",
+  "documentRevision.audit.document.docId.STRING_DELETED": "Doc Id deleted",
   "transition.action.confirm": "Confirm",
   "transition.action.cancel": "Cancel",
   "transition.action.title": "Enter password to proceed",
@@ -339,7 +333,6 @@
   "transition.action.to_review": "Send to review",
   "transition.action.withdraw": "Withdraw",
   "transition.action.pending_submission": "Pending submission",
-
   "document.revision.list.docId": "DOC ID",
   "document.revision.list.revision": "Revision",
   "document.revision.list.description": "Description",
@@ -353,12 +346,11 @@
   "document.revision.docVersion": "Doc Versions",
   "document.revision.user.permissions": "User Permissions",
   "document.revision.group.permissions": "Group Permissions",
-
+  "document.revision.download.pdf.error": "PDF can't be downloaded",
   "page.title.changeRequest": "Change Request List",
   "page.title.documentList": "Document List",
   "page.title.documentCreate": "Create New Document",
   "page.title.changeRequestCreate": "Create New Change Request",
-
   "form.builder": "Form Builder",
   "form.builder.create": "Create a Form",
   "form.builder.name": "Form Name",
@@ -381,6 +373,7 @@
   "form.builder.radiogroup": "Radio Button group",
   "form.builder.label": "Label",
   "form.builder.placeholder": "Placeholder",
+  "form.builder.mediaQR": "Image QR",
   "form.builder.rowNumber": "Row Number",
   "form.builder.required": "Required",
   "form.builder.options.placeholder": "Option 1\nOption 2\nOption 3\n...",
@@ -449,54 +442,54 @@
   "form.builder.tax": "Tax: ",
   "form.builder.shipping.cost": "Shipping cost: ",
   "form.builder.total": "Total: ",
-
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.watermark": "Download PDF file",
   "attachment.download.watermark.clean.copy": "Download PDF clean copy",
-
   "training.completed": "Training completed",
   "training.certify.completion": "Click the button to certify training completion",
-
   "file.viewer.video.not.supported": "Your browser does not support the video tag",
-
   "company.switch.title": "Switch Company",
   "company.switch.subtitle": "Select a company below to sign-in to",
   "company.switch.button": "SWITCH COMPANY",
-
   "supplier_survey_success_submit_message": "Survey is filled. Thank you for the response!",
   "suppliersurvey.submit.button": "Survey is filled. Thank you for the response!",
-
   "user.management.profile": "User Profile",
   "user.management.last.training": "Last Training",
   "user.management.add.to.groups": "Add to groups",
   "user.management.add.employee": "Add Employee",
+  "user.management.add.addresses": "Add Addresses",
   "user.management.update.profile": "Update profile",
   "user.management.no.groups.specified": "No groups specified",
-
+  "user.management.no.addresses.specified": "No addresses specified",
+  "user.management.addresses": "Addresses",
+  "user.management.edit.address": "Edit Addresses",
+  "user.management.no.codes.specified": "No acct codes specified",
+  "user.management.edit.codes": "Edit Acct Codes",
+  "user.management.add.codes": "Add Acct Codes",
+  "user.management.codes": "Acct Codes",
   "integrations.title": "Integrations",
   "integrations.add": "Add",
-
   "slack.finalising.registration": "Finalising Slack registration",
   "slack.registration.completed": "Slack registration completed",
   "slack.registration.failed": "Slack registration failed",
   "slack.integrations.admin.add": "ADD SLACK INTEGRATION",
-
   "supplier.id": "Supplier ID",
   "supplier.name": "Supplier name",
   "supplier.status": "Supplier status",
   "supplier.add.new": "Add {name}",
   "supplier.form.error": "There is no form. Please create a new supplier through the Document list.",
   "supplier.select.form": "Select a form",
-  
-
   "watermark.successfully.requested": "Watermarked copy of {file}.{type} successfully requested. We will notify you when it's ready to download.",
   "watermark.download.ready": "Watermarked file {name}.{type} ready to download",
   "watermark.request.failed": "Request for {name}.{type} failed",
-
   "mqtt.refresh.page": "Refresh page",
-
+  "group.management.group.details": "Group Details",
+  "group.management.add.group": "Add Group",
+  "group.management.create.group": "Create Group",
+  "group.management.edit.group": "Edit Group",
+  "group.management.group.type": "Group Type",
+  "group.management.list.of.users": "Start typing to see the list of users…",
   "change.owner": "Change Owner",
   "change.owner.update": "Update Owner"
-
 }

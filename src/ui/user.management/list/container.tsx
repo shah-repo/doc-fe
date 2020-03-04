@@ -2,12 +2,13 @@ import _ from "lodash";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { getHasTag, getTableCriteria, getTableData } from "../../../common/utils/selectors";
+import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { HOME_URL } from "../../constants/urls";
 import useDidMount from "../../hooks/useDidMount";
+import useGetHasTag from "../../hooks/useGetHasTag";
 import ListPresenter from "./presenter";
 
 export const UserManagementListContainer: React.FunctionComponent = () => {
@@ -16,7 +17,7 @@ export const UserManagementListContainer: React.FunctionComponent = () => {
   const dispatch = useDispatch();
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const tableData = useSelector(getTableData(TABLE_NAME));
-  const canManageUsers = useSelector(getHasTag(GroupTag.USER_MANAGEMENT));
+  const canManageUsers = useGetHasTag(GroupTag.USER_MANAGEMENT);
   const didMount = useDidMount();
 
   if (_.isEmpty(tableCriteria.queryDict) && !didMount) {

@@ -34,15 +34,15 @@ interface OwnProps {
 }
 
 export type DocumentRevisionUpdateContainerProps = OwnProps &
-  DispatchProps &
-  StateProps;
+DispatchProps &
+StateProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
 });
 
 export const DocumentRevisionUpdateContainer: React.FunctionComponent<
-  DocumentRevisionUpdateContainerProps
+DocumentRevisionUpdateContainerProps
 > = ({
   save,
   documentRevision,
@@ -53,49 +53,49 @@ export const DocumentRevisionUpdateContainer: React.FunctionComponent<
   loadDocument,
   canChangeOwnerShip,
 }) => {
-    const [doNotPrompt, setDoNotPrompt] = React.useState(false);
-    const async = useAsync<DocumentRevision>({
-      onSuccess: () => {
-        setDoNotPrompt(true);
-        loadAudit(documentRevision.id);
-        if (documentId) {
-          loadDocument(documentId!);
-        }
-      },
-    });
+  const [doNotPrompt, setDoNotPrompt] = React.useState(false);
+  const async = useAsync<DocumentRevision>({
+    onSuccess: () => {
+      setDoNotPrompt(true);
+      loadAudit(documentRevision.id);
+      if (documentId) {
+        loadDocument(documentId);
+      }
+    },
+  });
 
-    if (!canEditDocumentRevision(documentRevision, currentUserEmail)) {
-      return (
-        <DocumentRevisionSummaryPresenter
-          dataProp={documentRevision}
-          canShowCreateVersionButton={true}
-          canChangeOwnerShip={canChangeOwnerShip}
-        />
-      );
-    }
-
-    const onSubmit = (values: DocumentRevisionFormValues) => {
-      async.start(
-        save,
-        documentRevision.id,
-        toDocumentRevisionEditRequestBody(values),
-        async,
-      );
-    };
-
+  if (!canEditDocumentRevision(documentRevision, currentUserEmail)) {
     return (
-      <DocumentRevisionForm
-        doNotPrompt={doNotPrompt}
-        asyncState={async.asyncState}
-        onSubmit={onSubmit}
-        initialValues={toDocumentRevisionFormValues(documentRevision)}
-        onDirtyFlagChange={onDirtyFlagChange}
-        documentRevision={documentRevision}
+      <DocumentRevisionSummaryPresenter
+        dataProp={documentRevision}
+        canShowCreateVersionButton={true}
         canChangeOwnerShip={canChangeOwnerShip}
-        showRevisionTypeChange
       />
     );
+  }
+
+  const onSubmit = (values: DocumentRevisionFormValues) => {
+    async.start(
+      save,
+      documentRevision.id,
+      toDocumentRevisionEditRequestBody(values),
+      async,
+    );
   };
+
+  return (
+    <DocumentRevisionForm
+      doNotPrompt={doNotPrompt}
+      asyncState={async.asyncState}
+      onSubmit={onSubmit}
+      initialValues={toDocumentRevisionFormValues(documentRevision)}
+      onDirtyFlagChange={onDirtyFlagChange}
+      documentRevision={documentRevision}
+      canChangeOwnerShip={canChangeOwnerShip}
+      showRevisionTypeChange
+    />
+  );
+};
 
 export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
   mapStateToProps,

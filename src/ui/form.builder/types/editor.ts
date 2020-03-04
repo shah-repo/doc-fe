@@ -25,7 +25,8 @@ export type FBEditorElementType =
   | "action"
   | "hellosign"
   | "hellosignPremade"
-  | "purchaseorder";
+  | "purchaseorder"
+  | "mediaQR";
 
 export type FBEditorModeType = "create" | "update";
 

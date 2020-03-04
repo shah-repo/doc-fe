@@ -1,17 +1,15 @@
 import React, { useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
-import { getHasTag } from "../../../common/utils/selectors";
+import { getHasPermission } from "../../../common/utils/selectors";
 import Config from "../../../config";
 import { authActions, authSelectors } from "../../../state/ducks/auth";
-import {
-  EmployeeEditRequestBody,
-  GroupTag,
-} from "../../../state/ducks/auth/types";
+import { EmployeeEditRequestBody, GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { companySelectors, Employee } from "../../../state/ducks/company";
 import { userManagementActions } from "../../../state/ducks/userManagement";
 import { USER_SLACK_URL } from "../../../state/ducks/userManagement/constants";
 import { ApplicationState } from "../../../state/reducers";
 import useAsync from "../../hooks/useAsync";
+import useGetHasTag from "../../hooks/useGetHasTag";
 import UserProfilePresenter from "./UserProfile.presenter";
 
 interface OwnProps {
@@ -42,14 +40,15 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
   const async = useAsync();
   const dispatch = useDispatch();
 
-  const canManageUsers = useSelector(getHasTag(GroupTag.USER_MANAGEMENT));
+  const canUpdateCompany = useSelector(getHasPermission(Permission.COMPANY_UPDATE_CURRENT));
+  const canManageUsers = useGetHasTag(GroupTag.USER_MANAGEMENT);
   const name = useSelector(authSelectors.currentUserName);
   const avatar = useSelector(authSelectors.currentEmployeeAvatar);
   const email = useSelector(authSelectors.currentUserEmail);
   const employeeId = useSelector(authSelectors.currentEmployeeId);
   const groups = useSelector(authSelectors.getCurrentUserGroups);
   const activeStatus = useSelector(authSelectors.currentUserActiveStatus);
-  const userSlackId =  useSelector(authSelectors.currentSlackUserId);
+  const userSlackId = useSelector(authSelectors.currentSlackUserId);
   const userId = useSelector(authSelectors.currentUserId);
   const [showEditUser, setEditUser] = useState(false);
   const showEdit = () => setEditUser(true);
@@ -78,6 +77,7 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
       isOpen={showUserProfile}
       close={closeUserProfile}
       canManageUsers={canManageUsers}
+      canUpdateCompany={canUpdateCompany}
       employeeGroups={groups}
       name={name}
       avatar={avatar}

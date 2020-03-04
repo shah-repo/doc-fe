@@ -4,19 +4,9 @@ import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import { get } from "lodash";
 import React, { useMemo } from "react";
 import { connect } from "react-redux";
-import { changeRequestsActions } from "../../../state/ducks/changeRequest";
-import {
-  Document,
-  DocumentRevision,
-  documentRevisionsActions,
-  documentRevisionsSelectors,
-  DocumentRevisionStatus,
-} from "../../../state/ducks/documentRevisions";
-import {
-  DocumentType,
-  DocumentTypeByIdState,
-  documentTypeSelectors,
-} from "../../../state/ducks/documentRevisions/documentType";
+import { Permission } from "../../../state/ducks/auth/types";
+import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { DocumentType, DocumentTypeByIdState, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
@@ -25,7 +15,7 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 import DocumentHeader from "../../document.revision/summary/header";
-import useActionCreator from "../../hooks/useActionCreator";
+import useGetHasPermission from "../../hooks/useGetHasPermission";
 import styles from "./DocumentRevisionForm.container.style";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
@@ -61,8 +51,8 @@ interface OwnProps {
 }
 
 export type DocumentRevisionFormContainerProps = OwnProps &
-  StateProps &
-  DispatchProps;
+StateProps &
+DispatchProps;
 
 const getAvailableReferences = documentRevisionsSelectors.makeGetAvailableReferences();
 const mapStateToProps = (
@@ -76,12 +66,12 @@ const mapStateToProps = (
   documentTypesById: documentTypeSelectors.byId(state),
   document: documentRevisionsSelectors.getDocument(
     state,
-    get(props.initialValues, "document.id")!,
+    get(props.initialValues, "document.id"),
   ),
 });
 
 export const DocumentRevisionFormContainer: React.FunctionComponent<
-  DocumentRevisionFormContainerProps
+DocumentRevisionFormContainerProps
 > = ({
   onSubmit,
   initialValues,
@@ -100,8 +90,19 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
   documentTypes,
   documentTypesById,
   document,
-  canChangeOwnerShip,
+  canChangeOwnerShip = false,
 }) => {
+
+  const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
+  const cleanInitialValues = useMemo(() => {
+    if (canUpdateHTML) {
+      return initialValues;
+    }
+    return {
+      ...initialValues,
+      renderHTML: undefined,
+    };
+  }, [canUpdateHTML, initialValues]);
 
   const docTypes = useMemo(
     () =>
@@ -125,29 +126,26 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
 
   document = document || ({} as Document);
   const classes = styles();
-  const loadAvailableApproversAction = useActionCreator(changeRequestsActions.loadAvailableApprovers);
 
-  const render = (props: FormikProps<DocumentRevisionFormValues>) => {
-    return (
-      <DocumentRevisionFormPresenter
-        {...props}
-        asyncState={asyncState}
-        documentRevisions={documentRevisions}
-        documentRevision={documentRevision}
-        availableReferences={availableReferences}
-        showRevisionTypeChange={showRevisionTypeChange}
-        loadDocumentProposedId={loadDocumentProposedId}
-        proposedDocId={proposedDocId}
-        setDocId={setDocId}
-        doNotPrompt={doNotPrompt}
-        onDirtyFlagChange={onDirtyFlagChange}
-        documentTypes={docTypes}
-        otherDocumentTypes={otherTypes}
-        documentTypesById={documentTypesById}
-        canChangeOwnerShip={canChangeOwnerShip!}
-      />
-    );
-  };
+  const render = (props: FormikProps<DocumentRevisionFormValues>) => (
+    <DocumentRevisionFormPresenter
+      {...props}
+      asyncState={asyncState}
+      documentRevisions={documentRevisions}
+      documentRevision={documentRevision}
+      availableReferences={availableReferences}
+      showRevisionTypeChange={showRevisionTypeChange}
+      loadDocumentProposedId={loadDocumentProposedId}
+      proposedDocId={proposedDocId}
+      setDocId={setDocId}
+      doNotPrompt={doNotPrompt}
+      onDirtyFlagChange={onDirtyFlagChange}
+      documentTypes={docTypes}
+      otherDocumentTypes={otherTypes}
+      documentTypesById={documentTypesById}
+      canChangeOwnerShip={canChangeOwnerShip}
+    />
+  );
 
   // TODO: check why are we loading all document revisions
   // if it's really necessary maybe it can be loaded through the DataFetcherContainer
@@ -160,7 +158,6 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
       DocumentRevisionStatus.PendingChange,
       DocumentRevisionStatus.Draft,
     ]);
-  loadAvailableApproversAction();
 
   return (
     <AsyncGate
@@ -180,7 +177,7 @@ export const DocumentRevisionFormContainer: React.FunctionComponent<
           )}
         </Box>
         <Formik
-          initialValues={initialValues}
+          initialValues={cleanInitialValues}
           onSubmit={onSubmit}
           enableReinitialize={true}
         >

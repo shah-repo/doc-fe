@@ -37,13 +37,14 @@ const FBPurchaseOrderDialog: React.FunctionComponent<Props> = ({
       open={dialog.isOpen}
       onClose={closeDialog}
       fullWidth={true}
+      id="FBPurchaseOrderDialog-openButton"
     >
       <DialogTitle >
         <Typography align="center" variant="h4">
           <Text translation="form.builder.add.item" />
         </Typography>
       </DialogTitle>
-      <DialogContent>
+      <DialogContent id="FBPurchaseOrderDialog-closeDialog">
         <FBPurchaseOrderForm
           closeDialog={closeDialog}
           onSubmit={handleSubmit}

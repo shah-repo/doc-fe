@@ -11,6 +11,8 @@ export const getCompany = (company: Partial<Company> = {}): Company => ({
   slackIntegrationEnabled: false,
   helloSignAppId: "",
   teamId: faker.random.uuid(),
+  addresses: [],
+  acctCodes: [],
   ...company,
 });
 

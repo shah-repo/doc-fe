@@ -1,13 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
 import { GroupTag } from "../../state/ducks/auth/types";
-import {
-  DocumentRevision,
-  documentRevisionsActions,
-  documentRevisionsSelectors,
-  DocumentRevisionStatus,
-} from "../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
@@ -15,7 +10,7 @@ import HelloSignAllSignedRefreshSockets from "../document.revision/HelloSignAllS
 import SummaryPresenter from "../document.revision/summary/presenter";
 import CloneContainer from "./Clone.container";
 import DocumentRevisionUpdateContainer from "./DocumentRevisionUpdate.container";
-import { canEditDocumentRevision } from "./helpers";
+import { canChangeDocumentOwner, canEditDocumentRevision } from "./helpers";
 
 interface StateProps {
   currentUserEmail: string;
@@ -36,19 +31,19 @@ interface OwnProps {
   isNewOutput?: boolean;
 }
 
-export type DocumentRevisionDisplayContainerProps = OwnProps &
+export type DocumentRevisionDisplayContainerProps =
+  OwnProps &
   DispatchProps &
   StateProps;
 
+const selectCanChangeOwnership = authSelectors.makeGetHasTag();
 const mapStateToProps = (
   state: ApplicationState,
   props: OwnProps,
 ): StateProps => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
-  loadDocumentRevisionAsyncState: documentRevisionsSelectors.getLoadAsyncState(
-    state,
-  ),
-  isCompanyAdmin: authSelectors.getHasTag(state, GroupTag.OWNERSHIP_CHANGE),
+  loadDocumentRevisionAsyncState: documentRevisionsSelectors.getLoadAsyncState(state),
+  isCompanyAdmin: selectCanChangeOwnership(state, GroupTag.USER_MANAGEMENT),
   currentEmployeeId: authSelectors.currentEmployeeId(state),
   documentRevision: documentRevisionsSelectors.getDocumentRevision(
     state,
@@ -68,20 +63,27 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
   currentEmployeeId,
   isCompanyAdmin,
 }) => {
-  const loadDocumentRevisionAction = () =>
-    loadDocumentRevision(documentRevisionId);
+  const loadDocumentRevisionAction = useCallback(() => {
+    if (documentRevisionId) {
+      loadDocumentRevision(documentRevisionId);
+    }
+  }, [documentRevisionId, loadDocumentRevision]);
 
   useEffect(() => {
-    if (documentRevisionId) {
-      loadDocumentRevisionAction();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [documentRevisionId]);
+    loadDocumentRevisionAction();
+  }, [loadDocumentRevisionAction]);
 
-  const canChangeOwnerShip =
-    documentRevision &&
-    documentRevision.status === DocumentRevisionStatus.Draft &&
-    (isCompanyAdmin || documentRevision.owner.id === currentEmployeeId);
+  const canChangeOwnerShip = useMemo(() => {
+    if (!documentRevision) {
+      return false;
+    }
+    return canChangeDocumentOwner(
+      documentRevision.status,
+      currentEmployeeId,
+      documentRevision.owner.id,
+      isCompanyAdmin,
+    );
+  }, [currentEmployeeId, documentRevision, isCompanyAdmin]);
 
   const canEdit =
     documentRevision &&

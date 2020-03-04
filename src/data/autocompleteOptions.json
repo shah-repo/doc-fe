@@ -4,34 +4,42 @@
     "path": "/document_revisions",
     "label": "Document revisions",
     "optionValueKey": "id",
-    "optionLabelKey": "name"
+    "optionLabelKey": "name",
+    "useValueKeyLabel": true,
+    "root": ""
   },
   {
     "id": "2",
     "path": "/change_requests",
     "label": "Change requests",
     "optionValueKey": "id",
-    "optionLabelKey": "title"
+    "optionLabelKey": "title",
+    "useValueKeyLabel": true,
+    "root": ""
   },
   {
     "id": "3",
     "path": "/change_requests/available_approvers",
     "label": "Approvers",
     "optionValueKey": "id",
-    "optionLabelKey": "user.email"
+    "optionLabelKey": "user.email",
+    "root": "optionalApprovers"
   },
   {
     "id": "4",
     "path": "/document_type",
     "label": "Document types",
     "optionValueKey": "id",
-    "optionLabelKey": "documentTypeName"
+    "optionLabelKey": "documentTypeName",
+    "root": ""
   },
   {
     "id": "5",
     "path": "/document_revisions?documentTypeAcronym=SUP",
     "label": "Supplier list",
     "optionValueKey": "id",
-    "optionLabelKey": "name"
+    "optionLabelKey": "name",
+    "useValueKeyLabel": true,
+    "root": ""
   }
 ]

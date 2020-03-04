@@ -1,6 +1,6 @@
 import { User } from "../common";
 import { DocumentType } from "../documentRevisions/documentType";
-import { SELECT_COMPANY } from "./constants";
+import { SELECT_COMPANY, SET_COMPANY_MINE } from "./constants";
 
 export interface WhiteLabelingColors {
   defaultBackground: string;
@@ -21,6 +21,7 @@ export interface Employee {
   active: boolean;
   company: Company;
   slackUserId: string;
+  user?: User;
 }
 
 export interface Company {
@@ -33,11 +34,24 @@ export interface Company {
   whiteLabeling: WhiteLabeling;
   helloSignAppId: string;
   teamId: string;
+  addresses: [];
+  acctCodes: [];
 }
 
 export interface SelectCompanyAction {
   type: typeof SELECT_COMPANY;
   payload: Company;
+}
+
+export interface CompanyMineAction {
+  type: typeof SET_COMPANY_MINE;
+  payload: Company;
+}
+
+export interface CompanyMineRequest {
+  name?: string;
+  addresses?: string[];
+  acctCodes?: string[];
 }
 
 export type SelectCompanyState = Company;

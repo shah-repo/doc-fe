@@ -11,7 +11,7 @@ const FBTransportSchema: React.FunctionComponent<FBTransportSchemaProps> = ({
 }) => {
   return (
     <Box display="flex" flexDirection="row-reverse">
-      <FBImportSchema importSchema={importSchema}  />
+      <FBImportSchema importSchema={importSchema} />
       <FBExportSchema {...props} />
     </Box>
   );

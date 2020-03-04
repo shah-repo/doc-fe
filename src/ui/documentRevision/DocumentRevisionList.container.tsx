@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core";
 import ExpandLessIcon from "@material-ui/icons/ExpandMore";
 import classNames from "classnames";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { Nullable, TypographySize } from "../../state/ducks/common";
@@ -24,7 +24,7 @@ interface OwnProps {
   documentRevisions: DocumentRevision[];
   documentId: string;
   docId: string;
-  selectedDocumentRevision: string;
+  selectedDocumentRevision: Nullable<string>;
   documentRevisionId: Nullable<string>;
 }
 
@@ -32,7 +32,7 @@ export type DocumentRevisionListContainerProps = OwnProps;
 
 // used by the document revision manager container
 export const DocumentRevisionListContainer: React.FunctionComponent<
-  DocumentRevisionListContainerProps
+DocumentRevisionListContainerProps
 > = ({
   documentRevisions,
   documentId,
@@ -45,12 +45,13 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
   const handleChange = () => () => setExpanded(!expanded);
   const dispatch = useDispatch();
   const loadDocumentAsyncState = useSelector(documentRevisionsSelectors.getLoadDocumentAsyncState);
-  const loadDocumentAction = () => dispatch(documentRevisionsActions.loadDocument(documentId));
+  const loadDocumentAction = useCallback(() => {
+      dispatch(documentRevisionsActions.loadDocument(documentId));
+  }, [dispatch, documentId]);
 
   useEffect(() => {
     loadDocumentAction();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [documentRevisionId, documentId]);
+  }, [loadDocumentAction, documentId]);
 
   return (
     <AsyncGate
@@ -89,7 +90,7 @@ export const DocumentRevisionListContainer: React.FunctionComponent<
                       <div>
                         <Text translation="common.version" />
                         &nbsp;
-                      {generateVersionNumber(
+                        {generateVersionNumber(
                           documentRevision.revision,
                           documentRevision.revisionStage,
                           documentRevision.revisionChangeType,

@@ -1,10 +1,5 @@
 import _ from "lodash";
-import {
-  DocumentRevision,
-  DocumentRevisionEditRequestBody,
-  DocumentRevisionStatus,
-  RevisionChangeType,
-} from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import FBStore from "../../form.builder/stores/ui/FBStore";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
@@ -63,6 +58,7 @@ export const toDocumentRevisionFormValues = (
       .map((employee) => ({ label: employee.name, value: employee.id })),
     securityGroups: _.get(documentRevision, "document.securityList.securityGroups", [])
       .map((group) => ({ label: group.name, value: group.id })),
+    renderHTML: documentRevision.renderHTML,
   };
   FBDRStore.setValues(documentRevision);
   return values;
@@ -86,7 +82,11 @@ export const toDocumentRevisionEditRequestBody = (
     revisionStage: values.revisionStage,
     revisionChangeType: values.revisionChangeType,
     retrain: values.retrain,
+    renderHTML: values.renderHTML ? values.renderHTML.replace(/(\r\n|\n|\r)/gm, "") : values.renderHTML,
   } as DocumentRevisionEditRequestBody;
+  if (!values.document?.documentType?.isQms) {
+    data.description = data.description || data.name;
+  }
   return data;
 };
 
@@ -110,11 +110,11 @@ export const toNewVersionRequestBody = (
         id: _.get(values, "document.id"),
         docId: _.get(values, "document.docId"),
         securityList: {
-          securityEmployees:  values.securityEmployees.map((employee) => ({ id: employee.value })),
-          securityGroups: values.securityGroups.map((group) => ({ id: group.value })),
+          securityEmployees:  (values.securityEmployees || []).map((employee) => ({ id: employee.value })),
+          securityGroups: (values.securityGroups || []).map((group) => ({ id: group.value })),
         },
       };
-      newValues.document.documentType = { id: values.document.documentType!.id as string };
+      newValues.document.documentType = { id: _.get(values, "document.documentType.id") };
     }
   }
 

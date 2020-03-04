@@ -22,21 +22,22 @@ export const References: React.FunctionComponent<Props> = ({
           <Text translation="common.referenced.by" />
         </Typography>
         <div>
-          {document.referencedBy.map((reference) => {
-            return (
+          {
+            document.referencedBy.map((reference) => (
               <div key={reference.id}>
                 <Link
                   to={documentVersionPath(
                     reference.id,
                     reference.document.id,
                   )}
+                  id="References-linkButton"
                   target="_blank"
                 >
                   {reference.name}
                 </Link>
               </div>
-            );
-          })}
+            ))
+          }
         </div>
       </React.Fragment>
     );

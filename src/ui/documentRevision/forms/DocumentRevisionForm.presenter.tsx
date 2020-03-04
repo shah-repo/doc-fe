@@ -2,36 +2,25 @@ import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import _ from "lodash";
 import { observer } from "mobx-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
-import {
-  changeRequestsActions,
-  changeRequestsSelectors,
-} from "../../../state/ducks/changeRequest";
-import {
-  DocumentRevision,
-  DocumentRevisionStatus,
-  RevisionStageOptions,
-} from "../../../state/ducks/documentRevisions";
+import { GroupTag } from "../../../state/ducks/auth/types";
+import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
+import { DocumentRevision, DocumentRevisionStatus, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
-import {
-  userManagementActions,
-  userManagementSelectors,
-} from "../../../state/ducks/userManagement";
+import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import OwnerChanger from "../../components/common/owner.changer/container";
+import { RequestType } from "../../components/common/owner.changer/helpers/types";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
 import CheckboxField from "../../components/forms/fields/Checkbox";
-import InputField from "../../components/forms/fields/Input";
 import RichTextEditor from "../../components/forms/fields/RichTextEditor";
-import SelectField, {
-  SelectOption,
-} from "../../components/forms/fields/Select";
+import SelectField, { SelectOption } from "../../components/forms/fields/Select";
 import { required, validator } from "../../components/forms/fields/validators";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
@@ -50,13 +39,15 @@ import useActionCreator from "../../hooks/useActionCreator";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
 import ApproveAndRelease from "./presenters/ApproveAndRelease";
+import DocIdInput from "./presenters/DocIdInput";
 import References from "./presenters/References";
+import RenderHtmlField from "./presenters/RenderHtmlField";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
 import { DocumentRevisionFormValues } from "./types";
 
 export interface Props
   extends WithStyles<typeof styles>,
-    FormikProps<DocumentRevisionFormValues> {
+  FormikProps<DocumentRevisionFormValues> {
   asyncState: AsyncState;
   documentRevision: DocumentRevision;
   documentRevisions?: DocumentRevision[];
@@ -96,19 +87,21 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   otherDocumentTypes,
   canChangeOwnerShip,
   documentRevision,
+  setFieldValue,
 }) => {
   const loadAvailableApproversAction = useActionCreator(
-    changeRequestsActions.loadAvailableApprovers,
+    changeRequestsActions.loadAvailableApprovers
   );
   const loadApproversAsyncState = useSelector(
-    changeRequestsSelectors.getLoadApproversAsyncState,
+    changeRequestsSelectors.getLoadApproversAsyncState
   );
   const loadGroupsAction = useActionCreator(
-    userManagementActions.loadCompanyGroups,
+    userManagementActions.loadCompanyGroups
   );
   const loadGroupAsyncState = useSelector(
-    userManagementSelectors.getLoadGroupsAsyncState,
+    userManagementSelectors.getLoadGroupsAsyncState
   );
+
   if (!values.id && !_.get(values, "document.documentType.id")) {
     FBDRStore.setMode("none");
     if (setDocId) {
@@ -121,49 +114,63 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   };
 
   const isDisabled: boolean = _.get(initialValues, "id") !== undefined;
-  const docId = _.get(initialValues, "document.docId");
   const isdocRevVersionOne = _.get(documentRevision, "version") === 1;
-  const isdocRevStatusDraft = _.get(documentRevision, "status") === DocumentRevisionStatus.Draft;
-  const outputDocEnabled: boolean = (isdocRevVersionOne && isdocRevStatusDraft) || !isDisabled;
-  const useProposedDocId = (!docId || docId === "") && values.document;
-  values.document!.docId = useProposedDocId
-    ? proposedDocId
-    : values.document!.docId;
+  const isdocRevStatusDraft =
+    _.get(documentRevision, "status") === DocumentRevisionStatus.Draft;
+  const outputDocEnabled: boolean =
+    (isdocRevVersionOne && isdocRevStatusDraft) || !isDisabled;
 
-  const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    const { documentType } = values.document || {};
-
-    if (!documentType) {
-      return;
+  useEffect(() => {
+    if (proposedDocId) {
+      setFieldValue("document.docId", proposedDocId);
     }
-    const type = documentTypesById[documentType.id!].documentTypeAcronym;
+  }, [proposedDocId, setFieldValue]);
 
-    if (!values.document && !type) {
-      return;
-    }
-    const pattern = new RegExp("^" + type + "\\d{0," + type!.length + "}", "g");
+  const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
 
-    if (!pattern.test(value) || !setDocId) {
-      return;
+  useEffect(() => {
+    if (isdocRevStatusDraft) {
+      savedocInfo({
+        name: values.name,
+        isQms: values.document?.documentType?.isQms || false,
+      });
     }
-    setDocId!(value);
-  };
+  }, [isdocRevStatusDraft, values.document, values.name]);
 
   const handleTypeChange = (
-    event: React.ChangeEvent<{ name?: string; value: unknown }>,
+    event: React.ChangeEvent<{ name?: string; value: unknown }>
   ) => {
     const typeId = event.target.value as string;
     const type = documentTypesById[typeId] || {};
+    savedocInfo({ name: event.target.name || "", isQms: type.isQms });
+    groupOptions.forEach((group) => {
+      if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
+        setFieldValue("securityGroups", [
+          { value: group.value, label: group.label },
+        ]);
+      }
+    });
     if (loadDocumentProposedId) {
       loadDocumentProposedId(type.documentTypeAcronym);
     }
     FBDRStore.setInitialFBMode(type.group);
+    if (type.isQms) {
+      groupOptions.forEach((group) => {
+        if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
+          setFieldValue("securityGroups", [
+            { value: group.value, label: group.label },
+          ]);
+        }
+      });
+    }
+    if (!type.isQms) {
+      setFieldValue("securityGroups", []);
+    }
     handleChange(event);
   };
 
   const onFormClick = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     FBValidate();
   };
@@ -176,10 +183,14 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     const currentUserId = authSelectors.currentUserId(state);
     return changeRequestsSelectors.getApproversListWithoutCurrentUser(
       state,
-      currentUserId,
+      currentUserId
     );
   });
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
+
+  const renderChangeOwnership = canChangeOwnerShip && values.id && (
+    <OwnerChanger requestId={values.id} requestType={RequestType.Document} />
+  );
 
   const renderRevisionStageDropdown = !isDisabled && (
     <SelectField
@@ -226,7 +237,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         <RichTextEditor
           name="description"
           label="common.description"
-          validate={validator(required)}
+          validate={docInfo.isQms ? validator(required) : undefined}
+          editorProps={{
+            placeholder: docInfo.isQms
+              ? ""
+              : "Optional: Title will be used if description not provided.",
+          }}
         />
         <SelectField
           name="document.documentType.id"
@@ -239,15 +255,11 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           validate={validator(required)}
           includeEmpty={false}
         />
-        <InputField
-          name="document.docId"
-          label="common.documentId"
-          inputProps={{
-            id: "document.docId",
-            value: values.document!.docId,
-            disabled: isDisabled,
-            onChange: handleDocIdChange,
-          }}
+        <DocIdInput
+          document={values.document}
+          isDisabled={isDisabled}
+          documentTypesById={documentTypesById}
+          setDocId={setDocId}
         />
         {renderRevisionStageDropdown}
         <AutcompleteField
@@ -320,11 +332,15 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               includeEmpty={false}
               validate={validator(required)}
             />
+            <RenderHtmlField />
           </Box>
         )}
         {FBStore.active && (
           <Box mt={5}>
-            <FBWorkspaceForm id={_.get(values, "id")} />
+            <FBWorkspaceForm
+              id={_.get(values, "id")}
+              documentId={_.get(values, "document.id")}
+            />
           </Box>
         )}
         <Box mt={5}>
@@ -334,15 +350,19 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             justify="flex-end"
             direction="row"
           >
-            {canChangeOwnerShip && (
-              <OwnerChanger requestId={values.id!} requestType={"document"} />
-            )}
+            {renderChangeOwnership}
             <SubmitButton
               asyncState={asyncState}
               label={isDisabled ? "common.save" : "navigation.createDocument"}
               onClick={onFormClick}
+              id="DocumentRevisionForm-submit"
             />
-            <ApproveAndRelease id={values.id} status={values.status} />
+            <ApproveAndRelease
+              id={values.id}
+              status={values.status}
+              isQms={docInfo.isQms}
+              documentName={docInfo.name}
+            />
           </Grid>
         </Box>
       </FormWrapper>

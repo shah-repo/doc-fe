@@ -22,6 +22,7 @@ export interface DocumentType {
   documentTypeName: string;
   group: DocumentGroupType;
   pageDetails?: Nullable<PageDetails>;
+  isQms: boolean;
 }
 
 export interface DocumentForms {

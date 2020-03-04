@@ -31,6 +31,7 @@ export const TableSearchTextField: React.FunctionComponent<Props> = ({
 
   return (
     <StyledSearchTextField
+      id={dataKey}
       value={value}
       name={dataKey}
       onChange={handleChange}
