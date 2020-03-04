@@ -10,6 +10,7 @@ import FBMapWrapper from "../FBMapWrapper/FBMapWrapper";
 
 const FBMediaGallery: React.FunctionComponent<FBMediaGalleryProps> = ({
   collection = [],
+  removeMedia,
 }) => {
 
   const useStyles = makeStyles((theme: Theme) =>
@@ -43,7 +44,13 @@ const FBMediaGallery: React.FunctionComponent<FBMediaGalleryProps> = ({
                   style={{ objectFit: "cover", width: "100%", height: "175px" }}
                   src={item.s3link}
                   loader={
-                    <Box height={175} display="flex" color="white" alignItems="center" justifyContent="center">
+                    <Box
+                      height={175}
+                      display="flex"
+                      color="white"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
                       <CircularProgress color="inherit" />
                     </Box>
                   }
@@ -53,23 +60,33 @@ const FBMediaGallery: React.FunctionComponent<FBMediaGalleryProps> = ({
                 title={item.name}
                 titlePosition="top"
                 actionIcon={
-                  <Tooltip
-                    TransitionComponent={Zoom}
-                    enterDelay={300}
-                    placement="left-start"
-                    classes={{ tooltip: classes.noMaxWidth }}
-                    title={
-                      <img
-                        alt={item.name}
-                        src={item.s3link}
-                        style={{ objectFit: "cover", maxHeight: "600px", maxWidth: "600px" }}
-                      />
-                    }
-                  >
-                    <IconButton style={{ color: "rgba(255, 255, 255, 0.54)" }}>
-                      <VisibilityIcon />
-                    </IconButton>
-                  </Tooltip>
+                  <Box display="flex" flexDirection="row-reverse" color="white">
+                    {/* Note* do not delete it
+                    <IconButton
+                      color="inherit"
+                      size="small"
+                      onClick={removeMedia && removeMedia(item.id)}
+                    >
+                      <DeleteForeverIcon />
+                    </IconButton> */}
+                    <Tooltip
+                      TransitionComponent={Zoom}
+                      enterDelay={300}
+                      placement="left-start"
+                      classes={{ tooltip: classes.noMaxWidth }}
+                      title={
+                        <img
+                          alt={item.name}
+                          src={item.s3link}
+                          style={{ objectFit: "cover", maxHeight: "600px", maxWidth: "600px" }}
+                        />
+                      }
+                    >
+                      <IconButton color="inherit" size="small">
+                        <VisibilityIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
                 }
               />
             </GridListTile>

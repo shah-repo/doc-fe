@@ -6,6 +6,7 @@ export type FBMediaStatus = "AVAILABLE" | "USED" | "OBSOLETED";
 
 export type FBMediaAlbumFieldProps = FBInputProps & {
   onFileUploadChange: (event: React.FormEvent<HTMLInputElement>) => any;
+  removeMedia?: (mediaId: string) => any;
   onClick?: () => any;
   mode?: FBMediaAlbumFieldMode;
   mediaAlbumFieldState?: FBMediaAlbumFieldState;

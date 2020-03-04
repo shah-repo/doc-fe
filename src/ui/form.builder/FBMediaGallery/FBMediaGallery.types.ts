@@ -1,3 +1,4 @@
 import { FBMediaAlbumProps } from "..";
 
-export type FBMediaGalleryProps = Pick<FBMediaAlbumProps, "collection">;
+export type FBMediaGalleryProps =
+  & Pick<FBMediaAlbumProps, "collection" | "removeMedia">;

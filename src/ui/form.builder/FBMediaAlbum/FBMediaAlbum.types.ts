@@ -1,5 +1,6 @@
 import { BoxProps } from "@material-ui/core";
 import { FBMediaAlbumState } from ".";
+import { FBMediaAlbumFieldProps } from "..";
 
 export type FBMediaAlbumMode = "carousel" | "gallery";
 
@@ -16,11 +17,16 @@ export interface FBMediaAlbumActionProps {
   onClick?: () => any;
 }
 
-export type FBMediaAlbumProps = Pick<BoxProps, "height" | "width"> & {
-  collection?: FBMediaProps[];
-  mediaAlbumState?: FBMediaAlbumState;
-  mode?: FBMediaAlbumMode;
-  title?: string;
-  actionIcons?: FBMediaAlbumActionProps[];
-  onClick?: () => any;
-};
+export type FBMediaAlbumProps =
+  & Pick<BoxProps, "height" | "width">
+  & Pick<FBMediaAlbumFieldProps, "collection" | "removeMedia">
+  & {
+    mediaAlbumState?: FBMediaAlbumState;
+    mode?: FBMediaAlbumMode;
+    title?: string;
+    actionIcons?: FBMediaAlbumActionProps[];
+    onClick?: () => any;
+    remove?: () => any;
+    name?: string;
+    fieldMode?: FBMediaAlbumFieldProps["mode"];
+  };
