@@ -3,7 +3,7 @@ export * from "./FBApi/FBApi.types";
 export { default as FBAutocomplete } from "./FBAutocomplete/FBAutocomplete";
 export { default as FBAutocompleteState } from "./FBAutocomplete/FBAutocomplete.state";
 export * from "./FBAutocomplete/FBAutocomplete.types";
-export { default as FBEditorMediaQR } from "./FBEditorMediaQR/FBEditorMediaQR";
+export { default as FBEditorMediaAlbumField } from "./FBEditorMediaAlbumField/FBEditorMediaAlbumField";
 export { default as FBFieldBottomBar } from "./FBFieldBottomBar/FBFieldBottomBar";
 export * from "./FBFieldBottomBar/FBFieldBottomBar.types";
 export { default as FBFieldMarkDown } from "./FBFieldMarkDown/FBFieldMarkDown";

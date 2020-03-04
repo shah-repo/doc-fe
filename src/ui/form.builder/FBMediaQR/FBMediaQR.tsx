@@ -3,16 +3,17 @@ import CloseIcon from "@material-ui/icons/Close";
 import QRCode from "qrcode.react";
 import React from "react";
 import { FBMediaQRProps } from ".";
-import FBStore from "../stores/ui/FBStore";
+import Text from "../../components/Text";
 import { withFBMediaQR } from "./FBMediaQR.wrap";
 
 const FBMediaQR: React.FunctionComponent<FBMediaQRProps> = ({
   qrValue,
   disabled,
-  handleClose
+  handleClose,
+  mode,
 }) => (
   <Box>
-    {!disabled && (
+    {mode === "qr" && (
       <Box>
         <Box display="flex" justifyContent="flex-end" p={1} bgcolor="black">
           <IconButton
@@ -28,11 +29,11 @@ const FBMediaQR: React.FunctionComponent<FBMediaQRProps> = ({
         </Box>
       </Box>
     )}
-    {disabled && FBStore.mode !== "form" && (
-      <Box>Scan QR will be placed here</Box>
+    {mode === "placeholder" && (
+      <Box><Text message="form.builder.media.album.placeholder" /></Box>
     )}
-    {disabled && FBStore.mode === "form" && (
-      <Box>You must save the document in order to scan QR code.</Box>
+    {mode === "preupload" && (
+      <Box><Text message="form.builder.media.album.output.placeholder" /></Box>
     )}
   </Box>
 );

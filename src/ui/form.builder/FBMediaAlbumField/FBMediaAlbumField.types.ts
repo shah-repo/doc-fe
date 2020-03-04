@@ -1,7 +1,7 @@
-import { FBMediaAlbumFieldState, FBMediaProps } from "..";
+import { FBMediaAlbumFieldState, FBMediaProps, FBMediaQRMode } from "..";
 import { FBInputProps } from "../types/common";
 
-export type FBMediaAlbumFieldMode = "mediaMode" | "qr";
+export type FBMediaAlbumFieldMode = "mediaMode" | "qr" | "preview";
 export type FBMediaStatus = "AVAILABLE" | "USED" | "OBSOLETED";
 
 export type FBMediaAlbumFieldProps = FBInputProps & {
@@ -10,6 +10,7 @@ export type FBMediaAlbumFieldProps = FBInputProps & {
   mode?: FBMediaAlbumFieldMode;
   mediaAlbumFieldState?: FBMediaAlbumFieldState;
   qrValue?: string;
+  qrMode?: FBMediaQRMode;
   collection?: FBMediaProps[];
   loading?: boolean;
 };

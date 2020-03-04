@@ -16,6 +16,7 @@ const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
   collection,
   name = "",
   loading,
+  isTemplate,
   ...props
 }) => (
   <Provider {...{ [`mediaAlbumFieldState_${name}`]: mediaAlbumFieldState }} >
@@ -30,19 +31,19 @@ const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
         type="file"
       />
       <FBInput {...props} type="textfield">
-        {mode === "mediaMode" && (
+        {(mode === "mediaMode" || mode === "preview") && (
           <FBMediaAlbum
             {...{ collection }}
             actionIcons={[
               {
-                icon: <CropFreeIcon />,
+                icon: (<>{mode !== "preview" && <CropFreeIcon />}</>),
                 onClick,
               },
               {
                 icon: (
                   <>
-                    {loading && <CircularProgress color="inherit" size={20} />}
-                    {!loading && (
+                    {mode !== "preview" && loading && <CircularProgress color="inherit" size={20} />}
+                    {mode !== "preview" && !loading && (
                       <label htmlFor={`fb-mediaalbum-upload-${name}`}>
                         <CloudUploadIcon />
                       </label>
@@ -53,7 +54,7 @@ const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
             ]}
           />
         )}
-        {mode === "qr" && <FBMediaQR {...{ qrValue }} handleClose={onClick} />}
+        {mode === "qr" && <FBMediaQR {...{ qrValue, isTemplate }} handleClose={onClick} />}
       </FBInput>
     </Box>
   </ Provider>
