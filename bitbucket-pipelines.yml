@@ -131,7 +131,8 @@ definitions:
 # Pipelines
 #
 pipelines:
-  default:
+  pull-requests:
+    '**':
       - parallel:
           - step: *RUN_TESTS
           # - step: *RUN_LINTER
