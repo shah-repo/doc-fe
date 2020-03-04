@@ -2,11 +2,19 @@
 import HelloSign from "hellosign-embedded";
 import _ from "lodash";
 import React from "react";
+import { useIntl } from "react-intl";
+import { useSelector } from "react-redux";
 import { FBHelloSignPayload, FBHelloSignProps } from ".";
-import { store } from "../../../state/store";
+import { companySelectors } from "../../../state/ducks/company";
+import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { FBActionModel } from "../stores/domain/models/FBActionModel";
 import FBActionStore from "../stores/ui/FBActionStore";
 import FBStore from "../stores/ui/FBStore";
+import {
+  CANCEL_SIGNATURE_REQUEST_URL,
+  CREATE_TEMPLATE_URL,
+  SEND_SIGNATURE_REQUEST_URL,
+} from "./constants";
 
 export const withFBHelloSign = <T extends FBHelloSignProps>(
   Component: React.FunctionComponent<T>,
@@ -18,22 +26,29 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     ...props
   }: T) => {
 
-    const signatureId = _.get(store.getState().documentRevisions.byId[FBStore.docId], "formInput.signatureRequestId");
-    if (FBStore.mode === "form") {
-      if (signatureId === "" || signatureId === undefined) {
-        buttonLabel = "form.builder.send.signature";
-      } else {
-        buttonLabel = "form.builder.cancel.signature";
+    const intl = useIntl();
+    const documentById = useSelector(documentRevisionsSelectors.byId);
+    const selectedCompany = useSelector(companySelectors.getSelectedCompany);
+    const signatureId = _.get(documentById[FBStore.docId], "formInput.signatureRequestId");
+
+    const getButtonLabel = () => {
+      if (FBStore.mode !== "form") {
+        return "form.builder.create.template";
       }
-    } else {
-      buttonLabel = "form.builder.create.template";
-    }
+
+      if (!signatureId) {
+        return "form.builder.send.signature";
+      }
+
+      return "form.builder.cancel.signature";
+    };
+    buttonLabel = getButtonLabel();
 
     async function apiCall(payload: FBHelloSignPayload) {
       const apiCall = new FBActionModel();
       apiCall.set({
         requestMethod: "POST",
-        requestUrl: "/hello_sign/template",
+        requestUrl: CREATE_TEMPLATE_URL,
         payload,
       });
       const data = await FBActionStore.apiCall(apiCall.toJS() as unknown as FBActionModel);
@@ -45,7 +60,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
       apiCallSig.set({
         testMode: 1,
         requestMethod: "POST",
-        requestUrl: "/hello_sign/send_signature_request",
+        requestUrl: SEND_SIGNATURE_REQUEST_URL,
         payload,
       });
       FBActionStore.apiCall(apiCallSig.toJS() as unknown as FBActionModel);
@@ -55,14 +70,14 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
       const apiCallSig = new FBActionModel();
       apiCallSig.set({
         requestMethod: "PATCH",
-        requestUrl: "/hello_sign/cancel_signature_request",
+        requestUrl: CANCEL_SIGNATURE_REQUEST_URL,
         payload,
       });
       FBActionStore.apiCall(apiCallSig.toJS() as unknown as FBActionModel);
     }
 
     function helloSignIframe(data: any) {
-      const clientId = store.getState().company.selectedCompany.helloSignAppId;
+      const clientId = selectedCompany.helloSignAppId;
       const editUrl = data.template.edit_url;
       const client = new HelloSign({
         clientId,
@@ -80,23 +95,23 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
 
       if (FBStore.mode === "form") {
         if (FBStore.docId === "") {
-          return alert("Please fill out fields for signature request and save document");
+          return alert(intl.formatMessage({ id: "form.builder.signature.notification" }));
         }
-        const items = store.getState().documentRevisions.byId[FBStore.docId].formInput;
+        const items = documentById[FBStore.docId].formInput;
         if (_.values(items).some((x) => x === "") || items === null) {
-          return alert("Signature Request can be sent only after the fields are filled in and document is saved");
+          return alert(intl.formatMessage({ id: "form.builder.signature.warning" }));
         }
-        if (signatureId === "" || signatureId === undefined) {
+        if (!signatureId) {
           apiCallSig(payload);
         } else {
           apiCallCancelSig(payload);
         }
       } else {
         if (FBStore.docId === "") {
-          return alert("Template creation is available only after the document is created");
+          return alert(intl.formatMessage({ id: "form.builder.template.notification" }));
         }
-        if (store.getState().documentRevisions.byId[FBStore.docId].attachments.length === 0) {
-          return alert("No attachments uploaded, upload attachment and save document to create template");
+        if (documentById[FBStore.docId].attachments.length === 0) {
+          return alert(intl.formatMessage({ id: "form.builder.template.warning" }));
         }
         apiCall(payload);
       }

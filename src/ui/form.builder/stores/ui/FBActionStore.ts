@@ -1,13 +1,22 @@
 import { AxiosRequestConfig, Method } from "axios";
 import _, { Dictionary } from "lodash";
 import { action } from "mobx";
+import { useIntl } from "react-intl";
 import apiClient from "../../../../state/apiClient";
 import { AsyncActionErrorResponse } from "../../../../state/middlewares/api/types";
 import { store } from "../../../../state/store";
+import {
+  ATTACH_TEMPLATE_URL,
+  CANCEL_SIGNATURE_REQUEST_URL,
+  CREATE_TEMPLATE_URL,
+  SEND_SIGNATURE_REQUEST_URL,
+} from "../../FBHelloSign/constants";
 import { FBTemplateSchema } from "../../types/store";
 import { FBActionModel } from "../domain/models/FBActionModel";
 import FBStore from "./FBStore";
 // import qs from "query-string";
+
+const intl = useIntl();
 
 export class FormBuilderActionStore {
   public values: Dictionary<Dictionary<any>> = {};
@@ -38,17 +47,17 @@ export class FormBuilderActionStore {
 
       const { data } = await apiClient.request(requestConfig);
       if (!_.isUndefined(data)) {
-        if (requestUrl === "/hello_sign/template") {
+        if (requestUrl === CREATE_TEMPLATE_URL) {
           return data;
         }
-        if (requestUrl === "/hello_sign/send_signature_request") {
-          return alert("Signature request sent");
+        if (requestUrl === SEND_SIGNATURE_REQUEST_URL) {
+          return alert(intl.formatMessage({ id: "form.builder.signature.sent" }));
         }
-        if (requestUrl === "/hello_sign/template/attach_predefined") {
-          return alert("Template Attached Successfully");
+        if (requestUrl === ATTACH_TEMPLATE_URL) {
+          return alert(intl.formatMessage({ id: "form.builder.template.attached" }));
         }
-        if (requestUrl === "/hello_sign/cancel_signature_request") {
-          return alert("Signature request cancelled successfully");
+        if (requestUrl === CANCEL_SIGNATURE_REQUEST_URL) {
+          return alert(intl.formatMessage({ id: "form.builder.signature.cancelled" }));
         }
         alert("Success");
       }
@@ -61,8 +70,8 @@ export class FormBuilderActionStore {
         responseMessage = Array.isArray(message) ? message.join("; ") : message;
       }
       const errorMessage: string = responseMessage || exception.message;
-      if (requestUrl === "/hello_sign/template/attach_predefined") {
-        return alert("Template doesn't exist, enter existing TemplateID and save document");
+      if (requestUrl === ATTACH_TEMPLATE_URL) {
+        return alert(intl.formatMessage({ id: "form.builder.template.invalid" }));
       }
       alert(errorMessage);
     }
