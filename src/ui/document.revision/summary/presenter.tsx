@@ -30,8 +30,8 @@ interface OwnProps {
 }
 
 export type Props = OwnProps &
-  DataProps<DocumentRevision> &
-  WithStyles<typeof styles>;
+DataProps<DocumentRevision> &
+WithStyles<typeof styles>;
 
 export const Presenter: React.FunctionComponent<Props> = ({
   classes,
@@ -55,7 +55,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const onSubmit = () => void 0;
   FBDRStore.setValues(dataProp);
   const outputDocumentTypeName = useSelector((state: ApplicationState) => {
-    const outputDocumentTypeId = formTemplate ? formTemplate!.outputDocumentType.id : "";
+    const outputDocumentTypeId = formTemplate ? formTemplate.outputDocumentType.id : "";
     return documentTypeSelectors.getDocTypeName(state, outputDocumentTypeId);
   });
 

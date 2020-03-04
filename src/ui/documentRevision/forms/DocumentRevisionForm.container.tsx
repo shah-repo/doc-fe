@@ -4,18 +4,9 @@ import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import { get } from "lodash";
 import React, { useMemo } from "react";
 import { connect } from "react-redux";
-import {
-  Document,
-  DocumentRevision,
-  documentRevisionsActions,
-  documentRevisionsSelectors,
-  DocumentRevisionStatus,
-} from "../../../state/ducks/documentRevisions";
-import {
-  DocumentType,
-  DocumentTypeByIdState,
-  documentTypeSelectors,
-} from "../../../state/ducks/documentRevisions/documentType";
+import { Permission } from "../../../state/ducks/auth/types";
+import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { DocumentType, DocumentTypeByIdState, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
@@ -24,6 +15,7 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 import DocumentHeader from "../../document.revision/summary/header";
+import useGetHasPermission from "../../hooks/useGetHasPermission";
 import styles from "./DocumentRevisionForm.container.style";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
@@ -101,6 +93,17 @@ DocumentRevisionFormContainerProps
   canChangeOwnerShip = false,
 }) => {
 
+  const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
+  const cleanInitialValues = useMemo(() => {
+    if (canUpdateHTML) {
+      return initialValues;
+    }
+    return {
+      ...initialValues,
+      renderHTML: undefined,
+    };
+  }, [canUpdateHTML, initialValues]);
+
   const docTypes = useMemo(
     () =>
       documentTypes.map((document) => ({
@@ -174,7 +177,7 @@ DocumentRevisionFormContainerProps
           )}
         </Box>
         <Formik
-          initialValues={initialValues}
+          initialValues={cleanInitialValues}
           onSubmit={onSubmit}
           enableReinitialize={true}
         >
