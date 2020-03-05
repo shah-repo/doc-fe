@@ -3,11 +3,7 @@ import { Box } from "@material-ui/core";
 import classNames from "classnames";
 import { convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
-import {
-  Field as FormikField,
-  FieldConfig,
-  FieldProps as FormikFieldProps,
-} from "formik";
+import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import React, { useEffect, useState } from "react";
 import { Editor, EditorProps } from "react-draft-wysiwyg";
 import useDebounce from "use-debounce/lib/useDebounce";
@@ -63,7 +59,16 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
   }, []);
 
   useEffect(() => {
-    if (!field.value) {
+    if (!value) {
+      return;
+    }
+
+    const html = draftToHtml(convertToRaw(value.getCurrentContent())).trim();
+
+    // workaround for assessment description
+    // field value is set to undefined if attachment is added
+    // that's why we have to update the editor value as well
+    if (!field.value && html) {
       setValue(convertHtmlToDraft(""));
     }
   }, [field.value]);
