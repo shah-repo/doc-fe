@@ -10,7 +10,7 @@ export type FBAutocompleteProps =
   & Pick<UseAutocompleteProps, "getOptionLabel" | "filterOptions">
   & FBStateProps<FBAutocompleteState>
   & Pick<FBOptionProps, "optionLabelKey" | "optionValueKey">
-  & Pick<FBAutocompleteIndicator, "useValueKeyLabel">
+  & Pick<FBAutocompleteIndicator, "prefixLabelRoot">
   & {
     options?: any[];
     optionPath?: string;
@@ -26,5 +26,5 @@ export interface FBAutocompleteIndicator {
   optionLabelKey: string;
   optionValueKey?: string;
   root?: string;
-  useValueKeyLabel?: boolean;
+  prefixLabelRoot?: string;
 }
