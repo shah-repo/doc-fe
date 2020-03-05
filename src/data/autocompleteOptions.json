@@ -1,11 +1,10 @@
-[
-  {
+[{
     "id": "1",
     "path": "/document_revisions",
     "label": "Document revisions",
     "optionValueKey": "id",
     "optionLabelKey": "name",
-    "useValueKeyLabel": true,
+    "prefixLabelRoot": "document.docId",
     "root": ""
   },
   {
@@ -14,7 +13,7 @@
     "label": "Change requests",
     "optionValueKey": "id",
     "optionLabelKey": "title",
-    "useValueKeyLabel": true,
+    "prefixLabelRoot": "crId",
     "root": ""
   },
   {
@@ -39,7 +38,7 @@
     "label": "Supplier list",
     "optionValueKey": "id",
     "optionLabelKey": "name",
-    "useValueKeyLabel": true,
+    "prefixLabelRoot": "document.docId",
     "root": ""
   }
 ]
