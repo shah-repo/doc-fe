@@ -226,7 +226,7 @@ const pingServer = (): ApiAction =>
     asyncType: PING_SERVER_GET_ASYNC,
     method: "get",
     onFailure: (message, dispatch) => {
-      dispatch(logoutUser());
+      // dispatch(logoutUser());
     },
   });
 
