@@ -10,11 +10,7 @@ import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisio
 import { FBActionModel } from "../stores/domain/models/FBActionModel";
 import FBActionStore from "../stores/ui/FBActionStore";
 import FBStore from "../stores/ui/FBStore";
-import {
-  CANCEL_SIGNATURE_REQUEST_URL,
-  CREATE_TEMPLATE_URL,
-  SEND_SIGNATURE_REQUEST_URL,
-} from "./constants";
+import { CANCEL_SIGNATURE_REQUEST_URL, CREATE_TEMPLATE_URL, SEND_SIGNATURE_REQUEST_URL } from "./constants";
 
 export const withFBHelloSign = <T extends FBHelloSignProps>(
   Component: React.FunctionComponent<T>,
@@ -29,7 +25,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     const intl = useIntl();
     const documentById = useSelector(documentRevisionsSelectors.byId);
     const selectedCompany = useSelector(companySelectors.getSelectedCompany);
-    const signatureId = _.get(documentById[FBStore.docId], "formInput.signatureRequestId");
+    const signatureId = FBStore.getValue("signatureRequestId");
 
     const getButtonLabel = () => {
       if (FBStore.mode !== "form") {

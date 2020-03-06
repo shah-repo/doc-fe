@@ -5,11 +5,7 @@ import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { FBHelloSignPayload, FBHelloSignPayloadSignature, FBHelloSignProps } from ".";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
-import {
-  ATTACH_TEMPLATE_URL,
-  CANCEL_SIGNATURE_REQUEST_URL,
-  SEND_SIGNATURE_REQUEST_URL,
-} from "../FBHelloSign/constants";
+import { ATTACH_TEMPLATE_URL, CANCEL_SIGNATURE_REQUEST_URL, SEND_SIGNATURE_REQUEST_URL } from "../FBHelloSign/constants";
 import { FBActionModel } from "../stores/domain/models/FBActionModel";
 import FBActionStore from "../stores/ui/FBActionStore";
 import FBStore from "../stores/ui/FBStore";
@@ -29,7 +25,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     const documentById = useSelector(documentRevisionsSelectors.byId);
     disabled = FBStore.mode === "form";
 
-    const signatureId = _.get(documentById[FBStore.docId], "formInput.signatureRequestId");
+    const signatureId = FBStore.getValue("signatureRequestId");
     const getButtonLabel = () => {
       if (FBStore.mode !== "form") {
         return "form.builder.attach.template";
@@ -101,7 +97,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
         const payload: FBHelloSignPayload = {
           templateId,
           documentRevision: {
-              id: FBStore.docId,
+            id: FBStore.docId,
           },
         };
         if (templateId === "" || templateId === undefined) {

@@ -178,7 +178,7 @@ pipelines:
     task/ENC-1422_hello_action_button:
       - parallel:
           - step: *RUN_TESTS
-          - step: *RUN_LINTER
+          # - step: *RUN_LINTER
           - step: *BUILD_DEV2
       - step: *DEPLOY_DEV2
 
