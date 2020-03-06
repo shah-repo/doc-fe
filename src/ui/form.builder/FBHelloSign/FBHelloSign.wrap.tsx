@@ -109,6 +109,9 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
         if (documentById[FBStore.docId].attachments.length === 0) {
           return alert(intl.formatMessage({ id: "form.builder.template.warning" }));
         }
+        if (_.get(documentById[FBStore.docId].formTemplate, "helloSignTemplateId")) {
+          return alert(intl.formatMessage({ id: "form.builder.template.created.warning" }));
+        }
         apiCall(payload);
       }
     };
