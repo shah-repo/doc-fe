@@ -26,7 +26,7 @@ export type FBEditorElementType =
   | "hellosign"
   | "hellosignPremade"
   | "purchaseorder"
-  | "mediaQR";
+  | "mediaupload";
 
 export type FBEditorModeType = "create" | "update";
 
@@ -38,5 +38,5 @@ export interface FBEditorFormProps {
 
 export interface FBValidatorGroup {
   name: string;
-  fields: Array<Partial<FBTemplateSchema>>;
+  fields: Partial<FBTemplateSchema>[];
 }

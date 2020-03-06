@@ -1,5 +1,5 @@
 import { Dictionary } from "lodash";
-import { FBAutocomplete, FBEditorMediaQR, FBMediaAlbumField } from "..";
+import { FBAutocomplete, FBEditorMediaAlbumField, FBMediaAlbumField } from "..";
 import FBActionContainer from "../components/actions/FBActionContainer";
 import FBActionEditor from "../components/editors/FBActionEditor";
 import FBAutocompleteEditor from "../components/editors/FBAutocompleteEditor";
@@ -30,9 +30,7 @@ import FBHelloSign from "../FBHelloSign";
 import FBHelloSignPremade from "../FBHelloSignPremade";
 import { FBEditorElementType } from "../types/editor";
 
-export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<
-  any
->> = {
+export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = {
   section: FBLabelEditor,
   subsection: FBLabelEditor,
   textfield: FBTextFieldEditor,
@@ -50,7 +48,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<
   hellosign: FBLabelEditor,
   hellosignPremade: FBHelloSignTemplateEditor,
   purchaseorder: FBLabelEditor,
-  mediaQR: FBEditorMediaQR
+  mediaupload: FBEditorMediaAlbumField,
 };
 
 export const FBFieldComponent: Dictionary<any> = {
@@ -73,7 +71,7 @@ export const FBFieldComponent: Dictionary<any> = {
   hellosign: FBHelloSign,
   hellosignPremade: FBHelloSignPremade,
   purchaseorder: FBPurchaseOrderField,
-  mediaQR: FBMediaAlbumField
+  mediaupload: FBMediaAlbumField,
 };
 
 export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
@@ -90,21 +88,22 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "radiogroup",
     "fileupload",
     "purchaseorder",
-    "mediaQR"
+    "mediaupload",
   ],
   approvals: ["hellosign", "hellosignPremade"],
   lists: ["autocomplete"],
-  actions: ["action"]
+  actions: ["action"],
 };
 
 export const FBGroupEditorOptions: Dictionary<any[]> = {
   autocomplete: [{ value: "multiple", text: "form.builder.multi.select" }],
+  mediaupload: [{ value: "isTemplate", text: "form.builder.is.template" }],
   select: [
     { value: "includeNone", text: "form.builder.include.none" },
-    { value: "includeContext", text: "form.builder.include.other" }
+    { value: "includeContext", text: "form.builder.include.other" },
   ],
   control: [{ value: "includeContext", text: "form.builder.include.note" }],
   controlgroup: [
-    { value: "includeContext", text: "form.builder.include.other" }
-  ]
+    { value: "includeContext", text: "form.builder.include.other" },
+  ],
 };

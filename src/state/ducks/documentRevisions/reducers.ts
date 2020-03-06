@@ -2,27 +2,8 @@ import _ from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
 import { AuditByCRIdState } from "../audit/types";
-import {
-  DOCUMENT_GET_ASYNC,
-  DOCUMENT_REVISION_AUDIT_SET,
-  DOCUMENT_REVISION_GET_ASYNC,
-  DOCUMENT_REVISION_GET_AUDIT_ASYNC,
-  DOCUMENT_REVISION_LIST,
-  DOCUMENT_REVISION_LIST_ASYNC,
-  DOCUMENT_REVISION_SET,
-  DOCUMENT_SET,
-} from "./constants";
-import {
-  AllIdsState,
-  DocumentByIdState,
-  DocumentRevision,
-  DocumentRevisionAuditSetAction,
-  DocumentRevisionsAllIdsState,
-  DocumentRevisionsByIdState,
-  DocumentRevisionSetAction,
-  DocumentRevisionsListAction,
-  DocumentSetAction,
-} from "./types";
+import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
+import { AllIdsState, DocumentByIdState, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionsAllIdsState, DocumentRevisionsByIdState, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentSetAction } from "./types";
 
 type DocumentRevisionActions =
   | DocumentRevisionsListAction
@@ -35,19 +16,17 @@ export const byId = (
   switch (action.type) {
     case DOCUMENT_REVISION_LIST:
       return action.payload.reduce(
-        (acc: DocumentRevisionsByIdState, docRev: DocumentRevision) => {
-          return {
-            ...acc,
-            [docRev.id]: {
-              ...state[docRev.id],
-              ...docRev,
-              document: {
-                ...(state[docRev.id] || {}).document,
-                ...docRev.document,
-              },
+        (acc: DocumentRevisionsByIdState, docRev: DocumentRevision) => ({
+          ...acc,
+          [docRev.id]: {
+            ...state[docRev.id],
+            ...docRev,
+            document: {
+              ...(state[docRev.id] || {}).document,
+              ...docRev.document,
             },
-          };
-        },
+          },
+        }),
         {},
       );
     // return { ...(_.keyBy<DocumentRevision>(action.payload, (documentRevision) => documentRevision.id)) };
@@ -74,11 +53,27 @@ export const allIds = (
   }
 };
 
+type DocumentByIdAction = DocumentSetAction | DocumentRevisionActions;
+
 export const documentsById = (
   state: DocumentByIdState = {},
-  action: DocumentSetAction,
+  action: DocumentByIdAction,
 ): DocumentByIdState => {
   switch (action.type) {
+    case DOCUMENT_REVISION_SET:
+      return {
+        ...state,
+        [action.payload.document.id]: {
+          ...state[action.payload.document.id],
+          documentRevisions: state[action.payload.document.id].documentRevisions.map((docRev) => {
+            if (docRev.id !== action.payload.id) {
+              return docRev;
+            }
+
+            return _.merge(docRev, action.payload);
+          }),
+        },
+      };
     case DOCUMENT_SET:
       return { ...state, [action.payload.id]: action.payload };
     default:
@@ -91,9 +86,10 @@ export const auditsByCRId = (
   action: DocumentRevisionAuditSetAction,
 ): AuditByCRIdState => {
   switch (action.type) {
-    case DOCUMENT_REVISION_AUDIT_SET:
+    case DOCUMENT_REVISION_AUDIT_SET: {
       const audits = _.groupBy(action.payload.audit, "groupId");
       return { ...state, [action.payload.id]: audits };
+    }
     default:
       return state;
   }

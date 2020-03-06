@@ -1,6 +1,5 @@
 import React from "react";
 import { useIntl } from "react-intl";
-import { toast } from "react-toastify";
 import { AttachmentDownloadResponse, attachmentsActions } from "../../../state/ducks/attachments";
 import { PDF } from "../../../state/ducks/documentRevisions";
 import AsyncButton from "../../components/AsyncButton";
@@ -10,7 +9,7 @@ import useAsync from "../../hooks/useAsync";
 interface Props {
   pdf?: PDF;
 }
-export const DownloadPDF: React.FunctionComponent<Props> = ({
+export const DownloadHTML: React.FunctionComponent<Props> = ({
   pdf,
 }) => {
   const intl = useIntl();
@@ -21,7 +20,7 @@ export const DownloadPDF: React.FunctionComponent<Props> = ({
       window.open(downloadInfo?.url, "_blank");
     },
     onError: () => {
-      toast(intl.formatMessage({ id: "document.revision.download.pdf.error" }));
+      alert(intl.formatMessage({ id: "document.revision.download.html.error" }));
     },
   });
 
@@ -35,7 +34,7 @@ export const DownloadPDF: React.FunctionComponent<Props> = ({
 
   return (
     <AsyncButton
-      label="common.download.pdf"
+      label="common.download.html"
       onClick={handleClick}
       asyncState={async.asyncState}
       color="primary"
@@ -44,4 +43,4 @@ export const DownloadPDF: React.FunctionComponent<Props> = ({
   );
 };
 
-export default DownloadPDF;
+export default DownloadHTML;

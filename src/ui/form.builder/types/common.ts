@@ -1,10 +1,7 @@
 import { BoxProps } from "@material-ui/core/Box/Box";
 import { FormControlProps } from "@material-ui/core/FormControl/FormControl";
 import { SelectProps } from "@material-ui/core/Select";
-import {
-  BaseTextFieldProps,
-  OutlinedTextFieldProps,
-} from "@material-ui/core/TextField";
+import { BaseTextFieldProps, OutlinedTextFieldProps } from "@material-ui/core/TextField";
 import { Dictionary } from "lodash";
 import { ReactNode } from "react";
 import { ValueType } from "react-select/src/types";
@@ -16,10 +13,7 @@ import { FBActionContainerProps } from "./actions/action";
 import { FBContextProps } from "./common/context";
 import { FBEditorElementType } from "./editor";
 import { FBFormikFieldProps } from "./formik";
-import {
-  FBValidatorDelimiter,
-  FBValidatorTrigger,
-} from "./validation/validator";
+import { FBValidatorDelimiter, FBValidatorTrigger } from "./validation/validator";
 import { FBValidatorConfigProps } from "./validation/validatorDialog";
 
 export type Subtract<T, V> = Pick<T, Exclude<keyof T, keyof V>>;
@@ -38,48 +32,36 @@ export enum FBLabelFontSize {
   lg = "h5",
 }
 
-export type FBLabelProps = Pick<FormControlProps, "error"> &
-  Pick<
-    BoxProps,
-    | "m"
-    | "mb"
-    | "ml"
-    | "mr"
-    | "mt"
-    | "mx"
-    | "my"
-    | "p"
-    | "pb"
-    | "pl"
-    | "pr"
-    | "pt"
-    | "px"
-    | "py"
-  > & {
+export type FBLabelProps =
+  & Pick<FormControlProps, "error">
+  & Pick<BoxProps, "m" | "mb" | "ml" | "mr" | "mt" | "mx" | "my" | "p" | "pb" | "pl" | "pr" | "pt" | "px" | "py">
+  & {
     label?: string | ReactNode;
     labelValues?: TextProps["values"];
     fontSize?: "sm" | "md" | "lg";
   };
 
-export type FBOptionProps = Pick<FBContextProps, "includeContext"> &
-  Pick<BaseTextFieldProps, "name" | "type"> & {
+export type FBOptionProps =
+  & Pick<FBContextProps, "includeContext">
+  & Pick<BaseTextFieldProps, "name" | "type">
+  & {
     options?: any[] | string;
     optionId?: string;
     optionPath?: string;
     optionLabelKey?: string;
     optionValueKey?: string;
     includeNone?: boolean;
+    value?: any;
   };
 
-export type FBInputProps = Omit<FBFormikFieldProps, "name"> &
-  FBLabelProps &
-  Pick<FBContextProps, "includeContext" | "showContext" | "contextLabel"> &
-  Pick<SelectProps, "renderValue"> &
+export type FBInputProps = Omit<FBFormikFieldProps, "name">
+  & FBLabelProps
+  & Pick<FBContextProps, "includeContext" | "showContext" | "contextLabel">
+  & Pick<SelectProps, "renderValue">
   // & Pick<FBValidatorProps, "rules" | "applicableOn">
-  Pick<FBActionContainerProps, "actions"> &
-  Pick<FBOptionProps, "optionId" | "options"> &
-  Pick<
-    BaseTextFieldProps,
+  & Pick<FBActionContainerProps, "actions">
+  & Pick<FBOptionProps, "optionId" | "options">
+  & Pick<BaseTextFieldProps,
     | "children"
     | "value"
     | "disabled"
@@ -90,7 +72,8 @@ export type FBInputProps = Omit<FBFormikFieldProps, "name"> &
     | "placeholder"
     | "hidden"
     | "fullWidth"
-  > & {
+  >
+  & {
     index?: number;
     type?: FBEditorElementType | string;
     linkUrl?: string;
@@ -114,6 +97,7 @@ export type FBInputProps = Omit<FBFormikFieldProps, "name"> &
     validationMode?: FBValidationModeType[];
     formValuesRules?: Dictionary<any>;
     templateId?: string;
+    isTemplate?: boolean;
   };
 
 export type FBFormDefaultProps = FBInputProps &

@@ -123,14 +123,29 @@ export class FBMediaAlbumFieldState {
     let s3link = img.s3link;
     const { promise } = apiClient().get(FBEndpoint.AssetUrl, {
       s3link,
-      expireAt: "2020-03-05T23:59:00Z", // TODO: Remove this once BE removes param
     });
 
     promise
       .then((data: FBMediaUrlProps) => {
         s3link = data.url;
         const collection = _.union(this.collection, [{ ...img, s3link }]);
+        this.mode !== "preview" && (this.setMode("mediaMode"));
         set(this, "collection", collection);
+      })
+      .catch((_error) => this.error(_error));
+  };
+
+  @action public removeCandidate = (mediaId: string) => {
+    this.setLoading(true);
+    const { promise } = apiClient().patch(`${FBEndpoint.FileUploadCandidates}/${mediaId}`, {
+      status: "OBSOLETED",
+    });
+
+    promise
+      .then((data: FBMediaProps) => {
+        const collection = _.filter(this.collection, (media) => media.id !== data.id);
+        set(this, "collection", collection);
+        this.setLoading(false);
       })
       .catch((_error) => this.error(_error));
   };

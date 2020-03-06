@@ -1,5 +1,5 @@
 import { Dictionary } from "lodash";
-import { FBDialogState } from "..";
+import { FBDialogState } from "../FBDialog/FBDialog.state";
 import { FBStateProps } from "../helpers/FBStateProps";
 import { FBButtonProps } from "../types/button";
 import { FBInputProps } from "../types/common";
