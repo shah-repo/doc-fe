@@ -65,13 +65,14 @@ export const documentsById = (
         ...state,
         [action.payload.document.id]: {
           ...state[action.payload.document.id],
-          documentRevisions: state[action.payload.document.id].documentRevisions.map((docRev) => {
-            if (docRev.id !== action.payload.id) {
-              return docRev;
-            }
+          documentRevisions: (state[action.payload.document.id] || { documentRevisions: [] })
+            .documentRevisions.map((docRev) => {
+              if (docRev.id !== action.payload.id) {
+                return docRev;
+              }
 
-            return _.merge(docRev, action.payload);
-          }),
+              return _.merge(docRev, action.payload);
+            }),
         },
       };
     case DOCUMENT_SET:
