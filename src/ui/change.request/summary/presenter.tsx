@@ -2,10 +2,7 @@ import { Box, Grid, ListItem, WithStyles, withStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { filter } from "lodash";
 import React, { useMemo } from "react";
-import {
-  ChangeRequest,
-  changeRequestsActions,
-} from "../../../state/ducks/changeRequest";
+import { ChangeRequest, changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
 import { AsyncState } from "../../../state/types";
 import ControlsContainer from "../../changeRequest/forms/assessmentForm/AssessmentFormControls.container";
@@ -33,8 +30,8 @@ interface OwnProps extends DataProps<ChangeRequest> {
 }
 
 export type Props = OwnProps &
-  WithStyles<typeof styles> &
-  FormikProps<ChangeRequestFormValues>;
+WithStyles<typeof styles> &
+FormikProps<ChangeRequestFormValues>;
 
 export const Presenter: React.FunctionComponent<Props> = ({
   classes,
@@ -70,18 +67,18 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const renderImplementationPlan = dataProp.implementationPlan &&
     (dataProp.implementationPlan.attachments.length > 0 ||
       dataProp.implementationPlan.tasks.length > 0) && (
-      <ImplementationPlan
-        dataProp={dataProp.implementationPlan}
-        currentUserEmail={currentUserEmail}
-        crStatus={dataProp.state}
-        closeTask={closeTask}
-        crId={dataProp.id}
-      />
-    );
+    <ImplementationPlan
+      dataProp={dataProp.implementationPlan}
+      currentUserEmail={currentUserEmail}
+      crStatus={dataProp.state}
+      closeTask={closeTask}
+      crId={dataProp.id}
+    />
+  );
 
   const renderChangeOwnership = canChangeOwnerShip && (
     <OwnerChanger
-      requestId={dataProp!.id}
+      requestId={dataProp.id}
       requestType={RequestType.ChangeRequest}
     />
   );
@@ -108,18 +105,16 @@ export const Presenter: React.FunctionComponent<Props> = ({
         {canEdit && approversFieldRenderer()}
         <ApproversSummary dataProp={dataProp.approvals} />
       </Grid>
-      <Box className={classes.submitBox} p={4}>
+      <Box className={classes.submitBox} p={2}>
         <Grid
           item={true}
-          container={true}
           alignItems="flex-end"
-          direction="column"
         >
           {canEdit && <FormProgress asyncState={asyncState} />}
           {canEdit && <FormMessage asyncState={asyncState} />}
           {renderChangeOwnership}
-          {canEdit && submitButtonRenderer()}
           <ControlsContainer changeRequest={dataProp} errors={errors} />
+          {canEdit && submitButtonRenderer()}
         </Grid>
       </Box>
     </Box>
