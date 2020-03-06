@@ -1,5 +1,4 @@
 import { SortDirectionType } from "react-virtualized/dist/es/Table";
-import { Translation } from "../../translations/types";
 import { TableColumnActionType, TableColumnProps } from "./column/types";
 
 export type TableSelectionRenderer<T> = (
@@ -20,8 +19,7 @@ export interface TableSortProps<T> {
 }
 
 export interface TablePanelProps<T> {
-  columns: Array<TableColumnProps<T>>;
-  noRowsTranslation?: Translation;
+  columns: TableColumnProps<T>[];
   cellMeasure?: boolean;
   onSelect?: TableSelectionRenderer<T>;
   searchable?: boolean;

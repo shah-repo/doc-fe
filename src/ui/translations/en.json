@@ -54,7 +54,6 @@
   "errors.fetch.tryAgain": "Try again",
   "fields.select.none": "None",
   "table.column.actions": "Actions",
-  "table.no.results.found": "No results found",
   "environment.DEV_THEME": "DEVELOPMENT",
   "environment.DEMO_THEME": "DEMO",
   "changeRequest.title": "Document - Change Request",
