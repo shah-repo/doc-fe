@@ -64,6 +64,13 @@ const getCurrentUserGroups = createSelector(
   })),
 );
 
+const makeGetHasPermission = () => createSelector(
+  (state: ApplicationState) => state.auth.groups.permissions,
+  (state: ApplicationState, selectedPermission: Permission) =>
+    selectedPermission,
+  (permissions, selectedPermission) => permissions.includes(selectedPermission),
+);
+
 const getHasPermission = createSelector(
   (state: ApplicationState) => state.auth.groups.permissions,
   (state: ApplicationState, selectedPermission: Permission) =>
@@ -90,4 +97,5 @@ export default {
   currentEmployeePermissions,
   currentEmployeeTags,
   makeGetHasTag,
+  makeGetHasPermission,
 };

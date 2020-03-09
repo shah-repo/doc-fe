@@ -2,24 +2,8 @@ import { apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import { authActions } from "../auth";
 import { EmployeeEditRequestBody } from "../auth/types";
-import {
-  ADD_WATERMARK,
-  ATTACHMENT_PUBLIC_UPLOAD_URL,
-  ATTACHMENT_ROOT_URL,
-  ATTACHMENT_UPLOAD_URL,
-  CHECK_WATERMARK_ASYNC,
-  CLEAR_WATERMARKS,
-  REMOVE_WATERMARK,
-  REQUEST_WATERMARK_ASYNC,
-} from "./constants";
-import {
-  Attachment,
-  AttachmentDownloadResponse,
-  AttachmentType,
-  AvatarS3linkResponse,
-  WatermarkRequest,
-  WatermarkRequestBody,
-} from "./types";
+import { ADD_WATERMARK, ATTACHMENT_PUBLIC_UPLOAD_URL, ATTACHMENT_ROOT_URL, ATTACHMENT_UPLOAD_URL, CHECK_WATERMARK_ASYNC, CLEAR_WATERMARKS, REMOVE_WATERMARK, REQUEST_WATERMARK_ASYNC } from "./constants";
+import { Attachment, AttachmentDownloadResponse, AttachmentType, AvatarS3linkResponse, WatermarkRequest, WatermarkRequestBody } from "./types";
 
 const upload = (file: File, handlers: Handlers<Attachment>): ApiAction => {
   const formData = new FormData();
@@ -131,6 +115,16 @@ const uploadAvatar = (
   });
 };
 
+const getAssetUrl = (
+  s3link: string,
+  handlers: Handlers,
+): ApiAction => apiActionWithCallbacks<AttachmentDownloadResponse, string>({
+  url: `${ATTACHMENT_ROOT_URL}/assetUrl`,
+  method: "get",
+  params: { s3link },
+  handlers,
+});
+
 export default {
   upload,
   download,
@@ -141,4 +135,5 @@ export default {
   clearWatermarks,
   requestAvatarS3link,
   uploadAvatar,
+  getAssetUrl,
 };

@@ -36,14 +36,14 @@ export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
       if (_.isUndefined(mediaAlbumState)) {
         return;
       }
-      let prevStep = mediaAlbumState?.activeStep - 1;
+      let prevStep = mediaAlbumState?.activeMedia - 1;
       prevStep < 0 && (prevStep = _.size(collection) - 1);
       mediaAlbumState?.setActiveMedia(prevStep);
     };
 
     useObserver(() => {
       activeStep = mediaAlbumState?.activeMedia || 0;
-      activeMediaPath = _.get(collection[activeStep!], "path", "");
+      activeMediaPath = _.get(collection[activeStep!], "s3link", "");
     });
 
     return Component({
@@ -52,7 +52,7 @@ export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
       activeStep,
       activeMediaPath,
       handleNext,
-      handleBack
+      handleBack,
     });
   };
 

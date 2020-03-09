@@ -41,9 +41,10 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
   isSlackIntegrationEnabled,
   slackTeamId,
 }) => {
-  const canManageUsers = useGetHasTag(GroupTag.USER_MANAGEMENT);
   const userSlackId = useSelector(authSelectors.currentSlackUserId);
   const isDeveloper = useSelector(getHasPermission(Permission.DEVELOPER));
+  const canUpdateCompany = useSelector(getHasPermission(Permission.COMPANY_UPDATE_CURRENT));
+  const canManageUsers = useGetHasTag(GroupTag.USER_MANAGEMENT);
 
   const [realUser, setRealUser] = useState<any>({ user: {}, groups: [] });
   const [showEditUser, setEditUser] = useState(false);
@@ -123,6 +124,7 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
 
   return (
     <UserProfilePresenter
+      canUpdateCompany={canUpdateCompany}
       isOpen={showUserProfile}
       close={closeUserProfile}
       canManageUsers={canManageUsers}

@@ -40,6 +40,7 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
   const async = useAsync();
   const dispatch = useDispatch();
 
+  const canUpdateCompany = useSelector(getHasPermission(Permission.COMPANY_UPDATE_CURRENT));
   const canManageUsers = useGetHasTag(GroupTag.USER_MANAGEMENT);
   const isDeveloper = useSelector(getHasPermission(Permission.DEVELOPER));
   const name = useSelector(authSelectors.currentUserName);
@@ -77,6 +78,7 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
       isOpen={showUserProfile}
       close={closeUserProfile}
       canManageUsers={canManageUsers}
+      canUpdateCompany={canUpdateCompany}
       employeeGroups={groups}
       name={name}
       avatar={avatar}

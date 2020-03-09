@@ -40,7 +40,9 @@ import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInf
 import styles from "./DocumentRevisionForm.styles";
 import ApproveAndRelease from "./presenters/ApproveAndRelease";
 import DocIdInput from "./presenters/DocIdInput";
+import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
 import References from "./presenters/References";
+import RenderHtmlField from "./presenters/RenderHtmlField";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -89,16 +91,16 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   setFieldValue,
 }) => {
   const loadAvailableApproversAction = useActionCreator(
-    changeRequestsActions.loadAvailableApprovers,
+    changeRequestsActions.loadAvailableApprovers
   );
   const loadApproversAsyncState = useSelector(
-    changeRequestsSelectors.getLoadApproversAsyncState,
+    changeRequestsSelectors.getLoadApproversAsyncState
   );
   const loadGroupsAction = useActionCreator(
-    userManagementActions.loadCompanyGroups,
+    userManagementActions.loadCompanyGroups
   );
   const loadGroupAsyncState = useSelector(
-    userManagementSelectors.getLoadGroupsAsyncState,
+    userManagementSelectors.getLoadGroupsAsyncState
   );
 
   if (!values.id && !_.get(values, "document.documentType.id")) {
@@ -114,8 +116,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   const isDisabled: boolean = _.get(initialValues, "id") !== undefined;
   const isdocRevVersionOne = _.get(documentRevision, "version") === 1;
-  const isdocRevStatusDraft = _.get(documentRevision, "status") === DocumentRevisionStatus.Draft;
-  const outputDocEnabled: boolean = (isdocRevVersionOne && isdocRevStatusDraft) || !isDisabled;
+  const isdocRevStatusDraft =
+    _.get(documentRevision, "status") === DocumentRevisionStatus.Draft;
+  const outputDocEnabled: boolean =
+    (isdocRevVersionOne && isdocRevStatusDraft) || !isDisabled;
 
   useEffect(() => {
     if (proposedDocId) {
@@ -135,7 +139,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   }, [isdocRevStatusDraft, values.document, values.name]);
 
   const handleTypeChange = (
-    event: React.ChangeEvent<{ name?: string; value: unknown }>,
+    event: React.ChangeEvent<{ name?: string; value: unknown }>
   ) => {
     const typeId = event.target.value as string;
     const type = documentTypesById[typeId] || {};
@@ -167,7 +171,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   };
 
   const onFormClick = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     FBValidate();
   };
@@ -180,7 +184,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     const currentUserId = authSelectors.currentUserId(state);
     return changeRequestsSelectors.getApproversListWithoutCurrentUser(
       state,
-      currentUserId,
+      currentUserId
     );
   });
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
@@ -329,11 +333,16 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               includeEmpty={false}
               validate={validator(required)}
             />
+            <RenderHtmlField />
           </Box>
         )}
         {FBStore.active && (
           <Box mt={5}>
-            <FBWorkspaceForm id={_.get(values, "id")} />
+            <GenerateHtmlPreview id={values.id} renderHTML={values.formDocument?.renderHTML} />
+            <FBWorkspaceForm
+              id={_.get(values, "id")}
+              documentId={_.get(values, "formDocument.document.id") || _.get(values, "document.id")}
+            />
           </Box>
         )}
         <Box mt={5}>

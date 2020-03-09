@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, RouteComponentProps } from "react-router-dom";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { documentTypeActions, DocumentTypeById, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import { ApplicationState } from "../../../state/reducers";
@@ -54,6 +55,10 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [acronym]);
+
+  useEffect(() => {
+    dispatch(documentRevisionsActions.loadList());
+  }, []);
 
   const async = useAsync<DocumentTypeById>({
     onSuccess: () => {

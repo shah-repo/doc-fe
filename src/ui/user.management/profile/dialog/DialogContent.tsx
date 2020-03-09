@@ -5,6 +5,7 @@ import { ReactComponent as SlackLogo } from "../../../../assets/images/slack_ful
 import { getTableCriteria } from "../../../../common/utils/selectors";
 import { attachmentsActions } from "../../../../state/ducks/attachments";
 import { EmployeeEditRequestBody } from "../../../../state/ducks/auth/types";
+import { companySelectors } from "../../../../state/ducks/company";
 import { tableSearchActions } from "../../../../state/ducks/tableSearch";
 import { GetEmployeeResponse, userManagementActions } from "../../../../state/ducks/userManagement";
 import { AsyncState } from "../../../../state/types";
@@ -14,8 +15,11 @@ import Text from "../../../components/Text";
 import useAsync from "../../../hooks/useAsync";
 import styles from "../../profile/UserProfile.styles";
 import { toEmployeeActiveStatusEditRequestBody } from "../../utils/transform";
+import AcctCodes from "../AddressesAndCodes/AcctCodes";
+import Addresses from "../AddressesAndCodes/Addresses";
 import ApiTokenContent from "../apiTokenContent/ApiTokenContent";
 import UserGroups from "../groups/UserGroups";
+
 
 interface OwnProps {
   canManageUsers: boolean;
@@ -43,6 +47,7 @@ interface OwnProps {
   isCurrentUser: boolean;
   isUsernameEmpty: boolean;
   isDeveloper: boolean;
+  canUpdateCompany: boolean;
 }
 
 type Props = OwnProps;
@@ -73,12 +78,14 @@ export const DialogContent: React.FunctionComponent<Props> = ({
   isCurrentUser,
   isUsernameEmpty,
   isDeveloper,
+  canUpdateCompany,
 }) => {
   const TABLE_NAME = "userManagement";
   const classes = styles();
   const dispatch = useDispatch();
   const [avatarURL, setAvatarURL] = useState<string>("");
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
+  const companyMine = useSelector(companySelectors.getCompanyMine);
 
   const asyncS3link = useAsync({
     onSuccess: (data: any) => {
@@ -238,6 +245,8 @@ export const DialogContent: React.FunctionComponent<Props> = ({
         )}
         {!isDeveloper &&
           <ApiTokenContent />}
+        <Addresses canUpdateCompany={canUpdateCompany} addresses={companyMine.addresses} />
+        <AcctCodes canUpdateCompany={canUpdateCompany} acctCodes={companyMine.acctCodes} />
         {showEditUser && updateProfileButtonsRenderer()}
       </Box>
     </React.Fragment>

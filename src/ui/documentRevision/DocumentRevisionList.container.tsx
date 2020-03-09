@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core";
 import ExpandLessIcon from "@material-ui/icons/ExpandMore";
 import classNames from "classnames";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { Nullable, TypographySize } from "../../state/ducks/common";
@@ -45,12 +45,13 @@ DocumentRevisionListContainerProps
   const handleChange = () => () => setExpanded(!expanded);
   const dispatch = useDispatch();
   const loadDocumentAsyncState = useSelector(documentRevisionsSelectors.getLoadDocumentAsyncState);
-  const loadDocumentAction = () => dispatch(documentRevisionsActions.loadDocument(documentId));
+  const loadDocumentAction = useCallback(() => {
+      dispatch(documentRevisionsActions.loadDocument(documentId));
+  }, [dispatch, documentId]);
 
   useEffect(() => {
     loadDocumentAction();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [documentRevisionId, documentId]);
+  }, [loadDocumentAction, documentId]);
 
   return (
     <AsyncGate

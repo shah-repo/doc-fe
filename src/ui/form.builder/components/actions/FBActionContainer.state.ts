@@ -4,7 +4,7 @@ import { FETCH_VALIDATORS_REMOTE_URL_URL } from "../../../../state/ducks/auth/co
 import { RemoteValidatorHelper } from "../../../remoteValidators/remoteValidatorsHelper";
 import FBRequest from "../../FBApi/FBApi.request";
 
-export class FBActionContainerState extends FBRequest {
+export class FBActionContainerState extends FBRequest<any, any> {
   constructor() {
     super();
     this.data = _.get(window, "EnlilRemoteValidators.avaliableActions");
@@ -21,7 +21,7 @@ export class FBActionContainerState extends FBRequest {
       () => RemoteValidatorHelper,
     );
     set(this, "data", _.get(window, "EnlilRemoteValidators.avaliableActions"));
-  }
+  };
 }
 
 export default FBActionContainerState;

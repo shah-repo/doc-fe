@@ -36,6 +36,7 @@ interface OwnProps {
   activeStatus: boolean;
   userId: string;
   isDeveloper: boolean;
+  canUpdateCompany: boolean;
 }
 
 type Props = OwnProps;
@@ -66,6 +67,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
   userId,
   callbackUpdateWithUpload,
   isDeveloper,
+  canUpdateCompany,
 }) => {
   const [isUsernameEmpty, setUsernameError] = useState<boolean>(false);
   const currentUserId = useSelector(authSelectors.currentUserId);
@@ -135,6 +137,7 @@ export const UserProfilePresenter: React.FunctionComponent<Props> = ({
         isCurrentUser={isCurrentUser}
         isUsernameEmpty={isUsernameEmpty}
         isDeveloper={isDeveloper}
+        canUpdateCompany={canUpdateCompany}
       />
     </Dialog>
   );

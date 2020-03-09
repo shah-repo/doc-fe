@@ -12,9 +12,10 @@ export type FBWorkspaceProps =
   & Omit<FBFormikFieldProps, "name">
   & {
     id?: string;
+    documentId?: string;
     mode?: FBWorkspaceMode;
     includeTransport?: boolean;
     isStarter?: boolean;
     schema?: FBTemplateSchema[];
     values?: Dictionary<any>;
-};
+  };

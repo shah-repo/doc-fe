@@ -1,31 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { authActions, authSelectors } from "../../state/ducks/auth";
-import { ApplicationState } from "../../state/reducers";
+import { companyActions } from "../../state/ducks/company";
 import { CHANGE_REQUEST_CREATE_URL } from "../constants/urls";
 import { Translation } from "../translations/types";
 import HeaderPresenter from "./Header.presenter";
-interface StateProps {
-  email: string;
-  name: string;
-}
 
-interface DispatchProps {
-  logout: () => void;
-}
-
-type Props = StateProps & DispatchProps & RouteComponentProps;
-
-const mapStateToProps = (state: ApplicationState) => ({
-  email: authSelectors.currentUserEmail(state),
-  name: authSelectors.currentUserName(state),
-});
+type Props = RouteComponentProps;
 
 const HeaderContainer: React.FunctionComponent<Props> = ({
-  email,
-  logout,
-  name,
   location,
   history,
 }) => {
@@ -33,6 +17,10 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
     "translation.unknown",
   );
   const [showUserProfile, setUserProfile] = useState(false);
+  const email = useSelector(authSelectors.currentUserEmail);
+  const name = useSelector(authSelectors.currentUserName);
+  const dispatch = useDispatch();
+  const logout = () => dispatch(authActions.logout());
 
   const openUserProfile = () => {
     setUserProfile(true);
@@ -41,6 +29,7 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
   const closeUserProfile = () => setUserProfile(false);
   useEffect(() => {
     setTranslationByPath(location.pathname);
+    dispatch(companyActions.getCompanyMine());
 
     const unlistenHistory = history.listen((location) => {
       setTranslationByPath(location.pathname);
@@ -76,9 +65,4 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
   );
 };
 
-export default connect<StateProps, DispatchProps, {}, ApplicationState>(
-  mapStateToProps,
-  {
-    logout: authActions.logout,
-  },
-)(withRouter(HeaderContainer));
+export default withRouter(HeaderContainer);

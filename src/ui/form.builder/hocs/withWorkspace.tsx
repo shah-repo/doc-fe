@@ -14,7 +14,9 @@ export const withWorkspace = <T extends FBWorkspaceProps>(
     React.useEffect(() => {
       FBDynamicValidatorStore.registerValidators();
       FBDynamicValidatorStore.validate();
-    }, []);
+      FBStore.docId = props.id || "";
+      FBStore.documentId = props.documentId || "";
+    }, [props.documentId, props.id]);
 
     if (props.mode) {
       FBStore.setMode(props.mode);
@@ -22,15 +24,13 @@ export const withWorkspace = <T extends FBWorkspaceProps>(
     const { schema, mode, values } = FBStore;
     const isStarter = mode === "design" && schema.length === 0;
 
-    FBStore.docId = props.id || "";
-
     return Component({
       ...props,
       isStarter,
       mode,
       schema,
       values,
-      form: props.form
+      form: props.form,
     });
   };
 

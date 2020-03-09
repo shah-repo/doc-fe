@@ -1,6 +1,6 @@
 import { User } from "../common";
 import { DocumentType } from "../documentRevisions/documentType";
-import { SELECT_COMPANY } from "./constants";
+import { SELECT_COMPANY, SET_COMPANY_MINE } from "./constants";
 
 export interface WhiteLabelingColors {
   defaultBackground: string;
@@ -33,11 +33,24 @@ export interface Company {
   documentTypes: DocumentType[];
   whiteLabeling: WhiteLabeling;
   teamId: string;
+  addresses: [];
+  acctCodes: [];
 }
 
 export interface SelectCompanyAction {
   type: typeof SELECT_COMPANY;
   payload: Company;
+}
+
+export interface CompanyMineAction {
+  type: typeof SET_COMPANY_MINE;
+  payload: Company;
+}
+
+export interface CompanyMineRequest {
+  name?: string;
+  addresses?: string[];
+  acctCodes?: string[];
 }
 
 export type SelectCompanyState = Company;
