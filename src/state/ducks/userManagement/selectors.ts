@@ -5,7 +5,6 @@ import { AsyncState } from "../../types";
 const groupsById = (state: ApplicationState) => state.userManagement.groupsById;
 const groupsAllIds = (state: ApplicationState) => state.userManagement.groupsAllIds;
 const getLoadGroupsAsyncState = (state: ApplicationState): AsyncState => state.userManagement.loadGroupsListAsyncInfo;
-const getApiTokenList = (state: ApplicationState) => state.userManagement.apiTokenList;
 
 const getGroupsOptions = createSelector(
   groupsAllIds, groupsById,
@@ -25,5 +24,4 @@ export default {
   getGroupsOptions,
   getLoadGroupsAsyncState,
   apiToken,
-  getApiTokenList,
 };

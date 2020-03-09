@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
@@ -6,9 +6,7 @@ import { ReactComponent as DisableIcon } from "../../../../assets/images/disable
 import { getTableData } from "../../../../common/utils/selectors";
 import { tableSearchActions } from "../../../../state/ducks/tableSearch";
 import { ApiTokenData, GetApiTokenList, userManagementActions, userManagementSelectors } from "../../../../state/ducks/userManagement";
-import { API_TOKEN_LIST_URL } from "../../../../state/ducks/userManagement/constants";
-import InputField from "../../../components/forms/fields/Input";
-import { required, validator } from "../../../components/forms/fields/validators";
+import { API_TOKEN } from "../../../../state/ducks/userManagement/constants";
 import { TableColumnProps } from "../../../components/table/column/types";
 import { TablePanel } from "../../../components/table/panel";
 import Text from "../../../components/Text";
@@ -17,6 +15,7 @@ import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
 import { styles } from "./ApiToken.style";
 import ApiTokenDialog from "./ApiTokenDialog";
+import GenerateTokenFormPresenter from "./GenerateTokenForm.presenter";
 
 export const ApiTokenContent: React.FunctionComponent = () => {
   const classes = styles();
@@ -24,34 +23,9 @@ export const ApiTokenContent: React.FunctionComponent = () => {
   const dialog = useDialog();
   const openDialog = () => dialog.open();
 
-  const renderForm = () => (
-    <Form>
-      <Box style={{
-        display: "flex",
-      }}>
-        <Box className={classes.inputField}>
-          <InputField
-            type="text"
-            name="name"
-            inputProps={{ placeholder: "Enter Token Name", id: "ApiTokenContent-name" }}
-            validate={validator(required)}
-          />
-        </Box>
-        <Box style={{ paddingTop: 9 }}>
-          <Button
-            id="ApiTokenContent-generate"
-            type="submit"
-            color="primary"
-            variant="contained"
-          >
-            <Text translation="user.management.generate.key" />
-          </Button>
-        </Box>
-      </Box>
-    </Form>
-  );
   const TABLE_NAME = "apiTokens";
   const updateTable = useActionCreator(tableSearchActions.setForceUpdate);
+  const [newTableData, setNewTableData] = useState({});
 
   const async = useAsync({
     onSuccess: () => {
@@ -59,30 +33,6 @@ export const ApiTokenContent: React.FunctionComponent = () => {
       updateTable(TABLE_NAME, true);
     },
   });
-  const generateAction = useActionCreator(userManagementActions.generateApiToken);
-  const revokeApiToken = useActionCreator(userManagementActions.revokeApiToken);
-  const apiToken = useSelector(userManagementSelectors.apiToken);
-  const tableData = useSelector(getTableData(TABLE_NAME));
-  const resetTableData = useActionCreator(tableSearchActions.setData);
-
-  const generateKey = (values: ApiTokenData) => {
-    async.start(generateAction, { name: values.name }, async);
-  };
-
-  const initialValues = {
-    name: "",
-  };
-
-  const renderInputForm = () => (
-    <Formik
-      onSubmit={generateKey}
-      initialValues={initialValues}
-    >
-      {renderForm}
-    </Formik>
-  );
-
-  const [newTableData, setNewTableData] = useState({});
 
   const asyncDeleteToken = useAsync({
     onSuccess: () => {
@@ -90,11 +40,32 @@ export const ApiTokenContent: React.FunctionComponent = () => {
     },
   });
 
+  const generateAction = useActionCreator(userManagementActions.generateApiToken);
+  const revokeApiToken = useActionCreator(userManagementActions.revokeApiToken);
+  const resetTableData = useActionCreator(tableSearchActions.setData);
+
+  const apiToken = useSelector(userManagementSelectors.apiToken);
+  const tableData = useSelector(getTableData(TABLE_NAME));
+
+  const generateKey = (values: ApiTokenData) => {
+    async.start(generateAction, { name: values.name }, async);
+  };
+
   const disableApiToken = (tokenKey) => {
     asyncDeleteToken.start(revokeApiToken, tokenKey, asyncDeleteToken);
     const data = tableData.filter((obj) => obj.id !== tokenKey);
     setNewTableData(data);
   };
+
+  const initialValues = {
+    name: "",
+  };
+
+  const renderForm = () => (
+    <Form>
+      <GenerateTokenFormPresenter />
+    </Form>
+  );
 
   const columns: TableColumnProps<GetApiTokenList>[] = [
     {
@@ -142,10 +113,15 @@ export const ApiTokenContent: React.FunctionComponent = () => {
 
   return (
     <>
-      <Typography variant="h6" style={{ marginBottom: 15 }}>
+      <Typography variant="h6" style={{ marginBottom: 15, marginTop: 15 }}>
         <Text translation="user.management.api.token" />
       </Typography>
-      {renderInputForm()}
+      <Formik
+        onSubmit={generateKey}
+        initialValues={initialValues}
+      >
+        {renderForm}
+      </Formik>
       <ApiTokenDialog
         dialog={dialog}
         apiTokenKey={apiToken.id}
@@ -154,11 +130,11 @@ export const ApiTokenContent: React.FunctionComponent = () => {
       />
       <TablePanel<GetApiTokenList>
         columns={columns}
-        queryUrl={API_TOKEN_LIST_URL}
+        queryUrl={API_TOKEN}
         tableName={TABLE_NAME}
         cellMeasure={true}
         searchable={false}
-        headerStyle={classes.header}
+        rootCustomStyle={classes.rootCustomStyle}
       />
     </>
   );

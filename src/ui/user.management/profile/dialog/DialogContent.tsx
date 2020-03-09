@@ -243,11 +243,11 @@ export const DialogContent: React.FunctionComponent<Props> = ({
             />
           </div>
         )}
-        {!isDeveloper &&
-          <ApiTokenContent />}
         <Addresses canUpdateCompany={canUpdateCompany} addresses={companyMine.addresses} />
         <AcctCodes canUpdateCompany={canUpdateCompany} acctCodes={companyMine.acctCodes} />
         {showEditUser && updateProfileButtonsRenderer()}
+        {isDeveloper &&
+          <ApiTokenContent />}
       </Box>
     </React.Fragment>
   );

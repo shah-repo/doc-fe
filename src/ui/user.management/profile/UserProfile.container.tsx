@@ -42,7 +42,7 @@ export const UserProfileContainer: React.FunctionComponent<Props> = ({
 
   const canUpdateCompany = useSelector(getHasPermission(Permission.COMPANY_UPDATE_CURRENT));
   const canManageUsers = useGetHasTag(GroupTag.USER_MANAGEMENT);
-  const isDeveloper = useSelector(getHasPermission(Permission.DEVELOPER));
+  const isDeveloper = useSelector(getHasPermission(Permission.DEVELOPERS));
   const name = useSelector(authSelectors.currentUserName);
   const avatar = useSelector(authSelectors.currentEmployeeAvatar);
   const email = useSelector(authSelectors.currentUserEmail);

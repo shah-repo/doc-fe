@@ -34,7 +34,7 @@ export function TablePanel<T extends any>({
   sortBy,
   tableName,
   providedData,
-  headerStyle,
+  rootCustomStyle,
 }: Props<T>) {
   const didMount = useDidMount();
   let lastQueryValue = "";
@@ -133,7 +133,7 @@ export function TablePanel<T extends any>({
 
       requestConfig.headers.Authorization = `bearer ${
         store.getState().auth.user.employeeId
-        }:${store.getState().auth.user.sessionId}`;
+      }:${store.getState().auth.user.sessionId}`;
 
       let { data } = await apiClient.request(requestConfig);
       if (customDataSet) {
@@ -257,7 +257,7 @@ export function TablePanel<T extends any>({
   const bodyRenderer = () => <AutoSizer>{tableRenderer}</AutoSizer>;
 
   return (
-    <Box className={headerStyle ? headerStyle : classes.root}>
+    <Box className={rootCustomStyle ? rootCustomStyle : classes.root}>
       <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
       {bodyRenderer()}
     </Box>

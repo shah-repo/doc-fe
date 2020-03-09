@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
-import { API_TOKEN, API_TOKEN_LIST, COMPANY_GROUPS_GET_ASYNC, COMPANY_GROUPS_LIST } from "./constants";
+import { API_TOKEN_GENERATE, API_TOKEN_LIST, COMPANY_GROUPS_GET_ASYNC, COMPANY_GROUPS_LIST } from "./constants";
 import { ApiTokenDataAction, ApiTokenListAction, ApiTokenState, CompanyGroupsListAction, GetApiTokenList, GroupsAllIdsState, GroupsByIdState, LoadCompanyGroup } from "./types";
 
 export const groupsById = (
@@ -44,7 +44,7 @@ export const apiToken = (
   action: ApiTokenDataAction,
 ): ApiTokenState => {
   switch (action.type) {
-    case API_TOKEN:
+    case API_TOKEN_GENERATE:
       return action.payload;
     default:
       return state;

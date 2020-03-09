@@ -32,7 +32,7 @@ export interface TablePanelProps<T> {
   customDataSet?: (data: T[]) => T[];
   tableName: string;
   providedData?: T[];
-  headerStyle?: any;
+  rootCustomStyle?: any;
 }
 
 export interface TablePanelStateProps {

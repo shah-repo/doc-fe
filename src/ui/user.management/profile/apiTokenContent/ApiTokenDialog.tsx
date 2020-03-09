@@ -1,13 +1,11 @@
-import { Box, Button, Dialog, DialogContent, DialogTitle, IconButton, Typography } from "@material-ui/core";
+import { Box, Dialog, DialogContent, DialogTitle, IconButton, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
-import copy from "copy-to-clipboard";
 import { Form, Formik } from "formik";
 import React from "react";
-import { ReactComponent as CopyIcon } from "../../../../assets/images/copy.svg";
-import InputField from "../../../components/forms/fields/Input";
 import Text from "../../../components/Text";
 import { DialogHandler } from "../../../hooks/useDialog";
 import { styles } from "./ApiToken.style";
+import ApiTokenResponseFormPresenter from "./ApiTokenResponseForm.presenter";
 
 export interface Props {
   dialog: DialogHandler;
@@ -28,41 +26,10 @@ export const ApiTokenDialog: React.FunctionComponent<Props> = ({
 
   const renderForm = () => (
     <Form>
-      <InputField
-        name="name"
-        label="common.name"
-        inputProps={{ id: "ApiTokenDialog-name", disabled: true }}
+      <ApiTokenResponseFormPresenter
+        apiTokenKey={apiTokenKey}
+        apiTokenSecret={apiTokenSecret}
       />
-      <div>
-        <Button
-          className={classes.copyKeyButton}
-          color="primary"
-          id="ApiTokenDialog-copyKey"
-          onClick={() => copy(apiTokenKey)}>
-          <CopyIcon className={classes.icon} />
-          <Text translation="api.token.copy.key" />
-        </Button>
-        <InputField
-          name="key"
-          label="api.token.key"
-          inputProps={{ id: "ApiTokenDialog-key", disabled: true }}
-        />
-      </div>
-      <div>
-        <Button
-          className={classes.copySecretButton}
-          color="primary"
-          id="ApiTokenDialog-copySecret"
-          onClick={() => copy(apiTokenSecret)}>
-          <CopyIcon className={classes.icon} />
-          <Text translation="api.token.copy.secret" />
-        </Button>
-        <InputField
-          name="secret"
-          label="api.token.secret"
-          inputProps={{ id: "ApiTokenDialog-secret", disabled: true }}
-        />
-      </div>
     </Form>
   );
 
