@@ -12,31 +12,29 @@ interface OwnProps {
   documentRevision: DocumentRevision;
   onDelete?: () => void;
   onClick: () => void;
-  selectedDocumentRevision: string;
 }
 
 export type DocumentRevisionItemPresenterProps = OwnProps;
 
-export const DocumentRevisionItemPresenter: React.FunctionComponent<
-  DocumentRevisionItemPresenterProps
-> = ({ onClick, onDelete, documentRevision, selectedDocumentRevision }) => {
+export const DocumentRevisionItemPresenter: React.FunctionComponent<DocumentRevisionItemPresenterProps> = ({
+  onClick,
+  onDelete,
+  documentRevision,
+}) => {
   if (!documentRevision) {
     return null;
   }
 
   const classes = styles();
-  const isSelected = selectedDocumentRevision === documentRevision.id;
 
   return (
     <div
-      className={classNames(classes.container, {
-        [classes.selected]: isSelected,
-      })}
+      className={classNames(classes.container)}
     >
       <Grid container={true}>
         <Grid item={true} xs={10}>
           <div onClick={onClick}>
-            <div className={isSelected ? classes.item : classes.itemSelected}>
+            <div className={classes.itemSelected}>
               <SummaryInfo
                 label="common.docId"
                 value={documentRevision.document.docId}
