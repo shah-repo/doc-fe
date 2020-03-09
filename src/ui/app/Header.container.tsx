@@ -3,9 +3,7 @@ import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { authActions, authSelectors } from "../../state/ducks/auth";
 import { ApplicationState } from "../../state/reducers";
-import {
-  CHANGE_REQUEST_CREATE_URL,
-} from "../constants/urls";
+import { CHANGE_REQUEST_CREATE_URL } from "../constants/urls";
 import { Translation } from "../translations/types";
 import HeaderPresenter from "./Header.presenter";
 interface StateProps {
@@ -37,7 +35,7 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
   const [showUserProfile, setUserProfile] = useState(false);
 
   const openUserProfile = () => {
-      setUserProfile(true);
+    setUserProfile(true);
   };
 
   const closeUserProfile = () => setUserProfile(false);
@@ -51,7 +49,7 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
     return () => {
       unlistenHistory();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const setTranslationByPath = (path: any) => {

@@ -2,7 +2,7 @@ import { Dictionary } from "lodash";
 import { Group, GroupTag, Permission } from "../auth/types";
 import { Id, Nullable, User } from "../common";
 import { Company, Employee } from "../company";
-import { COMPANY_GROUPS_LIST } from "./constants";
+import { API_TOKEN, API_TOKEN_LIST, COMPANY_GROUPS_LIST } from "./constants";
 
 export interface GetEmployeeResponse {
   id: string;
@@ -39,7 +39,7 @@ export interface EmployeeActiveStatusRequestBody {
   active: boolean;
 }
 
-export interface LoadCompanyGroups extends Array<LoadCompanyGroup> {}
+export type LoadCompanyGroups = LoadCompanyGroup[];
 
 export interface CompanyGroupsListAction {
   type: typeof COMPANY_GROUPS_LIST;
@@ -49,3 +49,30 @@ export interface CompanyGroupsListAction {
 export type GroupsByIdState = Dictionary<LoadCompanyGroup>;
 
 export type GroupsAllIdsState = string[];
+
+export interface ApiTokenData {
+  name: string;
+}
+
+export interface ApiTokenDataAction {
+  type: typeof API_TOKEN;
+  payload: any;
+}
+
+export interface ApiTokenState {
+  id: string;
+  secretKey: string;
+  name: string;
+}
+
+export type LoadApiTokenList = GetApiTokenList[];
+export interface GetApiTokenList {
+  id: string;
+  name: string;
+  active: boolean;
+}
+
+export interface ApiTokenListAction {
+  type: typeof API_TOKEN_LIST;
+  payload: LoadApiTokenList;
+}

@@ -20,7 +20,7 @@ export interface TableSortProps<T> {
 }
 
 export interface TablePanelProps<T> {
-  columns: Array<TableColumnProps<T>>;
+  columns: TableColumnProps<T>[];
   noRowsTranslation?: Translation;
   cellMeasure?: boolean;
   onSelect?: TableSelectionRenderer<T>;
@@ -32,6 +32,7 @@ export interface TablePanelProps<T> {
   customDataSet?: (data: T[]) => T[];
   tableName: string;
   providedData?: T[];
+  headerStyle?: any;
 }
 
 export interface TablePanelStateProps {

@@ -5,21 +5,11 @@ import _ from "lodash";
 import qs from "query-string";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  AutoSizer,
-  CellMeasurerCache,
-  Index,
-  Size,
-  SortDirection,
-  SortDirectionType,
-  Table,
-} from "react-virtualized";
+import { AutoSizer, CellMeasurerCache, Index, Size, SortDirection, SortDirectionType, Table } from "react-virtualized";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
-import {
-  tableSearchActions,
-} from "../../../state/ducks/tableSearch";
+import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import Text from "../../components/Text";
@@ -44,9 +34,10 @@ export function TablePanel<T extends any>({
   sortBy,
   tableName,
   providedData,
+  headerStyle,
 }: Props<T>) {
   const didMount = useDidMount();
-  let lastQueryValue: string = "";
+  let lastQueryValue = "";
   const headerHeight = searchable ? 117 : 50;
   const styleProps: TableStyleProps = {
     isSelectable: onSelect !== undefined,
@@ -142,7 +133,7 @@ export function TablePanel<T extends any>({
 
       requestConfig.headers.Authorization = `bearer ${
         store.getState().auth.user.employeeId
-      }:${store.getState().auth.user.sessionId}`;
+        }:${store.getState().auth.user.sessionId}`;
 
       let { data } = await apiClient.request(requestConfig);
       if (customDataSet) {
@@ -170,7 +161,7 @@ export function TablePanel<T extends any>({
       if (axios.isCancel(exception)) {
         return;
       }
-      let responseMessage: string = "";
+      let responseMessage = "";
       const isUnauthorizedRequest = exception.response.status === 401;
 
       if (isUnauthorizedRequest) {
@@ -214,32 +205,30 @@ export function TablePanel<T extends any>({
     minHeight: 50,
   });
 
-  const tableRenderer = ({ height, width }: Size) => {
-    return (
-      <Table
-        width={width}
-        height={height}
-        headerHeight={headerHeight}
-        rowHeight={measurerCache.rowHeight}
-        deferredMeasurementCache={measurerCache}
-        rowCount={queryData.length}
-        className={classes.table}
-        rowClassName={classes.row}
-        headerClassName={classes.header}
-        rowGetter={rowGetter}
-        sortBy={sortBy}
-        sort={sort}
-        sortDirection={tableCriteria.sortDirection}
-        noRowsRenderer={noRowsRenderer}
-        onRowClick={onSelect && (({ rowData }) => onSelect({ rowData })())}
-        scrollToIndex={tableCriteria.scrollToIndex}
-      >
-        {columns.map((item) =>
-          TableColumn<T>(item, { measurerCache, searchable, queryGetter }),
-        )}
-      </Table>
-    );
-  };
+  const tableRenderer = ({ height, width }: Size) => (
+    <Table
+      width={width}
+      height={height}
+      headerHeight={headerHeight}
+      rowHeight={measurerCache.rowHeight}
+      deferredMeasurementCache={measurerCache}
+      rowCount={queryData.length}
+      className={classes.table}
+      rowClassName={classes.row}
+      headerClassName={classes.header}
+      rowGetter={rowGetter}
+      sortBy={sortBy}
+      sort={sort}
+      sortDirection={tableCriteria.sortDirection}
+      noRowsRenderer={noRowsRenderer}
+      onRowClick={onSelect && (({ rowData }) => onSelect({ rowData })())}
+      scrollToIndex={tableCriteria.scrollToIndex}
+    >
+      {columns.map((item) =>
+        TableColumn<T>(item, { measurerCache, searchable, queryGetter }),
+      )}
+    </Table>
+  );
 
   const sort = ({ sortBy, sortDirection }: TableSortProps<T>) => {
     const sortedTableData = processData(
@@ -265,12 +254,10 @@ export function TablePanel<T extends any>({
     );
   };
 
-  const bodyRenderer = () => {
-    return <AutoSizer>{tableRenderer}</AutoSizer>;
-  };
+  const bodyRenderer = () => <AutoSizer>{tableRenderer}</AutoSizer>;
 
   return (
-    <Box className={classes.root}>
+    <Box className={headerStyle ? headerStyle : classes.root}>
       <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
       {bodyRenderer()}
     </Box>
