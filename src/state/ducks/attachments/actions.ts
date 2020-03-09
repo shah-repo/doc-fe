@@ -1,4 +1,3 @@
-import { addMinutes } from "date-fns";
 import { apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import { authActions } from "../auth";
@@ -119,11 +118,10 @@ const uploadAvatar = (
 const getAssetUrl = (
   s3link: string,
   handlers: Handlers,
-  expireAt = addMinutes(new Date(), 5).toISOString(),
 ): ApiAction => apiActionWithCallbacks<AttachmentDownloadResponse, string>({
   url: `${ATTACHMENT_ROOT_URL}/assetUrl`,
   method: "get",
-  params: { s3link, expireAt },
+  params: { s3link },
   handlers,
 });
 
