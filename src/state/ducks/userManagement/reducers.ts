@@ -1,8 +1,8 @@
 import _ from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
-import { API_TOKEN_LIST, COMPANY_GROUPS_GET_ASYNC, COMPANY_GROUPS_LIST } from "./constants";
-import { ApiTokenListAction, CompanyGroupsListAction, GetApiTokenList, GroupsAllIdsState, GroupsByIdState, LoadCompanyGroup } from "./types";
+import { COMPANY_GROUPS_GET_ASYNC, COMPANY_GROUPS_LIST } from "./constants";
+import { CompanyGroupsListAction, GroupsAllIdsState, GroupsByIdState, LoadCompanyGroup } from "./types";
 
 export const groupsById = (
   state: GroupsByIdState = {},
@@ -33,21 +33,8 @@ export const groupsAllIds = (
   }
 };
 
-export const apiTokenList = (
-  state: GetApiTokenList[] = [],
-  action: ApiTokenListAction,
-): GetApiTokenList[] => {
-  switch (action.type) {
-    case API_TOKEN_LIST:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
 export default combineReducers({
   loadGroupsListAsyncInfo: asyncReducer(COMPANY_GROUPS_GET_ASYNC),
   groupsById,
   groupsAllIds,
-  apiTokenList,
 });
