@@ -425,6 +425,8 @@
   "form.builder.template.warning": "No attachments uploaded, upload attachment and save document to create template",
   "form.builder.template.created.warning": "Template already created",
   "form.builder.template.attached": "Template Attached Successfully",
+  "form.builder.template.message.retrieving": "Retrieving template from HelloSign, please wait...",
+  "form.builder.template.message.loading": "Loading Template...",
   "form.builder.send.signature": "Send Signature Request",
   "form.builder.signature.sent": "Signature request sent",
   "form.builder.signature.cancelled": "Signature request cancelled successfully",

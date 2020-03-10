@@ -1,31 +1,52 @@
 
+import { makeStyles } from "@material-ui/core";
 import HelloSign from "hellosign-embedded";
 import _ from "lodash";
+import { useObserver } from "mobx-react";
 import React from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { FBHelloSignPayload, FBHelloSignProps } from ".";
+import { FB } from "..";
 import { companySelectors } from "../../../state/ducks/company";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { FBActionModel } from "../stores/domain/models/FBActionModel";
 import FBActionStore from "../stores/ui/FBActionStore";
 import FBStore from "../stores/ui/FBStore";
 import { CANCEL_SIGNATURE_REQUEST_URL, CREATE_TEMPLATE_URL, SEND_SIGNATURE_REQUEST_URL } from "./constants";
+import FBHelloSignState from "./FBHelloSign.state";
 
 export const withFBHelloSign = <T extends FBHelloSignProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     buttonLabel,
+    waitOverlay,
+    helloSignState,
+    backdropStyle,
+    loadingMessage,
     onClick,
-    state,
     ...props
   }: T) => {
-
+    helloSignState = FB.useRef<FBHelloSignState>(FBHelloSignState);
     const intl = useIntl();
     const documentById = useSelector(documentRevisionsSelectors.byId);
     const selectedCompany = useSelector(companySelectors.getSelectedCompany);
     const signatureId = FBStore.getValue("signatureRequestId");
+
+    const useStyles = makeStyles(theme => ({
+      backdrop: {
+        zIndex: 1550,
+        color: '#fff',
+      },
+    }));
+
+    backdropStyle = useStyles();
+
+    useObserver(() => {
+      waitOverlay = helloSignState && helloSignState.waitOverlay;
+      loadingMessage = helloSignState && helloSignState.loadingMessage;
+    })
 
     const getButtonLabel = () => {
       if (FBStore.mode !== "form") {
@@ -73,6 +94,8 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     }
 
     function helloSignIframe(data: any) {
+      //using previouslyFinished with 'close' because 'cancel' event doesn't work for some reason
+      let previouslyFinished = false;
       const clientId = selectedCompany.helloSignAppId;
       const editUrl = data.template.edit_url;
       const client = new HelloSign({
@@ -80,6 +103,16 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
         skipDomainVerification: true,
       });
       client.open(editUrl);
+      client.on('finish', () => {
+        previouslyFinished = true;
+        helloSignState && helloSignState.setLoadingMessage(
+          intl.formatMessage({ id: "form.builder.template.message.retrieving" })
+        );
+        helloSignState && helloSignState.setOverlay(true);
+      });
+      client.on('close', () => {
+        helloSignState && helloSignState.setOverlay(previouslyFinished);
+      });
     }
 
     onClick = () => {
@@ -112,6 +145,10 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
         if (_.get(documentById[FBStore.docId].formTemplate, "helloSignTemplateId")) {
           return alert(intl.formatMessage({ id: "form.builder.template.created.warning" }));
         }
+        helloSignState && helloSignState.setLoadingMessage(
+          intl.formatMessage({ id: "form.builder.template.message.loading" })
+        );
+        helloSignState && helloSignState.setOverlay(true);
         apiCall(payload);
       }
     };
@@ -119,8 +156,11 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     return Component({
       ...(props as T),
       onClick,
-      state,
       buttonLabel,
+      waitOverlay,
+      backdropStyle,
+      loadingMessage,
+      helloSignState,
     });
   };
 

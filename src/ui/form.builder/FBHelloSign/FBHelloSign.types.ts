@@ -3,6 +3,7 @@ import { FBDialogState } from "../FBDialog/FBDialog.state";
 import { FBStateProps } from "../helpers/FBStateProps";
 import { FBButtonProps } from "../types/button";
 import { FBInputProps } from "../types/common";
+import FBHelloSignState from "./FBHelloSign.state";
 
 export type FBHelloSignFieldType =
   | "text"
@@ -26,6 +27,10 @@ export type FBHelloSignProps = FBStateProps<FBDialogState> &
   Pick<FBInputProps, "label" | "name"> &
   Pick<FBButtonProps, "onClick"> & {
     buttonLabel?: string;
+    waitOverlay?: boolean;
+    backdropStyle?: any;
+    loadingMessage?: string;
+    helloSignState?: FBHelloSignState;
   };
 
 export const FBHelloSignTypeMap: Dictionary<FBHelloSignFieldType> = {
