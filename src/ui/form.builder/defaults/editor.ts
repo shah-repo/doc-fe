@@ -1,5 +1,5 @@
 import { Dictionary } from "lodash";
-import { FBAutocomplete, FBEditorMediaAlbumField, FBMediaAlbumField, FBParagraph } from "..";
+import { FBAutocomplete, FBMediaAlbumField, FBParagraph } from "..";
 import FBActionContainer from "../components/actions/FBActionContainer";
 import FBActionEditor from "../components/editors/FBActionEditor";
 import FBAutocompleteEditor from "../components/editors/FBAutocompleteEditor";
@@ -45,9 +45,10 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   fileupload: FBLabelStepperEditor,
   action: FBActionEditor,
   purchaseorder: FBLabelEditor,
-  mediaupload: FBEditorMediaAlbumField,
   paragraph: FBEditorParagraph,
   sectionnumbering: FBEditorSectionNumbering,
+  instructionsmediaupload: FBLabelEditor,
+  evidencemediaupload: FBLabelEditor,
 };
 
 export const FBFieldComponent: Dictionary<any> = {
@@ -68,9 +69,10 @@ export const FBFieldComponent: Dictionary<any> = {
   schemaItem: FBValidatorSchemaItem,
   action: FBActionContainer,
   purchaseorder: FBPurchaseOrderField,
-  mediaupload: FBMediaAlbumField,
   paragraph: FBParagraph,
   sectionnumbering: FBSectionBox,
+  instructionsmediaupload: FBMediaAlbumField,
+  evidencemediaupload: FBMediaAlbumField,
 };
 
 export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
@@ -88,7 +90,8 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "radiogroup",
     "fileupload",
     "purchaseorder",
-    "mediaupload",
+    "instructionsmediaupload",
+    "evidencemediaupload",
   ],
   lists: ["autocomplete"],
   actions: ["action"],
