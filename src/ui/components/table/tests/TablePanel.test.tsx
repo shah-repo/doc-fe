@@ -19,6 +19,7 @@ describe("TablePanel component tests", () => {
   const messages = { en: messagesEn };
   const language = "en";
 
+  const noRowsTranslation = "table.no.results.found";
   // tslint:disable-next-line: no-unused-declaration
   let isActionSelected = false;
 
@@ -59,6 +60,7 @@ describe("TablePanel component tests", () => {
     <IntlProvider locale={language} messages={messages[language]}>
       <TablePanel<Document>
         columns={columns}
+        noRowsTranslation={noRowsTranslation}
         tableName="table"
       />
     </IntlProvider>

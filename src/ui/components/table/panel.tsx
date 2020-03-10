@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box } from "@material-ui/core";
+import { Box, CircularProgress } from "@material-ui/core";
 import axios, { AxiosRequestConfig } from "axios";
 import _ from "lodash";
 import qs from "query-string";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AutoSizer, CellMeasurerCache, Index, Size, SortDirection, SortDirectionType, Table } from "react-virtualized";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
@@ -12,6 +12,7 @@ import { authActions } from "../../../state/ducks/auth";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
+import Text from "../../components/Text";
 import useDidMount from "../../hooks/useDidMount";
 import { TableColumn } from "./column/base";
 import { styles } from "./styles";
@@ -23,6 +24,7 @@ let call;
 
 export function TablePanel<T extends any>({
   columns,
+  noRowsTranslation = "table.no.results.found",
   cellMeasure = false,
   onSelect,
   searchable = true,
@@ -43,6 +45,7 @@ export function TablePanel<T extends any>({
   const classes = styles(styleProps);
   const sortDirection = SortDirection.DESC;
 
+  const [isLoading, setIsLoading] = useState(false);
   const tableCriteria = useSelector(getTableCriteria(tableName));
   const tableData = useSelector(getTableData(tableName));
   const dispatch = useDispatch();
@@ -132,6 +135,14 @@ export function TablePanel<T extends any>({
         store.getState().auth.user.employeeId
       }:${store.getState().auth.user.sessionId}`;
 
+      setIsLoading(true);
+      dispatch(
+        tableSearchActions.setData(
+          [],
+          tableName,
+        ),
+      );
+
       let { data } = await apiClient.request(requestConfig);
       if (customDataSet) {
         data = customDataSet(data);
@@ -154,7 +165,9 @@ export function TablePanel<T extends any>({
           tableName,
         ),
       );
+      setIsLoading(false);
     } catch (exception) {
+      setIsLoading(false);
       if (axios.isCancel(exception)) {
         return;
       }
@@ -188,6 +201,15 @@ export function TablePanel<T extends any>({
     }
   };
 
+  const noRowsRenderer = () => isLoading ?
+    <Box textAlign="center" marginTop="50px">
+      <CircularProgress />
+    </Box>
+    :
+    <Box className={classes.emptyMsg}>
+      <Text translation={noRowsTranslation} />
+    </Box>;
+
   const rowGetter = ({ index }: Index): T => queryData[index] as T;
 
   const measurerCache = new CellMeasurerCache({
@@ -211,6 +233,7 @@ export function TablePanel<T extends any>({
       sortBy={sortBy}
       sort={sort}
       sortDirection={tableCriteria.sortDirection}
+      noRowsRenderer={noRowsRenderer}
       onRowClick={onSelect && (({ rowData }) => onSelect({ rowData })())}
       scrollToIndex={tableCriteria.scrollToIndex}
     >
