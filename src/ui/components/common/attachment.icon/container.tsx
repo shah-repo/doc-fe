@@ -2,14 +2,7 @@ import { Grid } from "@material-ui/core";
 import _ from "lodash";
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import {
-  Attachment,
-  AttachmentDownloadResponse,
-  attachmentsActions,
-  AttachmentType,
-  WatermarkRequest,
-  WatermarkRequestBody,
-} from "../../../../state/ducks/attachments";
+import { Attachment, AttachmentDownloadResponse, attachmentsActions, AttachmentType, WatermarkRequest, WatermarkRequestBody } from "../../../../state/ducks/attachments";
 import { Nullable } from "../../../../state/ducks/common";
 import { ApplicationState } from "../../../../state/reducers";
 import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
@@ -21,10 +14,7 @@ import { withFormik } from "../../hoc/formik";
 import ViewFile from "../view.file/container";
 import Menu from "./menu";
 import PresenterFactory from "./presenter.factory";
-import {
-  AttachmentIconContainerProps,
-  AttachmentIconDispatchProps,
-} from "./utils/types";
+import { AttachmentIconContainerProps, AttachmentIconDispatchProps } from "./utils/types";
 import WatermarkContainer from "./watermark/container";
 
 type DispatchProps = AttachmentIconDispatchProps;
@@ -51,27 +41,27 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
       window.onbeforeunload = null;
-      window.open(downloadInfo!.url, "_parent");
+      downloadInfo && window.open(downloadInfo.url, "_parent");
     },
   });
   const requestWatermarkAction = useActionCreator(attachmentsActions.requestWatermarkedFile);
   const requestWatermarkAsync = useAsync<WatermarkRequest>({
     onSuccess: (data) => {
-      setNewWatermarkRequest(data!);
+      data && setNewWatermarkRequest(data);
     },
     onError: (msg) => {
-      setNewWatermarkError(msg!);
+      msg && setNewWatermarkError(msg);
     },
   });
 
   const handleRemove = (attachment: Attachment) => () => {
     if (!form && !field) { return; }
-    const filtered = (field!.value as Attachment[]).filter((a) => a.id !== attachment.id);
+    const filtered = (field.value as Attachment[]).filter((a) => a.id !== attachment.id);
 
     if (FBStore.mode === "form") {
       let values = {
         ...FBStore.values,
-        [name as string]: filtered,
+        [name]: filtered,
       };
 
       if (_.isEmpty(filtered)) {
@@ -81,7 +71,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
       FBStore.setValues(values);
       FBDynamicValidatorStore.validate();
     }
-    form!.setFieldValue(name, filtered);
+    form.setFieldValue(name, filtered);
   };
 
   const handleDownload = (attachment: Attachment, type?: AttachmentType) => () => {

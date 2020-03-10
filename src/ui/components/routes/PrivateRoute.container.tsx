@@ -27,9 +27,7 @@ const PrivateRouteContainer: React.FunctionComponent<Props> = ({
   );
 
   if (companyId) {
-    const employee = employees.find((employee) => {
-      return employee.company.id === companyId;
-    });
+    const employee = employees.find((employee) => employee.company.id === companyId);
 
     if (employee) {
       dispatch(companyActions.selectCompany(employee.company));

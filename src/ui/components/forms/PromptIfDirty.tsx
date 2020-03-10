@@ -12,7 +12,8 @@ const PromptIfDirty: React.FunctionComponent<Props> = ({
 }) => {
   useEffect(() => {
     const startBeforeUnload = () => { window.onbeforeunload = (e: Event) => { e.returnValue = true; }; };
-    const cancelBeforeUnload = () => window.onbeforeunload = () => { };
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    const cancelBeforeUnload = () => window.onbeforeunload = () => {};
 
     if (onDirtyFlagChange) {
       onDirtyFlagChange(dirty);

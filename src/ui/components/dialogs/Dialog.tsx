@@ -30,7 +30,7 @@ const DialogWindow: React.FunctionComponent<Props> = ({
 
   const handleAction = (action: DialogAction) => () => {
     if (onActionClick) {
-      onActionClick!(action);
+      onActionClick(action);
     }
     dialogHandler.close();
   };

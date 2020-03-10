@@ -46,7 +46,7 @@ export function TablePanel<T extends any>({
   providedData,
 }: Props<T>) {
   const didMount = useDidMount();
-  let lastQueryValue: string = "";
+  let lastQueryValue = "";
   const headerHeight = searchable ? 117 : 50;
   const styleProps: TableStyleProps = {
     isSelectable: onSelect !== undefined,
@@ -170,7 +170,7 @@ export function TablePanel<T extends any>({
       if (axios.isCancel(exception)) {
         return;
       }
-      let responseMessage: string = "";
+      let responseMessage = "";
       const isUnauthorizedRequest = exception.response.status === 401;
 
       if (isUnauthorizedRequest) {
@@ -214,32 +214,30 @@ export function TablePanel<T extends any>({
     minHeight: 50,
   });
 
-  const tableRenderer = ({ height, width }: Size) => {
-    return (
-      <Table
-        width={width}
-        height={height}
-        headerHeight={headerHeight}
-        rowHeight={measurerCache.rowHeight}
-        deferredMeasurementCache={measurerCache}
-        rowCount={queryData.length}
-        className={classes.table}
-        rowClassName={classes.row}
-        headerClassName={classes.header}
-        rowGetter={rowGetter}
-        sortBy={sortBy}
-        sort={sort}
-        sortDirection={tableCriteria.sortDirection}
-        noRowsRenderer={noRowsRenderer}
-        onRowClick={onSelect && (({ rowData }) => onSelect({ rowData })())}
-        scrollToIndex={tableCriteria.scrollToIndex}
-      >
-        {columns.map((item) =>
-          TableColumn<T>(item, { measurerCache, searchable, queryGetter }),
-        )}
-      </Table>
-    );
-  };
+  const tableRenderer = ({ height, width }: Size) => (
+    <Table
+      width={width}
+      height={height}
+      headerHeight={headerHeight}
+      rowHeight={measurerCache.rowHeight}
+      deferredMeasurementCache={measurerCache}
+      rowCount={queryData.length}
+      className={classes.table}
+      rowClassName={classes.row}
+      headerClassName={classes.header}
+      rowGetter={rowGetter}
+      sortBy={sortBy}
+      sort={sort}
+      sortDirection={tableCriteria.sortDirection}
+      noRowsRenderer={noRowsRenderer}
+      onRowClick={onSelect && (({ rowData }) => onSelect({ rowData })())}
+      scrollToIndex={tableCriteria.scrollToIndex}
+    >
+      {columns.map((item) =>
+        TableColumn<T>(item, { measurerCache, searchable, queryGetter }),
+      )}
+    </Table>
+  );
 
   const sort = ({ sortBy, sortDirection }: TableSortProps<T>) => {
     const sortedTableData = processData(
@@ -265,9 +263,7 @@ export function TablePanel<T extends any>({
     );
   };
 
-  const bodyRenderer = () => {
-    return <AutoSizer>{tableRenderer}</AutoSizer>;
-  };
+  const bodyRenderer = () => <AutoSizer>{tableRenderer}</AutoSizer>;
 
   return (
     <Box className={classes.root}>

@@ -51,21 +51,21 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
         return;
       }
       if (!multiple) {
-        return form!.setFieldValue(name, attachment);
+        return form.setFieldValue(name, attachment);
       }
-      const attachments: Attachment[] = field!.value ? [...field!.value] : [];
+      const attachments: Attachment[] = field.value ? [...field.value] : [];
       attachments.push(attachment!);
 
       if (FBStore.mode === "form") {
         FBStore.setValues({
           ...FBStore.values,
-          [name as string]: _.map(attachments, (attach) =>
+          [name]: _.map(attachments, (attach) =>
             _.pick(attach, ["id", "name", "s3link", "type"]),
           ),
         });
         FBDynamicValidatorStore.validate();
       }
-      form!.setFieldValue(name, attachments);
+      form.setFieldValue(name, attachments);
     },
   });
 
@@ -90,7 +90,7 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
       return;
     }
 
-    handleUpload(filteredFiles as File[]);
+    handleUpload(filteredFiles);
   };
 
   return (

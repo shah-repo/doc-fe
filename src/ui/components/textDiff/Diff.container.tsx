@@ -32,7 +32,7 @@ const DiffContainer: React.FunctionComponent<Props> = ({
       const difference = findDiff(oldContents, newContents);
       setDelta(difference || null);
       refOld.current!.getEditor().setContents(oldContents);
-      refNew.current!.getEditor().setContents(difference as DeltaStatic);
+      refNew.current!.getEditor().setContents(difference);
     }
   }, [newText]);
 

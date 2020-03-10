@@ -20,16 +20,10 @@ describe("TablePanel component tests", () => {
   const language = "en";
 
   const noRowsTranslation = "table.no.results.found";
-  // tslint:disable-next-line: no-unused-declaration
-  let isActionSelected: boolean = false;
 
-  const onActionSelect = ({ rowData, actionType }: TableSelectionProps<Document>) => () => {
-    if (actionType === "EDIT") {
-      isActionSelected = true;
-    }
-  };
+  const onActionSelect = ({ rowData, actionType }: TableSelectionProps<Document>) => () => {};
 
-  const columns: Array<TableColumnProps<Document>> = [
+  const columns: TableColumnProps<Document>[] = [
     {
       key: "name",
       label: "header.title",
@@ -51,22 +45,20 @@ describe("TablePanel component tests", () => {
       label: "login.title",
       cellType: "ACTION",
       onSelect: onActionSelect,
-      columnOptions: { cellDataGetter: () => ["EDIT"]},
+      columnOptions: { cellDataGetter: () => ["EDIT"] },
       cellOptions: { align: "right" },
     },
   ];
 
-  const getDocumentList = () => {
-    return (
-      <IntlProvider locale={language} messages={messages[language]}>
-        <TablePanel<Document>
-          columns={columns}
-          noRowsTranslation={noRowsTranslation}
-          tableName="table"
-        />
-      </IntlProvider>
-    );
-  };
+  const getDocumentList = () => (
+    <IntlProvider locale={language} messages={messages[language]}>
+      <TablePanel<Document>
+        columns={columns}
+        noRowsTranslation={noRowsTranslation}
+        tableName="table"
+      />
+    </IntlProvider>
+  );
 
   it("should mount", () => {
     const wrapper = mount(getDocumentList());
