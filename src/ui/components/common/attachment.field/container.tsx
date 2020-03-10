@@ -2,11 +2,7 @@ import { Box } from "@material-ui/core";
 import _ from "lodash";
 import React from "react";
 import { connect } from "react-redux";
-import {
-  Attachment,
-  Attachment as AttachmentModel,
-  attachmentsActions,
-} from "../../../../state/ducks/attachments";
+import { Attachment, Attachment as AttachmentModel, attachmentsActions } from "../../../../state/ducks/attachments";
 import { ApplicationState } from "../../../../state/reducers";
 import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../../form.builder/stores/ui/FBStore";
@@ -15,10 +11,7 @@ import FormMessage from "../../forms/FormMessage";
 import FormProgress from "../../forms/FormProgress";
 import { withFormik } from "../../hoc/formik";
 import Presenter from "./presenter";
-import {
-  AttachmentContainerProps,
-  AttachmentFieldDispatchProps,
-} from "./utils/types";
+import { AttachmentContainerProps, AttachmentFieldDispatchProps } from "./utils/types";
 
 type DispatchProps = AttachmentFieldDispatchProps;
 
@@ -54,7 +47,7 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
         return form.setFieldValue(name, attachment);
       }
       const attachments: Attachment[] = field.value ? [...field.value] : [];
-      attachments.push(attachment!);
+      attachment && attachments.push(attachment);
 
       if (FBStore.mode === "form") {
         FBStore.setValues({

@@ -21,6 +21,7 @@ describe("TablePanel component tests", () => {
 
   const noRowsTranslation = "table.no.results.found";
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   const onActionSelect = ({ rowData, actionType }: TableSelectionProps<Document>) => () => {};
 
   const columns: TableColumnProps<Document>[] = [

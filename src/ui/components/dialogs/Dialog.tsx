@@ -4,8 +4,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { useTheme } from "@material-ui/core/styles";
-import { WithStyles, withStyles } from "@material-ui/core/styles";
+import { useTheme, WithStyles, withStyles } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
@@ -43,7 +42,7 @@ const DialogWindow: React.FunctionComponent<Props> = ({
 
   const actionsRenderer = () => (
     <DialogActions>
-      {actions!.map((type) => actionRenderer(type))}
+      {actions && actions.map((type) => actionRenderer(type))}
     </DialogActions>
   );
 

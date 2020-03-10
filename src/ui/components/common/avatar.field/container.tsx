@@ -1,6 +1,7 @@
 import { Box, Link } from "@material-ui/core";
 import classNames from "classnames";
 import React from "react";
+import { Nullable } from "../../../../state/ducks/common";
 import Text from "../../Text";
 import styles from "./utils/styles";
 
@@ -8,7 +9,7 @@ import styles from "./utils/styles";
 interface OwnProps {
   showEditUser: boolean;
   setPreviewAvatar: (values: string) => void;
-  setFile: (value: File) => void;
+  setFile: (value: Nullable<File>) => void;
 }
 
 type Props = OwnProps;

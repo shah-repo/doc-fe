@@ -13,6 +13,8 @@ export const modules = {
     ],
     handlers: {
       link(value: string) {
+        // this will be removed once we get rid of ReactQuill
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const that: any = this;
 
         const tooltip = that.quill.theme.tooltip;

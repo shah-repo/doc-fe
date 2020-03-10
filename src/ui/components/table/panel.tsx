@@ -5,21 +5,11 @@ import _ from "lodash";
 import qs from "query-string";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  AutoSizer,
-  CellMeasurerCache,
-  Index,
-  Size,
-  SortDirection,
-  SortDirectionType,
-  Table,
-} from "react-virtualized";
+import { AutoSizer, CellMeasurerCache, Index, Size, SortDirection, Table } from "react-virtualized";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
-import {
-  tableSearchActions,
-} from "../../../state/ducks/tableSearch";
+import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import Text from "../../components/Text";
@@ -62,8 +52,8 @@ export function TablePanel<T extends any>({
 
   const processData = (
     data: T[],
-    sortBy: string,
-    sortDirection: SortDirectionType,
+    sortBy = "",
+    sortDirection = "DESC",
   ) => {
     let sortedData = _.sortBy(
       data,
@@ -242,8 +232,8 @@ export function TablePanel<T extends any>({
   const sort = ({ sortBy, sortDirection }: TableSortProps<T>) => {
     const sortedTableData = processData(
       tableData,
-      sortBy!,
-      sortDirection!,
+      sortBy,
+      sortDirection,
     );
 
     dispatch(
