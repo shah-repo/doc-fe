@@ -29,7 +29,7 @@ export const DocumentRevisionControlPreviewPresenter: React.FunctionComponent<Do
     ));
 
   return (
-    <div id="documentRevisionItem" className={classes.container}>
+    <div className={classes.container}>
       <Fab
         color="primary"
         variant="extended"
