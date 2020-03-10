@@ -19,6 +19,7 @@ const toRequestFormBuilder = (values: DocumentRevision) => {
         },
       };
     case "outputCreate":
+    case "outputUpdate":
       return {
         ...values,
         formDocument: {
