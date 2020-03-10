@@ -51,7 +51,7 @@ describe("TablePanel component tests", () => {
       label: "login.title",
       cellType: "ACTION",
       onSelect: onActionSelect,
-      columnOptions: { cellDataGetter: () => ["EDIT"]},
+      columnOptions: { cellDataGetter: () => ["EDIT"] },
       cellOptions: { align: "right" },
     },
   ];

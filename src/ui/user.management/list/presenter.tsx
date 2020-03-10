@@ -37,16 +37,14 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
   const openUserProfile = () => setUserProfile(true);
   const closeUserProfile = () => setUserProfile(false);
 
-  const handleUserProfileDialog = ( rowData: GetEmployeeResponse ) => {
+  const handleUserProfileDialog = (rowData: GetEmployeeResponse) => {
     setEmployee(rowData);
     openUserProfile();
   };
 
-  const handleGroups = (groups: Group[]) => {
-    return groups.map((group) => group.name).join(", ");
-  };
+  const handleGroups = (groups: Group[]) => groups.map((group) => group.name).join(", ");
 
-  const columns: Array<TableColumnProps<GetEmployeeResponse>> = [
+  const columns: TableColumnProps<GetEmployeeResponse>[] = [
     {
       key: "name" as keyof GetEmployeeResponse,
       id: "UserManagementListPresenter-name",

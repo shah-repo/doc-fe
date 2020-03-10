@@ -34,6 +34,7 @@ export function TablePanel<T extends any>({
   sortBy,
   tableName,
   providedData,
+  rootCustomStyle,
 }: Props<T>) {
   const didMount = useDidMount();
   let lastQueryValue = "";
@@ -270,7 +271,7 @@ export function TablePanel<T extends any>({
   const bodyRenderer = () => <AutoSizer>{tableRenderer}</AutoSizer>;
 
   return (
-    <Box className={classes.root}>
+    <Box className={rootCustomStyle ? rootCustomStyle : classes.root}>
       <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
       {bodyRenderer()}
     </Box>
