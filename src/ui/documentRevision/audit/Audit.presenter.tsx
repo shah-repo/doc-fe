@@ -1,11 +1,4 @@
-import {
-  Box,
-  ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
-  List,
-  Typography,
-} from "@material-ui/core";
+import { Box, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, List, Typography } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import React from "react";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
@@ -30,7 +23,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId) => {
       const change = audit[groupId][0];
-      const {owner, ownerUser, ownerThirdParty} = change;
+      const { owner, ownerUser, ownerThirdParty } = change;
       const { name } = ((owner && owner.user) || ownerUser || ownerThirdParty);
 
       return (
@@ -105,7 +98,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   return (
     <div className={classes.container}>
       <ExpansionPanel expanded={expanded} onChange={handleChange()}>
-        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+        <ExpansionPanelSummary id="docHistoryButton" expandIcon={<ExpandMoreIcon />}>
           <Typography variant={TypographySize.md}>
             <Text translation="documentRevision.audit.docHistory" />
           </Typography>

@@ -6,18 +6,13 @@ import Typography from "@material-ui/core/Typography";
 import { Dashboard } from "@material-ui/icons";
 import React from "react";
 import { connect } from "react-redux";
-import { RouteComponentProps, withRouter } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Link, RouteComponentProps, withRouter } from "react-router-dom";
 import { authSelectors } from "../../state/ducks/auth";
 import { ApplicationState } from "../../state/reducers";
 import BottomLogo from "../components/icons/BottomLogo.container";
 import Logo from "../components/icons/Logo.container";
 import SwitchCompanyButtonContainer from "../components/icons/SwitchCompanyButton/SwitchCompanyButton.container";
-import {
-  CHANGE_REQUEST_LIST_URL,
-  DOCUMENT_REVISION_LIST_URL,
-  HOME_URL,
-} from "../constants/urls";
+import { CHANGE_REQUEST_LIST_URL, DOCUMENT_REVISION_LIST_URL, HOME_URL } from "../constants/urls";
 import styles from "./Navigation.styles";
 import NavigationLinkContainer from "./NavigationLink.container";
 import DocumentByTypeListLinks from "./routes/DocumentByTypeList";
@@ -37,54 +32,55 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
   location,
   hasMultipleCompanies,
 }) => (
-  <Drawer
-    className={classes.drawer}
-    variant="permanent"
-    classes={{ paper: classes.drawerPaper }}
-    anchor="left"
-  >
-    <Toolbar className={classes.toolbar}>
-      <Typography variant="h6" className={classes.toolbarTitle}>
-        <Link to={HOME_URL} className={classes.headerLink}>
-          <Logo />
-        </Link>
-      </Typography>
-    </Toolbar>
-    <List className={classes.list}>
-      <NavigationLinkContainer
-        url={HOME_URL}
-        text="navigation.dashboard"
-        Icon={Dashboard}
-        currentPath={location.pathname}
-        childrenUrls={
-          [
-            // { url: CHANGE_REQUEST_CREATE_URL, text: "navigation.createChangeRequest" },
-          ]
-        }
-      />
-      <NavigationLinkContainer
-        url={DOCUMENT_REVISION_LIST_URL}
-        text="navigation.document.list"
-        Icon={Dashboard}
-        currentPath={location.pathname}
-      />
-      <NavigationLinkContainer
-        url={CHANGE_REQUEST_LIST_URL}
-        text="navigation.change.request.list"
-        Icon={Dashboard}
-        currentPath={location.pathname}
-      />
-      <UserManagementLink pathname={location.pathname} />
-      <GroupManagementLink pathname={location.pathname} />
-      <DocumentByTypeListLinks pathname={location.pathname} />
-    </List>
-    {hasMultipleCompanies && (
-      <SwitchCompanyButtonContainer location={location} />
-    )}
+    <Drawer
+      PaperProps={{ id: "navigation" }}
+      className={classes.drawer}
+      variant="permanent"
+      classes={{ paper: classes.drawerPaper }}
+      anchor="left"
+    >
+      <Toolbar className={classes.toolbar}>
+        <Typography variant="h6" className={classes.toolbarTitle}>
+          <Link to={HOME_URL} className={classes.headerLink}>
+            <Logo />
+          </Link>
+        </Typography>
+      </Toolbar>
+      <List className={classes.list}>
+        <NavigationLinkContainer
+          url={HOME_URL}
+          text="navigation.dashboard"
+          Icon={Dashboard}
+          currentPath={location.pathname}
+          childrenUrls={
+            [
+              // { url: CHANGE_REQUEST_CREATE_URL, text: "navigation.createChangeRequest" },
+            ]
+          }
+        />
+        <NavigationLinkContainer
+          url={DOCUMENT_REVISION_LIST_URL}
+          text="navigation.document.list"
+          Icon={Dashboard}
+          currentPath={location.pathname}
+        />
+        <NavigationLinkContainer
+          url={CHANGE_REQUEST_LIST_URL}
+          text="navigation.change.request.list"
+          Icon={Dashboard}
+          currentPath={location.pathname}
+        />
+        <UserManagementLink pathname={location.pathname} />
+        <GroupManagementLink pathname={location.pathname} />
+        <DocumentByTypeListLinks pathname={location.pathname} />
+      </List>
+      {hasMultipleCompanies && (
+        <SwitchCompanyButtonContainer location={location} />
+      )}
 
-    <BottomLogo />
-  </Drawer>
-);
+      <BottomLogo />
+    </Drawer>
+  );
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   hasMultipleCompanies: authSelectors.hasMultipleCompanies(state),

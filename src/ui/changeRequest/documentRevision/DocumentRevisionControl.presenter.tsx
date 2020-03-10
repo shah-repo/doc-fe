@@ -53,7 +53,7 @@ DocumentRevisionControlPresenterProps
         color="primary"
         variant="extended"
         size="large"
-        id="ChangeRequest-form"
+        id="changeRequestFormButton"
       >
         <Text translation="changeRequest.documentControl.changeRequestForm" />
       </Fab>

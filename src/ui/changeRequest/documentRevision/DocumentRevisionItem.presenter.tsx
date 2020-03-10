@@ -29,6 +29,7 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<DocumentRevi
 
   return (
     <div
+      id="documentRevisionItem"
       className={classNames(classes.container)}
     >
       <Grid container={true}>
