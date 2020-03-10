@@ -81,6 +81,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     root: {
       fontSize: "0.8rem",
       fontFamily: "Open Sans, sans-serif;",
+      padding: 0,
     },
     head: {
       fontSize: "0.81rem",

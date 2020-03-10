@@ -68,7 +68,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
     // workaround for assessment description
     // field value is set to undefined if attachment is added
     // that's why we have to update the editor value as well
-    if (!field.value && html) {
+    if (!field.value && html && html !== "<p></p>") {
       setValue(convertHtmlToDraft(""));
     }
   }, [field.value]);
