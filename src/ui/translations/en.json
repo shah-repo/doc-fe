@@ -439,6 +439,8 @@
   "form.builder.total": "Total: ",
   "form.builder.media.album.placeholder": "Media upload placeholder.",
   "form.builder.media.album.output.placeholder": "You must save the document in order to scan upload code.",
+  "form.builder.representation": "Representation",
+  "form.builder.paragraph": "Paragraph",
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.watermark": "Download PDF file",

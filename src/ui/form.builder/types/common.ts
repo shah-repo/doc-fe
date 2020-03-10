@@ -61,7 +61,7 @@ export type FBInputProps =
   & Pick<SelectProps, "renderValue">
   // & Pick<FBValidatorProps, "rules" | "applicableOn">
   & Pick<FBActionContainerProps, "actions">
-  & Pick<FBOptionProps, "optionId" | "options">
+  & Pick<FBOptionProps, "optionId" | "options" | "optionValueKey">
   & Pick<BaseTextFieldProps,
   | "children"
   | "value"
@@ -93,6 +93,8 @@ export type FBInputProps =
     validationMode?: FBValidationModeType[];
     formValuesRules?: Dictionary<any>;
     isTemplate?: boolean;
+    valueType?: "object" | "key";
+    paragraph?: string;
   };
 
 export type FBFormDefaultProps =
