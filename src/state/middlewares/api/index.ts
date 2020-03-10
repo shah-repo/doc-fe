@@ -18,7 +18,7 @@ const dispatchAsyncStatusAction = (
   dispatch: Dispatch,
   type: string | undefined,
   status: AsyncStatus,
-  message: string = "",
+  message = "",
 ): void => {
   if (!type) {
     return;
@@ -77,13 +77,12 @@ const apiMiddleware: Middleware = ({
     action.onSuccess(data, dispatch);
     dispatchAsyncStatusAction(dispatch, action.asyncType, AsyncStatus.Success);
   } catch (exception) {
-    let responseMessage: string = "";
+    let responseMessage = "";
     const isUnauthorizedRequest = exception.response.status === 401 && action.includeAuthorization;
     const isPasswordAction = exception.response.status === 401 && action.password;
 
     if (isUnauthorizedRequest && !isPasswordAction) {
       dispatch(authActions.logoutUser());
-      return;
     }
 
     if (exception.response) {

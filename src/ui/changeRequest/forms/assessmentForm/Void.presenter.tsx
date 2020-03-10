@@ -35,6 +35,7 @@ const AssessmentFormVoidPresenter: React.FunctionComponent<Props> = ({
         onClose={dialog.close}
         maxWidth="xs"
         fullWidth={true}
+        PaperProps={{ id: "voidAlertDialog" }}
       >
         <DialogTitle >
           <Box textAlign="center">

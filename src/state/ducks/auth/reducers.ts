@@ -2,29 +2,9 @@ import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
 import { COMPANY_DEFAULT_STATE } from "../company/reducers";
 import { EditGroupsAction, EditUserInfoAction } from "../tableSearch";
-import {
-  EDIT_EMPLOYEE_GROUPS,
-  EDIT_EMPLOYEE_USER_INFO,
-} from "../tableSearch/constants";
-import {
-  AUTH_USER,
-  LOGOUT_USER,
-  SET_EMPLOYEE,
-  USER_GROUPS,
-  USER_GROUPS_GET_ASYNC,
-  USERS_ME_URL,
-} from "./constants";
-import {
-  AuthUserAction,
-  EditUserMeAction,
-  GroupTag,
-  LogoutUserAction,
-  Permission,
-  SelectEmployeeAction,
-  UserGroupsAction,
-  UserGroupsState,
-  UserState,
-} from "./types";
+import { EDIT_EMPLOYEE_GROUPS, EDIT_EMPLOYEE_USER_INFO } from "../tableSearch/constants";
+import { AUTH_USER, LOGOUT_USER, PING_SERVER_GET_ASYNC, SET_EMPLOYEE, USERS_ME_URL, USER_GROUPS, USER_GROUPS_GET_ASYNC } from "./constants";
+import { AuthUserAction, EditUserMeAction, GroupTag, LogoutUserAction, Permission, SelectEmployeeAction, UserGroupsAction, UserGroupsState, UserState } from "./types";
 
 export const DEFAULT_EMPLOYEE = {
   id: "",
@@ -146,6 +126,7 @@ export const groups = (
 const reducer = combineReducers({
   user,
   loadGroupsAsyncInfo: asyncReducer(USER_GROUPS_GET_ASYNC),
+  pingServerAsyncInfo: asyncReducer(PING_SERVER_GET_ASYNC),
   groups,
 });
 

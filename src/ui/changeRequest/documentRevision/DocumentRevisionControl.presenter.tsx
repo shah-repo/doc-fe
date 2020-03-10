@@ -58,7 +58,7 @@ export const DocumentRevisionControlPresenter: React.FunctionComponent<
           variant="extended"
           size="large"
           onClick={selectAssessmentForm}
-          id="ChangeRequest-form"
+          id="changeRequestFormButton"
         >
           <Text translation="changeRequest.documentControl.changeRequestForm" />
         </Fab>

@@ -25,10 +25,10 @@ const VerificationEmailPage: React.FunctionComponent<Props> = ({ email, logo, me
           <Text translation={"signup.verification"} />
         </Typography>
         <Typography id="VerificationEmailPage-email" variant="h4" className={classes.boldTitle}>
-          {`"${email}"`}
+          {`"${email.toLowerCase()}"`}
         </Typography>
         <Typography id="VerificationEmailPage-message" variant="subtitle1" className={classes.title}>
-        <Text translation={message} />
+          <Text translation={message} />
         </Typography>
         {!isForgotPassword &&
         <NavLink to={"/login"} exact={true} className={classes.navigationLink} id="VerificationEmailPage-loginLink">
