@@ -29,6 +29,7 @@ export const DocumentRevisionItemPresenter: React.FunctionComponent<
 
   return (
     <div
+      id="documentRevisionItem"
       className={classNames(classes.container, {
         [classes.selected]: isSelected,
       })}
