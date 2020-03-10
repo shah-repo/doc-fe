@@ -2,7 +2,7 @@ import { Dictionary } from "lodash";
 import { Group, GroupTag, Permission } from "../auth/types";
 import { Id, Nullable, User } from "../common";
 import { Company, Employee } from "../company";
-import { API_TOKEN_GENERATE, API_TOKEN_LIST, COMPANY_GROUPS_LIST } from "./constants";
+import { API_TOKEN_LIST, COMPANY_GROUPS_LIST } from "./constants";
 
 export interface GetEmployeeResponse {
   id: string;
@@ -52,11 +52,6 @@ export type GroupsAllIdsState = string[];
 
 export interface ApiTokenData {
   name: string;
-}
-
-export interface ApiTokenDataAction {
-  type: typeof API_TOKEN_GENERATE;
-  payload: any;
 }
 
 export interface ApiTokenState {

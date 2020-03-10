@@ -7,7 +7,6 @@ export const API_TOKEN_POST_ASYNC = "userManagement/API_TOKEN_POST_ASYNC";
 export const API_TOKEN_LIST = "userManagement/API_TOKEN_LIST";
 export const API_TOKEN_GET_ASYNC = "userManagement/API_TOKEN_GET_ASYNC";
 export const API_TOKEN_DELETE_ASYNC = "userManagement/API_TOKEN_DELETE_ASYNC";
-export const API_TOKEN_GENERATE = "userManagement/API_TOKEN_GENERATE";
 
 export const SLACK_URL = "userManagement/SLACK_URL";
 export const EMPLOYEES_URL = "/employees";

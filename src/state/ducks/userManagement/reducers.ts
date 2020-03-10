@@ -1,8 +1,8 @@
 import _ from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
-import { API_TOKEN_GENERATE, API_TOKEN_LIST, COMPANY_GROUPS_GET_ASYNC, COMPANY_GROUPS_LIST } from "./constants";
-import { ApiTokenDataAction, ApiTokenListAction, ApiTokenState, CompanyGroupsListAction, GetApiTokenList, GroupsAllIdsState, GroupsByIdState, LoadCompanyGroup } from "./types";
+import { API_TOKEN_LIST, COMPANY_GROUPS_GET_ASYNC, COMPANY_GROUPS_LIST } from "./constants";
+import { ApiTokenListAction, CompanyGroupsListAction, GetApiTokenList, GroupsAllIdsState, GroupsByIdState, LoadCompanyGroup } from "./types";
 
 export const groupsById = (
   state: GroupsByIdState = {},
@@ -33,24 +33,6 @@ export const groupsAllIds = (
   }
 };
 
-export const API_TOKEN_DEFAULT: ApiTokenState = {
-  id: "",
-  name: "",
-  secretKey: "",
-};
-
-export const apiToken = (
-  state: ApiTokenState = API_TOKEN_DEFAULT,
-  action: ApiTokenDataAction,
-): ApiTokenState => {
-  switch (action.type) {
-    case API_TOKEN_GENERATE:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
 export const apiTokenList = (
   state: GetApiTokenList[] = [],
   action: ApiTokenListAction,
@@ -67,6 +49,5 @@ export default combineReducers({
   loadGroupsListAsyncInfo: asyncReducer(COMPANY_GROUPS_GET_ASYNC),
   groupsById,
   groupsAllIds,
-  apiToken,
   apiTokenList,
 });

@@ -18,10 +18,7 @@ const getGroupsOptions = createSelector(
   ),
 );
 
-const apiToken = (state: ApplicationState) => state.userManagement.apiToken;
-
 export default {
   getGroupsOptions,
   getLoadGroupsAsyncState,
-  apiToken,
 };
