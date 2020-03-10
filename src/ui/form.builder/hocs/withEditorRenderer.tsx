@@ -71,6 +71,7 @@ export const withEditorRenderer =
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
         customValidator,
         formValuesRules: FBValidatorStore.formValues,
+        ...(type === "sectionnumbering" && { label: `${values.label} #${FBStore.sectionNumbering}`}),
       };
 
       FBValidatorStore.selectedFieldIndex = null;
