@@ -12,13 +12,11 @@ interface RadioButtonOwnProps extends Pick<FormControlLabelProps, Exclude<keyof 
 
 type RadioButtonProps = RadioButtonOwnProps;
 
-const RadioButton: React.FunctionComponent<RadioButtonProps> = ({ radioButton, ...formControlLabelProps }) => {
-  return (
-    <FormControlLabel
-      control={<MuiRadio color="primary" {...radioButton} />}
-      {...formControlLabelProps}
-    />
-  );
-};
+const RadioButton: React.FunctionComponent<RadioButtonProps> = ({ radioButton, ...formControlLabelProps }) => (
+  <FormControlLabel
+    control={<MuiRadio color="primary" {...radioButton} />}
+    {...formControlLabelProps}
+  />
+);
 
 export default RadioButton;

@@ -9,7 +9,7 @@ import {
 import DownloadButtonPresenter from "./DownloadButton.presenter";
 
 describe("DownloadButtonContainer tests", () => {
-  const attachment: Attachment = {id: "DASfjsak", name: "Test", type: "txt", s3link: "", isLoading: false };
+  const attachment: Attachment = { id: "DASfjsak", name: "Test", type: "txt", s3link: "", isLoading: false };
   const defaultProps: DownloadButtonContainerProps = {
     attachment,
     download: jest.fn(),

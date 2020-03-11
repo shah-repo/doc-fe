@@ -12,7 +12,7 @@ export const EditableSelectContainer: React.FunctionComponent<EditableSelectCont
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     const v = event.target.value as string;
-    form!.setFieldValue(name, v);
+    form.setFieldValue(name, v);
   };
 
   return (

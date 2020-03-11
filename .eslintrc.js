@@ -314,30 +314,9 @@ module.exports = {
         "message": "Please use import() instead. More info: https://facebook.github.io/create-react-app/docs/code-splitting"
       }
     ],
-    /* "react/forbid-foreign-prop-types": [
-      "warn",
-      {
-        "allowInPropTypes": true
-      }
-    ],
-
-    "react/jsx-pascal-case": [
-      "warn",
-      {
-        "allowAllCaps": true,
-        "ignore": []
-      }
-    ],
-
-    "react/no-typos": [
-      "error"
-    ],
-
     "react/style-prop-object": [
       "warn"
     ], 
-    */
-    // disable when ready
     "react/prop-types": "off",
     "jsx-a11y/accessible-emoji": [
       "warn"
@@ -520,7 +499,20 @@ module.exports = {
     "spaced-comment": "error",
     "space-infix-ops":"error",
     "semi-spacing": "error",
-    "comma-spacing":"error"
+    "comma-spacing":"error",
+    "arrow-spacing": "error",
+    "space-infix-ops": "error",
+    "semi-spacing": "error",
+    "comma-spacing": "error",
+    "object-curly-spacing": ["error", "always"],
+    "object-curly-newline":["error", {"multiline":true, "consistent":true,}],
+    "key-spacing": "error",
+    "keyword-spacing": "error",
+    "space-before-blocks": "error",
+    "block-spacing": "error",
+    "func-call-spacing": "error",
+    "switch-colon-spacing": "error",
+    "space-unary-ops": "error"
   },
   "settings": {
     "react": {

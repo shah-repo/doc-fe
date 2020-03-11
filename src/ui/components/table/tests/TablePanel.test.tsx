@@ -20,14 +20,9 @@ describe("TablePanel component tests", () => {
   const language = "en";
 
   const noRowsTranslation = "table.no.results.found";
-  // tslint:disable-next-line: no-unused-declaration
-  let isActionSelected = false;
 
-  const onActionSelect = ({ rowData, actionType }: TableSelectionProps<Document>) => () => {
-    if (actionType === "EDIT") {
-      isActionSelected = true;
-    }
-  };
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const onActionSelect = ({ rowData, actionType }: TableSelectionProps<Document>) => () => {};
 
   const columns: TableColumnProps<Document>[] = [
     {
