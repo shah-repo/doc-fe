@@ -12,6 +12,8 @@ const FBHelloSign: React.FunctionComponent<FBHelloSignProps> = ({
   buttonLabel,
   backdropStyle,
   loadingMessage,
+  signatureSent,
+  signatureSentMessage,
   waitOverlay,
   ...props
 }) => (
@@ -26,6 +28,9 @@ const FBHelloSign: React.FunctionComponent<FBHelloSignProps> = ({
       )}
       <FBInput {...props} disabled={false} fullWidth={false}>
         <FBButton label={buttonLabel} {...{ onClick }} />
+        {signatureSent && (
+          <Box>{signatureSentMessage}</Box>
+        )}
       </FBInput>
     </Provider>
   );

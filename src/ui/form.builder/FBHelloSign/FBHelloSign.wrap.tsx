@@ -9,7 +9,9 @@ import { useSelector } from "react-redux";
 import { FBHelloSignPayload, FBHelloSignProps } from ".";
 import { FB } from "..";
 import { companySelectors } from "../../../state/ducks/company";
-import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
+import { documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
 import { FBActionModel } from "../stores/domain/models/FBActionModel";
 import FBActionStore from "../stores/ui/FBActionStore";
 import FBStore from "../stores/ui/FBStore";
@@ -25,14 +27,19 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     helloSignState,
     backdropStyle,
     loadingMessage,
+    signatureSent,
+    signatureSentMessage,
     onClick,
     ...props
   }: T) => {
+    const loadAction = useActionCreator(documentRevisionsActions.load);
+    const async = useAsync();
     helloSignState = FB.useRef<FBHelloSignState>(FBHelloSignState);
     const intl = useIntl();
     const documentById = useSelector(documentRevisionsSelectors.byId);
     const selectedCompany = useSelector(companySelectors.getSelectedCompany);
     const signatureId = FBStore.getValue("signatureRequestId");
+    signatureSentMessage = intl.formatMessage({ id: "form.builder.signature.document.sent" });
 
     const useStyles = makeStyles(theme => ({
       backdrop: {
@@ -46,6 +53,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     useObserver(() => {
       waitOverlay = helloSignState && helloSignState.waitOverlay;
       loadingMessage = helloSignState && helloSignState.loadingMessage;
+      signatureSent = helloSignState && helloSignState.signatureSent;
     })
 
     const getButtonLabel = () => {
@@ -56,7 +64,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
       if (!signatureId) {
         return "form.builder.send.signature";
       }
-
+      helloSignState && helloSignState.setSignatureStatus(true);
       return "form.builder.cancel.signature";
     };
     buttonLabel = getButtonLabel();
@@ -72,7 +80,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
       helloSignIframe(data);
     }
 
-    function apiCallSig(payload: FBHelloSignPayload) {
+    async function apiCallSig(payload: FBHelloSignPayload) {
       const apiCallSig = new FBActionModel();
       apiCallSig.set({
         testMode: 1,
@@ -80,7 +88,14 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
         requestUrl: SEND_SIGNATURE_REQUEST_URL,
         payload,
       });
-      FBActionStore.apiCall(apiCallSig.toJS() as unknown as FBActionModel);
+      const status = await FBActionStore.apiCall(apiCallSig.toJS() as unknown as FBActionModel);
+      helloSignState && helloSignState.setSignatureStatus(status);
+      helloSignState && helloSignState.setOverlay(false);
+
+      const id = FBStore.docId;
+      if (status) {
+        async.start(loadAction, id, async);
+      }
     }
 
     function apiCallCancelSig(payload: FBHelloSignPayload) {
@@ -127,10 +142,15 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
           return alert(intl.formatMessage({ id: "form.builder.signature.notification" }));
         }
         const items = documentById[FBStore.docId].formInput;
-        if (_.values(items).some((x) => x === "") || items === null) {
+        const filteredItems = _.pick(items, _.keys(items).filter((x) => !_.includes(x, "Generated_From_Template")));
+        if (_.values(filteredItems).some((x) => x === "") || filteredItems === null) {
           return alert(intl.formatMessage({ id: "form.builder.signature.warning" }));
         }
         if (!signatureId) {
+          helloSignState && helloSignState.setLoadingMessage(
+            intl.formatMessage({ id: "form.builder.signature.sending" })
+          );
+          helloSignState && helloSignState.setOverlay(true);
           apiCallSig(payload);
         } else {
           apiCallCancelSig(payload);
@@ -160,6 +180,8 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
       waitOverlay,
       backdropStyle,
       loadingMessage,
+      signatureSent,
+      signatureSentMessage,
       helloSignState,
     });
   };

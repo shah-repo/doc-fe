@@ -98,6 +98,7 @@ export type FBInputProps = Omit<FBFormikFieldProps, "name">
     formValuesRules?: Dictionary<any>;
     templateId?: string;
     isTemplate?: boolean;
+    hellosignFlowProps?: any;
   };
 
 export type FBFormDefaultProps = FBInputProps &

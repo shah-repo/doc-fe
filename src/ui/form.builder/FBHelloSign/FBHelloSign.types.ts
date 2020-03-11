@@ -30,6 +30,8 @@ export type FBHelloSignProps = FBStateProps<FBDialogState> &
     waitOverlay?: boolean;
     backdropStyle?: any;
     loadingMessage?: string;
+    signatureSent?: boolean;
+    signatureSentMessage?: string;
     helloSignState?: FBHelloSignState;
   };
 
