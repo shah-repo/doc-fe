@@ -29,7 +29,8 @@ export type FBEditorElementType =
   | "instructionsmediaupload"
   | "evidencemediaupload"
   | "checkpoint"
-  | "pause";
+  | "pause"
+  | "createlabel";
 
 export type FBEditorModeType = "create" | "update";
 
