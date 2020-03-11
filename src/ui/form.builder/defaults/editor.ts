@@ -106,7 +106,12 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
 };
 
 export const FBGroupEditorOptions: Dictionary<any[]> = {
-  autocomplete: [{ value: "multiple", text: "form.builder.multi.select" }],
+  autocomplete: [
+    { value: "multiple", text: "form.builder.multi.select",
+    }, {
+      value: "includeQRScan", text: "form.builder.include.qr.scan",
+    },
+  ],
   mediaupload: [{ value: "isTemplate", text: "form.builder.is.template" }],
   select: [
     { value: "includeNone", text: "form.builder.include.none" },

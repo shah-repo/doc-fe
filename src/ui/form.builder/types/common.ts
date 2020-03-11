@@ -42,6 +42,7 @@ export type FBLabelProps =
   };
 
 export type FBOptionProps =
+  & Omit<FBFormikFieldProps, "name">
   & Pick<FBContextProps, "includeContext">
   & Pick<BaseTextFieldProps, "name" | "type">
   & {
@@ -95,6 +96,7 @@ export type FBInputProps =
     isTemplate?: boolean;
     valueType?: "object" | "key";
     paragraph?: string;
+    includeQRScan?: boolean;
   };
 
 export type FBFormDefaultProps =
