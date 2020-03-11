@@ -441,6 +441,8 @@
   "form.builder.media.album.output.placeholder": "You must save the document in order to scan upload code.",
   "form.builder.representation": "Representation",
   "form.builder.paragraph": "Paragraph",
+  "form.builder.instructionsmediaupload": "Instructions Media upload",
+  "form.builder.evidencemediaupload": "Evidence Media upload",
   "form.builder.sectionnumbering": "Section Numbering",
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",

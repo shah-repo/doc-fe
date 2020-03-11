@@ -24,9 +24,10 @@ export type FBEditorElementType =
   | "schemaItem"
   | "action"
   | "purchaseorder"
-  | "mediaupload"
   | "paragraph"
-  | "sectionnumbering";
+  | "sectionnumbering"
+  | "instructionsmediaupload"
+  | "evidencemediaupload";
 
 export type FBEditorModeType = "create" | "update";
 
@@ -41,4 +42,6 @@ export interface FBValidatorGroup {
   fields: Partial<FBTemplateSchema>[];
 }
 
-export const omitLabelValidation: FBEditorElementType[] = ["action", "paragraph"];
+export const omitLabelValidation: FBEditorElementType[] = [
+  "action", "paragraph", "instructionsmediaupload", "evidencemediaupload",
+];

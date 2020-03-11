@@ -72,6 +72,7 @@ export const withEditorRenderer =
         customValidator,
         formValuesRules: FBValidatorStore.formValues,
         ...(type === "sectionnumbering" && { label: `${values.label} #${FBStore.sectionNumbering}`}),
+        ...(type === "instructionsmediaupload" && { isTemplate: true }),
       };
 
       FBValidatorStore.selectedFieldIndex = null;
