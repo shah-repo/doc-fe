@@ -51,6 +51,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   instructionsmediaupload: FBLabelEditor,
   evidencemediaupload: FBLabelEditor,
   checkpoint: FBLabelEditor,
+  pause: FBLabelEditor,
 };
 
 export const FBFieldComponent: Dictionary<any> = {
@@ -76,6 +77,7 @@ export const FBFieldComponent: Dictionary<any> = {
   instructionsmediaupload: FBMediaAlbumField,
   evidencemediaupload: FBMediaAlbumField,
   checkpoint: FBButton,
+  pause: FBButton,
 };
 
 export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
@@ -96,7 +98,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "instructionsmediaupload",
     "evidencemediaupload",
   ],
-  buttons: ["checkpoint"],
+  buttons: ["checkpoint", "pause"],
   lists: ["autocomplete"],
   actions: ["action"],
 };
@@ -113,3 +115,17 @@ export const FBGroupEditorOptions: Dictionary<any[]> = {
     { value: "includeContext", text: "form.builder.include.other" },
   ],
 };
+
+export const omitLabelValidation: FBEditorElementType[] = [
+  "action",
+  "paragraph",
+  "instructionsmediaupload",
+  "evidencemediaupload",
+  "checkpoint",
+  "pause",
+];
+
+export const pickDefaultLabel: FBEditorElementType[] = [
+  "checkpoint",
+  "pause",
+];

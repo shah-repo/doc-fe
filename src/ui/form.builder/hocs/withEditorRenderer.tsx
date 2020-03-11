@@ -4,12 +4,12 @@ import _, { Dictionary } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import FBButton from "../components/inputs/FBButton";
-import { FBFieldEditorComponent } from "../defaults/editor";
+import { FBFieldEditorComponent, omitLabelValidation, pickDefaultLabel } from "../defaults/editor";
 import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 import editorStore from "../stores/ui/FBEditorStore";
 import FBStore from "../stores/ui/FBStore";
 import FBValidatorStore from "../stores/ui/FBValidatorStore";
-import { FBEditorFormProps, omitLabelValidation, pickDefaultLabel } from "../types/editor";
+import { FBEditorFormProps } from "../types/editor";
 import { FBTemplateSchema } from "../types/store";
 
 export const withEditorRenderer =
