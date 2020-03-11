@@ -26,6 +26,7 @@ import FBLink from "../components/navigation/FBLink";
 import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaItem";
 import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
 import FBEditorParagraph from "../FBEditorParagraph/FBEditorParagraph";
+import FBEditorSectionNumbering from "../FBEditorSectionNumbering";
 import { FBEditorElementType } from "../types/editor";
 
 export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = {
@@ -46,6 +47,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   purchaseorder: FBLabelEditor,
   mediaupload: FBEditorMediaAlbumField,
   paragraph: FBEditorParagraph,
+  sectionnumbering: FBEditorSectionNumbering,
 };
 
 export const FBFieldComponent: Dictionary<any> = {
@@ -68,10 +70,11 @@ export const FBFieldComponent: Dictionary<any> = {
   purchaseorder: FBPurchaseOrderField,
   mediaupload: FBMediaAlbumField,
   paragraph: FBParagraph,
+  sectionnumbering: FBSectionBox,
 };
 
 export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
-  section: ["section", "subsection"],
+  section: ["section", "subsection", "sectionnumbering"],
   representation: ["paragraph"],
   basics: [
     "textfield",

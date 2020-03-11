@@ -24,6 +24,11 @@ export class FormBuilderStore {
     };
   }
 
+  @computed get sectionNumbering(): number {
+    const sectionNumbering = _.filter(this.getSchema(), { type: "sectionnumbering"});
+    return _.size(sectionNumbering) + 1;
+  }
+
   @observable public name?: string = undefined;
   @observable public schema: FBTemplateSchema[] = [];
   @observable public values: Dictionary<any> = {};

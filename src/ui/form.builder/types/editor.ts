@@ -25,7 +25,8 @@ export type FBEditorElementType =
   | "action"
   | "purchaseorder"
   | "mediaupload"
-  | "paragraph";
+  | "paragraph"
+  | "sectionnumbering";
 
 export type FBEditorModeType = "create" | "update";
 
