@@ -20,6 +20,7 @@ export const Justification: React.FunctionComponent<FormikHybridFieldProps> = ({
   return (
     <Box mb={8}>
       <TextEditorField
+        data-testid="justification"
         name="justifications.description"
         label="cr.justification"
         actionsRenderer={actionsRenderer}

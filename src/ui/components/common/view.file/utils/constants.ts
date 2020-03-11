@@ -1,9 +1,20 @@
 export const SUPPORTED_VIDEO_FILES = [
+  "mkv",
+  "m4v",
   "mp4",
-  "webm",
   "ogg",
   "ogv",
-  "avi",
+  "webm",
+  // not supported
+  // "mpeg",
+  // "flv",
+  // "vob",
+  // "avi",
+  // "3gp",
+  // "mpg",
+  // "mov",
+  // "wmv",
+  // "mts",
 ];
 export const SUPPORTED_IMAGE_FILES = [
   "apng",

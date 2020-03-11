@@ -16,6 +16,7 @@ export const styles = makeStyles((theme) => ({
   },
   content: {
     overflow: "hidden",
+    height: "85%",
   },
   contentRoot: {
     textAlign: "center",
@@ -25,5 +26,11 @@ export const styles = makeStyles((theme) => ({
     right: theme.spacing(1),
     top: theme.spacing(1),
     marginRight: 30,
+  },
+  zoom: {
+    maxWidth: "45vw",
+    width: "100%",
+    maxHeight: "90vh",
+    margin: "0 auto",
   },
 }));

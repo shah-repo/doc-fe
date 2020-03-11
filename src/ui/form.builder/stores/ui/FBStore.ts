@@ -5,6 +5,7 @@ import { FBInputProps } from "../../types/common";
 import { FBTemplateSchema } from "../../types/store";
 import { FBWorkspaceMode } from "../../types/workspace";
 import editorStore from "./FBEditorStore";
+import FBValidatorStore from "./FBValidatorStore";
 
 export class FormBuilderStore {
   @computed get active(): boolean {
@@ -27,20 +28,19 @@ export class FormBuilderStore {
   @observable public schema: FBTemplateSchema[] = [];
   @observable public values: Dictionary<any> = {};
   @observable public mode: FBWorkspaceMode = "none";
-  public docId: string = "";
+  public docId = "";
+  public documentId = "";
 
   @action public setMode = (mode: FBWorkspaceMode) => {
     this.mode = mode;
     this.setModeConfig();
-  }
+  };
 
   @action public setName = (name: string) => {
     this.name = name;
-  }
+  };
 
-  @action public getName = (): string | undefined => {
-    return this.name;
-  }
+  @action public getName = (): string | undefined => this.name;
 
   @action public getSchemaItem = (
     index?: number,
@@ -49,14 +49,14 @@ export class FormBuilderStore {
       return;
     }
     return this.schema[index];
-  }
+  };
 
   @action public getSchemaItemByName = (
     name: string,
   ): FBTemplateSchema | undefined => {
     const filtered = _.filter(this.schema, (schemaItem) => schemaItem.name === name);
     return filtered[0];
-  }
+  };
 
   @action public removeSchemaItem = (index?: number) => {
     if (index === undefined) {
@@ -64,7 +64,7 @@ export class FormBuilderStore {
     }
     const newSchema = this.schema.filter((o) => o.index !== index);
     this.setSchema(newSchema);
-  }
+  };
 
   @action public editSchemaItem = (index?: number) => {
     if (index === undefined) {
@@ -74,23 +74,22 @@ export class FormBuilderStore {
     if (!schema) {
       return;
     }
+    FBValidatorStore.selectedFieldIndex = index;
     editorStore.editorTypeEdit(schema);
-  }
+  };
 
-  @action public getSchema = (): FBTemplateSchema[] => {
-    return this.schema;
-  }
+  @action public getSchema = (): FBTemplateSchema[] => this.schema;
 
   @action public setSchema = (newSchema: FBTemplateSchema[]) => {
     newSchema.map((o, i) => o.index = i);
     this.schema = newSchema;
-  }
+  };
 
   @action public setFormSchema = (newSchema: FBTemplateSchema[]) => {
     const filtered = _.filter(newSchema, (schemaItem) => schemaItem.type !== "action");
     filtered.map((o, i) => o.index = i);
     this.schema = filtered;
-  }
+  };
 
   @action public getValues = () => {
     const initialValues: Dictionary<any> = {};
@@ -101,11 +100,9 @@ export class FormBuilderStore {
       ...initialValues,
       ...this.values,
     };
-  }
+  };
 
-  @action public getValue = (name: string): any => {
-    return _.get(this.getValues(), name);
-  }
+  @action public getValue = (name: string): any => _.get(this.getValues(), name);
 
   @action public getValidationAttribute = () => {
     const attributes: Dictionary<string> = {};
@@ -117,11 +114,11 @@ export class FormBuilderStore {
           "";
     });
     return attributes;
-  }
+  };
 
   @action public setValues = (values: Dictionary<any> | undefined) => {
     this.values = values || {};
-  }
+  };
 
   @action private setModeConfig = () => {
     switch (this.mode) {
@@ -133,11 +130,9 @@ export class FormBuilderStore {
       default:
         return;
     }
-  }
+  };
 
-  @action private isDisabled = (): boolean => {
-    return this.mode !== "form";
-  }
+  @action private isDisabled = (): boolean => this.mode !== "form";
 }
 
 const FBStore = new FormBuilderStore();

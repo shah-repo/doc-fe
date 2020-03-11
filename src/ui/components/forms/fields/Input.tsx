@@ -20,9 +20,7 @@ const Input: React.FunctionComponent<InputPropsWithFormik> = ({
   actionsRenderer,
   lpignore = true,
   ...fieldProps
-}) => {
-
-  return (
+}) => (
     <Field size={size} actionsRenderer={actionsRenderer} {...fieldProps} inputLabelProps={{ shrink: true }} >
       <MuiInput
         required={false}
@@ -32,7 +30,6 @@ const Input: React.FunctionComponent<InputPropsWithFormik> = ({
       />
     </Field>
   );
-};
 
 type InputFieldProps = InputOwnProps & FieldConfig;
 

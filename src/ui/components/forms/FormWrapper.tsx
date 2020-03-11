@@ -8,7 +8,10 @@ interface Props {
 }
 
 const FormWrapper: React.FunctionComponent<Props> = ({
-  dirty, resetForm, initialValues, children,
+  dirty,
+  resetForm,
+  initialValues,
+  children,
 }) => {
   useEffect(() => {
     if (dirty) {

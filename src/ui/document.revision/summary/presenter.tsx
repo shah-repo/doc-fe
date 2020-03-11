@@ -1,12 +1,10 @@
 import { Box, Grid, WithStyles, withStyles } from "@material-ui/core";
 import { Formik } from "formik";
+import _ from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { DataProps } from "../../../state/ducks/common";
-import {
-  DocumentRevision,
-  DocumentRevisionStatus,
-} from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
@@ -33,8 +31,8 @@ interface OwnProps {
 }
 
 export type Props = OwnProps &
-  DataProps<DocumentRevision> &
-  WithStyles<typeof styles>;
+DataProps<DocumentRevision> &
+WithStyles<typeof styles>;
 
 export const Presenter: React.FunctionComponent<Props> = ({
   classes,
@@ -51,6 +49,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
     description,
     trainingRecords,
     formTemplate,
+    formDocument,
   },
   canChangeOwnerShip,
   canShowCreateVersionButton,
@@ -58,7 +57,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const onSubmit = () => void 0;
   FBDRStore.setValues(dataProp);
   const outputDocumentTypeName = useSelector((state: ApplicationState) => {
-    const outputDocumentTypeId = formTemplate ? formTemplate!.outputDocumentType.id : "";
+    const outputDocumentTypeId = formTemplate ? formTemplate.outputDocumentType.id : "";
     return documentTypeSelectors.getDocTypeName(state, outputDocumentTypeId);
   });
 
@@ -112,17 +111,17 @@ export const Presenter: React.FunctionComponent<Props> = ({
       </Grid>
 
       {FBStore.active && (
-        <Box px={5}>
-          <FBWorkspace />
+        <Box px={5} id="Presenter-FBWorkspace">
+          <FBWorkspace documentId={_.get(formDocument, "document.id") || _.get(document, "id")} />
         </Box>
       )}
       <Box flexDirection={document.canAccess ? "row-reverse" : "row"} display="flex" px={3}>
         {canChangeOwnerShip && (
-            <OwnerChanger
-              requestId={id}
-              requestType={RequestType.Document}
-            />
-          )}
+          <OwnerChanger
+            requestId={id}
+            requestType={RequestType.Document}
+          />
+        )}
         <ControlsContainer
           documentRevision={dataProp}
           canShowCreateVersionButton={canShowCreateVersionButton}

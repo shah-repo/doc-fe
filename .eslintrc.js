@@ -518,6 +518,9 @@ module.exports = {
       }
     ],
     "spaced-comment": "error",
+    "space-infix-ops":"error",
+    "semi-spacing": "error",
+    "comma-spacing":"error"
   },
   "settings": {
     "react": {

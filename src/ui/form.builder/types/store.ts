@@ -4,9 +4,9 @@ import { FBInputProps } from "./common";
 import { FBDocumentFlowProps } from "./formik";
 
 export type FBTemplateSchema = FBInputProps;
-  // & Pick<FBInputProps, "index" | "name" | "type" | "disabled" | "rows" | "placeholder">
-  // & FBLabelProps
-  // & Pick<FBContextProps, "includeContext" | "contextLabel">;
+// & Pick<FBInputProps, "index" | "name" | "type" | "disabled" | "rows" | "placeholder">
+// & FBLabelProps
+// & Pick<FBContextProps, "includeContext" | "contextLabel">;
 
 // export interface FBTemplateSchema {
 //   type: FBEditorElementType | string;
@@ -34,9 +34,9 @@ export type FBTemplateSchema = FBInputProps;
 export type FBDRGroupConfig =
   & Pick<FBDocumentFlowProps, "formInput">
   & {
-  docRevMode: FBDocumentRevisionMode;
-  schema: FBTemplateSchema[];
-};
+    docRevMode: FBDocumentRevisionMode;
+    schema: FBTemplateSchema[];
+  };
 
 export type FBDocumentRevisionMode =
   | "none"
@@ -44,6 +44,7 @@ export type FBDocumentRevisionMode =
   | "update"
   | "preview"
   | "outputCreate"
+  | "outputUpdate"
   | "outputPreview";
 
 export interface FBStoreProps {

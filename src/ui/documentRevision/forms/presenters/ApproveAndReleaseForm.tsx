@@ -36,6 +36,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({ cancel, asyncSt
         label="transition.action.confirm"
         fullWidth={false}
         className={classes.submitButton}
+        id="ApproveAndRelease-submit"
       />
       <Button
         variant="text"
@@ -43,6 +44,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({ cancel, asyncSt
         className={classes.cancelButton}
         disabled={asyncState.status === AsyncStatus.Active}
         onClick={cancel}
+        id="ApproveAndRelease-cancelButton"
       >
         <Text translation="transition.action.cancel" />
       </Button>

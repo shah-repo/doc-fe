@@ -1,8 +1,6 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
-import {
-  ChangeRequest,
-} from "../../../state/ducks/changeRequest";
+import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { AsyncState } from "../../../state/types";
 import ChangeRequestHeader from "../../change.request/summary/header";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
@@ -67,7 +65,7 @@ export const ChangeRequestFormPresenter: React.FunctionComponent<
     return (
       <>
         <Grid item={true} xs={12} sm={6} md={7}>
-          {changeRequest && !selectedDocumentRevision && <ChangeRequestHeader dataProp={changeRequest!} />}
+          {changeRequest && !selectedDocumentRevision && <ChangeRequestHeader dataProp={changeRequest} />}
           {!selectedDocumentRevision && renderAssessmentForm}
           {renderDocumentRevisionForm}
         </Grid>

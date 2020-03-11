@@ -15,6 +15,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     getOptionLabel,
     optionValueKey = "value",
     optionLabelKey = "text",
+    prefixLabelRoot = "",
     optionPath = "",
     optionId = "",
     name = "",
@@ -36,6 +37,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
         optionPath = _.get(indicator, "path");
         optionValueKey = _.get(indicator, "optionValueKey", "");
         optionLabelKey = _.get(indicator, "optionLabelKey", "");
+        prefixLabelRoot = _.get(indicator, "prefixLabelRoot", "");
         const { root } = indicator;
         state.setRoot(root || "");
       }
@@ -50,7 +52,10 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       state?.setUrl(optionPath);
     }, []);
 
-    getOptionLabel = (option) => _.get(option, optionLabelKey) || "";
+    getOptionLabel = (option) => {
+      const optionLabel = prefixLabelRoot ? `${_.get(option, prefixLabelRoot)} - ` : "";
+      return `${optionLabel}${_.get(option, optionLabelKey, "")}`;
+    };
 
     renderTags = (value, getTagProps) =>
       value.map((option, index) => (

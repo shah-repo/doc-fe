@@ -8,24 +8,21 @@ import { FBWorkspaceProps } from "../types/workspace";
 import { withFormik } from "./common/withFormik";
 
 export const withWorkspace = <T extends FBWorkspaceProps>(
-  Component: React.FunctionComponent<T>,
+  Component: React.FunctionComponent<T>
 ) => {
   const Comp = (props: T) => {
-
     React.useEffect(() => {
       FBDynamicValidatorStore.registerValidators();
       FBDynamicValidatorStore.validate();
-    }, []);
+      FBStore.docId = props.id || "";
+      FBStore.documentId = props.documentId || "";
+    }, [props.documentId, props.id]);
 
     if (props.mode) {
       FBStore.setMode(props.mode);
     }
     const { schema, mode, values } = FBStore;
-    const isStarter = (mode === "design" && schema.length === 0);
-
-    if (props.id) {
-      FBStore.docId = props.id;
-    }
+    const isStarter = mode === "design" && schema.length === 0;
 
     return Component({
       ...props,
@@ -38,6 +35,6 @@ export const withWorkspace = <T extends FBWorkspaceProps>(
   };
 
   return withFormik<any, FBTemplateSchema | Dictionary<any>>(
-    observer((props: T) => Comp(props)),
+    observer((props: T) => Comp(props))
   );
 };

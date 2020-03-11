@@ -21,13 +21,13 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
   return (
     <Grid item={true} xs={12}>
       {label && (
-        <Grid item={true} xs={12}>
+        <Grid item={true} xs={12} id="BaseWithhtml-label">
           <Typography variant="h6">
             <Text message={label} />
           </Typography>
         </Grid>
       )}
-      <Grid item={true} xs={12}>
+      <Grid item={true} xs={12} id="BaseWithhtml-editor">
         <Editor
           readOnly={true}
           editorState={editor}

@@ -17,7 +17,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
   includeTransport = true,
   isStarter = true,
   schema = [],
-  form,
+  form
 }) => {
   const dialog = useDialog();
   const openDialog = () => dialog.open();
@@ -37,22 +37,25 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
   };
 
   return (
-  <Box>
-    {isStarter && <FBAddFieldButton0 />}
-    {!isStarter && <FBSortableContainer items={schema} />}
-    {includeTransport && <FBTransportSchema />}
-    {FBStore.mode === "design" && <FBButton
-      label="View"
-      onClick={onClickView}
-    />}
-    <ViewValidatorPresenter
-      isOpen={dialog.isOpen}
-      closeDialog={closeDialog}
-      schema={schema}
-    />
-    <FBFormMarkDown />
-    <FBEditorDialog />
-  </Box>
+    <Box>
+      {isStarter && <FBAddFieldButton0 />}
+      {!isStarter && <FBSortableContainer items={schema} />}
+      {includeTransport && <FBTransportSchema />}
+      {FBStore.mode === "design" && (
+        <FBButton
+          label="View"
+          onClick={onClickView}
+          id="FBWorkspace-clickView"
+        />
+      )}
+      <ViewValidatorPresenter
+        isOpen={dialog.isOpen}
+        closeDialog={closeDialog}
+        schema={schema}
+      />
+      <FBFormMarkDown />
+      <FBEditorDialog />
+    </Box>
   );
 };
 
