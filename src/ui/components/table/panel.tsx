@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box } from "@material-ui/core";
+import { Box, CircularProgress } from "@material-ui/core";
 import axios, { AxiosRequestConfig } from "axios";
 import _ from "lodash";
 import qs from "query-string";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AutoSizer, CellMeasurerCache, Index, Size, SortDirection, Table } from "react-virtualized";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
@@ -34,6 +34,7 @@ export function TablePanel<T extends any>({
   sortBy,
   tableName,
   providedData,
+  rootCustomStyle,
 }: Props<T>) {
   const didMount = useDidMount();
   let lastQueryValue = "";
@@ -45,6 +46,7 @@ export function TablePanel<T extends any>({
   const classes = styles(styleProps);
   const sortDirection = SortDirection.DESC;
 
+  const [isLoading, setIsLoading] = useState(false);
   const tableCriteria = useSelector(getTableCriteria(tableName));
   const tableData = useSelector(getTableData(tableName));
   const dispatch = useDispatch();
@@ -134,6 +136,14 @@ export function TablePanel<T extends any>({
         store.getState().auth.user.employeeId
       }:${store.getState().auth.user.sessionId}`;
 
+      setIsLoading(true);
+      dispatch(
+        tableSearchActions.setData(
+          [],
+          tableName,
+        ),
+      );
+
       let { data } = await apiClient.request(requestConfig);
       if (customDataSet) {
         data = customDataSet(data);
@@ -156,7 +166,9 @@ export function TablePanel<T extends any>({
           tableName,
         ),
       );
+      setIsLoading(false);
     } catch (exception) {
+      setIsLoading(false);
       if (axios.isCancel(exception)) {
         return;
       }
@@ -190,11 +202,14 @@ export function TablePanel<T extends any>({
     }
   };
 
-  const noRowsRenderer = () => (
+  const noRowsRenderer = () => isLoading ?
+    <Box textAlign="center" marginTop="50px">
+      <CircularProgress />
+    </Box>
+    :
     <Box className={classes.emptyMsg}>
       <Text translation={noRowsTranslation} />
-    </Box>
-  );
+    </Box>;
 
   const rowGetter = ({ index }: Index): T => queryData[index] as T;
 
@@ -256,7 +271,7 @@ export function TablePanel<T extends any>({
   const bodyRenderer = () => <AutoSizer>{tableRenderer}</AutoSizer>;
 
   return (
-    <Box className={classes.root}>
+    <Box className={rootCustomStyle ? rootCustomStyle : classes.root}>
       <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
       {bodyRenderer()}
     </Box>

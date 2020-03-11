@@ -42,6 +42,7 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
   slackTeamId,
 }) => {
   const userSlackId = useSelector(authSelectors.currentSlackUserId);
+  const isDeveloper = useSelector(getHasPermission(Permission.DEVELOPERS));
   const canUpdateCompany = useSelector(getHasPermission(Permission.COMPANY_UPDATE_CURRENT));
   const canManageUsers = useGetHasTag(GroupTag.USER_MANAGEMENT);
 
@@ -148,6 +149,7 @@ export const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
       activeStatus={active}
       userId={realUser.user.id}
       callbackUpdateWithUpload={callbackUpdateWithUpload}
+      isDeveloper={isDeveloper}
     />
   );
 };
