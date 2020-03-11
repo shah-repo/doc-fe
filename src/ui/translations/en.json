@@ -444,6 +444,8 @@
   "form.builder.instructionsmediaupload": "Instructions Media upload",
   "form.builder.evidencemediaupload": "Evidence Media upload",
   "form.builder.sectionnumbering": "Section Numbering",
+  "form.builder.buttons": "Buttons",
+  "form.builder.checkpoint": "Checkpoint",
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.watermark": "Download PDF file",

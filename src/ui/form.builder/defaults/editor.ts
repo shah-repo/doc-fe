@@ -10,6 +10,7 @@ import FBLabelEditor from "../components/editors/FBLabelEditor";
 import FBLabelStepperEditor from "../components/editors/FBLabelStepperEditor";
 import FBSelectEditor from "../components/editors/FBSelectEditor";
 import FBTextFieldEditor from "../components/editors/FBTextFieldEditor";
+import FBButton from "../components/inputs/FBButton";
 import FBCheckbox from "../components/inputs/FBCheckbox";
 import FBCheckboxGroup from "../components/inputs/FBCheckboxGroup";
 import FBDatePicker from "../components/inputs/FBDatePicker";
@@ -49,6 +50,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   sectionnumbering: FBEditorSectionNumbering,
   instructionsmediaupload: FBLabelEditor,
   evidencemediaupload: FBLabelEditor,
+  checkpoint: FBLabelEditor,
 };
 
 export const FBFieldComponent: Dictionary<any> = {
@@ -73,6 +75,7 @@ export const FBFieldComponent: Dictionary<any> = {
   sectionnumbering: FBSectionBox,
   instructionsmediaupload: FBMediaAlbumField,
   evidencemediaupload: FBMediaAlbumField,
+  checkpoint: FBButton,
 };
 
 export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
@@ -93,6 +96,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "instructionsmediaupload",
     "evidencemediaupload",
   ],
+  buttons: ["checkpoint"],
   lists: ["autocomplete"],
   actions: ["action"],
 };
