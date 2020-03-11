@@ -9,7 +9,7 @@ const FBButton: React.FunctionComponent<FBButtonProps> = ({
   color = "secondary",
   ...props
 }) => (
-  <Box component="span" py={1}>
+  <Box component="span" pb={0.5}>
     <Button {...{ color, variant }} {...props} id="FBButton-label">
       <Text message={label} />
     </Button>
