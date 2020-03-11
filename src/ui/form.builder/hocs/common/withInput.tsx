@@ -1,5 +1,4 @@
-import { Dictionary } from "lodash";
-import _ from "lodash";
+import _, { Dictionary } from "lodash";
 import { observer, useObserver } from "mobx-react";
 import React from "react";
 import { FBFormValues } from "../../defaults/formik";

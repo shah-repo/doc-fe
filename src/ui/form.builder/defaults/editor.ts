@@ -1,5 +1,5 @@
 import { Dictionary } from "lodash";
-import { FBAutocomplete, FBEditorMediaAlbumField, FBMediaAlbumField } from "..";
+import { FBAutocomplete, FBEditorMediaAlbumField, FBMediaAlbumField, FBParagraph } from "..";
 import FBActionContainer from "../components/actions/FBActionContainer";
 import FBActionEditor from "../components/editors/FBActionEditor";
 import FBAutocompleteEditor from "../components/editors/FBAutocompleteEditor";
@@ -25,6 +25,7 @@ import FBFileUpload from "../components/navigation/FBFileUpload";
 import FBLink from "../components/navigation/FBLink";
 import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaItem";
 import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
+import FBEditorParagraph from "../FBEditorParagraph/FBEditorParagraph";
 import { FBEditorElementType } from "../types/editor";
 
 export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = {
@@ -44,6 +45,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   action: FBActionEditor,
   purchaseorder: FBLabelEditor,
   mediaupload: FBEditorMediaAlbumField,
+  paragraph: FBEditorParagraph,
 };
 
 export const FBFieldComponent: Dictionary<any> = {
@@ -65,10 +67,12 @@ export const FBFieldComponent: Dictionary<any> = {
   action: FBActionContainer,
   purchaseorder: FBPurchaseOrderField,
   mediaupload: FBMediaAlbumField,
+  paragraph: FBParagraph,
 };
 
 export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
   section: ["section", "subsection"],
+  representation: ["paragraph"],
   basics: [
     "textfield",
     "checkbox",
