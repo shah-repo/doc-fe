@@ -7,6 +7,7 @@ import { LOGIN_URL } from "../../constants/urls";
 import PrivateRoutePresenter, { PrivateRoutePresenterProps } from "./PrivateRoute.presenter";
 
 jest.mock("react-router-dom", () => ({
+  // eslint-disable-next-line react/display-name
   Redirect: () => <div>REDIRECT</div>,
 }));
 

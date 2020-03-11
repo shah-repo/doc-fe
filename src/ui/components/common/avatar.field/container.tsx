@@ -1,6 +1,7 @@
 import { Box, Link } from "@material-ui/core";
 import classNames from "classnames";
 import React from "react";
+import { Nullable } from "../../../../state/ducks/common";
 import Text from "../../Text";
 import styles from "./utils/styles";
 
@@ -8,7 +9,7 @@ import styles from "./utils/styles";
 interface OwnProps {
   showEditUser: boolean;
   setPreviewAvatar: (values: string) => void;
-  setFile: (value: File) => void;
+  setFile: (value: Nullable<File>) => void;
 }
 
 type Props = OwnProps;
@@ -20,7 +21,7 @@ const AvatarUploadContainer: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const onChange = (event: React.FormEvent<HTMLInputElement>) => {
-    const file = event.currentTarget.files![0];
+    const file = event.currentTarget.files && event.currentTarget.files[0];
     setPreviewAvatar(URL.createObjectURL(file));
     setFile(file);
   };

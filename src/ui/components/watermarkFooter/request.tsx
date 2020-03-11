@@ -23,8 +23,7 @@ export const WatermarkFooterRequest: React.FunctionComponent<Props> = ({
 }) => {
   const asyncAction = useActionCreator(attachmentsActions.checkWatermarkStatus);
   const async = useAsync<WatermarkRequest>({
-    onSuccess: (data) => {
-      const watermarkRequest = data!;
+    onSuccess: (watermarkRequest = {} as WatermarkRequest) => {
       let isSuccess = false;
       let translation = "watermark.request.failed";
 

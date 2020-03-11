@@ -60,7 +60,7 @@ export type FBInputProps = Omit<FBFormikFieldProps, "name">
   & Pick<SelectProps, "renderValue">
   // & Pick<FBValidatorProps, "rules" | "applicableOn">
   & Pick<FBActionContainerProps, "actions">
-  & Pick<FBOptionProps, "optionId" | "options">
+  & Pick<FBOptionProps, "optionId" | "options" | "optionValueKey">
   & Pick<BaseTextFieldProps,
     | "children"
     | "value"
@@ -99,6 +99,8 @@ export type FBInputProps = Omit<FBFormikFieldProps, "name">
     templateId?: string;
     isTemplate?: boolean;
     hellosignFlowProps?: any;
+    valueType?: "object" | "key";
+    paragraph?: string;
   };
 
 export type FBFormDefaultProps = FBInputProps &

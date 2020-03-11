@@ -26,7 +26,10 @@ export type FBEditorElementType =
   | "hellosign"
   | "hellosignPremade"
   | "purchaseorder"
-  | "mediaupload";
+  | "paragraph"
+  | "sectionnumbering"
+  | "instructionsmediaupload"
+  | "evidencemediaupload";
 
 export type FBEditorModeType = "create" | "update";
 
@@ -40,3 +43,7 @@ export interface FBValidatorGroup {
   name: string;
   fields: Partial<FBTemplateSchema>[];
 }
+
+export const omitLabelValidation: FBEditorElementType[] = [
+  "action", "paragraph", "instructionsmediaupload", "evidencemediaupload",
+];

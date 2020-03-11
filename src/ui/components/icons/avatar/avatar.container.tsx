@@ -1,4 +1,5 @@
 import React from "react";
+import { Nullable } from "../../../../state/ducks/common";
 import AvatarPresenter from "./avatar.presenter";
 
 interface OwnProps {
@@ -6,7 +7,7 @@ interface OwnProps {
   showEditUser: boolean;
   previewAvatar: string;
   setPreviewAvatar: (value: string) => void;
-  setFile: (value: File) => void;
+  setFile: (value: Nullable<File>) => void;
 }
 
 type Props = OwnProps;

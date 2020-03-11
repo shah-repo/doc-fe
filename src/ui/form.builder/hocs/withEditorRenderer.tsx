@@ -8,7 +8,7 @@ import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 import editorStore from "../stores/ui/FBEditorStore";
 import FBStore from "../stores/ui/FBStore";
 import FBValidatorStore from "../stores/ui/FBValidatorStore";
-import { FBEditorFormProps } from "../types/editor";
+import { FBEditorFormProps, omitLabelValidation } from "../types/editor";
 import { FBTemplateSchema } from "../types/store";
 
 export const withEditorRenderer =
@@ -37,7 +37,7 @@ export const withEditorRenderer =
 
     const onClick = () => {
       const label = _.get(props, "values.label", "");
-      if (type !== "action" && _.isEmpty(label)) {
+      if (!_.includes(omitLabelValidation, type) && _.isEmpty(label)) {
         FBDynamicValidatorStore.setHelperText({
           label: ["The Label field is required."],
         });
@@ -71,6 +71,8 @@ export const withEditorRenderer =
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
         customValidator,
         formValuesRules: FBValidatorStore.formValues,
+        ...(type === "sectionnumbering" && { label: `${values.label} #${FBStore.sectionNumbering}`}),
+        ...(type === "instructionsmediaupload" && { isTemplate: true }),
       };
 
       FBValidatorStore.selectedFieldIndex = null;

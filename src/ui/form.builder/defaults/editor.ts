@@ -1,5 +1,5 @@
 import { Dictionary } from "lodash";
-import { FBAutocomplete, FBEditorMediaAlbumField, FBMediaAlbumField } from "..";
+import { FBAutocomplete, FBMediaAlbumField, FBParagraph } from "..";
 import FBActionContainer from "../components/actions/FBActionContainer";
 import FBActionEditor from "../components/editors/FBActionEditor";
 import FBAutocompleteEditor from "../components/editors/FBAutocompleteEditor";
@@ -26,6 +26,8 @@ import FBFileUpload from "../components/navigation/FBFileUpload";
 import FBLink from "../components/navigation/FBLink";
 import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaItem";
 import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
+import FBEditorParagraph from "../FBEditorParagraph/FBEditorParagraph";
+import FBEditorSectionNumbering from "../FBEditorSectionNumbering";
 import FBHelloSign from "../FBHelloSign";
 import FBHelloSignPremade from "../FBHelloSignPremade";
 import { FBEditorElementType } from "../types/editor";
@@ -48,7 +50,10 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   hellosign: FBLabelEditor,
   hellosignPremade: FBHelloSignTemplateEditor,
   purchaseorder: FBLabelEditor,
-  mediaupload: FBEditorMediaAlbumField,
+  paragraph: FBEditorParagraph,
+  sectionnumbering: FBEditorSectionNumbering,
+  instructionsmediaupload: FBLabelEditor,
+  evidencemediaupload: FBLabelEditor,
 };
 
 export const FBFieldComponent: Dictionary<any> = {
@@ -71,11 +76,15 @@ export const FBFieldComponent: Dictionary<any> = {
   hellosign: FBHelloSign,
   hellosignPremade: FBHelloSignPremade,
   purchaseorder: FBPurchaseOrderField,
-  mediaupload: FBMediaAlbumField,
+  paragraph: FBParagraph,
+  sectionnumbering: FBSectionBox,
+  instructionsmediaupload: FBMediaAlbumField,
+  evidencemediaupload: FBMediaAlbumField,
 };
 
 export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
-  section: ["section", "subsection"],
+  section: ["section", "subsection", "sectionnumbering"],
+  representation: ["paragraph"],
   basics: [
     "textfield",
     "checkbox",
@@ -88,7 +97,8 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "radiogroup",
     "fileupload",
     "purchaseorder",
-    "mediaupload",
+    "instructionsmediaupload",
+    "evidencemediaupload",
   ],
   approvals: ["hellosign", "hellosignPremade"],
   lists: ["autocomplete"],

@@ -55,7 +55,7 @@ describe("Field component tests", () => {
 
   it("displays error component", () => {
     const wrapper = getWrapper({});
-    const formActions = formProps as FormikProps<TestFormValues>;
+    const formActions = formProps;
     formActions.setFieldError("test", "Does not work");
     formActions.setFieldTouched("test", true);
     wrapper.update();
@@ -65,7 +65,7 @@ describe("Field component tests", () => {
 
   it("does not display error component when field is not touched", () => {
     const wrapper = getWrapper({});
-    const formActions = formProps as FormikProps<TestFormValues>;
+    const formActions = formProps;
     formActions.setFieldError("test", "Does not work");
     formActions.setFieldTouched("test", false);
     wrapper.update();

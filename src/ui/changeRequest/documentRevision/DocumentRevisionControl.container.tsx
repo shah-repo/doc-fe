@@ -2,12 +2,7 @@ import _ from "lodash";
 import React, { useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
-import {
-  DocumentRevision,
-  DocumentRevisionsByIdState,
-  documentRevisionsSelectors,
-  DocumentRevisionStatus,
-} from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionsByIdState, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { ApplicationState } from "../../../state/reducers";
 import AddDocumentRevisionContainer from "./AddDocumentRevision.container";
@@ -21,15 +16,12 @@ interface StateProps {
 
 interface OwnProps {
   documentsInChangeRequest: string[];
-  selectedDocumentRevision: string | null;
   documentsInCrById: { [key: string]: DocumentRevision };
-  selectDocumentRevision: (documentRevisionId: string) => void;
-  selectAssessmentForm: () => void;
   setDocumentRevisionsList: (documents: string[]) => void;
 }
 
 export type DocumentRevisionControlContainerProps = OwnProps &
-  StateProps;
+StateProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   documentRevisionsList: documentRevisionsSelectors.getDocumentRevisionsList(
@@ -38,16 +30,11 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
   documentRevisionsById: documentRevisionsSelectors.byId(state),
 });
 
-export const DocumentRevisionControlContainer: React.FunctionComponent<
-  DocumentRevisionControlContainerProps
-> = ({
+export const DocumentRevisionControlContainer: React.FunctionComponent<DocumentRevisionControlContainerProps> = ({
   setDocumentRevisionsList,
   documentsInChangeRequest,
   documentRevisionsList,
-  selectDocumentRevision,
-  selectAssessmentForm,
   documentRevisionsById,
-  selectedDocumentRevision,
   documentsInCrById,
 }) => {
   const classes = styles();
@@ -88,9 +75,6 @@ export const DocumentRevisionControlContainer: React.FunctionComponent<
         documentsInCrById={documentsInCrById}
         documentRevisionsById={documentRevisionsById}
         deleteDocumentFromChangeRequest={deleteDocumentFromChangeRequest}
-        selectDocumentRevision={selectDocumentRevision}
-        selectedDocumentRevision={selectedDocumentRevision}
-        selectAssessmentForm={selectAssessmentForm}
         openAddDocuments={openAddDocuments}
       />
       <AddDocumentRevisionContainer
