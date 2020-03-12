@@ -99,14 +99,15 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
       }
     }
 
-    function apiCallCancelSig(payload: FBHelloSignPayload) {
+    async function apiCallCancelSig(payload: FBHelloSignPayload) {
       const apiCallSig = new FBActionModel();
       apiCallSig.set({
         requestMethod: "PATCH",
         requestUrl: CANCEL_SIGNATURE_REQUEST_URL,
         payload,
       });
-      FBActionStore.apiCall(apiCallSig.toJS() as unknown as FBActionModel);
+      await FBActionStore.apiCall(apiCallSig.toJS() as unknown as FBActionModel);
+      helloSignState && helloSignState.setOverlay(false);
     }
 
     function helloSignIframe(data: any) {
@@ -154,6 +155,10 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
           helloSignState && helloSignState.setOverlay(true);
           apiCallSig(payload);
         } else {
+          helloSignState && helloSignState.setOverlay(true);
+          helloSignState && helloSignState.setLoadingMessage(
+            intl.formatMessage({ id: "form.builder.signature.cancelling" })
+          );
           apiCallCancelSig(payload);
         }
       } else {

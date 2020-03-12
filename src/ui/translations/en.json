@@ -438,6 +438,7 @@
   "form.builder.signature.warning": "Signature Request can be sent only after the fields are filled in and document is saved",
   "form.builder.signature.sending": "Sending Signature Request",
   "form.builder.signature.document.sent": "Document Sent Out For Signature",
+  "form.builder.signature.cancelling": "Cancelling Signature Request",
   "form.builder.cancel.signature": "Cancel Signature Request",
   "form.builder.hellosign": "Hellosign",
   "form.builder.purchaseorder": "Purchase Order",
