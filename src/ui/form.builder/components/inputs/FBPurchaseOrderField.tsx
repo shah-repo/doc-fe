@@ -78,6 +78,11 @@ const FBPurchaseOrderField: React.FunctionComponent<any> = ({
 
   const editItem = (index: number) => {
     setInitialValues(storeValue.items[index]);
+    // workaround need to calculate total cost when editing item
+    FBStore.setValues({
+      ...FBStore.getValues(),
+      ...storeValue.items[index],
+    });
     setRowIndex(index);
     dialog.open();
   };
