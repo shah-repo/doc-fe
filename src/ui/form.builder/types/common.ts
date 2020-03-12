@@ -42,6 +42,7 @@ export type FBLabelProps =
   };
 
 export type FBOptionProps =
+  & Omit<FBFormikFieldProps, "name">
   & Pick<FBContextProps, "includeContext">
   & Pick<BaseTextFieldProps, "name" | "type">
   & {
@@ -101,6 +102,7 @@ export type FBInputProps = Omit<FBFormikFieldProps, "name">
     hellosignFlowProps?: any;
     valueType?: "object" | "key";
     paragraph?: string;
+    includeQRScan?: boolean;
   };
 
 export type FBFormDefaultProps = FBInputProps &

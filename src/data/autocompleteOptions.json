@@ -40,5 +40,14 @@
     "optionLabelKey": "name",
     "prefixLabelRoot": "document.docId",
     "root": ""
+  },
+  {
+    "id": "6",
+    "path": "/document_revisions?documentTypeAcronym=TL",
+    "label": "TL numbers list",
+    "optionValueKey": "id",
+    "optionLabelKey": "name",
+    "prefixLabelRoot": "",
+    "root": ""
   }
 ]

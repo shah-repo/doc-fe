@@ -10,6 +10,7 @@ import FBLabelEditor from "../components/editors/FBLabelEditor";
 import FBLabelStepperEditor from "../components/editors/FBLabelStepperEditor";
 import FBSelectEditor from "../components/editors/FBSelectEditor";
 import FBTextFieldEditor from "../components/editors/FBTextFieldEditor";
+import FBButton from "../components/inputs/FBButton";
 import FBCheckbox from "../components/inputs/FBCheckbox";
 import FBCheckboxGroup from "../components/inputs/FBCheckboxGroup";
 import FBDatePicker from "../components/inputs/FBDatePicker";
@@ -51,6 +52,9 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   sectionnumbering: FBEditorSectionNumbering,
   instructionsmediaupload: FBLabelEditor,
   evidencemediaupload: FBLabelEditor,
+  checkpoint: FBLabelEditor,
+  pause: FBLabelEditor,
+  createlabel: FBLabelEditor,
 };
 
 export const FBFieldComponent: Dictionary<any> = {
@@ -76,6 +80,9 @@ export const FBFieldComponent: Dictionary<any> = {
   sectionnumbering: FBSectionBox,
   instructionsmediaupload: FBMediaAlbumField,
   evidencemediaupload: FBMediaAlbumField,
+  checkpoint: FBButton,
+  pause: FBButton,
+  createlabel: FBButton,
 };
 
 export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
@@ -97,12 +104,19 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "evidencemediaupload",
   ],
   approvals: ["hellosign"],
+  buttons: ["checkpoint", "pause", "createlabel"],
   lists: ["autocomplete"],
   actions: ["action"],
 };
 
 export const FBGroupEditorOptions: Dictionary<any[]> = {
-  autocomplete: [{ value: "multiple", text: "form.builder.multi.select" }],
+  autocomplete: [
+    {
+      value: "multiple", text: "form.builder.multi.select",
+    }, {
+      value: "includeQRScan", text: "form.builder.include.qr.scan",
+    },
+  ],
   mediaupload: [{ value: "isTemplate", text: "form.builder.is.template" }],
   select: [
     { value: "includeNone", text: "form.builder.include.none" },
@@ -113,3 +127,19 @@ export const FBGroupEditorOptions: Dictionary<any[]> = {
     { value: "includeContext", text: "form.builder.include.other" },
   ],
 };
+
+export const omitLabelValidation: FBEditorElementType[] = [
+  "action",
+  "paragraph",
+  "instructionsmediaupload",
+  "evidencemediaupload",
+  "checkpoint",
+  "pause",
+  "createlabel",
+];
+
+export const pickDefaultLabel: FBEditorElementType[] = [
+  "checkpoint",
+  "pause",
+  "createlabel",
+];

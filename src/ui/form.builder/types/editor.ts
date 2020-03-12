@@ -28,7 +28,10 @@ export type FBEditorElementType =
   | "paragraph"
   | "sectionnumbering"
   | "instructionsmediaupload"
-  | "evidencemediaupload";
+  | "evidencemediaupload"
+  | "checkpoint"
+  | "pause"
+  | "createlabel";
 
 export type FBEditorModeType = "create" | "update";
 
@@ -42,7 +45,3 @@ export interface FBValidatorGroup {
   name: string;
   fields: Partial<FBTemplateSchema>[];
 }
-
-export const omitLabelValidation: FBEditorElementType[] = [
-  "action", "paragraph", "instructionsmediaupload", "evidencemediaupload",
-];
