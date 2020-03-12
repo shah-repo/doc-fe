@@ -33,7 +33,7 @@ export class FormBuilderStore {
 
   @action public sectionNumber = (endIndex: number): number => {
     const sections = _.filter(this.getSchema(), (schemaItem, index) =>
-      endIndex > index && schemaItem.type === "sectionnumbering"
+      endIndex > index && schemaItem.type === "stepsection"
     );
     return _.size(sections) + 1;
   };

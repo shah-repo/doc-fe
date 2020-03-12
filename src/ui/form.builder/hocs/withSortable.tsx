@@ -34,14 +34,14 @@ export function withSortable<T extends FBSortableProps>(
 
     private onSortEnd = ({ oldIndex, newIndex }: SortEnd) => {
       const newSchema = arrayMove(FBStore.schema, oldIndex, newIndex);
-      let sectionNumbering = 1;
+      let stepSection = 1;
       _.map(newSchema, (schemaItem: FBInputProps) => {
-        if (schemaItem.type !== "sectionnumbering") {
+        if (schemaItem.type !== "stepsection") {
           return;
         }
         const slicedLabel = (_.get(schemaItem, "label", "")! as string).slice(0, -1);
-        schemaItem.label = `${slicedLabel} ${sectionNumbering}`;
-        sectionNumbering++;
+        schemaItem.label = `${slicedLabel} ${stepSection}`;
+        stepSection++;
       });
       FBStore.setSchema(newSchema);
       sortableStore.setMode("inactive");

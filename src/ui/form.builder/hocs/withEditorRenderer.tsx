@@ -21,11 +21,10 @@ export const withEditorRenderer =
     const InputType = FBFieldEditorComponent[type as string];
     const uniqid = require("uniqid");
     const intl = useIntl();
-    let defaultLabel: string | undefined;
     FBValidatorStore.setActiveValidatorType(type);
-    _.includes(pickDefaultLabel, type) && (defaultLabel =
-      _.get(props, "values.label") || intl.formatMessage({ id: `form.builder.${type}` })
-    );
+    if (_.includes(pickDefaultLabel, type) && _.isUndefined(_.get(props, "values.label"))) {
+      _.set(props, "values.label", intl.formatMessage({ id: `form.builder.${type}` }));
+    }
 
     // const schemaItem = (): FBTemplateSchema => ({
     //   type,
@@ -36,14 +35,14 @@ export const withEditorRenderer =
     // });
 
     function setSectionOrdering() {
-      let sectionNumbering = 1;
+      let stepSection = 1;
       _.map(FBStore.getSchema(), (schemaItem: FBInputProps) => {
-        if (schemaItem.type !== "sectionnumbering") {
+        if (schemaItem.type !== "stepsection") {
           return;
         }
         const slicedLabel = (_.get(schemaItem, "label", "") as string).slice(0, -1);
-        schemaItem.label = `${slicedLabel} ${sectionNumbering}`;
-        sectionNumbering++;
+        schemaItem.label = `${slicedLabel} ${stepSection}`;
+        stepSection++;
       });
     }
 
@@ -55,10 +54,7 @@ export const withEditorRenderer =
     };
 
     const onClick = () => {
-      let label = _.get(props, "values.label");
-      if (_.includes(pickDefaultLabel, type) && _.isUndefined(label)) {
-        label = defaultLabel;
-      }
+      const label = _.get(props, "values.label");
       if (!_.includes(omitLabelValidation, type) && !label) {
         FBDynamicValidatorStore.setHelperText({
           label: ["The Label field is required."],
@@ -93,10 +89,8 @@ export const withEditorRenderer =
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
         customValidator,
         formValuesRules: FBValidatorStore.formValues,
-        ...(type === "sectionnumbering" && { label: `${values.label} #${FBStore.sectionNumber(index)}`}),
+        ...(type === "stepsection" && { label: `${values.label} #${FBStore.sectionNumber(index)}` }),
         ...(type === "instructionsmediaupload" && { isTemplate: true }),
-        // Will be deprecated (refactoring)
-        ...(defaultLabel && { label: intl.formatMessage({ id: defaultLabel }) }),
       };
 
       FBValidatorStore.selectedFieldIndex = null;
@@ -120,8 +114,8 @@ export const withEditorRenderer =
     return (
       <Box>
         <InputType
-          {...(defaultLabel && {defaultValue: defaultLabel })}
-          {...{index}}
+          {...(_.includes(pickDefaultLabel, type) && { defaultValue: _.get(props, "values.label") })}
+          {...{ index }}
         />
         <Box display="flex" flexDirection="row-reverse" mx={-1}>
           <FBButton label={buttonLabel} onClick={onClick} />
