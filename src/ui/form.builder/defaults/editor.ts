@@ -1,5 +1,5 @@
 import { Dictionary } from "lodash";
-import { FBAutocomplete, FBEditorMediaAlbumField, FBMediaAlbumField } from "..";
+import { FBAutocomplete, FBMediaAlbumField, FBParagraph, FBQuantityField } from "..";
 import FBActionContainer from "../components/actions/FBActionContainer";
 import FBActionEditor from "../components/editors/FBActionEditor";
 import FBAutocompleteEditor from "../components/editors/FBAutocompleteEditor";
@@ -10,6 +10,7 @@ import FBLabelEditor from "../components/editors/FBLabelEditor";
 import FBLabelStepperEditor from "../components/editors/FBLabelStepperEditor";
 import FBSelectEditor from "../components/editors/FBSelectEditor";
 import FBTextFieldEditor from "../components/editors/FBTextFieldEditor";
+import FBButton from "../components/inputs/FBButton";
 import FBCheckbox from "../components/inputs/FBCheckbox";
 import FBCheckboxGroup from "../components/inputs/FBCheckboxGroup";
 import FBDatePicker from "../components/inputs/FBDatePicker";
@@ -25,6 +26,8 @@ import FBFileUpload from "../components/navigation/FBFileUpload";
 import FBLink from "../components/navigation/FBLink";
 import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaItem";
 import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
+import FBEditorParagraph from "../FBEditorParagraph/FBEditorParagraph";
+import FBEditorSectionNumbering from "../FBEditorSectionNumbering";
 import { FBEditorElementType } from "../types/editor";
 
 export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = {
@@ -43,7 +46,14 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   fileupload: FBLabelStepperEditor,
   action: FBActionEditor,
   purchaseorder: FBLabelEditor,
-  mediaupload: FBEditorMediaAlbumField,
+  paragraph: FBEditorParagraph,
+  sectionnumbering: FBEditorSectionNumbering,
+  instructionsmediaupload: FBLabelEditor,
+  evidencemediaupload: FBLabelEditor,
+  checkpoint: FBLabelEditor,
+  pause: FBLabelEditor,
+  createlabel: FBLabelEditor,
+  quantity: FBLabelEditor,
 };
 
 export const FBFieldComponent: Dictionary<any> = {
@@ -64,11 +74,19 @@ export const FBFieldComponent: Dictionary<any> = {
   schemaItem: FBValidatorSchemaItem,
   action: FBActionContainer,
   purchaseorder: FBPurchaseOrderField,
-  mediaupload: FBMediaAlbumField,
+  paragraph: FBParagraph,
+  sectionnumbering: FBSectionBox,
+  instructionsmediaupload: FBMediaAlbumField,
+  evidencemediaupload: FBMediaAlbumField,
+  checkpoint: FBButton,
+  pause: FBButton,
+  createlabel: FBButton,
+  quantity: FBQuantityField,
 };
 
 export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
-  section: ["section", "subsection"],
+  section: ["section", "subsection", "sectionnumbering"],
+  representation: ["paragraph"],
   basics: [
     "textfield",
     "checkbox",
@@ -80,15 +98,23 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "radio",
     "radiogroup",
     "fileupload",
+    "quantity",
     "purchaseorder",
-    "mediaupload",
+    "instructionsmediaupload",
+    "evidencemediaupload",
   ],
+  buttons: ["checkpoint", "pause", "createlabel"],
   lists: ["autocomplete"],
   actions: ["action"],
 };
 
 export const FBGroupEditorOptions: Dictionary<any[]> = {
-  autocomplete: [{ value: "multiple", text: "form.builder.multi.select" }],
+  autocomplete: [
+    { value: "multiple", text: "form.builder.multi.select",
+    }, {
+      value: "includeQRScan", text: "form.builder.include.qr.scan",
+    },
+  ],
   mediaupload: [{ value: "isTemplate", text: "form.builder.is.template" }],
   select: [
     { value: "includeNone", text: "form.builder.include.none" },
@@ -99,3 +125,17 @@ export const FBGroupEditorOptions: Dictionary<any[]> = {
     { value: "includeContext", text: "form.builder.include.other" },
   ],
 };
+
+export const omitLabelValidation: FBEditorElementType[] = [
+  "action",
+  "paragraph",
+  "instructionsmediaupload",
+  "evidencemediaupload",
+];
+
+export const pickDefaultLabel: FBEditorElementType[] = [
+  "checkpoint",
+  "pause",
+  "createlabel",
+  "quantity",
+];

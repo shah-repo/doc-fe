@@ -21,27 +21,25 @@ export const WatermarkPresenter: React.FunctionComponent<Props> = ({
   title,
   content,
   children,
-}) => {
-  return (
-    <Dialog
-      open={isOpen}
-      onClose={handleClose}
-      maxWidth="sm"
-      fullWidth={true}
-    >
-      <DialogTitle>
-        <Text message={title} />
-      </DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-          <Text {...content} />
-        </DialogContentText>
-      </DialogContent>
-      <Box textAlign="right">
-        {children}
-      </Box>
-    </Dialog>
-  );
-};
+}) => (
+  <Dialog
+    open={isOpen}
+    onClose={handleClose}
+    maxWidth="sm"
+    fullWidth={true}
+  >
+    <DialogTitle>
+      <Text message={title} />
+    </DialogTitle>
+    <DialogContent>
+      <DialogContentText>
+        <Text {...content} />
+      </DialogContentText>
+    </DialogContent>
+    <Box textAlign="right">
+      {children}
+    </Box>
+  </Dialog>
+);
 
 export default WatermarkPresenter;

@@ -1,10 +1,6 @@
 import { Box } from "@material-ui/core";
 import classNames from "classnames";
-import {
-  Field as FormikField,
-  FieldConfig,
-  FieldProps as FormikFieldProps,
-} from "formik";
+import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 // tslint:disable-next-line: no-implicit-dependencies
 import { QuillOptionsStatic } from "quill";
 import React, { useEffect, useMemo, useRef, useState } from "react";
@@ -69,14 +65,14 @@ const TextEditor: React.FunctionComponent<TextEditorPropsWithFormik> = ({
         },
       },
     );
-  }, []);
+  }, [customContainers, customHandlers]);
 
   useEffect(() => {
     if (!isComponentVisible) {
       return;
     }
     customToolbarAction && customToolbarAction();
-  }, [isComponentVisible]);
+  }, [customToolbarAction, isComponentVisible]);
 
   const handleChange = (editHtml: string) => {
     // when you click on an empty editor Quill injects some HTML

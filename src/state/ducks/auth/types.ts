@@ -181,6 +181,7 @@ export enum Permission {
   USERS_ANONYMIZE_EMAILS = "USERS_ANONYMIZE_EMAILS",
   // Slack
   SLACK_APP_INSTALL = "SLACK_APP_INSTALL",
+  DEVELOPERS = "DEVELOPERS",
 }
 
 export enum GroupTag {

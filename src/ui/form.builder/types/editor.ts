@@ -24,7 +24,14 @@ export type FBEditorElementType =
   | "schemaItem"
   | "action"
   | "purchaseorder"
-  | "mediaupload";
+  | "paragraph"
+  | "sectionnumbering"
+  | "instructionsmediaupload"
+  | "evidencemediaupload"
+  | "checkpoint"
+  | "pause"
+  | "createlabel"
+  | "quantity";
 
 export type FBEditorModeType = "create" | "update";
 

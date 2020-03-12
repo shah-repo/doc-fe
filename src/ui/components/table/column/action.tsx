@@ -7,7 +7,7 @@ import { TableColumnActionProps } from "./types";
 type Props<T> = TableColumnActionProps<T>;
 
 const TableColumnAction = <T extends any>(): React.FunctionComponent<
-  Props<T>
+Props<T>
 > => ({ actionType, rowData, onSelect }) => {
   const iconRenderer = () => {
     switch (actionType) {
@@ -19,6 +19,8 @@ const TableColumnAction = <T extends any>(): React.FunctionComponent<
         return <OpenInNew />;
       case "ADD":
         return <Add />;
+      default:
+        return null;
     }
   };
 

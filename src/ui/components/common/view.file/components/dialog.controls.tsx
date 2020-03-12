@@ -7,7 +7,7 @@ import { styles } from "../utils/styles";
 import { ViewFileTitleControlsProps } from "../utils/types";
 
 const ViewFileTitleControls: React.FunctionComponent<ViewFileTitleControlsProps> = ({
-  attachment,
+  attachment = {},
   attachments,
 }) => {
   const setFile = useContext(SetFile);
@@ -16,7 +16,7 @@ const ViewFileTitleControls: React.FunctionComponent<ViewFileTitleControlsProps>
     if (viewableFiles.length === 1) {
       return { setPreviousAttachment: undefined, setNextAttachment: undefined };
     }
-    const currentIndex = viewableFiles.findIndex((item) => item.id === attachment!.id);
+    const currentIndex = viewableFiles.findIndex((item) => item.id === attachment.id);
 
     const setPrevious = currentIndex === 0
       ? undefined

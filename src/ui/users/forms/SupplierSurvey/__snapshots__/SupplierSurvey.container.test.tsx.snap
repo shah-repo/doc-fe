@@ -79,26 +79,30 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
             </div>
           </div>
         </div>
-        <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary"
-          id="FBButton-label"
-          tabindex="0"
-          type="button"
+        <span
+          class="MuiBox-root MuiBox-root-133"
         >
-          <span
-            class="MuiButton-label"
+          <button
+            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary"
+            id="FBButton-label"
+            tabindex="0"
+            type="button"
           >
-            <span>
-              Source
+            <span
+              class="MuiButton-label"
+            >
+              <span>
+                Source
+              </span>
             </span>
-          </span>
-          <span
-            class="MuiTouchRipple-root"
-          />
-        </button>
+            <span
+              class="MuiTouchRipple-root"
+            />
+          </button>
+        </span>
       </div>
       <div
-        class="MuiBox-root MuiBox-root-161"
+        class="MuiBox-root MuiBox-root-162"
       >
         <button
           class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary"

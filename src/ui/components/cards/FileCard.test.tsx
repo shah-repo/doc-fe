@@ -40,6 +40,7 @@ describe("Filecard component unit tests", () => {
   });
 
   it("Displays remove button if removeAttachment is present", () => {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     const wrapper = getWrapper({ attachment, removeAttachment: () => {} });
     expect(wrapper.find({ "aria-label": "Delete" })).toHaveLength(1);
   });

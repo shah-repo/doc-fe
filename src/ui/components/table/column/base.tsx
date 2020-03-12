@@ -2,25 +2,13 @@ import { Box, Tooltip } from "@material-ui/core";
 import Link from "@material-ui/core/Link";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
-import {
-  CellMeasurer,
-  Column,
-  SortDirectionType,
-  SortIndicator,
-  TableCellProps as ColumnProps,
-} from "react-virtualized";
+import { CellMeasurer, Column, SortDirectionType, SortIndicator, TableCellProps as ColumnProps } from "react-virtualized";
 import Text from "../../Text";
 import { TableSearchSelectField } from "../search/select";
 import { TableSearchTextField } from "../search/text";
 import TableColumnAction from "./action";
 import { StyledCellLink, StyledTableCell, StyledTableHeader } from "./styles";
-import {
-  InnerTableColumnProps,
-  TableCellProps,
-  TableCellTooltipRenderer,
-  TableCellTypeRenderer,
-  TableColumnProps,
-} from "./types";
+import { InnerTableColumnProps, TableCellProps, TableColumnProps } from "./types";
 
 type Props<T> = TableColumnProps<T>;
 type InnerProps = InnerTableColumnProps;
@@ -63,24 +51,22 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
     </StyledCellLink>
   );
 
-  const cellActionType = ({ cellData, rowData }: TableCellProps<T>) => {
-    return cellData.map((actionType) => {
-      const ActionColumn = TableColumnAction<T>();
-      return (
-        <ActionColumn
-          key={"action-" + actionType}
-          actionType={actionType}
-          rowData={rowData}
-          onSelect={onSelect}
-        />
-      );
-    });
-  };
+  const cellActionType = ({ cellData, rowData }: TableCellProps<T>) => cellData.map((actionType) => {
+    const ActionColumn = TableColumnAction<T>();
+    return (
+      <ActionColumn
+        key={"action-" + actionType}
+        actionType={actionType}
+        rowData={rowData}
+        onSelect={onSelect}
+      />
+    );
+  });
 
   const cellTypeRenderer = ({ cellData, rowData }: ColumnProps) => {
     let type = cellType;
     if (typeof cellType === "function") {
-      type = (cellType as TableCellTypeRenderer<T>)(rowData);
+      type = (cellType)(rowData);
     }
     switch (type) {
       case "LINK":
@@ -95,7 +81,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
   const cellMeasurer = ({ parent, rowIndex, columnIndex, ...other }: any) => (
     <CellMeasurer
       key={key}
-      cache={measurerCache!}
+      cache={measurerCache}
       rowIndex={rowIndex}
       columnIndex={columnIndex}
       parent={parent}
@@ -156,7 +142,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
     const { rowData } = columnProps;
     let tooltipValue: string = rowData[tooltipKey] || "";
     if (typeof tooltipKey === "function") {
-      tooltipValue = (tooltipKey as TableCellTooltipRenderer<T>)(rowData);
+      tooltipValue = (tooltipKey)(rowData);
     }
 
     return (

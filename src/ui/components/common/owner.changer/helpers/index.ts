@@ -8,6 +8,7 @@ export const getUrlandActions = (requestType) => {
       documentRevisionsActions.save,
       documentRevisionsSelectors.getDocumentRevision,
     ],
+    // eslint-disable-next-line @typescript-eslint/camelcase
     change_request: [
       changeRequestsActions.save,
       changeRequestsSelectors.getChangeRequest,

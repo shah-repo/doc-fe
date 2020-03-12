@@ -18,7 +18,7 @@ export type DownloadButtonContainerProps = DispatchProps & OwnProps;
 export const DownloadButtonContainer: React.FunctionComponent<DownloadButtonContainerProps> =
   ({ download, attachment }) => {
     const async = useAsync<AttachmentDownloadResponse>({
-      onSuccess: (downloadInfo) => window.open(downloadInfo!.url, "_parent"),
+      onSuccess: (downloadInfo) => downloadInfo && window.open(downloadInfo.url, "_parent"),
     });
     const onClick = () => async.start(download, attachment, async);
 
