@@ -31,7 +31,8 @@ export type FBEditorElementType =
   | "checkpoint"
   | "pause"
   | "createlabel"
-  | "quantity";
+  | "quantity"
+  | "timer";
 
 export type FBEditorModeType = "create" | "update";
 
