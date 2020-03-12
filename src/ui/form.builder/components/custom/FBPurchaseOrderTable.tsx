@@ -1,14 +1,4 @@
-import {
-  Box,
-  Checkbox,
-  makeStyles,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  withStyles,
-} from "@material-ui/core";
+import { Box, Checkbox, makeStyles, Table, TableBody, TableCell, TableHead, TableRow, withStyles } from "@material-ui/core";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import React, { useEffect, useState } from "react";
 import Date from "../../../components/Date"; // we shouldn't use anything outside the formbuilder
@@ -64,13 +54,11 @@ const FBPurchaseOrderTable: React.FunctionComponent<Props> = ({
       return;
     }
 
-    const preCalcValues = values.map((value) => {
-      return {
-        ...value,
-        unitPrice: Number(value.unitPrice || 0).toFixed(2),
-        amount: (Number(value.unitPrice || 0) * Number(value.order || 0)).toFixed(2),
-      };
-    });
+    const preCalcValues = values.map((value) => ({
+      ...value,
+      unitPrice: Number(value.unitPrice || 0).toFixed(2),
+      amount: (Number(value.unitPrice || 0) * Number(value.order || 0)).toFixed(2),
+    }));
 
     setPreCalc(preCalcValues);
   }, [values]);
