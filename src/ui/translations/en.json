@@ -472,6 +472,7 @@
   "form.builder.createlabel": "Create a Label",
   "form.builder.include.qr.scan": "Include QR Scan",
   "form.builder.scan.qr": "Scan QR code",
+  "form.builder.quantity": "Quantity",
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.watermark": "Download PDF file",

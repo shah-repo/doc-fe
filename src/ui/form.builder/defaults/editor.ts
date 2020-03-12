@@ -1,5 +1,5 @@
 import { Dictionary } from "lodash";
-import { FBAutocomplete, FBMediaAlbumField, FBParagraph } from "..";
+import { FBAutocomplete, FBMediaAlbumField, FBParagraph, FBQuantityField } from "..";
 import FBActionContainer from "../components/actions/FBActionContainer";
 import FBActionEditor from "../components/editors/FBActionEditor";
 import FBAutocompleteEditor from "../components/editors/FBAutocompleteEditor";
@@ -55,6 +55,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   checkpoint: FBLabelEditor,
   pause: FBLabelEditor,
   createlabel: FBLabelEditor,
+  quantity: FBLabelEditor,
 };
 
 export const FBFieldComponent: Dictionary<any> = {
@@ -83,6 +84,7 @@ export const FBFieldComponent: Dictionary<any> = {
   checkpoint: FBButton,
   pause: FBButton,
   createlabel: FBButton,
+  quantity: FBQuantityField,
 };
 
 export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
@@ -99,6 +101,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "radio",
     "radiogroup",
     "fileupload",
+    "quantity",
     "purchaseorder",
     "instructionsmediaupload",
     "evidencemediaupload",
@@ -133,13 +136,11 @@ export const omitLabelValidation: FBEditorElementType[] = [
   "paragraph",
   "instructionsmediaupload",
   "evidencemediaupload",
-  "checkpoint",
-  "pause",
-  "createlabel",
 ];
 
 export const pickDefaultLabel: FBEditorElementType[] = [
   "checkpoint",
   "pause",
   "createlabel",
+  "quantity",
 ];
