@@ -9,6 +9,7 @@ import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 import editorStore from "../stores/ui/FBEditorStore";
 import FBStore from "../stores/ui/FBStore";
 import FBValidatorStore from "../stores/ui/FBValidatorStore";
+import { FBInputProps } from "../types/common";
 import { FBEditorFormProps } from "../types/editor";
 import { FBTemplateSchema } from "../types/store";
 
@@ -23,7 +24,7 @@ export const withEditorRenderer =
     let defaultLabel: string | undefined;
     FBValidatorStore.setActiveValidatorType(type);
     _.includes(pickDefaultLabel, type) && (defaultLabel =
-      intl.formatMessage({ id: `form.builder.${type}` })
+      _.get(props, "values.label") || intl.formatMessage({ id: `form.builder.${type}` })
     );
 
     // const schemaItem = (): FBTemplateSchema => ({
@@ -34,6 +35,18 @@ export const withEditorRenderer =
     //   ...props.values,
     // });
 
+    function setSectionOrdering() {
+      let sectionNumbering = 1;
+      _.map(FBStore.getSchema(), (schemaItem: FBInputProps) => {
+        if (schemaItem.type !== "sectionnumbering") {
+          return;
+        }
+        const slicedLabel = (_.get(schemaItem, "label", "") as string).slice(0, -1);
+        schemaItem.label = `${slicedLabel} ${sectionNumbering}`;
+        sectionNumbering++;
+      });
+    }
+
     const propsByType = (): Dictionary<FBTemplateSchema | string[]> => {
       if (type === "action") {
         return { actions: _.keys(props.values) };
@@ -42,8 +55,11 @@ export const withEditorRenderer =
     };
 
     const onClick = () => {
-      const label = _.get(props, "values.label", "");
-      if (!_.includes(omitLabelValidation, type) && _.isEmpty(label)) {
+      let label = _.get(props, "values.label");
+      if (_.includes(pickDefaultLabel, type) && _.isUndefined(label)) {
+        label = defaultLabel;
+      }
+      if (!_.includes(omitLabelValidation, type) && !label) {
         FBDynamicValidatorStore.setHelperText({
           label: ["The Label field is required."],
         });
@@ -77,7 +93,7 @@ export const withEditorRenderer =
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
         customValidator,
         formValuesRules: FBValidatorStore.formValues,
-        ...(type === "sectionnumbering" && { label: `${values.label} #${FBStore.sectionNumbering}`}),
+        ...(type === "sectionnumbering" && { label: `${values.label} #${FBStore.sectionNumber(index)}`}),
         ...(type === "instructionsmediaupload" && { isTemplate: true }),
         // Will be deprecated (refactoring)
         ...(defaultLabel && { label: intl.formatMessage({ id: defaultLabel }) }),
@@ -94,6 +110,7 @@ export const withEditorRenderer =
       newSchema.splice(index, removeEl, schema);
       FBStore.setSchema(newSchema);
       editorStore.open = false;
+      setSectionOrdering();
     };
 
     const buttonLabel = mode === "create"
@@ -104,6 +121,7 @@ export const withEditorRenderer =
       <Box>
         <InputType
           {...(defaultLabel && {defaultValue: defaultLabel })}
+          {...{index}}
         />
         <Box display="flex" flexDirection="row-reverse" mx={-1}>
           <FBButton label={buttonLabel} onClick={onClick} />

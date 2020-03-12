@@ -33,6 +33,8 @@ export { default as FBMediaQR } from "./FBMediaQR/FBMediaQR";
 export * from "./FBMediaQR/FBMediaQR.types";
 export { default as FBParagraph } from "./FBParagraph/FBParagraph";
 export * from "./FBParagraph/FBParagraph.types";
+export { default as FBQuantityField } from "./FBQuantityField/FBQuantityField";
+export * from "./FBQuantityField/FBQuantityField.types";
 export { default as FBStepper } from "./FBStepper/FBStepper";
 export * from "./FBStepper/FBStepper.types";
 export { default as FBStepperEditor } from "./FBStepperEditor/FBStepperEditor";
