@@ -24,7 +24,6 @@ export type FBEditorElementType =
   | "schemaItem"
   | "action"
   | "hellosign"
-  | "hellosignPremade"
   | "purchaseorder"
   | "paragraph"
   | "sectionnumbering"

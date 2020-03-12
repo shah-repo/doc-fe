@@ -5,7 +5,6 @@ import FBActionEditor from "../components/editors/FBActionEditor";
 import FBAutocompleteEditor from "../components/editors/FBAutocompleteEditor";
 import FBControlEditor from "../components/editors/FBControlEditor";
 import FBControlGroupEditor from "../components/editors/FBControlGroupEditor";
-import FBHelloSignTemplateEditor from "../components/editors/FBHelloSignTemplateEditor";
 import FBHyperlinkEditor from "../components/editors/FBHyperlinkEditor";
 import FBLabelEditor from "../components/editors/FBLabelEditor";
 import FBLabelStepperEditor from "../components/editors/FBLabelStepperEditor";
@@ -29,7 +28,6 @@ import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaS
 import FBEditorParagraph from "../FBEditorParagraph/FBEditorParagraph";
 import FBEditorSectionNumbering from "../FBEditorSectionNumbering";
 import FBHelloSign from "../FBHelloSign";
-import FBHelloSignPremade from "../FBHelloSignPremade";
 import { FBEditorElementType } from "../types/editor";
 
 export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = {
@@ -48,7 +46,6 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   fileupload: FBLabelStepperEditor,
   action: FBActionEditor,
   hellosign: FBLabelEditor,
-  hellosignPremade: FBHelloSignTemplateEditor,
   purchaseorder: FBLabelEditor,
   paragraph: FBEditorParagraph,
   sectionnumbering: FBEditorSectionNumbering,
@@ -74,7 +71,6 @@ export const FBFieldComponent: Dictionary<any> = {
   schemaItem: FBValidatorSchemaItem,
   action: FBActionContainer,
   hellosign: FBHelloSign,
-  hellosignPremade: FBHelloSignPremade,
   purchaseorder: FBPurchaseOrderField,
   paragraph: FBParagraph,
   sectionnumbering: FBSectionBox,
@@ -100,7 +96,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "instructionsmediaupload",
     "evidencemediaupload",
   ],
-  approvals: ["hellosign", "hellosignPremade"],
+  approvals: ["hellosign"],
   lists: ["autocomplete"],
   actions: ["action"],
 };

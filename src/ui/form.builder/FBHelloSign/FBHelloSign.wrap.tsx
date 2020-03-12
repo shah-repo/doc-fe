@@ -8,6 +8,7 @@ import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { FBHelloSignPayload, FBHelloSignProps } from ".";
 import { FB } from "..";
+import { SM_APP_CONFIG } from "../../../common/constants";
 import { companySelectors } from "../../../state/ducks/company";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -83,7 +84,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     async function apiCallSig(payload: FBHelloSignPayload) {
       const apiCallSig = new FBActionModel();
       apiCallSig.set({
-        testMode: 1,
+        testMode: SM_APP_CONFIG.REACT_APP_HELLOSIGN_TEST_MODE,
         requestMethod: "POST",
         requestUrl: SEND_SIGNATURE_REQUEST_URL,
         payload,

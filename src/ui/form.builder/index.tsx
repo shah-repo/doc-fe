@@ -17,7 +17,6 @@ export { default as FBFormMarkDown } from "./FBFormMarkDown/FBFormMarkDown";
 export * from "./FBFormMarkDown/FBFormMarkDown.types";
 export { default as FBHelloSign } from "./FBHelloSign/FBHelloSign";
 export * from "./FBHelloSign/FBHelloSign.types";
-export { default as FBHelloSignPremade } from "./FBHelloSignPremade/FBHelloSignPremade";
 export { default as FBMapWrapper } from "./FBMapWrapper/FBMapWrapper";
 export * from "./FBMapWrapper/FBMapWrapper.types";
 export { default as FBMediaAlbum } from "./FBMediaAlbum/FBMediaAlbum";
