@@ -23,7 +23,7 @@ export const withEditorRenderer =
     let defaultLabel: string | undefined;
     FBValidatorStore.setActiveValidatorType(type);
     _.includes(pickDefaultLabel, type) && (defaultLabel =
-      intl.formatMessage({ id: `form.builder.${type}` })
+      _.get(props, "values.label") || intl.formatMessage({ id: `form.builder.${type}` })
     );
 
     // const schemaItem = (): FBTemplateSchema => ({
@@ -42,8 +42,11 @@ export const withEditorRenderer =
     };
 
     const onClick = () => {
-      const label = _.get(props, "values.label", "");
-      if (!_.includes(omitLabelValidation, type) && _.isEmpty(label)) {
+      let label = _.get(props, "values.label");
+      if (_.includes(pickDefaultLabel, type) && _.isUndefined(label)) {
+        label = defaultLabel;
+      }
+      if (!_.includes(omitLabelValidation, type) && !label) {
         FBDynamicValidatorStore.setHelperText({
           label: ["The Label field is required."],
         });
