@@ -9,6 +9,7 @@ import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 import editorStore from "../stores/ui/FBEditorStore";
 import FBStore from "../stores/ui/FBStore";
 import FBValidatorStore from "../stores/ui/FBValidatorStore";
+import { FBInputProps } from "../types/common";
 import { FBEditorFormProps } from "../types/editor";
 import { FBTemplateSchema } from "../types/store";
 
@@ -33,6 +34,18 @@ export const withEditorRenderer =
     //   // rules: FBValidatorStore.getRules(),
     //   ...props.values,
     // });
+
+    function setSectionOrdering() {
+      let sectionNumbering = 1;
+      _.map(FBStore.getSchema(), (schemaItem: FBInputProps) => {
+        if (schemaItem.type !== "sectionnumbering") {
+          return;
+        }
+        const slicedLabel = (_.get(schemaItem, "label", "") as string).slice(0, -1);
+        schemaItem.label = `${slicedLabel} ${sectionNumbering}`;
+        sectionNumbering++;
+      });
+    }
 
     const propsByType = (): Dictionary<FBTemplateSchema | string[]> => {
       if (type === "action") {
@@ -80,7 +93,7 @@ export const withEditorRenderer =
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
         customValidator,
         formValuesRules: FBValidatorStore.formValues,
-        ...(type === "sectionnumbering" && { label: `${values.label} #${FBStore.sectionNumbering}`}),
+        ...(type === "sectionnumbering" && { label: `${values.label} #${FBStore.sectionNumber(index)}`}),
         ...(type === "instructionsmediaupload" && { isTemplate: true }),
         // Will be deprecated (refactoring)
         ...(defaultLabel && { label: intl.formatMessage({ id: defaultLabel }) }),
@@ -97,6 +110,7 @@ export const withEditorRenderer =
       newSchema.splice(index, removeEl, schema);
       FBStore.setSchema(newSchema);
       editorStore.open = false;
+      setSectionOrdering();
     };
 
     const buttonLabel = mode === "create"
@@ -107,6 +121,7 @@ export const withEditorRenderer =
       <Box>
         <InputType
           {...(defaultLabel && {defaultValue: defaultLabel })}
+          {...{index}}
         />
         <Box display="flex" flexDirection="row-reverse" mx={-1}>
           <FBButton label={buttonLabel} onClick={onClick} />

@@ -24,17 +24,19 @@ export class FormBuilderStore {
     };
   }
 
-  @computed get sectionNumbering(): number {
-    const sectionNumbering = _.filter(this.getSchema(), { type: "sectionnumbering"});
-    return _.size(sectionNumbering) + 1;
-  }
-
   @observable public name?: string = undefined;
   @observable public schema: FBTemplateSchema[] = [];
   @observable public values: Dictionary<any> = {};
   @observable public mode: FBWorkspaceMode = "none";
   public docId = "";
   public documentId = "";
+
+  @action public sectionNumber = (endIndex: number): number => {
+    const sections = _.filter(this.getSchema(), (schemaItem, index) =>
+      endIndex > index && schemaItem.type === "sectionnumbering"
+    );
+    return _.size(sections) + 1;
+  };
 
   @action public setMode = (mode: FBWorkspaceMode) => {
     this.mode = mode;
