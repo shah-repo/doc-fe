@@ -20,21 +20,19 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
   closeDialog,
 }) => {
   const [errorMessage, setErrorMessage] = useState("");
-  useEffect(() => {
-    return () => {
-      FBStore.setValues({
-        ...FBStore.getValues(),
-        units: undefined,
-        partNumber: undefined,
-        date: undefined,
-        description: undefined,
-        unitPrice: undefined,
-        tax: undefined,
-        order: undefined,
-        isTraceabilityRequired: undefined,
-      });
-      setErrorMessage("");
-    };
+  useEffect(() => () => {
+    FBStore.setValues({
+      ...FBStore.getValues(),
+      units: undefined,
+      partNumber: undefined,
+      date: undefined,
+      description: undefined,
+      unitPrice: undefined,
+      tax: undefined,
+      order: undefined,
+      isTraceabilityRequired: undefined,
+    });
+    setErrorMessage("");
   }, []);
   const handleSubmit = (values: PurchaseOrderItem) => {
     values.date = values.date || new Date();
@@ -72,12 +70,12 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
       <Form>
         <Box marginBottom="10px">
           <Typography color="error">
-              {errorMessage}
+            {errorMessage}
           </Typography>
         </Box>
         <FBTextField
           inputProps={{ type: "number" }}
-          label="form.builder.field.order"
+          label="form.builder.field.qunatity.ordered"
           name="order"
         />
         <FBTextField
@@ -85,15 +83,15 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
           name="units"
         />
         <FBTextField
-          label="form.builder.field.pn"
+          label="form.builder.field.part.number"
           name="partNumber"
         />
         <FBDatePicker
-          label="form.builder.field.date"
+          label="form.builder.field.date.required"
           name="date"
         />
         <FBTextField
-          label="form.builder.field.pn.description"
+          label="form.builder.field.supplier.part.number"
           name="description"
           rows="3"
         />
