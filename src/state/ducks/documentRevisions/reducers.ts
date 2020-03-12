@@ -61,6 +61,9 @@ export const documentsById = (
 ): DocumentByIdState => {
   switch (action.type) {
     case DOCUMENT_REVISION_SET:
+      if (!action.payload.document) {
+        return state;
+      }
       return {
         ...state,
         [action.payload.document.id]: {
