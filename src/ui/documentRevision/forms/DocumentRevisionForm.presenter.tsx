@@ -125,7 +125,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     if (proposedDocId) {
       setFieldValue("document.docId", proposedDocId);
     }
-  }, [proposedDocId, setFieldValue]);
+    if (_.isEmpty(values.document?.documentType?.id)) {
+      setFieldValue("document.docId", "");
+    }
+  }, [values.document, proposedDocId, setFieldValue]);
 
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
 
