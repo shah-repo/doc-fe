@@ -43,6 +43,8 @@ export { default as FBSwitchPanelState } from "./FBSwitchPanel//FBSwitchPanel.st
 export * from "./FBSwitchPanel//FBSwitchPanel.types";
 export { default as FBTabs } from "./FBTabs/FBTabs";
 export * from "./FBTabs/FBTabs.types";
+export { default as FBTimerField } from "./FBTimerField/FBTimerField";
+export * from "./FBTimerField/FBTimerField.types";
 export { default as FBValidationEditor } from "./FBValidationEditor/FBValidationEditor";
 export * from "./FBValidationEditor/FBValidationEditor.types";
 export { default as FBValidationMode } from "./FBValidationMode/FBValidationMode";

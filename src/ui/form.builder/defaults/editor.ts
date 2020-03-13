@@ -1,5 +1,5 @@
 import { Dictionary } from "lodash";
-import { FBAutocomplete, FBMediaAlbumField, FBParagraph, FBQuantityField } from "..";
+import { FBAutocomplete, FBMediaAlbumField, FBParagraph, FBQuantityField, FBTimerField } from "..";
 import FBActionContainer from "../components/actions/FBActionContainer";
 import FBActionEditor from "../components/editors/FBActionEditor";
 import FBAutocompleteEditor from "../components/editors/FBAutocompleteEditor";
@@ -54,6 +54,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   pause: FBLabelEditor,
   createlabel: FBLabelEditor,
   quantity: FBLabelEditor,
+  timer: FBLabelEditor,
 };
 
 export const FBFieldComponent: Dictionary<any> = {
@@ -82,6 +83,7 @@ export const FBFieldComponent: Dictionary<any> = {
   pause: FBButton,
   createlabel: FBButton,
   quantity: FBQuantityField,
+  timer: FBTimerField,
 };
 
 export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
@@ -99,6 +101,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "radiogroup",
     "fileupload",
     "quantity",
+    "timer",
     "purchaseorder",
     "instructionsmediaupload",
     "evidencemediaupload",
@@ -110,8 +113,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
 
 export const FBGroupEditorOptions: Dictionary<any[]> = {
   autocomplete: [
-    { value: "multiple", text: "form.builder.multi.select",
-    }, {
+    { value: "multiple", text: "form.builder.multi.select" }, {
       value: "includeQRScan", text: "form.builder.include.qr.scan",
     },
   ],
