@@ -78,6 +78,9 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
         payload,
       });
       const data = await FBActionStore.apiCall(apiCall.toJS() as unknown as FBActionModel);
+      if (!data) {
+        return helloSignState && helloSignState.setOverlay(false);
+      }
       helloSignIframe(data);
     }
 
