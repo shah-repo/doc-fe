@@ -1,5 +1,5 @@
 import { Dictionary } from "lodash";
-import { FBAutocomplete, FBMediaAlbumField, FBParagraph, FBQuantityField } from "..";
+import { FBAutocomplete, FBMediaAlbumField, FBParagraph, FBQuantityField, FBTimerField } from "..";
 import FBActionContainer from "../components/actions/FBActionContainer";
 import FBActionEditor from "../components/editors/FBActionEditor";
 import FBAutocompleteEditor from "../components/editors/FBAutocompleteEditor";
@@ -27,7 +27,7 @@ import FBLink from "../components/navigation/FBLink";
 import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaItem";
 import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
 import FBEditorParagraph from "../FBEditorParagraph/FBEditorParagraph";
-import FBEditorSectionNumbering from "../FBEditorSectionNumbering";
+import FBEditorStepSection from "../FBEditorStepSection";
 import FBHelloSign from "../FBHelloSign";
 import { FBEditorElementType } from "../types/editor";
 
@@ -49,13 +49,14 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   hellosign: FBLabelEditor,
   purchaseorder: FBLabelEditor,
   paragraph: FBEditorParagraph,
-  sectionnumbering: FBEditorSectionNumbering,
+  stepsection: FBEditorStepSection,
   instructionsmediaupload: FBLabelEditor,
   evidencemediaupload: FBLabelEditor,
   checkpoint: FBLabelEditor,
   pause: FBLabelEditor,
   createlabel: FBLabelEditor,
   quantity: FBLabelEditor,
+  timer: FBLabelEditor,
 };
 
 export const FBFieldComponent: Dictionary<any> = {
@@ -78,17 +79,18 @@ export const FBFieldComponent: Dictionary<any> = {
   hellosign: FBHelloSign,
   purchaseorder: FBPurchaseOrderField,
   paragraph: FBParagraph,
-  sectionnumbering: FBSectionBox,
+  stepsection: FBSectionBox,
   instructionsmediaupload: FBMediaAlbumField,
   evidencemediaupload: FBMediaAlbumField,
   checkpoint: FBButton,
   pause: FBButton,
   createlabel: FBButton,
   quantity: FBQuantityField,
+  timer: FBTimerField,
 };
 
 export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
-  section: ["section", "subsection", "sectionnumbering"],
+  section: ["section", "subsection", "stepsection"],
   representation: ["paragraph"],
   basics: [
     "textfield",
@@ -102,6 +104,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "radiogroup",
     "fileupload",
     "quantity",
+    "timer",
     "purchaseorder",
     "instructionsmediaupload",
     "evidencemediaupload",
@@ -114,9 +117,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
 
 export const FBGroupEditorOptions: Dictionary<any[]> = {
   autocomplete: [
-    {
-      value: "multiple", text: "form.builder.multi.select",
-    }, {
+    { value: "multiple", text: "form.builder.multi.select" }, {
       value: "includeQRScan", text: "form.builder.include.qr.scan",
     },
   ],
@@ -143,4 +144,5 @@ export const pickDefaultLabel: FBEditorElementType[] = [
   "pause",
   "createlabel",
   "quantity",
+  "stepsection",
 ];

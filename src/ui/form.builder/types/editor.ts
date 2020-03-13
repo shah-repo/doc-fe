@@ -26,13 +26,14 @@ export type FBEditorElementType =
   | "hellosign"
   | "purchaseorder"
   | "paragraph"
-  | "sectionnumbering"
+  | "stepsection"
   | "instructionsmediaupload"
   | "evidencemediaupload"
   | "checkpoint"
   | "pause"
   | "createlabel"
-  | "quantity";
+  | "quantity"
+  | "timer";
 
 export type FBEditorModeType = "create" | "update";
 
