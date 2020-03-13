@@ -4,6 +4,8 @@ export { default as FBAutocomplete } from "./FBAutocomplete/FBAutocomplete";
 export { default as FBAutocompleteState } from "./FBAutocomplete/FBAutocomplete.state";
 export * from "./FBAutocomplete/FBAutocomplete.types";
 export { default as FBEditorParagraph } from "./FBEditorParagraph/FBEditorParagraph";
+export { default as FBEditorStepSection } from "./FBEditorStepSection/FBEditorStepSection";
+export * from "./FBEditorStepSection/FBEditorStepSection.types";
 export { default as FBFieldBottomBar } from "./FBFieldBottomBar/FBFieldBottomBar";
 export * from "./FBFieldBottomBar/FBFieldBottomBar.types";
 export { default as FBFieldMarkDown } from "./FBFieldMarkDown/FBFieldMarkDown";

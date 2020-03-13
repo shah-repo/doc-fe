@@ -25,7 +25,7 @@ export type FBEditorElementType =
   | "action"
   | "purchaseorder"
   | "paragraph"
-  | "sectionnumbering"
+  | "stepsection"
   | "instructionsmediaupload"
   | "evidencemediaupload"
   | "checkpoint"

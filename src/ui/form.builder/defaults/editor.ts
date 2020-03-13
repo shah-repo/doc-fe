@@ -27,7 +27,7 @@ import FBLink from "../components/navigation/FBLink";
 import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaItem";
 import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
 import FBEditorParagraph from "../FBEditorParagraph/FBEditorParagraph";
-import FBEditorSectionNumbering from "../FBEditorSectionNumbering";
+import FBEditorStepSection from "../FBEditorStepSection";
 import { FBEditorElementType } from "../types/editor";
 
 export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = {
@@ -47,7 +47,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   action: FBActionEditor,
   purchaseorder: FBLabelEditor,
   paragraph: FBEditorParagraph,
-  sectionnumbering: FBEditorSectionNumbering,
+  stepsection: FBEditorStepSection,
   instructionsmediaupload: FBLabelEditor,
   evidencemediaupload: FBLabelEditor,
   checkpoint: FBLabelEditor,
@@ -76,7 +76,7 @@ export const FBFieldComponent: Dictionary<any> = {
   action: FBActionContainer,
   purchaseorder: FBPurchaseOrderField,
   paragraph: FBParagraph,
-  sectionnumbering: FBSectionBox,
+  stepsection: FBSectionBox,
   instructionsmediaupload: FBMediaAlbumField,
   evidencemediaupload: FBMediaAlbumField,
   checkpoint: FBButton,
@@ -87,7 +87,7 @@ export const FBFieldComponent: Dictionary<any> = {
 };
 
 export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
-  section: ["section", "subsection", "sectionnumbering"],
+  section: ["section", "subsection", "stepsection"],
   representation: ["paragraph"],
   basics: [
     "textfield",
@@ -140,4 +140,5 @@ export const pickDefaultLabel: FBEditorElementType[] = [
   "pause",
   "createlabel",
   "quantity",
+  "stepsection",
 ];
