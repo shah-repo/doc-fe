@@ -6,6 +6,7 @@ import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors 
 import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
+import HelloSignAllSignedRefreshSockets from "../document.revision/HelloSignAllSignedRefreshSockets";
 import SummaryPresenter from "../document.revision/summary/presenter";
 import CloneContainer from "./Clone.container";
 import DocumentRevisionUpdateContainer from "./DocumentRevisionUpdate.container";
@@ -17,7 +18,6 @@ interface StateProps {
   documentRevision: DocumentRevision;
   currentEmployeeId: string;
   isCompanyAdmin: boolean;
-
 }
 
 interface DispatchProps {
@@ -86,13 +86,13 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
   }, [currentEmployeeId, documentRevision, isCompanyAdmin]);
 
   const canEdit =
-      documentRevision &&
-      !isNewVersion &&
-      !isNewOutput &&
-      canEditDocumentRevision(documentRevision, currentUserEmail);
+    documentRevision &&
+    !isNewVersion &&
+    !isNewOutput &&
+    canEditDocumentRevision(documentRevision, currentUserEmail);
 
   const canPreview =
-      documentRevision && !(canEdit || isNewVersion || isNewOutput);
+    documentRevision && !(canEdit || isNewVersion || isNewOutput);
 
   return (
     <AsyncGate
@@ -100,6 +100,7 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
       asyncAction={loadDocumentRevisionAction}
       startActionOnMount={false}
     >
+      <HelloSignAllSignedRefreshSockets documentRevision={documentRevision} />
       {canEdit && (
         <DocumentRevisionUpdateContainer
           documentRevision={documentRevision}

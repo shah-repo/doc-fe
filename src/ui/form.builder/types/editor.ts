@@ -23,6 +23,7 @@ export type FBEditorElementType =
   | "schemaSelect"
   | "schemaItem"
   | "action"
+  | "hellosign"
   | "purchaseorder"
   | "paragraph"
   | "stepsection"

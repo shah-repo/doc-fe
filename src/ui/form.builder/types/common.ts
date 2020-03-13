@@ -55,8 +55,7 @@ export type FBOptionProps =
     value?: any;
   };
 
-export type FBInputProps =
-  & Omit<FBFormikFieldProps, "name">
+export type FBInputProps = Omit<FBFormikFieldProps, "name">
   & FBLabelProps
   & Pick<FBContextProps, "includeContext" | "showContext" | "contextLabel">
   & Pick<SelectProps, "renderValue">
@@ -64,22 +63,27 @@ export type FBInputProps =
   & Pick<FBActionContainerProps, "actions">
   & Pick<FBOptionProps, "optionId" | "options" | "optionValueKey">
   & Pick<BaseTextFieldProps,
-  | "children"
-  | "value"
-  | "disabled"
-  | "name"
-  | "helperText"
-  | "defaultValue"
-  | "rows"
-  | "placeholder"
-  | "hidden"
+    | "children"
+    | "value"
+    | "disabled"
+    | "name"
+    | "helperText"
+    | "defaultValue"
+    | "rows"
+    | "placeholder"
+    | "hidden"
+    | "fullWidth"
   >
   & {
     index?: number;
     type?: FBEditorElementType | string;
     linkUrl?: string;
     onChange?: (e: any, value: any) => void;
-    afterChange?: (fieldName: string, value: any, values: Dictionary<any>) => void;
+    afterChange?: (
+      fieldName: string,
+      value: any,
+      values: Dictionary<any>,
+    ) => void;
     rules?: string;
     applicableIn?: string[];
     checked?: boolean;
@@ -93,17 +97,17 @@ export type FBInputProps =
     tooltip?: string;
     validationMode?: FBValidationModeType[];
     formValuesRules?: Dictionary<any>;
+    templateId?: string;
     isTemplate?: boolean;
+    hellosignFlowProps?: any;
     valueType?: "object" | "key";
     paragraph?: string;
     includeQRScan?: boolean;
   };
 
-export type FBFormDefaultProps =
-  & FBInputProps
-  & FBLabelRendererProps
-  & FBOptionRendererProps
-  & {
+export type FBFormDefaultProps = FBInputProps &
+  FBLabelRendererProps &
+  FBOptionRendererProps & {
     index?: number;
     type?: FBEditorElementType | string;
     readOnly?: boolean;
@@ -130,12 +134,10 @@ export type FBOnChangeType =
   | string
   | Date;
 
-export type FBOnChangeProps =
-  & FormikHybridFieldProps
-  & Pick<SelectProps, "onChange" | "value">
-  & Pick<FBFormDefaultProps, "validatorDelimiter">
-  & Pick<OutlinedTextFieldProps, "error" | "helperText">
-  & {
+export type FBOnChangeProps = FormikHybridFieldProps &
+  Pick<SelectProps, "onChange" | "value"> &
+  Pick<FBFormDefaultProps, "validatorDelimiter"> &
+  Pick<OutlinedTextFieldProps, "error" | "helperText"> & {
     value?: any;
     onChange?: (trigger: any) => void;
   };
