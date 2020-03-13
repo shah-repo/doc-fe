@@ -4,6 +4,8 @@ export { default as FBAutocomplete } from "./FBAutocomplete/FBAutocomplete";
 export { default as FBAutocompleteState } from "./FBAutocomplete/FBAutocomplete.state";
 export * from "./FBAutocomplete/FBAutocomplete.types";
 export { default as FBEditorParagraph } from "./FBEditorParagraph/FBEditorParagraph";
+export { default as FBEditorStepSection } from "./FBEditorStepSection/FBEditorStepSection";
+export * from "./FBEditorStepSection/FBEditorStepSection.types";
 export { default as FBFieldBottomBar } from "./FBFieldBottomBar/FBFieldBottomBar";
 export * from "./FBFieldBottomBar/FBFieldBottomBar.types";
 export { default as FBFieldMarkDown } from "./FBFieldMarkDown/FBFieldMarkDown";
@@ -43,6 +45,8 @@ export { default as FBSwitchPanelState } from "./FBSwitchPanel//FBSwitchPanel.st
 export * from "./FBSwitchPanel//FBSwitchPanel.types";
 export { default as FBTabs } from "./FBTabs/FBTabs";
 export * from "./FBTabs/FBTabs.types";
+export { default as FBTimerField } from "./FBTimerField/FBTimerField";
+export * from "./FBTimerField/FBTimerField.types";
 export { default as FBValidationEditor } from "./FBValidationEditor/FBValidationEditor";
 export * from "./FBValidationEditor/FBValidationEditor.types";
 export { default as FBValidationMode } from "./FBValidationMode/FBValidationMode";

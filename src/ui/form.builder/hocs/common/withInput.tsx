@@ -1,7 +1,6 @@
 import _, { Dictionary } from "lodash";
 import { observer, useObserver } from "mobx-react";
 import React from "react";
-import { FBFormValues } from "../../defaults/formik";
 import FBDynamicValidatorStore from "../../stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../stores/ui/FBStore";
 import FBValidatorStore from "../../stores/ui/FBValidatorStore";
@@ -30,14 +29,13 @@ export const withInput = <T extends FBInputProps>(
     ...props
   }: T) => {
     const elements = React.Children.toArray(children);
-    value = _.get(form, `values.${name}`);
+    value =
+      _.get(form, `values.${name}`) ||
+      _.get(FBStore.getValues(), name) ||
+      defaultValue ||
+      _.get(FBValidatorStore.formValues, name) ||
+      "";
 
-    _.isUndefined(value) &&
-      (value =
-        _.get(FBStore.getValues(), name) ||
-        defaultValue ||
-        _.get(FBValidatorStore.formValues, name) ||
-        _.get(FBFormValues, type));
     error = Boolean(_.get(form, `errors.${name}`));
     helperText =
       (error && _.get(form, `errors.${name}`)) ||
