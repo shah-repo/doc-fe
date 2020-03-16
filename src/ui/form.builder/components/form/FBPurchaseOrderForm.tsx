@@ -1,5 +1,5 @@
 import { Box, Typography } from "@material-ui/core";
-import { Form, Formik } from "formik";
+import { Form, Formik, FormikErrors } from "formik";
 import React, { useEffect, useState } from "react";
 import FBStore from "../../stores/ui/FBStore";
 import FBButton from "../inputs/FBButton";
@@ -12,12 +12,14 @@ interface Props {
   initialValues?: PurchaseOrderItem;
   onSubmit: (values: any) => void;
   closeDialog: () => void;
+  items: PurchaseOrderItem[];
 }
 
 const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
   initialValues = {} as PurchaseOrderItem,
   onSubmit,
   closeDialog,
+  items,
 }) => {
   const [errorMessage, setErrorMessage] = useState("");
   useEffect(() => () => {
@@ -62,10 +64,28 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
 
     onSubmit(values);
   };
+  const validate = (values: PurchaseOrderItem) => {
+    const errors: FormikErrors<any> = {};
+
+    const isUniquePartNumber = !items.map((item) => item.partNumber).includes(values.partNumber);
+    const isPartNumberInitialValue = initialValues.partNumber === values.partNumber;
+
+    if (!isUniquePartNumber && !isPartNumberInitialValue) {
+      // errors.partNumber = "form.builder.already.taken";
+      errors.partNumber = "Part Number must be unique";
+      setErrorMessage("Part Number must be unique");
+    } else {
+      errorMessage && setErrorMessage("");
+    }
+
+    return errors;
+  };
+
   return (
     <Formik
       initialValues={initialValues}
       onSubmit={handleSubmit}
+      validate={validate}
     >
       <Form>
         <Box marginBottom="10px">
