@@ -15,9 +15,10 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
   disabled,
   name,
   tooltip = "",
+  fullWidth = true,
 }) => (
   <Tooltip title={tooltip} placement="bottom-start">
-    <FormControl error={error} fullWidth>
+    <FormControl {...{error, fullWidth}}>
       {children}
       {!_.isEmpty(helperText) && (
         <FormHelperText>

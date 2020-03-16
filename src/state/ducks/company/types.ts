@@ -32,6 +32,7 @@ export interface Company {
   users: User[];
   documentTypes: DocumentType[];
   whiteLabeling: WhiteLabeling;
+  helloSignAppId: string;
   teamId: string;
   addresses: [];
   acctCodes: [];

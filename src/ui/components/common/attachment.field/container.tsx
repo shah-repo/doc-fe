@@ -49,6 +49,13 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
       const attachments: Attachment[] = field.value ? [...field.value] : [];
       attachment && attachments.push(attachment);
 
+      FBStore.setValues({
+        ...FBStore.values,
+        [name as string]: _.map(attachments, (attach) =>
+          _.pick(attach, ["id", "name", "s3link", "type"]),
+        ),
+      });
+
       if (FBStore.mode === "form") {
         FBStore.setValues({
           ...FBStore.values,

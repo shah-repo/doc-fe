@@ -28,6 +28,7 @@ import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaIte
 import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
 import FBEditorParagraph from "../FBEditorParagraph/FBEditorParagraph";
 import FBEditorStepSection from "../FBEditorStepSection";
+import FBHelloSign from "../FBHelloSign";
 import { FBEditorElementType } from "../types/editor";
 
 export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = {
@@ -45,6 +46,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   hyperlink: FBHyperlinkEditor,
   fileupload: FBLabelStepperEditor,
   action: FBActionEditor,
+  hellosign: FBLabelEditor,
   purchaseorder: FBLabelEditor,
   paragraph: FBEditorParagraph,
   stepsection: FBEditorStepSection,
@@ -74,6 +76,7 @@ export const FBFieldComponent: Dictionary<any> = {
   schemaSelect: FBValidatorSchemaSelect,
   schemaItem: FBValidatorSchemaItem,
   action: FBActionContainer,
+  hellosign: FBHelloSign,
   purchaseorder: FBPurchaseOrderField,
   paragraph: FBParagraph,
   stepsection: FBSectionBox,
@@ -106,6 +109,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "instructionsmediaupload",
     "evidencemediaupload",
   ],
+  approvals: ["hellosign"],
   buttons: ["checkpoint", "pause", "createlabel"],
   lists: ["autocomplete"],
   actions: ["action"],
