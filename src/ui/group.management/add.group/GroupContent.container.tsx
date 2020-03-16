@@ -1,19 +1,14 @@
-import { omit } from "lodash";
+import { isEmpty, omit } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
 import { groupManagementActions } from "../../../state/ducks/groupManagement";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
-import {
-  GetEmployeeResponse,
-  LoadCompanyGroup,
-  userManagementActions,
-
-} from "../../../state/ducks/userManagement";
+import { GetEmployeeResponse, LoadCompanyGroup, userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import useAsync from "../../hooks/useAsync";
 import { getHasOfficialPermissions } from "../utils/helpers";
-import { toEmployeeIds, toMembersEditRequestBody, toMembersOptions } from "../utils/transform";
+import { toArray, toEmployeeIds, toMembersEditRequestBody, toMembersOptions } from "../utils/transform";
 import { DEFAULT_GROUP } from "../utils/types";
 import GroupContentPresenter from "./GroupContent.presenter";
 
@@ -34,6 +29,7 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
 }) => {
   const [group, setGroup] = useState<GroupRequestBody>(DEFAULT_GROUP);
   const [members, setMembers] = useState<OptionType[]>([]);
+  const [parentGroups, setParentGroups] = useState();
   const currentEmployeePermissions = useSelector(
     authSelectors.currentEmployeePermissions,
   );
@@ -41,15 +37,16 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
   const hasOfficialPermission = getHasOfficialPermissions(
     currentEmployeePermissions,
   );
+  const allGroups = useSelector(userManagementSelectors.getGroupsOptions);
 
   const dispatch = useDispatch();
   const createGroupAsync = useAsync({
-      onSuccess: (response) => {
-        handleTableRefresh();
-        handleReset();
-        dispatch(userManagementActions.loadCompanyGroups());
-      },
-    });
+    onSuccess: (response) => {
+      handleTableRefresh();
+      handleReset();
+      dispatch(userManagementActions.loadCompanyGroups());
+    },
+  });
   const editGroupAsync = useAsync({
     onSuccess: (response) => {
       handleTableRefresh();
@@ -61,7 +58,7 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
   const handleCreateGroup = (values: GroupRequestBody) => {
     dispatch(
       groupManagementActions.createGroup(
-        {...values, employees: toMembersEditRequestBody(members)},
+        { ...values, employees: toMembersEditRequestBody(members) },
         createGroupAsync,
       ),
     );
@@ -69,8 +66,8 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
   const handleEditGroup = (groupId: string, values: GroupRequestBody) => {
     const isGroupNameChanged = !(selectedGroup!.name === values.name);
     const body = isGroupNameChanged ?
-                {...values, employees: toMembersEditRequestBody(members)} :
-                omit({...values, employees: toMembersEditRequestBody(members)}, ["name"]);
+      { ...values, employees: toMembersEditRequestBody(members) } :
+      omit({ ...values, employees: toMembersEditRequestBody(members) }, ["name"]);
     dispatch(
       groupManagementActions.editGroup(
         groupId,
@@ -89,6 +86,7 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
         isOfficial: selectedGroup.isOfficial,
         tags: selectedGroup.tags || [],
         employees: toEmployeeIds(selectedGroup.employees),
+        parentGroups: selectedGroup.parentGroups,
       });
       setMembers(
         toMembersOptions(
@@ -100,6 +98,7 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
 
   const handleReset = () => {
     setGroup(DEFAULT_GROUP);
+    setParentGroups([]);
     setMembers([]);
   };
 
@@ -107,8 +106,16 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
     isCreateMode ?  handleCreateGroup(group) : handleEditGroup(selectedGroup!.id, group);
   };
 
-  const  handleAsyncState = () => {
-    return isCreateMode ? createGroupAsync.asyncState : editGroupAsync.asyncState;
+  const  handleAsyncState = () => isCreateMode ? createGroupAsync.asyncState : editGroupAsync.asyncState;
+
+  const onSelectParentGroup = (selectedItems: any) => {
+    if (!isEmpty(selectedItems)) {
+      const selectedItemsData = allGroups.filter((group) => selectedItems.some((item) => group.label === item.label));
+      setParentGroups(selectedItemsData);
+      setGroup({ ...group, parentGroups: toArray(selectedItems) });
+    } if (isEmpty(selectedItems)) {
+      setParentGroups([]);
+    }
   };
 
   return (
@@ -125,6 +132,9 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
       group={group}
       setGroup={setGroup}
       handleAsyncState={handleAsyncState}
+      allGroups={allGroups}
+      parentGroups={parentGroups}
+      onSelectParentGroup={onSelectParentGroup}
     />
   );
 };

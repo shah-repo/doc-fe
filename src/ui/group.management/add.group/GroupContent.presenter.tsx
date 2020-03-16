@@ -11,6 +11,7 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import FormMessage from "../../components/forms/FormMessage";
 import Text from "../../components/Text";
 import { toArray, toMembersOptions, toOptions } from "../utils/transform";
+import GroupInfoPresenter from "./GroupInfo.presenter";
 import GroupType from "./GroupType";
 
 interface Props {
@@ -26,6 +27,9 @@ interface Props {
   group: GroupRequestBody;
   setGroup: (values: GroupRequestBody) => void;
   handleAsyncState: () => AsyncActionPayload;
+  allGroups: any[];
+  parentGroups: any[];
+  onSelectParentGroup: (selectedItems) => void;
 }
 
 export const GroupContentPresenter: React.FunctionComponent<Props> = ({
@@ -41,6 +45,9 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
   group,
   setGroup,
   handleAsyncState,
+  allGroups,
+  parentGroups,
+  onSelectParentGroup,
 }) => {
   const intl = useIntl();
   const canCreateOfficialGroup = hasOfficialPermission && group.isOfficial;
@@ -113,6 +120,36 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
     </Box>
   );
 
+  const renderSelectedGroupInfo = () => parentGroups.map((parentGroup, index) => (
+    <Box mt={6} width="700px" padding="10px" border="1px solid grey" borderRadius={4} key={index} >
+      <Typography variant="h6" style={{ marginBottom: 5 }}>
+        <Text message={`${parentGroup.label} Info`}/>
+      </Typography>
+      <GroupInfoPresenter
+        items={parentGroup.permissions}
+        title="common.permissions"
+      />
+      <GroupInfoPresenter
+        items={parentGroup.tags}
+        title="common.tags"
+      />
+    </Box>
+  ));
+
+  const parentGroupsRenderer = () => (
+    <Box width={700} mt={5}>
+      <Typography variant="h4" style={{ marginBottom: "16px" }}>
+        <Text translation="common.parent.groups" />
+      </Typography>
+      <Select
+        id="Group-addParentGroups"
+        isMulti={true}
+        options={toOptions(allGroups.map((group) => group.label))}
+        onChange={(selectedItems: any) => onSelectParentGroup(selectedItems)}
+      />
+    </Box>
+  );
+
   const resetButtonRenderer = () => (
     <Button variant="outlined" onClick={handleReset} id="Group-reset">
       <Text translation="common.reset" />
@@ -129,7 +166,6 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
       <Text translation="common.save" />
     </Button>
   );
-
   return (
     <Grid
       container={true}
@@ -145,6 +181,8 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
         {addMembersRenderer()}
         {canCreateOfficialGroup && permissionsRenderer()}
         {canCreateOfficialGroup && tagsRenderer()}
+        {canCreateOfficialGroup && parentGroupsRenderer()}
+        {!isEmpty(parentGroups) && renderSelectedGroupInfo()}
         <Grid item={true} style={{ textAlign: "right" }}>
           {isCreateMode && resetButtonRenderer()}
           {submitButtonRenderer()}

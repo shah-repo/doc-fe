@@ -267,6 +267,7 @@
   "common.warning.message": "Are you sure you want to approve and release {name}?",
   "common.permissions": "Permissions",
   "common.tags": "Tags",
+  "common.parent.groups": "Parent groups",
   "common.renderHTML": "Render HTML",
   "common.download.html": "Download HTML",
   "output.info": "Form Info",

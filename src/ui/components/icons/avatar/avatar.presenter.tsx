@@ -29,7 +29,7 @@ const AvatarPresenter: React.FunctionComponent<Props> = ({
     </Box>
   );
   return (
-    <Box display="flex" justifyContent="center" mt={20}>
+    <Box display="flex" justifyContent="center" mt={"-115px"}>
       <Box
         display="flex"
         alignItems="flex-end"
