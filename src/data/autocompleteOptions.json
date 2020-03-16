@@ -66,5 +66,13 @@
     "optionValueKey": "id",
     "optionLabelKey": "name",
     "root": "addresses"
+  },
+  {
+    "id": "9",
+    "path": "/company/mine",
+    "label": "GL codes",
+    "optionValueKey": "id",
+    "optionLabelKey": "name",
+    "root": "acctCodes"
   }
 ]
