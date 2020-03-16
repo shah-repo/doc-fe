@@ -11,13 +11,14 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
   labelValues,
   gutter = true,
   hidden,
+  loading,
   ...props
 }) => (
   <Box>
     {!hidden && (
       <Box mb={gutter ? 4 : 0}>
-        {label && <FBLabel {...{ error, label, labelValues }} />}
-        <FBInputControl {...props} {...{label}} />
+        {label && <FBLabel {...{ error, label, labelValues, loading }} />}
+        <FBInputControl {...props} {...{ label }} />
       </Box>
     )}
   </Box>
