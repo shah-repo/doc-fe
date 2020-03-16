@@ -1,11 +1,7 @@
 import Button, { ButtonProps } from "@material-ui/core/Button";
 import React from "react";
 import { connect } from "react-redux";
-import {
-  changeRequestsActions,
-  ChangeRequestTransition,
-  ChangeRequestTransitionResponse,
-} from "../../../../state/ducks/changeRequest";
+import { changeRequestsActions, ChangeRequestTransition, ChangeRequestTransitionResponse } from "../../../../state/ducks/changeRequest";
 import { ApplicationState } from "../../../../state/reducers";
 import { AsyncStatus } from "../../../../state/types";
 import FormMessage from "../../../components/forms/FormMessage";
@@ -49,6 +45,7 @@ const TransitionButton: React.FunctionComponent<Props> = ({
       <FormMessage asyncState={async.asyncState} />
       <FormProgress asyncState={async.asyncState} />
       <Button
+        id="transitionButton"
         variant="contained"
         color="primary"
         onClick={onClick}

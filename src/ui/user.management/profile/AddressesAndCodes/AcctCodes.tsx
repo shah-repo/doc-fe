@@ -33,7 +33,7 @@ export const AcctCodes: React.FunctionComponent<Props> = ({
       title="user.management.codes"
       placeholder="New Acct Code"
       fields={acctCodes}
-      numberValues={true}
+      asyncState={async.asyncState}
     />
   );
 };

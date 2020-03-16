@@ -17,6 +17,7 @@ import styles from "../../profile/UserProfile.styles";
 import { toEmployeeActiveStatusEditRequestBody } from "../../utils/transform";
 import AcctCodes from "../AddressesAndCodes/AcctCodes";
 import Addresses from "../AddressesAndCodes/Addresses";
+import ApiTokenContent from "../apiTokenContent/ApiTokenContent";
 import UserGroups from "../groups/UserGroups";
 
 
@@ -45,6 +46,7 @@ interface OwnProps {
   userId: string;
   isCurrentUser: boolean;
   isUsernameEmpty: boolean;
+  isDeveloper: boolean;
   canUpdateCompany: boolean;
 }
 
@@ -75,6 +77,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
   callbackUpdateWithUpload,
   isCurrentUser,
   isUsernameEmpty,
+  isDeveloper,
   canUpdateCompany,
 }) => {
   const TABLE_NAME = "userManagement";
@@ -243,6 +246,8 @@ export const DialogContent: React.FunctionComponent<Props> = ({
         <Addresses canUpdateCompany={canUpdateCompany} addresses={companyMine.addresses} />
         <AcctCodes canUpdateCompany={canUpdateCompany} acctCodes={companyMine.acctCodes} />
         {showEditUser && updateProfileButtonsRenderer()}
+        {isDeveloper &&
+          <ApiTokenContent />}
       </Box>
     </React.Fragment>
   );

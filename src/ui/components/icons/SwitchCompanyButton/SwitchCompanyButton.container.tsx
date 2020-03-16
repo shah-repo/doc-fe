@@ -23,11 +23,12 @@ const SwitchCompanyButton: React.FunctionComponent<SwitchCompanyButtonProps> = (
   }
   return (
     <div
+      id="switchCompanyButton"
       className={classes.switchButton}
       onClick={handleClick}
     >
       <span className={classes.switchButtonText}>
-        <Text translation="company.switch.button" />
+        <Text translation="company.switch.company" />
       </span>
     </div>
   );

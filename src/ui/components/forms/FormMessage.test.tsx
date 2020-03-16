@@ -12,27 +12,33 @@ describe("FormMessage component unit tests", () => {
   );
 
   it("displays nothing when no message", () => {
-    expect(getWrapper({ asyncState: {
-      status: AsyncStatus.Idle,
-      message: "",
-    }}).text()).toBe("");
+    expect(getWrapper({
+      asyncState: {
+        status: AsyncStatus.Idle,
+        message: "",
+      },
+    }).text()).toBe("");
   });
 
   it("displays message", () => {
-    const wrapper = getWrapper({ asyncState: {
-      status: AsyncStatus.Success,
-      message: "TEST",
-    }});
+    const wrapper = getWrapper({
+      asyncState: {
+        status: AsyncStatus.Success,
+        message: "TEST",
+      },
+    });
 
     expect(wrapper.text()).toEqual("TEST");
     expect(wrapper.find(FormHelperText).prop("error")).toBeFalsy();
   });
 
   it("displays message and sets error flag", () => {
-    const wrapper = getWrapper({ asyncState: {
-      status: AsyncStatus.Error,
-      message: "TEST",
-    }});
+    const wrapper = getWrapper({
+      asyncState: {
+        status: AsyncStatus.Error,
+        message: "TEST",
+      },
+    });
 
     expect(wrapper.text()).toEqual("TEST");
     expect(wrapper.find(FormHelperText).prop("error")).toBeTruthy();

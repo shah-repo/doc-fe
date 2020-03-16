@@ -1,0 +1,11 @@
+{
+  "REACT_APP_API_ENDPOINT": "https://api.demo.enlil.io/api",
+  "REACT_APP_AWS_COGNITO_CLIENT_ID": "4serq1ji6rdqmoe8lki8emrd1f",
+  "REACT_APP_FRONTEND_URL": "https://demo.enlil.io",
+  "REACT_APP_SIGNUP_DOMAIN_URL": "https://shifamed-doc-demo.auth.us-west-2.amazoncognito.com",
+  "REACT_APP_THEME": "DEMO_THEME",
+  "REACT_APP_AWS_BUCKET_PUBLIC": "doc-demo-be-demo-public",
+  "REACT_APP_AWS_REGION": "us-west-2",
+  "REACT_APP_HELLOSIGN_TEST_MODE": "1",
+  "NODE_ENV": "development"
+}

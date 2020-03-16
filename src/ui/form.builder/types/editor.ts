@@ -23,8 +23,17 @@ export type FBEditorElementType =
   | "schemaSelect"
   | "schemaItem"
   | "action"
+  | "hellosign"
   | "purchaseorder"
-  | "mediaQR";
+  | "paragraph"
+  | "stepsection"
+  | "instructionsmediaupload"
+  | "evidencemediaupload"
+  | "checkpoint"
+  | "pause"
+  | "createlabel"
+  | "quantity"
+  | "timer";
 
 export type FBEditorModeType = "create" | "update";
 
@@ -36,5 +45,5 @@ export interface FBEditorFormProps {
 
 export interface FBValidatorGroup {
   name: string;
-  fields: Array<Partial<FBTemplateSchema>>;
+  fields: Partial<FBTemplateSchema>[];
 }

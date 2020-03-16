@@ -1,9 +1,6 @@
 import _ from "lodash";
 import { action, computed, observable } from "mobx";
-import {
-  DocumentRevision,
-  DocumentRevisionStatus,
-} from "../../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { DocumentGroupType } from "../../../../state/ducks/documentRevisions/documentType";
 import { canEditDocumentRevision } from "../../../document.revision/utils/helpers";
 import { FBDocumentRevisionMode, FBDRGroupConfig } from "../../types/store";
@@ -13,13 +10,13 @@ export class FBDocumentRevisionStore {
   @observable public mode: FBDocumentRevisionMode = "none";
 
   @computed public get isOutput(): boolean {
-    return this.mode === "outputCreate" || this.mode === "outputPreview";
+    return this.mode === "outputCreate" || this.mode === "outputPreview" || this.mode === "outputUpdate";
   }
 
   @action public setInitialFBMode = (group: DocumentGroupType) => {
     const docRevMode = group === "FORM" ? "create" : "none";
     this.setMode(docRevMode);
-  }
+  };
 
   @action public setValues = (values: DocumentRevision) => {
     const fmGroup = _.get(values, "document.documentType.group");
@@ -35,7 +32,7 @@ export class FBDocumentRevisionStore {
       default:
         return this.setMode("none");
     }
-  }
+  };
 
   @action public setMode = (mode: FBDocumentRevisionMode) => {
     this.mode = mode;
@@ -47,11 +44,12 @@ export class FBDocumentRevisionStore {
       case "outputPreview":
         return FBStore.setMode("preview");
       case "outputCreate":
+      case "outputUpdate":
         return FBStore.setMode("form");
       default:
         return FBStore.setMode(mode);
     }
-  }
+  };
 
   @action private outputConfig = (values: DocumentRevision) => {
     const schema = _.get(values, "formDocument.formTemplate.schema") || [];
@@ -62,10 +60,13 @@ export class FBDocumentRevisionStore {
       DocumentRevisionStatus.PendingChange,
     ];
     const canEditOutput = editableIn.includes(values.status);
-    const docRevMode = canEditOutput ? "outputCreate" : "outputPreview";
+    let docRevMode: FBDocumentRevisionMode = canEditOutput ? "outputCreate" : "outputPreview";
+    if (docRevMode === "outputCreate" && !_.isEmpty(values.id)) {
+      docRevMode = "outputUpdate";
+    }
 
     this.setGroupConfig({ docRevMode, schema, formInput });
-  }
+  };
 
   @action private fmConfig = (values: DocumentRevision) => {
     const schema = _.get(values, "formTemplate.schema") || [];
@@ -76,7 +77,7 @@ export class FBDocumentRevisionStore {
       docRevMode = "preview";
     }
     this.setGroupConfig({ docRevMode, schema, formInput });
-  }
+  };
 
   @action private setGroupConfig = ({
     docRevMode,
@@ -86,7 +87,7 @@ export class FBDocumentRevisionStore {
     this.setMode(docRevMode);
     FBStore.setSchema(schema);
     FBStore.setValues(formInput);
-  }
+  };
 }
 
 const FBDRStore = new FBDocumentRevisionStore();

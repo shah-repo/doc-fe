@@ -8,10 +8,11 @@ export function withFormik<T extends FormikHybridFieldProps, U>(
 ) {
 
   return class extends React.Component<Subtract<T, FieldProps>> {
+    public static displayName = "FormikWrapper";
 
     public render() {
       const childrenRenderer = (fieldProps: FieldProps<U>) =>
-      <Component {...fieldProps} {...this.props as T} />;
+        <Component {...fieldProps} {...this.props as T} />;
       return (
         <FormikField name={this.props.name}>
           {childrenRenderer}

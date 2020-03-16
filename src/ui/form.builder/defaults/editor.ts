@@ -1,5 +1,5 @@
 import { Dictionary } from "lodash";
-import { FBAutocomplete, FBEditorMediaQR, FBMediaAlbumField } from "..";
+import { FBAutocomplete, FBMediaAlbumField, FBParagraph, FBQuantityField, FBTimerField } from "..";
 import FBActionContainer from "../components/actions/FBActionContainer";
 import FBActionEditor from "../components/editors/FBActionEditor";
 import FBAutocompleteEditor from "../components/editors/FBAutocompleteEditor";
@@ -10,6 +10,7 @@ import FBLabelEditor from "../components/editors/FBLabelEditor";
 import FBLabelStepperEditor from "../components/editors/FBLabelStepperEditor";
 import FBSelectEditor from "../components/editors/FBSelectEditor";
 import FBTextFieldEditor from "../components/editors/FBTextFieldEditor";
+import FBButton from "../components/inputs/FBButton";
 import FBCheckbox from "../components/inputs/FBCheckbox";
 import FBCheckboxGroup from "../components/inputs/FBCheckboxGroup";
 import FBDatePicker from "../components/inputs/FBDatePicker";
@@ -25,11 +26,12 @@ import FBFileUpload from "../components/navigation/FBFileUpload";
 import FBLink from "../components/navigation/FBLink";
 import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaItem";
 import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
+import FBEditorParagraph from "../FBEditorParagraph/FBEditorParagraph";
+import FBEditorStepSection from "../FBEditorStepSection";
+import FBHelloSign from "../FBHelloSign";
 import { FBEditorElementType } from "../types/editor";
 
-export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<
-  any
->> = {
+export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = {
   section: FBLabelEditor,
   subsection: FBLabelEditor,
   textfield: FBTextFieldEditor,
@@ -44,8 +46,17 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<
   hyperlink: FBHyperlinkEditor,
   fileupload: FBLabelStepperEditor,
   action: FBActionEditor,
+  hellosign: FBLabelEditor,
   purchaseorder: FBLabelEditor,
-  mediaQR: FBEditorMediaQR
+  paragraph: FBEditorParagraph,
+  stepsection: FBEditorStepSection,
+  instructionsmediaupload: FBLabelEditor,
+  evidencemediaupload: FBLabelEditor,
+  checkpoint: FBLabelEditor,
+  pause: FBLabelEditor,
+  createlabel: FBLabelEditor,
+  quantity: FBLabelEditor,
+  timer: FBLabelEditor,
 };
 
 export const FBFieldComponent: Dictionary<any> = {
@@ -65,12 +76,22 @@ export const FBFieldComponent: Dictionary<any> = {
   schemaSelect: FBValidatorSchemaSelect,
   schemaItem: FBValidatorSchemaItem,
   action: FBActionContainer,
+  hellosign: FBHelloSign,
   purchaseorder: FBPurchaseOrderField,
-  mediaQR: FBMediaAlbumField
+  paragraph: FBParagraph,
+  stepsection: FBSectionBox,
+  instructionsmediaupload: FBMediaAlbumField,
+  evidencemediaupload: FBMediaAlbumField,
+  checkpoint: FBButton,
+  pause: FBButton,
+  createlabel: FBButton,
+  quantity: FBQuantityField,
+  timer: FBTimerField,
 };
 
 export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
-  section: ["section", "subsection"],
+  section: ["section", "subsection", "stepsection"],
+  representation: ["paragraph"],
   basics: [
     "textfield",
     "checkbox",
@@ -82,21 +103,46 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "radio",
     "radiogroup",
     "fileupload",
+    "quantity",
+    "timer",
     "purchaseorder",
-    "mediaQR"
+    "instructionsmediaupload",
+    "evidencemediaupload",
   ],
+  approvals: ["hellosign"],
+  buttons: ["checkpoint", "pause", "createlabel"],
   lists: ["autocomplete"],
-  actions: ["action"]
+  actions: ["action"],
 };
 
 export const FBGroupEditorOptions: Dictionary<any[]> = {
-  autocomplete: [{ value: "multiple", text: "form.builder.multi.select" }],
+  autocomplete: [
+    { value: "multiple", text: "form.builder.multi.select" }, {
+      value: "includeQRScan", text: "form.builder.include.qr.scan",
+    },
+  ],
+  mediaupload: [{ value: "isTemplate", text: "form.builder.is.template" }],
   select: [
     { value: "includeNone", text: "form.builder.include.none" },
-    { value: "includeContext", text: "form.builder.include.other" }
+    { value: "includeContext", text: "form.builder.include.other" },
   ],
   control: [{ value: "includeContext", text: "form.builder.include.note" }],
   controlgroup: [
-    { value: "includeContext", text: "form.builder.include.other" }
-  ]
+    { value: "includeContext", text: "form.builder.include.other" },
+  ],
 };
+
+export const omitLabelValidation: FBEditorElementType[] = [
+  "action",
+  "paragraph",
+  "instructionsmediaupload",
+  "evidencemediaupload",
+];
+
+export const pickDefaultLabel: FBEditorElementType[] = [
+  "checkpoint",
+  "pause",
+  "createlabel",
+  "quantity",
+  "stepsection",
+];

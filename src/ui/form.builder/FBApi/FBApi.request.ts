@@ -42,7 +42,8 @@ export default class FBRequest<Data, Body> {
 
   @action public dataFilter = (data: Data): Data | undefined => data;
   @action public onError = (_error) => {
-    alert(_error);
+    const { message } = _error;
+    alert(message);
   };
 
   @action private start = (method: ApiActionMethod) => {

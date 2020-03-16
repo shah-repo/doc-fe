@@ -21,15 +21,15 @@ const Input: React.FunctionComponent<InputPropsWithFormik> = ({
   lpignore = true,
   ...fieldProps
 }) => (
-    <Field size={size} actionsRenderer={actionsRenderer} {...fieldProps} inputLabelProps={{ shrink: true }} >
-      <MuiInput
-        required={false}
-        inputProps={{ "data-lpignore": lpignore }}
-        {...fieldProps.field}
-        {...inputProps}
-      />
-    </Field>
-  );
+  <Field size={size} actionsRenderer={actionsRenderer} {...fieldProps} inputLabelProps={{ shrink: true }} >
+    <MuiInput
+      required={false}
+      inputProps={{ "data-lpignore": lpignore }}
+      {...fieldProps.field}
+      {...inputProps}
+    />
+  </Field>
+);
 
 type InputFieldProps = InputOwnProps & FieldConfig;
 

@@ -31,6 +31,13 @@ export class FormBuilderStore {
   public docId = "";
   public documentId = "";
 
+  @action public sectionNumber = (endIndex: number): number => {
+    const sections = _.filter(this.getSchema(), (schemaItem, index) =>
+      endIndex > index && schemaItem.type === "stepsection"
+    );
+    return _.size(sections) + 1;
+  };
+
   @action public setMode = (mode: FBWorkspaceMode) => {
     this.mode = mode;
     this.setModeConfig();

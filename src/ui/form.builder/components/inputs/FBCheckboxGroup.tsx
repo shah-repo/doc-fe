@@ -3,7 +3,6 @@ import _ from "lodash";
 import React from "react";
 import Text from "../../../components/Text";
 import { withOptions } from "../../hocs/common/withOptions";
-import FBStore from "../../stores/ui/FBStore";
 import { FBCheckGroupProps } from "../../types/inputs/check";
 import FBInput from "../common/FBInput";
 
@@ -14,6 +13,7 @@ const FBCheckboxGroup: React.FunctionComponent<FBCheckGroupProps> = ({
   optionValueKey = "value",
   optionLabelKey = "text",
   labelValues,
+  form,
   ...props
 }) => (
   <FBInput {...props} {...{ type }}>
@@ -25,7 +25,7 @@ const FBCheckboxGroup: React.FunctionComponent<FBCheckGroupProps> = ({
           control={
             <Checkbox
               disabled={props.disabled}
-              checked={FBStore.getValue(_.get(option, optionValueKey))}
+              checked={form?.values[_.get(option, optionValueKey)]}
             />
           }
           label={

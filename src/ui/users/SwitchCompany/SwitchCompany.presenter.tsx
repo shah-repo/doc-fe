@@ -7,13 +7,13 @@ interface Props {
   numberOfCompanies: number;
 }
 
-const SwitchCompanyPresenter: React.FunctionComponent<Props> = ({ children, numberOfCompanies}) => {
+const SwitchCompanyPresenter: React.FunctionComponent<Props> = ({ children, numberOfCompanies }) => {
   const classes = styles();
   return (
     <div className={classes.root}>
       <div className={classes.container}>
-        <div className={classes.title}>
-          <Text translation="company.switch.title" />
+        <div id="switchCompanyHeader" className={classes.title}>
+          <Text translation="company.switch.company" />
         </div>
         <div className={classes.subtitle}>
           <Text translation="company.switch.subtitle" />

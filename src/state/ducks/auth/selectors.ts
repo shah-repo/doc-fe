@@ -39,6 +39,9 @@ const currentEmployeeTags = (state: ApplicationState): GroupTag[] =>
 const getLoadPermissionsAsyncState = (state: ApplicationState): AsyncState =>
   state.auth.loadGroupsAsyncInfo;
 
+const getPingServerAsyncState = (state: ApplicationState): AsyncState =>
+  state.auth.pingServerAsyncInfo;
+
 const makeGetHasTag = () => createSelector(
   (state: ApplicationState) => state.auth.groups.tags,
   (state: ApplicationState, selectedTag: GroupTag) => selectedTag,
@@ -85,6 +88,7 @@ export default {
   currentUserId,
   currentEmployeeId,
   getLoadPermissionsAsyncState,
+  getPingServerAsyncState,
   employees,
   hasMultipleCompanies,
   currentEmployeeAvatar,

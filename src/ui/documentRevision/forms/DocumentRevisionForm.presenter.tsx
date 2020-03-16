@@ -40,6 +40,7 @@ import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInf
 import styles from "./DocumentRevisionForm.styles";
 import ApproveAndRelease from "./presenters/ApproveAndRelease";
 import DocIdInput from "./presenters/DocIdInput";
+import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
 import References from "./presenters/References";
 import RenderHtmlField from "./presenters/RenderHtmlField";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
@@ -124,7 +125,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     if (proposedDocId) {
       setFieldValue("document.docId", proposedDocId);
     }
-  }, [proposedDocId, setFieldValue]);
+    if (_.isEmpty(values.document?.documentType?.id)) {
+      setFieldValue("document.docId", "");
+    }
+  }, [values.document, proposedDocId, setFieldValue]);
 
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
 
@@ -337,9 +341,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         )}
         {FBStore.active && (
           <Box mt={5}>
+            <GenerateHtmlPreview id={values.id} renderHTML={values.formDocument?.renderHTML} />
             <FBWorkspaceForm
               id={_.get(values, "id")}
-              documentId={_.get(values, "document.id")}
+              documentId={_.get(values, "formDocument.document.id") || _.get(values, "document.id")}
             />
           </Box>
         )}

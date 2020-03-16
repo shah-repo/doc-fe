@@ -131,7 +131,8 @@ definitions:
 # Pipelines
 #
 pipelines:
-  default:
+  pull-requests:
+    '**':
       - parallel:
           - step: *RUN_TESTS
           # - step: *RUN_LINTER
@@ -174,7 +175,14 @@ pipelines:
           - step: *BUILD_DEV
       - step: *DEPLOY_DEV
 
-    release/20.3.1:
+    task/ENC-1422_hello_action_button:
+      - parallel:
+          - step: *RUN_TESTS
+          # - step: *RUN_LINTER
+          - step: *BUILD_DEV2
+      - step: *DEPLOY_DEV2
+
+    release/20.4:
       - parallel:
           - step: *RUN_TESTS
           # - step: *RUN_LINTER

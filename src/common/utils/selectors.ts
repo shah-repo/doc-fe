@@ -7,3 +7,4 @@ export const getTableCriteria = (tableName: string) => (reduxState: ApplicationS
 export const getTableData = (tableName: string) => (reduxState: ApplicationState) => tableSearchSelectors.getTableData(reduxState, tableName);
 export const getHasSlack = (slack: Permission) => (reduxState: ApplicationState) => authSelectors.getHasSlack(reduxState, slack);
 export const getHasPermission = (permission: Permission) => (reduxState: ApplicationState) => authSelectors.getHasPermission(reduxState, permission);
+

@@ -12,8 +12,8 @@ export const styles = makeStyles((theme) => ({
       size === "lg"
         ? theme.spacing(0, 0, -1.7, 4.5)
         : size === "md"
-        ? theme.spacing(0, 0, -1.3, 3.7)
-        : theme.spacing(0, 0, -1.4, 3.1),
+          ? theme.spacing(0, 0, -1.3, 3.7)
+          : theme.spacing(0, 0, -1.4, 3.1),
     padding: theme.spacing(0.5, 0.5, 0),
     fontSize: size === "lg" ? "1.3em" : size === "md" ? "1.2em" : "1.1em",
     display: disabled ? "none" : "inherit",
@@ -89,8 +89,8 @@ export const styles = makeStyles((theme) => ({
       props.size === "lg"
         ? "5px 7px 0 0"
         : props.size === "md"
-        ? "3px 5px 0 0"
-        : "3px 4px 0 0",
+          ? "3px 5px 0 0"
+          : "3px 4px 0 0",
   }),
   ribbonEdgeTopright: {
     "top": "50%",
@@ -107,7 +107,7 @@ export const styles = makeStyles((theme) => ({
       props.size === "lg"
         ? "5px 0 0 7px"
         : props.size === "md"
-        ? "3px 0 0 5px"
-        : "3px 0 0 4px",
+          ? "3px 0 0 5px"
+          : "3px 0 0 4px",
   }),
 }));

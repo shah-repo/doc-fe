@@ -3,6 +3,7 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { FBMediaAlbumFieldProps, FBMediaAlbumFieldState } from ".";
 import { FB } from "..";
+import FBDRStore from "../stores/ui/FBDRStore";
 import FBStore from "../stores/ui/FBStore";
 
 export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
@@ -17,17 +18,24 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     qrValue,
     collection,
     loading = false,
+    qrMode = "qr",
+    isTemplate,
+    removeMedia,
     ...props
   }: T) => {
     mediaAlbumFieldState = FB.useRef<FBMediaAlbumFieldState>(FBMediaAlbumFieldState);
     const documentId = FBStore.documentId;
 
     React.useEffect(() => {
+      const isPreview =
+        (FBStore.mode !== "design" && isTemplate) ||
+        (FBStore.mode === "preview" && FBDRStore.isOutput && !isTemplate);
+      isPreview && mediaAlbumFieldState && (mediaAlbumFieldState.setMode("preview"));
       if (!_.isEmpty(documentId)) {
         mediaAlbumFieldState?.setFieldName(name);
         mediaAlbumFieldState?.downloadCandidates();
       }
-    }, [documentId, mediaAlbumFieldState, name]);
+    }, [documentId, isTemplate, mediaAlbumFieldState, name]);
 
     // Handle mode
     onClick = () => {
@@ -60,6 +68,8 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       collection,
       name,
       loading,
+      isTemplate,
+      removeMedia: mediaAlbumFieldState?.removeCandidate,
     });
   };
 
