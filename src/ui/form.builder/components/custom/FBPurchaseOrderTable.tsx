@@ -1,5 +1,6 @@
 import { Box, Checkbox, makeStyles, Table, TableBody, TableCell, TableHead, TableRow, withStyles } from "@material-ui/core";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
+import classNames from "classnames";
 import React, { useEffect, useState } from "react";
 import Date from "../../../components/Date"; // we shouldn't use anything outside the formbuilder
 import Text from "../../../components/Text";
@@ -35,7 +36,7 @@ const useStyles = makeStyles({
   table: {
     minWidth: 700,
   },
-  row: {
+  editable: {
     cursor: "pointer",
   },
 });
@@ -47,10 +48,10 @@ const FBPurchaseOrderTable: React.FunctionComponent<Props> = ({
   disabled,
 }) => {
   const classes = useStyles();
-  const handleEdit = (index) => () => editItem(index);
+  const handleEdit = (index) => () => !disabled && editItem(index);
   const handleDelete = (index) => (e) => {
     e.stopPropagation();
-    deleteItem(index);
+    !disabled && deleteItem(index);
   };
   const [preCalc, setPreCalc] = useState<any[]>([]);
   useEffect(() => {
@@ -105,7 +106,11 @@ const FBPurchaseOrderTable: React.FunctionComponent<Props> = ({
         </TableHead>
         <TableBody>
           {preCalc.map((row, index) => (
-            <TableRow key={index} onClick={handleEdit(index)} className={classes.row}>
+            <TableRow
+              key={index}
+              onClick={handleEdit(index)}
+              className={classNames({ [classes.editable]: !disabled })}
+            >
               <StyledTableCell align="left">{index + 1}</StyledTableCell>
               <StyledTableCell>{row.order}</StyledTableCell>
               <StyledTableCell>{row.units}</StyledTableCell>

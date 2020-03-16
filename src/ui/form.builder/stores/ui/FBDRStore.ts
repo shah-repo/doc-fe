@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { action, computed, observable } from "mobx";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
 import { DocumentGroupType } from "../../../../state/ducks/documentRevisions/documentType";
 import { canEditDocumentRevision } from "../../../document.revision/utils/helpers";
 import { FBDocumentRevisionMode, FBDRGroupConfig } from "../../types/store";
@@ -55,12 +55,8 @@ export class FBDocumentRevisionStore {
     const schema = _.get(values, "formDocument.formTemplate.schema") || [];
     const { formInput } = values;
 
-    const editableIn = [
-      DocumentRevisionStatus.Draft,
-      DocumentRevisionStatus.PendingChange,
-    ];
-    const canEditOutput = editableIn.includes(values.status);
-    let docRevMode: FBDocumentRevisionMode = canEditOutput ? "outputCreate" : "outputPreview";
+    const canEditDoc = canEditDocumentRevision(values);
+    let docRevMode: FBDocumentRevisionMode = canEditDoc ? "outputCreate" : "outputPreview";
     if (docRevMode === "outputCreate" && !_.isEmpty(values.id)) {
       docRevMode = "outputUpdate";
     }
