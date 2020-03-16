@@ -58,5 +58,13 @@
     "optionLabelKey": "name",
     "prefixLabelRoot": "document.docId",
     "root": ""
+  },
+  {
+    "id": "8",
+    "path": "/company/mine",
+    "label": "Company addresses",
+    "optionValueKey": "id",
+    "optionLabelKey": "name",
+    "root": "addresses"
   }
 ]
