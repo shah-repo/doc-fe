@@ -9,9 +9,16 @@ const FBEditorApprovalField: React.FunctionComponent<Pick<FBInputProps, "default
   <>
     <FBTextField label="form.builder.label" name="label" {...props}  />
     <FBAutocomplete
-      label="Approvers"
+      label="common.approvers"
       optionId="3"
       name="approvers"
+      multiple={true}
+      valueType="object"
+    />
+    <FBAutocomplete
+      label="Groups"
+      optionId="10"
+      name="groups"
       multiple={true}
       valueType="object"
     />
