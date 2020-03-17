@@ -30,7 +30,7 @@ export type FBEditorElementType =
   | "instructionsmediaupload"
   | "evidencemediaupload"
   | "checkpoint"
-  | "pause"
+  | "approval"
   | "createlabel"
   | "quantity"
   | "timer";
