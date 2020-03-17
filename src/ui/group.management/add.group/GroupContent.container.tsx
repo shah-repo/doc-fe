@@ -8,7 +8,7 @@ import { GetEmployeeResponse, LoadCompanyGroup, userManagementActions, userManag
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import useAsync from "../../hooks/useAsync";
 import { getHasOfficialPermissions } from "../utils/helpers";
-import { toArray, toEmployeeIds, toMembersEditRequestBody, toMembersOptions } from "../utils/transform";
+import { toArrayOfIds, toMembersOptions, toRequestBody } from "../utils/transform";
 import { DEFAULT_GROUP } from "../utils/types";
 import GroupContentPresenter from "./GroupContent.presenter";
 
@@ -29,7 +29,7 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
 }) => {
   const [group, setGroup] = useState<GroupRequestBody>(DEFAULT_GROUP);
   const [members, setMembers] = useState<OptionType[]>([]);
-  const [parentGroups, setParentGroups] = useState();
+  const [parentGroups, setParentGroups] = useState<OptionType[]>([]);
   const currentEmployeePermissions = useSelector(
     authSelectors.currentEmployeePermissions,
   );
@@ -58,16 +58,17 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
   const handleCreateGroup = (values: GroupRequestBody) => {
     dispatch(
       groupManagementActions.createGroup(
-        { ...values, employees: toMembersEditRequestBody(members) },
+        { ...values, employees: toRequestBody(members), parents: toRequestBody(parentGroups) },
         createGroupAsync,
       ),
     );
   };
+
   const handleEditGroup = (groupId: string, values: GroupRequestBody) => {
     const isGroupNameChanged = !(selectedGroup!.name === values.name);
     const body = isGroupNameChanged ?
-      { ...values, employees: toMembersEditRequestBody(members) } :
-      omit({ ...values, employees: toMembersEditRequestBody(members) }, ["name"]);
+      { ...values, employees: toRequestBody(members), parents: toRequestBody(parentGroups) } :
+      omit({ ...values, employees: toRequestBody(members), parents: toRequestBody(parentGroups) }, ["name"] );
     dispatch(
       groupManagementActions.editGroup(
         groupId,
@@ -85,8 +86,8 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
         defaultForNewUsers: selectedGroup.defaultForNewUsers,
         isOfficial: selectedGroup.isOfficial,
         tags: selectedGroup.tags || [],
-        employees: toEmployeeIds(selectedGroup.employees),
-        parentGroups: selectedGroup.parentGroups,
+        employees: toArrayOfIds(selectedGroup.employees),
+        parents: toArrayOfIds(selectedGroup.parents),
       });
       setMembers(
         toMembersOptions(
@@ -109,13 +110,12 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
   const  handleAsyncState = () => isCreateMode ? createGroupAsync.asyncState : editGroupAsync.asyncState;
 
   const onSelectParentGroup = (selectedItems: any) => {
-    if (!isEmpty(selectedItems)) {
-      const selectedItemsData = allGroups.filter((group) => selectedItems.some((item) => group.label === item.label));
-      setParentGroups(selectedItemsData);
-      setGroup({ ...group, parentGroups: toArray(selectedItems) });
-    } if (isEmpty(selectedItems)) {
+    if (isEmpty(selectedItems)) {
       setParentGroups([]);
+      return;
     }
+    const selectedItemsData = allGroups.filter((group) => selectedItems.some((item) => group.label === item.label));
+    setParentGroups(selectedItemsData);
   };
 
   return (

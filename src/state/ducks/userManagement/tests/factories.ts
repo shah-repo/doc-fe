@@ -8,7 +8,7 @@ export const getGroup = (): Group => ({
   name: faker.random.word(),
   permissions: [],
   tags: null,
-  parentGroups: [],
+  parents: [],
 });
 
 export const getCompanyGroup = (): LoadCompanyGroup => ({

@@ -11,7 +11,7 @@ export const DEFAULT_SELECTED_GROUP: LoadCompanyGroup = {
   company: COMPANY_DEFAULT_STATE,
   employees: [],
   isOfficial: true,
-  parentGroups: [],
+  parents: [],
 };
 
 export const DEFAULT_ACTIVE_EMPLOYEES: GetEmployeeResponse[] = [{
@@ -32,5 +32,5 @@ export const DEFAULT_GROUP: GroupRequestBody = {
   isOfficial: false,
   tags: [],
   employees: [],
-  parentGroups: [],
+  parents: [],
 };

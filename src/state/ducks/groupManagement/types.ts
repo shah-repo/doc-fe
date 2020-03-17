@@ -8,5 +8,5 @@ export interface GroupRequestBody {
   isOfficial: boolean;
   tags: GroupTag[];
   employees: Id[];
-  parentGroups: Id[];
+  parents: Id[];
 }

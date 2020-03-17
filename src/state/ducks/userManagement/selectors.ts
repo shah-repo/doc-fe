@@ -15,7 +15,7 @@ const getGroupsOptions = createSelector(
       value: groups[id].id,
       tags: groups[id].tags,
       permissions: groups[id].permissions,
-      parentGroups: groups[id].parentGroups,
+      parents: groups[id].parents,
     }))
   ),
 );

@@ -28,7 +28,7 @@ describe("user management selectors test", () => {
       value: companyGroups[0].id,
       tags: companyGroups[0].tags,
       permissions: companyGroups[0].permissions,
-      parentGroups: companyGroups[0].parentGroups,
+      parents: companyGroups[0].parents,
     }];
     expect(selectors.getGroupsOptions(state)).toEqual(expectedGroupOptions);
   });

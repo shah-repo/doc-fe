@@ -29,7 +29,7 @@ export interface LoadCompanyGroup {
   company: Company;
   employees: Employee[];
   isOfficial: boolean;
-  parentGroups: Id[];
+  parents: Group[];
 }
 
 export interface EmployeeGroupsEditRequestBody {
