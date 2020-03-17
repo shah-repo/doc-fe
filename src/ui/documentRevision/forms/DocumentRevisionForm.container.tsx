@@ -60,7 +60,7 @@ const mapStateToProps = (
   props: OwnProps,
 ): StateProps => ({
   availableReferences: getAvailableReferences(state, props.initialValues),
-  loadAsyncState: documentRevisionsSelectors.getLoadListAsyncState(state),
+  loadAsyncState: documentRevisionsSelectors.getLoadAsyncState(state),
   documentRevisions: documentRevisionsSelectors.getDocumentRevisionsList(state),
   documentTypes: documentTypeSelectors.getDocumentTypeFormOptions(state),
   documentTypesById: documentTypeSelectors.byId(state),

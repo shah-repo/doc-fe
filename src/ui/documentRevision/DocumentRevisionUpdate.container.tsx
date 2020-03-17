@@ -1,18 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
-import {
-  DocumentRevision,
-  documentRevisionsActions,
-} from "../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsActions } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";
 import useAsync from "../hooks/useAsync";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
-import {
-  toDocumentRevisionEditRequestBody,
-  toDocumentRevisionFormValues,
-} from "./forms/transform";
+import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
 import { canEditDocumentRevision } from "./helpers";
 
@@ -57,7 +51,6 @@ DocumentRevisionUpdateContainerProps
   const async = useAsync<DocumentRevision>({
     onSuccess: () => {
       setDoNotPrompt(true);
-      loadAudit(documentRevision.id);
       if (documentId) {
         loadDocument(documentId);
       }
