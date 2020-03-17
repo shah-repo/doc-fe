@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Typography } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import React from "react";
 import { FBAutocompleteProps } from ".";
@@ -11,7 +11,6 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   options = [],
   getOptionLabel,
   renderInput,
-  loading,
   defaultValue,
   renderEl,
   renderTags,
@@ -19,20 +18,15 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   ...props
 }) =>  (
   <FBInput {...props} type="autocomplete">
-    {loading && <CircularProgress size={20} />}
-    {renderEl && (
-      <>
-        {includeQRScan && (
-          <Box display="flex" flexDirection="row-reverse">
-            <Typography variant="button" display="block" color="primary">
-              <Text message="form.builder.scan.qr" />
-            </Typography>
-          </Box>)}
-        <Autocomplete
-          {...{options, multiple, getOptionLabel, loading, renderInput, defaultValue, renderTags}}
-        />
-      </>
-    )}
+    {includeQRScan && (
+      <Box display="flex" flexDirection="row-reverse">
+        <Typography variant="button" display="block" color="primary">
+          <Text message="form.builder.scan.qr" />
+        </Typography>
+      </Box>)}
+    <Autocomplete
+      {...{ options, multiple, getOptionLabel, renderInput, defaultValue, renderTags }}
+    />
   </FBInput>
 );
 
