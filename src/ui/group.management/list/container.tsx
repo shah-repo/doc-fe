@@ -37,20 +37,28 @@ export const ListContainer: React.FunctionComponent<Props> = () => {
   const hasUnofficialPermissions = getHasUnofficialPermissions(currentEmployeePermissions);
   const canCreateGroups = hasOfficialPermissions || hasUnofficialPermissions;
 
-  const async = useAsync({
+  const asyncPreview = useAsync({
     onSuccess: (data: any) => {
       setGroup(data);
+      previewGroupsDialog.open();
+    },
+  });
+
+  const asyncEdit = useAsync({
+    onSuccess: (data: any) => {
+      setGroup(data);
+      editGroupsDialog.open();
     },
   });
 
   const loadGroupByIdAction = useActionCreator(userManagementActions.loadGroupById);
 
   const handleGroupsPreview = (rowData: LoadCompanyGroup) => {
-    async.start(loadGroupByIdAction, rowData.id, previewGroupsDialog, async);
+    asyncPreview.start(loadGroupByIdAction, rowData.id, asyncPreview);
   };
 
   const handleGroupsEdit = (rowData: LoadCompanyGroup) => {
-    async.start(loadGroupByIdAction, rowData.id, editGroupsDialog, async);
+    asyncEdit.start(loadGroupByIdAction, rowData.id, asyncEdit);
   };
 
   const handlePermission = (rowData: LoadCompanyGroup) => {

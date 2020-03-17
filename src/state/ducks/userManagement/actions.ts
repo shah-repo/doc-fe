@@ -54,18 +54,10 @@ const loadGroupsMe = (handlers: Handlers): ApiAction<Group[]> =>
 
 const loadGroupById = (
   id: string,
-  dialog: {
-    isOpen: boolean;
-    open: () => void;
-    close: () => void;
-  },
   handlers: Handlers): ApiAction<Group> => apiActionWithCallbacks({
   url: `${GROUPS_URL}/${id}`,
   method: "get",
   asyncType: GROUP_GET_BY_ID,
-  onSuccess: () => {
-    dialog.open();
-  },
   handlers,
 });
 
