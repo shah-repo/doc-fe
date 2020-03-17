@@ -1,11 +1,4 @@
-import {
-  Box,
-  ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
-  List,
-  Typography,
-} from "@material-ui/core";
+import { Box, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, List, Typography } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import React from "react";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
@@ -105,7 +98,7 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   return (
     <div className={classes.container}>
       <ExpansionPanel expanded={expanded} onChange={handleChange()}>
-        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+        <ExpansionPanelSummary id="crHistoryButton" expandIcon={<ExpandMoreIcon />}>
           <Typography variant={TypographySize.md}>
             <Text translation="changeRequest.audit.crHistory" />
           </Typography>

@@ -12,13 +12,11 @@ interface InputOwnProps extends FieldOwnProps {
 
 type InputPropsWithFormik = InputOwnProps & FormikFieldProps;
 
-const Input: React.FunctionComponent<InputPropsWithFormik> = ({ inputProps, ...fieldProps }) => {
-  return (
-    <Field variant="filled" required={fieldProps.required} {...fieldProps}>
-      <MuiInput required={false} {...fieldProps.field} {...inputProps} />
-    </Field>
-  );
-};
+const Input: React.FunctionComponent<InputPropsWithFormik> = ({ inputProps, ...fieldProps }) => (
+  <Field variant="filled" required={fieldProps.required} {...fieldProps}>
+    <MuiInput required={false} {...fieldProps.field} {...inputProps} />
+  </Field>
+);
 
 type InputFieldProps = InputOwnProps & FieldConfig;
 

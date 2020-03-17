@@ -27,7 +27,7 @@ export default (theme: Theme) =>
       paddingBottom: theme.spacing(2),
     },
     submitBox: {
-      textAlign: "center",
+      textAlign: "right",
     },
     whiteContainer: {
       background: "#fff",

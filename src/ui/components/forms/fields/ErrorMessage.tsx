@@ -3,7 +3,7 @@ import * as React from "react";
 import Text from "../../Text";
 
 // tslint:disable-next-line: no-empty-interface
-interface ErrorMessageOwnProps extends FormikFieldProps {}
+type ErrorMessageOwnProps = FormikFieldProps;
 
 type ErrorMessageProps = ErrorMessageOwnProps;
 

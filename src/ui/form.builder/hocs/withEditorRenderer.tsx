@@ -2,8 +2,9 @@ import { Box } from "@material-ui/core";
 import { FormikProps } from "formik";
 import _, { Dictionary } from "lodash";
 import React from "react";
+import { useIntl } from "react-intl";
 import FBButton from "../components/inputs/FBButton";
-import { FBFieldEditorComponent } from "../defaults/editor";
+import { FBFieldEditorComponent, omitLabelValidation, pickDefaultLabel } from "../defaults/editor";
 import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 import editorStore from "../stores/ui/FBEditorStore";
 import FBStore from "../stores/ui/FBStore";
@@ -18,7 +19,17 @@ export const withEditorRenderer =
     const { type, index, mode } = other;
     const InputType = FBFieldEditorComponent[type as string];
     const uniqid = require("uniqid");
+    const intl = useIntl();
     FBValidatorStore.setActiveValidatorType(type);
+    if (_.includes(pickDefaultLabel, type) && _.isUndefined(_.get(props, "values.label"))) {
+      _.set(props, "values.label", intl.formatMessage({ id: `form.builder.${type}` }));
+    }
+
+    if (type === "stepsection") {
+      const stepLabel = props.values.label as string;
+      const orderStr = FBStore.getSectionStepReg(stepLabel);
+      orderStr && _.set(props, "values.label", stepLabel.replace(orderStr, ""));
+    }
 
     // const schemaItem = (): FBTemplateSchema => ({
     //   type,
@@ -36,8 +47,8 @@ export const withEditorRenderer =
     };
 
     const onClick = () => {
-      const label = _.get(props, "values.label", "");
-      if (type !== "action" && _.isEmpty(label)) {
+      const label = _.get(props, "values.label");
+      if (!_.includes(omitLabelValidation, type) && !label) {
         FBDynamicValidatorStore.setHelperText({
           label: ["The Label field is required."],
         });
@@ -71,6 +82,7 @@ export const withEditorRenderer =
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
         customValidator,
         formValuesRules: FBValidatorStore.formValues,
+        ...(type === "instructionsmediaupload" && { isTemplate: true }),
       };
 
       FBValidatorStore.selectedFieldIndex = null;
@@ -92,7 +104,10 @@ export const withEditorRenderer =
 
     return (
       <Box>
-        <InputType />
+        <InputType
+          {...(_.includes(pickDefaultLabel, type) && { defaultValue: _.get(props, "values.label") })}
+          {...{ index }}
+        />
         <Box display="flex" flexDirection="row-reverse" mx={-1}>
           <FBButton label={buttonLabel} onClick={onClick} />
           <FBButton label="common.cancel" onClick={editorStore.reset} />

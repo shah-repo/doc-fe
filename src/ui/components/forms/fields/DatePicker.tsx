@@ -14,14 +14,14 @@ import Field, { FieldOwnProps } from "./Field";
 
 interface DatePickerOwnProps extends FieldOwnProps {
   datePickerProps?: Pick<
-    ReactDatePickerProps,
-    Exclude<keyof ReactDatePickerProps, "onChange">
+  ReactDatePickerProps,
+  Exclude<keyof ReactDatePickerProps, "onChange">
   >;
 }
 
 type DatePickerPropsWithFormik = DatePickerOwnProps &
-  FormikFieldProps &
-  Partial<TypographyProps>;
+FormikFieldProps &
+Partial<TypographyProps>;
 
 const DatePicker: React.FunctionComponent<DatePickerPropsWithFormik> = ({
   datePickerProps,
@@ -48,11 +48,11 @@ const DatePicker: React.FunctionComponent<DatePickerPropsWithFormik> = ({
 };
 
 type DatePickerFieldProps = DatePickerOwnProps &
-  FieldConfig &
-  Partial<TypographyProps>;
+FieldConfig &
+Partial<TypographyProps>;
 
 const DatePickerField: React.FunctionComponent<
-  DatePickerFieldProps
+DatePickerFieldProps
 > = (props) => <FormikField component={DatePicker} {...props} />;
 
 export default DatePickerField;

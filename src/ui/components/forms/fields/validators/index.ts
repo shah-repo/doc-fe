@@ -13,6 +13,7 @@ export const required: Validator = (value) => {
 
 export const email: Validator = (value: string) => {
   // https://stackoverflow.com/a/34096956
+  // eslint-disable-next-line max-len
   if (!/^[a-z0-9!'#$%&*+/=?^_`{|}~-]+(?:\.[a-z0-9!'#$%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-zA-Z]{2,}$/i.test(value)) {
     return "validators.email";
   }

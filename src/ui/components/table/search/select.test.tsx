@@ -8,20 +8,18 @@ import { TableSearchFieldProps } from "./types";
 describe("Table search select field tests", () => {
 
   const options: SelectOption[] = [{
-      value: 1,
-      text: "One",
-    }, {
-      value: 2,
-      text: "Two",
+    value: 1,
+    text: "One",
+  }, {
+    value: 2,
+    text: "Two",
   }];
 
   type Props = Partial<TableSearchFieldProps>;
 
-  const getWrapper = (props: Props) => {
-    return shallow(
-      <TableSearchSelectField key="test" selectOptions={options} {...props} />,
-    );
-  };
+  const getWrapper = (props: Props) => shallow(
+    <TableSearchSelectField key="test" selectOptions={options} {...props} />,
+  );
 
   it("renders with 'none' as the first menu item", () => {
     const wrapper = getWrapper({});

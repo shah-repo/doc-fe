@@ -37,6 +37,7 @@ export const EditableSelectPresenter: React.FunctionComponent<Props> = ({
       <AutocompleteField
         name={name}
         autocompleteProps={{
+          // eslint-disable-next-line react/display-name
           noOptionsMessage: () => <Text message="document.emptyData" />,
           id: { name },
           isMulti: false,

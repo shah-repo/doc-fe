@@ -14,7 +14,7 @@ const ViewFileContainer: React.FunctionComponent<ViewFileContainerProps> = ({
   const [signedUrl, setSignedUrl] = useState("");
   const download = useActionCreator(attachmentsActions.download);
   const async = useAsync<AttachmentDownloadResponse>({
-    onSuccess: (downloadInfo) => setSignedUrl(downloadInfo!.url),
+    onSuccess: (downloadInfo) => downloadInfo && setSignedUrl(downloadInfo.url),
   });
   useEffect(() => {
     if (isOpen) {

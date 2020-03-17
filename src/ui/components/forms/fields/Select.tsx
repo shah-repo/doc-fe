@@ -23,8 +23,8 @@ export interface SelectOwnProps extends FieldOwnProps {
 }
 
 type SelectPropsWithFormik = SelectOwnProps &
-  FormikFieldProps &
-  Partial<TypographyProps>;
+FormikFieldProps &
+Partial<TypographyProps>;
 
 const Select: React.FunctionComponent<SelectPropsWithFormik> = ({
   selectProps,

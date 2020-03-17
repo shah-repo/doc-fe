@@ -3,26 +3,24 @@ import React from "react";
 import Text from "../Text";
 
 interface OwnProps {
-    numberOfRecords: number;
+  numberOfRecords: number;
 }
 
 export type Props = OwnProps;
 
 export const DocumentInfo: React.FunctionComponent<Props> = ({
   numberOfRecords,
-}) => {
-  return (
-    <Box component="span">
-        <Text translation="common.records.found"/>
+}) => (
+  <Box component="span">
+    <Text translation="common.records.found"/>
         :&nbsp;
-        <span
-          data-testid="numberOfRecords"
-          style={{fontWeight: "bold"}}
-        >
-          {numberOfRecords}
-        </span>
-    </Box>
-  );
-};
+    <span
+      data-testid="numberOfRecords"
+      style={{ fontWeight: "bold" }}
+    >
+      {numberOfRecords}
+    </span>
+  </Box>
+);
 
 export default DocumentInfo;

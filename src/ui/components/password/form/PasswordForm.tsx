@@ -15,34 +15,33 @@ interface PasswordFormProps extends WithStyles<typeof styles> {
   cancel: () => void;
 }
 
-const PasswordForm: React.FunctionComponent<PasswordFormProps> = ({ cancel, classes, asyncState }) => {
-  return (
-    <Form className={classes.form}>
-      <FormMessage asyncState={asyncState} />
-      <InputField
-        name="password"
-        label="transition.action.password"
-        inputProps={{ type: "password" }}
-        validate={validator(required)}
-      />
-      <FormProgress asyncState={asyncState} />
-      <SubmitButton
-        asyncState={asyncState}
-        label="transition.action.confirm"
-        fullWidth={false}
-        className={classes.submitButton}
-      />
-      <Button
-        variant="text"
-        color="secondary"
-        className={classes.cancelButton}
-        disabled={asyncState.status === AsyncStatus.Active}
-        onClick={cancel}
-      >
-        <Text translation="transition.action.cancel" />
-      </Button>
-    </Form>
-  );
-};
+const PasswordForm: React.FunctionComponent<PasswordFormProps> = ({ cancel, classes, asyncState }) => (
+  <Form className={classes.form}>
+    <FormMessage asyncState={asyncState} />
+    <InputField
+      name="password"
+      label="transition.action.password"
+      inputProps={{ type: "password" }}
+      validate={validator(required)}
+    />
+    <FormProgress asyncState={asyncState} />
+    <SubmitButton
+      id="passwordConfirm"
+      asyncState={asyncState}
+      label="transition.action.confirm"
+      fullWidth={false}
+      className={classes.submitButton}
+    />
+    <Button
+      variant="text"
+      color="secondary"
+      className={classes.cancelButton}
+      disabled={asyncState.status === AsyncStatus.Active}
+      onClick={cancel}
+    >
+      <Text translation="transition.action.cancel" />
+    </Button>
+  </Form>
+);
 
 export default withStyles(styles)(PasswordForm);

@@ -1,15 +1,6 @@
-import {
-  Box,
-  Checkbox,
-  makeStyles,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  withStyles,
-} from "@material-ui/core";
+import { Box, Checkbox, makeStyles, Table, TableBody, TableCell, TableHead, TableRow, withStyles } from "@material-ui/core";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
+import classNames from "classnames";
 import React, { useEffect, useState } from "react";
 import Date from "../../../components/Date"; // we shouldn't use anything outside the formbuilder
 import Text from "../../../components/Text";
@@ -31,6 +22,10 @@ const StyledTableCell = withStyles((theme) => ({
   body: {
     fontSize: 14,
   },
+  root: {
+    padding: "8px",
+    maxWidth: "100%",
+  },
 }))(TableCell);
 
 const useStyles = makeStyles({
@@ -41,7 +36,7 @@ const useStyles = makeStyles({
   table: {
     minWidth: 700,
   },
-  row: {
+  editable: {
     cursor: "pointer",
   },
 });
@@ -53,10 +48,10 @@ const FBPurchaseOrderTable: React.FunctionComponent<Props> = ({
   disabled,
 }) => {
   const classes = useStyles();
-  const handleEdit = (index) => () => editItem(index);
+  const handleEdit = (index) => () => !disabled && editItem(index);
   const handleDelete = (index) => (e) => {
     e.stopPropagation();
-    deleteItem(index);
+    !disabled && deleteItem(index);
   };
   const [preCalc, setPreCalc] = useState<any[]>([]);
   useEffect(() => {
@@ -64,13 +59,11 @@ const FBPurchaseOrderTable: React.FunctionComponent<Props> = ({
       return;
     }
 
-    const preCalcValues = values.map((value) => {
-      return {
-        ...value,
-        unitPrice: Number(value.unitPrice || 0).toFixed(2),
-        amount: (Number(value.unitPrice || 0) * Number(value.order || 0)).toFixed(2),
-      };
-    });
+    const preCalcValues = values.map((value) => ({
+      ...value,
+      unitPrice: Number(value.unitPrice || 0).toFixed(2),
+      amount: (Number(value.unitPrice || 0) * Number(value.order || 0)).toFixed(2),
+    }));
 
     setPreCalc(preCalcValues);
   }, [values]);
@@ -80,21 +73,21 @@ const FBPurchaseOrderTable: React.FunctionComponent<Props> = ({
       <Table className={classes.table} aria-label="purchase order table">
         <TableHead>
           <TableRow>
-            <StyledTableCell size="small" align="left">Item</StyledTableCell>
+            <StyledTableCell align="left">Item</StyledTableCell>
             <StyledTableCell>
-              <Text message="form.builder.field.order" />
+              <Text message="form.builder.field.qunatity.ordered" />
             </StyledTableCell>
             <StyledTableCell>
               <Text message="form.builder.field.units" />
             </StyledTableCell>
             <StyledTableCell>
-              <Text message="form.builder.field.pn" />
+              <Text message="form.builder.field.part.number" />
             </StyledTableCell>
             <StyledTableCell>
-              <Text message="form.builder.field.date" />
+              <Text message="form.builder.field.date.required" />
             </StyledTableCell>
-            <StyledTableCell>
-              <Text message="form.builder.field.pn.description" />
+            <StyledTableCell colSpan={6} padding="none">
+              <Text message="form.builder.field.supplier.part.number" />
             </StyledTableCell>
             <StyledTableCell>
               <Text message="form.builder.field.unit.price" />
@@ -113,7 +106,11 @@ const FBPurchaseOrderTable: React.FunctionComponent<Props> = ({
         </TableHead>
         <TableBody>
           {preCalc.map((row, index) => (
-            <TableRow key={index} onClick={handleEdit(index)} className={classes.row}>
+            <TableRow
+              key={index}
+              onClick={handleEdit(index)}
+              className={classNames({ [classes.editable]: !disabled })}
+            >
               <StyledTableCell align="left">{index + 1}</StyledTableCell>
               <StyledTableCell>{row.order}</StyledTableCell>
               <StyledTableCell>{row.units}</StyledTableCell>
@@ -121,7 +118,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<Props> = ({
               <StyledTableCell>
                 <Date value={row.date} />
               </StyledTableCell>
-              <StyledTableCell>{row.description}</StyledTableCell>
+              <StyledTableCell colSpan={6} padding="none">{row.description}</StyledTableCell>
               <StyledTableCell>${row.unitPrice}</StyledTableCell>
               <StyledTableCell>${row.amount}</StyledTableCell>
               <StyledTableCell padding="checkbox" align="center">

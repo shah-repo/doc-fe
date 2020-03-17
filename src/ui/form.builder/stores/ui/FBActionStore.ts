@@ -4,6 +4,7 @@ import { action } from "mobx";
 import apiClient from "../../../../state/apiClient";
 import { AsyncActionErrorResponse } from "../../../../state/middlewares/api/types";
 import { store } from "../../../../state/store";
+import { ATTACH_TEMPLATE_URL, CANCEL_SIGNATURE_REQUEST_URL, CREATE_TEMPLATE_URL, SEND_SIGNATURE_REQUEST_URL } from "../../FBHelloSign/constants";
 import { FBTemplateSchema } from "../../types/store";
 import { FBActionModel } from "../domain/models/FBActionModel";
 import FBStore from "./FBStore";
@@ -27,17 +28,29 @@ export class FormBuilderActionStore {
       const requestConfig: AxiosRequestConfig = {
         method: requestMethod as Method,
         url: requestUrl,
-        data: _.omit(this.values[action.name || ""], "send-email-action-supplier-field"),
+        data: action.payload || _.omit(this.values[action.name || ""], "send-email-action-supplier-field"),
         // paramsSerializer: (params) => qs.stringify(params),
         headers: {},
       };
 
       requestConfig.headers.Authorization = `bearer ${
         store.getState().auth.user.employeeId
-      }:${store.getState().auth.user.sessionId}`;
+        }:${store.getState().auth.user.sessionId}`;
 
       const { data } = await apiClient.request(requestConfig);
       if (!_.isUndefined(data)) {
+        if (requestUrl === CREATE_TEMPLATE_URL) {
+          return data;
+        }
+        if (requestUrl === SEND_SIGNATURE_REQUEST_URL) {
+          return true;
+        }
+        if (requestUrl === ATTACH_TEMPLATE_URL) {
+          return alert("Template Attached Successfully");
+        }
+        if (requestUrl === CANCEL_SIGNATURE_REQUEST_URL) {
+          return alert("Signature request cancelled successfully");
+        }
         alert("Success");
       }
     } catch (exception) {
@@ -49,6 +62,12 @@ export class FormBuilderActionStore {
         responseMessage = Array.isArray(message) ? message.join("; ") : message;
       }
       const errorMessage: string = responseMessage || exception.message;
+      if (requestUrl === ATTACH_TEMPLATE_URL) {
+        return alert("Template doesn't exist, enter existing TemplateID and save document");
+      }
+      if (requestUrl === SEND_SIGNATURE_REQUEST_URL) {
+        return false;
+      }
       alert(errorMessage);
     }
   }

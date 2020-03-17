@@ -18,7 +18,7 @@ interface OwnProps {
 export type DocumentRevisionItemPresenterProps = OwnProps;
 
 export const DocumentRevisionItemPresenter: React.FunctionComponent<
-  DocumentRevisionItemPresenterProps
+DocumentRevisionItemPresenterProps
 > = ({ onClick, onDelete, documentRevision, selectedDocumentRevision }) => {
   if (!documentRevision) {
     return null;

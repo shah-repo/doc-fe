@@ -45,7 +45,7 @@ export const StyledCellLink = withStyles((theme) => ({
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     columnBox: {
-      display:  "column",
+      display: "column",
       flex: 1,
     },
     headerSpan: {

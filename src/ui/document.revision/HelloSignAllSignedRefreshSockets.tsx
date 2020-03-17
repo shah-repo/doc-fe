@@ -1,0 +1,36 @@
+import React from "react";
+import { IotService } from "../../common/utils/iot/mqttClient";
+import { DocumentRevision, documentRevisionsActions } from "../../state/ducks/documentRevisions";
+import useActionCreator from "../hooks/useActionCreator";
+import useAsync from "../hooks/useAsync";
+import useMqttSubscription from "../hooks/useMqttSubscription";
+
+interface Props {
+  documentRevision: DocumentRevision;
+}
+
+const HelloSignAllSignedRefreshSockets: React.FunctionComponent<Props> = ({
+  documentRevision: {
+    id,
+  },
+}) => {
+  const iotService = IotService.getInstance();
+  const subscribe = () => {
+    iotService.subscribeToTopic(`+/hellosign_all_signed/${id}`, loadData);
+    iotService.subscribeToTopic(`+/hellosign_template_created/${id}`, loadData);
+  };
+  const unsubscribe = () => {
+    iotService.unsubscribeFromTopic(`+/hellosign_all_signed/${id}`);
+    iotService.unsubscribeFromTopic(`+/hellosign_template_created/${id}`);
+  };
+  const loadAction = useActionCreator(documentRevisionsActions.load);
+  const async = useAsync();
+  const loadData = (msg: string) => {
+    async.start(loadAction, id, async);
+  };
+  useMqttSubscription(subscribe, unsubscribe);
+
+  return null;
+};
+
+export default HelloSignAllSignedRefreshSockets;

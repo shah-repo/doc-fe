@@ -27,10 +27,8 @@ export const WatermarkFooterContainer: React.FunctionComponent = () => {
     ]);
   };
 
-  useEffect(() => {
-    return () => {
-      dispatch(attachmentsActions.clearWatermarks());
-    };
+  useEffect(() => () => {
+    dispatch(attachmentsActions.clearWatermarks());
   }, [dispatch]);
 
   const renderFooter = requestResults.length > 0 && (

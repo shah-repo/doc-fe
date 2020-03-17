@@ -4,7 +4,6 @@ import striptags from "striptags";
 import Config from "../../config";
 import { ChangeRequest } from "../../state/ducks/changeRequest";
 import { DocumentRevision } from "../../state/ducks/documentRevisions";
-import { ThemeEnv } from "../../ui/layout/theme/utils/types";
 
 export const sanitizeHtml = (html: string) => DOMPurify.sanitize(html);
 
@@ -22,6 +21,4 @@ export const stripTagsFromObject = <T extends ChangeRequest | DocumentRevision>(
 };
 
 export const theme = Config.Theme;
-export const logo = theme === ThemeEnv.DEV_THEME ?
-  "/logo_enlil_dark.svg" :
-  "/logo_enlil.svg";
+export const logo = "/logo_enlil_dark.svg";

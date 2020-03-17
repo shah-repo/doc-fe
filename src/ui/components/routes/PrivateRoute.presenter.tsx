@@ -20,7 +20,7 @@ const PrivateRoutePresenter: React.FunctionComponent<PrivateRoutePresenterProps>
     }
 
     return (
-      <Redirect to={{ pathname: LOGIN_URL, state: { from: rest.location }}}/>
+      <Redirect to={{ pathname: LOGIN_URL, state: { from: rest.location } }}/>
     );
   };
 

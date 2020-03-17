@@ -52,7 +52,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
 
   // Workaround for untouched select fields
   if (error && !shouldDisplayError && isSubmitting) {
-    form!.setFieldTouched(field.name, true);
+    form.setFieldTouched(field.name, true);
   }
 
   const LabelComponent = () => {
