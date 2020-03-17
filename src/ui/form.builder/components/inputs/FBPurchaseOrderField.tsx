@@ -107,6 +107,7 @@ const FBPurchaseOrderField: React.FunctionComponent<any> = ({
         disabled={disabled}
         onSubmit={onSubmit}
         initialValues={initialValues}
+        items={storeValue.items}
       />
       <FBPurchaseOrderTotal
         values={storeValue}

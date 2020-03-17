@@ -1,6 +1,7 @@
 import { Box, Typography } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import FBStore from "../../stores/ui/FBStore";
 import FBButton from "../inputs/FBButton";
 import FBCheckbox from "../inputs/FBCheckbox";
@@ -12,13 +13,16 @@ interface Props {
   initialValues?: PurchaseOrderItem;
   onSubmit: (values: any) => void;
   closeDialog: () => void;
+  items: PurchaseOrderItem[];
 }
 
 const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
   initialValues = {} as PurchaseOrderItem,
   onSubmit,
   closeDialog,
+  items,
 }) => {
+  const intl = useIntl();
   const [errorMessage, setErrorMessage] = useState("");
   useEffect(() => () => {
     FBStore.setValues({
@@ -35,6 +39,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
     setErrorMessage("");
   }, []);
   const handleSubmit = (values: PurchaseOrderItem) => {
+    setErrorMessage("");
     values.date = values.date || new Date();
     values.tax = values.tax || false;
     values.isTraceabilityRequired = values.isTraceabilityRequired || false;
@@ -47,32 +52,34 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
       "unitPrice",
     ];
 
-    let missingFields = "";
+    let newError = "";
     fields.forEach((field) => {
       if (!values[field]) {
         const fieldName = field.split(/(?=[A-Z])/).join(" ").toUpperCase();
-        missingFields += `${fieldName} is required; `;
+        newError += `${fieldName} is required; `;
       }
     });
 
-    if (missingFields) {
-      setErrorMessage(missingFields);
+    const isUniquePartNumber = !items.map((item) => item.partNumber).includes(values.partNumber);
+    const isPartNumberInitialValue = initialValues.partNumber === values.partNumber;
+    if (!isUniquePartNumber && !isPartNumberInitialValue) {
+      newError = `${newError} ${intl.formatMessage({ id: "form.builder.pn.unique" })}`;
+    }
+
+    if (newError) {
+      setErrorMessage(newError);
       return;
     }
 
     onSubmit(values);
   };
+
   return (
     <Formik
       initialValues={initialValues}
       onSubmit={handleSubmit}
     >
       <Form>
-        <Box marginBottom="10px">
-          <Typography color="error">
-            {errorMessage}
-          </Typography>
-        </Box>
         <FBTextField
           inputProps={{ type: "number" }}
           label="form.builder.field.qunatity.ordered"
@@ -108,6 +115,11 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
           label="form.builder.field.is.traceability.required"
           name="isTraceabilityRequired"
         />
+        <Box marginBottom="10px">
+          <Typography color="error">
+            {errorMessage}
+          </Typography>
+        </Box>
         <Box textAlign="right">
           <FBButton
             type="button"
