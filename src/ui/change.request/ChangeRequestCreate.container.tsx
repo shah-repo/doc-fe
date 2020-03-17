@@ -3,11 +3,11 @@ import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
 import { ChangeRequest, changeRequestsActions } from "../../state/ducks/changeRequest";
 import { ApplicationState } from "../../state/reducers";
-import { changeRequestEditPath } from "../change.request/utils/paths";
 import useAsync from "../hooks/useAsync";
-import ChangeRequestFormContainer from "./forms/ChangeRequestForm.container";
-import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "./forms/transform";
-import { ChangeRequestFormValues } from "./forms/types";
+import ChangeRequestFormContainer from "./form/ChangeRequestForm.container";
+import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "./form/transform";
+import { ChangeRequestFormValues } from "./form/types";
+import { changeRequestEditPath } from "./utils/paths";
 
 interface DispatchProps {
   create: typeof changeRequestsActions.create;

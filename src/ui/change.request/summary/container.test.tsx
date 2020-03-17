@@ -3,9 +3,9 @@ import faker from "faker";
 import { Form, Formik } from "formik";
 import React from "react";
 import { getChangeRequest } from "../../../state/ducks/changeRequest/tests/factories";
-import ChangeRequestAuditContainer from "../../changeRequest/audit/Audit.container";
-import SummaryPresenter from "../../changeRequest/documentRevision/DocumentRevisionControlPreview.presenter";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
+import ChangeRequestAuditContainer from "../audit/Audit.container";
+import SummaryPresenter from "../documentRevision/DocumentRevisionControlPreview.presenter";
 import { Container, Props } from "./container";
 import Presenter from "./presenter";
 

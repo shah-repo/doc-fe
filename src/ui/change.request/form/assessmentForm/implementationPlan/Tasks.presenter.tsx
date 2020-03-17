@@ -45,17 +45,15 @@ export const TasksPresenter: React.FunctionComponent<Props> = ({
   return (
     <div>
       {
-        tasks.map((task: ImplementationPlanTaskFormValues, index: number) => {
-          return (
-            <TaskPresenter
-              key={index}
-              task={task}
-              removeTask={removeTask}
-              index={index}
-              editTask={editTask}
-            />
-          );
-        })
+        tasks.map((task: ImplementationPlanTaskFormValues, index: number) => (
+          <TaskPresenter
+            key={index}
+            task={task}
+            removeTask={removeTask}
+            index={index}
+            editTask={editTask}
+          />
+        ))
       }
       {renderAddButton()}
     </div>

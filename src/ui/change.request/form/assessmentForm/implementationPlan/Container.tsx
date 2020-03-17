@@ -7,7 +7,7 @@ import HeaderField from "../../../../components/common/header.field/field";
 import { ChangeRequestFormValues } from "../../types";
 import Tasks from "./Tasks.container";
 
-export interface Props extends FieldProps<ChangeRequestFormValues> {}
+export type Props = FieldProps<ChangeRequestFormValues>;
 
 export const styles = makeStyles(() =>
   createStyles({
@@ -15,7 +15,7 @@ export const styles = makeStyles(() =>
       color: "red",
     },
   },
-));
+  ));
 
 const Container: React.FunctionComponent<Props> = () => {
 

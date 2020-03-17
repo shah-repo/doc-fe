@@ -4,11 +4,11 @@ import React from "react";
 import { ChangeRequestStatus } from "../../state/ducks/changeRequest";
 import { getChangeRequest } from "../../state/ducks/changeRequest/tests/factories";
 import { getOwner, getUser } from "../../state/ducks/common/tests/factories";
-import { changeRequestPreviewPath } from "../change.request/utils/paths";
 import { ASYNC_DEFAULT_STATE } from "../hooks/useAsync";
 import { ChangeRequestUpdateContainer, ChangeRequestUpdateContainerProps } from "./ChangeRequestUpdate.container";
-import ChangeRequestFormContainer from "./forms/ChangeRequestForm.container";
-import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "./forms/transform";
+import ChangeRequestFormContainer from "./form/ChangeRequestForm.container";
+import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "./form/transform";
+import { changeRequestPreviewPath } from "./utils/paths";
 
 describe("ChangeRequestUpdateContainer tests", () => {
   const currentUserEmail = faker.internet.email();

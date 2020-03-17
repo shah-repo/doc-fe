@@ -3,12 +3,12 @@ import React from "react";
 import CallbackHandler from "../../common/callbackHandler";
 import { ChangeRequest } from "../../state/ducks/changeRequest";
 import { getChangeRequest } from "../../state/ducks/changeRequest/tests/factories";
-import { changeRequestEditPath } from "../change.request/utils/paths";
 import { ASYNC_DEFAULT_STATE } from "../hooks/useAsync";
 import getRouteComponentProps from "../tests/helpers/getRouteComponentProps";
 import { ChangeRequestCreateContainer, ChangeRequestCreateContainerProps, DEFAULT_INITIAL_VALUES } from "./ChangeRequestCreate.container";
-import ChangeRequestFormContainer from "./forms/ChangeRequestForm.container";
-import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "./forms/transform";
+import ChangeRequestFormContainer from "./form/ChangeRequestForm.container";
+import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "./form/transform";
+import { changeRequestEditPath } from "./utils/paths";
 
 describe("ChangeRequestCreateContainer tests", () => {
   const defaultProps: ChangeRequestCreateContainerProps = {

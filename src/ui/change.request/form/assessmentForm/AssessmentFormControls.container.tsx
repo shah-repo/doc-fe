@@ -5,11 +5,7 @@ import _ from "lodash";
 import React from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../../../state/ducks/auth";
-import {
-  ChangeRequest,
-  ChangeRequestStatus,
-  ChangeRequestTransition,
-} from "../../../../state/ducks/changeRequest";
+import { ChangeRequest, ChangeRequestStatus, ChangeRequestTransition } from "../../../../state/ducks/changeRequest";
 import { Approval, ApprovalStatus } from "../../../../state/ducks/documents";
 import { ApplicationState } from "../../../../state/reducers";
 import ChangeRequestTransitionDialogContainer from "../../dialogs/ChangeRequestTransitionDialog.container";
@@ -26,15 +22,15 @@ interface OwnProps {
 }
 
 export type AssessmentFormControlsContainerProps = OwnProps &
-  StateProps &
-  WithStyles<typeof styles>;
+StateProps &
+WithStyles<typeof styles>;
 
 const mapStateToProps = (state: ApplicationState) => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
 });
 
 const AssessmentFormControlsContainer: React.FunctionComponent<
-  AssessmentFormControlsContainerProps
+AssessmentFormControlsContainerProps
 > = ({ changeRequest, currentUserEmail, errors }) => {
   if (!changeRequest) {
     return null;

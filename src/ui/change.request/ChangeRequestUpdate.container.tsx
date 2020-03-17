@@ -4,11 +4,11 @@ import { Redirect } from "react-router-dom";
 import { authSelectors } from "../../state/ducks/auth";
 import { ChangeRequest, changeRequestsActions } from "../../state/ducks/changeRequest";
 import { ApplicationState } from "../../state/reducers";
+import ChangeRequestFormContainer from "../change.request/form/ChangeRequestForm.container";
+import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "../change.request/form/transform";
+import { ChangeRequestFormValues } from "../change.request/form/types";
 import { changeRequestPreviewPath } from "../change.request/utils/paths";
 import useAsync from "../hooks/useAsync";
-import ChangeRequestFormContainer from "./forms/ChangeRequestForm.container";
-import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "./forms/transform";
-import { ChangeRequestFormValues } from "./forms/types";
 import { canEditChangeRequest } from "./helpers";
 
 interface StateProps {
