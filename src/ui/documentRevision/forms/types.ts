@@ -18,6 +18,7 @@ export interface DocumentRevisionFormValues extends FBDocumentFlowProps {
   status?: DocumentRevisionStatus;
   securityEmployees: OptionType[];
   securityGroups: OptionType[];
+  outputRevision?: boolean;
   renderHTML?: string;
 }
 
