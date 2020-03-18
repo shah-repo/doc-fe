@@ -144,8 +144,9 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
       <Select
         id="Group-addParentGroups"
         isMulti={true}
-        options={toOptions(allGroups.map((group) => group.label))}
+        options={allGroups}
         onChange={(selectedItems: any) => onSelectParentGroup(selectedItems)}
+        value={parentGroups}
       />
     </Box>
   );

@@ -1,3 +1,4 @@
+import { Group } from "../../../state/ducks/auth/types";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 
@@ -10,6 +11,12 @@ export const toOptions = (values: any[]): OptionType[] => values.map((value) => 
   label: value,
   value,
 }));
+
+export const toParentOptions = (values: Group[]): OptionType[] => values.map((value) => ({
+  label: value.name,
+  value: value.id,
+}));
+
 
 export const toArray = (values: OptionType[]): any[] => {
   if (values === null) {

@@ -2,13 +2,14 @@ import { isEmpty, omit } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
+import { Group } from "../../../state/ducks/auth/types";
 import { groupManagementActions } from "../../../state/ducks/groupManagement";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
 import { GetEmployeeResponse, LoadCompanyGroup, userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import useAsync from "../../hooks/useAsync";
 import { getHasOfficialPermissions } from "../utils/helpers";
-import { toArrayOfIds, toMembersOptions, toRequestBody } from "../utils/transform";
+import { toArrayOfIds, toMembersOptions, toParentOptions, toRequestBody } from "../utils/transform";
 import { DEFAULT_GROUP } from "../utils/types";
 import GroupContentPresenter from "./GroupContent.presenter";
 
@@ -92,6 +93,11 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
       setMembers(
         toMembersOptions(
           (selectedGroup.employees as unknown) as GetEmployeeResponse[],
+        ),
+      );
+      setParentGroups(
+        toParentOptions(
+          (selectedGroup.parents as unknown) as Group[],
         ),
       );
     }
