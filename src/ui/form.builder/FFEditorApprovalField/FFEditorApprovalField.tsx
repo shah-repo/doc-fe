@@ -3,7 +3,11 @@ import { FBAutocomplete } from "..";
 import FBTextField from "../components/inputs/FBTextField";
 import { FBInputProps } from "../types/common";
 
-const FBEditorApprovalField: React.FunctionComponent<Pick<FBInputProps, "defaultValue">> = ({
+export type FBEditorApprovalFieldProps = Pick<FBInputProps, "defaultValue" | "approverGroups" | "approvers">;
+
+const FBEditorApprovalField: React.FunctionComponent<FBEditorApprovalFieldProps> = ({
+  approverGroups,
+  approvers,
   ...props
 }) => (
   <>
@@ -14,13 +18,17 @@ const FBEditorApprovalField: React.FunctionComponent<Pick<FBInputProps, "default
       name="approvers"
       multiple={true}
       valueType="object"
+      optionObjectKeys={["id", "groups", "user.id", "user.email", "user.name"]}
+      defaultValue={approvers}
     />
     <FBAutocomplete
-      label="Groups"
+      label="form.builder.approver.groups"
       optionId="10"
-      name="groups"
+      name="approverGroups"
       multiple={true}
       valueType="object"
+      optionObjectKeys={["id", "name"]}
+      defaultValue={approverGroups}
     />
   </>
 );

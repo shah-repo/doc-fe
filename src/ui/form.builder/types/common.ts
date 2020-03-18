@@ -6,6 +6,7 @@ import { Dictionary } from "lodash";
 import { ReactNode } from "react";
 import { ValueType } from "react-select/src/types";
 import { Employee } from "../../../state/ducks/company";
+import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
 import { TextProps } from "../../components/Text";
@@ -55,6 +56,7 @@ export type FBOptionProps =
     optionValueKey?: string;
     includeNone?: boolean;
     value?: any;
+    optionObjectKeys?: string[];
   };
 
 export type FBInputProps = Omit<FBFormikFieldProps, "name">
@@ -63,7 +65,7 @@ export type FBInputProps = Omit<FBFormikFieldProps, "name">
 & Pick<SelectProps, "renderValue">
 // & Pick<FBValidatorProps, "rules" | "applicableOn">
 & Pick<FBActionContainerProps, "actions">
-& Pick<FBOptionProps, "optionId" | "options" | "optionValueKey">
+& Pick<FBOptionProps, "optionId" | "options" | "optionValueKey" | "optionObjectKeys">
 & Pick<BaseTextFieldProps,
 | "children"
 | "value"
@@ -107,6 +109,7 @@ export type FBInputProps = Omit<FBFormikFieldProps, "name">
   includeQRScan?: boolean;
   loading?: boolean;
   approvers?: Employee[];
+  approverGroups?: GroupRequestBody[];
 };
 
 export type FBFormDefaultProps = FBInputProps &

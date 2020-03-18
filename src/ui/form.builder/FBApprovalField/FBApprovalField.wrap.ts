@@ -1,9 +1,10 @@
 import _ from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FBApprovalFieldProps, FBApprovalFieldState, FBApprovalStatus } from ".";
+import { FBApprovalFieldIdentifier, FBApprovalFieldProps, FBApprovalFieldState, FBApprovalStatus } from ".";
 import { FB } from "..";
 import { store } from "../../../state/store";
+import FBDRStore from "../stores/ui/FBDRStore";
 import FBStore from "../stores/ui/FBStore";
 
 export const withFBApprovalField = <T extends FBApprovalFieldProps>(
@@ -18,30 +19,41 @@ export const withFBApprovalField = <T extends FBApprovalFieldProps>(
     approvalFieldState,
     hasApproved,
     approverStatus,
+    disabled = !FBDRStore.isOutput,
     ...props
   }: T) => {
 
     approvalFieldState = FB.useRef<FBApprovalFieldState>(FBApprovalFieldState);
 
-    approverStatus = (email: string | undefined): string => {
-      if (!email || !_.includes(approvalFieldState?.hasApproved, email)) {
+    function groupCheck(group: string): boolean {
+      const filteredGroup = _.filter(currentUser.groups, { id: group });
+      return !_.isEmpty(filteredGroup);
+    }
+
+    approverStatus = (identifier: string | undefined): string => {
+      if (!identifier || !_.includes(approvalFieldState?.hasApproved, identifier)) {
         return FBApprovalStatus.Pending;
       }
       return FBApprovalStatus.Approved;
     };
 
-    canApprove = (email: string | undefined): boolean => {
-      if (!email) {
+    canApprove = (identifier: string | undefined): boolean => {
+      if (!identifier) {
         return false;
       }
       return (
-        email === currentUser?.email &&
-        approverStatus!(email) !== FBApprovalStatus.Approved
+        (identifier === currentUser?.email || groupCheck(identifier)) &&
+        approverStatus!(identifier) !== FBApprovalStatus.Approved
       );
     };
 
-    onClick = () => {
-      approvalFieldState?.addApprover(currentUser.email);
+    onClick = (identifierType: FBApprovalFieldIdentifier) => () => {
+      if (identifierType === "approver") {
+        approvalFieldState?.addApprover([currentUser.email]);
+      } else {
+        approvalFieldState?.addApprover(_.map(currentUser.groups, "id"));
+      }
+      name && FBStore.setValue(name, hasApproved);
     };
 
     React.useEffect(() => {
@@ -63,6 +75,7 @@ export const withFBApprovalField = <T extends FBApprovalFieldProps>(
       currentUser,
       canApprove,
       onClick,
+      disabled,
       name,
     });
   };

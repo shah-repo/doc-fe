@@ -24,6 +24,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     options,
     renderTags,
     disabled,
+    defaultValue,
     ...props
   }: T) => {
     state = FB.useRef<FBAutocompleteState>(FBAutocompleteState);
@@ -83,7 +84,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
         renderEl: renderEl || state?.loaded,
         options: options || state?.data,
         loading: state?.loading,
-        defaultValue: state?.defaultValue,
+        defaultValue: state?.defaultValue || defaultValue,
         name,
         renderInput,
         optionValueKey,
