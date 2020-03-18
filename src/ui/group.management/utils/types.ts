@@ -3,26 +3,27 @@ import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
 import { GetEmployeeResponse, LoadCompanyGroup } from "../../../state/ducks/userManagement";
 
 export const DEFAULT_SELECTED_GROUP: LoadCompanyGroup = {
-    id: "",
-    name: "",
-    permissions: [],
-    defaultForNewUsers: true,
-    tags: null,
-    company: COMPANY_DEFAULT_STATE,
-    employees: [],
-    isOfficial: true,
-  };
+  id: "",
+  name: "",
+  permissions: [],
+  defaultForNewUsers: true,
+  tags: null,
+  company: COMPANY_DEFAULT_STATE,
+  employees: [],
+  isOfficial: true,
+  parents: [],
+};
 
 export const DEFAULT_ACTIVE_EMPLOYEES: GetEmployeeResponse[] = [{
+  id: "",
+  active: true,
+  groups: [],
+  user: {
     id: "",
-    active: true,
-    groups: [],
-    user: {
-        id: "",
-        email: "",
-        name: "",
-    },
-  }];
+    email: "",
+    name: "",
+  },
+}];
 
 export const DEFAULT_GROUP: GroupRequestBody = {
   name: "",
@@ -31,4 +32,5 @@ export const DEFAULT_GROUP: GroupRequestBody = {
   isOfficial: false,
   tags: [],
   employees: [],
+  parents: [],
 };

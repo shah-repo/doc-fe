@@ -62,6 +62,7 @@ export interface Group {
   name: string;
   tags: Nullable<GroupTag[]>;
   permissions: Permission[];
+  parents: Group[];
 }
 
 export type AuthUserPayload = User;

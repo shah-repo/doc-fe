@@ -1,39 +1,41 @@
-import { Employee } from "../../../state/ducks/company";
+import { Group } from "../../../state/ducks/auth/types";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 
-export const toMembersOptions = (values: GetEmployeeResponse[]): OptionType[] => {
-        return values.map((employee) => ({
-            label: employee.user.name,
-            value: employee.id,
-        }));
-  };
+export const toMembersOptions = (values: GetEmployeeResponse[]): OptionType[] => values.map((employee) => ({
+  label: employee.user.name,
+  value: employee.id,
+}));
 
-export const toOptions = (values: any[]): OptionType[] => {
-    return values.map((value) => ({
-        label: value,
-        value,
-    }));
-};
+export const toOptions = (values: any[]): OptionType[] => values.map((value) => ({
+  label: value,
+  value,
+}));
+
+export const toParentOptions = (values: Group[]): OptionType[] => values.map((value) => ({
+  label: value.name,
+  value: value.id,
+}));
+
 
 export const toArray = (values: OptionType[]): any[] => {
-    if (values === null) {
-        return [];
-    }
-    return values.map((value) =>
-        value.value,
-    );
+  if (values === null) {
+    return [];
+  }
+  return values.map((value) =>
+    value.value,
+  );
 };
-export const toEmployeeIds = (employees: Employee[] | null) => {
-    if (!employees) {return []; }
-    return employees.map((employee) => ({
-                id: employee.id,
-        }));
+export const toArrayOfIds = (data: any[] | null) => {
+  if (!data) { return []; }
+  return data.map((item) => ({
+    id: item.id,
+  }));
 };
 
-export const toMembersEditRequestBody = (members: OptionType[] | null) => {
-    if (members == null) {return []; }
-    return members.map((member) => ({
-            id: member.value,
-        }));
+export const toRequestBody = (options: OptionType[] | null) => {
+  if (options == null) { return []; }
+  return options.map((option) => ({
+    id: option.value,
+  }));
 };
