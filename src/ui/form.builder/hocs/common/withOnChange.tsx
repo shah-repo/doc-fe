@@ -92,7 +92,7 @@ export const withOnChange = <T extends FBInputProps>(
     }
 
     function isString() {
-      return (ev as unknown) as string;
+      return _.toString(ev);
     }
 
     let fieldValue = {
