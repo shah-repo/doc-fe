@@ -111,7 +111,7 @@ export const toNewVersionRequestBody = (
         id: _.get(values, "document.id"),
         docId: _.get(values, "document.docId"),
         securityList: {
-          securityEmployees:  (values.securityEmployees || []).map((employee) => ({ id: employee.value })),
+          securityEmployees: (values.securityEmployees || []).map((employee) => ({ id: employee.value })),
           securityGroups: (values.securityGroups || []).map((group) => ({ id: group.value })),
         },
       };
@@ -129,8 +129,9 @@ export const toDocumentRevisionFormValuesWithRevisionChange = (
     documentRevision,
   );
   values.revisionChangeType = RevisionChangeType.NextRevision;
+  values.outputRevision = true;
   FBDRStore.setValues({
-    ...documentRevision,
+    ...values,
     status: DocumentRevisionStatus.Draft,
   });
   return values;
