@@ -2,6 +2,7 @@ import { Box, Typography } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import { FormattedNumber, useIntl } from "react-intl";
+import { FBAutocomplete } from "../..";
 import Text from "../../../components/Text";
 import { TAX_RATE } from "../../helpers/constants";
 import FBStore from "../../stores/ui/FBStore";
@@ -67,6 +68,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
       tax: undefined,
       order: undefined,
       isTraceabilityRequired: undefined,
+      glCode: undefined,
     });
     setErrorMessage("");
   }, []);
@@ -82,6 +84,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
       "date",
       "description",
       "unitPrice",
+      "glCode",
     ];
 
     let newError = "";
@@ -116,6 +119,13 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
           inputProps={{ type: "number" }}
           label="form.builder.field.qunatity.ordered"
           name="order"
+        />
+        <FBAutocomplete
+          label="GL code"
+          optionId="9"
+          optionValueKey="id"
+          optionLabelKey="name"
+          name="glCode"
         />
         <FBTextField
           label="form.builder.field.units"
