@@ -1,7 +1,10 @@
 import { Box, Typography } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
-import { useIntl } from "react-intl";
+import { FormattedNumber, useIntl } from "react-intl";
+import { FBAutocomplete } from "../..";
+import Text from "../../../components/Text";
+import { TAX_RATE } from "../../helpers/constants";
 import FBStore from "../../stores/ui/FBStore";
 import FBButton from "../inputs/FBButton";
 import FBCheckbox from "../inputs/FBCheckbox";
@@ -15,6 +18,36 @@ interface Props {
   closeDialog: () => void;
   items: PurchaseOrderItem[];
 }
+
+interface TotalCostProps {
+  order: number;
+  unitPrice: number;
+  taxRequired: boolean;
+}
+
+const TotalCost: React.FunctionComponent<TotalCostProps> = ({
+  order = 0,
+  unitPrice = 0,
+  taxRequired = false,
+}) => {
+  const totalPrice = React.useMemo(() => {
+    const price = order * unitPrice;
+    return taxRequired ? (price + (price * TAX_RATE)) : price;
+  }
+  , [order, unitPrice, taxRequired]);
+  return (
+    <Box margin="5px 0">
+      <Typography variant="h5" align="right">
+        <Box minWidth="150px" component="span">
+          <Text translation="form.builder.total" />
+        </Box>
+        <Box minWidth="150px" component="span">
+          <FormattedNumber value={totalPrice} style="currency" currency="USD" />
+        </Box>
+      </Typography>
+    </Box>
+  );
+};
 
 const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
   initialValues = {} as PurchaseOrderItem,
@@ -35,6 +68,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
       tax: undefined,
       order: undefined,
       isTraceabilityRequired: undefined,
+      glCode: undefined,
     });
     setErrorMessage("");
   }, []);
@@ -50,6 +84,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
       "date",
       "description",
       "unitPrice",
+      "glCode",
     ];
 
     let newError = "";
@@ -85,6 +120,11 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
           label="form.builder.field.qunatity.ordered"
           name="order"
         />
+        <FBAutocomplete
+          label="GL code"
+          optionId="9"
+          name="glCode"
+        />
         <FBTextField
           label="form.builder.field.units"
           name="units"
@@ -114,6 +154,11 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
         <FBCheckbox
           label="form.builder.field.is.traceability.required"
           name="isTraceabilityRequired"
+        />
+        <TotalCost
+          unitPrice={FBStore.getValue("unitPrice")}
+          order={FBStore.getValue("order")}
+          taxRequired={FBStore.getValue("tax")}
         />
         <Box marginBottom="10px">
           <Typography color="error">

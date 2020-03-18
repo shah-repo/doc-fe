@@ -3,6 +3,7 @@ import { Box, TextField, Typography } from "@material-ui/core";
 import React, { useEffect, useRef, useState } from "react";
 import { FormattedNumber } from "react-intl";
 import Text from "../../../components/Text";
+import { TAX_RATE } from "../../helpers/constants";
 import FBStore from "../../stores/ui/FBStore";
 import { PurchaseOrder } from "../inputs/FBPurchaseOrderField";
 
@@ -11,8 +12,6 @@ interface Props {
   name: string;
   disabled: boolean;
 }
-
-const TAX_RATE = 0.065;
 
 const FBPurchaseOrderTotal: React.FunctionComponent<Props> = ({
   values,
