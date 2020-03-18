@@ -123,8 +123,6 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
         <FBAutocomplete
           label="GL code"
           optionId="9"
-          optionValueKey="id"
-          optionLabelKey="name"
           name="glCode"
         />
         <FBTextField
