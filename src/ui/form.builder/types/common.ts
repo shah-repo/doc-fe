@@ -5,6 +5,7 @@ import { BaseTextFieldProps, OutlinedTextFieldProps } from "@material-ui/core/Te
 import { Dictionary } from "lodash";
 import { ReactNode } from "react";
 import { ValueType } from "react-select/src/types";
+import { Employee } from "../../../state/ducks/company";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
 import { TextProps } from "../../components/Text";
@@ -105,6 +106,7 @@ export type FBInputProps = Omit<FBFormikFieldProps, "name">
   paragraph?: string;
   includeQRScan?: boolean;
   loading?: boolean;
+  approvers?: Employee[];
 };
 
 export type FBFormDefaultProps = FBInputProps &

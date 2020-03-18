@@ -26,9 +26,11 @@ import FBFileUpload from "../components/navigation/FBFileUpload";
 import FBLink from "../components/navigation/FBLink";
 import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaItem";
 import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
+import FBApprovalField from "../FBApprovalField/FBApprovalField";
 import FBEditorParagraph from "../FBEditorParagraph/FBEditorParagraph";
 import FBEditorStepSection from "../FBEditorStepSection";
 import FBHelloSign from "../FBHelloSign";
+import FBEditorApprovalField from "../FFEditorApprovalField";
 import { FBEditorElementType } from "../types/editor";
 
 export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = {
@@ -53,7 +55,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   instructionsmediaupload: FBLabelEditor,
   evidencemediaupload: FBLabelEditor,
   checkpoint: FBLabelEditor,
-  pause: FBLabelEditor,
+  approval: FBEditorApprovalField,
   createlabel: FBLabelEditor,
   quantity: FBLabelEditor,
   timer: FBLabelEditor,
@@ -83,7 +85,7 @@ export const FBFieldComponent: Dictionary<any> = {
   instructionsmediaupload: FBMediaAlbumField,
   evidencemediaupload: FBMediaAlbumField,
   checkpoint: FBButton,
-  pause: FBButton,
+  approval: FBApprovalField,
   createlabel: FBButton,
   quantity: FBQuantityField,
   timer: FBTimerField,
@@ -110,7 +112,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "evidencemediaupload",
   ],
   approvals: ["hellosign"],
-  buttons: ["checkpoint", "pause", "createlabel"],
+  buttons: ["checkpoint", "approval", "createlabel"],
   lists: ["autocomplete"],
   actions: ["action"],
 };
@@ -141,7 +143,7 @@ export const omitLabelValidation: FBEditorElementType[] = [
 
 export const pickDefaultLabel: FBEditorElementType[] = [
   "checkpoint",
-  "pause",
+  "approval",
   "createlabel",
   "quantity",
   "stepsection",

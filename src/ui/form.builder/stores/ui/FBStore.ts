@@ -146,6 +146,10 @@ export class FormBuilderStore {
     this.values = values || {};
   };
 
+  @action public setValue = (name: string, value: any) => {
+    this.setValues(_.set(this.values, name, value));
+  };
+
   @action private setModeConfig = () => {
     switch (this.mode) {
       case "none":

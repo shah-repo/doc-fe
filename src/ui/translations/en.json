@@ -468,7 +468,7 @@
   "form.builder.stepsection": "Step",
   "form.builder.buttons": "Buttons",
   "form.builder.checkpoint": "Checkpoint",
-  "form.builder.pause": "Pause",
+  "form.builder.approval": "Approve",
   "form.builder.createlabel": "Create a Label",
   "form.builder.include.qr.scan": "Include QR Scan",
   "form.builder.scan.qr": "Scan QR code",
