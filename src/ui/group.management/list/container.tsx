@@ -5,8 +5,10 @@ import { getTableCriteria, getTableData } from "../../../common/utils/selectors"
 import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
-import { LoadCompanyGroup } from "../../../state/ducks/userManagement";
+import { LoadCompanyGroup, userManagementActions } from "../../../state/ducks/userManagement";
 import { HOME_URL } from "../../constants/urls";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
 import useGetHasTag from "../../hooks/useGetHasTag";
 import { getHasOfficialPermissions, getHasUnofficialPermissions } from "../utils/helpers";
@@ -35,14 +37,28 @@ export const ListContainer: React.FunctionComponent<Props> = () => {
   const hasUnofficialPermissions = getHasUnofficialPermissions(currentEmployeePermissions);
   const canCreateGroups = hasOfficialPermissions || hasUnofficialPermissions;
 
+  const asyncPreview = useAsync({
+    onSuccess: (data: any) => {
+      setGroup(data);
+      previewGroupsDialog.open();
+    },
+  });
+
+  const asyncEdit = useAsync({
+    onSuccess: (data: any) => {
+      setGroup(data);
+      editGroupsDialog.open();
+    },
+  });
+
+  const loadGroupByIdAction = useActionCreator(userManagementActions.loadGroupById);
+
   const handleGroupsPreview = (rowData: LoadCompanyGroup) => {
-    setGroup(rowData);
-    previewGroupsDialog.open();
+    asyncPreview.start(loadGroupByIdAction, rowData.id, asyncPreview);
   };
 
   const handleGroupsEdit = (rowData: LoadCompanyGroup) => {
-    setGroup(rowData);
-    editGroupsDialog.open();
+    asyncEdit.start(loadGroupByIdAction, rowData.id, asyncEdit);
   };
 
   const handlePermission = (rowData: LoadCompanyGroup) => {
