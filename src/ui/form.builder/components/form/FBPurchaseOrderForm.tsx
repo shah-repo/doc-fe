@@ -122,14 +122,13 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
         </Box>
         <Box textAlign="right">
           <FBButton
-            type="button"
             variant="outlined"
             onClick={closeDialog}
-            label="Cancel"
+            label="common.cancel"
           />
           <FBButton
-            type="submit"
-            label="Done"
+            buttonType="submit"
+            label="common.done"
           />
         </Box>
       </Form>
