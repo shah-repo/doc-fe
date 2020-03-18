@@ -11,6 +11,7 @@ interface Props {
   initialValues?: PurchaseOrderItem;
   onSubmit: (values: any) => void;
   disabled: boolean;
+  items: PurchaseOrderItem[];
 }
 
 const FBPurchaseOrderDialog: React.FunctionComponent<Props> = ({
@@ -18,6 +19,7 @@ const FBPurchaseOrderDialog: React.FunctionComponent<Props> = ({
   onSubmit,
   disabled,
   initialValues,
+  items,
 }) => {
   const addItem = () => {
     dialog.open();
@@ -49,6 +51,7 @@ const FBPurchaseOrderDialog: React.FunctionComponent<Props> = ({
           closeDialog={closeDialog}
           onSubmit={handleSubmit}
           initialValues={initialValues}
+          items={items}
         />
       </DialogContent>
     </Dialog>

@@ -44,9 +44,6 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     }
 
     React.useEffect(() => {
-      if (FBStore.mode === "design") {
-        return;
-      }
       const value = _.get(FBStore.getValues(), name) || "";
       state?.setDefaultState(value);
       state?.setUrl(optionPath);
