@@ -108,7 +108,6 @@ export const withOnChange = <T extends FBInputProps>(
         if (_.isEqual(value as string, "includeContext")) {
           storeValue("contextLabel", contextLabel);
         }
-        return;
       },
       checkbox: isChecked,
       radio: isChecked,
@@ -129,8 +128,11 @@ export const withOnChange = <T extends FBInputProps>(
       },
     };
 
+    if (type === "checkboxgroup") {
+      return;
+    }
     fieldValue = fieldValue[type || ""] ? fieldValue[type || ""]() : fieldValue.default();
-    !_.isUndefined(fieldValue) && storeValue(name, fieldValue);
+    storeValue(name, fieldValue);
   };
 
   return Component({

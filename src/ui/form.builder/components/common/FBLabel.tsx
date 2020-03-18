@@ -20,12 +20,12 @@ const FBLabel: React.FunctionComponent<FBLabelProps> = ({
       fontWeight={300}
       {...boxProps}
     >
+      <Text message={label as string} values={labelValues} />
       {loading && (
-        <Box mr={1} component="span">
+        <Box ml={1} component="span">
           <CircularProgress size={15} />
         </Box>
       )}
-      <Text message={label as string} values={labelValues} />
     </Box>
   </FormLabel>
 );
