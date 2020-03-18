@@ -3,6 +3,7 @@ import { action, computed, observable } from "mobx";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { DocumentGroupType } from "../../../../state/ducks/documentRevisions/documentType";
 import { canEditDocumentRevision } from "../../../document.revision/utils/helpers";
+import { DocumentRevisionFormValues } from "../../../documentRevision/forms/types";
 import { FBDocumentRevisionMode, FBDRGroupConfig } from "../../types/store";
 import FBStore from "./FBStore";
 
@@ -18,7 +19,7 @@ export class FBDocumentRevisionStore {
     this.setMode(docRevMode);
   };
 
-  @action public setValues = (values: DocumentRevision) => {
+  @action public setValues = (values: DocumentRevision | DocumentRevisionFormValues) => {
     const fmGroup = _.get(values, "document.documentType.group");
     const outputGroup = _.get(values, "formDocument.document.docId");
 
@@ -51,15 +52,16 @@ export class FBDocumentRevisionStore {
     }
   };
 
-  @action private outputConfig = (values: DocumentRevision) => {
+  @action private outputConfig = (values: DocumentRevision | DocumentRevisionFormValues) => {
     const schema = _.get(values, "formDocument.formTemplate.schema") || [];
+    const isRevised = (values as DocumentRevisionFormValues).outputRevision;
     const { formInput } = values;
 
     const editableIn = [
       DocumentRevisionStatus.Draft,
       DocumentRevisionStatus.PendingChange,
     ];
-    const canEditOutput = editableIn.includes(values.status);
+    const canEditOutput = isRevised ||  editableIn.includes((values as DocumentRevision).status);
     let docRevMode: FBDocumentRevisionMode = canEditOutput ? "outputCreate" : "outputPreview";
     if (docRevMode === "outputCreate" && !_.isEmpty(values.id)) {
       docRevMode = "outputUpdate";
@@ -68,12 +70,14 @@ export class FBDocumentRevisionStore {
     this.setGroupConfig({ docRevMode, schema, formInput });
   };
 
-  @action private fmConfig = (values: DocumentRevision) => {
+  @action private fmConfig = (values: DocumentRevision | DocumentRevisionFormValues) => {
     const schema = _.get(values, "formTemplate.schema") || [];
     const { formTemplate, formInput } = values;
     let docRevMode: FBDocumentRevisionMode = formTemplate ? "update" : "create";
+    const isRevised = (values as DocumentRevisionFormValues).outputRevision;
+    const isEditable = isRevised || canEditDocumentRevision(values as DocumentRevision);
 
-    if (docRevMode === "update" && !canEditDocumentRevision(values)) {
+    if (docRevMode === "update" && !isEditable) {
       docRevMode = "preview";
     }
     this.setGroupConfig({ docRevMode, schema, formInput });

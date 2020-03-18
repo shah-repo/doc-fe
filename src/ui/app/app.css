@@ -14,3 +14,7 @@ body {
 .MuiSelect-icon {
   right: 10px;
 }
+
+.x-hellosign-embedded {
+  z-index: 9999;
+}

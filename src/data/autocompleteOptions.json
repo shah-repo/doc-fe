@@ -47,7 +47,39 @@
     "label": "TL numbers list",
     "optionValueKey": "id",
     "optionLabelKey": "name",
-    "prefixLabelRoot": "",
+    "prefixLabelRoot": "document.docId",
     "root": ""
+  },
+  {
+    "id": "7",
+    "path": "/document_revisions?documentTypeAcronym=CSL",
+    "label": "CSL numbers list",
+    "optionValueKey": "id",
+    "optionLabelKey": "name",
+    "prefixLabelRoot": "document.docId",
+    "root": ""
+  },
+  {
+    "id": "8",
+    "path": "/company/mine",
+    "label": "Company addresses",
+    "optionValueKey": "id",
+    "optionLabelKey": "name",
+    "root": "addresses"
+  },
+  {
+    "id": "9",
+    "path": "/company/mine",
+    "label": "GL codes",
+    "optionValueKey": "id",
+    "optionLabelKey": "name",
+    "root": "acctCodes"
+  },
+  {
+    "id": "10",
+    "path": "/groups",
+    "label": "Groups",
+    "optionValueKey": "id",
+    "optionLabelKey": "name"
   }
 ]

@@ -23,14 +23,17 @@ export type FBEditorElementType =
   | "schemaSelect"
   | "schemaItem"
   | "action"
+  | "hellosign"
   | "purchaseorder"
   | "paragraph"
-  | "sectionnumbering"
+  | "stepsection"
   | "instructionsmediaupload"
   | "evidencemediaupload"
   | "checkpoint"
-  | "pause"
-  | "createlabel";
+  | "approval"
+  | "createlabel"
+  | "quantity"
+  | "timer";
 
 export type FBEditorModeType = "create" | "update";
 

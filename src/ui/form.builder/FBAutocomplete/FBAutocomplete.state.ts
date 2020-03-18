@@ -15,6 +15,9 @@ export class FBAutocompleteState extends FBRequest<any, any> {
   };
 
   @action public onSuccess = () => {
+    if (!this.data.some((d) => d.id)) {
+      set(this, "data", _.map(this.data, (d) => ({ id: d, name: d })));
+    }
     !_.isUndefined(this.defaultState) &&
       this.setDefaultValue(this.defaultState);
   };

@@ -6957,6 +6957,15 @@ he@1.2.x:
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
 
+hellosign-embedded@^2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/hellosign-embedded/-/hellosign-embedded-2.6.0.tgz#b4e1f0c7cbb5dbbdb3e68d3d6bd98a17dfae5b1b"
+  integrity sha512-zGevmO8yPNCuQFucxObBj7sT0vybPa1Km9U14mFNFMPf+0YbwxrPHtYfwZEZctcH6DH/0B4w8m9EuwA2rO2+Cg==
+  dependencies:
+    common-tags "^1.8.0"
+    debug "^4.1.1"
+    tiny-emitter "^2.1.0"
+
 help-me@^1.0.1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/help-me/-/help-me-1.1.0.tgz#8f2d508d0600b4a456da2f086556e7e5c056a3c6"
@@ -13453,7 +13462,7 @@ timsort@^0.3.0:
   resolved "https://registry.yarnpkg.com/timsort/-/timsort-0.3.0.tgz#405411a8e7e6339fe64db9a234de11dc31e02bd4"
   integrity sha1-QFQRqOfmM5/mTbmiNN4R3DHgK9Q=
 
-tiny-emitter@^2.0.0:
+tiny-emitter@^2.0.0, tiny-emitter@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/tiny-emitter/-/tiny-emitter-2.1.0.tgz#1d1a56edfc51c43e863cbb5382a72330e3555423"
   integrity sha512-NB6Dk1A9xgQPMoGqC5CVXn123gWyte215ONT5Pp5a0yt4nlEoO1ZWeCwpncaekPHXO60i47ihFnZPiRPjRMq4Q==

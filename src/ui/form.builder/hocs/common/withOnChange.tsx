@@ -129,7 +129,7 @@ export const withOnChange = <T extends FBInputProps>(
     };
 
     fieldValue = fieldValue[type || ""] ? fieldValue[type || ""]() : fieldValue.default();
-    fieldValue && storeValue(name, fieldValue);
+    !_.isUndefined(fieldValue) && storeValue(name, fieldValue);
   };
 
   return Component({

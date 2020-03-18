@@ -7,15 +7,18 @@ import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { ChangeRequest, changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../../state/reducers";
 import ChangeRequestAuditContainer from "../../changeRequest/audit/Audit.container";
 import SummaryPresenter from "../../changeRequest/documentRevision/DocumentRevisionControlPreview.presenter";
 import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "../../changeRequest/forms/transform";
 import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
+import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
 import useAsync from "../../hooks/useAsync";
 import { canChangeCROwner, canEditApprovers, canEditChangeRequest } from "../utils/helpers";
 import { changeRequestEditPath } from "../utils/paths";
 import { SummaryDispatchProps } from "../utils/types";
+import DocumentRevisionLoader from "./loader";
 import Presenter from "./presenter";
 import ChangeRequestSummarySockets from "./sockets";
 import styles from "./styles";
@@ -54,10 +57,15 @@ export const Container: React.FunctionComponent<Props> = ({
 }) => {
   const canChangeOwnerShip = canChangeCROwner(dataProp.state, currentEmployeeId, dataProp.owner.id, isCompanyAdmin);
 
+  const [docRev, setDocRev] = React.useState<DocumentRevision | null>(null);
   const async = useAsync<ChangeRequest>();
   if (canEditChangeRequest({ dataProp, currentUserEmail })) {
     return <Redirect to={changeRequestEditPath(dataProp.id)} />;
   }
+
+  const docRevSummary = (documentRevision: DocumentRevision) =>
+    setDocRev(documentRevision);
+  const crSummary = () => setDocRev(null);
 
   const canEdit = canEditApprovers({ dataProp, currentUserEmail });
 
@@ -73,18 +81,18 @@ export const Container: React.FunctionComponent<Props> = ({
   const summaryPresenterRenderer = (
     props: FormikProps<ChangeRequestFormValues>,
   ) => (
-    <Form>
-      <Presenter
-        dataProp={dataProp}
-        asyncState={async.asyncState}
-        canEdit={canEdit}
-        currentUserEmail={currentUserEmail}
-        closeTask={closeTask}
-        canChangeOwnerShip={canChangeOwnerShip}
-        {...props}
-      />
-    </Form>
-  );
+      <Form>
+        <Presenter
+          dataProp={dataProp}
+          asyncState={async.asyncState}
+          canEdit={canEdit}
+          currentUserEmail={currentUserEmail}
+          closeTask={closeTask}
+          canChangeOwnerShip={canChangeOwnerShip}
+          {...props}
+        />
+      </Form>
+    );
 
   const validate = (values: ChangeRequestFormValues) => {
     const errors: FormikErrors<any> = {};
@@ -118,12 +126,19 @@ export const Container: React.FunctionComponent<Props> = ({
         <Grid item={true} xs={2} className={classes.sidebar}>
           <SummaryPresenter
             documentsInChangeRequest={dataProp.documentRevisions}
+            selectAssessmentForm={crSummary}
+            selectDocumentRevision={docRevSummary}
+            selectedDocumentRevision={docRev ? docRev.id : null}
           />
         </Grid>
         <Grid item={true} xs={7} className={classes.root}>
-          {summaryFormikRenderer()}
+          {docRev && <DocumentRevisionLoader documentRevisionId={docRev.id} />}
+          {!docRev && summaryFormikRenderer()}
         </Grid>
         <Grid item={true} xs={3} className={classes.sidebar}>
+          {docRev && (
+            <DocumentRevisionAuditContainer documentRevisionId={docRev.id} />
+          )}
           {dataProp && (
             <ChangeRequestAuditContainer changeRequestId={dataProp.id} />
           )}
