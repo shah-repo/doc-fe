@@ -476,6 +476,7 @@
   "form.builder.timer": "Timer",
   "form.builder.start.timer": "Start Timer",
   "form.builder.pn.unique": "Part Number must be unique",
+  "form.builder.approver.groups": "Groups",
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.watermark": "Download PDF file",

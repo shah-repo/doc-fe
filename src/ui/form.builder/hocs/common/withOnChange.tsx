@@ -115,11 +115,12 @@ export const withOnChange = <T extends FBInputProps>(
       texteditor: isString,
       datepicker: isString,
       autocomplete() {
-        const { optionValueKey = "id", valueType = "key"} = props;
+        const { optionValueKey = "id", valueType = "key", optionObjectKeys } = props;
         if (_.isArray(value)) {
-          return (valueType === "object")
-            ? value
-            : _.map(value, (v) => (_.isString(v) ? v : _.get(v, optionValueKey)));
+          if (valueType === "object") {
+            return optionObjectKeys ? _.map(value, (v) => _.pick(v, optionObjectKeys!)) : value;
+          }
+          return _.map(value, (v) => (_.isString(v) ? v : _.get(v, optionValueKey)));
         }
         return _.get(value, optionValueKey);
       },

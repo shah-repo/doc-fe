@@ -4,9 +4,9 @@ import { action, observable, set } from "mobx";
 export class FBApprovalFieldState {
   @observable public hasApproved: string[] = [];
 
-  @action public addApprover = (email: string) => {
+  @action public addApprover = (identifier: string[]) => {
     // this.hasApproved.push(email);
-    set(this, "hasApproved", _.union(this.hasApproved, [email]));
+    set(this, "hasApproved", _.union(this.hasApproved, identifier));
   };
 
   @action public removeApprover = (email: string) => {
