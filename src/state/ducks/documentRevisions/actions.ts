@@ -45,6 +45,7 @@ ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCal
   method: "patch",
   data: body,
   onSuccess: (documentRevision, dispatch) => {
+    dispatch(loadAudit(id));
     dispatch(documentRevisionSet(documentRevision));
   },
   handlers,

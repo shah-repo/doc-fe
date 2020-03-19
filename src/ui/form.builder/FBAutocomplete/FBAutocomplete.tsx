@@ -24,9 +24,12 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
           <Text message="form.builder.scan.qr" />
         </Typography>
       </Box>)}
-    <Autocomplete
-      {...{ options, multiple, getOptionLabel, renderInput, defaultValue, renderTags }}
-    />
+    {renderEl && (
+      <Autocomplete
+        {...{ options, multiple, getOptionLabel, defaultValue, renderTags }}
+        renderInput={renderInput || (() => <div />)}
+      />
+    )}
   </FBInput>
 );
 

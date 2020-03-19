@@ -7,14 +7,19 @@ const FBButton: React.FunctionComponent<FBButtonProps> = ({
   label = "",
   variant = "contained",
   color = "secondary",
-  type = "button",
+  buttonType = "button",
   ...props
 }) => (
-    <Box component="span" pb={0.5}>
-      <Button {...{ color, variant, type }} {...props} id="FBButton-label">
-        <Text message={label} />
-      </Button>
-    </Box>
-  );
+  <Box component="span" pb={0.5}>
+    <Button
+      {...{ color, variant }}
+      {...props}
+      type={buttonType}
+      id="FBButton-label"
+    >
+      <Text message={label} />
+    </Button>
+  </Box>
+);
 
 export default FBButton;

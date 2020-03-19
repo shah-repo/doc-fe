@@ -2,24 +2,16 @@ import faker from "faker";
 import { Audit } from "../../audit/types";
 import { getOwner } from "../../common/tests/factories";
 import { DocumentType } from "../documentType";
-import {
-  Document,
-  DocumentRevision,
-  DocumentRevisionEditRequestBody,
-  DocumentRevisionStatus,
-  RevisionChangeType,
-} from "../types";
+import { Document, DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType } from "../types";
 
-export const generateDocumentType = (docType: Partial<DocumentType> = {}): DocumentType => {
-  return {
-    id: faker.random.uuid(),
-    documentTypeAcronym: faker.random.word(),
-    documentTypeName: faker.random.words(),
-    group: "OTHER",
-    isQms: false,
-    ...docType,
-  };
-};
+export const generateDocumentType = (docType: Partial<DocumentType> = {}): DocumentType => ({
+  id: faker.random.uuid(),
+  documentTypeAcronym: faker.random.word(),
+  documentTypeName: faker.random.words(),
+  group: "OTHER",
+  isQms: false,
+  ...docType,
+});
 
 export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> = {}): DocumentRevision => ({
   id: faker.random.uuid(),
@@ -56,6 +48,7 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
           name: faker.random.word(),
           tags: [],
           permissions: [],
+          parents: [],
         },
       ],
     },
@@ -98,6 +91,7 @@ export const getDocument = (document: Partial<Document> = {}): Document => ({
         name: faker.random.word(),
         tags: [],
         permissions: [],
+        parents: [],
       },
     ],
   },

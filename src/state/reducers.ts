@@ -61,9 +61,11 @@ const rootReducer = (state: any, action: any) => {
   if (action.type === LOGOUT_USER || action.type === CLEAR_NON_AUTH_DATA) {
     const { auth: authState } = state;
     const { company: companyState } = state;
+    const { tableSearch: tableSearchState } = state;
     state = {
       auth: authState,
       company: companyState,
+      tableSearch: tableSearchState,
     };
   }
 
