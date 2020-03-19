@@ -1,5 +1,5 @@
 import { Attachment } from "../attachments";
-import { User } from "../auth/types";
+import { Group, User } from "../auth/types";
 import { ChangeRequest } from "../changeRequest";
 import { Approval, Owner } from "../common";
 import { DocumentRevision, Reference } from "../documentRevisions";
@@ -10,15 +10,16 @@ export interface Audit {
   field: string;
   type: string;
   nextValue:
-    | string
-    | User
-    | Owner
-    | Attachment
-    | Approval
-    | Reference
-    | DocumentRevision
-    | ChangeRequest
-    | DocumentType;
+  | string
+  | User
+  | Owner
+  | Attachment
+  | Approval
+  | Reference
+  | DocumentRevision
+  | ChangeRequest
+  | DocumentType
+  | Group;
   timestamp: string;
   groupId: string;
   owner: Owner;
