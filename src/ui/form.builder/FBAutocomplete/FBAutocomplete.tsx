@@ -28,7 +28,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
       {renderEl && (
         <Autocomplete
           {...{ options, multiple, getOptionLabel, defaultValue, renderTags }}
-          renderInput={renderInput || (() => <div />)}
+          renderInput={renderInput!}
           disableCloseOnSelect={multiple}
         />
       )}
