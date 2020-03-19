@@ -1,5 +1,6 @@
 import React from "react";
 import { FBAutocomplete } from "..";
+import FBCheckbox from "../components/inputs/FBCheckbox";
 import FBTextField from "../components/inputs/FBTextField";
 import { FBInputProps } from "../types/common";
 
@@ -30,6 +31,7 @@ const FBEditorApprovalField: React.FunctionComponent<FBEditorApprovalFieldProps>
       optionObjectKeys={["id", "name"]}
       defaultValue={approverGroups}
     />
+    <FBCheckbox name="approveIsBlocking" label="form.builder.blocking" />
   </>
 );
 
