@@ -120,7 +120,6 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
             {renderForm}
           </Formik>
         </DialogContent>
-        }
       </Dialog>
     </>
   );
