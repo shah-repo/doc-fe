@@ -211,6 +211,16 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     />
   );
 
+  const upgradeButtonRenderer = () => (
+    <Button
+      variant="outlined"
+      onClick={onUpgradeClick}
+      id="DocumentRevisionForm-upgrade"
+    >
+      <Text translation="common.upgrade"/>
+    </Button>
+  );
+
   const isReadyForUpgrade = documentRevision.formDocument?.status === DocumentRevisionStatus.Deprecated;
 
   return (
@@ -368,15 +378,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               onClick={onFormClick}
               id="DocumentRevisionForm-submit"
             />
-            {isReadyForUpgrade &&
-            <Button
-              variant="outlined"
-              onClick={onUpgradeClick}
-              id="DocumentRevisionForm-upgrade"
-            >
-              <Text translation="common.upgrade"/>
-            </Button>
-            }
+            {isReadyForUpgrade && upgradeButtonRenderer()}
             <ApproveAndRelease
               id={values.id}
               status={values.status}
