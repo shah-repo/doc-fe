@@ -1,21 +1,12 @@
 import { Paper, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import { useDispatch } from "react-redux";
-import {
-  DocumentRevision,
-  documentRevisionsActions,
-  DocumentRevisionStatus,
-} from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsActions, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
-import {
-  TableDataProps,
-  TablePanelStateProps,
-  TableSearchQueryType,
-  TableSelectionProps,
-} from "../../components/table/types";
+import { TableDataProps, TablePanelStateProps, TableSearchQueryType, TableSelectionProps } from "../../components/table/types";
 import { generateVersionNumber } from "../../documentRevision/helpers";
 import styles from "./DocumentRevisionTable.styles";
 
@@ -29,7 +20,7 @@ interface DocumentRevisionTableProps extends WithStyles<typeof styles> {
 }
 
 const DocumentRevisionTable: React.FunctionComponent<
-  DocumentRevisionTableProps
+DocumentRevisionTableProps
 > = ({
   classes,
   tableName,
@@ -56,7 +47,7 @@ const DocumentRevisionTable: React.FunctionComponent<
   const customDataSet = (data: DocumentRevision[]) =>
     data.filter((rec) => !addedDocuments.includes(rec.id));
 
-  const columns: Array<TableColumnProps<DocumentRevision>> = [
+  const columns: TableColumnProps<DocumentRevision>[] = [
     {
       key: "docId",
       label: "document.revision.list.docId",
@@ -115,19 +106,17 @@ const DocumentRevisionTable: React.FunctionComponent<
     },
   ];
 
-  const bodyRenderer = () => {
-    return (
-      <TablePanel<DocumentRevision>
-        columns={columns}
-        cellMeasure={true}
-        queryUrl={DOCUMENT_REVISION_ROOT_URL}
-        customQuerySet={customQuerySet}
-        customDataSet={customDataSet}
-        tableName={tableName}
-        providedData={documentRevisionsToShow}
-      />
-    );
-  };
+  const bodyRenderer = () => (
+    <TablePanel<DocumentRevision>
+      columns={columns}
+      cellMeasure={true}
+      queryUrl={DOCUMENT_REVISION_ROOT_URL}
+      customQuerySet={customQuerySet}
+      customDataSet={customDataSet}
+      tableName={tableName}
+      providedData={documentRevisionsToShow}
+    />
+  );
 
   return (
     <Paper className={classes.root}>

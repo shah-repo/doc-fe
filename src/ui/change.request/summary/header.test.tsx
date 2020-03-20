@@ -2,19 +2,19 @@ import { Box, Grid, Typography } from "@material-ui/core";
 import { mount } from "enzyme";
 import React from "react";
 import { getChangeRequest } from "../../../state/ducks/changeRequest/tests/factories";
-import { Header, Props  } from "./header";
+import { Header, Props } from "./header";
 
 jest.mock("../../components/Text");
 
 describe("Header tests", () => {
   const defaultProps: Props = {
-  dataProp: getChangeRequest(),
-  classes: {
-    headerContainer: "",
-    status: "",
-    crId: "",
-  },
- };
+    dataProp: getChangeRequest(),
+    classes: {
+      headerContainer: "",
+      status: "",
+      crId: "",
+    },
+  };
 
   const getWrapper = (props: Partial<>) => mount(
     <Header {...defaultProps} {...props}/>,

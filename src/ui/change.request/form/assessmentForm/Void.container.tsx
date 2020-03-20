@@ -15,18 +15,19 @@ const AssessmentFormVoidContainer: React.FunctionComponent<Props> = ({
   const appyTransitionAction = useActionCreator(changeRequestsActions.applyTransition);
   const async = useAsync();
   const voidDocument = () => {
-    if (changeRequest!.documentRevisions.length > 0) {
+    if (changeRequest && changeRequest.documentRevisions.length > 0) {
       dialog.open();
       return;
     }
 
-    async.start(
-      appyTransitionAction,
-      changeRequest!.id,
-      { password: "" },
-      "void",
-      async,
-    );
+    changeRequest
+     && async.start(
+       appyTransitionAction,
+       changeRequest.id,
+       { password: "" },
+       "void",
+       async,
+     );
   };
 
   if (!changeRequest) {

@@ -2,12 +2,7 @@ import _ from "lodash";
 import React, { useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
-import {
-  DocumentRevision,
-  DocumentRevisionsByIdState,
-  documentRevisionsSelectors,
-  DocumentRevisionStatus,
-} from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionsByIdState, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { ApplicationState } from "../../../state/reducers";
 import AddDocumentRevisionContainer from "./AddDocumentRevision.container";
@@ -29,7 +24,7 @@ interface OwnProps {
 }
 
 export type DocumentRevisionControlContainerProps = OwnProps &
-  StateProps;
+StateProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   documentRevisionsList: documentRevisionsSelectors.getDocumentRevisionsList(
@@ -39,7 +34,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 });
 
 export const DocumentRevisionControlContainer: React.FunctionComponent<
-  DocumentRevisionControlContainerProps
+DocumentRevisionControlContainerProps
 > = ({
   setDocumentRevisionsList,
   documentsInChangeRequest,

@@ -16,51 +16,51 @@ const AssessmentFormVoidPresenter: React.FunctionComponent<Props> = ({
   voidDocument,
   dialog,
 }) => (
-    <>
-      <Box position="absolute" marginTop="-50px">
-        <FormMessage asyncState={asyncState} />
-        <FormProgress asyncState={asyncState} />
-      </Box>
-      <Button
-        id="void"
-        variant="outlined"
-        color="primary"
-        onClick={voidDocument}
-        disabled={asyncState.status === AsyncStatus.Active}
-      >
-        <Text translation="common.void" />
-      </Button>
-      <Dialog
-        open={dialog.isOpen}
-        onClose={dialog.close}
-        maxWidth="xs"
-        fullWidth={true}
-        PaperProps={{ id: "voidAlertDialog" }}
-      >
-        <DialogTitle >
-          <Box textAlign="center">
-            <Text translation="common.alert" />
-          </Box>
-        </DialogTitle>
-        <DialogContent>
-          <Box textAlign="center" marginBottom="20px">
-            <DialogContentText>
-              <Text translation="changeRequest.void.alert" />
-            </DialogContentText>
-          </Box>
-        </DialogContent>
-        <Box textAlign="center" marginBottom="10px">
-          <Button
-            id="close"
-            color="primary"
-            variant="contained"
-            onClick={dialog.close}
-          >
-            <Text translation="common.ok" />
-          </Button>
+  <>
+    <Box position="absolute" marginTop="-50px">
+      <FormMessage asyncState={asyncState} />
+      <FormProgress asyncState={asyncState} />
+    </Box>
+    <Button
+      id="void"
+      variant="outlined"
+      color="primary"
+      onClick={voidDocument}
+      disabled={asyncState.status === AsyncStatus.Active}
+    >
+      <Text translation="common.void" />
+    </Button>
+    <Dialog
+      open={dialog.isOpen}
+      onClose={dialog.close}
+      maxWidth="xs"
+      fullWidth={true}
+      PaperProps={{ id: "voidAlertDialog" }}
+    >
+      <DialogTitle >
+        <Box textAlign="center">
+          <Text translation="common.alert" />
         </Box>
-      </Dialog>
-    </>
-  );
+      </DialogTitle>
+      <DialogContent>
+        <Box textAlign="center" marginBottom="20px">
+          <DialogContentText>
+            <Text translation="changeRequest.void.alert" />
+          </DialogContentText>
+        </Box>
+      </DialogContent>
+      <Box textAlign="center" marginBottom="10px">
+        <Button
+          id="close"
+          color="primary"
+          variant="contained"
+          onClick={dialog.close}
+        >
+          <Text translation="common.ok" />
+        </Button>
+      </Box>
+    </Dialog>
+  </>
+);
 
 export default AssessmentFormVoidPresenter;

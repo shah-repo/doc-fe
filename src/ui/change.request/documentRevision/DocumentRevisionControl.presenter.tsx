@@ -47,6 +47,7 @@ DocumentRevisionControlPresenterProps
         }
         onDelete={handleDelete(documentRevisionId)}
         onClick={handleClick(documentRevisionId)}
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         selectedDocumentRevision={selectedDocumentRevision!}
       />
     ));

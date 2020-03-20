@@ -1,10 +1,10 @@
 import { Fab, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
-
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import Text from "../../components/Text";
 import styles from "./DocumentRevisionControlPreview.styles";
 import DocumentRevisionItemPresenter from "./DocumentRevisionItem.presenter";
+
 
 interface OwnProps extends WithStyles<typeof styles> {
   documentsInChangeRequest: DocumentRevision[];
@@ -16,7 +16,7 @@ interface OwnProps extends WithStyles<typeof styles> {
 export type DocumentRevisionControlPreviewPresenterProps = OwnProps;
 
 export const DocumentRevisionControlPreviewPresenter: React.FunctionComponent<
-  DocumentRevisionControlPreviewPresenterProps
+DocumentRevisionControlPreviewPresenterProps
 > = ({
   documentsInChangeRequest,
   selectAssessmentForm,
@@ -29,6 +29,7 @@ export const DocumentRevisionControlPreviewPresenter: React.FunctionComponent<
       <DocumentRevisionItemPresenter
         key={documentRevision.id}
         documentRevision={documentRevision}
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         selectedDocumentRevision={selectedDocumentRevision!}
         onClick={() => selectDocumentRevision(documentRevision)}
       />

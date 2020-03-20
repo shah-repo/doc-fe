@@ -140,6 +140,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
           {
             canChangeOwnerShip &&
             <OwnerChanger
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               requestId={changeRequest!.id}
               requestType={RequestType.ChangeRequest}
             />

@@ -3,7 +3,7 @@ import { shallow } from "enzyme";
 import React from "react";
 import { getAttachment } from "../../../state/ducks/attachments/tests/factories";
 import AttachmentField from "../../components/common/attachment.icon/container";
-import { Assessment,   Props } from "./assessment";
+import { Assessment, Props } from "./assessment";
 
 describe("Assessment tests", () => {
   const defaultProps: Props = {
@@ -28,7 +28,7 @@ describe("Assessment tests", () => {
     },
   };
 
-  const getWrapper = (props: Partial<Props>= {}) => shallow(
+  const getWrapper = (props: Partial<Props> = {}) => shallow(
     <Assessment {...defaultProps} {...props}/>,
   );
 

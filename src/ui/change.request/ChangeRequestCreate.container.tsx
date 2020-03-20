@@ -34,7 +34,7 @@ export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequest
     const async = useAsync<ChangeRequest>({
       onSuccess: (createdChangeRequest?) => {
         setDoNotPrompt(true);
-        history.push(changeRequestEditPath(createdChangeRequest!.id));
+        createdChangeRequest && history.push(changeRequestEditPath(createdChangeRequest.id));
       },
     });
 

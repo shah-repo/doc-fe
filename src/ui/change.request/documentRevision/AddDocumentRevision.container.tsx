@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  DocumentRevision,
-  DocumentRevisionsByIdState,
-  DocumentRevisionStatus,
-} from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionsByIdState, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
 import { AddDocumentRevisionPresenter } from "./AddDocumentRevision.presenter";
 
@@ -30,7 +26,7 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
   tableData,
 }) => {
   const [documentRevisionsToShow, setDocumentRevisionsToShow] = useState<
-    DocumentRevision[]
+  DocumentRevision[]
   >([]);
   const [addedDocuments, setAddedDocuments] = useState<string[]>([]);
   const addDocument = (documentRevisionId: string) =>
@@ -44,7 +40,7 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
     const documentsToIgnore = [...addedDocuments, ...documentsInChangeRequest].map((documentRevisionId) =>
       documentRevisionId);
     const filteredArray = tableData.filter((documentRevision) =>
-      documentsToIgnore.indexOf(documentRevision.id) < 0 && documentRevision.status === DocumentRevisionStatus.Draft);
+      !documentsToIgnore.includes(documentRevision.id) && documentRevision.status === DocumentRevisionStatus.Draft);
     setDocumentRevisionsToShow(filteredArray);
   }, [addedDocuments, documentsInChangeRequest, tableData]);
 
