@@ -16,9 +16,6 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     root: {
       boxShadow: "none",
     },
-    positionFixed: {
-      position: undefined,
-    },
   },
   MuiTypography: {
     caption: {
