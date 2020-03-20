@@ -1,11 +1,4 @@
-import {
-  AppBar,
-  Box,
-  IconButton,
-  TextField,
-  Toolbar,
-  Typography,
-} from "@material-ui/core";
+import { AppBar, Box, IconButton, TextField, Toolbar, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { isEmpty } from "lodash";
 import React from "react";
@@ -61,7 +54,7 @@ export const DialogTitle: React.FunctionComponent<Props> = ({
     />
   );
   return (
-    <AppBar className={classes.appBar}>
+    <AppBar classes={{ positionFixed: classes.positionFixed }} className={classes.appBar}>
       <Toolbar>
         <IconButton
           className={classes.iconButton}
