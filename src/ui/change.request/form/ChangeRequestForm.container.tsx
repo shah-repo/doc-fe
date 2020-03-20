@@ -1,11 +1,7 @@
 import { Grid, WithStyles, withStyles } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import {
-  ChangeRequest,
-} from "../../../state/ducks/changeRequest";
-import {
-  DocumentRevision,
-} from "../../../state/ducks/documentRevisions";
+import { ChangeRequest } from "../../../state/ducks/changeRequest";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { AsyncState } from "../../../state/types";
 import DocumentRevisionControlContainer from "../documentRevision/DocumentRevisionControl.container";
 import { ChangeRequestFormPresenter } from "./ChangeRequestForm.presenter";
@@ -21,10 +17,10 @@ interface OwnProps {
 }
 
 type ChangeRequestFormContainerProps = OwnProps &
-  WithStyles<typeof styles>;
+WithStyles<typeof styles>;
 
 export const ChangeRequestFormContainer: React.FunctionComponent<
-  ChangeRequestFormContainerProps
+ChangeRequestFormContainerProps
 > = ({
   classes,
   onSubmit,
@@ -36,7 +32,7 @@ export const ChangeRequestFormContainer: React.FunctionComponent<
   const alertMessage = "You have unsaved changes.";
   const [isFormDirty, setIsFormDirty] = useState<boolean>(false);
   const [selectedDocumentRevision, setSelectedDocumentRevision] = useState<
-    string | null
+  string | null
   >(null);
   const [documentRevisionsList, setDocumentRevisionsList] = useState<string[]>(
     initialValues.documentRevisions,

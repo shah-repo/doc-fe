@@ -6,7 +6,7 @@ import { ApplicationState } from "../../../state/reducers";
 import TransitionDialog from "../../components/transitionDialog/TransitionDialog";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
-import { PasswordFormValues } from "../forms/types";
+import { PasswordFormValues } from "../form/types";
 
 interface OwnProps {
   changeRequestId: string;

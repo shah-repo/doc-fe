@@ -1,7 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import { AssessmentItem, AssessmentType } from "../../../state/ducks/changeRequest";
-import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
 import AttachmentField from "../../components/common/attachment.field/container";
 import AttachmentIconField from "../../components/common/attachment.icon/container";
 import HeaderField from "../../components/common/header.field/field";
@@ -10,6 +9,7 @@ import { withFormik } from "../../components/hoc/formik";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
 import { REASONING_OPTIONS } from "../utils/constants";
 import AssessmentsReasoning from "./assessments.reasoning";
+import { ChangeRequestFormValues } from "./types";
 
 type Props = Partial<FormikHybridFieldProps>;
 

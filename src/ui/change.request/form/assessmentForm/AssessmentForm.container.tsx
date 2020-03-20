@@ -26,26 +26,26 @@ const AssessmentFormContainer: React.FunctionComponent<AssessmentFormContainerPr
   doNotPrompt,
   onDirtyFlagChange,
 }) => {
-    const render = (props: FormikProps<ChangeRequestFormValues>) => (
-      <AssessmentFormPresenter
-        {...props}
-        asyncState={asyncState}
-        changeRequest={changeRequest}
-        documentRevisionsList={documentRevisionsList}
-        doNotPrompt={doNotPrompt}
-        onDirtyFlagChange={onDirtyFlagChange}
-      />
-    );
+  const render = (props: FormikProps<ChangeRequestFormValues>) => (
+    <AssessmentFormPresenter
+      {...props}
+      asyncState={asyncState}
+      changeRequest={changeRequest}
+      documentRevisionsList={documentRevisionsList}
+      doNotPrompt={doNotPrompt}
+      onDirtyFlagChange={onDirtyFlagChange}
+    />
+  );
 
-    return (
-      <Formik
-        initialValues={initialValues}
-        onSubmit={onSubmit}
-        enableReinitialize={true}
-      >
-        {render}
-      </Formik>
-    );
-  };
+  return (
+    <Formik
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+      enableReinitialize={true}
+    >
+      {render}
+    </Formik>
+  );
+};
 
 export default AssessmentFormContainer;

@@ -2,25 +2,15 @@ import React from "react";
 import { connect } from "react-redux";
 import { Route } from "react-router-dom";
 import { authSelectors } from "../../state/ducks/auth";
-import {
-  changeRequestsActions,
-  changeRequestsSelectors,
-} from "../../state/ducks/changeRequest";
+import { changeRequestsActions, changeRequestsSelectors } from "../../state/ducks/changeRequest";
 import { ApplicationState } from "../../state/reducers";
 import Switch from "../app/Switch";
-import ChangeRequestUpdateContainer from "../changeRequest/ChangeRequestUpdate.container";
 import AsyncGate from "../components/AsyncGate";
-import {
-  CHANGE_REQUEST_PREVIEW_URL,
-  CHANGE_REQUEST_UPDATE_URL,
-} from "../constants/urls";
+import { CHANGE_REQUEST_PREVIEW_URL, CHANGE_REQUEST_UPDATE_URL } from "../constants/urls";
+import ChangeRequestUpdateContainer from "./ChangeRequestUpdate.container";
 import ChangeRequestSockets from "./Sockets";
 import SummaryContainer from "./summary/container";
-import {
-  ContainerDispatchProps,
-  ContainerOwnProps,
-  ContainerStateProps,
-} from "./utils/types";
+import { ContainerDispatchProps, ContainerOwnProps, ContainerStateProps } from "./utils/types";
 
 type DispatchProps = ContainerDispatchProps;
 type StateProps = ContainerStateProps;

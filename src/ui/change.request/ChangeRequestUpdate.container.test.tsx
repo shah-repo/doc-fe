@@ -5,13 +5,10 @@ import { ChangeRequestStatus } from "../../state/ducks/changeRequest";
 import { getChangeRequest } from "../../state/ducks/changeRequest/tests/factories";
 import { getOwner, getUser } from "../../state/ducks/common/tests/factories";
 import { ASYNC_DEFAULT_STATE } from "../hooks/useAsync";
-import {
-  ChangeRequestUpdateContainer,
-  ChangeRequestUpdateContainerProps,
-} from "./ChangeRequestUpdate.container";
-import ChangeRequestFormContainer from "./forms/ChangeRequestForm.container";
-import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "./forms/transform";
-import { generateChangeRequestPreviewPath } from "./pathGenerators";
+import { ChangeRequestUpdateContainer, ChangeRequestUpdateContainerProps } from "./ChangeRequestUpdate.container";
+import ChangeRequestFormContainer from "./form/ChangeRequestForm.container";
+import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "./form/transform";
+import { changeRequestPreviewPath } from "./utils/paths";
 
 describe("ChangeRequestUpdateContainer tests", () => {
   const currentUserEmail = faker.internet.email();
@@ -67,6 +64,6 @@ describe("ChangeRequestUpdateContainer tests", () => {
     const redirect = wrapper.find("Redirect").first();
 
     expect(redirect).toBeDefined();
-    expect(redirect.prop("to")).toEqual(generateChangeRequestPreviewPath(changeRequest.id));
+    expect(redirect.prop("to")).toEqual(changeRequestPreviewPath(changeRequest.id));
   });
 });

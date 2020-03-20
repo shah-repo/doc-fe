@@ -4,10 +4,10 @@ import { RouteComponentProps } from "react-router-dom";
 import { ChangeRequest, changeRequestsActions } from "../../state/ducks/changeRequest";
 import { ApplicationState } from "../../state/reducers";
 import useAsync from "../hooks/useAsync";
-import ChangeRequestFormContainer from "./forms/ChangeRequestForm.container";
-import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "./forms/transform";
-import { ChangeRequestFormValues } from "./forms/types";
-import { generateChangeRequestEditPath } from "./pathGenerators";
+import ChangeRequestFormContainer from "./form/ChangeRequestForm.container";
+import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "./form/transform";
+import { ChangeRequestFormValues } from "./form/types";
+import { changeRequestEditPath } from "./utils/paths";
 
 interface DispatchProps {
   create: typeof changeRequestsActions.create;
@@ -19,16 +19,14 @@ interface OwnProps extends RouteComponentProps {
 
 export type ChangeRequestCreateContainerProps = OwnProps & DispatchProps;
 
-export const DEFAULT_INITIAL_VALUES = (): ChangeRequest => {
-  return {
-    title: "",
-    description: "",
-    justifications: { description: "", attachments: [] },
-    implementationPlan: { tasks: [], attachments: [] },
-    approvals: [],
-    documentRevisions: [],
-  } as unknown as ChangeRequest;
-};
+export const DEFAULT_INITIAL_VALUES = (): ChangeRequest => ({
+  title: "",
+  description: "",
+  justifications: { description: "", attachments: [] },
+  implementationPlan: { tasks: [], attachments: [] },
+  approvals: [],
+  documentRevisions: [],
+} as unknown as ChangeRequest);
 
 export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequestCreateContainerProps> =
   ({ create, history }) => {
@@ -36,7 +34,7 @@ export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequest
     const async = useAsync<ChangeRequest>({
       onSuccess: (createdChangeRequest?) => {
         setDoNotPrompt(true);
-        history.push(generateChangeRequestEditPath(createdChangeRequest!.id));
+        history.push(changeRequestEditPath(createdChangeRequest!.id));
       },
     });
 

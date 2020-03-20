@@ -5,14 +5,10 @@ import { ChangeRequest } from "../../state/ducks/changeRequest";
 import { getChangeRequest } from "../../state/ducks/changeRequest/tests/factories";
 import { ASYNC_DEFAULT_STATE } from "../hooks/useAsync";
 import getRouteComponentProps from "../tests/helpers/getRouteComponentProps";
-import {
-  ChangeRequestCreateContainer,
-  ChangeRequestCreateContainerProps,
-  DEFAULT_INITIAL_VALUES,
-} from "./ChangeRequestCreate.container";
-import ChangeRequestFormContainer from "./forms/ChangeRequestForm.container";
-import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "./forms/transform";
-import { generateChangeRequestEditPath } from "./pathGenerators";
+import { ChangeRequestCreateContainer, ChangeRequestCreateContainerProps, DEFAULT_INITIAL_VALUES } from "./ChangeRequestCreate.container";
+import ChangeRequestFormContainer from "./form/ChangeRequestForm.container";
+import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "./form/transform";
+import { changeRequestEditPath } from "./utils/paths";
 
 describe("ChangeRequestCreateContainer tests", () => {
   const defaultProps: ChangeRequestCreateContainerProps = {
@@ -43,7 +39,7 @@ describe("ChangeRequestCreateContainer tests", () => {
     const changeRequest = getChangeRequest();
     (createParameters[1].successHandler as CallbackHandler<ChangeRequest>).execute(changeRequest);
 
-    expect(routeComponentProps.history.push).toHaveBeenCalledWith(generateChangeRequestEditPath(changeRequest.id));
+    expect(routeComponentProps.history.push).toHaveBeenCalledWith(changeRequestEditPath(changeRequest.id));
   });
 
   it("sets default initialValues", () => {
