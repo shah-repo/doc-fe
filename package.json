@@ -77,7 +77,7 @@
     "build": "react-scripts --max_old_space_size=4096 build",
     "test": "react-scripts --max_old_space_size=500 --expose-gc test --logHeapUsage",
     "eject": "react-scripts eject",
-    "lint": "eslint -c .eslintrc.js --ext .ts --ext .tsx  src/state/ducks/documents",
+    "lint": "eslint -c .eslintrc.js --ext .ts --ext .tsx  src/state/ducks/userManagement",
     "lint:fix": "yarn lint --fix"
   },
   "eslintConfig": {

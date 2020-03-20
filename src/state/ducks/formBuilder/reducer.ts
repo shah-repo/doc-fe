@@ -1,19 +1,4 @@
-import {
-  ADD_FIELD,
-  ADD_LIST,
-  CLOSE_SECTION,
-  DELETE_FIELD,
-  EDIT_FIELD,
-  HIDE_MODAL,
-  RECORD_UPDATES,
-  SET_FORM_INFO,
-  SHOW_MODAL,
-  UPDATE_DRAG_DROP_FIELDS,
-  UPDATE_FIELD,
-  UPDATE_FIELD_VALUE,
-  UPLOAD_TEMPLATE,
-  VIEW_FORM_MODE,
-} from "./constants";
+import { ADD_FIELD, ADD_LIST, CLOSE_SECTION, DELETE_FIELD, EDIT_FIELD, HIDE_MODAL, RECORD_UPDATES, SET_FORM_INFO, SHOW_MODAL, UPDATE_DRAG_DROP_FIELDS, UPDATE_FIELD, UPDATE_FIELD_VALUE, UPLOAD_TEMPLATE, VIEW_FORM_MODE } from "./constants";
 
 const initialState = {
   title: "",
@@ -43,7 +28,7 @@ const formReducer = (state: any = initialState, action: any) => {
         elements,
         modalState: { ...state.modalState, show: false },
       };
-    case ADD_LIST:
+    case ADD_LIST: {
       const listField = {
         type: action.fieldType,
         config: {
@@ -57,6 +42,7 @@ const formReducer = (state: any = initialState, action: any) => {
         elements,
         modalState: { ...state.modalState, show: false },
       };
+    }
     case SHOW_MODAL:
       return {
         ...state,
@@ -83,7 +69,7 @@ const formReducer = (state: any = initialState, action: any) => {
         },
       };
 
-    case UPDATE_FIELD:
+    case UPDATE_FIELD: {
       const updatedField = {
         type: action.fieldType,
         config: action.config,
@@ -97,7 +83,8 @@ const formReducer = (state: any = initialState, action: any) => {
         modalState: { ...state.modalState, show: false },
         currentField: "",
       };
-    case RECORD_UPDATES:
+    }
+    case RECORD_UPDATES: {
       const diff = {
         reason: action.reason,
         date: action.date,
@@ -113,6 +100,7 @@ const formReducer = (state: any = initialState, action: any) => {
         ...state,
         elements,
       };
+    }
     case DELETE_FIELD:
       elements.splice(action.currentIndex, 1);
       return {
@@ -120,7 +108,7 @@ const formReducer = (state: any = initialState, action: any) => {
         elements,
       };
 
-    case CLOSE_SECTION:
+    case CLOSE_SECTION: {
       let flag = false;
       elements.reduceRight((acc, elem, i) => {
         if (i <= index + 1 && !flag) {
@@ -135,7 +123,7 @@ const formReducer = (state: any = initialState, action: any) => {
         ...state,
         elements,
       };
-
+    }
     case SET_FORM_INFO:
       return {
         ...state,
@@ -183,11 +171,12 @@ const formReducer = (state: any = initialState, action: any) => {
     case "DELETE_TASK":
       newTasks.splice(action.id, 1);
       return { ...state, tasks: [...newTasks] };
-    case "CLOSE_TASK":
+    case "CLOSE_TASK": {
       const task = newTasks[action.id];
       task.status = "closed";
       newTasks.splice(action.id, 1, task);
       return { ...state, tasks: [...newTasks] };
+    }
     default:
       return state;
   }
