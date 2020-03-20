@@ -2,7 +2,7 @@ import _ from "lodash";
 import React from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { DocumentRevision, documentRevisionsActions, RevisionChangeType } from "../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsActions, DocumentRevisionStatus, RevisionChangeType } from "../../state/ducks/documentRevisions";
 import { documentsActions, documentsSelectors } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
@@ -48,9 +48,10 @@ export const DEFAULT_INITIAL_VALUES = (): DocumentRevisionFormValues => ({
     documentType: { id: "" },
   },
   revisionStage: 1,
-  formTemplate: {outputDocumentType: { id: "" }, schema: []},
+  formTemplate: { outputDocumentType: { id: "" }, schema: [] },
   securityGroups: [],
   securityEmployees: [],
+  status: DocumentRevisionStatus.Draft,
 });
 
 export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionCreateContainerProps> = ({

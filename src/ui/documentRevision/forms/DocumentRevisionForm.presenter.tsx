@@ -1,4 +1,4 @@
-import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
+import { Box, Button, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import _ from "lodash";
 import { observer } from "mobx-react";
@@ -28,6 +28,7 @@ import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
 import SubmitButton from "../../components/forms/SubmitButton";
+import Text from "../../components/Text";
 import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
 import { documentDetailsPath } from "../../document.revision/utils/paths";
@@ -46,6 +47,7 @@ import RenderHtmlField from "./presenters/RenderHtmlField";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
 import { DocumentRevisionFormValues } from "./types";
 
+
 export interface Props
   extends WithStyles<typeof styles>,
   FormikProps<DocumentRevisionFormValues> {
@@ -63,6 +65,7 @@ export interface Props
   documentTypesById: DocumentTypeByIdState;
   onDirtyFlagChange?: (dirty: boolean) => void;
   canChangeOwnerShip: boolean;
+  onUpgradeClick: () => void;
 }
 
 export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
@@ -89,6 +92,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   canChangeOwnerShip,
   documentRevision,
   setFieldValue,
+  onUpgradeClick,
 }) => {
   const loadAvailableApproversAction = useActionCreator(
     changeRequestsActions.loadAvailableApprovers
@@ -206,6 +210,18 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       includeEmpty={false}
     />
   );
+
+  const upgradeButtonRenderer = () => (
+    <Button
+      variant="outlined"
+      onClick={onUpgradeClick}
+      id="DocumentRevisionForm-upgrade"
+    >
+      <Text translation="common.upgrade"/>
+    </Button>
+  );
+
+  const isReadyForUpgrade = documentRevision.formDocument?.status === DocumentRevisionStatus.Deprecated;
 
   return (
     <Grid
@@ -362,6 +378,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               onClick={onFormClick}
               id="DocumentRevisionForm-submit"
             />
+            {isReadyForUpgrade && upgradeButtonRenderer()}
             <ApproveAndRelease
               id={values.id}
               status={values.status}
