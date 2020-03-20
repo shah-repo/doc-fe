@@ -94,13 +94,16 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
   const canPreview =
     documentRevision && !(canEdit || isNewVersion || isNewOutput);
 
+  const subscribeToSocket = documentRevision &&
+    <HelloSignAllSignedRefreshSockets documentRevision={documentRevision} />;
+
   return (
     <AsyncGate
       asyncState={loadDocumentRevisionAsyncState}
       asyncAction={loadDocumentRevisionAction}
       startActionOnMount={false}
     >
-      <HelloSignAllSignedRefreshSockets documentRevision={documentRevision} />
+      {subscribeToSocket}
       {canEdit && (
         <DocumentRevisionUpdateContainer
           documentRevision={documentRevision}
