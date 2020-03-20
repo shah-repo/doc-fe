@@ -92,7 +92,7 @@ export const withOnChange = <T extends FBInputProps>(
     }
 
     function isString() {
-      return (ev as unknown) as string;
+      return _.toString(ev);
     }
 
     let fieldValue = {
@@ -108,18 +108,18 @@ export const withOnChange = <T extends FBInputProps>(
         if (_.isEqual(value as string, "includeContext")) {
           storeValue("contextLabel", contextLabel);
         }
-        return;
       },
       checkbox: isChecked,
       radio: isChecked,
       texteditor: isString,
       datepicker: isString,
       autocomplete() {
-        const { optionValueKey = "id", valueType = "key"} = props;
+        const { optionValueKey = "id", valueType = "key", optionObjectKeys } = props;
         if (_.isArray(value)) {
-          return (valueType === "object")
-            ? value
-            : _.map(value, (v) => (_.isString(v) ? v : _.get(v, optionValueKey)));
+          if (valueType === "object") {
+            return optionObjectKeys ? _.map(value, (v) => _.pick(v, optionObjectKeys!)) : value;
+          }
+          return _.map(value, (v) => (_.isString(v) ? v : _.get(v, optionValueKey)));
         }
         return _.get(value, optionValueKey);
       },
@@ -128,8 +128,11 @@ export const withOnChange = <T extends FBInputProps>(
       },
     };
 
+    if (type === "checkboxgroup") {
+      return;
+    }
     fieldValue = fieldValue[type || ""] ? fieldValue[type || ""]() : fieldValue.default();
-    !_.isUndefined(fieldValue) && storeValue(name, fieldValue);
+    storeValue(name, fieldValue);
   };
 
   return Component({

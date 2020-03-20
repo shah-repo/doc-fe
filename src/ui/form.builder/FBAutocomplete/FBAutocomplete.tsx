@@ -17,22 +17,20 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   includeQRScan,
   ...props
 }) =>  (
-  <>
-    <FBInput {...props} type="autocomplete">
-      {includeQRScan && (
-        <Box display="flex" flexDirection="row-reverse">
-          <Typography variant="button" display="block" color="primary">
-            <Text message="form.builder.scan.qr" />
-          </Typography>
-        </Box>)}
-      {renderEl && (
-        <Autocomplete
-          {...{ options, multiple, getOptionLabel, defaultValue, renderTags }}
-          renderInput={renderInput || (() => <div />)}
-        />
-      )}
-    </FBInput>
-  </>
+  <FBInput {...props} type="autocomplete">
+    {includeQRScan && (
+      <Box display="flex" flexDirection="row-reverse">
+        <Typography variant="button" display="block" color="primary">
+          <Text message="form.builder.scan.qr" />
+        </Typography>
+      </Box>)}
+    {renderEl && (
+      <Autocomplete
+        {...{ options, multiple, getOptionLabel, defaultValue, renderTags }}
+        renderInput={renderInput || (() => <div />)}
+      />
+    )}
+  </FBInput>
 );
 
 export default withFBAutocomplete(FBAutocomplete);

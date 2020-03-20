@@ -74,5 +74,12 @@
     "optionValueKey": "id",
     "optionLabelKey": "name",
     "root": "acctCodes"
+  },
+  {
+    "id": "10",
+    "path": "/groups",
+    "label": "Groups",
+    "optionValueKey": "id",
+    "optionLabelKey": "name"
   }
 ]

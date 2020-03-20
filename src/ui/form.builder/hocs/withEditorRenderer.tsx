@@ -105,6 +105,7 @@ export const withEditorRenderer =
     return (
       <Box>
         <InputType
+          {..._.omit(props.values, "label")}
           {...(_.includes(pickDefaultLabel, type) && { defaultValue: _.get(props, "values.label") })}
           {...{ index }}
         />

@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import { Attachment } from "../../state/ducks/attachments";
 import { Audit } from "../../state/ducks/audit";
+import { Group } from "../../state/ducks/auth/types";
 import { ChangeRequest } from "../../state/ducks/changeRequest";
 import { Approval, Owner, User } from "../../state/ducks/common";
 import { DocumentRevision, Reference } from "../../state/ducks/documentRevisions";
@@ -43,6 +44,7 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
       break;
     case "tasks.assigned":
     case "owner":
+    case "securityEmployees":
       returnValue = (audit.nextValue as Owner).user.name;
       break;
     case "documentRevisions":
@@ -77,6 +79,9 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
           }}
         />
       );
+      break;
+    case "securityGroups":
+      returnValue = (audit.nextValue as Group).name;
       break;
     default:
       returnValue = getAuditDefaultValue(audit.nextValue);

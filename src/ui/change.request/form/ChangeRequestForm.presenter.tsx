@@ -2,10 +2,10 @@ import { Grid } from "@material-ui/core";
 import React from "react";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { AsyncState } from "../../../state/types";
+import ChangeRequestHeader from "../../change.request/summary/header";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
 import ChangeRequestAuditContainer from "../audit/Audit.container";
 import DocumentRevisionLoader from "../documentRevision/DocumentRevisionLoader";
-import ChangeRequestHeader from "../summary/header";
 import AssessmentFormContainer from "./assessmentForm/AssessmentForm.container";
 import { ChangeRequestFormValues } from "./types";
 
