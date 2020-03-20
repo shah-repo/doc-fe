@@ -71,13 +71,15 @@
     "weak": "^1.0.1",
     "yup": "0.28.0"
   },
-  "engines": {},
+  "engines": {
+    "node": "v10.19.0"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts --max_old_space_size=4096 build",
     "test": "react-scripts --max_old_space_size=500 --expose-gc test --logHeapUsage",
     "eject": "react-scripts eject",
-    "lint": "eslint -c .eslintrc.js --ext .ts --ext .tsx  src/state/ducks/userManagement",
+    "lint": "eslint -c .eslintrc.js --ext .ts --ext .tsx  src",
     "lint:fix": "yarn lint --fix"
   },
   "eslintConfig": {
