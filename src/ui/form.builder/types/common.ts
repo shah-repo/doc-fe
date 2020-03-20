@@ -110,6 +110,7 @@ export type FBInputProps = Omit<FBFormikFieldProps, "name">
   loading?: boolean;
   approvers?: Employee[];
   approverGroups?: GroupRequestBody[];
+  approveIsBlocking?: boolean;
 };
 
 export type FBFormDefaultProps = FBInputProps &

@@ -5,17 +5,24 @@ import { FBInputProps } from "../types/common";
 export type FBApprovalFieldIdentifier = "approver" | "group";
 
 export type FBApprovalFieldProps =
-& Pick<FBInputProps, "name" | "type" | "approvers" | "approverGroups" | "disabled">
+& Pick<FBInputProps, "name" | "type" | "approvers" | "approverGroups" | "disabled" | "approveIsBlocking">
 & {
-  approverStatus?: (email: string | undefined) => string;
-  canApprove?: (email: string | undefined) => boolean;
+  approverStatusInfo?: (identifier: string | undefined) => string;
+  canApprove?: (identifier: string | undefined) => boolean;
   onClick?: (identifierType: FBApprovalFieldIdentifier) => () => void;
+  approverIsVisible?: (identifier: string | undefined) => boolean;
   approvalFieldState?: FBApprovalFieldState;
-  hasApproved?: string[];
+  hasApproved?: FBApprovedFieldValue[];
   currentUser?: UserState;
+  isBlocked?: boolean;
 };
 
 export enum FBApprovalStatus {
-  Pending = "Pending Approval",
-  Approved = "Approved"
+  Pending = "",
+  Approved = "| Approved"
+}
+
+export interface FBApprovedFieldValue {
+  identifier: string;
+  approvedAt: string;
 }
