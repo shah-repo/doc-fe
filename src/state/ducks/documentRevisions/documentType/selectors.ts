@@ -32,15 +32,13 @@ const getDocumentTypeFormOptions = createSelector(
   allIds, byId,
   (ids, documentTypes) =>
     _.orderBy(
-      ids.map((id) => {
-        return {
-          id: documentTypes[id].id,
-          documentTypeName: documentTypes[id].documentTypeName,
-          documentTypeAcronym: documentTypes[id].documentTypeAcronym,
-          group: documentTypes[id].group,
-          isQms: documentTypes[id].isQms,
-        };
-      })
+      ids.map((id) => ({
+        id: documentTypes[id].id,
+        documentTypeName: documentTypes[id].documentTypeName,
+        documentTypeAcronym: documentTypes[id].documentTypeAcronym,
+        group: documentTypes[id].group,
+        isQms: documentTypes[id].isQms,
+      }))
       , ["documentTypeName"], ["asc"]),
 );
 
@@ -48,12 +46,10 @@ const getDocumentTypeOptions = createSelector(
   allIds, byId,
   (ids, documentTypes) =>
     _.orderBy(
-      ids.map((id) => {
-        return {
-          value: documentTypes[id].id,
-          text: documentTypes[id].documentTypeAcronym,
-        };
-      })
+      ids.map((id) => ({
+        value: documentTypes[id].id,
+        text: documentTypes[id].documentTypeAcronym,
+      }))
       , ["text"], ["asc"]),
 );
 
