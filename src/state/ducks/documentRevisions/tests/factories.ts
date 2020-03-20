@@ -69,6 +69,7 @@ export const getDocumentRevisionEditRequestBody = (
   type: faker.lorem.word(),
   referenceTo: [],
   revisionChangeType: RevisionChangeType.NextRevision,
+  status: DocumentRevisionStatus.Deprecated,
   ...body,
 });
 
