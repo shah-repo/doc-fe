@@ -182,9 +182,7 @@ DocumentRevisionFormContainerProps
         })}
       >
         <Box ml={3}>
-          {!showRevisionTypeChange && (
-            <ChangeRequestLink dataProp={documentRevision} />
-          )}
+          <ChangeRequestLink dataProp={documentRevision} />
         </Box>
         <Formik
           initialValues={cleanInitialValues}
