@@ -27,18 +27,16 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 
 const DashboardContainer: React.FunctionComponent<DashboardContainerProps> = ({
   loadPendingActions, loadPendingActionsListAsyncState, pendingActions,
-}) => {
-  return (
-    <>
-      <DashboardSockets />
-      <DashboardPresenter
-        loadPendingActions={loadPendingActions}
-        loadPendingActionsListAsyncState={loadPendingActionsListAsyncState}
-        pendingActions={pendingActions}
-      />
-    </>
-  );
-};
+}) => (
+  <>
+    <DashboardSockets />
+    <DashboardPresenter
+      loadPendingActions={loadPendingActions}
+      loadPendingActionsListAsyncState={loadPendingActionsListAsyncState}
+      pendingActions={pendingActions}
+    />
+  </>
+);
 
 export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(mapStateToProps, {
   loadPendingActions: dashboardActions.loadPendingActionsList,
