@@ -45,15 +45,15 @@ export const TaskPresenter: React.FunctionComponent<Props> = ({
       <SummaryFieldWithHtml value={task.description} />
       <div className={classes.detailsContainer}>
         <span className={classes.marginRight}>
-          <Text id="assignedTo" translation="common.assigned.to" />:&nbsp;
+          <Text data-id="assignedTo" translation="common.assigned.to" />:&nbsp;
           {task.assigned && task.assigned.label}
         </span>
         <span className={classes.marginRight}>
-          <Text id="dueDate" translation="common.due.date" />:&nbsp;
+          <Text data-id="dueDate" translation="common.due.date" />:&nbsp;
           <Date value={task.dueDate && toStartOfDay(task.dueDate)} />
         </span>
         <span>
-          <Text id="status" translation="common.status" />:&nbsp;
+          <Text data-id="status" translation="common.status" />:&nbsp;
           {task.status}
         </span>
         <Button id="remove" onClick={removeTask(index)} className={classes.button} color="secondary">
