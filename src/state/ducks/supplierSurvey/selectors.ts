@@ -9,6 +9,6 @@ const getLoadSupplierSurveyListAsyncInfo = (
 ): AsyncState => state.supplierSurvey.loadSupplierSurveyAsyncInfo;
 
 export default {
-    getLoadSupplierSurveyListAsyncInfo,
-    supplierSurvey,
+  getLoadSupplierSurveyListAsyncInfo,
+  supplierSurvey,
 };

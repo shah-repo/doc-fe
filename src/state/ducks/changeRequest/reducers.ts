@@ -2,29 +2,8 @@ import _ from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
 import { AuditByCRIdState } from "../audit/types";
-import {
-  CHANGE_REQUEST_AUDIT_SET,
-  CHANGE_REQUEST_GET_APPROVERS_ASYNC,
-  CHANGE_REQUEST_GET_ASYNC,
-  CHANGE_REQUEST_GET_AUDIT_ASYNC,
-  CHANGE_REQUEST_LIST,
-  CHANGE_REQUEST_LIST_APPROVERS,
-  CHANGE_REQUEST_LIST_ASYNC,
-  CHANGE_REQUEST_SET,
-} from "./constants";
-import {
-  allIdsState,
-  ChangeRequest,
-  ChangeRequestAuditSetAction,
-  ChangeRequestAvailableApprovers,
-  ChangeRequestListAction,
-  ChangeRequestListApproversAction,
-  ChangeRequestsAllIdsState,
-  ChangeRequestsApproversAllIdsState,
-  ChangeRequestsApproversByIdState,
-  ChangeRequestsByIdState,
-  ChangeRequestSetAction,
-} from "./types";
+import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_GET_APPROVERS_ASYNC, CHANGE_REQUEST_GET_ASYNC, CHANGE_REQUEST_GET_AUDIT_ASYNC, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_LIST_ASYNC, CHANGE_REQUEST_SET } from "./constants";
+import { allIdsState, ChangeRequest, ChangeRequestAuditSetAction, ChangeRequestAvailableApprovers, ChangeRequestListAction, ChangeRequestListApproversAction, ChangeRequestsAllIdsState, ChangeRequestsApproversAllIdsState, ChangeRequestsApproversByIdState, ChangeRequestsByIdState, ChangeRequestSetAction } from "./types";
 
 type ChangeRequestActions = ChangeRequestSetAction | ChangeRequestListAction;
 
@@ -40,12 +19,13 @@ export const byId = (
           (changeRequest) => changeRequest.id,
         ),
       };
-    case CHANGE_REQUEST_SET:
+    case CHANGE_REQUEST_SET: {
       const newState: ChangeRequest = {
         ...action.payload,
         approvals: action.payload.approvals.filter((a) => a.active),
       };
       return { ...state, [action.payload.id]: newState };
+    }
     default:
       return state;
   }
@@ -102,9 +82,10 @@ export const auditsByCRId = (
   action: ChangeRequestAuditSetAction,
 ): AuditByCRIdState => {
   switch (action.type) {
-    case CHANGE_REQUEST_AUDIT_SET:
+    case CHANGE_REQUEST_AUDIT_SET: {
       const audits = _.groupBy(action.payload.audit, "groupId");
       return { ...state, [action.payload.id]: audits };
+    }
     default:
       return state;
   }

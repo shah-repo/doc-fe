@@ -90,26 +90,26 @@ const setDocumentProposedId = (docId: string): DocumentProposedIdSetAction => ({
 });
 
 const create = (body: DocumentEditRequestBody, handlers: Handlers<Document>):
-  ApiAction<Document, DocumentEditRequestBody> => apiActionWithCallbacks({
-    url: DOCUMENTS_ROOT_URL,
-    method: "post",
-    data: body,
-    onSuccess: (document, dispatch) => {
-      dispatch(documentSet(document));
-    },
-    handlers,
-  });
+ApiAction<Document, DocumentEditRequestBody> => apiActionWithCallbacks({
+  url: DOCUMENTS_ROOT_URL,
+  method: "post",
+  data: body,
+  onSuccess: (document, dispatch) => {
+    dispatch(documentSet(document));
+  },
+  handlers,
+});
 
 const save = (id: string, body: DocumentEditRequestBody, handlers: Handlers<Document>):
-  ApiAction<Document, DocumentEditRequestBody> => apiActionWithCallbacks({
-    url: `${DOCUMENTS_ROOT_URL}/${id}`,
-    method: "patch",
-    data: body,
-    onSuccess: (document, dispatch) => {
-      dispatch(documentSet(document));
-    },
-    handlers,
-  });
+ApiAction<Document, DocumentEditRequestBody> => apiActionWithCallbacks({
+  url: `${DOCUMENTS_ROOT_URL}/${id}`,
+  method: "patch",
+  data: body,
+  onSuccess: (document, dispatch) => {
+    dispatch(documentSet(document));
+  },
+  handlers,
+});
 
 const applyTransition = (
   id: string,

@@ -65,7 +65,7 @@ export const data = (
         [action.tableName]: action.payload,
       };
     case EDIT_EMPLOYEE_GROUPS:
-    case EDIT_EMPLOYEE_ACTIVE_STATUS:
+    case EDIT_EMPLOYEE_ACTIVE_STATUS: {
       if (!state.userManagement) {
         return state;
       }
@@ -90,8 +90,9 @@ export const data = (
         ...state,
         userManagement: list,
       };
+    }
     case EDIT_EMPLOYEE_USER_INFO:
-    case USERS_ME_URL:
+    case USERS_ME_URL: {
       if (!state.userManagement) {
         return state;
       }
@@ -119,6 +120,7 @@ export const data = (
         ...state,
         userManagement: employees,
       };
+    }
     case TABLE_CLEAR_ALL:
       return {};
     default:

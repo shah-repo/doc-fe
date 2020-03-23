@@ -97,7 +97,7 @@ export const groups = (
   action: UserGroupsAction | LogoutUserAction,
 ): UserGroupsState => {
   switch (action.type) {
-    case USER_GROUPS:
+    case USER_GROUPS: {
       const tagsSet = new Set<GroupTag>();
       const permissionsSet = new Set<Permission>();
       action.payload.forEach((group) => {
@@ -116,6 +116,7 @@ export const groups = (
         tags: Array.from(tagsSet),
         permissions: Array.from(permissionsSet),
       };
+    }
     case LOGOUT_USER:
       return { ...USER_GROUPS_DEFAULT_STATE };
     default:
