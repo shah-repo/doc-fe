@@ -7,8 +7,8 @@ export default makeStyles((theme: Theme) =>
 
     },
     title: {
-        color: "#474747",
-        fontsize: "1.3rem",
+      color: "#474747",
+      fontsize: "1.3rem",
     },
   }),
 );
