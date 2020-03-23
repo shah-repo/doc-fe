@@ -3,18 +3,18 @@ import React from "react";
 import { getAttachment } from "../../../state/ducks/attachments/tests/factories";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import AttachmentIconField from "../../components/common/attachment.icon/container";
-import { Justification,   Props } from "./justification";
+import { Justification, Props } from "./justification";
 
 describe("Justification tests without attachments", () => {
   const defaultProps: Props = {
     dataProp: {
-        id: "",
-        description: "Test description",
-        attachments: [ ],
-      },
+      id: "",
+      description: "Test description",
+      attachments: [ ],
+    },
   };
 
-  const getWrapper = (props: Partial<Props>= {}) => shallow(
+  const getWrapper = (props: Partial<Props> = {}) => shallow(
     <Justification {...defaultProps} {...props}/>,
   );
 
@@ -33,13 +33,13 @@ describe("Justification tests without attachments", () => {
 describe("Justification tests with attachments", () => {
   const defaultProps: Props = {
     dataProp: {
-        id: "",
-        description: "Test description",
-        attachments: [ getAttachment() ],
-      },
+      id: "",
+      description: "Test description",
+      attachments: [ getAttachment() ],
+    },
   };
 
-  const getWrapper = (props: Partial<Props>= {}) => shallow(
+  const getWrapper = (props: Partial<Props> = {}) => shallow(
     <Justification {...defaultProps} {...props}/>,
   );
 

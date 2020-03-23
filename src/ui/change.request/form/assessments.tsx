@@ -16,7 +16,7 @@ type Props = Partial<FormikHybridFieldProps>;
 const Assessments: React.FunctionComponent<Props> = ({ form }) => {
   const itemRenderer = () =>
     Object.values(AssessmentType).map((type) => {
-      const { attachments, reasoning }: AssessmentItem = form!.values.assessments[
+      const { attachments, reasoning }: AssessmentItem = form && form.values.assessments[
         type
       ];
 
@@ -26,7 +26,7 @@ const Assessments: React.FunctionComponent<Props> = ({ form }) => {
 
       // Has attachment
       if ((attachments || []).length > 0 && reasoning) {
-        form!.setFieldValue(`assessments.${type}.reasoning`, undefined);
+        form && form.setFieldValue(`assessments.${type}.reasoning`, undefined);
       }
 
       const reasoningOptions = REASONING_OPTIONS[type];
@@ -40,7 +40,7 @@ const Assessments: React.FunctionComponent<Props> = ({ form }) => {
             actionsRenderer={actionsRenderer}
             hidden={(attachments || []).length > 0}
             editorProps={{
-              // tslint:disable-next-line: jsx-key
+              // eslint-disable-next-line react/jsx-key
               toolbarCustomButtons: [<AssessmentsReasoning reasoningOptions={reasoningOptions} />],
             }}
           />

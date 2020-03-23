@@ -29,7 +29,7 @@ export const Assessment: React.FunctionComponent<Props> = ({ classes, dataProp }
             <Text message={`change.request.${type}.assessment`} />
           </Typography>
           {item.reasoning && reasoningRenderer(item)}
-          {item.attachments!.length > 0 && attachmentRenderer(type)}
+          {item.attachments && item.attachments.length > 0 && attachmentRenderer(type)}
         </Grid>
       );
     });

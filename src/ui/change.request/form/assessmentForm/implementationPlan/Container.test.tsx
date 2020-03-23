@@ -6,7 +6,7 @@ import HeaderField from "../../../../components/common/header.field/field";
 import Container, { Props } from "./Container";
 
 describe("Container tests", () => {
-  const getWrapper = (props: Partial<Props>= {}) => shallow(
+  const getWrapper = (props: Partial<Props> = {}) => shallow(
     <Container {...props} />,
   );
 

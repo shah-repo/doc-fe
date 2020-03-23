@@ -2,6 +2,7 @@ import { fireEvent, wait } from "@testing-library/react";
 import MockAdapter from "axios-mock-adapter";
 import React from "react";
 import apiInstance from "../../../state/apiClient";
+import getRouteComponentProps from "../../tests/helpers/getRouteComponentProps";
 import render from "../../tests/helpers/renderWithProviders";
 import ListContainer from "./container";
 
@@ -18,6 +19,7 @@ const mockResponse = [
   },
 ];
 
+const defaultProps = getRouteComponentProps();
 describe("Change Request list container test", () => {
   const url = "/change_requests";
   const title = "Test search";
@@ -37,8 +39,9 @@ describe("Change Request list container test", () => {
     apiMock.reset();
   });
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   it("renders empty on mount", async () => {
-    const { asFragment, getByTestId } = render(<ListContainer />);
+    const { asFragment, getByTestId } = render(<ListContainer {...defaultProps} />);
     const numberOfRecords = getByTestId("numberOfRecords");
 
     expect(asFragment()).toMatchSnapshot();
@@ -46,7 +49,7 @@ describe("Change Request list container test", () => {
   });
 
   it("renders two items after API response", async () => {
-    const { getByTestId } = render(<ListContainer />);
+    const { getByTestId } = render(<ListContainer {...defaultProps} />);
     const numberOfRecords = getByTestId("numberOfRecords");
 
     await wait(() => {
@@ -56,13 +59,14 @@ describe("Change Request list container test", () => {
   });
 
   it("renders one item after search", async () => {
-    const { container, getByTestId } = render(<ListContainer />);
+    const { container, getByTestId } = render(<ListContainer {...defaultProps} />);
     const titleInput = container.querySelector("[name='title']");
     const numberOfRecords = getByTestId("numberOfRecords");
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     await wait(() => {});
 
-    fireEvent.change(titleInput!, { target: { value: title } });
+    titleInput && fireEvent.change(titleInput, { target: { value: title } });
 
     await wait(() => {
       expect(numberOfRecords.innerHTML).toEqual("1");

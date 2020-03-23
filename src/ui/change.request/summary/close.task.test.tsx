@@ -16,7 +16,7 @@ describe("CloseTask tests", () => {
     closeTask: jest.fn(),
   };
 
-  const getWrapper = (props: Partial<Props>= {}) => shallow(
+  const getWrapper = (props: Partial<Props> = {}) => shallow(
     <CloseTask {...defaultProps} {...props}/>,
   );
 

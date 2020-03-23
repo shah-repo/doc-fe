@@ -1,17 +1,7 @@
 import * as _ from "lodash";
 import { getStartOfDayDateString, toStartOfDay } from "../../../common/utils/date";
 import { Attachment } from "../../../state/ducks/attachments";
-import {
-  Approver,
-  Assessment,
-  AssessmentType,
-  ChangeRequest,
-  ChangeRequestEditRequestBody,
-  ImplementationPlan,
-  ImplementationPlanRequest,
-  ImplementationPlanTaskRequest,
-  Justifications,
-} from "../../../state/ducks/changeRequest";
+import { Approver, Assessment, AssessmentType, ChangeRequest, ChangeRequestEditRequestBody, ImplementationPlan, ImplementationPlanRequest, ImplementationPlanTaskRequest, Justifications } from "../../../state/ducks/changeRequest";
 import { reactQuillEmptyString } from "../../components/forms/fields/validators";
 import { ChangeRequestFormValues, ImplementationPlanFormValues, ImplementationPlanTaskFormValues } from "./types";
 
@@ -23,39 +13,37 @@ const createNestedObject = (value: NestedObject = { description: "", attachments
 });
 
 const createAssessment = (value: Assessment = {
-  design: {reasoning: "", attachments: []},
-  process: {reasoning: "", attachments: []},
-  regulatory: {reasoning: "", attachments: []},
+  design: { reasoning: "", attachments: [] },
+  process: { reasoning: "", attachments: [] },
+  regulatory: { reasoning: "", attachments: [] },
 }) => ({
   design: { reasoning: value.design.reasoning, attachments: value.design.attachments },
   process: { reasoning: value.process.reasoning, attachments: value.process.attachments },
   regulatory: { reasoning: value.regulatory.reasoning, attachments: value.regulatory.attachments },
 });
 
-const toImplementationPlanFormValues = (plan: ImplementationPlan): ImplementationPlanFormValues => {
-  return (
-    {
-      attachments: plan.attachments,
-      tasks: plan.tasks.map((task) => {
-        const taskForm: ImplementationPlanTaskFormValues = {
-          id: task.id,
-          status: task.status,
-          title: task.title,
-          description: task.description,
-          dueDate: task.dueDate,
-        };
+const toImplementationPlanFormValues = (plan: ImplementationPlan): ImplementationPlanFormValues => (
+  {
+    attachments: plan.attachments,
+    tasks: plan.tasks.map((task) => {
+      const taskForm: ImplementationPlanTaskFormValues = {
+        id: task.id,
+        status: task.status,
+        title: task.title,
+        description: task.description,
+        dueDate: task.dueDate,
+      };
 
-        if (task.assigned) {
-          taskForm.assigned = {
-            value: task.assigned.id,
-            label: task.assigned.user.name,
-          };
-        }
-        return taskForm;
-      }),
-    }
-  );
-};
+      if (task.assigned) {
+        taskForm.assigned = {
+          value: task.assigned.id,
+          label: task.assigned.user.name,
+        };
+      }
+      return taskForm;
+    }),
+  }
+);
 
 export const toChangeRequestFormValues = (changeRequest: ChangeRequest): ChangeRequestFormValues => {
   const values: ChangeRequestFormValues = {

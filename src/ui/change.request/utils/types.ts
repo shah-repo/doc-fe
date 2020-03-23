@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { FormikProps } from "formik";
 import { RouteComponentProps } from "react-router-dom";
 import { attachmentsActions } from "../../../state/ducks/attachments";
@@ -29,7 +30,7 @@ export enum DesignAssessmentReasoningOption {
   not_affect_changes =
   "Changes do not affect form, fit, function or materials with no impact on risk, safety or effectiveness",
   equivalent_changes =
-  // tslint:disable-next-line: max-line-length
+  // eslint-disable-next-line max-len
   "Changes are equivalent to current design with no impact on risk, safety or effectiveness. Equivalency established through design verification",
 }
 

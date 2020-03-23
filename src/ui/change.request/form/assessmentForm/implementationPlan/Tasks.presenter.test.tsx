@@ -18,7 +18,7 @@ describe("Tasks presenter test without tasks", () => {
     editTask: jest.fn(),
   };
 
-  const getWrapper = (props: Partial<Props>= {}) => shallow(
+  const getWrapper = (props: Partial<Props> = {}) => shallow(
     <TasksPresenter {...defaultProps} {...props}/>,
   );
 
@@ -34,16 +34,16 @@ describe("Tasks presenter test with tasks", () => {
 
   const defaultProps: Props = {
     tasks: [{
-      title:  "Task 1",
-      description:  "Test",
+      title: "Task 1",
+      description: "Test",
       status: "DONE",
     },
     {
-      title:  "Task 2",
-      description:  "Test",
+      title: "Task 2",
+      description: "Test",
       status: "PENDING",
     },
-  ],
+    ],
     openDialog: jest.fn(),
     closeDialog: jest.fn(),
     onSubmit: jest.fn(),
@@ -60,7 +60,7 @@ describe("Tasks presenter test with tasks", () => {
 
   it("Match number of task presenters to number of tasks", () => {
 
-    const wrapper = getWrapper({...defaultProps});
+    const wrapper = getWrapper({ ...defaultProps });
 
     expect(wrapper.find(TaskPresenter)).toHaveLength(2);
     expect(wrapper.find(TaskFormDialog)).toHaveLength(1);

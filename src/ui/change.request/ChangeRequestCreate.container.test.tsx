@@ -38,7 +38,7 @@ describe("ChangeRequestCreateContainer tests", () => {
 
     const changeRequest = getChangeRequest();
     (createParameters[1].successHandler as CallbackHandler<ChangeRequest>).execute(changeRequest);
-
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(routeComponentProps.history.push).toHaveBeenCalledWith(changeRequestEditPath(changeRequest.id));
   });
 
