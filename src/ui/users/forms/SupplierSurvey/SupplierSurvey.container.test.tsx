@@ -61,6 +61,7 @@ describe("Supplier survey container test", () => {
 
     expect(asFragment()).toMatchSnapshot();
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     fireEvent.click(container.querySelector("[type='submit']")!);
 
     await wait();

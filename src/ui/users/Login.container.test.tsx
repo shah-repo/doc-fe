@@ -1,11 +1,13 @@
 import { mount, ReactWrapper } from "enzyme";
 import _ from "lodash";
 import React from "react";
+import { getEmployee } from "../../state/ducks/company/tests/factories";
 import { HOME_URL } from "../constants/urls";
 import getRouteComponentProps from "../tests/helpers/getRouteComponentProps";
 import { LoginContainer, LoginContainerProps } from "./Login.container";
 
 jest.mock("react-router-dom", () => ({
+  // eslint-disable-next-line react/display-name
   Redirect: () => <div>REDIRECT</div>,
 }));
 
@@ -19,11 +21,8 @@ describe("LoginContainer unit tests", () => {
     location: {
       ...getRouteComponentProps().location,
     },
-    companies: [
-      {
-        id: "",
-      },
-    ],
+    hasMultipleCompanies: false,
+    employees: [getEmployee()],
   };
 
   const getProps = (
