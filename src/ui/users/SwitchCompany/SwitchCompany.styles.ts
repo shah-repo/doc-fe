@@ -47,11 +47,11 @@ export const styles = makeStyles((theme: Theme) =>
       textAlign: "justify",
       borderBottom: "1px solid lightgrey",
     },
-    company:  {
+    company: {
       display: "flex",
     },
     companyName: {
       margin: "18px 0 18px 16px",
     },
   }),
-  );
+);

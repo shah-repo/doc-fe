@@ -58,6 +58,7 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
 
   return (
     <SwitchCompanyPresenter
+      // eslint-disable-next-line react/no-children-prop
       children={companies}
       numberOfCompanies={companies.length}
     />

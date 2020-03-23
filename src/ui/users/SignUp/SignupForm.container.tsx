@@ -33,7 +33,7 @@ const SignupFormContainer: React.FunctionComponent<SignupFormContainerProps> = (
 }) => {
   const async = useAsync({
     onSuccess: () => {
-        toggleSignupSuccess(true);
+      toggleSignupSuccess(true);
     },
   });
 

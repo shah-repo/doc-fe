@@ -23,12 +23,12 @@ const SetForgotPasswordContainer: React.FunctionComponent<SetForgotPasswordConta
   const onSubmit = (confirmValues: PasswordValues): void => {
     dispatch(
       authActions.confirmNewPassword(
-      {
-        email: confirmValues.email,
-        code: clientCode as string,
-        password: confirmValues.password,
-      },
-      async,
+        {
+          email: confirmValues.email,
+          code: clientCode as string,
+          password: confirmValues.password,
+        },
+        async,
       ),
     );
   };
