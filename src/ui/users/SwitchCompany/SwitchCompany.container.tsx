@@ -28,33 +28,35 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
     history.push(HOME_URL);
   };
 
-  const companies = orderBy(employees, ["company.name"], ["asc"]).map(
-    (employee: Employee) => {
-      const { company } = employee;
-      const whiteLabeling = company.whiteLabeling || {};
+  const companies = orderBy(employees, ["company.name"], ["asc"])
+    .filter((employee) => employee.active)
+    .map(
+      (employee: Employee) => {
+        const { company } = employee;
+        const whiteLabeling = company.whiteLabeling || {};
 
-      return (
-        <button
-          key={company.id}
-          className={classes.companyButton}
-          onClick={handleClick(employee)}
-          id="SwitchCompanyContainer-companies"
-        >
-          <div className={classes.company}>
-            {whiteLabeling.avatar && (
-              <img
-                src={whiteLabeling.avatar}
-                alt="Avatar"
-                className={classes.avatar}
-              />
-            )}
-            {!whiteLabeling.avatar && <CompanyAvatar />}
-            <div className={classes.companyName}>{company.name}</div>
-          </div>
-        </button>
-      );
-    },
-  );
+        return (
+          <button
+            key={company.id}
+            className={classes.companyButton}
+            onClick={handleClick(employee)}
+            id="SwitchCompanyContainer-companies"
+          >
+            <div className={classes.company}>
+              {whiteLabeling.avatar && (
+                <img
+                  src={whiteLabeling.avatar}
+                  alt="Avatar"
+                  className={classes.avatar}
+                />
+              )}
+              {!whiteLabeling.avatar && <CompanyAvatar />}
+              <div className={classes.companyName}>{company.name}</div>
+            </div>
+          </button>
+        );
+      },
+    );
 
   return (
     <SwitchCompanyPresenter
