@@ -52,15 +52,27 @@ export const getReferenceToSummary = (dataProp: Reference[], status: DocumentRev
 
 const getReferencedByUrl = (reference: Reference) => documentVersionPath(reference.id, reference.document.id);
 
-export const getReferencedBySummary = (dataProp: Reference[]) => {
+export const getReferencedBySummary = (dataProp: DocumentRevision[]): ReferenceSummary[] => {
   const summaries: ReferenceSummary[] = [];
 
-  dataProp.forEach((reference) => {
+  const byDocument: { [key: string]: DocumentRevision } = dataProp.reduce((acc, docRev) =>
+  {
+    const { status } = docRev;
+    const { id } = docRev.document;
+
+    if (!acc[id] || status === DocumentRevisionStatus.Released) {
+      acc[id] = docRev;
+    }
+
+    return acc;
+  }, {});
+
+  Object.values<DocumentRevision>(byDocument).forEach((docRev: DocumentRevision) => {
     summaries.push(
       {
-        id: reference.id,
-        url: getReferencedByUrl(reference),
-        title: `${reference.document.docId} - ${reference.name}`,
+        id: docRev.id,
+        url: getReferencedByUrl(docRev),
+        title: `${docRev.document.docId} - ${docRev.name}`,
       },
     );
   });
