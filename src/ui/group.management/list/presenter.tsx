@@ -6,10 +6,7 @@ import { GROUPS_URL } from "../../../state/ducks/userManagement/constants";
 import { TableColumnProps } from "../../components/table/column/types";
 import DocumentInfo from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
-import {
-  TableDataProps,
-  TablePanelStateProps,
-} from "../../components/table/types";
+import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import AddGroupContainer from "../add.group/container";
 import AddGroup from "../add.group/Group";
@@ -40,11 +37,9 @@ export const GroupManagementListPresenter: React.FunctionComponent<Props> = ({
   canCreateGroups,
 }) => {
   const classes = styles();
-  const handleMembers = (members: Employee[]) => {
-    return members.map((member) => member.user!.name).join(", ");
-  };
+  const handleMembers = (members: Employee[]) => members.map((member) => member.user && member.user.name).join(", ");
 
-  const columns: Array<TableColumnProps<LoadCompanyGroup>> = [
+  const columns: TableColumnProps<LoadCompanyGroup>[] = [
     {
       key: "groupName" as keyof LoadCompanyGroup,
       id: "GroupManagementListPresenter-name",

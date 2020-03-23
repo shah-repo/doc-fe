@@ -45,6 +45,7 @@ export const AddGroup: React.FunctionComponent<Props> = ({
       { active: true },
       asyncGetActiveEmployees,
     );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleTableRefresh = () => {
@@ -63,17 +64,17 @@ export const AddGroup: React.FunctionComponent<Props> = ({
 
   return (
     <Dialog fullScreen={true} open={isOpen}>
-        <DialogTitle
-            closeDialog={closeDialog}
-            title={title}
-        />
-        <GroupContentContainer
-          selectedGroup={selectedGroup}
-          isCreateMode={isCreateMode}
-          employees={activeEmployees}
-          handleTableRefresh={handleTableRefresh}
-          closeDialog={closeDialog}
-        />
+      <DialogTitle
+        closeDialog={closeDialog}
+        title={title}
+      />
+      <GroupContentContainer
+        selectedGroup={selectedGroup}
+        isCreateMode={isCreateMode}
+        employees={activeEmployees}
+        handleTableRefresh={handleTableRefresh}
+        closeDialog={closeDialog}
+      />
     </Dialog>
   );
 };
