@@ -31,7 +31,7 @@ export const AddSlackButtonContainer: React.FunctionComponent<Props> = ({
 
   const asyncSlack = useAsync<string>({
     onSuccess: (slackUrl) => {
-        window.open(slackUrl);
+      window.open(slackUrl);
     },
   });
 
