@@ -54,6 +54,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
     return documentPreviewPath(rowData.id, rowData.document.id);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const pageDetailColumns = documentType.pageDetails!.columns;
   const additionalColumns = pageDetailColumns.map(
     (column: PageDetailsColumn) => ({
@@ -73,7 +74,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
     }),
   );
 
-  const columns: Array<TableColumnProps<DocumentRevision>> = [
+  const columns: TableColumnProps<DocumentRevision>[] = [
     {
       key: "docId",
       label: `${documentType.documentTypeName} ID` as Translation,
