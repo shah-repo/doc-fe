@@ -49,15 +49,13 @@ export const AddEmployeeFormContainer: React.FunctionComponent = () => {
     async.start(addEmployeeAction, transformToAddEmployeeRequest(values), async);
   };
 
-  const renderForm = (props: FormikProps<AddEmployeeFormValues>) => {
-    return (
-      <AddEmployeeFormPresenter
-        {...props}
-        asyncState={async.asyncState}
-        groupOptions={groupOptions}
-      />
-    );
-  };
+  const renderForm = (props: FormikProps<AddEmployeeFormValues>) => (
+    <AddEmployeeFormPresenter
+      {...props}
+      asyncState={async.asyncState}
+      groupOptions={groupOptions}
+    />
+  );
 
   return (
     <Grid

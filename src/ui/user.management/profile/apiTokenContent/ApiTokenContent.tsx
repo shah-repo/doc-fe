@@ -20,7 +20,7 @@ export const ApiTokenContent: React.FunctionComponent = () => {
   const TABLE_NAME = "apiTokens";
 
   const async = useAsync({
-    onSuccess: (data: ApiTokenState = {id: "", name: "", secretKey: ""}) => {
+    onSuccess: (data: ApiTokenState = { id: "", name: "", secretKey: "" }) => {
       setApiToken(data);
       openDialog();
       resetTableData(
@@ -34,7 +34,7 @@ export const ApiTokenContent: React.FunctionComponent = () => {
   });
 
   const asyncDeleteToken = useAsync({
-    onSuccess: (deletedToken: GetApiTokenList = {id: "", name: "", active: true}) => {
+    onSuccess: (deletedToken: GetApiTokenList = { id: "", name: "", active: true }) => {
       resetTableData(
         [
           ...tableData.filter((obj) => obj.id !== deletedToken.id),
@@ -45,7 +45,7 @@ export const ApiTokenContent: React.FunctionComponent = () => {
   });
 
   const generateAction = useActionCreator(userManagementActions.generateApiToken);
-  const [apiToken, setApiToken] = useState<ApiTokenState>({id: "", name: "", secretKey: ""});
+  const [apiToken, setApiToken] = useState<ApiTokenState>({ id: "", name: "", secretKey: "" });
   const revokeApiToken = useActionCreator(userManagementActions.revokeApiToken);
   const resetTableData = useActionCreator(tableSearchActions.setData);
 
