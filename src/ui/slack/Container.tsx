@@ -6,21 +6,19 @@ import SlackLandingContainer from "./landing/Container";
 
 type Props = RouteComponentProps;
 
-export const SlackContainer: React.FunctionComponent<Props> = () => {
-  return (
-    <Switch>
-      <Route
-        path={SLACK_COMPANY_URL}
-        component={SlackLandingContainer}
-        exact={true}
-      />
-      <Route
-        path={SLACK_USER_URL}
-        component={SlackLandingContainer}
-        exact={true}
-      />
-    </Switch>
-  );
-};
+export const SlackContainer: React.FunctionComponent<Props> = () => (
+  <Switch>
+    <Route
+      path={SLACK_COMPANY_URL}
+      component={SlackLandingContainer}
+      exact={true}
+    />
+    <Route
+      path={SLACK_USER_URL}
+      component={SlackLandingContainer}
+      exact={true}
+    />
+  </Switch>
+);
 
 export default SlackContainer;

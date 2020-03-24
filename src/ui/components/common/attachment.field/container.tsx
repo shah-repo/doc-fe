@@ -51,7 +51,7 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
 
       FBStore.setValues({
         ...FBStore.values,
-        [name as string]: _.map(attachments, (attach) =>
+        [name]: _.map(attachments, (attach) =>
           _.pick(attach, ["id", "name", "s3link", "type"]),
         ),
       });
