@@ -3,14 +3,21 @@ import { ApiAction, Handlers } from "../../types";
 import { Group, User } from "../auth/types";
 import { EditActiveStatusAction, EditGroupsAction, EditUserInfoAction } from "../tableSearch";
 import { EDIT_EMPLOYEE_ACTIVE_STATUS, EDIT_EMPLOYEE_GROUPS, EDIT_EMPLOYEE_USER_INFO } from "../tableSearch/constants";
-import { ADD_EMPLOYEE_POST_ASYNC, API_TOKEN, API_TOKEN_DELETE_ASYNC, API_TOKEN_GET_ASYNC, API_TOKEN_POST_ASYNC, API_TOKEN_REVOKE_URL, API_TOKEN_URL, COMPANY_GROUPS_GET_ASYNC, COMPANY_GROUPS_LIST, EMPLOYEES_URL, EMPLOYEE_GET_ASYNC, GROUPS_ME_GET_ASYNC, GROUPS_ME_URL, GROUPS_URL, GROUP_GET_BY_ID, SLACK_URL } from "./constants";
-import { AddEmployeeRequest, ApiTokenData, CompanyGroupsListAction, EmployeeActiveStatusRequestBody, EmployeeGroupsEditRequestBody, GetApiTokenList, GetEmployeeResponse, GetSlackUrl, LoadCompanyGroups } from "./types";
+import { ADD_EMPLOYEE_POST_ASYNC, API_TOKEN, API_TOKEN_DELETE_ASYNC, API_TOKEN_GET_ASYNC, API_TOKEN_POST_ASYNC, API_TOKEN_REVOKE_URL, API_TOKEN_URL, COMPANY_GROUPS_GET_ASYNC, COMPANY_GROUPS_LIST, CURRENT_GROUP, EMPLOYEES_URL, EMPLOYEE_GET_ASYNC, GROUPS_ME_GET_ASYNC, GROUPS_ME_URL, GROUPS_URL, GROUP_GET_BY_ID, SLACK_URL } from "./constants";
+import { AddEmployeeRequest, ApiTokenData, CompanyGroupsListAction, CurrentEditableGroupAction, EmployeeActiveStatusRequestBody, EmployeeGroupsEditRequestBody, GetApiTokenList, GetEmployeeResponse, GetSlackUrl, LoadCompanyGroup, LoadCompanyGroups } from "./types";
 
 const companyGroupsList = (
   groups: LoadCompanyGroups,
 ): CompanyGroupsListAction => ({
   type: COMPANY_GROUPS_LIST,
   payload: groups,
+});
+
+const currentEditableGroup = (
+  group: LoadCompanyGroup,
+): CurrentEditableGroupAction => ({
+  type: CURRENT_GROUP,
+  payload: group,
 });
 
 const loadCompanyGroups = (): ApiAction<LoadCompanyGroups> =>
@@ -59,6 +66,9 @@ const loadGroupById = (
   method: "get",
   asyncType: GROUP_GET_BY_ID,
   handlers,
+  onSuccess: (response, dispatch) => {
+    dispatch(currentEditableGroup(response));
+  },
 });
 
 const editSelectedEmployeeGroups = (

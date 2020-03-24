@@ -12,6 +12,7 @@ export const DEFAULT_SELECTED_GROUP: LoadCompanyGroup = {
   employees: [],
   isOfficial: true,
   parents: [],
+  joinedParents: [],
 };
 
 export const DEFAULT_ACTIVE_EMPLOYEES: GetEmployeeResponse[] = [{

@@ -39,6 +39,10 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
     currentEmployeePermissions,
   );
   const allGroups = useSelector(userManagementSelectors.getGroupsOptions);
+  const currentGroupData = useSelector(userManagementSelectors.getCurrentGroup);
+  const [currentGroup, setCurrentGroup] = useState(
+    currentGroupData.joinedParents.filter((joinedParent) => joinedParent.id !== currentGroupData.id)
+  );
 
   const dispatch = useDispatch();
   const createGroupAsync = useAsync({
@@ -107,6 +111,7 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
     setGroup(DEFAULT_GROUP);
     setParentGroups([]);
     setMembers([]);
+    setCurrentGroup([]);
   };
 
   const handleSubmit = () => {
@@ -141,6 +146,7 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
       allGroups={allGroups}
       parentGroups={parentGroups}
       onSelectParentGroup={onSelectParentGroup}
+      joinedParents={currentGroup}
     />
   );
 };

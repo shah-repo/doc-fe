@@ -2,7 +2,7 @@ import { Dictionary } from "lodash";
 import { Group, GroupTag, Permission } from "../auth/types";
 import { Id, Nullable, User } from "../common";
 import { Company, Employee } from "../company";
-import { COMPANY_GROUPS_LIST } from "./constants";
+import { COMPANY_GROUPS_LIST, CURRENT_GROUP } from "./constants";
 
 export interface GetEmployeeResponse {
   id: string;
@@ -30,6 +30,7 @@ export interface LoadCompanyGroup {
   employees: Employee[];
   isOfficial: boolean;
   parents: Group[];
+  joinedParents: Group[];
 }
 
 export interface EmployeeGroupsEditRequestBody {
@@ -47,9 +48,15 @@ export interface CompanyGroupsListAction {
   payload: LoadCompanyGroups;
 }
 
+export interface CurrentEditableGroupAction {
+  type: typeof CURRENT_GROUP;
+  payload: LoadCompanyGroup;
+}
+
 export type GroupsByIdState = Dictionary<LoadCompanyGroup>;
 
 export type GroupsAllIdsState = string[];
+export type LoadJoinedDataState = Dictionary<LoadCompanyGroup>;
 
 export interface ApiTokenData {
   name: string;

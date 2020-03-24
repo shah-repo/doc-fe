@@ -3,7 +3,7 @@ import { isEmpty } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import Select from "react-select";
-import { GroupTag, Permission } from "../../../state/ducks/auth/types";
+import { Group, GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
 import { AsyncActionPayload } from "../../../state/types";
@@ -30,6 +30,7 @@ interface Props {
   allGroups: any[];
   parentGroups: any[];
   onSelectParentGroup: (selectedItems) => void;
+  joinedParents: Group[];
 }
 
 export const GroupContentPresenter: React.FunctionComponent<Props> = ({
@@ -48,6 +49,7 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
   allGroups,
   parentGroups,
   onSelectParentGroup,
+  joinedParents,
 }) => {
   const intl = useIntl();
   const canCreateOfficialGroup = hasOfficialPermission && group.isOfficial;
@@ -120,10 +122,10 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
     </Box>
   );
 
-  const renderSelectedGroupInfo = () => parentGroups.map((parentGroup, index) => (
+  const renderSelectedGroupInfo = (parentGroups) => parentGroups.map((parentGroup, index) => (
     <Box mt={6} width="700px" padding="10px" border="1px solid grey" borderRadius={4} key={index} >
       <Typography variant="h6" style={{ marginBottom: 5 }}>
-        <Text message={`${parentGroup.label} Info`}/>
+        <Text message={`${parentGroup.label || parentGroup.name} Info`}/>
       </Typography>
       <GroupInfoPresenter
         items={parentGroup.permissions}
@@ -183,7 +185,8 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
         {canCreateOfficialGroup && permissionsRenderer()}
         {canCreateOfficialGroup && tagsRenderer()}
         {canCreateOfficialGroup && parentGroupsRenderer()}
-        {!isEmpty(parentGroups) && renderSelectedGroupInfo()}
+        {!isEmpty(parentGroups) && renderSelectedGroupInfo(parentGroups)}
+        {!isEmpty(joinedParents) && renderSelectedGroupInfo(joinedParents)}
         <Grid item={true} style={{ textAlign: "right" }}>
           {isCreateMode && resetButtonRenderer()}
           {submitButtonRenderer()}
