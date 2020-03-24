@@ -24,9 +24,6 @@ const editGroup = (
     method: "patch",
     data: body,
     handlers,
-    onSuccess: (response, dispatch) => {
-      console.log(response);
-    },
   });
 
 export default {
