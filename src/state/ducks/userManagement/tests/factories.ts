@@ -19,4 +19,5 @@ export const getCompanyGroup = (): LoadCompanyGroup => ({
   company: getCompany(),
   employees: [getEmployee()],
   isOfficial: true,
+  joinedParents: [],
 });

@@ -1,4 +1,5 @@
 export const COMPANY_GROUPS_LIST = "userManagement/COMPANY_GROUPS_LIST";
+export const CURRENT_GROUP = "userManagement/CURRENT_GROUP";
 export const COMPANY_GROUPS_GET_ASYNC = "userManagement/COMPANY_GROUPS_GET_ASYNC";
 export const GROUPS_ME_GET_ASYNC = "userManagement/GROUPS_ME_GET_ASYNC";
 export const GROUP_GET_BY_ID = "userManagement/GROUPS_GET_BY_ID";
@@ -13,6 +14,7 @@ export const SLACK_URL = "userManagement/SLACK_URL";
 export const EMPLOYEES_URL = "/employees";
 export const GROUPS_URL = "/groups";
 export const GROUPS_ME_URL = `${GROUPS_URL}/me`;
+export const SET_JOINED_DATA = "userManagement/SET_JOINED_DATA";
 
 export const COMPANY_SLACK_URL = "/slack/company_oauth_url";
 export const USER_SLACK_URL = "/slack/user_oauth_url";
