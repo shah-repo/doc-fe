@@ -13,6 +13,7 @@ export const getCompany = (company: Partial<Company> = {}): Company => ({
   teamId: faker.random.uuid(),
   addresses: [],
   acctCodes: [],
+  helloSignIntegrationEnabled: false,
   ...company,
 });
 
