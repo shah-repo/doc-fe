@@ -26,6 +26,7 @@ const initialValues = {
 
 export const AddEmployeeFormContainer: React.FunctionComponent = () => {
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
+  const defaultGroups = useSelector(userManagementSelectors.getDefaultGroups);
   const addEmployeeAction = useActionCreator(userManagementActions.addEmployee);
   const async = useAsync({
     onSuccess: () => {
@@ -54,7 +55,7 @@ export const AddEmployeeFormContainer: React.FunctionComponent = () => {
       {...props}
       asyncState={async.asyncState}
       groupOptions={groupOptions}
-      defaultGroups={groupOptions.filter((option) => option.defaultForNewUsers)}
+      defaultGroups={defaultGroups}
     />
   );
 

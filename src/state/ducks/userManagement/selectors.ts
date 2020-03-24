@@ -23,8 +23,14 @@ const getGroupsOptions = createSelector(
   ),
 );
 
+const getDefaultGroups = createSelector(
+  getGroupsOptions,
+  (groupOptions) => groupOptions.filter((option) => option.defaultForNewUsers),
+);
+
 export default {
   getGroupsOptions,
   getLoadGroupsAsyncState,
   getCurrentGroup,
+  getDefaultGroups,
 };
