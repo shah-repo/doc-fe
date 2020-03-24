@@ -1,6 +1,5 @@
 import { Button, createStyles, makeStyles } from "@material-ui/core";
 import React from "react";
-import { toStartOfDay } from "../../../../../common/utils/date";
 import SummaryFieldWithHtml from "../../../../common/summary/baseWithHtml";
 import Date from "../../../../components/Date";
 import Text from "../../../../components/Text";
@@ -50,7 +49,7 @@ export const TaskPresenter: React.FunctionComponent<Props> = ({
         </span>
         <span className={classes.marginRight}>
           <Text data-id="dueDate" translation="common.due.date" />:&nbsp;
-          <Date value={task.dueDate && toStartOfDay(task.dueDate)} />
+          <Date value={task.dueDate} />
         </span>
         <span>
           <Text data-id="status" translation="common.status" />:&nbsp;

@@ -31,7 +31,7 @@ const toImplementationPlanFormValues = (plan: ImplementationPlan): Implementatio
         status: task.status,
         title: task.title,
         description: task.description,
-        dueDate: task.dueDate,
+        dueDate: toStartOfDay(task.dueDate),
       };
 
       if (task.assigned) {
