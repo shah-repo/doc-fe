@@ -8,6 +8,8 @@ export const getGroup = (): Group => ({
   name: faker.random.word(),
   permissions: [],
   tags: null,
+  joinedTags: null,
+  joinedPermissions: [],
   parents: [],
 });
 
