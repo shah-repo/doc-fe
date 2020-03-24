@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/quotes */
 import React from "react";
 import { IotService } from "../../common/utils/iot/mqttClient";
 import { dashboardActions } from "../../state/ducks/dashboard";

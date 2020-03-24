@@ -17,25 +17,25 @@ const DashboardPresenter: React.FunctionComponent<DashboardPresenterProps> = ({
   const classes = styles();
   const renderPendingActions = () => (
     <React.Fragment>
-    {
-      pendingActions.map((pendingAction, index) => {
-        switch (pendingAction.type) {
-          case PendingActionType.PENDING_REVIEW:
-            return <ChangeRequestApproval key={index} pendingAction={pendingAction} />;
-          case PendingActionType.PENDING_TRAINING_RECORDS:
-            return <TrainingRequest key={index} pendingAction={pendingAction} />;
-          default:
-            return <TaskApproval key={index} pendingAction={pendingAction} />;
-        }
-      })
-    }
+      {
+        pendingActions.map((pendingAction, index) => {
+          switch (pendingAction.type) {
+            case PendingActionType.PENDING_REVIEW:
+              return <ChangeRequestApproval key={index} pendingAction={pendingAction} />;
+            case PendingActionType.PENDING_TRAINING_RECORDS:
+              return <TrainingRequest key={index} pendingAction={pendingAction} />;
+            default:
+              return <TaskApproval key={index} pendingAction={pendingAction} />;
+          }
+        })
+      }
     </React.Fragment>
   );
   const renderNoPendingActions = pendingActions.length === 0 && (
-      <Typography className={classes.noPendingActions}>
-        <Text translation="dashboard.noPendingActions" />
-      </Typography>
-    );
+    <Typography className={classes.noPendingActions}>
+      <Text translation="dashboard.noPendingActions" />
+    </Typography>
+  );
 
   return (
     <Grid container={true} className={classes.root} spacing={8}>

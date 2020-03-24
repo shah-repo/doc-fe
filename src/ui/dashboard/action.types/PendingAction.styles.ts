@@ -7,4 +7,4 @@ export const styles = makeStyles((theme: Theme) =>
       color: "red",
     },
   },
-));
+  ));
