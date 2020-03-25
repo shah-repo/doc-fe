@@ -1,4 +1,4 @@
-import { isEmpty, omit } from "lodash";
+import { isEmpty, omit, uniqBy } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
@@ -30,7 +30,7 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
 }) => {
   const [group, setGroup] = useState<GroupRequestBody>(DEFAULT_GROUP);
   const [members, setMembers] = useState<OptionType[]>([]);
-  const [parentGroups, setParentGroups] = useState<OptionType[]>([]);
+  const [parentGroups, setParentGroups] = useState<any[]>([]);
   const currentEmployeePermissions = useSelector(
     authSelectors.currentEmployeePermissions,
   );
@@ -41,9 +41,8 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
   const allGroups = useSelector(userManagementSelectors.getGroupsOptions);
   const currentGroupData = useSelector(userManagementSelectors.getCurrentGroup);
   const [currentGroup, setCurrentGroup] = useState(
-    currentGroupData.joinedParents.filter((joinedParent) => joinedParent.id !== currentGroupData.id)
+    isCreateMode ? [] : currentGroupData.joinedParents.filter((joinedParent) => joinedParent.id !== currentGroupData.id)
   );
-
   const dispatch = useDispatch();
   const createGroupAsync = useAsync({
     onSuccess: (response) => {
@@ -52,6 +51,7 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
       dispatch(userManagementActions.loadCompanyGroups());
     },
   });
+
   const editGroupAsync = useAsync({
     onSuccess: (response) => {
       handleTableRefresh();
@@ -146,7 +146,7 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
       allGroups={allGroups}
       parentGroups={parentGroups}
       onSelectParentGroup={onSelectParentGroup}
-      joinedParents={currentGroup}
+      joinedParents={uniqBy(currentGroup, "id")}
     />
   );
 };

@@ -63,17 +63,17 @@ export const AddGroup: React.FunctionComponent<Props> = ({
 
   return (
     <Dialog fullScreen={true} open={isOpen}>
-        <DialogTitle
-            closeDialog={closeDialog}
-            title={title}
-        />
-        <GroupContentContainer
-          selectedGroup={selectedGroup}
-          isCreateMode={isCreateMode}
-          employees={activeEmployees}
-          handleTableRefresh={handleTableRefresh}
-          closeDialog={closeDialog}
-        />
+      <DialogTitle
+        closeDialog={closeDialog}
+        title={title}
+      />
+      <GroupContentContainer
+        selectedGroup={selectedGroup}
+        isCreateMode={isCreateMode}
+        employees={activeEmployees}
+        handleTableRefresh={handleTableRefresh}
+        closeDialog={closeDialog}
+      />
     </Dialog>
   );
 };

@@ -17,6 +17,7 @@ export const toParentOptions = (values: Group[]): OptionType[] => values.map((va
   value: value.id,
   permissions: value.permissions,
   tags: value.tags,
+  parents: value.parents,
 }));
 
 

@@ -121,11 +121,38 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
       />
     </Box>
   );
+  const inheritText = (parentGroup) => {
+    if (!isEmpty(parentGroup.parents)) {
+      return `inherits from ${parentGroup.parents.map((parent) => parent.name)}`;
+    }
+    return "";
+  };
 
-  const renderSelectedGroupInfo = (parentGroups) => parentGroups.map((parentGroup, index) => (
+  const renderSelectedGroupInfo = (parentGroups) => parentGroups.map((parentGroup, index) => {
+    if (joinedParents.some((p) => p.name === parentGroup.label)) {
+      return null;
+    }
+    return (
+      <Box mt={6} width="700px" padding="10px" border="1px solid grey" borderRadius={4} key={index} >
+        <Typography variant="h6" style={{ marginBottom: 5 }}>
+          <Text message={`${parentGroup.label} ${inheritText(parentGroup)}`}/>
+        </Typography>
+        <GroupInfoPresenter
+          items={parentGroup.permissions}
+          title="common.permissions"
+        />
+        <GroupInfoPresenter
+          items={parentGroup.tags}
+          title="common.tags"
+        />
+      </Box>
+    );
+  });
+
+  const renderJoinedGroupsInfo = (parentGroups) => parentGroups.map((parentGroup, index) => (
     <Box mt={6} width="700px" padding="10px" border="1px solid grey" borderRadius={4} key={index} >
       <Typography variant="h6" style={{ marginBottom: 5 }}>
-        <Text message={`${parentGroup.label || parentGroup.name} Info`}/>
+        <Text message={`${parentGroup.label || parentGroup.name} ${inheritText(parentGroup)}`}/>
       </Typography>
       <GroupInfoPresenter
         items={parentGroup.permissions}
@@ -186,7 +213,7 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
         {canCreateOfficialGroup && tagsRenderer()}
         {canCreateOfficialGroup && parentGroupsRenderer()}
         {!isEmpty(parentGroups) && renderSelectedGroupInfo(parentGroups)}
-        {!isEmpty(joinedParents) && renderSelectedGroupInfo(joinedParents)}
+        {!isEmpty(joinedParents) && renderJoinedGroupsInfo(joinedParents)}
         <Grid item={true} style={{ textAlign: "right" }}>
           {isCreateMode && resetButtonRenderer()}
           {submitButtonRenderer()}
