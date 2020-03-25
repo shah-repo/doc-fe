@@ -39,9 +39,9 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
     currentEmployeePermissions,
   );
   const allGroups = useSelector(userManagementSelectors.getGroupsOptions);
-  const currentGroupsData = useSelector(userManagementSelectors.getCurrentGroups);
+  const currentGroupData = useSelector(userManagementSelectors.getCurrentGroup);
   const [currentGroups, setCurrentGroups] = useState(
-    isCreateMode ? [] : currentGroupsData.joinedParents.filter((joinedParent) => joinedParent.id !== currentGroupsData.id)
+    isCreateMode ? [] : currentGroupData.joinedParents.filter((joinedParent) => joinedParent.id !== currentGroupData.id)
   );
   const dispatch = useDispatch();
   const createGroupAsync = useAsync({

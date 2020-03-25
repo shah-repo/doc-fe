@@ -5,7 +5,7 @@ import { AsyncState } from "../../types";
 const groupsById = (state: ApplicationState) => state.userManagement.groupsById;
 const groupsAllIds = (state: ApplicationState) => state.userManagement.groupsAllIds;
 const getLoadGroupsAsyncState = (state: ApplicationState): AsyncState => state.userManagement.loadGroupsListAsyncInfo;
-const getCurrentGroups = (state: ApplicationState) => state.userManagement.currentEditableGroup;
+const getCurrentGroup = (state: ApplicationState) => state.userManagement.currentEditableGroup;
 
 const getGroupsOptions = createSelector(
   groupsAllIds, groupsById,
@@ -31,6 +31,6 @@ const getDefaultGroups = createSelector(
 export default {
   getGroupsOptions,
   getLoadGroupsAsyncState,
-  getCurrentGroups,
+  getCurrentGroup,
   getDefaultGroups,
 };
