@@ -128,30 +128,15 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
     return "";
   };
 
-  const renderSelectedGroupInfo = (parentGroups) => parentGroups.map((parentGroup, index) => {
-    if (joinedParents.some((p) => p.name === parentGroup.label)) {
-      return null;
-    }
-    return (
-      <Box mt={6} width="700px" padding="10px" border="1px solid grey" borderRadius={4} key={index} >
-        <Typography variant="h6" style={{ marginBottom: 5 }}>
-          <Text message={`${parentGroup.label} ${inheritText(parentGroup)}`}/>
-        </Typography>
-        <GroupInfoPresenter
-          items={parentGroup.permissions}
-          title="common.permissions"
-        />
-        <GroupInfoPresenter
-          items={parentGroup.tags}
-          title="common.tags"
-        />
-      </Box>
-    );
-  });
-
-  const renderJoinedGroupsInfo = (parentGroups) => parentGroups.map((parentGroup, index) => (
-    <Box mt={6} width="700px" padding="10px" border="1px solid grey" borderRadius={4} key={index} >
-      <Typography variant="h6" style={{ marginBottom: 5 }}>
+  const renderParentContainer = (parentGroup, index) => (
+    <Box mt={6} width="700px" padding="10px" border="1px solid grey" borderRadius={4} key={index}>
+      <Typography
+        variant="h6"
+        style={{
+          marginBottom: 5,
+          borderBottom: "solid",
+          borderColor: "grey",
+        }}>
         <Text message={`${parentGroup.label || parentGroup.name} ${inheritText(parentGroup)}`}/>
       </Typography>
       <GroupInfoPresenter
@@ -163,7 +148,18 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
         title="common.tags"
       />
     </Box>
-  ));
+  );
+
+  const renderSelectedGroupInfo = (parentGroups) => parentGroups.map((parentGroup, index) => {
+    if (joinedParents.some((p) => p.name === parentGroup.label)) {
+      return null;
+    }
+    return renderParentContainer(parentGroup, index);
+  });
+
+  const renderJoinedGroupsInfo = (parentGroups) => parentGroups.map((parentGroup, index) =>
+    renderParentContainer(parentGroup, index)
+  );
 
   const parentGroupsRenderer = () => (
     <Box width={700} mt={5}>
@@ -201,7 +197,7 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
       container={true}
       alignItems="center"
       direction="column"
-      style={{ marginTop: "250px" }}
+      style={{ marginTop: 90 }}
     >
       <Grid>
         {hasOfficialPermission && isCreateMode && (
