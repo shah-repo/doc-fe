@@ -38,7 +38,7 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
   const hasOfficialPermission = getHasOfficialPermissions(
     currentEmployeePermissions,
   );
-  const allGroups = useSelector(userManagementSelectors.getGroupsOptions);
+  const allGroups = useSelector(userManagementSelectors.getOfficialGroups);
   const currentGroupData = useSelector(userManagementSelectors.getCurrentGroup);
   const [currentGroup, setCurrentGroup] = useState(
     currentGroupData.joinedParents.filter((joinedParent) => joinedParent.id !== currentGroupData.id)

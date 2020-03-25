@@ -19,6 +19,7 @@ const getGroupsOptions = createSelector(
       permissions: groups[id].permissions,
       parents: groups[id].parents,
       joinedParents: groups[id].joinedParents,
+      isOfficial: groups[id].isOfficial,
     }))
   ),
 );
@@ -28,9 +29,15 @@ const getDefaultGroups = createSelector(
   (groupOptions) => groupOptions.filter((option) => option.defaultForNewUsers),
 );
 
+const getOfficialGroups = createSelector(
+  getGroupsOptions,
+  (groupOptions) => groupOptions.filter((option) => option.isOfficial),
+);
+
 export default {
   getGroupsOptions,
   getLoadGroupsAsyncState,
   getCurrentGroup,
   getDefaultGroups,
+  getOfficialGroups,
 };
