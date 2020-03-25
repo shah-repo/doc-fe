@@ -5,6 +5,8 @@ import { WHITE_LABEL_DEFAULT } from "./constants";
 const getSelectedCompany = (state: ApplicationState) => state.company.selectedCompany;
 const slackTeamId = (state: ApplicationState) => state.company.selectedCompany.teamId;
 const isSlackIntegrationEnabled = (state: ApplicationState) => state.company.selectedCompany.slackIntegrationEnabled;
+const isHelloSignIntegrationEnabled = (state: ApplicationState) =>
+  state.company.selectedCompany.helloSignIntegrationEnabled;
 
 const getWhiteLabeling = createSelector(
   getSelectedCompany,
@@ -19,4 +21,5 @@ export default {
   slackTeamId,
   getSelectedCompany,
   getCompanyMine,
+  isHelloSignIntegrationEnabled,
 };
