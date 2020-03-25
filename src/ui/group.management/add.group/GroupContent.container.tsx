@@ -1,4 +1,4 @@
-import { isEmpty, omit, uniqBy } from "lodash";
+import { isEmpty, omit } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
@@ -30,7 +30,7 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
 }) => {
   const [group, setGroup] = useState<GroupRequestBody>(DEFAULT_GROUP);
   const [members, setMembers] = useState<OptionType[]>([]);
-  const [parentGroups, setParentGroups] = useState<any[]>([]);
+  const [parentGroups, setParentGroups] = useState<OptionType[]>([]);
   const currentEmployeePermissions = useSelector(
     authSelectors.currentEmployeePermissions,
   );
@@ -39,9 +39,9 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
     currentEmployeePermissions,
   );
   const allGroups = useSelector(userManagementSelectors.getGroupsOptions);
-  const currentGroupData = useSelector(userManagementSelectors.getCurrentGroup);
-  const [currentGroup, setCurrentGroup] = useState(
-    isCreateMode ? [] : currentGroupData.joinedParents.filter((joinedParent) => joinedParent.id !== currentGroupData.id)
+  const currentGroupsData = useSelector(userManagementSelectors.getCurrentGroups);
+  const [currentGroups, setCurrentGroups] = useState(
+    isCreateMode ? [] : currentGroupsData.joinedParents.filter((joinedParent) => joinedParent.id !== currentGroupsData.id)
   );
   const dispatch = useDispatch();
   const createGroupAsync = useAsync({
@@ -111,7 +111,7 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
     setGroup(DEFAULT_GROUP);
     setParentGroups([]);
     setMembers([]);
-    setCurrentGroup([]);
+    setCurrentGroups([]);
   };
 
   const handleSubmit = () => {
@@ -146,7 +146,7 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
       allGroups={allGroups}
       parentGroups={parentGroups}
       onSelectParentGroup={onSelectParentGroup}
-      joinedParents={uniqBy(currentGroup, "id")}
+      joinedParents={currentGroups}
     />
   );
 };

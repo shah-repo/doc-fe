@@ -1,5 +1,5 @@
 import { Box, Button, Grid, TextField, Typography } from "@material-ui/core";
-import { isEmpty } from "lodash";
+import { isEmpty, uniqBy } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import Select from "react-select";
@@ -53,6 +53,7 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const intl = useIntl();
   const canCreateOfficialGroup = hasOfficialPermission && group.isOfficial;
+  const uniqJoinedParents = uniqBy(joinedParents, "id");
 
   const groupNameRenderer = () => (
     <Box width={700}>
@@ -151,7 +152,7 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
   );
 
   const renderSelectedGroupInfo = (parentGroups) => parentGroups.map((parentGroup, index) => {
-    if (joinedParents.some((p) => p.name === parentGroup.label)) {
+    if (uniqJoinedParents.some((p) => p.name === parentGroup.label)) {
       return null;
     }
     return renderParentContainer(parentGroup, index);
@@ -209,7 +210,7 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
         {canCreateOfficialGroup && tagsRenderer()}
         {canCreateOfficialGroup && parentGroupsRenderer()}
         {!isEmpty(parentGroups) && renderSelectedGroupInfo(parentGroups)}
-        {!isEmpty(joinedParents) && renderJoinedGroupsInfo(joinedParents)}
+        {!isEmpty(uniqJoinedParents) && renderJoinedGroupsInfo(uniqJoinedParents)}
         <Grid item={true} style={{ textAlign: "right" }}>
           {isCreateMode && resetButtonRenderer()}
           {submitButtonRenderer()}
