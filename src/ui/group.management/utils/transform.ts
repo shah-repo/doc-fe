@@ -15,6 +15,9 @@ export const toOptions = (values: any[]): OptionType[] => values.map((value) => 
 export const toParentOptions = (values: Group[]): OptionType[] => values.map((value) => ({
   label: value.name,
   value: value.id,
+  permissions: value.permissions,
+  tags: value.tags,
+  parents: value.parents,
 }));
 
 

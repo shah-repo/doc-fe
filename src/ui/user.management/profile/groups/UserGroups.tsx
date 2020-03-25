@@ -122,7 +122,7 @@ export const UserGroups: React.FunctionComponent<Props> = ({
     </Box>
   );
   return (
-    <Box minWidth="500px">
+    <Box minWidth="500px" maxWidth="700px">
       {!showEditGroups && groupsRenderer()}
       {showEditGroups && editGroupsRenderer()}
     </Box>

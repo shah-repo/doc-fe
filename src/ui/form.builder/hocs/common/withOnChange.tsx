@@ -117,7 +117,9 @@ export const withOnChange = <T extends FBInputProps>(
         const { optionValueKey = "id", valueType = "key", optionObjectKeys } = props;
         if (_.isArray(value)) {
           if (valueType === "object") {
-            return optionObjectKeys ? _.map(value, (v) => _.pick(v, optionObjectKeys!)) : value;
+            return optionObjectKeys ?
+              _.map(value, (v) => _.pick(v, optionObjectKeys as string[]))
+              : value;
           }
           return _.map(value, (v) => (_.isString(v) ? v : _.get(v, optionValueKey)));
         }
@@ -129,7 +131,7 @@ export const withOnChange = <T extends FBInputProps>(
     };
 
     if (type === "checkboxgroup") {
-      return;
+      return fieldValue.checkboxgroup();
     }
     fieldValue = fieldValue[type || ""] ? fieldValue[type || ""]() : fieldValue.default();
     storeValue(name, fieldValue);

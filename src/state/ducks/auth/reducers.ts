@@ -101,14 +101,14 @@ export const groups = (
       const tagsSet = new Set<GroupTag>();
       const permissionsSet = new Set<Permission>();
       action.payload.forEach((group) => {
-        const { tags, permissions } = group;
+        const { joinedTags, joinedPermissions } = group;
 
-        if (tags) {
-          tags.forEach((tag) => tagsSet.add(tag));
+        if (joinedTags) {
+          joinedTags.forEach((tag) => tagsSet.add(tag));
         }
 
-        if (permissions) {
-          permissions.forEach((permission) => permissionsSet.add(permission));
+        if (joinedPermissions) {
+          joinedPermissions.forEach((permission) => permissionsSet.add(permission));
         }
       });
 

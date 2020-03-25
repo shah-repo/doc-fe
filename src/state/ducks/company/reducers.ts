@@ -16,6 +16,7 @@ export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
   teamId: "",
   addresses: [],
   acctCodes: [],
+  helloSignIntegrationEnabled: false,
 };
 
 type CompanyActions = SelectCompanyAction | LogoutUserAction;

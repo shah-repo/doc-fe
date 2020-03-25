@@ -16,6 +16,7 @@ export class FBEditorStore {
   @observable public content?: React.ReactNode = undefined;
   @observable public title?: string = undefined;
   @observable public maxWidth?: "sm" | "md" | "lg" = "md";
+  @observable public isHelloSignIntegrationEnabled?: boolean = false;
   public editorIndex = 0;
   public editorMode: FBEditorModeType = "create";
 
@@ -86,14 +87,19 @@ export class FBEditorStore {
       </FBEditorSection>
     ));
 
-  @action private generateElements = (elements: FBEditorElementType[]) =>
-    elements.map((el, i) => (
+  @action private generateElements = (elements: FBEditorElementType[]) => elements.map((el, i) => {
+    if (el === "hellosign" && !this.isHelloSignIntegrationEnabled) {
+      return null;
+    }
+
+    return (
       <FBButton
         key={`form.builder.${el as string}-${i}`}
         label={`form.builder.${el as string}`}
         onClick={this.editorTypeRenderer(el)}
       />
-    ));
+    );
+  });
 }
 
 const editorStore = new FBEditorStore();

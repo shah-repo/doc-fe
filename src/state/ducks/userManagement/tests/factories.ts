@@ -8,6 +8,8 @@ export const getGroup = (): Group => ({
   name: faker.random.word(),
   permissions: [],
   tags: null,
+  joinedTags: null,
+  joinedPermissions: [],
   parents: [],
 });
 
@@ -17,4 +19,5 @@ export const getCompanyGroup = (): LoadCompanyGroup => ({
   company: getCompany(),
   employees: [getEmployee()],
   isOfficial: true,
+  joinedParents: [],
 });

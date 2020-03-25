@@ -61,7 +61,9 @@ export interface Group {
   id: string;
   name: string;
   tags: Nullable<GroupTag[]>;
+  joinedTags: Nullable<GroupTag[]>;
   permissions: Permission[];
+  joinedPermissions: Nullable<Permission[]>;
   parents: Group[];
 }
 
