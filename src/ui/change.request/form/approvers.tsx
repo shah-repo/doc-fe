@@ -30,11 +30,10 @@ export const Approvers: React.FunctionComponent<Props> = ({
   });
   const loadAvailableApproversAction = useActionCreator(changeRequestsActions.loadAvailableApprovers);
   const styles = {
-      multiValueRemove: (base: React.CSSProperties, state: any) => {
-        return (dataProp! && dataProp!.some((approver) => approver.approver.id === state.data.value)) ?
-          { ...base, display: "none" } :
-          base;
-      },
+    multiValueRemove: (base: React.CSSProperties, state: any) =>
+      (dataProp && dataProp.some((approver) => approver.approver.id === state.data.value)) ?
+        { ...base, display: "none" } :
+        base,
   };
 
   return (

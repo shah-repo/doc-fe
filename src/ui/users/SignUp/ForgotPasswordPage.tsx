@@ -18,11 +18,11 @@ interface Props extends FormikProps<PasswordEmail> {
 }
 
 const ForgotPasswordPage: React.FunctionComponent<Props> = ({
-    logo,
-    closeForgotPasswordPage,
-    asyncState,
-    showVerificationState,
-    values,
+  logo,
+  closeForgotPasswordPage,
+  asyncState,
+  showVerificationState,
+  values,
 }) => {
   const classes = styles();
   return (
@@ -41,13 +41,13 @@ const ForgotPasswordPage: React.FunctionComponent<Props> = ({
           <FormMessage asyncState={asyncState} className={classes.status} id="ForgotPasswordPage-formError" />
         </Typography>
         <InputField
-            name="email"
-            label="login.email"
-            size="sm"
-            gutter={false}
-            inputProps={{ autoComplete: "email", autoFocus: true, id: "ForgotPasswordPage-email" }}
-            validate={validator(required, email)}
-            lpignore={false}
+          name="email"
+          label="login.email"
+          size="sm"
+          gutter={false}
+          inputProps={{ autoComplete: "email", autoFocus: true, id: "ForgotPasswordPage-email" }}
+          validate={validator(required, email)}
+          lpignore={false}
         />
         <SubmitButton
           onClick={() => showVerificationState(values, "forgot.password.email")}

@@ -25,6 +25,6 @@ export const supplierSurvey = (
 };
 
 export default combineReducers({
-    loadSupplierSurveyAsyncInfo: asyncReducer(SUPPLIER_SURVEY_ASYNC),
-    supplierSurvey,
+  loadSupplierSurveyAsyncInfo: asyncReducer(SUPPLIER_SURVEY_ASYNC),
+  supplierSurvey,
 });

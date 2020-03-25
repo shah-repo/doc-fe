@@ -1,11 +1,9 @@
 import React from "react";
 
-const TrainingDetailContainer: React.FunctionComponent = () => {
-  return (
-    <div>
+const TrainingDetailContainer: React.FunctionComponent = () => (
+  <div>
       Training
-    </div>
-  );
-};
+  </div>
+);
 
 export default TrainingDetailContainer;

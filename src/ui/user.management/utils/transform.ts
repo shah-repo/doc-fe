@@ -3,18 +3,16 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 
 export const toEmployeeGroupsEditRequestBody = (employeeGroups: OptionType[] | null):
 EmployeeGroupsEditRequestBody => {
-    if (employeeGroups == null) {return {groups: []}; }
+  if (employeeGroups == null) { return { groups: [] }; }
 
-    const employeeGroupsEditRequestBody: EmployeeGroupsEditRequestBody = {
-        groups: employeeGroups.map((group) => ({
-            id: group.value,
-        })),
-    };
-    return employeeGroupsEditRequestBody;
+  const employeeGroupsEditRequestBody: EmployeeGroupsEditRequestBody = {
+    groups: employeeGroups.map((group) => ({
+      id: group.value,
+    })),
+  };
+  return employeeGroupsEditRequestBody;
 };
 
-export const toEmployeeActiveStatusEditRequestBody = (active: boolean): EmployeeActiveStatusRequestBody => {
-    return ({
-        active,
-    });
-};
+export const toEmployeeActiveStatusEditRequestBody = (active: boolean): EmployeeActiveStatusRequestBody => ({
+  active,
+});

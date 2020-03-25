@@ -45,6 +45,7 @@ export const AddGroup: React.FunctionComponent<Props> = ({
       { active: true },
       asyncGetActiveEmployees,
     );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleTableRefresh = () => {

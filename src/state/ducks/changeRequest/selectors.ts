@@ -30,7 +30,7 @@ const getApproversListWithoutCurrentUser = createSelector(
     approvers: approversById(state),
   }),
   (state, owner) => owner,
-  ({ids, approvers}, currentUserId): OptionType[] => {
+  ({ ids, approvers }, currentUserId): OptionType[] => {
     const list: OptionType[] = [];
 
     ids.forEach((id) => {
@@ -58,32 +58,31 @@ const getAssignessList = createSelector(
 const getChangeRequest = (state: ApplicationState, changeRequestId: string) => byId(state)[changeRequestId];
 const getAudit = (state: ApplicationState, changeRequestId: string) => auditsByCRId(state)[changeRequestId];
 
-const makeGetAudit = () => {
-  return createSelector(
-    getAudit,
-    (audits: AuditGroupType = {}) =>  {
-      Object.keys(audits).forEach((groupId) => {
-        audits[groupId].map((audit: Audit) => {
-          switch (audit.field) {
-            case "assessments.description":
-            case "justifications.description":
-            case "tasks.description":
-            case "description":
-            case "assessments.process.reasoning":
-            case "assessments.design.reasoning":
-            case "assessments.regulatory.reasoning":
-              const html = audit.nextValue as string;
-              audit.nextValue = stripTags(html).substring(0, 100);
-              return audit;
-            default:
-              return audit;
+const makeGetAudit = () => createSelector(
+  getAudit,
+  (audits: AuditGroupType = {}) =>  {
+    Object.keys(audits).forEach((groupId) => {
+      audits[groupId].map((audit: Audit) => {
+        switch (audit.field) {
+          case "assessments.description":
+          case "justifications.description":
+          case "tasks.description":
+          case "description":
+          case "assessments.process.reasoning":
+          case "assessments.design.reasoning":
+          case "assessments.regulatory.reasoning": {
+            const html = audit.nextValue as string;
+            audit.nextValue = stripTags(html).substring(0, 100);
+            return audit;
           }
-        });
+          default:
+            return audit;
+        }
       });
-      return audits;
-    },
-  );
-};
+    });
+    return audits;
+  },
+);
 
 const getLoadAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadAsyncInfo;
 const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadListAsyncInfo;

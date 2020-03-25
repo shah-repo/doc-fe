@@ -58,6 +58,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
 
   useEffect(() => {
     dispatch(documentRevisionsActions.loadList());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const async = useAsync<DocumentTypeById>({

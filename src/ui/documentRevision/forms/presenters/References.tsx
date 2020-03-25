@@ -8,6 +8,8 @@ import { documentVersionPath } from "../../../document.revision/utils/paths";
 export interface Props {
   document?: Partial<DocumentRevisionDocument>;
 }
+
+// TODO: check if this component is used
 export const References: React.FunctionComponent<Props> = ({
   document,
 }) => {

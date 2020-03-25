@@ -59,4 +59,4 @@ export const styles = makeStyles((theme: Theme) =>
       marginTop: "50px",
     },
   }),
-  );
+);

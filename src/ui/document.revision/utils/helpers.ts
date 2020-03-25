@@ -1,9 +1,7 @@
 import _ from "lodash";
-import moment from "moment-timezone";
-import {
-  DocumentRevision,
-  DocumentRevisionStatus,
-} from "../../../state/ducks/documentRevisions";
+import moment from "moment";
+import "moment-timezone";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { store } from "../../../state/store";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { ReleasedDateOptions } from "./types";
@@ -27,9 +25,9 @@ export const documentRevisionIdMask = (
   type: string,
   count: string | number,
 ) => {
-    const countStr = "" + count;
-    const pad = "0000";
-    return type + pad.substring(0, pad.length - countStr.length) + countStr;
+  const countStr = "" + count;
+  const pad = "0000";
+  return type + pad.substring(0, pad.length - countStr.length) + countStr;
 };
 
 export const documentRevisionStatusOption = () => {
@@ -38,7 +36,7 @@ export const documentRevisionStatusOption = () => {
     // TODO: Change DocumentRevisionStatus enum into key = value, value = text
     const keyName = DocumentRevisionStatus[key as keyof typeof DocumentRevisionStatus];
     if (keyName !== DocumentRevisionStatus.Deprecated) {
-      options.push({value: keyName, text: keyName});
+      options.push({ value: keyName, text: keyName });
     }
   });
   return _.orderBy(options, ["text"], ["asc"]);
@@ -47,19 +45,17 @@ export const documentRevisionStatusOption = () => {
 export const documentRevisionQueryStatus = (): DocumentRevisionStatus[] =>
   Object.values(DocumentRevisionStatus).filter((value) => value !== DocumentRevisionStatus.Deprecated);
 
-export const documentRevisionReleasedDateOption = () => {
-  return [
-    {
-      text: ReleasedDateOptions.LAST_WEEK,
-      value: moment().subtract(7, "d").startOf("day").toISOString(),
-    },
-    {
-      text: ReleasedDateOptions.LAST_TWO_WEEKS,
-      value: moment().subtract(14, "d").startOf("day").toISOString(),
-    },
-    {
-      text: ReleasedDateOptions.LAST_MONTH,
-      value: moment().subtract(30, "d").startOf("day").toISOString(),
-    },
-  ];
-};
+export const documentRevisionReleasedDateOption = () => [
+  {
+    text: ReleasedDateOptions.LAST_WEEK,
+    value: moment().subtract(7, "d").startOf("day").toISOString(),
+  },
+  {
+    text: ReleasedDateOptions.LAST_TWO_WEEKS,
+    value: moment().subtract(14, "d").startOf("day").toISOString(),
+  },
+  {
+    text: ReleasedDateOptions.LAST_MONTH,
+    value: moment().subtract(30, "d").startOf("day").toISOString(),
+  },
+];

@@ -1,21 +1,11 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 
 import { getCallbackHandler } from "../../../common/tests/factories";
 import { Handlers } from "../../types";
 import actions from "./actions";
 import { CHANGE_REQUEST_ROOT_URL } from "./constants";
-import {
-  getApprover,
-  getAudit,
-  getChangeRequest,
-  getChangeRequestEditRequestBody,
-} from "./tests/factories";
-import {
-  ChangeRequest,
-  ChangeRequestAvailableApprovers,
-  ChangeRequestEditRequestBody,
-  ChangeRequestTransitionRequestBody,
-  ChangeRequestTransitionResponse,
-} from "./types";
+import { getApprover, getAudit, getChangeRequest, getChangeRequestEditRequestBody } from "./tests/factories";
+import { ChangeRequest, ChangeRequestAvailableApprovers, ChangeRequestEditRequestBody, ChangeRequestTransitionRequestBody, ChangeRequestTransitionResponse } from "./types";
 
 describe("change requests actions tests", () => {
   describe("loadList tests", () => {

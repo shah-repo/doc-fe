@@ -15,6 +15,8 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 import DocumentHeader from "../../document.revision/summary/header";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import styles from "./DocumentRevisionForm.container.style";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
@@ -124,6 +126,13 @@ DocumentRevisionFormContainerProps
     [documentTypes],
   );
 
+  const upgradeAction = useActionCreator(documentRevisionsActions.upgradeToReleasedForm);
+  const async = useAsync();
+
+  const onUpgradeClick = () => {
+    async.start(upgradeAction, documentRevision.id, async);
+  };
+
   document = document || ({} as Document);
   const classes = styles();
 
@@ -144,6 +153,7 @@ DocumentRevisionFormContainerProps
       otherDocumentTypes={otherTypes}
       documentTypesById={documentTypesById}
       canChangeOwnerShip={canChangeOwnerShip}
+      onUpgradeClick={onUpgradeClick}
     />
   );
 
@@ -172,9 +182,7 @@ DocumentRevisionFormContainerProps
         })}
       >
         <Box ml={3}>
-          {!showRevisionTypeChange && (
-            <ChangeRequestLink dataProp={documentRevision} />
-          )}
+          <ChangeRequestLink dataProp={documentRevision} />
         </Box>
         <Formik
           initialValues={cleanInitialValues}

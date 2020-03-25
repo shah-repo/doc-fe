@@ -70,7 +70,7 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
   };
 
   const handleEditGroup = (groupId: string, values: GroupRequestBody) => {
-    const isGroupNameChanged = !(selectedGroup!.name === values.name);
+    const isGroupNameChanged = !(selectedGroup && (selectedGroup.name === values.name));
     const body = isGroupNameChanged ?
       { ...values, employees: toRequestBody(members), parents: toRequestBody(parentGroups) } :
       omit({ ...values, employees: toRequestBody(members), parents: toRequestBody(parentGroups) }, ["name"] );
@@ -115,7 +115,7 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
   };
 
   const handleSubmit = () => {
-    isCreateMode ?  handleCreateGroup(group) : handleEditGroup(selectedGroup!.id, group);
+    isCreateMode ?  handleCreateGroup(group) : (selectedGroup && handleEditGroup(selectedGroup.id, group));
   };
 
   const  handleAsyncState = () => isCreateMode ? createGroupAsync.asyncState : editGroupAsync.asyncState;

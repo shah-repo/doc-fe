@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 
 import { getCallbackHandler } from "../../../common/tests/factories";
 import { Handlers } from "../../types";

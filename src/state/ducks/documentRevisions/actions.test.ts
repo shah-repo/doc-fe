@@ -1,21 +1,10 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { getCallbackHandler } from "../../../common/tests/factories";
 import { Handlers } from "../../types";
 import actions from "./actions";
 import { DOCUMENT_REVISION_ROOT_URL, DOCUMENT_ROOT_URL } from "./constants";
-import {
-  getAudit,
-  getDocument,
-  getDocumentRevision,
-  getDocumentRevisionEditRequestBody,
-} from "./tests/factories";
-import {
-  Document,
-  DocumentRevision,
-  DocumentRevisionEditRequestBody,
-  DocumentRevisionStatus,
-  DocumentRevisionTransitionRequestBody,
-  DocumentRevisionTransitionResponse,
-} from "./types";
+import { getAudit, getDocument, getDocumentRevision, getDocumentRevisionEditRequestBody } from "./tests/factories";
+import { Document, DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse } from "./types";
 
 describe("documents actions tests", () => {
   describe("loadList tests", () => {
@@ -43,11 +32,11 @@ describe("documents actions tests", () => {
     it(
       "calls GET on DOCUMENT_REVISION_ROOT_URL?status%5B%5D=RELEASED&status%5B%5D=DEPRECATED&status%5B%5D=OBSOLETE",
       () => {
-      expect(action.url).toBe(
-        `${DOCUMENT_REVISION_ROOT_URL}?status%5B%5D=RELEASED&status%5B%5D=DEPRECATED&status%5B%5D=OBSOLETE&`,
-      );
-      expect(action.method).toBe("get");
-    });
+        expect(action.url).toBe(
+          `${DOCUMENT_REVISION_ROOT_URL}?status%5B%5D=RELEASED&status%5B%5D=DEPRECATED&status%5B%5D=OBSOLETE&`,
+        );
+        expect(action.method).toBe("get");
+      });
 
     it("calls dispatch with documentRevisionsList action on success", () => {
       const dispatch = jest.fn();

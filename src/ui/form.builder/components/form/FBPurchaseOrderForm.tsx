@@ -69,6 +69,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
       order: undefined,
       isTraceabilityRequired: undefined,
       glCode: undefined,
+      capitalEquipment: undefined,
     });
     setErrorMessage("");
   }, []);
@@ -146,6 +147,10 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
           inputProps={{ type: "number" }}
           label="form.builder.field.unit.price"
           name="unitPrice"
+        />
+        <FBCheckbox
+          label="form.builder.field.capital.equipment"
+          name="capitalEquipment"
         />
         <FBCheckbox
           label="form.builder.field.tax"
