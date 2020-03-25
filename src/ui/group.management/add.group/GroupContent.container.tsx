@@ -40,10 +40,9 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
   );
   const allGroups = useSelector(userManagementSelectors.getGroupsOptions);
   const currentGroupData = useSelector(userManagementSelectors.getCurrentGroup);
-  const [currentGroup, setCurrentGroup] = useState(
-    currentGroupData.joinedParents.filter((joinedParent) => joinedParent.id !== currentGroupData.id)
+  const [currentGroups, setCurrentGroups] = useState(
+    isCreateMode ? [] : currentGroupData.joinedParents.filter((joinedParent) => joinedParent.id !== currentGroupData.id)
   );
-
   const dispatch = useDispatch();
   const createGroupAsync = useAsync({
     onSuccess: (response) => {
@@ -52,6 +51,7 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
       dispatch(userManagementActions.loadCompanyGroups());
     },
   });
+
   const editGroupAsync = useAsync({
     onSuccess: (response) => {
       handleTableRefresh();
@@ -111,7 +111,7 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
     setGroup(DEFAULT_GROUP);
     setParentGroups([]);
     setMembers([]);
-    setCurrentGroup([]);
+    setCurrentGroups([]);
   };
 
   const handleSubmit = () => {
@@ -146,7 +146,7 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
       allGroups={allGroups}
       parentGroups={parentGroups}
       onSelectParentGroup={onSelectParentGroup}
-      joinedParents={currentGroup}
+      joinedParents={currentGroups}
     />
   );
 };
