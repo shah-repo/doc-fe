@@ -31,6 +31,7 @@ describe("user management selectors test", () => {
       parents: companyGroups[0].parents,
       joinedParents: companyGroups[0].joinedParents,
       defaultForNewUsers: companyGroups[0].defaultForNewUsers,
+      isOfficial: companyGroups[0].isOfficial,
     }];
     expect(selectors.getGroupsOptions(state)).toEqual(expectedGroupOptions);
   });
