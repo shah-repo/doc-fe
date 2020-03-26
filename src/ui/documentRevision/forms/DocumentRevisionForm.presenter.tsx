@@ -66,6 +66,7 @@ export interface Props
   onDirtyFlagChange?: (dirty: boolean) => void;
   canChangeOwnerShip: boolean;
   onUpgradeClick: () => void;
+  type?: string;
 }
 
 export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
@@ -93,6 +94,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   documentRevision,
   setFieldValue,
   onUpgradeClick,
+  type,
 }) => {
   const loadAvailableApproversAction = useActionCreator(
     changeRequestsActions.loadAvailableApprovers
@@ -221,6 +223,18 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     </Button>
   );
 
+  useEffect(() => {
+    if (values.document?.documentType?.isQms) {
+      groupOptions.forEach((group) => {
+        if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
+          setFieldValue("securityGroups", [
+            { value: group.value, label: group.label },
+          ]);
+        }
+      });
+    }
+  }, [values.document, setFieldValue, groupOptions]);
+
   const formDocumentStatus = get(documentRevision, "formDocument.status", "");
 
   return (
@@ -300,7 +314,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         />
         <AttachmentsField />
         {renderTypeOfRevisionChange}
-        {!values.status && (
+        {(!values.status || type === "newOutput") && (
           <AsyncGate
             asyncState={loadApproversAsyncState}
             asyncAction={loadAvailableApproversAction}
@@ -318,7 +332,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             />
           </AsyncGate>
         )}
-        {!values.status && (
+        {(!values.status || type === "newOutput") && (
           <AsyncGate
             asyncState={loadGroupAsyncState}
             asyncAction={loadGroupsAction}

@@ -3,10 +3,7 @@ import _ from "lodash";
 import React from "react";
 import { connect, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
-import {
-  DocumentRevision,
-  documentRevisionsSelectors,
-} from "../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import AccessPermissionsContainer from "./accessPermissions/AccessPermissions.container";
@@ -100,7 +97,7 @@ DocumentRevisionManagerContainerProps
             documentRevisionId={documentRevisionId}
           />
         )}
-        {documentRevisionId && canAccess && (
+        {documentRevisionId && canAccess && !isNewOutput && (
           <AccessPermissionsContainer
             documentRevisionId={documentRevisionId}
             documentId={documentId}
