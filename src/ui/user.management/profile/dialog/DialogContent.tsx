@@ -1,6 +1,7 @@
 import { Box, Button, Typography } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { ReactComponent as SlackLogo } from "../../../../assets/images/slack_full_logo.svg";
 import { getTableCriteria } from "../../../../common/utils/selectors";
 import { attachmentsActions } from "../../../../state/ducks/attachments";
@@ -19,7 +20,6 @@ import AcctCodes from "../AddressesAndCodes/AcctCodes";
 import Addresses from "../AddressesAndCodes/Addresses";
 import ApiTokenContent from "../apiTokenContent/ApiTokenContent";
 import UserGroups from "../groups/UserGroups";
-
 
 interface OwnProps {
   canManageUsers: boolean;
@@ -80,12 +80,21 @@ export const DialogContent: React.FunctionComponent<Props> = ({
   isDeveloper,
   canUpdateCompany,
 }) => {
-  const TABLE_NAME = "userManagement";
   const classes = styles();
   const dispatch = useDispatch();
+  const history = useHistory();
+
+  const TABLE_NAME = "userManagement";
+
   const [avatarURL, setAvatarURL] = useState<string>("");
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const companyMine = useSelector(companySelectors.getCompanyMine);
+
+  // this is a hack for back button to redirect to user management table
+  useEffect(() => () => {
+    history.goForward();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const asyncS3link = useAsync({
     onSuccess: (data: any) => {

@@ -1,7 +1,8 @@
 import { Box, Grid } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { getTableCriteria } from "../../../common/utils/selectors";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
@@ -25,6 +26,11 @@ const initialValues = {
 };
 
 export const AddEmployeeFormContainer: React.FunctionComponent = () => {
+  const TABLE_NAME = "userManagement";
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const defaultGroups = useSelector(userManagementSelectors.getDefaultGroups);
   const addEmployeeAction = useActionCreator(userManagementActions.addEmployee);
@@ -43,12 +49,17 @@ export const AddEmployeeFormContainer: React.FunctionComponent = () => {
       );
     },
   });
-  const dispatch = useDispatch();
-  const TABLE_NAME = "userManagement";
-  const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
+
+
   const onSubmit = (values: AddEmployeeFormValues) => {
     async.start(addEmployeeAction, transformToAddEmployeeRequest(values), async);
   };
+
+  // this is a hack for back button to redirect to user management table
+  useEffect(() => () => {
+    history.goForward();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const renderForm = (props: FormikProps<AddEmployeeFormValues>) => (
     <AddEmployeeFormPresenter
