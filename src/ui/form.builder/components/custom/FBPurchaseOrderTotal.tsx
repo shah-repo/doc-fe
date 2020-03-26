@@ -31,6 +31,7 @@ const FBPurchaseOrderTotal: React.FunctionComponent<Props> = ({
       [name]: {
         ...storeValues[name],
         shippingCost: value,
+        formattedShippingCost: Number(value || 0).toFixed(2),
       },
     });
     setShippingCost(value);
@@ -44,8 +45,19 @@ const FBPurchaseOrderTotal: React.FunctionComponent<Props> = ({
 
   useEffect(() => {
     const total = cost.subTotal + cost.tax + Number(shippingCost || 0);
+    const storeValues = FBStore.getValues();
+    FBStore.setValues({
+      ...storeValues,
+      [name]: {
+        ...storeValues[name],
+        formattedSubTotal: cost.subTotal.toFixed(2),
+        formattedTax: cost.tax.toFixed(2),
+        formattedTotal: total.toFixed(2),
+      },
+    });
+
     setTotalAmount(total);
-  }, [cost, shippingCost]);
+  }, [cost.tax, cost.subTotal, name, shippingCost]);
   useEffect(() => {
     if (!values.items) {
       setCost(INITIAL_COST);

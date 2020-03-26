@@ -78,6 +78,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
     values.date = values.date || new Date();
     values.tax = values.tax || false;
     values.isTraceabilityRequired = values.isTraceabilityRequired || false;
+    values.capitalEquipment = values.capitalEquipment || false;
     const fields = [
       "order",
       "units",

@@ -1,7 +1,9 @@
 import { Box } from "@material-ui/core";
 import { isUndefined } from "lodash";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import useDialog from "../../../hooks/useDialog";
+import { TAX_RATE } from "../../helpers/constants";
 import FBStore from "../../stores/ui/FBStore";
 import FBPurchaseOrderDialog from "../custom/FBPurchaseOrderDialog";
 import FBPurchaseOrderTable from "../custom/FBPurchaseOrderTable";
@@ -17,6 +19,7 @@ export interface PurchaseOrderItem {
   unitPrice: number;
   tax: boolean;
   isTraceabilityRequired: boolean;
+  capitalEquipment: boolean;
 }
 
 export interface PurchaseOrder {
@@ -51,20 +54,29 @@ const FBPurchaseOrderField: React.FunctionComponent<any> = ({
     }
   }, [dialog.isOpen]);
 
-  const onSubmit = (values: any) => {
+  const onSubmit = (values: PurchaseOrderItem) => {
     const items = storeValue.items || [];
+    const total = Number(values.order) * Number(values.unitPrice);
+    const tax = values.tax ? total * TAX_RATE : 0;
+    const withPreCalcValues = {
+      ...values,
+      index: rowIndex + 1,
+      formattedDate: moment(values.date).format("MM/DD/YYYY"),
+      formattedTotal: (total + tax).toFixed(2),
+      formattedUnitPrice: Number(values.unitPrice || 0).toFixed(2),
+    };
     if (isUndefined(rowIndex)) {
       FBStore.setValues({
         ...FBStore.getValues(),
         [props.name]: {
           ...storeValue,
-          items: [...items, values],
+          items: [...items, withPreCalcValues],
         },
       });
       return;
     }
 
-    items[rowIndex] = values;
+    items[rowIndex] = withPreCalcValues;
     FBStore.setValues({
       ...FBStore.getValues(),
       [props.name]: {
@@ -88,7 +100,10 @@ const FBPurchaseOrderField: React.FunctionComponent<any> = ({
   };
 
   const deleteItem = (index: number) => {
-    const filtered = (storeValue.items || []).filter((order, i) => i !== index);
+    const filtered = (storeValue.items || [])
+      .filter((order, i) => i !== index)
+      .map((value, index) => ({ ...value, index: index + 1 }));
+
     FBStore.setValues({
       ...FBStore.getValues(),
       [props.name]: {
