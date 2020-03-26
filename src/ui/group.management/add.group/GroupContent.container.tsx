@@ -1,6 +1,7 @@
 import { isEmpty, omit } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { authSelectors } from "../../../state/ducks/auth";
 import { Group } from "../../../state/ducks/auth/types";
 import { groupManagementActions } from "../../../state/ducks/groupManagement";
@@ -28,6 +29,9 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
   handleTableRefresh,
   closeDialog,
 }) => {
+  const history = useHistory();
+  const dispatch = useDispatch();
+
   const [group, setGroup] = useState<GroupRequestBody>(DEFAULT_GROUP);
   const [members, setMembers] = useState<OptionType[]>([]);
   const [parentGroups, setParentGroups] = useState<OptionType[]>([]);
@@ -43,7 +47,6 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
   const [currentGroups, setCurrentGroups] = useState(
     isCreateMode ? [] : currentGroupData.joinedParents.filter((joinedParent) => joinedParent.id !== currentGroupData.id)
   );
-  const dispatch = useDispatch();
   const createGroupAsync = useAsync({
     onSuccess: (response) => {
       handleTableRefresh();
@@ -106,6 +109,12 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
       );
     }
   }, [selectedGroup]);
+
+  // this is a hack for back button to redirect to group management table
+  useEffect(() => () => {
+    history.goForward();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleReset = () => {
     setGroup(DEFAULT_GROUP);
