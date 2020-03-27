@@ -45,6 +45,12 @@ const FBPurchaseOrderTotal: React.FunctionComponent<Props> = ({
 
   useEffect(() => {
     const total = cost.subTotal + cost.tax + Number(shippingCost || 0);
+    setTotalAmount(total);
+
+    if (disabled) {
+      return;
+    }
+
     const storeValues = FBStore.getValues();
     FBStore.setValues({
       ...storeValues,
@@ -56,8 +62,7 @@ const FBPurchaseOrderTotal: React.FunctionComponent<Props> = ({
       },
     });
 
-    setTotalAmount(total);
-  }, [cost.tax, cost.subTotal, name, shippingCost]);
+  }, [cost.tax, cost.subTotal, name, shippingCost, disabled]);
   useEffect(() => {
     if (!values.items) {
       setCost(INITIAL_COST);
