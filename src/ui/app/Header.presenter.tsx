@@ -29,53 +29,53 @@ const Header: React.FunctionComponent<Props> = ({
   closeUserProfile,
   showUserProfile,
 }) => (
-    <AppBar position="fixed" color="primary" className={classes.appBar}>
-      <Toolbar>
-        <Grid
-          container={true}
-          spacing={10}
-          justify="space-between"
-          alignItems="center"
-        >
-          <Grid item={true} xs={6}>
-            {pageTitle !== "translation.unknown" ? (
-              <Typography variant="h6">
-                <Text translation={pageTitle} />
-              </Typography>
-            ) : null}
-          </Grid>
-          <Grid item={true} xs={6}>
-            <Grid container={true} justify="flex-end" alignItems="center">
-              <Typography
-                id="welcomeHeader"
-                variant="caption"
-                className={classes.welcomeText}
-                noWrap={true}
-              >
-                <Text translation="header.welcome" />,
+  <AppBar position="fixed" color="primary" className={classes.appBar}>
+    <Toolbar>
+      <Grid
+        container={true}
+        spacing={10}
+        justify="space-between"
+        alignItems="center"
+      >
+        <Grid item={true} xs={6}>
+          {pageTitle !== "translation.unknown" ? (
+            <Typography variant="h6">
+              <Text translation={pageTitle} />
+            </Typography>
+          ) : null}
+        </Grid>
+        <Grid item={true} xs={6}>
+          <Grid container={true} justify="flex-end" alignItems="center">
+            <Typography
+              id="welcomeHeader"
+              variant="caption"
+              className={classes.welcomeText}
+              noWrap={true}
+            >
+              <Text translation="header.welcome" />,
             </Typography>
               &nbsp;
             <Button
-                className={classes.name}
-                id="Header-userProfile"
-                color="primary"
-                variant="text"
-                onClick={openUserProfile}
-              >
-                <Text translation="header.name" values={{ name }} />
-              </Button>
-              <Button id="logoutButton" color="primary" variant="text" onClick={onLogout}>
-                <Text translation="header.logout" />
-              </Button>
-              <UserProfileContainer
-                closeUserProfile={closeUserProfile}
-                showUserProfile={showUserProfile}
-              />
-            </Grid>
+              className={classes.name}
+              id="Header-userProfile"
+              color="primary"
+              variant="text"
+              onClick={openUserProfile}
+            >
+              <Text translation="header.name" values={{ name }} />
+            </Button>
+            <Button id="logoutButton" color="primary" variant="text" onClick={onLogout}>
+              <Text translation="header.logout" />
+            </Button>
+            <UserProfileContainer
+              closeUserProfile={closeUserProfile}
+              showUserProfile={showUserProfile}
+            />
           </Grid>
         </Grid>
-      </Toolbar>
-    </AppBar>
-  );
+      </Grid>
+    </Toolbar>
+  </AppBar>
+);
 
 export default withStyles(styles)(Header);
