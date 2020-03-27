@@ -11,7 +11,7 @@ import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
 import useGetHasTag from "../../hooks/useGetHasTag";
-import { getHasOfficialPermissions, getHasUnofficialPermissions } from "../utils/helpers";
+import { getHasOfficialPermissions, getHasUnofficialPermissions, getIsMemberOfGroup } from "../utils/helpers";
 import { DEFAULT_SELECTED_GROUP } from "../utils/types";
 import ListPresenter from "./presenter";
 
@@ -33,6 +33,8 @@ export const ListContainer: React.FunctionComponent<Props> = () => {
     dispatch(tableSearchActions.clearSearchCriteria(TABLE_NAME));
 
   const currentEmployeePermissions = useSelector(authSelectors.currentEmployeePermissions);
+  const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
+
   const hasOfficialPermissions = getHasOfficialPermissions(currentEmployeePermissions);
   const hasUnofficialPermissions = getHasUnofficialPermissions(currentEmployeePermissions);
   const canCreateGroups = hasOfficialPermissions || hasUnofficialPermissions;
@@ -62,9 +64,9 @@ export const ListContainer: React.FunctionComponent<Props> = () => {
   };
 
   const handlePermission = (rowData: LoadCompanyGroup) => {
-    if (hasOfficialPermissions && hasOfficialPermissions) {
-      handleGroupsEdit(rowData);
-    } else if (!rowData.isOfficial && hasUnofficialPermissions && !hasOfficialPermissions) {
+    const isMemberOfGroup = getIsMemberOfGroup(rowData.employees, currentEmployeeId);
+    const canEditUnofficialGroup = !rowData.isOfficial && hasUnofficialPermissions && isMemberOfGroup;
+    if (hasOfficialPermissions || canEditUnofficialGroup) {
       handleGroupsEdit(rowData);
     } else {
       handleGroupsPreview(rowData);
