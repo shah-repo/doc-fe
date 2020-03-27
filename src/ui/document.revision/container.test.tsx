@@ -3,13 +3,13 @@ import React from "react";
 import { Route } from "react-router-dom";
 import { getDocumentRevision } from "../../state/ducks/documentRevisions/tests/factories";
 import {
-    DOCUMENT_REVISION_DETAILS_URL,
-    DOCUMENT_REVISION_NEW_VERSION_URL,
-    DOCUMENT_REVISION_VERSION_URL,
-  } from "../constants/urls";
+  DOCUMENT_REVISION_DETAILS_URL,
+  DOCUMENT_REVISION_NEW_VERSION_URL,
+  DOCUMENT_REVISION_VERSION_URL,
+} from "../constants/urls";
 import { ASYNC_DEFAULT_STATE } from "../hooks/useAsync";
 import getRouteComponentProps from "../tests/helpers/getRouteComponentProps";
-import { Container, Props} from "./container";
+import { Container, Props } from "./container";
 
 describe("Container tests", () => {
   const defaultProps: Props = {
@@ -19,7 +19,7 @@ describe("Container tests", () => {
     loadAsyncState: ASYNC_DEFAULT_STATE,
   };
 
-  const getWrapper = (props: Partial<Props>= {}) => shallow(
+  const getWrapper = (props: Partial<Props> = {}) => shallow(
     <Container {...defaultProps} {...props}/>,
   );
 

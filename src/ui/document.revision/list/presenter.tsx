@@ -54,7 +54,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
     return queryDict;
   };
 
-  const columns: Array<TableColumnProps<DocumentRevision>> = [
+  const columns: TableColumnProps<DocumentRevision>[] = [
     {
       key: "docId",
       label: "document.revision.list.docId",
@@ -104,9 +104,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         defaultValue: tableCriteria.queryDict.documentTypeId,
       },
       columnOptions: {
-        cellDataGetter: ({ rowData }) => {
-          return rowData.document.documentType.documentTypeAcronym;
-        },
+        cellDataGetter: ({ rowData }) => rowData.document.documentType.documentTypeAcronym,
         width: 100,
       },
     },
@@ -160,6 +158,7 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       cellOptions: { align: "center" },
       columnOptions: {
         width: 115,
+        // eslint-disable-next-line react/display-name
         cellDataGetter: ({ rowData }) => <Date value={rowData.releasedAt} />,
       },
       searchOptions: {

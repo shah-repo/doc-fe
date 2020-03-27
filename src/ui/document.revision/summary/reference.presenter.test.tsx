@@ -9,23 +9,23 @@ describe("ReferencePresenter tests", () => {
   const defaultProps: Props = {
     label: faker.lorem.word(),
     dataProp: [
-        {
-            id: faker.random.uuid(),
-            url: faker.internet.url(),
-            title: faker.lorem.word(),
-        },
-        {
-            id: faker.random.uuid(),
-            url: faker.internet.url(),
-            title: faker.lorem.word(),
-        },
+      {
+        id: faker.random.uuid(),
+        url: faker.internet.url(),
+        title: faker.lorem.word(),
+      },
+      {
+        id: faker.random.uuid(),
+        url: faker.internet.url(),
+        title: faker.lorem.word(),
+      },
     ],
     classes: {
-        box: "",
+      box: "",
     },
   };
 
-  const getWrapper = (props: Partial<Props>= {}) => shallow(
+  const getWrapper = (props: Partial<Props> = {}) => shallow(
     <ReferencePresenter {...defaultProps} {...props}/>,
   );
 

@@ -1,7 +1,7 @@
 import { mount } from "enzyme";
 import React from "react";
 import getRouteComponentProps from "../../tests/helpers/getRouteComponentProps";
-import { ListContainer, Props} from "./container";
+import { ListContainer, Props } from "./container";
 import { ListPresenter } from "./presenter";
 
 jest.mock("react-redux", () => ({
@@ -38,7 +38,7 @@ describe("Document revision ListContainer tests", () => {
     ...getRouteComponentProps(),
   };
 
-  const getWrapper = (props: Partial<Props>= {}) => mount(
+  const getWrapper = (props: Partial<Props> = {}) => mount(
     <ListContainer {...defaultProps} {...props}/>,
   );
 
