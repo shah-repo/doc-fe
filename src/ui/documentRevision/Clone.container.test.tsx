@@ -13,7 +13,7 @@ describe("Clone container redirect test", () => {
     type: "newVersion",
   };
 
-  const getWrapper = (props: Partial<CloneContainerProps> = {}) => shallow (
+  const getWrapper = (props: Partial<CloneContainerProps> = {}) => shallow(
     <CloneContainer {...defaultProps} {...props}/>,
   );
 
@@ -30,11 +30,11 @@ describe("Clone container redirect test", () => {
 describe("Clone container test", () => {
   const defaultProps: CloneContainerProps = {
     disableCreateNewVersion: false,
-    documentRevision: {...getDocumentRevision(), status: DocumentRevisionStatus.Released},
+    documentRevision: { ...getDocumentRevision(), status: DocumentRevisionStatus.Released },
     type: "newVersion",
   };
 
-  const getWrapper = (props: Partial<CloneContainerProps> = {}) => shallow (
+  const getWrapper = (props: Partial<CloneContainerProps> = {}) => shallow(
     <CloneContainer {...defaultProps} {...props}/>,
   );
 
