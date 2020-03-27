@@ -9,10 +9,10 @@ const ChangeRequestListSockets: React.FunctionComponent = () => {
   const dispatch = useDispatch();
   const iotService = IotService.getInstance();
   const subscribe = () => {
-    iotService.subscribeToTopic(`+/change_requests/+crId/created`, loadData);
+    iotService.subscribeToTopic("+/change_requests/+crId/created", loadData);
   };
   const unsubscribe = () => {
-    iotService.unsubscribeFromTopic(`+/change_requests/+crId/created`);
+    iotService.unsubscribeFromTopic("+/change_requests/+crId/created");
   };
   const loadData = (msg: string, params: any) => {
     dispatch(

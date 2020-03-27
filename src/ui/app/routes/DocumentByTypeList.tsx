@@ -23,16 +23,14 @@ const DocumentByTypeListLinks: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      {docTypesWithPageDetails.map((docType: DocumentType) => {
-        return (
-          <NavigationLinkContainer
-            key={docType.id}
-            url={`${DOCUMENT_BY_TYPE_ROOT_URL}/${docType.documentTypeAcronym.toLowerCase()}`}
-            text={docType.documentTypeName}
-            currentPath={pathname}
-          />
-        );
-      })}
+      {docTypesWithPageDetails.map((docType: DocumentType) => (
+        <NavigationLinkContainer
+          key={docType.id}
+          url={`${DOCUMENT_BY_TYPE_ROOT_URL}/${docType.documentTypeAcronym.toLowerCase()}`}
+          text={docType.documentTypeName}
+          currentPath={pathname}
+        />
+      ))}
     </>
   );
 };

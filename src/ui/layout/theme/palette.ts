@@ -17,7 +17,7 @@ export const createAppPalette = (theme: ThemeEnv, customColors: WhiteLabelingCol
     default:
       palette = defaultPalette;
       break;
-    }
+  }
 
   palette = {
     ...palette,
