@@ -93,6 +93,7 @@ export const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
         autocompleteProps={{
           id: "approvals",
           isMulti: true,
+          isClearable: true,
         }}
         options={groupOptions}
       />
