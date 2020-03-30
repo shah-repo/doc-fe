@@ -95,6 +95,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   setFieldValue,
   onUpgradeClick,
   type,
+  submitForm,
 }) => {
   const loadAvailableApproversAction = useActionCreator(
     changeRequestsActions.loadAvailableApprovers
@@ -183,6 +184,16 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     FBValidate();
+    if (values.document?.documentType?.isQms) {
+      groupOptions.forEach((group) => {
+        if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
+          setFieldValue("securityGroups", [
+            { value: group.value, label: group.label },
+          ]);
+        }
+      });
+    }
+    submitForm();
   };
 
   const renderTypeOfRevisionChange = showRevisionTypeChange && (
@@ -222,18 +233,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       <Text translation="common.upgrade"/>
     </Button>
   );
-
-  useEffect(() => {
-    if (values.document?.documentType?.isQms) {
-      groupOptions.forEach((group) => {
-        if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
-          setFieldValue("securityGroups", [
-            { value: group.value, label: group.label },
-          ]);
-        }
-      });
-    }
-  }, [values.document, setFieldValue, groupOptions]);
 
   const formDocumentStatus = get(documentRevision, "formDocument.status", "");
 
@@ -391,6 +390,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               label={isDisabled ? "common.save" : "navigation.createDocument"}
               onClick={onFormClick}
               id="DocumentRevisionForm-submit"
+              type="button"
             />
             {formDocumentStatus === DocumentRevisionStatus.Deprecated && upgradeButtonRenderer()}
             <ApproveAndRelease
