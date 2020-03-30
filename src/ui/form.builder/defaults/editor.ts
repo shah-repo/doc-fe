@@ -30,6 +30,7 @@ import FBApprovalField from "../FBApprovalField/FBApprovalField";
 import FBEditorParagraph from "../FBEditorParagraph/FBEditorParagraph";
 import FBEditorStepSection from "../FBEditorStepSection";
 import FBHelloSign from "../FBHelloSign";
+import FBInlineApproval from "../FBInlineApproval";
 import FBEditorApprovalField from "../FFEditorApprovalField";
 import { FBEditorElementType } from "../types/editor";
 
@@ -59,6 +60,8 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   createlabel: FBLabelEditor,
   quantity: FBLabelEditor,
   timer: FBLabelEditor,
+  inlineapproval: FBLabelEditor,
+  outputapproval: FBEditorApprovalField,
 };
 
 export const FBFieldComponent: Dictionary<any> = {
@@ -89,6 +92,7 @@ export const FBFieldComponent: Dictionary<any> = {
   createlabel: FBButton,
   quantity: FBQuantityField,
   timer: FBTimerField,
+  inlineapproval: FBInlineApproval,
 };
 
 export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
@@ -110,6 +114,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "purchaseorder",
     "instructionsmediaupload",
     "evidencemediaupload",
+    "inlineapproval",
   ],
   approvals: ["hellosign"],
   buttons: ["checkpoint", "approval", "createlabel"],
@@ -139,6 +144,8 @@ export const omitLabelValidation: FBEditorElementType[] = [
   "paragraph",
   "instructionsmediaupload",
   "evidencemediaupload",
+  "inlineapproval",
+  "outputapproval",
 ];
 
 export const pickDefaultLabel: FBEditorElementType[] = [

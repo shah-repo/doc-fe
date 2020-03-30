@@ -73,12 +73,13 @@ export const withFBApprovalField = <T extends FBApprovalFieldProps>(
     };
 
     onClick = (identifierType: FBApprovalFieldIdentifier) => () => {
-      if (identifierType === "approver") {
-        approvalFieldState?.addApprover([currentUser.email]);
-      } else {
-        approvalFieldState?.addApprover(_.map(currentUser.groups, "id"));
-      }
-      name && FBStore.setValue(name, hasApproved);
+      const hasApproved = (identifierType === "approver")
+        ? [currentUser.email]
+        : _.map(currentUser.groups, "id");
+
+      approvalFieldState?.addApprover(hasApproved);
+      name && FBStore.setValue(name, approvalFieldState?.hasApproved);
+      FBStore.resetSchema();
     };
 
     React.useEffect(() => {
