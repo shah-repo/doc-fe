@@ -65,8 +65,9 @@ export const ListContainer: React.FunctionComponent<Props> = () => {
 
   const handlePermission = (rowData: LoadCompanyGroup) => {
     const isMemberOfGroup = getIsMemberOfGroup(rowData.employees, currentEmployeeId);
-    const canEditUnofficialGroup = !rowData.isOfficial && hasUnofficialPermissions && isMemberOfGroup;
-    if (hasOfficialPermissions || canEditUnofficialGroup) {
+    const canEditOfficialGroup = rowData.isOfficial && hasOfficialPermissions;
+    const canEditUnofficialGroup = !rowData.isOfficial && (hasUnofficialPermissions || hasOfficialPermissions) && isMemberOfGroup;
+    if (canEditOfficialGroup || canEditUnofficialGroup) {
       handleGroupsEdit(rowData);
     } else {
       handleGroupsPreview(rowData);
