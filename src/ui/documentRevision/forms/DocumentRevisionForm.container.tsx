@@ -50,6 +50,7 @@ interface OwnProps {
   proposedDocId?: string;
   loadDocumentProposedId?: typeof documentsActions.loadDocumentProposedId;
   canChangeOwnerShip?: boolean;
+  type?: string;
 }
 
 export type DocumentRevisionFormContainerProps = OwnProps &
@@ -93,6 +94,7 @@ DocumentRevisionFormContainerProps
   documentTypesById,
   document,
   canChangeOwnerShip = false,
+  type,
 }) => {
 
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
@@ -154,6 +156,7 @@ DocumentRevisionFormContainerProps
       documentTypesById={documentTypesById}
       canChangeOwnerShip={canChangeOwnerShip}
       onUpgradeClick={onUpgradeClick}
+      type={type}
     />
   );
 

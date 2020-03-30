@@ -1,4 +1,5 @@
 import { Field } from "formik";
+import { uniqBy } from "lodash";
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
@@ -18,11 +19,12 @@ export const Title: React.FunctionComponent<Props> = ({
   const documents = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
   const options = useMemo(
     () =>
-      documents.map((document) => ({
-        label: document.name,
-        value: document.name,
-        isDisabled: true,
-      })),
+      uniqBy(documents, (document) => document.name)
+        .map((document) => ({
+          label: document.name,
+          value: document.name,
+          isDisabled: true,
+        })),
     [documents],
   );
 
