@@ -2,7 +2,7 @@ import { Dictionary } from "lodash";
 import { Group, GroupTag, Permission } from "../auth/types";
 import { Id, Nullable, User } from "../common";
 import { Company, Employee } from "../company";
-import { COMPANY_GROUPS_LIST, CURRENT_GROUP } from "./constants";
+import { COMPANY_GROUPS_LIST } from "./constants";
 
 export interface GetEmployeeResponse {
   id: string;
@@ -46,11 +46,6 @@ export type LoadCompanyGroups = LoadCompanyGroup[];
 export interface CompanyGroupsListAction {
   type: typeof COMPANY_GROUPS_LIST;
   payload: LoadCompanyGroups;
-}
-
-export interface CurrentEditableGroupAction {
-  type: typeof CURRENT_GROUP;
-  payload: LoadCompanyGroup;
 }
 
 export type GroupsByIdState = Dictionary<LoadCompanyGroup>;
