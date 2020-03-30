@@ -26,9 +26,9 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     inlineApprovalState = FB.useRef<FBInlineApprovalState>(FBInlineApprovalState);
 
     const formValue = FBStore.getValue(name);
-    approvers = approvers || _.get(formValue, "approvers");
-    approverGroups = approverGroups || _.get(formValue, "approverGroups");
-    _.isUndefined(approveIsBlocking) && (approveIsBlocking = _.get(formValue, "approveIsBlocking"));
+    approvers = approvers || formValue?.approvers;
+    approverGroups = approverGroups || formValue?.approverGroups;
+    _.isUndefined(approveIsBlocking) && (approveIsBlocking = formValue?.approveIsBlocking);
 
     React.useEffect(() => {
       switch (true) {
