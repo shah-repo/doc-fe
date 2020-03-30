@@ -78,6 +78,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
     values.date = values.date || new Date();
     values.tax = values.tax || false;
     values.isTraceabilityRequired = values.isTraceabilityRequired || false;
+    values.capitalEquipment = values.capitalEquipment || false;
     const fields = [
       "order",
       "units",
@@ -96,7 +97,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
       }
     });
 
-    const isUniquePartNumber = !items.map((item) => item.partNumber).includes(values.partNumber);
+    const isUniquePartNumber = !(items || []).map((item) => item.partNumber).includes(values.partNumber);
     const isPartNumberInitialValue = initialValues.partNumber === values.partNumber;
     if (!isUniquePartNumber && !isPartNumberInitialValue) {
       newError = `${newError} ${intl.formatMessage({ id: "form.builder.pn.unique" })}`;
