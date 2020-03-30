@@ -19,7 +19,9 @@ export const TextFieldSelect: React.FunctionComponent<TextFieldSelectProps> = ({
     form.setFieldValue(field.name, v);
 
     filterOptions(
-      fieldProps.options && fieldProps.options.filter((option) => option.value.includes(v)),
+      fieldProps.options &&
+      fieldProps.options
+        .filter((option) => option.value.toLowerCase().includes(v.toLowerCase())),
     );
 
     if (!form.touched[field.name]) {
