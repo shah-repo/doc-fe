@@ -12,6 +12,8 @@ REACT_APP_FRONTEND_URL="https://develop.enlil.io"
 REACT_APP_SIGNUP_DOMAIN_URL="https://shifamed-doc-develop.auth.us-west-2.amazoncognito.com"
 REACT_APP_HELLOSIGN_TEST_MODE="1"
 REACT_APP_THEME='DEV_THEME'
+REACT_APP_HELLOSIGN_CLIENT_ID="ENV_ID"
+
 ```
 
 ## Available Scripts
