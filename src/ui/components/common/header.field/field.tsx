@@ -7,8 +7,8 @@ import { styles } from "./utils/styles";
 import { HeaderFieldProps } from "./utils/types";
 
 type Props = DataProps<Translation | string> &
-  HeaderFieldProps &
-  Partial<TypographyProps>;
+HeaderFieldProps &
+Partial<TypographyProps>;
 
 const HeaderField: React.FunctionComponent<Props> = ({
   dataProp,

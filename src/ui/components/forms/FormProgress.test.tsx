@@ -10,17 +10,21 @@ describe("FormProgress component unit tests", () => {
   );
 
   it("displays nothing when not active", () => {
-    expect(getWrapper({ asyncState: {
-      status: AsyncStatus.Idle,
-      message: "",
-    }}).text()).toBe("");
+    expect(getWrapper({
+      asyncState: {
+        status: AsyncStatus.Idle,
+        message: "",
+      },
+    }).text()).toBe("");
   });
 
   it("displays LinearProgress when active", () => {
-    const wrapper = getWrapper({ asyncState: {
-      status: AsyncStatus.Active,
-      message: "",
-    }});
+    const wrapper = getWrapper({
+      asyncState: {
+        status: AsyncStatus.Active,
+        message: "",
+      },
+    });
 
     expect(wrapper.find(LinearProgress)).toHaveLength(1);
   });

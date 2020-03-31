@@ -5,7 +5,8 @@ import { AsyncState } from "../../types";
 import { Nullable } from "../common";
 import { Group, GroupTag, Permission } from "./types";
 
-const isAuthenticated = (state: ApplicationState): boolean => Boolean(state.auth.user.sessionId && state.auth.user.employeeId);
+const isAuthenticated = (state: ApplicationState): boolean =>
+  Boolean(state.auth.user.sessionId && state.auth.user.employeeId);
 
 const currentUserEmail = (state: ApplicationState): string =>
   state.auth.user.email;
@@ -38,6 +39,9 @@ const currentEmployeeTags = (state: ApplicationState): GroupTag[] =>
 
 const getLoadPermissionsAsyncState = (state: ApplicationState): AsyncState =>
   state.auth.loadGroupsAsyncInfo;
+
+const getPingServerAsyncState = (state: ApplicationState): AsyncState =>
+  state.auth.pingServerAsyncInfo;
 
 const makeGetHasTag = () => createSelector(
   (state: ApplicationState) => state.auth.groups.tags,
@@ -85,6 +89,7 @@ export default {
   currentUserId,
   currentEmployeeId,
   getLoadPermissionsAsyncState,
+  getPingServerAsyncState,
   employees,
   hasMultipleCompanies,
   currentEmployeeAvatar,

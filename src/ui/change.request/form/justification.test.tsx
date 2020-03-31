@@ -15,11 +15,11 @@ describe("Justification with attachments tests", () => {
           description: "",
           attachments: [getAttachment()],
         },
-        },
       },
-    } as FormikHybridFieldProps;
+    },
+  } as FormikHybridFieldProps;
 
-  const getWrapper = (props: Partial<FormikHybridFieldProps>= {}) => shallow (
+  const getWrapper = (props: Partial<FormikHybridFieldProps> = {}) => shallow(
     <Justification {...defaultProps} {...props} />,
   );
 
@@ -37,11 +37,11 @@ describe("Justification without attachments tests", () => {
           description: faker.lorem.paragraph(),
           attachments: [],
         },
-        },
       },
-    } as FormikHybridFieldProps;
+    },
+  } as FormikHybridFieldProps;
 
-  const getWrapper = (props: Partial<FormikHybridFieldProps>= {}) => shallow (
+  const getWrapper = (props: Partial<FormikHybridFieldProps> = {}) => shallow(
     <Justification {...defaultProps} {...props} />,
   );
 

@@ -2,29 +2,9 @@ import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
 import { COMPANY_DEFAULT_STATE } from "../company/reducers";
 import { EditGroupsAction, EditUserInfoAction } from "../tableSearch";
-import {
-  EDIT_EMPLOYEE_GROUPS,
-  EDIT_EMPLOYEE_USER_INFO,
-} from "../tableSearch/constants";
-import {
-  AUTH_USER,
-  LOGOUT_USER,
-  SET_EMPLOYEE,
-  USER_GROUPS,
-  USER_GROUPS_GET_ASYNC,
-  USERS_ME_URL,
-} from "./constants";
-import {
-  AuthUserAction,
-  EditUserMeAction,
-  GroupTag,
-  LogoutUserAction,
-  Permission,
-  SelectEmployeeAction,
-  UserGroupsAction,
-  UserGroupsState,
-  UserState,
-} from "./types";
+import { EDIT_EMPLOYEE_GROUPS, EDIT_EMPLOYEE_USER_INFO } from "../tableSearch/constants";
+import { AUTH_USER, LOGOUT_USER, PING_SERVER_GET_ASYNC, SET_EMPLOYEE, USERS_ME_URL, USER_GROUPS, USER_GROUPS_GET_ASYNC } from "./constants";
+import { AuthUserAction, EditUserMeAction, GroupTag, LogoutUserAction, Permission, SelectEmployeeAction, UserGroupsAction, UserGroupsState, UserState } from "./types";
 
 export const DEFAULT_EMPLOYEE = {
   id: "",
@@ -117,18 +97,18 @@ export const groups = (
   action: UserGroupsAction | LogoutUserAction,
 ): UserGroupsState => {
   switch (action.type) {
-    case USER_GROUPS:
+    case USER_GROUPS: {
       const tagsSet = new Set<GroupTag>();
       const permissionsSet = new Set<Permission>();
       action.payload.forEach((group) => {
-        const { tags, permissions } = group;
+        const { joinedTags, joinedPermissions } = group;
 
-        if (tags) {
-          tags.forEach((tag) => tagsSet.add(tag));
+        if (joinedTags) {
+          joinedTags.forEach((tag) => tagsSet.add(tag));
         }
 
-        if (permissions) {
-          permissions.forEach((permission) => permissionsSet.add(permission));
+        if (joinedPermissions) {
+          joinedPermissions.forEach((permission) => permissionsSet.add(permission));
         }
       });
 
@@ -136,6 +116,7 @@ export const groups = (
         tags: Array.from(tagsSet),
         permissions: Array.from(permissionsSet),
       };
+    }
     case LOGOUT_USER:
       return { ...USER_GROUPS_DEFAULT_STATE };
     default:
@@ -146,6 +127,7 @@ export const groups = (
 const reducer = combineReducers({
   user,
   loadGroupsAsyncInfo: asyncReducer(USER_GROUPS_GET_ASYNC),
+  pingServerAsyncInfo: asyncReducer(PING_SERVER_GET_ASYNC),
   groups,
 });
 

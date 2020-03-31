@@ -41,107 +41,99 @@ const getAudit = (
 const getDocId = (state: ApplicationState, documentId: string) =>
   _.get(documentsById(state)[documentId], "docId", "");
 
-const makeGetDocumentRevisions = () => {
-  return createSelector(
-    getDocumentRevisions,
-    (documentRevisions) => _.sortBy(documentRevisions, (docRev) => -docRev.version),
-  );
-};
+const makeGetDocumentRevisions = () => createSelector(
+  getDocumentRevisions,
+  (documentRevisions) => _.sortBy(documentRevisions, (docRev) => -docRev.version),
+);
 
-const makeGetDisableCreateNewVersion = () => {
-  return createSelector(
-    [getDocumentRevisions],
-    (documentRevisions) =>
-      _.some(
-        documentRevisions,
-        (docRev) =>
-          docRev.status === DocumentRevisionStatus.Draft ||
+const makeGetDisableCreateNewVersion = () => createSelector(
+  [getDocumentRevisions],
+  (documentRevisions) =>
+    _.some(
+      documentRevisions,
+      (docRev) =>
+        docRev.status === DocumentRevisionStatus.Draft ||
           docRev.status === DocumentRevisionStatus.PendingChange ||
           docRev.status === DocumentRevisionStatus.InReview,
-      ),
-  );
-};
+    ),
+);
 
 const getCurrentDocumentValues = (
   state: ApplicationState,
   docRev: DocumentRevisionFormValues,
 ) => docRev;
 
-const makeGetAvailableReferences = () => {
-  return createSelector(
-    [allIds, byId, getCurrentDocumentValues],
-    (ids, docRevs, currentDocRev): OptionType[] => {
-      const filteredIds = ids.filter((id) => {
-        const { status, changeRequest } = docRevs[id];
+const makeGetAvailableReferences = () => createSelector(
+  [allIds, byId, getCurrentDocumentValues],
+  (ids, docRevs, currentDocRev): OptionType[] => {
+    const filteredIds = ids.filter((id) => {
+      const { status, changeRequest } = docRevs[id];
 
+      if (
+        currentDocRev.document && currentDocRev.document.id === docRevs[id].id
+      ) {
+        return false;
+      }
+
+      if (status === DocumentRevisionStatus.Released) {
+        return true;
+      }
+
+      if (status === DocumentRevisionStatus.PendingChange) {
         if (
-          currentDocRev.document && currentDocRev.document.id === docRevs[id].id
-        ) {
-          return false;
-        }
-
-        if (status === DocumentRevisionStatus.Released) {
-          return true;
-        }
-
-        if (status === DocumentRevisionStatus.PendingChange) {
-          if (
-            changeRequest &&
+          changeRequest &&
             currentDocRev.changeRequest &&
             changeRequest.id === currentDocRev.changeRequest.id
-          ) {
-            return true;
-          }
+        ) {
+          return true;
+        }
+      }
+
+      return false;
+    });
+
+    // if two doc revs from same to document, take the one with the higher version number
+    const uniqueIds = filteredIds.filter((id) => {
+      const docRev = docRevs[id];
+
+      const skipId = _.some(filteredIds, (filteredId) => {
+        const filteredDocRev = docRevs[filteredId];
+
+        if (filteredDocRev.document.id === docRev.document.id) {
+          return filteredDocRev.version > docRev.version;
         }
 
         return false;
       });
 
-      // if two doc revs from same to document, take the one with the higher version number
-      const uniqueIds = filteredIds.filter((id) => {
-        const docRev = docRevs[id];
+      return !skipId;
+    });
 
-        const skipId = _.some(filteredIds, (filteredId) => {
-          const filteredDocRev = docRevs[filteredId];
+    return uniqueIds.map((id) => {
+      const { document, revision, name } = docRevs[id];
 
-          if (filteredDocRev.document.id === docRev.document.id) {
-            return filteredDocRev.version > docRev.version;
-          }
+      return {
+        value: document.id,
+        label: `${document.docId} - ${revision} - ${name}`,
+      };
+    });
+  },
+);
 
-          return false;
-        });
-
-        return !skipId;
+const makeGetAudit = () => createSelector(
+  getAudit,
+  (audits: AuditGroupType = {}) => {
+    Object.keys(audits).forEach((groupId) => {
+      audits[groupId].forEach((audit: Audit) => {
+        if (audit.field === "description") {
+          const html = audit.nextValue as string;
+          audit.nextValue = stripTags(html).substring(0, 30);
+        }
       });
-
-      return uniqueIds.map((id) => {
-        const { document, revision, name } = docRevs[id];
-
-        return {
-          value: document.id,
-          label: `${document.docId} - ${revision} - ${name}`,
-        };
-      });
-    },
-  );
-};
-
-const makeGetAudit = () => {
-  return createSelector(
-    getAudit,
-    (audits: AuditGroupType = {}) => {
-      Object.keys(audits).forEach((groupId) => {
-        audits[groupId].forEach((audit: Audit) => {
-          if (audit.field === "description") {
-            const html = audit.nextValue as string;
-            audit.nextValue = stripTags(html).substring(0, 30);
-          }
-        });
-      });
-      return audits;
-    },
-  );
-};
+    });
+    return audits;
+  },
+);
 
 const getLoadAsyncState = (state: ApplicationState): AsyncState =>
   state.documentRevisions.loadAsyncInfo;

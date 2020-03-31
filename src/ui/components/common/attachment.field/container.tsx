@@ -2,11 +2,7 @@ import { Box } from "@material-ui/core";
 import _ from "lodash";
 import React from "react";
 import { connect } from "react-redux";
-import {
-  Attachment,
-  Attachment as AttachmentModel,
-  attachmentsActions,
-} from "../../../../state/ducks/attachments";
+import { Attachment, Attachment as AttachmentModel, attachmentsActions } from "../../../../state/ducks/attachments";
 import { ApplicationState } from "../../../../state/reducers";
 import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../../form.builder/stores/ui/FBStore";
@@ -15,10 +11,7 @@ import FormMessage from "../../forms/FormMessage";
 import FormProgress from "../../forms/FormProgress";
 import { withFormik } from "../../hoc/formik";
 import Presenter from "./presenter";
-import {
-  AttachmentContainerProps,
-  AttachmentFieldDispatchProps,
-} from "./utils/types";
+import { AttachmentContainerProps, AttachmentFieldDispatchProps } from "./utils/types";
 
 type DispatchProps = AttachmentFieldDispatchProps;
 
@@ -51,21 +44,28 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
         return;
       }
       if (!multiple) {
-        return form!.setFieldValue(name, attachment);
+        return form.setFieldValue(name, attachment);
       }
-      const attachments: Attachment[] = field!.value ? [...field!.value] : [];
-      attachments.push(attachment!);
+      const attachments: Attachment[] = field.value ? [...field.value] : [];
+      attachment && attachments.push(attachment);
+
+      FBStore.setValues({
+        ...FBStore.values,
+        [name]: _.map(attachments, (attach) =>
+          _.pick(attach, ["id", "name", "s3link", "type"]),
+        ),
+      });
 
       if (FBStore.mode === "form") {
         FBStore.setValues({
           ...FBStore.values,
-          [name as string]: _.map(attachments, (attach) =>
+          [name]: _.map(attachments, (attach) =>
             _.pick(attach, ["id", "name", "s3link", "type"]),
           ),
         });
         FBDynamicValidatorStore.validate();
       }
-      form!.setFieldValue(name, attachments);
+      form.setFieldValue(name, attachments);
     },
   });
 
@@ -90,7 +90,7 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
       return;
     }
 
-    handleUpload(filteredFiles as File[]);
+    handleUpload(filteredFiles);
   };
 
   return (

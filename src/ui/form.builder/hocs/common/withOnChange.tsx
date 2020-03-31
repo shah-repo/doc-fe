@@ -21,9 +21,6 @@ export const withOnChange = <T extends FBInputProps>(
   ...props
 }: T) => {
   function contextState(): boolean {
-    if (_.isUndefined(field) && _.isUndefined(form)) {
-      return false;
-    }
     const fieldName = field?.name || "";
     const fieldValue = FBStore.getValue(fieldName);
 
@@ -44,15 +41,19 @@ export const withOnChange = <T extends FBInputProps>(
   }
 
   function storeValue(fieldName: string, value: any) {
+    if (!field) {
+      return;
+    }
     // Context state check
-    const inputContextName = `input-context-${field!.name}`;
+    const inputContextName = `input-context-${field.name}`;
 
     if (includeContext) {
       switch (true) {
-        case type !== "checkboxgroup" && value !== `context-${field!.name}`:
-        case fieldName === `context-${field!.name}` && !value:
-          form!.setFieldValue(inputContextName, "");
+        case type !== "checkboxgroup" && value !== `context-${field.name}`:
+        case fieldName === `context-${field.name}` && !value:
+          form?.setFieldValue(inputContextName, "");
           FBStore.setValues(_.omit(FBStore.getValues(), inputContextName));
+        default: break;
       }
     }
 
@@ -70,11 +71,8 @@ export const withOnChange = <T extends FBInputProps>(
     }
 
     FBDynamicValidatorStore.validate();
-
-    if (type !== "texteditor") {
-      form!.setFieldValue(fieldName, value);
-      afterChange && afterChange(fieldName, value, form!.values || {});
-    }
+    form?.setFieldValue(fieldName, value);
+    afterChange && afterChange(fieldName, value, form?.values || {});
   }
 
   const handleChange = (
@@ -89,8 +87,16 @@ export const withOnChange = <T extends FBInputProps>(
       value = _.get(ev, "target.value", "");
     }
 
-    switch (type) {
-      case "checkboxgroup":
+    function isChecked() {
+      return _.get(ev.target, "checked");
+    }
+
+    function isString() {
+      return _.toString(ev);
+    }
+
+    let fieldValue = {
+      checkboxgroup() {
         const checked = _.get(ev.target, "checked");
         storeValue(value as string, checked);
         let groupValue: string[] = _.get(form, `values.${name}`) || [];
@@ -102,38 +108,33 @@ export const withOnChange = <T extends FBInputProps>(
         if (_.isEqual(value as string, "includeContext")) {
           storeValue("contextLabel", contextLabel);
         }
-        return;
-      case "checkbox":
-      case "radio":
-        value = _.get(ev.target, "checked");
-        break;
-      case "texteditor":
-      case "datepicker":
-        value = (ev as unknown) as string;
-        break;
-      case "autocomplete":
-        const valueKey = _.get(props, "optionValueKey", "id");
-
+      },
+      checkbox: isChecked,
+      radio: isChecked,
+      texteditor: isString,
+      datepicker: isString,
+      autocomplete() {
+        const { optionValueKey = "id", valueType = "key", optionObjectKeys } = props;
         if (_.isArray(value)) {
-          const valueType = _.get(props, "valueType", "key");
-          value = (valueType === "object")
-            ? value
-            : _.map(value, (v) => (_.isString(v) ? v : _.get(v, valueKey)));
-        } else {
-          value = _.get(value, valueKey);
+          if (valueType === "object") {
+            return optionObjectKeys ?
+              _.map(value, (v) => _.pick(v, optionObjectKeys as string[]))
+              : value;
+          }
+          return _.map(value, (v) => (_.isString(v) ? v : _.get(v, optionValueKey)));
         }
-        break;
-        // case "select":
-        //   if (multiple) {
-        //     const selectValue: string[] = _.get(form, `values.${name}`) as string[] || [];
-        //     value = selectValue.push(_.get(ev.target, "value"));
-        //     // value = _.get(ev.target, "value") as string[];
-        //     break;
-        //   }
-      default:
-        value = _.get(ev.target, "value");
+        return _.get(value, optionValueKey);
+      },
+      default() {
+        return _.get(ev.target, "value");
+      },
+    };
+
+    if (type === "checkboxgroup") {
+      return fieldValue.checkboxgroup();
     }
-    storeValue(name, value);
+    fieldValue = fieldValue[type || ""] ? fieldValue[type || ""]() : fieldValue.default();
+    storeValue(name, fieldValue);
   };
 
   return Component({

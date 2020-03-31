@@ -67,7 +67,7 @@ export const reviewIds = (
   return state;
 };
 
-const proposedDocId = (state: string = "", action: DocumentProposedIdSetAction): string => {
+const proposedDocId = (state = "", action: DocumentProposedIdSetAction): string => {
   if (action.type === DOCUMENT_PROPOSED_DOC_ID_SET) {
     return action.payload;
   }

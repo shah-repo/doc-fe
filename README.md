@@ -2,6 +2,7 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+
 ## Environment variables
 
 ```bash
@@ -10,6 +11,7 @@ REACT_APP_REFRESH_TOKEN_VALIDITY_DAYS="30"
 REACT_APP_AWS_COGNITO_CLIENT_ID="5ts2oghmmo5bv2hik76b9rt8of"
 REACT_APP_FRONTEND_URL="https://develop.enlil.io"
 REACT_APP_SIGNUP_DOMAIN_URL="https://shifamed-doc-develop.auth.us-west-2.amazoncognito.com"
+REACT_APP_HELLOSIGN_TEST_MODE="1"
 REACT_APP_THEME='DEV_THEME'
 ```
 

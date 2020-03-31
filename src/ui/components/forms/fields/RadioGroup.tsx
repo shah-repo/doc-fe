@@ -15,16 +15,14 @@ type RadioGroupPropsWithFormik = RadioGroupOwnProps & FormikFieldProps;
 
 const RadioGroup: React.FunctionComponent<RadioGroupPropsWithFormik> = ({
   radioGroupProps, children, ...fieldProps
-}) => {
-  return (
-    <Field {...fieldProps}>
-      <ErrorMessage {...fieldProps} />
-      <MuiRadioGroup {...fieldProps.field} {...radioGroupProps}>
-        {children}
-      </MuiRadioGroup>
-    </Field>
-  );
-};
+}) => (
+  <Field {...fieldProps}>
+    <ErrorMessage {...fieldProps} />
+    <MuiRadioGroup {...fieldProps.field} {...radioGroupProps}>
+      {children}
+    </MuiRadioGroup>
+  </Field>
+);
 
 type RadioGroupFieldProps = RadioGroupOwnProps & FieldConfig;
 

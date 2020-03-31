@@ -30,4 +30,4 @@ export const styles = makeStyles((theme: Theme) =>
       fontFamily: "Open Sans, sans-serif;",
     },
   },
-));
+  ));

@@ -1,7 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import { AssessmentItem, AssessmentType } from "../../../state/ducks/changeRequest";
-import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
 import AttachmentField from "../../components/common/attachment.field/container";
 import AttachmentIconField from "../../components/common/attachment.icon/container";
 import HeaderField from "../../components/common/header.field/field";
@@ -10,13 +9,14 @@ import { withFormik } from "../../components/hoc/formik";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
 import { REASONING_OPTIONS } from "../utils/constants";
 import AssessmentsReasoning from "./assessments.reasoning";
+import { ChangeRequestFormValues } from "./types";
 
 type Props = Partial<FormikHybridFieldProps>;
 
 const Assessments: React.FunctionComponent<Props> = ({ form }) => {
   const itemRenderer = () =>
     Object.values(AssessmentType).map((type) => {
-      const { attachments, reasoning }: AssessmentItem = form!.values.assessments[
+      const { attachments, reasoning }: AssessmentItem = form && form.values.assessments[
         type
       ];
 
@@ -26,7 +26,7 @@ const Assessments: React.FunctionComponent<Props> = ({ form }) => {
 
       // Has attachment
       if ((attachments || []).length > 0 && reasoning) {
-        form!.setFieldValue(`assessments.${type}.reasoning`, undefined);
+        form && form.setFieldValue(`assessments.${type}.reasoning`, undefined);
       }
 
       const reasoningOptions = REASONING_OPTIONS[type];
@@ -40,7 +40,7 @@ const Assessments: React.FunctionComponent<Props> = ({ form }) => {
             actionsRenderer={actionsRenderer}
             hidden={(attachments || []).length > 0}
             editorProps={{
-              // tslint:disable-next-line: jsx-key
+              // eslint-disable-next-line react/jsx-key
               toolbarCustomButtons: [<AssessmentsReasoning reasoningOptions={reasoningOptions} />],
             }}
           />

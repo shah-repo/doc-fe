@@ -90,7 +90,11 @@ export const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
       <AutocompleteField
         name="groups"
         label="common.groups"
-        autocompleteProps={{ id: "AddEmployeeFormPresenter-commonGroups", isClearable: true, isMulti: true }}
+        autocompleteProps={{
+          id: "approvals",
+          isMulti: true,
+          isClearable: true,
+        }}
         options={groupOptions}
       />
       <Box mt={5}>

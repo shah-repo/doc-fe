@@ -12,9 +12,11 @@ export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
   documentTypes: [],
   whiteLabeling: WHITE_LABEL_DEFAULT,
   slackIntegrationEnabled: false,
+  helloSignAppId: "",
   teamId: "",
   addresses: [],
   acctCodes: [],
+  helloSignIntegrationEnabled: false,
 };
 
 type CompanyActions = SelectCompanyAction | LogoutUserAction;

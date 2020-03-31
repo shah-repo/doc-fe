@@ -1,5 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
+import { Nullable } from "../../../../state/ducks/common";
 import AvatarUploadContainer from "../../common/avatar.field/container";
 import styles from "./avatar.styles";
 
@@ -8,7 +9,7 @@ interface OwnProps {
   showEditUser: boolean;
   previewAvatar: string;
   setPreviewAvatar: (value: string) => void;
-  setFile: (value: File) => void;
+  setFile: (value: Nullable<File>) => void;
 }
 
 type Props = OwnProps;
@@ -28,7 +29,7 @@ const AvatarPresenter: React.FunctionComponent<Props> = ({
     </Box>
   );
   return (
-    <Box display="flex" justifyContent="center" mt={20}>
+    <Box display="flex" justifyContent="center" mt={-16}>
       <Box
         display="flex"
         alignItems="flex-end"

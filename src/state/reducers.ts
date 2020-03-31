@@ -36,6 +36,12 @@ const documentTypePersistConfig = {
   whitelist: ["byId"],
 };
 
+const tableSearchPersistConfig = {
+  key: "tableSearch",
+  storage,
+  whitelist: ["criteria"],
+};
+
 const appReducer = combineReducers({
   attachments,
   auth: persistReducer(authPersistConfig, auth),
@@ -46,7 +52,7 @@ const appReducer = combineReducers({
   formBuilderState,
   documentType: persistReducer(documentTypePersistConfig, documentType),
   company: persistReducer(companyPersistConfig, company),
-  tableSearch,
+  tableSearch: persistReducer(tableSearchPersistConfig, tableSearch),
   supplierSurvey,
   userManagement,
 });
@@ -55,9 +61,11 @@ const rootReducer = (state: any, action: any) => {
   if (action.type === LOGOUT_USER || action.type === CLEAR_NON_AUTH_DATA) {
     const { auth: authState } = state;
     const { company: companyState } = state;
+    const { tableSearch: tableSearchState } = state;
     state = {
       auth: authState,
       company: companyState,
+      tableSearch: tableSearchState,
     };
   }
 

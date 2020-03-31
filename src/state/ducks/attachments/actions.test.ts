@@ -1,11 +1,9 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { Attachment, attachmentsActions } from ".";
 import CallbackHandler from "../../../common/callbackHandler";
 import { getCallbackHandler } from "../../../common/tests/factories";
 import { Handlers } from "../../types";
-import {
-  ATTACHMENT_ROOT_URL,
-  ATTACHMENT_UPLOAD_URL,
-} from "./constants";
+import { ATTACHMENT_ROOT_URL, ATTACHMENT_UPLOAD_URL } from "./constants";
 import { AttachmentDownloadResponse } from "./types";
 
 describe("attachemnt actions tests", () => {

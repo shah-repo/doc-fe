@@ -1,5 +1,5 @@
 import { Box, Button, Grid, TextField, Typography } from "@material-ui/core";
-import { isEmpty } from "lodash";
+import { isEmpty, uniqBy } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import Select from "react-select";
@@ -11,6 +11,7 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import FormMessage from "../../components/forms/FormMessage";
 import Text from "../../components/Text";
 import { toArray, toMembersOptions, toOptions } from "../utils/transform";
+import GroupInfoPresenter from "./GroupInfo.presenter";
 import GroupType from "./GroupType";
 
 interface Props {
@@ -26,6 +27,9 @@ interface Props {
   group: GroupRequestBody;
   setGroup: (values: GroupRequestBody) => void;
   handleAsyncState: () => AsyncActionPayload;
+  allGroups: any[];
+  parentGroups: any[];
+  setParentGroups: (state: any) => void;
 }
 
 export const GroupContentPresenter: React.FunctionComponent<Props> = ({
@@ -41,6 +45,9 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
   group,
   setGroup,
   handleAsyncState,
+  allGroups,
+  parentGroups,
+  setParentGroups,
 }) => {
   const intl = useIntl();
   const canCreateOfficialGroup = hasOfficialPermission && group.isOfficial;
@@ -113,6 +120,58 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
     </Box>
   );
 
+  const inheritText = (parentGroup) => {
+    if (!isEmpty(parentGroup.parents)) {
+      return `inherits from ${parentGroup.parents.map((parent) => parent.name)}`;
+    }
+    return "";
+  };
+
+  const renderParentContainer = (parentGroup) => parentGroup.map((p) => (
+    <Box mt={6} width="700px" padding="10px" border="1px solid grey" borderRadius={4} key={p.id}>
+      <Typography
+        variant="h6"
+        style={{
+          marginBottom: 5,
+          borderBottom: "solid",
+          borderColor: "grey",
+        }}>
+        <Text message={`${p.name} ${inheritText(p)}`}/>
+      </Typography>
+      <GroupInfoPresenter
+        items={p.permissions}
+        title="common.permissions"
+      />
+      <GroupInfoPresenter
+        items={p.tags}
+        title="common.tags"
+      />
+    </Box>)
+  );
+
+  const renderSelectedGroupInfo = (parentGroups) => {
+    const arrayOfIds = parentGroups.map((p) => p.value);
+    const savedParents = allGroups.filter((group) => arrayOfIds.includes(group.value));
+    const ids = savedParents.map((s) => s.joinedParents.map((e) => e));
+    return renderParentContainer(uniqBy(ids.flat(), "id"));
+  };
+
+
+  const parentGroupsRenderer = () => (
+    <Box width={700} mt={5}>
+      <Typography variant="h4" style={{ marginBottom: "16px" }}>
+        <Text translation="common.parent.groups" />
+      </Typography>
+      <Select
+        id="Group-addParentGroups"
+        isMulti={true}
+        options={allGroups}
+        onChange={(state: any) => setParentGroups(state)}
+        value={parentGroups}
+      />
+    </Box>
+  );
+
   const resetButtonRenderer = () => (
     <Button variant="outlined" onClick={handleReset} id="Group-reset">
       <Text translation="common.reset" />
@@ -129,13 +188,12 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
       <Text translation="common.save" />
     </Button>
   );
-
   return (
     <Grid
       container={true}
       alignItems="center"
       direction="column"
-      style={{ marginTop: "250px" }}
+      style={{ marginTop: 90 }}
     >
       <Grid>
         {hasOfficialPermission && isCreateMode && (
@@ -145,6 +203,8 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
         {addMembersRenderer()}
         {canCreateOfficialGroup && permissionsRenderer()}
         {canCreateOfficialGroup && tagsRenderer()}
+        {canCreateOfficialGroup && parentGroupsRenderer()}
+        {!isEmpty(parentGroups) && renderSelectedGroupInfo(parentGroups)}
         <Grid item={true} style={{ textAlign: "right" }}>
           {isCreateMode && resetButtonRenderer()}
           {submitButtonRenderer()}

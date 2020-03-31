@@ -1,5 +1,7 @@
 import Box from "@material-ui/core/Box/Box";
-import React from "react";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { companySelectors } from "../../../../state/ducks/company";
 import useDialog from "../../../hooks/useDialog";
 import FBAddFieldButton0 from "../../components/custom/FBAddFieldButton0";
 import FBTransportSchema from "../../components/custom/FBTransportSchema";
@@ -7,6 +9,7 @@ import FBButton from "../../components/inputs/FBButton";
 import FBFormMarkDown from "../../FBFormMarkDown";
 import { withWorkspace } from "../../hocs/withWorkspace";
 import FBDynamicValidatorStore from "../../stores/ui/FBDynamicValidatorStore";
+import editorStore from "../../stores/ui/FBEditorStore";
 import FBStore from "../../stores/ui/FBStore";
 import { FBWorkspaceProps } from "../../types/workspace";
 import FBEditorDialog from "../editor/FBEditorDialog";
@@ -17,7 +20,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
   includeTransport = true,
   isStarter = true,
   schema = [],
-  form
+  form,
 }) => {
   const dialog = useDialog();
   const openDialog = () => dialog.open();
@@ -35,6 +38,11 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
     FBDynamicValidatorStore.registerValidators();
     FBDynamicValidatorStore.validate();
   };
+  const isHelloSignIntegrationEnabled = useSelector(companySelectors.isHelloSignIntegrationEnabled);
+
+  useEffect(() => {
+    editorStore.isHelloSignIntegrationEnabled = isHelloSignIntegrationEnabled;
+  }, [isHelloSignIntegrationEnabled]);
 
   return (
     <Box>

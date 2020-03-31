@@ -29,6 +29,8 @@ export interface LoadCompanyGroup {
   company: Company;
   employees: Employee[];
   isOfficial: boolean;
+  parents: Group[];
+  joinedParents: Group[];
 }
 
 export interface EmployeeGroupsEditRequestBody {
@@ -39,7 +41,7 @@ export interface EmployeeActiveStatusRequestBody {
   active: boolean;
 }
 
-export interface LoadCompanyGroups extends Array<LoadCompanyGroup> {}
+export type LoadCompanyGroups = LoadCompanyGroup[];
 
 export interface CompanyGroupsListAction {
   type: typeof COMPANY_GROUPS_LIST;
@@ -49,3 +51,20 @@ export interface CompanyGroupsListAction {
 export type GroupsByIdState = Dictionary<LoadCompanyGroup>;
 
 export type GroupsAllIdsState = string[];
+export type LoadJoinedDataState = Dictionary<LoadCompanyGroup>;
+
+export interface ApiTokenData {
+  name: string;
+}
+
+export interface ApiTokenState {
+  id: string;
+  secretKey: string;
+  name: string;
+}
+
+export interface GetApiTokenList {
+  id: string;
+  name: string;
+  active: boolean;
+}

@@ -33,9 +33,9 @@ const AssessmentsReasoning: React.FunctionComponent<Props> = ({
   } = useComponentVisible(false);
 
   const addPlaceholder = (placeholder: string) => {
-    onChange!(
+    onChange && editorState && onChange(
       EditorState.push(
-        editorState!,
+        editorState,
         ContentState.createFromText(intl.formatMessage({ id: placeholder })),
         "insert-characters",
       ),
@@ -57,14 +57,14 @@ const AssessmentsReasoning: React.FunctionComponent<Props> = ({
   ));
 
   return (
-      <div ref={ref} onClick={openPlaceholderDropdown} className="rdw-block-wrapper" aria-label="rdw-block-control">
-        <div className="rdw-dropdown-wrapper rdw-block-dropdown rte-select-reasoning" aria-label="rdw-dropdown">
-          <div className="rdw-dropdown-selectedtext" title="Placeholders">
-            <Text translation="change.request.select.reasoning" />
-            <div className={`rdw-dropdown-caretto${isComponentVisible ? "close" : "open"}`}/>
-          </div>
-          {
-            isComponentVisible &&
+    <div ref={ref} onClick={openPlaceholderDropdown} className="rdw-block-wrapper" aria-label="rdw-block-control">
+      <div className="rdw-dropdown-wrapper rdw-block-dropdown rte-select-reasoning" aria-label="rdw-dropdown">
+        <div className="rdw-dropdown-selectedtext" title="Placeholders">
+          <Text translation="change.request.select.reasoning" />
+          <div className={`rdw-dropdown-caretto${isComponentVisible ? "close" : "open"}`}/>
+        </div>
+        {
+          isComponentVisible &&
             <Box
               className="rdw-dropdown-optionwrapper"
               component="ul"
@@ -73,10 +73,10 @@ const AssessmentsReasoning: React.FunctionComponent<Props> = ({
             >
               {listItem}
             </Box>
-          }
-        </div>
+        }
       </div>
-    );
+    </div>
+  );
 };
 
 export default AssessmentsReasoning;

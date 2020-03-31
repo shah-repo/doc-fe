@@ -21,7 +21,7 @@ const NewUserSetPasswordContainer: React.FunctionComponent<NewUserSetPasswordCon
   const async = useAsync();
 
   const onSubmit = (confirmValues: PasswordValues): void => {
-   dispatch(
+    dispatch(
       authActions.newUserSetPassword({
         email: confirmValues.email,
         newPassword: confirmValues.password,

@@ -15,6 +15,7 @@
     "aws-sdk": "^2.580.0",
     "axios": "0.19.0",
     "classnames": "2.2.6",
+    "copy-to-clipboard": "^3.3.1",
     "diff": "4.0.1",
     "dompurify": "2.0.7",
     "draft-js": "0.11.4",
@@ -22,6 +23,8 @@
     "flat": "^5.0.0",
     "formik": "2.1.0",
     "glamor": "^2.20.40",
+    "hellosign-embedded": "^2.6.0",
+    "html-react-parser": "^0.10.1",
     "html-to-draftjs": "1.5.0",
     "jest-junit": "8.0.0",
     "lodash": "4.17.15",
@@ -83,10 +86,11 @@
     "extends": "react-app"
   },
   "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
+    "chrome >= 66",
+    "edge >= 17",
+    "firefox >= 59",
+    "safari >= 11",
+    "not dead"
   ],
   "devDependencies": {
     "@testing-library/jest-dom": "4.2.4",

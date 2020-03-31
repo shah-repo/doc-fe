@@ -9,9 +9,11 @@ export const getCompany = (company: Partial<Company> = {}): Company => ({
   documentTypes: [],
   whiteLabeling: {} as WhiteLabeling,
   slackIntegrationEnabled: false,
+  helloSignAppId: "",
   teamId: faker.random.uuid(),
   addresses: [],
   acctCodes: [],
+  helloSignIntegrationEnabled: false,
   ...company,
 });
 

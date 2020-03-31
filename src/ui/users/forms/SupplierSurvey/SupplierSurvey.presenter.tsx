@@ -12,22 +12,20 @@ interface Props {
   onSubmit: () => void;
 }
 
-const SupplierSurveyPresenter: React.FunctionComponent<Props> = ({onSubmit, supplierSurvey, asyncState}) => {
-  const renderForm = (props: FormikProps<FBDocumentFlowProps>) => {
-    return (
-      <SupplierSurveyFormBuild
-        {...props}
-        asyncState={asyncState}
-        supplierSurvey={supplierSurvey}
-      />
-    );
-};
+const SupplierSurveyPresenter: React.FunctionComponent<Props> = ({ onSubmit, supplierSurvey, asyncState }) => {
+  const renderForm = (props: FormikProps<FBDocumentFlowProps>) => (
+    <SupplierSurveyFormBuild
+      {...props}
+      asyncState={asyncState}
+      supplierSurvey={supplierSurvey}
+    />
+  );
 
   return (
     <Formik
-        initialValues={toSupplierSurveyFormValues(supplierSurvey)}
-        onSubmit={onSubmit}
-        enableReinitialize={true}
+      initialValues={toSupplierSurveyFormValues(supplierSurvey)}
+      onSubmit={onSubmit}
+      enableReinitialize={true}
     >
       {renderForm}
     </Formik>

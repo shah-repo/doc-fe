@@ -9,12 +9,12 @@ import { ChangeRequest, changeRequestsActions } from "../../../state/ducks/chang
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../../state/reducers";
-import ChangeRequestAuditContainer from "../../changeRequest/audit/Audit.container";
-import SummaryPresenter from "../../changeRequest/documentRevision/DocumentRevisionControlPreview.presenter";
-import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "../../changeRequest/forms/transform";
-import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
 import useAsync from "../../hooks/useAsync";
+import ChangeRequestAuditContainer from "../audit/Audit.container";
+import SummaryPresenter from "../documentRevision/DocumentRevisionControlPreview.presenter";
+import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "../form/transform";
+import { ChangeRequestFormValues } from "../form/types";
 import { canChangeCROwner, canEditApprovers, canEditChangeRequest } from "../utils/helpers";
 import { changeRequestEditPath } from "../utils/paths";
 import { SummaryDispatchProps } from "../utils/types";
@@ -81,18 +81,18 @@ export const Container: React.FunctionComponent<Props> = ({
   const summaryPresenterRenderer = (
     props: FormikProps<ChangeRequestFormValues>,
   ) => (
-      <Form>
-        <Presenter
-          dataProp={dataProp}
-          asyncState={async.asyncState}
-          canEdit={canEdit}
-          currentUserEmail={currentUserEmail}
-          closeTask={closeTask}
-          canChangeOwnerShip={canChangeOwnerShip}
-          {...props}
-        />
-      </Form>
-    );
+    <Form>
+      <Presenter
+        dataProp={dataProp}
+        asyncState={async.asyncState}
+        canEdit={canEdit}
+        currentUserEmail={currentUserEmail}
+        closeTask={closeTask}
+        canChangeOwnerShip={canChangeOwnerShip}
+        {...props}
+      />
+    </Form>
+  );
 
   const validate = (values: ChangeRequestFormValues) => {
     const errors: FormikErrors<any> = {};

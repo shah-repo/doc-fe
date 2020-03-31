@@ -17,7 +17,13 @@ export const ChangeRequestApproval: React.FunctionComponent<Props> = ({
   const classes = styles();
 
   return (
-    <Grid container={true} spacing={10} justify="space-between" alignItems="baseline" id="ChangeRequestApproval-pendingActions" >
+    <Grid
+      container={true}
+      spacing={10}
+      justify="space-between"
+      alignItems="baseline"
+      id="ChangeRequestApproval-pendingActions"
+    >
       <Grid item={true} xs={8}>
         <span className={classes.crId}>{`CRID: ${pendingAction.changeReq.crId} `}</span>
         <span>{`from ${pendingAction.changeReq.owner.user.name} `}</span>

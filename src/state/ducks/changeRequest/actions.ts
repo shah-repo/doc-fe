@@ -36,7 +36,7 @@ const changeRequestSet = (changeRequest: ChangeRequest): ChangeRequestSetAction 
   payload: changeRequest,
 });
 
-const loadList = (searchTerms: string = ""): ApiAction<ChangeRequest[]> => apiAction({
+const loadList = (searchTerms = ""): ApiAction<ChangeRequest[]> => apiAction({
   url: `${CHANGE_REQUEST_ROOT_URL}${searchTerms}`,
   method: "get",
   asyncType: CHANGE_REQUEST_LIST_ASYNC,
@@ -79,26 +79,26 @@ const loadAvailableApprovers = (): ApiAction<ChangeRequestAvailableApproversResp
 });
 
 const create = (body: ChangeRequestEditRequestBody, handlers: Handlers<ChangeRequest>):
-  ApiAction<ChangeRequest, ChangeRequestEditRequestBody> => apiActionWithCallbacks({
-    url: CHANGE_REQUEST_ROOT_URL,
-    method: "post",
-    data: body,
-    onSuccess: (changeRequest, dispatch) => {
-      dispatch(changeRequestSet(changeRequest));
-    },
-    handlers,
-  });
+ApiAction<ChangeRequest, ChangeRequestEditRequestBody> => apiActionWithCallbacks({
+  url: CHANGE_REQUEST_ROOT_URL,
+  method: "post",
+  data: body,
+  onSuccess: (changeRequest, dispatch) => {
+    dispatch(changeRequestSet(changeRequest));
+  },
+  handlers,
+});
 
 const save = (id: string, body: ChangeRequestEditRequestBody, handlers: Handlers<ChangeRequest>):
-  ApiAction<ChangeRequest, ChangeRequestEditRequestBody> => apiActionWithCallbacks({
-    url: `${CHANGE_REQUEST_ROOT_URL}/${id}`,
-    method: "patch",
-    data: body,
-    onSuccess: (changeRequest, dispatch) => {
-      dispatch(changeRequestSet(changeRequest));
-    },
-    handlers,
-  });
+ApiAction<ChangeRequest, ChangeRequestEditRequestBody> => apiActionWithCallbacks({
+  url: `${CHANGE_REQUEST_ROOT_URL}/${id}`,
+  method: "patch",
+  data: body,
+  onSuccess: (changeRequest, dispatch) => {
+    dispatch(changeRequestSet(changeRequest));
+  },
+  handlers,
+});
 
 const applyTransition = (
   id: string,
@@ -134,15 +134,15 @@ const loadAudit = (id: string): ApiAction<Audit[]> => apiAction({
 });
 
 const closeTask = (changeRequestId: string, taskId: string, body: any, handlers: Handlers):
-  ApiAction => apiActionWithCallbacks({
-    url: `${CHANGE_REQUEST_ROOT_URL}/implementation_plan_task/${taskId}/done`,
-    method: "post",
-    data: body,
-    onSuccess: (d, dispatch) => {
-      dispatch(load(changeRequestId));
-    },
-    handlers,
-  });
+ApiAction => apiActionWithCallbacks({
+  url: `${CHANGE_REQUEST_ROOT_URL}/implementation_plan_task/${taskId}/done`,
+  method: "post",
+  data: body,
+  onSuccess: (d, dispatch) => {
+    dispatch(load(changeRequestId));
+  },
+  handlers,
+});
 
 export default {
   changeRequestsList,

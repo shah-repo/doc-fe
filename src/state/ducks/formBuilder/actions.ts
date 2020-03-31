@@ -15,83 +15,65 @@ import {
   VIEW_FORM_MODE,
 } from "./constants";
 
-export const viewFormMode = (mode: boolean) => {
-  return {
-    type: VIEW_FORM_MODE,
-    mode,
-  };
-};
+export const viewFormMode = (mode: boolean) => ({
+  type: VIEW_FORM_MODE,
+  mode,
+});
 
-export const showModal = (currentIndex: number | string) => {
-  return {
-    type: SHOW_MODAL,
-    currentIndex,
-  };
-};
+export const showModal = (currentIndex: number | string) => ({
+  type: SHOW_MODAL,
+  currentIndex,
+});
 
-export const hideModal = () => {
-  return {
-    type: HIDE_MODAL,
-  };
-};
+export const hideModal = () => ({
+  type: HIDE_MODAL,
+});
 
-export const addField = (field: any) => {
-  return {
-    type: ADD_FIELD,
-    field,
-  };
-};
+export const addField = (field: any) => ({
+  type: ADD_FIELD,
+  field,
+});
 
-export const addList = (fieldType: string) => {
-  return {
-    type: ADD_LIST,
-    fieldType,
-  };
-};
+export const addList = (fieldType: string) => ({
+  type: ADD_LIST,
+  fieldType,
+});
 
 export const editField = (
   fieldType: string,
   config: any,
   currentIndex: number | string,
   closed: boolean,
-) => {
-  return {
-    type: EDIT_FIELD,
-    fieldType,
-    config,
-    currentIndex,
-    closed,
-  };
-};
+) => ({
+  type: EDIT_FIELD,
+  fieldType,
+  config,
+  currentIndex,
+  closed,
+});
 
 export const updateField = (
   fieldType: string,
   config: any,
   currentIndex: number | string,
   closed: boolean,
-) => {
-  return {
-    type: UPDATE_FIELD,
-    fieldType,
-    config,
-    currentIndex,
-    closed,
-  };
-};
+) => ({
+  type: UPDATE_FIELD,
+  fieldType,
+  config,
+  currentIndex,
+  closed,
+});
 
-export const deleteField = (currentIndex: number | string) => {
-  return {
-    type: DELETE_FIELD,
-    currentIndex,
-  };
-};
+export const deleteField = (currentIndex: number | string) => ({
+  type: DELETE_FIELD,
+  currentIndex,
+});
 
-export const closeSection = (currentIndex: number | string) => {
-  return {
-    type: CLOSE_SECTION,
-    currentIndex,
-  };
-};
+export const closeSection = (currentIndex: number | string) => ({
+  type: CLOSE_SECTION,
+  currentIndex,
+});
 
 export const recordUpdates = (
   prevConfig: any,
@@ -115,45 +97,37 @@ export const recordUpdates = (
   };
 };
 
-export const uploadTemplate = (elements: any) => {
-  return {
-    type: UPLOAD_TEMPLATE,
-    elements,
-  };
-};
+export const uploadTemplate = (elements: any) => ({
+  type: UPLOAD_TEMPLATE,
+  elements,
+});
 
 export const setFormInfo = (
   title: string,
   formNumber: number,
   status: string,
-) => {
-  return {
-    type: SET_FORM_INFO,
-    title,
-    formNumber,
-    status,
-  };
-};
+) => ({
+  type: SET_FORM_INFO,
+  title,
+  formNumber,
+  status,
+});
 
-export const updateDragAndDropFields = (fields: any) => {
-  return {
-    type: UPDATE_DRAG_DROP_FIELDS,
-    fields,
-  };
-};
+export const updateDragAndDropFields = (fields: any) => ({
+  type: UPDATE_DRAG_DROP_FIELDS,
+  fields,
+});
 
 export const updateFieldValue = (
   currentIndex: number | string,
   fieldName: string,
   fieldValue: any,
-) => {
-  return {
-    type: UPDATE_FIELD_VALUE,
-    currentIndex,
-    fieldName,
-    fieldValue,
-  };
-};
+) => ({
+  type: UPDATE_FIELD_VALUE,
+  currentIndex,
+  fieldName,
+  fieldValue,
+});
 
 export default {
   viewFormMode,

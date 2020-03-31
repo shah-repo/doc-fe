@@ -5,6 +5,8 @@ import { BaseTextFieldProps, OutlinedTextFieldProps } from "@material-ui/core/Te
 import { Dictionary } from "lodash";
 import { ReactNode } from "react";
 import { ValueType } from "react-select/src/types";
+import { Employee } from "../../../state/ducks/company";
+import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { FormikHybridFieldProps } from "../../components/hoc/utils/types";
 import { TextProps } from "../../components/Text";
@@ -39,9 +41,11 @@ export type FBLabelProps =
     label?: string | ReactNode;
     labelValues?: TextProps["values"];
     fontSize?: "sm" | "md" | "lg";
+    loading?: boolean;
   };
 
 export type FBOptionProps =
+  & Omit<FBFormikFieldProps, "name">
   & Pick<FBContextProps, "includeContext">
   & Pick<BaseTextFieldProps, "name" | "type">
   & {
@@ -52,73 +56,85 @@ export type FBOptionProps =
     optionValueKey?: string;
     includeNone?: boolean;
     value?: any;
+    optionObjectKeys?: string[];
   };
 
-export type FBInputProps =
-  & Omit<FBFormikFieldProps, "name">
-  & FBLabelProps
-  & Pick<FBContextProps, "includeContext" | "showContext" | "contextLabel">
-  & Pick<SelectProps, "renderValue">
-  // & Pick<FBValidatorProps, "rules" | "applicableOn">
-  & Pick<FBActionContainerProps, "actions">
-  & Pick<FBOptionProps, "optionId" | "options">
-  & Pick<BaseTextFieldProps,
-  | "children"
-  | "value"
-  | "disabled"
-  | "name"
-  | "helperText"
-  | "defaultValue"
-  | "rows"
-  | "placeholder"
-  | "hidden"
-  >
-  & {
-    index?: number;
-    type?: FBEditorElementType | string;
-    linkUrl?: string;
-    onChange?: (e: any, value: any) => void;
-    afterChange?: (fieldName: string, value: any, values: Dictionary<any>) => void;
-    rules?: string;
-    applicableIn?: string[];
-    checked?: boolean;
-    validatorFieldName?: string;
-    hasSchemaItem?: boolean;
-    hasSchemaItems?: boolean;
-    applicableOn?: any[];
-    multiple?: boolean;
-    customValidator?: FBValidatorConfigProps;
-    gutter?: boolean;
-    tooltip?: string;
-    validationMode?: FBValidationModeType[];
-    formValuesRules?: Dictionary<any>;
-    isTemplate?: boolean;
-  };
+export type FBInputProps = Omit<FBFormikFieldProps, "name">
+& FBLabelProps
+& Pick<FBContextProps, "includeContext" | "showContext" | "contextLabel">
+& Pick<SelectProps, "renderValue">
+// & Pick<FBValidatorProps, "rules" | "applicableOn">
+& Pick<FBActionContainerProps, "actions">
+& Pick<FBOptionProps, "optionId" | "options" | "optionValueKey" | "optionObjectKeys">
+& Pick<BaseTextFieldProps,
+| "children"
+| "value"
+| "disabled"
+| "name"
+| "helperText"
+| "defaultValue"
+| "rows"
+| "placeholder"
+| "hidden"
+| "fullWidth"
+>
+& {
+  index?: number;
+  type?: FBEditorElementType | string;
+  linkUrl?: string;
+  onChange?: (e: any, value: any) => void;
+  afterChange?: (
+    fieldName: string,
+    value: any,
+    values: Dictionary<any>,
+  ) => void;
+  rules?: string;
+  applicableIn?: string[];
+  checked?: boolean;
+  validatorFieldName?: string;
+  hasSchemaItem?: boolean;
+  hasSchemaItems?: boolean;
+  applicableOn?: any[];
+  multiple?: boolean;
+  customValidator?: FBValidatorConfigProps;
+  gutter?: boolean;
+  tooltip?: string;
+  validationMode?: FBValidationModeType[];
+  formValuesRules?: Dictionary<any>;
+  templateId?: string;
+  isTemplate?: boolean;
+  hellosignFlowProps?: any;
+  valueType?: "object" | "key";
+  paragraph?: string;
+  includeQRScan?: boolean;
+  loading?: boolean;
+  approvers?: Employee[];
+  approverGroups?: GroupRequestBody[];
+  approveIsBlocking?: boolean;
+};
 
-export type FBFormDefaultProps =
-  & FBInputProps
-  & FBLabelRendererProps
-  & FBOptionRendererProps
-  & {
-    index?: number;
-    type?: FBEditorElementType | string;
-    readOnly?: boolean;
-    className?: string;
-    gutter?: boolean;
-    options?: SelectOption[] | string[] | string;
-    includeOther?: boolean;
-    includeNote?: boolean;
-    optionNote?: string;
-    autocompleteId?: string;
-    isMulti?: boolean;
-    linkUrl?: string;
-    rules?: string;
-    validatorDelimiter?: FBValidatorDelimiter;
-    hasSchemaItem?: boolean;
-    fieldName?: string;
-    row?: boolean;
-    applicableOn?: FBValidatorTrigger[];
-  };
+export type FBFormDefaultProps = FBInputProps &
+FBLabelRendererProps &
+FBOptionRendererProps & {
+  index?: number;
+  type?: FBEditorElementType | string;
+  readOnly?: boolean;
+  className?: string;
+  gutter?: boolean;
+  options?: SelectOption[] | string[] | string;
+  includeOther?: boolean;
+  includeNote?: boolean;
+  optionNote?: string;
+  autocompleteId?: string;
+  isMulti?: boolean;
+  linkUrl?: string;
+  rules?: string;
+  validatorDelimiter?: FBValidatorDelimiter;
+  hasSchemaItem?: boolean;
+  fieldName?: string;
+  row?: boolean;
+  applicableOn?: FBValidatorTrigger[];
+};
 
 export type FBOnChangeType =
   | React.ChangeEvent<HTMLInputElement>
@@ -126,12 +142,10 @@ export type FBOnChangeType =
   | string
   | Date;
 
-export type FBOnChangeProps =
-  & FormikHybridFieldProps
-  & Pick<SelectProps, "onChange" | "value">
-  & Pick<FBFormDefaultProps, "validatorDelimiter">
-  & Pick<OutlinedTextFieldProps, "error" | "helperText">
-  & {
-    value?: any;
-    onChange?: (trigger: any) => void;
-  };
+export type FBOnChangeProps = FormikHybridFieldProps &
+Pick<SelectProps, "onChange" | "value"> &
+Pick<FBFormDefaultProps, "validatorDelimiter"> &
+Pick<OutlinedTextFieldProps, "error" | "helperText"> & {
+  value?: any;
+  onChange?: (trigger: any) => void;
+};

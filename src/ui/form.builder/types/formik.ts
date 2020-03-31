@@ -1,7 +1,7 @@
 import { FieldConfig, FieldProps, FormikConfig } from "formik";
 import { Dictionary } from "lodash";
 import { Id } from "../../../state/ducks/common";
-import { DocumentRevisionDocumentRequest, RevisionChangeType } from "../../../state/ducks/documentRevisions";
+import { DocumentRevisionDocumentRequest, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { FBTemplateSchema } from "./store";
 
 export interface FBFormikProps extends Omit<FormikConfig<any>, "onSubmit" | "initialValues"> {
@@ -25,9 +25,11 @@ export interface FBDocumentFlowProps {
   revisionChangeType?: RevisionChangeType;
   releasedAt?: string;
   renderHTML?: string;
+  status?: DocumentRevisionStatus;
 }
 
 export interface FBFormTemplateProps {
   outputDocumentType: Id;
   schema: FBTemplateSchema[] | string;
+  helloSignTemplateId?: string;
 }

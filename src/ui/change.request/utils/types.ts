@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { FormikProps } from "formik";
 import { RouteComponentProps } from "react-router-dom";
 import { attachmentsActions } from "../../../state/ducks/attachments";
@@ -6,8 +7,8 @@ import { changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { AssessmentType, ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { DataProps } from "../../../state/ducks/common";
 import { LoadAsyncState } from "../../../state/types";
-import { ChangeRequestFormValues } from "../../changeRequest/forms/types";
 import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
+import { ChangeRequestFormValues } from "../form/types";
 
 // Container
 export type ContainerStateProps = LoadAsyncState & DataProps<ChangeRequest> & AuthProps;
@@ -27,15 +28,15 @@ export interface ListDispatchProps {
 // Assessment
 export enum DesignAssessmentReasoningOption {
   not_affect_changes =
-    "Changes do not affect form, fit, function or materials with no impact on risk, safety or effectiveness",
+  "Changes do not affect form, fit, function or materials with no impact on risk, safety or effectiveness",
   equivalent_changes =
-    // tslint:disable-next-line: max-line-length
-    "Changes are equivalent to current design with no impact on risk, safety or effectiveness. Equivalency established through design verification",
+  // eslint-disable-next-line max-len
+  "Changes are equivalent to current design with no impact on risk, safety or effectiveness. Equivalency established through design verification",
 }
 
 export enum ProcessAssessmentReasoningOption {
   not_affect_changes =
-    "Changes do not affect bioburden, sterilization, or validated state and are covered by existing QC methods",
+  "Changes do not affect bioburden, sterilization, or validated state and are covered by existing QC methods",
 }
 
 export enum RegulatoryAssessmentReasoningOption {
@@ -75,9 +76,9 @@ export interface SummaryDispatchProps {
 // Common
 export type ChangeRequestsUserProps = ActionProps & AuthProps & {
   tableName: string;
-  clearFilter: () => void,
-  tableCriteria: TablePanelStateProps,
-  tableData: TableDataProps<ChangeRequest>
+  clearFilter: () => void;
+  tableCriteria: TablePanelStateProps;
+  tableData: TableDataProps<ChangeRequest>;
 };
 export type ChangeRequestUserProps = DataProps<ChangeRequest> & AuthProps;
 

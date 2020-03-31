@@ -1,3 +1,4 @@
+import { CircularProgress } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import FormLabel from "@material-ui/core/FormLabel/FormLabel";
 import React from "react";
@@ -9,6 +10,7 @@ const FBLabel: React.FunctionComponent<FBLabelProps> = ({
   error,
   labelValues,
   fontSize = "md",
+  loading,
   ...boxProps
 }) => (
   <FormLabel component="legend" error={error}>
@@ -19,6 +21,11 @@ const FBLabel: React.FunctionComponent<FBLabelProps> = ({
       {...boxProps}
     >
       <Text message={label as string} values={labelValues} />
+      {loading && (
+        <Box ml={1} component="span">
+          <CircularProgress size={15} />
+        </Box>
+      )}
     </Box>
   </FormLabel>
 );

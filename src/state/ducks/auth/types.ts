@@ -61,7 +61,11 @@ export interface Group {
   id: string;
   name: string;
   tags: Nullable<GroupTag[]>;
+  joinedTags: Nullable<GroupTag[]>;
   permissions: Permission[];
+  joinedPermissions: Nullable<Permission[]>;
+  joinedParents: Group[];
+  parents: Group[];
 }
 
 export type AuthUserPayload = User;
@@ -181,6 +185,7 @@ export enum Permission {
   USERS_ANONYMIZE_EMAILS = "USERS_ANONYMIZE_EMAILS",
   // Slack
   SLACK_APP_INSTALL = "SLACK_APP_INSTALL",
+  DEVELOPERS = "DEVELOPERS",
 }
 
 export enum GroupTag {

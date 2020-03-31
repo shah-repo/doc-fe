@@ -25,7 +25,7 @@ const Text: React.FunctionComponent<TextProps> = ({
     translationId = message;
   }
 
-  return <FormattedMessage  id={translationId} {...props} />;
+  return <FormattedMessage id={translationId} {...props} />;
 };
 
 export default Text;

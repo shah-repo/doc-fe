@@ -1,4 +1,4 @@
-import { Button, Paper, Typography, withStyles, WithStyles } from "@material-ui/core";
+import { Box, Button, Paper, Typography, withStyles, WithStyles } from "@material-ui/core";
 import { Form, FormikProps } from "formik";
 import * as React from "react";
 import { NavLink } from "react-router-dom";
@@ -34,6 +34,17 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({
   logo,
   forgotPassword,
 }) => {
+  const isSignLabel = signLabel === "signup.sign.in";
+  const forgotPasswordButtonRenderer = () => (
+    <Button
+      color="primary"
+      onClick={forgotPassword}
+      className={classes.forgotPasswordLink}
+      id="LoginFormPresenter-forgotLink">
+      <Text translation={"forgot.password"} />
+    </Button>
+  );
+
   return (
     <Paper className={classes.paper}>
       <img
@@ -45,45 +56,42 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({
         <Text translation={title} />
       </Typography>
       <Form className={classes.formStyle}>
-      <FormMessage asyncState={asyncState} className={classes.status} id="LoginFormPresenter-formError" />
-      <InputField
-        name="email"
-        label="login.email"
-        size="sm"
-        gutter={false}
-        inputProps={{ autoComplete: "email", autoFocus: true, id: "LoginFormPresenter-email" }}
-        validate={validator(required, email)}
-        lpignore={false}
-      />
-      <div className={classes.passwordContainer}>
-        {signLabel !== "signup.sign.in" &&
-        <Button color="primary" onClick={forgotPassword} className={classes.forgotPasswordLink} id="LoginFormPresenter-forgotLink">
-          <Text translation={"forgot.password"} />
-        </Button>}
-      <InputField
-        name="password"
-        label="login.password"
-        size="sm"
-        gutter={false}
-        inputProps={{ autoComplete: "current-password", id: "LoginFormPresenter-password", type: "password" }}
-        validate={validator(required)}
-        lpignore={false}
-      /></div>
+        <FormMessage asyncState={asyncState} className={classes.status} id="LoginFormPresenter-formError" />
+        <InputField
+          name="email"
+          label="login.email"
+          size="sm"
+          gutter={false}
+          inputProps={{ autoComplete: "email", autoFocus: true, id: "LoginFormPresenter-email" }}
+          validate={validator(required, email)}
+          lpignore={false}
+        />
+        <Box className={classes.passwordContainer}>
+          {!isSignLabel && forgotPasswordButtonRenderer()}
+          <InputField
+            name="password"
+            label="login.password"
+            size="sm"
+            gutter={false}
+            inputProps={{ autoComplete: "current-password", id: "LoginFormPresenter-password", type: "password" }}
+            validate={validator(required)}
+            lpignore={false}
+          />
+        </Box>
         <SubmitButton
           asyncState={asyncState}
           label={buttonLabel}
           className={classes.submit}
           id="LoginFormPresenter-submit"
         />
-      <Typography component="h1" variant="h5" className={classes.navigationText}>
-        <Text translation={signMessage} />
-        <NavLink to={route} exact={true} className={classes.navigationLink} id="LoginFormPresenter-linkRoute">
-          <Text translation={signLabel} />
-        </NavLink>
-      </Typography>
-    </Form>
+        <Typography component="h1" variant="h5" className={classes.navigationText}>
+          <Text translation={signMessage} />
+          <NavLink to={route} exact={true} className={classes.navigationLink} id="LoginFormPresenter-linkRoute">
+            <Text translation={signLabel} />
+          </NavLink>
+        </Typography>
+      </Form>
     </Paper>
-  );
-};
+  ); };
 
 export default withStyles(styles)(LoginFormPresenter);

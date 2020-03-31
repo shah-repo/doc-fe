@@ -30,6 +30,14 @@ export class FormBuilderStore {
   @observable public mode: FBWorkspaceMode = "none";
   public docId = "";
   public documentId = "";
+  public stepSectionReg = /#([1-9][0-9]?|100)$/;
+
+  @action public sectionNumber = (endIndex: number): number => {
+    const sections = _.filter(this.getSchema(), (schemaItem, index) =>
+      endIndex > index && schemaItem.type === "stepsection"
+    );
+    return _.size(sections) + 1;
+  };
 
   @action public setMode = (mode: FBWorkspaceMode) => {
     this.mode = mode;
@@ -80,8 +88,26 @@ export class FormBuilderStore {
 
   @action public getSchema = (): FBTemplateSchema[] => this.schema;
 
+  @action public getSectionStepReg = (label: string): string | undefined => {
+    const reg = this.stepSectionReg.exec(label);
+    return _.first(reg);
+  };
+
   @action public setSchema = (newSchema: FBTemplateSchema[]) => {
-    newSchema.map((o, i) => o.index = i);
+    let stepSectionCounter = 1;
+    newSchema.map((o, i) => {
+      o.index = i;
+      if (o.type === "stepsection") {
+        const orderStr = this.getSectionStepReg(o.label as string);
+        if (orderStr) {
+          o.label = (o.label as string).replace(orderStr, `#${stepSectionCounter}`);
+        } else {
+          o.label += ` #${stepSectionCounter}`;
+        }
+        stepSectionCounter++;
+      }
+      return o;
+    });
     this.schema = newSchema;
   };
 
@@ -118,6 +144,10 @@ export class FormBuilderStore {
 
   @action public setValues = (values: Dictionary<any> | undefined) => {
     this.values = values || {};
+  };
+
+  @action public setValue = (name: string, value: any) => {
+    this.setValues(_.set(this.values, name, value));
   };
 
   @action private setModeConfig = () => {

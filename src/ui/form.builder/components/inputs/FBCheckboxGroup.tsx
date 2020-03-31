@@ -14,28 +14,35 @@ const FBCheckboxGroup: React.FunctionComponent<FBCheckGroupProps> = ({
   optionValueKey = "value",
   optionLabelKey = "text",
   labelValues,
+  form,
   ...props
 }) => (
   <FBInput {...props} {...{ type }}>
     <FormGroup row={row}>
-      {_.map(options, (option, index) => (
-        <FormControlLabel
-          key={`${_.get(option, optionValueKey)}-${index}`}
-          value={_.get(option, optionValueKey)}
-          control={
-            <Checkbox
-              disabled={props.disabled}
-              checked={FBStore.getValue(_.get(option, optionValueKey))}
-            />
-          }
-          label={
-            <Text
-              message={_.get(option, optionLabelKey)}
-              values={labelValues}
-            />
-          }
-        />
-      ))}
+      {_.map(options, (option, index) => {
+
+        const valueKey = _.get(option, optionValueKey);
+        const checked = form?.values[valueKey] || FBStore.getValue(valueKey);
+
+        return (
+          <FormControlLabel
+            key={`${_.get(option, optionValueKey)}-${index}`}
+            value={_.get(option, optionValueKey)}
+            control={
+              <Checkbox
+                disabled={props.disabled}
+                checked={checked}
+              />
+            }
+            label={
+              <Text
+                message={_.get(option, optionLabelKey)}
+                values={labelValues}
+              />
+            }
+          />
+        );
+      })}
     </FormGroup>
   </FBInput>
 );

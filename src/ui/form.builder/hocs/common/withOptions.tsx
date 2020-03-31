@@ -1,11 +1,13 @@
 import _ from "lodash";
 import React from "react";
 import { FBOptionProps } from "../../types/common";
+import { withFormik } from "./withFormik";
 
 export const withOptions = <T extends FBOptionProps>(
   Component: React.FunctionComponent<T>,
 ) => {
-  return ({
+
+  const Comp = ({
     includeNone = false,
     optionLabelKey = "text",
     optionValueKey = "value",
@@ -14,7 +16,6 @@ export const withOptions = <T extends FBOptionProps>(
     type,
     ...props
   }: T) => {
-
     function mapStringOption(): T["options"] {
       const splitArray = _.split(props.options as string, "\n");
       const isValueVar = type === "radiogroup" || type === "select";
@@ -58,4 +59,7 @@ export const withOptions = <T extends FBOptionProps>(
       type,
     });
   };
+
+  return withFormik((props: T) => Comp(props));
+
 };

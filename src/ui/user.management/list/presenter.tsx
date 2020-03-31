@@ -1,5 +1,6 @@
 import { Button, Grid } from "@material-ui/core";
 import React, { useState } from "react";
+import { useIntl } from "react-intl";
 import { Group } from "../../../state/ducks/auth/types";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
 import { EMPLOYEES_URL } from "../../../state/ducks/userManagement/constants";
@@ -21,6 +22,7 @@ export interface Props {
   tableData: TableDataProps<any>;
   clearFilter?: () => void;
   groupOptions: SelectOption[];
+  handleResendSignupEmail: (email: string) => void;
 }
 
 export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
@@ -29,7 +31,9 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
   tableData,
   clearFilter,
   groupOptions,
+  handleResendSignupEmail,
 }) => {
+  const intl = useIntl();
   const classes = styles();
   const [showUserProfile, setUserProfile] = useState(false);
   const [selectedEmployee, setEmployee] = useState<GetEmployeeResponse>(DEFAULT_SELECTED_EMPLOYEE);
@@ -37,16 +41,21 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
   const openUserProfile = () => setUserProfile(true);
   const closeUserProfile = () => setUserProfile(false);
 
-  const handleUserProfileDialog = ( rowData: GetEmployeeResponse ) => {
+  const handleUserProfileDialog = (rowData: GetEmployeeResponse) => {
     setEmployee(rowData);
     openUserProfile();
   };
 
-  const handleGroups = (groups: Group[]) => {
-    return groups.map((group) => group.name).join(", ");
-  };
+  const handleGroups = (groups: Group[]) => groups.map((group) => group.name).join(", ");
+  const handleSignupEmail = (confirmed: boolean) => confirmed ?
+    intl.formatMessage({
+      id: "user.management.signed.up",
+    }) :
+    intl.formatMessage({
+      id: "user.management.resend.signup.email",
+    });
 
-  const columns: Array<TableColumnProps<GetEmployeeResponse>> = [
+  const columns: TableColumnProps<GetEmployeeResponse>[] = [
     {
       key: "name" as keyof GetEmployeeResponse,
       id: "UserManagementListPresenter-name",
@@ -96,6 +105,17 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
       },
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.active ? "Active" : "Inactive",
+        width: 50,
+      },
+    },
+    {
+      key: "confirmed" as keyof GetEmployeeResponse,
+      label: "user.management.signed.up",
+      omitSearch: true,
+      onSelect: ({ rowData }) => () => handleResendSignupEmail(rowData.user.email),
+      cellType: (rowData) => rowData.user.confirmed ? "BASE" : "LINK",
+      columnOptions: {
+        cellDataGetter: ({ rowData }) => handleSignupEmail(rowData.user.confirmed),
         width: 50,
       },
     },

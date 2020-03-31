@@ -13,6 +13,7 @@ export const approversResponse = {
         email: "zsalahieh@shifamed.com",
         name: "Zahra Shifamed",
         permissions: null,
+        // eslint-disable-next-line max-len
         avatar: "https://doc-be-dev-public.s3.us-west-2.amazonaws.com/9ea4f9be-ea42-40ff-b507-77597ff202a8/2020-01-10T20%3A39%3A21.883Z_Blue%20Sky%20image.jpg",
       },
       groups: [

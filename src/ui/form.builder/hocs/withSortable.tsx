@@ -12,8 +12,9 @@ export function withSortable<T extends FBSortableProps>(
   Component: React.ComponentType<T>,
 ) {
   return class extends React.Component<
-    Subtract<T, Omit<FBSortableProps, "items">>
+  Subtract<T, Omit<FBSortableProps, "items">>
   > {
+
     public render() {
       return (
         <Component
@@ -28,13 +29,13 @@ export function withSortable<T extends FBSortableProps>(
     private wrapperRenderer = (schema: FBTemplateSchema) => {
       const InputType = FBFieldComponent[schema.type as string];
       return <InputType key={schema.name} {...schema} {...FBStore.fieldMode} />;
-    }
+    };
 
     private onSortEnd = ({ oldIndex, newIndex }: SortEnd) => {
       const newSchema = arrayMove(FBStore.schema, oldIndex, newIndex);
       FBStore.setSchema(newSchema);
       sortableStore.setMode("inactive");
-    }
+    };
 
     private onSortStart = () => sortableStore.setMode("active");
 

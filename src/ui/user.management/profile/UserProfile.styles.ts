@@ -2,6 +2,9 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core";
 
 export default makeStyles((theme: Theme) =>
   createStyles({
+    positionFixed: {
+      position: "relative",
+    },
     appBar: {
       backgroundColor: "#29064C",
       height: "330px",

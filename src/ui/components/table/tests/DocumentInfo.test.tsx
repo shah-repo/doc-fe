@@ -4,17 +4,17 @@ import React from "react";
 import { DocumentInfo, Props } from "../DocumentInfo";
 
 describe( "DocumentInfo tests", () => {
-    const defaultProps: Props = {
-        numberOfRecords: faker.random.number(),
-    };
+  const defaultProps: Props = {
+    numberOfRecords: faker.random.number(),
+  };
 
-    const getWrapper = (props: Partial<Props>= {}) => shallow(
-        <DocumentInfo {...defaultProps} {...props}/>,
-      );
+  const getWrapper = (props: Partial<Props> = {}) => shallow(
+    <DocumentInfo {...defaultProps} {...props}/>,
+  );
 
-    it("Renders correctly", () => {
-        const wrapper = getWrapper();
+  it("Renders correctly", () => {
+    const wrapper = getWrapper();
 
-        expect(wrapper.find("span").contains(defaultProps.numberOfRecords)).toBe(true);
-    });
+    expect(wrapper.find("span").contains(defaultProps.numberOfRecords)).toBe(true);
+  });
 });

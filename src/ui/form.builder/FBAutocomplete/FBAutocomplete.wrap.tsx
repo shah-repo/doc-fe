@@ -13,8 +13,8 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
   const Comp = ({
     state,
     getOptionLabel,
-    optionValueKey = "value",
-    optionLabelKey = "text",
+    optionValueKey,
+    optionLabelKey,
     prefixLabelRoot = "",
     optionPath = "",
     optionId = "",
@@ -24,6 +24,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     options,
     renderTags,
     disabled,
+    defaultValue,
     ...props
   }: T) => {
     state = FB.useRef<FBAutocompleteState>(FBAutocompleteState);
@@ -35,18 +36,18 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       const indicator = state?.getIndicator(optionId);
       if (!_.isUndefined(indicator)) {
         optionPath = _.get(indicator, "path");
-        optionValueKey = _.get(indicator, "optionValueKey", "");
-        optionLabelKey = _.get(indicator, "optionLabelKey", "");
+        optionValueKey = optionValueKey || _.get(indicator, "optionValueKey", "");
+        optionLabelKey = optionLabelKey || _.get(indicator, "optionLabelKey", "");
         prefixLabelRoot = _.get(indicator, "prefixLabelRoot", "");
         const { root } = indicator;
         state.setRoot(root || "");
       }
     }
 
+    !optionValueKey && (optionValueKey = "value");
+    !optionLabelKey && (optionLabelKey = "text");
+
     React.useEffect(() => {
-      if (FBStore.mode === "design") {
-        return;
-      }
       const value = _.get(FBStore.getValues(), name) || "";
       state?.setDefaultState(value);
       state?.setUrl(optionPath);
@@ -54,14 +55,14 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
 
     getOptionLabel = (option) => {
       const optionLabel = prefixLabelRoot ? `${_.get(option, prefixLabelRoot)} - ` : "";
-      return `${optionLabel}${_.get(option, optionLabelKey, "")}`;
+      return `${optionLabel}${_.get(option, optionLabelKey || "", "")}`;
     };
 
     renderTags = (value, getTagProps) =>
       value.map((option, index) => (
         <Chip
           key={`${_.kebabCase(option)}-${index}`}
-          label={_.get(option, optionLabelKey, "")}
+          label={_.get(option, optionLabelKey || "", "")}
           {...getTagProps({ index })}
           {...{ disabled }}
         />
@@ -83,7 +84,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
         renderEl: renderEl || state?.loaded,
         options: options || state?.data,
         loading: state?.loading,
-        defaultValue: state?.defaultValue,
+        defaultValue: state?.defaultValue || defaultValue,
         name,
         renderInput,
         optionValueKey,

@@ -15,6 +15,9 @@ export class FBAutocompleteState extends FBRequest<any, any> {
   };
 
   @action public onSuccess = () => {
+    if (!this.data.some((d) => d.id)) {
+      set(this, "data", _.map(this.data, (d) => ({ id: d, name: d })));
+    }
     !_.isUndefined(this.defaultState) &&
       this.setDefaultValue(this.defaultState);
   };
@@ -37,9 +40,10 @@ export class FBAutocompleteState extends FBRequest<any, any> {
       set(this, "loaded", true);
       return;
     }
+
     this.setLoading(true);
     const defaultValue = _.isArray(value) ? value : [value];
-    const filtered = _.filter(this.data, (rec) =>
+    const  filtered = _.filter(this.data, (rec) =>
       _.includes(defaultValue, rec.id)
     );
     set(this, "defaultValue", _.isArray(value) ? filtered : _.first(filtered));

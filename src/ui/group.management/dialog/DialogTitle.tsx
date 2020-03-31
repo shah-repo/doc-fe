@@ -1,10 +1,4 @@
-import {
-  AppBar,
-  Box,
-  IconButton,
-  Toolbar,
-  Typography,
-} from "@material-ui/core";
+import { AppBar, Box, IconButton, Toolbar, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
 import Text from "../../components/Text";
@@ -24,7 +18,7 @@ export const DialogTitle: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   return (
-    <AppBar>
+    <AppBar style={{ position: "relative" }}>
       <Toolbar>
         <IconButton
           className={classes.closeIcon}

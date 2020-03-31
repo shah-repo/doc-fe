@@ -1,20 +1,30 @@
-import { TextField } from "@material-ui/core";
+import { TextField, TextFieldProps } from "@material-ui/core";
 import { RenderInputParams } from "@material-ui/lab/Autocomplete/Autocomplete";
+import _ from "lodash";
 import React from "react";
+import FBStore from "../../stores/ui/FBStore";
 import { FBInputProps } from "../../types/common";
 import FBInput from "../common/FBInput";
 
-const FBTextField: React.FunctionComponent<FBInputProps & Partial<RenderInputParams>> = ({
+export type FBTextFieldProps =
+  & FBInputProps
+  & Partial<Omit<RenderInputParams, "InputProps">>
+  & Pick<TextFieldProps, "InputProps">;
+
+const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   rows = 1,
   placeholder,
   error,
   id,
+  disabled,
   InputLabelProps,
   InputProps,
   inputProps,
   ...props
-}) => (
-    <FBInput {...props} type="textfield">
+}) => {
+  const disableEdit = disabled || _.get(props.hellosignFlowProps, "type") === "HS_DEFINED_FIELD" || FBStore.getValue("signatureRequestId");
+  return (
+    <FBInput disabled={disableEdit} {...props} type="textfield">
       <TextField
         multiline={Boolean(rows && (rows as number) > 1)}
         variant="outlined"
@@ -24,5 +34,6 @@ const FBTextField: React.FunctionComponent<FBInputProps & Partial<RenderInputPar
       />
     </FBInput>
   );
+}
 
 export default FBTextField;
