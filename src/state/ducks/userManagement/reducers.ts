@@ -1,9 +1,8 @@
 import _ from "lodash";
 import { combineReducers } from "redux";
-import { DEFAULT_SELECTED_GROUP } from "../../../ui/group.management/utils/types";
 import asyncReducer from "../../reducers/asyncReducer";
-import { COMPANY_GROUPS_GET_ASYNC, COMPANY_GROUPS_LIST, CURRENT_GROUP } from "./constants";
-import { CompanyGroupsListAction, CurrentEditableGroupAction, GroupsAllIdsState, GroupsByIdState, LoadCompanyGroup } from "./types";
+import { COMPANY_GROUPS_GET_ASYNC, COMPANY_GROUPS_LIST } from "./constants";
+import { CompanyGroupsListAction, GroupsAllIdsState, GroupsByIdState, LoadCompanyGroup } from "./types";
 
 export const groupsById = (
   state: GroupsByIdState = {},
@@ -34,22 +33,8 @@ export const groupsAllIds = (
   }
 };
 
-export const currentEditableGroup = (
-  state: LoadCompanyGroup = DEFAULT_SELECTED_GROUP,
-  action: CurrentEditableGroupAction,
-): LoadCompanyGroup => {
-  switch (action.type) {
-    case CURRENT_GROUP:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-
 export default combineReducers({
   loadGroupsListAsyncInfo: asyncReducer(COMPANY_GROUPS_GET_ASYNC),
   groupsById,
   groupsAllIds,
-  currentEditableGroup,
 });

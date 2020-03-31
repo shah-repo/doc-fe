@@ -1,4 +1,4 @@
-import { isEmpty, omit } from "lodash";
+import { omit } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -43,10 +43,6 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
     currentEmployeePermissions,
   );
   const allGroups = useSelector(userManagementSelectors.getOfficialGroups);
-  const currentGroupData = useSelector(userManagementSelectors.getCurrentGroup);
-  const [currentGroups, setCurrentGroups] = useState(
-    isCreateMode ? [] : currentGroupData.joinedParents.filter((joinedParent) => joinedParent.id !== currentGroupData.id)
-  );
   const createGroupAsync = useAsync({
     onSuccess: (response) => {
       handleTableRefresh();
@@ -120,7 +116,6 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
     setGroup(DEFAULT_GROUP);
     setParentGroups([]);
     setMembers([]);
-    setCurrentGroups([]);
   };
 
   const handleSubmit = () => {
@@ -128,15 +123,6 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
   };
 
   const  handleAsyncState = () => isCreateMode ? createGroupAsync.asyncState : editGroupAsync.asyncState;
-
-  const onSelectParentGroup = (selectedItems: any) => {
-    if (isEmpty(selectedItems)) {
-      setParentGroups([]);
-      return;
-    }
-    const selectedItemsData = allGroups.filter((group) => selectedItems.some((item) => group.label === item.label));
-    setParentGroups(selectedItemsData);
-  };
 
   return (
     <GroupContentPresenter
@@ -154,8 +140,7 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
       handleAsyncState={handleAsyncState}
       allGroups={allGroups}
       parentGroups={parentGroups}
-      onSelectParentGroup={onSelectParentGroup}
-      joinedParents={currentGroups}
+      setParentGroups={setParentGroups}
     />
   );
 };
