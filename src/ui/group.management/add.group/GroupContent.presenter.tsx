@@ -3,7 +3,7 @@ import { isEmpty, uniqBy } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import Select from "react-select";
-import { Group, GroupTag, Permission } from "../../../state/ducks/auth/types";
+import { GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
 import { AsyncActionPayload } from "../../../state/types";
@@ -29,8 +29,7 @@ interface Props {
   handleAsyncState: () => AsyncActionPayload;
   allGroups: any[];
   parentGroups: any[];
-  onSelectParentGroup: (selectedItems) => void;
-  joinedParents: Group[];
+  setParentGroups: (state: any) => void;
 }
 
 export const GroupContentPresenter: React.FunctionComponent<Props> = ({
@@ -48,12 +47,10 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
   handleAsyncState,
   allGroups,
   parentGroups,
-  onSelectParentGroup,
-  joinedParents,
+  setParentGroups,
 }) => {
   const intl = useIntl();
   const canCreateOfficialGroup = hasOfficialPermission && group.isOfficial;
-  const uniqJoinedParents = uniqBy(joinedParents, "id");
 
   const groupNameRenderer = () => (
     <Box width={700}>
@@ -122,6 +119,7 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
       />
     </Box>
   );
+
   const inheritText = (parentGroup) => {
     if (!isEmpty(parentGroup.parents)) {
       return `inherits from ${parentGroup.parents.map((parent) => parent.name)}`;
@@ -129,8 +127,8 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
     return "";
   };
 
-  const renderParentContainer = (parentGroup, index) => (
-    <Box mt={6} width="700px" padding="10px" border="1px solid grey" borderRadius={4} key={index}>
+  const renderParentContainer = (parentGroup) => parentGroup.map((p) => (
+    <Box mt={6} width="700px" padding="10px" border="1px solid grey" borderRadius={4} key={p.id}>
       <Typography
         variant="h6"
         style={{
@@ -138,29 +136,26 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
           borderBottom: "solid",
           borderColor: "grey",
         }}>
-        <Text message={`${parentGroup.label || parentGroup.name} ${inheritText(parentGroup)}`}/>
+        <Text message={`${p.name} ${inheritText(p)}`}/>
       </Typography>
       <GroupInfoPresenter
-        items={parentGroup.permissions}
+        items={p.permissions}
         title="common.permissions"
       />
       <GroupInfoPresenter
-        items={parentGroup.tags}
+        items={p.tags}
         title="common.tags"
       />
-    </Box>
+    </Box>)
   );
 
-  const renderSelectedGroupInfo = (parentGroups) => parentGroups.map((parentGroup, index) => {
-    if (uniqJoinedParents.some((p) => p.name === parentGroup.label)) {
-      return null;
-    }
-    return renderParentContainer(parentGroup, index);
-  });
+  const renderSelectedGroupInfo = (parentGroups) => {
+    const arrayOfIds = parentGroups.map((p) => p.value);
+    const savedParents = allGroups.filter((group) => arrayOfIds.includes(group.value));
+    const ids = savedParents.map((s) => s.joinedParents.map((e) => e));
+    return renderParentContainer(uniqBy(ids.flat(), "id"));
+  };
 
-  const renderJoinedGroupsInfo = (parentGroups) => parentGroups.map((parentGroup, index) =>
-    renderParentContainer(parentGroup, index)
-  );
 
   const parentGroupsRenderer = () => (
     <Box width={700} mt={5}>
@@ -171,7 +166,7 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
         id="Group-addParentGroups"
         isMulti={true}
         options={allGroups}
-        onChange={(selectedItems: any) => onSelectParentGroup(selectedItems)}
+        onChange={(state: any) => setParentGroups(state)}
         value={parentGroups}
       />
     </Box>
@@ -210,7 +205,6 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
         {canCreateOfficialGroup && tagsRenderer()}
         {canCreateOfficialGroup && parentGroupsRenderer()}
         {!isEmpty(parentGroups) && renderSelectedGroupInfo(parentGroups)}
-        {!isEmpty(uniqJoinedParents) && renderJoinedGroupsInfo(uniqJoinedParents)}
         <Grid item={true} style={{ textAlign: "right" }}>
           {isCreateMode && resetButtonRenderer()}
           {submitButtonRenderer()}
