@@ -22,7 +22,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
 
     if (value && optionValueType === "key" && optionValueKey) {
       defaultValue = multiple
-        ? _.filter(options, { [optionValueKey]: value })
+        ? _.filter(options, (o) => _.includes(value, o[optionValueKey]))
         : _.find(options, { [optionValueKey]: value });
     }
 

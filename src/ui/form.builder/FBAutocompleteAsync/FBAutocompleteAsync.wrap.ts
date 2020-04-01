@@ -48,7 +48,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     return Component({
       ...(props as T),
       options,
-      loading: autocompleteAsyncState?.loading,
+      loading,
       optionValueKey,
       optionLabelKey,
       getOptionLabel,

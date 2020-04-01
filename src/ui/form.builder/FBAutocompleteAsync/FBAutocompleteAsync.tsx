@@ -5,12 +5,11 @@ import { withFBAutocompleteAsync } from "./FBAutocompleteAsync.wrap";
 
 const FBAutocompleteAsync: React.FunctionComponent<FBAutocompleteAsyncProps> = ({
   options,
-  name,
   ...props
 }) =>  (
   <>
     {!options && <FBAutocomplete {...props} disabled={true} />}
-    {options && <FBAutocomplete {...props} {...{ options, name }}/>}
+    {options && <FBAutocomplete {...props} {...{ options }}/>}
   </>
 );
 

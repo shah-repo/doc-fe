@@ -1,5 +1,5 @@
 import { Dictionary } from "lodash";
-import { FBDialogState } from "..";
+import { FBDialogState } from "../FBDialog";
 import { FBFormikFieldProps } from "./formik";
 import { FBTemplateSchema } from "./store";
 
