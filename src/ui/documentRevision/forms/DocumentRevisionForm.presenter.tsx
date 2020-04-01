@@ -184,15 +184,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     FBValidate();
-    if (values.document?.documentType?.isQms) {
-      groupOptions.forEach((group) => {
-        if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
-          setFieldValue("securityGroups", [
-            { value: group.value, label: group.label },
-          ]);
-        }
-      });
-    }
     submitForm();
   };
 
@@ -208,6 +199,18 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     );
   });
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
+
+  useEffect(() => {
+    if (values.document?.documentType?.isQms) {
+      groupOptions.forEach((group) => {
+        if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
+          setFieldValue("securityGroups", [
+            { value: group.value, label: group.label },
+          ]);
+        }
+      });
+    }
+  }, [values.document, setFieldValue, groupOptions]);
 
   const renderChangeOwnership = canChangeOwnerShip && values.id && (
     <OwnerChanger requestId={values.id} requestType={RequestType.Document} />
