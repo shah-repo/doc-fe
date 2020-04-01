@@ -2,6 +2,7 @@ import { Button, createStyles, Grid, makeStyles } from "@material-ui/core";
 import { Form, FormikProps } from "formik";
 import React from "react";
 import { connect } from "react-redux";
+import { toStartOfDay } from "../../../../../common/utils/date";
 import { changeRequestsSelectors } from "../../../../../state/ducks/changeRequest";
 import { ApplicationState } from "../../../../../state/reducers";
 import AutocompleteField from "../../../../components/forms/fields/Autocomplete/Autocomplete";
@@ -77,7 +78,7 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = ({
             name="dueDate"
             label="common.due.date"
             size="sm"
-            datePickerProps={{ id: "dueDate", minDate: new Date() }}
+            datePickerProps={{ id: "dueDate", minDate: toStartOfDay(undefined) }}
             validate={validator(required)}
           />
         </Grid>

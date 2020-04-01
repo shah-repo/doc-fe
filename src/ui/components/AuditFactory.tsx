@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import { toStartOfDay } from "../../common/utils/date";
 import { Attachment } from "../../state/ducks/attachments";
 import { Audit } from "../../state/ducks/audit";
 import { Group } from "../../state/ducks/auth/types";
@@ -8,7 +9,7 @@ import { DocumentRevision, Reference } from "../../state/ducks/documentRevisions
 import { DocumentType } from "../../state/ducks/documentRevisions/documentType";
 import { getAuditDefaultValue } from "../common/utils/audit";
 import Text from "../components/Text";
-import DateTime from "./DateTime";
+import DateFormatter from "./Date";
 import DialogOpener from "./textDiff/DialogOpener";
 
 interface OwnProps {
@@ -52,7 +53,7 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
       break;
     case "tasks.dueDate":
     case "effectiveDate":
-      returnValue = <DateTime value={audit.nextValue as string} />;
+      returnValue = <DateFormatter value={toStartOfDay(audit.nextValue as string)} />;
       break;
     case "justifications.description":
     case "tasks.description":
