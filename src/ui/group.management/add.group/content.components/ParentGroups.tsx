@@ -1,5 +1,4 @@
 import { Box, Grid, Typography } from "@material-ui/core";
-import { isEmpty } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import Select from "react-select";
@@ -17,15 +16,6 @@ export const ParentGroups: React.FunctionComponent<Props> = ({
 }) => {
   const allGroups = useSelector(userManagementSelectors.getOfficialGroups);
 
-  const onSelectParentGroup = (selectedItems: any) => {
-    if (isEmpty(selectedItems)) {
-      setParentGroups([]);
-      return;
-    }
-    const selectedItemsData = allGroups.filter((group) => selectedItems.some((item) => group.label === item.label));
-    setParentGroups(selectedItemsData);
-  };
-
   return (
     <Grid>
       <Box width={700} mt={5}>
@@ -36,7 +26,7 @@ export const ParentGroups: React.FunctionComponent<Props> = ({
           id="Group-addParentGroups"
           isMulti={true}
           options={allGroups}
-          onChange={(selectedItems: any) => onSelectParentGroup(selectedItems)}
+          onChange={(state: any) => setParentGroups(state)}
           value={parentGroups}
         />
       </Box>

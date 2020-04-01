@@ -21,6 +21,7 @@ export const GroupType: React.FunctionComponent<Props> = ({
       isOfficial: isOfficial ? true : false,
       permissions: isOfficial ? group.permissions : [],
       tags: isOfficial ? group.tags : [],
+      parents: isOfficial ? group.parents : [],
     });
   };
 

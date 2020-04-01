@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Group, Permission } from "../../../state/ducks/auth/types";
 import { groupManagementActions } from "../../../state/ducks/groupManagement";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
-import { GetEmployeeResponse, LoadCompanyGroup, userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
+import { GetEmployeeResponse, LoadCompanyGroup, userManagementActions } from "../../../state/ducks/userManagement";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import useAsync from "../../hooks/useAsync";
 import { toEditRequestBody, toGroupOptions, toMembersOptions, toParentOptions, toRequestBody } from "../utils/transform";
@@ -32,14 +32,11 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
 }) => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const currentGroupData = useSelector(userManagementSelectors.getCurrentGroup);
 
   const [group, setGroup] = useState<GroupRequestBody>(DEFAULT_GROUP);
   const [members, setMembers] = useState<OptionType[]>([]);
   const [parentGroups, setParentGroups] = useState<OptionType[]>([]);
-  const [currentGroups, setCurrentGroups] = useState(
-    isCreateMode ? [] : currentGroupData.joinedParents.filter((joinedParent) => joinedParent.id !== currentGroupData.id)
-  );
+
   const canCreateOfficialGroup = hasOfficialPermission && group.isOfficial;
 
   useEffect(() => {
@@ -98,7 +95,6 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
     setGroup(DEFAULT_GROUP);
     setParentGroups([]);
     setMembers([]);
-    setCurrentGroups([]);
   };
 
   const handleSubmit = () => {
@@ -118,7 +114,6 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
       currentEmployeePermissions={currentEmployeePermissions}
       canCreateOfficialGroup={canCreateOfficialGroup}
       parentGroups={parentGroups}
-      currentGroups={currentGroups}
       setParentGroups={setParentGroups}
       handleReset={handleReset}
       handleSubmit={handleSubmit}

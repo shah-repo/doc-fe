@@ -1,6 +1,6 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
-import { Group, Permission } from "../../../state/ducks/auth/types";
+import { Permission } from "../../../state/ducks/auth/types";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
 import { AsyncActionPayload } from "../../../state/types";
@@ -23,7 +23,6 @@ interface Props {
   currentEmployeePermissions: Permission[];
   canCreateOfficialGroup: boolean;
   parentGroups: any[];
-  currentGroups: Group[];
   setParentGroups: (selectedItems: any) => void;
   handleReset: () => void;
   handleSubmit: () => void;
@@ -41,7 +40,6 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
   currentEmployeePermissions,
   canCreateOfficialGroup,
   parentGroups,
-  currentGroups,
   setParentGroups,
   handleReset,
   handleSubmit,
@@ -76,7 +74,6 @@ export const GroupContentPresenter: React.FunctionComponent<Props> = ({
         />}
       <JoinedGroups
         parentGroups={parentGroups}
-        joinedParents={currentGroups}
       />
       <ActionButtons
         handleReset={handleReset}

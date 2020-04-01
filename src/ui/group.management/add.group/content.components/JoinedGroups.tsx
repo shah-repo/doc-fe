@@ -1,21 +1,19 @@
 import { Box, Grid, Typography } from "@material-ui/core";
 import { isEmpty, uniqBy } from "lodash";
 import React from "react";
-import { Group } from "../../../../state/ducks/auth/types";
+import { useSelector } from "react-redux";
+import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import Text from "../../../components/Text";
 import GroupInfoPresenter from "./GroupInfo.presenter";
 
 interface Props {
   parentGroups: any[];
-  joinedParents: Group[];
 }
 
 export const JoinedGroups: React.FunctionComponent<Props> = ({
   parentGroups,
-  joinedParents,
 }) => {
-
-  const uniqJoinedParents = uniqBy(joinedParents, "id");
+  const allGroups = useSelector(userManagementSelectors.getOfficialGroups);
 
   const inheritText = (parentGroup) => {
     if (!isEmpty(parentGroup.parents)) {
@@ -24,8 +22,8 @@ export const JoinedGroups: React.FunctionComponent<Props> = ({
     return "";
   };
 
-  const renderParentContainer = (parentGroup, index) => (
-    <Box mt={6} width="700px" padding="10px" border="1px solid grey" borderRadius={4} key={index}>
+  const renderParentContainer = (parentGroup) => parentGroup.map((p) => (
+    <Box mt={6} width="700px" padding="10px" border="1px solid grey" borderRadius={4} key={p.id}>
       <Typography
         variant="h6"
         style={{
@@ -33,35 +31,29 @@ export const JoinedGroups: React.FunctionComponent<Props> = ({
           borderBottom: "solid",
           borderColor: "grey",
         }}>
-        <Text message={`${parentGroup.label || parentGroup.name} ${inheritText(parentGroup)}`}/>
+        <Text message={`${p.name} ${inheritText(p)}`}/>
       </Typography>
       <GroupInfoPresenter
-        items={parentGroup.permissions}
+        items={p.permissions}
         title="common.permissions"
       />
       <GroupInfoPresenter
-        items={parentGroup.tags}
+        items={p.tags}
         title="common.tags"
       />
-    </Box>
+    </Box>)
   );
 
-  const renderSelectedGroupInfo = (parentGroups) => parentGroups.map((parentGroup, index) => {
-    if (uniqJoinedParents.some((p) => p.name === parentGroup.label)) {
-      return null;
-    }
-    return renderParentContainer(parentGroup, index);
-  });
-
-  const renderJoinedGroupsInfo = (parentGroups) => parentGroups.map((parentGroup, index) =>
-    renderParentContainer(parentGroup, index)
-  );
-
+  const renderSelectedGroupInfo = (parentGroups) => {
+    const arrayOfIds = parentGroups.map((p) => p.value);
+    const savedParents = allGroups.filter((group) => arrayOfIds.includes(group.value));
+    const ids = savedParents.map((s) => s.joinedParents.map((e) => e));
+    return renderParentContainer(uniqBy(ids.flat(), "id"));
+  };
 
   return (
     <Grid>
       {!isEmpty(parentGroups) && renderSelectedGroupInfo(parentGroups)}
-      {!isEmpty(uniqJoinedParents) && renderJoinedGroupsInfo(uniqJoinedParents)}
     </Grid>
   );
 };
