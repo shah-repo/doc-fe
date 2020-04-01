@@ -1,4 +1,3 @@
-import { filter } from "lodash";
 import { createSelector } from "reselect";
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
 import { ApplicationState } from "../../reducers";
@@ -59,8 +58,9 @@ const getHasSlack = createSelector(
 const employees = (state: ApplicationState) => state.auth.user.employees;
 
 const hasMultipleCompanies = (state: ApplicationState): boolean => (
-  (filter(state.auth.user.employees, ["active", true] )).length > 1
+  ((state.auth.user.employees).filter((employee) => employee.active)).length > 1
 );
+
 const getCurrentUserGroups = createSelector(
   [currentUserGroups],
   (groups): OptionType[] => (groups || []).map((group) => ({
