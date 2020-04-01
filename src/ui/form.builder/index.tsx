@@ -7,7 +7,6 @@ export { default as FBAutocomplete } from "./FBAutocomplete/FBAutocomplete";
 export * from "./FBAutocomplete/FBAutocomplete.types";
 export { default as FBAutocompleteAsync } from "./FBAutocompleteAsync/FBAutocompleteAsync";
 export { default as FBAutocompleteAsyncState } from "./FBAutocompleteAsync/FBAutocompleteAsync.state";
-export { default as FBAutocompleteAsyncStore } from "./FBAutocompleteAsync/FBAutocompleteAsync.store";
 export * from "./FBAutocompleteAsync/FBAutocompleteAsync.types";
 export { default as FBConditionalWrapper } from "./FBConditionalWrapper/FBConditionalWrapper";
 export * from "./FBConditionalWrapper/FBConditionalWrapper.types";

@@ -1,8 +1,9 @@
 import _ from "lodash";
 import { action, computed, set } from "mobx";
-import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncStore } from "..";
+import { FBAutocompleteAsyncConfig } from "..";
 import autocompleteOptions from "../../../data/autocompleteOptions.json";
 import FBRequest from "../FBApi/FBApi.request";
+import FBAutocompleteAsyncStore from "./FBAutocompleteAsync.store";
 
 export class FBAutocompleteAsyncState extends FBRequest<any, any> {
   private optionId: string | undefined;

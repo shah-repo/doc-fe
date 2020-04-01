@@ -1,8 +1,9 @@
 import _ from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FBAutocompleteAsyncProps, FBAutocompleteAsyncState, FBAutocompleteAsyncStore } from ".";
+import { FBAutocompleteAsyncProps, FBAutocompleteAsyncState } from ".";
 import { FB } from "..";
+import FBAutocompleteAsyncStore from "./FBAutocompleteAsync.store";
 
 export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
   Component: React.FunctionComponent<T>
