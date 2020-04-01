@@ -96,7 +96,6 @@ export const withFBApprovalField = <T extends FBApprovalFieldProps>(
 
     return Component({
       ...(props as T),
-      approvalFieldState,
       hasApproved,
       approverStatusInfo,
       currentUser,

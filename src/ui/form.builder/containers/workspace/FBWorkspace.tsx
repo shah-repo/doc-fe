@@ -1,6 +1,7 @@
-import Box from "@material-ui/core/Box/Box";
+import { Provider } from "mobx-react";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { FBDialog } from "../..";
 import { companySelectors } from "../../../../state/ducks/company";
 import useDialog from "../../../hooks/useDialog";
 import FBAddFieldButton0 from "../../components/custom/FBAddFieldButton0";
@@ -18,6 +19,7 @@ import ViewValidatorPresenter from "./ViewValidator.presenter";
 
 const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
   includeTransport = true,
+  dialogState,
   isStarter = true,
   schema = [],
   form,
@@ -45,7 +47,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
   }, [isHelloSignIntegrationEnabled]);
 
   return (
-    <Box>
+    <Provider {...{ dialogState }}>
       {isStarter && <FBAddFieldButton0 />}
       {!isStarter && <FBSortableContainer items={schema} />}
       {includeTransport && <FBTransportSchema />}
@@ -63,7 +65,8 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
       />
       <FBFormMarkDown />
       <FBEditorDialog />
-    </Box>
+      <FBDialog />
+    </Provider>
   );
 };
 

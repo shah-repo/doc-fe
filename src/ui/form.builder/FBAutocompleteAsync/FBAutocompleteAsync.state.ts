@@ -1,11 +1,10 @@
 import _ from "lodash";
-import { action, computed, observable, set } from "mobx";
+import { action, computed, set } from "mobx";
 import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncStore } from "..";
 import autocompleteOptions from "../../../data/autocompleteOptions.json";
 import FBRequest from "../FBApi/FBApi.request";
 
 export class FBAutocompleteAsyncState extends FBRequest<any, any> {
-  @observable public loaded = false;
   private optionId: string | undefined;
 
   @computed public get optionConfig(): FBAutocompleteAsyncConfig | undefined {
@@ -15,8 +14,11 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     return  _.find(autocompleteOptions, { id: this.optionId });
   }
 
-  @action public setOptionId = (id: string) => {
+  @action public setOptionId = (id?: string) => {
     set(this, "optionId", id);
+  };
+
+  @action public load = () => {
     if (!this.optionConfig) {
       return;
     }
@@ -30,11 +32,11 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     if (!this.optionId) {
       return;
     }
-    if (!this.data.some((d) => d.id)) {
+    if (!this.data.some((value) => typeof value === "object")) {
       const data = _.map(this.data, (d) => ({ id: d, name: d }));
       return FBAutocompleteAsyncStore.setOptionData(this.optionId, data);
     }
-    FBAutocompleteAsyncStore.setOptionData(this.optionId, this.data);
+    FBAutocompleteAsyncStore.setOptionData(this.optionId, this.data.slice());
   };
 }
 

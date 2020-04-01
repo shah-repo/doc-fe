@@ -15,6 +15,7 @@ export { default as FBDialog } from "./FBDialog/FBDialog";
 export { default as FBDialogState } from "./FBDialog/FBDialog.state";
 export * from "./FBDialog/FBDialog.types";
 export { default as FBEditorApprovalField } from "./FBEditorApprovalField/FBEditorApprovalField";
+export * from "./FBEditorApprovalField/FBEditorApprovalField.types";
 export { default as FBEditorInlineApproval } from "./FBEditorInlineApproval/FBEditorInlineApproval";
 export * from "./FBEditorInlineApproval/FBEditorInlineApproval.types";
 export { default as FBEditorParagraph } from "./FBEditorParagraph/FBEditorParagraph";

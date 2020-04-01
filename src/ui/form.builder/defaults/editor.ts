@@ -1,5 +1,5 @@
 import { Dictionary } from "lodash";
-import FBAutocompleteAsync, { FBMediaAlbumField, FBParagraph, FBQuantityField, FBTimerField } from "..";
+import { FBAutocompleteAsync, FBMediaAlbumField, FBParagraph, FBQuantityField, FBTimerField } from "..";
 import FBActionContainer from "../components/actions/FBActionContainer";
 import FBActionEditor from "../components/editors/FBActionEditor";
 import FBAutocompleteEditor from "../components/editors/FBAutocompleteEditor";
@@ -99,6 +99,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
   section: ["section", "subsection", "stepsection"],
   representation: ["paragraph"],
   basics: [
+    "autocomplete",
     "textfield",
     "checkbox",
     "checkboxgroup",
@@ -118,7 +119,6 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
   ],
   approvals: ["hellosign"],
   buttons: ["checkpoint", "approval", "createlabel"],
-  lists: ["autocomplete"],
   actions: ["action"],
 };
 
@@ -144,12 +144,12 @@ export const omitLabelValidation: FBEditorElementType[] = [
   "paragraph",
   "instructionsmediaupload",
   "evidencemediaupload",
-  "inlineapproval",
 ];
 
 export const pickDefaultLabel: FBEditorElementType[] = [
   "checkpoint",
   "approval",
+  "inlineapproval",
   "createlabel",
   "quantity",
   "stepsection",
