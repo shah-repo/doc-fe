@@ -3,11 +3,12 @@ import classNames from "classnames";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import { get } from "lodash";
 import React, { useMemo } from "react";
-import { connect } from "react-redux";
-import { Permission } from "../../../state/ducks/auth/types";
+import { connect, useSelector } from "react-redux";
+import { GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { DocumentType, DocumentTypeByIdState, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
+import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
@@ -98,15 +99,29 @@ DocumentRevisionFormContainerProps
 }) => {
 
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
+  const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
+
   const cleanInitialValues = useMemo(() => {
+    let defaultSecurityGroups = [{ value: "", label: "" }];
+    if (initialValues.document?.documentType?.isQms) {
+      groupOptions.forEach((group) => {
+        if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
+          defaultSecurityGroups = [{ value: group.value, label: group.label }];
+        }
+      });
+    }
     if (canUpdateHTML) {
-      return initialValues;
+      return {
+        ...initialValues,
+        securityGroups: defaultSecurityGroups,
+      };
     }
     return {
       ...initialValues,
       renderHTML: undefined,
+      securityGroups: defaultSecurityGroups,
     };
-  }, [canUpdateHTML, initialValues]);
+  }, [canUpdateHTML, initialValues, groupOptions]);
 
   const docTypes = useMemo(
     () =>
