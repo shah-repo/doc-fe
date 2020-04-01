@@ -102,24 +102,20 @@ DocumentRevisionFormContainerProps
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
 
   const cleanInitialValues = useMemo(() => {
-    let defaultSecurityGroups = [{ value: "", label: "" }];
+    const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;
+    const securityGroups: any[] = [];
     if (initialValues.document?.documentType?.isQms) {
       groupOptions.forEach((group) => {
         if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
-          defaultSecurityGroups = [{ value: group.value, label: group.label }];
+          securityGroups.push({ value: group.value, label: group.label });
         }
       });
     }
-    if (canUpdateHTML) {
-      return {
-        ...initialValues,
-        securityGroups: defaultSecurityGroups,
-      };
-    }
+
     return {
       ...initialValues,
-      renderHTML: undefined,
-      securityGroups: defaultSecurityGroups,
+      renderHTML,
+      securityGroups,
     };
   }, [canUpdateHTML, initialValues, groupOptions]);
 
