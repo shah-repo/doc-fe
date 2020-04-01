@@ -38,7 +38,7 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
         </Box>
       )}
     >
-      <Box mb={3}>
+      <Box mb={3} mt={FBDRStore.isOutput ? 0 : 3}>
         {(mode === "placeholder" || mode === "starter") && (
           <Box
             style={{ borderStyle: "dashed" }}

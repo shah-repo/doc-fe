@@ -15,6 +15,26 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     return  _.find(autocompleteOptions, { id: this.optionId });
   }
 
+  @computed public get sliceData(): any {
+    if (!this.optionId) {
+      return;
+    }
+    if (FBAutocompleteAsyncStore.data.get(this.optionId)) {
+      return Array.from(FBAutocompleteAsyncStore.data.get(this.optionId).values());
+    }
+  }
+
+  public sliceValue = (id: string | string[]): any => {
+    if (!this.optionId) {
+      return;
+    }
+    const options = FBAutocompleteAsyncStore.data.get(this.optionId);
+    if (!_.isArray(id)) {
+      return options.get(id);
+    }
+    return Array.from(_.map(id, (i) => options.get(i)));
+  };
+
   @action public setOptionId = (id?: string) => {
     set(this, "optionId", id);
   };
