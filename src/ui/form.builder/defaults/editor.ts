@@ -99,10 +99,10 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
   section: ["section", "subsection", "stepsection"],
   representation: ["paragraph"],
   basics: [
-    "autocomplete",
     "textfield",
     "checkbox",
     "checkboxgroup",
+    "autocomplete",
     "texteditor",
     "datepicker",
     "hyperlink",
