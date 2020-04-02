@@ -1,6 +1,6 @@
 import React from "react";
 import useDialog from "../../hooks/useDialog";
-import AddGroupPresenter from "./presenter";
+import AddGroupPresenter from "./AddGroup.presenter";
 
 export const AddGroupContainer: React.FunctionComponent = () => {
   const dialog = useDialog();

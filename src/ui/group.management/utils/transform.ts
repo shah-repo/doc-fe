@@ -1,15 +1,33 @@
+import { omit } from "lodash";
 import { Group } from "../../../state/ducks/auth/types";
-import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
+import { GroupRequestBody } from "../../../state/ducks/groupManagement";
+import { GetEmployeeResponse, LoadCompanyGroup } from "../../../state/ducks/userManagement";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-
-export const toMembersOptions = (values: GetEmployeeResponse[]): OptionType[] => values.map((employee) => ({
-  label: employee.user.name,
-  value: employee.id,
-}));
 
 export const toOptions = (values: any[]): OptionType[] => values.map((value) => ({
   label: value,
   value,
+}));
+
+export const toArray = (values: OptionType[]): any[] => {
+  if (values === null) {
+    return [];
+  }
+  return values.map((value) =>
+    value.value,
+  );
+};
+
+export const toArrayOfIds = (data: any[] | null) => {
+  if (!data) { return []; }
+  return data.map((item) => ({
+    id: item.id,
+  }));
+};
+
+export const toMembersOptions = (values: GetEmployeeResponse[]): OptionType[] => values.map((employee) => ({
+  label: employee.user.name,
+  value: employee.id,
 }));
 
 export const toParentOptions = (values: Group[]): OptionType[] => values.map((value) => ({
@@ -20,25 +38,35 @@ export const toParentOptions = (values: Group[]): OptionType[] => values.map((va
   parents: value.parents,
 }));
 
+export const toGroupOptions = (selectedGroup: LoadCompanyGroup): GroupRequestBody => ({
+  name: selectedGroup.name,
+  permissions: selectedGroup.permissions,
+  defaultForNewUsers: selectedGroup.defaultForNewUsers,
+  isOfficial: selectedGroup.isOfficial,
+  tags: selectedGroup.tags || [],
+  employees: toArrayOfIds(selectedGroup.employees),
+  parents: toArrayOfIds(selectedGroup.parents),
+});
 
-export const toArray = (values: OptionType[]): any[] => {
-  if (values === null) {
-    return [];
-  }
-  return values.map((value) =>
-    value.value,
-  );
-};
-export const toArrayOfIds = (data: any[] | null) => {
-  if (!data) { return []; }
-  return data.map((item) => ({
-    id: item.id,
-  }));
-};
-
-export const toRequestBody = (options: OptionType[] | null) => {
+export const toIds = (options: OptionType[] | null) => {
   if (options == null) { return []; }
   return options.map((option) => ({
     id: option.value,
   }));
 };
+
+export const toRequestBody = (
+  values: GroupRequestBody,
+  members: OptionType[],
+  parentGroups: OptionType[]) =>
+  ({ ...values, employees: toIds(members), parents: toIds(parentGroups) });
+
+
+export const toEditRequestBody = (
+  isGroupNameChanged: boolean,
+  values: GroupRequestBody,
+  members: OptionType[],
+  parentGroups: OptionType[]
+) => isGroupNameChanged ?
+  toRequestBody(values, members, parentGroups) :
+  omit(toRequestBody(values, members, parentGroups), ["name"] );
