@@ -1,6 +1,8 @@
 import { Dictionary } from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
+import { FB } from "..";
+import { FBDialogState } from "../FBDialog";
 import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 import FBStore from "../stores/ui/FBStore";
 import { FBTemplateSchema } from "../types/store";
@@ -11,6 +13,8 @@ export const withWorkspace = <T extends FBWorkspaceProps>(
   Component: React.FunctionComponent<T>
 ) => {
   const Comp = (props: T) => {
+    const dialogState = FB.useRef<FBDialogState>(FBDialogState);
+
     React.useEffect(() => {
       FBDynamicValidatorStore.registerValidators();
       FBDynamicValidatorStore.validate();
@@ -31,6 +35,7 @@ export const withWorkspace = <T extends FBWorkspaceProps>(
       schema,
       values,
       form: props.form,
+      dialogState,
     });
   };
 
