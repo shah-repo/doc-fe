@@ -8,7 +8,7 @@ import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { FBHelloSignPayload, FBHelloSignProps } from ".";
 import { FB } from "..";
-import { SM_APP_CONFIG } from "../../../common/constants";
+import Config from "../../../config";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -85,7 +85,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     async function apiCallSig(payload: FBHelloSignPayload) {
       const apiCallSig = new FBActionModel();
       apiCallSig.set({
-        testMode: SM_APP_CONFIG.REACT_APP_HELLOSIGN_TEST_MODE,
+        testMode: Config.get('HELLOSIGN_TEST_MODE'),
         requestMethod: "POST",
         requestUrl: SEND_SIGNATURE_REQUEST_URL,
         payload,
@@ -114,7 +114,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     function helloSignIframe(data: any) {
       //using previouslyFinished with 'close' because 'cancel' event doesn't work for some reason
       let previouslyFinished = false;
-      const clientId =  SM_APP_CONFIG.REACT_APP_HELLOSIGN_CLIENT_ID;
+      const clientId =  Config.get('HELLOSIGN_CLIENT_ID');
       const editUrl = data.template.edit_url;
       console.log(clientId);
       const client = new HelloSign({
