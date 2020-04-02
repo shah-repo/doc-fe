@@ -9,7 +9,6 @@ import { useSelector } from "react-redux";
 import { FBHelloSignPayload, FBHelloSignProps } from ".";
 import { FB } from "..";
 import { SM_APP_CONFIG } from "../../../common/constants";
-import { companySelectors } from "../../../state/ducks/company";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -38,7 +37,6 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     helloSignState = FB.useRef<FBHelloSignState>(FBHelloSignState);
     const intl = useIntl();
     const documentById = useSelector(documentRevisionsSelectors.byId);
-    const selectedCompany = useSelector(companySelectors.getSelectedCompany);
     const signatureId = FBStore.getValue("signatureRequestId");
     signatureSentMessage = intl.formatMessage({ id: "form.builder.signature.document.sent" });
 
@@ -116,8 +114,9 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     function helloSignIframe(data: any) {
       //using previouslyFinished with 'close' because 'cancel' event doesn't work for some reason
       let previouslyFinished = false;
-      const clientId = selectedCompany.helloSignAppId;
+      const clientId =  SM_APP_CONFIG.REACT_APP_HELLOSIGN_CLIENT_ID;
       const editUrl = data.template.edit_url;
+      console.log(clientId);
       const client = new HelloSign({
         clientId,
         skipDomainVerification: true,
