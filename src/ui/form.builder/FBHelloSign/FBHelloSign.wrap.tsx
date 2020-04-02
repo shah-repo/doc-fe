@@ -85,7 +85,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     async function apiCallSig(payload: FBHelloSignPayload) {
       const apiCallSig = new FBActionModel();
       apiCallSig.set({
-        testMode: Config.get('HELLOSIGN_TEST_MODE'),
+        testMode: Config.HelloSignTestMode,
         requestMethod: "POST",
         requestUrl: SEND_SIGNATURE_REQUEST_URL,
         payload,
@@ -114,7 +114,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     function helloSignIframe(data: any) {
       //using previouslyFinished with 'close' because 'cancel' event doesn't work for some reason
       let previouslyFinished = false;
-      const clientId =  Config.get('HELLOSIGN_CLIENT_ID');
+      const clientId =  Config.HelloSignClientId;
       const editUrl = data.template.edit_url;
       console.log(clientId);
       const client = new HelloSign({

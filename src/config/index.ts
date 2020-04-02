@@ -69,6 +69,14 @@ class Config {
   public static get SlackUserUri(): string {
     return `${this.FrontendUrl}/slack/user`;
   }
+
+  public static get HelloSignTestMode(): string {
+    return this.get("HELLOSIGN_TEST_MODE");
+  }
+
+  public static get HelloSignClientId(): string {
+    return this.get("HELLOSIGN_CLIENT_ID");
+  }
 }
 
 export default Config;
