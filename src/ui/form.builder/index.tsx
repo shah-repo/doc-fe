@@ -4,11 +4,19 @@ export { default as FBApprovalField } from "./FBApprovalField/FBApprovalField";
 export { default as FBApprovalFieldState } from "./FBApprovalField/FBApprovalField.state";
 export * from "./FBApprovalField/FBApprovalField.types";
 export { default as FBAutocomplete } from "./FBAutocomplete/FBAutocomplete";
-export { default as FBAutocompleteState } from "./FBAutocomplete/FBAutocomplete.state";
 export * from "./FBAutocomplete/FBAutocomplete.types";
+export { default as FBAutocompleteAsync } from "./FBAutocompleteAsync/FBAutocompleteAsync";
+export { default as FBAutocompleteAsyncState } from "./FBAutocompleteAsync/FBAutocompleteAsync.state";
+export * from "./FBAutocompleteAsync/FBAutocompleteAsync.types";
+export { default as FBConditionalWrapper } from "./FBConditionalWrapper/FBConditionalWrapper";
+export * from "./FBConditionalWrapper/FBConditionalWrapper.types";
 export { default as FBDialog } from "./FBDialog/FBDialog";
 export { default as FBDialogState } from "./FBDialog/FBDialog.state";
 export * from "./FBDialog/FBDialog.types";
+export { default as FBEditorApprovalField } from "./FBEditorApprovalField/FBEditorApprovalField";
+export * from "./FBEditorApprovalField/FBEditorApprovalField.types";
+export { default as FBEditorInlineApproval } from "./FBEditorInlineApproval/FBEditorInlineApproval";
+export * from "./FBEditorInlineApproval/FBEditorInlineApproval.types";
 export { default as FBEditorParagraph } from "./FBEditorParagraph/FBEditorParagraph";
 export { default as FBEditorStepSection } from "./FBEditorStepSection/FBEditorStepSection";
 export * from "./FBEditorStepSection/FBEditorStepSection.types";
@@ -63,4 +71,5 @@ export * from "./FBValidationEditor/FBValidationEditor.types";
 export { default as FBValidationMode } from "./FBValidationMode/FBValidationMode";
 export * from "./FBValidationMode/FBValidationMode.types";
 export { default as FB } from "./helpers/FB";
+
 

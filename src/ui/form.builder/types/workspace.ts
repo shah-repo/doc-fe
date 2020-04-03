@@ -1,4 +1,5 @@
 import { Dictionary } from "lodash";
+import { FBDialogState } from "../FBDialog";
 import { FBFormikFieldProps } from "./formik";
 import { FBTemplateSchema } from "./store";
 
@@ -18,4 +19,5 @@ export type FBWorkspaceProps =
     isStarter?: boolean;
     schema?: FBTemplateSchema[];
     values?: Dictionary<any>;
+    dialogState?: FBDialogState;
   };

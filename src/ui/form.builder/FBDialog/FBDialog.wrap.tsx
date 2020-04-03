@@ -12,26 +12,35 @@ export const withFBDialog = <T extends FBDialogProps>(
     title,
     maxWidth = "sm",
     actions,
+    open,
     ...props
   }: T) => {
 
-    const { dialog } = FB.useStores();
+    const { dialogState } = FB.useStores();
 
     React.useEffect(() => {
-      dialog && dialog.config({maxWidth, content, title, actions});
+      dialogState && dialogState.config({ maxWidth, content, title, actions });
     }, []);
 
-    const onCloseClick = () => dialog.closeDialog();
+    const onCloseClick = () => dialogState.closeDialog();
 
-    return useObserver(() => Component({
+    useObserver(() => {
+      open = dialogState?.open;
+      content = dialogState?.content;
+      title = dialogState?.title;
+      maxWidth = dialogState?.maxWidth;
+      actions = dialogState?.actions;
+    });
+
+    return Component({
       ...(props as T),
-      open: dialog?.open,
-      content: dialog?.content,
-      title: dialog?.title,
-      maxWidth: dialog?.maxWidth,
-      actions: dialog?.actions,
+      open,
+      content,
+      title,
+      maxWidth,
+      actions,
       onCloseClick,
-    }));
+    });
   };
 
   return (props: T) => Comp(props);
