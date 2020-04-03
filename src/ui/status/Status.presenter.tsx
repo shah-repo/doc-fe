@@ -1,7 +1,7 @@
 import React from "react";
 import Config from "../../config";
 
-const API = Config.API_ENDPOINT;
+const API = Config.ApiEndpoint;
 const STATUS_QUERY = "/v1/status";
 const MICRO_STATUS_QUERY = "/v1/micro/healthcheck";
 
