@@ -53,6 +53,7 @@ export interface CompanyMineRequest {
   name?: string;
   addresses?: string[];
   acctCodes?: string[];
+  helloSignIntegrationEnabled?: boolean;
 }
 
 export type SelectCompanyState = Company;

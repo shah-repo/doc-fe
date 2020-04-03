@@ -6,7 +6,7 @@ const getSelectedCompany = (state: ApplicationState) => state.company.selectedCo
 const slackTeamId = (state: ApplicationState) => state.company.selectedCompany.teamId;
 const isSlackIntegrationEnabled = (state: ApplicationState) => state.company.selectedCompany.slackIntegrationEnabled;
 const isHelloSignIntegrationEnabled = (state: ApplicationState) =>
-  state.company.selectedCompany.helloSignIntegrationEnabled;
+  state.company.companyMine.helloSignIntegrationEnabled;
 
 const getWhiteLabeling = createSelector(
   getSelectedCompany,
