@@ -50,6 +50,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<any> = ({
   name,
 }) => {
   const handleSubmit = () => {};
+  // calculate total amount
 
   return (
     <Formik

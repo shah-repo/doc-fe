@@ -1,10 +1,19 @@
 import { action, observable, set } from "mobx";
+import moment from "moment";
 import { TAX_RATE } from "../helpers/constants";
 import FBStore from "../stores/ui/FBStore";
 
+const DEFAULT_PO = {
+  items: [],
+  shippingCost: "0.00",
+  tax: "0.00",
+  subTotal: "0.00",
+  totalAmount: "0.00",
+};
+
 export class FBPurchaseOrderState {
   @observable public name = "";
-  @observable public po = { items: [], shippingCost: 0 };
+  @observable public po = DEFAULT_PO;
   @observable public isDialogOpen = false;
   @observable public formValues = {};
 
@@ -60,6 +69,25 @@ export class FBPurchaseOrderState {
     this.updateFBStore();
   };
 
+  @action public initialize = (shippingCost) => {
+    if (!this.name) {
+      return;
+    }
+    const value = FBStore.getValue(this.name) || DEFAULT_PO;
+
+    console.log(value);
+
+    // this method is used to format old PO values into new correct values
+    this.po = {
+      items: value.items.map(this.initiliazeLineItem),
+      shippingCost: this.formatCost(value.shippingCost),
+      subTotal: this.formatCost(value.subTotal),
+      tax: this.formatCost(value.tax),
+      totalAmount: this.formatCost(value.totalAmount),
+    };
+    this.calculateCost();
+  };
+
   private updateFBStore = () => {
     if (!this.name) {
       return;
@@ -70,6 +98,28 @@ export class FBPurchaseOrderState {
   };
 
   private formatCost = (value: any) => Number(value || 0).toFixed(2);
+
+  private initiliazeLineItem = (item, index) => (
+    {
+      index: index + 1,
+      order: item.order,
+      glCode: item.glCode,
+      units: item.units,
+      partNumber: item.partNumber,
+      date: item.date,
+      description: item.description,
+      unitPrice: this.formatCost(item.unitPrice),
+      tax: item.tax,
+      isTraceabilityRequired: item.isTraceabilityRequired,
+      capitalEquipment: item.capitalEquipment,
+      formattedDate: item.formattedDate || moment(item.date).format("MM/DD/YYYY"),
+      totalAmount: (() => {
+        const total = Number(item.order) * Number(item.unitPrice);
+        const tax = item.tax ? total * TAX_RATE : 0;
+        return this.formatCost(total + tax);
+      })(),
+    }
+  );
 }
 
 export default FBPurchaseOrderState;

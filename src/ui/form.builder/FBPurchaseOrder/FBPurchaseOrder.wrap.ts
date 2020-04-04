@@ -2,7 +2,6 @@ import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { FBPurchaseOrderState } from ".";
 import { FB } from "..";
-import FBStore from "../stores/ui/FBStore";
 
 export const withFBPurchaseOrder = <T extends any>(
   Component: React.FunctionComponent<T>
@@ -17,8 +16,8 @@ export const withFBPurchaseOrder = <T extends any>(
     poState = FB.useRef<FBPurchaseOrderState>(FBPurchaseOrderState);
 
     useEffect(() => {
-      poState.po = FBStore.getValue(name);
       poState.name = name;
+      poState.initialize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [name]);
 

@@ -95,7 +95,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<any> = ({
               </StyledTableCell>
               <StyledTableCell colSpan={6} padding="none">{row.description}</StyledTableCell>
               <StyledTableCell>${row.unitPrice}</StyledTableCell>
-              <StyledTableCell>${row.amount}</StyledTableCell>
+              <StyledTableCell>${row.totalAmount}</StyledTableCell>
               <StyledTableCell padding="checkbox" align="center">
                 <Checkbox disabled checked={row.tax} />
               </StyledTableCell>

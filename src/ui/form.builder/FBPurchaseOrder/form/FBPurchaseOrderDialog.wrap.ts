@@ -11,6 +11,7 @@ export const withFBPurchaseOrderDialog = <T extends any>(
   }: T) => {
     const { poState } = FB.useStores();
     const addItem = () => {
+      poState.setFormValues({});
       !props.disabled && poState.openDialog();
     };
     const closeDialog = () => {
