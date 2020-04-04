@@ -2,6 +2,7 @@ import { Dialog, DialogContent, DialogTitle, Typography } from "@material-ui/cor
 import React from "react";
 import Text from "../../../components/Text";
 import FBButton from "../../components/inputs/FBButton";
+import { withFBPurchaseOrderDialog } from "./FBPurchaseOrderDialog.wrap";
 import FBPurchaseOrderForm from "./FBPurchaseOrderForm";
 
 const FBPurchaseOrderDialog: React.FunctionComponent<any> = ({
@@ -9,19 +10,13 @@ const FBPurchaseOrderDialog: React.FunctionComponent<any> = ({
   onSubmit,
   disabled,
   name,
+  closeDialog,
+  addItem,
+  isDialogOpen,
 }) => {
-  const addItem = () => {
-    poState.openDialog();
-  };
-
-  const closeDialog = () => {
-    poState.setFormValues({});
-    poState.closeDialog();
-  };
-
-  const renderDialog = poState.isDialogOpen && (
+  const renderDialog = isDialogOpen && (
     <Dialog
-      open={poState.isDialogOpen}
+      open={isDialogOpen}
       onClose={closeDialog}
       fullWidth={true}
       id="FBPurchaseOrderDialog-openButton"
@@ -52,4 +47,4 @@ const FBPurchaseOrderDialog: React.FunctionComponent<any> = ({
   );
 };
 
-export default FBPurchaseOrderDialog;
+export default withFBPurchaseOrderDialog(FBPurchaseOrderDialog);

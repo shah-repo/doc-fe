@@ -5,6 +5,7 @@ import React from "react";
 import Date from "../../../components/Date"; // we shouldn't use anything outside the formbuilder
 import Text from "../../../components/Text";
 import Colors from "../../../layout/theme/utils/colors";
+import { withFBPurchaseOrderTable } from "./FBPurchaseOrderTable.wrap";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -37,19 +38,10 @@ const useStyles = makeStyles({
 const FBPurchaseOrderTable: React.FunctionComponent<any> = ({
   poState,
   disabled,
+  handleEdit,
+  handleDelete,
 }) => {
   const classes = useStyles();
-  const handleEdit = (index) => () => {
-    if (disabled) {
-      return;
-    }
-    poState.setFormValues(poState.po.items[index]);
-    poState.openDialog();
-  };
-  const handleDelete = (index) => (e) => {
-    e.stopPropagation();
-    !disabled && poState.deleteItem(index);
-  };
 
   return (
     <Box className={classes.root}>
@@ -121,4 +113,4 @@ const FBPurchaseOrderTable: React.FunctionComponent<any> = ({
   );
 };
 
-export default FBPurchaseOrderTable;
+export default withFBPurchaseOrderTable(FBPurchaseOrderTable);
