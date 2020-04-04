@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { MobXProviderContext } from "mobx-react";
 import React from "react";
+import { FBProviderProps } from "..";
 
 export class FB {
   public static useRef<T>(state: new () => T): T {
@@ -9,7 +10,7 @@ export class FB {
   }
 
   public static useStores() {
-    return React.useContext(MobXProviderContext);
+    return React.useContext(MobXProviderContext) as FBProviderProps;
   }
 
   public static uniqid(): string {

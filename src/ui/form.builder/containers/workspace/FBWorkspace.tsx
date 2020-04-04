@@ -1,6 +1,6 @@
-import { Provider } from "mobx-react";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
+import FBProvider from "../..";
 import { companySelectors } from "../../../../state/ducks/company";
 import useDialog from "../../../hooks/useDialog";
 import FBAddFieldButton0 from "../../components/custom/FBAddFieldButton0";
@@ -47,7 +47,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
   }, [isHelloSignIntegrationEnabled]);
 
   return (
-    <Provider {...{ dialogState }}>
+    <FBProvider {...{ dialogState }}>
       {isStarter && <FBAddFieldButton0 />}
       {!isStarter && <FBSortableContainer items={schema} />}
       {includeTransport && <FBTransportSchema />}
@@ -66,7 +66,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
       <FBFormMarkDown />
       <FBEditorDialog />
       <FBDialog />
-    </Provider>
+    </FBProvider>
   );
 };
 

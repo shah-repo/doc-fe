@@ -1,10 +1,9 @@
 import { Box } from "@material-ui/core";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
-import { Provider } from "mobx-react";
 import React from "react";
 import { FBInlineApprovalProps } from ".";
-import { FBApprovalField } from "..";
+import FBProvider, { FBApprovalField } from "..";
 import Text from "../../components/Text";
 import FBConditionalWrapper from "../FBConditionalWrapper";
 import FBDRStore from "../stores/ui/FBDRStore";
@@ -25,7 +24,7 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
   approvers,
   name,
 }) => (
-  <Provider {...{ inlineApprovalState }}>
+  <FBProvider {...{ inlineApprovalState }}>
     <FBConditionalWrapper
       condition={FBDRStore.isOutput}
       wrapper={(children) => (
@@ -59,7 +58,7 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
         )}
       </Box>
     </FBConditionalWrapper>
-  </Provider>
+  </FBProvider>
 );
 
 export default withFBInlineApproval(FBInlineApproval);

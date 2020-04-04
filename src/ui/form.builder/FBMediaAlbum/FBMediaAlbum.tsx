@@ -2,10 +2,9 @@ import { Box, IconButton, Tooltip } from "@material-ui/core";
 import AllOutIcon from "@material-ui/icons/AllOut";
 import AppsIcon from "@material-ui/icons/Apps";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-import { Provider } from "mobx-react";
 import React from "react";
 import { FBMediaAlbumActionProps, FBMediaAlbumProps } from ".";
-import { FBMediaGallery } from "..";
+import FBProvider, { FBMediaGallery } from "..";
 import Text from "../../components/Text";
 import FBMapWrapper from "../FBMapWrapper/FBMapWrapper";
 import FBMediaCarousel from "../FBMediaCarousel";
@@ -23,7 +22,7 @@ const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({
   remove,
   ...props
 }) => (
-  <Provider {...{ mediaAlbumState }}>
+  <FBProvider {...{ mediaAlbumState }}>
     <Box bgcolor="black" borderColor="white" borderBottom={0.5} {...props}>
       <Box display="flex" p={1}>
         <Box p={1} flexGrow={1} color="white">
@@ -73,7 +72,7 @@ const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({
     </Box>
     {mode === "carousel" && <FBMediaCarousel {...{ collection, removeMedia }} />}
     {mode === "gallery" && <FBMediaGallery {...{ collection, removeMedia }} />}
-  </Provider>
+  </FBProvider>
 );
 
 export default withFBMediaAlbum(FBMediaAlbum);
