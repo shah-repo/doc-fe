@@ -2,8 +2,8 @@ import { Box, Typography } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import { FormattedNumber, useIntl } from "react-intl";
-import { FBAutocomplete } from "../..";
 import Text from "../../../components/Text";
+import FBAutocompleteAsync from "../../FBAutocompleteAsync";
 import { TAX_RATE } from "../../helpers/constants";
 import FBStore from "../../stores/ui/FBStore";
 import FBButton from "../inputs/FBButton";
@@ -122,7 +122,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
           label="form.builder.field.qunatity.ordered"
           name="order"
         />
-        <FBAutocomplete
+        <FBAutocompleteAsync
           label="GL code"
           optionId="9"
           name="glCode"

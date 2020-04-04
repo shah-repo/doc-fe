@@ -1,7 +1,7 @@
 import { Box, FormControlLabel, Radio, RadioGroup, Typography } from "@material-ui/core";
 import React from "react";
-import { GroupRequestBody } from "../../../state/ducks/groupManagement";
-import Text from "../../components/Text";
+import { GroupRequestBody } from "../../../../state/ducks/groupManagement";
+import Text from "../../../components/Text";
 
 interface Props {
   group: GroupRequestBody;
@@ -21,6 +21,7 @@ export const GroupType: React.FunctionComponent<Props> = ({
       isOfficial: isOfficial ? true : false,
       permissions: isOfficial ? group.permissions : [],
       tags: isOfficial ? group.tags : [],
+      parents: isOfficial ? group.parents : [],
     });
   };
 

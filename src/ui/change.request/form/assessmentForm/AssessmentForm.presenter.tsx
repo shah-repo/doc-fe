@@ -2,6 +2,7 @@ import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { Field, FieldProps, FormikProps } from "formik";
 import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
+import { toStartOfDay } from "../../../../common/utils/date";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { GroupTag } from "../../../../state/ducks/auth/types";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest";
@@ -127,7 +128,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
         <DatePickerField
           name="effectiveDate"
           label="common.target.date"
-          datePickerProps={{ id: "targetDate", minDate: new Date() }}
+          datePickerProps={{ id: "targetDate", minDate: toStartOfDay(undefined) }}
         />
         <ApproversField />
         <Grid

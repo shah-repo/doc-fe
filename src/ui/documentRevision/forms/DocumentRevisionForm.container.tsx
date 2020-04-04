@@ -3,11 +3,12 @@ import classNames from "classnames";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import { get } from "lodash";
 import React, { useMemo } from "react";
-import { connect } from "react-redux";
-import { Permission } from "../../../state/ducks/auth/types";
+import { connect, useSelector } from "react-redux";
+import { GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { DocumentType, DocumentTypeByIdState, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
+import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
@@ -98,15 +99,25 @@ DocumentRevisionFormContainerProps
 }) => {
 
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
+  const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
+
   const cleanInitialValues = useMemo(() => {
-    if (canUpdateHTML) {
-      return initialValues;
+    const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;
+    const securityGroups: any[] = [];
+    if (initialValues.document?.documentType?.isQms) {
+      groupOptions.forEach((group) => {
+        if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
+          securityGroups.push({ value: group.value, label: group.label });
+        }
+      });
     }
+
     return {
       ...initialValues,
-      renderHTML: undefined,
+      renderHTML,
+      securityGroups,
     };
-  }, [canUpdateHTML, initialValues]);
+  }, [canUpdateHTML, initialValues, groupOptions]);
 
   const docTypes = useMemo(
     () =>

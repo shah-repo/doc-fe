@@ -57,8 +57,9 @@ const getHasSlack = createSelector(
 
 const employees = (state: ApplicationState) => state.auth.user.employees;
 
-const hasMultipleCompanies = (state: ApplicationState): boolean =>
-  state.auth.user.employees.length > 1;
+const hasMultipleCompanies = (state: ApplicationState): boolean => (
+  ((state.auth.user.employees).filter((employee) => employee.active)).length > 1
+);
 
 const getCurrentUserGroups = createSelector(
   [currentUserGroups],

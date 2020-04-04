@@ -95,7 +95,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   setFieldValue,
   onUpgradeClick,
   type,
-  submitForm,
 }) => {
   const loadAvailableApproversAction = useActionCreator(
     changeRequestsActions.loadAvailableApprovers
@@ -184,16 +183,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     FBValidate();
-    if (values.document?.documentType?.isQms) {
-      groupOptions.forEach((group) => {
-        if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
-          setFieldValue("securityGroups", [
-            { value: group.value, label: group.label },
-          ]);
-        }
-      });
-    }
-    submitForm();
   };
 
   const renderTypeOfRevisionChange = showRevisionTypeChange && (
@@ -208,6 +197,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     );
   });
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
+
 
   const renderChangeOwnership = canChangeOwnerShip && values.id && (
     <OwnerChanger requestId={values.id} requestType={RequestType.Document} />
@@ -390,7 +380,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               label={isDisabled ? "common.save" : "navigation.createDocument"}
               onClick={onFormClick}
               id="DocumentRevisionForm-submit"
-              type="button"
             />
             {formDocumentStatus === DocumentRevisionStatus.Deprecated && upgradeButtonRenderer()}
             <ApproveAndRelease

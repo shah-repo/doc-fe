@@ -1,16 +1,13 @@
-import { isEmpty, omit } from "lodash";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { authSelectors } from "../../../state/ducks/auth";
-import { Group } from "../../../state/ducks/auth/types";
+import { Group, Permission } from "../../../state/ducks/auth/types";
 import { groupManagementActions } from "../../../state/ducks/groupManagement";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
-import { GetEmployeeResponse, LoadCompanyGroup, userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
+import { GetEmployeeResponse, LoadCompanyGroup, userManagementActions } from "../../../state/ducks/userManagement";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import useAsync from "../../hooks/useAsync";
-import { getHasOfficialPermissions } from "../utils/helpers";
-import { toArrayOfIds, toMembersOptions, toParentOptions, toRequestBody } from "../utils/transform";
+import { toEditRequestBody, toGroupOptions, toMembersOptions, toParentOptions, toRequestBody } from "../utils/transform";
 import { DEFAULT_GROUP } from "../utils/types";
 import GroupContentPresenter from "./GroupContent.presenter";
 
@@ -20,6 +17,8 @@ interface Props {
   employees: GetEmployeeResponse[];
   handleTableRefresh: () => void;
   closeDialog: () => void;
+  currentEmployeePermissions: Permission[];
+  hasOfficialPermission: boolean;
 }
 
 export const GroupContentContainer: React.FunctionComponent<Props> = ({
@@ -28,6 +27,8 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
   employees,
   handleTableRefresh,
   closeDialog,
+  currentEmployeePermissions,
+  hasOfficialPermission,
 }) => {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -35,18 +36,23 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
   const [group, setGroup] = useState<GroupRequestBody>(DEFAULT_GROUP);
   const [members, setMembers] = useState<OptionType[]>([]);
   const [parentGroups, setParentGroups] = useState<OptionType[]>([]);
-  const currentEmployeePermissions = useSelector(
-    authSelectors.currentEmployeePermissions,
-  );
-  const currentEmployeeTags = useSelector(authSelectors.currentEmployeeTags);
-  const hasOfficialPermission = getHasOfficialPermissions(
-    currentEmployeePermissions,
-  );
-  const allGroups = useSelector(userManagementSelectors.getOfficialGroups);
-  const currentGroupData = useSelector(userManagementSelectors.getCurrentGroup);
-  const [currentGroups, setCurrentGroups] = useState(
-    isCreateMode ? [] : currentGroupData.joinedParents.filter((joinedParent) => joinedParent.id !== currentGroupData.id)
-  );
+
+  const canCreateOfficialGroup = hasOfficialPermission && group.isOfficial;
+
+  useEffect(() => {
+    if (selectedGroup) {
+      setGroup(toGroupOptions(selectedGroup));
+      setMembers(toMembersOptions((selectedGroup.employees as unknown) as GetEmployeeResponse[]));
+      setParentGroups(toParentOptions((selectedGroup.parents as unknown) as Group[]));
+    }
+  }, [selectedGroup]);
+
+  // this is a hack for back button to redirect to group management table
+  useEffect(() => () => {
+    history.goForward();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const createGroupAsync = useAsync({
     onSuccess: (response) => {
       handleTableRefresh();
@@ -63,10 +69,12 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
     },
   });
 
+  const handleAsyncState = () => isCreateMode ? createGroupAsync.asyncState : editGroupAsync.asyncState;
+
   const handleCreateGroup = (values: GroupRequestBody) => {
     dispatch(
       groupManagementActions.createGroup(
-        { ...values, employees: toRequestBody(members), parents: toRequestBody(parentGroups) },
+        toRequestBody(values, members, parentGroups),
         createGroupAsync,
       ),
     );
@@ -74,68 +82,23 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
 
   const handleEditGroup = (groupId: string, values: GroupRequestBody) => {
     const isGroupNameChanged = !(selectedGroup && (selectedGroup.name === values.name));
-    const body = isGroupNameChanged ?
-      { ...values, employees: toRequestBody(members), parents: toRequestBody(parentGroups) } :
-      omit({ ...values, employees: toRequestBody(members), parents: toRequestBody(parentGroups) }, ["name"] );
     dispatch(
       groupManagementActions.editGroup(
         groupId,
-        body,
+        toEditRequestBody(isGroupNameChanged, values, members, parentGroups),
         editGroupAsync,
       ),
     );
   };
 
-  useEffect(() => {
-    if (selectedGroup) {
-      setGroup({
-        name: selectedGroup.name,
-        permissions: selectedGroup.permissions,
-        defaultForNewUsers: selectedGroup.defaultForNewUsers,
-        isOfficial: selectedGroup.isOfficial,
-        tags: selectedGroup.tags || [],
-        employees: toArrayOfIds(selectedGroup.employees),
-        parents: toArrayOfIds(selectedGroup.parents),
-      });
-      setMembers(
-        toMembersOptions(
-          (selectedGroup.employees as unknown) as GetEmployeeResponse[],
-        ),
-      );
-      setParentGroups(
-        toParentOptions(
-          (selectedGroup.parents as unknown) as Group[],
-        ),
-      );
-    }
-  }, [selectedGroup]);
-
-  // this is a hack for back button to redirect to group management table
-  useEffect(() => () => {
-    history.goForward();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const handleReset = () => {
     setGroup(DEFAULT_GROUP);
     setParentGroups([]);
     setMembers([]);
-    setCurrentGroups([]);
   };
 
   const handleSubmit = () => {
     isCreateMode ?  handleCreateGroup(group) : (selectedGroup && handleEditGroup(selectedGroup.id, group));
-  };
-
-  const  handleAsyncState = () => isCreateMode ? createGroupAsync.asyncState : editGroupAsync.asyncState;
-
-  const onSelectParentGroup = (selectedItems: any) => {
-    if (isEmpty(selectedItems)) {
-      setParentGroups([]);
-      return;
-    }
-    const selectedItemsData = allGroups.filter((group) => selectedItems.some((item) => group.label === item.label));
-    setParentGroups(selectedItemsData);
   };
 
   return (
@@ -143,19 +106,17 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
       employees={employees}
       members={members}
       setMembers={setMembers}
-      handleReset={handleReset}
-      handleSubmit={handleSubmit}
-      hasOfficialPermission={hasOfficialPermission}
-      currentEmployeePermissions={currentEmployeePermissions}
       isCreateMode={isCreateMode}
-      currentEmployeeTags={currentEmployeeTags}
       group={group}
       setGroup={setGroup}
       handleAsyncState={handleAsyncState}
-      allGroups={allGroups}
+      hasOfficialPermission={hasOfficialPermission}
+      currentEmployeePermissions={currentEmployeePermissions}
+      canCreateOfficialGroup={canCreateOfficialGroup}
       parentGroups={parentGroups}
-      onSelectParentGroup={onSelectParentGroup}
-      joinedParents={currentGroups}
+      setParentGroups={setParentGroups}
+      handleReset={handleReset}
+      handleSubmit={handleSubmit}
     />
   );
 };
