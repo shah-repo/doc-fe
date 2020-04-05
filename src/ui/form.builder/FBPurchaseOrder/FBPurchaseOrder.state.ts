@@ -75,8 +75,6 @@ export class FBPurchaseOrderState {
     }
     const value = FBStore.getValue(this.name) || DEFAULT_PO;
 
-    console.log(value);
-
     // this method is used to format old PO values into new correct values
     this.po = {
       items: value.items.map(this.initiliazeLineItem),

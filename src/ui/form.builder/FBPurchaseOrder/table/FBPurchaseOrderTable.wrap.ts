@@ -1,5 +1,6 @@
 import React from "react";
 import { FB } from "../..";
+import useDialog from "../../../hooks/useDialog";
 
 export const withFBPurchaseOrderTable = <T extends any>(
   Component: React.FunctionComponent<T>
@@ -10,12 +11,13 @@ export const withFBPurchaseOrderTable = <T extends any>(
     ...props
   }: T) => {
     const { poState } = FB.useStores();
+    const dialog = useDialog();
     const handleEdit = (index) => () => {
       if (props.disabled) {
         return;
       }
       poState.setFormValues(poState.po.items[index]);
-      poState.openDialog();
+      dialog.open();
     };
     const handleDelete = (index) => (e) => {
       e.stopPropagation();
@@ -28,6 +30,8 @@ export const withFBPurchaseOrderTable = <T extends any>(
       name,
       handleEdit,
       handleDelete,
+      isDialogOpen: dialog.isOpen,
+      closeDialog: dialog.close,
     });
   };
 

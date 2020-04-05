@@ -5,6 +5,7 @@ import React from "react";
 import Date from "../../../components/Date"; // we shouldn't use anything outside the formbuilder
 import Text from "../../../components/Text";
 import Colors from "../../../layout/theme/utils/colors";
+import FBPurchaseOrderDialog from "../form/FBPurchaseOrderDialog";
 import { withFBPurchaseOrderTable } from "./FBPurchaseOrderTable.wrap";
 
 const StyledTableCell = withStyles((theme) => ({
@@ -40,6 +41,8 @@ const FBPurchaseOrderTable: React.FunctionComponent<any> = ({
   disabled,
   handleEdit,
   handleDelete,
+  isDialogOpen,
+  closeDialog,
 }) => {
   const classes = useStyles();
 
@@ -109,6 +112,10 @@ const FBPurchaseOrderTable: React.FunctionComponent<any> = ({
           ))}
         </TableBody>
       </Table>
+      <FBPurchaseOrderDialog
+        isDialogOpen={isDialogOpen}
+        closeDialog={closeDialog}
+      />
     </Box>
   );
 };

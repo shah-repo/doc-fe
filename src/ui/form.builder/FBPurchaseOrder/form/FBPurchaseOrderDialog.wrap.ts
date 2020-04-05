@@ -10,23 +10,11 @@ export const withFBPurchaseOrderDialog = <T extends any>(
     ...props
   }: T) => {
     const { poState } = FB.useStores();
-    const addItem = () => {
-      poState.setFormValues({});
-      !props.disabled && poState.openDialog();
-    };
-    const closeDialog = () => {
-      poState.setFormValues({});
-      poState.closeDialog();
-    };
-    const isDialogOpen = poState.isDialogOpen;
 
     return Component({
       ...(props as T),
       poState,
       name,
-      addItem,
-      closeDialog,
-      isDialogOpen,
     });
   };
 

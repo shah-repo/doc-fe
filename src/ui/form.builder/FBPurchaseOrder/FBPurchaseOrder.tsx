@@ -3,7 +3,7 @@ import { Provider } from "mobx-react";
 import React from "react";
 import FBPurchaseOrderTotal from "./cost/FBPurchaseOrderTotal";
 import { withFBPurchaseOrder } from "./FBPurchaseOrder.wrap";
-import FBPurchaseOrderDialog from "./form/FBPurchaseOrderDialog";
+import FBPurchaseOrderAddItem from "./form/FBPurchaseOrderAddItem";
 import FBPurchaseOrderTable from "./table/FBPurchaseOrderTable";
 
 const FBPurchaseOrder: React.FunctionComponent<any> = ({
@@ -16,7 +16,7 @@ const FBPurchaseOrder: React.FunctionComponent<any> = ({
     <Provider {...{ poState }}>
       <Box mb={3}>
         <FBPurchaseOrderTable {...props} />
-        <FBPurchaseOrderDialog {...props} />
+        <FBPurchaseOrderAddItem {...props} />
         <FBPurchaseOrderTotal {...props} />
       </Box>
     </Provider>

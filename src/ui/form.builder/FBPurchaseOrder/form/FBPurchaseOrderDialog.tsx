@@ -1,17 +1,13 @@
 import { Dialog, DialogContent, DialogTitle, Typography } from "@material-ui/core";
 import React from "react";
 import Text from "../../../components/Text";
-import FBButton from "../../components/inputs/FBButton";
 import { withFBPurchaseOrderDialog } from "./FBPurchaseOrderDialog.wrap";
 import FBPurchaseOrderForm from "./FBPurchaseOrderForm";
 
 const FBPurchaseOrderDialog: React.FunctionComponent<any> = ({
-  poState,
   onSubmit,
-  disabled,
   name,
   closeDialog,
-  addItem,
   isDialogOpen,
 }) => {
   const renderDialog = isDialogOpen && (
@@ -27,21 +23,16 @@ const FBPurchaseOrderDialog: React.FunctionComponent<any> = ({
         </Typography>
       </DialogTitle>
       <DialogContent id="FBPurchaseOrderDialog-closeDialog">
-        <FBPurchaseOrderForm name={name} />
+        <FBPurchaseOrderForm
+          name={name}
+          onSubmit={onSubmit}
+        />
       </DialogContent>
     </Dialog>
   );
 
   return (
     <>
-      <FBButton
-        fullWidth={true}
-        disabled={disabled}
-        label="form.builder.add.item"
-        onClick={addItem}
-        variant="outlined"
-        style={{ margin: "8px 0" }}
-      />
       {renderDialog}
     </>
   );

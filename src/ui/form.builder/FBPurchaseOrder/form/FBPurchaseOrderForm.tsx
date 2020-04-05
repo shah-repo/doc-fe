@@ -43,20 +43,18 @@ const TotalCost: React.FunctionComponent<TotalCostProps> = ({
 };
 
 const FBPurchaseOrderForm: React.FunctionComponent<any> = ({
-  initialValues = {} as PurchaseOrderItem,
+  initialValues = { order: 346 } as PurchaseOrderItem,
   onSubmit,
   closeDialog,
   items,
   name,
 }) => {
-  const handleSubmit = () => {};
+  const handleSubmit = (item) => onSubmit(item);
   // calculate total amount
 
-  return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={handleSubmit}
-    >
+  const renderForm = (props) => {
+    console.log(props);
+    return (
       <Form>
         <FBTextField
           inputProps={{ type: "number" }}
@@ -124,6 +122,16 @@ const FBPurchaseOrderForm: React.FunctionComponent<any> = ({
           />
         </Box>
       </Form>
+    );
+  };
+
+  return (
+    <Formik
+      initialValues={initialValues}
+      onSubmit={handleSubmit}
+      validateOnChange
+    >
+      {renderForm}
     </Formik>
   );
 };
