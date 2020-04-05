@@ -8,7 +8,7 @@ import DocumentInfo from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
 import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
 import Text from "../../components/Text";
-import AddGroupContainer from "../add.group/container";
+import AddGroupContainer from "../add.group/AddGroup.container";
 import AddGroup from "../add.group/Group";
 import { GroupsDisplay } from "../display.groups/GroupsDisplay";
 import { styles } from "./styles";

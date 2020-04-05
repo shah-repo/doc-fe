@@ -42,9 +42,8 @@ export const withEditorRenderer =
     function fieldType(values: FBTemplateSchema): FBEditorElementType {
       const { name: fieldName } = values;
       switch (type) {
-        case "outputapproval":
+        case "inlineapproval":
           FBDRStore.isOutput && fieldName && FBStore.setValue(fieldName, values);
-          return "inlineapproval";
         default:
           return type;
       }
@@ -105,7 +104,7 @@ export const withEditorRenderer =
       const removeEl = (mode === "create") ? 0 : 1;
       const newSchema = FBStore.schema;
       newSchema.splice(index, removeEl, schema);
-      if (type === "outputapproval") {
+      if (type === "inlineapproval") {
         FBStore.clearSchema();
       }
       FBStore.setSchema(newSchema);
