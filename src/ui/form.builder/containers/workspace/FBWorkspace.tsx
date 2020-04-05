@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import FBProvider from "../..";
+import { FBProvider } from "../..";
 import { companySelectors } from "../../../../state/ducks/company";
 import useDialog from "../../../hooks/useDialog";
 import FBAddFieldButton0 from "../../components/custom/FBAddFieldButton0";

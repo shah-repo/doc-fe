@@ -1,8 +1,11 @@
-import { FBDialogState, FBFieldWrapperState, FBInlineApprovalState, FBMediaAlbumState } from "..";
+import { FBDialogState, FBFieldWrapperState, FBFormState, FBInlineApprovalState, FBMediaAlbumState, FBSchemaState, FBWorkspaceState } from "..";
 
 export interface FBProviderProps {
+  workspaceState?: FBWorkspaceState;
   dialogState?: FBDialogState;
   fieldWrapper?: FBFieldWrapperState;
   mediaAlbumState?: FBMediaAlbumState;
   inlineApprovalState?: FBInlineApprovalState;
+  formState?: FBFormState;
+  schemaState?: FBSchemaState;
 }

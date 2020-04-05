@@ -3,7 +3,7 @@ import BorderColorIcon from "@material-ui/icons/BorderColor";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import React from "react";
 import { FBInlineApprovalProps } from ".";
-import FBProvider, { FBApprovalField } from "..";
+import { FBApprovalField, FBProvider } from "..";
 import Text from "../../components/Text";
 import FBConditionalWrapper from "../FBConditionalWrapper";
 import FBDRStore from "../stores/ui/FBDRStore";

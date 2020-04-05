@@ -4,7 +4,7 @@ import AppsIcon from "@material-ui/icons/Apps";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import React from "react";
 import { FBMediaAlbumActionProps, FBMediaAlbumProps } from ".";
-import FBProvider, { FBMediaGallery } from "..";
+import { FBMediaGallery, FBProvider } from "..";
 import Text from "../../components/Text";
 import FBMapWrapper from "../FBMapWrapper/FBMapWrapper";
 import FBMediaCarousel from "../FBMediaCarousel";
