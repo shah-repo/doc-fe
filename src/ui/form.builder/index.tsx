@@ -17,6 +17,7 @@ export { default as FBEditorApprovalField } from "./FBEditorApprovalField/FBEdit
 export * from "./FBEditorApprovalField/FBEditorApprovalField.types";
 export { default as FBEditorInlineApproval } from "./FBEditorInlineApproval/FBEditorInlineApproval";
 export * from "./FBEditorInlineApproval/FBEditorInlineApproval.types";
+export { default as FBEditorInstructionsDocument } from "./FBEditorInstructionsDocument/FBEditorInstructionsDocument";
 export { default as FBEditorParagraph } from "./FBEditorParagraph/FBEditorParagraph";
 export { default as FBEditorStepSection } from "./FBEditorStepSection/FBEditorStepSection";
 export * from "./FBEditorStepSection/FBEditorStepSection.types";
@@ -36,6 +37,8 @@ export * from "./FBHelloSign/FBHelloSign.types";
 export { default as FBInlineApproval } from "./FBInlineApproval/FBInlineApproval";
 export { default as FBInlineApprovalState } from "./FBInlineApproval/FBInlineApproval.state";
 export * from "./FBInlineApproval/FBInlineApproval.types";
+export { default as FBInstructionsDocument } from "./FBInstructionsDocument/FBInstructionsDocument";
+export * from "./FBInstructionsDocument/FBInstructionsDocument.types";
 export { default as FBMapWrapper } from "./FBMapWrapper/FBMapWrapper";
 export * from "./FBMapWrapper/FBMapWrapper.types";
 export { default as FBMediaAlbum } from "./FBMediaAlbum/FBMediaAlbum";
@@ -71,5 +74,4 @@ export * from "./FBValidationEditor/FBValidationEditor.types";
 export { default as FBValidationMode } from "./FBValidationMode/FBValidationMode";
 export * from "./FBValidationMode/FBValidationMode.types";
 export { default as FB } from "./helpers/FB";
-
 
