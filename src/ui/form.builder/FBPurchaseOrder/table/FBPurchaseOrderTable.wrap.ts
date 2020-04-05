@@ -30,13 +30,11 @@ export const withFBPurchaseOrderTable = <T extends any>(
       dialog.close();
       setIndex(undefined);
       setInitialValues(undefined);
+      poState.clearFormValues();
     };
     const onSubmit = (item) => {
-      dialog.close();
       poState.updateItem(index, item);
-      setIndex(undefined);
-      setInitialValues(undefined);
-      poState.clearFormValues();
+      closeDialog();
     };
 
     return Component({

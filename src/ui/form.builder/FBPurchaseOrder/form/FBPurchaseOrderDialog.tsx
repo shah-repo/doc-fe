@@ -28,6 +28,7 @@ const FBPurchaseOrderDialog: React.FunctionComponent<any> = ({
           name={name}
           onSubmit={onSubmit}
           initialValues={initialValues}
+          closeDialog={closeDialog}
         />
       </DialogContent>
     </Dialog>

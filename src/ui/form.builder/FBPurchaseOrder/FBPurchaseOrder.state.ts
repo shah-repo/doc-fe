@@ -39,11 +39,20 @@ export class FBPurchaseOrderState {
   };
 
   @action public setFormValues = (item) => {
-    FBStore.setValue(`${this.name}-formValues`, item);
+    let values = {};
+    Object.keys(item).forEach((key) => {
+      values = {
+        ...values,
+        [`${this.name}-formValues.${key}`]: item[key],
+      };
+    });
+    FBStore.setValues({
+      ...FBStore.getValues(),
+      ...values,
+    });
   };
 
   @action public clearFormValues = () => {
-    this.setFormValues(undefined);
     FBStore.setValue(`${this.name}-formValues.order`, undefined);
     FBStore.setValue(`${this.name}-formValues.glCode`, undefined);
     FBStore.setValue(`${this.name}-formValues.units`, undefined);

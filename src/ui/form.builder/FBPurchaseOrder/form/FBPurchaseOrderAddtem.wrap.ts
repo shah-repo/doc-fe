@@ -16,17 +16,15 @@ export const withFBPurchaseOrderAddItem = <T extends any>(
         return;
       }
 
-      poState.setFormValues({});
       dialog.open();
     };
     const closeDialog = () => {
       dialog.close();
-      poState.setFormValues(undefined);
+      poState.clearFormValues();
     };
     const onSubmit = (item) => {
       dialog.close();
       poState.addItem(item);
-      poState.setFormValues(undefined);
       poState.clearFormValues();
     };
 
