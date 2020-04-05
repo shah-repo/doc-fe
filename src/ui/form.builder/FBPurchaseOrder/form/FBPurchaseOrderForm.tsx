@@ -12,6 +12,7 @@ import { PurchaseOrderItem } from "../../components/inputs/FBPurchaseOrderField"
 import FBTextField from "../../components/inputs/FBTextField";
 import { TAX_RATE } from "../../helpers/constants";
 import FBStore from "../../stores/ui/FBStore";
+import { withFBPurchaseOrderForm } from "./FBPurchaseOrderForm.wrap";
 
 interface TotalCostProps {
   order: number;
@@ -62,7 +63,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<any> = ({
   initialValues = {} as PurchaseOrderItem,
   onSubmit,
   closeDialog,
-  items,
+  items = [],
   name,
 }) => {
   // Use to prevent re-render and triggering validateOnMount
@@ -170,6 +171,12 @@ const FBPurchaseOrderForm: React.FunctionComponent<any> = ({
       item[key] && delete errors[key];
     });
 
+    const isUniquePartNumber = !items.map((item) => item.partNumber).includes(item.partNumber);
+    const isPartNumberInitialValue = initialValues[`${name}-formValues`]?.partNumber === item.partNumber;
+    if (!isUniquePartNumber && !isPartNumberInitialValue) {
+      errors.partNumber = "form.builder.pn.unique";
+    }
+
     return errors;
   };
 
@@ -186,4 +193,4 @@ const FBPurchaseOrderForm: React.FunctionComponent<any> = ({
   );
 };
 
-export default FBPurchaseOrderForm;
+export default withFBPurchaseOrderForm(FBPurchaseOrderForm);
