@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { FB } from "../..";
 import useDialog from "../../../hooks/useDialog";
-import FBStore from "../../stores/ui/FBStore";
 
 export const withFBPurchaseOrderTable = <T extends any>(
   Component: React.FunctionComponent<T>
@@ -33,12 +32,11 @@ export const withFBPurchaseOrderTable = <T extends any>(
       setInitialValues(undefined);
     };
     const onSubmit = (item) => {
-      console.log(item);
-      console.log(index);
-      console.log("----");
-      console.log(FBStore.getValues());
-      console.log("----");
-      poState.setFormValues(undefined);
+      dialog.close();
+      poState.updateItem(index, item);
+      setIndex(undefined);
+      setInitialValues(undefined);
+      poState.clearFormValues();
     };
 
     return Component({

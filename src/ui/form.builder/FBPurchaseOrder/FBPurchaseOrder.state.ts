@@ -4,7 +4,7 @@ import { TAX_RATE } from "../helpers/constants";
 import FBStore from "../stores/ui/FBStore";
 
 const DEFAULT_PO = {
-  items: [],
+  items: [] as any[],
   shippingCost: "0.00",
   tax: "0.00",
   subTotal: "0.00",
@@ -14,8 +14,6 @@ const DEFAULT_PO = {
 export class FBPurchaseOrderState {
   @observable public name = "";
   @observable public po = DEFAULT_PO;
-  @observable public isDialogOpen = false;
-  @observable public formValues = {};
 
   @action public setItems = (items: any[]) => {
     set(this.po, "items", items);
@@ -30,16 +28,32 @@ export class FBPurchaseOrderState {
     this.calculateCost();
   };
 
-  @action public openDialog = () => {
-    set(this, "isDialogOpen", true);
+  @action public addItem = (item) => {
+    this.po.items.push({ ...item, index: this.po.items.length });
+    this.calculateCost();
   };
 
-  @action public closeDialog = () => {
-    set(this, "isDialogOpen", false);
+  @action public updateItem = (index, item) => {
+    this.po.items[index] = item;
+    this.calculateCost();
   };
 
   @action public setFormValues = (item) => {
     FBStore.setValue(`${this.name}-formValues`, item);
+  };
+
+  @action public clearFormValues = () => {
+    this.setFormValues(undefined);
+    FBStore.setValue(`${this.name}-formValues.order`, undefined);
+    FBStore.setValue(`${this.name}-formValues.glCode`, undefined);
+    FBStore.setValue(`${this.name}-formValues.units`, undefined);
+    FBStore.setValue(`${this.name}-formValues.partNumber`, undefined);
+    FBStore.setValue(`${this.name}-formValues.date`, undefined);
+    FBStore.setValue(`${this.name}-formValues.description`, undefined);
+    FBStore.setValue(`${this.name}-formValues.unitPrice`, undefined);
+    FBStore.setValue(`${this.name}-formValues.capitalEquipment`, undefined);
+    FBStore.setValue(`${this.name}-formValues.tax`, undefined);
+    FBStore.setValue(`${this.name}-formValues.isTraceabilityRequired`, undefined);
   };
 
   @action public setShippingCost = (shippingCost) => {

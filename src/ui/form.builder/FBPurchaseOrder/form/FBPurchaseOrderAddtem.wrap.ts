@@ -24,8 +24,10 @@ export const withFBPurchaseOrderAddItem = <T extends any>(
       poState.setFormValues(undefined);
     };
     const onSubmit = (item) => {
-      console.log(item);
+      dialog.close();
+      poState.addItem(item);
       poState.setFormValues(undefined);
+      poState.clearFormValues();
     };
 
     return Component({

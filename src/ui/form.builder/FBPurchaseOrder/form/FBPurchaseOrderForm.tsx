@@ -43,14 +43,18 @@ const TotalCost: React.FunctionComponent<TotalCostProps> = ({
 };
 
 const FBPurchaseOrderForm: React.FunctionComponent<any> = ({
-  initialValues = { order: 346 } as PurchaseOrderItem,
+  initialValues = {} as PurchaseOrderItem,
   onSubmit,
   closeDialog,
   items,
   name,
 }) => {
-  const handleSubmit = (item) => onSubmit(item);
-  // calculate total amount
+  const handleSubmit = (values) => {
+    const item = values[`${name}-formValues`];
+    const price = item.order * item.unitPrice;
+    const totalAmount = item.tax ? (price + (price * TAX_RATE)) : price;
+    onSubmit({ ...item, totalAmount: totalAmount.toFixed(2) });
+  };
 
   const renderForm = (props) => (
     <Form>
