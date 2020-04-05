@@ -38,8 +38,8 @@ export class FBPurchaseOrderState {
     set(this, "isDialogOpen", false);
   };
 
-  @action public setFormValues = (values) => {
-    set(this, "formValues", values);
+  @action public setFormValues = (item) => {
+    FBStore.setValue(`${this.name}-formValues`, item);
   };
 
   @action public setShippingCost = (shippingCost) => {

@@ -9,6 +9,7 @@ const FBPurchaseOrderAddItem: React.FunctionComponent<any> = ({
   isDialogOpen,
   closeDialog,
   onSubmit,
+  name,
 }) => (
   <>
     <FBButton
@@ -23,6 +24,7 @@ const FBPurchaseOrderAddItem: React.FunctionComponent<any> = ({
       isDialogOpen={isDialogOpen}
       closeDialog={closeDialog}
       onSubmit={onSubmit}
+      name={name}
     />
   </>
 );

@@ -7,7 +7,6 @@ export const withFBPurchaseOrderAddItem = <T extends any>(
 ) => {
 
   const Comp = ({
-    name = "",
     ...props
   }: T) => {
     const { poState } = FB.useStores();
@@ -21,17 +20,17 @@ export const withFBPurchaseOrderAddItem = <T extends any>(
       dialog.open();
     };
     const closeDialog = () => {
-      poState.setFormValues({});
       dialog.close();
+      poState.setFormValues(undefined);
     };
     const onSubmit = (item) => {
       console.log(item);
+      poState.setFormValues(undefined);
     };
 
     return Component({
-      ...(props as T),
+      ...(props),
       poState,
-      name,
       openDialog,
       closeDialog,
       isDialogOpen: dialog.isOpen,

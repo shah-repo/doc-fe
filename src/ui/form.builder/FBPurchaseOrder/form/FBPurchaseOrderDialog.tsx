@@ -9,6 +9,7 @@ const FBPurchaseOrderDialog: React.FunctionComponent<any> = ({
   name,
   closeDialog,
   isDialogOpen,
+  initialValues,
 }) => {
   const renderDialog = isDialogOpen && (
     <Dialog
@@ -26,6 +27,7 @@ const FBPurchaseOrderDialog: React.FunctionComponent<any> = ({
         <FBPurchaseOrderForm
           name={name}
           onSubmit={onSubmit}
+          initialValues={initialValues}
         />
       </DialogContent>
     </Dialog>

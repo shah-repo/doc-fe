@@ -52,78 +52,75 @@ const FBPurchaseOrderForm: React.FunctionComponent<any> = ({
   const handleSubmit = (item) => onSubmit(item);
   // calculate total amount
 
-  const renderForm = (props) => {
-    console.log(props);
-    return (
-      <Form>
-        <FBTextField
-          inputProps={{ type: "number" }}
-          label="form.builder.field.qunatity.ordered"
-          name="order"
-        />
-        <FBAutocomplete
-          label="GL code"
-          optionId="9"
-          name="glCode"
-        />
-        <FBTextField
-          label="form.builder.field.units"
-          name="units"
-        />
-        <FBTextField
-          label="form.builder.field.part.number"
-          name="partNumber"
-        />
-        <FBDatePicker
-          label="form.builder.field.date.required"
-          name="date"
-        />
-        <FBTextField
-          label="form.builder.field.supplier.part.number"
-          name="description"
-          rows="3"
-        />
-        <FBTextField
-          inputProps={{ type: "number" }}
-          label="form.builder.field.unit.price"
-          name="unitPrice"
-        />
-        <FBCheckbox
-          label="form.builder.field.capital.equipment"
-          name="capitalEquipment"
-        />
-        <FBCheckbox
-          label="form.builder.field.tax"
-          name="tax"
-        />
-        <FBCheckbox
-          label="form.builder.field.is.traceability.required"
-          name="isTraceabilityRequired"
-        />
-        <TotalCost
-          unitPrice={FBStore.getValue("unitPrice")}
-          order={FBStore.getValue("order")}
-          taxRequired={FBStore.getValue("tax")}
-        />
-        <Box marginBottom="10px">
-          <Typography color="error">
+  const renderForm = (props) => (
+    <Form>
+      <FBTextField
+        inputProps={{ type: "number" }}
+        label="form.builder.field.qunatity.ordered"
+        name={`${name}-formValues.order`}
+      />
+      <FBAutocomplete
+        label="GL code"
+        optionId="9"
+        name={`${name}-formValues.glCode`}
+      />
+      <FBTextField
+        label="form.builder.field.units"
+        name={`${name}-formValues.units`}
+      />
+      <FBTextField
+        label="form.builder.field.part.number"
+        name={`${name}-formValues.partNumber`}
+      />
+      <FBDatePicker
+        label="form.builder.field.date.required"
+        name={`${name}-formValues.date`}
+      />
+      <FBTextField
+        label="form.builder.field.supplier.part.number"
+        name={`${name}-formValues.description`}
+        rows="3"
+      />
+      <FBTextField
+        inputProps={{ type: "number" }}
+        label="form.builder.field.unit.price"
+        name={`${name}-formValues.unitPrice`}
+      />
+      <FBCheckbox
+        label="form.builder.field.capital.equipment"
+        name={`${name}-formValues.capitalEquipment`}
+      />
+      <FBCheckbox
+        label="form.builder.field.tax"
+        name={`${name}-formValues.tax`}
+      />
+      <FBCheckbox
+        label="form.builder.field.is.traceability.required"
+        name={`${name}-formValues.isTraceabilityRequired`}
+      />
+      <TotalCost
+        unitPrice={FBStore.getValue(`${name}-formValues.unitPrice`)}
+        order={FBStore.getValue(`${name}-formValues.order`)}
+        taxRequired={FBStore.getValue(`${name}-formValues.tax`)}
+      />
+      <Box marginBottom="10px">
+        <Typography color="error">
             errorMessage
-          </Typography>
-        </Box>
-        <Box textAlign="right">
-          <FBButton
-            variant="outlined"
-            onClick={closeDialog}
-            label="common.cancel"
-          />
-          <FBButton
-            buttonType="submit"
-            label="common.done"
-          />
-        </Box>
-      </Form>
-    );
-  };
+        </Typography>
+      </Box>
+      <Box textAlign="right">
+        <FBButton
+          variant="outlined"
+          onClick={closeDialog}
+          label="common.cancel"
+        />
+        <FBButton
+          buttonType="submit"
+          label="common.done"
+        />
+      </Box>
+    </Form>
+  );
 
   return (
     <Formik

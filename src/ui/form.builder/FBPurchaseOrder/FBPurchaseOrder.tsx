@@ -8,19 +8,15 @@ import FBPurchaseOrderTable from "./table/FBPurchaseOrderTable";
 
 const FBPurchaseOrder: React.FunctionComponent<any> = ({
   poState,
-  name,
   ...props
-}) => {
-  console.log(poState);
-  return (
-    <Provider {...{ poState }}>
-      <Box mb={3}>
-        <FBPurchaseOrderTable {...props} />
-        <FBPurchaseOrderAddItem {...props} />
-        <FBPurchaseOrderTotal {...props} />
-      </Box>
-    </Provider>
-  );
-};
+}) => (
+  <Provider {...{ poState }}>
+    <Box mb={3}>
+      <FBPurchaseOrderTable {...props} />
+      <FBPurchaseOrderAddItem {...props} />
+      <FBPurchaseOrderTotal {...props} />
+    </Box>
+  </Provider>
+);
 
 export default withFBPurchaseOrder(FBPurchaseOrder);

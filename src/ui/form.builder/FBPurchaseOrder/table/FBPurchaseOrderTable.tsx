@@ -43,6 +43,9 @@ const FBPurchaseOrderTable: React.FunctionComponent<any> = ({
   handleDelete,
   isDialogOpen,
   closeDialog,
+  initialValues,
+  onSubmit,
+  name,
 }) => {
   const classes = useStyles();
 
@@ -86,7 +89,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<any> = ({
           {poState.po.items.map((row, index) => (
             <TableRow
               key={index}
-              onClick={handleEdit(index)}
+              onClick={handleEdit(index, row)}
               className={classNames({ [classes.editable]: !disabled })}
             >
               <StyledTableCell align="left">{index + 1}</StyledTableCell>
@@ -115,6 +118,9 @@ const FBPurchaseOrderTable: React.FunctionComponent<any> = ({
       <FBPurchaseOrderDialog
         isDialogOpen={isDialogOpen}
         closeDialog={closeDialog}
+        initialValues={initialValues}
+        onSubmit={onSubmit}
+        name={name}
       />
     </Box>
   );
