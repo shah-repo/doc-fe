@@ -1,9 +1,9 @@
-import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { FBPurchaseOrderState } from ".";
 import { FB } from "..";
+import { FBPurchaseOrderFieldProps } from "./FBPurchaseOrder.types";
 
-export const withFBPurchaseOrder = <T extends any>(
+export const withFBPurchaseOrder = <T extends FBPurchaseOrderFieldProps>(
   Component: React.FunctionComponent<T>
 ) => {
 
@@ -20,10 +20,6 @@ export const withFBPurchaseOrder = <T extends any>(
       poState.initialize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [name]);
-
-    useObserver(() => {
-      poState.isDialogOpen = poState?.isDialogOpen;
-    });
 
     return Component({
       ...(props as T),

@@ -1,0 +1,56 @@
+import { Dictionary } from "lodash";
+import { FBPurchaseOrderState } from ".";
+import { FBInputProps } from "../types/common";
+
+export type FBPurchaseOrderBasicProps = Pick<FBInputProps, "name" | "disabled">;
+
+export type FBPurchaseOrderFieldProps =
+& FBPurchaseOrderBasicProps
+& {
+  poState: FBPurchaseOrderState;
+};
+
+export type FBPurchaseOrderDialogProps =
+& FBPurchaseOrderBasicProps
+& {
+  isDialogOpen: boolean;
+  initialValues?: Dictionary<PurchaseOrderItem>;
+  onSubmit: (item: PurchaseOrderItem) => void;
+  closeDialog: () => void;
+  items?: PurchaseOrderItem[];
+};
+
+export type FBPurchaseOrderFormProps =
+& FBPurchaseOrderBasicProps
+& Pick<FBPurchaseOrderDialogProps, "initialValues" | "onSubmit" | "closeDialog" | "items">;
+
+export type FBPurchaseOrderAddItemProps =
+& FBPurchaseOrderBasicProps
+& Pick<FBPurchaseOrderDialogProps, "onSubmit" | "closeDialog" | "items" | "isDialogOpen">
+& {
+  openDialog: () => void;
+};
+
+export interface PurchaseOrder {
+  shippingCost: string;
+  tax: string;
+  subTotal: string;
+  totalAmount: string;
+  items: PurchaseOrderItem[];
+}
+
+export interface PurchaseOrderItem {
+  index: number;
+  order: string;
+  glCode: string;
+  units: string;
+  partNumber: string;
+  date: Date;
+  description: string;
+  unitPrice: string;
+  formattedDate: string;
+  totalAmount: string;
+  isTraceabilityRequired: boolean;
+  capitalEquipment: boolean;
+  tax: boolean;
+}

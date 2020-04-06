@@ -1,22 +1,17 @@
 import React from "react";
-import { FB } from "../..";
+import { FBPurchaseOrderDialogProps } from "../FBPurchaseOrder.types";
 
-export const withFBPurchaseOrderDialog = <T extends any>(
+export const withFBPurchaseOrderDialog = <T extends FBPurchaseOrderDialogProps>(
   Component: React.FunctionComponent<T>
 ) => {
 
   const Comp = ({
     name = "",
     ...props
-  }: T) => {
-    const { poState } = FB.useStores();
-
-    return Component({
-      ...(props as T),
-      poState,
-      name,
-    });
-  };
+  }: T) => Component({
+    ...(props as T),
+    name,
+  });
 
   return (props: T) => Comp(props);
 };

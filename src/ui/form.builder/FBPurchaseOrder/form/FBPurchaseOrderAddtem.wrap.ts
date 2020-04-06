@@ -35,6 +35,7 @@ export const withFBPurchaseOrderAddItem = <T extends any>(
       closeDialog,
       isDialogOpen: dialog.isOpen,
       onSubmit,
+      items: poState.po.items,
     });
   };
 

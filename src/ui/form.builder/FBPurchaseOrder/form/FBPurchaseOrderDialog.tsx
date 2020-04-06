@@ -1,10 +1,11 @@
 import { Dialog, DialogContent, DialogTitle, Typography } from "@material-ui/core";
 import React from "react";
 import Text from "../../../components/Text";
+import { FBPurchaseOrderDialogProps } from "../FBPurchaseOrder.types";
 import { withFBPurchaseOrderDialog } from "./FBPurchaseOrderDialog.wrap";
 import FBPurchaseOrderForm from "./FBPurchaseOrderForm";
 
-const FBPurchaseOrderDialog: React.FunctionComponent<any> = ({
+const FBPurchaseOrderDialog: React.FunctionComponent<FBPurchaseOrderDialogProps> = ({
   onSubmit,
   name,
   closeDialog,

@@ -2,11 +2,12 @@ import { Box } from "@material-ui/core";
 import { Provider } from "mobx-react";
 import React from "react";
 import FBPurchaseOrderTotal from "./cost/FBPurchaseOrderTotal";
+import { FBPurchaseOrderFieldProps } from "./FBPurchaseOrder.types";
 import { withFBPurchaseOrder } from "./FBPurchaseOrder.wrap";
 import FBPurchaseOrderAddItem from "./form/FBPurchaseOrderAddItem";
 import FBPurchaseOrderTable from "./table/FBPurchaseOrderTable";
 
-const FBPurchaseOrder: React.FunctionComponent<any> = ({
+const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderFieldProps> = ({
   poState,
   ...props
 }) => (

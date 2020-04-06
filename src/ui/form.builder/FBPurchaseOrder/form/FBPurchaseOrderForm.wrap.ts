@@ -1,7 +1,8 @@
 import React from "react";
 import { FB } from "../..";
+import { FBPurchaseOrderFormProps } from "../FBPurchaseOrder.types";
 
-export const withFBPurchaseOrderForm = <T extends any>(
+export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
   Component: React.FunctionComponent<T>
 ) => {
 

@@ -3,15 +3,15 @@ import { Form, Formik } from "formik";
 import moment from "moment";
 import React, { useState } from "react";
 import { FormattedNumber } from "react-intl";
-import { FBAutocomplete } from "../..";
 import Text from "../../../components/Text";
 import FBButton from "../../components/inputs/FBButton";
 import FBCheckbox from "../../components/inputs/FBCheckbox";
 import FBDatePicker from "../../components/inputs/FBDatePicker";
-import { PurchaseOrderItem } from "../../components/inputs/FBPurchaseOrderField";
 import FBTextField from "../../components/inputs/FBTextField";
+import FBAutocompleteAsync from "../../FBAutocompleteAsync";
 import { TAX_RATE } from "../../helpers/constants";
 import FBStore from "../../stores/ui/FBStore";
+import { FBPurchaseOrderFormProps, PurchaseOrderItem } from "../FBPurchaseOrder.types";
 import { withFBPurchaseOrderForm } from "./FBPurchaseOrderForm.wrap";
 
 interface TotalCostProps {
@@ -43,7 +43,9 @@ const TotalCost: React.FunctionComponent<TotalCostProps> = ({
     </Box>
   );
 };
-const Error: React.FunctionComponent<any> = ({
+
+interface ErrorProps { error?: string }
+const Error: React.FunctionComponent<ErrorProps> = ({
   error,
 }) => {
   if (!error) {
@@ -59,7 +61,7 @@ const Error: React.FunctionComponent<any> = ({
   );
 };
 
-const FBPurchaseOrderForm: React.FunctionComponent<any> = ({
+const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = ({
   initialValues = {} as PurchaseOrderItem,
   onSubmit,
   closeDialog,
@@ -86,7 +88,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<any> = ({
           name={`${name}-formValues.order`}
         />
         <Error error={errors.order} />
-        <FBAutocomplete
+        <FBAutocompleteAsync
           label="GL code"
           optionId="9"
           name={`${name}-formValues.glCode`}

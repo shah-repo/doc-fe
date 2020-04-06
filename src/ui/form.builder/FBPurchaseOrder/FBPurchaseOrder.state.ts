@@ -2,8 +2,9 @@ import { action, observable, set } from "mobx";
 import moment from "moment";
 import { TAX_RATE } from "../helpers/constants";
 import FBStore from "../stores/ui/FBStore";
+import { PurchaseOrder, PurchaseOrderItem } from "./FBPurchaseOrder.types";
 
-const DEFAULT_PO = {
+const DEFAULT_PO: PurchaseOrder = {
   items: [] as any[],
   shippingCost: "0.00",
   tax: "0.00",
@@ -15,30 +16,30 @@ export class FBPurchaseOrderState {
   @observable public name = "";
   @observable public po = DEFAULT_PO;
 
-  @action public setItems = (items: any[]) => {
+  @action public setItems = (items: PurchaseOrderItem[]) => {
     set(this.po, "items", items);
   };
 
   @action public deleteItem = (index: number) => {
     const filtered = (this.po.items || [])
       .filter((item, i) => i !== index)
-      .map((item: any, index) => ({ ...item, index: index + 1 }));
+      .map((item: PurchaseOrderItem, index) => ({ ...item, index: index + 1 }));
 
     this.setItems(filtered);
     this.calculateCost();
   };
 
-  @action public addItem = (item) => {
+  @action public addItem = (item: PurchaseOrderItem) => {
     this.po.items.push({ ...item, index: this.po.items.length });
     this.calculateCost();
   };
 
-  @action public updateItem = (index, item) => {
+  @action public updateItem = (index: number, item: PurchaseOrderItem) => {
     this.po.items[index] = item;
     this.calculateCost();
   };
 
-  @action public setFormValues = (item) => {
+  @action public setFormValues = (item: PurchaseOrderItem) => {
     let values = {};
     Object.keys(item).forEach((key) => {
       values = {
@@ -65,7 +66,7 @@ export class FBPurchaseOrderState {
     FBStore.setValue(`${this.name}-formValues.isTraceabilityRequired`, undefined);
   };
 
-  @action public setShippingCost = (shippingCost) => {
+  @action public setShippingCost = (shippingCost: string) => {
     set(this.po, "shippingCost", this.formatCost(shippingCost));
     this.calculateCost();
   };
@@ -92,11 +93,11 @@ export class FBPurchaseOrderState {
     this.updateFBStore();
   };
 
-  @action public initialize = (shippingCost) => {
+  @action public initialize = () => {
     if (!this.name) {
       return;
     }
-    const value = FBStore.getValue(this.name) || DEFAULT_PO;
+    const value: PurchaseOrder = FBStore.getValue(this.name) || DEFAULT_PO;
 
     // this method is used to format old PO values into new correct values
     this.po = {
@@ -120,7 +121,7 @@ export class FBPurchaseOrderState {
 
   private formatCost = (value: any) => Number(value || 0).toFixed(2);
 
-  private initiliazeLineItem = (item, index) => (
+  private initiliazeLineItem = (item: PurchaseOrderItem, index: number) => (
     {
       index: index + 1,
       order: item.order,
