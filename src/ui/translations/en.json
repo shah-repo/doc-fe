@@ -220,7 +220,7 @@
   "common.close.task": "Close task",
   "common.document": "Document",
   "common.Numeric": "Numeric",
-  "common.AlphaNumeric": "Alpha Numeric",
+  "common.NumericAlpha": "Numeric Alpha",
   "common.Alpha": "Alpha",
   "common.clear.filters": "Clear Filters",
   "common.changes": "Changes",

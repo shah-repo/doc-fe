@@ -94,7 +94,7 @@ export interface DocumentRevision extends FBDocumentFlowProps {
 
 export const RevisionStageOptions = [
   { value: 1, text: "common.Numeric" },
-  { value: 2, text: "common.AlphaNumeric" },
+  { value: 2, text: "common.NumericAlpha" },
   { value: 3, text: "common.Alpha" },
 ];
 
