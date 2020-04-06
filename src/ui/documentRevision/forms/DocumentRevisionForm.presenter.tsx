@@ -1,4 +1,4 @@
-import { Box, Button, Grid, withStyles, WithStyles } from "@material-ui/core";
+import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { get, isEmpty } from "lodash";
 import { observer } from "mobx-react";
@@ -28,7 +28,6 @@ import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
 import SubmitButton from "../../components/forms/SubmitButton";
-import Text from "../../components/Text";
 import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
 import { documentDetailsPath } from "../../document.revision/utils/paths";
@@ -93,7 +92,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   canChangeOwnerShip,
   documentRevision,
   setFieldValue,
-  onUpgradeClick,
+  /*   onUpgradeClick,*/
   type,
 }) => {
   const loadAvailableApproversAction = useActionCreator(
@@ -213,8 +212,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       includeEmpty={false}
     />
   );
-
-  const upgradeButtonRenderer = () => (
+  // Upgrade button hidden for temporary fix
+  /*   const upgradeButtonRenderer = () => (
     <Button
       variant="outlined"
       onClick={onUpgradeClick}
@@ -224,7 +223,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     </Button>
   );
 
-  const formDocumentStatus = get(documentRevision, "formDocument.status", "");
+  const formDocumentStatus = get(documentRevision, "formDocument.status", ""); */
 
   return (
     <Grid
@@ -381,7 +380,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               onClick={onFormClick}
               id="DocumentRevisionForm-submit"
             />
-            {formDocumentStatus === DocumentRevisionStatus.Deprecated && upgradeButtonRenderer()}
+            {/* {formDocumentStatus === DocumentRevisionStatus.Deprecated && upgradeButtonRenderer()} */}
             <ApproveAndRelease
               id={values.id}
               status={values.status}
