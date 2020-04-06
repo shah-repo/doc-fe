@@ -3,10 +3,11 @@ import { Button } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
 import { GroupTag } from "../../../../state/ducks/auth/types";
-import { DocumentRevision, documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsActions, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
 import { DocumentProposedId, documentsActions } from "../../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import Text from "../../../components/Text";
+import { toNewVersionRequestBody } from "../../../documentRevision/forms/transform";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useGetDocTypeByAcronym from "../../../hooks/useGetDocTypeByAcronym";
@@ -17,32 +18,6 @@ interface Props {
 const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
   document,
 }) => {
-  const DOCUMENT_REVISION = {
-    description: "<p>API create 12:24</p>",
-    name: "API create 12:24",
-    attachments: [],
-    referenceTo: [
-      {
-        id: "286206b4-ad19-4eeb-8b20-d504e5291884",
-      },
-    ],
-    revisionStage: 1,
-    revisionChangeType: "NEXT_REVISION",
-    document: {
-      docId: "LOT00165",
-      securityList: {
-        securityEmployees: [],
-        securityGroups: [
-          {
-            id: "4c1fb9ee-621c-463a-b51c-4ea25e82ffb0",
-          },
-        ],
-      },
-      documentType: {
-        id: "d9d308e1-dc62-4201-94fe-effabbdf3e9e",
-      },
-    },
-  };
   const LOT = "LOT";
 
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
@@ -51,10 +26,6 @@ const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
   const createDocumentAsync = useAsync({
     onSuccess: (doc) => {
       console.log(doc);
-      console.log(createDocumentAsync);
-      console.log(createDocumentAction);
-      console.log(DOCUMENT_REVISION);
-      console.log(docType);
     },
   });
   const loadDocumentProposedIdAction = useActionCreator(documentsActions.loadDocumentProposedIdWithCallback);
@@ -68,7 +39,6 @@ const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
   });
 
   const createLot = (docId: string) => {
-    console.log(docId);
     const securityGroups: any[] = [];
     if (docType?.isQms) {
       groupOptions.forEach((group) => {
@@ -77,6 +47,21 @@ const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
         }
       });
     }
+    const values = toNewVersionRequestBody({
+      name: "API LOT 1",
+      description: "API LOT 1",
+      attachments: [],
+      referenceTo: [{ value: document.document.id, label: "" }],
+      securityEmployees: [],
+      securityGroups,
+      document: {
+        docId,
+        documentType: { id: docType?.id },
+      },
+      revisionStage: 1,
+      revisionChangeType: RevisionChangeType.NextRevision,
+    });
+    createDocumentAsync.start(createDocumentAction, values, createDocumentAsync);
   };
   const startLotCreation = () => {
     if (!docType) {
