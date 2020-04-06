@@ -16,7 +16,7 @@ import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import OwnerChanger from "../../components/common/owner.changer/container";
 import { RequestType } from "../../components/common/owner.changer/helpers/types";
-import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
+import { default as AutocompleteField } from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
 import CheckboxField from "../../components/forms/fields/Checkbox";
 import RichTextEditor from "../../components/forms/fields/RichTextEditor";
@@ -61,7 +61,7 @@ export interface Props
   setDocId?: typeof documentsActions.setDocumentProposedId;
   doNotPrompt?: boolean;
   documentTypes: SelectOption[];
-  otherDocumentTypes: SelectOption[];
+  otherDocumentTypes: OptionType[];
   documentTypesById: DocumentTypeByIdState;
   onDirtyFlagChange?: (dirty: boolean) => void;
   canChangeOwnerShip: boolean;
@@ -225,6 +225,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   );
 
   const formDocumentStatus = get(documentRevision, "formDocument.status", "");
+  const isDocTypeDisabled = type === "newVersion" || isdocRevStatusDraft;
+  const options = type === "newOutput" ? initialValues.formDocument?.formTemplate?.outputDocumentTypes.map((e) =>
+    ({ value: e.id, text: e.documentTypeName })
+  ) as SelectOption[] : documentTypes;
 
   return (
     <Grid
@@ -271,10 +275,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           name="document.documentType.id"
           label="document.type"
           selectProps={{
-            inputProps: { id: "documentType", disabled: isDisabled },
+            inputProps: { id: "documentType", disabled: isDocTypeDisabled },
             onChange: handleTypeChange,
           }}
-          options={documentTypes}
+          options={options}
           validate={validator(required)}
           includeEmpty={false}
         />
@@ -285,7 +289,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           setDocId={setDocId}
         />
         {renderRevisionStageDropdown}
-        <AutcompleteField
+        <AutocompleteField
           name="referenceTo"
           label="documentRevision.form.references"
           autocompleteProps={{
@@ -309,7 +313,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             asyncAction={loadAvailableApproversAction}
             startActionOnMount={true}
           >
-            <AutcompleteField
+            <AutocompleteField
               name="securityEmployees"
               label="document.revision.user.permissions"
               autocompleteProps={{
@@ -327,7 +331,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             asyncAction={loadGroupsAction}
             startActionOnMount={true}
           >
-            <AutcompleteField
+            <AutocompleteField
               name="securityGroups"
               label="document.revision.group.permissions"
               autocompleteProps={{
@@ -341,18 +345,16 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         )}
         {FBStore.active && !FBDRStore.isOutput && (
           <Box mt={4}>
-            <SelectField
-              name="formTemplate.outputDocumentType.id"
+            <AutocompleteField
+              name="formTemplate.outputDocumentTypes"
               label="document.output.type"
-              selectProps={{
-                inputProps: {
-                  id: "formTemplate.outputDocumentType",
-                  disabled: !outputDocEnabled,
-                  className: !outputDocEnabled ? classes.outputGrey : "",
-                },
+              autocompleteProps={{
+                id: "formTemplate.outputDocumentTypes",
+                isMulti: true,
+                closeMenuOnSelect: false,
+                className: !outputDocEnabled ? classes.outputGrey : "",
               }}
               options={otherDocumentTypes}
-              includeEmpty={false}
               validate={validator(required)}
             />
             <RenderHtmlField />
