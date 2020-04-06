@@ -1,9 +1,10 @@
 import { Box } from "@material-ui/core";
-import { isEmpty } from "lodash";
+import { uniqBy } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { components } from "react-select";
-import { ReactComponent as CheckMark } from "../../../assets/images/check_mark.svg";
+import { ReactComponent as CheckedMark } from "../../../assets/images/check_mark.svg";
+import { ReactComponent as UncheckedMark } from "../../../assets/images/uncheck_mark.svg";
 import { authSelectors } from "../../../state/ducks/auth";
 import { Group } from "../../../state/ducks/auth/types";
 import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
@@ -15,12 +16,14 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
 import { toUniqGroupOptions } from "./transform";
+import { ChangeRequestFormValues } from "./types";
 
 
 interface OwnProps {
   dataProp?: Approval[];
   withoutCurrentUser?: boolean;
   documentTypeGroups?: Group[];
+  values?: ChangeRequestFormValues;
 }
 
 export type Props = OwnProps;
@@ -29,6 +32,7 @@ export const Approvers: React.FunctionComponent<Props> = ({
   dataProp,
   withoutCurrentUser = false,
   documentTypeGroups,
+  values,
 }) => {
 
   const joinedEmployees = (groups: Group[]) => groups.map((group) => group.joinedEmployees.map((employee) =>
@@ -54,44 +58,38 @@ export const Approvers: React.FunctionComponent<Props> = ({
         base,
   };
 
-  const options = isEmpty(approvers) ? availableApprovers : toUniqGroupOptions(approvers);
-
-  const renderGroupApproversResults = () => (
-    <Box display="flex" flexWrap="wrap">
-      {documentTypeGroups?.map((group) =>
-        <Box marginRight={6} marginBottom={4} key={group.id} >
-          <div><CheckMark /></div>
-          <Box paddingLeft={1} display="initial">
-            <Text message={group.name} />
-          </Box></Box>
+  const renderGroupApproversResults = () => {
+    const uniqGroups = uniqBy(documentTypeGroups, "id");
+    const selectedEmployees = values?.approvals?.map((e) => e.value);
+    return (
+      <Box display="flex" flexWrap="wrap">
+        {uniqGroups.map((group) =>
+          <Box marginRight={6} marginBottom={4} key={group.id} display="inline-flex">
+            {group.joinedEmployees.some((employee) => selectedEmployees?.includes(employee.user?.id as string)) ? <CheckedMark /> : <UncheckedMark />}
+            <Box paddingLeft={1} display="initial">
+              <Text message={group.name} />
+            </Box></Box>
         )}
-    </Box>);
+      </Box>
+    );
+  };
+
+  const arrayOfOptions = [
+    ...toUniqGroupOptions(approvers), ...availableApprovers,
+  ];
 
   const formatOptionLabel = ({ value, label, groups }) => (
     <div style={{ display: "flex" }} key={value}>
       <div>{label}</div>
       <div style={{ marginLeft: "10px", color: "#ccc" }}>
-        {groups.join(",  ")}
+        {groups ? groups.join(",  ") : ""}
       </div>
     </div>);
 
-  const MultiValueLabel = ({ props, data }) => {
-    console.log(data);
-    return (<components.MultiValueLabel {...props}>
-      <Box marginLeft={1}>{data.label}</Box>
-    </components.MultiValueLabel>);
-  };
+  const MultiValueLabel = ({ props, data }) => (<components.MultiValueLabel {...props}>
+    <Box marginLeft={1}><Text message={data.label}/></Box>
+  </components.MultiValueLabel>);
 
-  const customFilter = ({ option, searchText }) => {
-    if (
-      option.data.label.toLowerCase().includes(searchText.toLowerCase()) ||
-      option.data.groups.map((group) => group.toLowerCase().includes(searchText.toLowerCase()))
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  };
 
   return (
     <AsyncGate
@@ -110,9 +108,8 @@ export const Approvers: React.FunctionComponent<Props> = ({
           backspaceRemovesValue: false,
           formatOptionLabel,
           components: { MultiValueLabel },
-          filterOption: { customFilter },
         }}
-        options={options as OptionType[]}
+        options={uniqBy(arrayOfOptions, "value") as OptionType[]}
       />
       {documentTypeGroups && renderGroupApproversResults()}
     </AsyncGate>

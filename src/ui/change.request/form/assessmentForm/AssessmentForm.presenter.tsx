@@ -57,6 +57,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   resetForm,
   errors,
   documentTypeGroups,
+  values,
 }) => {
   const didMount = useDidMount();
 
@@ -132,7 +133,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
           label="common.target.date"
           datePickerProps={{ id: "targetDate", minDate: toStartOfDay(undefined) }}
         />
-        <ApproversField documentTypeGroups={documentTypeGroups} />
+        <ApproversField documentTypeGroups={documentTypeGroups}values={values} />
         <Grid
           item={true}
           container={true}
