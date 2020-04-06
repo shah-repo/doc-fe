@@ -18,6 +18,7 @@ interface OwnProps {
   documentRevisionsList: string[];
   onDirtyFlagChange: (dirty: boolean) => void;
   onSubmit: (values: ChangeRequestFormValues) => void;
+  documentTypeGroups: any[];
 }
 
 type ChangeRequestFormPresenterProps = OwnProps;
@@ -33,6 +34,7 @@ ChangeRequestFormPresenterProps
   doNotPrompt,
   onDirtyFlagChange,
   selectedDocumentRevision,
+  documentTypeGroups,
 }) => {
   const renderAssessmentForm = (
     <AssessmentFormContainer
@@ -43,6 +45,7 @@ ChangeRequestFormPresenterProps
       documentRevisionsList={documentRevisionsList}
       doNotPrompt={doNotPrompt}
       onDirtyFlagChange={onDirtyFlagChange}
+      documentTypeGroups={documentTypeGroups}
     />
   );
 

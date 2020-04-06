@@ -38,6 +38,7 @@ ChangeRequestFormContainerProps
     initialValues.documentRevisions,
   );
   const [documentsInCrById, setDocumentsInCrById] = useState({});
+  const [documentTypeGroups, setDocumentTypeGroups] = useState<any[]>([]);
 
   useEffect(() => {
     if (changeRequest && changeRequest.documentRevisions) {
@@ -69,6 +70,8 @@ ChangeRequestFormContainerProps
 
   const onDirtyFlagChange = (dirty: boolean) => setIsFormDirty(dirty);
 
+  const allGroups = [].concat(...documentTypeGroups);
+
   return (
     <Grid container={true} className={classes.whiteContainer}>
       <Grid container={true} spacing={4}>
@@ -80,6 +83,8 @@ ChangeRequestFormContainerProps
             selectAssessmentForm={selectAssessmentForm}
             selectedDocumentRevision={selectedDocumentRevision}
             documentsInCrById={documentsInCrById}
+            setDocumentTypeGroups={setDocumentTypeGroups}
+            documentTypeGroups={documentTypeGroups}
           />
         </Grid>
         <ChangeRequestFormPresenter
@@ -91,6 +96,7 @@ ChangeRequestFormContainerProps
           changeRequest={changeRequest}
           selectedDocumentRevision={selectedDocumentRevision}
           documentRevisionsList={documentRevisionsList}
+          documentTypeGroups={allGroups}
         />
       </Grid>
     </Grid>

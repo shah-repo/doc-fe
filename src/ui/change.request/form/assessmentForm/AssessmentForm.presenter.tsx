@@ -39,6 +39,7 @@ interface Props
   documentRevisionsList: string[];
   doNotPrompt?: boolean;
   onDirtyFlagChange?: (dirty: boolean) => void;
+  documentTypeGroups: any[];
 }
 
 const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
@@ -55,6 +56,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   initialValues,
   resetForm,
   errors,
+  documentTypeGroups,
 }) => {
   const didMount = useDidMount();
 
@@ -130,7 +132,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
           label="common.target.date"
           datePickerProps={{ id: "targetDate", minDate: toStartOfDay(undefined) }}
         />
-        <ApproversField />
+        <ApproversField documentTypeGroups={documentTypeGroups} />
         <Grid
           item={true}
           container={true}
