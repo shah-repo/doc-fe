@@ -495,6 +495,8 @@
   "form.builder.create.lot": "Create Lot",
   "form.builder.close.item": "Close Item",
   "form.builder.reopen.item": "Reopen Item",
+  "form.builder.lot.wasnt.created": "Lot couldn't be created",
+  "form.builder.no.document.lot": "There's no document type LOT",
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.watermark": "Download PDF file",

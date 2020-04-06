@@ -1,12 +1,14 @@
 /* eslint-disable react/style-prop-object */
 import { Button } from "@material-ui/core";
 import React from "react";
+import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { GroupTag } from "../../../../state/ducks/auth/types";
 import { DocumentRevision, documentRevisionsActions, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
 import { DocumentProposedId, documentsActions } from "../../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import Text from "../../../components/Text";
+import { documentPreviewPath } from "../../../document.revision/utils/paths";
 import { toNewVersionRequestBody } from "../../../documentRevision/forms/transform";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
@@ -19,13 +21,18 @@ const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
   document,
 }) => {
   const LOT = "LOT";
+  const intl = useIntl();
 
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const docType = useGetDocTypeByAcronym(LOT);
   const createDocumentAction = useActionCreator(documentRevisionsActions.create);
-  const createDocumentAsync = useAsync({
-    onSuccess: (doc) => {
-      console.log(doc);
+  const createDocumentAsync = useAsync<DocumentRevision>({
+    onSuccess: (docRev ) => {
+      const path = docRev && documentPreviewPath(docRev.id, docRev.document.id);
+      window.open(path, "_blank");
+    },
+    onError: () => {
+      alert(intl.formatMessage({ id: "form.builder.lot.wasnt.created" }));
     },
   });
   const loadDocumentProposedIdAction = useActionCreator(documentsActions.loadDocumentProposedIdWithCallback);
@@ -34,7 +41,7 @@ const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
       createLot(proposedDocId?.docId || "");
     },
     onError: () => {
-      alert("Lot couldn't be created");
+      alert(intl.formatMessage({ id: "form.builder.lot.wasnt.created" }));
     },
   });
 
@@ -48,8 +55,8 @@ const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
       });
     }
     const values = toNewVersionRequestBody({
-      name: "API LOT 1",
-      description: "API LOT 1",
+      name: "API LOT 3",
+      description: "API LOT 3",
       attachments: [],
       referenceTo: [{ value: document.document.id, label: "" }],
       securityEmployees: [],
@@ -65,7 +72,7 @@ const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
   };
   const startLotCreation = () => {
     if (!docType) {
-      alert("There's no document type LOT");
+      alert(intl.formatMessage({ id: "form.builder.no.document.lot" }));
       return;
     }
     loadDocumentProposedIdAsync.start(loadDocumentProposedIdAction, LOT, loadDocumentProposedIdAsync);
