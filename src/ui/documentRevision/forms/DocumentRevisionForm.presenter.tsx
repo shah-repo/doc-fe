@@ -225,7 +225,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   );
 
   const formDocumentStatus = get(documentRevision, "formDocument.status", "");
-  const isDocTypeDisabled = type === "newVersion" || isdocRevVersionOne || isdocRevStatusDraft;
+  const isDocTypeDisabled = type === "newVersion" || isdocRevStatusDraft;
   const options = type === "newOutput" ? initialValues.formDocument?.formTemplate?.outputDocumentTypes.map((e) =>
     ({ value: e.id, text: e.documentTypeName })
   ) as SelectOption[] : documentTypes;
