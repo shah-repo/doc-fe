@@ -42,10 +42,10 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
         return;
       }
       const slicedOptions = autocompleteAsyncState?.sliceData;
-      if (selectedOptions) {
-        options = autocompleteAsyncState?.sliceValue(slicedOptions);
-      } else {
-        options = slicedOptions;
+      if (slicedOptions) {
+        options = selectedOptions
+          ? autocompleteAsyncState?.sliceValue(selectedOptions)
+          : slicedOptions;
       }
       // options = autocompleteAsyncState?.sliceData;
       loading = !options && autocompleteAsyncState?.loading;
@@ -70,6 +70,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       optionLabelKey,
       optionValueType,
       getOptionLabel,
+      selectedOptions,
       defaultValue,
       multiple,
       name,
