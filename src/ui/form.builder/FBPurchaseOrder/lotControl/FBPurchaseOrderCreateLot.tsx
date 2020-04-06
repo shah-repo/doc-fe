@@ -1,10 +1,10 @@
 /* eslint-disable react/style-prop-object */
 import { Button } from "@material-ui/core";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { GroupTag } from "../../../../state/ducks/auth/types";
 import { DocumentRevision, documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
-import { documentsActions } from "../../../../state/ducks/documents";
+import { DocumentProposedId, documentsActions } from "../../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
@@ -45,39 +45,49 @@ const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
   };
   const LOT = "LOT";
 
-  const dispatch = useDispatch();
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const docType = useGetDocTypeByAcronym(LOT);
   const createDocumentAction = useActionCreator(documentRevisionsActions.create);
-  const asyncCreateDocument = useAsync({
+  const createDocumentAsync = useAsync({
     onSuccess: (doc) => {
       console.log(doc);
-      console.log(asyncCreateDocument);
+      console.log(createDocumentAsync);
       console.log(createDocumentAction);
       console.log(DOCUMENT_REVISION);
       console.log(docType);
     },
   });
+  const loadDocumentProposedIdAction = useActionCreator(documentsActions.loadDocumentProposedIdWithCallback);
+  const loadDocumentProposedIdAsync = useAsync<DocumentProposedId>({
+    onSuccess: (proposedDocId) => {
+      createLot(proposedDocId?.docId || "");
+    },
+    onError: () => {
+      alert("Lot couldn't be created");
+    },
+  });
 
-  const createLot = () => {
-    if (!docType) {
-      alert("There's no document type LOT");
-      return;
-    }
-    dispatch(documentsActions.loadDocumentProposedId(LOT));
+  const createLot = (docId: string) => {
+    console.log(docId);
     const securityGroups: any[] = [];
-    if (docType.isQms) {
+    if (docType?.isQms) {
       groupOptions.forEach((group) => {
         if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
           securityGroups.push({ value: group.value, label: group.label });
         }
       });
     }
-    console.log("create lot");
+  };
+  const startLotCreation = () => {
+    if (!docType) {
+      alert("There's no document type LOT");
+      return;
+    }
+    loadDocumentProposedIdAsync.start(loadDocumentProposedIdAction, LOT, loadDocumentProposedIdAsync);
   };
 
   return (
-    <Button onClick={createLot}>
+    <Button onClick={startLotCreation}>
       <Text translation="form.builder.create.lot" />
     </Button>
   );
