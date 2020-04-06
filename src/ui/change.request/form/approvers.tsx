@@ -36,9 +36,9 @@ export const Approvers: React.FunctionComponent<Props> = ({
 }) => {
 
   const joinedEmployees = (groups: Group[]) => groups.map((group) => group.joinedEmployees.map((employee) =>
-    ({ group: group.name, ...employee.user })
+    ({ group: group.name, id: employee.id, name: employee.user?.name })
   ));
-  const approvers = joinedEmployees(documentTypeGroups as Group[]).flat();
+  const approvers = documentTypeGroups ? joinedEmployees(documentTypeGroups).flat() : [];
 
   const loadApproversAsyncState = useSelector(changeRequestsSelectors.getLoadApproversAsyncState);
   const availableApprovers = useSelector((state: ApplicationState) => {
@@ -65,7 +65,7 @@ export const Approvers: React.FunctionComponent<Props> = ({
       <Box display="flex" flexWrap="wrap">
         {uniqGroups.map((group) =>
           <Box marginRight={6} marginBottom={4} key={group.id} display="inline-flex">
-            {group.joinedEmployees.some((employee) => selectedEmployees?.includes(employee.user?.id as string)) ? <CheckedMark /> : <UncheckedMark />}
+            {group.joinedEmployees.some((employee) => selectedEmployees?.includes(employee.id)) ? <CheckedMark /> : <UncheckedMark />}
             <Box paddingLeft={1} display="initial">
               <Text message={group.name} />
             </Box></Box>
@@ -78,13 +78,16 @@ export const Approvers: React.FunctionComponent<Props> = ({
     ...toUniqGroupOptions(approvers), ...availableApprovers,
   ];
 
-  const formatOptionLabel = ({ value, label, groups }) => (
-    <div style={{ display: "flex" }} key={value}>
-      <div>{label}</div>
-      <div style={{ marginLeft: "10px", color: "#ccc" }}>
-        {groups ? groups.join(",  ") : ""}
-      </div>
-    </div>);
+  const formatOptionLabel = ({ value, label, groups }) => {
+    const uniqueValues = groups ? groups.filter((x, i, a) => a.indexOf(x) === i) : [];
+    return (
+      <div style={{ display: "flex" }} key={value}>
+        <div>{label}</div>
+        <div style={{ marginLeft: "10px", color: "#ccc" }}>
+          {groups ? uniqueValues.join(",  ") : ""}
+        </div>
+      </div>);
+  };
 
   const MultiValueLabel = ({ props, data }) => (<components.MultiValueLabel {...props}>
     <Box marginLeft={1}><Text message={data.label}/></Box>

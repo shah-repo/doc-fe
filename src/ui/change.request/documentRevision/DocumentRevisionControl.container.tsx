@@ -58,6 +58,7 @@ DocumentRevisionControlContainerProps
   const deleteDocumentFromChangeRequest = (
     deleteDocumentRevisionId: string,
   ) => {
+    setDocumentTypeGroups([]);
     setDocumentRevisionsList(
       documentsInChangeRequest.filter(
         (documentRevisionId) => documentRevisionId !== deleteDocumentRevisionId,

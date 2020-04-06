@@ -49,10 +49,11 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
 
   const getGroupsByStage = useActionCreator(documentTypeActions.loadGroupsByStage);
 
-  const addDocument = (documentRevisionId: string) =>
+  const addDocument = (documentRevisionId: string) => {
     setAddedDocuments(Array.from(
       new Set([...addedDocuments, documentRevisionId]),
     ));
+  };
   const deleteDocument = (documentRevisionId: string) =>
     setAddedDocuments(addedDocuments.filter((id) => id !== documentRevisionId));
 
@@ -62,12 +63,6 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
     const filteredArray = tableData.filter((documentRevision) =>
       !documentsToIgnore.includes(documentRevision.id) && documentRevision.status === DocumentRevisionStatus.Draft);
     setDocumentRevisionsToShow(filteredArray);
-    documentsInChangeRequest.forEach((e) => async.start(
-      getGroupsByStage,
-      documentRevisionsById[e].document.documentType.id,
-      documentRevisionsById[e].revisionStage,
-      async,
-    ));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [addedDocuments, documentsInChangeRequest, tableData]);
 
@@ -80,6 +75,16 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
     setAddedDocuments([]);
     close();
   };
+
+  useEffect(() => {
+    documentsInChangeRequest.forEach((e) => async.start(
+      getGroupsByStage,
+      documentRevisionsById[e].document.documentType.id,
+      documentRevisionsById[e].revisionStage,
+      async,
+    ));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [documentRevisionsById, documentsInChangeRequest]);
 
 
   const handleDelete = (documentRevisionId: string) => () => deleteDocument(documentRevisionId);
