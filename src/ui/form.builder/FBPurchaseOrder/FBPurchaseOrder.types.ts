@@ -69,4 +69,5 @@ export interface PurchaseOrderItem {
   isTraceabilityRequired: boolean;
   capitalEquipment: boolean;
   tax: boolean;
+  isClosed: boolean;
 }

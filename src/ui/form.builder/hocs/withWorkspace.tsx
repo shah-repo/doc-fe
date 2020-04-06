@@ -2,6 +2,7 @@ import { Dictionary } from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
 import { FB } from "..";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { FBDialogState } from "../FBDialog";
 import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 import FBStore from "../stores/ui/FBStore";
@@ -20,7 +21,8 @@ export const withWorkspace = <T extends FBWorkspaceProps>(
       FBDynamicValidatorStore.validate();
       FBStore.docId = props.id || "";
       FBStore.documentId = props.documentId || "";
-    }, [props.documentId, props.id]);
+      FBStore.document = props.document || {} as DocumentRevision;
+    }, [props.documentId, props.id, props.document]);
 
     if (props.mode) {
       FBStore.setMode(props.mode);

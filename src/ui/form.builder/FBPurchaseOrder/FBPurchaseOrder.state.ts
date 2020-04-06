@@ -64,6 +64,11 @@ export class FBPurchaseOrderState {
     FBStore.setValue(`${this.name}-formValues.capitalEquipment`, undefined);
     FBStore.setValue(`${this.name}-formValues.tax`, undefined);
     FBStore.setValue(`${this.name}-formValues.isTraceabilityRequired`, undefined);
+    FBStore.setValue(`${this.name}-formValues.index`, undefined);
+    FBStore.setValue(`${this.name}-formValues.formattedDate`, undefined);
+    FBStore.setValue(`${this.name}-formValues.totalAmount`, undefined);
+    FBStore.setValue(`${this.name}-formValues.isClosed`, undefined);
+    FBStore.setValue(`${this.name}-formValues`, undefined);
   };
 
   @action public setShippingCost = (shippingCost: string) => {
@@ -121,7 +126,7 @@ export class FBPurchaseOrderState {
 
   private formatCost = (value: any) => Number(value || 0).toFixed(2);
 
-  private initiliazeLineItem = (item: PurchaseOrderItem, index: number) => (
+  private initiliazeLineItem = (item: PurchaseOrderItem, index: number): PurchaseOrderItem => (
     {
       index: index + 1,
       order: item.order,
@@ -140,6 +145,7 @@ export class FBPurchaseOrderState {
         const tax = item.tax ? total * TAX_RATE : 0;
         return this.formatCost(total + tax);
       })(),
+      isClosed: item.isClosed || false,
     }
   );
 }

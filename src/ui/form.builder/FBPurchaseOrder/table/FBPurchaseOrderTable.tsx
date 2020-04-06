@@ -7,6 +7,7 @@ import Text from "../../../components/Text";
 import Colors from "../../../layout/theme/utils/colors";
 import { FBPurchaseOrderTableProps, PurchaseOrderItem } from "../FBPurchaseOrder.types";
 import FBPurchaseOrderDialog from "../form/FBPurchaseOrderDialog";
+import FBPurchaseOrderLotControl from "../lotControl/FBPurchaseOrderLotControl";
 import { withFBPurchaseOrderTable } from "./FBPurchaseOrderTable.wrap";
 
 const StyledTableCell = withStyles((theme) => ({
@@ -112,6 +113,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
                   <RemoveCircleOutlineIcon color="error" onClick={handleDelete(index)} />
                 </StyledTableCell>
               }
+              <FBPurchaseOrderLotControl item={row} />
             </TableRow>
           ))}
         </TableBody>
