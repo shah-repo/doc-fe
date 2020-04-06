@@ -19,6 +19,7 @@ export { default as FBEditorInlineApproval } from "./FBEditorInlineApproval/FBEd
 export * from "./FBEditorInlineApproval/FBEditorInlineApproval.types";
 export { default as FBEditorInstructionsDocument } from "./FBEditorInstructionsDocument/FBEditorInstructionsDocument";
 export { default as FBEditorParagraph } from "./FBEditorParagraph/FBEditorParagraph";
+export { default as FBEditorSelectDocument } from "./FBEditorSelectDocument/FBEditorSelectDocument";
 export { default as FBEditorStepSection } from "./FBEditorStepSection/FBEditorStepSection";
 export * from "./FBEditorStepSection/FBEditorStepSection.types";
 export { default as FBFieldBottomBar } from "./FBFieldBottomBar/FBFieldBottomBar";
@@ -59,6 +60,7 @@ export { default as FBParagraph } from "./FBParagraph/FBParagraph";
 export * from "./FBParagraph/FBParagraph.types";
 export { default as FBQuantityField } from "./FBQuantityField/FBQuantityField";
 export * from "./FBQuantityField/FBQuantityField.types";
+export { default as FBSelectDocument } from "./FBSelectDocument/FBSelectDocument";
 export { default as FBStepper } from "./FBStepper/FBStepper";
 export * from "./FBStepper/FBStepper.types";
 export { default as FBStepperEditor } from "./FBStepperEditor/FBStepperEditor";
@@ -74,4 +76,5 @@ export * from "./FBValidationEditor/FBValidationEditor.types";
 export { default as FBValidationMode } from "./FBValidationMode/FBValidationMode";
 export * from "./FBValidationMode/FBValidationMode.types";
 export { default as FB } from "./helpers/FB";
+
 
