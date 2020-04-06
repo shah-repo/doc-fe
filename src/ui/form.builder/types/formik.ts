@@ -1,6 +1,5 @@
 import { FieldConfig, FieldProps, FormikConfig } from "formik";
 import { Dictionary } from "lodash";
-import { Id } from "../../../state/ducks/common";
 import { DocumentRevisionDocumentRequest, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { FBTemplateSchema } from "./store";
 
@@ -28,8 +27,13 @@ export interface FBDocumentFlowProps {
   status?: DocumentRevisionStatus;
 }
 
+export interface OutputDocumentTypes {
+  id: string;
+  documentTypeName: string;
+}
+
 export interface FBFormTemplateProps {
-  outputDocumentType: Id[];
+  outputDocumentTypes: OutputDocumentTypes[];
   schema: FBTemplateSchema[] | string;
   helloSignTemplateId?: string;
 }

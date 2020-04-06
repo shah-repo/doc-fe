@@ -2,6 +2,7 @@ import _ from "lodash";
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import FBStore from "../../form.builder/stores/ui/FBStore";
+import { FBInputProps } from "../../form.builder/types/common";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -12,7 +13,7 @@ const toRequestFormBuilder = (values: DocumentRevision) => {
       return {
         ...values,
         formTemplate: {
-          outputDocumentType: _.get(values, "formTemplate.outputDocumentType.id", []).map((outputDoc) => ({ id: outputDoc.value }) ),
+          outputDocumentTypes: _.get(values, "formTemplate.outputDocumentTypes", []).map((outputDoc) => ({ id: outputDoc.value }) ),
           schema: FBStore.getSchema(),
         },
       };
@@ -48,7 +49,12 @@ export const toDocumentRevisionFormValues = (
     document: documentRevision.document,
     changeRequest: documentRevision.changeRequest,
     retrain: documentRevision.retrain,
-    formTemplate: documentRevision.formTemplate,
+    formTemplate: {
+      helloSignTemplateId: documentRevision.formTemplate?.helloSignTemplateId,
+      schema: documentRevision.formTemplate?.schema as FBInputProps[],
+      outputDocumentTypes: _.get(documentRevision, "formTemplate.outputDocumentTypes", [])
+        .map((e) => ({ label: e.documentTypeName, value: e.id })),
+    },
     formInput: documentRevision.formInput,
     formDocument: documentRevision.formDocument,
     status: documentRevision.status,
@@ -66,6 +72,7 @@ export const toDocumentRevisionFormValues = (
 export const toDocumentRevisionEditRequestBody = (
   values: DocumentRevisionFormValues,
 ): DocumentRevisionEditRequestBody => {
+  console.log(values);
   const data = {
     ...toRequestFormBuilder((_.pick(values, [
       "formTemplate",
@@ -144,7 +151,7 @@ export const toDocumentRevisionFormValuesForOutput = (
     formTemplate: undefined,
     status: DocumentRevisionStatus.Draft,
     document: {
-      documentType: _.get(documentRevision, "formTemplate.outputDocumentType", []),
+      documentType: _.get(documentRevision, "formTemplate.outputDocumentTypes"),
     },
     formDocument: {
       ...documentRevision,

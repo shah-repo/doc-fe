@@ -1,4 +1,3 @@
-import _ from "lodash";
 import React from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
@@ -48,7 +47,7 @@ export const DEFAULT_INITIAL_VALUES = (): DocumentRevisionFormValues => ({
     documentType: { id: "" },
   },
   revisionStage: 1,
-  formTemplate: { outputDocumentType: [{ id: "" }], schema: [] },
+  formTemplate: { outputDocumentTypes: [], schema: [] },
   securityGroups: [],
   securityEmployees: [],
 });
@@ -71,10 +70,6 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
       break;
     case "newOutput": {
       initialValues = toDocumentRevisionFormValuesForOutput(documentRevision);
-      const documentTypeAcronym = _.get(initialValues, "document.documentType.documentTypeAcronym");
-      if (documentTypeAcronym) {
-        loadDocumentProposedId(documentTypeAcronym);
-      }
       break;
     }
     default:

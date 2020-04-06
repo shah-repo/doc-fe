@@ -225,6 +225,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   );
 
   const formDocumentStatus = get(documentRevision, "formDocument.status", "");
+  const isDocTypeDisabled = type === "newVersion" || isdocRevVersionOne || isdocRevStatusDraft;
+  const options = type === "newOutput" ? initialValues.formDocument?.formTemplate?.outputDocumentTypes.map((e) =>
+    ({ value: e.id, text: e.documentTypeName })
+  ) as SelectOption[] : documentTypes;
 
   return (
     <Grid
@@ -271,10 +275,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           name="document.documentType.id"
           label="document.type"
           selectProps={{
-            inputProps: { id: "documentType", disabled: isDisabled },
+            inputProps: { id: "documentType", disabled: isDocTypeDisabled },
             onChange: handleTypeChange,
           }}
-          options={documentTypes}
+          options={options}
           validate={validator(required)}
           includeEmpty={false}
         />
@@ -342,10 +346,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         {FBStore.active && !FBDRStore.isOutput && (
           <Box mt={4}>
             <AutocompleteField
-              name="formTemplate.outputDocumentType.id"
+              name="formTemplate.outputDocumentTypes"
               label="document.output.type"
               autocompleteProps={{
-                id: "formTemplate.outputDocumentType",
+                id: "formTemplate.outputDocumentTypes",
                 isMulti: true,
                 closeMenuOnSelect: false,
                 className: !outputDocEnabled ? classes.outputGrey : "",
