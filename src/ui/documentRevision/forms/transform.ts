@@ -72,7 +72,6 @@ export const toDocumentRevisionFormValues = (
 export const toDocumentRevisionEditRequestBody = (
   values: DocumentRevisionFormValues,
 ): DocumentRevisionEditRequestBody => {
-  console.log(values);
   const data = {
     ...toRequestFormBuilder((_.pick(values, [
       "formTemplate",
