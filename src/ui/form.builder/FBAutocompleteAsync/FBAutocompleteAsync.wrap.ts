@@ -27,7 +27,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       valueKey: optionValueKey = "id",
       labelKey: optionLabelKey = "name",
     } = autocompleteAsyncState?.optionConfig || {};
-    const formValue = FBStore.getValue(name);
+    const formValue = FBStore.getValue(name) || defaultValue;
 
     React.useEffect(() => {
       if (!optionId) {
