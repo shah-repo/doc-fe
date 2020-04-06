@@ -2,7 +2,7 @@ import { Box } from "@material-ui/core";
 import { Provider } from "mobx-react";
 import React from "react";
 import FBPurchaseOrderTotal from "./cost/FBPurchaseOrderTotal";
-import { FBPurchaseOrderFieldProps } from "./FBPurchaseOrder.types";
+import { FBPurchaseOrderAddItemProps, FBPurchaseOrderFieldProps, FBPurchaseOrderTableProps, FBPurchaseOrderTotalProps } from "./FBPurchaseOrder.types";
 import { withFBPurchaseOrder } from "./FBPurchaseOrder.wrap";
 import FBPurchaseOrderAddItem from "./form/FBPurchaseOrderAddItem";
 import FBPurchaseOrderTable from "./table/FBPurchaseOrderTable";
@@ -13,9 +13,9 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderFieldProps> = ({
 }) => (
   <Provider {...{ poState }}>
     <Box mb={3}>
-      <FBPurchaseOrderTable {...props} />
-      <FBPurchaseOrderAddItem {...props} />
-      <FBPurchaseOrderTotal {...props} />
+      <FBPurchaseOrderTable {...props as FBPurchaseOrderTableProps} />
+      <FBPurchaseOrderAddItem {...props as FBPurchaseOrderAddItemProps} />
+      <FBPurchaseOrderTotal {...props as FBPurchaseOrderTotalProps} />
     </Box>
   </Provider>
 );

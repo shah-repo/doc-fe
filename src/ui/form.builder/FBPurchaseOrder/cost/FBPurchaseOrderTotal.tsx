@@ -3,11 +3,11 @@ import { Box, TextField, Typography } from "@material-ui/core";
 import React, { useEffect, useRef } from "react";
 import { FormattedNumber } from "react-intl";
 import Text from "../../../components/Text";
+import { FBPurchaseOrderTotalProps } from "../FBPurchaseOrder.types";
 import { withFBPurchaseOrderTotal } from "./FBPurschaseOrderTotal.wrap";
 
-const FBPurchaseOrderTotal: React.FunctionComponent<any> = ({
+const FBPurchaseOrderTotal: React.FunctionComponent<FBPurchaseOrderTotalProps> = ({
   shippingCost,
-  name,
   disabled,
   setShippingCost,
   subTotal,
@@ -26,14 +26,14 @@ const FBPurchaseOrderTotal: React.FunctionComponent<any> = ({
     }
   }, [inputEl, shippingCost]);
 
-  const renderCost = (translation: string, value: number) => (
+  const renderCost = (translation: string, value: string) => (
     <Box margin="5px 0">
       <Typography variant="h5" align="right">
         <Box minWidth="150px" component="span">
           <Text message={translation} />
         </Box>
         <Box minWidth="150px" component="span">
-          <FormattedNumber value={value} style="currency" currency="USD" />
+          <FormattedNumber value={value as unknown as number} style="currency" currency="USD" />
         </Box>
       </Typography>
     </Box>

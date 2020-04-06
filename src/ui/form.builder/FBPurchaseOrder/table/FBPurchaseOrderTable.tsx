@@ -5,6 +5,7 @@ import React from "react";
 import Date from "../../../components/Date"; // we shouldn't use anything outside the formbuilder
 import Text from "../../../components/Text";
 import Colors from "../../../layout/theme/utils/colors";
+import { FBPurchaseOrderTableProps, PurchaseOrderItem } from "../FBPurchaseOrder.types";
 import FBPurchaseOrderDialog from "../form/FBPurchaseOrderDialog";
 import { withFBPurchaseOrderTable } from "./FBPurchaseOrderTable.wrap";
 
@@ -36,8 +37,8 @@ const useStyles = makeStyles({
   },
 });
 
-const FBPurchaseOrderTable: React.FunctionComponent<any> = ({
-  poState,
+const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> = ({
+  items,
   disabled,
   handleEdit,
   handleDelete,
@@ -86,7 +87,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<any> = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {poState.po.items.map((row, index) => (
+          {items.map((row: PurchaseOrderItem, index) => (
             <TableRow
               key={index}
               onClick={handleEdit(index, row)}

@@ -1,9 +1,10 @@
 import React from "react";
 import FBButton from "../../components/inputs/FBButton";
+import { FBPurchaseOrderAddItemProps } from "../FBPurchaseOrder.types";
 import { withFBPurchaseOrderAddItem } from "./FBPurchaseOrderAddtem.wrap";
 import FBPurchaseOrderDialog from "./FBPurchaseOrderDialog";
 
-const FBPurchaseOrderAddItem: React.FunctionComponent<any> = ({
+const FBPurchaseOrderAddItem: React.FunctionComponent<FBPurchaseOrderAddItemProps> = ({
   disabled,
   openDialog,
   isDialogOpen,

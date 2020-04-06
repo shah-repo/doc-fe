@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { FB } from "../..";
 import useDialog from "../../../hooks/useDialog";
+import { FBPurchaseOrderTableProps } from "../FBPurchaseOrder.types";
 
-export const withFBPurchaseOrderTable = <T extends any>(
+export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
   Component: React.FunctionComponent<T>
 ) => {
 
@@ -39,13 +40,13 @@ export const withFBPurchaseOrderTable = <T extends any>(
 
     return Component({
       ...(props),
-      poState,
       handleEdit,
       handleDelete,
       isDialogOpen: dialog.isOpen,
       closeDialog,
       initialValues,
       onSubmit,
+      items: poState.po.items,
     });
   };
 

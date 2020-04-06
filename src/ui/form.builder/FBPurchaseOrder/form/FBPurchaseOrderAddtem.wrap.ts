@@ -1,8 +1,9 @@
 import React from "react";
 import { FB } from "../..";
 import useDialog from "../../../hooks/useDialog";
+import { FBPurchaseOrderAddItemProps } from "../FBPurchaseOrder.types";
 
-export const withFBPurchaseOrderAddItem = <T extends any>(
+export const withFBPurchaseOrderAddItem = <T extends FBPurchaseOrderAddItemProps>(
   Component: React.FunctionComponent<T>
 ) => {
 

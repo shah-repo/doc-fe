@@ -31,6 +31,22 @@ export type FBPurchaseOrderAddItemProps =
   openDialog: () => void;
 };
 
+export type FBPurchaseOrderTotalProps =
+& FBPurchaseOrderBasicProps
+& Pick<PurchaseOrder, "shippingCost" | "subTotal" | "tax" | "totalAmount">
+& Pick<FBPurchaseOrderState, "setShippingCost">
+& Pick<FBInputProps, "disabled">;
+
+
+export type FBPurchaseOrderTableProps =
+& FBPurchaseOrderBasicProps
+& Pick<FBPurchaseOrderDialogProps, "onSubmit" | "closeDialog" | "items" | "isDialogOpen" | "initialValues">
+& {
+  items: PurchaseOrderItem[];
+  handleEdit: (index: number, item: PurchaseOrderItem) => () => void;
+  handleDelete (index: number): (e: any) => void;
+};
+
 export interface PurchaseOrder {
   shippingCost: string;
   tax: string;
