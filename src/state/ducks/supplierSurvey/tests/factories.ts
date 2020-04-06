@@ -4,9 +4,9 @@ import { getDocumentRevision } from "../../documentRevisions/tests/factories";
 import { SupplierSurveyForm } from "../types";
 
 export const getFormTemplate = (formTemplate: Partial<FBFormTemplateProps> = {}): FBFormTemplateProps => ({
-  outputDocumentType: {
+  outputDocumentType: [{
     id: faker.random.uuid(),
-  },
+  }],
   schema: [{
     type: "textfield",
     index: 0,

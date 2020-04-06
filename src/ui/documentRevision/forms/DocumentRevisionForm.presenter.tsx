@@ -16,7 +16,7 @@ import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import OwnerChanger from "../../components/common/owner.changer/container";
 import { RequestType } from "../../components/common/owner.changer/helpers/types";
-import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
+import { default as AutocompleteField } from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
 import CheckboxField from "../../components/forms/fields/Checkbox";
 import RichTextEditor from "../../components/forms/fields/RichTextEditor";
@@ -61,7 +61,7 @@ export interface Props
   setDocId?: typeof documentsActions.setDocumentProposedId;
   doNotPrompt?: boolean;
   documentTypes: SelectOption[];
-  otherDocumentTypes: SelectOption[];
+  otherDocumentTypes: OptionType[];
   documentTypesById: DocumentTypeByIdState;
   onDirtyFlagChange?: (dirty: boolean) => void;
   canChangeOwnerShip: boolean;
@@ -285,7 +285,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           setDocId={setDocId}
         />
         {renderRevisionStageDropdown}
-        <AutcompleteField
+        <AutocompleteField
           name="referenceTo"
           label="documentRevision.form.references"
           autocompleteProps={{
@@ -309,7 +309,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             asyncAction={loadAvailableApproversAction}
             startActionOnMount={true}
           >
-            <AutcompleteField
+            <AutocompleteField
               name="securityEmployees"
               label="document.revision.user.permissions"
               autocompleteProps={{
@@ -327,7 +327,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             asyncAction={loadGroupsAction}
             startActionOnMount={true}
           >
-            <AutcompleteField
+            <AutocompleteField
               name="securityGroups"
               label="document.revision.group.permissions"
               autocompleteProps={{
@@ -341,18 +341,16 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         )}
         {FBStore.active && !FBDRStore.isOutput && (
           <Box mt={4}>
-            <SelectField
+            <AutocompleteField
               name="formTemplate.outputDocumentType.id"
               label="document.output.type"
-              selectProps={{
-                inputProps: {
-                  id: "formTemplate.outputDocumentType",
-                  disabled: !outputDocEnabled,
-                  className: !outputDocEnabled ? classes.outputGrey : "",
-                },
+              autocompleteProps={{
+                id: "formTemplate.outputDocumentType",
+                isMulti: true,
+                closeMenuOnSelect: false,
+                className: !outputDocEnabled ? classes.outputGrey : "",
               }}
               options={otherDocumentTypes}
-              includeEmpty={false}
               validate={validator(required)}
             />
             <RenderHtmlField />

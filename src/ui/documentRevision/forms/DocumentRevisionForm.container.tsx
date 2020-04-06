@@ -13,7 +13,6 @@ import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { SelectOption } from "../../components/forms/fields/Select";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 import DocumentHeader from "../../document.revision/summary/header";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -128,11 +127,11 @@ DocumentRevisionFormContainerProps
     [documentTypes],
   );
 
-  const otherTypes: SelectOption[] = useMemo(
+  const otherTypes: OptionType[] = useMemo(
     () =>
-      documentTypes.reduce((acc: SelectOption[], document) => {
+      documentTypes.reduce((acc: OptionType[], document) => {
         if (document.group === "OTHER") {
-          acc.push({ value: document.id, text: document.documentTypeName });
+          acc.push({ value: document.id, label: document.documentTypeName });
         }
         return acc;
       }, []),

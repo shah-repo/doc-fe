@@ -29,7 +29,7 @@ export interface FBDocumentFlowProps {
 }
 
 export interface FBFormTemplateProps {
-  outputDocumentType: Id;
+  outputDocumentType: Id[];
   schema: FBTemplateSchema[] | string;
   helloSignTemplateId?: string;
 }
