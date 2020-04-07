@@ -3,6 +3,7 @@ import { Button } from "@material-ui/core";
 import React from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
+import { Slide, toast } from "react-toastify";
 import { GroupTag } from "../../../../state/ducks/auth/types";
 import { DocumentRevision, documentRevisionsActions, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
 import { DocumentProposedId, documentsActions } from "../../../../state/ducks/documents";
@@ -35,7 +36,7 @@ const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
       window.open(path, "_blank");
     },
     onError: () => {
-      alert(intl.formatMessage({ id: "form.builder.po.lot.wasnt.created" }));
+      toastError("form.builder.po.lot.wasnt.created");
     },
   });
   const loadDocumentProposedIdAction = useActionCreator(documentsActions.loadDocumentProposedIdWithCallback);
@@ -44,7 +45,7 @@ const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
       createLot(proposedDocId?.docId || "");
     },
     onError: () => {
-      alert(intl.formatMessage({ id: "form.builder.po.lot.wasnt.created" }));
+      toastError("form.builder.po.lot.wasnt.created");
     },
   });
 
@@ -59,7 +60,7 @@ const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
     }
     const values = toNewVersionRequestBody({
       name: `${item.glCode}-${item.description}`,
-      description: `${item.glCode}-${item.description}`,
+      description: `<p>${item.glCode}-${item.description}</p>`,
       attachments: [],
       referenceTo: [{ value: document.document.id, label: "" }],
       securityEmployees: [],
@@ -70,12 +71,27 @@ const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
       },
       revisionStage: 1,
       revisionChangeType: RevisionChangeType.NextRevision,
+      renderHTML: undefined,
     });
     createDocumentAsync.start(createDocumentAction, values, createDocumentAsync);
   };
+  const toastError = (message: string) => {
+    toast.error(
+      intl.formatMessage({ id: message }),
+      {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        transition: Slide,
+      }
+    );
+  };
   const startLotCreation = () => {
     if (!docType) {
-      alert(intl.formatMessage({ id: "form.builder.po.no.document.lot" }));
+      toastError("form.builder.po.no.document.lot");
       return;
     }
     loadDocumentProposedIdAsync.start(loadDocumentProposedIdAction, LOT, loadDocumentProposedIdAsync);
