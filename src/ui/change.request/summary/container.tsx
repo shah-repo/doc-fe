@@ -1,15 +1,17 @@
 import { Grid, WithStyles, withStyles } from "@material-ui/core";
 import { Form, Formik, FormikErrors, FormikProps } from "formik";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { authSelectors } from "../../../state/ducks/auth";
-import { GroupTag } from "../../../state/ducks/auth/types";
+import { Group, GroupTag } from "../../../state/ducks/auth/types";
 import { ChangeRequest, changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import { ApplicationState } from "../../../state/reducers";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
+import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import ChangeRequestAuditContainer from "../audit/Audit.container";
 import SummaryPresenter from "../documentRevision/DocumentRevisionControlPreview.presenter";
@@ -56,6 +58,26 @@ export const Container: React.FunctionComponent<Props> = ({
   isCompanyAdmin,
 }) => {
   const canChangeOwnerShip = canChangeCROwner(dataProp.state, currentEmployeeId, dataProp.owner.id, isCompanyAdmin);
+  const [summaryDocumentTypeGroups, setSummaryDocTypeGroups] = useState<any[]>([]);
+  const asyncGroups = useAsync({
+    onSuccess: (response: Group[] = []) => {
+      setSummaryDocTypeGroups([
+        ...summaryDocumentTypeGroups,
+        response,
+      ]);
+    },
+  });
+  const getGroupsByStage = useActionCreator(documentTypeActions.loadGroupsByStage);
+
+  useEffect(() => {
+    dataProp.documentRevisions.map((docRev) => asyncGroups.start(
+      getGroupsByStage,
+      docRev.document.documentType.id,
+      docRev.revisionStage,
+      asyncGroups,
+    ));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataProp]);
 
   const [docRev, setDocRev] = React.useState<DocumentRevision | null>(null);
   const async = useAsync<ChangeRequest>();
@@ -89,6 +111,7 @@ export const Container: React.FunctionComponent<Props> = ({
         currentUserEmail={currentUserEmail}
         closeTask={closeTask}
         canChangeOwnerShip={canChangeOwnerShip}
+        documentTypeGroups={summaryDocumentTypeGroups.flat()}
         {...props}
       />
     </Form>

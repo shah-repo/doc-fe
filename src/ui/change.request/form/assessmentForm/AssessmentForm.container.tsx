@@ -1,5 +1,6 @@
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import React from "react";
+import { Group } from "../../../../state/ducks/auth/types";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest";
 import { AsyncState } from "../../../../state/types";
 import { ChangeRequestFormValues } from "../types";
@@ -13,7 +14,7 @@ interface OwnProps {
   documentRevisionsList: string[];
   doNotPrompt?: boolean;
   onDirtyFlagChange?: (dirty: boolean) => void;
-  documentTypeGroups: any[];
+  documentTypeGroups: Group[];
 }
 
 type AssessmentFormContainerProps = OwnProps;

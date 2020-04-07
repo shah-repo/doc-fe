@@ -1,5 +1,6 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
+import { Group } from "../../../state/ducks/auth/types";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { AsyncState } from "../../../state/types";
 import ChangeRequestHeader from "../../change.request/summary/header";
@@ -18,7 +19,7 @@ interface OwnProps {
   documentRevisionsList: string[];
   onDirtyFlagChange: (dirty: boolean) => void;
   onSubmit: (values: ChangeRequestFormValues) => void;
-  documentTypeGroups: any[];
+  documentTypeGroups: Group[];
 }
 
 type ChangeRequestFormPresenterProps = OwnProps;

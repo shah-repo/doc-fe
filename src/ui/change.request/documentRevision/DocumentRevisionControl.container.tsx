@@ -23,7 +23,7 @@ interface OwnProps {
   selectAssessmentForm: () => void;
   setDocumentRevisionsList: (documents: string[]) => void;
   setDocumentTypeGroups: (groups: Group[]) => void;
-  documentTypeGroups: any[];
+  documentTypeGroups: Group[];
 }
 
 export type DocumentRevisionControlContainerProps = OwnProps &
@@ -56,14 +56,14 @@ DocumentRevisionControlContainerProps
   const openAddDocuments = () => setShowAddDocuments(true);
   const closeAddDocuments = () => setShowAddDocuments(false);
   const deleteDocumentFromChangeRequest = (
-    deleteDocumentRevisionId: string,
+    deleteDocumentRevisionId: string, index
   ) => {
-    setDocumentTypeGroups([]);
     setDocumentRevisionsList(
       documentsInChangeRequest.filter(
         (documentRevisionId) => documentRevisionId !== deleteDocumentRevisionId,
       ),
     );
+    setDocumentTypeGroups(documentTypeGroups.filter((group, docIndex) => docIndex !== index));
   };
 
   const TABLE_NAME = "addDocRevTable";
