@@ -15,14 +15,17 @@ export type FBPurchaseOrderDialogProps =
 & {
   isDialogOpen: boolean;
   initialValues?: Dictionary<PurchaseOrderItem>;
-  onSubmit: (item: PurchaseOrderItem) => void;
+  onSubmit: (item: any) => void;
   closeDialog: () => void;
   items?: PurchaseOrderItem[];
 };
 
 export type FBPurchaseOrderFormProps =
 & FBPurchaseOrderBasicProps
-& Pick<FBPurchaseOrderDialogProps, "initialValues" | "onSubmit" | "closeDialog" | "items">;
+& Pick<FBPurchaseOrderDialogProps, "initialValues" | "onSubmit" | "closeDialog" | "items">
+& {
+  validateForm?: (values: any) => void;
+};
 
 export type FBPurchaseOrderAddItemProps =
 & FBPurchaseOrderBasicProps

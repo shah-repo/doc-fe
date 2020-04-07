@@ -1,7 +1,7 @@
 import { Box, Typography } from "@material-ui/core";
 import { Form, Formik } from "formik";
-import moment from "moment";
-import React, { useState } from "react";
+import { Dictionary } from "lodash";
+import React from "react";
 import { FormattedNumber } from "react-intl";
 import Text from "../../../components/Text";
 import FBButton from "../../components/inputs/FBButton";
@@ -62,22 +62,12 @@ const Error: React.FunctionComponent<ErrorProps> = ({
 };
 
 const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = ({
-  initialValues = {} as PurchaseOrderItem,
+  initialValues = {} as Dictionary<PurchaseOrderItem>,
   onSubmit,
   closeDialog,
-  items = [],
   name,
+  validateForm,
 }) => {
-  // Use to prevent re-render and triggering validateOnMount
-  const [initialValuesState] = useState(() => initialValues);
-  const handleSubmit = (values) => {
-    const item = values[`${name}-formValues`];
-    const price = item.order * item.unitPrice;
-    const totalAmount = item.tax ? (price + (price * TAX_RATE)) : price;
-    const formattedDate = moment(item.date).format("MM/DD/YYYY");
-    onSubmit({ ...item, totalAmount: totalAmount.toFixed(2), formattedDate });
-  };
-
   const renderForm = (props) => {
     const { errors } = props;
     return (
@@ -152,40 +142,11 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
       </Form>
     );
   };
-  const validateForm = (values) => {
-    const item = values[`${name}-formValues`];
-    const required = "form.builder.required";
-    const errors: any = {
-      order: required,
-      glCode: required,
-      units: required,
-      partNumber: required,
-      date: required,
-      description: required,
-      unitPrice: required,
-    };
-
-    if (!item) {
-      return errors;
-    }
-
-    Object.keys(errors).forEach((key) => {
-      item[key] && delete errors[key];
-    });
-
-    const isUniquePartNumber = !items.map((item) => item.partNumber).includes(item.partNumber);
-    const isPartNumberInitialValue = initialValues[`${name}-formValues`]?.partNumber === item.partNumber;
-    if (!isUniquePartNumber && !isPartNumberInitialValue) {
-      errors.partNumber = "form.builder.pn.unique";
-    }
-
-    return errors;
-  };
 
   return (
     <Formik
-      initialValues={initialValuesState}
-      onSubmit={handleSubmit}
+      initialValues={initialValues}
+      onSubmit={onSubmit}
       validate={validateForm}
       validateOnChange
       validateOnMount
