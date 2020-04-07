@@ -2,7 +2,6 @@ import _ from "lodash";
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import FBStore from "../../form.builder/stores/ui/FBStore";
-import { FBInputProps } from "../../form.builder/types/common";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -50,8 +49,7 @@ export const toDocumentRevisionFormValues = (
     changeRequest: documentRevision.changeRequest,
     retrain: documentRevision.retrain,
     formTemplate: {
-      helloSignTemplateId: documentRevision.formTemplate?.helloSignTemplateId,
-      schema: documentRevision.formTemplate?.schema as FBInputProps[],
+      schema: FBStore.getSchema(),
       outputDocumentTypes: _.get(documentRevision, "formTemplate.outputDocumentTypes", [])
         .map((e) => ({ label: e.documentTypeName, value: e.id })),
     },
