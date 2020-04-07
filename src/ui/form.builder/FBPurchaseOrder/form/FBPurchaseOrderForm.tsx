@@ -75,7 +75,6 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
     const price = item.order * item.unitPrice;
     const totalAmount = item.tax ? (price + (price * TAX_RATE)) : price;
     const formattedDate = moment(item.date).format("MM/DD/YYYY");
-    item.isClosed = false;
     onSubmit({ ...item, totalAmount: totalAmount.toFixed(2), formattedDate });
   };
 

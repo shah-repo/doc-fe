@@ -1,29 +1,32 @@
 /* eslint-disable react/style-prop-object */
+import { Box } from "@material-ui/core";
 import React from "react";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import FBStore from "../../stores/ui/FBStore";
 import { PurchaseOrderItem } from "../FBPurchaseOrder.types";
-import FBPurchaseOrderClosedItem from "./FBPurchaseOrderClosedItem";
 import FBPurchaseOrderCreateLot from "./FBPurchaseOrderCreateLot";
+import FBPurchaseOrderReceivedItems from "./FBPurchaseOrderReceivedItems";
 
 interface Props {
   item: PurchaseOrderItem;
+  isActive: boolean;
 }
 const FBPurchaseOrderLotControl: React.FunctionComponent<Props> = ({
   item,
+  isActive,
 }) => {
   const { document } = FBStore;
   const isReleased = document.status === DocumentRevisionStatus.Released;
 
-  if (!isReleased) {
+  if (!isReleased || !isActive) {
     return null;
   }
 
   return (
-    <>
-      {!item.isClosed && <FBPurchaseOrderCreateLot document={document} />}
-      {item.isClosed && <FBPurchaseOrderClosedItem document={document} />}
-    </>
+    <Box position="absolute">
+      <FBPurchaseOrderCreateLot document={document} item={item} />
+      <FBPurchaseOrderReceivedItems document={document} item={item} />
+    </Box>
   );
 };
 

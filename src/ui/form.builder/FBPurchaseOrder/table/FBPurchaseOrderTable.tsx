@@ -1,7 +1,7 @@
 import { Box, Checkbox, makeStyles, Table, TableBody, TableCell, TableHead, TableRow, withStyles } from "@material-ui/core";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import classNames from "classnames";
-import React from "react";
+import React, { useState } from "react";
 import Date from "../../../components/Date"; // we shouldn't use anything outside the formbuilder
 import Text from "../../../components/Text";
 import Colors from "../../../layout/theme/utils/colors";
@@ -50,6 +50,9 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
   name,
 }) => {
   const classes = useStyles();
+  const [hoverIndex, setHoverIndex] = useState(-1);
+  const handleMouseEnter = (index) => () => setHoverIndex(index);
+  const handleMouseLeave = () => setHoverIndex(-1);
 
   return (
     <Box className={classes.root}>
@@ -93,6 +96,8 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
               key={index}
               onClick={handleEdit(index, row)}
               className={classNames({ [classes.editable]: !disabled })}
+              onMouseEnter={handleMouseEnter(index)}
+              onMouseLeave={handleMouseLeave}
             >
               <StyledTableCell align="left">{index + 1}</StyledTableCell>
               <StyledTableCell>{row.order}</StyledTableCell>
@@ -113,7 +118,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
                   <RemoveCircleOutlineIcon color="error" onClick={handleDelete(index)} />
                 </StyledTableCell>
               }
-              <FBPurchaseOrderLotControl item={row} />
+              <FBPurchaseOrderLotControl isActive={index === hoverIndex} item={row} />
             </TableRow>
           ))}
         </TableBody>

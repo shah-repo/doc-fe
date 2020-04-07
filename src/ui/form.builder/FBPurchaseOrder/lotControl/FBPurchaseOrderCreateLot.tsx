@@ -13,12 +13,15 @@ import { toNewVersionRequestBody } from "../../../documentRevision/forms/transfo
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useGetDocTypeByAcronym from "../../../hooks/useGetDocTypeByAcronym";
+import { PurchaseOrderItem } from "../FBPurchaseOrder.types";
 
 interface Props {
   document: DocumentRevision;
+  item: PurchaseOrderItem;
 }
 const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
   document,
+  item,
 }) => {
   const LOT = "LOT";
   const intl = useIntl();
@@ -32,7 +35,7 @@ const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
       window.open(path, "_blank");
     },
     onError: () => {
-      alert(intl.formatMessage({ id: "form.builder.lot.wasnt.created" }));
+      alert(intl.formatMessage({ id: "form.builder.po.lot.wasnt.created" }));
     },
   });
   const loadDocumentProposedIdAction = useActionCreator(documentsActions.loadDocumentProposedIdWithCallback);
@@ -41,7 +44,7 @@ const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
       createLot(proposedDocId?.docId || "");
     },
     onError: () => {
-      alert(intl.formatMessage({ id: "form.builder.lot.wasnt.created" }));
+      alert(intl.formatMessage({ id: "form.builder.po.lot.wasnt.created" }));
     },
   });
 
@@ -55,8 +58,8 @@ const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
       });
     }
     const values = toNewVersionRequestBody({
-      name: "API LOT 3",
-      description: "API LOT 3",
+      name: `${item.glCode}-${item.description}`,
+      description: `${item.glCode}-${item.description}`,
       attachments: [],
       referenceTo: [{ value: document.document.id, label: "" }],
       securityEmployees: [],
@@ -72,15 +75,20 @@ const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
   };
   const startLotCreation = () => {
     if (!docType) {
-      alert(intl.formatMessage({ id: "form.builder.no.document.lot" }));
+      alert(intl.formatMessage({ id: "form.builder.po.no.document.lot" }));
       return;
     }
     loadDocumentProposedIdAsync.start(loadDocumentProposedIdAction, LOT, loadDocumentProposedIdAsync);
   };
 
   return (
-    <Button onClick={startLotCreation}>
-      <Text translation="form.builder.create.lot" />
+    <Button
+      onClick={startLotCreation}
+      color="secondary"
+      variant="contained"
+      size="small"
+    >
+      <Text translation="form.builder.po.create.lot" />
     </Button>
   );
 };

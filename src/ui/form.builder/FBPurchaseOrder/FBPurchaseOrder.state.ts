@@ -67,7 +67,6 @@ export class FBPurchaseOrderState {
     FBStore.setValue(`${this.name}-formValues.index`, undefined);
     FBStore.setValue(`${this.name}-formValues.formattedDate`, undefined);
     FBStore.setValue(`${this.name}-formValues.totalAmount`, undefined);
-    FBStore.setValue(`${this.name}-formValues.isClosed`, undefined);
     FBStore.setValue(`${this.name}-formValues`, undefined);
   };
 
@@ -145,7 +144,6 @@ export class FBPurchaseOrderState {
         const tax = item.tax ? total * TAX_RATE : 0;
         return this.formatCost(total + tax);
       })(),
-      isClosed: item.isClosed || false,
     }
   );
 }
