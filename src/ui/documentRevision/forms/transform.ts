@@ -150,7 +150,7 @@ export const toDocumentRevisionFormValuesForOutput = (
     formTemplate: undefined,
     status: DocumentRevisionStatus.Draft,
     document: {
-      documentType: _.get(documentRevision, "formTemplate.outputDocumentTypes"),
+      documentType: documentRevision.formTemplate?.outputDocumentTypes[0],
     },
     formDocument: {
       ...documentRevision,

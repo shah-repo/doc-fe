@@ -1,18 +1,10 @@
 import { Box, Typography } from "@material-ui/core";
-import {
-  Field as FormikField,
-  FieldConfig,
-  FieldProps as FormikFieldProps,
-} from "formik";
+import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
 import Select, { createFilter } from "react-select";
 import { SelectComponentsProps } from "react-select/base";
 import { ValueType } from "react-select/src/types";
-import {
-  TypographyColor,
-  TypographyProps,
-  TypographySize,
-} from "../../../../../state/ducks/common";
+import { TypographyColor, TypographyProps, TypographySize } from "../../../../../state/ducks/common";
 import Text from "../../../../components/Text";
 import Field, { FieldOwnProps } from "../Field";
 import { InputField } from "../Input.styles";
