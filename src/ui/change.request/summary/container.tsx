@@ -11,7 +11,6 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import { ApplicationState } from "../../../state/reducers";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
-import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import ChangeRequestAuditContainer from "../audit/Audit.container";
 import SummaryPresenter from "../documentRevision/DocumentRevisionControlPreview.presenter";
@@ -52,6 +51,7 @@ export const Container: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
   save,
+  loadGroupsByStage,
   currentUserEmail,
   closeTask,
   currentEmployeeId,
@@ -64,14 +64,13 @@ export const Container: React.FunctionComponent<Props> = ({
       setSummaryDocTypeGroups([
         ...summaryDocumentTypeGroups,
         response,
-      ]);
+      ].flat());
     },
   });
-  const getGroupsByStage = useActionCreator(documentTypeActions.loadGroupsByStage);
 
   useEffect(() => {
     dataProp.documentRevisions.map((docRev) => asyncGroups.start(
-      getGroupsByStage,
+      loadGroupsByStage,
       docRev.document.documentType.id,
       docRev.revisionStage,
       asyncGroups,
@@ -111,7 +110,7 @@ export const Container: React.FunctionComponent<Props> = ({
         currentUserEmail={currentUserEmail}
         closeTask={closeTask}
         canChangeOwnerShip={canChangeOwnerShip}
-        documentTypeGroups={summaryDocumentTypeGroups.flat()}
+        documentTypeGroups={summaryDocumentTypeGroups}
         {...props}
       />
     </Form>
@@ -178,5 +177,6 @@ export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
   {
     save: changeRequestsActions.save,
     closeTask: changeRequestsActions.closeTask,
+    loadGroupsByStage: documentTypeActions.loadGroupsByStage,
   },
 )(withStyles(styles)(Container));
