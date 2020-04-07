@@ -3,6 +3,7 @@ import { FormikProps } from "formik";
 import { get, isEmpty } from "lodash";
 import { observer } from "mobx-react";
 import React, { useEffect } from "react";
+import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
@@ -96,6 +97,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   onUpgradeClick,
   type,
 }) => {
+  const intl = useIntl();
   const loadAvailableApproversAction = useActionCreator(
     changeRequestsActions.loadAvailableApprovers
   );
@@ -315,11 +317,14 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           >
             <AutocompleteField
               name="securityEmployees"
-              label="document.revision.user.permissions"
+              label="document.revision.selected.users"
               autocompleteProps={{
                 id: "securityEmployees",
                 isMulti: true,
                 closeMenuOnSelect: false,
+                placeholder: intl.formatMessage({
+                  id: "document.revision.selected.users.placeholder",
+                }),
               }}
               options={availableApprovers}
             />
@@ -333,11 +338,14 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           >
             <AutocompleteField
               name="securityGroups"
-              label="document.revision.group.permissions"
+              label="document.revision.selected.groups"
               autocompleteProps={{
                 id: "securityGroups",
                 isMulti: true,
                 closeMenuOnSelect: false,
+                placeholder: intl.formatMessage({
+                  id: "document.revision.selected.groups.placeholder",
+                }),
               }}
               options={groupOptions}
             />
