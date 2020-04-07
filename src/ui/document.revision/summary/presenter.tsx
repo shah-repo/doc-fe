@@ -56,10 +56,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
 }) => {
   const onSubmit = () => void 0;
   FBDRStore.setValues(dataProp);
-  const outputDocumentTypeName = useSelector((state: ApplicationState) => {
-    const outputDocumentTypeId = formTemplate ? formTemplate.outputDocumentType.id : "";
-    return documentTypeSelectors.getDocTypeName(state, outputDocumentTypeId);
-  });
+  const outputDocumentTypeName = useSelector((state: ApplicationState) => formTemplate ? formTemplate.outputDocumentTypes.map((i) => documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
 
   const renderTrainingControl = status === DocumentRevisionStatus.Released && (
     <TrainingControl

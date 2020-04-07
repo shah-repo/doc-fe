@@ -2,9 +2,7 @@ import { Dialog, DialogContent, DialogTitle, Typography } from "@material-ui/cor
 import React from "react";
 import Text from "../../../components/Text";
 import { FBPurchaseOrderDialogProps } from "../FBPurchaseOrder.types";
-import { withFBPurchaseOrderDialog } from "./FBPurchaseOrderDialog.wrap";
 import FBPurchaseOrderForm from "./FBPurchaseOrderForm";
-
 const FBPurchaseOrderDialog: React.FunctionComponent<FBPurchaseOrderDialogProps> = ({
   onSubmit,
   name,
@@ -42,4 +40,4 @@ const FBPurchaseOrderDialog: React.FunctionComponent<FBPurchaseOrderDialogProps>
   );
 };
 
-export default withFBPurchaseOrderDialog(FBPurchaseOrderDialog);
+export default FBPurchaseOrderDialog;

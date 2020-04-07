@@ -11,6 +11,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
   const Comp = ({
     autocompleteAsyncState,
     optionValueType = "key",
+    selectedOptions,
     getOptionLabel,
     defaultValue,
     optionId,
@@ -27,7 +28,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       valueKey: optionValueKey = "id",
       labelKey: optionLabelKey = "name",
     } = autocompleteAsyncState?.optionConfig || {};
-    const formValue = FBStore.getValue(name);
+    const formValue = FBStore.getValue(name) || defaultValue;
 
     React.useEffect(() => {
       if (!optionId) {
@@ -40,7 +41,12 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       if (!optionId) {
         return;
       }
-      options = autocompleteAsyncState?.sliceData;
+      const slicedOptions = autocompleteAsyncState?.sliceData;
+      if (slicedOptions) {
+        options = selectedOptions
+          ? autocompleteAsyncState?.sliceValue(selectedOptions)
+          : slicedOptions;
+      }
       loading = !options && autocompleteAsyncState?.loading;
     });
 
@@ -63,6 +69,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       optionLabelKey,
       optionValueType,
       getOptionLabel,
+      selectedOptions,
       defaultValue,
       multiple,
       name,
