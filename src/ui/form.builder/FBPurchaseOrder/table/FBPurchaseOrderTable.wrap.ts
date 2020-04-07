@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { FB } from "../..";
+import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import useDialog from "../../../hooks/useDialog";
+import FBStore from "../../stores/ui/FBStore";
 import { FBPurchaseOrderTableProps } from "../FBPurchaseOrder.types";
 
 export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
@@ -10,12 +12,14 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
   const Comp = ({
     ...props
   }: T) => {
+    const { document } = FBStore;
+    const isDocumentReleased = document.status === DocumentRevisionStatus.Released;
     const [index, setIndex] = useState(undefined);
     const [initialValues, setInitialValues] = useState<any>(undefined);
     const { poState } = FB.useStores();
     const dialog = useDialog();
     const handleEdit = (index, item) => () => {
-      if (props.disabled) {
+      if (props.disabled && !isDocumentReleased) {
         return;
       }
       poState.setFormValues(item);
@@ -47,6 +51,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       initialValues,
       onSubmit,
       items: poState.po.items,
+      isDocumentReleased,
     });
   };
 

@@ -46,6 +46,7 @@ export type FBPurchaseOrderTableProps =
 & Pick<FBPurchaseOrderDialogProps, "onSubmit" | "closeDialog" | "items" | "isDialogOpen" | "initialValues">
 & {
   items: PurchaseOrderItem[];
+  isDocumentReleased?: boolean;
   handleEdit: (index: number, item: PurchaseOrderItem) => () => void;
   handleDelete (index: number): (e: any) => void;
 };
@@ -72,4 +73,5 @@ export interface PurchaseOrderItem {
   isTraceabilityRequired: boolean;
   capitalEquipment: boolean;
   tax: boolean;
+  received?: number;
 }

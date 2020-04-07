@@ -1,13 +1,13 @@
 import { Box, Checkbox, makeStyles, Table, TableBody, TableCell, TableHead, TableRow, withStyles } from "@material-ui/core";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import classNames from "classnames";
-import React, { useState } from "react";
+import React from "react";
 import Date from "../../../components/Date"; // we shouldn't use anything outside the formbuilder
 import Text from "../../../components/Text";
 import Colors from "../../../layout/theme/utils/colors";
 import { FBPurchaseOrderTableProps, PurchaseOrderItem } from "../FBPurchaseOrder.types";
 import FBPurchaseOrderDialog from "../form/FBPurchaseOrderDialog";
-import FBPurchaseOrderLotControl from "../lotControl/FBPurchaseOrderLotControl";
+import FBPurchaseOrderLotDialog from "../lot/FBPurchaseOrderLotDialog";
 import { withFBPurchaseOrderTable } from "./FBPurchaseOrderTable.wrap";
 
 const StyledTableCell = withStyles((theme) => ({
@@ -48,11 +48,9 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
   initialValues,
   onSubmit,
   name,
+  isDocumentReleased,
 }) => {
   const classes = useStyles();
-  const [hoverIndex, setHoverIndex] = useState(-1);
-  const handleMouseEnter = (index) => () => setHoverIndex(index);
-  const handleMouseLeave = () => setHoverIndex(-1);
 
   return (
     <Box className={classes.root}>
@@ -96,8 +94,6 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
               key={index}
               onClick={handleEdit(index, row)}
               className={classNames({ [classes.editable]: !disabled })}
-              onMouseEnter={handleMouseEnter(index)}
-              onMouseLeave={handleMouseLeave}
             >
               <StyledTableCell align="left">{index + 1}</StyledTableCell>
               <StyledTableCell>{row.order}</StyledTableCell>
@@ -118,18 +114,30 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
                   <RemoveCircleOutlineIcon color="error" onClick={handleDelete(index)} />
                 </StyledTableCell>
               }
-              <FBPurchaseOrderLotControl isActive={index === hoverIndex} item={row} />
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <FBPurchaseOrderDialog
-        isDialogOpen={isDialogOpen}
-        closeDialog={closeDialog}
-        initialValues={initialValues}
-        onSubmit={onSubmit}
-        name={name}
-      />
+      {
+        !isDocumentReleased &&
+        <FBPurchaseOrderDialog
+          isDialogOpen={isDialogOpen}
+          closeDialog={closeDialog}
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+          name={name}
+        />
+      }
+      {
+        isDocumentReleased &&
+        <FBPurchaseOrderLotDialog
+          isDialogOpen={isDialogOpen}
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+          name={name}
+          closeDialog={closeDialog}
+        />
+      }
     </Box>
   );
 };

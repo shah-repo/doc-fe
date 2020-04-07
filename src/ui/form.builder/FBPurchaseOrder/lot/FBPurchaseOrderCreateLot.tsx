@@ -1,6 +1,5 @@
-/* eslint-disable react/style-prop-object */
 import { Button } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { Slide, toast } from "react-toastify";
@@ -14,16 +13,17 @@ import { toNewVersionRequestBody } from "../../../documentRevision/forms/transfo
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useGetDocTypeByAcronym from "../../../hooks/useGetDocTypeByAcronym";
+import FBStore from "../../stores/ui/FBStore";
 import { PurchaseOrderItem } from "../FBPurchaseOrder.types";
 
 interface Props {
-  document: DocumentRevision;
   item: PurchaseOrderItem;
 }
 const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
-  document,
   item,
 }) => {
+  const [isCreatingLot, setIsCreatingLot] = useState(false);
+  const { document } = FBStore;
   const LOT = "LOT";
   const intl = useIntl();
 
@@ -34,9 +34,11 @@ const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
     onSuccess: (docRev ) => {
       const path = docRev && documentPreviewPath(docRev.id, docRev.document.id);
       window.open(path, "_blank");
+      setIsCreatingLot(false);
     },
     onError: () => {
       toastError("form.builder.po.lot.wasnt.created");
+      setIsCreatingLot(false);
     },
   });
   const loadDocumentProposedIdAction = useActionCreator(documentsActions.loadDocumentProposedIdWithCallback);
@@ -46,6 +48,7 @@ const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
     },
     onError: () => {
       toastError("form.builder.po.lot.wasnt.created");
+      setIsCreatingLot(false);
     },
   });
 
@@ -58,6 +61,7 @@ const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
         }
       });
     }
+
     const values = toNewVersionRequestBody({
       name: `${item.glCode}-${item.description}`,
       description: `<p>${item.glCode}-${item.description}</p>`,
@@ -73,6 +77,7 @@ const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
       revisionChangeType: RevisionChangeType.NextRevision,
       renderHTML: undefined,
     });
+
     createDocumentAsync.start(createDocumentAction, values, createDocumentAsync);
   };
   const toastError = (message: string) => {
@@ -94,6 +99,7 @@ const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
       toastError("form.builder.po.no.document.lot");
       return;
     }
+    setIsCreatingLot(true);
     loadDocumentProposedIdAsync.start(loadDocumentProposedIdAction, LOT, loadDocumentProposedIdAsync);
   };
 
@@ -102,7 +108,8 @@ const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
       onClick={startLotCreation}
       color="secondary"
       variant="contained"
-      size="small"
+      disabled={isCreatingLot}
+      type="button"
     >
       <Text translation="form.builder.po.create.lot" />
     </Button>
