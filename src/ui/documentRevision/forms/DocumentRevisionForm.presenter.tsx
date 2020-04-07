@@ -22,7 +22,7 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types.js"
 import CheckboxField from "../../components/forms/fields/Checkbox";
 import RichTextEditor from "../../components/forms/fields/RichTextEditor";
 import SelectField, { SelectOption } from "../../components/forms/fields/Select";
-import { required, validator } from "../../components/forms/fields/validators";
+import { required, requiredAtLeastOne, validator } from "../../components/forms/fields/validators";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
 import FormWrapper from "../../components/forms/FormWrapper";
@@ -363,7 +363,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 className: !outputDocEnabled ? classes.outputGrey : "",
               }}
               options={otherDocumentTypes}
-              validate={validator(required)}
+              validate={validator(requiredAtLeastOne)}
             />
             <RenderHtmlField />
           </Box>
