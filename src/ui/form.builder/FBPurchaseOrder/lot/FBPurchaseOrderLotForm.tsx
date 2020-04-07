@@ -41,7 +41,7 @@ const FBPurchaseOrderLotForm: React.FunctionComponent<FBPurchaseOrderFormProps> 
           label="form.builder.field.order.received"
           name={`${name}-formValues.received`}
         />
-        <Error error={errors.order} />
+        <Error error={errors.received} />
         <Box textAlign="center">
           <FBButton
             onClick={closeDialog}

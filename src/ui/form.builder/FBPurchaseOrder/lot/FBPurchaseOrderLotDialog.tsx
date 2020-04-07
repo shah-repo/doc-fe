@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogTitle, Typography } from "@material-ui/core";
 import React from "react";
 import Text from "../../../components/Text";
-import FBPurchaseOrderLotForm from "./FBPurchaseOrderLotForm";
+import FBPurchaseOrderLotFormContainer from "./FBPurchaseOrderLotForm.container";
 const FBPurchaseOrderLotDialog: React.FunctionComponent<any> = ({
   onSubmit,
   name,
@@ -21,7 +21,7 @@ const FBPurchaseOrderLotDialog: React.FunctionComponent<any> = ({
         </Typography>
       </DialogTitle>
       <DialogContent id="FBPurchaseOrderDialog-closeDialog">
-        <FBPurchaseOrderLotForm
+        <FBPurchaseOrderLotFormContainer
           name={name}
           onSubmit={onSubmit}
           initialValues={initialValues}

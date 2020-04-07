@@ -67,6 +67,7 @@ export class FBPurchaseOrderState {
     FBStore.setValue(`${this.name}-formValues.index`, undefined);
     FBStore.setValue(`${this.name}-formValues.formattedDate`, undefined);
     FBStore.setValue(`${this.name}-formValues.totalAmount`, undefined);
+    FBStore.setValue(`${this.name}-formValues.received`, undefined);
     FBStore.setValue(`${this.name}-formValues`, undefined);
   };
 
