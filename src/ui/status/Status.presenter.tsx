@@ -2,8 +2,8 @@ import React from "react";
 import Config from "../../config";
 
 const API = Config.ApiEndpoint;
-const STATUS_QUERY = "/v1/status";
-const MICRO_STATUS_QUERY = "/v1/micro/healthcheck";
+const STATUS_QUERY = "/status";
+const MICRO_STATUS_QUERY = "/micro/healthcheck";
 
 interface StatusState {
   data: object;
