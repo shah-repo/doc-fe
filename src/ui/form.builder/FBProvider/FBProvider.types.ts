@@ -1,4 +1,5 @@
 import { FBDialogState, FBFieldWrapperState, FBFormState, FBInlineApprovalState, FBMediaAlbumState, FBSchemaState, FBTestStepState, FBWorkspaceState } from "..";
+import { FBPurchaseOrderState } from "../FBPurchaseOrder";
 
 export interface FBProviderProps {
   workspaceState?: FBWorkspaceState;
@@ -9,4 +10,5 @@ export interface FBProviderProps {
   formState?: FBFormState;
   schemaState?: FBSchemaState;
   testStepState?: FBTestStepState;
+  poState?: FBPurchaseOrderState;
 }

@@ -47,7 +47,7 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
         item[key] && delete errors[key];
       });
 
-      const isUniquePartNumber = !poState.po.items.map((item) => item.partNumber).includes(item.partNumber);
+      const isUniquePartNumber = !poState?.po.items.map((item) => item.partNumber).includes(item.partNumber);
       const isPartNumberInitialValue = initialValuesState[`${name}-formValues`]?.partNumber === item.partNumber;
       if (!isUniquePartNumber && !isPartNumberInitialValue) {
         errors.partNumber = "form.builder.pn.unique";

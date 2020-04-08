@@ -3,7 +3,7 @@ import { action, get, observable, set } from "mobx";
 import React from "react";
 import { FBSchemaProps } from ".";
 import { FBCheckboxGroup, FBInputProps, FBInputType } from "..";
-import FBParagraph from "../FBParagraph";
+import { FBParagraph } from "../FBParagraph";
 import { FBSection } from "../FBSection";
 import { FBTextField } from "../FBTextField";
 

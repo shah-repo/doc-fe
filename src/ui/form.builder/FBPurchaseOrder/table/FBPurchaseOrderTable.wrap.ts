@@ -22,26 +22,26 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       if (props.disabled && !isDocumentReleased) {
         return;
       }
-      poState.setFormValues(item);
+      poState?.setFormValues(item);
       setIndex(index);
       setInitialValues({ [`${props.name}-formValues`]: item });
       dialog.open();
     };
     const handleDelete = (index) => (e) => {
       e.stopPropagation();
-      !props.disabled && poState.deleteItem(index);
+      !props.disabled && poState && poState.deleteItem(index);
     };
     const closeDialog = () => {
       dialog.close();
       setIndex(undefined);
       setInitialValues(undefined);
-      poState.clearFormValues();
+      poState?.clearFormValues();
     };
     const onSubmit = (item) => {
-      poState.updateItem(index, item);
+      poState?.updateItem(index || 0, item);
       setIndex(undefined);
       setInitialValues(undefined);
-      poState.clearFormValues();
+      poState?.clearFormValues();
     };
 
     return Component({
@@ -52,7 +52,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       closeDialog,
       initialValues,
       onSubmit,
-      items: poState.po.items,
+      items: poState?.po.items,
       isDocumentReleased,
     });
   };
