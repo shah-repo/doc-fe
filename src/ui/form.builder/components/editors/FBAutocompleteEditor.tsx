@@ -1,7 +1,6 @@
 import React from "react";
 import autocompleteOptions from "../../../../data/autocompleteOptions.json";
 import FBStepperEditor from "../../FBStepperEditor";
-import { withAutocompleteEditor } from "../../hocs/editors/withAutocompleteEditor";
 import { FBAutocompleteEditorProps } from "../../types/editors/autocomplete.js";
 import FBSelect from "../inputs/FBSelect";
 import FBAdditionsEditor from "./FBAdditionsEditor";
@@ -26,4 +25,4 @@ const FBAutocompleteEditor: React.FunctionComponent<FBAutocompleteEditorProps> =
   </FBStepperEditor>
 );
 
-export default withAutocompleteEditor(FBAutocompleteEditor);
+export default FBAutocompleteEditor;

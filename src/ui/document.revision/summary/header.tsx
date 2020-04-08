@@ -10,29 +10,27 @@ export type Props = DataProps<DocumentRevision> & WithStyles<typeof styles>;
 export const Header: React.FunctionComponent<Props> = ({
   classes,
   dataProp,
-}) => {
-  return (
-    <Grid
-      container={true}
-      alignItems="center"
-      spacing={0}
-      className={classes.headerContainer}
-    >
-      <Grid item={true} xs={3}>
-        <Chip label={dataProp.status} className={classes.status} id="Header-chip" />
-      </Grid>
-      <Grid item={true} xs={6}>
-        <Typography variant="h6" align="center">
-          <Text message="common.document" />
-        </Typography>
-      </Grid>
-      <Grid item={true} xs={3} id="Header-docId" >
-        <Typography variant="h6" align="right" className={classes.crId} >
-          {dataProp.document.docId}
-        </Typography>
-      </Grid>
+}) => (
+  <Grid
+    container={true}
+    alignItems="center"
+    spacing={0}
+    className={classes.headerContainer}
+  >
+    <Grid item={true} xs={3}>
+      <Chip label={dataProp.status} className={classes.status} id="Header-chip" />
     </Grid>
-  );
-};
+    <Grid item={true} xs={6}>
+      <Typography variant="h6" align="center">
+        <Text message="common.document" />
+      </Typography>
+    </Grid>
+    <Grid item={true} xs={3} id="Header-docId" >
+      <Typography variant="h6" align="right" className={classes.crId} >
+        {dataProp.document.docId}
+      </Typography>
+    </Grid>
+  </Grid>
+);
 
 export default withStyles(styles)(Header);

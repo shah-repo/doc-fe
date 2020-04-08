@@ -23,7 +23,7 @@ import styles from "./NavigationLink.styles";
 
 interface NavigationLinkPresenterProps
   extends LinkDefinition,
-    WithStyles<typeof styles> {
+  WithStyles<typeof styles> {
   ActionIcon?: ReactNode;
   isChild?: boolean;
 }

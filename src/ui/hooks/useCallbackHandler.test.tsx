@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { mount, ReactWrapper } from "enzyme";
 import React from "react";
 import { act } from "react-dom/test-utils";

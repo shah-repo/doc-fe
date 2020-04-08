@@ -11,7 +11,7 @@ describe("Document revision form - References", () => {
   );
 
   it("should return all references", () => {
-    const document = {...getDocument(), referencedBy: [getDocumentRevision()]};
+    const document = { ...getDocument(), referencedBy: [getDocumentRevision()] };
     const wrapper = getWrapper({ document });
     const reference = document.referencedBy[0];
 

@@ -18,22 +18,20 @@ export const ReferencePresenter: React.FunctionComponent<Props> = ({
   label,
 }) => {
   const referencesRenderer = () =>
-    dataProp.map((reference: Model, index) => {
-      return (
-        <Grid item key={reference.id}>
-          <ListItem>
-            <Grid item={true} xs={12}>
-              <Typography variant="body1">
-                <Text message={`${index + 1}`} />.{" "}
-                <Link to={reference.url} target="_blank" id="ReferencePresenter-link">
-                  {reference.title}
-                </Link>
-              </Typography>
-            </Grid>
-          </ListItem>
-        </Grid>
-      );
-    });
+    dataProp.map((reference: Model, index) => (
+      <Grid item key={reference.id}>
+        <ListItem>
+          <Grid item={true} xs={12}>
+            <Typography variant="body1">
+              <Text message={`${index + 1}`} />.{" "}
+              <Link to={reference.url} target="_blank" id="ReferencePresenter-link">
+                {reference.title}
+              </Link>
+            </Typography>
+          </Grid>
+        </ListItem>
+      </Grid>
+    ));
 
   return (
     <Box className={classes.box}>

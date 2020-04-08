@@ -2,8 +2,8 @@ import { Box, Typography } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import { FormattedNumber, useIntl } from "react-intl";
-import { FBAutocomplete } from "../..";
 import Text from "../../../components/Text";
+import FBAutocompleteAsync from "../../FBAutocompleteAsync";
 import { TAX_RATE } from "../../helpers/constants";
 import FBStore from "../../stores/ui/FBStore";
 import FBButton from "../inputs/FBButton";
@@ -78,6 +78,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
     values.date = values.date || new Date();
     values.tax = values.tax || false;
     values.isTraceabilityRequired = values.isTraceabilityRequired || false;
+    values.capitalEquipment = values.capitalEquipment || false;
     const fields = [
       "order",
       "units",
@@ -96,7 +97,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
       }
     });
 
-    const isUniquePartNumber = !items.map((item) => item.partNumber).includes(values.partNumber);
+    const isUniquePartNumber = !(items || []).map((item) => item.partNumber).includes(values.partNumber);
     const isPartNumberInitialValue = initialValues.partNumber === values.partNumber;
     if (!isUniquePartNumber && !isPartNumberInitialValue) {
       newError = `${newError} ${intl.formatMessage({ id: "form.builder.pn.unique" })}`;
@@ -121,7 +122,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<Props> = ({
           label="form.builder.field.qunatity.ordered"
           name="order"
         />
-        <FBAutocomplete
+        <FBAutocompleteAsync
           label="GL code"
           optionId="9"
           name="glCode"

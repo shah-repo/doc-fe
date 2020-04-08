@@ -13,6 +13,8 @@ const DEFAULTS = {
   VALIDATORS_S3_FOLDER_NAME: "",
   AWS_BUCKET_PUBLIC: "",
   AWS_REGION: "",
+  HELLOSIGN_TEST_MODE: "",
+  HELLOSIGN_CLIENT_ID: ""
 };
 
 type ConfigKey = keyof typeof DEFAULTS;
@@ -68,6 +70,14 @@ class Config {
 
   public static get SlackUserUri(): string {
     return `${this.FrontendUrl}/slack/user`;
+  }
+
+  public static get HelloSignTestMode(): string {
+    return this.get("HELLOSIGN_TEST_MODE");
+  }
+
+  public static get HelloSignClientId(): string {
+    return this.get("HELLOSIGN_CLIENT_ID");
   }
 }
 

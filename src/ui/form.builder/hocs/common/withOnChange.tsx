@@ -95,6 +95,13 @@ export const withOnChange = <T extends FBInputProps>(
       return _.toString(ev);
     }
 
+    function isDate() {
+      if (_.isEmpty(ev)) {
+        return ev;
+      }
+      return (ev as unknown as Date).toISOString();
+    }
+
     let fieldValue = {
       checkboxgroup() {
         const checked = _.get(ev.target, "checked");
@@ -112,11 +119,11 @@ export const withOnChange = <T extends FBInputProps>(
       checkbox: isChecked,
       radio: isChecked,
       texteditor: isString,
-      datepicker: isString,
+      datepicker: isDate,
       autocomplete() {
-        const { optionValueKey = "id", valueType = "key", optionObjectKeys } = props;
+        const { optionValueKey = "id", optionValueType = "key", optionObjectKeys } = props;
         if (_.isArray(value)) {
-          if (valueType === "object") {
+          if (optionValueType === "object") {
             return optionObjectKeys ?
               _.map(value, (v) => _.pick(v, optionObjectKeys as string[]))
               : value;

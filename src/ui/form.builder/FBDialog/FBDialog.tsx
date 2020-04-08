@@ -37,7 +37,9 @@ const FBDialog: React.FunctionComponent<FBDialogProps> = ({
       {content}
     </DialogContent>
     {actions && (
-      <DialogActions>{actions}</DialogActions>
+      <DialogActions>
+        <Box px={2}>{actions}</Box>
+      </DialogActions>
     )}
   </ Dialog>
 );

@@ -1,5 +1,5 @@
 import _, { Dictionary } from "lodash";
-import { action, computed, observable } from "mobx";
+import { action, computed, observable, set } from "mobx";
 import { FBFormValues } from "../../defaults/formik";
 import { FBInputProps } from "../../types/common";
 import { FBTemplateSchema } from "../../types/store";
@@ -8,15 +8,17 @@ import editorStore from "./FBEditorStore";
 import FBValidatorStore from "./FBValidatorStore";
 
 export class FormBuilderStore {
-  @computed get active(): boolean {
+
+
+  @computed public get active(): boolean {
     return this.mode !== "none";
   }
 
-  @computed get isStarter(): boolean {
+  @computed public get isStarter(): boolean {
     return (this.mode === "design") && (this.schema.length === 0);
   }
 
-  @computed get fieldMode(): Pick<FBInputProps, "disabled"> {
+  @computed public get fieldMode(): Pick<FBInputProps, "disabled"> {
     return {
       disabled: this.isDisabled(),
       // readOnly: this.isReadonly(),
@@ -108,7 +110,17 @@ export class FormBuilderStore {
       }
       return o;
     });
-    this.schema = newSchema;
+    set(this, "schema", newSchema);
+  };
+
+  @action public clearSchema = () => {
+    set(this, "schema", []);
+  };
+
+  @action public resetSchema = () => {
+    const schema = this.schema;
+    this.clearSchema();
+    set(this, "schema", schema);
   };
 
   @action public setFormSchema = (newSchema: FBTemplateSchema[]) => {
@@ -128,7 +140,7 @@ export class FormBuilderStore {
     };
   };
 
-  @action public getValue = (name: string): any => _.get(this.getValues(), name);
+  @action public getValue = (name?: string): any => _.get(this.getValues(), name || "");
 
   @action public getValidationAttribute = () => {
     const attributes: Dictionary<string> = {};

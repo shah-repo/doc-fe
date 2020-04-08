@@ -2,84 +2,84 @@
     "id": "1",
     "path": "/document_revisions",
     "label": "Document revisions",
-    "optionValueKey": "id",
-    "optionLabelKey": "name",
-    "prefixLabelRoot": "document.docId",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
     "root": ""
   },
   {
     "id": "2",
     "path": "/change_requests",
     "label": "Change requests",
-    "optionValueKey": "id",
-    "optionLabelKey": "title",
-    "prefixLabelRoot": "crId",
+    "valueKey": "id",
+    "labelKey": "title",
+    "labelPrefixRoot": "crId",
     "root": ""
   },
   {
     "id": "3",
     "path": "/change_requests/available_approvers",
     "label": "Approvers",
-    "optionValueKey": "id",
-    "optionLabelKey": "user.email",
+    "valueKey": "id",
+    "labelKey": "user.email",
     "root": "optionalApprovers"
   },
   {
     "id": "4",
     "path": "/document_type",
     "label": "Document types",
-    "optionValueKey": "id",
-    "optionLabelKey": "documentTypeName",
+    "valueKey": "id",
+    "labelKey": "documentTypeName",
     "root": ""
   },
   {
     "id": "5",
     "path": "/document_revisions?documentTypeAcronym=SUP",
     "label": "Supplier list",
-    "optionValueKey": "id",
-    "optionLabelKey": "name",
-    "prefixLabelRoot": "document.docId",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
     "root": ""
   },
   {
     "id": "6",
     "path": "/document_revisions?documentTypeAcronym=TL",
     "label": "TL numbers list",
-    "optionValueKey": "id",
-    "optionLabelKey": "name",
-    "prefixLabelRoot": "document.docId",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
     "root": ""
   },
   {
     "id": "7",
     "path": "/document_revisions?documentTypeAcronym=CSL",
     "label": "CSL numbers list",
-    "optionValueKey": "id",
-    "optionLabelKey": "name",
-    "prefixLabelRoot": "document.docId",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
     "root": ""
   },
   {
     "id": "8",
     "path": "/company/mine",
     "label": "Company addresses",
-    "optionValueKey": "id",
-    "optionLabelKey": "name",
+    "valueKey": "id",
+    "labelKey": "name",
     "root": "addresses"
   },
   {
     "id": "9",
     "path": "/company/mine",
     "label": "GL codes",
-    "optionValueKey": "id",
-    "optionLabelKey": "name",
+    "valueKey": "id",
+    "labelKey": "name",
     "root": "acctCodes"
   },
   {
     "id": "10",
     "path": "/groups",
     "label": "Groups",
-    "optionValueKey": "id",
-    "optionLabelKey": "name"
+    "valueKey": "id",
+    "labelKey": "name"
   }
 ]

@@ -19,7 +19,7 @@ export const withFBApprovalField = <T extends FBApprovalFieldProps>(
     approvalFieldState,
     hasApproved,
     approverStatusInfo,
-    disabled = !FBDRStore.isOutput,
+    disabled,
     approverIsVisible,
     isBlocked = true,
     ...props
@@ -27,6 +27,7 @@ export const withFBApprovalField = <T extends FBApprovalFieldProps>(
 
     approvalFieldState = FB.useRef<FBApprovalFieldState>(FBApprovalFieldState);
     isBlocked = _.isEmpty(approvalFieldState.hasApproved);
+    disabled = !FBDRStore.isOutput;
 
     function groupCheck(group: string): boolean {
       const filteredGroup = _.filter(currentUser.groups, { id: group });
@@ -73,12 +74,13 @@ export const withFBApprovalField = <T extends FBApprovalFieldProps>(
     };
 
     onClick = (identifierType: FBApprovalFieldIdentifier) => () => {
-      if (identifierType === "approver") {
-        approvalFieldState?.addApprover([currentUser.email]);
-      } else {
-        approvalFieldState?.addApprover(_.map(currentUser.groups, "id"));
-      }
-      name && FBStore.setValue(name, hasApproved);
+      const hasApproved = (identifierType === "approver")
+        ? [currentUser.email]
+        : _.map(currentUser.groups, "id");
+
+      approvalFieldState?.addApprover(hasApproved);
+      name && FBStore.setValue(name, approvalFieldState?.hasApproved);
+      FBStore.resetSchema();
     };
 
     React.useEffect(() => {
@@ -95,7 +97,6 @@ export const withFBApprovalField = <T extends FBApprovalFieldProps>(
 
     return Component({
       ...(props as T),
-      approvalFieldState,
       hasApproved,
       approverStatusInfo,
       currentUser,

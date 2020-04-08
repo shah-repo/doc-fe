@@ -13,9 +13,10 @@ describe("Header tests", () => {
       headerContainer: "",
       status: "",
       crId: "",
-    }};
+    },
+  };
 
-  const getWrapper = (props: Partial<Props>= {}) => mount(
+  const getWrapper = (props: Partial<Props> = {}) => mount(
     <Header {...defaultProps} {...props}/>,
   );
 

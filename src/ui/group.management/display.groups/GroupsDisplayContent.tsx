@@ -1,5 +1,6 @@
 import { Box, Chip, Grid, Typography } from "@material-ui/core";
-import React from "react";
+import React, { useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { Employee } from "../../../state/ducks/company";
 import Text from "../../components/Text";
 import styles from "./styles";
@@ -16,6 +17,13 @@ export const GroupsDisplayContent: React.FunctionComponent<Props> = ({
   employees,
 }) => {
   const classes = styles();
+  const history = useHistory();
+
+  // this is a hack for back button to redirect to group management table
+  useEffect(() => () => {
+    history.goForward();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const memberChipRenderer = (employees: Employee[]) => (
     employees.map((employee) => (

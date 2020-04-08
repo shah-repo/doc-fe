@@ -1,4 +1,6 @@
+/* eslint-disable react/display-name */
 import arrayMove from "array-move";
+import _ from "lodash";
 import React from "react";
 import { SortEnd } from "react-sortable-hoc";
 import { FBFieldComponent } from "../defaults/editor";
@@ -11,9 +13,12 @@ import { FBTemplateSchema } from "../types/store";
 export function withSortable<T extends FBSortableProps>(
   Component: React.ComponentType<T>,
 ) {
+
+
   return class extends React.Component<
   Subtract<T, Omit<FBSortableProps, "items">>
   > {
+    private isApproved = true;
 
     public render() {
       return (
@@ -27,8 +32,23 @@ export function withSortable<T extends FBSortableProps>(
       );
     }
     private wrapperRenderer = (schema: FBTemplateSchema) => {
-      const InputType = FBFieldComponent[schema.type as string];
-      return <InputType key={schema.name} {...schema} {...FBStore.fieldMode} />;
+      const { type, name = "" } = schema;
+      const InputType = FBFieldComponent[type as string];
+
+      let { disabled } = FBStore.fieldMode;
+      // Approved state
+      if (type === "inlineapproval" || type === "approval") {
+        const { approvers, approverGroups, approveIsBlocking } = FBStore.getValue(name) || schema;
+        const formValue = FBStore.getValue(`fb-approval-field-${name}`);
+        if ((!_.isEmpty(approvers) || !_.isEmpty(approverGroups)) && approveIsBlocking && _.isEmpty(formValue)) {
+          this.isApproved = false;
+        }
+      }
+      !this.isApproved && (disabled = true);
+      if (_.last(FBStore.getSchema())?.name === name) {
+        this.isApproved = true;
+      }
+      return <InputType key={schema.name} {...schema} {...{ disabled }} />;
     };
 
     private onSortEnd = ({ oldIndex, newIndex }: SortEnd) => {

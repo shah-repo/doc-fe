@@ -1,5 +1,5 @@
 import { Dictionary } from "lodash";
-import { FBAutocomplete, FBMediaAlbumField, FBParagraph, FBQuantityField, FBTimerField } from "..";
+import { FBAutocompleteAsync, FBMediaAlbumField, FBParagraph, FBQuantityField, FBTimerField } from "..";
 import FBActionContainer from "../components/actions/FBActionContainer";
 import FBActionEditor from "../components/editors/FBActionEditor";
 import FBAutocompleteEditor from "../components/editors/FBAutocompleteEditor";
@@ -27,10 +27,12 @@ import FBLink from "../components/navigation/FBLink";
 import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaItem";
 import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
 import FBApprovalField from "../FBApprovalField/FBApprovalField";
+import FBEditorApprovalField from "../FBEditorApprovalField";
+import FBEditorInlineApproval from "../FBEditorInlineApproval";
 import FBEditorParagraph from "../FBEditorParagraph/FBEditorParagraph";
 import FBEditorStepSection from "../FBEditorStepSection";
 import FBHelloSign from "../FBHelloSign";
-import FBEditorApprovalField from "../FFEditorApprovalField";
+import FBInlineApproval from "../FBInlineApproval";
 import { FBEditorElementType } from "../types/editor";
 
 export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = {
@@ -59,6 +61,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   createlabel: FBLabelEditor,
   quantity: FBLabelEditor,
   timer: FBLabelEditor,
+  inlineapproval: FBEditorInlineApproval,
 };
 
 export const FBFieldComponent: Dictionary<any> = {
@@ -72,7 +75,7 @@ export const FBFieldComponent: Dictionary<any> = {
   select: FBSelect,
   radio: FBRadio,
   radiogroup: FBRadioGroup,
-  autocomplete: FBAutocomplete,
+  autocomplete: FBAutocompleteAsync,
   hyperlink: FBLink,
   fileupload: FBFileUpload,
   schemaSelect: FBValidatorSchemaSelect,
@@ -89,6 +92,7 @@ export const FBFieldComponent: Dictionary<any> = {
   createlabel: FBButton,
   quantity: FBQuantityField,
   timer: FBTimerField,
+  inlineapproval: FBInlineApproval,
 };
 
 export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
@@ -98,6 +102,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "textfield",
     "checkbox",
     "checkboxgroup",
+    "autocomplete",
     "texteditor",
     "datepicker",
     "hyperlink",
@@ -110,10 +115,10 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "purchaseorder",
     "instructionsmediaupload",
     "evidencemediaupload",
+    "inlineapproval",
   ],
   approvals: ["hellosign"],
   buttons: ["checkpoint", "approval", "createlabel"],
-  lists: ["autocomplete"],
   actions: ["action"],
 };
 
@@ -144,6 +149,7 @@ export const omitLabelValidation: FBEditorElementType[] = [
 export const pickDefaultLabel: FBEditorElementType[] = [
   "checkpoint",
   "approval",
+  "inlineapproval",
   "createlabel",
   "quantity",
   "stepsection",
