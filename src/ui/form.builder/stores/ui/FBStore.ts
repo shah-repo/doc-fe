@@ -1,5 +1,6 @@
 import _, { Dictionary } from "lodash";
 import { action, computed, observable, set } from "mobx";
+import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
 import { FBFormValues } from "../../defaults/formik";
 import { FBInputProps } from "../../types/common";
 import { FBTemplateSchema } from "../../types/store";
@@ -33,6 +34,7 @@ export class FormBuilderStore {
   public docId = "";
   public documentId = "";
   public stepSectionReg = /#([1-9][0-9]?|100)$/;
+  public document: DocumentRevision = {} as DocumentRevision;
 
   @action public sectionNumber = (endIndex: number): number => {
     const sections = _.filter(this.getSchema(), (schemaItem, index) =>

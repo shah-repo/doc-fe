@@ -13,7 +13,6 @@ import FBButton from "../components/inputs/FBButton";
 import FBCheckbox from "../components/inputs/FBCheckbox";
 import FBCheckboxGroup from "../components/inputs/FBCheckboxGroup";
 import FBDatePicker from "../components/inputs/FBDatePicker";
-import FBPurchaseOrderField from "../components/inputs/FBPurchaseOrderField";
 import FBRadio from "../components/inputs/FBRadio";
 import FBRadioGroup from "../components/inputs/FBRadioGroup";
 import FBSelect from "../components/inputs/FBSelect";
@@ -39,6 +38,7 @@ import FBInlineApproval from "../FBInlineApproval";
 import FBInstructionsDocument from "../FBInstructionsDocument";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
+import FBPurchaseOrder from "../FBPurchaseOrder";
 import { FBQuantityField } from "../FBQuantityField";
 import { FBSelectDocument } from "../FBSelectDocument";
 import { FBTestRequirement } from "../FBTestRequirement";
@@ -97,7 +97,7 @@ export const FBFieldComponent: Dictionary<any> = {
   schemaItem: FBValidatorSchemaItem,
   action: FBActionContainer,
   hellosign: FBHelloSign,
-  purchaseorder: FBPurchaseOrderField,
+  purchaseorder: FBPurchaseOrder,
   paragraph: FBParagraph,
   stepsection: FBSectionBox,
   teststep: FBTestStep,
