@@ -1,4 +1,4 @@
-import { Box, Button, Grid, withStyles, WithStyles } from "@material-ui/core";
+import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { get, isEmpty } from "lodash";
 import { observer } from "mobx-react";
@@ -29,7 +29,6 @@ import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
 import SubmitButton from "../../components/forms/SubmitButton";
-import Text from "../../components/Text";
 import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
 import { documentDetailsPath } from "../../document.revision/utils/paths";
@@ -46,6 +45,7 @@ import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
 import References from "./presenters/References";
 import RenderHtmlField from "./presenters/RenderHtmlField";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
+import UpgradeToLatest from "./presenters/UpgradeToLatest";
 import { DocumentRevisionFormValues } from "./types";
 
 
@@ -216,17 +216,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     />
   );
 
-  const upgradeButtonRenderer = () => (
-    <Button
-      variant="outlined"
-      onClick={onUpgradeClick}
-      id="DocumentRevisionForm-upgrade"
-    >
-      <Text translation="common.upgrade"/>
-    </Button>
-  );
-
   const formDocumentStatus = get(documentRevision, "formDocument.status", "");
+  const isStatusDeprecated = formDocumentStatus === DocumentRevisionStatus.Deprecated;
   const isDocTypeDisabled = type === "newVersion" || isdocRevStatusDraft;
   const options = type === "newOutput" ? initialValues.formDocument?.formTemplate?.outputDocumentTypes.map((e) =>
     ({ value: e.id, text: e.documentTypeName })
@@ -391,7 +382,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               onClick={onFormClick}
               id="DocumentRevisionForm-submit"
             />
-            {formDocumentStatus === DocumentRevisionStatus.Deprecated && upgradeButtonRenderer()}
+            {isStatusDeprecated && <UpgradeToLatest onUpgradeClick={onUpgradeClick}/>}
             <ApproveAndRelease
               id={values.id}
               status={values.status}
