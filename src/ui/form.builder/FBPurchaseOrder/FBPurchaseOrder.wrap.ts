@@ -1,3 +1,4 @@
+import { debounce } from "lodash";
 import React, { useEffect } from "react";
 import { FBPurchaseOrderState } from ".";
 import { FB } from "..";
@@ -6,7 +7,9 @@ import { FBPurchaseOrderFieldProps } from "./FBPurchaseOrder.types";
 export const withFBPurchaseOrder = <T extends FBPurchaseOrderFieldProps>(
   Component: React.FunctionComponent<T>
 ) => {
-
+  const debounced = debounce((f) => {
+    f();
+  }, 300);
   const Comp = ({
     poState,
     name = "",
@@ -16,8 +19,10 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderFieldProps>(
     poState = FB.useRef<FBPurchaseOrderState>(FBPurchaseOrderState);
 
     useEffect(() => {
-      poState.name = name;
-      poState.initialize();
+      debounced(() => {
+        poState.name = name;
+        poState.initialize();
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [name]);
 

@@ -146,12 +146,11 @@ const approveAndRelease = (
 });
 
 const createAndRelease = (
-  id: string,
   body: CreateAndReleaseRequest,
   password: string,
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
-  url: `${DOCUMENT_REVISION_ROOT_URL}/release/${id}`,
+  url: `${DOCUMENT_REVISION_ROOT_URL}/create_and_release`,
   method: "post",
   data: body,
   password,

@@ -1,10 +1,8 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { useHistory } from "react-router-dom";
 import { DocumentRevision, documentRevisionsActions, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
 import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";
-import { documentPreviewPath } from "../../../document.revision/utils/paths";
 import { toNewVersionRequestBody } from "../../../documentRevision/forms/transform";
 import { DocumentRevisionFormValues } from "../../../documentRevision/forms/types";
 import useActionCreator from "../../../hooks/useActionCreator";
@@ -18,12 +16,9 @@ const FBPurchaseOrderReceiveFormContainer: React.FunctionComponent<FBPurchaseOrd
   name,
   ...props
 }) => {
-  const history = useHistory();
   const releaseAction = useActionCreator(documentRevisionsActions.createAndRelease);
   const releaseAsync = useAsync<DocumentRevision>({
     onSuccess: (docRev) => {
-      const path = docRev && documentPreviewPath(docRev.id, docRev.document.id);
-      history.push(path);
       props.closeDialog();
     },
   });
@@ -37,9 +32,10 @@ const FBPurchaseOrderReceiveFormContainer: React.FunctionComponent<FBPurchaseOrd
       ...document,
       formInput: { ...FBStore.getValues() },
       revisionChangeType: RevisionChangeType.NextRevision,
+      formDocument: { id: document.formDocument?.id },
     } as unknown as DocumentRevisionFormValues);
     const body = { releasedDocumentRevision, releaseDto: [] };
-    releaseAsync.start(releaseAction, document.id, body, password, releaseAsync);
+    releaseAsync.start(releaseAction, body, password, releaseAsync);
   };
   const validateForm = (values) => {
     const item = values[`${name}-formValues`] || {};
