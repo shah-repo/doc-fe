@@ -170,7 +170,7 @@ export interface DocumentRevisionAuditSetAction {
 
 export type AllIdsState = string[];
 
-export interface CreateAndReleaseRequest {
+export interface ApproveAndReleaseRequest {
   approvers: Id[];
 }
 

@@ -9,9 +9,9 @@ import { DocumentRevisionFormValues } from "../../../documentRevision/forms/type
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import FBStore from "../../stores/ui/FBStore";
-import FBPurchaseOrderLotForm from "./FBPurchaseOrderLotForm";
+import FBPurchaseOrderLotForm from "./FBPurchaseOrderReceiveForm";
 
-const FBPurchaseOrderLotFormContainer: React.FunctionComponent<any> = ({
+const FBPurchaseOrderReceiveFormContainer: React.FunctionComponent<any> = ({
   onSubmit,
   name,
   ...props
@@ -64,4 +64,4 @@ const FBPurchaseOrderLotFormContainer: React.FunctionComponent<any> = ({
   );
 };
 
-export default FBPurchaseOrderLotFormContainer;
+export default FBPurchaseOrderReceiveFormContainer;

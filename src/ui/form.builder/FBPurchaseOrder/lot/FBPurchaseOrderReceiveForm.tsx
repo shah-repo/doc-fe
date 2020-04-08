@@ -26,7 +26,7 @@ const Error: React.FunctionComponent<ErrorProps> = ({
   );
 };
 
-const FBPurchaseOrderLotForm: React.FunctionComponent<FBPurchaseOrderFormProps> = ({
+const FBPurchaseOrderReceiveForm: React.FunctionComponent<FBPurchaseOrderFormProps> = ({
   initialValues = {} as Dictionary<PurchaseOrderItem>,
   onSubmit,
   closeDialog,
@@ -77,4 +77,4 @@ const FBPurchaseOrderLotForm: React.FunctionComponent<FBPurchaseOrderFormProps> 
   );
 };
 
-export default FBPurchaseOrderLotForm;
+export default FBPurchaseOrderReceiveForm;

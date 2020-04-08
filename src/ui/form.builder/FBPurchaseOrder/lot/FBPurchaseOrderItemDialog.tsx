@@ -2,7 +2,7 @@ import { Box, Button, Dialog, DialogContent, DialogTitle, Typography } from "@ma
 import React, { useState } from "react";
 import Text from "../../../components/Text";
 import FBPurchaseOrderCreateLot from "./FBPurchaseOrderCreateLot";
-import FBPurchaseOrderLotFormContainer from "./FBPurchaseOrderLotForm.container";
+import FBPurchaseOrderReceiveFormContainer from "./FBPurchaseOrderReceiveForm.container";
 const FBPurchaseOrderItemDialog: React.FunctionComponent<any> = ({
   onSubmit,
   name,
@@ -25,7 +25,7 @@ const FBPurchaseOrderItemDialog: React.FunctionComponent<any> = ({
       </Button>
     </Box>;
   const renderForm = showForm &&
-    <FBPurchaseOrderLotFormContainer
+    <FBPurchaseOrderReceiveFormContainer
       name={name}
       onSubmit={onSubmit}
       initialValues={initialValues}
