@@ -14,7 +14,6 @@ import FBButton from "../components/inputs/FBButton";
 import FBCheckbox from "../components/inputs/FBCheckbox";
 import FBCheckboxGroup from "../components/inputs/FBCheckboxGroup";
 import FBDatePicker from "../components/inputs/FBDatePicker";
-import FBPurchaseOrderField from "../components/inputs/FBPurchaseOrderField";
 import FBRadio from "../components/inputs/FBRadio";
 import FBRadioGroup from "../components/inputs/FBRadioGroup";
 import FBSelect from "../components/inputs/FBSelect";
@@ -34,6 +33,7 @@ import FBEditorStepSection from "../FBEditorStepSection";
 import FBHelloSign from "../FBHelloSign";
 import FBInlineApproval from "../FBInlineApproval";
 import FBInstructionsDocument from "../FBInstructionsDocument";
+import FBPurchaseOrder from "../FBPurchaseOrder";
 import { FBEditorElementType } from "../types/editor";
 
 export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = {
@@ -85,7 +85,7 @@ export const FBFieldComponent: Dictionary<any> = {
   schemaItem: FBValidatorSchemaItem,
   action: FBActionContainer,
   hellosign: FBHelloSign,
-  purchaseorder: FBPurchaseOrderField,
+  purchaseorder: FBPurchaseOrder,
   paragraph: FBParagraph,
   stepsection: FBSectionBox,
   instructionsmediaupload: FBMediaAlbumField,

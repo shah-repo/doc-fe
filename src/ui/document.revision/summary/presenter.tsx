@@ -109,7 +109,10 @@ export const Presenter: React.FunctionComponent<Props> = ({
 
       {FBStore.active && (
         <Box px={5} id="Presenter-FBWorkspace">
-          <FBWorkspace documentId={_.get(formDocument, "document.id") || _.get(document, "id")} />
+          <FBWorkspace
+            documentId={_.get(formDocument, "document.id") || _.get(document, "id")}
+            document={dataProp}
+          />
         </Box>
       )}
       <Box flexDirection={document.canAccess ? "row-reverse" : "row"} display="flex" px={3}>
