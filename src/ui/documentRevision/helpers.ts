@@ -1,10 +1,6 @@
 import _ from "lodash";
 import moment from "moment";
-import {
-  DocumentRevision,
-  DocumentRevisionStatus,
-  RevisionChangeType,
-} from "../../state/ducks/documentRevisions";
+import { Document, DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../state/ducks/documentRevisions";
 
 export const canEditDocumentRevision = (
   documentRevision: DocumentRevision,
@@ -133,3 +129,5 @@ export const getDocRevIdToRedirect = (
 export const canChangeDocumentOwner = (status: DocumentRevisionStatus, currentEmployeeId: string, ownerId: string, isCompanyAdmin: boolean) =>
   (status === DocumentRevisionStatus.Draft || status === DocumentRevisionStatus.PendingChange) &&
     (isCompanyAdmin || ownerId === currentEmployeeId);
+
+export const getIsLastVersionObsolete = (formDocuments: Document) => _.some(formDocuments.documentRevisions, ["status", DocumentRevisionStatus.Obsolete ]);
