@@ -34,6 +34,6 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
       />
     </FBInput>
   );
-}
+};
 
 export default FBTextField;
