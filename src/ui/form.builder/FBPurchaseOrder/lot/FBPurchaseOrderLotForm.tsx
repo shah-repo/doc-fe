@@ -6,7 +6,6 @@ import Text from "../../../components/Text";
 import FBButton from "../../components/inputs/FBButton";
 import FBTextField from "../../components/inputs/FBTextField";
 import { FBPurchaseOrderFormProps, PurchaseOrderItem } from "../FBPurchaseOrder.types";
-import FBPurchaseOrderCreateLot from "./FBPurchaseOrderCreateLot";
 
 interface ErrorProps { error?: string }
 const Error: React.FunctionComponent<ErrorProps> = ({
@@ -48,7 +47,6 @@ const FBPurchaseOrderLotForm: React.FunctionComponent<FBPurchaseOrderFormProps> 
             variant="outlined"
             label="common.close"
           />
-          <FBPurchaseOrderCreateLot item={initialValues[`${name}-formValues`]} />
           <FBButton
             variant="contained"
             buttonType="submit"

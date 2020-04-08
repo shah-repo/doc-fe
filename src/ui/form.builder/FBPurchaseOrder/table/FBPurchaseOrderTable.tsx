@@ -7,7 +7,7 @@ import Text from "../../../components/Text";
 import Colors from "../../../layout/theme/utils/colors";
 import { FBPurchaseOrderTableProps, PurchaseOrderItem } from "../FBPurchaseOrder.types";
 import FBPurchaseOrderDialog from "../form/FBPurchaseOrderDialog";
-import FBPurchaseOrderLotDialog from "../lot/FBPurchaseOrderLotDialog";
+import FBPurchaseOrderItemDialog from "../lot/FBPurchaseOrderItemDialog";
 import { withFBPurchaseOrderTable } from "./FBPurchaseOrderTable.wrap";
 
 const StyledTableCell = withStyles((theme) => ({
@@ -119,7 +119,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
         </TableBody>
       </Table>
       {
-        !isDocumentReleased &&
+        !isDocumentReleased && isDialogOpen &&
         <FBPurchaseOrderDialog
           isDialogOpen={isDialogOpen}
           closeDialog={closeDialog}
@@ -129,8 +129,8 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
         />
       }
       {
-        isDocumentReleased &&
-        <FBPurchaseOrderLotDialog
+        isDocumentReleased && isDialogOpen &&
+        <FBPurchaseOrderItemDialog
           isDialogOpen={isDialogOpen}
           initialValues={initialValues}
           onSubmit={onSubmit}

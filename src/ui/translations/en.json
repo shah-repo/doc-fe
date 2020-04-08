@@ -498,6 +498,7 @@
   "form.builder.set.approvers": "Set Approvers",
   "form.builder.approval.reset.msg": "Section is already approved. Are you sure you want to reset the state?",
   "form.builder.lot": "Lot",
+  "form.builder.po.line.item": "Purchase Order Line Item",
   "form.builder.po.items.received": "Items Received",
   "form.builder.po.create.lot": "Create Lot",
   "form.builder.po.lot.wasnt.created": "Lot couldn't be created",
