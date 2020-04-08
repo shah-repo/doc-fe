@@ -9,7 +9,7 @@ const FBEditorInstructionsDocument: React.FunctionComponent<FBLabelEditorProps> 
   <>
     <FBTextField label="form.builder.label" name="label" {...{ defaultValue }}  />
     <FBAutocompleteAsync
-      label="form.builder.documents"
+      label="form.builder.document"
       name="instructionsDocument"
       optionId="1"
     />

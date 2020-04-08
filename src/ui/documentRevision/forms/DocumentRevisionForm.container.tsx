@@ -2,7 +2,7 @@ import { Box, Grid } from "@material-ui/core";
 import classNames from "classnames";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import { get } from "lodash";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
@@ -144,6 +144,14 @@ DocumentRevisionFormContainerProps
   const onUpgradeClick = () => {
     async.start(upgradeAction, documentRevision.id, async);
   };
+
+  useEffect(() => {
+    if (initialValues.document?.documentType?.documentTypeAcronym && loadDocumentProposedId) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      loadDocumentProposedId(initialValues.document.documentType.documentTypeAcronym);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialValues.document?.documentType?.documentTypeAcronym]);
 
   document = document || ({} as Document);
   const classes = styles();

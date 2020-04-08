@@ -35,7 +35,8 @@ export type FBEditorElementType =
   | "quantity"
   | "timer"
   | "inlineapproval"
-  | "instructionsdocument";
+  | "instructionsdocument"
+  | "selectdocument";
 
 export type FBEditorModeType = "create" | "update";
 

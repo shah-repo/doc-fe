@@ -1,5 +1,5 @@
 import { Dictionary } from "lodash";
-import { FBAutocompleteAsync, FBEditorInstructionsDocument, FBMediaAlbumField, FBParagraph, FBQuantityField, FBTimerField } from "..";
+import { FBAutocompleteAsync, FBEditorInstructionsDocument, FBEditorSelectDocument, FBMediaAlbumField, FBParagraph, FBQuantityField, FBSelectDocument, FBTimerField } from "..";
 import FBActionContainer from "../components/actions/FBActionContainer";
 import FBActionEditor from "../components/editors/FBActionEditor";
 import FBAutocompleteEditor from "../components/editors/FBAutocompleteEditor";
@@ -64,6 +64,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   timer: FBLabelEditor,
   inlineapproval: FBEditorInlineApproval,
   instructionsdocument: FBEditorInstructionsDocument,
+  selectdocument: FBEditorSelectDocument,
 };
 
 export const FBFieldComponent: Dictionary<any> = {
@@ -96,6 +97,7 @@ export const FBFieldComponent: Dictionary<any> = {
   timer: FBTimerField,
   inlineapproval: FBInlineApproval,
   instructionsdocument: FBInstructionsDocument,
+  selectdocument: FBSelectDocument,
 };
 
 export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
@@ -121,7 +123,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "inlineapproval",
   ],
   approvals: ["hellosign"],
-  instructions: ["instructionsdocument"],
+  instructions: ["instructionsdocument", "selectdocument"],
   buttons: ["checkpoint", "approval", "createlabel"],
   actions: ["action"],
 };
@@ -159,4 +161,5 @@ export const pickDefaultLabel: FBEditorElementType[] = [
   "quantity",
   "stepsection",
   "instructionsdocument",
+  "selectdocument",
 ];
