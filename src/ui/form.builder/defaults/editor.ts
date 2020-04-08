@@ -31,6 +31,7 @@ import FBEditorInlineApproval from "../FBEditorInlineApproval";
 import { FBEditorInstructionsDocument } from "../FBEditorInstructionsDocument";
 import FBEditorParagraph from "../FBEditorParagraph/FBEditorParagraph";
 import { FBEditorSelectDocument } from "../FBEditorSelectDocument";
+import { FBEditorSelectRequirement } from "../FBEditorSelectRequirement";
 import FBEditorStepSection from "../FBEditorStepSection";
 import { FBEditorTestRequirement } from "../FBEditorTestRequirement";
 import FBHelloSign from "../FBHelloSign";
@@ -41,6 +42,7 @@ import { FBParagraph } from "../FBParagraph";
 import FBPurchaseOrder from "../FBPurchaseOrder";
 import { FBQuantityField } from "../FBQuantityField";
 import { FBSelectDocument } from "../FBSelectDocument";
+import { FBSelectRequirement } from "../FBSelectRequirement";
 import { FBTestRequirement } from "../FBTestRequirement";
 import { FBTestStep } from "../FBTestStep";
 import { FBTimerField } from "../FBTimerField";
@@ -76,6 +78,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   inlineapproval: FBEditorInlineApproval,
   instructionsdocument: FBEditorInstructionsDocument,
   selectdocument: FBEditorSelectDocument,
+  selectrequirement: FBEditorSelectRequirement,
   testRequirement: FBEditorTestRequirement,
 };
 
@@ -111,6 +114,7 @@ export const FBFieldComponent: Dictionary<any> = {
   inlineapproval: FBInlineApproval,
   instructionsdocument: FBInstructionsDocument,
   selectdocument: FBSelectDocument,
+  selectrequirement: FBSelectRequirement,
   testRequirement: FBTestRequirement,
 };
 
@@ -138,7 +142,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "testRequirement",
   ],
   approvals: ["hellosign"],
-  instructions: ["instructionsdocument", "selectdocument"],
+  instructions: ["instructionsdocument", "selectdocument", "selectrequirement"],
   buttons: ["checkpoint", "approval", "createlabel"],
   actions: ["action"],
 };
@@ -178,6 +182,7 @@ export const pickDefaultLabel: FBEditorElementType[] = [
   "teststep",
   "instructionsdocument",
   "selectdocument",
+  "selectrequirement",
   "testRequirement",
   "instructionsmediaupload",
   "evidencemediaupload",

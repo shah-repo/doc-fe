@@ -25,8 +25,8 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState);
     autocompleteAsyncState?.setOptionId(optionId);
     const {
-      valueKey: optionValueKey = "id",
-      labelKey: optionLabelKey = "name",
+      valueKey: optionValueKey = "value",
+      labelKey: optionLabelKey = "text",
     } = autocompleteAsyncState?.optionConfig || {};
     const formValue = FBStore.getValue(name) || defaultValue;
 

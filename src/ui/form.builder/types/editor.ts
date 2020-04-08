@@ -38,7 +38,8 @@ export type FBEditorElementType =
   | "instructionsdocument"
   | "selectdocument"
   | "teststep"
-  | "testRequirement";
+  | "testRequirement"
+  | "selectrequirement";
 
 export type FBEditorModeType = "create" | "update";
 

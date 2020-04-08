@@ -27,6 +27,7 @@ export { default as FBEditorProperties } from "./FBEditorProperties/FBEditorProp
 export * from "./FBEditorProperties/FBEditorProperties.state";
 export * from "./FBEditorProperties/FBEditorProperties.types";
 export { default as FBEditorSelectDocument } from "./FBEditorSelectDocument/FBEditorSelectDocument";
+export { default as FBEditorSelectRequirement } from "./FBEditorSelectRequirement/FBEditorSelectRequirement";
 export { default as FBEditorStepSection } from "./FBEditorStepSection/FBEditorStepSection";
 export * from "./FBEditorStepSection/FBEditorStepSection.types";
 export { default as FBEditorTestRequirement } from "./FBEditorTestRequirement/FBEditorTestRequirement";
@@ -85,6 +86,7 @@ export * from "./FBSchema/FBSchema.types";
 export { default as FBSection } from "./FBSection/FBSection";
 export * from "./FBSection/FBSection.types";
 export { default as FBSelectDocument } from "./FBSelectDocument/FBSelectDocument";
+export { default as FBSelectRequirement } from "./FBSelectRequirement/FBSelectRequirement";
 export { default as FBSortable } from "./FBSortable/FBSortable";
 export * from "./FBSortable/FBSortable.types";
 export { default as FBStarter } from "./FBStarter/FBStarter";
@@ -115,5 +117,4 @@ export { default as FBWorkspaceState } from "./FBWorkspace/FBWorkspace.state";
 export * from "./FBWorkspace/FBWorkspace.types";
 export { default as FB } from "./helpers/FB";
 export * from "./helpers/FBFieldName";
-
 
