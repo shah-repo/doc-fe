@@ -58,6 +58,14 @@ const makeGetDisableCreateNewVersion = () => createSelector(
     ),
 );
 
+
+const getIsLastVersionObsolete = (state: ApplicationState, documentId: string | undefined) => {
+  if (!documentId) {
+    return undefined;
+  }
+  return _.some(documentsById(state)[documentId]?.documentRevisions, ["status", DocumentRevisionStatus.Obsolete ]);
+};
+
 const getCurrentDocumentValues = (
   state: ApplicationState,
   docRev: DocumentRevisionFormValues,
@@ -160,4 +168,5 @@ export default {
   makeGetAudit,
   makeGetDisableCreateNewVersion,
   getDocId,
+  getIsLastVersionObsolete,
 };

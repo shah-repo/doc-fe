@@ -1,10 +1,9 @@
 import { Box, Button, Typography } from "@material-ui/core";
-import { get } from "lodash";
 import React, { useEffect, useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
-import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import Text from "../components/Text";
@@ -12,7 +11,7 @@ import DownloadHTML from "../document.revision/summary/download.html";
 import { documentNewVersionPath, documentOutputPath } from "../document.revision/utils/paths";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
-import { canCreateNewVersion, canCreateOutput, getIsLastVersionObsolete } from "./helpers";
+import { canCreateNewVersion, canCreateOutput } from "./helpers";
 import { styles } from "./PreviewControls.styles";
 
 interface OwnProps {
@@ -38,17 +37,16 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const classes = styles();
   const dispatch = useDispatch();
 
+  const [isEmailSent, toogleEmailSent] = useState<boolean>(false);
+  const formDocumentId = documentRevision.formDocument?.document?.id || undefined;
+  const isLastVersionObsolete = useSelector((state: ApplicationState) => documentRevisionsSelectors.getIsLastVersionObsolete(state, formDocumentId));
+
   useEffect(() => {
     if (formDocumentId) {
       dispatch(documentRevisionsActions.loadDocument(formDocumentId));
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [documentRevision]);
-
-  const [isEmailSent, toogleEmailSent] = useState<boolean>(false);
-  const formDocumentId = get(documentRevision, "formDocument.document.id", false);
-  const formDocuments: Document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, formDocumentId));
-  const isLastVersionObsolete = formDocuments && getIsLastVersionObsolete(formDocuments);
+  }, [formDocumentId]);
 
   const async = useAsync({
     onSuccess: () => {
