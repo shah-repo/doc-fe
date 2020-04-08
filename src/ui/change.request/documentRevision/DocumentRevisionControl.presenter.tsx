@@ -13,7 +13,7 @@ interface OwnProps {
   documentRevisionsById: DocumentRevisionsByIdState;
   selectedDocumentRevision: string | null;
   selectDocumentRevision: (documentRevisionId: string) => void;
-  deleteDocumentFromChangeRequest: (documentRevisionId: string) => void;
+  deleteDocumentFromChangeRequest: (documentRevisionId: string, index) => void;
   selectAssessmentForm: () => void;
   openAddDocuments: () => void;
 }
@@ -33,19 +33,19 @@ DocumentRevisionControlPresenterProps
   openAddDocuments,
 }) => {
   const classes = styles();
-  const handleDelete = (documentRevisionId: string) => () =>
-    deleteDocumentFromChangeRequest(documentRevisionId);
+  const handleDelete = (documentRevisionId: string, index) => () =>
+    deleteDocumentFromChangeRequest(documentRevisionId, index);
   const handleClick = (documentRevisionId: string) => () =>
     selectDocumentRevision(documentRevisionId);
   const renderDocumentRevisions = () =>
-    documentsInChangeRequest.map((documentRevisionId: string) => (
+    documentsInChangeRequest.map((documentRevisionId: string, index) => (
       <DocumentRevisionItemPresenter
         key={documentRevisionId}
         documentRevision={
           documentsInCrById[documentRevisionId] ||
             documentRevisionsById[documentRevisionId]
         }
-        onDelete={handleDelete(documentRevisionId)}
+        onDelete={handleDelete(documentRevisionId, index)}
         onClick={handleClick(documentRevisionId)}
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         selectedDocumentRevision={selectedDocumentRevision!}
