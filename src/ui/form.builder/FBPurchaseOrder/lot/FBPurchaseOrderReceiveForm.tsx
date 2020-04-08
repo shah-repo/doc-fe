@@ -1,30 +1,13 @@
-import { Box, Typography } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import { Dictionary } from "lodash";
 import React from "react";
 import InputField from "../../../components/forms/fields/Input";
 import { required, validator } from "../../../components/forms/fields/validators";
-import Text from "../../../components/Text";
 import FBButton from "../../components/inputs/FBButton";
 import FBTextField from "../../components/inputs/FBTextField";
 import { FBPurchaseOrderFormProps, PurchaseOrderItem } from "../FBPurchaseOrder.types";
-
-interface ErrorProps { error?: string }
-const Error: React.FunctionComponent<ErrorProps> = ({
-  error,
-}) => {
-  if (!error) {
-    return null;
-  }
-
-  return (
-    <Box marginTop="-30px" marginBottom="10px">
-      <Typography color="error" variant="subtitle2" >
-        <Text message={error} />
-      </Typography>
-    </Box>
-  );
-};
+import { default as Error } from "../form/FBPurchaseOrderError";
 
 const FBPurchaseOrderReceiveForm: React.FunctionComponent<FBPurchaseOrderFormProps> = ({
   initialValues = {} as Dictionary<PurchaseOrderItem>,

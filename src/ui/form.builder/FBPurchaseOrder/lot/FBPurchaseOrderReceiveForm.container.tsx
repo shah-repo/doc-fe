@@ -1,5 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { DocumentRevision, documentRevisionsActions, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
 import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";
@@ -9,24 +10,20 @@ import { DocumentRevisionFormValues } from "../../../documentRevision/forms/type
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import FBStore from "../../stores/ui/FBStore";
+import { FBPurchaseOrderFormProps } from "../FBPurchaseOrder.types";
 import FBPurchaseOrderLotForm from "./FBPurchaseOrderReceiveForm";
 
-const FBPurchaseOrderReceiveFormContainer: React.FunctionComponent<any> = ({
+const FBPurchaseOrderReceiveFormContainer: React.FunctionComponent<FBPurchaseOrderFormProps> = ({
   onSubmit,
   name,
   ...props
 }) => {
+  const history = useHistory();
   const releaseAction = useActionCreator(documentRevisionsActions.createAndRelease);
   const releaseAsync = useAsync<DocumentRevision>({
     onSuccess: (docRev) => {
       const path = docRev && documentPreviewPath(docRev.id, docRev.document.id);
-      window.open(path, "_blank");
-      props.closeDialog();
-    },
-    onError: () => {
-      const { document: docRev } = FBStore;
-      const path = docRev && documentPreviewPath(docRev.id, docRev.document.id);
-      window.open(path, "_blank");
+      history.push(path);
       props.closeDialog();
     },
   });

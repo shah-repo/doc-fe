@@ -1,14 +1,16 @@
 import { Box, Button, Dialog, DialogContent, DialogTitle, Typography } from "@material-ui/core";
+import { Dictionary } from "lodash";
 import React, { useState } from "react";
 import Text from "../../../components/Text";
+import { FBPurchaseOrderDialogProps, PurchaseOrderItem } from "../FBPurchaseOrder.types";
 import FBPurchaseOrderCreateLot from "./FBPurchaseOrderCreateLot";
 import FBPurchaseOrderReceiveFormContainer from "./FBPurchaseOrderReceiveForm.container";
-const FBPurchaseOrderItemDialog: React.FunctionComponent<any> = ({
+const FBPurchaseOrderItemDialog: React.FunctionComponent<FBPurchaseOrderDialogProps> = ({
   onSubmit,
   name,
   closeDialog,
   isDialogOpen,
-  initialValues,
+  initialValues = {} as Dictionary<PurchaseOrderItem>,
 }) => {
   const [showForm, setShowForm] = useState(false);
   const renderControls = !showForm &&

@@ -12,6 +12,7 @@ import FBAutocompleteAsync from "../../FBAutocompleteAsync";
 import { TAX_RATE } from "../../helpers/constants";
 import FBStore from "../../stores/ui/FBStore";
 import { FBPurchaseOrderFormProps, PurchaseOrderItem } from "../FBPurchaseOrder.types";
+import { default as Error } from "./FBPurchaseOrderError";
 import { withFBPurchaseOrderForm } from "./FBPurchaseOrderForm.wrap";
 
 interface TotalCostProps {
@@ -39,23 +40,6 @@ const TotalCost: React.FunctionComponent<TotalCostProps> = ({
         <Box minWidth="150px" component="span">
           <FormattedNumber value={totalPrice} style="currency" currency="USD" />
         </Box>
-      </Typography>
-    </Box>
-  );
-};
-
-interface ErrorProps { error?: string }
-const Error: React.FunctionComponent<ErrorProps> = ({
-  error,
-}) => {
-  if (!error) {
-    return null;
-  }
-
-  return (
-    <Box marginTop="-30px" marginBottom="10px">
-      <Typography color="error" variant="subtitle2" >
-        <Text message={error} />
       </Typography>
     </Box>
   );
