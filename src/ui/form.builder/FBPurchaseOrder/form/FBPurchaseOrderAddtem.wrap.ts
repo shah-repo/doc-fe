@@ -21,12 +21,12 @@ export const withFBPurchaseOrderAddItem = <T extends FBPurchaseOrderAddItemProps
     };
     const closeDialog = () => {
       dialog.close();
-      poState.clearFormValues();
+      poState?.clearFormValues();
     };
     const onSubmit = (item) => {
       dialog.close();
-      poState.addItem(item);
-      poState.clearFormValues();
+      poState?.addItem(item);
+      poState?.clearFormValues();
     };
 
     return Component({
@@ -36,7 +36,7 @@ export const withFBPurchaseOrderAddItem = <T extends FBPurchaseOrderAddItemProps
       closeDialog,
       isDialogOpen: dialog.isOpen,
       onSubmit,
-      items: poState.po.items,
+      items: poState?.po.items,
     });
   };
 

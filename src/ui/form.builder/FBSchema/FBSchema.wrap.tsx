@@ -1,0 +1,55 @@
+import _ from "lodash";
+import { useObserver } from "mobx-react";
+import React from "react";
+import { FBSchemaComponentProps, FBSchemaProps, FBSchemaState } from ".";
+import { FB, FBSortable } from "..";
+
+export const withFBSchema = <T extends FBSchemaComponentProps>(
+  Component: React.FunctionComponent<T>
+) => {
+  const Comp = ({
+    workspaceMode,
+    schemaState,
+    schema,
+    ...props
+  }: T) => {
+
+    schemaState = FB.useRef<FBSchemaState>(FBSchemaState, schema);
+    const { formState } = FB.useStores();
+
+    function controlRenderer(schemaItem: FBSchemaProps): React.ReactNode | undefined {
+      const { name, rules, label, placeholder } = schemaItem;
+      // Validation settings
+      if (formState && name) {
+        const validationAttrName = (label as string) || placeholder || name;
+          formState?.setValidationAttributeName(name, validationAttrName);
+          rules && (formState.setFieldRules(name, rules));
+      }
+      return FBSchemaState.component(schemaItem);
+    }
+
+    function schemaRenderer(): React.ReactNode | React.ReactNode[] | undefined {
+      if (workspaceMode === "design") {
+        return <FBSortable />;
+      }
+      return _.map(schema, (schemaItem, index) => controlRenderer({
+        ...schemaItem,
+        index,
+      }));
+    }
+
+    useObserver(() => {
+      schema = schemaState?.schema || schema;
+    });
+
+    return Component({
+      ...(props as T),
+      schemaState,
+      workspaceMode,
+      schema,
+      children: schemaRenderer(),
+    });
+  };
+
+  return (props: T) => Comp(props);
+};

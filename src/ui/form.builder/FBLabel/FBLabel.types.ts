@@ -1,0 +1,18 @@
+import { FormControlProps } from "@material-ui/core/FormControl";
+import { ReactNode } from "react";
+import { TextProps } from "../../components/Text";
+
+export type FBLabelProps =
+  & Pick<FormControlProps, "error">
+  & {
+    label?: string | ReactNode;
+    labelValues?: TextProps["values"];
+    fontSize?: string | "sm" | "md" | "lg";
+    loading?: boolean;
+  };
+
+export enum FBLabelFontSize {
+  sm = "subtitle1",
+  md = "h6",
+  lg = "h5",
+}

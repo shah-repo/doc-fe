@@ -1,6 +1,6 @@
 import { action, observable, set } from "mobx";
 import { FBInlineApprovalMode } from ".";
-import { FBFieldWrapperState } from "..";
+import { FBFieldWrapperState } from "../FBFieldWrapper";
 
 export class FBInlineApprovalState extends FBFieldWrapperState {
   @observable public mode: FBInlineApprovalMode = "placeholder";
