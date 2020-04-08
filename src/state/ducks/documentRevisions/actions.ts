@@ -3,7 +3,7 @@ import { ApiAction, Handlers } from "../../types";
 import { Audit, AuditActionPayload } from "../audit/types";
 import { documentsActions } from "../documents";
 import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET } from "./constants";
-import { Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, SecurityList } from "./types";
+import { CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, SecurityList } from "./types";
 
 const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentRevisionsListAction => ({
   type: DOCUMENT_REVISION_LIST,
@@ -130,6 +130,23 @@ const loadAudit = (id: string): ApiAction<Audit[]> => apiAction({
 
 const approveAndRelease = (
   id: string,
+  body: CreateAndReleaseRequest,
+  password: string,
+  handlers: Handlers,
+): ApiAction => apiActionWithCallbacks({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/release/${id}`,
+  method: "post",
+  data: body,
+  password,
+  onSuccess: (docRev: DocumentRevision, dispatch) => {
+    dispatch(documentRevisionSet(docRev));
+    dispatch(loadDocument(docRev.document.id));
+  },
+  handlers,
+});
+
+const createAndRelease = (
+  id: string,
   body: any,
   password: string,
   handlers: Handlers,
@@ -194,4 +211,5 @@ export default {
   approveAndReleaseNonQms,
   getRenderTemplatePreview,
   upgradeToReleasedForm,
+  createAndRelease,
 };

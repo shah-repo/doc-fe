@@ -39,7 +39,9 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     };
     const onSubmit = (item) => {
       poState.updateItem(index, item);
-      closeDialog();
+      setIndex(undefined);
+      setInitialValues(undefined);
+      poState.clearFormValues();
     };
 
     return Component({

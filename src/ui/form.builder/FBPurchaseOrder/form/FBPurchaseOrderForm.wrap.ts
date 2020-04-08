@@ -24,6 +24,7 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
       const totalAmount = item.tax ? (price + (price * TAX_RATE)) : price;
       const formattedDate = moment(item.date).format("MM/DD/YYYY");
       onSubmit({ ...item, totalAmount: totalAmount.toFixed(2), formattedDate });
+      props.closeDialog();
     };
     const validateForm = (values) => {
       const item = values[`${name}-formValues`];

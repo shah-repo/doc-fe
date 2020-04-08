@@ -2,6 +2,8 @@ import { Box, Typography } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import { Dictionary } from "lodash";
 import React from "react";
+import InputField from "../../../components/forms/fields/Input";
+import { required, validator } from "../../../components/forms/fields/validators";
 import Text from "../../../components/Text";
 import FBButton from "../../components/inputs/FBButton";
 import FBTextField from "../../components/inputs/FBTextField";
@@ -41,6 +43,12 @@ const FBPurchaseOrderLotForm: React.FunctionComponent<FBPurchaseOrderFormProps> 
           name={`${name}-formValues.received`}
         />
         <Error error={errors.received} />
+        <InputField
+          name="password"
+          label="transition.action.password"
+          inputProps={{ type: "password" }}
+          validate={validator(required)}
+        />
         <Box textAlign="center">
           <FBButton
             onClick={closeDialog}
