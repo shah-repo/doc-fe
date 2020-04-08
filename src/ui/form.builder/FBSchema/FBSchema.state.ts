@@ -2,8 +2,9 @@ import _ from "lodash";
 import { action, get, observable, set } from "mobx";
 import React from "react";
 import { FBSchemaProps } from ".";
-import { FBCheckboxGroup, FBInputProps, FBInputType, FBSection } from "..";
+import { FBCheckboxGroup, FBInputProps, FBInputType } from "..";
 import FBParagraph from "../FBParagraph";
+import { FBSection } from "../FBSection";
 import { FBTextField } from "../FBTextField";
 
 export class FBSchemaState {

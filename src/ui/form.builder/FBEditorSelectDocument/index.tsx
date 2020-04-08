@@ -1,2 +1,2 @@
-export { default } from "./FBEditorSelectDocument";
+export { default as FBEditorSelectDocument } from "./FBEditorSelectDocument";
 

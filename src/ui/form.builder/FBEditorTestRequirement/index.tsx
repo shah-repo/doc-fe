@@ -1,2 +1,2 @@
-export { default } from "./FBEditorTestRequirement";
+export { default as FBEditorTestRequirement } from "./FBEditorTestRequirement";
 
