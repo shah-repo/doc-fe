@@ -17,7 +17,7 @@ export const UpgradeToLatest: React.FunctionComponent<Props> = ({
     <React.Fragment>
       <Button
         variant="outlined"
-        onClick={() => dialog.open()}
+        onClick={dialog.open}
         id="UpgradeToLatest-upgrade"
       >
         <Text translation="common.upgrade"/>
@@ -46,7 +46,7 @@ export const UpgradeToLatest: React.FunctionComponent<Props> = ({
             </Button>
             <Button
               variant="outlined"
-              onClick={() =>  dialog.close()}
+              onClick={dialog.close}
               id="UpgradeToLatest-upgrade"
             >
               <Text translation="common.cancel"/>
