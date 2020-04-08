@@ -1,30 +1,8 @@
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import { Audit, AuditActionPayload } from "../audit/types";
-import {
-  CHANGE_REQUEST_AUDIT_SET,
-  CHANGE_REQUEST_GET_APPROVERS_ASYNC,
-  CHANGE_REQUEST_GET_ASYNC,
-  CHANGE_REQUEST_GET_AUDIT_ASYNC,
-  CHANGE_REQUEST_LIST,
-  CHANGE_REQUEST_LIST_APPROVERS,
-  CHANGE_REQUEST_LIST_ASYNC,
-  CHANGE_REQUEST_ROOT_URL,
-  CHANGE_REQUEST_SET,
-} from "./constants";
-import {
-  ChangeRequest,
-  ChangeRequestAuditSetAction,
-  ChangeRequestAvailableApprovers,
-  ChangeRequestAvailableApproversResponse,
-  ChangeRequestEditRequestBody,
-  ChangeRequestListAction,
-  ChangeRequestListApproversAction,
-  ChangeRequestSetAction,
-  ChangeRequestTransition,
-  ChangeRequestTransitionRequestBody,
-  ChangeRequestTransitionResponse,
-} from "./types";
+import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_GET_APPROVERS_ASYNC, CHANGE_REQUEST_GET_ASYNC, CHANGE_REQUEST_GET_AUDIT_ASYNC, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_LIST_ASYNC, CHANGE_REQUEST_ROOT_URL, CHANGE_REQUEST_SET } from "./constants";
+import { ChangeRequest, ChangeRequestAuditSetAction, ChangeRequestAvailableApprovers, ChangeRequestAvailableApproversResponse, ChangeRequestEditRequestBody, ChangeRequestListAction, ChangeRequestListApproversAction, ChangeRequestSetAction, ChangeRequestTransition, ChangeRequestTransitionRequestBody, ChangeRequestTransitionResponse } from "./types";
 
 const changeRequestsList = (changeRequests: ChangeRequest[]): ChangeRequestListAction => ({
   type: CHANGE_REQUEST_LIST,
@@ -135,7 +113,7 @@ const loadAudit = (id: string): ApiAction<Audit[]> => apiAction({
 
 const closeTask = (changeRequestId: string, taskId: string, body: any, handlers: Handlers):
 ApiAction => apiActionWithCallbacks({
-  url: `${CHANGE_REQUEST_ROOT_URL}/implementation_plan_task/${taskId}/done`,
+  url: `${CHANGE_REQUEST_ROOT_URL}/task/${taskId}/done`,
   method: "post",
   data: body,
   onSuccess: (d, dispatch) => {
