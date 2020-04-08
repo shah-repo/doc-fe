@@ -66,6 +66,7 @@ export interface Group {
   joinedPermissions: Nullable<Permission[]>;
   joinedParents: Group[];
   parents: Group[];
+  joinedEmployees: Employee[];
 }
 
 export type AuthUserPayload = User;

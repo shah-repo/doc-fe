@@ -52,6 +52,7 @@ export * from "./FBInlineApproval/FBInlineApproval.types";
 export { default as FBInput } from "./FBInput/FBInput";
 export { default as FBInputState } from "./FBInput/FBInput.state";
 export * from "./FBInput/FBInput.types";
+export { default as FBInstructionsDocument } from "./FBInstructionsDocument/FBInstructionsDocument";
 export * from "./FBInstructionsDocument/FBInstructionsDocument.types";
 export { default as FBLabel } from "./FBLabel/FBLabel";
 export * from "./FBLabel/FBLabel.types";
