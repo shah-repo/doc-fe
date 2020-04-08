@@ -7,6 +7,12 @@ import { ChangeRequestFormValues, ImplementationPlanFormValues, ImplementationPl
 
 type NestedObject = Justifications;
 
+export interface OptionApproverType {
+  value: string;
+  label: string;
+  groups: string[];
+}
+
 const createNestedObject = (value: NestedObject = { description: "", attachments: [] }) => ({
   description: value.description,
   attachments: value.attachments,
@@ -96,6 +102,23 @@ const createAssessmentObjectForRequestBody = (value: Assessment) => {
     assessments[t] = { attachments: itemAttachment, reasoning: itemReasoning };
   });
   return assessments;
+};
+
+export const toOptions = (values: any[]): OptionApproverType[] => values.map((value) => ({
+  label: value.name,
+  value: value.id,
+  groups: [value.group],
+}));
+
+export const toUniqGroupOptions = (approvers) => {
+  const arrayHashmap = toOptions(approvers).reduce((obj, item) => {
+    obj[item.value] ? obj[item.value].groups.push(...item.groups) : (obj[item.value] = { ...item });
+    return obj;
+  }, {});
+
+  const mergedArray = Object.values(arrayHashmap);
+
+  return mergedArray;
 };
 
 export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues): ChangeRequestEditRequestBody => {

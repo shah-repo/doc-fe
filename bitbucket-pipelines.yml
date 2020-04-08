@@ -175,7 +175,7 @@ pipelines:
           - step: *BUILD_DEV
       - step: *DEPLOY_DEV
 
-    task/ENC-1422_hello_action_button:
+    ENC-2195-approvers-list:
       - parallel:
           - step: *RUN_TESTS
           # - step: *RUN_LINTER
