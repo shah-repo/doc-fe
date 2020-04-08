@@ -24,7 +24,11 @@ export type FBInputType =
   | "action"
   | "summarysection"
   | "editoroptions"
-  | "schemaselect";
+  | "schemaselect"
+  | "paragraph"
+  | "testRequirement"
+  | "instructionsmediaupload"
+  | "evidencemediaupload";
 
 export type FBValidationMode = "disabled" | "visibility";
 
@@ -56,6 +60,8 @@ export type FBInputProps =
   rules?: string;
   validationMode?: FBValidationMode;
   includeSelectedSchema?: boolean;
+  paragraph?: string;
+  testRequirement?: string;
 };
 
 export const OmitInputClones: FBInputType[] = ["fileupload"];

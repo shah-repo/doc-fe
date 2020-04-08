@@ -4,7 +4,7 @@ import React from "react";
 import { FBProviderProps } from "..";
 
 export class FB {
-  public static useRef<T>(state: (new (props: any) => T), props: any = undefined): T {
+  public static useRef<T>(state: (new(props: any) => T), props: any = undefined): T {
     const stateRef = React.useRef<T | undefined>(undefined);
     if (_.isUndefined(stateRef.current)) {
       stateRef.current = new state(props);

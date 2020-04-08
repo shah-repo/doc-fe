@@ -85,7 +85,6 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     async function apiCallSig(payload: FBHelloSignPayload) {
       const apiCallSig = new FBActionModel();
       apiCallSig.set({
-        testMode: Config.HelloSignTestMode,
         requestMethod: "POST",
         requestUrl: SEND_SIGNATURE_REQUEST_URL,
         payload,

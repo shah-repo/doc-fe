@@ -2,13 +2,15 @@ import _ from "lodash";
 import { action, get, observable, set } from "mobx";
 import React from "react";
 import { FBSchemaProps } from ".";
-import { FBCheckboxGroup, FBInputProps, FBInputType, FBTextField } from "..";
+import { FBCheckboxGroup, FBInputProps, FBInputType, FBSection } from "..";
+import FBParagraph from "../FBParagraph";
+import { FBTextField } from "../FBTextField";
 
 export class FBSchemaState {
   public static omitLabel: FBInputType[] = ["section", "subsection"];
 
   private static control: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
-    // section: FBSection,
+    section: FBSection,
     // subsection: FBSubsection,
     textfield: FBTextField,
     // checkbox: FBCheckbox,
@@ -23,6 +25,7 @@ export class FBSchemaState {
     // autocomplete: FBAutocomplete,
     // autocompleteasync: FBAutocompleteAsync,
     // schemaselect: FBSchemaSelect,
+    paragraph: FBParagraph,
   };
 
   public controlProps: FBInputProps | undefined;
@@ -43,7 +46,7 @@ export class FBSchemaState {
     }
     return React.createElement(schemaControl, {
       key: `fb-control-${type}-${name}-${index}`,
-      ...schemaControl,
+      ...controlProps,
     });
   };
 

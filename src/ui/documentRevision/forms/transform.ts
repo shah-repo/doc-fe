@@ -12,9 +12,7 @@ const toRequestFormBuilder = (values: DocumentRevision) => {
       return {
         ...values,
         formTemplate: {
-          outputDocumentType: {
-            id: _.get(values, "formTemplate.outputDocumentType.id"),
-          },
+          outputDocumentTypes: _.get(values, "formTemplate.outputDocumentTypes", []).map((outputDoc) => ({ id: outputDoc.value }) ),
           schema: FBStore.getSchema(),
         },
       };
@@ -50,7 +48,11 @@ export const toDocumentRevisionFormValues = (
     document: documentRevision.document,
     changeRequest: documentRevision.changeRequest,
     retrain: documentRevision.retrain,
-    formTemplate: documentRevision.formTemplate,
+    formTemplate: {
+      schema: FBStore.getSchema(),
+      outputDocumentTypes: _.get(documentRevision, "formTemplate.outputDocumentTypes", [])
+        .map((e) => ({ label: e.documentTypeName, value: e.id })),
+    },
     formInput: documentRevision.formInput,
     formDocument: documentRevision.formDocument,
     status: documentRevision.status,
@@ -146,7 +148,7 @@ export const toDocumentRevisionFormValuesForOutput = (
     formTemplate: undefined,
     status: DocumentRevisionStatus.Draft,
     document: {
-      documentType: _.get(documentRevision, "formTemplate.outputDocumentType"),
+      documentType: documentRevision.formTemplate?.outputDocumentTypes[0],
     },
     formDocument: {
       ...documentRevision,

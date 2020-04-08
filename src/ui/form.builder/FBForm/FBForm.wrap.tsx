@@ -15,7 +15,7 @@ export const withFBForm = <T extends FBFormProps>(
     ...props
   }: T) => {
 
-    formState = FB.useRef<FBFormState>(FBFormState);
+    formState = FB.useRef<FBFormState>(FBFormState, schema);
     formState?.setInitialValues(initialValues);
     formState && (formState.errorValidation = errorValidation);
 

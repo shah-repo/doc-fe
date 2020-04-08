@@ -1,7 +1,7 @@
 import flatten from "flat";
 import _, { Dictionary } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
-import { FBSchemaState } from "../FBSchema";
+import { FBSchemaProps, FBSchemaState } from "../FBSchema";
 
 export class FBFormState extends FBSchemaState {
   public rules: Dictionary<string> = {};
@@ -11,6 +11,11 @@ export class FBFormState extends FBSchemaState {
   @observable public values: Dictionary<any> = {};
   @observable public errors: Dictionary<string> = {};
   @observable public helpers = new Map<string, string>();
+
+  public constructor(schema?: FBSchemaProps[]) {
+    super();
+    this.schema = schema;
+  }
 
   @computed private get Validator(): any {
     return _.get(window, "EnlilRemoteValidators.validator");

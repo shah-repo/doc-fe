@@ -34,7 +34,11 @@ export type FBEditorElementType =
   | "createlabel"
   | "quantity"
   | "timer"
-  | "inlineapproval";
+  | "inlineapproval"
+  | "instructionsdocument"
+  | "selectdocument"
+  | "teststep"
+  | "testRequirement";
 
 export type FBEditorModeType = "create" | "update";
 

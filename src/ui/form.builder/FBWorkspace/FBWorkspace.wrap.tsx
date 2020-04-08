@@ -16,7 +16,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     ...props
   }: T) => {
 
-    workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState);
+    workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, schema);
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
 
     React.useEffect(() => {

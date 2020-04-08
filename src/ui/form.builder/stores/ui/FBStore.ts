@@ -36,7 +36,7 @@ export class FormBuilderStore {
 
   @action public sectionNumber = (endIndex: number): number => {
     const sections = _.filter(this.getSchema(), (schemaItem, index) =>
-      endIndex > index && schemaItem.type === "stepsection"
+      endIndex > index && (schemaItem.type === "stepsection" || schemaItem.type === "teststep")
     );
     return _.size(sections) + 1;
   };
@@ -99,7 +99,7 @@ export class FormBuilderStore {
     let stepSectionCounter = 1;
     newSchema.map((o, i) => {
       o.index = i;
-      if (o.type === "stepsection") {
+      if (o.type === "stepsection" || o.type === "teststep") {
         const orderStr = this.getSectionStepReg(o.label as string);
         if (orderStr) {
           o.label = (o.label as string).replace(orderStr, `#${stepSectionCounter}`);

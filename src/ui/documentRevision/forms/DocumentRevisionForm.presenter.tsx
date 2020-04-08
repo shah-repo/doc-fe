@@ -3,6 +3,7 @@ import { FormikProps } from "formik";
 import { get, isEmpty } from "lodash";
 import { observer } from "mobx-react";
 import React, { useEffect } from "react";
+import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
@@ -16,12 +17,12 @@ import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import OwnerChanger from "../../components/common/owner.changer/container";
 import { RequestType } from "../../components/common/owner.changer/helpers/types";
-import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
+import { default as AutocompleteField } from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
 import CheckboxField from "../../components/forms/fields/Checkbox";
 import RichTextEditor from "../../components/forms/fields/RichTextEditor";
 import SelectField, { SelectOption } from "../../components/forms/fields/Select";
-import { required, validator } from "../../components/forms/fields/validators";
+import { required, requiredAtLeastOne, validator } from "../../components/forms/fields/validators";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
 import FormWrapper from "../../components/forms/FormWrapper";
@@ -61,7 +62,7 @@ export interface Props
   setDocId?: typeof documentsActions.setDocumentProposedId;
   doNotPrompt?: boolean;
   documentTypes: SelectOption[];
-  otherDocumentTypes: SelectOption[];
+  otherDocumentTypes: OptionType[];
   documentTypesById: DocumentTypeByIdState;
   onDirtyFlagChange?: (dirty: boolean) => void;
   canChangeOwnerShip: boolean;
@@ -96,6 +97,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   onUpgradeClick,
   type,
 }) => {
+  const intl = useIntl();
   const loadAvailableApproversAction = useActionCreator(
     changeRequestsActions.loadAvailableApprovers
   );
@@ -225,6 +227,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   );
 
   const formDocumentStatus = get(documentRevision, "formDocument.status", "");
+  const isDocTypeDisabled = type === "newVersion" || isdocRevStatusDraft;
+  const options = type === "newOutput" ? initialValues.formDocument?.formTemplate?.outputDocumentTypes.map((e) =>
+    ({ value: e.id, text: e.documentTypeName })
+  ) as SelectOption[] : documentTypes;
 
   return (
     <Grid
@@ -271,10 +277,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           name="document.documentType.id"
           label="document.type"
           selectProps={{
-            inputProps: { id: "documentType", disabled: isDisabled },
+            inputProps: { id: "documentType", disabled: isDocTypeDisabled },
             onChange: handleTypeChange,
           }}
-          options={documentTypes}
+          options={options}
           validate={validator(required)}
           includeEmpty={false}
         />
@@ -285,7 +291,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           setDocId={setDocId}
         />
         {renderRevisionStageDropdown}
-        <AutcompleteField
+        <AutocompleteField
           name="referenceTo"
           label="documentRevision.form.references"
           autocompleteProps={{
@@ -309,13 +315,16 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             asyncAction={loadAvailableApproversAction}
             startActionOnMount={true}
           >
-            <AutcompleteField
+            <AutocompleteField
               name="securityEmployees"
-              label="document.revision.user.permissions"
+              label="document.revision.selected.users"
               autocompleteProps={{
                 id: "securityEmployees",
                 isMulti: true,
                 closeMenuOnSelect: false,
+                placeholder: intl.formatMessage({
+                  id: "document.revision.selected.users.placeholder",
+                }),
               }}
               options={availableApprovers}
             />
@@ -327,13 +336,16 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             asyncAction={loadGroupsAction}
             startActionOnMount={true}
           >
-            <AutcompleteField
+            <AutocompleteField
               name="securityGroups"
-              label="document.revision.group.permissions"
+              label="document.revision.selected.groups"
               autocompleteProps={{
                 id: "securityGroups",
                 isMulti: true,
                 closeMenuOnSelect: false,
+                placeholder: intl.formatMessage({
+                  id: "document.revision.selected.groups.placeholder",
+                }),
               }}
               options={groupOptions}
             />
@@ -341,19 +353,17 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         )}
         {FBStore.active && !FBDRStore.isOutput && (
           <Box mt={4}>
-            <SelectField
-              name="formTemplate.outputDocumentType.id"
+            <AutocompleteField
+              name="formTemplate.outputDocumentTypes"
               label="document.output.type"
-              selectProps={{
-                inputProps: {
-                  id: "formTemplate.outputDocumentType",
-                  disabled: !outputDocEnabled,
-                  className: !outputDocEnabled ? classes.outputGrey : "",
-                },
+              autocompleteProps={{
+                id: "formTemplate.outputDocumentTypes",
+                isMulti: true,
+                closeMenuOnSelect: false,
+                className: !outputDocEnabled ? classes.outputGrey : "",
               }}
               options={otherDocumentTypes}
-              includeEmpty={false}
-              validate={validator(required)}
+              validate={validator(requiredAtLeastOne)}
             />
             <RenderHtmlField />
           </Box>
