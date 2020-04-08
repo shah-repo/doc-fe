@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
-import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
+import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import Text from "../components/Text";
@@ -11,7 +11,7 @@ import DownloadHTML from "../document.revision/summary/download.html";
 import { documentNewVersionPath, documentOutputPath } from "../document.revision/utils/paths";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
-import { canCreateNewVersion, canCreateOutput } from "./helpers";
+import { canCreateNewVersion, canCreateOutput, getIsLastVersionObsolete } from "./helpers";
 import { styles } from "./PreviewControls.styles";
 
 interface OwnProps {
@@ -38,8 +38,9 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const dispatch = useDispatch();
 
   const [isEmailSent, toogleEmailSent] = useState<boolean>(false);
-  const formDocumentId = documentRevision.formDocument?.document?.id || undefined;
-  const isLastVersionObsolete = useSelector((state: ApplicationState) => documentRevisionsSelectors.getIsLastVersionObsolete(state, formDocumentId));
+  const formDocumentId = documentRevision.formDocument?.document?.id || "";
+  const formDocuments: Document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, formDocumentId));
+  const isLastVersionObsolete = formDocuments && getIsLastVersionObsolete(formDocuments);
 
   useEffect(() => {
     if (formDocumentId) {
