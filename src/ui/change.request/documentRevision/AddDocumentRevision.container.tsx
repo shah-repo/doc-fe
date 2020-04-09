@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Group } from "../../../state/ducks/auth/types";
-import { DocumentRevision, DocumentRevisionsByIdState, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
-import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentRevision, documentRevisionsActions, DocumentRevisionsByIdState, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -47,7 +46,7 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
     },
   });
 
-  const getGroupsByStage = useActionCreator(documentTypeActions.loadGroupsByStage);
+  const getGroupsByStage = useActionCreator(documentRevisionsActions.loadGroupsByStage);
 
   const addDocument = (documentRevisionId: string) => {
     setAddedDocuments(Array.from(
@@ -67,8 +66,7 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
       if (documentRevisionsById[e]) {
         async.start(
           getGroupsByStage,
-          documentRevisionsById[e].document.documentType.id,
-          documentRevisionsById[e].revisionStage,
+          e,
           async,
         ); } });
   // eslint-disable-next-line react-hooks/exhaustive-deps

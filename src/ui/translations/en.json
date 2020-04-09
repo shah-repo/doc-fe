@@ -313,6 +313,7 @@
   "documentRevision.form.nextRevision": "Next Revision",
   "documentRevision.form.nextRevisionStage": "Upgrade to Next Revision Level",
   "documentRevision.form.obsolete": "Obsolete",
+  "documentRevision.form.administrativeChange": "Administrative Change",
   "documentRevision.form.typeOfRevisionChange": "Type of Revision Change",
   "documentRevision.audit.docHistory": "Doc History",
   "documentRevision.audit.name.STRING_EDITED": "Name changed",
