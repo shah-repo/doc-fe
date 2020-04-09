@@ -17,6 +17,7 @@ const FBEditorSelectRequirement: React.FunctionComponent<FBInputProps> = ({
       multiple={true}
       optionLabelKey="text"
       optionValueKey="value"
+      defaultValue={props.options}
     />
   </>
 );
