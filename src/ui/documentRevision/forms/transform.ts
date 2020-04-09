@@ -12,7 +12,8 @@ const toRequestFormBuilder = (values: DocumentRevision) => {
       return {
         ...values,
         formTemplate: {
-          outputDocumentTypes: _.get(values, "formTemplate.outputDocumentTypes", []).map((outputDoc) => ({ id: outputDoc.value }) ),
+          outputDocumentTypes: _.get(values, "formTemplate.outputDocumentTypes", [])
+            .map((outputDoc) => ({ id: outputDoc.value }) ),
           schema: FBStore.getSchema(),
         },
       };
@@ -48,11 +49,6 @@ export const toDocumentRevisionFormValues = (
     document: documentRevision.document,
     changeRequest: documentRevision.changeRequest,
     retrain: documentRevision.retrain,
-    formTemplate: {
-      schema: FBStore.getSchema(),
-      outputDocumentTypes: _.get(documentRevision, "formTemplate.outputDocumentTypes", [])
-        .map((e) => ({ label: e.documentTypeName, value: e.id })),
-    },
     formInput: documentRevision.formInput,
     formDocument: documentRevision.formDocument,
     status: documentRevision.status,
@@ -63,6 +59,13 @@ export const toDocumentRevisionFormValues = (
       .map((group) => ({ label: group.name, value: group.id })),
     renderHTML: documentRevision.renderHTML,
   };
+  if (documentRevision.formTemplate) {
+    values.formTemplate = {
+      schema: FBStore.getSchema(),
+      outputDocumentTypes: _.get(documentRevision, "formTemplate.outputDocumentTypes", [])
+        .map((e) => ({ label: e.documentTypeName, value: e.id })),
+    };
+  }
   FBDRStore.setValues(documentRevision);
   return values;
 };
