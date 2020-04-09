@@ -6,12 +6,7 @@ import { getUser } from "../common/tests/factories";
 import actions from "./actions";
 import { EMPLOYEES_URL, GROUPS_ME_URL, GROUPS_URL } from "./constants";
 import { getCompanyGroup, getGroup } from "./tests/factories";
-import {
-  AddEmployeeRequest,
-  EmployeeGroupsEditRequestBody,
-  GetEmployeeResponse,
-  LoadCompanyGroups,
-} from "./types";
+import { AddEmployeeRequest, EmployeeGroupsEditRequestBody, GetEmployeeResponse, LoadCompanyGroups } from "./types";
 
 describe(" survey management actions test", () => {
   const companyGroup: LoadCompanyGroups = [getCompanyGroup()];
@@ -102,7 +97,7 @@ describe(" survey management actions test", () => {
     it("calls dispatch with editSelectedEmployeeGroups action on success", () => {
       const dispatch = jest.fn();
       action.onSuccess(employee, dispatch);
-      expect(dispatch).toHaveBeenLastCalledWith(
+      expect(dispatch).toHaveBeenCalledWith(
         actions.editSelectedEmployeeGroups(employee),
       );
     });
