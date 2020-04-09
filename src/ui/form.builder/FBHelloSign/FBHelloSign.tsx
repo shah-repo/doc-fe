@@ -4,6 +4,7 @@ import { FBHelloSignProps } from ".";
 import FBInput from "../components/common/FBInput";
 import FBButton from "../components/inputs/FBButton";
 import { withFBHelloSign } from "./FBHelloSign.wrap";
+import FBHelloSignSocket from "./FBHelloSignSocket";
 
 const FBHelloSign: React.FunctionComponent<FBHelloSignProps> = ({
   onClick,
@@ -16,6 +17,7 @@ const FBHelloSign: React.FunctionComponent<FBHelloSignProps> = ({
   ...props
 }) => (
   <>
+    <FBHelloSignSocket />
     {waitOverlay && (
       <Backdrop className={backdropStyle.backdrop} open={true}>
         <Box display="flex" flexDirection="row" pr={1}>
