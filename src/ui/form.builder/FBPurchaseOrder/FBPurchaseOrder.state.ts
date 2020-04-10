@@ -1,5 +1,6 @@
 import { action, observable, set } from "mobx";
 import moment from "moment";
+import uniqid from "uniqid";
 import { TAX_RATE } from "../helpers/constants";
 import FBStore from "../stores/ui/FBStore";
 import { PurchaseOrder, PurchaseOrderItem } from "./FBPurchaseOrder.types";
@@ -54,6 +55,7 @@ export class FBPurchaseOrderState {
   };
 
   @action public clearFormValues = () => {
+    FBStore.setValue(`${this.name}-formValues.id`, undefined);
     FBStore.setValue(`${this.name}-formValues.order`, undefined);
     FBStore.setValue(`${this.name}-formValues.glCode`, undefined);
     FBStore.setValue(`${this.name}-formValues.units`, undefined);
@@ -128,6 +130,7 @@ export class FBPurchaseOrderState {
 
   private initiliazeLineItem = (item: PurchaseOrderItem, index: number): PurchaseOrderItem => (
     {
+      id: item.id || uniqid(),
       index: index + 1,
       order: item.order,
       glCode: item.glCode,

@@ -60,6 +60,7 @@ export interface PurchaseOrder {
 }
 
 export interface PurchaseOrderItem {
+  id: string;
   index: number;
   order: string;
   glCode: string;
