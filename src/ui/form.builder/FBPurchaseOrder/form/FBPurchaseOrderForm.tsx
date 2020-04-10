@@ -79,7 +79,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
           label="form.builder.field.part.number"
           name={`${name}-formValues.partNumber`}
           optionId="1"
-          onChange={handlePartNumberChange}
+          onChange={handlePartNumberChange && handlePartNumberChange(props.setFieldValue)}
           getOptionLabel={getPartNumberOptionLabel}
         />
         <Error error={errors.partNumber} />
