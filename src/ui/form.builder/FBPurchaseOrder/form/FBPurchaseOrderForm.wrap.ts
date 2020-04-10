@@ -77,7 +77,6 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
         setFieldValue(`${name}-formValues.partNumberDocId`, option.document.docId);
       }
     };
-    const getPartNumberOptionLabel = (option: DocumentRevision) => option.document.docId;
 
     return Component({
       ...(props as T),
@@ -87,7 +86,6 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
       validateForm,
       initialValues: initialValuesState,
       handlePartNumberChange,
-      getPartNumberOptionLabel,
     });
   };
 

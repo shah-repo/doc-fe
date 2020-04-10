@@ -26,7 +26,6 @@ export type FBPurchaseOrderFormProps =
 & {
   validateForm?: (values: any) => void;
   handlePartNumberChange?: (setFieldValue: any) => (evt: any, option: any) => void;
-  getPartNumberOptionLabel?: (option: any) => string;
 };
 
 export type FBPurchaseOrderAddItemProps =
