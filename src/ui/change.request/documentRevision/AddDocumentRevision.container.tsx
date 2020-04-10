@@ -62,6 +62,10 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
     const filteredArray = tableData.filter((documentRevision) =>
       !documentsToIgnore.includes(documentRevision.id) && documentRevision.status === DocumentRevisionStatus.Draft);
     setDocumentRevisionsToShow(filteredArray);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [addedDocuments, documentsInChangeRequest, tableData]);
+
+  useEffect(() => {
     documentsInChangeRequest.forEach((e) => {
       if (documentRevisionsById[e]) {
         async.start(
@@ -70,7 +74,7 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
           async,
         ); } });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [addedDocuments, documentsInChangeRequest, tableData]);
+  }, [documentRevisionsById, documentsInChangeRequest, addedDocuments]);
 
   const closeDialogAddDocuments = () => {
     const documentRevisions = new Set([
