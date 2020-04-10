@@ -1,6 +1,7 @@
 import { Dictionary } from "lodash";
 import moment from "moment";
 import React, { useState } from "react";
+import uniqid from "uniqid";
 import { FB } from "../..";
 import { TAX_RATE } from "../../helpers/constants";
 import { FBPurchaseOrderFormProps, PurchaseOrderItem } from "../FBPurchaseOrder.types";
@@ -23,6 +24,7 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
       const price = item.order * item.unitPrice;
       const totalAmount = item.tax ? (price + (price * TAX_RATE)) : price;
       const formattedDate = moment(item.date).format("MM/DD/YYYY");
+      item.id = item.id || uniqid();
       onSubmit({ ...item, totalAmount: totalAmount.toFixed(2), formattedDate });
       props.closeDialog();
     };
