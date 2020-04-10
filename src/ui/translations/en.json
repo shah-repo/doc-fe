@@ -461,6 +461,7 @@
   "form.builder.field.units": "Units",
   "form.builder.field.date.required": "Date Required",
   "form.builder.field.part.number": "Part Number",
+  "form.builder.field.part.number.title": "Part Number Title",
   "form.builder.field.supplier.part.number": "Supplier Part Number",
   "form.builder.field.price": "Price",
   "form.builder.field.unit.price": "Unit Price",

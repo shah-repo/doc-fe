@@ -3,7 +3,9 @@ import moment from "moment";
 import React, { useState } from "react";
 import uniqid from "uniqid";
 import { FB } from "../..";
+import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
 import { TAX_RATE } from "../../helpers/constants";
+import FBStore from "../../stores/ui/FBStore";
 import { FBPurchaseOrderFormProps, PurchaseOrderItem } from "../FBPurchaseOrder.types";
 
 export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
@@ -57,6 +59,17 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
 
       return errors;
     };
+    const handlePartNumberChange = (evt, values: DocumentRevision) => {
+      if (!values) {
+        FBStore.setValue(`${name}-formValues.partNumberTitle`, undefined);
+        FBStore.setValue(`${name}-formValues.partNumberDocId`, undefined);
+      } else {
+        FBStore.setValue(`${name}-formValues.partNumberTitle`, values.name);
+        FBStore.setValue(`${name}-formValues.partNumberDocId`, values.document.docId);
+      }
+      FBStore.resetSchema();
+    };
+    const getPartNumberOptionLabel = (option: DocumentRevision) => option.document.docId;
 
     return Component({
       ...(props as T),
@@ -65,6 +78,8 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
       onSubmit: handleSubmit,
       validateForm,
       initialValues: initialValuesState,
+      handlePartNumberChange,
+      getPartNumberOptionLabel,
     });
   };
 
