@@ -7,8 +7,7 @@ import { authSelectors } from "../../../state/ducks/auth";
 import { Group, GroupTag } from "../../../state/ducks/auth/types";
 import { ChangeRequest, changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../../state/reducers";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
 import useAsync from "../../hooks/useAsync";
@@ -71,8 +70,7 @@ export const Container: React.FunctionComponent<Props> = ({
   useEffect(() => {
     dataProp.documentRevisions.map((docRev) => asyncGroups.start(
       loadGroupsByStage,
-      docRev.document.documentType.id,
-      docRev.revisionStage,
+      docRev.id,
       asyncGroups,
     ));
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -177,6 +175,6 @@ export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
   {
     save: changeRequestsActions.save,
     closeTask: changeRequestsActions.closeTask,
-    loadGroupsByStage: documentTypeActions.loadGroupsByStage,
+    loadGroupsByStage: documentRevisionsActions.loadGroupsByStage,
   },
 )(withStyles(styles)(Container));
