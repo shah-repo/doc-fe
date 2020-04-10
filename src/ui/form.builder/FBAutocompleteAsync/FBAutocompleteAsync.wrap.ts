@@ -55,7 +55,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       defaultValue = autocompleteAsyncState?.sliceValue(formValue);
     }
 
-    getOptionLabel = (option) => {
+    const getDefaultOptionLabel = (option) => {
       const { labelPrefixRoot } = autocompleteAsyncState?.optionConfig || {};
       const optionLabel = labelPrefixRoot ? `${_.get(option, labelPrefixRoot)} - ` : "";
       return `${optionLabel}${_.get(option, optionLabelKey, "")}`;
@@ -68,7 +68,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       optionValueKey,
       optionLabelKey,
       optionValueType,
-      getOptionLabel,
+      getOptionLabel: getOptionLabel || getDefaultOptionLabel,
       selectedOptions,
       defaultValue,
       multiple,

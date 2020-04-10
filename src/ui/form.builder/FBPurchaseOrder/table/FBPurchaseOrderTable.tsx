@@ -98,7 +98,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
               <StyledTableCell align="left">{index + 1}</StyledTableCell>
               <StyledTableCell>{row.order}</StyledTableCell>
               <StyledTableCell>{row.units}</StyledTableCell>
-              <StyledTableCell>{row.partNumber}</StyledTableCell>
+              <StyledTableCell>{row.partNumberDocId}</StyledTableCell>
               <StyledTableCell>
                 <Date value={row.date} />
               </StyledTableCell>

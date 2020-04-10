@@ -60,6 +60,8 @@ export class FBPurchaseOrderState {
     FBStore.setValue(`${this.name}-formValues.glCode`, undefined);
     FBStore.setValue(`${this.name}-formValues.units`, undefined);
     FBStore.setValue(`${this.name}-formValues.partNumber`, undefined);
+    FBStore.setValue(`${this.name}-formValues.partNumberDocId`, undefined);
+    FBStore.setValue(`${this.name}-formValues.partNumberTitle`, undefined);
     FBStore.setValue(`${this.name}-formValues.date`, undefined);
     FBStore.setValue(`${this.name}-formValues.description`, undefined);
     FBStore.setValue(`${this.name}-formValues.unitPrice`, undefined);
@@ -136,6 +138,8 @@ export class FBPurchaseOrderState {
       glCode: item.glCode,
       units: item.units,
       partNumber: item.partNumber,
+      partNumberDocId: item.partNumberDocId,
+      partNumberTitle: item.partNumberTitle,
       date: item.date,
       description: item.description,
       unitPrice: this.formatCost(item.unitPrice),
