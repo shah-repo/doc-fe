@@ -9,7 +9,7 @@ const FBEditorSelectRequirement: React.FunctionComponent<FBInputProps> = ({
   ...props
 }) => (
   <>
-    <FBTextField label="form.builder.label" name="label" {...props} {...{ defaultValue }}  />
+    <FBTextField {...props} label="form.builder.label" name="label" {...{ defaultValue }}  />
     <FBAutocompleteAsync
       label="form.builder.options"
       name="options"
