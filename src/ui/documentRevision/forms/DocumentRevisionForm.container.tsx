@@ -130,7 +130,7 @@ DocumentRevisionFormContainerProps
   const otherTypes: OptionType[] = useMemo(
     () =>
       documentTypes.reduce((acc: OptionType[], document) => {
-        if (document.group === "OTHER") {
+        if (document.group === "RECORD" || document.group === "OTHER") {
           acc.push({ value: document.id, label: document.documentTypeName });
         }
         return acc;
