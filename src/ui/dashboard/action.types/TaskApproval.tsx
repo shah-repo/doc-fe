@@ -19,7 +19,7 @@ export const TaskApproval: React.FunctionComponent<Props> = ({
   return (
     <Grid container spacing={10} justify="space-between" alignItems="baseline" id="TaslApproval-tasks">
       <Grid item xs={9}>
-        <span className={classes.crId}>{`CRID: ${pendingAction.changeReq.crId} `}</span>
+        <span className={classes.highlight}>{`CRID: ${pendingAction.changeReq.crId} `}</span>
         <span>{`"${pendingAction.changeReq.title}"`}</span>
         <Text message={`dashboard.type.${pendingAction.type}`} />
       </Grid>

@@ -1,10 +1,11 @@
-import { Box, Button } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import * as React from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { IotService } from "../../../../common/utils/iot/mqttClient";
 import { AttachmentDownloadResponse, attachmentsActions } from "../../../../state/ducks/attachments";
 import { authSelectors } from "../../../../state/ducks/auth";
+import { Nullable } from "../../../../state/ducks/common";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import { toastError, toastInfo } from "../../../components/notifications";
 import Text from "../../../components/Text";
@@ -13,7 +14,7 @@ import useAsync from "../../../hooks/useAsync";
 
 export interface Props {
   id?: string;
-  renderHTML?: string;
+  renderHTML?: Nullable<string>;
 }
 const GenerateHtmlPreview: React.FunctionComponent<Props> = ({
   id,
@@ -56,6 +57,7 @@ const GenerateHtmlPreview: React.FunctionComponent<Props> = ({
   const assetAction = useActionCreator(attachmentsActions.getAssetUrl);
   const assetAsync = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
+      setHtmlRequested(false);
       window.onbeforeunload = null;
       window.open(downloadInfo?.url, "_blank");
     },
@@ -69,15 +71,13 @@ const GenerateHtmlPreview: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <Box textAlign="right">
-      <Button
-        onClick={handleClick}
-        variant="contained"
-        disabled={htmlRequested}
-      >
-        <Text translation="document.revision.generate.html.preview" />
-      </Button>
-    </Box>
+    <Button
+      onClick={handleClick}
+      variant="contained"
+      disabled={htmlRequested}
+    >
+      <Text translation="common.generate.pdf" />
+    </Button>
   );
 };
 

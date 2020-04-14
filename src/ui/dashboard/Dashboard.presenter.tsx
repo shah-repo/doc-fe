@@ -4,6 +4,7 @@ import { PendingActionType } from "../../state/ducks/dashboard";
 import AsyncGate from "../components/AsyncGate";
 import Text from "../components/Text";
 import ChangeRequestApproval from "./action.types/ChangeRequestApproval";
+import PurchaseOrderApproval from "./action.types/PurchaseOrderApproval";
 import TaskApproval from "./action.types/TaskApproval";
 import TrainingRequest from "./action.types/TrainingRequest";
 import { styles } from "./Dashboard.styles";
@@ -21,9 +22,12 @@ const DashboardPresenter: React.FunctionComponent<DashboardPresenterProps> = ({
         pendingActions.map((pendingAction, index) => {
           switch (pendingAction.type) {
             case PendingActionType.PENDING_REVIEW:
+              return <PurchaseOrderApproval key={index} documentRevision={pendingAction.documentRevision} />;
               return <ChangeRequestApproval key={index} pendingAction={pendingAction} />;
             case PendingActionType.PENDING_TRAINING_RECORDS:
               return <TrainingRequest key={index} pendingAction={pendingAction} />;
+            case PendingActionType.PURCHASE_ORDERS:
+              return <PurchaseOrderApproval key={index} documentRevision={pendingAction.documentRevision} />;
             default:
               return <TaskApproval key={index} pendingAction={pendingAction} />;
           }

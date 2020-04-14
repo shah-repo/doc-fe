@@ -25,7 +25,7 @@ export const ChangeRequestApproval: React.FunctionComponent<Props> = ({
       id="ChangeRequestApproval-pendingActions"
     >
       <Grid item={true} xs={8}>
-        <span className={classes.crId}>{`CRID: ${pendingAction.changeReq.crId} `}</span>
+        <span className={classes.highlight}>{`CRID: ${pendingAction.changeReq.crId} `}</span>
         <span>{`from ${pendingAction.changeReq.owner.user.name} `}</span>
         <Text message={`dashboard.type.${pendingAction.type}`} />
       </Grid>

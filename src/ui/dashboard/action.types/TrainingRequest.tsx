@@ -28,7 +28,7 @@ export const TrainingRequest: React.FunctionComponent<Props> = ({
       id="TrainingRequest-pendingActions"
     >
       <Grid item={true} xs={8}>
-        <span className={classes.crId}>
+        <span className={classes.highlight}>
           <Text message={`dashboard.type.${pendingAction.type}`} />
         </span>
         <span>
