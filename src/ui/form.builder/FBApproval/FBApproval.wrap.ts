@@ -25,6 +25,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
     isDefined = false,
     approvers,
     approverGroups,
+    loading,
     ...props
   }: T) => {
 
@@ -122,10 +123,14 @@ export const withFBApproval = <T extends FBApprovalProps>(
       }
       const hasApproved = FBStore.getValue(name) as FBApprovalValue[] || [];
       approvalFieldState?.setApprovers(hasApproved);
+      approvalFieldState?.load();
     }, []);
 
     useObserver(() => {
       hasApproved = approvalFieldState?.hasApproved;
+      approvers = approvalFieldState?.approvers(approvers as string[]);
+      approverGroups = approvalFieldState?.groups(approverGroups as string[]);
+      loading = approvalFieldState?.loading;
     });
 
     return Component({
@@ -138,6 +143,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
       isApproved,
       isDefined,
       disabled,
+      loading,
       name,
     });
   };

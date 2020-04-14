@@ -20,6 +20,7 @@ export type FBApprovalProps =
   hasApproved?: FBApprovalValue[];
   isApproved?: boolean;
   isDefined?: boolean;
+  loading?: boolean;
 };
 
 export enum FBApprovalStatus {
@@ -41,3 +42,8 @@ export type FBApprovalFieldProps<T> =
 & {
   collection: T[];
 };
+
+export interface FBApprovalData {
+  approvers?: Employee[];
+  approverGroups?: GroupRequestBody[];
+}
