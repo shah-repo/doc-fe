@@ -1,6 +1,9 @@
 import { Dictionary } from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
+import { FB } from "..";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { FBDialogState } from "../FBDialog";
 import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 import FBStore from "../stores/ui/FBStore";
 import { FBTemplateSchema } from "../types/store";
@@ -11,12 +14,15 @@ export const withWorkspace = <T extends FBWorkspaceProps>(
   Component: React.FunctionComponent<T>
 ) => {
   const Comp = (props: T) => {
+    const dialogState = FB.useRef<FBDialogState>(FBDialogState);
+
     React.useEffect(() => {
       FBDynamicValidatorStore.registerValidators();
       FBDynamicValidatorStore.validate();
       FBStore.docId = props.id || "";
       FBStore.documentId = props.documentId || "";
-    }, [props.documentId, props.id]);
+      FBStore.document = props.document || {} as DocumentRevision;
+    }, [props.documentId, props.id, props.document]);
 
     if (props.mode) {
       FBStore.setMode(props.mode);
@@ -31,6 +37,7 @@ export const withWorkspace = <T extends FBWorkspaceProps>(
       schema,
       values,
       form: props.form,
+      dialogState,
     });
   };
 

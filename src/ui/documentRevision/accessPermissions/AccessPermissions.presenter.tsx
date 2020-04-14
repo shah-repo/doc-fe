@@ -155,7 +155,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
         >
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography variant={TypographySize.md}>
-              <Text translation="document.access.user.permissions" />
+              <Text translation="document.revision.selected.users" />
             </Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails
@@ -200,7 +200,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
         >
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography variant={TypographySize.md}>
-              <Text translation="document.access.group.permissions" />
+              <Text translation="document.revision.selected.groups" />
             </Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails

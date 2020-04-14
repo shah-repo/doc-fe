@@ -10,6 +10,7 @@ import { FBEditorElementType, FBEditorModeType } from "../../types/editor";
 import { FBTemplateSchema } from "../../types/store";
 import FBValidatorStore from "../ui/FBValidatorStore";
 import FBDynamicValidatorStore from "./FBDynamicValidatorStore";
+import FBStore from "./FBStore";
 
 export class FBEditorStore {
   @observable public open = false;
@@ -65,14 +66,19 @@ export class FBEditorStore {
     if (_.isUndefined(schema.index)) {
       return;
     }
-    const { type, index, customValidator } = schema;
+    const { type, index, customValidator, name = "" } = schema;
     this.editorIndex = index;
     this.editorMode = "update";
     this.open = true;
+    const formValues = FBStore.getValue(name);
+    const newSchema = {
+      ...schema,
+      ...formValues,
+    };
     FBDynamicValidatorStore.setDynamicValidator(customValidator);
     this.editorTypeRenderer(
       type as FBEditorElementType,
-      schema,
+      newSchema,
       "form.builder.edit.field",
     )();
   };

@@ -12,6 +12,7 @@ export const getGroup = (): Group => ({
   joinedPermissions: [],
   parents: [],
   joinedParents: [],
+  joinedEmployees: [],
 });
 
 export const getCompanyGroup = (): LoadCompanyGroup => ({

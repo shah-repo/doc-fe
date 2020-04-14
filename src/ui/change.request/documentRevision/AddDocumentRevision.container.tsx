@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { DocumentRevision, DocumentRevisionsByIdState, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { Group } from "../../../state/ducks/auth/types";
+import { DocumentRevision, documentRevisionsActions, DocumentRevisionsByIdState, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
 import { AddDocumentRevisionPresenter } from "./AddDocumentRevision.presenter";
 
 interface AddDocumentRevisionContainerProps {
@@ -13,6 +16,8 @@ interface AddDocumentRevisionContainerProps {
   tableName: string;
   tableCriteria: TablePanelStateProps;
   tableData: TableDataProps<DocumentRevision>;
+  setDocumentTypeGroups: (groups: Group[]) => void;
+  documentTypeGroups: any[];
 }
 
 export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRevisionContainerProps> = ({
@@ -24,15 +29,30 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
   tableName,
   tableCriteria,
   tableData,
+  setDocumentTypeGroups,
+  documentTypeGroups,
 }) => {
   const [documentRevisionsToShow, setDocumentRevisionsToShow] = useState<
   DocumentRevision[]
   >([]);
   const [addedDocuments, setAddedDocuments] = useState<string[]>([]);
-  const addDocument = (documentRevisionId: string) =>
+
+  const async = useAsync({
+    onSuccess: (response: Group[] = []) => {
+      setDocumentTypeGroups([
+        ...documentTypeGroups,
+        response,
+      ]);
+    },
+  });
+
+  const getGroupsByStage = useActionCreator(documentRevisionsActions.loadGroupsByStage);
+
+  const addDocument = (documentRevisionId: string) => {
     setAddedDocuments(Array.from(
       new Set([...addedDocuments, documentRevisionId]),
     ));
+  };
   const deleteDocument = (documentRevisionId: string) =>
     setAddedDocuments(addedDocuments.filter((id) => id !== documentRevisionId));
 
@@ -42,7 +62,19 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
     const filteredArray = tableData.filter((documentRevision) =>
       !documentsToIgnore.includes(documentRevision.id) && documentRevision.status === DocumentRevisionStatus.Draft);
     setDocumentRevisionsToShow(filteredArray);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [addedDocuments, documentsInChangeRequest, tableData]);
+
+  useEffect(() => {
+    documentsInChangeRequest.forEach((e) => {
+      if (documentRevisionsById[e]) {
+        async.start(
+          getGroupsByStage,
+          e,
+          async,
+        ); } });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [documentRevisionsById, documentsInChangeRequest, addedDocuments]);
 
   const closeDialogAddDocuments = () => {
     const documentRevisions = new Set([
@@ -53,6 +85,7 @@ export const AddDocumentRevisionContainer: React.FunctionComponent<AddDocumentRe
     setAddedDocuments([]);
     close();
   };
+
   const handleDelete = (documentRevisionId: string) => () => deleteDocument(documentRevisionId);
 
   return (

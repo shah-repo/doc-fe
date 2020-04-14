@@ -6,6 +6,7 @@ import { AuthProps } from "../../../state/ducks/auth/types";
 import { changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { AssessmentType, ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { DataProps } from "../../../state/ducks/common";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { LoadAsyncState } from "../../../state/types";
 import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
 import { ChangeRequestFormValues } from "../form/types";
@@ -71,6 +72,7 @@ export interface AssessmentDispatchProps {
 export interface SummaryDispatchProps {
   save: typeof changeRequestsActions.save;
   closeTask: typeof changeRequestsActions.closeTask;
+  loadGroupsByStage: typeof documentRevisionsActions.loadGroupsByStage;
 }
 
 // Common

@@ -1,6 +1,4 @@
 import { Dictionary } from "lodash";
-import { FBDialogState } from "../FBDialog/FBDialog.state";
-import { FBStateProps } from "../helpers/FBStateProps";
 import { FBButtonProps } from "../types/button";
 import { FBInputProps } from "../types/common";
 import FBHelloSignState from "./FBHelloSign.state";
@@ -23,7 +21,7 @@ export interface FBHelloSignPayload {
   };
 }
 
-export type FBHelloSignProps = FBStateProps<FBDialogState> &
+export type FBHelloSignProps =
   Pick<FBInputProps, "label" | "name"> &
   Pick<FBButtonProps, "onClick"> & {
     buttonLabel?: string;

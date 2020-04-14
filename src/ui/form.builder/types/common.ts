@@ -57,6 +57,7 @@ export type FBOptionProps =
     includeNone?: boolean;
     value?: any;
     optionObjectKeys?: string[];
+    optionValueType?:  "object" | "key";
   };
 
 export type FBInputProps = Omit<FBFormikFieldProps, "name">
@@ -65,7 +66,7 @@ export type FBInputProps = Omit<FBFormikFieldProps, "name">
 & Pick<SelectProps, "renderValue">
 // & Pick<FBValidatorProps, "rules" | "applicableOn">
 & Pick<FBActionContainerProps, "actions">
-& Pick<FBOptionProps, "optionId" | "options" | "optionValueKey" | "optionObjectKeys">
+& Pick<FBOptionProps, "optionId" | "options" | "optionValueKey" | "optionLabelKey" | "optionObjectKeys" | "optionValueType">
 & Pick<BaseTextFieldProps,
 | "children"
 | "value"
@@ -104,13 +105,14 @@ export type FBInputProps = Omit<FBFormikFieldProps, "name">
   templateId?: string;
   isTemplate?: boolean;
   hellosignFlowProps?: any;
-  valueType?: "object" | "key";
   paragraph?: string;
   includeQRScan?: boolean;
   loading?: boolean;
   approvers?: Employee[];
   approverGroups?: GroupRequestBody[];
   approveIsBlocking?: boolean;
+  instructionsDocument?: string;
+  testRequirement?: string;
 };
 
 export type FBFormDefaultProps = FBInputProps &

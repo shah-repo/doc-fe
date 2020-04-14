@@ -1,0 +1,41 @@
+import _, { Dictionary } from "lodash";
+import { action, computed, get, observable, set } from "mobx";
+import { FBWorkspaceMode } from ".";
+import { FBSchemaProps, FBSchemaState } from "..";
+
+export class FBWorkspaceState extends FBSchemaState {
+  @observable public mode: FBWorkspaceMode = "none";
+  @observable public initialValues: Dictionary<any> = {};
+
+  public constructor(schema?: FBSchemaProps[]) {
+    super();
+    this.schema = schema;
+  }
+
+  @computed public get active(): boolean {
+    return this.mode !== "none";
+  }
+
+  @computed public get isStarter() {
+    return (this.mode === "design" && _.size(this.schema) === 0);
+  }
+
+  @action public setMode = (mode: FBWorkspaceMode) => {
+    set(this, "mode", mode);
+  };
+
+  @action public getMode = (): FBWorkspaceMode => get(this, "mode");
+
+  @action public isMode = (mode: FBWorkspaceMode | FBWorkspaceMode[]): boolean => {
+    if (_.isArray(mode)) {
+      return _.includes(mode, this.mode);
+    }
+    return this.mode === mode;
+  };
+
+  @action public setInitialValues = (initialValues: Dictionary<any>) => {
+    set(this, "initialValues", initialValues);
+  };
+}
+
+export default FBWorkspaceState;

@@ -1,12 +1,6 @@
 import { apiAction, apiActionWithCallbacks } from "../../../factories";
 import { ApiAction, Handlers } from "../../../types";
-import {
-  DOCUMENT_TYPE_BY_ID,
-  DOCUMENT_TYPE_BY_ID_ASYNC,
-  DOCUMENT_TYPE_LIST,
-  DOCUMENT_TYPE_LIST_ASYNC,
-  DOCUMENT_TYPE_ROOT_URL,
-} from "./constants";
+import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_BY_ID_ASYNC, DOCUMENT_TYPE_LIST, DOCUMENT_TYPE_LIST_ASYNC, DOCUMENT_TYPE_ROOT_URL } from "./constants";
 import { DocumentType, DocumentTypeById, DocumentTypeByIdAction, DocumentTypeListAction } from "./types";
 
 const documentTypesList = (documentTypes: DocumentType[]): DocumentTypeListAction => ({

@@ -4,7 +4,7 @@ import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { toStartOfDay } from "../../../../common/utils/date";
 import { authSelectors } from "../../../../state/ducks/auth";
-import { GroupTag } from "../../../../state/ducks/auth/types";
+import { Group, GroupTag } from "../../../../state/ducks/auth/types";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest";
 import { AsyncState } from "../../../../state/types";
 import OwnerChanger from "../../../components/common/owner.changer/container";
@@ -39,6 +39,7 @@ interface Props
   documentRevisionsList: string[];
   doNotPrompt?: boolean;
   onDirtyFlagChange?: (dirty: boolean) => void;
+  documentTypeGroups: Group[];
 }
 
 const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
@@ -55,6 +56,8 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   initialValues,
   resetForm,
   errors,
+  documentTypeGroups,
+  values,
 }) => {
   const didMount = useDidMount();
 
@@ -130,7 +133,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
           label="common.target.date"
           datePickerProps={{ id: "targetDate", minDate: toStartOfDay(undefined) }}
         />
-        <ApproversField />
+        <ApproversField documentTypeGroups={documentTypeGroups} values={values} />
         <Grid
           item={true}
           container={true}

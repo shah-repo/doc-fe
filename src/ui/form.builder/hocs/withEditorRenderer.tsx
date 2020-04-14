@@ -3,6 +3,7 @@ import { FormikProps } from "formik";
 import _, { Dictionary } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
+import { FBTestStepState } from "..";
 import FBButton from "../components/inputs/FBButton";
 import { FBFieldEditorComponent, omitLabelValidation, pickDefaultLabel } from "../defaults/editor";
 import FBDRStore from "../stores/ui/FBDRStore";
@@ -10,6 +11,7 @@ import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 import editorStore from "../stores/ui/FBEditorStore";
 import FBStore from "../stores/ui/FBStore";
 import FBValidatorStore from "../stores/ui/FBValidatorStore";
+import { FBInputProps } from "../types/common";
 import { FBEditorElementType, FBEditorFormProps } from "../types/editor";
 import { FBTemplateSchema } from "../types/store";
 
@@ -25,7 +27,7 @@ export const withEditorRenderer =
       _.set(props, "values.label", intl.formatMessage({ id: `form.builder.${type}` }));
     }
 
-    if (type === "stepsection") {
+    if (type === "stepsection" || type === "teststep") {
       const stepLabel = props.values.label as string;
       const orderStr = FBStore.getSectionStepReg(stepLabel);
       orderStr && _.set(props, "values.label", stepLabel.replace(orderStr, ""));
@@ -42,9 +44,8 @@ export const withEditorRenderer =
     function fieldType(values: FBTemplateSchema): FBEditorElementType {
       const { name: fieldName } = values;
       switch (type) {
-        case "outputapproval":
+        case "inlineapproval":
           FBDRStore.isOutput && fieldName && FBStore.setValue(fieldName, values);
-          return "inlineapproval";
         default:
           return type;
       }
@@ -103,11 +104,16 @@ export const withEditorRenderer =
       // FBValidatorStore.customValidator = undefined;
 
       const removeEl = (mode === "create") ? 0 : 1;
-      const newSchema = FBStore.schema;
+      let newSchema = FBStore.schema;
       newSchema.splice(index, removeEl, schema);
-      if (type === "outputapproval") {
+      if (type === "inlineapproval") {
         FBStore.clearSchema();
       }
+
+      if (type === "teststep") {
+        newSchema = _.union(newSchema, new FBTestStepState().schema as FBInputProps[]);
+      }
+
       FBStore.setSchema(newSchema);
       editorStore.open = false;
     };

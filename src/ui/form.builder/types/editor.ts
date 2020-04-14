@@ -36,7 +36,12 @@ export type FBEditorElementType =
   | "timer"
   | "inlineapproval"
   | "outputapproval"
-  | "approvalMatrix";
+  | "approvalMatrix"
+  | "instructionsdocument"
+  | "selectdocument"
+  | "teststep"
+  | "testRequirement"
+  | "selectrequirement";
 
 export type FBEditorModeType = "create" | "update";
 
