@@ -5,12 +5,11 @@ import React from "react";
 import { useIntl } from "react-intl";
 import FBButton from "../components/inputs/FBButton";
 import { FBFieldEditorComponent, omitLabelValidation, pickDefaultLabel } from "../defaults/editor";
-import FBDRStore from "../stores/ui/FBDRStore";
 import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 import editorStore from "../stores/ui/FBEditorStore";
 import FBStore from "../stores/ui/FBStore";
 import FBValidatorStore from "../stores/ui/FBValidatorStore";
-import { FBEditorElementType, FBEditorFormProps } from "../types/editor";
+import { FBEditorFormProps } from "../types/editor";
 import { FBTemplateSchema } from "../types/store";
 
 export const withEditorRenderer =
@@ -38,16 +37,6 @@ export const withEditorRenderer =
     //   // rules: FBValidatorStore.getRules(),
     //   ...props.values,
     // });
-
-    function fieldType(values: FBTemplateSchema): FBEditorElementType {
-      const { name: fieldName } = values;
-      switch (type) {
-        case "inlineapproval":
-          FBDRStore.isOutput && fieldName && FBStore.setValue(fieldName, values);
-        default:
-          return type;
-      }
-    }
 
     const propsByType = (): Dictionary<FBTemplateSchema | string[]> => {
       if (type === "action") {
@@ -86,7 +75,7 @@ export const withEditorRenderer =
         index,
         name,
         ...values,
-        type: fieldType(values as FBTemplateSchema),
+        type,
         rules,
         // applicableOn: FBValidatorStore.applicableOn ? [FBValidatorTrigger.ON_STATE_TO_IN_REVIEW] : [],
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],

@@ -31,11 +31,11 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     inlineApprovalState = FB.useRef<FBInlineApprovalState>(FBInlineApprovalState);
     const { dialogState }: { dialogState: FBDialogState} = FB.useStores();
 
-    const formValue = FBStore.getValue(`fb-approval-field-${name}`);
-    const schemaValue = FBStore.getValue(name);
-    approvers = approvers || schemaValue?.approvers;
-    approverGroups = approverGroups || schemaValue?.approverGroups;
-    _.isUndefined(approveIsBlocking) && (approveIsBlocking = schemaValue?.approveIsBlocking);
+    const formValue = FBStore.getValue(name);
+    // const schemaValue = FBStore.getValue(name);
+    // approvers = approvers || schemaValue?.approvers;
+    // approverGroups = approverGroups || schemaValue?.approverGroups;
+    // _.isUndefined(approveIsBlocking) && (approveIsBlocking = schemaValue?.approveIsBlocking);
 
     function resetedSchema(): FBTemplateSchema[] {
       const schema = FBStore.getSchema();
@@ -45,7 +45,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     }
 
     function resetedValues(): Dictionary<any> {
-      return _.omit(FBStore.values, [name, "approveIsBlocking", `fb-approval-field-${name}`]);
+      return _.omit(FBStore.values, [name, "approveIsBlocking"]);
     }
 
     function removeConfig() {

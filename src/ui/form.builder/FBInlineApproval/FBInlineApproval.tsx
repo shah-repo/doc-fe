@@ -54,7 +54,7 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
         {mode === "defined" && (
           <FBApproval
             {...{ approvers, approverGroups, approveIsBlocking, label: "form.builder.approval" }}
-            name={`fb-approval-field-${name}`}
+            {...{ name }}
           />
         )}
       </Box>
