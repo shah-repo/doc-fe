@@ -3,7 +3,6 @@ clone:
 
 definitions:
   caches:
-    jest-cache: ./jest-cache
 
   steps:
     - step: &COMMON
@@ -23,6 +22,7 @@ definitions:
             access-key: $AWS_ACCESS_KEY_ID
             secret-key: $AWS_SECRET_ACCESS_KEY
         max-time: 20
+        size: 2x
         caches:
           - node
 
@@ -52,7 +52,6 @@ definitions:
         size: 2x
         caches:
           - node
-          - jest-cache
         artifacts:
           - test-results/**
           - jest-config/**
@@ -175,14 +174,14 @@ pipelines:
           - step: *BUILD_DEV
       - step: *DEPLOY_DEV
 
-    task/ENC-1422_hello_action_button:
+    ENC-2195-approvers-list:
       - parallel:
           - step: *RUN_TESTS
           # - step: *RUN_LINTER
           - step: *BUILD_DEV2
       - step: *DEPLOY_DEV2
 
-    release/20.4.1:
+    release/20.7:
       - parallel:
           - step: *RUN_TESTS
           # - step: *RUN_LINTER

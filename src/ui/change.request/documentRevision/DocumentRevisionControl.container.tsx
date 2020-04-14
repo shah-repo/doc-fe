@@ -2,6 +2,7 @@ import _ from "lodash";
 import React, { useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
+import { Group } from "../../../state/ducks/auth/types";
 import { DocumentRevision, DocumentRevisionsByIdState, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { ApplicationState } from "../../../state/reducers";
@@ -21,6 +22,8 @@ interface OwnProps {
   selectDocumentRevision: (documentRevisionId: string) => void;
   selectAssessmentForm: () => void;
   setDocumentRevisionsList: (documents: string[]) => void;
+  setDocumentTypeGroups: (groups: Group[]) => void;
+  documentTypeGroups: Group[];
 }
 
 export type DocumentRevisionControlContainerProps = OwnProps &
@@ -44,6 +47,8 @@ DocumentRevisionControlContainerProps
   documentRevisionsById,
   selectedDocumentRevision,
   documentsInCrById,
+  setDocumentTypeGroups,
+  documentTypeGroups,
 }) => {
   const classes = styles();
   const [showAddDocuments, setShowAddDocuments] = useState(false);
@@ -51,13 +56,14 @@ DocumentRevisionControlContainerProps
   const openAddDocuments = () => setShowAddDocuments(true);
   const closeAddDocuments = () => setShowAddDocuments(false);
   const deleteDocumentFromChangeRequest = (
-    deleteDocumentRevisionId: string,
+    deleteDocumentRevisionId: string, index
   ) => {
     setDocumentRevisionsList(
       documentsInChangeRequest.filter(
         (documentRevisionId) => documentRevisionId !== deleteDocumentRevisionId,
       ),
     );
+    setDocumentTypeGroups(documentTypeGroups.filter((group, docIndex) => docIndex !== index));
   };
 
   const TABLE_NAME = "addDocRevTable";
@@ -98,6 +104,8 @@ DocumentRevisionControlContainerProps
         tableName={TABLE_NAME}
         tableCriteria={tableCriteria}
         tableData={tableData}
+        setDocumentTypeGroups={setDocumentTypeGroups}
+        documentTypeGroups={documentTypeGroups}
       />
     </div>
   );

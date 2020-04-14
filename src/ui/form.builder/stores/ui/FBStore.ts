@@ -1,5 +1,6 @@
 import _, { Dictionary } from "lodash";
 import { action, computed, observable, set } from "mobx";
+import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
 import { FBFormValues } from "../../defaults/formik";
 import { FBInputProps } from "../../types/common";
 import { FBTemplateSchema } from "../../types/store";
@@ -33,10 +34,11 @@ export class FormBuilderStore {
   public docId = "";
   public documentId = "";
   public stepSectionReg = /#([1-9][0-9]?|100)$/;
+  public document: DocumentRevision = {} as DocumentRevision;
 
   @action public sectionNumber = (endIndex: number): number => {
     const sections = _.filter(this.getSchema(), (schemaItem, index) =>
-      endIndex > index && schemaItem.type === "stepsection"
+      endIndex > index && (schemaItem.type === "stepsection" || schemaItem.type === "teststep")
     );
     return _.size(sections) + 1;
   };
@@ -99,7 +101,7 @@ export class FormBuilderStore {
     let stepSectionCounter = 1;
     newSchema.map((o, i) => {
       o.index = i;
-      if (o.type === "stepsection") {
+      if (o.type === "stepsection" || o.type === "teststep") {
         const orderStr = this.getSectionStepReg(o.label as string);
         if (orderStr) {
           o.label = (o.label as string).replace(orderStr, `#${stepSectionCounter}`);

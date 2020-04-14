@@ -46,7 +46,7 @@ DocumentRevisionListContainerProps
   const dispatch = useDispatch();
   const loadDocumentAsyncState = useSelector(documentRevisionsSelectors.getLoadDocumentAsyncState);
   const loadDocumentAction = useCallback(() => {
-      dispatch(documentRevisionsActions.loadDocument(documentId));
+    dispatch(documentRevisionsActions.loadDocument(documentId));
   }, [dispatch, documentId]);
 
   useEffect(() => {

@@ -6,6 +6,7 @@ import { IotService } from "../../../../common/utils/iot/mqttClient";
 import { AttachmentDownloadResponse, attachmentsActions } from "../../../../state/ducks/attachments";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
+import { toastError, toastInfo } from "../../../components/notifications";
 import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
@@ -25,11 +26,11 @@ const GenerateHtmlPreview: React.FunctionComponent<Props> = ({
   const templateAction = useActionCreator(documentRevisionsActions.getRenderTemplatePreview);
   const templateAsync = useAsync({
     onSuccess: () => {
-      alert(intl.formatMessage({ id: "document.revision.download.html.request" }));
+      toastInfo(intl.formatMessage({ id: "document.revision.download.html.request" }));
     },
     onError: () => {
       unsubscribe();
-      alert(intl.formatMessage({ id: "document.revision.download.html.error" }));
+      toastError(intl.formatMessage({ id: "document.revision.download.html.error" }));
     },
   });
   const handleClick = () => {
@@ -59,7 +60,7 @@ const GenerateHtmlPreview: React.FunctionComponent<Props> = ({
       window.open(downloadInfo?.url, "_blank");
     },
     onError: () => {
-      alert(intl.formatMessage({ id: "document.revision.download.html.error" }));
+      toastError(intl.formatMessage({ id: "document.revision.download.html.error" }));
     },
   });
 

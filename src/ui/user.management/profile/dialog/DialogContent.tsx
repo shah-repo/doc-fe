@@ -20,6 +20,7 @@ import AcctCodes from "../AddressesAndCodes/AcctCodes";
 import Addresses from "../AddressesAndCodes/Addresses";
 import ApiTokenContent from "../apiTokenContent/ApiTokenContent";
 import UserGroups from "../groups/UserGroups";
+import { HelloSignAccess } from "../HelloSignAccess";
 
 interface OwnProps {
   canManageUsers: boolean;
@@ -89,6 +90,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
   const [avatarURL, setAvatarURL] = useState<string>("");
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const companyMine = useSelector(companySelectors.getCompanyMine);
+  const { helloSignIntegrationEnabled } = companyMine;
 
   // this is a hack for back button to redirect to user management table
   useEffect(() => () => {
@@ -237,6 +239,7 @@ export const DialogContent: React.FunctionComponent<Props> = ({
           employeeId={employeeId}
           callbackUpdateGroups={callbackUpdateGroups}
         />
+        {canUpdateCompany && <HelloSignAccess helloSignStatus={helloSignIntegrationEnabled}/>}
         {slackIntegrationEnabled && slackTeamId && !slackUserId && (
           <div>
             <Typography variant="h4" className={classes.integrations}>

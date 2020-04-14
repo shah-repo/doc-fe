@@ -1,7 +1,7 @@
 import { DialogProps, SvgIconProps } from "@material-ui/core";
 
 export type FBDialogProps =
-& Pick<Partial<DialogProps>, "open" | "title" | "maxWidth">
+& Pick<Partial<DialogProps>, "open" | "maxWidth">
 & {
   title?: React.ReactNode | string;
   content?: React.ReactNode;

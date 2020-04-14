@@ -2,6 +2,7 @@ import { Box, Grid, ListItem, WithStyles, withStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { filter } from "lodash";
 import React, { useMemo } from "react";
+import { Group } from "../../../state/ducks/auth/types";
 import { ChangeRequest, changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
 import { AsyncState } from "../../../state/types";
@@ -27,6 +28,7 @@ interface OwnProps extends DataProps<ChangeRequest> {
   currentUserEmail: string;
   closeTask: typeof changeRequestsActions.closeTask;
   canChangeOwnerShip: boolean;
+  documentTypeGroups: Group[];
 }
 
 export type Props = OwnProps &
@@ -42,6 +44,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
   closeTask,
   canChangeOwnerShip,
   errors,
+  documentTypeGroups,
+  values,
 }) => {
   const approvedApprovers = useMemo(
     () => filter(dataProp.approvals, ["status", "APPROVED"]),
@@ -50,8 +54,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
 
   const approversFieldRenderer = () => (
     <Box>
-      <ListItem>
-        <ApproversField dataProp={approvedApprovers} />
+      <ListItem style={{ display: "inline-block" }}>
+        <ApproversField dataProp={approvedApprovers} documentTypeGroups={documentTypeGroups} values={values} />
       </ListItem>
     </Box>
   );
@@ -106,10 +110,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         <ApproversSummary dataProp={dataProp.approvals} />
       </Grid>
       <Box className={classes.submitBox} p={2}>
-        <Grid
-          item={true}
-          alignItems="flex-end"
-        >
+        <Grid item={true}>
           {canEdit && <FormProgress asyncState={asyncState} />}
           {canEdit && <FormMessage asyncState={asyncState} />}
           {renderChangeOwnership}

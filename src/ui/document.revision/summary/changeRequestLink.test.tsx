@@ -14,7 +14,7 @@ describe("ChangeRequestLink tests", () => {
     dataProp: {},
   };
 
-  const getWrapper = (props: Partial<Props>= {}) => shallow(
+  const getWrapper = (props: Partial<Props> = {}) => shallow(
     <ChangeRequestLink {...defaultProps} {...props}/>,
   );
 
@@ -24,32 +24,32 @@ describe("ChangeRequestLink tests", () => {
   });
 
   it("Dont show if changeRequest is empty", () => {
-    const defaultProps: Props = { dataProp: getDocumentRevision()};
-    const wrapper = getWrapper({...defaultProps});
+    const defaultProps: Props = { dataProp: getDocumentRevision() };
+    const wrapper = getWrapper({ ...defaultProps });
     expect(wrapper.isEmptyRender()).toEqual(true);
   });
 
   it("Link sets props correctly", () => {
-    const defaultProps: Props = { dataProp: { ...getDocumentRevision(), changeRequest: getChangeRequest() }};
+    const defaultProps: Props = { dataProp: { ...getDocumentRevision(), changeRequest: getChangeRequest() } };
     const path = changeRequestEditPath(defaultProps.dataProp.changeRequest.id);
 
-    const wrapper = getWrapper({...defaultProps});
+    const wrapper = getWrapper({ ...defaultProps });
 
     expect(wrapper.find(Link).prop("to")).toEqual(path);
   });
 
   it("Tooltip sets prop title correctly", () => {
-    const defaultProps: Props = { dataProp: { ...getDocumentRevision(), changeRequest: getChangeRequest() }};
+    const defaultProps: Props = { dataProp: { ...getDocumentRevision(), changeRequest: getChangeRequest() } };
     const title = stripTags(defaultProps.dataProp.changeRequest.description);
 
-    const wrapper = getWrapper({...defaultProps});
+    const wrapper = getWrapper({ ...defaultProps });
 
     expect(wrapper.find(Tooltip).prop("title")).toEqual(title);
   });
 
   it("Displays crId", () => {
-    const defaultProps: Props = { dataProp: { ...getDocumentRevision(), changeRequest: getChangeRequest() }};
-    const wrapper = getWrapper({...defaultProps});
+    const defaultProps: Props = { dataProp: { ...getDocumentRevision(), changeRequest: getChangeRequest() } };
+    const wrapper = getWrapper({ ...defaultProps });
     expect(wrapper.find("span").contains(defaultProps.dataProp.changeRequest.crId)).toEqual(true);
   });
 });

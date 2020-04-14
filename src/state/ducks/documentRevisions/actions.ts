@@ -1,9 +1,10 @@
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import { Audit, AuditActionPayload } from "../audit/types";
+import { Group } from "../auth/types";
 import { documentsActions } from "../documents";
 import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET } from "./constants";
-import { Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, SecurityList } from "./types";
+import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, SecurityList } from "./types";
 
 const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentRevisionsListAction => ({
   type: DOCUMENT_REVISION_LIST,
@@ -130,7 +131,7 @@ const loadAudit = (id: string): ApiAction<Audit[]> => apiAction({
 
 const approveAndRelease = (
   id: string,
-  body: any,
+  body: ApproveAndReleaseRequest,
   password: string,
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
@@ -140,6 +141,21 @@ const approveAndRelease = (
   password,
   onSuccess: (docRev: DocumentRevision, dispatch) => {
     dispatch(load(id));
+    dispatch(loadDocument(docRev.document.id));
+  },
+  handlers,
+});
+
+const createAndRelease = (
+  body: CreateAndReleaseRequest,
+  password: string,
+  handlers: Handlers,
+): ApiAction => apiActionWithCallbacks({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/create_and_release`,
+  method: "post",
+  data: body,
+  password,
+  onSuccess: (docRev: DocumentRevision, dispatch) => {
     dispatch(loadDocument(docRev.document.id));
   },
   handlers,
@@ -177,6 +193,13 @@ const upgradeToReleasedForm = (
   handlers,
 });
 
+const loadGroupsByStage = (id: string, handlers: Handlers): ApiAction<Group[]> =>
+  apiActionWithCallbacks({
+    url: `${DOCUMENT_REVISION_ROOT_URL}/${id}/required_approvers`,
+    method: "get",
+    handlers,
+  });
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
@@ -194,4 +217,6 @@ export default {
   approveAndReleaseNonQms,
   getRenderTemplatePreview,
   upgradeToReleasedForm,
+  createAndRelease,
+  loadGroupsByStage,
 };

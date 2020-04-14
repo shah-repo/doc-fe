@@ -4,7 +4,7 @@ import faker from "faker";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
-import { ListPresenter, Props} from "./presenter";
+import { ListPresenter, Props } from "./presenter";
 
 describe("ListPresenter tests", () => {
   const defaultProps: Props = {
@@ -18,19 +18,19 @@ describe("ListPresenter tests", () => {
     setDocId: jest.fn(),
     previewDocumentRevision: jest.fn(),
     documentTypeOptions: [{
-        value: faker.lorem.word(),
-        text: faker.lorem.word(),
+      value: faker.lorem.word(),
+      text: faker.lorem.word(),
     }],
     classes: {
-        root: "",
-        button: "",
-        item: "",
-        link: "",
-        clearButton: "",
+      root: "",
+      button: "",
+      item: "",
+      link: "",
+      clearButton: "",
     },
   };
 
-  const getWrapper = (props: Partial<Props>= {}) => shallow(
+  const getWrapper = (props: Partial<Props> = {}) => shallow(
     <ListPresenter {...defaultProps} {...props}/>,
   );
   it("RouterLink props are set correctly", () => {
@@ -39,7 +39,7 @@ describe("ListPresenter tests", () => {
   });
 
   it("tableName is set correctly", () => {
-      const wrapper = getWrapper();
-      expect(wrapper.find(Grid).at(3).children().prop("tableName")).toEqual(defaultProps.tableName);
+    const wrapper = getWrapper();
+    expect(wrapper.find(Grid).at(3).children().prop("tableName")).toEqual(defaultProps.tableName);
   });
 });

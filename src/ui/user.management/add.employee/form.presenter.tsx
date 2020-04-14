@@ -1,10 +1,10 @@
-import { Box, Button, Grid, Typography } from "@material-ui/core";
+import { Box, Button, Grid } from "@material-ui/core";
 import { Form, FormikProps } from "formik";
 import React, { useEffect, useState } from "react";
-import Select from "react-select";
 import { useDebounce } from "use-debounce";
 import { GetEmployeeResponse, userManagementActions } from "../../../state/ducks/userManagement";
 import { AsyncState, AsyncStatus } from "../../../state/types";
+import AutocompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import InputField from "../../components/forms/fields/Input";
 import { email, required, validator } from "../../components/forms/fields/validators";
@@ -19,7 +19,6 @@ import { AddEmployeeFormValues } from "./form.container";
 interface Props extends FormikProps<AddEmployeeFormValues> {
   asyncState: AsyncState;
   groupOptions: OptionType[];
-  defaultGroups: OptionType[];
 }
 
 export const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
@@ -28,7 +27,6 @@ export const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
   resetForm,
   values,
   setFieldValue,
-  defaultGroups,
 }) => {
   const [isNameDisabled, setIsNameDisabled] = useState(false);
   useEffect(() => {
@@ -89,20 +87,14 @@ export const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
         inputProps={{ id: "AddEmployeeFormPresenter-commonName", disabled: isNameDisabled }}
         validate={validator(required)}
       />
-      <Box mb={0.3}>
-        <Typography
-          variant="h6"
-        >
-          <Text translation="common.groups" />
-        </Typography>
-      </Box>
-      <Select
+      <AutocompleteField
         name="groups"
         label="common.groups"
-        id="AddEmployeeFormPresenter-commonGroups"
-        isClearable={true}
-        isMulti={true}
-        defaultValue={defaultGroups}
+        autocompleteProps={{
+          id: "approvals",
+          isMulti: true,
+          isClearable: true,
+        }}
         options={groupOptions}
       />
       <Box mt={5}>

@@ -18,7 +18,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     ...props
   }: T) => {
 
-    const value = FBStore.getValue(name);
+    const value = FBStore.getValue(name) || defaultValue;
 
     if (options && value && optionValueType === "key") {
       defaultValue = multiple

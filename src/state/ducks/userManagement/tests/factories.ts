@@ -11,6 +11,8 @@ export const getGroup = (): Group => ({
   joinedTags: null,
   joinedPermissions: [],
   parents: [],
+  joinedParents: [],
+  joinedEmployees: [],
 });
 
 export const getCompanyGroup = (): LoadCompanyGroup => ({

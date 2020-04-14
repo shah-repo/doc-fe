@@ -1,13 +1,14 @@
-import { Box, Button, Grid, withStyles, WithStyles } from "@material-ui/core";
+import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { get, isEmpty } from "lodash";
 import { observer } from "mobx-react";
 import React, { useEffect } from "react";
+import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
-import { DocumentRevision, DocumentRevisionStatus, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
@@ -16,19 +17,18 @@ import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import OwnerChanger from "../../components/common/owner.changer/container";
 import { RequestType } from "../../components/common/owner.changer/helpers/types";
-import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
+import { default as AutocompleteField } from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
 import CheckboxField from "../../components/forms/fields/Checkbox";
 import RichTextEditor from "../../components/forms/fields/RichTextEditor";
 import SelectField, { SelectOption } from "../../components/forms/fields/Select";
-import { required, validator } from "../../components/forms/fields/validators";
+import { required, requiredAtLeastOne, validator } from "../../components/forms/fields/validators";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
 import SubmitButton from "../../components/forms/SubmitButton";
-import Text from "../../components/Text";
 import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
 import { documentDetailsPath } from "../../document.revision/utils/paths";
@@ -45,6 +45,7 @@ import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
 import References from "./presenters/References";
 import RenderHtmlField from "./presenters/RenderHtmlField";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
+import UpgradeToLatest from "./presenters/UpgradeToLatest";
 import { DocumentRevisionFormValues } from "./types";
 
 
@@ -61,11 +62,12 @@ export interface Props
   setDocId?: typeof documentsActions.setDocumentProposedId;
   doNotPrompt?: boolean;
   documentTypes: SelectOption[];
-  otherDocumentTypes: SelectOption[];
+  otherDocumentTypes: OptionType[];
   documentTypesById: DocumentTypeByIdState;
   onDirtyFlagChange?: (dirty: boolean) => void;
   canChangeOwnerShip: boolean;
   onUpgradeClick: () => void;
+  type?: string;
 }
 
 export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
@@ -93,7 +95,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   documentRevision,
   setFieldValue,
   onUpgradeClick,
+  type,
 }) => {
+  const intl = useIntl();
   const loadAvailableApproversAction = useActionCreator(
     changeRequestsActions.loadAvailableApprovers
   );
@@ -196,6 +200,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   });
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
 
+
   const renderChangeOwnership = canChangeOwnerShip && values.id && (
     <OwnerChanger requestId={values.id} requestType={RequestType.Document} />
   );
@@ -211,17 +216,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     />
   );
 
-  const upgradeButtonRenderer = () => (
-    <Button
-      variant="outlined"
-      onClick={onUpgradeClick}
-      id="DocumentRevisionForm-upgrade"
-    >
-      <Text translation="common.upgrade"/>
-    </Button>
-  );
-
   const formDocumentStatus = get(documentRevision, "formDocument.status", "");
+  const isStatusDeprecated = formDocumentStatus === DocumentRevisionStatus.Deprecated;
+  const isDocTypeDisabled = type === "newVersion" || isdocRevStatusDraft;
+  const options = type === "newOutput" ? initialValues.formDocument?.formTemplate?.outputDocumentTypes.map((e) =>
+    ({ value: e.id, text: e.documentTypeName })
+  ) as SelectOption[] : documentTypes;
 
   return (
     <Grid
@@ -268,10 +268,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           name="document.documentType.id"
           label="document.type"
           selectProps={{
-            inputProps: { id: "documentType", disabled: isDisabled },
+            inputProps: { id: "documentType", disabled: isDocTypeDisabled },
             onChange: handleTypeChange,
           }}
-          options={documentTypes}
+          options={options}
           validate={validator(required)}
           includeEmpty={false}
         />
@@ -282,7 +282,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           setDocId={setDocId}
         />
         {renderRevisionStageDropdown}
-        <AutcompleteField
+        <AutocompleteField
           name="referenceTo"
           label="documentRevision.form.references"
           autocompleteProps={{
@@ -297,40 +297,49 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         <CheckboxField
           name="retrain"
           label="document.revision.trainingRequired"
+          checkboxProps={{
+            disabled: values.revisionChangeType === RevisionChangeType.AdministrativeChange,
+          }}
         />
         <AttachmentsField />
         {renderTypeOfRevisionChange}
-        {!values.status && (
+        {(!values.status || type === "newOutput") && (
           <AsyncGate
             asyncState={loadApproversAsyncState}
             asyncAction={loadAvailableApproversAction}
             startActionOnMount={true}
           >
-            <AutcompleteField
+            <AutocompleteField
               name="securityEmployees"
-              label="document.revision.user.permissions"
+              label="document.revision.selected.users"
               autocompleteProps={{
                 id: "securityEmployees",
                 isMulti: true,
                 closeMenuOnSelect: false,
+                placeholder: intl.formatMessage({
+                  id: "document.revision.selected.users.placeholder",
+                }),
               }}
               options={availableApprovers}
             />
           </AsyncGate>
         )}
-        {!values.status && (
+        {(!values.status || type === "newOutput") && (
           <AsyncGate
             asyncState={loadGroupAsyncState}
             asyncAction={loadGroupsAction}
             startActionOnMount={true}
           >
-            <AutcompleteField
+            <AutocompleteField
               name="securityGroups"
-              label="document.revision.group.permissions"
+              label="document.revision.selected.groups"
               autocompleteProps={{
                 id: "securityGroups",
                 isMulti: true,
                 closeMenuOnSelect: false,
+                placeholder: intl.formatMessage({
+                  id: "document.revision.selected.groups.placeholder",
+                }),
               }}
               options={groupOptions}
             />
@@ -338,26 +347,24 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         )}
         {FBStore.active && !FBDRStore.isOutput && (
           <Box mt={4}>
-            <SelectField
-              name="formTemplate.outputDocumentType.id"
+            <AutocompleteField
+              name="formTemplate.outputDocumentTypes"
               label="document.output.type"
-              selectProps={{
-                inputProps: {
-                  id: "formTemplate.outputDocumentType",
-                  disabled: !outputDocEnabled,
-                  className: !outputDocEnabled ? classes.outputGrey : "",
-                },
+              autocompleteProps={{
+                id: "formTemplate.outputDocumentTypes",
+                isMulti: true,
+                closeMenuOnSelect: false,
+                className: !outputDocEnabled ? classes.outputGrey : "",
               }}
               options={otherDocumentTypes}
-              includeEmpty={false}
-              validate={validator(required)}
+              validate={validator(requiredAtLeastOne)}
             />
             <RenderHtmlField />
           </Box>
         )}
         {FBStore.active && (
           <Box mt={5}>
-            <GenerateHtmlPreview id={values.id} renderHTML={values.formDocument?.renderHTML} />
+            {values.id && <GenerateHtmlPreview id={values.id} renderHTML={values.formDocument?.renderHTML} />}
             <FBWorkspaceForm
               id={get(values, "id")}
               documentId={get(values, "formDocument.document.id") || get(values, "document.id")}
@@ -378,7 +385,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               onClick={onFormClick}
               id="DocumentRevisionForm-submit"
             />
-            {formDocumentStatus === DocumentRevisionStatus.Deprecated && upgradeButtonRenderer()}
+            {isStatusDeprecated && <UpgradeToLatest onUpgradeClick={onUpgradeClick}/>}
             <ApproveAndRelease
               id={values.id}
               status={values.status}

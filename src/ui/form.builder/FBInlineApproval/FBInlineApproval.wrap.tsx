@@ -2,7 +2,7 @@ import _, { Dictionary } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBInlineApprovalProps, FBInlineApprovalState } from ".";
-import { FB, FBDialogState } from "..";
+import { FB } from "..";
 import Text from "../../components/Text";
 import FBButton from "../components/inputs/FBButton";
 import FBDRStore from "../stores/ui/FBDRStore";
@@ -29,7 +29,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
   }: T) => {
 
     inlineApprovalState = FB.useRef<FBInlineApprovalState>(FBInlineApprovalState);
-    const { dialogState }: { dialogState: FBDialogState} = FB.useStores();
+    const { dialogState } = FB.useStores();
 
     const formValue = FBStore.getValue(name);
     // const schemaValue = FBStore.getValue(name);
@@ -81,9 +81,8 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     const editApproval = () => FBStore.editSchemaItem(index);
     const removeApproval = () => {
       if (mode === "defined" && formValue && approveIsBlocking) {
-        return dialogState.config({
+        return dialogState?.config({
           open: true,
-          maxWidth: "sm",
           content: <Text message="form.builder.approval.reset.msg" />,
           actions: resetActions(),
         });

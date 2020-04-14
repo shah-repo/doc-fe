@@ -2,17 +2,17 @@ import { Box, Grid } from "@material-ui/core";
 import classNames from "classnames";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import { get } from "lodash";
-import React, { useMemo } from "react";
-import { connect } from "react-redux";
-import { Permission } from "../../../state/ducks/auth/types";
+import React, { useEffect, useMemo } from "react";
+import { connect, useSelector } from "react-redux";
+import { GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { DocumentType, DocumentTypeByIdState, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
+import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { SelectOption } from "../../components/forms/fields/Select";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 import DocumentHeader from "../../document.revision/summary/header";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -50,6 +50,7 @@ interface OwnProps {
   proposedDocId?: string;
   loadDocumentProposedId?: typeof documentsActions.loadDocumentProposedId;
   canChangeOwnerShip?: boolean;
+  type?: string;
 }
 
 export type DocumentRevisionFormContainerProps = OwnProps &
@@ -93,18 +94,29 @@ DocumentRevisionFormContainerProps
   documentTypesById,
   document,
   canChangeOwnerShip = false,
+  type,
 }) => {
 
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
+  const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
+
   const cleanInitialValues = useMemo(() => {
-    if (canUpdateHTML) {
-      return initialValues;
+    const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;
+    const securityGroups: any[] = [];
+    if (initialValues.document?.documentType?.isQms) {
+      groupOptions.forEach((group) => {
+        if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
+          securityGroups.push({ value: group.value, label: group.label });
+        }
+      });
     }
+
     return {
       ...initialValues,
-      renderHTML: undefined,
+      renderHTML,
+      securityGroups,
     };
-  }, [canUpdateHTML, initialValues]);
+  }, [canUpdateHTML, initialValues, groupOptions]);
 
   const docTypes = useMemo(
     () =>
@@ -115,11 +127,11 @@ DocumentRevisionFormContainerProps
     [documentTypes],
   );
 
-  const otherTypes: SelectOption[] = useMemo(
+  const otherTypes: OptionType[] = useMemo(
     () =>
-      documentTypes.reduce((acc: SelectOption[], document) => {
+      documentTypes.reduce((acc: OptionType[], document) => {
         if (document.group === "OTHER") {
-          acc.push({ value: document.id, text: document.documentTypeName });
+          acc.push({ value: document.id, label: document.documentTypeName });
         }
         return acc;
       }, []),
@@ -132,6 +144,14 @@ DocumentRevisionFormContainerProps
   const onUpgradeClick = () => {
     async.start(upgradeAction, documentRevision.id, async);
   };
+
+  useEffect(() => {
+    if (initialValues.document?.documentType?.documentTypeAcronym && loadDocumentProposedId) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      loadDocumentProposedId(initialValues.document.documentType.documentTypeAcronym);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialValues.document?.documentType?.documentTypeAcronym]);
 
   document = document || ({} as Document);
   const classes = styles();
@@ -154,6 +174,7 @@ DocumentRevisionFormContainerProps
       documentTypesById={documentTypesById}
       canChangeOwnerShip={canChangeOwnerShip}
       onUpgradeClick={onUpgradeClick}
+      type={type}
     />
   );
 

@@ -7,9 +7,7 @@ const useActionCreator = <A> (
 ) => {
   const dispatch = useDispatch();
 
-  return useMemo(() => {
-    return bindActionCreators(action, dispatch);
-  }, [dispatch, action]);
+  return useMemo(() => bindActionCreators(action, dispatch), [dispatch, action]);
 };
 
 export default useActionCreator;

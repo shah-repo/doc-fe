@@ -65,8 +65,7 @@ const getDocumentTypeByAcronym = createSelector(
 );
 const docRevTypeById = (state: ApplicationState) => state.documentType.docRevTypeId.forms[0] ?
   state.documentType.docRevTypeId.forms[0].id : "";
-const docId = (state: ApplicationState) => state.documentType.docRevTypeId.forms[0] ?
-  state.documentType.docRevTypeId.forms[0].document.id : "";
+
 const formIds = (state: ApplicationState) => state.documentType.docRevTypeId.forms;
 
 const getDocTypeName = createSelector(
@@ -74,6 +73,13 @@ const getDocTypeName = createSelector(
   (state, docTypeId) => docTypeId,
   (byIds, docTypeId) => _.get(byIds[docTypeId], "documentTypeName", "N/A"),
 );
+
+const makeGetDocTypeByAcronym = () => createSelector(
+  (state: ApplicationState) => getDocumentTypeList(state),
+  (state: ApplicationState, acronym: string) => acronym,
+  (docTypeList, acronym) => docTypeList.find((docType) => docType.documentTypeAcronym === acronym),
+);
+
 
 export default {
   byId,
@@ -85,7 +91,7 @@ export default {
   getDocumentTypesWithPageDetails,
   getDocumentTypeByAcronym,
   docRevTypeById,
-  docId,
   getDocTypeName,
   formIds,
+  makeGetDocTypeByAcronym,
 };

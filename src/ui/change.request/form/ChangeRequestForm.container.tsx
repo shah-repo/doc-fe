@@ -1,8 +1,11 @@
 import { Grid, WithStyles, withStyles } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
+import { Group } from "../../../state/ducks/auth/types";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { AsyncState } from "../../../state/types";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
 import DocumentRevisionControlContainer from "../documentRevision/DocumentRevisionControl.container";
 import { ChangeRequestFormPresenter } from "./ChangeRequestForm.presenter";
 import styles from "./styles";
@@ -31,6 +34,7 @@ ChangeRequestFormContainerProps
 }) => {
   const alertMessage = "You have unsaved changes.";
   const [isFormDirty, setIsFormDirty] = useState<boolean>(false);
+  const [documentTypeGroups, setDocumentTypeGroups] = useState<any[]>([]);
   const [selectedDocumentRevision, setSelectedDocumentRevision] = useState<
   string | null
   >(null);
@@ -38,6 +42,17 @@ ChangeRequestFormContainerProps
     initialValues.documentRevisions,
   );
   const [documentsInCrById, setDocumentsInCrById] = useState({});
+
+  const async = useAsync({
+    onSuccess: (response: Group[] = []) => {
+      setDocumentTypeGroups([
+        ...documentTypeGroups,
+        response,
+      ]);
+    },
+  });
+  const getGroupsByStage = useActionCreator(documentRevisionsActions.loadGroupsByStage);
+
 
   useEffect(() => {
     if (changeRequest && changeRequest.documentRevisions) {
@@ -47,6 +62,11 @@ ChangeRequestFormContainerProps
           {},
         ),
       );
+      changeRequest.documentRevisions.map((docRev) => async.start(
+        getGroupsByStage,
+        docRev.id,
+        async,
+      ));
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [(changeRequest || {}).documentRevisions]);
@@ -69,6 +89,8 @@ ChangeRequestFormContainerProps
 
   const onDirtyFlagChange = (dirty: boolean) => setIsFormDirty(dirty);
 
+  const transformedDocTypeGroups = [].concat(...documentTypeGroups);
+
   return (
     <Grid container={true} className={classes.whiteContainer}>
       <Grid container={true} spacing={4}>
@@ -80,6 +102,8 @@ ChangeRequestFormContainerProps
             selectAssessmentForm={selectAssessmentForm}
             selectedDocumentRevision={selectedDocumentRevision}
             documentsInCrById={documentsInCrById}
+            setDocumentTypeGroups={setDocumentTypeGroups}
+            documentTypeGroups={documentTypeGroups}
           />
         </Grid>
         <ChangeRequestFormPresenter
@@ -91,6 +115,7 @@ ChangeRequestFormContainerProps
           changeRequest={changeRequest}
           selectedDocumentRevision={selectedDocumentRevision}
           documentRevisionsList={documentRevisionsList}
+          documentTypeGroups={transformedDocTypeGroups}
         />
       </Grid>
     </Grid>

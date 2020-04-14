@@ -26,6 +26,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const [noForm, toggleNoForm] = React.useState(false);
   const [multipleForm, toggleMultipleForm] = React.useState(false);
   const [selectedFormId, saveSelectedFormId] = React.useState("");
+  const [docId, setDocId] = React.useState("");
   const documentType = useSelector(
     (state: ApplicationState) =>
       documentTypeSelectors.getDocumentTypeByAcronym(state, acronym),
@@ -36,7 +37,6 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const tableData = useSelector(getTableData(TABLE_NAME));
   const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
-  const docId = useSelector(documentTypeSelectors.docId);
   const formIds = useSelector(documentTypeSelectors.formIds);
 
   useEffect(() => {
@@ -64,7 +64,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const async = useAsync<DocumentTypeById>({
     onSuccess: () => {
       if (formIds.length === 1) {
-        history.push(`/document_revision/${docId}/output_document/${docRevId}`);
+        history.push(`/document_revision/${formIds[0].document.id}/output_document/${docRevId}`);
         return;
       } else if (isEmpty(formIds)) {
         toggleNoForm(true);
@@ -90,6 +90,8 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
 
   const handleSelection = (event) => {
+    const form = formIds.find((form) => form.id === event.target.value);
+    form && setDocId(form.document.id);
     saveSelectedFormId(event.target.value);
   };
 

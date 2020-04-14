@@ -22,6 +22,7 @@ export enum RevisionChangeType {
   NextRevision = "NEXT_REVISION",
   NextRevisionStage = "NEXT_REVISION_STAGE",
   Obsolete = "OBSOLETE",
+  AdministrativeChange = "ADMINISTRATIVE_CHANGE",
 }
 
 export interface DocumentRevisionDocument {
@@ -94,7 +95,7 @@ export interface DocumentRevision extends FBDocumentFlowProps {
 
 export const RevisionStageOptions = [
   { value: 1, text: "common.Numeric" },
-  { value: 2, text: "common.AlphaNumeric" },
+  { value: 2, text: "common.NumericAlpha" },
   { value: 3, text: "common.Alpha" },
 ];
 
@@ -169,3 +170,12 @@ export interface DocumentRevisionAuditSetAction {
 }
 
 export type AllIdsState = string[];
+
+export interface ApproveAndReleaseRequest {
+  approvers: Id[];
+}
+
+export interface CreateAndReleaseRequest {
+  releasedDocumentRevision: DocumentRevision;
+  releaseDto: CreateAndReleaseRequest;
+}

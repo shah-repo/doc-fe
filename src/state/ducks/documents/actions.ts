@@ -1,31 +1,7 @@
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
-import {
-  DOCUMENT_GET_ASYNC,
-  DOCUMENT_PROPOSED_DOC_ID,
-  DOCUMENT_PROPOSED_DOC_ID_ASYNC,
-  DOCUMENT_PROPOSED_DOC_ID_SET,
-  DOCUMENT_SET,
-  DOCUMENTS_LIST,
-  DOCUMENTS_LIST_ASYNC,
-  DOCUMENTS_ROOT_URL,
-  DOCUMENTS_TO_REVIEW_LIST,
-  DOCUMENTS_TO_REVIEW_LIST_ASYNC,
-  DOCUMENTS_TO_REVIEW_URL,
-} from "./constants";
-import {
-  AccessRequestBody,
-  Document,
-  DocumentEditRequestBody,
-  DocumentListAction,
-  DocumentProposedId,
-  DocumentProposedIdSetAction,
-  DocumentSetAction,
-  DocumentsToReviewListAction,
-  DocumentTransition,
-  DocumentTransitionRequestBody,
-  DocumentTransitionResponse,
-} from "./types";
+import { DOCUMENTS_LIST, DOCUMENTS_LIST_ASYNC, DOCUMENTS_ROOT_URL, DOCUMENTS_TO_REVIEW_LIST, DOCUMENTS_TO_REVIEW_LIST_ASYNC, DOCUMENTS_TO_REVIEW_URL, DOCUMENT_GET_ASYNC, DOCUMENT_PROPOSED_DOC_ID, DOCUMENT_PROPOSED_DOC_ID_ASYNC, DOCUMENT_PROPOSED_DOC_ID_SET, DOCUMENT_SET } from "./constants";
+import { AccessRequestBody, Document, DocumentEditRequestBody, DocumentListAction, DocumentProposedId, DocumentProposedIdSetAction, DocumentSetAction, DocumentsToReviewListAction, DocumentTransition, DocumentTransitionRequestBody, DocumentTransitionResponse } from "./types";
 
 const documentsList = (documents: Document[]): DocumentListAction => ({
   type: DOCUMENTS_LIST,
@@ -82,6 +58,12 @@ const loadDocumentProposedId = (documentTypeAcronym: string): ApiAction<Document
   onSuccess: (documentProposedId, dispatch) => {
     dispatch(documentProposedIdSet(documentProposedId.docId || ""));
   },
+});
+
+const loadDocumentProposedIdWithCallback = (documentTypeAcronym: string, handlers: Handlers):
+ApiAction<DocumentProposedId> => apiActionWithCallbacks({
+  ...loadDocumentProposedId(documentTypeAcronym),
+  handlers,
 });
 
 const setDocumentProposedId = (docId: string): DocumentProposedIdSetAction => ({
@@ -150,4 +132,5 @@ export default {
   loadDocumentProposedId,
   setDocumentProposedId,
   sendEmailAccessRequest,
+  loadDocumentProposedIdWithCallback,
 };

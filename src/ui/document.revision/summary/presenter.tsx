@@ -56,10 +56,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
 }) => {
   const onSubmit = () => void 0;
   FBDRStore.setValues(dataProp);
-  const outputDocumentTypeName = useSelector((state: ApplicationState) => {
-    const outputDocumentTypeId = formTemplate ? formTemplate.outputDocumentType.id : "";
-    return documentTypeSelectors.getDocTypeName(state, outputDocumentTypeId);
-  });
+  const outputDocumentTypeName = useSelector((state: ApplicationState) => formTemplate ? formTemplate.outputDocumentTypes.map((i) => documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
 
   const renderTrainingControl = status === DocumentRevisionStatus.Released && (
     <TrainingControl
@@ -112,7 +109,10 @@ export const Presenter: React.FunctionComponent<Props> = ({
 
       {FBStore.active && (
         <Box px={5} id="Presenter-FBWorkspace">
-          <FBWorkspace documentId={_.get(formDocument, "document.id") || _.get(document, "id")} />
+          <FBWorkspace
+            documentId={_.get(formDocument, "document.id") || _.get(document, "id")}
+            document={dataProp}
+          />
         </Box>
       )}
       <Box flexDirection={document.canAccess ? "row-reverse" : "row"} display="flex" px={3}>
