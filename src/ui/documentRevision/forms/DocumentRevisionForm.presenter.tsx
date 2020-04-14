@@ -62,7 +62,7 @@ export interface Props
   setDocId?: typeof documentsActions.setDocumentProposedId;
   doNotPrompt?: boolean;
   documentTypes: SelectOption[];
-  otherDocumentTypes: OptionType[];
+  outputDocumentTypeOptions: OptionType[];
   documentTypesById: DocumentTypeByIdState;
   onDirtyFlagChange?: (dirty: boolean) => void;
   canChangeOwnerShip: boolean;
@@ -90,7 +90,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   errors,
   documentTypes,
   documentTypesById,
-  otherDocumentTypes,
+  outputDocumentTypeOptions,
   canChangeOwnerShip,
   documentRevision,
   setFieldValue,
@@ -356,7 +356,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 closeMenuOnSelect: false,
                 className: !outputDocEnabled ? classes.outputGrey : "",
               }}
-              options={otherDocumentTypes}
+              options={outputDocumentTypeOptions}
               validate={validator(requiredAtLeastOne)}
             />
             <RenderHtmlField />
