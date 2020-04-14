@@ -15,11 +15,11 @@ export const withFBPurchaseOrderTotal = <T extends FBPurchaseOrderTotalProps>(
     return Component({
       ...(props as T),
       poState,
-      setShippingCost: poState.setShippingCost,
-      subTotal: poState.po.subTotal,
-      tax: poState.po.tax,
-      totalAmount: poState.po.totalAmount,
-      shippingCost: poState.po.shippingCost,
+      setShippingCost: poState?.setShippingCost,
+      subTotal: poState?.po.subTotal,
+      tax: poState?.po.tax,
+      totalAmount: poState?.po.totalAmount,
+      shippingCost: poState?.po.shippingCost,
       name,
     });
   };

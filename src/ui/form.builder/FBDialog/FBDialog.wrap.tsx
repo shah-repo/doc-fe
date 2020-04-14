@@ -22,13 +22,13 @@ export const withFBDialog = <T extends FBDialogProps>(
       dialogState && dialogState.config({ maxWidth, content, title, actions });
     }, []);
 
-    const onCloseClick = () => dialogState.closeDialog();
+    const onCloseClick = () => dialogState?.closeDialog();
 
     useObserver(() => {
       open = dialogState?.open;
       content = dialogState?.content;
       title = dialogState?.title;
-      maxWidth = dialogState?.maxWidth;
+      maxWidth = dialogState?.maxWidth || "sm";
       actions = dialogState?.actions;
     });
 

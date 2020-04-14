@@ -1,9 +1,8 @@
 import { Box } from "@material-ui/core";
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
-import { Provider } from "mobx-react";
 import React from "react";
 import { FBFieldWrapperProps } from ".";
-import { FBFieldBottomBar, FBFieldMarkDown, FBFieldTopBar } from "..";
+import { FBFieldBottomBar, FBFieldMarkDown, FBFieldTopBar, FBProvider } from "..";
 import { withFBFieldWrapper } from "./FBFieldWrapper.wrap";
 
 const FBFieldWrapper: React.FunctionComponent<FBFieldWrapperProps> = ({
@@ -17,7 +16,7 @@ const FBFieldWrapper: React.FunctionComponent<FBFieldWrapperProps> = ({
   state,
   ...props
 }) => (
-  <Provider fieldWrapper={state}>
+  <FBProvider fieldWrapper={state}>
     <Box {...{ onMouseOver, onMouseLeave }}>
       <FBFieldTopBar
         visibility={toolsVisible}
@@ -42,7 +41,7 @@ const FBFieldWrapper: React.FunctionComponent<FBFieldWrapperProps> = ({
         {...{ index }}
       />
     </Box>
-  </Provider>
+  </FBProvider>
 );
 
 export default withFBFieldWrapper(FBFieldWrapper);

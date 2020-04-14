@@ -1,0 +1,41 @@
+[{
+    "value": "1",
+    "text": "Event Types - The alarm system shall support the following event types; Fault, Error, Warning."
+  },
+  {
+    "value": "2",
+    "text": "Event Priority - The alarm system shall associate a priority level with each event type, from highest to lowest in the following order; Fault, Error, Warning."
+  },
+  {
+    "value": "3",
+    "text": "Audio Alarm Indicators - The system shall use sound as an audible indication of alarm type."
+  },
+  {
+    "value": "4",
+    "text": "Audio Fault Event Indicator - The system shall indicate the occurrence of a fault type alarm by emitting an audible TBD within 5 second of the triggering event"
+  },
+  {
+    "value": "5",
+    "text": "Audio Error Event Indicator - The system shall indicate the occurrence of a error type alarm by emitting an audible TBD within 10 second of the triggering event"
+  },
+  {
+    "value": "6",
+    "text": "Visual Alarm Indicator - The system shall use color as a visual indication of alarm type"
+  },
+  {
+    "value": "7",
+    "text": "Visual Fault Alarm Indicator - The system shall use 'red' coloration to indicate a fault alarm type in UI displays"
+  },
+  {
+    "value": "8",
+    "text": "Log File Location - The system data logging function shall create log directories on the internal disk storage device in the 'Data' directory"
+  },
+  {
+    "value": "9",
+    "text": "Log File Operations - The data logging function shall create, modify, delete log data files in an asynchronous fashion."
+  },
+  {
+    "value": "10",
+    "text": "Event Log File Update Interval - The event log files maintained by the data logging function shall be updated at 5 minute intervals"
+  }
+]

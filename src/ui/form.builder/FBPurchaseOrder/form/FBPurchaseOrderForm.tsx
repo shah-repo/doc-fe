@@ -8,7 +8,7 @@ import FBButton from "../../components/inputs/FBButton";
 import FBCheckbox from "../../components/inputs/FBCheckbox";
 import FBDatePicker from "../../components/inputs/FBDatePicker";
 import FBTextField from "../../components/inputs/FBTextField";
-import FBAutocompleteAsync from "../../FBAutocompleteAsync";
+import { FBAutocompleteAsync } from "../../FBAutocompleteAsync";
 import { TAX_RATE } from "../../helpers/constants";
 import FBStore from "../../stores/ui/FBStore";
 import { FBPurchaseOrderFormProps, PurchaseOrderItem } from "../FBPurchaseOrder.types";
