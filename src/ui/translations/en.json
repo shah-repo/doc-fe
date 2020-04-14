@@ -458,6 +458,8 @@
   "form.builder.purhcase.order.items.placeholder": "Item A\nItem B\nItem C\n...",
   "form.builder.add.item": "Add item",
   "form.builder.field.qunatity.ordered": "Quantity Ordered",
+  "form.builder.field.ordered": "Ordered",
+  "form.builder.field.received": "Received",
   "form.builder.field.units": "Units",
   "form.builder.field.date.required": "Date Required",
   "form.builder.field.part.number": "Part Number",
