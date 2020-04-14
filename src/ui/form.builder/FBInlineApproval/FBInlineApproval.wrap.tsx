@@ -1,4 +1,4 @@
-import _, { Dictionary } from "lodash";
+import _ from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBInlineApprovalProps, FBInlineApprovalState } from ".";
@@ -8,7 +8,6 @@ import FBButton from "../components/inputs/FBButton";
 import FBDRStore from "../stores/ui/FBDRStore";
 import FBEditorStore from "../stores/ui/FBEditorStore";
 import FBStore from "../stores/ui/FBStore";
-import { FBTemplateSchema } from "../types/store";
 
 export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
   Component: React.FunctionComponent<T>
@@ -19,9 +18,6 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     inlineApprovalState,
     toolsVisible,
     mode,
-    // approverGroups,
-    // approvers,
-    // approveIsBlocking,
     name = "",
     index,
     type,
@@ -32,27 +28,10 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     const { dialogState } = FB.useStores();
     const { approvers, approverGroups, approveIsBlocking } = FBStore.getValue(name) || {};
 
-    // const formValue = FBStore.getValue(name);
-    // const { approvers, approverGroups, approveIsBlocking } = formValue;
-    // const schemaValue = FBStore.getValue(name);
-    // approvers = approvers || schemaValue?.approvers;
-    // approverGroups = approverGroups || schemaValue?.approverGroups;
-    // _.isUndefined(approveIsBlocking) && (approveIsBlocking = schemaValue?.approveIsBlocking);
-
-    function resetedSchema(): FBTemplateSchema[] {
-      const schema = FBStore.getSchema();
-      return schema.map((item) => (item.name === name ? {
-        ..._.omit(item, ["approvers", "approverGroups", "approveIsBlocking"]),
-      } : item));
-    }
-
-    function resetedValues(): Dictionary<any> {
-      return _.omit(FBStore.values, [name, "approveIsBlocking"]);
-    }
-
     function removeConfig() {
-      FBStore.setSchema(resetedSchema());
-      FBStore.setValues(resetedValues());
+      // FBStore.setSchema(resetedSchema());
+      const omitedValue = _.omit(FBStore.values, [name]);
+      FBStore.setValues(omitedValue);
       // We need to reset entire form for after approval behaviour
       FBStore.resetSchema();
       dialogState?.closeDialog();

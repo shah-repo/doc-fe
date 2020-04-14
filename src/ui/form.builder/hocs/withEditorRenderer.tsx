@@ -6,7 +6,6 @@ import { useIntl } from "react-intl";
 import { FBTestStepState } from "..";
 import FBButton from "../components/inputs/FBButton";
 import { FBFieldEditorComponent, omitLabelValidation, pickDefaultLabel } from "../defaults/editor";
-import FBDRStore from "../stores/ui/FBDRStore";
 import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 import editorStore from "../stores/ui/FBEditorStore";
 import FBStore from "../stores/ui/FBStore";
@@ -97,8 +96,11 @@ export const withEditorRenderer =
       let newSchema = FBStore.schema;
       newSchema.splice(index, removeEl, schema);
       if (type === "inlineapproval") {
-        const approvalName = (values as FBInputProps).name;
-        FBDRStore.isOutput && FBStore.setValue(approvalName, _.pick(values, ["approvers", "approverGroups", "approveIsBlocking"]));
+        const approvalName: string = (values as FBInputProps).name || "";
+        FBStore.setValues({
+          ..._.omit(FBStore.getValues(), ["approvers", "approverGroups", "approveIsBlocking"]),
+          [approvalName]: _.pick(values, ["approvers", "approverGroups", "approveIsBlocking"]),
+        });
         FBStore.clearSchema();
       }
 
