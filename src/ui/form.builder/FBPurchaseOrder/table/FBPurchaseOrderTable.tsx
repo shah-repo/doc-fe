@@ -59,8 +59,14 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
           <TableRow>
             <StyledTableCell align="left">Item</StyledTableCell>
             <StyledTableCell>
-              <Text message="form.builder.field.qunatity.ordered" />
+              <Text message="form.builder.field.ordered" />
             </StyledTableCell>
+            {
+              isDocumentReleased &&
+              <StyledTableCell>
+                <Text message="form.builder.field.received" />
+              </StyledTableCell>
+            }
             <StyledTableCell>
               <Text message="form.builder.field.units" />
             </StyledTableCell>
@@ -97,6 +103,10 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
             >
               <StyledTableCell align="left">{index + 1}</StyledTableCell>
               <StyledTableCell>{row.order}</StyledTableCell>
+              {
+                isDocumentReleased &&
+                <StyledTableCell>{row.received}</StyledTableCell>
+              }
               <StyledTableCell>{row.units}</StyledTableCell>
               <StyledTableCell>{row.partNumberDocId}</StyledTableCell>
               <StyledTableCell>
