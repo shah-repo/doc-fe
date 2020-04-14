@@ -6,7 +6,6 @@ import { FBApprovalProps } from ".";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import Text from "../../components/Text";
-import FBButton from "../components/inputs/FBButton";
 import FBApprovalField from "./FBApproval.field";
 import { withFBApproval } from "./FBApproval.wrap";
 
@@ -41,7 +40,6 @@ const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
         {...{ disabled }}
       />
     )}
-    {!isDefined && <FBButton {...{ disabled }} />}
     {approveIsBlocking && (
       <Box
         mt={4}

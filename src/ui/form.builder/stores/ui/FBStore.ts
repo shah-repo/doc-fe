@@ -160,7 +160,10 @@ export class FormBuilderStore {
     this.values = values || {};
   };
 
-  @action public setValue = (name: string, value: any) => {
+  @action public setValue = (name: string | undefined, value: any) => {
+    if (!name) {
+      return;
+    }
     this.setValues(_.set(this.values, name, value));
   };
 

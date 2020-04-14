@@ -19,9 +19,9 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     inlineApprovalState,
     toolsVisible,
     mode,
-    approverGroups,
-    approvers,
-    approveIsBlocking,
+    // approverGroups,
+    // approvers,
+    // approveIsBlocking,
     name = "",
     index,
     type,
@@ -30,8 +30,10 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
 
     inlineApprovalState = FB.useRef<FBInlineApprovalState>(FBInlineApprovalState);
     const { dialogState } = FB.useStores();
+    const { approvers, approverGroups, approveIsBlocking } = FBStore.getValue(name) || {};
 
-    const formValue = FBStore.getValue(name);
+    // const formValue = FBStore.getValue(name);
+    // const { approvers, approverGroups, approveIsBlocking } = formValue;
     // const schemaValue = FBStore.getValue(name);
     // approvers = approvers || schemaValue?.approvers;
     // approverGroups = approverGroups || schemaValue?.approverGroups;
@@ -80,7 +82,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     const onMouseLeave = () => inlineApprovalState?.setToolsActive(false);
     const editApproval = () => FBStore.editSchemaItem(index);
     const removeApproval = () => {
-      if (mode === "defined" && formValue && approveIsBlocking) {
+      if (mode === "defined" && approveIsBlocking) {
         return dialogState?.config({
           open: true,
           content: <Text message="form.builder.approval.reset.msg" />,

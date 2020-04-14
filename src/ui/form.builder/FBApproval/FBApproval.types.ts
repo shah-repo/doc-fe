@@ -14,7 +14,7 @@ export interface FBApprovalConfig {
 export type FBApprovalProps =
 & Pick<FBInputProps, "name" | "label" | "type" | "approvers" | "approverGroups" | "disabled" | "approveIsBlocking">
 & {
-  onApprove?: (approver: Employee | GroupRequestBody | undefined) => () => void;
+  onApprove?: (approver?: Employee | GroupRequestBody) => () => void;
   approvalConfig?: (approver?: Employee | GroupRequestBody) => FBApprovalConfig | undefined;
   approvalFieldState?: FBApprovalState;
   hasApproved?: FBApprovalValue[];
@@ -28,8 +28,9 @@ export enum FBApprovalStatus {
 }
 
 export interface FBApprovalValue {
+  id: string;
   email: string;
-  groupId?: string;
+  groupId?: string | false;
   approvedAt: string;
   notify: boolean;
 }

@@ -3,6 +3,7 @@ import arrayMove from "array-move";
 import _ from "lodash";
 import React from "react";
 import { SortEnd } from "react-sortable-hoc";
+import { FBFieldName } from "..";
 import { FBFieldComponent } from "../defaults/editor";
 import sortableStore from "../stores/ui/FBSortableStore";
 import FBStore from "../stores/ui/FBStore";
@@ -31,27 +32,21 @@ export function withSortable<T extends FBSortableProps>(
     }
 
     private approvedState = (schema: FBTemplateSchema) => {
-      const { type, name = "", approveIsBlocking } = schema;
-      if (type !== "inlineapproval" && type !== "approval") {
+      const { type, name = "" } = schema;
+      const activeConfig = type === "approval" ? schema : FBStore.getValue(name);
+      const { approveIsBlocking = false } = activeConfig || {};
+      if ((type !== "inlineapproval" && type !== "approval") || !approveIsBlocking) {
         return;
       }
-      console.log(schema);
-      console.log(FBStore.getValue(name));
-      if (approveIsBlocking && !FBStore.getValue(name)) {
-        this.isApproved = false;
-      }
-      if (_.last(FBStore.getSchema())?.name === name) {
-        this.isApproved = true;
-      }
-      // const { approvers, approverGroups, approveIsBlocking } = FBStore.getValue(name) || schema;
-      // const formValue = FBStore.getValue(`fb-approval-field-${name}`);
-      // if ((!_.isEmpty(approvers) || !_.isEmpty(approverGroups)) && approveIsBlocking && _.isEmpty(formValue)) {
-      //   this.isApproved = false;
-      // }
+      const hasValue = type === "approval"
+        ? FBStore.getValue(name)
+        : FBStore.getValue(`${FBFieldName.InlineApproval}${name}`);
+
+      this.isApproved = Boolean(hasValue);
     };
 
     private wrapperRenderer = (schema: FBTemplateSchema) => {
-      const { type } = schema;
+      const { type, name } = schema;
       const InputType = FBFieldComponent[type as string];
 
       let { disabled } = FBStore.fieldMode;
@@ -59,6 +54,9 @@ export function withSortable<T extends FBSortableProps>(
       // Approved state
       this.approvedState(schema);
       !this.isApproved && (disabled = true);
+      if (_.last(FBStore.getSchema())?.name === name) {
+        this.isApproved = true;
+      }
       return <InputType key={schema.name} {...schema} {...{ disabled }} />;
     };
 

@@ -29,7 +29,6 @@ const FBApprovalField = <T extends Employee | GroupRequestBody>({
               </Box>
             )}
             {config?.canApprove && (
-
               <IconButton
                 onClick={onApprove && onApprove(approver)}
                 color="primary"

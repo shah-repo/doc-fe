@@ -3,6 +3,7 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { FBApprovalConfig, FBApprovalProps, FBApprovalState, FBApprovalStatus, FBApprovalValue } from ".";
 import { FB } from "..";
+import { getStartOfDayDateString } from "../../../common/utils/date";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { store } from "../../../state/store";
@@ -72,7 +73,9 @@ export const withFBApproval = <T extends FBApprovalProps>(
         if (!approverValue) {
           return "";
         }
-        return `${status}, ${approverValue.approvedAt}`;
+        const approver = approverValue.groupId ? `${approverValue.email}, ` : "";
+        const approvedAt = getStartOfDayDateString(approverValue.approvedAt, "LL");
+        return `${status}, ${approver}${approvedAt}`;
       }
       return status;
     }
@@ -90,8 +93,9 @@ export const withFBApproval = <T extends FBApprovalProps>(
         return;
       }
       approvalFieldState?.addApprover({
+        id: currentUser.id,
         email: currentUser.email,
-        groupId: (approver as GroupRequestBody).id,
+        groupId: !_.includes(_.keys(approver), "user") && approver?.id,
         approvedAt: (new Date()).toISOString(),
         notify: false,
       });
