@@ -3,7 +3,7 @@ import BorderColorIcon from "@material-ui/icons/BorderColor";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import React from "react";
 import { FBInlineApprovalProps } from ".";
-import { FBApprovalField, FBProvider } from "..";
+import { FBApproval, FBFieldName, FBProvider } from "..";
 import Text from "../../components/Text";
 import FBConditionalWrapper from "../FBConditionalWrapper";
 import FBDRStore from "../stores/ui/FBDRStore";
@@ -51,9 +51,9 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
           </Box>
         )}
         {mode === "defined" && (
-          <FBApprovalField
+          <FBApproval
             {...{ approvers, approverGroups, approveIsBlocking, label: "form.builder.approval" }}
-            name={`fb-approval-field-${name}`}
+            name={`${FBFieldName.InlineApproval}${name}`}
           />
         )}
       </Box>
