@@ -1,4 +1,4 @@
-import { Box, Typography } from "@material-ui/core";
+import { Box, CircularProgress, Typography } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import WarningIcon from "@material-ui/icons/Warning";
 import React from "react";
@@ -16,6 +16,7 @@ const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
   isApproved,
   isDefined,
   approveIsBlocking,
+  loading,
   label,
   ...props
 }) => (
@@ -23,12 +24,17 @@ const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
     {isDefined && (
       <Typography variant="button" display="block" style={{ color: "rgb(120, 138, 156)" }}>
         {label}
+        {loading && (
+          <Box ml={1} component="span">
+            <CircularProgress size={16} />
+          </Box>
+        )}
       </Typography>
     )}
     {approvers && (
       <FBApprovalField<Employee>
         {...props}
-        collection={approvers}
+        collection={approvers as Employee[]}
         {...{ disabled }}
       />
     )}
@@ -36,7 +42,7 @@ const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
       <FBApprovalField<GroupRequestBody>
         {...props}
         mt={approvers ? 2 : 0}
-        collection={approverGroups}
+        collection={approverGroups as GroupRequestBody[]}
         {...{ disabled }}
       />
     )}
