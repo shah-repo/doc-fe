@@ -22,7 +22,8 @@ export class FBDocumentRevisionStore {
   @action public setValues = (values: DocumentRevision | DocumentRevisionFormValues) => {
     const fmGroup = _.get(values, "document.documentType.group");
     const outputGroup = _.get(values, "formDocument.document.docId");
-    FBStore.documentId = values.id || "";
+    FBStore.documentId = values.formDocument?.document?.id || values.document?.id || "";
+    FBStore.docId = values.id || "";
 
     switch (true) {
       // TEMPLATE FORM

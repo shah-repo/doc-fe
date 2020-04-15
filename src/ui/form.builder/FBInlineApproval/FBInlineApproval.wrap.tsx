@@ -29,7 +29,6 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     const { approvers, approverGroups, approveIsBlocking } = FBStore.getValue(name) || {};
 
     function removeConfig() {
-      // FBStore.setSchema(resetedSchema());
       const omitedValue = _.omit(FBStore.values, [name]);
       FBStore.setValues(omitedValue);
       // We need to reset entire form for after approval behaviour
