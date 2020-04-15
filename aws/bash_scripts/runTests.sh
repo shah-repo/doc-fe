@@ -7,7 +7,6 @@ ENVIRONMENT_DIR="${AWS_DIR}/environments"
 PYTHON_SCRIPTS_DIR="${AWS_DIR}/python_scripts"
 TEST_RESULTS_DIR="${BASE_DIR}/test-results"
 JEST_CONFIG_LOG_DIR="${BASE_DIR}/jest-config"
-JEST_CACHE_DIR="${BASE_DIR}/jest-cache"
 MAX_WORKERS="6"
 
 # Install Dependencies
@@ -46,5 +45,4 @@ yarn test \
   --reporters="jest-junit" \
   --silent \
   --maxWorkers="${MAX_WORKERS}" \
-  --forceExit \
-  --cacheDirectory="${JEST_CACHE_DIR}"
+  --forceExit

@@ -51,6 +51,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
   closeDialog,
   name,
   validateForm,
+  handlePartNumberChange,
 }) => {
   const renderForm = (props) => {
     const { errors } = props;
@@ -73,11 +74,18 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
           name={`${name}-formValues.units`}
         />
         <Error error={errors.units} />
-        <FBTextField
+        <FBAutocompleteAsync
           label="form.builder.field.part.number"
           name={`${name}-formValues.partNumber`}
+          optionId="11"
+          onChange={handlePartNumberChange && handlePartNumberChange(props.setFieldValue)}
         />
         <Error error={errors.partNumber} />
+        <FBTextField
+          label="form.builder.field.part.number.title"
+          name={`${name}-formValues.partNumberTitle`}
+          disabled
+        />
         <FBDatePicker
           label="form.builder.field.date.required"
           name={`${name}-formValues.date`}

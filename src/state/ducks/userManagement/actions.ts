@@ -1,5 +1,6 @@
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
+import { authActions } from "../auth";
 import { Group, User } from "../auth/types";
 import { EditActiveStatusAction, EditGroupsAction, EditUserInfoAction } from "../tableSearch";
 import { EDIT_EMPLOYEE_ACTIVE_STATUS, EDIT_EMPLOYEE_GROUPS, EDIT_EMPLOYEE_USER_INFO } from "../tableSearch/constants";
@@ -86,6 +87,7 @@ const editEmployeeGroups = (
     data: body,
     onSuccess: (employee, dispatch) => {
       dispatch(editSelectedEmployeeGroups(employee));
+      dispatch(authActions.loadUserGroups());
     },
     handlers,
   });

@@ -43,6 +43,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             <Chip
               key={`fb-autocomplete-${_.get(option, optionLabelKey)}-${index}`}
               label={<Box whiteSpace="normal">{_.get(option, optionLabelKey)}</Box>}
+              style={{ minHeight: "32px", height: "auto" }}
               {...getTagProps({ index })}
               {...{ disabled }}
             />

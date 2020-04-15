@@ -38,13 +38,14 @@ export default class FBRequest<Data, Body> {
     this.start("post");
   };
 
-  @action public onSuccess = () => {};
-
   @action public dataFilter = (data: Data): Data | undefined => data;
   @action public onError = (_error) => {
     const { message } = _error;
     alert(message);
   };
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  protected onSuccess() {}
 
   @action private start = (method: ApiActionMethod) => {
     this.setLoading(true);

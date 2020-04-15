@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { Group, Permission } from "../../../state/ducks/auth/types";
 import { groupManagementActions } from "../../../state/ducks/groupManagement";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
-import { GetEmployeeResponse, LoadCompanyGroup, userManagementActions } from "../../../state/ducks/userManagement";
+import { GetEmployeeResponse, LoadCompanyGroup } from "../../../state/ducks/userManagement";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import useAsync from "../../hooks/useAsync";
 import { toEditRequestBody, toGroupOptions, toMembersOptions, toParentOptions, toRequestBody } from "../utils/transform";
@@ -57,14 +57,12 @@ export const GroupContentContainer: React.FunctionComponent<Props> = ({
     onSuccess: (response) => {
       handleTableRefresh();
       handleReset();
-      dispatch(userManagementActions.loadCompanyGroups());
     },
   });
 
   const editGroupAsync = useAsync({
     onSuccess: (response) => {
       handleTableRefresh();
-      dispatch(userManagementActions.loadCompanyGroups());
       closeDialog();
     },
   });

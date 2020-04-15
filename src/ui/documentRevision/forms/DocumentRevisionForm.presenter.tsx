@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
-import { DocumentRevision, DocumentRevisionStatus, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
@@ -62,7 +62,7 @@ export interface Props
   setDocId?: typeof documentsActions.setDocumentProposedId;
   doNotPrompt?: boolean;
   documentTypes: SelectOption[];
-  otherDocumentTypes: OptionType[];
+  outputDocumentTypeOptions: OptionType[];
   documentTypesById: DocumentTypeByIdState;
   onDirtyFlagChange?: (dirty: boolean) => void;
   canChangeOwnerShip: boolean;
@@ -90,7 +90,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   errors,
   documentTypes,
   documentTypesById,
-  otherDocumentTypes,
+  outputDocumentTypeOptions,
   canChangeOwnerShip,
   documentRevision,
   setFieldValue,
@@ -297,6 +297,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         <CheckboxField
           name="retrain"
           label="document.revision.trainingRequired"
+          checkboxProps={{
+            disabled: values.revisionChangeType === RevisionChangeType.AdministrativeChange,
+          }}
         />
         <AttachmentsField />
         {renderTypeOfRevisionChange}
@@ -353,7 +356,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 closeMenuOnSelect: false,
                 className: !outputDocEnabled ? classes.outputGrey : "",
               }}
-              options={otherDocumentTypes}
+              options={outputDocumentTypeOptions}
               validate={validator(requiredAtLeastOne)}
             />
             <RenderHtmlField />

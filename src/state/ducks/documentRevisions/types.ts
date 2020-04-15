@@ -22,6 +22,7 @@ export enum RevisionChangeType {
   NextRevision = "NEXT_REVISION",
   NextRevisionStage = "NEXT_REVISION_STAGE",
   Obsolete = "OBSOLETE",
+  AdministrativeChange = "ADMINISTRATIVE_CHANGE",
 }
 
 export interface DocumentRevisionDocument {
