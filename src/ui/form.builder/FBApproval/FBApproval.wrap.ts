@@ -32,7 +32,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
     approvalFieldState = FB.useRef<FBApprovalState>(FBApprovalState);
     isApproved = approvalFieldState.isApproved;
     isDefined = !_.isEmpty(approvers) || !_.isEmpty(approverGroups);
-    disabled = !FBDRStore.isOutput || (FBDRStore.isOutput && !FBStore.documentId);
+    disabled = !FBDRStore.isOutput || (FBDRStore.isOutput && !FBStore.docId);
     const currentUser = store.getState().auth.user;
 
     function groupCheck(id: string): boolean {
