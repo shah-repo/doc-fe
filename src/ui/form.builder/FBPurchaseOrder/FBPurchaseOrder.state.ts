@@ -31,7 +31,7 @@ export class FBPurchaseOrderState {
   };
 
   @action public addItem = (item: PurchaseOrderItem) => {
-    this.po.items.push({ ...item, index: this.po.items.length + 1 });
+    this.po.items.push({ ...item, received: 0, index: this.po.items.length + 1 });
     this.calculateCost();
   };
 
@@ -120,7 +120,7 @@ export class FBPurchaseOrderState {
   };
 
   private updateFBStore = () => {
-    if (!this.name) {
+    if (!this.name || FBStore.mode === "design") {
       return;
     }
 
