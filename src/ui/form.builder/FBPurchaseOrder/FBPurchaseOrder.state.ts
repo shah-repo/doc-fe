@@ -152,7 +152,7 @@ export class FBPurchaseOrderState {
         const tax = item.tax ? total * TAX_RATE : 0;
         return this.formatCost(total + tax);
       })(),
-      received: item.received,
+      received: item.received || 0,
     }
   );
 }
