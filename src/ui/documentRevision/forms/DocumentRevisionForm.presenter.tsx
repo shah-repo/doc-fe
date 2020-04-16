@@ -149,6 +149,13 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
   }, [isdocRevStatusDraft, values.document, values.name]);
 
+  useEffect(() => {
+    if (values.revisionChangeType === RevisionChangeType.AdministrativeChange) {
+      setFieldValue("retrain", false);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [values.revisionChangeType]);
+
   const handleTypeChange = (
     event: React.ChangeEvent<{ name?: string; value: unknown }>
   ) => {
