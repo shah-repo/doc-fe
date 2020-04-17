@@ -33,7 +33,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
       {...{ options, multiple, getOptionLabel, defaultValue }}
       renderInput={(params: RenderInputParams) => (
         <Box display="flex">
-          <Box flexGrow={1}>
+          <Box width="100%">
             <TextField
               {...params}
               {...{ placeholder }}
@@ -51,7 +51,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
           </Box>
           {refresh && (
             <Box ml={-4} display="flex" alignItems="center">
-              <IconButton size="small" onClick={refresh}>
+              <IconButton size="small" onClick={refresh} {...{ disabled }}>
                 <CachedIcon fontSize="small" />
               </ IconButton>
             </Box>
