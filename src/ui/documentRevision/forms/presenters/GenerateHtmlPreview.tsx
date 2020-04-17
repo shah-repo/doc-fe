@@ -75,6 +75,7 @@ const GenerateHtmlPreview: React.FunctionComponent<Props> = ({
       onClick={handleClick}
       variant="contained"
       disabled={htmlRequested}
+      color="secondary"
     >
       <Text translation="common.generate.pdf" />
     </Button>
