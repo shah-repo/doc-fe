@@ -14,7 +14,7 @@ export enum PendingActionType {
 export interface PendingAction {
   type: PendingActionType;
   userId: string;
-  changeReq: ChangeRequest;
+  changeReq?: ChangeRequest;
   trainingRecord?: TrainingRecord;
   documentRevision?: DocumentRevision;
 }

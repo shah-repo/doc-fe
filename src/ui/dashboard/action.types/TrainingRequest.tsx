@@ -1,6 +1,5 @@
 import { Button, Grid } from "@material-ui/core";
 import React from "react";
-import { PendingAction } from "../../../state/ducks/dashboard";
 import { TrainingRecord } from "../../../state/ducks/training";
 import Date from "../../components/Date";
 import Text from "../../components/Text";
@@ -8,16 +7,15 @@ import { documentDetailsPath } from "../../document.revision/utils/paths";
 import { styles } from "./PendingAction.styles";
 
 interface OwnProps {
-  pendingAction: PendingAction;
+  trainingRecord: TrainingRecord;
 }
 
 type Props = OwnProps;
 
 export const TrainingRequest: React.FunctionComponent<Props> = ({
-  pendingAction,
+  trainingRecord,
 }) => {
   const classes = styles();
-  const trainingRecord = pendingAction.trainingRecord as TrainingRecord;
 
   return (
     <Grid
@@ -29,13 +27,12 @@ export const TrainingRequest: React.FunctionComponent<Props> = ({
     >
       <Grid item={true} xs={8}>
         <span className={classes.highlight}>
-          <Text message={`dashboard.type.${pendingAction.type}`} />
+          <Text message="dashboard.type.PENDING_TRAINING_RECORDS" />
         </span>
         <span>
           <Text
             translation="dashboard.is.due.on"
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            values={{ docId: pendingAction.trainingRecord!.trainingPlan!.document.docId }}
+            values={{ docId: trainingRecord?.trainingPlan?.document.docId }}
           />
           <Date value={trainingRecord.dueOn} />
         </span>
@@ -44,8 +41,7 @@ export const TrainingRequest: React.FunctionComponent<Props> = ({
         <Button
           variant="contained"
           target="_blank"
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          href={documentDetailsPath(trainingRecord.trainingPlan!.document.id)}
+          href={documentDetailsPath(trainingRecord.trainingPlan?.document.id || "")}
           color="secondary"
           id="TrainingRequest-button"
         >

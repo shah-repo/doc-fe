@@ -22,13 +22,20 @@ const DashboardPresenter: React.FunctionComponent<DashboardPresenterProps> = ({
         pendingActions.map((pendingAction, index) => {
           switch (pendingAction.type) {
             case PendingActionType.PENDING_REVIEW:
-              return <ChangeRequestApproval key={index} pendingAction={pendingAction} />;
+              return pendingAction.changeReq &&
+                <ChangeRequestApproval key={index} changeRequest={pendingAction.changeReq} />;
             case PendingActionType.PENDING_TRAINING_RECORDS:
-              return <TrainingRequest key={index} pendingAction={pendingAction} />;
+              return pendingAction.trainingRecord &&
+                <TrainingRequest key={index} trainingRecord={pendingAction.trainingRecord} />;
             case PendingActionType.PURCHASE_ORDERS:
-              return <PurchaseOrderApproval key={index} documentRevision={pendingAction.documentRevision} />;
+              return pendingAction.documentRevision &&
+                <PurchaseOrderApproval key={index} documentRevision={pendingAction.documentRevision} />;
+            case PendingActionType.PENDING_DOC_CONTROL:
+            case PendingActionType.PENDING_IMPL_PLAN_TASK:
+              return pendingAction.changeReq &&
+                <TaskApproval key={index} changeRequest={pendingAction.changeReq} />;
             default:
-              return <TaskApproval key={index} pendingAction={pendingAction} />;
+              return "Missing item";
           }
         })
       }

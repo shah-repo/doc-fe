@@ -17,7 +17,7 @@ export const POActions: React.FunctionComponent<Props> = ({
     <Box display="flex" flexDirection="column">
       {
         documentRevision.changeRequest &&
-      <POApproveOrReject changeRequestId={changeRequestId} />
+        <POApproveOrReject changeRequestId={changeRequestId} />
       }
       <Box display="flex" justifyContent="flex-end">
         <GenerateHtmlPreview

@@ -1,18 +1,18 @@
 import { Button, Grid } from "@material-ui/core";
 import React from "react";
-import { PendingAction } from "../../../state/ducks/dashboard";
+import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { changeRequestEditPath } from "../../change.request/utils/paths";
 import Text from "../../components/Text";
 import { styles } from "./PendingAction.styles";
 
 interface OwnProps {
-  pendingAction: PendingAction;
+  changeRequest: ChangeRequest;
 }
 
 type Props = OwnProps;
 
 export const ChangeRequestApproval: React.FunctionComponent<Props> = ({
-  pendingAction,
+  changeRequest,
 }) => {
   const classes = styles();
 
@@ -25,15 +25,15 @@ export const ChangeRequestApproval: React.FunctionComponent<Props> = ({
       id="ChangeRequestApproval-pendingActions"
     >
       <Grid item={true} xs={8}>
-        <span className={classes.highlight}>{`CRID: ${pendingAction.changeReq.crId} `}</span>
-        <span>{`from ${pendingAction.changeReq.owner.user.name} `}</span>
-        <Text message={`dashboard.type.${pendingAction.type}`} />
+        <span className={classes.highlight}>{`CRID: ${changeRequest.crId} `}</span>
+        <span>{`from ${changeRequest.owner.user.name} `}</span>
+        <Text message="dashboard.type.PENDING_REVIEW" />
       </Grid>
       <Grid item={true} xs={2}>
         <Button
           variant="contained"
           target="_blank"
-          href={changeRequestEditPath(pendingAction.changeReq.id)}
+          href={changeRequestEditPath(changeRequest.id)}
           color="secondary"
           id="ChangeRequestApproval-button"
         >
