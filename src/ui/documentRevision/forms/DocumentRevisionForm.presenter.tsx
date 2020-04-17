@@ -4,11 +4,11 @@ import { get, isEmpty } from "lodash";
 import { observer } from "mobx-react";
 import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
-import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
+import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus, RevisionChangeType, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
@@ -38,6 +38,7 @@ import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import FBStore from "../../form.builder/stores/ui/FBStore";
 import useActionCreator from "../../hooks/useActionCreator";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
+import { getIsLastVersionObsolete } from "../helpers";
 import styles from "./DocumentRevisionForm.styles";
 import ApproveAndRelease from "./presenters/ApproveAndRelease";
 import DocIdInput from "./presenters/DocIdInput";
@@ -98,6 +99,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   type,
 }) => {
   const intl = useIntl();
+  const dispatch = useDispatch();
   const loadAvailableApproversAction = useActionCreator(
     changeRequestsActions.loadAvailableApprovers
   );
@@ -121,7 +123,16 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const openReference = (documentId: string) => {
     window.open(documentDetailsPath(documentId), "_blank");
   };
+  const formDocumentId = documentRevision && (documentRevision.formDocument?.document?.id || "");
+  const formDocuments: Document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, formDocumentId));
+  const isLastVersionObsolete = formDocuments && getIsLastVersionObsolete(formDocuments);
 
+  useEffect(() => {
+    if (formDocumentId) {
+      dispatch(documentRevisionsActions.loadDocument(formDocumentId));
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formDocumentId]);
   const isDisabled: boolean = get(initialValues, "id") !== undefined;
   const isdocRevVersionOne = get(documentRevision, "version") === 1;
   const isdocRevStatusDraft =
@@ -148,6 +159,13 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       });
     }
   }, [isdocRevStatusDraft, values.document, values.name]);
+
+  useEffect(() => {
+    if (values.revisionChangeType === RevisionChangeType.AdministrativeChange) {
+      setFieldValue("retrain", false);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [values.revisionChangeType]);
 
   const handleTypeChange = (
     event: React.ChangeEvent<{ name?: string; value: unknown }>
@@ -217,7 +235,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   );
 
   const formDocumentStatus = get(documentRevision, "formDocument.status", "");
-  const isStatusDeprecated = formDocumentStatus === DocumentRevisionStatus.Deprecated;
+  const documentStatus = documentRevision && documentRevision.status;
+  const isDocumentStatusDraftOrPending = documentStatus === (DocumentRevisionStatus.Draft || DocumentRevisionStatus.PendingChange);
+  const isFormStatusDeprecated = formDocumentStatus === DocumentRevisionStatus.Deprecated;
   const isDocTypeDisabled = type === "newVersion" || isdocRevStatusDraft;
   const options = type === "newOutput" ? initialValues.formDocument?.formTemplate?.outputDocumentTypes.map((e) =>
     ({ value: e.id, text: e.documentTypeName })
@@ -385,7 +405,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               onClick={onFormClick}
               id="DocumentRevisionForm-submit"
             />
-            {isStatusDeprecated && <UpgradeToLatest onUpgradeClick={onUpgradeClick}/>}
+            {isFormStatusDeprecated && isDocumentStatusDraftOrPending && !isLastVersionObsolete && <UpgradeToLatest onUpgradeClick={onUpgradeClick}/>}
             <ApproveAndRelease
               id={values.id}
               status={values.status}

@@ -68,13 +68,13 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
         FBStore.setValue(`${name}-formValues.partNumber`, undefined);
         FBStore.setValue(`${name}-formValues.partNumberTitle`, undefined);
         FBStore.setValue(`${name}-formValues.partNumberDocId`, undefined);
-        setFieldValue(`${name}-formValues.partNumber`, undefined);
-        setFieldValue(`${name}-formValues.partNumberTitle`, undefined);
         setFieldValue(`${name}-formValues.partNumberDocId`, undefined);
+        setFieldValue(`${name}-formValues.partNumberTitle`, undefined);
+        setFieldValue(`${name}-formValues.partNumber`, undefined);
       } else {
-        setFieldValue(`${name}-formValues.partNumber`, option.id);
-        setFieldValue(`${name}-formValues.partNumberTitle`, option.name);
         setFieldValue(`${name}-formValues.partNumberDocId`, option.document.docId);
+        setFieldValue(`${name}-formValues.partNumberTitle`, option.name);
+        setFieldValue(`${name}-formValues.partNumber`, option.id);
       }
     };
 
