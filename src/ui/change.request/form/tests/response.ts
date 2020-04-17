@@ -52,7 +52,6 @@ export const approversResponse = {
             "EMPLOYEE_CREATE",
             "EMPLOYEE_UPDATE",
             "EMPLOYEE_DELETE",
-            "GROUP_GET",
             "GROUP_UPDATE",
           ],
           defaultForNewUsers: false,
