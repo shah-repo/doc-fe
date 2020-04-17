@@ -49,7 +49,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
           ? autocompleteAsyncState?.sliceValue(selectedOptions)
           : slicedOptions;
       }
-      loading = !options && autocompleteAsyncState?.loading;
+      loading = autocompleteAsyncState?.loading;
     });
 
     if (options && formValue && optionValueType === "key") {
