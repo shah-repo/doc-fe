@@ -39,8 +39,13 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     set(this, "optionId", id);
   };
 
-  @action public load = () => {
-    this.loadInternal();
+  @action public load = (force = false) => {
+    if (!this.optionId) {
+      return;
+    }
+    if (!FBAutocompleteAsyncStore.data.get(this.optionId) || force) {
+      this.loadInternal();
+    }
   };
 
   protected onSuccess() {
