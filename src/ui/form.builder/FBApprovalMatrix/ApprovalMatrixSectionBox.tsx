@@ -1,6 +1,7 @@
 import { Box, Button, Grid } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ExitExpandIcon } from "../../../assets/images/expand_exit_icon.svg";
+import { ReactComponent as ExpandIcon } from "../../../assets/images/expand_icon.svg";
 import { ReactComponent as EditIcon } from "../../../assets/images/pen_edit.svg";
 import Text from "../../components/Text";
 import { FBFormDefaultProps } from "../types/common";
@@ -45,7 +46,7 @@ const ApprovalMatrixSectionBox: React.FunctionComponent<Props> = ({
           style={{ padding: 0, margin: 0 }}
           onClick={() => alreadyOpened ? closeDialog() : openDialog()}
         >
-          <ExitExpandIcon style={{ paddingRight: 5 }}/>
+          {alreadyOpened ? <ExitExpandIcon style={{ paddingRight: 5 }}/> : <ExpandIcon style={{ paddingRight: 5 }}/> }
           <Box>
             <Text message={alreadyOpened ? "Exit fullscreen" : "Fullscreen Mode"} />
           </Box>

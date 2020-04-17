@@ -1,10 +1,10 @@
 import { Box, Dialog, DialogContent } from "@material-ui/core";
 import React, { useEffect } from "react";
 import useDialog from "../../hooks/useDialog";
-import FBApprovalMatrixTable from "../components/custom/FBApprovalMatrixTable";
 import FBButton from "../components/inputs/FBButton";
 import FBStore from "../stores/ui/FBStore";
 import ApprovalMatrixSectionBox from "./ApprovalMatrixSectionBox";
+import FBApprovalMatrixTable from "./FBApprovalMatrixTable";
 
 
 export interface PurchaseOrderItem {
@@ -73,13 +73,6 @@ const FBapprovalMatrixField: React.FunctionComponent<any> = ({
         editItem={editItem}
         deleteItem={deleteItem}
         disabled={disabled}
-      />
-      <FBButton
-        fullWidth={true}
-        disabled={disabled}
-        label="form.builder.add.item"
-        variant="outlined"
-        style={{ margin: "8px 0" }}
       />
       <Dialog fullScreen={true} open={dialog.isOpen}>
         <DialogContent>
