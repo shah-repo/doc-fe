@@ -11,6 +11,8 @@ export interface Props extends FBFormDefaultProps {
   openDialog: () => void;
   closeDialog: () => void;
   alreadyOpened?: boolean;
+  toggleEditMode: (editMode: boolean) => void;
+  editMode: boolean;
 }
 
 const ApprovalMatrixSectionBox: React.FunctionComponent<Props> = ({
@@ -19,6 +21,8 @@ const ApprovalMatrixSectionBox: React.FunctionComponent<Props> = ({
   openDialog,
   closeDialog,
   alreadyOpened,
+  toggleEditMode,
+  editMode,
 }) => (
   <Box
     mb={4}
@@ -33,7 +37,9 @@ const ApprovalMatrixSectionBox: React.FunctionComponent<Props> = ({
     <Grid item={true} xs={6}>{label && <Text message={(label as string).toUpperCase()} />}</Grid>
     <Grid item={true} xs={6} style={{ display: "flex", justifyContent: "flex-end" }}>
       <Box paddingRight={2}>
-        <Button color="inherit" style={{ padding: 0, margin: 0 }}>
+        <Button color="inherit" style={{ padding: 0, margin: 0 }}
+          onClick={() => toggleEditMode(!editMode)}
+        >
           <EditIcon style={{ paddingRight: 5 }}  />
           <Box>
             <Text message="Edit Matrix" />
