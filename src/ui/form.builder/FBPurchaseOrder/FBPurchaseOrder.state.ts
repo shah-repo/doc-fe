@@ -1,5 +1,6 @@
 import { action, observable, set } from "mobx";
 import moment from "moment";
+import uniqid from "uniqid";
 import { TAX_RATE } from "../helpers/constants";
 import FBStore from "../stores/ui/FBStore";
 import { PurchaseOrder, PurchaseOrderItem } from "./FBPurchaseOrder.types";
@@ -30,7 +31,7 @@ export class FBPurchaseOrderState {
   };
 
   @action public addItem = (item: PurchaseOrderItem) => {
-    this.po.items.push({ ...item, index: this.po.items.length });
+    this.po.items.push({ ...item, received: 0, index: this.po.items.length + 1 });
     this.calculateCost();
   };
 
@@ -54,10 +55,13 @@ export class FBPurchaseOrderState {
   };
 
   @action public clearFormValues = () => {
+    FBStore.setValue(`${this.name}-formValues.id`, undefined);
     FBStore.setValue(`${this.name}-formValues.order`, undefined);
     FBStore.setValue(`${this.name}-formValues.glCode`, undefined);
     FBStore.setValue(`${this.name}-formValues.units`, undefined);
     FBStore.setValue(`${this.name}-formValues.partNumber`, undefined);
+    FBStore.setValue(`${this.name}-formValues.partNumberDocId`, undefined);
+    FBStore.setValue(`${this.name}-formValues.partNumberTitle`, undefined);
     FBStore.setValue(`${this.name}-formValues.date`, undefined);
     FBStore.setValue(`${this.name}-formValues.description`, undefined);
     FBStore.setValue(`${this.name}-formValues.unitPrice`, undefined);
@@ -116,7 +120,7 @@ export class FBPurchaseOrderState {
   };
 
   private updateFBStore = () => {
-    if (!this.name) {
+    if (!this.name || FBStore.mode === "design") {
       return;
     }
 
@@ -128,11 +132,14 @@ export class FBPurchaseOrderState {
 
   private initiliazeLineItem = (item: PurchaseOrderItem, index: number): PurchaseOrderItem => (
     {
+      id: item.id || uniqid(),
       index: index + 1,
       order: item.order,
       glCode: item.glCode,
       units: item.units,
       partNumber: item.partNumber,
+      partNumberDocId: item.partNumberDocId,
+      partNumberTitle: item.partNumberTitle,
       date: item.date,
       description: item.description,
       unitPrice: this.formatCost(item.unitPrice),
@@ -145,7 +152,7 @@ export class FBPurchaseOrderState {
         const tax = item.tax ? total * TAX_RATE : 0;
         return this.formatCost(total + tax);
       })(),
-      received: item.received,
+      received: item.received || 0,
     }
   );
 }

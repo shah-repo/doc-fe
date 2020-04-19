@@ -1,8 +1,8 @@
 export { default as apiClient } from "./FBApi/FBApi.client";
 export * from "./FBApi/FBApi.types";
-export { default as FBApprovalField } from "./FBApprovalField/FBApprovalField";
-export { default as FBApprovalFieldState } from "./FBApprovalField/FBApprovalField.state";
-export * from "./FBApprovalField/FBApprovalField.types";
+export { default as FBApproval } from "./FBApproval/FBApproval";
+export { default as FBApprovalState } from "./FBApproval/FBApproval.state";
+export * from "./FBApproval/FBApproval.types";
 export { default as FBAutocomplete } from "./FBAutocomplete/FBAutocomplete";
 export * from "./FBAutocomplete/FBAutocomplete.types";
 export { default as FBAutocompleteAsync } from "./FBAutocompleteAsync/FBAutocompleteAsync";

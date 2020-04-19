@@ -39,7 +39,32 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     set(this, "optionId", id);
   };
 
-  @action public load = () => {
+  @action public load = (force = false) => {
+    if (!this.optionId) {
+      return;
+    }
+    if (!FBAutocompleteAsyncStore.data.get(this.optionId) || force) {
+      this.loadInternal();
+    }
+  };
+
+  protected onSuccess() {
+    super.onSuccess();
+    if (!this.optionId) {
+      return;
+    }
+    let data = this.data;
+    if (!data) {
+      return;
+    }
+    if (data.some && !data.some((value) => typeof value === "object")) {
+      data = _.map(this.data, (d) => ({ id: d, name: d }));
+      return FBAutocompleteAsyncStore.setOptionData(this.optionId, data);
+    }
+    data.slice && FBAutocompleteAsyncStore.setOptionData(this.optionId, data.slice());
+  }
+
+  protected loadInternal() {
     if (!this.optionConfig) {
       return;
     }
@@ -47,18 +72,8 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     this.setUrl(url);
     this.setRoot(root);
     this.fetch();
-  };
-
-  @action public onSuccess = () => {
-    if (!this.optionId) {
-      return;
-    }
-    if (!this.data.some((value) => typeof value === "object")) {
-      const data = _.map(this.data, (d) => ({ id: d, name: d }));
-      return FBAutocompleteAsyncStore.setOptionData(this.optionId, data);
-    }
-    FBAutocompleteAsyncStore.setOptionData(this.optionId, this.data.slice());
-  };
+  }
 }
 
 export default FBAutocompleteAsyncState;
+

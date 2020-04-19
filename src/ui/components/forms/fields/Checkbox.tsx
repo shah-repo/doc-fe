@@ -26,7 +26,7 @@ const Checkbox: React.FunctionComponent<CheckboxPropsWithFormik> = ({ checkboxPr
           <MuiCheckbox
             {...fieldProps.field}
             {...checkboxProps}
-            checked={field.value && true}
+            checked={checkboxProps?.disabled ? false : field.value && true}
             value={field.value ? "checked" : ""}
             id="Checkbox-box"
           />

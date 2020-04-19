@@ -2,8 +2,7 @@ import { Grid, WithStyles, withStyles } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { Group } from "../../../state/ducks/auth/types";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { AsyncState } from "../../../state/types";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -52,7 +51,7 @@ ChangeRequestFormContainerProps
       ]);
     },
   });
-  const getGroupsByStage = useActionCreator(documentTypeActions.loadGroupsByStage);
+  const getGroupsByStage = useActionCreator(documentRevisionsActions.loadGroupsByStage);
 
 
   useEffect(() => {
@@ -65,8 +64,7 @@ ChangeRequestFormContainerProps
       );
       changeRequest.documentRevisions.map((docRev) => async.start(
         getGroupsByStage,
-        docRev.document.documentType.id,
-        docRev.revisionStage,
+        docRev.id,
         async,
       ));
     }
