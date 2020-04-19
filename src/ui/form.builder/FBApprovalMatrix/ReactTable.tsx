@@ -1,7 +1,10 @@
+import { FormControl } from "@material-ui/core";
 import React from "react";
 import { useBlockLayout, useTable } from "react-table";
 import { useSticky } from "react-table-sticky";
 import styled from "styled-components";
+import InputField from "../../components/forms/fields/Input";
+import SelectField from "../../components/forms/fields/Select";
 import { FBFormDefaultProps } from "../types/common";
 
 
@@ -110,6 +113,23 @@ const Styles = styled.div`
         box-shadow: -2px 0px 3px lightgray;
       }
     }
+    .muiRoot {
+      .MuiSelect-selectMenu.MuiSelect-selectMenu {
+        padding: 0;
+      }
+    }
+    .control {
+      .MuiFormControl-root {
+        margin-top: 1px;
+        font-size: 12px;
+      }
+    }
+    .muiInput {
+      .MuiInputBase-input {
+        padding: 2px;
+        font-size: 12px;
+      }
+    }
   }
 `;
 
@@ -178,7 +198,7 @@ const ReactTable: React.FunctionComponent<Props> = ({
             return (
               <div key={i} {...row.getRowProps()} className="tr">
                 {row.cells.map((cell, index) => {
-                  if (cell.column.parent.Header !== " " && !editMode) {
+                  if (cell.column.parent.Header !== " " && !editMode && cell.row.values.acronym !== "") {
                     const value = cell.value ? "Y" : "";
                     return (
                       <div key={index} {...cell.getCellProps()} className="td">
@@ -186,11 +206,56 @@ const ReactTable: React.FunctionComponent<Props> = ({
                       </div>
                     );
                   }
-                  if (cell.column.Header === "Training req." && !editMode) {
+                  if (cell.column.Header === "Training req." && !editMode && cell.row.values.acronym !== "") {
                     const value = cell.value ? "Yes" : "No";
                     return (
                       <div key={index} {...cell.getCellProps()} className="td">
                         {value}
+                      </div>
+                    );
+                  }
+                  if (cell.row.values.name === "" && (cell.column.Header === "Internal type") ) {
+                    return (
+                      <div key={index} {...cell.getCellProps()} className="td">
+                        <FormControl className="control" id="ApprovalMatrix-selectField" style={{ width: "100%", height: 20 }}>
+                          <SelectField
+                            name={cell.row.values.index}
+                            includeEmpty={false}
+                            options={[{ value: "DOC", text: "DOC" }, { value: "RSD", text: "RSD" }]}
+                            selectProps={{
+                              placeholder: "Select...",
+                              style: {
+                                margin: 0,
+                                height: 20,
+                                padding: 0,
+                                marginTop: 0,
+                              },
+                              className: "muiRoot",
+                            }}
+                            inputFieldProps={{
+                              style: { marginTop: 0 },
+                            }}
+                          />
+                        </FormControl>
+                      </div>
+                    );
+                  }
+                  if (cell.row.values.name === "" && ((cell.column.Header === "Prefix") || (cell.column.Header === "Document type"))) {
+                    return (
+                      <div key={index} {...cell.getCellProps()} className="td">
+                        <FormControl className="control" id="ApprovalMatrix-selectField" style={{ width: "100%", height: 20 }}>
+                          <InputField name={cell.column.Header === "Prefix" ? "prefix" : "documentType"} inputProps={
+                            {
+                              style: {
+                                margin: 0,
+                                height: 20,
+                                padding: 0,
+                                marginTop: 0,
+                              },
+                              className: "muiInput",
+                            }
+                          } />
+                        </FormControl>
                       </div>
                     );
                   }

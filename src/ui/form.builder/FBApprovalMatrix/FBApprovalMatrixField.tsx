@@ -545,7 +545,6 @@ const FBapprovalMatrixField: React.FunctionComponent<any> = ({
       },
       {
         Header: "Approvals numeric alpha",
-        maxWidth: 100,
         columns: roles.approvalRoles.map((group) => ({
           Header: group.name,
           accessor: `approvalsNumericAlpha-${group.index}`,
@@ -566,7 +565,6 @@ const FBapprovalMatrixField: React.FunctionComponent<any> = ({
       },
       {
         Header: "Approvals alpha",
-        maxWidth: 100,
         columns: roles.approvalRoles.map((group) => ({
           Header: group.name,
           accessor: `approvalsAlpha-${group.index}`,
@@ -587,7 +585,6 @@ const FBapprovalMatrixField: React.FunctionComponent<any> = ({
       },
       {
         Header: "Approvals administrative",
-        maxWidth: 100,
         columns: roles.approvalRoles.map((group) => ({
           Header: group.name,
           accessor: `approvalsAdmin-${group.index}`,
@@ -595,42 +592,97 @@ const FBapprovalMatrixField: React.FunctionComponent<any> = ({
           // eslint-disable-next-line react/display-name
           Cell: (rowData) => {
             const key = `approvalsAdmin-${group.index}`;
-            if (editMode) {
-              return (
-                <FBCheckbox
-                  value={rowData.row.original[key] ? true : false}
-                  label=" "
-                  name={key}
-                  isFullWidth={false}
-                  gutter={false}
-                />);
-            }
             return (
-              <div key={key} className="td">
-                {rowData.row.original[key] ? true : false}
-              </div>
-            );
+              <FBCheckbox
+                value={rowData.row.original[key] ? true : false}
+                label=" "
+                name={key}
+                isFullWidth={false}
+                gutter={false}
+              />);
           },
         })),
       },
     ],
-    [roles.approvalRoles, editMode]
+    [roles.approvalRoles]
   );
+  const [rolesState, setRoles] = useState(roles.approvalMatrix);
 
-  const docTypeData = roles.approvalMatrix.map((e) => e.docType);
-  const stage1Data = roles.approvalMatrix.map((e) =>
+  const docTypeData = rolesState.map((e) => e.docType);
+  const stage1Data = rolesState.map((e) =>
     roles.approvalRoles.map((role) => ({ [`approvalsNumeric-${role.index}`]: e.approvalRoles.stage1[role.index] })
     ));
-  const stage2Data = roles.approvalMatrix.map((e) =>
+  const stage2Data = rolesState.map((e) =>
     roles.approvalRoles.map((role) => ({ [`approvalsNumericAlpha-${role.index}`]: e.approvalRoles.stage2[role.index] })
     ));
-  const stage3Data = roles.approvalMatrix.map((e) =>
+  const stage3Data = rolesState.map((e) =>
     roles.approvalRoles.map((role) => ({ [`approvalsAlpha-${role.index}`]: e.approvalRoles.stage3[role.index] })
     ));
-  const stageAdmData = roles.approvalMatrix.map((e) =>
+  const stageAdmData = rolesState.map((e) =>
     roles.approvalRoles.map((role) => ({ [`approvalsAdmin-${role.index}`]: e.approvalRoles.admStage[role.index] })
     ));
   const data = docTypeData.map((item, i) => Object.assign({}, item, ...stage1Data[i], ...stage2Data[i], ...stage3Data[i], ...stageAdmData[i]));
+
+  const [addMode, setAddMode] = useState(false);
+
+  const addNewRowData = () => {
+    setAddMode(true);
+    const newState = [...roles.approvalMatrix, {
+      docType: {
+        id: "",
+        acronym: "",
+        name: "",
+        defaultTraining: false,
+        group: "",
+      },
+      approvalRoles: {
+        stage1: [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+        ],
+        stage2: [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+        ],
+        stage3: [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+        ],
+        admStage: [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+        ],
+      },
+    }];
+    setRoles(newState);
+  };
+
+  const cancelNewRowData = () => {
+    setAddMode(false);
+    rolesState.splice(-1, 1);
+  };
+
+  const saveNewRowData = () => {
+    setAddMode(false);
+    console.log("New row is saved");
+  };
+
 
   return (
     <Box mt={3}>
@@ -640,15 +692,35 @@ const FBapprovalMatrixField: React.FunctionComponent<any> = ({
         closeDialog={() => dialog.close()}
         toggleEditMode={toggleEditMode}
         editMode={editMode}
+        addMode={addMode}
       />
       <ReactTable data={data} columns={columns} editMode={editMode} />
+      {!addMode &&
       <FBButton
         fullWidth={true}
-        disabled={disabled}
+        onClick={() => addNewRowData()}
         label="form.builder.add.item"
         variant="outlined"
         style={{ margin: "8px 0" }}
-      />
+        disabled={editMode}
+      />}
+      {addMode &&
+      <Box display="flex" flexDirection="row-reverse">
+        <FBButton
+          onClick={() => saveNewRowData()}
+          label="Save changes"
+          variant="contained"
+          color="primary"
+          style={{ margin: "8px" }}
+        />
+        <FBButton
+          onClick={() => cancelNewRowData()}
+          label="Cancel"
+          variant="outlined"
+          color="primary"
+          style={{ margin: "8px" }}
+        />
+      </Box>}
       <Dialog fullScreen={true} open={dialog.isOpen}>
         <DialogContent>
           <ApprovalMatrixSectionBox
@@ -658,15 +730,35 @@ const FBapprovalMatrixField: React.FunctionComponent<any> = ({
             alreadyOpened={true}
             toggleEditMode={toggleEditMode}
             editMode={editMode}
+            addMode={addMode}
           />
           <ReactTable data={data} columns={columns} editMode={editMode} />
-          <FBButton
-            fullWidth={true}
-            disabled={disabled}
-            label="form.builder.add.item"
-            variant="outlined"
-            style={{ margin: "8px 0" }}
-          />
+          {!addMode &&
+            <FBButton
+              fullWidth={true}
+              onClick={() => addNewRowData()}
+              label="form.builder.add.item"
+              variant="outlined"
+              style={{ margin: "8px 0" }}
+              disabled={editMode}
+            />}
+          {addMode &&
+          <Box display="flex" flexDirection="row-reverse">
+            <FBButton
+              onClick={() => saveNewRowData()}
+              label="Save"
+              variant="contained"
+              color="primary"
+              style={{ margin: "8px" }}
+            />
+            <FBButton
+              onClick={() => cancelNewRowData()}
+              label="Cancel"
+              variant="outlined"
+              color="primary"
+              style={{ margin: "8px" }}
+            />
+          </Box>}
         </DialogContent>
       </Dialog>
     </Box>
