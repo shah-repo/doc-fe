@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { useIntl } from "react-intl";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
 import { documentPreviewPath } from "../../../document.revision/utils/paths";
 import DashboardActionTypeBase from "../DashboardActionTypeBase";
@@ -12,15 +13,24 @@ interface Props {
 export const PurchaseOrderApproval: React.FunctionComponent<Props> = ({
   key,
   documentRevision,
-}) => (
-  <DashboardActionTypeBase
-    key={key}
-    title="PURCHASE ORDER: PO00771, Rev 2"
-    description="Purchase order from XY is pending your approval"
-    url={documentPreviewPath(documentRevision.id, documentRevision.document.id)}
-  >
-    <PODetailsContainer documentRevision={documentRevision} />
-  </DashboardActionTypeBase>
-);
+}) => {
+  const intl = useIntl();
+  const [title] = useState(intl.formatMessage(
+    { id: "dashboard.title.purchase.order" },
+    { docId: documentRevision.document.docId, version: documentRevision.version },
+  ));
+  const [description] = useState(intl.formatMessage({ id: "dashboard.assigned.purchase.order" }));
+
+  return (
+    <DashboardActionTypeBase
+      key={key}
+      title={title}
+      description={description}
+      url={documentPreviewPath(documentRevision.id, documentRevision.document.id)}
+    >
+      <PODetailsContainer documentRevision={documentRevision} />
+    </DashboardActionTypeBase>
+  );
+};
 
 export default PurchaseOrderApproval;
