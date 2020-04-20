@@ -388,6 +388,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <FBWorkspaceForm
               id={get(values, "id")}
               documentId={get(values, "formDocument.document.id") || get(values, "document.id")}
+              document={values as unknown as DocumentRevision}
             />
           </Box>
         )}

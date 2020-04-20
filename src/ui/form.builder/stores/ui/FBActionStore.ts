@@ -4,6 +4,7 @@ import { action } from "mobx";
 import apiClient from "../../../../state/apiClient";
 import { AsyncActionErrorResponse } from "../../../../state/middlewares/api/types";
 import { store } from "../../../../state/store";
+import { toastInfo } from "../../../components/notifications";
 import { ATTACH_TEMPLATE_URL, CANCEL_SIGNATURE_REQUEST_URL, CREATE_TEMPLATE_URL, SEND_SIGNATURE_REQUEST_URL } from "../../FBHelloSign/constants";
 import { FBTemplateSchema } from "../../types/store";
 import { FBActionModel } from "../domain/models/FBActionModel";
@@ -13,11 +14,9 @@ import FBStore from "./FBStore";
 export class FormBuilderActionStore {
   public values: Dictionary<Dictionary<any>> = {};
 
-  @action public getActions = (): FBTemplateSchema[] => {
-    return _.filter(FBStore.getSchema(), (schemaItem) => (
-      schemaItem.type === "action"
-    ));
-  }
+  @action public getActions = (): FBTemplateSchema[] => _.filter(FBStore.getSchema(), (schemaItem) => (
+    schemaItem.type === "action"
+  ));
 
   @action public apiCall = async (action: Partial<FBActionModel>) => {
     const { requestUrl, requestMethod } = action;
@@ -35,7 +34,7 @@ export class FormBuilderActionStore {
 
       requestConfig.headers.Authorization = `bearer ${
         store.getState().auth.user.employeeId
-        }:${store.getState().auth.user.sessionId}`;
+      }:${store.getState().auth.user.sessionId}`;
 
       const { data } = await apiClient.request(requestConfig);
       if (!_.isUndefined(data)) {
@@ -49,12 +48,14 @@ export class FormBuilderActionStore {
           return alert("Template Attached Successfully");
         }
         if (requestUrl === CANCEL_SIGNATURE_REQUEST_URL) {
-          return alert("Signature request cancelled successfully");
+          return toastInfo(
+            "Signature request cancellation requested. This page will be reloaded after the request is completed."
+          );
         }
         alert("Success");
       }
     } catch (exception) {
-      let responseMessage: string = "";
+      let responseMessage = "";
       if (exception.response) {
         const {
           data: { message },
@@ -70,7 +71,7 @@ export class FormBuilderActionStore {
       }
       alert(errorMessage);
     }
-  }
+  };
 }
 
 const FBActionStore = new FormBuilderActionStore();

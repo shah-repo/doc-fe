@@ -18,10 +18,12 @@ const HelloSignAllSignedRefreshSockets: React.FunctionComponent<Props> = ({
   const subscribe = () => {
     iotService.subscribeToTopic(`+/hellosign_all_signed/${id}`, loadData);
     iotService.subscribeToTopic(`+/hellosign_template_created/${id}`, loadData);
+    iotService.subscribeToTopic(`+/hellosign_signature_canceled/${id}`, loadData);
   };
   const unsubscribe = () => {
     iotService.unsubscribeFromTopic(`+/hellosign_all_signed/${id}`);
     iotService.unsubscribeFromTopic(`+/hellosign_template_created/${id}`);
+    iotService.unsubscribeFromTopic(`+/hellosign_signature_canceled/${id}`);
   };
   const loadAction = useActionCreator(documentRevisionsActions.load);
   const async = useAsync();
