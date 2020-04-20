@@ -65,6 +65,7 @@ export * from "./FBMediaAlbum/FBMediaAlbum.types";
 export { default as FBMediaAlbumField } from "./FBMediaAlbumField/FBMediaAlbumField";
 export { default as FBMediaAlbumFieldSocket } from "./FBMediaAlbumField/FBMediaAlbumField.socket";
 export { default as FBMediaAlbumFieldState } from "./FBMediaAlbumField/FBMediaAlbumField.state";
+export { default as FBMediaAlbumFieldStore } from "./FBMediaAlbumField/FBMediaAlbumField.store";
 export * from "./FBMediaAlbumField/FBMediaAlbumField.types";
 export { default as FBMediaCarousel } from "./FBMediaCarousel/FBMediaCarousel";
 export { default as FBMediaCarouselState } from "./FBMediaCarousel/FBMediaCarousel.state";

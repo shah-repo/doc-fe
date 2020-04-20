@@ -1,5 +1,5 @@
-import { Box, IconButton } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
+import { Box, CircularProgress, IconButton, Tooltip } from "@material-ui/core";
+import AlbumIcon from "@material-ui/icons/Album";
 import QRCode from "qrcode.react";
 import React from "react";
 import { FBMediaQRProps } from ".";
@@ -7,37 +7,39 @@ import Text from "../../components/Text";
 import { withFBMediaQR } from "./FBMediaQR.wrap";
 
 const FBMediaQR: React.FunctionComponent<FBMediaQRProps> = ({
+  setMediaFieldMode,
+  loading,
   qrValue,
-  handleClose,
   mode,
 }) => (
   <Box>
     {mode === "qr" && (
-      <Box>
-        <Box display="flex" justifyContent="flex-end" p={1} bgcolor="black">
-          <IconButton
-            onClick={() => handleClose && handleClose()}
-            size="small"
-            style={{ color: "white" }}
-          >
-            <CloseIcon />
+      <>
+        <Box display="flex" flexDirection="row-reverse" py={0.8}>
+          <IconButton size="small" onClick={setMediaFieldMode}>
+            <Tooltip title={<Text message="form.builder.album" />}>
+              <AlbumIcon />
+            </Tooltip>
           </IconButton>
         </Box>
-        <Box display="flex" justifyContent="center" py={8}>
-          <QRCode value={qrValue} />
+        <Box
+          display="flex"
+          alignItems="center"
+          height={350}
+          justifyContent="center"
+          bgcolor="#f6f7f7"
+        >
+          {loading && (
+            <Box height="100%" display="flex" alignItems="center">
+              <CircularProgress />
+            </Box>
+          )}
+          {!loading && <QRCode value={qrValue} />}
         </Box>
-      </Box>
+      </>
     )}
-    {mode === "placeholder" && (
-      <Box>
-        <Text message="form.builder.media.album.placeholder" />
-      </Box>
-    )}
-    {mode === "preupload" && (
-      <Box>
-        <Text message="form.builder.media.album.output.placeholder" />
-      </Box>
-    )}
+    {mode === "placeholder" && <Text message="form.builder.media.album.placeholder" />}
+    {mode === "preupload" && <Text message="form.builder.media.album.output.placeholder" />}
   </Box>
 );
 

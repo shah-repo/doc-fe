@@ -410,6 +410,7 @@
   "form.builder.gallery": "Gallery",
   "form.builder.carousel": "Carousel",
   "form.builder.qr.code": "QR Code",
+  "form.builder.album": "Album",
   "form.builder.upload": "Upload",
   "form.builder.delete": "Delete",
   "form.builder.export": "Export Form",

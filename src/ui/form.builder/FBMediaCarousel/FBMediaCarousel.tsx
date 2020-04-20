@@ -1,16 +1,23 @@
-import { Box, CircularProgress, IconButton } from "@material-ui/core";
+import { Box, CircularProgress, IconButton, Tooltip } from "@material-ui/core";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import React from "react";
 import Img from "react-image";
 import LazyLoad from "react-lazy-load";
 import { FBMediaCarouselProps } from ".";
+import Text from "../../components/Text";
 import { withFBMediaCarousel } from "./FBMediaCarousel.wrap";
 
 const FBMediaCarousel: React.FunctionComponent<FBMediaCarouselProps> = ({
   activeMediaPath,
+  toolsVisibility,
+  onMouseOver,
+  onMouseLeave,
   handleNext,
   handleBack,
+  handleDelete,
+  actionsDisabled,
 }) => (
   <Box
     position="relative"
@@ -18,21 +25,39 @@ const FBMediaCarousel: React.FunctionComponent<FBMediaCarouselProps> = ({
     display="flex"
     alignItems="center"
     height={350}
-    bgcolor="black"
     justifyContent="center"
+    bgcolor="#f6f7f7"
+    {...{ onMouseOver, onMouseLeave }}
   >
     <LazyLoad height={350}>
       <Img
         style={{ objectFit: "cover", width: "100%", height: "350px" }}
         src={activeMediaPath}
         loader={
-          <Box height="100%" display="flex" color="white" alignItems="center">
-            <CircularProgress color="inherit" />
+          <Box height="100%" display="flex" alignItems="center">
+            <CircularProgress />
           </Box>
         }
       />
     </LazyLoad>
-    <Box position="absolute" alignContent="middle" left={10}>
+    {!actionsDisabled && (
+      <Box position="absolute" top={4} right={0} visibility={toolsVisibility} color="white">
+        <IconButton
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          onClick={handleDelete}
+          size="small"
+          color="inherit"
+        >
+          <Tooltip title={<Text message="form.builder.delete" />}>
+            <DeleteForeverIcon
+              fontSize="default"
+              opacity={0.9}
+            />
+          </Tooltip>
+        </IconButton>
+      </Box>
+    )}
+    <Box position="absolute" alignContent="middle" left={10} visibility={toolsVisibility}>
       <IconButton
         style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
         onClick={handleBack}
@@ -44,7 +69,7 @@ const FBMediaCarousel: React.FunctionComponent<FBMediaCarouselProps> = ({
         />
       </IconButton>
     </Box>
-    <Box position="absolute" alignContent="middle" right={10}>
+    <Box position="absolute" alignContent="middle" right={10} visibility={toolsVisibility}>
       <IconButton
         style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
         onClick={handleNext}

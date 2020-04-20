@@ -7,7 +7,7 @@ export interface FBLabelEditorProps {
 const FBLabelEditor: React.FunctionComponent<FBLabelEditorProps> = ({
   ...props
 }) => (
-  <FBTextField label="form.builder.label" name="label" {...props}  />
+  <FBTextField label="form.builder.label" {...props} name="label"  />
 );
 
 export default FBLabelEditor;
