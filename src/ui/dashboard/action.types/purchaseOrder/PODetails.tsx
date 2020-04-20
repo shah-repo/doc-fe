@@ -3,6 +3,7 @@ import React from "react";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
 import { Attachment } from "../../../change.request/form/types";
 import Text from "../../../components/Text";
+import GenerateHtmlPreview from "../../../documentRevision/forms/presenters/GenerateHtmlPreview";
 import { PurchaseOrder } from "../../../form.builder/FBPurchaseOrder/FBPurchaseOrder.types";
 import POAttachments from "./POAttachments";
 
@@ -46,6 +47,12 @@ export const PODetails: React.FunctionComponent<Props> = ({
       ))
     }
     <POAttachments attachments={attachments} />
+    <Box marginTop="15px" marginLeft="-10px">
+      <GenerateHtmlPreview
+        id={documentRevision.id}
+        renderHTML={documentRevision.formDocument?.renderHTML || "tes"}
+      />
+    </Box>
   </Box>
 );
 
