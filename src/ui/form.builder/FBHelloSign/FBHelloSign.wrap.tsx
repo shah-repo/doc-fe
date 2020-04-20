@@ -155,12 +155,10 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
           helloSignState && helloSignState.setOverlay(true);
           apiCallSig(payload);
         } else {
-          /*
           helloSignState && helloSignState.setOverlay(true);
           helloSignState && helloSignState.setLoadingMessage(
             intl.formatMessage({ id: "form.builder.signature.cancelling" })
           );
-          */
           apiCallCancelSig(payload);
         }
       } else {
