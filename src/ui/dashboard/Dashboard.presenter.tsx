@@ -23,19 +23,19 @@ const DashboardPresenter: React.FunctionComponent<DashboardPresenterProps> = ({
           switch (pendingAction.type) {
             case PendingActionType.PENDING_REVIEW:
               return pendingAction.changeReq &&
-                <ChangeRequestApproval key={index} changeRequest={pendingAction.changeReq} />;
+                <ChangeRequestApproval key={index} index={index} changeRequest={pendingAction.changeReq} />;
             case PendingActionType.PENDING_TRAINING_RECORDS:
               return pendingAction.trainingRecord &&
-                <TrainingRequest key={index} trainingRecord={pendingAction.trainingRecord} />;
+                <TrainingRequest key={index} index={index} trainingRecord={pendingAction.trainingRecord} />;
             case PendingActionType.PURCHASE_ORDERS:
               return pendingAction.documentRevision &&
-                <PurchaseOrderApproval key={index} documentRevision={pendingAction.documentRevision} />;
+                <PurchaseOrderApproval key={index} index={index} documentRevision={pendingAction.documentRevision} />;
             case PendingActionType.PENDING_DOC_CONTROL:
             case PendingActionType.PENDING_IMPL_PLAN_TASK:
               return pendingAction.changeReq &&
-                <TaskApproval key={index} changeRequest={pendingAction.changeReq} />;
+                <TaskApproval key={index} index={index} changeRequest={pendingAction.changeReq} />;
             default:
-              return "Missing item";
+              return <Text key={index} translation="common.undefined" />;
           }
         })
       }

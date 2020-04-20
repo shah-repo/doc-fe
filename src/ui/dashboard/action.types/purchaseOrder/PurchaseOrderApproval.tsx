@@ -7,12 +7,12 @@ import DashboardActionTypeBase from "../DashboardActionTypeBase";
 import PODetailsContainer from "./PODetailsContainer";
 
 interface Props {
-  key: number;
+  index: number;
   documentRevision: DocumentRevision;
 }
 
 export const PurchaseOrderApproval: React.FunctionComponent<Props> = ({
-  key,
+  index,
   documentRevision,
 }) => {
   const intl = useIntl();
@@ -29,7 +29,7 @@ export const PurchaseOrderApproval: React.FunctionComponent<Props> = ({
 
   return (
     <DashboardActionTypeBase
-      key={key}
+      index={index}
       title={title}
       description={description}
       url={documentPreviewPath(documentRevision.id, documentRevision.document.id)}

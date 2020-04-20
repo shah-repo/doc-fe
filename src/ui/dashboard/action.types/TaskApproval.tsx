@@ -5,12 +5,12 @@ import { changeRequestEditPath } from "../../change.request/utils/paths";
 import DashboardActionTypeBase from "./DashboardActionTypeBase";
 
 interface Props {
-  key: number;
+  index: number;
   changeRequest: ChangeRequest;
 }
 
 export const TaskApproval: React.FunctionComponent<Props> = ({
-  key,
+  index,
   changeRequest,
 }) => {
   const intl = useIntl();
@@ -19,7 +19,7 @@ export const TaskApproval: React.FunctionComponent<Props> = ({
 
   return (
     <DashboardActionTypeBase
-      key={key}
+      index={index}
       title={title}
       description={description}
       url={changeRequestEditPath(changeRequest.id)}

@@ -280,6 +280,7 @@
   "common.reject": "Reject",
   "common.total.amount": "Total amount",
   "common.line.items": "Line items",
+  "common.undefined": "Undefined",
   "output.info": "Form Info",
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",

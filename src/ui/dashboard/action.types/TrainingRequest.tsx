@@ -6,14 +6,14 @@ import { documentDetailsPath } from "../../document.revision/utils/paths";
 import DashboardActionTypeBase from "./DashboardActionTypeBase";
 
 interface OwnProps {
-  key: number;
+  index: number;
   trainingRecord: TrainingRecord;
 }
 
 type Props = OwnProps;
 
 export const TrainingRequest: React.FunctionComponent<Props> = ({
-  key,
+  index,
   trainingRecord,
 }) => {
   const intl = useIntl();
@@ -28,7 +28,7 @@ export const TrainingRequest: React.FunctionComponent<Props> = ({
 
   return (
     <DashboardActionTypeBase
-      key={key}
+      index={index}
       title={title}
       description={description}
       url={documentDetailsPath(trainingRecord.trainingPlan?.document.id || "")}

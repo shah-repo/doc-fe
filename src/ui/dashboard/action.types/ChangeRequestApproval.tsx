@@ -4,15 +4,13 @@ import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { changeRequestEditPath } from "../../change.request/utils/paths";
 import DashboardActionTypeBase from "./DashboardActionTypeBase";
 
-interface OwnProps {
-  key: number;
+interface Props {
+  index: number;
   changeRequest: ChangeRequest;
 }
 
-type Props = OwnProps;
-
 export const ChangeRequestApproval: React.FunctionComponent<Props> = ({
-  key,
+  index,
   changeRequest,
 }) => {
   const intl = useIntl();
@@ -27,7 +25,7 @@ export const ChangeRequestApproval: React.FunctionComponent<Props> = ({
 
   return (
     <DashboardActionTypeBase
-      key={key}
+      index={index}
       title={title}
       description={description}
       url={changeRequestEditPath(changeRequest.id)}

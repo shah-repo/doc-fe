@@ -3,14 +3,14 @@ import React from "react";
 import Text from "../../components/Text";
 
 interface Props {
-  key: number;
+  index: number;
   title: string;
   description: string;
   url: string;
 }
 
 export const DashboardActionTypeBase: React.FunctionComponent<Props> = ({
-  key,
+  index,
   title,
   description,
   url,
@@ -35,7 +35,7 @@ export const DashboardActionTypeBase: React.FunctionComponent<Props> = ({
         target="_blank"
         href={url}
         color="secondary"
-        id={`Dashboard-open-${key}`}
+        id={`Dashboard-open-${index}`}
       >
         <Text translation="common.open" />
       </Button>
