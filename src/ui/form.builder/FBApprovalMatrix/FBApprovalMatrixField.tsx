@@ -5,6 +5,7 @@ import FBButton from "../components/inputs/FBButton";
 import FBCheckbox from "../components/inputs/FBCheckbox";
 import FBStore from "../stores/ui/FBStore";
 import ApprovalMatrixSectionBox from "./ApprovalMatrixSectionBox";
+import ApprovalRoles from "./ApprovalRoles/ApprovalRoles";
 import ReactTable from "./ReactTable";
 
 
@@ -686,6 +687,7 @@ const FBapprovalMatrixField: React.FunctionComponent<any> = ({
 
   return (
     <Box mt={3}>
+      <ApprovalRoles/>
       <ApprovalMatrixSectionBox
         label={label} isOpen={dialog.isOpen}
         openDialog={() => dialog.open()}
