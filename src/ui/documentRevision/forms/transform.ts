@@ -82,9 +82,14 @@ export const toDocumentRevisionEditRequestBody = (
     description: values.description,
     name: values.name,
     attachments: values.attachments,
-    referenceTo: (values.referenceTo || []).map((reference) => ({
-      id: reference.value,
-    })),
+    referenceTo: (values.referenceTo || [])
+      // this map is used for PO items received,
+      // we re-send the document, but the references are no longer of option type
+      // and reference.value equals to undefined
+      .map((reference) => reference.value ? reference : { value: (reference as any).id })
+      .map((reference) => ({
+        id: reference.value,
+      })),
     revisionStage: values.revisionStage,
     revisionChangeType: values.revisionChangeType,
     retrain: values.retrain,
