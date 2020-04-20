@@ -1,4 +1,4 @@
-import { Grid, Paper, Typography } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import React from "react";
 import { PendingActionType } from "../../state/ducks/dashboard";
 import AsyncGate from "../components/AsyncGate";
@@ -55,10 +55,8 @@ const DashboardPresenter: React.FunctionComponent<DashboardPresenterProps> = ({
           asyncState={loadPendingActionsListAsyncState}
           startActionOnMount={true}
         >
-          <Paper className={classes.actionsContainer}>
-            {pendingActions.length > 0 && renderPendingActions()}
-            {renderNoPendingActions}
-          </Paper>
+          {pendingActions.length > 0 && renderPendingActions()}
+          {renderNoPendingActions}
         </AsyncGate>
       </Grid>
     </Grid>

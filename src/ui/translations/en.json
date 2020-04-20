@@ -278,6 +278,8 @@
   "common.generate.pdf": "Generate PDF",
   "common.approve": "Approve",
   "common.reject": "Reject",
+  "common.total.amount": "Total amount",
+  "common.line.items": "Line items",
   "output.info": "Form Info",
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",
