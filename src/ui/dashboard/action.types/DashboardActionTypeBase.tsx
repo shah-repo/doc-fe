@@ -1,5 +1,6 @@
 import { Box, Button } from "@material-ui/core";
 import React from "react";
+import { Link } from "react-router-dom";
 import Text from "../../components/Text";
 
 interface Props {
@@ -22,14 +23,16 @@ export const DashboardActionTypeBase: React.FunctionComponent<Props> = ({
       justifyContent="space-between"
       alignItems="center"
     >
-      <Box>
-        <Box color="primary.main" fontWeight="fontWeightBold" marginBottom="5px">
-          {title}
-        </Box>
+      <Link to={url} style={{ textDecoration: "none", color: "inherit" }}>
         <Box>
-          {description}
+          <Box color="primary.main" fontWeight="fontWeightBold" marginBottom="5px">
+            {title}
+          </Box>
+          <Box>
+            {description}
+          </Box>
         </Box>
-      </Box>
+      </Link>
       <Button
         variant="contained"
         target="_blank"
