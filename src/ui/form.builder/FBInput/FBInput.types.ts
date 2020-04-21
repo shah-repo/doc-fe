@@ -62,6 +62,7 @@ export type FBInputProps =
   includeSelectedSchema?: boolean;
   paragraph?: string;
   testRequirement?: string;
+  isTemplate?: boolean;
 };
 
 export const OmitInputClones: FBInputType[] = ["fileupload"];

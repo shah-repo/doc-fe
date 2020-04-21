@@ -10,23 +10,30 @@ export interface FBMediaProps {
   fieldNameFromSchema: string;
   type: string;
   name: string;
+  order?: number;
 }
 
-export interface FBMediaAlbumActionProps {
-  icon: React.ReactNode;
-  onClick?: () => any;
+export interface FBMediaUrlProps {
+  url: string;
 }
+
+export type FBMediaFile = File & {
+  order: number;
+};
 
 export type FBMediaAlbumProps =
   & Pick<BoxProps, "height" | "width">
-  & Pick<FBMediaAlbumFieldProps, "collection" | "removeMedia">
+  & Pick<FBMediaAlbumFieldProps,
+  | "collection"
+  | "removeMedia"
+  | "setMediaFieldMode"
+  | "loading"
+  | "name"
+  | "onFileUploadChange"
+  | "actionsDisabled">
   & {
+    setMediaMode?: () => any;
     mediaAlbumState?: FBMediaAlbumState;
     mode?: FBMediaAlbumMode;
     title?: string;
-    actionIcons?: FBMediaAlbumActionProps[];
-    onClick?: () => any;
-    remove?: () => any;
-    name?: string;
-    fieldMode?: FBMediaAlbumFieldProps["mode"];
   };

@@ -16,13 +16,12 @@ export class FBTestStepState {
       type: "instructionsmediaupload",
       label: "Instructions Media Upload",
       name: `fb-teststep-instructionsmediaupload-${FB.uniqid()}`,
+      isTemplate: true,
     },
     {
       type: "evidencemediaupload",
       label: "Evidence Media Upload",
       name: `fb-teststep-evidencemediaupload-${FB.uniqid()}`,
-
-
     },
   ];
 }

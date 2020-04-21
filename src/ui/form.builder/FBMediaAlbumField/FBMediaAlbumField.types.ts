@@ -1,21 +1,21 @@
-import { FBMediaAlbumFieldState, FBMediaProps, FBMediaQRMode } from "..";
+import { FBMediaAlbumFieldState, FBMediaProps } from "..";
 import { FBInputProps } from "../types/common";
 
-export type FBMediaAlbumFieldMode = "mediaMode" | "qr" | "preview";
+export type FBMediaAlbumFieldMode = "media" | "qr";
 export type FBMediaStatus = "AVAILABLE" | "USED" | "OBSOLETED";
 
-export type FBMediaAlbumFieldProps = FBInputProps & {
+export type FBMediaAlbumFieldProps =
+& Pick<FBInputProps, "name" | "label" | "isTemplate">
+& {
   onFileUploadChange: (event: React.FormEvent<HTMLInputElement>) => any;
   removeMedia?: (mediaId: string) => any;
-  onClick?: () => any;
-  mode?: FBMediaAlbumFieldMode;
+  setMediaFieldMode?: () => any;
   mediaAlbumFieldState?: FBMediaAlbumFieldState;
+  actionsDisabled?: boolean;
+  mode?: FBMediaAlbumFieldMode;
   qrValue?: string;
-  qrMode?: FBMediaQRMode;
   collection?: FBMediaProps[];
   loading?: boolean;
 };
 
-export interface FBMediaUrlProps {
-  url: string;
-}
+export type FBMediaAlbumFieldConstructor = Pick<FBMediaAlbumFieldProps, "name" | "isTemplate">;

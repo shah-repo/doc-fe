@@ -1,5 +1,4 @@
-[
-  {
+[{
     "id": "1",
     "path": "/document_revisions",
     "label": "Document revisions",
@@ -90,6 +89,15 @@
     "valueKey": "id",
     "labelKey": "document.docId",
     "labelPrefixRoot": "",
+    "root": ""
+  },
+  {
+    "id": "12",
+    "path": "/document_revisions?documentTypeAcronym=PO",
+    "label": "Purchase Order list",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
     "root": ""
   }
 ]

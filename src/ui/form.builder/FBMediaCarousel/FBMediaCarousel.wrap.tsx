@@ -2,7 +2,7 @@ import _ from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBMediaCarouselProps, FBMediaCarouselState } from ".";
-import { FB } from "..";
+import { FB, FBMediaProps } from "..";
 
 export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
   Component: React.FunctionComponent<T>
@@ -11,6 +11,11 @@ export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
     collection = [],
     mediaCarouselState,
     activeMediaPath = "",
+    removeMedia,
+    toolsVisibility,
+    onMouseOver,
+    onMouseLeave,
+    handleDelete,
     handleNext,
     handleBack,
     activeStep,
@@ -20,7 +25,9 @@ export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
     const { mediaAlbumState } = FB.useStores();
 
     React.useEffect(() => {
-      mediaAlbumState?.setActiveMedia(0);
+      if (_.isUndefined(mediaAlbumState?.activeMedia)) {
+        mediaAlbumState?.setActiveMedia(0);
+      }
     }, []);
 
     handleNext = () => {
@@ -41,18 +48,39 @@ export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
       mediaAlbumState?.setActiveMedia(prevStep);
     };
 
+    handleDelete = () => {
+      const activeMedia = mediaAlbumState?.activeMedia;
+      if (_.isUndefined(activeMedia)) {
+        return;
+      }
+      const media: FBMediaProps | undefined = collection[activeMedia];
+      if (_.isUndefined(media)) {
+        return;
+      }
+      removeMedia && removeMedia(media.id);
+      mediaAlbumState?.setActiveMedia(0);
+    };
+
+    onMouseOver = () => !_.isEmpty(activeMediaPath) && mediaCarouselState?.setToolsVisible(true);
+    onMouseLeave = () => mediaCarouselState?.setToolsVisible(false);
+
     useObserver(() => {
       activeStep = mediaAlbumState?.activeMedia || 0;
-      activeMediaPath = _.get(collection[activeStep], "s3link", "");
+      activeMediaPath = collection[activeStep]?.s3link;
+      toolsVisibility = mediaCarouselState?.toolsVisibility || "hidden";
     });
 
     return Component({
       ...(props as T),
+      onMouseOver,
+      onMouseLeave,
+      activeMediaPath,
+      toolsVisibility,
       collection,
       activeStep,
-      activeMediaPath,
       handleNext,
       handleBack,
+      handleDelete,
     });
   };
 
