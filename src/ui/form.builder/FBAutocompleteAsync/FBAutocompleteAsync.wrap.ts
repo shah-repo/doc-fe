@@ -23,21 +23,12 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     ...props
   }: T) => {
 
-    autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState);
-    autocompleteAsyncState?.setOptionId(optionId);
+    autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, optionId);
     const {
       valueKey: optionValueKey = "value",
       labelKey: optionLabelKey = "text",
     } = autocompleteAsyncState?.optionConfig || {};
     const formValue = FBStore.getValue(name);
-
-    React.useEffect(() => {
-      if (!optionId) {
-        return;
-      }
-      autocompleteAsyncState?.load();
-    }, [optionId]);
-
 
     useObserver(() => {
       if (!optionId) {
