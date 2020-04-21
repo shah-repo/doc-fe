@@ -64,7 +64,6 @@ export const PODetailsContainer: React.FunctionComponent<Props> = ({
         documentRevision={documentRevision}
         purchaseOrders={purchaseOrders}
         attachments={documentRevision.formInput?.attachments}
-        supplier={supplier}
       />
       <POActions documentRevision={documentRevision} />
     </Box>
