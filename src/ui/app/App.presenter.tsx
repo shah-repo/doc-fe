@@ -10,7 +10,7 @@ import Routes from "./Routes";
 const AppPresenter: React.FunctionComponent = () => {
   const dispatch = useDispatch();
   const pingServer = useCallback(() => dispatch(authActions.pingServer()), [dispatch]);
-  const [showSpinner, toggleSpinner] = React.useState(false);
+  const [showSpinner, toggleSpinner] = React.useState(true);
 
   const pingServerAsyncInfo = useSelector((state: ApplicationState) =>
     authSelectors.getPingServerAsyncState(state));
@@ -24,7 +24,7 @@ const AppPresenter: React.FunctionComponent = () => {
     if (pingServerAsyncInfo.status === AsyncStatus.Success || pingServerAsyncInfo.status === AsyncStatus.Error) {
       setTimeout(() => {
         toggleSpinner(false);
-      }, 1000);
+      }, 500);
     }
   }, [pingServer, pingServerAsyncInfo]);
 
