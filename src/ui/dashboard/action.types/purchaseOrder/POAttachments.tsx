@@ -28,7 +28,7 @@ export const POAttachments: React.FunctionComponent<Props> = ({
   return (
     <Box marginTop="5px">
       <Box component="span" fontWeight="fontWeightBold">
-        <Text translation="common.attachment" />
+        <Text translation="common.attachments" />
         {": "}
       </Box>
       {

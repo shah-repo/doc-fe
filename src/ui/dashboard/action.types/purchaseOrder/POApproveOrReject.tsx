@@ -1,6 +1,9 @@
 import { Box } from "@material-ui/core";
-import React from "react";
+import React, { useContext } from "react";
+import { useDispatch } from "react-redux";
+import { dashboardActions } from "../../../../state/ducks/dashboard";
 import ChangeRequestTransitionDialogContainer from "../../../change.request/dialogs/ChangeRequestTransitionDialog.container";
+import { IndexContetxt } from "./PurchaseOrderApproval";
 
 interface Props {
   changeRequestId: string;
@@ -8,27 +11,36 @@ interface Props {
 
 export const POApproveOrReject: React.FunctionComponent<Props> = ({
   changeRequestId,
-}) => (
-  <Box>
-    <ChangeRequestTransitionDialogContainer
-      transition="reject"
-      changeRequestId={changeRequestId}
-      buttonProps={{
-        color: "secondary",
-        variant: "outlined",
-      }}
-      label="common.reject"
-    />
-    <ChangeRequestTransitionDialogContainer
-      transition="approve"
-      changeRequestId={changeRequestId}
-      buttonProps={{
-        color: "secondary",
-      }}
-      label="common.approve"
-    />
-  </Box>
+}) => {
+  const index = useContext(IndexContetxt);
+  const dispatch = useDispatch();
+  const removeDashboardItem = () => {
+    setTimeout(() => dispatch(dashboardActions.removeFromList(index)), 500);
+  };
 
-);
+  return (
+    <Box>
+      <ChangeRequestTransitionDialogContainer
+        transition="reject"
+        changeRequestId={changeRequestId}
+        buttonProps={{
+          color: "secondary",
+          variant: "outlined",
+        }}
+        label="common.reject"
+        onSuccess={removeDashboardItem}
+      />
+      <ChangeRequestTransitionDialogContainer
+        transition="approve"
+        changeRequestId={changeRequestId}
+        buttonProps={{
+          color: "secondary",
+        }}
+        label="common.approve"
+        onSuccess={removeDashboardItem}
+      />
+    </Box>
+  );
+};
 
 export default POApproveOrReject;

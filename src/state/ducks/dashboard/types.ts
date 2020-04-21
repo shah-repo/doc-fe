@@ -1,7 +1,7 @@
 import { ChangeRequest } from "../changeRequest";
 import { DocumentRevision } from "../documentRevisions";
 import { TrainingRecord } from "../training";
-import { PENDING_ACTIONS_LIST } from "./constants";
+import { PENDING_ACTIONS_LIST, PENDING_ACTIONS_REMOVE } from "./constants";
 
 export enum PendingActionType {
   PENDING_REVIEW = "PENDING_REVIEW",
@@ -22,6 +22,11 @@ export interface PendingAction {
 export interface PendingActionsListAction {
   type: typeof PENDING_ACTIONS_LIST;
   payload: PendingAction[];
+}
+
+export interface PendingActionsRemoveAction {
+  type: typeof PENDING_ACTIONS_REMOVE;
+  payload: number;
 }
 
 export type PendingActionsState = PendingAction[];

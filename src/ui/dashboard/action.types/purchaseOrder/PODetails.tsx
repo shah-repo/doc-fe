@@ -50,7 +50,7 @@ export const PODetails: React.FunctionComponent<Props> = ({
     <Box marginTop="15px" marginLeft="-10px">
       <GenerateHtmlPreview
         id={documentRevision.id}
-        renderHTML={documentRevision.formDocument?.renderHTML || "tes"}
+        renderHTML={documentRevision.formDocument?.renderHTML}
       />
     </Box>
   </Box>
