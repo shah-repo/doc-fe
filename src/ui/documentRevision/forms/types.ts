@@ -20,6 +20,7 @@ export interface DocumentRevisionFormValues extends FBDocumentFlowProps {
   securityGroups: OptionType[];
   outputRevision?: boolean;
   renderHTML?: string;
+  outputDocumentTypes?: OptionType[];
 }
 
 export interface SecurityId {

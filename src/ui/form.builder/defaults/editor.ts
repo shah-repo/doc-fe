@@ -1,5 +1,4 @@
 import { Dictionary } from "lodash";
-import { FBAutocompleteAsync, FBMediaAlbumField, FBParagraph, FBQuantityField, FBTimerField } from "..";
 import FBActionContainer from "../components/actions/FBActionContainer";
 import FBActionEditor from "../components/editors/FBActionEditor";
 import FBAutocompleteEditor from "../components/editors/FBAutocompleteEditor";
@@ -14,7 +13,6 @@ import FBButton from "../components/inputs/FBButton";
 import FBCheckbox from "../components/inputs/FBCheckbox";
 import FBCheckboxGroup from "../components/inputs/FBCheckboxGroup";
 import FBDatePicker from "../components/inputs/FBDatePicker";
-import FBPurchaseOrderField from "../components/inputs/FBPurchaseOrderField";
 import FBRadio from "../components/inputs/FBRadio";
 import FBRadioGroup from "../components/inputs/FBRadioGroup";
 import FBSelect from "../components/inputs/FBSelect";
@@ -27,12 +25,27 @@ import FBLink from "../components/navigation/FBLink";
 import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaItem";
 import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
 import FBApprovalField from "../FBApprovalField/FBApprovalField";
+import { FBAutocompleteAsync } from "../FBAutocompleteAsync";
 import FBEditorApprovalField from "../FBEditorApprovalField";
 import FBEditorInlineApproval from "../FBEditorInlineApproval";
+import { FBEditorInstructionsDocument } from "../FBEditorInstructionsDocument";
 import FBEditorParagraph from "../FBEditorParagraph/FBEditorParagraph";
+import { FBEditorSelectDocument } from "../FBEditorSelectDocument";
+import { FBEditorSelectRequirement } from "../FBEditorSelectRequirement";
 import FBEditorStepSection from "../FBEditorStepSection";
+import { FBEditorTestRequirement } from "../FBEditorTestRequirement";
 import FBHelloSign from "../FBHelloSign";
 import FBInlineApproval from "../FBInlineApproval";
+import FBInstructionsDocument from "../FBInstructionsDocument";
+import { FBMediaAlbumField } from "../FBMediaAlbumField";
+import { FBParagraph } from "../FBParagraph";
+import FBPurchaseOrder from "../FBPurchaseOrder";
+import { FBQuantityField } from "../FBQuantityField";
+import { FBSelectDocument } from "../FBSelectDocument";
+import { FBSelectRequirement } from "../FBSelectRequirement";
+import { FBTestRequirement } from "../FBTestRequirement";
+import { FBTestStep } from "../FBTestStep";
+import { FBTimerField } from "../FBTimerField";
 import { FBEditorElementType } from "../types/editor";
 
 export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = {
@@ -54,6 +67,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   purchaseorder: FBLabelEditor,
   paragraph: FBEditorParagraph,
   stepsection: FBEditorStepSection,
+  teststep: FBEditorStepSection,
   instructionsmediaupload: FBLabelEditor,
   evidencemediaupload: FBLabelEditor,
   checkpoint: FBLabelEditor,
@@ -62,6 +76,10 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   quantity: FBLabelEditor,
   timer: FBLabelEditor,
   inlineapproval: FBEditorInlineApproval,
+  instructionsdocument: FBEditorInstructionsDocument,
+  selectdocument: FBEditorSelectDocument,
+  selectrequirement: FBEditorSelectRequirement,
+  testRequirement: FBEditorTestRequirement,
 };
 
 export const FBFieldComponent: Dictionary<any> = {
@@ -82,9 +100,10 @@ export const FBFieldComponent: Dictionary<any> = {
   schemaItem: FBValidatorSchemaItem,
   action: FBActionContainer,
   hellosign: FBHelloSign,
-  purchaseorder: FBPurchaseOrderField,
+  purchaseorder: FBPurchaseOrder,
   paragraph: FBParagraph,
   stepsection: FBSectionBox,
+  teststep: FBTestStep,
   instructionsmediaupload: FBMediaAlbumField,
   evidencemediaupload: FBMediaAlbumField,
   checkpoint: FBButton,
@@ -93,11 +112,14 @@ export const FBFieldComponent: Dictionary<any> = {
   quantity: FBQuantityField,
   timer: FBTimerField,
   inlineapproval: FBInlineApproval,
+  instructionsdocument: FBInstructionsDocument,
+  selectdocument: FBSelectDocument,
+  selectrequirement: FBSelectRequirement,
+  testRequirement: FBTestRequirement,
 };
 
 export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
-  section: ["section", "subsection", "stepsection"],
-  representation: ["paragraph"],
+  section: ["section", "subsection", "stepsection", "teststep"],
   basics: [
     "textfield",
     "checkbox",
@@ -109,6 +131,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "select",
     "radio",
     "radiogroup",
+    "paragraph",
     "fileupload",
     "quantity",
     "timer",
@@ -116,8 +139,10 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "instructionsmediaupload",
     "evidencemediaupload",
     "inlineapproval",
+    "testRequirement",
   ],
   approvals: ["hellosign"],
+  instructions: ["instructionsdocument", "selectdocument", "selectrequirement"],
   buttons: ["checkpoint", "approval", "createlabel"],
   actions: ["action"],
 };
@@ -144,6 +169,7 @@ export const omitLabelValidation: FBEditorElementType[] = [
   "paragraph",
   "instructionsmediaupload",
   "evidencemediaupload",
+  "instructionsdocument",
 ];
 
 export const pickDefaultLabel: FBEditorElementType[] = [
@@ -153,4 +179,11 @@ export const pickDefaultLabel: FBEditorElementType[] = [
   "createlabel",
   "quantity",
   "stepsection",
+  "teststep",
+  "instructionsdocument",
+  "selectdocument",
+  "selectrequirement",
+  "testRequirement",
+  "instructionsmediaupload",
+  "evidencemediaupload",
 ];

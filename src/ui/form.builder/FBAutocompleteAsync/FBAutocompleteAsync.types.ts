@@ -6,7 +6,7 @@ export type FBAutocompleteAsyncProps =
 & Pick<Partial<AutocompleteProps>, "renderInput" | "loading" | "defaultValue" | "renderTags">
 & {
   autocompleteAsyncState?: FBAutocompleteAsyncState;
-  renderEl?: boolean;
+  selectedOptions?: string[];
 };
 
 export interface FBAutocompleteAsyncConfig  {

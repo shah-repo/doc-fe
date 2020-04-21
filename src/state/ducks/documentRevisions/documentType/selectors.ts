@@ -74,6 +74,12 @@ const getDocTypeName = createSelector(
   (byIds, docTypeId) => _.get(byIds[docTypeId], "documentTypeName", "N/A"),
 );
 
+const makeGetDocTypeByAcronym = () => createSelector(
+  (state: ApplicationState) => getDocumentTypeList(state),
+  (state: ApplicationState, acronym: string) => acronym,
+  (docTypeList, acronym) => docTypeList.find((docType) => docType.documentTypeAcronym === acronym),
+);
+
 
 export default {
   byId,
@@ -87,4 +93,5 @@ export default {
   docRevTypeById,
   getDocTypeName,
   formIds,
+  makeGetDocTypeByAcronym,
 };

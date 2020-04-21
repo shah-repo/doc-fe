@@ -1,17 +1,14 @@
 import { Box, Checkbox, makeStyles, Table, TableBody, TableCell, TableHead, TableRow, withStyles } from "@material-ui/core";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import classNames from "classnames";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Date from "../../../components/Date"; // we shouldn't use anything outside the formbuilder
 import Text from "../../../components/Text";
 import Colors from "../../../layout/theme/utils/colors";
-
-interface Props {
-  values: any[];
-  disabled: boolean;
-  editItem: (index: number) => void;
-  deleteItem: (index: number) => void;
-}
+import { FBPurchaseOrderTableProps, PurchaseOrderItem } from "../FBPurchaseOrder.types";
+import FBPurchaseOrderDialog from "../form/FBPurchaseOrderDialog";
+import FBPurchaseOrderItemDialog from "../lot/FBPurchaseOrderItemDialog";
+import { withFBPurchaseOrderTable } from "./FBPurchaseOrderTable.wrap";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -41,32 +38,19 @@ const useStyles = makeStyles({
   },
 });
 
-const FBPurchaseOrderTable: React.FunctionComponent<Props> = ({
-  values,
-  editItem,
-  deleteItem,
+const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> = ({
+  items,
   disabled,
+  handleEdit,
+  handleDelete,
+  isDialogOpen,
+  closeDialog,
+  initialValues,
+  onSubmit,
+  name,
+  isDocumentReleased,
 }) => {
   const classes = useStyles();
-  const handleEdit = (index) => () => !disabled && editItem(index);
-  const handleDelete = (index) => (e) => {
-    e.stopPropagation();
-    !disabled && deleteItem(index);
-  };
-  const [preCalc, setPreCalc] = useState<any[]>([]);
-  useEffect(() => {
-    if (!values) {
-      return;
-    }
-
-    const preCalcValues = values.map((value) => ({
-      ...value,
-      unitPrice: Number(value.unitPrice || 0).toFixed(2),
-      amount: (Number(value.unitPrice || 0) * Number(value.order || 0)).toFixed(2),
-    }));
-
-    setPreCalc(preCalcValues);
-  }, [values]);
 
   return (
     <Box className={classes.root}>
@@ -105,10 +89,10 @@ const FBPurchaseOrderTable: React.FunctionComponent<Props> = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {preCalc.map((row, index) => (
+          {items.map((row: PurchaseOrderItem, index) => (
             <TableRow
               key={index}
-              onClick={handleEdit(index)}
+              onClick={handleEdit(index, row)}
               className={classNames({ [classes.editable]: !disabled })}
             >
               <StyledTableCell align="left">{index + 1}</StyledTableCell>
@@ -120,7 +104,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<Props> = ({
               </StyledTableCell>
               <StyledTableCell colSpan={6} padding="none">{row.description}</StyledTableCell>
               <StyledTableCell>${row.unitPrice}</StyledTableCell>
-              <StyledTableCell>${row.amount}</StyledTableCell>
+              <StyledTableCell>${row.totalAmount}</StyledTableCell>
               <StyledTableCell padding="checkbox" align="center">
                 <Checkbox disabled checked={row.tax} />
               </StyledTableCell>
@@ -134,8 +118,28 @@ const FBPurchaseOrderTable: React.FunctionComponent<Props> = ({
           ))}
         </TableBody>
       </Table>
+      {
+        !isDocumentReleased && isDialogOpen &&
+        <FBPurchaseOrderDialog
+          isDialogOpen={isDialogOpen}
+          closeDialog={closeDialog}
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+          name={name}
+        />
+      }
+      {
+        isDocumentReleased && isDialogOpen &&
+        <FBPurchaseOrderItemDialog
+          isDialogOpen={isDialogOpen}
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+          name={name}
+          closeDialog={closeDialog}
+        />
+      }
     </Box>
   );
 };
 
-export default FBPurchaseOrderTable;
+export default withFBPurchaseOrderTable(FBPurchaseOrderTable);

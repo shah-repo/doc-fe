@@ -2,7 +2,7 @@ import { Box, Grid } from "@material-ui/core";
 import classNames from "classnames";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import { get } from "lodash";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
@@ -13,7 +13,6 @@ import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { SelectOption } from "../../components/forms/fields/Select";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 import DocumentHeader from "../../document.revision/summary/header";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -128,11 +127,11 @@ DocumentRevisionFormContainerProps
     [documentTypes],
   );
 
-  const otherTypes: SelectOption[] = useMemo(
+  const otherTypes: OptionType[] = useMemo(
     () =>
-      documentTypes.reduce((acc: SelectOption[], document) => {
+      documentTypes.reduce((acc: OptionType[], document) => {
         if (document.group === "OTHER") {
-          acc.push({ value: document.id, text: document.documentTypeName });
+          acc.push({ value: document.id, label: document.documentTypeName });
         }
         return acc;
       }, []),
@@ -145,6 +144,19 @@ DocumentRevisionFormContainerProps
   const onUpgradeClick = () => {
     async.start(upgradeAction, documentRevision.id, async);
   };
+
+  useEffect(() => {
+    if (type !== "newVersion" &&
+      !initialValues.document?.docId &&
+      loadDocumentProposedId &&
+      initialValues.document?.documentType?.documentTypeAcronym) {
+      loadDocumentProposedId(initialValues.document.documentType.documentTypeAcronym);
+    }
+    if (setDocId && initialValues.document?.docId) {
+      setDocId(initialValues.document?.docId);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialValues.document?.documentType?.documentTypeAcronym]);
 
   document = document || ({} as Document);
   const classes = styles();

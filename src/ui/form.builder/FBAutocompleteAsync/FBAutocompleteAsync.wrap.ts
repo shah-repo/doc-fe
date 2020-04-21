@@ -11,6 +11,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
   const Comp = ({
     autocompleteAsyncState,
     optionValueType = "key",
+    selectedOptions,
     getOptionLabel,
     defaultValue,
     optionId,
@@ -24,8 +25,8 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState);
     autocompleteAsyncState?.setOptionId(optionId);
     const {
-      valueKey: optionValueKey = "id",
-      labelKey: optionLabelKey = "name",
+      valueKey: optionValueKey = "value",
+      labelKey: optionLabelKey = "text",
     } = autocompleteAsyncState?.optionConfig || {};
     const formValue = FBStore.getValue(name);
 
@@ -40,13 +41,18 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       if (!optionId) {
         return;
       }
-      options = autocompleteAsyncState?.sliceData;
+      const slicedOptions = autocompleteAsyncState?.sliceData;
+      if (slicedOptions) {
+        options = selectedOptions
+          ? autocompleteAsyncState?.sliceValue(selectedOptions)
+          : slicedOptions;
+      }
       loading = !options && autocompleteAsyncState?.loading;
     });
 
     if (options && formValue && optionValueType === "key") {
-      optionValueType = "object";
-      defaultValue = autocompleteAsyncState?.sliceValue(formValue);
+      const value = autocompleteAsyncState?.sliceValue(formValue);
+      defaultValue = _.map(value, { optionValueKey });
     }
 
     getOptionLabel = (option) => {
@@ -63,6 +69,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       optionLabelKey,
       optionValueType,
       getOptionLabel,
+      selectedOptions,
       defaultValue,
       multiple,
       name,
