@@ -1,6 +1,7 @@
 import { Box } from "@material-ui/core";
 import React, { useState } from "react";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
+import { FBAutocompleteAsyncOption } from "../../../form.builder";
 import { PurchaseOrder } from "../../../form.builder/FBPurchaseOrder/FBPurchaseOrder.types";
 import { FBInputProps } from "../../../form.builder/types/common";
 import POActions from "./POActions";
@@ -15,39 +16,21 @@ export const PODetailsContainer: React.FunctionComponent<Props> = ({
 }) => {
   const [purchaseOrders] = useState<PurchaseOrder[]>(() => {
     const schema = documentRevision.formDocument?.formTemplate?.schema;
-    const isSchemaArray = Array.isArray(schema);
-    if (!isSchemaArray) {
-      return [];
-    }
     return (schema as FBInputProps[]).reduce<PurchaseOrder[]>((acc, { type, name }) => {
-      if (((type) !== "purchaseorder")) {
-        return acc;
+      if ((type === "purchaseorder") && name && documentRevision.formInput?.[name]) {
+        return acc.concat(documentRevision.formInput[name]);
       }
-      if (name === undefined) {
-        return acc;
-      }
-      if (!documentRevision.formInput) {
-        return acc;
-      }
-      if (!documentRevision.formInput[name]) {
-        return acc;
-      }
-      return acc.concat(documentRevision.formInput[name]);
+      return acc;
     }, []);
   });
   const [supplierId] = useState(() => {
     const schema = documentRevision.formDocument?.formTemplate?.schema;
-    const isSchemaArray = Array.isArray(schema);
-    if (!isSchemaArray || !documentRevision.formInput) {
-      return "";
-    }
 
-    const fieldName = (schema as FBInputProps[]).find((schemaItem) => schemaItem.optionId === "5")?.name;
-    if (!fieldName) {
-      return "";
-    }
+    const fieldName = (schema as FBInputProps[])
+      .find((schemaItem) => schemaItem.optionId === FBAutocompleteAsyncOption.supplier)
+      ?.name;
 
-    return documentRevision.formInput[fieldName];
+    return documentRevision.formInput?.[fieldName || ""];
   });
 
   return (

@@ -19,7 +19,8 @@ export const POSupplier: React.FunctionComponent<Props> = ({
     }
 
     dispatch(documentRevisionsActions.load(supplierId));
-  }, [supplierId, docRevById, dispatch]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [supplierId, dispatch]);
 
   return (
     <Box marginBottom="5px">
