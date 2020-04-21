@@ -6,23 +6,27 @@ import { Attachment } from "../../../change.request/form/types";
 import Text from "../../../components/Text";
 import { PurchaseOrder } from "../../../form.builder/FBPurchaseOrder/FBPurchaseOrder.types";
 import POAttachments from "./POAttachments";
+import POSupplier from "./POSupplier";
 
 interface Props {
   documentRevision: DocumentRevision;
   purchaseOrders: PurchaseOrder[];
   attachments?: Attachment[];
+  supplierId: string;
 }
 
 export const PODetails: React.FunctionComponent<Props> = ({
   documentRevision,
   purchaseOrders,
   attachments = [],
+  supplierId,
 }) => {
   const [showAttachments] = useState(attachments.length > 0);
   const [isExpanded, setIsExpanded] = useState(false);
   const handleChange = () => setIsExpanded(!isExpanded);
   const renderDetails = (
     <Box>
+      <POSupplier supplierId={supplierId} />
       {
         purchaseOrders.map((order, index) => (
           <Box key={index}>

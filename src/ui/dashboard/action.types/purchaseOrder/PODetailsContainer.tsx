@@ -35,9 +35,7 @@ export const PODetailsContainer: React.FunctionComponent<Props> = ({
       return acc.concat(documentRevision.formInput[name]);
     }, []);
   });
-  /*
-  Suppplier name is not stored, ony the ID. We'll need a workaround
-  const [supplier] = useState(() => {
+  const [supplierId] = useState(() => {
     const schema = documentRevision.formDocument?.formTemplate?.schema;
     const isSchemaArray = Array.isArray(schema);
     if (!isSchemaArray || !documentRevision.formInput) {
@@ -51,7 +49,6 @@ export const PODetailsContainer: React.FunctionComponent<Props> = ({
 
     return documentRevision.formInput[fieldName];
   });
-  */
 
   return (
     <Box
@@ -64,6 +61,7 @@ export const PODetailsContainer: React.FunctionComponent<Props> = ({
         documentRevision={documentRevision}
         purchaseOrders={purchaseOrders}
         attachments={documentRevision.formInput?.attachments}
+        supplierId={supplierId}
       />
       <POActions documentRevision={documentRevision} />
     </Box>
