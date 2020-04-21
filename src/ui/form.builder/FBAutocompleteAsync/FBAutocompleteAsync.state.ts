@@ -8,6 +8,11 @@ import FBAutocompleteAsyncStore from "./FBAutocompleteAsync.store";
 export class FBAutocompleteAsyncState extends FBRequest<any, any> {
   private optionId: string | undefined;
 
+  public constructor(optionId?: string) {
+    super();
+    this.setOptionId(optionId);
+  }
+
   @computed public get optionConfig(): FBAutocompleteAsyncConfig | undefined {
     if (!this.optionId) {
       return;
@@ -37,6 +42,7 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
 
   @action public setOptionId = (id?: string) => {
     set(this, "optionId", id);
+    this.load();
   };
 
   @action public load = (force = false) => {
