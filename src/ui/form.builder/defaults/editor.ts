@@ -25,7 +25,7 @@ import FBLink from "../components/navigation/FBLink";
 import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaItem";
 import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
 import FBApprovalField from "../FBApprovalField/FBApprovalField";
-import FBApprovalMatrixField from "../FBApprovalMatrix/FBApprovalMatrixField";
+import FBApprovalMatrix from "../FBApprovalMatrix";
 import { FBAutocompleteAsync } from "../FBAutocompleteAsync";
 import FBEditorApprovalField from "../FBEditorApprovalField";
 import FBEditorInlineApproval from "../FBEditorInlineApproval";
@@ -102,7 +102,7 @@ export const FBFieldComponent: Dictionary<any> = {
   schemaItem: FBValidatorSchemaItem,
   action: FBActionContainer,
   hellosign: FBHelloSign,
-  approvalMatrix: FBApprovalMatrixField,
+  approvalMatrix: FBApprovalMatrix,
   purchaseorder: FBPurchaseOrder,
   paragraph: FBParagraph,
   stepsection: FBSectionBox,

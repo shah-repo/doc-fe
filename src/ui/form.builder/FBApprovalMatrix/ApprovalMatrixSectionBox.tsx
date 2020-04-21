@@ -7,7 +7,6 @@ import Text from "../../components/Text";
 import { FBFormDefaultProps } from "../types/common";
 
 export interface Props extends FBFormDefaultProps {
-  isOpen: boolean;
   openDialog: () => void;
   closeDialog: () => void;
   alreadyOpened?: boolean;
@@ -18,7 +17,6 @@ export interface Props extends FBFormDefaultProps {
 
 const ApprovalMatrixSectionBox: React.FunctionComponent<Props> = ({
   label,
-  isOpen,
   openDialog,
   closeDialog,
   alreadyOpened,
@@ -45,7 +43,7 @@ const ApprovalMatrixSectionBox: React.FunctionComponent<Props> = ({
         >
           <EditIcon style={{ paddingRight: 5 }}  />
           <Box>
-            <Text message="Edit Matrix" />
+            <Text message={editMode ? "Close edit mode" : "Edit Matrix"} />
           </Box>
         </Button>
       </Box>

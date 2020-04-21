@@ -1,12 +1,28 @@
-import { FormControl } from "@material-ui/core";
+import { InputBase, MenuItem, Select, withStyles } from "@material-ui/core";
 import React from "react";
 import { useBlockLayout, useTable } from "react-table";
 import { useSticky } from "react-table-sticky";
 import styled from "styled-components";
-import InputField from "../../components/forms/fields/Input";
-import SelectField from "../../components/forms/fields/Select";
 import { FBFormDefaultProps } from "../types/common";
 
+const BootstrapInput = withStyles((theme) => ({
+  root: {
+    "label + &": {
+      marginTop: theme.spacing(3),
+    },
+    "width": "94px",
+  },
+  input: {
+    position: "relative",
+    padding: 2,
+    fontSize: 12,
+    border: "1px solid lightgray",
+    fontFamily: "Open Sans, sans-serif",
+  },
+  selectMenu: {
+    padding: 0,
+  },
+}))(InputBase);
 
 const Styles = styled.div`
   .table {
@@ -130,6 +146,16 @@ const Styles = styled.div`
         font-size: 12px;
       }
     }
+    .capitalize {
+      text-transform: uppercase;
+      font-family: Open Sans, sans-serif;
+      color: #4d4d4d;
+    }
+    .input {
+      font-family: Open Sans, sans-serif;
+      color: #4d4d4d;
+      font-size: 12px;
+    }
   }
 `;
 
@@ -137,29 +163,21 @@ export interface Props extends FBFormDefaultProps {
   data: any[];
   columns: any[];
   editMode: boolean;
+  handleAddRoleItems: (index: number, item: string, type: string) => void;
 }
 
 const ReactTable: React.FunctionComponent<Props> = ({
-  data, columns, editMode,
+  data, columns, editMode, handleAddRoleItems,
 }) => {
 
-  // const renderEditable = (cellInfo) => {
-  //   return (
-  //     <div
-  //       style={{ backgroundColor: "#fafafa" }}
-  //       contentEditable
-  //       suppressContentEditableWarning
-  //       onBlur={(e) => {
-  //         const data = [...this.state.data];
-  //         data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-  //         data[cellInfo.index].full = data[cellInfo.index].age * 2;
-  //       }}
-  //       dangerouslySetInnerHTML={{
-  //         __html: this.state.data[cellInfo.index][cellInfo.column.id],
-  //       }}
-  //     />
-  //   );
-  // };
+  const readInputValue = (event, header, index) => {
+    handleAddRoleItems(index, event.target.value, header);
+  };
+
+  const readSelectValue = (event, index) => {
+    handleAddRoleItems(index, event.target.value, "internalType");
+  };
+
 
   const {
     getTableProps,
@@ -217,45 +235,29 @@ const ReactTable: React.FunctionComponent<Props> = ({
                   if (cell.row.values.name === "" && (cell.column.Header === "Internal type") ) {
                     return (
                       <div key={index} {...cell.getCellProps()} className="td">
-                        <FormControl className="control" id="ApprovalMatrix-selectField" style={{ width: "100%", height: 20 }}>
-                          <SelectField
-                            name={cell.row.values.index}
-                            includeEmpty={false}
-                            options={[{ value: "DOC", text: "DOC" }, { value: "RSD", text: "RSD" }]}
-                            selectProps={{
-                              placeholder: "Select...",
-                              style: {
-                                margin: 0,
-                                height: 20,
-                                padding: 0,
-                                marginTop: 0,
-                              },
-                              className: "muiRoot",
-                            }}
-                            inputFieldProps={{
-                              style: { marginTop: 0 },
-                            }}
-                          />
-                        </FormControl>
+                        <Select
+                          value={cell.row.values.internalType}
+                          onChange={(e) => readSelectValue(e, cell.row.index)}
+                          input={<BootstrapInput />}
+                        >
+                          <MenuItem value={"DOC"}>DOC</MenuItem>
+                          <MenuItem value={"FORM"}>FORM</MenuItem>
+                          <MenuItem value={"OTHER"}>OTHER</MenuItem>
+                        </Select>
                       </div>
                     );
                   }
                   if (cell.row.values.name === "" && ((cell.column.Header === "Prefix") || (cell.column.Header === "Document type"))) {
+                    const name = cell.column.Header === "Prefix" ? "prefix" : "documentType";
                     return (
                       <div key={index} {...cell.getCellProps()} className="td">
-                        <FormControl className="control" id="ApprovalMatrix-selectField" style={{ width: "100%", height: 20 }}>
-                          <InputField name={cell.column.Header === "Prefix" ? "prefix" : "documentType"} inputProps={
-                            {
-                              style: {
-                                margin: 0,
-                                height: 20,
-                                padding: 0,
-                                marginTop: 0,
-                              },
-                              className: "muiInput",
-                            }
-                          } />
-                        </FormControl>
+                        <input
+                          type="text"
+                          name={name}
+                          onChange={(e) => readInputValue(e, name, cell.row.index)}
+                          style={{ width: name === "prefix" ? 44 : 185, padding: 3, border: "1px solid lightgray" }}
+                          className={name === "prefix" ? "capitalize" : "input"}
+                        />
                       </div>
                     );
                   }

@@ -1,7 +1,7 @@
 import { Nullable } from "../../common";
 import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST } from "./constants";
 
-export type DocumentGroupType = "FORM" | "OTHER";
+export type DocumentGroupType = "FORM" | "OTHER" | "DAM";
 
 export interface PageDetailsColumn {
   label: string;
