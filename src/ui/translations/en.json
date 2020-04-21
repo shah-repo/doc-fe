@@ -282,6 +282,7 @@
   "common.line.items": "Line items",
   "common.undefined": "Undefined",
   "common.summary": "Summary",
+  "common.supplier": "Supplier",
   "output.info": "Form Info",
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",
