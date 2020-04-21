@@ -17,7 +17,7 @@ export const DashboardActionTypeBase: React.FunctionComponent<Props> = ({
   url,
   children,
 }) => (
-  <Box marginBottom="20px" marginTop="20px">
+  <Box marginBottom="15px" marginTop="15px">
     <Box
       display="flex"
       justifyContent="space-between"
