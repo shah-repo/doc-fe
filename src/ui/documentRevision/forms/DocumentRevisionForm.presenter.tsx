@@ -384,7 +384,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         )}
         {FBStore.active && (
           <Box mt={5}>
-            {values.id && <GenerateHtmlPreview id={values.id} renderHTML={values.formDocument?.renderHTML} />}
+            {
+              values.id &&
+              <Box textAlign="right">
+                <GenerateHtmlPreview id={values.id} renderHTML={values.formDocument?.renderHTML} />
+              </Box>
+            }
             <FBWorkspaceForm
               id={get(values, "id")}
               documentId={get(values, "formDocument.document.id") || get(values, "document.id")}
