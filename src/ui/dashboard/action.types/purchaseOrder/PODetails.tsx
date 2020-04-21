@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
 import { Attachment } from "../../../change.request/form/types";
 import Text from "../../../components/Text";
-import GenerateHtmlPreview from "../../../documentRevision/forms/presenters/GenerateHtmlPreview";
 import { PurchaseOrder } from "../../../form.builder/FBPurchaseOrder/FBPurchaseOrder.types";
 import POAttachments from "./POAttachments";
 
@@ -19,6 +18,7 @@ export const PODetails: React.FunctionComponent<Props> = ({
   purchaseOrders,
   attachments = [],
 }) => {
+  const [showAttachments] = useState(attachments.length > 0);
   const [isExpanded, setIsExpanded] = useState(false);
   const handleChange = () => setIsExpanded(!isExpanded);
   const renderDetails = (
@@ -50,13 +50,7 @@ export const PODetails: React.FunctionComponent<Props> = ({
           </Box>
         ))
       }
-      <POAttachments attachments={attachments} />
-      <Box marginTop="15px" marginLeft="-15px">
-        <GenerateHtmlPreview
-          id={documentRevision.id}
-          renderHTML={documentRevision.formDocument?.renderHTML}
-        />
-      </Box>
+      {showAttachments && <POAttachments attachments={attachments} />}
     </Box>
   );
 

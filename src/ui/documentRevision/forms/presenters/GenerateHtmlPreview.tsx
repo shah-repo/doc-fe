@@ -1,4 +1,5 @@
-import { Button } from "@material-ui/core";
+import { Button, IconButton } from "@material-ui/core";
+import GetAppIcon from "@material-ui/icons/GetApp";
 import * as React from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
@@ -15,10 +16,12 @@ import useAsync from "../../../hooks/useAsync";
 export interface Props {
   id?: string;
   renderHTML?: Nullable<string>;
+  showDownloadButton?: boolean;
 }
 const GenerateHtmlPreview: React.FunctionComponent<Props> = ({
   id,
   renderHTML,
+  showDownloadButton = false,
 }) => {
   const intl = useIntl();
   const employeeId = useSelector(authSelectors.currentEmployeeId);
@@ -68,6 +71,18 @@ const GenerateHtmlPreview: React.FunctionComponent<Props> = ({
 
   if (!renderHTML) {
     return null;
+  }
+
+  if (showDownloadButton) {
+    return (
+      <IconButton
+        onClick={handleClick}
+        disabled={htmlRequested}
+        color="secondary"
+      >
+        <GetAppIcon />
+      </IconButton>
+    );
   }
 
   return (
