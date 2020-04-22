@@ -20,7 +20,7 @@ interface Props {
 export const styles = makeStyles(() =>
   createStyles({
     boxWithBorder: {
-      borderBottom: `1.5px solid ${"#B4C0CA"}`,
+      borderBottom: `1px solid ${"#B4C0CA"}`,
     },
     boxWithoutBorder: {
       border: "none",
@@ -44,7 +44,7 @@ const ApprovalRolesPresenter: React.FunctionComponent<Props> = ({
 
   const approvalRoleRenderer = () => (
     <Box paddingBottom="16px">
-      <Typography variant="h4">
+      <Typography variant="h6">
         <Text translation="form.builder.approval.role" />
       </Typography>
       <TextField
@@ -60,7 +60,7 @@ const ApprovalRolesPresenter: React.FunctionComponent<Props> = ({
 
   const approvingUsersRenderer = () => (
     <Box paddingBottom="16px">
-      <Typography variant="h4" style={{ marginBottom: "16px" }}>
+      <Typography variant="h6" style={{ marginBottom: "16px" }}>
         <Text translation="form.builder.approving.users" />
       </Typography>
       <Select
@@ -83,7 +83,7 @@ const ApprovalRolesPresenter: React.FunctionComponent<Props> = ({
 
   const approvingGroupsRenderer = () => (
     <Box>
-      <Typography variant="h4" style={{ marginBottom: "16px" }}>
+      <Typography variant="h6" style={{ marginBottom: "16px" }}>
         <Text translation= "form.builder.approving.groups" />
       </Typography>
       <Select

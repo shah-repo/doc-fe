@@ -41,7 +41,7 @@ const ApprovalRoles: React.FunctionComponent<Props> = ({
       setActiveEmployees(data);
     },
   });
-  const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
+  const groupOptions = useSelector(userManagementSelectors.getOfficialGroups);
 
   useEffect(() => {
     if (disabled && !isDocumentReleased) {
