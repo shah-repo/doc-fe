@@ -1,5 +1,8 @@
 import _ from "lodash";
 import React from "react";
+import { FB, FBButton } from "../..";
+import FBTextField from "../../components/inputs/FBTextField";
+import { FBFieldName } from "../../helpers/FBFieldName";
 import FBDynamicValidatorStore from "../../stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../stores/ui/FBStore";
 import { FBInputProps } from "../../types/common";
@@ -11,6 +14,7 @@ export const withOnChange = <T extends FBInputProps>(
   onChange,
   afterChange,
   includeContext = false,
+  approveIsBlocking,
   contextLabel,
   showContext,
   type,
@@ -18,8 +22,11 @@ export const withOnChange = <T extends FBInputProps>(
   form,
   name,
   multiple,
+  approved,
   ...props
 }: T) => {
+
+  const { dialogState } = FB.useStores();
   function contextState(): boolean {
     const fieldName = field?.name || "";
     const fieldValue = FBStore.getValue(fieldName);
@@ -79,6 +86,35 @@ export const withOnChange = <T extends FBInputProps>(
     ev: React.ChangeEvent<{ value: any; checked: boolean }>,
     value: any = undefined,
   ) => {
+    // TODO: refactoring needed
+    const oldValue = FBStore.getValue(name);
+    const reasonName = name + FBFieldName.ApproveReasoning;
+    if (approved && !approveIsBlocking && !form?.values[reasonName]) {
+      dialogState?.config({
+        open: true,
+        maxWidth: "md",
+        content: (
+          <FBTextField
+            label="form.builder.change.reasoning"
+            name={reasonName} />
+        ),
+        actions: (
+          <>
+            <FBButton label="common.cancel" onClick={() => {
+              name && storeValue(name, oldValue);
+              dialogState.closeDialog();
+            }} />
+            <FBButton label="common.save" onClick={() => {
+              if (!FBStore.getValue(reasonName)) {
+                name && storeValue(name, oldValue);
+              }
+              dialogState.closeDialog();
+            }} />
+          </>
+        ),
+      });
+    }
+
     if ((!form && !field) || !name) {
       return;
     }
@@ -151,6 +187,8 @@ export const withOnChange = <T extends FBInputProps>(
     includeContext,
     showContext: contextState(),
     contextLabel,
+    approveIsBlocking,
+    approved,
     type,
     field,
     form,
