@@ -9,7 +9,7 @@ import FBStore from "./FBStore";
 
 export class FormBuilderValidatorStored {
   @observable public errors: Dictionary<string> = {};
-  @observable public indicatorValues: Dictionary<Dictionary<string>> = {};
+  @observable public indicatorValues: Dictionary<Dictionary<any>> = {};
   public applicableOn = false;
   public activeValidatorType?: FBEditorElementType;
   public customValidator?: FBValidatorConfigProps;
