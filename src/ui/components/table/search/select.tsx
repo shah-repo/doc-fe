@@ -27,7 +27,7 @@ export const TableSearchSelectField: React.FunctionComponent<Props> = ({
   };
 
   const menuItemRenderer = (option: SelectOption) => (
-    <MenuItem key={option.value} value={option.value}>{/* {option.text} */}<Text message={option.text} /></MenuItem>
+    <MenuItem key={option.value} value={option.value}><Text message={option.text} /></MenuItem>
   );
 
   return (
