@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { FBProvider } from "../..";
+import { FBProvider, FBSnackbar } from "../..";
 import { companySelectors } from "../../../../state/ducks/company";
 import useDialog from "../../../hooks/useDialog";
 import FBAddFieldButton0 from "../../components/custom/FBAddFieldButton0";
@@ -20,6 +20,7 @@ import ViewValidatorPresenter from "./ViewValidator.presenter";
 const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
   includeTransport = true,
   dialogState,
+  snackbarState,
   isStarter = true,
   schema = [],
   form,
@@ -47,7 +48,8 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
   }, [isHelloSignIntegrationEnabled]);
 
   return (
-    <FBProvider {...{ dialogState }}>
+    <FBProvider {...{ dialogState, snackbarState }}>
+      <FBSnackbar autoHideDuration={6000}/>
       {isStarter && <FBAddFieldButton0 />}
       {!isStarter && <FBSortableContainer items={schema} />}
       {includeTransport && <FBTransportSchema />}
@@ -66,6 +68,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
       <FBFormMarkDown />
       <FBEditorDialog />
       <FBDialog />
+
     </FBProvider>
   );
 };

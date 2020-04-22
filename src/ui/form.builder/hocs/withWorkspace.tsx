@@ -1,7 +1,7 @@
 import { Dictionary } from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
-import { FB } from "..";
+import { FB, FBSnackbarState } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { FBDialogState } from "../FBDialog";
 import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
@@ -15,6 +15,7 @@ export const withWorkspace = <T extends FBWorkspaceProps>(
 ) => {
   const Comp = (props: T) => {
     const dialogState = FB.useRef<FBDialogState>(FBDialogState);
+    const snackbarState = FB.useRef<FBSnackbarState>(FBSnackbarState);
 
     React.useEffect(() => {
       FBDynamicValidatorStore.registerValidators();
@@ -38,6 +39,7 @@ export const withWorkspace = <T extends FBWorkspaceProps>(
       values,
       form: props.form,
       dialogState,
+      snackbarState,
     });
   };
 
