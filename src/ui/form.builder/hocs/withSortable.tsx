@@ -31,36 +31,40 @@ export function withSortable<T extends FBSortableProps>(
       );
     }
 
-    private isApproved = (schema: FBTemplateSchema): boolean => {
+    private isApproved = (schema: FBTemplateSchema): {disabled: boolean; approved: boolean} => {
       const { index = 0 } = schema;
-      let approved = true;
+      let state = { disabled: false, approved: false };
 
       _.range(index, _.size(FBStore.getSchema())).some((_item, current) => {
         const activeSchema = FBStore.getSchema()[current + index];
         const { type, name = "" } = activeSchema;
         const activeConfig = type === "approval" ? activeSchema : FBStore.getValue(name);
         const { approveIsBlocking = false } = activeConfig || {};
-        if ((type === "inlineapproval" || type === "approval") && approveIsBlocking) {
+        if ((type === "inlineapproval" || type === "approval")) {
 
           const hasValue = type === "approval"
             ? FBStore.getValue(name)
             : FBStore.getValue(`${FBFieldName.InlineApproval}${name}`);
-          approved = Boolean(hasValue);
+          state = {
+            disabled: approveIsBlocking ? Boolean(hasValue) : false,
+            approved: Boolean(hasValue),
+          };
+
           return true;
         }
       });
-      return approved;
+      return state;
     };
 
     private wrapperRenderer = (schema: FBTemplateSchema) => {
       const { type } = schema;
       const InputType = FBFieldComponent[type as string];
-
       let { disabled } = FBStore.fieldMode;
 
       // Approved state
-      !this.isApproved(schema) && (disabled = true);
-      return <InputType key={schema.name} {...schema} {...{ disabled }} />;
+      const state = this.isApproved(schema);
+      state.disabled && (disabled = true);
+      return <InputType key={schema.name} {...schema} {...{ disabled }} approved={state.approved} />;
     };
 
     private onSortEnd = ({ oldIndex, newIndex }: SortEnd) => {
