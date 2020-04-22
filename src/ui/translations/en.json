@@ -593,5 +593,11 @@
   "group.management.group.type": "Group Type",
   "group.management.list.of.users": "Start typing to see the list of users…",
   "change.owner": "Change Owner",
-  "change.owner.update": "Update Owner"
+  "change.owner.update": "Update Owner",
+  "DRAFT": "DRAFT",
+  "PENDING_CHANGE": "PENDING_CHANGE",
+  "IN_REVIEW": "IN_REVIEW",
+  "RELEASED": "RELEASED",
+  "DEPRECATED": "SUPERSEDED",
+  "OBSOLETE": "OBSOLETE"
 }

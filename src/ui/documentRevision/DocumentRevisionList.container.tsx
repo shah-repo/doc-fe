@@ -1,10 +1,4 @@
-import {
-  ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
-  List,
-  Typography,
-} from "@material-ui/core";
+import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, List, Typography } from "@material-ui/core";
 import ExpandLessIcon from "@material-ui/icons/ExpandMore";
 import classNames from "classnames";
 import React, { useCallback, useEffect } from "react";
@@ -95,7 +89,7 @@ DocumentRevisionListContainerProps
                           documentRevision.revisionStage,
                           documentRevision.revisionChangeType,
                         )}
-                        &nbsp; - {documentRevision.status}
+                        &nbsp; - <Text message={documentRevision.status} />
                       </div>
                     </NavLink>
                     <NavLink
