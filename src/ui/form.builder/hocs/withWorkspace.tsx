@@ -15,6 +15,9 @@ export const withWorkspace = <T extends FBWorkspaceProps>(
 ) => {
   const Comp = (props: T) => {
     const dialogState = FB.useRef<FBDialogState>(FBDialogState);
+    // Let us change doc id value on every render
+    // while FBStore is a global store and we have change company remaining data issue
+    FBStore.documentId = props.documentId || "";
 
     React.useEffect(() => {
       FBDynamicValidatorStore.registerValidators();
