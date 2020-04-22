@@ -4,7 +4,6 @@ import { useIntl } from "react-intl";
 import Select from "react-select";
 import Text from "../../../components/Text";
 import { toMembersOptions } from "../../../group.management/utils/transform";
-import { toOptions } from "./utils/transform";
 
 interface Props {
   name: string;
@@ -13,6 +12,9 @@ interface Props {
   groupOptions: any;
   employeeOptions: any;
   isWithoutBorder: boolean;
+  handleEditRoleDetails: (e, index, type) => void;
+  index?: number;
+  isDisabled: boolean;
 }
 
 export const styles = makeStyles(() =>
@@ -33,6 +35,9 @@ const ApprovalRolesPresenter: React.FunctionComponent<Props> = ({
   employeeOptions,
   groupOptions,
   isWithoutBorder,
+  handleEditRoleDetails,
+  index,
+  isDisabled,
 }) => {
   const intl = useIntl();
   const classes = styles();
@@ -46,6 +51,8 @@ const ApprovalRolesPresenter: React.FunctionComponent<Props> = ({
         variant="outlined"
         id="ApprovalRoles-groupName"
         value={name}
+        disabled={isDisabled}
+        onChange={(e) => handleEditRoleDetails(e, index, "name")}
         style={{ width: "100%", marginTop: "16px" }}
       />
     </Box>
@@ -60,7 +67,13 @@ const ApprovalRolesPresenter: React.FunctionComponent<Props> = ({
         id="ApprovalRoles-members"
         isMulti={true}
         options={toMembersOptions(employeeOptions)}
-        value={toMembersOptions(employees)}
+        value={toMembersOptions(employeeOptions).filter((option) => {
+          if (employees.map((employee) => employee.id).includes(option.value)) {
+            return option;
+          }
+          return null;
+        })}
+        onChange={(e) => handleEditRoleDetails(e, index, "employees")}
         placeholder={intl.formatMessage({
           id: "form.builder.approving.roles.placeholder",
         })}
@@ -77,7 +90,13 @@ const ApprovalRolesPresenter: React.FunctionComponent<Props> = ({
         id="ApprovalRoles-members"
         isMulti={true}
         options={groupOptions}
-        value={toOptions(groups)}
+        value={groupOptions.filter((option) => {
+          if (groups.map((group) => group.id).includes(option.value)) {
+            return option;
+          }
+          return null;
+        })}
+        onChange={(e) => handleEditRoleDetails(e, index, "groups")}
         placeholder={intl.formatMessage({
           id: "form.builder.approving.roles.placeholder",
         })}
@@ -86,7 +105,11 @@ const ApprovalRolesPresenter: React.FunctionComponent<Props> = ({
   );
 
   return (
-    <Box className={isWithoutBorder ? classes.boxWithoutBorder : classes.boxWithBorder} paddingBottom="32px" marginBottom="16px">
+    <Box
+      className={isWithoutBorder ? classes.boxWithoutBorder : classes.boxWithBorder}
+      paddingBottom="32px"
+      marginBottom="16px"
+    >
       {approvalRoleRenderer()}
       {approvingUsersRenderer()}
       {approvingGroupsRenderer()}

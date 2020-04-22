@@ -1,14 +1,22 @@
-import { Box, Button, createStyles, Dialog, DialogContent, makeStyles } from "@material-ui/core";
+import { Box, Button, createStyles, Dialog, DialogContent, makeStyles, Typography } from "@material-ui/core";
 import React from "react";
 import Text from "../../../components/Text";
 import useDialog from "../../../hooks/useDialog";
 import FBButton from "../../components/inputs/FBButton";
+import { ApprovalRole } from "../FBApprovalMatrix.types";
 import ApprovalRolesPresenter from "./ApprovalRoles.presenter";
 
 interface Props {
   activeEmployees: any;
   groupOptions: any;
-  onClick: () => void;
+  onSave: (dialog) => void;
+  handleEditRoleDetails: (e, index, type) => void;
+  isDisabled: boolean;
+  addAnotherRole: () => void;
+  approvalRoles: ApprovalRole[];
+  handleCancelDialogRole: () => void;
+  errorMessage: string;
+  disabled: boolean;
 }
 
 const styles = makeStyles(() =>
@@ -26,7 +34,14 @@ const styles = makeStyles(() =>
 export const AddRoleDialog: React.FunctionComponent<Props> = ({
   activeEmployees,
   groupOptions,
-  onClick,
+  onSave,
+  handleEditRoleDetails,
+  isDisabled,
+  addAnotherRole,
+  approvalRoles,
+  handleCancelDialogRole,
+  errorMessage,
+  disabled,
 }) => {
   const classes = styles();
   const dialog = useDialog();
@@ -38,7 +53,11 @@ export const AddRoleDialog: React.FunctionComponent<Props> = ({
         label="form.builder.add.another.role"
         variant="outlined"
         style={{ margin: "0px 0px 32px 0px" }}
-        onClick={dialog.open}
+        onClick={() => {
+          addAnotherRole();
+          dialog.open();
+        }}
+        disabled={disabled}
       />
       <Dialog
         disableEscapeKeyDown={true}
@@ -53,25 +72,33 @@ export const AddRoleDialog: React.FunctionComponent<Props> = ({
           classes={{ root: classes.dialogContent }}
           id="AddRoleDialog-content"
         >
+          {errorMessage && <Typography variant="subtitle2" color="error" style={{ marginTop: 10 }} >
+            <Text message={errorMessage} /></Typography>}
           <ApprovalRolesPresenter
-            name={""}
-            groups={[]}
-            employees={[]}
+            isDisabled={isDisabled}
+            handleEditRoleDetails={handleEditRoleDetails}
+            name={approvalRoles[approvalRoles.length - 1] && approvalRoles[approvalRoles.length - 1].name}
+            groups={approvalRoles[approvalRoles.length - 1] && approvalRoles[approvalRoles.length - 1].groups}
+            employees={approvalRoles[approvalRoles.length - 1] && approvalRoles[approvalRoles.length - 1].employees}
             employeeOptions={activeEmployees}
             groupOptions={groupOptions}
             isWithoutBorder={true}
+            index={approvalRoles.length - 1}
           />
           <Box display="flex" justifyContent="flex-end">
             <Button
               variant="contained"
-              onClick={onClick}
+              onClick={() => onSave(dialog)}
               id="AddRoleDialog-save"
             >
               <Text translation="common.save"/>
             </Button>
             <Button
               variant="outlined"
-              onClick={dialog.close}
+              onClick={() => {
+                handleCancelDialogRole();
+                dialog.close();
+              }}
               id="AddRoleDialog-cancel"
             >
               <Text translation="common.cancel"/>

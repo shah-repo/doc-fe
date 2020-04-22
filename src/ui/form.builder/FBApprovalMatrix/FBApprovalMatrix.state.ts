@@ -1,4 +1,5 @@
 import { action, observable, set } from "mobx";
+import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import FBStore from "../stores/ui/FBStore";
 import { ApprovalMatrix, ApprovalMatrixItem, ApprovalRole } from "./FBApprovalMatrix.types";
 
@@ -32,6 +33,10 @@ export class FBApprovalMatrixState {
     this.am.approvalMatrix.splice(-1, 1);
   };
 
+  @action public removeAddedRole = () => {
+    this.am.approvalRoles.splice(-1, 1);
+  };
+
   @action public editDefaultTraining = (index: number, defaultTraining: boolean) => {
     this.am.approvalMatrix[index].docType.defaultTraining = defaultTraining;
   };
@@ -45,14 +50,22 @@ export class FBApprovalMatrixState {
     this.am.approvalMatrix[index].approvalRoles[stage][itemIndex] = approvalMatrixItem;
   };
 
-  @action public editApprovalMatrix = (
-    index: number, approvalMatrixItem: ApprovalMatrixItem,
+  @action public editApprovalRoles = (
+    index: number, approvalRoleItem: OptionType[], type: string
   ) => {
-    this.am.approvalMatrix[index] = approvalMatrixItem;
+    this.am.approvalRoles[index][type] = approvalRoleItem.map((role) => ({
+      id: role.value,
+    }));
+  };
+
+
+  @action public editName = (
+    index: number, approvalRoleItem: string, type: string
+  ) => {
+    this.am.approvalRoles[index][type] = approvalRoleItem;
   };
 
   @action public editApprovalRoleItem = (index: number, item: string, type: string) => {
-    console.log(this.am.approvalMatrix, index);
     this.am.approvalMatrix[index].docType[type] = item;
   };
 
@@ -62,6 +75,8 @@ export class FBApprovalMatrixState {
     }
     const value: ApprovalMatrix = FBStore.getValue(this.name) || DEFAULT_AM;
     this.am = value;
+    FBStore.setValue(this.name, this.am);
+    FBStore.resetSchema();
   };
 }
 

@@ -3,7 +3,7 @@ import React from "react";
 import { useBlockLayout, useTable } from "react-table";
 import { useSticky } from "react-table-sticky";
 import styled from "styled-components";
-import { FBFormDefaultProps } from "../types/common";
+import { FBFormDefaultProps } from "../../types/common";
 
 const BootstrapInput = withStyles((theme) => ({
   root: {
@@ -18,9 +18,6 @@ const BootstrapInput = withStyles((theme) => ({
     fontSize: 12,
     border: "1px solid lightgray",
     fontFamily: "Open Sans, sans-serif",
-  },
-  selectMenu: {
-    padding: 0,
   },
 }))(InputBase);
 
@@ -94,7 +91,7 @@ const Styles = styled.div`
     }
 
     &.sticky {
-      overflow-x: scroll;
+      overflow-x: auto;
       overflow-y: hidden;
       .header,
       .footer {
@@ -129,23 +126,6 @@ const Styles = styled.div`
         box-shadow: -2px 0px 3px lightgray;
       }
     }
-    .muiRoot {
-      .MuiSelect-selectMenu.MuiSelect-selectMenu {
-        padding: 0;
-      }
-    }
-    .control {
-      .MuiFormControl-root {
-        margin-top: 1px;
-        font-size: 12px;
-      }
-    }
-    .muiInput {
-      .MuiInputBase-input {
-        padding: 2px;
-        font-size: 12px;
-      }
-    }
     .capitalize {
       text-transform: uppercase;
       font-family: Open Sans, sans-serif;
@@ -163,21 +143,15 @@ export interface Props extends FBFormDefaultProps {
   data: any[];
   columns: any[];
   editMode: boolean;
-  handleAddRoleItems: (index: number, item: string, type: string) => void;
+  fullscreenMode?: boolean;
+  addMode: boolean;
+  readInputValue: (event, header, index) => void;
+  readSelectValue: (event, index) => void;
 }
 
-const ReactTable: React.FunctionComponent<Props> = ({
-  data, columns, editMode, handleAddRoleItems,
+const FBApprovalMatrixTable: React.FunctionComponent<Props> = ({
+  data, columns, editMode, readSelectValue, readInputValue, fullscreenMode, addMode,
 }) => {
-
-  const readInputValue = (event, header, index) => {
-    handleAddRoleItems(index, event.target.value, header);
-  };
-
-  const readSelectValue = (event, index) => {
-    handleAddRoleItems(index, event.target.value, "internalType");
-  };
-
 
   const {
     getTableProps,
@@ -193,12 +167,13 @@ const ReactTable: React.FunctionComponent<Props> = ({
     useBlockLayout,
     useSticky
   );
-  // if fullscreen size set clasName to width: fit-content
+
   return (
     <Styles>
       <div
         {...getTableProps()}
         className="table sticky"
+        style={{ width: fullscreenMode ? "fit-content" : "100%" }}
       >
         <div className="header">
           {headerGroups.map((headerGroup, index) => (
@@ -216,7 +191,7 @@ const ReactTable: React.FunctionComponent<Props> = ({
             return (
               <div key={i} {...row.getRowProps()} className="tr">
                 {row.cells.map((cell, index) => {
-                  if (cell.column.parent.Header !== " " && !editMode && cell.row.values.acronym !== "") {
+                  if (cell.column.parent.id !== " " && !editMode && !(cell.row.index === (data.length - 1) && addMode)) {
                     const value = cell.value ? "Y" : "";
                     return (
                       <div key={index} {...cell.getCellProps()} className="td">
@@ -224,7 +199,7 @@ const ReactTable: React.FunctionComponent<Props> = ({
                       </div>
                     );
                   }
-                  if (cell.column.Header === "Training req." && !editMode && cell.row.values.acronym !== "") {
+                  if (cell.column.id === "defaultTraining" && !editMode && !(cell.row.index === (data.length - 1) && addMode)) {
                     const value = cell.value ? "Yes" : "No";
                     return (
                       <div key={index} {...cell.getCellProps()} className="td">
@@ -232,7 +207,7 @@ const ReactTable: React.FunctionComponent<Props> = ({
                       </div>
                     );
                   }
-                  if (cell.row.values.name === "" && (cell.column.Header === "Internal type") ) {
+                  if (addMode && (cell.row.index === (data.length - 1)) && (cell.column.id === "group") ) {
                     return (
                       <div key={index} {...cell.getCellProps()} className="td">
                         <Select
@@ -240,21 +215,20 @@ const ReactTable: React.FunctionComponent<Props> = ({
                           onChange={(e) => readSelectValue(e, cell.row.index)}
                           input={<BootstrapInput />}
                         >
-                          <MenuItem value={"DOC"}>DOC</MenuItem>
-                          <MenuItem value={"FORM"}>FORM</MenuItem>
-                          <MenuItem value={"OTHER"}>OTHER</MenuItem>
+                          <MenuItem value={"RECORD"}>Record</MenuItem>
+                          <MenuItem value={"OTHER"}>Doc</MenuItem>
                         </Select>
                       </div>
                     );
                   }
-                  if (cell.row.values.name === "" && ((cell.column.Header === "Prefix") || (cell.column.Header === "Document type"))) {
-                    const name = cell.column.Header === "Prefix" ? "prefix" : "documentType";
+                  if (addMode && (cell.row.index === (data.length - 1)) && ((cell.column.id === "acronym") || (cell.column.id === "name"))) {
+                    const name = cell.column.id === "acronym" ? "prefix" : "documentType";
                     return (
                       <div key={index} {...cell.getCellProps()} className="td">
                         <input
                           type="text"
                           name={name}
-                          onChange={(e) => readInputValue(e, name, cell.row.index)}
+                          onChange={(e) => readInputValue(e, cell.column.id, cell.row.index)}
                           style={{ width: name === "prefix" ? 44 : 185, padding: 3, border: "1px solid lightgray" }}
                           className={name === "prefix" ? "capitalize" : "input"}
                         />
@@ -277,4 +251,4 @@ const ReactTable: React.FunctionComponent<Props> = ({
   );
 };
 
-export default ReactTable;
+export default FBApprovalMatrixTable;

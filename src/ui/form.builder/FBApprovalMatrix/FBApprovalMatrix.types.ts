@@ -21,6 +21,7 @@ export interface Group {
 }
 
 export interface ApprovalMatrixItem {
+  id: string;
   docType: DocType;
   approvalRoles: ApprovalRolesStages;
 }
@@ -59,5 +60,12 @@ export type FBApprovalMatrixTableProps =
   cancelAddMode: () => void;
   handleAddRoleItems: (index: number, item: string, type: string) => void;
   addMode: boolean;
-};
+  handleSaveChanges: () => void;
+  errorMessage: string;
+  handleEditRoleDetails: (e: string, index: number, type: string) => void;
+  addAnotherRole: () => void;
+  handleSaveRole: (dialog) => void;
+  handleCancelDialogRole: () => void;
+  disabled: boolean;
+} & Pick<FBInputProps, "disabled">;
 

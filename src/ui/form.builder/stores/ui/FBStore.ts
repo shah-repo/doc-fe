@@ -70,6 +70,13 @@ export class FormBuilderStore {
     return filtered[0];
   };
 
+  @action public getSchemaItemByType = (
+    type: string,
+  ): FBTemplateSchema | undefined => {
+    const filtered = _.filter(this.schema, (schemaItem) => schemaItem.type === type);
+    return filtered[0];
+  };
+
   @action public removeSchemaItem = (index?: number) => {
     if (index === undefined) {
       return;

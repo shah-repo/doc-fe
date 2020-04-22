@@ -1,10 +1,10 @@
 import { Box, Button, Grid } from "@material-ui/core";
 import React from "react";
-import { ReactComponent as ExitExpandIcon } from "../../../assets/images/expand_exit_icon.svg";
-import { ReactComponent as ExpandIcon } from "../../../assets/images/expand_icon.svg";
-import { ReactComponent as EditIcon } from "../../../assets/images/pen_edit.svg";
-import Text from "../../components/Text";
-import { FBFormDefaultProps } from "../types/common";
+import { ReactComponent as ExitExpandIcon } from "../../../../assets/images/expand_exit_icon.svg";
+import { ReactComponent as ExpandIcon } from "../../../../assets/images/expand_icon.svg";
+import { ReactComponent as EditIcon } from "../../../../assets/images/pen_edit.svg";
+import Text from "../../../components/Text";
+import { FBFormDefaultProps } from "../../types/common";
 
 export interface Props extends FBFormDefaultProps {
   openDialog: () => void;
@@ -13,6 +13,7 @@ export interface Props extends FBFormDefaultProps {
   toggleEditMode: (editMode: boolean) => void;
   editMode: boolean;
   addMode: boolean;
+  disabled: boolean;
 }
 
 const ApprovalMatrixSectionBox: React.FunctionComponent<Props> = ({
@@ -23,6 +24,7 @@ const ApprovalMatrixSectionBox: React.FunctionComponent<Props> = ({
   toggleEditMode,
   editMode,
   addMode,
+  disabled,
 }) => (
   <Box
     mb={4}
@@ -39,7 +41,7 @@ const ApprovalMatrixSectionBox: React.FunctionComponent<Props> = ({
       <Box paddingRight={2}>
         <Button color="inherit" style={{ padding: 0, margin: 0 }}
           onClick={() => toggleEditMode(!editMode)}
-          disabled={addMode}
+          disabled={addMode || disabled}
         >
           <EditIcon style={{ paddingRight: 5 }}  />
           <Box>
@@ -52,6 +54,7 @@ const ApprovalMatrixSectionBox: React.FunctionComponent<Props> = ({
           color="inherit"
           style={{ padding: 0, margin: 0 }}
           onClick={() => alreadyOpened ? closeDialog() : openDialog()}
+          disabled={disabled}
         >
           {alreadyOpened ? <ExitExpandIcon style={{ paddingRight: 5 }}/> : <ExpandIcon style={{ paddingRight: 5 }}/> }
           <Box>

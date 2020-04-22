@@ -1,12 +1,13 @@
-import { Box, Dialog, DialogContent } from "@material-ui/core";
+import { Box, Dialog, DialogContent, Typography } from "@material-ui/core";
 import React, { useState } from "react";
+import Text from "../../../components/Text";
 import useDialog from "../../../hooks/useDialog";
 import FBButton from "../../components/inputs/FBButton";
-import ApprovalMatrixSectionBox from "../ApprovalMatrixSectionBox";
 import ApprovalRoles from "../ApprovalRoles/ApprovalRoles";
 import { FBApprovalMatrixTableProps } from "../FBApprovalMatrix.types";
-import ReactTable from "../ReactTable";
+import ApprovalMatrixSectionBox from "./ApprovalMatrixSectionBox";
 import { withFBApprovalMatrixTable } from "./FBApprovalMatrixField.wrap";
+import FBApprovalMatrixTable from "./FBApprovalMatrixTable";
 
 const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixTableProps> = ({
   approvalRoles,
@@ -17,9 +18,26 @@ const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixTableProps>
   addMode,
   cancelAddMode,
   handleAddRoleItems,
+  handleSaveChanges,
+  errorMessage,
+  handleEditRoleDetails,
+  addAnotherRole,
+  handleSaveRole,
+  handleCancelDialogRole,
+  disabled,
+  name,
 }) => {
   const dialog = useDialog();
   const [editMode, toggleEditMode] = useState(false);
+
+
+  const readInputValue = (event, header, index) => {
+    handleAddRoleItems(index, event.target.value, header);
+  };
+
+  const readSelectValue = (event, index) => {
+    handleAddRoleItems(index, event.target.value, "group");
+  };
 
   const columns = React.useMemo(
     () => [
@@ -62,7 +80,6 @@ const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixTableProps>
         columns: approvalRoles.map((group) => ({
           Header: group.name,
           accessor: `approvalsNumeric-${group.index}`,
-          maxWidth: 100,
           // eslint-disable-next-line react/display-name
           Cell: (rowData) => {
             const key = `approvalsNumeric-${group.index}`;
@@ -81,7 +98,6 @@ const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixTableProps>
         columns: approvalRoles.map((group) => ({
           Header: group.name,
           accessor: `approvalsNumericAlpha-${group.index}`,
-          maxWidth: 100,
           // eslint-disable-next-line react/display-name
           Cell: (rowData) => {
             const key = `approvalsNumericAlpha-${group.index}`;
@@ -100,7 +116,6 @@ const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixTableProps>
         columns: approvalRoles.map((group) => ({
           Header: group.name,
           accessor: `approvalsAlpha-${group.index}`,
-          maxWidth: 100,
           // eslint-disable-next-line react/display-name
           Cell: (rowData) => {
             const key = `approvalsAlpha-${group.index}`;
@@ -119,7 +134,6 @@ const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixTableProps>
         columns: approvalRoles.map((group) => ({
           Header: group.name,
           accessor: `approvalsAdmin-${group.index}`,
-          maxWidth: 100,
           // eslint-disable-next-line react/display-name
           Cell: (rowData) => {
             const key = `approvalsAdmin-${group.index}`;
@@ -150,21 +164,38 @@ const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixTableProps>
   const stageAdmData = approvalMatrix.map((e) =>
     approvalRoles.map((role) => ({ [`approvalsAdmin-${role.index}`]: e.approvalRoles.admStage[role.index] })
     ));
-  const data = docTypeData.map((item, i) => Object.assign({}, item, ...stage1Data[i], ...stage2Data[i], ...stage3Data[i], ...stageAdmData[i]));
+  const data = docTypeData.map((item, i) =>
+    Object.assign({}, item, ...stage1Data[i], ...stage2Data[i], ...stage3Data[i], ...stageAdmData[i]));
 
 
   return (
     <Box mt={3}>
-      <ApprovalRoles/>
+      <ApprovalRoles
+        approvalRoles={ approvalRoles }
+        addAnotherRole={addAnotherRole}
+        handleEditRoleDetails={handleEditRoleDetails}
+        handleSaveRole={handleSaveRole}
+        handleCancelDialogRole={handleCancelDialogRole}
+        errorMessage={errorMessage}
+        disabled={disabled}
+      />
       <ApprovalMatrixSectionBox
-        label="nanan"
+        label="Approval matrix"
         openDialog={() => dialog.open()}
         closeDialog={() => dialog.close()}
         toggleEditMode={toggleEditMode}
         editMode={editMode}
         addMode={addMode}
+        disabled={disabled}
       />
-      <ReactTable data={data} columns={columns} editMode={editMode} handleAddRoleItems={handleAddRoleItems} />
+      <FBApprovalMatrixTable
+        addMode={addMode}
+        data={data}
+        columns={columns}
+        editMode={editMode}
+        readInputValue={readInputValue}
+        readSelectValue={readSelectValue}
+      />
       {!addMode &&
       <FBButton
         fullWidth={true}
@@ -172,12 +203,13 @@ const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixTableProps>
         label="form.builder.add.item"
         variant="outlined"
         style={{ margin: "8px 0" }}
-        disabled={editMode}
+        disabled={editMode || disabled}
       />}
+      {errorMessage && <Typography variant="subtitle2" color="error" style={{ marginTop: 10 }} ><Text message={errorMessage} /></Typography>}
       {addMode &&
       <Box display="flex" flexDirection="row-reverse">
         <FBButton
-          onClick={() => console.log("save")}
+          onClick={handleSaveChanges}
           label="Save changes"
           variant="contained"
           color="primary"
@@ -194,15 +226,24 @@ const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixTableProps>
       <Dialog fullScreen={true} open={dialog.isOpen}>
         <DialogContent>
           <ApprovalMatrixSectionBox
-            label="nanan"
+            label="Approval matrix"
             openDialog={() => dialog.open()}
             closeDialog={() => dialog.close()}
             alreadyOpened={true}
             toggleEditMode={toggleEditMode}
             editMode={editMode}
             addMode={addMode}
+            disabled={disabled}
           />
-          <ReactTable data={data} columns={columns} editMode={editMode} handleAddRoleItems={handleAddRoleItems} />
+          <FBApprovalMatrixTable
+            addMode={addMode}
+            fullscreenMode={true}
+            data={data}
+            columns={columns}
+            editMode={editMode}
+            readInputValue={readInputValue}
+            readSelectValue={readSelectValue}
+          />
           {!addMode &&
             <FBButton
               fullWidth={true}
@@ -210,12 +251,13 @@ const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixTableProps>
               label="form.builder.add.item"
               variant="outlined"
               style={{ margin: "8px 0" }}
-              disabled={editMode}
+              disabled={editMode || disabled}
             />}
+          {errorMessage && <Typography variant="subtitle2" color="error" style={{ marginTop: 10 }} ><Text message={errorMessage} /></Typography>}
           {addMode &&
           <Box display="flex" flexDirection="row-reverse">
             <FBButton
-              onClick={() => console.log("save")}
+              onClick={handleSaveChanges}
               label="Save"
               variant="contained"
               color="primary"
