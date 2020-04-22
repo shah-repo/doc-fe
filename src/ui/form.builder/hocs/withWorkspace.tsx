@@ -16,12 +16,14 @@ export const withWorkspace = <T extends FBWorkspaceProps>(
   const Comp = (props: T) => {
     const dialogState = FB.useRef<FBDialogState>(FBDialogState);
     const snackbarState = FB.useRef<FBSnackbarState>(FBSnackbarState);
+    // Let us change doc id value on every render
+    // while FBStore is a global store and we have change company remaining data issue
+    FBStore.documentId = props.documentId || "";
 
     React.useEffect(() => {
       FBDynamicValidatorStore.registerValidators();
       FBDynamicValidatorStore.validate();
       FBStore.docId = props.id || "";
-      FBStore.documentId = props.documentId || "";
       FBStore.document = props.document || {} as DocumentRevision;
     }, [props.documentId, props.id, props.document]);
 

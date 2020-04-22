@@ -28,7 +28,10 @@ export const PurchaseOrderApproval: React.FunctionComponent<Props> = ({
     { id: "dashboard.title.purchase.order" },
     { docId: documentRevision.document.docId, version },
   ));
-  const [description] = useState(intl.formatMessage({ id: "dashboard.assigned.purchase.order" }));
+  const [description] = useState(intl.formatMessage(
+    { id: "dashboard.assigned.purchase.order" },
+    { name: documentRevision.owner.user.name },
+  ));
 
   return (
     <DashboardActionTypeBase

@@ -146,9 +146,14 @@ DocumentRevisionFormContainerProps
   };
 
   useEffect(() => {
-    if (initialValues.document?.documentType?.documentTypeAcronym && loadDocumentProposedId) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    if (type !== "newVersion" &&
+      !initialValues.document?.docId &&
+      loadDocumentProposedId &&
+      initialValues.document?.documentType?.documentTypeAcronym) {
       loadDocumentProposedId(initialValues.document.documentType.documentTypeAcronym);
+    }
+    if (setDocId && initialValues.document?.docId) {
+      setDocId(initialValues.document?.docId);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialValues.document?.documentType?.documentTypeAcronym]);

@@ -287,7 +287,7 @@
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",
   "dashboard.assigned.change.request": "A change request from {name} is pending your approval",
-  "dashboard.assigned.purchase.order": "Purchase order is pending your approval",
+  "dashboard.assigned.purchase.order": "Purchase order from {name} is pending your approval",
   "dashboard.title.change.request": "CHANGE REQUEST: {crId}",
   "dashboard.title.purchase.order": "PURCHASE ORDER: {docId}, Rev {version}",
   "dashboard.title.task": "CHANGE REQUEST: {crId}",
