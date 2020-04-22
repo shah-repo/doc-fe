@@ -1,6 +1,7 @@
 export { default as apiClient } from "./FBApi/FBApi.client";
 export * from "./FBApi/FBApi.types";
 export { default as FBApproval } from "./FBApproval/FBApproval";
+export { default as FBApprovalSocket } from "./FBApproval/FBApproval.socket";
 export { default as FBApprovalState } from "./FBApproval/FBApproval.state";
 export * from "./FBApproval/FBApproval.types";
 export { default as FBAutocomplete } from "./FBAutocomplete/FBAutocomplete";
@@ -88,6 +89,9 @@ export { default as FBSection } from "./FBSection/FBSection";
 export * from "./FBSection/FBSection.types";
 export { default as FBSelectDocument } from "./FBSelectDocument/FBSelectDocument";
 export { default as FBSelectRequirement } from "./FBSelectRequirement/FBSelectRequirement";
+export { default as FBSnackbar } from "./FBSnackbar/FBSnackbar";
+export { default as FBSnackbarState } from "./FBSnackbar/FBSnackbar.state";
+export * from "./FBSnackbar/FBSnackbar.types";
 export { default as FBSortable } from "./FBSortable/FBSortable";
 export * from "./FBSortable/FBSortable.types";
 export { default as FBStarter } from "./FBStarter/FBStarter";
@@ -118,4 +122,5 @@ export { default as FBWorkspaceState } from "./FBWorkspace/FBWorkspace.state";
 export * from "./FBWorkspace/FBWorkspace.types";
 export { default as FB } from "./helpers/FB";
 export * from "./helpers/FBFieldName";
+
 
