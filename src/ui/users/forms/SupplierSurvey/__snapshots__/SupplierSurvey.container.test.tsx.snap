@@ -18,13 +18,13 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
         </h4>
       </div>
       <div
-        class="MuiBox-root MuiBox-root-59"
+        class="MuiBox-root MuiBox-root-66"
       >
         <div
-          class="MuiBox-root MuiBox-root-60"
+          class="MuiBox-root MuiBox-root-67"
         >
           <div
-            class="MuiBox-root MuiBox-root-61"
+            class="MuiBox-root MuiBox-root-68"
           >
             <div
               class="MuiFormControl-root MuiFormControl-fullWidth"
@@ -37,14 +37,14 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
               >
                 <span
                   aria-disabled="false"
-                  class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-89 MuiCheckbox-root MuiCheckbox-colorSecondary MuiIconButton-colorSecondary"
+                  class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-96 MuiCheckbox-root MuiCheckbox-colorSecondary MuiIconButton-colorSecondary"
                   style="padding: 0px;"
                 >
                   <span
                     class="MuiIconButton-label"
                   >
                     <input
-                      class="PrivateSwitchBase-input-92"
+                      class="PrivateSwitchBase-input-99"
                       data-indeterminate="false"
                       name="checkbox"
                       type="checkbox"
@@ -79,7 +79,7 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
         </div>
       </div>
       <span
-        class="MuiBox-root MuiBox-root-132"
+        class="MuiBox-root MuiBox-root-139"
       >
         <button
           class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary"
@@ -100,7 +100,7 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
         </button>
       </span>
       <div
-        class="MuiBox-root MuiBox-root-161"
+        class="MuiBox-root MuiBox-root-168"
       >
         <button
           class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary"

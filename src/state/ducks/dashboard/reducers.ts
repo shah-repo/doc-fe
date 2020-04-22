@@ -1,19 +1,17 @@
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
-import {
-  PENDING_ACTIONS_LIST,
-  PENDING_ACTIONS_LIST_ASYNC,
-} from "./constants";
-import {
-  PendingActionsListAction,
-  PendingActionsState,
-} from "./types";
+import { PENDING_ACTIONS_LIST, PENDING_ACTIONS_LIST_ASYNC, PENDING_ACTIONS_REMOVE } from "./constants";
+import { PendingActionsListAction, PendingActionsRemoveAction, PendingActionsState } from "./types";
+
+type PendingActions = PendingActionsListAction | PendingActionsRemoveAction;
 
 export const pendingActions = (
-  state: PendingActionsState = [], action: PendingActionsListAction): PendingActionsState => {
+  state: PendingActionsState = [], action: PendingActions): PendingActionsState => {
   switch (action.type) {
     case PENDING_ACTIONS_LIST:
       return action.payload;
+    case PENDING_ACTIONS_REMOVE:
+      return state.filter((item, index) => index !== action.payload);
     default:
       return state;
   }

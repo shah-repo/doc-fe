@@ -41,9 +41,9 @@ describe("Table search select field tests", () => {
     expect(items.at(0).text()).toEqual("None");
 
     expect(items.at(1).prop("value")).toEqual(options[0].value);
-    expect(items.at(1).text()).toEqual(options[0].text);
+    expect((items.at(1).find("Text")).prop("message")).toEqual(options[0].text);
 
     expect(items.at(2).prop("value")).toEqual(options[1].value);
-    expect(items.at(2).text()).toEqual(options[1].text);
+    expect((items.at(2).find("Text")).prop("message")).toEqual(options[1].text);
   });
 });

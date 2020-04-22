@@ -8,6 +8,11 @@ import FBAutocompleteAsyncStore from "./FBAutocompleteAsync.store";
 export class FBAutocompleteAsyncState extends FBRequest<any, any> {
   private optionId: string | undefined;
 
+  public constructor(optionId?: string) {
+    super();
+    this.setOptionId(optionId);
+  }
+
   @computed public get optionConfig(): FBAutocompleteAsyncConfig | undefined {
     if (!this.optionId) {
       return;
@@ -24,11 +29,14 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     }
   }
 
-  public sliceValue = (id: string | string[]): any => {
+  @action public sliceValue = (id: string | string[]): any => {
     if (!this.optionId) {
       return;
     }
     const options = FBAutocompleteAsyncStore.data.get(this.optionId);
+    if (!options) {
+      return;
+    }
     if (!_.isArray(id)) {
       return options.get(id);
     }
@@ -37,9 +45,35 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
 
   @action public setOptionId = (id?: string) => {
     set(this, "optionId", id);
+    this.load();
   };
 
-  @action public load = () => {
+  @action public load = (force = false) => {
+    if (!this.optionId) {
+      return;
+    }
+    if (!FBAutocompleteAsyncStore.data.get(this.optionId) || force) {
+      this.loadInternal();
+    }
+  };
+
+  protected onSuccess() {
+    super.onSuccess();
+    if (!this.optionId) {
+      return;
+    }
+    let data = this.data;
+    if (!data) {
+      return;
+    }
+    if (data.some && !data.some((value) => typeof value === "object")) {
+      data = _.map(this.data, (d) => ({ id: d, name: d }));
+      return FBAutocompleteAsyncStore.setOptionData(this.optionId, data);
+    }
+    data.slice && FBAutocompleteAsyncStore.setOptionData(this.optionId, data.slice());
+  }
+
+  protected loadInternal() {
     if (!this.optionConfig) {
       return;
     }
@@ -47,18 +81,8 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     this.setUrl(url);
     this.setRoot(root);
     this.fetch();
-  };
-
-  @action public onSuccess = () => {
-    if (!this.optionId) {
-      return;
-    }
-    if (!this.data.some((value) => typeof value === "object")) {
-      const data = _.map(this.data, (d) => ({ id: d, name: d }));
-      return FBAutocompleteAsyncStore.setOptionData(this.optionId, data);
-    }
-    FBAutocompleteAsyncStore.setOptionData(this.optionId, this.data.slice());
-  };
+  }
 }
 
 export default FBAutocompleteAsyncState;
+

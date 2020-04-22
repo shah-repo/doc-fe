@@ -1,35 +1,52 @@
-import { Box, IconButton, Tooltip } from "@material-ui/core";
+import { Box, CircularProgress, IconButton, Tooltip } from "@material-ui/core";
 import AllOutIcon from "@material-ui/icons/AllOut";
 import AppsIcon from "@material-ui/icons/Apps";
-import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import CropFreeIcon from "@material-ui/icons/CropFree";
 import React from "react";
-import { FBMediaAlbumActionProps, FBMediaAlbumProps } from ".";
+import { FBMediaAlbumProps } from ".";
 import { FBMediaGallery, FBProvider } from "..";
 import Text from "../../components/Text";
-import FBMapWrapper from "../FBMapWrapper/FBMapWrapper";
 import FBMediaCarousel from "../FBMediaCarousel";
 import { withFBMediaAlbum } from "./FBMediaAlbum.wrap";
 
 const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({
+  setMediaFieldMode,
+  onFileUploadChange,
   mediaAlbumState,
-  collection,
-  title,
-  onClick,
-  fieldMode,
-  mode,
-  actionIcons = [],
+  setMediaMode,
   removeMedia,
-  remove,
+  actionsDisabled,
+  collection,
+  loading,
+  name,
+  title,
+  mode,
   ...props
 }) => (
   <FBProvider {...{ mediaAlbumState }}>
-    <Box bgcolor="black" borderColor="white" borderBottom={0.5} {...props}>
-      <Box display="flex" p={1}>
-        <Box p={1} flexGrow={1} color="white">
-          {title}
-        </Box>
-        <Box pl={0.3} color="white">
-          <IconButton size="small" {...{ onClick }} color="inherit">
+    <input
+      accept="image/*"
+      style={{ display: "none" }}
+      id={`fb-mediaalbum-upload-${name}`}
+      onChange={onFileUploadChange}
+      multiple
+      type="file"
+    />
+    <Box {...props} >
+      <Box display="flex" py={0.5}>
+        <Tooltip {...{ title }}>
+          <Box
+            style={{ whiteSpace: "nowrap" }}
+            textOverflow="ellipsis"
+            overflow="hidden"
+            flexGrow={1}
+          >
+            {title}
+          </Box>
+        </Tooltip>
+        <Box pl={0.3}>
+          <IconButton size="small" onClick={setMediaMode}>
             {mode === "carousel" && (
               <Tooltip title={<Text message="form.builder.gallery" />}>
                 <AppsIcon />
@@ -42,36 +59,29 @@ const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({
             )}
           </IconButton>
         </Box>
-        <FBMapWrapper<FBMediaAlbumActionProps> collection={actionIcons}>
-          {(item, index) => (
-            <Box pl={0.3} color="white">
-              <IconButton
-                key={`fb-media-action-${index}`}
-                size="small"
-                color="inherit"
-                onClick={item.onClick}
-              >
-                {item.icon}
-              </IconButton>
-            </Box>
-          )}
-        </FBMapWrapper>
-        <Box pl={0.3} color="white">
-          <IconButton
-            disabled={!(fieldMode !== "preview" && mode === "carousel")}
-            size="small"
-            onClick={remove}
-            color="inherit"
-          >
-            <Tooltip title={<Text message="form.builder.delete" />}>
-              <DeleteForeverIcon />
+        <Box pl={0.3}>
+          <IconButton size="small" disabled={actionsDisabled}>
+            {loading && <CircularProgress size={20} />}
+            {!loading && (
+              <label htmlFor={`fb-mediaalbum-upload-${name}`}>
+                <Tooltip title={<Text message="form.builder.upload" />}>
+                  <CloudUploadIcon />
+                </Tooltip>
+              </label>
+            )}
+          </IconButton>
+        </Box>
+        <Box pl={0.3}>
+          <IconButton size="small" disabled={actionsDisabled} onClick={setMediaFieldMode}>
+            <Tooltip title={<Text message="form.builder.qr.code" />}>
+              <CropFreeIcon />
             </Tooltip>
           </IconButton>
         </Box>
       </Box>
     </Box>
-    {mode === "carousel" && <FBMediaCarousel {...{ collection, removeMedia }} />}
-    {mode === "gallery" && <FBMediaGallery {...{ collection, removeMedia }} />}
+    {mode === "carousel" && <FBMediaCarousel {...{ collection, removeMedia, actionsDisabled }} />}
+    {mode === "gallery" && <FBMediaGallery {...{ collection, removeMedia, actionsDisabled }} />}
   </FBProvider>
 );
 

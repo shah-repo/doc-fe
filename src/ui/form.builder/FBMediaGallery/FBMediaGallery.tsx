@@ -1,19 +1,23 @@
 import { Box, CircularProgress, createStyles, GridList, GridListTile, GridListTileBar, IconButton, makeStyles, Theme, Tooltip, Zoom } from "@material-ui/core";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import React from "react";
 import Img from "react-image";
 import LazyLoad from "react-lazy-load";
 import { FBMediaGalleryProps } from ".";
 import { FBMediaProps } from "..";
+import Text from "../../components/Text";
 import FBMapWrapper from "../FBMapWrapper/FBMapWrapper";
+import { withFBMediaGallery } from "./FBMediaGallery.wrap";
 
 
 const FBMediaGallery: React.FunctionComponent<FBMediaGalleryProps> = ({
   collection = [],
-  removeMedia,
+  handleDelete,
+  actionsDisabled,
 }) => {
 
-  const useStyles = makeStyles((theme: Theme) =>
+  const useStyles = makeStyles((_theme: Theme) =>
     createStyles({
       noMaxWidth: {
         maxWidth: "none",
@@ -23,13 +27,13 @@ const FBMediaGallery: React.FunctionComponent<FBMediaGalleryProps> = ({
 
   const classes = useStyles();
 
-  return(
+  return (
     <Box
       display="flex"
       flexWrap="wrap"
       justifyContent="space-around"
       overflow="hidden"
-      bgcolor="black"
+      bgcolor="#f6f7f7"
     >
       <GridList
         cellHeight={175}
@@ -51,24 +55,36 @@ const FBMediaGallery: React.FunctionComponent<FBMediaGalleryProps> = ({
                       alignItems="center"
                       justifyContent="center"
                     >
-                      <CircularProgress color="inherit" />
+                      <CircularProgress />
                     </Box>
                   }
                 />
               </LazyLoad>
               <GridListTileBar
-                title={item.name}
+                subtitle={(
+                  <Tooltip title={item.name}>
+                    <Box
+                      style={{ whiteSpace: "nowrap" }}
+                      textOverflow="ellipsis"
+                      overflow="hidden">
+                      {item.name}
+                    </Box>
+                  </Tooltip>
+                )}
                 titlePosition="top"
+                style={{ height: "35px" }}
                 actionIcon={
                   <Box display="flex" flexDirection="row-reverse" color="white">
-                    {/* Note* do not delete it
                     <IconButton
                       color="inherit"
                       size="small"
-                      onClick={removeMedia && removeMedia(item.id)}
+                      disabled={actionsDisabled}
+                      onClick={() => handleDelete && handleDelete(item.id)}
                     >
-                      <DeleteForeverIcon />
-                    </IconButton> */}
+                      <Tooltip title={<Text message="form.builder.delete" />}>
+                        <DeleteForeverIcon fontSize="small" />
+                      </Tooltip>
+                    </IconButton>
                     <Tooltip
                       TransitionComponent={Zoom}
                       enterDelay={300}
@@ -83,7 +99,7 @@ const FBMediaGallery: React.FunctionComponent<FBMediaGalleryProps> = ({
                       }
                     >
                       <IconButton color="inherit" size="small">
-                        <VisibilityIcon />
+                        <VisibilityIcon fontSize="small" />
                       </IconButton>
                     </Tooltip>
                   </Box>
@@ -98,4 +114,4 @@ const FBMediaGallery: React.FunctionComponent<FBMediaGalleryProps> = ({
 };
 
 
-export default FBMediaGallery;
+export default withFBMediaGallery(FBMediaGallery);

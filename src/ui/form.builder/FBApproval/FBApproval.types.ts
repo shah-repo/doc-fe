@@ -1,0 +1,59 @@
+import { BoxProps } from "@material-ui/core";
+import { FBApprovalState } from ".";
+import { Employee } from "../../../state/ducks/company";
+import { GroupRequestBody } from "../../../state/ducks/groupManagement";
+import { FBInputProps } from "../types/common";
+
+export interface FBApprovalConfig {
+  label?: string;
+  isVisible?: boolean;
+  status?: string;
+  canApprove?: boolean;
+}
+
+export type FBApprovalProps =
+& Pick<FBInputProps, "name" | "label" | "type" | "approvers" | "approverGroups" | "disabled" | "approveIsBlocking">
+& {
+  onApprove?: (approver?: Employee | GroupRequestBody) => () => void;
+  approvalConfig?: (approver?: Employee | GroupRequestBody) => FBApprovalConfig | undefined;
+  approvalFieldState?: FBApprovalState;
+  hasApproved?: FBApprovalValue[];
+  isApproved?: boolean;
+  isDefined?: boolean;
+  loading?: boolean;
+};
+
+export enum FBApprovalStatus {
+  Pending = "",
+  Approved = "| Approved"
+}
+
+export interface FBApprovalValue {
+  id: string;
+  userId?: string;
+  groupId?: string;
+  approvedAt: string;
+}
+
+export interface FBApprovalApi {
+  fieldName: string;
+  fieldValue: FBApprovalValue[];
+}
+
+export type FBApprovalFieldProps<T> =
+& FBApprovalProps
+& Pick<BoxProps, "mt">
+& {
+  collection: T[];
+};
+
+export interface FBApprovalData {
+  approvers?: Employee[];
+  approverGroups?: GroupRequestBody[];
+}
+
+export interface FBApprovalSocketMsg {
+  data?: {
+    message: string;
+  };
+}

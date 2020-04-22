@@ -40,7 +40,12 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const [isEmailSent, toogleEmailSent] = useState<boolean>(false);
   const formDocumentId = documentRevision.formDocument?.document?.id || "";
   const formDocuments: Document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, formDocumentId));
-  const isLastVersionObsolete = formDocuments && getIsLastVersionObsolete(formDocuments);
+  const isLastVersionObsolete = () => {
+    if (selectedDocument.document.documentType.group === "RECORD") {
+      return;
+    }
+    return formDocuments && getIsLastVersionObsolete(formDocuments);
+  };
 
   useEffect(() => {
     if (formDocumentId) {
@@ -129,7 +134,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
 
   return (
     <Box component="span" style={{ paddingTop: 30, width: "100%" }}>
-      {!isLastVersionObsolete && renderCloneButton()}
+      {!isLastVersionObsolete() && renderCloneButton()}
       {renderOutputButton()}
       {renderNoAccessWarning()}
       <DownloadHTML pdf={documentRevision.pdf} />

@@ -13,6 +13,7 @@ interface OwnProps {
   transition: ChangeRequestTransition;
   buttonProps?: ButtonProps;
   label: string;
+  onSuccess?: () => void;
 }
 
 interface DispatchProps {
@@ -22,10 +23,20 @@ interface DispatchProps {
 export type TransitionDialogContainerProps = OwnProps & DispatchProps;
 
 export const TransitionDialogContainer: React.FunctionComponent<TransitionDialogContainerProps> = ({
-  changeRequestId, applyTransition, transition, buttonProps, label,
+  changeRequestId,
+  applyTransition,
+  transition,
+  buttonProps,
+  label,
+  onSuccess,
 }) => {
   const dialog = useDialog();
-  const async = useAsync<ChangeRequestTransitionResponse>({ onSuccess: dialog.close });
+  const async = useAsync<ChangeRequestTransitionResponse>({
+    onSuccess: () => {
+      onSuccess && onSuccess();
+      dialog.close();
+    },
+  });
 
   const openDialog = () => {
     async.reset();

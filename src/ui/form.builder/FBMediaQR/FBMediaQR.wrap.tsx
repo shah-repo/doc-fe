@@ -8,13 +8,10 @@ export const withFBMediaQR = <T extends FBMediaQRProps>(
   Component: React.FunctionComponent<T>
 ) => {
   const Comp = ({
-    disabled,
     isTemplate,
     mode = "qr",
     ...props
   }: T) => {
-
-    disabled = !(FBStore.mode === "form" && !_.isEmpty(FBStore.docId)) && !isTemplate;
 
     switch (true) {
       case isTemplate && FBStore.mode === "design":
@@ -35,7 +32,6 @@ export const withFBMediaQR = <T extends FBMediaQRProps>(
 
     return Component({
       ...(props as T),
-      disabled,
       isTemplate,
       mode,
     });

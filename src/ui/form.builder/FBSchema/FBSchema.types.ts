@@ -21,6 +21,7 @@ export type FBSchemaProps = Pick<FBInputProps,
 | "validationMode"
 | "paragraph"
 | "testRequirement"
+| "isTemplate"
 > & {
   validators?: Dictionary<any>;
 };

@@ -18,24 +18,17 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     options,
     loading,
     multiple,
+    refresh,
     name,
     ...props
   }: T) => {
 
-    autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState);
-    autocompleteAsyncState?.setOptionId(optionId);
+    autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, optionId);
     const {
       valueKey: optionValueKey = "value",
       labelKey: optionLabelKey = "text",
     } = autocompleteAsyncState?.optionConfig || {};
     const formValue = FBStore.getValue(name);
-
-    React.useEffect(() => {
-      if (!optionId) {
-        return;
-      }
-      autocompleteAsyncState?.load();
-    }, [optionId]);
 
     useObserver(() => {
       if (!optionId) {
@@ -47,7 +40,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
           ? autocompleteAsyncState?.sliceValue(selectedOptions)
           : slicedOptions;
       }
-      loading = !options && autocompleteAsyncState?.loading;
+      loading = autocompleteAsyncState?.loading;
     });
 
     if (options && formValue && optionValueType === "key") {
@@ -55,7 +48,9 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       defaultValue = _.map(value, { optionValueKey });
     }
 
-    const getDefaultOptionLabel = (option) => {
+    refresh = () => autocompleteAsyncState?.load(true);
+
+    getOptionLabel = (option) => {
       const { labelPrefixRoot } = autocompleteAsyncState?.optionConfig || {};
       const optionLabel = labelPrefixRoot ? `${_.get(option, labelPrefixRoot)} - ` : "";
       return `${optionLabel}${_.get(option, optionLabelKey, "")}`;
@@ -68,10 +63,11 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       optionValueKey,
       optionLabelKey,
       optionValueType,
-      getOptionLabel: getOptionLabel || getDefaultOptionLabel,
+      getOptionLabel,
       selectedOptions,
       defaultValue,
       multiple,
+      refresh,
       name,
     });
   };

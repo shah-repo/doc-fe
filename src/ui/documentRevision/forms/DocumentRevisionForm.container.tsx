@@ -127,10 +127,10 @@ DocumentRevisionFormContainerProps
     [documentTypes],
   );
 
-  const otherTypes: OptionType[] = useMemo(
+  const outputDocumentTypeOptions: OptionType[] = useMemo(
     () =>
       documentTypes.reduce((acc: OptionType[], document) => {
-        if (document.group === "OTHER" || document.group === "DAM") {
+        if (document.group === "RECORD" || document.group === "OTHER") {
           acc.push({ value: document.id, label: document.documentTypeName });
         }
         return acc;
@@ -146,9 +146,14 @@ DocumentRevisionFormContainerProps
   };
 
   useEffect(() => {
-    if (initialValues.document?.documentType?.documentTypeAcronym && loadDocumentProposedId) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    if (type !== "newVersion" &&
+      !initialValues.document?.docId &&
+      loadDocumentProposedId &&
+      initialValues.document?.documentType?.documentTypeAcronym) {
       loadDocumentProposedId(initialValues.document.documentType.documentTypeAcronym);
+    }
+    if (setDocId && initialValues.document?.docId) {
+      setDocId(initialValues.document?.docId);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialValues.document?.documentType?.documentTypeAcronym]);
@@ -170,7 +175,7 @@ DocumentRevisionFormContainerProps
       doNotPrompt={doNotPrompt}
       onDirtyFlagChange={onDirtyFlagChange}
       documentTypes={docTypes}
-      otherDocumentTypes={otherTypes}
+      outputDocumentTypeOptions={outputDocumentTypeOptions}
       documentTypesById={documentTypesById}
       canChangeOwnerShip={canChangeOwnerShip}
       onUpgradeClick={onUpgradeClick}

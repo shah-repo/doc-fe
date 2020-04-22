@@ -1,7 +1,7 @@
 import { Dictionary } from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
-import { FB } from "..";
+import { FB, FBSnackbarState } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { FBDialogState } from "../FBDialog";
 import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
@@ -15,12 +15,15 @@ export const withWorkspace = <T extends FBWorkspaceProps>(
 ) => {
   const Comp = (props: T) => {
     const dialogState = FB.useRef<FBDialogState>(FBDialogState);
+    const snackbarState = FB.useRef<FBSnackbarState>(FBSnackbarState);
+    // Let us change doc id value on every render
+    // while FBStore is a global store and we have change company remaining data issue
+    FBStore.documentId = props.documentId || "";
 
     React.useEffect(() => {
       FBDynamicValidatorStore.registerValidators();
       FBDynamicValidatorStore.validate();
       FBStore.docId = props.id || "";
-      FBStore.documentId = props.documentId || "";
       FBStore.document = props.document || {} as DocumentRevision;
     }, [props.documentId, props.id, props.document]);
 
@@ -38,6 +41,7 @@ export const withWorkspace = <T extends FBWorkspaceProps>(
       values,
       form: props.form,
       dialogState,
+      snackbarState,
     });
   };
 

@@ -18,7 +18,7 @@ export const Header: React.FunctionComponent<Props> = ({
     className={classes.headerContainer}
   >
     <Grid item={true} xs={3}>
-      <Chip label={dataProp.status} className={classes.status} id="Header-chip" />
+      <Chip label={<Text message={dataProp.status} />} className={classes.status} id="Header-chip" />
     </Grid>
     <Grid item={true} xs={6}>
       <Typography variant="h6" align="center">
