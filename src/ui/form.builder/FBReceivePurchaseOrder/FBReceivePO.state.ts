@@ -9,22 +9,20 @@ export class FBReceivePOState {
 
   @action public setItems = (lineItems: PurchaseOrderItem[]) => {
     set(this, "items", lineItems);
-    console.log(lineItems);
-    console.log(this.updateFBStore);
-    // this.updateFBStore();
+    this.updateFBStore();
   };
 
   @action public setPOId = (poId: string) => {
     set(this, "poId", poId);
-    // this.updateFBStore();
+    this.updateFBStore();
   };
   @action public initialize = () => {
     if (!this.name) {
       return;
     }
-    // const values = FBStore.getValue(this.name);
-    // this.poId = values.poId;
-    // this.items = values.items;
+    const values = FBStore.getValue(this.name);
+    this.poId = values.poId;
+    this.items = values.items;
   };
 
   private updateFBStore = () => {
@@ -32,13 +30,10 @@ export class FBReceivePOState {
       return;
     }
 
-    /*
     FBStore.setValue(this.name, {
       poId: this.poId,
       items: this.items,
     });
-    */
-    FBStore.resetSchema();
   };
 
 }

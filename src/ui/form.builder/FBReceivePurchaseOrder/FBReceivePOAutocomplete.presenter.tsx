@@ -5,10 +5,16 @@ import { FBAutocompleteAsync, FBAutocompleteAsyncOption } from "../FBAutocomplet
 
 const FBReceivePOAutocompletePresenter: React.FunctionComponent<any> = ({
   handleChange,
+  poId,
   ...props
 }) => (
   <Box mb={3}>
-    <FBAutocompleteAsync {...props} onChange={handleChange} optionId={FBAutocompleteAsyncOption.po} />
+    <FBAutocompleteAsync
+      {...props}
+      onChange={handleChange}
+      optionId={FBAutocompleteAsyncOption.po}
+      value={poId}
+    />
   </Box>
 );
 

@@ -1,3 +1,4 @@
+import { useObserver } from "mobx-react";
 import React from "react";
 import { useIntl } from "react-intl";
 import { FB } from "..";
@@ -15,7 +16,8 @@ const FBReceivePOAutocompleteContainer: React.FunctionComponent<{}> = ({
 }) => {
   const intl = useIntl();
   const { receiveState } = FB.useStores();
-  const handleChange = async (e, po: Partial<DocumentRevision>) => {
+  useObserver(() => receiveState?.poId);
+  const handleChange = async (e, po: DocumentRevision) => {
     const apiCall = new FBActionModel();
     apiCall.set({
       requestMethod: "GET",
@@ -34,12 +36,18 @@ const FBReceivePOAutocompleteContainer: React.FunctionComponent<{}> = ({
       return;
     }
 
+    receiveState?.setPOId(po.id);
     receiveState?.setItems(
       data.formInput?.[poFieldName]?.items || []
     );
   };
+
   return (
-    <FBReceivePOAutocompletePresenter {...props} handleChange={handleChange} />
+    <FBReceivePOAutocompletePresenter
+      {...props}
+      handleChange={handleChange}
+      poId={receiveState?.poId}
+    />
   );
 };
 

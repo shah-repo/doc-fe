@@ -10,8 +10,8 @@ const FBReceivePOTableContainer: React.FunctionComponent<any> = ({
   const { receiveState } = FB.useStores();
   useObserver(() => receiveState?.items);
   const handleEdit = (index, item) => {
-    console.log(index);
-    console.log(item);
+    // console.log(index);
+    // console.log(item);
   };
 
   if (receiveState?.items.length === 0) {

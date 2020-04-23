@@ -40,7 +40,6 @@ const FBReceivePOTablePresenter: React.FunctionComponent<any> = ({
   disabled,
 }) => {
   const classes = useStyles();
-  console.log(items);
 
   return (
     <Box className={classes.root}>
