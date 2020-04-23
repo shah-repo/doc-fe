@@ -6,6 +6,7 @@ import { AsyncActionErrorResponse } from "../../../../state/middlewares/api/type
 import { store } from "../../../../state/store";
 import { toastInfo } from "../../../components/notifications";
 import { ATTACH_TEMPLATE_URL, CANCEL_SIGNATURE_REQUEST_URL, CREATE_TEMPLATE_URL, SEND_SIGNATURE_REQUEST_URL } from "../../FBHelloSign/constants";
+import { DOCUMENT_REVISION_ROOT_URL } from "../../FBReceivePurchaseOrder/constants";
 import { FBTemplateSchema } from "../../types/store";
 import { FBActionModel } from "../domain/models/FBActionModel";
 import FBStore from "./FBStore";
@@ -51,6 +52,9 @@ export class FormBuilderActionStore {
           return toastInfo(
             "Signature request cancellation requested. This page will be reloaded after the request is completed."
           );
+        }
+        if (requestUrl?.startsWith(DOCUMENT_REVISION_ROOT_URL)) {
+          return data;
         }
         alert("Success");
       }

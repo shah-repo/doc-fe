@@ -41,6 +41,7 @@ import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
 import FBPurchaseOrder from "../FBPurchaseOrder";
 import { FBQuantityField } from "../FBQuantityField";
+import FBReceivePO from "../FBReceivePurchaseOrder";
 import { FBSelectDocument } from "../FBSelectDocument";
 import { FBSelectRequirement } from "../FBSelectRequirement";
 import { FBTestRequirement } from "../FBTestRequirement";
@@ -65,6 +66,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   action: FBActionEditor,
   hellosign: FBLabelEditor,
   purchaseorder: FBLabelEditor,
+  receivepurchaseorder: FBLabelEditor,
   paragraph: FBEditorParagraph,
   stepsection: FBEditorStepSection,
   teststep: FBEditorStepSection,
@@ -101,6 +103,7 @@ export const FBFieldComponent: Dictionary<any> = {
   action: FBActionContainer,
   hellosign: FBHelloSign,
   purchaseorder: FBPurchaseOrder,
+  receivepurchaseorder: FBReceivePO,
   paragraph: FBParagraph,
   stepsection: FBSectionBox,
   teststep: FBTestStep,
@@ -136,6 +139,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "quantity",
     "timer",
     "purchaseorder",
+    "receivepurchaseorder",
     "instructionsmediaupload",
     "evidencemediaupload",
     "testRequirement",
