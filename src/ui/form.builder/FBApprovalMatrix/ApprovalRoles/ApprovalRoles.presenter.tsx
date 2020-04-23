@@ -58,6 +58,7 @@ const ApprovalRolesPresenter: React.FunctionComponent<Props> = ({
     </Box>
   );
 
+  const employeesSelection = employees ? employees.map((employee) => employee.id) : [];
   const approvingUsersRenderer = () => (
     <Box paddingBottom="16px">
       <Typography variant="h6" style={{ marginBottom: "16px" }}>
@@ -68,7 +69,7 @@ const ApprovalRolesPresenter: React.FunctionComponent<Props> = ({
         isMulti={true}
         options={toMembersOptions(employeeOptions)}
         value={toMembersOptions(employeeOptions).filter((option) => {
-          if (employees.map((employee) => employee.id).includes(option.value)) {
+          if (employeesSelection.includes(option.value)) {
             return option;
           }
           return null;
@@ -80,7 +81,7 @@ const ApprovalRolesPresenter: React.FunctionComponent<Props> = ({
       />
     </Box>
   );
-
+  const groupsSelection = groups ? groups.map((group) => group.id) : [];
   const approvingGroupsRenderer = () => (
     <Box>
       <Typography variant="h6" style={{ marginBottom: "16px" }}>
@@ -91,7 +92,7 @@ const ApprovalRolesPresenter: React.FunctionComponent<Props> = ({
         isMulti={true}
         options={groupOptions}
         value={groupOptions.filter((option) => {
-          if (groups.map((group) => group.id).includes(option.value)) {
+          if (groupsSelection.includes(option.value)) {
             return option;
           }
           return null;

@@ -17,6 +17,7 @@ export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
   }: T) => {
     const { amState } = FB.useStores();
     const { document } = FBStore;
+    console.log(FBStore);
     const isDocumentReleased = document.status === DocumentRevisionStatus.Released;
 
     const [addMode, setAddMode] = useState(false);
@@ -30,12 +31,12 @@ export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
     const loadAction = useActionCreator(documentTypeActions.getApprovalMatrix);
 
     useEffect(() => {
-      if (props.disabled && !isDocumentReleased) {
+      if (props.disabled || isDocumentReleased || (document.docId && document.status === DocumentRevisionStatus.Draft)) {
         return;
       }
       async.start(loadAction, async);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.disabled, isDocumentReleased]);
+    }, [props.disabled, isDocumentReleased, document.docId]);
 
     const disabled = props.disabled;
     const handleEditDefaultTraining = (index, item) => () => {
