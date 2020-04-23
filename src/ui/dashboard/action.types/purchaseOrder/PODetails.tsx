@@ -2,7 +2,6 @@ import { Box, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary } fro
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import React, { useState } from "react";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
-import { Attachment } from "../../../change.request/form/types";
 import Text from "../../../components/Text";
 import { PurchaseOrder } from "../../../form.builder/FBPurchaseOrder/FBPurchaseOrder.types";
 import POAttachments from "./POAttachments";
@@ -11,17 +10,14 @@ import POSupplier from "./POSupplier";
 interface Props {
   documentRevision: DocumentRevision;
   purchaseOrders: PurchaseOrder[];
-  attachments?: Attachment[];
   supplierId: string;
 }
 
 export const PODetails: React.FunctionComponent<Props> = ({
   documentRevision,
   purchaseOrders,
-  attachments = [],
   supplierId,
 }) => {
-  const [showAttachments] = useState(attachments.length > 0);
   const [isExpanded, setIsExpanded] = useState(false);
   const handleChange = () => setIsExpanded(!isExpanded);
   const renderDetails = (
@@ -54,7 +50,7 @@ export const PODetails: React.FunctionComponent<Props> = ({
           </Box>
         ))
       }
-      {showAttachments && <POAttachments attachments={attachments} />}
+      <POAttachments documentRevision={documentRevision} />
     </Box>
   );
 
