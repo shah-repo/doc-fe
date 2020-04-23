@@ -47,6 +47,8 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         attachments.push(change);
       } else if (change.field.includes("referenceTo")) {
         references.push(change);
+      } else if (change.field.includes("formInput")) {
+        return;
       } else {
         singleFields.push((
           <Box mb={1} key={`${change.groupId}-${index}`}>
