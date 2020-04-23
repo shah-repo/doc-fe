@@ -1,28 +1,41 @@
 import React from "react";
+import { useIntl } from "react-intl";
 import { FB } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { toastError } from "../../components/notifications";
 import { FBActionModel } from "../stores/domain/models/FBActionModel";
 import FBActionStore from "../stores/ui/FBActionStore";
+import { FBInputProps } from "../types/common";
+import { FBEditorElementType } from "../types/editor";
 import FBReceivePOAutocompletePresenter from "./FBReceivePOAutocomplete.presenter";
 
 
 const FBReceivePOAutocompleteContainer: React.FunctionComponent<{}> = ({
   ...props
 }) => {
-  const stores = FB.useStores();
-  console.log(stores);
-  console.log(FB);
+  const intl = useIntl();
+  const { receiveState } = FB.useStores();
   const handleChange = async (e, po: Partial<DocumentRevision>) => {
     const apiCall = new FBActionModel();
     apiCall.set({
       requestMethod: "GET",
       requestUrl: `/document_revisions/${po.id}`,
     });
-    const data = await FBActionStore.apiCall(apiCall.toJS() as unknown as FBActionModel);
+    const data: DocumentRevision = await FBActionStore.apiCall(apiCall.toJS() as unknown as FBActionModel);
 
-    // receiveState.setLineItems([]);
+    const schema = data.formDocument?.formTemplate?.schema || [];
+    const poFieldName = (schema as FBInputProps[])
+      .find((schemaItem) => schemaItem.type as FBEditorElementType  === "purchaseorder")
+      ?.name;
 
-    console.log(data);
+    if (!poFieldName) {
+      toastError(intl.formatMessage({ id: "form.builder.receive.po.not.found" }));
+      return;
+    }
+
+    receiveState?.setItems(
+      data.formInput?.[poFieldName]?.items || []
+    );
   };
   return (
     <FBReceivePOAutocompletePresenter {...props} handleChange={handleChange} />

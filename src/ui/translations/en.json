@@ -532,6 +532,7 @@
   "form.builder.selectrequirement": "Select Requirement(s)",
   "form.builder.requirements": "Requirements",
   "form.builder.testRequirement": "Test Requirement",
+  "form.builder.receive.po.not.found": "Purchase Order not found",
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.watermark": "Download PDF file",

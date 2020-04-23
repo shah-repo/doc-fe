@@ -1,10 +1,14 @@
-import { action, observable } from "mobx";
+import { action, observable, set } from "mobx";
+import { PurchaseOrderItem } from "../FBPurchaseOrder/FBPurchaseOrder.types";
 import FBStore from "../stores/ui/FBStore";
 
 export class FBReceivePOState {
   @observable public name = "";
-  @observable public po = {};
+  @observable public items: PurchaseOrderItem[] = [];
 
+  @action public setItems = (lineItems: PurchaseOrderItem[]) => {
+    set(this, "items", lineItems);
+  };
   @action public initialize = () => {
     if (!this.name) {
       return;
@@ -19,8 +23,8 @@ export class FBReceivePOState {
       return;
     }
 
-    FBStore.setValue(this.name, this.po);
-    FBStore.resetSchema();
+    // FBStore.setValue(this.name, this.po);
+    // FBStore.resetSchema();
   };
 
 }
