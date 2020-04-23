@@ -17,7 +17,12 @@ const FBReceivePOAutocompleteContainer: React.FunctionComponent<{}> = ({
   const intl = useIntl();
   const { receiveState } = FB.useStores();
   useObserver(() => receiveState?.poId);
-  const handleChange = async (e, po: DocumentRevision) => {
+  const handleChange = async (e, po?: DocumentRevision) => {
+    if (!po) {
+      receiveState?.setPOId("");
+      receiveState?.setItems([]);
+      return;
+    }
     const apiCall = new FBActionModel();
     apiCall.set({
       requestMethod: "GET",
