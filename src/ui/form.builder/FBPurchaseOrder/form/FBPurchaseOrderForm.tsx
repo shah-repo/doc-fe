@@ -9,7 +9,6 @@ import FBCheckbox from "../../components/inputs/FBCheckbox";
 import FBDatePicker from "../../components/inputs/FBDatePicker";
 import FBTextField from "../../components/inputs/FBTextField";
 import { FBAutocompleteAsync } from "../../FBAutocompleteAsync";
-import { TAX_RATE } from "../../helpers/constants";
 import FBStore from "../../stores/ui/FBStore";
 import { FBPurchaseOrderFormProps, PurchaseOrderItem } from "../FBPurchaseOrder.types";
 import { default as Error } from "./FBPurchaseOrderError";
@@ -18,19 +17,14 @@ import { withFBPurchaseOrderForm } from "./FBPurchaseOrderForm.wrap";
 interface TotalCostProps {
   order: number;
   unitPrice: number;
-  taxRequired: boolean;
 }
 
 const TotalCost: React.FunctionComponent<TotalCostProps> = ({
   order = 0,
   unitPrice = 0,
-  taxRequired = false,
 }) => {
-  const totalPrice = React.useMemo(() => {
-    const price = order * unitPrice;
-    return taxRequired ? (price + (price * TAX_RATE)) : price;
-  }
-  , [order, unitPrice, taxRequired]);
+  const totalPrice = React.useMemo(() => (order * unitPrice)
+    , [order, unitPrice]);
   return (
     <Box margin="5px 0">
       <Typography variant="h5" align="right">
@@ -118,7 +112,6 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
         <TotalCost
           unitPrice={FBStore.getValue(`${name}-formValues.unitPrice`)}
           order={FBStore.getValue(`${name}-formValues.order`)}
-          taxRequired={FBStore.getValue(`${name}-formValues.tax`)}
         />
         <Box textAlign="right">
           <FBButton
