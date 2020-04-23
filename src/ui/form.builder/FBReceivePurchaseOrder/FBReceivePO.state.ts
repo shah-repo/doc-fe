@@ -4,18 +4,27 @@ import FBStore from "../stores/ui/FBStore";
 
 export class FBReceivePOState {
   @observable public name = "";
+  @observable public poId = "";
   @observable public items: PurchaseOrderItem[] = [];
 
   @action public setItems = (lineItems: PurchaseOrderItem[]) => {
     set(this, "items", lineItems);
+    console.log(lineItems);
+    console.log(this.updateFBStore);
+    // this.updateFBStore();
+  };
+
+  @action public setPOId = (poId: string) => {
+    set(this, "poId", poId);
+    // this.updateFBStore();
   };
   @action public initialize = () => {
     if (!this.name) {
       return;
     }
-    const value = FBStore.getValue(this.name);
-    console.log(value);
-    this.updateFBStore();
+    // const values = FBStore.getValue(this.name);
+    // this.poId = values.poId;
+    // this.items = values.items;
   };
 
   private updateFBStore = () => {
@@ -23,8 +32,13 @@ export class FBReceivePOState {
       return;
     }
 
-    // FBStore.setValue(this.name, this.po);
-    // FBStore.resetSchema();
+    /*
+    FBStore.setValue(this.name, {
+      poId: this.poId,
+      items: this.items,
+    });
+    */
+    FBStore.resetSchema();
   };
 
 }

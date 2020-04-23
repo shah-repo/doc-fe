@@ -29,6 +29,7 @@ const FBReceivePOAutocompleteContainer: React.FunctionComponent<{}> = ({
       ?.name;
 
     if (!poFieldName) {
+      // TODO: agree on alternative for notifications
       toastError(intl.formatMessage({ id: "form.builder.receive.po.not.found" }));
       return;
     }
