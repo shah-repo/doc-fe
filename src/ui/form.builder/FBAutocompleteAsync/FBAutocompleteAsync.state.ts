@@ -72,7 +72,7 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
         return _.map(
           _.groupBy(data, "document.docId"), (recs) => _.last(_.sortBy(recs, "version"))
         );
-      default: return;
+      default: return data;
     }
   };
 
