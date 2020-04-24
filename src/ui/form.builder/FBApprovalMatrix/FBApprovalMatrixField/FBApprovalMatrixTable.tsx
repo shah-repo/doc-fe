@@ -62,7 +62,6 @@ const Styles = styled.div`
 
     .td {
       padding: 5px;
-      height: 34px;
       border-bottom: 1px solid white;
       border-right: 1px solid white;
       background-color: white;

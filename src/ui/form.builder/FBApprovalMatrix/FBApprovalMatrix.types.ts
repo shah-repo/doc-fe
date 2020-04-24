@@ -104,6 +104,7 @@ export interface ApprovalRolesPresenterProps {
   handleEditRoleDetails: (e, index, type) => void;
   index?: number;
   isDisabled: boolean;
+  disabledSelectField?: boolean;
 }
 
 export interface AddRoleDialogProps {
@@ -135,4 +136,5 @@ export interface ApprovalRolesContainerProps {
   approvalRoles: ApprovalRole[];
   handleEditRoleDetails: (e, index, type) => void;
   isDisabled: boolean;
+  disabledSelectField: boolean;
 }
