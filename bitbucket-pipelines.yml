@@ -174,7 +174,7 @@ pipelines:
           - step: *BUILD_DEV
       - step: *DEPLOY_DEV
 
-    ENC-2195-approvers-list:
+    ENC-2399-approval-matrix-table:
       - parallel:
           - step: *RUN_TESTS
           # - step: *RUN_LINTER

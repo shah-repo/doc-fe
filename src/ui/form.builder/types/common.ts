@@ -42,6 +42,7 @@ export type FBLabelProps =
     labelValues?: TextProps["values"];
     fontSize?: "sm" | "md" | "lg";
     loading?: boolean;
+    isFullWidth?: boolean;
   };
 
 export type FBOptionProps =
