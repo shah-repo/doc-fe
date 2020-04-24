@@ -1,4 +1,4 @@
-import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
+import { Box, Button, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { get, isEmpty } from "lodash";
 import { observer } from "mobx-react";
@@ -29,6 +29,7 @@ import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
 import SubmitButton from "../../components/forms/SubmitButton";
+import Text from "../../components/Text";
 import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
 import { documentDetailsPath } from "../../document.revision/utils/paths";
@@ -69,6 +70,7 @@ export interface Props
   canChangeOwnerShip: boolean;
   onUpgradeClick: () => void;
   type?: string;
+  handleCancelDraft: () => void;
 }
 
 export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
@@ -97,6 +99,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   setFieldValue,
   onUpgradeClick,
   type,
+  handleCancelDraft,
 }) => {
   const intl = useIntl();
   const dispatch = useDispatch();
@@ -233,7 +236,11 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       includeEmpty={false}
     />
   );
-
+  const CancelButtonRenderer = () => (
+    <Button id="cancelDraftButton" variant="outlined" onClick={handleCancelDraft}>
+      <Text translation="common.cancel.draft" />
+    </Button>
+  );
   const formDocumentStatus = get(documentRevision, "formDocument.status", "");
   const documentStatus = documentRevision && documentRevision.status;
   const isDocumentStatusDraftOrPending = documentStatus === (DocumentRevisionStatus.Draft || DocumentRevisionStatus.PendingChange);
@@ -242,6 +249,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const options = type === "newOutput" ? initialValues.formDocument?.formTemplate?.outputDocumentTypes.map((e) =>
     ({ value: e.id, text: e.documentTypeName })
   ) as SelectOption[] : documentTypes;
+  const canShowCancelButton = documentStatus === DocumentRevisionStatus.Draft && documentRevision.version > 1;
 
   return (
     <Grid
@@ -404,6 +412,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             justify="flex-end"
             direction="row"
           >
+            { canShowCancelButton &&  CancelButtonRenderer()}
             {renderChangeOwnership}
             <SubmitButton
               asyncState={asyncState}
