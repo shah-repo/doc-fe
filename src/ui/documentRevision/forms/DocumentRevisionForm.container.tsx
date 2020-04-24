@@ -139,10 +139,17 @@ DocumentRevisionFormContainerProps
   );
 
   const upgradeAction = useActionCreator(documentRevisionsActions.upgradeToReleasedForm);
+  const cancelDraft = useActionCreator(documentRevisionsActions.cancelDraft);
+
   const async = useAsync();
+  const cancelDraftAsync = useAsync();
 
   const onUpgradeClick = () => {
     async.start(upgradeAction, documentRevision.id, async);
+  };
+
+  const handleCancelDraft = () => {
+    async.start(cancelDraft, documentRevision.id, cancelDraftAsync);
   };
 
   useEffect(() => {
@@ -180,6 +187,7 @@ DocumentRevisionFormContainerProps
       canChangeOwnerShip={canChangeOwnerShip}
       onUpgradeClick={onUpgradeClick}
       type={type}
+      handleCancelDraft={handleCancelDraft}
     />
   );
 

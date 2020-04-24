@@ -283,6 +283,7 @@
   "common.undefined": "Undefined",
   "common.summary": "Summary",
   "common.supplier": "Supplier",
+  "common.cancel.draft": "Cancel Draft",
   "output.info": "Form Info",
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",

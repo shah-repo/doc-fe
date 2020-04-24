@@ -200,6 +200,14 @@ const loadGroupsByStage = (id: string, handlers: Handlers): ApiAction<Group[]> =
     handlers,
   });
 
+const cancelDraft = (id: string): ApiAction<DocumentRevision> => apiAction({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/cancel/${id}`,
+  method: "patch",
+  onSuccess: (documentRevision, dispatch) => {
+    dispatch(documentRevisionSet(documentRevision));
+  },
+});
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
@@ -219,4 +227,5 @@ export default {
   upgradeToReleasedForm,
   createAndRelease,
   loadGroupsByStage,
+  cancelDraft,
 };
