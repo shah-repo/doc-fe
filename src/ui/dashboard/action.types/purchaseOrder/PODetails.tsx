@@ -1,73 +1,64 @@
-import { Box, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary } from "@material-ui/core";
+import { Box, createStyles, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, makeStyles } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import React, { useState } from "react";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
 import Text from "../../../components/Text";
 import { PurchaseOrder } from "../../../form.builder/FBPurchaseOrder/FBPurchaseOrder.types";
 import POAttachments from "./POAttachments";
+import PODetailItem from "./PODetailItem";
 import POSupplier from "./POSupplier";
 
 interface Props {
   documentRevision: DocumentRevision;
-  purchaseOrders: PurchaseOrder[];
+  purchaseOrder: PurchaseOrder;
   supplierId: string;
 }
 
+
+export const styles = makeStyles(() =>
+  createStyles({
+    hideBorder: {
+      "&.MuiExpansionPanel-root:before": {
+        display: "none",
+      },
+    },
+  }),
+);
+
 export const PODetails: React.FunctionComponent<Props> = ({
   documentRevision,
-  purchaseOrders,
+  purchaseOrder,
   supplierId,
 }) => {
+  const classes = styles();
   const [isExpanded, setIsExpanded] = useState(false);
   const handleChange = () => setIsExpanded(!isExpanded);
   const renderDetails = (
     <Box>
-      <POSupplier supplierId={supplierId} />
-      {
-        purchaseOrders.map((order, index) => (
-          <Box key={index}>
-            <Box marginBottom="5px">
-              <Box component="span" fontWeight="fontWeightBold">
-                <Text translation="common.total.amount" />
-                {": "}
-              </Box>
-              <Box component="span">${order.totalAmount}</Box>
-            </Box>
-            <Box marginBottom="5px">
-              <Box component="span" fontWeight="fontWeightBold">
-                <Text translation="common.description" />
-                {": "}
-              </Box>
-              <Box component="span">{documentRevision.name}</Box>
-            </Box>
-            <Box marginBottom="5px">
-              <Box component="span" fontWeight="fontWeightBold">
-                <Text translation="common.line.items" />
-                {": "}
-              </Box>
-              <Box component="span">{order.items.length}</Box>
-            </Box>
-          </Box>
-        ))
-      }
+      <PODetailItem label="common.description" value={documentRevision.name} />
+      <PODetailItem label="common.line.items" value={purchaseOrder.items.length} />
       <POAttachments documentRevision={documentRevision} />
     </Box>
   );
 
   return (
-    <ExpansionPanel expanded={isExpanded} onChange={handleChange}>
-      <ExpansionPanelSummary
-        expandIcon={<ExpandMoreIcon color="primary" />}
-        style={{ width: "100px" }}
-      >
-        <Box color="primary.main" fontWeight="bold" style={{ textTransform: "uppercase" }}>
-          <Text translation="common.summary" />
-        </Box>
-      </ExpansionPanelSummary>
-      <ExpansionPanelDetails>
-        {renderDetails}
-      </ExpansionPanelDetails>
-    </ExpansionPanel>
+    <Box>
+      <POSupplier supplierId={supplierId} />
+      <PODetailItem label="common.total.amount" value={`${purchaseOrder.totalAmount}`} />
+      <ExpansionPanel expanded={isExpanded} onChange={handleChange} className={classes.hideBorder}>
+        <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon color="primary" />}
+          style={{ width: "100px" }}
+        >
+          <Box color="primary.main" fontWeight="bold" style={{ textTransform: "uppercase" }}>
+            <Text translation="common.summary" />
+          </Box>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>
+          {renderDetails}
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
+    </Box>
   );
 };
 

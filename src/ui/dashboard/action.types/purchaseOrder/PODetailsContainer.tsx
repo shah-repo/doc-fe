@@ -14,14 +14,14 @@ interface Props {
 export const PODetailsContainer: React.FunctionComponent<Props> = ({
   documentRevision,
 }) => {
-  const [purchaseOrders] = useState<PurchaseOrder[]>(() => {
+  const [purchaseOrder] = useState<PurchaseOrder>(() => {
     const schema = documentRevision.formDocument?.formTemplate?.schema;
-    return (schema as FBInputProps[]).reduce<PurchaseOrder[]>((acc, { type, name }) => {
-      if ((type === "purchaseorder") && name && documentRevision.formInput?.[name]) {
-        return acc.concat(documentRevision.formInput[name]);
-      }
-      return acc;
-    }, []);
+
+    const fieldName = (schema as FBInputProps[])
+      .find((schemaItem) => schemaItem.type === "purchaseorder")
+      ?.name;
+
+    return documentRevision.formInput?.[fieldName || ""] || {};
   });
   const [supplierId] = useState(() => {
     const schema = documentRevision.formDocument?.formTemplate?.schema;
@@ -42,7 +42,7 @@ export const PODetailsContainer: React.FunctionComponent<Props> = ({
     >
       <PODetails
         documentRevision={documentRevision}
-        purchaseOrders={purchaseOrders}
+        purchaseOrder={purchaseOrder}
         supplierId={supplierId}
       />
       <POActions documentRevision={documentRevision} />
