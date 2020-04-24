@@ -27,6 +27,7 @@ const ApprovalRolesPresenter: React.FunctionComponent<ApprovalRolesPresenterProp
   handleEditRoleDetails,
   index,
   isDisabled,
+  disabledSelectField,
 }) => {
   const intl = useIntl();
   const classes = styles();
@@ -55,6 +56,7 @@ const ApprovalRolesPresenter: React.FunctionComponent<ApprovalRolesPresenterProp
         <Text translation="form.builder.approving.users" />
       </Typography>
       <Select
+        isDisabled={disabledSelectField}
         styles={selectStyles}
         id="ApprovalRoles-members"
         isMulti={true}
@@ -79,6 +81,7 @@ const ApprovalRolesPresenter: React.FunctionComponent<ApprovalRolesPresenterProp
         <Text translation= "form.builder.approving.groups" />
       </Typography>
       <Select
+        isDisabled={disabledSelectField}
         styles={selectStyles}
         id="ApprovalRoles-members"
         isMulti={true}

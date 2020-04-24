@@ -9,6 +9,7 @@ const ApprovalRolesContainer: React.FunctionComponent<ApprovalRolesContainerProp
   approvalRoles,
   handleEditRoleDetails,
   isDisabled,
+  disabledSelectField,
 }) => {
 
   const approvalRolesRenderer = () => (
@@ -28,6 +29,7 @@ const ApprovalRolesContainer: React.FunctionComponent<ApprovalRolesContainerProp
           approvalRoles,
           handleEditRoleDetails,
           isWithoutBorder,
+          disabledSelectField,
         }}
       />;
     })

@@ -34,7 +34,7 @@ const ApprovalRoles: React.FunctionComponent<ApprovalRolesProps> = ({
   const groupOptions = useSelector(userManagementSelectors.getOfficialGroups);
 
   useEffect(() => {
-    if (disabled || isDocumentReleased) {
+    if (disabled) {
       return;
     }
     asyncGetActiveEmployees.start(getEmployeeAction, { active: true }, asyncGetActiveEmployees);
@@ -45,6 +45,7 @@ const ApprovalRoles: React.FunctionComponent<ApprovalRolesProps> = ({
       <ApprovalRolesSectionBox/>
       {approvalRoles && <ApprovalRolesContainer
         isDisabled={true}
+        disabledSelectField={disabled}
         {...{ handleEditRoleDetails, activeEmployees, groupOptions, approvalRoles }}
       />}
       <AddRoleDialog
