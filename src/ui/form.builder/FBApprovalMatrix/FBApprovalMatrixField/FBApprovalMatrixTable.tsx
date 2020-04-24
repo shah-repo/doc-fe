@@ -197,7 +197,7 @@ const FBApprovalMatrixTable: React.FunctionComponent<Props> = ({
                   if (cell.column.parent.id !== " " && defaultTableMode) {
                     const value = cell.value ? "common.y" : " ";
                     return (
-                      <div key={index} {...cell.getCellProps()} className="td">
+                      <div key={`${index}-${cell.column.id}}`} {...cell.getCellProps()} className="td">
                         <Text  message={value} />
                       </div>
                     );
@@ -205,14 +205,14 @@ const FBApprovalMatrixTable: React.FunctionComponent<Props> = ({
                   if (cell.column.id === "defaultTraining" && defaultTableMode) {
                     const value = cell.value ? "common.yes" : "common.no";
                     return (
-                      <div key={index} {...cell.getCellProps()} className="td">
+                      <div key={`${index}-${cell.column.id}}`} {...cell.getCellProps()} className="td">
                         <Text  translation={value} />
                       </div>
                     );
                   }
                   if (addTableMode && (cell.column.id === "group") ) {
                     return (
-                      <div key={index} {...cell.getCellProps()} className="td">
+                      <div key={`${index}-${cell.column.id}}`} {...cell.getCellProps()} className="td">
                         <Select
                           value={cell.row.values.internalType}
                           onChange={(e) => readSelectValue(e, cell.row.index)}
@@ -227,7 +227,7 @@ const FBApprovalMatrixTable: React.FunctionComponent<Props> = ({
                   if (addTableMode && ((cell.column.id === "acronym") || (cell.column.id === "name"))) {
                     const name = cell.column.id === "acronym" ? "prefix" : "documentType";
                     return (
-                      <div key={index} {...cell.getCellProps()} className="td">
+                      <div key={`${index}-${cell.column.id}}`} {...cell.getCellProps()} className="td">
                         <input
                           type="text"
                           name={name}
@@ -239,7 +239,7 @@ const FBApprovalMatrixTable: React.FunctionComponent<Props> = ({
                     );
                   }
                   return (
-                    <div key={index} {...cell.getCellProps()} className="td">
+                    <div key={`${index}-${cell.column.id}}`} {...cell.getCellProps()} className="td">
                       {cell.render("Cell")}
                     </div>
                   );
