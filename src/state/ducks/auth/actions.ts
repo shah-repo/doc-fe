@@ -1,7 +1,6 @@
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { IotService } from "../../../common/utils/iot/mqttClient";
-import FBStore from "../../../ui/form.builder/stores/ui/FBStore";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApplicationState } from "../../reducers";
 import { ApiAction, Handlers } from "../../types";
@@ -202,7 +201,6 @@ const logout = (): ThunkAction<void, ApplicationState, any, AnyAction> => (
     url: LOGOUT_URL,
     method: "delete",
     onCompleted: () => {
-      FBStore.clearStores();
       dispatch(logoutUser());
       const iotService = IotService.getInstance();
       iotService.unsubscribeAll();
