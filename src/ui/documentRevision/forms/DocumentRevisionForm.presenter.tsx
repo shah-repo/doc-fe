@@ -236,12 +236,13 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   const formDocumentStatus = get(documentRevision, "formDocument.status", "");
   const documentStatus = documentRevision && documentRevision.status;
-  const isDocumentStatusDraftOrPending = documentStatus === (DocumentRevisionStatus.Draft || DocumentRevisionStatus.PendingChange);
+  const isDocumentStatusDraftOrPending =
+    documentStatus === (DocumentRevisionStatus.Draft || DocumentRevisionStatus.PendingChange);
   const isFormStatusDeprecated = formDocumentStatus === DocumentRevisionStatus.Deprecated;
   const isDocTypeDisabled = type === "newVersion" || isdocRevStatusDraft;
-  const options = type === "newOutput" ? initialValues.formDocument?.formTemplate?.outputDocumentTypes.map((e) =>
+  const options = type === "newOutput" ? (initialValues.formDocument?.formTemplate?.outputDocumentTypes.map((e) =>
     ({ value: e.id, text: e.documentTypeName })
-  ) as SelectOption[] : documentTypes;
+  ) as SelectOption[] || []) : documentTypes;
 
   return (
     <Grid
