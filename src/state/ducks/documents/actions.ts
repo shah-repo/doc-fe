@@ -50,10 +50,10 @@ const load = (id: string): ApiAction<Document> => apiAction({
   },
 });
 
-const loadDocumentProposedId = (documentTypeAcronym: string): ApiAction<DocumentProposedId> => apiAction({
+const loadDocumentProposedId = (documentTypeId: string): ApiAction<DocumentProposedId> => apiAction({
   url: DOCUMENT_PROPOSED_DOC_ID,
   method: "get",
-  params: { documentTypeAcronym },
+  params: { documentTypeId },
   asyncType: DOCUMENT_PROPOSED_DOC_ID_ASYNC,
   onSuccess: (documentProposedId, dispatch) => {
     dispatch(documentProposedIdSet(documentProposedId.docId || ""));

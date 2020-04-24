@@ -181,7 +181,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       }
     });
     if (loadDocumentProposedId) {
-      loadDocumentProposedId(type.documentTypeAcronym);
+      loadDocumentProposedId(type.id);
     }
     FBDRStore.setInitialFBMode(type.group);
     if (type.isQms) {
