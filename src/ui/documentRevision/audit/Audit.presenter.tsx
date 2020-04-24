@@ -25,6 +25,11 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       const change = audit[groupId][0];
       const { owner, ownerUser, ownerThirdParty } = change;
       const { name } = ((owner && owner.user) || ownerUser || ownerThirdParty);
+      const hasOnlyFBChanges = audit[groupId].every((change) => change.field.includes("formInput"));
+
+      if (hasOnlyFBChanges) {
+        return null;
+      }
 
       return (
         <Box key={groupId} className={classes.changeContainer}>
