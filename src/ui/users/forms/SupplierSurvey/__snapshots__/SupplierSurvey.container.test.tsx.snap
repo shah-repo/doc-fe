@@ -32,13 +32,11 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
             >
               <label
                 class="MuiFormControlLabel-root"
-                style="margin: 0px;"
                 type="checkbox"
               >
                 <span
                   aria-disabled="false"
                   class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-96 MuiCheckbox-root MuiCheckbox-colorSecondary MuiIconButton-colorSecondary"
-                  style="padding: 0px;"
                 >
                   <span
                     class="MuiIconButton-label"
