@@ -17,7 +17,6 @@ export interface Props extends FBFormDefaultProps {
 }
 
 const ApprovalMatrixSectionBox: React.FunctionComponent<Props> = ({
-  label,
   openDialog,
   closeDialog,
   alreadyOpened,
@@ -36,7 +35,7 @@ const ApprovalMatrixSectionBox: React.FunctionComponent<Props> = ({
     fontWeight={100}
     display="flex"
   >
-    <Grid item={true} xs={6}>{label && <Text message={(label as string).toUpperCase()} />}</Grid>
+    <Grid item={true} xs={6}><Text translation={"form.builder.approvalMatrix"} /></Grid>
     <Grid item={true} xs={6} style={{ display: "flex", justifyContent: "flex-end" }}>
       <Box paddingRight={2}>
         <Button color="inherit" style={{ padding: 0, margin: 0 }}

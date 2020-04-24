@@ -3,6 +3,7 @@ import React from "react";
 import { useBlockLayout, useTable } from "react-table";
 import { useSticky } from "react-table-sticky";
 import styled from "styled-components";
+import Text from "../../../components/Text";
 import { FBFormDefaultProps } from "../../types/common";
 
 const BootstrapInput = withStyles((theme) => ({
@@ -191,23 +192,25 @@ const FBApprovalMatrixTable: React.FunctionComponent<Props> = ({
             return (
               <div key={i} {...row.getRowProps()} className="tr">
                 {row.cells.map((cell, index) => {
-                  if (cell.column.parent.id !== " " && !editMode && !(cell.row.index === (data.length - 1) && addMode)) {
-                    const value = cell.value ? "Y" : "";
+                  const defaultTableMode = !editMode && !(cell.row.index === (data.length - 1) && addMode);
+                  const addTableMode = addMode && (cell.row.index === (data.length - 1));
+                  if (cell.column.parent.id !== " " && defaultTableMode) {
+                    const value = cell.value ? "common.y" : " ";
                     return (
                       <div key={index} {...cell.getCellProps()} className="td">
-                        {value}
+                        <Text  message={value} />
                       </div>
                     );
                   }
-                  if (cell.column.id === "defaultTraining" && !editMode && !(cell.row.index === (data.length - 1) && addMode)) {
-                    const value = cell.value ? "Yes" : "No";
+                  if (cell.column.id === "defaultTraining" && defaultTableMode) {
+                    const value = cell.value ? "common.yes" : "common.no";
                     return (
                       <div key={index} {...cell.getCellProps()} className="td">
-                        {value}
+                        <Text  translation={value} />
                       </div>
                     );
                   }
-                  if (addMode && (cell.row.index === (data.length - 1)) && (cell.column.id === "group") ) {
+                  if (addTableMode && (cell.column.id === "group") ) {
                     return (
                       <div key={index} {...cell.getCellProps()} className="td">
                         <Select
@@ -221,7 +224,7 @@ const FBApprovalMatrixTable: React.FunctionComponent<Props> = ({
                       </div>
                     );
                   }
-                  if (addMode && (cell.row.index === (data.length - 1)) && ((cell.column.id === "acronym") || (cell.column.id === "name"))) {
+                  if (addTableMode && ((cell.column.id === "acronym") || (cell.column.id === "name"))) {
                     const name = cell.column.id === "acronym" ? "prefix" : "documentType";
                     return (
                       <div key={index} {...cell.getCellProps()} className="td">

@@ -1,23 +1,10 @@
-import { Box, Button, createStyles, Dialog, DialogContent, makeStyles, Typography } from "@material-ui/core";
+import { Box, createStyles, Dialog, DialogContent, makeStyles, Typography } from "@material-ui/core";
 import React from "react";
 import Text from "../../../components/Text";
 import useDialog from "../../../hooks/useDialog";
 import FBButton from "../../components/inputs/FBButton";
-import { ApprovalRole } from "../FBApprovalMatrix.types";
+import { AddRoleDialogProps } from "../FBApprovalMatrix.types";
 import ApprovalRolesPresenter from "./ApprovalRoles.presenter";
-
-interface Props {
-  activeEmployees: any;
-  groupOptions: any;
-  onSave: (dialog) => void;
-  handleEditRoleDetails: (e, index, type) => void;
-  isDisabled: boolean;
-  addAnotherRole: () => void;
-  approvalRoles: ApprovalRole[];
-  handleCancelDialogRole: () => void;
-  errorMessage: string;
-  disabled: boolean;
-}
 
 const styles = makeStyles(() =>
   createStyles({
@@ -31,7 +18,7 @@ const styles = makeStyles(() =>
   },
   ));
 
-export const AddRoleDialog: React.FunctionComponent<Props> = ({
+export const AddRoleDialog: React.FunctionComponent<AddRoleDialogProps> = ({
   activeEmployees,
   groupOptions,
   onSave,
@@ -86,23 +73,21 @@ export const AddRoleDialog: React.FunctionComponent<Props> = ({
             index={approvalRoles.length - 1}
           />
           <Box display="flex" justifyContent="flex-end">
-            <Button
+            <FBButton
               variant="contained"
               onClick={() => onSave(dialog)}
               id="AddRoleDialog-save"
-            >
-              <Text translation="common.save"/>
-            </Button>
-            <Button
+              label="common.save"
+            />
+            <FBButton
               variant="outlined"
               onClick={() => {
                 handleCancelDialogRole();
                 dialog.close();
               }}
               id="AddRoleDialog-cancel"
-            >
-              <Text translation="common.cancel"/>
-            </Button>
+              label="common.cancel"
+            />
           </Box>
         </DialogContent>
       </Dialog>

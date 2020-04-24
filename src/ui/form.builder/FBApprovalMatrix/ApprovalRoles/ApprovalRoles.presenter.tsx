@@ -4,18 +4,7 @@ import { useIntl } from "react-intl";
 import Select from "react-select";
 import Text from "../../../components/Text";
 import { toMembersOptions } from "../../../group.management/utils/transform";
-
-interface Props {
-  name: string;
-  groups: any;
-  employees: any;
-  groupOptions: any;
-  employeeOptions: any;
-  isWithoutBorder: boolean;
-  handleEditRoleDetails: (e, index, type) => void;
-  index?: number;
-  isDisabled: boolean;
-}
+import { ApprovalRolesPresenterProps } from "../FBApprovalMatrix.types";
 
 export const styles = makeStyles(() =>
   createStyles({
@@ -28,7 +17,7 @@ export const styles = makeStyles(() =>
   },
   ));
 
-const ApprovalRolesPresenter: React.FunctionComponent<Props> = ({
+const ApprovalRolesPresenter: React.FunctionComponent<ApprovalRolesPresenterProps> = ({
   name,
   groups,
   employees,
@@ -59,12 +48,14 @@ const ApprovalRolesPresenter: React.FunctionComponent<Props> = ({
   );
 
   const employeesSelection = employees ? employees.map((employee) => employee.id) : [];
+  const selectStyles = { menu: (styles) => ({ ...styles, zIndex: 999 }) };
   const approvingUsersRenderer = () => (
     <Box paddingBottom="16px">
       <Typography variant="h6" style={{ marginBottom: "16px" }}>
         <Text translation="form.builder.approving.users" />
       </Typography>
       <Select
+        styles={selectStyles}
         id="ApprovalRoles-members"
         isMulti={true}
         options={toMembersOptions(employeeOptions)}
@@ -88,6 +79,7 @@ const ApprovalRolesPresenter: React.FunctionComponent<Props> = ({
         <Text translation= "form.builder.approving.groups" />
       </Typography>
       <Select
+        styles={selectStyles}
         id="ApprovalRoles-members"
         isMulti={true}
         options={groupOptions}
@@ -108,8 +100,8 @@ const ApprovalRolesPresenter: React.FunctionComponent<Props> = ({
   return (
     <Box
       className={isWithoutBorder ? classes.boxWithoutBorder : classes.boxWithBorder}
-      paddingBottom="32px"
-      marginBottom="16px"
+      pb={4}
+      mb={2}
     >
       {approvalRoleRenderer()}
       {approvingUsersRenderer()}

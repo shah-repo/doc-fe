@@ -6,22 +6,12 @@ import { DEFAULT_ACTIVE_EMPLOYEES } from "../../../group.management/utils/types"
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import FBStore from "../../stores/ui/FBStore";
-import { ApprovalRole } from "../FBApprovalMatrix.types";
+import { ApprovalRolesProps } from "../FBApprovalMatrix.types";
 import AddRoleDialog from "./AddRoleDialog";
-import ApprovalRolesContainer from "./ApprovalRoles.wrap";
+import ApprovalRolesContainer from "./ApprovalRoles.container";
 import ApprovalRolesSectionBox from "./ApprovalRolesSectionBox";
 
-interface Props {
-  approvalRoles: ApprovalRole[];
-  handleEditRoleDetails: (e, index, type) => void;
-  addAnotherRole: () => void;
-  handleSaveRole: (dialog) => void;
-  handleCancelDialogRole: () => void;
-  errorMessage: string;
-  disabled: boolean;
-}
-
-const ApprovalRoles: React.FunctionComponent<Props> = ({
+const ApprovalRoles: React.FunctionComponent<ApprovalRolesProps> = ({
   approvalRoles,
   handleEditRoleDetails,
   addAnotherRole,
@@ -50,30 +40,28 @@ const ApprovalRoles: React.FunctionComponent<Props> = ({
     asyncGetActiveEmployees.start(getEmployeeAction, { active: true }, asyncGetActiveEmployees);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [disabled, isDocumentReleased]);
-
   return (
     <>
       <ApprovalRolesSectionBox/>
       {approvalRoles && <ApprovalRolesContainer
         isDisabled={true}
-        handleEditRoleDetails={handleEditRoleDetails}
-        activeEmployees={activeEmployees}
-        groupOptions={groupOptions}
-        approvalRoles={approvalRoles}
+        {...{ handleEditRoleDetails, activeEmployees, groupOptions, approvalRoles }}
       />}
       <AddRoleDialog
         isDisabled={false}
-        handleEditRoleDetails={handleEditRoleDetails}
-        activeEmployees={activeEmployees}
-        groupOptions={groupOptions}
         onSave={handleSaveRole}
-        addAnotherRole={addAnotherRole}
-        approvalRoles={approvalRoles}
-        handleCancelDialogRole={handleCancelDialogRole}
-        errorMessage={errorMessage}
-        disabled={disabled}
+        {...{
+          activeEmployees,
+          groupOptions,
+          disabled,
+          errorMessage,
+          approvalRoles,
+          handleCancelDialogRole,
+          addAnotherRole,
+          handleEditRoleDetails,
+        }}
       />
-    </>
-  ); };
+    </>);
+};
 
 export default ApprovalRoles;

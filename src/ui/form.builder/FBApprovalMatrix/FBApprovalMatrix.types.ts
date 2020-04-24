@@ -1,4 +1,7 @@
+import { Group } from "../../../state/ducks/auth/types";
 import { Employee } from "../../../state/ducks/company";
+import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
+import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { FBInputProps } from "../types/common";
 import FBApprovalMatrixState from "./FBApprovalMatrix.state";
 
@@ -13,11 +16,6 @@ export interface ApprovalRole {
   groups: Group[];
   name: string;
   index: number;
-}
-
-export interface Group {
-  name: string;
-  id: string;
 }
 
 export interface ApprovalMatrixItem {
@@ -49,6 +47,12 @@ export type FBApprovalMatrixFieldProps =
   amState: FBApprovalMatrixState;
 };
 
+export interface Dialog {
+  isOpen: boolean;
+  open: () => void;
+  close: () => void;
+}
+
 export type FBApprovalMatrixTableProps =
 & FBApprovalMatrixBasicProps
 & {
@@ -64,8 +68,71 @@ export type FBApprovalMatrixTableProps =
   errorMessage: string;
   handleEditRoleDetails: (e: string, index: number, type: string) => void;
   addAnotherRole: () => void;
-  handleSaveRole: (dialog) => void;
+  handleSaveRole: (dialog: Dialog) => void;
   handleCancelDialogRole: () => void;
   disabled: boolean;
 } & Pick<FBInputProps, "disabled">;
 
+export interface FBApprovalMatrixFieldUIProps {
+  approvalRoles: ApprovalRole[];
+  addAnotherRole: () => void;
+  handleEditRoleDetails: (e: string, index: number, type: string) => void;
+  handleSaveRole: (dialog: Dialog) => void;
+  handleCancelDialogRole: () => void;
+  errorMessage: string;
+  disabled: boolean;
+  dialog: Dialog;
+  toggleEditMode: (boolean) => void;
+  editMode: boolean;
+  addMode: boolean;
+  data: any[];
+  columns: any[];
+  readInputValue: (event: string, header: string, index: number) => void;
+  readSelectValue: (event: string, index: number) => void;
+  handleAdd: () => void;
+  handleSaveChanges: () => void;
+  cancelAddMode: () => void;
+}
+
+export interface ApprovalRolesPresenterProps {
+  name: string;
+  groups: Group[];
+  employees: Employee[];
+  groupOptions: OptionType[];
+  employeeOptions: GetEmployeeResponse[];
+  isWithoutBorder: boolean;
+  handleEditRoleDetails: (e, index, type) => void;
+  index?: number;
+  isDisabled: boolean;
+}
+
+export interface AddRoleDialogProps {
+  activeEmployees: GetEmployeeResponse[];
+  groupOptions: OptionType[];
+  onSave: (dialog) => void;
+  handleEditRoleDetails: (e, index, type) => void;
+  isDisabled: boolean;
+  addAnotherRole: () => void;
+  approvalRoles: ApprovalRole[];
+  handleCancelDialogRole: () => void;
+  errorMessage: string;
+  disabled: boolean;
+}
+
+export interface ApprovalRolesProps {
+  approvalRoles: ApprovalRole[];
+  handleEditRoleDetails: (e, index, type) => void;
+  addAnotherRole: () => void;
+  handleSaveRole: (dialog) => void;
+  handleCancelDialogRole: () => void;
+  errorMessage: string;
+  disabled: boolean;
+}
+
+export interface ApprovalRolesContainerProps {
+  activeEmployees: GetEmployeeResponse[];
+  groupOptions: OptionType[];
+  approvalRoles: ApprovalRole[];
+  handleEditRoleDetails: (e, index, type) => void;
+  isDisabled: boolean;
+}

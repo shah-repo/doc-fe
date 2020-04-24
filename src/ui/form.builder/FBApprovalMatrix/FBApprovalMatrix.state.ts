@@ -4,8 +4,8 @@ import FBStore from "../stores/ui/FBStore";
 import { ApprovalMatrix, ApprovalMatrixItem, ApprovalRole } from "./FBApprovalMatrix.types";
 
 const DEFAULT_AM: ApprovalMatrix = {
-  approvalRoles: [],
-  approvalMatrix: [],
+  approvalRoles: [] as ApprovalRole[],
+  approvalMatrix: [] as ApprovalMatrixItem[],
 };
 
 export class FBApprovalMatrixState {
@@ -19,6 +19,12 @@ export class FBApprovalMatrixState {
   @action public setApprovalMatrix = (approvalMatrix: ApprovalMatrix) => {
     this.setApprovalRoles(approvalMatrix.approvalRoles);
     set(this.am, "approvalMatrix", approvalMatrix.approvalMatrix);
+    this.updateFBStore();
+  };
+
+  @action public updateFBStore = () => {
+    FBStore.setValue(this.name, this.am);
+    FBStore.resetSchema();
   };
 
   @action public addApprovalRoleItem = (approvalRoleItem: ApprovalRole) => {
@@ -35,10 +41,12 @@ export class FBApprovalMatrixState {
 
   @action public removeAddedRole = () => {
     this.am.approvalRoles.splice(-1, 1);
+    this.updateFBStore();
   };
 
   @action public editDefaultTraining = (index: number, defaultTraining: boolean) => {
     this.am.approvalMatrix[index].docType.defaultTraining = defaultTraining;
+    this.updateFBStore();
   };
 
   @action public editApprovalMatrixRole = (
@@ -48,6 +56,7 @@ export class FBApprovalMatrixState {
     itemIndex: number
   ) => {
     this.am.approvalMatrix[index].approvalRoles[stage][itemIndex] = approvalMatrixItem;
+    this.updateFBStore();
   };
 
   @action public editApprovalRoles = (
@@ -56,6 +65,7 @@ export class FBApprovalMatrixState {
     this.am.approvalRoles[index][type] = approvalRoleItem.map((role) => ({
       id: role.value,
     }));
+    this.updateFBStore();
   };
 
 
@@ -63,10 +73,12 @@ export class FBApprovalMatrixState {
     index: number, approvalRoleItem: string, type: string
   ) => {
     this.am.approvalRoles[index][type] = approvalRoleItem;
+    this.updateFBStore();
   };
 
   @action public editApprovalRoleItem = (index: number, item: string, type: string) => {
     this.am.approvalMatrix[index].docType[type] = item;
+    this.updateFBStore();
   };
 
   @action public initialize = () => {
@@ -76,7 +88,7 @@ export class FBApprovalMatrixState {
     const value: ApprovalMatrix = FBStore.getValue(this.name) || DEFAULT_AM;
     this.am = value;
     FBStore.setValue(this.name, this.am);
-    FBStore.resetSchema();
+    this.updateFBStore();
   };
 }
 

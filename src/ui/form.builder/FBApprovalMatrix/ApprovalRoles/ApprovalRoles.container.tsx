@@ -1,16 +1,9 @@
 /* eslint-disable react/jsx-key */
 import React from "react";
-import { ApprovalRole } from "../FBApprovalMatrix.types";
+import { ApprovalRolesContainerProps } from "../FBApprovalMatrix.types";
 import ApprovalRolesPresenter from "./ApprovalRoles.presenter";
 
-interface Props {
-  activeEmployees: any;
-  groupOptions: any;
-  approvalRoles: ApprovalRole[];
-  handleEditRoleDetails: (e, index, type) => void;
-  isDisabled: boolean;
-}
-const ApprovalRolesContainer: React.FunctionComponent<Props> = ({
+const ApprovalRolesContainer: React.FunctionComponent<ApprovalRolesContainerProps> = ({
   activeEmployees,
   groupOptions,
   approvalRoles,
@@ -24,15 +17,18 @@ const ApprovalRolesContainer: React.FunctionComponent<Props> = ({
 
       return <ApprovalRolesPresenter
         key={index}
-        handleEditRoleDetails={handleEditRoleDetails}
-        isDisabled={isDisabled}
-        index={index}
         name={role.name}
         groups={role.groups}
         employees={role.employees}
         employeeOptions={activeEmployees}
-        groupOptions={groupOptions}
-        isWithoutBorder={isWithoutBorder}
+        {...{
+          isDisabled,
+          index,
+          groupOptions,
+          approvalRoles,
+          handleEditRoleDetails,
+          isWithoutBorder,
+        }}
       />;
     })
   );

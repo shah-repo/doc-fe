@@ -73,7 +73,7 @@ export class FormBuilderStore {
   @action public getSchemaItemByType = (
     type: string,
   ): FBTemplateSchema | undefined => {
-    const filtered = _.filter(this.schema, (schemaItem) => schemaItem.type === type);
+    const filtered = _.filter(this.schema, { type });
     return filtered[0];
   };
 

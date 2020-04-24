@@ -1,13 +1,9 @@
-import { Box, Dialog, DialogContent, Typography } from "@material-ui/core";
 import React, { useState } from "react";
-import Text from "../../../components/Text";
+import { useIntl } from "react-intl";
 import useDialog from "../../../hooks/useDialog";
-import FBButton from "../../components/inputs/FBButton";
-import ApprovalRoles from "../ApprovalRoles/ApprovalRoles";
 import { FBApprovalMatrixTableProps } from "../FBApprovalMatrix.types";
-import ApprovalMatrixSectionBox from "./ApprovalMatrixSectionBox";
+import FBApprovalMatrixFieldUI from "./FBApprovalMatrixField.ui";
 import { withFBApprovalMatrixTable } from "./FBApprovalMatrixField.wrap";
-import FBApprovalMatrixTable from "./FBApprovalMatrixTable";
 
 const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixTableProps> = ({
   approvalRoles,
@@ -25,7 +21,6 @@ const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixTableProps>
   handleSaveRole,
   handleCancelDialogRole,
   disabled,
-  name,
 }) => {
   const dialog = useDialog();
   const [editMode, toggleEditMode] = useState(false);
@@ -39,6 +34,8 @@ const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixTableProps>
     handleAddRoleItems(index, event.target.value, "group");
   };
 
+  const intl = useIntl();
+
   const columns = React.useMemo(
     () => [
       {
@@ -46,22 +43,30 @@ const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixTableProps>
         sticky: "left",
         columns: [
           {
-            Header: "Prefix",
+            Header: intl.formatMessage({
+              id: "form.builder.field.prefix",
+            }),
             width: 50,
             accessor: "acronym",
           },
           {
-            Header: "Internal type",
+            Header: intl.formatMessage({
+              id: "form.builder.am.internal.type",
+            }),
             width: 100,
             accessor: "group",
           },
           {
-            Header: "Document type",
+            Header: intl.formatMessage({
+              id: "form.builder.field.document.type",
+            }),
             width: 193,
             accessor: "name",
           },
           {
-            Header: "Training req.",
+            Header: intl.formatMessage({
+              id: "form.builder.field.training.req",
+            }),
             width: 100,
             accessor: "defaultTraining",
             // eslint-disable-next-line react/display-name
@@ -76,7 +81,9 @@ const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixTableProps>
         ],
       },
       {
-        Header: "Approvals numeric",
+        Header: intl.formatMessage({
+          id: "form.builder.approvals.numeric",
+        }),
         columns: approvalRoles.map((group) => ({
           Header: group.name,
           accessor: `approvalsNumeric-${group.index}`,
@@ -94,7 +101,9 @@ const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixTableProps>
         })),
       },
       {
-        Header: "Approvals numeric alpha",
+        Header: intl.formatMessage({
+          id: "form.builder.approvals.numeric.alpha",
+        }),
         columns: approvalRoles.map((group) => ({
           Header: group.name,
           accessor: `approvalsNumericAlpha-${group.index}`,
@@ -112,7 +121,9 @@ const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixTableProps>
         })),
       },
       {
-        Header: "Approvals alpha",
+        Header: intl.formatMessage({
+          id: "form.builder.approvals.alpha",
+        }),
         columns: approvalRoles.map((group) => ({
           Header: group.name,
           accessor: `approvalsAlpha-${group.index}`,
@@ -130,7 +141,9 @@ const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixTableProps>
         })),
       },
       {
-        Header: "Approvals administrative",
+        Header: intl.formatMessage({
+          id: "form.builder.approvals.admin",
+        }),
         columns: approvalRoles.map((group) => ({
           Header: group.name,
           accessor: `approvalsAdmin-${group.index}`,
@@ -148,6 +161,7 @@ const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixTableProps>
         })),
       },
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [handleEdit, handleEditDefaultTraining, approvalRoles]
   );
 
@@ -169,111 +183,26 @@ const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixTableProps>
 
 
   return (
-    <Box mt={3}>
-      <ApprovalRoles
-        approvalRoles={ approvalRoles }
-        addAnotherRole={addAnotherRole}
-        handleEditRoleDetails={handleEditRoleDetails}
-        handleSaveRole={handleSaveRole}
-        handleCancelDialogRole={handleCancelDialogRole}
-        errorMessage={errorMessage}
-        disabled={disabled}
-      />
-      <ApprovalMatrixSectionBox
-        label="Approval matrix"
-        openDialog={() => dialog.open()}
-        closeDialog={() => dialog.close()}
-        toggleEditMode={toggleEditMode}
-        editMode={editMode}
-        addMode={addMode}
-        disabled={disabled}
-      />
-      <FBApprovalMatrixTable
-        addMode={addMode}
-        data={data}
-        columns={columns}
-        editMode={editMode}
-        readInputValue={readInputValue}
-        readSelectValue={readSelectValue}
-      />
-      {!addMode &&
-      <FBButton
-        fullWidth={true}
-        onClick={handleAdd}
-        label="form.builder.add.item"
-        variant="outlined"
-        style={{ margin: "8px 0" }}
-        disabled={editMode || disabled}
-      />}
-      {errorMessage && <Typography variant="subtitle2" color="error" style={{ marginTop: 10 }} ><Text message={errorMessage} /></Typography>}
-      {addMode &&
-      <Box display="flex" flexDirection="row-reverse">
-        <FBButton
-          onClick={handleSaveChanges}
-          label="Save changes"
-          variant="contained"
-          color="primary"
-          style={{ margin: "8px" }}
-        />
-        <FBButton
-          onClick={cancelAddMode}
-          label="Cancel"
-          variant="outlined"
-          color="primary"
-          style={{ margin: "8px" }}
-        />
-      </Box>}
-      <Dialog fullScreen={true} open={dialog.isOpen}>
-        <DialogContent>
-          <ApprovalMatrixSectionBox
-            label="Approval matrix"
-            openDialog={() => dialog.open()}
-            closeDialog={() => dialog.close()}
-            alreadyOpened={true}
-            toggleEditMode={toggleEditMode}
-            editMode={editMode}
-            addMode={addMode}
-            disabled={disabled}
-          />
-          <FBApprovalMatrixTable
-            addMode={addMode}
-            fullscreenMode={true}
-            data={data}
-            columns={columns}
-            editMode={editMode}
-            readInputValue={readInputValue}
-            readSelectValue={readSelectValue}
-          />
-          {!addMode &&
-            <FBButton
-              fullWidth={true}
-              onClick={handleAdd}
-              label="form.builder.add.item"
-              variant="outlined"
-              style={{ margin: "8px 0" }}
-              disabled={editMode || disabled}
-            />}
-          {errorMessage && <Typography variant="subtitle2" color="error" style={{ marginTop: 10 }} ><Text message={errorMessage} /></Typography>}
-          {addMode &&
-          <Box display="flex" flexDirection="row-reverse">
-            <FBButton
-              onClick={handleSaveChanges}
-              label="Save"
-              variant="contained"
-              color="primary"
-              style={{ margin: "8px" }}
-            />
-            <FBButton
-              onClick={cancelAddMode}
-              label="Cancel"
-              variant="outlined"
-              color="primary"
-              style={{ margin: "8px" }}
-            />
-          </Box>}
-        </DialogContent>
-      </Dialog>
-    </Box>
+    <FBApprovalMatrixFieldUI
+      approvalRoles={approvalRoles}
+      addAnotherRole={addAnotherRole}
+      handleEditRoleDetails={handleEditRoleDetails}
+      handleSaveRole={handleSaveRole}
+      handleCancelDialogRole={handleCancelDialogRole}
+      errorMessage={errorMessage}
+      disabled={disabled}
+      dialog={dialog}
+      toggleEditMode={toggleEditMode}
+      editMode={editMode}
+      addMode={addMode}
+      data={data}
+      columns={columns}
+      readInputValue={readInputValue}
+      readSelectValue={readSelectValue}
+      handleAdd={handleAdd}
+      handleSaveChanges={handleSaveChanges}
+      cancelAddMode={cancelAddMode}
+    />
   );
 };
 
