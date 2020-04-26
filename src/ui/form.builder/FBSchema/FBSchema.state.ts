@@ -4,6 +4,7 @@ import React from "react";
 import { FBSchemaProps } from ".";
 import { FBAutocompleteAsync, FBCheckboxGroup, FBInputProps, FBInputType } from "..";
 import { FBCheckbox } from "../FBCheckbox";
+import { FBDatePicker } from "../FBDatePicker";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
 import { FBSchemaSelect } from "../FBSchemaSelect";
@@ -25,7 +26,7 @@ export class FBSchemaState {
     checkboxgroup: FBCheckboxGroup,
     autocomplete: FBAutocompleteAsync,
     texteditor: FBTextEditor,
-    // datepicker: FBDatePicker,
+    datepicker: FBDatePicker,
     // hyperlink: FBLink,
     // select: FBSelectField,
     // radio: FBRadio,

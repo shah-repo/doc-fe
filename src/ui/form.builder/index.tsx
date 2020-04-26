@@ -18,6 +18,7 @@ export * from "./FBConditionalWrapper/FBConditionalWrapper.types";
 export { default as FBControlPicker } from "./FBControlPicker/FBControlPicker";
 export { default as FBControlPickerState } from "./FBControlPicker/FBControlPicker.state";
 export * from "./FBControlPicker/FBControlPicker.types";
+export { default as FBDatePicker } from "./FBDatePicker/FBDatePicker";
 export { default as FBDialog } from "./FBDialog/FBDialog";
 export { default as FBDialogState } from "./FBDialog/FBDialog.state";
 export * from "./FBDialog/FBDialog.types";

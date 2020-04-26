@@ -86,7 +86,7 @@ export const withFBOnChange = <T extends FBInputProps>(
     }
 
     function dateValue(value: string) {
-      stringValue(value);
+      stringValue((value as unknown as Date).toISOString());
       inputState && inputState.setValue(value);
     }
 

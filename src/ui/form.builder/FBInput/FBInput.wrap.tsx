@@ -76,7 +76,6 @@ export const withFBInput = <T extends FBInputProps>(
         onChange,
         value,
         ...(type !== "datepicker" && type !== "autocomplete" && !_.isBoolean(defaultValue) && { defaultValue }),
-        // ...(type === "datepicker" && { value: inputState?.value }),
       });
     }
 

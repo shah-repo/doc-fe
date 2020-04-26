@@ -24,7 +24,7 @@ export class FBEditorState {
     checkboxgroup: FBEditorOptionGroup,
     autocomplete: FBEditorAutocomplete,
     texteditor: FBEditorLabel,
-    // datepicker: FBEditorLabel,
+    datepicker: FBEditorLabel,
     // hyperlink: FBEditorHyperlink,
     // select: FBEditorOptionGroup,
     // radio: FBEditorCheckControl,
