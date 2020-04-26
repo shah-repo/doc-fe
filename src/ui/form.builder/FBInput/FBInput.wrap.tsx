@@ -34,6 +34,9 @@ export const withFBInput = <T extends FBInputProps>(
     const intl = useIntl();
     defaultValue = setDefaultValue();
     helperText =  formState?.helpers.get(name) || helperText;
+    if (type === "texteditor" && inputState) {
+      inputState.value = inputState.value || "";
+    }
     value = inputState?.value;
     error = !_.isUndefined(formState?.getFieldHelper(name)) && formState?.errorValidation;
 

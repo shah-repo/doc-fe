@@ -9,6 +9,7 @@ import { FBParagraph } from "../FBParagraph";
 import { FBSchemaSelect } from "../FBSchemaSelect";
 import { FBSection } from "../FBSection";
 import { FBSubsection } from "../FBSubsection";
+import { FBTextEditor } from "../FBTextEditor";
 import { FBTextField } from "../FBTextField";
 import FBStore from "../stores/ui/FBStore";
 import { FBInputProps as FBOldInputProps } from "../types/common";
@@ -23,7 +24,7 @@ export class FBSchemaState {
     checkbox: FBCheckbox,
     checkboxgroup: FBCheckboxGroup,
     autocomplete: FBAutocompleteAsync,
-    // texteditor: FBTextEditor,
+    texteditor: FBTextEditor,
     // datepicker: FBDatePicker,
     // hyperlink: FBLink,
     // select: FBSelectField,

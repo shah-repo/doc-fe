@@ -6,6 +6,21 @@ import { FB, FBSchemaProps } from "..";
 import { FBDialogState } from "../FBDialog";
 import FBStore from "../stores/ui/FBStore";
 
+// Disable missing translation message for the non translation cases.
+
+// eslint-disable-next-line
+const consoleError = console.error.bind(console);
+// eslint-disable-next-line
+console.error = (message, ...args) => {
+  if (
+    typeof message === "string" &&
+    (message.startsWith("[React Intl] Cannot format message:") || message.startsWith("[React Intl] Missing message:"))
+  ) {
+    return;
+  }
+  consoleError(message, ...args);
+};
+
 export const withFBWorkspace = <T extends FBWorkspaceProps>(
   Component: React.FunctionComponent<T>,
 ) => {

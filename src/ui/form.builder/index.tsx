@@ -136,6 +136,7 @@ export * from "./FBTestRequirement/FBTestRequirement.types";
 export { default as FBTestStep } from "./FBTestStep/FBTestStep";
 export { default as FBTestStepState } from "./FBTestStep/FBTestStep.state";
 export * from "./FBTestStep/FBTestStep.types";
+export { default as FBTextEditor } from "./FBTextEditor/FBTextEditor";
 export { default as FBTextField } from "./FBTextField/FBTextField";
 export * from "./FBTextField/FBTextField.types";
 export { default as FBTimerField } from "./FBTimerField/FBTimerField";
