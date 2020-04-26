@@ -2,7 +2,7 @@ import _ from "lodash";
 import { action, get, observable, set } from "mobx";
 import React from "react";
 import { FBSchemaProps } from ".";
-import { FBCheckboxGroup, FBInputProps, FBInputType } from "..";
+import { FBAutocompleteAsync, FBCheckboxGroup, FBInputProps, FBInputType } from "..";
 import { FBCheckbox } from "../FBCheckbox";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
@@ -22,6 +22,7 @@ export class FBSchemaState {
     textfield: FBTextField,
     checkbox: FBCheckbox,
     checkboxgroup: FBCheckboxGroup,
+    autocomplete: FBAutocompleteAsync,
     // texteditor: FBTextEditor,
     // datepicker: FBDatePicker,
     // hyperlink: FBLink,

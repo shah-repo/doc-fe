@@ -1,22 +1,20 @@
 import { action, observable, set } from "mobx";
 import React from "react";
 import { FBEditorMode, FBEditorModeProps, FBEditorProps, FBInputType } from "..";
+import { FBEditorAutocomplete } from "../FBEditorAutocomplete";
 import { FBEditorCheckControl } from "../FBEditorCheckControl";
 import { FBEditorLabel } from "../FBEditorLabel";
 import { FBEditorOptionGroup } from "../FBEditorOptionGroup";
 import FBEditorTextField from "../FBEditorTextField/FBEditorTextField";
-import { FBEditorValidation } from "../FBEditorValidation";
 
 export class FBEditorState {
-  public static steppers: Record<FBEditorMode, React.FunctionComponent<any> | undefined> = {
-    config: undefined,
-    validation: FBEditorValidation,
-    // validation: FBEditorValidation,
-    // validationmode: FBValidationMode,
-  };
 
-
-  public static omitValidation: FBInputType[] = ["section", "subsection", "hyperlink", "action"];
+  public static omitValidation: FBInputType[] = [
+    "section",
+    "subsection",
+    "hyperlink",
+    "action",
+  ];
 
   private static editors: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
     section: FBEditorLabel,
@@ -24,6 +22,7 @@ export class FBEditorState {
     textfield: FBEditorTextField,
     checkbox: FBEditorCheckControl,
     checkboxgroup: FBEditorOptionGroup,
+    autocomplete: FBEditorAutocomplete,
     // texteditor: FBEditorLabel,
     // datepicker: FBEditorLabel,
     // hyperlink: FBEditorHyperlink,

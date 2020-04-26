@@ -3,7 +3,6 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { FBAutocompleteAsyncProps, FBAutocompleteAsyncState } from ".";
 import { FB } from "..";
-import FBStore from "../stores/ui/FBStore";
 
 export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
   Component: React.FunctionComponent<T>
@@ -23,13 +22,14 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     ...props
   }: T) => {
 
+    const { formState } = FB.useStores();
     autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState);
     autocompleteAsyncState?.setOptionId(optionId);
     const {
       valueKey: optionValueKey = "value",
       labelKey: optionLabelKey = "text",
     } = autocompleteAsyncState?.optionConfig || {};
-    const formValue = FBStore.getValue(name);
+    const formValue = formState?.getFieldValue(name);
 
     React.useEffect(() => {
       if (!optionId) {

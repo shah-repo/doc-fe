@@ -37,6 +37,9 @@ export const withFBOnChange = <T extends FBInputProps>(
     function checkValue(ev: React.ChangeEvent<HTMLInputElement>) {
       const value = _.get(ev.target, "checked");
       contextValue(value);
+      if (!value) {
+        return formState?.omitFieldValue(name);
+      }
       formState?.setFieldValue(name, value);
     }
 

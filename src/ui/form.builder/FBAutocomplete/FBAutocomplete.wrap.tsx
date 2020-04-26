@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React from "react";
 import { FBAutocompleteProps } from ".";
-import FBStore from "../stores/ui/FBStore";
+import { FB } from "..";
 
 export const withFBAutocomplete = <T extends FBAutocompleteProps>(
   Component: React.FunctionComponent<T>
@@ -18,7 +18,8 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     ...props
   }: T) => {
 
-    const value = FBStore.getValue(name) || defaultValue;
+    const { formState } = FB.useStores();
+    const value = formState?.getFieldValue(name) || defaultValue;
 
     if (options && value && optionValueType === "key") {
       defaultValue = multiple

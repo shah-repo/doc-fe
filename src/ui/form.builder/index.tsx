@@ -28,6 +28,7 @@ export { default as FBEditorActions } from "./FBEditorActions/FBEditorActions";
 export * from "./FBEditorActions/FBEditorActions.types";
 export { default as FBEditorApprovalField } from "./FBEditorApprovalField/FBEditorApprovalField";
 export * from "./FBEditorApprovalField/FBEditorApprovalField.types";
+export { default as FBEditorAutocomplete } from "./FBEditorAutocomplete/FBEditorAutocomplete";
 export { default as FBEditorCheckControl } from "./FBEditorCheckControl/FBEditorCheckControl";
 export { default as FBEditorInlineApproval } from "./FBEditorInlineApproval/FBEditorInlineApproval";
 export * from "./FBEditorInlineApproval/FBEditorInlineApproval.types";
@@ -112,6 +113,8 @@ export { default as FBSchemaSelectState } from "./FBSchemaSelect/FBSchemaSelect.
 export * from "./FBSchemaSelect/FBSchemaSelect.types";
 export { default as FBSection } from "./FBSection/FBSection";
 export * from "./FBSection/FBSection.types";
+export { default as FBSelect } from "./FBSelect/FBSelect";
+export * from "./FBSelect/FBSelect.types";
 export { default as FBSelectDocument } from "./FBSelectDocument/FBSelectDocument";
 export { default as FBSelectRequirement } from "./FBSelectRequirement/FBSelectRequirement";
 export { default as FBSortable } from "./FBSortable/FBSortable";
@@ -153,4 +156,6 @@ export { default as FBWorkspaceTplActions } from "./FBWorkspaceTplActions/FBWork
 export * from "./FBWorkspaceTplActions/FBWorkspaceTplActions.types";
 export { default as FB } from "./helpers/FB";
 export * from "./helpers/FBFieldName";
+
+
 

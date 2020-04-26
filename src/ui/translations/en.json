@@ -432,7 +432,7 @@
   "form.builder.error.message": "Error Message",
   "form.builder.field.config": "Field Config",
   "form.builder.validation": "Validation",
-  "form.builder.form.preview": "Form preview",
+  "form.builder.form.preview": "Form Preview",
   "form.builder.predefined.validation": "Predefined Validation",
   "form.builder.custom.validation": "Custom Validation",
   "form.builder.validation.mode": "Validation Mode",
