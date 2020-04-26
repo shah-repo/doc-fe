@@ -1,3 +1,4 @@
+import flatten from "flat";
 import _, { Dictionary } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBInputState } from "..";
@@ -117,8 +118,14 @@ export class FBFormState extends FBSchemaState {
     }
 
     const rules = this.getRules();
-    // const values = flatten(this.getValues());
-    const values = this.getValues();
+    const values =  _.mapValues(this.getValues(), (v, k) => {
+      if (_.isBoolean(v)) {
+        return _.toString(v);
+      } else if (_.isObject(v) && !_.isArray(v)) {
+        return flatten(v);
+      }
+      return v;
+    });
     const validator = new this.Validator(values, rules);
     validator.setAttributeNames(this.validationAttributeNames);
 

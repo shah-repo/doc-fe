@@ -29,11 +29,9 @@ export class FBEditorState {
     datepicker: FBEditorLabel,
     hyperlink: FBEditorHyperlink,
     select: FBEditorOptionGroup,
-    // radio: FBEditorCheckControl,
-    // radiogroup: FBEditorOptionGroup,
-    // fileupload: FBEditorLabel,
-    // autocomplete: FBEditorAutocomplete,
-    // autocompleteasync: FBEditorAutocomplete,
+    radio: FBEditorCheckControl,
+    radiogroup: FBEditorOptionGroup,
+    fileupload: FBEditorLabel,
   };
 
   @observable public mode?: FBEditorMode = "config";

@@ -8,6 +8,8 @@ import { FBDatePicker } from "../FBDatePicker";
 import { FBHyperlink } from "../FBHyperlink";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
+import { FBRadio } from "../FBRadio";
+import { FBRadioGroup } from "../FBRadioGroup";
 import { FBSchemaSelect } from "../FBSchemaSelect";
 import { FBSection } from "../FBSection";
 import { FBSelect } from "../FBSelect";
@@ -31,8 +33,8 @@ export class FBSchemaState {
     datepicker: FBDatePicker,
     hyperlink: FBHyperlink,
     select: FBSelect,
-    // radio: FBRadio,
-    // radiogroup: FBRadioGroup,
+    radio: FBRadio,
+    radiogroup: FBRadioGroup,
     // fileupload: FBFileUpload,
     // autocomplete: FBAutocomplete,
     // autocompleteasync: FBAutocompleteAsync,
