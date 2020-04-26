@@ -5,6 +5,7 @@ import { FBSchemaProps } from ".";
 import { FBAutocompleteAsync, FBCheckboxGroup, FBInputProps, FBInputType } from "..";
 import { FBCheckbox } from "../FBCheckbox";
 import { FBDatePicker } from "../FBDatePicker";
+import { FBFileUpload } from "../FBFileUpload";
 import { FBHyperlink } from "../FBHyperlink";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
@@ -35,7 +36,7 @@ export class FBSchemaState {
     select: FBSelect,
     radio: FBRadio,
     radiogroup: FBRadioGroup,
-    // fileupload: FBFileUpload,
+    fileupload: FBFileUpload,
     // autocomplete: FBAutocomplete,
     // autocompleteasync: FBAutocompleteAsync,
     schemaselect: FBSchemaSelect,
