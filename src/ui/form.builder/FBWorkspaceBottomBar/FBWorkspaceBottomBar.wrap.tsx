@@ -69,7 +69,7 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
         maxWidth: "md",
         title: "form.builder.form.preview",
         content: (
-          <Box px={8}>
+          <Box mx={8}>
             <FBForm schema={workspaceState?.schema} initialValidation={true} />
           </Box>
         ),

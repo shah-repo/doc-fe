@@ -89,7 +89,7 @@ export const withFBInput = <T extends FBInputProps>(
         formState?.setValidationAttributeName(name, validationAttrName);
         rules && (formState.setFieldRules(name, rules));
       }
-    }, []);
+    }, [rules]);
 
     return Component({
       ...(props as T),

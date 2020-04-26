@@ -1,5 +1,5 @@
 import React from "react";
-import { FBEditor, FBEditorLabel, FBEditorProperties, FBEditorProps } from "..";
+import { FBEditor, FBEditorProperties, FBEditorProps, FBTextField } from "..";
 
 const FBEditorCheckControl: React.FunctionComponent<FBEditorProps> = ({
   children,
@@ -7,7 +7,7 @@ const FBEditorCheckControl: React.FunctionComponent<FBEditorProps> = ({
   type,
 }) => (
   <FBEditor {...{ type, index }}>
-    <FBEditorLabel key={`fb-editor-label-${type}-${index}`} />
+    <FBTextField label="form.builder.label" name="label" rules="required"/>
     <FBEditorProperties key={`fb-editor-prop-${type}-${index}`} {...{ type }} />
     {children}
   </FBEditor>

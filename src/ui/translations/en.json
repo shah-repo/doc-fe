@@ -524,6 +524,7 @@
   "form.builder.editor.validation": "Validation",
   "form.builder.editor.validationmode": "Validation Mode",
   "form.builder.inputs": "Inputs",
+  "form.builder.properties": "Properties",
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.watermark": "Download PDF file",

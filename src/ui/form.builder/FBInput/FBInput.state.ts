@@ -1,6 +1,8 @@
 import { action, observable, set } from "mobx";
+import { FBInputType } from ".";
 
 export class FBInputState {
+  public static omitLabel: FBInputType[] = ["checkbox"];
   @observable public defaultValue: any;
   @observable public value: any;
   @observable public includeContext = false;
