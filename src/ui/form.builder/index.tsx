@@ -31,6 +31,7 @@ export { default as FBEditorApprovalField } from "./FBEditorApprovalField/FBEdit
 export * from "./FBEditorApprovalField/FBEditorApprovalField.types";
 export { default as FBEditorAutocomplete } from "./FBEditorAutocomplete/FBEditorAutocomplete";
 export { default as FBEditorCheckControl } from "./FBEditorCheckControl/FBEditorCheckControl";
+export { default as FBEditorHyperlink } from "./FBEditorHyperlink/FBEditorHyperlink";
 export { default as FBEditorInlineApproval } from "./FBEditorInlineApproval/FBEditorInlineApproval";
 export * from "./FBEditorInlineApproval/FBEditorInlineApproval.types";
 export { default as FBEditorInstructionsDocument } from "./FBEditorInstructionsDocument/FBEditorInstructionsDocument";
@@ -70,6 +71,8 @@ export { default as FBFormMarkDown } from "./FBFormMarkDown/FBFormMarkDown";
 export * from "./FBFormMarkDown/FBFormMarkDown.types";
 export { default as FBHelloSign } from "./FBHelloSign/FBHelloSign";
 export * from "./FBHelloSign/FBHelloSign.types";
+export { default as FBHyperlink } from "./FBHyperlink/FBHyperlink";
+export * from "./FBHyperlink/FBHyperlink.types";
 export { default as FBInlineApproval } from "./FBInlineApproval/FBInlineApproval";
 export { default as FBInlineApprovalState } from "./FBInlineApproval/FBInlineApproval.state";
 export * from "./FBInlineApproval/FBInlineApproval.types";
@@ -158,6 +161,5 @@ export { default as FBWorkspaceTplActions } from "./FBWorkspaceTplActions/FBWork
 export * from "./FBWorkspaceTplActions/FBWorkspaceTplActions.types";
 export { default as FB } from "./helpers/FB";
 export * from "./helpers/FBFieldName";
-
 
 

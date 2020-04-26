@@ -5,6 +5,7 @@ import { FBSchemaProps } from ".";
 import { FBAutocompleteAsync, FBCheckboxGroup, FBInputProps, FBInputType } from "..";
 import { FBCheckbox } from "../FBCheckbox";
 import { FBDatePicker } from "../FBDatePicker";
+import { FBHyperlink } from "../FBHyperlink";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
 import { FBSchemaSelect } from "../FBSchemaSelect";
@@ -27,7 +28,7 @@ export class FBSchemaState {
     autocomplete: FBAutocompleteAsync,
     texteditor: FBTextEditor,
     datepicker: FBDatePicker,
-    // hyperlink: FBLink,
+    hyperlink: FBHyperlink,
     // select: FBSelectField,
     // radio: FBRadio,
     // radiogroup: FBRadioGroup,

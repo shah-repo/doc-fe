@@ -3,9 +3,11 @@ import React from "react";
 import { FBEditorMode, FBEditorModeProps, FBEditorProps, FBInputType } from "..";
 import { FBEditorAutocomplete } from "../FBEditorAutocomplete";
 import { FBEditorCheckControl } from "../FBEditorCheckControl";
+import { FBEditorHyperlink } from "../FBEditorHyperlink";
 import { FBEditorLabel } from "../FBEditorLabel";
 import { FBEditorOptionGroup } from "../FBEditorOptionGroup";
-import FBEditorTextField from "../FBEditorTextField/FBEditorTextField";
+import { FBEditorTextField } from "../FBEditorTextField";
+
 
 export class FBEditorState {
 
@@ -25,7 +27,7 @@ export class FBEditorState {
     autocomplete: FBEditorAutocomplete,
     texteditor: FBEditorLabel,
     datepicker: FBEditorLabel,
-    // hyperlink: FBEditorHyperlink,
+    hyperlink: FBEditorHyperlink,
     // select: FBEditorOptionGroup,
     // radio: FBEditorCheckControl,
     // radiogroup: FBEditorOptionGroup,
