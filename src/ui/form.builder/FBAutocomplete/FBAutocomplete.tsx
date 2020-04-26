@@ -4,9 +4,8 @@ import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import _ from "lodash";
 import React from "react";
 import { FBAutocompleteProps } from ".";
-import { FBMapWrapper } from "..";
+import { FBInput, FBMapWrapper } from "..";
 import Text from "../../components/Text";
-import FBInput from "../components/common/FBInput";
 import { withFBAutocomplete } from "./FBAutocomplete.wrap";
 
 const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({

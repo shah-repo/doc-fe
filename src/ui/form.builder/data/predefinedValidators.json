@@ -1,0 +1,35 @@
+[{
+    "type": "checkbox",
+    "name": "validators.required",
+    "label": "required",
+    "helperText": "Check if the length of the String representation of the value is >"
+  },
+  {
+    "type": "checkbox",
+    "name": "validators.required_if",
+    "label": "required_if:anotherfield,value",
+    "helperText": "The field must be present and not empty if the anotherfield field is equal to any value."
+  },
+  {
+    "type": "schemaselect",
+    "name": "validators.required_if.name",
+    "label": "Required if field",
+    "includeSelectedSchema": true,
+    "rules": "required_with:validators.required_if",
+    "validationMode": "visibility"
+  },
+  {
+    "type": "checkbox",
+    "name": "validators.required_with",
+    "label": "required_with:foo,bar,...",
+    "helperText": "The field under validation must be present and not empty only if any of the other specified fields are present."
+  },
+  {
+    "type": "schemaselect",
+    "name": "validators.required_with_name",
+    "label": "Required if field",
+    "multiple": true,
+    "rules": "required_with:validators.required_with",
+    "validationMode": "visibility"
+  }
+]

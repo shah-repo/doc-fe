@@ -1,6 +1,6 @@
 import React from "react";
 import { FBStarterProps } from ".";
-import { FB } from "..";
+import { FB, FBControlPicker } from "..";
 
 export const withFBStarter = <T extends FBStarterProps>(
   Component: React.FunctionComponent<T>,
@@ -15,7 +15,7 @@ export const withFBStarter = <T extends FBStarterProps>(
     onClick = () => {
       dialogState?.config({
         open: true,
-        // content: <FBControlPicker />,
+        content: <FBControlPicker />,
       });
     };
 

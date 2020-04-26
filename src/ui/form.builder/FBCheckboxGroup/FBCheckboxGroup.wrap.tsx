@@ -2,6 +2,7 @@ import { Checkbox, FormControlLabel } from "@material-ui/core";
 import _ from "lodash";
 import React from "react";
 import { FBCheckboxGroupProps } from ".";
+import { FBOption } from "..";
 import Text from "../../components/Text";
 import { withFBOption } from "../FBOption/FBOption.wrap";
 import { FB } from "../helpers";
@@ -23,7 +24,7 @@ export const withFBCheckboxGroup = <T extends FBCheckboxGroupProps>(
     const { formState } = FB.useStores();
     const formValue = formState?.getFieldValue(name, []);
 
-    controls = _.map(options, (option, index) => {
+    controls = _.map(options as FBOption[], (option, index) => {
       const [value, message] = _.at(option, [optionValueKey!, optionLabelKey!]);
       const defaultChecked = _.includes(formValue, value);
       return (

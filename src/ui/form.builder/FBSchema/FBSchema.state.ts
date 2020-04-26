@@ -3,18 +3,24 @@ import { action, get, observable, set } from "mobx";
 import React from "react";
 import { FBSchemaProps } from ".";
 import { FBCheckboxGroup, FBInputProps, FBInputType } from "..";
+import { FBCheckbox } from "../FBCheckbox";
+import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
+import { FBSchemaSelect } from "../FBSchemaSelect";
 import { FBSection } from "../FBSection";
+import { FBSubsection } from "../FBSubsection";
 import { FBTextField } from "../FBTextField";
+import FBStore from "../stores/ui/FBStore";
+import { FBInputProps as FBOldInputProps } from "../types/common";
 
 export class FBSchemaState {
   public static omitLabel: FBInputType[] = ["section", "subsection"];
 
   private static control: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
     section: FBSection,
-    // subsection: FBSubsection,
+    subsection: FBSubsection,
     textfield: FBTextField,
-    // checkbox: FBCheckbox,
+    checkbox: FBCheckbox,
     checkboxgroup: FBCheckboxGroup,
     // texteditor: FBTextEditor,
     // datepicker: FBDatePicker,
@@ -25,8 +31,10 @@ export class FBSchemaState {
     // fileupload: FBFileUpload,
     // autocomplete: FBAutocomplete,
     // autocompleteasync: FBAutocompleteAsync,
-    // schemaselect: FBSchemaSelect,
+    schemaselect: FBSchemaSelect,
     paragraph: FBParagraph,
+    instructionsmediaupload: FBMediaAlbumField,
+    evidencemediaupload: FBMediaAlbumField,
   };
 
   public controlProps: FBInputProps | undefined;
@@ -76,6 +84,8 @@ export class FBSchemaState {
       const schema = _.union(this.schema, [schemaItem]);
       this.setSchema(schema);
     }
+    // OLD: to be removed
+    FBStore.setSchema(this.schema as FBOldInputProps[]);
   };
 
   @action public setSchemaItemAt = (schemaItem: FBSchemaProps, index?: number) => {

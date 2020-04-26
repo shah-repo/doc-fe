@@ -1,4 +1,4 @@
-export interface FBMapWrapperProps<T> {
-  collection: T[];
-  children: (item: T, index: number, props: any) => React.ReactNode;
+export interface FBMapWrapperProps<T extends any> {
+  collection: T | T[];
+  children: (value: T | any, key: number | any, props: any) => React.ReactNode;
 }

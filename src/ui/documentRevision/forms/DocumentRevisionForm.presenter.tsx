@@ -32,7 +32,7 @@ import SubmitButton from "../../components/forms/SubmitButton";
 import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
 import { documentDetailsPath } from "../../document.revision/utils/paths";
-import FBWorkspaceForm from "../../form.builder/containers/workspace/FBWorkspaceForm";
+import { FBWorkspace } from "../../form.builder";
 import { FBValidate } from "../../form.builder/defaults/validator";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import FBStore from "../../form.builder/stores/ui/FBStore";
@@ -385,7 +385,13 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         {FBStore.active && (
           <Box mt={5}>
             {values.id && <GenerateHtmlPreview id={values.id} renderHTML={values.formDocument?.renderHTML} />}
-            <FBWorkspaceForm
+            {/* <FBWorkspaceForm
+              id={get(values, "id")}
+              documentId={get(values, "formDocument.document.id") || get(values, "document.id")}
+              document={values as unknown as DocumentRevision}
+            /> */}
+            <FBWorkspace
+              // OLD: to be removed
               id={get(values, "id")}
               documentId={get(values, "formDocument.document.id") || get(values, "document.id")}
               document={values as unknown as DocumentRevision}

@@ -11,18 +11,14 @@ const FBFieldWrapper: React.FunctionComponent<FBFieldWrapperProps> = ({
   onMouseOver,
   onMouseLeave,
   topBarMargin,
-  bottomBarMargin,
+  grabMargin,
   index,
-  state,
+  fieldWrapperState,
   ...props
 }) => (
-  <FBProvider fieldWrapper={state}>
+  <FBProvider {...{ fieldWrapperState }}>
     <Box {...{ onMouseOver, onMouseLeave }}>
-      <FBFieldTopBar
-        visibility={toolsVisible}
-        mb={topBarMargin}
-        index={index}
-      />
+      <FBFieldTopBar visibility={toolsVisible} mb={topBarMargin} index={index} />
       <Box display="flex" flexDirection="row">
         <Box width="100%">{props.children}</Box>
         <Box
@@ -30,16 +26,13 @@ const FBFieldWrapper: React.FunctionComponent<FBFieldWrapperProps> = ({
           width="0"
           alignItems="center"
           style={{ cursor: "grab" }}
+          mt={grabMargin}
         >
           <DragIndicatorIcon />
         </Box>
       </Box>
-      {markDownVisible && <FBFieldMarkDown mt={-3.5} {...{ index }} />}
-      <FBFieldBottomBar
-        visibility={toolsVisible}
-        mt={bottomBarMargin}
-        {...{ index }}
-      />
+      {markDownVisible && <FBFieldMarkDown {...{ index }} />}
+      <FBFieldBottomBar visibility={toolsVisible} {...{ index }} />
     </Box>
   </FBProvider>
 );

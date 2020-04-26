@@ -1,6 +1,7 @@
 import { BaseTextFieldProps } from "@material-ui/core";
 import { AutocompleteProps } from "@material-ui/lab/Autocomplete";
-import { FBEditorPropertiesType, FBInputState, FBLabelProps, FBOptionProps } from "..";
+import { FBEditorPropertiesType, FBInputState, FBLabelProps, FBOptionProps, FBSchemaState } from "..";
+import { FBEditorValidationMode } from "../FBEditorValidation";
 
 export type FBInputType =
   | "url"
@@ -19,7 +20,6 @@ export type FBInputType =
   | "autocompleteasync"
   | "hyperlink"
   | "fileupload"
-  | "schemaSelect"
   | "schemaItem"
   | "action"
   | "summarysection"
@@ -28,9 +28,20 @@ export type FBInputType =
   | "paragraph"
   | "testRequirement"
   | "instructionsmediaupload"
-  | "evidencemediaupload";
-
-export type FBValidationMode = "disabled" | "visibility";
+  | "evidencemediaupload"
+  | "stepsection"
+  | "teststep"
+  | "quantity"
+  | "timer"
+  | "purchaseorder"
+  | "hellosign"
+  | "approval"
+  | "inlineapproval"
+  | "checkpoint"
+  | "createlabel"
+  | "instructionsdocument"
+  | "selectdocument"
+  | "selectrequirement";
 
 export type FBInputProps =
 & FBLabelProps
@@ -48,7 +59,7 @@ export type FBInputProps =
 | "defaultChecked"
 | "hidden"
 > & {
-  onChange?: (ev: React.ChangeEvent<any> | any, value: any) => any;
+  onChange?: (ev: React.ChangeEvent<any> | any, value: any, context?: FBSchemaState) => any;
   type?: FBInputType;
   index?: number;
   gutter?: boolean;
@@ -58,11 +69,12 @@ export type FBInputProps =
   editorProperties?: FBEditorPropertiesType[];
   includeContext?: boolean;
   rules?: string;
-  validationMode?: FBValidationMode;
+  validationMode?: FBEditorValidationMode;
   includeSelectedSchema?: boolean;
   paragraph?: string;
   testRequirement?: string;
   isTemplate?: boolean;
+  includeQRScan?: boolean;
 };
 
 export const OmitInputClones: FBInputType[] = ["fileupload"];

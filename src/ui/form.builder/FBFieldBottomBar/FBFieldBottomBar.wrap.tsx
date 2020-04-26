@@ -8,13 +8,10 @@ export const withFBFieldBottomBar = <T extends FBFieldBottomBarProps>(
   const Comp = ({
     index = 0,
     ...props
-  }: T) => {
-
-    return Component({
-      ...(props as T),
-      onClick: editorStore.setOpen(index),
-    });
-  };
+  }: T) => Component({
+    ...(props as T),
+    onClick: editorStore.setOpen(index),
+  });
 
   return (props: T) => Comp(props);
 };

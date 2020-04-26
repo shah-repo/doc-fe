@@ -11,7 +11,8 @@ ButtonProps,
 | "disabled"
 | "id"
 | "type"
+| "style"
+| "autoFocus"
 > & {
-  component?: (props: any) => JSX.Element;
   label?: string;
 };

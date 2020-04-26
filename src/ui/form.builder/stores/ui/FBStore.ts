@@ -34,7 +34,7 @@ export class FormBuilderStore {
   public docId = "";
   public documentId = "";
   public stepSectionReg = /#([1-9][0-9]?|100)$/;
-  public document: DocumentRevision = {} as DocumentRevision;
+  public document: Partial<DocumentRevision> = {};
 
   @action public sectionNumber = (endIndex: number): number => {
     const sections = _.filter(this.getSchema(), (schemaItem, index) =>

@@ -15,11 +15,11 @@ export type FBWorkspaceProps =
   & {
     id?: string;
     documentId?: string;
+    document?: DocumentRevision;
     mode?: FBWorkspaceMode;
     includeTransport?: boolean;
     isStarter?: boolean;
     schema?: FBTemplateSchema[];
     values?: Dictionary<any>;
     dialogState?: FBDialogState;
-    document?: DocumentRevision;
   };

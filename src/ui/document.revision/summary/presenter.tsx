@@ -14,7 +14,7 @@ import { RequestType } from "../../components/common/owner.changer/helpers/types
 import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
-import FBWorkspace from "../../form.builder/containers/workspace/FBWorkspace";
+import { FBWorkspace } from "../../form.builder";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import FBStore from "../../form.builder/stores/ui/FBStore";
 import Attachment from "./attachment";

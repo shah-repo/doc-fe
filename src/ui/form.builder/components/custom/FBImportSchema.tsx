@@ -7,24 +7,24 @@ import FBButton from "../inputs/FBButton";
 const FBImportSchema: React.FunctionComponent<FBImportSchemaProps> = ({
   importSchema,
 }) => (
-    <Box>
-      <input
-        hidden={true}
-        id="fb-upload-file"
-        type="file"
-        accept=".json"
-        onChange={(importSchema)}
+  <Box>
+    <input
+      hidden={true}
+      id="fb-upload-file"
+      type="file"
+      accept=".json"
+      onChange={(importSchema)}
+    />
+    <label htmlFor="fb-upload-file">
+      <FBButton
+        component={(props) => <span {...props} />}
+        color="default"
+        startIcon={<VerticalAlignBottomIcon />}
+        label="form.builder.import.template"
+        id="FBImportSchema-import"
       />
-      <label htmlFor="fb-upload-file">
-        <FBButton
-          component={(props) => <span {...props} />}
-          color="default"
-          startIcon={<VerticalAlignBottomIcon />}
-          label="form.builder.import.template"
-          id="FBImportSchema-import"
-        />
-      </label>
-    </Box>
-  );
+    </label>
+  </Box>
+);
 
 export default FBImportSchema;

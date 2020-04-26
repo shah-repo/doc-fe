@@ -66,7 +66,7 @@ const FBPurchaseOrderCreateLot: React.FunctionComponent<Props> = ({
       name: `${item.glCode}-${item.description}`,
       description: `<p>${item.glCode}-${item.description}</p>`,
       attachments: [],
-      referenceTo: [{ value: document.document.id, label: "" }],
+      referenceTo: [{ value: document?.document?.id || "", label: "" }],
       securityEmployees: [],
       securityGroups,
       document: {

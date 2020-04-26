@@ -15,16 +15,16 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
   }: T) => {
 
     schemaState = FB.useRef<FBSchemaState>(FBSchemaState, schema);
-    const { formState } = FB.useStores();
+
 
     function controlRenderer(schemaItem: FBSchemaProps): React.ReactNode | undefined {
-      const { name, rules, label, placeholder } = schemaItem;
-      // Validation settings
-      if (formState && name) {
-        const validationAttrName = (label as string) || placeholder || name;
-          formState?.setValidationAttributeName(name, validationAttrName);
-          rules && (formState.setFieldRules(name, rules));
-      }
+      // const { name, rules, label, placeholder } = schemaItem;
+      // // Validation settings
+      // if (formState && name) {
+      //   const validationAttrName = (label as string) || placeholder || name;
+      //     formState?.setValidationAttributeName(name, validationAttrName);
+      //     rules && (formState.setFieldRules(name, rules));
+      // }
       return FBSchemaState.component(schemaItem);
     }
 

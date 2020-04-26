@@ -2,42 +2,42 @@ import _ from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBFieldWrapperProps, FBFieldWrapperState } from ".";
-import { FB } from "..";
-import { FBEditorSectionConfig } from "../defaults/editor";
-import FBStore from "../stores/ui/FBStore";
+import { FB, FBSchemaState } from "..";
 
 export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    state,
+    fieldWrapperState,
     index = 0,
     topBarMargin = 0,
-    bottomBarMargin = 0,
+    grabMargin = 0,
     ...props
   }: T) => {
 
-    state = FB.useRef<FBFieldWrapperState>(FBFieldWrapperState);
-    const { label, type } = FBStore.getSchemaItem(index) || {};
+    const { workspaceState } = FB.useStores();
+    fieldWrapperState = FB.useRef<FBFieldWrapperState>(FBFieldWrapperState);
 
-    const isSection: boolean = _.includes(FBEditorSectionConfig.section, type);
+    const { label, type } = workspaceState?.getSchemaItemAt(index) || {};
 
-    (!isSection && !_.isEmpty(label)) && (topBarMargin = -3);
-    !state.markDownVisible && (bottomBarMargin = -3);
+    if (!_.includes(FBSchemaState.omitLabel, type) && !_.isUndefined(label)) {
+      topBarMargin = -3;
+      grabMargin = 3.5;
+    }
 
-    const onMouseOver = () => state?.setToolsActive(true);
-    const onMouseLeave = () => state?.setToolsActive(false);
+    const onMouseOver = () => fieldWrapperState?.setToolsActive(true);
+    const onMouseLeave = () => fieldWrapperState?.setToolsActive(false);
 
     return useObserver(() => Component({
       ...(props as T),
       onMouseOver,
       onMouseLeave,
-      toolsVisible: state?.toolsVisible,
-      markDownVisible: state?.markDownVisible,
+      toolsVisible: fieldWrapperState?.toolsVisible,
+      markDownVisible: fieldWrapperState?.markDownVisible,
       topBarMargin,
-      bottomBarMargin,
+      grabMargin,
       index,
-      state,
+      fieldWrapperState,
     }));
   };
 

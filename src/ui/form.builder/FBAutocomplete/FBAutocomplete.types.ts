@@ -1,5 +1,5 @@
 import { UseAutocompleteProps } from "@material-ui/lab/useAutocomplete";
-import { FBInputProps } from "../types/common";
+import { FBInputProps } from "..";
 
 export type FBAutocompleteProps =
  & FBInputProps

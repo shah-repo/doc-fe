@@ -1,4 +1,3 @@
-
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBDialogProps } from ".";
@@ -8,21 +7,26 @@ export const withFBDialog = <T extends FBDialogProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
+    maxWidth = "sm",
     content,
     title,
-    maxWidth = "sm",
     actions,
     open,
     ...props
   }: T) => {
 
     const { dialogState } = FB.useStores();
+    const handleClose = () => dialogState?.closeDialog();
 
-    React.useEffect(() => {
-      dialogState && dialogState.config({ maxWidth, content, title, actions });
-    }, []);
+    const [portalAction, setActionContainer] = React.useState(null);
+    const handleActionsRef = React.useCallback((instance) => {
+      setActionContainer(instance);
+    }, [setActionContainer]);
 
-    const onCloseClick = () => dialogState?.closeDialog();
+    const [portalTitle, setTitleContainer] = React.useState(null);
+    const handleTitleRef = React.useCallback((instance) => {
+      setTitleContainer(instance);
+    }, [setTitleContainer]);
 
     useObserver(() => {
       open = dialogState?.open;
@@ -34,12 +38,17 @@ export const withFBDialog = <T extends FBDialogProps>(
 
     return Component({
       ...(props as T),
+      handleActionsRef,
+      handleTitleRef,
+      handleClose,
+      dialogState,
+      portalAction,
+      portalTitle,
       open,
       content,
       title,
       maxWidth,
       actions,
-      onCloseClick,
     });
   };
 

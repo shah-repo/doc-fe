@@ -1,22 +1,29 @@
-import { inject, useObserver } from "mobx-react";
+import { useObserver } from "mobx-react";
 import React from "react";
 import { FBFieldTopBarProps } from ".";
-import FBStore from "../stores/ui/FBStore";
+import { FB } from "..";
+import { withFBEditorHelper } from "../FBEditor/FBEditor.helper";
 
 export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
+    openEditor,
     index,
-    fieldWrapper,
     ...props
   }: T) => {
 
-    const editSchemaItem = () => FBStore.editSchemaItem(index);
-    const removeSchemaItem = () => FBStore.removeSchemaItem(index);
-    const markDownSchemaItem = () =>
-      fieldWrapper?.setMarkDownActive(!fieldWrapper.markDownVisible);
+    const { fieldWrapperState, workspaceState } = FB.useStores();
+    const { type } = workspaceState?.getSchemaItemAt(index) || {};
 
+    const editSchemaItem = () => {
+      openEditor && type && openEditor(type, index)();
+    };
+    const removeSchemaItem = () => {
+      workspaceState?.removeSchemaItemAt(index);
+    };
+    const markDownSchemaItem = () =>
+      fieldWrapperState?.setMarkDownActive(!fieldWrapperState.markDownVisible);
     return useObserver(() => Component({
       ...(props as T),
       editSchemaItem,
@@ -25,5 +32,5 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
     }));
   };
 
-  return inject("fieldWrapper")((props: T) => Comp(props));
+  return withFBEditorHelper((props: T) => Comp(props));
 };
