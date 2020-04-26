@@ -10,6 +10,7 @@ import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
 import { FBSchemaSelect } from "../FBSchemaSelect";
 import { FBSection } from "../FBSection";
+import { FBSelect } from "../FBSelect";
 import { FBSubsection } from "../FBSubsection";
 import { FBTextEditor } from "../FBTextEditor";
 import { FBTextField } from "../FBTextField";
@@ -29,7 +30,7 @@ export class FBSchemaState {
     texteditor: FBTextEditor,
     datepicker: FBDatePicker,
     hyperlink: FBHyperlink,
-    // select: FBSelectField,
+    select: FBSelect,
     // radio: FBRadio,
     // radiogroup: FBRadioGroup,
     // fileupload: FBFileUpload,

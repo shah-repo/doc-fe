@@ -28,7 +28,7 @@ export class FBEditorState {
     texteditor: FBEditorLabel,
     datepicker: FBEditorLabel,
     hyperlink: FBEditorHyperlink,
-    // select: FBEditorOptionGroup,
+    select: FBEditorOptionGroup,
     // radio: FBEditorCheckControl,
     // radiogroup: FBEditorOptionGroup,
     // fileupload: FBEditorLabel,
