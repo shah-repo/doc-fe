@@ -1,5 +1,5 @@
 import { useObserver } from "mobx-react";
-import React from "react";
+import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import { FB } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
@@ -14,15 +14,42 @@ import FBReceivePOAutocompletePresenter from "./FBReceivePOAutocomplete.presente
 const FBReceivePOAutocompleteContainer: React.FunctionComponent<{}> = ({
   ...props
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const intl = useIntl();
   const { receiveState } = FB.useStores();
   useObserver(() => receiveState?.poId);
+  const handlePOSchema = (document: DocumentRevision) => {
+    const schema = (document.formDocument?.formTemplate?.schema || []) as FBInputProps[];
+    const poSchema = schema.reduce<FBInputProps[]>((acc, schemaItem: FBInputProps) => {
+      if ((schemaItem.type as FBEditorElementType === "purchaseorder") || !schemaItem.name) {
+        return acc;
+      }
+      schemaItem.disabled = true;
+      return acc.concat(schemaItem);
+    }, []);
+    const fieldNames: string[] = poSchema.map((item) => item.name as string);
+    const poFormInput = fieldNames.reduce((acc, name) => {
+      acc[name] = document.formInput?.[name];
+      return acc;
+    }, {});
+
+    receiveState?.setFieldNames(fieldNames);
+    receiveState?.setPOFormInput(poFormInput);
+    receiveState?.setPOSchema(poSchema);
+
+    receiveState?.updateSchema();
+    receiveState?.updateFormInput();
+  };
   const handleChange = async (e, po?: DocumentRevision) => {
+    receiveState?.clear();
     if (!po) {
-      receiveState?.setPOId("");
-      receiveState?.setItems([]);
       return;
     }
+
+    setIsLoading(true);
+    receiveState?.setPOId(po.id);
+    receiveState?.setItems([]);
+
     const apiCall = new FBActionModel();
     apiCall.set({
       requestMethod: "GET",
@@ -30,8 +57,10 @@ const FBReceivePOAutocompleteContainer: React.FunctionComponent<{}> = ({
     });
     const data: DocumentRevision = await FBActionStore.apiCall(apiCall.toJS() as unknown as FBActionModel);
 
-    const schema = data.formDocument?.formTemplate?.schema || [];
-    const poFieldName = (schema as FBInputProps[])
+    setIsLoading(false);
+
+    const schema = (data.formDocument?.formTemplate?.schema || []) as FBInputProps[];
+    const poFieldName = schema
       .find((schemaItem) => schemaItem.type as FBEditorElementType  === "purchaseorder")
       ?.name;
 
@@ -41,10 +70,11 @@ const FBReceivePOAutocompleteContainer: React.FunctionComponent<{}> = ({
       return;
     }
 
-    receiveState?.setPOId(po.id);
     receiveState?.setItems(
       data.formInput?.[poFieldName]?.items || []
     );
+
+    handlePOSchema(data);
   };
 
   return (
@@ -52,6 +82,7 @@ const FBReceivePOAutocompleteContainer: React.FunctionComponent<{}> = ({
       {...props}
       handleChange={handleChange}
       poId={receiveState?.poId}
+      isLoading={isLoading}
     />
   );
 };
