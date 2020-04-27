@@ -18,6 +18,7 @@ import { FBSelect } from "../FBSelect";
 import { FBSubsection } from "../FBSubsection";
 import { FBTextEditor } from "../FBTextEditor";
 import { FBTextField } from "../FBTextField";
+import { FBTimerField } from "../FBTimerField";
 import FBStore from "../stores/ui/FBStore";
 import { FBInputProps as FBOldInputProps } from "../types/common";
 
@@ -41,6 +42,7 @@ export class FBSchemaState {
     schemaselect: FBSchemaSelect,
     paragraph: FBParagraph,
     quantity: FBQuantityField,
+    timer: FBTimerField,
     instructionsmediaupload: FBMediaAlbumField,
     evidencemediaupload: FBMediaAlbumField,
   };

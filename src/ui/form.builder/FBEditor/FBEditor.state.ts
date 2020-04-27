@@ -19,10 +19,12 @@ export class FBEditorState {
     "action",
     "paragraph",
     "quantity",
+    "timer",
   ];
 
   public static pickDefaultValue: FBInputType[] = [
     "quantity",
+    "timer",
   ];
 
   private static editors: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
@@ -41,6 +43,7 @@ export class FBEditorState {
     fileupload: FBEditorLabel,
     paragraph: FBEditorParagraph,
     quantity: FBEditorLabel,
+    timer: FBEditorLabel,
   };
 
   @observable public mode?: FBEditorMode = "config";
