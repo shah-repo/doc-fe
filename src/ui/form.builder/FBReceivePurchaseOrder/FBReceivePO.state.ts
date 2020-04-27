@@ -113,7 +113,7 @@ export class FBReceivePOState {
     this.poFormInput = values.poFormInput || {};
     this.poSchema = values.poSchema || [];
 
-    this.updateSchema();
+    // this.updateSchema();
     this.updateFormInput();
   };
 

@@ -1,6 +1,7 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import FBReceivePOAutocompleteContainer from "./autocomplete/FBReceivePOAutocomplete.container";
+import FBReceivePOSchema from "./FBReceivePOSchema";
 import FBReceivePOTableContainer from "./table/FBReceivePOTable.container";
 
 
@@ -11,6 +12,7 @@ const FBReceivePOPresenter: React.FunctionComponent<any> = ({
   <Box mb={3}>
     <FBReceivePOAutocompleteContainer {...props} />
     <FBReceivePOTableContainer {...props} />
+    <FBReceivePOSchema {...props} />
   </Box>
 );
 

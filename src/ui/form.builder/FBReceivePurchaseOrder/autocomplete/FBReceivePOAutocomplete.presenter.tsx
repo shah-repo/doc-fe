@@ -19,7 +19,7 @@ const FBReceivePOAutocompletePresenter: React.FunctionComponent<any> = ({
         {...props}
         onChange={handleChange}
         optionId={FBAutocompleteAsyncOption.po}
-        value={poId}
+        defaultValue={poId}
       />
       {renderSpinner}
     </Box>

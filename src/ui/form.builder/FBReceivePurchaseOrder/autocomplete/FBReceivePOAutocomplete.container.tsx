@@ -37,7 +37,7 @@ const FBReceivePOAutocompleteContainer: React.FunctionComponent<{}> = ({
     receiveState?.setPOFormInput(poFormInput);
     receiveState?.setPOSchema(poSchema);
 
-    receiveState?.updateSchema();
+    // receiveState?.updateSchema();
     receiveState?.updateFormInput();
   };
   const handleChange = async (e, po?: DocumentRevision) => {

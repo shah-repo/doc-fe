@@ -2,7 +2,7 @@ import _ from "lodash";
 import { action, get, observable, set } from "mobx";
 import React from "react";
 import { FBSchemaProps } from ".";
-import { FBCheckboxGroup, FBInputProps, FBInputType } from "..";
+import { FBAutocompleteAsync, FBCheckboxGroup, FBInputProps, FBInputType } from "..";
 import { FBParagraph } from "../FBParagraph";
 import { FBSection } from "../FBSection";
 import { FBTextField } from "../FBTextField";
@@ -23,8 +23,8 @@ export class FBSchemaState {
     // radio: FBRadio,
     // radiogroup: FBRadioGroup,
     // fileupload: FBFileUpload,
-    // autocomplete: FBAutocomplete,
-    // autocompleteasync: FBAutocompleteAsync,
+    autocomplete: FBAutocompleteAsync,
+    autocompleteasync: FBAutocompleteAsync,
     // schemaselect: FBSchemaSelect,
     paragraph: FBParagraph,
   };
