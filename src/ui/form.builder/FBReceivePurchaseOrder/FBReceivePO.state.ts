@@ -1,5 +1,6 @@
 import { Dictionary } from "lodash";
 import { action, observable, set } from "mobx";
+import uniqid from "uniqid";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { PurchaseOrderItem } from "../FBPurchaseOrder/FBPurchaseOrder.types";
 import FBStore from "../stores/ui/FBStore";
@@ -72,7 +73,7 @@ export class FBReceivePOState {
 
   @action public submit = (index, received, docRevId, documentId) => {
     const receivedList = (this.items[index].receivedList || [])
-      .concat({ received, docRevId, documentId });
+      .concat({ id: uniqid(), received, docRevId, documentId });
     const totalReceived = (this.items[index].received || 0) + Number(received);
     this.items[index] = {
       ...this.items[index],

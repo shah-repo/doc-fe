@@ -10,10 +10,12 @@ import { DocumentProposedId, documentsActions } from "../../../../state/ducks/do
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import Text from "../../../components/Text";
 import { documentPreviewPath } from "../../../document.revision/utils/paths";
-import { toNewVersionRequestBody } from "../../../documentRevision/forms/transform";
+import { toDocumentRevisionEditRequestBody, toNewVersionRequestBody } from "../../../documentRevision/forms/transform";
+import { DocumentRevisionFormValues } from "../../../documentRevision/forms/types";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useGetDocTypeByAcronym from "../../../hooks/useGetDocTypeByAcronym";
+import FBStore from "../../stores/ui/FBStore";
 import { SelectedItem } from "../table/FBReceivePOTable.container";
 const FBReceivePOSubmit: React.FunctionComponent<any> = ({
   isValid,
@@ -24,6 +26,14 @@ const FBReceivePOSubmit: React.FunctionComponent<any> = ({
   name,
   closeDialog,
 }) => {
+  const { document } = FBStore;
+  const saveDocAction = useActionCreator(documentRevisionsActions.save);
+  const saveDocAsync = useAsync({
+    onSuccess: () => {
+      setIsCreatingLot(false);
+      submitForm();
+    },
+  });
   const { receiveState } = FB.useStores();
   const selectedItem = useContext(SelectedItem);
   const [isCreatingLot, setIsCreatingLot] = useState(false);
@@ -44,8 +54,12 @@ const FBReceivePOSubmit: React.FunctionComponent<any> = ({
         docRev?.document.id,
       );
       receiveState?.clearFormValues();
-      setIsCreatingLot(false);
-      submitForm();
+      saveDocAsync.start(
+        saveDocAction,
+        document.id,
+        toDocumentRevisionEditRequestBody(document as unknown as DocumentRevisionFormValues),
+        saveDocAsync,
+      );
     },
     onError: () => {
       toastError("form.builder.po.lot.wasnt.created");
