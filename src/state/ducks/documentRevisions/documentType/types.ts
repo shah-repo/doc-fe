@@ -23,6 +23,7 @@ export interface DocumentType {
   group: DocumentGroupType;
   pageDetails?: Nullable<PageDetails>;
   isQms: boolean;
+  defaultTraining: boolean;
 }
 
 export interface DocumentForms {
