@@ -98,6 +98,10 @@ export class FBEditorStore {
       return null;
     }
 
+    if (el === "approvalMatrix" && FBStore.getSchemaItemByType("approvalMatrix")) {
+      return null;
+    }
+
     return (
       <FBButton
         key={`form.builder.${el as string}-${i}`}

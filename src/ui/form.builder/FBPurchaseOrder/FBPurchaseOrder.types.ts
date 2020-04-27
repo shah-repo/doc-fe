@@ -2,7 +2,7 @@ import { Dictionary } from "lodash";
 import { FBPurchaseOrderState } from ".";
 import { FBInputProps } from "../types/common";
 
-export type FBPurchaseOrderBasicProps = Pick<FBInputProps, "name" | "disabled">;
+export type FBPurchaseOrderBasicProps = Pick<FBInputProps, "name" | "disabled" | "label">;
 
 export type FBPurchaseOrderFieldProps =
 & FBPurchaseOrderBasicProps

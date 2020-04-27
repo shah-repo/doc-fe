@@ -3,7 +3,7 @@ import _ from "lodash";
 import React from "react";
 import { connect, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { DocumentRevision, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsSelectors, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import AccessPermissionsContainer from "./accessPermissions/AccessPermissions.container";
@@ -61,12 +61,12 @@ DocumentRevisionManagerContainerProps
     );
   }
   const canAccess = _.get(selectedDocument, "document.canAccess", []);
-
+  const docRevsWithoutCanceled = documentRevisions.filter((docrev) => docrev.status !== DocumentRevisionStatus.Canceled);
   return (
     <Grid container={true} spacing={2} className={classes.whiteContainer}>
       <Grid item={true} xs={2} className={classes.sidebar}>
         <DocumentRevisionListContainer
-          documentRevisions={documentRevisions}
+          documentRevisions={docRevsWithoutCanceled}
           documentId={documentId}
           docId={docId}
           selectedDocumentRevision={documentRevisionId}

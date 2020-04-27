@@ -29,11 +29,14 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     }
   }
 
-  public sliceValue = (id: string | string[]): any => {
+  @action public sliceValue = (id: string | string[]): any => {
     if (!this.optionId) {
       return;
     }
     const options = FBAutocompleteAsyncStore.data.get(this.optionId);
+    if (!options) {
+      return;
+    }
     if (!_.isArray(id)) {
       return options.get(id);
     }

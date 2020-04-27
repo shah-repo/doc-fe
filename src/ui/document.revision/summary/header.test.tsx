@@ -2,7 +2,7 @@ import { Chip, Typography } from "@material-ui/core";
 import { mount } from "enzyme";
 import React from "react";
 import { getDocumentRevision } from "../../../state/ducks/documentRevisions/tests/factories";
-import { Header,  Props } from "./header";
+import { Header, Props } from "./header";
 
 jest.mock("../../components/Text");
 
@@ -22,7 +22,7 @@ describe("Header tests", () => {
 
   it("Chip sets prop label correctly", () => {
     const wrapper = getWrapper();
-    expect(wrapper.find(Chip).prop("label")).toEqual(defaultProps.dataProp.status);
+    expect((wrapper.find(Chip).find("Text")).prop("message")).toEqual(defaultProps.dataProp.status);
   });
 
   it("docId id displayed", () => {

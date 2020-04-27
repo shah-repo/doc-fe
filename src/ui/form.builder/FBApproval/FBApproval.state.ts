@@ -1,14 +1,34 @@
 import _ from "lodash";
 import { action, computed, observable, set } from "mobx";
-import { FBApprovalData, FBApprovalValue } from ".";
+import { FBApprovalApi, FBApprovalData, FBApprovalValue } from ".";
 import { FBAutocompleteAsyncOption } from "..";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
+import { FBEndpoint } from "../defaults/FBEndpoint";
+import FBRequest from "../FBApi/FBApi.request";
 import { FBAutocompleteAsyncState } from "../FBAutocompleteAsync/FBAutocompleteAsync.state";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
+import FBStore from "../stores/ui/FBStore";
 
-export class FBApprovalState extends FBAutocompleteAsyncState {
+export class FBApprovalState {
   @observable public hasApproved: FBApprovalValue[] = [];
+  public postApi: FBRequest<any, FBApprovalApi> = new FBRequest();
+  public approversApi: FBAutocompleteAsyncState = new FBAutocompleteAsyncState(this.approversId);
+  public groupsApi: FBAutocompleteAsyncState = new FBAutocompleteAsyncState(this.groupsId);
+
+  public constructor() {
+    const urlTpl = _.template(FBEndpoint.PostInlineApprove);
+    const url = urlTpl({ documentId: FBStore.docId });
+    this.postApi.setUrl(url);
+  }
+
+  @computed public get approversId(): string {
+    return FBAutocompleteAsyncOption.approver;
+  }
+
+  @computed public get groupsId(): string {
+    return FBAutocompleteAsyncOption.group;
+  }
 
   @computed public get sliceData(): FBApprovalData {
     const data = FBAutocompleteAsyncStore.data;
@@ -25,28 +45,12 @@ export class FBApprovalState extends FBAutocompleteAsyncState {
   }
 
   @action public approvers(values: string[]): Employee[] | undefined {
-    const data = this.sliceData.approvers;
-    return _.filter(data, (approver) => _.includes(values, approver.id));
+    return this.approversApi.sliceValue(values);
   }
 
   @action public groups(values: string[]): GroupRequestBody[] | undefined {
-    const data = this.sliceData.approverGroups;
-    return _.filter(data, (group) => _.includes(values, group.id));
+    return this.groupsApi.sliceValue(values);
   }
-
-  @action public load = () => {
-    const { approvers, approverGroups } = this.sliceData || {};
-    if (this.loading) {
-      return;
-    }
-    if (!approvers) {
-      this.setOptionId(FBAutocompleteAsyncOption.approver);
-      this.loadInternal();
-    } else if (!approverGroups) {
-      this.setOptionId(FBAutocompleteAsyncOption.group);
-      this.loadInternal();
-    }
-  };
 
   @action public addApprover = (value: FBApprovalValue) => {
     set(this, "hasApproved", _.union(this.hasApproved, [value]));
@@ -55,11 +59,6 @@ export class FBApprovalState extends FBAutocompleteAsyncState {
   @action public setApprovers = (approvers: FBApprovalValue[]) => {
     set(this, "hasApproved", approvers);
   };
-
-  protected onSuccess() {
-    super.onSuccess();
-    this.load();
-  }
 }
 
 export default FBApprovalState;
