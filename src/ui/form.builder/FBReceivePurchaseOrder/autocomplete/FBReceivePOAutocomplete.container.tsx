@@ -47,8 +47,6 @@ const FBReceivePOAutocompleteContainer: React.FunctionComponent<{}> = ({
     }
 
     setIsLoading(true);
-    receiveState?.setPOId(po.id);
-    receiveState?.setItems([]);
 
     const apiCall = new FBActionModel();
     apiCall.set({
@@ -57,6 +55,8 @@ const FBReceivePOAutocompleteContainer: React.FunctionComponent<{}> = ({
     });
     const data: DocumentRevision = await FBActionStore.apiCall(apiCall.toJS() as unknown as FBActionModel);
 
+    receiveState?.setPODocument(data);
+    receiveState?.setPOId(po.id);
     setIsLoading(false);
 
     const schema = (data.formDocument?.formTemplate?.schema || []) as FBInputProps[];

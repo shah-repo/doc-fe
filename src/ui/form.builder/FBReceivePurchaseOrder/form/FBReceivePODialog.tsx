@@ -11,7 +11,6 @@ const FBReceivePODialog: React.FunctionComponent<any> = ({
   const renderDialog = isDialogOpen && (
     <Dialog
       open={isDialogOpen}
-      onClose={closeDialog}
       fullWidth={true}
       id="FBReceivePODialog-openButton"
     >

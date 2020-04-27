@@ -1,8 +1,9 @@
-import { Button } from "@material-ui/core";
+import { Box, Button } from "@material-ui/core";
 import React, { useContext, useState } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { Slide, toast } from "react-toastify";
+import { FB } from "../..";
 import { GroupTag } from "../../../../state/ducks/auth/types";
 import { DocumentRevision, documentRevisionsActions, RevisionChangeType } from "../../../../state/ducks/documentRevisions";
 import { DocumentProposedId, documentsActions } from "../../../../state/ducks/documents";
@@ -13,7 +14,6 @@ import { toNewVersionRequestBody } from "../../../documentRevision/forms/transfo
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useGetDocTypeByAcronym from "../../../hooks/useGetDocTypeByAcronym";
-import FBStore from "../../stores/ui/FBStore";
 import { SelectedItem } from "../table/FBReceivePOTable.container";
 const FBReceivePOSubmit: React.FunctionComponent<any> = ({
   isValid,
@@ -22,10 +22,11 @@ const FBReceivePOSubmit: React.FunctionComponent<any> = ({
   startValidation,
   dirty,
   name,
+  closeDialog,
 }) => {
+  const { receiveState } = FB.useStores();
   const selectedItem = useContext(SelectedItem);
   const [isCreatingLot, setIsCreatingLot] = useState(false);
-  const { document } = FBStore;
   const LOT = "LOT";
   const intl = useIntl();
 
@@ -36,6 +37,13 @@ const FBReceivePOSubmit: React.FunctionComponent<any> = ({
     onSuccess: (docRev ) => {
       const path = docRev && documentPreviewPath(docRev.id, docRev.document.id);
       window.open(path, "_blank");
+      receiveState?.submit(
+        selectedItem.index - 1,
+        formValues[`${name}-formValues`].received,
+        docRev?.id,
+        docRev?.document.id,
+      );
+      receiveState?.clearFormValues();
       setIsCreatingLot(false);
       submitForm();
     },
@@ -69,7 +77,8 @@ const FBReceivePOSubmit: React.FunctionComponent<any> = ({
       name: `${selectedItem.glCode}-${selectedItem.description}`,
       description: `<p>${formValues[`${name}-formValues`].received}<br>${formValues[`${name}-formValues`].comments}</p>`,
       attachments: [],
-      referenceTo: [{ value: document.document.id, label: "" }],
+      // can't reference this receivables document because it's not released and they are not in the same CR
+      referenceTo: [{ value: receiveState?.poDocument?.document.id as string, label: "" }],
       securityEmployees: [],
       securityGroups,
       document: {
@@ -80,6 +89,10 @@ const FBReceivePOSubmit: React.FunctionComponent<any> = ({
       revisionChangeType: RevisionChangeType.NextRevision,
       renderHTML: undefined,
     });
+
+    values.formDocument = undefined;
+    values.formInput = undefined;
+    values.formTemplate = undefined;
 
     createDocumentAsync.start(createDocumentAction, values, createDocumentAsync);
   };
@@ -111,15 +124,26 @@ const FBReceivePOSubmit: React.FunctionComponent<any> = ({
   };
 
   return (
-    <Button
-      onClick={startLotCreation}
-      color="secondary"
-      variant="contained"
-      disabled={isCreatingLot}
-      type="button"
-    >
-      <Text translation="form.builder.receive" />
-    </Button>
+    <Box textAlign="center">
+      <Button
+        onClick={closeDialog}
+        color="secondary"
+        variant="outlined"
+        disabled={isCreatingLot}
+        type="button"
+      >
+        <Text translation="common.cancel" />
+      </Button>
+      <Button
+        onClick={startLotCreation}
+        color="secondary"
+        variant="contained"
+        disabled={isCreatingLot}
+        type="button"
+      >
+        <Text translation="form.builder.receive" />
+      </Button>
+    </Box>
   );
 };
 

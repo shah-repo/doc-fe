@@ -19,10 +19,9 @@ const FBReceivePOTableContainer: React.FunctionComponent<any> = ({
   };
   const closeDialog = () => {
     dialog.close();
-    receiveState?.clearFormValues();
+    SelectedItem = React.createContext(undefined);
   };
-  const onSubmit = (values) => {
-    console.log(values);
+  const onSubmit = () => {
     closeDialog();
   };
 
