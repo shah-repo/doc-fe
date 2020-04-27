@@ -92,7 +92,7 @@ const FBReceivePOSubmit: React.FunctionComponent<any> = ({
       description: `<p>${formValues[`${name}-formValues`].received}<br>${formValues[`${name}-formValues`].comments}</p>`,
       attachments: [],
       // can't reference this receivables document because it's not released and they are not in the same CR
-      referenceTo: [{ value: receiveState?.poDocument?.document.id as string, label: "" }],
+      referenceTo: [{ value: receiveState?.poDocumentId as string, label: "" }],
       securityEmployees: [],
       securityGroups,
       document: {

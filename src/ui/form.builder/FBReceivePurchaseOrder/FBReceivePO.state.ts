@@ -1,7 +1,6 @@
 import { Dictionary } from "lodash";
 import { action, observable, set } from "mobx";
 import uniqid from "uniqid";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { PurchaseOrderItem } from "../FBPurchaseOrder/FBPurchaseOrder.types";
 import FBStore from "../stores/ui/FBStore";
 import { FBInputProps } from "../types/common";
@@ -11,11 +10,7 @@ export class FBReceivePOState {
   @observable public name = "";
   @observable public poId = "";
   // NOTE: this is hardcoded to test lot creation, needs to be removed
-  @observable public poDocument?: DocumentRevision = {
-    document: {
-      id: "4871d87e-1f78-41c9-b196-43cb50476ace",
-    },
-  } as DocumentRevision;
+  @observable public poDocumentId = "";
   @observable public items: PurchaseOrderItem[] = [];
   @observable public fieldNames: string[] = [];
   @observable public poFormInput = {};
@@ -31,8 +26,8 @@ export class FBReceivePOState {
     this.updateFBStore();
   };
 
-  @action public setPODocument = (poDocument?: DocumentRevision) => {
-    set(this, "poDocument", poDocument);
+  @action public setPODocumentId = (poDocumentId: string) => {
+    set(this, "poDocumentId", poDocumentId);
     this.updateFBStore();
   };
 
@@ -47,7 +42,11 @@ export class FBReceivePOState {
   };
 
   @action public setPOSchema = (poSchema: FBInputProps[]) => {
-    set(this, "poSchema", poSchema);
+    const schemaWithId = poSchema.map((item) => ({
+      ...item,
+      id: uniqid(),
+    }));
+    set(this, "poSchema", schemaWithId);
     this.updateFBStore();
   };
 
@@ -90,7 +89,7 @@ export class FBReceivePOState {
     });
     this.setItems([]);
     this.setPOId("");
-    this.setPODocument(undefined);
+    this.setPODocumentId("");
     this.setFieldNames([]);
     this.setPOFormInput({});
     this.setPOSchema([]);
@@ -106,13 +105,16 @@ export class FBReceivePOState {
     if (!this.name) {
       return;
     }
-    const values = FBStore.getValue(this.name);
+    const values = FBStore.getValue(this.name) || {};
     this.poId = values.poId || "";
-    this.poDocument = values.poDocument || this.poDocument;
+    this.poDocumentId = values.poDocumentId || "";
     this.items = values.items || [];
     this.fieldNames = values.fieldNames || [];
     this.poFormInput = values.poFormInput || {};
     this.poSchema = values.poSchema || [];
+
+    this.updateSchema();
+    this.updateFormInput();
   };
 
   private updateFBStore = () => {
@@ -121,7 +123,7 @@ export class FBReceivePOState {
     }
 
     FBStore.setValue(this.name, {
-      poDocument: this.poDocument,
+      poDocumentId: this.poDocumentId,
       poId: this.poId,
       items: this.items,
       fieldNames: this.fieldNames,

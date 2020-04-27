@@ -55,7 +55,7 @@ const FBReceivePOAutocompleteContainer: React.FunctionComponent<{}> = ({
     });
     const data: DocumentRevision = await FBActionStore.apiCall(apiCall.toJS() as unknown as FBActionModel);
 
-    receiveState?.setPODocument(data);
+    receiveState?.setPODocumentId(data.document.id);
     receiveState?.setPOId(po.id);
     setIsLoading(false);
 
