@@ -426,6 +426,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               status={values.status}
               isQms={docInfo.isQms}
               documentName={docInfo.name}
+              docRevId={values.id as string}
             />
           </Grid>
         </Box>
