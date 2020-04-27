@@ -71,7 +71,9 @@ export class FBReceivePOState {
   };
 
   @action public clearFormValues = () => {
-    FBStore.setValue(`${this.name}-formValues.id`, undefined);
+    FBStore.setValue(`${this.name}-formValues`, undefined);
+    FBStore.setValue(`${this.name}-formValues.received`, undefined);
+    FBStore.setValue(`${this.name}-formValues.comments`, undefined);
   };
 
   @action public initialize = () => {

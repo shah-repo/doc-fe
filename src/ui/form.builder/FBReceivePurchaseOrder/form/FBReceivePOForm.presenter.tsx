@@ -43,10 +43,11 @@ const FBReceivePOFormPresenter: React.FunctionComponent<any> = ({
           />
           <FBReceivePOSubmit
             submitForm={submitForm}
-            values={values}
+            formValues={values}
             isValid={isValid}
             startValidation={startValidation}
             dirty={dirty}
+            name={name}
           />
         </Box>
       </Form>

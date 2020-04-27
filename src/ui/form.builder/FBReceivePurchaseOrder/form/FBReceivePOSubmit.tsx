@@ -1,5 +1,5 @@
 import { Button } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { Slide, toast } from "react-toastify";
@@ -14,14 +14,16 @@ import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useGetDocTypeByAcronym from "../../../hooks/useGetDocTypeByAcronym";
 import FBStore from "../../stores/ui/FBStore";
+import { SelectedItem } from "../table/FBReceivePOTable.container";
 const FBReceivePOSubmit: React.FunctionComponent<any> = ({
-  item,
   isValid,
-  values,
+  formValues,
   submitForm,
   startValidation,
   dirty,
+  name,
 }) => {
+  const selectedItem = useContext(SelectedItem);
   const [isCreatingLot, setIsCreatingLot] = useState(false);
   const { document } = FBStore;
   const LOT = "LOT";
@@ -35,6 +37,7 @@ const FBReceivePOSubmit: React.FunctionComponent<any> = ({
       const path = docRev && documentPreviewPath(docRev.id, docRev.document.id);
       window.open(path, "_blank");
       setIsCreatingLot(false);
+      submitForm();
     },
     onError: () => {
       toastError("form.builder.po.lot.wasnt.created");
@@ -63,8 +66,8 @@ const FBReceivePOSubmit: React.FunctionComponent<any> = ({
     }
 
     const values = toNewVersionRequestBody({
-      name: `${item.glCode}-${item.description}`,
-      description: `<p>${item.glCode}-${item.description}</p>`,
+      name: `${selectedItem.glCode}-${selectedItem.description}`,
+      description: `<p>${formValues[`${name}-formValues`].received}<br>${formValues[`${name}-formValues`].comments}</p>`,
       attachments: [],
       referenceTo: [{ value: document.document.id, label: "" }],
       securityEmployees: [],
@@ -96,7 +99,6 @@ const FBReceivePOSubmit: React.FunctionComponent<any> = ({
   };
   const startLotCreation = () => {
     if (!isValid || !dirty) {
-      console.log("not valid");
       startValidation();
       return;
     }
@@ -104,8 +106,6 @@ const FBReceivePOSubmit: React.FunctionComponent<any> = ({
       toastError("form.builder.po.no.document.lot");
       return;
     }
-    console.log("valid");
-    return;
     setIsCreatingLot(true);
     loadDocumentProposedIdAsync.start(loadDocumentProposedIdAction, LOT, loadDocumentProposedIdAsync);
   };

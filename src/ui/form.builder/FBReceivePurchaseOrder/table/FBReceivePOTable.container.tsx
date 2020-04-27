@@ -5,6 +5,7 @@ import useDialog from "../../../hooks/useDialog";
 import FBReceivePODialog from "../form/FBReceivePODialog";
 import FBReceivePOTablePresenter from "./FBReceivePOTable.presenter";
 
+export let SelectedItem: React.Context<any>;
 
 const FBReceivePOTableContainer: React.FunctionComponent<any> = ({
   ...props
@@ -13,9 +14,8 @@ const FBReceivePOTableContainer: React.FunctionComponent<any> = ({
   const { receiveState } = FB.useStores();
   useObserver(() => receiveState?.items);
   const handleEdit = (index, item) => () => {
+    SelectedItem = React.createContext(item);
     dialog.open();
-    console.log(index);
-    console.log(item);
   };
   const closeDialog = () => {
     dialog.close();
