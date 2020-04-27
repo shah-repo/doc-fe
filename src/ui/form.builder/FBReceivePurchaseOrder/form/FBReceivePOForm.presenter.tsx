@@ -1,9 +1,10 @@
 import { Box } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import React from "react";
-import FBButton from "../components/inputs/FBButton";
-import FBTextField from "../components/inputs/FBTextField";
-import { default as Error } from "../FBPurchaseOrder/form/FBPurchaseOrderError";
+import FBButton from "../../components/inputs/FBButton";
+import FBTextField from "../../components/inputs/FBTextField";
+import { default as Error } from "../../FBPurchaseOrder/form/FBPurchaseOrderError";
+import FBReceivePOSubmit from "./FBReceivePOSubmit";
 
 const FBReceivePOFormPresenter: React.FunctionComponent<any> = ({
   onSubmit,
@@ -12,7 +13,15 @@ const FBReceivePOFormPresenter: React.FunctionComponent<any> = ({
   validateForm,
 }) => {
   const renderForm = (props) => {
-    const { errors } = props;
+    const {
+      errors,
+      submitForm,
+      values,
+      isValid,
+      validateForm: startValidation,
+      dirty,
+    } = props;
+
     return (
       <Form>
         <FBTextField
@@ -32,10 +41,12 @@ const FBReceivePOFormPresenter: React.FunctionComponent<any> = ({
             variant="outlined"
             label="common.cancel"
           />
-          <FBButton
-            variant="contained"
-            buttonType="submit"
-            label="form.builder.receive"
+          <FBReceivePOSubmit
+            submitForm={submitForm}
+            values={values}
+            isValid={isValid}
+            startValidation={startValidation}
+            dirty={dirty}
           />
         </Box>
       </Form>

@@ -1,6 +1,6 @@
 import { Box, CircularProgress } from "@material-ui/core";
 import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption } from "../FBAutocompleteAsync";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption } from "../../FBAutocompleteAsync";
 
 
 const FBReceivePOAutocompletePresenter: React.FunctionComponent<any> = ({

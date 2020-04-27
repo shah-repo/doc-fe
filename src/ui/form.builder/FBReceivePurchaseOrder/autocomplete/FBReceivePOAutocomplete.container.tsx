@@ -1,13 +1,13 @@
 import { useObserver } from "mobx-react";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
-import { FB } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { toastError } from "../../components/notifications";
-import { FBActionModel } from "../stores/domain/models/FBActionModel";
-import FBActionStore from "../stores/ui/FBActionStore";
-import { FBInputProps } from "../types/common";
-import { FBEditorElementType } from "../types/editor";
+import { FB } from "../..";
+import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
+import { toastError } from "../../../components/notifications";
+import { FBActionModel } from "../../stores/domain/models/FBActionModel";
+import FBActionStore from "../../stores/ui/FBActionStore";
+import { FBInputProps } from "../../types/common";
+import { FBEditorElementType } from "../../types/editor";
 import FBReceivePOAutocompletePresenter from "./FBReceivePOAutocomplete.presenter";
 
 

@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogTitle, Typography } from "@material-ui/core";
 import React from "react";
-import Text from "../../components/Text";
+import Text from "../../../components/Text";
 import FBReceivePOFormContainer from "./FBReceivePOForm.container";
 const FBReceivePODialog: React.FunctionComponent<any> = ({
   onSubmit,

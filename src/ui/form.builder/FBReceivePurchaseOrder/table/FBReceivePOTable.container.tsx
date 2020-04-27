@@ -1,8 +1,8 @@
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB } from "..";
-import useDialog from "../../hooks/useDialog";
-import FBReceivePODialog from "./FBReceivePODialog";
+import { FB } from "../..";
+import useDialog from "../../../hooks/useDialog";
+import FBReceivePODialog from "../form/FBReceivePODialog";
 import FBReceivePOTablePresenter from "./FBReceivePOTable.presenter";
 
 

@@ -1,10 +1,10 @@
 import { Box, makeStyles, Table, TableBody, TableCell, TableHead, TableRow, withStyles } from "@material-ui/core";
 import classNames from "classnames";
 import React from "react";
-import Date from "../../components/Date";
-import Text from "../../components/Text";
-import Colors from "../../layout/theme/utils/colors";
-import { PurchaseOrderItem } from "../FBPurchaseOrder/FBPurchaseOrder.types";
+import Date from "../../../components/Date";
+import Text from "../../../components/Text";
+import Colors from "../../../layout/theme/utils/colors";
+import { PurchaseOrderItem } from "../../FBPurchaseOrder/FBPurchaseOrder.types";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
