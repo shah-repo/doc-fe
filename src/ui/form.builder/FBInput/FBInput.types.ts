@@ -41,7 +41,8 @@ export type FBInputType =
   | "createlabel"
   | "instructionsdocument"
   | "selectdocument"
-  | "selectrequirement";
+  | "selectrequirement"
+  | "approvalMatrix";
 
 export type FBInputProps =
 & FBLabelProps

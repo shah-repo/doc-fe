@@ -19,6 +19,7 @@ export class FBControlPickerState {
       "quantity",
       "timer",
       "purchaseorder",
+      "approvalMatrix",
       "instructionsmediaupload",
       "evidencemediaupload",
       "testRequirement",

@@ -25,7 +25,7 @@ import FBLink from "../components/navigation/FBLink";
 import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaItem";
 import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
 import FBApproval from "../FBApproval";
-import FBApprovalMatrix from "../FBApprovalMatrix";
+import { FBApprovalMatrix } from "../FBApprovalMatrix";
 import { FBAutocompleteAsync } from "../FBAutocompleteAsync";
 import FBEditorApprovalField from "../FBEditorApprovalField";
 import FBEditorInlineApproval from "../FBEditorInlineApproval";
