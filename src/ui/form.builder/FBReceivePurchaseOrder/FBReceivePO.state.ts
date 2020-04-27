@@ -70,6 +70,10 @@ export class FBReceivePOState {
     this.setPOSchema([]);
   };
 
+  @action public clearFormValues = () => {
+    FBStore.setValue(`${this.name}-formValues.id`, undefined);
+  };
+
   @action public initialize = () => {
     if (!this.name) {
       return;
