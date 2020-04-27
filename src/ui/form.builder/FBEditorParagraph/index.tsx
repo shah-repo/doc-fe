@@ -1,2 +1,2 @@
-export { default } from "./FBEditorParagraph";
+export { default as FBEditorParagraph } from "./FBEditorParagraph";
 

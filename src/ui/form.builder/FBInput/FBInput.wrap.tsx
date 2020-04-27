@@ -74,7 +74,7 @@ export const withFBInput = <T extends FBInputProps>(
       children = React.cloneElement(child as React.ReactElement, {
         disabled,
         onChange,
-        value,
+        ...(type !== "texteditor" && { value }),
         ...(type !== "datepicker" && type !== "autocomplete" && !_.isBoolean(defaultValue) && { defaultValue }),
       });
     }

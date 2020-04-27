@@ -37,8 +37,6 @@ export class FBSchemaState {
     radio: FBRadio,
     radiogroup: FBRadioGroup,
     fileupload: FBFileUpload,
-    // autocomplete: FBAutocomplete,
-    // autocompleteasync: FBAutocompleteAsync,
     schemaselect: FBSchemaSelect,
     paragraph: FBParagraph,
     instructionsmediaupload: FBMediaAlbumField,

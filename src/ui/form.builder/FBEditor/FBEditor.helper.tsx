@@ -1,4 +1,3 @@
-import _ from "lodash";
 import React from "react";
 import { FBEditorHelperProps } from ".";
 import { FB, FBEditorActions, FBEditorState, FBEditorTitle, FBInputType } from "..";
@@ -15,11 +14,10 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
 
     openEditor = (type: FBInputType, index?: number) => () => {
       const editorForm = FBEditorState.editor({ type, index });
-      const underValidation =  !_.includes(FBEditorState.omitValidation, type);
       if (!editorForm) {
         return;
       }
-
+      const { underValidation } = editorForm.props;
       dialogState && dialogState.config({
         open: true,
         title: underValidation ? <FBEditorTitle /> : "form.builder.create.field",

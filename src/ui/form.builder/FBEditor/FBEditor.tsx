@@ -8,18 +8,20 @@ const FBEditor: React.FunctionComponent<FBEditorProps> = ({
   editorState,
   children,
   initialValues,
+  underValidation,
   mode,
+  ...props
 }) => (
   <FBProvider {...{ editorState }}>
     <FBForm {...{ initialValues }}>
-      {/* {mode === "config" && children}
-      {mode === "validation" && <FBEditorValidation />} */}
       <Box hidden={mode === "validation"}>
         {children}
       </Box>
-      <Box hidden={mode === "config"}>
-        <FBEditorValidation />
-      </Box>
+      {underValidation && (
+        <Box hidden={mode === "config"}>
+          <FBEditorValidation />
+        </Box>
+      )}
     </FBForm>
   </FBProvider>
 );

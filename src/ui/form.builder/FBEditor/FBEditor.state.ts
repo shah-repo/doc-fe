@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { action, observable, set } from "mobx";
 import React from "react";
 import { FBEditorMode, FBEditorModeProps, FBEditorProps, FBInputType } from "..";
@@ -6,8 +7,8 @@ import { FBEditorCheckControl } from "../FBEditorCheckControl";
 import { FBEditorHyperlink } from "../FBEditorHyperlink";
 import { FBEditorLabel } from "../FBEditorLabel";
 import { FBEditorOptionGroup } from "../FBEditorOptionGroup";
+import { FBEditorParagraph } from "../FBEditorParagraph";
 import { FBEditorTextField } from "../FBEditorTextField";
-
 
 export class FBEditorState {
 
@@ -16,6 +17,7 @@ export class FBEditorState {
     "subsection",
     "hyperlink",
     "action",
+    "paragraph",
   ];
 
   private static editors: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
@@ -32,6 +34,7 @@ export class FBEditorState {
     radio: FBEditorCheckControl,
     radiogroup: FBEditorOptionGroup,
     fileupload: FBEditorLabel,
+    paragraph: FBEditorParagraph,
   };
 
   @observable public mode?: FBEditorMode = "config";
@@ -55,8 +58,11 @@ export class FBEditorState {
     return React.createElement(editorControl, {
       key: `fb-editor-${type}-${index}`,
       ...editorProps,
+      ...type && ({ underValidation: FBEditorState.underValidation(type) }),
     });
   };
+
+  public static underValidation = (type: FBInputType) => !_.includes(FBEditorState.omitValidation, type);
 
   @action public setMode = (mode: FBEditorMode) => set(this, "mode", mode);
 }

@@ -14,7 +14,7 @@ const FBTextEditor: React.FunctionComponent<FBInputProps> = ({
       modules={modules}
       formats={formats}
       readOnly={disabled}
-      id={`field-${name}`}
+      id={`fb-paragraph-field-${name}`}
     />
   </FBInput>
 );

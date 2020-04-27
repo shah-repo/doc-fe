@@ -15,6 +15,7 @@ export type FBEditorProps =
 & {
   mode?: FBEditorMode;
   editorState?: FBEditorState;
+  underValidation?: boolean;
 };
 
 export interface FBEditorHelperProps {
