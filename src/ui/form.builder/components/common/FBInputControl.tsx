@@ -18,7 +18,7 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
   fullWidth = true,
 }) => (
   <Tooltip title={tooltip} placement="bottom-start">
-    <FormControl {...{error, fullWidth}}>
+    <FormControl {...{ error, fullWidth }}>
       {children}
       {!_.isEmpty(helperText) && (
         <FormHelperText>
@@ -29,7 +29,7 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
         <Box mt={3}>
           <FBTextField
             label={contextLabel}
-            {...{disabled}}
+            {...{ disabled }}
             name={`input-context-${name}`}
           />
         </Box>

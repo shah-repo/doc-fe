@@ -30,10 +30,14 @@ export enum FBApprovalStatus {
 
 export interface FBApprovalValue {
   id: string;
-  email: string;
-  groupId?: string | false;
+  userId?: string;
+  groupId?: string;
   approvedAt: string;
-  notify: boolean;
+}
+
+export interface FBApprovalApi {
+  fieldName: string;
+  fieldValue: FBApprovalValue[];
 }
 
 export type FBApprovalFieldProps<T> =
@@ -46,4 +50,10 @@ export type FBApprovalFieldProps<T> =
 export interface FBApprovalData {
   approvers?: Employee[];
   approverGroups?: GroupRequestBody[];
+}
+
+export interface FBApprovalSocketMsg {
+  data?: {
+    message: string;
+  };
 }

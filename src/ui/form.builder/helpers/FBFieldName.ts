@@ -4,4 +4,5 @@ export enum FBFieldName {
   InlineApproval = "fb-inline-",
   TemplateName = "fb-template-name",
   SchemaSelectValue = "validators.required_if.value",
+  ApproveReasoning = "-reasoning"
 }

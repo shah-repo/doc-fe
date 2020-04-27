@@ -1,40 +1,29 @@
-import { Button, Grid } from "@material-ui/core";
-import React from "react";
-import { PendingAction } from "../../../state/ducks/dashboard";
+import React, { useState } from "react";
+import { useIntl } from "react-intl";
+import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { changeRequestEditPath } from "../../change.request/utils/paths";
-import Text from "../../components/Text";
-import { styles } from "./PendingAction.styles";
+import DashboardActionTypeBase from "./DashboardActionTypeBase";
 
-interface OwnProps {
-  pendingAction: PendingAction;
+interface Props {
+  index: number;
+  changeRequest: ChangeRequest;
 }
 
-type Props = OwnProps;
-
 export const TaskApproval: React.FunctionComponent<Props> = ({
-  pendingAction,
+  index,
+  changeRequest,
 }) => {
-  const classes = styles();
+  const intl = useIntl();
+  const [title] = useState(intl.formatMessage({ id: "dashboard.title.task" }, { crId: changeRequest.crId }));
+  const [description] = useState(intl.formatMessage({ id: "dashboard.assigned.task" }));
 
   return (
-    <Grid container spacing={10} justify="space-between" alignItems="baseline" id="TaslApproval-tasks">
-      <Grid item xs={9}>
-        <span className={classes.crId}>{`CRID: ${pendingAction.changeReq.crId} `}</span>
-        <span>{`"${pendingAction.changeReq.title}"`}</span>
-        <Text message={`dashboard.type.${pendingAction.type}`} />
-      </Grid>
-      <Grid item xs={2}>
-        <Button
-          variant="contained"
-          target="_blank"
-          href={changeRequestEditPath(pendingAction.changeReq.id)}
-          color="secondary"
-          id="TaskApproval-button"
-        >
-          <Text translation="common.open" />
-        </Button>
-      </Grid>
-    </Grid>
+    <DashboardActionTypeBase
+      index={index}
+      title={title}
+      description={description}
+      url={changeRequestEditPath(changeRequest.id)}
+    />
   );
 };
 

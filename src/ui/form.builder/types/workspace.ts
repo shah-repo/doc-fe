@@ -1,4 +1,5 @@
 import { Dictionary } from "lodash";
+import { FBSnackbarState } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { FBDialogState } from "../FBDialog";
 import { FBFormikFieldProps } from "./formik";
@@ -15,11 +16,12 @@ export type FBWorkspaceProps =
   & {
     id?: string;
     documentId?: string;
-    document?: DocumentRevision;
     mode?: FBWorkspaceMode;
     includeTransport?: boolean;
     isStarter?: boolean;
     schema?: FBTemplateSchema[];
     values?: Dictionary<any>;
     dialogState?: FBDialogState;
+    snackbarState?: FBSnackbarState;
+    document?: DocumentRevision;
   };

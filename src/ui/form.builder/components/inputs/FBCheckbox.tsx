@@ -21,7 +21,6 @@ const FBCheckbox: React.FunctionComponent<FBInputProps> = ({
         />
       )}
     />
-  </FBInput>
-);
+  </FBInput>);
 
 export default FBCheckbox;
