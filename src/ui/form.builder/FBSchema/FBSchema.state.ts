@@ -2,9 +2,27 @@ import _ from "lodash";
 import { action, get, observable, set } from "mobx";
 import React from "react";
 import { FBSchemaProps } from ".";
-import { FBAutocompleteAsync, FBCheckboxGroup, FBInputProps, FBInputType } from "..";
+import { FBApproval, FBAutocompleteAsync, FBButton, FBCheckboxGroup, FBInlineApproval, FBInputProps, FBInputType, FBInstructionsDocument, FBMediaAlbumField, FBQuantityField, FBSelectDocument, FBSelectRequirement, FBTestRequirement, FBTimerField } from "..";
+import FBActionContainer from "../components/actions/FBActionContainer";
+import FBCheckbox from "../components/inputs/FBCheckbox";
+import FBDatePicker from "../components/inputs/FBDatePicker";
+import FBRadio from "../components/inputs/FBRadio";
+import FBRadioGroup from "../components/inputs/FBRadioGroup";
+import FBSelect from "../components/inputs/FBSelect";
+import FBTextEditorField from "../components/inputs/FBTextEditorField";
+import FBSectionBox from "../components/layout/FBSectionBox";
+import FBSubSectionBox from "../components/layout/FBSubSectionBox";
+import FBFileUpload from "../components/navigation/FBFileUpload";
+import FBLink from "../components/navigation/FBLink";
+import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaItem";
+import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
+import { FBApprovalMatrix } from "../FBApprovalMatrix";
 import { FBParagraph } from "../FBParagraph";
+import { FBPOReceive } from "../FBPOReceive";
+import { FBPurchaseOrder } from "../FBPurchaseOrder";
+import FBReceivePO from "../FBReceivePurchaseOrder";
 import { FBSection } from "../FBSection";
+import { FBTestStep } from "../FBTestStep";
 import { FBTextField } from "../FBTextField";
 
 export class FBSchemaState {
@@ -27,6 +45,38 @@ export class FBSchemaState {
     autocompleteasync: FBAutocompleteAsync,
     // schemaselect: FBSchemaSelect,
     paragraph: FBParagraph,
+
+    // OLD: to be removed
+    subsection: FBSubSectionBox,
+    checkbox: FBCheckbox,
+    datepicker: FBDatePicker,
+    texteditor: FBTextEditorField,
+    select: FBSelect,
+    radio: FBRadio,
+    radiogroup: FBRadioGroup,
+    hyperlink: FBLink,
+    fileupload: FBFileUpload,
+    schemaSelect: FBValidatorSchemaSelect,
+    schemaItem: FBValidatorSchemaItem,
+    action: FBActionContainer,
+    approvalMatrix: FBApprovalMatrix,
+    purchaseorder: FBPurchaseOrder,
+    receivepurchaseorder: FBReceivePO,
+    poreceive: FBPOReceive,
+    stepsection: FBSectionBox,
+    teststep: FBTestStep,
+    instructionsmediaupload: FBMediaAlbumField,
+    evidencemediaupload: FBMediaAlbumField,
+    checkpoint: FBButton,
+    approval: FBApproval,
+    createlabel: FBButton,
+    quantity: FBQuantityField,
+    timer: FBTimerField,
+    inlineapproval: FBInlineApproval,
+    instructionsdocument: FBInstructionsDocument,
+    selectdocument: FBSelectDocument,
+    selectrequirement: FBSelectRequirement,
+    testRequirement: FBTestRequirement,
   };
 
   public controlProps: FBInputProps | undefined;

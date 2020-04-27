@@ -25,7 +25,7 @@ import FBLink from "../components/navigation/FBLink";
 import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaItem";
 import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
 import FBApproval from "../FBApproval";
-import FBApprovalMatrix from "../FBApprovalMatrix";
+import { FBApprovalMatrix } from "../FBApprovalMatrix";
 import { FBAutocompleteAsync } from "../FBAutocompleteAsync";
 import FBEditorApprovalField from "../FBEditorApprovalField";
 import FBEditorInlineApproval from "../FBEditorInlineApproval";
@@ -40,7 +40,8 @@ import FBInlineApproval from "../FBInlineApproval";
 import FBInstructionsDocument from "../FBInstructionsDocument";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
-import FBPurchaseOrder from "../FBPurchaseOrder";
+import { FBPOReceive } from "../FBPOReceive";
+import { FBPurchaseOrder } from "../FBPurchaseOrder";
 import { FBQuantityField } from "../FBQuantityField";
 import FBReceivePO from "../FBReceivePurchaseOrder";
 import { FBSelectDocument } from "../FBSelectDocument";
@@ -68,6 +69,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   hellosign: FBLabelEditor,
   purchaseorder: FBLabelEditor,
   receivepurchaseorder: FBLabelEditor,
+  poreceive: FBLabelEditor,
   approvalMatrix: FBLabelEditor,
   paragraph: FBEditorParagraph,
   stepsection: FBEditorStepSection,
@@ -107,6 +109,7 @@ export const FBFieldComponent: Dictionary<any> = {
   approvalMatrix: FBApprovalMatrix,
   purchaseorder: FBPurchaseOrder,
   receivepurchaseorder: FBReceivePO,
+  poreceive: FBPOReceive,
   paragraph: FBParagraph,
   stepsection: FBSectionBox,
   teststep: FBTestStep,
@@ -143,6 +146,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "timer",
     "purchaseorder",
     "receivepurchaseorder",
+    "poreceive",
     "approvalMatrix",
     "instructionsmediaupload",
     "evidencemediaupload",

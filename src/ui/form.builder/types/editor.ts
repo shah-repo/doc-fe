@@ -26,6 +26,7 @@ export type FBEditorElementType =
   | "hellosign"
   | "purchaseorder"
   | "receivepurchaseorder"
+  | "poreceive"
   | "paragraph"
   | "stepsection"
   | "instructionsmediaupload"
