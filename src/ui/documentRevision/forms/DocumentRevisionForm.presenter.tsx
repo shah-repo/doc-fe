@@ -184,6 +184,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       }
     });
     if (loadDocumentProposedId) {
+      setFieldValue("retrain", type.defaultTraining);
       loadDocumentProposedId(type.documentTypeAcronym);
     }
     FBDRStore.setInitialFBMode(type.group);

@@ -113,6 +113,7 @@ DocumentRevisionFormContainerProps
 
     return {
       ...initialValues,
+      retrain: initialValues.document?.documentType?.defaultTraining || false,
       renderHTML,
       securityGroups,
     };
