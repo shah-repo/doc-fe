@@ -9,6 +9,7 @@ import { FBFileUpload } from "../FBFileUpload";
 import { FBHyperlink } from "../FBHyperlink";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
+import { FBQuantityField } from "../FBQuantityField";
 import { FBRadio } from "../FBRadio";
 import { FBRadioGroup } from "../FBRadioGroup";
 import { FBSchemaSelect } from "../FBSchemaSelect";
@@ -39,6 +40,7 @@ export class FBSchemaState {
     fileupload: FBFileUpload,
     schemaselect: FBSchemaSelect,
     paragraph: FBParagraph,
+    quantity: FBQuantityField,
     instructionsmediaupload: FBMediaAlbumField,
     evidencemediaupload: FBMediaAlbumField,
   };

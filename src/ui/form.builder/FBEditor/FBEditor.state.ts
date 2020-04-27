@@ -18,6 +18,11 @@ export class FBEditorState {
     "hyperlink",
     "action",
     "paragraph",
+    "quantity",
+  ];
+
+  public static pickDefaultValue: FBInputType[] = [
+    "quantity",
   ];
 
   private static editors: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
@@ -35,6 +40,7 @@ export class FBEditorState {
     radiogroup: FBEditorOptionGroup,
     fileupload: FBEditorLabel,
     paragraph: FBEditorParagraph,
+    quantity: FBEditorLabel,
   };
 
   @observable public mode?: FBEditorMode = "config";
@@ -59,10 +65,12 @@ export class FBEditorState {
       key: `fb-editor-${type}-${index}`,
       ...editorProps,
       ...type && ({ underValidation: FBEditorState.underValidation(type) }),
+      ...type && ({ includeDefaultValue: FBEditorState.includeDefaultValue(type) }),
     });
   };
 
   public static underValidation = (type: FBInputType) => !_.includes(FBEditorState.omitValidation, type);
+  public static includeDefaultValue = (type: FBInputType) => _.includes(FBEditorState.pickDefaultValue, type);
 
   @action public setMode = (mode: FBEditorMode) => set(this, "mode", mode);
 }

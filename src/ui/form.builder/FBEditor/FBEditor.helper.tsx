@@ -18,6 +18,7 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
         return;
       }
       const { underValidation } = editorForm.props;
+
       dialogState && dialogState.config({
         open: true,
         title: underValidation ? <FBEditorTitle /> : "form.builder.create.field",

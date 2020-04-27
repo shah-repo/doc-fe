@@ -15,6 +15,7 @@ export const withFBStarter = <T extends FBStarterProps>(
     onClick = () => {
       dialogState?.config({
         open: true,
+        maxWidth: "sm",
         content: <FBControlPicker />,
       });
     };

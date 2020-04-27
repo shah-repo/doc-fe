@@ -39,7 +39,10 @@ export class FBFormState extends FBSchemaState {
     if (!fieldName) {
       return defaultValue;
     }
-    return _.get(this.values, fieldName) || defaultValue;
+    if (!_.get(this.values, fieldName) && !_.isUndefined(defaultValue)) {
+      this.setFieldValue(fieldName, defaultValue);
+    }
+    return _.get(this.values, fieldName);
   };
 
   @action public setFieldValue = (

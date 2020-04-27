@@ -16,7 +16,7 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
     <TextField
       variant="outlined"
       label=""
-      {...{type, rows, placeholder, error, multiline}}
+      {...{ type, rows, placeholder, error, multiline }}
     />
   </FBInput>
 );
