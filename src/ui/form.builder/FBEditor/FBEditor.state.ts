@@ -20,6 +20,7 @@ export class FBEditorState {
     "paragraph",
     "quantity",
     "timer",
+    "purchaseorder",
   ];
 
   public static pickDefaultValue: FBInputType[] = [
@@ -44,6 +45,7 @@ export class FBEditorState {
     paragraph: FBEditorParagraph,
     quantity: FBEditorLabel,
     timer: FBEditorLabel,
+    purchaseorder: FBEditorLabel,
   };
 
   @observable public mode?: FBEditorMode = "config";

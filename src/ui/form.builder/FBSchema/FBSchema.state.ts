@@ -9,6 +9,7 @@ import { FBFileUpload } from "../FBFileUpload";
 import { FBHyperlink } from "../FBHyperlink";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
+import { FBPurchaseOrder } from "../FBPurchaseOrder";
 import { FBQuantityField } from "../FBQuantityField";
 import { FBRadio } from "../FBRadio";
 import { FBRadioGroup } from "../FBRadioGroup";
@@ -43,6 +44,7 @@ export class FBSchemaState {
     paragraph: FBParagraph,
     quantity: FBQuantityField,
     timer: FBTimerField,
+    purchaseorder: FBPurchaseOrder,
     instructionsmediaupload: FBMediaAlbumField,
     evidencemediaupload: FBMediaAlbumField,
   };

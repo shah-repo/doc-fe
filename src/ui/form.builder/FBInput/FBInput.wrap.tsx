@@ -45,7 +45,7 @@ export const withFBInput = <T extends FBInputProps>(
     );
 
     function editorOptionDefaultValue(): string {
-      const options: FBOption[] | undefined = formState?.getFieldValue(name, defaultValue);
+      const options: FBOption[] | undefined = formState?.getFieldValue(name);
       return _.join(_.map(options, "text"), "\n") || "";
     }
 

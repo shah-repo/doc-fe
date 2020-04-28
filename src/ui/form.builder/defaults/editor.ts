@@ -40,7 +40,7 @@ import FBInlineApproval from "../FBInlineApproval";
 import FBInstructionsDocument from "../FBInstructionsDocument";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
-import FBPurchaseOrder from "../FBPurchaseOrder";
+import { FBPurchaseOrder } from "../FBPurchaseOrder";
 import { FBQuantityField } from "../FBQuantityField";
 import { FBSelectDocument } from "../FBSelectDocument";
 import { FBSelectRequirement } from "../FBSelectRequirement";

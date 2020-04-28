@@ -18,7 +18,7 @@ export const withFBOnChange = <T extends FBInputProps>(
     const { workspaceState, formState, schemaState } = FB.useStores();
 
     React.useEffect(() => {
-      const defaultValue = formState?.getFieldValue(name, "");
+      const defaultValue = formState?.getFieldValue(name);
       // Check include context state
       contextValue(defaultValue as string | string[] | boolean);
     }, []);
@@ -43,7 +43,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       formState?.setFieldValue(name, value);
     }
 
-    function contextValue(value: boolean | string | string[]) {
+    function contextValue(value: boolean | string | string[] | undefined = "") {
       if (!editorProperties) {
         return;
       }

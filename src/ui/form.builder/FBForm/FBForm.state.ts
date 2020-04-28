@@ -42,7 +42,7 @@ export class FBFormState extends FBSchemaState {
     if (!_.get(this.values, fieldName) && !_.isUndefined(defaultValue)) {
       this.setFieldValue(fieldName, defaultValue);
     }
-    return _.get(this.values, fieldName);
+    return _.get(this.values, fieldName, defaultValue);
   };
 
   @action public setFieldValue = (
@@ -121,14 +121,15 @@ export class FBFormState extends FBSchemaState {
     }
 
     const rules = this.getRules();
-    const values =  _.mapValues(this.getValues(), (v, k) => {
-      if (_.isBoolean(v)) {
-        return _.toString(v);
-      } else if (_.isObject(v) && !_.isArray(v)) {
-        return flatten(v);
-      }
-      return v;
-    });
+    const values = flatten(this.getValues());
+    // const values =  _.mapValues(this.getValues(), (v, k) => {
+    //   if (_.isBoolean(v)) {
+    //     return _.toString(v);
+    //   } else if (_.isObject(v) && !_.isArray(v)) {
+    //     return flatten(v);
+    //   }
+    //   return v;
+    // });
     const validator = new this.Validator(values, rules);
     validator.setAttributeNames(this.validationAttributeNames);
 

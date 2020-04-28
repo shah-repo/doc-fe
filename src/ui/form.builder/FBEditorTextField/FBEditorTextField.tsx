@@ -5,8 +5,9 @@ const FBEditorTextField: React.FunctionComponent<FBEditorProps> = ({
   children,
   type,
   index,
+  ...props
 }) => (
-  <FBEditor {...{ type, index }}>
+  <FBEditor {...props} {...{ type, index }}>
     <FBTextField label="form.builder.label" name="label" rules="required"/>
     <FBEditorPlaceholder key={`fb-editor-placeholder-${type}`} />
     <FBTextField

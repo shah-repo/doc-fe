@@ -26,7 +26,7 @@
   },
   {
     "type": "schemaselect",
-    "name": "validators.required_with_name",
+    "name": "validators.required_with.name",
     "label": "Required if field",
     "multiple": true,
     "rules": "required_with:validators.required_with",

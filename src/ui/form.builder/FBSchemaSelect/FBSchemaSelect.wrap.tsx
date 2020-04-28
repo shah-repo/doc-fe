@@ -29,12 +29,12 @@ export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
       if (!value) {
         return;
       }
-      const { type, name } = value;
+      const { type } = value;
       schemaState?.setSchemaItemAt({
         ...value,
         name: FBFieldName.SchemaSelectValue,
         ...(type === "checkbox" && { defaultChecked: false }),
-        rules: `required_with:${name}`,
+        rules: "required_with:validators.required_if.name",
       }, index + 1);
     }
 

@@ -11,7 +11,7 @@ export const withFBCheckbox = <T extends FBInputProps>(
   }: T) => {
 
     const { formState } = FB.useStores();
-    const formValue = formState?.getFieldValue(name, false);
+    const formValue = formState?.getFieldValue(name);
 
     return Component({
       ...(props as T),
