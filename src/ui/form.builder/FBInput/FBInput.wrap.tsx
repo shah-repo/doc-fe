@@ -85,8 +85,8 @@ export const withFBInput = <T extends FBInputProps>(
       // Validation settings
       if (formState && name) {
         const validationAttrName =
-          intl.formatMessage({ id: (label || "translation.empty") as string }) ||
-          intl.formatMessage({ id: placeholder || "translation.empty" }) ||
+          intl.formatMessage({ id: (label || "translation.unknown") as string }) ||
+          intl.formatMessage({ id: placeholder || "translation.unknown" }) ||
           name;
         formState?.setValidationAttributeName(name, validationAttrName);
         rules && (formState.setFieldRules(name, rules));
