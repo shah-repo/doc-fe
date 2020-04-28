@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
 import { DocumentRevision, documentRevisionsActions } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";
 import useAsync from "../hooks/useAsync";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
@@ -49,13 +50,8 @@ DocumentRevisionUpdateContainerProps
 }) => {
 
   const { docId } = documentRevision.document;
-  // Document List tab title
-  useEffect(() => {
-    document.title = docId || "Enlil";
-    return () => {
-      document.title = "Enlil";
-    };
-  });
+  useDocumentTitle(docId);
+
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
   const async = useAsync<DocumentRevision>({
     onSuccess: () => {
