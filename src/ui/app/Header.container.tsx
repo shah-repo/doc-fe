@@ -4,6 +4,7 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 import { authActions, authSelectors } from "../../state/ducks/auth";
 import { companyActions } from "../../state/ducks/company";
 import { CHANGE_REQUEST_CREATE_URL } from "../constants/urls";
+import FBStore from "../form.builder/stores/ui/FBStore";
 import { Translation } from "../translations/types";
 import HeaderPresenter from "./Header.presenter";
 
@@ -20,7 +21,10 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
   const email = useSelector(authSelectors.currentUserEmail);
   const name = useSelector(authSelectors.currentUserName);
   const dispatch = useDispatch();
-  const logout = () => dispatch(authActions.logout());
+  const logout = () => {
+    dispatch(authActions.logout());
+    FBStore.clearStores();
+  };
 
   const openUserProfile = () => {
     setUserProfile(true);

@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import uniqid from "uniqid";
 import { FB } from "../..";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
-import { TAX_RATE } from "../../helpers/constants";
 import FBStore from "../../stores/ui/FBStore";
 import { FBPurchaseOrderFormProps, PurchaseOrderItem } from "../FBPurchaseOrder.types";
 
@@ -24,12 +23,11 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
     const handleSubmit = (values) => {
       const item = values[`${name}-formValues`];
       const price = item.order * item.unitPrice;
-      const totalAmount = item.tax ? (price + (price * TAX_RATE)) : price;
       const formattedDate = moment(item.date).format("MM/DD/YYYY");
       item.id = item.id || uniqid();
       onSubmit({
         ...item,
-        totalAmount: totalAmount.toFixed(2),
+        totalAmount: price.toFixed(2),
         formattedDate,
       });
       props.closeDialog();

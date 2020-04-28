@@ -149,8 +149,7 @@ export class FBPurchaseOrderState {
       formattedDate: item.formattedDate || moment(item.date).format("MM/DD/YYYY"),
       totalAmount: (() => {
         const total = Number(item.order) * Number(item.unitPrice);
-        const tax = item.tax ? total * TAX_RATE : 0;
-        return this.formatCost(total + tax);
+        return this.formatCost(total);
       })(),
       received: item.received || 0,
     }

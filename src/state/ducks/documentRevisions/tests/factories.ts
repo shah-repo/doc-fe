@@ -10,6 +10,7 @@ export const generateDocumentType = (docType: Partial<DocumentType> = {}): Docum
   documentTypeName: faker.random.words(),
   group: "OTHER",
   isQms: false,
+  defaultTraining: false,
   ...docType,
 });
 

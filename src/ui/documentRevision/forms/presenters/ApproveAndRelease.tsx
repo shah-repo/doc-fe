@@ -1,14 +1,15 @@
 import { Button, createStyles, Dialog, DialogContent, DialogTitle, makeStyles } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getHasPermission } from "../../../../common/utils/selectors";
-import { Permission } from "../../../../state/ducks/auth/types";
+import { Group, Permission } from "../../../../state/ducks/auth/types";
 import { documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
+import { ApproveAndReleaseFormValues } from "../types";
 import ApproveAndReleaseForm from "./ApproveAndReleaseForm";
 
 interface Props {
@@ -16,6 +17,7 @@ interface Props {
   status?: DocumentRevisionStatus;
   isQms: boolean;
   documentName: string;
+  docRevId: string;
 }
 
 const styles = makeStyles(() =>
@@ -34,6 +36,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   status,
   isQms,
   documentName,
+  docRevId,
 }) => {
   const classes = styles();
   const dialog = useDialog();
@@ -41,6 +44,29 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const releaseNonQmsAction = useActionCreator(documentRevisionsActions.approveAndReleaseNonQms);
   const async = useAsync<any>({ onSuccess: dialog.close });
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
+  const [documentTypeGroups, setDocTypeGroups] = useState<any[]>([]);
+  const asyncGroups = useAsync({
+    onSuccess: (response: Group[] = []) => {
+      setDocTypeGroups([
+        ...documentTypeGroups,
+        response,
+      ].flat());
+    },
+  });
+
+  const getGroupsByStage = useActionCreator(documentRevisionsActions.loadGroupsByStage);
+
+  useEffect(() => {
+    if (!docRevId) {
+      return;
+    }
+    asyncGroups.start(
+      getGroupsByStage,
+      docRevId,
+      asyncGroups,
+    );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [docRevId]);
 
   const openDialog = () => {
     async.reset();
@@ -76,13 +102,17 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
     return null;
   }
 
+  const transformedDocTypeGroups = [].concat(...documentTypeGroups);
+
+
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
-  const renderForm = (props: FormikProps<any>) => (
+  const renderForm = (props: FormikProps<ApproveAndReleaseFormValues>) => (
     <ApproveAndReleaseForm
       {...props}
       asyncState={async.asyncState}
       cancel={closeDialog}
       isQms={isQms}
+      documentTypeGroups={transformedDocTypeGroups}
     />
   );
 
@@ -114,7 +144,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
           id="ApproveAndRelease-content"
         >
           <Formik
-            initialValues={{ password: "" }}
+            initialValues={{ password: "", approvals: [] }}
             onSubmit={onSubmit}
           >
             {renderForm}

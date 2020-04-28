@@ -38,6 +38,7 @@ const getDocumentTypeFormOptions = createSelector(
         documentTypeAcronym: documentTypes[id].documentTypeAcronym,
         group: documentTypes[id].group,
         isQms: documentTypes[id].isQms,
+        defaultTraining: documentTypes[id].defaultTraining,
       }))
       , ["documentTypeName"], ["asc"]),
 );
