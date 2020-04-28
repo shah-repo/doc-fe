@@ -113,6 +113,7 @@ DocumentRevisionFormContainerProps
 
     return {
       ...initialValues,
+      retrain: initialValues.document?.documentType?.defaultTraining || false,
       renderHTML,
       securityGroups,
     };
@@ -157,7 +158,7 @@ DocumentRevisionFormContainerProps
       !initialValues.document?.docId &&
       loadDocumentProposedId &&
       initialValues.document?.documentType?.documentTypeAcronym) {
-      loadDocumentProposedId(initialValues.document.documentType.documentTypeAcronym);
+      loadDocumentProposedId(initialValues.document?.documentType.id as string);
     }
     if (setDocId && initialValues.document?.docId) {
       setDocId(initialValues.document?.docId);

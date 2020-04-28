@@ -116,6 +116,10 @@ export const withEditorRenderer =
       ? "form.builder.add.field"
       : "common.save";
 
+    if (_.get(props, "values.label")) {
+      _.set(props, "values.label", intl.formatMessage({ id: _.get(props, "values.label", "translation.unknown") }));
+    }
+
     return (
       <Box>
         <InputType

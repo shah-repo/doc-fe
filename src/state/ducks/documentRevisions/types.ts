@@ -92,6 +92,7 @@ export interface DocumentRevision extends FBDocumentFlowProps {
   grantAccess?: boolean;
   renderHTML?: string;
   pdf?: PDF;
+  outputRevision?: boolean;
 }
 
 export const RevisionStageOptions = [

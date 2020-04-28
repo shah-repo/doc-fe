@@ -14,6 +14,7 @@ import AsyncGate from "../../components/AsyncGate";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import Text from "../../components/Text";
+import { ApproveAndReleaseFormValues } from "../../documentRevision/forms/types";
 import useActionCreator from "../../hooks/useActionCreator";
 import { toUniqGroupOptions } from "./transform";
 import { ChangeRequestFormValues } from "./types";
@@ -23,7 +24,7 @@ interface OwnProps {
   dataProp?: Approval[];
   withoutCurrentUser?: boolean;
   documentTypeGroups?: Group[];
-  values?: ChangeRequestFormValues;
+  values?: ChangeRequestFormValues | ApproveAndReleaseFormValues;
 }
 
 export type Props = OwnProps;
@@ -60,7 +61,7 @@ export const Approvers: React.FunctionComponent<Props> = ({
 
   const renderGroupApproversResults = () => {
     const uniqGroups = uniqBy(documentTypeGroups, "id");
-    const selectedEmployees = values?.approvals?.map((e) => e.value);
+    const selectedEmployees = values?.approvals.map((e) => e.value);
     return (
       <Box display="flex" flexWrap="wrap">
         {uniqGroups.map((group) =>
