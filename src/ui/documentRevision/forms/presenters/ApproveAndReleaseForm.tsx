@@ -1,6 +1,7 @@
 import { Button } from "@material-ui/core";
-import { Form } from "formik";
+import { Form, FormikProps } from "formik";
 import * as React from "react";
+import { Group } from "../../../../state/ducks/auth/types";
 import { AsyncState, AsyncStatus } from "../../../../state/types";
 import Approvers from "../../../change.request/form/approvers";
 import InputField from "../../../components/forms/fields/Input";
@@ -9,21 +10,29 @@ import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import Text from "../../../components/Text";
+import { ApproveAndReleaseFormValues } from "../types";
 import { styles } from "./ApproveAndRelease.styles";
 
-interface Props {
+interface Props extends FormikProps<ApproveAndReleaseFormValues>{
   asyncState: AsyncState;
   cancel: () => void;
   isQms: boolean;
+  documentTypeGroups: Group[];
 }
 
-const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({ cancel, asyncState, isQms }) => {
+const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
+  cancel,
+  asyncState,
+  isQms,
+  values,
+  documentTypeGroups,
+}) => {
   const classes = styles();
 
   return (
     <Form className={classes.form}>
       <FormMessage asyncState={asyncState} />
-      {isQms && <Approvers withoutCurrentUser={true} />}
+      {isQms && <Approvers withoutCurrentUser={true} values={values} documentTypeGroups={documentTypeGroups} />}
       {isQms && <InputField
         name="password"
         label="transition.action.password"

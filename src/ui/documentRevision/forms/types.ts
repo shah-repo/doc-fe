@@ -26,3 +26,8 @@ export interface DocumentRevisionFormValues extends FBDocumentFlowProps {
 export interface SecurityId {
   id: string;
 }
+
+export interface ApproveAndReleaseFormValues {
+  approvals: OptionType[];
+  password: string;
+}

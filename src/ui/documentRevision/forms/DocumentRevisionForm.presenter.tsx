@@ -184,7 +184,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       }
     });
     if (loadDocumentProposedId) {
-      loadDocumentProposedId(type.documentTypeAcronym);
+      setFieldValue("retrain", type.defaultTraining);
+      loadDocumentProposedId(type.id);
     }
     FBDRStore.setInitialFBMode(type.group);
     if (type.isQms) {
@@ -243,12 +244,14 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   );
   const formDocumentStatus = get(documentRevision, "formDocument.status", "");
   const documentStatus = documentRevision && documentRevision.status;
-  const isDocumentStatusDraftOrPending = documentStatus === (DocumentRevisionStatus.Draft || DocumentRevisionStatus.PendingChange);
+  const isDocumentStatusDraftOrPending =
+    documentStatus === (DocumentRevisionStatus.Draft || DocumentRevisionStatus.PendingChange);
   const isFormStatusDeprecated = formDocumentStatus === DocumentRevisionStatus.Deprecated;
   const isDocTypeDisabled = type === "newVersion" || isdocRevStatusDraft;
-  const options = type === "newOutput" ? initialValues.formDocument?.formTemplate?.outputDocumentTypes.map((e) =>
+  const options = type === "newOutput" ? (initialValues.formDocument?.formTemplate?.outputDocumentTypes.map((e) =>
     ({ value: e.id, text: e.documentTypeName })
-  ) as SelectOption[] : documentTypes;
+  ) as SelectOption[] || documentTypes) : documentTypes;
+
   const canShowCancelButton = documentStatus === DocumentRevisionStatus.Draft && documentRevision.version > 1;
 
   return (
@@ -427,6 +430,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               status={values.status}
               isQms={docInfo.isQms}
               documentName={docInfo.name}
+              docRevId={values.id as string}
             />
           </Grid>
         </Box>

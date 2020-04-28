@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { action, computed, set } from "mobx";
-import { FBAutocompleteAsyncConfig } from "..";
+import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncOption } from "..";
 import autocompleteOptions from "../../../data/autocompleteOptions.json";
 import FBRequest from "../FBApi/FBApi.request";
 import FBAutocompleteAsyncStore from "./FBAutocompleteAsync.store";
@@ -54,6 +54,25 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     }
     if (!FBAutocompleteAsyncStore.data.get(this.optionId) || force) {
       this.loadInternal();
+    }
+  };
+
+  @action public dataFilter = (data: any[]): any[] | undefined => {
+    if (!this.optionId) {
+      return;
+    }
+    // TODO: refactore autocomplete list to reuse doc rev list (check with mobile)
+    switch (this.optionId) {
+      case FBAutocompleteAsyncOption.revision:
+      case FBAutocompleteAsyncOption.supplier:
+      case FBAutocompleteAsyncOption.tl:
+      case FBAutocompleteAsyncOption.csl:
+      case FBAutocompleteAsyncOption.part:
+      case FBAutocompleteAsyncOption.po:
+        return _.map(
+          _.groupBy(data, "document.docId"), (recs) => _.last(_.sortBy(recs, "version"))
+        );
+      default: return data;
     }
   };
 

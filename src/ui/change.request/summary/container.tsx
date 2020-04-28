@@ -11,6 +11,7 @@ import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks
 import { ApplicationState } from "../../../state/reducers";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
 import useAsync from "../../hooks/useAsync";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 import ChangeRequestAuditContainer from "../audit/Audit.container";
 import SummaryPresenter from "../documentRevision/DocumentRevisionControlPreview.presenter";
 import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "../form/transform";
@@ -56,6 +57,7 @@ export const Container: React.FunctionComponent<Props> = ({
   currentEmployeeId,
   isCompanyAdmin,
 }) => {
+  useDocumentTitle(dataProp.crId);
   const canChangeOwnerShip = canChangeCROwner(dataProp.state, currentEmployeeId, dataProp.owner.id, isCompanyAdmin);
   const [summaryDocumentTypeGroups, setSummaryDocTypeGroups] = useState<any[]>([]);
   const asyncGroups = useAsync({
