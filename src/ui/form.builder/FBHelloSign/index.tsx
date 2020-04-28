@@ -1,2 +1,3 @@
-export { default } from "./FBHelloSign";
+export { default as FBHelloSign } from "./FBHelloSign";
 export * from "./FBHelloSign.types";
+

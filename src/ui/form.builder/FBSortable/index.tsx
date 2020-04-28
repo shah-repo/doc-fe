@@ -1,3 +1,3 @@
-export { default } from "./FBSortable";
+export { default as FBSortable } from "./FBSortable";
 export * from "./FBSortable.types";
 

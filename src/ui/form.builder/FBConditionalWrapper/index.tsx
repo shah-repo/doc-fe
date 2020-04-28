@@ -1,3 +1,3 @@
-export { default } from "./FBConditionalWrapper";
+export { default as FBConditionalWrapper } from "./FBConditionalWrapper";
 export * from "./FBConditionalWrapper.types";
 

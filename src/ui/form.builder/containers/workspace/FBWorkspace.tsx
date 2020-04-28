@@ -6,7 +6,7 @@ import useDialog from "../../../hooks/useDialog";
 import FBAddFieldButton0 from "../../components/custom/FBAddFieldButton0";
 import FBTransportSchema from "../../components/custom/FBTransportSchema";
 import FBButton from "../../components/inputs/FBButton";
-import FBDialog from "../../FBDialog";
+import { FBDialog } from "../../FBDialog";
 import FBFormMarkDown from "../../FBFormMarkDown";
 import { withWorkspace } from "../../hocs/withWorkspace";
 import FBDynamicValidatorStore from "../../stores/ui/FBDynamicValidatorStore";

@@ -1,8 +1,7 @@
 import _ from "lodash";
 import { action, get, observable, set } from "mobx";
 import React from "react";
-import { FBSchemaProps } from ".";
-import { FBApproval, FBAutocompleteAsync, FBButton, FBCheckboxGroup, FBInlineApproval, FBInputProps, FBInputType, FBInstructionsDocument, FBMediaAlbumField, FBQuantityField, FBSelectDocument, FBSelectRequirement, FBTestRequirement, FBTimerField } from "..";
+import { FBInputProps, FBInputType, FBSchemaProps } from "..";
 import FBActionContainer from "../components/actions/FBActionContainer";
 import FBCheckbox from "../components/inputs/FBCheckbox";
 import FBDatePicker from "../components/inputs/FBDatePicker";
@@ -16,14 +15,26 @@ import FBFileUpload from "../components/navigation/FBFileUpload";
 import FBLink from "../components/navigation/FBLink";
 import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaItem";
 import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
+import { FBApproval } from "../FBApproval";
 import { FBApprovalMatrix } from "../FBApprovalMatrix";
+import { FBAutocompleteAsync } from "../FBAutocompleteAsync";
+import { FBButton } from "../FBButton";
+import { FBCheckboxGroup } from "../FBCheckboxGroup";
+import { FBInlineApproval } from "../FBInlineApproval";
+import { FBInstructionsDocument } from "../FBInstructionsDocument";
+import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
 import { FBPOReceive } from "../FBPOReceive";
 import { FBPurchaseOrder } from "../FBPurchaseOrder";
-import FBReceivePO from "../FBReceivePurchaseOrder";
+import { FBQuantityField } from "../FBQuantityField";
+import { FBReceivePO } from "../FBReceivePurchaseOrder";
 import { FBSection } from "../FBSection";
+import { FBSelectDocument } from "../FBSelectDocument";
+import { FBSelectRequirement } from "../FBSelectRequirement";
+import { FBTestRequirement } from "../FBTestRequirement";
 import { FBTestStep } from "../FBTestStep";
 import { FBTextField } from "../FBTextField";
+import { FBTimerField } from "../FBTimerField";
 
 export class FBSchemaState {
   public static omitLabel: FBInputType[] = ["section", "subsection"];

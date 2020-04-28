@@ -2,7 +2,7 @@ import { Box, CircularProgress } from "@material-ui/core";
 import React from "react";
 import { FBDialog, FBPOReceiveProps, FBPOReceiveTable, FBSchema, FBSchemaProps } from "..";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption } from "../FBAutocompleteAsync";
-import FBProvider from "../FBProvider";
+import { FBProvider } from "../FBProvider";
 import { withFBPOReceive } from "./FBPOReceive.wrap";
 
 const FBPOReceive: React.FunctionComponent<FBPOReceiveProps> = ({
