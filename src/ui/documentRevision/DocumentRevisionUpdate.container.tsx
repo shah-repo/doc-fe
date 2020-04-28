@@ -5,6 +5,7 @@ import { DocumentRevision, documentRevisionsActions } from "../../state/ducks/do
 import { ApplicationState } from "../../state/reducers";
 import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";
 import useAsync from "../hooks/useAsync";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
@@ -47,6 +48,10 @@ DocumentRevisionUpdateContainerProps
   loadDocument,
   canChangeOwnerShip,
 }) => {
+
+  const { docId } = documentRevision.document;
+  useDocumentTitle(docId);
+
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
   const async = useAsync<DocumentRevision>({
     onSuccess: () => {

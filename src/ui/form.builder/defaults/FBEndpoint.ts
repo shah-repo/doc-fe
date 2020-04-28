@@ -6,6 +6,6 @@ export enum FBEndpoint {
   AssetUrl = "/attachments/assetUrl",
   PostInlineApprove = "/document_revisions/${documentId}/inline_approve",
   FetchDocumentRevision = "/document_revisions/${documentId}",
-  FetchDocId = "/documents/proposed_docid?documentTypeAcronym=${documentTypeAcronym} ",
+  FetchDocId = "/documents/proposed_docid?documentTypeId=${documentTypeId} ",
   DocumentRevisionsUrl = "/document_revisions",
 }

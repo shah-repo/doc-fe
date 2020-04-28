@@ -6,6 +6,7 @@ import { Redirect } from "react-router-dom";
 import { DocumentRevision, documentRevisionsSelectors, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 import AccessPermissionsContainer from "./accessPermissions/AccessPermissions.container";
 import DocumentRevisionAuditContainer from "./audit/Audit.container";
 import DocumentRevisionDisplayContainer from "./DocumentRevisionDisplay.container";
@@ -51,6 +52,8 @@ DocumentRevisionManagerContainerProps
   deprecatedAt,
   docId,
 }) => {
+  useDocumentTitle(docId);
+
   const selectedDocument = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId as string));
 
