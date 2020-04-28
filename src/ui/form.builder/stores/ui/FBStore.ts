@@ -6,6 +6,7 @@ import FBAutocompleteAsyncStore from "../../FBAutocompleteAsync/FBAutocompleteAs
 import { FBInputProps } from "../../types/common";
 import { FBTemplateSchema } from "../../types/store";
 import { FBWorkspaceMode } from "../../types/workspace";
+import FBDRStore from "./FBDRStore";
 import editorStore from "./FBEditorStore";
 import FBValidatorStore from "./FBValidatorStore";
 
@@ -183,7 +184,7 @@ export class FormBuilderStore {
     switch (this.mode) {
       case "none":
       case "design":
-        this.schema = [];
+        this.schema = FBDRStore.docSchema;
         this.values = {};
         break;
       default:
