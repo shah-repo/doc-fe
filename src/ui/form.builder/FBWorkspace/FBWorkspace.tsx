@@ -34,16 +34,6 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
             {isStarter && <FBStarter />}
             {!isStarter && <FBSchema {...{ schema }} workspaceMode={mode} />}
             <FBWorkspaceBottomBar {...{ includeTransport }} />
-            {/* <Box display="flex">
-              {mode === "design" && (
-                <FBButton
-                  label="Form Preview"
-                  onClick={handleFormPreview}
-                  id="FBWorkspace-clickView"
-                />
-              )}
-              {includeTransport && <FBTransportSchema />}
-            </Box> */}
           </FBConditionalWrapper>
         </>
       )}
