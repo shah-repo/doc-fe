@@ -30,13 +30,9 @@ export default class FBRequest<Data, Body> {
     set(this, "root", root);
   };
 
-  @action public fetch = () => {
-    this.start("get");
-  };
+  @action public fetch = () => this.start("get");
 
-  @action public post = () => {
-    this.start("post");
-  };
+  @action public post = () => this.start("post");
 
   @action public dataFilter = (data: Data): Data | undefined => data;
   @action public onError = (_error) => {
@@ -77,5 +73,7 @@ export default class FBRequest<Data, Body> {
         this.setLoading(false);
         this.onError(_error);
       });
+
+    return promise;
   };
 }
