@@ -1,4 +1,5 @@
-import { Box, Chip, TextField, Typography } from "@material-ui/core";
+import { Box, Chip, IconButton, TextField, Typography } from "@material-ui/core";
+import CachedIcon from "@material-ui/icons/Cached";
 import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import _ from "lodash";
 import React from "react";
@@ -17,6 +18,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   optionLabelKey = "",
   placeholder,
   disabled,
+  refresh,
   ...props
 }) =>  (
   <FBInput {...props} {...{ multiple, disabled }} type="autocomplete">
@@ -30,12 +32,31 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
     <Autocomplete
       {...{ options, multiple, getOptionLabel, defaultValue }}
       renderInput={(params: RenderInputParams) => (
-        <TextField
-          {...params}
-          {...{ placeholder }}
-          variant="outlined"
-          fullWidth
-        />
+        <Box display="flex">
+          <Box width="100%">
+            <TextField
+              {...params}
+              {...{ placeholder }}
+              fullWidth
+              variant="outlined"
+              InputProps={{
+                ...params.InputProps,
+                ...(refresh) && { style: { paddingRight: "33px" } },
+              }}
+              inputProps={{
+                ...params.inputProps,
+                style: { padding: "10.5px 0" },
+              }}
+            />
+          </Box>
+          {refresh && (
+            <Box ml={-4} display="flex" alignItems="center">
+              <IconButton size="small" onClick={refresh} {...{ disabled }}>
+                <CachedIcon fontSize="small" />
+              </ IconButton>
+            </Box>
+          )}
+        </Box>
       )}
       renderTags={(value, getTagProps) => (
         <FBMapWrapper<any[]> collection={value}>

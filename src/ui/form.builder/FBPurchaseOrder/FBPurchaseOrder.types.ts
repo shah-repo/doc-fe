@@ -25,6 +25,7 @@ export type FBPurchaseOrderFormProps =
 & Pick<FBPurchaseOrderDialogProps, "initialValues" | "onSubmit" | "closeDialog" | "items">
 & {
   validateForm?: (values: any) => void;
+  handlePartNumberChange?: (setFieldValue: any) => (evt: any, option: any) => void;
 };
 
 export type FBPurchaseOrderAddItemProps =
@@ -60,11 +61,14 @@ export interface PurchaseOrder {
 }
 
 export interface PurchaseOrderItem {
+  id: string;
   index: number;
   order: string;
   glCode: string;
   units: string;
   partNumber: string;
+  partNumberDocId: string;
+  partNumberTitle: string;
   date: Date;
   description: string;
   unitPrice: string;

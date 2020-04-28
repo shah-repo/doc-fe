@@ -40,10 +40,10 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     const signatureId = FBStore.getValue("signatureRequestId");
     signatureSentMessage = intl.formatMessage({ id: "form.builder.signature.document.sent" });
 
-    const useStyles = makeStyles(theme => ({
+    const useStyles = makeStyles((theme) => ({
       backdrop: {
         zIndex: 1550,
-        color: '#fff',
+        color: "#fff",
       },
     }));
 
@@ -53,7 +53,7 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
       waitOverlay = helloSignState && helloSignState.waitOverlay;
       loadingMessage = helloSignState && helloSignState.loadingMessage;
       signatureSent = helloSignState && helloSignState.signatureSent;
-    })
+    });
 
     const getButtonLabel = () => {
       if (FBStore.mode !== "form") {
@@ -111,24 +111,23 @@ export const withFBHelloSign = <T extends FBHelloSignProps>(
     }
 
     function helloSignIframe(data: any) {
-      //using previouslyFinished with 'close' because 'cancel' event doesn't work for some reason
+      // using previouslyFinished with 'close' because 'cancel' event doesn't work for some reason
       let previouslyFinished = false;
       const clientId =  Config.HelloSignClientId;
       const editUrl = data.template.edit_url;
-      console.log(clientId);
       const client = new HelloSign({
         clientId,
         skipDomainVerification: true,
       });
       client.open(editUrl);
-      client.on('finish', () => {
+      client.on("finish", () => {
         previouslyFinished = true;
         helloSignState && helloSignState.setLoadingMessage(
           intl.formatMessage({ id: "form.builder.template.message.retrieving" })
         );
         helloSignState && helloSignState.setOverlay(true);
       });
-      client.on('close', () => {
+      client.on("close", () => {
         helloSignState && helloSignState.setOverlay(previouslyFinished);
       });
     }

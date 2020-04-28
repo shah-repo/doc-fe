@@ -108,11 +108,12 @@ export type FBInputProps = Omit<FBFormikFieldProps, "name">
   paragraph?: string;
   includeQRScan?: boolean;
   loading?: boolean;
-  approvers?: Employee[];
-  approverGroups?: GroupRequestBody[];
+  approvers?: string[] | Employee[];
+  approverGroups?: string[] | GroupRequestBody[];
   approveIsBlocking?: boolean;
   instructionsDocument?: string;
   testRequirement?: string;
+  approved?: boolean;
 };
 
 export type FBFormDefaultProps = FBInputProps &

@@ -127,10 +127,10 @@ DocumentRevisionFormContainerProps
     [documentTypes],
   );
 
-  const otherTypes: OptionType[] = useMemo(
+  const outputDocumentTypeOptions: OptionType[] = useMemo(
     () =>
       documentTypes.reduce((acc: OptionType[], document) => {
-        if (document.group === "OTHER") {
+        if (document.group === "RECORD" || document.group === "OTHER") {
           acc.push({ value: document.id, label: document.documentTypeName });
         }
         return acc;
@@ -150,7 +150,7 @@ DocumentRevisionFormContainerProps
       !initialValues.document?.docId &&
       loadDocumentProposedId &&
       initialValues.document?.documentType?.documentTypeAcronym) {
-      loadDocumentProposedId(initialValues.document.documentType.documentTypeAcronym);
+      loadDocumentProposedId(initialValues.document?.documentType.id as string);
     }
     if (setDocId && initialValues.document?.docId) {
       setDocId(initialValues.document?.docId);
@@ -175,7 +175,7 @@ DocumentRevisionFormContainerProps
       doNotPrompt={doNotPrompt}
       onDirtyFlagChange={onDirtyFlagChange}
       documentTypes={docTypes}
-      otherDocumentTypes={otherTypes}
+      outputDocumentTypeOptions={outputDocumentTypeOptions}
       documentTypesById={documentTypesById}
       canChangeOwnerShip={canChangeOwnerShip}
       onUpgradeClick={onUpgradeClick}

@@ -16,8 +16,6 @@ const FBEditorApprovalField: React.FunctionComponent<FBEditorApprovalFieldProps>
       optionId="3"
       name="approvers"
       multiple={true}
-      optionValueType="object"
-      optionObjectKeys={["id", "groups", "user.id", "user.email", "user.name"]}
       defaultValue={approvers}
     />
     <FBAutocompleteAsync
@@ -25,8 +23,6 @@ const FBEditorApprovalField: React.FunctionComponent<FBEditorApprovalFieldProps>
       optionId="10"
       name="approverGroups"
       multiple={true}
-      optionValueType="object"
-      optionObjectKeys={["id", "name"]}
       defaultValue={approverGroups}
     />
     <FBCheckbox name="approveIsBlocking" label="form.builder.blocking" />

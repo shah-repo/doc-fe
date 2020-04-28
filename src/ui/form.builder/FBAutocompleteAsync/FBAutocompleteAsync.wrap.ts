@@ -18,24 +18,17 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     options,
     loading,
     multiple,
+    refresh,
     name,
     ...props
   }: T) => {
 
-    autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState);
-    autocompleteAsyncState?.setOptionId(optionId);
+    autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, optionId);
     const {
       valueKey: optionValueKey = "value",
       labelKey: optionLabelKey = "text",
     } = autocompleteAsyncState?.optionConfig || {};
     const formValue = FBStore.getValue(name);
-
-    React.useEffect(() => {
-      if (!optionId) {
-        return;
-      }
-      autocompleteAsyncState?.load();
-    }, [optionId]);
 
     useObserver(() => {
       if (!optionId) {
@@ -47,13 +40,15 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
           ? autocompleteAsyncState?.sliceValue(selectedOptions)
           : slicedOptions;
       }
-      loading = !options && autocompleteAsyncState?.loading;
+      loading = autocompleteAsyncState?.loading;
     });
 
     if (options && formValue && optionValueType === "key") {
       const value = autocompleteAsyncState?.sliceValue(formValue);
       defaultValue = _.map(value, { optionValueKey });
     }
+
+    refresh = () => autocompleteAsyncState?.load(true);
 
     getOptionLabel = (option) => {
       const { labelPrefixRoot } = autocompleteAsyncState?.optionConfig || {};
@@ -72,6 +67,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       selectedOptions,
       defaultValue,
       multiple,
+      refresh,
       name,
     });
   };

@@ -29,6 +29,11 @@ export const RevisionTypeChange: React.FunctionComponent = () => (
         value={RevisionChangeType.Obsolete}
         id="RevisionTypeChange-obsolete"
       />
+      <RadioButton
+        label={<Text translation="documentRevision.form.administrativeChange" />}
+        value={RevisionChangeType.AdministrativeChange}
+        id="RevisionTypeChange-administrativeChange"
+      />
     </RadioGroup>
   </Box>
 );

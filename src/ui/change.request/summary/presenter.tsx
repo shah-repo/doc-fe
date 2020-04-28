@@ -110,10 +110,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         <ApproversSummary dataProp={dataProp.approvals} />
       </Grid>
       <Box className={classes.submitBox} p={2}>
-        <Grid
-          item={true}
-          alignItems="flex-end"
-        >
+        <Grid item={true}>
           {canEdit && <FormProgress asyncState={asyncState} />}
           {canEdit && <FormMessage asyncState={asyncState} />}
           {renderChangeOwnership}

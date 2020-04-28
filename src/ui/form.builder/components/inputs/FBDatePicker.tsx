@@ -1,4 +1,5 @@
 import DateFnsUtils from "@date-io/date-fns";
+import { TextField } from "@material-ui/core";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import React from "react";
 import { FBInputProps } from "../../types/common";
@@ -21,6 +22,7 @@ const FBDatePicker: React.FunctionComponent<FBInputProps> = ({
         label=""
         value=""
         onChange={(date) => onChange && onChange(null, date)}
+        TextFieldComponent={(props) => <TextField {...props} disabled={true} />}
       />
     </FBInput>
   </MuiPickersUtilsProvider>

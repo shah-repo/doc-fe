@@ -24,7 +24,7 @@ import FBFileUpload from "../components/navigation/FBFileUpload";
 import FBLink from "../components/navigation/FBLink";
 import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaItem";
 import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
-import FBApprovalField from "../FBApprovalField/FBApprovalField";
+import FBApproval from "../FBApproval";
 import { FBAutocompleteAsync } from "../FBAutocompleteAsync";
 import FBEditorApprovalField from "../FBEditorApprovalField";
 import FBEditorInlineApproval from "../FBEditorInlineApproval";
@@ -107,7 +107,7 @@ export const FBFieldComponent: Dictionary<any> = {
   instructionsmediaupload: FBMediaAlbumField,
   evidencemediaupload: FBMediaAlbumField,
   checkpoint: FBButton,
-  approval: FBApprovalField,
+  approval: FBApproval,
   createlabel: FBButton,
   quantity: FBQuantityField,
   timer: FBTimerField,
@@ -138,12 +138,11 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "purchaseorder",
     "instructionsmediaupload",
     "evidencemediaupload",
-    "inlineapproval",
     "testRequirement",
   ],
-  approvals: ["hellosign"],
+  approvals: ["hellosign", "approval", "inlineapproval"],
+  buttons: ["checkpoint", "createlabel"],
   instructions: ["instructionsdocument", "selectdocument", "selectrequirement"],
-  buttons: ["checkpoint", "approval", "createlabel"],
   actions: ["action"],
 };
 

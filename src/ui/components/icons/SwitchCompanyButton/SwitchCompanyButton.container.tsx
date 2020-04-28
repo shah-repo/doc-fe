@@ -5,6 +5,7 @@ import { authSelectors } from "../../../../state/ducks/auth";
 import { Employee } from "../../../../state/ducks/company";
 import { ApplicationState } from "../../../../state/reducers";
 import { LOGIN_URL } from "../../../constants/urls";
+import FBStore from "../../../form.builder/stores/ui/FBStore";
 import Text from "../../Text";
 import styles from "./SwitchCompanyButton.styles";
 
@@ -20,6 +21,7 @@ const SwitchCompanyButton: React.FunctionComponent<SwitchCompanyButtonProps> = (
   const history = useHistory();
   function handleClick() {
     history.push(LOGIN_URL);
+    FBStore.clearStores();
   }
   return (
     <div

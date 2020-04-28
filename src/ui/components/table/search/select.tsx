@@ -2,6 +2,7 @@ import { FormControl, InputBase, MenuItem, Select } from "@material-ui/core";
 import InputLabel from "@material-ui/core/InputLabel";
 import React from "react";
 import { SelectOption } from "../../forms/fields/Select";
+import Text from "../../Text";
 import { searchQueryString } from "./helpers";
 import { selectStyles } from "./styles";
 import { TableSearchFieldProps } from "./types";
@@ -26,7 +27,7 @@ export const TableSearchSelectField: React.FunctionComponent<Props> = ({
   };
 
   const menuItemRenderer = (option: SelectOption) => (
-    <MenuItem key={option.value} value={option.value}>{option.text}</MenuItem>
+    <MenuItem key={option.value} value={option.value}><Text message={option.text} /></MenuItem>
   );
 
   return (

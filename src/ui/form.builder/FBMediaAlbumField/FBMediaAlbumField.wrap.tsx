@@ -2,8 +2,7 @@ import _ from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBMediaAlbumFieldProps, FBMediaAlbumFieldState } from ".";
-import { FB } from "..";
-import FBDRStore from "../stores/ui/FBDRStore";
+import { FB, FBMediaFile } from "..";
 import FBStore from "../stores/ui/FBStore";
 
 export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
@@ -11,65 +10,66 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
 ) => {
   const Comp = ({
     mediaAlbumFieldState,
-    onClick,
+    setMediaFieldMode,
     onFileUploadChange,
-    mode,
+    isTemplate = false,
+    actionsDisabled,
+    loading,
+    collection,
+    removeMedia,
     name = "",
     qrValue,
-    collection,
-    loading = false,
-    qrMode = "qr",
-    isTemplate,
-    removeMedia,
+    mode,
     ...props
   }: T) => {
-    mediaAlbumFieldState = FB.useRef<FBMediaAlbumFieldState>(FBMediaAlbumFieldState);
     const documentId = FBStore.documentId;
+    mediaAlbumFieldState = FB.useRef<FBMediaAlbumFieldState>(
+      FBMediaAlbumFieldState, { name, isTemplate }
+    );
+    qrValue = `https://enlil.io/fileupload?document=${documentId}&fieldname=${name}`;
 
     React.useEffect(() => {
-      const isPreview =
-        (FBStore.mode !== "design" && isTemplate) ||
-        (FBStore.mode === "preview" && FBDRStore.isOutput && !isTemplate);
-      isPreview && mediaAlbumFieldState && (mediaAlbumFieldState.setMode("preview"));
-      if (!_.isEmpty(documentId)) {
-        mediaAlbumFieldState?.setFieldName(name);
-        mediaAlbumFieldState?.downloadCandidates();
+      if (_.isEmpty(documentId)) {
+        return;
       }
-    }, [documentId, isTemplate, mediaAlbumFieldState, name]);
+      mediaAlbumFieldState?.downloadCandidates();
+    }, [documentId, mediaAlbumFieldState]);
 
     // Handle mode
-    onClick = () => {
-      const mode =
-        mediaAlbumFieldState?.getMode() === "qr" ? "mediaMode" : "qr";
+    setMediaFieldMode = () => {
+      const mode = mediaAlbumFieldState?.mode === "qr" ? "media" : "qr";
       mediaAlbumFieldState?.setMode(mode);
     };
 
     // Handle image upload
     onFileUploadChange = (event: React.FormEvent<HTMLInputElement>) => {
       const files = _.get(event, "currentTarget.files", []);
-      mediaAlbumFieldState?.upload(files as File[]);
+      _.map(files, (file, index) => {
+        (file as FBMediaFile).order = (_.last(collection)?.order || 0) + _.toNumber(index + 1);
+      });
+      mediaAlbumFieldState?.upload(files as FBMediaFile[]);
     };
 
     useObserver(() => {
       mode = mediaAlbumFieldState?.mode;
+      loading = mediaAlbumFieldState?.loading;
       collection = mediaAlbumFieldState?.collection;
-      loading = mediaAlbumFieldState?.loading || false;
     });
 
-    qrValue = `https://enlil.io/fileupload?document=${FBStore.documentId}&fieldname=${name}`;
 
     return Component({
       ...(props as T),
-      mediaAlbumFieldState,
-      mode,
-      onClick,
-      qrValue,
-      onFileUploadChange,
-      collection,
-      name,
-      loading,
-      isTemplate,
       removeMedia: mediaAlbumFieldState?.removeCandidate,
+      actionsDisabled: mediaAlbumFieldState?.isPreview,
+      mediaAlbumFieldState,
+      onFileUploadChange,
+      setMediaFieldMode,
+      collection,
+      isTemplate,
+      qrValue,
+      loading,
+      mode,
+      name,
     });
   };
 

@@ -81,5 +81,23 @@
     "label": "Groups",
     "valueKey": "id",
     "labelKey": "name"
+  },
+  {
+    "id": "11",
+    "path": "/document_revisions",
+    "label": "Parts",
+    "valueKey": "id",
+    "labelKey": "document.docId",
+    "labelPrefixRoot": "",
+    "root": ""
+  },
+  {
+    "id": "12",
+    "path": "/document_revisions?documentTypeAcronym=PO",
+    "label": "Purchase Order list",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
   }
 ]

@@ -2,6 +2,7 @@ import _, { Dictionary } from "lodash";
 import { action, computed, observable, set } from "mobx";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
 import { FBFormValues } from "../../defaults/formik";
+import FBAutocompleteAsyncStore from "../../FBAutocompleteAsync/FBAutocompleteAsync.store";
 import { FBInputProps } from "../../types/common";
 import { FBTemplateSchema } from "../../types/store";
 import { FBWorkspaceMode } from "../../types/workspace";
@@ -35,6 +36,10 @@ export class FormBuilderStore {
   public documentId = "";
   public stepSectionReg = /#([1-9][0-9]?|100)$/;
   public document: DocumentRevision = {} as DocumentRevision;
+
+  public clearStores = () => {
+    FBAutocompleteAsyncStore.data.clear();
+  };
 
   @action public sectionNumber = (endIndex: number): number => {
     const sections = _.filter(this.getSchema(), (schemaItem, index) =>
@@ -160,7 +165,10 @@ export class FormBuilderStore {
     this.values = values || {};
   };
 
-  @action public setValue = (name: string, value: any) => {
+  @action public setValue = (name: string | undefined, value: any) => {
+    if (!name) {
+      return;
+    }
     this.setValues(_.set(this.values, name, value));
   };
 

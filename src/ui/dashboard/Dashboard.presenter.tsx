@@ -1,9 +1,10 @@
-import { Grid, Paper, Typography } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import React from "react";
 import { PendingActionType } from "../../state/ducks/dashboard";
 import AsyncGate from "../components/AsyncGate";
 import Text from "../components/Text";
 import ChangeRequestApproval from "./action.types/ChangeRequestApproval";
+import PurchaseOrderApproval from "./action.types/purchaseOrder/PurchaseOrderApproval";
 import TaskApproval from "./action.types/TaskApproval";
 import TrainingRequest from "./action.types/TrainingRequest";
 import { styles } from "./Dashboard.styles";
@@ -21,11 +22,20 @@ const DashboardPresenter: React.FunctionComponent<DashboardPresenterProps> = ({
         pendingActions.map((pendingAction, index) => {
           switch (pendingAction.type) {
             case PendingActionType.PENDING_REVIEW:
-              return <ChangeRequestApproval key={index} pendingAction={pendingAction} />;
+              return pendingAction.changeReq &&
+                <ChangeRequestApproval key={index} index={index} changeRequest={pendingAction.changeReq} />;
             case PendingActionType.PENDING_TRAINING_RECORDS:
-              return <TrainingRequest key={index} pendingAction={pendingAction} />;
+              return pendingAction.trainingRecord &&
+                <TrainingRequest key={index} index={index} trainingRecord={pendingAction.trainingRecord} />;
+            case PendingActionType.PURCHASE_ORDERS:
+              return pendingAction.documentRevision &&
+                <PurchaseOrderApproval key={index} index={index} documentRevision={pendingAction.documentRevision} />;
+            case PendingActionType.PENDING_DOC_CONTROL:
+            case PendingActionType.PENDING_IMPL_PLAN_TASK:
+              return pendingAction.changeReq &&
+                <TaskApproval key={index} index={index} changeRequest={pendingAction.changeReq} />;
             default:
-              return <TaskApproval key={index} pendingAction={pendingAction} />;
+              return <Text key={index} translation="common.undefined" />;
           }
         })
       }
@@ -45,10 +55,8 @@ const DashboardPresenter: React.FunctionComponent<DashboardPresenterProps> = ({
           asyncState={loadPendingActionsListAsyncState}
           startActionOnMount={true}
         >
-          <Paper className={classes.actionsContainer}>
-            {pendingActions.length > 0 && renderPendingActions()}
-            {renderNoPendingActions}
-          </Paper>
+          {pendingActions.length > 0 && renderPendingActions()}
+          {renderNoPendingActions}
         </AsyncGate>
       </Grid>
     </Grid>
