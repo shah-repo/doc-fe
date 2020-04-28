@@ -18,7 +18,7 @@ export const withFBPOReceiveTable = <T extends FBPOReceiveTableProps>(
         open: true,
         maxWidth: "sm",
         title: "form.builder.po.items.received",
-        content: <FBPOReceiveForm {...{ name }} />,
+        content: <FBPOReceiveForm {...{ name, item }} />,
         actions: <FBPOReceiveFormActions />,
       });
     };

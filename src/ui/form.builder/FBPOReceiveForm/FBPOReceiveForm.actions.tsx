@@ -9,7 +9,7 @@ const FBPOReceiveFormActions: React.FunctionComponent<FBPOReceiveFormProps> = ({
   handleAdd,
 }) => (
   <Box display="flex" flexDirection="row-reverse" mx={3}>
-    <FBSubmitButton variant="outlined" label="form.builder.receive" onClick={handleAdd} />
+    <FBSubmitButton variant="contained" label="form.builder.receive" onClick={handleAdd} />
     <FBButton variant="outlined" label="common.cancel" onClick={handleCancel} />
   </Box>
 );

@@ -50,6 +50,7 @@ export class FBPOReceiveState extends FBRequest<DocumentRevision, any>  {
       if (schemaItem.type !== "purchaseorder") {
         return _.merge(schemaItem, {
           defaultValue: _.get(this.docValues, schemaItem.name || ""),
+          disabled: true,
         });
       }
     }) as FBInputProps[];

@@ -1,4 +1,4 @@
-import { FBFormProps, FBPOReceiveProps } from "..";
+import { FBFormProps, FBPOReceiveProps, PurchaseOrderItem } from "..";
 
 export type FBPOReceiveFormProps =
 & Pick<FBPOReceiveProps, "name">
@@ -6,4 +6,5 @@ export type FBPOReceiveFormProps =
 & {
   handleAdd?: () => any;
   handleCancel?: () => any;
+  item?: PurchaseOrderItem;
 };
