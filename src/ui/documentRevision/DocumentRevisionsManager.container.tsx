@@ -1,6 +1,6 @@
 import { Grid, withStyles, WithStyles } from "@material-ui/core";
 import _ from "lodash";
-import React from "react";
+import React, { useEffect } from "react";
 import { connect, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { DocumentRevision, documentRevisionsSelectors, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
@@ -51,6 +51,14 @@ DocumentRevisionManagerContainerProps
   deprecatedAt,
   docId,
 }) => {
+  // Document List tab title
+  useEffect(() => {
+    document.title = docId || "Enlil";
+    return () => {
+      document.title = "Enlil";
+    };
+  });
+
   const selectedDocument = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId as string));
 

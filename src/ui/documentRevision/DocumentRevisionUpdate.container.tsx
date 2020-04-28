@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
 import { DocumentRevision, documentRevisionsActions } from "../../state/ducks/documentRevisions";
@@ -47,6 +47,15 @@ DocumentRevisionUpdateContainerProps
   loadDocument,
   canChangeOwnerShip,
 }) => {
+
+  const { docId } = documentRevision.document;
+  // Document List tab title
+  useEffect(() => {
+    document.title = docId || "Enlil";
+    return () => {
+      document.title = "Enlil";
+    };
+  });
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
   const async = useAsync<DocumentRevision>({
     onSuccess: () => {

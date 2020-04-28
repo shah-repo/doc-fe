@@ -56,6 +56,14 @@ export const Container: React.FunctionComponent<Props> = ({
   currentEmployeeId,
   isCompanyAdmin,
 }) => {
+  const { crId } = dataProp;
+  // Change Request tab title
+  useEffect(() => {
+    document.title = crId || "Enlil";
+    return () => {
+      document.title = "Enlil";
+    };
+  });
   const canChangeOwnerShip = canChangeCROwner(dataProp.state, currentEmployeeId, dataProp.owner.id, isCompanyAdmin);
   const [summaryDocumentTypeGroups, setSummaryDocTypeGroups] = useState<any[]>([]);
   const asyncGroups = useAsync({
