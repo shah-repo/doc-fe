@@ -4,7 +4,7 @@ export type FBPOReceiveFormProps =
 & Pick<FBPOReceiveProps, "name">
 & Pick<FBFormProps, "children">
 & {
-  handleAdd?: () => any;
+  handleReceive?: () => any;
   handleCancel?: () => any;
   item?: PurchaseOrderItem;
 };

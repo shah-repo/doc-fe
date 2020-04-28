@@ -6,11 +6,19 @@ import { withFBPOReceiveForm } from "./FBPOReceiveForm.wrap";
 
 const FBPOReceiveFormActions: React.FunctionComponent<FBPOReceiveFormProps> = ({
   handleCancel,
-  handleAdd,
+  handleReceive,
 }) => (
   <Box display="flex" flexDirection="row-reverse" mx={3}>
-    <FBSubmitButton variant="contained" label="form.builder.receive" onClick={handleAdd} />
-    <FBButton variant="outlined" label="common.cancel" onClick={handleCancel} />
+    <FBSubmitButton
+      variant="contained"
+      label="form.builder.receive"
+      onClick={handleReceive}
+    />
+    <FBButton
+      variant="outlined"
+      label="common.cancel"
+      onClick={handleCancel}
+    />
   </Box>
 );
 

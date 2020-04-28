@@ -11,7 +11,7 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
 ) => {
   const Comp = ({
     handleCancel,
-    handleAdd,
+    handleReceive,
     item,
     ...props
   }: T) => {
@@ -24,10 +24,10 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
     );
     const { dialogState, formState } = FB.useStores();
 
-    handleAdd = () => {
+    handleReceive = () => {
       try {
         // TODO: check why name is undefined
-        poReceiveFormState?.submit((formState?.getValues())[`${props.name}-formValues`]);
+        poReceiveFormState?.submit(formState?.getValues());
 
         dialogState?.closeDialog();
       } catch {}
@@ -36,7 +36,7 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
     return Component({
       ...(props as T),
       handleCancel: dialogState?.closeDialog,
-      handleAdd,
+      handleReceive,
     });
   };
 

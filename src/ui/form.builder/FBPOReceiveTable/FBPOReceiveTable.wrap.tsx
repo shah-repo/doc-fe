@@ -13,13 +13,13 @@ export const withFBPOReceiveTable = <T extends FBPOReceiveTableProps>(
 
     const { dialogState } = FB.useStores();
 
-    handleEdit = (index, item) => () => {
+    handleEdit = (_index, item) => () => {
       dialogState?.config({
         open: true,
         maxWidth: "sm",
         title: "form.builder.po.items.received",
-        content: <FBPOReceiveForm {...{ name, item }} />,
-        actions: <FBPOReceiveFormActions />,
+        content: <FBPOReceiveForm />,
+        actions: <FBPOReceiveFormActions {...{ item }} />,
       });
     };
 
