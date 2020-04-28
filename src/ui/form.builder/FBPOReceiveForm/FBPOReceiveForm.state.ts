@@ -21,9 +21,6 @@ export class FBPOReceiveFormState  {
     { docType, groupOptions, item }:
     { docType?: DocumentType; groupOptions: any[]; item: PurchaseOrderItem }
   ) {
-    const urlTpl = template(FBEndpoint.FetchDocId);
-    const url = urlTpl({ documentTypeAcronym: "LFPO" });
-    this.docIdAPI.setUrl(url);
     this.createLotAPI.setUrl(FBEndpoint.DocumentRevisionsUrl);
     this.docType = docType;
     this.groupOptions = groupOptions;
@@ -34,6 +31,9 @@ export class FBPOReceiveFormState  {
     if (!this.docType) {
       throw new Error("form.builder.po.no.document.lot");
     }
+    const urlTpl = template(FBEndpoint.FetchDocId);
+    const url = urlTpl({ documentTypeId: this.docType.id });
+    this.docIdAPI.setUrl(url);
     const data = await this.docIdAPI.fetch();
     this.createLot(data.docId, values);
   }
