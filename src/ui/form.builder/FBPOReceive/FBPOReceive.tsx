@@ -1,6 +1,7 @@
 import { Box, CircularProgress } from "@material-ui/core";
 import React from "react";
 import { FBDialog, FBPOReceiveProps, FBPOReceiveTable, FBSchema, FBSchemaProps } from "..";
+import FBSectionBox from "../components/layout/FBSectionBox";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption } from "../FBAutocompleteAsync";
 import { FBProvider } from "../FBProvider";
 import { withFBPOReceive } from "./FBPOReceive.wrap";
@@ -24,6 +25,7 @@ const FBPOReceive: React.FunctionComponent<FBPOReceiveProps> = ({
         </Box>
       )}
       {!loading && items && <FBPOReceiveTable {...{ items, name }} />}
+      {!loading && <FBSectionBox label="PURCHASE ORDER" />}
       {!loading && schema && <FBSchema schema={schema as FBSchemaProps[]} />}
     </Box>
   </FBProvider>

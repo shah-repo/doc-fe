@@ -2,10 +2,12 @@
 import { isString } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FB, FBPOReceiveFormProps } from "..";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import useGetDocTypeByAcronym from "../../hooks/useGetDocTypeByAcronym";
+import FBStore from "../stores/ui/FBStore";
 import FBPOReceiveFormState from "./FBPOReceiveForm.state";
 
 export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
@@ -18,6 +20,7 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
     ...props
   }: T) => {
 
+    const dispatch = useDispatch();
     const intl = useIntl();
     const lfpoDocType = useGetDocTypeByAcronym("LFPO");
     const lotDocType = useGetDocTypeByAcronym("LOT");
@@ -32,6 +35,7 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
       try {
         await poReceiveFormState?.submit(formState?.getValues());
 
+        dispatch(documentRevisionsActions.reload(FBStore.docId));
         dialogState?.closeDialog();
       } catch (e) {
         if (isString(e.message)) {
