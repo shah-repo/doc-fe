@@ -25,7 +25,6 @@ export type FBEditorElementType =
   | "action"
   | "hellosign"
   | "purchaseorder"
-  | "receivepurchaseorder"
   | "poreceive"
   | "paragraph"
   | "stepsection"

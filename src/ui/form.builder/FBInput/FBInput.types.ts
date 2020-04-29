@@ -31,7 +31,6 @@ export type FBInputType =
   | "evidencemediaupload"
   | "purchaseorder"
   | "approvalMatrix"
-  | "receivepurchaseorder"
   | "poreceive"
   | "stepsection"
   | "teststep"

@@ -27,7 +27,6 @@ import { FBParagraph } from "../FBParagraph";
 import { FBPOReceive } from "../FBPOReceive";
 import { FBPurchaseOrder } from "../FBPurchaseOrder";
 import { FBQuantityField } from "../FBQuantityField";
-import { FBReceivePO } from "../FBReceivePurchaseOrder";
 import { FBSection } from "../FBSection";
 import { FBSelectDocument } from "../FBSelectDocument";
 import { FBSelectRequirement } from "../FBSelectRequirement";
@@ -72,7 +71,6 @@ export class FBSchemaState {
     action: FBActionContainer,
     approvalMatrix: FBApprovalMatrix,
     purchaseorder: FBPurchaseOrder,
-    receivepurchaseorder: FBReceivePO,
     poreceive: FBPOReceive,
     stepsection: FBSectionBox,
     teststep: FBTestStep,
