@@ -36,7 +36,7 @@ export const PODetails: React.FunctionComponent<Props> = ({
   const renderDetails = (
     <Box>
       <PODetailItem label="common.description" value={documentRevision.name} />
-      <PODetailItem label="common.line.items" value={purchaseOrder.items.length} />
+      <PODetailItem label="common.line.items" value={purchaseOrder.items?.length} />
       <POAttachments documentRevision={documentRevision} />
     </Box>
   );

@@ -116,6 +116,7 @@ export type FBInputProps = Omit<FBFormikFieldProps, "name">
   testRequirement?: string;
   approved?: boolean;
   designDisabled?: boolean;
+  reviseDisabled?: boolean;
 };
 
 export type FBFormDefaultProps = FBInputProps &

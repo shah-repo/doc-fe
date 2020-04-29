@@ -37,6 +37,7 @@ export class FormBuilderStore {
   public documentId = "";
   public stepSectionReg = /#([1-9][0-9]?|100)$/;
   public document: DocumentRevision = {} as DocumentRevision;
+  public isRevised? = false;
 
   public clearStores = () => {
     FBAutocompleteAsyncStore.data.clear();
@@ -103,7 +104,7 @@ export class FormBuilderStore {
     editorStore.editorTypeEdit(schema);
   };
 
-  @action public getSchema = (): FBTemplateSchema[] => this.schema;
+  @action public getSchema = (): FBTemplateSchema[] => _.uniqBy(this.schema || [], "name");
 
   @action public getSectionStepReg = (label: string): string | undefined => {
     const reg = this.stepSectionReg.exec(label);
