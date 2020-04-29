@@ -1,5 +1,7 @@
 
+import { isString } from "lodash";
 import React from "react";
+import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { FB, FBPOReceiveFormProps } from "..";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
@@ -16,6 +18,7 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
     ...props
   }: T) => {
 
+    const intl = useIntl();
     const lfpoDocType = useGetDocTypeByAcronym("LFPO");
     const lotDocType = useGetDocTypeByAcronym("LOT");
     const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
@@ -25,13 +28,16 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
     );
     const { dialogState, formState } = FB.useStores();
 
-    handleReceive = () => {
+    handleReceive = async () => {
       try {
-        // TODO: check why name is undefined
-        poReceiveFormState?.submit(formState?.getValues());
+        await poReceiveFormState?.submit(formState?.getValues());
 
         dialogState?.closeDialog();
-      } catch {}
+      } catch (e) {
+        if (isString(e.message)) {
+          alert(intl.formatMessage({ id: e.message }));
+        }
+      }
     };
 
     return Component({

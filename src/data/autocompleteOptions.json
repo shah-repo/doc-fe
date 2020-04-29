@@ -85,7 +85,7 @@
   },
   {
     "id": "11",
-    "path": "/document_revisions",
+    "path": "/document_revisions?status%5B%5D=RELEASED",
     "label": "Parts",
     "valueKey": "id",
     "labelKey": "document.docId",

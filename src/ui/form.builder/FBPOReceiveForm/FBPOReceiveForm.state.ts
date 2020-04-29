@@ -11,7 +11,6 @@ import { PurchaseOrderItem } from "../FBPurchaseOrder";
 import FBStore from "../stores/ui/FBStore";
 
 export class FBPOReceiveFormState  {
-  public lfpoDocAPI: FBRequest<any, any> = new FBRequest();
   public docIdAPI: FBRequest<any, any> = new FBRequest();
   public createLotAPI: FBRequest<any, any> = new FBRequest();
   public releasedLfpoAPI: FBRequest<any, any> = new FBRequest();
@@ -37,13 +36,13 @@ export class FBPOReceiveFormState  {
 
   @action public async submit(values: any) {
     if (!this.releasedLfpoAPI.data || this.releasedLfpoAPI.data?.length === 0) {
-      throw new Error("Please create a form of type LFPO - Lot From Purchase Order Form");
+      throw new Error("form.builder.missing.lfpo");
     }
     if (!this.lfpoDocType || !this.lotDocType) {
       throw new Error("form.builder.po.no.document.lot");
     }
     const data = await this.docIdAPI.fetch();
-    this.createLot(data.docId, values);
+    await this.createLot(data.docId, values);
   }
 
   public async createLot(docId: string, values: any) {
@@ -58,7 +57,7 @@ export class FBPOReceiveFormState  {
 
     const reqBody = toNewVersionRequestBody({
       name: `${this.item?.glCode}-${this.item?.description}`,
-      description: `<p>${values.comments}</p>`,
+      description: values.comments ? `<p>${values.comments}</p>` : `<p>${this.item?.description}</p>`,
       attachments: [],
       referenceTo: [{ value: FBStore.document.document.id, label: "" }],
       securityEmployees: [],
