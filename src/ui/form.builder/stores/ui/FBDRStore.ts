@@ -29,6 +29,7 @@ export class FBDocumentRevisionStore {
     FBStore.documentId = values.formDocument?.document?.id || values.document?.id || "";
     FBStore.docId = values.id || "";
     this.docSchema = values.document?.documentType?.schema || [];
+    FBStore.isRevised = values.outputRevision;
 
     switch (true) {
       // TEMPLATE FORM
