@@ -2,8 +2,8 @@ import { FBInputProps } from "../../../../ui/form.builder/types/common";
 import { Nullable } from "../../common";
 import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST } from "./constants";
 
-export type DocumentGroupType = "FORM" | "OTHER" | "RECORD" | "DAM";
-
+export type DocumentGroupType = "FORM" | "OTHER" | "RECORD" | "DAM" | "MPI" | "DYNAMIC_FORM";
+export type DocumentGroupOptionsType = "FORM" | "DAM" | "BE_OUTPUT" | "HAVE_OUTPUT" | "RECORD" | "ONE_ITEM" | "DYNAMIC_FORM";
 export interface PageDetailsColumn {
   label: string;
   fieldName: string;
@@ -22,6 +22,7 @@ export interface DocumentType {
   documentTypeAcronym: string;
   documentTypeName: string;
   group: DocumentGroupType;
+  groupOptions?: DocumentGroupOptionsType[];
   pageDetails?: Nullable<PageDetails>;
   isQms: boolean;
   defaultTraining: boolean;
