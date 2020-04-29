@@ -84,7 +84,7 @@ const FBPOReceiveTable: React.FunctionComponent<FBPOReceiveTableProps> = ({
               >
                 <StyledTableCell align="left">{index + 1}</StyledTableCell>
                 <StyledTableCell>{item.order}</StyledTableCell>
-                <StyledTableCell>{item.received}</StyledTableCell>
+                <StyledTableCell>N/A</StyledTableCell>
                 <StyledTableCell>{item.units}</StyledTableCell>
                 <StyledTableCell>{item.partNumberDocId}</StyledTableCell>
                 <StyledTableCell>

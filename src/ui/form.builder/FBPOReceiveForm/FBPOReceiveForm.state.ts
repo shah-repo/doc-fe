@@ -11,36 +11,44 @@ import { PurchaseOrderItem } from "../FBPurchaseOrder";
 import FBStore from "../stores/ui/FBStore";
 
 export class FBPOReceiveFormState  {
+  public lfpoDocAPI: FBRequest<any, any> = new FBRequest();
   public docIdAPI: FBRequest<any, any> = new FBRequest();
   public createLotAPI: FBRequest<any, any> = new FBRequest();
-  public docType?: DocumentType;
+  public docRevByAcronymAPI: FBRequest<any, any> = new FBRequest();
+  public lfpoDocType?: DocumentType;
+  public lotDocType?: DocumentType;
   public groupOptions: any[] = [];
   public item?: PurchaseOrderItem;
 
   public constructor(
-    { docType, groupOptions, item }:
-    { docType?: DocumentType; groupOptions: any[]; item: PurchaseOrderItem }
+    { lfpoDocType, lotDocType, groupOptions, item }:
+    { lfpoDocType?: DocumentType; lotDocType?: DocumentType; groupOptions: any[]; item: PurchaseOrderItem }
   ) {
     this.createLotAPI.setUrl(FBEndpoint.DocumentRevisionsUrl);
-    this.docType = docType;
+    this.lfpoDocType = lfpoDocType;
+    this.lotDocType = lotDocType;
     this.groupOptions = groupOptions;
     this.item = item;
+    const urlTpl = template(FBEndpoint.FetchDocId);
+    const url = urlTpl({ documentTypeId: this.lotDocType?.id });
+    this.docIdAPI.setUrl(url);
+    this.fetchLfpoDocs();
   }
 
   @action public async submit(values: any) {
-    if (!this.docType) {
+    if (!this.docRevByAcronymAPI.data || this.docRevByAcronymAPI.data?.length === 0) {
+      throw new Error("Please create a form of type LFPO - Lot From Purchase Order Form");
+    }
+    if (!this.lfpoDocType || !this.lotDocType) {
       throw new Error("form.builder.po.no.document.lot");
     }
-    const urlTpl = template(FBEndpoint.FetchDocId);
-    const url = urlTpl({ documentTypeId: this.docType.id });
-    this.docIdAPI.setUrl(url);
     const data = await this.docIdAPI.fetch();
     this.createLot(data.docId, values);
   }
 
   public async createLot(docId: string, values: any) {
     const securityGroups: any[] = [];
-    if (this.docType?.isQms) {
+    if (this.lotDocType?.isQms) {
       this.groupOptions.forEach((group) => {
         if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
           securityGroups.push({ value: group.value, label: group.label });
@@ -48,11 +56,9 @@ export class FBPOReceiveFormState  {
       });
     }
 
-    // TODO: fix. Values can't be read because name is undefined
-    values = "form values";
     const reqBody = toNewVersionRequestBody({
       name: `${this.item?.glCode}-${this.item?.description}`,
-      description: `<p>${values}</p>`,
+      description: `<p>${values.comments}</p>`,
       attachments: [],
       // can't reference this receivables document because it's not released and they are not in the same CR
       referenceTo: [{ value: FBStore.document.document.id, label: "" }],
@@ -60,7 +66,7 @@ export class FBPOReceiveFormState  {
       securityGroups,
       document: {
         docId,
-        documentType: { id: this.docType?.id },
+        documentType: { id: this.lotDocType?.id },
       },
       revisionStage: 1,
       revisionChangeType: RevisionChangeType.NextRevision,
@@ -71,10 +77,9 @@ export class FBPOReceiveFormState  {
     reqBody.formTemplate = undefined;
     reqBody.formInput = {
       // eslint-disable-next-line @typescript-eslint/camelcase
-      lot_number: 5,
+      lot_number: values.received,
       // eslint-disable-next-line @typescript-eslint/camelcase
       lot_part_number: this.item?.partNumber,
-      // TODO: item is undefined just like name
     };
 
     this.createLotAPI.setBody(reqBody);
@@ -82,6 +87,13 @@ export class FBPOReceiveFormState  {
 
     const path = documentPreviewPath(docRev.id, docRev.document.id);
     window.open(path, "_blank");
+  }
+
+  private fetchLfpoDocs() {
+    const urlTpl = template(FBEndpoint.FetchDocumentRevisionByAcronym);
+    const url = urlTpl({ documentTypeAcronym: this.lfpoDocType?.documentTypeAcronym });
+    this.docRevByAcronymAPI.setUrl(url);
+    this.docRevByAcronymAPI.fetch();
   }
 }
 

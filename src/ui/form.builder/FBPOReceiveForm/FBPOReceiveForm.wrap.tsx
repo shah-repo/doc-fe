@@ -16,11 +16,12 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
     ...props
   }: T) => {
 
-    const docType = useGetDocTypeByAcronym("LFPO");
+    const lfpoDocType = useGetDocTypeByAcronym("LFPO");
+    const lotDocType = useGetDocTypeByAcronym("LOT");
     const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
     const poReceiveFormState = FB.useRef<FBPOReceiveFormState>(
       FBPOReceiveFormState,
-      { docType, groupOptions, item }
+      { lfpoDocType, lotDocType, groupOptions, item }
     );
     const { dialogState, formState } = FB.useStores();
 
