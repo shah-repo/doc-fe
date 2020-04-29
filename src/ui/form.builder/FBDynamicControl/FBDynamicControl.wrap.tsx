@@ -1,5 +1,4 @@
 import _ from "lodash";
-import { autorun } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBDynamicControlProps, FBDynamicControlState } from "..";
@@ -23,24 +22,14 @@ export const withFBDynamicControl = <T extends FBDynamicControlProps>(
     dynamicControlState = FB.useRef<FBDynamicControlState>(FBDynamicControlState);
 
     handleSelect = (control: DocumentRevision) => {
-      dynamicControlState?.setControlUrl(control.id);
+      const schema = control.formTemplate?.schema as FBInputProps[] || [];
+      FBStore.setSchema(_.union(FBStore.getSchema(), schema));
+      editorStore.open = false;
     };
-
-    autorun(() => {
-      if (dynamicControlState?.controlApi.data) {
-        const control = dynamicControlState?.controlApi.data;
-        const docSchema =
-        control.formTemplate?.schema as FBInputProps[] ||
-        control.formDocument?.formDocument?.formTemplate?.schema as FBInputProps[] ||
-        [];
-        FBStore.setSchema(_.union(FBStore.getSchema(), docSchema));
-        editorStore.open = false;
-      }
-    });
 
     useObserver(() => {
       controls = dynamicControlState?.data;
-      loading = dynamicControlState?.loading || dynamicControlState?.controlApi.loading;
+      loading = dynamicControlState?.loading;
     });
 
     return Component({

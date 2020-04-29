@@ -33,7 +33,7 @@ export class FBDocumentRevisionStore {
 
     switch (true) {
       // TEMPLATE FORM
-      case fmGroup && fmGroup === "FORM":
+      case fmGroup && _.includes(fmGroup, "FORM"):
         return this.fmConfig(values);
       // OUTPUT FORM
       case outputGroup !== undefined:
