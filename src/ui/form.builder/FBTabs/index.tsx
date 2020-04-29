@@ -1,2 +1,3 @@
-export { default } from "./FBTabs";
+export { default as FBTabs } from "./FBTabs";
 export * from "./FBTabs.types";
+

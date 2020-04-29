@@ -5,7 +5,7 @@ import { FBApprovalFieldProps } from ".";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import Text from "../../components/Text";
-import FBMapWrapper from "../FBMapWrapper";
+import { FBMapWrapper } from "../FBMapWrapper";
 
 const FBApprovalField = <T extends Employee | GroupRequestBody>({
   approvalConfig,

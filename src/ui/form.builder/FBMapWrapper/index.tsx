@@ -1,2 +1,3 @@
-export { default } from "./FBMapWrapper";
+export { default as FBMapWrapper } from "./FBMapWrapper";
 export * from "./FBMapWrapper.types";
+

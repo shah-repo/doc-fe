@@ -1,3 +1,3 @@
-export { default } from "./FBLabel";
+export { default as FBLabel } from "./FBLabel";
 export * from "./FBLabel.types";
 

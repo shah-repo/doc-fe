@@ -1,5 +1,6 @@
 import _ from "lodash";
 import React from "react";
+import { useIntl } from "react-intl";
 import { FBOption } from "..";
 import { FBInputProps, OmitInputClones } from "../FBInput";
 import { FB } from "../helpers";
@@ -20,14 +21,23 @@ export const withFBInput = <T extends FBInputProps>(
     editorProperties,
     helperText,
     validationMode,
+    label,
+    placeholder,
     error,
     hidden,
+    rules,
+    value,
     ...props
   }: T) => {
 
     const { formState } = FB.useStores();
+    const intl = useIntl();
     defaultValue = setDefaultValue();
     helperText =  formState?.helpers.get(name) || helperText;
+    if (type === "texteditor" && inputState) {
+      inputState.value = inputState.value || "";
+    }
+    value = inputState?.value;
     error = !_.isUndefined(formState?.getFieldHelper(name)) && formState?.errorValidation;
 
     (_.isUndefined(hidden) && validationMode === "visibility") && (hidden =
@@ -41,7 +51,7 @@ export const withFBInput = <T extends FBInputProps>(
 
     function setDefaultValue(): any {
       if (!formState) {
-        return;
+        return defaultValue;
       }
       const value = {
         editoroptions() {
@@ -64,14 +74,29 @@ export const withFBInput = <T extends FBInputProps>(
       children = React.cloneElement(child as React.ReactElement, {
         disabled,
         onChange,
+        ...(type !== "texteditor" && { value }),
         ...(type !== "datepicker" && type !== "autocomplete" && !_.isBoolean(defaultValue) && { defaultValue }),
-        ...(type === "datepicker" && { value: inputState?.value }),
       });
     }
+
+    React.useEffect(() => {
+      // Input states
+      inputState && formState && formState.inputState.set(name, inputState);
+      // Validation settings
+      if (formState && name) {
+        const validationAttrName =
+          intl.formatMessage({ id: (label || "translation.empty") as string }) ||
+          intl.formatMessage({ id: placeholder || "translation.empty" }) ||
+          name;
+        formState?.setValidationAttributeName(name, validationAttrName);
+        rules && (formState.setFieldRules(name, rules));
+      }
+    }, [rules]);
 
     return Component({
       ...(props as T),
       includeContext: inputState?.includeContext,
+      validationMode,
       helperText,
       children,
       disabled,
@@ -83,6 +108,9 @@ export const withFBInput = <T extends FBInputProps>(
       inputState,
       editorProperties,
       hidden,
+      label,
+      placeholder,
+      rules,
     });
   };
 

@@ -40,6 +40,17 @@ const load = (id: string): ApiAction<DocumentRevision> => apiAction({
   },
 });
 
+// reload is same as load, but without async type
+// when using load action the AsyncGate component will hide the document and show the spinner
+// this is a silent load
+const reload = (id: string): ApiAction<DocumentRevision> => apiAction({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
+  method: "get",
+  onSuccess: (documentRevision, dispatch) => {
+    dispatch(documentRevisionSet(documentRevision));
+  },
+});
+
 const save = (id: string, body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>):
 ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
@@ -228,4 +239,5 @@ export default {
   createAndRelease,
   loadGroupsByStage,
   cancelDraft,
+  reload,
 };

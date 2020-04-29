@@ -1,6 +1,6 @@
 import React from "react";
 import autocompleteOptions from "../../../../data/autocompleteOptions.json";
-import FBStepperEditor from "../../FBStepperEditor";
+import { FBStepperEditor } from "../../FBStepperEditor";
 import { FBAutocompleteEditorProps } from "../../types/editors/autocomplete.js";
 import FBSelect from "../inputs/FBSelect";
 import FBAdditionsEditor from "./FBAdditionsEditor";
