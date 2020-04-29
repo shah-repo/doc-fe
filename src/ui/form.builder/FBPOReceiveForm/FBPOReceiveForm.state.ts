@@ -14,7 +14,7 @@ export class FBPOReceiveFormState  {
   public lfpoDocAPI: FBRequest<any, any> = new FBRequest();
   public docIdAPI: FBRequest<any, any> = new FBRequest();
   public createLotAPI: FBRequest<any, any> = new FBRequest();
-  public docRevByAcronymAPI: FBRequest<any, any> = new FBRequest();
+  public releasedLfpoAPI: FBRequest<any, any> = new FBRequest();
   public lfpoDocType?: DocumentType;
   public lotDocType?: DocumentType;
   public groupOptions: any[] = [];
@@ -36,7 +36,7 @@ export class FBPOReceiveFormState  {
   }
 
   @action public async submit(values: any) {
-    if (!this.docRevByAcronymAPI.data || this.docRevByAcronymAPI.data?.length === 0) {
+    if (!this.releasedLfpoAPI.data || this.releasedLfpoAPI.data?.length === 0) {
       throw new Error("Please create a form of type LFPO - Lot From Purchase Order Form");
     }
     if (!this.lfpoDocType || !this.lotDocType) {
@@ -60,7 +60,6 @@ export class FBPOReceiveFormState  {
       name: `${this.item?.glCode}-${this.item?.description}`,
       description: `<p>${values.comments}</p>`,
       attachments: [],
-      // can't reference this receivables document because it's not released and they are not in the same CR
       referenceTo: [{ value: FBStore.document.document.id, label: "" }],
       securityEmployees: [],
       securityGroups,
@@ -73,11 +72,13 @@ export class FBPOReceiveFormState  {
       renderHTML: undefined,
     });
 
-    reqBody.formDocument = undefined;
+    reqBody.formDocument = {
+      id: this.releasedLfpoAPI.data[0].id,
+    };
     reqBody.formTemplate = undefined;
     reqBody.formInput = {
       // eslint-disable-next-line @typescript-eslint/camelcase
-      lot_number: values.received,
+      lot_quantity: values.received,
       // eslint-disable-next-line @typescript-eslint/camelcase
       lot_part_number: this.item?.partNumber,
     };
@@ -92,8 +93,8 @@ export class FBPOReceiveFormState  {
   private fetchLfpoDocs() {
     const urlTpl = template(FBEndpoint.FetchDocumentRevisionByAcronym);
     const url = urlTpl({ documentTypeAcronym: this.lfpoDocType?.documentTypeAcronym });
-    this.docRevByAcronymAPI.setUrl(url);
-    this.docRevByAcronymAPI.fetch();
+    this.releasedLfpoAPI.setUrl(url);
+    this.releasedLfpoAPI.fetch();
   }
 }
 
