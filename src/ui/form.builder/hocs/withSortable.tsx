@@ -37,6 +37,9 @@ export function withSortable<T extends FBSortableProps>(
 
       _.range(index, _.size(FBStore.getSchema())).some((_item, current) => {
         const activeSchema = FBStore.getSchema()[current + index];
+        if (!activeSchema) {
+          return state;
+        }
         const { type, name = "" } = activeSchema;
         const activeConfig = type === "approval" ? activeSchema : FBStore.getValue(name);
         const { approveIsBlocking = false } = activeConfig || {};
@@ -57,18 +60,22 @@ export function withSortable<T extends FBSortableProps>(
     };
 
     private wrapperRenderer = (schema: FBTemplateSchema) => {
-      const { type } = schema;
+      const { type, reviseDisabled } = schema;
       const InputType = FBFieldComponent[type as string];
       let { disabled } = FBStore.fieldMode;
 
       // Approved state
       const state = this.isApproved(schema);
       state.disabled && (disabled = true);
+
+      if (reviseDisabled && FBStore.isRevised) {
+        disabled = true;
+      }
       return <InputType key={schema.name} {...schema} {...{ disabled }} approved={state.approved} />;
     };
 
     private onSortEnd = ({ oldIndex, newIndex }: SortEnd) => {
-      const newSchema = arrayMove(FBStore.schema, oldIndex, newIndex);
+      const newSchema = arrayMove(FBStore.getSchema(), oldIndex, newIndex);
       FBStore.setSchema(newSchema);
       sortableStore.setMode("inactive");
     };

@@ -1,20 +1,24 @@
 import _ from "lodash";
 import { action, computed, observable } from "mobx";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
-import { DocumentGroupType } from "../../../../state/ducks/documentRevisions/documentType";
+import { DocumentType } from "../../../../state/ducks/documentRevisions/documentType";
 import { canEditDocumentRevision } from "../../../document.revision/utils/helpers";
 import { DocumentRevisionFormValues } from "../../../documentRevision/forms/types";
+import { FBInputProps } from "../../types/common";
 import { FBDocumentRevisionMode, FBDRGroupConfig } from "../../types/store";
 import FBStore from "./FBStore";
 
 export class FBDocumentRevisionStore {
   @observable public mode: FBDocumentRevisionMode = "none";
+  public docSchema: FBInputProps[] = [];
 
   @computed public get isOutput(): boolean {
     return this.mode === "outputCreate" || this.mode === "outputPreview" || this.mode === "outputUpdate";
   }
 
-  @action public setInitialFBMode = (group: DocumentGroupType) => {
+  @action public setInitialFBMode = (docType: DocumentType) => {
+    this.docSchema = docType.schema || [];
+    const group = docType.group;
     const docRevMode = group === "FORM" ? "create" : "none";
     this.setMode(docRevMode);
   };
@@ -24,6 +28,8 @@ export class FBDocumentRevisionStore {
     const outputGroup = _.get(values, "formDocument.document.docId");
     FBStore.documentId = values.formDocument?.document?.id || values.document?.id || "";
     FBStore.docId = values.id || "";
+    this.docSchema = values.document?.documentType?.schema || [];
+    FBStore.isRevised = values.outputRevision;
 
     switch (true) {
       // TEMPLATE FORM
@@ -91,7 +97,7 @@ export class FBDocumentRevisionStore {
     formInput,
   }: FBDRGroupConfig) => {
     this.setMode(docRevMode);
-    FBStore.setSchema(schema);
+    FBStore.setSchema(_.union(this.docSchema, schema));
     FBStore.setValues(formInput);
   };
 }
