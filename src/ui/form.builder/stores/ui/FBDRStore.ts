@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { action, computed, observable } from "mobx";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
-import { DocumentType } from "../../../../state/ducks/documentRevisions/documentType";
+import { DocumentGroupOptionsType, DocumentType } from "../../../../state/ducks/documentRevisions/documentType";
 import { canEditDocumentRevision } from "../../../document.revision/utils/helpers";
 import { DocumentRevisionFormValues } from "../../../documentRevision/forms/types";
 import { FBInputProps } from "../../types/common";
@@ -18,8 +18,8 @@ export class FBDocumentRevisionStore {
 
   @action public setInitialFBMode = (docType: DocumentType) => {
     this.docSchema = docType.schema || [];
-    const group = docType.group;
-    const docRevMode = group === "FORM" ? "create" : "none";
+    const formOption: DocumentGroupOptionsType = "FORM";
+    const docRevMode = docType.groupOptions?.includes(formOption) ? "create" : "none";
     this.setMode(docRevMode);
   };
 
@@ -29,6 +29,7 @@ export class FBDocumentRevisionStore {
     FBStore.documentId = values.formDocument?.document?.id || values.document?.id || "";
     FBStore.docId = values.id || "";
     this.docSchema = values.document?.documentType?.schema || [];
+    FBStore.isRevised = values.outputRevision;
 
     switch (true) {
       // TEMPLATE FORM
