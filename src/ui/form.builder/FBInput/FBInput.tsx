@@ -2,7 +2,7 @@ import { FormControl, FormHelperText } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import _ from "lodash";
 import React from "react";
-import { FBFieldName, FBInputProps, FBLabel, FBTextField } from "..";
+import { FBFieldName, FBInputProps, FBInputState, FBLabel, FBTextField } from "..";
 import { withFBInput } from "./FBInput.wrap";
 
 const FBInput: React.FunctionComponent<FBInputProps> = ({
@@ -23,7 +23,9 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
     {!hidden && (
       <Box mb={gutter ? 5 : 0}>
         <FormControl fullWidth {...{ error }}>
-          {label && <FBLabel {...{ error, label, labelValues, loading }} />}
+          {!_.includes(FBInputState.omitLabel, type) && label && (
+            <FBLabel {...{ error, label, labelValues, loading }} />
+          )}
           {children}
         </FormControl>
         {!_.isEmpty(helperText) && (
@@ -32,7 +34,7 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
         {includeContext && (
           <Box mt={type === "select" ? 3 : 0.5}>
             <FBTextField
-              label="common.note"
+              label="form.builder.note"
               {...{ disabled }}
               name={`${FBFieldName.Context}-${name}`}
             />

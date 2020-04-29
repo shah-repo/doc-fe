@@ -5,9 +5,8 @@ import React from "react";
 import Img from "react-image";
 import LazyLoad from "react-lazy-load";
 import { FBMediaGalleryProps } from ".";
-import { FBMediaProps } from "..";
+import { FBMapWrapper, FBMediaProps } from "..";
 import Text from "../../components/Text";
-import FBMapWrapper from "../FBMapWrapper/FBMapWrapper";
 import { withFBMediaGallery } from "./FBMediaGallery.wrap";
 
 

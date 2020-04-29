@@ -5,7 +5,7 @@ import React from "react";
 import { FBInlineApprovalProps } from ".";
 import { FBApproval, FBFieldName, FBProvider } from "..";
 import Text from "../../components/Text";
-import FBConditionalWrapper from "../FBConditionalWrapper";
+import { FBConditionalWrapper } from "../FBConditionalWrapper";
 import FBDRStore from "../stores/ui/FBDRStore";
 import { withFBInlineApproval } from "./FBInlineApproval.wrap";
 

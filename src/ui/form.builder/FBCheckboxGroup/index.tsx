@@ -1,3 +1,3 @@
-export { default } from "./FBCheckboxGroup";
+export { default as FBCheckboxGroup } from "./FBCheckboxGroup";
 export * from "./FBCheckboxGroup.types";
 

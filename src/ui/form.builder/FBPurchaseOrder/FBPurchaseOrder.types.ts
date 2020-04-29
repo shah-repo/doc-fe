@@ -78,4 +78,5 @@ export interface PurchaseOrderItem {
   capitalEquipment: boolean;
   tax: boolean;
   received?: number;
+  receivedList?: any[];
 }

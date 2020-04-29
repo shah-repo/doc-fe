@@ -15,7 +15,7 @@ export const withFBOnChange = <T extends FBInputProps>(
   }: T) => {
 
     inputState = FB.useRef<FBInputState>(FBInputState);
-    const { formState } = FB.useStores();
+    const { workspaceState, formState, schemaState } = FB.useStores();
 
     React.useEffect(() => {
       const defaultValue = formState?.getFieldValue(name, "");
@@ -37,6 +37,9 @@ export const withFBOnChange = <T extends FBInputProps>(
     function checkValue(ev: React.ChangeEvent<HTMLInputElement>) {
       const value = _.get(ev.target, "checked");
       contextValue(value);
+      if (!value) {
+        return formState?.omitFieldValue(name);
+      }
       formState?.setFieldValue(name, value);
     }
 
@@ -83,12 +86,12 @@ export const withFBOnChange = <T extends FBInputProps>(
     }
 
     function dateValue(value: string) {
-      stringValue(value);
+      stringValue((value as unknown as Date).toISOString());
       inputState && inputState.setValue(value);
     }
 
     const onChange = ((ev: React.ChangeEvent<any> | any, value: any) => {
-      props.onChange && props.onChange(ev, value);
+      props.onChange && props.onChange(ev, value, schemaState || formState || workspaceState);
       if (!formState) {
         return;
       }
