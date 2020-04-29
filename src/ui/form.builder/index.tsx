@@ -18,6 +18,9 @@ export * from "./FBConditionalWrapper/FBConditionalWrapper.types";
 export { default as FBDialog } from "./FBDialog/FBDialog";
 export { default as FBDialogState } from "./FBDialog/FBDialog.state";
 export * from "./FBDialog/FBDialog.types";
+export { default as FBDynamicControl } from "./FBDynamicControl/FBDynamicControl";
+export * from "./FBDynamicControl/FBDynamicControl.state";
+export * from "./FBDynamicControl/FBDynamicControl.types";
 export { default as FBEditorApprovalField } from "./FBEditorApprovalField/FBEditorApprovalField";
 export * from "./FBEditorApprovalField/FBEditorApprovalField.types";
 export { default as FBEditorInlineApproval } from "./FBEditorInlineApproval/FBEditorInlineApproval";
@@ -132,5 +135,4 @@ export { default as FBWorkspaceState } from "./FBWorkspace/FBWorkspace.state";
 export * from "./FBWorkspace/FBWorkspace.types";
 export { default as FB } from "./helpers/FB";
 export * from "./helpers/FBFieldName";
-
 
