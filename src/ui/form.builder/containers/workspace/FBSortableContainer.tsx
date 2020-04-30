@@ -17,8 +17,7 @@ const FBSortableContainer: React.FunctionComponent<FBSortableProps> = ({
       <li style={{ listStyleType: "none" }} id="FBSortableContainer-list" >
         <FBFieldWrapper
           key={`${value.name}_${value.index}`}
-          index={value.index}
-          designDisabled={value.designDisabled}
+          inputProps={value}
         >
           {wrapperRenderer(value)}
         </FBFieldWrapper>

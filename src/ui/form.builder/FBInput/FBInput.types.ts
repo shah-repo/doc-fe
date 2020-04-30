@@ -65,6 +65,7 @@ export type FBInputProps =
   onChange?: (ev: React.ChangeEvent<any> | any, value: any, context?: FBSchemaState) => any;
   type?: FBInputType;
   index?: number;
+  stepIndex?: number;
   gutter?: boolean;
   linkUrl?: string;
   defaultValue?: any;
@@ -78,6 +79,7 @@ export type FBInputProps =
   testRequirement?: string;
   isTemplate?: boolean;
   includeQRScan?: boolean;
+  designDisabled?: boolean;
 };
 
 export const OmitInputClones: FBInputType[] = ["fileupload"];

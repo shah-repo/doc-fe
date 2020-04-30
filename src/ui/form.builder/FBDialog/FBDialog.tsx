@@ -34,10 +34,10 @@ const FBDialog: React.FunctionComponent<FBDialogProps> = ({
           <Text message={title} />
         </Box>
       )}
-      {!_.isString(title) && <div ref={handleTitleRef} />}
+      <div ref={handleTitleRef} />
     </DialogTitle>
     <DialogContent>
-      {content && (
+      {content && portalTitle && portalAction && (
         <content.type {...content.props}>
           {content.props.children}
           {!_.isString(title) && (

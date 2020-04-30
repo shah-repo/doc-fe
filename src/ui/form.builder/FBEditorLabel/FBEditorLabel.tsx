@@ -1,14 +1,15 @@
 import React from "react";
-import { FBEditor, FBEditorLabelProps, FBTextField } from "..";
+import { FBEditor, FBEditorProps, FBTextField } from "..";
 import Text from "../../components/Text";
 
-const FBEditorLabel: React.FunctionComponent<FBEditorLabelProps> = ({
+const FBEditorLabel: React.FunctionComponent<FBEditorProps> = ({
   children,
   includeDefaultValue,
-  type,
+  inputProps: { type } = {},
+  inputProps,
   ...props
 }) => (
-  <FBEditor {...props} {...{ includeDefaultValue, type }}>
+  <FBEditor {...props} {...{ inputProps }}>
     <Text message={`form.builder.${type}`}>
       {(defaultValue) => (
         <FBTextField

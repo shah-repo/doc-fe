@@ -6,21 +6,21 @@ import { FBFieldBottomBar, FBFieldMarkDown, FBFieldTopBar, FBProvider } from "..
 import { withFBFieldWrapper } from "./FBFieldWrapper.wrap";
 
 const FBFieldWrapper: React.FunctionComponent<FBFieldWrapperProps> = ({
+  fieldWrapperState,
+  inputProps: { index, designDisabled } = {},
   toolsVisible = false,
   markDownVisible = false,
   onMouseOver,
   onMouseLeave,
   topBarMargin,
   grabMargin,
-  designDisabled,
   addToolVisible,
-  index,
-  fieldWrapperState,
+  inputProps,
   ...props
 }) => (
   <FBProvider {...{ fieldWrapperState }}>
     <Box {...{ onMouseOver, onMouseLeave }}>
-      <FBFieldTopBar visibility={toolsVisible} mb={topBarMargin} index={index} />
+      <FBFieldTopBar visibility={toolsVisible} mb={topBarMargin} {...{ inputProps }} />
       <Box display="flex" flexDirection="row">
         <Box width="100%">{props.children}</Box>
         {!designDisabled && (

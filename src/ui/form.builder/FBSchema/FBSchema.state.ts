@@ -24,11 +24,16 @@ import FBStore from "../stores/ui/FBStore";
 import { FBInputProps as FBOldInputProps } from "../types/common";
 
 export class FBSchemaState {
-  public static omitLabel: FBInputType[] = ["section", "subsection"];
+  public static omitLabel: FBInputType[] = [
+    "section",
+    "subsection",
+    "stepsection",
+  ];
 
   private static control: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
     section: FBSection,
     subsection: FBSubsection,
+    stepsection: FBSection,
     textfield: FBTextField,
     checkbox: FBCheckbox,
     checkboxgroup: FBCheckboxGroup,
@@ -102,8 +107,12 @@ export class FBSchemaState {
 
   @action public getSchema = (): FBSchemaProps[] => get(this, "schema");
 
-  @action public getSchemaItem = (name: string): FBSchemaProps | undefined =>
-    _.find(this.getSchema(), { name });
+  @action public getSchemaItem = (name?: string): FBSchemaProps | undefined => {
+    if (!name) {
+      return;
+    }
+    return _.find(this.getSchema(), { name });
+  };
 
   @action public getSchemaItemAt = (index?: number): FBSchemaProps | undefined => {
     if (_.isUndefined(index)) {
@@ -113,7 +122,13 @@ export class FBSchemaState {
   };
 
   @action public setSchema = (schema?: FBSchemaProps[]) => {
-    schema && schema.map((o, i) => o.index = i);
+    schema = (schema || []).map((o: FBSchemaProps, i, ro) => ({
+      ...o,
+      index: i,
+      ...(o.type === "stepsection") && {
+        stepIndex: _.size(_.filter(ro.slice(0, i + 1), { type: "stepsection" })),
+      },
+    }));
     set(this, "schema", schema);
   };
 
@@ -148,7 +163,10 @@ export class FBSchemaState {
     this.setSchema(newSchema);
   };
 
-  @action public removeSchemaItem = (schemaItem: FBSchemaProps) => {
+  @action public removeSchemaItem = (schemaItem?: FBSchemaProps) => {
+    if (!schemaItem) {
+      return;
+    }
     const schema = _.filter(this.schema, (item) => item.name !== schemaItem.name);
     this.setSchema(schema);
   };

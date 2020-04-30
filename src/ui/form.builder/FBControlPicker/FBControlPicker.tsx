@@ -6,6 +6,7 @@ import { withFBEditorHelper } from "../FBEditor/FBEditor.helper";
 import { FBInputType } from "../FBInput";
 
 const FBControlPicker: React.FunctionComponent<FBControlPickerProps> = ({
+  index,
   openEditor,
 }) => (
   <Box px={2}>
@@ -16,11 +17,11 @@ const FBControlPicker: React.FunctionComponent<FBControlPickerProps> = ({
             <FBLabel label={`form.builder.${section}`} />
           </Box>
           <FBMapWrapper<FBInputType> collection={editors}>
-            {(editor, index) => (
+            {(editor, i) => (
               <FBButton
-                key={`fb-controlpicker-editor-${editor}-${index}`}
+                key={`fb-controlpicker-editor-${editor}-${i}`}
                 label={`form.builder.${editor as string}`}
-                onClick={openEditor && openEditor(editor)}
+                onClick={openEditor && openEditor({ type: editor, index })}
               />
             )}
           </FBMapWrapper>

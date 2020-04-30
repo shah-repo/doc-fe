@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import _ from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
@@ -21,6 +22,7 @@ export const withFBInput = <T extends FBInputProps>(
     editorProperties,
     helperText,
     validationMode,
+    includeContext,
     label,
     placeholder,
     error,
@@ -38,6 +40,7 @@ export const withFBInput = <T extends FBInputProps>(
       inputState.value = inputState.value || "";
     }
     value = inputState?.value;
+    includeContext = inputState?.includeContext;
     error = !_.isUndefined(formState?.getFieldHelper(name)) && formState?.errorValidation;
 
     (_.isUndefined(hidden) && validationMode === "visibility") && (hidden =
@@ -51,7 +54,7 @@ export const withFBInput = <T extends FBInputProps>(
 
     function setDefaultValue(): any {
       if (!formState) {
-        return defaultValue;
+        return;
       }
       const value = {
         editoroptions() {
@@ -67,6 +70,10 @@ export const withFBInput = <T extends FBInputProps>(
       return (value[type || ""] || value.default)();
     }
 
+    React.useEffect(() => {
+      inputState?.setDefaultValue(defaultValue);
+    }, [defaultValue]);
+
     const child = _.first(React.Children.toArray(children));
     const isClone = !_.includes(OmitInputClones, type) && !_.isUndefined(child);
 
@@ -74,8 +81,9 @@ export const withFBInput = <T extends FBInputProps>(
       children = React.cloneElement(child as React.ReactElement, {
         disabled,
         onChange,
-        ...(type !== "texteditor" && { value }),
-        ...(type !== "datepicker" && type !== "autocomplete" && !_.isBoolean(defaultValue) && { defaultValue }),
+        defaultValue,
+        // ...(type !== "texteditor" && { value }),
+        // ...(type !== "datepicker" && type !== "autocomplete" && !_.isBoolean(defaultValue) && { defaultValue: inputState?.defaultValue }),
       });
     }
 
@@ -95,7 +103,7 @@ export const withFBInput = <T extends FBInputProps>(
 
     return Component({
       ...(props as T),
-      includeContext: inputState?.includeContext,
+      includeContext,
       validationMode,
       helperText,
       children,
@@ -111,6 +119,7 @@ export const withFBInput = <T extends FBInputProps>(
       label,
       placeholder,
       rules,
+      value,
     });
   };
 

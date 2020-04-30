@@ -19,6 +19,10 @@ export class FBInputState {
   @action public setValue = (value: any) => {
     set(this, "value", value);
   };
+
+  @action public setDefaultValue = (value: any) => {
+    set(this, "defaultValue", value);
+  };
 }
 
 export default FBInputState;

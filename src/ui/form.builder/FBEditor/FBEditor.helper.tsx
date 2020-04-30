@@ -1,6 +1,7 @@
+import _ from "lodash";
 import React from "react";
 import { FBEditorHelperProps } from ".";
-import { FB, FBEditorActions, FBEditorState, FBEditorTitle, FBInputType } from "..";
+import { FB, FBEditorActions, FBEditorState, FBEditorTitle, FBInputProps } from "..";
 
 export const withFBEditorHelper = <T extends FBEditorHelperProps>(
   Component: React.FunctionComponent<T>
@@ -10,10 +11,30 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
     ...props
   }: T) => {
 
-    const { dialogState } = FB.useStores();
+    const { dialogState, workspaceState } = FB.useStores();
 
-    openEditor = (type: FBInputType, index?: number) => () => {
-      const editorForm = FBEditorState.editor({ type, index });
+    function defaultProps(props: Partial<FBInputProps>): Partial<FBInputProps> {
+      const { type, stepIndex } = props;
+      if (type === "stepsection") {
+        const stepSections = _.filter(workspaceState?.getSchema(), { type: "stepsection" });
+        props = {
+          ...props,
+          stepIndex: stepIndex || (_.size(stepSections) + 1),
+        };
+      }
+      return props;
+    }
+
+    openEditor = (props?: Partial<FBInputProps>) => () => {
+      const { type, index } = props || {};
+      if (!type) {
+        return;
+      }
+
+      const editorForm = FBEditorState.editor({
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        inputProps: defaultProps(props!),
+      });
       if (!editorForm) {
         return;
       }
@@ -24,7 +45,7 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
         title: underValidation ? <FBEditorTitle /> : "form.builder.create.field",
         maxWidth: "sm",
         content: editorForm,
-        actions: <FBEditorActions key={`fb-editor-actions-${type}`} {...{ type }} />,
+        actions: <FBEditorActions key={`fb-editor-actions-${type}`} {...{ type, index }} />,
       });
     };
 

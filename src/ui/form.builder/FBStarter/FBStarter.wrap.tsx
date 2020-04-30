@@ -12,11 +12,11 @@ export const withFBStarter = <T extends FBStarterProps>(
 
     const { dialogState } = FB.useStores();
 
-    onClick = () => {
+    onClick = (index?: number) => {
       dialogState?.config({
         open: true,
         maxWidth: "sm",
-        content: <FBControlPicker />,
+        content: <FBControlPicker {...{ index }} />,
       });
     };
 

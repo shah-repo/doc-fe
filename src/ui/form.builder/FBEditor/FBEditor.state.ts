@@ -8,6 +8,7 @@ import { FBEditorHyperlink } from "../FBEditorHyperlink";
 import { FBEditorLabel } from "../FBEditorLabel";
 import { FBEditorOptionGroup } from "../FBEditorOptionGroup";
 import { FBEditorParagraph } from "../FBEditorParagraph";
+import { FBEditorStepSection } from "../FBEditorStepSection";
 import { FBEditorTextField } from "../FBEditorTextField";
 
 export class FBEditorState {
@@ -15,6 +16,7 @@ export class FBEditorState {
   public static omitValidation: FBInputType[] = [
     "section",
     "subsection",
+    "stepsection",
     "hyperlink",
     "action",
     "paragraph",
@@ -26,11 +28,13 @@ export class FBEditorState {
   public static pickDefaultValue: FBInputType[] = [
     "quantity",
     "timer",
+    "stepsection",
   ];
 
   private static editors: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
     section: FBEditorLabel,
     subsection: FBEditorLabel,
+    stepsection: FBEditorStepSection,
     textfield: FBEditorTextField,
     checkbox: FBEditorCheckControl,
     checkboxgroup: FBEditorOptionGroup,
@@ -61,8 +65,8 @@ export class FBEditorState {
   ];
 
   public static editor = (editorProps: FBEditorProps): React.ReactElement | undefined => {
-    const { type, index } = editorProps;
-    const editorControl = FBEditorState.editors[type || ""];
+    const { inputProps: { type = "", index = 0 } = {} } = editorProps;
+    const editorControl = FBEditorState.editors[type];
     if (!editorControl) {
       return;
     }

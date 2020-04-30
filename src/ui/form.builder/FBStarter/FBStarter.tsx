@@ -18,7 +18,7 @@ const FBStarter: React.FunctionComponent<FBStarterProps> = ({
       size="medium"
       variant="text"
       fullWidth={true}
-      {...{ onClick }}
+      onClick={() => onClick && onClick(0)}
     />
   </Box>
 );

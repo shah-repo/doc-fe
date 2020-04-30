@@ -11,6 +11,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
     onAddClick,
     onCancelClick,
     toStringRules,
+    index,
     type,
     ...props
   }: T) => {
@@ -19,15 +20,15 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
 
     onAddClick = () => {
       const formValues = formState?.getValues();
-      const editorProps = Object.assign({}, ..._.map(formValues.editorProperties, (value) => ({ [value]: true })));
-      workspaceState?.setSchemaItem({
-        index: _.size(workspaceState.schema) + 1,
+      const editorProps = Object.assign({}, ..._.map(formValues?.editorProperties, (value) => ({ [value]: true })));
+      workspaceState?.setSchemaItemAt({
+        index,
         ...formValues,
         name: formValues?.name || FB.uniqid(),
         ...formValues?.validators && toStringRules && { rules: toStringRules(formValues.validators) },
         ...editorProps,
         type,
-      });
+      }, index);
       dialogState?.closeDialog();
     };
 

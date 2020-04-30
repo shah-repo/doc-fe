@@ -32,7 +32,10 @@ export class FBFormState extends FBSchemaState {
     set(this.values, values);
   };
 
-  @action public getValues = () => get(this, "values");
+  @action public getValues = () => ({
+    ...this.initialValues,
+    ...this.values,
+  });
 
   @action public getFieldValue = (
     fieldName: string | undefined, defaultValue: any = undefined): any => {
@@ -40,9 +43,9 @@ export class FBFormState extends FBSchemaState {
       return defaultValue;
     }
     if (!_.get(this.values, fieldName) && !_.isUndefined(defaultValue)) {
-      this.setFieldValue(fieldName, defaultValue);
+      this.initialValues[fieldName] = defaultValue;
     }
-    return _.get(this.values, fieldName);
+    return _.get(this.values, fieldName) || _.get(this.initialValues, fieldName);
   };
 
   @action public setFieldValue = (

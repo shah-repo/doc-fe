@@ -3,11 +3,11 @@ import { FBEditor, FBEditorPlaceholder, FBEditorProps, FBTextField } from "..";
 
 const FBEditorTextField: React.FunctionComponent<FBEditorProps> = ({
   children,
-  type,
-  index,
+  inputProps: { type } = {},
+  inputProps,
   ...props
 }) => (
-  <FBEditor {...props} {...{ type, index }}>
+  <FBEditor {...props} {...{ inputProps }}>
     <FBTextField label="form.builder.label" name="label" rules="required"/>
     <FBEditorPlaceholder key={`fb-editor-placeholder-${type}`} />
     <FBTextField

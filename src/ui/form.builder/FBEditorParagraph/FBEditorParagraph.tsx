@@ -4,10 +4,10 @@ import "../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.cs
 
 const FBEditorParagraph: React.FunctionComponent<FBEditorProps> = ({
   children,
-  index,
-  type,
+  inputProps,
+  ...props
 }) => (
-  <FBEditor {...{ type, index }}>
+  <FBEditor {...props} {...{ inputProps }}>
     <FBTextEditor name="paragraph" />
     {children}
   </FBEditor>

@@ -7,6 +7,7 @@ import { withFBStarter } from "../FBStarter/FBStarter.wrap";
 const FBFieldBottomBar: React.FunctionComponent<FBFieldBottomBarProps> = ({
   visibility,
   onClick,
+  index = 0,
   mt,
 }) => (
   <Box display="flex" {...{ visibility, mt }}>
@@ -23,7 +24,7 @@ const FBFieldBottomBar: React.FunctionComponent<FBFieldBottomBarProps> = ({
       fullWidth={true}
       size="medium"
       variant="text"
-      {...{ onClick }}
+      onClick={() => onClick && onClick(index + 1)}
     />
     <Box
       borderTop={3}

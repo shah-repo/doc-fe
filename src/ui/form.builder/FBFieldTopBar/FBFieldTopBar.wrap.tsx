@@ -9,18 +9,19 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
 ) => {
   const Comp = ({
     openEditor,
-    index,
+    inputProps,
+    inputProps: { type } = {},
     ...props
   }: T) => {
 
     const { fieldWrapperState, workspaceState } = FB.useStores();
-    const { type } = workspaceState?.getSchemaItemAt(index) || {};
 
     const editSchemaItem = () => {
-      openEditor && type && openEditor(type, index)();
+      openEditor && type && openEditor(inputProps)();
     };
+
     const removeSchemaItem = () => {
-      workspaceState?.removeSchemaItemAt(index);
+      workspaceState?.removeSchemaItem(inputProps);
     };
     const markDownSchemaItem = () =>
       fieldWrapperState?.setMarkDownActive(!fieldWrapperState.markDownVisible);

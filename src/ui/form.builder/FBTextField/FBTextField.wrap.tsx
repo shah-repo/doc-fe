@@ -1,6 +1,6 @@
 import _ from "lodash";
 import React from "react";
-import { FBTextFieldProps } from "./FBTextField.types";
+import { FBTextFieldProps } from "..";
 
 export const withFBTextField = <T extends FBTextFieldProps>(
   Component: React.FunctionComponent<T>,

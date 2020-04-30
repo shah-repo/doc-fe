@@ -6,6 +6,7 @@ import Text from "../../components/Text";
 const FBSection: React.FunctionComponent<FBSectionProps> = ({
   label,
   gutter = true,
+  stepIndex,
 }) => (
   <Box
     bgcolor="primary.main"
@@ -17,6 +18,7 @@ const FBSection: React.FunctionComponent<FBSectionProps> = ({
     mb={gutter ? 4 : 0}
   >
     {label && <Text message={(label as string).toUpperCase()} />}
+    {stepIndex && ` #${stepIndex}`}
   </Box>
 );
 

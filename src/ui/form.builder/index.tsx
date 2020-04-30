@@ -43,7 +43,6 @@ export { default as FBEditorInlineApproval } from "./FBEditorInlineApproval/FBEd
 export * from "./FBEditorInlineApproval/FBEditorInlineApproval.types";
 export { default as FBEditorInstructionsDocument } from "./FBEditorInstructionsDocument/FBEditorInstructionsDocument";
 export { default as FBEditorLabel } from "./FBEditorLabel/FBEditorLabel";
-export * from "./FBEditorLabel/FBEditorLabel.types";
 export { default as FBEditorOptionGroup } from "./FBEditorOptionGroup/FBEditorOptionGroup";
 export { default as FBEditorOptions } from "./FBEditorOptions/FBEditorOptions";
 export { default as FBEditorParagraph } from "./FBEditorParagraph/FBEditorParagraph";

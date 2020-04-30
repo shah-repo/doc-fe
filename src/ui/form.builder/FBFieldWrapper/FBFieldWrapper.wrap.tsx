@@ -9,14 +9,17 @@ export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
 ) => {
   const Comp = ({
     fieldWrapperState,
-    index = 0,
     topBarMargin = 0,
     grabMargin = 0,
-    designDisabled = false,
+    toolsVisible,
+    addToolVisible,
+    markDownVisible,
+    inputProps,
     ...props
   }: T) => {
 
     const { workspaceState } = FB.useStores();
+    const { index = 0, designDisabled = false } = inputProps || {};
     fieldWrapperState = FB.useRef<FBFieldWrapperState>(FBFieldWrapperState);
 
     const { label, type } = workspaceState?.getSchemaItemAt(index) || {};
@@ -37,18 +40,24 @@ export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
       fieldWrapperState?.setAddToolActive(false);
     };
 
+    useObserver(() => {
+      toolsVisible = fieldWrapperState?.toolsVisible;
+      addToolVisible = fieldWrapperState?.addToolVisible;
+      markDownVisible = fieldWrapperState?.markDownVisible;
+    });
+
     return useObserver(() => Component({
       ...(props as T),
       onMouseOver,
       onMouseLeave,
-      toolsVisible: fieldWrapperState?.toolsVisible,
-      addToolVisible: fieldWrapperState?.addToolVisible,
-      markDownVisible: fieldWrapperState?.markDownVisible,
+      fieldWrapperState,
+      toolsVisible,
+      addToolVisible,
+      markDownVisible,
       designDisabled,
       topBarMargin,
       grabMargin,
-      index,
-      fieldWrapperState,
+      inputProps,
     }));
   };
 

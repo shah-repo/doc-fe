@@ -3,10 +3,11 @@ import { FBEditor, FBEditorProps, FBTextField } from "..";
 
 const FBEditorHyperlink: React.FunctionComponent<FBEditorProps> = ({
   children,
-  index,
-  type,
+  inputProps: { type, index } = {},
+  inputProps,
+  ...props
 }) => (
-  <FBEditor {...{ type, index }}>
+  <FBEditor {...props} {...{ inputProps }}>
     <FBTextField label="form.builder.label" name="label" rules="required"/>
     <FBTextField
       type="url"

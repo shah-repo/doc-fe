@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBEditorProps, FBEditorState } from ".";
@@ -9,18 +8,13 @@ export const withFBEditor = <T extends FBEditorProps>(
 ) => {
   const Comp = ({
     editorState,
-    initialValues = {},
-    children,
+    initialValues,
     mode,
-    index,
-    type,
+    inputProps,
     ...props
   }: T) => {
 
-    const { workspaceState } = FB.useStores();
     editorState = FB.useRef<FBEditorState>(FBEditorState);
-
-    !_.isUndefined(index) && (initialValues = workspaceState?.getSchemaItemAt(index) || {});
 
     useObserver(() => {
       mode = editorState?.mode;
@@ -29,11 +23,8 @@ export const withFBEditor = <T extends FBEditorProps>(
     return Component({
       ...(props as T),
       editorState,
-      initialValues,
-      children,
+      initialValues: inputProps,
       mode,
-      index,
-      type,
     });
   };
 

@@ -1,9 +1,9 @@
 import { BoxProps } from "@material-ui/core";
 import { FBFieldWrapperState } from ".";
-import { FBInputProps } from "../types/common";
+import { FBFormProps, FBInputProps } from "..";
 
 export type FBFieldWrapperProps =
-  & Pick<FBInputProps, "index" | "children" | "designDisabled">
+  & Pick<FBFormProps, "children">
   & Pick<BoxProps, "onMouseOver" | "onMouseLeave">
   & {
     fieldWrapperState?: FBFieldWrapperState;
@@ -12,5 +12,6 @@ export type FBFieldWrapperProps =
     markDownVisible?: boolean;
     topBarMargin?: number;
     grabMargin?: number;
+    inputProps?: Partial<FBInputProps>;
   };
 
