@@ -561,6 +561,7 @@
   "form.builder.part.number": "Part Number",
   "form.builder.dynamiccontrols": "Dynamic Controls",
   "form.builder.missing.lfpo": "Please create a form of type LFPO - Lot From Purchase Order Form",
+  "form.builder.save.doc.before.continue": "Please save your document before you continue",
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.watermark": "Download PDF file",
