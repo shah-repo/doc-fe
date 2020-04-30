@@ -1,8 +1,7 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import { FBEditorTitleProps, FBEditorTitleState } from ".";
-import { FBButton, FBEditorModeProps } from "..";
-import FBMapWrapper from "../FBMapWrapper";
+import { FBButton, FBEditorModeProps, FBMapWrapper } from "..";
 import { withFBEditorTitle } from "./FBEditorTitle.wrap";
 
 const FBEditorTitle: React.FunctionComponent<FBEditorTitleProps> = ({

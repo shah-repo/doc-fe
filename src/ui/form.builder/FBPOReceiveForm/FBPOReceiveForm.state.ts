@@ -55,6 +55,10 @@ export class FBPOReceiveFormState  {
       });
     }
 
+    if (!FBStore.document?.document?.id) {
+      return;
+    }
+
     const reqBody = toNewVersionRequestBody({
       name: `${this.item?.glCode}-${this.item?.description}`,
       description: values.comments ? `<p>${values.comments}</p>` : `<p>${this.item?.description}</p>`,
