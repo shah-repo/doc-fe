@@ -42,7 +42,7 @@ export class FBFormState extends FBSchemaState {
     if (!_.get(this.values, fieldName) && !_.isUndefined(defaultValue)) {
       this.setFieldValue(fieldName, defaultValue);
     }
-    return _.get(this.values, fieldName, defaultValue);
+    return _.get(this.values, fieldName);
   };
 
   @action public setFieldValue = (
@@ -130,6 +130,7 @@ export class FBFormState extends FBSchemaState {
     //   }
     //   return v;
     // });
+
     const validator = new this.Validator(values, rules);
     validator.setAttributeNames(this.validationAttributeNames);
 

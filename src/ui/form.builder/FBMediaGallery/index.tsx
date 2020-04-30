@@ -1,2 +1,3 @@
-export { default } from "./FBMediaGallery";
+export { default as FBMediaGallery } from "./FBMediaGallery";
 export * from "./FBMediaGallery.types";
+

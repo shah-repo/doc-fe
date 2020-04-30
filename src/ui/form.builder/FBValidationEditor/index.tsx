@@ -1,2 +1,3 @@
-export { default } from "./FBValidationEditor";
+export { default as FBValidationEditor } from "./FBValidationEditor";
 export * from "./FBValidationEditor.types";
+

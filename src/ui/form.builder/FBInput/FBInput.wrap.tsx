@@ -51,7 +51,7 @@ export const withFBInput = <T extends FBInputProps>(
 
     function setDefaultValue(): any {
       if (!formState) {
-        return;
+        return defaultValue;
       }
       const value = {
         editoroptions() {

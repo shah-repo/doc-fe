@@ -12,6 +12,7 @@ export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
     index = 0,
     topBarMargin = 0,
     grabMargin = 0,
+    designDisabled = false,
     ...props
   }: T) => {
 
@@ -25,15 +26,25 @@ export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
       grabMargin = 3.5;
     }
 
-    const onMouseOver = () => fieldWrapperState?.setToolsActive(true);
-    const onMouseLeave = () => fieldWrapperState?.setToolsActive(false);
+    const onMouseOver = () => {
+      if (fieldWrapperState) {
+        !designDisabled && fieldWrapperState.setToolsActive(true);
+        fieldWrapperState.setAddToolActive(true);
+      }
+    };
+    const onMouseLeave = () => {
+      fieldWrapperState?.setToolsActive(false);
+      fieldWrapperState?.setAddToolActive(false);
+    };
 
     return useObserver(() => Component({
       ...(props as T),
       onMouseOver,
       onMouseLeave,
       toolsVisible: fieldWrapperState?.toolsVisible,
+      addToolVisible: fieldWrapperState?.addToolVisible,
       markDownVisible: fieldWrapperState?.markDownVisible,
+      designDisabled,
       topBarMargin,
       grabMargin,
       index,

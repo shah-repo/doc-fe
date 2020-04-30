@@ -1,3 +1,3 @@
-export { default } from "./FBEditorStepSection";
+export { default as FBEditorStepSection } from "./FBEditorStepSection";
 export * from "./FBEditorStepSection.types";
 

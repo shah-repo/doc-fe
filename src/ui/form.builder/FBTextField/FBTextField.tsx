@@ -10,13 +10,14 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   error,
   rows,
   type,
+  inputProps,
   ...props
 }) => (
   <FBInput {...props} type="textfield">
     <TextField
       variant="outlined"
       label=""
-      {...{ type, rows, placeholder, error, multiline }}
+      {...{ type, rows, placeholder, error, multiline, inputProps }}
     />
   </FBInput>
 );

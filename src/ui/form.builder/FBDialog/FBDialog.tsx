@@ -51,7 +51,7 @@ const FBDialog: React.FunctionComponent<FBDialogProps> = ({
         </content.type>
       )}
     </DialogContent>
-    <DialogActions>
+    <DialogActions style={{ margin: 0 }}>
       <div ref={handleActionsRef} />
     </DialogActions>
   </ Dialog>

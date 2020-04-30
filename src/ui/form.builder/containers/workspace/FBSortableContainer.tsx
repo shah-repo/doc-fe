@@ -15,22 +15,24 @@ const FBSortableContainer: React.FunctionComponent<FBSortableProps> = ({
   const SortableItem = SortableElement(
     ({ value }: { value: FBTemplateSchema }) => (
       <li style={{ listStyleType: "none" }} id="FBSortableContainer-list" >
-        <FBFieldWrapper key={`${value.name}_${value.index}`} index={value.index}>
+        <FBFieldWrapper
+          key={`${value.name}_${value.index}`}
+          index={value.index}
+          designDisabled={value.designDisabled}
+        >
           {wrapperRenderer(value)}
         </FBFieldWrapper>
       </li>
     ),
   );
 
-  const SortableList = SortableContainer(() => {
-    return (
-      <ul style={{ listStyleType: "none", padding: "0", margin: "0" }}>
-        {items.map((value, index) => (
-          <SortableItem key={`item-${index}`} index={index} value={value} />
-        ))}
-      </ul>
-    );
-  });
+  const SortableList = SortableContainer(() => (
+    <ul style={{ listStyleType: "none", padding: "0", margin: "0" }}>
+      {items.map((value, index) => (
+        <SortableItem key={`item-${index}`} index={index} value={value} />
+      ))}
+    </ul>
+  ));
 
   const plainList = () => items.map((schema) => wrapperRenderer(schema));
 

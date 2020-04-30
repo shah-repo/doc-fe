@@ -93,7 +93,7 @@ export const withEditorRenderer =
       // FBValidatorStore.customValidator = undefined;
 
       const removeEl = (mode === "create") ? 0 : 1;
-      let newSchema = FBStore.schema;
+      let newSchema = FBStore.getSchema();
       newSchema.splice(index, removeEl, schema);
       if (type === "inlineapproval") {
         const approvalName: string = (values as FBInputProps).name || "";
@@ -115,6 +115,10 @@ export const withEditorRenderer =
     const buttonLabel = mode === "create"
       ? "form.builder.add.field"
       : "common.save";
+
+    if (_.get(props, "values.label")) {
+      _.set(props, "values.label", intl.formatMessage({ id: _.get(props, "values.label", "translation.unknown") }));
+    }
 
     return (
       <Box>

@@ -6,6 +6,7 @@ import FBAutocompleteAsyncStore from "../../FBAutocompleteAsync/FBAutocompleteAs
 import { FBInputProps } from "../../types/common";
 import { FBTemplateSchema } from "../../types/store";
 import { FBWorkspaceMode } from "../../types/workspace";
+import FBDRStore from "./FBDRStore";
 import editorStore from "./FBEditorStore";
 import FBValidatorStore from "./FBValidatorStore";
 
@@ -36,6 +37,7 @@ export class FormBuilderStore {
   public documentId = "";
   public stepSectionReg = /#([1-9][0-9]?|100)$/;
   public document: Partial<DocumentRevision> = {};
+  public isRevised? = false;
 
   public clearStores = () => {
     FBAutocompleteAsyncStore.data.clear();
@@ -102,7 +104,7 @@ export class FormBuilderStore {
     editorStore.editorTypeEdit(schema);
   };
 
-  @action public getSchema = (): FBTemplateSchema[] => this.schema;
+  @action public getSchema = (): FBTemplateSchema[] => _.uniqBy(this.schema || [], "name");
 
   @action public getSectionStepReg = (label: string): string | undefined => {
     const reg = this.stepSectionReg.exec(label);
@@ -183,7 +185,7 @@ export class FormBuilderStore {
     switch (this.mode) {
       case "none":
       case "design":
-        this.schema = [];
+        this.schema = FBDRStore.docSchema;
         this.values = {};
         break;
       default:

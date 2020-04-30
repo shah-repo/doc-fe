@@ -29,20 +29,21 @@ export type FBInputType =
   | "testRequirement"
   | "instructionsmediaupload"
   | "evidencemediaupload"
+  | "purchaseorder"
+  | "approvalMatrix"
+  | "poreceive"
   | "stepsection"
   | "teststep"
+  | "checkpoint"
+  | "approval"
+  | "createlabel"
   | "quantity"
   | "timer"
-  | "purchaseorder"
-  | "hellosign"
-  | "approval"
   | "inlineapproval"
-  | "checkpoint"
-  | "createlabel"
   | "instructionsdocument"
   | "selectdocument"
   | "selectrequirement"
-  | "approvalMatrix";
+  | "testRequirement";
 
 export type FBInputProps =
 & FBLabelProps

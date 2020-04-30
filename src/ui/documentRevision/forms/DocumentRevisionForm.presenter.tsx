@@ -187,7 +187,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       setFieldValue("retrain", type.defaultTraining);
       loadDocumentProposedId(type.id);
     }
-    FBDRStore.setInitialFBMode(type.group);
+    FBDRStore.setInitialFBMode(type);
     if (type.isQms) {
       groupOptions.forEach((group) => {
         if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
