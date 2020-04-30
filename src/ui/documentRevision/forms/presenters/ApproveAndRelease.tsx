@@ -122,6 +122,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
         color="secondary"
         variant="outlined"
         onClick={openDialog}
+        id="ApproveAndRelease-button"
       >
         <Text translation="common.approve.and.release" />
       </Button>
