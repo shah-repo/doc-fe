@@ -12,7 +12,9 @@ const FBControlPicker: React.FunctionComponent<FBControlPickerProps> = ({
     <FBMapWrapper<FBControlPickerDataProps> collection={FBControlPickerState.config}>
       {(editors, section) => (
         <Box key={`fb-controlpicker-section-${section}`} mb={4}>
-          <FBLabel label={`form.builder.${section}`} />
+          <Box mx={1}>
+            <FBLabel label={`form.builder.${section}`} />
+          </Box>
           <FBMapWrapper<FBInputType> collection={editors}>
             {(editor, index) => (
               <FBButton
