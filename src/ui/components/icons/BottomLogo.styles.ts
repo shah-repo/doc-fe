@@ -3,9 +3,6 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core";
 const styles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      bottom: 30,
-      left: 20,
-      position: "absolute",
       textAlign: "center",
       display: "flex",
       justifyContent: "center",
@@ -13,9 +10,10 @@ const styles = makeStyles((theme: Theme) =>
       color: theme.palette.secondary.contrastText,
       letterSpacing: 1,
       fontWeight: 100,
+      marginTop: 20,
     },
     logo: {
-      width: "30%",
+      width: 60,
       marginLeft: 10,
     },
   }),
