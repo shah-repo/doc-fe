@@ -2,6 +2,8 @@ import _ from "lodash";
 import React from "react";
 import { FBEditorHelperProps } from ".";
 import { FB, FBEditorActions, FBEditorState, FBEditorTitle, FBInputProps } from "..";
+import { FBData } from "../FBData";
+import { FBInputType } from "../FBInput";
 
 export const withFBEditorHelper = <T extends FBEditorHelperProps>(
   Component: React.FunctionComponent<T>
@@ -15,8 +17,9 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
 
     function defaultProps(props: Partial<FBInputProps>): Partial<FBInputProps> {
       const { type, stepIndex } = props;
-      if (type === "stepsection") {
-        const stepSections = _.filter(workspaceState?.getSchema(), { type: "stepsection" });
+      if (_.includes(FBEditorState.pickStepIndex, type)) {
+        const stepSections = _.filter(workspaceState?.getSchema(), (schemaItem) =>
+          _.includes(FBEditorState.pickStepIndex, schemaItem.type));
         props = {
           ...props,
           stepIndex: stepIndex || (_.size(stepSections) + 1),
@@ -25,12 +28,26 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
       return props;
     }
 
+    function addTestStep() {
+      workspaceState?.setSchema(_.union(workspaceState.schema, FBData.testStep));
+      dialogState?.closeDialog();
+    }
+
+    function customHandler(type: FBInputType) {
+      const handler: Partial<Record<FBInputType, () => any>> = {
+        teststep: () => addTestStep(),
+      };
+      handler[type]?.();
+    }
+
     openEditor = (props?: Partial<FBInputProps>) => () => {
       const { type, index } = props || {};
       if (!type) {
         return;
       }
-
+      if (_.includes(FBEditorState.pickCustomHandler, type)) {
+        return customHandler(type);
+      }
       const editorForm = FBEditorState.editor({
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         inputProps: defaultProps(props!),

@@ -3,7 +3,7 @@ import { FormikProps } from "formik";
 import _, { Dictionary } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
-import { FBTestStepState } from "..";
+import { FBData } from "..";
 import FBButton from "../components/inputs/FBButton";
 import { FBFieldEditorComponent, omitLabelValidation, pickDefaultLabel } from "../defaults/editor";
 import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
@@ -105,7 +105,7 @@ export const withEditorRenderer =
       }
 
       if (type === "teststep") {
-        newSchema = _.union(newSchema, new FBTestStepState().schema as FBInputProps[]);
+        newSchema = _.union(newSchema, FBData.testStep as FBInputProps[]);
       }
 
       FBStore.setSchema(newSchema);

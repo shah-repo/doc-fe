@@ -34,7 +34,6 @@ import { FBEditorInstructionsDocument } from "../FBEditorInstructionsDocument";
 import FBEditorParagraph from "../FBEditorParagraph/FBEditorParagraph";
 import { FBEditorSelectDocument } from "../FBEditorSelectDocument";
 import { FBEditorSelectRequirement } from "../FBEditorSelectRequirement";
-import { FBEditorStepSection } from "../FBEditorStepSection";
 import { FBEditorTestRequirement } from "../FBEditorTestRequirement";
 import { FBHelloSign } from "../FBHelloSign";
 import { FBInlineApproval } from "../FBInlineApproval";
@@ -47,7 +46,6 @@ import { FBQuantityField } from "../FBQuantityField";
 import { FBSelectDocument } from "../FBSelectDocument";
 import { FBSelectRequirement } from "../FBSelectRequirement";
 import { FBTestRequirement } from "../FBTestRequirement";
-import { FBTestStep } from "../FBTestStep";
 import { FBTimerField } from "../FBTimerField";
 import { FBEditorElementType } from "../types/editor";
 
@@ -72,8 +70,8 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   poreceive: FBLabelEditor,
   approvalMatrix: FBLabelEditor,
   paragraph: FBEditorParagraph,
-  stepsection: FBEditorStepSection,
-  teststep: FBEditorStepSection,
+  stepsection: FBLabelEditor,
+  teststep: FBLabelEditor,
   instructionsmediaupload: FBLabelEditor,
   evidencemediaupload: FBLabelEditor,
   checkpoint: FBLabelEditor,
@@ -112,7 +110,7 @@ export const FBFieldComponent: Dictionary<any> = {
   poreceive: FBPOReceive,
   paragraph: FBParagraph,
   stepsection: FBSectionBox,
-  teststep: FBTestStep,
+  teststep: FBSectionBox,
   instructionsmediaupload: FBMediaAlbumField,
   evidencemediaupload: FBMediaAlbumField,
   checkpoint: FBButton,

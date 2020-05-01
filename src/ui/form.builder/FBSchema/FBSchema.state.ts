@@ -2,7 +2,7 @@ import _ from "lodash";
 import { action, get, observable, set } from "mobx";
 import React from "react";
 import { FBSchemaProps } from ".";
-import { FBAutocompleteAsync, FBCheckboxGroup, FBInputProps, FBInputType } from "..";
+import { FBAutocompleteAsync, FBCheckboxGroup, FBEditorState, FBInputProps, FBInputType } from "..";
 import { FBCheckbox } from "../FBCheckbox";
 import { FBDatePicker } from "../FBDatePicker";
 import { FBFileUpload } from "../FBFileUpload";
@@ -28,12 +28,14 @@ export class FBSchemaState {
     "section",
     "subsection",
     "stepsection",
+    "teststep",
   ];
 
   private static control: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
     section: FBSection,
     subsection: FBSubsection,
     stepsection: FBSection,
+    teststep: FBSection,
     textfield: FBTextField,
     checkbox: FBCheckbox,
     checkboxgroup: FBCheckboxGroup,
@@ -122,14 +124,17 @@ export class FBSchemaState {
   };
 
   @action public setSchema = (schema?: FBSchemaProps[]) => {
-    schema = (schema || []).map((o: FBSchemaProps, i, ro) => ({
-      ...o,
+    schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
+      ...schemaItem,
       index: i,
-      ...(o.type === "stepsection") && {
-        stepIndex: _.size(_.filter(ro.slice(0, i + 1), { type: "stepsection" })),
+      ...(_.includes(FBEditorState.pickStepIndex, schemaItem.type)) && {
+        stepIndex: _.size(_.filter(ro.slice(0, i + 1), (step) =>
+          _.includes(FBEditorState.pickStepIndex, step.type))),
       },
     }));
     set(this, "schema", schema);
+    // OLD: to be removed
+    FBStore.setSchema(this.schema as FBOldInputProps[]);
   };
 
   @action public setSchemaItem = (schemaItem: FBSchemaProps) => {
@@ -140,20 +145,14 @@ export class FBSchemaState {
       const schema = _.union(this.schema, [schemaItem]);
       this.setSchema(schema);
     }
-    // OLD: to be removed
-    FBStore.setSchema(this.schema as FBOldInputProps[]);
   };
 
-  @action public setSchemaItemAt = (schemaItem: FBSchemaProps, index?: number) => {
-    if (_.isUndefined(index)) {
-      return;
+  @action public setSchemaItemAt = (schemaItem: FBSchemaProps, index = 0) => {
+    if (schemaItem.name ===  this.getSchemaItemAt(index)?.name) {
+      return this.updateSchemaItem(schemaItem, index);
     }
-    const position = index || _.size(this.schema);
     const newSchema = this.schema?.slice(0);
-    if (!newSchema) {
-      return;
-    }
-    newSchema.splice(position, 0, schemaItem);
+    newSchema?.splice(index, 0, schemaItem);
     this.setSchema(newSchema);
   };
 

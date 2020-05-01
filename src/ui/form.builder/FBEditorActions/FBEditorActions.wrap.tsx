@@ -24,7 +24,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       workspaceState?.setSchemaItemAt({
         index,
         ...formValues,
-        name: formValues?.name || FB.uniqid(),
+        name: formValues?.name || FB.uniqid,
         ...formValues?.validators && toStringRules && { rules: toStringRules(formValues.validators) },
         ...editorProps,
         type,

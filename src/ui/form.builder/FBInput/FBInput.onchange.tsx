@@ -75,7 +75,7 @@ export const withFBOnChange = <T extends FBInputProps>(
     function editorOptionsValue(ev: React.ChangeEvent<HTMLInputElement>) {
       const valueArray = _.get(ev.target, "value").split("\n");
       const optionsValue = _.map(valueArray, (text: string) => ({
-        value: FB.uniqid(),
+        value: FB.uniqid,
         text,
       }));
       formState?.setFieldValue(name, optionsValue);

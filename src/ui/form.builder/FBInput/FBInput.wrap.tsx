@@ -3,6 +3,7 @@ import _ from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { FBOption } from "..";
+import { isTranslation } from "../../translations/types";
 import { FBInputProps, OmitInputClones } from "../FBInput";
 import { FB } from "../helpers";
 import { withFBOnChange } from "./FBInput.onchange";
@@ -67,7 +68,11 @@ export const withFBInput = <T extends FBInputProps>(
           return formState.getFieldValue(name, defaultValue) || "";
         },
       };
-      return (value[type || ""] || value.default)();
+      const transDefault = (value[type || ""] || value.default)();
+      if (isTranslation(transDefault)) {
+        return intl.formatMessage({ id: transDefault });
+      }
+      return transDefault;
     }
 
     React.useEffect(() => {

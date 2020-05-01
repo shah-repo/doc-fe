@@ -8,7 +8,6 @@ import { FBEditorHyperlink } from "../FBEditorHyperlink";
 import { FBEditorLabel } from "../FBEditorLabel";
 import { FBEditorOptionGroup } from "../FBEditorOptionGroup";
 import { FBEditorParagraph } from "../FBEditorParagraph";
-import { FBEditorStepSection } from "../FBEditorStepSection";
 import { FBEditorTextField } from "../FBEditorTextField";
 
 export class FBEditorState {
@@ -17,6 +16,7 @@ export class FBEditorState {
     "section",
     "subsection",
     "stepsection",
+    "teststep",
     "hyperlink",
     "action",
     "paragraph",
@@ -29,12 +29,18 @@ export class FBEditorState {
     "quantity",
     "timer",
     "stepsection",
+    "teststep",
   ];
+
+  public static pickStepIndex: FBInputType[] = ["stepsection", "teststep"];
+
+  public static pickCustomHandler: FBInputType[] = ["teststep"];
 
   private static editors: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
     section: FBEditorLabel,
     subsection: FBEditorLabel,
-    stepsection: FBEditorStepSection,
+    stepsection: FBEditorLabel,
+    teststep: FBEditorLabel,
     textfield: FBEditorTextField,
     checkbox: FBEditorCheckControl,
     checkboxgroup: FBEditorOptionGroup,
