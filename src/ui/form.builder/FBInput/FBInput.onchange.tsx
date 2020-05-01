@@ -44,7 +44,7 @@ export const withFBOnChange = <T extends FBInputProps>(
     }
 
     function contextValue(value: boolean | string | string[] | undefined = "") {
-      if (!editorProperties) {
+      if (!editorProperties || _.isEmpty(editorProperties)) {
         return;
       }
 
