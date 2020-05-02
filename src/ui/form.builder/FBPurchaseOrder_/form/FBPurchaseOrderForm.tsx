@@ -3,7 +3,7 @@ import { Form, Formik } from "formik";
 import { Dictionary } from "lodash";
 import React from "react";
 import { FormattedNumber } from "react-intl";
-import unitsOptions from "../../../../data/units.json";
+import { FBData } from "../..";
 import Text from "../../../components/Text";
 import FBButton from "../../components/inputs/FBButton";
 import FBCheckbox from "../../components/inputs/FBCheckbox";
@@ -68,7 +68,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
         <FBSelect
           label="form.builder.field.units"
           name={`${name}-formValues.units`}
-          options={unitsOptions}
+          options={FBData.unitsOptions}
           optionValueKey="value"
           optionLabelKey="text"
         />

@@ -1,9 +1,10 @@
 import _ from "lodash";
-import { FB, FBAutocompleteAsyncConfig, FBEditorPropertiesOption, FBInputType } from "..";
+import { FB, FBAutocompleteAsyncConfig, FBEditorPropertiesOption, FBInputType, FBOption } from "..";
 import { FBSchemaProps } from "../FBSchema";
 import autocompleteOptions from "./autocompleteOptions.json";
 import editorProperties from "./editorProperties.json";
 import testStepSchema from "./testStepSchema.json";
+import unitsOptions from "./unitsOptions.json";
 
 export class FBData {
   public static get testStepSchema(): FBSchemaProps[]  {
@@ -17,6 +18,10 @@ export class FBData {
 
   public static get autocompleteOptions(): FBAutocompleteAsyncConfig[] {
     return autocompleteOptions;
+  }
+
+  public static get unitsOptions(): FBOption[] {
+    return unitsOptions;
   }
 }
 

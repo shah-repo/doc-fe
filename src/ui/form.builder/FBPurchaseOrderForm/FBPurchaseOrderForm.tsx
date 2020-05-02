@@ -1,5 +1,5 @@
 import React from "react";
-import { FBAutocompleteAsync, FBCheckbox, FBDatePicker, FBPurchaseOrderFormProps, FBQuantityField, FBTextField } from "..";
+import { FBAutocomplete, FBAutocompleteAsync, FBCheckbox, FBData, FBDatePicker, FBPurchaseOrderFormProps, FBQuantityField, FBTextField } from "..";
 import { withFBPurchaseOrderForm } from "./FBPurchaseOrderForm.wrap";
 
 
@@ -20,9 +20,12 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
       name="glCode"
       rules="required"
     />
-    <FBTextField
+    <FBAutocomplete
       label="form.builder.field.units"
       name="units"
+      options={FBData.unitsOptions}
+      optionValueKey="value"
+      optionLabelKey="text"
       rules="required"
     />
     <FBAutocompleteAsync
@@ -31,7 +34,6 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
       optionId="11"
       rules="required"
       onChange={handlePartTitle}
-      // onChange={handlePartNumberChange && handlePartNumberChange(props.setFieldValue)}
     />
     <FBTextField
       label="form.builder.field.part.number.title"

@@ -1,7 +1,9 @@
 import _ from "lodash";
 import React from "react";
+import { useIntl } from "react-intl";
 import { FBAutocompleteProps } from ".";
 import { FB } from "..";
+import { isTranslation } from "../../translations/types";
 
 export const withFBAutocomplete = <T extends FBAutocompleteProps>(
   Component: React.FunctionComponent<T>
@@ -20,6 +22,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
 
     const { formState } = FB.useStores();
     const value = formState?.getFieldValue(name) || defaultValue;
+    const intl = useIntl();
 
     if (options && value && optionValueType === "key") {
       defaultValue = multiple
@@ -27,9 +30,13 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
         : _.find(options, { [optionValueKey]: value });
     }
 
-    !getOptionLabel && (getOptionLabel =
-      (option) => optionLabelKey && _.get(option, optionLabelKey)
-    );
+    !getOptionLabel && (getOptionLabel = (option) => {
+      let optionText = _.get(option, optionLabelKey);
+      if (isTranslation(optionText)) {
+        optionText = intl.formatMessage({ id: optionText });
+      }
+      return optionText;
+    });
 
     return Component({
       ...(props as T),
