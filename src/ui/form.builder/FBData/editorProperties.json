@@ -1,0 +1,43 @@
+{
+  "autocomplete": [{
+    "value": "multiple",
+    "text": "form.builder.multi.select",
+    "outputText": "form.builder.multiple"
+  }],
+  "autocompleteasync": [{
+    "value": "multiple",
+    "text": "form.builder.multi.select",
+    "outputText": "form.builder.multiple"
+  }],
+  "select": [{
+      "value": "includeNone",
+      "text": "form.builder.include.none",
+      "outputText": "form.builder.none"
+    },
+    {
+      "value": "includeContext",
+      "text": "form.builder.include.other",
+      "outputText": "form.builder.other"
+    }
+  ],
+  "checkbox": [{
+    "value": "includeContext",
+    "text": "form.builder.include.note",
+    "outputText": "form.builder.note"
+  }],
+  "radio": [{
+    "value": "includeContext",
+    "text": "form.builder.include.note",
+    "outputText": "form.builder.note"
+  }],
+  "checkboxgroup": [{
+    "value": "includeContext",
+    "text": "form.builder.include.other",
+    "outputText": "form.builder.other"
+  }],
+  "radiogroup": [{
+    "value": "includeContext",
+    "text": "form.builder.include.other",
+    "outputText": "form.builder.other"
+  }]
+}

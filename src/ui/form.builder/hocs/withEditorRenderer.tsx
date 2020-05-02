@@ -105,7 +105,7 @@ export const withEditorRenderer =
       }
 
       if (type === "teststep") {
-        newSchema = _.union(newSchema, FBData.testStep as FBInputProps[]);
+        newSchema = _.union(newSchema, FBData.testStepSchema as FBInputProps[]);
       }
 
       FBStore.setSchema(newSchema);

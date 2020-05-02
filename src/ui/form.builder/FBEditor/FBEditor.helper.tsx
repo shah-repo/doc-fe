@@ -29,7 +29,7 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
     }
 
     function addTestStep() {
-      workspaceState?.setSchema(_.union(workspaceState.schema, FBData.testStep));
+      workspaceState?.setSchema(_.union(workspaceState.schema, FBData.testStepSchema));
       dialogState?.closeDialog();
     }
 

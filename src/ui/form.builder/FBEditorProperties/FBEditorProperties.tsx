@@ -1,16 +1,15 @@
 import React from "react";
 import { FBEditorPropertiesProps } from ".";
-import { FBCheckboxGroup, FBFieldName } from "..";
-import { withFBEditorProperties } from "./FBEditorProperties.wrap";
+import { FBCheckboxGroup, FBData, FBFieldName } from "..";
 
 const FBEditorProperties: React.FunctionComponent<FBEditorPropertiesProps> = ({
-  options = [],
+  type,
 }) => (
   <FBCheckboxGroup
     name={FBFieldName.EditorProps}
     label="form.builder.properties"
-    {...{ options }}
+    options={type && FBData.editorProperties[type]}
   />
 );
 
-export default withFBEditorProperties(FBEditorProperties);
+export default FBEditorProperties;

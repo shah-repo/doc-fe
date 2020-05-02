@@ -1,10 +1,11 @@
-import { FBEditorPropertiesState, FBInputProps, FBOptionProps } from "..";
+import { FBInputProps } from "..";
+import { FBOption } from "../FBOption";
 
 export type FBEditorPropertiesType = "multiple" | "includeNone" | "includeContext";
-
-export type FBEditorPropertiesProps =
-& Pick<FBInputProps, "type">
-& Pick<FBOptionProps, "options">
+export type FBEditorPropertiesProps = Pick<FBInputProps, "type" | "options">;
+export type FBEditorPropertiesOption =
+& Pick<FBOption, "text">
 & {
-  editorPropsState?: FBEditorPropertiesState;
+  value: FBEditorPropertiesType;
+  outputText?: string;
 };

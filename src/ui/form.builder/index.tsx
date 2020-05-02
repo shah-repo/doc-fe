@@ -49,7 +49,6 @@ export { default as FBEditorOptions } from "./FBEditorOptions/FBEditorOptions";
 export { default as FBEditorParagraph } from "./FBEditorParagraph/FBEditorParagraph";
 export { default as FBEditorPlaceholder } from "./FBEditorPlaceholder/FBEditorPlaceholder";
 export { default as FBEditorProperties } from "./FBEditorProperties/FBEditorProperties";
-export * from "./FBEditorProperties/FBEditorProperties.state";
 export * from "./FBEditorProperties/FBEditorProperties.types";
 export { default as FBEditorSelectDocument } from "./FBEditorSelectDocument/FBEditorSelectDocument";
 export { default as FBEditorSelectRequirement } from "./FBEditorSelectRequirement/FBEditorSelectRequirement";
