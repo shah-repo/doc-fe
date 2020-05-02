@@ -1,7 +1,6 @@
 import _ from "lodash";
 import { action, computed, set } from "mobx";
-import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncOption } from "..";
-import autocompleteOptions from "../../../data/autocompleteOptions.json";
+import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncOption, FBData } from "..";
 import FBRequest from "../FBApi/FBApi.request";
 import FBAutocompleteAsyncStore from "./FBAutocompleteAsync.store";
 
@@ -17,7 +16,7 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     if (!this.optionId) {
       return;
     }
-    return  _.find(autocompleteOptions, { id: this.optionId });
+    return  _.find(FBData.autocompleteOptions, { id: this.optionId });
   }
 
   @computed public get sliceData(): any {

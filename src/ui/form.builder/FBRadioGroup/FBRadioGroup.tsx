@@ -1,7 +1,6 @@
 import { RadioGroup } from "@material-ui/core";
 import React from "react";
-import { FBRadioGroupProps } from ".";
-import { FBInput } from "..";
+import { FBInput, FBRadioGroupProps } from "..";
 import { withFBRadioGroup } from "./FBRadioGroup.wrap";
 
 const FBRadioGroup: React.FunctionComponent<FBRadioGroupProps> = ({

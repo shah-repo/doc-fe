@@ -31,6 +31,7 @@ export const withFBOnChange = <T extends FBInputProps>(
         : _.remove(checkedValue, (cv) => cv !== valueName);
 
       contextValue(groupValue);
+      formState?.setFieldValue(valueName, checked);
       formState?.setFieldValue(name, groupValue);
     }
 

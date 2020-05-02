@@ -128,7 +128,6 @@ export { default as FBProvider } from "./FBProvider/FBProvider";
 export * from "./FBProvider/FBProvider.types";
 export * from "./FBPurchaseOrder/FBPurchaseOrder.types";
 export { default as FBQuantityField } from "./FBQuantityField/FBQuantityField";
-export * from "./FBQuantityField/FBQuantityField.types";
 export { default as FBRadio } from "./FBRadio/FBRadio";
 export { default as FBRadioGroup } from "./FBRadioGroup/FBRadioGroup";
 export * from "./FBRadioGroup/FBRadioGroup.types";

@@ -3,8 +3,7 @@ import CachedIcon from "@material-ui/icons/Cached";
 import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import _ from "lodash";
 import React from "react";
-import { FBAutocompleteProps } from ".";
-import { FBInput, FBMapWrapper } from "..";
+import { FBAutocompleteProps, FBInput, FBMapWrapper } from "..";
 import Text from "../../components/Text";
 import { withFBAutocomplete } from "./FBAutocomplete.wrap";
 
@@ -35,7 +34,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
           <Box width="100%">
             <TextField
               {...params}
-              {...{ placeholder }}
+              {...!params.InputProps.startAdornment && { placeholder }}
               fullWidth
               variant="outlined"
               InputProps={{

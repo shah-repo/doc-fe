@@ -3,11 +3,19 @@
     "value": "multiple",
     "text": "form.builder.multi.select",
     "outputText": "form.builder.multiple"
+  }, {
+    "value": "includeQRScan",
+    "text": "form.builder.include.qr.scan",
+    "outputText": "form.builder.scan.qr"
   }],
   "autocompleteasync": [{
     "value": "multiple",
     "text": "form.builder.multi.select",
     "outputText": "form.builder.multiple"
+  }, {
+    "value": "includeQRScan",
+    "text": "form.builder.include.qr.scan",
+    "outputText": "form.builder.scan.qr"
   }],
   "select": [{
       "value": "includeNone",

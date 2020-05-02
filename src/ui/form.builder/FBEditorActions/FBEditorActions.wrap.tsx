@@ -20,15 +20,6 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
 
     const { dialogState, workspaceState, formState } = FB.useStores();
 
-    function editorProperties(formValues?: Dictionary<any>): Dictionary<boolean> | undefined {
-      if (!formValues) {
-        return;
-      }
-      return Object.assign({}, ..._.map(formValues.editorProperties, (value) => ({
-        [value]: true,
-      })));
-    }
-
     function propertiesOptions(formValues?: Dictionary<any>): FBOptionProps[] | undefined {
       if (formValues?.options && formValues.editorProperties && type) {
         _.map(FBData.editorProperties[type], (ep) => {
@@ -51,9 +42,8 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         type,
         name: FB.uniqid,
         ...formValues,
-        ...formValues?.validators && toStringRules && { rules: toStringRules(formValues.validators) },
-        ...editorProperties(formValues),
         ...options && { options },
+        ...formValues?.validators && toStringRules && { rules: toStringRules(formValues.validators) },
       }, index);
       dialogState?.closeDialog();
     };

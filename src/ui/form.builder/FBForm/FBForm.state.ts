@@ -32,10 +32,7 @@ export class FBFormState extends FBSchemaState {
     set(this.values, values);
   };
 
-  @action public getValues = () => ({
-    ...this.initialValues,
-    ...this.values,
-  });
+  @action public getValues = () => this.values;
 
   @action public getFieldValue = (
     fieldName: string | undefined, defaultValue: any = undefined): any => {
