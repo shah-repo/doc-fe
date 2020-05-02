@@ -54,6 +54,7 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
       ...(props as T),
       onChange,
       loading: fileFieldState?.loading,
+      name,
     }));
   };
 
