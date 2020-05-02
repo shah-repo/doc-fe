@@ -22,9 +22,9 @@ export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
     const { index = 0, designDisabled = false } = inputProps || {};
     fieldWrapperState = FB.useRef<FBFieldWrapperState>(FBFieldWrapperState);
 
-    const { label, type } = workspaceState?.getSchemaItemAt(index) || {};
+    const { label, type, includeQRScan } = workspaceState?.getSchemaItemAt(index) || {};
 
-    if (!_.includes(FBSchemaState.omitLabel, type) && !_.isUndefined(label)) {
+    if (!_.includes(FBSchemaState.omitLabel, type) && !_.isUndefined(label) && !includeQRScan) {
       topBarMargin = -3;
       grabMargin = 3.5;
     }

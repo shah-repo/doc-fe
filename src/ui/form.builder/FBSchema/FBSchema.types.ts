@@ -23,6 +23,7 @@ export type FBSchemaProps = Pick<FBInputProps,
 | "testRequirement"
 | "isTemplate"
 | "stepIndex"
+| "includeQRScan"
 > & {
   validators?: Dictionary<any>;
 };
