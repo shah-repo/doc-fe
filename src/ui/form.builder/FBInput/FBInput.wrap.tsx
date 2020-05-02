@@ -76,10 +76,10 @@ export const withFBInput = <T extends FBInputProps>(
     }
 
     React.useEffect(() => {
-      inputState?.setDefaultValue(defaultValue);
       if (!_.isUndefined(defaultValue) && !_.isEmpty(defaultValue)) {
         formState?.setFieldValue(name, defaultValue);
       }
+      inputState?.setDefaultValue(defaultValue);
     }, [defaultValue]);
 
     const child = _.first(React.Children.toArray(children));
@@ -90,7 +90,8 @@ export const withFBInput = <T extends FBInputProps>(
         disabled,
         onChange,
         defaultValue,
-        ...(type === "datepicker") && { value: inputState?.value },
+        ...(type !== "texteditor" && { value }),
+        // ...(type === "datepicker") && { value: inputState?.value },
         // ...(type !== "texteditor" && { value }),
         // ...(type !== "datepicker" && type !== "autocomplete" && !_.isBoolean(defaultValue) && { defaultValue: inputState?.defaultValue }),
       });

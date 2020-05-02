@@ -29,6 +29,7 @@ export class FBSchemaState {
     "subsection",
     "stepsection",
     "teststep",
+    "purchaseorder",
   ];
 
   private static control: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {

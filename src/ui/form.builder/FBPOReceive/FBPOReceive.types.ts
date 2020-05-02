@@ -1,7 +1,7 @@
 import { FBPOReceiveState } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { FBDialogState } from "../FBDialog";
-import { PurchaseOrderItem } from "../FBPurchaseOrder/FBPurchaseOrder.types";
+import { PurchaseOrderItem } from "../FBPurchaseOrder_/FBPurchaseOrder.types";
 import { FBInputProps } from "../types/common";
 
 export type FBPOReceiveProps =

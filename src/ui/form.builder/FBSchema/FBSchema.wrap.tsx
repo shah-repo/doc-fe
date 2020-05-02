@@ -39,7 +39,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
     }
 
     useObserver(() => {
-      schema = schema || schemaState?.schema;
+      schema = schemaState?.schema;
     });
 
     return Component({

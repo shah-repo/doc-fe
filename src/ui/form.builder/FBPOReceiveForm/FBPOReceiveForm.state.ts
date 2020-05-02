@@ -7,7 +7,7 @@ import { documentPreviewPath } from "../../document.revision/utils/paths";
 import { toNewVersionRequestBody } from "../../documentRevision/forms/transform";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
-import { PurchaseOrderItem } from "../FBPurchaseOrder";
+import { PurchaseOrderItem } from "../FBPurchaseOrder_/FBPurchaseOrder.types";
 import FBStore from "../stores/ui/FBStore";
 
 export class FBPOReceiveFormState  {

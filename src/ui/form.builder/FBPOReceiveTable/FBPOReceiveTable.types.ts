@@ -1,4 +1,5 @@
-import { FBPOReceiveProps, PurchaseOrderItem } from "..";
+import { FBPOReceiveProps } from "..";
+import { PurchaseOrderItem } from "../FBPurchaseOrder_/FBPurchaseOrder.types";
 
 export type FBPOReceiveTableProps =
 & Pick<FBPOReceiveProps, "items" | "name">

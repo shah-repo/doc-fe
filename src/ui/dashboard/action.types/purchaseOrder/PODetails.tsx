@@ -3,7 +3,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import React, { useState } from "react";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
 import Text from "../../../components/Text";
-import { PurchaseOrder } from "../../../form.builder/FBPurchaseOrder/FBPurchaseOrder.types";
+import { PurchaseOrder } from "../../../form.builder/FBPurchaseOrder_/FBPurchaseOrder.types";
 import POAttachments from "./POAttachments";
 import PODetailItem from "./PODetailItem";
 import POSupplier from "./POSupplier";

@@ -5,7 +5,7 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { toastError } from "../../components/notifications";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
-import { PurchaseOrderItem } from "../FBPurchaseOrder/FBPurchaseOrder.types";
+import { PurchaseOrderItem } from "../FBPurchaseOrder_/FBPurchaseOrder.types";
 import { FBInputProps } from "../types/common";
 import { FBEditorElementType } from "../types/editor";
 
