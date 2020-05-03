@@ -40,6 +40,7 @@ import FBInlineApproval from "../FBInlineApproval";
 import FBInstructionsDocument from "../FBInstructionsDocument";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
+import FBPOApprovalMatrix from "../FBPOApprovalMatrix";
 import FBPurchaseOrder from "../FBPurchaseOrder";
 import { FBQuantityField } from "../FBQuantityField";
 import { FBSelectDocument } from "../FBSelectDocument";
@@ -67,6 +68,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   hellosign: FBLabelEditor,
   purchaseorder: FBLabelEditor,
   approvalMatrix: FBLabelEditor,
+  poApprovalMatrix: FBLabelEditor,
   paragraph: FBEditorParagraph,
   stepsection: FBEditorStepSection,
   teststep: FBEditorStepSection,
@@ -103,6 +105,7 @@ export const FBFieldComponent: Dictionary<any> = {
   action: FBActionContainer,
   hellosign: FBHelloSign,
   approvalMatrix: FBApprovalMatrix,
+  poApprovalMatrix: FBPOApprovalMatrix,
   purchaseorder: FBPurchaseOrder,
   paragraph: FBParagraph,
   stepsection: FBSectionBox,
@@ -140,6 +143,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "timer",
     "purchaseorder",
     "approvalMatrix",
+    "poApprovalMatrix",
     "instructionsmediaupload",
     "evidencemediaupload",
     "testRequirement",

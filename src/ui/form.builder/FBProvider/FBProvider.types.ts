@@ -1,5 +1,6 @@
 import { FBDialogState, FBFieldWrapperState, FBFormState, FBInlineApprovalState, FBMediaAlbumState, FBSchemaState, FBSnackbarState, FBTestStepState, FBWorkspaceState } from "..";
 import { FBApprovalMatrixState } from "../FBApprovalMatrix";
+import { FBPOApprovalMatrixState } from "../FBPOApprovalMatrix";
 import { FBPurchaseOrderState } from "../FBPurchaseOrder";
 
 export interface FBProviderProps {
@@ -13,5 +14,6 @@ export interface FBProviderProps {
   testStepState?: FBTestStepState;
   poState?: FBPurchaseOrderState;
   amState?: FBApprovalMatrixState;
+  poamState?: FBPOApprovalMatrixState;
   snackbarState?: FBSnackbarState;
 }
