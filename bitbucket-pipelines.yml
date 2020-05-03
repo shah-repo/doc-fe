@@ -127,6 +127,24 @@ definitions:
           - ./aws/bash_scripts/publish.sh "prod"
         trigger: manual
 #
+# SANDBOX
+#
+    - step: &BUILD_SANDBOX
+        <<: *COMMON_BUILD
+        name: Building for Sandbox
+        script:
+          - ./aws/bash_scripts/build.sh "sandbox"
+        artifacts:
+          - compiled.tar.gz
+
+    - step: &DEPLOY_SANDBOX
+        <<: *COMMON_DEPLOY 
+        name: Deploy to Sandbox
+        deployment: Sandbox
+        script:
+          - ./aws/bash_scripts/publish.sh "sandbox"
+        trigger: manual
+#
 # Pipelines
 #
 pipelines:
@@ -187,3 +205,10 @@ pipelines:
           # - step: *RUN_LINTER
           - step: *BUILD_DEMO
       - step: *DEPLOY_DEMO
+
+    ENC-2950:
+      - parallel:
+          - step: *RUN_TESTS
+          # - step: *RUN_LINTER
+          - step: *BUILD_SANDBOX
+      - step: *DEPLOY_SANDBOX
