@@ -1,11 +1,39 @@
 import _ from "lodash";
 import { action, get, observable, set } from "mobx";
 import React from "react";
-import { FBSchemaProps } from ".";
-import { FBCheckboxGroup, FBInputProps, FBInputType } from "..";
+import { FBInputProps, FBInputType, FBSchemaProps } from "..";
+import FBActionContainer from "../components/actions/FBActionContainer";
+import FBCheckbox from "../components/inputs/FBCheckbox";
+import FBDatePicker from "../components/inputs/FBDatePicker";
+import FBRadio from "../components/inputs/FBRadio";
+import FBRadioGroup from "../components/inputs/FBRadioGroup";
+import FBSelect from "../components/inputs/FBSelect";
+import FBTextEditorField from "../components/inputs/FBTextEditorField";
+import FBSectionBox from "../components/layout/FBSectionBox";
+import FBSubSectionBox from "../components/layout/FBSubSectionBox";
+import FBFileUpload from "../components/navigation/FBFileUpload";
+import FBLink from "../components/navigation/FBLink";
+import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaItem";
+import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
+import { FBApproval } from "../FBApproval";
+import { FBApprovalMatrix } from "../FBApprovalMatrix";
+import { FBAutocompleteAsync } from "../FBAutocompleteAsync";
+import { FBButton } from "../FBButton";
+import { FBCheckboxGroup } from "../FBCheckboxGroup";
+import { FBInlineApproval } from "../FBInlineApproval";
+import { FBInstructionsDocument } from "../FBInstructionsDocument";
+import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
+import { FBPOReceive } from "../FBPOReceive";
+import { FBPurchaseOrder } from "../FBPurchaseOrder";
+import { FBQuantityField } from "../FBQuantityField";
 import { FBSection } from "../FBSection";
+import { FBSelectDocument } from "../FBSelectDocument";
+import { FBSelectRequirement } from "../FBSelectRequirement";
+import { FBTestRequirement } from "../FBTestRequirement";
+import { FBTestStep } from "../FBTestStep";
 import { FBTextField } from "../FBTextField";
+import { FBTimerField } from "../FBTimerField";
 
 export class FBSchemaState {
   public static omitLabel: FBInputType[] = ["section", "subsection"];
@@ -23,10 +51,41 @@ export class FBSchemaState {
     // radio: FBRadio,
     // radiogroup: FBRadioGroup,
     // fileupload: FBFileUpload,
-    // autocomplete: FBAutocomplete,
-    // autocompleteasync: FBAutocompleteAsync,
+    autocomplete: FBAutocompleteAsync,
+    autocompleteasync: FBAutocompleteAsync,
     // schemaselect: FBSchemaSelect,
     paragraph: FBParagraph,
+
+    // OLD: to be removed
+    subsection: FBSubSectionBox,
+    checkbox: FBCheckbox,
+    datepicker: FBDatePicker,
+    texteditor: FBTextEditorField,
+    select: FBSelect,
+    radio: FBRadio,
+    radiogroup: FBRadioGroup,
+    hyperlink: FBLink,
+    fileupload: FBFileUpload,
+    schemaSelect: FBValidatorSchemaSelect,
+    schemaItem: FBValidatorSchemaItem,
+    action: FBActionContainer,
+    approvalMatrix: FBApprovalMatrix,
+    purchaseorder: FBPurchaseOrder,
+    poreceive: FBPOReceive,
+    stepsection: FBSectionBox,
+    teststep: FBTestStep,
+    instructionsmediaupload: FBMediaAlbumField,
+    evidencemediaupload: FBMediaAlbumField,
+    checkpoint: FBButton,
+    approval: FBApproval,
+    createlabel: FBButton,
+    quantity: FBQuantityField,
+    timer: FBTimerField,
+    inlineapproval: FBInlineApproval,
+    instructionsdocument: FBInstructionsDocument,
+    selectdocument: FBSelectDocument,
+    selectrequirement: FBSelectRequirement,
+    testRequirement: FBTestRequirement,
   };
 
   public controlProps: FBInputProps | undefined;

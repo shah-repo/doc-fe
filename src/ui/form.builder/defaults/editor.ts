@@ -24,23 +24,25 @@ import FBFileUpload from "../components/navigation/FBFileUpload";
 import FBLink from "../components/navigation/FBLink";
 import FBValidatorSchemaItem from "../components/validation/FBValidatorSchemaItem";
 import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaSelect";
-import FBApproval from "../FBApproval";
-import FBApprovalMatrix from "../FBApprovalMatrix";
+import { FBApproval } from "../FBApproval";
+import { FBApprovalMatrix } from "../FBApprovalMatrix";
 import { FBAutocompleteAsync } from "../FBAutocompleteAsync";
-import FBEditorApprovalField from "../FBEditorApprovalField";
-import FBEditorInlineApproval from "../FBEditorInlineApproval";
+import { FBDynamicControl } from "../FBDynamicControl";
+import { FBEditorApprovalField } from "../FBEditorApprovalField";
+import { FBEditorInlineApproval } from "../FBEditorInlineApproval";
 import { FBEditorInstructionsDocument } from "../FBEditorInstructionsDocument";
 import FBEditorParagraph from "../FBEditorParagraph/FBEditorParagraph";
 import { FBEditorSelectDocument } from "../FBEditorSelectDocument";
 import { FBEditorSelectRequirement } from "../FBEditorSelectRequirement";
-import FBEditorStepSection from "../FBEditorStepSection";
+import { FBEditorStepSection } from "../FBEditorStepSection";
 import { FBEditorTestRequirement } from "../FBEditorTestRequirement";
-import FBHelloSign from "../FBHelloSign";
-import FBInlineApproval from "../FBInlineApproval";
-import FBInstructionsDocument from "../FBInstructionsDocument";
+import { FBHelloSign } from "../FBHelloSign";
+import { FBInlineApproval } from "../FBInlineApproval";
+import { FBInstructionsDocument } from "../FBInstructionsDocument";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
 import FBPOApprovalMatrix from "../FBPOApprovalMatrix";
+import { FBPOReceive } from "../FBPOReceive";
 import FBPurchaseOrder from "../FBPurchaseOrder";
 import { FBQuantityField } from "../FBQuantityField";
 import { FBSelectDocument } from "../FBSelectDocument";
@@ -62,11 +64,13 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   radio: FBControlEditor,
   radiogroup: FBControlGroupEditor,
   autocomplete: FBAutocompleteEditor,
+  autocompleteasync: FBAutocompleteEditor,
   hyperlink: FBHyperlinkEditor,
   fileupload: FBLabelStepperEditor,
   action: FBActionEditor,
   hellosign: FBLabelEditor,
   purchaseorder: FBLabelEditor,
+  poreceive: FBLabelEditor,
   approvalMatrix: FBLabelEditor,
   poApprovalMatrix: FBLabelEditor,
   paragraph: FBEditorParagraph,
@@ -98,6 +102,7 @@ export const FBFieldComponent: Dictionary<any> = {
   radio: FBRadio,
   radiogroup: FBRadioGroup,
   autocomplete: FBAutocompleteAsync,
+  autocompleteasync: FBAutocompleteAsync,
   hyperlink: FBLink,
   fileupload: FBFileUpload,
   schemaSelect: FBValidatorSchemaSelect,
@@ -107,6 +112,7 @@ export const FBFieldComponent: Dictionary<any> = {
   approvalMatrix: FBApprovalMatrix,
   poApprovalMatrix: FBPOApprovalMatrix,
   purchaseorder: FBPurchaseOrder,
+  poreceive: FBPOReceive,
   paragraph: FBParagraph,
   stepsection: FBSectionBox,
   teststep: FBTestStep,
@@ -122,6 +128,7 @@ export const FBFieldComponent: Dictionary<any> = {
   selectdocument: FBSelectDocument,
   selectrequirement: FBSelectRequirement,
   testRequirement: FBTestRequirement,
+  dynamiccontrol: FBDynamicControl,
 };
 
 export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
@@ -142,12 +149,14 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "quantity",
     "timer",
     "purchaseorder",
+    "poreceive",
     "approvalMatrix",
     "poApprovalMatrix",
     "instructionsmediaupload",
     "evidencemediaupload",
     "testRequirement",
   ],
+  dynamiccontrols: ["dynamiccontrol"],
   approvals: ["hellosign", "approval", "inlineapproval"],
   buttons: ["checkpoint", "createlabel"],
   instructions: ["instructionsdocument", "selectdocument", "selectrequirement"],

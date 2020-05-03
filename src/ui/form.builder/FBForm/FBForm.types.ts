@@ -9,4 +9,5 @@ export interface FBFormProps {
   schema?: FBSchemaProps[];
   workspaceMode?: FBWorkspaceMode;
   errorValidation?: boolean;
+  initialValidation?: boolean;
 }

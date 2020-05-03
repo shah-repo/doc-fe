@@ -16,10 +16,10 @@ export const withFBTextField = <T extends FBTextFieldProps>(
     );
 
     return Component({
-        ...(props as T),
-        multiline,
-        rows,
-      });
+      ...(props as T),
+      multiline,
+      rows,
+    });
   };
   return (props: T) => Comp(props);
 };

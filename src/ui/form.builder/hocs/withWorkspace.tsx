@@ -1,4 +1,4 @@
-import { Dictionary } from "lodash";
+import _, { Dictionary } from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
 import { FB, FBSnackbarState } from "..";
@@ -37,7 +37,7 @@ export const withWorkspace = <T extends FBWorkspaceProps>(
       ...props,
       isStarter,
       mode,
-      schema,
+      schema: _.uniqBy(schema || [], "name"), // OLD: to be removed
       values,
       form: props.form,
       dialogState,

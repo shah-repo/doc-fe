@@ -7,7 +7,6 @@ import Text from "../../../components/Text";
 import Colors from "../../../layout/theme/utils/colors";
 import { FBPurchaseOrderTableProps, PurchaseOrderItem } from "../FBPurchaseOrder.types";
 import FBPurchaseOrderDialog from "../form/FBPurchaseOrderDialog";
-import FBPurchaseOrderItemDialog from "../lot/FBPurchaseOrderItemDialog";
 import { withFBPurchaseOrderTable } from "./FBPurchaseOrderTable.wrap";
 
 const StyledTableCell = withStyles((theme) => ({
@@ -130,16 +129,6 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
           initialValues={initialValues}
           onSubmit={onSubmit}
           name={name}
-        />
-      }
-      {
-        isDocumentReleased && isDialogOpen &&
-        <FBPurchaseOrderItemDialog
-          isDialogOpen={isDialogOpen}
-          initialValues={initialValues}
-          onSubmit={onSubmit}
-          name={name}
-          closeDialog={closeDialog}
         />
       }
     </Box>

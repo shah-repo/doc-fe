@@ -1,6 +1,7 @@
 import flatten from "flat";
 import _, { Dictionary } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
+import { FBInputState } from "..";
 import { FBSchemaProps, FBSchemaState } from "../FBSchema";
 
 export class FBFormState extends FBSchemaState {
@@ -11,6 +12,7 @@ export class FBFormState extends FBSchemaState {
   @observable public values: Dictionary<any> = {};
   @observable public errors: Dictionary<string> = {};
   @observable public helpers = new Map<string, string>();
+  @observable public inputState = new Map<string, FBInputState>();
 
   public constructor(schema?: FBSchemaProps[]) {
     super();
@@ -32,18 +34,34 @@ export class FBFormState extends FBSchemaState {
 
   @action public getValues = () => get(this, "values");
 
-  @action public getFieldValue = (fieldName: string | undefined, defaultValue: any = undefined): any => {
+  @action public getFieldValue = (
+    fieldName: string | undefined, defaultValue: any = undefined): any => {
     if (!fieldName) {
       return defaultValue;
     }
-    return _.get(this.values, fieldName) || defaultValue;
+    if (!_.get(this.values, fieldName) && !_.isUndefined(defaultValue)) {
+      this.setFieldValue(fieldName, defaultValue);
+    }
+    return _.get(this.values, fieldName);
   };
 
-  @action public setFieldValue = (fieldName: string | undefined, value: any) => {
+  @action public setFieldValue = (
+    fieldName: string | undefined,
+    value: any,
+    withState = false,
+  ) => {
     if (!fieldName) {
       return;
     }
-    this.setValues(_.set(this.values, fieldName, value));
+    if (_.isUndefined(value)) {
+      this.omitFieldValue(fieldName);
+    } else {
+      this.setValues(_.set(this.values, fieldName, value));
+    }
+    if (withState) {
+      this.inputState.get(fieldName)?.setValue(this.getFieldValue(fieldName));
+      this.inputState.get(fieldName)?.setValue(value);
+    }
   };
 
   @action public omitFieldValue = (fieldName?: string) => {
@@ -97,27 +115,32 @@ export class FBFormState extends FBSchemaState {
     };
   };
 
-  @action public validate = () => {
+  @action public validate = (callback?: (valid: boolean) => any) => {
     if (_.isUndefined(this.Validator)) {
       return;
     }
 
     const rules = this.getRules();
-    const values = flatten(this.getValues());
+    const values =  _.mapValues(this.getValues(), (v, k) => {
+      if (_.isBoolean(v)) {
+        return _.toString(v);
+      } else if (_.isObject(v) && !_.isArray(v)) {
+        return flatten(v);
+      }
+      return v;
+    });
     const validator = new this.Validator(values, rules);
     validator.setAttributeNames(this.validationAttributeNames);
 
     this.helpers.clear();
     function passes() {
-      // eslint-disable-next-line no-console
-      console.log("Validation passed");
+      callback && callback(true);
     }
 
     validator.checkAsync(passes, () => {
       const errors = validator.errors.all();
-      _.map(errors, (v, k) => {
-        this.setFieldHelper(k, _.join(v, "\n"));
-      });
+      _.map(errors, (v, k) => this.setFieldHelper(k, _.join(v, "\n")));
+      callback && callback(false);
     });
   };
 }

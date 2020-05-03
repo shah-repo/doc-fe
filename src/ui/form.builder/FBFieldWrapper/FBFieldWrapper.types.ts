@@ -4,11 +4,12 @@ import { FBStateProps } from "../helpers/FBStateProps";
 import { FBInputProps } from "../types/common";
 
 export type FBFieldWrapperProps =
-  & Pick<FBInputProps, "index" | "children">
+  & Pick<FBInputProps, "index" | "children" | "designDisabled">
   & Pick<BoxProps, "onMouseOver" | "onMouseLeave">
   & FBStateProps<FBFieldWrapperState>
   & {
     toolsVisible?: "visible" | "hidden";
+    addToolVisible?: "visible" | "hidden";
     markDownVisible?: boolean;
     topBarMargin?: number;
     bottomBarMargin?: number;
