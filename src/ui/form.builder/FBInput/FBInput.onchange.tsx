@@ -92,7 +92,6 @@ export const withFBOnChange = <T extends FBInputProps>(
     }
 
     const onChange = ((ev: React.ChangeEvent<any> | any, value: any) => {
-      props.onChange && props.onChange(ev, value, schemaState || formState || workspaceState);
       if (!formState) {
         return;
       }
@@ -124,6 +123,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       };
 
       (changedValue[type || ""] || changedValue.default)();
+      props.onChange && props.onChange(ev, value, schemaState || formState || workspaceState);
       formState.validate();
     });
 

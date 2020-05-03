@@ -1,15 +1,18 @@
 import React from "react";
-import { FBButton, FBPurchaseOrderProps, FBPurchaseOrderTable, FBPurchaseOrderTotal, FBSection } from "..";
+import { FBButton, FBDialog, FBProvider, FBPurchaseOrderProps, FBPurchaseOrderTable, FBPurchaseOrderTotal, FBSection } from "..";
 import { withFBPurchaseOrder } from "./FBPurchaseOrder.wrap";
 
 
 const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
   handleAddItem,
+  purchaseOrderState,
+  dialogState,
   label,
   disabled,
   ...props
 }) => (
-  <>
+  <FBProvider {...{ purchaseOrderState, dialogState }}>
+    <FBDialog />
     <FBSection {...{ label }}  />
     <FBPurchaseOrderTable />
     <FBButton
@@ -21,7 +24,7 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
       style={{ margin: 0 }}
     />
     <FBPurchaseOrderTotal />
-  </>
+  </FBProvider>
 );
 
 export default withFBPurchaseOrder(FBPurchaseOrder);

@@ -1,26 +1,36 @@
 import { Box } from "@material-ui/core";
 import React from "react";
+import { FormattedNumber } from "react-intl";
 import { FBButton, FBPurchaseOrderActionsProps, FBSubmitButton } from "..";
+import Text from "../../components/Text";
+import { withFBPurchaseOrderActions } from "./FBPurchaseOrderActions.wrap";
 
 
 const FBPurchaseOrderActions: React.FunctionComponent<FBPurchaseOrderActionsProps> = ({
   onAddClick,
   onCancelClick,
+  totalPrice = 0,
   ...props
 }) => (
-  <Box display="flex" flexDirection="row-reverse" mx={3}>
-    <FBSubmitButton
-      variant="outlined"
-      label="common.add"
-      onClick={onAddClick}
-      autoFocus
-    />
-    <FBButton
-      variant="outlined"
-      label="common.cancel"
-      onClick={onCancelClick}
-    />
-  </Box>
+  <>
+    <Box display="flex" flexDirection="row-reverse" fontSize="h6.fontSize" mx={3} mb={1}>
+      <Text translation="form.builder.total" />
+      <FormattedNumber value={totalPrice} style="currency" currency="USD" />
+    </Box>
+    <Box display="flex" flexDirection="row-reverse" mx={2}>
+      <FBSubmitButton
+        variant="outlined"
+        label="common.add"
+        onClick={onAddClick}
+        autoFocus
+      />
+      <FBButton
+        variant="outlined"
+        label="common.cancel"
+        onClick={onCancelClick}
+      />
+    </Box>
+  </>
 );
 
-export default FBPurchaseOrderActions;
+export default withFBPurchaseOrderActions(FBPurchaseOrderActions);

@@ -1,17 +1,24 @@
+import { useObserver } from "mobx-react";
 import React from "react";
-import { FBPurchaseOrderActionsProps } from "..";
+import { FB, FBPurchaseOrderActionsProps } from "..";
 
 export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
+    totalPrice,
     ...props
   }: T) => {
 
-    console.log(props);
+    const { purchaseOrderState } = FB.useStores();
+
+    useObserver(() => {
+      totalPrice = purchaseOrderState?.totalPrice || 0;
+    });
 
     return Component({
-      ...(props),
+      ...(props as T),
+      totalPrice,
     });
   };
 

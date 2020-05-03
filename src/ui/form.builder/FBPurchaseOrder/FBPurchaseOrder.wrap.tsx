@@ -1,15 +1,18 @@
 import React from "react";
-import { FB, FBForm, FBPurchaseOrderActions, FBPurchaseOrderForm, FBPurchaseOrderProps } from "..";
+import { FB, FBDialogState, FBForm, FBPurchaseOrderActions, FBPurchaseOrderForm, FBPurchaseOrderProps, FBPurchaseOrderState } from "..";
 
 export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     handleAddItem,
+    purchaseOrderState,
+    dialogState,
     ...props
   }: T) => {
 
-    const { dialogState } = FB.useStores();
+    purchaseOrderState = FB.useRef<FBPurchaseOrderState>(FBPurchaseOrderState);
+    dialogState = FB.useRef<FBDialogState>(FBDialogState);
 
     handleAddItem = () => {
       dialogState?.config({
@@ -28,6 +31,8 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
     return Component({
       ...(props as T),
       handleAddItem,
+      purchaseOrderState,
+      dialogState,
     });
   };
 

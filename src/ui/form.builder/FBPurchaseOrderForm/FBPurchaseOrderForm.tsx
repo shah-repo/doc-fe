@@ -5,6 +5,7 @@ import { withFBPurchaseOrderForm } from "./FBPurchaseOrderForm.wrap";
 
 const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = ({
   handlePartTitle,
+  handleTotal,
   children,
   ...props
 }) => (
@@ -13,6 +14,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
       label="form.builder.field.qunatity.ordered"
       name="order"
       rules="required"
+      onChange={handleTotal}
     />
     <FBAutocompleteAsync
       label="GL code"
@@ -56,6 +58,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
       label="form.builder.field.unit.price"
       name="unitPrice"
       rules="required"
+      onChange={handleTotal}
     />
     <FBCheckbox
       label="form.builder.field.capital.equipment"
