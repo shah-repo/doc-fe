@@ -61,16 +61,22 @@ export const Approvers: React.FunctionComponent<Props> = ({
 
   const renderGroupApproversResults = () => {
     const uniqGroups = uniqBy(documentTypeGroups, "id");
-    const selectedEmployees = values?.approvals.map((e) => e.value);
+    const selectedEmployees = (values?.approvals || []).map((e) => e.value);
     return (
       <Box display="flex" flexWrap="wrap">
-        {uniqGroups.map((group) =>
-          <Box marginRight={6} marginBottom={4} key={group.id} display="inline-flex">
-            {group.joinedEmployees.some((employee) => selectedEmployees?.includes(employee.id)) ? <CheckedMark /> : <UncheckedMark />}
-            <Box paddingLeft={1} display="initial">
-              <Text message={group.name} />
-            </Box></Box>
-        )}
+        {
+          uniqGroups.map((group) =>
+            <Box marginRight={6} marginBottom={4} key={group.id} display="inline-flex">
+              {
+                group
+                  .joinedEmployees
+                  .some((employee) => selectedEmployees?.includes(employee.id)) ? <CheckedMark /> : <UncheckedMark />
+              }
+              <Box paddingLeft={1} display="initial">
+                <Text message={group.name} />
+              </Box></Box>
+          )
+        }
       </Box>
     );
   };
