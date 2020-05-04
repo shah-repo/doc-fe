@@ -19,10 +19,15 @@ export const FBPurchaseOrderClasses = makeStyles({
     },
     "& tr": {
       cursor: "pointer",
+      height: "45px",
     },
     "& td": {
-      padding: "14px 8px",
+      padding: "0px 8px",
       whiteSpace: "nowrap",
+    },
+    "& .FBCheck-root": {
+      color: "#c1c1c1",
+      marginTop: "5px",
     },
   },
 });

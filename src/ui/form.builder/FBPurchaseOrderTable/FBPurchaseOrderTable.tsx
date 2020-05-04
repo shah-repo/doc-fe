@@ -3,6 +3,8 @@ import Table from "@material-ui/core/Table";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import CheckBoxIcon from "@material-ui/icons/CheckBox";
+import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 import _ from "lodash";
 import React from "react";
 import { FBMapWrapper, FBPurchaseOrderDetailsHead, FBPurchaseOrderItem, FBPurchaseOrderTableProps, FBTextField, FBTooltip } from "..";
@@ -22,10 +24,10 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
   <Table className={classes?.table}>
     <TableHead>
       <TableRow>
-        <TableCell colSpan={4}>
+        <TableCell colSpan={3}>
           <Text message="form.builder.details" />
         </TableCell>
-        <TableCell align="right">
+        <TableCell colSpan={2} align="right">
           <Text message="form.builder.field.ext.amount" />
         </TableCell>
       </TableRow>
@@ -77,6 +79,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
             <Table className={classes?.tableDetails}>
               <TableHead>
                 <TableRow>
+                  <TableCell><Text message="form.builder.field.tax" /></TableCell>
                   <TableCell align="right">
                     <Text message="form.builder.sum" />
                   </TableCell>
@@ -89,6 +92,10 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
                       key={`fb-po-item-${item.id}-${index}`}
                       onClick={() => handleItem && handleItem(item)}
                     >
+                      <TableCell align="right">
+                        {item.tax && <CheckBoxIcon className="FBCheck-root" fontSize="small" />}
+                        {!item.tax && <CheckBoxOutlineBlankIcon className="FBCheck-root" fontSize="small" />}
+                      </TableCell>
                       <TableCell align="right">
                         ${item.totalAmount}
                       </TableCell>
