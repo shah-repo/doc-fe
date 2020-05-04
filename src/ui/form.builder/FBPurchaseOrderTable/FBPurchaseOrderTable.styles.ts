@@ -17,6 +17,9 @@ export const FBPurchaseOrderClasses = makeStyles({
     "& th": {
       whiteSpace: "nowrap",
     },
+    "& tr": {
+      cursor: "pointer",
+    },
     "& td": {
       padding: "14px 8px",
       whiteSpace: "nowrap",

@@ -19,14 +19,19 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
       dialogState?.closeDialog();
     };
 
+    onCancelClick = () => {
+      dialogState?.closeDialog();
+      purchaseOrderState?.setItemTotalAmount();
+    };
+
     useObserver(() => {
-      totalPrice = purchaseOrderState?.totalAmount || 0;
+      totalPrice = purchaseOrderState?.itemTotalAmount || 0;
     });
 
     return Component({
       ...(props as T),
       onAddClick,
-      onCancelClick: dialogState?.closeDialog,
+      onCancelClick,
       totalPrice,
     });
   };

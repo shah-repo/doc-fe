@@ -1,13 +1,14 @@
 import React from "react";
-import { FB, FBDialogState, FBForm, FBPurchaseOrderActions, FBPurchaseOrderForm, FBPurchaseOrderProps, FBPurchaseOrderState } from "..";
+import { FB, FBDialogState, FBForm, FBPurchaseOrderActions, FBPurchaseOrderForm, FBPurchaseOrderItem, FBPurchaseOrderProps, FBPurchaseOrderState } from "..";
 
 export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    handleAddItem,
+    handleItem,
     purchaseOrderState,
     dialogState,
+    disabled,
     name,
     ...props
   }: T) => {
@@ -17,13 +18,17 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
     purchaseOrderState = FB.useRef<FBPurchaseOrderState>(FBPurchaseOrderState, formValue);
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
 
-    handleAddItem = () => {
+    handleItem = (item?: FBPurchaseOrderItem) => {
+      if (disabled) {
+        return;
+      }
+      purchaseOrderState?.setItemTotalAmount(item);
       dialogState?.config({
         open: true,
         maxWidth: "sm",
         title: "form.builder.add.item",
         content: (
-          <FBForm>
+          <FBForm initialValues={item}>
             <FBPurchaseOrderForm />
           </FBForm>
         ),
@@ -33,9 +38,10 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
 
     return Component({
       ...(props as T),
-      handleAddItem,
+      handleItem,
       purchaseOrderState,
       dialogState,
+      disabled,
       name,
     });
   };

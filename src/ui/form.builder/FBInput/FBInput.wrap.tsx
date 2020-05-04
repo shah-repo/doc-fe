@@ -89,11 +89,11 @@ export const withFBInput = <T extends FBInputProps>(
       children = React.cloneElement(child as React.ReactElement, {
         disabled,
         onChange,
-        defaultValue,
+        // defaultValue,
         ...(type !== "texteditor" && { value }),
         // ...(type === "datepicker") && { value: inputState?.value },
         // ...(type !== "texteditor" && { value }),
-        // ...(type !== "datepicker" && type !== "autocomplete" && !_.isBoolean(defaultValue) && { defaultValue: inputState?.defaultValue }),
+        ...(type !== "datepicker" && type !== "autocomplete" && !_.isBoolean(defaultValue) && { defaultValue }),
       });
     }
 

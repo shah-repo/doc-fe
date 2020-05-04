@@ -12,6 +12,7 @@ import { withFBPurchaseOrderTable } from "./FBPurchaseOrderTable.wrap";
 
 const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> = ({
   handleShippingCost,
+  handleItem,
   classes,
   calculation,
   disabled,
@@ -48,18 +49,19 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
               <TableBody>
                 <FBMapWrapper<FBPurchaseOrderItem[]> collection={items}>
                   {(item, index) => (
-                    <TableRow key={`fb-po-item-${item.id}-${index}`}>
+                    <TableRow
+                      key={`fb-po-item-${item.id}-${index}`}
+                      onClick={() => handleItem && handleItem(item)}
+                    >
                       <FBMapWrapper<string[]> collection={_.keys(FBPurchaseOrderDetailsHead)}>
                         {(key, index) => (
                           <TableCell align={(index > 1) ? "right" : "left"} key={`fb-po-item-${key}-${index}`}>
                             {key === "description" && (
                               <FBTooltip title={item[key]} placement="bottom">
-                                <Box>
-                                  {_.truncate(item[key], { length: 35, omission: " ..." })}
-                                </Box>
+                                <Box>{_.truncate(item[key], { length: 35, omission: " ..." })}</Box>
                               </FBTooltip>
                             )}
-                            {key !== "description" && item[key]}
+                            {key !== "description" && `${key === "unitPrice" ? "$" : ""}${item[key]}`}
                           </TableCell>
                         )}
                       </FBMapWrapper>
@@ -83,9 +85,12 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
               <TableBody>
                 <FBMapWrapper<FBPurchaseOrderItem[]> collection={items}>
                   {(item: FBPurchaseOrderItem, index) => (
-                    <TableRow key={`fb-po-item-${item.id}-${index}`}>
+                    <TableRow
+                      key={`fb-po-item-${item.id}-${index}`}
+                      onClick={() => handleItem && handleItem(item)}
+                    >
                       <TableCell align="right">
-                        {item.totalAmount}
+                        ${item.totalAmount}
                       </TableCell>
                     </TableRow>
                   )}
@@ -102,12 +107,12 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
           <Text message="form.builder.sub.total" />
         </TableCell>
         <TableCell className="FBTotal-root" align="right">
-          {calculation?.subTotal}
+          ${calculation?.subTotal}
         </TableCell>
       </TableRow>
       <TableRow>
         <TableCell className="FBTotal-root" colSpan={2}><Text message="form.builder.tax" /></TableCell>
-        <TableCell className="FBTotal-root" align="right">{calculation?.tax}</TableCell>
+        <TableCell className="FBTotal-root" align="right">${calculation?.tax}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell className="FBTotal-root" colSpan={2}><Text message="form.builder.shipping.cost" /></TableCell>
@@ -119,7 +124,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
             type="number"
             size="small"
             inputProps={{
-              style: { textAlign: "right", fontSize: 16, padding: "5px" },
+              style: { textAlign: "right", padding: "5px" },
               step: ".01",
             }}
             onChange={handleShippingCost}
@@ -129,7 +134,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
       </TableRow>
       <TableRow>
         <TableCell className="FBTotal-root" colSpan={2}><Text message="form.builder.total" /></TableCell>
-        <TableCell className="FBTotal-root" align="right">{calculation?.totalAmount}</TableCell>
+        <TableCell className="FBTotal-root" align="right">${calculation?.totalAmount}</TableCell>
       </TableRow>
     </TableBody>
   </Table>

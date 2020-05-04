@@ -5,7 +5,7 @@ import { FB, FBPurchaseOrderCalculation, FBPurchaseOrderItem, FBPurchaseOrderVal
 import { TAX_RATE } from "../helpers/constants";
 
 export class FBPurchaseOrderState  {
-  @observable public totalAmount = 0;
+  @observable public itemTotalAmount = 0;
   @observable public items: FBPurchaseOrderItem[] = [];
   @observable public calculation: FBPurchaseOrderCalculation = {
     tax: "0.00",
@@ -24,7 +24,11 @@ export class FBPurchaseOrderState  {
     set(this, "calculation", calculation);
   }
 
-  @action public setTotalAmount = (totalAmount: number) => set(this, "totalAmount", totalAmount);
+  @action public setItemTotalAmount = (item?: FBPurchaseOrderItem) => {
+    const { unitPrice = 0, order = 0 } = item || {};
+    const itemTotalAmount = _.toNumber(unitPrice) * _.toNumber(order);
+    set(this, "itemTotalAmount", itemTotalAmount);
+  };
 
   @action public setShippingCost = (shippingCost?: string) => {
     if (!shippingCost) {
@@ -38,16 +42,19 @@ export class FBPurchaseOrderState  {
     if (!item) {
       return;
     }
-    const items = _.union(this.items, [{
-      id: FB.uniqid,
-      ...item,
-      totalAmount: this.totalAmount.toFixed(2),
-      formattedDate: moment(item.date).format("MM/DD/YYYY"),
-      index: _.size(this.items) + 1,
-    }]);
+    const items: FBPurchaseOrderItem[] = _.isUndefined(item.index)
+      ? this.addItem(item)
+      : this.updateItem(item);
     set(this, "items", items);
-    this.setTotalAmount(0);
+    this.setItemTotalAmount();
     this.calculateCost();
+  };
+
+  @action public removeItem = (item?: FBPurchaseOrderItem) => {
+    if (!item) {
+      return;
+    }
+    set(this, "items", _.filter(this.items, (itm) => itm.id !== item.id));
   };
 
   @action public calculateCost = () => {
@@ -55,13 +62,8 @@ export class FBPurchaseOrderState  {
       (agg, item: any) => {
         const orderCost = Number(item.unitPrice || 0) * Number(item.order || 0);
         const subTotal = agg.subTotal + orderCost;
-
         let tax = agg.tax;
-
-        if (item.tax) {
-          tax += orderCost * TAX_RATE;
-        }
-
+        item.tax && (tax += orderCost * TAX_RATE);
         return { subTotal, tax };
       }, { tax: 0, subTotal: 0 },
     );
@@ -76,6 +78,23 @@ export class FBPurchaseOrderState  {
   };
 
   private formatCost = (value: any) => Number(value || 0).toFixed(2);
+
+  private addItem = (item: FBPurchaseOrderItem): FBPurchaseOrderItem[] => _.union(this.items, [{
+    id: FB.uniqid,
+    ...item,
+    received: 0,
+    totalAmount: this.itemTotalAmount.toFixed(2),
+    formattedDate: moment(item.date).format("MM/DD/YYYY"),
+    index: _.size(this.items),
+  }]);
+
+  private updateItem = (item: FBPurchaseOrderItem): FBPurchaseOrderItem[] => {
+    this.items[item.index] = {
+      ...item,
+      totalAmount: this.itemTotalAmount.toFixed(2),
+    };
+    return this.items;
+  };
 }
 
 export default FBPurchaseOrderState;

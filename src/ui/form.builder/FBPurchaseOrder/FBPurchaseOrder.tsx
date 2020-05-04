@@ -5,7 +5,7 @@ import { withFBPurchaseOrder } from "./FBPurchaseOrder.wrap";
 
 
 const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
-  handleAddItem,
+  handleItem,
   purchaseOrderState,
   dialogState,
   label,
@@ -17,12 +17,12 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
     <FBDialog />
     <Box mb={gutter ? 5 : 0}>
       <FBSection {...{ label }}  />
-      <FBPurchaseOrderTable {...{ name, disabled }} />
+      <FBPurchaseOrderTable {...{ name, disabled, handleItem }} />
       <FBButton
         fullWidth={true}
         disabled={disabled}
         label="form.builder.add.item"
-        onClick={handleAddItem}
+        onClick={() => handleItem && handleItem()}
         variant="outlined"
         style={{ margin: 0 }}
       />

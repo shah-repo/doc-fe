@@ -2,6 +2,7 @@ import _ from "lodash";
 import React from "react";
 import { FB, FBPurchaseOrderFormProps } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { FBPurchaseOrderItem } from "../FBPurchaseOrder/FBPurchaseOrder.types";
 
 export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
   Component: React.FunctionComponent<T>,
@@ -25,9 +26,8 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
     };
 
     handleTotal = () => {
-      const { unitPrice = 0, order = 0 } = formState?.getValues() || {};
-      const totalAmount = _.toNumber(unitPrice) * _.toNumber(order);
-      purchaseOrderState?.setTotalAmount(totalAmount);
+      const item = formState?.getValues() as FBPurchaseOrderItem;
+      purchaseOrderState?.setItemTotalAmount(item);
     };
 
     getOptionDisabled = (option: DocumentRevision) => {

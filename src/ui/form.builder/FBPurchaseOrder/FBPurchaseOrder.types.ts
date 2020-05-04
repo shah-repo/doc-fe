@@ -3,7 +3,7 @@ import { FBDialogState, FBInputProps, FBPurchaseOrderState } from "..";
 export type FBPurchaseOrderProps =
 & Pick<FBInputProps, "name" | "label" | "disabled" | "gutter">
 & {
-  handleAddItem?: () => any;
+  handleItem?: (item?: FBPurchaseOrderItem) => any;
   purchaseOrderState?: FBPurchaseOrderState;
   dialogState?: FBDialogState;
 };
