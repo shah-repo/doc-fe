@@ -14,7 +14,7 @@ export default (theme: Theme) =>
     },
     toolbar: {
       backgroundColor: theme.palette.secondary.main,
-      marginTop: 40,
+      marginTop: 20,
     },
     toolbarTitle: {
       flex: 1,
@@ -26,8 +26,5 @@ export default (theme: Theme) =>
       "&:hover": {
         color: theme.palette.secondary.light,
       },
-    },
-    list: {
-      padding: theme.spacing(3, 0),
     },
   });
