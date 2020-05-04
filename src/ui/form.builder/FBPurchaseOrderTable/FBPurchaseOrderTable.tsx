@@ -5,6 +5,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import CheckBoxIcon from "@material-ui/icons/CheckBox";
 import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
+import DeleteIcon from "@material-ui/icons/Delete";
 import _ from "lodash";
 import React from "react";
 import { FBMapWrapper, FBPurchaseOrderDetailsHead, FBPurchaseOrderItem, FBPurchaseOrderTableProps, FBTextField, FBTooltip } from "..";
@@ -14,6 +15,7 @@ import { withFBPurchaseOrderTable } from "./FBPurchaseOrderTable.wrap";
 
 const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> = ({
   handleShippingCost,
+  handleDelete,
   handleItem,
   classes,
   calculation,
@@ -39,6 +41,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
             <Table className={classes?.tableDetails}>
               <TableHead>
                 <TableRow>
+                  <TableCell />
                   <FBMapWrapper<string[]> collection={_.values(FBPurchaseOrderDetailsHead)}>
                     {(head, index) => (
                       <TableCell align={(index > 1) ? "right" : "left"} key={`fb-po-head-${head}-${index}`}>
@@ -55,6 +58,13 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
                       key={`fb-po-item-${item.id}-${index}`}
                       onClick={() => handleItem && handleItem(item)}
                     >
+                      <TableCell align="right">
+                        <DeleteIcon
+                          className="FBIcon-root"
+                          fontSize="small"
+                          onClick={handleDelete && handleDelete(index)}
+                        />
+                      </TableCell>
                       <FBMapWrapper<string[]> collection={_.keys(FBPurchaseOrderDetailsHead)}>
                         {(key, index) => (
                           <TableCell align={(index > 1) ? "right" : "left"} key={`fb-po-item-${key}-${index}`}>
@@ -93,8 +103,8 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
                       onClick={() => handleItem && handleItem(item)}
                     >
                       <TableCell align="right">
-                        {item.tax && <CheckBoxIcon className="FBCheck-root" fontSize="small" />}
-                        {!item.tax && <CheckBoxOutlineBlankIcon className="FBCheck-root" fontSize="small" />}
+                        {item.tax && <CheckBoxIcon className="FBIcon-root" fontSize="small" />}
+                        {!item.tax && <CheckBoxOutlineBlankIcon className="FBIcon-root" fontSize="small" />}
                       </TableCell>
                       <TableCell align="right">
                         ${item.totalAmount}

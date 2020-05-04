@@ -3,9 +3,10 @@ import { FBPurchaseOrderProps } from "../FBPurchaseOrder/FBPurchaseOrder.types";
 
 export type FBPurchaseOrderTableProps =
 & Pick<FBInputProps, "name" | "disabled">
-& Pick<FBPurchaseOrderProps, "handleItem">
+& Pick<FBPurchaseOrderProps, "handleItem" | "disabled">
 & {
   handleShippingCost?: (ev: React.ChangeEvent<any>) => any;
+  handleDelete?: (index: number) => (e: any) => void;
   classes?: Record<"table" | "tableDetails", string>;
   items?: FBPurchaseOrderItem[];
   calculation?: FBPurchaseOrderCalculation;

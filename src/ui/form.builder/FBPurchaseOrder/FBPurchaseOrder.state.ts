@@ -77,6 +77,16 @@ export class FBPurchaseOrderState  {
     });
   };
 
+  @action public deleteItem = (index: number) => {
+    const items = _.filter(this.items, (itm) => itm.index !== index);
+    _.map(items, (itm, index) => ({
+      ...itm,
+      index,
+    }));
+    set(this, "items", items);
+    this.calculateCost();
+  };
+
   private formatCost = (value: any) => Number(value || 0).toFixed(2);
 
   private addItem = (item: FBPurchaseOrderItem): FBPurchaseOrderItem[] => _.union(this.items, [{

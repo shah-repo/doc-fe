@@ -8,8 +8,10 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
 ) => {
   const Comp = ({
     handleShippingCost,
+    handleDelete,
     classes,
     calculation,
+    disabled,
     items,
     name,
     ...props
@@ -23,6 +25,11 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       purchaseOrderState?.setShippingCost(value);
     };
 
+    handleDelete = (index: number) => (e: any) => {
+      e.stopPropagation();
+      !disabled && purchaseOrderState && purchaseOrderState.deleteItem(index);
+    };
+
     useObserver(() => {
       calculation = purchaseOrderState?.calculation;
       items = purchaseOrderState?.items;
@@ -32,6 +39,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     return Component({
       ...(props as T),
       handleShippingCost,
+      handleDelete,
       classes,
       calculation,
       items,

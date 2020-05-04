@@ -12,6 +12,10 @@ export const FBPurchaseOrderClasses = makeStyles({
     "& .FBTotal-root": {
       padding: "10px 8px",
     },
+    "& .FBIcon-root": {
+      color: "#c1c1c1",
+      marginTop: "5px",
+    },
   },
   tableDetails: {
     "& th": {
@@ -24,10 +28,6 @@ export const FBPurchaseOrderClasses = makeStyles({
     "& td": {
       padding: "0px 8px",
       whiteSpace: "nowrap",
-    },
-    "& .FBCheck-root": {
-      color: "#c1c1c1",
-      marginTop: "5px",
     },
   },
 });
