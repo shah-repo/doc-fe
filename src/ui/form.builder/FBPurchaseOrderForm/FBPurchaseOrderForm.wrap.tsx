@@ -9,6 +9,7 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
   const Comp = ({
     handlePartTitle,
     handleTotal,
+    getOptionDisabled,
     ...props
   }: T) => {
 
@@ -29,10 +30,16 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
       purchaseOrderState?.setTotalAmount(totalAmount);
     };
 
+    getOptionDisabled = (option: DocumentRevision) => {
+      const selectedParts = _.map(purchaseOrderState?.items, "partNumber");
+      return _.includes(selectedParts, option.id);
+    };
+
     return Component({
       ...(props as T),
       handlePartTitle,
       handleTotal,
+      getOptionDisabled,
     });
   };
 

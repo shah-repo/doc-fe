@@ -6,6 +6,7 @@ import { withFBPurchaseOrderForm } from "./FBPurchaseOrderForm.wrap";
 const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = ({
   handlePartTitle,
   handleTotal,
+  getOptionDisabled,
   children,
   ...props
 }) => (
@@ -36,6 +37,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
       optionId="11"
       rules="required"
       onChange={handlePartTitle}
+      {...{ getOptionDisabled }}
     />
     <FBTextField
       label="form.builder.field.part.number.title"
