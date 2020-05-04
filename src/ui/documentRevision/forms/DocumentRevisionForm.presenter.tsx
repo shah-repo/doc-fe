@@ -2,7 +2,7 @@ import { Box, Button, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { get, isEmpty } from "lodash";
 import { observer } from "mobx-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
@@ -116,7 +116,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     userManagementSelectors.getLoadGroupsAsyncState
   );
 
-  if (!values.id && !get(values, "document.documentType.id")) {
+  if (!values.id && !values.document?.documentType?.id) {
     FBDRStore.setMode("none");
     if (setDocId) {
       setDocId("");
@@ -127,8 +127,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     window.open(documentDetailsPath(documentId), "_blank");
   };
   const formDocumentId = documentRevision && (documentRevision.formDocument?.document?.id || "");
-  const formDocuments: Document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, formDocumentId));
-  const isLastVersionObsolete = formDocuments && getIsLastVersionObsolete(formDocuments);
+  const formDocuments: Document = useSelector((state: ApplicationState) =>
+    documentRevisionsSelectors.getDocument(state, formDocumentId)
+  );
+  const isLastVersionObsolete = useMemo(() =>
+    formDocuments && getIsLastVersionObsolete(formDocuments)
+  , [formDocuments]);
 
   useEffect(() => {
     if (formDocumentId) {
@@ -136,10 +140,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formDocumentId]);
-  const isDisabled: boolean = get(initialValues, "id") !== undefined;
-  const isdocRevVersionOne = get(documentRevision, "version") === 1;
+  const isDisabled: boolean = initialValues.id !== undefined;
+  const isdocRevVersionOne = documentRevision.version === 1;
   const isdocRevStatusDraft =
-    get(documentRevision, "status") === DocumentRevisionStatus.Draft;
+    documentRevision.status === DocumentRevisionStatus.Draft;
   const outputDocEnabled: boolean =
     (isdocRevVersionOne && isdocRevStatusDraft) || !isDisabled;
 
@@ -222,7 +226,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   });
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
 
-
   const renderChangeOwnership = canChangeOwnerShip && values.id && (
     <OwnerChanger requestId={values.id} requestType={RequestType.Document} />
   );
@@ -242,15 +245,18 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       <Text translation="common.cancel.draft" />
     </Button>
   );
-  const formDocumentStatus = get(documentRevision, "formDocument.status", "");
-  const documentStatus = documentRevision && documentRevision.status;
+  const formDocumentStatus = documentRevision?.formDocument?.status || "";
+  const documentStatus = documentRevision?.status;
   const isDocumentStatusDraftOrPending =
     documentStatus === (DocumentRevisionStatus.Draft || DocumentRevisionStatus.PendingChange);
   const isFormStatusDeprecated = formDocumentStatus === DocumentRevisionStatus.Deprecated;
   const isDocTypeDisabled = type === "newVersion" || isdocRevStatusDraft;
-  const options = type === "newOutput" ? (initialValues.formDocument?.formTemplate?.outputDocumentTypes.map((e) =>
-    ({ value: e.id, text: e.documentTypeName })
-  ) as SelectOption[] || documentTypes) : documentTypes;
+  const options = useMemo(() => type === "newOutput" ?
+    (initialValues.formDocument?.formTemplate?.outputDocumentTypes.map((e) =>
+      ({ value: e.id, text: e.documentTypeName })
+    ) as SelectOption[] || documentTypes)
+    : documentTypes
+  , [documentTypes, initialValues.formDocument, type]);
 
   const canShowCancelButton = documentStatus === DocumentRevisionStatus.Draft && documentRevision.version > 1;
 
@@ -423,7 +429,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               onClick={onFormClick}
               id="DocumentRevisionForm-submit"
             />
-            {isFormStatusDeprecated && isDocumentStatusDraftOrPending && !isLastVersionObsolete && <UpgradeToLatest onUpgradeClick={onUpgradeClick}/>}
+            {
+              isFormStatusDeprecated &&
+              isDocumentStatusDraftOrPending &&
+              !isLastVersionObsolete &&
+              <UpgradeToLatest onUpgradeClick={onUpgradeClick}/>
+            }
             <ApproveAndRelease
               id={values.id}
               status={values.status}
