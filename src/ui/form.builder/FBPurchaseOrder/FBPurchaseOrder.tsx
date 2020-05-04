@@ -1,5 +1,5 @@
 import React from "react";
-import { FBButton, FBDialog, FBProvider, FBPurchaseOrderProps, FBPurchaseOrderTable, FBPurchaseOrderTotal, FBSection } from "..";
+import { FBButton, FBDialog, FBProvider, FBPurchaseOrderProps, FBPurchaseOrderTable, FBSection } from "..";
 import { withFBPurchaseOrder } from "./FBPurchaseOrder.wrap";
 
 
@@ -17,13 +17,12 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
     <FBPurchaseOrderTable />
     <FBButton
       fullWidth={true}
-      // disabled={disabled}
+      disabled={disabled}
       label="form.builder.add.item"
       onClick={handleAddItem}
       variant="outlined"
       style={{ margin: 0 }}
     />
-    <FBPurchaseOrderTotal />
   </FBProvider>
 );
 

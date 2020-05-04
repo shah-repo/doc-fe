@@ -1,17 +1,38 @@
+import { useObserver } from "mobx-react";
 import React from "react";
-import { FBPurchaseOrderTableProps } from "..";
+import { FBPurchaseOrderClasses } from ".";
+import { FB, FBPurchaseOrderTableProps } from "..";
 
 export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
+    handleShippingCost,
+    classes,
+    calculation,
+    items,
     ...props
   }: T) => {
 
-    console.log(props);
+    const { purchaseOrderState } = FB.useStores();
+    classes = FBPurchaseOrderClasses();
+
+    handleShippingCost = (ev: React.ChangeEvent<any>) => {
+      const { target: { value = 0 } = {} } = ev || {};
+      purchaseOrderState?.setShippingCost(value);
+    };
+
+    useObserver(() => {
+      calculation = purchaseOrderState?.calculation;
+      items = purchaseOrderState?.items;
+    });
 
     return Component({
-      ...(props),
+      ...(props as T),
+      handleShippingCost,
+      classes,
+      calculation,
+      items,
     });
   };
 

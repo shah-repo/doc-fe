@@ -11,4 +11,6 @@ export type FBTextFieldProps =
 | "inputProps"
 | "InputProps"
 | "variant"
-| "style">;
+| "style"
+| "size"
+>;

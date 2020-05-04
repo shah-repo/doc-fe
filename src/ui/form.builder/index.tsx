@@ -135,8 +135,6 @@ export { default as FBPurchaseOrderForm } from "./FBPurchaseOrderForm/FBPurchase
 export * from "./FBPurchaseOrderForm/FBPurchaseOrderForm.types";
 export { default as FBPurchaseOrderTable } from "./FBPurchaseOrderTable/FBPurchaseOrderTable";
 export * from "./FBPurchaseOrderTable/FBPurchaseOrderTable.types";
-export { default as FBPurchaseOrderTotal } from "./FBPurchaseOrderTotal/FBPurchaseOrderTotal";
-export * from "./FBPurchaseOrderTotal/FBPurchaseOrderTotal.types";
 export { default as FBQuantityField } from "./FBQuantityField/FBQuantityField";
 export { default as FBRadio } from "./FBRadio/FBRadio";
 export { default as FBRadioGroup } from "./FBRadioGroup/FBRadioGroup";

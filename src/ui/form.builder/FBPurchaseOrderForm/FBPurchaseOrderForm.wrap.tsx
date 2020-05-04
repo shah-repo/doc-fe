@@ -25,7 +25,8 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
 
     handleTotal = () => {
       const { unitPrice = 0, order = 0 } = formState?.getValues() || {};
-      purchaseOrderState?.setTotalPrice(_.toNumber(unitPrice) * _.toNumber(order));
+      const totalAmount = _.toNumber(unitPrice) * _.toNumber(order);
+      purchaseOrderState?.setTotalAmount(totalAmount);
     };
 
     return Component({
