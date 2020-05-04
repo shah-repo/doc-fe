@@ -8,10 +8,13 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
     handleAddItem,
     purchaseOrderState,
     dialogState,
+    name,
     ...props
   }: T) => {
 
-    purchaseOrderState = FB.useRef<FBPurchaseOrderState>(FBPurchaseOrderState);
+    const { formState } = FB.useStores();
+    const formValue = formState?.getFieldValue(name);
+    purchaseOrderState = FB.useRef<FBPurchaseOrderState>(FBPurchaseOrderState, formValue);
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
 
     handleAddItem = () => {
@@ -33,6 +36,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
       handleAddItem,
       purchaseOrderState,
       dialogState,
+      name,
     });
   };
 

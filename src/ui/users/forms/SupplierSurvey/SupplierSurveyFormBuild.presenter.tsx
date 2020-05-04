@@ -41,7 +41,7 @@ const SupplierSurveyFormBuild: React.FunctionComponent<Props> = ({
       <Box width="700px" height="38px" borderBottom={1} borderColor="grey.500" my={5}>
         <Typography align="center" variant="h4">{supplierSurvey.surveyFormDocumentRevision.name}</Typography>
       </Box>
-      <FBWorkspace mode="form" includeTransport={false} />
+      <FBWorkspace mode="form" includeTransport={false} initialValues={initialValues.formInput} />
       <Box width="700px" display="flex" justifyContent="flex-end">
         <SubmitButton
           asyncState={asyncState}

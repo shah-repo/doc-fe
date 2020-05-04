@@ -11,10 +11,11 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     classes,
     calculation,
     items,
+    name,
     ...props
   }: T) => {
 
-    const { purchaseOrderState } = FB.useStores();
+    const { purchaseOrderState, formState } = FB.useStores();
     classes = FBPurchaseOrderClasses();
 
     handleShippingCost = (ev: React.ChangeEvent<any>) => {
@@ -25,6 +26,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     useObserver(() => {
       calculation = purchaseOrderState?.calculation;
       items = purchaseOrderState?.items;
+      formState?.setFieldValue(name, { items, ...calculation });
     });
 
     return Component({
@@ -33,6 +35,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       classes,
       calculation,
       items,
+      name,
     });
   };
 

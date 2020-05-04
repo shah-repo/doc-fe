@@ -14,7 +14,9 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
   handleShippingCost,
   classes,
   calculation,
+  disabled,
   items = [],
+  name,
 }) => (
   <Table className={classes?.table}>
     <TableHead>
@@ -104,6 +106,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
         <TableCell className="FBTotal-root" colSpan={2}><Text message="form.builder.shipping.cost" /></TableCell>
         <TableCell className="FBTotal-root" align="right">
           <FBTextField
+            name={`${name}.shippingCost`}
             gutter={false}
             variant="standard"
             type="number"
@@ -113,6 +116,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
               step: ".01",
             }}
             onChange={handleShippingCost}
+            {...{ disabled }}
           />
         </TableCell>
       </TableRow>

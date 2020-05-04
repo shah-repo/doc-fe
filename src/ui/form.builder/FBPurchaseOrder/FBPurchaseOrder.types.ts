@@ -1,7 +1,7 @@
 import { FBDialogState, FBInputProps, FBPurchaseOrderState } from "..";
 
 export type FBPurchaseOrderProps =
-& Pick<FBInputProps, "name" | "label" | "disabled">
+& Pick<FBInputProps, "name" | "label" | "disabled" | "gutter">
 & {
   handleAddItem?: () => any;
   purchaseOrderState?: FBPurchaseOrderState;
@@ -35,3 +35,9 @@ export interface FBPurchaseOrderCalculation {
   totalAmount: string;
   shippingCost: string;
 }
+
+export type FBPurchaseOrderValue =
+& FBPurchaseOrderCalculation
+& {
+  items?: FBPurchaseOrderItem[];
+};

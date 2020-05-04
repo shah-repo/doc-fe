@@ -3,6 +3,7 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { FBSchemaComponentProps, FBSchemaProps, FBSchemaState } from ".";
 import { FB, FBSortable } from "..";
+import FBStore from "../stores/ui/FBStore";
 
 export const withFBSchema = <T extends FBSchemaComponentProps>(
   Component: React.FunctionComponent<T>
@@ -34,6 +35,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
       }
       return _.map(schema, (schemaItem, index) => controlRenderer({
         ...schemaItem,
+        disabled: FBStore.fieldMode.disabled, // OLD: to be removed
         index,
       }));
     }

@@ -112,6 +112,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
           <FBWorkspace
             documentId={_.get(formDocument, "document.id") || _.get(document, "id")}
             document={dataProp}
+            initialValues={dataProp.formInput}
           />
         </Box>
       )}

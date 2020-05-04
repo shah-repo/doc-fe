@@ -406,6 +406,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               id={get(values, "id")}
               documentId={get(values, "formDocument.document.id") || get(values, "document.id")}
               document={values as unknown as DocumentRevision}
+              initialValues={values.formInput}
             />
           </Box>
         )}

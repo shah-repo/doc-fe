@@ -31,7 +31,6 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     mode,
     isStarter,
     active,
-    initialValues,
     // OLD: to be removed
     id = "",
     documentId = "",
@@ -59,7 +58,6 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       active = workspaceState?.active;
       schema = workspaceState?.schema;
       mode = workspaceState?.mode;
-      initialValues = workspaceState?.initialValues;
     });
 
     return Component({
@@ -68,7 +66,6 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       active,
       schema,
       mode,
-      initialValues,
       dialogState,
       workspaceState,
     });

@@ -5,6 +5,7 @@ export type FBSchemaProps = Pick<FBInputProps,
 | "label"
 | "name"
 | "type"
+| "disabled"
 | "index"
 | "placeholder"
 | "rows"

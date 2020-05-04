@@ -3,6 +3,7 @@ import _, { Dictionary } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBInputState } from "..";
 import { FBSchemaProps, FBSchemaState } from "../FBSchema";
+import FBStore from "../stores/ui/FBStore";
 
 export class FBFormState extends FBSchemaState {
   public rules: Dictionary<string> = {};
@@ -30,6 +31,9 @@ export class FBFormState extends FBSchemaState {
 
   @action public setValues = (values: Dictionary<any>) => {
     set(this.values, values);
+
+    // OLD: to be removed
+    FBStore.setValues(values);
   };
 
   @action public getValues = () => this.values;

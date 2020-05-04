@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { action, observable, set } from "mobx";
 import moment from "moment";
-import { FB, FBPurchaseOrderCalculation, FBPurchaseOrderItem } from "..";
+import { FB, FBPurchaseOrderCalculation, FBPurchaseOrderItem, FBPurchaseOrderValue } from "..";
 import { TAX_RATE } from "../helpers/constants";
 
 export class FBPurchaseOrderState  {
@@ -13,6 +13,16 @@ export class FBPurchaseOrderState  {
     totalAmount: "0.00",
     shippingCost: "0.00",
   };
+
+  public constructor(initialValues?: FBPurchaseOrderValue) {
+    if (!initialValues) {
+      return;
+    }
+    const { items } = initialValues || {};
+    const calculation = _.omit(initialValues, "items");
+    set(this, "items", items);
+    set(this, "calculation", calculation);
+  }
 
   @action public setTotalAmount = (totalAmount: number) => set(this, "totalAmount", totalAmount);
 
@@ -55,11 +65,13 @@ export class FBPurchaseOrderState  {
         return { subTotal, tax };
       }, { tax: 0, subTotal: 0 },
     );
-    const totalAmount = sum.tax + sum.subTotal + Number(this.calculation.shippingCost || 0);
+    const shippingCost = this.calculation.shippingCost || 0;
+    const totalAmount = sum.tax + sum.subTotal + Number(shippingCost);
     set(this, "calculation", {
       subTotal: this.formatCost(sum.subTotal),
       tax: this.formatCost(sum.tax),
       totalAmount: this.formatCost(totalAmount),
+      shippingCost: this.formatCost(shippingCost),
     });
   };
 

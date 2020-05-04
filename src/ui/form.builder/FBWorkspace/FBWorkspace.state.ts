@@ -1,11 +1,10 @@
-import _, { Dictionary } from "lodash";
+import _ from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBWorkspaceConstructor, FBWorkspaceMode } from ".";
 import { FBSchemaState } from "..";
 
 export class FBWorkspaceState extends FBSchemaState {
   @observable public mode: FBWorkspaceMode = "none";
-  @observable public initialValues: Dictionary<any> = {};
 
   public constructor({ schema, mode }: FBWorkspaceConstructor) {
     super(schema);
@@ -32,10 +31,6 @@ export class FBWorkspaceState extends FBSchemaState {
       return _.includes(mode, this.mode);
     }
     return this.mode === mode;
-  };
-
-  @action public setInitialValues = (initialValues: Dictionary<any>) => {
-    set(this, "initialValues", initialValues);
   };
 }
 
