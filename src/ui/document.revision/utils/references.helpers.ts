@@ -16,6 +16,7 @@ const handleReferenceForDeprecated = (documentRevisions: DocumentRevision[], dep
 
   return documentRevisions.find((docRev) => docRev.status === DocumentRevisionStatus.Released);
 };
+
 const getCorrectDocRev = (
   status: DocumentRevisionStatus,
   deprecatedAt: string,
@@ -37,11 +38,6 @@ const getCorrectDocRev = (
   return released;
 };
 
-const getReferenceToUrl = (
-  documentId: string,
-  documentRevisionId: string,
-): string => documentVersionPath(documentRevisionId, documentId);
-
 export const getReferenceToSummary = (dataProp: Reference[], status: DocumentRevisionStatus, deprecatedAt: string) => {
   const summaries: ReferenceSummary[] = [];
 
@@ -55,7 +51,7 @@ export const getReferenceToSummary = (dataProp: Reference[], status: DocumentRev
     summaries.push(
       {
         id: ref.id,
-        url: getReferenceToUrl(ref.id, docRev.id),
+        url: documentVersionPath(docRev.id, ref.id),
         title: `${ref.docId} - ${docRev.name}`,
       },
     );
