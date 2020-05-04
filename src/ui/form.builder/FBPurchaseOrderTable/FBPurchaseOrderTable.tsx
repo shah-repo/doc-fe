@@ -5,7 +5,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import _ from "lodash";
 import React from "react";
-import { FBMapWrapper, FBPurchaseOrderDetailsHead, FBPurchaseOrderItem, FBPurchaseOrderTableProps, FBTextField } from "..";
+import { FBMapWrapper, FBPurchaseOrderDetailsHead, FBPurchaseOrderItem, FBPurchaseOrderTableProps, FBTextField, FBTooltip } from "..";
 import Text from "../../components/Text";
 import { withFBPurchaseOrderTable } from "./FBPurchaseOrderTable.wrap";
 
@@ -52,7 +52,14 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
                       <FBMapWrapper<string[]> collection={_.keys(FBPurchaseOrderDetailsHead)}>
                         {(key, index) => (
                           <TableCell align={(index > 1) ? "right" : "left"} key={`fb-po-item-${key}-${index}`}>
-                            {item[key]}
+                            {key === "description" && (
+                              <FBTooltip title={item[key]} placement="bottom">
+                                <Box>
+                                  {_.truncate(item[key], { length: 35, omission: " ..." })}
+                                </Box>
+                              </FBTooltip>
+                            )}
+                            {key !== "description" && item[key]}
                           </TableCell>
                         )}
                       </FBMapWrapper>
