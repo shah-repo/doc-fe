@@ -8,6 +8,7 @@ export default (theme: Theme) =>
       display: "flex",
       textDecoration: "none",
       flex: 1,
+      marginBottom: 5,
     },
     childLink: {
       paddingLeft: theme.spacing(3),
