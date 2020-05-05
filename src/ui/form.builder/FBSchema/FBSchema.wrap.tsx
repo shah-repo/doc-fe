@@ -3,7 +3,6 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { FBSchemaComponentProps, FBSchemaProps, FBSchemaState } from ".";
 import { FB, FBSortable } from "..";
-import FBStore from "../stores/ui/FBStore";
 
 export const withFBSchema = <T extends FBSchemaComponentProps>(
   Component: React.FunctionComponent<T>
@@ -17,15 +16,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
 
     schemaState = FB.useRef<FBSchemaState>(FBSchemaState, schema);
 
-
     function controlRenderer(schemaItem: FBSchemaProps): React.ReactNode | undefined {
-      // const { name, rules, label, placeholder } = schemaItem;
-      // // Validation settings
-      // if (formState && name) {
-      //   const validationAttrName = (label as string) || placeholder || name;
-      //     formState?.setValidationAttributeName(name, validationAttrName);
-      //     rules && (formState.setFieldRules(name, rules));
-      // }
       return FBSchemaState.component(schemaItem);
     }
 
@@ -35,7 +26,6 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
       }
       return _.map(schema, (schemaItem, index) => controlRenderer({
         ...schemaItem,
-        disabled: FBStore.fieldMode.disabled, // OLD: to be removed
         index,
       }));
     }

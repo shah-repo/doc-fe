@@ -42,6 +42,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       handleDelete,
       classes,
       calculation,
+      disabled,
       items,
       name,
     });
