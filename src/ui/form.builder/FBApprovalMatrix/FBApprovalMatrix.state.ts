@@ -70,10 +70,8 @@ export class FBApprovalMatrixState {
     this.am.approvalRoles[index][type] = approvalRoleItem.map((role) => ({
       id: role.value,
     }));
-    // this.updateFBStore();
-    FBStore.resetSchema();
+    this.updateFBStore();
   };
-
 
   @action public editName = (
     index: number, approvalRoleItem: string, type: string
