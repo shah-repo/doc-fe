@@ -126,7 +126,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const openReference = (documentId: string) => {
     window.open(documentDetailsPath(documentId), "_blank");
   };
-  const formDocumentId = documentRevision && (documentRevision.formDocument?.document?.id || "");
+  const formDocumentId = documentRevision && (documentRevision?.formDocument?.document?.id || "");
   const formDocuments: Document = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocument(state, formDocumentId)
   );
@@ -141,9 +141,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formDocumentId]);
   const isDisabled: boolean = initialValues.id !== undefined;
-  const isdocRevVersionOne = documentRevision.version === 1;
+  const isdocRevVersionOne = documentRevision?.version === 1;
   const isdocRevStatusDraft =
-    documentRevision.status === DocumentRevisionStatus.Draft;
+    documentRevision?.status === DocumentRevisionStatus.Draft;
   const outputDocEnabled: boolean =
     (isdocRevVersionOne && isdocRevStatusDraft) || !isDisabled;
 
@@ -258,7 +258,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     : documentTypes
   , [documentTypes, initialValues.formDocument, type]);
 
-  const canShowCancelButton = documentStatus === DocumentRevisionStatus.Draft && documentRevision.version > 1;
+  const canShowCancelButton = documentStatus === DocumentRevisionStatus.Draft && documentRevision?.version > 1;
 
   return (
     <Grid
