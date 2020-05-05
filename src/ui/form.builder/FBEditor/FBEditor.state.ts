@@ -34,6 +34,8 @@ export class FBEditorState {
     "instructionsdocument",
     "selectdocument",
     "selectrequirement",
+    "checkpoint",
+    "createlabel",
   ];
 
   public static pickDefaultValue: FBInputType[] = [
@@ -47,6 +49,8 @@ export class FBEditorState {
     "instructionsdocument",
     "selectdocument",
     "selectrequirement",
+    "checkpoint",
+    "createlabel",
   ];
 
   public static pickStepIndex: FBInputType[] = ["stepsection", "teststep"];
@@ -79,6 +83,8 @@ export class FBEditorState {
     instructionsdocument: FBEditorInstructionsDocument,
     selectdocument: FBEditorSelectDocument,
     selectrequirement: FBEditorSelectRequirement,
+    checkpoint: FBEditorLabel,
+    createlabel: FBEditorLabel,
   };
 
   @observable public mode?: FBEditorMode = "config";

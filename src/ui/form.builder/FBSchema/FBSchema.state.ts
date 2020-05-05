@@ -3,6 +3,7 @@ import { action, get, observable, set } from "mobx";
 import React from "react";
 import { FBSchemaProps } from ".";
 import { FBAutocompleteAsync, FBCheckboxGroup, FBEditorState, FBInputProps, FBInputType } from "..";
+import { FBButton } from "../FBButton";
 import { FBCheckbox } from "../FBCheckbox";
 import { FBDatePicker } from "../FBDatePicker";
 import { FBFileUpload } from "../FBFileUpload";
@@ -63,6 +64,8 @@ export class FBSchemaState {
     instructionsdocument: FBInstructionsDocument,
     selectdocument: FBSelectDocument,
     selectrequirement: FBSelectRequirement,
+    checkpoint: FBButton,
+    createlabel: FBButton,
 
     // OLD: to be removed
     // datepicker: FBDatePicker,
