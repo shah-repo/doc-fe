@@ -1,6 +1,5 @@
 import React from "react";
-import { FBAutocompleteAsync } from "..";
-import requirementsOptions from "../../../data/requirementsOptions.json";
+import { FBAutocompleteAsync, FBData } from "..";
 import FBTextField from "../components/inputs/FBTextField";
 import { FBInputProps } from "../types/common";
 
@@ -13,7 +12,7 @@ const FBEditorSelectRequirement: React.FunctionComponent<FBInputProps> = ({
     <FBAutocompleteAsync
       label="form.builder.options"
       name="options"
-      options={requirementsOptions}
+      options={FBData.requirementOptions}
       multiple={true}
       optionLabelKey="text"
       optionValueKey="value"

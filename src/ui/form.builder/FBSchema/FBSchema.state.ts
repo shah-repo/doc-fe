@@ -17,6 +17,7 @@ import { FBSchemaSelect } from "../FBSchemaSelect";
 import { FBSection } from "../FBSection";
 import { FBSelect } from "../FBSelect";
 import { FBSubsection } from "../FBSubsection";
+import { FBTestRequirement } from "../FBTestRequirement";
 import { FBTextEditor } from "../FBTextEditor";
 import { FBTextField } from "../FBTextField";
 import { FBTimerField } from "../FBTimerField";
@@ -55,6 +56,7 @@ export class FBSchemaState {
     purchaseorder: FBPurchaseOrder,
     instructionsmediaupload: FBMediaAlbumField,
     evidencemediaupload: FBMediaAlbumField,
+    testRequirement: FBTestRequirement,
 
     // OLD: to be removed
     // datepicker: FBDatePicker,

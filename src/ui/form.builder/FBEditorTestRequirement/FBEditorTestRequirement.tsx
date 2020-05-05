@@ -1,20 +1,33 @@
 import React from "react";
-import { FBAutocomplete } from "..";
-import requirementsOptions from "../../../data/requirementsOptions.json";
-import { FBLabelEditorProps } from "../components/editors/FBLabelEditor";
-import FBTextField from "../components/inputs/FBTextField";
+import { FBAutocomplete, FBData, FBEditor, FBEditorProps, FBTextField } from "..";
+import Text from "../../components/Text";
 
-const FBEditorTestRequirement: React.FunctionComponent<FBLabelEditorProps> = ({
-  defaultValue,
+const FBEditorTestRequirement: React.FunctionComponent<FBEditorProps> = ({
+  children,
+  includeDefaultValue,
+  inputProps: { type } = {},
+  inputProps,
+  ...props
 }) => (
-  <>
-    <FBTextField label="form.builder.label" name="label" {...{ defaultValue }}  />
+  <FBEditor {...props} {...{ inputProps }}>
+    <Text message={`form.builder.${type}`}>
+      {(defaultValue: string) => (
+        <FBTextField
+          label="form.builder.label"
+          name="label"
+          rules="required"
+          {...includeDefaultValue && { defaultValue }}
+        />
+      )}
+    </Text>
     <FBAutocomplete
       label="form.builder.testRequirement"
       name="testRequirement"
-      options={requirementsOptions}
+      options={FBData.requirementOptions}
+      rules="required"
     />
-  </>
+    {children}
+  </FBEditor>
 );
 
 export default FBEditorTestRequirement;
