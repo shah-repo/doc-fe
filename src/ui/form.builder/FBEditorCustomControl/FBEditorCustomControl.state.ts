@@ -2,7 +2,7 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
-export class FBDynamicControlState extends FBRequest<DocumentRevision[], any> {
+export class FBEditorCustomControlState extends FBRequest<DocumentRevision[], any> {
   public url = FBEndpoint.DynamicControl;
 
   public constructor() {
@@ -11,4 +11,4 @@ export class FBDynamicControlState extends FBRequest<DocumentRevision[], any> {
   }
 }
 
-export default FBDynamicControlState;
+export default FBEditorCustomControlState;

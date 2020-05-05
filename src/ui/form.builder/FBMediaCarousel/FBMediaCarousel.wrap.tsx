@@ -1,8 +1,7 @@
 import _ from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FBMediaCarouselProps, FBMediaCarouselState } from ".";
-import { FB, FBMediaProps } from "..";
+import { FB, FBMediaCarouselProps, FBMediaCarouselState, FBMediaProps } from "..";
 
 export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
   Component: React.FunctionComponent<T>

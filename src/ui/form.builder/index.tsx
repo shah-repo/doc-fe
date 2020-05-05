@@ -27,9 +27,6 @@ export { default as FBDatePicker } from "./FBDatePicker/FBDatePicker";
 export { default as FBDialog } from "./FBDialog/FBDialog";
 export { default as FBDialogState } from "./FBDialog/FBDialog.state";
 export * from "./FBDialog/FBDialog.types";
-export { default as FBDynamicControl } from "./FBDynamicControl/FBDynamicControl";
-export * from "./FBDynamicControl/FBDynamicControl.state";
-export * from "./FBDynamicControl/FBDynamicControl.types";
 export { default as FBEditor } from "./FBEditor/FBEditor";
 export { default as FBEditorState } from "./FBEditor/FBEditor.state";
 export * from "./FBEditor/FBEditor.types";
@@ -39,11 +36,15 @@ export { default as FBEditorApprovalField } from "./FBEditorApprovalField/FBEdit
 export * from "./FBEditorApprovalField/FBEditorApprovalField.types";
 export { default as FBEditorAutocomplete } from "./FBEditorAutocomplete/FBEditorAutocomplete";
 export { default as FBEditorCheckControl } from "./FBEditorCheckControl/FBEditorCheckControl";
+export { default as FBEditorCustomControl } from "./FBEditorCustomControl/FBEditorCustomControl";
+export * from "./FBEditorCustomControl/FBEditorCustomControl.state";
+export * from "./FBEditorCustomControl/FBEditorCustomControl.types";
 export { default as FBEditorHyperlink } from "./FBEditorHyperlink/FBEditorHyperlink";
 export { default as FBEditorInlineApproval } from "./FBEditorInlineApproval/FBEditorInlineApproval";
 export * from "./FBEditorInlineApproval/FBEditorInlineApproval.types";
 export { default as FBEditorInstructionsDocument } from "./FBEditorInstructionsDocument/FBEditorInstructionsDocument";
 export { default as FBEditorLabel } from "./FBEditorLabel/FBEditorLabel";
+export { default as FBEditorMediaAlbum } from "./FBEditorMediaAlbum/FBEditorMediaAlbum";
 export { default as FBEditorOptionGroup } from "./FBEditorOptionGroup/FBEditorOptionGroup";
 export { default as FBEditorOptions } from "./FBEditorOptions/FBEditorOptions";
 export { default as FBEditorParagraph } from "./FBEditorParagraph/FBEditorParagraph";
@@ -193,5 +194,4 @@ export { default as FBWorkspaceTplActions } from "./FBWorkspaceTplActions/FBWork
 export * from "./FBWorkspaceTplActions/FBWorkspaceTplActions.types";
 export { default as FB } from "./helpers/FB";
 export * from "./helpers/FBFieldName";
-
 

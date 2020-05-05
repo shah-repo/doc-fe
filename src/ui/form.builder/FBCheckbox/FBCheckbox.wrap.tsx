@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React from "react";
 import { FBInputProps } from "..";
 import { FB } from "../helpers";
@@ -7,15 +8,16 @@ export const withFBCheckbox = <T extends FBInputProps>(
 ) => {
   const Comp = ({
     name = "",
+    defaultChecked,
     ...props
   }: T) => {
 
     const { formState } = FB.useStores();
-    const formValue = formState?.getFieldValue(name);
+    _.isUndefined(defaultChecked) && (defaultChecked = formState?.getFieldValue(name));
 
     return Component({
       ...(props as T),
-      defaultChecked: formValue,
+      defaultChecked,
       name,
     });
   };

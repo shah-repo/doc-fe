@@ -1,6 +1,5 @@
 import React from "react";
-import { FBAutocomplete, FBAutocompleteAsync, FBInputProps } from "..";
-import requirementsOptions from "../../../data/requirementsOptions.json";
+import { FBAutocomplete, FBAutocompleteAsync, FBData, FBInputProps } from "..";
 import FBDRStore from "../stores/ui/FBDRStore";
 
 const FBSelectRequirement: React.FunctionComponent<FBInputProps> = ({
@@ -13,14 +12,14 @@ const FBSelectRequirement: React.FunctionComponent<FBInputProps> = ({
         {...props}
         selectedOptions={options as string[]}
         multiple={true}
-        options={requirementsOptions}
+        options={FBData.requirementOptions}
       />
     )}
     {!FBDRStore.isOutput && (
       <FBAutocomplete
         {...props}
         multiple={true}
-        options={requirementsOptions}
+        options={FBData.requirementOptions}
         defaultValue={options}
       />
     )}

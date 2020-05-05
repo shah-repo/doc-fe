@@ -1,8 +1,7 @@
 import { Box } from "@material-ui/core";
 import React, { useState } from "react";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
-import { FBAutocompleteAsyncOption } from "../../../form.builder";
-import { PurchaseOrder } from "../../../form.builder/FBPurchaseOrder_/FBPurchaseOrder.types";
+import { FBAutocompleteAsyncOption, FBPurchaseOrderValue } from "../../../form.builder";
 import { FBInputProps } from "../../../form.builder/types/common";
 import POActions from "./POActions";
 import PODetails from "./PODetails";
@@ -14,7 +13,7 @@ interface Props {
 export const PODetailsContainer: React.FunctionComponent<Props> = ({
   documentRevision,
 }) => {
-  const [purchaseOrder] = useState<PurchaseOrder>(() => {
+  const [purchaseOrder] = useState<FBPurchaseOrderValue>(() => {
     const schema = documentRevision.formDocument?.formTemplate?.schema;
 
     const fieldName = (schema as FBInputProps[])

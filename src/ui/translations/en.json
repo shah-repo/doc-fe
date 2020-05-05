@@ -569,7 +569,7 @@
   "form.builder.reload": "RELOAD",
   "form.builder.change.reasoning": "Change Reasoning",
   "form.builder.part.number": "Part Number",
-  "form.builder.dynamiccontrols": "Dynamic Controls",
+  "form.builder.customcontrols": "Custom Controls",
   "form.builder.missing.lfpo": "Please create a form of type LFPO - Lot From Purchase Order Form",
   "form.builder.multiple": "Multiple",
   "form.builder.units.hours.short": "Hrs.",

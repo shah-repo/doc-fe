@@ -1,10 +1,10 @@
 import { CircularProgress } from "@material-ui/core";
 import React from "react";
-import { FBButton, FBDynamicControlProps, FBMapWrapper } from "..";
+import { FBButton, FBEditorCustomControlProps, FBMapWrapper } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { withFBDynamicControl } from "./FBDynamicControl.wrap";
+import { withFBEditorCustomControl } from "./FBEditorCustomControl.wrap";
 
-const FBDynamicControl: React.FunctionComponent<FBDynamicControlProps> = ({
+const FBEditorCustomControl: React.FunctionComponent<FBEditorCustomControlProps> = ({
   controls = [],
   loading,
   handleSelect,
@@ -26,4 +26,4 @@ const FBDynamicControl: React.FunctionComponent<FBDynamicControlProps> = ({
   </>
 );
 
-export default withFBDynamicControl(FBDynamicControl);
+export default withFBEditorCustomControl(FBEditorCustomControl);

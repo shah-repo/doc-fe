@@ -1,6 +1,6 @@
 import _ from "lodash";
 import React from "react";
-import { FBMediaQRProps } from ".";
+import { FB, FBMediaQRProps } from "..";
 import FBDRStore from "../stores/ui/FBDRStore";
 import FBStore from "../stores/ui/FBStore";
 
@@ -13,17 +13,19 @@ export const withFBMediaQR = <T extends FBMediaQRProps>(
     ...props
   }: T) => {
 
+    const { workspaceState } = FB.useStores();
+
     switch (true) {
-      case isTemplate && FBStore.mode === "design":
+      case isTemplate && workspaceState?.mode === "design":
         _.isEmpty(FBStore.documentId) && (mode = "preupload");
         break;
-      case !isTemplate && FBStore.mode === "design":
+      case !isTemplate && workspaceState?.mode === "design":
         mode = "placeholder";
         break;
-      case !isTemplate && FBStore.mode === "form":
+      case !isTemplate && workspaceState?.mode === "form":
         (_.isEmpty(FBStore.documentId) || FBDRStore.mode === "outputCreate") && (mode = "preupload");
         break;
-      case !isTemplate && FBStore.mode === "preview":
+      case !isTemplate && workspaceState?.mode === "preview":
         mode = FBDRStore.isOutput ? "preupload" : "placeholder";
         break;
       default:

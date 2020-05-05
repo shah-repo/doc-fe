@@ -1,7 +1,7 @@
 import axios from "axios";
 import _ from "lodash";
 import { action, computed, observable, set } from "mobx";
-import { apiClient, FBMediaAlbumFieldConstructor, FBMediaAlbumFieldMode, FBMediaAlbumFieldStore, FBMediaFile, FBMediaProps, FBMediaUrlProps } from "..";
+import { apiClient, FBMediaAlbumFieldConstructor, FBMediaAlbumFieldMode, FBMediaAlbumFieldStore, FBMediaFile, FBMediaProps, FBMediaUrlProps, FBWorkspaceState } from "..";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBDRStore from "../stores/ui/FBDRStore";
 import FBStore from "../stores/ui/FBStore";
@@ -12,20 +12,26 @@ export class FBMediaAlbumFieldState {
   public filesUploaded: FBMediaProps[] = [];
   public fieldName: string | undefined;
   public isTemplate = false;
+  private workspaceState?: FBWorkspaceState;
 
-  public constructor({ name, isTemplate = false }: FBMediaAlbumFieldConstructor) {
+  public constructor({
+    name,
+    isTemplate = false,
+    workspaceState,
+  }: FBMediaAlbumFieldConstructor) {
+
+    this.workspaceState = workspaceState;
     this.fieldName = name;
     this.isTemplate = isTemplate;
-    if (this.isPreview) {
-      this.setMode("media");
-    }
+    this.isPreview && this.setMode("media");
+    this.downloadCandidates();
   }
 
   @computed public get isPreview() {
     if (this.isTemplate) {
-      return FBStore.mode !== "design";
+      return this.workspaceState?.mode !== "design";
     }
-    return FBStore.mode === "preview" && FBDRStore.isOutput;
+    return this.workspaceState?.mode === "preview" && FBDRStore.isOutput;
   }
 
   @computed public get collection(): FBMediaProps[] {

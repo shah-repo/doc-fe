@@ -45,6 +45,7 @@ export class FBFormState extends FBSchemaState {
     }
     if (!_.get(this.values, fieldName) && !_.isUndefined(defaultValue)) {
       this.initialValues[fieldName] = defaultValue;
+      this.values[fieldName] = defaultValue;
     }
     return _.get(this.values, fieldName) || _.get(this.initialValues, fieldName);
   };
@@ -125,15 +126,14 @@ export class FBFormState extends FBSchemaState {
     }
 
     const rules = this.getRules();
-    const values = flatten(this.getValues());
-    // const values =  _.mapValues(this.getValues(), (v, k) => {
-    //   if (_.isBoolean(v)) {
-    //     return _.toString(v);
-    //   } else if (_.isObject(v) && !_.isArray(v)) {
-    //     return flatten(v);
-    //   }
-    //   return v;
-    // });
+    let values = this.getValues();
+    values = Object.assign({}, ...Object.keys(values).map((key) => {
+      const value = values[key];
+      if (_.isArray(value) || _.isObject(value)) {
+        return ({ [key]: flatten(value) });
+      }
+      return ({ [key]: value });
+    }));
 
     const validator = new this.Validator(values, rules);
     validator.setAttributeNames(this.validationAttributeNames);

@@ -1,8 +1,7 @@
 import _ from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FBMediaAlbumFieldProps, FBMediaAlbumFieldState } from ".";
-import { FB, FBMediaFile } from "..";
+import { FB, FBMediaAlbumFieldProps, FBMediaAlbumFieldState, FBMediaFile } from "..";
 import FBStore from "../stores/ui/FBStore";
 
 export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
@@ -23,17 +22,11 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     ...props
   }: T) => {
     const documentId = FBStore.documentId;
+    const { workspaceState } = FB.useStores();
     mediaAlbumFieldState = FB.useRef<FBMediaAlbumFieldState>(
-      FBMediaAlbumFieldState, { name, isTemplate }
+      FBMediaAlbumFieldState, { name, isTemplate, workspaceState }
     );
     qrValue = `https://enlil.io/fileupload?document=${documentId}&fieldname=${name}`;
-
-    React.useEffect(() => {
-      if (_.isEmpty(documentId)) {
-        return;
-      }
-      mediaAlbumFieldState?.downloadCandidates();
-    }, [documentId, mediaAlbumFieldState]);
 
     // Handle mode
     setMediaFieldMode = () => {
@@ -55,7 +48,6 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       loading = mediaAlbumFieldState?.loading;
       collection = mediaAlbumFieldState?.collection;
     });
-
 
     return Component({
       ...(props as T),

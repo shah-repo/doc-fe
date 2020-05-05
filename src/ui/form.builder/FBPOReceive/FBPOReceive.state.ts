@@ -1,11 +1,11 @@
 import _, { Dictionary } from "lodash";
 import { action, computed } from "mobx";
 import { useIntl } from "react-intl";
+import { FBPurchaseOrderItem } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { toastError } from "../../components/notifications";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
-import { PurchaseOrderItem } from "../FBPurchaseOrder_/FBPurchaseOrder.types";
 import { FBInputProps } from "../types/common";
 import { FBEditorElementType } from "../types/editor";
 
@@ -24,7 +24,7 @@ export class FBPOReceiveState extends FBRequest<DocumentRevision, any>  {
     return this.data?.formInput;
   }
 
-  @computed public get items(): PurchaseOrderItem[] | undefined {
+  @computed public get items(): FBPurchaseOrderItem[] | undefined {
     if (!this.docSchema) {
       return;
     }

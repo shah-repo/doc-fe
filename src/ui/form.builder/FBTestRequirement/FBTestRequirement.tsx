@@ -1,8 +1,6 @@
 import React from "react";
 import { FBTestRequirementProps } from ".";
-import { FBAutocomplete } from "..";
-import requirementsOptions from "../../../data/requirementsOptions.json";
-
+import { FBAutocomplete, FBData } from "..";
 
 const FBTestRequirement: React.FunctionComponent<FBTestRequirementProps> = ({
   testRequirement,
@@ -12,7 +10,7 @@ const FBTestRequirement: React.FunctionComponent<FBTestRequirementProps> = ({
     {...props}
     defaultValue={testRequirement}
     disabled={true}
-    options={requirementsOptions}
+    options={FBData.requirementOptions}
   />
 );
 

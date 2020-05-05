@@ -27,7 +27,6 @@ import FBValidatorSchemaSelect from "../components/validation/FBValidatorSchemaS
 import { FBApproval } from "../FBApproval";
 import { FBApprovalMatrix } from "../FBApprovalMatrix";
 import { FBAutocompleteAsync } from "../FBAutocompleteAsync";
-import { FBDynamicControl } from "../FBDynamicControl";
 import { FBEditorApprovalField } from "../FBEditorApprovalField";
 import { FBEditorInlineApproval } from "../FBEditorInlineApproval";
 import { FBEditorInstructionsDocument } from "../FBEditorInstructionsDocument";
@@ -123,7 +122,6 @@ export const FBFieldComponent: Dictionary<any> = {
   selectdocument: FBSelectDocument,
   selectrequirement: FBSelectRequirement,
   testRequirement: FBTestRequirement,
-  dynamiccontrol: FBDynamicControl,
 };
 
 export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {

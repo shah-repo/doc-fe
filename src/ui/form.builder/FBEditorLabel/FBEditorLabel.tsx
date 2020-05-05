@@ -1,16 +1,25 @@
 import { InputAdornment } from "@material-ui/core";
 import React from "react";
-import { FBEditor, FBEditorProps, FBInput, FBTextField } from "..";
+import { FBConditionalWrapper, FBEditor, FBEditorProps, FBInput, FBTextField } from "..";
 import Text from "../../components/Text";
 
 const FBEditorLabel: React.FunctionComponent<FBEditorProps> = ({
   children,
   includeDefaultValue,
+  standalone = false,
   inputProps: { type, stepIndex } = {},
   inputProps,
   ...props
 }) => (
-  <FBEditor {...props} {...{ inputProps }}>
+  <FBConditionalWrapper
+    condition={!standalone}
+    wrapper={(wrapperChildren) => (
+      <FBEditor {...props} {...{ inputProps }}>
+        {wrapperChildren}
+        {children}
+      </FBEditor>
+    )}
+  >
     <Text message={`form.builder.${type}`}>
       {(defaultValue: string) => (
         <FBTextField
@@ -31,8 +40,7 @@ const FBEditorLabel: React.FunctionComponent<FBEditorProps> = ({
         />
       )}
     </Text>
-    {children}
-  </FBEditor>
+  </FBConditionalWrapper>
 );
 
 export default FBEditorLabel;

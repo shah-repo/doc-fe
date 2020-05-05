@@ -1,7 +1,13 @@
-import { FBControlPickerDataProps } from "..";
+import React from "react";
+import { FBControlPickerDataProps, FBInputType } from "..";
+import { FBEditorCustomControl } from "../FBEditorCustomControl";
 
 export class FBControlPickerState {
-  public static config: FBControlPickerDataProps = {
+  public static customPicker: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
+    customcontrol: FBEditorCustomControl,
+  };
+
+  public static pickers: FBControlPickerDataProps = {
     section: ["section", "subsection", "stepsection", "teststep"],
     inputs: [
       "textfield",
@@ -25,9 +31,18 @@ export class FBControlPickerState {
       "testRequirement",
     ],
     approvals: ["hellosign", "approval", "inlineapproval"],
-    buttons: ["checkpoint", "createlabel"],
+    customcontrols: ["customcontrol"],
     instructions: ["instructionsdocument", "selectdocument", "selectrequirement"],
+    buttons: ["checkpoint", "createlabel"],
     actions: ["action"],
+  };
+
+  public static picker = (picker: FBInputType): React.ReactElement | undefined => {
+    const customPicker = FBControlPickerState.customPicker[picker];
+    if (!customPicker) {
+      return;
+    }
+    return React.createElement(customPicker, {});
   };
 }
 

@@ -7,6 +7,7 @@ import { FBCheckbox } from "../FBCheckbox";
 import { FBDatePicker } from "../FBDatePicker";
 import { FBFileUpload } from "../FBFileUpload";
 import { FBHyperlink } from "../FBHyperlink";
+import { FBInstructionsDocument } from "../FBInstructionsDocument";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
 import { FBPurchaseOrder } from "../FBPurchaseOrder";
@@ -16,7 +17,10 @@ import { FBRadioGroup } from "../FBRadioGroup";
 import { FBSchemaSelect } from "../FBSchemaSelect";
 import { FBSection } from "../FBSection";
 import { FBSelect } from "../FBSelect";
+import { FBSelectDocument } from "../FBSelectDocument";
+import { FBSelectRequirement } from "../FBSelectRequirement";
 import { FBSubsection } from "../FBSubsection";
+import { FBTestRequirement } from "../FBTestRequirement";
 import { FBTextEditor } from "../FBTextEditor";
 import { FBTextField } from "../FBTextField";
 import { FBTimerField } from "../FBTimerField";
@@ -55,6 +59,10 @@ export class FBSchemaState {
     purchaseorder: FBPurchaseOrder,
     instructionsmediaupload: FBMediaAlbumField,
     evidencemediaupload: FBMediaAlbumField,
+    testRequirement: FBTestRequirement,
+    instructionsdocument: FBInstructionsDocument,
+    selectdocument: FBSelectDocument,
+    selectrequirement: FBSelectRequirement,
 
     // OLD: to be removed
     // datepicker: FBDatePicker,

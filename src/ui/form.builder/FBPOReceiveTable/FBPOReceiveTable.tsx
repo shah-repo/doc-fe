@@ -1,11 +1,10 @@
 import { Box, makeStyles, Table, TableBody, TableCell, TableHead, TableRow, withStyles } from "@material-ui/core";
 import classNames from "classnames";
 import React from "react";
-import { FBMapWrapper, FBPOReceiveTableProps } from "..";
+import { FBMapWrapper, FBPOReceiveTableProps, FBPurchaseOrderItem } from "..";
 import Date from "../../components/Date";
 import Text from "../../components/Text";
 import Colors from "../../layout/theme/utils/colors";
-import { PurchaseOrderItem } from "../FBPurchaseOrder_/FBPurchaseOrder.types";
 import { withFBPOReceiveTable } from "./FBPOReceiveTable.wrap";
 
 const StyledTableCell = withStyles((theme) => ({
@@ -76,7 +75,7 @@ const FBPOReceiveTable: React.FunctionComponent<FBPOReceiveTableProps> = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          <FBMapWrapper<PurchaseOrderItem> collection={items}>
+          <FBMapWrapper<FBPurchaseOrderItem> collection={items}>
             {(item, index) => (
               <TableRow
                 key={`fb-po-receive-${item.id}`}

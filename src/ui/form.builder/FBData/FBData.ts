@@ -3,6 +3,7 @@ import { FB, FBAutocompleteAsyncConfig, FBEditorPropertiesOption, FBInputType, F
 import { FBSchemaProps } from "../FBSchema";
 import autocompleteOptions from "./autocompleteOptions.json";
 import editorProperties from "./editorProperties.json";
+import requirementOptions from "./requirementOptions.json";
 import testStepSchema from "./testStepSchema.json";
 import unitsOptions from "./unitsOptions.json";
 
@@ -22,6 +23,10 @@ export class FBData {
 
   public static get unitsOptions(): FBOption[] {
     return unitsOptions;
+  }
+
+  public static get requirementOptions(): FBOption[] {
+    return requirementOptions;
   }
 }
 

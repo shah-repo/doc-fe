@@ -5,9 +5,14 @@ import { FBEditorMode, FBEditorModeProps, FBEditorProps, FBInputType } from ".."
 import { FBEditorAutocomplete } from "../FBEditorAutocomplete";
 import { FBEditorCheckControl } from "../FBEditorCheckControl";
 import { FBEditorHyperlink } from "../FBEditorHyperlink";
+import { FBEditorInstructionsDocument } from "../FBEditorInstructionsDocument";
 import { FBEditorLabel } from "../FBEditorLabel";
+import { FBEditorMediaAlbum } from "../FBEditorMediaAlbum";
 import { FBEditorOptionGroup } from "../FBEditorOptionGroup";
 import { FBEditorParagraph } from "../FBEditorParagraph";
+import { FBEditorSelectDocument } from "../FBEditorSelectDocument";
+import { FBEditorSelectRequirement } from "../FBEditorSelectRequirement";
+import { FBEditorTestRequirement } from "../FBEditorTestRequirement";
 import { FBEditorTextField } from "../FBEditorTextField";
 
 export class FBEditorState {
@@ -23,6 +28,12 @@ export class FBEditorState {
     "quantity",
     "timer",
     "purchaseorder",
+    "instructionsmediaupload",
+    "evidencemediaupload",
+    "testRequirement",
+    "instructionsdocument",
+    "selectdocument",
+    "selectrequirement",
   ];
 
   public static pickDefaultValue: FBInputType[] = [
@@ -30,6 +41,12 @@ export class FBEditorState {
     "timer",
     "stepsection",
     "teststep",
+    "instructionsmediaupload",
+    "evidencemediaupload",
+    "testRequirement",
+    "instructionsdocument",
+    "selectdocument",
+    "selectrequirement",
   ];
 
   public static pickStepIndex: FBInputType[] = ["stepsection", "teststep"];
@@ -56,6 +73,12 @@ export class FBEditorState {
     quantity: FBEditorLabel,
     timer: FBEditorLabel,
     purchaseorder: FBEditorLabel,
+    instructionsmediaupload: FBEditorMediaAlbum,
+    evidencemediaupload: FBEditorMediaAlbum,
+    testRequirement: FBEditorTestRequirement,
+    instructionsdocument: FBEditorInstructionsDocument,
+    selectdocument: FBEditorSelectDocument,
+    selectrequirement: FBEditorSelectRequirement,
   };
 
   @observable public mode?: FBEditorMode = "config";
