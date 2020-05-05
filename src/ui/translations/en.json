@@ -429,6 +429,7 @@
   "form.builder.upload": "Upload",
   "form.builder.delete": "Delete",
   "form.builder.export": "Export Form",
+  "form.builder.comment": "Comment",
   "form.builder.import.template": "Import Template",
   "form.builder.template.name": "Template Name",
   "form.builder.export.template": "Export Template",
