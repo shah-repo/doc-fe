@@ -10,19 +10,23 @@ const FBControlPicker: React.FunctionComponent<FBControlPickerProps> = ({
   openEditor,
 }) => (
   <Box px={2}>
-    <FBMapWrapper<FBControlPickerDataProps> collection={FBControlPickerState.config}>
+    <FBMapWrapper<FBControlPickerDataProps> collection={FBControlPickerState.pickers}>
       {(editors, section) => (
         <Box key={`fb-controlpicker-section-${section}`} mb={4}>
           <Box mx={1}>
             <FBLabel label={`form.builder.${section}`} />
           </Box>
           <FBMapWrapper<FBInputType> collection={editors}>
-            {(editor, i) => (
-              <FBButton
-                key={`fb-controlpicker-editor-${editor}-${i}`}
-                label={`form.builder.${editor as string}`}
-                onClick={openEditor && openEditor({ type: editor, index })}
-              />
+            {(picker, i) => (
+              <React.Fragment key={`fb-controlpicker-editor-${picker}-${i}`}>
+                {FBControlPickerState.picker(picker) && FBControlPickerState.picker(picker)}
+                {!FBControlPickerState.picker(picker) && (
+                  <FBButton
+                    label={`form.builder.${picker as string}`}
+                    onClick={openEditor && openEditor({ type: picker, index })}
+                  />
+                )}
+              </React.Fragment>
             )}
           </FBMapWrapper>
         </Box>

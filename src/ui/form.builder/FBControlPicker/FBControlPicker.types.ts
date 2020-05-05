@@ -5,5 +5,5 @@ export type FBControlPickerProps =
 & FBEditorHelperProps
 & Pick<FBInputProps, "index">;
 
-export type FBControlPickerType = "section" | "inputs" | "approvals" | "buttons" | "instructions" | "actions";
+export type FBControlPickerType = "section" | "inputs" | "approvals" | "customcontrols" | "buttons" | "instructions" | "actions";
 export type FBControlPickerDataProps = Record<FBControlPickerType, FBInputType[]>;

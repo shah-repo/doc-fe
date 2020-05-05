@@ -1,4 +1,4 @@
-import { FBDialogState, FBDynamicControlState, FBEditorState, FBFieldWrapperState, FBFileUploadState, FBFormState, FBInlineApprovalState, FBMediaAlbumState, FBPurchaseOrderState, FBSchemaState, FBSnackbarState, FBWorkspaceState } from "..";
+import { FBDialogState, FBEditorCustomControlState, FBEditorState, FBFieldWrapperState, FBFileUploadState, FBFormState, FBInlineApprovalState, FBMediaAlbumState, FBPurchaseOrderState, FBSchemaState, FBSnackbarState, FBWorkspaceState } from "..";
 import { FBApprovalMatrixState } from "../FBApprovalMatrix";
 import { FBPOReceiveState } from "../FBPOReceive";
 
@@ -15,7 +15,7 @@ export interface FBProviderProps {
   fileUploadState?: FBFileUploadState;
   amState?: FBApprovalMatrixState;
   snackbarState?: FBSnackbarState;
-  dynamicControlState?: FBDynamicControlState;
+  customControlState?: FBEditorCustomControlState;
   poReceiveState?: FBPOReceiveState;
   purchaseOrderState?: FBPurchaseOrderState;
 }

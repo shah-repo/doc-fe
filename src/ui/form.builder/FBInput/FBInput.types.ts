@@ -44,7 +44,8 @@ export type FBInputType =
   | "selectdocument"
   | "selectrequirement"
   | "testRequirement"
-  | "hellosign";
+  | "hellosign"
+  | "customcontrol";
 
 export type FBInputProps =
 & FBLabelProps
