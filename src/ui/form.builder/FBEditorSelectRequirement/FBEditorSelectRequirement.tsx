@@ -1,14 +1,16 @@
 import React from "react";
-import { FBAutocompleteAsync, FBData } from "..";
-import FBTextField from "../components/inputs/FBTextField";
-import { FBInputProps } from "../types/common";
+import { FBAutocompleteAsync, FBData, FBEditor, FBEditorLabel, FBEditorProps } from "..";
 
-const FBEditorSelectRequirement: React.FunctionComponent<FBInputProps> = ({
-  defaultValue,
+const FBEditorSelectRequirement: React.FunctionComponent<FBEditorProps> = ({
+  children,
+  includeDefaultValue,
+  standalone = false,
+  inputProps,
+  inputProps: { options } = {},
   ...props
 }) => (
-  <>
-    <FBTextField {...props} label="form.builder.label" name="label" {...{ defaultValue }}  />
+  <FBEditor {...props} {...{ inputProps }}>
+    <FBEditorLabel {...props} {...{ inputProps, includeDefaultValue }} standalone={true} />
     <FBAutocompleteAsync
       label="form.builder.options"
       name="options"
@@ -16,9 +18,11 @@ const FBEditorSelectRequirement: React.FunctionComponent<FBInputProps> = ({
       multiple={true}
       optionLabelKey="text"
       optionValueKey="value"
-      defaultValue={props.options}
+      defaultValue={options}
+      rules="required"
     />
-  </>
+    {children}
+  </FBEditor>
 );
 
 export default FBEditorSelectRequirement;

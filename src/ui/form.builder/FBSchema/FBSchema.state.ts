@@ -17,6 +17,8 @@ import { FBRadioGroup } from "../FBRadioGroup";
 import { FBSchemaSelect } from "../FBSchemaSelect";
 import { FBSection } from "../FBSection";
 import { FBSelect } from "../FBSelect";
+import { FBSelectDocument } from "../FBSelectDocument";
+import { FBSelectRequirement } from "../FBSelectRequirement";
 import { FBSubsection } from "../FBSubsection";
 import { FBTestRequirement } from "../FBTestRequirement";
 import { FBTextEditor } from "../FBTextEditor";
@@ -59,6 +61,8 @@ export class FBSchemaState {
     evidencemediaupload: FBMediaAlbumField,
     testRequirement: FBTestRequirement,
     instructionsdocument: FBInstructionsDocument,
+    selectdocument: FBSelectDocument,
+    selectrequirement: FBSelectRequirement,
 
     // OLD: to be removed
     // datepicker: FBDatePicker,

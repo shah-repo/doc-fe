@@ -10,6 +10,8 @@ import { FBEditorLabel } from "../FBEditorLabel";
 import { FBEditorMediaAlbum } from "../FBEditorMediaAlbum";
 import { FBEditorOptionGroup } from "../FBEditorOptionGroup";
 import { FBEditorParagraph } from "../FBEditorParagraph";
+import { FBEditorSelectDocument } from "../FBEditorSelectDocument";
+import { FBEditorSelectRequirement } from "../FBEditorSelectRequirement";
 import { FBEditorTestRequirement } from "../FBEditorTestRequirement";
 import { FBEditorTextField } from "../FBEditorTextField";
 
@@ -30,6 +32,8 @@ export class FBEditorState {
     "evidencemediaupload",
     "testRequirement",
     "instructionsdocument",
+    "selectdocument",
+    "selectrequirement",
   ];
 
   public static pickDefaultValue: FBInputType[] = [
@@ -41,6 +45,8 @@ export class FBEditorState {
     "evidencemediaupload",
     "testRequirement",
     "instructionsdocument",
+    "selectdocument",
+    "selectrequirement",
   ];
 
   public static pickStepIndex: FBInputType[] = ["stepsection", "teststep"];
@@ -71,6 +77,8 @@ export class FBEditorState {
     evidencemediaupload: FBEditorMediaAlbum,
     testRequirement: FBEditorTestRequirement,
     instructionsdocument: FBEditorInstructionsDocument,
+    selectdocument: FBEditorSelectDocument,
+    selectrequirement: FBEditorSelectRequirement,
   };
 
   @observable public mode?: FBEditorMode = "config";

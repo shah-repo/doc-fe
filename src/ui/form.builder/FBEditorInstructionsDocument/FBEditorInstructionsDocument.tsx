@@ -6,7 +6,6 @@ const FBEditorInstructionsDocument: React.FunctionComponent<FBEditorProps> = ({
   children,
   includeDefaultValue,
   standalone = false,
-  inputProps: { type } = {},
   inputProps,
   ...props
 }) => (
@@ -16,6 +15,7 @@ const FBEditorInstructionsDocument: React.FunctionComponent<FBEditorProps> = ({
       label="form.builder.document"
       name="instructionsDocument"
       optionId="1"
+      rules="required"
     />
     {children}
   </FBEditor>
