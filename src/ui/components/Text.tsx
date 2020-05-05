@@ -15,17 +15,30 @@ const Text: React.FunctionComponent<TextProps> = ({
   translation = "translation.unknown",
   ...props
 }: TextProps) => {
-  let translationId = translation;
-
-  if (message) {
-    if (!isTranslation(message)) {
-      return <span>{message}</span>;
+  const [hasTranslation, text] = React.useMemo(() => {
+    const stringToCheck = message || translation;
+    if (!stringToCheck) {
+      return [false, ""];
     }
 
-    translationId = message;
+    if (isTranslation(stringToCheck)) {
+      return [true, stringToCheck];
+    }
+
+    const strippedLastPart = stringToCheck.split(".").slice(0, -1).join(".");
+
+    if (isTranslation(strippedLastPart)) {
+      return [true, strippedLastPart];
+    }
+
+    return [false, stringToCheck];
+  }, [message, translation]);
+
+  if (hasTranslation) {
+    return <FormattedMessage id={text} {...props} />;
   }
 
-  return <FormattedMessage id={translationId} {...props} />;
+  return <span>{text}</span>;
 };
 
 export default Text;
