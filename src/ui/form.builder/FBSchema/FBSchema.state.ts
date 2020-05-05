@@ -7,6 +7,7 @@ import { FBCheckbox } from "../FBCheckbox";
 import { FBDatePicker } from "../FBDatePicker";
 import { FBFileUpload } from "../FBFileUpload";
 import { FBHyperlink } from "../FBHyperlink";
+import { FBInstructionsDocument } from "../FBInstructionsDocument";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
 import { FBPurchaseOrder } from "../FBPurchaseOrder";
@@ -57,6 +58,7 @@ export class FBSchemaState {
     instructionsmediaupload: FBMediaAlbumField,
     evidencemediaupload: FBMediaAlbumField,
     testRequirement: FBTestRequirement,
+    instructionsdocument: FBInstructionsDocument,
 
     // OLD: to be removed
     // datepicker: FBDatePicker,

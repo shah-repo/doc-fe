@@ -5,6 +5,7 @@ import { FBEditorMode, FBEditorModeProps, FBEditorProps, FBInputType } from ".."
 import { FBEditorAutocomplete } from "../FBEditorAutocomplete";
 import { FBEditorCheckControl } from "../FBEditorCheckControl";
 import { FBEditorHyperlink } from "../FBEditorHyperlink";
+import { FBEditorInstructionsDocument } from "../FBEditorInstructionsDocument";
 import { FBEditorLabel } from "../FBEditorLabel";
 import { FBEditorMediaAlbum } from "../FBEditorMediaAlbum";
 import { FBEditorOptionGroup } from "../FBEditorOptionGroup";
@@ -28,6 +29,7 @@ export class FBEditorState {
     "instructionsmediaupload",
     "evidencemediaupload",
     "testRequirement",
+    "instructionsdocument",
   ];
 
   public static pickDefaultValue: FBInputType[] = [
@@ -38,6 +40,7 @@ export class FBEditorState {
     "instructionsmediaupload",
     "evidencemediaupload",
     "testRequirement",
+    "instructionsdocument",
   ];
 
   public static pickStepIndex: FBInputType[] = ["stepsection", "teststep"];
@@ -67,6 +70,7 @@ export class FBEditorState {
     instructionsmediaupload: FBEditorMediaAlbum,
     evidencemediaupload: FBEditorMediaAlbum,
     testRequirement: FBEditorTestRequirement,
+    instructionsdocument: FBEditorInstructionsDocument,
   };
 
   @observable public mode?: FBEditorMode = "config";

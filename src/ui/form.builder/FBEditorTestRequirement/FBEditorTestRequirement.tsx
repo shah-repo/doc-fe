@@ -1,6 +1,5 @@
 import React from "react";
-import { FBAutocomplete, FBData, FBEditor, FBEditorProps, FBTextField } from "..";
-import Text from "../../components/Text";
+import { FBAutocomplete, FBData, FBEditor, FBEditorLabel, FBEditorProps } from "..";
 
 const FBEditorTestRequirement: React.FunctionComponent<FBEditorProps> = ({
   children,
@@ -10,16 +9,7 @@ const FBEditorTestRequirement: React.FunctionComponent<FBEditorProps> = ({
   ...props
 }) => (
   <FBEditor {...props} {...{ inputProps }}>
-    <Text message={`form.builder.${type}`}>
-      {(defaultValue: string) => (
-        <FBTextField
-          label="form.builder.label"
-          name="label"
-          rules="required"
-          {...includeDefaultValue && { defaultValue }}
-        />
-      )}
-    </Text>
+    <FBEditorLabel {...props} {...{ inputProps, includeDefaultValue }} standalone={true} />
     <FBAutocomplete
       label="form.builder.testRequirement"
       name="testRequirement"

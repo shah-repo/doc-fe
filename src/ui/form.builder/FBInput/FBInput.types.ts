@@ -81,6 +81,7 @@ export type FBInputProps =
   isTemplate?: boolean;
   includeQRScan?: boolean;
   designDisabled?: boolean;
+  instructionsDocument?: string;
 };
 
 export const OmitInputClones: FBInputType[] = ["fileupload"];

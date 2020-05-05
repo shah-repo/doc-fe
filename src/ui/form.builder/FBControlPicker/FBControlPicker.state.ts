@@ -32,8 +32,8 @@ export class FBControlPickerState {
     ],
     approvals: ["hellosign", "approval", "inlineapproval"],
     customcontrols: ["customcontrol"],
-    buttons: ["checkpoint", "createlabel"],
     instructions: ["instructionsdocument", "selectdocument", "selectrequirement"],
+    buttons: ["checkpoint", "createlabel"],
     actions: ["action"],
   };
 
