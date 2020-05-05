@@ -1,5 +1,6 @@
 import { template } from "lodash";
 import { action } from "mobx";
+import { FBPurchaseOrderItem } from "..";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { DocumentType } from "../../../state/ducks/documentRevisions/documentType";
@@ -7,7 +8,6 @@ import { documentPreviewPath } from "../../document.revision/utils/paths";
 import { toNewVersionRequestBody } from "../../documentRevision/forms/transform";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
-import { PurchaseOrderItem } from "../FBPurchaseOrder_/FBPurchaseOrder.types";
 import FBStore from "../stores/ui/FBStore";
 
 export class FBPOReceiveFormState  {
@@ -17,11 +17,11 @@ export class FBPOReceiveFormState  {
   public lfpoDocType?: DocumentType;
   public lotDocType?: DocumentType;
   public groupOptions: any[] = [];
-  public item?: PurchaseOrderItem;
+  public item?: FBPurchaseOrderItem;
 
   public constructor(
     { lfpoDocType, lotDocType, groupOptions, item }:
-    { lfpoDocType?: DocumentType; lotDocType?: DocumentType; groupOptions: any[]; item: PurchaseOrderItem }
+    { lfpoDocType?: DocumentType; lotDocType?: DocumentType; groupOptions: any[]; item: FBPurchaseOrderItem }
   ) {
     this.createLotAPI.setUrl(FBEndpoint.DocumentRevisionsUrl);
     this.lfpoDocType = lfpoDocType;
