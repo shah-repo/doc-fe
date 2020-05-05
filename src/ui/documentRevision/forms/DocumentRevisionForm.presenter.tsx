@@ -1,6 +1,6 @@
 import { Box, Button, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
-import { get, isEmpty } from "lodash";
+import { isEmpty } from "lodash";
 import { observer } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
@@ -33,7 +33,6 @@ import Text from "../../components/Text";
 import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
 import { documentDetailsPath } from "../../document.revision/utils/paths";
-import FBWorkspaceForm from "../../form.builder/containers/workspace/FBWorkspaceForm";
 import { FBValidate } from "../../form.builder/defaults/validator";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import FBStore from "../../form.builder/stores/ui/FBStore";
@@ -44,6 +43,7 @@ import styles from "./DocumentRevisionForm.styles";
 import ApproveAndRelease from "./presenters/ApproveAndRelease";
 import DocIdInput from "./presenters/DocIdInput";
 import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
+import MemoizedFBWorkspace from "./presenters/MemoizedFBWorkspace";
 import References from "./presenters/References";
 import RenderHtmlField from "./presenters/RenderHtmlField";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
@@ -407,9 +407,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 <GenerateHtmlPreview id={values.id} renderHTML={values.formDocument?.renderHTML} />
               </Box>
             }
-            <FBWorkspaceForm
-              id={get(values, "id")}
-              documentId={get(values, "formDocument.document.id") || get(values, "document.id")}
+            <MemoizedFBWorkspace
+              id={values.id}
+              documentId={values.formDocument?.document?.id || values.document?.id}
               document={values as unknown as DocumentRevision}
             />
           </Box>
@@ -421,7 +421,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             justify="flex-end"
             direction="row"
           >
-            { canShowCancelButton &&  CancelButtonRenderer()}
+            {canShowCancelButton &&  CancelButtonRenderer()}
             {renderChangeOwnership}
             <SubmitButton
               asyncState={asyncState}
