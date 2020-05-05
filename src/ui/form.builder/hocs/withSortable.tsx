@@ -47,7 +47,7 @@ export function withSortable<T extends FBSortableProps>(
             ? FBStore.getValue(name)
             : FBStore.getValue(`${FBFieldName.InlineApproval}${name}`);
           hasValue = Boolean(hasValue);
-          hasStart = approveIsBlocking && !hasValue;
+          hasStart = approveIsBlocking && hasValue;
           return true;
         }
         return false;
