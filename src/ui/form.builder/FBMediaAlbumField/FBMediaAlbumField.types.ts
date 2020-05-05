@@ -1,5 +1,4 @@
-import { FBMediaAlbumFieldState, FBMediaProps } from "..";
-import { FBInputProps } from "../types/common";
+import { FBInputProps, FBMediaAlbumFieldState, FBMediaProps, FBWorkspaceState } from "..";
 
 export type FBMediaAlbumFieldMode = "media" | "qr";
 export type FBMediaStatus = "AVAILABLE" | "USED" | "OBSOLETED";
@@ -18,4 +17,8 @@ export type FBMediaAlbumFieldProps =
   loading?: boolean;
 };
 
-export type FBMediaAlbumFieldConstructor = Pick<FBMediaAlbumFieldProps, "name" | "isTemplate">;
+export type FBMediaAlbumFieldConstructor =
+& Pick<FBMediaAlbumFieldProps, "name" | "isTemplate">
+& {
+  workspaceState?: FBWorkspaceState;
+};

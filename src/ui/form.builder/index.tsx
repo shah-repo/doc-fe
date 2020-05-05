@@ -44,6 +44,7 @@ export { default as FBEditorInlineApproval } from "./FBEditorInlineApproval/FBEd
 export * from "./FBEditorInlineApproval/FBEditorInlineApproval.types";
 export { default as FBEditorInstructionsDocument } from "./FBEditorInstructionsDocument/FBEditorInstructionsDocument";
 export { default as FBEditorLabel } from "./FBEditorLabel/FBEditorLabel";
+export { default as FBEditorMediaAlbum } from "./FBEditorMediaAlbum/FBEditorMediaAlbum";
 export { default as FBEditorOptionGroup } from "./FBEditorOptionGroup/FBEditorOptionGroup";
 export { default as FBEditorOptions } from "./FBEditorOptions/FBEditorOptions";
 export { default as FBEditorParagraph } from "./FBEditorParagraph/FBEditorParagraph";
@@ -193,5 +194,4 @@ export { default as FBWorkspaceTplActions } from "./FBWorkspaceTplActions/FBWork
 export * from "./FBWorkspaceTplActions/FBWorkspaceTplActions.types";
 export { default as FB } from "./helpers/FB";
 export * from "./helpers/FBFieldName";
-
 

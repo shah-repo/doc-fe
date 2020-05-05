@@ -5,9 +5,8 @@ import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import CropFreeIcon from "@material-ui/icons/CropFree";
 import React from "react";
 import { FBMediaAlbumProps } from ".";
-import { FBMediaGallery, FBProvider } from "..";
+import { FBMediaCarousel, FBMediaGallery, FBProvider } from "..";
 import Text from "../../components/Text";
-import { FBMediaCarousel } from "../FBMediaCarousel";
 import { withFBMediaAlbum } from "./FBMediaAlbum.wrap";
 
 const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({

@@ -65,7 +65,7 @@ export const withFBInput = <T extends FBInputProps>(
           return inputState && (inputState.value = formState.getFieldValue(name, ""));
         },
         default() {
-          return formState.getFieldValue(name, defaultValue) || "";
+          return formState.getFieldValue(name, defaultValue || defaultChecked);
         },
       };
       const transDefault = (value[type || ""] || value.default)();
