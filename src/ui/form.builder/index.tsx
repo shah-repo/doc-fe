@@ -134,6 +134,8 @@ export * from "./FBPurchaseOrderActions/FBPurchaseOrderActions.types";
 export { default as FBPurchaseOrderForm } from "./FBPurchaseOrderForm/FBPurchaseOrderForm";
 export * from "./FBPurchaseOrderForm/FBPurchaseOrderForm.types";
 export { default as FBPurchaseOrderTable } from "./FBPurchaseOrderTable/FBPurchaseOrderTable";
+export { default as FBPurchaseOrderTableDetails } from "./FBPurchaseOrderTable/FBPurchaseOrderTable.details";
+export { default as FBPurchaseOrderTableSum } from "./FBPurchaseOrderTable/FBPurchaseOrderTable.sum";
 export * from "./FBPurchaseOrderTable/FBPurchaseOrderTable.types";
 export { default as FBQuantityField } from "./FBQuantityField/FBQuantityField";
 export { default as FBRadio } from "./FBRadio/FBRadio";
@@ -191,4 +193,5 @@ export { default as FBWorkspaceTplActions } from "./FBWorkspaceTplActions/FBWork
 export * from "./FBWorkspaceTplActions/FBWorkspaceTplActions.types";
 export { default as FB } from "./helpers/FB";
 export * from "./helpers/FBFieldName";
+
 

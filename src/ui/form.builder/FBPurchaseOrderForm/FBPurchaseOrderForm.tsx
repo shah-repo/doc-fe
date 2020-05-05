@@ -1,3 +1,4 @@
+import { Box } from "@material-ui/core";
 import React from "react";
 import { FBAutocomplete, FBAutocompleteAsync, FBCheckbox, FBData, FBDatePicker, FBPurchaseOrderFormProps, FBQuantityField, FBTextField } from "..";
 import { withFBPurchaseOrderForm } from "./FBPurchaseOrderForm.wrap";
@@ -8,7 +9,6 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
   handleTotal,
   getOptionDisabled,
   children,
-  ...props
 }) => (
   <>
     <FBQuantityField
@@ -62,21 +62,23 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
       rules="required"
       onChange={handleTotal}
     />
-    <FBCheckbox
-      label="form.builder.field.capital.equipment"
-      name="capitalEquipment"
-      gutter={false}
-    />
-    <FBCheckbox
-      label="form.builder.field.tax"
-      name="tax"
-      gutter={false}
-    />
-    <FBCheckbox
-      label="form.builder.field.is.traceability.required"
-      name="isTraceabilityRequired"
-      gutter={false}
-    />
+    <Box display="flex" justifyContent="flex-start">
+      <FBCheckbox
+        label="form.builder.field.tax"
+        name="tax"
+        gutter={false}
+      />
+      <FBCheckbox
+        label="form.builder.field.capital.equipment"
+        name="capitalEquipment"
+        gutter={false}
+      />
+      <FBCheckbox
+        label="form.builder.field.is.traceability.required"
+        name="isTraceabilityRequired"
+        gutter={false}
+      />
+    </Box>
     {children}
   </>
 );

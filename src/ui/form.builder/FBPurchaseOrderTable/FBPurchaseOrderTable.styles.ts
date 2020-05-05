@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/core";
 
 export const FBPurchaseOrderClasses = makeStyles({
-  table: {
+  root: {
     "width": "100%",
     "tableLayout": "fixed",
     "& th": {
@@ -13,11 +13,17 @@ export const FBPurchaseOrderClasses = makeStyles({
       padding: "10px 8px",
     },
     "& .FBIcon-root": {
-      color: "#c1c1c1",
-      marginTop: "5px",
+      "color": "#c1c1c1",
+      "marginTop": "5px",
+      "&:hover": {
+        color: "#888888",
+      },
+    },
+    "& .FBAmount-root": {
+      width: "30%",
     },
   },
-  tableDetails: {
+  table: {
     "& th": {
       whiteSpace: "nowrap",
     },

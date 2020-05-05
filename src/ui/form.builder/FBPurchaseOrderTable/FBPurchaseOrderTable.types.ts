@@ -7,10 +7,16 @@ export type FBPurchaseOrderTableProps =
 & {
   handleShippingCost?: (ev: React.ChangeEvent<any>) => any;
   handleDelete?: (index: number) => (e: any) => void;
-  classes?: Record<"table" | "tableDetails", string>;
+  classes?: Record<"root" | "table", string>;
   items?: FBPurchaseOrderItem[];
   calculation?: FBPurchaseOrderCalculation;
 };
+
+export type FBPurchaseOrderTableDetailsProps =
+& Pick<FBPurchaseOrderTableProps, "handleDelete" | "handleItem" | "classes" | "items">;
+
+export type FBPurchaseOrderTableSumProps =
+& Pick<FBPurchaseOrderTableProps,  "handleItem" | "classes" | "items">;
 
 export enum FBPurchaseOrderDetailsHead {
   index = "form.builder.item",
