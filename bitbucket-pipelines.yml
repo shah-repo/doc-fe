@@ -6,7 +6,7 @@ definitions:
 
   steps:
     - step: &COMMON
-        image: 
+        image:
           name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe_test-1.2
           aws:
             access-key: $AWS_ACCESS_KEY_ID
@@ -16,7 +16,7 @@ definitions:
           - node
 
     - step: &COMMON_BUILD
-        image: 
+        image:
           name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe-1.2
           aws:
             access-key: $AWS_ACCESS_KEY_ID
@@ -27,7 +27,7 @@ definitions:
           - node
 
     - step: &COMMON_DEPLOY
-        image: 
+        image:
           name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/shifamed:build_image_fe-1.2
           aws:
             access-key: $AWS_ACCESS_KEY_ID
@@ -57,9 +57,9 @@ definitions:
           - jest-config/**
         script:
           - ./aws/bash_scripts/runTests.sh
-#
-# DEV
-#
+    #
+    # DEV
+    #
     - step: &BUILD_DEV
         <<: *COMMON_BUILD
         name: Building for Dev
@@ -69,14 +69,14 @@ definitions:
           - compiled.tar.gz
 
     - step: &DEPLOY_DEV
-        <<: *COMMON_DEPLOY 
+        <<: *COMMON_DEPLOY
         name: Deploy to Dev
         deployment: Development
         script:
           - ./aws/bash_scripts/publish.sh "dev"
-#
-# DEV2
-#
+    #
+    # DEV2
+    #
     - step: &BUILD_DEV2
         <<: *COMMON_BUILD
         name: Building for Dev2
@@ -86,14 +86,14 @@ definitions:
           - compiled.tar.gz
 
     - step: &DEPLOY_DEV2
-        <<: *COMMON_DEPLOY 
+        <<: *COMMON_DEPLOY
         name: Deploy to Dev2
         deployment: Development
         script:
           - ./aws/bash_scripts/publish.sh "dev2"
-#
-# DEMO
-#
+    #
+    # DEMO
+    #
     - step: &BUILD_DEMO
         <<: *COMMON_BUILD
         name: Building for Demo
@@ -103,14 +103,14 @@ definitions:
           - compiled.tar.gz
 
     - step: &DEPLOY_DEMO
-        <<: *COMMON_DEPLOY 
+        <<: *COMMON_DEPLOY
         name: Deploy to Demo
         deployment: Demo
         script:
           - ./aws/bash_scripts/publish.sh "demo"
-#
-# PROD
-#
+    #
+    # PROD
+    #
     - step: &BUILD_PROD
         <<: *COMMON_BUILD
         name: Building for Prod
@@ -120,7 +120,7 @@ definitions:
           - compiled.tar.gz
 
     - step: &DEPLOY_PROD
-        <<: *COMMON_DEPLOY 
+        <<: *COMMON_DEPLOY
         name: Deploy to Prod
         deployment: Production
         script:
@@ -131,7 +131,7 @@ definitions:
 #
 pipelines:
   pull-requests:
-    '**':
+    "**":
       - parallel:
           - step: *RUN_TESTS
           # - step: *RUN_LINTER
@@ -174,7 +174,7 @@ pipelines:
           - step: *BUILD_DEV
       - step: *DEPLOY_DEV
 
-    ENC-2399-approval-matrix-table:
+    ENC-2434_fb_cr:
       - parallel:
           - step: *RUN_TESTS
           # - step: *RUN_LINTER
