@@ -11,5 +11,5 @@ export enum FBEndpoint {
   DocumentRevisionsUrl = "/document_revisions",
   FetchDocumentRevisionByAcronym =
   "/document_revisions?documentTypeAcronym=${documentTypeAcronym}&status%5B%5D=RELEASED",
-  ReceivedItemsQuantity = "/lot_quantity/${documentId}",
+  ReceivedItemsQuantity = "/documents/lot_quantity/${documentId}",
 }
