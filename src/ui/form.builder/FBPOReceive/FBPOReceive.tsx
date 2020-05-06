@@ -25,7 +25,7 @@ const FBPOReceive: React.FunctionComponent<FBPOReceiveProps> = ({
         </Box>
       )}
       {!loading && items && <FBPOReceiveTable {...{ items, name }} />}
-      {!loading && <FBSectionBox label="PURCHASE ORDER" />}
+      {!loading && schema && <FBSectionBox label="PURCHASE ORDER" />}
       {!loading && schema && <FBSchema schema={schema as FBSchemaProps[]} />}
     </Box>
   </FBProvider>

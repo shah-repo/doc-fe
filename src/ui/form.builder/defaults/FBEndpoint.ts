@@ -9,5 +9,7 @@ export enum FBEndpoint {
   FetchDocumentRevision = "/document_revisions/${documentId}",
   FetchDocId = "/documents/proposed_docid?documentTypeId=${documentTypeId} ",
   DocumentRevisionsUrl = "/document_revisions",
-  FetchDocumentRevisionByAcronym = "/document_revisions?documentTypeAcronym=${documentTypeAcronym}&status%5B%5D=RELEASED",
+  FetchDocumentRevisionByAcronym =
+  "/document_revisions?documentTypeAcronym=${documentTypeAcronym}&status%5B%5D=RELEASED",
+  ReceivedItemsQuantity = "/documents/lot_quantity/${documentId}",
 }

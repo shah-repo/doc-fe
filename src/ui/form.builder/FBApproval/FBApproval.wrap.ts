@@ -1,9 +1,10 @@
 import _ from "lodash";
 import { useObserver } from "mobx-react";
+import moment from "moment";
 import React from "react";
 import { FBApprovalConfig, FBApprovalProps, FBApprovalState, FBApprovalStatus, FBApprovalValue } from ".";
 import { FB, FBAutocompleteAsyncOption } from "..";
-import { getStartOfDayDateString } from "../../../common/utils/date";
+import { TIME_ZONE } from "../../../common/utils/date";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { store } from "../../../state/store";
@@ -75,7 +76,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
         if (!approverValue) {
           return "";
         }
-        const approvedAt = getStartOfDayDateString(approverValue.approvedAt, "LL");
+        const approvedAt = moment(approverValue.approvedAt).tz(TIME_ZONE, true).format("D MMM YYYY hh:mm a");
         return `${status}, ${approvedAt}`;
       }
       return status;

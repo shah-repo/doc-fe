@@ -1,6 +1,9 @@
+import { Dictionary, template } from "lodash";
 import { action, observable, set } from "mobx";
 import moment from "moment";
 import uniqid from "uniqid";
+import { FBEndpoint } from "../defaults/FBEndpoint";
+import FBRequest from "../FBApi/FBApi.request";
 import { TAX_RATE } from "../helpers/constants";
 import FBStore from "../stores/ui/FBStore";
 import { PurchaseOrder, PurchaseOrderItem } from "./FBPurchaseOrder.types";
@@ -16,6 +19,7 @@ const DEFAULT_PO: PurchaseOrder = {
 export class FBPurchaseOrderState {
   @observable public name = "";
   @observable public po = DEFAULT_PO;
+  public receivedItems: FBRequest<any, Dictionary<number>> = new FBRequest();
 
   @action public setItems = (items: PurchaseOrderItem[]) => {
     set(this.po, "items", items);
@@ -117,6 +121,18 @@ export class FBPurchaseOrderState {
       totalAmount: this.formatCost(value.totalAmount),
     };
     this.calculateCost();
+  };
+
+  @action public fetchReceivedItems = () => {
+    const { document } = FBStore;
+    if (!document?.document?.id) {
+      return;
+    }
+
+    const urlTpl = template(FBEndpoint.ReceivedItemsQuantity);
+    const url = urlTpl({ documentId: document?.document?.id });
+    this.receivedItems.setUrl(url);
+    this.receivedItems.fetch();
   };
 
   private updateFBStore = () => {
