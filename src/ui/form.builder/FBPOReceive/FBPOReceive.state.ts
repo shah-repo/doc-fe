@@ -18,6 +18,10 @@ export class FBPOReceiveState extends FBRequest<DocumentRevision, any>  {
     this.setPOId(id);
   }
 
+  @computed public get poDocumentId(): string | undefined {
+    return this.data?.document.id;
+  }
+
   @computed public get docSchema(): FBInputProps[] | undefined {
     return this.data?.formDocument?.formTemplate?.schema;
   }

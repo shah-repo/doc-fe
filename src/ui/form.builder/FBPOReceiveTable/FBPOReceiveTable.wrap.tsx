@@ -1,7 +1,9 @@
 
 import { useObserver } from "mobx-react";
 import React from "react";
+import { useIntl } from "react-intl";
 import { FB, FBPOReceiveForm, FBPOReceiveFormActions, FBPOReceiveTableProps } from "..";
+import FBStore from "../stores/ui/FBStore";
 
 export const withFBPOReceiveTable = <T extends FBPOReceiveTableProps>(
   Component: React.FunctionComponent<T>,
@@ -14,8 +16,14 @@ export const withFBPOReceiveTable = <T extends FBPOReceiveTableProps>(
   }: T) => {
 
     const { dialogState, poReceiveState } = FB.useStores();
+    const intl = useIntl();
 
     handleEdit = (_index, item) => () => {
+      if (!FBStore.document.document.id) {
+        alert(intl.formatMessage({ id: "form.builder.save.doc.before.continue" }));
+        return;
+      }
+
       dialogState?.config({
         open: true,
         maxWidth: "sm",
