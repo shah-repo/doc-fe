@@ -2,13 +2,10 @@ import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { isEmpty } from "lodash";
 import { observer } from "mobx-react";
-import React, { useEffect, useMemo } from "react";
-import { useSelector } from "react-redux";
-import { GroupTag } from "../../../state/ducks/auth/types";
+import React, { useEffect } from "react";
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
-import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { AsyncState } from "../../../state/types";
 import OwnerChanger from "../../components/common/owner.changer/container";
 import { RequestType } from "../../components/common/owner.changer/helpers/types";
@@ -35,6 +32,7 @@ import styles from "./DocumentRevisionForm.styles";
 import ApproveAndRelease from "./presenters/ApproveAndRelease";
 import CancelButton from "./presenters/CancelButton";
 import DocIdInput from "./presenters/DocIdInput";
+import DocumentTypeSelect from "./presenters/DocumentTypeSelect";
 import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
 import MemoizedFBWorkspace from "./presenters/MemoizedFBWorkspace";
 import References from "./presenters/References";
@@ -72,6 +70,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   classes,
   asyncState,
   initialValues,
+  // TODO: check handleChange
   handleChange,
   availableReferences,
   showRevisionTypeChange,
@@ -140,45 +139,11 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values.revisionChangeType]);
 
-  const handleTypeChange = (
-    event: React.ChangeEvent<{ name?: string; value: unknown }>
-  ) => {
-    const typeId = event.target.value as string;
-    const type = documentTypesById[typeId] || {};
-    savedocInfo({ name: event.target.name || "", isQms: type.isQms });
-    groupOptions.forEach((group) => {
-      if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
-        setFieldValue("securityGroups", [
-          { value: group.value, label: group.label },
-        ]);
-      }
-    });
-    if (loadDocumentProposedId) {
-      setFieldValue("retrain", type.defaultTraining);
-      loadDocumentProposedId(type.id);
-    }
-    FBDRStore.setInitialFBMode(type);
-    if (type.isQms) {
-      groupOptions.forEach((group) => {
-        if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
-          setFieldValue("securityGroups", [
-            { value: group.value, label: group.label },
-          ]);
-        }
-      });
-    }
-    if (!type.isQms) {
-      setFieldValue("securityGroups", []);
-    }
-    handleChange(event);
-  };
-
   const onFormClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     FBValidate();
   };
-  const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
 
   const renderChangeOwnership = canChangeOwnerShip && values.id && (
     <OwnerChanger requestId={values.id} requestType={RequestType.Document} />
@@ -194,14 +159,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       includeEmpty={false}
     />
   );
-
-  const isDocTypeDisabled = type === "newVersion" || isdocRevStatusDraft;
-  const options = useMemo(() => type === "newOutput" ?
-    (initialValues.formDocument?.formTemplate?.outputDocumentTypes.map((e) =>
-      ({ value: e.id, text: e.documentTypeName })
-    ) as SelectOption[] || documentTypes)
-    : documentTypes
-  , [documentTypes, initialValues.formDocument, type]);
 
 
   return (
@@ -245,16 +202,14 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               : "Optional: Title will be used if description not provided.",
           }}
         />
-        <SelectField
-          name="document.documentType.id"
-          label="document.type"
-          selectProps={{
-            inputProps: { id: "documentType", disabled: isDocTypeDisabled },
-            onChange: handleTypeChange,
-          }}
-          options={options}
-          validate={validator(required)}
-          includeEmpty={false}
+        <DocumentTypeSelect
+          outputDocumentTypes={initialValues.formDocument?.formTemplate?.outputDocumentTypes}
+          type={type}
+          isdocRevStatusDraft={isdocRevStatusDraft}
+          // TODO: check handleChange
+          handleChange={handleChange}
+          savedocInfo={savedocInfo}
+          setFieldValue={setFieldValue}
         />
         <DocIdInput
           document={values.document}
