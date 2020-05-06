@@ -3,18 +3,13 @@ import { FormikProps } from "formik";
 import { isEmpty } from "lodash";
 import { observer } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
-import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
-import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
-import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
-import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
-import AsyncGate from "../../components/AsyncGate";
 import OwnerChanger from "../../components/common/owner.changer/container";
 import { RequestType } from "../../components/common/owner.changer/helpers/types";
 import { default as AutocompleteField } from "../../components/forms/fields/Autocomplete/Autocomplete";
@@ -35,7 +30,6 @@ import { documentDetailsPath } from "../../document.revision/utils/paths";
 import { FBValidate } from "../../form.builder/defaults/validator";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import FBStore from "../../form.builder/stores/ui/FBStore";
-import useActionCreator from "../../hooks/useActionCreator";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
 import ApproveAndRelease from "./presenters/ApproveAndRelease";
@@ -46,6 +40,7 @@ import MemoizedFBWorkspace from "./presenters/MemoizedFBWorkspace";
 import References from "./presenters/References";
 import RenderHtmlField from "./presenters/RenderHtmlField";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
+import SecurityEmployees from "./presenters/SecurityEmployees";
 import SecurityGroups from "./presenters/SecurityGroups";
 import UpgradeToLatest from "./presenters/UpgradeToLatest";
 import { DocumentRevisionFormValues } from "./types";
@@ -101,14 +96,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   type,
   handleCancelDraft,
 }) => {
-  const intl = useIntl();
-  const loadAvailableApproversAction = useActionCreator(
-    changeRequestsActions.loadAvailableApprovers
-  );
-  const loadApproversAsyncState = useSelector(
-    changeRequestsSelectors.getLoadApproversAsyncState
-  );
-
   if (!values.id && !values.document?.documentType?.id) {
     FBDRStore.setMode("none");
     if (setDocId) {
@@ -191,14 +178,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   ) => {
     FBValidate();
   };
-
-  const availableApprovers = useSelector((state: ApplicationState) => {
-    const currentUserId = authSelectors.currentUserId(state);
-    return changeRequestsSelectors.getApproversListWithoutCurrentUser(
-      state,
-      currentUserId
-    );
-  });
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
 
   const renderChangeOwnership = canChangeOwnerShip && values.id && (
@@ -305,28 +284,14 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         />
         <AttachmentsField />
         {showRevisionTypeChange && <RevisionTypeChange />}
-        {(!values.status || type === "newOutput") && (
-          <AsyncGate
-            asyncState={loadApproversAsyncState}
-            asyncAction={loadAvailableApproversAction}
-            startActionOnMount={true}
-          >
-            <AutocompleteField
-              name="securityEmployees"
-              label="document.revision.selected.users"
-              autocompleteProps={{
-                id: "securityEmployees",
-                isMulti: true,
-                closeMenuOnSelect: false,
-                placeholder: intl.formatMessage({
-                  id: "document.revision.selected.users.placeholder",
-                }),
-              }}
-              options={availableApprovers}
-            />
-          </AsyncGate>
-        )}
-        <SecurityGroups values={values} type={type} />
+        {
+          (!values.status || type === "newOutput") &&
+          <SecurityEmployees />
+        }
+        {
+          (!values.status || type === "newOutput") &&
+          <SecurityGroups />
+        }
         {FBStore.active && !FBDRStore.isOutput && (
           <Box mt={4}>
             <AutocompleteField
