@@ -1,20 +1,27 @@
 import { Button } from "@material-ui/core";
 import * as React from "react";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import Text from "../../../components/Text";
+import useActionCreator from "../../../hooks/useActionCreator";
+import useAsync from "../../../hooks/useAsync";
 
 interface Props {
-  handleCancelDraft: any;
   documentStatus: DocumentRevisionStatus;
-  documentRevision?: DocumentRevision;
+  version?: number;
+  docRevId?: string;
 }
 
 const CancelButton: React.FunctionComponent<Props> = ({
-  handleCancelDraft,
   documentStatus,
-  documentRevision,
+  version = 0,
+  docRevId,
 }) => {
-  const canShowCancelButton = documentStatus === DocumentRevisionStatus.Draft && (documentRevision?.version || 0) > 1;
+  const async = useAsync();
+  const cancelDraft = useActionCreator(documentRevisionsActions.cancelDraft);
+  const handleCancelDraft = () => {
+    async.start(cancelDraft, docRevId, async);
+  };
+  const canShowCancelButton = documentStatus === DocumentRevisionStatus.Draft && version > 1;
 
   return (
     <>

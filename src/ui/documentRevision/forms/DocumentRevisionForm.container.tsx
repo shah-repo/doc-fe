@@ -15,8 +15,6 @@ import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 import DocumentHeader from "../../document.revision/summary/header";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import styles from "./DocumentRevisionForm.container.style";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
@@ -139,20 +137,6 @@ DocumentRevisionFormContainerProps
     [documentTypes],
   );
 
-  const upgradeAction = useActionCreator(documentRevisionsActions.upgradeToReleasedForm);
-  const cancelDraft = useActionCreator(documentRevisionsActions.cancelDraft);
-
-  const async = useAsync();
-  const cancelDraftAsync = useAsync();
-
-  const onUpgradeClick = () => {
-    async.start(upgradeAction, documentRevision.id, async);
-  };
-
-  const handleCancelDraft = () => {
-    async.start(cancelDraft, documentRevision.id, cancelDraftAsync);
-  };
-
   useEffect(() => {
     if (type !== "newVersion" &&
       !initialValues.document?.docId &&
@@ -186,9 +170,7 @@ DocumentRevisionFormContainerProps
       outputDocumentTypeOptions={outputDocumentTypeOptions}
       documentTypesById={documentTypesById}
       canChangeOwnerShip={canChangeOwnerShip}
-      onUpgradeClick={onUpgradeClick}
       type={type}
-      handleCancelDraft={handleCancelDraft}
     />
   );
 

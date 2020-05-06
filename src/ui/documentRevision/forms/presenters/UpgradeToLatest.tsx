@@ -1,29 +1,32 @@
 import { Box, Button, Dialog, DialogContent } from "@material-ui/core";
 import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { Document, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../../../state/reducers";
 import Text from "../../../components/Text";
+import useActionCreator from "../../../hooks/useActionCreator";
+import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
 import { getIsLastVersionObsolete } from "../../helpers";
 
 
 interface Props {
-  documentRevision?: DocumentRevision;
-  onUpgradeClick: () => void;
+  documentStatus?: DocumentRevisionStatus;
+  formDocumentId?: string;
+  docRevId?: string;
+  formDocumentStatus?: DocumentRevisionStatus;
 }
 
 
 export const UpgradeToLatest: React.FunctionComponent<Props> = ({
-  onUpgradeClick,
-  documentRevision,
+  documentStatus,
+  formDocumentId = "",
+  docRevId,
+  formDocumentStatus,
 }) => {
   const dispatch = useDispatch();
   const dialog = useDialog();
-  const formDocumentStatus = documentRevision?.formDocument?.status || "";
   const isFormStatusDeprecated = formDocumentStatus === DocumentRevisionStatus.Deprecated;
-  const documentStatus = documentRevision?.status;
-  const formDocumentId = documentRevision?.formDocument?.document?.id || "";
   const isDocumentStatusDraftOrPending =
     documentStatus === (DocumentRevisionStatus.Draft || DocumentRevisionStatus.PendingChange);
   const formDocuments: Document = useSelector((state: ApplicationState) =>
@@ -39,6 +42,12 @@ export const UpgradeToLatest: React.FunctionComponent<Props> = ({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formDocumentId]);
+
+  const async = useAsync();
+  const upgradeAction = useActionCreator(documentRevisionsActions.upgradeToReleasedForm);
+  const onUpgradeClick = () => {
+    async.start(upgradeAction, docRevId, async);
+  };
 
 
   return (

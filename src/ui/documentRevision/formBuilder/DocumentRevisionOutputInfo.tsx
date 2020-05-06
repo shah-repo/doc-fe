@@ -1,20 +1,22 @@
 import { Box } from "@material-ui/core";
-import _ from "lodash";
 import React from "react";
-import { DataProps } from "../../../state/ducks/common";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import Date from "../../components/Date";
 import Text from "../../components/Text";
+import { FBDocumentFlowProps } from "../../form.builder/types/formik";
 import { generateVersionNumber } from "../helpers";
 
-const DocumentRevisionOutputInfo: React.FunctionComponent<DataProps<DocumentRevision>> = ({
-  dataProp,
+interface Props {
+  formDocument?: FBDocumentFlowProps;
+}
+
+const DocumentRevisionOutputInfo: React.FunctionComponent<Props> = ({
+  formDocument = {},
 }) => {
 
-  const { revision, revisionStage, revisionChangeType, releasedAt } = _.get(dataProp, "formDocument") || {};
+  const { revision, revisionStage, revisionChangeType, releasedAt } = formDocument;
   const version = generateVersionNumber(revision, revisionStage, revisionChangeType);
 
-  const docId = _.get(dataProp, "formDocument.document.docId");
+  const docId = formDocument?.document?.docId;
 
   return (
     <Box mb={3}>

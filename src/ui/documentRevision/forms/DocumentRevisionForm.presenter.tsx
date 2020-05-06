@@ -61,9 +61,7 @@ export interface Props
   documentTypesById: DocumentTypeByIdState;
   onDirtyFlagChange?: (dirty: boolean) => void;
   canChangeOwnerShip: boolean;
-  onUpgradeClick: () => void;
   type?: string;
-  handleCancelDraft: () => void;
 }
 
 export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
@@ -91,9 +89,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   canChangeOwnerShip,
   documentRevision,
   setFieldValue,
-  onUpgradeClick,
   type,
-  handleCancelDraft,
 }) => {
   if (!values.id && !values.document?.documentType?.id) {
     FBDRStore.setMode("none");
@@ -169,11 +165,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       sm={isDisabled ? 12 : 10}
       xs={12}
     >
-      {FBDRStore.isOutput && (
-        <DocumentRevisionOutputInfo
-          dataProp={(values as unknown) as DocumentRevision}
-        />
-      )}
+      {
+        FBDRStore.isOutput &&
+        <DocumentRevisionOutputInfo formDocument={values.formDocument} />
+      }
       <FormWrapper
         dirty={dirty}
         initialValues={initialValues}
@@ -288,8 +283,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           >
             <CancelButton
               documentStatus={documentRevision?.status}
-              documentRevision={documentRevision}
-              handleCancelDraft={handleCancelDraft}
+              version={documentRevision?.version}
+              docRevId={documentRevision?.id}
             />
             {renderChangeOwnership}
             <SubmitButton
@@ -301,7 +296,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               onClick={onFormClick}
               id="DocumentRevisionForm-submit"
             />
-            <UpgradeToLatest onUpgradeClick={onUpgradeClick} documentRevision={documentRevision} />
+            <UpgradeToLatest
+              documentStatus={documentRevision?.formDocument?.status}
+              formDocumentId={documentRevision?.formDocument?.document?.id}
+              docRevId={documentRevision?.id}
+              formDocumentStatus={documentRevision?.formDocument?.status}
+            />
             <ApproveAndRelease
               id={values.id}
               status={values.status}
