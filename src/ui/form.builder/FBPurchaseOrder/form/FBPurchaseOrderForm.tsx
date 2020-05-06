@@ -3,10 +3,12 @@ import { Form, Formik } from "formik";
 import { Dictionary } from "lodash";
 import React from "react";
 import { FormattedNumber } from "react-intl";
+import unitsOptions from "../../../../data/units.json";
 import Text from "../../../components/Text";
 import FBButton from "../../components/inputs/FBButton";
 import FBCheckbox from "../../components/inputs/FBCheckbox";
 import FBDatePicker from "../../components/inputs/FBDatePicker";
+import FBSelect from "../../components/inputs/FBSelect";
 import FBTextField from "../../components/inputs/FBTextField";
 import { FBAutocompleteAsync } from "../../FBAutocompleteAsync";
 import FBStore from "../../stores/ui/FBStore";
@@ -63,9 +65,12 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
           name={`${name}-formValues.glCode`}
         />
         <Error error={errors.glCode} />
-        <FBTextField
+        <FBSelect
           label="form.builder.field.units"
           name={`${name}-formValues.units`}
+          options={unitsOptions}
+          optionValueKey="value"
+          optionLabelKey="text"
         />
         <Error error={errors.units} />
         <FBAutocompleteAsync

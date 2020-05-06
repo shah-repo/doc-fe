@@ -1,3 +1,4 @@
+import Box from "@material-ui/core/Box";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
@@ -39,46 +40,49 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
     classes={{ paper: classes.drawerPaper }}
     anchor="left"
   >
-    <Toolbar className={classes.toolbar}>
-      <Typography variant="h6" className={classes.toolbarTitle}>
-        <Link to={HOME_URL} className={classes.headerLink}>
-          <Logo />
-        </Link>
-      </Typography>
-    </Toolbar>
-    <List className={classes.list}>
-      <NavigationLinkContainer
-        url={HOME_URL}
-        text="navigation.dashboard"
-        Icon={Dashboard}
-        currentPath={location.pathname}
-        childrenUrls={
-          [
+    <Box flexGrow="1">
+      <Toolbar className={classes.toolbar}>
+        <Typography variant="h6" className={classes.toolbarTitle}>
+          <Link to={HOME_URL} className={classes.headerLink}>
+            <Logo />
+          </Link>
+        </Typography>
+      </Toolbar>
+      <List>
+        <NavigationLinkContainer
+          url={HOME_URL}
+          text="navigation.dashboard"
+          Icon={Dashboard}
+          currentPath={location.pathname}
+          childrenUrls={
+            [
             // { url: CHANGE_REQUEST_CREATE_URL, text: "navigation.createChangeRequest" },
-          ]
-        }
-      />
-      <NavigationLinkContainer
-        url={DOCUMENT_REVISION_LIST_URL}
-        text="navigation.document.list"
-        Icon={Dashboard}
-        currentPath={location.pathname}
-      />
-      <NavigationLinkContainer
-        url={CHANGE_REQUEST_LIST_URL}
-        text="navigation.change.request.list"
-        Icon={Dashboard}
-        currentPath={location.pathname}
-      />
-      <UserManagementLink pathname={location.pathname} />
-      <GroupManagementLink pathname={location.pathname} />
-      <DocumentByTypeListLinks pathname={location.pathname} />
-    </List>
-    {hasMultipleCompanies && (
-      <SwitchCompanyButtonContainer location={location} />
-    )}
-
-    <BottomLogo />
+            ]
+          }
+        />
+        <NavigationLinkContainer
+          url={DOCUMENT_REVISION_LIST_URL}
+          text="navigation.document.list"
+          Icon={Dashboard}
+          currentPath={location.pathname}
+        />
+        <NavigationLinkContainer
+          url={CHANGE_REQUEST_LIST_URL}
+          text="navigation.change.request.list"
+          Icon={Dashboard}
+          currentPath={location.pathname}
+        />
+        <UserManagementLink pathname={location.pathname} />
+        <GroupManagementLink pathname={location.pathname} />
+        <DocumentByTypeListLinks pathname={location.pathname} />
+      </List>
+    </Box>
+    <Box paddingBottom="20px">
+      {hasMultipleCompanies && (
+        <SwitchCompanyButtonContainer location={location} />
+      )}
+      <BottomLogo />
+    </Box>
   </Drawer>
 );
 
