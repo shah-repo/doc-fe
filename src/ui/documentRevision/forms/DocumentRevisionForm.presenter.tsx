@@ -419,7 +419,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             {renderChangeOwnership}
             <SubmitButton
               asyncState={asyncState}
-              label={isDisabled ? "common.save" : "navigation.createDocument"}
+              label={isDisabled ?
+                `common.save.${values.document?.documentType?.documentTypeAcronym}` :
+                "navigation.createDocument"
+              }
               onClick={onFormClick}
               id="DocumentRevisionForm-submit"
             />
