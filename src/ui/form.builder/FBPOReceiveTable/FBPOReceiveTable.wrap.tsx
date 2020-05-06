@@ -1,4 +1,5 @@
 
+import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBPOReceiveForm, FBPOReceiveFormActions, FBPOReceiveTableProps } from "..";
 
@@ -8,10 +9,11 @@ export const withFBPOReceiveTable = <T extends FBPOReceiveTableProps>(
   const Comp = ({
     handleEdit,
     name,
+    receivedItems = {},
     ...props
   }: T) => {
 
-    const { dialogState } = FB.useStores();
+    const { dialogState, poReceiveState } = FB.useStores();
 
     handleEdit = (_index, item) => () => {
       dialogState?.config({
@@ -23,9 +25,14 @@ export const withFBPOReceiveTable = <T extends FBPOReceiveTableProps>(
       });
     };
 
+    useObserver(() => {
+      receivedItems = poReceiveState?.receivedItems.data;
+    });
+
     return Component({
       ...(props as T),
       handleEdit,
+      receivedItems,
     });
   };
 

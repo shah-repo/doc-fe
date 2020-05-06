@@ -48,6 +48,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
   onSubmit,
   name,
   isDocumentReleased,
+  receivedItems = {},
 }) => {
   const classes = useStyles();
 
@@ -99,7 +100,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
             >
               <StyledTableCell align="left">{index + 1}</StyledTableCell>
               <StyledTableCell>{row.order}</StyledTableCell>
-              <StyledTableCell>{row.received}</StyledTableCell>
+              <StyledTableCell>{receivedItems[row.partNumber] ?? 0}</StyledTableCell>
               <StyledTableCell>{row.units}</StyledTableCell>
               <StyledTableCell>{row.partNumberDocId}</StyledTableCell>
               <StyledTableCell>

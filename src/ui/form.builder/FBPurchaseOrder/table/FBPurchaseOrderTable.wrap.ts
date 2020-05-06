@@ -1,3 +1,4 @@
+import { useObserver } from "mobx-react";
 import React, { useState } from "react";
 import { FB } from "../..";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
@@ -43,6 +44,10 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       setInitialValues(undefined);
       poState?.clearFormValues();
     };
+
+    useObserver(() => {
+      props.receivedItems = poState?.receivedItems.data;
+    });
 
     return Component({
       ...(props),
