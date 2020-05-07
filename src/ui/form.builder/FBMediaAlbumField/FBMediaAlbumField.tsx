@@ -17,9 +17,10 @@ const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
   loading,
   mode,
   label,
+  gutter = true,
 }) => (
   <Provider {...{ [`mediaAlbumFieldState_${name}`]: mediaAlbumFieldState }} >
-    <Box mb={6}>
+    <Box mb={gutter ? 5 : 0}>
       {label && <FBLabel {...{ label }} />}
       <FBMediaAlbumFieldSocket fieldNameFromSchema={name} />
       {mode !== "qr" && (
