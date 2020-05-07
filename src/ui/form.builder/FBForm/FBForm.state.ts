@@ -1,4 +1,4 @@
-import flatten from "flat";
+import { flatten, unflatten } from "flat";
 import _, { Dictionary } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBInputState } from "..";
@@ -9,9 +9,9 @@ export class FBFormState extends FBSchemaState {
   public rules: Dictionary<string> = {};
   public validationAttributeNames: Dictionary<string> = {};
   public errorValidation = true;
-  @observable public initialValues: Dictionary<any> = {};
-  @observable public values: Dictionary<any> = {};
-  @observable public errors: Dictionary<string> = {};
+  public initialValues: Dictionary<any> = {};
+  public values: Dictionary<any> = {};
+  @observable public errors = new Map<string, string>();
   @observable public helpers = new Map<string, string>();
   @observable public inputState = new Map<string, FBInputState>();
 
@@ -25,18 +25,17 @@ export class FBFormState extends FBSchemaState {
   }
 
   @action public setInitialValues = (values: Dictionary<any>) => {
-    set(this.initialValues, values);
+    this.initialValues = values;
     this.setValues(values);
   };
 
   @action public setValues = (values: Dictionary<any>) => {
-    set(this.values, values);
-
+    this.values = values;
     // OLD: to be removed
     FBStore.setValues(values);
   };
 
-  @action public getValues = () => this.values;
+  @action public getValues = () => unflatten(this.values);
 
   @action public getFieldValue = (
     fieldName: string | undefined, defaultValue: any = undefined): any => {
@@ -45,7 +44,6 @@ export class FBFormState extends FBSchemaState {
     }
     if (!_.get(this.values, fieldName) && !_.isUndefined(defaultValue)) {
       this.initialValues[fieldName] = defaultValue;
-      this.values[fieldName] = defaultValue;
     }
     return _.get(this.values, fieldName) || _.get(this.initialValues, fieldName);
   };
@@ -76,22 +74,19 @@ export class FBFormState extends FBSchemaState {
     this.values = _.omit(this.values, fieldName);
   };
 
-  @action public setRules = (rules: Dictionary<string>) => set(this.rules, rules);
+  @action public setRules = (rules: Dictionary<string>) =>
+    set(this.rules, rules);
 
   @action public getRules = () => this.rules;
 
-  @action public setErrors = (errors: Dictionary<string>) => {
-    set(this.errors, errors);
-  };
+  @action public setErrors = (errors: Dictionary<string>) =>
+    set(this, "errors", errors);
 
-  @action public setFieldError = (fieldName: string, error: string) => {
-    this.setErrors({
-      ...this.errors,
-      [fieldName]: error,
-    });
-  };
+  @action public setFieldError = (fieldName: string, error: string) =>
+    set(this.errors, fieldName, error);
 
-  @action public getFieldError = (fieldName: string): string | undefined => get(this.errors, fieldName);
+  @action public getFieldError = (fieldName: string): string | undefined =>
+    get(this.errors, fieldName);
 
   @action public setHelpers = (helpers: Dictionary<string>) => {
     set(this, "helpers", helpers);
@@ -101,7 +96,8 @@ export class FBFormState extends FBSchemaState {
     set(this.helpers, fieldName, value);
   };
 
-  @action public getFieldHelper = (fieldName: string) => get(this.helpers, fieldName);
+  @action public getFieldHelper = (fieldName: string) =>
+    get(this.helpers, fieldName);
 
   @action public setFieldRules = (fieldName: string, rules: string | undefined) => {
     if (_.isUndefined(rules)) {
@@ -126,27 +122,38 @@ export class FBFormState extends FBSchemaState {
     }
 
     const rules = this.getRules();
-    let values = this.getValues();
-    values = Object.assign({}, ...Object.keys(values).map((key) => {
-      const value = values[key];
-      if (_.isArray(value) || _.isObject(value)) {
-        return ({ [key]: flatten(value) });
-      }
-      return ({ [key]: value });
-    }));
-
+    const values = flatten(this.getValues(), { safe: true });
     const validator = new this.Validator(values, rules);
+    this.registerValidator(validator);
     validator.setAttributeNames(this.validationAttributeNames);
 
-    this.helpers.clear();
+    this.errors.clear();
     function passes() {
       callback && callback(true);
     }
 
     validator.checkAsync(passes, () => {
       const errors = validator.errors.all();
-      _.map(errors, (v, k) => this.setFieldHelper(k, _.join(v, "\n")));
+      _.map(errors, (v, k) => this.setFieldError(k, _.join(v, "\n")));
       callback && callback(false);
+    });
+  };
+
+  // *NOTE: remove this after it is set in be script
+  public registerValidator = (validator: any) => {
+    this.Validator.registerAsyncImplicit("required_if_in", function(val: string[], req: string, attribute: string, passes) {
+      const reqs = req.split(",");
+      const reqName = reqs.shift() || "";
+      const inputValue = validator.input[reqName];
+      const diff = inputValue && inputValue.filter((val) => reqs.includes(val));
+      if (diff && diff.length > 0 && !val) {
+        const { messages: { attributeNames } } = validator;
+        const reqsAttributes = reqs.map((req) => attributeNames[req]);
+        return passes(
+          false,
+          `The ${attributeNames[attribute]} field is required when ${attributeNames[reqName]} includes ${reqsAttributes.join(", ")}.`);
+      }
+      return passes();
     });
   };
 }

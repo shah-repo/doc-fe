@@ -12,7 +12,7 @@ export const withFBValidation = <T extends FBValidationProps>(
 
     function valueByType(value: any, key: string): any {
       switch (true) {
-        case _.isArray(value): return  _.map(value, key);
+        case _.isArray(value): return value;
         case _.isDate(value): return (value as string);
         case _.isObject(value): return _.get(value, key);
         default: return value;

@@ -1,9 +1,11 @@
 import { Checkbox, FormControlLabel } from "@material-ui/core";
 import _ from "lodash";
 import React from "react";
+import { useIntl } from "react-intl";
 import { FBCheckboxGroupProps } from ".";
 import { FBOption } from "..";
 import Text from "../../components/Text";
+import { isTranslation } from "../../translations/types";
 import { withFBOption } from "../FBOption/FBOption.wrap";
 import { FB } from "../helpers";
 
@@ -12,8 +14,8 @@ export const withFBCheckboxGroup = <T extends FBCheckboxGroupProps>(
 ) => {
   const Comp = ({
     options,
-    optionValueKey,
-    optionLabelKey,
+    optionValueKey = "",
+    optionLabelKey = "",
     controls,
     onChange,
     disabled,
@@ -23,10 +25,16 @@ export const withFBCheckboxGroup = <T extends FBCheckboxGroupProps>(
 
     const { formState } = FB.useStores();
     const formValue = formState?.getFieldValue(name, []);
+    const intl = useIntl();
 
     controls = _.map(options as FBOption[], (option, index) => {
-      const [value, message] = _.at(option, [optionValueKey!, optionLabelKey!]);
+      const [value, message] = _.at(option, [optionValueKey, optionLabelKey]);
       const defaultChecked = _.includes(formValue, value);
+      let attr = message;
+      if (isTranslation(attr)) {
+        attr = intl.formatMessage({ id: message });
+      }
+      formState?.setValidationAttributeName(value, attr);
       return (
         <FormControlLabel
           key={`${value}-${index}`}

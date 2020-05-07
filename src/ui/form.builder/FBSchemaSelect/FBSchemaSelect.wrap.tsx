@@ -1,7 +1,7 @@
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBSchemaSelectProps, FBSchemaSelectState } from ".";
-import { FB, FBFieldName, FBSchemaProps } from "..";
+import { FB, FBSchemaProps } from "..";
 
 export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
   Component: React.FunctionComponent<T>
@@ -32,9 +32,9 @@ export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
       const { type } = value;
       schemaState?.setSchemaItemAt({
         ...value,
-        name: FBFieldName.SchemaSelectValue,
+        name: name?.replace("name", "value"),
         ...(type === "checkbox" && { defaultChecked: false }),
-        rules: "required_with:validators.required_if.name",
+        rules: `required_with:${name}`,
       }, index + 1);
     }
 

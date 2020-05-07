@@ -1,29 +1,18 @@
-import { TextField } from "@material-ui/core";
-import React, { ChangeEvent } from "react";
-import { FBInput, FBInputProps } from "..";
-import Text from "../../components/Text";
+import React from "react";
+import { FBTextField, FBTextFieldProps } from "..";
 
-const FBEditorOptions: React.FunctionComponent<FBInputProps> = ({
-  onChange,
+const FBEditorOptions: React.FunctionComponent<FBTextFieldProps> = ({
   ...props
 }) => (
-  <Text message="form.builder.options.placeholder">
-    {(placeholder: string) => (
-      <Text message="form.builder.options.note">
-        {(helperText) => (
-          <FBInput {...props} name="options" type="editoroptions">
-            <TextField
-              variant="outlined"
-              rows={5}
-              multiline
-              onChange={onChange as unknown as (event: ChangeEvent<HTMLInputElement>) => void}
-              {...{placeholder, helperText}}
-            />
-          </FBInput>
-        )}
-      </Text>
-    )}
-  </Text>
+  <FBTextField
+    label="form.builder.options"
+    name="options"
+    rows={5}
+    multiline
+    rules="required"
+    FBProps={{ inputType: "editoroptions" }}
+    placeholder="form.builder.options.placeholder"
+  />
 );
 
 export default FBEditorOptions;

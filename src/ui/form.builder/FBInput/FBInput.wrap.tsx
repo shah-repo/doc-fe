@@ -36,13 +36,14 @@ export const withFBInput = <T extends FBInputProps>(
     const { formState } = FB.useStores();
     const intl = useIntl();
     defaultValue = setDefaultValue();
-    helperText =  formState?.helpers.get(name) || helperText;
+    helperText = formState?.errors.get(name) || helperText;
+    error = !_.isUndefined(formState?.errors.get(name)) && formState?.errorValidation;
+
     if (type === "texteditor" && inputState) {
       inputState.value = inputState.value || "";
     }
     value = inputState?.value;
     includeContext = inputState?.includeContext;
-    error = !_.isUndefined(formState?.getFieldHelper(name)) && formState?.errorValidation;
 
     (_.isUndefined(hidden) && validationMode === "visibility") && (hidden =
       !helperText && !defaultValue
@@ -102,11 +103,9 @@ export const withFBInput = <T extends FBInputProps>(
       inputState && formState && formState.inputState.set(name, inputState);
       // Validation settings
       if (formState && name) {
-        const validationAttrName =
-          intl.formatMessage({ id: (label || "translation.unknown") as string }) ||
-          intl.formatMessage({ id: placeholder || "translation.unknown" }) ||
-          name;
-        formState?.setValidationAttributeName(name, validationAttrName);
+        let attr = (label as string) || placeholder || name;
+        isTranslation(attr) && (attr = intl.formatMessage({ id: attr }));
+        formState?.setValidationAttributeName(name, attr);
         rules && (formState.setFieldRules(name, rules));
       }
     }, [rules]);

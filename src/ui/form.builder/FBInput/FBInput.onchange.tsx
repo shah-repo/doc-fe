@@ -31,7 +31,6 @@ export const withFBOnChange = <T extends FBInputProps>(
         : _.remove(checkedValue, (cv) => cv !== valueName);
 
       contextValue(groupValue);
-      formState?.setFieldValue(valueName, checked);
       formState?.setFieldValue(name, groupValue);
     }
 
@@ -73,15 +72,6 @@ export const withFBOnChange = <T extends FBInputProps>(
       formState?.setFieldValue(name, value);
     }
 
-    function editorOptionsValue(ev: React.ChangeEvent<HTMLInputElement>) {
-      const valueArray = _.get(ev.target, "value").split("\n");
-      const optionsValue = _.map(valueArray, (text: string) => ({
-        value: FB.uniqid,
-        text,
-      }));
-      formState?.setFieldValue(name, optionsValue);
-    }
-
     function stringValue(value: string) {
       formState?.setFieldValue(name, value);
     }
@@ -113,7 +103,6 @@ export const withFBOnChange = <T extends FBInputProps>(
         checkboxgroup() { return checkboxGroupValue(ev); },
         checkbox() { return isSingleCheck(); },
         radio() { return isSingleCheck(); },
-        editoroptions() { return editorOptionsValue(ev); },
         autocomplete() { return autocompleteValue(value); },
         texteditor() { return stringValue(ev as string); },
         datepicker() { return dateValue(ev as string); },

@@ -20,6 +20,20 @@
   },
   {
     "type": "checkbox",
+    "name": "validators.required_if_in",
+    "label": "required_if_in:anotherfield,[value]",
+    "helperText": "The field must be present and not empty if the anotherfield field includes value in the array."
+  },
+  {
+    "type": "schemaselect",
+    "name": "validators.required_if_in.name",
+    "label": "Required if field",
+    "includeSelectedSchema": true,
+    "rules": "required_with:validators.required_if_in",
+    "validationMode": "visibility"
+  },
+  {
+    "type": "checkbox",
     "name": "validators.required_with",
     "label": "required_with:foo,bar,...",
     "helperText": "The field under validation must be present and not empty only if any of the other specified fields are present."
@@ -27,7 +41,7 @@
   {
     "type": "schemaselect",
     "name": "validators.required_with.name",
-    "label": "Required if field",
+    "label": "Required with",
     "multiple": true,
     "rules": "required_with:validators.required_with",
     "validationMode": "visibility"
