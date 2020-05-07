@@ -34,7 +34,7 @@ export class FBPOReceiveFormState  {
     this.fetchLfpoDocs();
   }
 
-  @action public async submit(values: any) {
+  @action public async submit(values: any, poDocumentId?: string) {
     if (!this.releasedLfpoAPI.data || this.releasedLfpoAPI.data?.length === 0) {
       throw new Error("form.builder.missing.lfpo");
     }
@@ -42,10 +42,10 @@ export class FBPOReceiveFormState  {
       throw new Error("form.builder.po.no.document.lot");
     }
     const data = await this.docIdAPI.fetch();
-    await this.createLot(data.docId, values);
+    await this.createLot(data.docId, values, poDocumentId);
   }
 
-  public async createLot(docId: string, values: any) {
+  public async createLot(docId: string, values: any, poDocumentId?: string) {
     const securityGroups: any[] = [];
     if (this.lotDocType?.isQms) {
       this.groupOptions.forEach((group) => {
@@ -71,6 +71,7 @@ export class FBPOReceiveFormState  {
       renderHTML: undefined,
     });
 
+    poDocumentId && reqBody.referenceTo.push({ id: poDocumentId });
     reqBody.formDocument = {
       id: this.releasedLfpoAPI.data[0].id,
     };

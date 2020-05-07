@@ -1,8 +1,8 @@
 import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
-import { get, isEmpty } from "lodash";
+import { isEmpty } from "lodash";
 import { observer } from "mobx-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
@@ -30,7 +30,6 @@ import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
 import FormHeader from "../../document.revision/header/FormHeader";
 import { documentDetailsPath } from "../../document.revision/utils/paths";
-import FBWorkspaceForm from "../../form.builder/containers/workspace/FBWorkspaceForm";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import FBStore from "../../form.builder/stores/ui/FBStore";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -38,11 +37,11 @@ import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInf
 import styles from "./DocumentRevisionForm.styles";
 import DocIdInput from "./presenters/DocIdInput";
 import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
+import MemoizedFBWorkspace from "./presenters/MemoizedFBWorkspace";
 import References from "./presenters/References";
 import RenderHtmlField from "./presenters/RenderHtmlField";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
 import { DocumentRevisionFormValues } from "./types";
-
 
 export interface Props
   extends WithStyles<typeof styles>,
@@ -108,7 +107,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     userManagementSelectors.getLoadGroupsAsyncState
   );
 
-  if (!values.id && !get(values, "document.documentType.id")) {
+  if (!values.id && !values.document?.documentType?.id) {
     FBDRStore.setMode("none");
     if (setDocId) {
       setDocId("");
@@ -118,11 +117,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const openReference = (documentId: string) => {
     window.open(documentDetailsPath(documentId), "_blank");
   };
-
-  const isDisabled: boolean = get(initialValues, "id") !== undefined;
-  const isdocRevVersionOne = get(documentRevision, "version") === 1;
+  const isDisabled: boolean = initialValues.id !== undefined;
+  const isdocRevVersionOne = documentRevision?.version === 1;
   const isdocRevStatusDraft =
-    get(documentRevision, "status") === DocumentRevisionStatus.Draft;
+    documentRevision?.status === DocumentRevisionStatus.Draft;
   const outputDocEnabled: boolean =
     (isdocRevVersionOne && isdocRevStatusDraft) || !isDisabled;
 
@@ -210,9 +208,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     />
   );
   const isDocTypeDisabled = type === "newVersion" || isdocRevStatusDraft;
-  const options = type === "newOutput" ? (initialValues.formDocument?.formTemplate?.outputDocumentTypes.map((e) =>
-    ({ value: e.id, text: e.documentTypeName })
-  ) as SelectOption[] || documentTypes) : documentTypes;
+  const options = useMemo(() => type === "newOutput" ?
+    (initialValues.formDocument?.formTemplate?.outputDocumentTypes.map((e) =>
+      ({ value: e.id, text: e.documentTypeName })
+    ) as SelectOption[] || documentTypes)
+    : documentTypes
+  , [documentTypes, initialValues.formDocument, type]);
 
   return (
     <Grid
@@ -364,9 +365,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 <GenerateHtmlPreview id={values.id} renderHTML={values.formDocument?.renderHTML} />
               </Box>
             }
-            <FBWorkspaceForm
-              id={get(values, "id")}
-              documentId={get(values, "formDocument.document.id") || get(values, "document.id")}
+            <MemoizedFBWorkspace
+              id={values.id}
+              documentId={values.formDocument?.document?.id || values.document?.id}
               document={values as unknown as DocumentRevision}
             />
           </Box>

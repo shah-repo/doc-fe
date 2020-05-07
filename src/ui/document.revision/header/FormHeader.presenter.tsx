@@ -46,7 +46,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const UpgradeToLastestRenderer = isFormStatusDeprecated && isDocumentStatusDraftOrPending && !isLastVersionObsolete && <UpgradeToLatest onUpgradeClick={onUpgradeClick}/>;
   const CancelButtonRenderer = canShowCancelButton && (
-    <Button color="secondary" variant="outlined" onClick={handleCancelDraft}>
+    <Button color="secondary" variant="outlined" onClick={handleCancelDraft} id="cancelDraftButton">
       <Text translation="common.cancel.draft" />
     </Button>
   );

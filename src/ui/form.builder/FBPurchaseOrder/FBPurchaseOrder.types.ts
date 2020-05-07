@@ -48,6 +48,7 @@ export type FBPurchaseOrderTableProps =
 & {
   items: PurchaseOrderItem[];
   isDocumentReleased?: boolean;
+  receivedItems?: Dictionary<number>;
   handleEdit: (index: number, item: PurchaseOrderItem) => () => void;
   handleDelete (index: number): (e: any) => void;
 };

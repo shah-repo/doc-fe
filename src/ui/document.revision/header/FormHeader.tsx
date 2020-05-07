@@ -1,6 +1,5 @@
 import { useFormikContext } from "formik";
-import { get } from "lodash";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../../state/reducers";
@@ -33,12 +32,14 @@ const FormHeader: React.FunctionComponent<Props> = ({
 }) => {
   const formik = useFormikContext();
   const dispatch = useDispatch();
-  const formDocumentStatus = get(documentRevision, "formDocument.status", "");
-  const documentStatus = documentRevision && documentRevision.status;
-  const canShowCancelButton = documentStatus === DocumentRevisionStatus.Draft && documentRevision.version > 1;
+  const formDocumentStatus = documentRevision?.formDocument?.status || "";
+  const documentStatus = documentRevision?.status;
+  const canShowCancelButton = documentStatus === DocumentRevisionStatus.Draft && documentRevision?.version > 1;
   const isFormStatusDeprecated = formDocumentStatus === DocumentRevisionStatus.Deprecated;
-  const formDocumentId = documentRevision && (documentRevision.formDocument?.document?.id || "");
-  const formDocuments: Document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, formDocumentId));
+  const formDocumentId = documentRevision && (documentRevision?.formDocument?.document?.id || "");
+  const formDocuments: Document = useSelector((state: ApplicationState) =>
+    documentRevisionsSelectors.getDocument(state, formDocumentId)
+  );
 
   useEffect(() => {
     if (formDocumentId) {
@@ -47,7 +48,7 @@ const FormHeader: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formDocumentId]);
 
-  const isLastVersionObsolete = formDocuments && getIsLastVersionObsolete(formDocuments);
+  const isLastVersionObsolete = useMemo(() => formDocuments && getIsLastVersionObsolete(formDocuments), [formDocuments]);
   const isDocumentStatusDraftOrPending =
     documentStatus === (DocumentRevisionStatus.Draft || DocumentRevisionStatus.PendingChange);
   const onFormClick = ( event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
