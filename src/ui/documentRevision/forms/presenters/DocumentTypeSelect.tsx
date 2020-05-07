@@ -1,3 +1,4 @@
+import { FormikHandlers, FormikHelpers } from "formik";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GroupTag } from "../../../../state/ducks/auth/types";
@@ -7,20 +8,20 @@ import { userManagementSelectors } from "../../../../state/ducks/userManagement"
 import SelectField, { SelectOption } from "../../../components/forms/fields/Select";
 import { required, validator } from "../../../components/forms/fields/validators";
 import FBDRStore from "../../../form.builder/stores/ui/FBDRStore";
+import { OutputDocumentTypes } from "../../../form.builder/types/formik";
 
-interface Props {
+
+interface OwnProps {
   isdocRevStatusDraft: boolean;
   type?: string;
-  outputDocumentTypes?: any[];
+  outputDocumentTypes?: OutputDocumentTypes[];
   savedocInfo: React.Dispatch<React.SetStateAction<{
     name: string;
     isQms: boolean;
   }>>;
-  // TODO: pick interface from formik
-  setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void;
-  // TODO: check handleChange
-  handleChange: any;
 }
+
+type Props = OwnProps & Pick<FormikHelpers<any>, "setFieldValue"> & Pick<FormikHandlers, "handleChange">;
 
 const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   isdocRevStatusDraft,
@@ -77,7 +78,6 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
     if (!type.isQms) {
       setFieldValue("securityGroups", []);
     }
-    // TODO: check handleChange
     handleChange(event);
   };
 

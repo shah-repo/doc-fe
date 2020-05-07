@@ -7,11 +7,8 @@ import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType, RevisionS
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
-import OwnerChanger from "../../components/common/owner.changer/container";
-import { RequestType } from "../../components/common/owner.changer/helpers/types";
 import { default as AutocompleteField } from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
-import RichTextEditor from "../../components/forms/fields/RichTextEditor";
 import SelectField from "../../components/forms/fields/Select";
 import { required, validator } from "../../components/forms/fields/validators";
 import FormMessage from "../../components/forms/FormMessage";
@@ -19,17 +16,15 @@ import FormProgress from "../../components/forms/FormProgress";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
-import SubmitButton from "../../components/forms/SubmitButton";
 import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
 import { documentDetailsPath } from "../../document.revision/utils/paths";
-import { FBValidate } from "../../form.builder/defaults/validator";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import FBStore from "../../form.builder/stores/ui/FBStore";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
-import ApproveAndRelease from "./presenters/ApproveAndRelease";
-import CancelButton from "./presenters/CancelButton";
+import DocRevActions from "./presenters/Actions";
+import Description from "./presenters/Description";
 import DocIdInput from "./presenters/DocIdInput";
 import DocumentSecurity from "./presenters/DocumentSecurity";
 import DocumentTypeSelect from "./presenters/DocumentTypeSelect";
@@ -39,7 +34,6 @@ import MemoizedFBWorkspace from "./presenters/MemoizedFBWorkspace";
 import References from "./presenters/References";
 import RetrainField from "./presenters/RetrainField";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
-import UpgradeToLatest from "./presenters/UpgradeToLatest";
 import { DocumentRevisionFormValues } from "./types";
 
 
@@ -66,7 +60,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   classes,
   asyncState,
   initialValues,
-  // TODO: check handleChange
   handleChange,
   availableReferences,
   showRevisionTypeChange,
@@ -131,16 +124,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values.revisionChangeType]);
 
-  const onFormClick = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    FBValidate();
-  };
-
-  const renderChangeOwnership = canChangeOwnerShip && values.id && (
-    <OwnerChanger requestId={values.id} requestType={RequestType.Document} />
-  );
-
   const renderRevisionStageDropdown = !isDisabled && (
     <SelectField
       name="revisionStage"
@@ -183,21 +166,11 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
         <Title name="name" label="common.title" />
-        <RichTextEditor
-          name="description"
-          label="common.description"
-          validate={docInfo.isQms ? validator(required) : undefined}
-          editorProps={{
-            placeholder: docInfo.isQms
-              ? ""
-              : "Optional: Title will be used if description not provided.",
-          }}
-        />
+        <Description isQms={docInfo.isQms} />
         <DocumentTypeSelect
           outputDocumentTypes={initialValues.formDocument?.formTemplate?.outputDocumentTypes}
           type={type}
           isdocRevStatusDraft={isdocRevStatusDraft}
-          // TODO: check handleChange
           handleChange={handleChange}
           savedocInfo={savedocInfo}
           setFieldValue={setFieldValue}
@@ -251,43 +224,13 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             />
           </Box>
         )}
-        <Box mt={5}>
-          <Grid
-            container={true}
-            alignItems="flex-end"
-            justify="flex-end"
-            direction="row"
-          >
-            <CancelButton
-              documentStatus={documentRevision?.status}
-              version={documentRevision?.version}
-              docRevId={documentRevision?.id}
-            />
-            {renderChangeOwnership}
-            <SubmitButton
-              asyncState={asyncState}
-              label={isDisabled ?
-                `common.save.${values.document?.documentType?.documentTypeAcronym}` :
-                "navigation.createDocument"
-              }
-              onClick={onFormClick}
-              id="DocumentRevisionForm-submit"
-            />
-            <UpgradeToLatest
-              documentStatus={documentRevision?.formDocument?.status}
-              formDocumentId={documentRevision?.formDocument?.document?.id}
-              docRevId={documentRevision?.id}
-              formDocumentStatus={documentRevision?.formDocument?.status}
-            />
-            <ApproveAndRelease
-              id={values.id}
-              status={values.status}
-              isQms={docInfo.isQms}
-              documentName={docInfo.name}
-              docRevId={values.id as string}
-            />
-          </Grid>
-        </Box>
+        <DocRevActions
+          documentRevision={documentRevision}
+          asyncState={asyncState}
+          docInfo={docInfo}
+          values={values}
+          canChangeOwnerShip={canChangeOwnerShip}
+        />
       </FormWrapper>
     </Grid>
   );

@@ -6,7 +6,7 @@ import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 
 interface Props {
-  documentStatus: DocumentRevisionStatus;
+  documentStatus?: DocumentRevisionStatus;
   version?: number;
   docRevId?: string;
 }
