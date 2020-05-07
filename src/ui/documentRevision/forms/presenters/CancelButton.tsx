@@ -29,7 +29,8 @@ const CancelButton: React.FunctionComponent<Props> = ({
         canShowCancelButton &&
         <Button id="cancelDraftButton" variant="outlined" onClick={handleCancelDraft}>
           <Text translation="common.cancel.draft" />
-        </Button>}
+        </Button>
+      }
     </>
   );
 };

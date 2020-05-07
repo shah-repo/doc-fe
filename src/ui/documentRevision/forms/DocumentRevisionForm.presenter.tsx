@@ -11,10 +11,9 @@ import OwnerChanger from "../../components/common/owner.changer/container";
 import { RequestType } from "../../components/common/owner.changer/helpers/types";
 import { default as AutocompleteField } from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
-import CheckboxField from "../../components/forms/fields/Checkbox";
 import RichTextEditor from "../../components/forms/fields/RichTextEditor";
-import SelectField, { SelectOption } from "../../components/forms/fields/Select";
-import { required, requiredAtLeastOne, validator } from "../../components/forms/fields/validators";
+import SelectField from "../../components/forms/fields/Select";
+import { required, validator } from "../../components/forms/fields/validators";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
 import FormWrapper from "../../components/forms/FormWrapper";
@@ -32,14 +31,14 @@ import styles from "./DocumentRevisionForm.styles";
 import ApproveAndRelease from "./presenters/ApproveAndRelease";
 import CancelButton from "./presenters/CancelButton";
 import DocIdInput from "./presenters/DocIdInput";
+import DocumentSecurity from "./presenters/DocumentSecurity";
 import DocumentTypeSelect from "./presenters/DocumentTypeSelect";
+import FBActiveNoOutput from "./presenters/FBActiveNoOutput";
 import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
 import MemoizedFBWorkspace from "./presenters/MemoizedFBWorkspace";
 import References from "./presenters/References";
-import RenderHtmlField from "./presenters/RenderHtmlField";
+import RetrainField from "./presenters/RetrainField";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
-import SecurityEmployees from "./presenters/SecurityEmployees";
-import SecurityGroups from "./presenters/SecurityGroups";
 import UpgradeToLatest from "./presenters/UpgradeToLatest";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -56,7 +55,6 @@ export interface Props
   proposedDocId?: string;
   setDocId?: typeof documentsActions.setDocumentProposedId;
   doNotPrompt?: boolean;
-  documentTypes: SelectOption[];
   outputDocumentTypeOptions: OptionType[];
   documentTypesById: DocumentTypeByIdState;
   onDirtyFlagChange?: (dirty: boolean) => void;
@@ -83,7 +81,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   isSubmitting,
   isValidating,
   errors,
-  documentTypes,
   documentTypesById,
   outputDocumentTypeOptions,
   canChangeOwnerShip,
@@ -91,22 +88,21 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   setFieldValue,
   type,
 }) => {
-  if (!values.id && !values.document?.documentType?.id) {
-    FBDRStore.setMode("none");
-    if (setDocId) {
-      setDocId("");
+  useEffect(() => {
+    if (!values.id && !values.document?.documentType?.id) {
+      FBDRStore.setMode("none");
+      if (setDocId) {
+        setDocId("");
+      }
     }
-  }
+  }, [setDocId, values.document, values.id]);
 
   const openReference = (documentId: string) => {
     window.open(documentDetailsPath(documentId), "_blank");
   };
   const isDisabled: boolean = initialValues.id !== undefined;
-  const isdocRevVersionOne = documentRevision?.version === 1;
   const isdocRevStatusDraft =
     documentRevision?.status === DocumentRevisionStatus.Draft;
-  const outputDocEnabled: boolean =
-    (isdocRevVersionOne && isdocRevStatusDraft) || !isDisabled;
 
   useEffect(() => {
     if (proposedDocId) {
@@ -225,40 +221,21 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           onClick={openReference}
         />
         <References document={initialValues.document} />
-        <CheckboxField
-          name="retrain"
-          label="document.revision.trainingRequired"
-          checkboxProps={{
-            disabled: values.revisionChangeType === RevisionChangeType.AdministrativeChange,
-          }}
-        />
+        <RetrainField revisionChangeType={values.revisionChangeType} />
         <AttachmentsField />
         {showRevisionTypeChange && <RevisionTypeChange />}
         {
           (!values.status || type === "newOutput") &&
-          <SecurityEmployees />
+          <DocumentSecurity />
         }
         {
-          (!values.status || type === "newOutput") &&
-          <SecurityGroups />
+          FBStore.active && !FBDRStore.isOutput &&
+          <FBActiveNoOutput
+            docRevId={initialValues.id}
+            status={documentRevision?.status}
+            version={documentRevision?.version}
+          />
         }
-        {FBStore.active && !FBDRStore.isOutput && (
-          <Box mt={4}>
-            <AutocompleteField
-              name="formTemplate.outputDocumentTypes"
-              label="document.output.type"
-              autocompleteProps={{
-                id: "formTemplate.outputDocumentTypes",
-                isMulti: true,
-                closeMenuOnSelect: false,
-                className: !outputDocEnabled ? classes.outputGrey : "",
-              }}
-              options={outputDocumentTypeOptions}
-              validate={validator(requiredAtLeastOne)}
-            />
-            <RenderHtmlField />
-          </Box>
-        )}
         {FBStore.active && (
           <Box mt={5}>
             {

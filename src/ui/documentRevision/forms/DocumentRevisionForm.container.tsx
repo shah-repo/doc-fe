@@ -117,15 +117,6 @@ DocumentRevisionFormContainerProps
     };
   }, [canUpdateHTML, initialValues, groupOptions]);
 
-  const docTypes = useMemo(
-    () =>
-      documentTypes.map((document) => ({
-        value: document.id,
-        text: document.documentTypeName,
-      })),
-    [documentTypes],
-  );
-
   const outputDocumentTypeOptions: OptionType[] = useMemo(
     () =>
       documentTypes.reduce((acc: OptionType[], document) => {
@@ -166,7 +157,6 @@ DocumentRevisionFormContainerProps
       setDocId={setDocId}
       doNotPrompt={doNotPrompt}
       onDirtyFlagChange={onDirtyFlagChange}
-      documentTypes={docTypes}
       outputDocumentTypeOptions={outputDocumentTypeOptions}
       documentTypesById={documentTypesById}
       canChangeOwnerShip={canChangeOwnerShip}
