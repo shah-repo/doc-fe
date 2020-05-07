@@ -1,22 +1,20 @@
-import { Box, Button, Grid, withStyles, WithStyles } from "@material-ui/core";
+import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { get, isEmpty } from "lodash";
 import { observer } from "mobx-react";
 import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
-import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus, RevisionChangeType, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
-import OwnerChanger from "../../components/common/owner.changer/container";
-import { RequestType } from "../../components/common/owner.changer/helpers/types";
 import { default as AutocompleteField } from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
 import CheckboxField from "../../components/forms/fields/Checkbox";
@@ -28,26 +26,21 @@ import FormProgress from "../../components/forms/FormProgress";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
-import SubmitButton from "../../components/forms/SubmitButton";
-import Text from "../../components/Text";
 import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
+import FormHeader from "../../document.revision/header/FormHeader";
 import { documentDetailsPath } from "../../document.revision/utils/paths";
 import FBWorkspaceForm from "../../form.builder/containers/workspace/FBWorkspaceForm";
-import { FBValidate } from "../../form.builder/defaults/validator";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import FBStore from "../../form.builder/stores/ui/FBStore";
 import useActionCreator from "../../hooks/useActionCreator";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
-import { getIsLastVersionObsolete } from "../helpers";
 import styles from "./DocumentRevisionForm.styles";
-import ApproveAndRelease from "./presenters/ApproveAndRelease";
 import DocIdInput from "./presenters/DocIdInput";
 import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
 import References from "./presenters/References";
 import RenderHtmlField from "./presenters/RenderHtmlField";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
-import UpgradeToLatest from "./presenters/UpgradeToLatest";
 import { DocumentRevisionFormValues } from "./types";
 
 
@@ -102,7 +95,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   handleCancelDraft,
 }) => {
   const intl = useIntl();
-  const dispatch = useDispatch();
   const loadAvailableApproversAction = useActionCreator(
     changeRequestsActions.loadAvailableApprovers
   );
@@ -126,16 +118,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const openReference = (documentId: string) => {
     window.open(documentDetailsPath(documentId), "_blank");
   };
-  const formDocumentId = documentRevision && (documentRevision.formDocument?.document?.id || "");
-  const formDocuments: Document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, formDocumentId));
-  const isLastVersionObsolete = formDocuments && getIsLastVersionObsolete(formDocuments);
 
-  useEffect(() => {
-    if (formDocumentId) {
-      dispatch(documentRevisionsActions.loadDocument(formDocumentId));
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formDocumentId]);
   const isDisabled: boolean = get(initialValues, "id") !== undefined;
   const isdocRevVersionOne = get(documentRevision, "version") === 1;
   const isdocRevStatusDraft =
@@ -203,12 +186,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     handleChange(event);
   };
 
-  const onFormClick = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    FBValidate();
-  };
-
   const renderTypeOfRevisionChange = showRevisionTypeChange && (
     <RevisionTypeChange />
   );
@@ -222,11 +199,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   });
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
 
-
-  const renderChangeOwnership = canChangeOwnerShip && values.id && (
-    <OwnerChanger requestId={values.id} requestType={RequestType.Document} />
-  );
-
   const renderRevisionStageDropdown = !isDisabled && (
     <SelectField
       name="revisionStage"
@@ -237,22 +209,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       includeEmpty={false}
     />
   );
-  const CancelButtonRenderer = () => (
-    <Button id="cancelDraftButton" variant="outlined" onClick={handleCancelDraft}>
-      <Text translation="common.cancel.draft" />
-    </Button>
-  );
-  const formDocumentStatus = get(documentRevision, "formDocument.status", "");
-  const documentStatus = documentRevision && documentRevision.status;
-  const isDocumentStatusDraftOrPending =
-    documentStatus === (DocumentRevisionStatus.Draft || DocumentRevisionStatus.PendingChange);
-  const isFormStatusDeprecated = formDocumentStatus === DocumentRevisionStatus.Deprecated;
   const isDocTypeDisabled = type === "newVersion" || isdocRevStatusDraft;
   const options = type === "newOutput" ? (initialValues.formDocument?.formTemplate?.outputDocumentTypes.map((e) =>
     ({ value: e.id, text: e.documentTypeName })
   ) as SelectOption[] || documentTypes) : documentTypes;
-
-  const canShowCancelButton = documentStatus === DocumentRevisionStatus.Draft && documentRevision.version > 1;
 
   return (
     <Grid
@@ -262,6 +222,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       sm={isDisabled ? 12 : 10}
       xs={12}
     >
+      <FormHeader
+        {...{ documentRevision, handleCancelDraft, canChangeOwnerShip, values, onUpgradeClick, docInfo, isDisabled, asyncState }}
+      />
       {FBDRStore.isOutput && (
         <DocumentRevisionOutputInfo
           dataProp={(values as unknown) as DocumentRevision}
@@ -408,31 +371,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             />
           </Box>
         )}
-        <Box mt={5}>
-          <Grid
-            container={true}
-            alignItems="flex-end"
-            justify="flex-end"
-            direction="row"
-          >
-            { canShowCancelButton &&  CancelButtonRenderer()}
-            {renderChangeOwnership}
-            <SubmitButton
-              asyncState={asyncState}
-              label={isDisabled ? "common.save" : "navigation.createDocument"}
-              onClick={onFormClick}
-              id="DocumentRevisionForm-submit"
-            />
-            {isFormStatusDeprecated && isDocumentStatusDraftOrPending && !isLastVersionObsolete && <UpgradeToLatest onUpgradeClick={onUpgradeClick}/>}
-            <ApproveAndRelease
-              id={values.id}
-              status={values.status}
-              isQms={docInfo.isQms}
-              documentName={docInfo.name}
-              docRevId={values.id as string}
-            />
-          </Grid>
-        </Box>
       </FormWrapper>
     </Grid>
   );

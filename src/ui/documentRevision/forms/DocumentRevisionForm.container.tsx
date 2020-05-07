@@ -14,7 +14,6 @@ import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
-import DocumentHeader from "../../document.revision/summary/header";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
@@ -210,7 +209,6 @@ DocumentRevisionFormContainerProps
       asyncAction={loadAction}
       startActionOnMount={true}
     >
-      {documentRevision && <DocumentHeader dataProp={documentRevision} />}
       <Grid
         className={classNames(classes.container, {
           [classes.borderContainer]: documentRevision,
