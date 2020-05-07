@@ -5,8 +5,9 @@ import { FBParagraphProps } from ".";
 
 const FBParagraph: React.FunctionComponent<FBParagraphProps> = ({
   paragraph = "",
+  gutter = true,
 }) => (
-  <Box>
+  <Box  mb={gutter ? 4 : 1}>
     {parse(paragraph)}
   </Box>
 );

@@ -50,7 +50,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       workspaceState?.setSchemaItemAt({
         index,
         type,
-        name: FB.uniqid,
+        name: `${_.kebabCase(formValues?.label)}-${FB.uniqid}`,
         ...formValues,
         ...options && { options },
         ...formValues?.validators && toStringRules && { rules: toStringRules(formValues.validators) },
