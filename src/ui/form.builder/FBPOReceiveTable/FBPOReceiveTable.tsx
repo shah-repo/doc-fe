@@ -39,6 +39,7 @@ const FBPOReceiveTable: React.FunctionComponent<FBPOReceiveTableProps> = ({
   items = [],
   handleEdit,
   disabled,
+  receivedItems = {},
 }) => {
   const classes = useStyles();
 
@@ -84,7 +85,7 @@ const FBPOReceiveTable: React.FunctionComponent<FBPOReceiveTableProps> = ({
               >
                 <StyledTableCell align="left">{index + 1}</StyledTableCell>
                 <StyledTableCell>{item.order}</StyledTableCell>
-                <StyledTableCell>N/A</StyledTableCell>
+                <StyledTableCell>{receivedItems[item.partNumber] ?? 0}</StyledTableCell>
                 <StyledTableCell>{item.units}</StyledTableCell>
                 <StyledTableCell>{item.partNumberDocId}</StyledTableCell>
                 <StyledTableCell>

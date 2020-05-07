@@ -28,11 +28,14 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
       FBPOReceiveFormState,
       { lfpoDocType, lotDocType, groupOptions, item }
     );
-    const { dialogState, formState } = FB.useStores();
+    const { dialogState, formState, poReceiveState } = FB.useStores();
 
     handleReceive = async () => {
       try {
-        await poReceiveFormState?.submit(formState?.getValues());
+        await poReceiveFormState?.submit(
+          formState?.getValues(),
+          poReceiveState?.poDocumentId,
+        );
 
         dispatch(documentRevisionsActions.reload(FBStore.docId));
         dialogState?.closeDialog();

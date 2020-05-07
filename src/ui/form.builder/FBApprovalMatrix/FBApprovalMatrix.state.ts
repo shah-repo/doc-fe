@@ -2,7 +2,6 @@ import { action, observable, set } from "mobx";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import FBStore from "../stores/ui/FBStore";
 import { ApprovalMatrix, ApprovalMatrixItem, ApprovalRole } from "./FBApprovalMatrix.types";
-
 const DEFAULT_AM: ApprovalMatrix = {
   approvalRoles: [] as ApprovalRole[],
   approvalMatrix: [] as ApprovalMatrixItem[],
@@ -29,6 +28,12 @@ export class FBApprovalMatrixState {
 
   @action public addApprovalRoleItem = (approvalRoleItem: ApprovalRole) => {
     this.am.approvalRoles.push(approvalRoleItem);
+    this.am.approvalMatrix.map((row) => {
+      row.approvalRoles.admStage.push(false);
+      row.approvalRoles.stage1.push(false);
+      row.approvalRoles.stage2.push(false);
+      row.approvalRoles.stage3.push(false);
+    });
   };
 
   @action public addApprovalMatrixItem = (approvalMatrixItem: ApprovalMatrixItem) => {
@@ -67,7 +72,6 @@ export class FBApprovalMatrixState {
     }));
     this.updateFBStore();
   };
-
 
   @action public editName = (
     index: number, approvalRoleItem: string, type: string

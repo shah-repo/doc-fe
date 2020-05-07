@@ -3,7 +3,7 @@ import { FormikProps } from "formik";
 import _, { Dictionary } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
-import { FBData } from "..";
+import { FB, FBData } from "..";
 import FBButton from "../components/inputs/FBButton";
 import { FBFieldEditorComponent, omitLabelValidation, pickDefaultLabel } from "../defaults/editor";
 import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
@@ -95,6 +95,13 @@ export const withEditorRenderer =
       const removeEl = (mode === "create") ? 0 : 1;
       let newSchema = FBStore.getSchema();
       newSchema.splice(index, removeEl, schema);
+      if (type === "approval" || type === "instructionsmediaupload") {
+        newSchema.splice(index, 0, {
+          type: "section",
+          name: FB.uniqid(),
+          label: intl.formatMessage({ id: "form.builder.section" }),
+        });
+      }
       if (type === "inlineapproval") {
         const approvalName: string = (values as FBInputProps).name || "";
         FBStore.setValues({

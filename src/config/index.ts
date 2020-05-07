@@ -14,7 +14,8 @@ const DEFAULTS = {
   AWS_BUCKET_PUBLIC: "",
   AWS_REGION: "",
   HELLOSIGN_TEST_MODE: "",
-  HELLOSIGN_CLIENT_ID: ""
+  HELLOSIGN_CLIENT_ID: "",
+  ENV_NAME: "",
 };
 
 type ConfigKey = keyof typeof DEFAULTS;
@@ -78,6 +79,14 @@ class Config {
 
   public static get HelloSignClientId(): string {
     return this.get("HELLOSIGN_CLIENT_ID");
+  }
+
+  public static get EnvironmentName(): string {
+    return this.get("ENV_NAME");
+  }
+
+  public static get isSandbox(): boolean {
+    return this.get("ENV_NAME") === "SANDBOX";
   }
 }
 
