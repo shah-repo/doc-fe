@@ -126,32 +126,35 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
       >
         <Text translation="common.approve.and.release" />
       </Button>
-      <Dialog
-        disableEscapeKeyDown={true}
-        disableBackdropClick={true}
-        fullWidth={true}
-        maxWidth="xs"
-        open={dialog.isOpen}
-        onSubmit={preventPropagation}
-        classes={{ paper: classes.dialogContent }}
-        id="ApproveAndRelease-dialog"
-      >
-        <DialogTitle>
-          {isQms && <Text translation="transition.action.title" />}
-          {!isQms && <Text translation="common.warning.message" values={{ name: documentName }} />}
-        </DialogTitle>
-        <DialogContent
-          classes={{ root: classes.dialogContent }}
-          id="ApproveAndRelease-content"
+      {
+        dialog.isOpen &&
+        <Dialog
+          disableEscapeKeyDown={true}
+          disableBackdropClick={true}
+          fullWidth={true}
+          maxWidth="xs"
+          open={dialog.isOpen}
+          onSubmit={preventPropagation}
+          classes={{ paper: classes.dialogContent }}
+          id="ApproveAndRelease-dialog"
         >
-          <Formik
-            initialValues={{ password: "", approvals: [] }}
-            onSubmit={onSubmit}
+          <DialogTitle>
+            {isQms && <Text translation="transition.action.title" />}
+            {!isQms && <Text translation="common.warning.message" values={{ name: documentName }} />}
+          </DialogTitle>
+          <DialogContent
+            classes={{ root: classes.dialogContent }}
+            id="ApproveAndRelease-content"
           >
-            {renderForm}
-          </Formik>
-        </DialogContent>
-      </Dialog>
+            <Formik
+              initialValues={{ password: "", approvals: [] }}
+              onSubmit={onSubmit}
+            >
+              {renderForm}
+            </Formik>
+          </DialogContent>
+        </Dialog>
+      }
     </>
   );
 };

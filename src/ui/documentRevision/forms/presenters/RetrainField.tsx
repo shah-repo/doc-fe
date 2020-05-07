@@ -29,4 +29,4 @@ const RetrainField: React.FunctionComponent<Props> = ({
   );
 };
 
-export default RetrainField;
+export default React.memo(RetrainField);

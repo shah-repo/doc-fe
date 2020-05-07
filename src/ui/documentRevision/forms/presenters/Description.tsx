@@ -29,4 +29,4 @@ const Description: React.FunctionComponent<Props> = ({
   );
 };
 
-export default Description;
+export default React.memo(Description);

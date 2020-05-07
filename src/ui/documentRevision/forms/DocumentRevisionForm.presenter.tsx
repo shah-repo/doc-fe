@@ -198,7 +198,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             version={documentRevision?.version}
           />
         }
-        {FBStore.active && (
+        {
+          FBStore.active &&
           <Box mt={5}>
             {
               values.id &&
@@ -212,7 +213,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               document={values as unknown as DocumentRevision}
             />
           </Box>
-        )}
+        }
         <DocRevActions
           documentRevision={documentRevision}
           asyncState={asyncState}
