@@ -2,7 +2,6 @@ import _, { Dictionary } from "lodash";
 import React from "react";
 import { FBEditorActionsProps } from ".";
 import { FB } from "..";
-import { FBData } from "../FBData";
 import { withFBValidation } from "../FBValidation/FBValidation.wrap";
 import { FBOptionProps } from "../types/common";
 
@@ -20,23 +19,34 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
 
     const { dialogState, workspaceState, formState } = FB.useStores();
 
-    function propertiesOptions(formValues?: Dictionary<any>): FBOptionProps[] | undefined {
-      if (formValues?.options && formValues.editorProperties && type) {
-        _.map(FBData.editorProperties[type], (ep) => {
-          if (_.includes(formValues.editorProperties, ep.value)) {
-            const propOption = { ...ep, text: ep.outputText };
-            ep.value === "includeNone"
-              ? formValues.options[0] = propOption
-              : formValues.options.push(propOption);
-          }
-        });
+    // function propertiesOptions(formValues?: Dictionary<any>): FBOptionProps[] | undefined {
+    //   if (formValues?.options && formValues.editorProperties && type) {
+    //     _.map(FBData.editorProperties[type], (ep) => {
+    //       if (_.includes(formValues.editorProperties, ep.value)) {
+    //         const propOption = { ...ep, text: ep.outputText };
+    //         ep.value === "includeNone"
+    //           ? formValues.options[0] = propOption
+    //           : formValues.options.push(propOption);
+    //       }
+    //     });
+    //   }
+    //   return formValues?.options;
+    // }
+
+    function editorOptions(formValues: Dictionary<any> = {}): FBOptionProps[] | undefined {
+      const { options } = formValues;
+      if (!options || !_.isString(options)) {
+        return options;
       }
-      return formValues?.options;
+      return _.map((options).split("\n"), (text) => ({
+        value: _.kebabCase(text),
+        text,
+      }));
     }
 
     onAddClick = () => {
       const formValues = formState?.getValues();
-      const options = propertiesOptions(formValues);
+      const options = editorOptions(formValues);
       workspaceState?.setSchemaItemAt({
         index,
         type,
