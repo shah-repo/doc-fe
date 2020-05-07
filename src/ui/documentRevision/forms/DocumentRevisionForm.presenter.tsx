@@ -3,7 +3,7 @@ import { FormikProps } from "formik";
 import { isEmpty } from "lodash";
 import { observer } from "mobx-react";
 import React, { useEffect } from "react";
-import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
@@ -45,11 +45,9 @@ export interface Props
   documentRevisions?: DocumentRevision[];
   availableReferences: OptionType[];
   showRevisionTypeChange?: boolean;
-  loadDocumentProposedId?: typeof documentsActions.loadDocumentProposedId;
   proposedDocId?: string;
   setDocId?: typeof documentsActions.setDocumentProposedId;
   doNotPrompt?: boolean;
-  outputDocumentTypeOptions: OptionType[];
   documentTypesById: DocumentTypeByIdState;
   onDirtyFlagChange?: (dirty: boolean) => void;
   canChangeOwnerShip: boolean;
@@ -63,7 +61,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   handleChange,
   availableReferences,
   showRevisionTypeChange,
-  loadDocumentProposedId,
   proposedDocId,
   values,
   setDocId,
@@ -75,7 +72,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   isValidating,
   errors,
   documentTypesById,
-  outputDocumentTypeOptions,
   canChangeOwnerShip,
   documentRevision,
   setFieldValue,
@@ -89,24 +85,24 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       }
     }
   }, [setDocId, values.document, values.id]);
-
-  const openReference = (documentId: string) => {
-    window.open(documentDetailsPath(documentId), "_blank");
-  };
-  const isDisabled: boolean = initialValues.id !== undefined;
-  const isdocRevStatusDraft =
-    documentRevision?.status === DocumentRevisionStatus.Draft;
-
   useEffect(() => {
     if (proposedDocId) {
       setFieldValue("document.docId", proposedDocId);
     }
+  }, [proposedDocId, setFieldValue]);
+  useEffect(() => {
     if (isEmpty(values.document?.documentType?.id)) {
       setFieldValue("document.docId", "");
     }
-  }, [values.document, proposedDocId, setFieldValue]);
+  }, [values.document, setFieldValue]);
 
+  const openReference = (documentId: string) => {
+    window.open(documentDetailsPath(documentId), "_blank");
+  };
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
+  const isDisabled: boolean = initialValues.id !== undefined;
+  const isdocRevStatusDraft =
+    documentRevision?.status === DocumentRevisionStatus.Draft;
 
   useEffect(() => {
     if (isdocRevStatusDraft) {
@@ -116,13 +112,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       });
     }
   }, [isdocRevStatusDraft, values.document, values.name]);
-
-  useEffect(() => {
-    if (values.revisionChangeType === RevisionChangeType.AdministrativeChange) {
-      setFieldValue("retrain", false);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [values.revisionChangeType]);
 
   const renderRevisionStageDropdown = !isDisabled && (
     <SelectField
@@ -194,7 +183,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           onClick={openReference}
         />
         <References document={initialValues.document} />
-        <RetrainField revisionChangeType={values.revisionChangeType} />
+        <RetrainField revisionChangeType={values.revisionChangeType} setFieldValue={setFieldValue} />
         <AttachmentsField />
         {showRevisionTypeChange && <RevisionTypeChange />}
         {
