@@ -1,24 +1,23 @@
-import { FormikHelpers } from "formik";
+import { useFormikContext } from "formik";
 import * as React from "react";
 import { useEffect } from "react";
 import { RevisionChangeType } from "../../../../state/ducks/documentRevisions";
 import CheckboxField from "../../../components/forms/fields/Checkbox";
 
-interface OwnProps {
+interface Props {
   revisionChangeType?: RevisionChangeType ;
 }
 
-type Props = OwnProps & Pick<FormikHelpers<any>, "setFieldValue">;
-
 const RetrainField: React.FunctionComponent<Props> = ({
   revisionChangeType,
-  setFieldValue,
 }) => {
+  const formik = useFormikContext();
   useEffect(() => {
     if (revisionChangeType === RevisionChangeType.AdministrativeChange) {
-      setFieldValue("retrain", false);
+      formik.setFieldValue("retrain", false);
     }
-  }, [revisionChangeType, setFieldValue]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [revisionChangeType]);
   const disabled = revisionChangeType === RevisionChangeType.AdministrativeChange;
   return (
     <CheckboxField

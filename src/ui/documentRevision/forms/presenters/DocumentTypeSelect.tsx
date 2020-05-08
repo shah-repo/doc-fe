@@ -1,4 +1,4 @@
-import { FormikHandlers, FormikHelpers } from "formik";
+import { useFormikContext } from "formik";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GroupTag } from "../../../../state/ducks/auth/types";
@@ -10,8 +10,7 @@ import { required, validator } from "../../../components/forms/fields/validators
 import FBDRStore from "../../../form.builder/stores/ui/FBDRStore";
 import { OutputDocumentTypes } from "../../../form.builder/types/formik";
 
-
-interface OwnProps {
+interface Props {
   isdocRevStatusDraft: boolean;
   type?: string;
   outputDocumentTypes?: OutputDocumentTypes[];
@@ -21,16 +20,13 @@ interface OwnProps {
   }>>;
 }
 
-type Props = OwnProps & Pick<FormikHelpers<any>, "setFieldValue"> & Pick<FormikHandlers, "handleChange">;
-
 const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   isdocRevStatusDraft,
   type,
   outputDocumentTypes = [],
   savedocInfo,
-  setFieldValue,
-  handleChange,
 }) => {
+  const formik = useFormikContext();
   const dispatch = useDispatch();
   const loadDocumentProposedId = (documentTypeId: string) =>
     dispatch(documentsActions.loadDocumentProposedId(documentTypeId));
@@ -56,29 +52,29 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
     savedocInfo({ name: event.target.name || "", isQms: type.isQms });
     groupOptions.forEach((group) => {
       if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
-        setFieldValue("securityGroups", [
+        formik.setFieldValue("securityGroups", [
           { value: group.value, label: group.label },
         ]);
       }
     });
     if (loadDocumentProposedId) {
-      setFieldValue("retrain", type.defaultTraining);
+      formik.setFieldValue("retrain", type.defaultTraining);
       loadDocumentProposedId(type.id);
     }
     FBDRStore.setInitialFBMode(type);
     if (type.isQms) {
       groupOptions.forEach((group) => {
         if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
-          setFieldValue("securityGroups", [
+          formik.setFieldValue("securityGroups", [
             { value: group.value, label: group.label },
           ]);
         }
       });
     }
     if (!type.isQms) {
-      setFieldValue("securityGroups", []);
+      formik.setFieldValue("securityGroups", []);
     }
-    handleChange(event);
+    formik.handleChange(event);
   };
 
   return (

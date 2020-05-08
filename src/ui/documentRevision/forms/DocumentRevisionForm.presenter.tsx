@@ -159,9 +159,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           outputDocumentTypes={initialValues.formDocument?.formTemplate?.outputDocumentTypes}
           type={type}
           isdocRevStatusDraft={isdocRevStatusDraft}
-          handleChange={handleChange}
           savedocInfo={savedocInfo}
-          setFieldValue={setFieldValue}
         />
         <DocIdInput
           document={values.document}
@@ -182,10 +180,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           onClick={openReference}
         />
         <References document={initialValues.document} />
-        <RetrainField
-          revisionChangeType={values.revisionChangeType}
-          setFieldValue={setFieldValue}
-        />
+        <RetrainField revisionChangeType={values.revisionChangeType} />
         <AttachmentsField />
         {showRevisionTypeChange && <RevisionTypeChange />}
         {
