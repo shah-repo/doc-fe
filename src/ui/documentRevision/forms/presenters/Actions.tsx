@@ -5,13 +5,14 @@ import { AsyncState } from "../../../../state/types";
 import OwnerChanger from "../../../components/common/owner.changer/container";
 import { RequestType } from "../../../components/common/owner.changer/helpers/types";
 import SubmitButton from "../../../components/forms/SubmitButton";
-import { FBValidate } from "../../../form.builder/defaults/validator";
+import { FB } from "../../../form.builder";
 import { DocumentRevisionFormValues } from "../types";
 import ApproveAndRelease from "./ApproveAndRelease";
 import CancelButton from "./CancelButton";
 import UpgradeToLatest from "./UpgradeToLatest";
 
 interface Props {
+  setValues: (values: DocumentRevisionFormValues) => any;
   documentRevision?: DocumentRevision;
   values: DocumentRevisionFormValues;
   docInfo: {
@@ -28,10 +29,34 @@ const DocRevActions: React.FunctionComponent<Props> = ({
   docInfo,
   asyncState,
   canChangeOwnerShip,
+  setValues,
 }) => {
+  const { workspaceState, formState } = FB.useStores();
   const isDisabled: boolean = documentRevision?.id !== undefined;
   const onFormClick = () => {
-    FBValidate();
+    switch (workspaceState?.getMode()) {
+      case "design":
+        setValues({
+          ...values,
+          formTemplate: {
+            outputDocumentTypes: (values.outputDocumentTypes || [])
+              .map((outputDoc) => ({ id: outputDoc.value }) ),
+            schema: workspaceState?.getSchema(),
+          },
+        });
+        break;
+      case "form":
+        setValues({
+          ...values,
+          formDocument: {
+            id: values.formDocument?.id,
+          },
+          formInput: formState?.getValues(),
+        });
+        break;
+      default:
+        break;
+    }
   };
   const renderChangeOwnership = canChangeOwnerShip && values.id && (
     <OwnerChanger requestId={values.id} requestType={RequestType.Document} />

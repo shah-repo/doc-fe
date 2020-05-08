@@ -113,10 +113,10 @@ DocumentRevisionFormContainerProps
 
     return {
       ...initialValues,
-      outputDocumentTypes: initialValues.formTemplate?.outputDocumentTypes as OptionType[],
       retrain,
       renderHTML,
       securityGroups,
+      outputDocumentTypes: initialValues.formTemplate?.outputDocumentTypes as OptionType[],
     };
   }, [canUpdateHTML, initialValues, groupOptions]);
 

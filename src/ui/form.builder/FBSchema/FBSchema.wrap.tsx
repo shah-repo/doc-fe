@@ -26,6 +26,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
       }
       return _.map(schema, (schemaItem, index) => controlRenderer({
         ...schemaItem,
+        disabled: schemaItem.disabled || schemaItem.reviseDisabled || workspaceMode === "preview",
         index,
       }));
     }

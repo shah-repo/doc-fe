@@ -11,8 +11,8 @@ const SortableItem = SortableElement(
     <li style={{ listStyleType: "none" }} id="FBSortableContainer-list" >
       <FBFieldWrapper
         key={`${value.name}_${value.index}`}
-        index={value.index}
-        designDisabled={value.designDisabled}
+        // index={value.index}
+        // designDisabled={value.designDisabled}
       >
         {wrapperRenderer(value)}
       </FBFieldWrapper>

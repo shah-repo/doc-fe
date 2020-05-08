@@ -6,6 +6,7 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { toastError } from "../../components/notifications";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
+import { FBSchemaProps } from "../FBSchema";
 import FBStore from "../stores/ui/FBStore";
 import { FBInputProps } from "../types/common";
 import { FBEditorElementType } from "../types/editor";
@@ -22,7 +23,7 @@ export class FBPOReceiveState extends FBRequest<DocumentRevision, any>  {
     return this.data?.document.id;
   }
 
-  @computed public get docSchema(): FBInputProps[] | undefined {
+  @computed public get docSchema(): FBSchemaProps[] | undefined {
     return this.data?.formDocument?.formTemplate?.schema;
   }
 

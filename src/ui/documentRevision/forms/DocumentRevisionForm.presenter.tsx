@@ -3,7 +3,7 @@ import { FormikProps } from "formik";
 import { isEmpty } from "lodash";
 import { observer } from "mobx-react";
 import React, { useEffect } from "react";
-import { DocumentRevision, DocumentRevisionStatus, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
@@ -19,6 +19,7 @@ import ScrollToError from "../../components/forms/ScrollToError";
 import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
 import { documentDetailsPath } from "../../document.revision/utils/paths";
+import { FB } from "../../form.builder";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
 import DocRevActions from "./presenters/Actions";
@@ -49,7 +50,7 @@ export interface Props
   onDirtyFlagChange?: (dirty: boolean) => void;
   canChangeOwnerShip: boolean;
   type?: string;
-  handleFBContainerRef?: (instance: any) => any;
+  handleFBContainerRef?: (instance: HTMLDivElement | null) => any;
 }
 
 export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
@@ -78,6 +79,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   setValues,
 }) => {
 
+  const { workspaceState } = FB.useStores();
   useEffect(() => {
     if (!values.id && !values.document?.documentType?.id && setDocId) {
       setDocId("");
@@ -131,7 +133,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       xs={12}
     >
       {
-        workspaceState?.getMode() === "form" &&
+        workspaceState?.mode === "form" &&
         <DocumentRevisionOutputInfo formDocument={values.formDocument} />
       }
       <FormWrapper
@@ -154,7 +156,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         <Title name="name" label="common.title" />
         <Description isQms={docInfo.isQms} />
         <DocumentTypeSelect
-          outputDocumentTypes={initialValues.formDocument?.formTemplate?.outputDocumentTypes}
+          outputDocumentTypes={initialValues.formDocument?.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]}
           type={type}
           isdocRevStatusDraft={isdocRevStatusDraft}
           savedocInfo={savedocInfo}
@@ -211,6 +213,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           docInfo={docInfo}
           values={values}
           canChangeOwnerShip={canChangeOwnerShip}
+          {...{ setValues }}
         />
       </FormWrapper>
     </Grid>

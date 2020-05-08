@@ -51,7 +51,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   return (
     <Box mt={4}>
       <AutocompleteField
-        name="formTemplate.outputDocumentTypes"
+        name="outputDocumentTypes"
         label="document.output.type"
         autocompleteProps={{
           id: "formTemplate.outputDocumentTypes",
