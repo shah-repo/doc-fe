@@ -1,50 +1,36 @@
-import { Box, Button, Grid, withStyles, WithStyles } from "@material-ui/core";
+import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { isEmpty } from "lodash";
 import { observer } from "mobx-react";
-import React, { useEffect, useMemo } from "react";
-import { useIntl } from "react-intl";
-import { useDispatch, useSelector } from "react-redux";
-import { authSelectors } from "../../../state/ducks/auth";
-import { GroupTag } from "../../../state/ducks/auth/types";
-import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
-import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus, FBOutputDocumentType, RevisionChangeType, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
-import { DocumentGroupOptionsType, DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
+import React, { useEffect } from "react";
+import { DocumentRevision, DocumentRevisionStatus, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
+import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
-import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
-import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
-import AsyncGate from "../../components/AsyncGate";
-import OwnerChanger from "../../components/common/owner.changer/container";
-import { RequestType } from "../../components/common/owner.changer/helpers/types";
 import { default as AutocompleteField } from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
-import CheckboxField from "../../components/forms/fields/Checkbox";
-import RichTextEditor from "../../components/forms/fields/RichTextEditor";
-import SelectField, { SelectOption } from "../../components/forms/fields/Select";
-import { required, requiredAtLeastOne, validator } from "../../components/forms/fields/validators";
+import SelectField from "../../components/forms/fields/Select";
+import { required, validator } from "../../components/forms/fields/validators";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
-import SubmitButton from "../../components/forms/SubmitButton";
-import Text from "../../components/Text";
 import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
 import { documentDetailsPath } from "../../document.revision/utils/paths";
-import { FB, FBWorkspaceMode } from "../../form.builder";
-import useActionCreator from "../../hooks/useActionCreator";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
-import { getIsLastVersionObsolete } from "../helpers";
 import styles from "./DocumentRevisionForm.styles";
-import ApproveAndRelease from "./presenters/ApproveAndRelease";
+import DocRevActions from "./presenters/Actions";
+import Description from "./presenters/Description";
 import DocIdInput from "./presenters/DocIdInput";
+import DocumentSecurity from "./presenters/DocumentSecurity";
+import DocumentTypeSelect from "./presenters/DocumentTypeSelect";
+import FBActiveNoOutput from "./presenters/FBActiveNoOutput";
 import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
 import References from "./presenters/References";
-import RenderHtmlField from "./presenters/RenderHtmlField";
+import RetrainField from "./presenters/RetrainField";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
-import UpgradeToLatest from "./presenters/UpgradeToLatest";
 import { DocumentRevisionFormValues } from "./types";
 
 
@@ -56,18 +42,13 @@ export interface Props
   documentRevisions?: DocumentRevision[];
   availableReferences: OptionType[];
   showRevisionTypeChange?: boolean;
-  loadDocumentProposedId?: typeof documentsActions.loadDocumentProposedId;
   proposedDocId?: string;
   setDocId?: typeof documentsActions.setDocumentProposedId;
   doNotPrompt?: boolean;
-  documentTypes: SelectOption[];
-  outputDocumentTypeOptions: OptionType[];
   documentTypesById: DocumentTypeByIdState;
   onDirtyFlagChange?: (dirty: boolean) => void;
   canChangeOwnerShip: boolean;
-  onUpgradeClick: () => void;
   type?: string;
-  handleCancelDraft: () => void;
   handleFBContainerRef?: (instance: any) => any;
 }
 
@@ -78,7 +59,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   handleChange,
   availableReferences,
   showRevisionTypeChange,
-  loadDocumentProposedId,
   proposedDocId,
   values,
   setDocId,
@@ -89,72 +69,38 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   isSubmitting,
   isValidating,
   errors,
-  documentTypes,
   documentTypesById,
-  outputDocumentTypeOptions,
   canChangeOwnerShip,
   documentRevision,
   setFieldValue,
-  onUpgradeClick,
   type,
-  handleCancelDraft,
   handleFBContainerRef,
   setValues,
 }) => {
-  const { workspaceState, formState } = FB.useStores();
-  const intl = useIntl();
-  const dispatch = useDispatch();
-  const loadAvailableApproversAction = useActionCreator(
-    changeRequestsActions.loadAvailableApprovers
-  );
-  const loadApproversAsyncState = useSelector(
-    changeRequestsSelectors.getLoadApproversAsyncState
-  );
-  const loadGroupsAction = useActionCreator(
-    userManagementActions.loadCompanyGroups
-  );
-  const loadGroupAsyncState = useSelector(
-    userManagementSelectors.getLoadGroupsAsyncState
-  );
-
-  if (!values.id && !values.document?.documentType?.id && setDocId) {
-    setDocId("");
-  }
-
-  const openReference = (documentId: string) => {
-    window.open(documentDetailsPath(documentId), "_blank");
-  };
-  const formDocumentId = documentRevision && (documentRevision?.formDocument?.document?.id || "");
-  const formDocuments: Document = useSelector((state: ApplicationState) =>
-    documentRevisionsSelectors.getDocument(state, formDocumentId)
-  );
-  const isLastVersionObsolete = useMemo(() =>
-    formDocuments && getIsLastVersionObsolete(formDocuments)
-  , [formDocuments]);
 
   useEffect(() => {
-    if (formDocumentId) {
-      dispatch(documentRevisionsActions.loadDocument(formDocumentId));
+    if (!values.id && !values.document?.documentType?.id && setDocId) {
+      setDocId("");
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formDocumentId]);
-  const isDisabled: boolean = initialValues.id !== undefined;
-  const isdocRevVersionOne = documentRevision?.version === 1;
-  const isdocRevStatusDraft =
-    documentRevision?.status === DocumentRevisionStatus.Draft;
-  const outputDocEnabled: boolean =
-    (isdocRevVersionOne && isdocRevStatusDraft) || !isDisabled;
-
+  }, [setDocId, values.document, values.id]);
   useEffect(() => {
     if (proposedDocId) {
       setFieldValue("document.docId", proposedDocId);
     }
+  }, [proposedDocId, setFieldValue]);
+  useEffect(() => {
     if (isEmpty(values.document?.documentType?.id)) {
       setFieldValue("document.docId", "");
     }
-  }, [values.document, proposedDocId, setFieldValue]);
+  }, [values.document, setFieldValue]);
 
+  const openReference = (documentId: string) => {
+    window.open(documentDetailsPath(documentId), "_blank");
+  };
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
+  const isDisabled: boolean = initialValues.id !== undefined;
+  const isdocRevStatusDraft =
+    documentRevision?.status === DocumentRevisionStatus.Draft;
 
   useEffect(() => {
     if (isdocRevStatusDraft) {
@@ -164,92 +110,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       });
     }
   }, [isdocRevStatusDraft, values.document, values.name]);
-
-  useEffect(() => {
-    if (values.revisionChangeType === RevisionChangeType.AdministrativeChange) {
-      setFieldValue("retrain", false);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [values.revisionChangeType]);
-
-  const handleTypeChange = (
-    event: React.ChangeEvent<{ name?: string; value: unknown }>
-  ) => {
-    const typeId = event.target.value as string;
-    const type = documentTypesById[typeId] || {};
-    savedocInfo({ name: event.target.name || "", isQms: type.isQms });
-    groupOptions.forEach((group) => {
-      if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
-        setFieldValue("securityGroups", [
-          { value: group.value, label: group.label },
-        ]);
-      }
-    });
-    if (loadDocumentProposedId) {
-      setFieldValue("retrain", type.defaultTraining);
-      loadDocumentProposedId(type.id);
-    }
-    if (type.isQms) {
-      groupOptions.forEach((group) => {
-        if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
-          setFieldValue("securityGroups", [
-            { value: group.value, label: group.label },
-          ]);
-        }
-      });
-    }
-    if (!type.isQms) {
-      setFieldValue("securityGroups", []);
-    }
-    // FB mode
-    const formOption: DocumentGroupOptionsType = "FORM";
-    const mode: FBWorkspaceMode = type.groupOptions?.includes(formOption) ? "design" : "none";
-    workspaceState?.setMode(mode);
-    handleChange(event);
-  };
-
-  const onFormClick = (_event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    switch (workspaceState?.getMode()) {
-      case "design":
-        setValues({
-          ...values,
-          formTemplate: {
-            outputDocumentTypes: (values.outputDocumentTypes || [])
-              .map((outputDoc) => ({ id: outputDoc.value }) ),
-            schema: workspaceState?.getSchema(),
-          },
-        });
-        break;
-      case "form":
-        setValues({
-          ...values,
-          formDocument: {
-            id: values.formDocument?.id,
-          },
-          formInput: formState?.getValues(),
-        });
-        break;
-      default:
-        break;
-    }
-  };
-
-  const renderTypeOfRevisionChange = showRevisionTypeChange && (
-    <RevisionTypeChange />
-  );
-
-  const availableApprovers = useSelector((state: ApplicationState) => {
-    const currentUserId = authSelectors.currentUserId(state);
-    return changeRequestsSelectors.getApproversListWithoutCurrentUser(
-      state,
-      currentUserId
-    );
-  });
-  const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
-
-  const renderChangeOwnership = canChangeOwnerShip && values.id && (
-    <OwnerChanger requestId={values.id} requestType={RequestType.Document} />
-  );
 
   const renderRevisionStageDropdown = !isDisabled && (
     <SelectField
@@ -261,25 +121,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       includeEmpty={false}
     />
   );
-  const CancelButtonRenderer = () => (
-    <Button id="cancelDraftButton" variant="outlined" onClick={handleCancelDraft}>
-      <Text translation="common.cancel.draft" />
-    </Button>
-  );
-  const formDocumentStatus = documentRevision?.formDocument?.status || "";
-  const documentStatus = documentRevision?.status;
-  const isDocumentStatusDraftOrPending =
-    documentStatus === (DocumentRevisionStatus.Draft || DocumentRevisionStatus.PendingChange);
-  const isFormStatusDeprecated = formDocumentStatus === DocumentRevisionStatus.Deprecated;
-  const isDocTypeDisabled = type === "newVersion" || isdocRevStatusDraft;
-  const options = useMemo(() => type === "newOutput" ?
-    ((initialValues.formDocument?.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]).map((e) =>
-      ({ value: e.id, text: e.documentTypeName })
-    ) as SelectOption[] || documentTypes)
-    : documentTypes
-  , [documentTypes, initialValues.formDocument, type]);
-
-  const canShowCancelButton = documentStatus === DocumentRevisionStatus.Draft && documentRevision?.version > 1;
 
   return (
     <Grid
@@ -289,11 +130,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       sm={isDisabled ? 12 : 10}
       xs={12}
     >
-      {workspaceState?.getMode() === "form" && (
-        <DocumentRevisionOutputInfo
-          dataProp={(values as unknown) as DocumentRevision}
-        />
-      )}
+      {
+        workspaceState?.getMode() === "form" &&
+        <DocumentRevisionOutputInfo formDocument={values.formDocument} />
+      }
       <FormWrapper
         dirty={dirty}
         initialValues={initialValues}
@@ -312,26 +152,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         <FormMessage asyncState={asyncState} />
         <FormProgress asyncState={asyncState} />
         <Title name="name" label="common.title" />
-        <RichTextEditor
-          name="description"
-          label="common.description"
-          validate={docInfo.isQms ? validator(required) : undefined}
-          editorProps={{
-            placeholder: docInfo.isQms
-              ? ""
-              : "Optional: Title will be used if description not provided.",
-          }}
-        />
-        <SelectField
-          name="document.documentType.id"
-          label="document.type"
-          selectProps={{
-            inputProps: { id: "documentType", disabled: isDocTypeDisabled },
-            onChange: handleTypeChange,
-          }}
-          options={options}
-          validate={validator(required)}
-          includeEmpty={false}
+        <Description isQms={docInfo.isQms} />
+        <DocumentTypeSelect
+          outputDocumentTypes={initialValues.formDocument?.formTemplate?.outputDocumentTypes}
+          type={type}
+          isdocRevStatusDraft={isdocRevStatusDraft}
+          savedocInfo={savedocInfo}
         />
         <DocIdInput
           document={values.document}
@@ -352,75 +178,23 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           onClick={openReference}
         />
         <References document={initialValues.document} />
-        <CheckboxField
-          name="retrain"
-          label="document.revision.trainingRequired"
-          checkboxProps={{
-            disabled: values.revisionChangeType === RevisionChangeType.AdministrativeChange,
-          }}
-        />
+        <RetrainField revisionChangeType={values.revisionChangeType} />
         <AttachmentsField />
-        {renderTypeOfRevisionChange}
-        {(!values.status || type === "newOutput") && (
-          <AsyncGate
-            asyncState={loadApproversAsyncState}
-            asyncAction={loadAvailableApproversAction}
-            startActionOnMount={true}
-          >
-            <AutocompleteField
-              name="securityEmployees"
-              label="document.revision.selected.users"
-              autocompleteProps={{
-                id: "securityEmployees",
-                isMulti: true,
-                closeMenuOnSelect: false,
-                placeholder: intl.formatMessage({
-                  id: "document.revision.selected.users.placeholder",
-                }),
-              }}
-              options={availableApprovers}
-            />
-          </AsyncGate>
-        )}
-        {(!values.status || type === "newOutput") && (
-          <AsyncGate
-            asyncState={loadGroupAsyncState}
-            asyncAction={loadGroupsAction}
-            startActionOnMount={true}
-          >
-            <AutocompleteField
-              name="securityGroups"
-              label="document.revision.selected.groups"
-              autocompleteProps={{
-                id: "securityGroups",
-                isMulti: true,
-                closeMenuOnSelect: false,
-                placeholder: intl.formatMessage({
-                  id: "document.revision.selected.groups.placeholder",
-                }),
-              }}
-              options={groupOptions}
-            />
-          </AsyncGate>
-        )}
-        {workspaceState?.active && workspaceState.mode === "design" && (
-          <Box mt={4}>
-            <AutocompleteField
-              name="outputDocumentTypes"
-              label="document.output.type"
-              autocompleteProps={{
-                id: "formTemplate.outputDocumentTypes",
-                isMulti: true,
-                closeMenuOnSelect: false,
-                className: !outputDocEnabled ? classes.outputGrey : "",
-              }}
-              options={outputDocumentTypeOptions}
-              validate={validator(requiredAtLeastOne)}
-            />
-            <RenderHtmlField />
-          </Box>
-        )}
-        {workspaceState?.active && (
+        {showRevisionTypeChange && <RevisionTypeChange />}
+        {
+          (!values.status || type === "newOutput") &&
+          <DocumentSecurity />
+        }
+        {
+          workspaceState?.active && workspaceState.mode === "design" &&
+          <FBActiveNoOutput
+            docRevId={initialValues.id}
+            status={documentRevision?.status}
+            version={documentRevision?.version}
+          />
+        }
+        {
+          workspaceState?.active &&
           <Box mt={5}>
             {
               values.id &&
@@ -430,40 +204,14 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             }
             <div ref={handleFBContainerRef} />
           </Box>
-        )}
-        <Box mt={5}>
-          <Grid
-            container={true}
-            alignItems="flex-end"
-            justify="flex-end"
-            direction="row"
-          >
-            {canShowCancelButton &&  CancelButtonRenderer()}
-            {renderChangeOwnership}
-            <SubmitButton
-              asyncState={asyncState}
-              label={isDisabled ?
-                `common.save.${values.document?.documentType?.documentTypeAcronym}` :
-                "navigation.createDocument"
-              }
-              onClick={onFormClick}
-              id="DocumentRevisionForm-submit"
-            />
-            {
-              isFormStatusDeprecated &&
-              isDocumentStatusDraftOrPending &&
-              !isLastVersionObsolete &&
-              <UpgradeToLatest onUpgradeClick={onUpgradeClick}/>
-            }
-            <ApproveAndRelease
-              id={values.id}
-              status={values.status}
-              isQms={docInfo.isQms}
-              documentName={docInfo.name}
-              docRevId={values.id as string}
-            />
-          </Grid>
-        </Box>
+        }
+        <DocRevActions
+          documentRevision={documentRevision}
+          asyncState={asyncState}
+          docInfo={docInfo}
+          values={values}
+          canChangeOwnerShip={canChangeOwnerShip}
+        />
       </FormWrapper>
     </Grid>
   );

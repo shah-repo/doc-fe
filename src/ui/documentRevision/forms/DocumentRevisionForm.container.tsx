@@ -6,7 +6,7 @@ import React, { useEffect, useMemo } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
-import { DocumentType, DocumentTypeByIdState, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentTypeByIdState, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
@@ -15,8 +15,6 @@ import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 import DocumentHeader from "../../document.revision/summary/header";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import styles from "./DocumentRevisionForm.container.style";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
@@ -27,7 +25,6 @@ interface StateProps {
   availableReferences: OptionType[];
   loadAsyncState: AsyncState;
   documentRevisions: DocumentRevision[];
-  documentTypes: DocumentType[];
   documentTypesById: DocumentTypeByIdState;
   document: Document;
 }
@@ -66,7 +63,6 @@ const mapStateToProps = (
   availableReferences: getAvailableReferences(state, props.initialValues),
   loadAsyncState: documentRevisionsSelectors.getLoadListAsyncState(state),
   documentRevisions: documentRevisionsSelectors.getDocumentRevisionsList(state),
-  documentTypes: documentTypeSelectors.getDocumentTypeFormOptions(state),
   documentTypesById: documentTypeSelectors.byId(state),
   document: documentRevisionsSelectors.getDocument(
     state,
@@ -91,7 +87,6 @@ DocumentRevisionFormContainerProps
   doNotPrompt,
   onDirtyFlagChange,
   documentRevision,
-  documentTypes,
   documentTypesById,
   document,
   canChangeOwnerShip = false,
@@ -112,48 +107,18 @@ DocumentRevisionFormContainerProps
       });
     }
 
+    const retrain = initialValues.id ?
+      initialValues.retrain :
+      initialValues.document?.documentType?.defaultTraining || false;
+
     return {
       ...initialValues,
-      retrain: initialValues.document?.documentType?.defaultTraining || false,
       outputDocumentTypes: initialValues.formTemplate?.outputDocumentTypes as OptionType[],
+      retrain,
       renderHTML,
       securityGroups,
     };
   }, [canUpdateHTML, initialValues, groupOptions]);
-
-  const docTypes = useMemo(
-    () =>
-      documentTypes.map((document) => ({
-        value: document.id,
-        text: document.documentTypeName,
-      })),
-    [documentTypes],
-  );
-
-  const outputDocumentTypeOptions: OptionType[] = useMemo(
-    () =>
-      documentTypes.reduce((acc: OptionType[], document) => {
-        if (document.group === "RECORD" || document.group === "OTHER" || document.group === "DAM") {
-          acc.push({ value: document.id, label: document.documentTypeName });
-        }
-        return acc;
-      }, []),
-    [documentTypes],
-  );
-
-  const upgradeAction = useActionCreator(documentRevisionsActions.upgradeToReleasedForm);
-  const cancelDraft = useActionCreator(documentRevisionsActions.cancelDraft);
-
-  const async = useAsync();
-  const cancelDraftAsync = useAsync();
-
-  const onUpgradeClick = () => {
-    async.start(upgradeAction, documentRevision.id, async);
-  };
-
-  const handleCancelDraft = () => {
-    async.start(cancelDraft, documentRevision.id, cancelDraftAsync);
-  };
 
   useEffect(() => {
     if (type !== "newVersion" &&
@@ -184,18 +149,13 @@ DocumentRevisionFormContainerProps
       documentRevision={documentRevision}
       availableReferences={availableReferences}
       showRevisionTypeChange={showRevisionTypeChange}
-      loadDocumentProposedId={loadDocumentProposedId}
       proposedDocId={proposedDocId}
       setDocId={setDocId}
       doNotPrompt={doNotPrompt}
       onDirtyFlagChange={onDirtyFlagChange}
-      documentTypes={docTypes}
-      outputDocumentTypeOptions={outputDocumentTypeOptions}
       documentTypesById={documentTypesById}
       canChangeOwnerShip={canChangeOwnerShip}
-      onUpgradeClick={onUpgradeClick}
       type={type}
-      handleCancelDraft={handleCancelDraft}
       {...{ handleFBContainerRef }}
     />
   );
