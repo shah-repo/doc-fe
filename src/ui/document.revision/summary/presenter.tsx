@@ -79,7 +79,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         <ChangeRequestLink dataProp={dataProp} />
         {FBDRStore.isOutput && (
           <Box ml={2} mt={1}>
-            <DocumentRevisionOutputInfo dataProp={dataProp} />
+            <DocumentRevisionOutputInfo formDocument={dataProp?.formDocument} />
           </Box>
         )}
         <SummaryField label="document.title" value={name} />
