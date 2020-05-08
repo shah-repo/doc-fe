@@ -38,4 +38,4 @@ export const RevisionTypeChange: React.FunctionComponent = () => (
   </Box>
 );
 
-export default RevisionTypeChange;
+export default React.memo(RevisionTypeChange);

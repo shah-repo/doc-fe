@@ -39,4 +39,4 @@ export const Title: React.FunctionComponent<Props> = ({
   );
 };
 
-export default Title;
+export default React.memo(Title);
