@@ -2,14 +2,17 @@ import _ from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBWorkspaceConstructor, FBWorkspaceMode } from ".";
 import { FBSchemaState } from "..";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 
 export class FBWorkspaceState extends FBSchemaState {
   @observable public mode: FBWorkspaceMode = "none";
+  public document?: DocumentRevision;
 
-  public constructor({ schema, mode }: FBWorkspaceConstructor) {
+  public constructor({ schema, mode, document }: FBWorkspaceConstructor) {
     super(schema);
     this.schema = schema;
     this.mode = mode || "none";
+    this.document = document;
   }
 
   @computed public get active(): boolean {

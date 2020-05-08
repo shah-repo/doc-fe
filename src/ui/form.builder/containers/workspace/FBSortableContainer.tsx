@@ -6,32 +6,34 @@ import { withSortable } from "../../hocs/withSortable";
 import { FBSortableProps } from "../../types/sortable";
 import { FBTemplateSchema } from "../../types/store";
 
+const SortableItem = SortableElement(
+  ({ value, wrapperRenderer }: { value: FBTemplateSchema; wrapperRenderer: any }) => (
+    <li style={{ listStyleType: "none" }} id="FBSortableContainer-list" >
+      <FBFieldWrapper
+        key={`${value.name}_${value.index}`}
+        index={value.index}
+        designDisabled={value.designDisabled}
+      >
+        {wrapperRenderer(value)}
+      </FBFieldWrapper>
+    </li>
+  ),
+);
+
+const SortableList = SortableContainer(({ items, wrapperRenderer }) => (
+  <ul style={{ listStyleType: "none", padding: "0", margin: "0" }}>
+    {items.map((value, index) => (
+      <SortableItem key={`item-${index}`} index={index} value={value} wrapperRenderer={wrapperRenderer} />
+    ))}
+  </ul>
+));
+
 const FBSortableContainer: React.FunctionComponent<FBSortableProps> = ({
   items,
   wrapperRenderer,
   isSortable,
   ...props
 }) => {
-  const SortableItem = SortableElement(
-    ({ value }: { value: FBTemplateSchema }) => (
-      <li style={{ listStyleType: "none" }} id="FBSortableContainer-list" >
-        <FBFieldWrapper
-          key={`${value.name}_${value.index}`}
-          inputProps={value}
-        >
-          {wrapperRenderer(value)}
-        </FBFieldWrapper>
-      </li>
-    ),
-  );
-
-  const SortableList = SortableContainer(() => (
-    <ul style={{ listStyleType: "none", padding: "0", margin: "0" }}>
-      {items.map((value, index) => (
-        <SortableItem key={`item-${index}`} index={index} value={value} />
-      ))}
-    </ul>
-  ));
 
   const plainList = () => items.map((schema) => wrapperRenderer(schema));
 
@@ -40,7 +42,14 @@ const FBSortableContainer: React.FunctionComponent<FBSortableProps> = ({
   return (
     <Box>
       {isSortable && (
-        <SortableList {...props} axis="y" lockAxis="y" pressDelay={150} />
+        <SortableList
+          {...props}
+          items={items}
+          wrapperRenderer={wrapperRenderer}
+          axis="y"
+          lockAxis="y"
+          pressDelay={150}
+        />
       )}
       {!isSortable && plainList()}
     </Box>

@@ -1,6 +1,7 @@
 import { Box, Typography } from "@material-ui/core";
 import { FormikProps } from "formik";
 import * as React from "react";
+import { FBDocumentRevisionProps } from "../../../../state/ducks/documentRevisions";
 import { SupplierSurveyForm } from "../../../../state/ducks/supplierSurvey";
 import { AsyncState } from "../../../../state/types";
 import FormMessage from "../../../components/forms/FormMessage";
@@ -8,9 +9,8 @@ import FormProgress from "../../../components/forms/FormProgress";
 import FormWrapper from "../../../components/forms/FormWrapper";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import { FBWorkspace } from "../../../form.builder";
-import { FBDocumentFlowProps } from "../../../form.builder/types/formik";
 
-interface Props extends FormikProps<FBDocumentFlowProps> {
+interface Props extends FormikProps<FBDocumentRevisionProps> {
   asyncState: AsyncState;
   supplierSurvey: SupplierSurveyForm;
   name?: string;

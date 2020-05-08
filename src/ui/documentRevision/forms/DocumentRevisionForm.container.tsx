@@ -20,6 +20,7 @@ import useAsync from "../../hooks/useAsync";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import styles from "./DocumentRevisionForm.container.style";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
+import MemoizedFBWorkspace from "./presenters/MemoizedFBWorkspace";
 import { DocumentRevisionFormValues } from "./types";
 
 interface StateProps {
@@ -114,6 +115,7 @@ DocumentRevisionFormContainerProps
     return {
       ...initialValues,
       retrain: initialValues.document?.documentType?.defaultTraining || false,
+      outputDocumentTypes: initialValues.formTemplate?.outputDocumentTypes as OptionType[],
       renderHTML,
       securityGroups,
     };
@@ -169,6 +171,11 @@ DocumentRevisionFormContainerProps
   document = document || ({} as Document);
   const classes = styles();
 
+  const [FBContainer, setFBContainer] = React.useState(undefined);
+  const handleFBContainerRef = React.useCallback((instance) => {
+    setFBContainer(instance);
+  }, [setFBContainer]);
+
   const render = (props: FormikProps<DocumentRevisionFormValues>) => (
     <DocumentRevisionFormPresenter
       {...props}
@@ -189,6 +196,7 @@ DocumentRevisionFormContainerProps
       onUpgradeClick={onUpgradeClick}
       type={type}
       handleCancelDraft={handleCancelDraft}
+      {...{ handleFBContainerRef }}
     />
   );
 
@@ -219,13 +227,19 @@ DocumentRevisionFormContainerProps
         <Box ml={3}>
           <ChangeRequestLink dataProp={documentRevision} />
         </Box>
-        <Formik
-          initialValues={cleanInitialValues}
-          onSubmit={onSubmit}
-          enableReinitialize={true}
+        <MemoizedFBWorkspace
+          portalContainer={FBContainer}
+          document={cleanInitialValues}
+          {...{ proposedDocId }}
         >
-          {render}
-        </Formik>
+          <Formik
+            initialValues={cleanInitialValues}
+            onSubmit={onSubmit}
+            enableReinitialize={true}
+          >
+            {render}
+          </Formik>
+        </MemoizedFBWorkspace>
       </Grid>
     </AsyncGate>
   );

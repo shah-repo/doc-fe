@@ -1,3 +1,4 @@
+import { Dictionary } from "lodash";
 import { FBPOReceiveProps, FBPurchaseOrderItem } from "..";
 
 export type FBPOReceiveTableProps =
@@ -5,4 +6,5 @@ export type FBPOReceiveTableProps =
 & {
   handleEdit?: (index: number, item: FBPurchaseOrderItem) => any;
   disabled?: boolean;
+  receivedItems?: Dictionary<number>;
 };

@@ -11,6 +11,7 @@ const FBWorkspaceBottomBar: React.FunctionComponent<FBWorkspaceBottomBarProps> =
   importSchema,
   exportSchema,
   includeTransport,
+  previewDisabled,
 }) => (
   <Box display="flex" flexDirection="row-reverse" p={1} mt={2} bgcolor="#f6f7f7">
     <input
@@ -20,7 +21,11 @@ const FBWorkspaceBottomBar: React.FunctionComponent<FBWorkspaceBottomBarProps> =
       accept=".json"
       onChange={importSchema}
     />
-    <IconButton size="small" disabled={!includeTransport} onClick={exportSchema}>
+    <IconButton
+      size="small"
+      disabled={!includeTransport}
+      onClick={exportSchema}
+    >
       <FBTooltip title="form.builder.export.template">
         <VerticalAlignTopIcon />
       </FBTooltip>
@@ -32,7 +37,12 @@ const FBWorkspaceBottomBar: React.FunctionComponent<FBWorkspaceBottomBarProps> =
         </label>
       </FBTooltip>
     </IconButton>
-    <IconButton size="small" id="FBWorkspace-clickView" onClick={handleFormPreview}>
+    <IconButton
+      size="small"
+      id="FBWorkspace-clickView"
+      disabled={previewDisabled}
+      onClick={handleFormPreview}
+    >
       <FBTooltip title="form.builder.form.preview">
         <VisibilityIcon />
       </FBTooltip>
