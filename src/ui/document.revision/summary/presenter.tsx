@@ -1,10 +1,9 @@
 import { Box, Grid, WithStyles, withStyles } from "@material-ui/core";
 import { Formik } from "formik";
-import _ from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { DataProps } from "../../../state/ducks/common";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
@@ -14,9 +13,8 @@ import { RequestType } from "../../components/common/owner.changer/helpers/types
 import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
-import { FBWorkspace } from "../../form.builder";
+import { FBSchemaProps, FBWorkspace } from "../../form.builder";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
-import FBStore from "../../form.builder/stores/ui/FBStore";
 import Attachment from "./attachment";
 import ChangeRequestLink from "./changeRequestLink";
 import DocumentHeader from "./header";
@@ -55,9 +53,12 @@ export const Presenter: React.FunctionComponent<Props> = ({
   canShowCreateVersionButton,
 }) => {
   const onSubmit = () => void 0;
-  FBDRStore.setValues(dataProp);
-  const outputDocumentTypeName = useSelector((state: ApplicationState) => formTemplate ? formTemplate.outputDocumentTypes.map((i) => documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
-
+  const outputDocumentTypeName = useSelector((state: ApplicationState) =>
+    formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
+      documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
+  const { formInput } = dataProp || {};
+  const { schema } = dataProp.formTemplate || dataProp.formDocument?.formTemplate || {};
+  const FBIsActive = formInput || formTemplate || formDocument;
   const renderTrainingControl = status === DocumentRevisionStatus.Released && (
     <TrainingControl
       dataProp={trainingRecords}
@@ -107,12 +108,13 @@ export const Presenter: React.FunctionComponent<Props> = ({
         {renderTrainingControl}
       </Grid>
 
-      {FBStore.active && (
-        <Box px={5} id="Presenter-FBWorkspace">
+      {FBIsActive && (
+        <Box px={5} mt={4} id="Presenter-FBWorkspace">
           <FBWorkspace
-            documentId={_.get(formDocument, "document.id") || _.get(document, "id")}
             document={dataProp}
             initialValues={dataProp.formInput}
+            schema={schema as FBSchemaProps[]}
+            mode="preview"
           />
         </Box>
       )}

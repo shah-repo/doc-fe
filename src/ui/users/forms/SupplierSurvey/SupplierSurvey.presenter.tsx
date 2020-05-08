@@ -1,8 +1,8 @@
 import { Formik, FormikProps } from "formik";
 import * as React from "react";
+import { FBDocumentRevisionProps } from "../../../../state/ducks/documentRevisions";
 import { SupplierSurveyForm } from "../../../../state/ducks/supplierSurvey";
 import { AsyncState } from "../../../../state/types";
-import { FBDocumentFlowProps } from "../../../form.builder/types/formik";
 import { toSupplierSurveyFormValues } from "../transform";
 import SupplierSurveyFormBuild from "./SupplierSurveyFormBuild.presenter";
 
@@ -13,7 +13,7 @@ interface Props {
 }
 
 const SupplierSurveyPresenter: React.FunctionComponent<Props> = ({ onSubmit, supplierSurvey, asyncState }) => {
-  const renderForm = (props: FormikProps<FBDocumentFlowProps>) => (
+  const renderForm = (props: FormikProps<FBDocumentRevisionProps>) => (
     <SupplierSurveyFormBuild
       {...props}
       asyncState={asyncState}

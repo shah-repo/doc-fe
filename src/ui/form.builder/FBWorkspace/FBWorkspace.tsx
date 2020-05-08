@@ -26,7 +26,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
           <FBConditionalWrapper
             condition={!_.isUndefined(portalContainer)}
             wrapper={(wrapperChildren) => (
-              <Portal container={portalContainer?.current}>
+              <Portal container={portalContainer}>
                 {wrapperChildren}
               </Portal>
             )}

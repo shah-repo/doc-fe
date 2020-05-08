@@ -13,10 +13,13 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
     handleFormPreview,
     importSchema,
     exportSchema,
+    previewDisabled,
+    includeTransport,
     ...props
   }: T) => {
 
     const { workspaceState, dialogState } = FB.useStores();
+    previewDisabled = !includeTransport || !(workspaceState?.mode !== "form");
 
     const readFile = (file: Blob) => {
       const reader = new FileReader();
@@ -81,6 +84,8 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
       handleFormPreview,
       importSchema,
       exportSchema,
+      includeTransport,
+      previewDisabled,
     });
   };
 

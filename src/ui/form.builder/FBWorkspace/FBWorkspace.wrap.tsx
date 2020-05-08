@@ -2,9 +2,8 @@
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBWorkspaceProps, FBWorkspaceState } from ".";
-import { FB, FBSchemaProps } from "..";
+import { FB } from "..";
 import { FBDialogState } from "../FBDialog";
-import FBStore from "../stores/ui/FBStore";
 
 // Disable missing translation message for the non translation cases.
 
@@ -31,27 +30,12 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     mode,
     isStarter,
     active,
-    // OLD: to be removed
-    id = "",
-    documentId = "",
-    document = {},
+    document,
     ...props
   }: T) => {
 
-    workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
-      schema: FBStore.getSchema() as FBSchemaProps[],
-      mode: FBStore.mode,
-    });
+    workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, { schema, mode, document });
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
-
-    React.useEffect(() => {
-      // workspaceState && mode && (workspaceState.setMode(mode));
-      // OLD: to be removed
-      FBStore.docId = id;
-      FBStore.documentId = documentId;
-      FBStore.document = document;
-      // workspaceState?.setSchema(FBStore.getSchema() as FBSchemaProps[]);
-    }, []);
 
     useObserver(() => {
       isStarter = workspaceState?.isStarter;

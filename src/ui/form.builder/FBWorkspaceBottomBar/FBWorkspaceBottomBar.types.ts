@@ -9,4 +9,5 @@ export type FBWorkspaceBottomBarProps =
   handleFormPreview?: () => any;
   importSchema?: (event: React.ChangeEvent<HTMLInputElement>) => any;
   exportSchema?: () => any;
+  previewDisabled?: boolean;
 };

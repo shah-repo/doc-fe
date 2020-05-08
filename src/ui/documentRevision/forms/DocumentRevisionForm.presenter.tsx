@@ -8,8 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
-import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus, RevisionChangeType, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
-import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
+import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors, DocumentRevisionStatus, FBOutputDocumentType, RevisionChangeType, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
+import { DocumentGroupOptionsType, DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
@@ -33,9 +33,7 @@ import Text from "../../components/Text";
 import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
 import { documentDetailsPath } from "../../document.revision/utils/paths";
-import { FBValidate } from "../../form.builder/defaults/validator";
-import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
-import FBStore from "../../form.builder/stores/ui/FBStore";
+import { FB, FBWorkspaceMode } from "../../form.builder";
 import useActionCreator from "../../hooks/useActionCreator";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import { getIsLastVersionObsolete } from "../helpers";
@@ -43,7 +41,6 @@ import styles from "./DocumentRevisionForm.styles";
 import ApproveAndRelease from "./presenters/ApproveAndRelease";
 import DocIdInput from "./presenters/DocIdInput";
 import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
-import MemoizedFBWorkspace from "./presenters/MemoizedFBWorkspace";
 import References from "./presenters/References";
 import RenderHtmlField from "./presenters/RenderHtmlField";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
@@ -71,6 +68,7 @@ export interface Props
   onUpgradeClick: () => void;
   type?: string;
   handleCancelDraft: () => void;
+  handleFBContainerRef?: (instance: any) => any;
 }
 
 export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
@@ -100,7 +98,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   onUpgradeClick,
   type,
   handleCancelDraft,
+  handleFBContainerRef,
+  setValues,
 }) => {
+  const { workspaceState, formState } = FB.useStores();
   const intl = useIntl();
   const dispatch = useDispatch();
   const loadAvailableApproversAction = useActionCreator(
@@ -116,11 +117,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     userManagementSelectors.getLoadGroupsAsyncState
   );
 
-  if (!values.id && !values.document?.documentType?.id) {
-    FBDRStore.setMode("none");
-    if (setDocId) {
-      setDocId("");
-    }
+  if (!values.id && !values.document?.documentType?.id && setDocId) {
+    setDocId("");
   }
 
   const openReference = (documentId: string) => {
@@ -191,7 +189,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       setFieldValue("retrain", type.defaultTraining);
       loadDocumentProposedId(type.id);
     }
-    FBDRStore.setInitialFBMode(type);
     if (type.isQms) {
       groupOptions.forEach((group) => {
         if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
@@ -204,13 +201,37 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     if (!type.isQms) {
       setFieldValue("securityGroups", []);
     }
+    // FB mode
+    const formOption: DocumentGroupOptionsType = "FORM";
+    const mode: FBWorkspaceMode = type.groupOptions?.includes(formOption) ? "design" : "none";
+    workspaceState?.setMode(mode);
     handleChange(event);
   };
 
-  const onFormClick = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    FBValidate();
+  const onFormClick = (_event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    switch (workspaceState?.getMode()) {
+      case "design":
+        setValues({
+          ...values,
+          formTemplate: {
+            outputDocumentTypes: (values.outputDocumentTypes || [])
+              .map((outputDoc) => ({ id: outputDoc.value }) ),
+            schema: workspaceState?.getSchema(),
+          },
+        });
+        break;
+      case "form":
+        setValues({
+          ...values,
+          formDocument: {
+            id: values.formDocument?.id,
+          },
+          formInput: formState?.getValues(),
+        });
+        break;
+      default:
+        break;
+    }
   };
 
   const renderTypeOfRevisionChange = showRevisionTypeChange && (
@@ -252,7 +273,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isFormStatusDeprecated = formDocumentStatus === DocumentRevisionStatus.Deprecated;
   const isDocTypeDisabled = type === "newVersion" || isdocRevStatusDraft;
   const options = useMemo(() => type === "newOutput" ?
-    (initialValues.formDocument?.formTemplate?.outputDocumentTypes.map((e) =>
+    ((initialValues.formDocument?.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]).map((e) =>
       ({ value: e.id, text: e.documentTypeName })
     ) as SelectOption[] || documentTypes)
     : documentTypes
@@ -268,7 +289,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       sm={isDisabled ? 12 : 10}
       xs={12}
     >
-      {FBDRStore.isOutput && (
+      {workspaceState?.getMode() === "form" && (
         <DocumentRevisionOutputInfo
           dataProp={(values as unknown) as DocumentRevision}
         />
@@ -382,10 +403,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             />
           </AsyncGate>
         )}
-        {FBStore.active && !FBDRStore.isOutput && (
+        {workspaceState?.active && workspaceState.mode === "design" && (
           <Box mt={4}>
             <AutocompleteField
-              name="formTemplate.outputDocumentTypes"
+              name="outputDocumentTypes"
               label="document.output.type"
               autocompleteProps={{
                 id: "formTemplate.outputDocumentTypes",
@@ -399,7 +420,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <RenderHtmlField />
           </Box>
         )}
-        {FBStore.active && (
+        {workspaceState?.active && (
           <Box mt={5}>
             {
               values.id &&
@@ -407,12 +428,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 <GenerateHtmlPreview id={values.id} renderHTML={values.formDocument?.renderHTML} />
               </Box>
             }
-            <MemoizedFBWorkspace
-              id={values.id}
-              documentId={values.formDocument?.document?.id || values.document?.id}
-              document={values as unknown as DocumentRevision}
-              initialValues={values.formInput}
-            />
+            <div ref={handleFBContainerRef} />
           </Box>
         )}
         <Box mt={5}>

@@ -98,7 +98,7 @@ export const withEditorRenderer =
       if (type === "approval" || type === "instructionsmediaupload") {
         newSchema.splice(index, 0, {
           type: "section",
-          name: FB.uniqid(),
+          name: FB.uniqid,
           label: intl.formatMessage({ id: "form.builder.section" }),
         });
       }
