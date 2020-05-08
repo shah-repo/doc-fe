@@ -124,7 +124,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     />
   );
 
-
   return (
     <Grid
       item={true}
@@ -183,7 +182,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           onClick={openReference}
         />
         <References document={initialValues.document} />
-        <RetrainField revisionChangeType={values.revisionChangeType} setFieldValue={setFieldValue} />
+        <RetrainField
+          revisionChangeType={values.revisionChangeType}
+          setFieldValue={setFieldValue}
+        />
         <AttachmentsField />
         {showRevisionTypeChange && <RevisionTypeChange />}
         {

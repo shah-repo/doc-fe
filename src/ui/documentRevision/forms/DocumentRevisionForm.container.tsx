@@ -106,9 +106,13 @@ DocumentRevisionFormContainerProps
       });
     }
 
+    const retrain = initialValues.id ?
+      initialValues.retrain :
+      initialValues.document?.documentType?.defaultTraining || false;
+
     return {
       ...initialValues,
-      retrain: initialValues.document?.documentType?.defaultTraining || false,
+      retrain,
       renderHTML,
       securityGroups,
     };
