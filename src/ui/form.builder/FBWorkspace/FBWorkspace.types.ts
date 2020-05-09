@@ -9,7 +9,7 @@ export type FBWorkspaceProps =
 & {
   workspaceState?: FBWorkspaceState;
   dialogState?: FBDialogState;
-  portalContainer?: Element;
+  portalContainer?: React.MutableRefObject<HTMLDivElement | null>;
   schema?: FBSchemaProps[];
   mode?: FBWorkspaceMode;
   isStarter?: boolean;

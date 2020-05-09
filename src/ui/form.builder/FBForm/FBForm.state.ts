@@ -3,7 +3,6 @@ import _, { Dictionary } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBInputState } from "..";
 import { FBSchemaProps, FBSchemaState } from "../FBSchema";
-import FBStore from "../stores/ui/FBStore";
 
 export class FBFormState extends FBSchemaState {
   public rules: Dictionary<string> = {};
@@ -31,8 +30,6 @@ export class FBFormState extends FBSchemaState {
 
   @action public setValues = (values: Dictionary<any>) => {
     this.values = values;
-    // OLD: to be removed
-    FBStore.setValues(values);
   };
 
   @action public getValues = () => unflatten(this.values);
@@ -48,21 +45,21 @@ export class FBFormState extends FBSchemaState {
     return _.get(this.values, fieldName) || _.get(this.initialValues, fieldName);
   };
 
-  @action public setFieldValue = (
-    fieldName: string | undefined,
-    value: any,
-    withState = false,
-  ) => {
+  @action public setFieldValue = (fieldName: string | undefined, value: any, withState = false) => {
     if (!fieldName) {
       return;
     }
     if (_.isUndefined(value)) {
       this.omitFieldValue(fieldName);
     } else {
-      this.setValues(_.set(this.values, fieldName, value));
+      this.setValues({
+        ...this.values,
+        [fieldName]: value,
+      });
     }
     if (withState) {
-      this.inputState.get(fieldName)?.setValue(this.getFieldValue(fieldName));
+      const prevValue = this.getFieldValue(fieldName);
+      this.inputState.get(fieldName)?.setValue(prevValue);
       this.inputState.get(fieldName)?.setValue(value);
     }
   };

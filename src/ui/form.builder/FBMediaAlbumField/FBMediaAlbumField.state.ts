@@ -4,7 +4,6 @@ import { action, computed, observable, set } from "mobx";
 import { apiClient, FBMediaAlbumFieldConstructor, FBMediaAlbumFieldMode, FBMediaAlbumFieldStore, FBMediaFile, FBMediaProps, FBMediaUrlProps, FBWorkspaceState } from "..";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBDRStore from "../stores/ui/FBDRStore";
-import FBStore from "../stores/ui/FBStore";
 
 export class FBMediaAlbumFieldState {
   @observable public loading = false;
@@ -25,6 +24,10 @@ export class FBMediaAlbumFieldState {
     this.isTemplate = isTemplate;
     this.isPreview && this.setMode("media");
     this.downloadCandidates();
+  }
+
+  public get documentId(): string | undefined {
+    return this.workspaceState?.documentId;
   }
 
   @computed public get isPreview() {
@@ -85,7 +88,7 @@ export class FBMediaAlbumFieldState {
   };
 
   @action public createCandidate = (url: string, file: FBMediaFile) => {
-    if (_.isEmpty(FBStore.documentId)) {
+    if (!this.documentId) {
       return;
     }
     const { promise } = apiClient().post(FBEndpoint.FileUploadCandidates, {
@@ -94,7 +97,7 @@ export class FBMediaAlbumFieldState {
       fieldNameFromSchema: this.fieldName,
       order: file.order,
       document: {
-        id: FBStore.documentId,
+        id: this.documentId,
       },
     });
 
@@ -104,12 +107,12 @@ export class FBMediaAlbumFieldState {
   };
 
   @action public downloadCandidates = () => {
-    if (_.isEmpty(FBStore.documentId)) {
+    if (!this.documentId) {
       return;
     }
     this.setLoading(true);
     const { promise } = apiClient().get(FBEndpoint.FileUploadCandidates, {
-      documentId: FBStore.documentId,
+      documentId: this.documentId,
       status: "AVAILABLE",
     });
 

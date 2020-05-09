@@ -27,6 +27,7 @@ export type FBSchemaProps = Pick<FBInputProps,
 | "includeQRScan"
 | "instructionsDocument"
 | "reviseDisabled"
+| "customValidator"
 > & {
   validators?: Dictionary<any>;
 };

@@ -1,4 +1,3 @@
-
 import React from "react";
 import { FBFilePresenterProps, FBFilePresenterState } from ".";
 import { FB } from "..";

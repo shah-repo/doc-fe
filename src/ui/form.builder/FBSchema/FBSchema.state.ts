@@ -25,8 +25,6 @@ import { FBTestRequirement } from "../FBTestRequirement";
 import { FBTextEditor } from "../FBTextEditor";
 import { FBTextField } from "../FBTextField";
 import { FBTimerField } from "../FBTimerField";
-import FBStore from "../stores/ui/FBStore";
-import { FBInputProps as FBOldInputProps } from "../types/common";
 
 export class FBSchemaState {
   public static omitLabel: FBInputType[] = [
@@ -66,40 +64,7 @@ export class FBSchemaState {
     selectrequirement: FBSelectRequirement,
     checkpoint: FBButton,
     createlabel: FBButton,
-
-    // OLD: to be removed
-    // datepicker: FBDatePicker,
-    // texteditor: FBTextEditorField,
-    // select: FBSelect,
-    // radio: FBRadio,
-    // radiogroup: FBRadioGroup,
-    // hyperlink: FBLink,
-    // fileupload: FBFileUpload,
-    // schemaSelect: FBValidatorSchemaSelect,
-    // schemaItem: FBValidatorSchemaItem,
-    // action: FBActionContainer,
-    // approvalMatrix: FBApprovalMatrix,
-    // purchaseorder: FBPurchaseOrder,
-    // poreceive: FBPOReceive,
-    // stepsection: FBSectionBox,
-    // teststep: FBTestStep,
-    // instructionsmediaupload: FBMediaAlbumField,
-    // evidencemediaupload: FBMediaAlbumField,
-    // checkpoint: FBButton,
-    // approval: FBApproval,
-    // createlabel: FBButton,
-    // quantity: FBQuantityField,
-    // timer: FBTimerField,
-    // inlineapproval: FBInlineApproval,
-    // instructionsdocument: FBInstructionsDocument,
-    // selectdocument: FBSelectDocument,
-    // selectrequirement: FBSelectRequirement,
-    // testRequirement: FBTestRequirement,
   };
-
-  public controlProps: FBInputProps | undefined;
-  public type: FBInputType | undefined;
-  public index: number | undefined;
 
   @observable public schema?: FBSchemaProps[];
 
@@ -132,7 +97,7 @@ export class FBSchemaState {
     if (_.isUndefined(index)) {
       return;
     }
-    return _.get(this.getSchema(), index);
+    return this.schema && this.schema[index];
   };
 
   @action public setSchema = (schema?: FBSchemaProps[]) => {
@@ -145,25 +110,25 @@ export class FBSchemaState {
       },
     }));
     set(this, "schema", schema);
-    // OLD: to be removed
-    FBStore.setSchema(this.schema as FBOldInputProps[]);
   };
 
   @action public setSchemaItem = (schemaItem: FBSchemaProps) => {
     const schemaItemIndex = _.findIndex(this.getSchema(), { name: schemaItem.name });
-    if (!_.isUndefined(this.getSchemaItemAt(schemaItemIndex))) {
-      this.updateSchemaItem(schemaItem, schemaItemIndex);
-    } else {
+    const schemaAt = this.getSchemaItemAt(schemaItemIndex);
+    if (schemaAt) {
       const schema = _.union(this.schema, [schemaItem]);
       this.setSchema(schema);
+      return;
     }
+    this.updateSchemaItem(schemaItem, schemaItemIndex);
   };
 
   @action public setSchemaItemAt = (schemaItem: FBSchemaProps, index = 0) => {
-    if (schemaItem.name ===  this.getSchemaItemAt(index)?.name) {
+    const schemaAt = this.getSchemaItemAt(index);
+    if (schemaAt && schemaItem.name ===  schemaAt.name) {
       return this.updateSchemaItem(schemaItem, index);
     }
-    const newSchema = this.schema?.slice(0);
+    const newSchema = this.schema?.slice(0) || [];
     newSchema?.splice(index, 0, schemaItem);
     this.setSchema(newSchema);
   };

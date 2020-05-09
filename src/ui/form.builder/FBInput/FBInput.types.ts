@@ -2,6 +2,7 @@ import { BaseTextFieldProps } from "@material-ui/core";
 import { AutocompleteProps } from "@material-ui/lab/Autocomplete";
 import { FBEditorPropertiesType, FBInputState, FBLabelProps, FBOptionProps, FBSchemaState } from "..";
 import { FBEditorValidationMode } from "../FBEditorValidation";
+import { FBValidatorConfigProps } from "../types/validation/validatorDialog";
 
 export type FBInputType =
   | "url"
@@ -83,6 +84,7 @@ export type FBInputProps =
   designDisabled?: boolean;
   instructionsDocument?: string;
   reviseDisabled?: boolean;
+  customValidator?: FBValidatorConfigProps;
 };
 
 export const OmitInputClones: FBInputType[] = ["fileupload"];
