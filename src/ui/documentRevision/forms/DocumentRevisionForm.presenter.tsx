@@ -51,6 +51,7 @@ export interface Props
   canChangeOwnerShip: boolean;
   type?: string;
   handleFBContainerRef?: (instance: HTMLDivElement | null) => any;
+  FBContainer?: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
@@ -76,6 +77,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   setFieldValue,
   type,
   handleFBContainerRef,
+  FBContainer,
   setValues,
 }) => {
 
@@ -204,7 +206,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 <GenerateHtmlPreview id={values.id} renderHTML={values.formDocument?.renderHTML} />
               </Box>
             }
-            <div ref={handleFBContainerRef} />
+            <div ref={FBContainer} />
           </Box>
         }
         <DocRevActions

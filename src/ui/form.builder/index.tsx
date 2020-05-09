@@ -186,6 +186,7 @@ export * from "./FBValidationEditor/FBValidationEditor.types";
 export { default as FBValidationMode } from "./FBValidationMode/FBValidationMode";
 export * from "./FBValidationMode/FBValidationMode.types";
 export { default as FBWorkspace } from "./FBWorkspace/FBWorkspace";
+export { default as FBWorkspaceMemo } from "./FBWorkspace/FBWorkspace.memo";
 export { default as FBWorkspaceState } from "./FBWorkspace/FBWorkspace.state";
 export * from "./FBWorkspace/FBWorkspace.types";
 export { default as FBWorkspaceBottomBar } from "./FBWorkspaceBottomBar/FBWorkspaceBottomBar";

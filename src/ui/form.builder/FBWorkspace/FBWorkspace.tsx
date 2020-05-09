@@ -1,8 +1,8 @@
 import { Portal } from "@material-ui/core";
 import _ from "lodash";
 import React from "react";
-import { FBWorkspaceProps } from ".";
-import { FBConditionalWrapper, FBDialog, FBForm, FBProvider, FBSchema, FBStarter, FBWorkspaceBottomBar } from "..";
+import { FBWorkspaceMemo, FBWorkspaceProps } from ".";
+import { FBConditionalWrapper, FBDialog, FBForm, FBProvider } from "..";
 import { withFBWorkspace } from "./FBWorkspace.wrap";
 
 const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
@@ -14,8 +14,8 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
   dialogState,
   schema,
   mode = "none",
-  initialValues = {},
-  includeTransport = true,
+  initialValues,
+  includeTransport,
 }) => (
   <FBProvider {...{ workspaceState, dialogState }}>
     <FBDialog />
@@ -26,14 +26,12 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
           <FBConditionalWrapper
             condition={!_.isUndefined(portalContainer)}
             wrapper={(wrapperChildren) => (
-              <Portal container={portalContainer}>
+              <Portal container={portalContainer?.current}>
                 {wrapperChildren}
               </Portal>
             )}
           >
-            {isStarter && <FBStarter />}
-            {!isStarter && <FBSchema {...{ schema }} workspaceMode={mode} />}
-            <FBWorkspaceBottomBar {...{ includeTransport }} />
+            <FBWorkspaceMemo {...{ isStarter, schema, mode, includeTransport }} />
           </FBConditionalWrapper>
         </>
       )}

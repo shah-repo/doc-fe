@@ -3,12 +3,14 @@ import _ from "lodash";
 import marked from "marked";
 import React from "react";
 import { FBFormMarkDownProps } from ".";
-import FBStore from "../stores/ui/FBStore";
+import { FB } from "..";
 
 export const withFBFormMarkDown = <T extends FBFormMarkDownProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({ ...props }: T) => {
+    const { workspaceState, formState } = FB.useStores();
+
     const template = _.template(`
       <%= label %>
       ========================
@@ -21,7 +23,7 @@ export const withFBFormMarkDown = <T extends FBFormMarkDownProps>(
     `);
 
     const source = (): string => {
-      const tpl = _.map(FBStore.getSchema(), (schemaItem) => {
+      const tpl = _.map(workspaceState?.getSchema(), (schemaItem) => {
         let { customValidator } = schemaItem;
         const { name } = schemaItem;
         customValidator = customValidator
@@ -29,7 +31,7 @@ export const withFBFormMarkDown = <T extends FBFormMarkDownProps>(
           : "";
         return template({
           ...schemaItem,
-          value: FBStore.getValues()[name || ""],
+          value: formState?.getFieldValue(name, ""),
           customValidator,
         });
       });
@@ -49,7 +51,7 @@ export const withFBFormMarkDown = <T extends FBFormMarkDownProps>(
     };
 
     return Component({
-      ...(props as T),
+      ...(props),
       exportMarkdown,
     });
   };
