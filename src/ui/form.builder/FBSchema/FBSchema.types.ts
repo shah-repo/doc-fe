@@ -28,6 +28,7 @@ export type FBSchemaProps = Pick<FBInputProps,
 | "instructionsDocument"
 | "reviseDisabled"
 | "customValidator"
+| "defaultValue"
 > & {
   validators?: Dictionary<any>;
 };

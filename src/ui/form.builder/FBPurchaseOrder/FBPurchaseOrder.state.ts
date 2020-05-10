@@ -1,10 +1,12 @@
-import _ from "lodash";
+import _, { Dictionary } from "lodash";
 import { action, observable, set } from "mobx";
 import moment from "moment";
-import { FB, FBPurchaseOrderCalculation, FBPurchaseOrderItem, FBPurchaseOrderValue } from "..";
+import { FB, FBPurchaseOrderCalculation, FBPurchaseOrderConstructor, FBPurchaseOrderItem } from "..";
+import { FBEndpoint } from "../defaults/FBEndpoint";
+import FBRequest from "../FBApi/FBApi.request";
 import { TAX_RATE } from "../helpers/constants";
 
-export class FBPurchaseOrderState  {
+export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   @observable public itemTotalAmount = 0;
   @observable public items: FBPurchaseOrderItem[] = [];
   @observable public calculation: FBPurchaseOrderCalculation = {
@@ -14,9 +16,13 @@ export class FBPurchaseOrderState  {
     shippingCost: "0.00",
   };
 
-  public constructor(initialValues?: FBPurchaseOrderValue) {
-    if (!initialValues) {
+  public constructor({ documentId, ...initialValues }: FBPurchaseOrderConstructor) {
+    super();
+    if (!initialValues || _.isEmpty(initialValues)) {
       return;
+    }
+    if (documentId) {
+      this.fetchReceivedItems(documentId);
     }
     const { items } = initialValues || {};
     const calculation = _.omit(initialValues, "items");
@@ -85,6 +91,24 @@ export class FBPurchaseOrderState  {
     }));
     set(this, "items", items);
     this.calculateCost();
+  };
+
+  protected onSuccess() {
+    const items = _.reduce(this.items, (reduced: FBPurchaseOrderItem[], item) => {
+      reduced.push({
+        ...item,
+        received: this.data[item.partNumber] ?? 0,
+      });
+      return reduced;
+    }, []);
+    this.items = items;
+  }
+
+  private fetchReceivedItems = (documentId: string) => {
+    const urlTpl = _.template(FBEndpoint.ReceivedItemsQuantity);
+    const url = urlTpl({ documentId });
+    this.setUrl(url);
+    this.fetch();
   };
 
   private formatCost = (value: any) => Number(value || 0).toFixed(2);

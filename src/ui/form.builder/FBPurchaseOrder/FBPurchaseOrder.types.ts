@@ -1,11 +1,13 @@
 import { FBDialogState, FBInputProps, FBPurchaseOrderState } from "..";
 
+export type FBPurchaseOrderMode = "preview" | "form";
 export type FBPurchaseOrderProps =
-& Pick<FBInputProps, "name" | "label" | "disabled" | "gutter">
+& Pick<FBInputProps, "name" | "label" | "disabled" | "gutter" | "defaultValue">
 & {
   handleItem?: (item?: FBPurchaseOrderItem) => any;
   purchaseOrderState?: FBPurchaseOrderState;
   dialogState?: FBDialogState;
+  mode?: FBPurchaseOrderMode;
 };
 
 export interface FBPurchaseOrderItem {
@@ -36,8 +38,11 @@ export interface FBPurchaseOrderCalculation {
   shippingCost: string;
 }
 
-export type FBPurchaseOrderValue =
-& FBPurchaseOrderCalculation
+export type FBPurchaseOrderValue = FBPurchaseOrderCalculation
 & {
   items?: FBPurchaseOrderItem[];
+};
+
+export type FBPurchaseOrderConstructor = FBPurchaseOrderValue & {
+  documentId?: string;
 };

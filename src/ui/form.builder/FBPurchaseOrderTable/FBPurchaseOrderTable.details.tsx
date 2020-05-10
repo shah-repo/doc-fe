@@ -6,8 +6,7 @@ import TableRow from "@material-ui/core/TableRow";
 import DeleteIcon from "@material-ui/icons/Delete";
 import _ from "lodash";
 import React from "react";
-import { FBMapWrapper, FBPurchaseOrderDetailsHead, FBPurchaseOrderItem, FBPurchaseOrderTableDetailsProps, FBTooltip } from "..";
-import Text from "../../components/Text";
+import { FBMapWrapper, FBPurchaseOrderDetailsHead, FBPurchaseOrderItem, FBPurchaseOrderTableDetailsProps, FBTableCell, FBTooltip } from "..";
 
 
 const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableDetailsProps> = ({
@@ -15,20 +14,21 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
   handleItem,
   classes,
   items = [],
+  loading = false,
+  mode,
 }) => (
   <Box width="100%" overflow="auto">
     <Table className={classes?.table}>
       <TableHead>
         <TableRow>
-          <TableCell />
+          <FBTableCell />
           <FBMapWrapper<string[]> collection={_.values(FBPurchaseOrderDetailsHead)}>
             {(head, index) => (
-              <TableCell
+              <FBTableCell
+                label={head}
                 key={`fb-po-head-${head}-${index}`}
                 align={(index > 1) ? "right" : "left"}
-              >
-                <Text message={head} />
-              </TableCell>
+              />
             )}
           </FBMapWrapper>
         </TableRow>
@@ -40,36 +40,38 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
               key={`fb-po-item-${item.id}-${index}`}
               onClick={() => handleItem && handleItem(item)}
             >
-              <TableCell align="right">
-                <FBTooltip title="form.builder.delete">
-                  <DeleteIcon
-                    className="FBIcon-root"
-                    fontSize="small"
-                    onClick={handleDelete && handleDelete(index)}
-                  />
-                </FBTooltip>
-              </TableCell>
-              <FBMapWrapper<string[]> collection={_.keys(FBPurchaseOrderDetailsHead)}>
-                {(key, index) => (
-                  <>
-                    {index === 0 && <TableCell>{index + 1}</TableCell>}
-                    {index > 0 && (
-                      <TableCell
-                        key={`fb-po-item-${key}-${index}`}
-                        align={(index > 1) ? "right" : "left"}
-                      >
-                        {key === "description" && (
-                          <FBTooltip title={item[key]} placement="bottom">
-                            <Box>
-                              {_.truncate(item[key], { length: 35, omission: " ..." })}
-                            </Box>
-                          </FBTooltip>
-                        )}
-                        {key !== "description" && `${key === "unitPrice" ? "$" : ""}${item[key]}`}
-                      </TableCell>
-                    )}
-                  </>
+              <FBTableCell align="right">
+                {mode === "form" && (
+                  <FBTooltip title="form.builder.delete">
+                    <DeleteIcon
+                      className="FBIcon-root"
+                      fontSize="small"
+                      onClick={handleDelete && handleDelete(index)}
+                    />
+                  </FBTooltip>
                 )}
+              </FBTableCell>
+              <FBMapWrapper<string[]> collection={_.keys(FBPurchaseOrderDetailsHead)}>
+                {(key, index) => {
+                  let label = `${key === "unitPrice" ? "$" : ""}${item[key]}`;
+                  let tooltipTitle: string | undefined;
+                  if (key === "description") {
+                    label = _.truncate(item[key], { length: 35, omission: " ..." });
+                    tooltipTitle = label;
+                  }
+                  return (
+                    <React.Fragment  key={`fb-po-item-${key}-${index}`}>
+                      {index === 0 && <TableCell>{index + 1}</TableCell>}
+                      {index > 0 && (
+                        <FBTableCell
+                          align={(index > 1) ? "right" : "left"}
+                          loading={key === "received" ? loading : false}
+                          {...{ label, tooltipTitle }}
+                        />
+                      )}
+                    </React.Fragment>
+                  );
+                }}
               </FBMapWrapper>
             </TableRow>
           )}

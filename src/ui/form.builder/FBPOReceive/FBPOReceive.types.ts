@@ -1,15 +1,22 @@
-import { FBPOReceiveState, FBPurchaseOrderItem } from "..";
+import { FBDialogState, FBFormProps, FBInputProps, FBPOReceiveState, FBPurchaseOrderProps, FBSchemaProps } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { FBDialogState } from "../FBDialog";
-import { FBInputProps } from "../types/common";
 
+export enum FBPOReceiveImportance {
+  purchaseorder = 1,
+  other = 2
+}
 export type FBPOReceiveProps =
-& Pick<FBInputProps, "name" | "index" | "label" | "afterChange">
+& Pick<FBInputProps, "name" | "index" | "label" | "onChange">
+& Pick<FBFormProps, "initialValues">
 & {
   dialogState?: FBDialogState;
   poReceiveState?: FBPOReceiveState;
   po?: DocumentRevision;
-  schema?: FBInputProps[];
+  schema?: FBSchemaProps[];
   loading?: boolean;
-  items?: FBPurchaseOrderItem[];
 };
+
+export type FBPOReceiveItemProps =
+& Pick<FBPurchaseOrderProps, "handleItem" | "mode">
+& Partial<FBSchemaProps>;
+

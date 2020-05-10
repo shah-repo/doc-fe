@@ -1,11 +1,10 @@
 import { TableBody } from "@material-ui/core";
 import Table from "@material-ui/core/Table";
-import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import React from "react";
-import { FBPurchaseOrderTableDetails, FBPurchaseOrderTableProps, FBPurchaseOrderTableSum, FBTextField } from "..";
-import Text from "../../components/Text";
+import { FBPurchaseOrderTableDetails, FBPurchaseOrderTableProps, FBPurchaseOrderTableSum, FBTableCell } from "..";
+import FBPurchaseOrderTableTotal from "./FBPurchaseOrderTable.total";
 import { withFBPurchaseOrderTable } from "./FBPurchaseOrderTable.wrap";
 
 const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> = ({
@@ -16,58 +15,29 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
   calculation,
   disabled,
   items = [],
+  loading,
+  mode,
   name,
 }) => (
   <Table className={classes?.root}>
     <TableHead>
       <TableRow>
-        <TableCell colSpan={3}><Text message="form.builder.details" /></TableCell>
-        <TableCell colSpan={2} align="right" className="FBAmount-root">
-          <Text message="form.builder.field.ext.amount" />
-        </TableCell>
+        <FBTableCell colSpan={8} label="form.builder.details" />
+        <FBTableCell colSpan={3} label="form.builder.field.ext.amount" align="right" />
       </TableRow>
     </TableHead>
     <TableBody>
       <TableRow>
-        <TableCell colSpan={3}>
-          <FBPurchaseOrderTableDetails {...{ handleDelete, handleItem, classes, items }} />
-        </TableCell>
-        <TableCell colSpan={2}>
+        <FBTableCell colSpan={8}>
+          <FBPurchaseOrderTableDetails {...{ handleDelete, handleItem, classes, items, mode, loading }} />
+        </FBTableCell>
+        <FBTableCell colSpan={3}>
           <FBPurchaseOrderTableSum {...{ handleItem, classes, items }} />
-        </TableCell>
+        </FBTableCell>
       </TableRow>
-      <TableRow>
-        <TableCell rowSpan={4} />
-        <TableCell rowSpan={4} />
-        <TableCell className="FBTotal-root" colSpan={2}><Text message="form.builder.sub.total" /></TableCell>
-        <TableCell className="FBTotal-root" align="right">${calculation?.subTotal}</TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell className="FBTotal-root" colSpan={2}><Text message="form.builder.tax" /></TableCell>
-        <TableCell className="FBTotal-root" align="right">${calculation?.tax}</TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell className="FBTotal-root" colSpan={2}><Text message="form.builder.shipping.cost" /></TableCell>
-        <TableCell className="FBTotal-root" align="right">
-          <FBTextField
-            name={`${name}.shippingCost`}
-            gutter={false}
-            variant="standard"
-            type="number"
-            size="small"
-            inputProps={{
-              style: { textAlign: "right", padding: "5px" },
-              step: ".01",
-            }}
-            onChange={handleShippingCost}
-            {...{ disabled }}
-          />
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell className="FBTotal-root" colSpan={2}><Text message="form.builder.total" /></TableCell>
-        <TableCell className="FBTotal-root" align="right">${calculation?.totalAmount}</TableCell>
-      </TableRow>
+      {mode === "form" && (
+        <FBPurchaseOrderTableTotal {...{ handleShippingCost, calculation, disabled, name }} />
+      )}
     </TableBody>
   </Table>
 );

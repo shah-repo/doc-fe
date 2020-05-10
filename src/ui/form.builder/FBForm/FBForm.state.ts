@@ -23,9 +23,9 @@ export class FBFormState extends FBSchemaState {
     return _.get(window, "EnlilRemoteValidators.validator");
   }
 
-  @action public setInitialValues = (values: Dictionary<any>) => {
-    this.initialValues = values;
-    this.setValues(values);
+  @action public setInitialValues = (values?: Dictionary<any>) => {
+    this.initialValues = values || {};
+    this.setValues(this.initialValues);
   };
 
   @action public setValues = (values: Dictionary<any>) => {

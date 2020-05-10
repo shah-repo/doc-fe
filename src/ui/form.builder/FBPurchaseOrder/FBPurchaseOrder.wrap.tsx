@@ -1,5 +1,6 @@
 import React from "react";
 import { FB, FBDialogState, FBForm, FBPurchaseOrderActions, FBPurchaseOrderForm, FBPurchaseOrderItem, FBPurchaseOrderProps, FBPurchaseOrderState } from "..";
+import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 
 export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
   Component: React.FunctionComponent<T>,
@@ -7,19 +8,25 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
   const Comp = ({
     handleItem,
     purchaseOrderState,
+    defaultValue,
     dialogState,
     disabled,
     name,
     ...props
   }: T) => {
 
-    const { formState } = FB.useStores();
-    const formValue = formState?.getFieldValue(name);
-    purchaseOrderState = FB.useRef<FBPurchaseOrderState>(FBPurchaseOrderState, formValue);
+    const { workspaceState, formState } = FB.useStores();
+    const formValue = formState?.getFieldValue(name, defaultValue);
+    const { status: documentStatus } = workspaceState?.document || {};
+    const isDocumentReleased = documentStatus === DocumentRevisionStatus.Released;
+    purchaseOrderState = FB.useRef<FBPurchaseOrderState>(FBPurchaseOrderState, {
+      ...formValue,
+      documentId: workspaceState?.document?.document?.id,
+    });
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
 
-    handleItem = (item?: FBPurchaseOrderItem) => {
-      if (disabled) {
+    !handleItem && (handleItem = (item?: FBPurchaseOrderItem) => {
+      if (disabled && isDocumentReleased) {
         return;
       }
       purchaseOrderState?.setItemTotalAmount(item);
@@ -34,7 +41,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
         ),
         actions: <FBPurchaseOrderActions />,
       });
-    };
+    });
 
     return Component({
       ...(props as T),
