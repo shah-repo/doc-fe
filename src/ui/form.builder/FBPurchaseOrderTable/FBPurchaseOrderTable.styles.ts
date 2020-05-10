@@ -8,6 +8,7 @@ export const FBPurchaseOrderClasses = makeStyles({
       backgroundColor: "#f6f7f7",
       color: "#252525",
       padding: "14px 8px",
+      whiteSpace: "nowrap",
     },
     "& .FBTotal-root": {
       padding: "10px 8px",
@@ -18,9 +19,6 @@ export const FBPurchaseOrderClasses = makeStyles({
       "&:hover": {
         color: "#888888",
       },
-    },
-    "& .FBAmount-root": {
-      width: "30%",
     },
   },
   table: {

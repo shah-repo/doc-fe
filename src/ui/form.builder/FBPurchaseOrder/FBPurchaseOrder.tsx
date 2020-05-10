@@ -8,24 +8,27 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
   handleItem,
   purchaseOrderState,
   dialogState,
+  gutter = true,
+  mode = "form",
   label,
   disabled,
-  gutter = true,
   name,
 }) => (
   <FBProvider {...{ purchaseOrderState, dialogState }}>
     <FBDialog />
     <Box mb={gutter ? 5 : 0}>
-      <FBSection {...{ label }}  />
-      <FBPurchaseOrderTable {...{ name, disabled, handleItem }} />
-      <FBButton
-        fullWidth={true}
-        disabled={disabled}
-        label="form.builder.add.item"
-        onClick={() => handleItem && handleItem()}
-        variant="outlined"
-        style={{ margin: 0 }}
-      />
+      {mode === "form" && <FBSection {...{ label }}  />}
+      <FBPurchaseOrderTable {...{ name, disabled, handleItem, mode }} />
+      {!disabled && (
+        <FBButton
+          fullWidth={true}
+          label="form.builder.add.item"
+          onClick={() => handleItem && handleItem()}
+          variant="outlined"
+          style={{ margin: 0 }}
+          {...{ disabled }}
+        />
+      )}
     </Box>
   </FBProvider>
 );

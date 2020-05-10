@@ -11,6 +11,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     handleDelete,
     classes,
     calculation,
+    loading,
     disabled,
     items,
     name,
@@ -34,6 +35,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       calculation = purchaseOrderState?.calculation;
       items = purchaseOrderState?.items;
       formState?.setFieldValue(name, { items, ...calculation });
+      loading = purchaseOrderState?.loading;
     });
 
     return Component({
@@ -42,6 +44,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       handleDelete,
       classes,
       calculation,
+      loading,
       disabled,
       items,
       name,

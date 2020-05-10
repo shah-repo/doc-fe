@@ -16,8 +16,13 @@ export class FBWorkspaceState extends FBSchemaState {
   }
 
   public get documentId(): string | undefined {
-    const { id } = this.document?.formDocument?.document || {};
+    const { id } = this.document?.document || {};
     return id;
+  }
+
+  public get isOutput(): boolean {
+    const { docId } = this.document?.formDocument?.document || {};
+    return Boolean(docId && !_.isEmpty(docId));
   }
 
   @computed public get active(): boolean {

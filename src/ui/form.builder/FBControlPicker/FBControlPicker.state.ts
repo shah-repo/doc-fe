@@ -25,6 +25,7 @@ export class FBControlPickerState {
       "quantity",
       "timer",
       "purchaseorder",
+      "poreceive",
       "approvalMatrix",
       "instructionsmediaupload",
       "evidencemediaupload",

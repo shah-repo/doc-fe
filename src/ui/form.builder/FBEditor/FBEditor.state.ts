@@ -36,6 +36,7 @@ export class FBEditorState {
     "selectrequirement",
     "checkpoint",
     "createlabel",
+    "poreceive",
   ];
 
   public static pickDefaultValue: FBInputType[] = [
@@ -77,6 +78,7 @@ export class FBEditorState {
     quantity: FBEditorLabel,
     timer: FBEditorLabel,
     purchaseorder: FBEditorLabel,
+    poreceive: FBEditorLabel,
     instructionsmediaupload: FBEditorMediaAlbum,
     evidencemediaupload: FBEditorMediaAlbum,
     testRequirement: FBEditorTestRequirement,

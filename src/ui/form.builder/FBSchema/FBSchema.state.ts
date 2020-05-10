@@ -11,6 +11,7 @@ import { FBHyperlink } from "../FBHyperlink";
 import { FBInstructionsDocument } from "../FBInstructionsDocument";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
+import { FBPOReceive } from "../FBPOReceive";
 import { FBPurchaseOrder } from "../FBPurchaseOrder";
 import { FBQuantityField } from "../FBQuantityField";
 import { FBRadio } from "../FBRadio";
@@ -44,6 +45,7 @@ export class FBSchemaState {
     checkbox: FBCheckbox,
     checkboxgroup: FBCheckboxGroup,
     autocomplete: FBAutocompleteAsync,
+    autocompleteasync: FBAutocompleteAsync,
     texteditor: FBTextEditor,
     datepicker: FBDatePicker,
     hyperlink: FBHyperlink,
@@ -56,6 +58,7 @@ export class FBSchemaState {
     quantity: FBQuantityField,
     timer: FBTimerField,
     purchaseorder: FBPurchaseOrder,
+    poreceive: FBPOReceive,
     instructionsmediaupload: FBMediaAlbumField,
     evidencemediaupload: FBMediaAlbumField,
     testRequirement: FBTestRequirement,

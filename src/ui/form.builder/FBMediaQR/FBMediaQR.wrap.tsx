@@ -12,7 +12,7 @@ export const withFBMediaQR = <T extends FBMediaQRProps>(
   }: T) => {
 
     const { workspaceState } = FB.useStores();
-    const { mode: workspaceMode, documentId } = workspaceState || {};
+    const { mode: workspaceMode, documentId, isOutput } = workspaceState || {};
 
     switch (true) {
       case isTemplate && workspaceMode === "design":
@@ -25,7 +25,7 @@ export const withFBMediaQR = <T extends FBMediaQRProps>(
         (!documentId || FBDRStore.mode === "outputCreate") && (mode = "preupload");
         break;
       case !isTemplate && workspaceMode === "preview":
-        mode = FBDRStore.isOutput ? "preupload" : "placeholder";
+        mode = isOutput ? "preupload" : "placeholder";
         break;
       default:
         mode = "qr";

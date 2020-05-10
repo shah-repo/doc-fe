@@ -6,7 +6,6 @@ import { FB, FBPOReceiveFormProps } from "..";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import useGetDocTypeByAcronym from "../../hooks/useGetDocTypeByAcronym";
-import FBStore from "../stores/ui/FBStore";
 import FBPOReceiveFormState from "./FBPOReceiveForm.state";
 
 export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
@@ -24,20 +23,26 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
     const lfpoDocType = useGetDocTypeByAcronym("LFPO");
     const lotDocType = useGetDocTypeByAcronym("LOT");
     const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
+    const { dialogState, formState, poReceiveState, workspaceState } = FB.useStores();
+    const documentId = workspaceState?.documentId;
+
     const poReceiveFormState = FB.useRef<FBPOReceiveFormState>(
       FBPOReceiveFormState,
-      { lfpoDocType, lotDocType, groupOptions, item }
+      { lfpoDocType, lotDocType, groupOptions, item, documentId }
     );
-    const { dialogState, formState, poReceiveState } = FB.useStores();
+
 
     handleReceive = async () => {
+      if (!workspaceState?.documentId) {
+        return;
+      }
       try {
         await poReceiveFormState?.submit(
           formState?.getValues(),
           poReceiveState?.poDocumentId,
         );
 
-        dispatch(documentRevisionsActions.reload(FBStore.docId));
+        dispatch(documentRevisionsActions.reload(workspaceState.documentId));
         dialogState?.closeDialog();
       } catch (e) {
         if (isString(e.message)) {
