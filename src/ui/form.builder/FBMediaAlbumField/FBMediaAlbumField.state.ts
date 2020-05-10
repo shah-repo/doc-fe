@@ -3,7 +3,6 @@ import _ from "lodash";
 import { action, computed, observable, set } from "mobx";
 import { apiClient, FBMediaAlbumFieldConstructor, FBMediaAlbumFieldMode, FBMediaAlbumFieldStore, FBMediaFile, FBMediaProps, FBMediaUrlProps, FBWorkspaceState } from "..";
 import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBDRStore from "../stores/ui/FBDRStore";
 
 export class FBMediaAlbumFieldState {
   @observable public loading = false;
@@ -34,7 +33,7 @@ export class FBMediaAlbumFieldState {
     if (this.isTemplate) {
       return this.workspaceState?.mode !== "design";
     }
-    return this.workspaceState?.mode === "preview" && FBDRStore.isOutput;
+    return this.workspaceState?.mode === "preview" && this.workspaceState?.isOutput;
   }
 
   @computed public get collection(): FBMediaProps[] {

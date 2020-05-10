@@ -20,6 +20,11 @@ export class FBWorkspaceState extends FBSchemaState {
     return id;
   }
 
+  public get isOutput(): boolean {
+    const { docId } = this.document?.formDocument?.document || {};
+    return Boolean(docId && !_.isEmpty(docId));
+  }
+
   @computed public get active(): boolean {
     return this.mode !== "none";
   }

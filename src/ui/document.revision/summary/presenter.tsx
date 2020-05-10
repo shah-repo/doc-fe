@@ -1,5 +1,6 @@
 import { Box, Grid, WithStyles, withStyles } from "@material-ui/core";
 import { Formik } from "formik";
+import _ from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { DataProps } from "../../../state/ducks/common";
@@ -14,7 +15,6 @@ import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
 import { FBSchemaProps, FBWorkspace } from "../../form.builder";
-import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import Attachment from "./attachment";
 import ChangeRequestLink from "./changeRequestLink";
 import DocumentHeader from "./header";
@@ -57,7 +57,9 @@ export const Presenter: React.FunctionComponent<Props> = ({
     formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
       documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
   const { formInput } = dataProp || {};
-  const { schema } = dataProp.formTemplate || dataProp.formDocument?.formTemplate || {};
+  const { schema } = formTemplate || formDocument?.formTemplate || {};
+  const { docId } = formDocument?.document || {};
+  const FBIsOutput = Boolean(docId && !_.isEmpty(docId));
   const FBIsActive = formInput || formTemplate || formDocument;
   const renderTrainingControl = status === DocumentRevisionStatus.Released && (
     <TrainingControl
@@ -77,7 +79,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         direction="column"
       >
         <ChangeRequestLink dataProp={dataProp} />
-        {FBDRStore.isOutput && (
+        {FBIsOutput && (
           <Box ml={2} mt={1}>
             <DocumentRevisionOutputInfo formDocument={dataProp?.formDocument} />
           </Box>
