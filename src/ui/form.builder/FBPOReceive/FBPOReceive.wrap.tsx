@@ -21,6 +21,8 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
   }: T) => {
 
     const formValue = FBStore.getValue(name);
+    const { docId } = FBStore;
+    const disableAutocomplete = Boolean(docId);
     poReceiveState = FB.useRef<FBPOReceiveState>(FBPOReceiveState, formValue);
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
 
@@ -50,6 +52,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
       items,
       name,
       po,
+      disableAutocomplete,
     });
   };
 
