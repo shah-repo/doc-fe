@@ -9,8 +9,9 @@ interface Props {
 
 export const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const items = children.filter((item) => item.props?.shouldDisplay || item.props?.shouldDisplay === undefined);
 
-  if (children.every((item) => !item)) {
+  if (items.every((item) => !item)) {
     return null;
   }
 
@@ -21,7 +22,6 @@ export const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  console.log(children);
 
   return (
     <>
@@ -35,12 +35,13 @@ export const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        {children.map((menuItem, index) => {
-          if (!menuItem) {
-            return null;
-          }
-          return <MenuItem key={index}> {menuItem} </MenuItem>;
-        })}
+        {children.map((menuItem, index) =>
+          <MenuItem
+            style={{ display: menuItem.props.shouldDisplay === false ? "none" : "block" }}
+            key={index}>
+            {menuItem}
+          </MenuItem>
+        )}
       </Menu>
     </>
   );
