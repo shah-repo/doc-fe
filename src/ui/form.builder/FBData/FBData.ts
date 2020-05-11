@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { FB, FBAutocompleteAsyncConfig, FBEditorPropertiesOption, FBInputType, FBOption } from "..";
 import { FBSchemaProps } from "../FBSchema";
+import additionalSchema from "./additionalSchema.json";
 import autocompleteOptions from "./autocompleteOptions.json";
 import editorProperties from "./editorProperties.json";
 import requirementOptions from "./requirementOptions.json";
@@ -27,6 +28,12 @@ export class FBData {
 
   public static get requirementOptions(): FBOption[] {
     return requirementOptions;
+  }
+
+  public static additionalSchema(type: FBInputType): Partial<FBSchemaProps>[] {
+    const compiled = _.template(JSON.stringify(additionalSchema));
+    const parse = JSON.parse(compiled({ id: FB.uniqid }));
+    return parse[type];
   }
 }
 

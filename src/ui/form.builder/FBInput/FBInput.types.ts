@@ -89,6 +89,8 @@ export type FBInputProps =
   customValidator?: FBValidatorConfigProps;
   approvers?: string[] | Employee[];
   approverGroups?: string[] | GroupRequestBody[];
+  approveIsBlocking?: boolean;
+  applicableOn?: any[];
 };
 
 export const OmitInputClones: FBInputType[] = ["fileupload"];

@@ -1,6 +1,7 @@
 export { default as apiClient } from "./FBApi/FBApi.client";
 export * from "./FBApi/FBApi.types";
 export { default as FBApproval } from "./FBApproval/FBApproval";
+export { default as FBApprovalField } from "./FBApproval/FBApproval.field";
 export { default as FBApprovalSocket } from "./FBApproval/FBApproval.socket";
 export { default as FBApprovalState } from "./FBApproval/FBApproval.state";
 export * from "./FBApproval/FBApproval.types";

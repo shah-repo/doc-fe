@@ -1,0 +1,7 @@
+{
+  "approval": [{
+    "type": "section",
+    "name": "fb-approval-section-${id}",
+    "label": "form.builder.section"
+  }]
+}

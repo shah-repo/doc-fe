@@ -47,5 +47,10 @@
     "value": "includeContext",
     "text": "form.builder.include.other",
     "outputText": "form.builder.other"
+  }],
+  "approval": [{
+    "value": "approveIsBlocking",
+    "text": "form.builder.blocking",
+    "outputText": "form.builder.blocking"
   }]
 }
