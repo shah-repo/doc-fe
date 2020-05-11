@@ -50,11 +50,11 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
 
     refresh = () => autocompleteAsyncState?.load(true);
 
-    getOptionLabel = (option) => {
+    !getOptionLabel && (getOptionLabel = (option) => {
       const { labelPrefixRoot } = autocompleteAsyncState?.optionConfig || {};
       const optionLabel = labelPrefixRoot ? `${_.get(option, labelPrefixRoot)} - ` : "";
       return `${optionLabel}${_.get(option, optionLabelKey, "")}`;
-    };
+    });
 
     return Component({
       ...(props as T),
