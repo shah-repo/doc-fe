@@ -31,7 +31,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
         <FBTableCell colSpan={8}>
           <FBPurchaseOrderTableDetails {...{ handleDelete, handleItem, classes, items, mode, loading }} />
         </FBTableCell>
-        <FBTableCell colSpan={3}>
+        <FBTableCell colSpan={3} style={{ verticalAlign: "baseline" }}>
           <FBPurchaseOrderTableSum {...{ handleItem, classes, items }} />
         </FBTableCell>
       </TableRow>
