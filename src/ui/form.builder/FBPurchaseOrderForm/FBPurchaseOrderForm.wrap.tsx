@@ -2,8 +2,8 @@ import _ from "lodash";
 import React from "react";
 import { FB, FBPurchaseOrderFormProps } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { generateVersionNumber } from "../../documentRevision/helpers";
 import { FBPurchaseOrderItem } from "../FBPurchaseOrder/FBPurchaseOrder.types";
+import { generateDocIdLabel } from "./helpers";
 
 export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
   Component: React.FunctionComponent<T>,
@@ -17,14 +17,6 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
   }: T) => {
 
     const { formState, purchaseOrderState } = FB.useStores();
-    const generateDocIdLabel = (docRev) => {
-      const { document: { docId } } = docRev;
-      return `${docId} - ${docIdVersion(docRev)}`;
-    };
-    const docIdVersion = (docRev) => {
-      const { revision, revisionStage, revisionChangeType } = docRev;
-      return generateVersionNumber(revision, revisionStage, revisionChangeType);
-    };
 
     handlePartTitle = (_ev: any, value?: DocumentRevision) => {
       formState?.setFieldValue("partNumberTitle", value?.name, true);
