@@ -3,6 +3,7 @@ import React from "react";
 import { FB, FBPurchaseOrderFormProps } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { FBPurchaseOrderItem } from "../FBPurchaseOrder/FBPurchaseOrder.types";
+import { generateDocIdLabel } from "./helpers";
 
 export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
   Component: React.FunctionComponent<T>,
@@ -11,6 +12,7 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
     handlePartTitle,
     handleTotal,
     getOptionDisabled,
+    getOptionLabel,
     ...props
   }: T) => {
 
@@ -20,7 +22,7 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
       formState?.setFieldValue("partNumberTitle", value?.name, true);
       formState?.setValues({
         ...formState.getValues(),
-        partNumberDocId: value?.document.docId,
+        partNumberDocId: generateDocIdLabel(value),
         partNumber: value?.id,
       });
     };
@@ -35,11 +37,14 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
       return _.includes(selectedParts, option.id);
     };
 
+    getOptionLabel = (option) => generateDocIdLabel(option);
+
     return Component({
       ...(props as T),
       handlePartTitle,
       handleTotal,
       getOptionDisabled,
+      getOptionLabel,
     });
   };
 
