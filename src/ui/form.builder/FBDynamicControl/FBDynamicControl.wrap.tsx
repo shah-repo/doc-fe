@@ -22,7 +22,11 @@ export const withFBDynamicControl = <T extends FBDynamicControlProps>(
     dynamicControlState = FB.useRef<FBDynamicControlState>(FBDynamicControlState);
 
     handleSelect = (control: DocumentRevision) => {
-      const schema = control.formTemplate?.schema as FBInputProps[] || [];
+      let schema = control.formTemplate?.schema as FBInputProps[] || [];
+      schema = _.map(schema, (schemaItem) => ({
+        ...schemaItem,
+        name: `${_.kebabCase(schemaItem.label as string || "")}-${FB.uniqid()}`,
+      }));
       FBStore.setSchema(_.union(FBStore.getSchema(), schema));
       editorStore.open = false;
     };
