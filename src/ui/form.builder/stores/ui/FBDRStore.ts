@@ -17,7 +17,7 @@ export class FBDocumentRevisionStore {
   }
 
   @action public setInitialFBMode = (docType: DocumentType) => {
-    this.docSchema = docType.schema || [];
+    this.docSchema = docType.schema as FBInputProps[] || [];
     const formOption: DocumentGroupOptionsType = "FORM";
     const docRevMode = docType.groupOptions?.includes(formOption) ? "create" : "none";
     this.setMode(docRevMode);
@@ -28,7 +28,7 @@ export class FBDocumentRevisionStore {
     const outputGroup = _.get(values, "formDocument.document.docId");
     FBStore.documentId = values.formDocument?.document?.id || values.document?.id || "";
     FBStore.docId = values.id || "";
-    this.docSchema = values.document?.documentType?.schema || [];
+    this.docSchema = values.document?.documentType?.schema as FBInputProps[] || [];
     FBStore.isRevised = values.outputRevision;
 
     switch (true) {

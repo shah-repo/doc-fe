@@ -16,7 +16,8 @@ export class FBFilePresenterState extends FBRequest<AttachmentDownloadResponse, 
   }
 
   @computed public get fileName(): string {
-    return `${this.file?.name}.${this.fileType}` || "";
+    return this.file?.name + "." + this.fileType;
+    // `${this.file?.name}.${this.fileType}` || "";
   }
 
   @computed public get fileShortName(): string {
@@ -27,7 +28,7 @@ export class FBFilePresenterState extends FBRequest<AttachmentDownloadResponse, 
   }
 
   @computed public get isCleanCopy(): boolean {
-    return !_.isUndefined(_.get(this.file, "s3linkCleanCopy"));
+    return Boolean(this.file?.s3linkCleanCopy);
   }
 
   @computed public get isFileViewable(): boolean {
@@ -72,7 +73,7 @@ export class FBFilePresenterState extends FBRequest<AttachmentDownloadResponse, 
     if (_.isUndefined(file)) {
       return;
     }
-    return _.isUndefined(file.s3linkCleanCopy)
+    return !file.s3linkCleanCopy
       ? AttachmentType.Attached
       : AttachmentType.CleanCopy;
   };
