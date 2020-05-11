@@ -1,9 +1,12 @@
 import TableRow from "@material-ui/core/TableRow";
 import React from "react";
+import { FormattedNumber } from "react-intl";
 import { FBPurchaseOrderTableTotalProps, FBTableCell, FBTextField } from "..";
+import { FBSelect } from "../FBSelect";
 
 const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTotalProps> = ({
   handleShippingCost,
+  handleCurrencyChange,
   calculation,
   disabled,
   name,
@@ -11,8 +14,33 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
   <React.Fragment>
     <TableRow>
       <FBTableCell rowSpan={4} colSpan={6} />
+      <FBTableCell label="form.builder.currency" className="FBTotal-root" colSpan={2} />
+      <FBTableCell className="FBTotal-root" align="right" colSpan={2}>
+        <FBSelect
+          name={`${name}.currency`}
+          onChange={handleCurrencyChange}
+          defaultValue="USD"
+          optionLabelKey="text"
+          optionValueKey="value"
+          options={[
+            { text: "USD $", value: "USD" },
+            { text: "EUR €", value: "EUR" },
+            { text: "GBP £", value: "GBP" },
+          ]}
+          {...{ disabled }}
+        />
+      </FBTableCell>
+    </TableRow>
+    <TableRow>
       <FBTableCell label="form.builder.sub.total" colSpan={4} className="FBTotal-root" />
-      <FBTableCell label={`$${calculation?.subTotal}`} className="FBTotal-root" align="right" />
+      <FBTableCell className="FBTotal-root" align="right">
+        <FormattedNumber
+          value={Number(calculation?.subTotal)}
+          style="currency"
+          currency="GBP"
+          currencyDisplay="narrowSymbol"
+        />
+      </FBTableCell>
     </TableRow>
     <TableRow>
       <FBTableCell label="form.builder.tax" className="FBTotal-root" colSpan={4} />

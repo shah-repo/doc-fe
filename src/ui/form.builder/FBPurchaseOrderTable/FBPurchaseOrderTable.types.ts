@@ -6,6 +6,7 @@ export type FBPurchaseOrderTableProps =
 & Pick<FBPurchaseOrderProps, "handleItem" | "disabled" | "mode">
 & {
   handleShippingCost?: (ev: React.ChangeEvent<any>) => any;
+  handleCurrencyChange?: (ev, value) => void;
   handleDelete?: (index: number) => (e: any) => void;
   classes?: Record<"root" | "table", string>;
   items?: FBPurchaseOrderItem[];
@@ -20,7 +21,7 @@ export type FBPurchaseOrderTableSumProps =
 & Pick<FBPurchaseOrderTableProps,  "handleItem" | "classes" | "items">;
 
 export type FBPurchaseOrderTableTotalProps =
-& Pick<FBPurchaseOrderTableProps,  "handleShippingCost" | "calculation" | "disabled" | "name">;
+& Pick<FBPurchaseOrderTableProps,  "handleShippingCost" | "handleCurrencyChange" | "calculation" | "disabled" | "name">;
 
 export enum FBPurchaseOrderDetailsHead {
   index = "form.builder.item",

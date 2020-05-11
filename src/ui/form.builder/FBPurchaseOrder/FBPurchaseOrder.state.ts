@@ -5,6 +5,7 @@ import { FB, FBPurchaseOrderCalculation, FBPurchaseOrderConstructor, FBPurchaseO
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import { TAX_RATE } from "../helpers/constants";
+import { Currency } from "./FBPurchaseOrder.types";
 
 export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   @observable public itemTotalAmount = 0;
@@ -14,6 +15,8 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     subTotal: "0.00",
     totalAmount: "0.00",
     shippingCost: "0.00",
+    currency: "USD",
+    exchangeRate: 0.5,
   };
 
   public constructor({ documentId, ...initialValues }: FBPurchaseOrderConstructor) {
@@ -27,7 +30,7 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     const { items } = initialValues || {};
     const calculation = _.omit(initialValues, "items");
     set(this, "items", items);
-    set(this, "calculation", calculation);
+    set(this, "calculation", { ...this.calculation, ...calculation });
   }
 
   @action public setItemTotalAmount = (item?: FBPurchaseOrderItem) => {
@@ -42,6 +45,27 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     }
     set(this.calculation, "shippingCost", this.formatCost(shippingCost));
     this.calculateCost();
+  };
+
+  @action public setCurrency = (currency: Currency) => {
+    const setToUsd = () => {
+      set(this.calculation, "currency", "USD");
+      set(this.calculation, "exchangeRate", 1);
+      this.calculateCost();
+    };
+    if (currency === "USD") {
+      setToUsd();
+      return;
+    }
+
+    // async request
+    new Promise((resolve, reject) => {
+      resolve(1.5);
+    }).then((rate) => {
+      set(this.calculation, "currency", currency);
+      set(this.calculation, "exchangeRate", rate);
+      this.calculateCost();
+    }).catch(() => setToUsd() );
   };
 
   @action public setItem = (item?: FBPurchaseOrderItem) => {
@@ -74,8 +98,11 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
       }, { tax: 0, subTotal: 0 },
     );
     const shippingCost = this.calculation.shippingCost || 0;
-    const totalAmount = sum.tax + sum.subTotal + Number(shippingCost);
+    const totalAmount = (sum.tax + sum.subTotal + Number(shippingCost)) * this.calculation.exchangeRate;
+    console.log(sum.tax + sum.subTotal + Number(shippingCost));
+    console.log(this.calculation.exchangeRate);
     set(this, "calculation", {
+      ...this.calculation,
       subTotal: this.formatCost(sum.subTotal),
       tax: this.formatCost(sum.tax),
       totalAmount: this.formatCost(totalAmount),

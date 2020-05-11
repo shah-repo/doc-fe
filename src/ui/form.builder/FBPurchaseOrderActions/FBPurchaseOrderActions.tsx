@@ -15,7 +15,7 @@ const FBPurchaseOrderActions: React.FunctionComponent<FBPurchaseOrderActionsProp
   <>
     <Box display="flex" flexDirection="row-reverse" fontSize="h6.fontSize" mx={3} mb={1}>
       <Text translation="form.builder.total" />
-      <FormattedNumber value={totalPrice} style="currency" currency="USD" />
+      <FormattedNumber value={totalPrice} style="currency" currency="EUR" currencyDisplay="narrowSymbol" />
     </Box>
     <Box display="flex" flexDirection="row-reverse" mx={2}>
       <FBSubmitButton
