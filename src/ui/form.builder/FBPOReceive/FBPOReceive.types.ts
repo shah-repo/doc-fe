@@ -6,7 +6,7 @@ export enum FBPOReceiveImportance {
   other = 2
 }
 export type FBPOReceiveProps =
-& Pick<FBInputProps, "name" | "index" | "label" | "onChange">
+& Pick<FBInputProps, "name" | "index" | "label" | "onChange" | "disabled">
 & Pick<FBFormProps, "initialValues">
 & {
   dialogState?: FBDialogState;
