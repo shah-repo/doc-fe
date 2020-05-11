@@ -9,14 +9,12 @@ import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
 import { getIsLastVersionObsolete } from "../../helpers";
 
-
 interface Props {
   documentStatus?: DocumentRevisionStatus;
   formDocumentId?: string;
   docRevId?: string;
   formDocumentStatus?: DocumentRevisionStatus;
 }
-
 
 export const UpgradeToLatest: React.FunctionComponent<Props> = ({
   documentStatus,
@@ -48,7 +46,6 @@ export const UpgradeToLatest: React.FunctionComponent<Props> = ({
   const onUpgradeClick = () => {
     async.start(upgradeAction, docRevId, async);
   };
-
 
   return (
     <>

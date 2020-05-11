@@ -21,6 +21,7 @@ export const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  console.log(children);
 
   return (
     <>
@@ -35,7 +36,9 @@ export const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
         onClose={handleClose}
       >
         {children.map((menuItem, index) => {
-          if (!menuItem) { return null; }
+          if (!menuItem) {
+            return null;
+          }
           return <MenuItem key={index}> {menuItem} </MenuItem>;
         })}
       </Menu>
