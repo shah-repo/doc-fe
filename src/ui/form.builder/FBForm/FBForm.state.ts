@@ -25,14 +25,19 @@ export class FBFormState extends FBSchemaState {
 
   @action public setInitialValues = (values?: Dictionary<any>) => {
     this.initialValues = values || {};
-    this.setValues(this.initialValues);
+    this.setValues({
+      ...this.initialValues,
+      ...this.values,
+    });
   };
 
   @action public setValues = (values: Dictionary<any>) => {
     this.values = values;
   };
 
-  @action public getValues = () => unflatten(this.values);
+  @action public getValues = () =>
+    unflatten(this.values, { overwrite: true })
+  ;
 
   @action public getFieldValue = (
     fieldName: string | undefined, defaultValue: any = undefined): any => {
