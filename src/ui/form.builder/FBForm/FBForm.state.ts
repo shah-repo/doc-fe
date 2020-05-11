@@ -54,7 +54,7 @@ export class FBFormState extends FBSchemaState {
     if (!fieldName) {
       return;
     }
-    if (_.isUndefined(value)) {
+    if (_.isUndefined(value) || value.length === 0) {
       this.omitFieldValue(fieldName);
     } else {
       this.setValues({

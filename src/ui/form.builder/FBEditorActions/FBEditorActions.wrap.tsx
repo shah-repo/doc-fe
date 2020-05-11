@@ -12,7 +12,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
     onAddClick,
     onCancelClick,
     toStringRules,
-    index,
+    index = 0,
     type,
     ...props
   }: T) => {
@@ -45,9 +45,19 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       return options;
     }
 
+    function additionalSchema() {
+      if (!type) { return; }
+      const additionalSchema = FBData.additionalSchema(type);
+      if (!workspaceState?.getSchemaItemAt(index) && additionalSchema) {
+        workspaceState?.setSchema(_.union(workspaceState.getSchema(), additionalSchema));
+        index = index + _.size(additionalSchema);
+      }
+    }
+
     onAddClick = () => {
       const formValues = formState?.getValues();
       const options = propertiesOptions(formValues);
+      additionalSchema();
       workspaceState?.setSchemaItemAt({
         index,
         type,
@@ -55,6 +65,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         ...formValues,
         ...options && { options },
         ...formValues?.validators && toStringRules && { rules: toStringRules(formValues.validators) },
+        applicableOn: ["ON_STATE_TO_IN_REVIEW"],
       }, index);
       dialogState?.closeDialog();
     };

@@ -45,5 +45,19 @@
     "multiple": true,
     "rules": "required_with:validators.required_with",
     "validationMode": "visibility"
+  },
+  {
+    "type": "checkbox",
+    "name": "validators.required_without",
+    "label": "required_without:foo,bar,...",
+    "helperText": "The field under validation must be present and not empty only when any of the other specified fields are not present."
+  },
+  {
+    "type": "schemaselect",
+    "name": "validators.required_without.name",
+    "label": "Required without",
+    "multiple": true,
+    "rules": "required_with:validators.required_without",
+    "validationMode": "visibility"
   }
 ]
