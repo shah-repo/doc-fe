@@ -103,6 +103,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDisabled: boolean = initialValues.id !== undefined;
   const isdocRevStatusDraft =
     documentRevision?.status === DocumentRevisionStatus.Draft;
+  const documentType = documentTypesById[values.document?.documentType?.id || ""];
+  const hasOutput = documentType?.groupOptions?.includes("HAVE_OUTPUT");
 
   useEffect(() => {
     if (isdocRevStatusDraft) {
@@ -188,7 +190,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           <DocumentSecurity />
         }
         {
-          FBStore.active && !FBDRStore.isOutput &&
+          FBStore.active && !FBDRStore.isOutput && hasOutput &&
           <FBActiveNoOutput
             docRevId={initialValues.id}
             status={documentRevision?.status}
