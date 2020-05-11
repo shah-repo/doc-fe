@@ -206,6 +206,14 @@ pipelines:
           - step: *BUILD_DEV2
       - step: *DEPLOY_DEV2
 
+    release/20.10:
+      - parallel:
+          - step: *RUN_TESTS
+          # - step: *RUN_LINTER
+          - step: *BUILD_DEMO
+      - step: *DEPLOY_DEMO
+
+
     release/20.9:
       - parallel:
           - step: *RUN_TESTS
