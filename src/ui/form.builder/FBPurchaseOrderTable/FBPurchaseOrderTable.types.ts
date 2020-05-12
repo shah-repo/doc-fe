@@ -15,9 +15,14 @@ export type FBPurchaseOrderTableProps =
 };
 
 export type FBPurchaseOrderTableDetailsProps =
-& Pick<
-FBPurchaseOrderTableProps,
-"handleDelete" | "handleItem" | "classes" | "items" | "mode" | "loading" | "calculation"
+& Pick<FBPurchaseOrderTableProps,
+| "handleDelete"
+| "handleItem"
+| "classes"
+| "items"
+| "mode"
+| "loading"
+| "calculation"
 >;
 
 export type FBPurchaseOrderTableSumProps =

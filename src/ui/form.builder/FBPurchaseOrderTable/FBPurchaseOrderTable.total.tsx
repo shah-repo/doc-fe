@@ -22,6 +22,7 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
           onChange={handleCurrencyChange}
           options={FBData.currencyOptions}
           gutter={false}
+          SelectDisplayProps={{ style: { padding: "5px 30px" } }}
           {...{ disabled }}
         />
       </FBTableCell>
