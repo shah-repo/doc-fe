@@ -1,5 +1,5 @@
 import { FBInputProps, FBPurchaseOrderCalculation, FBPurchaseOrderItem } from "..";
-import { FBPurchaseOrderProps } from "../FBPurchaseOrder/FBPurchaseOrder.types";
+import { FBCurrency, FBPurchaseOrderProps } from "../FBPurchaseOrder/FBPurchaseOrder.types";
 
 export type FBPurchaseOrderTableProps =
 & Pick<FBInputProps, "name" | "disabled">
@@ -32,4 +32,9 @@ export enum FBPurchaseOrderDetailsHead {
   partNumberDocId = "form.builder.field.part.number",
   formattedDate = "form.builder.field.date.required",
   unitPrice = "form.builder.field.unit.price"
+}
+
+export interface FBCurrencyOption {
+  text: string;
+  value: FBCurrency;
 }

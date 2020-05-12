@@ -1,7 +1,9 @@
 import _ from "lodash";
 import { FB, FBAutocompleteAsyncConfig, FBEditorPropertiesOption, FBInputType, FBOption } from "..";
+import { FBCurrencyOption } from "../FBPurchaseOrderTable";
 import { FBSchemaProps } from "../FBSchema";
 import autocompleteOptions from "./autocompleteOptions.json";
+import currencyOptions from "./currencyOptions.json";
 import editorProperties from "./editorProperties.json";
 import requirementOptions from "./requirementOptions.json";
 import testStepSchema from "./testStepSchema.json";
@@ -27,6 +29,10 @@ export class FBData {
 
   public static get requirementOptions(): FBOption[] {
     return requirementOptions;
+  }
+
+  public static get currencyOptions(): FBCurrencyOption[] {
+    return currencyOptions as FBCurrencyOption[];
   }
 }
 

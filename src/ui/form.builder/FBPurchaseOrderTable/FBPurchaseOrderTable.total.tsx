@@ -1,7 +1,7 @@
 import TableRow from "@material-ui/core/TableRow";
 import React from "react";
 import { FormattedNumber } from "react-intl";
-import { FBPurchaseOrderTableTotalProps, FBTableCell, FBTextField } from "..";
+import { FBData, FBPurchaseOrderTableTotalProps, FBTableCell, FBTextField } from "..";
 import { FBSelect } from "../FBSelect";
 
 const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTotalProps> = ({
@@ -13,20 +13,14 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
 }) => (
   <React.Fragment>
     <TableRow>
-      <FBTableCell rowSpan={4} colSpan={6} />
-      <FBTableCell label="form.builder.currency" className="FBTotal-root" colSpan={2} />
+      <FBTableCell rowSpan={5} colSpan={6} />
+      <FBTableCell label="form.builder.currency" className="FBTotal-root" colSpan={3} />
       <FBTableCell className="FBTotal-root" align="right" colSpan={2}>
         <FBSelect
           name={`${name}.currency`}
           onChange={handleCurrencyChange}
-          defaultValue="USD"
-          optionLabelKey="text"
-          optionValueKey="value"
-          options={[
-            { text: "USD $", value: "USD" },
-            { text: "EUR €", value: "EUR" },
-            { text: "GBP £", value: "GBP" },
-          ]}
+          options={FBData.currencyOptions}
+          gutter={false}
           {...{ disabled }}
         />
       </FBTableCell>

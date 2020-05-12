@@ -31,14 +31,12 @@ export interface FBPurchaseOrderItem {
   receivedList?: any[];
 }
 
-export type Currency = "USD" | "EUR" | "GBP";
-
 export interface FBPurchaseOrderCalculation {
   subTotal: string;
   tax: string;
   totalAmount: string;
   shippingCost: string;
-  currency: Currency;
+  currency: FBCurrency;
   exchangeRate: number;
 }
 
@@ -50,3 +48,5 @@ export type FBPurchaseOrderValue = FBPurchaseOrderCalculation
 export type FBPurchaseOrderConstructor = FBPurchaseOrderValue & {
   documentId?: string;
 };
+
+export type FBCurrency = "USD" | "EUR" | "GBP";
