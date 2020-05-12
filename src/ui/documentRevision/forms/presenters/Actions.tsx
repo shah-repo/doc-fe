@@ -55,7 +55,10 @@ const DocRevActions: React.FunctionComponent<Props> = ({
         });
         break;
       default:
-        break;
+        setValues({
+          ...values,
+          formTemplate: undefined,
+        });
     }
   };
   const renderChangeOwnership = canChangeOwnerShip && values.id && (
