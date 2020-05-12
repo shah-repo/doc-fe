@@ -1,4 +1,5 @@
 import React from "react";
+import * as generateUuid from "uuid/v4";
 import { FB } from "../..";
 import useDialog from "../../../hooks/useDialog";
 import { FBPOApprovalMatrixAddItemProps } from "../FBPOApprovalMatrix.types";
@@ -19,17 +20,29 @@ export const withFBPOApprovalMatrixAddItem = <T extends FBPOApprovalMatrixAddIte
 
       dialog.open();
     };
+
     const closeDialog = () => {
       dialog.close();
       poamState?.clearFormValues();
     };
+
     const onSubmit = (item) => {
-      poamState?.addItem(item);
+      dialog.close();
+      poamState?.addItem({
+        ...item,
+        limit: parseInt(item.limit, 10),
+        id: generateUuid(),
+        signatures: item.signatures.map((it) => ({
+          id: generateUuid(),
+          signatureStage: it.signatureStage,
+          groups: it.groups,
+          employees: it.employees,
+        })),
+      });
       poamState?.clearFormValues();
     };
 
-    const signatureStages = poamState?.poam.approvalLevels.map((level) =>
-      level.signatures.map((sign) => sign.signatureStage));
+    const signatureStages = [1, 2, 3];
 
 
     return Component({
@@ -42,7 +55,7 @@ export const withFBPOApprovalMatrixAddItem = <T extends FBPOApprovalMatrixAddIte
       approvalLevels: poamState?.poam.approvalLevels,
       employees: props.employees,
       groupOptions: props.groupOptions,
-      signatureStages: signatureStages?.[0],
+      signatureStages,
     });
   };
 

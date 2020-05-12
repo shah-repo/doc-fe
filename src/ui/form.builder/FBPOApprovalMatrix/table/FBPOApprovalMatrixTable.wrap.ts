@@ -44,8 +44,6 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
     const [initialValues, setInitialValues] = useState<any>(undefined);
     const [index, setIndex] = useState(undefined);
     const dialog = useDialog();
-    const signatureStages = poamState?.poam.approvalLevels.map((level) =>
-      level.signatures.map((sign) => sign.signatureStage));
 
     const closeDialog = () => {
       dialog.close();
@@ -54,6 +52,8 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
       poamState?.clearFormValues();
     };
 
+    const signatureStages = [1, 2, 3];
+
 
     const handleEdit = (index, item) => () => {
       if (props.disabled && !isDocumentReleased) {
@@ -61,7 +61,7 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
       }
       poamState?.setFormValues(item, groupOptions, employees);
       setIndex(index);
-      const signatures = signatureStages?.map((level) => ({
+      const signaturesByStage = signatureStages?.map((level) => ({
         [`${props.name}-formValues.signature${level}.groups`]: groupOptions.filter((option) => {
           const selectedGroupIds = item.signatures[level as unknown as number - 1]?.groups?.map((group) => group.id);
           if (selectedGroupIds?.includes(option.value)) {
@@ -78,10 +78,13 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
           return null;
         }),
       }));
+
+      const signatures = Object.assign({}, ...signaturesByStage?.map((signature) => signature) as any);
+
       setInitialValues({
         [`${props.name}-formValues.name`]: item.name,
         [`${props.name}-formValues.limit`]: item.limit,
-        ...signatures?.map((signature, index) => signature[index]),
+        ...signatures,
       });
       dialog.open();
     };
@@ -103,7 +106,7 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
       closeDialog,
       employees,
       handleEdit,
-      signatureStages: signatureStages?.[0],
+      signatureStages,
       isDocumentReleased,
     });
   };

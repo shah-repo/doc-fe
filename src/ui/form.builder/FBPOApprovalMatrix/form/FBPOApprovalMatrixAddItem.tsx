@@ -25,13 +25,15 @@ const FBPOApprovalMatrixAddItem: React.FunctionComponent<FBPOApprovalMatrixAddIt
       style={{ margin: "8px 0" }}
     />
     <FBPOApprovalMatrixDialog
-      isDialogOpen={isDialogOpen}
-      closeDialog={closeDialog}
-      onSubmit={onSubmit}
-      name={name}
-      employees={employees}
-      groupOptions={groupOptions}
-      signatureStages={signatureStages}
+      { ...{
+        isDialogOpen,
+        closeDialog,
+        onSubmit,
+        name,
+        employees,
+        groupOptions,
+        signatureStages,
+      }}
     />
   </>
 );

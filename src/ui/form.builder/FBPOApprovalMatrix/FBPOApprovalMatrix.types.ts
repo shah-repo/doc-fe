@@ -18,7 +18,7 @@ export type FBPOApprovalMatrixDialogProps =
 & FBPOApprovalMatrixBasicProps
 & {
   isDialogOpen: boolean;
-  initialValues?: Dictionary<POApprovalMatrixLevel>;
+  initialValues?: Dictionary<any>;
   onSubmit: (item: any) => void;
   closeDialog: () => void;
   groupOptions: OptionType[];
@@ -37,7 +37,7 @@ export type FBPOApprovalMatrixFormProps =
 export type FBPOApprovalMatrixAddItemProps =
 & FBPOApprovalMatrixBasicProps
 & Pick<FBPOApprovalMatrixDialogProps,
-"onSubmit" | "closeDialog" | "isDialogOpen" | "signatureStages" | "employees" | "groupOptions">
+"onSubmit" | "closeDialog" | "isDialogOpen" | "employees" | "groupOptions" | "signatureStages">
 & {
   openDialog: () => void;
 };
@@ -46,7 +46,7 @@ export type FBPOApprovalMatrixAddItemProps =
 export type FBPOApprovalMatrixTableProps =
 & FBPOApprovalMatrixBasicProps
 & Pick<FBPOApprovalMatrixDialogProps, "onSubmit" |
-"closeDialog" | "isDialogOpen" | "initialValues" | "signatureStages" | "groupOptions" | "employees" >
+"closeDialog" | "isDialogOpen" | "initialValues" | "groupOptions" | "employees" | "signatureStages" >
 & {
   approvalLevels: POApprovalMatrix[];
   handleEdit: (index: number, item: POApprovalMatrixLevel) => () => void;
@@ -60,7 +60,7 @@ export interface POApprovalMatrix {
 export interface POApprovalMatrixLevel {
   id: string;
   name: string;
-  limit: string;
+  limit: number;
   signatures: Signature[];
 }
 

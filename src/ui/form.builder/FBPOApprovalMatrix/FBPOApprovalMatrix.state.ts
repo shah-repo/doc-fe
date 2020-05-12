@@ -4,48 +4,7 @@ import FBStore from "../stores/ui/FBStore";
 import { POApprovalMatrix, POApprovalMatrixLevel } from "./FBPOApprovalMatrix.types";
 
 const DEFAULT_POAM: POApprovalMatrix = {
-  approvalLevels: [    {
-    name: "Level 1",
-    limit: "$500",
-    signatures: [
-      {
-        signatureStage: 1,
-        groups: [{ id: "e4ec85a1-c0c8-4fe9-8298-fa8f5e51bcf2" }],
-        employees: [{ id: "b3df30a9-34c9-4dd8-8c0e-fc1b32a170fa" }],
-      },
-      {
-        signatureStage: 2,
-        groups: [],
-        employees: [],
-      },
-      {
-        signatureStage: 3,
-        groups: [],
-        employees: [],
-      },
-    ],
-  },
-  {
-    name: "Level 2",
-    limit: "$1500",
-    signatures: [
-      {
-        signatureStage: 1,
-        groups: [],
-        employees: [],
-      },
-      {
-        signatureStage: 2,
-        groups: [],
-        employees: [],
-      },
-      {
-        signatureStage: 3,
-        groups: [],
-        employees: [],
-      },
-    ],
-  }] as POApprovalMatrixLevel[],
+  approvalLevels: [] as POApprovalMatrixLevel[],
 };
 
 export class FBPOApprovalMatrixState {
@@ -57,9 +16,7 @@ export class FBPOApprovalMatrixState {
   };
 
   @action public addItem = (approvalLevel: POApprovalMatrixLevel) => {
-    this.poam.approvalLevels.push({
-      ...approvalLevel,
-    });
+    this.poam.approvalLevels.push(approvalLevel);
     this.updateFBStore();
   };
 
@@ -70,35 +27,37 @@ export class FBPOApprovalMatrixState {
 
   @action public setFormValues = (approvalLevel: POApprovalMatrixLevel, groupOptions, employees) => {
     let values = {};
-    const signatureStage = approvalLevel.signatures.map((sign) => sign.signatureStage);
-    const signatures = signatureStage.map((level) => ({
+    const signatureStages = this.poam.approvalLevels.map((level) => level.signatures.map((sign) => sign.signatureStage));
+    const signaturesByStage = signatureStages.flat().map((level) => ({
       [`${this.name}-formValues.signature${level}.groups`]: groupOptions.filter((option) => {
-        const selectedGroupIds = approvalLevel.signatures[level - 1]?.groups?.map((group) => group.id);
+        const selectedGroupIds = approvalLevel.signatures[level as unknown as number - 1]?.groups?.map((group) => group.id);
         if (selectedGroupIds?.includes(option.value)) {
           return option;
         }
         return null;
       }),
       [`${this.name}-formValues.signature${level}.employees`]: toMembersOptions(employees).filter((option) => {
-        const selectedEmployeeIds = approvalLevel.signatures[level - 1]?.employees?.map((employee) => employee.id);
+        const selectedEmployeeIds = approvalLevel.signatures[level as unknown as number - 1]?.employees?.map((employee) =>
+          employee.id);
         if (selectedEmployeeIds?.includes(option.value)) {
           return option;
         }
         return null;
       }),
     }));
-    Object.keys(approvalLevel).forEach((key) => {
-      values = {
-        ...values,
-        [`${this.name}-formValues.name`]: approvalLevel.name,
-        [`${this.name}-formValues.limit`]: approvalLevel.limit,
-        ...signatures.map((signature, index) => signature[index]),
-      };
-    });
+    const signatures = Object.assign({}, ...signaturesByStage?.map((signature) => signature));
+    values = {
+      [`${this.name}-formValues.name`]: approvalLevel.name,
+      [`${this.name}-formValues.limit`]: approvalLevel.limit,
+      ...signatures,
+    };
+
     FBStore.setValues({
       ...FBStore.getValues(),
       ...values,
     });
+    this.updateFBStore();
+
   };
 
   @action public initialize = () => {
@@ -113,6 +72,13 @@ export class FBPOApprovalMatrixState {
     FBStore.setValue(`${this.name}-formValues.name`, undefined);
     FBStore.setValue(`${this.name}-formValues.limit`, undefined);
     FBStore.setValue(`${this.name}-formValues.signatures`, undefined);
+    FBStore.setValue(`${this.name}-formValues`, undefined);
+    FBStore.setValue(`${this.name}-formValues.signature1.groups`, undefined);
+    FBStore.setValue(`${this.name}-formValues.signature1.employees`, undefined);
+    FBStore.setValue(`${this.name}-formValues.signature2.groups`, undefined);
+    FBStore.setValue(`${this.name}-formValues.signature2.employees`, undefined);
+    FBStore.setValue(`${this.name}-formValues.signature3.groups`, undefined);
+    FBStore.setValue(`${this.name}-formValues.signature3.employees`, undefined);
   };
 
   private updateFBStore = () => {

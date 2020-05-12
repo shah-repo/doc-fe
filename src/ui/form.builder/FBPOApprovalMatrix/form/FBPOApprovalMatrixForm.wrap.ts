@@ -9,7 +9,7 @@ import { DEFAULT_ACTIVE_EMPLOYEES } from "../../../group.management/utils/types"
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import FBStore from "../../stores/ui/FBStore";
-import { FBPOApprovalMatrixFormProps, POApprovalMatrixLevel } from "../FBPOApprovalMatrix.types";
+import { FBPOApprovalMatrixFormProps } from "../FBPOApprovalMatrix.types";
 
 export const withFBPOApprovalMatrixForm = <T extends FBPOApprovalMatrixFormProps>(
   Component: React.FunctionComponent<T>
@@ -18,13 +18,11 @@ export const withFBPOApprovalMatrixForm = <T extends FBPOApprovalMatrixFormProps
   const Comp = ({
     name = "",
     onSubmit,
-    initialValues = {} as Dictionary<POApprovalMatrixLevel>,
+    initialValues = {} as Dictionary<any>,
     ...props
   }: T) => {
     const { poamState } = FB.useStores();
     const { document } = FBStore;
-
-    const [initialValuesState] = useState(() => initialValues);
 
     const handleSubmit = (values) => {
       const item = values[`${name}-formValues`];
@@ -33,7 +31,7 @@ export const withFBPOApprovalMatrixForm = <T extends FBPOApprovalMatrixFormProps
         name: item.name,
         limit: item.limit,
         id: item.id,
-        signatures: signatureStages?.[0].map((stage) => ({
+        signatures: signatureStages?.map((stage) => ({
           signatureStage: stage,
           groups: item[`signature${stage}`]?.groups?.map((group) => ({ id: group.value })) || [],
           employees: item[`signature${stage}`]?.employees?.map((employee) => ({ id: employee.value })) || [],
@@ -81,8 +79,7 @@ export const withFBPOApprovalMatrixForm = <T extends FBPOApprovalMatrixFormProps
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.disabled, isDocumentReleased]);
 
-    const signatureStages = poamState?.poam.approvalLevels.map((level) =>
-      level.signatures.map((sign) => sign.signatureStage));
+    const signatureStages = [1, 2, 3];
 
     return Component({
       ...(props as T),
@@ -90,10 +87,10 @@ export const withFBPOApprovalMatrixForm = <T extends FBPOApprovalMatrixFormProps
       name,
       onSubmit: handleSubmit,
       validateForm,
-      initialValues: initialValuesState,
+      initialValues,
       employees: activeEmployees,
       groupOptions,
-      signatureStages: signatureStages?.[0],
+      signatureStages,
     });
   };
 

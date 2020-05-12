@@ -12,8 +12,8 @@ const FBPOApprovalMatrixDialog: React.FunctionComponent<FBPOApprovalMatrixDialog
   initialValues,
   groupOptions,
   employees,
-  signatureStages,
 }) => {
+  const signatureStages = [1, 2, 3];
   const renderDialog = isDialogOpen && (
     <Dialog
       open={isDialogOpen}
@@ -28,13 +28,15 @@ const FBPOApprovalMatrixDialog: React.FunctionComponent<FBPOApprovalMatrixDialog
       </DialogTitle>
       <DialogContent id="FBPurchaseOrderDialog-closeDialog">
         <FBPOApprovalMatrixForm
-          name={name}
-          onSubmit={onSubmit}
-          initialValues={initialValues}
-          closeDialog={closeDialog}
-          groupOptions={groupOptions}
-          employees={employees}
-          signatureStages={signatureStages}
+          { ...{
+            name,
+            onSubmit,
+            initialValues,
+            closeDialog,
+            groupOptions,
+            employees,
+            signatureStages,
+          }}
         />
       </DialogContent>
     </Dialog>

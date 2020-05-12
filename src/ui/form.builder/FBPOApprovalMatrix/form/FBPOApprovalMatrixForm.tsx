@@ -7,13 +7,13 @@ import Text from "../../../components/Text";
 import { toMembersOptions } from "../../../group.management/utils/transform";
 import FBButton from "../../components/inputs/FBButton";
 import FBTextField from "../../components/inputs/FBTextField";
-import { FBPOApprovalMatrixFormProps, POApprovalMatrixLevel } from "../FBPOApprovalMatrix.types";
+import { FBPOApprovalMatrixFormProps } from "../FBPOApprovalMatrix.types";
 import { default as Error } from "./FBPOApprovalMatrixError";
 import { withFBPOApprovalMatrixForm } from "./FBPOApprovalMatrixForm.wrap";
 
 
 const FBPOApprovalMatrixForm: React.FunctionComponent<FBPOApprovalMatrixFormProps> = ({
-  initialValues = {} as Dictionary<POApprovalMatrixLevel>,
+  initialValues = {} as Dictionary<any>,
   onSubmit,
   closeDialog,
   name,
@@ -46,8 +46,9 @@ const FBPOApprovalMatrixForm: React.FunctionComponent<FBPOApprovalMatrixFormProp
               label="document.revision.selected.groups"
               options={groupOptions}
               autocompleteProps={{
-                id: `${name}-formValues.signature${level}.groups`,
                 isMulti: true,
+                isClearable: true,
+                defaultValue: props.values[`${name}-formValues.signature${level}.groups`],
               }}
             />
             <AutocompleteField
@@ -55,8 +56,10 @@ const FBPOApprovalMatrixForm: React.FunctionComponent<FBPOApprovalMatrixFormProp
               label="document.revision.selected.users"
               options={toMembersOptions(employees)}
               autocompleteProps={{
-                id: `${name}-formValues.signature${level}.employees`,
                 isMulti: true,
+                isClearable: true,
+                defaultValue: props.values[`${name}-formValues.signature${level}.employees`],
+
               }}
             />
           </Box>) )}
@@ -81,7 +84,6 @@ const FBPOApprovalMatrixForm: React.FunctionComponent<FBPOApprovalMatrixFormProp
       onSubmit={onSubmit}
       validate={validateForm}
       validateOnChange
-      validateOnMount
     >
       {renderForm}
     </Formik>

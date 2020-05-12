@@ -70,7 +70,7 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
           </TableRow>
         </TableHead>
         <TableBody>
-          {approvalLevels.map((row: any, index) => (
+          {approvalLevels?.map((row: any, index) => (
             <TableRow
               key={`${row.name}-${index}`}
               onClick={handleEdit(index, row)}
@@ -114,14 +114,16 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
       {
         !isDocumentReleased && isDialogOpen &&
         <FBPOApprovalMatrixDialog
-          isDialogOpen={isDialogOpen}
-          closeDialog={closeDialog}
-          initialValues={initialValues}
-          onSubmit={onSubmit}
-          name={name}
-          groupOptions={groupOptions}
-          employees={employees}
-          signatureStages={signatureStages}
+          {...{
+            isDialogOpen,
+            closeDialog,
+            initialValues,
+            onSubmit,
+            name,
+            groupOptions,
+            employees,
+            signatureStages,
+          }}
         />
       }
     </Box>
