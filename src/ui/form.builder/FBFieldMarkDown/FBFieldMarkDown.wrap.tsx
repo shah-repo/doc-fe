@@ -28,11 +28,12 @@ export const withFBFieldMarkDown = <T extends FBFieldMarkDownProps>(
     `);
 
     const source = template({
-        ...schemaItem,
-        label: _.get(schemaItem, "label") || "",
-        value: FBStore.getValues()[name || ""],
-        customValidator,
-      });
+      ...schemaItem,
+      label: _.get(schemaItem, "label", ""),
+      rules: _.get(schemaItem, "rules", ""),
+      value: FBStore.getValues()[name || ""],
+      customValidator,
+    });
 
     return Component({
       ...(props as T),

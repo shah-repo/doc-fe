@@ -2,7 +2,7 @@ import { FBOptionProps } from "../types/common";
 
 export type FBValidationModeType = "ValidationHidden" | "ValidationDisabled";
 
-export enum FBValidationMode {
+export enum FBValidationModeOption {
   ValidationHidden = "Show/Hide field",
   ValidationDisabled = "Enable/Disable field",
 }
