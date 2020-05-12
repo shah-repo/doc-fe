@@ -2,7 +2,7 @@ import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { isEmpty } from "lodash";
 import { observer } from "mobx-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { DocumentRevision, DocumentRevisionStatus, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
@@ -104,6 +104,11 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isdocRevStatusDraft =
     documentRevision?.status === DocumentRevisionStatus.Draft;
 
+  const hasOutput = useMemo(() => {
+    const documentType = documentTypesById[values.document?.documentType?.id || ""];
+    return documentType?.groupOptions?.includes("HAVE_OUTPUT");
+  }, [values.document?.documentType?.id]);
+
   useEffect(() => {
     if (isdocRevStatusDraft) {
       savedocInfo({
@@ -188,7 +193,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           <DocumentSecurity />
         }
         {
-          FBStore.active && !FBDRStore.isOutput &&
+          FBStore.active && !FBDRStore.isOutput && hasOutput &&
           <FBActiveNoOutput
             docRevId={initialValues.id}
             status={documentRevision?.status}
