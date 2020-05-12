@@ -10,12 +10,17 @@ const FBPurchaseOrderActions: React.FunctionComponent<FBPurchaseOrderActionsProp
   onAddClick,
   onCancelClick,
   totalPrice = 0,
+  currency,
   ...props
 }) => (
   <>
     <Box display="flex" flexDirection="row-reverse" fontSize="h6.fontSize" mx={3} mb={1}>
       <Text translation="form.builder.total" />
-      <FormattedNumber value={totalPrice} style="currency" currency="EUR" currencyDisplay="narrowSymbol" />
+      <FormattedNumber
+        value={totalPrice}
+        style="currency"
+        currency={currency}
+      />
     </Box>
     <Box display="flex" flexDirection="row-reverse" mx={2}>
       <FBSubmitButton

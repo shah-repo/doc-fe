@@ -38,6 +38,7 @@ export interface FBPurchaseOrderCalculation {
   shippingCost: string;
   currency: FBCurrency;
   exchangeRate: number;
+  totalInUSD: string;
 }
 
 export type FBPurchaseOrderValue = FBPurchaseOrderCalculation

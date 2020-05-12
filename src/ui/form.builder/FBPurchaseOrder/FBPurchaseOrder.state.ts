@@ -17,6 +17,7 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     shippingCost: "0.00",
     currency: "USD",
     exchangeRate: 0.5,
+    totalInUSD: "0.00",
   };
 
   public constructor({ documentId, ...initialValues }: FBPurchaseOrderConstructor) {
@@ -99,12 +100,14 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     );
     const shippingCost = this.calculation.shippingCost || 0;
     const totalAmount = sum.tax + sum.subTotal + Number(shippingCost);
+    const totalInUSD = totalAmount * this.calculation.exchangeRate;
     set(this, "calculation", {
       ...this.calculation,
       subTotal: this.formatCost(sum.subTotal),
       tax: this.formatCost(sum.tax),
       totalAmount: this.formatCost(totalAmount),
       shippingCost: this.formatCost(shippingCost),
+      totalInUSD: this.formatCost(totalInUSD),
     });
   };
 

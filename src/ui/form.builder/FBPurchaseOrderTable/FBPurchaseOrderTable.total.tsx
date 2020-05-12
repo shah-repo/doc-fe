@@ -3,6 +3,7 @@ import React from "react";
 import { FormattedNumber } from "react-intl";
 import { FBData, FBPurchaseOrderTableTotalProps, FBTableCell, FBTextField } from "..";
 import { FBSelect } from "../FBSelect";
+import FBPurchaseOrderExchange from "./FBPurchaseOrder.exchange";
 
 const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTotalProps> = ({
   handleShippingCost,
@@ -13,7 +14,7 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
 }) => (
   <React.Fragment>
     <TableRow>
-      <FBTableCell rowSpan={5} colSpan={6} />
+      <FBTableCell rowSpan={6} colSpan={6} />
       <FBTableCell label="form.builder.currency" className="FBTotal-root" colSpan={3} />
       <FBTableCell className="FBTotal-root" align="right" colSpan={2}>
         <FBSelect
@@ -31,14 +32,19 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
         <FormattedNumber
           value={Number(calculation?.subTotal)}
           style="currency"
-          currency="GBP"
-          currencyDisplay="narrowSymbol"
+          currency={calculation?.currency}
         />
       </FBTableCell>
     </TableRow>
     <TableRow>
       <FBTableCell label="form.builder.tax" className="FBTotal-root" colSpan={4} />
-      <FBTableCell label={`$${calculation?.tax}`} className="FBTotal-root" align="right" />
+      <FBTableCell className="FBTotal-root" align="right">
+        <FormattedNumber
+          value={Number(calculation?.tax)}
+          style="currency"
+          currency={calculation?.currency}
+        />
+      </FBTableCell>
     </TableRow>
     <TableRow>
       <FBTableCell label="form.builder.shipping.cost" className="FBTotal-root" colSpan={3} />
@@ -60,8 +66,22 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
     </TableRow>
     <TableRow>
       <FBTableCell label="form.builder.total" className="FBTotal-root" colSpan={4} />
-      <FBTableCell label={`$${calculation?.totalAmount}`} className="FBTotal-root" align="right" />
+      <FBTableCell className="FBTotal-root" align="right">
+        <FormattedNumber
+          value={Number(calculation?.totalAmount)}
+          style="currency"
+          currency={calculation?.currency}
+        />
+      </FBTableCell>
     </TableRow>
+    {
+      calculation?.currency !== "USD" &&
+      <TableRow>
+        <FBTableCell colSpan={5} className="FBTotal-root" align="right">
+          <FBPurchaseOrderExchange {...{ calculation }} />
+        </FBTableCell>
+      </TableRow>
+    }
   </React.Fragment>
 );
 
