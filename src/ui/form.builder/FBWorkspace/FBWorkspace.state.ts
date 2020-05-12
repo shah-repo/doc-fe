@@ -15,6 +15,11 @@ export class FBWorkspaceState extends FBSchemaState {
     this.document = document;
   }
 
+  public get id(): string | undefined {
+    const { id } = this.document || {};
+    return id;
+  }
+
   public get documentId(): string | undefined {
     const { id } = this.document?.document || {};
     return id;

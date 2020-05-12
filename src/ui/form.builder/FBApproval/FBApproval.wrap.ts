@@ -9,8 +9,6 @@ import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { store } from "../../../state/store";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
-import FBDRStore from "../stores/ui/FBDRStore";
-import FBStore from "../stores/ui/FBStore";
 
 export const withFBApproval = <T extends FBApprovalProps>(
   Component: React.FunctionComponent<T>
@@ -31,10 +29,13 @@ export const withFBApproval = <T extends FBApprovalProps>(
     ...props
   }: T) => {
 
-    approvalFieldState = FB.useRef<FBApprovalState>(FBApprovalState);
+    const { workspaceState, formState } = FB.useStores();
+    const { id, isOutput } = workspaceState || {};
+
+    approvalFieldState = FB.useRef<FBApprovalState>(FBApprovalState, id);
     isApproved = approvalFieldState.isApproved;
     isDefined = !_.isEmpty(approvers) || !_.isEmpty(approverGroups);
-    disabled = !FBDRStore.isOutput || (FBDRStore.isOutput && !FBStore.docId);
+    disabled = !isOutput || (isOutput && !id);
     const currentUser = store.getState().auth.user;
 
     function isApprover(approver: Employee | GroupRequestBody): boolean {
@@ -66,18 +67,22 @@ export const withFBApproval = <T extends FBApprovalProps>(
     }
 
     function approverName(approver?: Employee | GroupRequestBody): string {
-      return (approver as Employee).user?.email || (approver as GroupRequestBody).name || "";
+      return (approver as Employee)?.user?.email || (approver as GroupRequestBody)?.name || "";
     }
 
     function approverStatusInfo(id: string): string {
       const status = approverStatus(id);
       if (status === FBApprovalStatus.Approved) {
-        const approverValue = findApprover(id);
-        if (!approverValue) {
-          return "";
+        const { userId, groupId, approvedAt } = findApprover(id) || {};
+        if (!approvedAt) { return ""; }
+        let approver = "";
+        if (userId && groupId) {
+          const approverObj = _.first(approvalFieldState?.approvers([userId]));
+          approver = `${approverName(approverObj)},`;
         }
-        const approvedAt = moment(approverValue.approvedAt).tz(TIME_ZONE, true).format("D MMM YYYY hh:mm a");
-        return `${status}, ${approvedAt}`;
+
+        const mom = moment(approvedAt).tz(TIME_ZONE, true).format("D MMM YYYY hh:mm a");
+        return `${status}, ${approver} ${mom}`;
       }
       return status;
     }
@@ -130,7 +135,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
       if (!name) {
         return;
       }
-      const hasApproved = FBStore.getValue(name) as FBApprovalValue[] || [];
+      const hasApproved = formState?.getFieldValue(name) as FBApprovalValue[] || [];
       approvalFieldState?.setApprovers(hasApproved);
     }, []);
 
@@ -139,7 +144,6 @@ export const withFBApproval = <T extends FBApprovalProps>(
         (approvers = approvalFieldState?.approvers(approvers as string[]));
       FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.group) &&
         (approverGroups = approvalFieldState?.groups(approverGroups as string[]));
-
       hasApproved = approvalFieldState?.hasApproved;
       loading = approvalFieldState?.approversApi.loading || approvalFieldState?.groupsApi.loading;
     });

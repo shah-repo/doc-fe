@@ -2,6 +2,7 @@ import _ from "lodash";
 import { action, observable, set } from "mobx";
 import React from "react";
 import { FBEditorMode, FBEditorModeProps, FBEditorProps, FBInputType } from "..";
+import { FBEditorApprovalField } from "../FBEditorApprovalField";
 import { FBEditorAutocomplete } from "../FBEditorAutocomplete";
 import { FBEditorCheckControl } from "../FBEditorCheckControl";
 import { FBEditorHyperlink } from "../FBEditorHyperlink";
@@ -52,6 +53,7 @@ export class FBEditorState {
     "selectrequirement",
     "checkpoint",
     "createlabel",
+    "approval",
   ];
 
   public static pickStepIndex: FBInputType[] = ["stepsection", "teststep"];
@@ -87,6 +89,7 @@ export class FBEditorState {
     selectrequirement: FBEditorSelectRequirement,
     checkpoint: FBEditorLabel,
     createlabel: FBEditorLabel,
+    approval: FBEditorApprovalField,
   };
 
   @observable public mode?: FBEditorMode = "config";

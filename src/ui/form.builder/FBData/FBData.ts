@@ -2,6 +2,7 @@ import _ from "lodash";
 import { FB, FBAutocompleteAsyncConfig, FBEditorPropertiesOption, FBInputType, FBOption } from "..";
 import { FBCurrencyOption } from "../FBPurchaseOrderTable";
 import { FBSchemaProps } from "../FBSchema";
+import additionalSchema from "./additionalSchema.json";
 import autocompleteOptions from "./autocompleteOptions.json";
 import currencyOptions from "./currencyOptions.json";
 import editorProperties from "./editorProperties.json";
@@ -33,6 +34,12 @@ export class FBData {
 
   public static get currencyOptions(): FBCurrencyOption[] {
     return currencyOptions as FBCurrencyOption[];
+  }
+
+  public static additionalSchema(type: FBInputType): Partial<FBSchemaProps>[] {
+    const compiled = _.template(JSON.stringify(additionalSchema));
+    const parse = JSON.parse(compiled({ id: FB.uniqid }));
+    return parse[type];
   }
 }
 

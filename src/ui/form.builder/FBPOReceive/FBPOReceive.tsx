@@ -16,8 +16,12 @@ const FBPOReceive: React.FunctionComponent<FBPOReceiveProps> = ({
 }) => (
   <FBProvider {...{ poReceiveState, dialogState }} >
     <FBDialog />
-    <Box>
-      <FBAutocompleteAsync {...props} {...{ name }} optionId={FBAutocompleteAsyncOption.po} />
+    <Box mb={4}>
+      <FBAutocompleteAsync
+        {...props}
+        {...{ name }}
+        optionId={FBAutocompleteAsyncOption.po}
+      />
       {loading && (
         <Box display="flex" justifyContent="center">
           <CircularProgress />

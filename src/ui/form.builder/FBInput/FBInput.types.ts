@@ -1,6 +1,8 @@
 import { BaseTextFieldProps } from "@material-ui/core";
 import { AutocompleteProps } from "@material-ui/lab/Autocomplete";
 import { FBEditorPropertiesType, FBInputState, FBLabelProps, FBOptionProps, FBSchemaState } from "..";
+import { Employee } from "../../../state/ducks/company";
+import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { FBEditorValidationMode } from "../FBEditorValidation";
 import { FBValidatorConfigProps } from "../types/validation/validatorDialog";
 
@@ -85,6 +87,10 @@ export type FBInputProps =
   instructionsDocument?: string;
   reviseDisabled?: boolean;
   customValidator?: FBValidatorConfigProps;
+  approvers?: string[] | Employee[];
+  approverGroups?: string[] | GroupRequestBody[];
+  approveIsBlocking?: boolean;
+  applicableOn?: any[];
 };
 
 export const OmitInputClones: FBInputType[] = ["fileupload"];
