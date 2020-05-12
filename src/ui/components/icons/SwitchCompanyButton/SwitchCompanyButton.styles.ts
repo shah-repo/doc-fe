@@ -3,9 +3,6 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core";
 const styles = makeStyles((theme: Theme) =>
   createStyles({
     switchButton: {
-      left: 32,
-      bottom: 70,
-      position: "absolute",
       display: "flex",
       color: theme.palette.secondary.contrastText,
       background: "0% 0% no-repeat padding-box",

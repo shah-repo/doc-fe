@@ -34,27 +34,24 @@ export function withSortable<T extends FBSortableProps>(
     private isApproved = (schema: FBTemplateSchema): {disabled: boolean; approved: boolean} => {
       const { index = 0 } = schema;
       let state = { disabled: false, approved: false };
+      const FBSchema = FBStore.getSchema();
 
-      _.range(index, _.size(FBStore.getSchema())).some((_item, current) => {
-        const activeSchema = FBStore.getSchema()[current + index];
-        if (!activeSchema) {
-          return state;
-        }
-        const { type, name = "" } = activeSchema;
-        const activeConfig = type === "approval" ? activeSchema : FBStore.getValue(name);
-        const { approveIsBlocking = false } = activeConfig || {};
-        if ((type === "inlineapproval" || type === "approval")) {
-
-          const hasValue = type === "approval"
+      _.range(0, index).reverse().some((current) => {
+        const schemaItem =  FBSchema[current];
+        const { type, name } = schemaItem;
+        if (type === "inlineapproval" || type === "approval") {
+          const activeConfig = type === "approval" ? schemaItem : FBStore.getValue(name);
+          const { approveIsBlocking = false } = activeConfig || {};
+          let hasValue = type === "approval"
             ? FBStore.getValue(name)
             : FBStore.getValue(`${FBFieldName.InlineApproval}${name}`);
-          state = {
-            disabled: approveIsBlocking ? Boolean(hasValue) : false,
-            approved: Boolean(hasValue),
-          };
-
+          hasValue = Boolean(hasValue);
+          if (approveIsBlocking && !hasValue) {
+            state = { disabled: true, approved: true };
+          }
           return true;
         }
+        return false;
       });
       return state;
     };
