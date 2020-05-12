@@ -16,7 +16,7 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     totalAmount: "0.00",
     shippingCost: "0.00",
     currency: "USD",
-    exchangeRate: 0.5,
+    exchangeRate: 1,
     totalInUSD: "0.00",
   };
 
