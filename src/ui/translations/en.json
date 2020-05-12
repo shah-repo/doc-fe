@@ -657,5 +657,7 @@
   "IN_REVIEW": "IN_REVIEW",
   "RELEASED": "RELEASED",
   "DEPRECATED": "SUPERSEDED",
-  "OBSOLETE": "OBSOLETE"
+  "OBSOLETE": "OBSOLETE",
+  "maintenance.back.soon": "We’ll be back soon!",
+  "maintenance.inconvinience": "Sorry for the inconvenience but we’re performing some maintenance at the moment."
 }
