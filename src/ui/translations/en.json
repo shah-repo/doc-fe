@@ -595,6 +595,7 @@
   "form.builder.units.pounds": "pounds",
   "form.builder.units.gallon": "gallon",
   "form.builder.units.ounce": "ounce",
+  "form.builder.revise.disabled": "Revision Disabled",
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.watermark": "Download PDF file",

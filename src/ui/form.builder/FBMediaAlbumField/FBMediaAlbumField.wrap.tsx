@@ -14,6 +14,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     onFileUploadChange,
     isTemplate = false,
     actionsDisabled,
+    reviseDisabled,
     loading,
     collection,
     removeMedia,
@@ -56,14 +57,16 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       collection = mediaAlbumFieldState?.collection;
     });
 
+    actionsDisabled = (reviseDisabled && FBStore.isRevised) || mediaAlbumFieldState?.isPreview;
 
     return Component({
       ...(props as T),
       removeMedia: mediaAlbumFieldState?.removeCandidate,
-      actionsDisabled: mediaAlbumFieldState?.isPreview,
+      actionsDisabled,
       mediaAlbumFieldState,
       onFileUploadChange,
       setMediaFieldMode,
+      reviseDisabled,
       collection,
       isTemplate,
       qrValue,

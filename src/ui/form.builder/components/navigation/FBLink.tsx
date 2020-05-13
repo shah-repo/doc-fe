@@ -5,16 +5,17 @@ import FBInput from "../common/FBInput";
 
 const FBLink: React.FunctionComponent<FBInputProps> = ({
   linkUrl = "https://",
-...props
+  disabled,
+  ...props
 }) => (
   <FBInput {...props} type="hyperlink">
     <Link
       component="button"
       variant="body2"
       rel="noopener"
-      style={{textAlign: "left"}}
+      style={{ textAlign: "left" }}
       onClick={() => {
-        window.open(linkUrl!.includes("http") ? linkUrl : `https://${linkUrl}`);
+        !disabled && window.open(linkUrl.includes("http") ? linkUrl : `https://${linkUrl}`);
       }}
     >
       {linkUrl}

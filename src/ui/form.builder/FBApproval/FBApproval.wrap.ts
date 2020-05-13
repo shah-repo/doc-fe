@@ -27,6 +27,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
     isDefined = false,
     approvers,
     approverGroups,
+    reviseDisabled,
     loading,
     ...props
   }: T) => {
@@ -34,7 +35,10 @@ export const withFBApproval = <T extends FBApprovalProps>(
     approvalFieldState = FB.useRef<FBApprovalState>(FBApprovalState);
     isApproved = approvalFieldState.isApproved;
     isDefined = !_.isEmpty(approvers) || !_.isEmpty(approverGroups);
-    disabled = !FBDRStore.isOutput || (FBDRStore.isOutput && !FBStore.docId);
+    disabled =
+      !FBDRStore.isOutput ||
+      (FBDRStore.isOutput && !FBStore.docId) ||
+      (reviseDisabled && FBStore.isRevised);
     const currentUser = store.getState().auth.user;
 
     function isApprover(approver: Employee | GroupRequestBody): boolean {
@@ -153,6 +157,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
       approvalConfig,
       approvers,
       approverGroups,
+      reviseDisabled,
       hasApproved,
       isApproved,
       isDefined,
