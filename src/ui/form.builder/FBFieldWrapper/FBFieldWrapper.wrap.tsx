@@ -15,6 +15,7 @@ export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
     topBarMargin = 0,
     bottomBarMargin = 0,
     designDisabled = false,
+    reviseDisabled,
     ...props
   }: T) => {
 
@@ -27,10 +28,9 @@ export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
     !state.markDownVisible && (bottomBarMargin = -3);
 
     const onMouseOver = () => {
-      if (state) {
-        !designDisabled && state.setToolsActive(true);
-        state.setAddToolActive(true);
-      }
+      state?.setAddToolActive(true);
+      if (designDisabled || (reviseDisabled && FBStore.isRevised)) { return; }
+      state?.setToolsActive(true);
     };
     const onMouseLeave = () => {
       state?.setToolsActive(false);

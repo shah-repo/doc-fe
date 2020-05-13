@@ -12,8 +12,16 @@ export interface FBApprovalConfig {
 }
 
 export type FBApprovalProps =
-& Pick<FBInputProps, "name" | "label" | "type" | "approvers" | "approverGroups" | "disabled" | "approveIsBlocking">
-& {
+& Pick<FBInputProps,
+| "name"
+| "label"
+| "type"
+| "approvers"
+| "approverGroups"
+| "disabled"
+| "approveIsBlocking"
+| "reviseDisabled"
+> & {
   onApprove?: (approver?: Employee | GroupRequestBody) => () => void;
   approvalConfig?: (approver?: Employee | GroupRequestBody) => FBApprovalConfig | undefined;
   approvalFieldState?: FBApprovalState;

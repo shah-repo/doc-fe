@@ -161,20 +161,43 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
 
 export const FBGroupEditorOptions: Dictionary<any[]> = {
   autocomplete: [
-    { value: "multiple", text: "form.builder.multi.select" }, {
-      value: "includeQRScan", text: "form.builder.include.qr.scan",
-    },
+    { value: "multiple", text: "form.builder.multi.select" },
+    { value: "includeQRScan", text: "form.builder.include.qr.scan" },
+    { value: "reviseDisabled", text: "form.builder.revise.disabled" },
   ],
-  mediaupload: [{ value: "isTemplate", text: "form.builder.is.template" }],
+  mediaupload: [
+    { value: "isTemplate", text: "form.builder.is.template" },
+    { value: "reviseDisabled", text: "form.builder.revise.disabled" },
+  ],
   select: [
     { value: "includeNone", text: "form.builder.include.none" },
     { value: "includeContext", text: "form.builder.include.other" },
+    { value: "reviseDisabled", text: "form.builder.revise.disabled" },
   ],
-  control: [{ value: "includeContext", text: "form.builder.include.note" }],
+  control: [
+    { value: "includeContext", text: "form.builder.include.note" },
+    { value: "reviseDisabled", text: "form.builder.revise.disabled" },
+  ],
   controlgroup: [
     { value: "includeContext", text: "form.builder.include.other" },
+    { value: "reviseDisabled", text: "form.builder.revise.disabled" },
+  ],
+  textfield: [
+    { value: "reviseDisabled", text: "form.builder.revise.disabled" },
+  ],
+  label: [
+    { value: "reviseDisabled", text: "form.builder.revise.disabled" },
+  ],
+  approval: [
+    { value: "approveIsBlocking", text: "form.builder.blocking" },
+    { value: "reviseDisabled", text: "form.builder.revise.disabled" },
   ],
 };
+
+export const omitReviseDisabledOption: string[] = [
+  "section",
+  "subsection",
+];
 
 export const omitLabelValidation: FBEditorElementType[] = [
   "action",

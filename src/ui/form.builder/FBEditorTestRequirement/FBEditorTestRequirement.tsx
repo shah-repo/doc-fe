@@ -2,6 +2,7 @@ import React from "react";
 import { FBAutocomplete } from "..";
 import requirementsOptions from "../../../data/requirementsOptions.json";
 import { FBLabelEditorProps } from "../components/editors/FBLabelEditor";
+import FBCheckboxGroup from "../components/inputs/FBCheckboxGroup";
 import FBTextField from "../components/inputs/FBTextField";
 
 const FBEditorTestRequirement: React.FunctionComponent<FBLabelEditorProps> = ({
@@ -13,6 +14,13 @@ const FBEditorTestRequirement: React.FunctionComponent<FBLabelEditorProps> = ({
       label="form.builder.testRequirement"
       name="testRequirement"
       options={requirementsOptions}
+    />
+    <FBCheckboxGroup
+      name="editor-additions"
+      label="form.builder.additions"
+      options={[
+        { value: "reviseDisabled", text: "form.builder.revise.disabled" },
+      ]}
     />
   </>
 );
