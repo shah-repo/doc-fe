@@ -28,14 +28,13 @@ import { FBApproval } from "../FBApproval";
 import { FBApprovalMatrix } from "../FBApprovalMatrix";
 import { FBAutocompleteAsync } from "../FBAutocompleteAsync";
 import { FBEditorApprovalField } from "../FBEditorApprovalField";
-import { FBEditorInlineApproval } from "../FBEditorInlineApproval";
 import { FBEditorInstructionsDocument } from "../FBEditorInstructionsDocument";
 import FBEditorParagraph from "../FBEditorParagraph/FBEditorParagraph";
+import { FBEditorRequestApproval } from "../FBEditorRequestApproval";
 import { FBEditorSelectDocument } from "../FBEditorSelectDocument";
 import { FBEditorSelectRequirement } from "../FBEditorSelectRequirement";
 import { FBEditorTestRequirement } from "../FBEditorTestRequirement";
 import { FBHelloSign } from "../FBHelloSign";
-import { FBInlineApproval } from "../FBInlineApproval";
 import { FBInstructionsDocument } from "../FBInstructionsDocument";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
@@ -78,7 +77,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   createlabel: FBLabelEditor,
   quantity: FBLabelEditor,
   timer: FBLabelEditor,
-  inlineapproval: FBEditorInlineApproval,
+  inlineapproval: FBEditorRequestApproval,
   instructionsdocument: FBEditorInstructionsDocument,
   selectdocument: FBEditorSelectDocument,
   selectrequirement: FBEditorSelectRequirement,
@@ -117,7 +116,6 @@ export const FBFieldComponent: Dictionary<any> = {
   createlabel: FBButton,
   quantity: FBQuantityField,
   timer: FBTimerField,
-  inlineapproval: FBInlineApproval,
   instructionsdocument: FBInstructionsDocument,
   selectdocument: FBSelectDocument,
   selectrequirement: FBSelectRequirement,

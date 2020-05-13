@@ -54,6 +54,7 @@ export class FBFormState extends FBSchemaState {
     if (!fieldName) {
       return;
     }
+    const prevValue = this.getFieldValue(fieldName);
     if (_.isUndefined(value) || value.length === 0) {
       this.omitFieldValue(fieldName);
     } else {
@@ -63,7 +64,6 @@ export class FBFormState extends FBSchemaState {
       });
     }
     if (withState) {
-      const prevValue = this.getFieldValue(fieldName);
       this.inputState.get(fieldName)?.setValue(prevValue);
       this.inputState.get(fieldName)?.setValue(value);
     }

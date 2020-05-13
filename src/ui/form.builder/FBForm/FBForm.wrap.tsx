@@ -22,7 +22,7 @@ export const withFBForm = <T extends FBFormProps>(
 
     React.useEffect(() => {
       initialValidation && formState && formState.validate();
-    }, [initialValidation]);
+    }, [initialValidation, formState]);
 
     return Component({
       ...(props as T),
