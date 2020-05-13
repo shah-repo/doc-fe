@@ -29,9 +29,9 @@ export class FBPOApprovalMatrixState {
     let values = {};
     const signatureStages = this.poam.approvalLevels
       .map((level) => level.signatures.map((sign) => sign.signatureStage));
-    const signaturesByStage = signatureStages.flat().map((level) => ({
+    const signaturesByStage = signatureStages.flat().map((level: number) => ({
       [`signature${level}.groups`]: groupOptions.filter((option) => {
-        const selectedGroupIds = approvalLevel.signatures[level as unknown as number - 1]?.groups
+        const selectedGroupIds = approvalLevel.signatures[level - 1]?.groups
         ?.map((group) => group.id);
         if (selectedGroupIds?.includes(option.value)) {
           return option;
@@ -40,7 +40,7 @@ export class FBPOApprovalMatrixState {
       }),
       [`signature${level}.employees`]: toMembersOptions(employees)
         .filter((option) => {
-          const selectedEmployeeIds = approvalLevel.signatures[level as unknown as number - 1]?.employees
+          const selectedEmployeeIds = approvalLevel.signatures[level - 1]?.employees
           ?.map((employee) =>
             employee.id);
           if (selectedEmployeeIds?.includes(option.value)) {

@@ -463,6 +463,7 @@
   "form.builder.template.message.retrieving": "Retrieving template from HelloSign, please wait...",
   "form.builder.template.message.loading": "Loading Template...",
   "form.builder.send.signature": "Send Signature Request",
+  "form.builder.signature.label": "Signature {number}",
   "form.builder.signature.sent": "Signature request sent",
   "form.builder.signature.cancelled": "Signature request cancelled successfully",
   "form.builder.signature.notification": "Please fill out fields for signature request and save document",

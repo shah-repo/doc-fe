@@ -39,7 +39,7 @@ const FBPOApprovalMatrixForm: React.FunctionComponent<FBPOApprovalMatrixFormProp
         {signatureStages?.map((level) => (
           <Box key={level} borderTop="1px solid lightgray">
             <Typography variant="h6" style={{ paddingTop: 20 }}>
-              <Text message={`Signature ${level}`}/>
+              <Text translation="form.builder.signature.label" values={{ number: level }} />
             </Typography>
             <AutocompleteField
               name={`${name}-formValues.signature${level}.groups`}
@@ -48,7 +48,7 @@ const FBPOApprovalMatrixForm: React.FunctionComponent<FBPOApprovalMatrixFormProp
               autocompleteProps={{
                 isMulti: true,
                 isClearable: true,
-                defaultValue: props.values[`${name}-formValues`][`signature${level}.groups`],
+                defaultValue: props.values[`${name}-formValues`]?.[`signature${level}.groups`],
               }}
             />
             <AutocompleteField
@@ -58,7 +58,7 @@ const FBPOApprovalMatrixForm: React.FunctionComponent<FBPOApprovalMatrixFormProp
               autocompleteProps={{
                 isMulti: true,
                 isClearable: true,
-                defaultValue: props.values[`${name}-formValues`][`signature${level}.employees`],
+                defaultValue: props.values[`${name}-formValues`]?.[`signature${level}.employees`],
               }}
             />
           </Box>) )}
