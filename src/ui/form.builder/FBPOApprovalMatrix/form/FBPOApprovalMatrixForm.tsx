@@ -48,7 +48,7 @@ const FBPOApprovalMatrixForm: React.FunctionComponent<FBPOApprovalMatrixFormProp
               autocompleteProps={{
                 isMulti: true,
                 isClearable: true,
-                defaultValue: props.values[`${name}-formValues.signature${level}.groups`],
+                defaultValue: props.values[`${name}-formValues`][`signature${level}.groups`],
               }}
             />
             <AutocompleteField
@@ -58,8 +58,7 @@ const FBPOApprovalMatrixForm: React.FunctionComponent<FBPOApprovalMatrixFormProp
               autocompleteProps={{
                 isMulti: true,
                 isClearable: true,
-                defaultValue: props.values[`${name}-formValues.signature${level}.employees`],
-
+                defaultValue: props.values[`${name}-formValues`][`signature${level}.employees`],
               }}
             />
           </Box>) )}

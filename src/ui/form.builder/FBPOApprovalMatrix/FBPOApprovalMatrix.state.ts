@@ -27,37 +27,37 @@ export class FBPOApprovalMatrixState {
 
   @action public setFormValues = (approvalLevel: POApprovalMatrixLevel, groupOptions, employees) => {
     let values = {};
-    const signatureStages = this.poam.approvalLevels.map((level) => level.signatures.map((sign) => sign.signatureStage));
+    const signatureStages = this.poam.approvalLevels
+      .map((level) => level.signatures.map((sign) => sign.signatureStage));
     const signaturesByStage = signatureStages.flat().map((level) => ({
-      [`${this.name}-formValues.signature${level}.groups`]: groupOptions.filter((option) => {
-        const selectedGroupIds = approvalLevel.signatures[level as unknown as number - 1]?.groups?.map((group) => group.id);
+      [`signature${level}.groups`]: groupOptions.filter((option) => {
+        const selectedGroupIds = approvalLevel.signatures[level as unknown as number - 1]?.groups
+        ?.map((group) => group.id);
         if (selectedGroupIds?.includes(option.value)) {
           return option;
         }
         return null;
       }),
-      [`${this.name}-formValues.signature${level}.employees`]: toMembersOptions(employees).filter((option) => {
-        const selectedEmployeeIds = approvalLevel.signatures[level as unknown as number - 1]?.employees?.map((employee) =>
-          employee.id);
-        if (selectedEmployeeIds?.includes(option.value)) {
-          return option;
-        }
-        return null;
-      }),
+      [`signature${level}.employees`]: toMembersOptions(employees)
+        .filter((option) => {
+          const selectedEmployeeIds = approvalLevel.signatures[level as unknown as number - 1]?.employees
+          ?.map((employee) =>
+            employee.id);
+          if (selectedEmployeeIds?.includes(option.value)) {
+            return option;
+          }
+          return null;
+        }),
     }));
     const signatures = Object.assign({}, ...signaturesByStage?.map((signature) => signature));
     values = {
-      [`${this.name}-formValues.name`]: approvalLevel.name,
-      [`${this.name}-formValues.limit`]: approvalLevel.limit,
+      name: approvalLevel.name,
+      limit: approvalLevel.limit,
       ...signatures,
     };
 
-    FBStore.setValues({
-      ...FBStore.getValues(),
-      ...values,
-    });
+    FBStore.setValue(`${this.name}-formValues`, values);
     this.updateFBStore();
-
   };
 
   @action public initialize = () => {

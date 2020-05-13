@@ -38,7 +38,6 @@ export const withFBPOApprovalMatrixForm = <T extends FBPOApprovalMatrixFormProps
         })),
       });
       props.closeDialog();
-      validateForm(values);
     };
 
     const validateForm = (values) => {
