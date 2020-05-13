@@ -95,7 +95,7 @@ export const withEditorRenderer =
       const removeEl = (mode === "create") ? 0 : 1;
       let newSchema = FBStore.getSchema();
       newSchema.splice(index, removeEl, schema);
-      if (type === "approval" || type === "instructionsmediaupload") {
+      if (type === "approval" || type === "inlineapproval") {
         newSchema.splice(index, 0, {
           type: "section",
           name: FB.uniqid(),
