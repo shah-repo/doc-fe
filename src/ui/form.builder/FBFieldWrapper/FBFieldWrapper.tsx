@@ -27,7 +27,7 @@ const FBFieldWrapper: React.FunctionComponent<FBFieldWrapperProps> = ({
       />
       <Box display="flex" flexDirection="row">
         <Box width="100%">{props.children}</Box>
-        {designDisabled && (
+        {!designDisabled && (
           <Box
             display="flex"
             width="0"

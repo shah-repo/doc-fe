@@ -14,7 +14,4 @@ export default (theme: Theme) =>
       paddingTop: theme.spacing(3),
       textAlign: "center",
     },
-    outputGrey: {
-      color: `${theme.palette.text.disabled}`,
-    },
   });

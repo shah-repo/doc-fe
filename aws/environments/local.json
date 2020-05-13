@@ -7,6 +7,7 @@
   "REACT_APP_AWS_BUCKET_PUBLIC": "doc-be-dev-public",
   "REACT_APP_AWS_REGION": "us-west-2",
   "REACT_APP_HELLOSIGN_TEST_MODE": "1",
-  "REACT_APP_HELLOSIGN_CLIENT_ID":"766f813cde9c349cc141a652c7bd025d",
-  "NODE_ENV": "development"
+  "REACT_APP_HELLOSIGN_CLIENT_ID": "766f813cde9c349cc141a652c7bd025d",
+  "NODE_ENV": "development",
+  "REACT_APP_ENV_NAME": "LOCAL"
 }

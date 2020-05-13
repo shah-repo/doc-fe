@@ -6,14 +6,20 @@ import { toastError } from "../../components/notifications";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import { PurchaseOrderItem } from "../FBPurchaseOrder/FBPurchaseOrder.types";
+import FBStore from "../stores/ui/FBStore";
 import { FBInputProps } from "../types/common";
 import { FBEditorElementType } from "../types/editor";
 
 export class FBPOReceiveState extends FBRequest<DocumentRevision, any>  {
+  public receivedItems: FBRequest<any, Dictionary<number>> = new FBRequest();
 
   public constructor(id: string) {
     super();
     this.setPOId(id);
+  }
+
+  @computed public get poDocumentId(): string | undefined {
+    return this.data?.document.id;
   }
 
   @computed public get docSchema(): FBInputProps[] | undefined {
@@ -64,6 +70,18 @@ export class FBPOReceiveState extends FBRequest<DocumentRevision, any>  {
     const url = urlTpl({ documentId: id });
     this.setUrl(url);
     this.fetch();
+  };
+
+  @action public fetchReceivedItems = () => {
+    const { document } = FBStore;
+    if (!document?.document?.id) {
+      return;
+    }
+
+    const urlTpl = _.template(FBEndpoint.ReceivedItemsQuantity);
+    const url = urlTpl({ documentId: document?.document?.id });
+    this.receivedItems.setUrl(url);
+    this.receivedItems.fetch();
   };
 }
 
