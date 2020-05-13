@@ -209,8 +209,7 @@ pipelines:
     release/20.11:
       - parallel:
           - step: *RUN_TESTS
-          - step: *RUN_LINTER
-          - step: *RUN_MIGRATION_TEST
+          # - step: *RUN_LINTER
           - step: *BUILD_DEMO
       - step: *DEPLOY_DEMO
 
