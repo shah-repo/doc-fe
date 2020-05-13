@@ -52,5 +52,10 @@
     "value": "approveIsBlocking",
     "text": "form.builder.blocking",
     "outputText": "form.builder.blocking"
+  }],
+  "requestapproval": [{
+    "value": "approveIsBlocking",
+    "text": "form.builder.blocking",
+    "outputText": "form.builder.blocking"
   }]
 }

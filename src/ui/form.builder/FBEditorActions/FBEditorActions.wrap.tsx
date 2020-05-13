@@ -1,7 +1,7 @@
 import _, { Dictionary } from "lodash";
 import React from "react";
 import { FBEditorActionsProps } from ".";
-import { FB, FBData } from "..";
+import { FB, FBData, FBSchemaProps } from "..";
 import { withFBValidation } from "../FBValidation/FBValidation.wrap";
 import { FBOptionProps } from "../types/common";
 
@@ -9,8 +9,9 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
   Component: React.FunctionComponent<T>
 ) => {
   const Comp = ({
-    onAddClick,
-    onCancelClick,
+    handleAdd,
+    handleCancel,
+    parentFormState,
     toStringRules,
     index = 0,
     type,
@@ -18,6 +19,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
   }: T) => {
 
     const { dialogState, workspaceState, formState } = FB.useStores();
+    const { isOutput } = workspaceState || {};
 
     function editorOptions(formValues: Dictionary<any> = {}): FBOptionProps[] | undefined {
       const { options } = formValues;
@@ -31,8 +33,8 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
     }
 
     function propertiesOptions(formValues?: Dictionary<any>): FBOptionProps[] | undefined {
-      const options = editorOptions(formValues) || [];
-      if (formValues?.editorProperties && type) {
+      const options = editorOptions(formValues);
+      if (options && formValues?.editorProperties && type) {
         _.map(FBData.editorProperties[type], (ep) => {
           if (_.includes(formValues.editorProperties, ep.value)) {
             const propOption = { ...ep, text: ep.outputText };
@@ -54,8 +56,19 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       }
     }
 
-    onAddClick = () => {
+    function handleAddOutput(formValues: FBSchemaProps) {
+      const { name } = formValues;
+      parentFormState?.setFieldValue(name, formValues, true);
+      dialogState?.closeDialog();
+    }
+
+    handleAdd = () => {
+      if (!type) { return; }
       const formValues = formState?.getValues();
+      if (isOutput) {
+        handleAddOutput(formValues);
+        return;
+      }
       const options = propertiesOptions(formValues);
       additionalSchema();
       workspaceState?.setSchemaItemAt({
@@ -70,12 +83,12 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       dialogState?.closeDialog();
     };
 
-    onCancelClick = () => dialogState?.closeDialog();
+    handleCancel = () => dialogState?.closeDialog();
 
     return Component({
       ...(props as T),
-      onAddClick,
-      onCancelClick,
+      handleAdd,
+      handleCancel,
       type,
     });
   };

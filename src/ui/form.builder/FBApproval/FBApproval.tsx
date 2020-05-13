@@ -23,7 +23,7 @@ const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
     <FBApprovalSocket />
     {isDefined && (
       <Typography variant="button" display="block" style={{ color: "rgb(120, 138, 156)" }}>
-        {label}
+        {<Text message={label as string} />}
         {loading && (
           <Box ml={1} component="span">
             <CircularProgress size={16} />

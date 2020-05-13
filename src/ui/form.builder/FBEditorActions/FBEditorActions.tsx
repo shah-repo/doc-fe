@@ -5,20 +5,20 @@ import { FBButton, FBSubmitButton } from "..";
 import { withFBEditorActions } from "./FBEditorActions.wrap";
 
 const FBEditorActions: React.FunctionComponent<FBEditorActionsProps> = ({
-  onAddClick,
-  onCancelClick,
+  handleAdd,
+  handleCancel,
 }) => (
   <Box display="flex" flexDirection="row-reverse" mx={3}>
     <FBSubmitButton
       variant="outlined"
       label="common.add"
-      onClick={onAddClick}
+      onClick={handleAdd}
       autoFocus
     />
     <FBButton
       variant="outlined"
       label="common.cancel"
-      onClick={onCancelClick}
+      onClick={handleCancel}
     />
   </Box>
 );

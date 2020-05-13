@@ -30,12 +30,12 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
         if (!schema) { return disabled; }
         const item =  schema[current];
         const { type, name } = item;
-        if (type === "inlineapproval" || type === "approval") {
+        if (type === "requestapproval" || type === "approval") {
           const activeConfig = type === "approval" ? item : formState?.getFieldValue(name);
           const { approveIsBlocking = false } = activeConfig || {};
           let hasValue = type === "approval"
             ? formState?.getFieldValue(name)
-            : formState?.getFieldValue(`${FBFieldName.InlineApproval}${name}`);
+            : formState?.getFieldValue(`${FBFieldName.RequestApproval}${name}`);
           hasValue = Boolean(hasValue);
           if (approveIsBlocking && !hasValue) {
             disabled = true;

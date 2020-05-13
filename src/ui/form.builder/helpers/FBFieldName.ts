@@ -1,7 +1,7 @@
 export enum FBFieldName {
   Context = "input-context",
   EditorProps = "editorProperties",
-  InlineApproval = "fb-inline-",
+  RequestApproval = "fb-request-",
   TemplateName = "fb-template-name",
   ApproveReasoning = "-reasoning"
 }
