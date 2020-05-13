@@ -126,9 +126,9 @@ definitions:
         script:
           - ./aws/bash_scripts/publish.sh "prod"
         trigger: manual
-#
-# SANDBOX
-#
+    #
+    # SANDBOX
+    #
     - step: &BUILD_SANDBOX
         <<: *COMMON_BUILD
         name: Building for Sandbox
@@ -138,7 +138,7 @@ definitions:
           - compiled.tar.gz
 
     - step: &DEPLOY_SANDBOX
-        <<: *COMMON_DEPLOY 
+        <<: *COMMON_DEPLOY
         name: Deploy to Sandbox
         deployment: Sandbox
         script:
@@ -199,24 +199,16 @@ pipelines:
           - step: *BUILD_DEV
       - step: *DEPLOY_DEV
 
+    sandbox:
+      - parallel:
+          - step: *RUN_TESTS
+          # - step: *RUN_LINTER
+          - step: *BUILD_SANDBOX
+      - step: *DEPLOY_SANDBOX
+
     ENC-2434_fb_cr:
       - parallel:
           - step: *RUN_TESTS
           # - step: *RUN_LINTER
           - step: *BUILD_DEV2
       - step: *DEPLOY_DEV2
-
-    release/20.10:
-      - parallel:
-          - step: *RUN_TESTS
-          # - step: *RUN_LINTER
-          - step: *BUILD_DEMO
-      - step: *DEPLOY_DEMO
-
-
-    release/20.9:
-      - parallel:
-          - step: *RUN_TESTS
-          # - step: *RUN_LINTER
-          - step: *BUILD_SANDBOX
-      - step: *DEPLOY_SANDBOX

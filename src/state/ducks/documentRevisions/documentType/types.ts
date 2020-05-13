@@ -2,7 +2,7 @@ import { FBSchemaProps } from "../../../../ui/form.builder";
 import { Nullable } from "../../common";
 import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST } from "./constants";
 
-export type DocumentGroupType = "FORM" | "OTHER" | "RECORD" | "DAM" | "MPI" | "DYNAMIC_FORM";
+export type DocumentGroupType = "FORM" | "OTHER" | "RECORD" | "DAM" | "MPI" | "DYNAMIC_FORM" | "POAM" | "PO";
 export type DocumentGroupOptionsType = "FORM" | "DAM" | "BE_OUTPUT" | "HAVE_OUTPUT" | "RECORD" | "ONE_ITEM" | "DYNAMIC_FORM";
 export interface PageDetailsColumn {
   label: string;

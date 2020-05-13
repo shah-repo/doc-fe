@@ -19,7 +19,7 @@ export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
   }: T) => {
 
     const { workspaceState } = FB.useStores();
-    const { index = 0, designDisabled = false } = inputProps || {};
+    const { index = 0, designDisabled = false, reviseDisabled = false } = inputProps || {};
     fieldWrapperState = FB.useRef<FBFieldWrapperState>(FBFieldWrapperState);
 
     const { label, type, includeQRScan } = workspaceState?.getSchemaItemAt(index) || {};
@@ -30,10 +30,9 @@ export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
     }
 
     const onMouseOver = () => {
-      if (fieldWrapperState) {
-        !designDisabled && fieldWrapperState.setToolsActive(true);
-        fieldWrapperState.setAddToolActive(true);
-      }
+      fieldWrapperState?.setAddToolActive(true);
+      if (designDisabled || (reviseDisabled && workspaceState?.isRevised)) { return; }
+      fieldWrapperState?.setToolsActive(true);
     };
     const onMouseLeave = () => {
       fieldWrapperState?.setToolsActive(false);

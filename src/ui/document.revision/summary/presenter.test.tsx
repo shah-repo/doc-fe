@@ -1,9 +1,10 @@
 import { shallow } from "enzyme";
 import { Formik } from "formik";
 import React from "react";
+import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import { getDocumentRevision } from "../../../state/ducks/documentRevisions/tests/factories";
+import SummaryHeader from "../header/SummaryHeader";
 import ChangeRequestLink from "./changeRequestLink";
-import DocumentHeader from "./header";
 import { Presenter, Props } from "./presenter";
 import TrainingControl from "./training.control";
 
@@ -20,10 +21,17 @@ jest.mock("react-redux", () => ({
 
 describe("Presenter tests", () => {
   const defaultProps: Props = {
-    dataProp: { ...getDocumentRevision(), status: "RELEASED" },
+    canShowCreateVersionButton: true,
+    canChangeOwnerShip: true,
+    dataProp: { ...getDocumentRevision(), status: DocumentRevisionStatus.Released },
     classes: {
+      status: "",
+      root: "",
+      box: "",
+      headerContainer: "",
       previewBox: "",
-      submitBox: "",
+      crId: "",
+      trainingText: "",
     },
   };
 
@@ -33,7 +41,7 @@ describe("Presenter tests", () => {
 
   it("Set props correctly", () => {
     const wrapper = getWrapper();
-    expect(wrapper.find(DocumentHeader).prop("dataProp")).toEqual(defaultProps.dataProp);
+    expect(wrapper.find(SummaryHeader).prop("documentRevision")).toEqual(defaultProps.dataProp);
     expect(wrapper.find(ChangeRequestLink).prop("dataProp")).toEqual(defaultProps.dataProp);
     expect(wrapper.find(TrainingControl).prop("dataProp")).toEqual(defaultProps.dataProp.trainingRecords);
   });

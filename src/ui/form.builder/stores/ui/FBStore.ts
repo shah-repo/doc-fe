@@ -43,12 +43,10 @@ export class FormBuilderStore {
     FBAutocompleteAsyncStore.data.clear();
   };
 
-  // @action public sectionNumber = (endIndex: number): number => {
-  //   const sections = _.filter(this.getSchema(), (schemaItem, index) =>
-  //     endIndex > index && (schemaItem.type === "stepsection" || schemaItem.type === "teststep")
-  //   );
-  //   return _.size(sections) + 1;
-  // };
+  public get isRevised(): boolean | undefined {
+    const { version, revision, outputRevision } = this.document;
+    return ((version > 1) && (revision > 1)) || outputRevision;
+  }
 
   @action public setMode = (mode: FBWorkspaceMode) => {
     this.mode = mode;

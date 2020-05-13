@@ -9,15 +9,12 @@ import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/do
 import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
-import OwnerChanger from "../../components/common/owner.changer/container";
-import { RequestType } from "../../components/common/owner.changer/helpers/types";
 import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
-import ControlsContainer from "../../documentRevision/PreviewControls.container";
 import { FBSchemaProps, FBWorkspace } from "../../form.builder";
+import SummaryHeader from "../header/SummaryHeader";
 import Attachment from "./attachment";
 import ChangeRequestLink from "./changeRequestLink";
-import DocumentHeader from "./header";
 import ReferencedByContainer from "./referencedBy.container";
 import ReferenceToContainer from "./referenceTo.container";
 import styles from "./styles";
@@ -71,7 +68,11 @@ export const Presenter: React.FunctionComponent<Props> = ({
 
   const contentRenderer = () => (
     <Box>
-      <DocumentHeader dataProp={dataProp} />
+      <SummaryHeader
+        documentRevision={dataProp}
+        canChangeOwnerShip={canChangeOwnerShip}
+        canShowCreateVersionButton={canShowCreateVersionButton}
+      />
       <Grid
         container={true}
         className={classes.previewBox}
@@ -120,19 +121,6 @@ export const Presenter: React.FunctionComponent<Props> = ({
           />
         </Box>
       )}
-      <Box flexDirection={document.canAccess ? "row-reverse" : "row"} display="flex" px={3}>
-        {canChangeOwnerShip && (
-          <OwnerChanger
-            requestId={id}
-            requestType={RequestType.Document}
-          />
-        )}
-        <ControlsContainer
-          documentRevision={dataProp}
-          canShowCreateVersionButton={canShowCreateVersionButton}
-          hasAccess={document.canAccess}
-        />
-      </Box>
     </Box>
   );
 
