@@ -1,46 +1,33 @@
-import { Chip, createStyles, Grid, makeStyles, Theme, Typography } from "@material-ui/core";
+import { Chip, Grid, Typography } from "@material-ui/core";
+import classNames from "classnames";
 import React from "react";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 import Text from "../../components/Text";
+import { styles } from "./DocumentListInfo.styles";
 
 export interface Props {
   documentRevision: DocumentRevision;
 }
 
-export const styles = makeStyles((theme: Theme) =>
-  createStyles({
-    status: {
-      color: "#8A9DAD",
-      background: "#F2F4F6",
-      padding: "15px 5px",
-      borderRadius: "3px",
-      fontWeight: "bold",
-      marginRight: theme.spacing(2),
-    },
-    statusIcon: {
-      background: "#8A9DAD",
-      borderRadius: "50%",
-      width: "8px",
-      height: "8px",
-    },
-    id: {
-      fontWeight: "bold",
-      marginRight: theme.spacing(2),
-    },
-  },
-  ));
-
 export const DocumentListInfo: React.FunctionComponent<Props> = ({
   documentRevision,
 }) => {
   const classes = styles();
+  const isStatusReleased = documentRevision.status === DocumentRevisionStatus.Released;
+  const statusIcon = () =>
+    <div className={classNames(classes.statusIconDefault, {
+      [classes.statusIconReleased]: isStatusReleased,
+    })}/>;
+
   return (
     <Grid container={true} xs={6} alignItems="center">
       <Chip
         label={<Text message={documentRevision.status} />}
         id="DocumentListInfo-status"
-        className={classes.status}
-        icon={<div className={classes.statusIcon}/>}
+        className={classNames(classes.statusDefault, {
+          [classes.statusReleased]: isStatusReleased,
+        })}
+        icon={statusIcon()}
       />
       <Typography variant="h6" id="DocumentListInfo-docId" className={classes.id} >
         {documentRevision.document.docId}

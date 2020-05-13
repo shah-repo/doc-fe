@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/camelcase */
 export enum Colors {
-  white = "#fff",
+  white = "#FFF",
   black = "#000",
   // gray
-  light_gray = "#ccc",
-  medium_gray = "#8A9DAD",
-  gray = "#474747",
+  light_gray = "#F2F4F6",
+  medium_gray = "#D4DBE1",
+  gray = "#8A9DAD",
+  dark_gray = "#474747",
   // "#b4c0ca",
   // "#e8e9ed", Need this grey for scroll on company switch
   // "#ADB6D8"
@@ -26,13 +27,14 @@ export enum Colors {
   light_blue = "#DBE9FF",
   blue = "#0066FF",
   // red
-  red = "c40000",
+  red = "#c40000",
   dark_red = "#a10808",
   // "#d31b1b"
   // purple
   deep_purple = "#29064C",
   purple = "#99c",
   // green
+  light_green = "#BED948",
   green = "#16bd23",
 }
 

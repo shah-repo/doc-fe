@@ -3,15 +3,16 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import React from "react";
 import { DRAWER_WIDTH } from "../../app/NavigationLink.styles";
+import Colors from "../../layout/theme/utils/colors";
 
 export const styles = makeStyles(() =>
   createStyles({
     appbar: {
-      backgroundColor: "#fff",
+      backgroundColor: Colors.white,
     },
     toolbar: {
       marginLeft: DRAWER_WIDTH,
-      borderBottom: `1px solid ${"#D4DBE1"}`,
+      borderBottom: `1px solid ${Colors.medium_gray}`,
     },
   },
   ));
