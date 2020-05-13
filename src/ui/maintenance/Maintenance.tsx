@@ -17,7 +17,7 @@ export const Maintenance: React.FunctionComponent = () => (
         }}
       >
         <p>
-          <Text translation="maintenance.inconvinience" />
+          <Text translation="maintenance.inconvenience" />
         </p>
       </div>
     </article>
