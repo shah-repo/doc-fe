@@ -9,10 +9,13 @@ export const styles = makeStyles(() =>
   createStyles({
     appbar: {
       backgroundColor: Colors.white,
+      position: "fixed",
+      top: "45px",
     },
     toolbar: {
       marginLeft: DRAWER_WIDTH,
       borderBottom: `1px solid ${Colors.medium_gray}`,
+      minHeight: "60px",
     },
   },
   ));
@@ -21,7 +24,7 @@ const Header: React.FunctionComponent = ({ children }) => {
   const classes = styles();
 
   return (
-    <AppBar position="fixed" color="primary" className={classes.appbar}>
+    <AppBar color="primary" className={classes.appbar}>
       <Toolbar className={classes.toolbar}>
         <Grid container={true}>
           {children}

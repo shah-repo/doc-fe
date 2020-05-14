@@ -1,53 +1,43 @@
 import { Grid } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
-import Button from "@material-ui/core/Button";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
+import { Nullable } from "../../state/ducks/common/types";
 import Text from "../components/Text";
-import { Translation } from "../translations/types";
 import UserProfileContainer from "../user.management/profile/UserProfile.container";
 import styles from "./Header.styles";
+import UserAvatar from "./UserMenu/UserAvatar";
+import UserMenu from "./UserMenu/UserMenu.container";
 
 interface Props extends WithStyles<typeof styles> {
   email: string;
   name: string;
-  pageTitle: Translation;
-  onLogout: () => void;
-  openUserProfile: () => void;
   closeUserProfile: () => void;
   showUserProfile: boolean;
+  avatar: Nullable<string>;
 }
 
 const Header: React.FunctionComponent<Props> = ({
   classes,
-  onLogout,
   name,
-  pageTitle,
-  openUserProfile,
   closeUserProfile,
   showUserProfile,
+  avatar,
 }) => (
   <AppBar position="fixed" color="primary" className={classes.appBar}>
-    <Toolbar>
+    <Toolbar className={classes.toolbar}>
       <Grid
         container={true}
-        spacing={10}
-        justify="space-between"
-        alignItems="center"
+        alignItems="flex-end"
+        justify="flex-end"
       >
         <Grid item={true} xs={6}>
-          {pageTitle !== "translation.unknown" ? (
-            <Typography variant="h6">
-              <Text translation={pageTitle} />
-            </Typography>
-          ) : null}
-        </Grid>
-        <Grid item={true} xs={6}>
           <Grid container={true} justify="flex-end" alignItems="center">
+            <UserAvatar avatar={avatar}/>
             <Typography
-              id="welcomeHeader"
+              id="Header-welcomeText"
               variant="caption"
               className={classes.welcomeText}
               noWrap={true}
@@ -55,18 +45,15 @@ const Header: React.FunctionComponent<Props> = ({
               <Text translation="header.welcome" />,
             </Typography>
               &nbsp;
-            <Button
+            <Typography
+              id="Header-userName"
+              variant="caption"
               className={classes.name}
-              id="Header-userProfile"
-              color="primary"
-              variant="text"
-              onClick={openUserProfile}
+              noWrap={true}
             >
-              <Text translation="header.name" values={{ name }} />
-            </Button>
-            <Button id="logoutButton" color="primary" variant="text" onClick={onLogout}>
-              <Text translation="header.logout" />
-            </Button>
+              {name}
+            </Typography>
+            <UserMenu/>
             <UserProfileContainer
               closeUserProfile={closeUserProfile}
               showUserProfile={showUserProfile}

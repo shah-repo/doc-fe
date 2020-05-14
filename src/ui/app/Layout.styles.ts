@@ -4,13 +4,17 @@ import { DRAWER_WIDTH } from "./Navigation.styles";
 export default (theme: Theme) =>
   createStyles({
     content: {
-      position: "absolute",
-      left: DRAWER_WIDTH,
-      top: 64,
-      bottom: 0,
-      right: 0,
-      overflow: "auto",
-      padding: theme.spacing(4, 5),
-      backgroundColor: "white",
+      "position": "absolute",
+      "left": DRAWER_WIDTH,
+      "top": 64,
+      "bottom": 0,
+      "right": 0,
+      "overflow": "auto",
+      "padding": theme.spacing(4, 5),
+      "backgroundColor": "white",
+      "scrollbarWidth": "none",
+      "&::-webkit-scrollbar": {
+        display: "none",
+      },
     },
   });
