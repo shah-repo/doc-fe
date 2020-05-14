@@ -59,5 +59,38 @@
     "multiple": true,
     "rules": "required_with:validators.required_without",
     "validationMode": "visibility"
+  }, {
+    "type": "checkbox",
+    "name": "validators.required_document_status",
+    "label": "required_document_status:value",
+    "helperText": "Selected document must be in status."
+  }, {
+    "type": "autocomplete",
+    "name": "validators.required_document_status.name",
+    "label": "Document Status",
+    "rules": "required_with:validators.required_document_status",
+    "validationMode": "visibility",
+    "options": [{
+      "value": "DRAFT",
+      "text": "Draft"
+    }, {
+      "value": "PENDING_CHANGE",
+      "text": "Pending Change"
+    }, {
+      "value": "IN_REVIEW",
+      "text": "In Review"
+    }, {
+      "value": "RELEASED",
+      "text": "Released"
+    }, {
+      "value": "DEPRECATED",
+      "text": "Deprecated"
+    }, {
+      "value": "OBSOLETE",
+      "text": "Obsolete"
+    }, {
+      "value": "CANCELED",
+      "text": "Canceled"
+    }]
   }
 ]

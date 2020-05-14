@@ -36,7 +36,11 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
 
     function propertiesOptions(formValues?: Dictionary<any>): FBOption[] | undefined {
       if (!type) { return; }
-      let options = editorOptions(formValues) || [];
+      let options = editorOptions(formValues);
+      // TODO: dist editor options type
+      if (type === "autocomplete" || type === "autocompleteasync") {
+        return options;
+      }
       const { editorProperties = [] } = formValues || {};
       // TOD: optimize types
       options = (FBData.editorProperties[type] || []).reduce((acc, item) => {
@@ -52,7 +56,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
           acc = _.union(acc, [propOption]);
         }
         return acc;
-      }, options as FBEditorPropertiesOption[]);
+      }, options as FBEditorPropertiesOption[] || []);
 
       return options;
     }
