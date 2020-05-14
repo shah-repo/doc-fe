@@ -8,6 +8,8 @@ export type FBEditorPropertiesType =
 | "includeQRScan"
 | "reviseDisabled"
 | "approveIsBlocking";
+
+export const FBInlineEditorProperties = ["includeNone", "includeContext"];
 export type FBEditorPropertiesProps = Pick<FBInputProps, "type" | "options" | "onChange">;
 export type FBEditorPropertiesOption =
 & Pick<FBOption, "text">

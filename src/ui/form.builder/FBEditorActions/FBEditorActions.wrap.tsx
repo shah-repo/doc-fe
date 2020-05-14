@@ -37,9 +37,12 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
     function propertiesOptions(formValues?: Dictionary<any>): FBOption[] | undefined {
       if (!type) { return; }
       let options = editorOptions(formValues) || [];
+      const { editorProperties = [] } = formValues || {};
+      // TOD: optimize types
       options = (FBData.editorProperties[type] || []).reduce((acc, item) => {
         let { outputText: text } = item;
         const { value } = item;
+        if (!editorProperties.includes(value)) { return acc; }
         if (!text) { return acc; }
         isTranslation(text) && (text = intl.formatMessage({ id: text }));
         const propOption = { value, text };
