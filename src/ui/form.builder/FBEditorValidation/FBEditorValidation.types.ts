@@ -1,8 +1,8 @@
-import { FBFormProps, FBInputProps, FBWorkspaceProps } from "..";
+import { FBFormProps, FBInputProps, FBSchemaComponentProps } from "..";
 
 export type FBEditorValidationMode = "disabled" | "visibility";
 
 export type FBEditorValidationProps =
 & Pick<FBFormProps, "initialValues">
-& Pick<FBWorkspaceProps, "schema">
-& Pick<FBInputProps, "onChange">;
+& Pick<FBInputProps, "onChange">
+& Pick<FBSchemaComponentProps, "schema" | "schemaState">;

@@ -1,9 +1,10 @@
 import _, { Dictionary } from "lodash";
 import React from "react";
+import { useIntl } from "react-intl";
 import { FBEditorActionsProps } from ".";
-import { FB, FBData, FBSchemaProps } from "..";
+import { FB, FBData, FBEditorPropertiesOption, FBOption, FBSchemaProps } from "..";
+import { isTranslation } from "../../translations/types";
 import { withFBValidation } from "../FBValidation/FBValidation.wrap";
-import { FBOptionProps } from "../types/common";
 
 export const withFBEditorActions = <T extends FBEditorActionsProps>(
   Component: React.FunctionComponent<T>
@@ -20,30 +21,36 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
 
     const { dialogState, workspaceState, formState } = FB.useStores();
     const { isOutput } = workspaceState || {};
+    const intl = useIntl();
 
-    function editorOptions(formValues: Dictionary<any> = {}): FBOptionProps[] | undefined {
+    function editorOptions(formValues: Dictionary<any> = {}): FBOption[] | undefined {
       const { options } = formValues;
       if (!options || !_.isString(options)) {
         return options;
       }
-      return _.map((options).split("\n"), (text) => ({
+      return _.map((options.replace(/^\s+|\s+$/g, "")).split("\n"), (text) => ({
         value: _.kebabCase(text),
         text,
       }));
     }
 
-    function propertiesOptions(formValues?: Dictionary<any>): FBOptionProps[] | undefined {
-      const options = editorOptions(formValues);
-      if (options && formValues?.editorProperties && type) {
-        _.map(FBData.editorProperties[type], (ep) => {
-          if (_.includes(formValues.editorProperties, ep.value)) {
-            const propOption = { ...ep, text: ep.outputText };
-            ep.value === "includeNone"
-              ? options[0] = propOption
-              : options.push(propOption);
-          }
-        });
-      }
+    function propertiesOptions(formValues?: Dictionary<any>): FBOption[] | undefined {
+      if (!type) { return; }
+      let options = editorOptions(formValues) || [];
+      options = (FBData.editorProperties[type] || []).reduce((acc, item) => {
+        let { outputText: text } = item;
+        const { value } = item;
+        if (!text) { return acc; }
+        isTranslation(text) && (text = intl.formatMessage({ id: text }));
+        const propOption = { value, text };
+        if (value === "includeNone") {
+          _.first(options)?.value !== "includeNone" && (acc.splice(0, 0, propOption));
+        } else {
+          acc = _.union(acc, [propOption]);
+        }
+        return acc;
+      }, options as FBEditorPropertiesOption[]);
+
       return options;
     }
 
@@ -64,7 +71,10 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
 
     handleAdd = () => {
       if (!type) { return; }
-      const formValues = formState?.getValues();
+      const formValues = {
+        ...formState?.initialValues,
+        ...formState?.getValues(),
+      };
       if (isOutput) {
         handleAddOutput(formValues);
         return;

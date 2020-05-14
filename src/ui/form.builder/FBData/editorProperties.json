@@ -7,15 +7,9 @@
     "value": "includeQRScan",
     "text": "form.builder.include.qr.scan",
     "outputText": "form.builder.scan.qr"
-  }],
-  "autocompleteasync": [{
-    "value": "multiple",
-    "text": "form.builder.multi.select",
-    "outputText": "form.builder.multiple"
   }, {
-    "value": "includeQRScan",
-    "text": "form.builder.include.qr.scan",
-    "outputText": "form.builder.scan.qr"
+    "value": "reviseDisabled",
+    "text": "form.builder.revise.disabled"
   }],
   "select": [{
       "value": "includeNone",
@@ -26,36 +20,45 @@
       "value": "includeContext",
       "text": "form.builder.include.other",
       "outputText": "form.builder.other"
+    },
+    {
+      "value": "reviseDisabled",
+      "text": "form.builder.revise.disabled"
     }
   ],
   "checkbox": [{
     "value": "includeContext",
     "text": "form.builder.include.note",
     "outputText": "form.builder.note"
-  }],
-  "radio": [{
-    "value": "includeContext",
-    "text": "form.builder.include.note",
-    "outputText": "form.builder.note"
+  }, {
+    "value": "reviseDisabled",
+    "text": "form.builder.revise.disabled"
   }],
   "checkboxgroup": [{
     "value": "includeContext",
     "text": "form.builder.include.other",
     "outputText": "form.builder.other"
+  }, {
+    "value": "reviseDisabled",
+    "text": "form.builder.revise.disabled"
   }],
   "radiogroup": [{
     "value": "includeContext",
     "text": "form.builder.include.other",
     "outputText": "form.builder.other"
+  }, {
+    "value": "reviseDisabled",
+    "text": "form.builder.revise.disabled"
   }],
   "approval": [{
     "value": "approveIsBlocking",
-    "text": "form.builder.blocking",
-    "outputText": "form.builder.blocking"
+    "text": "form.builder.blocking"
+  }, {
+    "value": "reviseDisabled",
+    "text": "form.builder.revise.disabled"
   }],
-  "requestapproval": [{
-    "value": "approveIsBlocking",
-    "text": "form.builder.blocking",
-    "outputText": "form.builder.blocking"
+  "textfield": [{
+    "value": "reviseDisabled",
+    "text": "form.builder.revise.disabled"
   }]
 }

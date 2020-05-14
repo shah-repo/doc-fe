@@ -1,8 +1,8 @@
 import { flatten, unflatten } from "flat";
 import _, { Dictionary } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
-import { FBInputState } from "..";
-import { FBSchemaProps, FBSchemaState } from "../FBSchema";
+import { FBFormConstructor, FBInputState } from "..";
+import { FBSchemaState } from "../FBSchema";
 
 export class FBFormState extends FBSchemaState {
   public rules: Dictionary<string> = {};
@@ -14,22 +14,16 @@ export class FBFormState extends FBSchemaState {
   @observable public helpers = new Map<string, string>();
   @observable public inputState = new Map<string, FBInputState>();
 
-  public constructor(schema?: FBSchemaProps[]) {
+  public constructor({ schema, initialValues = {} }: FBFormConstructor) {
     super();
     this.schema = schema;
+    this.initialValues = initialValues;
+    this.values = initialValues;
   }
 
   @computed private get Validator(): any {
     return _.get(window, "EnlilRemoteValidators.validator");
   }
-
-  @action public setInitialValues = (values?: Dictionary<any>) => {
-    this.initialValues = values || {};
-    this.setValues({
-      ...this.initialValues,
-      ...this.values,
-    });
-  };
 
   @action public setValues = (values: Dictionary<any>) => {
     this.values = values;
@@ -45,7 +39,7 @@ export class FBFormState extends FBSchemaState {
       return defaultValue;
     }
     if (!_.get(this.values, fieldName) && !_.isUndefined(defaultValue)) {
-      this.initialValues[fieldName] = defaultValue;
+      (this.initialValues || {})[fieldName] = defaultValue;
     }
     return _.get(this.values, fieldName) || _.get(this.initialValues, fieldName);
   };
@@ -73,7 +67,8 @@ export class FBFormState extends FBSchemaState {
     if (!fieldName) {
       return;
     }
-    this.values = _.omit(this.values, fieldName);
+    this.initialValues = _.omit(this.initialValues, fieldName);
+    this.values = _.omit(this.getValues(), fieldName);
   };
 
   @action public setRules = (rules: Dictionary<string>) =>

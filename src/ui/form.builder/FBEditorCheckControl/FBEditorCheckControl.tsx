@@ -9,7 +9,7 @@ const FBEditorCheckControl: React.FunctionComponent<FBEditorProps> = ({
 }) => (
   <FBEditor {...props} {...{ inputProps }}>
     <FBTextField label="form.builder.label" name="label" rules="required"/>
-    <FBEditorProperties key={`fb-editor-prop-${type}-${index}`} {...{ type }} />
+    <FBEditorProperties key={`fb-editor-prop-${type}-${index}`} type="checkbox" />
     {children}
   </FBEditor>
 );

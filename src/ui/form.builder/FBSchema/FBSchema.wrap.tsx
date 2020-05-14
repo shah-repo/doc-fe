@@ -14,7 +14,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
     ...props
   }: T) => {
 
-    schemaState = FB.useRef<FBSchemaState>(FBSchemaState, schema);
+    !schemaState && (schemaState = FB.useRef<FBSchemaState>(FBSchemaState, schema));
     const { workspaceState } = FB.useStores();
 
     function controlRenderer(schemaItem: FBSchemaProps): React.ReactNode | undefined {

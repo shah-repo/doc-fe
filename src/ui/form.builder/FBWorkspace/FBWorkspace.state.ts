@@ -30,6 +30,11 @@ export class FBWorkspaceState extends FBSchemaState {
     return Boolean(docId && !_.isEmpty(docId));
   }
 
+  public get isRevised(): boolean | undefined {
+    const { version = 0, revision = 0, outputRevision = false } = this.document || {};
+    return ((version > 1) && (revision > 1)) || outputRevision;
+  }
+
   @computed public get active(): boolean {
     return this.mode !== "none";
   }
