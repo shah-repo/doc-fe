@@ -6,12 +6,9 @@ export default (theme: Theme) =>
       flexGrow: 1,
     },
     box: {
-      padding: theme.spacing(2, 0),
+      // padding: theme.spacing(2, 0),
     },
     previewBox: {
-      padding: theme.spacing(0, 3),
-      borderLeft: "1px solid #ccc",
-      borderRight: "1px solid #ccc",
       margin: 0,
       width: "100%",
     },

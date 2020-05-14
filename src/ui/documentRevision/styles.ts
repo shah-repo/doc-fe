@@ -8,6 +8,13 @@ export default (theme: Theme) =>
       margin: 0,
       width: "100%",
     },
+    iconButton: {
+      "margin": "8px 13px 13px 11px",
+      "&:hover": {
+        background: "#EDF4FF",
+        borderRadius: "5px",
+      },
+    },
     sidebar: {
       "&.MuiGrid-item.MuiGrid-grid-xs-2": {
         paddingTop: theme.spacing(12),

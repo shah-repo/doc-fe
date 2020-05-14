@@ -19,7 +19,6 @@ import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import FBStore from "../../form.builder/stores/ui/FBStore";
 import Attachment from "./attachment";
 import ChangeRequestLink from "./changeRequestLink";
-import DocumentHeader from "./header";
 import ReferencedByContainer from "./referencedBy.container";
 import ReferenceToContainer from "./referenceTo.container";
 import styles from "./styles";
@@ -68,7 +67,6 @@ export const Presenter: React.FunctionComponent<Props> = ({
 
   const contentRenderer = () => (
     <Box>
-      <DocumentHeader dataProp={dataProp} />
       <Grid
         container={true}
         className={classes.previewBox}
