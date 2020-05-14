@@ -24,7 +24,7 @@ const AssessmentFormVoidPresenter: React.FunctionComponent<Props> = ({
     <Button
       id="void"
       variant="outlined"
-      color="primary"
+      color="secondary"
       onClick={voidDocument}
       disabled={asyncState.status === AsyncStatus.Active}
     >

@@ -33,21 +33,6 @@ export default (theme: Theme) =>
       background: "#fff",
       padding: theme.spacing(3, 0),
     },
-    headerContainer: {
-      padding: "10px 0 60px",
-    },
-    status: {
-      color: "#fff",
-      background: theme.palette.text.hint,
-      padding: theme.spacing(2.2, 0.2),
-      minWidth: "110px",
-      borderRadius: "60px",
-      textAlign: "center",
-      fontSize: "0.7rem",
-    },
-    crId: {
-      color: theme.palette.text.hint,
-    },
     summaryContainer: {
       padding: theme.spacing(0, 4),
     },
