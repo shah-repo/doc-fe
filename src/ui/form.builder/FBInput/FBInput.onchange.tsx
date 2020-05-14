@@ -53,8 +53,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       }
 
       if (_.isArray(value)) {
-        value = _.difference(editorProperties, value as FBEditorPropertiesType[]);
-        value = _.isEmpty(value);
+        value = value.includes("includeContext");
       }
       inputState?.setIncludeContext(value);
     }

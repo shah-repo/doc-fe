@@ -30,7 +30,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
 
     poReceiveState = FB.useRef<FBPOReceiveState>(FBPOReceiveState, formValue);
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
-    disabled = disabled || Boolean(documentId);
+    disabled = disabled || !documentId;
 
     const handleItem = (item?: FBPurchaseOrderItem) => {
       if (!workspaceState?.documentId) {
