@@ -2,7 +2,7 @@
 import _ from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
-import { FBOption } from "..";
+import { FBInlineEditorProperties, FBOption } from "..";
 import { isTranslation } from "../../translations/types";
 import { FBInputProps, OmitInputClones } from "../FBInput";
 import { FB } from "../helpers";
@@ -56,7 +56,11 @@ export const withFBInput = <T extends FBInputProps>(
       let editorValue = "";
       options.reduce && (editorValue = options.reduce((acc, item) => {
         const { value, text } = item;
-        !editorProperties.includes(value) && (acc += `${text}\n`);
+        // TODO: optimize types
+        if (!FBInlineEditorProperties.includes(value) && !editorProperties.includes(value)) {
+          acc += `${text}\n`;
+        }
+        // !editorProperties.includes(value) && (acc += `${text}\n`);
         return acc;
       }, editorValue));
       return editorValue.replace(/^\s+|\s+$/g, "");
