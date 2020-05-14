@@ -59,7 +59,7 @@ DocumentRevisionUpdateContainerProps
     onSuccess: () => {
       setDoNotPrompt(true);
       if (documentId) {
-        loadDocument(documentId);
+        // loadDocument(documentId);
       }
     },
   });
@@ -81,6 +81,7 @@ DocumentRevisionUpdateContainerProps
       return;
     }
 
+    console.log(dataToSubmit);
     async.start(
       save,
       documentRevision.id,

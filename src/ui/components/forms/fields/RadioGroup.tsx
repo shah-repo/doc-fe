@@ -1,9 +1,8 @@
-import {
-  RadioGroup as MuiRadioGroup,
-} from "@material-ui/core";
+import { RadioGroup as MuiRadioGroup } from "@material-ui/core";
 import { RadioGroupProps as MuiRadioGroupProps } from "@material-ui/core/RadioGroup";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
+import { useFormContext } from "../FormContext";
 import ErrorMessage from "./ErrorMessage";
 import Field, { FieldOwnProps } from "./Field";
 
@@ -15,14 +14,29 @@ type RadioGroupPropsWithFormik = RadioGroupOwnProps & FormikFieldProps;
 
 const RadioGroup: React.FunctionComponent<RadioGroupPropsWithFormik> = ({
   radioGroupProps, children, ...fieldProps
-}) => (
-  <Field {...fieldProps}>
-    <ErrorMessage {...fieldProps} />
-    <MuiRadioGroup {...fieldProps.field} {...radioGroupProps}>
-      {children}
-    </MuiRadioGroup>
-  </Field>
-);
+}) => {
+  const { field, form } = fieldProps;
+  const { disableFieldSubmit } = useFormContext();
+
+  return (
+    <Field {...fieldProps}>
+      <ErrorMessage {...fieldProps} />
+      <MuiRadioGroup
+        {...fieldProps.field}
+        {...radioGroupProps}
+        onChange={(evt, value) => {
+          field.onChange(evt);
+          radioGroupProps?.onChange?.(evt, value);
+          if (!disableFieldSubmit) {
+            form.submitForm();
+          }
+        }}
+      >
+        {children}
+      </MuiRadioGroup>
+    </Field>
+  );
+};
 
 type RadioGroupFieldProps = RadioGroupOwnProps & FieldConfig;
 
