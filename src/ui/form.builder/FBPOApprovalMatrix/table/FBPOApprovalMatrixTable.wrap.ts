@@ -61,7 +61,7 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
       poamState?.setFormValues(item, groupOptions, employees);
       setIndex(index);
       setInitialValues({
-        [`${props.name}-formValues`]: FBStore.getValue(`${props.name}-formValues`),
+        [`${props.name}-formValues`]: { ...FBStore.getValue(`${props.name}-formValues`), id: item.id },
       });
       dialog.open();
     };
