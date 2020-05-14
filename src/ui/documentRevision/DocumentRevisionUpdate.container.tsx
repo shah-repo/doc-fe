@@ -1,13 +1,14 @@
-import React from "react";
+import { isEmpty } from "lodash";
+import React, { useMemo } from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
-import { DocumentRevision, documentRevisionsActions } from "../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionEditRequestBody, documentRevisionsActions } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";
 import useAsync from "../hooks/useAsync";
 import useDocumentTitle from "../hooks/useDocumentTitle";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
-import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
+import { compareValuesToSubmit, toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
 import { canEditDocumentRevision } from "./helpers";
 
@@ -49,6 +50,7 @@ DocumentRevisionUpdateContainerProps
   canChangeOwnerShip,
 }) => {
 
+  const initialValues = useMemo(() => toDocumentRevisionFormValues(documentRevision), [documentRevision]);
   const { docId } = documentRevision.document;
   useDocumentTitle(docId);
 
@@ -73,10 +75,16 @@ DocumentRevisionUpdateContainerProps
   }
 
   const onSubmit = (values: DocumentRevisionFormValues) => {
+    const dataToSubmit = compareValuesToSubmit(initialValues, values, toDocumentRevisionEditRequestBody);
+
+    if (isEmpty(dataToSubmit)) {
+      return;
+    }
+
     async.start(
       save,
       documentRevision.id,
-      toDocumentRevisionEditRequestBody(values),
+      dataToSubmit as DocumentRevisionEditRequestBody,
       async,
     );
   };
@@ -86,7 +94,7 @@ DocumentRevisionUpdateContainerProps
       doNotPrompt={doNotPrompt}
       asyncState={async.asyncState}
       onSubmit={onSubmit}
-      initialValues={toDocumentRevisionFormValues(documentRevision)}
+      initialValues={initialValues}
       onDirtyFlagChange={onDirtyFlagChange}
       documentRevision={documentRevision}
       canChangeOwnerShip={canChangeOwnerShip}
