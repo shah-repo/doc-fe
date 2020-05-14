@@ -1,5 +1,5 @@
-import { Box, Grid, IconButton, Typography, withStyles, WithStyles } from "@material-ui/core";
-import React, { useState } from "react";
+import { Box, Grid, IconButton, Slide, Typography, withStyles, WithStyles } from "@material-ui/core";
+import React, { useRef, useState } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { ReactComponent as BadgeIcon } from "../../assets/images/badge-15.svg";
@@ -57,6 +57,9 @@ DocumentRevisionManagerContainerProps
 }) => {
   useDocumentTitle(docId);
   const [sidebar, openSidebar] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>();
+
+  const inputRef = useRef(null);
 
   // const selectedDocument = useSelector((state: ApplicationState) =>
   //   documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId as string));
@@ -69,9 +72,40 @@ DocumentRevisionManagerContainerProps
   }
   // const canAccess = _.get(selectedDocument, "document.canAccess", []);
   // const docRevsWithoutCanceled = documentRevisions.filter((docrev) => docrev.status !== DocumentRevisionStatus.Canceled);
+
+  const renderSidebarItems = (title) => {
+    setTitle(title);
+  };
+
+  const sidebarList = [
+    {
+      icon: <NoteIcon />,
+      title: "Versions",
+    },
+    {
+      icon: <TimelineIcon />,
+      title: "History",
+    },
+    {
+      icon: <BadgeIcon />,
+      title: "Access Permissions",
+    },
+    {
+      icon: <BookmarkIcon />,
+      title: "Bookmarks",
+    },
+  ];
+
   const changeSize = () => {
     openSidebar(!sidebar);
+    renderSidebarItems(sidebarList[0].title);
+    if (inputRef && !sidebar) {
+      const input = inputRef.current as any;
+      input.focus();
+      return;
+    }
   };
+
   return (
     <Grid container={true} spacing={2} className={classes.whiteContainer}>
       {/* <Grid item={true} xs={2} className={classes.sidebar}>
@@ -126,47 +160,40 @@ DocumentRevisionManagerContainerProps
               paddingLeft: sidebar ? "none" : 4,
             }}>
             <Box borderBottom="1px solid lightgray" width="max-content" marginRight={1} >
-              <IconButton onClick={() => changeSize()} className={classes.iconButton}>
+              <IconButton onClick={() => changeSize()} className={classes.openButton}>
                 {sidebar ? <SidebarCloseIcon /> : <SidebarOpenIcon />}
               </IconButton>
             </Box>
-            <Box>
-              <IconButton onClick={() => changeSize()} className={classes.iconButton}>
-                <NoteIcon />
-              </IconButton>
-            </Box>
-            <Box>
-              <IconButton onClick={() => changeSize()} className={classes.iconButton}>
-                <TimelineIcon />
-              </IconButton>
-            </Box>
-            <Box>
-              <IconButton onClick={() => changeSize()} className={classes.iconButton}>
-                <BadgeIcon />
-              </IconButton>
-            </Box>
-            <Box>
-              <IconButton onClick={() => changeSize()} className={classes.iconButton}>
-                <BookmarkIcon />
-              </IconButton>
-            </Box>
+            {sidebarList.map((item) =>
+              <Box key={item.title}>
+                <IconButton
+                  ref={sidebarList[0].title === item.title ? inputRef : null}
+                  onClick={() => renderSidebarItems(item.title)}
+                  className={classes.iconButton}
+                >
+                  {item.icon}
+                </IconButton>
+              </Box>
+            )}
           </Grid>
-          <Grid
-            item={true}
-            xs={11}
-            style={{
-              display: sidebar ? "block" : "none",
-              padding: 0,
-              marginLeft: 78,
-              position: "fixed",
-              width: "265px",
-            }}>
-            <Box padding={2}>
-              <Typography variant="button">
-                <Text message={"Sara"} />
-              </Typography>
-            </Box>
-          </Grid>
+          <Slide direction="up" in={sidebar} mountOnEnter unmountOnExit>
+            <Grid
+              item={true}
+              xs={11}
+              style={{
+                display: sidebar ? "block" : "none",
+                padding: 0,
+                marginLeft: 78,
+                position: "fixed",
+                width: "265px",
+              }}>
+              <Box padding={2}>
+                <Typography variant="button">
+                  <Text message={title} />
+                </Typography>
+              </Box>
+            </Grid>
+          </Slide>
         </Grid>
       </Grid>
     </Grid>

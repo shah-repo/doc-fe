@@ -8,9 +8,18 @@ export default (theme: Theme) =>
       margin: 0,
       width: "100%",
     },
+    openButton: {
+      "margin": "8px 13px 13px 11px",
+      "&:hover, :focus": {
+        background: "#none",
+
+      },
+    },
     iconButton: {
       "margin": "8px 13px 13px 11px",
-      "&:hover": {
+      "paddingTop": "5px",
+      "paddingBottom": "5px",
+      "&:hover, &:focus, li.active > a": {
         background: "#EDF4FF",
         borderRadius: "5px",
       },
