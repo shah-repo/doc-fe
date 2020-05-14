@@ -23,7 +23,7 @@ export const withFBPOApprovalMatrixAddItem = <T extends FBPOApprovalMatrixAddIte
 
     const closeDialog = () => {
       dialog.close();
-      poamState?.clearFormValues();
+      poamState?.resetFormValues();
     };
 
     const onSubmit = (item) => {

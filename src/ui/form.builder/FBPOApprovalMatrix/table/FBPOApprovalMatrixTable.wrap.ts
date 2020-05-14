@@ -48,7 +48,7 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
       dialog.close();
       setIndex(undefined);
       setInitialValues(undefined);
-      poamState?.clearFormValues();
+      poamState?.resetFormValues();
     };
 
     const signatureStages = [1, 2, 3];
