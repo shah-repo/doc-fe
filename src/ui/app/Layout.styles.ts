@@ -12,6 +12,7 @@ export default (theme: Theme) =>
       "overflow": "auto",
       "padding": theme.spacing(4, 5),
       "backgroundColor": "white",
+      "scrollbarWidth": "none",
       "&::-webkit-scrollbar": {
         display: "none",
       },

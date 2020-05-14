@@ -5,6 +5,7 @@ import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
 import SyncAltOutlinedIcon from "@material-ui/icons/SyncAltOutlined";
 import React from "react";
+import { Nullable } from "../../../state/ducks/common";
 import SwitchCompanyButtonContainer from "../../components/icons/SwitchCompanyButton/SwitchCompanyButton.container";
 import Text from "../../components/Text";
 import { UserMenuContext } from "../Header.container";
@@ -12,7 +13,7 @@ import { UserMenuContext } from "../Header.container";
 interface Props {
   location: any;
   handleClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  anchorEl: null | HTMLElement;
+  anchorEl: Nullable<HTMLElement>;
   handleClose: () => void;
 }
 
