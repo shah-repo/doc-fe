@@ -7,7 +7,7 @@ const FBPOReceiveForm: React.FunctionComponent<FBPOReceiveFormProps> = ({
 }) => (
   <FBForm>
     <FBTextField
-      inputProps={{ type: "number" }}
+      inputProps={{ type: "number", min: "0" }}
       label="form.builder.quantity.received"
       name="received"
       rules="required"
