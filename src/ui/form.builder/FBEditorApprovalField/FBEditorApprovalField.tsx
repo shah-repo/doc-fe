@@ -32,7 +32,7 @@ const FBEditorApprovalField: React.FunctionComponent<FBEditorApprovalFieldProps>
       defaultValue={approverGroups}
       rules="required_without:approvers"
     />
-    <FBEditorProperties key={`fb-editor-props-${type}-${index}`} {...{ type }} />
+    <FBEditorProperties key={`fb-editor-props-${type}-${index}`} type="approval" />
     {children}
   </FBEditor>
 );

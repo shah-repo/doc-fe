@@ -11,7 +11,7 @@ const FBTimerField: React.FunctionComponent<FBTimerProps> = ({
       <FBTextField {...props} />
     </Box>
     <Box mt={3.4}>
-      <FBButton variant="outlined" label="form.builder.start.timer" />
+      <FBButton disabled={props.disabled} variant="outlined" label="form.builder.start.timer" />
     </Box>
   </Box>
 );

@@ -2,7 +2,7 @@ import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { isEmpty } from "lodash";
 import { observer } from "mobx-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
@@ -18,11 +18,11 @@ import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
 import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
+import FormHeader from "../../document.revision/header/FormHeader";
 import { documentDetailsPath } from "../../document.revision/utils/paths";
 import { FB } from "../../form.builder";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
-import DocRevActions from "./presenters/Actions";
 import Description from "./presenters/Description";
 import DocIdInput from "./presenters/DocIdInput";
 import DocumentSecurity from "./presenters/DocumentSecurity";
@@ -33,7 +33,6 @@ import References from "./presenters/References";
 import RetrainField from "./presenters/RetrainField";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
 import { DocumentRevisionFormValues } from "./types";
-
 
 export interface Props
   extends WithStyles<typeof styles>,
@@ -54,11 +53,20 @@ export interface Props
   FBContainer?: React.MutableRefObject<HTMLDivElement | null>;
 }
 
+interface FormHeaderContext {
+  documentRevision: DocumentRevision;
+  canChangeOwnerShip: boolean;
+  values: DocumentRevisionFormValues;
+  docInfo: any;
+  isDisabled: boolean;
+  asyncState: AsyncState;
+}
+export let FormHeaderContext = React.createContext<FormHeaderContext | undefined>(undefined);
+
 export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   classes,
   asyncState,
   initialValues,
-  handleChange,
   availableReferences,
   showRevisionTypeChange,
   proposedDocId,
@@ -82,6 +90,18 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 }) => {
 
   const { workspaceState } = FB.useStores();
+  const isDisabled: boolean = initialValues.id !== undefined;
+  const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
+
+  FormHeaderContext = React.createContext<FormHeaderContext | undefined>({
+    documentRevision,
+    canChangeOwnerShip,
+    values,
+    docInfo,
+    isDisabled,
+    asyncState,
+  });
+
   useEffect(() => {
     if (!values.id && !values.document?.documentType?.id && setDocId) {
       setDocId("");
@@ -101,10 +121,13 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const openReference = (documentId: string) => {
     window.open(documentDetailsPath(documentId), "_blank");
   };
-  const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
-  const isDisabled: boolean = initialValues.id !== undefined;
   const isdocRevStatusDraft =
     documentRevision?.status === DocumentRevisionStatus.Draft;
+
+  const hasOutput = useMemo(() => {
+    const documentType = documentTypesById[values.document?.documentType?.id || ""];
+    return documentType?.groupOptions?.includes("HAVE_OUTPUT");
+  }, [values.document?.documentType?.id]);
 
   useEffect(() => {
     if (isdocRevStatusDraft) {
@@ -134,6 +157,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       sm={isDisabled ? 12 : 10}
       xs={12}
     >
+      <FormHeader/>
       {
         workspaceState?.mode === "form" &&
         <DocumentRevisionOutputInfo formDocument={values.formDocument} />
@@ -190,7 +214,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           <DocumentSecurity />
         }
         {
-          workspaceState?.active && workspaceState.mode === "design" &&
+          workspaceState?.active && workspaceState.mode === "design" && hasOutput &&
           <FBActiveNoOutput
             docRevId={initialValues.id}
             status={documentRevision?.status}
@@ -209,14 +233,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <div ref={FBContainer} />
           </Box>
         }
-        <DocRevActions
-          documentRevision={documentRevision}
-          asyncState={asyncState}
-          docInfo={docInfo}
-          values={values}
-          canChangeOwnerShip={canChangeOwnerShip}
-          {...{ setValues }}
-        />
       </FormWrapper>
     </Grid>
   );

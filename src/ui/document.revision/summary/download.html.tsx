@@ -37,8 +37,8 @@ export const DownloadHTML: React.FunctionComponent<Props> = ({
       label="common.download.html"
       onClick={handleClick}
       asyncState={async.asyncState}
-      color="primary"
-      variant="text"
+      color="secondary"
+      variant="outlined"
     />
   );
 };

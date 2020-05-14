@@ -17,6 +17,7 @@ import { FBPurchaseOrder } from "../FBPurchaseOrder";
 import { FBQuantityField } from "../FBQuantityField";
 import { FBRadio } from "../FBRadio";
 import { FBRadioGroup } from "../FBRadioGroup";
+import { FBRequestApproval } from "../FBRequestApproval";
 import { FBSchemaSelect } from "../FBSchemaSelect";
 import { FBSection } from "../FBSection";
 import { FBSelect } from "../FBSelect";
@@ -69,6 +70,7 @@ export class FBSchemaState {
     checkpoint: FBButton,
     createlabel: FBButton,
     approval: FBApproval,
+    requestapproval: FBRequestApproval,
   };
 
   @observable public schema?: FBSchemaProps[];

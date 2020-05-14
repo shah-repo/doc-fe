@@ -42,7 +42,7 @@ export type FBInputType =
   | "createlabel"
   | "quantity"
   | "timer"
-  | "inlineapproval"
+  | "requestapproval"
   | "instructionsdocument"
   | "selectdocument"
   | "selectrequirement"

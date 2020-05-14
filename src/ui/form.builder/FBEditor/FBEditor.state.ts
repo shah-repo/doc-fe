@@ -11,6 +11,7 @@ import { FBEditorLabel } from "../FBEditorLabel";
 import { FBEditorMediaAlbum } from "../FBEditorMediaAlbum";
 import { FBEditorOptionGroup } from "../FBEditorOptionGroup";
 import { FBEditorParagraph } from "../FBEditorParagraph";
+import { FBEditorRequestApproval } from "../FBEditorRequestApproval";
 import { FBEditorSelectDocument } from "../FBEditorSelectDocument";
 import { FBEditorSelectRequirement } from "../FBEditorSelectRequirement";
 import { FBEditorTestRequirement } from "../FBEditorTestRequirement";
@@ -38,6 +39,7 @@ export class FBEditorState {
     "checkpoint",
     "createlabel",
     "poreceive",
+    "requestapproval",
   ];
 
   public static pickDefaultValue: FBInputType[] = [
@@ -54,6 +56,7 @@ export class FBEditorState {
     "checkpoint",
     "createlabel",
     "approval",
+    "requestapproval",
   ];
 
   public static pickStepIndex: FBInputType[] = ["stepsection", "teststep"];
@@ -90,6 +93,7 @@ export class FBEditorState {
     checkpoint: FBEditorLabel,
     createlabel: FBEditorLabel,
     approval: FBEditorApprovalField,
+    requestapproval: FBEditorRequestApproval,
   };
 
   @observable public mode?: FBEditorMode = "config";

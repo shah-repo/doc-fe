@@ -15,7 +15,7 @@ export const withFBOnChange = <T extends FBInputProps>(
   }: T) => {
 
     inputState = FB.useRef<FBInputState>(FBInputState);
-    const { workspaceState, formState, schemaState } = FB.useStores();
+    const { formState, schemaState, workspaceState } = FB.useStores();
 
     React.useEffect(() => {
       const defaultValue = formState?.getFieldValue(name);
@@ -85,7 +85,6 @@ export const withFBOnChange = <T extends FBInputProps>(
       if (!formState) {
         return;
       }
-
       function isSingleCheck() {
         return checkValue(ev);
       }

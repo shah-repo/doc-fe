@@ -16,13 +16,12 @@ export const withFBForm = <T extends FBFormProps>(
     ...props
   }: T) => {
 
-    formState = FB.useRef<FBFormState>(FBFormState, schema);
-    formState?.setInitialValues(initialValues);
+    formState = FB.useRef<FBFormState>(FBFormState, { schema, initialValues });
     formState && (formState.errorValidation = errorValidation);
 
     React.useEffect(() => {
       initialValidation && formState && formState.validate();
-    }, [initialValidation]);
+    }, [initialValidation, formState]);
 
     return Component({
       ...(props as T),
