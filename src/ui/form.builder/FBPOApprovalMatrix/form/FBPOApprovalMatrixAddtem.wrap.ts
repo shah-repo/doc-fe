@@ -32,7 +32,7 @@ export const withFBPOApprovalMatrixAddItem = <T extends FBPOApprovalMatrixAddIte
         limit: parseInt(item.limit, 10),
         id: item.id,
         signatures: item.signatures.map((it) => ({
-          id: item.id,
+          id: it.id,
           signatureStage: it.signatureStage,
           groups: it.groups,
           employees: it.employees,
