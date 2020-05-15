@@ -25,6 +25,7 @@
   "header.welcome": "Welcome",
   "header.name": "{name}",
   "header.logout": "Logout",
+  "header.menu.my.profile": "My profile",
   "navigation.dashboard": "Dashboard",
   "navigation.documents": "Documents",
   "navigation.document.list": "Document List",

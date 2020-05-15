@@ -34,6 +34,11 @@ export const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
+        getContentAnchorEl={null}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
       >
         {children.map((menuItem, index) =>
           <MenuItem
