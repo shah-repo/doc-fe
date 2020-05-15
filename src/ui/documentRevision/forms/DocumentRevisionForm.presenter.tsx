@@ -18,12 +18,12 @@ import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
 import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
+import FormHeader from "../../document.revision/header/FormHeader";
 import { documentDetailsPath } from "../../document.revision/utils/paths";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import FBStore from "../../form.builder/stores/ui/FBStore";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
-import DocRevActions from "./presenters/Actions";
 import Description from "./presenters/Description";
 import DocIdInput from "./presenters/DocIdInput";
 import DocumentSecurity from "./presenters/DocumentSecurity";
@@ -35,7 +35,6 @@ import References from "./presenters/References";
 import RetrainField from "./presenters/RetrainField";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
 import { DocumentRevisionFormValues } from "./types";
-
 
 export interface Props
   extends WithStyles<typeof styles>,
@@ -54,11 +53,20 @@ export interface Props
   type?: string;
 }
 
+interface FormHeaderContext {
+  documentRevision: DocumentRevision;
+  canChangeOwnerShip: boolean;
+  values: DocumentRevisionFormValues;
+  docInfo: any;
+  isDisabled: boolean;
+  asyncState: AsyncState;
+}
+export let FormHeaderContext = React.createContext<FormHeaderContext | undefined>(undefined);
+
 export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   classes,
   asyncState,
   initialValues,
-  handleChange,
   availableReferences,
   showRevisionTypeChange,
   proposedDocId,
@@ -77,6 +85,18 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   setFieldValue,
   type,
 }) => {
+  const isDisabled: boolean = initialValues.id !== undefined;
+  const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
+
+  FormHeaderContext = React.createContext<FormHeaderContext | undefined>({
+    documentRevision,
+    canChangeOwnerShip,
+    values,
+    docInfo,
+    isDisabled,
+    asyncState,
+  });
+
   useEffect(() => {
     if (!values.id && !values.document?.documentType?.id) {
       FBDRStore.setMode("none");
@@ -99,8 +119,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const openReference = (documentId: string) => {
     window.open(documentDetailsPath(documentId), "_blank");
   };
-  const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
-  const isDisabled: boolean = initialValues.id !== undefined;
   const isdocRevStatusDraft =
     documentRevision?.status === DocumentRevisionStatus.Draft;
 
@@ -137,6 +155,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       sm={isDisabled ? 12 : 10}
       xs={12}
     >
+      <FormHeader/>
       {
         FBDRStore.isOutput &&
         <DocumentRevisionOutputInfo formDocument={values.formDocument} />
@@ -216,13 +235,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             />
           </Box>
         }
-        <DocRevActions
-          documentRevision={documentRevision}
-          asyncState={asyncState}
-          docInfo={docInfo}
-          values={values}
-          canChangeOwnerShip={canChangeOwnerShip}
-        />
       </FormWrapper>
     </Grid>
   );

@@ -9,14 +9,12 @@ import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/do
 import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
-import OwnerChanger from "../../components/common/owner.changer/container";
-import { RequestType } from "../../components/common/owner.changer/helpers/types";
 import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
-import ControlsContainer from "../../documentRevision/PreviewControls.container";
 import FBWorkspace from "../../form.builder/containers/workspace/FBWorkspace";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import FBStore from "../../form.builder/stores/ui/FBStore";
+import SummaryHeader from "../header/SummaryHeader";
 import Attachment from "./attachment";
 import ChangeRequestLink from "./changeRequestLink";
 import ReferencedByContainer from "./referencedBy.container";
@@ -67,6 +65,11 @@ export const Presenter: React.FunctionComponent<Props> = ({
 
   const contentRenderer = () => (
     <Box>
+      <SummaryHeader
+        documentRevision={dataProp}
+        canChangeOwnerShip={canChangeOwnerShip}
+        canShowCreateVersionButton={canShowCreateVersionButton}
+      />
       <Grid
         container={true}
         className={classes.previewBox}
@@ -113,19 +116,6 @@ export const Presenter: React.FunctionComponent<Props> = ({
           />
         </Box>
       )}
-      <Box flexDirection={document.canAccess ? "row-reverse" : "row"} display="flex" px={3}>
-        {canChangeOwnerShip && (
-          <OwnerChanger
-            requestId={id}
-            requestType={RequestType.Document}
-          />
-        )}
-        <ControlsContainer
-          documentRevision={dataProp}
-          canShowCreateVersionButton={canShowCreateVersionButton}
-          hasAccess={document.canAccess}
-        />
-      </Box>
     </Box>
   );
 

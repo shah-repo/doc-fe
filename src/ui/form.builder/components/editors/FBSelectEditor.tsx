@@ -6,7 +6,7 @@ import FBLabelEditor from "./FBLabelEditor";
 
 const FBSelectEditor: React.FunctionComponent<{}> = () => (
   <FBStepperEditor>
-    <FBLabelEditor />
+    <FBLabelEditor standalone={false} />
     <FBOptionsContainer />
     <FBAdditionsEditor type="select" contextLabel="form.builder.note" />
   </FBStepperEditor>

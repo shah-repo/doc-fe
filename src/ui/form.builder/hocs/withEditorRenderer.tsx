@@ -4,6 +4,7 @@ import _, { Dictionary } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { FB, FBTestStepState } from "..";
+import { isTranslation } from "../../translations/types";
 import FBButton from "../components/inputs/FBButton";
 import { FBFieldEditorComponent, omitLabelValidation, pickDefaultLabel } from "../defaults/editor";
 import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
@@ -123,8 +124,9 @@ export const withEditorRenderer =
       ? "form.builder.add.field"
       : "common.save";
 
-    if (_.get(props, "values.label")) {
-      _.set(props, "values.label", intl.formatMessage({ id: _.get(props, "values.label", "translation.unknown") }));
+    const defaulLabel = props.values.label;
+    if (defaulLabel && isTranslation(defaulLabel as string)) {
+      _.set(props, "values.label", intl.formatMessage({ id: defaulLabel as string }));
     }
 
     return (
@@ -132,7 +134,7 @@ export const withEditorRenderer =
         <InputType
           {..._.omit(props.values, "label")}
           {...(_.includes(pickDefaultLabel, type) && { defaultValue: _.get(props, "values.label") })}
-          {...{ index }}
+          {...{ index, type }}
         />
         <Box display="flex" flexDirection="row-reverse" mx={-1}>
           <FBButton label={buttonLabel} onClick={onClick} />

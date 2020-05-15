@@ -28,8 +28,8 @@ export class FBDocumentRevisionStore {
     const outputGroup = _.get(values, "formDocument.document.docId");
     FBStore.documentId = values.formDocument?.document?.id || values.document?.id || "";
     FBStore.docId = values.id || "";
+    FBStore.document = values as DocumentRevision;
     this.docSchema = values.document?.documentType?.schema || [];
-    FBStore.isRevised = values.outputRevision;
 
     switch (true) {
       // TEMPLATE FORM

@@ -4,7 +4,7 @@ import { FBStateProps } from "../helpers/FBStateProps";
 import { FBInputProps } from "../types/common";
 
 export type FBFieldWrapperProps =
-  & Pick<FBInputProps, "index" | "children" | "designDisabled">
+  & Pick<FBInputProps, "index" | "children" | "designDisabled" | "reviseDisabled">
   & Pick<BoxProps, "onMouseOver" | "onMouseLeave">
   & FBStateProps<FBFieldWrapperState>
   & {

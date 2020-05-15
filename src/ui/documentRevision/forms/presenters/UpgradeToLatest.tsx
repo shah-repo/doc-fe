@@ -9,21 +9,23 @@ import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
 import { getIsLastVersionObsolete } from "../../helpers";
 
-
 interface Props {
   documentStatus?: DocumentRevisionStatus;
   formDocumentId?: string;
   docRevId?: string;
   formDocumentStatus?: DocumentRevisionStatus;
+  shouldDisplay: boolean;
+  setShouldDisplay: (value: boolean) => void;
 }
-
 
 export const UpgradeToLatest: React.FunctionComponent<Props> = ({
   documentStatus,
   formDocumentId = "",
   docRevId,
   formDocumentStatus,
+  setShouldDisplay,
 }) => {
+
   const dispatch = useDispatch();
   const dialog = useDialog();
   const isFormStatusDeprecated = formDocumentStatus === DocumentRevisionStatus.Deprecated;
@@ -36,6 +38,7 @@ export const UpgradeToLatest: React.FunctionComponent<Props> = ({
     formDocuments && getIsLastVersionObsolete(formDocuments)
   , [formDocuments]);
 
+
   useEffect(() => {
     if (formDocumentId) {
       dispatch(documentRevisionsActions.loadDocument(formDocumentId));
@@ -43,12 +46,15 @@ export const UpgradeToLatest: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formDocumentId]);
 
+  useEffect(() => {
+    setShouldDisplay( isFormStatusDeprecated && isDocumentStatusDraftOrPending && !isLastVersionObsolete);
+  });
+
   const async = useAsync();
   const upgradeAction = useActionCreator(documentRevisionsActions.upgradeToReleasedForm);
   const onUpgradeClick = () => {
     async.start(upgradeAction, docRevId, async);
   };
-
 
   return (
     <>

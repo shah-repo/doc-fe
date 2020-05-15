@@ -13,6 +13,7 @@ const SortableItem = SortableElement(
         key={`${value.name}_${value.index}`}
         index={value.index}
         designDisabled={value.designDisabled}
+        reviseDisabled={value.reviseDisabled}
       >
         {wrapperRenderer(value)}
       </FBFieldWrapper>

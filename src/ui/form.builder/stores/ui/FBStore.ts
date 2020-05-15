@@ -37,11 +37,15 @@ export class FormBuilderStore {
   public documentId = "";
   public stepSectionReg = /#([1-9][0-9]?|100)$/;
   public document: DocumentRevision = {} as DocumentRevision;
-  public isRevised? = false;
 
   public clearStores = () => {
     FBAutocompleteAsyncStore.data.clear();
   };
+
+  public get isRevised(): boolean | undefined {
+    const { version, revision, outputRevision } = this.document;
+    return ((version > 1) && (revision > 1)) || outputRevision;
+  }
 
   @action public sectionNumber = (endIndex: number): number => {
     const sections = _.filter(this.getSchema(), (schemaItem, index) =>

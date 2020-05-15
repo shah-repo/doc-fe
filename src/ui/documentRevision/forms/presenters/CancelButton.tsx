@@ -1,5 +1,6 @@
 import { Button } from "@material-ui/core";
 import * as React from "react";
+import { useEffect } from "react";
 import { documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
@@ -9,13 +10,21 @@ interface Props {
   documentStatus?: DocumentRevisionStatus;
   version?: number;
   docRevId?: string;
+  shouldDisplay: boolean;
+  setShouldDisplay: (value: boolean) => void;
 }
 
 const CancelButton: React.FunctionComponent<Props> = ({
   documentStatus,
   version = 0,
   docRevId,
+  shouldDisplay,
+  setShouldDisplay,
 }) => {
+  useEffect(() => {
+    setShouldDisplay(canShowCancelButton);
+  });
+
   const async = useAsync();
   const cancelDraft = useActionCreator(documentRevisionsActions.cancelDraft);
   const handleCancelDraft = () => {
