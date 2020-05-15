@@ -1,5 +1,6 @@
 
 import { isString } from "lodash";
+import { intercept } from "mobx";
 import React from "react";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
@@ -46,6 +47,14 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
         }
       }
     };
+
+    intercept(formState?.values || {}, "received", (change) => {
+      const value = Number(change.newValue);
+      if (value < 0) {
+        change.newValue = Math.abs(value);
+      }
+      return change;
+    });
 
     return Component({
       ...(props as T),
