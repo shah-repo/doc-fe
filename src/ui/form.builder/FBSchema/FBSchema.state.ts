@@ -3,6 +3,7 @@ import { action, get, observable, set } from "mobx";
 import React from "react";
 import { FBSchemaProps } from ".";
 import { FBAutocompleteAsync, FBCheckboxGroup, FBEditorState, FBInputProps, FBInputType } from "..";
+import { FBActionField } from "../FBActionField";
 import { FBApproval } from "../FBApproval";
 import { FBButton } from "../FBButton";
 import { FBCheckbox } from "../FBCheckbox";
@@ -71,6 +72,7 @@ export class FBSchemaState {
     createlabel: FBButton,
     approval: FBApproval,
     requestapproval: FBRequestApproval,
+    action: FBActionField,
   };
 
   @observable public schema?: FBSchemaProps[];

@@ -9,11 +9,12 @@ export type FBEditorPropertiesType =
 | "reviseDisabled"
 | "approveIsBlocking";
 
-export const FBInlineEditorProperties = ["includeNone", "includeContext"];
 export type FBEditorPropertiesProps = Pick<FBInputProps, "type" | "options" | "onChange">;
+
 export type FBEditorPropertiesOption =
 & Pick<FBOption, "text">
 & {
-  value: FBEditorPropertiesType;
+  value?: string;
   outputText?: string;
+  isOption?: boolean;
 };

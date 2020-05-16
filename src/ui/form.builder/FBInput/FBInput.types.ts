@@ -1,6 +1,6 @@
 import { BaseTextFieldProps } from "@material-ui/core";
 import { AutocompleteProps } from "@material-ui/lab/Autocomplete";
-import { FBEditorPropertiesType, FBInputState, FBLabelProps, FBOptionProps, FBSchemaState } from "..";
+import { FBEditorOptionsProps, FBEditorPropertiesType, FBInputState, FBLabelProps, FBOptionProps, FBSchemaState } from "..";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { FBEditorValidationMode } from "../FBEditorValidation";
@@ -53,6 +53,7 @@ export type FBInputType =
 export type FBInputProps =
 & FBLabelProps
 & FBOptionProps
+& FBEditorOptionsProps
 & Pick<AutocompleteProps, "multiple">
 & Pick<BaseTextFieldProps,
 | "children"
@@ -91,6 +92,7 @@ export type FBInputProps =
   approverGroups?: string[] | GroupRequestBody[];
   approveIsBlocking?: boolean;
   applicableOn?: any[];
+  actions?: string[];
 };
 
 export const OmitInputClones: FBInputType[] = ["fileupload"];

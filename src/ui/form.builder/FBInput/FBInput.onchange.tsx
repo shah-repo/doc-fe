@@ -94,7 +94,12 @@ export const withFBOnChange = <T extends FBInputProps>(
       }
 
       function isDefault() {
-        formState?.setFieldValue(name, _.get(ev.target, "value"));
+        const { type } = ev.target;
+        let { value } = ev.target;
+        if (type === "number") {
+          value = _.toNumber(value);
+        }
+        formState?.setFieldValue(name, value);
       }
 
       const changedValue = {

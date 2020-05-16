@@ -1,5 +1,5 @@
 import React from "react";
-import { FBAutocompleteAsync, FBEditor, FBEditorApprovalFieldProps, FBEditorLabel, FBEditorProperties } from "..";
+import { FBAutocompleteAsync, FBEditor, FBEditorApprovalFieldProps, FBEditorLabel } from "..";
 
 const FBEditorApprovalField: React.FunctionComponent<FBEditorApprovalFieldProps> = ({
   approverGroups,
@@ -9,7 +9,6 @@ const FBEditorApprovalField: React.FunctionComponent<FBEditorApprovalFieldProps>
   inputProps,
   includeDefaultValue,
   standalone = false,
-  inputProps: { type, index } = {},
   ...props
 }) => (
   <FBEditor {...props} {...{ inputProps }}>
@@ -32,7 +31,6 @@ const FBEditorApprovalField: React.FunctionComponent<FBEditorApprovalFieldProps>
       defaultValue={approverGroups}
       rules="required_without:approvers"
     />
-    <FBEditorProperties key={`fb-editor-props-${type}-${index}`} type="approval" />
     {children}
   </FBEditor>
 );

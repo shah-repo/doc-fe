@@ -1,9 +1,9 @@
 import React from "react";
-import { FBEditor, FBEditorPlaceholder, FBEditorProperties, FBEditorProps, FBTextField } from "..";
+import { FBEditor, FBEditorPlaceholder, FBEditorProps, FBTextField } from "..";
 
 const FBEditorTextField: React.FunctionComponent<FBEditorProps> = ({
   children,
-  inputProps: { type, index } = {},
+  inputProps: { type } = {},
   inputProps,
   ...props
 }) => (
@@ -17,7 +17,6 @@ const FBEditorTextField: React.FunctionComponent<FBEditorProps> = ({
       name="rows"
       key={`fb-editor-${type}`}
     />
-    <FBEditorProperties key={`fb-editor-props-${type}-${index}`} type="textfield" />
     {children}
   </FBEditor>
 );

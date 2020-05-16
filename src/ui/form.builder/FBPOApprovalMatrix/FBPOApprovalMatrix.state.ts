@@ -30,6 +30,7 @@ export class FBPOApprovalMatrixState {
     const signatureStages = this.poam.approvalLevels
       .map((level) => level.signatures.map((sign) => sign.signatureStage));
     const signaturesByStage = signatureStages.flat().map((level: number) => ({
+      id: approvalLevel.signatures[level - 1].id,
       [`signature${level}.groups`]: groupOptions.filter((option) => {
         const selectedGroupIds = approvalLevel.signatures[level - 1]?.groups
         ?.map((group) => group.id);
@@ -54,6 +55,7 @@ export class FBPOApprovalMatrixState {
       name: approvalLevel.name,
       limit: approvalLevel.limit,
       ...signatures,
+      ...signaturesByStage,
     };
 
     FBStore.setValue(`${this.name}-formValues`, values);
@@ -69,16 +71,13 @@ export class FBPOApprovalMatrixState {
   };
 
   @action public clearFormValues = () => {
+    FBStore.setValue(`${this.name}-formValues`, undefined);
     FBStore.setValue(`${this.name}-formValues.name`, undefined);
     FBStore.setValue(`${this.name}-formValues.limit`, undefined);
-    FBStore.setValue(`${this.name}-formValues.signatures`, undefined);
+  };
+
+  @action public resetFormValues = () => {
     FBStore.setValue(`${this.name}-formValues`, undefined);
-    FBStore.setValue(`${this.name}-formValues.signature1.groups`, undefined);
-    FBStore.setValue(`${this.name}-formValues.signature1.employees`, undefined);
-    FBStore.setValue(`${this.name}-formValues.signature2.groups`, undefined);
-    FBStore.setValue(`${this.name}-formValues.signature2.employees`, undefined);
-    FBStore.setValue(`${this.name}-formValues.signature3.groups`, undefined);
-    FBStore.setValue(`${this.name}-formValues.signature3.employees`, undefined);
   };
 
   private updateFBStore = () => {

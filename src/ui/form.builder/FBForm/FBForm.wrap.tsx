@@ -16,7 +16,7 @@ export const withFBForm = <T extends FBFormProps>(
     ...props
   }: T) => {
 
-    formState = FB.useRef<FBFormState>(FBFormState, { schema, initialValues });
+    !formState && (formState = FB.useRef<FBFormState>(FBFormState, { schema, initialValues }));
     formState && (formState.errorValidation = errorValidation);
 
     React.useEffect(() => {
