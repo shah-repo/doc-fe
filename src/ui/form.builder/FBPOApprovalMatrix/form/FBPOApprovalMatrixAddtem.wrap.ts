@@ -1,5 +1,4 @@
 import React from "react";
-import * as generateUuid from "uuid/v4";
 import { FB } from "../..";
 import useDialog from "../../../hooks/useDialog";
 import { FBPOApprovalMatrixAddItemProps } from "../FBPOApprovalMatrix.types";
@@ -23,7 +22,7 @@ export const withFBPOApprovalMatrixAddItem = <T extends FBPOApprovalMatrixAddIte
 
     const closeDialog = () => {
       dialog.close();
-      poamState?.clearFormValues();
+      poamState?.resetFormValues();
     };
 
     const onSubmit = (item) => {
@@ -31,9 +30,9 @@ export const withFBPOApprovalMatrixAddItem = <T extends FBPOApprovalMatrixAddIte
       poamState?.addItem({
         ...item,
         limit: parseInt(item.limit, 10),
-        id: generateUuid(),
+        id: item.id,
         signatures: item.signatures.map((it) => ({
-          id: generateUuid(),
+          id: it.id,
           signatureStage: it.signatureStage,
           groups: it.groups,
           employees: it.employees,
