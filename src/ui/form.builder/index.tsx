@@ -46,6 +46,7 @@ export { default as FBEditorLabel } from "./FBEditorLabel/FBEditorLabel";
 export { default as FBEditorMediaAlbum } from "./FBEditorMediaAlbum/FBEditorMediaAlbum";
 export { default as FBEditorOptionGroup } from "./FBEditorOptionGroup/FBEditorOptionGroup";
 export { default as FBEditorOptions } from "./FBEditorOptions/FBEditorOptions";
+export * from "./FBEditorOptions/FBEditorOptions.types";
 export { default as FBEditorParagraph } from "./FBEditorParagraph/FBEditorParagraph";
 export { default as FBEditorPlaceholder } from "./FBEditorPlaceholder/FBEditorPlaceholder";
 export { default as FBEditorProperties } from "./FBEditorProperties/FBEditorProperties";

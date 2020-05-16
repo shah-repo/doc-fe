@@ -1,6 +1,6 @@
 import _ from "lodash";
 import React from "react";
-import { FB, FBEditorPropertiesProps } from "..";
+import { FB, FBData, FBEditorPropertiesProps } from "..";
 
 export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
   Component: React.FunctionComponent<T>,
@@ -8,10 +8,13 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
 
   const Comp = ({
     onChange,
+    options,
+    type,
     ...props
   }: T) => {
 
     const { formState } = FB.useStores();
+    type && (options = FBData.editorPropertiesByType(type));
 
     onChange = (ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       const [valueName, checked] = _.at(ev.target, ["value", "checked"]);
@@ -22,6 +25,8 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
     return Component({
       ...(props as T),
       onChange,
+      options,
+      type,
     });
   };
   return (props: T) => Comp(props);

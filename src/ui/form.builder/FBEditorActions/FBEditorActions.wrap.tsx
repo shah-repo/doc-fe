@@ -1,9 +1,8 @@
-import _, { Dictionary } from "lodash";
+import _ from "lodash";
 import React from "react";
-import { useIntl } from "react-intl";
 import { FBEditorActionsProps } from ".";
-import { FB, FBData, FBEditorPropertiesOption, FBOption, FBSchemaProps } from "..";
-import { isTranslation } from "../../translations/types";
+import { FB, FBData, FBSchemaProps } from "..";
+import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
 import { withFBValidation } from "../FBValidation/FBValidation.wrap";
 
 export const withFBEditorActions = <T extends FBEditorActionsProps>(
@@ -12,6 +11,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
   const Comp = ({
     handleAdd,
     handleCancel,
+    stringToOptions,
     parentFormState,
     toStringRules,
     index = 0,
@@ -21,45 +21,6 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
 
     const { dialogState, workspaceState, formState } = FB.useStores();
     const { isOutput } = workspaceState || {};
-    const intl = useIntl();
-
-    function editorOptions(formValues: Dictionary<any> = {}): FBOption[] | undefined {
-      const { options } = formValues;
-      if (!options || !_.isString(options)) {
-        return options;
-      }
-      return _.map((options.replace(/^\s+|\s+$/g, "")).split("\n"), (text) => ({
-        value: _.kebabCase(text),
-        text,
-      }));
-    }
-
-    function propertiesOptions(formValues?: Dictionary<any>): FBOption[] | undefined {
-      if (!type) { return; }
-      let options = editorOptions(formValues);
-      // TODO: dist editor options type
-      if (type === "autocomplete" || type === "autocompleteasync") {
-        return options;
-      }
-      const { editorProperties = [] } = formValues || {};
-      // TOD: optimize types
-      options = (FBData.editorProperties[type] || []).reduce((acc, item) => {
-        let { outputText: text } = item;
-        const { value } = item;
-        if (!editorProperties.includes(value)) { return acc; }
-        if (!text) { return acc; }
-        isTranslation(text) && (text = intl.formatMessage({ id: text }));
-        const propOption = { value, text };
-        if (value === "includeNone") {
-          _.first(options)?.value !== "includeNone" && (acc.splice(0, 0, propOption));
-        } else {
-          acc = _.union(acc, [propOption]);
-        }
-        return acc;
-      }, options as FBEditorPropertiesOption[] || []);
-
-      return options;
-    }
 
     function additionalSchema() {
       if (!type) { return; }
@@ -78,23 +39,20 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
 
     handleAdd = () => {
       if (!type) { return; }
-      const formValues = {
-        ...formState?.initialValues,
-        ...formState?.getValues(),
-      };
+      const formValues: FBSchemaProps = formState?.getValues();
+      const { options, validators, label, editorProperties } = formValues;
       if (isOutput) {
         handleAddOutput(formValues);
         return;
       }
-      const options = propertiesOptions(formValues);
       additionalSchema();
       workspaceState?.setSchemaItemAt({
         index,
         type,
-        name: `${_.kebabCase(formValues?.label)}-${FB.uniqid}`,
+        name: `${_.kebabCase(label as string)}-${FB.uniqid}`,
         ...formValues,
-        ...options && { options },
-        ...formValues?.validators && toStringRules && { rules: toStringRules(formValues.validators) },
+        ..._.isString(options) && stringToOptions && { options: stringToOptions(options, editorProperties) },
+        ...validators && toStringRules && { rules: toStringRules(validators) },
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
       }, index);
       dialogState?.closeDialog();
@@ -110,5 +68,5 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
     });
   };
 
-  return withFBValidation((props: T) => Comp(props));
+  return withFBEditorOptions(withFBValidation((props: T) => Comp(props)));
 };
