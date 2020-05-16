@@ -92,6 +92,7 @@ export type FBInputProps =
   approverGroups?: string[] | GroupRequestBody[];
   approveIsBlocking?: boolean;
   applicableOn?: any[];
+  actions?: string[];
 };
 
 export const OmitInputClones: FBInputType[] = ["fileupload"];

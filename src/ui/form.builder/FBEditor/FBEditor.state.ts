@@ -2,6 +2,7 @@ import _ from "lodash";
 import { action, observable, set } from "mobx";
 import React from "react";
 import { FBEditorMode, FBEditorModeProps, FBEditorProps, FBInputType } from "..";
+import { FBEditorAction } from "../FBEditorAction";
 import { FBEditorApprovalField } from "../FBEditorApprovalField";
 import { FBEditorAutocomplete } from "../FBEditorAutocomplete";
 import { FBEditorCheckControl } from "../FBEditorCheckControl";
@@ -94,6 +95,7 @@ export class FBEditorState {
     createlabel: FBEditorLabel,
     approval: FBEditorApprovalField,
     requestapproval: FBEditorRequestApproval,
+    action: FBEditorAction,
   };
 
   @observable public mode?: FBEditorMode = "config";

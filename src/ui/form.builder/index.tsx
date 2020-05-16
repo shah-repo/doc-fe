@@ -1,3 +1,7 @@
+export { default as FBActionField } from "./FBActionField/FBActionField";
+export { default as FBActionFieldActions } from "./FBActionField/FBActionField.actions";
+export { default as FBActionFieldState } from "./FBActionField/FBActionField.state";
+export * from "./FBActionField/FBActionField.types";
 export { default as apiClient } from "./FBApi/FBApi.client";
 export * from "./FBApi/FBApi.types";
 export { default as FBApproval } from "./FBApproval/FBApproval";
@@ -31,6 +35,7 @@ export * from "./FBDialog/FBDialog.types";
 export { default as FBEditor } from "./FBEditor/FBEditor";
 export { default as FBEditorState } from "./FBEditor/FBEditor.state";
 export * from "./FBEditor/FBEditor.types";
+export { default as FBEditorAction } from "./FBEditorAction/FBEditorAction";
 export { default as FBEditorActions } from "./FBEditorActions/FBEditorActions";
 export * from "./FBEditorActions/FBEditorActions.types";
 export { default as FBEditorApprovalField } from "./FBEditorApprovalField/FBEditorApprovalField";

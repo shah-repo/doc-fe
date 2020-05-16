@@ -124,16 +124,19 @@ export class FBFormState extends FBSchemaState {
     this.registerValidator(validator);
     validator.setAttributeNames(this.validationAttributeNames);
 
-    this.errors.clear();
-    function passes() {
-      callback && callback(true);
-    }
-
-    validator.checkAsync(passes, () => {
-      const errors = validator.errors.all();
-      _.map(errors, (v, k) => this.setFieldError(k, _.join(v, "\n")));
-      callback && callback(false);
-    });
+    validator.checkAsync(
+      // passes
+      () => {
+        this.errors.clear();
+        callback && callback(true);
+      },
+      // failed
+      () => {
+        this.errors.clear();
+        const errors = validator.errors.all();
+        _.map(errors, (v, k) => this.setFieldError(k, _.join(v, "\n")));
+        callback && callback(false);
+      });
   };
 
   // *NOTE: remove this after it is set in be script
