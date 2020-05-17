@@ -1,3 +1,4 @@
+import axios from "axios";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import { Audit, AuditActionPayload } from "../audit/types";
@@ -61,6 +62,7 @@ ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCal
     dispatch(documentRevisionSet(documentRevision));
   },
   handlers,
+  cancelToken: axios.CancelToken.source(),
 });
 
 const create = (body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>):

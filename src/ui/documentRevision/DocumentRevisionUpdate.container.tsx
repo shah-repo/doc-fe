@@ -81,7 +81,8 @@ DocumentRevisionUpdateContainerProps
       return;
     }
 
-    console.log(dataToSubmit);
+    async.reset();
+
     async.start(
       save,
       documentRevision.id,
