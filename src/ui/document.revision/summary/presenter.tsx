@@ -9,6 +9,7 @@ import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/do
 import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
+import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import FBWorkspace from "../../form.builder/containers/workspace/FBWorkspace";
@@ -53,7 +54,11 @@ export const Presenter: React.FunctionComponent<Props> = ({
 }) => {
   const onSubmit = () => void 0;
   FBDRStore.setValues(dataProp);
-  const outputDocumentTypeName = useSelector((state: ApplicationState) => formTemplate ? formTemplate.outputDocumentTypes.map((i) => documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
+  const outputDocumentTypeName = useSelector((state: ApplicationState) =>
+    formTemplate ?
+      formTemplate.outputDocumentTypes.map((i) => documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") :
+      []
+  );
 
   const renderTrainingControl = status === DocumentRevisionStatus.Released && (
     <TrainingControl
@@ -120,13 +125,15 @@ export const Presenter: React.FunctionComponent<Props> = ({
   );
 
   return (
-    <Formik
-      initialValues={dataProp}
-      onSubmit={onSubmit}
-      enableReinitialize={true}
-    >
-      {contentRenderer}
-    </Formik>
+    <FormContext.Provider value={{ submitOnChange: false }}>
+      <Formik
+        initialValues={dataProp}
+        onSubmit={onSubmit}
+        enableReinitialize={true}
+      >
+        {contentRenderer}
+      </Formik>
+    </FormContext.Provider>
   );
 };
 

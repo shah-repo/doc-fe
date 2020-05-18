@@ -2,11 +2,13 @@ import { Grid } from "@material-ui/core";
 import React from "react";
 import Header from "../../components/common/header/Header";
 import HeaderInfo from "../../components/common/header/HeaderInfo";
+import FormMessage from "../../components/forms/FormMessage";
+import FormProgress from "../../components/forms/FormProgress";
 import { FormHeaderContext } from "../../documentRevision/forms/DocumentRevisionForm.presenter";
 import DocRevActions from "../../documentRevision/forms/presenters/Actions";
 
 const FormHeaderPresenter: React.FunctionComponent = () => {
-  const  { documentRevision, isDisabled } = React.useContext(FormHeaderContext)!;
+  const  { documentRevision, isDisabled, asyncState } = React.useContext(FormHeaderContext)!;
   return (
     <Header>
       {documentRevision &&
@@ -20,6 +22,8 @@ const FormHeaderPresenter: React.FunctionComponent = () => {
           <DocRevActions/>
         </Grid>
       </Grid>
+      <FormMessage asyncState={asyncState} />
+      <FormProgress asyncState={asyncState} fullWidth />
     </Header>
   );
 };

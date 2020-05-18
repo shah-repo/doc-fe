@@ -160,8 +160,8 @@ export class FBPurchaseOrderState {
       description: item.description,
       unitPrice: this.formatCost(item.unitPrice),
       tax: item.tax,
-      isTraceabilityRequired: item.isTraceabilityRequired,
-      capitalEquipment: item.capitalEquipment,
+      isTraceabilityRequired: !!item.isTraceabilityRequired,
+      capitalEquipment: !!item.capitalEquipment,
       formattedDate: item.formattedDate || moment(item.date).format("MM/DD/YYYY"),
       totalAmount: (() => {
         const total = Number(item.order) * Number(item.unitPrice);

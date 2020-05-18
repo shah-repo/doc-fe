@@ -3,6 +3,7 @@ import { Formik, FormikProps } from "formik";
 import React from "react";
 import { AsyncState } from "../../../state/types";
 import { Translation } from "../../translations/types";
+import { FormContext } from "../forms/FormContext";
 import Text from "../Text";
 import PasswordForm from "./form/PasswordForm";
 import { Password } from "./types";
@@ -38,12 +39,14 @@ export const PasswordDialog: React.FunctionComponent<Props> = ({
         <Text translation={dialogTitle} />
       </DialogTitle>
       <DialogContent>
-        <Formik
-          initialValues={{ password: "" }}
-          onSubmit={onSubmit}
-        >
-          {renderForm}
-        </Formik>
+        <FormContext.Provider value={{ submitOnChange: false }}>
+          <Formik
+            initialValues={{ password: "" }}
+            onSubmit={onSubmit}
+          >
+            {renderForm}
+          </Formik>
+        </FormContext.Provider>
       </DialogContent>
     </Dialog>
   );
