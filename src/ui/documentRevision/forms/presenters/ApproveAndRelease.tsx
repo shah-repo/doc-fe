@@ -70,6 +70,11 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
 
   const openDialog = () => {
     async.reset();
+    asyncGroups.start(
+      getGroupsByStage,
+      docRevId,
+      asyncGroups,
+    );
     dialog.open();
   };
   const closeDialog = () => {
