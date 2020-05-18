@@ -9,8 +9,6 @@ import DatePickerField from "../../../components/forms/fields/DatePicker";
 import InputField from "../../../components/forms/fields/Input";
 import TextEditorField from "../../../components/forms/fields/RichTextEditor";
 import { required, validator } from "../../../components/forms/fields/validators";
-import FormMessage from "../../../components/forms/FormMessage";
-import FormProgress from "../../../components/forms/FormProgress";
 import FormWrapper from "../../../components/forms/FormWrapper";
 import PromptIfDirty from "../../../components/forms/PromptIfDirty";
 import ScrollToError from "../../../components/forms/ScrollToError";
@@ -99,8 +97,6 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
           doNotPrompt={doNotPrompt}
           onDirtyFlagChange={onDirtyFlagChange}
         />
-        <FormMessage asyncState={asyncState} />
-        <FormProgress asyncState={asyncState} />
         {renderCrId()}
 
         <Box mb={1}>
