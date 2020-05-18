@@ -18,8 +18,6 @@ interface StateProps {
 
 interface DispatchProps {
   save: typeof documentRevisionsActions.save;
-  loadAudit: typeof documentRevisionsActions.loadAudit;
-  loadDocument: typeof documentRevisionsActions.loadDocument;
 }
 
 interface OwnProps {
@@ -44,9 +42,7 @@ DocumentRevisionUpdateContainerProps
   documentRevision,
   currentUserEmail,
   onDirtyFlagChange,
-  loadAudit,
   documentId,
-  loadDocument,
   canChangeOwnerShip,
 }) => {
 
@@ -58,9 +54,6 @@ DocumentRevisionUpdateContainerProps
   const async = useAsync<DocumentRevision>({
     onSuccess: () => {
       setDoNotPrompt(true);
-      if (documentId) {
-        // loadDocument(documentId);
-      }
     },
   });
 
@@ -109,7 +102,5 @@ export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
   mapStateToProps,
   {
     save: documentRevisionsActions.save,
-    loadAudit: documentRevisionsActions.loadAudit,
-    loadDocument: documentRevisionsActions.loadDocument,
   },
 )(DocumentRevisionUpdateContainer);

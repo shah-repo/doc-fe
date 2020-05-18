@@ -11,8 +11,6 @@ import { default as AutocompleteField } from "../../components/forms/fields/Auto
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
 import SelectField from "../../components/forms/fields/Select";
 import { required, validator } from "../../components/forms/fields/validators";
-import FormMessage from "../../components/forms/FormMessage";
-import FormProgress from "../../components/forms/FormProgress";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
@@ -125,7 +123,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const hasOutput = useMemo(() => {
     const documentType = documentTypesById[values.document?.documentType?.id || ""];
     return documentType?.groupOptions?.includes("HAVE_OUTPUT");
-  }, [values.document?.documentType?.id]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [documentTypesById, values.document?.documentType?.id]);
 
   useEffect(() => {
     if (isdocRevStatusDraft) {
@@ -175,8 +174,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           doNotPrompt={doNotPrompt}
           onDirtyFlagChange={onDirtyFlagChange}
         />
-        <FormMessage asyncState={asyncState} />
-        <FormProgress asyncState={asyncState} />
         <Title name="name" label="common.title" />
         <Description isQms={docInfo.isQms} />
         <DocumentTypeSelect
