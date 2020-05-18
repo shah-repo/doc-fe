@@ -37,6 +37,9 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, { schema, mode, document });
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
 
+    // *TODO: find a way to reset constructor props
+    workspaceState.document = document;
+
     useObserver(() => {
       isStarter = workspaceState?.isStarter;
       active = workspaceState?.active;

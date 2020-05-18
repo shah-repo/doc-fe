@@ -15,6 +15,7 @@ export type FBButtonProps =
 | "type"
 | "style"
 | "autoFocus"
+| "hidden"
 >
 & {
   label?: string;

@@ -90,6 +90,7 @@ export * from "./FBForm/FBForm.types";
 export { default as FBFormMarkDown } from "./FBFormMarkDown/FBFormMarkDown";
 export * from "./FBFormMarkDown/FBFormMarkDown.types";
 export { default as FBHelloSign } from "./FBHelloSign/FBHelloSign";
+export { default as FBHelloSignState } from "./FBHelloSign/FBHelloSign.state";
 export * from "./FBHelloSign/FBHelloSign.types";
 export { default as FBHyperlink } from "./FBHyperlink/FBHyperlink";
 export * from "./FBHyperlink/FBHyperlink.types";
