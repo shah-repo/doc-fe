@@ -13,6 +13,7 @@ export class FBPOApprovalMatrixState {
 
   @action public setItems = (approvalLevels: POApprovalMatrixLevel[]) => {
     set(this.poam, "approvalLevels", approvalLevels);
+    this.updateFBStore();
   };
 
   @action public addItem = (approvalLevel: POApprovalMatrixLevel) => {
