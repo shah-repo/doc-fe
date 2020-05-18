@@ -44,7 +44,7 @@ const AssessmentFormContainer: React.FunctionComponent<Props> = ({
   );
 
   return (
-    <FormContext.Provider value={{ disableFieldSubmit: true }}>
+    <FormContext.Provider value={{ submitOnChange: true }}>
       <Formik
         initialValues={initialValues}
         onSubmit={onSubmit}

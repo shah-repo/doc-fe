@@ -4,7 +4,6 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 import { DocumentRevision, documentRevisionsActions, RevisionChangeType } from "../../state/ducks/documentRevisions";
 import { documentsActions, documentsSelectors } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
-import { FormContext } from "../components/forms/FormContext";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import useAsync from "../hooks/useAsync";
 import { DocumentCloneType } from "./Clone.container";
@@ -95,20 +94,18 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   const showRevisionTypeChange = type === "newVersion" && !!documentRevision;
 
   return (
-    <FormContext.Provider value={{ disableFieldSubmit: true }}>
-      <DocumentRevisionForm
-        asyncState={async.asyncState}
-        onSubmit={onSubmit}
-        initialValues={initialValues}
-        showRevisionTypeChange={showRevisionTypeChange}
-        setDocId={setDocId}
-        doNotPrompt={doNotPrompt}
-        documentRevision={documentRevision}
-        loadDocumentProposedId={loadDocumentProposedId}
-        proposedDocId={proposedDocId}
-        type={type}
-      />
-    </FormContext.Provider>
+    <DocumentRevisionForm
+      asyncState={async.asyncState}
+      onSubmit={onSubmit}
+      initialValues={initialValues}
+      showRevisionTypeChange={showRevisionTypeChange}
+      setDocId={setDocId}
+      doNotPrompt={doNotPrompt}
+      documentRevision={documentRevision}
+      loadDocumentProposedId={loadDocumentProposedId}
+      proposedDocId={proposedDocId}
+      type={type}
+    />
   );
 };
 

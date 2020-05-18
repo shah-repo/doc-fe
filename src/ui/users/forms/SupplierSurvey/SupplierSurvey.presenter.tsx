@@ -2,6 +2,7 @@ import { Formik, FormikProps } from "formik";
 import * as React from "react";
 import { SupplierSurveyForm } from "../../../../state/ducks/supplierSurvey";
 import { AsyncState } from "../../../../state/types";
+import { FormContext } from "../../../components/forms/FormContext";
 import { FBDocumentFlowProps } from "../../../form.builder/types/formik";
 import { toSupplierSurveyFormValues } from "../transform";
 import SupplierSurveyFormBuild from "./SupplierSurveyFormBuild.presenter";
@@ -22,13 +23,16 @@ const SupplierSurveyPresenter: React.FunctionComponent<Props> = ({ onSubmit, sup
   );
 
   return (
-    <Formik
-      initialValues={toSupplierSurveyFormValues(supplierSurvey)}
-      onSubmit={onSubmit}
-      enableReinitialize={true}
-    >
-      {renderForm}
-    </Formik>
+    <FormContext.Provider value={{ submitOnChange: false }}>
+      <Formik
+        initialValues={toSupplierSurveyFormValues(supplierSurvey)}
+        onSubmit={onSubmit}
+        enableReinitialize={true}
+      >
+        {renderForm}
+      </Formik>
+
+    </FormContext.Provider>
   );
 };
 

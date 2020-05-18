@@ -4,6 +4,7 @@ import { Formik, FormikProps } from "formik";
 import React from "react";
 import { AsyncState } from "../../../state/types";
 import Text from "../../components/Text";
+import { FormContext } from "../forms/FormContext";
 import PasswordForm from "../password/form/PasswordForm";
 import styles from "./TransitionDialog.styles";
 import { PasswordFormValues, Transition } from "./types";
@@ -50,12 +51,14 @@ const TransitionDialog: React.FunctionComponent<Props> =
             <Text translation="transition.action.title" />
           </DialogTitle>
           <DialogContent>
-            <Formik
-              initialValues={{ password: "" }}
-              onSubmit={onSubmit}
-            >
-              {renderForm}
-            </Formik>
+            <FormContext.Provider value={{ submitOnChange: false }}>
+              <Formik
+                initialValues={{ password: "" }}
+                onSubmit={onSubmit}
+              >
+                {renderForm}
+              </Formik>
+            </FormContext.Provider>
           </DialogContent>
         </Dialog>
       </div>

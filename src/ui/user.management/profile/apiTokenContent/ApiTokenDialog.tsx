@@ -2,6 +2,7 @@ import { Box, Dialog, DialogContent, DialogTitle, IconButton, Typography } from 
 import CloseIcon from "@material-ui/icons/Close";
 import { Form, Formik } from "formik";
 import React from "react";
+import { FormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
 import { DialogHandler } from "../../../hooks/useDialog";
 import { styles } from "./ApiToken.style";
@@ -52,12 +53,14 @@ export const ApiTokenDialog: React.FunctionComponent<Props> = ({
         <Text translation="api.token.title" />
       </DialogTitle>
       <DialogContent>
-        <Formik
-          initialValues={initialValues}
-          onSubmit={dialog.close}
-        >
-          {renderForm}
-        </Formik>
+        <FormContext.Provider value={{ submitOnChange: false }}>
+          <Formik
+            initialValues={initialValues}
+            onSubmit={dialog.close}
+          >
+            {renderForm}
+          </Formik>
+        </FormContext.Provider>
         <Box display="flex" marginBottom={2} >
           <Typography variant="subtitle1" className={classes.dialogMessage}>
             <Text translation="api.token.note" />

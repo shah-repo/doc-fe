@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
 import { DocumentRevision, DocumentRevisionEditRequestBody, documentRevisionsActions } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
+import { FormContext } from "../components/forms/FormContext";
 import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";
 import useAsync from "../hooks/useAsync";
 import useDocumentTitle from "../hooks/useDocumentTitle";
@@ -85,16 +86,18 @@ DocumentRevisionUpdateContainerProps
   };
 
   return (
-    <DocumentRevisionForm
-      doNotPrompt={doNotPrompt}
-      asyncState={async.asyncState}
-      onSubmit={onSubmit}
-      initialValues={initialValues}
-      onDirtyFlagChange={onDirtyFlagChange}
-      documentRevision={documentRevision}
-      canChangeOwnerShip={canChangeOwnerShip}
-      showRevisionTypeChange
-    />
+    <FormContext.Provider value={{ submitOnChange: true }}>
+      <DocumentRevisionForm
+        doNotPrompt={doNotPrompt}
+        asyncState={async.asyncState}
+        onSubmit={onSubmit}
+        initialValues={initialValues}
+        onDirtyFlagChange={onDirtyFlagChange}
+        documentRevision={documentRevision}
+        canChangeOwnerShip={canChangeOwnerShip}
+        showRevisionTypeChange
+      />
+    </FormContext.Provider>
   );
 };
 
