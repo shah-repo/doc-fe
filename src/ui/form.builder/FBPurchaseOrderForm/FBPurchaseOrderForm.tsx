@@ -1,17 +1,31 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBAutocomplete, FBAutocompleteAsync, FBCheckbox, FBData, FBDatePicker, FBPurchaseOrderFormProps, FBQuantityField, FBTextField } from "..";
+import { FBAutocomplete, FBAutocompleteAsync, FBCheckbox, FBData, FBDatePicker, FBPurchaseOrderFormProps, FBQuantityField, FBRadioGroup, FBTextField } from "..";
 import { withFBPurchaseOrderForm } from "./FBPurchaseOrderForm.wrap";
-
 
 const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = ({
   handlePartTitle,
   handleTotal,
   getOptionDisabled,
   getOptionLabel,
+  type,
   children,
 }) => (
   <>
+    <FBRadioGroup
+      name="type"
+      defaultValue="product"
+      options={[
+        {
+          text: "Product",
+          value: "product",
+        },
+        {
+          text: "Service",
+          value: "service",
+        },
+      ]}
+    />
     <FBQuantityField
       label="form.builder.field.qunatity.ordered"
       name="order"
@@ -50,12 +64,15 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
       name="date"
       rules="required"
     />
-    <FBTextField
-      label="form.builder.field.supplier.part.number"
-      name="description"
-      rules="required"
-      rows="3"
-    />
+    {
+      type === "product" &&
+      <FBTextField
+        label="form.builder.field.supplier.part.number"
+        name="description"
+        rules="required"
+        rows="3"
+      />
+    }
     <FBTextField
       type="number"
       label="form.builder.field.unit.price"
@@ -63,23 +80,26 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
       rules="required"
       onChange={handleTotal}
     />
-    <Box display="flex" justifyContent="flex-start">
-      <FBCheckbox
-        label="form.builder.field.tax"
-        name="tax"
-        gutter={false}
-      />
-      <FBCheckbox
-        label="form.builder.field.capital.equipment"
-        name="capitalEquipment"
-        gutter={false}
-      />
-      <FBCheckbox
-        label="form.builder.field.is.traceability.required"
-        name="isTraceabilityRequired"
-        gutter={false}
-      />
-    </Box>
+    {
+      type === "product" &&
+      <Box display="flex" justifyContent="flex-start">
+        <FBCheckbox
+          label="form.builder.field.tax"
+          name="tax"
+          gutter={false}
+        />
+        <FBCheckbox
+          label="form.builder.field.capital.equipment"
+          name="capitalEquipment"
+          gutter={false}
+        />
+        <FBCheckbox
+          label="form.builder.field.is.traceability.required"
+          name="isTraceabilityRequired"
+          gutter={false}
+        />
+      </Box>
+    }
     {children}
   </>
 );

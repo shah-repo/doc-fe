@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBPurchaseOrderFormProps } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
@@ -13,6 +14,7 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
     handleTotal,
     getOptionDisabled,
     getOptionLabel,
+    type,
     ...props
   }: T) => {
 
@@ -39,12 +41,18 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
 
     getOptionLabel = (option) => generateDocIdLabel(option);
 
+    useObserver(() => {
+      type = formState?.values.type;
+      // type = formState?.getFieldValue("type");
+    });
+
     return Component({
       ...(props as T),
       handlePartTitle,
       handleTotal,
       getOptionDisabled,
       getOptionLabel,
+      type,
     });
   };
 

@@ -29,6 +29,7 @@ export interface FBPurchaseOrderItem {
   tax: boolean;
   received?: number;
   receivedList?: any[];
+  type: string;
 }
 
 export interface FBPurchaseOrderCalculation {
