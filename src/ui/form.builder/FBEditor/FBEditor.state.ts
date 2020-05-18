@@ -42,6 +42,7 @@ export class FBEditorState {
     "poreceive",
     "requestapproval",
     "hellosign",
+    "approvalMatrix",
   ];
 
   public static pickDefaultValue: FBInputType[] = [
@@ -98,6 +99,7 @@ export class FBEditorState {
     requestapproval: FBEditorRequestApproval,
     action: FBEditorAction,
     hellosign: FBEditorLabel,
+    approvalMatrix: FBEditorLabel,
   };
 
   @observable public mode?: FBEditorMode = "config";
