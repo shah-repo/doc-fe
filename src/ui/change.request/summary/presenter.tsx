@@ -7,20 +7,16 @@ import { ChangeRequest, changeRequestsActions } from "../../../state/ducks/chang
 import { DataProps } from "../../../state/ducks/common";
 import { AsyncState } from "../../../state/types";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
-import OwnerChanger from "../../components/common/owner.changer/container";
-import { RequestType } from "../../components/common/owner.changer/helpers/types";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
-import SubmitButton from "../../components/forms/SubmitButton";
 import ApproversField from "../form/approvers";
-import ControlsContainer from "../form/assessmentForm/AssessmentFormControls.container";
 import { ChangeRequestFormValues } from "../form/types";
 import ApproversSummary from "./approvers";
 import Assessment from "./assessment";
-import ChangeRequestHeader from "./header";
 import ImplementationPlan from "./implementation.plan";
 import Justification from "./justification";
 import styles from "./styles";
+import SummaryHeader from "./SummaryHeader";
 
 interface OwnProps extends DataProps<ChangeRequest> {
   asyncState: AsyncState;
@@ -60,13 +56,6 @@ export const Presenter: React.FunctionComponent<Props> = ({
     </Box>
   );
 
-  const submitButtonRenderer = () => (
-    <SubmitButton
-      asyncState={asyncState}
-      label="document.save"
-      errors={errors}
-    />
-  );
 
   const renderImplementationPlan = dataProp.implementationPlan &&
     (dataProp.implementationPlan.attachments.length > 0 ||
@@ -80,22 +69,26 @@ export const Presenter: React.FunctionComponent<Props> = ({
     />
   );
 
-  const renderChangeOwnership = canChangeOwnerShip && (
-    <OwnerChanger
-      requestId={dataProp.id}
-      requestType={RequestType.ChangeRequest}
-    />
-  );
 
   return (
     <Box>
-      <ChangeRequestHeader dataProp={dataProp} />
+      <SummaryHeader
+        {...{
+          dataProp,
+          canChangeOwnerShip,
+          asyncState,
+          errors,
+          canEdit,
+        }}
+      />
       <Grid
         container={true}
         spacing={4}
         direction="column"
         className={classes.previewBox}
       >
+        {canEdit && <FormProgress asyncState={asyncState} />}
+        {canEdit && <FormMessage asyncState={asyncState} />}
         <Grid item={true} xs={12} className={classes.box}>
           <SummaryFieldWithHtml
             label="cr.description"
@@ -109,15 +102,6 @@ export const Presenter: React.FunctionComponent<Props> = ({
         {canEdit && approversFieldRenderer()}
         <ApproversSummary dataProp={dataProp.approvals} />
       </Grid>
-      <Box className={classes.submitBox} p={2}>
-        <Grid item={true}>
-          {canEdit && <FormProgress asyncState={asyncState} />}
-          {canEdit && <FormMessage asyncState={asyncState} />}
-          {renderChangeOwnership}
-          <ControlsContainer changeRequest={dataProp} errors={errors} />
-          {canEdit && submitButtonRenderer()}
-        </Grid>
-      </Box>
     </Box>
   );
 };

@@ -4,6 +4,7 @@ import { Group } from "../../../state/ducks/auth/types";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { AsyncState } from "../../../state/types";
+import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import DocumentRevisionControlContainer from "../documentRevision/DocumentRevisionControl.container";
@@ -32,12 +33,9 @@ ChangeRequestFormContainerProps
   changeRequest,
   doNotPrompt,
 }) => {
-  const alertMessage = "You have unsaved changes.";
   const [isFormDirty, setIsFormDirty] = useState<boolean>(false);
   const [documentTypeGroups, setDocumentTypeGroups] = useState<any[]>([]);
-  const [selectedDocumentRevision, setSelectedDocumentRevision] = useState<
-  string | null
-  >(null);
+  const [selectedDocumentRevision, setSelectedDocumentRevision] = useState<string | null>(null);
   const [documentRevisionsList, setDocumentRevisionsList] = useState<string[]>(
     initialValues.documentRevisions,
   );
@@ -52,7 +50,6 @@ ChangeRequestFormContainerProps
     },
   });
   const getGroupsByStage = useActionCreator(documentRevisionsActions.loadGroupsByStage);
-
 
   useEffect(() => {
     if (changeRequest && changeRequest.documentRevisions) {
@@ -75,7 +72,7 @@ ChangeRequestFormContainerProps
     if (!isFormDirty) {
       return true;
     }
-    alert(alertMessage);
+    alert(<Text message="common.unsaved.changes"/>);
     return false;
   };
 
