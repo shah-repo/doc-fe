@@ -8,6 +8,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
   handleTotal,
   getOptionDisabled,
   getOptionLabel,
+  handleTypeChange,
   type,
   children,
 }) => (
@@ -15,6 +16,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
     <FBRadioGroup
       name="type"
       defaultValue="product"
+      onChange={handleTypeChange}
       options={[
         {
           text: "Product",

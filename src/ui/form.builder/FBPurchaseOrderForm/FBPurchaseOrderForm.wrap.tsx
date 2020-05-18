@@ -14,6 +14,7 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
     handleTotal,
     getOptionDisabled,
     getOptionLabel,
+    handleTypeChange,
     type,
     ...props
   }: T) => {
@@ -34,6 +35,11 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
       purchaseOrderState?.setItemTotalAmount(item);
     };
 
+    handleTypeChange = (ev: React.ChangeEvent<any>) => {
+      const value = _.get(ev.target, "value");
+      formState?.setFieldValue("type", value, true);
+    };
+
     getOptionDisabled = (option: DocumentRevision) => {
       const selectedParts = _.map(purchaseOrderState?.items, "partNumber");
       return _.includes(selectedParts, option.id);
@@ -42,7 +48,7 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
     getOptionLabel = (option) => generateDocIdLabel(option);
 
     useObserver(() => {
-      type = formState?.values.type;
+      type = formState?.inputState.get("type")?.value;
       // type = formState?.getFieldValue("type");
     });
 
@@ -52,6 +58,7 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
       handleTotal,
       getOptionDisabled,
       getOptionLabel,
+      handleTypeChange,
       type,
     });
   };
