@@ -9,6 +9,7 @@ const FBButton: React.FunctionComponent<FBButtonProps> = ({
   variant = "contained",
   gutter,
   hidden,
+  style,
   ...props
 }) => (
   <Button
@@ -16,6 +17,7 @@ const FBButton: React.FunctionComponent<FBButtonProps> = ({
     {...props}
     type="button"
     style={{
+      ...style,
       ...hidden && { display: "none" },
     }}
   >

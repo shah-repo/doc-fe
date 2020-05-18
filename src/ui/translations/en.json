@@ -613,6 +613,8 @@
   "form.builder.add.approvers": "Add Approvers",
   "form.builder.revise.disabled": "Revision Disabled",
   "form.builder.send": "Send",
+  "form.builder.edit.matrix": "Edit matrix",
+  "form.builder.fullscreen.mode": "Fullscreen Mode",
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.watermark": "Download PDF file",

@@ -52,10 +52,7 @@ export class FBFormState extends FBSchemaState {
     if (_.isUndefined(value) || value.length === 0) {
       this.omitFieldValue(fieldName);
     } else {
-      this.setValues({
-        ...this.values,
-        [fieldName]: value,
-      });
+      _.set(this.values, fieldName, value);
     }
     if (withState) {
       this.inputState.get(fieldName)?.setValue(prevValue);
@@ -100,10 +97,7 @@ export class FBFormState extends FBSchemaState {
     if (_.isUndefined(rules)) {
       return;
     }
-    this.rules = {
-      ...this.rules,
-      [fieldName]: rules,
-    };
+    _.set(this.rules, fieldName, rules);
   };
 
   @action public setValidationAttributeName = (fieldName: string, attrName: string) => {

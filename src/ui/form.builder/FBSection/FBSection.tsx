@@ -7,6 +7,7 @@ const FBSection: React.FunctionComponent<FBSectionProps> = ({
   label,
   gutter = true,
   stepIndex,
+  children,
 }) => (
   <Box
     bgcolor="primary.main"
@@ -25,6 +26,7 @@ const FBSection: React.FunctionComponent<FBSectionProps> = ({
       </Box>
     )}
     {stepIndex && ` #${stepIndex}`}
+    {children}
   </Box>
 );
 

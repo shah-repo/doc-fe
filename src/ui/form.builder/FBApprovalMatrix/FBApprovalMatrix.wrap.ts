@@ -5,7 +5,6 @@ import { FB } from "..";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
-import FBStore from "../stores/ui/FBStore";
 import FBApprovalMatrixState from "./FBApprovalMatrix.state";
 import { ApprovalMatrix, FBApprovalMatrixFieldProps } from "./FBApprovalMatrix.types";
 
@@ -23,7 +22,8 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixFieldProps>(
   }: T) => {
 
     amState = FB.useRef<FBApprovalMatrixState>(FBApprovalMatrixState);
-    const { document } = FBStore;
+    const { workspaceState, formState } = FB.useStores();
+    const { document } = workspaceState || {};
     const async = useAsync({
       onSuccess: (response) => {
         amState?.setApprovalMatrix(response as ApprovalMatrix);
@@ -33,12 +33,12 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixFieldProps>(
     const loadAction = useActionCreator(documentTypeActions.getApprovalMatrix);
 
     useEffect(() => {
-      if ((props.disabled || FBStore.getValue(name)) && !document.outputRevision) {
+      if ((props.disabled || formState?.getFieldValue(name)) && !document?.outputRevision) {
         return;
       }
       async.start(loadAction, async);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.disabled, loadAction, document.formInput]);
+    }, [props.disabled, loadAction, document?.formInput]);
 
     useEffect(() => {
       debounced(() => {

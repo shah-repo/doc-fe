@@ -5,7 +5,7 @@ import { FBSchemaProps } from ".";
 import { FBAutocompleteAsync, FBCheckboxGroup, FBEditorState, FBInputProps, FBInputType } from "..";
 import { FBActionField } from "../FBActionField";
 import { FBApproval } from "../FBApproval";
-import { FBApprovalMatrix } from "../FBApprovalMatrix";
+import { FBApprovalMatrixField } from "../FBApprovalMatrixField";
 import { FBButton } from "../FBButton";
 import { FBCheckbox } from "../FBCheckbox";
 import { FBDatePicker } from "../FBDatePicker";
@@ -76,7 +76,7 @@ export class FBSchemaState {
     requestapproval: FBRequestApproval,
     action: FBActionField,
     hellosign: FBHelloSign,
-    approvalMatrix: FBApprovalMatrix,
+    approvalMatrix: FBApprovalMatrixField,
   };
 
   @observable public schema?: FBSchemaProps[];
