@@ -1,7 +1,7 @@
 import { flatten, unflatten } from "flat";
 import _, { Dictionary } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
-import { FBFormConstructor, FBInputState } from "..";
+import { FBFormConstructor, FBInputState, FBWorkspaceMode } from "..";
 import { FBSchemaState } from "../FBSchema";
 
 export class FBFormState extends FBSchemaState {
@@ -9,16 +9,18 @@ export class FBFormState extends FBSchemaState {
   public validationAttributeNames: Dictionary<string> = {};
   public errorValidation = true;
   public initialValues: Dictionary<any> = {};
+  public workspaceMode?: FBWorkspaceMode;
   public values: Dictionary<any> = {};
   @observable public errors = new Map<string, string>();
   @observable public helpers = new Map<string, string>();
   @observable public inputState = new Map<string, FBInputState>();
 
-  public constructor({ schema, initialValues = {} }: FBFormConstructor) {
+  public constructor({ schema, initialValues = {}, workspaceMode }: FBFormConstructor) {
     super();
     this.schema = schema;
     this.initialValues = initialValues;
     this.values = initialValues;
+    this.workspaceMode = workspaceMode;
   }
 
   @computed private get Validator(): any {
