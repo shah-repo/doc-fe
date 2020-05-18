@@ -9,6 +9,7 @@ import { FBButton } from "../FBButton";
 import { FBCheckbox } from "../FBCheckbox";
 import { FBDatePicker } from "../FBDatePicker";
 import { FBFileUpload } from "../FBFileUpload";
+import { FBHelloSign } from "../FBHelloSign";
 import { FBHyperlink } from "../FBHyperlink";
 import { FBInstructionsDocument } from "../FBInstructionsDocument";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
@@ -73,6 +74,7 @@ export class FBSchemaState {
     approval: FBApproval,
     requestapproval: FBRequestApproval,
     action: FBActionField,
+    hellosign: FBHelloSign,
   };
 
   @observable public schema?: FBSchemaProps[];
