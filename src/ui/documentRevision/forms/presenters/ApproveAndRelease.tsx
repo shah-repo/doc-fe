@@ -48,7 +48,6 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const asyncGroups = useAsync({
     onSuccess: (response: Group[] = []) => {
       setDocTypeGroups([
-        ...documentTypeGroups,
         response,
       ].flat());
     },
