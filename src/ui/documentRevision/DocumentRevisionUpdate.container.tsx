@@ -5,11 +5,12 @@ import { authSelectors } from "../../state/ducks/auth";
 import { DocumentRevision, DocumentRevisionEditRequestBody, documentRevisionsActions } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { FormContext } from "../components/forms/FormContext";
+import { compareValuesToSubmit } from "../components/forms/helpers";
 import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";
 import useAsync from "../hooks/useAsync";
 import useDocumentTitle from "../hooks/useDocumentTitle";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
-import { compareValuesToSubmit, toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
+import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
 import { canEditDocumentRevision } from "./helpers";
 
