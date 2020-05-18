@@ -30,7 +30,7 @@ export class FBPOApprovalMatrixState {
     const signatureStages = this.poam.approvalLevels
       .map((level) => level.signatures.map((sign) => sign.signatureStage));
     const signaturesByStage = signatureStages.flat().map((level: number) => ({
-      id: approvalLevel.signatures[level - 1].id,
+      id: approvalLevel.signatures[level - 1]?.id,
       [`signature${level}groups`]: groupOptions.filter((option) => {
         const selectedGroupIds = approvalLevel.signatures[level - 1]?.groups
         ?.map((group) => group.id);
