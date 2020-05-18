@@ -32,6 +32,7 @@ const Input: React.FunctionComponent<InputPropsWithFormik> = ({
         {...inputProps}
         onBlur={(evt) => {
           fieldProps.field.onBlur(evt);
+          inputProps?.onBlur?.(evt);
           submitForm(fieldProps.form.submitForm);
         }}
       />
