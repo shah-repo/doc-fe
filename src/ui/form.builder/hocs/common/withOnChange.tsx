@@ -1,6 +1,8 @@
+import { useFormikContext } from "formik";
 import _ from "lodash";
 import React from "react";
 import { FB, FBButton } from "../..";
+import { useFormContext } from "../../../components/forms/FormContext";
 import FBTextField from "../../components/inputs/FBTextField";
 import { FBFieldName } from "../../helpers/FBFieldName";
 import FBDynamicValidatorStore from "../../stores/ui/FBDynamicValidatorStore";
@@ -26,6 +28,8 @@ export const withOnChange = <T extends FBInputProps>(
   ...props
 }: T) => {
 
+  const { submitForm } = useFormContext();
+  const formik = useFormikContext();
   const { dialogState } = FB.useStores();
   function contextState(): boolean {
     const fieldName = field?.name || "";
@@ -178,6 +182,11 @@ export const withOnChange = <T extends FBInputProps>(
     }
     fieldValue = fieldValue[type || ""] ? fieldValue[type || ""]() : fieldValue.default();
     storeValue(name, fieldValue);
+
+    if (type === "textfield") {
+      return;
+    }
+    submitForm(formik.submitForm);
   };
 
   return Component({
