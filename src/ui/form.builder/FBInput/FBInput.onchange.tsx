@@ -1,7 +1,9 @@
+import { useFormikContext } from "formik";
 import _ from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBEditorPropertiesType, FBInputProps, FBInputState } from "..";
+import { useFormContext } from "../../components/forms/FormContext";
 
 export const withFBOnChange = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>
@@ -16,6 +18,8 @@ export const withFBOnChange = <T extends FBInputProps>(
 
     inputState = FB.useRef<FBInputState>(FBInputState);
     const { workspaceState, formState, schemaState } = FB.useStores();
+    const { submitForm } = useFormContext();
+    const formik = useFormikContext();
 
     React.useEffect(() => {
       const defaultValue = formState?.getFieldValue(name, "");
@@ -124,6 +128,10 @@ export const withFBOnChange = <T extends FBInputProps>(
 
       (changedValue[type || ""] || changedValue.default)();
       formState.validate();
+      if (type === "textfield") {
+        return;
+      }
+      submitForm(formik.submitForm);
     });
 
     return useObserver(() => Component({
