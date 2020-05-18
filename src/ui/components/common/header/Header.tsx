@@ -2,8 +2,8 @@ import { createStyles, Grid, makeStyles } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import React from "react";
-import { DRAWER_WIDTH } from "../../app/NavigationLink.styles";
-import Colors from "../../layout/theme/utils/colors";
+import { DRAWER_WIDTH } from "../../../app/NavigationLink.styles";
+import Colors from "../../../layout/theme/utils/colors";
 
 export const styles = makeStyles(() =>
   createStyles({

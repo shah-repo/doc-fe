@@ -79,7 +79,7 @@ const apiMiddleware: Middleware = ({
     action.onSuccess(data, dispatch);
     dispatchAsyncStatusAction(dispatch, action.asyncType, AsyncStatus.Success);
   } catch (exception) {
-    const redirectToMaintenance = exception.response.status === 491 && window.location.pathname !== MAINTENANCE;
+    const redirectToMaintenance = exception?.response?.status === 491 && window.location.pathname !== MAINTENANCE;
     redirectToMaintenance && redirectTo(MAINTENANCE)();
 
     let responseMessage = "";

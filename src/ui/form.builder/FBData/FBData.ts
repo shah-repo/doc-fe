@@ -2,6 +2,7 @@ import _ from "lodash";
 import { FB, FBActionOptionProps, FBAutocompleteAsyncConfig, FBEditorPropertiesOption, FBEditorPropertiesType, FBInputType, FBOption, FBSchemaProps } from "..";
 import actionOptions from "./actionOptions.json";
 import additionalSchema from "./additionalSchema.json";
+import approvalMatrixRoleSchema from "./approvalMatrixRoleSchema.json";
 import autocompleteOptions from "./autocompleteOptions.json";
 import editorProperties from "./editorProperties.json";
 import editorPropertiesControl from "./editorPropertiesControl.json";
@@ -56,6 +57,10 @@ export class FBData {
 
   public static get actionOptions(): FBActionOptionProps[] {
     return actionOptions as FBActionOptionProps[];
+  }
+
+  public static get approvalMatrixRoleSchema(): FBSchemaProps[] {
+    return approvalMatrixRoleSchema as FBSchemaProps[];
   }
 }
 

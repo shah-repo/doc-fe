@@ -23,5 +23,6 @@
   "createlabel": ["reviseDisabled"],
   "selectrequirement": ["reviseDisabled"],
   "selectdocument": ["reviseDisabled"],
-  "instructionsdocument": ["reviseDisabled"]
+  "instructionsdocument": ["reviseDisabled"],
+  "approvalMatrix": ["reviseDisabled"]
 }

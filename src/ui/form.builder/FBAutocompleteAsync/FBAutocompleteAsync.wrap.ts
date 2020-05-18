@@ -48,6 +48,15 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       defaultValue = _.map(value, { optionValueKey });
     }
 
+    if (options && formValue && !_.isEmpty(formValue)) {
+      if (optionValueType === "key") {
+        const value = autocompleteAsyncState?.sliceValue(formValue);
+        defaultValue = _.map(value, { optionValueKey });
+      } else {
+        defaultValue = formValue;
+      }
+    }
+
     refresh = () => autocompleteAsyncState?.load(true);
 
     !getOptionLabel && (getOptionLabel = (option) => {

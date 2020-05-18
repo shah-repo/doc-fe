@@ -1,0 +1,62 @@
+import { Grid } from "@material-ui/core";
+import { useFormikContext } from "formik";
+import * as React from "react";
+import { useSelector } from "react-redux";
+import { authSelectors } from "../../../../state/ducks/auth";
+import { GroupTag } from "../../../../state/ducks/auth/types";
+import { ChangeRequest } from "../../../../state/ducks/changeRequest";
+import { AsyncState } from "../../../../state/types";
+import OwnerChangerContainer from "../../../components/common/owner.changer/container";
+import { RequestType } from "../../../components/common/owner.changer/helpers/types";
+import SubmitButton from "../../../components/forms/SubmitButton";
+import useGetHasTag from "../../../hooks/useGetHasTag";
+import { canChangeCROwner } from "../../utils/helpers";
+import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
+import AssessmentFormVoidContainer from "./Void.container";
+
+interface Props {
+  changeRequest?: ChangeRequest;
+  asyncState: AsyncState;
+}
+
+const DocRevActions: React.FunctionComponent<Props> = ({
+  changeRequest,
+  asyncState,
+}) => {
+  const formik = useFormikContext();
+  const isCompanyAdmin = useGetHasTag(GroupTag.USER_MANAGEMENT);
+  const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
+  const canChangeOwnerShip = React.useMemo(() => {
+    if (!changeRequest) {
+      return false;
+    }
+    return canChangeCROwner(changeRequest.state, currentEmployeeId, changeRequest?.owner.id, isCompanyAdmin);
+  }, [changeRequest, currentEmployeeId, isCompanyAdmin]);
+
+  return (
+    <Grid
+      container={true}
+      alignItems="flex-end"
+      justify="flex-end"
+      direction="row"
+    >
+      <SubmitButton
+        id="submit"
+        asyncState={asyncState}
+        onClick={formik.submitForm}
+        label={
+          changeRequest
+            ? "common.save"
+            : "navigation.createChangeRequest"
+        }/>
+      {changeRequest && canChangeOwnerShip &&
+        <OwnerChangerContainer
+          requestId={changeRequest.id}
+          requestType={RequestType.ChangeRequest}
+        />}
+      <AssessmentFormVoidContainer changeRequest={changeRequest} />
+      <AssessmentFormControlsContainer changeRequest={changeRequest} />
+    </Grid>
+  ); };
+
+export default DocRevActions;
