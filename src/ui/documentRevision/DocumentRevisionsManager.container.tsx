@@ -118,7 +118,7 @@ DocumentRevisionManagerContainerProps
         />
       </Grid> */}
       {documentRevisionId && !isNewOutput && (
-        <Grid item={true} xs={sidebar ? 9 : 11} style={{ background: "#F2F4F6" }}>
+        <Grid item={true} xs={sidebar ? 9 : 11} style={{ background: "#F2F4F6", marginLeft: "-40px", marginBottom: "-32px", padding: "32px" }}>
           <DocumentRevisionDisplayContainer
             documentRevisionId={documentRevisionId}
             isNewVersion={isNewVersion}

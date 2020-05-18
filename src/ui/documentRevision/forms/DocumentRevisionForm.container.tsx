@@ -1,5 +1,4 @@
 import { Box, Grid } from "@material-ui/core";
-import classNames from "classnames";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import { get } from "lodash";
 import React, { useEffect, useMemo } from "react";
@@ -15,7 +14,6 @@ import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
-import styles from "./DocumentRevisionForm.container.style";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -131,7 +129,6 @@ DocumentRevisionFormContainerProps
   }, [initialValues.document?.documentType?.documentTypeAcronym]);
 
   document = document || ({} as Document);
-  const classes = styles();
 
   const render = (props: FormikProps<DocumentRevisionFormValues>) => (
     <DocumentRevisionFormPresenter
@@ -169,11 +166,7 @@ DocumentRevisionFormContainerProps
       asyncAction={loadAction}
       startActionOnMount={true}
     >
-      <Grid
-        className={classNames(classes.container, {
-          [classes.borderContainer]: documentRevision,
-        })}
-      >
+      <Grid>
         <Box ml={3}>
           <ChangeRequestLink dataProp={documentRevision} />
         </Box>

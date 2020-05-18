@@ -77,34 +77,13 @@ export const Presenter: React.FunctionComponent<Props> = ({
         direction="column"
       >
         <ChangeRequestLink dataProp={dataProp} />
-        {FBDRStore.isOutput && (
-          <Box ml={2} mt={1}>
-            <DocumentRevisionOutputInfo formDocument={dataProp?.formDocument} />
-          </Box>
-        )}
-        <SummaryField label="document.title" value={name} />
-        <SummaryField
-          label="document.revision.trainingRequired"
-          value={<Text translation={retrain ? "common.yes" : "common.no"} />}
-        />
+        <SummaryField label="common.title" value={name} />
+        <SummaryField label="document.revision.trainingRequired" value={<Text translation={retrain ? "common.yes" : "common.no"} />}/>
         <SummaryFieldWithHtml label="common.description" value={description} />
-        {formTemplate && (
-          <SummaryField
-            label="document.output.type"
-            value={outputDocumentTypeName}
-          />
-        )}
-        {referenceTo && (
-          <ReferenceToContainer
-            dataProp={referenceTo}
-            status={status}
-            deprecatedAt={deprecatedAt}
-          />
-        )}
-        {document.referencedBy && (
-          <ReferencedByContainer dataProp={document.referencedBy} />
-        )}
-        {attachments && <Attachment />}
+        {formTemplate && <SummaryField label="document.output.type" value={outputDocumentTypeName}/>}
+        {referenceTo && <ReferenceToContainer dataProp={referenceTo} status={status} deprecatedAt={deprecatedAt}/>}
+        {document.referencedBy && <ReferencedByContainer dataProp={document.referencedBy} />}
+        {attachments && <Attachment isAttachmentEmpty={!attachments.length}/>}
         {renderTrainingControl}
       </Grid>
 
@@ -114,6 +93,11 @@ export const Presenter: React.FunctionComponent<Props> = ({
             documentId={_.get(formDocument, "document.id") || _.get(document, "id")}
             document={dataProp}
           />
+        </Box>
+      )}
+      {FBDRStore.isOutput && (
+        <Box ml={2} mt={1}>
+          <DocumentRevisionOutputInfo formDocument={dataProp?.formDocument} />
         </Box>
       )}
     </Box>

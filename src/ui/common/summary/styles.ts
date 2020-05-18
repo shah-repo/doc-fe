@@ -7,7 +7,6 @@ export default (theme: Theme) =>
       "maxHeight": "36em",
       "width": "100%",
       "overflowY": "auto",
-      "margin": theme.spacing(1) + "px 0 " + theme.spacing(3) + "px",
       "&.ql-container.ql-snow": {
         "border": 0,
         "& .ql-editor": {

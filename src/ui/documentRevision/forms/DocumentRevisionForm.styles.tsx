@@ -6,7 +6,7 @@ export default (theme: Theme) =>
       margin: "auto",
       width: "100%",
       padding: theme.spacing(2, 5),
-      background: "#fff",
+      background: "#F2F4F6",
     },
     reviewButton: {
       marginTop: theme.spacing(3),

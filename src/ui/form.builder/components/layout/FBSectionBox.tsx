@@ -5,20 +5,19 @@ import { FBFormDefaultProps } from "../../types/common";
 
 const FBSectionBox: React.FunctionComponent<FBFormDefaultProps> = ({
   label,
-}) => {
-  return (
-    <Box
-      mb={4}
-      bgcolor="primary.main"
-      color="primary.contrastText"
-      py={1.5}
-      px={2}
-      fontSize="h6.fontSize"
-      fontWeight={100}
-    >
-      {label && <Text message={(label as string).toUpperCase()} />}
-    </Box>
-  );
-};
+}) => (
+  <Box
+    mb={4}
+    bgcolor="primary.main"
+    color="primary.contrastText"
+    py={1.5}
+    px={2}
+    fontSize="h6.fontSize"
+    fontWeight={100}
+    borderRadius={4}
+  >
+    {label && <Text message={(label as string).toUpperCase()} />}
+  </Box>
+);
 
 export default FBSectionBox;
