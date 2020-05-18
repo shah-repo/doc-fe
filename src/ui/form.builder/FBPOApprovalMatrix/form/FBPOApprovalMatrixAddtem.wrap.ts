@@ -29,7 +29,7 @@ export const withFBPOApprovalMatrixAddItem = <T extends FBPOApprovalMatrixAddIte
       dialog.close();
       poamState?.addItem({
         ...item,
-        limit: parseInt(item.limit, 10),
+        limit: item.limit,
         id: item.id,
         signatures: item.signatures.map((it) => ({
           id: it.id,

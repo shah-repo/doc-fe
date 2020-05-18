@@ -32,6 +32,7 @@ const FBPOApprovalMatrixForm: React.FunctionComponent<FBPOApprovalMatrixFormProp
         />
         <Error error={errors.name} />
         <FBTextField
+          inputProps={{ type: "number" }}
           label="form.builder.field.limit"
           name={`${name}-formValues.limit`}
         />
