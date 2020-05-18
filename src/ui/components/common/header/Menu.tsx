@@ -40,13 +40,14 @@ export const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
           horizontal: "center",
         }}
       >
-        {children.map((menuItem, index) =>
-          <MenuItem
+        {children.map((menuItem, index) => {
+          if (!menuItem) { return null; }
+          return <MenuItem
             style={{ display: menuItem.props.shouldDisplay === false ? "none" : "block" }}
             key={index}>
             {menuItem}
-          </MenuItem>
-        )}
+          </MenuItem>;
+        })}
       </Menu>
     </>
   );
