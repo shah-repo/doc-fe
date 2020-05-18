@@ -3,6 +3,7 @@ import React from "react";
 import { Group } from "../../../../state/ducks/auth/types";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest";
 import { AsyncState } from "../../../../state/types";
+import { FormContext } from "../../../components/forms/FormContext";
 import { ChangeRequestFormValues } from "../types";
 import AssessmentFormPresenter from "./AssessmentForm.presenter";
 
@@ -43,13 +44,15 @@ const AssessmentFormContainer: React.FunctionComponent<Props> = ({
   );
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={onSubmit}
-      enableReinitialize={true}
-    >
-      {render}
-    </Formik>
+    <FormContext.Provider value={{ disableFieldSubmit: true }}>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={onSubmit}
+        enableReinitialize={true}
+      >
+        {render}
+      </Formik>
+    </FormContext.Provider>
   );
 };
 

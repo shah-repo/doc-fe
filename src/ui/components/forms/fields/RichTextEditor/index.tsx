@@ -50,7 +50,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
   ...fieldProps
 }) => {
   const formik = useFormikContext();
-  const { disableFieldSubmit } = useFormContext();
+  const { submitForm } = useFormContext();
   const didMount = useDidMount();
   const { field, form } = fieldProps;
   const [value, setValue] = useState();
@@ -113,9 +113,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
       setFieldTouched(name, true);
     }
 
-    if (!disableFieldSubmit) {
-      formik.submitForm();
-    }
+    submitForm(formik.submitForm);
   };
 
   const handleFocus = () => {

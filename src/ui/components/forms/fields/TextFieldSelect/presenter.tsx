@@ -21,13 +21,11 @@ export const EditableSelectPresenter: React.FunctionComponent<Props> = ({
   handleBlur,
 }) => {
   const formik = useFormikContext();
-  const { disableFieldSubmit } = useFormContext();
+  const { submitForm } = useFormContext();
   const classes = styles({ gutter, error: false });
   const blurOverride = (event) => {
     handleBlur(event);
-    if (!disableFieldSubmit) {
-      formik.submitForm();
-    }
+    submitForm(formik.submitForm);
   };
   return (
     <Box className={classes.root}>

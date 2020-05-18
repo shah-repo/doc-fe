@@ -19,7 +19,7 @@ type CheckboxPropsWithFormik = CheckboxOwnProps & FormikFieldProps & OwnProps;
 
 const Checkbox: React.FunctionComponent<CheckboxPropsWithFormik> = ({ checkboxProps, label, ...fieldProps }) => {
   const { field, form } = fieldProps;
-  const { disableFieldSubmit } = useFormContext();
+  const { submitForm } = useFormContext();
 
   return (
     <Field {...fieldProps} >
@@ -34,9 +34,7 @@ const Checkbox: React.FunctionComponent<CheckboxPropsWithFormik> = ({ checkboxPr
             onChange={(evt, checked: boolean) => {
               field.onChange(evt);
               checkboxProps?.onChange?.(evt, checked);
-              if (!disableFieldSubmit) {
-                form.submitForm();
-              }
+              submitForm(form.submitForm);
             }}
           />
         }

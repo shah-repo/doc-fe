@@ -16,7 +16,7 @@ const RadioGroup: React.FunctionComponent<RadioGroupPropsWithFormik> = ({
   radioGroupProps, children, ...fieldProps
 }) => {
   const { field, form } = fieldProps;
-  const { disableFieldSubmit } = useFormContext();
+  const { submitForm } = useFormContext();
 
   return (
     <Field {...fieldProps}>
@@ -27,9 +27,7 @@ const RadioGroup: React.FunctionComponent<RadioGroupPropsWithFormik> = ({
         onChange={(evt, value) => {
           field.onChange(evt);
           radioGroupProps?.onChange?.(evt, value);
-          if (!disableFieldSubmit) {
-            form.submitForm();
-          }
+          submitForm(form.submitForm);
         }}
       >
         {children}
