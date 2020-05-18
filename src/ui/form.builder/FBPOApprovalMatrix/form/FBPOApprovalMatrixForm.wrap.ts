@@ -28,7 +28,7 @@ export const withFBPOApprovalMatrixForm = <T extends FBPOApprovalMatrixFormProps
       const item = values[`${name}-formValues`];
       onSubmit({
         name: item.name,
-        limit: item.limit,
+        limit: parseInt(item.limit, 10),
         id: item.id || generateUuid(),
         signatures: signatureStages?.map((stage) => ({
           signatureStage: stage,
