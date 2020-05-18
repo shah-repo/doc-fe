@@ -38,13 +38,17 @@ export const withFBInput = <T extends FBInputProps>(
 
     const { formState } = FB.useStores();
     const intl = useIntl();
-    defaultValue = React.useMemo(() => setDefaultValue(), [defaultValue]);
+    defaultValue = setDefaultValue();
     helperText = formState?.errors.get(name) || helperText;
     error = !_.isUndefined(formState?.errors.get(name)) && formState?.errorValidation;
     value = inputState?.value;
     includeContext = inputState?.includeContext;
 
-    (_.isUndefined(hidden) && validationMode === "visibility") && (hidden =
+    (_.isUndefined(hidden) && formState?.workspaceMode === "form" && validationMode === "visibility") && (hidden =
+      !helperText && !defaultValue
+    );
+
+    (!disabled && formState?.workspaceMode === "form" && validationMode === "disabled") && (disabled =
       !helperText && !defaultValue
     );
 

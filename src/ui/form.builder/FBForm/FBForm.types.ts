@@ -12,4 +12,4 @@ export interface FBFormProps {
   initialValidation?: boolean;
 }
 
-export type FBFormConstructor = Pick<FBFormProps, "schema" | "initialValues">;
+export type FBFormConstructor = Pick<FBFormProps, "schema" | "initialValues" | "workspaceMode">;
