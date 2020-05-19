@@ -9,6 +9,7 @@ import { ChangeRequest, changeRequestsActions } from "../../../state/ducks/chang
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../../state/reducers";
+import { FormContext } from "../../components/forms/FormContext";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
 import useAsync from "../../hooks/useAsync";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
@@ -127,14 +128,16 @@ export const Container: React.FunctionComponent<Props> = ({
   };
 
   const summaryFormikRenderer = () => (
-    <Formik
-      initialValues={toChangeRequestFormValues(dataProp)}
-      onSubmit={onSubmit}
-      enableReinitialize={true}
-      validate={validate}
-    >
-      {summaryPresenterRenderer}
-    </Formik>
+    <FormContext.Provider value={{ submitOnChange: true }}>
+      <Formik
+        initialValues={toChangeRequestFormValues(dataProp)}
+        onSubmit={onSubmit}
+        enableReinitialize={true}
+        validate={validate}
+      >
+        {summaryPresenterRenderer}
+      </Formik>
+    </FormContext.Provider>
   );
   return (
     <Grid

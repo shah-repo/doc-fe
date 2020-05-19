@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
 import { ChangeRequest, changeRequestsActions } from "../../state/ducks/changeRequest";
 import { ApplicationState } from "../../state/reducers";
+import { FormContext } from "../components/forms/FormContext";
 import useAsync from "../hooks/useAsync";
 import ChangeRequestFormContainer from "./form/ChangeRequestForm.container";
 import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "./form/transform";
@@ -44,12 +45,14 @@ export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequest
 
 
     return (
-      <ChangeRequestFormContainer
-        initialValues={toChangeRequestFormValues(DEFAULT_INITIAL_VALUES())}
-        asyncState={async.asyncState}
-        onSubmit={onSubmitAssessment}
-        doNotPrompt={doNotPrompt}
-      />
+      <FormContext.Provider value={{ submitOnChange: true }}>
+        <ChangeRequestFormContainer
+          initialValues={toChangeRequestFormValues(DEFAULT_INITIAL_VALUES())}
+          asyncState={async.asyncState}
+          onSubmit={onSubmitAssessment}
+          doNotPrompt={doNotPrompt}
+        />
+      </FormContext.Provider>
     );
   };
 

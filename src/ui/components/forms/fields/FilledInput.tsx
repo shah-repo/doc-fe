@@ -1,6 +1,4 @@
-import {
-  FilledInput as MuiInput,
-} from "@material-ui/core";
+import { FilledInput as MuiInput } from "@material-ui/core";
 import { InputProps as MuiInputProps } from "@material-ui/core/Input";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
@@ -12,6 +10,7 @@ interface InputOwnProps extends FieldOwnProps {
 
 type InputPropsWithFormik = InputOwnProps & FormikFieldProps;
 
+// TODO: check if this is still used
 const Input: React.FunctionComponent<InputPropsWithFormik> = ({ inputProps, ...fieldProps }) => (
   <Field variant="filled" required={fieldProps.required} {...fieldProps}>
     <MuiInput required={false} {...fieldProps.field} {...inputProps} />
