@@ -513,6 +513,8 @@
   "form.builder.field.prefix": "Prefix",
   "form.builder.field.internal.type": "Internal type",
   "form.builder.field.document.type": "Document type",
+  "form.builder.field.description": "Description",
+  "form.builder.field.service.id": "Service ID",
   "form.builder.approvals.alpha": "Approvals Alpha",
   "form.builder.approvals.numeric": "Approvals Numeric",
   "form.builder.approvals.numeric.alpha": "Approvals Numeric Alpha",

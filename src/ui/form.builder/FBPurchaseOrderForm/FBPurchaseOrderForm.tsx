@@ -28,50 +28,69 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
         },
       ]}
     />
-    <FBQuantityField
-      label="form.builder.field.qunatity.ordered"
-      name="order"
-      rules="required"
-      onChange={handleTotal}
-    />
+    {
+      type === "product" &&
+      <>
+        <FBAutocompleteAsync
+          label="form.builder.field.part.number"
+          name="partNumber"
+          optionId="11"
+          onChange={handlePartTitle}
+          {...{ getOptionDisabled, getOptionLabel }}
+        />
+        <FBTextField
+          label="form.builder.field.part.number.title"
+          name="partNumberTitle"
+          disabled
+        />
+      </>
+    }
+    {
+      type === "service" &&
+      <>
+        <FBTextField
+          label="form.builder.field.service.id"
+          name="serviceId"
+        />
+        <FBTextField
+          label="form.builder.field.description"
+          name="description"
+        />
+      </>
+    }
+    <Box display="flex" justifyContent="space-between">
+      <Box width="100%" marginRight="10px">
+        <FBQuantityField
+          label="form.builder.field.qunatity.ordered"
+          name="order"
+
+          onChange={handleTotal}
+        />
+      </Box>
+      <Box width="100%" marginLeft="10px">
+        <FBAutocomplete
+          label="form.builder.field.units"
+          name="units"
+          options={FBData.unitsOptions}
+          optionValueKey="value"
+          optionLabelKey="text"
+        />
+      </Box>
+    </Box>
     <FBAutocompleteAsync
       label="GL code"
       optionId="9"
       name="glCode"
-      rules="required"
-    />
-    <FBAutocomplete
-      label="form.builder.field.units"
-      name="units"
-      options={FBData.unitsOptions}
-      optionValueKey="value"
-      optionLabelKey="text"
-      rules="required"
-    />
-    <FBAutocompleteAsync
-      label="form.builder.field.part.number"
-      name="partNumber"
-      optionId="11"
-      rules="required"
-      onChange={handlePartTitle}
-      {...{ getOptionDisabled, getOptionLabel }}
-    />
-    <FBTextField
-      label="form.builder.field.part.number.title"
-      name="partNumberTitle"
-      disabled
     />
     <FBDatePicker
       label="form.builder.field.date.required"
       name="date"
-      rules="required"
     />
     {
       type === "product" &&
       <FBTextField
         label="form.builder.field.supplier.part.number"
         name="description"
-        rules="required"
         rows="3"
       />
     }
@@ -79,7 +98,6 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
       type="number"
       label="form.builder.field.unit.price"
       name="unitPrice"
-      rules="required"
       onChange={handleTotal}
     />
     {

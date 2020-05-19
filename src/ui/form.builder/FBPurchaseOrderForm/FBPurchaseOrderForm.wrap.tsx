@@ -38,6 +38,12 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
     handleTypeChange = (ev: React.ChangeEvent<any>) => {
       const value = _.get(ev.target, "value");
       formState?.setFieldValue("type", value, true);
+      formState?.setFieldValue("tax", false);
+      formState?.setFieldValue("capitalEquipment", false);
+      formState?.setFieldValue("isTraceabilityRequired", false);
+      formState?.setFieldValue("partNumber", undefined);
+      formState?.setFieldValue("partNumberTitle", undefined);
+      formState?.setFieldValue("description", undefined);
     };
 
     getOptionDisabled = (option: DocumentRevision) => {
@@ -48,7 +54,7 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
     getOptionLabel = (option) => generateDocIdLabel(option);
 
     useObserver(() => {
-      type = formState?.inputState.get("type")?.value;
+      type = formState?.inputState.get("type")?.value || formState?.getFieldValue("type");
       // type = formState?.getFieldValue("type");
     });
 
