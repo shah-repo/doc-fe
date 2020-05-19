@@ -145,6 +145,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       includeEmpty={false}
     />
   );
+  const documentTypeId = values.document?.documentType?.id;
 
   return (
     <Grid
@@ -177,9 +178,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         <Title
           name="name"
           label="common.title"
-          documentTypeId={values.document?.documentType?.id}
+          documentTypeId={documentTypeId}
         />
-        <Description isQms={docInfo.isQms} />
+        <Description isQms={docInfo.isQms} documentTypeId={documentTypeId} />
         <DocumentTypeSelect
           outputDocumentTypes={initialValues.formDocument?.formTemplate?.outputDocumentTypes}
           type={type}
@@ -191,6 +192,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           isDisabled={isDisabled}
           documentTypesById={documentTypesById}
           setDocId={setDocId}
+          documentTypeId={documentTypeId}
         />
         {renderRevisionStageDropdown}
         <AutocompleteField
