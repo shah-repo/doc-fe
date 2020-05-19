@@ -2,7 +2,7 @@ import { Box, Table, TableBody, TableHead, TableRow } from "@material-ui/core";
 import _ from "lodash";
 import React from "react";
 import * as generateUuid from "uuid/v4";
-import { FBApprovalMatrixItem, FBApprovalMatrixTableInfoHead, FBApprovalMatrixTableProps, FBCheckbox, FBMapWrapper, FBSelect, FBTableCell, FBTextField } from "..";
+import { FBApprovalMatrixCheck, FBApprovalMatrixItem, FBApprovalMatrixTableInfoHead, FBApprovalMatrixTableProps, FBCheckbox, FBMapWrapper, FBSelect, FBTableCell, FBTextField } from "..";
 
 const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTableProps> = ({
   approvalMatrix = [],
@@ -48,14 +48,11 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
               />
             )}
             {mode === "edit" && (
-              <FBTableCell>
-                <Box display="flex" justifyContent="center" pl={3}>
-                  <FBCheckbox
-                    name={`${name}.approvalMatrix.${index}.docType.defaultTraining`}
-                    gutter={false}
-                    defaultChecked={am.docType.defaultTraining}
-                  />
-                </Box>
+              <FBTableCell align="center">
+                <FBApprovalMatrixCheck
+                  name={`${name}.approvalMatrix.${index}.docType.defaultTraining`}
+                  checked={am.docType.defaultTraining}
+                />
               </FBTableCell>
             )}
           </TableRow>
