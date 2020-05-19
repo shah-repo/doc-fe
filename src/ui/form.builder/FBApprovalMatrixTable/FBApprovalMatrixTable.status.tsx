@@ -1,7 +1,7 @@
 import { Box, Table, TableBody, TableHead, TableRow } from "@material-ui/core";
 import _ from "lodash";
 import React from "react";
-import { FBApprovalMatrixItem, FBApprovalMatrixTableProps, FBApprovalMatrixTableRoleHead, FBApprovalRole, FBCheckbox, FBMapWrapper, FBTableCell } from "..";
+import { FBApprovalMatrixCheck, FBApprovalMatrixItem, FBApprovalMatrixTableProps, FBApprovalMatrixTableRoleHead, FBApprovalRole, FBCheckbox, FBMapWrapper, FBTableCell } from "..";
 
 const FBApprovalMatrixTableStatus: React.FunctionComponent<FBApprovalMatrixTableProps> = ({
   approvalRoles = [],
@@ -12,7 +12,7 @@ const FBApprovalMatrixTableStatus: React.FunctionComponent<FBApprovalMatrixTable
 }) =>  (
   <Table className={classes?.tableStatus}>
     <TableHead >
-      <TableRow style={{ height: "30px", position: "sticky", top: 0  }}>
+      <TableRow style={{ height: "30px" }}>
         <FBMapWrapper<string[]> collection={_.values(FBApprovalMatrixTableRoleHead)}>
           {(head: string, index) => (
             <FBTableCell
@@ -20,7 +20,7 @@ const FBApprovalMatrixTableStatus: React.FunctionComponent<FBApprovalMatrixTable
               label={head}
               colSpan={approvalRoles.length}
               align="center"
-              style={{ borderLeft: "1px solid #ccc" }}
+              style={{ borderLeft: "1px solid #f0f0f0" }}
             />
           )}
         </FBMapWrapper>
@@ -38,7 +38,7 @@ const FBApprovalMatrixTableStatus: React.FunctionComponent<FBApprovalMatrixTable
                   label={role.name}
                   align="center"
                   style={{
-                    ...index === 0 && { borderLeft: "1px solid #ccc" },
+                    ...index === 0 && { borderLeft: "1px solid #f0f0f0" },
                   }}
                 />
               )}
@@ -66,14 +66,11 @@ const FBApprovalMatrixTableStatus: React.FunctionComponent<FBApprovalMatrixTable
                         />
                       )}
                       {mode === "edit" && (
-                        <FBTableCell>
-                          <Box display="flex" justifyContent="center" pl={3}>
-                            <FBCheckbox
-                              name={`${name}.approvalMatrix.${i}.approvalRoles.${key}.${index}`}
-                              gutter={false}
-                              defaultChecked={value}
-                            />
-                          </Box>
+                        <FBTableCell align="center">
+                          <FBApprovalMatrixCheck
+                            name={`${name}.approvalMatrix.${i}.approvalRoles.${key}.${index}`}
+                            checked={value}
+                          />
                         </FBTableCell>
                       )}
                     </React.Fragment>

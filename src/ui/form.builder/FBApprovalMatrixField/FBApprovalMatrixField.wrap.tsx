@@ -1,4 +1,3 @@
-import { useObserver } from "mobx-react";
 import React from "react";
 import { FBApprovalMatrixFieldProps, FBApprovalMatrixFieldState } from ".";
 import { FB } from "..";
@@ -30,10 +29,6 @@ export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
     handleAdd = () => {
       approvalMatrixFieldState && (approvalMatrixFieldState.mode = "add");
     };
-
-    useObserver(() => {
-      mode = approvalMatrixFieldState?.mode;
-    });
 
     return Component({
       ...(props as T),
