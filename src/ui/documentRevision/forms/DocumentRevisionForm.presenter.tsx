@@ -209,7 +209,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         <References document={initialValues.document} />
         <RetrainField revisionChangeType={values.revisionChangeType} />
         <AttachmentsField />
-        {showRevisionTypeChange && <RevisionTypeChange />}
+        {showRevisionTypeChange && <RevisionTypeChange {...{ documentTypeId }} />}
         {
           (!values.status || type === "newOutput") &&
           <DocumentSecurity />
