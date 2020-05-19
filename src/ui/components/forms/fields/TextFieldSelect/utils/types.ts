@@ -15,4 +15,5 @@ export interface TextFieldSelectProps extends FormikHybridFieldProps {
   options?: TextFieldSelectOptions[];
   isActive: boolean;
   handleBlur: (event: React.FocusEvent) => void;
+  disabled?: boolean;
 }
