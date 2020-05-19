@@ -20,6 +20,7 @@ export const EditableSelectPresenter: React.FunctionComponent<Props> = ({
   isActive = false,
   disabled = false,
   handleBlur,
+  isDisabled,
 }) => {
   const formik = useFormikContext();
   const { submitForm } = useFormContext();

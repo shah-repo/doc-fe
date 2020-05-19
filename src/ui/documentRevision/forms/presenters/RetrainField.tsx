@@ -6,10 +6,12 @@ import CheckboxField from "../../../components/forms/fields/Checkbox";
 
 interface Props {
   revisionChangeType?: RevisionChangeType ;
+  isDisabled?: boolean;
 }
 
 const RetrainField: React.FunctionComponent<Props> = ({
   revisionChangeType,
+  isDisabled = false,
 }) => {
   const formik = useFormikContext();
   useEffect(() => {
@@ -18,7 +20,7 @@ const RetrainField: React.FunctionComponent<Props> = ({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [revisionChangeType]);
-  const disabled = revisionChangeType === RevisionChangeType.AdministrativeChange;
+  const disabled = revisionChangeType === RevisionChangeType.AdministrativeChange || isDisabled;
   return (
     <CheckboxField
       name="retrain"

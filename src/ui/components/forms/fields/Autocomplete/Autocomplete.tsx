@@ -62,6 +62,7 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
         onChange={onChange}
         filterOption={filterOption}
         input={<InputField name={fieldProps.field.name} />}
+        isDisabled={true}
       />
     </Field>
   );

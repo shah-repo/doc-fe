@@ -1,5 +1,6 @@
+import _ from "lodash";
 import React, { useCallback, useEffect, useMemo } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
 import { GroupTag } from "../../state/ducks/auth/types";
 import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
@@ -30,6 +31,8 @@ interface OwnProps {
   isNewVersion?: boolean;
   isNewOutput?: boolean;
 }
+
+export let isOperator = React.createContext<boolean>(false);
 
 export type DocumentRevisionDisplayContainerProps =
   OwnProps &
@@ -73,6 +76,15 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
     loadDocumentRevisionAction();
   }, [loadDocumentRevisionAction]);
 
+  const selectedDocument = useSelector((state: ApplicationState) =>
+    documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId));
+  const operators = _.get(selectedDocument, "document.operators", []);
+  const email = useSelector(authSelectors.currentUserEmail);
+  const availableOperators = operators.map((operator) => operator.user.email);
+  const isCurrentUserOperator = availableOperators.includes(email);
+
+  isOperator = React.createContext(isCurrentUserOperator);
+
   const canChangeOwnerShip = useMemo(() => {
     if (!documentRevision) {
       return false;
@@ -89,13 +101,14 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
     documentRevision &&
     !isNewVersion &&
     !isNewOutput &&
-    canEditDocumentRevision(documentRevision, currentUserEmail);
+    (canEditDocumentRevision(documentRevision, currentUserEmail) || isCurrentUserOperator);
 
   const canPreview =
     documentRevision && !(canEdit || isNewVersion || isNewOutput);
 
   const subscribeToSocket = documentRevision &&
     <HelloSignAllSignedRefreshSockets documentRevision={documentRevision} />;
+  console.log(canEdit, canPreview);
 
   return (
     <AsyncGate
