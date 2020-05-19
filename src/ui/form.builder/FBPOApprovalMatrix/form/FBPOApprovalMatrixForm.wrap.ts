@@ -1,7 +1,7 @@
 import { Dictionary } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import uniqid from "uniqid";
+import * as generateUuid from "uuid/v4";
 import { FB } from "../..";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 import { GetEmployeeResponse, userManagementActions, userManagementSelectors } from "../../../../state/ducks/userManagement";
@@ -26,15 +26,15 @@ export const withFBPOApprovalMatrixForm = <T extends FBPOApprovalMatrixFormProps
 
     const handleSubmit = (values) => {
       const item = values[`${name}-formValues`];
-      item.id = item.id || uniqid();
       onSubmit({
         name: item.name,
-        limit: item.limit,
-        id: item.id,
+        limit: parseInt(item.limit, 10),
+        id: item.id || generateUuid(),
         signatures: signatureStages?.map((stage) => ({
           signatureStage: stage,
-          groups: item[`signature${stage}`]?.groups?.map((group) => ({ id: group.value })) || [],
-          employees: item[`signature${stage}`]?.employees?.map((employee) => ({ id: employee.value })) || [],
+          id: initialValues[`${name}-formValues`]?.[stage - 1].id || generateUuid(),
+          groups: item[`signature${stage}groups`]?.map((group) => ({ id: group.value })) || [],
+          employees: item[`signature${stage}employees`]?.map((employee) => ({ id: employee.value })) || [],
         })),
       });
       props.closeDialog();
