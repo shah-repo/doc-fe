@@ -55,7 +55,6 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
 
     useObserver(() => {
       type = formState?.inputState.get("type")?.value || formState?.getFieldValue("type");
-      // type = formState?.getFieldValue("type");
     });
 
     return Component({
