@@ -33,8 +33,8 @@ export const withFBPOApprovalMatrixForm = <T extends FBPOApprovalMatrixFormProps
         signatures: signatureStages?.map((stage) => ({
           signatureStage: stage,
           id: initialValues[`${name}-formValues`]?.[stage - 1].id || generateUuid(),
-          groups: item[`signature${stage}`]?.groups?.map((group) => ({ id: group.value })) || [],
-          employees: item[`signature${stage}`]?.employees?.map((employee) => ({ id: employee.value })) || [],
+          groups: item[`signature${stage}groups`]?.map((group) => ({ id: group.value })) || [],
+          employees: item[`signature${stage}employees`]?.map((employee) => ({ id: employee.value })) || [],
         })),
       });
       props.closeDialog();

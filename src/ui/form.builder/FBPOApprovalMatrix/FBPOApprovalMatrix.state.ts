@@ -13,6 +13,7 @@ export class FBPOApprovalMatrixState {
 
   @action public setItems = (approvalLevels: POApprovalMatrixLevel[]) => {
     set(this.poam, "approvalLevels", approvalLevels);
+    this.updateFBStore();
   };
 
   @action public addItem = (approvalLevel: POApprovalMatrixLevel) => {
@@ -30,8 +31,8 @@ export class FBPOApprovalMatrixState {
     const signatureStages = this.poam.approvalLevels
       .map((level) => level.signatures.map((sign) => sign.signatureStage));
     const signaturesByStage = signatureStages.flat().map((level: number) => ({
-      id: approvalLevel.signatures[level - 1].id,
-      [`signature${level}.groups`]: groupOptions.filter((option) => {
+      id: approvalLevel.signatures[level - 1]?.id,
+      [`signature${level}groups`]: groupOptions.filter((option) => {
         const selectedGroupIds = approvalLevel.signatures[level - 1]?.groups
         ?.map((group) => group.id);
         if (selectedGroupIds?.includes(option.value)) {
@@ -39,7 +40,7 @@ export class FBPOApprovalMatrixState {
         }
         return null;
       }),
-      [`signature${level}.employees`]: toMembersOptions(employees)
+      [`signature${level}employees`]: toMembersOptions(employees)
         .filter((option) => {
           const selectedEmployeeIds = approvalLevel.signatures[level - 1]?.employees
           ?.map((employee) =>
