@@ -21,8 +21,8 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixFieldProps>(
     ...props
   }: T) => {
 
-    amState = FB.useRef<FBApprovalMatrixState>(FBApprovalMatrixState);
     const { workspaceState, formState } = FB.useStores();
+    amState = FB.useRef<FBApprovalMatrixState>(FBApprovalMatrixState, formState);
     const { document } = workspaceState || {};
     const async = useAsync({
       onSuccess: (response) => {
@@ -38,7 +38,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixFieldProps>(
       }
       async.start(loadAction, async);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.disabled, loadAction, document?.formInput]);
+    }, [props.disabled, loadAction, workspaceState?.document?.formInput]);
 
     useEffect(() => {
       debounced(() => {

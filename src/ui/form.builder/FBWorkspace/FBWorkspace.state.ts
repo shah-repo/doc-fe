@@ -43,6 +43,13 @@ export class FBWorkspaceState extends FBSchemaState {
     return (this.mode === "design" && _.size(this.schema) === 0);
   }
 
+  // TO BE REMOVED!!
+  @action public resetSchema = () => {
+    const schema = this.schema;
+    set(this, "schema", []);
+    set(this, "schema", schema);
+  };
+
   @action public setMode = (mode: FBWorkspaceMode) => {
     set(this, "mode", mode);
   };

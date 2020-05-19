@@ -27,7 +27,7 @@ export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
     };
 
     useObserver(() => {
-      approvalRoles = approvalMatrixFieldState?.aprovalRoles;
+      approvalRoles = approvalMatrixFieldState?.approvalRoles;
       formState?.setFieldValue(`${name}.approvalRoles`, approvalRoles);
     });
 

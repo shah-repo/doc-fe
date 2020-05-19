@@ -16,6 +16,11 @@ export { default as FBApprovalMatrixRoles } from "./FBApprovalMatrixRoles/FBAppr
 export * from "./FBApprovalMatrixRoles/FBApprovalMatrixRoles.types";
 export { default as FBApprovalMatrixRolesActions } from "./FBApprovalMatrixRolesActions/FBApprovalMatrixRolesActions";
 export * from "./FBApprovalMatrixRolesActions/FBApprovalMatrixRolesActions.types";
+export { default as FBApprovalMatrixTable } from "./FBApprovalMatrixTable/FBApprovalMatrixTable";
+export { default as FBApprovalMatrixTableInfo } from "./FBApprovalMatrixTable/FBApprovalMatrixTable.info";
+export { default as FBApprovalMatrixTableStatus } from "./FBApprovalMatrixTable/FBApprovalMatrixTable.status";
+export * from "./FBApprovalMatrixTable/FBApprovalMatrixTable.styles";
+export * from "./FBApprovalMatrixTable/FBApprovalMatrixTable.types";
 export { default as FBApprovalMatrix } from "./FBApprovalMatrix_/FBApprovalMatrix";
 export * from "./FBApprovalMatrix_/FBApprovalMatrix.types";
 export { default as FBAutocomplete } from "./FBAutocomplete/FBAutocomplete";
