@@ -47,8 +47,8 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
           });
           approvalLevel.push({ ...level, signatures: signatures.sort((a, b) => a.signatureStage - b.signatureStage) });
         });
-        const nesto = _.uniqBy(approvalLevel, "id");
-        poamState?.setItems(nesto);
+        const uniqApprovalLevels = _.uniqBy(approvalLevel, "id");
+        poamState?.setItems(uniqApprovalLevels);
       },
     });
 
