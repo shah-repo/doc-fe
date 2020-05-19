@@ -1,4 +1,4 @@
-import { debounce } from "lodash";
+import _, { debounce } from "lodash";
 import React, { useEffect } from "react";
 import * as generateUuid from "uuid/v4";
 import { FB } from "..";
@@ -47,7 +47,8 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
           });
           approvalLevel.push({ ...level, signatures: signatures.sort((a, b) => a.signatureStage - b.signatureStage) });
         });
-        poamState?.setItems(approvalLevel);
+        const nesto = _.uniqBy(approvalLevel, "id");
+        poamState?.setItems(nesto);
       },
     });
 
