@@ -13,7 +13,7 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
     ...props
   }: T) => {
 
-    const { dialogState, workspaceState } = FB.useStores();
+    const { dialogState, workspaceState, formState } = FB.useStores();
 
     function defaultProps(props: Partial<FBInputProps>): Partial<FBInputProps> {
       const { type, stepIndex } = props;
@@ -62,7 +62,12 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
         title: underValidation ? <FBEditorTitle /> : "form.builder.create.field",
         maxWidth: "sm",
         content: editorForm,
-        actions: <FBEditorActions key={`fb-editor-actions-${type}`} {...{ type, index }} />,
+        actions: (
+          <FBEditorActions
+            key={`fb-editor-actions-${type}`}
+            parentFormState={formState}
+            {...{ type, index }} />
+        ),
       });
     };
 

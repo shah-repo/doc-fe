@@ -1,5 +1,4 @@
-[
-  {
+[{
     "id": "1",
     "path": "/document_revisions",
     "label": "Document revisions",
@@ -99,6 +98,14 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
+    "root": ""
+  },
+  {
+    "id": "13",
+    "path": "/employees?active=true",
+    "label": "Employees",
+    "valueKey": "id",
+    "labelKey": "user.name",
     "root": ""
   }
 ]

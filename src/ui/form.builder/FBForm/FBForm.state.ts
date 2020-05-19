@@ -1,35 +1,31 @@
 import { flatten, unflatten } from "flat";
 import _, { Dictionary } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
-import { FBInputState } from "..";
-import { FBSchemaProps, FBSchemaState } from "../FBSchema";
+import { FBFormConstructor, FBInputState, FBWorkspaceMode } from "..";
+import { FBSchemaState } from "../FBSchema";
 
 export class FBFormState extends FBSchemaState {
   public rules: Dictionary<string> = {};
   public validationAttributeNames: Dictionary<string> = {};
   public errorValidation = true;
   public initialValues: Dictionary<any> = {};
+  public workspaceMode?: FBWorkspaceMode;
   public values: Dictionary<any> = {};
   @observable public errors = new Map<string, string>();
   @observable public helpers = new Map<string, string>();
   @observable public inputState = new Map<string, FBInputState>();
 
-  public constructor(schema?: FBSchemaProps[]) {
+  public constructor({ schema, initialValues = {}, workspaceMode }: FBFormConstructor) {
     super();
     this.schema = schema;
+    this.initialValues = initialValues;
+    this.values = initialValues;
+    this.workspaceMode = workspaceMode;
   }
 
   @computed private get Validator(): any {
     return _.get(window, "EnlilRemoteValidators.validator");
   }
-
-  @action public setInitialValues = (values?: Dictionary<any>) => {
-    this.initialValues = values || {};
-    this.setValues({
-      ...this.initialValues,
-      ...this.values,
-    });
-  };
 
   @action public setValues = (values: Dictionary<any>) => {
     this.values = values;
@@ -45,7 +41,7 @@ export class FBFormState extends FBSchemaState {
       return defaultValue;
     }
     if (!_.get(this.values, fieldName) && !_.isUndefined(defaultValue)) {
-      this.initialValues[fieldName] = defaultValue;
+      (this.initialValues || {})[fieldName] = defaultValue;
     }
     return _.get(this.values, fieldName) || _.get(this.initialValues, fieldName);
   };
@@ -54,16 +50,13 @@ export class FBFormState extends FBSchemaState {
     if (!fieldName) {
       return;
     }
+    const prevValue = this.getFieldValue(fieldName);
     if (_.isUndefined(value) || value.length === 0) {
       this.omitFieldValue(fieldName);
     } else {
-      this.setValues({
-        ...this.values,
-        [fieldName]: value,
-      });
+      _.set(this.values, fieldName, value);
     }
     if (withState) {
-      const prevValue = this.getFieldValue(fieldName);
       this.inputState.get(fieldName)?.setValue(prevValue);
       this.inputState.get(fieldName)?.setValue(value);
     }
@@ -73,7 +66,8 @@ export class FBFormState extends FBSchemaState {
     if (!fieldName) {
       return;
     }
-    this.values = _.omit(this.values, fieldName);
+    this.initialValues = _.omit(this.initialValues, fieldName);
+    this.values = _.omit(this.getValues(), fieldName);
   };
 
   @action public setRules = (rules: Dictionary<string>) =>
@@ -105,10 +99,7 @@ export class FBFormState extends FBSchemaState {
     if (_.isUndefined(rules)) {
       return;
     }
-    this.rules = {
-      ...this.rules,
-      [fieldName]: rules,
-    };
+    _.set(this.rules, fieldName, rules);
   };
 
   @action public setValidationAttributeName = (fieldName: string, attrName: string) => {
@@ -129,16 +120,19 @@ export class FBFormState extends FBSchemaState {
     this.registerValidator(validator);
     validator.setAttributeNames(this.validationAttributeNames);
 
-    this.errors.clear();
-    function passes() {
-      callback && callback(true);
-    }
-
-    validator.checkAsync(passes, () => {
-      const errors = validator.errors.all();
-      _.map(errors, (v, k) => this.setFieldError(k, _.join(v, "\n")));
-      callback && callback(false);
-    });
+    validator.checkAsync(
+      // passes
+      () => {
+        this.errors.clear();
+        callback && callback(true);
+      },
+      // failed
+      () => {
+        this.errors.clear();
+        const errors = validator.errors.all();
+        _.map(errors, (v, k) => this.setFieldError(k, _.join(v, "\n")));
+        callback && callback(false);
+      });
   };
 
   // *NOTE: remove this after it is set in be script

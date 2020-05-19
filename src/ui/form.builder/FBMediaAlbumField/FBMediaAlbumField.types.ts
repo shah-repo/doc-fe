@@ -4,7 +4,7 @@ export type FBMediaAlbumFieldMode = "media" | "qr";
 export type FBMediaStatus = "AVAILABLE" | "USED" | "OBSOLETED";
 
 export type FBMediaAlbumFieldProps =
-& Pick<FBInputProps, "name" | "label" | "isTemplate" | "gutter">
+& Pick<FBInputProps, "name" | "label" | "isTemplate" | "gutter" | "reviseDisabled">
 & {
   onFileUploadChange: (event: React.FormEvent<HTMLInputElement>) => any;
   removeMedia?: (mediaId: string) => any;

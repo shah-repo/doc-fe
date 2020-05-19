@@ -31,7 +31,7 @@ export class FBControlPickerState {
       "evidencemediaupload",
       "testRequirement",
     ],
-    approvals: ["hellosign", "approval", "inlineapproval"],
+    approvals: ["hellosign", "approval", "requestapproval"],
     customcontrols: ["customcontrol"],
     instructions: ["instructionsdocument", "selectdocument", "selectrequirement"],
     buttons: ["checkpoint", "createlabel"],

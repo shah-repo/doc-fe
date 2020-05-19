@@ -1,11 +1,14 @@
 import _ from "lodash";
-import { FB, FBAutocompleteAsyncConfig, FBEditorPropertiesOption, FBInputType, FBOption } from "..";
+import { FB, FBActionOptionProps, FBAutocompleteAsyncConfig, FBEditorPropertiesOption, FBEditorPropertiesType, FBInputType, FBOption } from "..";
 import { FBCurrencyOption } from "../FBPurchaseOrderTable";
 import { FBSchemaProps } from "../FBSchema";
+import actionOptions from "./actionOptions.json";
 import additionalSchema from "./additionalSchema.json";
+import approvalMatrixRoleSchema from "./approvalMatrixRoleSchema.json";
 import autocompleteOptions from "./autocompleteOptions.json";
 import currencyOptions from "./currencyOptions.json";
 import editorProperties from "./editorProperties.json";
+import editorPropertiesControl from "./editorPropertiesControl.json";
 import requirementOptions from "./requirementOptions.json";
 import testStepSchema from "./testStepSchema.json";
 import unitsOptions from "./unitsOptions.json";
@@ -16,8 +19,25 @@ export class FBData {
     return JSON.parse(compiled({ id: FB.uniqid })) as unknown as FBSchemaProps[];
   }
 
-  public static get editorProperties(): Partial<Record<FBInputType, FBEditorPropertiesOption[]>> {
-    return editorProperties as Record<FBInputType, FBEditorPropertiesOption[]>;
+  public static get editorProperties(): Record<FBEditorPropertiesType, FBEditorPropertiesOption> {
+    return editorProperties;
+  }
+
+  public static get editorPropertiesControl(): Record<FBInputType, FBEditorPropertiesType[]> {
+    return editorPropertiesControl as Record<FBInputType, FBEditorPropertiesType[]>;
+  }
+
+  public static editorPropertiesByType(type: FBInputType): FBEditorPropertiesOption[] | undefined {
+    const editorProps = FBData.editorPropertiesControl[type];
+    if (!editorProps) { return; }
+    return _.map(editorProps, (itm) => ({
+      value: itm,
+      ...FBData.editorProperties[itm],
+      // :/
+      ...(itm === "includeContext" && (type === "checkbox" || type === "radio")) && {
+        text: "form.builder.include.note",
+      },
+    })) as FBEditorPropertiesOption[];
   }
 
   public static get autocompleteOptions(): FBAutocompleteAsyncConfig[] {
@@ -40,6 +60,14 @@ export class FBData {
     const compiled = _.template(JSON.stringify(additionalSchema));
     const parse = JSON.parse(compiled({ id: FB.uniqid }));
     return parse[type];
+  }
+
+  public static get actionOptions(): FBActionOptionProps[] {
+    return actionOptions as FBActionOptionProps[];
+  }
+
+  public static get approvalMatrixRoleSchema(): FBSchemaProps[] {
+    return approvalMatrixRoleSchema as FBSchemaProps[];
   }
 }
 

@@ -15,7 +15,7 @@ export const withFBOnChange = <T extends FBInputProps>(
   }: T) => {
 
     inputState = FB.useRef<FBInputState>(FBInputState);
-    const { workspaceState, formState, schemaState } = FB.useStores();
+    const { formState, schemaState, workspaceState } = FB.useStores();
 
     React.useEffect(() => {
       const defaultValue = formState?.getFieldValue(name);
@@ -53,8 +53,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       }
 
       if (_.isArray(value)) {
-        value = _.difference(editorProperties, value as FBEditorPropertiesType[]);
-        value = _.isEmpty(value);
+        value = value.includes("includeContext");
       }
       inputState?.setIncludeContext(value);
     }
@@ -85,7 +84,6 @@ export const withFBOnChange = <T extends FBInputProps>(
       if (!formState) {
         return;
       }
-
       function isSingleCheck() {
         return checkValue(ev);
       }
@@ -96,7 +94,12 @@ export const withFBOnChange = <T extends FBInputProps>(
       }
 
       function isDefault() {
-        formState?.setFieldValue(name, _.get(ev.target, "value"));
+        const { type } = ev.target;
+        let { value } = ev.target;
+        if (type === "number") {
+          value = _.toNumber(value);
+        }
+        formState?.setFieldValue(name, value);
       }
 
       const changedValue = {

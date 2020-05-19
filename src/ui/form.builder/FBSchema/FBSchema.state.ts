@@ -3,11 +3,14 @@ import { action, get, observable, set } from "mobx";
 import React from "react";
 import { FBSchemaProps } from ".";
 import { FBAutocompleteAsync, FBCheckboxGroup, FBEditorState, FBInputProps, FBInputType } from "..";
+import { FBActionField } from "../FBActionField";
 import { FBApproval } from "../FBApproval";
+import { FBApprovalMatrixField } from "../FBApprovalMatrixField";
 import { FBButton } from "../FBButton";
 import { FBCheckbox } from "../FBCheckbox";
 import { FBDatePicker } from "../FBDatePicker";
 import { FBFileUpload } from "../FBFileUpload";
+import { FBHelloSign } from "../FBHelloSign";
 import { FBHyperlink } from "../FBHyperlink";
 import { FBInstructionsDocument } from "../FBInstructionsDocument";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
@@ -17,6 +20,7 @@ import { FBPurchaseOrder } from "../FBPurchaseOrder";
 import { FBQuantityField } from "../FBQuantityField";
 import { FBRadio } from "../FBRadio";
 import { FBRadioGroup } from "../FBRadioGroup";
+import { FBRequestApproval } from "../FBRequestApproval";
 import { FBSchemaSelect } from "../FBSchemaSelect";
 import { FBSection } from "../FBSection";
 import { FBSelect } from "../FBSelect";
@@ -69,6 +73,10 @@ export class FBSchemaState {
     checkpoint: FBButton,
     createlabel: FBButton,
     approval: FBApproval,
+    requestapproval: FBRequestApproval,
+    action: FBActionField,
+    hellosign: FBHelloSign,
+    approvalMatrix: FBApprovalMatrixField,
   };
 
   @observable public schema?: FBSchemaProps[];

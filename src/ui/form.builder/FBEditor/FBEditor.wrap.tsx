@@ -8,9 +8,7 @@ export const withFBEditor = <T extends FBEditorProps>(
 ) => {
   const Comp = ({
     editorState,
-    initialValues,
     mode,
-    inputProps,
     ...props
   }: T) => {
 
@@ -23,7 +21,6 @@ export const withFBEditor = <T extends FBEditorProps>(
     return Component({
       ...(props as T),
       editorState,
-      initialValues: inputProps,
       mode,
     });
   };

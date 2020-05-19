@@ -32,6 +32,7 @@ export const withFBFormMarkDown = <T extends FBFormMarkDownProps>(
         return template({
           ...schemaItem,
           value: formState?.getFieldValue(name, ""),
+          label: (schemaItem.label as string) || "",
           customValidator,
         });
       });

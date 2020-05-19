@@ -1,5 +1,5 @@
 import React from "react";
-import { FBAutocomplete, FBData, FBEditor, FBEditorPlaceholder, FBEditorProperties, FBEditorProps, FBTextField } from "..";
+import { FBAutocomplete, FBData, FBEditor, FBEditorPlaceholder, FBEditorProps, FBTextField } from "..";
 
 const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
   children,
@@ -19,7 +19,6 @@ const FBEditorAutocomplete: React.FunctionComponent<FBEditorProps> = ({
       key={`fb-editor-${type}-${index}`}
       rules="required"
     />
-    <FBEditorProperties key={`fb-editor-props-${type}-${index}`} {...{ type }} />
     {children}
   </FBEditor>
 );

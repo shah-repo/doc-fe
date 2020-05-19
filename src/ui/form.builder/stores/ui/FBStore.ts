@@ -37,18 +37,15 @@ export class FormBuilderStore {
   public documentId = "";
   public stepSectionReg = /#([1-9][0-9]?|100)$/;
   public document: Partial<DocumentRevision> = {};
-  public isRevised? = false;
 
   public clearStores = () => {
     FBAutocompleteAsyncStore.data.clear();
   };
 
-  // @action public sectionNumber = (endIndex: number): number => {
-  //   const sections = _.filter(this.getSchema(), (schemaItem, index) =>
-  //     endIndex > index && (schemaItem.type === "stepsection" || schemaItem.type === "teststep")
-  //   );
-  //   return _.size(sections) + 1;
-  // };
+  public get isRevised(): boolean | undefined {
+    const { version = 0, revision = 0, outputRevision } = this.document;
+    return ((version > 1) && (revision > 1)) || outputRevision;
+  }
 
   @action public setMode = (mode: FBWorkspaceMode) => {
     this.mode = mode;

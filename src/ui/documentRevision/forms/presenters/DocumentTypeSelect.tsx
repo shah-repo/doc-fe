@@ -7,6 +7,7 @@ import { FBOutputDocumentType } from "../../../../state/ducks/documentRevisions"
 import { DocumentGroupOptionsType, documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
+import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
 import SelectField, { SelectOption } from "../../../components/forms/fields/Select";
 import { required, validator } from "../../../components/forms/fields/validators";
 import { FB } from "../../../form.builder";
@@ -64,18 +65,17 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
       formik.setFieldValue("retrain", type.defaultTraining);
       loadDocumentProposedId(type.id);
     }
+
+    const securityGroups: OptionType[] = [];
     if (type.isQms) {
       groupOptions.forEach((group) => {
         if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
-          formik.setFieldValue("securityGroups", [
-            { value: group.value, label: group.label },
-          ]);
+          securityGroups.push({ value: group.value, label: group.label });
         }
       });
+      formik.setFieldValue("securityGroups", securityGroups);
     }
-    if (!type.isQms) {
-      formik.setFieldValue("securityGroups", []);
-    }
+
     // FB mode
     const { schema = [] } = type;
     const formOption: DocumentGroupOptionsType = "FORM";

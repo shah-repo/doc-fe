@@ -2,7 +2,9 @@ import _ from "lodash";
 import { action, observable, set } from "mobx";
 import React from "react";
 import { FBEditorMode, FBEditorModeProps, FBEditorProps, FBInputType } from "..";
+import { FBEditorAction } from "../FBEditorAction";
 import { FBEditorApprovalField } from "../FBEditorApprovalField";
+import { FBEditorApprovalMatrix } from "../FBEditorApprovalMatrix";
 import { FBEditorAutocomplete } from "../FBEditorAutocomplete";
 import { FBEditorCheckControl } from "../FBEditorCheckControl";
 import { FBEditorHyperlink } from "../FBEditorHyperlink";
@@ -11,6 +13,7 @@ import { FBEditorLabel } from "../FBEditorLabel";
 import { FBEditorMediaAlbum } from "../FBEditorMediaAlbum";
 import { FBEditorOptionGroup } from "../FBEditorOptionGroup";
 import { FBEditorParagraph } from "../FBEditorParagraph";
+import { FBEditorRequestApproval } from "../FBEditorRequestApproval";
 import { FBEditorSelectDocument } from "../FBEditorSelectDocument";
 import { FBEditorSelectRequirement } from "../FBEditorSelectRequirement";
 import { FBEditorTestRequirement } from "../FBEditorTestRequirement";
@@ -38,6 +41,9 @@ export class FBEditorState {
     "checkpoint",
     "createlabel",
     "poreceive",
+    "requestapproval",
+    "hellosign",
+    "approvalMatrix",
   ];
 
   public static pickDefaultValue: FBInputType[] = [
@@ -54,6 +60,7 @@ export class FBEditorState {
     "checkpoint",
     "createlabel",
     "approval",
+    "requestapproval",
   ];
 
   public static pickStepIndex: FBInputType[] = ["stepsection", "teststep"];
@@ -90,6 +97,10 @@ export class FBEditorState {
     checkpoint: FBEditorLabel,
     createlabel: FBEditorLabel,
     approval: FBEditorApprovalField,
+    requestapproval: FBEditorRequestApproval,
+    action: FBEditorAction,
+    hellosign: FBEditorLabel,
+    approvalMatrix: FBEditorApprovalMatrix,
   };
 
   @observable public mode?: FBEditorMode = "config";

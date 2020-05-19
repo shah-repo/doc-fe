@@ -5,7 +5,7 @@ import { withFBEditorValidation } from "./FBEditorValidation.wrap";
 
 const FBEditorValidation: React.FunctionComponent<FBEditorValidationProps> = ({
   schema = [],
-  initialValues = {},
+  schemaState,
 }) => (
   <>
     <Box bgcolor="#f6f7f7" px={2} pt={1}>
@@ -20,17 +20,17 @@ const FBEditorValidation: React.FunctionComponent<FBEditorValidationProps> = ({
           },
           {
             text: "Show/Hide",
-            value: "disabled",
+            value: "visibility",
           },
           {
             text: "Enable/disable",
-            value: "visibility",
+            value: "disabled",
           },
         ]}
       />
     </Box>
     <Box px={2}>
-      <FBSchema {...{ schema }} />
+      <FBSchema {...{ schema, schemaState }} />
     </Box>
 
   </>

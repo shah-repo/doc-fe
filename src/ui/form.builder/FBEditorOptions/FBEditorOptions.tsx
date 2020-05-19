@@ -1,9 +1,7 @@
 import React from "react";
 import { FBTextField, FBTextFieldProps } from "..";
 
-const FBEditorOptions: React.FunctionComponent<FBTextFieldProps> = ({
-  ...props
-}) => (
+const FBEditorOptions: React.FunctionComponent<FBTextFieldProps> = () => (
   <FBTextField
     label="form.builder.options"
     name="options"

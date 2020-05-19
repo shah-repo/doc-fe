@@ -11,7 +11,7 @@ const FBAutocompleteEditor: React.FunctionComponent<FBAutocompleteEditorProps> =
   afterChange,
 }) => (
   <FBStepperEditor>
-    <FBLabelEditor />
+    <FBLabelEditor standalone={false} />
     <FBPlaceholderEditor />
     <FBSelect
       label="form.builder.select.options"

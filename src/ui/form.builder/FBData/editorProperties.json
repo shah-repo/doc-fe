@@ -1,56 +1,26 @@
 {
-  "autocomplete": [{
-    "value": "multiple",
+  "multiple": {
     "text": "form.builder.multi.select",
     "outputText": "form.builder.multiple"
-  }, {
-    "value": "includeQRScan",
+  },
+  "includeQRScan": {
     "text": "form.builder.include.qr.scan",
     "outputText": "form.builder.scan.qr"
-  }],
-  "autocompleteasync": [{
-    "value": "multiple",
-    "text": "form.builder.multi.select",
-    "outputText": "form.builder.multiple"
-  }, {
-    "value": "includeQRScan",
-    "text": "form.builder.include.qr.scan",
-    "outputText": "form.builder.scan.qr"
-  }],
-  "select": [{
-      "value": "includeNone",
-      "text": "form.builder.include.none",
-      "outputText": "form.builder.none"
-    },
-    {
-      "value": "includeContext",
-      "text": "form.builder.include.other",
-      "outputText": "form.builder.other"
-    }
-  ],
-  "checkbox": [{
-    "value": "includeContext",
-    "text": "form.builder.include.note",
-    "outputText": "form.builder.note"
-  }],
-  "radio": [{
-    "value": "includeContext",
-    "text": "form.builder.include.note",
-    "outputText": "form.builder.note"
-  }],
-  "checkboxgroup": [{
-    "value": "includeContext",
+  },
+  "reviseDisabled": {
+    "text": "form.builder.revise.disabled"
+  },
+  "includeNone": {
+    "text": "form.builder.include.none",
+    "outputText": "form.builder.none",
+    "isOption": true
+  },
+  "includeContext": {
     "text": "form.builder.include.other",
-    "outputText": "form.builder.other"
-  }],
-  "radiogroup": [{
-    "value": "includeContext",
-    "text": "form.builder.include.other",
-    "outputText": "form.builder.other"
-  }],
-  "approval": [{
-    "value": "approveIsBlocking",
-    "text": "form.builder.blocking",
-    "outputText": "form.builder.blocking"
-  }]
+    "outputText": "form.builder.other",
+    "isOption": true
+  },
+  "approveIsBlocking": {
+    "text": "form.builder.blocking"
+  }
 }

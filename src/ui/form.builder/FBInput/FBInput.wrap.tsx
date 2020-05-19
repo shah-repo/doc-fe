@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-hooks/exhaustive-deps */
 import _ from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { FBOption } from "..";
 import { isTranslation } from "../../translations/types";
+import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
 import { FBInputProps, OmitInputClones } from "../FBInput";
 import { FB } from "../helpers";
 import { withFBOnChange } from "./FBInput.onchange";
@@ -12,6 +14,7 @@ export const withFBInput = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>
 ) => {
   const Comp = ({
+    optionsToString,
     inputState,
     onChange,
     name = "",
@@ -38,29 +41,25 @@ export const withFBInput = <T extends FBInputProps>(
     defaultValue = setDefaultValue();
     helperText = formState?.errors.get(name) || helperText;
     error = !_.isUndefined(formState?.errors.get(name)) && formState?.errorValidation;
-
-    if (type === "texteditor" && inputState) {
-      inputState.value = inputState.value || "";
-    }
     value = inputState?.value;
     includeContext = inputState?.includeContext;
 
-    (_.isUndefined(hidden) && validationMode === "visibility") && (hidden =
+    (_.isUndefined(hidden) && formState?.workspaceMode === "form" && validationMode === "visibility") && (hidden =
       !helperText && !defaultValue
     );
 
-    function editorOptionDefaultValue(): string {
-      const options: FBOption[] | undefined = formState?.getFieldValue(name);
-      return _.join(_.map(options, "text"), "\n") || "";
-    }
+    (!disabled && formState?.workspaceMode === "form" && validationMode === "disabled") && (disabled =
+      !helperText && !defaultValue
+    );
 
     function setDefaultValue(): any {
-      if (!formState) {
-        return;
-      }
+      if (!formState) { return; }
       const value = {
         editoroptions() {
-          return editorOptionDefaultValue();
+          const options: FBOption[] | undefined = formState?.getFieldValue(name);
+          const value = optionsToString && optionsToString(options);
+          formState?.setFieldValue(name, value);
+          return value || "";
         },
         datepicker() {
           return inputState && (inputState.value = formState.getFieldValue(name, ""));
@@ -76,13 +75,6 @@ export const withFBInput = <T extends FBInputProps>(
       return transDefault;
     }
 
-    React.useEffect(() => {
-      if (!_.isUndefined(defaultValue) && !_.isEmpty(defaultValue)) {
-        formState?.setFieldValue(name, defaultValue);
-      }
-      inputState?.setDefaultValue(defaultValue);
-    }, [defaultValue]);
-
     const child = _.first(React.Children.toArray(children));
     const isClone = !_.includes(OmitInputClones, type) && !_.isUndefined(child);
 
@@ -90,24 +82,22 @@ export const withFBInput = <T extends FBInputProps>(
       children = React.cloneElement(child as React.ReactElement, {
         disabled,
         onChange,
-        // defaultValue,
         ...(type !== "texteditor" && { value }),
-        // ...(type === "datepicker") && { value: inputState?.value },
-        // ...(type !== "texteditor" && { value }),
         ...(type !== "datepicker" && type !== "autocomplete" && !_.isBoolean(defaultValue) && { defaultValue }),
       });
     }
 
     React.useEffect(() => {
+      if (!formState && !inputState) { return; }
       // Input states
-      inputState && formState && formState.inputState.set(name, inputState);
+      formState!.inputState.set(name, inputState!);
+      formState!.inputState.set(name, inputState!);
+
       // Validation settings
-      if (formState && name) {
-        let attr = (label as string) || placeholder || name;
-        isTranslation(attr) && (attr = intl.formatMessage({ id: attr }));
-        formState?.setValidationAttributeName(name, attr);
-        rules && (formState.setFieldRules(name, rules));
-      }
+      let attr = (label as string) || placeholder || name;
+      isTranslation(attr) && (attr = intl.formatMessage({ id: attr }));
+      formState?.setValidationAttributeName(name, attr);
+      rules && (formState!.setFieldRules(name, rules));
     }, [rules]);
 
     return Component({
@@ -132,5 +122,5 @@ export const withFBInput = <T extends FBInputProps>(
     });
   };
 
-  return withFBOnChange((props: T) => Comp(props));
+  return withFBEditorOptions(withFBOnChange((props: T) => Comp(props)));
 };

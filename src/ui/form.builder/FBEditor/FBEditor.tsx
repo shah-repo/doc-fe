@@ -1,21 +1,25 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import { FBEditorProps } from ".";
-import { FBEditorValidation, FBForm, FBProvider } from "..";
+import { FBEditorProperties, FBEditorValidation, FBForm, FBProvider } from "..";
 import { withFBEditor } from "./FBEditor.wrap";
 
 const FBEditor: React.FunctionComponent<FBEditorProps> = ({
+  inputProps: { type, index } = {},
+  inputProps,
   editorState,
   children,
-  initialValues,
   underValidation,
   mode,
-  ...props
 }) => (
   <FBProvider {...{ editorState }}>
-    <FBForm {...{ initialValues }}>
+    <FBForm initialValues={inputProps}>
       <Box hidden={mode === "validation"}>
         {children}
+        <FBEditorProperties
+          key={`fb-editor-props-${type}-${index}`}
+          {...{ type }}
+        />
       </Box>
       {underValidation && (
         <Box hidden={mode === "config"}>

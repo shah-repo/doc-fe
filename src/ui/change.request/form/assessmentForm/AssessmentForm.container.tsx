@@ -6,7 +6,7 @@ import { AsyncState } from "../../../../state/types";
 import { ChangeRequestFormValues } from "../types";
 import AssessmentFormPresenter from "./AssessmentForm.presenter";
 
-interface OwnProps {
+interface Props {
   initialValues: ChangeRequestFormValues;
   asyncState: AsyncState;
   onSubmit: (values: ChangeRequestFormValues, actions: FormikActions<ChangeRequestFormValues>) => void;
@@ -15,11 +15,10 @@ interface OwnProps {
   doNotPrompt?: boolean;
   onDirtyFlagChange?: (dirty: boolean) => void;
   documentTypeGroups: Group[];
+  selectedDocumentRevision: string | null;
 }
 
-type AssessmentFormContainerProps = OwnProps;
-
-const AssessmentFormContainer: React.FunctionComponent<AssessmentFormContainerProps> = ({
+const AssessmentFormContainer: React.FunctionComponent<Props> = ({
   onSubmit,
   initialValues,
   asyncState,
@@ -28,6 +27,7 @@ const AssessmentFormContainer: React.FunctionComponent<AssessmentFormContainerPr
   doNotPrompt,
   onDirtyFlagChange,
   documentTypeGroups,
+  selectedDocumentRevision,
 }) => {
   const render = (props: FormikProps<ChangeRequestFormValues>) => (
     <AssessmentFormPresenter
@@ -38,6 +38,7 @@ const AssessmentFormContainer: React.FunctionComponent<AssessmentFormContainerPr
       doNotPrompt={doNotPrompt}
       onDirtyFlagChange={onDirtyFlagChange}
       documentTypeGroups={documentTypeGroups}
+      selectedDocumentRevision={selectedDocumentRevision}
     />
   );
 
