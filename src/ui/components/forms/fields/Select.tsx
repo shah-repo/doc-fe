@@ -51,8 +51,9 @@ const Select: React.FunctionComponent<SelectPropsWithFormik> = ({
         {...fieldProps.field}
         {...selectProps}
         input={<InputField name={fieldProps.field.name} {...inputFieldProps}/>}
-        onChange={(evt) => {
+        onChange={(evt, child) => {
           field.onChange(evt);
+          selectProps?.onChange?.(evt, child);
           submitForm(form.submitForm);
         }}
       >
