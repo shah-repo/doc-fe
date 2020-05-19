@@ -186,6 +186,7 @@
   "common.save": "Save",
   "common.type": "Type",
   "common.title": "Title",
+  "common.title.SUP": "Supplier Name",
   "common.documentId": "Document ID",
   "common.remove": "Remove",
   "common.upload": "Upload",

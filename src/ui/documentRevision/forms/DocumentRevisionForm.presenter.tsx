@@ -174,7 +174,11 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           doNotPrompt={doNotPrompt}
           onDirtyFlagChange={onDirtyFlagChange}
         />
-        <Title name="name" label="common.title" />
+        <Title
+          name="name"
+          label="common.title"
+          documentTypeId={values.document?.documentType?.id}
+        />
         <Description isQms={docInfo.isQms} />
         <DocumentTypeSelect
           outputDocumentTypes={initialValues.formDocument?.formTemplate?.outputDocumentTypes}
