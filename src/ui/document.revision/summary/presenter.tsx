@@ -4,7 +4,7 @@ import _ from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { DataProps } from "../../../state/ducks/common";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
@@ -58,10 +58,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const FBIsActive = formInput || formTemplate || formDocument;
 
   const outputDocumentTypeName = useSelector((state: ApplicationState) =>
-    formTemplate ?
-      formTemplate.outputDocumentTypes.map((i) => documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") :
-      []
-  );
+    formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
+      documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
 
   const renderTrainingControl = status === DocumentRevisionStatus.Released && (
     <TrainingControl
