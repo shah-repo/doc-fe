@@ -4,7 +4,6 @@ import { FBApprovalMatrixTableInfo, FBApprovalMatrixTableProps, FBApprovalMatrix
 import { withFBApprovalMatrixTable } from "./FBApprovalMatrixTable.wrap";
 
 const FBApprovalMatrixTable: React.FunctionComponent<FBApprovalMatrixTableProps> = ({
-  handleCheck,
   approvalRoles,
   approvalMatrix,
   classes,
@@ -13,11 +12,11 @@ const FBApprovalMatrixTable: React.FunctionComponent<FBApprovalMatrixTableProps>
 }) =>  (
   <Box display="flex" flexDirection="row">
     <Box width="100%">
-      <FBApprovalMatrixTableInfo {...{ classes, approvalMatrix, mode, name, handleCheck }} />
+      <FBApprovalMatrixTableInfo {...{ classes, approvalMatrix, mode, name }} />
     </Box>
     {approvalRoles && (
       <Box width="65%"style={{ overflowX: "auto", overflowY: "hidden" }}>
-        <FBApprovalMatrixTableStatus {...{ classes, approvalMatrix, approvalRoles, mode, name, handleCheck }} />
+        <FBApprovalMatrixTableStatus {...{ classes, approvalMatrix, approvalRoles, mode, name }} />
       </Box>
     )}
   </Box>
