@@ -1,4 +1,5 @@
-[{
+[
+  {
     "text": "form.builder.units.hours.short",
     "value": "hours"
   },
@@ -63,6 +64,14 @@
     "value": "bottles"
   },
   {
+    "text": "form.builder.units.samples",
+    "value": "samples"
+  },
+  {
+    "text": "form.builder.units.batch",
+    "value": "batch"
+  },
+  {
     "text": "form.builder.units.foot",
     "value": "foot"
   },
@@ -85,6 +94,10 @@
   {
     "text": "form.builder.units.sqft.short",
     "value": "sqft"
+  },
+  {
+    "text": "form.builder.units.ar.short",
+    "value": "ar"
   },
   {
     "text": "form.builder.units.gram",
