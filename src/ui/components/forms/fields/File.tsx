@@ -9,6 +9,7 @@ export type FileOwnProps = FieldOwnProps;
 
 type FileProps = FileOwnProps & WithStyles<typeof styles> & FormikFieldProps;
 
+// TODO: check if this is still used
 const File: React.FunctionComponent<FileProps> = ({ classes, ...fieldProps }) => {
   const onChange = (event: React.FormEvent<HTMLInputElement>) => {
     fieldProps.form.setFieldValue(fieldProps.field.name, event.currentTarget.files && event.currentTarget.files[0]);

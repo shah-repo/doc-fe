@@ -32,6 +32,7 @@ const FBPOApprovalMatrixForm: React.FunctionComponent<FBPOApprovalMatrixFormProp
         />
         <Error error={errors.name} />
         <FBTextField
+          inputProps={{ type: "number" }}
           label="form.builder.field.limit"
           name={`${name}-formValues.limit`}
         />
@@ -42,23 +43,21 @@ const FBPOApprovalMatrixForm: React.FunctionComponent<FBPOApprovalMatrixFormProp
               <Text translation="form.builder.signature.label" values={{ number: level }} />
             </Typography>
             <AutocompleteField
-              name={`${name}-formValues.signature${level}.groups`}
+              name={`${name}-formValues.signature${level}groups`}
               label="document.revision.selected.groups"
               options={groupOptions}
               autocompleteProps={{
                 isMulti: true,
                 isClearable: true,
-                defaultValue: props.values[`${name}-formValues`]?.[`signature${level}.groups`],
               }}
             />
             <AutocompleteField
-              name={`${name}-formValues.signature${level}.employees`}
+              name={`${name}-formValues.signature${level}employees`}
               label="document.revision.selected.users"
               options={toMembersOptions(employees)}
               autocompleteProps={{
                 isMulti: true,
                 isClearable: true,
-                defaultValue: props.values[`${name}-formValues`]?.[`signature${level}.employees`],
               }}
             />
           </Box>) )}
