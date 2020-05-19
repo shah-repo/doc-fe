@@ -27,6 +27,7 @@ export class FBControlPickerState {
       "purchaseorder",
       "poreceive",
       "approvalMatrix",
+      "poApprovalMatrix",
       "instructionsmediaupload",
       "evidencemediaupload",
       "testRequirement",

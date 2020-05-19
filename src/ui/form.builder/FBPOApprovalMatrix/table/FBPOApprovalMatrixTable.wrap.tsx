@@ -1,3 +1,4 @@
+import { useObserver } from "mobx-react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { FB } from "../..";
@@ -7,18 +8,22 @@ import { DEFAULT_ACTIVE_EMPLOYEES } from "../../../group.management/utils/types"
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
-import FBStore from "../../stores/ui/FBStore";
 import { FBPOApprovalMatrixTableProps } from "../FBPOApprovalMatrix.types";
+import FBPOApprovalMatrixForm from "../form/FBPOApprovalMatrixForm";
+import FBPOApprovalMatrixFormActions from "../form/FBPOApprovalMatrixForm.actions";
 
 export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTableProps>(
   Component: React.FunctionComponent<T>
 ) => {
 
   const Comp = ({
+    approvalLevels,
     ...props
   }: T) => {
-    const { document } = FBStore;
-    const isDocumentReleased = document.status === DocumentRevisionStatus.Released;
+    const { workspaceState, dialogState } = FB.useStores();
+    const { document } = workspaceState || {};
+
+    const isDocumentReleased = document?.status === DocumentRevisionStatus.Released;
     const groupOptions = useSelector(userManagementSelectors.getOfficialGroups);
     const [employees, setActiveEmployees] = useState<GetEmployeeResponse[]>(
       DEFAULT_ACTIVE_EMPLOYEES,
@@ -60,10 +65,17 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
       }
       poamState?.setFormValues(item, groupOptions, employees);
       setIndex(index);
-      setInitialValues({
-        [`${props.name}-formValues`]: { ...FBStore.getValue(`${props.name}-formValues`), id: item.id },
+      dialogState?.config({
+        open: true,
+        title: "form.builder.add.item",
+        content: <FBPOApprovalMatrixForm initialValues={item} signatureStages={[1, 2, 3]} />,
+        actions: <FBPOApprovalMatrixFormActions />,
       });
-      dialog.open();
+
+      // setInitialValues({
+      //   [props.name + "-formValues"]: { ...formState?.getFieldValue(props.name + "-formValues"), id: item.id },
+      // });
+      // dialog.open();
     };
 
     const onSubmit = (item) => {
@@ -73,10 +85,14 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
       poamState?.clearFormValues();
     };
 
+    useObserver(() => {
+      approvalLevels = poamState?.poam.approvalLevels;
+    });
+
     return Component({
-      ...(props),
+      ...(props as T),
       initialValues,
-      approvalLevels: poamState?.poam.approvalLevels,
+      approvalLevels,
       onSubmit,
       groupOptions,
       isDialogOpen: dialog.isOpen,

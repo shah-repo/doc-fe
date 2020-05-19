@@ -137,6 +137,7 @@ export * from "./FBMediaQR/FBMediaQR.types";
 export * from "./FBOption/FBOption.types";
 export { default as FBParagraph } from "./FBParagraph/FBParagraph";
 export * from "./FBParagraph/FBParagraph.types";
+export { default as FBPOApprovalMatrix } from "./FBPOApprovalMatrix/FBPOApprovalMatrix";
 export { default as FBPOReceive } from "./FBPOReceive/FBPOReceive";
 export { default as FBPOReceiveState } from "./FBPOReceive/FBPOReceive.state";
 export * from "./FBPOReceive/FBPOReceive.types";
