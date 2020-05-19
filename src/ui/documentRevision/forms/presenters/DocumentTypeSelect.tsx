@@ -5,6 +5,7 @@ import { GroupTag } from "../../../../state/ducks/auth/types";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
+import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
 import SelectField, { SelectOption } from "../../../components/forms/fields/Select";
 import { required, validator } from "../../../components/forms/fields/validators";
 import FBDRStore from "../../../form.builder/stores/ui/FBDRStore";
@@ -36,6 +37,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   const documentTypesById = useSelector(documentTypeSelectors.byId);
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const isDocTypeDisabled = (type === "newVersion" || isdocRevStatusDraft) || isDisabled;
+  const isNewOutput = type === "newOutput";
   const options: SelectOption[] = React.useMemo(() => {
     if (type === "newOutput" && outputDocumentTypes) {
       return outputDocumentTypes.map((e) =>
@@ -63,19 +65,18 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
       formik.setFieldValue("retrain", type.defaultTraining);
       loadDocumentProposedId(type.id);
     }
-    FBDRStore.setInitialFBMode(type);
+    if (!isNewOutput) {
+      FBDRStore.setInitialFBMode(type);
+    }
+    const securityGroups: OptionType[] = [];
     if (type.isQms) {
       groupOptions.forEach((group) => {
         if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
-          formik.setFieldValue("securityGroups", [
-            { value: group.value, label: group.label },
-          ]);
+          securityGroups.push({ value: group.value, label: group.label });
         }
       });
     }
-    if (!type.isQms) {
-      formik.setFieldValue("securityGroups", []);
-    }
+    formik.setFieldValue("securityGroups", securityGroups);
     formik.handleChange(event);
   };
 

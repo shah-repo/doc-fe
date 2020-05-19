@@ -14,6 +14,7 @@ const FBQuantityField: React.FunctionComponent<FBQuantityProps> = ({
       type="number"
       variant="outlined"
       label=""
+      inputProps={{ min: "0" }}
       {...{ placeholder, error, id }}
     />
   </FBInput>

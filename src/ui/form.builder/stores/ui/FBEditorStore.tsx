@@ -24,9 +24,9 @@ export class FBEditorStore {
 
   @action public setOpen = (forIndex = -1) => () => {
     this.open = true;
+    this.editorIndex = forIndex + 1;
     this.content = this.sections();
     this.title = "";
-    this.editorIndex = forIndex + 1;
     this.editorMode = "create";
   };
 
@@ -104,7 +104,7 @@ export class FBEditorStore {
     }
 
     if (el === "dynamiccontrol") {
-      return <FBDynamicControl />;
+      return <FBDynamicControl index={this.editorIndex} />;
     }
 
     return (

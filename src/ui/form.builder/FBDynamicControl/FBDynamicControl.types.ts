@@ -1,9 +1,9 @@
-import { FBDynamicControlState } from "..";
+import { FBDynamicControlState, FBInputProps } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 
-export interface FBDynamicControlProps {
+export type FBDynamicControlProps = Pick<FBInputProps, "index"> & {
   dynamicControlState?: FBDynamicControlState;
   controls?: DocumentRevision[];
   loading?: boolean;
   handleSelect?: (control: DocumentRevision) => any;
-}
+};
