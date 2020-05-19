@@ -1,6 +1,6 @@
 import _ from "lodash";
 import React, { useCallback, useEffect, useMemo } from "react";
-import { connect, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
 import { GroupTag } from "../../state/ducks/auth/types";
 import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
@@ -19,6 +19,7 @@ interface StateProps {
   documentRevision: DocumentRevision;
   currentEmployeeId: string;
   isCompanyAdmin: boolean;
+  selectedDocument: DocumentRevision;
 }
 
 interface DispatchProps {
@@ -52,6 +53,10 @@ const mapStateToProps = (
     state,
     props.documentRevisionId,
   ),
+  selectedDocument: documentRevisionsSelectors.getDocumentRevision(
+    state,
+    props.documentRevisionId
+  ),
 });
 
 export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevisionDisplayContainerProps> = ({
@@ -65,6 +70,7 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
   documentId,
   currentEmployeeId,
   isCompanyAdmin,
+  selectedDocument,
 }) => {
   const loadDocumentRevisionAction = useCallback(() => {
     if (documentRevisionId) {
@@ -76,12 +82,9 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
     loadDocumentRevisionAction();
   }, [loadDocumentRevisionAction]);
 
-  const selectedDocument = useSelector((state: ApplicationState) =>
-    documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId));
   const operators = _.get(selectedDocument, "document.operators", []);
-  const email = useSelector(authSelectors.currentUserEmail);
   const availableOperators = operators.map((operator) => operator.user.email);
-  const isCurrentUserOperator = availableOperators.includes(email);
+  const isCurrentUserOperator = availableOperators.includes(currentUserEmail);
 
   isOperator = React.createContext(isCurrentUserOperator);
 
@@ -108,7 +111,6 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
 
   const subscribeToSocket = documentRevision &&
     <HelloSignAllSignedRefreshSockets documentRevision={documentRevision} />;
-  console.log(canEdit, canPreview);
 
   return (
     <AsyncGate
