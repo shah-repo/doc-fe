@@ -19,8 +19,12 @@ export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
     const formValue = formState?.getFieldValue(name);
     approvalMatrixFieldState = FB.useRef<FBApprovalMatrixFieldState>(FBApprovalMatrixFieldState, formValue);
 
+    async function fetchData() {
+      const data = await approvalMatrixFieldState?.fetch();
+      formState?.setFieldValue(name, data);
+    }
     if (!disabled && !formValue) {
-      approvalMatrixFieldState.fetch();
+      fetchData();
     }
 
     handleAdd = () => {

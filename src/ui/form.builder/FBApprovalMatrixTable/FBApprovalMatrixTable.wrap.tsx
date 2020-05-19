@@ -20,7 +20,6 @@ export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
     useObserver(() => {
       approvalRoles = approvalMatrixFieldState?.approvalRoles;
       approvalMatrix = approvalMatrixFieldState?.approvalMatrix;
-      mode = approvalMatrixFieldState?.mode;
     });
 
     return Component({

@@ -17,15 +17,13 @@ const FBApprovalMatrixRoles: React.FunctionComponent<FBApprovalMatrixRolesProps>
       {approvalRoles && (
         <FBMapWrapper<FBApprovalRole[]> collection={approvalRoles}>
           {(role: FBApprovalRole, index) => (
-            <>
+            <React.Fragment key={`fb-approval-matrix-role-${role.id}`}>
               <FBTextField
-                key={`fb-role-name-${role.id}`}
                 label="form.builder.approval.role"
                 name={`${name}.approvalRoles.${index}.name`}
                 disabled={true}
               />
               <FBAutocompleteAsync
-                key={`fb-role-role-approver-${role.id}`}
                 label="form.builder.approving.users"
                 name={`${name}.approvalRoles.${index}.employees`}
                 placeholder="form.builder.approving.roles.placeholder"
@@ -35,7 +33,6 @@ const FBApprovalMatrixRoles: React.FunctionComponent<FBApprovalMatrixRolesProps>
                 {...{ disabled }}
               />
               <FBAutocompleteAsync
-                key={`fb-role-role-group-${role.id}`}
                 label="form.builder.approving.groups"
                 name={`${name}.approvalRoles.${index}.groups`}
                 placeholder="form.builder.approving.roles.placeholder"
@@ -44,7 +41,7 @@ const FBApprovalMatrixRoles: React.FunctionComponent<FBApprovalMatrixRolesProps>
                 optionId={FBAutocompleteAsyncOption.group}
                 {...{ disabled }}
               />
-            </>
+            </React.Fragment>
           )}
         </FBMapWrapper>
       )}

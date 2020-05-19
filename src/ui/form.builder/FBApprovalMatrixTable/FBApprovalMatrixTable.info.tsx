@@ -41,10 +41,23 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
               label={am.docType.name}
               align="center"
             />
-            <FBTableCell
-              label={am.docType.defaultTraining ? "Yes" : "No"}
-              align="center"
-            />
+            {mode !== "edit" && (
+              <FBTableCell
+                label={am.docType.defaultTraining ? "Yes" : "No"}
+                align="center"
+              />
+            )}
+            {mode === "edit" && (
+              <FBTableCell>
+                <Box display="flex" justifyContent="center" pl={3}>
+                  <FBCheckbox
+                    name={`${name}.approvalMatrix.${index}.docType.defaultTraining`}
+                    gutter={false}
+                    defaultChecked={am.docType.defaultTraining}
+                  />
+                </Box>
+              </FBTableCell>
+            )}
           </TableRow>
         )}
       </FBMapWrapper>

@@ -6,4 +6,5 @@ export type FBApprovalMatrixProps =
 & {
   handleSave?: () => any;
   handleCancel?: () => any;
+  handleEdit?: () => any;
 };

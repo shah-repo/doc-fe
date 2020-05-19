@@ -27,8 +27,11 @@ const FBApprovalMatrixTableStatus: React.FunctionComponent<FBApprovalMatrixTable
       </TableRow>
       <TableRow className="FBStatus-root" style={{ height: "30px" }}>
         <FBMapWrapper<string[]> collection={_.values(FBApprovalMatrixTableRoleHead)}>
-          {(head: string) => (
-            <FBMapWrapper<FBApprovalRole[]> collection={approvalRoles}>
+          {(head: string, index) => (
+            <FBMapWrapper<FBApprovalRole[]>
+              key={`fb-approval-matrix-column-${head}-${index}`}
+              collection={approvalRoles}
+            >
               {(role: FBApprovalRole, index) => (
                 <FBTableCell
                   key={`fb-approval-matrix-column-${head}-${role.id}-${index}`}
@@ -46,17 +49,34 @@ const FBApprovalMatrixTableStatus: React.FunctionComponent<FBApprovalMatrixTable
     </TableHead>
     <TableBody>
       <FBMapWrapper<FBApprovalMatrixItem[]> collection={approvalMatrix}>
-        {(am: FBApprovalMatrixItem, index) => (
-          <TableRow key={`fb-approval-matrix-stage-${am.id}-${index}`}>
+        {(am: FBApprovalMatrixItem, i) => (
+          <TableRow key={`fb-approval-matrix-stage-${am.id}-${i}`}>
             <FBMapWrapper<string[]> collection={_.keys(FBApprovalMatrixTableRoleHead)}>
-              {(key: string) => (
-                <FBMapWrapper<boolean[]> collection={_.get(am.approvalRoles, key)}>
+              {(key: string, index) => (
+                <FBMapWrapper<boolean[]>
+                  key={`fb-approval-matrix-stage-${key}-${index}`}
+                  collection={_.get(am.approvalRoles, key)}
+                >
                   {(value: boolean, index) => (
-                    <FBTableCell
-                      key={`fb-approval-matrix-stage-value-${am.id}-${index}`}
-                      label={value ? "Y" : ""}
-                      align="center"
-                    />
+                    <React.Fragment key={`fb-approval-matrix-stage-${am.id}-${index}`}>
+                      {mode !== "edit" && (
+                        <FBTableCell
+                          label={value ? "Y" : ""}
+                          align="center"
+                        />
+                      )}
+                      {mode === "edit" && (
+                        <FBTableCell>
+                          <Box display="flex" justifyContent="center" pl={3}>
+                            <FBCheckbox
+                              name={`${name}.approvalMatrix.${i}.approvalRoles.${key}.${index}`}
+                              gutter={false}
+                              defaultChecked={value}
+                            />
+                          </Box>
+                        </FBTableCell>
+                      )}
+                    </React.Fragment>
                   )}
                 </FBMapWrapper>
               )}
@@ -67,10 +87,13 @@ const FBApprovalMatrixTableStatus: React.FunctionComponent<FBApprovalMatrixTable
       {mode === "add" && (
         <TableRow>
           <FBMapWrapper<string[]> collection={_.keys(FBApprovalMatrixTableRoleHead)}>
-            {(key: string) => (
-              <FBMapWrapper<FBApprovalRole[]> collection={approvalRoles}>
-                {(_value: FBApprovalRole, index) => (
-                  <FBTableCell>
+            {(key: string, index) => (
+              <FBMapWrapper<FBApprovalRole[]>
+                key={`fb-approval-matrix-add-${key}-${index}`}
+                collection={approvalRoles}
+              >
+                {(value: FBApprovalRole, index) => (
+                  <FBTableCell key={`fb-approval-matrix-add-${value}-${index}`}>
                     <Box display="flex" justifyContent="center" pl={3}>
                       <FBCheckbox
                         name={`${name}.approvalMatrix.${approvalMatrix.length}.approvalRoles.${key}.${index}`}

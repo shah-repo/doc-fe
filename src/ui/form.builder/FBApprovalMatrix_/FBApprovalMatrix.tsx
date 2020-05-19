@@ -1,4 +1,5 @@
 import { Box, IconButton } from "@material-ui/core";
+import CancelPresentationIcon from "@material-ui/icons/CancelPresentation";
 import EditIcon from "@material-ui/icons/Edit";
 import FullscreenOutlinedIcon from "@material-ui/icons/FullscreenOutlined";
 import React from "react";
@@ -9,6 +10,7 @@ const FBApprovalMatrix: React.FunctionComponent<FBApprovalMatrixProps> = ({
   handleAdd,
   handleSave,
   handleCancel,
+  handleEdit,
   disabled,
   name,
   mode,
@@ -21,14 +23,21 @@ const FBApprovalMatrix: React.FunctionComponent<FBApprovalMatrixProps> = ({
             <FullscreenOutlinedIcon />
           </FBTooltip>
         </IconButton>
-        <IconButton color="inherit" size="small" {...{ disabled }} >
-          <FBTooltip title='form.builder.edit.matrix'>
-            <EditIcon fontSize="small" />
-          </FBTooltip>
+        <IconButton color="inherit" size="small" {...{ disabled }} onClick={handleEdit} >
+          {mode !== "edit" && (
+            <FBTooltip title='form.builder.edit.matrix'>
+              <EditIcon fontSize="small" />
+            </FBTooltip>
+          )}
+          {mode === "edit" && (
+            <FBTooltip title='Cancel edit'>
+              <CancelPresentationIcon fontSize="small" />
+            </FBTooltip>
+          )}
         </IconButton>
       </Box>
     </FBSection>
-    <FBApprovalMatrixTable {...{ name }} />
+    <FBApprovalMatrixTable {...{ name, mode }} />
     <Box mt={2}>
       {mode === "add" && (
         <Box display="flex" flexDirection="row-reverse">

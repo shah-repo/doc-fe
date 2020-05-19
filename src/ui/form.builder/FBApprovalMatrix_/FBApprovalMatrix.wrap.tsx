@@ -8,7 +8,9 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
   const Comp = ({
     handleSave,
     handleCancel,
+    handleEdit,
     name,
+    mode,
     ...props
   }: T) => {
 
@@ -29,11 +31,21 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       approvalMatrixFieldState?.setMode("none");
     };
 
+    handleEdit = () => {
+      if (mode !== "edit") {
+        approvalMatrixFieldState?.setMode("edit");
+        return;
+      }
+      handleSave && handleSave();
+    };
+
     return Component({
       ...(props as T),
       handleSave,
       handleCancel,
+      handleEdit,
       name,
+      mode,
     });
   };
 
