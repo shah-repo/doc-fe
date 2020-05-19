@@ -11,6 +11,7 @@ export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
     approvalMatrix,
     classes,
     mode,
+    name,
     ...props
   }: T) => {
 
@@ -28,6 +29,7 @@ export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
       approvalMatrix,
       classes,
       mode,
+      name,
     });
   };
 

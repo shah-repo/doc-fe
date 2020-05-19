@@ -44,4 +44,4 @@ export interface FBApprovalMatrixFieldData {
   approvalMatrix: FBApprovalMatrixItem[];
 }
 
-export type FBApprovalMatrixFieldMode = "none" | "add" | "edit";
+export type FBApprovalMatrixFieldMode = "none" | "add" | "edit" | "fullscreen";

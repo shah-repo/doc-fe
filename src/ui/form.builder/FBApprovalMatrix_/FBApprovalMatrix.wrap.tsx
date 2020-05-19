@@ -1,6 +1,7 @@
+import { useObserver } from "mobx-react";
 import React from "react";
 import { FBApprovalMatrixProps } from ".";
-import { FB, FBApprovalMatrixFieldData } from "..";
+import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixSection, FBApprovalMatrixTable, FBDialogState } from "..";
 
 export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
   Component: React.FunctionComponent<T>
@@ -9,12 +10,27 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
     handleSave,
     handleCancel,
     handleEdit,
+    handleFullScreen,
+    dialogState,
+    disabled,
     name,
-    mode,
+    mode = "none",
     ...props
   }: T) => {
 
     const { formState, approvalMatrixFieldState } = FB.useStores();
+    dialogState = FB.useRef<FBDialogState>(FBDialogState);
+
+
+    const modeContent = () => (
+      <>
+        <FBApprovalMatrixSection
+          {...{ handleEdit, handleFullScreen, disabled, mode }}
+        />
+        <FBApprovalMatrixTable {...{ name, mode }} />
+      </>
+    );
+
 
     handleSave = () => {
       const formValue: Partial<FBApprovalMatrixFieldData> = formState?.getFieldValue(name);
@@ -34,16 +50,39 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
     handleEdit = () => {
       if (mode !== "edit") {
         approvalMatrixFieldState?.setMode("edit");
+      } else {
+        handleSave && handleSave();
+      }
+    };
+
+    handleFullScreen = () => {
+      handleSave && handleSave();
+      if (dialogState?.open) {
+        approvalMatrixFieldState?.setMode("none");
         return;
       }
-      handleSave && handleSave();
+      dialogState?.config({
+        open: true,
+        maxWidth: "lg",
+        content: modeContent(),
+      });
     };
+
+    useObserver(() => {
+      approvalMatrixFieldState && (mode = approvalMatrixFieldState.mode);
+      if (dialogState?.open) {
+        dialogState.setContent(modeContent());
+      }
+    });
 
     return Component({
       ...(props as T),
       handleSave,
       handleCancel,
       handleEdit,
+      handleFullScreen,
+      dialogState,
+      disabled,
       name,
       mode,
     });
