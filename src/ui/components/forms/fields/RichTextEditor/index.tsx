@@ -3,13 +3,14 @@ import { Box } from "@material-ui/core";
 import classNames from "classnames";
 import { convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
-import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
+import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps, useFormikContext } from "formik";
 import React, { useEffect, useState } from "react";
 import { Editor, EditorProps } from "react-draft-wysiwyg";
 import useDebounce from "use-debounce/lib/useDebounce";
 import "../../../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { RenderSize } from "../../../../../state/ducks/common";
 import useDidMount from "../../../../hooks/useDidMount";
+import { useFormContext } from "../../FormContext";
 import Field, { FieldOwnProps } from "../Field";
 import { convertHtmlToDraft } from "./helpers";
 import "./rte.css";
@@ -48,6 +49,8 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
   toggleToolbar = true,
   ...fieldProps
 }) => {
+  const formik = useFormikContext();
+  const { submitForm } = useFormContext();
   const didMount = useDidMount();
   const { field, form } = fieldProps;
   const [value, setValue] = useState();
@@ -109,6 +112,8 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
     if (!touched[name]) {
       setFieldTouched(name, true);
     }
+
+    submitForm(formik.submitForm);
   };
 
   const handleFocus = () => {

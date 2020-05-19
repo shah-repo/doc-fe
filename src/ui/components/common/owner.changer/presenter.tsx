@@ -4,6 +4,7 @@ import React, { Fragment } from "react";
 import { Owner } from "../../../../state/ducks/common";
 import { AsyncState } from "../../../../state/types";
 import SelectField, { SelectOption } from "../../forms/fields/Select";
+import { FormContext } from "../../forms/FormContext";
 import FormMessage from "../../forms/FormMessage";
 import FormProgress from "../../forms/FormProgress";
 import SubmitButton from "../../forms/SubmitButton";
@@ -66,12 +67,14 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
         <Text translation="change.owner" />
       </DialogTitle>
       <DialogContent style={{ width: 500 }}>
-        <Formik
-          initialValues={{ employee: currentOwner.id }}
-          onSubmit={updateOwner}
-        >
-          {renderForm}
-        </Formik>
+        <FormContext.Provider value={{ submitOnChange: false }}>
+          <Formik
+            initialValues={{ employee: currentOwner.id }}
+            onSubmit={updateOwner}
+          >
+            {renderForm}
+          </Formik>
+        </FormContext.Provider>
       </DialogContent>
     </Dialog>
   );

@@ -57,6 +57,9 @@ export const withFBInput = <T extends FBInputProps>(
       const value = {
         editoroptions() {
           const options: FBOption[] | undefined = formState?.getFieldValue(name);
+          if (_.isString(options)) {
+            return;
+          }
           const value = optionsToString && optionsToString(options);
           formState?.setFieldValue(name, value);
           return value || "";
@@ -82,7 +85,7 @@ export const withFBInput = <T extends FBInputProps>(
       children = React.cloneElement(child as React.ReactElement, {
         disabled,
         onChange,
-        error,
+        ...(type === "textfield" && { error }),
         ...(type !== "texteditor" && { value }),
         ...(type !== "datepicker" && type !== "autocomplete" && !_.isBoolean(defaultValue) && { defaultValue }),
       });

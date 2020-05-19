@@ -72,6 +72,8 @@ describe("documents actions tests", () => {
     const handlers: Handlers<DocumentRevision> = {
       successHandler: getCallbackHandler<DocumentRevision>(),
       errorHandler: getCallbackHandler<string>(),
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      setCancelToken: () => {},
     };
     const action = actions.save(documentRevision.id, body, handlers);
 

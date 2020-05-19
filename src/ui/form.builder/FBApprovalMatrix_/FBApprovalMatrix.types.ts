@@ -1,4 +1,4 @@
-import { FBApprovalMatrixFieldProps, FBInputProps } from "..";
+import { FBApprovalMatrixFieldProps, FBDialogState, FBInputProps } from "..";
 
 export type FBApprovalMatrixProps =
 & Pick<FBInputProps, "disabled" | "name" >
@@ -6,4 +6,7 @@ export type FBApprovalMatrixProps =
 & {
   handleSave?: () => any;
   handleCancel?: () => any;
+  handleEdit?: () => any;
+  handleFullScreen?: () => any;
+  dialogState?: FBDialogState;
 };
