@@ -14,7 +14,6 @@ export type FBTextFieldProps =
 const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   rows = 1,
   placeholder,
-  error,
   id,
   disabled,
   InputLabelProps,
@@ -34,7 +33,7 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
         variant="outlined"
         label=""
         id="FBTextField-input"
-        {...{ rows, placeholder, error, id, InputLabelProps, InputProps, inputProps }}
+        {...{ rows, placeholder, id, InputLabelProps, InputProps, inputProps }}
       />
     </FBInput>
   );

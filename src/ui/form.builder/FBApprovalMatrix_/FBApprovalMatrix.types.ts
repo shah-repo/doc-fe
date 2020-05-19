@@ -1,4 +1,9 @@
-import { FBInputProps } from "..";
+import { FBApprovalMatrixFieldProps, FBInputProps } from "..";
 
 export type FBApprovalMatrixProps =
-& Pick<FBInputProps, "disabled">;
+& Pick<FBInputProps, "disabled" | "name" >
+& Pick<FBApprovalMatrixFieldProps, "handleAdd" | "mode" >
+& {
+  handleSave?: () => any;
+  handleCancel?: () => any;
+};

@@ -2,11 +2,16 @@ import { Box, IconButton } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import FullscreenOutlinedIcon from "@material-ui/icons/FullscreenOutlined";
 import React from "react";
-import { FBApprovalMatrixProps, FBButton, FBSection, FBTooltip } from "..";
+import { FBApprovalMatrixProps, FBApprovalMatrixTable, FBButton, FBSection, FBSubmitButton, FBTooltip } from "..";
+import { withFBApprovalMatrix } from "./FBApprovalMatrix.wrap";
 
 const FBApprovalMatrix: React.FunctionComponent<FBApprovalMatrixProps> = ({
+  handleAdd,
+  handleSave,
+  handleCancel,
   disabled,
-  ...props
+  name,
+  mode,
 }) =>  (
   <>
     <FBSection label="form.builder.approvalMatrix">
@@ -23,14 +28,35 @@ const FBApprovalMatrix: React.FunctionComponent<FBApprovalMatrixProps> = ({
         </IconButton>
       </Box>
     </FBSection>
-    <FBButton
-      fullWidth={true}
-      label="form.builder.add.item"
-      variant="outlined"
-      style={{ margin: 0 }}
-      {...{ disabled }}
-    />
+    <FBApprovalMatrixTable {...{ name }} />
+    <Box mt={2}>
+      {mode === "add" && (
+        <Box display="flex" flexDirection="row-reverse">
+          <FBSubmitButton
+            variant="outlined"
+            label="common.save"
+            onClick={handleSave}
+            autoFocus
+          />
+          <FBButton
+            variant="outlined"
+            label="common.cancel"
+            onClick={handleCancel}
+          />
+        </Box>
+      )}
+      {mode !== "add" && (
+        <FBButton
+          fullWidth={true}
+          label="form.builder.add.item"
+          variant="outlined"
+          style={{ margin: 0 }}
+          onClick={handleAdd}
+          {...{ disabled }}
+        />
+      )}
+    </Box>
   </>
 );
 
-export default FBApprovalMatrix;
+export default withFBApprovalMatrix(FBApprovalMatrix);

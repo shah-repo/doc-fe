@@ -1,7 +1,7 @@
 import { flatten, unflatten } from "flat";
 import _, { Dictionary } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
-import { FBFormConstructor, FBInputState, FBWorkspaceMode } from "..";
+import { FBFormConstructor, FBInputState, FBWorkspaceMode, FBWorkspaceState } from "..";
 import { FBSchemaState } from "../FBSchema";
 
 export class FBFormState extends FBSchemaState {
@@ -11,16 +11,19 @@ export class FBFormState extends FBSchemaState {
   public initialValues: Dictionary<any> = {};
   public workspaceMode?: FBWorkspaceMode;
   public values: Dictionary<any> = {};
+  // TO BBE REMOVED!
+  public workspaceState?: FBWorkspaceState;
   @observable public errors = new Map<string, string>();
   @observable public helpers = new Map<string, string>();
   @observable public inputState = new Map<string, FBInputState>();
 
-  public constructor({ schema, initialValues = {}, workspaceMode }: FBFormConstructor) {
+  public constructor({ schema, initialValues = {}, workspaceMode, workspaceState }: FBFormConstructor) {
     super();
     this.schema = schema;
     this.initialValues = initialValues;
     this.values = initialValues;
     this.workspaceMode = workspaceMode;
+    this.workspaceState = workspaceState;
   }
 
   @computed private get Validator(): any {
@@ -41,7 +44,7 @@ export class FBFormState extends FBSchemaState {
       return defaultValue;
     }
     if (!_.get(this.values, fieldName) && !_.isUndefined(defaultValue)) {
-      (this.initialValues || {})[fieldName] = defaultValue;
+      _.set(this.initialValues || {}, fieldName, defaultValue);
     }
     return _.get(this.values, fieldName) || _.get(this.initialValues, fieldName);
   };
@@ -116,7 +119,16 @@ export class FBFormState extends FBSchemaState {
 
     const rules = this.getRules();
     const values = flatten(this.getValues(), { safe: true });
-    const validator = new this.Validator(values, rules);
+    // *TODO: unify validators format
+    let validator: any;
+    try {
+      validator = new this.Validator(values, rules);
+    } catch {
+      validator = new this.Validator(flatten(this.getValues()), flatten(this.getRules()));
+    }
+    if (!validator) {
+      return;
+    }
     this.registerValidator(validator);
     validator.setAttributeNames(this.validationAttributeNames);
 

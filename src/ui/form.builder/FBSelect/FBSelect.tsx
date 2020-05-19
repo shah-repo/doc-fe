@@ -6,10 +6,12 @@ import { withFBSelect } from "./FBSelect.wrap";
 const FBSelect: React.FunctionComponent<FBSelectProps> = ({
   defaultValue,
   menuItems,
+  variant = "outlined",
+  style,
   ...props
 }) => (
   <FBInput {...props} type="select">
-    <Select variant="outlined" {...{ defaultValue }}>
+    <Select {...{ defaultValue, style, variant }}>
       {menuItems}
     </Select>
   </FBInput>

@@ -94,6 +94,7 @@ export type FBInputProps =
   applicableOn?: any[];
   actions?: string[];
   hellosignFlowProps?: any;
+  showErrorMsg?: boolean;
 };
 
 export const OmitInputClones: FBInputType[] = ["fileupload"];

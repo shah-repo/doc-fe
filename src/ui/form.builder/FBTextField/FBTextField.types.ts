@@ -1,6 +1,5 @@
 import { TextFieldProps } from "@material-ui/core/TextField";
-import { FBInputProps } from "..";
-import { FBInputType } from "../FBInput";
+import { FBInputProps, FBInputType } from "..";
 
 export type FBTextFieldProps =
 & FBInputProps
@@ -11,10 +10,10 @@ export type FBTextFieldProps =
 | "id"
 | "inputProps"
 | "InputProps"
-| "variant"
 | "style"
 | "size"
 | "onBlur"
+| "variant"
 >
 & {
   FBProps?: {
