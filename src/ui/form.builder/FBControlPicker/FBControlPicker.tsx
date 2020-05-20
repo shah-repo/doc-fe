@@ -9,7 +9,7 @@ import { withFBEditorHelper } from "../FBEditor/FBEditor.helper";
 import { FBInputType } from "../FBInput";
 
 const FBControlPicker: React.FunctionComponent<FBControlPickerProps> = ({
-  index,
+  index = 0,
   openEditor,
 }) => {
   const helloSignEnabled = useSelector(companySelectors.isHelloSignIntegrationEnabled);
@@ -26,8 +26,8 @@ const FBControlPicker: React.FunctionComponent<FBControlPickerProps> = ({
             <FBMapWrapper<FBInputType> collection={editors}>
               {(picker, i) => (
                 <React.Fragment key={`fb-controlpicker-editor-${picker}-${i}`}>
-                  {FBControlPickerState.picker(picker) && FBControlPickerState.picker(picker)}
-                  {!FBControlPickerState.picker(picker) && (
+                  {FBControlPickerState.picker(picker, index) && FBControlPickerState.picker(picker, index)}
+                  {!FBControlPickerState.picker(picker, index) && (
                     <FBButton
                       label={`form.builder.${picker as string}`}
                       onClick={openEditor && openEditor({ type: picker, index })}
