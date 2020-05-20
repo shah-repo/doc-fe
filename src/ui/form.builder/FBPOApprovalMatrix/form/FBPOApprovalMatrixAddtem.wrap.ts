@@ -51,7 +51,7 @@ export const withFBPOApprovalMatrixAddItem = <T extends FBPOApprovalMatrixAddIte
       closeDialog,
       isDialogOpen: dialog.isOpen,
       onSubmit,
-      approvalLevels: poamState?.poam.approvalLevels,
+      approvalLevels: poamState?.poam?.approvalLevels,
       employees: props.employees,
       groupOptions: props.groupOptions,
       signatureStages,

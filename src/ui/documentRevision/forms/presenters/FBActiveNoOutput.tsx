@@ -41,6 +41,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
           document.group === "OTHER" ||
           document.group === "DAM" ||
           document.group === "POAM" ||
+          document.group === "WORK_ORDER" ||
           document.group === "PO") {
           acc.push({ value: document.id, label: document.documentTypeName });
         }
