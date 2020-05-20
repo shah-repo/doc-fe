@@ -1,28 +1,33 @@
 import _ from "lodash";
 import React from "react";
-import { FBEditorPropertiesProps, FBEditorPropertiesState } from ".";
-import { FB } from "..";
-import { withFBOption } from "../FBOption/FBOption.wrap";
-
+import { FB, FBData, FBEditorPropertiesProps } from "..";
 
 export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
   Component: React.FunctionComponent<T>,
 ) => {
+
   const Comp = ({
-    editorPropsState,
-    type,
+    onChange,
     options,
+    type,
     ...props
   }: T) => {
 
-    editorPropsState = FB.useRef<FBEditorPropertiesState>(FBEditorPropertiesState);
-    _.isEmpty(options) && (options = editorPropsState.getOptions(type));
+    const { formState } = FB.useStores();
+    type && (options = FBData.editorPropertiesByType(type));
+
+    onChange = (ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      const [valueName, checked] = _.at(ev.target, ["value", "checked"]);
+      // *NOTE: Mobile support until mobile switches to editor props
+      formState?.setFieldValue(valueName, checked);
+    };
 
     return Component({
       ...(props as T),
+      onChange,
       options,
+      type,
     });
   };
-
-  return withFBOption((props: T) => Comp(props));
+  return (props: T) => Comp(props);
 };

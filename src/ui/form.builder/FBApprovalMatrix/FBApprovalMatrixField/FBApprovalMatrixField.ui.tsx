@@ -1,7 +1,7 @@
 import { Box, Dialog, DialogContent, Typography } from "@material-ui/core";
 import React from "react";
+import { FBButton } from "../..";
 import Text from "../../../components/Text";
-import FBButton from "../../components/inputs/FBButton";
 import ApprovalRoles from "../ApprovalRoles/ApprovalRoles";
 import { FBApprovalMatrixFieldUIProps } from "../FBApprovalMatrix.types";
 import ApprovalMatrixSectionBox from "./ApprovalMatrixSectionBox";

@@ -40,6 +40,7 @@ export const AccessPermissionsContainer: React.FunctionComponent<AccessPermissio
     documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId));
   const securityGroups = _.get(selectedDocument, "document.securityGroups", []);
   const securityEmployees = _.get(selectedDocument, "document.securityEmployees", []);
+  const operators = _.get(selectedDocument, "document.operators", []);
 
   return (
     <AccessPermissionsPresenter
@@ -49,6 +50,7 @@ export const AccessPermissionsContainer: React.FunctionComponent<AccessPermissio
       groupOptions={groupOptions}
       securityGroups={securityGroups}
       securityEmployees={securityEmployees}
+      operators={operators}
       documentId={documentId}
       documentRevisionId={documentRevisionId}
       loadGroupsAction={loadGroupsAction}

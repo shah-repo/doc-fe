@@ -2,6 +2,7 @@ import { Box, Button, createStyles, Dialog, DialogContent, DialogTitle, makeStyl
 import { ButtonProps } from "@material-ui/core/Button";
 import { Formik, FormikProps } from "formik";
 import React from "react";
+import { FormContext } from "../../../../components/forms/FormContext";
 import Text from "../../../../components/Text";
 import { ImplementationPlanTaskFormValues } from "../../types";
 import TaskForm from "./TaskForm";
@@ -72,12 +73,14 @@ export const TaskFormDialog: React.FunctionComponent<TaskFormDialogProps> =
           <DialogContent
             classes={{ root: classes.dialogContent }}
           >
-            <Formik
-              initialValues={initialValues}
-              onSubmit={onSubmit}
-            >
-              {renderForm}
-            </Formik>
+            <FormContext.Provider value={{ submitOnChange: false }}>
+              <Formik
+                initialValues={initialValues}
+                onSubmit={onSubmit}
+              >
+                {renderForm}
+              </Formik>
+            </FormContext.Provider>
           </DialogContent>
         </Dialog>
       </div>

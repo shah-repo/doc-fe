@@ -3,7 +3,7 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { arrayMove, SortableElement, SortEnd } from "react-sortable-hoc";
 import { FBSortableProps } from ".";
-import { FB, FBFieldWrapper, FBSchemaProps, FBSchemaState } from "..";
+import { FB, FBFieldWrapper, FBInputProps, FBSchemaProps, FBSchemaState } from "..";
 
 export const withFBSortable = <T extends FBSortableProps>(
   Component: React.FunctionComponent<T>,
@@ -25,7 +25,7 @@ export const withFBSortable = <T extends FBSortableProps>(
       <li style={{ listStyleType: "none" }}>
         <FBFieldWrapper
           key={`fb-sortable-wrapper-${value.index}`}
-          index={value.index}
+          inputProps={value as FBInputProps}
         >
           {schemaField(value)}
         </FBFieldWrapper>

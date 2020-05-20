@@ -1,8 +1,9 @@
 import { Formik, FormikProps } from "formik";
 import * as React from "react";
+import { FBDocumentRevisionProps } from "../../../../state/ducks/documentRevisions";
 import { SupplierSurveyForm } from "../../../../state/ducks/supplierSurvey";
 import { AsyncState } from "../../../../state/types";
-import { FBDocumentFlowProps } from "../../../form.builder/types/formik";
+import { FormContext } from "../../../components/forms/FormContext";
 import { toSupplierSurveyFormValues } from "../transform";
 import SupplierSurveyFormBuild from "./SupplierSurveyFormBuild.presenter";
 
@@ -13,7 +14,7 @@ interface Props {
 }
 
 const SupplierSurveyPresenter: React.FunctionComponent<Props> = ({ onSubmit, supplierSurvey, asyncState }) => {
-  const renderForm = (props: FormikProps<FBDocumentFlowProps>) => (
+  const renderForm = (props: FormikProps<FBDocumentRevisionProps>) => (
     <SupplierSurveyFormBuild
       {...props}
       asyncState={asyncState}
@@ -22,13 +23,16 @@ const SupplierSurveyPresenter: React.FunctionComponent<Props> = ({ onSubmit, sup
   );
 
   return (
-    <Formik
-      initialValues={toSupplierSurveyFormValues(supplierSurvey)}
-      onSubmit={onSubmit}
-      enableReinitialize={true}
-    >
-      {renderForm}
-    </Formik>
+    <FormContext.Provider value={{ submitOnChange: false }}>
+      <Formik
+        initialValues={toSupplierSurveyFormValues(supplierSurvey)}
+        onSubmit={onSubmit}
+        enableReinitialize={true}
+      >
+        {renderForm}
+      </Formik>
+
+    </FormContext.Provider>
   );
 };
 

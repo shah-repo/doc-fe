@@ -3,7 +3,6 @@ import React from "react";
 import { FBButton, FBPOReceiveFormProps, FBSubmitButton } from "..";
 import { withFBPOReceiveForm } from "./FBPOReceiveForm.wrap";
 
-
 const FBPOReceiveFormActions: React.FunctionComponent<FBPOReceiveFormProps> = ({
   handleCancel,
   handleReceive,

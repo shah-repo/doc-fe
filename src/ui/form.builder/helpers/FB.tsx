@@ -16,7 +16,7 @@ export class FB {
     return React.useContext(MobXProviderContext) as FBProviderProps;
   }
 
-  public static uniqid(): string {
+  public static get uniqid(): string {
     const uniqid = require("uniqid");
     return uniqid();
   }

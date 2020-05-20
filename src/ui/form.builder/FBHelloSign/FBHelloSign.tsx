@@ -1,35 +1,40 @@
 import { Backdrop, Box, CircularProgress } from "@material-ui/core";
 import React from "react";
-import { FBHelloSignProps } from ".";
-import FBInput from "../components/common/FBInput";
-import FBButton from "../components/inputs/FBButton";
+import { FBButton, FBHelloSignProps, FBInput } from "..";
 import { withFBHelloSign } from "./FBHelloSign.wrap";
 
 const FBHelloSign: React.FunctionComponent<FBHelloSignProps> = ({
   onClick,
-  buttonLabel,
-  backdropStyle,
   loadingMessage,
+  waitOverlay,
+  buttonLabel,
   signatureSent,
   signatureSentMessage,
-  waitOverlay,
   ...props
 }) => (
   <>
     {waitOverlay && (
-      <Backdrop className={backdropStyle.backdrop} open={true}>
+      <Backdrop style={{ zIndex: 1550, color: "#fff" }} open={true}>
         <Box display="flex" flexDirection="row" pr={1}>
           <CircularProgress size={20} />
           <Box marginLeft={1} >{loadingMessage}</Box>
         </Box>
       </Backdrop>
     )}
-    <FBInput {...props} disabled={false} type="button" fullWidth={false}>
-      <FBButton label={buttonLabel} {...{ onClick }} />
-      {signatureSent && (
-        <Box>{signatureSentMessage}</Box>
-      )}
+
+    <FBInput {...props}>
+      <>
+        <FBButton
+          label={buttonLabel}
+          style={{ marginLeft: 0 }}
+          {...{ onClick }}
+        />
+        {signatureSent && (
+          <Box>{signatureSentMessage}</Box>
+        )}
+      </>
     </FBInput>
+
   </>
 );
 

@@ -1,0 +1,108 @@
+[{
+    "type": "checkbox",
+    "name": "validators.required",
+    "label": "required",
+    "helperText": "Check if the length of the String representation of the value is >"
+  },
+  {
+    "type": "checkbox",
+    "name": "validators.required_if",
+    "label": "required_if:anotherfield,value",
+    "helperText": "The field must be present and not empty if the anotherfield field is equal to any value."
+  },
+  {
+    "type": "schemaselect",
+    "name": "validators.required_if.name",
+    "label": "Required if field",
+    "includeSelectedSchema": true,
+    "rules": "required_with:validators.required_if",
+    "validationMode": "visibility"
+  },
+  {
+    "type": "checkbox",
+    "name": "validators.required_if_in",
+    "label": "required_if_in:anotherfield,[value]",
+    "helperText": "The field must be present and not empty if the anotherfield field includes value in the array."
+  },
+  {
+    "type": "schemaselect",
+    "name": "validators.required_if_in.name",
+    "label": "Required if field",
+    "includeSelectedSchema": true,
+    "rules": "required_with:validators.required_if_in",
+    "validationMode": "visibility"
+  },
+  {
+    "type": "checkbox",
+    "name": "validators.required_with",
+    "label": "required_with:foo,bar,...",
+    "helperText": "The field under validation must be present and not empty only if any of the other specified fields are present."
+  },
+  {
+    "type": "schemaselect",
+    "name": "validators.required_with.name",
+    "label": "Required with",
+    "multiple": true,
+    "rules": "required_with:validators.required_with",
+    "validationMode": "visibility"
+  },
+  {
+    "type": "checkbox",
+    "name": "validators.required_without",
+    "label": "required_without:foo,bar,...",
+    "helperText": "The field under validation must be present and not empty only when any of the other specified fields are not present."
+  },
+  {
+    "type": "schemaselect",
+    "name": "validators.required_without.name",
+    "label": "Required without",
+    "multiple": true,
+    "rules": "required_with:validators.required_without",
+    "validationMode": "visibility"
+  }, {
+    "type": "checkbox",
+    "name": "validators.required_document_status",
+    "label": "required_document_status:value",
+    "helperText": "Selected document must be in status."
+  }, {
+    "type": "autocomplete",
+    "name": "validators.required_document_status.name",
+    "label": "Document Status",
+    "rules": "required_with:validators.required_document_status",
+    "validationMode": "visibility",
+    "options": [{
+      "value": "DRAFT",
+      "text": "Draft"
+    }, {
+      "value": "PENDING_CHANGE",
+      "text": "Pending Change"
+    }, {
+      "value": "IN_REVIEW",
+      "text": "In Review"
+    }, {
+      "value": "RELEASED",
+      "text": "Released"
+    }, {
+      "value": "DEPRECATED",
+      "text": "Deprecated"
+    }, {
+      "value": "OBSOLETE",
+      "text": "Obsolete"
+    }, {
+      "value": "CANCELED",
+      "text": "Canceled"
+    }]
+  }, {
+    "type": "checkbox",
+    "name": "validators.required_document_type",
+    "label": "required_document_type:value",
+    "helperText": "Selected document must be of selected type."
+  }, {
+    "type": "autocomplete",
+    "name": "validators.required_document_type.name",
+    "label": "Document Type",
+    "rules": "required_with:validators.required_document_type",
+    "validationMode": "visibility",
+    "optionId": "4"
+  }
+]

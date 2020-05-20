@@ -1,25 +1,36 @@
 import { Box } from "@material-ui/core";
-import { Provider } from "mobx-react";
 import React from "react";
-import FBSectionBox from "../components/layout/FBSectionBox";
-import FBPurchaseOrderTotal from "./cost/FBPurchaseOrderTotal";
-import { FBPurchaseOrderAddItemProps, FBPurchaseOrderFieldProps, FBPurchaseOrderTableProps, FBPurchaseOrderTotalProps } from "./FBPurchaseOrder.types";
+import { FBButton, FBDialog, FBProvider, FBPurchaseOrderProps, FBPurchaseOrderTable, FBSection } from "..";
 import { withFBPurchaseOrder } from "./FBPurchaseOrder.wrap";
-import FBPurchaseOrderAddItem from "./form/FBPurchaseOrderAddItem";
-import FBPurchaseOrderTable from "./table/FBPurchaseOrderTable";
 
-const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderFieldProps> = ({
-  poState,
-  ...props
+
+const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
+  handleItem,
+  purchaseOrderState,
+  dialogState,
+  gutter = true,
+  mode = "form",
+  label,
+  disabled,
+  name,
 }) => (
-  <Provider {...{ poState }}>
-    <Box mt={3}>
-      <FBSectionBox label={props.label} />
-      <FBPurchaseOrderTable {...props as FBPurchaseOrderTableProps} />
-      <FBPurchaseOrderAddItem {...props as FBPurchaseOrderAddItemProps} />
-      <FBPurchaseOrderTotal {...props as FBPurchaseOrderTotalProps} />
+  <FBProvider {...{ purchaseOrderState, dialogState }}>
+    <FBDialog />
+    <Box mb={gutter ? 5 : 0}>
+      {mode === "form" && <FBSection {...{ label }}  />}
+      <FBPurchaseOrderTable {...{ name, disabled, handleItem, mode }} />
+      {!disabled && (
+        <FBButton
+          fullWidth={true}
+          label="form.builder.add.item"
+          onClick={() => handleItem && handleItem()}
+          variant="outlined"
+          style={{ margin: 0 }}
+          {...{ disabled }}
+        />
+      )}
     </Box>
-  </Provider>
+  </FBProvider>
 );
 
 export default withFBPurchaseOrder(FBPurchaseOrder);

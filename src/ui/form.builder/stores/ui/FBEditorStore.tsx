@@ -1,7 +1,6 @@
 import _ from "lodash";
 import { action, observable } from "mobx";
 import React from "react";
-import { FBDynamicControl } from "../..";
 import FBForm from "../../components/form/FBForm";
 import FBButton from "../../components/inputs/FBButton";
 import FBEditorSection from "../../containers/editor/FBEditorSection";
@@ -24,9 +23,9 @@ export class FBEditorStore {
 
   @action public setOpen = (forIndex = -1) => () => {
     this.open = true;
+    this.editorIndex = forIndex + 1;
     this.content = this.sections();
     this.title = "";
-    this.editorIndex = forIndex + 1;
     this.editorMode = "create";
   };
 
@@ -101,10 +100,6 @@ export class FBEditorStore {
 
     if (el === "approvalMatrix" && FBStore.getSchemaItemByType("approvalMatrix")) {
       return null;
-    }
-
-    if (el === "dynamiccontrol") {
-      return <FBDynamicControl />;
     }
 
     return (

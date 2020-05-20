@@ -5,6 +5,7 @@ export class FBFieldWrapperState {
   @observable public toolsVisible: FBFieldWrapperProps["toolsVisible"] = "hidden";
   @observable public addToolVisible: FBFieldWrapperProps["addToolVisible"] = "hidden";
   @observable public markDownVisible = false;
+  @observable public state: FBFieldWrapperState | undefined;
 
   @action public setToolsActive = (active: boolean) => {
     const visibleState: FBFieldWrapperProps["toolsVisible"] = active ? "visible" : "hidden";

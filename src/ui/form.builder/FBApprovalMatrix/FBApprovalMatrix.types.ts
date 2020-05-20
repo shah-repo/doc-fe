@@ -1,8 +1,8 @@
+import { FBInputProps } from "..";
 import { Group } from "../../../state/ducks/auth/types";
 import { Employee } from "../../../state/ducks/company";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { FBInputProps } from "../types/common";
 import FBApprovalMatrixState from "./FBApprovalMatrix.state";
 
 export interface ApprovalMatrix {

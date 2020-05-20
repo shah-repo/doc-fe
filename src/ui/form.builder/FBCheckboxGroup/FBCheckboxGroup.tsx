@@ -10,7 +10,7 @@ const FBCheckboxGroup: React.FunctionComponent<FBCheckboxGroupProps> = ({
   ...props
 }) => (
   <FBInput {...props} type="checkboxgroup">
-    <FormGroup {...{row}}>
+    <FormGroup {...{ row }}>
       {controls}
     </FormGroup>
   </FBInput>

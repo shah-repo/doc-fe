@@ -9,6 +9,7 @@ import { required, validator } from "../../components/forms/fields/validators";
 interface OwnProps {
   name: string;
   label: string;
+  disabled?: boolean;
 }
 
 export type Props = OwnProps;

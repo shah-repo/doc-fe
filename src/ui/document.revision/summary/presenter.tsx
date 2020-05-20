@@ -4,16 +4,16 @@ import _ from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { DataProps } from "../../../state/ducks/common";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
+import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
-import FBWorkspace from "../../form.builder/containers/workspace/FBWorkspace";
+import { FBSchemaProps, FBWorkspace } from "../../form.builder";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
-import FBStore from "../../form.builder/stores/ui/FBStore";
 import SummaryHeader from "../header/SummaryHeader";
 import Attachment from "./attachment";
 import ChangeRequestLink from "./changeRequestLink";
@@ -52,8 +52,15 @@ export const Presenter: React.FunctionComponent<Props> = ({
   canShowCreateVersionButton,
 }) => {
   const onSubmit = () => void 0;
-  FBDRStore.setValues(dataProp);
-  const outputDocumentTypeName = useSelector((state: ApplicationState) => formTemplate ? formTemplate.outputDocumentTypes.map((i) => documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
+  const { formInput } = dataProp || {};
+  const { schema } = formTemplate || formDocument?.formTemplate || {};
+  const { docId } = formDocument?.document || {};
+  const FBIsOutput = Boolean(docId && !_.isEmpty(docId));
+  const FBIsActive = formInput || formTemplate || formDocument;
+
+  const outputDocumentTypeName = useSelector((state: ApplicationState) =>
+    formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
+      documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
 
   const renderTrainingControl = status === DocumentRevisionStatus.Released && (
     <TrainingControl
@@ -77,8 +84,16 @@ export const Presenter: React.FunctionComponent<Props> = ({
         direction="column"
       >
         <ChangeRequestLink dataProp={dataProp} />
-        <SummaryField label="common.title" value={name} />
-        <SummaryField label="document.revision.trainingRequired" value={<Text translation={retrain ? "common.yes" : "common.no"} />}/>
+        {FBIsOutput && (
+          <Box ml={2} mt={1}>
+            <DocumentRevisionOutputInfo formDocument={dataProp?.formDocument} />
+          </Box>
+        )}
+        <SummaryField label="document.title" value={name} />
+        <SummaryField
+          label="document.revision.trainingRequired"
+          value={<Text translation={retrain ? "common.yes" : "common.no"} />}
+        />
         <SummaryFieldWithHtml label="common.description" value={description} />
         {formTemplate && <SummaryField label="document.output.type" value={outputDocumentTypeName}/>}
         {referenceTo && <ReferenceToContainer dataProp={referenceTo} status={status} deprecatedAt={deprecatedAt}/>}
@@ -87,11 +102,13 @@ export const Presenter: React.FunctionComponent<Props> = ({
         {renderTrainingControl}
       </Grid>
 
-      {FBStore.active && (
-        <Box px={5} id="Presenter-FBWorkspace">
+      {FBIsActive && (
+        <Box px={5} mt={4} id="Presenter-FBWorkspace">
           <FBWorkspace
-            documentId={_.get(formDocument, "document.id") || _.get(document, "id")}
             document={dataProp}
+            initialValues={dataProp.formInput}
+            schema={schema as FBSchemaProps[]}
+            mode="preview"
           />
         </Box>
       )}
@@ -104,13 +121,15 @@ export const Presenter: React.FunctionComponent<Props> = ({
   );
 
   return (
-    <Formik
-      initialValues={dataProp}
-      onSubmit={onSubmit}
-      enableReinitialize={true}
-    >
-      {contentRenderer}
-    </Formik>
+    <FormContext.Provider value={{ submitOnChange: false }}>
+      <Formik
+        initialValues={dataProp}
+        onSubmit={onSubmit}
+        enableReinitialize={true}
+      >
+        {contentRenderer}
+      </Formik>
+    </FormContext.Provider>
   );
 };
 

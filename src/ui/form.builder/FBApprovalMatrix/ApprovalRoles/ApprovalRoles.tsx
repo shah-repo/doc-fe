@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { FB } from "../..";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { GetEmployeeResponse, userManagementActions, userManagementSelectors } from "../../../../state/ducks/userManagement";
 import { DEFAULT_ACTIVE_EMPLOYEES } from "../../../group.management/utils/types";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
-import FBStore from "../../stores/ui/FBStore";
 import { ApprovalRolesProps } from "../FBApprovalMatrix.types";
 import AddRoleDialog from "./AddRoleDialog";
 import ApprovalRolesContainer from "./ApprovalRoles.container";
@@ -20,8 +20,9 @@ const ApprovalRoles: React.FunctionComponent<ApprovalRolesProps> = ({
   errorMessage,
   disabled,
 }) => {
-  const { document } = FBStore;
-  const isDocumentReleased = document.status === DocumentRevisionStatus.Released;
+  const { workspaceState } = FB.useStores();
+  const { document } = workspaceState || {};
+  const isDocumentReleased = document?.status === DocumentRevisionStatus.Released;
   const [activeEmployees, setActiveEmployees] = useState<GetEmployeeResponse[]>(
     DEFAULT_ACTIVE_EMPLOYEES,
   );

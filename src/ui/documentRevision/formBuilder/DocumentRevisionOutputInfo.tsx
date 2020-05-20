@@ -1,19 +1,19 @@
 import { Box } from "@material-ui/core";
 import React from "react";
+import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions";
 import Date from "../../components/Date";
 import Text from "../../components/Text";
-import { FBDocumentFlowProps } from "../../form.builder/types/formik";
 import { generateVersionNumber } from "../helpers";
 
 interface Props {
-  formDocument?: FBDocumentFlowProps;
+  formDocument?: FBDocumentRevisionProps;
 }
 
 const DocumentRevisionOutputInfo: React.FunctionComponent<Props> = ({
   formDocument = {},
 }) => {
 
-  const { revision, revisionStage, revisionChangeType, releasedAt } = formDocument;
+  const { revision, revisionStage, revisionChangeType, releasedAt } = formDocument || {};
   const version = generateVersionNumber(revision, revisionStage, revisionChangeType);
 
   const docId = formDocument?.document?.docId;

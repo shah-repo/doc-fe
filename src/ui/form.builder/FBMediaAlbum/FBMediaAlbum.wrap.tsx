@@ -1,7 +1,6 @@
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FBMediaAlbumProps, FBMediaAlbumState } from ".";
-import { FB } from "..";
+import { FB, FBMediaAlbumProps, FBMediaAlbumState } from "..";
 
 export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
   Component: React.FunctionComponent<T>

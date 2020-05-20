@@ -3,14 +3,14 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import React, { useState } from "react";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
 import Text from "../../../components/Text";
-import { PurchaseOrder } from "../../../form.builder/FBPurchaseOrder/FBPurchaseOrder.types";
+import { FBPurchaseOrderValue } from "../../../form.builder";
 import POAttachments from "./POAttachments";
 import PODetailItem from "./PODetailItem";
 import POSupplier from "./POSupplier";
 
 interface Props {
   documentRevision: DocumentRevision;
-  purchaseOrder: PurchaseOrder;
+  purchaseOrder: FBPurchaseOrderValue;
   supplierId: string;
 }
 
@@ -36,7 +36,7 @@ export const PODetails: React.FunctionComponent<Props> = ({
   const renderDetails = (
     <Box>
       <PODetailItem label="common.description" value={documentRevision.name} />
-      <PODetailItem label="common.line.items" value={purchaseOrder.items?.length} />
+      <PODetailItem label="common.line.items" value={purchaseOrder.items?.length || 0} />
       <POAttachments documentRevision={documentRevision} />
     </Box>
   );

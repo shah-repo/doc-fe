@@ -6,7 +6,11 @@ import RadioGroup from "../../../components/forms/fields/RadioGroup";
 import { required, validator } from "../../../components/forms/fields/validators";
 import Text from "../../../components/Text";
 
-export const RevisionTypeChange: React.FunctionComponent = () => (
+interface Props {
+  isDisabled: boolean;
+}
+
+export const RevisionTypeChange: React.FunctionComponent<Props> = ({ isDisabled }) => (
   <Box mt={7}>
     <Typography variant="h6">
       <Text translation="documentRevision.form.typeOfRevisionChange" />
@@ -16,6 +20,7 @@ export const RevisionTypeChange: React.FunctionComponent = () => (
         label={<Text translation="documentRevision.form.nextRevision" />}
         value={RevisionChangeType.NextRevision}
         id="RevisionTypeChange-nextRevision"
+        disabled={isDisabled}
       />
       <RadioButton
         label={
@@ -23,16 +28,19 @@ export const RevisionTypeChange: React.FunctionComponent = () => (
         }
         value={RevisionChangeType.NextRevisionStage}
         id="RevisionTypeChange-nextRevisionStage"
+        disabled={isDisabled}
       />
       <RadioButton
         label={<Text translation="documentRevision.form.obsolete" />}
         value={RevisionChangeType.Obsolete}
         id="RevisionTypeChange-obsolete"
+        disabled={isDisabled}
       />
       <RadioButton
         label={<Text translation="documentRevision.form.administrativeChange" />}
         value={RevisionChangeType.AdministrativeChange}
         id="RevisionTypeChange-administrativeChange"
+        disabled={isDisabled}
       />
     </RadioGroup>
   </Box>
