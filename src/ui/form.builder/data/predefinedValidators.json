@@ -92,5 +92,17 @@
       "value": "CANCELED",
       "text": "Canceled"
     }]
+  }, {
+    "type": "checkbox",
+    "name": "validators.required_document_type",
+    "label": "required_document_type:value",
+    "helperText": "Selected document must be of selected type."
+  }, {
+    "type": "autocomplete",
+    "name": "validators.required_document_type.name",
+    "label": "Document Type",
+    "rules": "required_with:validators.required_document_type",
+    "validationMode": "visibility",
+    "optionId": "4"
   }
 ]
