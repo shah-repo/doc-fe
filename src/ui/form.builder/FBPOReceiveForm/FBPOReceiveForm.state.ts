@@ -64,6 +64,7 @@ export class FBPOReceiveFormState  {
       referenceTo: [{ value: this.documentId, label: "" }],
       securityEmployees: [],
       securityGroups,
+      operators: [],
       document: {
         docId,
         documentType: { id: this.lotDocType?.id },

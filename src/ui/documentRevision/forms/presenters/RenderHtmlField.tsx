@@ -1,11 +1,15 @@
 import * as React from "react";
 import InputField from "../../../components/forms/fields/Input";
 
-const RenderHtmlField: React.FunctionComponent = () => (
+interface Props {
+  isDisabled: boolean;
+}
+
+const RenderHtmlField: React.FunctionComponent<Props> = ({ isDisabled = false }) => (
   <InputField
     name="renderHTML"
     label="common.renderHTML"
-    inputProps={{ id: "RenderHTML", rows: 5, multiline: true }}
+    inputProps={{ id: "RenderHTML", rows: 5, multiline: true, disabled: isDisabled }}
   />
 );
 

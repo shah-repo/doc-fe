@@ -43,6 +43,13 @@ export const getDocumentRevision = (documentRevision: Partial<DocumentRevision> 
           name: faker.random.word(),
         },
       ],
+      operators: [
+        {
+          id: faker.random.uuid(),
+          email: faker.random.word(),
+          name: faker.random.word(),
+        },
+      ],
       securityGroups: [
         {
           id: faker.random.uuid(),
@@ -85,6 +92,13 @@ export const getDocument = (document: Partial<Document> = {}): Document => ({
   documentType: generateDocumentType(),
   securityList: {
     securityEmployees: [
+      {
+        id: faker.random.uuid(),
+        email: faker.random.word(),
+        name: faker.random.word(),
+      },
+    ],
+    operators: [
       {
         id: faker.random.uuid(),
         email: faker.random.word(),

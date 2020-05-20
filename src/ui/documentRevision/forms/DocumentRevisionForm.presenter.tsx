@@ -3,6 +3,8 @@ import { FormikProps } from "formik";
 import { isEmpty } from "lodash";
 import { observer } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
+import { useSelector } from "react-redux";
+import { authSelectors } from "../../../state/ducks/auth";
 import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
@@ -19,6 +21,7 @@ import Title from "../../document.revision/form/title";
 import FormHeader from "../../document.revision/header/FormHeader";
 import { documentDetailsPath } from "../../document.revision/utils/paths";
 import { FB } from "../../form.builder";
+import { isOperator } from "../DocumentRevisionDisplay.container";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
 import Description from "./presenters/Description";
@@ -99,6 +102,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     isDisabled,
     asyncState,
   });
+  const isCurrentUserOperator = React.useContext(isOperator);
+  const email = useSelector(authSelectors.currentUserEmail);
+  const isOwner = documentRevision?.owner.user.email === email;
+  const isDisabledInput =  values.id !== undefined && isCurrentUserOperator && !isOwner;
 
   useEffect(() => {
     if (!values.id && !values.document?.documentType?.id && setDocId) {
@@ -176,13 +183,15 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           doNotPrompt={doNotPrompt}
           onDirtyFlagChange={onDirtyFlagChange}
         />
-        <Title name="name" label="common.title" />
-        <Description isQms={docInfo.isQms} />
+        <Title name="name" label="common.title" disabled={isDisabledInput}/>
+
+        <Description isQms={docInfo.isQms} isDisabled={isDisabledInput}/>
         <DocumentTypeSelect
           outputDocumentTypes={initialValues.formDocument?.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]}
           type={type}
           isdocRevStatusDraft={isdocRevStatusDraft}
           savedocInfo={savedocInfo}
+          isDisabled={isDisabledInput}
         />
         <DocIdInput
           document={values.document}
@@ -201,11 +210,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           }}
           options={availableReferences}
           onClick={openReference}
+          isDisabled={isDisabledInput}
         />
         <References document={initialValues.document} />
-        <RetrainField revisionChangeType={values.revisionChangeType} />
-        <AttachmentsField />
-        {showRevisionTypeChange && <RevisionTypeChange />}
+        <RetrainField revisionChangeType={values.revisionChangeType} isDisabled={isDisabledInput}/>
+        <AttachmentsField isDisabled={isDisabledInput}/>
+        {showRevisionTypeChange && <RevisionTypeChange isDisabled={isDisabledInput}/>}
         {
           (!values.status || type === "newOutput") &&
           <DocumentSecurity />
@@ -216,6 +226,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             docRevId={initialValues.id}
             status={documentRevision?.status}
             version={documentRevision?.version}
+            isDisabled={isDisabledInput}
           />
         }
         {

@@ -27,6 +27,8 @@ export const toDocumentRevisionFormValues = (
       .map((employee) => ({ label: employee.name, value: employee.id })),
     securityGroups: _.get(documentRevision, "document.securityList.securityGroups", [])
       .map((group) => ({ label: group.name, value: group.id })),
+    operators: _.get(documentRevision, "document.securityList.operators", [])
+      .map((operator) => ({ label: operator.name, value: operator.id })),
     renderHTML: documentRevision.renderHTML,
   };
   if (documentRevision.formTemplate) {
@@ -89,6 +91,7 @@ export const toNewVersionRequestBody = (
         securityList: {
           securityEmployees: (values.securityEmployees || []).map((employee) => ({ id: employee.value })),
           securityGroups: (values.securityGroups || []).map((group) => ({ id: group.value })),
+          operators: (values.operators || []).map((operator) => ({ id: operator.value })),
         },
       };
       newValues.document.documentType = { id: _.get(values, "document.documentType.id") };

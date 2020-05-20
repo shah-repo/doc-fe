@@ -18,7 +18,9 @@ export const EditableSelectPresenter: React.FunctionComponent<Props> = ({
   value = "",
   gutter = true,
   isActive = false,
+  disabled = false,
   handleBlur,
+  isDisabled,
 }) => {
   const formik = useFormikContext();
   const { submitForm } = useFormContext();
@@ -39,6 +41,7 @@ export const EditableSelectPresenter: React.FunctionComponent<Props> = ({
           onChange: handleChange,
           autoComplete: "off",
           onBlur: blurOverride,
+          disabled,
         }}
         formControlProps={{ className: classes.textField }}
       />
