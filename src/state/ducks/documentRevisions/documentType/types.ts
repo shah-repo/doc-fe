@@ -61,3 +61,12 @@ export interface DocumentTypeByIdState {
 export type DocRevByIdState = DocumentTypeById;
 
 export type DocumentTypeAllIdsState = string[];
+
+export enum DynamicUIDocTypes {
+  PO = "PO",
+  RC = "RC",
+  SUP = "SUP",
+  WO = "WO",
+  DAM = "DAM",
+  ADC = "ADC",
+}
