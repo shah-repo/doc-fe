@@ -1,175 +1,134 @@
-import { Dictionary, template } from "lodash";
+import _, { Dictionary } from "lodash";
 import { action, observable, set } from "mobx";
 import moment from "moment";
-import uniqid from "uniqid";
+import { FB, FBPurchaseOrderCalculation, FBPurchaseOrderConstructor, FBPurchaseOrderItem } from "..";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import { TAX_RATE } from "../helpers/constants";
-import FBStore from "../stores/ui/FBStore";
-import { PurchaseOrder, PurchaseOrderItem } from "./FBPurchaseOrder.types";
 
-const DEFAULT_PO: PurchaseOrder = {
-  items: [] as any[],
-  shippingCost: "0.00",
-  tax: "0.00",
-  subTotal: "0.00",
-  totalAmount: "0.00",
-};
-
-export class FBPurchaseOrderState {
-  @observable public name = "";
-  @observable public po = DEFAULT_PO;
-  public receivedItems: FBRequest<any, Dictionary<number>> = new FBRequest();
-
-  @action public setItems = (items: PurchaseOrderItem[]) => {
-    set(this.po, "items", items);
+export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
+  @observable public itemTotalAmount = 0;
+  @observable public items: FBPurchaseOrderItem[] = [];
+  @observable public calculation: FBPurchaseOrderCalculation = {
+    tax: "0.00",
+    subTotal: "0.00",
+    totalAmount: "0.00",
+    shippingCost: "0.00",
   };
 
-  @action public deleteItem = (index: number) => {
-    const filtered = (this.po.items || [])
-      .filter((item, i) => i !== index)
-      .map((item: PurchaseOrderItem, index) => ({ ...item, index: index + 1 }));
+  public constructor({ documentId, ...initialValues }: FBPurchaseOrderConstructor) {
+    super();
+    if (!initialValues || _.isEmpty(initialValues)) {
+      return;
+    }
+    if (documentId) {
+      this.fetchReceivedItems(documentId);
+    }
+    const { items } = initialValues || {};
+    const calculation = _.omit(initialValues, "items");
+    set(this, "items", items);
+    set(this, "calculation", calculation);
+  }
 
-    this.setItems(filtered);
+  @action public setItemTotalAmount = (item?: FBPurchaseOrderItem) => {
+    const { unitPrice = 0, order = 0 } = item || {};
+    const itemTotalAmount = _.toNumber(unitPrice) * _.toNumber(order);
+    set(this, "itemTotalAmount", itemTotalAmount);
+  };
+
+  @action public setShippingCost = (shippingCost?: string) => {
+    if (!shippingCost) {
+      return;
+    }
+    set(this.calculation, "shippingCost", this.formatCost(shippingCost));
     this.calculateCost();
   };
 
-  @action public addItem = (item: PurchaseOrderItem) => {
-    this.po.items.push({ ...item, received: 0, index: this.po.items.length + 1 });
+  @action public setItem = (item?: FBPurchaseOrderItem) => {
+    if (!item) {
+      return;
+    }
+    const items: FBPurchaseOrderItem[] = _.isUndefined(item.index)
+      ? this.addItem(item)
+      : this.updateItem(item);
+    set(this, "items", items);
+    this.setItemTotalAmount();
     this.calculateCost();
   };
 
-  @action public updateItem = (index: number, item: PurchaseOrderItem) => {
-    this.po.items[index] = item;
-    this.calculateCost();
-  };
-
-  @action public setFormValues = (item: PurchaseOrderItem) => {
-    let values = {};
-    Object.keys(item).forEach((key) => {
-      values = {
-        ...values,
-        [`${this.name}-formValues.${key}`]: item[key],
-      };
-    });
-    FBStore.setValues({
-      ...FBStore.getValues(),
-      ...values,
-    });
-  };
-
-  @action public clearFormValues = () => {
-    FBStore.setValue(`${this.name}-formValues.id`, undefined);
-    FBStore.setValue(`${this.name}-formValues.order`, undefined);
-    FBStore.setValue(`${this.name}-formValues.glCode`, undefined);
-    FBStore.setValue(`${this.name}-formValues.units`, undefined);
-    FBStore.setValue(`${this.name}-formValues.partNumber`, undefined);
-    FBStore.setValue(`${this.name}-formValues.partNumberDocId`, undefined);
-    FBStore.setValue(`${this.name}-formValues.partNumberTitle`, undefined);
-    FBStore.setValue(`${this.name}-formValues.date`, undefined);
-    FBStore.setValue(`${this.name}-formValues.description`, undefined);
-    FBStore.setValue(`${this.name}-formValues.unitPrice`, undefined);
-    FBStore.setValue(`${this.name}-formValues.capitalEquipment`, undefined);
-    FBStore.setValue(`${this.name}-formValues.tax`, undefined);
-    FBStore.setValue(`${this.name}-formValues.isTraceabilityRequired`, undefined);
-    FBStore.setValue(`${this.name}-formValues.index`, undefined);
-    FBStore.setValue(`${this.name}-formValues.formattedDate`, undefined);
-    FBStore.setValue(`${this.name}-formValues.totalAmount`, undefined);
-    FBStore.setValue(`${this.name}-formValues.received`, undefined);
-    FBStore.setValue(`${this.name}-formValues`, undefined);
-  };
-
-  @action public setShippingCost = (shippingCost: string) => {
-    set(this.po, "shippingCost", this.formatCost(shippingCost));
-    this.calculateCost();
+  @action public removeItem = (item?: FBPurchaseOrderItem) => {
+    if (!item) {
+      return;
+    }
+    set(this, "items", _.filter(this.items, (itm) => itm.id !== item.id));
   };
 
   @action public calculateCost = () => {
-    const sum = (this.po.items || []).reduce(
+    const sum = (this.items || []).reduce(
       (agg, item: any) => {
         const orderCost = Number(item.unitPrice || 0) * Number(item.order || 0);
         const subTotal = agg.subTotal + orderCost;
-
         let tax = agg.tax;
-
-        if (item.tax) {
-          tax += orderCost * TAX_RATE;
-        }
-
+        item.tax && (tax += orderCost * TAX_RATE);
         return { subTotal, tax };
       }, { tax: 0, subTotal: 0 },
     );
-    const totalAmount = sum.tax + sum.subTotal + Number(this.po.shippingCost || 0);
-    set(this.po, "subTotal", this.formatCost(sum.subTotal));
-    set(this.po, "tax", this.formatCost(sum.tax));
-    set(this.po, "totalAmount", this.formatCost(totalAmount));
-    this.updateFBStore();
+    const shippingCost = this.calculation.shippingCost || 0;
+    const totalAmount = sum.tax + sum.subTotal + Number(shippingCost);
+    set(this, "calculation", {
+      subTotal: this.formatCost(sum.subTotal),
+      tax: this.formatCost(sum.tax),
+      totalAmount: this.formatCost(totalAmount),
+      shippingCost: this.formatCost(shippingCost),
+    });
   };
 
-  @action public initialize = () => {
-    if (!this.name) {
-      return;
-    }
-    const value: PurchaseOrder = FBStore.getValue(this.name) || DEFAULT_PO;
-
-    // this method is used to format old PO values into new correct values
-    this.po = {
-      items: value.items.map(this.initiliazeLineItem),
-      shippingCost: this.formatCost(value.shippingCost),
-      subTotal: this.formatCost(value.subTotal),
-      tax: this.formatCost(value.tax),
-      totalAmount: this.formatCost(value.totalAmount),
-    };
+  @action public deleteItem = (index: number) => {
+    const items = _.filter(this.items, (itm) => itm.index !== index);
+    _.map(items, (itm, index) => ({
+      ...itm,
+      index,
+    }));
+    set(this, "items", items);
     this.calculateCost();
   };
 
-  @action public fetchReceivedItems = () => {
-    const { document } = FBStore;
-    if (!document?.document?.id) {
-      return;
-    }
+  protected onSuccess() {
+    const items = _.reduce(this.items, (reduced: FBPurchaseOrderItem[], item) => {
+      reduced.push({
+        ...item,
+        received: this.data[item.partNumber] ?? 0,
+      });
+      return reduced;
+    }, []);
+    this.items = items;
+  }
 
-    const urlTpl = template(FBEndpoint.ReceivedItemsQuantity);
-    const url = urlTpl({ documentId: document?.document?.id });
-    this.receivedItems.setUrl(url);
-    this.receivedItems.fetch();
-  };
-
-  private updateFBStore = () => {
-    if (!this.name || FBStore.mode === "design") {
-      return;
-    }
-
-    FBStore.setValue(this.name, this.po);
-    FBStore.resetSchema();
+  private fetchReceivedItems = (documentId: string) => {
+    const urlTpl = _.template(FBEndpoint.ReceivedItemsQuantity);
+    const url = urlTpl({ documentId });
+    this.setUrl(url);
+    this.fetch();
   };
 
   private formatCost = (value: any) => Number(value || 0).toFixed(2);
 
-  private initiliazeLineItem = (item: PurchaseOrderItem, index: number): PurchaseOrderItem => (
-    {
-      id: item.id || uniqid(),
-      index: index + 1,
-      order: item.order,
-      glCode: item.glCode,
-      units: item.units,
-      partNumber: item.partNumber,
-      partNumberDocId: item.partNumberDocId,
-      partNumberTitle: item.partNumberTitle,
-      date: item.date,
-      description: item.description,
-      unitPrice: this.formatCost(item.unitPrice),
-      tax: item.tax,
-      isTraceabilityRequired: !!item.isTraceabilityRequired,
-      capitalEquipment: !!item.capitalEquipment,
-      formattedDate: item.formattedDate || moment(item.date).format("MM/DD/YYYY"),
-      totalAmount: (() => {
-        const total = Number(item.order) * Number(item.unitPrice);
-        return this.formatCost(total);
-      })(),
-      received: item.received || 0,
-    }
-  );
+  private addItem = (item: FBPurchaseOrderItem): FBPurchaseOrderItem[] => _.union(this.items, [{
+    id: FB.uniqid,
+    ...item,
+    received: 0,
+    totalAmount: this.itemTotalAmount.toFixed(2),
+    formattedDate: moment(item.date).format("MM/DD/YYYY"),
+    index: _.size(this.items),
+  }]);
+
+  private updateItem = (item: FBPurchaseOrderItem): FBPurchaseOrderItem[] => {
+    this.items[item.index] = {
+      ...item,
+      totalAmount: this.itemTotalAmount.toFixed(2),
+    };
+    return this.items;
+  };
 }
 
 export default FBPurchaseOrderState;

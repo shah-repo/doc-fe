@@ -10,10 +10,12 @@ import Text from "../../../components/Text";
 
 interface Props {
   documentTypeId?: string;
+  isDisabled: boolean;
 }
 
 export const RevisionTypeChange: React.FunctionComponent<Props> = ({
   documentTypeId = "",
+  isDisabled,
 }) => {
   const documentType = useSelector(documentTypeSelectors.byId)[documentTypeId];
   const { documentTypeAcronym: acronym } = documentType || {};
@@ -49,6 +51,7 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
           label={<Text message={`documentRevision.form.nextRevision.${acronym}`} />}
           value={RevisionChangeType.NextRevision}
           id="RevisionTypeChange-nextRevision"
+          disabled={isDisabled}
         />
         {
           !hideNextRevisionLevel ||
@@ -58,6 +61,7 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
             }
             value={RevisionChangeType.NextRevisionStage}
             id="RevisionTypeChange-nextRevisionStage"
+            disabled={isDisabled}
           />
         }
         {
@@ -66,12 +70,14 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
             label={<Text message={`documentRevision.form.obsolete.${acronym}`} />}
             value={RevisionChangeType.Obsolete}
             id="RevisionTypeChange-obsolete"
+            disabled={isDisabled}
           />
         }
         <RadioButton
           label={<Text translation="documentRevision.form.administrativeChange" />}
           value={RevisionChangeType.AdministrativeChange}
           id="RevisionTypeChange-administrativeChange"
+          disabled={isDisabled}
         />
       </RadioGroup>
     </Box>

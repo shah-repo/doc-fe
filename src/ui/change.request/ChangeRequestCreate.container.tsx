@@ -45,7 +45,7 @@ export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequest
 
 
     return (
-      <FormContext.Provider value={{ submitOnChange: true }}>
+      <FormContext.Provider value={{ submitOnChange: false }}>
         <ChangeRequestFormContainer
           initialValues={toChangeRequestFormValues(DEFAULT_INITIAL_VALUES())}
           asyncState={async.asyncState}

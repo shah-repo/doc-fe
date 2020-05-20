@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React, { useCallback, useEffect, useMemo } from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
@@ -18,6 +19,7 @@ interface StateProps {
   documentRevision: DocumentRevision;
   currentEmployeeId: string;
   isCompanyAdmin: boolean;
+  selectedDocument: DocumentRevision;
 }
 
 interface DispatchProps {
@@ -30,6 +32,8 @@ interface OwnProps {
   isNewVersion?: boolean;
   isNewOutput?: boolean;
 }
+
+export let isOperator = React.createContext<boolean>(false);
 
 export type DocumentRevisionDisplayContainerProps =
   OwnProps &
@@ -49,6 +53,10 @@ const mapStateToProps = (
     state,
     props.documentRevisionId,
   ),
+  selectedDocument: documentRevisionsSelectors.getDocumentRevision(
+    state,
+    props.documentRevisionId
+  ),
 });
 
 export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevisionDisplayContainerProps> = ({
@@ -62,6 +70,7 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
   documentId,
   currentEmployeeId,
   isCompanyAdmin,
+  selectedDocument,
 }) => {
   const loadDocumentRevisionAction = useCallback(() => {
     if (documentRevisionId) {
@@ -72,6 +81,12 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
   useEffect(() => {
     loadDocumentRevisionAction();
   }, [loadDocumentRevisionAction]);
+
+  const operators = _.get(selectedDocument, "document.operators", []);
+  const availableOperators = operators.map((operator) => operator.user.email);
+  const isCurrentUserOperator = availableOperators.includes(currentUserEmail);
+
+  isOperator = React.createContext(isCurrentUserOperator);
 
   const canChangeOwnerShip = useMemo(() => {
     if (!documentRevision) {
@@ -89,7 +104,7 @@ export const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentR
     documentRevision &&
     !isNewVersion &&
     !isNewOutput &&
-    canEditDocumentRevision(documentRevision, currentUserEmail);
+    (canEditDocumentRevision(documentRevision, currentUserEmail) || isCurrentUserOperator);
 
   const canPreview =
     documentRevision && !(canEdit || isNewVersion || isNewOutput);

@@ -1,4 +1,4 @@
-import { FBInputProps } from "../../../../ui/form.builder/types/common";
+import { FBSchemaProps } from "../../../../ui/form.builder";
 import { Nullable } from "../../common";
 import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST } from "./constants";
 
@@ -26,7 +26,7 @@ export interface DocumentType {
   pageDetails?: Nullable<PageDetails>;
   isQms: boolean;
   defaultTraining: boolean;
-  schema?: FBInputProps[];
+  schema?: FBSchemaProps[];
 }
 
 export interface DocumentForms {

@@ -7,6 +7,7 @@ export type FBDialogProps =
   handleClose?: SvgIconProps["onClick"];
   handleActionsRef?: (instance: any) => any;
   handleTitleRef?: (instance: any) => any;
+  onClose?: () => any;
   dialogState?: FBDialogState;
   title?: React.ReactNode | string;
   content?: React.ReactElement;

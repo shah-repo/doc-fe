@@ -15,10 +15,10 @@ export const withFBOnChange = <T extends FBInputProps>(
   }: T) => {
 
     inputState = FB.useRef<FBInputState>(FBInputState);
-    const { workspaceState, formState, schemaState } = FB.useStores();
+    const { formState, schemaState, workspaceState } = FB.useStores();
 
     React.useEffect(() => {
-      const defaultValue = formState?.getFieldValue(name, "");
+      const defaultValue = formState?.getFieldValue(name);
       // Check include context state
       contextValue(defaultValue as string | string[] | boolean);
     }, []);
@@ -43,8 +43,8 @@ export const withFBOnChange = <T extends FBInputProps>(
       formState?.setFieldValue(name, value);
     }
 
-    function contextValue(value: boolean | string | string[]) {
-      if (!editorProperties) {
+    function contextValue(value: boolean | string | string[] | undefined = "") {
+      if (!editorProperties || _.isEmpty(editorProperties)) {
         return;
       }
 
@@ -53,8 +53,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       }
 
       if (_.isArray(value)) {
-        value = _.difference(editorProperties, value as FBEditorPropertiesType[]);
-        value = _.isEmpty(value);
+        value = value.includes("includeContext");
       }
       inputState?.setIncludeContext(value);
     }
@@ -72,15 +71,6 @@ export const withFBOnChange = <T extends FBInputProps>(
       formState?.setFieldValue(name, value);
     }
 
-    function editorOptionsValue(ev: React.ChangeEvent<HTMLInputElement>) {
-      const valueArray = _.get(ev.target, "value").split("\n");
-      const optionsValue = _.map(valueArray, (text: string) => ({
-        value: FB.uniqid(),
-        text,
-      }));
-      formState?.setFieldValue(name, optionsValue);
-    }
-
     function stringValue(value: string) {
       formState?.setFieldValue(name, value);
     }
@@ -91,11 +81,9 @@ export const withFBOnChange = <T extends FBInputProps>(
     }
 
     const onChange = ((ev: React.ChangeEvent<any> | any, value: any) => {
-      props.onChange && props.onChange(ev, value, schemaState || formState || workspaceState);
       if (!formState) {
         return;
       }
-
       function isSingleCheck() {
         return checkValue(ev);
       }
@@ -118,7 +106,6 @@ export const withFBOnChange = <T extends FBInputProps>(
         checkboxgroup() { return checkboxGroupValue(ev); },
         checkbox() { return isSingleCheck(); },
         radio() { return isSingleCheck(); },
-        editoroptions() { return editorOptionsValue(ev); },
         autocomplete() { return autocompleteValue(value); },
         texteditor() { return stringValue(ev as string); },
         datepicker() { return dateValue(ev as string); },
@@ -128,6 +115,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       };
 
       (changedValue[type || ""] || changedValue.default)();
+      props.onChange && props.onChange(ev, value, schemaState || formState || workspaceState);
       formState.validate();
     });
 

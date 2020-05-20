@@ -1,7 +1,9 @@
 import _ from "lodash";
 import React from "react";
+import { useIntl } from "react-intl";
 import { FBAutocompleteProps } from ".";
-import FBStore from "../stores/ui/FBStore";
+import { FB } from "..";
+import { isTranslation } from "../../translations/types";
 
 export const withFBAutocomplete = <T extends FBAutocompleteProps>(
   Component: React.FunctionComponent<T>
@@ -10,6 +12,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     optionLabelKey = "text",
     optionValueKey = "value",
     optionValueType = "key",
+    placeholder,
     getOptionLabel,
     multiple,
     name,
@@ -18,17 +21,31 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     ...props
   }: T) => {
 
-    const value = FBStore.getValue(name) || defaultValue;
+    const { formState } = FB.useStores();
+    const value = formState?.getFieldValue(name) || defaultValue;
+    const intl = useIntl();
 
-    if (options && value && optionValueType === "key") {
-      defaultValue = multiple
-        ? _.filter(options, (o) => _.includes(value, o[optionValueKey]))
-        : _.find(options, { [optionValueKey]: value });
+    if (placeholder && isTranslation(placeholder)) {
+      placeholder = intl.formatMessage({ id: placeholder });
     }
 
-    !getOptionLabel && (getOptionLabel =
-      (option) => optionLabelKey && _.get(option, optionLabelKey)
-    );
+    if (options && value && !_.isEmpty(value)) {
+      if (optionValueType === "key") {
+        defaultValue = multiple
+          ? _.filter(options, (o) => _.includes(value, o[optionValueKey]))
+          : _.find(options, { [optionValueKey]: value });
+      } else {
+        defaultValue = value;
+      }
+    }
+
+    !getOptionLabel && (getOptionLabel = (option) => {
+      let optionText = _.get(option, optionLabelKey);
+      if (isTranslation(optionText)) {
+        optionText = intl.formatMessage({ id: optionText });
+      }
+      return optionText;
+    });
 
     return Component({
       ...(props as T),
@@ -38,6 +55,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       optionValueKey,
       optionLabelKey,
       optionValueType,
+      placeholder,
       multiple,
       name,
     });

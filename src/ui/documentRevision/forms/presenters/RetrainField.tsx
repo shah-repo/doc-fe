@@ -9,11 +9,13 @@ import CheckboxField from "../../../components/forms/fields/Checkbox";
 interface Props {
   revisionChangeType?: RevisionChangeType ;
   documentTypeId?: string;
+  isDisabled?: boolean;
 }
 
 const RetrainField: React.FunctionComponent<Props> = ({
   documentTypeId = "",
   revisionChangeType,
+  isDisabled = false,
 }) => {
   const documentType = useSelector(documentTypeSelectors.byId)[documentTypeId];
   const isVisible = useMemo(() => {
@@ -39,7 +41,7 @@ const RetrainField: React.FunctionComponent<Props> = ({
     return null;
   }
 
-  const disabled = revisionChangeType === RevisionChangeType.AdministrativeChange;
+  const disabled = revisionChangeType === RevisionChangeType.AdministrativeChange || isDisabled;
   return (
     <CheckboxField
       name="retrain"

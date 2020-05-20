@@ -3,6 +3,7 @@ import Box from "@material-ui/core/Box";
 import _ from "lodash";
 import React from "react";
 import { FBFieldName, FBInputProps, FBInputState, FBLabel, FBTextField } from "..";
+import Text from "../../components/Text";
 import { withFBInput } from "./FBInput.wrap";
 
 const FBInput: React.FunctionComponent<FBInputProps> = ({
@@ -10,6 +11,7 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
   error,
   labelValues,
   gutter = true,
+  showErrorMsg = true,
   children,
   helperText = "",
   disabled,
@@ -28,8 +30,10 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
           )}
           {children}
         </FormControl>
-        {!_.isEmpty(helperText) && (
-          <FormHelperText {...{ error }}>{helperText}</FormHelperText>
+        {!_.isEmpty(helperText) && showErrorMsg && (
+          <FormHelperText {...{ error }}>
+            <Text message={helperText as string} />
+          </FormHelperText>
         )}
         {includeContext && (
           <Box mt={type === "select" ? 3 : 0.5}>

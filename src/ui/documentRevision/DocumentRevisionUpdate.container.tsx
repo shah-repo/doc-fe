@@ -9,6 +9,7 @@ import { compareValuesToSubmit } from "../components/forms/helpers";
 import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";
 import useAsync from "../hooks/useAsync";
 import useDocumentTitle from "../hooks/useDocumentTitle";
+import { isOperator } from "./DocumentRevisionDisplay.container";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
@@ -49,6 +50,7 @@ DocumentRevisionUpdateContainerProps
 }) => {
 
   const initialValues = useMemo(() => toDocumentRevisionFormValues(documentRevision), [documentRevision]);
+  const isCurrentUserOperator = React.useContext(isOperator);
   const { docId } = documentRevision.document;
   useDocumentTitle(docId);
 
@@ -59,7 +61,7 @@ DocumentRevisionUpdateContainerProps
     },
   });
 
-  if (!canEditDocumentRevision(documentRevision, currentUserEmail)) {
+  if (!(canEditDocumentRevision(documentRevision, currentUserEmail) || isCurrentUserOperator )) {
     return (
       <DocumentRevisionSummaryPresenter
         dataProp={documentRevision}

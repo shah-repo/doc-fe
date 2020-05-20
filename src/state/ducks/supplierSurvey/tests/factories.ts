@@ -1,5 +1,5 @@
 import faker from "faker";
-import { FBFormTemplateProps } from "../../../../ui/form.builder/types/formik";
+import { FBFormTemplateProps } from "../../documentRevisions";
 import { getDocumentRevision } from "../../documentRevisions/tests/factories";
 import { SupplierSurveyForm } from "../types";
 

@@ -8,7 +8,6 @@ import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import { FBAutocompleteAsyncState } from "../FBAutocompleteAsync/FBAutocompleteAsync.state";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
-import FBStore from "../stores/ui/FBStore";
 
 export class FBApprovalState {
   @observable public hasApproved: FBApprovalValue[] = [];
@@ -16,9 +15,10 @@ export class FBApprovalState {
   public approversApi: FBAutocompleteAsyncState = new FBAutocompleteAsyncState(this.approversId);
   public groupsApi: FBAutocompleteAsyncState = new FBAutocompleteAsyncState(this.groupsId);
 
-  public constructor() {
+  public constructor(documentId?: string) {
+    if (!documentId) { return; }
     const urlTpl = _.template(FBEndpoint.PostInlineApprove);
-    const url = urlTpl({ documentId: FBStore.docId });
+    const url = urlTpl({ documentId });
     this.postApi.setUrl(url);
   }
 

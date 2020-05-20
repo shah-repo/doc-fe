@@ -3,7 +3,6 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { FBAutocompleteAsyncProps, FBAutocompleteAsyncState } from ".";
 import { FB } from "..";
-import FBStore from "../stores/ui/FBStore";
 
 export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
   Component: React.FunctionComponent<T>
@@ -23,12 +22,13 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     ...props
   }: T) => {
 
+    const { formState } = FB.useStores();
     autocompleteAsyncState = FB.useRef<FBAutocompleteAsyncState>(FBAutocompleteAsyncState, optionId);
     const {
       valueKey: optionValueKey = "value",
       labelKey: optionLabelKey = "text",
     } = autocompleteAsyncState?.optionConfig || {};
-    const formValue = FBStore.getValue(name);
+    const formValue = formState?.getFieldValue(name);
 
     useObserver(() => {
       if (!optionId) {
@@ -48,13 +48,22 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       defaultValue = _.map(value, { optionValueKey });
     }
 
+    if (options && formValue && !_.isEmpty(formValue)) {
+      if (optionValueType === "key") {
+        const value = autocompleteAsyncState?.sliceValue(formValue);
+        defaultValue = _.map(value, { optionValueKey });
+      } else {
+        defaultValue = formValue;
+      }
+    }
+
     refresh = () => autocompleteAsyncState?.load(true);
 
-    getOptionLabel = (option) => {
+    !getOptionLabel && (getOptionLabel = (option) => {
       const { labelPrefixRoot } = autocompleteAsyncState?.optionConfig || {};
       const optionLabel = labelPrefixRoot ? `${_.get(option, labelPrefixRoot)} - ` : "";
       return `${optionLabel}${_.get(option, optionLabelKey, "")}`;
-    };
+    });
 
     return Component({
       ...(props as T),

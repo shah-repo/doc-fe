@@ -11,6 +11,7 @@ interface OwnProps {
   name: string;
   label: string;
   documentTypeId?: string;
+  disabled?: boolean;
 }
 
 export type Props = OwnProps;

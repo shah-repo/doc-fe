@@ -9,11 +9,13 @@ import { required, validator } from "../../../components/forms/fields/validators
 interface Props {
   isQms: boolean;
   documentTypeId?: string;
+  isDisabled?: boolean;
 }
 
 const Description: React.FunctionComponent<Props> = ({
   documentTypeId = "",
   isQms,
+  isDisabled = false,
 }) => {
   const intl = useIntl();
   const documentType = useSelector(documentTypeSelectors.byId)[documentTypeId];
@@ -44,7 +46,7 @@ const Description: React.FunctionComponent<Props> = ({
       name="description"
       label={`common.description.${documentType?.documentTypeAcronym}`}
       validate={validators}
-      editorProps={{ placeholder }}
+      editorProps={{ placeholder, readOnly: isDisabled }}
     />
   );
 };
