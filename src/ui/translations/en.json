@@ -638,6 +638,7 @@
   "form.builder.EUR.to.USD": "1 Euro = {rate} USD",
   "form.builder.GBP.to.USD": "1 GBP = {rate} USD",
   "form.builder.total.in.USD": "Total in US dollars: {total} USD",
+  "form.builder.date.of.exchange": "Exchange rate according to {fixerLink} as of {dateOfExchangeRate}",
   "form.builder.download.file": "Download attached file {fileShortName}",
   "form.builder.download.clean.copy": "Download generated clean copy of file {fileShortName}",
   "form.builder.add.approvers": "Add Approvers",

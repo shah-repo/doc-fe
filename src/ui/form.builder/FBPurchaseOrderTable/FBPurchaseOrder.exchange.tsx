@@ -9,6 +9,17 @@ const FBPurchaseOrderExchange: React.FunctionComponent<Props> = ({
 }) => (
   <div>
     <div>
+      <Text
+        translation="form.builder.date.of.exchange"
+        values={{
+          fixerLink: (
+            <a href="https://fixer.io" target="_blank" rel="noopener noreferrer">{"fixer.io"}</a>
+          ),
+          dateOfExchangeRate: calculation?.dateOfExchangeRate,
+        }}
+      />
+    </div>
+    <div>
       <Text message={`form.builder.${calculation?.currency}.to.USD`} values={{ rate: calculation?.exchangeRate }} />
     </div>
     <div>

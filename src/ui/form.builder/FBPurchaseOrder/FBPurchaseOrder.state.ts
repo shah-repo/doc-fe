@@ -1,4 +1,4 @@
-import _, { Dictionary } from "lodash";
+import _, { Dictionary, template } from "lodash";
 import { action, observable, set } from "mobx";
 import moment from "moment";
 import { FB, FBPurchaseOrderCalculation, FBPurchaseOrderConstructor, FBPurchaseOrderItem } from "..";
@@ -8,6 +8,7 @@ import { TAX_RATE } from "../helpers/constants";
 import { FBCurrency } from "./FBPurchaseOrder.types";
 
 export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
+  public exchangeRate: FBRequest<any, Dictionary<number>> = new FBRequest();
   @observable public itemTotalAmount = 0;
   @observable public items: FBPurchaseOrderItem[] = [];
   @observable public calculation: FBPurchaseOrderCalculation = {
@@ -18,6 +19,7 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     currency: "USD",
     exchangeRate: 1,
     totalInUSD: "0.00",
+    dateOfExchangeRate: "",
   };
 
   public constructor({ documentId, ...initialValues }: FBPurchaseOrderConstructor) {
@@ -48,7 +50,7 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     this.calculateCost();
   };
 
-  @action public setCurrency = (currency: FBCurrency) => {
+  @action public setCurrency = async (currency: FBCurrency) => {
     const setToUsd = () => {
       set(this.calculation, "currency", "USD");
       set(this.calculation, "exchangeRate", 1);
@@ -59,14 +61,19 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
       return;
     }
 
-    // async request
-    new Promise((resolve, reject) => {
-      resolve(1.5);
-    }).then((rate) => {
+    const urlTpl = template(FBEndpoint.Currency);
+    const url = urlTpl({ symboName: currency });
+    this.exchangeRate.setUrl(url);
+
+    try {
+      const data = await this.exchangeRate.fetch();
       set(this.calculation, "currency", currency);
-      set(this.calculation, "exchangeRate", rate);
+      set(this.calculation, "exchangeRate", data.rate.toFixed(2));
+      set(this.calculation, "dateOfExchangeRate", moment().format("LL"));
       this.calculateCost();
-    }).catch(() => setToUsd() );
+    } catch (e) {
+      setToUsd();
+    }
   };
 
   @action public setItem = (item?: FBPurchaseOrderItem) => {
