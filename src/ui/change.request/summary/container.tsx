@@ -128,7 +128,7 @@ export const Container: React.FunctionComponent<Props> = ({
   };
 
   const summaryFormikRenderer = () => (
-    <FormContext.Provider value={{ submitOnChange: true }}>
+    <FormContext.Provider value={{ submitOnChange: false }}>
       <Formik
         initialValues={toChangeRequestFormValues(dataProp)}
         onSubmit={onSubmit}
