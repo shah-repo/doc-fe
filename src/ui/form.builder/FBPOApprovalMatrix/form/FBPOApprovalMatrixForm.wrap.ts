@@ -1,6 +1,6 @@
 import React from "react";
 import { FB } from "../..";
-import { FBPOApprovalMatrixFormActionsProps } from "../FBPOApprovalMatrix.types";
+import { FBPOApprovalMatrixFormActionsProps, POApprovalMatrixLevel } from "../FBPOApprovalMatrix.types";
 
 export const withFBPOApprovalMatrixForm = <T extends FBPOApprovalMatrixFormActionsProps>(
   Component: React.FunctionComponent<T>
@@ -16,7 +16,7 @@ export const withFBPOApprovalMatrixForm = <T extends FBPOApprovalMatrixFormActio
 
     handleAdd = () => {
       const formValues = formState?.getValues();
-      poamState?.addItem(formValues);
+      poamState?.addItem(formValues as POApprovalMatrixLevel);
       dialogState?.closeDialog();
     };
     handleCancel = () => dialogState?.closeDialog();
