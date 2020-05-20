@@ -19,6 +19,7 @@ interface Props {
     name: string;
     isQms: boolean;
   }>>;
+  isDisabled: boolean;
 }
 
 const DocumentTypeSelect: React.FunctionComponent<Props> = ({
@@ -26,6 +27,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   type,
   outputDocumentTypes = [],
   savedocInfo,
+  isDisabled = false,
 }) => {
   const formik = useFormikContext();
   const dispatch = useDispatch();
@@ -34,7 +36,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   const documentTypes = useSelector(documentTypeSelectors.getDocumentTypeFormOptions);
   const documentTypesById = useSelector(documentTypeSelectors.byId);
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
-  const isDocTypeDisabled = type === "newVersion" || isdocRevStatusDraft;
+  const isDocTypeDisabled = (type === "newVersion" || isdocRevStatusDraft) || isDisabled;
   const isNewOutput = type === "newOutput";
   const options: SelectOption[] = React.useMemo(() => {
     if (type === "newOutput" && outputDocumentTypes) {

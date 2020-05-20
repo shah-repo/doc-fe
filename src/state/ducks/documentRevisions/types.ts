@@ -38,6 +38,7 @@ export interface DocumentRevisionDocument {
 export interface SecurityList {
   securityGroups: Group[];
   securityEmployees: User[];
+  operators: User[];
 }
 
 export interface Document {
@@ -108,6 +109,7 @@ export interface ReferenceToEditRequest {
 export interface SecurityListRequest {
   securityEmployees: Id[];
   securityGroups: Id[];
+  operators: Id[];
 }
 
 export interface DocumentRevisionDocumentRequest {
