@@ -12,6 +12,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     optionLabelKey = "text",
     optionValueKey = "value",
     optionValueType = "key",
+    placeholder,
     getOptionLabel,
     multiple,
     name,
@@ -24,10 +25,18 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     const value = formState?.getFieldValue(name) || defaultValue;
     const intl = useIntl();
 
-    if (options && value && optionValueType === "key") {
-      defaultValue = multiple
-        ? _.filter(options, (o) => _.includes(value, o[optionValueKey]))
-        : _.find(options, { [optionValueKey]: value });
+    if (placeholder && isTranslation(placeholder)) {
+      placeholder = intl.formatMessage({ id: placeholder });
+    }
+
+    if (options && value && !_.isEmpty(value)) {
+      if (optionValueType === "key") {
+        defaultValue = multiple
+          ? _.filter(options, (o) => _.includes(value, o[optionValueKey]))
+          : _.find(options, { [optionValueKey]: value });
+      } else {
+        defaultValue = value;
+      }
     }
 
     !getOptionLabel && (getOptionLabel = (option) => {
@@ -46,6 +55,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       optionValueKey,
       optionLabelKey,
       optionValueType,
+      placeholder,
       multiple,
       name,
     });

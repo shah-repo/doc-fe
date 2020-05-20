@@ -13,11 +13,10 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   type,
   inputProps,
   InputProps,
-  variant,
   style,
   ...props
 }) => (
-  <FBInput {...props} type={inputType as FBInputType}>
+  <FBInput {...props} {...{ error }} type={inputType as FBInputType}>
     <TextField
       label=""
       variant="outlined"

@@ -1,3 +1,4 @@
+import { CancelTokenSource } from "axios";
 import { Action, Dispatch } from "redux";
 import CallbackHandler from "../common/callbackHandler";
 
@@ -16,6 +17,7 @@ export interface ApiAction<Response = any, Body = any> extends Action {
   onSuccess: (data: Response, dispatch: Dispatch) => void;
   onFailure: (error: any,  dispatch: Dispatch) => void;
   onCompleted: (dispatch: Dispatch) => void;
+  cancelToken?: CancelTokenSource;
 }
 
 export interface ActionWithPayload<P> extends Action {
@@ -45,4 +47,5 @@ export interface LoadAsyncState {
 export interface Handlers<S = any, E = string> {
   successHandler: CallbackHandler<S>;
   errorHandler: CallbackHandler<E>;
+  setCancelToken: (token?: CancelTokenSource) => void;
 }

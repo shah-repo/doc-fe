@@ -6,6 +6,7 @@ import { SelectComponentsProps } from "react-select/base";
 import { ValueType } from "react-select/src/types";
 import { TypographyColor, TypographyProps, TypographySize } from "../../../../../state/ducks/common";
 import Text from "../../../../components/Text";
+import { useFormContext } from "../../FormContext";
 import Field, { FieldOwnProps } from "../Field";
 import { InputField } from "../Input.styles";
 import { OptionType } from "./types";
@@ -26,6 +27,7 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
   onClick,
   ...fieldProps
 }) => {
+  const { submitForm } = useFormContext();
   const onChange = (value: ValueType<OptionType>) => {
     const {
       form: { setFieldValue, setFieldTouched, touched },
@@ -37,6 +39,7 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
     }
 
     setFieldValue(name, value);
+    submitForm(fieldProps.form.submitForm);
   };
 
   const stringify = (option: OptionType) => option.label;

@@ -1,8 +1,11 @@
-import React from "react";
+import { isEmpty } from "lodash";
+import React, { useMemo } from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
-import { DocumentRevision, documentRevisionsActions } from "../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionEditRequestBody, documentRevisionsActions } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
+import { FormContext } from "../components/forms/FormContext";
+import { compareValuesToSubmit } from "../components/forms/helpers";
 import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";
 import useAsync from "../hooks/useAsync";
 import useDocumentTitle from "../hooks/useDocumentTitle";
@@ -17,8 +20,6 @@ interface StateProps {
 
 interface DispatchProps {
   save: typeof documentRevisionsActions.save;
-  loadAudit: typeof documentRevisionsActions.loadAudit;
-  loadDocument: typeof documentRevisionsActions.loadDocument;
 }
 
 interface OwnProps {
@@ -43,12 +44,11 @@ DocumentRevisionUpdateContainerProps
   documentRevision,
   currentUserEmail,
   onDirtyFlagChange,
-  loadAudit,
   documentId,
-  loadDocument,
   canChangeOwnerShip,
 }) => {
 
+  const initialValues = useMemo(() => toDocumentRevisionFormValues(documentRevision), [documentRevision]);
   const { docId } = documentRevision.document;
   useDocumentTitle(docId);
 
@@ -56,9 +56,6 @@ DocumentRevisionUpdateContainerProps
   const async = useAsync<DocumentRevision>({
     onSuccess: () => {
       setDoNotPrompt(true);
-      if (documentId) {
-        loadDocument(documentId);
-      }
     },
   });
 
@@ -73,25 +70,35 @@ DocumentRevisionUpdateContainerProps
   }
 
   const onSubmit = (values: DocumentRevisionFormValues) => {
+    const dataToSubmit = compareValuesToSubmit(initialValues, values, toDocumentRevisionEditRequestBody);
+
+    if (isEmpty(dataToSubmit)) {
+      return;
+    }
+
+    async.reset();
+
     async.start(
       save,
       documentRevision.id,
-      toDocumentRevisionEditRequestBody(values),
+      dataToSubmit as DocumentRevisionEditRequestBody,
       async,
     );
   };
 
   return (
-    <DocumentRevisionForm
-      doNotPrompt={doNotPrompt}
-      asyncState={async.asyncState}
-      onSubmit={onSubmit}
-      initialValues={toDocumentRevisionFormValues(documentRevision)}
-      onDirtyFlagChange={onDirtyFlagChange}
-      documentRevision={documentRevision}
-      canChangeOwnerShip={canChangeOwnerShip}
-      showRevisionTypeChange
-    />
+    <FormContext.Provider value={{ submitOnChange: true }}>
+      <DocumentRevisionForm
+        doNotPrompt={doNotPrompt}
+        asyncState={async.asyncState}
+        onSubmit={onSubmit}
+        initialValues={initialValues}
+        onDirtyFlagChange={onDirtyFlagChange}
+        documentRevision={documentRevision}
+        canChangeOwnerShip={canChangeOwnerShip}
+        showRevisionTypeChange
+      />
+    </FormContext.Provider>
   );
 };
 
@@ -99,7 +106,5 @@ export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(
   mapStateToProps,
   {
     save: documentRevisionsActions.save,
-    loadAudit: documentRevisionsActions.loadAudit,
-    loadDocument: documentRevisionsActions.loadDocument,
   },
 )(DocumentRevisionUpdateContainer);

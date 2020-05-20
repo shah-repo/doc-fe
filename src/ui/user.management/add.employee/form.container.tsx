@@ -7,6 +7,7 @@ import { getTableCriteria } from "../../../common/utils/selectors";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
+import { FormContext } from "../../components/forms/FormContext";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import AddEmployeeFormPresenter from "./form.presenter";
@@ -80,13 +81,15 @@ export const AddEmployeeFormContainer: React.FunctionComponent = () => {
         width="50vw"
         paddingTop={10}
       >
-        <Formik
-          initialValues={initialValues}
-          onSubmit={onSubmit}
-          enableReinitialize={true}
-        >
-          {renderForm}
-        </Formik>
+        <FormContext.Provider value={{ submitOnChange: false }}>
+          <Formik
+            initialValues={initialValues}
+            onSubmit={onSubmit}
+            enableReinitialize={true}
+          >
+            {renderForm}
+          </Formik>
+        </FormContext.Provider>
       </Box>
     </Grid>
   );

@@ -1,6 +1,6 @@
 import { Dictionary } from "lodash";
 import { FBFormState } from ".";
-import { FBSchemaProps, FBWorkspaceMode } from "..";
+import { FBSchemaProps, FBWorkspaceMode, FBWorkspaceState } from "..";
 
 export interface FBFormProps {
   initialValues?: Dictionary<any>;
@@ -12,4 +12,7 @@ export interface FBFormProps {
   initialValidation?: boolean;
 }
 
-export type FBFormConstructor = Pick<FBFormProps, "schema" | "initialValues">;
+export type FBFormConstructor = Pick<FBFormProps, "schema" | "initialValues" | "workspaceMode">
+& {
+  workspaceState?: FBWorkspaceState;
+};

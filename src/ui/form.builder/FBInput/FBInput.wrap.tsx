@@ -38,13 +38,17 @@ export const withFBInput = <T extends FBInputProps>(
 
     const { formState } = FB.useStores();
     const intl = useIntl();
-    defaultValue = React.useMemo(() => setDefaultValue(), [defaultValue]);
+    defaultValue = setDefaultValue();
     helperText = formState?.errors.get(name) || helperText;
     error = !_.isUndefined(formState?.errors.get(name)) && formState?.errorValidation;
     value = inputState?.value;
     includeContext = inputState?.includeContext;
 
-    (_.isUndefined(hidden) && validationMode === "visibility") && (hidden =
+    (_.isUndefined(hidden) && formState?.workspaceMode === "form" && validationMode === "visibility") && (hidden =
+      !helperText && !defaultValue
+    );
+
+    (!disabled && formState?.workspaceMode === "form" && validationMode === "disabled") && (disabled =
       !helperText && !defaultValue
     );
 
@@ -53,6 +57,9 @@ export const withFBInput = <T extends FBInputProps>(
       const value = {
         editoroptions() {
           const options: FBOption[] | undefined = formState?.getFieldValue(name);
+          if (_.isString(options)) {
+            return;
+          }
           const value = optionsToString && optionsToString(options);
           formState?.setFieldValue(name, value);
           return value || "";
@@ -78,6 +85,7 @@ export const withFBInput = <T extends FBInputProps>(
       children = React.cloneElement(child as React.ReactElement, {
         disabled,
         onChange,
+        ...(type === "textfield" && { error }),
         ...(type !== "texteditor" && { value }),
         ...(type !== "datepicker" && type !== "autocomplete" && !_.isBoolean(defaultValue) && { defaultValue }),
       });

@@ -20,11 +20,11 @@ const FBEditorValidation: React.FunctionComponent<FBEditorValidationProps> = ({
           },
           {
             text: "Show/Hide",
-            value: "disabled",
+            value: "visibility",
           },
           {
             text: "Enable/disable",
-            value: "visibility",
+            value: "disabled",
           },
         ]}
       />

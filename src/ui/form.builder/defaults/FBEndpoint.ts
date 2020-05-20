@@ -15,5 +15,7 @@ export enum FBEndpoint {
   CreateTemplateUrl = "/hello_sign/template",
   SendSignatureUrl = "/hello_sign/send_signature_request",
   CancelSignatureUrl = "/hello_sign/cancel_signature_request",
-  AttachTemplateUrl = "/hello_sign/template/attach_predefined"
+  AttachTemplateUrl = "/hello_sign/template/attach_predefined",
+  ApprovalMatrix = "/document_type/approval_matrix",
+  POApprovalMatrix = "/purchase_order/approval_matrix",
 }

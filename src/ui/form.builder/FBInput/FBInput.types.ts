@@ -48,7 +48,8 @@ export type FBInputType =
   | "selectrequirement"
   | "testRequirement"
   | "hellosign"
-  | "customcontrol";
+  | "customcontrol"
+  | "poApprovalMatrix";
 
 export type FBInputProps =
 & FBLabelProps
@@ -94,6 +95,7 @@ export type FBInputProps =
   applicableOn?: any[];
   actions?: string[];
   hellosignFlowProps?: any;
+  showErrorMsg?: boolean;
 };
 
 export const OmitInputClones: FBInputType[] = ["fileupload"];
