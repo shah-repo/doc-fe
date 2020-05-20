@@ -302,6 +302,7 @@
   "document.title": "Document Title",
   "document.type": "Document Type",
   "document.output.type": "Output Document Type",
+  "document.assign.to": "Assign Document to",
   "document.save": "Save",
   "document.emptyData": "No data",
   "document.form.title": "Document: {name}",
