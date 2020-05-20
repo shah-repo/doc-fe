@@ -3,7 +3,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core";
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      margin: theme.spacing(0, 4, 0, 2),
+      margin: theme.spacing(1),
     },
     details: {
       overflowY: "auto",
@@ -29,11 +29,15 @@ export const styles = makeStyles((theme: Theme) =>
       color: theme.palette.text.hint,
     },
     accessButton: {
-      padding: 0,
-      margin: 0,
-      border: 0,
-      backgroundColor: "transparent",
-      cursor: "pointer",
+      "padding": 0,
+      "margin": 0,
+      "border": 0,
+      "backgroundColor": "transparent",
+      "cursor": "pointer",
+      "li.active > a": {
+        borderBottom: `1px solid ${theme.palette.common.white}`,
+        transition: "none",
+      },
     },
   }),
 );

@@ -32,4 +32,16 @@ export default (theme: Theme) =>
         paddingTop: theme.spacing(12),
       },
     },
+    sidebarItemTitle: {
+      position: "fixed",
+      background: "white",
+      zIndex: 1,
+    },
+    sidebarContent: {
+      "overflow": "auto",
+      "height": "calc(100vh - 127px)",
+      "&::-webkit-scrollbar": {
+        display: "none",
+      },
+    },
   });

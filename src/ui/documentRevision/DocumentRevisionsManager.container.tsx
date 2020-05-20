@@ -1,19 +1,22 @@
 import { Box, Grid, IconButton, Slide, Typography, withStyles, WithStyles } from "@material-ui/core";
+import _ from "lodash";
 import React, { useRef, useState } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { ReactComponent as BadgeIcon } from "../../assets/images/badge-15.svg";
-import { ReactComponent as BookmarkIcon } from "../../assets/images/bookmark-2.svg";
 import { ReactComponent as SidebarCloseIcon } from "../../assets/images/move-down.svg";
 import { ReactComponent as SidebarOpenIcon } from "../../assets/images/move-up.svg";
 import { ReactComponent as NoteIcon } from "../../assets/images/note.svg";
 import { ReactComponent as TimelineIcon } from "../../assets/images/timeline.svg";
-import { DocumentRevision, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsSelectors, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import Text from "../components/Text";
 import { documentVersionPath } from "../document.revision/utils/paths";
+import DocumentRevisionAuditContainer from "../documentRevision/audit/Audit.container";
 import useDocumentTitle from "../hooks/useDocumentTitle";
+import AccessPermissionsContainer from "./accessPermissions/AccessPermissions.container";
 import DocumentRevisionDisplayContainer from "./DocumentRevisionDisplay.container";
+import DocumentRevisionListContainer from "./DocumentRevisionList.container";
 import { getDocRevIdToRedirect, shouldRedircetToLatestReleasd } from "./helpers";
 import styles from "./styles";
 
@@ -56,13 +59,60 @@ DocumentRevisionManagerContainerProps
   docId,
 }) => {
   useDocumentTitle(docId);
+  const docRevsWithoutCanceled = documentRevisions.filter((docrev) => docrev.status !== DocumentRevisionStatus.Canceled);
+  const selectedDocument = useSelector((state: ApplicationState) =>
+    documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId as string));
+  const canAccess = _.get(selectedDocument, "document.canAccess", []);
+
+  const sidebarList = [
+    {
+      icon: <NoteIcon />,
+      details: {
+        title: "Versions",
+        component: <DocumentRevisionListContainer
+          documentRevisions={docRevsWithoutCanceled}
+          documentId={documentId}
+          docId={docId}
+          selectedDocumentRevision={documentRevisionId}
+          documentRevisionId={documentRevisionId}
+        />,
+      },
+    },
+    {
+      icon: <TimelineIcon />,
+      details: {
+        title: "History",
+        component: documentRevisionId ? <DocumentRevisionAuditContainer
+          documentRevisionId={documentRevisionId}
+        /> : null,
+      },
+    },
+    {
+      icon: <BadgeIcon />,
+      details: {
+        title: "Access Permissions",
+        component: documentRevisionId && canAccess && !isNewOutput ? <AccessPermissionsContainer
+          documentRevisionId={documentRevisionId}
+          documentId={documentId}
+          canAccess={canAccess}
+          withoutCurrentUser={true}
+        /> : null,
+      },
+    },
+    // ENC-3193
+    // {
+    //   icon: <BookmarkIcon />,
+    //   details: {
+    //     title: "Bookmarks",
+    //     component: <Box />,
+    //   },
+    // },
+  ];
   const [sidebar, openSidebar] = useState<boolean>(false);
-  const [title, setTitle] = useState<string>();
+  const [number, setNumber] = useState(0);
+
 
   const inputRef = useRef(null);
-
-  // const selectedDocument = useSelector((state: ApplicationState) =>
-  //   documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId as string));
 
   if (shouldRedircetToLatestReleasd(documentRevisions, documentRevisionId)) {
     const docRevIdToRedirect = getDocRevIdToRedirect(documentRevisions, deprecatedAt);
@@ -70,53 +120,22 @@ DocumentRevisionManagerContainerProps
       <Redirect to={documentVersionPath(docRevIdToRedirect, documentId)} />
     );
   }
-  // const canAccess = _.get(selectedDocument, "document.canAccess", []);
-  // const docRevsWithoutCanceled = documentRevisions.filter((docrev) => docrev.status !== DocumentRevisionStatus.Canceled);
-
-  const renderSidebarItems = (title) => {
-    setTitle(title);
-  };
-
-  const sidebarList = [
-    {
-      icon: <NoteIcon />,
-      title: "Versions",
-    },
-    {
-      icon: <TimelineIcon />,
-      title: "History",
-    },
-    {
-      icon: <BadgeIcon />,
-      title: "Access Permissions",
-    },
-    {
-      icon: <BookmarkIcon />,
-      title: "Bookmarks",
-    },
-  ];
 
   const changeSize = () => {
     openSidebar(!sidebar);
-    renderSidebarItems(sidebarList[0].title);
+    if (sidebar) {
+      setNumber(0);
+    }
     if (inputRef && !sidebar) {
       const input = inputRef.current as any;
       input.focus();
+      input.click();
       return;
     }
   };
 
   return (
     <Grid container={true} spacing={2} className={classes.whiteContainer}>
-      {/* <Grid item={true} xs={2} className={classes.sidebar}>
-        <DocumentRevisionListContainer
-          documentRevisions={docRevsWithoutCanceled}
-          documentId={documentId}
-          docId={docId}
-          selectedDocumentRevision={documentRevisionId}
-          documentRevisionId={documentRevisionId}
-        />
-      </Grid> */}
       {documentRevisionId && !isNewOutput && (
         <Grid item={true} xs={sidebar ? 9 : 11} style={{ background: "#F2F4F6" }}>
           <DocumentRevisionDisplayContainer
@@ -135,21 +154,6 @@ DocumentRevisionManagerContainerProps
           />
         </Grid>
       )}
-      {/* <Grid item={true} xs={3} className={classes.sidebar}>
-        {documentRevisionId && (
-          <DocumentRevisionAuditContainer
-            documentRevisionId={documentRevisionId}
-          />
-        )}
-        {documentRevisionId && canAccess && !isNewOutput && (
-          <AccessPermissionsContainer
-            documentRevisionId={documentRevisionId}
-            documentId={documentId}
-            canAccess={canAccess}
-            withoutCurrentUser={true}
-          />
-        )}
-      </Grid> */}
       <Grid item={true} xs={sidebar ? 3 : 1} style={{ position: "sticky", paddingLeft: "4px" }}>
         <Grid container={true} style={{ height: "100%" }}>
           <Grid item={true} xs={1}
@@ -164,11 +168,11 @@ DocumentRevisionManagerContainerProps
                 {sidebar ? <SidebarCloseIcon /> : <SidebarOpenIcon />}
               </IconButton>
             </Box>
-            {sidebarList.map((item) =>
-              <Box key={item.title}>
+            {sidebarList.map((item, index) =>
+              <Box key={item.details.title}>
                 <IconButton
-                  ref={sidebarList[0].title === item.title ? inputRef : null}
-                  onClick={() => renderSidebarItems(item.title)}
+                  ref={sidebarList[number].details.title === item.details.title ? inputRef : null}
+                  onClick={() => setNumber(index)}
                   className={classes.iconButton}
                 >
                   {item.icon}
@@ -183,14 +187,17 @@ DocumentRevisionManagerContainerProps
               style={{
                 display: sidebar ? "block" : "none",
                 padding: 0,
-                marginLeft: 78,
+                width: 260,
                 position: "fixed",
-                width: "265px",
+                marginLeft: 78,
               }}>
-              <Box padding={2}>
+              <Box padding={2} paddingLeft={4} className={classes.sidebarItemTitle}>
                 <Typography variant="button">
-                  <Text message={title} />
+                  <Text message={sidebarList[number].details.title} />
                 </Typography>
+              </Box>
+              <Box top={60} position="absolute" width={260} className={classes.sidebarContent}>
+                {sidebarList[number].details.component}
               </Box>
             </Grid>
           </Slide>
