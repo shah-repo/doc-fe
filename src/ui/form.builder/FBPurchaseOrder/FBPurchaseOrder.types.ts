@@ -10,6 +10,8 @@ export type FBPurchaseOrderProps =
   mode?: FBPurchaseOrderMode;
 };
 
+export type FBPurchaseOrderItemType = "product" | "service";
+
 export interface FBPurchaseOrderItem {
   id: string;
   index: number;
@@ -29,6 +31,7 @@ export interface FBPurchaseOrderItem {
   tax: boolean;
   received?: number;
   receivedList?: any[];
+  type: FBPurchaseOrderItemType;
 }
 
 export interface FBPurchaseOrderCalculation {
