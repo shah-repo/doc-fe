@@ -1,4 +1,4 @@
-import { flatten, unflatten } from "flat";
+import { flatten } from "flat";
 import _, { Dictionary } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBFormConstructor, FBInputState, FBWorkspaceMode, FBWorkspaceState } from "..";
@@ -34,9 +34,10 @@ export class FBFormState extends FBSchemaState {
     this.values = values;
   };
 
-  @action public getValues = () =>
-    unflatten(this.values, { overwrite: true })
-  ;
+  @action public getValues = () => this.values;
+  // TODO: Remove if works
+  //   unflatten(this.values, { overwrite: true })
+  // ;
 
   @action public getFieldValue = (
     fieldName: string | undefined, defaultValue: any = undefined): any => {
@@ -118,7 +119,8 @@ export class FBFormState extends FBSchemaState {
     }
 
     const rules = this.getRules();
-    const values = flatten(this.getValues(), { safe: true });
+    // const values = flatten(this.getValues(), { safe: true });
+    const values = this.getValues();
     // *TODO: unify validators format
     let validator: any;
     try {
