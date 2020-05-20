@@ -3,7 +3,7 @@ import { uniqBy } from "lodash";
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
-import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { documentTypeSelectors, DynamicUIDocTypes } from "../../../state/ducks/documentRevisions/documentType";
 import { TextFieldSelect } from "../../components/forms/fields/TextFieldSelect/container";
 import { required, validator } from "../../components/forms/fields/validators";
 
@@ -23,9 +23,9 @@ export const Title: React.FunctionComponent<Props> = ({
   const documentType = useSelector(documentTypeSelectors.byId)[documentTypeId];
   const [isVisible, validators] = useMemo(() => {
     switch (documentType?.documentTypeAcronym) {
-      case "WO":
-      case "RC":
-      case "PO":
+      case DynamicUIDocTypes.WO:
+      case DynamicUIDocTypes.RC:
+      case DynamicUIDocTypes.PO:
         return [false];
       default:
         return [true, validator(required)];

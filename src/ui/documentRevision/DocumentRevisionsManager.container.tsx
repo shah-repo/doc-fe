@@ -64,7 +64,10 @@ DocumentRevisionManagerContainerProps
     );
   }
   const canAccess = _.get(selectedDocument, "document.canAccess", []);
-  const docRevsWithoutCanceled = documentRevisions.filter((docrev) => docrev.status !== DocumentRevisionStatus.Canceled);
+  const docRevsWithoutCanceled = documentRevisions.filter((docrev) =>
+    docrev.status !== DocumentRevisionStatus.Canceled
+  );
+
   return (
     <Grid container={true} spacing={2} className={classes.whiteContainer}>
       <Grid item={true} xs={2} className={classes.sidebar}>

@@ -2,7 +2,7 @@ import * as React from "react";
 import { useMemo } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
-import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
+import { documentTypeSelectors, DynamicUIDocTypes } from "../../../../state/ducks/documentRevisions/documentType";
 import RichTextEditor from "../../../components/forms/fields/RichTextEditor";
 import { required, validator } from "../../../components/forms/fields/validators";
 
@@ -24,11 +24,11 @@ const Description: React.FunctionComponent<Props> = ({
     let isVisible = true;
     let validators = isQms ? validator(required) : undefined;
 
-    if (documentType?.documentTypeAcronym === "RC") {
+    if (documentType?.documentTypeAcronym === DynamicUIDocTypes.RC) {
       isVisible = false;
       validators = undefined;
     }
-    if (documentType?.documentTypeAcronym === ("WO" || "PO")) {
+    if (documentType?.documentTypeAcronym === (DynamicUIDocTypes.WO || DynamicUIDocTypes.PO)) {
       validators = undefined;
     }
 

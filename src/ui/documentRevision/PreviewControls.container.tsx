@@ -5,6 +5,7 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
 import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
+import { DynamicUIDocTypes } from "../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import { toastInfo } from "../components/notifications";
@@ -36,6 +37,8 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton, hasAccess,
 }) => {
 
+  const acronym = documentRevision.document?.documentType?.documentTypeAcronym;
+  const canReviseDocument = acronym !== DynamicUIDocTypes.WO;
   const intl = useIntl();
   const dispatch = useDispatch();
   const [isEmailSent, toogleEmailSent] = useState<boolean>(false);
@@ -73,10 +76,10 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const canCreate = () => canCreateNewVersion(documentRevision, disableCreateNewVersion, canShowCreateVersionButton);
 
   const renderCloneButton = () => {
-    if (hasAccess && canCreate()) {
+    if (canReviseDocument && hasAccess && canCreate()) {
       return (
         <Button color="secondary" variant="outlined" onClick={cloneDocument} id="PreviewControlsContainer-revise" >
-          <Text translation="documentRevision.revise" />
+          <Text message={`documentRevision.revise.${acronym}`} />
         </Button>
       );
     }
@@ -85,7 +88,12 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const renderOutputButton = () => {
     if (hasAccess && canCreateOutput(documentRevision)) {
       return (
-        <Button color="secondary" variant="outlined" onClick={cloneOutputDocument} id="PreviewControlsContainer-createNew">
+        <Button
+          color="secondary"
+          variant="outlined"
+          onClick={cloneOutputDocument}
+          id="PreviewControlsContainer-createNew"
+        >
           <Text translation="common.create.new" />
         </Button>
       );

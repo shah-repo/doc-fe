@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { stripTags } from "../../../common/utils/helpers";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DynamicUIDocTypes } from "../../../state/ducks/documentRevisions/documentType";
 import { changeRequestEditPath } from "../../change.request/utils/paths";
 import Text from "../../components/Text";
 
@@ -16,7 +17,18 @@ export const ChangeRequestLink: React.FunctionComponent<Props> = ({
     return null;
   }
 
+  const acronym = dataProp?.document?.documentType?.documentTypeAcronym;
+  const hideLink = acronym === (
+    DynamicUIDocTypes.PO ||
+    DynamicUIDocTypes.RC ||
+    DynamicUIDocTypes.SUP ||
+    DynamicUIDocTypes.WO
+  );
   const { changeRequest } = dataProp;
+
+  if (hideLink) {
+    return null;
+  }
 
   return (
     <ListItem>

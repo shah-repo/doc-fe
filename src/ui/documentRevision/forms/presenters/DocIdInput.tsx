@@ -2,7 +2,7 @@ import * as React from "react";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { DocumentRevisionDocument } from "../../../../state/ducks/documentRevisions";
-import { DocumentTypeByIdState, documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
+import { DocumentTypeByIdState, documentTypeSelectors, DynamicUIDocTypes } from "../../../../state/ducks/documentRevisions/documentType";
 import { DocumentProposedIdSetAction } from "../../../../state/ducks/documents";
 import InputField from "../../../components/forms/fields/Input";
 
@@ -24,10 +24,10 @@ const DocIdInput: React.FunctionComponent<Props> = ({
   const documentType = useSelector(documentTypeSelectors.byId)[documentTypeId];
   const isVisible = useMemo(() => {
     switch (documentType?.documentTypeAcronym) {
-      case "PO":
-      case "RC":
-      case "WO":
-      case "SUP":
+      case DynamicUIDocTypes.PO:
+      case DynamicUIDocTypes.RC:
+      case DynamicUIDocTypes.WO:
+      case DynamicUIDocTypes.SUP:
         return false;
       default:
         return true;

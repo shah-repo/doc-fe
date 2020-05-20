@@ -2,10 +2,11 @@ import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, List, Typ
 import ExpandLessIcon from "@material-ui/icons/ExpandMore";
 import classNames from "classnames";
 import React, { useCallback, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { Nullable, TypographySize } from "../../state/ducks/common";
-import { DocumentRevision, documentRevisionsActions } from "../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
+import { ApplicationState } from "../../state/reducers";
 import SummaryInfo from "../common/summary/SummaryInfo";
 import Date from "../components/Date";
 import Text from "../components/Text";
@@ -33,6 +34,8 @@ DocumentRevisionListContainerProps
   selectedDocumentRevision,
   documentRevisionId,
 }) => {
+  const document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, documentId));
+  const { documentTypeAcronym: acronym } = document?.documentType || {};
   const classes = styles();
   const [expanded, setExpanded] = React.useState<boolean>(true);
   const handleChange = () => () => setExpanded(!expanded);
@@ -50,7 +53,7 @@ DocumentRevisionListContainerProps
       <ExpansionPanel expanded={expanded} onChange={handleChange()}>
         <ExpansionPanelSummary expandIcon={<ExpandLessIcon />}>
           <Typography variant={TypographySize.md}>
-            <Text translation="document.revision.docVersion" />
+            <Text message={`document.revision.docVersion.${acronym}`} />
           </Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>
@@ -82,7 +85,7 @@ DocumentRevisionListContainerProps
                         documentRevision.revisionStage,
                         documentRevision.revisionChangeType,
                       )}
-                        &nbsp; - <Text message={documentRevision.status} />
+                        &nbsp; - <Text message={`${documentRevision.status}.${acronym}`} />
                     </div>
                   </NavLink>
                   <NavLink

@@ -17,7 +17,7 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
 }) => {
   const documentType = useSelector(documentTypeSelectors.byId)[documentTypeId];
   const { documentTypeAcronym: acronym } = documentType || {};
-  const isVisible = acronym !== "WO";
+  const isVisible = acronym !== DynamicUIDocTypes.WO;
 
   if (!isVisible) {
     return null;

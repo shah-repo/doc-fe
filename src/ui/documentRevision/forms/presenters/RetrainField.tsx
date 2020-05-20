@@ -3,7 +3,7 @@ import * as React from "react";
 import { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { RevisionChangeType } from "../../../../state/ducks/documentRevisions";
-import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
+import { documentTypeSelectors, DynamicUIDocTypes } from "../../../../state/ducks/documentRevisions/documentType";
 import CheckboxField from "../../../components/forms/fields/Checkbox";
 
 interface Props {
@@ -18,10 +18,10 @@ const RetrainField: React.FunctionComponent<Props> = ({
   const documentType = useSelector(documentTypeSelectors.byId)[documentTypeId];
   const isVisible = useMemo(() => {
     switch (documentType?.documentTypeAcronym) {
-      case "PO":
-      case "RC":
-      case "WO":
-      case "SUP":
+      case DynamicUIDocTypes.PO:
+      case DynamicUIDocTypes.RC:
+      case DynamicUIDocTypes.WO:
+      case DynamicUIDocTypes.SUP:
         return false;
       default:
         return true;
