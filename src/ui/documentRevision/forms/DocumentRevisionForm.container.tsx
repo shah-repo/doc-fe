@@ -1,7 +1,7 @@
 import { Box, Grid } from "@material-ui/core";
 import classNames from "classnames";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
-import { get } from "lodash";
+import _, { get } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
@@ -137,9 +137,10 @@ DocumentRevisionFormContainerProps
 
   // FB config
   const FBContainer = React.useRef(null);
-  const { group: formGroup } = cleanInitialValues.document?.documentType || {};
+  const { group: formGroup, schema: formSchema = [] } = cleanInitialValues.document?.documentType || {};
   const { docId: outputGroup } = cleanInitialValues.formDocument?.document || {};
-  const { schema } = cleanInitialValues?.formTemplate || cleanInitialValues?.formDocument?.formTemplate || {};
+  let { schema = [] } = cleanInitialValues?.formTemplate || cleanInitialValues?.formDocument?.formTemplate || {};
+  schema = _.union(formSchema, schema);
   const { formInput } = cleanInitialValues || {};
   let mode: Partial<FBWorkspaceMode> = "none";
   if (formGroup && formGroup.includes("FORM")) {
