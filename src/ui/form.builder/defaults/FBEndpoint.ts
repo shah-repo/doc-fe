@@ -18,4 +18,5 @@ export enum FBEndpoint {
   AttachTemplateUrl = "/hello_sign/template/attach_predefined",
   ApprovalMatrix = "/document_type/approval_matrix",
   POApprovalMatrix = "/purchase_order/approval_matrix",
+  Currency = "/currency/${symboName}",
 }

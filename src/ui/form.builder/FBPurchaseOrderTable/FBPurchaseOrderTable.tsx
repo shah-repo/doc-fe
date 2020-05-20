@@ -9,6 +9,7 @@ import { withFBPurchaseOrderTable } from "./FBPurchaseOrderTable.wrap";
 
 const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> = ({
   handleShippingCost,
+  handleCurrencyChange,
   handleDelete,
   handleItem,
   classes,
@@ -29,14 +30,14 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
     <TableBody>
       <TableRow>
         <FBTableCell colSpan={8}>
-          <FBPurchaseOrderTableDetails {...{ handleDelete, handleItem, classes, items, mode, loading }} />
+          <FBPurchaseOrderTableDetails {...{ handleDelete, handleItem, classes, items, mode, loading, calculation }} />
         </FBTableCell>
         <FBTableCell colSpan={3} style={{ verticalAlign: "baseline" }}>
-          <FBPurchaseOrderTableSum {...{ handleItem, classes, items }} />
+          <FBPurchaseOrderTableSum {...{ handleItem, classes, items, calculation }} />
         </FBTableCell>
       </TableRow>
       {mode === "form" && (
-        <FBPurchaseOrderTableTotal {...{ handleShippingCost, calculation, disabled, name }} />
+        <FBPurchaseOrderTableTotal {...{ handleShippingCost, handleCurrencyChange, calculation, disabled, name }} />
       )}
     </TableBody>
   </Table>

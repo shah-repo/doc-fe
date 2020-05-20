@@ -33,6 +33,7 @@ export const withFBPurchaseOrderActions = <T extends FBPurchaseOrderActionsProps
       onAddClick,
       onCancelClick,
       totalPrice,
+      currency: purchaseOrderState?.calculation.currency,
     });
   };
 

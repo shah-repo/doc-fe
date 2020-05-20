@@ -39,6 +39,10 @@ export interface FBPurchaseOrderCalculation {
   tax: string;
   totalAmount: string;
   shippingCost: string;
+  currency: FBCurrency;
+  exchangeRate: number;
+  totalInUSD: string;
+  dateOfExchangeRate: string;
 }
 
 export type FBPurchaseOrderValue = FBPurchaseOrderCalculation
@@ -49,3 +53,5 @@ export type FBPurchaseOrderValue = FBPurchaseOrderCalculation
 export type FBPurchaseOrderConstructor = FBPurchaseOrderValue & {
   documentId?: string;
 };
+
+export type FBCurrency = "USD" | "EUR" | "GBP";

@@ -5,6 +5,7 @@ export type FBSelectProps =
 & Pick<SelectProps, "style" | "variant">
 & FBInputProps
 & FBOptionProps
+& Pick<SelectProps, "SelectDisplayProps">
 & {
   menuItems?: React.ReactNode[];
 };
