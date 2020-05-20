@@ -51,6 +51,11 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   };
 
   @action public setCurrency = async (currency: FBCurrency) => {
+    // FBInput.onchange, line 87
+    // on change is triggered twice
+    if (this.exchangeRate.loading) {
+      return;
+    }
     const setToUsd = () => {
       set(this.calculation, "currency", "USD");
       set(this.calculation, "exchangeRate", 1);
