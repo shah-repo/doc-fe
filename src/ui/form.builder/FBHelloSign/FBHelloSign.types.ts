@@ -1,7 +1,5 @@
 import { Dictionary } from "lodash";
-import { FBButtonProps } from "../types/button";
-import { FBInputProps } from "../types/common";
-import FBHelloSignState from "./FBHelloSign.state";
+import { FBButtonProps, FBHelloSignState, FBInputProps } from "..";
 
 export type FBHelloSignFieldType =
   | "text"
@@ -22,16 +20,16 @@ export interface FBHelloSignPayload {
 }
 
 export type FBHelloSignProps =
-  Pick<FBInputProps, "label" | "name"> &
-  Pick<FBButtonProps, "onClick"> & {
-    buttonLabel?: string;
-    waitOverlay?: boolean;
-    backdropStyle?: any;
-    loadingMessage?: string;
-    signatureSent?: boolean;
-    signatureSentMessage?: string;
-    helloSignState?: FBHelloSignState;
-  };
+& Pick<FBInputProps, "name" | "label" | "disabled">
+& Pick<FBButtonProps, "onClick">
+& {
+  helloSignState?: FBHelloSignState;
+  buttonLabel?: string;
+  waitOverlay?: boolean;
+  loadingMessage?: string;
+  signatureSent?: boolean;
+  signatureSentMessage?: string;
+};
 
 export const FBHelloSignTypeMap: Dictionary<FBHelloSignFieldType> = {
   textfield: "text",

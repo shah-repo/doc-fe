@@ -1,6 +1,5 @@
 import { BoxProps } from "@material-ui/core";
-import { FBMediaAlbumState } from ".";
-import { FBMediaAlbumFieldProps } from "..";
+import { FBMediaAlbumFieldProps, FBMediaAlbumState } from "..";
 
 export type FBMediaAlbumMode = "carousel" | "gallery";
 

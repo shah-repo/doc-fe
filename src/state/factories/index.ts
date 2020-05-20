@@ -30,22 +30,24 @@ interface ApiDefinitionWithCallbacks<R, B> extends Partial<ApiAction<R, B>> {
 }
 
 export const apiActionWithCallbacks = <R, B>(apiDefinition: ApiDefinitionWithCallbacks<R, B>):
-  ApiAction<R, B> => {
-    const action = apiAction(apiDefinition);
-    const onSuccess = action.onSuccess;
-    const onFailure = action.onFailure;
+ApiAction<R, B> => {
+  const action = apiAction(apiDefinition);
+  const onSuccess = action.onSuccess;
+  const onFailure = action.onFailure;
 
-    const handlers = apiDefinition.handlers;
+  const handlers = apiDefinition.handlers;
 
-    action.onSuccess = (data, dispatch) => {
-      onSuccess(data, dispatch);
-      handlers.successHandler.execute(data);
-    };
-
-    action.onFailure = (message, dispatch) => {
-      onFailure(message, dispatch);
-      handlers.errorHandler.execute(message);
-    };
-
-    return action;
+  action.onSuccess = (data, dispatch) => {
+    onSuccess(data, dispatch);
+    handlers.successHandler.execute(data);
   };
+
+  action.onFailure = (message, dispatch) => {
+    onFailure(message, dispatch);
+    handlers.errorHandler.execute(message);
+  };
+
+  apiDefinition.cancelToken && handlers.setCancelToken(apiDefinition.cancelToken);
+
+  return action;
+};

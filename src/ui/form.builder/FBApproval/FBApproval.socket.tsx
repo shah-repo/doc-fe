@@ -4,20 +4,20 @@ import React from "react";
 import { FB, FBApprovalSocketMsg, FBButton } from "..";
 import { IotService } from "../../../common/utils/iot/mqttClient";
 import useMqttSubscription from "../../hooks/useMqttSubscription";
-import FBStore from "../stores/ui/FBStore";
 
 const FBApprovalSocket: React.FunctionComponent<{}> = () => {
-  const { snackbarState } = FB.useStores();
+  const { snackbarState, workspaceState } = FB.useStores();
+  const { id } = workspaceState || {};
   const iotService = IotService.getInstance();
   const subscribe = () => {
     iotService.subscribeToTopic(
-      `+/document_revisions/${FBStore.docId}/updated`,
+      `+/document_revisions/${id}/updated`,
       notify
     );
   };
   const unsubscribe = () => {
     iotService.unsubscribeFromTopic(
-      `+/document_revisions/${FBStore.docId}/updated`,
+      `+/document_revisions/${id}/updated`,
     );
   };
 

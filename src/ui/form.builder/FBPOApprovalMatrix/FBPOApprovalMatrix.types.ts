@@ -1,10 +1,12 @@
+import { ButtonProps } from "@material-ui/core";
 import { Dictionary } from "lodash";
 import { FBPOApprovalMatrixState } from ".";
+import { FBFormProps, FBInputProps } from "..";
 import { Group } from "../../../state/ducks/auth/types";
 import { Employee } from "../../../state/ducks/company/types";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { FBInputProps } from "../types/common";
+import { FBDialogState } from "../FBDialog";
 
 export type FBPOApprovalMatrixBasicProps = Pick<FBInputProps, "name" | "disabled" | "label">;
 
@@ -12,6 +14,8 @@ export type FBPOApprovalMatrixFieldProps =
 & FBPOApprovalMatrixBasicProps
 & {
   poamState: FBPOApprovalMatrixState;
+  dialogState?: FBDialogState;
+  handleAdd?: () => any;
 };
 
 export type FBPOApprovalMatrixDialogProps =
@@ -27,12 +31,16 @@ export type FBPOApprovalMatrixDialogProps =
 };
 
 export type FBPOApprovalMatrixFormProps =
-& FBPOApprovalMatrixBasicProps
-& Pick<FBPOApprovalMatrixDialogProps, "initialValues" |
-"onSubmit" | "closeDialog" | "groupOptions" | "employees" | "signatureStages">
-& {
-  validateForm?: (values: any) => void;
-};
+& Pick<FBFormProps, "initialValues">
+& Pick<FBPOApprovalMatrixDialogProps, "signatureStages">;
+
+// export type FBPOApprovalMatrixFormProps =
+// & FBPOApprovalMatrixBasicProps
+// & Pick<FBPOApprovalMatrixDialogProps, "initialValues" |
+// "onSubmit" | "closeDialog" | "groupOptions" | "employees" | "signatureStages">
+// & {
+//   validateForm?: (values: any) => void;
+// };
 
 export type FBPOApprovalMatrixAddItemProps =
 & FBPOApprovalMatrixBasicProps
@@ -48,7 +56,7 @@ export type FBPOApprovalMatrixTableProps =
 & Pick<FBPOApprovalMatrixDialogProps, "onSubmit" |
 "closeDialog" | "isDialogOpen" | "initialValues" | "groupOptions" | "employees" | "signatureStages" >
 & {
-  approvalLevels: POApprovalMatrix[];
+  approvalLevels?: POApprovalMatrixLevel[];
   handleEdit: (index: number, item: POApprovalMatrixLevel) => () => void;
   isDocumentReleased: boolean;
 };
@@ -70,3 +78,10 @@ export interface Signature {
   groups: Group[];
   employees: Employee[];
 }
+
+export type FBPOApprovalMatrixFormActionsProps =
+& {
+  handleAdd?: ButtonProps["onClick"];
+  handleCancel?: ButtonProps["onClick"];
+};
+

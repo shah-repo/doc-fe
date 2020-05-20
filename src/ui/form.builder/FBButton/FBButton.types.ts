@@ -1,7 +1,9 @@
 import { ButtonProps } from "@material-ui/core";
+import { FBInputProps } from "..";
 
-export type FBButtonProps = Pick<
-ButtonProps,
+export type FBButtonProps =
+& Pick<FBInputProps, "gutter">
+& Pick<ButtonProps,
 | "variant"
 | "color"
 | "size"
@@ -11,7 +13,10 @@ ButtonProps,
 | "disabled"
 | "id"
 | "type"
-> & {
-  component?: (props: any) => JSX.Element;
+| "style"
+| "autoFocus"
+| "hidden"
+>
+& {
   label?: string;
 };

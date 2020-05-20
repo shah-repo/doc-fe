@@ -78,33 +78,34 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
             >
               <StyledTableCell>{row.name}</StyledTableCell>
               <StyledTableCell>{row.limit}</StyledTableCell>
-              {row.signatures.map((signatureLevel, index) =>
-                <StyledTableCell key={`${signatureLevel.name}-${index}`}>
-                  {signatureLevel.groups.map((group) =>
-                    groupOptions.map((e) => {
-                      if (e.value === group.id) {
-                        return (
-                          <Box width="max-content"
-                            bgcolor="lightgray"
-                            borderRadius="3px"
-                            p={0.3} m={0.3}>{e.label}</Box>
-                        );
+              {row.signatures.map((signature, index) =>
+                (
+                  <StyledTableCell key={`${signature?.name}-${index}`}>
+                    {signature?.groups?.map((group) =>
+                      groupOptions.map((e) => {
+                        if (e.value === group) {
+                          return (
+                            <Box width="max-content"
+                              bgcolor="lightgray"
+                              borderRadius="3px"
+                              p={0.3} m={0.3}>{e.label}</Box>
+                          );
+                        }
+                        return null;
+                      }))}
+                    {signature?.employees?.map((employee) =>
+                      employees.map((e) => {
+                        if (e.id === employee) {
+                          return (
+                            <Box width="max-content"
+                              bgcolor="lightgray"
+                              borderRadius="3px"
+                              p={0.3} m={0.3}>{e.user.name}</Box>
+                          );
+                        }
+                        return null;
                       }
-                      return null;
-                    }))}
-                  {signatureLevel.employees.map((employee) =>
-                    employees.map((e) => {
-                      if (e.id === employee.id) {
-                        return (
-                          <Box width="max-content"
-                            bgcolor="lightgray"
-                            borderRadius="3px"
-                            p={0.3} m={0.3}>{e.user.name}</Box>
-                        );
-                      }
-                      return null;
-                    }
-                    ))}</StyledTableCell>
+                      ))}</StyledTableCell>)
               )
               }
             </TableRow>

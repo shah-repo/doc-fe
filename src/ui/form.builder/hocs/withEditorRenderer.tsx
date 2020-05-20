@@ -3,7 +3,7 @@ import { FormikProps } from "formik";
 import _, { Dictionary } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
-import { FB, FBTestStepState } from "..";
+import { FB, FBData } from "..";
 import { isTranslation } from "../../translations/types";
 import FBButton from "../components/inputs/FBButton";
 import { FBFieldEditorComponent, omitLabelValidation, pickDefaultLabel } from "../defaults/editor";
@@ -99,7 +99,7 @@ export const withEditorRenderer =
       if (type === "approval" || type === "inlineapproval") {
         newSchema.splice(index, 0, {
           type: "section",
-          name: FB.uniqid(),
+          name: FB.uniqid,
           label: intl.formatMessage({ id: "form.builder.section" }),
         });
       }
@@ -113,7 +113,7 @@ export const withEditorRenderer =
       }
 
       if (type === "teststep") {
-        newSchema = _.union(newSchema, new FBTestStepState().schema as FBInputProps[]);
+        newSchema = _.union(newSchema, FBData.testStepSchema as FBInputProps[]);
       }
 
       FBStore.setSchema(newSchema);

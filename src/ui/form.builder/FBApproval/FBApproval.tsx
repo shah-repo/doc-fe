@@ -2,11 +2,10 @@ import { Box, CircularProgress, Typography } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import WarningIcon from "@material-ui/icons/Warning";
 import React from "react";
-import { FBApprovalProps, FBApprovalSocket } from ".";
+import { FBApprovalField, FBApprovalProps, FBApprovalSocket } from ".";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import Text from "../../components/Text";
-import FBApprovalField from "./FBApproval.field";
 import { withFBApproval } from "./FBApproval.wrap";
 
 const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
@@ -24,7 +23,7 @@ const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
     <FBApprovalSocket />
     {isDefined && (
       <Typography variant="button" display="block" style={{ color: "rgb(120, 138, 156)" }}>
-        {label}
+        {<Text message={label as string} />}
         {loading && (
           <Box ml={1} component="span">
             <CircularProgress size={16} />

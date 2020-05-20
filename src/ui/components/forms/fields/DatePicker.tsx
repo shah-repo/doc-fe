@@ -1,14 +1,8 @@
-import {
-  Field as FormikField,
-  FieldConfig,
-  FieldProps as FormikFieldProps,
-} from "formik";
+import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
-import {
-  default as ReactDatePicker,
-  ReactDatePickerProps,
-} from "react-datepicker";
+import { default as ReactDatePicker, ReactDatePickerProps } from "react-datepicker";
 import { TypographyProps } from "../../../../state/ducks/common";
+import { useFormContext } from "../FormContext";
 import { styles } from "./DatePicker.styles";
 import Field, { FieldOwnProps } from "./Field";
 
@@ -28,8 +22,12 @@ const DatePicker: React.FunctionComponent<DatePickerPropsWithFormik> = ({
   label,
   ...fieldProps
 }) => {
-  const onChange = (date: Date) =>
-    fieldProps.form.setFieldValue(fieldProps.field.name, date);
+  const { submitForm } = useFormContext();
+  const onChange = (date: Date) => {
+    const { form } = fieldProps;
+    form.setFieldValue(fieldProps.field.name, date);
+    submitForm(form.submitForm);
+  };
 
   const classes = styles();
 

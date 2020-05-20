@@ -1,7 +1,7 @@
 import React from "react";
+import { FBInputProps } from "..";
 import { FBAutocompleteAsync } from "../FBAutocompleteAsync";
 import FBDRStore from "../stores/ui/FBDRStore";
-import { FBInputProps } from "../types/common";
 
 const FBSelectDocument: React.FunctionComponent<FBInputProps> = ({
   options,

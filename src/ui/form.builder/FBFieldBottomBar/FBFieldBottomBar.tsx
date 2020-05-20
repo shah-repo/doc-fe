@@ -1,40 +1,39 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import { FBFieldBottomBarProps } from ".";
-import FBButton from "../components/inputs/FBButton";
-import { withFBFieldBottomBar } from "./FBFieldBottomBar.wrap";
+import { FBButton } from "..";
+import { withFBStarter } from "../FBStarter/FBStarter.wrap";
 
 const FBFieldBottomBar: React.FunctionComponent<FBFieldBottomBarProps> = ({
   visibility,
   onClick,
+  index = 0,
   mt,
-}) => {
-  return (
-    <Box display="flex" {...{ visibility, mt }}>
-      <Box
-        borderTop={3}
-        my="auto"
-        height="1px"
-        width="100%"
-        color="primary.main"
-      />
-      <FBButton
-        label="form.builder.add.field"
-        color="primary"
-        fullWidth={true}
-        size="medium"
-        variant="text"
-        {...{ onClick }}
-      />
-      <Box
-        borderTop={3}
-        my="auto"
-        height="1px"
-        width="100%"
-        color="primary.main"
-      />
-    </Box>
-  );
-};
+}) => (
+  <Box display="flex" {...{ visibility, mt }}>
+    <Box
+      borderTop={3}
+      my="auto"
+      height="1px"
+      width="100%"
+      color="primary.main"
+    />
+    <FBButton
+      label="form.builder.add.field"
+      color="primary"
+      fullWidth={true}
+      size="medium"
+      variant="text"
+      onClick={() => onClick && onClick(index + 1)}
+    />
+    <Box
+      borderTop={3}
+      my="auto"
+      height="1px"
+      width="100%"
+      color="primary.main"
+    />
+  </Box>
+);
 
-export default withFBFieldBottomBar(FBFieldBottomBar);
+export default withFBStarter(FBFieldBottomBar);

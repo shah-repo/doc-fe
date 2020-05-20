@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { getHasPermission } from "../../../../common/utils/selectors";
 import { Group, Permission } from "../../../../state/ducks/auth/types";
 import { documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { FormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
@@ -48,7 +49,6 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const asyncGroups = useAsync({
     onSuccess: (response: Group[] = []) => {
       setDocTypeGroups([
-        ...documentTypeGroups,
         response,
       ].flat());
     },
@@ -70,6 +70,11 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
 
   const openDialog = () => {
     async.reset();
+    asyncGroups.start(
+      getGroupsByStage,
+      docRevId,
+      asyncGroups,
+    );
     dialog.open();
   };
   const closeDialog = () => {
@@ -146,12 +151,14 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
             classes={{ root: classes.dialogContent }}
             id="ApproveAndRelease-content"
           >
-            <Formik
-              initialValues={{ password: "", approvals: [] }}
-              onSubmit={onSubmit}
-            >
-              {renderForm}
-            </Formik>
+            <FormContext.Provider value={{ submitOnChange: false }}>
+              <Formik
+                initialValues={{ password: "", approvals: [] }}
+                onSubmit={onSubmit}
+              >
+                {renderForm}
+              </Formik>
+            </FormContext.Provider>
           </DialogContent>
         </Dialog>
       }

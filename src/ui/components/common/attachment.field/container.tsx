@@ -7,6 +7,7 @@ import { ApplicationState } from "../../../../state/reducers";
 import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../../form.builder/stores/ui/FBStore";
 import useAsync from "../../../hooks/useAsync";
+import { useFormContext } from "../../forms/FormContext";
 import FormMessage from "../../forms/FormMessage";
 import FormProgress from "../../forms/FormProgress";
 import { withFormik } from "../../hoc/formik";
@@ -24,6 +25,7 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
   form,
   ...other
 }) => {
+  const { submitForm } = useFormContext();
   const handleUpload = (files: File[]) => {
     if (files.length === 0) {
       return;
@@ -66,6 +68,7 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
         FBDynamicValidatorStore.validate();
       }
       form.setFieldValue(name, attachments);
+      submitForm(form.submitForm);
     },
   });
 

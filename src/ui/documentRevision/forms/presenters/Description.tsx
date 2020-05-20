@@ -6,10 +6,12 @@ import { required, validator } from "../../../components/forms/fields/validators
 
 interface Props {
   isQms: boolean;
+  isDisabled?: boolean;
 }
 
 const Description: React.FunctionComponent<Props> = ({
   isQms,
+  isDisabled = false,
 }) => {
   const intl = useIntl();
   const validators = useMemo(() => isQms ? validator(required) : undefined, [isQms]);
@@ -24,7 +26,7 @@ const Description: React.FunctionComponent<Props> = ({
       name="description"
       label="common.description"
       validate={validators}
-      editorProps={{ placeholder }}
+      editorProps={{ placeholder, readOnly: isDisabled }}
     />
   );
 };

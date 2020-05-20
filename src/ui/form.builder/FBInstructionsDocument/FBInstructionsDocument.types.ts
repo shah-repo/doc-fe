@@ -1,3 +1,4 @@
-import { FBInputProps } from "../types/common";
+import { FBInputProps } from "..";
 
-export type FBInstructionsDocumentProps = Pick<FBInputProps, "name" | "label" | "instructionsDocument">;
+export type FBInstructionsDocumentProps =
+& Pick<FBInputProps, "name" | "label" | "instructionsDocument">;

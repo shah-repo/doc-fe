@@ -1,22 +1,27 @@
 import React from "react";
-import { FBAutocompleteAsync, FBEditorApprovalFieldProps } from "..";
-import FBCheckboxGroup from "../components/inputs/FBCheckboxGroup";
-import FBTextField from "../components/inputs/FBTextField";
+import { FBAutocompleteAsync, FBEditor, FBEditorApprovalFieldProps, FBEditorLabel } from "..";
 
 const FBEditorApprovalField: React.FunctionComponent<FBEditorApprovalFieldProps> = ({
   approverGroups,
   approvers,
   includeLabel = true,
+  children,
+  inputProps,
+  includeDefaultValue,
+  standalone = false,
   ...props
 }) => (
-  <>
-    {includeLabel && <FBTextField label="form.builder.label" name="label" {...props} />}
+  <FBEditor {...props} {...{ inputProps }}>
+    {includeLabel && (
+      <FBEditorLabel {...props} {...{ inputProps, includeDefaultValue }} standalone={true} />
+    )}
     <FBAutocompleteAsync
       label="common.approvers"
       optionId="3"
       name="approvers"
       multiple={true}
       defaultValue={approvers}
+      rules="required_without:approverGroups"
     />
     <FBAutocompleteAsync
       label="form.builder.approver.groups"
@@ -24,16 +29,10 @@ const FBEditorApprovalField: React.FunctionComponent<FBEditorApprovalFieldProps>
       name="approverGroups"
       multiple={true}
       defaultValue={approverGroups}
+      rules="required_without:approvers"
     />
-    <FBCheckboxGroup
-      name="editor-additions"
-      label="form.builder.additions"
-      options={[
-        { value: "approveIsBlocking", text: "form.builder.blocking" },
-        { value: "reviseDisabled", text: "form.builder.revise.disabled" },
-      ]}
-    />
-  </>
+    {children}
+  </FBEditor>
 );
 
 export default FBEditorApprovalField;

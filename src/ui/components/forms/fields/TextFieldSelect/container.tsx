@@ -7,6 +7,7 @@ export const TextFieldSelect: React.FunctionComponent<TextFieldSelectProps> = ({
   label,
   form,
   field,
+  disabled,
   ...fieldProps
 }) => {
   const [options, filterOptions] = useState(fieldProps.options);
@@ -45,6 +46,7 @@ export const TextFieldSelect: React.FunctionComponent<TextFieldSelectProps> = ({
       form={form}
       field={field}
       options={options}
+      disabled={disabled}
     />
   );
 };

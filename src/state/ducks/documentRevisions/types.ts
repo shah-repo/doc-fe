@@ -1,5 +1,6 @@
+import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
 import { TableColumnActionType } from "../../../ui/components/table/column/types";
-import { FBDocumentFlowProps } from "../../../ui/form.builder/types/formik";
+import { FBSchemaProps } from "../../../ui/form.builder";
 import { Attachment } from "../attachments";
 import { AuditActionPayload } from "../audit/types";
 import { Group } from "../auth/types";
@@ -38,6 +39,7 @@ export interface DocumentRevisionDocument {
 export interface SecurityList {
   securityGroups: Group[];
   securityEmployees: User[];
+  operators: User[];
 }
 
 export interface Document {
@@ -65,7 +67,7 @@ export interface PDF {
   type: string;
 }
 
-export interface DocumentRevision extends FBDocumentFlowProps {
+export interface DocumentRevision extends FBDocumentRevisionProps {
   id: string;
   docId?: string;
   typePrefix?: string;
@@ -108,6 +110,7 @@ export interface ReferenceToEditRequest {
 export interface SecurityListRequest {
   securityEmployees: Id[];
   securityGroups: Id[];
+  operators: Id[];
 }
 
 export interface DocumentRevisionDocumentRequest {
@@ -117,7 +120,7 @@ export interface DocumentRevisionDocumentRequest {
   securityList: SecurityListRequest;
 }
 
-export interface DocumentRevisionEditRequestBody extends FBDocumentFlowProps {
+export interface DocumentRevisionEditRequestBody extends FBDocumentRevisionProps {
   name: string;
   docId?: string;
   description: string;
@@ -129,6 +132,7 @@ export interface DocumentRevisionEditRequestBody extends FBDocumentFlowProps {
   revisionStage?: number;
   retrain?: boolean;
   renderHTML?: string;
+  status?: DocumentRevisionStatus;
 }
 
 export interface DocumentRevisionSetAction {
@@ -181,3 +185,30 @@ export interface CreateAndReleaseRequest {
   releasedDocumentRevision: DocumentRevision;
   releaseDto: CreateAndReleaseRequest;
 }
+
+export interface FBFormTemplateProps {
+  outputDocumentTypes: FBOutputDocumentType[] | OptionType[];
+  schema: FBSchemaProps[];
+  helloSignTemplateId?: string;
+}
+
+export interface FBDocumentRevisionProps {
+  id?: string;
+  formTemplate?: FBFormTemplateProps;
+  formDocument?: FBDocumentRevisionProps;
+  formInput?: Record<string, any>;
+  document?: Partial<DocumentRevisionDocumentRequest>;
+  revision?: number;
+  revisionStage?: number;
+  revisionChangeType?: RevisionChangeType;
+  releasedAt?: string;
+  renderHTML?: string;
+  status?: DocumentRevisionStatus;
+}
+
+export interface FBOutputDocumentType {
+  id: string;
+  documentTypeName?: string;
+}
+
+
