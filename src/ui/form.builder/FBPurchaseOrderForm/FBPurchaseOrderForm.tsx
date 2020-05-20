@@ -39,7 +39,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
           {...{ getOptionDisabled, getOptionLabel }}
         />
         <FBTextField
-          label="form.builder.field.part.number.title"
+          label="form.builder.field.part.description"
           name="partNumberTitle"
           disabled
         />
