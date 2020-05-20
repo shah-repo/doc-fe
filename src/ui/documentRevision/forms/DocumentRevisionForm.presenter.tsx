@@ -211,10 +211,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             id: "referenceTo",
             isMulti: true,
             closeMenuOnSelect: false,
-            isDisabled: isDisabledInput,
           }}
           options={availableReferences}
           onClick={openReference}
+          isDisabled={isDisabledInput}
         />
         <References document={initialValues.document} />
         <RetrainField revisionChangeType={values.revisionChangeType} isDisabled={isDisabledInput}/>
@@ -230,6 +230,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             docRevId={initialValues.id}
             status={documentRevision?.status}
             version={documentRevision?.version}
+            isDisabled={isDisabledInput}
           />
         }
         {

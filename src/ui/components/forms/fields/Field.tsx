@@ -86,8 +86,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
       fullWidth={true}
       error={shouldDisplayError}
       className={classes.form}
-      /*       disabled={true}
- */      {...formControlProps}
+      {...formControlProps}
     >
       {LabelComponent()}
       {children}

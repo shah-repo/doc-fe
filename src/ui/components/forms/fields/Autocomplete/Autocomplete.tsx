@@ -15,6 +15,7 @@ interface AutocompleteOwnProps extends FieldOwnProps {
   autocompleteProps: SelectComponentsProps;
   options: OptionType[];
   onClick?: (value: any) => void;
+  isDisabled?: boolean;
 }
 
 type AutocompletePropsWithFormik = AutocompleteOwnProps &
@@ -25,6 +26,7 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
   autocompleteProps,
   options,
   onClick,
+  isDisabled = false,
   ...fieldProps
 }) => {
   const { submitForm } = useFormContext();
@@ -62,7 +64,7 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
         onChange={onChange}
         filterOption={filterOption}
         input={<InputField name={fieldProps.field.name} />}
-        isDisabled={true}
+        isDisabled={isDisabled}
       />
     </Field>
   );
