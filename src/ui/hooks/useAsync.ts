@@ -1,3 +1,4 @@
+import { CancelTokenSource } from "axios";
 import { useState } from "react";
 import { AsyncState, AsyncStatus } from "../../state/types";
 import useCallbackHandler from "./useCallbackHandler";
@@ -5,6 +6,7 @@ import useCallbackHandler from "./useCallbackHandler";
 export interface AsyncHandlers<T> {
   onSuccess?: (arg?: T) => void;
   onError?: (message?: string) => void;
+  setCancelToken?: (token?: CancelTokenSource) => void;
 }
 
 export const ASYNC_DEFAULT_STATE = {
@@ -17,13 +19,14 @@ const useAsync = <T>({
   onError = () => undefined,
 }: AsyncHandlers<T> = {}) => {
   const [asyncState, setAsyncState] = useState<AsyncState>(ASYNC_DEFAULT_STATE);
+  const [cancelToken, setCancelToken] = useState<CancelTokenSource | undefined>(undefined);
 
   const start = <A extends (...args: any) => any>(
     action: A,
     ...args: Parameters<A>
   ) => {
-    action(...args);
     setAsyncState({ status: AsyncStatus.Active, message: "" });
+    return action(...args);
   };
 
   const successHandler = useCallbackHandler((result: T) => {
@@ -36,7 +39,12 @@ const useAsync = <T>({
     onError(message);
   });
 
-  const reset = () => setAsyncState(ASYNC_DEFAULT_STATE);
+  const reset = () => {
+    if (cancelToken) {
+      cancelToken.cancel();
+    }
+    setAsyncState(ASYNC_DEFAULT_STATE);
+  };
 
   return {
     asyncState,
@@ -44,6 +52,7 @@ const useAsync = <T>({
     reset,
     successHandler,
     errorHandler,
+    setCancelToken,
   };
 };
 

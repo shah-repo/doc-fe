@@ -7,7 +7,7 @@ import { getOwner, getUser } from "../../state/ducks/common/tests/factories";
 import { ASYNC_DEFAULT_STATE } from "../hooks/useAsync";
 import { ChangeRequestUpdateContainer, ChangeRequestUpdateContainerProps } from "./ChangeRequestUpdate.container";
 import ChangeRequestFormContainer from "./form/ChangeRequestForm.container";
-import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "./form/transform";
+import { toChangeRequestFormValues } from "./form/transform";
 import { changeRequestPreviewPath } from "./utils/paths";
 
 describe("ChangeRequestUpdateContainer tests", () => {
@@ -37,14 +37,18 @@ describe("ChangeRequestUpdateContainer tests", () => {
     const wrapper = getWrapper({ save });
 
     const form = wrapper.find(ChangeRequestFormContainer);
-    const values = toChangeRequestFormValues(changeRequest);
+    const submitPayload = { description: "Changed desription" };
+    const values = toChangeRequestFormValues({
+      ...changeRequest,
+      ...submitPayload,
+    });
 
     form.prop("onSubmit")(values);
 
     expect(save).toHaveBeenCalledTimes(1);
     expect(save).toHaveBeenCalledWith(
       changeRequest.id,
-      toChangeRequestEditRequestBody(values),
+      submitPayload,
       expect.anything(),
     );
   });

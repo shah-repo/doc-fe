@@ -1,5 +1,6 @@
 import { BaseTextFieldProps } from "@material-ui/core";
 import { AutocompleteProps } from "@material-ui/lab/Autocomplete";
+import { Dictionary } from "lodash";
 import { FBEditorOptionsProps, FBEditorPropertiesType, FBInputState, FBLabelProps, FBOptionProps, FBSchemaState } from "..";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
@@ -48,7 +49,8 @@ export type FBInputType =
   | "selectrequirement"
   | "testRequirement"
   | "hellosign"
-  | "customcontrol";
+  | "customcontrol"
+  | "poApprovalMatrix";
 
 export type FBInputProps =
 & FBLabelProps
@@ -94,6 +96,8 @@ export type FBInputProps =
   applicableOn?: any[];
   actions?: string[];
   hellosignFlowProps?: any;
+  showErrorMsg?: boolean;
+  validators?: Dictionary<any>;
 };
 
 export const OmitInputClones: FBInputType[] = ["fileupload"];

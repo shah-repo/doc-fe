@@ -27,6 +27,7 @@ export class FBControlPickerState {
       "purchaseorder",
       "poreceive",
       "approvalMatrix",
+      "poApprovalMatrix",
       "instructionsmediaupload",
       "evidencemediaupload",
       "testRequirement",
@@ -38,12 +39,12 @@ export class FBControlPickerState {
     actions: ["action"],
   };
 
-  public static picker = (picker: FBInputType): React.ReactElement | undefined => {
+  public static picker = (picker: FBInputType, index: number): React.ReactElement | undefined => {
     const customPicker = FBControlPickerState.customPicker[picker];
     if (!customPicker) {
       return;
     }
-    return React.createElement(customPicker, {});
+    return React.createElement(customPicker, { index });
   };
 }
 

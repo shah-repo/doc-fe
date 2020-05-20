@@ -13,6 +13,7 @@ export const withFBEditorCustomControl = <T extends FBEditorCustomControlProps>(
     customControlState,
     controls,
     loading,
+    index = 0,
     ...props
   }: T) => {
 
@@ -20,12 +21,14 @@ export const withFBEditorCustomControl = <T extends FBEditorCustomControlProps>(
     customControlState = FB.useRef<FBEditorCustomControlState>(FBEditorCustomControlState);
 
     handleSelect = (control: DocumentRevision) => {
+      const newSchema = workspaceState?.getSchema();
       const schema = control.formTemplate?.schema as FBSchemaProps[] || [];
       _.map(schema, (schemaItem) => ({
         ...schemaItem,
         name: FB.uniqid,
       }));
-      workspaceState?.setSchema(_.union(workspaceState.getSchema(), schema));
+      newSchema?.splice(index, 0, ...schema);
+      workspaceState?.setSchema(newSchema);
       dialogState?.closeDialog();
     };
 

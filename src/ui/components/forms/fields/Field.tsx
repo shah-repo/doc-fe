@@ -4,10 +4,7 @@ import { InputLabelProps } from "@material-ui/core/InputLabel";
 import { FieldProps as FormikFieldProps } from "formik";
 import _ from "lodash";
 import * as React from "react";
-import {
-  TypographyProps,
-  TypographySize,
-} from "../../../../state/ducks/common";
+import { TypographyProps, TypographySize } from "../../../../state/ducks/common";
 import { Translation } from "../../../translations/types";
 import HeaderField from "../../common/header.field/field";
 import Text from "../../Text";

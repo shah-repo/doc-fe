@@ -53,7 +53,6 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
         <FBTextField
           name={`${name}.shippingCost`}
           gutter={false}
-          variant="standard"
           type="number"
           size="small"
           inputProps={{

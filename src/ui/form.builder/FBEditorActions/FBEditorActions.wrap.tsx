@@ -39,7 +39,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
 
     handleAdd = () => {
       if (!type) { return; }
-      const formValues: FBSchemaProps = formState?.getValues();
+      const formValues: FBSchemaProps = formState?.getValues() as FBSchemaProps;
       const { options, validators, label, editorProperties } = formValues;
       if (isOutput) {
         handleAddOutput(formValues);

@@ -5,6 +5,7 @@ import { isEmpty } from "lodash";
 import React, { useState } from "react";
 import { ReactComponent as CloseIcon } from "../../../../assets/images/close_delete.svg";
 import { AsyncState } from "../../../../state/types";
+import { FormContext } from "../../../components/forms/FormContext";
 import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";
 import Text from "../../../components/Text";
@@ -127,12 +128,14 @@ export const EditRemoveAddFields: React.FunctionComponent<Props> = ({
   };
 
   const renderForm = () => (
-    <Formik
-      initialValues={fields}
-      onSubmit={handleSubmit}
-    >
-      {renderInputFields}
-    </Formik>
+    <FormContext.Provider value={{ submitOnChange: false }}>
+      <Formik
+        initialValues={fields}
+        onSubmit={handleSubmit}
+      >
+        {renderInputFields}
+      </Formik>
+    </FormContext.Provider>
   );
 
   return (

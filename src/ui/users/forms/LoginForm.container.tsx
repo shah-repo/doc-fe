@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { logo } from "../../../common/utils/helpers";
 import { authActions } from "../../../state/ducks/auth";
 import { ApplicationState } from "../../../state/reducers";
+import { FormContext } from "../../components/forms/FormContext";
 import useAsync from "../../hooks/useAsync";
 import { Translation } from "../../translations/types";
 import ForgotPasswordPage from "../SignUp/ForgotPasswordPage";
@@ -108,26 +109,28 @@ const LoginFormContainer: React.FunctionComponent<LoginFormContainerProps> = ({
   );
 
   return (
-    <div>
-      {forgotPasswordPage && !verificationState && (
-        <Formik initialValues={resetInitialValues} onSubmit={onForgotPassword}>
-          {renderForgotPassword}
-        </Formik>
-      )}
-      {verificationState && (
-        <VerificationEmailPage
-          email={resetEmail}
-          message={message}
-          logo={logo}
-          isForgotPassword={true}
-        />
-      )}
-      {!forgotPasswordPage && (
-        <Formik initialValues={initialValues} onSubmit={onSubmit}>
-          {render}
-        </Formik>
-      )}
-    </div>
+    <FormContext.Provider value={{ submitOnChange: false }}>
+      <div>
+        {forgotPasswordPage && !verificationState && (
+          <Formik initialValues={resetInitialValues} onSubmit={onForgotPassword}>
+            {renderForgotPassword}
+          </Formik>
+        )}
+        {verificationState && (
+          <VerificationEmailPage
+            email={resetEmail}
+            message={message}
+            logo={logo}
+            isForgotPassword={true}
+          />
+        )}
+        {!forgotPasswordPage && (
+          <Formik initialValues={initialValues} onSubmit={onSubmit}>
+            {render}
+          </Formik>
+        )}
+      </div>
+    </FormContext.Provider>
   );
 };
 

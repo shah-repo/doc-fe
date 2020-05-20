@@ -1,16 +1,34 @@
 import { useFormikContext } from "formik";
 import * as React from "react";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import { useSelector } from "react-redux";
 import { RevisionChangeType } from "../../../../state/ducks/documentRevisions";
+import { documentTypeSelectors, DynamicUIDocTypes } from "../../../../state/ducks/documentRevisions/documentType";
 import CheckboxField from "../../../components/forms/fields/Checkbox";
 
 interface Props {
   revisionChangeType?: RevisionChangeType ;
+  documentTypeId?: string;
+  isDisabled?: boolean;
 }
 
 const RetrainField: React.FunctionComponent<Props> = ({
+  documentTypeId = "",
   revisionChangeType,
+  isDisabled = false,
 }) => {
+  const documentType = useSelector(documentTypeSelectors.byId)[documentTypeId];
+  const isVisible = useMemo(() => {
+    switch (documentType?.documentTypeAcronym) {
+      case DynamicUIDocTypes.PO:
+      case DynamicUIDocTypes.RC:
+      case DynamicUIDocTypes.WO:
+      case DynamicUIDocTypes.SUP:
+        return false;
+      default:
+        return true;
+    }
+  }, [documentType]);
   const formik = useFormikContext();
   useEffect(() => {
     if (revisionChangeType === RevisionChangeType.AdministrativeChange) {
@@ -18,7 +36,12 @@ const RetrainField: React.FunctionComponent<Props> = ({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [revisionChangeType]);
-  const disabled = revisionChangeType === RevisionChangeType.AdministrativeChange;
+
+  if (!isVisible) {
+    return null;
+  }
+
+  const disabled = revisionChangeType === RevisionChangeType.AdministrativeChange || isDisabled;
   return (
     <CheckboxField
       name="retrain"

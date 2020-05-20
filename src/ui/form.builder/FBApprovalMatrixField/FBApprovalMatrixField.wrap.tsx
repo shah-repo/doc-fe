@@ -6,9 +6,11 @@ export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
   Component: React.FunctionComponent<T>
 ) => {
   const Comp = ({
+    handleAdd,
     approvalMatrixFieldState,
     disabled,
     name,
+    mode,
     ...props
   }: T) => {
 
@@ -16,15 +18,25 @@ export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
     const formValue = formState?.getFieldValue(name);
     approvalMatrixFieldState = FB.useRef<FBApprovalMatrixFieldState>(FBApprovalMatrixFieldState, formValue);
 
-    if (!disabled && !formValue) {
-      approvalMatrixFieldState.fetch();
+    async function fetchData() {
+      const data = await approvalMatrixFieldState?.fetch();
+      formState?.setFieldValue(name, data);
     }
+    if (!disabled && !formValue) {
+      fetchData();
+    }
+
+    handleAdd = () => {
+      approvalMatrixFieldState && (approvalMatrixFieldState.mode = "add");
+    };
 
     return Component({
       ...(props as T),
+      handleAdd,
       approvalMatrixFieldState,
       disabled,
       name,
+      mode,
     });
   };
 

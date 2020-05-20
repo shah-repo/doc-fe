@@ -81,9 +81,9 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
               {row.signatures.map((signature, index) =>
                 (
                   <StyledTableCell key={`${signature?.name}-${index}`}>
-                    {signature?.groups.map((group) =>
+                    {signature?.groups?.map((group) =>
                       groupOptions.map((e) => {
-                        if (e.value === group.id) {
+                        if (e.value === group) {
                           return (
                             <Box width="max-content"
                               bgcolor="lightgray"
@@ -93,9 +93,9 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
                         }
                         return null;
                       }))}
-                    {signature?.employees.map((employee) =>
+                    {signature?.employees?.map((employee) =>
                       employees.map((e) => {
-                        if (e.id === employee.id) {
+                        if (e.id === employee) {
                           return (
                             <Box width="max-content"
                               bgcolor="lightgray"

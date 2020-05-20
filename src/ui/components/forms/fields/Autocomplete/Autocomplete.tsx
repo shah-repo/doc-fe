@@ -6,6 +6,7 @@ import { SelectComponentsProps } from "react-select/base";
 import { ValueType } from "react-select/src/types";
 import { TypographyColor, TypographyProps, TypographySize } from "../../../../../state/ducks/common";
 import Text from "../../../../components/Text";
+import { useFormContext } from "../../FormContext";
 import Field, { FieldOwnProps } from "../Field";
 import { InputField } from "../Input.styles";
 import { OptionType } from "./types";
@@ -14,6 +15,7 @@ interface AutocompleteOwnProps extends FieldOwnProps {
   autocompleteProps: SelectComponentsProps;
   options: OptionType[];
   onClick?: (value: any) => void;
+  isDisabled?: boolean;
 }
 
 type AutocompletePropsWithFormik = AutocompleteOwnProps &
@@ -24,8 +26,10 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
   autocompleteProps,
   options,
   onClick,
+  isDisabled = false,
   ...fieldProps
 }) => {
+  const { submitForm } = useFormContext();
   const onChange = (value: ValueType<OptionType>) => {
     const {
       form: { setFieldValue, setFieldTouched, touched },
@@ -37,6 +41,7 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
     }
 
     setFieldValue(name, value);
+    submitForm(fieldProps.form.submitForm);
   };
 
   const stringify = (option: OptionType) => option.label;
@@ -59,6 +64,7 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
         onChange={onChange}
         filterOption={filterOption}
         input={<InputField name={fieldProps.field.name} />}
+        isDisabled={isDisabled}
       />
     </Field>
   );

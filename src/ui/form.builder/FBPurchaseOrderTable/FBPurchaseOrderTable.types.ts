@@ -33,7 +33,7 @@ export type FBPurchaseOrderTableTotalProps =
 
 export enum FBPurchaseOrderDetailsHead {
   index = "form.builder.item",
-  description = "form.builder.field.supplier.part.number",
+  description = "form.builder.field.description",
   order = "form.builder.field.ordered",
   received = "form.builder.field.received",
   units = "form.builder.field.units",

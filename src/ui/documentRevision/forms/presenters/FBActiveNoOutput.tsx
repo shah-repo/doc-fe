@@ -14,6 +14,7 @@ interface Props {
   status: DocumentRevisionStatus;
   version: number;
   docRevId?: string;
+  isDisabled: boolean;
 }
 
 export const styles = makeStyles((theme: Theme) =>
@@ -27,6 +28,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   status,
   version,
   docRevId,
+  isDisabled = false,
 }) => {
   const classes = styles();
   const documentTypes = useSelector(documentTypeSelectors.getDocumentTypeFormOptions);
@@ -46,12 +48,12 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
       }, []),
     [documentTypes],
   );
-  const isDisabled: boolean = docRevId !== undefined;
+  const disabled: boolean = (docRevId !== undefined) || isDisabled;
   const isdocRevStatusDraft =
     status === DocumentRevisionStatus.Draft;
   const isdocRevVersionOne = version === 1;
   const outputDocEnabled: boolean =
-    (isdocRevVersionOne && isdocRevStatusDraft) || !isDisabled;
+    (isdocRevVersionOne && isdocRevStatusDraft) || !disabled;
 
   return (
     <Box mt={4}>
@@ -66,8 +68,9 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
         }}
         options={outputDocumentTypeOptions}
         validate={validator(requiredAtLeastOne)}
+        isDisabled={isDisabled}
       />
-      {canUpdateHTML && <RenderHtmlField />}
+      {canUpdateHTML && <RenderHtmlField isDisabled={isDisabled}/>}
     </Box>
   );
 };

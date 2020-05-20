@@ -15,6 +15,7 @@ import { FBHyperlink } from "../FBHyperlink";
 import { FBInstructionsDocument } from "../FBInstructionsDocument";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
+import { FBPOApprovalMatrix } from "../FBPOApprovalMatrix";
 import { FBPOReceive } from "../FBPOReceive";
 import { FBPurchaseOrder } from "../FBPurchaseOrder";
 import { FBQuantityField } from "../FBQuantityField";
@@ -77,6 +78,7 @@ export class FBSchemaState {
     action: FBActionField,
     hellosign: FBHelloSign,
     approvalMatrix: FBApprovalMatrixField,
+    poApprovalMatrix: FBPOApprovalMatrix,
   };
 
   @observable public schema?: FBSchemaProps[];

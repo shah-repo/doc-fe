@@ -9,6 +9,9 @@ export { default as FBApprovalField } from "./FBApproval/FBApproval.field";
 export { default as FBApprovalSocket } from "./FBApproval/FBApproval.socket";
 export { default as FBApprovalState } from "./FBApproval/FBApproval.state";
 export * from "./FBApproval/FBApproval.types";
+export { default as FBApprovalMatrixCheck } from "./FBApprovalMatrixCheck/FBApprovalMatrixCheck";
+export { default as FBApprovalMatrixCheckState } from "./FBApprovalMatrixCheck/FBApprovalMatrixCheck.state";
+export * from "./FBApprovalMatrixCheck/FBApprovalMatrixCheck.types";
 export { default as FBApprovalMatrixField } from "./FBApprovalMatrixField/FBApprovalMatrixField";
 export { default as FBApprovalMatrixFieldState } from "./FBApprovalMatrixField/FBApprovalMatrixField.state";
 export * from "./FBApprovalMatrixField/FBApprovalMatrixField.types";
@@ -16,7 +19,13 @@ export { default as FBApprovalMatrixRoles } from "./FBApprovalMatrixRoles/FBAppr
 export * from "./FBApprovalMatrixRoles/FBApprovalMatrixRoles.types";
 export { default as FBApprovalMatrixRolesActions } from "./FBApprovalMatrixRolesActions/FBApprovalMatrixRolesActions";
 export * from "./FBApprovalMatrixRolesActions/FBApprovalMatrixRolesActions.types";
+export { default as FBApprovalMatrixTable } from "./FBApprovalMatrixTable/FBApprovalMatrixTable";
+export { default as FBApprovalMatrixTableInfo } from "./FBApprovalMatrixTable/FBApprovalMatrixTable.info";
+export { default as FBApprovalMatrixTableStatus } from "./FBApprovalMatrixTable/FBApprovalMatrixTable.status";
+export * from "./FBApprovalMatrixTable/FBApprovalMatrixTable.styles";
+export * from "./FBApprovalMatrixTable/FBApprovalMatrixTable.types";
 export { default as FBApprovalMatrix } from "./FBApprovalMatrix_/FBApprovalMatrix";
+export { default as FBApprovalMatrixSection } from "./FBApprovalMatrix_/FBApprovalMatrix.section";
 export * from "./FBApprovalMatrix_/FBApprovalMatrix.types";
 export { default as FBAutocomplete } from "./FBAutocomplete/FBAutocomplete";
 export * from "./FBAutocomplete/FBAutocomplete.types";
@@ -131,6 +140,7 @@ export * from "./FBMediaQR/FBMediaQR.types";
 export * from "./FBOption/FBOption.types";
 export { default as FBParagraph } from "./FBParagraph/FBParagraph";
 export * from "./FBParagraph/FBParagraph.types";
+export { default as FBPOApprovalMatrix } from "./FBPOApprovalMatrix/FBPOApprovalMatrix";
 export { default as FBPOReceive } from "./FBPOReceive/FBPOReceive";
 export { default as FBPOReceiveState } from "./FBPOReceive/FBPOReceive.state";
 export * from "./FBPOReceive/FBPOReceive.types";
@@ -213,4 +223,5 @@ export { default as FBWorkspaceTplActions } from "./FBWorkspaceTplActions/FBWork
 export * from "./FBWorkspaceTplActions/FBWorkspaceTplActions.types";
 export { default as FB } from "./helpers/FB";
 export * from "./helpers/FBFieldName";
+
 
