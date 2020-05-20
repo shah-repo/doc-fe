@@ -9,17 +9,14 @@ import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/do
 import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
-import OwnerChanger from "../../components/common/owner.changer/container";
-import { RequestType } from "../../components/common/owner.changer/helpers/types";
 import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
-import ControlsContainer from "../../documentRevision/PreviewControls.container";
 import FBWorkspace from "../../form.builder/containers/workspace/FBWorkspace";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import FBStore from "../../form.builder/stores/ui/FBStore";
+import SummaryHeader from "../header/SummaryHeader";
 import Attachment from "./attachment";
 import ChangeRequestLink from "./changeRequestLink";
-import DocumentHeader from "./header";
 import ReferencedByContainer from "./referencedBy.container";
 import ReferenceToContainer from "./referenceTo.container";
 import styles from "./styles";
@@ -68,7 +65,11 @@ export const Presenter: React.FunctionComponent<Props> = ({
 
   const contentRenderer = () => (
     <Box>
-      <DocumentHeader dataProp={dataProp} />
+      <SummaryHeader
+        documentRevision={dataProp}
+        canChangeOwnerShip={canChangeOwnerShip}
+        canShowCreateVersionButton={canShowCreateVersionButton}
+      />
       <Grid
         container={true}
         className={classes.previewBox}
@@ -78,7 +79,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         <ChangeRequestLink dataProp={dataProp} />
         {FBDRStore.isOutput && (
           <Box ml={2} mt={1}>
-            <DocumentRevisionOutputInfo dataProp={dataProp} />
+            <DocumentRevisionOutputInfo formDocument={dataProp?.formDocument} />
           </Box>
         )}
         <SummaryField label="document.title" value={name} />
@@ -115,19 +116,6 @@ export const Presenter: React.FunctionComponent<Props> = ({
           />
         </Box>
       )}
-      <Box flexDirection={document.canAccess ? "row-reverse" : "row"} display="flex" px={3}>
-        {canChangeOwnerShip && (
-          <OwnerChanger
-            requestId={id}
-            requestType={RequestType.Document}
-          />
-        )}
-        <ControlsContainer
-          documentRevision={dataProp}
-          canShowCreateVersionButton={canShowCreateVersionButton}
-          hasAccess={document.canAccess}
-        />
-      </Box>
     </Box>
   );
 

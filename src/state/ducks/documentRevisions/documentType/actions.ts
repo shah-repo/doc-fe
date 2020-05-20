@@ -1,4 +1,4 @@
-import { APPROVAL_MATRIX_URL } from "../../../../ui/form.builder/FBApprovalMatrix/constants";
+import { APPROVAL_MATRIX_URL, PO_APPROVAL_MATRIX_URL } from "../../../../ui/form.builder/FBApprovalMatrix/constants";
 import { ApprovalMatrix } from "../../../../ui/form.builder/FBApprovalMatrix/FBApprovalMatrix.types";
 import { apiAction, apiActionWithCallbacks } from "../../../factories";
 import { ApiAction, Handlers } from "../../../types";
@@ -40,8 +40,15 @@ const getApprovalMatrix = (handlers: Handlers): ApiAction<ApprovalMatrix> => api
   handlers,
 });
 
+const getPOApprovalMatrix = (handlers: Handlers): ApiAction<ApprovalMatrix> => apiActionWithCallbacks({
+  url: PO_APPROVAL_MATRIX_URL,
+  method: "get",
+  handlers,
+});
+
 export default {
   loadList,
   getDocTypeIds,
   getApprovalMatrix,
+  getPOApprovalMatrix,
 };

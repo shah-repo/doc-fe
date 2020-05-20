@@ -1,6 +1,6 @@
 import React from "react";
 import { FBAutocompleteAsync, FBEditorApprovalFieldProps } from "..";
-import FBCheckbox from "../components/inputs/FBCheckbox";
+import FBCheckboxGroup from "../components/inputs/FBCheckboxGroup";
 import FBTextField from "../components/inputs/FBTextField";
 
 const FBEditorApprovalField: React.FunctionComponent<FBEditorApprovalFieldProps> = ({
@@ -25,7 +25,14 @@ const FBEditorApprovalField: React.FunctionComponent<FBEditorApprovalFieldProps>
       multiple={true}
       defaultValue={approverGroups}
     />
-    <FBCheckbox name="approveIsBlocking" label="form.builder.blocking" />
+    <FBCheckboxGroup
+      name="editor-additions"
+      label="form.builder.additions"
+      options={[
+        { value: "approveIsBlocking", text: "form.builder.blocking" },
+        { value: "reviseDisabled", text: "form.builder.revise.disabled" },
+      ]}
+    />
   </>
 );
 

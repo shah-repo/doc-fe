@@ -16,4 +16,4 @@ const Attachments: React.FunctionComponent<{}> = () => (
   </Box>
 );
 
-export default Attachments;
+export default React.memo(Attachments);

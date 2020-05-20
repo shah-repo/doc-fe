@@ -30,6 +30,7 @@ export const withFBFormMarkDown = <T extends FBFormMarkDownProps>(
         return template({
           ...schemaItem,
           value: FBStore.getValues()[name || ""],
+          label: (schemaItem.label as string) || "",
           customValidator,
         });
       });
@@ -49,7 +50,7 @@ export const withFBFormMarkDown = <T extends FBFormMarkDownProps>(
     };
 
     return Component({
-      ...(props as T),
+      ...(props),
       exportMarkdown,
     });
   };

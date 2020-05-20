@@ -1,18 +1,19 @@
-import { Box, Button, Typography } from "@material-ui/core";
+import { Box, Button } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
 import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
+import { toastInfo } from "../components/notifications";
 import Text from "../components/Text";
 import DownloadHTML from "../document.revision/summary/download.html";
 import { documentNewVersionPath, documentOutputPath } from "../document.revision/utils/paths";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import { canCreateNewVersion, canCreateOutput, getIsLastVersionObsolete } from "./helpers";
-import { styles } from "./PreviewControls.styles";
 
 interface OwnProps {
   documentRevision: DocumentRevision;
@@ -34,9 +35,9 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainerProps> = ({
   documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton, hasAccess,
 }) => {
-  const classes = styles();
-  const dispatch = useDispatch();
 
+  const intl = useIntl();
+  const dispatch = useDispatch();
   const [isEmailSent, toogleEmailSent] = useState<boolean>(false);
   const formDocumentId = documentRevision.formDocument?.document?.id || "";
   const formDocuments: Document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, formDocumentId));
@@ -57,6 +58,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const async = useAsync({
     onSuccess: () => {
       toogleEmailSent(true);
+      toastInfo(intl.formatMessage({ id: "document.email.sent" }));
     },
   });
   const selectedDocument = useSelector((state: ApplicationState) =>
@@ -73,7 +75,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const renderCloneButton = () => {
     if (hasAccess && canCreate()) {
       return (
-        <Button color="primary" onClick={cloneDocument} id="PreviewControlsContainer-revise" >
+        <Button color="secondary" variant="outlined" onClick={cloneDocument} id="PreviewControlsContainer-revise" >
           <Text translation="documentRevision.revise" />
         </Button>
       );
@@ -83,7 +85,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const renderOutputButton = () => {
     if (hasAccess && canCreateOutput(documentRevision)) {
       return (
-        <Button color="primary" onClick={cloneOutputDocument} id="PreviewControlsContainer-createNew">
+        <Button color="secondary" variant="outlined" onClick={cloneOutputDocument} id="PreviewControlsContainer-createNew">
           <Text translation="common.create.new" />
         </Button>
       );
@@ -107,25 +109,15 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const renderNoAccessWarning = () => {
     if (!hasAccess) {
       return (
-        <div>
-          <div style={{ display: "flex" }} id="PreviewControlsContainer-warning">
-            <WarningIcon style={{ marginRight: 10 }} />
-            <Typography variant="h6">
-              <Text translation="document.security.warning" />
-            </Typography>
-          </div>
+        <div style={{ display: "flex" }}>
+          <Box alignSelf="center" id="PreviewControlsContainer-warning">
+            <WarningIcon style={{ marginRight: 10, width: "20px", height: "20px" }} />
+            <Text translation="document.security.warning" />
+          </Box>
           {!isEmailSent &&
-            <div className={classes.requestEmail}>
-              <Button color="primary" onClick={onSubmit} id="PreviewControlsContainer-access" >
-                <Text translation="document.request.access" />
-              </Button>
-            </div>}
-          {isEmailSent &&
-            <div className={classes.emailMessage} id="PreviewControlsContainer-emailSent">
-              <Typography variant="h6">
-                <Text translation="document.email.sent" />
-              </Typography>
-            </div>
+            <Button color="secondary" variant="outlined" onClick={onSubmit} id="PreviewControlsContainer-access" >
+              <Text translation="document.request.access" />
+            </Button>
           }
         </div>
       );
@@ -133,12 +125,12 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   };
 
   return (
-    <Box component="span" style={{ paddingTop: 30, width: "100%" }}>
+    <>
       {!isLastVersionObsolete() && renderCloneButton()}
       {renderOutputButton()}
       {renderNoAccessWarning()}
       <DownloadHTML pdf={documentRevision.pdf} />
-    </Box>
+    </>
   );
 };
 

@@ -16,14 +16,21 @@ export const withFBDynamicControl = <T extends FBDynamicControlProps>(
     dynamicControlState,
     controls,
     loading,
+    index = 0,
     ...props
   }: T) => {
 
     dynamicControlState = FB.useRef<FBDynamicControlState>(FBDynamicControlState);
 
     handleSelect = (control: DocumentRevision) => {
-      const schema = control.formTemplate?.schema as FBInputProps[] || [];
-      FBStore.setSchema(_.union(FBStore.getSchema(), schema));
+      const newSchema = FBStore.getSchema();
+      let schema = control.formTemplate?.schema as FBInputProps[] || [];
+      schema = _.map(schema, (schemaItem) => ({
+        ...schemaItem,
+        name: `${_.kebabCase(schemaItem.label as string || "")}-${FB.uniqid()}`,
+      }));
+      newSchema.splice(index, 0, ...schema);
+      FBStore.setSchema(newSchema);
       editorStore.open = false;
     };
 

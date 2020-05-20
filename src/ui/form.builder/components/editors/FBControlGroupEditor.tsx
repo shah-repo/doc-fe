@@ -6,7 +6,7 @@ import FBLabelEditor from "./FBLabelEditor";
 
 const FBControlGroupEditor: React.FunctionComponent<{}> = () => (
   <FBStepperEditor>
-    <FBLabelEditor />
+    <FBLabelEditor standalone={false} />
     <FBOptionsContainer />
     <FBAdditionsEditor type="controlgroup" contextLabel="form.builder.note" />
   </FBStepperEditor>

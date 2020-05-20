@@ -5,7 +5,7 @@ import { PurchaseOrderItem } from "../FBPurchaseOrder/FBPurchaseOrder.types";
 import { FBInputProps } from "../types/common";
 
 export type FBPOReceiveProps =
-& Pick<FBInputProps, "name" | "index" | "label" | "afterChange">
+& Pick<FBInputProps, "name" | "index" | "label" | "afterChange" | "disabled">
 & {
   dialogState?: FBDialogState;
   poReceiveState?: FBPOReceiveState;
@@ -13,4 +13,5 @@ export type FBPOReceiveProps =
   schema?: FBInputProps[];
   loading?: boolean;
   items?: PurchaseOrderItem[];
+  disableAutocomplete?: boolean;
 };

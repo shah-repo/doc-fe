@@ -41,6 +41,7 @@ import { FBInlineApproval } from "../FBInlineApproval";
 import { FBInstructionsDocument } from "../FBInstructionsDocument";
 import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
+import FBPOApprovalMatrix from "../FBPOApprovalMatrix";
 import { FBPOReceive } from "../FBPOReceive";
 import { FBPurchaseOrder } from "../FBPurchaseOrder";
 import { FBQuantityField } from "../FBQuantityField";
@@ -71,6 +72,7 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   purchaseorder: FBLabelEditor,
   poreceive: FBLabelEditor,
   approvalMatrix: FBLabelEditor,
+  poApprovalMatrix: FBLabelEditor,
   paragraph: FBEditorParagraph,
   stepsection: FBEditorStepSection,
   teststep: FBEditorStepSection,
@@ -108,6 +110,7 @@ export const FBFieldComponent: Dictionary<any> = {
   action: FBActionContainer,
   hellosign: FBHelloSign,
   approvalMatrix: FBApprovalMatrix,
+  poApprovalMatrix: FBPOApprovalMatrix,
   purchaseorder: FBPurchaseOrder,
   poreceive: FBPOReceive,
   paragraph: FBParagraph,
@@ -148,6 +151,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "purchaseorder",
     "poreceive",
     "approvalMatrix",
+    "poApprovalMatrix",
     "instructionsmediaupload",
     "evidencemediaupload",
     "testRequirement",
@@ -161,20 +165,43 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
 
 export const FBGroupEditorOptions: Dictionary<any[]> = {
   autocomplete: [
-    { value: "multiple", text: "form.builder.multi.select" }, {
-      value: "includeQRScan", text: "form.builder.include.qr.scan",
-    },
+    { value: "multiple", text: "form.builder.multi.select" },
+    { value: "includeQRScan", text: "form.builder.include.qr.scan" },
+    { value: "reviseDisabled", text: "form.builder.revise.disabled" },
   ],
-  mediaupload: [{ value: "isTemplate", text: "form.builder.is.template" }],
+  mediaupload: [
+    { value: "isTemplate", text: "form.builder.is.template" },
+    { value: "reviseDisabled", text: "form.builder.revise.disabled" },
+  ],
   select: [
     { value: "includeNone", text: "form.builder.include.none" },
     { value: "includeContext", text: "form.builder.include.other" },
+    { value: "reviseDisabled", text: "form.builder.revise.disabled" },
   ],
-  control: [{ value: "includeContext", text: "form.builder.include.note" }],
+  control: [
+    { value: "includeContext", text: "form.builder.include.note" },
+    { value: "reviseDisabled", text: "form.builder.revise.disabled" },
+  ],
   controlgroup: [
     { value: "includeContext", text: "form.builder.include.other" },
+    { value: "reviseDisabled", text: "form.builder.revise.disabled" },
+  ],
+  textfield: [
+    { value: "reviseDisabled", text: "form.builder.revise.disabled" },
+  ],
+  label: [
+    { value: "reviseDisabled", text: "form.builder.revise.disabled" },
+  ],
+  approval: [
+    { value: "approveIsBlocking", text: "form.builder.blocking" },
+    { value: "reviseDisabled", text: "form.builder.revise.disabled" },
   ],
 };
+
+export const omitReviseDisabledOption: string[] = [
+  "section",
+  "subsection",
+];
 
 export const omitLabelValidation: FBEditorElementType[] = [
   "action",
