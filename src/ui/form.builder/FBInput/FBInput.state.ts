@@ -3,7 +3,6 @@ import { FBInputType } from ".";
 
 export class FBInputState {
   public static omitLabel: FBInputType[] = ["checkbox", "radio"];
-  @observable public defaultValue: any;
   @observable public value: any;
   @observable public includeContext = false;
   @observable public children: React.ReactElement | undefined;

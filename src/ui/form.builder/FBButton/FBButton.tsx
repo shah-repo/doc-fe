@@ -7,9 +7,20 @@ const FBButton: React.FunctionComponent<FBButtonProps> = ({
   label = "",
   color = "secondary",
   variant = "contained",
+  gutter,
+  hidden,
+  style,
   ...props
 }) => (
-  <Button {...{ color, variant }} {...props} type="button">
+  <Button
+    {...{ color, variant }}
+    {...props}
+    type="button"
+    style={{
+      ...style,
+      ...hidden && { display: "none" },
+    }}
+  >
     <Text message={label} />
   </Button>
 );

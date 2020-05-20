@@ -4,13 +4,20 @@ import { FBCheckboxGroup, FBFieldName } from "..";
 import { withFBEditorProperties } from "./FBEditorProperties.wrap";
 
 const FBEditorProperties: React.FunctionComponent<FBEditorPropertiesProps> = ({
-  options = [],
+  onChange,
+  options,
+  type,
 }) => (
-  <FBCheckboxGroup
-    name={FBFieldName.EditorProps}
-    label="form.builder.properties"
-    {...{ options }}
-  />
+  <>
+    {options && (
+      <FBCheckboxGroup
+        name={FBFieldName.EditorProps}
+        label="form.builder.properties"
+        {...{ onChange, options }}
+      />
+    )}
+  </>
+
 );
 
 export default withFBEditorProperties(FBEditorProperties);

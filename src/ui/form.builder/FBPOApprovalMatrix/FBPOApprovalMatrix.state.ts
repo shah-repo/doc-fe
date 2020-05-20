@@ -1,15 +1,25 @@
+import _ from "lodash";
 import { action, observable, set } from "mobx";
+import { FBFormState } from "..";
 import { toMembersOptions } from "../../group.management/utils/transform";
-import FBStore from "../stores/ui/FBStore";
+import { FBEndpoint } from "../defaults/FBEndpoint";
+import FBRequest from "../FBApi/FBApi.request";
 import { POApprovalMatrix, POApprovalMatrixLevel } from "./FBPOApprovalMatrix.types";
 
 const DEFAULT_POAM: POApprovalMatrix = {
   approvalLevels: [] as POApprovalMatrixLevel[],
 };
 
-export class FBPOApprovalMatrixState {
+export class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrix, null> {
   @observable public name = "";
   @observable public poam = DEFAULT_POAM;
+  public url = FBEndpoint.POApprovalMatrix;
+  private formState?: FBFormState;
+
+  public constructor(formState?: FBFormState) {
+    super();
+    this.formState = formState;
+  }
 
   @action public setItems = (approvalLevels: POApprovalMatrixLevel[]) => {
     set(this.poam, "approvalLevels", approvalLevels);
@@ -17,8 +27,14 @@ export class FBPOApprovalMatrixState {
   };
 
   @action public addItem = (approvalLevel: POApprovalMatrixLevel) => {
-    this.poam.approvalLevels.push(approvalLevel);
-    this.updateFBStore();
+    const appLevelIndex = _.findIndex(this.poam.approvalLevels, { id: approvalLevel.id });
+    if (appLevelIndex === -1) {
+      set(this.poam, "approvalLevels", _.union(this.poam.approvalLevels, [approvalLevel]));
+      return;
+    }
+    const al = [...this.poam.approvalLevels];
+    al[appLevelIndex] = approvalLevel;
+    set(this.poam, "approvalLevels", al);
   };
 
   @action public editItem = (index: number, approvalLevel: POApprovalMatrixLevel) => {
@@ -59,7 +75,7 @@ export class FBPOApprovalMatrixState {
       ...signaturesByStage,
     };
 
-    FBStore.setValue(`${this.name}-formValues`, values);
+    this.formState?.setFieldValue(`${this.name}-formValues`, values);
     this.updateFBStore();
   };
 
@@ -67,27 +83,26 @@ export class FBPOApprovalMatrixState {
     if (!this.name) {
       return;
     }
-    const value: POApprovalMatrix = FBStore.getValue(this.name) || DEFAULT_POAM;
+    const value: POApprovalMatrix = this.formState?.getFieldValue(this.name, DEFAULT_POAM);
     this.poam = value;
   };
 
   @action public clearFormValues = () => {
-    FBStore.setValue(`${this.name}-formValues`, undefined);
-    FBStore.setValue(`${this.name}-formValues.name`, undefined);
-    FBStore.setValue(`${this.name}-formValues.limit`, undefined);
+    this.formState?.setFieldValue(`${this.name}-formValues`, undefined);
+    this.formState?.setFieldValue(`${this.name}-formValues.name`, undefined);
+    this.formState?.setFieldValue(`${this.name}-formValues.limit`, undefined);
   };
 
   @action public resetFormValues = () => {
-    FBStore.setValue(`${this.name}-formValues`, undefined);
+    this.formState?.setFieldValue(`${this.name}-formValues`, undefined);
   };
 
   private updateFBStore = () => {
-    if (!this.name || FBStore.mode === "design") {
+    if (!this.name || this.formState?.workspaceState?.mode === "design") {
       return;
     }
-
-    FBStore.setValue(this.name, this.poam);
-    FBStore.resetSchema();
+    this.formState?.setFieldValue(this.name, this.poam);
+    this.formState?.workspaceState?.resetSchema();
   };
 
 }

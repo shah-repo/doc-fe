@@ -1,5 +1,6 @@
 import { template } from "lodash";
 import { action } from "mobx";
+import { FBPOReceiveFormConstructor, FBPurchaseOrderItem } from "..";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { DocumentType } from "../../../state/ducks/documentRevisions/documentType";
@@ -7,8 +8,6 @@ import { documentPreviewPath } from "../../document.revision/utils/paths";
 import { toNewVersionRequestBody } from "../../documentRevision/forms/transform";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
-import { PurchaseOrderItem } from "../FBPurchaseOrder";
-import FBStore from "../stores/ui/FBStore";
 
 export class FBPOReceiveFormState  {
   public docIdAPI: FBRequest<any, any> = new FBRequest();
@@ -17,17 +16,16 @@ export class FBPOReceiveFormState  {
   public lfpoDocType?: DocumentType;
   public lotDocType?: DocumentType;
   public groupOptions: any[] = [];
-  public item?: PurchaseOrderItem;
+  public item?: FBPurchaseOrderItem;
+  private documentId: string | undefined;
 
-  public constructor(
-    { lfpoDocType, lotDocType, groupOptions, item }:
-    { lfpoDocType?: DocumentType; lotDocType?: DocumentType; groupOptions: any[]; item: PurchaseOrderItem }
-  ) {
+  public constructor({ lfpoDocType, lotDocType, groupOptions, item, documentId }: FBPOReceiveFormConstructor) {
     this.createLotAPI.setUrl(FBEndpoint.DocumentRevisionsUrl);
     this.lfpoDocType = lfpoDocType;
     this.lotDocType = lotDocType;
     this.groupOptions = groupOptions;
     this.item = item;
+    this.documentId = documentId;
     const urlTpl = template(FBEndpoint.FetchDocId);
     const url = urlTpl({ documentTypeId: this.lotDocType?.id });
     this.docIdAPI.setUrl(url);
@@ -55,11 +53,15 @@ export class FBPOReceiveFormState  {
       });
     }
 
+    if (!this.documentId) {
+      return;
+    }
+
     const reqBody = toNewVersionRequestBody({
       name: `${this.item?.glCode}-${this.item?.description}`,
       description: values.comments ? `<p>${values.comments}</p>` : `<p>${this.item?.description}</p>`,
       attachments: [],
-      referenceTo: [{ value: FBStore.document.document.id, label: "" }],
+      referenceTo: [{ value: this.documentId, label: "" }],
       securityEmployees: [],
       securityGroups,
       operators: [],

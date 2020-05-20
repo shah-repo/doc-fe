@@ -1,27 +1,24 @@
 import React from "react";
-import { FBAutocompleteAsync } from "..";
-import { FBLabelEditorProps } from "../components/editors/FBLabelEditor";
-import FBCheckboxGroup from "../components/inputs/FBCheckboxGroup";
-import FBTextField from "../components/inputs/FBTextField";
+import { FBAutocompleteAsync, FBEditor, FBEditorProps } from "..";
+import { FBEditorLabel } from "../FBEditorLabel";
 
-const FBEditorInstructionsDocument: React.FunctionComponent<FBLabelEditorProps> = ({
-  defaultValue,
+const FBEditorInstructionsDocument: React.FunctionComponent<FBEditorProps> = ({
+  children,
+  includeDefaultValue,
+  standalone = false,
+  inputProps,
+  ...props
 }) => (
-  <>
-    <FBTextField label="form.builder.label" name="label" {...{ defaultValue }}  />
+  <FBEditor {...props} {...{ inputProps }}>
+    <FBEditorLabel {...props} {...{ inputProps, includeDefaultValue }} standalone={true} />
     <FBAutocompleteAsync
       label="form.builder.document"
       name="instructionsDocument"
       optionId="1"
+      rules="required"
     />
-    <FBCheckboxGroup
-      name="editor-additions"
-      label="form.builder.additions"
-      options={[
-        { value: "reviseDisabled", text: "form.builder.revise.disabled" },
-      ]}
-    />
-  </>
+    {children}
+  </FBEditor>
 );
 
 export default FBEditorInstructionsDocument;

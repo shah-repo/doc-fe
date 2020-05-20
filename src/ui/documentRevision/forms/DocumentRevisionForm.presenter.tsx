@@ -5,7 +5,7 @@ import { observer } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
-import { DocumentRevision, DocumentRevisionStatus, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
@@ -20,8 +20,7 @@ import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
 import FormHeader from "../../document.revision/header/FormHeader";
 import { documentDetailsPath } from "../../document.revision/utils/paths";
-import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
-import FBStore from "../../form.builder/stores/ui/FBStore";
+import { FB } from "../../form.builder";
 import { isOperator } from "../DocumentRevisionDisplay.container";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
@@ -31,7 +30,6 @@ import DocumentSecurity from "./presenters/DocumentSecurity";
 import DocumentTypeSelect from "./presenters/DocumentTypeSelect";
 import FBActiveNoOutput from "./presenters/FBActiveNoOutput";
 import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
-import MemoizedFBWorkspace from "./presenters/MemoizedFBWorkspace";
 import References from "./presenters/References";
 import RetrainField from "./presenters/RetrainField";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
@@ -52,6 +50,8 @@ export interface Props
   onDirtyFlagChange?: (dirty: boolean) => void;
   canChangeOwnerShip: boolean;
   type?: string;
+  handleFBContainerRef?: (instance: HTMLDivElement | null) => any;
+  FBContainer?: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 interface FormHeaderContext {
@@ -85,7 +85,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   documentRevision,
   setFieldValue,
   type,
+  handleFBContainerRef,
+  FBContainer,
+  setValues,
 }) => {
+
+  const { workspaceState } = FB.useStores();
   const isDisabled: boolean = initialValues.id !== undefined;
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
 
@@ -103,17 +108,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDisabledInput =  values.id !== undefined && isCurrentUserOperator && !isOwner;
 
   useEffect(() => {
-    if (values.id && (isCurrentUserOperator || isOwner)) {
-      return FBStore.setMode("form");
-    }
-    values.id && FBStore.setMode("preview");
-  });
-  useEffect(() => {
-    if (!values.id && !values.document?.documentType?.id) {
-      FBDRStore.setMode("none");
-      if (setDocId) {
-        setDocId("");
-      }
+    if (!values.id && !values.document?.documentType?.id && setDocId) {
+      setDocId("");
     }
   }, [setDocId, values.document, values.id]);
   useEffect(() => {
@@ -169,7 +165,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     >
       <FormHeader/>
       {
-        FBDRStore.isOutput &&
+        workspaceState?.mode === "form" &&
         <DocumentRevisionOutputInfo formDocument={values.formDocument} />
       }
       <FormWrapper
@@ -191,7 +187,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
         <Description isQms={docInfo.isQms} isDisabled={isDisabledInput}/>
         <DocumentTypeSelect
-          outputDocumentTypes={initialValues.formDocument?.formTemplate?.outputDocumentTypes}
+          outputDocumentTypes={initialValues.formDocument?.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]}
           type={type}
           isdocRevStatusDraft={isdocRevStatusDraft}
           savedocInfo={savedocInfo}
@@ -225,7 +221,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           <DocumentSecurity />
         }
         {
-          FBStore.active && !FBDRStore.isOutput && hasOutput &&
+          workspaceState?.active && workspaceState.mode === "design" && hasOutput &&
           <FBActiveNoOutput
             docRevId={initialValues.id}
             status={documentRevision?.status}
@@ -234,7 +230,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           />
         }
         {
-          FBStore.active &&
+          workspaceState?.active &&
           <Box mt={5}>
             {
               values.id &&
@@ -242,11 +238,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 <GenerateHtmlPreview id={values.id} renderHTML={values.formDocument?.renderHTML} />
               </Box>
             }
-            <MemoizedFBWorkspace
-              id={values.id}
-              documentId={values.formDocument?.document?.id || values.document?.id}
-              document={values as unknown as DocumentRevision}
-            />
+            <div ref={FBContainer} />
           </Box>
         }
       </FormWrapper>

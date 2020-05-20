@@ -90,8 +90,8 @@ const apiMiddleware: Middleware = ({
     redirectToMaintenance && redirectTo(MAINTENANCE)();
 
     let responseMessage = "";
-    const isUnauthorizedRequest = exception.response.status === 401 && action.includeAuthorization;
-    const isPasswordAction = exception.response.status === 401 && action.password;
+    const isUnauthorizedRequest = exception?.response?.status === 401 && action.includeAuthorization;
+    const isPasswordAction = exception?.response?.status === 401 && action.password;
 
     if (isUnauthorizedRequest && !isPasswordAction) {
       dispatch(authActions.logoutUser());

@@ -1,28 +1,23 @@
 import React from "react";
-import { FBAutocomplete } from "..";
-import requirementsOptions from "../../../data/requirementsOptions.json";
-import { FBLabelEditorProps } from "../components/editors/FBLabelEditor";
-import FBCheckboxGroup from "../components/inputs/FBCheckboxGroup";
-import FBTextField from "../components/inputs/FBTextField";
+import { FBAutocomplete, FBData, FBEditor, FBEditorLabel, FBEditorProps } from "..";
 
-const FBEditorTestRequirement: React.FunctionComponent<FBLabelEditorProps> = ({
-  defaultValue,
+const FBEditorTestRequirement: React.FunctionComponent<FBEditorProps> = ({
+  children,
+  includeDefaultValue,
+  inputProps: { type } = {},
+  inputProps,
+  ...props
 }) => (
-  <>
-    <FBTextField label="form.builder.label" name="label" {...{ defaultValue }}  />
+  <FBEditor {...props} {...{ inputProps }}>
+    <FBEditorLabel {...props} {...{ inputProps, includeDefaultValue }} standalone={true} />
     <FBAutocomplete
       label="form.builder.testRequirement"
       name="testRequirement"
-      options={requirementsOptions}
+      options={FBData.requirementOptions}
+      rules="required"
     />
-    <FBCheckboxGroup
-      name="editor-additions"
-      label="form.builder.additions"
-      options={[
-        { value: "reviseDisabled", text: "form.builder.revise.disabled" },
-      ]}
-    />
-  </>
+    {children}
+  </FBEditor>
 );
 
 export default FBEditorTestRequirement;

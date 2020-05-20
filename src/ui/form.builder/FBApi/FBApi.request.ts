@@ -10,6 +10,10 @@ export default class FBRequest<Data, Body> {
   public url = "";
   public root = "";
 
+  public constructor(url = "") {
+    this.url = url;
+  }
+
   @action public setUrl = (url: string) => {
     set(this, "url", url);
   };
@@ -31,8 +35,8 @@ export default class FBRequest<Data, Body> {
   };
 
   @action public fetch = () => this.start("get");
-
   @action public post = () => this.start("post");
+  @action public patch = () => this.start("patch");
 
   @action public dataFilter = (data: Data): Data | undefined => data;
   @action public onError = (_error) => {
@@ -52,6 +56,9 @@ export default class FBRequest<Data, Body> {
         break;
       case "post":
         promise = apiClient().post(this.url, this.body).promise;
+        break;
+      case "patch":
+        promise = apiClient().patch(this.url, this.body).promise;
         break;
       default:
         return;

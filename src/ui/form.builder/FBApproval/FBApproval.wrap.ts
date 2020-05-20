@@ -9,8 +9,6 @@ import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { store } from "../../../state/store";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
-import FBDRStore from "../stores/ui/FBDRStore";
-import FBStore from "../stores/ui/FBStore";
 
 export const withFBApproval = <T extends FBApprovalProps>(
   Component: React.FunctionComponent<T>
@@ -32,13 +30,13 @@ export const withFBApproval = <T extends FBApprovalProps>(
     ...props
   }: T) => {
 
-    approvalFieldState = FB.useRef<FBApprovalState>(FBApprovalState);
+    const { workspaceState, formState } = FB.useStores();
+    const { id, isOutput } = workspaceState || {};
+
+    approvalFieldState = FB.useRef<FBApprovalState>(FBApprovalState, id);
     isApproved = approvalFieldState.isApproved;
     isDefined = !_.isEmpty(approvers) || !_.isEmpty(approverGroups);
-    disabled =
-      !FBDRStore.isOutput ||
-      (FBDRStore.isOutput && !FBStore.docId) ||
-      (reviseDisabled && FBStore.isRevised);
+    disabled = (!isOutput || (isOutput && !id) || (reviseDisabled && workspaceState?.isRevised));
     const currentUser = store.getState().auth.user;
 
     function isApprover(approver: Employee | GroupRequestBody): boolean {
@@ -138,7 +136,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
       if (!name) {
         return;
       }
-      const hasApproved = FBStore.getValue(name) as FBApprovalValue[] || [];
+      const hasApproved = formState?.getFieldValue(name) as FBApprovalValue[] || [];
       approvalFieldState?.setApprovers(hasApproved);
     }, []);
 

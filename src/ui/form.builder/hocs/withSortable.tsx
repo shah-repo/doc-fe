@@ -44,7 +44,7 @@ export function withSortable<T extends FBSortableProps>(
           const { approveIsBlocking = false } = activeConfig || {};
           let hasValue = type === "approval"
             ? FBStore.getValue(name)
-            : FBStore.getValue(`${FBFieldName.InlineApproval}${name}`);
+            : FBStore.getValue(`${FBFieldName.RequestApproval}${name}`);
           hasValue = Boolean(hasValue);
           if (approveIsBlocking && !hasValue) {
             state = { disabled: true, approved: true };

@@ -1,10 +1,20 @@
-import { FBEditorPropertiesState, FBInputProps, FBOptionProps } from "..";
+import { FBInputProps } from "..";
+import { FBOption } from "../FBOption";
 
-export type FBEditorPropertiesType = "multiple" | "includeNone" | "includeContext";
+export type FBEditorPropertiesType =
+| "multiple"
+| "includeNone"
+| "includeContext"
+| "includeQRScan"
+| "reviseDisabled"
+| "approveIsBlocking";
 
-export type FBEditorPropertiesProps =
-& Pick<FBInputProps, "type">
-& Pick<FBOptionProps, "options">
+export type FBEditorPropertiesProps = Pick<FBInputProps, "type" | "options" | "onChange">;
+
+export type FBEditorPropertiesOption =
+& Pick<FBOption, "text">
 & {
-  editorPropsState?: FBEditorPropertiesState;
+  value?: string;
+  outputText?: string;
+  isOption?: boolean;
 };

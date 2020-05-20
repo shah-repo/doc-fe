@@ -14,6 +14,7 @@ import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
+import { FBWorkspace, FBWorkspaceMode } from "../../form.builder";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import styles from "./DocumentRevisionForm.container.style";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
@@ -114,6 +115,7 @@ DocumentRevisionFormContainerProps
       retrain,
       renderHTML,
       securityGroups,
+      outputDocumentTypes: initialValues.formTemplate?.outputDocumentTypes as OptionType[],
     };
   }, [canUpdateHTML, initialValues, groupOptions]);
 
@@ -133,22 +135,43 @@ DocumentRevisionFormContainerProps
   document = document || ({} as Document);
   const classes = styles();
 
+  // FB config
+  const FBContainer = React.useRef(null);
+  const { group: formGroup } = cleanInitialValues.document?.documentType || {};
+  const { docId: outputGroup } = cleanInitialValues.formDocument?.document || {};
+  const { schema } = cleanInitialValues?.formTemplate || cleanInitialValues?.formDocument?.formTemplate || {};
+  const { formInput } = cleanInitialValues || {};
+  let mode: Partial<FBWorkspaceMode> = "none";
+  if (formGroup && formGroup.includes("FORM")) {
+    mode = "design";
+  } else if (outputGroup) {
+    mode = "form";
+  }
+
   const render = (props: FormikProps<DocumentRevisionFormValues>) => (
-    <DocumentRevisionFormPresenter
-      {...props}
-      asyncState={asyncState}
-      documentRevisions={documentRevisions}
-      documentRevision={documentRevision}
-      availableReferences={availableReferences}
-      showRevisionTypeChange={showRevisionTypeChange}
-      proposedDocId={proposedDocId}
-      setDocId={setDocId}
-      doNotPrompt={doNotPrompt}
-      onDirtyFlagChange={onDirtyFlagChange}
-      documentTypesById={documentTypesById}
-      canChangeOwnerShip={canChangeOwnerShip}
-      type={type}
-    />
+    <FBWorkspace
+      portalContainer={FBContainer}
+      document={props.values as unknown as DocumentRevision}
+      initialValues={formInput}
+      {...{ mode, schema  }}
+    >
+      <DocumentRevisionFormPresenter
+        {...props}
+        asyncState={asyncState}
+        documentRevisions={documentRevisions}
+        documentRevision={documentRevision}
+        availableReferences={availableReferences}
+        showRevisionTypeChange={showRevisionTypeChange}
+        proposedDocId={proposedDocId}
+        setDocId={setDocId}
+        doNotPrompt={doNotPrompt}
+        onDirtyFlagChange={onDirtyFlagChange}
+        documentTypesById={documentTypesById}
+        canChangeOwnerShip={canChangeOwnerShip}
+        type={type}
+        {...{ FBContainer }}
+      />
+    </FBWorkspace>
   );
 
   // TODO: check why are we loading all document revisions

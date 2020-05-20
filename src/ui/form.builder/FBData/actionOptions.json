@@ -1,0 +1,57 @@
+[{
+  "name": "SendEmailWithFormToFill",
+  "description": "Send Email with Form to fill in.",
+  "actionLabel": "Send Email",
+  "requestMethod": "POST",
+  "requestUrl": "/supplier_survey_requests",
+  "schema": [{
+    "type": "textfield",
+    "label": "Document id",
+    "hidden": true,
+    "name": "documentRevision.id",
+    "disabled": true,
+    "requiredDocId": true,
+    "rules": "required"
+  }, {
+    "type": "textfield",
+    "label": "Email",
+    "name": "email",
+    "rules": "required|email"
+  }, {
+    "type": "textfield",
+    "label": "Name",
+    "name": "name",
+    "rules": "required"
+  }]
+}, {
+  "name": "SendSurveyEmailWithFormToFill",
+  "description": "Send Email with Supplier Survey to fill in.",
+  "actionLabel": "Send Email",
+  "requestMethod": "POST",
+  "requestUrl": "/supplier_survey_requests",
+  "schema": [{
+    "type": "textfield",
+    "label": "Document id",
+    "hidden": true,
+    "name": "documentRevision.id",
+    "disabled": true,
+    "requiredDocId": true,
+    "rules": "required"
+  }, {
+    "type": "textfield",
+    "label": "Email",
+    "name": "email",
+    "rules": "required|email"
+  }, {
+    "type": "textfield",
+    "label": "Name",
+    "name": "name",
+    "rules": "required"
+  }, {
+    "type": "autocompleteasync",
+    "label": "Supplier",
+    "name": "send-email-action-supplier-field",
+    "optionId": "5",
+    "rules": "required|required_document_type:SUP"
+  }]
+}]

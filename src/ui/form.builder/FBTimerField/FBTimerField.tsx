@@ -1,17 +1,18 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import { FBTimerProps } from ".";
-import FBButton from "../components/inputs/FBButton";
-import FBTextField from "../components/inputs/FBTextField";
+import { FBButton, FBTextField } from "..";
 
 const FBTimerField: React.FunctionComponent<FBTimerProps> = ({
   ...props
 }) => (
-  <Box display="flex" alignItems="center">
+  <Box display="flex" >
     <Box flexGrow={1}>
       <FBTextField {...props} />
     </Box>
-    <FBButton disabled={props.disabled} label="form.builder.start.timer" />
+    <Box mt={3.4}>
+      <FBButton disabled={props.disabled} variant="outlined" label="form.builder.start.timer" />
+    </Box>
   </Box>
 );
 
