@@ -73,6 +73,8 @@ DocumentRevisionUpdateContainerProps
 
   const onSubmit = (values: DocumentRevisionFormValues, helpers, cleanInitialValues) => {
     const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
+    console.log(cleanInitialValues);
+    console.log(values);
 
     if (isEmpty(dataToSubmit)) {
       return;
@@ -89,7 +91,7 @@ DocumentRevisionUpdateContainerProps
   };
 
   return (
-    <FormContext.Provider value={{ submitOnChange: false }}>
+    <FormContext.Provider value={{ submitOnChange: true }}>
       <DocumentRevisionForm
         doNotPrompt={doNotPrompt}
         asyncState={async.asyncState}
