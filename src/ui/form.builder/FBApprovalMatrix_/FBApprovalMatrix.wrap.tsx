@@ -43,7 +43,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       if (formValue?.approvalMatrix) {
         formState?.setFieldValue(name, {
           ...formValue,
-          approvalMatrix: formValue?.approvalMatrix.splice(-1, 1),
+          approvalMatrix: formValue?.approvalMatrix.slice(0, -1),
         });
       }
       approvalMatrixFieldState?.setMode("none");
