@@ -98,6 +98,7 @@ export type FBInputProps =
   hellosignFlowProps?: any;
   showErrorMsg?: boolean;
   validators?: Dictionary<any>;
+  forceDefault?: boolean;
 };
 
 export const OmitInputClones: FBInputType[] = ["fileupload"];

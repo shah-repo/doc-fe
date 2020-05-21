@@ -40,11 +40,11 @@ export class FBFormState extends FBSchemaState {
   // ;
 
   @action public getFieldValue = (
-    fieldName: string | undefined, defaultValue: any = undefined): any => {
+    fieldName: string | undefined, defaultValue: any = undefined, forceDefault = false): any => {
     if (!fieldName) {
       return defaultValue;
     }
-    if (!_.get(this.values, fieldName) && !_.isUndefined(defaultValue)) {
+    if (forceDefault || (!_.get(this.values, fieldName) && !_.isUndefined(defaultValue))) {
       _.set(this.initialValues || {}, fieldName, defaultValue);
     }
     return _.get(this.values, fieldName) || _.get(this.initialValues, fieldName);
