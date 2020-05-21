@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { documentTypeSelectors, DynamicUIDocTypes } from "../../../state/ducks/documentRevisions/documentType";
-import { validator } from "../../components/forms/fields/validators";
+import { required, validator } from "../../components/forms/fields/validators";
 
 const useDescription = (
   documentTypeId = "",
@@ -15,7 +15,7 @@ const useDescription = (
     const placeholder: string = isQms ?
       "" :
       intl.formatMessage({ id: "document.revision.no.qms.message" });
-    let validators = isQms ? validator(require) : undefined;
+    let validators = isQms ? validator(required) : undefined;
 
     switch (documentType?.documentTypeAcronym) {
       case DynamicUIDocTypes.RC:

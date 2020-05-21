@@ -13,6 +13,7 @@ import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import { FBSchemaProps, FBWorkspace } from "../../form.builder";
+import useCRLink from "../../hooks/docCustomization/useCRLink";
 import useDescription from "../../hooks/docCustomization/useDescription";
 import useTitle from "../../hooks/docCustomization/useTitle";
 import useTraining from "../../hooks/docCustomization/useTraining";
@@ -63,6 +64,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const isTrainingVisible = useTraining(docTypeId);
   const [isDescriptionVisible] = useDescription(docTypeId);
   const [isTitleVisible] = useTitle(docTypeId);
+  const isCRLinkVisible = useCRLink(docTypeId);
 
   const outputDocumentTypeName = useSelector((state: ApplicationState) =>
     formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
@@ -89,7 +91,10 @@ export const Presenter: React.FunctionComponent<Props> = ({
         spacing={4}
         direction="column"
       >
-        <ChangeRequestLink dataProp={dataProp} />
+        {
+          isCRLinkVisible &&
+          <ChangeRequestLink dataProp={dataProp} />
+        }
         {FBIsOutput && (
           <Box ml={2} mt={1}>
             <DocumentRevisionOutputInfo formDocument={dataProp?.formDocument} />

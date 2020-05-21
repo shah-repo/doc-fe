@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { documentTypeSelectors, DynamicUIDocTypes } from "../../../state/ducks/documentRevisions/documentType";
-import { validator } from "../../components/forms/fields/validators";
+import { required, validator } from "../../components/forms/fields/validators";
 
 const useTitle = (
   documentTypeId = "",
@@ -14,7 +14,7 @@ const useTitle = (
       case DynamicUIDocTypes.PO:
         return [false];
       default:
-        return [true, validator(require)];
+        return [true, validator(required)];
     }
   }, [documentType]);
 };

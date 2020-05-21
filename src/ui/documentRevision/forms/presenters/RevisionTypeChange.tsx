@@ -1,5 +1,5 @@
 import { Box, Typography } from "@material-ui/core";
-import React from "react";
+import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { RevisionChangeType } from "../../../../state/ducks/documentRevisions";
 import { documentTypeSelectors, DynamicUIDocTypes } from "../../../../state/ducks/documentRevisions/documentType";
@@ -20,24 +20,32 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
   const documentType = useSelector(documentTypeSelectors.byId)[documentTypeId];
   const { documentTypeAcronym: acronym } = documentType || {};
   const isVisible = acronym !== DynamicUIDocTypes.WO;
+  const showNextRevisionLevel = useMemo(() => {
+    switch (acronym) {
+      case DynamicUIDocTypes.PO:
+      case DynamicUIDocTypes.RC:
+      case DynamicUIDocTypes.SUP:
+      case DynamicUIDocTypes.DAM:
+      case DynamicUIDocTypes.ADC:
+        return false;
+      default:
+        return true;
+    }
+  }, [acronym]);
+  const showObsolete = useMemo(() => {
+    switch (acronym) {
+      case DynamicUIDocTypes.WO:
+      case DynamicUIDocTypes.DAM:
+      case DynamicUIDocTypes.ADC:
+        return false;
+      default:
+        return true;
+    }
+  }, [acronym]);
 
   if (!isVisible) {
     return null;
   }
-
-  const hideNextRevisionLevel = acronym === (
-    DynamicUIDocTypes.RC ||
-    DynamicUIDocTypes.SUP ||
-    DynamicUIDocTypes.PO ||
-    DynamicUIDocTypes.DAM ||
-    DynamicUIDocTypes.ADC
-  );
-
-  const hideObsolete = acronym === (
-    DynamicUIDocTypes.WO ||
-    DynamicUIDocTypes.DAM ||
-    DynamicUIDocTypes.ADC
-  );
 
   return (
     <Box mt={7}>
@@ -54,7 +62,7 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
           disabled={isDisabled}
         />
         {
-          !hideNextRevisionLevel ||
+          showNextRevisionLevel &&
           <RadioButton
             label={
               <Text translation="documentRevision.form.nextRevisionStage" />
@@ -65,7 +73,7 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
           />
         }
         {
-          !hideObsolete &&
+          showObsolete &&
           <RadioButton
             label={<Text message={`documentRevision.form.obsolete.${acronym}`} />}
             value={RevisionChangeType.Obsolete}
