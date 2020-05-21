@@ -22,10 +22,7 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
 
     const { workspaceState, formState } = FB.useStores();
     const { document } = workspaceState || {};
-    poamState = FB.useRef<FBPOApprovalMatrixState>(FBPOApprovalMatrixState, {
-      formState,
-      approvalLevels: formState?.getFieldValue(name),
-    });
+    poamState = FB.useRef<FBPOApprovalMatrixState>(FBPOApprovalMatrixState, formState);
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
 
     const stages = [1, 2, 3];
@@ -66,7 +63,7 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
 
     useEffect(() => {
       poamState.name = name;
-      // poamState.initialize();
+      poamState.initialize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [name]);
 

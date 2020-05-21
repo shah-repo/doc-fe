@@ -21,7 +21,7 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
     name,
     ...props
   }: T) => {
-    const { workspaceState, dialogState, formState } = FB.useStores();
+    const { workspaceState, dialogState } = FB.useStores();
     const { document } = workspaceState || {};
 
     const isDocumentReleased = document?.status === DocumentRevisionStatus.Released;
@@ -88,7 +88,6 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
 
     useObserver(() => {
       approvalLevels = poamState?.poam?.approvalLevels;
-      formState?.setFieldValue(name, approvalLevels);
     });
 
     return Component({
