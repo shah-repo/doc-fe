@@ -88,14 +88,16 @@ DocumentRevisionManagerContainerProps
         </Grid>
       )}
       <SidebarContainer
-        docRevsWithoutCanceled={docRevsWithoutCanceled}
-        documentId={documentId}
-        docId={docId}
-        documentRevisionId={documentRevisionId}
-        canAccess={canAccess}
-        isNewOutput={isNewOutput}
-        sidebar={sidebar}
-        openSidebar={openSidebar}
+        {...{
+          docRevsWithoutCanceled,
+          documentId,
+          docId,
+          documentRevisionId,
+          canAccess,
+          isNewOutput,
+          sidebar,
+          openSidebar,
+        }}
       />
     </Grid>
   );

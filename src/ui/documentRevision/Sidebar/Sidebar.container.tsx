@@ -98,12 +98,14 @@ SidebarContainerProps
 
   return (
     <SidebarPresenter
-      sidebar={sidebar}
-      changeSize={changeSize}
-      indexNumber={indexNumber}
-      sidebarList={sidebarList}
-      inputRef={inputRef}
-      setIndex={setIndex}
+      {...{
+        sidebar,
+        changeSize,
+        indexNumber,
+        sidebarList,
+        inputRef,
+        setIndex,
+      }}
     />
   );
 };
