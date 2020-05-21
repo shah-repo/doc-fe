@@ -38,7 +38,9 @@ export const useFormContext = () => {
   }
   const submitForm = (formikSubmit: FormikSubmit) => {
     if (context.submitOnChange) {
-      setFBValue();
+      if (workspaceState) {
+        setFBValue();
+      }
       formikSubmit();
     }
   };

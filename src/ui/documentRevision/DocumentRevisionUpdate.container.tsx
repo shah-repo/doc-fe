@@ -73,8 +73,6 @@ DocumentRevisionUpdateContainerProps
 
   const onSubmit = (values: DocumentRevisionFormValues, helpers, cleanInitialValues) => {
     const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
-    console.log(cleanInitialValues);
-    console.log(values);
 
     if (isEmpty(dataToSubmit)) {
       return;
