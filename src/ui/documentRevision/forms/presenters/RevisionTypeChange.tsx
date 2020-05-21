@@ -26,7 +26,7 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
       case DynamicUIDocTypes.RC:
       case DynamicUIDocTypes.SUP:
       case DynamicUIDocTypes.DAM:
-      case DynamicUIDocTypes.ADC:
+      case DynamicUIDocTypes.POAM:
         return false;
       default:
         return true;
@@ -36,7 +36,7 @@ export const RevisionTypeChange: React.FunctionComponent<Props> = ({
     switch (acronym) {
       case DynamicUIDocTypes.WO:
       case DynamicUIDocTypes.DAM:
-      case DynamicUIDocTypes.ADC:
+      case DynamicUIDocTypes.POAM:
         return false;
       default:
         return true;

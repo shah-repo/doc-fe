@@ -65,6 +65,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const [isDescriptionVisible] = useDescription(docTypeId);
   const [isTitleVisible] = useTitle(docTypeId);
   const isCRLinkVisible = useCRLink(docTypeId);
+  const docTypeAcronym = dataProp?.document?.documentType?.documentTypeAcronym;
 
   const outputDocumentTypeName = useSelector((state: ApplicationState) =>
     formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
@@ -102,7 +103,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         )}
         {
           isTitleVisible &&
-          <SummaryField label="document.title" value={name} />
+          <SummaryField label={`common.title.${docTypeAcronym}`} value={name} />
         }
         {
           isTrainingVisible &&
@@ -113,7 +114,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         }
         {
           isDescriptionVisible &&
-          <SummaryFieldWithHtml label="common.description" value={description} />
+          <SummaryFieldWithHtml label={`common.description.${docTypeAcronym}`} value={description} />
         }
         {formTemplate && (
           <SummaryField
