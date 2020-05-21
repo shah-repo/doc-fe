@@ -48,12 +48,14 @@ const FBPOApprovalMatrixForm: React.FunctionComponent<FBPOApprovalMatrixFormProp
           label="document.revision.selected.groups"
           multiple={true}
           optionId={FBAutocompleteAsyncOption.officialGroups}
+          optionValueType="id"
         />
         <FBAutocompleteAsync
           name={`signatures.${level - 1}.employees`}
           label="document.revision.selected.users"
           multiple={true}
           optionId={FBAutocompleteAsyncOption.employees}
+          optionValueType="id"
         />
       </Box>) )}
     {children}

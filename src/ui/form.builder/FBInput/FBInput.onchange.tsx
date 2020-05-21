@@ -67,7 +67,10 @@ export const withFBOnChange = <T extends FBInputProps>(
         value = multiple
           ? _.map(value, (v) => v[optionValueKey])
           : value[optionValueKey];
+      } else if (optionValueType === "id") {
+        value = _.map(value, (v) => ({ id: v[optionValueKey] }));
       }
+      console.log(value);
       formState?.setFieldValue(name, value);
     }
 
