@@ -40,10 +40,12 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
 
     handleCancel = () => {
       const formValue: Partial<FBApprovalMatrixFieldData> = formState?.getFieldValue(name);
-      formState?.setFieldValue(name, {
-        ...formValue,
-        approvalMatrix: formValue?.approvalMatrix?.pop(),
-      });
+      if (formValue?.approvalMatrix) {
+        formState?.setFieldValue(name, {
+          ...formValue,
+          approvalMatrix: formValue?.approvalMatrix.splice(-1, 1),
+        });
+      }
       approvalMatrixFieldState?.setMode("none");
     };
 
