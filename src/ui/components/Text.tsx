@@ -17,8 +17,8 @@ const Text: React.FunctionComponent<TextProps> = ({
 }: TextProps) => {
   const [hasTranslation, text] = React.useMemo(() => {
     const stringToCheck = message || translation;
-    if (!stringToCheck) {
-      return [false, ""];
+    if (!stringToCheck || typeof stringToCheck !== "string") {
+      return [false, stringToCheck];
     }
 
     if (isTranslation(stringToCheck)) {

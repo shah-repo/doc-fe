@@ -10,6 +10,8 @@ export type FBPurchaseOrderProps =
   mode?: FBPurchaseOrderMode;
 };
 
+export type FBPurchaseOrderItemType = "product" | "service";
+
 export interface FBPurchaseOrderItem {
   id: string;
   index: number;
@@ -29,6 +31,7 @@ export interface FBPurchaseOrderItem {
   tax: boolean;
   received?: number;
   receivedList?: any[];
+  type: FBPurchaseOrderItemType;
 }
 
 export interface FBPurchaseOrderCalculation {
@@ -36,6 +39,10 @@ export interface FBPurchaseOrderCalculation {
   tax: string;
   totalAmount: string;
   shippingCost: string;
+  currency: FBCurrency;
+  exchangeRate: number;
+  totalInUSD: string;
+  dateOfExchangeRate: string;
 }
 
 export type FBPurchaseOrderValue = FBPurchaseOrderCalculation
@@ -46,3 +53,5 @@ export type FBPurchaseOrderValue = FBPurchaseOrderCalculation
 export type FBPurchaseOrderConstructor = FBPurchaseOrderValue & {
   documentId?: string;
 };
+
+export type FBCurrency = "USD" | "EUR" | "GBP";

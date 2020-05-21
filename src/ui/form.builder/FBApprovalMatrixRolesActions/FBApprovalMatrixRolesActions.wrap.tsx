@@ -1,6 +1,6 @@
 import React from "react";
 import { FBApprovalMatrixRolesActionsProps } from ".";
-import { FB } from "..";
+import { FB, FBApprovalRole } from "..";
 
 export const withFBApprovalMatrixRolesActions = <T extends FBApprovalMatrixRolesActionsProps>(
   Component: React.FunctionComponent<T>
@@ -15,7 +15,7 @@ export const withFBApprovalMatrixRolesActions = <T extends FBApprovalMatrixRoles
 
     handleAdd = () => {
       const formValues = formState?.getValues();
-      approvalMatrixFieldState?.addApprovalRole(formValues);
+      approvalMatrixFieldState?.addApprovalRole(formValues as FBApprovalRole);
       dialogState?.closeDialog();
     };
 

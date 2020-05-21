@@ -11,6 +11,7 @@ describe("Header Info tests", () => {
     status: faker.lorem.word(),
     id: faker.lorem.word(),
     name: faker.lorem.word(),
+    documentTypeAcronym: faker.lorem.word(),
   };
 
   const getWrapper = (props: Partial<Props> = {}) => mount(
@@ -19,7 +20,8 @@ describe("Header Info tests", () => {
 
   it("Chip sets prop label correctly", () => {
     const wrapper = getWrapper();
-    expect((wrapper.find(Chip).find("Text")).prop("message")).toEqual(defaultProps.status);
+    expect((wrapper.find(Chip).find("Text")).prop("message"))
+      .toEqual(`${defaultProps.status}.${defaultProps.documentTypeAcronym}`);
   });
 
   it("Id is displayed correctly", () => {

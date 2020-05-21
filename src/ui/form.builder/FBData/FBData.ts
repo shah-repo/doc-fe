@@ -1,9 +1,12 @@
 import _ from "lodash";
-import { FB, FBActionOptionProps, FBAutocompleteAsyncConfig, FBEditorPropertiesOption, FBEditorPropertiesType, FBInputType, FBOption, FBSchemaProps } from "..";
+import { FB, FBActionOptionProps, FBAutocompleteAsyncConfig, FBEditorPropertiesOption, FBEditorPropertiesType, FBInputType, FBOption } from "..";
+import { FBCurrencyOption } from "../FBPurchaseOrderTable";
+import { FBSchemaProps } from "../FBSchema";
 import actionOptions from "./actionOptions.json";
 import additionalSchema from "./additionalSchema.json";
 import approvalMatrixRoleSchema from "./approvalMatrixRoleSchema.json";
 import autocompleteOptions from "./autocompleteOptions.json";
+import currencyOptions from "./currencyOptions.json";
 import editorProperties from "./editorProperties.json";
 import editorPropertiesControl from "./editorPropertiesControl.json";
 import requirementOptions from "./requirementOptions.json";
@@ -47,6 +50,10 @@ export class FBData {
 
   public static get requirementOptions(): FBOption[] {
     return requirementOptions;
+  }
+
+  public static get currencyOptions(): FBCurrencyOption[] {
+    return currencyOptions as FBCurrencyOption[];
   }
 
   public static additionalSchema(type: FBInputType): Partial<FBSchemaProps>[] {

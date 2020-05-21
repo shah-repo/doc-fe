@@ -1,12 +1,12 @@
 import { List } from "@material-ui/core";
 import classNames from "classnames";
 import React, { useCallback, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { Nullable } from "../../state/ducks/common";
-import { DocumentRevision, documentRevisionsActions } from "../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
+import { ApplicationState } from "../../state/reducers";
 import SummaryInfo from "../common/summary/SummaryInfo";
-import Date from "../components/Date";
 import Text from "../components/Text";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import { styles } from "./DocumentRevisionList.container.styles";
@@ -32,6 +32,8 @@ DocumentRevisionListContainerProps
   selectedDocumentRevision,
   documentRevisionId,
 }) => {
+  const document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, documentId));
+  const { documentTypeAcronym: acronym } = document?.documentType || {};
   const classes = styles();
   const dispatch = useDispatch();
   const loadDocumentAction = useCallback(() => {
@@ -72,7 +74,7 @@ DocumentRevisionListContainerProps
                     documentRevision.revisionStage,
                     documentRevision.revisionChangeType,
                   )}
-                        &nbsp; - <Text message={documentRevision.status} />
+                        &nbsp; - <Text message={`${documentRevision.status}.${acronym}`} />
                 </div>
               </NavLink>
               <NavLink
@@ -92,12 +94,8 @@ DocumentRevisionListContainerProps
                 <SummaryInfo
                   label="common.released"
                   value={
-                    <Date
-                      value={
-                        documentRevision.obsoletedAt ||
-                              documentRevision.releasedAt
-                      }
-                    />
+                    documentRevision.obsoletedAt ||
+                              documentRevision.releasedAt as string
                   }
                 />
               </NavLink>

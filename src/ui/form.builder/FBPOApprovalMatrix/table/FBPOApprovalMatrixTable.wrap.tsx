@@ -86,7 +86,7 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
     };
 
     useObserver(() => {
-      approvalLevels = poamState?.poam.approvalLevels;
+      approvalLevels = poamState?.poam?.approvalLevels;
     });
 
     return Component({

@@ -1,8 +1,12 @@
 import React, { useRef, useState } from "react";
+import { useIntl } from "react-intl";
+import { useSelector } from "react-redux";
 import { ReactComponent as BadgeIcon } from "../../../assets/images/badge-15.svg";
 import { ReactComponent as NoteIcon } from "../../../assets/images/note.svg";
 import { ReactComponent as TimelineIcon } from "../../../assets/images/timeline.svg";
+import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { ApplicationState } from "../../../state/reducers";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
 import AccessPermissionsContainer from "../accessPermissions/AccessPermissions.container";
 import DocumentRevisionListContainer from "../DocumentRevisionList.container";
@@ -31,8 +35,10 @@ SidebarContainerProps
   sidebar,
   openSidebar,
 }) => {
-
+  const document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, documentId));
+  const { documentTypeAcronym: acronym } = document?.documentType || {};
   const [indexNumber, setIndex] = useState(0);
+  const intl = useIntl();
 
 
   const inputRef = useRef(null);
@@ -41,7 +47,9 @@ SidebarContainerProps
     {
       icon: <NoteIcon />,
       details: {
-        title: "Versions",
+        title: intl.formatMessage({
+          id: `document.revision.docVersion.${acronym}`,
+        }),
         component: <DocumentRevisionListContainer
           documentRevisions={docRevsWithoutCanceled}
           documentId={documentId}

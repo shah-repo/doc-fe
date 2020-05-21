@@ -1,6 +1,8 @@
 import * as React from "react";
+import { useMemo } from "react";
+import { useSelector } from "react-redux";
 import { DocumentRevisionDocument } from "../../../../state/ducks/documentRevisions";
-import { DocumentTypeByIdState } from "../../../../state/ducks/documentRevisions/documentType";
+import { DocumentTypeByIdState, documentTypeSelectors, DynamicUIDocTypes } from "../../../../state/ducks/documentRevisions/documentType";
 import { DocumentProposedIdSetAction } from "../../../../state/ducks/documents";
 import InputField from "../../../components/forms/fields/Input";
 
@@ -8,15 +10,29 @@ interface Props {
   isDisabled: boolean;
   document?: Partial<DocumentRevisionDocument>;
   documentTypesById: DocumentTypeByIdState;
+  documentTypeId?: string;
   setDocId: ((docId: string) => DocumentProposedIdSetAction) | undefined;
 }
 
 const DocIdInput: React.FunctionComponent<Props> = ({
+  documentTypeId = "",
   isDisabled,
   document = {},
   documentTypesById,
   setDocId,
 }) => {
+  const documentType = useSelector(documentTypeSelectors.byId)[documentTypeId];
+  const isVisible = useMemo(() => {
+    switch (documentType?.documentTypeAcronym) {
+      case DynamicUIDocTypes.PO:
+      case DynamicUIDocTypes.RC:
+      case DynamicUIDocTypes.WO:
+      case DynamicUIDocTypes.SUP:
+        return false;
+      default:
+        return true;
+    }
+  }, [documentType]);
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     const { documentType } = document;
@@ -37,6 +53,10 @@ const DocIdInput: React.FunctionComponent<Props> = ({
     }
     setDocId(value);
   };
+
+  if (!isVisible) {
+    return null;
+  }
 
   return (
     <InputField

@@ -12,6 +12,12 @@ export const compareValuesToSubmit = (initialValues, values, transformMethod) =>
   const formInputDiff = {};
 
   for (const [key, value] of Object.entries(transformedValues)) {
+    if (key === "formDocument") {
+      if ((value as any)?.id !== transformedInitialValues.formDocument?.id) {
+        diff[key] = value;
+      }
+      continue;
+    }
     if (!_.isEqual(value, transformedInitialValues[key])) {
       diff[key] = value;
     }

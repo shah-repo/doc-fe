@@ -1,4 +1,4 @@
-import { FBFormProps, FBInputProps } from "..";
+import { FBFormProps, FBInputProps, FBPurchaseOrderItem } from "..";
 import { FBAutocompleteProps } from "../FBAutocomplete";
 
 export type FBPurchaseOrderFormProps =
@@ -8,4 +8,6 @@ export type FBPurchaseOrderFormProps =
   handleTotal?: FBInputProps["onChange"];
   getOptionDisabled?: FBAutocompleteProps["getOptionDisabled"];
   getOptionLabel?: FBAutocompleteProps["getOptionLabel"];
+  handleTypeChange?: FBInputProps["onChange"];
+  type?: FBPurchaseOrderItem["type"];
 };

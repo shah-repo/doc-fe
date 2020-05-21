@@ -6,7 +6,7 @@ TEST_RESULTS_DIR="${BITBUCKET_CLONE_DIR}/eslint-results"
 # Install Dependencies
 echo "-------- Installing Dependencies --------"
 
-yarn install --pure-lockfile
+yarn install --frozen-lockfile
 
 # Executing Test
 echo "-------- Executing Lint Tests --------"

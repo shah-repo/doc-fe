@@ -71,8 +71,8 @@ DocumentRevisionUpdateContainerProps
     );
   }
 
-  const onSubmit = (values: DocumentRevisionFormValues) => {
-    const dataToSubmit = compareValuesToSubmit(initialValues, values, toDocumentRevisionEditRequestBody);
+  const onSubmit = (values: DocumentRevisionFormValues, helpers, cleanInitialValues) => {
+    const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
 
     if (isEmpty(dataToSubmit)) {
       return;
