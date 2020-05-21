@@ -4,7 +4,7 @@ import { FBFormState } from "..";
 import { toMembersOptions } from "../../group.management/utils/transform";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
-import { POApprovalMatrix, POApprovalMatrixLevel } from "./FBPOApprovalMatrix.types";
+import { FBPOApprovalMatrixConstructor, POApprovalMatrix, POApprovalMatrixLevel } from "./FBPOApprovalMatrix.types";
 
 const DEFAULT_POAM: POApprovalMatrix = {
   approvalLevels: [] as POApprovalMatrixLevel[],
@@ -16,9 +16,10 @@ export class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrix, null> {
   public url = FBEndpoint.POApprovalMatrix;
   private formState?: FBFormState;
 
-  public constructor(formState?: FBFormState) {
+  public constructor({ formState, approvalLevels }: FBPOApprovalMatrixConstructor) {
     super();
     this.formState = formState;
+    this.poam.approvalLevels = approvalLevels || [];
   }
 
   @action public setItems = (approvalLevels: POApprovalMatrixLevel[]) => {
