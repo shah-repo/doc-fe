@@ -18,6 +18,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   disabled,
   refresh,
   getOptionDisabled,
+  forceDefault,
   ...props
 }) =>  (
   <>
@@ -28,7 +29,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
         </Typography>
       </Box>
     )}
-    <FBInput {...props} {...{ multiple, disabled }} type="autocomplete">
+    <FBInput {...props} {...{ multiple, disabled, defaultValue, forceDefault }} type="autocomplete">
       <Autocomplete
         {...{ options, multiple, getOptionLabel, defaultValue, getOptionDisabled }}
         renderInput={(params: RenderInputParams) => (

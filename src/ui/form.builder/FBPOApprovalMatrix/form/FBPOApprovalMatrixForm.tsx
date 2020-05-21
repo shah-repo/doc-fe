@@ -49,6 +49,7 @@ const FBPOApprovalMatrixForm: React.FunctionComponent<FBPOApprovalMatrixFormProp
           multiple={true}
           optionId={FBAutocompleteAsyncOption.officialGroups}
           optionValueType="id"
+          defaultValue={[]}
         />
         <FBAutocompleteAsync
           name={`signatures.${level - 1}.employees`}
@@ -56,6 +57,7 @@ const FBPOApprovalMatrixForm: React.FunctionComponent<FBPOApprovalMatrixFormProp
           multiple={true}
           optionId={FBAutocompleteAsyncOption.employees}
           optionValueType="id"
+          defaultValue={[]}
         />
       </Box>) )}
     {children}
