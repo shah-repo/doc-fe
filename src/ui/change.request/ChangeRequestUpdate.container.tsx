@@ -60,7 +60,7 @@ ChangeRequestUpdateContainerProps
     async.start(
       save,
       changeRequest.id,
-      dataToSubmit as ChangeRequestEditRequestBody,
+      dataToSubmit as unknown as ChangeRequestEditRequestBody,
       async,
     );
   };

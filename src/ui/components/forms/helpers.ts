@@ -31,9 +31,9 @@ export const compareValuesToSubmit = (initialValues, values, transformMethod) =>
     }
   }
 
-  if (_.isEmpty(formInputDiff)) {
-    return diff;
-  }
+  // if (_.isEmpty(formInputDiff)) {
+  //   return diff;
+  // }
 
   return {
     ...diff,

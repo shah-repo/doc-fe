@@ -1,7 +1,7 @@
 import { ButtonProps } from "@material-ui/core";
 import { Dictionary } from "lodash";
 import { FBPOApprovalMatrixState } from ".";
-import { FBFormProps, FBInputProps } from "..";
+import { FBFormProps, FBFormState, FBInputProps } from "..";
 import { Group } from "../../../state/ducks/auth/types";
 import { Employee } from "../../../state/ducks/company/types";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
@@ -84,4 +84,9 @@ export type FBPOApprovalMatrixFormActionsProps =
   handleAdd?: ButtonProps["onClick"];
   handleCancel?: ButtonProps["onClick"];
 };
+
+export interface FBPOApprovalMatrixConstructor {
+  formState?: FBFormState;
+  approvalLevels?: POApprovalMatrixLevel[];
+}
 
