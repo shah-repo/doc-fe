@@ -223,7 +223,11 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           isDisabled={isDisabledInput}
         />
         <References document={initialValues.document} />
-        <RetrainField revisionChangeType={values.revisionChangeType} isDisabled={isDisabledInput} />
+        <RetrainField
+          revisionChangeType={values.revisionChangeType}
+          isDisabled={isDisabledInput}
+          documentTypeId={documentTypeId}
+        />
         <AttachmentsField isDisabled={isDisabledInput} />
         {showRevisionTypeChange && <RevisionTypeChange {...{ documentTypeId }} isDisabled={isDisabledInput} />}
         {

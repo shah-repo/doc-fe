@@ -3,9 +3,9 @@ import { uniqBy } from "lodash";
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
-import { documentTypeSelectors, DynamicUIDocTypes } from "../../../state/ducks/documentRevisions/documentType";
+import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { TextFieldSelect } from "../../components/forms/fields/TextFieldSelect/container";
-import { required, validator } from "../../components/forms/fields/validators";
+import useTitle from "../../hooks/docCustomization/useTitle";
 
 interface OwnProps {
   name: string;
@@ -22,16 +22,7 @@ export const Title: React.FunctionComponent<Props> = ({
   ...props
 }) => {
   const documentType = useSelector(documentTypeSelectors.byId)[documentTypeId];
-  const [isVisible, validators] = useMemo(() => {
-    switch (documentType?.documentTypeAcronym) {
-      case DynamicUIDocTypes.WO:
-      case DynamicUIDocTypes.RC:
-      case DynamicUIDocTypes.PO:
-        return [false];
-      default:
-        return [true, validator(required)];
-    }
-  }, [documentType]);
+  const [isVisible, validators] = useTitle(documentTypeId);
   const documents = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
   const options = useMemo(
     () =>

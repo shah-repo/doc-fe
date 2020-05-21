@@ -13,6 +13,9 @@ import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import { FBSchemaProps, FBWorkspace } from "../../form.builder";
+import useDescription from "../../hooks/docCustomization/useDescription";
+import useTitle from "../../hooks/docCustomization/useTitle";
+import useTraining from "../../hooks/docCustomization/useTraining";
 import SummaryHeader from "../header/SummaryHeader";
 import Attachment from "./attachment";
 import ChangeRequestLink from "./changeRequestLink";
@@ -56,6 +59,10 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const { docId } = formDocument?.document || {};
   const FBIsOutput = Boolean(docId && !_.isEmpty(docId));
   const FBIsActive = formInput || formTemplate || formDocument;
+  const docTypeId = dataProp?.document?.documentType?.id;
+  const isTrainingVisible = useTraining(docTypeId);
+  const [isDescriptionVisible] = useDescription(docTypeId);
+  const [isTitleVisible] = useTitle(docTypeId);
 
   const outputDocumentTypeName = useSelector((state: ApplicationState) =>
     formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
@@ -88,12 +95,21 @@ export const Presenter: React.FunctionComponent<Props> = ({
             <DocumentRevisionOutputInfo formDocument={dataProp?.formDocument} />
           </Box>
         )}
-        <SummaryField label="document.title" value={name} />
-        <SummaryField
-          label="document.revision.trainingRequired"
-          value={<Text translation={retrain ? "common.yes" : "common.no"} />}
-        />
-        <SummaryFieldWithHtml label="common.description" value={description} />
+        {
+          isTitleVisible &&
+          <SummaryField label="document.title" value={name} />
+        }
+        {
+          isTrainingVisible &&
+          <SummaryField
+            label="document.revision.trainingRequired"
+            value={<Text translation={retrain ? "common.yes" : "common.no"} />}
+          />
+        }
+        {
+          isDescriptionVisible &&
+          <SummaryFieldWithHtml label="common.description" value={description} />
+        }
         {formTemplate && (
           <SummaryField
             label="document.output.type"

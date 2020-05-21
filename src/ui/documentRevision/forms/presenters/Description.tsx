@@ -1,10 +1,9 @@
+import { FieldValidator } from "formik";
 import * as React from "react";
-import { useMemo } from "react";
-import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
-import { documentTypeSelectors, DynamicUIDocTypes } from "../../../../state/ducks/documentRevisions/documentType";
+import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import RichTextEditor from "../../../components/forms/fields/RichTextEditor";
-import { required, validator } from "../../../components/forms/fields/validators";
+import useDescription from "../../../hooks/docCustomization/useDescription";
 
 interface Props {
   isQms: boolean;
@@ -17,25 +16,8 @@ const Description: React.FunctionComponent<Props> = ({
   isQms,
   isDisabled = false,
 }) => {
-  const intl = useIntl();
+  const [isVisible, placeholder, validators] = useDescription(documentTypeId, isQms);
   const documentType = useSelector(documentTypeSelectors.byId)[documentTypeId];
-  const [placeholder, isVisible, validators] = useMemo(() => {
-    const placeholder = isQms ?
-      "" :
-      intl.formatMessage({ id: "document.revision.no.qms.message" });
-    let isVisible = true;
-    let validators = isQms ? validator(required) : undefined;
-
-    if (documentType?.documentTypeAcronym === DynamicUIDocTypes.RC) {
-      isVisible = false;
-      validators = undefined;
-    }
-    if (documentType?.documentTypeAcronym === (DynamicUIDocTypes.WO || DynamicUIDocTypes.PO)) {
-      validators = undefined;
-    }
-
-    return [placeholder, isVisible, validators];
-  }, [documentType, intl, isQms]);
 
   if (!isVisible) {
     return null;
@@ -45,8 +27,8 @@ const Description: React.FunctionComponent<Props> = ({
     <RichTextEditor
       name="description"
       label={`common.description.${documentType?.documentTypeAcronym}`}
-      validate={validators}
-      editorProps={{ placeholder, readOnly: isDisabled }}
+      validate={validators as FieldValidator}
+      editorProps={{ placeholder: (placeholder as string), readOnly: isDisabled }}
     />
   );
 };
