@@ -66,7 +66,7 @@ ChangeRequestUpdateContainerProps
   };
 
   return (
-    <FormContext.Provider value={{ submitOnChange: false }}>
+    <FormContext.Provider value={{ submitOnChange: true }}>
       <ChangeRequestFormContainer
         asyncState={async.asyncState}
         onSubmit={onSubmit}

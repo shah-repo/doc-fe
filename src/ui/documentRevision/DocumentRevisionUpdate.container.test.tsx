@@ -8,7 +8,7 @@ import DocumentRevisionSummaryPresenter from "../document.revision/summary/prese
 import { ASYNC_DEFAULT_STATE } from "../hooks/useAsync";
 import { DocumentRevisionUpdateContainer, DocumentRevisionUpdateContainerProps } from "./DocumentRevisionUpdate.container";
 import DocumentRevisionFormContainer from "./forms/DocumentRevisionForm.container";
-import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
+import { toDocumentRevisionFormValues } from "./forms/transform";
 
 describe("DocumentRevisionUpdateContainer tests", () => {
   const currentUserEmail = faker.internet.email();
@@ -37,14 +37,19 @@ describe("DocumentRevisionUpdateContainer tests", () => {
     const wrapper = getWrapper({ save });
 
     const form = wrapper.find(DocumentRevisionFormContainer);
-    const values = toDocumentRevisionFormValues(documentRevision);
+    const submitPayload = { description: "Changed desription" };
+    const initialValues = toDocumentRevisionFormValues(documentRevision);
+    const values = toDocumentRevisionFormValues({
+      ...documentRevision,
+      ...submitPayload,
+    });
 
-    form.prop("onSubmit")(values);
+    form.prop("onSubmit")(values, {} as any, initialValues);
 
     expect(save).toHaveBeenCalledTimes(1);
     expect(save).toHaveBeenCalledWith(
       documentRevision.id,
-      toDocumentRevisionEditRequestBody(values),
+      submitPayload,
       expect.anything(),
     );
   });

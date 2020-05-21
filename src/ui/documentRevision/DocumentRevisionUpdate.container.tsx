@@ -1,9 +1,11 @@
+import { isEmpty } from "lodash";
 import React, { useMemo } from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
-import { DocumentRevision, documentRevisionsActions } from "../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionEditRequestBody, documentRevisionsActions } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { FormContext } from "../components/forms/FormContext";
+import { compareValuesToSubmit } from "../components/forms/helpers";
 import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";
 import useAsync from "../hooks/useAsync";
 import useDocumentTitle from "../hooks/useDocumentTitle";
@@ -69,30 +71,25 @@ DocumentRevisionUpdateContainerProps
     );
   }
 
-  const onSubmit = (values: DocumentRevisionFormValues) => {
-    /*
-    const dataToSubmit = compareValuesToSubmit(initialValues, values, toDocumentRevisionEditRequestBody);
-
-    console.log(dataToSubmit);
+  const onSubmit = (values: DocumentRevisionFormValues, helpers, cleanInitialValues) => {
+    const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
 
     if (isEmpty(dataToSubmit)) {
       return;
     }
 
     async.reset();
-    */
 
     async.start(
       save,
       documentRevision.id,
-      // dataToSubmit as DocumentRevisionEditRequestBody,
-      toDocumentRevisionEditRequestBody(values),
+      dataToSubmit as DocumentRevisionEditRequestBody,
       async,
     );
   };
 
   return (
-    <FormContext.Provider value={{ submitOnChange: false }}>
+    <FormContext.Provider value={{ submitOnChange: true }}>
       <DocumentRevisionForm
         doNotPrompt={doNotPrompt}
         asyncState={async.asyncState}

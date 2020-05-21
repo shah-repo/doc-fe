@@ -38,6 +38,7 @@ interface OwnProps {
   onSubmit: (
     values: DocumentRevisionFormValues,
     actions: FormikActions<DocumentRevisionFormValues>,
+    cleanInitialValues?: DocumentRevisionFormValues,
   ) => void;
   showRevisionTypeChange?: boolean;
   setDocId?: typeof documentsActions.setDocumentProposedId;
@@ -141,7 +142,7 @@ DocumentRevisionFormContainerProps
   const { docId: outputGroup } = cleanInitialValues.formDocument?.document || {};
   let { schema = [] } = cleanInitialValues?.formTemplate || cleanInitialValues?.formDocument?.formTemplate || {};
   schema = _.union(formSchema, schema);
-  const { formInput } = cleanInitialValues || {};
+  const formInput = useMemo(() => cleanInitialValues ? { ...cleanInitialValues.formInput } : {}, [cleanInitialValues]);
   let mode: Partial<FBWorkspaceMode> = "none";
   if (formGroup && formGroup.includes("FORM")) {
     mode = "design";
@@ -203,7 +204,7 @@ DocumentRevisionFormContainerProps
         </Box>
         <Formik
           initialValues={cleanInitialValues}
-          onSubmit={onSubmit}
+          onSubmit={(values, helpers) => onSubmit(values, helpers, cleanInitialValues) }
           enableReinitialize={true}
         >
           {render}
