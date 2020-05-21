@@ -326,6 +326,7 @@
   "document.access.permissions": "Access Permissions",
   "document.request.access": "Request access",
   "document.email.sent": "An email with your request has been sent.",
+  "document.title": "Document Title",
   "documentRevision.revise": "Revise Document",
   "documentRevision.form.references": "References",
   "documentRevision.form.processChange": "Process change",

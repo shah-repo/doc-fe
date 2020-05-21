@@ -12,8 +12,6 @@ const Attachments: React.FunctionComponent<Props> = ({ isDisabled = false }) => 
   <Box marginBottom="33px">
     <HeaderField
       dataProp="common.attachments"
-      variant="regular"
-      color="secondary"
     />
     <AttachmentField name="attachments" component="field" disabled={isDisabled}/>
     {!isDisabled && <AttachmentIconField name="attachments" />}

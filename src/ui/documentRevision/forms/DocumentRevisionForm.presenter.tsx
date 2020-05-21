@@ -154,6 +154,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       includeEmpty={false}
     />
   );
+  console.log(workspaceState?.mode);
 
   return (
     <Grid
@@ -164,10 +165,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       xs={12}
     >
       <FormHeader/>
-      {
-        workspaceState?.mode === "form" &&
-        <DocumentRevisionOutputInfo formDocument={values.formDocument} />
-      }
       <FormWrapper
         dirty={dirty}
         initialValues={initialValues}
@@ -184,7 +181,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           onDirtyFlagChange={onDirtyFlagChange}
         />
         <Title name="name" label="common.title" disabled={isDisabledInput}/>
-
         <Description isQms={docInfo.isQms} isDisabled={isDisabledInput}/>
         <DocumentTypeSelect
           outputDocumentTypes={initialValues.formDocument?.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]}
@@ -241,6 +237,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <div ref={FBContainer} />
           </Box>
         }
+        {workspaceState?.mode === "form" && <DocumentRevisionOutputInfo formDocument={values.formDocument} />}
       </FormWrapper>
     </Grid>
   );

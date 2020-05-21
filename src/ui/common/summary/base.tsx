@@ -9,13 +9,13 @@ const Base: React.FunctionComponent<Props> = ({ label, value, noValueOption = "-
   <Grid item={true} xs={12}>
     <Grid container={true} spacing={1}>
       <Grid item={true} xs={12}>
-        <Typography variant="h5" id="SummaryBaseProps-label" style={{ fontWeight: "bold" }}>
+        <Typography variant="h6" id="SummaryBaseProps-label">
           {label && <Text message={label} />}
         </Typography>
       </Grid>
       <Grid item={true} xs={12}>
-        {value && <Typography id="SummaryBaseProps-values" variant="h5">{value}</Typography>}
-        {!value && <Typography id="SummaryBaseProps-noValues" variant="h5">{noValueOption}</Typography>}
+        {value && <Typography id="SummaryBaseProps-values" variant="h6">{value}</Typography>}
+        {!value && <Typography id="SummaryBaseProps-noValues" variant="h6">{noValueOption}</Typography>}
       </Grid>
     </Grid>
   </Grid>

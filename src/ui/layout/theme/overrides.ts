@@ -2,6 +2,7 @@ import { Theme } from "@material-ui/core";
 import { Overrides } from "@material-ui/core/styles/overrides";
 import { WhiteLabelingColors } from "../../../state/ducks/company";
 import { FBClasses } from "../../form.builder/defaults/layout";
+import Colors from "./utils/colors";
 
 const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Overrides => ({
   MuiAppBar: {
@@ -47,9 +48,10 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       fontFamily: "Open Sans, sans-serif;",
     },
     h6: {
-      fontSize: "1.1rem",
-      fontWeight: "normal",
+      color: Colors.dark_gray,
+      fontSize: "1rem",
       fontFamily: "Open Sans, sans-serif;",
+      fontWeight: "bold",
     },
   },
   MuiButton: {
@@ -98,7 +100,11 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       fontFamily: "Open Sans, sans-serif;",
     },
     input: {
-      fontSize: "0.8rem",
+      "fontSize": "0.8rem",
+      "borderRadius": "4px",
+      "&.Mui-disabled": {
+        backgroundColor: Colors.white,
+      },
     },
   },
   MuiSelect: {
@@ -112,6 +118,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
     },
     select: {
       paddingLeft: appTheme.spacing(0.5),
+      borderRadius: "4px",
     },
   },
   MuiTooltip: {
@@ -159,9 +166,10 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
           borderWidth: "0px!important",
         },
       },
+      backgroundColor: Colors.white,
     },
     notchedOutline: {
-      borderRadius: 0,
+      borderRadius: 4,
     },
   },
   MuiDialogActions: {

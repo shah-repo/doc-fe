@@ -4,7 +4,7 @@ import * as React from "react";
 import Select, { createFilter } from "react-select";
 import { SelectComponentsProps } from "react-select/base";
 import { ValueType } from "react-select/src/types";
-import { TypographyColor, TypographyProps, TypographySize } from "../../../../../state/ducks/common";
+import { TypographyProps } from "../../../../../state/ducks/common";
 import Text from "../../../../components/Text";
 import { useFormContext } from "../../FormContext";
 import Field, { FieldOwnProps } from "../Field";
@@ -50,10 +50,7 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
   return (
     <Field {...fieldProps} label={undefined}>
       <Box mb={0.3}>
-        <Typography
-          variant={TypographySize[fieldProps.size || "md"]}
-          color={TypographyColor[fieldProps.color || "secondary"]}
-        >
+        <Typography variant="h6">
           <Text message={fieldProps.label} />
         </Typography>
       </Box>
