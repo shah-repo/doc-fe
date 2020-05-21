@@ -26,6 +26,9 @@ export const useFormContext = () => {
       case "form":
         formik.setValues({
           ...values,
+          formDocument: {
+            id: values.formDocument?.id,
+          },
           formInput: formState?.getValues(),
         });
         break;
