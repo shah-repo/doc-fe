@@ -40,9 +40,6 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       case "form":
         formik.setValues({
           ...values,
-          formDocument: {
-            id: values.formDocument?.id,
-          },
           formInput: formState?.getValues(),
         });
         break;
