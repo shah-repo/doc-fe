@@ -1,6 +1,6 @@
 import { Box, Grid } from "@material-ui/core";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
-import { get } from "lodash";
+import _, { get } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
@@ -36,6 +36,7 @@ interface OwnProps {
   onSubmit: (
     values: DocumentRevisionFormValues,
     actions: FormikActions<DocumentRevisionFormValues>,
+    cleanInitialValues?: DocumentRevisionFormValues,
   ) => void;
   showRevisionTypeChange?: boolean;
   setDocId?: typeof documentsActions.setDocumentProposedId;
@@ -134,10 +135,11 @@ DocumentRevisionFormContainerProps
 
   // FB config
   const FBContainer = React.useRef(null);
-  const { group: formGroup } = cleanInitialValues.document?.documentType || {};
+  const { group: formGroup, schema: formSchema = [] } = cleanInitialValues.document?.documentType || {};
   const { docId: outputGroup } = cleanInitialValues.formDocument?.document || {};
-  const { schema } = cleanInitialValues?.formTemplate || cleanInitialValues?.formDocument?.formTemplate || {};
-  const { formInput } = cleanInitialValues || {};
+  let { schema = [] } = cleanInitialValues?.formTemplate || cleanInitialValues?.formDocument?.formTemplate || {};
+  schema = _.union(formSchema, schema);
+  const formInput = useMemo(() => cleanInitialValues ? { ...cleanInitialValues.formInput } : {}, [cleanInitialValues]);
   let mode: Partial<FBWorkspaceMode> = "none";
   if (formGroup && formGroup.includes("FORM")) {
     mode = "design";
@@ -195,7 +197,7 @@ DocumentRevisionFormContainerProps
         </Box>
         <Formik
           initialValues={cleanInitialValues}
-          onSubmit={onSubmit}
+          onSubmit={(values, helpers) => onSubmit(values, helpers, cleanInitialValues) }
           enableReinitialize={true}
         >
           {render}

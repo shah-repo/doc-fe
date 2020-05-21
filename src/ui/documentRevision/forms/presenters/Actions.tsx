@@ -28,29 +28,20 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   function setFBValue() {
     switch (workspaceState?.getMode()) {
       case "design":
-        formik.setValues({
-          ...values,
-          formTemplate: {
-            outputDocumentTypes: (values.outputDocumentTypes || [])
-              .map((outputDoc) => ({ id: outputDoc.value }) ),
-            schema: workspaceState?.getSchema(),
-          },
+        formik.setFieldValue("formTemplate", {
+          outputDocumentTypes: (values.outputDocumentTypes || [])
+            .map((outputDoc) => ({ id: outputDoc.value }) ),
+          schema: workspaceState?.getSchema(),
         });
         break;
       case "form":
-        formik.setValues({
-          ...values,
-          formDocument: {
-            id: values.formDocument?.id,
-          },
-          formInput: formState?.getValues(),
+        formik.setFieldValue("formDocument", {
+          id: values.formDocument?.id,
         });
+        formik.setFieldValue("formInput", formState?.getValues());
         break;
       default:
-        formik.setValues({
-          ...values,
-          formTemplate: undefined,
-        });
+        formik.setFieldValue("formTemplate", undefined);
     }
   }
   const onFormClick = () => {

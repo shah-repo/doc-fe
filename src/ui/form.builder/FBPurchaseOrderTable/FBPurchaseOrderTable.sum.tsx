@@ -5,6 +5,7 @@ import TableRow from "@material-ui/core/TableRow";
 import CheckBoxIcon from "@material-ui/icons/CheckBox";
 import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 import React from "react";
+import { FormattedNumber } from "react-intl";
 import { FBMapWrapper, FBPurchaseOrderItem, FBPurchaseOrderTableSumProps, FBTableCell } from "..";
 
 
@@ -12,6 +13,7 @@ const FBPurchaseOrderTableSum: React.FunctionComponent<FBPurchaseOrderTableSumPr
   handleItem,
   classes,
   items = [],
+  calculation,
 }) => (
   <Table className={classes?.table}>
     <TableHead>
@@ -31,7 +33,13 @@ const FBPurchaseOrderTableSum: React.FunctionComponent<FBPurchaseOrderTableSumPr
               {item.tax && <CheckBoxIcon className="FBIcon-root" fontSize="small" />}
               {!item.tax && <CheckBoxOutlineBlankIcon className="FBIcon-root" fontSize="small" />}
             </FBTableCell>
-            <FBTableCell label={`$${item.totalAmount}`} align="right" />
+            <FBTableCell align="right" >
+              <FormattedNumber
+                value={Number(item.totalAmount)}
+                style="currency"
+                currency={calculation?.currency}
+              />
+            </FBTableCell>
           </TableRow>
         )}
       </FBMapWrapper>

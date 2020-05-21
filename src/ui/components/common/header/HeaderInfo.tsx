@@ -9,12 +9,14 @@ export interface Props {
   status: string;
   id: string;
   name: string;
+  documentTypeAcronym?: string;
 }
 
 export const HeaderInfo: React.FunctionComponent<Props> = ({
   status,
   name,
   id,
+  documentTypeAcronym,
 }) => {
   const classes = styles();
   const isStatusReleased = status === DocumentRevisionStatus.Released;
@@ -26,7 +28,7 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
   return (
     <Grid container={true} xs={6} alignItems="center">
       <Chip
-        label={<Text message={status} />}
+        label={<Text message={`${status}.${documentTypeAcronym}`} />}
         id="HeaderInfo-status"
         className={classNames(classes.statusDefault, {
           [classes.statusReleased]: isStatusReleased,

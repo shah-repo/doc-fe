@@ -1,12 +1,14 @@
-import _, { Dictionary } from "lodash";
+import _, { Dictionary, template } from "lodash";
 import { action, observable, set } from "mobx";
 import moment from "moment";
 import { FB, FBPurchaseOrderCalculation, FBPurchaseOrderConstructor, FBPurchaseOrderItem } from "..";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import { TAX_RATE } from "../helpers/constants";
+import { FBCurrency } from "./FBPurchaseOrder.types";
 
 export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
+  public exchangeRate: FBRequest<any, Dictionary<number>> = new FBRequest();
   @observable public itemTotalAmount = 0;
   @observable public items: FBPurchaseOrderItem[] = [];
   @observable public calculation: FBPurchaseOrderCalculation = {
@@ -14,6 +16,10 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     subTotal: "0.00",
     totalAmount: "0.00",
     shippingCost: "0.00",
+    currency: "USD",
+    exchangeRate: 1,
+    totalInUSD: "0.00",
+    dateOfExchangeRate: "",
   };
 
   public constructor({ documentId, ...initialValues }: FBPurchaseOrderConstructor) {
@@ -27,7 +33,7 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     const { items } = initialValues || {};
     const calculation = _.omit(initialValues, "items");
     set(this, "items", items);
-    set(this, "calculation", calculation);
+    set(this, "calculation", { ...this.calculation, ...calculation });
   }
 
   @action public setItemTotalAmount = (item?: FBPurchaseOrderItem) => {
@@ -42,6 +48,37 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     }
     set(this.calculation, "shippingCost", this.formatCost(shippingCost));
     this.calculateCost();
+  };
+
+  @action public setCurrency = async (currency: FBCurrency) => {
+    // FBInput.onchange, line 87
+    // on change is triggered twice
+    if (this.exchangeRate.loading) {
+      return;
+    }
+    const setToUsd = () => {
+      set(this.calculation, "currency", "USD");
+      set(this.calculation, "exchangeRate", 1);
+      this.calculateCost();
+    };
+    if (currency === "USD") {
+      setToUsd();
+      return;
+    }
+
+    const urlTpl = template(FBEndpoint.Currency);
+    const url = urlTpl({ symboName: currency });
+    this.exchangeRate.setUrl(url);
+
+    try {
+      const data = await this.exchangeRate.fetch();
+      set(this.calculation, "currency", currency);
+      set(this.calculation, "exchangeRate", data.rate.toFixed(2));
+      set(this.calculation, "dateOfExchangeRate", moment().format("LL"));
+      this.calculateCost();
+    } catch (e) {
+      setToUsd();
+    }
   };
 
   @action public setItem = (item?: FBPurchaseOrderItem) => {
@@ -75,11 +112,14 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     );
     const shippingCost = this.calculation.shippingCost || 0;
     const totalAmount = sum.tax + sum.subTotal + Number(shippingCost);
+    const totalInUSD = totalAmount * this.calculation.exchangeRate;
     set(this, "calculation", {
+      ...this.calculation,
       subTotal: this.formatCost(sum.subTotal),
       tax: this.formatCost(sum.tax),
       totalAmount: this.formatCost(totalAmount),
       shippingCost: this.formatCost(shippingCost),
+      totalInUSD: this.formatCost(totalInUSD),
     });
   };
 

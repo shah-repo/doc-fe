@@ -38,12 +38,13 @@ describe("DocumentRevisionUpdateContainer tests", () => {
 
     const form = wrapper.find(DocumentRevisionFormContainer);
     const submitPayload = { description: "Changed desription" };
+    const initialValues = toDocumentRevisionFormValues(documentRevision);
     const values = toDocumentRevisionFormValues({
       ...documentRevision,
       ...submitPayload,
     });
 
-    form.prop("onSubmit")(values);
+    form.prop("onSubmit")(values, {} as any, initialValues);
 
     expect(save).toHaveBeenCalledTimes(1);
     expect(save).toHaveBeenCalledWith(

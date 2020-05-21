@@ -3,7 +3,7 @@ import { createStyles, Theme } from "@material-ui/core";
 export default (theme: Theme) =>
   createStyles({
     whiteContainer: {
-      background: "#fff",
+      background: theme.palette.background.paper,
       padding: 0,
       margin: 0,
       width: "100%",
@@ -20,6 +20,7 @@ export default (theme: Theme) =>
       "paddingTop": "5px",
       "paddingBottom": "5px",
       "&:hover, &:focus, li.active > a": {
+        // TODO blue hover, refactor new colors
         background: "#EDF4FF",
         borderRadius: "5px",
       },
@@ -30,6 +31,18 @@ export default (theme: Theme) =>
       },
       "&.MuiGrid-item.MuiGrid-grid-xs-3": {
         paddingTop: theme.spacing(12),
+      },
+    },
+    sidebarItemTitle: {
+      position: "fixed",
+      background: "white",
+      zIndex: 1,
+    },
+    sidebarContent: {
+      "overflow": "auto",
+      "height": "calc(97vh - 127px)",
+      "&::-webkit-scrollbar": {
+        display: "none",
       },
     },
   });

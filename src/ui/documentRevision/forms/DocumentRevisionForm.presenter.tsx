@@ -155,6 +155,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     />
   );
   console.log(workspaceState?.mode);
+  const documentTypeId = values.document?.documentType?.id;
 
   return (
     <Grid
@@ -180,8 +181,17 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           doNotPrompt={doNotPrompt}
           onDirtyFlagChange={onDirtyFlagChange}
         />
-        <Title name="name" label="common.title" disabled={isDisabledInput}/>
-        <Description isQms={docInfo.isQms} isDisabled={isDisabledInput}/>
+        <Title
+          name="name"
+          label="common.title"
+          documentTypeId={documentTypeId}
+          disabled={isDisabledInput}
+        />
+        <Description
+          isQms={docInfo.isQms}
+          documentTypeId={documentTypeId}
+          isDisabled={isDisabledInput}
+        />
         <DocumentTypeSelect
           outputDocumentTypes={initialValues.formDocument?.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]}
           type={type}
@@ -194,6 +204,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           isDisabled={isDisabled}
           documentTypesById={documentTypesById}
           setDocId={setDocId}
+          documentTypeId={documentTypeId}
         />
         {renderRevisionStageDropdown}
         <AutocompleteField
@@ -209,9 +220,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           isDisabled={isDisabledInput}
         />
         <References document={initialValues.document} />
-        <RetrainField revisionChangeType={values.revisionChangeType} isDisabled={isDisabledInput}/>
-        <AttachmentsField isDisabled={isDisabledInput}/>
-        {showRevisionTypeChange && <RevisionTypeChange isDisabled={isDisabledInput}/>}
+        <RetrainField revisionChangeType={values.revisionChangeType} isDisabled={isDisabledInput} />
+        <AttachmentsField isDisabled={isDisabledInput} />
+        {showRevisionTypeChange && <RevisionTypeChange {...{ documentTypeId }} isDisabled={isDisabledInput} />}
         {
           (!values.status || type === "newOutput") &&
           <DocumentSecurity />

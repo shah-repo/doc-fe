@@ -84,6 +84,8 @@ export const withFBOnChange = <T extends FBInputProps>(
       if (!formState) {
         return;
       }
+      // TODO: Remove this. Check how to handle validator required with without double onchange
+      props.onChange && props.onChange(ev, value, schemaState || formState || workspaceState);
       function isSingleCheck() {
         return checkValue(ev);
       }
