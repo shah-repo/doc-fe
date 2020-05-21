@@ -3,7 +3,7 @@ import { createStyles, Theme } from "@material-ui/core";
 export default (theme: Theme) =>
   createStyles({
     whiteContainer: {
-      background: "#fff",
+      background: theme.palette.background.paper,
       padding: 0,
       margin: 0,
       width: "100%",
@@ -20,6 +20,7 @@ export default (theme: Theme) =>
       "paddingTop": "5px",
       "paddingBottom": "5px",
       "&:hover, &:focus, li.active > a": {
+        // TODO blue hover, refactor new colors
         background: "#EDF4FF",
         borderRadius: "5px",
       },
@@ -39,7 +40,7 @@ export default (theme: Theme) =>
     },
     sidebarContent: {
       "overflow": "auto",
-      "height": "calc(100vh - 127px)",
+      "height": "calc(97vh - 127px)",
       "&::-webkit-scrollbar": {
         display: "none",
       },

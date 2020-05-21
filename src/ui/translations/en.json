@@ -379,6 +379,8 @@
   "document.revision.docVersion": "Doc Versions",
   "document.revision.selected.users": "Selected Users",
   "document.revision.selected.groups": "Selected Groups",
+  "document.revision.invitation": "Start typing to invite users",
+  "document.revision.invitation.group": "Start typing to invite groups",
   "document.revision.selected.users.placeholder": "Enter the name of users to access the document",
   "document.revision.selected.groups.placeholder": "Enter the name of the user groups to access the document",
   "document.revision.download.html.error": "HTML can't be downloaded",

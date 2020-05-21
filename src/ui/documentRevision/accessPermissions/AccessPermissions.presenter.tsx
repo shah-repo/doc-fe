@@ -1,10 +1,10 @@
 import { List, Typography } from "@material-ui/core";
+import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
 import _ from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import Select, { components } from "react-select";
 import { ReactComponent as CloseIcon } from "../../../assets/images/circle-remove.svg";
-import { ReactComponent as PlusIcon } from "../../../assets/images/plus_add_icon.svg";
 import { Group } from "../../../state/ducks/auth/types";
 import { changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { Owner, TypographySize } from "../../../state/ducks/common";
@@ -164,15 +164,15 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
   };
   const intl = useIntl();
 
-  const DropdownIndicator = (props) => (
-    <components.DropdownIndicator
-      {...props}
-    >
-      <button onMouseDown={(e) => handleUpdate(e)} className={classes.accessButton}>
-        <PlusIcon width="15" height="15" />
-      </button>
-    </components.DropdownIndicator>
-  );
+  const DropdownIndicator = (props) => ( <components.DropdownIndicator
+    {...props}
+  >
+    <button onMouseDown={(e) => handleUpdate(e)} className={classes.accessButton}>
+      {(props.selectProps.menuIsOpen || props.hasValue) ?
+        <AddBoxOutlinedIcon color="primary" fontSize="small" /> :
+        <AddBoxOutlinedIcon color="disabled" fontSize="small" />}
+    </button>
+  </components.DropdownIndicator>);
   const securityGroupsIds = securityGroups.map((e: Group) => e.id);
   const groupSelectOptions = groupOptions.filter((val) => !securityGroupsIds.includes(val.value));
   const securityEmployeesIds = securityEmployees.map((e: Owner) => e.id);
@@ -182,7 +182,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
   const operatorsSelectOptions = availableApprovers.filter((val) => !operatorsIds.includes(val.value));
   return (
     <div className={classes.container}>
-      <Typography variant={TypographySize.md} style={{ paddingBottom: 16 }}>
+      <Typography variant={TypographySize.md}>
         <Text translation="document.revision.selected.users" />
       </Typography>
       <div style={{ width: 240, paddingBottom: 32 }}>
@@ -191,14 +191,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
                   {securityEmployees.map((e: Owner, index) => (
                     <div
                       key={index}
-                      style={{
-                        display: "flex",
-                        marginTop: 16,
-                        marginBottom: 16,
-                        padding: 5,
-                        background: "#EDF4FF",
-                        borderRadius: 2,
-                      }}
+                      className={classes.selectContainer}
                     >
                       <div style={{ width: 230 }}>{e.user.name}</div>
                       <button className={classes.accessButton} onClick={() => handleDelete(e.id)} >
@@ -216,14 +209,14 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
             options={employeeSelectOptions}
             onChange={(e) => saveValue(e)}
             placeholder={intl.formatMessage({
-              id: "document.revision.selected.users.placeholder",
+              id: "document.revision.invitation",
             })}
             components={{ DropdownIndicator }}
             value={(accessElement.value === "" || isGroup) ? null : accessElement}
           />
         </AsyncGate>
       </div>
-      <Typography variant={TypographySize.md} style={{ paddingBottom: 16 }}>
+      <Typography variant={TypographySize.md}>
         <Text translation="document.revision.selected.groups" />
       </Typography>
       <div style={{ width: 240, paddingBottom: 32 }}>
@@ -232,14 +225,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
                   {securityGroups.map((e: Group, index) => (
                     <div
                       key={index}
-                      style={{
-                        display: "flex",
-                        marginTop: 16,
-                        marginBottom: 16,
-                        padding: 5,
-                        background: "#EDF4FF",
-                        borderRadius: 2,
-                      }}
+                      className={classes.selectContainer}
                     >
                       <div style={{ width: 230 }}>{e.name}</div>
                       <button className={classes.accessButton} onClick={() => handleDelete(e.id)}>
@@ -256,7 +242,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
           <Select
             options={groupSelectOptions}
             placeholder={intl.formatMessage({
-              id: "document.revision.selected.users.placeholder",
+              id: "document.revision.invitation.group",
             })}
             components={{ DropdownIndicator }}
             onChange={(e) => saveValue(e)}
@@ -264,7 +250,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
           />
         </AsyncGate>
       </div>
-      <Typography variant={TypographySize.md} style={{ paddingBottom: 16 }}>
+      <Typography variant={TypographySize.md}>
         <Text translation="document.assign.to" />
       </Typography>
       <div style={{ width: 240, paddingBottom: 32 }}>
@@ -273,14 +259,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
                   {operators.map((e: Owner, index) => (
                     <div
                       key={index}
-                      style={{
-                        display: "flex",
-                        marginTop: 16,
-                        marginBottom: 16,
-                        padding: 5,
-                        background: "#EDF4FF",
-                        borderRadius: 2,
-                      }}
+                      className={classes.selectContainer}
                     >
                       <div style={{ width: 230 }}>{e.user.name}</div>
                       <button className={classes.accessButton} onClick={() => handleDeleteOperatorAccess(e.id)} >
@@ -298,7 +277,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
             options={operatorsSelectOptions}
             onChange={(e) => saveValueOperator(e)}
             placeholder={intl.formatMessage({
-              id: "document.revision.selected.users.placeholder",
+              id: "document.revision.invitation",
             })}
             components={{ DropdownIndicator }}
             value={!operator ? null : operator}

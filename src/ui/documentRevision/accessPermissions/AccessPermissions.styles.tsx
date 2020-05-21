@@ -3,7 +3,8 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core";
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      margin: theme.spacing(1),
+      marginLeft: "16px",
+      marginTop: "8px",
     },
     details: {
       overflowY: "auto",
@@ -27,6 +28,14 @@ export const styles = makeStyles((theme: Theme) =>
     dateContainer: {
       marginBottom: theme.spacing(2),
       color: theme.palette.text.hint,
+    },
+    selectContainer: {
+      display: "flex",
+      marginTop: 16,
+      marginBottom: 16,
+      padding: 5,
+      background: "#EDF4FF",
+      borderRadius: 2,
     },
     accessButton: {
       "padding": 0,
