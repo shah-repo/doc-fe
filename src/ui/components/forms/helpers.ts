@@ -35,6 +35,10 @@ export const compareValuesToSubmit = (initialValues, values, transformMethod) =>
   //   return diff;
   // }
 
+  if (!transformedValues.formInput) {
+    return diff;
+  }
+
   return {
     ...diff,
     formInput: transformedValues.formInput,
