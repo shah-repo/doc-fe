@@ -48,7 +48,7 @@ export const UpgradeToLatest: React.FunctionComponent<Props> = ({
 
   useEffect(() => {
     setShouldDisplay( isFormStatusDeprecated && isDocumentStatusDraftOrPending && !isLastVersionObsolete);
-  });
+  }, [isDocumentStatusDraftOrPending, isFormStatusDeprecated, isLastVersionObsolete, setShouldDisplay]);
 
   const async = useAsync();
   const upgradeAction = useActionCreator(documentRevisionsActions.upgradeToReleasedForm);

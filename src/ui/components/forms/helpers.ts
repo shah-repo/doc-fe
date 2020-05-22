@@ -18,6 +18,21 @@ export const compareValuesToSubmit = (initialValues, values, transformMethod) =>
       }
       continue;
     }
+    if (key === "formTemplate") {
+      const initialFormTemplate = {
+        outputDocumentTypes: (transformedInitialValues?.formTemplate?.outputDocumentTypes || [])
+          .map((outputDoc) => ({ id: outputDoc.value }) ),
+        schema: transformedInitialValues?.formTemplate?.schema,
+      };
+      const newFormTemplateValue = {
+        outputDocumentTypes: (value as any).outputDocumentTypes,
+        schema: toJS((value as any).schema),
+      };
+      if (!_.isEqual(initialFormTemplate, newFormTemplateValue)) {
+        diff[key] = value;
+      }
+      continue;
+    }
     if (!_.isEqual(value, transformedInitialValues[key])) {
       diff[key] = value;
     }
@@ -34,6 +49,10 @@ export const compareValuesToSubmit = (initialValues, values, transformMethod) =>
   // if (_.isEmpty(formInputDiff)) {
   //   return diff;
   // }
+
+  if (!transformedValues.formInput) {
+    return diff;
+  }
 
   return {
     ...diff,

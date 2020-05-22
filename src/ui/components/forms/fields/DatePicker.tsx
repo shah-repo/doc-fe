@@ -26,7 +26,7 @@ const DatePicker: React.FunctionComponent<DatePickerPropsWithFormik> = ({
   const onChange = (date: Date) => {
     const { form } = fieldProps;
     form.setFieldValue(fieldProps.field.name, date);
-    submitForm(form.submitForm);
+    submitForm();
   };
 
   const classes = styles();
