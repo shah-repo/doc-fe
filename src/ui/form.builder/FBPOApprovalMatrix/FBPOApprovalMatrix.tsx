@@ -9,6 +9,7 @@ import FBPOApprovalMatrixTable from "./table/FBPOApprovalMatrixTable";
 
 const FBPOApprovalMatrix: React.FunctionComponent<FBPOApprovalMatrixFieldProps> = ({
   handleAdd,
+  handleRevert,
   poamState,
   dialogState,
   ...props
@@ -16,7 +17,7 @@ const FBPOApprovalMatrix: React.FunctionComponent<FBPOApprovalMatrixFieldProps> 
   <Provider {...{ poamState, dialogState }}>
     <FBDialog />
     <Box mt={3}>
-      <FBSectionBox label={props.label} />
+      <FBSectionBox label={props.label} {...{ handleRevert }} />
       <FBPOApprovalMatrixTable {...props as FBPOApprovalMatrixTableProps} />
       <FBButton
         fullWidth={true}

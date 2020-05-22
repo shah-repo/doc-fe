@@ -16,6 +16,7 @@ export type FBPOApprovalMatrixFieldProps =
   poamState: FBPOApprovalMatrixState;
   dialogState?: FBDialogState;
   handleAdd?: () => any;
+  handleRevert?: () => any;
 };
 
 export type FBPOApprovalMatrixDialogProps =
