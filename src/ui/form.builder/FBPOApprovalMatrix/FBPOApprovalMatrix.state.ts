@@ -28,12 +28,12 @@ export class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrix, null> {
   };
 
   @action public addItem = (approvalLevel: POApprovalMatrixLevel) => {
-    const appLevelIndex = _.findIndex(this.poam.approvalLevels, { id: approvalLevel.id });
+    const appLevelIndex = _.findIndex(this.approvalLevels, { id: approvalLevel.id });
     if (appLevelIndex === -1) {
       set(this, "approvalLevels", _.union(this.approvalLevels, [approvalLevel]));
       return;
     }
-    const al = [...this.poam.approvalLevels];
+    const al = [...this.approvalLevels];
     al[appLevelIndex] = approvalLevel;
     set(this, "approvalLevels", al);
   };
