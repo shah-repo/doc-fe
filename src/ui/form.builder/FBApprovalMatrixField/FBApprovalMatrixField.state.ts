@@ -31,6 +31,16 @@ export class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldD
 
   @action public addApprovalRole = (role: FBApprovalRole) => {
     const approvalRoles = _.union(this.approvalRoles || [], [role]);
+    const approvalMatrix = _.map(this.approvalMatrix, (am) => {
+      _.map(new Array(approvalRoles.length), (_, i) => {
+        am.approvalRoles.stage1[i] = am.approvalRoles.stage1[i] || false;
+        am.approvalRoles.stage2[i] = am.approvalRoles.stage2[i] || false;
+        am.approvalRoles.stage3[i] = am.approvalRoles.stage3[i] || false;
+        am.approvalRoles.admStage[i] = am.approvalRoles.admStage[i] || false;
+      });
+      return am;
+    });
+    this.approvalMatrix = approvalMatrix;
     this.setApprovalRoles(approvalRoles);
   };
 

@@ -29,6 +29,8 @@ const FBApprovalMatrixRoles: React.FunctionComponent<FBApprovalMatrixRolesProps>
                 placeholder="form.builder.approving.roles.placeholder"
                 optionValueType="id"
                 multiple={true}
+                defaultValue={[]}
+                forceDefault = {true}
                 optionId={FBAutocompleteAsyncOption.employees}
                 {...{ disabled }}
               />
@@ -38,7 +40,9 @@ const FBApprovalMatrixRoles: React.FunctionComponent<FBApprovalMatrixRolesProps>
                 placeholder="form.builder.approving.roles.placeholder"
                 optionValueType="id"
                 multiple={true}
+                forceDefault = {true}
                 optionId={FBAutocompleteAsyncOption.group}
+                defaultValue={[]}
                 {...{ disabled }}
               />
             </React.Fragment>
