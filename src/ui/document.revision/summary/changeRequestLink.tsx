@@ -4,29 +4,23 @@ import { Link } from "react-router-dom";
 import { stripTags } from "../../../common/utils/helpers";
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
-import { DynamicUIDocTypes } from "../../../state/ducks/documentRevisions/documentType";
 import { changeRequestEditPath } from "../../change.request/utils/paths";
 import Text from "../../components/Text";
+import useCRLink from "../../hooks/docCustomization/useCRLink";
 
 export type Props = DataProps<DocumentRevision>;
 
 export const ChangeRequestLink: React.FunctionComponent<Props> = ({
   dataProp,
 }) => {
+  const isVisible = useCRLink(dataProp?.document?.documentType?.id);
   if (!dataProp || !dataProp.changeRequest) {
     return null;
   }
 
-  const acronym = dataProp?.document?.documentType?.documentTypeAcronym;
-  const hideLink = acronym === (
-    DynamicUIDocTypes.PO ||
-    DynamicUIDocTypes.RC ||
-    DynamicUIDocTypes.SUP ||
-    DynamicUIDocTypes.WO
-  );
   const { changeRequest } = dataProp;
 
-  if (hideLink) {
+  if (!isVisible) {
     return null;
   }
 

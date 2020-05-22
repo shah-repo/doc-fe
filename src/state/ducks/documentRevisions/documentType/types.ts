@@ -68,5 +68,5 @@ export enum DynamicUIDocTypes {
   SUP = "SUP",
   WO = "WO",
   DAM = "DAM",
-  ADC = "ADC",
+  POAM = "POAM",
 }
