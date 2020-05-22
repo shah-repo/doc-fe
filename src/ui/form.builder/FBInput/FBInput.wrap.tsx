@@ -46,11 +46,11 @@ export const withFBInput = <T extends FBInputProps>(
     includeContext = inputState?.includeContext;
 
     (_.isUndefined(hidden) && formState?.workspaceMode === "form" && validationMode === "visibility") && (hidden =
-      !helperText && !defaultValue
+      !helperText && (!defaultValue || _.isEmpty(defaultValue))
     );
 
     (!disabled && formState?.workspaceMode === "form" && validationMode === "disabled") && (disabled =
-      !helperText && !defaultValue
+      !helperText && (!defaultValue || _.isEmpty(defaultValue))
     );
 
     function setDefaultValue(): any {

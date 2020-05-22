@@ -156,7 +156,7 @@ export class FBFormState extends FBSchemaState {
       const reqName = reqs.shift() || "";
       const inputValue = validator.input[reqName];
       const diff = inputValue && inputValue.filter((val) => reqs.includes(val));
-      if (diff && diff.length > 0 && !val) {
+      if (diff && diff.length > 0 && (!val || _.isEmpty(val))) {
         const { messages: { attributeNames } } = validator;
         const reqsAttributes = reqs.map((req) => attributeNames[req]);
         return passes(
