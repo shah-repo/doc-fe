@@ -3,10 +3,9 @@ import React, { useEffect } from "react";
 import * as generateUuid from "uuid/v4";
 import { FB, FBDialogState } from "..";
 import FBPOApprovalMatrixState from "./FBPOApprovalMatrix.state";
-import { FBPOApprovalMatrixFieldProps, POApprovalMatrixLevel } from "./FBPOApprovalMatrix.types";
+import { FBPOApprovalMatrixFieldProps, POApprovalMatrix, POApprovalMatrixLevel } from "./FBPOApprovalMatrix.types";
 import FBPOApprovalMatrixForm from "./form/FBPOApprovalMatrixForm";
 import FBPOApprovalMatrixFormActions from "./form/FBPOApprovalMatrixForm.actions";
-
 
 export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
   Component: React.FunctionComponent<T>
@@ -17,13 +16,18 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
     poamState,
     dialogState,
     name = "",
+    handleRevert,
     ...props
   }: T) => {
 
     const { workspaceState, formState } = FB.useStores();
     const { document } = workspaceState || {};
-    poamState = FB.useRef<FBPOApprovalMatrixState>(FBPOApprovalMatrixState, formState);
+    const formValue = formState?.getFieldValue(name) as POApprovalMatrix;
+    const { approvalLevels = [] } = formValue || {};
+
+    poamState = FB.useRef<FBPOApprovalMatrixState>(FBPOApprovalMatrixState, { formState, approvalLevels });
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
+
 
     const stages = [1, 2, 3];
     const approvalLevel: POApprovalMatrixLevel[] = [];
@@ -31,6 +35,7 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
 
     async function fetchPOApprovalMatrix() {
       const data = await poamState?.fetch();
+
       data?.approvalLevels?.map((level: POApprovalMatrixLevel) => {
         if (level.signatures.length === 3) {
           approvalLevel.push(level);
@@ -51,13 +56,19 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
       });
       const uniqApprovalLevels = _.uniqBy(approvalLevel, "id");
       poamState?.setItems(uniqApprovalLevels);
+      formState?.setFieldValue(name + "approvalLevels", approvalLevels);
     }
 
     useEffect(() => {
-      if ((props.disabled || formState?.getFieldValue(name)) && !document?.outputRevision) {
-        return;
+      // if ((props.disabled || formState?.getFieldValue(name)) && !document?.outputRevision) {
+      //   const formValue = formState?.getFieldValue(name) as POApprovalMatrix;
+      //   const { approvalLevels } = formValue || {};
+      //   poamState.setItems(approvalLevels);
+      //   return;
+      // }
+      if (document?.outputRevision || _.isEmpty(approvalLevels)) {
+        fetchPOApprovalMatrix();
       }
-      fetchPOApprovalMatrix();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.disabled, document?.formInput]);
 
@@ -76,9 +87,14 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
       });
     };
 
+    handleRevert = () => {
+      fetchPOApprovalMatrix();
+    };
+
     return Component({
       ...(props as T),
       handleAdd,
+      handleRevert,
       poamState,
       dialogState,
       name,
