@@ -15,7 +15,7 @@ type RadioGroupPropsWithFormik = RadioGroupOwnProps & FormikFieldProps;
 const RadioGroup: React.FunctionComponent<RadioGroupPropsWithFormik> = ({
   radioGroupProps, children, ...fieldProps
 }) => {
-  const { field, form } = fieldProps;
+  const { field } = fieldProps;
   const { submitForm } = useFormContext();
 
   return (
@@ -27,7 +27,7 @@ const RadioGroup: React.FunctionComponent<RadioGroupPropsWithFormik> = ({
         onChange={(evt, value) => {
           field.onChange(evt);
           radioGroupProps?.onChange?.(evt, value);
-          submitForm(form.submitForm);
+          submitForm();
         }}
       >
         {children}

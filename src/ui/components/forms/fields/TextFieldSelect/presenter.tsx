@@ -1,5 +1,4 @@
 import { Box } from "@material-ui/core";
-import { useFormikContext } from "formik";
 import React from "react";
 import Text from "../../../Text";
 import { useFormContext } from "../../FormContext";
@@ -22,12 +21,11 @@ export const EditableSelectPresenter: React.FunctionComponent<Props> = ({
   handleBlur,
   isDisabled,
 }) => {
-  const formik = useFormikContext();
   const { submitForm } = useFormContext();
   const classes = styles({ gutter, error: false });
   const blurOverride = (event) => {
     handleBlur(event);
-    submitForm(formik.submitForm);
+    submitForm();
   };
   return (
     <Box className={classes.root}>

@@ -4,8 +4,6 @@ import { FB } from "../../form.builder";
 
 export const FormContext = React.createContext({ submitOnChange: false });
 
-type FormikSubmit = (() => Promise<void>) & (() => Promise<any>);
-
 export const useFormContext = () => {
   const context = useContext(FormContext);
   const formik = useFormikContext();
@@ -31,12 +29,12 @@ export const useFormContext = () => {
     }
   }
   // TODO: check if this param is needed. Formik context should be available
-  const submitForm = (formikSubmit: FormikSubmit) => {
+  const submitForm = () => {
     if (context.submitOnChange) {
       if (workspaceState) {
         setFBValue();
       }
-      formikSubmit();
+      formik.submitForm();
     }
   };
 

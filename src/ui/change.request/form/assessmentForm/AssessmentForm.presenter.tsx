@@ -59,7 +59,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   useEffect(() => {
     if (didMount) {
       setFieldValue("documentRevisions", documentRevisionsList);
-      formContext.submitForm(submitForm);
+      formContext.submitForm();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentRevisionsList]);

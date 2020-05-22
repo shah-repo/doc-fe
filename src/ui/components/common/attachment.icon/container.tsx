@@ -74,7 +74,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
       FBDynamicValidatorStore.validate();
     }
     form.setFieldValue(name, filtered);
-    submitForm(form.submitForm);
+    submitForm();
   };
 
   const handleDownload = (attachment: Attachment, type?: AttachmentType) => () => {

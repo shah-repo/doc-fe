@@ -41,7 +41,7 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
     }
 
     setFieldValue(name, value);
-    submitForm(fieldProps.form.submitForm);
+    submitForm();
   };
 
   const stringify = (option: OptionType) => option.label;
