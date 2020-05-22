@@ -56,7 +56,7 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
       });
       const uniqApprovalLevels = _.uniqBy(approvalLevel, "id");
       poamState?.setItems(uniqApprovalLevels);
-      formState?.setFieldValue(name + "approvalLevels", approvalLevels);
+      formState?.setFieldValue(name + ".approvalLevels", approvalLevels);
     }
 
     useEffect(() => {
