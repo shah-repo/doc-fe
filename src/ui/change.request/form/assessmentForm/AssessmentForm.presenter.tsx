@@ -9,6 +9,7 @@ import DatePickerField from "../../../components/forms/fields/DatePicker";
 import InputField from "../../../components/forms/fields/Input";
 import TextEditorField from "../../../components/forms/fields/RichTextEditor";
 import { required, validator } from "../../../components/forms/fields/validators";
+import { useFormContext } from "../../../components/forms/FormContext";
 import FormWrapper from "../../../components/forms/FormWrapper";
 import PromptIfDirty from "../../../components/forms/PromptIfDirty";
 import ScrollToError from "../../../components/forms/ScrollToError";
@@ -50,12 +51,15 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   documentTypeGroups,
   values,
   selectedDocumentRevision,
+  submitForm,
 }) => {
+  const formContext = useFormContext();
   const didMount = useDidMount();
 
   useEffect(() => {
     if (didMount) {
       setFieldValue("documentRevisions", documentRevisionsList);
+      formContext.submitForm(submitForm);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentRevisionsList]);

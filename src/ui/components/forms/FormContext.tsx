@@ -30,6 +30,7 @@ export const useFormContext = () => {
         formik.setFieldValue("formTemplate", undefined);
     }
   }
+  // TODO: check if this param is needed. Formik context should be available
   const submitForm = (formikSubmit: FormikSubmit) => {
     if (context.submitOnChange) {
       if (workspaceState) {
