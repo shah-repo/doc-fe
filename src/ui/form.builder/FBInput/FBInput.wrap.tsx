@@ -33,6 +33,7 @@ export const withFBInput = <T extends FBInputProps>(
     hidden,
     rules,
     value,
+    forceDefault,
     ...props
   }: T) => {
 
@@ -45,11 +46,11 @@ export const withFBInput = <T extends FBInputProps>(
     includeContext = inputState?.includeContext;
 
     (_.isUndefined(hidden) && formState?.workspaceMode === "form" && validationMode === "visibility") && (hidden =
-      !helperText && !defaultValue
+      !helperText && (!defaultValue || _.isEmpty(defaultValue))
     );
 
     (!disabled && formState?.workspaceMode === "form" && validationMode === "disabled") && (disabled =
-      !helperText && !defaultValue
+      !helperText && (!defaultValue || _.isEmpty(defaultValue))
     );
 
     function setDefaultValue(): any {
@@ -68,7 +69,7 @@ export const withFBInput = <T extends FBInputProps>(
           return inputState && (inputState.value = formState.getFieldValue(name, ""));
         },
         default() {
-          return formState.getFieldValue(name, defaultValue || defaultChecked);
+          return formState.getFieldValue(name, defaultValue || defaultChecked, forceDefault);
         },
       };
       const transDefault = (value[type || ""] || value.default)();
@@ -123,6 +124,7 @@ export const withFBInput = <T extends FBInputProps>(
       placeholder,
       rules,
       value,
+      forceDefault,
     });
   };
 

@@ -40,11 +40,11 @@ export class FBFormState extends FBSchemaState {
   // ;
 
   @action public getFieldValue = (
-    fieldName: string | undefined, defaultValue: any = undefined): any => {
+    fieldName: string | undefined, defaultValue: any = undefined, forceDefault = false): any => {
     if (!fieldName) {
       return defaultValue;
     }
-    if (!_.get(this.values, fieldName) && !_.isUndefined(defaultValue)) {
+    if (forceDefault || (!_.get(this.values, fieldName) && !_.isUndefined(defaultValue))) {
       _.set(this.initialValues || {}, fieldName, defaultValue);
     }
     return _.get(this.values, fieldName) || _.get(this.initialValues, fieldName);
@@ -156,7 +156,7 @@ export class FBFormState extends FBSchemaState {
       const reqName = reqs.shift() || "";
       const inputValue = validator.input[reqName];
       const diff = inputValue && inputValue.filter((val) => reqs.includes(val));
-      if (diff && diff.length > 0 && !val) {
+      if (diff && diff.length > 0 && (!val || _.isEmpty(val))) {
         const { messages: { attributeNames } } = validator;
         const reqsAttributes = reqs.map((req) => attributeNames[req]);
         return passes(

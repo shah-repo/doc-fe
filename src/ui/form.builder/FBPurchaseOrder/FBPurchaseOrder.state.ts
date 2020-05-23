@@ -30,7 +30,8 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     if (documentId) {
       this.fetchReceivedItems(documentId);
     }
-    const { items } = initialValues || {};
+    const items = (initialValues?.items || [])
+      .map((item, index) => ({ ...item, index }));
     const calculation = _.omit(initialValues, "items");
     set(this, "items", items);
     set(this, "calculation", { ...this.calculation, ...calculation });
@@ -124,11 +125,13 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   };
 
   @action public deleteItem = (index: number) => {
-    const items = _.filter(this.items, (itm) => itm.index !== index);
-    _.map(items, (itm, index) => ({
-      ...itm,
-      index,
-    }));
+    const items = this.items
+      .filter((itm, indx) =>
+        indx !== index
+      ).map((itm, indx) => ({
+        ...itm,
+        index: indx,
+      }));
     set(this, "items", items);
     this.calculateCost();
   };

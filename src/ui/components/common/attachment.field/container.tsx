@@ -68,7 +68,7 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
         FBDynamicValidatorStore.validate();
       }
       form.setFieldValue(name, attachments);
-      submitForm(form.submitForm);
+      submitForm();
     },
   });
 

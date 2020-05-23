@@ -34,6 +34,11 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
         defaultValue = multiple
           ? _.filter(options, (o) => _.includes(value, o[optionValueKey]))
           : _.find(options, { [optionValueKey]: value });
+      } else if (optionValueType === "id") {
+        const varr = _.map(value, (v) => v[optionValueKey]);
+        defaultValue = multiple
+          ? _.filter(options, (o) => _.includes(varr, o[optionValueKey]))
+          : _.find(options, { [optionValueKey]: value });
       } else {
         defaultValue = value;
       }

@@ -7,6 +7,6 @@ export interface FBOptionProps {
   options?: Record<any, any>[] | FBOption[] | string[];
   optionLabelKey?: string;
   optionValueKey?: string;
-  optionValueType?: "object" | "key";
+  optionValueType?: "object" | "key" | "id";
   optionId?: string;
 }

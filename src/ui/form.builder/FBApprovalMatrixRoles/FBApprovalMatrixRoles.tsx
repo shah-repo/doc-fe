@@ -27,8 +27,10 @@ const FBApprovalMatrixRoles: React.FunctionComponent<FBApprovalMatrixRolesProps>
                 label="form.builder.approving.users"
                 name={`${name}.approvalRoles.${index}.employees`}
                 placeholder="form.builder.approving.roles.placeholder"
-                optionValueType="object"
+                optionValueType="id"
                 multiple={true}
+                defaultValue={[]}
+                forceDefault = {true}
                 optionId={FBAutocompleteAsyncOption.employees}
                 {...{ disabled }}
               />
@@ -36,9 +38,11 @@ const FBApprovalMatrixRoles: React.FunctionComponent<FBApprovalMatrixRolesProps>
                 label="form.builder.approving.groups"
                 name={`${name}.approvalRoles.${index}.groups`}
                 placeholder="form.builder.approving.roles.placeholder"
-                optionValueType="object"
+                optionValueType="id"
                 multiple={true}
+                forceDefault = {true}
                 optionId={FBAutocompleteAsyncOption.group}
+                defaultValue={[]}
                 {...{ disabled }}
               />
             </React.Fragment>

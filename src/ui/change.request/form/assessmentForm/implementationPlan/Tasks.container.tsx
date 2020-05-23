@@ -1,5 +1,6 @@
 import { FieldArrayRenderProps } from "formik";
 import React, { useState } from "react";
+import { useFormContext } from "../../../../components/forms/FormContext";
 import useDialog from "../../../../hooks/useDialog";
 import { ImplementationPlanTaskFormValues } from "../../types";
 import TasksPresenter from "./Tasks.presenter";
@@ -12,6 +13,7 @@ export const TasksContainer: React.FunctionComponent<Props> = ({
   form,
   replace,
 }) => {
+  const { submitForm } = useFormContext();
   const dialog = useDialog();
   const [selectedTask, changeSelectedTask] = useState<ImplementationPlanTaskFormValues | null>(null);
   const [selectedIndex, changeSelectedIndex] = useState<number | null>(null);
@@ -33,11 +35,15 @@ export const TasksContainer: React.FunctionComponent<Props> = ({
     } else {
       push(values);
     }
+    submitForm();
   };
 
   const tasks = form.values.implementationPlan.tasks;
   const numberOfTasks = tasks.length;
-  const removeTask = (index: number) => () => remove(index);
+  const removeTask = (index: number) => () => {
+    remove(index);
+    submitForm();
+  };
   const editTask = (task: ImplementationPlanTaskFormValues, index: number) => () => {
     changeSelectedIndex(index);
     changeSelectedTask({

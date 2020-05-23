@@ -20,7 +20,7 @@ const FBApprovalMatrixTableStatus: React.FunctionComponent<FBApprovalMatrixTable
               label={head}
               colSpan={approvalRoles.length}
               align="center"
-              style={{ borderLeft: "1px solid #f0f0f0" }}
+              style={{ borderLeft: "1px solid #f0f0f0", minWidth: "130px" }}
             />
           )}
         </FBMapWrapper>
