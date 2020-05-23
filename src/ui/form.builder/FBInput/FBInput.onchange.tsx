@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBEditorPropertiesType, FBInputProps, FBInputState } from "..";
+import { FB, FBEditorPropertiesType, FBInputProps, FBInputState, FBOptionValueType } from "..";
 
 export const withFBOnChange = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>
@@ -10,6 +10,7 @@ export const withFBOnChange = <T extends FBInputProps>(
     type,
     name,
     editorProperties,
+    forceDefault,
     inputState,
     ...props
   }: T) => {
@@ -62,16 +63,17 @@ export const withFBOnChange = <T extends FBInputProps>(
       if (!value) {
         return formState?.omitFieldValue(name);
       }
-      const { optionValueType, optionValueKey, multiple } = props;
-      if (optionValueType === "key") {
-        value = multiple
+      const { optionValueType = "key", optionValueKey = "id", multiple } = props;
+      const simpleValue: Record<FBOptionValueType, () => any> = {
+        object: () => value,
+        key: () => multiple
           ? _.map(value, (v) => v[optionValueKey])
-          : value[optionValueKey];
-      } else if (optionValueType === "id") {
-        value = _.map(value, (v) => ({ id: v[optionValueKey] }));
-      }
-      console.log(value);
-      formState?.setFieldValue(name, value);
+          : value[optionValueKey],
+        id: () =>  multiple
+          ? _.map(value, (v) => ({ [optionValueKey]: v[optionValueKey] }))
+          : { [optionValueKey]: value[optionValueKey] },
+      };
+      formState?.setFieldValue(name, simpleValue[optionValueType](), false, forceDefault);
     }
 
     function stringValue(value: string) {
@@ -128,6 +130,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       ...(props as T),
       onChange,
       editorProperties,
+      forceDefault,
       inputState,
       type,
       name,

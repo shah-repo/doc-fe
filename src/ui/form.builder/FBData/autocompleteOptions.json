@@ -107,5 +107,11 @@
     "valueKey": "id",
     "labelKey": "user.name",
     "root": ""
+  }, {
+    "id": "14",
+    "path": "/groups",
+    "label": "Official Groups",
+    "valueKey": "id",
+    "labelKey": "name"
   }
 ]

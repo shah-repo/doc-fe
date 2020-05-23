@@ -51,7 +51,9 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     if (!this.optionId) {
       return;
     }
-    if (!FBAutocompleteAsyncStore.data.get(this.optionId) || force) {
+    const isLoading = FBAutocompleteAsyncStore.loading.get(this.optionId);
+    const hasData = Boolean(FBAutocompleteAsyncStore.data.get(this.optionId));
+    if (force || (!hasData && !isLoading)) {
       this.loadInternal();
     }
   };
@@ -82,6 +84,7 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     if (!this.optionId) {
       return;
     }
+    FBAutocompleteAsyncStore.loading.set(this.optionId, false);
     let data = this.data;
     if (!data) {
       return;
@@ -97,6 +100,8 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     if (!this.optionConfig) {
       return;
     }
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    FBAutocompleteAsyncStore.loading.set(this.optionId!, true);
     const { path: url, root = "" } = this.optionConfig;
     this.setUrl(url);
     this.setRoot(root);
