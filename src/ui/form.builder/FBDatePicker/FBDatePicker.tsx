@@ -10,7 +10,7 @@ const FBDatePicker: React.FunctionComponent<FBInputProps> = ({
   ...props
 }) => (
   <MuiPickersUtilsProvider utils={DateFnsUtils}>
-    <FBInput {...props} {...{ onChange }} type="datepicker">
+    <FBInput {...props} type="datepicker">
       <KeyboardDatePicker
         fullWidth={true}
         disableToolbar={true}

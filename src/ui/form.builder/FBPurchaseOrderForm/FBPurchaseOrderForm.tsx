@@ -9,7 +9,6 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
   getOptionDisabled,
   getOptionLabel,
   handleTypeChange,
-  handleDateChange,
   type,
   children,
 }) => (
@@ -86,7 +85,6 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
     <FBDatePicker
       label="form.builder.field.date.required"
       name="date"
-      onChange={handleDateChange}
     />
     {
       type === "product" &&
