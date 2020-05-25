@@ -169,6 +169,7 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     this.items[item.index] = {
       ...item,
       totalAmount: this.itemTotalAmount.toFixed(2),
+      formattedDate: moment(item.date).format("MM/DD/YYYY"),
     };
     return this.items;
   };
