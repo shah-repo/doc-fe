@@ -9,7 +9,7 @@ const useTitle = (
   const documentType = useSelector(documentTypeSelectors.byId)[documentTypeId];
   return useMemo(() => {
     switch (documentType?.documentTypeAcronym) {
-      case DynamicUIDocTypes.WO:
+      // case DynamicUIDocTypes.WO:
       case DynamicUIDocTypes.RC:
       case DynamicUIDocTypes.PO:
         return [false];
