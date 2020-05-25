@@ -80,12 +80,14 @@ DocumentRevisionUpdateContainerProps
 
     async.reset();
 
-    async.start(
+    const promise = async.start(
       save,
       documentRevision.id,
       dataToSubmit as DocumentRevisionEditRequestBody,
       async,
     );
+    // workaround when editing document through CR view. The form is marked dirty when editing FB fields
+    promise?.then(() => helpers.resetForm());
   };
 
   return (
