@@ -64,6 +64,8 @@ export const withFBInput = <T extends FBInputProps>(
           formState?.setFieldValue(name, value);
           return value || "";
         },
+        autocompleteasync() { return; },
+        autocomplete() { return; },
         datepicker() {
           return inputState && (inputState.value = formState.getFieldValue(name, ""));
         },

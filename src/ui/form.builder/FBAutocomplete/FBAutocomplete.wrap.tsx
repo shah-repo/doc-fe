@@ -19,6 +19,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     defaultValue,
     options,
     optionId,
+    type,
     ...props
   }: T) => {
 
@@ -50,7 +51,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       placeholder = intl.formatMessage({ id: placeholder });
     }
 
-    (!optionId && options && formValue && !_.isEmpty(formValue)) && (defaultValue = getDefault());
+    (type !== "autocompleteasync" && options && formValue && !_.isEmpty(formValue)) && (defaultValue = getDefault());
 
     !getOptionLabel && (getOptionLabel = (option) => {
       let optionText = _.get(option, optionLabelKey);
@@ -72,6 +73,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       multiple,
       optionId,
       name,
+      type,
     });
   };
 
