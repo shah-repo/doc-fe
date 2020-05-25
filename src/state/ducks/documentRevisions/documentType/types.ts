@@ -6,7 +6,8 @@ export type DocumentGroupType = "FORM" | "OTHER" | "RECORD" | "DAM" | "MPI" | "D
 export type DocumentGroupOptionsType = "FORM" | "DAM" | "BE_OUTPUT" | "HAVE_OUTPUT" | "RECORD" | "ONE_ITEM" | "DYNAMIC_FORM";
 export interface PageDetailsColumn {
   label: string;
-  fieldName: string;
+  sourcePath: string;
+  valuePath: string;
 }
 
 export interface PageDetailsAddNew {

@@ -58,16 +58,17 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   const pageDetailColumns = documentType.pageDetails!.columns;
   const additionalColumns = pageDetailColumns.map(
     (column: PageDetailsColumn) => ({
-      key: column.fieldName as keyof DocumentRevision,
+      key: column.valuePath as keyof DocumentRevision,
       label: column.label as Translation,
       cellHref: cellHrefRenderer,
       omitSearch: true,
       columnOptions: {
         cellDataGetter: ({ rowData }) => {
-          const { fieldName } = column;
+          const { valuePath } = column;
+          // TODO (2020-05-25 22:17): Should not strip commas from value. Changes "John, Mike" to "John Mike"
           return FB.stripOption(
-            fieldName,
-            _.get(rowData, `formInput.${fieldName}`),
+            valuePath,
+            _.get(rowData, valuePath),
           );
         },
       },
