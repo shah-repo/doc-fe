@@ -43,6 +43,7 @@ export const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
         {children.map((menuItem, index) => {
           if (!menuItem) { return null; }
           return <MenuItem
+            onClick={handleClose}
             style={{ display: menuItem.props.shouldDisplay === false ? "none" : "block" }}
             key={index}>
             {menuItem}
