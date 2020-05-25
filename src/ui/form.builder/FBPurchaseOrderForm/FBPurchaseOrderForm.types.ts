@@ -9,5 +9,6 @@ export type FBPurchaseOrderFormProps =
   getOptionDisabled?: FBAutocompleteProps["getOptionDisabled"];
   getOptionLabel?: FBAutocompleteProps["getOptionLabel"];
   handleTypeChange?: FBInputProps["onChange"];
+  handleDateChange?: FBInputProps["onChange"];
   type?: FBPurchaseOrderItem["type"];
 };

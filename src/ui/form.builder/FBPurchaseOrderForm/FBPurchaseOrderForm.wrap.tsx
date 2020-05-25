@@ -15,6 +15,7 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
     getOptionDisabled,
     getOptionLabel,
     handleTypeChange,
+    handleDateChange,
     type,
     ...props
   }: T) => {
@@ -46,6 +47,9 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
       formState?.setFieldValue("description", undefined);
     };
 
+    handleDateChange = (ev: React.ChangeEvent<any>, value: any) =>
+      formState?.setFieldValue("formattedDate", value);
+
     getOptionDisabled = (option: DocumentRevision) => {
       const selectedParts = _.map(purchaseOrderState?.items, "partNumber");
       return _.includes(selectedParts, option.id);
@@ -64,6 +68,7 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
       getOptionDisabled,
       getOptionLabel,
       handleTypeChange,
+      handleDateChange,
       type,
     });
   };
