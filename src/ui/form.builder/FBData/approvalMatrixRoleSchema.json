@@ -9,7 +9,8 @@
     "label": "form.builder.approving.users",
     "name": "employees",
     "placeholder": "form.builder.approving.roles.placeholder",
-    "optionValueType": "object",
+    "optionValueType": "id",
+    "forceDefault": true,
     "multiple": true,
     "optionId": "13"
   },
@@ -18,8 +19,9 @@
     "label": "form.builder.approving.groups",
     "name": "groups",
     "placeholder": "form.builder.approving.roles.placeholder",
-    "optionValueType": "object",
+    "optionValueType": "id",
+    "forceDefault": true,
     "multiple": true,
-    "optionId": "10"
+    "optionId": "14"
   }
 ]

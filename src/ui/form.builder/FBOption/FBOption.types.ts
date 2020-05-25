@@ -3,10 +3,12 @@ export interface FBOption {
   value: string;
 }
 
+export type FBOptionValueType =  "object" | "key" | "id";
+
 export interface FBOptionProps {
   options?: Record<any, any>[] | FBOption[] | string[];
   optionLabelKey?: string;
   optionValueKey?: string;
-  optionValueType?: "object" | "key" | "id";
+  optionValueType?: FBOptionValueType;
   optionId?: string;
 }
