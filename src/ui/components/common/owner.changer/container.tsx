@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import {
-  GetEmployeeResponse,
-  userManagementActions,
-} from "../../../../state/ducks/userManagement";
+import { GetEmployeeResponse, userManagementActions } from "../../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../../state/reducers";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
@@ -56,17 +53,23 @@ const OwnerChangerContainer: React.FC<OwnProps> = ({
   };
 
   const getEmployeeAction = useActionCreator(userManagementActions.getEmployee);
+  const sortBy = (key) => (a, b) => {
+    a = a[key].toLowerCase();
+    b = b[key].toLowerCase();
+    if ( a === b) { return 0; }
+    return a < b ? -1 : 1;
+  };
 
   const getEmployees = useAsync<GetEmployeeResponse[]>({
     onSuccess: (data: GetEmployeeResponse[] = []) => {
-      setEmployees(
-        data.map((employee) => ({
-          value: employee.id,
-          text: employee.user.name,
-        })),
-      );
+      const employeesAlphaOrder = data.filter((user) => user.active).map((employee) => ({
+        value: employee.id,
+        text: employee.user.name,
+      }));
+      setEmployees(employeesAlphaOrder.sort(sortBy("text")));
     },
   });
+
 
   useEffect(() => {
     getEmployees.start(getEmployeeAction, null, getEmployees);
