@@ -15,7 +15,7 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty }
   );
   return (
     <Box pl={2}>
-      <Typography variant="h5" style={{ fontWeight: "bold" }}>
+      <Typography variant="h6">
         <Text message="common.attachments"/>
       </Typography>
       <AttachmentField name="attachments" disabled={true} />

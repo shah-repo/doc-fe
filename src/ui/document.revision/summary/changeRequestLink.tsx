@@ -32,8 +32,8 @@ export const ChangeRequestLink: React.FunctionComponent<Props> = ({
 
   return (
     <ListItem>
-      <Typography variant="h5">
-        <Box style={{ fontWeight: "bold" }}>
+      <Typography variant="h6">
+        <Box>
           <Text translation="common.crid"/>
         </Box>
         <Link

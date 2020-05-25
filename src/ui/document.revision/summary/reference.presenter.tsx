@@ -53,7 +53,7 @@ export const ReferencePresenter: React.FunctionComponent<Props> = ({
   return (
     <Box pb={3}>
       <ListItem id="ReferencePresenter-label">
-        <Typography variant="h5" style={{ fontWeight: "bold" }}>
+        <Typography variant="h6">
           <Text message={label} />
         </Typography>
       </ListItem>
