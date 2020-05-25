@@ -85,6 +85,7 @@ export const withFBInput = <T extends FBInputProps>(
 
     if (isClone) {
       children = React.cloneElement(child as React.ReactElement, {
+        name,
         disabled,
         onChange,
         ...(type === "textfield" && { error }),
