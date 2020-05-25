@@ -3,7 +3,7 @@ import React from "react";
 import AttachmentField from "../../components/common/attachment.icon/container";
 import Text from "../../components/Text";
 
-interface Props {
+export interface Props {
   isAttachmentEmpty: boolean;
 }
 
