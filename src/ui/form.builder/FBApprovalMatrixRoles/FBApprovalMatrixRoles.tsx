@@ -27,21 +27,21 @@ const FBApprovalMatrixRoles: React.FunctionComponent<FBApprovalMatrixRolesProps>
                 label="form.builder.approving.users"
                 name={`${name}.approvalRoles.${index}.employees`}
                 placeholder="form.builder.approving.roles.placeholder"
+                optionId={FBAutocompleteAsyncOption.employees}
                 optionValueType="id"
+                forceDefault = {true}
                 multiple={true}
                 defaultValue={[]}
-                forceDefault = {true}
-                optionId={FBAutocompleteAsyncOption.employees}
                 {...{ disabled }}
               />
               <FBAutocompleteAsync
                 label="form.builder.approving.groups"
                 name={`${name}.approvalRoles.${index}.groups`}
                 placeholder="form.builder.approving.roles.placeholder"
+                optionId={FBAutocompleteAsyncOption.officialGroups}
                 optionValueType="id"
-                multiple={true}
                 forceDefault = {true}
-                optionId={FBAutocompleteAsyncOption.group}
+                multiple={true}
                 defaultValue={[]}
                 {...{ disabled }}
               />

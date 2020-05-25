@@ -58,8 +58,10 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
           inputProps={{
             style: { textAlign: "right", padding: "5px" },
             step: ".01",
+            min: "0",
           }}
           onChange={handleShippingCost}
+          rules="min:0"
           {...{ disabled }}
         />
       </FBTableCell>

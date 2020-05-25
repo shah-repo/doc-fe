@@ -33,7 +33,6 @@ export const withFBInput = <T extends FBInputProps>(
     hidden,
     rules,
     value,
-    forceDefault,
     ...props
   }: T) => {
 
@@ -69,7 +68,7 @@ export const withFBInput = <T extends FBInputProps>(
           return inputState && (inputState.value = formState.getFieldValue(name, ""));
         },
         default() {
-          return formState.getFieldValue(name, defaultValue || defaultChecked, forceDefault);
+          return formState.getFieldValue(name, defaultValue || defaultChecked);
         },
       };
       const transDefault = (value[type || ""] || value.default)();
@@ -124,7 +123,6 @@ export const withFBInput = <T extends FBInputProps>(
       placeholder,
       rules,
       value,
-      forceDefault,
     });
   };
 
