@@ -62,11 +62,11 @@ const OwnerChangerContainer: React.FC<OwnProps> = ({
 
   const getEmployees = useAsync<GetEmployeeResponse[]>({
     onSuccess: (data: GetEmployeeResponse[] = []) => {
-      const employeesAlphaOrder = data.filter((user) => user.active).map((employee) => ({
+      const activeEmployees = data.filter((user) => user.active).map((employee) => ({
         value: employee.id,
         text: employee.user.name,
       }));
-      setEmployees(employeesAlphaOrder.sort(sortBy("text")));
+      setEmployees(activeEmployees.sort(sortBy("text")));
     },
   });
 
