@@ -1,10 +1,10 @@
 import { Grid, WithStyles, withStyles } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { Group } from "../../../state/ducks/auth/types";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { AsyncState } from "../../../state/types";
-import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import DocumentRevisionControlContainer from "../documentRevision/DocumentRevisionControl.container";
@@ -33,6 +33,7 @@ ChangeRequestFormContainerProps
   changeRequest,
   doNotPrompt,
 }) => {
+  const intl = useIntl();
   const [isFormDirty, setIsFormDirty] = useState<boolean>(false);
   const [documentTypeGroups, setDocumentTypeGroups] = useState<any[]>([]);
   const [selectedDocumentRevision, setSelectedDocumentRevision] = useState<string | null>(null);
@@ -72,7 +73,7 @@ ChangeRequestFormContainerProps
     if (!isFormDirty) {
       return true;
     }
-    alert(<Text message="common.unsaved.changes"/>);
+    alert(intl.formatMessage({ id: "common.unsaved.changes" }));
     return false;
   };
 
