@@ -141,7 +141,7 @@ DocumentRevisionFormContainerProps
   const { group: formGroup, schema: formSchema = [] } = cleanInitialValues.document?.documentType || {};
   const { docId: outputGroup } = cleanInitialValues.formDocument?.document || {};
   let { schema = [] } = cleanInitialValues?.formTemplate || cleanInitialValues?.formDocument?.formTemplate || {};
-  schema = _.union(formSchema, schema);
+  schema = _.uniqBy(_.union(formSchema, schema), "name");
   const formInput = useMemo(() => cleanInitialValues ? { ...cleanInitialValues.formInput } : {}, [cleanInitialValues]);
   let mode: Partial<FBWorkspaceMode> = "none";
   if (formGroup && formGroup.includes("FORM")) {
