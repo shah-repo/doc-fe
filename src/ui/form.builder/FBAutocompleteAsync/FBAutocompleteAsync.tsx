@@ -8,8 +8,8 @@ const FBAutocompleteAsync: React.FunctionComponent<FBAutocompleteAsyncProps> = (
   ...props
 }) =>  (
   <>
-    {!options && <FBAutocomplete {...props} disabled={true} />}
-    {options && <FBAutocomplete {...props} {...{ options }}/>}
+    {!options && <FBAutocomplete {...props} disabled={true} type="autocompleteasync" />}
+    {options && <FBAutocomplete {...props} {...{ options }} type="autocompleteasync" />}
   </>
 );
 

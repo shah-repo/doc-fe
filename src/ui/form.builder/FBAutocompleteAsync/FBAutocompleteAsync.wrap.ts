@@ -3,6 +3,7 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { FBAutocompleteAsyncProps, FBAutocompleteAsyncState } from ".";
 import { FB, FBOptionValueType } from "..";
+import FBAutocompleteAsyncStore from "./FBAutocompleteAsync.store";
 
 export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
   Component: React.FunctionComponent<T>
@@ -28,7 +29,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       valueKey: optionValueKey = "value",
       labelKey: optionLabelKey = "text",
     } = autocompleteAsyncState?.optionConfig || {};
-    const formValue = formState?.getFieldValue(name);
+    const formValue = formState?.getFieldValue(name) || defaultValue;
 
     function getDefault() {
       const objectValue: Record<FBOptionValueType, () => any> = {
@@ -49,6 +50,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
         return;
       }
       const slicedOptions = autocompleteAsyncState?.sliceData;
+      loading = FBAutocompleteAsyncStore.loading.get(optionId);
       if (slicedOptions) {
         options = selectedOptions
           ? autocompleteAsyncState?.sliceValue(selectedOptions)
@@ -56,7 +58,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       }
     });
 
-    (options && formValue && !_.isEmpty(formValue)) && (defaultValue = getDefault());
+    (optionId && options && formValue && !_.isEmpty(formValue)) && (defaultValue = getDefault());
 
     refresh = () => autocompleteAsyncState?.load(true);
 
@@ -69,7 +71,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     return Component({
       ...(props as T),
       options,
-      loading: autocompleteAsyncState?.loading,
+      loading,
       optionId,
       optionValueKey,
       optionLabelKey,
