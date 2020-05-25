@@ -1,4 +1,5 @@
-[{
+[
+  {
     "id": "1",
     "path": "/document_revisions",
     "label": "Document revisions",
@@ -84,7 +85,7 @@
   },
   {
     "id": "11",
-    "path": "/document_revisions",
+    "path": "/document_revisions?documentTypeAcronym=PRT",
     "label": "Parts",
     "valueKey": "id",
     "labelKey": "document.docId",
@@ -107,7 +108,8 @@
     "valueKey": "id",
     "labelKey": "user.name",
     "root": ""
-  }, {
+  },
+  {
     "id": "14",
     "path": "/groups",
     "label": "Official Groups",
