@@ -50,6 +50,7 @@ export const FBApprovalMatrixTableClasses = makeStyles({
     "& .FBStatus-root": {
       "& th": {
         minWidth: "80px",
+        whiteSpace: "nowrap",
       },
     },
   },

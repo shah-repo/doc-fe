@@ -167,7 +167,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       <FormHeader/>
       {
         workspaceState?.mode === "form" &&
-        <DocumentRevisionOutputInfo formDocument={values.formDocument} />
+        <DocumentRevisionOutputInfo formDocument={initialValues.formDocument} />
       }
       <FormWrapper
         dirty={dirty}

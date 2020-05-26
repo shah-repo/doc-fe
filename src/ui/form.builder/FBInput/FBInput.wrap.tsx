@@ -64,6 +64,8 @@ export const withFBInput = <T extends FBInputProps>(
           formState?.setFieldValue(name, value);
           return value || "";
         },
+        autocompleteasync() { return; },
+        autocomplete() { return; },
         datepicker() {
           return inputState && (inputState.value = formState.getFieldValue(name, ""));
         },
@@ -83,6 +85,7 @@ export const withFBInput = <T extends FBInputProps>(
 
     if (isClone) {
       children = React.cloneElement(child as React.ReactElement, {
+        name,
         disabled,
         onChange,
         ...(type === "textfield" && { error }),

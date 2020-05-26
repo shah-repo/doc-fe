@@ -11,6 +11,7 @@ const useCRLink = (
       case DynamicUIDocTypes.WO:
       case DynamicUIDocTypes.RC:
       case DynamicUIDocTypes.PO:
+      case DynamicUIDocTypes.SUP:
         return false;
       default:
         return true;
