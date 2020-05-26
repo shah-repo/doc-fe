@@ -65,7 +65,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       }
       dialogState?.config({
         open: true,
-        maxWidth: "lg",
+        maxWidth: "xl",
         content: modeContent(),
       });
     };

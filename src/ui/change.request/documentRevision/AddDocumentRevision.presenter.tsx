@@ -40,16 +40,19 @@ export const AddDocumentRevisionPresenter: React.FunctionComponent<AddDocumentRe
 }) => {
   const classes = styles();
 
-  const renderSlectedDocuments = () => (
-    addedDocuments.map((documentRevisionId) => (
-      <Chip
-        className={classes.documentRevision}
-        key={documentRevisionId}
-        label={(documentRevisionsById[documentRevisionId] || {}).name}
-        onDelete={handleDelete(documentRevisionId)}
-        id="AddDocument-chip"
-      />
-    ))
+  const renderSelectedDocuments = () => (
+    addedDocuments.map((documentRevisionId) => {
+      const docRevById =  (documentRevisionsById[documentRevisionId] || {});
+      return (
+        <Chip
+          className={classes.documentRevision}
+          key={documentRevisionId}
+          label={docRevById.name || docRevById.document.docId}
+          onDelete={handleDelete(documentRevisionId)}
+          id="AddDocument-chip"
+        />
+      );
+    })
   );
 
   return (
@@ -72,7 +75,7 @@ export const AddDocumentRevisionPresenter: React.FunctionComponent<AddDocumentRe
           <Text translation="changeRequest.documentControl.done" />
         </Button>
         <div className={classes.documentRevisionContainer}>
-          {renderSlectedDocuments()}
+          {renderSelectedDocuments()}
         </div>
         <DocumentRevisionTable
           documentRevisionsToShow={documentRevisionsToShow}

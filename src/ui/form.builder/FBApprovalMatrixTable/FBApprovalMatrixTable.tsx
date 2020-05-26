@@ -1,4 +1,5 @@
 import { Box } from "@material-ui/core";
+import _ from "lodash";
 import React from "react";
 import { FBApprovalMatrixTableInfo, FBApprovalMatrixTableProps, FBApprovalMatrixTableStatus } from "..";
 import { withFBApprovalMatrixTable } from "./FBApprovalMatrixTable.wrap";
@@ -14,7 +15,7 @@ const FBApprovalMatrixTable: React.FunctionComponent<FBApprovalMatrixTableProps>
     <Box width="100%">
       <FBApprovalMatrixTableInfo {...{ classes, approvalMatrix, mode, name }} />
     </Box>
-    {approvalRoles && (
+    {approvalRoles && !_.isEmpty(approvalRoles) && (
       <Box width="65%"style={{ overflowX: "auto", overflowY: "hidden" }}>
         <FBApprovalMatrixTableStatus {...{ classes, approvalMatrix, approvalRoles, mode, name }} />
       </Box>

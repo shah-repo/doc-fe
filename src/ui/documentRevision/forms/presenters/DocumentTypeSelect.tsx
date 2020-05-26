@@ -40,6 +40,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   const documentTypesById = useSelector(documentTypeSelectors.byId);
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const isDocTypeDisabled = (type === "newVersion" || isdocRevStatusDraft) || isDisabled;
+  const isNewOutput = type === "newOutput";
   const options: SelectOption[] = React.useMemo(() => {
     if (type === "newOutput" && outputDocumentTypes) {
       return outputDocumentTypes.map((e) =>
@@ -81,7 +82,8 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
     // FB mode
     const { schema = [] } = type;
     const formOption: DocumentGroupOptionsType = "FORM";
-    const mode: FBWorkspaceMode = type.groupOptions?.includes(formOption) ? "design" : "none";
+    const mode: FBWorkspaceMode = isNewOutput ? "form" :
+      type.groupOptions?.includes(formOption) ? "design" : "none";
     workspaceState?.setMode(mode);
     workspaceState?.setSchema(_.union(schema, workspaceState?.getSchema() || []));
     formik.handleChange(event);

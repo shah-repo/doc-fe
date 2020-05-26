@@ -31,7 +31,7 @@ const Select: React.FunctionComponent<SelectPropsWithFormik> = ({
   inputFieldProps,
   ...fieldProps
 }) => {
-  const { field, form } = fieldProps;
+  const { field } = fieldProps;
   const { submitForm } = useFormContext();
   const EmptyItem = includeEmpty && (
     <MenuItem value="">
@@ -54,7 +54,7 @@ const Select: React.FunctionComponent<SelectPropsWithFormik> = ({
         onChange={(evt, child) => {
           field.onChange(evt);
           selectProps?.onChange?.(evt, child);
-          submitForm(form.submitForm);
+          submitForm();
         }}
       >
         {EmptyItem}

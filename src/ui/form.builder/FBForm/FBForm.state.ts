@@ -50,12 +50,12 @@ export class FBFormState extends FBSchemaState {
     return _.get(this.values, fieldName) || _.get(this.initialValues, fieldName);
   };
 
-  @action public setFieldValue = (fieldName: string | undefined, value: any, withState = false) => {
+  @action public setFieldValue = (fieldName: string | undefined, value: any, withState = false, forceDefault = false) => {
     if (!fieldName) {
       return;
     }
     const prevValue = this.getFieldValue(fieldName);
-    if (_.isUndefined(value) || value.length === 0) {
+    if ((_.isUndefined(value) || value.length === 0) && !forceDefault) {
       this.omitFieldValue(fieldName);
     } else {
       _.set(this.values, fieldName, value);
@@ -156,7 +156,7 @@ export class FBFormState extends FBSchemaState {
       const reqName = reqs.shift() || "";
       const inputValue = validator.input[reqName];
       const diff = inputValue && inputValue.filter((val) => reqs.includes(val));
-      if (diff && diff.length > 0 && !val) {
+      if (diff && diff.length > 0 && (!val || _.isEmpty(val))) {
         const { messages: { attributeNames } } = validator;
         const reqsAttributes = reqs.map((req) => attributeNames[req]);
         return passes(

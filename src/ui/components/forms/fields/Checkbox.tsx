@@ -18,7 +18,7 @@ interface OwnProps {
 type CheckboxPropsWithFormik = CheckboxOwnProps & FormikFieldProps & OwnProps;
 
 const Checkbox: React.FunctionComponent<CheckboxPropsWithFormik> = ({ checkboxProps, label, ...fieldProps }) => {
-  const { field, form } = fieldProps;
+  const { field } = fieldProps;
   const { submitForm } = useFormContext();
 
   return (
@@ -34,7 +34,7 @@ const Checkbox: React.FunctionComponent<CheckboxPropsWithFormik> = ({ checkboxPr
             onChange={(evt, checked: boolean) => {
               field.onChange(evt);
               checkboxProps?.onChange?.(evt, checked);
-              submitForm(form.submitForm);
+              submitForm();
             }}
           />
         }

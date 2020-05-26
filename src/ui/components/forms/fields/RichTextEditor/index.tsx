@@ -3,7 +3,7 @@ import { Box } from "@material-ui/core";
 import classNames from "classnames";
 import { convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
-import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps, useFormikContext } from "formik";
+import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import React, { useEffect, useState } from "react";
 import { Editor, EditorProps } from "react-draft-wysiwyg";
 import useDebounce from "use-debounce/lib/useDebounce";
@@ -49,7 +49,6 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
   toggleToolbar = true,
   ...fieldProps
 }) => {
-  const formik = useFormikContext();
   const { submitForm } = useFormContext();
   const didMount = useDidMount();
   const { field, form } = fieldProps;
@@ -113,7 +112,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
       setFieldTouched(name, true);
     }
 
-    submitForm(formik.submitForm);
+    submitForm();
   };
 
   const handleFocus = () => {

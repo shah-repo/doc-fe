@@ -45,11 +45,11 @@ export const withFBInput = <T extends FBInputProps>(
     includeContext = inputState?.includeContext;
 
     (_.isUndefined(hidden) && formState?.workspaceMode === "form" && validationMode === "visibility") && (hidden =
-      !helperText && !defaultValue
+      !helperText && (!defaultValue || _.isEmpty(defaultValue))
     );
 
     (!disabled && formState?.workspaceMode === "form" && validationMode === "disabled") && (disabled =
-      !helperText && !defaultValue
+      !helperText && (!defaultValue || _.isEmpty(defaultValue))
     );
 
     function setDefaultValue(): any {
@@ -64,6 +64,8 @@ export const withFBInput = <T extends FBInputProps>(
           formState?.setFieldValue(name, value);
           return value || "";
         },
+        autocompleteasync() { return; },
+        autocomplete() { return; },
         datepicker() {
           return inputState && (inputState.value = formState.getFieldValue(name, ""));
         },
@@ -83,6 +85,7 @@ export const withFBInput = <T extends FBInputProps>(
 
     if (isClone) {
       children = React.cloneElement(child as React.ReactElement, {
+        name,
         disabled,
         onChange,
         ...(type === "textfield" && { error }),
