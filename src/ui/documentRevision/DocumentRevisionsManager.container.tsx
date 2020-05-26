@@ -68,7 +68,7 @@ DocumentRevisionManagerContainerProps
   }
 
   return (
-    <Grid container={true} spacing={2} className={classes.whiteContainer}>
+    <Grid container={true} className={classes.whiteContainer}>
       {documentRevisionId && !isNewOutput && (
         <Grid item={true} xs={sidebar ? 9 : 11} style={{ background: Colors.light_gray }}>
           <DocumentRevisionDisplayContainer
@@ -98,6 +98,7 @@ DocumentRevisionManagerContainerProps
           sidebar,
           openSidebar,
         }}
+        fbTemplate={selectedDocument?.formTemplate?.schema || []}
       />
     </Grid>
   );
