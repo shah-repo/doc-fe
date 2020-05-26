@@ -18,7 +18,11 @@ const FBSection: React.FunctionComponent<FBSectionProps> = ({
     fontSize="h6.fontSize"
     fontWeight={100}
     mb={gutter ? 4 : 0}
+<<<<<<< HEAD
     borderRadius={4}
+=======
+    id={label?.toString().replace(/\s/g, "")}
+>>>>>>> ENC-3190-sidebar
   >
     {label && (
       <Box component="span" style={{ textTransform: "uppercase" }}>
@@ -29,7 +33,6 @@ const FBSection: React.FunctionComponent<FBSectionProps> = ({
     )}
     {stepIndex && ` #${stepIndex}`}
     {children}
-  </Box>
-);
+  </Box> );
 
 export default FBSection;

@@ -1,15 +1,20 @@
 import React, { useRef, useState } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { ReactComponent as BadgeIcon } from "../../../assets/images/badge-15.svg";
+import { ReactComponent as BookmarkIcon } from "../../../assets/images/bookmark-2.svg";
 import { ReactComponent as NoteIcon } from "../../../assets/images/note.svg";
 import { ReactComponent as TimelineIcon } from "../../../assets/images/timeline.svg";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../state/reducers";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
+import { FBSchemaProps } from "../../form.builder";
+import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import AccessPermissionsContainer from "../accessPermissions/AccessPermissions.container";
 import DocumentRevisionListContainer from "../DocumentRevisionList.container";
+import Bookmarks from "./Bookmarks";
 import SidebarPresenter from "./Sidebar.presenter";
 
 interface SidebarContainerProps {
@@ -21,6 +26,7 @@ interface SidebarContainerProps {
   docId: string;
   sidebar: boolean;
   openSidebar: (value: boolean) => void;
+  fbTemplate: FBSchemaProps[];
 }
 
 export const SidebarContainer: React.FunctionComponent<
@@ -34,12 +40,15 @@ SidebarContainerProps
   isNewOutput,
   sidebar,
   openSidebar,
+  fbTemplate,
 }) => {
   const document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, documentId));
   const { documentTypeAcronym: acronym } = document?.documentType || {};
   const [indexNumber, setIndex] = useState(0);
   const intl = useIntl();
+  const url = useLocation();
 
+  useScrollIntoView();
 
   const inputRef = useRef(null);
 
@@ -80,16 +89,14 @@ SidebarContainerProps
         /> : null,
       },
     },
-    // ENC-3193
-    // {
-    //   icon: <BookmarkIcon />,
-    //   details: {
-    //     title: "Bookmarks",
-    //     component: <Box />,
-    //   },
-    // },
+    {
+      icon: <BookmarkIcon />,
+      details: {
+        title: "Bookmarks",
+        component: <Bookmarks location={url} fbTemplate={fbTemplate} />,
+      },
+    },
   ];
-
 
   const changeSize = () => {
     openSidebar(!sidebar);
