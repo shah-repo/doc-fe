@@ -16,6 +16,8 @@ export const TextFieldSelect: React.FunctionComponent<TextFieldSelectProps> = ({
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setActive(true);
 
+    // TODO: remove Autocomplete field, use pure react-select field
+    // Creatable https://react-select.com/home#creatable
     const v = event.target.value as string;
     form.setFieldValue(field.name, v);
 

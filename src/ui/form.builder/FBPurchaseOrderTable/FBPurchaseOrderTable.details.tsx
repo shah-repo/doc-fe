@@ -68,7 +68,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                     }
                     return (
                       <React.Fragment  key={`fb-po-item-${key}-${index}`}>
-                        {index === 0 && <TableCell>{index + 1}</TableCell>}
+                        {index === 0 && <TableCell>{item.index + 1}</TableCell>}
                         {index > 0 && (
                           <FBTableCell
                             align={(index > 1) ? "right" : "left"}

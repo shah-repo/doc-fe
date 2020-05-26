@@ -21,16 +21,16 @@ const CancelButton: React.FunctionComponent<Props> = ({
   shouldDisplay,
   setShouldDisplay,
 }) => {
+  const canShowCancelButton = documentStatus === DocumentRevisionStatus.Draft && version > 1;
   useEffect(() => {
     setShouldDisplay(canShowCancelButton);
-  });
+  }, [canShowCancelButton, setShouldDisplay]);
 
   const async = useAsync();
   const cancelDraft = useActionCreator(documentRevisionsActions.cancelDraft);
   const handleCancelDraft = () => {
     async.start(cancelDraft, docRevId, async);
   };
-  const canShowCancelButton = documentStatus === DocumentRevisionStatus.Draft && version > 1;
 
   return (
     <>

@@ -154,7 +154,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       includeEmpty={false}
     />
   );
-  console.log(workspaceState?.mode);
   const documentTypeId = values.document?.documentType?.id;
 
   return (
@@ -166,6 +165,10 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       xs={12}
     >
       <FormHeader/>
+      {
+        workspaceState?.mode === "form" &&
+        <DocumentRevisionOutputInfo formDocument={initialValues.formDocument} />
+      }
       <FormWrapper
         dirty={dirty}
         initialValues={initialValues}
@@ -220,7 +223,11 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           isDisabled={isDisabledInput}
         />
         <References document={initialValues.document} />
-        <RetrainField revisionChangeType={values.revisionChangeType} isDisabled={isDisabledInput} />
+        <RetrainField
+          revisionChangeType={values.revisionChangeType}
+          isDisabled={isDisabledInput}
+          documentTypeId={documentTypeId}
+        />
         <AttachmentsField isDisabled={isDisabledInput} />
         {showRevisionTypeChange && <RevisionTypeChange {...{ documentTypeId }} isDisabled={isDisabledInput} />}
         {

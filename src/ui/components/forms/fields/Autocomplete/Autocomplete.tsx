@@ -41,7 +41,6 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
     }
 
     setFieldValue(name, value);
-    submitForm(fieldProps.form.submitForm);
   };
 
   const stringify = (option: OptionType) => option.label;
@@ -62,6 +61,9 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
         filterOption={filterOption}
         input={<InputField name={fieldProps.field.name} />}
         isDisabled={isDisabled}
+        onBlur={() => {
+          submitForm();
+        }}
       />
     </Field>
   );

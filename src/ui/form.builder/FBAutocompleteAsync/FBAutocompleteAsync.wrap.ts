@@ -2,7 +2,8 @@ import _ from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBAutocompleteAsyncProps, FBAutocompleteAsyncState } from ".";
-import { FB } from "..";
+import { FB, FBOptionValueType } from "..";
+import FBAutocompleteAsyncStore from "./FBAutocompleteAsync.store";
 
 export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
   Component: React.FunctionComponent<T>
@@ -28,34 +29,36 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       valueKey: optionValueKey = "value",
       labelKey: optionLabelKey = "text",
     } = autocompleteAsyncState?.optionConfig || {};
-    const formValue = formState?.getFieldValue(name);
+    const formValue = formState?.getFieldValue(name) || defaultValue;
+
+    function getDefault() {
+      const objectValue: Record<FBOptionValueType, () => any> = {
+        object: () => formValue,
+        key: () => autocompleteAsyncState?.sliceValue(formValue),
+        id: () =>  {
+          const slicedValue = multiple
+            ? _.map(formValue, optionValueKey)
+            : _.get(formValue, optionValueKey);
+          return  autocompleteAsyncState?.sliceValue(slicedValue);
+        },
+      };
+      return objectValue[optionValueType]();
+    }
 
     useObserver(() => {
       if (!optionId) {
         return;
       }
       const slicedOptions = autocompleteAsyncState?.sliceData;
+      loading = FBAutocompleteAsyncStore.loading.get(optionId);
       if (slicedOptions) {
         options = selectedOptions
           ? autocompleteAsyncState?.sliceValue(selectedOptions)
           : slicedOptions;
       }
-      loading = autocompleteAsyncState?.loading;
     });
 
-    if (options && formValue && optionValueType === "key") {
-      const value = autocompleteAsyncState?.sliceValue(formValue);
-      defaultValue = _.map(value, { optionValueKey });
-    }
-
-    if (options && formValue && !_.isEmpty(formValue)) {
-      if (optionValueType === "key") {
-        const value = autocompleteAsyncState?.sliceValue(formValue);
-        defaultValue = _.map(value, { optionValueKey });
-      } else {
-        defaultValue = formValue;
-      }
-    }
+    (optionId && options && formValue && !_.isEmpty(formValue)) && (defaultValue = getDefault());
 
     refresh = () => autocompleteAsyncState?.load(true);
 
@@ -69,6 +72,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       ...(props as T),
       options,
       loading,
+      optionId,
       optionValueKey,
       optionLabelKey,
       optionValueType,

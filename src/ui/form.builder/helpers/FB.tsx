@@ -25,7 +25,7 @@ export class FB {
     if (_.isUndefined(optionName)) {
       return "";
     }
-    const striped = optionName.replace(fielddName, "").replace("-<-val->", "");
+    const striped = optionName.toString().replace(fielddName, "").replace("-<-val->", "");
     return _.startCase(striped);
   }
 }

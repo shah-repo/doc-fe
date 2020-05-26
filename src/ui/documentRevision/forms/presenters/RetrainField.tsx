@@ -1,10 +1,9 @@
 import { useFormikContext } from "formik";
 import * as React from "react";
-import { useEffect, useMemo } from "react";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
 import { RevisionChangeType } from "../../../../state/ducks/documentRevisions";
-import { documentTypeSelectors, DynamicUIDocTypes } from "../../../../state/ducks/documentRevisions/documentType";
 import CheckboxField from "../../../components/forms/fields/Checkbox";
+import useTraining from "../../../hooks/docCustomization/useTraining";
 
 interface Props {
   revisionChangeType?: RevisionChangeType ;
@@ -17,18 +16,7 @@ const RetrainField: React.FunctionComponent<Props> = ({
   revisionChangeType,
   isDisabled = false,
 }) => {
-  const documentType = useSelector(documentTypeSelectors.byId)[documentTypeId];
-  const isVisible = useMemo(() => {
-    switch (documentType?.documentTypeAcronym) {
-      case DynamicUIDocTypes.PO:
-      case DynamicUIDocTypes.RC:
-      case DynamicUIDocTypes.WO:
-      case DynamicUIDocTypes.SUP:
-        return false;
-      default:
-        return true;
-    }
-  }, [documentType]);
+  const isVisible = useTraining(documentTypeId);
   const formik = useFormikContext();
   useEffect(() => {
     if (revisionChangeType === RevisionChangeType.AdministrativeChange) {

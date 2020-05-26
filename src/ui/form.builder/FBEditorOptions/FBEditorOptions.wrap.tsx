@@ -15,7 +15,7 @@ export const withFBEditorOptions = <T extends FBEditorOptionsProps>(
     function stringOptions(options: string): FBOption[] {
       const stripOptions = options.replace(/^\s+|\s+$/g, "").split("\n");
       return stripOptions.map((text) => ({
-        value: _.kebabCase(text),
+        value: text,
         text,
       }));
     }

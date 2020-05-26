@@ -1,8 +1,6 @@
 import { Box } from "@material-ui/core";
-import { useFormikContext } from "formik";
 import React from "react";
 import Text from "../../../Text";
-import { useFormContext } from "../../FormContext";
 import AutocompleteField from "../Autocomplete/Autocomplete";
 import InputField from "../Input";
 import { styles } from "./utils/styles";
@@ -22,13 +20,7 @@ export const EditableSelectPresenter: React.FunctionComponent<Props> = ({
   handleBlur,
   isDisabled,
 }) => {
-  const formik = useFormikContext();
-  const { submitForm } = useFormContext();
   const classes = styles({ gutter, error: false });
-  const blurOverride = (event) => {
-    handleBlur(event);
-    submitForm(formik.submitForm);
-  };
   return (
     <Box className={classes.root}>
       <InputField
@@ -40,13 +32,13 @@ export const EditableSelectPresenter: React.FunctionComponent<Props> = ({
           value,
           onChange: handleChange,
           autoComplete: "off",
-          onBlur: blurOverride,
+          onBlur: handleBlur,
           disabled,
         }}
         formControlProps={{ className: classes.textField }}
       />
       <AutocompleteField
-        name={name}
+        name="dummy"
         autocompleteProps={{
           // eslint-disable-next-line react/display-name
           noOptionsMessage: () => <Text message="document.emptyData" />,
