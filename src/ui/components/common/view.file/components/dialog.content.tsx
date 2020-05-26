@@ -13,6 +13,7 @@ const ViewFileContent: React.FunctionComponent<ViewFileContentProps> = ({
   type,
   handleClose,
 }) => {
+  type = type.toLowerCase();
   const classes = styles();
   const [fileType, setFileType] = useState("");
 
