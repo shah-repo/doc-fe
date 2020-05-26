@@ -1,4 +1,4 @@
-import { Box, Typography } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import React from "react";
 import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions";
 import Date from "../../components/Date";
@@ -19,12 +19,12 @@ const DocumentRevisionOutputInfo: React.FunctionComponent<Props> = ({
   const docId = formDocument?.document?.docId;
 
   return (
-    <Box mb={3}>
-      <Typography variant="h6">
-        <Text message="output.info" />
-      </Typography>
-      <Box fontSize="subtitle2.fontSize">
-        {`${docId}, `}
+    <Box textAlign="center">
+      <Box style={{ fontWeight: "bold" }} component="span">
+        <Text message="output.info" />:
+      </Box>
+      <Box component="span" >
+        {` ${docId}, `}
         <Text message="common.version" />
         {` ${version}, `}
         <Date value={releasedAt} />
