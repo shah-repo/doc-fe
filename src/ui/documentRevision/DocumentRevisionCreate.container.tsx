@@ -1,5 +1,5 @@
 import React from "react";
-import { connect, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { DocumentRevision, documentRevisionsActions, RevisionChangeType } from "../../state/ducks/documentRevisions";
 import { documentsActions, documentsSelectors } from "../../state/ducks/documents";
@@ -15,6 +15,7 @@ interface DispatchProps {
   create: typeof documentRevisionsActions.create;
   setDocId: typeof documentsActions.setDocumentProposedId;
   loadDocumentProposedId: typeof documentsActions.loadDocumentProposedId;
+  loadDocument: typeof documentRevisionsActions.loadDocument;
 }
 
 interface OwnProps {
@@ -61,8 +62,8 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   type = "none",
   loadDocumentProposedId,
   proposedDocId,
+  loadDocument,
 }) => {
-  const dispatch = useDispatch();
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
   let initialValues = DEFAULT_INITIAL_VALUES();
 
@@ -82,7 +83,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
     onSuccess: (createdDocumentRevision?) => {
       if (createdDocumentRevision) {
         setDoNotPrompt(true);
-        dispatch(documentRevisionsActions.loadDocument(createdDocumentRevision.document.id));
+        loadDocument(createdDocumentRevision.document.id);
         history.push(
           documentVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id),
         );
@@ -118,4 +119,5 @@ export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(ma
   create: documentRevisionsActions.create,
   setDocId: documentsActions.setDocumentProposedId,
   loadDocumentProposedId: documentsActions.loadDocumentProposedId,
+  loadDocument: documentRevisionsActions.loadDocument,
 })(DocumentRevisionCreateContainerWithRouter);
