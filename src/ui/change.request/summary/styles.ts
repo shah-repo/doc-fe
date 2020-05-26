@@ -32,6 +32,7 @@ export default (theme: Theme) =>
     whiteContainer: {
       background: "#fff",
       padding: theme.spacing(3, 0),
+      margin: "40px 0 0 10px",
     },
     summaryContainer: {
       padding: theme.spacing(0, 4),

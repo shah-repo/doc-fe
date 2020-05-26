@@ -5,6 +5,6 @@ export default (theme: Theme) =>
     whiteContainer: {
       background: "#fff",
       padding: theme.spacing(0),
-      marginTop: theme.spacing(2.5),
+      margin: "50px 0 0 10px",
     },
   });

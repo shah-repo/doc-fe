@@ -1,15 +1,14 @@
 import { createStyles, Theme } from "@material-ui/core";
+import Colors from "../layout/theme/utils/colors";
 
 export default (theme: Theme) =>
   createStyles({
     whiteContainer: {
       background: "#F4F5F7",
-      padding: "30px",
+      marginTop: "40px",
       margin: 0,
       width: "100%",
-      marginLeft: "-40px",
-      marginBottom: "-32px",
-      paddingRight: 0,
+      height: "100%",
     },
     openButton: {
       "margin": "8px 13px 13px 11px",
@@ -40,6 +39,8 @@ export default (theme: Theme) =>
       position: "fixed",
       background: "white",
       zIndex: 1,
+      width: "100%",
+      marginTop: "10px",
     },
     sidebarContent: {
       "overflow": "auto",
@@ -47,5 +48,6 @@ export default (theme: Theme) =>
       "&::-webkit-scrollbar": {
         display: "none",
       },
+      "backgroundColor": Colors.white,
     },
   });

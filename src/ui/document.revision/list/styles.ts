@@ -3,6 +3,7 @@ import { createStyles, Theme } from "@material-ui/core";
 export default (theme: Theme) => createStyles({
   root: {
     height: "100%",
+    padding: "32px 40px",
   },
   item: {
     height: "77vh",

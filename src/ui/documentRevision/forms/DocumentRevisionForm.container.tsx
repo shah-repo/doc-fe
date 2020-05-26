@@ -191,7 +191,7 @@ DocumentRevisionFormContainerProps
       asyncAction={loadAction}
       startActionOnMount={true}
     >
-      <Grid>
+      <Grid style={{ background: "#F2F4F6" }}>
         <Box ml={3}>
           <ChangeRequestLink dataProp={documentRevision} />
         </Box>

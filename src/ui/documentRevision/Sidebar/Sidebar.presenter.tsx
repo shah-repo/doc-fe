@@ -26,7 +26,7 @@ export const SidebarPresenter: React.FunctionComponent<SidebarPresenterProps> = 
   inputRef,
   setIndex,
 }) => (
-  <Grid item={true} xs={sidebar ? 3 : 1} style={{ position: "sticky", paddingLeft: 4, marginTop: "-40px", background: "white", height: "100%" }}>
+  <Grid item={true} xs={sidebar ? 3 : 1} style={{ position: "sticky", background: "white", height: "100%" }}>
     <Grid container={true} style={{ height: "100%" }}>
       <Grid item={true} xs={1}
         style={{
