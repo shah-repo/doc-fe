@@ -84,11 +84,6 @@ export const Presenter: React.FunctionComponent<Props> = ({
         direction="column"
       >
         <ChangeRequestLink dataProp={dataProp} />
-        {FBIsOutput && (
-          <Box ml={2} mt={1}>
-            <DocumentRevisionOutputInfo formDocument={dataProp?.formDocument} />
-          </Box>
-        )}
         <SummaryField label="document.title" value={name} />
         <SummaryField
           label="document.revision.trainingRequired"
@@ -112,10 +107,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
           />
         </Box>
       )}
-      {FBDRStore.isOutput && (
-        <Box ml={2} mt={1}>
-          <DocumentRevisionOutputInfo formDocument={dataProp?.formDocument} />
-        </Box>
+      {(FBIsOutput || FBDRStore.isOutput) && (
+        <DocumentRevisionOutputInfo formDocument={dataProp?.formDocument} />
       )}
     </Box>
   );

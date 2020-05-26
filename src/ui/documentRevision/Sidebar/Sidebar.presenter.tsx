@@ -26,7 +26,7 @@ export const SidebarPresenter: React.FunctionComponent<SidebarPresenterProps> = 
   inputRef,
   setIndex,
 }) => (
-  <Grid item={true} xs={sidebar ? 3 : 1} style={{ position: "sticky", paddingLeft: 4 }}>
+  <Grid item={true} xs={sidebar ? 3 : 1} style={{ position: "sticky", paddingLeft: 4, marginTop: "-40px", background: "white", height: "100%" }}>
     <Grid container={true} style={{ height: "100%" }}>
       <Grid item={true} xs={1}
         style={{
@@ -34,6 +34,8 @@ export const SidebarPresenter: React.FunctionComponent<SidebarPresenterProps> = 
           position: "fixed",
           height: "100%",
           paddingLeft: sidebar ? "none" : 4,
+          paddingTop: sidebar ? "none" : 16,
+          background: "white",
         }}>
         <Box borderBottom="1px solid lightgray" width="max-content" marginRight={1} >
           <IconButton onClick={() => changeSize()} className={classes.openButton}>

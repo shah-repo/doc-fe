@@ -3,10 +3,13 @@ import { createStyles, Theme } from "@material-ui/core";
 export default (theme: Theme) =>
   createStyles({
     whiteContainer: {
-      background: theme.palette.background.paper,
-      padding: 0,
+      background: "#F4F5F7",
+      padding: "30px",
       margin: 0,
       width: "100%",
+      marginLeft: "-40px",
+      marginBottom: "-32px",
+      paddingRight: 0,
     },
     openButton: {
       "margin": "8px 13px 13px 11px",
