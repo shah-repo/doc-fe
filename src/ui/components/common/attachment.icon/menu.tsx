@@ -3,7 +3,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import React, { useMemo } from "react";
 import { Attachment, AttachmentType } from "../../../../state/ducks/attachments";
 import Text from "../../Text";
-import { VIEWABLE_FILES, WATERMARK_FILES } from "../view.file/utils/constants";
+import { WATERMARK_FILES } from "../view.file/utils/constants";
+import { checkIfFileIsViewable } from "../view.file/utils/helpers";
 import { AttachmentMenuProps } from "./utils/types";
 
 interface OwnProps {
@@ -21,7 +22,7 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
   handleWatermarkRequest,
 }) => {
   const file = useMemo(() => (attachment || {} as Attachment), [attachment]);
-  const isFileViewable =  useMemo(() => VIEWABLE_FILES.includes(file.type), [file.type]);
+  const isFileViewable =  useMemo(() => checkIfFileIsViewable(file.type), [file.type]);
   const canWatermark = useMemo(() => WATERMARK_FILES.includes(file.type), [file.type]);
   const {
     name: fileName,
