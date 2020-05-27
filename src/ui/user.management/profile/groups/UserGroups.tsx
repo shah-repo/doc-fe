@@ -2,11 +2,11 @@ import { Box, Button, Icon, Typography } from "@material-ui/core";
 import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Select, { components } from "react-select";
-import { ReactComponent as DeleteIcon } from "../../../../assets/images/circle-remove.svg";
+import Select from "react-select";
 import { Nullable } from "../../../../state/ducks/common";
 import { GetEmployeeResponse, userManagementActions, userManagementSelectors } from "../../../../state/ducks/userManagement";
 import SummaryField from "../../../common/summary/base";
+import { MultiValueRemove, selectStyles } from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
 import Text from "../../../components/Text";
 import useAsync from "../../../hooks/useAsync";
@@ -88,12 +88,6 @@ export const UserGroups: React.FunctionComponent<Props> = ({
     </Box>
   );
 
-  const MultiValueRemove = (props) => (
-    <components.MultiValueRemove {...props}>
-      <DeleteIcon style={{ width: 12, height: 12 }} />
-    </components.MultiValueRemove>
-  );
-
   const editGroupsRenderer = () => (
     <Box>
       <Typography variant="h6" style={{ marginBottom: "16px" }}>
@@ -103,19 +97,7 @@ export const UserGroups: React.FunctionComponent<Props> = ({
         id="UserGroups-groups"
         isMulti={true}
         components={{ MultiValueRemove }}
-        styles={{
-          multiValue: (base) => ({
-            ...base,
-            background: "#EDF4FF",
-          }),
-          multiValueRemove: (base) => ({
-            ...base,
-            "&:hover": {
-              background: "transparent",
-              cursor: "pointer",
-            },
-          }),
-        }}
+        styles={selectStyles}
         options={groupOptions}
         placeholder="Start typing to see the list of groups…"
         onChange={onChange}

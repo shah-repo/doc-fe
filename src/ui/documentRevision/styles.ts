@@ -1,6 +1,7 @@
-import { createStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import Colors from "../layout/theme/utils/colors";
 
-export default (theme: Theme) =>
+export default makeStyles((theme: Theme) =>
   createStyles({
     whiteContainer: {
       background: theme.palette.background.paper,
@@ -21,7 +22,7 @@ export default (theme: Theme) =>
       "paddingBottom": "5px",
       "&:hover, &:focus, li.active > a": {
         // TODO blue hover, refactor new colors
-        background: "#EDF4FF",
+        background: Colors.medium_blue,
         borderRadius: "5px",
       },
     },
@@ -45,4 +46,5 @@ export default (theme: Theme) =>
         display: "none",
       },
     },
-  });
+  })
+);

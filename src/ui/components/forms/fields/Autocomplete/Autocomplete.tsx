@@ -7,6 +7,7 @@ import { ValueType } from "react-select/src/types";
 import { ReactComponent as DeleteIcon } from "../../../../../assets/images/circle-remove.svg";
 import { TypographyColor, TypographyProps, TypographySize } from "../../../../../state/ducks/common";
 import Text from "../../../../components/Text";
+import Colors from "../../../../layout/theme/utils/colors";
 import { useFormContext } from "../../FormContext";
 import Field, { FieldOwnProps } from "../Field";
 import { InputField } from "../Input.styles";
@@ -18,6 +19,26 @@ interface AutocompleteOwnProps extends FieldOwnProps {
   onClick?: (value: any) => void;
   isDisabled?: boolean;
 }
+
+export const selectStyles = {
+  multiValue: (base) => ({
+    ...base,
+    background: Colors.medium_blue,
+  }),
+  multiValueRemove: (base) => ({
+    ...base,
+    "&:hover": {
+      background: "transparent",
+      cursor: "pointer",
+    },
+  }),
+};
+
+export const MultiValueRemove = (props) => (
+  <components.MultiValueRemove {...props}>
+    <DeleteIcon style={{ width: 12, height: 12 }} />
+  </components.MultiValueRemove>
+);
 
 type AutocompletePropsWithFormik = AutocompleteOwnProps &
 FormikFieldProps &
@@ -47,12 +68,6 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
   const stringify = (option: OptionType) => option.label;
   const filterOption = createFilter({ ignoreAccents: false, stringify });
 
-  const MultiValueRemove = (props) => (
-    <components.MultiValueRemove {...props}>
-      <DeleteIcon style={{ width: 12, height: 12 }} />
-    </components.MultiValueRemove>
-  );
-
   return (
     <Field {...fieldProps} label={undefined}>
       <Box mb={0.3}>
@@ -68,19 +83,7 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
         {...autocompleteProps}
         options={options}
         onChange={onChange}
-        styles={{
-          multiValue: (base) => ({
-            ...base,
-            background: "#EDF4FF",
-          }),
-          multiValueRemove: (base) => ({
-            ...base,
-            "&:hover": {
-              background: "transparent",
-              cursor: "pointer",
-            },
-          }),
-        }}
+        styles={selectStyles}
         filterOption={filterOption}
         input={<InputField name={fieldProps.field.name} />}
         isDisabled={isDisabled}

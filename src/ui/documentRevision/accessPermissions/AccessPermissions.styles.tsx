@@ -1,4 +1,5 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import Colors from "../../layout/theme/utils/colors";
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,7 +35,7 @@ export const styles = makeStyles((theme: Theme) =>
       marginTop: 16,
       marginBottom: 16,
       padding: 5,
-      background: "#EDF4FF",
+      background: Colors.medium_blue,
       borderRadius: 2,
     },
     accessButton: {

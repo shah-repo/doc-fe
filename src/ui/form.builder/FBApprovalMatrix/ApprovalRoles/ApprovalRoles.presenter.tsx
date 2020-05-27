@@ -1,8 +1,8 @@
 import { Box, createStyles, makeStyles, TextField, Typography } from "@material-ui/core";
 import React from "react";
 import { useIntl } from "react-intl";
-import Select, { components } from "react-select";
-import { ReactComponent as DeleteIcon } from "../../../../../assets/images/circle-remove.svg";
+import Select from "react-select";
+import { MultiValueRemove, selectStyles as selectStyle } from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import Text from "../../../components/Text";
 import { toMembersOptions } from "../../../group.management/utils/transform";
 import { ApprovalRolesPresenterProps } from "../FBApprovalMatrix.types";
@@ -49,26 +49,10 @@ const ApprovalRolesPresenter: React.FunctionComponent<ApprovalRolesPresenterProp
     </Box>
   );
 
-  const MultiValueRemove = (props) => (
-    <components.MultiValueRemove {...props}>
-      <DeleteIcon style={{ width: 12, height: 12 }} />
-    </components.MultiValueRemove>
-  );
-
   const employeesSelection = employees ? employees.map((employee) => employee.id) : [];
   const selectStyles = {
     menu: (styles) => ({ ...styles, zIndex: 999 }),
-    multiValue: (base) => ({
-      ...base,
-      background: "#EDF4FF",
-    }),
-    multiValueRemove: (base) => ({
-      ...base,
-      "&:hover": {
-        background: "transparent",
-        cursor: "pointer",
-      },
-    }),
+    ...selectStyle,
   };
   const approvingUsersRenderer = () => (
     <Box paddingBottom="16px">

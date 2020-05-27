@@ -71,7 +71,9 @@ SidebarContainerProps
     {
       icon: <TimelineIcon />,
       details: {
-        title: "History",
+        title: intl.formatMessage({
+          id: "document.revision.history",
+        }),
         component: documentRevisionId ? <DocumentRevisionAuditContainer
           documentRevisionId={documentRevisionId}
         /> : null,
@@ -80,7 +82,9 @@ SidebarContainerProps
     {
       icon: <BadgeIcon />,
       details: {
-        title: "Access Permissions",
+        title: intl.formatMessage({
+          id: "document.access.permissions",
+        }),
         component: documentRevisionId && canAccess && !isNewOutput ? <AccessPermissionsContainer
           documentRevisionId={documentRevisionId}
           documentId={documentId}
@@ -92,7 +96,9 @@ SidebarContainerProps
     {
       icon: <BookmarkIcon />,
       details: {
-        title: "Bookmarks",
+        title: intl.formatMessage({
+          id: "document.revision.bookmarks",
+        }),
         component: <Bookmarks location={url} fbTemplate={fbTemplate} />,
       },
     },
@@ -107,7 +113,6 @@ SidebarContainerProps
       const input = inputRef.current as any;
       input.focus();
       input.click();
-      return;
     }
   };
 
