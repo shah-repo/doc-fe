@@ -2,7 +2,8 @@ import { Box, Button, Icon, Typography } from "@material-ui/core";
 import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Select from "react-select";
+import Select, { components } from "react-select";
+import { ReactComponent as DeleteIcon } from "../../../../assets/images/circle-remove.svg";
 import { Nullable } from "../../../../state/ducks/common";
 import { GetEmployeeResponse, userManagementActions, userManagementSelectors } from "../../../../state/ducks/userManagement";
 import SummaryField from "../../../common/summary/base";
@@ -11,6 +12,7 @@ import Text from "../../../components/Text";
 import useAsync from "../../../hooks/useAsync";
 import { toEmployeeGroupsEditRequestBody } from "../../utils/transform";
 import { styles } from "./UserGroups.style";
+
 
 interface OwnProps {
   canManageUsers: boolean;
@@ -86,6 +88,12 @@ export const UserGroups: React.FunctionComponent<Props> = ({
     </Box>
   );
 
+  const MultiValueRemove = (props) => (
+    <components.MultiValueRemove {...props}>
+      <DeleteIcon style={{ width: 12, height: 12 }} />
+    </components.MultiValueRemove>
+  );
+
   const editGroupsRenderer = () => (
     <Box>
       <Typography variant="h6" style={{ marginBottom: "16px" }}>
@@ -94,6 +102,20 @@ export const UserGroups: React.FunctionComponent<Props> = ({
       <Select
         id="UserGroups-groups"
         isMulti={true}
+        components={{ MultiValueRemove }}
+        styles={{
+          multiValue: (base) => ({
+            ...base,
+            background: "#EDF4FF",
+          }),
+          multiValueRemove: (base) => ({
+            ...base,
+            "&:hover": {
+              background: "transparent",
+              cursor: "pointer",
+            },
+          }),
+        }}
         options={groupOptions}
         placeholder="Start typing to see the list of groups…"
         onChange={onChange}
