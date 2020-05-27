@@ -1,9 +1,10 @@
 import { Box, Typography } from "@material-ui/core";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
-import Select, { createFilter } from "react-select";
+import Select, { components, createFilter } from "react-select";
 import { SelectComponentsProps } from "react-select/base";
 import { ValueType } from "react-select/src/types";
+import { ReactComponent as DeleteIcon } from "../../../../../assets/images/circle-remove.svg";
 import { TypographyProps } from "../../../../../state/ducks/common";
 import Text from "../../../../components/Text";
 import { useFormContext } from "../../FormContext";
@@ -46,6 +47,12 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
   const stringify = (option: OptionType) => option.label;
   const filterOption = createFilter({ ignoreAccents: false, stringify });
 
+  const MultiValueRemove = (props) => (
+    <components.MultiValueRemove {...props}>
+      <DeleteIcon style={{ width: 12, height: 12 }} />
+    </components.MultiValueRemove>
+  );
+
   return (
     <Field {...fieldProps} label={undefined}>
       <Box mb={0.3}>
@@ -58,9 +65,23 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
         {...autocompleteProps}
         options={options}
         onChange={onChange}
+        styles={{
+          multiValue: (base) => ({
+            ...base,
+            background: "#EDF4FF",
+          }),
+          multiValueRemove: (base) => ({
+            ...base,
+            "&:hover": {
+              background: "transparent",
+              cursor: "pointer",
+            },
+          }),
+        }}
         filterOption={filterOption}
         input={<InputField name={fieldProps.field.name} />}
         isDisabled={isDisabled}
+        components={{ MultiValueRemove }}
         onBlur={() => {
           submitForm();
         }}
