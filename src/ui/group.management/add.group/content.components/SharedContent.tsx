@@ -1,11 +1,11 @@
 import { Box, Grid, TextField, Typography } from "@material-ui/core";
 import React from "react";
 import { useIntl } from "react-intl";
-import Select, { components } from "react-select";
-import { ReactComponent as DeleteIcon } from "../../../../assets/images/circle-remove.svg";
+import Select from "react-select";
 import { GroupRequestBody } from "../../../../state/ducks/groupManagement/types";
 import { GetEmployeeResponse } from "../../../../state/ducks/userManagement";
 import { AsyncActionPayload } from "../../../../state/types";
+import { MultiValueRemove, selectStyles } from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
 import FormMessage from "../../../components/forms/FormMessage";
 import Text from "../../../components/Text";
@@ -35,12 +35,6 @@ export const SharedContent: React.FunctionComponent<Props> = ({
 }) => {
   const intl = useIntl();
 
-  const MultiValueRemove = (props) => (
-    <components.MultiValueRemove {...props}>
-      <DeleteIcon style={{ width: 12, height: 12 }} />
-    </components.MultiValueRemove>
-  );
-
   const groupNameRenderer = () => (
     <Box width={700}>
       <Typography variant="h4">
@@ -69,19 +63,7 @@ export const SharedContent: React.FunctionComponent<Props> = ({
         isMulti={true}
         components={{ MultiValueRemove }}
         options={toMembersOptions(employees)}
-        styles={{
-          multiValue: (base) => ({
-            ...base,
-            background: "#EDF4FF",
-          }),
-          multiValueRemove: (base) => ({
-            ...base,
-            "&:hover": {
-              background: "transparent",
-              cursor: "pointer",
-            },
-          }),
-        }}
+        styles={selectStyles}
         onChange={(state: any) => setMembers(state)}
         value={members}
         placeholder={intl.formatMessage({

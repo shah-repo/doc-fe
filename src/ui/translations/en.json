@@ -393,6 +393,8 @@
   "document.revision.trainingRequired": "Training Required",
   "document.revision.released.date": "Released Date",
   "document.revision.docVersion": "Doc Versions",
+  "document.revision.history": "History",
+  "document.revision.bookmarks": "Bookmarks",
   "document.revision.docVersion.PO": "PO History",
   "document.revision.docVersion.RC": "Record History",
   "document.revision.docVersion.SUP": "Record History",

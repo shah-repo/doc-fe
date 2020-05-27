@@ -1,9 +1,9 @@
 import { Box, Grid, Typography } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
-import Select, { components } from "react-select";
-import { ReactComponent as DeleteIcon } from "../../../../assets/images/circle-remove.svg";
+import Select from "react-select";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
+import { MultiValueRemove, selectStyles } from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import Text from "../../../components/Text";
 
 interface Props {
@@ -16,12 +16,6 @@ export const ParentGroups: React.FunctionComponent<Props> = ({
   setParentGroups,
 }) => {
   const allGroups = useSelector(userManagementSelectors.getOfficialGroups);
-
-  const MultiValueRemove = (props) => (
-    <components.MultiValueRemove {...props}>
-      <DeleteIcon style={{ width: 12, height: 12 }} />
-    </components.MultiValueRemove>
-  );
 
   return (
     <Grid>
@@ -36,19 +30,7 @@ export const ParentGroups: React.FunctionComponent<Props> = ({
           onChange={(state: any) => setParentGroups(state)}
           value={parentGroups}
           components={{ MultiValueRemove }}
-          styles={{
-            multiValue: (base) => ({
-              ...base,
-              background: "#EDF4FF",
-            }),
-            multiValueRemove: (base) => ({
-              ...base,
-              "&:hover": {
-                background: "transparent",
-                cursor: "pointer",
-              },
-            }),
-          }}
+          styles={selectStyles}
         />
       </Box>
     </Grid>

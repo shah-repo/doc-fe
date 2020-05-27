@@ -1,6 +1,5 @@
-import { Grid, withStyles, WithStyles } from "@material-ui/core";
-import _ from "lodash";
-import React, { useState } from "react";
+import { Grid } from "@material-ui/core";
+import React, { useMemo, useState } from "react";
 import { connect, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { DocumentRevision, documentRevisionsSelectors, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
@@ -26,8 +25,7 @@ interface OwnProps {
 }
 
 export type DocumentRevisionManagerContainerProps = OwnProps &
-StateProps &
-WithStyles<typeof styles>;
+StateProps;
 
 const getDocumentRevisions = documentRevisionsSelectors.makeGetDocumentRevisions();
 const mapStateToProps = (
@@ -41,7 +39,6 @@ const mapStateToProps = (
 export const DocumentRevisionManagerContainer: React.FunctionComponent<
 DocumentRevisionManagerContainerProps
 > = ({
-  classes,
   isNewVersion,
   isNewOutput,
   documentId,
@@ -50,12 +47,13 @@ DocumentRevisionManagerContainerProps
   deprecatedAt,
   docId,
 }) => {
+  const classes = styles();
   useDocumentTitle(docId);
-  const docRevsWithoutCanceled = documentRevisions.filter((docrev) =>
-    docrev.status !== DocumentRevisionStatus.Canceled);
+  const docRevsWithoutCanceled = useMemo(() => documentRevisions.filter((docrev) =>
+    docrev.status !== DocumentRevisionStatus.Canceled), [documentRevisions]);
   const selectedDocument = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId as string));
-  const canAccess = _.get(selectedDocument, "document.canAccess", []);
+  const canAccess = selectedDocument?.document.canAccess;
 
   const [sidebar, openSidebar] = useState<boolean>(false);
 
@@ -103,6 +101,4 @@ DocumentRevisionManagerContainerProps
   );
 };
 
-export default connect<StateProps, {}, OwnProps, ApplicationState>(mapStateToProps)(
-  withStyles(styles)(DocumentRevisionManagerContainer),
-);
+export default connect<StateProps, {}, OwnProps, ApplicationState>(mapStateToProps)(DocumentRevisionManagerContainer);

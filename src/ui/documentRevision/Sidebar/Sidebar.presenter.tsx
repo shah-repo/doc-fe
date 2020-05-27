@@ -1,4 +1,4 @@
-import { Box, Grid, IconButton, Slide, Typography, withStyles, WithStyles } from "@material-ui/core";
+import { Box, Grid, IconButton, Slide, Typography } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as SidebarCloseIcon } from "../../../assets/images/move-down.svg";
 import { ReactComponent as SidebarOpenIcon } from "../../../assets/images/move-up.svg";
@@ -15,69 +15,69 @@ interface Props {
   setIndex: (index: number) => void;
 }
 
-export type SidebarPresenterProps = Props & WithStyles<typeof styles>;
-
-export const SidebarPresenter: React.FunctionComponent<SidebarPresenterProps> = ({
-  classes,
+export const SidebarPresenter: React.FunctionComponent<Props> = ({
   sidebar,
   changeSize,
   indexNumber,
   sidebarList,
   inputRef,
   setIndex,
-}) => (
-  <Grid item={true} xs={sidebar ? 3 : 1} style={{ position: "sticky", background: "white", height: "100%" }}>
-    <Grid container={true} style={{ height: "100%" }}>
-      <Grid item={true} xs={1}
-        style={{
-          borderRight: sidebar ? "2px solid lightgray" : "none",
-          position: "fixed",
-          height: "100%",
-          paddingLeft: sidebar ? "none" : 4,
-          paddingTop: sidebar ? "none" : 16,
-          background: "white",
-          right: sidebar ? "unset" : 0,
-        }}>
-        <Box borderBottom="1px solid lightgray" width="max-content" marginRight={1} >
-          <IconButton onClick={() => changeSize()} className={classes.openButton}>
-            {sidebar ? <SidebarOpenIcon /> : <SidebarCloseIcon />}
-          </IconButton>
-        </Box>
-        {sidebarList.map((item, index) =>
-          <Box key={item.details.title}>
-            <IconButton
-              ref={sidebarList[indexNumber].details.title === item.details.title ? inputRef : null}
-              onClick={() => setIndex(index)}
-              className={classes.iconButton}
-            >
-              {item.icon}
+}) => {
+  const classes = styles();
+
+  return (
+    <Grid item={true} xs={sidebar ? 3 : 1} style={{ position: "sticky", paddingLeft: 4 }}>
+      <Grid container={true} style={{ height: "100%" }}>
+        <Grid item={true} xs={1}
+          style={{
+            borderRight: sidebar ? "2px solid lightgray" : "none",
+            position: "fixed",
+            height: "100%",
+            paddingLeft: sidebar ? "none" : 4,
+            background: "white",
+            right: sidebar ? "unset" : 0,
+          }}>
+          <Box borderBottom="1px solid lightgray" width="max-content" marginRight={1} >
+            <IconButton onClick={() => changeSize()} className={classes.openButton}>
+              {sidebar ? <SidebarOpenIcon /> : <SidebarCloseIcon />}
             </IconButton>
           </Box>
-        )}
-      </Grid>
-      <Slide direction="up" in={sidebar} mountOnEnter unmountOnExit>
-        <Grid
-          item={true}
-          xs={11}
-          style={{
-            display: sidebar ? "block" : "none",
-            padding: 0,
-            width: 260,
-            position: "fixed",
-            marginLeft: 78,
-          }}>
-          <Box padding={2} paddingLeft={2} className={classes.sidebarItemTitle}>
-            <Typography variant="button">
-              <Text message={sidebarList[indexNumber].details.title} />
-            </Typography>
-          </Box>
-          <Box top={60} position="absolute" width={260} className={classes.sidebarContent}>
-            {sidebarList[indexNumber].details.component}
-          </Box>
+          {sidebarList.map((item, index) =>
+            <Box key={item.details.title}>
+              <IconButton
+                ref={sidebarList[indexNumber].details.title === item.details.title ? inputRef : null}
+                onClick={() => setIndex(index)}
+                className={classes.iconButton}
+              >
+                {item.icon}
+              </IconButton>
+            </Box>
+          )}
         </Grid>
-      </Slide>
+        <Slide direction="up" in={sidebar} mountOnEnter unmountOnExit>
+          <Grid
+            item={true}
+            xs={11}
+            style={{
+              display: sidebar ? "block" : "none",
+              padding: 0,
+              width: 260,
+              position: "fixed",
+              marginLeft: 78,
+            }}>
+            <Box padding={2} paddingLeft={2} className={classes.sidebarItemTitle}>
+              <Typography variant="button">
+                <Text message={sidebarList[indexNumber].details.title} />
+              </Typography>
+            </Box>
+            <Box top={60} position="absolute" width={260} className={classes.sidebarContent}>
+              {sidebarList[indexNumber].details.component}
+            </Box>
+          </Grid>
+        </Slide>
+      </Grid>
     </Grid>
-  </Grid>
-);
+  );
+};
 
-export default withStyles(styles)(SidebarPresenter);
+export default SidebarPresenter;
