@@ -2,7 +2,7 @@ import { Box, Table, TableBody, TableHead, TableRow } from "@material-ui/core";
 import _ from "lodash";
 import React from "react";
 import * as generateUuid from "uuid/v4";
-import { FBApprovalMatrixCheck, FBApprovalMatrixItem, FBApprovalMatrixTableInfoHead, FBApprovalMatrixTableProps, FBCheckbox, FBMapWrapper, FBSelect, FBTableCell, FBTextField } from "..";
+import { FBApprovalMatrixCheck, FBApprovalMatrixItem, FBApprovalMatrixTableInfoHead, FBApprovalMatrixTableProps, FBCheckbox, FBDocTypeGroup, FBMapWrapper, FBSelect, FBTableCell, FBTextField } from "..";
 
 const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTableProps> = ({
   approvalMatrix = [],
@@ -86,10 +86,10 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                         name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.group`}
                         rules="required"
                         showErrorMsg={false}
-                        options={[
-                          { text: "Record", value: "RECORD" },
-                          { text: "Other", value: "OTHER" },
-                        ]}
+                        // TODO: define options as static
+                        options={_.map(_.keys(FBDocTypeGroup), (k) =>
+                          ({ text: FBDocTypeGroup[k as keyof typeof FBDocTypeGroup], value: k })
+                        )}
                         gutter={false}
                         style={{ height: "30px", width: "100%" }}
                       />

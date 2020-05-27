@@ -21,3 +21,14 @@ export enum FBApprovalMatrixTableInfoHead {
   documentType = "form.builder.documentType",
   trainingReq = "form.builder.trainingReq"
 }
+
+export enum FBDocTypeGroup {
+  FORM = "FORM",
+  OTHER = "OTHER",
+  MPI = "MPI",
+  RECORD = "RECORD",
+  DYNAMIC_FORM = "DYNAMIC FORM",
+  POAM = "POAM",
+  PO = "PO",
+  WORK_ORDER = "WORK ORDER",
+}
