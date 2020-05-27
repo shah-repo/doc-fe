@@ -55,10 +55,10 @@ export default (theme: Theme) =>
     },
     sidebar: {
       "&.MuiGrid-item.MuiGrid-grid-xs-2": {
-        paddingTop: theme.spacing(12),
+        paddingTop: theme.spacing(5),
       },
       "&.MuiGrid-item.MuiGrid-grid-xs-3": {
-        paddingTop: theme.spacing(14),
+        paddingTop: theme.spacing(5),
       },
     },
   });

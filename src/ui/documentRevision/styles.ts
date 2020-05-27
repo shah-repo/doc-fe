@@ -8,7 +8,7 @@ export default (theme: Theme) =>
       marginTop: "40px",
       margin: 0,
       width: "100%",
-      height: "100%",
+      height: "max-content",
     },
     openButton: {
       "margin": "8px 13px 13px 11px",
@@ -40,7 +40,7 @@ export default (theme: Theme) =>
       background: "white",
       zIndex: 1,
       width: "100%",
-      marginTop: "10px",
+      paddingTop: "30px",
     },
     sidebarContent: {
       "overflow": "auto",
@@ -49,5 +49,6 @@ export default (theme: Theme) =>
         display: "none",
       },
       "backgroundColor": Colors.white,
+      "width": "320px",
     },
   });
