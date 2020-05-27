@@ -96,11 +96,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
           isCRLinkVisible &&
           <ChangeRequestLink dataProp={dataProp} />
         }
-        {FBIsOutput && (
-          <Box ml={2} mt={1}>
-            <DocumentRevisionOutputInfo formDocument={dataProp?.formDocument} />
-          </Box>
-        )}
+
         {
           isTitleVisible &&
           <SummaryField label={`common.title.${docTypeAcronym}`} value={name} />
@@ -132,7 +128,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
         {document.referencedBy && (
           <ReferencedByContainer dataProp={document.referencedBy} />
         )}
-        {attachments && <Attachment />}
+        {attachments && <Attachment isAttachmentEmpty={!attachments.length}/>}
         {renderTrainingControl}
       </Grid>
 
@@ -145,6 +141,9 @@ export const Presenter: React.FunctionComponent<Props> = ({
             mode="preview"
           />
         </Box>
+      )}
+      {FBIsOutput && (
+        <DocumentRevisionOutputInfo formDocument={dataProp?.formDocument} />
       )}
     </Box>
   );

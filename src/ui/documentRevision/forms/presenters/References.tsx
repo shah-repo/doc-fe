@@ -20,7 +20,7 @@ export const References: React.FunctionComponent<Props> = ({
 
   return (
     <React.Fragment>
-      <Typography variant="h6" color="textSecondary">
+      <Typography variant="h6">
         <Text translation="common.referenced.by" />
       </Typography>
       <div>

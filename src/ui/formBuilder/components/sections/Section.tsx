@@ -6,13 +6,11 @@ interface SecTionProps {
   closed: boolean;
 }
 
-const Section: React.FunctionComponent<SecTionProps> = ({ title, closed }) => {
-  return (
-    <div className={styles.section}>
-      {" "}
-      <h2>{title}</h2>{" "}
-    </div>
-  );
-};
+const Section: React.FunctionComponent<SecTionProps> = ({ title, closed }) => (
+  <div className={styles.section}>
+    {" "}
+    <h2>{title}</h2>{" "}
+  </div>
+);
 
 export default Section;

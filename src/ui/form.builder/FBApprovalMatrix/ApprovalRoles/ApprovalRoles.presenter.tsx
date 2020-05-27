@@ -2,6 +2,7 @@ import { Box, createStyles, makeStyles, TextField, Typography } from "@material-
 import React from "react";
 import { useIntl } from "react-intl";
 import Select from "react-select";
+import { MultiValueRemove, selectStyles as selectStyle } from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import Text from "../../../components/Text";
 import { toMembersOptions } from "../../../group.management/utils/transform";
 import { ApprovalRolesPresenterProps } from "../FBApprovalMatrix.types";
@@ -49,7 +50,10 @@ const ApprovalRolesPresenter: React.FunctionComponent<ApprovalRolesPresenterProp
   );
 
   const employeesSelection = employees ? employees.map((employee) => employee.id) : [];
-  const selectStyles = { menu: (styles) => ({ ...styles, zIndex: 999 }) };
+  const selectStyles = {
+    menu: (styles) => ({ ...styles, zIndex: 999 }),
+    ...selectStyle,
+  };
   const approvingUsersRenderer = () => (
     <Box paddingBottom="16px">
       <Typography variant="h6" style={{ marginBottom: "16px" }}>
@@ -71,6 +75,7 @@ const ApprovalRolesPresenter: React.FunctionComponent<ApprovalRolesPresenterProp
         placeholder={intl.formatMessage({
           id: "form.builder.approving.roles.placeholder",
         })}
+        components={{ MultiValueRemove }}
       />
     </Box>
   );
@@ -96,6 +101,7 @@ const ApprovalRolesPresenter: React.FunctionComponent<ApprovalRolesPresenterProp
         placeholder={intl.formatMessage({
           id: "form.builder.approving.roles.placeholder",
         })}
+        components={{ MultiValueRemove }}
       />
     </Box>
   );

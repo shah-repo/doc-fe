@@ -6,11 +6,13 @@ import Select from "react-select";
 import { Nullable } from "../../../../state/ducks/common";
 import { GetEmployeeResponse, userManagementActions, userManagementSelectors } from "../../../../state/ducks/userManagement";
 import SummaryField from "../../../common/summary/base";
+import { MultiValueRemove, selectStyles } from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
 import Text from "../../../components/Text";
 import useAsync from "../../../hooks/useAsync";
 import { toEmployeeGroupsEditRequestBody } from "../../utils/transform";
 import { styles } from "./UserGroups.style";
+
 
 interface OwnProps {
   canManageUsers: boolean;
@@ -94,6 +96,8 @@ export const UserGroups: React.FunctionComponent<Props> = ({
       <Select
         id="UserGroups-groups"
         isMulti={true}
+        components={{ MultiValueRemove }}
+        styles={selectStyles}
         options={groupOptions}
         placeholder="Start typing to see the list of groups…"
         onChange={onChange}

@@ -19,7 +19,7 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
   }, [value]);
 
   return (
-    <Grid item={true} xs={12}>
+    <Grid item={true} xs={12} style={{ marginBottom: "-24px" }}>
       {label && (
         <Grid item={true} xs={12} id="BaseWithhtml-label">
           <Typography variant="h6">
