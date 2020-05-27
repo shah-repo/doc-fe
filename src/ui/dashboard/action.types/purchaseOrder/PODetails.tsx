@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
 import Text from "../../../components/Text";
 import { FBPurchaseOrderValue } from "../../../form.builder";
+import POAssignedDate from "./POAssignedDate";
 import POAttachments from "./POAttachments";
 import PODetailItem from "./PODetailItem";
 import POSupplier from "./POSupplier";
@@ -45,6 +46,7 @@ export const PODetails: React.FunctionComponent<Props> = ({
     <Box>
       <POSupplier supplierId={supplierId} />
       <PODetailItem label="common.total.amount" value={`${purchaseOrder.totalAmount}`} />
+      <POAssignedDate approvals={documentRevision.changeRequest?.approvals} />
       <ExpansionPanel expanded={isExpanded} onChange={handleChange} className={classes.hideBorder}>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon color="primary" />}
