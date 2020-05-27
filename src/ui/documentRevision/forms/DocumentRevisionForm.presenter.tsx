@@ -165,10 +165,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       xs={12}
     >
       <FormHeader/>
-      {
-        workspaceState?.mode === "form" &&
-        <DocumentRevisionOutputInfo formDocument={initialValues.formDocument} />
-      }
       <FormWrapper
         dirty={dirty}
         initialValues={initialValues}
