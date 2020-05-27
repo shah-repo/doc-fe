@@ -71,6 +71,7 @@ DocumentRevisionListContainerProps
                         &nbsp;
                   {generateVersionNumber(
                     documentRevision.revision,
+                    documentRevision.subRevision,
                     documentRevision.revisionStage,
                     documentRevision.revisionChangeType,
                   )}
