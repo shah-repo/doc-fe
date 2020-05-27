@@ -15,6 +15,7 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 import { FBWorkspace, FBWorkspaceMode } from "../../form.builder";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
+import Colors from "../../layout/theme/utils/colors";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -191,7 +192,7 @@ DocumentRevisionFormContainerProps
       asyncAction={loadAction}
       startActionOnMount={true}
     >
-      <Grid style={{ background: "#F2F4F6" }}>
+      <Grid style={{ background: Colors.light_gray }} >
         <Box ml={3}>
           <ChangeRequestLink dataProp={documentRevision} />
         </Box>

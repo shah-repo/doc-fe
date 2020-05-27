@@ -4,8 +4,8 @@ import Colors from "../layout/theme/utils/colors";
 export default (theme: Theme) =>
   createStyles({
     whiteContainer: {
-      background: "#F4F5F7",
-      marginTop: "40px",
+      background: Colors.light_gray,
+      marginTop: theme.spacing(5),
       margin: 0,
       width: "100%",
       height: "max-content",
@@ -40,7 +40,7 @@ export default (theme: Theme) =>
       background: "white",
       zIndex: 1,
       width: "100%",
-      paddingTop: "30px",
+      paddingTop: theme.spacing(4),
     },
     sidebarContent: {
       "overflow": "auto",

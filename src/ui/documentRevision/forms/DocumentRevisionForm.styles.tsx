@@ -1,4 +1,5 @@
 import { createStyles, Theme } from "@material-ui/core";
+import Colors from "../../layout/theme/utils/colors";
 
 export default (theme: Theme) =>
   createStyles({
@@ -6,8 +7,8 @@ export default (theme: Theme) =>
       margin: "auto",
       width: "100%",
       padding: theme.spacing(2, 5),
-      background: "#F2F4F6",
-      marginTop: "40px",
+      background: Colors.light_gray,
+      marginTop: theme.spacing(5),
     },
     reviewButton: {
       marginTop: theme.spacing(3),

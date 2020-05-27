@@ -4,7 +4,7 @@ export const styles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       height: "100%",
-      padding: "32px 40px",
+      padding: theme.spacing(4, 5),
     },
     item: {
       height: "77vh",

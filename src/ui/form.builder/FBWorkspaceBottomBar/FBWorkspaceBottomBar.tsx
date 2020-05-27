@@ -4,6 +4,7 @@ import VerticalAlignTopIcon from "@material-ui/icons/VerticalAlignTop";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import React from "react";
 import { FBTooltip, FBWorkspaceBottomBarProps } from "..";
+import Colors from "../../layout/theme/utils/colors";
 import { withFBWorkspaceBottomBar } from "./FBWorkspaceBottomBar.wrap";
 
 const FBWorkspaceBottomBar: React.FunctionComponent<FBWorkspaceBottomBarProps> = ({
@@ -13,7 +14,7 @@ const FBWorkspaceBottomBar: React.FunctionComponent<FBWorkspaceBottomBarProps> =
   includeTransport,
   previewDisabled,
 }) => (
-  <Box display="flex" flexDirection="row-reverse" p={1} mt={2} bgcolor="#F4F5F7">
+  <Box display="flex" flexDirection="row-reverse" p={1} mt={2} bgcolor={Colors.light_gray}>
     <input
       hidden={true}
       id="fb-import-schema"
