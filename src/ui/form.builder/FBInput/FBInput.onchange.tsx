@@ -127,15 +127,23 @@ export const withFBOnChange = <T extends FBInputProps>(
       props.onChange && props.onChange(ev, value, schemaState || formState || workspaceState);
       formState.validate();
 
-      if (type === "textfield") {
+      if (type === "textfield" || type === "texteditor") {
         return;
       }
       submitForm();
     });
 
+    const onBlur = (ev) => {
+      props.onBlur && props.onBlur(ev);
+      if (type === "textfield" || type === "texteditor") {
+        submitForm();
+      }
+    };
+
     return useObserver(() => Component({
       ...(props as T),
       onChange,
+      onBlur,
       editorProperties,
       forceDefault,
       inputState,

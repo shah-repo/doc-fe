@@ -69,6 +69,7 @@ export type FBInputProps =
 | "defaultChecked"
 | "hidden"
 > & {
+  onBlur?: (ev: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => any;
   onChange?: (ev: React.ChangeEvent<any> | any, value: any, context?: FBSchemaState) => any;
   type?: FBInputType;
   index?: number;
