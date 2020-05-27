@@ -5,7 +5,7 @@ import Select, { components, createFilter } from "react-select";
 import { SelectComponentsProps } from "react-select/base";
 import { ValueType } from "react-select/src/types";
 import { ReactComponent as DeleteIcon } from "../../../../../assets/images/circle-remove.svg";
-import { TypographyColor, TypographyProps, TypographySize } from "../../../../../state/ducks/common";
+import { TypographyProps } from "../../../../../state/ducks/common";
 import Text from "../../../../components/Text";
 import Colors from "../../../../layout/theme/utils/colors";
 import { useFormContext } from "../../FormContext";
@@ -23,7 +23,7 @@ interface AutocompleteOwnProps extends FieldOwnProps {
 export const selectStyles = {
   multiValue: (base) => ({
     ...base,
-    background: Colors.medium_blue,
+    background: Colors.light_blue,
   }),
   multiValueRemove: (base) => ({
     ...base,
@@ -71,10 +71,7 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
   return (
     <Field {...fieldProps} label={undefined}>
       <Box mb={0.3}>
-        <Typography
-          variant={TypographySize[fieldProps.size || "md"]}
-          color={TypographyColor[fieldProps.color || "secondary"]}
-        >
+        <Typography variant="h6">
           <Text message={fieldProps.label} />
         </Typography>
       </Box>

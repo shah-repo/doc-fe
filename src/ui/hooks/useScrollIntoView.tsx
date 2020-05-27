@@ -1,9 +1,8 @@
-import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 export const useScrollIntoView = () => {
   const location = useLocation();
-  useEffect(() => {
+  setTimeout(() => {
     const hash = location.hash;
     if (!hash) {
       return;
@@ -11,5 +10,5 @@ export const useScrollIntoView = () => {
     const selector = `[id="${hash.substring(1)}"]`;
     const element = document.querySelector(selector) as HTMLElement;
     element && element.scrollIntoView({ behavior: "smooth" });
-  }, [location]);
+  }, 0);
 };

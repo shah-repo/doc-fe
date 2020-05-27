@@ -6,7 +6,6 @@ import { DocumentRevision, documentRevisionsSelectors, DocumentRevisionStatus } 
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import useDocumentTitle from "../hooks/useDocumentTitle";
-import Colors from "../layout/theme/utils/colors";
 import DocumentRevisionDisplayContainer from "./DocumentRevisionDisplay.container";
 import { getDocRevIdToRedirect, shouldRedircetToLatestReleasd } from "./helpers";
 import { SidebarContainer } from "./Sidebar/Sidebar.container";
@@ -68,7 +67,7 @@ DocumentRevisionManagerContainerProps
   return (
     <Grid container={true} className={classes.whiteContainer}>
       {documentRevisionId && !isNewOutput && (
-        <Grid item={true} xs={sidebar ? 9 : 11} style={{ background: Colors.light_gray }}>
+        <Grid item={true} xs={sidebar ? 9 : 11}>
           <DocumentRevisionDisplayContainer
             documentRevisionId={documentRevisionId}
             isNewVersion={isNewVersion}
@@ -77,7 +76,7 @@ DocumentRevisionManagerContainerProps
         </Grid>
       )}
       {documentRevisionId && isNewOutput && (
-        <Grid item={true} xs={7}>
+        <Grid item={true} xs={sidebar ? 9 : 11}>
           <DocumentRevisionDisplayContainer
             documentRevisionId={documentRevisionId}
             isNewOutput={isNewOutput}

@@ -1,4 +1,4 @@
-import { ListItem, Tooltip, Typography } from "@material-ui/core";
+import { Box, ListItem, Tooltip, Typography } from "@material-ui/core";
 import React from "react";
 import { Link } from "react-router-dom";
 import { stripTags } from "../../../common/utils/helpers";
@@ -27,9 +27,15 @@ export const ChangeRequestLink: React.FunctionComponent<Props> = ({
   return (
     <ListItem>
       <Typography variant="h6">
-        <Text translation="common.crid" />
-        :&nbsp;
-        <Link to={changeRequestEditPath(changeRequest.id)} target="_blank" id="ChangeRequestLink-linkButton" >
+        <Box>
+          <Text translation="common.crid"/>
+        </Box>
+        <Link
+          to={changeRequestEditPath(changeRequest.id)}
+          target="_blank"
+          id="ChangeRequestLink-linkButton"
+          style={{ textDecoration: "none" }}
+        >
           <Tooltip title={stripTags(changeRequest.description)} id="ChangeRequestLink-tootlip" >
             <span>{changeRequest.crId}</span>
           </Tooltip>

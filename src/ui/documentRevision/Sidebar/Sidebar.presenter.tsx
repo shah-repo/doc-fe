@@ -34,6 +34,8 @@ export const SidebarPresenter: React.FunctionComponent<Props> = ({
             position: "fixed",
             height: "100%",
             paddingLeft: sidebar ? "none" : 4,
+            background: "white",
+            right: sidebar ? "unset" : 0,
           }}>
           <Box borderBottom="1px solid lightgray" width="max-content" marginRight={1} >
             <IconButton onClick={() => changeSize()} className={classes.openButton}>

@@ -19,6 +19,7 @@ const FBSectionBox: React.FunctionComponent<Props> = ({
     px={2}
     fontSize="h6.fontSize"
     fontWeight={100}
+    borderRadius={4}
   >
     {label && <Text message={(label as string).toUpperCase()} />}
     <Box display="flex" flexDirection="row-reverse" mt={-3.5}>

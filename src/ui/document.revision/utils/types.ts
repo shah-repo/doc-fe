@@ -68,6 +68,7 @@ export interface ActionProps {
 export interface ReferenceSummary {
   id: string;
   url: string;
+  docId?: string;
   title: string;
 }
 

@@ -4,10 +4,11 @@ import Colors from "../layout/theme/utils/colors";
 export default makeStyles((theme: Theme) =>
   createStyles({
     whiteContainer: {
-      background: theme.palette.background.paper,
-      padding: 0,
+      background: Colors.light_gray,
+      marginTop: theme.spacing(5),
       margin: 0,
       width: "100%",
+      height: "max-content",
     },
     openButton: {
       "margin": "8px 13px 13px 11px",
@@ -22,7 +23,7 @@ export default makeStyles((theme: Theme) =>
       "paddingBottom": "5px",
       "&:hover, &:focus, li.active > a": {
         // TODO blue hover, refactor new colors
-        background: Colors.medium_blue,
+        background: Colors.light_blue,
         borderRadius: "5px",
       },
     },
@@ -38,6 +39,8 @@ export default makeStyles((theme: Theme) =>
       position: "fixed",
       background: "white",
       zIndex: 1,
+      width: "100%",
+      paddingTop: theme.spacing(4),
     },
     sidebarContent: {
       "overflow": "auto",
@@ -45,6 +48,8 @@ export default makeStyles((theme: Theme) =>
       "&::-webkit-scrollbar": {
         display: "none",
       },
+      "backgroundColor": Colors.white,
+      "width": "320px",
     },
   })
 );

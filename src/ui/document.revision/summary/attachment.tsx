@@ -1,16 +1,26 @@
-import { Box, WithStyles, withStyles } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import React from "react";
 import AttachmentField from "../../components/common/attachment.icon/container";
-import HeaderField from "../../components/common/header.field/field";
-import styles from "./styles";
+import Text from "../../components/Text";
 
-type Props = WithStyles<typeof styles>;
+export interface Props {
+  isAttachmentEmpty: boolean;
+}
 
-export const Attachment: React.FunctionComponent<Props> = ({ classes }) => (
-  <Box p={2}>
-    <HeaderField dataProp="common.attachments" color="primary" />
-    <AttachmentField name="attachments" disabled={true} />
-  </Box>
-);
+export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty }) => {
+  const emptyAttachmentsRenderer = isAttachmentEmpty && (
+    <Typography variant="h5" style={{ marginTop: "24px" }}>
+      <Text message="common.no.attachments"/>
+    </Typography>
+  );
+  return (
+    <Box pl={2}>
+      <Typography variant="h6">
+        <Text message="common.attachments"/>
+      </Typography>
+      <AttachmentField name="attachments" disabled={true} />
+      {emptyAttachmentsRenderer}
+    </Box>
+  ); };
 
-export default withStyles(styles)(Attachment);
+export default Attachment;

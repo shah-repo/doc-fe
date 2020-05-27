@@ -5,24 +5,10 @@ export default (theme: Theme) =>
     root: {
       flexGrow: 1,
     },
-    box: {
-      // padding: theme.spacing(2, 0),
-    },
     previewBox: {
       margin: 0,
       width: "100%",
-    },
-    headerContainer: {
-      padding: "0 0 40px",
-    },
-    status: {
-      color: "#fff",
-      background: theme.palette.text.hint,
-      padding: "20px 25px",
-      borderRadius: "60px",
-    },
-    crId: {
-      color: theme.palette.text.hint,
+      paddingLeft: theme.spacing(3),
     },
     trainingText: {
       marginRight: 20,

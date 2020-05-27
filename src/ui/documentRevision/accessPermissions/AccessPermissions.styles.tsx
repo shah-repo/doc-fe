@@ -35,7 +35,7 @@ export const styles = makeStyles((theme: Theme) =>
       marginTop: 16,
       marginBottom: 16,
       padding: 5,
-      background: Colors.medium_blue,
+      background: Colors.light_blue,
       borderRadius: 2,
     },
     accessButton: {
