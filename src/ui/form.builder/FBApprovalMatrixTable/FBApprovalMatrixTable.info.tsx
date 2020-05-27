@@ -65,6 +65,11 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
             defaultValue={generateUuid()}
             hidden={true}
           />
+          <FBTextField
+            name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.id`}
+            defaultValue={generateUuid()}
+            hidden={true}
+          />
           <FBMapWrapper<string[]> collection={_.keys(FBApprovalMatrixTableInfoHead)}>
             {(key: keyof typeof FBApprovalMatrixTableInfoHead, index) => (
               <>
