@@ -8,7 +8,7 @@ export interface Props {
 }
 
 export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty }) => {
-  const emptyAttachmentsRenderer = () => (
+  const emptyAttachmentsRenderer = isAttachmentEmpty && (
     <Typography variant="h5" style={{ marginTop: "24px" }}>
       <Text message="common.no.attachments"/>
     </Typography>
@@ -19,7 +19,7 @@ export const Attachment: React.FunctionComponent<Props> = ({ isAttachmentEmpty }
         <Text message="common.attachments"/>
       </Typography>
       <AttachmentField name="attachments" disabled={true} />
-      {isAttachmentEmpty && emptyAttachmentsRenderer()}
+      {emptyAttachmentsRenderer}
     </Box>
   ); };
 
