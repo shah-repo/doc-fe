@@ -1,6 +1,7 @@
 import { InputLabel, Theme } from "@material-ui/core";
 import InputBase from "@material-ui/core/InputBase";
 import { createStyles, withStyles } from "@material-ui/core/styles";
+import Colors from "../../../layout/theme/utils/colors";
 
 export const InputField = withStyles((theme: Theme) =>
   createStyles({
@@ -12,9 +13,8 @@ export const InputField = withStyles((theme: Theme) =>
       "fontFamily": "Open Sans, sans-serif;",
     },
     input: {
-      // "backgroundColor": theme.palette.background.madefaultin,
       position: "relative",
-      backgroundColor: "transparent",
+      backgroundColor: Colors.white,
       fontSize: theme.spacing(2),
       width: "auto",
       padding: theme.spacing(2),

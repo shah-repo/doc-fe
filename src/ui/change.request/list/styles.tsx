@@ -3,6 +3,7 @@ import { createStyles, Theme } from "@material-ui/core";
 export default (theme: Theme) => createStyles({
   root: {
     height: "100%",
+    padding: theme.spacing(4, 5),
   },
   item: {
     height: "77vh",
@@ -16,7 +17,7 @@ export default (theme: Theme) => createStyles({
     boxShadow: "none",
   },
   clearButton: {
-    margin: "0px 16px 0px 0px",
+    margin: theme.spacing(0, 2, 0, 0),
     backgroundColor: theme.palette.common.white,
   },
 });

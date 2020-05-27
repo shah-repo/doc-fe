@@ -73,6 +73,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   typePrefix?: string;
   version: number;
   revision: number;
+  subRevision?: number;
   revisionStage: number;
   revisionChangeType: RevisionChangeType;
   name: string;
@@ -199,6 +200,7 @@ export interface FBDocumentRevisionProps {
   formInput?: Record<string, any>;
   document?: Partial<DocumentRevisionDocumentRequest>;
   revision?: number;
+  subRevision?: number;
   revisionStage?: number;
   revisionChangeType?: RevisionChangeType;
   releasedAt?: string;

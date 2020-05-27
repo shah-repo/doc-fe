@@ -13,18 +13,18 @@ const DocumentRevisionOutputInfo: React.FunctionComponent<Props> = ({
   formDocument = {},
 }) => {
 
-  const { revision, revisionStage, revisionChangeType, releasedAt } = formDocument || {};
-  const version = generateVersionNumber(revision, revisionStage, revisionChangeType);
+  const { revision, subRevision, revisionStage, revisionChangeType, releasedAt } = formDocument || {};
+  const version = generateVersionNumber(revision, subRevision, revisionStage, revisionChangeType);
 
   const docId = formDocument?.document?.docId;
 
   return (
-    <Box mb={3}>
-      <Box mb={0.5} fontSize="h6.fontSize" fontWeight={300}>
-        <Text message="output.info" />
+    <Box textAlign="center" mb={8}>
+      <Box style={{ fontWeight: "bold" }} component="span">
+        <Text message="output.info" />:
       </Box>
-      <Box display="row" fontSize="subtitle2.fontSize">
-        {`${docId}, `}
+      <Box component="span" >
+        {` ${docId}, `}
         <Text message="common.version" />
         {` ${version}, `}
         <Date value={releasedAt} />

@@ -28,8 +28,8 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
       </FBTableCell>
     </TableRow>
     <TableRow>
-      <FBTableCell label="form.builder.sub.total" colSpan={4} className="FBTotal-root" />
-      <FBTableCell className="FBTotal-root" align="right">
+      <FBTableCell label="form.builder.sub.total" colSpan={3} className="FBTotal-root" />
+      <FBTableCell className="FBTotal-root" align="right" colSpan={2}>
         <FormattedNumber
           value={Number(calculation?.subTotal)}
           style="currency"
@@ -38,8 +38,8 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
       </FBTableCell>
     </TableRow>
     <TableRow>
-      <FBTableCell label="form.builder.tax" className="FBTotal-root" colSpan={4} />
-      <FBTableCell className="FBTotal-root" align="right">
+      <FBTableCell label="form.builder.tax" className="FBTotal-root" colSpan={3} />
+      <FBTableCell className="FBTotal-root" align="right" colSpan={2}>
         <FormattedNumber
           value={Number(calculation?.tax)}
           style="currency"
@@ -67,8 +67,8 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
       </FBTableCell>
     </TableRow>
     <TableRow>
-      <FBTableCell label="form.builder.total" className="FBTotal-root" colSpan={4} />
-      <FBTableCell className="FBTotal-root" align="right">
+      <FBTableCell label="form.builder.total" className="FBTotal-root" colSpan={3} />
+      <FBTableCell className="FBTotal-root" align="right" colSpan={2}>
         <FormattedNumber
           value={Number(calculation?.totalAmount)}
           style="currency"
