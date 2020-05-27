@@ -2,7 +2,7 @@
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBWorkspaceProps, FBWorkspaceState } from ".";
-import { FB } from "..";
+import { FB, FBSnackbarState } from "..";
 import { FBDialogState } from "../FBDialog";
 
 // Disable missing translation message for the non translation cases.
@@ -26,6 +26,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
   const Comp = ({
     workspaceState,
     dialogState,
+    snackbarState,
     schema,
     mode,
     isStarter,
@@ -36,6 +37,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
 
     workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, { schema, mode, document });
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
+    snackbarState = FB.useRef<FBSnackbarState>(FBSnackbarState);
 
     // *TODO: find a way to reset constructor props
     workspaceState.document = document;
@@ -55,6 +57,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       mode,
       dialogState,
       workspaceState,
+      snackbarState,
     });
   };
 
