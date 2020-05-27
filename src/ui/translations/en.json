@@ -292,6 +292,7 @@
   "common.none": "None",
   "common.no.attachments": "No attachments",
   "common.unsaved.changes": "You have unsaved changes.",
+  "common.assigned.date": "Assigned date",
   "output.info": "Form Info",
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",

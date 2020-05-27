@@ -22,6 +22,7 @@ export interface Approval {
   approver: Owner;
   reviewedAt?: string;
   active: boolean;
+  assignedAt?: string;
 }
 
 export interface Id {
