@@ -78,10 +78,10 @@ export const generateVersionNumber = (
     return "OBS";
   }
   switch (revisionStage) {
-    case 1:
-      // eslint-disable-next-line no-case-declarations
+    case 1: {
       const subRev = (subRevision && subRevision > 0) ? `.${subRevision}` : "";
       return `${revision}${subRev}`;
+    }
     case 2:
       return `1${getAlphabetFromNumber(revision)}`;
     case 3:
