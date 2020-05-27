@@ -18,7 +18,7 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
         </h4>
       </div>
       <div
-        class="MuiBox-root MuiBox-root-74"
+        class="MuiBox-root MuiBox-root-81"
       >
         <input
           accept=".json"
@@ -36,7 +36,7 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
             class="MuiIconButton-label"
           >
             <span
-              class="MuiBox-root MuiBox-root-98"
+              class="MuiBox-root MuiBox-root-105"
             >
               <svg
                 aria-hidden="true"
@@ -62,7 +62,7 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
             class="MuiIconButton-label"
           >
             <span
-              class="MuiBox-root MuiBox-root-108"
+              class="MuiBox-root MuiBox-root-115"
             >
               <label
                 for="fb-import-schema"
@@ -93,7 +93,7 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
             class="MuiIconButton-label"
           >
             <span
-              class="MuiBox-root MuiBox-root-109"
+              class="MuiBox-root MuiBox-root-116"
             >
               <svg
                 aria-hidden="true"
@@ -111,7 +111,7 @@ exports[`Supplier survey container test renders the survey and fails on submit 1
         </button>
       </div>
       <div
-        class="MuiBox-root MuiBox-root-110"
+        class="MuiBox-root MuiBox-root-117"
       >
         <button
           class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary"
