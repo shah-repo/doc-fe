@@ -2,7 +2,7 @@ import { Portal } from "@material-ui/core";
 import _ from "lodash";
 import React from "react";
 import { FBWorkspaceMemo, FBWorkspaceProps } from ".";
-import { FBConditionalWrapper, FBDialog, FBForm, FBProvider } from "..";
+import { FBConditionalWrapper, FBDialog, FBForm, FBProvider, FBSnackbar } from "..";
 import { withFBWorkspace } from "./FBWorkspace.wrap";
 
 const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
@@ -12,12 +12,14 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
   children,
   portalContainer,
   dialogState,
+  snackbarState,
   schema,
   mode = "none",
   initialValues,
   includeTransport,
 }) => (
-  <FBProvider {...{ workspaceState, dialogState }}>
+  <FBProvider {...{ workspaceState, dialogState, snackbarState }}>
+    <FBSnackbar autoHideDuration={6000}/>
     <FBDialog />
     <FBForm {...{ initialValues }} workspaceMode={mode}>
       {children}

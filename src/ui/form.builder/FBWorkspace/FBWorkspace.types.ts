@@ -1,4 +1,4 @@
-import { FBDialogState, FBFormProps, FBSchemaProps, FBWorkspaceState } from "..";
+import { FBDialogState, FBFormProps, FBSchemaProps, FBSnackbarState, FBWorkspaceState } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 
 
@@ -9,6 +9,7 @@ export type FBWorkspaceProps =
 & {
   workspaceState?: FBWorkspaceState;
   dialogState?: FBDialogState;
+  snackbarState?: FBSnackbarState;
   portalContainer?: React.MutableRefObject<HTMLDivElement | null>;
   schema?: FBSchemaProps[];
   mode?: FBWorkspaceMode;
