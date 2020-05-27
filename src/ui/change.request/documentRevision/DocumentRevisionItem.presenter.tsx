@@ -48,6 +48,7 @@ DocumentRevisionItemPresenterProps
               label="common.version"
               value={generateVersionNumber(
                 documentRevision.revision,
+                documentRevision.subRevision,
                 documentRevision.revisionStage,
                 documentRevision.revisionChangeType,
               )}

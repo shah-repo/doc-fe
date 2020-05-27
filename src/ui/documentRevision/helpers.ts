@@ -68,6 +68,7 @@ const getAlphabetFromNumber = (num: number) => {
 export const generateVersionNumber = (
   revision?: number,
   revisionStage?: number,
+  subRevision?: number,
   revisionChangeType?: RevisionChangeType,
 ) => {
   if (!revision || !revisionStage) {
@@ -78,7 +79,9 @@ export const generateVersionNumber = (
   }
   switch (revisionStage) {
     case 1:
-      return revision;
+      // eslint-disable-next-line no-case-declarations
+      const subRev = (subRevision && subRevision > 0) ? `.${subRevision}` : "";
+      return `${revision}${subRev}`;
     case 2:
       return `1${getAlphabetFromNumber(revision)}`;
     case 3:
