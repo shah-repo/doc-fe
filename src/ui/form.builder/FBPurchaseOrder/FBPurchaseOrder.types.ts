@@ -51,6 +51,7 @@ export type FBPurchaseOrderValue = FBPurchaseOrderCalculation
 };
 
 export type FBPurchaseOrderConstructor = FBPurchaseOrderValue & {
+  submitForm: () => void;
   documentId?: string;
 };
 

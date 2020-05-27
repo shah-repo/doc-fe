@@ -1,6 +1,7 @@
 import React from "react";
 import { FB, FBDialogState, FBForm, FBPurchaseOrderActions, FBPurchaseOrderForm, FBPurchaseOrderItem, FBPurchaseOrderProps, FBPurchaseOrderState } from "..";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { useFormContext } from "../../components/forms/FormContext";
 
 export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
   Component: React.FunctionComponent<T>,
@@ -15,6 +16,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
     ...props
   }: T) => {
 
+    const { submitForm } = useFormContext();
     const { workspaceState, formState } = FB.useStores();
     const formValue = formState?.getFieldValue(name, defaultValue);
     const { status: documentStatus } = workspaceState?.document || {};
@@ -22,6 +24,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
     purchaseOrderState = FB.useRef<FBPurchaseOrderState>(FBPurchaseOrderState, {
       ...formValue,
       documentId: workspaceState?.document?.document?.id,
+      submitForm,
     });
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
 

@@ -21,8 +21,9 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     totalInUSD: "0.00",
     dateOfExchangeRate: "",
   };
+  public submitForm;
 
-  public constructor({ documentId, ...initialValues }: FBPurchaseOrderConstructor) {
+  public constructor({ documentId, submitForm, ...initialValues }: FBPurchaseOrderConstructor) {
     super();
     if (!initialValues || _.isEmpty(initialValues)) {
       return;
@@ -35,6 +36,7 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     const calculation = _.omit(initialValues, "items");
     set(this, "items", items);
     set(this, "calculation", { ...this.calculation, ...calculation });
+    this.submitForm = submitForm;
   }
 
   @action public setItemTotalAmount = (item?: FBPurchaseOrderItem) => {
@@ -122,6 +124,7 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
       shippingCost: this.formatCost(shippingCost),
       totalInUSD: this.formatCost(totalInUSD),
     });
+    this.submitForm?.();
   };
 
   @action public deleteItem = (index: number) => {
