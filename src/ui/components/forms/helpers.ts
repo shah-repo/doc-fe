@@ -12,6 +12,9 @@ export const compareValuesToSubmit = (initialValues, values, transformMethod) =>
   const formInputDiff = {};
 
   for (const [key, value] of Object.entries(transformedValues)) {
+    if (key === "formInput") {
+      continue;
+    }
     if (key === "formDocument") {
       if ((value as any)?.id !== transformedInitialValues.formDocument?.id) {
         diff[key] = value;
@@ -45,12 +48,10 @@ export const compareValuesToSubmit = (initialValues, values, transformMethod) =>
       formInputDiff[key] = valueToCompare;
     }
   }
+  const hasKeysNotInValuesFormInput = Object.keys(transformedInitialValues.formInput)
+    .some((k) => !(k in transformedValues.formInput));
 
-  // if (_.isEmpty(formInputDiff)) {
-  //   return diff;
-  // }
-
-  if (!transformedValues.formInput) {
+  if (_.isEmpty(formInputDiff) && !hasKeysNotInValuesFormInput) {
     return diff;
   }
 
