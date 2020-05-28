@@ -2,10 +2,10 @@ import React, { useRef, useState } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { ReactComponent as BadgeIcon } from "../../../assets/images/badge-15.svg";
-import { ReactComponent as BookmarkIcon } from "../../../assets/images/bookmark-2.svg";
+import { ReactComponent as BadgeIcon } from "../../../assets/images/badge.svg";
+import { ReactComponent as BookmarkIcon } from "../../../assets/images/bookmark.svg";
+import { ReactComponent as TimelineIcon } from "../../../assets/images/history.svg";
 import { ReactComponent as NoteIcon } from "../../../assets/images/note.svg";
-import { ReactComponent as TimelineIcon } from "../../../assets/images/timeline.svg";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../state/reducers";
@@ -115,6 +115,14 @@ SidebarContainerProps
       input.click();
     }
   };
+  const handleMenuIconClick = (index: number) => {
+    if (!sidebar) {
+      openSidebar(!sidebar);
+      setIndex(index);
+      return;
+    }
+    setIndex(index);
+  };
 
   return (
     <SidebarPresenter
@@ -125,6 +133,7 @@ SidebarContainerProps
         sidebarList,
         inputRef,
         setIndex,
+        handleMenuIconClick,
       }}
     />
   );

@@ -3,6 +3,7 @@ export enum Colors {
   white = "#FFF",
   black = "#000",
   // gray
+  hint_gray = "#b4c0ca",
   light_gray = "#F2F4F6",
   medium_gray = "#D4DBE1",
   gray = "#8A9DAD",

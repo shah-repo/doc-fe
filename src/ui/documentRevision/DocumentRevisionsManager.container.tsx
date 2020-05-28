@@ -55,7 +55,7 @@ DocumentRevisionManagerContainerProps
     documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId as string));
   const canAccess = selectedDocument?.document.canAccess;
 
-  const [sidebar, openSidebar] = useState<boolean>(false);
+  const [sidebar, openSidebar] = useState<boolean>(true);
 
   if (shouldRedircetToLatestReleasd(documentRevisions, documentRevisionId)) {
     const docRevIdToRedirect = getDocRevIdToRedirect(documentRevisions, deprecatedAt);

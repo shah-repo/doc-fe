@@ -11,10 +11,9 @@ export default makeStyles((theme: Theme) =>
       height: "max-content",
     },
     openButton: {
-      "margin": "8px 13px 13px 11px",
+      "marginTop": theme.spacing(3),
       "&:hover, :focus": {
         background: "#none",
-
       },
     },
     iconButton: {
@@ -22,9 +21,14 @@ export default makeStyles((theme: Theme) =>
       "paddingTop": "5px",
       "paddingBottom": "5px",
       "&:hover, &:focus, li.active > a": {
-        // TODO blue hover, refactor new colors
-        background: Colors.light_blue,
-        borderRadius: "5px",
+        "background": Colors.light_blue,
+        "borderRadius": "5px",
+        "& svg": {
+          stroke: Colors.medium_blue,
+        },
+      },
+      "& svg": {
+        stroke: Colors.hint_gray,
       },
     },
     sidebar: {
@@ -41,6 +45,7 @@ export default makeStyles((theme: Theme) =>
       zIndex: 1,
       width: "100%",
       paddingTop: theme.spacing(4),
+      textTransform: "uppercase",
     },
     sidebarContent: {
       "overflow": "auto",
@@ -50,6 +55,13 @@ export default makeStyles((theme: Theme) =>
       },
       "backgroundColor": Colors.white,
       "width": "320px",
+      "marginTop": theme.spacing(1),
+    },
+    border: {
+      width: "60%",
+      backgroundColor: Colors.hint_gray,
+      height: "1px",
+      border: 0,
     },
   })
 );
