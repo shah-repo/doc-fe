@@ -1,12 +1,7 @@
 import faker from "faker";
 import { Audit } from "../../audit/types";
 import { getOwner, getUser } from "../../common/tests/factories";
-import {
-  ChangeRequest,
-  ChangeRequestAvailableApprovers,
-  ChangeRequestEditRequestBody,
-  ChangeRequestStatus,
-} from "../types";
+import { ChangeRequest, ChangeRequestAvailableApprovers, ChangeRequestEditRequestBody, ChangeRequestStatus } from "../types";
 
 const createNestedObject = () => (
   {
@@ -87,7 +82,7 @@ export const getApprover = (
 
 export const getAudit = (audit: Partial<Audit> = {}): Audit => ({
   id: faker.random.uuid(),
-  type: faker.lorem.word(),
+  type: "ARRAY_NEW",
   field: faker.lorem.word(),
   nextValue: faker.lorem.sentence(),
   groupId: "1",
