@@ -58,8 +58,9 @@ export const compareValuesToSubmit = (initialValues, values, transformMethod) =>
   const diff = getDiff(transformedValues, transformedInitialValues);
   const formInputDiff = getFormInputDiff(transformedValues, transformedInitialValues);
 
-  const hasKeysNotInValuesFormInput = Object.keys(transformedInitialValues.formInput)
-    .some((k) => !(k in transformedValues.formInput));
+  const hasKeysNotInValuesFormInput = transformedInitialValues?.formInput ?
+    Object.keys(transformedInitialValues.formInput).some((k) => !(k in transformedValues.formInput)) :
+    false;
 
   if (_.isEmpty(formInputDiff) && !hasKeysNotInValuesFormInput) {
     return diff;
