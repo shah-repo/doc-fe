@@ -9,7 +9,7 @@ const FBApprovalMatrixTableStatus: React.FunctionComponent<FBApprovalMatrixTable
   mode,
   classes,
   name,
-}) =>  (
+}) => (
   <Table className={classes?.tableStatus}>
     <TableHead >
       <TableRow style={{ height: "30px" }}>
@@ -96,6 +96,7 @@ const FBApprovalMatrixTableStatus: React.FunctionComponent<FBApprovalMatrixTable
                         name={`${name}.approvalMatrix.${approvalMatrix.length}.approvalRoles.${key}.${index}`}
                         gutter={false}
                         defaultChecked={false}
+                        forceDefault={true}
                       />
                     </Box>
                   </FBTableCell>

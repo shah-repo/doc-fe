@@ -46,7 +46,7 @@ export class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldD
       });
       return am;
     });
-    this.approvalMatrix = approvalMatrix;
+    this.setApprovalMatrix(approvalMatrix);
     this.setApprovalRoles(approvalRoles);
   };
 

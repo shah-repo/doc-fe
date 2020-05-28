@@ -1,9 +1,7 @@
-import { last, size } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import * as generateUuid from "uuid/v4";
 import { FBApprovalMatrixProps } from ".";
-import { FB, FBApprovalMatrixDocType, FBApprovalMatrixFieldData, FBApprovalMatrixItem, FBApprovalMatrixSection, FBApprovalMatrixTable, FBDialogState } from "..";
+import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixSection, FBApprovalMatrixTable, FBDialogState } from "..";
 
 export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
   Component: React.FunctionComponent<T>
@@ -35,24 +33,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
 
     handleSave = () => {
       const formValue: Partial<FBApprovalMatrixFieldData> = formState?.getFieldValue(name);
-      const am = [...formValue.approvalMatrix || []];
-      const lastAM = last(am) as FBApprovalMatrixItem;
-      // TODO: generate defaults from form & check forceDefault for boolean values
-      am[size(am) - 1] = {
-        id: generateUuid(),
-        approvalRoles: {
-          stage1: lastAM.approvalRoles?.stage1 || [],
-          stage2: lastAM.approvalRoles?.stage2 || [],
-          stage3: lastAM.approvalRoles?.stage3 || [],
-          admStage: lastAM.approvalRoles?.admStage || [],
-        },
-        docType: {
-          ...last(am)?.docType as FBApprovalMatrixDocType,
-          id: generateUuid(),
-          defaultTraining: last(am)?.docType?.defaultTraining || false,
-        },
-      };
-      approvalMatrixFieldState?.setApprovalMatrix(am);
+      approvalMatrixFieldState?.setApprovalMatrix(formValue.approvalMatrix);
       approvalMatrixFieldState?.setMode("none");
     };
 
