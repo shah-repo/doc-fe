@@ -71,8 +71,8 @@ DocumentRevisionListContainerProps
                         &nbsp;
                   {generateVersionNumber(
                     documentRevision.revision,
-                    documentRevision.subRevision,
                     documentRevision.revisionStage,
+                    documentRevision.subRevision,
                     documentRevision.revisionChangeType,
                   )}
                         &nbsp; - <Text message={`${documentRevision.status}.${acronym}`} />
