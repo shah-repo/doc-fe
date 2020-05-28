@@ -2,7 +2,6 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { FBPurchaseOrderClasses } from ".";
 import { FB, FBPurchaseOrderTableProps } from "..";
-import { useFormContext } from "../../components/forms/FormContext";
 
 export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
   Component: React.FunctionComponent<T>,
@@ -21,7 +20,6 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
   }: T) => {
 
     const { purchaseOrderState, formState } = FB.useStores();
-    const { submitForm } = useFormContext();
     classes = FBPurchaseOrderClasses();
 
     handleShippingCost = (ev: React.ChangeEvent<any>) => {
@@ -29,16 +27,12 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       purchaseOrderState?.setShippingCost(value);
     };
 
-    handleCurrencyChange = (ev, currency) => {
+    handleCurrencyChange = (ev, currency) =>
       purchaseOrderState?.setCurrency(currency.props.value);
-    };
 
     handleDelete = (index: number) => (e: any) => {
       e.stopPropagation();
-      if (!disabled && purchaseOrderState) {
-        purchaseOrderState.deleteItem(index);
-        submitForm();
-      }
+      !disabled && purchaseOrderState && purchaseOrderState.deleteItem(index);
     };
 
     useObserver(() => {

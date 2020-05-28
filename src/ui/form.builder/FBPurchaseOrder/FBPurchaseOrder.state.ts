@@ -104,6 +104,7 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
       return;
     }
     set(this, "items", _.filter(this.items, (itm) => itm.id !== item.id));
+    this.submitForm?.();
   };
 
   @action public calculateCost = () => {
@@ -139,6 +140,7 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
       }));
     set(this, "items", items);
     this.calculateCost();
+    this.submitForm?.();
   };
 
   protected onSuccess() {
