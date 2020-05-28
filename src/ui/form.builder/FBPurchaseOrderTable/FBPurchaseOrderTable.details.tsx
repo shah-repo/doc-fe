@@ -64,7 +64,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                       tooltipTitle = label;
                     }
                     if (key === "unitPrice") {
-                      label = intl.formatNumber(item[key], { style: "currency", currency: calculation?.currency });
+                      label = intl.formatNumber(item[key] || 0, { style: "currency", currency: calculation?.currency });
                     }
                     return (
                       <React.Fragment  key={`fb-po-item-${key}-${index}`}>

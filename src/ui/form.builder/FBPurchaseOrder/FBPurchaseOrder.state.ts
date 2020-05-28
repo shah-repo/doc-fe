@@ -161,12 +161,14 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
 
   private formatCost = (value: any) => Number(value || 0).toFixed(2);
 
+  private formatDate = (date) => date ? moment(date).format("MM/DD/YYYY") : "";
+
   private addItem = (item: FBPurchaseOrderItem): FBPurchaseOrderItem[] => _.union(this.items, [{
     id: FB.uniqid,
     ...item,
     received: 0,
     totalAmount: this.itemTotalAmount.toFixed(2),
-    formattedDate: moment(item.date).format("MM/DD/YYYY"),
+    formattedDate: this.formatDate(item.date),
     index: _.size(this.items),
   }]);
 
@@ -174,7 +176,7 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     this.items[item.index] = {
       ...item,
       totalAmount: this.itemTotalAmount.toFixed(2),
-      formattedDate: moment(item.date).format("MM/DD/YYYY"),
+      formattedDate: this.formatDate(item.date),
     };
     return this.items;
   };
