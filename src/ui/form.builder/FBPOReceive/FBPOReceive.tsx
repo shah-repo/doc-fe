@@ -29,7 +29,6 @@ const FBPOReceive: React.FunctionComponent<FBPOReceiveProps> = ({
       )}
       {!loading && schema && <FBForm {...{ schema, initialValues }} />}
     </Box>
-
   </FBProvider>
 );
 
