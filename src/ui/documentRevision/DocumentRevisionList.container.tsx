@@ -7,6 +7,7 @@ import { Nullable } from "../../state/ducks/common";
 import { DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import SummaryInfo from "../common/summary/SummaryInfo";
+import Date from "../components/Date";
 import Text from "../components/Text";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import { styles } from "./DocumentRevisionList.container.styles";
@@ -95,8 +96,11 @@ DocumentRevisionListContainerProps
                 <SummaryInfo
                   label="common.released"
                   value={
-                    documentRevision.obsoletedAt ||
-                              documentRevision.releasedAt as string
+                    <Date value={
+                      documentRevision.obsoletedAt ||
+                              documentRevision.releasedAt
+                    }
+                    />
                   }
                 />
               </NavLink>

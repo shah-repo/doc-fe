@@ -62,6 +62,9 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
       fontWeight: "bold",
       fontFamily: "Open Sans, sans-serif;",
     },
+    contained: {
+      boxShadow: "none",
+    },
   },
   MuiFab: {
     root: {

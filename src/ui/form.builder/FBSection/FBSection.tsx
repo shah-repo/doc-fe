@@ -20,6 +20,7 @@ const FBSection: React.FunctionComponent<FBSectionProps> = ({
     mb={gutter ? 4 : 0}
     borderRadius={4}
     id={label?.toString().replace(/\s/g, "")}
+    style={{ scrollMarginTop: 50 }}
   >
     {label && (
       <Box component="span" style={{ textTransform: "uppercase" }}>

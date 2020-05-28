@@ -1,43 +1,70 @@
-import { Button } from "@material-ui/core";
-import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
+import { Box, Button, createStyles, makeStyles, Theme, Tooltip } from "@material-ui/core";
 import copy from "copy-to-clipboard";
 import React from "react";
 import { Link } from "react-router-dom";
+import { ReactComponent as CopyIcon } from "../../../assets/images/copy_outlined.svg";
+import Text from "../../components/Text";
 import { FBSchemaProps } from "../../form.builder/FBSchema/FBSchema.types";
+import Colors from "../../layout/theme/utils/colors";
 
 interface SidebarPresenterProps {
   location: Location;
   fbTemplate: FBSchemaProps[];
 }
 
+export const styles = makeStyles((theme: Theme) =>
+  createStyles({
+    link: {
+      textDecoration: "none",
+    },
+    item: ({ isCurrentBookmark }) => ({
+      color: Colors.black,
+      width: "100%",
+      fontWeight: isCurrentBookmark ? 700 : 100,
+      padding: theme.spacing(1, 2),
+    }),
+    button: {
+      "padding": 0,
+      "margin": 0,
+      "backgroundColor": "transparent",
+      "float": "right",
+      "&:hover": {
+        backgroundColor: "transparent",
+      },
+    },
+  }));
+
 export const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ location, fbTemplate }) => {
+
   const links =  fbTemplate.map((schema) => {
-    const link = window.location.href.split("#");
-    const hash = schema.label?.toString().replace(/\s/g, "");
     if (schema.type === "section") {
+      const hash = schema.label?.toString().replace(/\s/g, "");
+      const link = window.location.href.split("#");
+      const isCurrentBookmark = hash === link[1];
+      const classes = styles({ isCurrentBookmark });
+
       return (
         <Link
-          style={{ textDecoration: "none" }}
-          to={{
-            hash,
-          }}
+          className={classes.link}
+          to={{ hash }}
           key={schema.index}>
-          <div
-            style={{ paddingLeft: 13, paddingTop: 8, paddingBottom: 8, color: "black", width: "100%" }}>
+          <Box className={classes.item}>
             {schema.label}
             <Button
               onClick={() => copy(`${link[0]}#${hash}`)}
-              style={{ padding: 0, margin: 0, backgroundColor: "transparent", float: "right"  }}
+              className={classes.button}
             >
-              <FileCopyOutlinedIcon fontSize="small" color="primary" />
+              <Tooltip arrow title={<Text translation={"common.copy.link"}/>} placement="top">
+                <CopyIcon/>
+              </Tooltip>
             </Button>
-          </div>
+          </Box>
         </Link>
       );
     }
   });
   return (
-    <div>{links}</div>
+    <Box>{links}</Box>
   );
 };
 

@@ -32,6 +32,10 @@ export const selectStyles = {
       cursor: "pointer",
     },
   }),
+  control: (base) => ({
+    ...base,
+    height: "52px",
+  }),
 };
 
 export const MultiValueRemove = (props) => (

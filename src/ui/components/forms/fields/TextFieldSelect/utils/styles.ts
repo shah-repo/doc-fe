@@ -22,7 +22,7 @@ export const styles = makeStyles((theme) => ({
     "position": "relative",
     "width": "100%",
     "z-index": "1",
-    "top": "25px",
+    "top": "19px",
     "border": 0,
     "& .MuiBox-root": {
       visibility: "hidden",
