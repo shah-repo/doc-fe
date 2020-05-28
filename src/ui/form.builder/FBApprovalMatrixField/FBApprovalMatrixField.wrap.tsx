@@ -14,7 +14,8 @@ export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
     ...props
   }: T) => {
 
-    const { formState } = FB.useStores();
+    const { formState, workspaceState } = FB.useStores();
+    const { document } = workspaceState || {};
     const formValue = formState?.getFieldValue(name);
     approvalMatrixFieldState = FB.useRef<FBApprovalMatrixFieldState>(FBApprovalMatrixFieldState, formValue);
 
@@ -22,7 +23,7 @@ export const withFBApprovalMatrixField = <T extends FBApprovalMatrixFieldProps>(
       const data = await approvalMatrixFieldState?.fetch();
       formState?.setFieldValue(name, data);
     }
-    if (!disabled && !formValue) {
+    if ((!disabled && !formValue) || document?.outputRevision) {
       fetchData();
     }
 
