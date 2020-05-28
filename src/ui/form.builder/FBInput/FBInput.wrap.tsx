@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-hooks/exhaustive-deps */
-import _ from "lodash";
+import { first, get, includes, isBoolean, isEmpty, isString, isUndefined } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { FBOption } from "..";
@@ -41,16 +41,19 @@ export const withFBInput = <T extends FBInputProps>(
     const intl = useIntl();
     defaultValue = setDefaultValue();
     helperText = formState?.errors.get(name) || helperText;
-    error = !_.isUndefined(formState?.errors.get(name)) && formState?.errorValidation;
+    error = !isUndefined(formState?.errors.get(name)) && formState?.errorValidation;
     value = inputState?.value;
     includeContext = inputState?.includeContext;
 
-    (_.isUndefined(hidden) && formState?.workspaceMode === "form" && validationMode === "visibility") && (hidden =
-      !helperText && (!defaultValue || _.isEmpty(defaultValue))
+    // TODO: Autocomplete default set as input
+    // then this can be removed and handle through defaultValue
+    const validationValue = get(formState?.values, name);
+    (isUndefined(hidden) && formState?.workspaceMode === "form" && validationMode === "visibility") && (hidden =
+      !helperText && (!validationValue || isEmpty(validationValue))
     );
 
     (!disabled && formState?.workspaceMode === "form" && validationMode === "disabled") && (disabled =
-      !helperText && (!defaultValue || _.isEmpty(defaultValue))
+      !helperText && (!validationValue || isEmpty(validationValue))
     );
 
     function setDefaultValue(): any {
@@ -58,7 +61,7 @@ export const withFBInput = <T extends FBInputProps>(
       const value = {
         editoroptions() {
           const options: FBOption[] | undefined = formState?.getFieldValue(name);
-          if (_.isString(options)) {
+          if (isString(options)) {
             return;
           }
           const value = optionsToString && optionsToString(options);
@@ -81,8 +84,8 @@ export const withFBInput = <T extends FBInputProps>(
       return transDefault;
     }
 
-    const child = _.first(React.Children.toArray(children));
-    const isClone = !_.includes(OmitInputClones, type) && !_.isUndefined(child);
+    const child = first(React.Children.toArray(children));
+    const isClone = !includes(OmitInputClones, type) && !isUndefined(child);
 
     if (isClone) {
       children = React.cloneElement(child as React.ReactElement, {
@@ -92,7 +95,7 @@ export const withFBInput = <T extends FBInputProps>(
         onBlur,
         ...(type === "textfield" && { error }),
         ...(type !== "texteditor" && { value }),
-        ...(type !== "datepicker" && type !== "autocomplete" && !_.isBoolean(defaultValue) && { defaultValue }),
+        ...(type !== "datepicker" && type !== "autocomplete" && !isBoolean(defaultValue) && { defaultValue }),
       });
     }
 

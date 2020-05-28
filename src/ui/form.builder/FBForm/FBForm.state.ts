@@ -46,6 +46,7 @@ export class FBFormState extends FBSchemaState {
     }
     if (!_.get(this.values, fieldName) && !_.isUndefined(defaultValue)) {
       _.set(this.initialValues || {}, fieldName, defaultValue);
+      _.set(this.values || {}, fieldName, defaultValue);
     }
     return _.get(this.values, fieldName) || _.get(this.initialValues, fieldName);
   };
