@@ -1,6 +1,7 @@
 import { Box, createStyles, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, makeStyles } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
+import { useIntl } from "react-intl";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions";
 import Text from "../../../components/Text";
 import { FBPurchaseOrderValue } from "../../../form.builder";
@@ -31,6 +32,11 @@ export const PODetails: React.FunctionComponent<Props> = ({
   purchaseOrder,
   supplierId,
 }) => {
+  const intl = useIntl();
+  const totalAmount = useMemo(() => {
+    const currency = purchaseOrder.currency || "USD";
+    return intl.formatNumber(Number(purchaseOrder.totalAmount), { style: "currency", currency });
+  }, [intl, purchaseOrder.totalAmount, purchaseOrder.currency]);
   const classes = styles();
   const [isExpanded, setIsExpanded] = useState(false);
   const handleChange = () => setIsExpanded(!isExpanded);
@@ -45,7 +51,7 @@ export const PODetails: React.FunctionComponent<Props> = ({
   return (
     <Box>
       <POSupplier supplierId={supplierId} />
-      <PODetailItem label="common.total.amount" value={`${purchaseOrder.totalAmount}`} />
+      <PODetailItem label="common.total.amount" value={`${totalAmount}`} />
       <POAssignedDate approvals={documentRevision.changeRequest?.approvals} />
       <ExpansionPanel expanded={isExpanded} onChange={handleChange} className={classes.hideBorder}>
         <ExpansionPanelSummary
