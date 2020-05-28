@@ -7,13 +7,17 @@ const DEFAULT_AM: ApprovalMatrix = {
   approvalMatrix: [] as ApprovalMatrixItem[],
 };
 
+type SubmitForm = () => void;
+
 export class FBApprovalMatrixState {
   @observable public name = "";
   @observable public am = DEFAULT_AM;
+  public submitForm;
   private formState?: FBFormState;
 
-  public constructor(formState?: FBFormState) {
+  public constructor(formState?: FBFormState, submitForm?: SubmitForm) {
     this.formState = formState;
+    this.submitForm = submitForm;
   }
 
   @action public setApprovalRoles = (approvalRoles: ApprovalRole[]) => {
@@ -29,6 +33,7 @@ export class FBApprovalMatrixState {
   @action public updateFBStore = () => {
     this.formState?.setFieldValue(this.name, this.am);
     this.formState?.workspaceState?.resetSchema();
+    this.submitForm?.();
   };
 
   @action public addApprovalRoleItem = (approvalRoleItem: ApprovalRole) => {
