@@ -251,7 +251,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <div ref={FBContainer} />
           </Box>
         }
-        {workspaceState?.mode === "form" && <DocumentRevisionOutputInfo formDocument={values.formDocument} />}
+        {workspaceState?.mode === "form" && <DocumentRevisionOutputInfo formDocument={initialValues.formDocument} />}
       </FormWrapper>
     </Grid>
   );
