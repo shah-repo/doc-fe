@@ -2,6 +2,7 @@ import _ from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBEditorPropertiesType, FBInputProps, FBInputState, FBOptionValueType } from "..";
+import { useFormContext } from "../../components/forms/FormContext";
 
 export const withFBOnChange = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>
@@ -17,6 +18,7 @@ export const withFBOnChange = <T extends FBInputProps>(
 
     inputState = FB.useRef<FBInputState>(FBInputState);
     const { formState, schemaState, workspaceState } = FB.useStores();
+    const { submitForm } = useFormContext();
 
     React.useEffect(() => {
       const defaultValue = formState?.getFieldValue(name);
@@ -124,11 +126,24 @@ export const withFBOnChange = <T extends FBInputProps>(
       (changedValue[type || ""] || changedValue.default)();
       props.onChange && props.onChange(ev, value, schemaState || formState || workspaceState);
       formState.validate();
+
+      if (type === "textfield" || type === "texteditor") {
+        return;
+      }
+      submitForm();
     });
+
+    const onBlur = (ev) => {
+      props.onBlur && props.onBlur(ev);
+      if (type === "textfield" || type === "texteditor") {
+        submitForm();
+      }
+    };
 
     return useObserver(() => Component({
       ...(props as T),
       onChange,
+      onBlur,
       editorProperties,
       forceDefault,
       inputState,

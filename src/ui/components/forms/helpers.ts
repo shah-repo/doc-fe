@@ -5,13 +5,12 @@ const clearMobxObject = (value) => typeof value === "object" ?
   toJS(value) :
   value;
 
-export const compareValuesToSubmit = (initialValues, values, transformMethod) => {
-  const transformedInitialValues = transformMethod(initialValues);
-  const transformedValues = transformMethod(values);
+const getDiff = (transformedValues, transformedInitialValues) => {
   const diff = {};
-  const formInputDiff = {};
-
   for (const [key, value] of Object.entries(transformedValues)) {
+    if (key === "formInput") {
+      continue;
+    }
     if (key === "formDocument") {
       if ((value as any)?.id !== transformedInitialValues.formDocument?.id) {
         diff[key] = value;
@@ -37,20 +36,33 @@ export const compareValuesToSubmit = (initialValues, values, transformMethod) =>
       diff[key] = value;
     }
   }
+  return diff;
+};
+
+const getFormInputDiff = (transformedValues, transformedInitialValues) => {
+  const formInputDiff = {};
   for (const [key, value] of Object.entries(transformedValues.formInput || {})) {
-    const initialValueToCompare = clearMobxObject(initialValues.formInput?.[key]);
+    const initialValueToCompare = clearMobxObject(transformedInitialValues.formInput?.[key]);
     const valueToCompare = clearMobxObject(value);
 
     if (!_.isEqual(valueToCompare, initialValueToCompare)) {
       formInputDiff[key] = valueToCompare;
     }
   }
+  return formInputDiff;
+};
 
-  // if (_.isEmpty(formInputDiff)) {
-  //   return diff;
-  // }
+export const compareValuesToSubmit = (initialValues, values, transformMethod) => {
+  const transformedInitialValues = transformMethod(initialValues);
+  const transformedValues = transformMethod(values);
+  const diff = getDiff(transformedValues, transformedInitialValues);
+  const formInputDiff = getFormInputDiff(transformedValues, transformedInitialValues);
 
-  if (!transformedValues.formInput) {
+  const hasKeysNotInValuesFormInput = transformedInitialValues?.formInput ?
+    Object.keys(transformedInitialValues.formInput).some((k) => !(k in transformedValues.formInput)) :
+    false;
+
+  if (_.isEmpty(formInputDiff) && !hasKeysNotInValuesFormInput) {
     return diff;
   }
 

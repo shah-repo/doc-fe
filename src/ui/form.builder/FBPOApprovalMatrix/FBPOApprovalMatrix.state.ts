@@ -13,34 +13,40 @@ export class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrix, null> {
   @observable public name = "";
   @observable public poam = DEFAULT_POAM;
   @observable public approvalLevels: POApprovalMatrixLevel[] = [];
+  public submitForm;
   public url = FBEndpoint.POApprovalMatrix;
   private formState?: FBFormState;
 
-  public constructor({ formState, approvalLevels }: FBPOApprovalMatrixConstructor) {
+  public constructor({ formState, approvalLevels, submitForm }: FBPOApprovalMatrixConstructor) {
     super();
     this.formState = formState;
     this.approvalLevels = approvalLevels || [];
+    this.submitForm = submitForm;
   }
 
   @action public setItems = (approvalLevels: POApprovalMatrixLevel[]) => {
     set(this, "approvalLevels", approvalLevels);
     this.updateFBStore();
+    this.submitForm?.();
   };
 
   @action public addItem = (approvalLevel: POApprovalMatrixLevel) => {
     const appLevelIndex = _.findIndex(this.approvalLevels, { id: approvalLevel.id });
     if (appLevelIndex === -1) {
       set(this, "approvalLevels", _.union(this.approvalLevels, [approvalLevel]));
+      this.submitForm?.();
       return;
     }
     const al = [...this.approvalLevels];
     al[appLevelIndex] = approvalLevel;
     set(this, "approvalLevels", al);
+    this.submitForm?.();
   };
 
   @action public editItem = (index: number, approvalLevel: POApprovalMatrixLevel) => {
     this.approvalLevels[index] = approvalLevel;
     this.updateFBStore();
+    this.submitForm?.();
   };
 
   @action public setFormValues = (approvalLevel: POApprovalMatrixLevel, groupOptions, employees) => {

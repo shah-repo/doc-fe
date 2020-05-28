@@ -89,5 +89,6 @@ export type FBPOApprovalMatrixFormActionsProps =
 export interface FBPOApprovalMatrixConstructor {
   formState?: FBFormState;
   approvalLevels?: POApprovalMatrixLevel[];
+  submitForm?: () => void;
 }
 

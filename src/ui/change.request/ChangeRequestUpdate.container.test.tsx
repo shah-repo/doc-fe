@@ -34,7 +34,7 @@ describe("ChangeRequestUpdateContainer tests", () => {
 
   it("calls save method on form submit", () => {
     const save = jest.fn();
-    const wrapper = getWrapper({ save });
+    const wrapper = getWrapper({ save, changeRequest });
 
     const form = wrapper.find(ChangeRequestFormContainer);
     const submitPayload = { description: "Changed desription" };

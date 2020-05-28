@@ -1,4 +1,4 @@
-import { isEmpty } from "lodash";
+import { debounce, isEmpty } from "lodash";
 import React, { useMemo } from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
@@ -90,12 +90,14 @@ DocumentRevisionUpdateContainerProps
     promise?.then(() => helpers.resetForm());
   };
 
+  const debouncedSubmit = debounce(onSubmit, 300);
+
   return (
     <FormContext.Provider value={{ submitOnChange: true }}>
       <DocumentRevisionForm
         doNotPrompt={doNotPrompt}
         asyncState={async.asyncState}
-        onSubmit={onSubmit}
+        onSubmit={debouncedSubmit}
         initialValues={initialValues}
         onDirtyFlagChange={onDirtyFlagChange}
         documentRevision={documentRevision}
