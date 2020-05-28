@@ -2,6 +2,7 @@ import TableRow from "@material-ui/core/TableRow";
 import React from "react";
 import { FormattedNumber } from "react-intl";
 import { FBData, FBPurchaseOrderTableTotalProps, FBTableCell, FBTextField } from "..";
+import { FormContext } from "../../components/forms/FormContext";
 import { FBSelect } from "../FBSelect";
 import FBPurchaseOrderExchange from "./FBPurchaseOrder.exchange";
 
@@ -17,14 +18,16 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
       <FBTableCell rowSpan={6} colSpan={6} />
       <FBTableCell label="form.builder.currency" className="FBTotal-root" colSpan={3} />
       <FBTableCell className="FBTotal-root" align="right" colSpan={2}>
-        <FBSelect
-          name={`${name}.currency`}
-          onChange={handleCurrencyChange}
-          options={FBData.currencyOptions}
-          gutter={false}
-          SelectDisplayProps={{ style: { padding: "5px 30px 5px 2px" } }}
-          {...{ disabled }}
-        />
+        <FormContext.Provider value={{ submitOnChange: false }}>
+          <FBSelect
+            name={`${name}.currency`}
+            onChange={handleCurrencyChange}
+            options={FBData.currencyOptions}
+            gutter={false}
+            SelectDisplayProps={{ style: { padding: "5px 30px 5px 2px" } }}
+            {...{ disabled }}
+          />
+        </ FormContext.Provider>
       </FBTableCell>
     </TableRow>
     <TableRow>

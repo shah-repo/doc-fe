@@ -1,6 +1,7 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import { FBAutocomplete, FBAutocompleteAsync, FBCheckbox, FBData, FBDatePicker, FBPurchaseOrderFormProps, FBQuantityField, FBRadioGroup, FBTextField } from "..";
+import { FormContext } from "../../components/forms/FormContext";
 import { withFBPurchaseOrderForm } from "./FBPurchaseOrderForm.wrap";
 
 const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = ({
@@ -12,7 +13,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
   type,
   children,
 }) => (
-  <>
+  <FormContext.Provider value={{ submitOnChange: false }}>
     <FBRadioGroup
       name="type"
       defaultValue="product"
@@ -121,7 +122,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
       </Box>
     }
     {children}
-  </>
+  </ FormContext.Provider>
 );
 
 export default withFBPurchaseOrderForm(FBPurchaseOrderForm);

@@ -63,6 +63,7 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
       set(this.calculation, "currency", "USD");
       set(this.calculation, "exchangeRate", 1);
       this.calculateCost();
+      this.submitForm?.();
     };
     if (currency === "USD") {
       setToUsd();
@@ -79,6 +80,7 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
       set(this.calculation, "exchangeRate", data.rate.toFixed(2));
       set(this.calculation, "dateOfExchangeRate", moment().format("LL"));
       this.calculateCost();
+      this.submitForm?.();
     } catch (e) {
       setToUsd();
     }
@@ -94,6 +96,7 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     set(this, "items", items);
     this.setItemTotalAmount();
     this.calculateCost();
+    this.submitForm?.();
   };
 
   @action public removeItem = (item?: FBPurchaseOrderItem) => {
@@ -124,7 +127,6 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
       shippingCost: this.formatCost(shippingCost),
       totalInUSD: this.formatCost(totalInUSD),
     });
-    this.submitForm?.();
   };
 
   @action public deleteItem = (index: number) => {
