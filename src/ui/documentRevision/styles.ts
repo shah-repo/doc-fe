@@ -4,11 +4,16 @@ import Colors from "../layout/theme/utils/colors";
 export default makeStyles((theme: Theme) =>
   createStyles({
     whiteContainer: {
-      background: Colors.light_gray,
       marginTop: theme.spacing(5),
       margin: 0,
-      width: "100%",
       height: "max-content",
+      transition: theme.transitions.create("all", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+    },
+    backColor: {
+      background: Colors.light_gray,
     },
     openButton: {
       "marginTop": theme.spacing(3),
@@ -41,11 +46,11 @@ export default makeStyles((theme: Theme) =>
     },
     sidebarItemTitle: {
       position: "fixed",
-      background: "white",
       zIndex: 1,
       width: "100%",
-      paddingTop: theme.spacing(4),
       textTransform: "uppercase",
+      padding: "30px",
+      paddingLeft: theme.spacing(1.5),
     },
     sidebarContent: {
       "overflow": "auto",
@@ -53,8 +58,6 @@ export default makeStyles((theme: Theme) =>
       "&::-webkit-scrollbar": {
         display: "none",
       },
-      "backgroundColor": Colors.white,
-      "width": "320px",
       "marginTop": theme.spacing(1),
     },
     border: {
@@ -62,6 +65,12 @@ export default makeStyles((theme: Theme) =>
       backgroundColor: Colors.hint_gray,
       height: "1px",
       border: 0,
+    },
+    transitions: {
+      transition: theme.transitions.create("all", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
     },
   })
 );
