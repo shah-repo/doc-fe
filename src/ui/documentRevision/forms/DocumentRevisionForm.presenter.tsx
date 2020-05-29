@@ -21,6 +21,7 @@ import Title from "../../document.revision/form/title";
 import FormHeader from "../../document.revision/header/FormHeader";
 import { documentDetailsPath } from "../../document.revision/utils/paths";
 import { FB } from "../../form.builder";
+import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { isOperator } from "../DocumentRevisionDisplay.container";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
@@ -90,6 +91,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   setValues,
 }) => {
 
+  useScrollIntoView();
   const { workspaceState } = FB.useStores();
   const isDisabled: boolean = initialValues.id !== undefined;
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });

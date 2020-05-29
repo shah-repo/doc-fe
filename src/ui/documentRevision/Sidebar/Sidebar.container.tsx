@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { ReactComponent as BadgeIcon } from "../../../assets/images/badge.svg";
 import { ReactComponent as BookmarkIcon } from "../../../assets/images/bookmark.svg";
 import { ReactComponent as TimelineIcon } from "../../../assets/images/history.svg";
@@ -45,8 +45,6 @@ SidebarContainerProps
   const document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, documentId));
   const { documentTypeAcronym: acronym } = document?.documentType || {};
   const [indexNumber, setIndex] = useState(0);
-  const history = useHistory();
-  const location = useLocation();
   const intl = useIntl();
   const url = useLocation();
 
@@ -107,7 +105,6 @@ SidebarContainerProps
   ];
 
   const changeSize = () => {
-    history.push(location.pathname);
     openSidebar(!sidebar);
     if (sidebar) {
       setIndex(0);
@@ -119,7 +116,6 @@ SidebarContainerProps
     }
   };
   const handleMenuIconClick = (index: number) => {
-    history.push(location.pathname);
     if (!sidebar) {
       openSidebar(!sidebar);
       setIndex(index);
