@@ -65,9 +65,9 @@ DocumentRevisionManagerContainerProps
   }
 
   return (
-    <Grid container={true} className={classes.whiteContainer}>
+    <Grid container={true} className={classes.whiteContainer} style={{ width: sidebar ? "100%" : "104%" }}>
       {documentRevisionId && !isNewOutput && (
-        <Grid item={true} xs={sidebar ? 9 : 11}>
+        <Grid item={true} xs={sidebar ? 9 : 11} className={classes.backColor}>
           <DocumentRevisionDisplayContainer
             documentRevisionId={documentRevisionId}
             isNewVersion={isNewVersion}
@@ -76,7 +76,7 @@ DocumentRevisionManagerContainerProps
         </Grid>
       )}
       {documentRevisionId && isNewOutput && (
-        <Grid item={true} xs={sidebar ? 9 : 11}>
+        <Grid item={true} xs={sidebar ? 9 : 11} className={classes.backColor}>
           <DocumentRevisionDisplayContainer
             documentRevisionId={documentRevisionId}
             isNewOutput={isNewOutput}

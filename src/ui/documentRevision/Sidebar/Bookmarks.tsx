@@ -22,6 +22,7 @@ export const styles = makeStyles((theme: Theme) =>
       width: "100%",
       fontWeight: isCurrentBookmark ? 700 : 100,
       padding: theme.spacing(1, 2),
+      paddingRight: theme.spacing(1),
     }),
     button: {
       "padding": 0,
