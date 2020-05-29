@@ -1,9 +1,9 @@
-import { Box, Link } from "@material-ui/core";
-import AttachFile from "@material-ui/icons/AttachFile";
+import { Box, Button } from "@material-ui/core";
 import React from "react";
 import Text from "../../Text";
 import { styles } from "./utils/styles";
 import { AttachmentFieldProps } from "./utils/types";
+import AttachFileIcon from '@material-ui/icons/AttachFile';
 
 export const AttachmentFieldPresenter: React.FunctionComponent<
 AttachmentFieldProps
@@ -14,22 +14,14 @@ AttachmentFieldProps
 
   return (
     <Box mt={1} className={classes.root} id="AttachmentFieldPresenter-field">
-      <input
-        accept="*"
-        className={classes.input}
-        id={`${name}-button-file`}
-        multiple={multiple}
-        type="file"
-        onChange={onChange}
-        onBlur={onChange}
-        disabled={disabled}
-      />
-      <label htmlFor={`${name}-button-file`}>
-        <Link component="span" variant="button" className={classes.link} id="AttachmentFieldPresenter-linkButton" >
-          <AttachFile className={classes.icon} />
-          <Text translation={text} />
-        </Link>
-      </label>
+
+      <Button
+        color="primary"
+        size="small"
+        startIcon={<AttachFileIcon />}
+      >
+        <Text translation={text} />
+      </Button>
     </Box>
   );
 };

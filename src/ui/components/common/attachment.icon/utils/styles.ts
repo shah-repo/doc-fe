@@ -44,6 +44,9 @@ export const styles = makeStyles((theme) => ({
     fontSize: "inherit",
     color: theme.palette.primary.main,
   },
+  button: {
+    margin: theme.spacing(1),
+  },
   fileIcon: {
     width: "100%",
     height: "100%",

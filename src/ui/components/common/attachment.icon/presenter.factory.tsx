@@ -20,6 +20,7 @@ AttachmentIconFactoryProps
   const file = attachment || {} as Attachment;
   const isUploading = file.s3link == null;
   const isLoading = file.isLoading || false;
+  const isRedLine = file.groupType === "RED_LINE";
   const isFileViewable = checkIfFileIsViewable(file.type);
   const defaultProps = {
     name,
@@ -28,6 +29,7 @@ AttachmentIconFactoryProps
     disabled,
     isUploading,
     isLoading,
+    isRedLine,
     handleRemove,
     ...other,
   };

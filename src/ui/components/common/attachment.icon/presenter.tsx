@@ -19,6 +19,7 @@ AttachmentIconProps
   disabled = false,
   isLoading,
   isUploading,
+  isRedLine,
   ...other
 }) => {
   const file = attachment || {} as Attachment;
@@ -32,9 +33,8 @@ AttachmentIconProps
       <Text translation="common.uploading" />
     </Box>
   );
-
   return (
-    <Grid key={`cell-${file.id}`} item={true} xs={12} sm={4} md={2}>
+    <Grid key={`cell-${file.id}`} item={true} xs={12} sm={4} md={1}>
       <Box className={classes.closeRoot}>
         <IconButton
           className={classes.closeRoot}
@@ -66,6 +66,8 @@ AttachmentIconProps
           title={`${file.name}.${file.type}`}
           id="AttachmentIconPresenter-fileTitle"
         >
+
+          {isRedLine && <hr style={{ border: "2px solid red", margin: "0px" }}/>}
           {`${file.name}.${file.type}`}
         </Typography>
       </Box>

@@ -21,6 +21,7 @@ export interface AttachmentIconFactoryProps extends FormikHybridFieldProps {
 export interface AttachmentIconProps extends AttachmentIconFactoryProps {
   isUploading?: boolean;
   isLoading?: boolean;
+  isRedLine?:boolean;
   handleIconClick?: (attachment: Attachment, type?: AttachmentType) => () => any;
 }
 
