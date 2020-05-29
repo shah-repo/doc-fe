@@ -1,5 +1,6 @@
 import React from "react";
 import { FBApprovalMatrix, FBApprovalMatrixFieldProps, FBApprovalMatrixRoles, FBProvider } from "..";
+import { FormContext } from "../../components/forms/FormContext";
 import { withFBApprovalMatrixField } from "./FBApprovalMatrixField.wrap";
 
 const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixFieldProps> = ({
@@ -10,8 +11,10 @@ const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixFieldProps>
   mode,
 }) =>  (
   <FBProvider {...{ approvalMatrixFieldState }}>
-    <FBApprovalMatrixRoles {...{ disabled, name }} />
-    <FBApprovalMatrix {...{ disabled, handleAdd, name, mode }} />
+    <FormContext.Provider value={{ submitOnChange: false }}>
+      <FBApprovalMatrixRoles {...{ disabled, name }} />
+      <FBApprovalMatrix {...{ disabled, handleAdd, name, mode }} />
+    </FormContext.Provider>
   </FBProvider>
 );
 

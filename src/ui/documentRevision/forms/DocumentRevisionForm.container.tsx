@@ -1,6 +1,6 @@
 import { Box, Grid } from "@material-ui/core";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
-import _, { get } from "lodash";
+import _, { cloneDeep, get } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
@@ -152,7 +152,7 @@ DocumentRevisionFormContainerProps
     <FBWorkspace
       portalContainer={FBContainer}
       document={props.values as unknown as DocumentRevision}
-      initialValues={formInput}
+      initialValues={cloneDeep(formInput)}
       {...{ mode, schema  }}
     >
       <DocumentRevisionFormPresenter
