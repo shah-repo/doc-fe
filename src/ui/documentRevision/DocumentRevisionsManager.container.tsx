@@ -54,8 +54,8 @@ DocumentRevisionManagerContainerProps
   const selectedDocument = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId as string));
   const canAccess = selectedDocument?.document.canAccess;
-
   const [sidebar, openSidebar] = useState<boolean>(true);
+  const schema = selectedDocument?.formTemplate?.schema || selectedDocument?.formDocument?.formTemplate?.schema || [];
 
   if (shouldRedircetToLatestReleasd(documentRevisions, documentRevisionId)) {
     const docRevIdToRedirect = getDocRevIdToRedirect(documentRevisions, deprecatedAt);
@@ -94,8 +94,8 @@ DocumentRevisionManagerContainerProps
           isNewOutput,
           sidebar,
           openSidebar,
+          schema,
         }}
-        fbTemplate={selectedDocument?.formTemplate?.schema || []}
       />
     </Grid>
   );
