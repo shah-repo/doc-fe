@@ -67,7 +67,7 @@ AttachmentIconProps
           id="AttachmentIconPresenter-fileTitle"
         >
 
-          {isRedLine && <hr style={{ border: "2px solid red", margin: "0px" }}/>}
+          {isRedLine && <hr style={{ border: "2px solid red", paddingLeft: "5px", paddingRight:  "5px" }}/>}
           {`${file.name}.${file.type}`}
         </Typography>
       </Box>

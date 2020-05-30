@@ -89,6 +89,7 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
       },
     );
 
+
     if (filteredFiles.length === 0) {
       return;
     }

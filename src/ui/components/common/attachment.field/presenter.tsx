@@ -1,9 +1,8 @@
-import { Box, Button } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import React from "react";
-import Text from "../../Text";
 import { styles } from "./utils/styles";
 import { AttachmentFieldProps } from "./utils/types";
-import AttachFileIcon from '@material-ui/icons/AttachFile';
+import { AttachmentGroupTypeSelector } from "./AttachmentGroupTypeSelector";
 
 export const AttachmentFieldPresenter: React.FunctionComponent<
 AttachmentFieldProps
@@ -14,14 +13,7 @@ AttachmentFieldProps
 
   return (
     <Box mt={1} className={classes.root} id="AttachmentFieldPresenter-field">
-
-      <Button
-        color="primary"
-        size="small"
-        startIcon={<AttachFileIcon />}
-      >
-        <Text translation={text} />
-      </Button>
+      <AttachmentGroupTypeSelector text={text}></AttachmentGroupTypeSelector>
     </Box>
   );
 };
