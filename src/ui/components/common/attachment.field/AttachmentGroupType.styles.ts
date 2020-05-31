@@ -35,6 +35,8 @@ export const styles = makeStyles((theme: Theme) =>
       display: isField ? "flex" : "block",
       padding: 10,
       color: "grey",
+      textDecoration: "none!important",
+      cursor: "pointer",
     }),
     input: {
       display: "none",
