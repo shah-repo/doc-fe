@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { action, observable, set } from "mobx";
-import { FBFormState } from "..";
+import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBFormState } from "..";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import { FBPOApprovalMatrixConstructor, POApprovalMatrix, POApprovalMatrixLevel } from "./FBPOApprovalMatrix.types";
@@ -13,6 +13,7 @@ export class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrix, null> {
   @observable public name = "";
   @observable public poam = DEFAULT_POAM;
   @observable public approvalLevels: POApprovalMatrixLevel[] = [];
+  public groupsApi = new FBAutocompleteAsyncState(FBAutocompleteAsyncOption.officialGroups);
   public submitForm;
   public url = FBEndpoint.POApprovalMatrix;
   private formState?: FBFormState;
@@ -22,6 +23,7 @@ export class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrix, null> {
     this.formState = formState;
     this.approvalLevels = approvalLevels || [];
     this.submitForm = submitForm;
+    this.groupsApi.fetch();
   }
 
   @action public setItems = (approvalLevels: POApprovalMatrixLevel[]) => {

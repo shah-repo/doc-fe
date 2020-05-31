@@ -1,13 +1,14 @@
 import { useObserver } from "mobx-react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { FB } from "../..";
+import { FB, FBAutocompleteAsyncOption } from "../..";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { GetEmployeeResponse, userManagementActions, userManagementSelectors } from "../../../../state/ducks/userManagement";
 import { DEFAULT_ACTIVE_EMPLOYEES } from "../../../group.management/utils/types";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
+import FBAutocompleteAsyncStore from "../../FBAutocompleteAsync/FBAutocompleteAsync.store";
 import { FBPOApprovalMatrixTableProps } from "../FBPOApprovalMatrix.types";
 import FBPOApprovalMatrixForm from "../form/FBPOApprovalMatrixForm";
 import FBPOApprovalMatrixFormActions from "../form/FBPOApprovalMatrixForm.actions";
@@ -19,6 +20,7 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
   const Comp = ({
     approvalLevels,
     name,
+    groups,
     ...props
   }: T) => {
     const { workspaceState, dialogState, formState } = FB.useStores();
@@ -89,6 +91,7 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
     useObserver(() => {
       approvalLevels = poamState?.approvalLevels;
       formState?.setFieldValue(name + ".approvalLevels", approvalLevels);
+      groups = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.officialGroups);
     });
 
     return Component({
@@ -96,6 +99,7 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
       initialValues,
       approvalLevels,
       onSubmit,
+      groups,
       groupOptions,
       isDialogOpen: dialog.isOpen,
       closeDialog,

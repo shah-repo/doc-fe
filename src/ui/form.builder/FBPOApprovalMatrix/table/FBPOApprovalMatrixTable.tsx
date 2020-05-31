@@ -35,7 +35,7 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
   disabled,
   approvalLevels,
   employees,
-  groupOptions,
+  groups,
   handleEdit,
   isDocumentReleased,
   isDialogOpen,
@@ -44,6 +44,7 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
   onSubmit,
   name,
   signatureStages,
+  groupOptions,
 }) => {
   const classes = useStyles();
 
@@ -82,17 +83,17 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
                 (
                   <StyledTableCell key={`${signature?.name}-${index}`}>
                     {signature?.groups?.map((group) =>
-                      groupOptions.map((e) => {
-                        if (e.value === group.id) {
-                          return (
-                            <Box width="max-content"
-                              bgcolor="lightgray"
-                              borderRadius="3px"
-                              p={0.3} m={0.3}>{e.label}</Box>
-                          );
-                        }
-                        return null;
-                      }))}
+                      <>
+                        { groups?.get(group.id) && (
+                          <Box width="max-content"
+                            bgcolor="lightgray"
+                            borderRadius="3px"
+                            p={0.3} m={0.3}>
+                            {groups?.get(group.id)?.name}
+                          </Box>
+                        )}
+                      </>
+                    )}
                     {signature?.employees?.map((employee) =>
                       employees.map((e) => {
                         if (e.id === employee.id) {
