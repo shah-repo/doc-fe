@@ -1,4 +1,5 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import { AttachmentStyleProps } from "./utils/types";
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,5 +31,27 @@ export const styles = makeStyles((theme: Theme) =>
     h4: {
       margin: 5,
     },
+    link: ({ isField }: AttachmentStyleProps) => ({
+      display: isField ? "flex" : "block",
+      padding: 10,
+      color: "grey",
+    }),
+    input: {
+      display: "none",
+    },
+    iconRedline: ({ isField }: AttachmentStyleProps) => ({
+      display: isField ? "inherited" : "none",
+      marginRight: theme.spacing(0.5),
+      width: 20,
+      height: 20,
+      color: "red",
+    }),
+    iconCleanCopy: ({ isField }: AttachmentStyleProps) => ({
+      display: isField ? "inherited" : "none",
+      marginRight: theme.spacing(0.5),
+      width: 20,
+      height: 20,
+      color: "STEELBLUE",
+    }),
   }),
 );

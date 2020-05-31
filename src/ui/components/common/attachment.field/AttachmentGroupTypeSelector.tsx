@@ -10,7 +10,12 @@ import AttachFileIcon from "@material-ui/icons/AttachFile";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {
-  text: string;
+  upload: any;
+  form: any;
+  field: any;
+  multiple: any;
+  name: any;
+  disabled: any;
 }
 
 const styles = makeStyles(() =>
@@ -27,7 +32,12 @@ const styles = makeStyles(() =>
 
 // eslint-disable-next-line no-empty-pattern
 export const AttachmentGroupTypeSelector: React.FunctionComponent<Props> = ({
-  text,
+  upload,
+  multiple,
+  field,
+  form,
+  name,
+  disabled,
 }) => {
   const classes = styles();
   const dialog = useDialog();
@@ -52,7 +62,15 @@ export const AttachmentGroupTypeSelector: React.FunctionComponent<Props> = ({
 
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
   const renderForm = (props: FormikProps<ApproveAndReleaseFormValues>) => (
-    <AttachmentGroupTypeForm onCancel= {closeDialog} />
+    <AttachmentGroupTypeForm
+      onCancel= {closeDialog}
+      upload = {upload}
+      field = {field}
+      form = {form}
+      multiple = {multiple}
+      name  = {name}
+      disabled = {disabled}
+    />
   );
 
   return (

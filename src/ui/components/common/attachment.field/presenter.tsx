@@ -6,14 +6,20 @@ import { AttachmentGroupTypeSelector } from "./AttachmentGroupTypeSelector";
 
 export const AttachmentFieldPresenter: React.FunctionComponent<
 AttachmentFieldProps
-> = ({ name, multiple, component = "button", onChange, disabled }) => {
+> = ({ name, multiple, component = "button", onChange, disabled, upload, form, field }) => {
   const isField = component === "field";
-  const text = isField ? "common.upload.files" : "common.add.attachment";
   const classes = styles({ isField });
 
   return (
     <Box mt={1} className={classes.root} id="AttachmentFieldPresenter-field">
-      <AttachmentGroupTypeSelector text={text}></AttachmentGroupTypeSelector>
+      <AttachmentGroupTypeSelector
+        upload = {upload}
+        form = {form}
+        name = {name}
+        multiple = {multiple}
+        field = {field}
+        disabled = {disabled}
+      />
     </Box>
   );
 };

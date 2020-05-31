@@ -89,7 +89,6 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
       },
     );
 
-
     if (filteredFiles.length === 0) {
       return;
     }
@@ -102,6 +101,7 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
       <FormProgress asyncState={async.asyncState} />
       <FormMessage asyncState={async.asyncState} />
       <Presenter
+        upload = {upload}
         {...other}
         name={name}
         component={component}
