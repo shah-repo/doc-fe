@@ -84,7 +84,7 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
                   <StyledTableCell key={`${signature?.name}-${index}`}>
                     {signature?.groups?.map((group) =>
                       <>
-                        { groups?.get(group.id) && (
+                        {groups?.get(group.id) && (
                           <Box width="max-content"
                             bgcolor="lightgray"
                             borderRadius="3px"

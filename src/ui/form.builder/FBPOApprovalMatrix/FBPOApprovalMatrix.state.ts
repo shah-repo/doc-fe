@@ -23,7 +23,6 @@ export class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrix, null> {
     this.formState = formState;
     this.approvalLevels = approvalLevels || [];
     this.submitForm = submitForm;
-    this.groupsApi.fetch();
   }
 
   @action public setItems = (approvalLevels: POApprovalMatrixLevel[]) => {
