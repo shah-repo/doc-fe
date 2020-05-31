@@ -1,3 +1,4 @@
+import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBPurchaseOrderClasses } from ".";
@@ -41,6 +42,13 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       formState?.setFieldValue(name, { items, ...calculation });
       loading = purchaseOrderState?.loading;
     });
+
+    React.useEffect(() => {
+      reaction(
+        () => purchaseOrderState?.calculation,
+        () => formState?.setFieldAutosave(name)
+      );
+    }, []);
 
     return Component({
       ...(props as T),
