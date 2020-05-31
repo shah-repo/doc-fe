@@ -90,8 +90,13 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const closeContextMenu = () => setAnchorEl(null);
 
   const handleViewFile = (attachment: Attachment) => () => {
-    setSelectedFile(attachment);
-    openFileView();
+    if (attachment.groupType === "CLEAN_COPY") {
+      setSelectedFile(attachment);
+      openFileView();
+    } else {
+      // eslint-disable-next-line no-console
+      console.log("Can't do that");
+    }
   };
 
   const handleWatermarkRequest = (attachment: Attachment, attachmentType: AttachmentType) => {

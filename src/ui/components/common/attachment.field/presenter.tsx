@@ -2,7 +2,7 @@ import { Box } from "@material-ui/core";
 import React from "react";
 import { styles } from "./utils/styles";
 import { AttachmentFieldProps } from "./utils/types";
-import { AttachmentGroupTypeSelector } from "./AttachmentGroupTypeSelector";
+import { AttachmentGroupTypeSelector } from "../attachment.grouptype/AttachmentGroupTypeSelector";
 
 export const AttachmentFieldPresenter: React.FunctionComponent<
 AttachmentFieldProps

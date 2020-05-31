@@ -4,7 +4,7 @@ import React from "react";
 import { FormContext } from "../../forms/FormContext";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
-import { ApproveAndReleaseFormValues } from "./types";
+import { ApproveAndReleaseFormValues } from "../attachment.field/types";
 import AttachmentGroupTypeForm  from "./AttachmentGroupTypeForm";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
 

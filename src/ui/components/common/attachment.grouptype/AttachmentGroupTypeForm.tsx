@@ -1,7 +1,7 @@
 import { Box, IconButton, Link } from "@material-ui/core";
 import * as React from "react";
 import Text from "../../Text";
-import { styles } from "./AttachmentGroupType.styles";
+import { styles } from "./styles";
 import PublishRoundedIcon from "@material-ui/icons/PublishRounded";
 import CloseIcon from "@material-ui/icons/Close";
 import {  Attachment, Attachment as AttachmentModel, attachmentsActions  } from "../../../../state/ducks/attachments";
@@ -84,8 +84,10 @@ const AttachmentGroupTypeForm: React.FunctionComponent<Props> = ({
     handleUpload(files);
   };
 
-  const onChange = (event: React.FormEvent<HTMLInputElement>) => {
+  const onChange = (isRedline) => (event: React.FormEvent<HTMLInputElement>) => {
     let isUserAlerted = false;
+    // eslint-disable-next-line no-console
+    console.log(isRedline);
     const filteredFiles = Array.from(event.currentTarget.files || []).filter(
       (file) => {
         const type = file.name.split(".").pop();
@@ -128,8 +130,8 @@ const AttachmentGroupTypeForm: React.FunctionComponent<Props> = ({
           id={`${name}-button-file`}
           multiple={multiple}
           type="file"
-          onChange={onChange}
-          onBlur={onChange}
+          onChange={onChange(true)}
+          onBlur={onChange(true)}
           className = {classes.input}
           disabled={disabled}
         />
@@ -146,8 +148,8 @@ const AttachmentGroupTypeForm: React.FunctionComponent<Props> = ({
           id={`${name}-button-file`}
           multiple={multiple}
           type="file"
-          onChange={onChange}
-          onBlur={onChange}
+          onChange={onChange(false)}
+          onBlur={onChange(false)}
           className = {classes.input}
           disabled={disabled}
         />

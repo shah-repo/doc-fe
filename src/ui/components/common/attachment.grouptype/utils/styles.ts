@@ -1,5 +1,5 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
-import { AttachmentStyleProps } from "./utils/types";
+import { AttachmentStyleProps } from "../../attachment.field/utils/types";
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
