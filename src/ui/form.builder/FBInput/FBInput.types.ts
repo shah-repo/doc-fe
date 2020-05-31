@@ -100,6 +100,7 @@ export type FBInputProps =
   showErrorMsg?: boolean;
   validators?: Dictionary<any>;
   forceDefault?: boolean;
+  autosave?: boolean;
 };
 
 export const OmitInputClones: FBInputType[] = ["fileupload"];

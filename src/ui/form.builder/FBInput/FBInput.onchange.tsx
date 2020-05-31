@@ -2,7 +2,6 @@ import _ from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBEditorPropertiesType, FBInputProps, FBInputState, FBOptionValueType } from "..";
-import { useFormContext } from "../../components/forms/FormContext";
 
 export const withFBOnChange = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>
@@ -18,13 +17,20 @@ export const withFBOnChange = <T extends FBInputProps>(
 
     inputState = FB.useRef<FBInputState>(FBInputState);
     const { formState, schemaState, workspaceState } = FB.useStores();
-    const { submitForm } = useFormContext();
 
     React.useEffect(() => {
       const defaultValue = formState?.getFieldValue(name);
       // Check include context state
       contextValue(defaultValue as string | string[] | boolean);
     }, []);
+
+    function setValue(formValue: any, withState = false, forceDefault = false) {
+      if (!name) { return; }
+      formState?.setFieldValue(name, formValue, withState, forceDefault);
+      if (type && !FBInputState.omitOnChange.includes(type)) {
+        formState?.setFieldAutosave(name);
+      }
+    }
 
     function checkboxGroupValue(ev: React.ChangeEvent<HTMLInputElement>) {
       const [valueName, checked] = _.at(ev.target, ["value", "checked"]);
@@ -34,16 +40,13 @@ export const withFBOnChange = <T extends FBInputProps>(
         : _.remove(checkedValue, (cv) => cv !== valueName);
 
       contextValue(groupValue);
-      formState?.setFieldValue(name, groupValue);
+      setValue(groupValue);
     }
 
     function checkValue(ev: React.ChangeEvent<HTMLInputElement>) {
       const value = _.get(ev.target, "checked");
       contextValue(value);
-      if (!value) {
-        return formState?.omitFieldValue(name);
-      }
-      formState?.setFieldValue(name, value);
+      setValue(value);
     }
 
     function contextValue(value: boolean | string | string[] | undefined = "") {
@@ -62,10 +65,10 @@ export const withFBOnChange = <T extends FBInputProps>(
     }
 
     function autocompleteValue(value: any) {
-      if (!value) {
-        return formState?.omitFieldValue(name);
-      }
       const { optionValueType = "key", optionValueKey = "id", multiple } = props;
+      if (!value) {
+        return setValue(multiple ? [] : "");
+      }
       const simpleValue: Record<FBOptionValueType, () => any> = {
         object: () => value,
         key: () => multiple
@@ -75,11 +78,11 @@ export const withFBOnChange = <T extends FBInputProps>(
           ? _.map(value, (v) => ({ [optionValueKey]: v[optionValueKey] }))
           : { [optionValueKey]: value[optionValueKey] },
       };
-      formState?.setFieldValue(name, simpleValue[optionValueType](), false, forceDefault);
+      setValue(simpleValue[optionValueType](), false, forceDefault);
     }
 
     function stringValue(value: string) {
-      formState?.setFieldValue(name, value);
+      setValue(value);
     }
 
     function dateValue(value: string) {
@@ -108,7 +111,7 @@ export const withFBOnChange = <T extends FBInputProps>(
         if (type === "number") {
           value = _.toNumber(value);
         }
-        formState?.setFieldValue(name, value);
+        setValue(value);
       }
 
       const changedValue = {
@@ -126,17 +129,12 @@ export const withFBOnChange = <T extends FBInputProps>(
       (changedValue[type || ""] || changedValue.default)();
       props.onChange && props.onChange(ev, value, schemaState || formState || workspaceState);
       formState.validate();
-
-      if (type === "textfield" || type === "texteditor") {
-        return;
-      }
-      submitForm();
     });
 
     const onBlur = (ev) => {
       props.onBlur && props.onBlur(ev);
-      if (type === "textfield" || type === "texteditor") {
-        submitForm();
+      if (type && FBInputState.omitOnChange.includes(type)) {
+        formState?.setFieldAutosave(name);
       }
     };
 

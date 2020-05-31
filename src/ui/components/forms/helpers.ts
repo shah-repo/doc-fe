@@ -1,9 +1,9 @@
 import _ from "lodash";
 import { toJS } from "mobx";
 
-const clearMobxObject = (value) => typeof value === "object" ?
-  toJS(value) :
-  value;
+// const clearMobxObject = (value) => typeof value === "object" ?
+//   toJS(value) :
+//   value;
 
 const getDiff = (transformedValues, transformedInitialValues) => {
   const diff = {};
@@ -39,32 +39,32 @@ const getDiff = (transformedValues, transformedInitialValues) => {
   return diff;
 };
 
-const getFormInputDiff = (transformedValues, transformedInitialValues) => {
-  const formInputDiff = {};
-  for (const [key, value] of Object.entries(transformedValues.formInput || {})) {
-    const initialValueToCompare = clearMobxObject(transformedInitialValues.formInput?.[key]);
-    const valueToCompare = clearMobxObject(value);
+// const getFormInputDiff = (transformedValues, transformedInitialValues) => {
+//   const formInputDiff = {};
+//   for (const [key, value] of Object.entries(transformedValues.formInput || {})) {
+//     const initialValueToCompare = clearMobxObject(transformedInitialValues.formInput?.[key]);
+//     const valueToCompare = clearMobxObject(value);
 
-    if (!_.isEqual(valueToCompare, initialValueToCompare)) {
-      formInputDiff[key] = valueToCompare;
-    }
-  }
-  return formInputDiff;
-};
+//     if (!_.isEqual(valueToCompare, initialValueToCompare)) {
+//       formInputDiff[key] = valueToCompare;
+//     }
+//   }
+//   return formInputDiff;
+// };
 
 export const compareValuesToSubmit = (initialValues, values, transformMethod) => {
   const transformedInitialValues = transformMethod(initialValues);
   const transformedValues = transformMethod(values);
   const diff = getDiff(transformedValues, transformedInitialValues);
-  const formInputDiff = getFormInputDiff(transformedValues, transformedInitialValues);
+  // const formInputDiff = getFormInputDiff(transformedValues, transformedInitialValues);
 
-  const hasKeysNotInValuesFormInput = transformedInitialValues?.formInput ?
-    Object.keys(transformedInitialValues.formInput).some((k) => !(k in transformedValues.formInput)) :
-    false;
+  // const hasKeysNotInValuesFormInput = transformedInitialValues?.formInput ?
+  //   Object.keys(transformedInitialValues.formInput).some((k) => !(k in transformedValues.formInput)) :
+  //   false;
 
-  if (_.isEmpty(formInputDiff) && !hasKeysNotInValuesFormInput) {
-    return diff;
-  }
+  // if (_.isEmpty(formInputDiff) && !hasKeysNotInValuesFormInput) {
+  //   return diff;
+  // }
 
   return {
     ...diff,

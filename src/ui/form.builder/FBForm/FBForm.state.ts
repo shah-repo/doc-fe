@@ -11,6 +11,8 @@ export class FBFormState extends FBSchemaState {
   public initialValues: Dictionary<any> = {};
   public workspaceMode?: FBWorkspaceMode;
   public values: Dictionary<any> = {};
+
+
   // TO BBE REMOVED!
   public workspaceState?: FBWorkspaceState;
   @observable public errors = new Map<string, string>();
@@ -56,11 +58,7 @@ export class FBFormState extends FBSchemaState {
       return;
     }
     const prevValue = this.getFieldValue(fieldName);
-    if ((_.isUndefined(value) || value.length === 0) && !forceDefault) {
-      this.omitFieldValue(fieldName);
-    } else {
-      _.set(this.values, fieldName, value);
-    }
+    _.set(this.values, fieldName, value);
     if (withState) {
       this.inputState.get(fieldName)?.setValue(prevValue);
       this.inputState.get(fieldName)?.setValue(value);
@@ -166,6 +164,14 @@ export class FBFormState extends FBSchemaState {
       }
       return passes();
     });
+  };
+
+  public setFieldAutosave = (name?: string) => {
+    if (!name) { return; }
+    const inputState = this.inputState.get(name);
+    if (!inputState) { return; }
+    const formValue = this.getFieldValue(name);
+    inputState.setAutosaveValue(formValue);
   };
 }
 

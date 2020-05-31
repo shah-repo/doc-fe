@@ -153,6 +153,7 @@ DocumentRevisionFormContainerProps
       portalContainer={FBContainer}
       document={props.values as unknown as DocumentRevision}
       initialValues={cloneDeep(formInput)}
+      autosave={true}
       {...{ mode, schema  }}
     >
       <DocumentRevisionFormPresenter
