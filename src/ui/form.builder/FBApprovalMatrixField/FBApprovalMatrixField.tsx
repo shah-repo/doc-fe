@@ -8,10 +8,11 @@ const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixFieldProps>
   disabled,
   name,
   mode,
+  workspaceMode,
 }) =>  (
   <FBProvider {...{ approvalMatrixFieldState }}>
     <FBApprovalMatrixRoles {...{ disabled, name }} />
-    <FBApprovalMatrix {...{ disabled, handleAdd, name, mode }} />
+    <FBApprovalMatrix {...{ disabled, handleAdd, name, mode, workspaceMode }} />
   </FBProvider>
 );
 
