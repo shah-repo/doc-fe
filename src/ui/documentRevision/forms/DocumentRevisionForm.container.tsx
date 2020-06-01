@@ -112,21 +112,30 @@ DocumentRevisionFormContainerProps
 
     return {
       ...initialValues,
+      document: {
+        ...(initialValues.document || {}),
+        // NOTE: workaround. DocId is set before groupOptions are loaded
+        // after groupOptions have been loaded the initial values are updated and the docId is removed
+        docId: proposedDocId || initialValues.document?.docId,
+      },
       retrain,
       renderHTML,
       securityGroups,
       outputDocumentTypes: initialValues.formTemplate?.outputDocumentTypes as OptionType[],
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canUpdateHTML, initialValues, groupOptions]);
 
   useEffect(() => {
     if (type !== "newVersion" &&
       !initialValues.document?.docId &&
       loadDocumentProposedId &&
-      initialValues.document?.documentType?.documentTypeAcronym) {
+      initialValues.document?.documentType?.documentTypeAcronym)
+    {
       loadDocumentProposedId(initialValues.document?.documentType.id as string);
     }
-    if (setDocId && initialValues.document?.docId) {
+    if (setDocId && initialValues.document?.docId)
+    {
       setDocId(initialValues.document?.docId);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
