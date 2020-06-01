@@ -123,7 +123,8 @@ DocumentRevisionFormContainerProps
       securityGroups,
       outputDocumentTypes: initialValues.formTemplate?.outputDocumentTypes as OptionType[],
     };
-  }, [canUpdateHTML, initialValues, proposedDocId, groupOptions]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [canUpdateHTML, initialValues, groupOptions]);
 
   useEffect(() => {
     if (type !== "newVersion" &&
