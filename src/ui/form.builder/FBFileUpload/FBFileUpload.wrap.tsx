@@ -34,6 +34,7 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
           formState?.setFieldAutosave(name);
         }
       );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return Component({

@@ -1,3 +1,4 @@
+import { cloneDeep } from "lodash";
 import { action, observable, set } from "mobx";
 import { FBInputType } from ".";
 
@@ -17,7 +18,7 @@ export class FBInputState {
 
   @action public setAutosaveValue = (value: any) => {
     this.autosavePrevValue = this.autosaveNextValue;
-    set(this, "autosaveNextValue", value);
+    set(this, "autosaveNextValue", cloneDeep(value));
   };
 
   @action public setIncludeContext = (state: boolean) => {
