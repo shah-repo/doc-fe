@@ -1,3 +1,4 @@
+import { reaction } from "mobx";
 import React, { useEffect } from "react";
 import { FB, FBDialogState } from "..";
 import FBPOApprovalMatrixState from "./FBPOApprovalMatrix.state";
@@ -91,6 +92,14 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
     };
 
     handleRevert = () => poamState.fetch();
+
+    React.useEffect(() => {
+      reaction(
+        () => poamState?.approvalLevels,
+        () => formState?.setFieldAutosave(name)
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return Component({
       ...(props as T),
