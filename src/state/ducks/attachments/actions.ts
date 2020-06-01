@@ -2,13 +2,13 @@ import { apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import { authActions } from "../auth";
 import { EmployeeEditRequestBody } from "../auth/types";
-import { ADD_WATERMARK, ATTACHMENT_PUBLIC_UPLOAD_URL, ATTACHMENT_ROOT_URL, ATTACHMENT_UPLOAD_URL, CHECK_WATERMARK_ASYNC, CLEAR_WATERMARKS, REMOVE_WATERMARK, REQUEST_WATERMARK_ASYNC } from "./constants";
+import { ADD_WATERMARK, ATTACHMENT_PUBLIC_UPLOAD_URL, ATTACHMENT_ROOT_URL, ATTACHMENT_UPLOAD_URL, CHECK_WATERMARK_ASYNC, CLEAR_WATERMARKS, REMOVE_WATERMARK, REQUEST_WATERMARK_ASYNC} from "./constants";
 import { Attachment, AttachmentDownloadResponse, AttachmentType, AvatarS3linkResponse, WatermarkRequest, WatermarkRequestBody } from "./types";
 
-const upload = (file: File, isRedLine: boolean, handlers: Handlers<Attachment>): ApiAction => {
+const upload = (file: File, groupType: string, handlers: Handlers<Attachment>): ApiAction => {
   const formData = new FormData();
   formData.append("file", file);
-  formData.append("groupType", isRedLine ? "CLEAN_COPY" : "RED_LINE");
+  formData.append("groupType", groupType);
   const type = file.name.split(".").pop();
   const isCleanCopyRequired = type === "docx";
   formData.append("isCleanCopyRequired", isCleanCopyRequired.toString());

@@ -11,7 +11,7 @@ import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicVa
 import { useFormContext } from "../../forms/FormContext";
 import _ from "lodash";
 import FormatAlignLeftIcon from "@material-ui/icons/FormatAlignLeft";
-
+import { GROUP_TYPES } from "../../../../state/ducks/attachments/constants";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {
@@ -85,10 +85,10 @@ const AttachmentGroupTypeForm: React.FunctionComponent<Props> = ({
     handleUpload(files, isRedLine);
   };
 
-  const onChangeCleanCopy = (isRedLine) => (event: React.FormEvent<HTMLInputElement>) => {
+  const onChange = (groupType) => (event: React.FormEvent<HTMLInputElement>) => {
     let isUserAlerted = false;
     // eslint-disable-next-line no-console
-    console.log(isRedLine);
+    console.log(groupType);
     const filteredFiles = Array.from(event.currentTarget.files || []).filter(
       (file) => {
         const type = file.name.split(".").pop();
@@ -109,7 +109,7 @@ const AttachmentGroupTypeForm: React.FunctionComponent<Props> = ({
       return;
     }
 
-    handleUpload(filteredFiles, isRedLine);
+    handleUpload(filteredFiles, groupType);
   };
 
 
@@ -131,7 +131,7 @@ const AttachmentGroupTypeForm: React.FunctionComponent<Props> = ({
           id={`${name}-button-file-clean-copy`}
           multiple={multiple}
           type="file"
-          onChange={onChangeCleanCopy(true)}
+          onChange={onChange(GROUP_TYPES.CLEAN_COPY)}
           className = {classes.input}
           disabled={disabled}
         />
@@ -148,7 +148,7 @@ const AttachmentGroupTypeForm: React.FunctionComponent<Props> = ({
           id={`${name}-button-file-red-line`}
           multiple={multiple}
           type="file"
-          onChange={onChangeCleanCopy(false)}
+          onChange={onChange(GROUP_TYPES.RED_LINE)}
           className = {classes.input}
           disabled={disabled}
         />
