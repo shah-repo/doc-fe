@@ -71,7 +71,7 @@ const AttachmentGroupTypeForm: React.FunctionComponent<Props> = ({
     },
   });
 
-  const handleUpload = (files: File[], isRedline) => {
+  const handleUpload = (files: File[], isRedLine) => {
     if (files.length === 0) {
       return;
     }
@@ -81,14 +81,14 @@ const AttachmentGroupTypeForm: React.FunctionComponent<Props> = ({
       return;
     }
 
-    async.start(upload, file, async);
-    handleUpload(files, isRedline);
+    async.start(upload, file, isRedLine, async);
+    handleUpload(files, isRedLine);
   };
 
-  const onChangeCleanCopy = (isRedline) => (event: React.FormEvent<HTMLInputElement>) => {
+  const onChangeCleanCopy = (isRedLine) => (event: React.FormEvent<HTMLInputElement>) => {
     let isUserAlerted = false;
     // eslint-disable-next-line no-console
-    console.log(isRedline);
+    console.log(isRedLine);
     const filteredFiles = Array.from(event.currentTarget.files || []).filter(
       (file) => {
         const type = file.name.split(".").pop();
@@ -109,7 +109,7 @@ const AttachmentGroupTypeForm: React.FunctionComponent<Props> = ({
       return;
     }
 
-    handleUpload(filteredFiles, isRedline);
+    handleUpload(filteredFiles, isRedLine);
   };
 
 
