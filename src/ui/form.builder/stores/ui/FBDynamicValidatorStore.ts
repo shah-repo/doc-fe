@@ -2,6 +2,7 @@ import Base64 from "Base64";
 import _, { Dictionary } from "lodash";
 import { action, computed, observable, set } from "mobx";
 import Validator from "validatorjs";
+import { FBSchemaProps } from "../..";
 import { DATA_HELPER_CALLBACK_NAME } from "../../../remoteValidators/interfaces";
 import { FBValidatorConfigProps, FBValidatorTemplate } from "../../types/validation/validatorDialog";
 import FBStore from "./FBStore";
@@ -145,12 +146,12 @@ export class FormBuilderDynamicValidatorStore {
 
   @action public getHelperText = (fieldName: string): string | undefined => _.get(this.helperText, fieldName);
 
-  @action public registerValidators = () => {
+  @action public registerValidators = (schema: FBSchemaProps[] = [], validator: any) => {
     if (_.isUndefined(this.Validator)) {
       return;
     }
 
-    _.map(FBStore.getSchema(), (schemaItem) => {
+    _.map(schema, (schemaItem) => {
       const { customValidator } = schemaItem;
 
       if (!_.isUndefined(customValidator)) {
@@ -164,7 +165,7 @@ export class FormBuilderDynamicValidatorStore {
           alert("An error occurred in validator function body: " + error);
         }
 
-        this.Validator.registerAsyncImplicit(
+        validator.registerAsyncImplicit(
           customValidator.name,
           async function f(this: any, value, input, attribute, passes) {
             try {

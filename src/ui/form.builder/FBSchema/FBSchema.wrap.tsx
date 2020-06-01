@@ -2,6 +2,7 @@ import _ from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBFieldName, FBInputProps, FBSchemaComponentProps, FBSchemaProps, FBSchemaState, FBSortable } from "..";
+import FormBuilderDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 
 export const withFBSchema = <T extends FBSchemaComponentProps>(
   Component: React.FunctionComponent<T>
@@ -14,7 +15,12 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
   }: T) => {
 
     !schemaState && (schemaState = FB.useRef<FBSchemaState>(FBSchemaState, schema));
-    const { workspaceState } = FB.useStores();
+    const { workspaceState, formState } = FB.useStores();
+
+    React.useEffect(() => {
+      FormBuilderDynamicValidatorStore.registerValidators(schema, formState?.Validator);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     function controlRenderer(schemaItem: FBSchemaProps | FBInputProps): React.ReactNode | undefined {
       return FBSchemaState.component(schemaItem);
