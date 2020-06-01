@@ -33,7 +33,7 @@ export const styles = makeStyles((theme: Theme) =>
     },
     link: ({ isField }: AttachmentStyleProps) => ({
       display: isField ? "flex" : "block",
-      padding: 10,
+      padding: 15,
       color: "grey",
       textDecoration: "none!important",
       cursor: "pointer",

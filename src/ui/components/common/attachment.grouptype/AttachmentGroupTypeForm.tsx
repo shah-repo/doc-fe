@@ -1,7 +1,7 @@
 import { Box, IconButton, Link } from "@material-ui/core";
 import * as React from "react";
 import Text from "../../Text";
-import { styles } from "./styles";
+import { styles } from "./utils/styles";
 import PublishRoundedIcon from "@material-ui/icons/PublishRounded";
 import CloseIcon from "@material-ui/icons/Close";
 import {  Attachment, Attachment as AttachmentModel, attachmentsActions  } from "../../../../state/ducks/attachments";
@@ -67,10 +67,11 @@ const AttachmentGroupTypeForm: React.FunctionComponent<Props> = ({
       }
       form.setFieldValue(name, attachments);
       submitForm();
+      onCancel();
     },
   });
 
-  const handleUpload = (files: File[]) => {
+  const handleUpload = (files: File[], isRedline) => {
     if (files.length === 0) {
       return;
     }
@@ -81,10 +82,10 @@ const AttachmentGroupTypeForm: React.FunctionComponent<Props> = ({
     }
 
     async.start(upload, file, async);
-    handleUpload(files);
+    handleUpload(files, isRedline);
   };
 
-  const onChange = (isRedline) => (event: React.FormEvent<HTMLInputElement>) => {
+  const onChangeCleanCopy = (isRedline) => (event: React.FormEvent<HTMLInputElement>) => {
     let isUserAlerted = false;
     // eslint-disable-next-line no-console
     console.log(isRedline);
@@ -108,7 +109,7 @@ const AttachmentGroupTypeForm: React.FunctionComponent<Props> = ({
       return;
     }
 
-    handleUpload(filteredFiles);
+    handleUpload(filteredFiles, isRedline);
   };
 
 
@@ -127,15 +128,14 @@ const AttachmentGroupTypeForm: React.FunctionComponent<Props> = ({
       <Box style={{ paddingTop: 20 }}>
         <input
           accept="*"
-          id={`${name}-button-file`}
+          id={`${name}-button-file-clean-copy`}
           multiple={multiple}
           type="file"
-          onChange={onChange(true)}
-          onBlur={onChange(true)}
+          onChange={onChangeCleanCopy(true)}
           className = {classes.input}
           disabled={disabled}
         />
-        <label htmlFor={`${name}-button-file`} >
+        <label htmlFor={`${name}-button-file-clean-copy`} >
           <Link component="span" variant="button" className={classes.link} id="AttachmentFieldPresenter-linkButton" >
             <FormatAlignLeftIcon className={classes.iconCleanCopy} />
             <Text message="Upload a clean copy" />
@@ -145,15 +145,14 @@ const AttachmentGroupTypeForm: React.FunctionComponent<Props> = ({
       <Box>
         <input
           accept="*"
-          id={`${name}-button-file`}
+          id={`${name}-button-file-red-line`}
           multiple={multiple}
           type="file"
-          onChange={onChange(false)}
-          onBlur={onChange(false)}
+          onChange={onChangeCleanCopy(false)}
           className = {classes.input}
           disabled={disabled}
         />
-        <label htmlFor={`${name}-button-file`}>
+        <label htmlFor={`${name}-button-file-red-line`}>
           <Link component="span" variant="button" className={classes.link} id="AttachmentFieldPresenter-linkButton" >
             <FormatAlignLeftIcon className={classes.iconRedline} />
             <Text message="Upload a redline" />
