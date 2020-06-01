@@ -49,6 +49,10 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
         return;
       }
       setIndex(index);
+      item = {
+        ...item,
+        signatures: sortBy(item.signatures, "signatureStage"),
+      };
       dialogState?.config({
         open: true,
         title: "form.builder.add.item",
