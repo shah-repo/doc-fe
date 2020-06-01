@@ -1,12 +1,10 @@
+import { sortBy } from "lodash";
 import { useObserver } from "mobx-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { FB, FBAutocompleteAsyncOption } from "../..";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
-import { GetEmployeeResponse, userManagementActions, userManagementSelectors } from "../../../../state/ducks/userManagement";
-import { DEFAULT_ACTIVE_EMPLOYEES } from "../../../group.management/utils/types";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
+import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import useDialog from "../../../hooks/useDialog";
 import FBAutocompleteAsyncStore from "../../FBAutocompleteAsync/FBAutocompleteAsync.store";
 import { FBPOApprovalMatrixTableProps } from "../FBPOApprovalMatrix.types";
@@ -21,6 +19,7 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
     approvalLevels,
     name,
     groups,
+    employees,
     ...props
   }: T) => {
     const { workspaceState, dialogState, formState } = FB.useStores();
@@ -28,23 +27,6 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
 
     const isDocumentReleased = document?.status === DocumentRevisionStatus.Released;
     const groupOptions = useSelector(userManagementSelectors.getOfficialGroups);
-    const [employees, setActiveEmployees] = useState<GetEmployeeResponse[]>(
-      DEFAULT_ACTIVE_EMPLOYEES,
-    );
-    const getEmployeeAction = useActionCreator(userManagementActions.getEmployee);
-    const asyncGetActiveEmployees = useAsync<GetEmployeeResponse[]>({
-      onSuccess: (data: GetEmployeeResponse[] = []) => {
-        setActiveEmployees(data);
-      },
-    });
-
-    useEffect(() => {
-      if (props.disabled && !isDocumentReleased) {
-        return;
-      }
-      asyncGetActiveEmployees.start(getEmployeeAction, { active: true }, asyncGetActiveEmployees);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.disabled, isDocumentReleased]);
 
     const { poamState } = FB.useStores();
 
@@ -66,7 +48,6 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
       if (props.disabled && !isDocumentReleased) {
         return;
       }
-      poamState?.setFormValues(item, groupOptions, employees);
       setIndex(index);
       dialogState?.config({
         open: true,
@@ -74,11 +55,6 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
         content: <FBPOApprovalMatrixForm initialValues={item} signatureStages={[1, 2, 3]} />,
         actions: <FBPOApprovalMatrixFormActions />,
       });
-
-      // setInitialValues({
-      //   [props.name + "-formValues"]: { ...formState?.getFieldValue(props.name + "-formValues"), id: item.id },
-      // });
-      // dialog.open();
     };
 
     const onSubmit = (item) => {
@@ -89,9 +65,10 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
     };
 
     useObserver(() => {
-      approvalLevels = poamState?.approvalLevels;
+      approvalLevels = sortBy(poamState?.approvalLevels, ["name"]);
       formState?.setFieldValue(name + ".approvalLevels", approvalLevels);
       groups = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.officialGroups);
+      employees = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.employees);
     });
 
     return Component({
@@ -100,10 +77,10 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
       approvalLevels,
       onSubmit,
       groups,
+      employees,
       groupOptions,
       isDialogOpen: dialog.isOpen,
       closeDialog,
-      employees,
       handleEdit,
       signatureStages,
       isDocumentReleased,
