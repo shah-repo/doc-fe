@@ -76,7 +76,7 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
         return DEFAULT_INITIAL_VALUES();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [documentRevision.id, type]);
+  }, [documentRevision?.id, type]);
 
   const async = useAsync<DocumentRevision>({
     onSuccess: (createdDocumentRevision?) => {
