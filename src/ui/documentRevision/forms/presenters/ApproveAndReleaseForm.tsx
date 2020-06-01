@@ -2,6 +2,7 @@ import { Button } from "@material-ui/core";
 import { Form, FormikProps } from "formik";
 import * as React from "react";
 import { Group } from "../../../../state/ducks/auth/types";
+import { Owner } from "../../../../state/ducks/common/types";
 import { AsyncState, AsyncStatus } from "../../../../state/types";
 import Approvers from "../../../change.request/form/approvers";
 import InputField from "../../../components/forms/fields/Input";
@@ -18,6 +19,7 @@ interface Props extends FormikProps<ApproveAndReleaseFormValues>{
   cancel: () => void;
   isQms: boolean;
   documentTypeGroups: Group[];
+  owner: Owner;
 }
 
 const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
@@ -26,13 +28,13 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   isQms,
   values,
   documentTypeGroups,
+  owner,
 }) => {
   const classes = styles();
-
   return (
     <Form className={classes.form}>
       <FormMessage asyncState={asyncState} />
-      {isQms && <Approvers withoutCurrentUser={true} values={values} documentTypeGroups={documentTypeGroups} />}
+      {isQms && <Approvers owner={owner} withoutCurrentUser={true} values={values} documentTypeGroups={documentTypeGroups} />}
       {isQms && <InputField
         name="password"
         label="transition.action.password"
