@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { DocumentRevision, documentRevisionsActions, RevisionChangeType } from "../../state/ducks/documentRevisions";
@@ -65,19 +65,18 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   loadDocument,
 }) => {
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
-  let initialValues = DEFAULT_INITIAL_VALUES();
-
-  switch (type) {
-    case "newVersion":
-      initialValues = toDocumentRevisionFormValuesWithRevisionChange(documentRevision);
-      break;
-    case "newOutput": {
-      initialValues = toDocumentRevisionFormValuesForOutput(documentRevision);
-      break;
+  const initialValues = useMemo(() => {
+    switch (type) {
+      case "newVersion":
+        return toDocumentRevisionFormValuesWithRevisionChange(documentRevision);
+      case "newOutput": {
+        return toDocumentRevisionFormValuesForOutput(documentRevision);
+      }
+      default:
+        return DEFAULT_INITIAL_VALUES();
     }
-    default:
-      break;
-  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [documentRevision.id, type]);
 
   const async = useAsync<DocumentRevision>({
     onSuccess: (createdDocumentRevision?) => {
