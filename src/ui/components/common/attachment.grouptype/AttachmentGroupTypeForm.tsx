@@ -87,8 +87,6 @@ const AttachmentGroupTypeForm: React.FunctionComponent<Props> = ({
 
   const onChange = (groupType) => (event: React.FormEvent<HTMLInputElement>) => {
     let isUserAlerted = false;
-    // eslint-disable-next-line no-console
-    console.log(groupType);
     const filteredFiles = Array.from(event.currentTarget.files || []).filter(
       (file) => {
         const type = file.name.split(".").pop();
