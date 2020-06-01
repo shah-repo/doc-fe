@@ -3,7 +3,7 @@ import { Group } from "../../../state/ducks/auth/types";
 import { Employee } from "../../../state/ducks/company";
 
 export type FBApprovalMatrixFieldProps =
-& Pick<FBInputProps, "name" | "disabled">
+& Pick<FBInputProps, "name" | "disabled" | "autosave">
 & {
   handleAdd?: FBButtonProps["onClick"];
   approvalMatrixFieldState?: FBApprovalMatrixFieldState;

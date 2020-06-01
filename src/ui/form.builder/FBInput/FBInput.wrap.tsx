@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { first, get, includes, isBoolean, isEmpty, isString, isUndefined } from "lodash";
+import { first, get, includes, isBoolean, isEmpty, isEqual, isString, isUndefined } from "lodash";
+import { reaction } from "mobx";
 import React from "react";
 import { useIntl } from "react-intl";
 import { FBOption } from "..";
+import { useFormContext } from "../../components/forms/FormContext";
 import { isTranslation } from "../../translations/types";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
 import { FBInputProps, OmitInputClones } from "../FBInput";
@@ -34,10 +36,12 @@ export const withFBInput = <T extends FBInputProps>(
     hidden,
     rules,
     value,
+    autosave = false,
     ...props
   }: T) => {
 
     const { formState } = FB.useStores();
+    const { submitForm } = useFormContext();
     const intl = useIntl();
     defaultValue = setDefaultValue();
     helperText = formState?.errors.get(name) || helperText;
@@ -112,6 +116,17 @@ export const withFBInput = <T extends FBInputProps>(
       rules && (formState!.setFieldRules(name, rules));
     }, [rules]);
 
+    React.useEffect(() => {
+      reaction(
+        () => inputState?.autosaveNextValue,
+        (value) => {
+          if (autosave && !isEqual(inputState?.autosavePrevValue, value)) {
+            submitForm();
+          }
+        }
+      );
+    }, []);
+
     return Component({
       ...(props as T),
       includeContext,
@@ -132,6 +147,7 @@ export const withFBInput = <T extends FBInputProps>(
       placeholder,
       rules,
       value,
+      autosave,
     });
   };
 

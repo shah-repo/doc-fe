@@ -1,8 +1,7 @@
 import _ from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FBSchemaComponentProps, FBSchemaProps, FBSchemaState } from ".";
-import { FB, FBFieldName, FBSortable } from "..";
+import { FB, FBFieldName, FBInputProps, FBSchemaComponentProps, FBSchemaProps, FBSchemaState, FBSortable } from "..";
 
 export const withFBSchema = <T extends FBSchemaComponentProps>(
   Component: React.FunctionComponent<T>
@@ -17,7 +16,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
     !schemaState && (schemaState = FB.useRef<FBSchemaState>(FBSchemaState, schema));
     const { workspaceState } = FB.useStores();
 
-    function controlRenderer(schemaItem: FBSchemaProps): React.ReactNode | undefined {
+    function controlRenderer(schemaItem: FBSchemaProps | FBInputProps): React.ReactNode | undefined {
       return FBSchemaState.component(schemaItem);
     }
 
@@ -51,16 +50,20 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
       if (workspaceMode === "design") {
         return <FBSortable />;
       }
-      return _.map(schema, (schemaItem, index) => controlRenderer({
-        ...schemaItem,
-        disabled: (
-          schemaItem.disabled ||
-          workspaceMode === "preview" ||
-          isApproved({ ...schemaItem, index }) ||
-          (schemaItem.reviseDisabled && workspaceState?.document?.outputRevision)
-        ),
-        index,
-      }));
+      return _.map(schema, (schemaItem, index) => {
+        const isUnderWorkspace = workspaceState?.getSchemaItem(schemaItem.name);
+        return controlRenderer({
+          autosave: isUnderWorkspace && workspaceState?.autosave,
+          ...schemaItem,
+          disabled: (
+            schemaItem.disabled ||
+            workspaceMode === "preview" ||
+            isApproved({ ...schemaItem, index }) ||
+            (schemaItem.reviseDisabled && workspaceState?.document?.outputRevision)
+          ),
+          index,
+        });
+      });
     }
 
     useObserver(() => {
