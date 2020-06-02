@@ -1,4 +1,4 @@
-import { Checkbox, FormControlLabel } from "@material-ui/core";
+import { Checkbox, FormControlLabel, SvgIconProps } from "@material-ui/core";
 import CheckBoxIcon from "@material-ui/icons/CheckBox";
 import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 import React from "react";
@@ -10,14 +10,15 @@ const FBCheckbox: React.FunctionComponent<FBInputProps> = ({
   label,
   disabled,
   defaultChecked,
+  fontSize = "default",
   ...props
 }) =>  (
   <FBInput {...props} {...{ disabled, label, defaultChecked }} type="checkbox">
     <FormControlLabel
       control={(
         <Checkbox
-          icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
-          checkedIcon={<CheckBoxIcon fontSize="small" />}
+          icon={<CheckBoxOutlineBlankIcon fontSize={fontSize as SvgIconProps["fontSize"]} />}
+          checkedIcon={<CheckBoxIcon fontSize={fontSize as SvgIconProps["fontSize"]} />}
           {...{ disabled, defaultChecked }} />
       )}
       label=""
