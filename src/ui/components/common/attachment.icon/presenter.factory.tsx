@@ -15,6 +15,7 @@ AttachmentIconFactoryProps
   handleContextMenu,
   handleViewFile,
   disabled = false,
+  canDeleteFile = true,
   ...other
 }) => {
   const file = attachment || {} as Attachment;
@@ -29,12 +30,14 @@ AttachmentIconFactoryProps
     isUploading,
     isLoading,
     handleRemove,
+    canDeleteFile,
     ...other,
   };
   let props: AttachmentIconProps = {
     ...defaultProps,
     handleIconClick: handleDownload,
     handleContextMenu,
+
   };
 
   if (isFileViewable && !isUploading) {
