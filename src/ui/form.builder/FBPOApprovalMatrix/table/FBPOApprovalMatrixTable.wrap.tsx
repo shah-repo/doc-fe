@@ -1,4 +1,4 @@
-import { sortBy } from "lodash";
+import { find, map, sortBy } from "lodash";
 import { useObserver } from "mobx-react";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
@@ -7,7 +7,7 @@ import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevision
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import useDialog from "../../../hooks/useDialog";
 import FBAutocompleteAsyncStore from "../../FBAutocompleteAsync/FBAutocompleteAsync.store";
-import { FBPOApprovalMatrixTableProps } from "../FBPOApprovalMatrix.types";
+import { FBPOApprovalMatrixTableProps, POApprovalMatrixLevel, Signature } from "../FBPOApprovalMatrix.types";
 import FBPOApprovalMatrixForm from "../form/FBPOApprovalMatrixForm";
 import FBPOApprovalMatrixFormActions from "../form/FBPOApprovalMatrixForm.actions";
 
@@ -44,14 +44,16 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
     const signatureStages = [1, 2, 3];
 
 
-    const handleEdit = (index, item) => () => {
+    const handleEdit = (index, item: POApprovalMatrixLevel) => () => {
       if (props.disabled && !isDocumentReleased) {
         return;
       }
       setIndex(index);
+      const stages = map(signatureStages, (signatureStage) =>
+        find(item.signatures, { signatureStage }) || { signatureStage });
       item = {
         ...item,
-        signatures: sortBy(item.signatures, "signatureStage"),
+        signatures: sortBy(stages, "signatureStage") as Signature[],
       };
       dialogState?.config({
         open: true,
