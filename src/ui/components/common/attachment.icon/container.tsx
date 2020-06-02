@@ -124,7 +124,6 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const attachmentsRenderer = attachments.map((attachment) => {
     if (isCurrentUserOperator && (documentType === "LOT" || "EB")) {
       const isOperatorOwner = attachment.owner?.id === currentEmployeeId;
-      const canDeleteFile = isOperatorOwner && documentType === "EB";
       return isOperatorOwner && <PresenterFactory
         {...other}
         key={`attachment-${attachment.id}`}
@@ -136,7 +135,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
         field={field}
         handleContextMenu={handleContextMenu}
         handleViewFile={handleViewFile}
-        canDeleteFile={canDeleteFile}
+        canDeleteFile={false}
       />;
     }
     if (isUserDocumentOwner) { return <PresenterFactory
