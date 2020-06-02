@@ -1,31 +1,30 @@
 import React from "react";
-import { FBAutocomplete, FBAutocompleteAsync } from "..";
-import requirementsOptions from "../../../data/requirementsOptions.json";
-import FBDRStore from "../stores/ui/FBDRStore";
-import { FBInputProps } from "../types/common";
+import { FB, FBAutocomplete, FBAutocompleteAsync, FBData, FBInputProps } from "..";
 
 const FBSelectRequirement: React.FunctionComponent<FBInputProps> = ({
   options,
   ...props
-}) => (
-  <>
-    {FBDRStore.isOutput && (
-      <FBAutocompleteAsync
-        {...props}
-        selectedOptions={options as string[]}
-        multiple={true}
-        options={requirementsOptions}
-      />
-    )}
-    {!FBDRStore.isOutput && (
-      <FBAutocomplete
-        {...props}
-        multiple={true}
-        options={requirementsOptions}
-        defaultValue={options}
-      />
-    )}
-  </>
-);
+}) => {
+  const { isOutput } = FB.useStores().workspaceState || {};
+  return (
+    <>
+      {isOutput && (
+        <FBAutocompleteAsync
+          {...props}
+          selectedOptions={options as string[]}
+          multiple={true}
+          options={FBData.requirementOptions}
+        />
+      )}
+      {!isOutput && (
+        <FBAutocomplete
+          {...props}
+          multiple={true}
+          options={FBData.requirementOptions}
+          defaultValue={options}
+        />
+      )}
+    </>
+  ); };
 
 export default FBSelectRequirement;

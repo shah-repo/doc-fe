@@ -1,0 +1,119 @@
+[
+  {
+    "id": "1",
+    "path": "/document_revisions",
+    "label": "Document revisions",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
+  },
+  {
+    "id": "2",
+    "path": "/change_requests",
+    "label": "Change requests",
+    "valueKey": "id",
+    "labelKey": "title",
+    "labelPrefixRoot": "crId",
+    "root": ""
+  },
+  {
+    "id": "3",
+    "path": "/change_requests/available_approvers",
+    "label": "Approvers",
+    "valueKey": "id",
+    "labelKey": "user.email",
+    "root": "optionalApprovers"
+  },
+  {
+    "id": "4",
+    "path": "/document_type",
+    "label": "Document types",
+    "valueKey": "id",
+    "labelKey": "documentTypeName",
+    "root": ""
+  },
+  {
+    "id": "5",
+    "path": "/document_revisions?documentTypeAcronym=SUP",
+    "label": "Supplier list",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
+  },
+  {
+    "id": "6",
+    "path": "/document_revisions?documentTypeAcronym=TL",
+    "label": "TL numbers list",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
+  },
+  {
+    "id": "7",
+    "path": "/document_revisions?documentTypeAcronym=CSL",
+    "label": "CSL numbers list",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
+  },
+  {
+    "id": "8",
+    "path": "/company/mine",
+    "label": "Company addresses",
+    "valueKey": "id",
+    "labelKey": "name",
+    "root": "addresses"
+  },
+  {
+    "id": "9",
+    "path": "/company/mine",
+    "label": "GL codes",
+    "valueKey": "id",
+    "labelKey": "name",
+    "root": "acctCodes"
+  },
+  {
+    "id": "10",
+    "path": "/groups",
+    "label": "Groups",
+    "valueKey": "id",
+    "labelKey": "name"
+  },
+  {
+    "id": "11",
+    "path": "/document_revisions?documentTypeAcronym=PRT",
+    "label": "Parts",
+    "valueKey": "id",
+    "labelKey": "document.docId",
+    "labelPrefixRoot": "",
+    "root": ""
+  },
+  {
+    "id": "12",
+    "path": "/document_revisions?documentTypeAcronym=PO&status%5B%5D=RELEASED",
+    "label": "Purchase Order list",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
+  },
+  {
+    "id": "13",
+    "path": "/employees?active=true",
+    "label": "Employees",
+    "valueKey": "id",
+    "labelKey": "user.name",
+    "root": ""
+  },
+  {
+    "id": "14",
+    "path": "/groups",
+    "label": "Official Groups",
+    "valueKey": "id",
+    "labelKey": "name"
+  }
+]

@@ -13,7 +13,7 @@ AttachmentFieldProps
   const classes = styles({ isField });
 
   return (
-    <Box mt={0.2} className={classes.root} id="AttachmentFieldPresenter-field">
+    <Box mt={1} className={classes.root} id="AttachmentFieldPresenter-field">
       <input
         accept="*"
         className={classes.input}

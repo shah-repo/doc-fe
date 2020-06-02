@@ -36,7 +36,7 @@ export CI=false # had to do this to make the build process not treat warnings as
 SCRIPT="${PYTHON_SCRIPTS_DIR}/setConfigValues.py"
 python3 $SCRIPT "${ENV}"
 
-yarn install --pure-lockfile
+yarn install --frozen-lockfile
 yarn build
 
 rm -rf compiled compiled.tar.gz

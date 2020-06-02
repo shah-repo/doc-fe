@@ -32,21 +32,7 @@ export default (theme: Theme) =>
     whiteContainer: {
       background: "#fff",
       padding: theme.spacing(3, 0),
-    },
-    headerContainer: {
-      padding: "10px 0 60px",
-    },
-    status: {
-      color: "#fff",
-      background: theme.palette.text.hint,
-      padding: theme.spacing(2.2, 0.2),
-      minWidth: "110px",
-      borderRadius: "60px",
-      textAlign: "center",
-      fontSize: "0.7rem",
-    },
-    crId: {
-      color: theme.palette.text.hint,
+      margin: theme.spacing(5, 0, 0, 1.5),
     },
     summaryContainer: {
       padding: theme.spacing(0, 4),
@@ -69,10 +55,10 @@ export default (theme: Theme) =>
     },
     sidebar: {
       "&.MuiGrid-item.MuiGrid-grid-xs-2": {
-        paddingTop: theme.spacing(12),
+        paddingTop: theme.spacing(5),
       },
       "&.MuiGrid-item.MuiGrid-grid-xs-3": {
-        paddingTop: theme.spacing(14),
+        paddingTop: theme.spacing(5),
       },
     },
   });

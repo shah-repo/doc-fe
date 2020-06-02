@@ -1,15 +1,24 @@
 import { action, observable, set } from "mobx";
+import { FBFormState } from "..";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import FBStore from "../stores/ui/FBStore";
 import { ApprovalMatrix, ApprovalMatrixItem, ApprovalRole } from "./FBApprovalMatrix.types";
 const DEFAULT_AM: ApprovalMatrix = {
   approvalRoles: [] as ApprovalRole[],
   approvalMatrix: [] as ApprovalMatrixItem[],
 };
 
+type SubmitForm = () => void;
+
 export class FBApprovalMatrixState {
   @observable public name = "";
   @observable public am = DEFAULT_AM;
+  public submitForm;
+  private formState?: FBFormState;
+
+  public constructor(formState?: FBFormState, submitForm?: SubmitForm) {
+    this.formState = formState;
+    this.submitForm = submitForm;
+  }
 
   @action public setApprovalRoles = (approvalRoles: ApprovalRole[]) => {
     set(this.am, "approvalRoles", approvalRoles);
@@ -22,8 +31,9 @@ export class FBApprovalMatrixState {
   };
 
   @action public updateFBStore = () => {
-    FBStore.setValue(this.name, this.am);
-    FBStore.resetSchema();
+    this.formState?.setFieldValue(this.name, this.am);
+    this.formState?.workspaceState?.resetSchema();
+    this.submitForm?.();
   };
 
   @action public addApprovalRoleItem = (approvalRoleItem: ApprovalRole) => {
@@ -89,9 +99,9 @@ export class FBApprovalMatrixState {
     if (!this.name) {
       return;
     }
-    const value: ApprovalMatrix = FBStore.getValue(this.name) || DEFAULT_AM;
+    const value: ApprovalMatrix = this.formState?.getFieldValue(this.name, DEFAULT_AM);
     this.am = value;
-    FBStore.setValue(this.name, this.am);
+    this.formState?.setFieldValue(this.name, this.am);
     this.updateFBStore();
   };
 }

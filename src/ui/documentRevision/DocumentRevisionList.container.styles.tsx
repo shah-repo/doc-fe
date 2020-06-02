@@ -3,7 +3,8 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core";
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      padding: theme.spacing(1),
+      paddingLeft: "14px",
+      paddingRight: "12px",
     },
     linkContainer: {
       borderBottom: `1px solid ${theme.palette.text.hint}`,

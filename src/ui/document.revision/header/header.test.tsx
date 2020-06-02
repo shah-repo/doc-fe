@@ -1,32 +1,36 @@
 import { Chip, Typography } from "@material-ui/core";
 import { mount } from "enzyme";
+import faker from "faker";
 import React from "react";
-import { getDocumentRevision } from "../../../state/ducks/documentRevisions/tests/factories";
-import { DocumentListInfo, Props } from "./DocumentListInfo";
+import { HeaderInfo, Props } from "../../components/common/header/HeaderInfo";
 
 jest.mock("../../components/Text");
 
-describe("Header tests", () => {
+describe("Header Info tests", () => {
   const defaultProps: Props = {
-    documentRevision: getDocumentRevision(),
+    status: faker.lorem.word(),
+    id: faker.lorem.word(),
+    name: faker.lorem.word(),
+    documentTypeAcronym: faker.lorem.word(),
   };
 
   const getWrapper = (props: Partial<Props> = {}) => mount(
-    <DocumentListInfo {...defaultProps} {...props}/>,
+    <HeaderInfo {...defaultProps} {...props}/>,
   );
 
   it("Chip sets prop label correctly", () => {
     const wrapper = getWrapper();
-    expect((wrapper.find(Chip).find("Text")).prop("message")).toEqual(defaultProps.documentRevision.status);
+    expect((wrapper.find(Chip).find("Text")).prop("message"))
+      .toEqual(`${defaultProps.status}.${defaultProps.documentTypeAcronym}`);
   });
 
-  it("docId id displayed", () => {
+  it("Id is displayed correctly", () => {
     const wrapper = getWrapper();
-    expect(wrapper.find(Typography).contains(defaultProps.documentRevision.document.docId)).toEqual(true);
+    expect(wrapper.find(Typography).contains(defaultProps.id)).toEqual(true);
   });
 
-  it("doc name is displayed", () => {
+  it("Name is displayed correctly", () => {
     const wrapper = getWrapper();
-    expect(wrapper.find(Typography).contains(defaultProps.documentRevision.name)).toEqual(true);
+    expect(wrapper.find(Typography).contains(defaultProps.name)).toEqual(true);
   });
 });

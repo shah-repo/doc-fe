@@ -1,35 +1,26 @@
-import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
+import { Box, withStyles, WithStyles } from "@material-ui/core";
 import { Field, FieldProps, FormikProps } from "formik";
-import React, { useEffect, useMemo } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
 import { toStartOfDay } from "../../../../common/utils/date";
-import { authSelectors } from "../../../../state/ducks/auth";
-import { Group, GroupTag } from "../../../../state/ducks/auth/types";
+import { Group } from "../../../../state/ducks/auth/types";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest";
 import { AsyncState } from "../../../../state/types";
-import OwnerChanger from "../../../components/common/owner.changer/container";
-import { RequestType } from "../../../components/common/owner.changer/helpers/types";
 import DatePickerField from "../../../components/forms/fields/DatePicker";
 import InputField from "../../../components/forms/fields/Input";
 import TextEditorField from "../../../components/forms/fields/RichTextEditor";
 import { required, validator } from "../../../components/forms/fields/validators";
-import FormMessage from "../../../components/forms/FormMessage";
-import FormProgress from "../../../components/forms/FormProgress";
+import { useFormContext } from "../../../components/forms/FormContext";
 import FormWrapper from "../../../components/forms/FormWrapper";
 import PromptIfDirty from "../../../components/forms/PromptIfDirty";
 import ScrollToError from "../../../components/forms/ScrollToError";
-import SubmitButton from "../../../components/forms/SubmitButton";
 import useDidMount from "../../../hooks/useDidMount";
-import useGetHasTag from "../../../hooks/useGetHasTag";
-import { canChangeCROwner } from "../../utils/helpers";
+import FormHeader from "../../form/assessmentForm/FormHeader";
 import ApproversField from "../approvers";
 import AssessmentsField from "../assessments";
 import JustificationField from "../justification";
 import { ChangeRequestFormValues } from "../types.js";
 import styles from "./AssessmentForm.styles";
-import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
 import AssessmentFormImplementationPlan from "./implementationPlan/Container";
-import AssessmentFormVoidContainer from "./Void.container";
 
 interface Props
   extends WithStyles<typeof styles>,
@@ -40,6 +31,7 @@ interface Props
   doNotPrompt?: boolean;
   onDirtyFlagChange?: (dirty: boolean) => void;
   documentTypeGroups: Group[];
+  selectedDocumentRevision: string | null;
 }
 
 const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
@@ -58,21 +50,16 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   errors,
   documentTypeGroups,
   values,
+  selectedDocumentRevision,
+  submitForm,
 }) => {
+  const formContext = useFormContext();
   const didMount = useDidMount();
-
-  const isCompanyAdmin = useGetHasTag(GroupTag.USER_MANAGEMENT);
-  const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
-  const canChangeOwnerShip = useMemo(() => {
-    if (!changeRequest) {
-      return false;
-    }
-    return canChangeCROwner(changeRequest.state, currentEmployeeId, changeRequest?.owner.id, isCompanyAdmin);
-  }, [changeRequest, currentEmployeeId, isCompanyAdmin]);
 
   useEffect(() => {
     if (didMount) {
       setFieldValue("documentRevisions", documentRevisionsList);
+      formContext.submitForm();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentRevisionsList]);
@@ -92,6 +79,13 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <div className={classes.container}>
+      <FormHeader
+        {...{
+          changeRequest,
+          asyncState,
+          selectedDocumentRevision,
+        }}
+      />
       <FormWrapper
         dirty={dirty}
         resetForm={resetForm}
@@ -107,8 +101,6 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
           doNotPrompt={doNotPrompt}
           onDirtyFlagChange={onDirtyFlagChange}
         />
-        <FormMessage asyncState={asyncState} />
-        <FormProgress asyncState={asyncState} />
         {renderCrId()}
 
         <Box mb={1}>
@@ -134,33 +126,6 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
           datePickerProps={{ id: "targetDate", minDate: toStartOfDay(undefined) }}
         />
         <ApproversField documentTypeGroups={documentTypeGroups} values={values} />
-        <Grid
-          item={true}
-          container={true}
-          alignItems="flex-end"
-          justify="flex-end"
-          direction="row"
-        >
-          {
-            canChangeOwnerShip &&
-            <OwnerChanger
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              requestId={changeRequest!.id}
-              requestType={RequestType.ChangeRequest}
-            />
-          }
-          <AssessmentFormVoidContainer changeRequest={changeRequest} />
-          <AssessmentFormControlsContainer changeRequest={changeRequest} />
-          <SubmitButton
-            id="submit"
-            asyncState={asyncState}
-            label={
-              changeRequest
-                ? "common.save"
-                : "navigation.createChangeRequest"
-            }
-          />
-        </Grid>
       </FormWrapper>
     </div>
   );

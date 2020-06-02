@@ -1,0 +1,26 @@
+{
+  "multiple": {
+    "text": "form.builder.multi.select",
+    "outputText": "form.builder.multiple"
+  },
+  "includeQRScan": {
+    "text": "form.builder.include.qr.scan",
+    "outputText": "form.builder.scan.qr"
+  },
+  "reviseDisabled": {
+    "text": "form.builder.revise.disabled"
+  },
+  "includeNone": {
+    "text": "form.builder.include.none",
+    "outputText": "form.builder.none",
+    "isOption": true
+  },
+  "includeContext": {
+    "text": "form.builder.include.other",
+    "outputText": "form.builder.other",
+    "isOption": true
+  },
+  "approveIsBlocking": {
+    "text": "form.builder.blocking"
+  }
+}

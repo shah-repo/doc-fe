@@ -1,5 +1,4 @@
-import { FBMediaAlbumFieldProps } from "..";
-import { FBInputProps } from "../types/common";
+import { FBInputProps, FBMediaAlbumFieldProps } from "..";
 
 export type FBMediaQRMode = "qr" | "placeholder" | "preupload";
 

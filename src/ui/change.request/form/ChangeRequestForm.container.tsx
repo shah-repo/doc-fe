@@ -1,5 +1,6 @@
 import { Grid, WithStyles, withStyles } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { Group } from "../../../state/ducks/auth/types";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks/documentRevisions";
@@ -32,12 +33,10 @@ ChangeRequestFormContainerProps
   changeRequest,
   doNotPrompt,
 }) => {
-  const alertMessage = "You have unsaved changes.";
+  const intl = useIntl();
   const [isFormDirty, setIsFormDirty] = useState<boolean>(false);
   const [documentTypeGroups, setDocumentTypeGroups] = useState<any[]>([]);
-  const [selectedDocumentRevision, setSelectedDocumentRevision] = useState<
-  string | null
-  >(null);
+  const [selectedDocumentRevision, setSelectedDocumentRevision] = useState<string | null>(null);
   const [documentRevisionsList, setDocumentRevisionsList] = useState<string[]>(
     initialValues.documentRevisions,
   );
@@ -52,7 +51,6 @@ ChangeRequestFormContainerProps
     },
   });
   const getGroupsByStage = useActionCreator(documentRevisionsActions.loadGroupsByStage);
-
 
   useEffect(() => {
     if (changeRequest && changeRequest.documentRevisions) {
@@ -75,7 +73,7 @@ ChangeRequestFormContainerProps
     if (!isFormDirty) {
       return true;
     }
-    alert(alertMessage);
+    alert(intl.formatMessage({ id: "common.unsaved.changes" }));
     return false;
   };
 

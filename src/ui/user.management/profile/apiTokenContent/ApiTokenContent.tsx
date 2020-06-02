@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { getTableData } from "../../../../common/utils/selectors";
 import { tableSearchActions } from "../../../../state/ducks/tableSearch";
 import { ApiTokenData, ApiTokenState, GetApiTokenList, userManagementActions } from "../../../../state/ducks/userManagement";
+import { FormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
@@ -74,12 +75,14 @@ export const ApiTokenContent: React.FunctionComponent = () => {
       <Typography variant="h6" style={{ marginBottom: 15, marginTop: 15 }}>
         <Text translation="user.management.api.token" />
       </Typography>
-      <Formik
-        onSubmit={generateKey}
-        initialValues={initialValues}
-      >
-        {renderForm}
-      </Formik>
+      <FormContext.Provider value={{ submitOnChange: false }}>
+        <Formik
+          onSubmit={generateKey}
+          initialValues={initialValues}
+        >
+          {renderForm}
+        </Formik>
+      </FormContext.Provider>
       <ApiTokenDialog
         dialog={dialog}
         apiTokenKey={apiToken.id}

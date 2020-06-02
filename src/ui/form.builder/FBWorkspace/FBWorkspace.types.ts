@@ -1,7 +1,5 @@
-import { FBWorkspaceState } from ".";
-import { FBSchemaProps } from "..";
-import { FBDialogState } from "../FBDialog";
-import { FBFormProps } from "../FBForm";
+import { FBDialogState, FBFormProps, FBSchemaProps, FBSnackbarState, FBWorkspaceState } from "..";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 
 
 export type FBWorkspaceMode = "none" | "design" | "form" | "preview";
@@ -9,11 +7,17 @@ export type FBWorkspaceMode = "none" | "design" | "form" | "preview";
 export type FBWorkspaceProps =
 & Pick<FBFormProps, "initialValues" | "children">
 & {
+  workspaceState?: FBWorkspaceState;
+  dialogState?: FBDialogState;
+  snackbarState?: FBSnackbarState;
+  portalContainer?: React.MutableRefObject<HTMLDivElement | null>;
   schema?: FBSchemaProps[];
   mode?: FBWorkspaceMode;
   isStarter?: boolean;
   active?: boolean;
-  portalContainer?: React.MutableRefObject<null>;
-  dialogState?: FBDialogState;
-  workspaceState?: FBWorkspaceState;
+  includeTransport?: boolean;
+  document?: DocumentRevision;
+  autosave?: boolean;
 };
+
+export type FBWorkspaceConstructor = Pick<FBWorkspaceProps, "schema" | "mode" | "document" | "autosave">;

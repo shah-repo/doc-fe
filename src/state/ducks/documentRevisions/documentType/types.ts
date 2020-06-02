@@ -1,12 +1,13 @@
-import { FBInputProps } from "../../../../ui/form.builder/types/common";
+import { FBSchemaProps } from "../../../../ui/form.builder";
 import { Nullable } from "../../common";
 import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST } from "./constants";
 
-export type DocumentGroupType = "FORM" | "OTHER" | "RECORD" | "DAM" | "MPI" | "DYNAMIC_FORM" | "POAM" | "PO";
+export type DocumentGroupType = "FORM" | "OTHER" | "RECORD" | "DAM" | "MPI" | "DYNAMIC_FORM" | "POAM" | "PO" | "WORK_ORDER";
 export type DocumentGroupOptionsType = "FORM" | "DAM" | "BE_OUTPUT" | "HAVE_OUTPUT" | "RECORD" | "ONE_ITEM" | "DYNAMIC_FORM";
 export interface PageDetailsColumn {
   label: string;
-  fieldName: string;
+  sourcePath: string;
+  valuePath: string;
 }
 
 export interface PageDetailsAddNew {
@@ -26,7 +27,7 @@ export interface DocumentType {
   pageDetails?: Nullable<PageDetails>;
   isQms: boolean;
   defaultTraining: boolean;
-  schema?: FBInputProps[];
+  schema?: FBSchemaProps[];
 }
 
 export interface DocumentForms {
@@ -61,3 +62,12 @@ export interface DocumentTypeByIdState {
 export type DocRevByIdState = DocumentTypeById;
 
 export type DocumentTypeAllIdsState = string[];
+
+export enum DynamicUIDocTypes {
+  PO = "PO",
+  RC = "RC",
+  SUP = "SUP",
+  WO = "WO",
+  DAM = "DAM",
+  POAM = "POAM",
+}

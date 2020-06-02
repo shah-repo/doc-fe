@@ -1,9 +1,7 @@
 import _ from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FBMediaAlbumFieldProps, FBMediaAlbumFieldState } from ".";
-import { FB, FBMediaFile } from "..";
-import FBStore from "../stores/ui/FBStore";
+import { FB, FBMediaAlbumFieldProps, FBMediaAlbumFieldState, FBMediaFile } from "..";
 
 export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
   Component: React.FunctionComponent<T>
@@ -23,18 +21,11 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     mode,
     ...props
   }: T) => {
-    const documentId = FBStore.documentId;
+    const { workspaceState } = FB.useStores();
     mediaAlbumFieldState = FB.useRef<FBMediaAlbumFieldState>(
-      FBMediaAlbumFieldState, { name, isTemplate }
+      FBMediaAlbumFieldState, { name, isTemplate, workspaceState }
     );
-    qrValue = `https://enlil.io/fileupload?document=${documentId}&fieldname=${name}`;
-
-    React.useEffect(() => {
-      if (_.isEmpty(documentId)) {
-        return;
-      }
-      mediaAlbumFieldState?.downloadCandidates();
-    }, [documentId, mediaAlbumFieldState]);
+    qrValue = `https://enlil.io/fileupload?document=${mediaAlbumFieldState.documentId}&fieldname=${name}`;
 
     // Handle mode
     setMediaFieldMode = () => {
@@ -57,7 +48,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       collection = mediaAlbumFieldState?.collection;
     });
 
-    actionsDisabled = (reviseDisabled && FBStore.isRevised) || mediaAlbumFieldState?.isPreview;
+    actionsDisabled = (reviseDisabled && workspaceState?.isRevised) || mediaAlbumFieldState?.isPreview;
 
     return Component({
       ...(props as T),

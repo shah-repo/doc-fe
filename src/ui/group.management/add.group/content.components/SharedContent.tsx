@@ -5,6 +5,7 @@ import Select from "react-select";
 import { GroupRequestBody } from "../../../../state/ducks/groupManagement/types";
 import { GetEmployeeResponse } from "../../../../state/ducks/userManagement";
 import { AsyncActionPayload } from "../../../../state/types";
+import { MultiValueRemove, selectStyles } from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
 import FormMessage from "../../../components/forms/FormMessage";
 import Text from "../../../components/Text";
@@ -60,7 +61,9 @@ export const SharedContent: React.FunctionComponent<Props> = ({
       <Select
         id="Group-members"
         isMulti={true}
+        components={{ MultiValueRemove }}
         options={toMembersOptions(employees)}
+        styles={selectStyles}
         onChange={(state: any) => setMembers(state)}
         value={members}
         placeholder={intl.formatMessage({

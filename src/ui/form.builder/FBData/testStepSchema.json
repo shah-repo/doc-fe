@@ -1,0 +1,25 @@
+[{
+    "type": "stepsection",
+    "label": "form.builder.stepsection",
+    "stepIndex": 0
+  }, {
+    "type": "paragraph",
+    "paragraph": "Type description here...",
+    "name": "fb-teststep-paragraph-${id}"
+  }, {
+    "type": "testRequirement",
+    "label": "form.builder.testRequirement",
+    "name": "fb-teststep-testRequirement-${id}"
+  },
+  {
+    "type": "instructionsmediaupload",
+    "label": "form.builder.instructionsmediaupload",
+    "name": "fb-teststep-instructionsmediaupload-${id}",
+    "isTemplate": true
+  },
+  {
+    "type": "evidencemediaupload",
+    "label": "form.builder.evidencemediaupload",
+    "name": "fb-teststep-evidencemediaupload-${id}"
+  }
+]

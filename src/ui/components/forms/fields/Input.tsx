@@ -2,6 +2,7 @@ import { InputBaseProps as MuiInputProps } from "@material-ui/core/InputBase";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
 import { RenderSize } from "../../../../state/ducks/common";
+import { useFormContext } from "../FormContext";
 import Field, { FieldOwnProps } from "./Field";
 import { InputField as MuiInput } from "./Input.styles";
 
@@ -20,16 +21,24 @@ const Input: React.FunctionComponent<InputPropsWithFormik> = ({
   actionsRenderer,
   lpignore = true,
   ...fieldProps
-}) => (
-  <Field size={size} actionsRenderer={actionsRenderer} {...fieldProps} inputLabelProps={{ shrink: true }} >
-    <MuiInput
-      required={false}
-      inputProps={{ "data-lpignore": lpignore }}
-      {...fieldProps.field}
-      {...inputProps}
-    />
-  </Field>
-);
+}) => {
+  const { submitForm } = useFormContext();
+  return (
+    <Field size={size} actionsRenderer={actionsRenderer} {...fieldProps} inputLabelProps={{ shrink: true }} >
+      <MuiInput
+        required={false}
+        inputProps={{ "data-lpignore": lpignore }}
+        {...fieldProps.field}
+        {...inputProps}
+        onBlur={(evt) => {
+          fieldProps.field.onBlur(evt);
+          inputProps?.onBlur?.(evt);
+          submitForm();
+        }}
+      />
+    </Field>
+  );
+};
 
 type InputFieldProps = InputOwnProps & FieldConfig;
 

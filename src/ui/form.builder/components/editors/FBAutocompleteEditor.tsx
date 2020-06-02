@@ -1,5 +1,5 @@
 import React from "react";
-import autocompleteOptions from "../../../../data/autocompleteOptions.json";
+import { FBData } from "../../FBData";
 import { FBStepperEditor } from "../../FBStepperEditor";
 import { FBAutocompleteEditorProps } from "../../types/editors/autocomplete.js";
 import FBSelect from "../inputs/FBSelect";
@@ -15,7 +15,7 @@ const FBAutocompleteEditor: React.FunctionComponent<FBAutocompleteEditorProps> =
     <FBPlaceholderEditor />
     <FBSelect
       label="form.builder.select.options"
-      options={autocompleteOptions}
+      options={FBData.autocompleteOptions}
       optionLabelKey="label"
       optionValueKey="id"
       name="optionId"

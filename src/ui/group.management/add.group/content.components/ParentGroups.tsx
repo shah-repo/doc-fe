@@ -3,6 +3,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import Select from "react-select";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
+import { MultiValueRemove, selectStyles } from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import Text from "../../../components/Text";
 
 interface Props {
@@ -28,6 +29,8 @@ export const ParentGroups: React.FunctionComponent<Props> = ({
           options={allGroups}
           onChange={(state: any) => setParentGroups(state)}
           value={parentGroups}
+          components={{ MultiValueRemove }}
+          styles={selectStyles}
         />
       </Box>
     </Grid>

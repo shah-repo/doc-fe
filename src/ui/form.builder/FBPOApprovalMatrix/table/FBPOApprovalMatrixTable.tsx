@@ -1,9 +1,12 @@
 import { Box, makeStyles, Table, TableBody, TableCell, TableHead, TableRow, withStyles } from "@material-ui/core";
 import classNames from "classnames";
+import { find } from "lodash";
 import React from "react";
+import { FBPOApprovalMatrixState } from "..";
+import { FBMapWrapper } from "../..";
 import Text from "../../../components/Text";
 import Colors from "../../../layout/theme/utils/colors";
-import { FBPOApprovalMatrixTableProps } from "../FBPOApprovalMatrix.types";
+import { FBPOApprovalMatrixTableProps, POApprovalMatrixLevel } from "../FBPOApprovalMatrix.types";
 import FBPOApprovalMatrixDialog from "../form/FBPOApprovalMatrixDialog";
 import { withFBPOApprovalMatrixTable } from "./FBPOApprovalMatrixTable.wrap";
 
@@ -35,7 +38,7 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
   disabled,
   approvalLevels,
   employees,
-  groupOptions,
+  groups,
   handleEdit,
   isDocumentReleased,
   isDialogOpen,
@@ -44,6 +47,7 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
   onSubmit,
   name,
   signatureStages,
+  groupOptions,
 }) => {
   const classes = useStyles();
 
@@ -70,7 +74,7 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
           </TableRow>
         </TableHead>
         <TableBody>
-          {approvalLevels?.map((row: any, index) => (
+          {approvalLevels?.map((row: POApprovalMatrixLevel, index) => (
             <TableRow
               key={`${row.name}-${index}`}
               onClick={handleEdit(index, row)}
@@ -78,36 +82,41 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
             >
               <StyledTableCell>{row.name}</StyledTableCell>
               <StyledTableCell>{row.limit}</StyledTableCell>
-              {row.signatures.map((signature, index) =>
-                (
-                  <StyledTableCell key={`${signature?.name}-${index}`}>
-                    {signature?.groups.map((group) =>
-                      groupOptions.map((e) => {
-                        if (e.value === group.id) {
-                          return (
-                            <Box width="max-content"
-                              bgcolor="lightgray"
-                              borderRadius="3px"
-                              p={0.3} m={0.3}>{e.label}</Box>
-                          );
-                        }
-                        return null;
-                      }))}
-                    {signature?.employees.map((employee) =>
-                      employees.map((e) => {
-                        if (e.id === employee.id) {
-                          return (
-                            <Box width="max-content"
-                              bgcolor="lightgray"
-                              borderRadius="3px"
-                              p={0.3} m={0.3}>{e.user.name}</Box>
-                          );
-                        }
-                        return null;
-                      }
-                      ))}</StyledTableCell>)
-              )
-              }
+              <FBMapWrapper<number[]> collection={FBPOApprovalMatrixState.stages}>
+                {(signatureStage: number, index) => (
+                  <StyledTableCell key={`fb-poam-signature-${row.id}-${index}`}>
+                    {find(row.signatures, { signatureStage })?.groups?.map((group) =>
+                      <>
+                        { groups?.get(group.id) && (
+                          <Box
+                            key={`fb-poam-signature-group-${group.id}-${index}`}
+                            width="max-content"
+                            bgcolor="lightgray"
+                            borderRadius="3px"
+                            p={0.3} m={0.3}>
+                            {groups?.get(group.id)?.name}
+                          </Box>
+                        )}
+                      </>
+                    )}
+                    {find(row.signatures, { signatureStage })?.employees?.map((employee) =>
+                      <>
+                        {employees?.get(employee.id) && (
+                          <Box
+                            key={`fb-poam-signature-employee-${employee.id}-${index}`}
+                            width="max-content"
+                            bgcolor="lightgray"
+                            borderRadius="3px"
+                            p={0.3} m={0.3}>
+                            {employees?.get(employee.id)?.user?.name}
+                          </Box>
+                        )}
+                      </>
+                    )}
+                  </StyledTableCell>
+                )}
+              </FBMapWrapper>
+
             </TableRow>
           ))}
         </TableBody>

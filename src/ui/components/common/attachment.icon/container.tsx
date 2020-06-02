@@ -10,6 +10,7 @@ import FBStore from "../../../form.builder/stores/ui/FBStore";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
+import { useFormContext } from "../../forms/FormContext";
 import { withFormik } from "../../hoc/formik";
 import ViewFile from "../view.file/container";
 import Menu from "./menu";
@@ -30,6 +31,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   ...other
 }) => {
 
+  const { submitForm } = useFormContext();
   const [newWatermarkRequest, setNewWatermarkRequest] = useState<Nullable<WatermarkRequest>>(null);
   const [newWatermakrError, setNewWatermarkError] = useState<string>("");
   const dialogHandler = useDialog();
@@ -72,6 +74,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
       FBDynamicValidatorStore.validate();
     }
     form.setFieldValue(name, filtered);
+    submitForm();
   };
 
   const handleDownload = (attachment: Attachment, type?: AttachmentType) => () => {

@@ -1,11 +1,11 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import Header from "../../components/common/header/Header";
+import HeaderInfo from "../../components/common/header/HeaderInfo";
 import OwnerChangerContainer from "../../components/common/owner.changer/container";
 import { RequestType } from "../../components/common/owner.changer/helpers/types";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
-import DocumentListInfo from "./DocumentListInfo";
-import Header from "./Header";
 
 interface Props {
   documentRevision: DocumentRevision;
@@ -19,7 +19,12 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
   canShowCreateVersionButton,
 }) => (
   <Header>
-    <DocumentListInfo documentRevision={documentRevision} />
+    <HeaderInfo
+      status={documentRevision.status}
+      id={documentRevision.document.docId}
+      name={documentRevision.name}
+      documentTypeAcronym={documentRevision?.document?.documentType.documentTypeAcronym}
+    />
     <Grid item={true} xs={6}>
       <Grid container={true} alignItems="flex-end" justify="flex-end">
         <ControlsContainer

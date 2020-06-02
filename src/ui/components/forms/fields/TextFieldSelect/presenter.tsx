@@ -16,7 +16,9 @@ export const EditableSelectPresenter: React.FunctionComponent<Props> = ({
   value = "",
   gutter = true,
   isActive = false,
+  disabled = false,
   handleBlur,
+  isDisabled,
 }) => {
   const classes = styles({ gutter, error: false });
   return (
@@ -31,11 +33,12 @@ export const EditableSelectPresenter: React.FunctionComponent<Props> = ({
           onChange: handleChange,
           autoComplete: "off",
           onBlur: handleBlur,
+          disabled,
         }}
         formControlProps={{ className: classes.textField }}
       />
       <AutocompleteField
-        name={name}
+        name="dummy"
         autocompleteProps={{
           // eslint-disable-next-line react/display-name
           noOptionsMessage: () => <Text message="document.emptyData" />,

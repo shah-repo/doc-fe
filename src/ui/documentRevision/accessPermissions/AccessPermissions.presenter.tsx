@@ -1,10 +1,10 @@
-import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, List, Typography } from "@material-ui/core";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { List, Typography } from "@material-ui/core";
+import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
 import _ from "lodash";
 import React from "react";
+import { useIntl } from "react-intl";
 import Select, { components } from "react-select";
-import { ReactComponent as CloseIcon } from "../../../assets/images/close_delete.svg";
-import { ReactComponent as PlusIcon } from "../../../assets/images/plus_add_icon.svg";
+import { ReactComponent as CloseIcon } from "../../../assets/images/circle-remove.svg";
 import { Group } from "../../../state/ducks/auth/types";
 import { changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { Owner, TypographySize } from "../../../state/ducks/common";
@@ -25,6 +25,7 @@ interface OwnProps {
   loadAvailableApproversAction: typeof changeRequestsActions.loadAvailableApprovers;
   groupOptions: OptionType[];
   securityEmployees: [];
+  operators: [];
   securityGroups: [];
   documentId: string;
   documentRevisionId: string;
@@ -39,6 +40,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
   groupOptions,
   securityGroups,
   securityEmployees,
+  operators,
   documentId,
   loadAvailableApproversAction,
   documentRevisionId,
@@ -47,19 +49,15 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
   loadGroupsAction,
 }) => {
   const classes = styles();
-  const [expanded, setExpanded] = React.useState<boolean>(false);
-  const [expandedUser, setExpandedUser] = React.useState<boolean>(false);
-  const [expandedGroup, setExpandedGroup] = React.useState<boolean>(false);
-
-  const handleChange = () => () => setExpanded(!expanded);
-  const handleChangeUser = () => () => setExpandedUser(!expandedUser);
-  const handleChangeGroup = () => () => setExpandedGroup(!expandedGroup);
 
   const security = {
     securityEmployees: securityEmployees.map((e: Group) => ({
       id: e.id,
     })),
     securityGroups: securityGroups.map((e: Group) => ({
+      id: e.id,
+    })),
+    operators: operators.map((e: Group) => ({
       id: e.id,
     })),
   };
@@ -79,6 +77,20 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
       async,
     );
   };
+
+  const handleDeleteOperatorAccess = (deletedId: string) => {
+    const deleteOperators = _.filter(security.operators, (operator) =>
+      (!_.isEqual(operator.id, deletedId)));
+    const securityDeleted = {
+      operators: deleteOperators,
+    };
+    async.start(
+      updateAction,
+      documentId,
+      securityDeleted,
+      async,
+    );
+  };
   const getList = useActionCreator(documentRevisionsActions.load);
   const updateAction = useActionCreator(documentRevisionsActions.updateAccess);
   const async = useAsync({
@@ -89,6 +101,8 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
 
   const initialElements = { value: "", text: "", label: "" };
   const [accessElement, saveAccessElement] = React.useState(initialElements);
+  const [operator, saveOperator] = React.useState<any>(null);
+
   const isGroup = _.some(groupOptions, {
     label: accessElement.label, text: accessElement.text, value: accessElement.value,
   });
@@ -100,6 +114,8 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
       const securityUpdateGroup = {
         securityEmployees: [...security.securityEmployees],
         securityGroups: [...security.securityGroups, { id: accessElement.value }],
+        operators: [...security.operators],
+
       };
       async.start(
         updateAction,
@@ -107,10 +123,27 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
         securityUpdateGroup,
         async,
       );
+    } else if (operator) {
+
+      const securityUpdateOperator = {
+        securityEmployees: [...security.securityEmployees],
+        securityGroups: [...security.securityGroups],
+        operators: [...security.operators, { id: operator.value }],
+      };
+      async.start(
+        updateAction,
+        documentId,
+        securityUpdateOperator,
+        async,
+      );
+      saveOperator(null);
+
     } else {
       const securityUpdateEmployee = {
         securityEmployees: [...security.securityEmployees, { id: accessElement.value }],
         securityGroups: [...security.securityGroups],
+        operators: [...security.operators],
+
       };
       async.start(
         updateAction,
@@ -126,49 +159,39 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
     saveAccessElement(value);
   };
 
-  const DropdownIndicator = (props) => (
-    <components.DropdownIndicator
-      {...props}
-    >
-      <button onMouseDown={(e) => handleUpdate(e)} className={classes.accessButton}>
-        <PlusIcon width="15" height="15" />
-      </button>
-    </components.DropdownIndicator>
-  );
+  const saveValueOperator = (value) => {
+    saveOperator(value);
+  };
+  const intl = useIntl();
+
+  const DropdownIndicator = (props) => ( <components.DropdownIndicator
+    {...props}
+  >
+    <button onMouseDown={(e) => handleUpdate(e)} className={classes.accessButton}>
+      {(props.selectProps.menuIsOpen || props.hasValue) ?
+        <AddBoxOutlinedIcon color="primary" fontSize="small" /> :
+        <AddBoxOutlinedIcon color="disabled" fontSize="small" />}
+    </button>
+  </components.DropdownIndicator>);
   const securityGroupsIds = securityGroups.map((e: Group) => e.id);
   const groupSelectOptions = groupOptions.filter((val) => !securityGroupsIds.includes(val.value));
   const securityEmployeesIds = securityEmployees.map((e: Owner) => e.id);
-  const employeeSelectOptions = availableApprovers.filter((val) => !securityEmployeesIds.includes(val.value));
+  const operatorsIds = operators.map((e: Owner) => e.id);
 
+  const employeeSelectOptions = availableApprovers.filter((val) => !securityEmployeesIds.includes(val.value));
+  const operatorsSelectOptions = availableApprovers.filter((val) => !operatorsIds.includes(val.value));
   return (
     <div className={classes.container}>
-      <ExpansionPanel expanded={expanded} onChange={handleChange()}>
-        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant={TypographySize.md}>
-            <Text translation="document.access.permissions" />
-          </Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanel
-          expanded={expandedUser}
-          onChange={handleChangeUser()}
-          style={{ marginLeft: 16 }}
-        >
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography variant={TypographySize.md}>
-              <Text translation="document.revision.selected.users" />
-            </Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails
-            className={classes.details}
-            style={{ marginLeft: 5, overflow: "unset" }}
-          >
-            <div style={{ width: 272 }}>
-              {!_.isEmpty(securityEmployees) &&
+      <Typography variant={TypographySize.md}>
+        <Text translation="document.revision.selected.users" />
+      </Typography>
+      <div style={{ width: 240, paddingBottom: 32 }}>
+        {!_.isEmpty(securityEmployees) &&
                 <List className={securityGroups.length > 3 ? rowStyles.customRows : undefined}>
                   {securityEmployees.map((e: Owner, index) => (
                     <div
                       key={index}
-                      style={{ display: "flex", marginTop: 16, marginBottom: 16 }}
+                      className={classes.selectContainer}
                     >
                       <div style={{ width: 230 }}>{e.user.name}</div>
                       <button className={classes.accessButton} onClick={() => handleDelete(e.id)} >
@@ -177,43 +200,32 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
                     </div>
                   ))}
                 </List>}
-              <AsyncGate
-                asyncState={loadApproversAsyncState}
-                asyncAction={loadAvailableApproversAction}
-                startActionOnMount={true}
-              >
-                <Select
-                  options={employeeSelectOptions}
-                  onChange={(e) => saveValue(e)}
-                  placeholder="Enter name to invite people"
-                  components={{ DropdownIndicator }}
-                  value={(accessElement.value === "" || isGroup) ? null : accessElement}
-                />
-              </AsyncGate>
-            </div>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-        <ExpansionPanel
-          expanded={expandedGroup}
-          onChange={handleChangeGroup()}
-          style={{ marginLeft: 16 }}
+        <AsyncGate
+          asyncState={loadApproversAsyncState}
+          asyncAction={loadAvailableApproversAction}
+          startActionOnMount={true}
         >
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography variant={TypographySize.md}>
-              <Text translation="document.revision.selected.groups" />
-            </Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails
-            className={classes.details}
-            style={{ marginLeft: 5, overflow: "unset" }}
-          >
-            <div style={{ width: 272 }}>
-              {!_.isEmpty(securityGroups) &&
+          <Select
+            options={employeeSelectOptions}
+            onChange={(e) => saveValue(e)}
+            placeholder={intl.formatMessage({
+              id: "document.revision.invitation",
+            })}
+            components={{ DropdownIndicator }}
+            value={(accessElement.value === "" || isGroup) ? null : accessElement}
+          />
+        </AsyncGate>
+      </div>
+      <Typography variant={TypographySize.md}>
+        <Text translation="document.revision.selected.groups" />
+      </Typography>
+      <div style={{ width: 240, paddingBottom: 32 }}>
+        {!_.isEmpty(securityGroups) &&
                 <List className={securityGroups.length > 3 ? rowStyles.customRows : undefined}>
                   {securityGroups.map((e: Group, index) => (
                     <div
                       key={index}
-                      style={{ display: "flex", marginTop: 16, marginBottom: 16 }}
+                      className={classes.selectContainer}
                     >
                       <div style={{ width: 230 }}>{e.name}</div>
                       <button className={classes.accessButton} onClick={() => handleDelete(e.id)}>
@@ -222,23 +234,56 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
                     </div>
                   ))}
                 </List>}
-              <AsyncGate
-                asyncState={loadGroupAsyncState}
-                asyncAction={loadGroupsAction}
-                startActionOnMount={true}
-              >
-                <Select
-                  options={groupSelectOptions}
-                  placeholder="Enter name to invite group"
-                  components={{ DropdownIndicator }}
-                  onChange={(e) => saveValue(e)}
-                  value={(accessElement.value === "" || !isGroup) ? null : accessElement}
-                />
-              </AsyncGate>
-            </div>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-      </ExpansionPanel>
+        <AsyncGate
+          asyncState={loadGroupAsyncState}
+          asyncAction={loadGroupsAction}
+          startActionOnMount={true}
+        >
+          <Select
+            options={groupSelectOptions}
+            placeholder={intl.formatMessage({
+              id: "document.revision.invitation.group",
+            })}
+            components={{ DropdownIndicator }}
+            onChange={(e) => saveValue(e)}
+            value={(accessElement.value === "" || !isGroup) ? null : accessElement}
+          />
+        </AsyncGate>
+      </div>
+      <Typography variant={TypographySize.md}>
+        <Text translation="document.assign.to" />
+      </Typography>
+      <div style={{ width: 240, paddingBottom: 32 }}>
+        {!_.isEmpty(operators) &&
+                <List className={operators.length > 3 ? rowStyles.customRows : undefined}>
+                  {operators.map((e: Owner, index) => (
+                    <div
+                      key={index}
+                      className={classes.selectContainer}
+                    >
+                      <div style={{ width: 230 }}>{e.user.name}</div>
+                      <button className={classes.accessButton} onClick={() => handleDeleteOperatorAccess(e.id)} >
+                        <CloseIcon />
+                      </button>
+                    </div>
+                  ))}
+                </List>}
+        <AsyncGate
+          asyncState={loadApproversAsyncState}
+          asyncAction={loadAvailableApproversAction}
+          startActionOnMount={true}
+        >
+          <Select
+            options={operatorsSelectOptions}
+            onChange={(e) => saveValueOperator(e)}
+            placeholder={intl.formatMessage({
+              id: "document.revision.invitation",
+            })}
+            components={{ DropdownIndicator }}
+            value={!operator ? null : operator}
+          />
+        </AsyncGate>
+      </div>
     </div>
   );
 };

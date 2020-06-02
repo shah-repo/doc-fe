@@ -16,7 +16,7 @@ export class FB {
     return React.useContext(MobXProviderContext) as FBProviderProps;
   }
 
-  public static uniqid(): string {
+  public static get uniqid(): string {
     const uniqid = require("uniqid");
     return uniqid();
   }
@@ -25,7 +25,7 @@ export class FB {
     if (_.isUndefined(optionName)) {
       return "";
     }
-    const striped = optionName.replace(fielddName, "").replace("-<-val->", "");
+    const striped = optionName.toString().replace(fielddName, "").replace("-<-val->", "");
     return _.startCase(striped);
   }
 }

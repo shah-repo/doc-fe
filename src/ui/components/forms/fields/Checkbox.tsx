@@ -4,6 +4,7 @@ import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } fro
 import * as React from "react";
 import { Translation } from "../../../translations/types";
 import Text from "../../Text";
+import { useFormContext } from "../FormContext";
 import Field, { FieldOwnProps } from "./Field";
 
 interface CheckboxOwnProps extends FieldOwnProps {
@@ -18,6 +19,7 @@ type CheckboxPropsWithFormik = CheckboxOwnProps & FormikFieldProps & OwnProps;
 
 const Checkbox: React.FunctionComponent<CheckboxPropsWithFormik> = ({ checkboxProps, label, ...fieldProps }) => {
   const { field } = fieldProps;
+  const { submitForm } = useFormContext();
 
   return (
     <Field {...fieldProps} >
@@ -29,6 +31,11 @@ const Checkbox: React.FunctionComponent<CheckboxPropsWithFormik> = ({ checkboxPr
             checked={checkboxProps?.disabled ? false : field.value && true}
             value={field.value ? "checked" : ""}
             id="Checkbox-box"
+            onChange={(evt, checked: boolean) => {
+              field.onChange(evt);
+              checkboxProps?.onChange?.(evt, checked);
+              submitForm();
+            }}
           />
         }
         label={<Text translation={label} />}

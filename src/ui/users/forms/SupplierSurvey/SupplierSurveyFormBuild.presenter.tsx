@@ -1,16 +1,16 @@
 import { Box, Typography } from "@material-ui/core";
 import { FormikProps } from "formik";
 import * as React from "react";
+import { FBDocumentRevisionProps } from "../../../../state/ducks/documentRevisions";
 import { SupplierSurveyForm } from "../../../../state/ducks/supplierSurvey";
 import { AsyncState } from "../../../../state/types";
 import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";
 import FormWrapper from "../../../components/forms/FormWrapper";
 import SubmitButton from "../../../components/forms/SubmitButton";
-import FBWorkspace from "../../../form.builder/containers/workspace/FBWorkspace";
-import { FBDocumentFlowProps } from "../../../form.builder/types/formik";
+import { FBWorkspace } from "../../../form.builder";
 
-interface Props extends FormikProps<FBDocumentFlowProps> {
+interface Props extends FormikProps<FBDocumentRevisionProps> {
   asyncState: AsyncState;
   supplierSurvey: SupplierSurveyForm;
   name?: string;
@@ -41,7 +41,7 @@ const SupplierSurveyFormBuild: React.FunctionComponent<Props> = ({
       <Box width="700px" height="38px" borderBottom={1} borderColor="grey.500" my={5}>
         <Typography align="center" variant="h4">{supplierSurvey.surveyFormDocumentRevision.name}</Typography>
       </Box>
-      <FBWorkspace mode="form" includeTransport={false} />
+      <FBWorkspace mode="form" includeTransport={false} initialValues={initialValues.formInput} />
       <Box width="700px" display="flex" justifyContent="flex-end">
         <SubmitButton
           asyncState={asyncState}

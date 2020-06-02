@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { DocumentRevision, documentRevisionsActions, RevisionChangeType } from "../../state/ducks/documentRevisions";
@@ -15,6 +15,7 @@ interface DispatchProps {
   create: typeof documentRevisionsActions.create;
   setDocId: typeof documentsActions.setDocumentProposedId;
   loadDocumentProposedId: typeof documentsActions.loadDocumentProposedId;
+  loadDocument: typeof documentRevisionsActions.loadDocument;
 }
 
 interface OwnProps {
@@ -50,6 +51,7 @@ export const DEFAULT_INITIAL_VALUES = (): DocumentRevisionFormValues => ({
   formTemplate: { outputDocumentTypes: [], schema: [] },
   securityGroups: [],
   securityEmployees: [],
+  operators: [],
 });
 
 export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionCreateContainerProps> = ({
@@ -60,26 +62,27 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
   type = "none",
   loadDocumentProposedId,
   proposedDocId,
+  loadDocument,
 }) => {
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
-  let initialValues = DEFAULT_INITIAL_VALUES();
-
-  switch (type) {
-    case "newVersion":
-      initialValues = toDocumentRevisionFormValuesWithRevisionChange(documentRevision);
-      break;
-    case "newOutput": {
-      initialValues = toDocumentRevisionFormValuesForOutput(documentRevision);
-      break;
+  const initialValues = useMemo(() => {
+    switch (type) {
+      case "newVersion":
+        return toDocumentRevisionFormValuesWithRevisionChange(documentRevision);
+      case "newOutput": {
+        return toDocumentRevisionFormValuesForOutput(documentRevision);
+      }
+      default:
+        return DEFAULT_INITIAL_VALUES();
     }
-    default:
-      break;
-  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [documentRevision?.id, type]);
 
   const async = useAsync<DocumentRevision>({
     onSuccess: (createdDocumentRevision?) => {
       if (createdDocumentRevision) {
         setDoNotPrompt(true);
+        loadDocument(createdDocumentRevision.document.id);
         history.push(
           documentVersionPath(createdDocumentRevision.id, createdDocumentRevision.document.id),
         );
@@ -115,4 +118,5 @@ export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(ma
   create: documentRevisionsActions.create,
   setDocId: documentsActions.setDocumentProposedId,
   loadDocumentProposedId: documentsActions.loadDocumentProposedId,
+  loadDocument: documentRevisionsActions.loadDocument,
 })(DocumentRevisionCreateContainerWithRouter);

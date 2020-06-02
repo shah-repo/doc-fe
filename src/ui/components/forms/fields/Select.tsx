@@ -4,6 +4,7 @@ import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } fro
 import * as React from "react";
 import { TypographyProps } from "../../../../state/ducks/common";
 import Text from "../../Text";
+import { useFormContext } from "../FormContext";
 import Field, { FieldOwnProps } from "./Field";
 import { InputField } from "./Input.styles";
 
@@ -30,6 +31,8 @@ const Select: React.FunctionComponent<SelectPropsWithFormik> = ({
   inputFieldProps,
   ...fieldProps
 }) => {
+  const { field } = fieldProps;
+  const { submitForm } = useFormContext();
   const EmptyItem = includeEmpty && (
     <MenuItem value="">
       <Text translation="fields.select.none" tagName="em" />
@@ -48,6 +51,11 @@ const Select: React.FunctionComponent<SelectPropsWithFormik> = ({
         {...fieldProps.field}
         {...selectProps}
         input={<InputField name={fieldProps.field.name} {...inputFieldProps}/>}
+        onChange={(evt, child) => {
+          field.onChange(evt);
+          selectProps?.onChange?.(evt, child);
+          submitForm();
+        }}
       >
         {EmptyItem}
         {Items}

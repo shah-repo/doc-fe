@@ -1,7 +1,6 @@
 import { Box, Grid } from "@material-ui/core";
-import classNames from "classnames";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
-import { get } from "lodash";
+import _, { cloneDeep, get } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { connect, useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
@@ -14,8 +13,9 @@ import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
+import { FBWorkspace, FBWorkspaceMode } from "../../form.builder";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
-import styles from "./DocumentRevisionForm.container.style";
+import Colors from "../../layout/theme/utils/colors";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -37,6 +37,7 @@ interface OwnProps {
   onSubmit: (
     values: DocumentRevisionFormValues,
     actions: FormikActions<DocumentRevisionFormValues>,
+    cleanInitialValues?: DocumentRevisionFormValues,
   ) => void;
   showRevisionTypeChange?: boolean;
   setDocId?: typeof documentsActions.setDocumentProposedId;
@@ -111,44 +112,76 @@ DocumentRevisionFormContainerProps
 
     return {
       ...initialValues,
+      document: {
+        ...(initialValues.document || {}),
+        // NOTE: workaround. DocId is set before groupOptions are loaded
+        // after groupOptions have been loaded the initial values are updated and the docId is removed
+        docId: proposedDocId || initialValues.document?.docId,
+      },
       retrain,
       renderHTML,
       securityGroups,
+      outputDocumentTypes: initialValues.formTemplate?.outputDocumentTypes as OptionType[],
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canUpdateHTML, initialValues, groupOptions]);
 
   useEffect(() => {
     if (type !== "newVersion" &&
       !initialValues.document?.docId &&
       loadDocumentProposedId &&
-      initialValues.document?.documentType?.documentTypeAcronym) {
+      initialValues.document?.documentType?.documentTypeAcronym)
+    {
       loadDocumentProposedId(initialValues.document?.documentType.id as string);
     }
-    if (setDocId && initialValues.document?.docId) {
+    if (setDocId && initialValues.document?.docId)
+    {
       setDocId(initialValues.document?.docId);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialValues.document?.documentType?.documentTypeAcronym]);
 
   document = document || ({} as Document);
-  const classes = styles();
+
+  // FB config
+  const FBContainer = React.useRef(null);
+  const { group: formGroup, schema: formSchema = [] } = cleanInitialValues.document?.documentType || {};
+  const { docId: outputGroup } = cleanInitialValues.formDocument?.document || {};
+  let { schema = [] } = cleanInitialValues?.formTemplate || cleanInitialValues?.formDocument?.formTemplate || {};
+  schema = _.uniqBy(_.union(schema, formSchema), "name");
+  const formInput = useMemo(() => cleanInitialValues ? { ...cleanInitialValues.formInput } : {}, [cleanInitialValues]);
+  let mode: Partial<FBWorkspaceMode> = "none";
+  if (formGroup && formGroup.includes("FORM")) {
+    mode = "design";
+  } else if (outputGroup) {
+    mode = "form";
+  }
 
   const render = (props: FormikProps<DocumentRevisionFormValues>) => (
-    <DocumentRevisionFormPresenter
-      {...props}
-      asyncState={asyncState}
-      documentRevisions={documentRevisions}
-      documentRevision={documentRevision}
-      availableReferences={availableReferences}
-      showRevisionTypeChange={showRevisionTypeChange}
-      proposedDocId={proposedDocId}
-      setDocId={setDocId}
-      doNotPrompt={doNotPrompt}
-      onDirtyFlagChange={onDirtyFlagChange}
-      documentTypesById={documentTypesById}
-      canChangeOwnerShip={canChangeOwnerShip}
-      type={type}
-    />
+    <FBWorkspace
+      portalContainer={FBContainer}
+      document={props.values as unknown as DocumentRevision}
+      initialValues={cloneDeep(formInput)}
+      autosave={true}
+      {...{ mode, schema  }}
+    >
+      <DocumentRevisionFormPresenter
+        {...props}
+        asyncState={asyncState}
+        documentRevisions={documentRevisions}
+        documentRevision={documentRevision}
+        availableReferences={availableReferences}
+        showRevisionTypeChange={showRevisionTypeChange}
+        proposedDocId={proposedDocId}
+        setDocId={setDocId}
+        doNotPrompt={doNotPrompt}
+        onDirtyFlagChange={onDirtyFlagChange}
+        documentTypesById={documentTypesById}
+        canChangeOwnerShip={canChangeOwnerShip}
+        type={type}
+        {...{ FBContainer }}
+      />
+    </FBWorkspace>
   );
 
   // TODO: check why are we loading all document revisions
@@ -169,17 +202,13 @@ DocumentRevisionFormContainerProps
       asyncAction={loadAction}
       startActionOnMount={true}
     >
-      <Grid
-        className={classNames(classes.container, {
-          [classes.borderContainer]: documentRevision,
-        })}
-      >
+      <Grid style={{ background: Colors.light_gray }} >
         <Box ml={3}>
           <ChangeRequestLink dataProp={documentRevision} />
         </Box>
         <Formik
           initialValues={cleanInitialValues}
-          onSubmit={onSubmit}
+          onSubmit={(values, helpers) => onSubmit(values, helpers, cleanInitialValues) }
           enableReinitialize={true}
         >
           {render}

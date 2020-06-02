@@ -1,20 +1,13 @@
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  withStyles,
-  WithStyles,
-} from "@material-ui/core";
+import { Button, Dialog, DialogContent, DialogTitle, withStyles, WithStyles } from "@material-ui/core";
 import { ButtonProps } from "@material-ui/core/Button";
 import { Formik, FormikProps } from "formik";
 import React from "react";
 import { AsyncState } from "../../../state/types";
 import Text from "../../components/Text";
+import { FormContext } from "../forms/FormContext";
 import PasswordForm from "../password/form/PasswordForm";
 import styles from "./TransitionDialog.styles";
-import { Transition } from "./types";
-import { PasswordFormValues } from "./types";
+import { PasswordFormValues, Transition } from "./types";
 
 export interface TransitionDialogProps {
   onSubmit: (values: PasswordFormValues) => void;
@@ -40,8 +33,8 @@ const TransitionDialog: React.FunctionComponent<Props> =
     return (
       <div className={classes.container}>
         <Button
-          color="primary"
-          variant="contained"
+          color= "secondary"
+          variant= "outlined"
           aria-label={transition}
           onClick={openDialog}
           {...buttonProps}
@@ -58,12 +51,14 @@ const TransitionDialog: React.FunctionComponent<Props> =
             <Text translation="transition.action.title" />
           </DialogTitle>
           <DialogContent>
-            <Formik
-              initialValues={{ password: "" }}
-              onSubmit={onSubmit}
-            >
-              {renderForm}
-            </Formik>
+            <FormContext.Provider value={{ submitOnChange: false }}>
+              <Formik
+                initialValues={{ password: "" }}
+                onSubmit={onSubmit}
+              >
+                {renderForm}
+              </Formik>
+            </FormContext.Provider>
           </DialogContent>
         </Dialog>
       </div>

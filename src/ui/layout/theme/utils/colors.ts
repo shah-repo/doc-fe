@@ -3,6 +3,7 @@ export enum Colors {
   white = "#FFF",
   black = "#000",
   // gray
+  hint_gray = "#b4c0ca",
   light_gray = "#F2F4F6",
   medium_gray = "#D4DBE1",
   gray = "#8A9DAD",
@@ -24,7 +25,8 @@ export enum Colors {
   // "#1592e6"
   // "#3572e2"
   // "#C9DFFF"
-  light_blue = "#DBE9FF",
+  light_blue = "#edf4ff",
+  medium_blue = "#5C9DFF",
   blue = "#0066FF",
   // red
   red = "#c40000",
