@@ -1,12 +1,11 @@
-import _, { debounce, isEmpty } from "lodash";
-import React, { useMemo, useState } from "react";
+import { debounce } from "lodash";
+import React, { useMemo } from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
 import { DocumentRevision, DocumentRevisionEditRequestBody, documentRevisionsActions } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
-import { AsyncStatus } from "../../state/types";
 import { FormContext } from "../components/forms/FormContext";
-import { compareValuesToSubmit } from "../components/forms/helpers";
+import { useFindDiff } from "../components/forms/helpers";
 import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";
 import useAsync from "../hooks/useAsync";
 import useDocumentTitle from "../hooks/useDocumentTitle";
@@ -50,8 +49,7 @@ DocumentRevisionUpdateContainerProps
   canChangeOwnerShip,
 }) => {
 
-  const [diffBeingSubmitted, setDiffBeingSubmitted] = useState({});
-  const [diffToSubmit, setDiffToSubmit] = useState({});
+  const findDiff = useFindDiff();
   const initialValues = useMemo(() => toDocumentRevisionFormValues(documentRevision), [documentRevision]);
   const isCurrentUserOperator = React.useContext(isOperator);
   const { docId } = documentRevision.document;
@@ -75,50 +73,25 @@ DocumentRevisionUpdateContainerProps
   }
 
   const onSubmit = (values: DocumentRevisionFormValues, helpers, cleanInitialValues) => {
-    // TODO: move to hook
-    let dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
+    const [shouldSubmit, data] = findDiff(cleanInitialValues, values, toDocumentRevisionEditRequestBody, async);
 
-    if (async.asyncState.status === AsyncStatus.Active) {
-      setDiffToSubmit(dataToSubmit);
+    if (!shouldSubmit) {
       return;
     }
 
-    dataToSubmit = {
-      ...dataToSubmit,
-      ...diffToSubmit,
-    };
-
-    const compare = (a, b) => {
-      const diff = {};
-      for (const [key, value] of Object.entries(a)) {
-        if (!_.isEqual(value, b[key])) {
-          diff[key] = value;
-        }
-      }
-      return diff;
-    };
-
-    dataToSubmit = compare({ ...dataToSubmit }, diffBeingSubmitted);
-
-    if (isEmpty(dataToSubmit)) {
-      setDiffBeingSubmitted({});
-      return;
-    }
-    setDiffToSubmit({});
-    setDiffBeingSubmitted(dataToSubmit);
     async.reset();
 
     const promise = async.start(
       save,
       documentRevision.id,
-      dataToSubmit as DocumentRevisionEditRequestBody,
+      data as DocumentRevisionEditRequestBody,
       async,
     );
     // workaround when editing document through CR view. The form is marked dirty when editing FB fields
     promise?.then(() => helpers.resetForm());
   };
 
-  const debouncedSubmit = debounce(onSubmit, 800);
+  const debouncedSubmit = debounce(onSubmit, 500);
 
   return (
     <FormContext.Provider value={{ submitOnChange: true }}>
