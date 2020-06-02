@@ -1,6 +1,7 @@
 import { Dictionary } from "lodash";
 import FBLabelEditor from "../components/editors/FBLabelEditor";
 import FBSectionBox from "../components/layout/FBSectionBox";
+import { FBInputType } from "../FBInput";
 import { FBEditorElementType } from "../types/editor";
 
 export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = {
@@ -80,7 +81,7 @@ export const FBFieldComponent: Dictionary<any> = {
   // testRequirement: FBTestRequirement,
 };
 
-export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
+export const FBEditorSectionConfig: Dictionary<FBInputType[]> = {
   section: ["section", "subsection", "stepsection", "teststep"],
   basics: [
     "textfield",
@@ -105,8 +106,7 @@ export const FBEditorSectionConfig: Dictionary<FBEditorElementType[]> = {
     "evidencemediaupload",
     "testRequirement",
   ],
-  dynamiccontrols: ["dynamiccontrol"],
-  approvals: ["hellosign", "approval", "inlineapproval"],
+  approvals: ["hellosign", "approval"],
   buttons: ["checkpoint", "createlabel"],
   instructions: ["instructionsdocument", "selectdocument", "selectrequirement"],
   actions: ["action"],

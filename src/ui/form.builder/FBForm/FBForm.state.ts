@@ -28,7 +28,7 @@ export class FBFormState extends FBSchemaState {
     this.workspaceState = workspaceState;
   }
 
-  @computed private get Validator(): any {
+  @computed public get Validator(): any {
     return _.get(window, "EnlilRemoteValidators.validator");
   }
 

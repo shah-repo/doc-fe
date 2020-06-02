@@ -20,7 +20,7 @@ export const withWorkspace = <T extends FBWorkspaceProps>(
     FBStore.documentId = props.documentId || "";
 
     React.useEffect(() => {
-      FBDynamicValidatorStore.registerValidators();
+      // FBDynamicValidatorStore.registerValidators();
       FBDynamicValidatorStore.validate();
       FBStore.docId = props.id || "";
     }, [props.documentId, props.id, props.document]);
