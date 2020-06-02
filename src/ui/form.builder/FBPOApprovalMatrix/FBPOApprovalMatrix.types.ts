@@ -55,7 +55,7 @@ export type FBPOApprovalMatrixAddItemProps =
 export type FBPOApprovalMatrixTableProps =
 & FBPOApprovalMatrixBasicProps
 & Pick<FBPOApprovalMatrixDialogProps, "onSubmit" |
-"closeDialog" | "isDialogOpen" | "initialValues" | "groupOptions" | "employees" | "signatureStages" >
+"closeDialog" | "isDialogOpen" | "initialValues" | "groupOptions" | "employees" | "signatureStages">
 & {
   approvalLevels?: POApprovalMatrixLevel[];
   handleEdit: (index: number, item: POApprovalMatrixLevel) => () => void;
