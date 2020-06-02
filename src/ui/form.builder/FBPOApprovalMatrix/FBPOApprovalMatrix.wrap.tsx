@@ -16,6 +16,7 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
     dialogState,
     name = "",
     handleRevert,
+    disabled,
     ...props
   }: T) => {
 
@@ -86,7 +87,7 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
       dialogState?.config({
         open: true,
         title: "form.builder.add.item",
-        content: <FBPOApprovalMatrixForm signatureStages={[1, 2, 3]} />,
+        content: <FBPOApprovalMatrixForm signatureStages={[1, 2, 3]} {...{ disabled }} />,
         actions: <FBPOApprovalMatrixFormActions />,
       });
     };
@@ -107,6 +108,7 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
       handleRevert,
       poamState,
       dialogState,
+      disabled,
       name,
     });
   };
