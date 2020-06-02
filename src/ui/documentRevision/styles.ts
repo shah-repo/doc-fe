@@ -8,7 +8,7 @@ export default makeStyles((theme: Theme) =>
       marginTop: theme.spacing(5),
       margin: 0,
       width: "100%",
-      height: "max-content",
+      height: "100%",
     },
     openButton: {
       "marginTop": theme.spacing(3),

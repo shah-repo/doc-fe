@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getHasPermission } from "../../../../common/utils/selectors";
 import { Group, Permission } from "../../../../state/ducks/auth/types";
+import { Owner } from "../../../../state/ducks/common/types";
 import { documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { FormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
@@ -19,6 +20,7 @@ interface Props {
   isQms: boolean;
   documentName: string;
   docRevId: string;
+  owner?: Owner;
 }
 
 const styles = makeStyles(() =>
@@ -38,6 +40,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   isQms,
   documentName,
   docRevId,
+  owner,
 }) => {
   const classes = styles();
   const dialog = useDialog();
@@ -118,6 +121,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
       cancel={closeDialog}
       isQms={isQms}
       documentTypeGroups={transformedDocTypeGroups}
+      owner={owner as Owner}
     />
   );
 
