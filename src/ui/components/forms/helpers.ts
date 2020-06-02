@@ -74,6 +74,7 @@ export const compareValuesToSubmit = (initialValues, values, transformMethod) =>
   };
 };
 
+// NOTE: this hook will be used in case onSubmit debounce is not enough to prevent double autosave
 export const useFindDiff = () => {
   const [diffBeingSubmitted, setDiffBeingSubmitted] = React.useState({});
   const [diffToSubmit, setDiffToSubmit] = React.useState({});
@@ -84,7 +85,6 @@ export const useFindDiff = () => {
     transformMethod,
     async
   ) => {
-    // TODO: move to hook
     let dataToSubmit = compareValuesToSubmit(initialValues, values, transformMethod);
 
     if (async.asyncState.status === AsyncStatus.Active) {
