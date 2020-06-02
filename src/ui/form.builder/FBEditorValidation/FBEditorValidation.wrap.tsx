@@ -64,8 +64,6 @@ export const withFBEditorValidation = <T extends FBEditorValidationProps>(
       ),
     });
 
-    customValidationEnabled = true;
-
     return Component({
       ...(props as T),
       handleCustomValidation,
