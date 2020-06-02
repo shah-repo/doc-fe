@@ -90,7 +90,7 @@ DocumentRevisionUpdateContainerProps
     promise?.then(() => helpers.resetForm());
   };
 
-  const debouncedSubmit = debounce(onSubmit, 300);
+  const debouncedSubmit = debounce(onSubmit, 1000);
 
   return (
     <FormContext.Provider value={{ submitOnChange: true }}>

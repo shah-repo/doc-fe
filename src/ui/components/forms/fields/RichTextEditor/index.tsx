@@ -75,7 +75,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
     }
   }, [field.value]);
 
-  const [debouncedUpdate] = useDebounce(value, 300);
+  const [debouncedUpdate] = useDebounce(value, 200);
   useEffect(() => {
     if (!value) {
       return;
