@@ -2,6 +2,7 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { FBApprovalMatrixProps } from ".";
 import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixSection, FBApprovalMatrixTable, FBDialogState } from "..";
+import { FBWorkspaceMode } from "../types/workspace";
 
 export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
   Component: React.FunctionComponent<T>
@@ -18,7 +19,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
     ...props
   }: T) => {
 
-    const { formState, approvalMatrixFieldState } = FB.useStores();
+    const { formState, approvalMatrixFieldState, workspaceState } = FB.useStores();
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
 
 
@@ -26,6 +27,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       <>
         <FBApprovalMatrixSection
           {...{ handleEdit, handleFullScreen, disabled, mode }}
+          workspaceMode={workspaceState?.mode as FBWorkspaceMode}
         />
         <FBApprovalMatrixTable {...{ name, mode }} />
       </>
@@ -33,7 +35,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
 
     handleSave = () => {
       const formValue: Partial<FBApprovalMatrixFieldData> = formState?.getFieldValue(name);
-      approvalMatrixFieldState?.setApprovalMatrix(formValue.approvalMatrix);
+      approvalMatrixFieldState?.setApprovalMatrix(formValue?.approvalMatrix);
       approvalMatrixFieldState?.setMode("none");
     };
 
@@ -86,6 +88,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       disabled,
       name,
       mode,
+      workspaceMode: workspaceState?.mode,
     });
   };
 
