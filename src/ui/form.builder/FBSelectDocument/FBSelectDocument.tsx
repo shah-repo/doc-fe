@@ -22,7 +22,8 @@ const FBSelectDocument: React.FunctionComponent<FBInputProps> = ({
           {...props}
           multiple={true}
           optionId="1"
-          defaultValue={options}
+          value={options}
+          // defaultValue={options}
         />
       )}
     </>

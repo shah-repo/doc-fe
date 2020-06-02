@@ -6,11 +6,7 @@ import { getDocumentRevision } from "../../state/ducks/documentRevisions/tests/f
 import { documentVersionPath } from "../document.revision/utils/paths";
 import { ASYNC_DEFAULT_STATE } from "../hooks/useAsync";
 import getRouteComponentProps from "../tests/helpers/getRouteComponentProps";
-import {
-  DEFAULT_INITIAL_VALUES,
-  DocumentRevisionCreateContainer,
-  DocumentRevisionCreateContainerProps,
-} from "./DocumentRevisionCreate.container";
+import { DEFAULT_INITIAL_VALUES, DocumentRevisionCreateContainer, DocumentRevisionCreateContainerProps } from "./DocumentRevisionCreate.container";
 import DocumentRevisionFormContainer from "./forms/DocumentRevisionForm.container";
 import { toNewVersionRequestBody } from "./forms/transform";
 
@@ -19,6 +15,7 @@ describe("DocumentRevisionCreateContainer tests", () => {
     ...getRouteComponentProps(),
     create: jest.fn(),
     setDocId: jest.fn(),
+    loadDocument: jest.fn(),
   };
 
   const getWrapper = (props: Partial<DocumentRevisionCreateContainerProps>) => shallow(

@@ -17,6 +17,7 @@ import useCRLink from "../../hooks/docCustomization/useCRLink";
 import useDescription from "../../hooks/docCustomization/useDescription";
 import useTitle from "../../hooks/docCustomization/useTitle";
 import useTraining from "../../hooks/docCustomization/useTraining";
+import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import SummaryHeader from "../header/SummaryHeader";
 import Attachment from "./attachment";
 import ChangeRequestLink from "./changeRequestLink";
@@ -54,6 +55,8 @@ export const Presenter: React.FunctionComponent<Props> = ({
   canChangeOwnerShip,
   canShowCreateVersionButton,
 }) => {
+
+  useScrollIntoView();
   const onSubmit = () => void 0;
   const { formInput } = dataProp || {};
   const { schema } = formTemplate || formDocument?.formTemplate || {};

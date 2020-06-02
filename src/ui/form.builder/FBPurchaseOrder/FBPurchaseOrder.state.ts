@@ -21,9 +21,8 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     totalInUSD: "0.00",
     dateOfExchangeRate: "",
   };
-  public submitForm;
 
-  public constructor({ documentId, submitForm, ...initialValues }: FBPurchaseOrderConstructor) {
+  public constructor({ documentId, ...initialValues }: FBPurchaseOrderConstructor) {
     super();
     if (!initialValues || _.isEmpty(initialValues)) {
       return;
@@ -36,7 +35,6 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     const calculation = _.omit(initialValues, "items");
     set(this, "items", items);
     set(this, "calculation", { ...this.calculation, ...calculation });
-    this.submitForm = submitForm;
   }
 
   @action public setItemTotalAmount = (item?: FBPurchaseOrderItem) => {
@@ -63,7 +61,6 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
       set(this.calculation, "currency", "USD");
       set(this.calculation, "exchangeRate", 1);
       this.calculateCost();
-      this.submitForm?.();
     };
     if (currency === "USD") {
       setToUsd();
@@ -80,7 +77,6 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
       set(this.calculation, "exchangeRate", data.rate.toFixed(2));
       set(this.calculation, "dateOfExchangeRate", moment().format("LL"));
       this.calculateCost();
-      this.submitForm?.();
     } catch (e) {
       setToUsd();
     }
@@ -96,7 +92,6 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     set(this, "items", items);
     this.setItemTotalAmount();
     this.calculateCost();
-    this.submitForm?.();
   };
 
   @action public removeItem = (item?: FBPurchaseOrderItem) => {
@@ -104,7 +99,6 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
       return;
     }
     set(this, "items", _.filter(this.items, (itm) => itm.id !== item.id));
-    this.submitForm?.();
   };
 
   @action public calculateCost = () => {
@@ -140,7 +134,6 @@ export class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
       }));
     set(this, "items", items);
     this.calculateCost();
-    this.submitForm?.();
   };
 
   protected onSuccess() {

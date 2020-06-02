@@ -4,7 +4,7 @@ import { Employee } from "../../../state/ducks/company";
 import { FBWorkspaceMode } from "../types/workspace";
 
 export type FBApprovalMatrixFieldProps =
-& Pick<FBInputProps, "name" | "disabled">
+& Pick<FBInputProps, "name" | "disabled" | "autosave">
 & {
   handleAdd?: FBButtonProps["onClick"];
   approvalMatrixFieldState?: FBApprovalMatrixFieldState;
