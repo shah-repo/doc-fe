@@ -40,15 +40,18 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     });
 
   const renderChanges = (audits: Audit[]) => {
-    const references: Audit[] = [];
+    const newReferences: Audit[] = [];
+    const deletedReferences: Audit[] = [];
     const attachments: Audit[] = [];
     const singleFields: JSX.Element[] = [];
 
-    audits.forEach((change, index) => {
+    audits.forEach((change: Audit, index) => {
       if (change.field.includes("attachments")) {
         attachments.push(change);
-      } else if (change.field.includes("referenceTo")) {
-        references.push(change);
+      } else if (change.field.includes("referenceTo") && change.type === "ARRAY_NEW") {
+        newReferences.push(change);
+      } else if (change.field.includes("referenceTo") && change.type === "ARRAY_DELETED") {
+        deletedReferences.push(change);
       } else if (change.field.includes("formInput")) {
         return;
       } else {
@@ -71,7 +74,8 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       <Box>
         {singleFields}
         {attachments.length > 0 && renderGroupChanges(attachments)}
-        {references.length > 0 && renderGroupChanges(references)}
+        {newReferences.length > 0 && renderGroupChanges(newReferences)}
+        {deletedReferences.length > 0 && renderGroupChanges(deletedReferences)}
       </Box>
     );
   };

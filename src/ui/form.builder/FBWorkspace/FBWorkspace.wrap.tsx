@@ -32,10 +32,11 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     isStarter,
     active,
     document,
+    autosave,
     ...props
   }: T) => {
 
-    workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, { schema, mode, document });
+    workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, { schema, mode, autosave, document });
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
     snackbarState = FB.useRef<FBSnackbarState>(FBSnackbarState);
 
@@ -58,6 +59,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       dialogState,
       workspaceState,
       snackbarState,
+      autosave,
     });
   };
 

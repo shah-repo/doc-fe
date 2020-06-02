@@ -7,11 +7,13 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 export class FBWorkspaceState extends FBSchemaState {
   @observable public mode: FBWorkspaceMode = "none";
   public document?: DocumentRevision;
+  public autosave?: boolean;
 
-  public constructor({ schema, mode, document }: FBWorkspaceConstructor) {
+  public constructor({ schema, mode, autosave, document }: FBWorkspaceConstructor) {
     super(schema);
     this.schema = schema;
     this.mode = mode || "none";
+    this.autosave = autosave;
     this.document = document;
   }
 

@@ -54,8 +54,8 @@ DocumentRevisionManagerContainerProps
   const selectedDocument = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId as string));
   const canAccess = selectedDocument?.document.canAccess;
-
   const [sidebar, openSidebar] = useState<boolean>(true);
+  const schema = selectedDocument?.formTemplate?.schema || selectedDocument?.formDocument?.formTemplate?.schema || [];
 
   if (shouldRedircetToLatestReleasd(documentRevisions, documentRevisionId)) {
     const docRevIdToRedirect = getDocRevIdToRedirect(documentRevisions, deprecatedAt);
@@ -65,9 +65,9 @@ DocumentRevisionManagerContainerProps
   }
 
   return (
-    <Grid container={true} className={classes.whiteContainer}>
+    <Grid container={true} className={classes.whiteContainer} style={{ width: sidebar ? "100%" : "104%" }}>
       {documentRevisionId && !isNewOutput && (
-        <Grid item={true} xs={sidebar ? 9 : 11}>
+        <Grid item={true} xs={sidebar ? 9 : 11} className={classes.backColor}>
           <DocumentRevisionDisplayContainer
             documentRevisionId={documentRevisionId}
             isNewVersion={isNewVersion}
@@ -76,7 +76,7 @@ DocumentRevisionManagerContainerProps
         </Grid>
       )}
       {documentRevisionId && isNewOutput && (
-        <Grid item={true} xs={sidebar ? 9 : 11}>
+        <Grid item={true} xs={sidebar ? 9 : 11} className={classes.backColor}>
           <DocumentRevisionDisplayContainer
             documentRevisionId={documentRevisionId}
             isNewOutput={isNewOutput}
@@ -94,8 +94,8 @@ DocumentRevisionManagerContainerProps
           isNewOutput,
           sidebar,
           openSidebar,
+          schema,
         }}
-        fbTemplate={selectedDocument?.formTemplate?.schema || []}
       />
     </Grid>
   );

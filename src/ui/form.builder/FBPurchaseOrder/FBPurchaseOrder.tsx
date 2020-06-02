@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBButton, FBDialog, FBProvider, FBPurchaseOrderProps, FBPurchaseOrderTable, FBSection } from "..";
+import { FBButton, FBDialog, FBInput, FBProvider, FBPurchaseOrderProps, FBPurchaseOrderTable, FBSection } from "..";
 import { withFBPurchaseOrder } from "./FBPurchaseOrder.wrap";
 
 
@@ -12,24 +12,27 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
   mode = "form",
   label,
   disabled,
+  autosave,
   name,
 }) => (
   <FBProvider {...{ purchaseOrderState, dialogState }}>
     <FBDialog />
-    <Box mb={gutter ? 5 : 0}>
-      {mode === "form" && <FBSection {...{ label }}  />}
-      <FBPurchaseOrderTable {...{ name, disabled, handleItem, mode }} />
-      {!disabled && (
-        <FBButton
-          fullWidth={true}
-          label="form.builder.add.item"
-          onClick={() => handleItem && handleItem()}
-          variant="outlined"
-          style={{ margin: 0 }}
-          {...{ disabled }}
-        />
-      )}
-    </Box>
+    <FBInput {...{ name, disabled, autosave }} type="purchaseorder">
+      <Box mb={gutter ? 5 : 0}>
+        {mode === "form" && <FBSection {...{ label }}  />}
+        <FBPurchaseOrderTable {...{ name, disabled, handleItem, mode }} />
+        {!disabled && (
+          <FBButton
+            fullWidth={true}
+            label="form.builder.add.item"
+            onClick={() => handleItem && handleItem()}
+            variant="outlined"
+            style={{ margin: 0 }}
+            {...{ disabled }}
+          />
+        )}
+      </Box>
+    </FBInput>
   </FBProvider>
 );
 

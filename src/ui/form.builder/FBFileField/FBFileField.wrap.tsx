@@ -1,9 +1,9 @@
 import _ from "lodash";
+import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBFileFieldProps, FBFileFieldState } from ".";
 import { FB } from "..";
-import { Attachment } from "../../../state/ducks/attachments";
 
 export const withFBAttachmentField = <T extends FBFileFieldProps>(
   Component: React.FunctionComponent<T>,
@@ -14,23 +14,8 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
     name = "",
     ...props
   }: T) => {
-    const { fileUploadState, formState } = FB.useStores();
+    const { fileUploadState } = FB.useStores();
     fileFieldState = FB.useRef<FBFileFieldState>(FBFileFieldState);
-
-    React.useEffect(() => {
-      if (_.isUndefined(formState)) {
-        return;
-      }
-      const formValue: Attachment[] | undefined = formState.getFieldValue(name, undefined);
-      fileUploadState?.addFiles(formValue);
-    }, []);
-
-    useObserver(() => {
-      if (!_.get(formState?.values, name)) {
-        formState?.setFieldValue(name, fileUploadState?.files);
-      }
-      fileUploadState?.addFile(fileFieldState?.data);
-    });
 
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const eventFiles = _.get(event, "currentTarget.files", []);
@@ -49,6 +34,13 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
 
       fileFieldState?.upload(validFiles);
     };
+
+    React.useEffect(() => {
+      reaction(
+        () => fileFieldState?.data,
+        (data) => fileUploadState?.addFile(data)
+      );
+    }, []);
 
     return useObserver(() => Component({
       ...(props as T),

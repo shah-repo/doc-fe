@@ -9,7 +9,7 @@ import Colors from "../../layout/theme/utils/colors";
 
 interface SidebarPresenterProps {
   location: Location;
-  fbTemplate: FBSchemaProps[];
+  schema: FBSchemaProps[];
 }
 
 export const styles = makeStyles((theme: Theme) =>
@@ -22,6 +22,7 @@ export const styles = makeStyles((theme: Theme) =>
       width: "100%",
       fontWeight: isCurrentBookmark ? 700 : 100,
       padding: theme.spacing(1, 2),
+      paddingRight: theme.spacing(1),
     }),
     button: {
       "padding": 0,
@@ -34,9 +35,9 @@ export const styles = makeStyles((theme: Theme) =>
     },
   }));
 
-export const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ location, fbTemplate }) => {
+export const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ location, schema }) => {
 
-  const links =  fbTemplate.map((schema) => {
+  const links =  schema.map((schema) => {
     if (schema.type === "section") {
       const hash = schema.label?.toString().replace(/\s/g, "");
       const link = window.location.href.split("#");
