@@ -8,12 +8,11 @@ import { authSelectors } from "../../../state/ducks/auth";
 import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType, RevisionStageOptions } from "../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../state/ducks/documents";
-import { AsyncState, AsyncStatus } from "../../../state/types";
+import { AsyncState } from "../../../state/types";
 import { default as AutocompleteField } from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types.js";
 import SelectField from "../../components/forms/fields/Select";
 import { required, validator } from "../../components/forms/fields/validators";
-import { useFormContext } from "../../components/forms/FormContext";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
@@ -91,7 +90,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   setValues,
 }) => {
 
-  const { submitForm } = useFormContext();
   const { workspaceState } = FB.useStores();
   const isDisabled: boolean = initialValues.id !== undefined;
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
@@ -109,12 +107,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isOwner = documentRevision?.owner.user.email === email;
   const isDisabledInput =  values.id !== undefined && isCurrentUserOperator && !isOwner;
 
-  useEffect(() => {
-    if (asyncState.status === AsyncStatus.Success) {
-      submitForm();
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [asyncState.status]);
   useEffect(() => {
     if (!values.id && !values.document?.documentType?.id && setDocId) {
       setDocId("");

@@ -1,11 +1,11 @@
-import { debounce } from "lodash";
+import { debounce, isEmpty } from "lodash";
 import React, { useMemo } from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
 import { DocumentRevision, DocumentRevisionEditRequestBody, documentRevisionsActions } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { FormContext } from "../components/forms/FormContext";
-import { useFindDiff } from "../components/forms/helpers";
+import { compareValuesToSubmit } from "../components/forms/helpers";
 import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";
 import useAsync from "../hooks/useAsync";
 import useDocumentTitle from "../hooks/useDocumentTitle";
@@ -49,7 +49,6 @@ DocumentRevisionUpdateContainerProps
   canChangeOwnerShip,
 }) => {
 
-  const findDiff = useFindDiff();
   const initialValues = useMemo(() => toDocumentRevisionFormValues(documentRevision), [documentRevision]);
   const isCurrentUserOperator = React.useContext(isOperator);
   const { docId } = documentRevision.document;
@@ -73,9 +72,9 @@ DocumentRevisionUpdateContainerProps
   }
 
   const onSubmit = (values: DocumentRevisionFormValues, helpers, cleanInitialValues) => {
-    const [shouldSubmit, data] = findDiff(cleanInitialValues, values, toDocumentRevisionEditRequestBody, async);
+    const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
 
-    if (!shouldSubmit) {
+    if (isEmpty(dataToSubmit)) {
       return;
     }
 
@@ -84,14 +83,14 @@ DocumentRevisionUpdateContainerProps
     const promise = async.start(
       save,
       documentRevision.id,
-      data as DocumentRevisionEditRequestBody,
+      dataToSubmit as DocumentRevisionEditRequestBody,
       async,
     );
     // workaround when editing document through CR view. The form is marked dirty when editing FB fields
     promise?.then(() => helpers.resetForm());
   };
 
-  const debouncedSubmit = debounce(onSubmit, 500);
+  const debouncedSubmit = debounce(onSubmit, 1000);
 
   return (
     <FormContext.Provider value={{ submitOnChange: true }}>
