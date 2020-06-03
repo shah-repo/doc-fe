@@ -51,7 +51,6 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const renderChangeOwnership = canChangeOwnerShip && values.id && (
     <OwnerChanger requestId={values.id} requestType={RequestType.Document} />
   );
-  console.log(documentRevision);
 
   return (
     <Grid
