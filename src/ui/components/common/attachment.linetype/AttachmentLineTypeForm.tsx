@@ -5,7 +5,7 @@ import PublishRoundedIcon from "@material-ui/icons/PublishRounded";
 import _ from "lodash";
 import * as React from "react";
 import { Attachment, Attachment as AttachmentModel, attachmentsActions } from "../../../../state/ducks/attachments";
-import { GROUP_TYPES } from "../../../../state/ducks/attachments/constants";
+import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
 import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../../form.builder/stores/ui/FBStore";
 import useAsync from "../../../hooks/useAsync";
@@ -25,7 +25,7 @@ interface Props {
   disabled?: boolean;
 }
 
-const AttachmentGroupTypeForm: React.FunctionComponent<Props> = ({
+const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
   onCancel,
   upload,
   field,
@@ -130,7 +130,7 @@ const AttachmentGroupTypeForm: React.FunctionComponent<Props> = ({
           id={`${name}-button-file-clean-copy`}
           multiple={multiple}
           type="file"
-          onChange={onChange(GROUP_TYPES.CLEAN_COPY)}
+          onChange={onChange(LINE_TYPES.CLEAN_COPY)}
           className = {classes.input}
           disabled={disabled}
         />
@@ -147,7 +147,7 @@ const AttachmentGroupTypeForm: React.FunctionComponent<Props> = ({
           id={`${name}-button-file-red-line`}
           multiple={multiple}
           type="file"
-          onChange={onChange(GROUP_TYPES.RED_LINE)}
+          onChange={onChange(LINE_TYPES.RED_LINE)}
           className = {classes.input}
           disabled={disabled}
         />
@@ -163,4 +163,4 @@ const AttachmentGroupTypeForm: React.FunctionComponent<Props> = ({
   );
 };
 
-export default AttachmentGroupTypeForm;
+export default AttachmentLineTypeForm;

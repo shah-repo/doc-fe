@@ -4,7 +4,7 @@ import React from "react";
 import { FormContext } from "../../forms/FormContext";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
-import AttachmentGroupTypeForm  from "./AttachmentGroupTypeForm";
+import AttachmentLineTypeForm  from "./AttachmentLineTypeForm";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
 import { attachmentsActions } from "../../../../state/ducks/attachments";
 
@@ -31,7 +31,7 @@ const styles = makeStyles(() =>
   ));
 
 
-export const AttachmentGroupTypeSelector: React.FunctionComponent<Props> = ({
+export const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
   upload,
   multiple,
   field,
@@ -55,7 +55,7 @@ export const AttachmentGroupTypeSelector: React.FunctionComponent<Props> = ({
 
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
   const renderForm = () => (
-    <AttachmentGroupTypeForm
+    <AttachmentLineTypeForm
       {...{ field, upload, form, name, multiple, disabled }}
       onCancel= {closeDialog}
     />
@@ -102,4 +102,4 @@ export const AttachmentGroupTypeSelector: React.FunctionComponent<Props> = ({
   );
 };
 
-export default AttachmentGroupTypeSelector;
+export default AttachmentLineTypeSelector;

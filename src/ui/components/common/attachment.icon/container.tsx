@@ -19,7 +19,7 @@ import { AttachmentIconContainerProps, AttachmentIconDispatchProps } from "./uti
 import WatermarkContainer from "./watermark/container";
 import PasswordDialog from "../../password/dialog";
 import { AsyncStatus } from "../../../../state/types";
-import { GROUP_TYPES } from "../../../../state/ducks/attachments/constants";
+import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
 import { Password } from "../../password/types";
 
 type DispatchProps = AttachmentIconDispatchProps;
@@ -116,7 +116,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const handleIconClick = (attachment: Attachment) => (evt: React.MouseEvent<HTMLElement>) => {
     evt.preventDefault();
     setSelectedFile(attachment);
-    if (attachment.lineType === GROUP_TYPES.RED_LINE) {
+    if (attachment.lineType === LINE_TYPES.RED_LINE) {
       openPasswordDialog();
     } else {
       openFileView();

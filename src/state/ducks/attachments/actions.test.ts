@@ -3,7 +3,7 @@ import { Attachment, attachmentsActions } from ".";
 import CallbackHandler from "../../../common/callbackHandler";
 import { getCallbackHandler } from "../../../common/tests/factories";
 import { Handlers } from "../../types";
-import { ATTACHMENT_ROOT_URL, ATTACHMENT_UPLOAD_URL } from "./constants";
+import { ATTACHMENT_ROOT_URL, ATTACHMENT_UPLOAD_URL, LINE_TYPES } from "./constants";
 import { AttachmentDownloadResponse } from "./types";
 
 describe("attachemnt actions tests", () => {
@@ -11,19 +11,21 @@ describe("attachemnt actions tests", () => {
     const handlers: Handlers<Attachment> = {
       successHandler: getCallbackHandler<Attachment>(),
       errorHandler: getCallbackHandler<string>(),
+      setCancelToken: () => true,
     };
     const file: File = new File(["abc"], "test.file");
 
     const uploadHandler: CallbackHandler<Attachment> = new CallbackHandler();
     uploadHandler.execute = jest.fn();
-
-    const action = attachmentsActions.upload(file, handlers);
     const attachment: Attachment = {
       id: "sdasd-1-e-asd-d",
       name: "Title",
       type: "SOC",
       s3link: "https://mylink.com",
+      lineType: LINE_TYPES.CLEAN_COPY,
     };
+
+    const action = attachmentsActions.upload(file, attachment.lineType, handlers);
 
     it("calls POST on ATTACHMENT_UPLOAD_URL", () => {
       expect(action.url).toBe(ATTACHMENT_UPLOAD_URL);
@@ -40,6 +42,7 @@ describe("attachemnt actions tests", () => {
     const handlers: Handlers<AttachmentDownloadResponse> = {
       successHandler: getCallbackHandler<AttachmentDownloadResponse>(),
       errorHandler: getCallbackHandler<string>(),
+      setCancelToken: () => true,
     };
 
     const attachment: Attachment = {
@@ -47,6 +50,7 @@ describe("attachemnt actions tests", () => {
       name: "Title",
       type: "SOC",
       s3link: "https://mylink.com",
+      lineType: LINE_TYPES.CLEAN_COPY,
     };
 
     const action = attachmentsActions.download(attachment, handlers);
