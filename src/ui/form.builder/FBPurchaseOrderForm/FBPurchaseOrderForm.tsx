@@ -100,6 +100,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
       label="form.builder.field.unit.price"
       name="unitPrice"
       onChange={handleTotal}
+      rules="min:0"
     />
     {
       type === "product" &&
