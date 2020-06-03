@@ -19,6 +19,7 @@ AttachmentIconProps
   disabled = false,
   isLoading,
   isUploading,
+  canDeleteFile,
   ...other
 }) => {
   const file = attachment || {} as Attachment;
@@ -32,18 +33,20 @@ AttachmentIconProps
       <Text translation="common.uploading" />
     </Box>
   );
-
+  const deleteButtonRenderer = canDeleteFile && (
+    <Box className={classes.closeRoot}>
+      <IconButton
+        className={classes.closeRoot}
+        onClick={handleRemove && handleRemove(file)}
+        id="AttachmentIconPresenter-handleRemove"
+      >
+        <CancelOutlined className={classes.closeIcon} />
+      </IconButton>
+    </Box>
+  );
   return (
     <Grid key={`cell-${file.id}`} item={true} xs={12} sm={4} md={2}>
-      <Box className={classes.closeRoot}>
-        <IconButton
-          className={classes.closeRoot}
-          onClick={handleRemove && handleRemove(file)}
-          id="AttachmentIconPresenter-handleRemove"
-        >
-          <CancelOutlined className={classes.closeIcon} />
-        </IconButton>
-      </Box>
+      {deleteButtonRenderer}
       <Tooltip title={`${file.name}.${file.type}`}>
         <ButtonBase
           onContextMenu={handleContextMenu && handleContextMenu(file)}
