@@ -27,6 +27,7 @@ export type FBSchemaProps = Pick<FBInputProps,
 | "includeQRScan"
 | "instructionsDocument"
 | "reviseDisabled"
+| "outputDisabled"
 | "customValidator"
 | "defaultValue"
 | "approvers"
