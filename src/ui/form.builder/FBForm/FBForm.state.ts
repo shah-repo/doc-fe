@@ -153,7 +153,9 @@ export class FBFormState extends FBSchemaState {
     this.Validator.registerAsyncImplicit("required_if_in", function(val: string[], req: string, attribute: string, passes) {
       const reqs = req.split(",");
       const reqName = reqs.shift() || "";
-      const inputValue = validator.input[reqName];
+      let inputValue = validator.input[reqName];
+      // Radio group support
+      !_.isArray(inputValue) && (inputValue = [inputValue]);
       const diff = inputValue && inputValue.filter((val) => reqs.includes(val));
       if (diff && diff.length > 0 && (!val || _.isEmpty(val))) {
         const { messages: { attributeNames } } = validator;
