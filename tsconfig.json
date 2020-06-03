@@ -25,6 +25,7 @@
     "noImplicitAny": false,
   },
   "include": [
-    "src"
+    "src",
+    "cypress"
   ]
 }

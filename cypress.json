@@ -1,0 +1,8 @@
+{
+  "baseUrl": "https://dev.enlil.io",
+  "videoCompression": 32,
+  "videoUploadOnPasses": false,
+  "viewportWidth": 1400,
+  "viewportHeight": 900,
+  "video": false
+}
