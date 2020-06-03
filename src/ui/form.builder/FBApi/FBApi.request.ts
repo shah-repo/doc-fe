@@ -14,6 +14,12 @@ export default class FBRequest<Data, Body> {
     this.url = url;
   }
 
+  @action public setTemplateUrl = (url: string, values: Record<string, any>) => {
+    const urlTpl = _.template(url);
+    const urlStr = urlTpl(values);
+    this.setUrl(urlStr);
+  };
+
   @action public setUrl = (url: string) => {
     set(this, "url", url);
   };
@@ -44,8 +50,9 @@ export default class FBRequest<Data, Body> {
     alert(message);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  protected onSuccess() {}
+  protected onSuccess() {
+    this.setLoading(false);
+  }
 
   @action private start = (method: ApiActionMethod) => {
     this.setLoading(true);
@@ -73,7 +80,6 @@ export default class FBRequest<Data, Body> {
         !_.isEmpty(this.root) && (data = _.get(data as Data, this.root));
         data = this.dataFilter(data);
         this.setData(data as Data);
-        this.setLoading(false);
         this.onSuccess();
       })
       .catch((_error) => {

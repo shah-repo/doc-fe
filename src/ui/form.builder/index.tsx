@@ -9,6 +9,9 @@ export { default as FBApprovalField } from "./FBApproval/FBApproval.field";
 export { default as FBApprovalSocket } from "./FBApproval/FBApproval.socket";
 export { default as FBApprovalState } from "./FBApproval/FBApproval.state";
 export * from "./FBApproval/FBApproval.types";
+export { default as FBApprovalAudit } from "./FBApprovalAudit/FBApprovalAudit";
+export { default as FBApprovalAuditState } from "./FBApprovalAudit/FBApprovalAudit.state";
+export * from "./FBApprovalAudit/FBApprovalAudit.types";
 export { default as FBApprovalMatrixCheck } from "./FBApprovalMatrixCheck/FBApprovalMatrixCheck";
 export { default as FBApprovalMatrixCheckState } from "./FBApprovalMatrixCheck/FBApprovalMatrixCheck.state";
 export * from "./FBApprovalMatrixCheck/FBApprovalMatrixCheck.types";
@@ -223,5 +226,4 @@ export { default as FBWorkspaceTplActions } from "./FBWorkspaceTplActions/FBWork
 export * from "./FBWorkspaceTplActions/FBWorkspaceTplActions.types";
 export { default as FB } from "./helpers/FB";
 export * from "./helpers/FBFieldName";
-
 
