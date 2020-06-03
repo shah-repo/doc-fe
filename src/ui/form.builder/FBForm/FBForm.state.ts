@@ -22,8 +22,8 @@ export class FBFormState extends FBSchemaState {
   public constructor({ schema, initialValues = {}, workspaceMode, workspaceState }: FBFormConstructor) {
     super();
     this.schema = schema;
-    this.initialValues = initialValues;
-    this.values = initialValues;
+    this.initialValues = initialValues || {};
+    this.values = initialValues || {};
     this.workspaceMode = workspaceMode;
     this.workspaceState = workspaceState;
   }
@@ -47,8 +47,8 @@ export class FBFormState extends FBSchemaState {
       return defaultValue;
     }
     if (!_.get(this.values, fieldName) && !_.isUndefined(defaultValue)) {
-      _.set(this.initialValues || {}, fieldName, defaultValue);
-      _.set(this.values || {}, fieldName, defaultValue);
+      _.set(this.initialValues, fieldName, defaultValue);
+      _.set(this.values, fieldName, defaultValue);
     }
     return _.get(this.values, fieldName) || _.get(this.initialValues, fieldName);
   };
