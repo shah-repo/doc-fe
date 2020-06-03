@@ -1,5 +1,5 @@
 import React from "react";
-import { FBAutocompleteAsync, FBEditor, FBEditorApprovalFieldProps, FBEditorLabel } from "..";
+import { FBAutocompleteAsync, FBEditor, FBEditorApprovalFieldProps } from "..";
 
 const FBEditorApprovalField: React.FunctionComponent<FBEditorApprovalFieldProps> = ({
   approverGroups,
@@ -12,9 +12,9 @@ const FBEditorApprovalField: React.FunctionComponent<FBEditorApprovalFieldProps>
   ...props
 }) => (
   <FBEditor {...props} {...{ inputProps }}>
-    {includeLabel && (
+    {/* {includeLabel && (
       <FBEditorLabel {...props} {...{ inputProps, includeDefaultValue }} standalone={true} />
-    )}
+    )} */}
     <FBAutocompleteAsync
       label="common.approvers"
       optionId="3"

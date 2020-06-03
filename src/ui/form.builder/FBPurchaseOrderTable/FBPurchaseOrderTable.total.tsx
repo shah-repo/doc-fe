@@ -31,7 +31,7 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
       </FBTableCell>
     </TableRow>
     <TableRow>
-      <FBTableCell label="form.builder.sub.total" colSpan={3} className="FBTotal-root" />
+      <FBTableCell label="form.builder.subTotal" colSpan={3} className="FBTotal-root" />
       <FBTableCell className="FBTotal-root" align="right" colSpan={2}>
         <FormattedNumber
           value={Number(calculation?.subTotal)}
