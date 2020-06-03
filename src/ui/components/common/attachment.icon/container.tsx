@@ -17,6 +17,10 @@ import Menu from "./menu";
 import PresenterFactory from "./presenter.factory";
 import { AttachmentIconContainerProps, AttachmentIconDispatchProps } from "./utils/types";
 import WatermarkContainer from "./watermark/container";
+import PasswordDialog from "../../password/dialog";
+import { AsyncStatus } from "../../../../state/types";
+import { GROUP_TYPES } from "../../../../state/ducks/attachments/constants";
+import { Password } from "../../password/types";
 
 type DispatchProps = AttachmentIconDispatchProps;
 
@@ -35,8 +39,14 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const [newWatermarkRequest, setNewWatermarkRequest] = useState<Nullable<WatermarkRequest>>(null);
   const [newWatermakrError, setNewWatermarkError] = useState<string>("");
   const dialogHandler = useDialog();
+  const passwordState =  {
+    status: AsyncStatus.Idle,
+    message: "Message",
+  };
+  const passwordDialogHandler = useDialog();
   const attachments = value || field?.value as Attachment[] || [];
   const [selectedFile, setSelectedFile] = useState<undefined | Attachment>(undefined);
+  const [password, setPassword] = useState<Password>();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   SetFile = React.createContext(setSelectedFile);
 
@@ -116,6 +126,25 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     );
   };
 
+  const passwordSubmit = (values: Password) => {
+    setPassword(values);
+    passwordDialogHandler.close();
+    openFileView();
+  };
+
+  const handleIconClick = (attachment: Attachment) => (evt: React.MouseEvent<HTMLElement>) => {
+    evt.preventDefault();
+    setSelectedFile(attachment);
+    if (attachment.groupType === GROUP_TYPES.RED_LINE) {
+      openPasswordDialog();
+    } else {
+      openFileView();
+    }
+  };
+
+  const openPasswordDialog = () => passwordDialogHandler.open();
+
+
   const openFileView = () => dialogHandler.open();
 
   const attachmentsRenderer = attachments.map((attachment) => (
@@ -130,14 +159,23 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
       field={field}
       handleContextMenu={handleContextMenu}
       handleViewFile={handleViewFile}
+      handleIconClick = {handleIconClick}
     />
   ));
 
   return (
     <Grid container={true} spacing={2}>
+
+      <PasswordDialog
+        isDialogOpen = {passwordDialogHandler.isOpen}
+        onSubmit = {passwordSubmit}
+        closeDialog = {passwordDialogHandler.close}
+        asyncState = {passwordState}
+      />
       <ViewFile
         isOpen={dialogHandler.isOpen}
         handleClose={dialogHandler.close}
+        password = {password}
         attachments={attachments}
         attachment={selectedFile}
       />

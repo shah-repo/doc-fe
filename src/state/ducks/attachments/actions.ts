@@ -2,7 +2,7 @@ import { apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import { authActions } from "../auth";
 import { EmployeeEditRequestBody } from "../auth/types";
-import { ADD_WATERMARK, ATTACHMENT_PUBLIC_UPLOAD_URL, ATTACHMENT_ROOT_URL, ATTACHMENT_UPLOAD_URL, CHECK_WATERMARK_ASYNC, CLEAR_WATERMARKS, REMOVE_WATERMARK, REQUEST_WATERMARK_ASYNC} from "./constants";
+import { ADD_WATERMARK, ATTACHMENT_PUBLIC_UPLOAD_URL, ATTACHMENT_ROOT_URL, ATTACHMENT_UPLOAD_URL, CHECK_WATERMARK_ASYNC, CLEAR_WATERMARKS, REMOVE_WATERMARK, REQUEST_WATERMARK_ASYNC } from "./constants";
 import { Attachment, AttachmentDownloadResponse, AttachmentType, AvatarS3linkResponse, WatermarkRequest, WatermarkRequestBody } from "./types";
 
 const upload = (file: File, groupType: string, handlers: Handlers<Attachment>): ApiAction => {
@@ -26,16 +26,27 @@ const download = (
   attachment: Attachment,
   handlers: Handlers<AttachmentDownloadResponse>,
   type?: AttachmentType,
+  password?: string
 ): ApiAction => {
   attachment.isLoading = true;
   const queryParams = type ? `?type=${type}` : "";
+  if (password) {
+    return apiActionWithCallbacks<AttachmentDownloadResponse, string>({
+      url: `${ATTACHMENT_ROOT_URL}/${attachment.id}/download_red_line${queryParams}`,
+      method: "get",
+      password,
+      onSuccess: () => (attachment.isLoading = false),
+      handlers,
+    });
+  } else {
+    return apiActionWithCallbacks<AttachmentDownloadResponse, string>({
+      url: `${ATTACHMENT_ROOT_URL}/${attachment.id}/download${queryParams}`,
+      method: "get",
+      onSuccess: () => (attachment.isLoading = false),
+      handlers,
+    });
+  }
 
-  return apiActionWithCallbacks<AttachmentDownloadResponse, string>({
-    url: `${ATTACHMENT_ROOT_URL}/${attachment.id}/download${queryParams}`,
-    method: "get",
-    onSuccess: () => (attachment.isLoading = false),
-    handlers,
-  });
 };
 
 const requestWatermarkedFile = (

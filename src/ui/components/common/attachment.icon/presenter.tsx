@@ -14,12 +14,12 @@ AttachmentIconProps
   attachment,
   size,
   handleRemove,
-  handleIconClick,
   handleContextMenu,
   disabled = false,
   isLoading,
   isUploading,
   isRedLine,
+  handleIconClick,
   ...other
 }) => {
   const file = attachment || {} as Attachment;
