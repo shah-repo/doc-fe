@@ -158,47 +158,51 @@ DocumentRevisionFormContainerProps
     mode = "form";
   }
 
-  const render = (props: FormikProps<DocumentRevisionFormValues>) => {
+  const GetScheme = (props: FormikProps<DocumentRevisionFormValues>): FBSchemaProps[] => {
     const { id: documentTypeId = "" } = props.values.document?.documentType || {};
     const { outputDocumentTypes } = props.values || {};
-    const { schema: docScheme = [] } = _.get(documentTypesById, documentTypeId) || {};
-    const outputScheme = outputDocumentTypes?.reduce((scheme, value: OptionType) => {
+    const { schema: docScheme = [] } = documentTypesById?.[documentTypeId] || {};
+    const outputScheme =  useMemo(() => outputDocumentTypes?.reduce((scheme, value: OptionType) => {
       const { schema: outputScheme = [] } = documentTypesById[value.value] || {};
       if (!_.isEmpty(outputScheme)) {
         return _.uniqBy(_.union(scheme, outputScheme), "name");
       }
       return scheme;
-    }, [] as FBSchemaProps[]);
+    }, [] as FBSchemaProps[]), [outputDocumentTypes]);
+
     const schema = isOutput
       ? originScheme
       : _.uniqBy([...docScheme, ...outputScheme || [], ...originScheme], "name");
+    return schema;
+  };
 
-    return (
-      <FBWorkspace
-        portalContainer={FBContainer}
-        document={props.values as unknown as DocumentRevision}
-        initialValues={cloneDeep(formInput)}
-        autosave={true}
-        {...{ mode, schema  }}
-      >
-        <DocumentRevisionFormPresenter
-          {...props}
-          asyncState={asyncState}
-          documentRevisions={documentRevisions}
-          documentRevision={documentRevision}
-          availableReferences={availableReferences}
-          showRevisionTypeChange={showRevisionTypeChange}
-          proposedDocId={proposedDocId}
-          setDocId={setDocId}
-          doNotPrompt={doNotPrompt}
-          onDirtyFlagChange={onDirtyFlagChange}
-          documentTypesById={documentTypesById}
-          canChangeOwnerShip={canChangeOwnerShip}
-          type={type}
-          {...{ FBContainer }}
-        />
-      </FBWorkspace>
-    ); };
+  const render = (props: FormikProps<DocumentRevisionFormValues>) => (
+    <FBWorkspace
+      portalContainer={FBContainer}
+      document={props.values as unknown as DocumentRevision}
+      initialValues={cloneDeep(formInput)}
+      autosave={true}
+      schema={GetScheme(props)}
+      {...{ mode  }}
+    >
+      <DocumentRevisionFormPresenter
+        {...props}
+        asyncState={asyncState}
+        documentRevisions={documentRevisions}
+        documentRevision={documentRevision}
+        availableReferences={availableReferences}
+        showRevisionTypeChange={showRevisionTypeChange}
+        proposedDocId={proposedDocId}
+        setDocId={setDocId}
+        doNotPrompt={doNotPrompt}
+        onDirtyFlagChange={onDirtyFlagChange}
+        documentTypesById={documentTypesById}
+        canChangeOwnerShip={canChangeOwnerShip}
+        type={type}
+        {...{ FBContainer }}
+      />
+    </FBWorkspace>
+  );
 
   // TODO: check why are we loading all document revisions
   // if it's really necessary maybe it can be loaded through the DataFetcherContainer
