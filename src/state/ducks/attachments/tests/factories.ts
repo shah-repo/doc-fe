@@ -6,6 +6,6 @@ export const getAttachment = (attachment: Partial<Attachment> = {}): Attachment 
   name: faker.system.fileName(),
   s3link: faker.internet.url(),
   type: faker.system.fileType(),
-  groupType: "CLEAN_COPY",
+  lineType: "CLEAN_COPY",
   ...attachment,
 });

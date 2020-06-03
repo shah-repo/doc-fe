@@ -9,7 +9,7 @@ export interface Attachment {
   s3link: string;
   s3linkCleanCopy?: string;
   isLoading?: boolean;
-  groupType:string;
+  lineType: string;
 }
 
 export interface AttachmentDownloadResponse {

@@ -1,30 +1,30 @@
 import { Box, IconButton, Link } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
+import FormatAlignLeftIcon from "@material-ui/icons/FormatAlignLeft";
+import PublishRoundedIcon from "@material-ui/icons/PublishRounded";
+import _ from "lodash";
 import * as React from "react";
+import { Attachment, Attachment as AttachmentModel, attachmentsActions } from "../../../../state/ducks/attachments";
+import { GROUP_TYPES } from "../../../../state/ducks/attachments/constants";
+import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
+import FBStore from "../../../form.builder/stores/ui/FBStore";
+import useAsync from "../../../hooks/useAsync";
+import { useFormContext } from "../../forms/FormContext";
 import Text from "../../Text";
 import { styles } from "./utils/styles";
-import PublishRoundedIcon from "@material-ui/icons/PublishRounded";
-import CloseIcon from "@material-ui/icons/Close";
-import {  Attachment, Attachment as AttachmentModel, attachmentsActions  } from "../../../../state/ducks/attachments";
-import useAsync from "../../../hooks/useAsync";
-import FBStore from "../../../form.builder/stores/ui/FBStore";
-import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
-import { useFormContext } from "../../forms/FormContext";
-import _ from "lodash";
-import FormatAlignLeftIcon from "@material-ui/icons/FormatAlignLeft";
-import { GROUP_TYPES } from "../../../../state/ducks/attachments/constants";
+import { FieldInputProps, FormikProps } from "formik";
+import { useIntl } from "react-intl";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {
-  onCancel: any;
+  onCancel: () => void;
   upload: typeof attachmentsActions.upload;
-  field: any;
-  form: any;
-  multiple: any;
-  name: any;
-  disabled: any;
+  field: FieldInputProps<any>;
+  form: FormikProps<any>;
+  multiple?: boolean;
+  name?: string;
+  disabled?: boolean;
 }
 
-// eslint-disable-next-line no-empty-pattern
 const AttachmentGroupTypeForm: React.FunctionComponent<Props> = ({
   onCancel,
   upload,
@@ -36,10 +36,12 @@ const AttachmentGroupTypeForm: React.FunctionComponent<Props> = ({
 }) => {
   const isField = true;
   const classes = styles({ isField });
+  const intl = useIntl();
   const { submitForm } = useFormContext();
 
   const async = useAsync<AttachmentModel>({
     onSuccess: (attachment?: AttachmentModel) => {
+      name = name ? name : "";
       if (!attachment && !form && !field) {
         return;
       }
@@ -85,16 +87,15 @@ const AttachmentGroupTypeForm: React.FunctionComponent<Props> = ({
     handleUpload(files, isRedLine);
   };
 
-  const onChange = (groupType) => (event: React.FormEvent<HTMLInputElement>) => {
+  const onChange = (lineType) => (event: React.FormEvent<HTMLInputElement>) => {
     let isUserAlerted = false;
     const filteredFiles = Array.from(event.currentTarget.files || []).filter(
       (file) => {
         const type = file.name.split(".").pop();
 
         if (type === "doc") {
-          // TODO: update react-intl and make use of hooks to translate this message
           !isUserAlerted &&
-            alert(".doc files are not accepted. Please use .docx");
+           alert(intl.formatMessage({ id: "document.revision.download.html.error" }));
           isUserAlerted = true;
           return false;
         }
@@ -107,7 +108,7 @@ const AttachmentGroupTypeForm: React.FunctionComponent<Props> = ({
       return;
     }
 
-    handleUpload(filteredFiles, groupType);
+    handleUpload(filteredFiles, lineType);
   };
 
 

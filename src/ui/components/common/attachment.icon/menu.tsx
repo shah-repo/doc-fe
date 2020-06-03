@@ -1,25 +1,31 @@
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import React, { useMemo } from "react";
-import { Attachment, AttachmentType } from "../../../../state/ducks/attachments";
+import { Attachment, AttachmentType, AttachmentDownloadResponse } from "../../../../state/ducks/attachments";
 import Text from "../../Text";
 import { WATERMARK_FILES } from "../view.file/utils/constants";
 import { checkIfFileIsViewable } from "../view.file/utils/helpers";
 import { AttachmentMenuProps } from "./utils/types";
+import useAsync from "../../../hooks/useAsync";
+import { ApiAction, Handlers } from "../../../../state/types";
 
 interface OwnProps {
   handleWatermarkRequest?: (attachment: Attachment, attachmentType: AttachmentType) => void;
+  download: (attachment: Attachment,
+    handlers: Handlers<AttachmentDownloadResponse, string>,
+    type?: AttachmentType | undefined,
+    password?: string | undefined) => ApiAction<Attachment>;
 }
 
 type Props = AttachmentMenuProps & OwnProps;
 
 const AttachmentMenu: React.FunctionComponent<Props> = ({
-  handleDownload,
   handleClose,
   anchorEl,
   attachment,
   openFileView,
   handleWatermarkRequest,
+  download,
 }) => {
   const file = useMemo(() => (attachment || {} as Attachment), [attachment]);
   const isFileViewable =  useMemo(() => checkIfFileIsViewable(file.type), [file.type]);
@@ -29,6 +35,12 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
     type: fileType,
     s3linkCleanCopy,
   } = file;
+  const async = useAsync<AttachmentDownloadResponse>({
+    onSuccess: (downloadInfo) => {
+      window.onbeforeunload = null;
+      downloadInfo && window.open(downloadInfo.url, "_parent");
+    },
+  });
   const handleClick = (type: AttachmentType) => () => {
     handleClose && handleClose();
     handleDownload && handleDownload(file, type)();
@@ -40,6 +52,9 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
   const handleWatermarkClick = (attachmentType: AttachmentType) => () => {
     handleClose && handleClose();
     handleWatermarkRequest && handleWatermarkRequest(file, attachmentType);
+  };
+  const handleDownload = (attachment: Attachment, type?: AttachmentType) => () => {
+    async.start(download, attachment, async, type);
   };
 
   const renderDownloadFile =

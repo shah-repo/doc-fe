@@ -2,7 +2,7 @@ import { Grid } from "@material-ui/core";
 import _ from "lodash";
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Attachment, AttachmentDownloadResponse, attachmentsActions, AttachmentType, WatermarkRequest, WatermarkRequestBody } from "../../../../state/ducks/attachments";
+import { Attachment, attachmentsActions, AttachmentType, WatermarkRequest, WatermarkRequestBody } from "../../../../state/ducks/attachments";
 import { Nullable } from "../../../../state/ducks/common";
 import { ApplicationState } from "../../../../state/reducers";
 import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
@@ -50,12 +50,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   SetFile = React.createContext(setSelectedFile);
 
-  const async = useAsync<AttachmentDownloadResponse>({
-    onSuccess: (downloadInfo) => {
-      window.onbeforeunload = null;
-      downloadInfo && window.open(downloadInfo.url, "_parent");
-    },
-  });
+
   const requestWatermarkAction = useActionCreator(attachmentsActions.requestWatermarkedFile);
   const requestWatermarkAsync = useAsync<WatermarkRequest>({
     onSuccess: (data = {} as WatermarkRequest) => {
@@ -87,10 +82,6 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     submitForm();
   };
 
-  const handleDownload = (attachment: Attachment, type?: AttachmentType) => () => {
-    async.start(download, attachment, async, type);
-  };
-
   const handleContextMenu = (file: Attachment) => (evt: React.MouseEvent<HTMLElement>) => {
     evt.preventDefault();
     setSelectedFile(file);
@@ -98,16 +89,6 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   };
 
   const closeContextMenu = () => setAnchorEl(null);
-
-  const handleViewFile = (attachment: Attachment) => () => {
-    if (attachment.groupType === "CLEAN_COPY") {
-      setSelectedFile(attachment);
-      openFileView();
-    } else {
-      // eslint-disable-next-line no-console
-      console.log("Can't do that");
-    }
-  };
 
   const handleWatermarkRequest = (attachment: Attachment, attachmentType: AttachmentType) => {
     setNewWatermarkError("");
@@ -135,7 +116,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const handleIconClick = (attachment: Attachment) => (evt: React.MouseEvent<HTMLElement>) => {
     evt.preventDefault();
     setSelectedFile(attachment);
-    if (attachment.groupType === GROUP_TYPES.RED_LINE) {
+    if (attachment.lineType === GROUP_TYPES.RED_LINE) {
       openPasswordDialog();
     } else {
       openFileView();
@@ -154,11 +135,9 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
       name={name}
       attachment={attachment}
       handleRemove={handleRemove}
-      handleDownload={handleDownload}
       form={form}
       field={field}
       handleContextMenu={handleContextMenu}
-      handleViewFile={handleViewFile}
       handleIconClick = {handleIconClick}
     />
   ));
@@ -184,11 +163,11 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
         newWatermarkError={newWatermakrError}
       />
       <Menu
-        handleDownload={handleDownload}
         handleClose={closeContextMenu}
         anchorEl={anchorEl}
         attachment={selectedFile}
         openFileView={openFileView}
+        download= {download}
         handleWatermarkRequest={handleWatermarkRequest}
       />
       {attachmentsRenderer}

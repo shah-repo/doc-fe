@@ -208,6 +208,7 @@
   "common.justifications": "Justifications",
   "common.attachments": "Attachments",
   "common.attachment": "Attachment",
+  "common.attachment.form.DOCERROR":".doc files are not accepted. Please use .docx",
   "common.assessments": "Assessments",
   "common.reasoning": "Reasoning",
   "common.implementation.plan": "Implementation Plan",

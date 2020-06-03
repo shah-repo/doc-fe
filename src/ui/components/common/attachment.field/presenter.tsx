@@ -6,7 +6,7 @@ import { AttachmentGroupTypeSelector } from "../attachment.grouptype/AttachmentG
 
 export const AttachmentFieldPresenter: React.FunctionComponent<
 AttachmentFieldProps
-> = ({ name, multiple, component = "button", onChange, disabled, upload, form, field }) => {
+> = ({ name, multiple, component = "button", disabled, upload, form, field }) => {
   const isField = component === "field";
   const classes = styles({ isField });
 

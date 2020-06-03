@@ -1,21 +1,21 @@
 import { Button, createStyles, Dialog, DialogContent, makeStyles } from "@material-ui/core";
-import { Formik, FormikProps } from "formik";
+import { Formik, FieldInputProps, FormikProps } from "formik";
 import React from "react";
 import { FormContext } from "../../forms/FormContext";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
-import { ApproveAndReleaseFormValues } from "../attachment.field/types";
 import AttachmentGroupTypeForm  from "./AttachmentGroupTypeForm";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
+import { attachmentsActions } from "../../../../state/ducks/attachments";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+
 interface Props {
-  upload: any;
-  form: any;
-  field: any;
-  multiple: any;
-  name: any;
-  disabled: any;
+  upload: typeof attachmentsActions.upload;
+  field: FieldInputProps<any>;
+  form: FormikProps<any>;
+  multiple?: boolean;
+  name?: string;
+  disabled?: boolean;
 }
 
 const styles = makeStyles(() =>
@@ -30,7 +30,7 @@ const styles = makeStyles(() =>
   },
   ));
 
-// eslint-disable-next-line no-empty-pattern
+
 export const AttachmentGroupTypeSelector: React.FunctionComponent<Props> = ({
   upload,
   multiple,
@@ -53,23 +53,11 @@ export const AttachmentGroupTypeSelector: React.FunctionComponent<Props> = ({
     dialog.close();
   };
 
-
-  const onSubmit = (values: any) => {
-    // eslint-disable-next-line no-console
-    console.log("submitted");
-  };
-
-
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
-  const renderForm = (props: FormikProps<ApproveAndReleaseFormValues>) => (
+  const renderForm = () => (
     <AttachmentGroupTypeForm
+      {...{ field, upload, form, name, multiple, disabled }}
       onCancel= {closeDialog}
-      upload = {upload}
-      field = {field}
-      form = {form}
-      multiple = {multiple}
-      name  = {name}
-      disabled = {disabled}
     />
   );
 
@@ -101,8 +89,8 @@ export const AttachmentGroupTypeSelector: React.FunctionComponent<Props> = ({
           >
             <FormContext.Provider value={{ submitOnChange: false }}>
               <Formik
-                initialValues={{ password: "", approvals: [] }}
-                onSubmit={onSubmit}
+                initialValues={{ }}
+                onSubmit={(values: any) => values}
               >
                 {renderForm}
               </Formik>

@@ -12,7 +12,6 @@ AttachmentIconFactoryProps
   handleRemove,
   handleDownload,
   handleContextMenu,
-  handleViewFile,
   disabled = false,
   handleIconClick,
   ...other
@@ -20,7 +19,7 @@ AttachmentIconFactoryProps
   const file = attachment || {} as Attachment;
   const isUploading = file.s3link == null;
   const isLoading = file.isLoading || false;
-  const isRedLine = file.groupType === "RED_LINE";
+  const isRedLine = file.lineType === "RED_LINE";
   const defaultProps = {
     name,
     attachment,

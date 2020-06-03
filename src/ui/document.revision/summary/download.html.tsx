@@ -20,7 +20,7 @@ export const DownloadHTML: React.FunctionComponent<Props> = ({
       window.open(downloadInfo?.url, "_blank");
     },
     onError: () => {
-      alert(intl.formatMessage({ id: "document.revision.download.html.error" }));
+      alert(intl.formatMessage({ id: "common.attachment.form.DOCERROR" }));
     },
   });
 
