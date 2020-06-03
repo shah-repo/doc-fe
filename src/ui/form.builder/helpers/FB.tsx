@@ -22,7 +22,7 @@ export class FB {
   }
 
   public static stripOption(fielddName: string, optionName?: string): string {
-    if (_.isUndefined(optionName)) {
+    if (!optionName) {
       return "";
     }
     const striped = optionName.toString().replace(fielddName, "").replace("-<-val->", "");
