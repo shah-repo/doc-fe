@@ -90,6 +90,7 @@ export type FBInputProps =
   designDisabled?: boolean;
   instructionsDocument?: string;
   reviseDisabled?: boolean;
+  outputDisabled?: boolean;
   customValidator?: FBValidatorConfigProps;
   approvers?: string[] | Employee[];
   approverGroups?: string[] | GroupRequestBody[];
