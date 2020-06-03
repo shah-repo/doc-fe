@@ -16,7 +16,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
 
     !schemaState && (schemaState = FB.useRef<FBSchemaState>(FBSchemaState, schema));
     const { workspaceState, formState } = FB.useStores();
-    const { isOutput, document: { outputRevision = false } = {} } = workspaceState || {};
+    const { isOutput, id, document: { outputRevision = false } = {} } = workspaceState || {};
 
     React.useEffect(() => {
       FormBuilderDynamicValidatorStore.registerValidators(schema, formState?.Validator);
@@ -68,7 +68,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
             workspaceMode === "preview" ||
             isApproved({ ...schemaItem, index }) ||
             (reviseDisabled && outputRevision) ||
-            (outputDisabled && isOutput)
+            (outputDisabled && isOutput && !_.isEmpty(id))
           ),
           index,
         });
