@@ -172,7 +172,7 @@ DocumentRevisionFormContainerProps
 
     const schema = isOutput
       ? originScheme
-      : _.uniqBy([...docScheme, ...outputScheme || [], ...originScheme], "name");
+      : _.uniqBy([...docScheme || [], ...outputScheme || [], ...originScheme], "name");
     return schema;
   };
 
