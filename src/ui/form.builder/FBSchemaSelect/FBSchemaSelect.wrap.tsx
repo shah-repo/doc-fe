@@ -35,6 +35,7 @@ export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
         ..._.omit(value, ["validationMode"]),
         name: name?.replace("name", "value"),
         ...(type === "checkbox" && { defaultChecked: false }),
+        ...(type === "radiogroup" && { type: "checkboxgroup" }),
         rules: `required_with:${name}`,
       }, index + 1);
     }

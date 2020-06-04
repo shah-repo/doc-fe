@@ -17,6 +17,7 @@ export interface AttachmentIconFactoryProps extends FormikHybridFieldProps {
   handleViewFile?: (attachment: Attachment) => () => any;
   value?: Attachment[];
   handleIconClick?: (attachment: Attachment) => any;
+  canDeleteFile?: boolean;
 }
 
 export interface AttachmentIconProps extends AttachmentIconFactoryProps {

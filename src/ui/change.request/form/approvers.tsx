@@ -8,7 +8,7 @@ import { ReactComponent as UncheckedMark } from "../../../assets/images/uncheck_
 import { authSelectors } from "../../../state/ducks/auth";
 import { Group } from "../../../state/ducks/auth/types";
 import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
-import { Approval } from "../../../state/ducks/common";
+import { Approval, Owner } from "../../../state/ducks/common";
 import { ApplicationState } from "../../../state/reducers";
 import AsyncGate from "../../components/AsyncGate";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
@@ -25,6 +25,7 @@ interface OwnProps {
   withoutCurrentUser?: boolean;
   documentTypeGroups?: Group[];
   values?: ChangeRequestFormValues | ApproveAndReleaseFormValues;
+  owner?: Owner;
 }
 
 export type Props = OwnProps;
@@ -34,6 +35,7 @@ export const Approvers: React.FunctionComponent<Props> = ({
   withoutCurrentUser = false,
   documentTypeGroups,
   values,
+  owner,
 }) => {
 
   const joinedEmployees = (groups: Group[]) => groups.map((group) => group.joinedEmployees.map((employee) =>
@@ -70,7 +72,9 @@ export const Approvers: React.FunctionComponent<Props> = ({
               {
                 group
                   .joinedEmployees
-                  .some((employee) => selectedEmployees?.includes(employee.id)) ? <CheckedMark /> : <UncheckedMark />
+                  .some((employee) => (
+                    selectedEmployees?.includes(employee.id)) || owner?.id === employee.id) ?
+                  <CheckedMark /> : <UncheckedMark />
               }
               <Box paddingLeft={1} display="initial">
                 <Text message={group.name} />
@@ -100,7 +104,6 @@ export const Approvers: React.FunctionComponent<Props> = ({
     <Box marginLeft={1}><Text message={data.label}/></Box>
   </components.MultiValueLabel>);
 
-
   return (
     <AsyncGate
       asyncState={loadApproversAsyncState}
@@ -119,7 +122,7 @@ export const Approvers: React.FunctionComponent<Props> = ({
           formatOptionLabel,
           components: { MultiValueLabel },
         }}
-        options={uniqBy(arrayOfOptions, "value") as OptionType[]}
+        options={uniqBy(arrayOfOptions, "value").filter((e: any) => e.value !== owner?.id) as OptionType[]}
       />
       {documentTypeGroups && renderGroupApproversResults()}
     </AsyncGate>

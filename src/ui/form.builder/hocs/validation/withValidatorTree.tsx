@@ -4,10 +4,9 @@ import _ from "lodash";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
 import React from "react";
+import { FB, FBInputProps } from "../..";
 import FBCheckbox from "../../components/inputs/FBCheckbox";
 import { FBEditorSectionConfig } from "../../defaults/editor";
-import FBStore from "../../stores/ui/FBStore";
-import { FBInputProps } from "../../types/common";
 import { FBValidatorTreeProps } from "../../types/validation/validatorTree";
 import { withFBStores } from "../common/withFBStores";
 
@@ -24,8 +23,10 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
       });
     }, []);
 
-    const truncate = (value: string = ""): string =>
-      _.truncate(value!, {
+    const { workspaceState } = FB.useStores();
+
+    const truncate = (value = ""): string =>
+      _.truncate(value, {
         length: truncateValue,
         omission: " [...]",
       });
@@ -64,7 +65,7 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
     const contextNode = (
       name: string,
       label: string | React.ReactNode,
-      included: boolean = false,
+      included = false,
     ) => {
       const contextLabel = truncate(label as string);
       const tooltip =
@@ -112,7 +113,7 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
 
     const parentNode = (
       schemaItem: FBInputProps,
-      includeNodeField: boolean = false,
+      includeNodeField = false,
     ) => {
       const { name, includeContext, type, label } = schemaItem;
       let { options } = schemaItem;
@@ -136,7 +137,7 @@ export const withValidatorTree = <T extends FBValidatorTreeProps>(
       );
     };
 
-    const items = _.map(FBStore.getSchema(), (schemaItem) => {
+    const items = _.map(workspaceState?.getSchema(), (schemaItem) => {
       const { name, label, type } = schemaItem;
       if (_.includes(FBEditorSectionConfig.section, type)) {
         return <div />;

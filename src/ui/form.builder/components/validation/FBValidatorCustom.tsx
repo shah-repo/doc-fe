@@ -13,25 +13,29 @@ const FBValidatorCustom: React.FunctionComponent<FBValidatorDynamicProps> = ({
   onMessageChange,
   errorMessage,
   clear,
+  children,
 }) => (
-  <Grid container spacing={3}>
-    <Grid item xs={6}>
-      <FBTextField
-        label="form.builder.error.message"
-        defaultValue={errorMessage}
-        onChange={onMessageChange}
-      />
-      <LiveProvider {...{ code, scope, transformCode }}>
-        <Box bgcolor="black">
-          <LiveEditor />
-        </Box>
-        <LiveError />
-      </LiveProvider>
+  <>
+    <Grid container spacing={3}>
+      <Grid item xs={6}>
+        <FBTextField
+          label="form.builder.error.message"
+          defaultValue={errorMessage}
+          onChange={onMessageChange}
+        />
+        <LiveProvider {...{ code, scope, transformCode }}>
+          <Box bgcolor="black">
+            <LiveEditor />
+          </Box>
+          <LiveError />
+        </LiveProvider>
+      </Grid>
+      <Grid item xs={6}>
+        <FBValidatorTree />
+      </Grid>
     </Grid>
-    <Grid item xs={6}>
-      <FBValidatorTree />
-    </Grid>
-  </Grid>
+    {children}
+  </>
 );
 
 export default withValidatorCustom(FBValidatorCustom);

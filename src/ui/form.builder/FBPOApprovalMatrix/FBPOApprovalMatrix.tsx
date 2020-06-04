@@ -1,8 +1,7 @@
 import { Box } from "@material-ui/core";
 import { Provider } from "mobx-react";
 import React from "react";
-import { FBButton, FBDialog } from "..";
-import { FormContext } from "../../components/forms/FormContext";
+import { FBButton, FBDialog, FBInput } from "..";
 import FBSectionBox from "../components/layout/FBSectionBox";
 import { FBPOApprovalMatrixFieldProps, FBPOApprovalMatrixTableProps } from "./FBPOApprovalMatrix.types";
 import { withFBPOApprovalMatrix } from "./FBPOApprovalMatrix.wrap";
@@ -13,14 +12,16 @@ const FBPOApprovalMatrix: React.FunctionComponent<FBPOApprovalMatrixFieldProps> 
   handleRevert,
   poamState,
   dialogState,
+  name,
+  autosave,
   ...props
 }) => (
   <Provider {...{ poamState, dialogState }}>
-    <FormContext.Provider value={{ submitOnChange: false }}>
-      <FBDialog />
+    <FBDialog />
+    <FBInput {...{ name, autosave }} disabled={props.disabled} type="poApprovalMatrix">
       <Box mt={3}>
         <FBSectionBox label={props.label} {...{ handleRevert }} />
-        <FBPOApprovalMatrixTable {...props as FBPOApprovalMatrixTableProps} />
+        <FBPOApprovalMatrixTable {...{ name }} {...props as FBPOApprovalMatrixTableProps} />
         <FBButton
           fullWidth={true}
           disabled={props.disabled}
@@ -30,7 +31,7 @@ const FBPOApprovalMatrix: React.FunctionComponent<FBPOApprovalMatrixFieldProps> 
           style={{ margin: "8px 0" }}
         />
       </Box>
-    </FormContext.Provider>
+    </FBInput>
   </Provider>
 );
 

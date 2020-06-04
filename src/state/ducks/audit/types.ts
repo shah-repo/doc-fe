@@ -5,10 +5,11 @@ import { Approval, Owner } from "../common";
 import { DocumentRevision, Reference } from "../documentRevisions";
 import { DocumentType } from "../documentRevisions/documentType";
 
+type AuditTypes = "ARRAY_NEW" | "ARRAY_DELETED";
 export interface Audit {
   id: string;
   field: string;
-  type: string;
+  type: AuditTypes;
   nextValue:
   | string
   | User

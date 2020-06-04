@@ -74,6 +74,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         isQms={docInfo.isQms}
         documentName={docInfo.name}
         docRevId={values.id as string}
+        owner={documentRevision?.owner}
       />
       <HeaderMenu>
         <CancelButton

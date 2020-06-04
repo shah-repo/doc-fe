@@ -11,6 +11,8 @@ export class FBFormState extends FBSchemaState {
   public initialValues: Dictionary<any> = {};
   public workspaceMode?: FBWorkspaceMode;
   public values: Dictionary<any> = {};
+
+
   // TO BBE REMOVED!
   public workspaceState?: FBWorkspaceState;
   @observable public errors = new Map<string, string>();
@@ -20,13 +22,13 @@ export class FBFormState extends FBSchemaState {
   public constructor({ schema, initialValues = {}, workspaceMode, workspaceState }: FBFormConstructor) {
     super();
     this.schema = schema;
-    this.initialValues = initialValues;
-    this.values = initialValues;
+    this.initialValues = initialValues || {};
+    this.values = initialValues || {};
     this.workspaceMode = workspaceMode;
     this.workspaceState = workspaceState;
   }
 
-  @computed private get Validator(): any {
+  @computed public get Validator(): any {
     return _.get(window, "EnlilRemoteValidators.validator");
   }
 
@@ -45,7 +47,8 @@ export class FBFormState extends FBSchemaState {
       return defaultValue;
     }
     if (!_.get(this.values, fieldName) && !_.isUndefined(defaultValue)) {
-      _.set(this.initialValues || {}, fieldName, defaultValue);
+      _.set(this.initialValues, fieldName, defaultValue);
+      _.set(this.values, fieldName, defaultValue);
     }
     return _.get(this.values, fieldName) || _.get(this.initialValues, fieldName);
   };
@@ -55,11 +58,7 @@ export class FBFormState extends FBSchemaState {
       return;
     }
     const prevValue = this.getFieldValue(fieldName);
-    if ((_.isUndefined(value) || value.length === 0) && !forceDefault) {
-      this.omitFieldValue(fieldName);
-    } else {
-      _.set(this.values, fieldName, value);
-    }
+    _.set(this.values, fieldName, value);
     if (withState) {
       this.inputState.get(fieldName)?.setValue(prevValue);
       this.inputState.get(fieldName)?.setValue(value);
@@ -154,7 +153,9 @@ export class FBFormState extends FBSchemaState {
     this.Validator.registerAsyncImplicit("required_if_in", function(val: string[], req: string, attribute: string, passes) {
       const reqs = req.split(",");
       const reqName = reqs.shift() || "";
-      const inputValue = validator.input[reqName];
+      let inputValue = validator.input[reqName];
+      // Radio group support
+      !_.isArray(inputValue) && (inputValue = [inputValue]);
       const diff = inputValue && inputValue.filter((val) => reqs.includes(val));
       if (diff && diff.length > 0 && (!val || _.isEmpty(val))) {
         const { messages: { attributeNames } } = validator;
@@ -165,6 +166,14 @@ export class FBFormState extends FBSchemaState {
       }
       return passes();
     });
+  };
+
+  public setFieldAutosave = (name?: string) => {
+    if (!name) { return; }
+    const inputState = this.inputState.get(name);
+    if (!inputState) { return; }
+    const formValue = this.getFieldValue(name);
+    inputState.setAutosaveValue(formValue);
   };
 }
 

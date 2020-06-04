@@ -1,8 +1,8 @@
 import _ from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FBSchemaComponentProps, FBSchemaProps, FBSchemaState } from ".";
-import { FB, FBFieldName, FBSortable } from "..";
+import { FB, FBFieldName, FBInputProps, FBSchemaComponentProps, FBSchemaProps, FBSchemaState, FBSortable } from "..";
+import FormBuilderDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 
 export const withFBSchema = <T extends FBSchemaComponentProps>(
   Component: React.FunctionComponent<T>
@@ -15,9 +15,15 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
   }: T) => {
 
     !schemaState && (schemaState = FB.useRef<FBSchemaState>(FBSchemaState, schema));
-    const { workspaceState } = FB.useStores();
+    const { workspaceState, formState } = FB.useStores();
+    const { isOutput, id, document: { outputRevision = false } = {} } = workspaceState || {};
 
-    function controlRenderer(schemaItem: FBSchemaProps): React.ReactNode | undefined {
+    React.useEffect(() => {
+      FormBuilderDynamicValidatorStore.registerValidators(schema, formState?.Validator);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    function controlRenderer(schemaItem: FBSchemaProps | FBInputProps): React.ReactNode | undefined {
       return FBSchemaState.component(schemaItem);
     }
 
@@ -51,16 +57,22 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
       if (workspaceMode === "design") {
         return <FBSortable />;
       }
-      return _.map(schema, (schemaItem, index) => controlRenderer({
-        ...schemaItem,
-        disabled: (
-          schemaItem.disabled ||
-          workspaceMode === "preview" ||
-          isApproved({ ...schemaItem, index }) ||
-          (schemaItem.reviseDisabled && workspaceState?.document?.outputRevision)
-        ),
-        index,
-      }));
+      return _.map(schema, (schemaItem, index) => {
+        const isUnderWorkspace = workspaceState?.getSchemaItem(schemaItem.name);
+        const { disabled, reviseDisabled, outputDisabled } = schemaItem || {};
+        return controlRenderer({
+          autosave: isUnderWorkspace && workspaceState?.autosave,
+          ...schemaItem,
+          disabled: (
+            disabled ||
+            workspaceMode === "preview" ||
+            isApproved({ ...schemaItem, index }) ||
+            (reviseDisabled && outputRevision) ||
+            (outputDisabled && isOutput && !_.isEmpty(id))
+          ),
+          index,
+        });
+      });
     }
 
     useObserver(() => {

@@ -17,6 +17,7 @@ export type FBWorkspaceProps =
   active?: boolean;
   includeTransport?: boolean;
   document?: DocumentRevision;
+  autosave?: boolean;
 };
 
-export type FBWorkspaceConstructor = Pick<FBWorkspaceProps, "schema" | "mode" | "document">;
+export type FBWorkspaceConstructor = Pick<FBWorkspaceProps, "schema" | "mode" | "document" | "autosave">;

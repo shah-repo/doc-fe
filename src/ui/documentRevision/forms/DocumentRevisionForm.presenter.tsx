@@ -21,6 +21,7 @@ import Title from "../../document.revision/form/title";
 import FormHeader from "../../document.revision/header/FormHeader";
 import { documentDetailsPath } from "../../document.revision/utils/paths";
 import { FB } from "../../form.builder";
+import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { isOperator } from "../DocumentRevisionDisplay.container";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
@@ -63,6 +64,8 @@ interface FormHeaderContext {
   asyncState: AsyncState;
 }
 export let FormHeaderContext = React.createContext<FormHeaderContext | undefined>(undefined);
+export let isOwnerContext = React.createContext<boolean>(false);
+export let documentTypeContext = React.createContext<string | undefined>(undefined);
 
 export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   classes,
@@ -90,6 +93,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   setValues,
 }) => {
 
+  useScrollIntoView();
   const { workspaceState } = FB.useStores();
   const isDisabled: boolean = initialValues.id !== undefined;
   const [docInfo, savedocInfo] = React.useState({ name: "", isQms: true });
@@ -106,6 +110,9 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner.user.email === email;
   const isDisabledInput =  values.id !== undefined && isCurrentUserOperator && !isOwner;
+  const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
+  isOwnerContext = React.createContext(isOwner);
+  documentTypeContext = React.createContext(documentType);
 
   useEffect(() => {
     if (!values.id && !values.document?.documentType?.id && setDocId) {
@@ -251,7 +258,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <div ref={FBContainer} />
           </Box>
         }
-        {workspaceState?.mode === "form" && <DocumentRevisionOutputInfo formDocument={values.formDocument} />}
+        {workspaceState?.mode === "form" && <DocumentRevisionOutputInfo formDocument={initialValues.formDocument} />}
       </FormWrapper>
     </Grid>
   );
