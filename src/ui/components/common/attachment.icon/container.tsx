@@ -138,18 +138,20 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
         canDeleteFile={false}
       />;
     }
-    if (isUserDocumentOwner) { return <PresenterFactory
-      {...other}
-      key={`attachment-${attachment.id}`}
-      name={name}
-      attachment={attachment}
-      handleRemove={handleRemove}
-      handleDownload={handleDownload}
-      form={form}
-      field={field}
-      handleContextMenu={handleContextMenu}
-      handleViewFile={handleViewFile}
-    />; }
+    if (isUserDocumentOwner) {
+      return <PresenterFactory
+        {...other}
+        key={`attachment-${attachment.id}`}
+        name={name}
+        attachment={attachment}
+        handleRemove={handleRemove}
+        handleDownload={handleDownload}
+        form={form}
+        field={field}
+        handleContextMenu={handleContextMenu}
+        handleViewFile={handleViewFile}
+      />;
+    }
     return null;
   });
 
