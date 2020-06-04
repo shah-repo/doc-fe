@@ -47,7 +47,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       workspaceState.document = document;
       if (!props.schema) { return; }
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      workspaceState.schema = uniqBy([...props.schema!, ...workspaceState.schema || []], "name");
+      workspaceState.schema = uniqBy([...workspaceState.schema || [], ...props.schema!], "name");
     }, [workspaceState, props.schema, document]);
 
 
