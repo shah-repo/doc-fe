@@ -95,7 +95,7 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
 
         if (type === "doc") {
           !isUserAlerted &&
-           alert(intl.formatMessage({ id: "document.revision.download.html.error" }));
+           alert(intl.formatMessage({ id: "common.attachment.form.DOCERROR" }));
           isUserAlerted = true;
           return false;
         }

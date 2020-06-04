@@ -13,12 +13,7 @@ AttachmentFieldProps
   return (
     <Box mt={1} className={classes.root} id="AttachmentFieldPresenter-field">
       <AttachmentLineTypeSelector
-        upload = {upload}
-        form = {form}
-        name = {name}
-        multiple = {multiple}
-        field = {field}
-        disabled = {disabled}
+        {...{ field, upload, form, name, multiple, disabled }}
       />
     </Box>
   );
