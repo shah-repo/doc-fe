@@ -26,7 +26,7 @@ const FBApprovalMatrixSection: React.FunctionComponent<FBApprovalMatrixProps> = 
           </FBTooltip>
         )}
         {mode === "edit" && (
-          <FBTooltip title='Exit Edit Mode'>
+          <FBTooltip title="form.builder.exit.edit.mode" >
             <CancelPresentationIcon fontSize="small" />
           </FBTooltip>
         )}
