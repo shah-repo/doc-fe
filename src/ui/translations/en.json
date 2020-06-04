@@ -509,6 +509,7 @@
   "form.builder.approvalMatrix": "Approval Matrix",
   "form.builder.poApprovalMatrix": "PO Approval Matrix",
   "form.buider.am.prefix": "Prefix",
+  "form.builder.exit.edit.mode": "Exit edit mode",
   "form.builder.am.internal.type": "Internal Type",
   "form.builder.approval.roles": "Approval Roles",
   "form.builder.approval.role": "Approval Role",
@@ -656,7 +657,6 @@
   "form.builder.subTotal": "Sub Total: ",
   "form.builder.totalAmount": "Total amount: ",
   "form.builder.type": "Type",
-
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.watermark": "Download PDF file",
