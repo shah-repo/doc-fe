@@ -1,5 +1,6 @@
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
+import { Employee } from "../company";
 import { COMPANY_DEFAULT_STATE } from "../company/reducers";
 import { EditGroupsAction, EditUserInfoAction } from "../tableSearch";
 import { EDIT_EMPLOYEE_GROUPS, EDIT_EMPLOYEE_USER_INFO } from "../tableSearch/constants";
@@ -39,13 +40,15 @@ export const user = (
   action: AuthUserActions,
 ): UserState => {
   switch (action.type) {
-    case AUTH_USER:
+    case AUTH_USER: {
+      const activeUser = action.payload.employees.find((employee) => employee.active) || { id: "" } as Employee;
       return {
         ...state,
         ...action.payload,
-        employeeId: action.payload.employees[0].id,
-        employee: action.payload.employees[0],
+        employeeId: activeUser.id,
+        employee: activeUser,
       };
+    }
     case SET_EMPLOYEE:
       return {
         ...state,
