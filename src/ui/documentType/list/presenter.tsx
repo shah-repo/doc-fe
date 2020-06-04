@@ -13,6 +13,7 @@ import { canEditDocumentRevision, documentRevisionQueryStatus, documentRevisionS
 import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
 import { FB } from "../../form.builder";
 import { Translation } from "../../translations/types";
+import { shouldShowStaticColumns } from "./helpers";
 import { styles } from "./styles";
 
 export interface Props {
@@ -34,6 +35,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   openDocRev,
   showError,
 }) => {
+  const showStaticColumns = shouldShowStaticColumns(documentType.documentTypeName);
   const classes = styles();
   const canEdit = (data: DocumentRevision) => canEditDocumentRevision(data);
   const queryUrl =
@@ -75,7 +77,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
     }),
   );
 
-  const columns: TableColumnProps<DocumentRevision>[] = [
+  const staticColumns: TableColumnProps<DocumentRevision>[] = [
     {
       key: "docId",
       label: `${documentType.documentTypeName} ID` as Translation,
@@ -137,8 +139,10 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
         width: 100,
       },
     },
-    ...additionalColumns,
   ];
+  const columns: TableColumnProps<DocumentRevision>[] = showStaticColumns ?
+    [...staticColumns, ...additionalColumns] :
+    [...additionalColumns];
 
   return (
     <Grid container={true} className={classes.root}>
