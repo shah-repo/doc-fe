@@ -1,4 +1,4 @@
-import { compact, groupBy, isEmpty, last, map, range, toNumber } from "lodash";
+import { compact, get, groupBy, isEmpty, last, map, range, toNumber } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import moment from "moment";
@@ -58,6 +58,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
 
       const mapped = map(grouped, (v, k) => {
         if (k === "none") { return; }
+        const fieldName = k.split(".")[1] || "";
         const type = k.split(".")[2];
         const label = k.split(".")[3] || "";
 
@@ -148,7 +149,47 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
         }
 
         function isAutocomplete() {
-          console.log(v);
+          const { optionId } = workspaceState?.getSchemaItem(fieldName) || {};
+          if (!optionId) { return; }
+          approvalAuditState?.setAutocompleteOptionId(optionId);
+          const data = FBAutocompleteAsyncStore.data.get(optionId || "");
+          if (!data) { return; }
+          const { labelKey = "text", labelPrefixRoot = "" } =
+              approvalAuditState?.autocompleteApi.optionConfig || {};
+          let prevIds: string[] = [];
+          let nextIds: string[] = [];
+          let desc = "Changed " + label + ": ";
+          v.reduce((desc, audit) => {
+            const { previousValue, nextValue } = audit;
+
+            if (previousValue !== "undefined") {
+              try {
+                prevIds = JSON.parse(previousValue);
+              } catch {
+                prevIds.push(previousValue);
+              }
+            }
+            try {
+              nextIds = JSON.parse(nextValue);
+            } catch {
+              nextIds.push(nextValue);
+            }
+            return desc;
+          }, "");
+          const previousDescription = (prevIds || []).reduce((prevDesc, id) => {
+            const record = data.get(id);
+            prevDesc += get(record, labelPrefixRoot, "") + " " + get(record, labelKey, "");
+            return prevDesc;
+          }, " ");
+          const nextDescription = (nextIds || []).reduce((nextDesc, id) => {
+            const record = data.get(id);
+            nextDesc += get(record, labelPrefixRoot, "") + " " + get(record, labelKey, "");
+            return nextDesc;
+          }, "");
+          !isEmpty(previousDescription.trim()) && (desc += "Removed: " + previousDescription);
+          !isEmpty(previousDescription.trim()) && !isEmpty(nextDescription) && (desc += " | ");
+          !isEmpty(nextDescription) && (desc += "Added: " + nextDescription);
+          return desc;
         }
 
         const description: Partial<Record<FBInputType | "default", () => any>> = {
@@ -164,6 +205,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           radio: () => isCheck(),
           fileupload: () => isFileupload(),
           autocomplete: () => isAutocomplete(),
+          autocompleteasync: () => isAutocomplete(),
           default: () => undefined,
         };
 

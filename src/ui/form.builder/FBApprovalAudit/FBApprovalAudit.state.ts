@@ -8,7 +8,6 @@ export class FBApprovalAuditState extends FBRequest<FBAuditData[], any> {
 
   public static omitAudit: FBInputType[] = [
     "instructionsdocument",
-    "autocomplete",
     "selectdocument",
     "autocompleteasync",
     "poreceive",
