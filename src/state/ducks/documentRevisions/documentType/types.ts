@@ -8,7 +8,6 @@ export type DocumentGroupOptionsType =
   "DAM" |
   "CAN_BE_OUTPUT" |
   "MUST_BE_OUTPUT" |
-  "BE_OUTPUT" |
   "HAVE_OUTPUT" |
   "RECORD" |
   "ONE_ITEM" |
