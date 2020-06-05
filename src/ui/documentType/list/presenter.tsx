@@ -11,7 +11,6 @@ import { TableDataProps, TablePanelStateProps, TableSearchQueryType } from "../.
 import Text from "../../components/Text";
 import { canEditDocumentRevision, documentRevisionQueryStatus, documentRevisionStatusOption } from "../../document.revision/utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
-import { FB } from "../../form.builder";
 import { Translation } from "../../translations/types";
 import { shouldShowStaticColumns } from "./helpers";
 import { styles } from "./styles";
@@ -65,14 +64,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       cellHref: cellHrefRenderer,
       omitSearch: true,
       columnOptions: {
-        cellDataGetter: ({ rowData }) => {
-          const { valuePath } = column;
-          // TODO (2020-05-25 22:17): Should not strip commas from value. Changes "John, Mike" to "John Mike"
-          return FB.stripOption(
-            valuePath,
-            _.get(rowData, valuePath),
-          );
-        },
+        cellDataGetter: ({ rowData }) => _.get(rowData, column.valuePath),
       },
     }),
   );
