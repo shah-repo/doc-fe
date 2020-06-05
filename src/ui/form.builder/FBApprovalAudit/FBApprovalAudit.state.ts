@@ -1,10 +1,25 @@
 import { action } from "mobx";
-import { FBApprovalAuditConstructor, FBAuditData, FBAutocompleteAsyncState } from "..";
+import { FBApprovalAuditConstructor, FBAuditData, FBAutocompleteAsyncState, FBInputType } from "..";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import FBStore from "../FBStore/FBStore";
 
 export class FBApprovalAuditState extends FBRequest<FBAuditData[], any> {
+
+  public static omitAudit: FBInputType[] = [
+    "instructionsdocument",
+    "autocomplete",
+    "selectdocument",
+    "autocompleteasync",
+    "poreceive",
+    "evidencemediaupload",
+    "instructionsdocument",
+    "testRequirement",
+    "selectrequirement",
+    "hellosign",
+    "approvalMatrix",
+    "poApprovalMatrix",
+  ];
 
   public autocompleteApi = new FBAutocompleteAsyncState();
 
@@ -22,10 +37,6 @@ export class FBApprovalAuditState extends FBRequest<FBAuditData[], any> {
   @action public refresh = () => {
     FBStore.audit.fetch();
   };
-
-  protected onSuccess() {
-    super.onSuccess();
-  }
 }
 
 export default FBApprovalAuditState;
