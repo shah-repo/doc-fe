@@ -37,7 +37,9 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
     () =>
       documentTypes.reduce((acc: OptionType[], document) => {
         if (
-          document.groupOptions?.includes("BE_OUTPUT")) {
+          document.groupOptions?.includes("MUST_BE_OUTPUT") ||
+          document.groupOptions?.includes("CAN_BE_OUTPUT")
+        ) {
           acc.push({ value: document.id, label: document.documentTypeName });
         }
         return acc;
