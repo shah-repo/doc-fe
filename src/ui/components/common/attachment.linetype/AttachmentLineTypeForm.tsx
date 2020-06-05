@@ -158,7 +158,6 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
           </Link>
         </label>
       </Box>
-
     </Box>
   );
 };

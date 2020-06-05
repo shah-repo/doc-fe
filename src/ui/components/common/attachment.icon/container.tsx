@@ -21,6 +21,7 @@ import PasswordDialog from "../../password/dialog";
 import { AsyncStatus } from "../../../../state/types";
 import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
 import { Password } from "../../password/types";
+import { AttachmentRedLineWarningDialog } from "../attachment.redline.warning/dialog";
 
 type DispatchProps = AttachmentIconDispatchProps;
 
@@ -39,15 +40,16 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const [newWatermarkRequest, setNewWatermarkRequest] = useState<Nullable<WatermarkRequest>>(null);
   const [newWatermakrError, setNewWatermarkError] = useState<string>("");
   const dialogHandler = useDialog();
-  const passwordState =  {
-    status: AsyncStatus.Idle,
-    message: "Message",
-  };
   const passwordDialogHandler = useDialog();
+  const redlineWarningDialogHandler = useDialog();
   const attachments = value || field?.value as Attachment[] || [];
   const [selectedFile, setSelectedFile] = useState<undefined | Attachment>(undefined);
   const [password, setPassword] = useState<Password>();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const passwordState =  {
+    status: AsyncStatus.Idle,
+    message: "",
+  };
   SetFile = React.createContext(setSelectedFile);
 
 
@@ -113,19 +115,23 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     openFileView();
   };
 
+  const warningSubmit = () => {
+    redlineWarningDialogHandler.close();
+    openPasswordDialog();
+  };
+
   const handleIconClick = (attachment: Attachment) => (evt: React.MouseEvent<HTMLElement>) => {
     evt.preventDefault();
     setSelectedFile(attachment);
     if (attachment.lineType === LINE_TYPES.RED_LINE) {
-      openPasswordDialog();
+      openWarningDialog();
     } else {
       openFileView();
     }
   };
 
   const openPasswordDialog = () => passwordDialogHandler.open();
-
-
+  const openWarningDialog = () => redlineWarningDialogHandler.open();
   const openFileView = () => dialogHandler.open();
 
   const attachmentsRenderer = attachments.map((attachment) => (
@@ -144,6 +150,12 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
 
   return (
     <Grid container={true} spacing={2}>
+      <AttachmentRedLineWarningDialog
+        isDialogOpen = {redlineWarningDialogHandler.isOpen}
+        onSubmit = {warningSubmit}
+        closeDialog = {redlineWarningDialogHandler.close}
+        asyncState = {passwordState}
+      />
 
       <PasswordDialog
         isDialogOpen = {passwordDialogHandler.isOpen}

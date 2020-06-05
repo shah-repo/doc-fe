@@ -47,7 +47,7 @@ AttachmentIconProps
     </Box>
   );
   return (
-    <Grid key={`cell-${file.id}`} item={true} xs={12} sm={4} md={2}>
+    <Grid key={`cell-${file.id}`} item={true} xs={2} sm={1} md={1}>
       {deleteButtonRenderer}
       <Tooltip title={`${file.name}.${file.type}`}>
         <ButtonBase
