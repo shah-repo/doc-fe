@@ -14,6 +14,7 @@ const ViewFileContainer: React.FunctionComponent<ViewFileContainerProps> = ({
 }) => {
   const [signedUrl, setSignedUrl] = useState("");
   const download = useActionCreator(attachmentsActions.download);
+  const downloadRedLine = useActionCreator(attachmentsActions.downloadRedLine);
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => downloadInfo && setSignedUrl(downloadInfo.url),
   });
@@ -22,7 +23,7 @@ const ViewFileContainer: React.FunctionComponent<ViewFileContainerProps> = ({
       async.start(download, attachment, async);
       return;
     } else if (isOpen && password) {
-      async.start(download, attachment, async, undefined, password.password);
+      async.start(downloadRedLine, attachment, async, undefined, password.password);
       return;
     }
     setSignedUrl("");

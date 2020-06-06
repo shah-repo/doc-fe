@@ -11,6 +11,7 @@ export interface Attachment {
   isLoading?: boolean;
   owner?: User;
   lineType: string;
+  documentRevision?: DocumentRevision;
 }
 
 export interface AttachmentDownloadResponse {

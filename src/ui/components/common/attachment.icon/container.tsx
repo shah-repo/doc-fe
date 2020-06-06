@@ -1,7 +1,7 @@
 import { Grid } from "@material-ui/core";
 import _ from "lodash";
 import React, { useState } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { Attachment, attachmentsActions, AttachmentType, WatermarkRequest, WatermarkRequestBody } from "../../../../state/ducks/attachments";
 import { Nullable } from "../../../../state/ducks/common";
 import { ApplicationState } from "../../../../state/reducers";
@@ -22,6 +22,9 @@ import { AsyncStatus } from "../../../../state/types";
 import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
 import { Password } from "../../password/types";
 import { AttachmentRedLineWarningDialog } from "../attachment.redline.warning/dialog";
+import { isOperator } from "../../../documentRevision/DocumentRevisionDisplay.container";
+import { isOwnerContext, documentTypeContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
+import { authSelectors } from "../../../../state/ducks/auth";
 
 type DispatchProps = AttachmentIconDispatchProps;
 
@@ -35,7 +38,6 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   value,
   ...other
 }) => {
-
   const { submitForm } = useFormContext();
   const [newWatermarkRequest, setNewWatermarkRequest] = useState<Nullable<WatermarkRequest>>(null);
   const [newWatermakrError, setNewWatermarkError] = useState<string>("");
@@ -46,7 +48,15 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const [selectedFile, setSelectedFile] = useState<undefined | Attachment>(undefined);
   const [password, setPassword] = useState<Password>();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const isCurrentUserOperator = React.useContext(isOperator);
+  const isUserDocumentOwner = React.useContext(isOwnerContext);
+  const documentType = React.useContext(documentTypeContext);
+  const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
   const passwordState =  {
+    status: AsyncStatus.Idle,
+    message: "",
+  };
+  const warningState = {
     status: AsyncStatus.Idle,
     message: "",
   };
@@ -134,8 +144,23 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const openWarningDialog = () => redlineWarningDialogHandler.open();
   const openFileView = () => dialogHandler.open();
 
-  const attachmentsRenderer = attachments.map((attachment) => (
-    <PresenterFactory
+  const attachmentsRenderer = attachments.map((attachment) => {
+    if (isCurrentUserOperator && (documentType === "LOT" || "EB")) {
+      const isOperatorOwner = attachment.owner?.id === currentEmployeeId;
+      return isOperatorOwner && <PresenterFactory
+        {...other}
+        key={`attachment-${attachment.id}`}
+        name={name}
+        attachment={attachment}
+        handleRemove={handleRemove}
+        form={form}
+        field={field}
+        handleContextMenu={handleContextMenu}
+        handleIconClick = {handleIconClick}
+        canDeleteFile={false}
+      />;
+    }
+    if (isUserDocumentOwner) { return <PresenterFactory
       {...other}
       key={`attachment-${attachment.id}`}
       name={name}
@@ -145,8 +170,11 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
       field={field}
       handleContextMenu={handleContextMenu}
       handleIconClick = {handleIconClick}
-    />
-  ));
+    />; }
+    return null;
+  });
+
+
 
   return (
     <Grid container={true} spacing={2}>
@@ -154,7 +182,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
         isDialogOpen = {redlineWarningDialogHandler.isOpen}
         onSubmit = {warningSubmit}
         closeDialog = {redlineWarningDialogHandler.close}
-        asyncState = {passwordState}
+        asyncState = {warningState}
       />
 
       <PasswordDialog

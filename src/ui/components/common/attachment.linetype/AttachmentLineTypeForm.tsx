@@ -1,6 +1,6 @@
-import { Box, IconButton, Link } from "@material-ui/core";
+import { Box, IconButton, Link, CircularProgress } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
-import FormatAlignLeftIcon from "@material-ui/icons/FormatAlignLeft";
+import NotesIcon from "@material-ui/icons/Notes";
 import PublishRoundedIcon from "@material-ui/icons/PublishRounded";
 import _ from "lodash";
 import * as React from "react";
@@ -14,6 +14,8 @@ import Text from "../../Text";
 import { styles } from "./utils/styles";
 import { FieldInputProps, FormikProps } from "formik";
 import { useIntl } from "react-intl";
+import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
+import { useState } from "react";
 
 interface Props {
   onCancel: () => void;
@@ -38,6 +40,7 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
   const classes = styles({ isField });
   const intl = useIntl();
   const { submitForm } = useFormContext();
+  const [isUploading, setIsUploading] = useState<boolean>(false);
 
   const async = useAsync<AttachmentModel>({
     onSuccess: (attachment?: AttachmentModel) => {
@@ -69,11 +72,13 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
       }
       form.setFieldValue(name, attachments);
       submitForm();
+      setIsUploading(false);
       onCancel();
     },
   });
 
-  const handleUpload = (files: File[], isRedLine) => {
+  const handleUpload = (files: File[], isRedLine, cleanCopRequired) => {
+    setIsUploading(true);
     if (files.length === 0) {
       return;
     }
@@ -83,19 +88,25 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
       return;
     }
 
-    async.start(upload, file, isRedLine, async);
-    handleUpload(files, isRedLine);
+    async.start(upload, file, isRedLine, async, cleanCopRequired);
+    handleUpload(files, isRedLine, cleanCopRequired);
   };
 
-  const onChange = (lineType) => (event: React.FormEvent<HTMLInputElement>) => {
+  const onChange = (lineType, cleanCopyRequired: boolean) => (event: React.FormEvent<HTMLInputElement>) => {
     let isUserAlerted = false;
     const filteredFiles = Array.from(event.currentTarget.files || []).filter(
       (file) => {
         const type = file.name.split(".").pop();
-
         if (type === "doc") {
           !isUserAlerted &&
            alert(intl.formatMessage({ id: "common.attachment.form.DOCERROR" }));
+          isUserAlerted = true;
+          return false;
+        }
+
+        if (type !== "docx" && cleanCopyRequired) {
+          !isUserAlerted &&
+          alert(intl.formatMessage({ id: "common.attachment.form.Create.Clean.Copy.Error" }));
           isUserAlerted = true;
           return false;
         }
@@ -103,17 +114,19 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
       },
     );
 
-
     if (filteredFiles.length === 0) {
       return;
     }
 
-    handleUpload(filteredFiles, lineType);
+    handleUpload(filteredFiles, lineType, cleanCopyRequired);
   };
 
 
   return (
+    <>
+      {!isUploading &&
     <Box className={classes.Box}>
+
       <IconButton
         className={classes.closeRoot}
         onClick={onCancel}
@@ -127,16 +140,33 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
       <Box style={{ paddingTop: 20 }}>
         <input
           accept="*"
+          id={`${name}-button-file-create-clean-copy`}
+          multiple={multiple}
+          type="file"
+          onChange={onChange(LINE_TYPES.RED_LINE, true)}
+          className = {classes.input}
+          disabled={disabled}
+        />
+        <label htmlFor={`${name}-button-file-create-clean-copy`} >
+          <Link component="span" variant="button" className={classes.link} id="AttachmentFieldPresenter-linkButton" >
+            <PlaylistAddIcon className={classes.iconCleanCopy} />
+            <Text message="Create a clean copy" />
+          </Link>
+        </label>
+      </Box>
+      <Box >
+        <input
+          accept="*"
           id={`${name}-button-file-clean-copy`}
           multiple={multiple}
           type="file"
-          onChange={onChange(LINE_TYPES.CLEAN_COPY)}
+          onChange={onChange(LINE_TYPES.CLEAN_COPY, false)}
           className = {classes.input}
           disabled={disabled}
         />
         <label htmlFor={`${name}-button-file-clean-copy`} >
           <Link component="span" variant="button" className={classes.link} id="AttachmentFieldPresenter-linkButton" >
-            <FormatAlignLeftIcon className={classes.iconCleanCopy} />
+            <NotesIcon className={classes.iconCleanCopy} />
             <Text message="Upload a clean copy" />
           </Link>
         </label>
@@ -147,18 +177,26 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
           id={`${name}-button-file-red-line`}
           multiple={multiple}
           type="file"
-          onChange={onChange(LINE_TYPES.RED_LINE)}
+          onChange={onChange(LINE_TYPES.RED_LINE, false)}
           className = {classes.input}
           disabled={disabled}
         />
         <label htmlFor={`${name}-button-file-red-line`}>
           <Link component="span" variant="button" className={classes.link} id="AttachmentFieldPresenter-linkButton" >
-            <FormatAlignLeftIcon className={classes.iconRedline} />
+            <NotesIcon className={classes.iconRedline} />
             <Text message="Upload a redline" />
           </Link>
         </label>
       </Box>
+
     </Box>
+      }
+
+      {isUploading &&
+       <Box className={classes.Box}>
+         <CircularProgress color="secondary" />
+       </Box>}
+    </>
   );
 };
 

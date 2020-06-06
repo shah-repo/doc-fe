@@ -209,6 +209,7 @@
   "common.attachments": "Attachments",
   "common.attachment": "Attachment",
   "common.attachment.form.DOCERROR":".doc files are not accepted. Please use .docx",
+  "common.attachment.form.Create.Clean.Copy.Error":"Cannot create a clean copy from a non docx file",
   "common.assessments": "Assessments",
   "common.reasoning": "Reasoning",
   "common.implementation.plan": "Implementation Plan",

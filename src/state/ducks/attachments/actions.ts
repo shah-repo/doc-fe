@@ -5,12 +5,12 @@ import { EmployeeEditRequestBody } from "../auth/types";
 import { ADD_WATERMARK, ATTACHMENT_PUBLIC_UPLOAD_URL, ATTACHMENT_ROOT_URL, ATTACHMENT_UPLOAD_URL, CHECK_WATERMARK_ASYNC, CLEAR_WATERMARKS, REMOVE_WATERMARK, REQUEST_WATERMARK_ASYNC } from "./constants";
 import { Attachment, AttachmentDownloadResponse, AttachmentType, AvatarS3linkResponse, WatermarkRequest, WatermarkRequestBody } from "./types";
 
-const upload = (file: File, lineType: string, handlers: Handlers<Attachment>): ApiAction => {
+const upload = (file: File, lineType: string, handlers: Handlers<Attachment>, isCleanCopyRequired): ApiAction => {
   const formData = new FormData();
   formData.append("file", file);
   formData.append("lineType", lineType);
   const type = file.name.split(".").pop();
-  const isCleanCopyRequired = type === "docx";
+  isCleanCopyRequired = type === "docx" && isCleanCopyRequired;
   formData.append("isCleanCopyRequired", isCleanCopyRequired.toString());
 
   return apiActionWithCallbacks<Attachment, FormData>({
@@ -26,27 +26,33 @@ const download = (
   attachment: Attachment,
   handlers: Handlers<AttachmentDownloadResponse>,
   type?: AttachmentType,
-  password?: string
 ): ApiAction => {
   attachment.isLoading = true;
   const queryParams = type ? `?type=${type}` : "";
-  if (password) {
-    return apiActionWithCallbacks<AttachmentDownloadResponse, string>({
-      url: `${ATTACHMENT_ROOT_URL}/${attachment.id}/download_red_line${queryParams}`,
-      method: "get",
-      password,
-      onSuccess: () => (attachment.isLoading = false),
-      handlers,
-    });
-  } else {
-    return apiActionWithCallbacks<AttachmentDownloadResponse, string>({
-      url: `${ATTACHMENT_ROOT_URL}/${attachment.id}/download${queryParams}`,
-      method: "get",
-      onSuccess: () => (attachment.isLoading = false),
-      handlers,
-    });
-  }
+  return apiActionWithCallbacks<AttachmentDownloadResponse, string>({
+    url: `${ATTACHMENT_ROOT_URL}/${attachment.id}/download`,
+    method: "get",
+    params: queryParams,
+    onCompleted: () => (attachment.isLoading = false),
+    handlers,
+  });
+};
 
+const downloadRedLine = (
+  attachment: Attachment,
+  handlers: Handlers<AttachmentDownloadResponse>,
+  type?: AttachmentType,
+  password?: string
+) => {
+  const queryParams = type ? `?type=${type}` : "";
+  return apiActionWithCallbacks<AttachmentDownloadResponse, string>({
+    url: `${ATTACHMENT_ROOT_URL}/${attachment.id}/download_red_line`,
+    method: "get",
+    password,
+    params: queryParams,
+    onCompleted: () => (attachment.isLoading = false),
+    handlers,
+  });
 };
 
 const requestWatermarkedFile = (
@@ -139,6 +145,7 @@ const getAssetUrl = (
 export default {
   upload,
   download,
+  downloadRedLine,
   requestWatermarkedFile,
   checkWatermarkStatus,
   addWatermark,
