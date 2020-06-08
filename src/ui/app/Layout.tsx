@@ -2,7 +2,6 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 import ChangeRequestCreateContainer from "../change.request/ChangeRequestCreate.container";
 import ChangeRequestContainer from "../change.request/Container";
 import ChangeRequestListContainer from "../change.request/list/container";
@@ -34,7 +33,6 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => (
     <CssBaseline />
     <HeaderContainer />
     <Navigation />
-    <ToastContainer autoClose={false} />
     <SocketsContainer />
     <WatermarkFooterContainer />
     <main className={classes.content}>
