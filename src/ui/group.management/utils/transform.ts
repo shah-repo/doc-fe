@@ -1,13 +1,24 @@
 import { omit } from "lodash";
-import { Group } from "../../../state/ducks/auth/types";
+import { Group, Permission } from "../../../state/ducks/auth/types";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { GetEmployeeResponse, LoadCompanyGroup } from "../../../state/ducks/userManagement";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 
-export const toOptions = (values: any[]): OptionType[] => values.map((value) => ({
-  label: value,
-  value,
-}));
+
+const restrictedPermissions = [
+  Permission.USERS_GET,
+];
+
+
+export const toOptions = (permissions: any[]): OptionType[] =>
+  permissions
+    .filter((permission) =>
+      !restrictedPermissions.includes(permission)
+    )
+    .map((permission) => ({
+      label: permission,
+      value: permission,
+    }));
 
 export const toArray = (values: OptionType[]): any[] => {
   if (values === null) {
