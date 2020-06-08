@@ -509,6 +509,7 @@
   "form.builder.approvalMatrix": "Approval Matrix",
   "form.builder.poApprovalMatrix": "PO Approval Matrix",
   "form.buider.am.prefix": "Prefix",
+  "form.builder.exit.edit.mode": "Exit edit mode",
   "form.builder.am.internal.type": "Internal Type",
   "form.builder.approval.roles": "Approval Roles",
   "form.builder.approval.role": "Approval Role",

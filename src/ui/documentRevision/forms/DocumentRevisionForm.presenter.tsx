@@ -108,7 +108,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   });
   const isCurrentUserOperator = React.useContext(isOperator);
   const email = useSelector(authSelectors.currentUserEmail);
-  const isOwner = documentRevision?.owner.user.email === email;
+  const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const isDisabledInput =  values.id !== undefined && isCurrentUserOperator && !isOwner;
   const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
   isOwnerContext = React.createContext(isOwner);

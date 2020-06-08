@@ -1,9 +1,9 @@
 
-import { union, uniqBy } from "lodash";
+import { uniqBy } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBWorkspaceProps, FBWorkspaceState } from ".";
-import { FB, FBSnackbarState } from "..";
+import { FB, FBSchemaProps, FBSnackbarState } from "..";
 import { FBDialogState } from "../FBDialog";
 
 // Disable missing translation message for the non translation cases.
@@ -33,22 +33,28 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     active,
     document,
     autosave,
-    schema,
     ...props
   }: T) => {
-
-    workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, { schema, mode, autosave, document });
+    let schema: FBSchemaProps[] = [];
+    workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, { schema: props.schema, mode, autosave, document });
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
     snackbarState = FB.useRef<FBSnackbarState>(FBSnackbarState);
 
+
     // *TODO: find a way to reset constructor props
-    workspaceState.document = document;
-    workspaceState.schema = uniqBy(union(schema, workspaceState.schema), "name");
+    React.useEffect(() => {
+      if (!workspaceState) { return; }
+      workspaceState.document = document;
+      if (!props.schema) { return; }
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      workspaceState.schema = uniqBy([...workspaceState.schema || [], ...props.schema!], "name");
+    }, [workspaceState, props.schema, document]);
+
 
     useObserver(() => {
       isStarter = workspaceState?.isStarter;
       active = workspaceState?.active;
-      schema = workspaceState?.schema;
+      schema = workspaceState?.schema || [];
       mode = workspaceState?.mode;
     });
 
