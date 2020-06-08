@@ -126,6 +126,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     let canDeleteFile = false;
     if (isCurrentUserOperator && (documentType === "LOT" || documentType === "EB")) {
       showAttachment = attachment.owner?.id === currentEmployeeId;
+      canDeleteFile = showAttachment;
     }
     if (isUserDocumentOwner) {
       canDeleteFile = true;
