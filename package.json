@@ -81,7 +81,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "cypress:dev": "cypress open",
+    "cypress:dev": "yarn env-cmd -e cypress yarn cypress open",
     "build": "react-scripts --max_old_space_size=4096 build",
     "test": "react-scripts --max_old_space_size=500 --expose-gc test --logHeapUsage",
     "eject": "react-scripts eject",
@@ -129,6 +129,7 @@
     "class-validator": "^0.12.2",
     "cypress": "^4.7.0",
     "cypress-promise": "^1.1.0",
+    "env-cmd": "^10.1.0",
     "enzyme": "3.11.0",
     "enzyme-adapter-react-16": "1.15.2",
     "enzyme-to-json": "3.4.3",
