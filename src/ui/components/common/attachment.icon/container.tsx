@@ -123,7 +123,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
 
   const attachmentsRenderer = attachments.map((attachment) => {
     let showAttachment = true;
-    let canDeleteFile = false;
+    let canDeleteFile = true;
     if (isCurrentUserOperator && (documentType === "LOT" || documentType === "EB")) {
       const isOwnerOfFile = attachment.owner?.id === currentEmployeeId;
       showAttachment = isOwnerOfFile;
