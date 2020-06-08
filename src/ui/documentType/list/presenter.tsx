@@ -12,7 +12,7 @@ import Text from "../../components/Text";
 import { canEditDocumentRevision, documentRevisionQueryStatus, documentRevisionStatusOption } from "../../document.revision/utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
 import { Translation } from "../../translations/types";
-import { shouldShowStaticColumns } from "./helpers";
+import { columnSearchConfiguration, shouldShowStaticColumns } from "./helpers";
 import { styles } from "./styles";
 
 export interface Props {
@@ -58,15 +58,20 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const pageDetailColumns = documentType.pageDetails!.columns;
   const additionalColumns = pageDetailColumns.map(
-    (column: PageDetailsColumn) => ({
-      key: column.valuePath as keyof DocumentRevision,
-      label: column.label as Translation,
-      cellHref: cellHrefRenderer,
-      omitSearch: true,
-      columnOptions: {
-        cellDataGetter: ({ rowData }) => _.get(rowData, column.valuePath),
-      },
-    }),
+    (column: PageDetailsColumn) => {
+      const [omitSearch, searchOptions] = columnSearchConfiguration(column.valuePath, tableCriteria);
+
+      return {
+        key: column.valuePath as keyof DocumentRevision,
+        label: column.label as Translation,
+        cellHref: cellHrefRenderer,
+        omitSearch,
+        columnOptions: {
+          cellDataGetter: ({ rowData }) => _.get(rowData, column.valuePath),
+        },
+        searchOptions,
+      };
+    },
   );
 
   const staticColumns: TableColumnProps<DocumentRevision>[] = [
