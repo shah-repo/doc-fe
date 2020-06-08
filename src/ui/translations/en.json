@@ -656,7 +656,6 @@
   "form.builder.subTotal": "Sub Total: ",
   "form.builder.totalAmount": "Total amount: ",
   "form.builder.type": "Type",
-
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.watermark": "Download PDF file",
@@ -704,7 +703,7 @@
   "supplier.name": "Supplier name",
   "supplier.status": "Supplier status",
   "supplier.add.new": "Add {name}",
-  "supplier.form.error": "There is no form. Please create a new supplier through the Document list.",
+  "missing.form.error": "There is no form. Please create a new {name} through the Document list.",
   "supplier.select.form": "Select a form",
   "watermark.successfully.requested": "Watermarked copy of {file}.{type} successfully requested. We will notify you when it's ready to download.",
   "watermark.download.ready": "Watermarked file {name}.{type} ready to download",
