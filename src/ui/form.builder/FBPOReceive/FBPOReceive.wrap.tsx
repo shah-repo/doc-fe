@@ -33,6 +33,9 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     disabled = disabled || Boolean(documentId);
 
     const handleItem = (item?: FBPurchaseOrderItem) => {
+      if (workspaceState?.isReleased) {
+        return;
+      }
       if (!workspaceState?.documentId) {
         alert(intl.formatMessage({ id: "form.builder.save.doc.before.continue" }));
         return;

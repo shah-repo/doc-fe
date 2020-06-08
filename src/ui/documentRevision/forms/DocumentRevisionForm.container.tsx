@@ -150,7 +150,9 @@ DocumentRevisionFormContainerProps
   const { schema: originScheme = [] } =
   cleanInitialValues?.formTemplate || cleanInitialValues?.formDocument?.formTemplate || {};
   const isOutput =  Boolean(outputGroup && !_.isEmpty(outputGroup));
-  const formInput = useMemo(() => cleanInitialValues ? { ...cleanInitialValues.formInput } : {}, [cleanInitialValues]);
+  const formInput = useMemo(() =>
+    cleanInitialValues ? cloneDeep(cleanInitialValues.formInput) : {}
+  , [cleanInitialValues]);
   let mode: Partial<FBWorkspaceMode> = "none";
   if (formGroup && formGroup.includes("FORM")) {
     mode = "design";
@@ -180,7 +182,7 @@ DocumentRevisionFormContainerProps
     <FBWorkspace
       portalContainer={FBContainer}
       document={props.values as unknown as DocumentRevision}
-      initialValues={cloneDeep(formInput)}
+      initialValues={formInput}
       autosave={true}
       schema={GetScheme(props)}
       {...{ mode  }}
