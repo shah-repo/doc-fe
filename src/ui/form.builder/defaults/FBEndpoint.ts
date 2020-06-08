@@ -19,4 +19,5 @@ export enum FBEndpoint {
   ApprovalMatrix = "/document_type/approval_matrix",
   POApprovalMatrix = "/purchase_order/approval_matrix",
   Currency = "/currency/${symboName}",
+  DocumentRevisionAudit = "/document_revisions/${documentId}/audit"
 }

@@ -2,7 +2,7 @@ import _ from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBWorkspaceConstructor, FBWorkspaceMode } from ".";
 import { FBSchemaState } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 
 export class FBWorkspaceState extends FBSchemaState {
   @observable public mode: FBWorkspaceMode = "none";
@@ -25,6 +25,11 @@ export class FBWorkspaceState extends FBSchemaState {
   public get documentId(): string | undefined {
     const { id } = this.document?.document || {};
     return id;
+  }
+
+  public get isReleased(): boolean {
+    const { status } = this.document || {};
+    return status === DocumentRevisionStatus.Released;
   }
 
   public get isOutput(): boolean {

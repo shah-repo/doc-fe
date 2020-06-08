@@ -1,46 +1,25 @@
-import { FormHelperText } from "@material-ui/core";
 import { mount } from "enzyme";
 import React from "react";
 import { AsyncStatus } from "../../../state/types";
+import { toastError } from "../notifications";
 import FormMessage, { FormMessageProps } from "./FormMessage";
 
 jest.mock("../Text");
+jest.mock("../notifications");
 
 describe("FormMessage component unit tests", () => {
   const getWrapper = (props: FormMessageProps) => mount(
     <FormMessage {...props} />,
   );
 
-  it("displays nothing when no message", () => {
-    expect(getWrapper({
-      asyncState: {
-        status: AsyncStatus.Idle,
-        message: "",
-      },
-    }).text()).toBe("");
-  });
-
-  it("displays message", () => {
-    const wrapper = getWrapper({
-      asyncState: {
-        status: AsyncStatus.Success,
-        message: "TEST",
-      },
-    });
-
-    expect(wrapper.text()).toEqual("TEST");
-    expect(wrapper.find(FormHelperText).prop("error")).toBeFalsy();
-  });
-
-  it("displays message and sets error flag", () => {
-    const wrapper = getWrapper({
+  it("displays toast error", () => {
+    getWrapper({
       asyncState: {
         status: AsyncStatus.Error,
-        message: "TEST",
+        message: "Error message",
       },
     });
-
-    expect(wrapper.text()).toEqual("TEST");
-    expect(wrapper.find(FormHelperText).prop("error")).toBeTruthy();
+    expect(toastError).toHaveBeenCalledTimes(1);
+    expect(toastError).toHaveBeenLastCalledWith("Error message");
   });
 });

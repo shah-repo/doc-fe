@@ -46,9 +46,12 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         ({ value: e.id, text: e.documentTypeName }) as SelectOption
       );
     }
-    return documentTypes.map((doc) =>
-      ({ value: doc.id, text: doc.documentTypeName })
-    );
+    return documentTypes
+      .filter((doc) =>
+        !doc.groupOptions?.includes("MUST_BE_OUTPUT")
+      ).map((doc) =>
+        ({ value: doc.id, text: doc.documentTypeName })
+      );
   }, [documentTypes, outputDocumentTypes, type]);
   const handleTypeChange = (
     event: React.ChangeEvent<{ name?: string; value: unknown }>
