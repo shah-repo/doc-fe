@@ -16,6 +16,7 @@ export type FBButtonProps =
 | "style"
 | "autoFocus"
 | "hidden"
+| "endIcon"
 >
 & {
   label?: string;

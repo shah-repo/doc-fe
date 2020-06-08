@@ -9,6 +9,7 @@ export interface Attachment {
   s3link: string;
   s3linkCleanCopy?: string;
   isLoading?: boolean;
+  owner?: User;
 }
 
 export interface AttachmentDownloadResponse {

@@ -34,7 +34,8 @@ export const selectStyles = {
   }),
   control: (base) => ({
     ...base,
-    height: "52px",
+    minHeight: "52px",
+    padding: "5px 3px",
   }),
 };
 

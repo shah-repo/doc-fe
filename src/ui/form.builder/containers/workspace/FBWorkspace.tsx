@@ -38,7 +38,7 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
   const onClickView = () => {
     FBStore.setMode("form");
     openDialog();
-    FBDynamicValidatorStore.registerValidators();
+    // FBDynamicValidatorStore.registerValidators();
     FBDynamicValidatorStore.validate();
   };
   const isHelloSignIntegrationEnabled = useSelector(companySelectors.isHelloSignIntegrationEnabled);

@@ -1,4 +1,5 @@
 
+import { union, uniqBy } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBWorkspaceProps, FBWorkspaceState } from ".";
@@ -27,20 +28,22 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     workspaceState,
     dialogState,
     snackbarState,
-    schema,
     mode,
     isStarter,
     active,
     document,
+    autosave,
+    schema,
     ...props
   }: T) => {
 
-    workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, { schema, mode, document });
+    workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, { schema, mode, autosave, document });
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
     snackbarState = FB.useRef<FBSnackbarState>(FBSnackbarState);
 
     // *TODO: find a way to reset constructor props
     workspaceState.document = document;
+    workspaceState.schema = uniqBy(union(schema, workspaceState.schema), "name");
 
     useObserver(() => {
       isStarter = workspaceState?.isStarter;
@@ -58,6 +61,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       dialogState,
       workspaceState,
       snackbarState,
+      autosave,
     });
   };
 

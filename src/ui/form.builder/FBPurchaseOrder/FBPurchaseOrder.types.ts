@@ -2,7 +2,7 @@ import { FBDialogState, FBInputProps, FBPurchaseOrderState } from "..";
 
 export type FBPurchaseOrderMode = "preview" | "form";
 export type FBPurchaseOrderProps =
-& Pick<FBInputProps, "name" | "label" | "disabled" | "gutter" | "defaultValue">
+& Pick<FBInputProps, "name" | "label" | "disabled" | "gutter" | "defaultValue" | "autosave">
 & {
   handleItem?: (item?: FBPurchaseOrderItem) => any;
   purchaseOrderState?: FBPurchaseOrderState;
@@ -51,7 +51,6 @@ export type FBPurchaseOrderValue = FBPurchaseOrderCalculation
 };
 
 export type FBPurchaseOrderConstructor = FBPurchaseOrderValue & {
-  submitForm: () => void;
   documentId?: string;
 };
 

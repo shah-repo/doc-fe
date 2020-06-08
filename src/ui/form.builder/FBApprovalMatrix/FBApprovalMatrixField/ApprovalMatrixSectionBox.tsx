@@ -53,7 +53,6 @@ const ApprovalMatrixSectionBox: React.FunctionComponent<Props> = ({
           color="inherit"
           style={{ padding: 0, margin: 0 }}
           onClick={() => alreadyOpened ? closeDialog() : openDialog()}
-          disabled={disabled}
         >
           {alreadyOpened ? <ExitExpandIcon style={{ paddingRight: 5 }}/> : <ExpandIcon style={{ paddingRight: 5 }}/> }
           <Box>

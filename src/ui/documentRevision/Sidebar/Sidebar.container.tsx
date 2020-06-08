@@ -26,7 +26,7 @@ interface SidebarContainerProps {
   docId: string;
   sidebar: boolean;
   openSidebar: (value: boolean) => void;
-  fbTemplate: FBSchemaProps[];
+  schema: FBSchemaProps[];
 }
 
 export const SidebarContainer: React.FunctionComponent<
@@ -40,7 +40,7 @@ SidebarContainerProps
   isNewOutput,
   sidebar,
   openSidebar,
-  fbTemplate,
+  schema,
 }) => {
   const document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, documentId));
   const { documentTypeAcronym: acronym } = document?.documentType || {};
@@ -99,7 +99,7 @@ SidebarContainerProps
         title: intl.formatMessage({
           id: "document.revision.bookmarks",
         }),
-        component: <Bookmarks location={url} fbTemplate={fbTemplate} />,
+        component: <Bookmarks location={url} schema={schema} />,
       },
     },
   ];

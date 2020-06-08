@@ -27,6 +27,7 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
       fileUploadState?.removeFile(file);
       formState?.setFieldValue(name, fileUploadState?.files);
     };
+
     handleDownload = () => {
       if (disabled) {
         return;

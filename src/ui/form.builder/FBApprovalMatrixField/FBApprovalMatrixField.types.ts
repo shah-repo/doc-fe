@@ -1,13 +1,15 @@
 import { FBApprovalMatrixFieldState, FBButtonProps, FBInputProps } from "..";
 import { Group } from "../../../state/ducks/auth/types";
 import { Employee } from "../../../state/ducks/company";
+import { FBWorkspaceMode } from "../types/workspace";
 
 export type FBApprovalMatrixFieldProps =
-& Pick<FBInputProps, "name" | "disabled">
+& Pick<FBInputProps, "name" | "disabled" | "autosave">
 & {
   handleAdd?: FBButtonProps["onClick"];
   approvalMatrixFieldState?: FBApprovalMatrixFieldState;
   mode?: FBApprovalMatrixFieldMode;
+  workspaceMode: FBWorkspaceMode;
 };
 
 export interface FBApprovalRole {

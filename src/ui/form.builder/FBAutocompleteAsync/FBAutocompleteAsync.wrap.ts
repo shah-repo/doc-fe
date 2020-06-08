@@ -20,6 +20,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     multiple,
     refresh,
     name,
+    value,
     ...props
   }: T) => {
 
@@ -29,7 +30,9 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       valueKey: optionValueKey = "value",
       labelKey: optionLabelKey = "text",
     } = autocompleteAsyncState?.optionConfig || {};
-    const formValue = formState?.getFieldValue(name) || defaultValue;
+    // TODO: handle autocomplete default value from input wrap
+    // and discard value prop
+    const formValue = formState?.getFieldValue(name, defaultValue) || value;
 
     function getDefault() {
       const objectValue: Record<FBOptionValueType, () => any> = {
@@ -82,6 +85,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       multiple,
       refresh,
       name,
+      value,
     });
   };
 
