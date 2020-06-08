@@ -171,7 +171,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       {showError && (
         <div style={{ color: "red" }} id="DocumentByTypeListPresenter-showError">
           <Text
-            translation="supplier.form.error"
+            translation="missing.form.error"
             values={{ name: documentType.documentTypeName }}
           />
         </div>
