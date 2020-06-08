@@ -132,22 +132,27 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
       canDeleteFile = true;
     }
 
-    return showAttachment &&
-    <PresenterFactory
-      {...other}
-      key={`attachment-${attachment.id}`}
-      {...{
-        name,
-        attachment,
-        handleRemove,
-        handleDownload,
-        form,
-        field,
-        handleContextMenu,
-        handleViewFile,
-        canDeleteFile,
-      }}
-    />;
+    if (!showAttachment) {
+      return null;
+    }
+
+    return (
+      <PresenterFactory
+        {...other}
+        key={`attachment-${attachment.id}`}
+        {...{
+          name,
+          attachment,
+          handleRemove,
+          handleDownload,
+          form,
+          field,
+          handleContextMenu,
+          handleViewFile,
+          canDeleteFile,
+        }}
+      />
+    );
   });
 
   return (
