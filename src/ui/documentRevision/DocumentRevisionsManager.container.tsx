@@ -27,6 +27,8 @@ interface OwnProps {
 export type DocumentRevisionManagerContainerProps = OwnProps &
 StateProps;
 
+export let documentRevisionStatusContext = React.createContext<DocumentRevisionStatus>(DocumentRevisionStatus.Draft);
+
 const getDocumentRevisions = documentRevisionsSelectors.makeGetDocumentRevisions();
 const mapStateToProps = (
   state: ApplicationState,
@@ -56,7 +58,8 @@ DocumentRevisionManagerContainerProps
   const canAccess = selectedDocument?.document.canAccess;
   const [sidebar, openSidebar] = useState<boolean>(true);
   const schema = selectedDocument?.formTemplate?.schema || selectedDocument?.formDocument?.formTemplate?.schema || [];
-
+  const documentRevisionStatus = selectedDocument?.status;
+  documentRevisionStatusContext = React.createContext(documentRevisionStatus);
   if (shouldRedircetToLatestReleasd(documentRevisions, documentRevisionId)) {
     const docRevIdToRedirect = getDocRevIdToRedirect(documentRevisions, deprecatedAt);
     return (

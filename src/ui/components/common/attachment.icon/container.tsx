@@ -27,6 +27,8 @@ import { isOwnerContext, documentTypeContext } from "../../../documentRevision/f
 import { authSelectors } from "../../../../state/ducks/auth";
 import { PasswordSubmitActionType } from "./utils/types";
 import { checkIfFileIsViewable } from "../view.file/utils/helpers";
+import { documentRevisionStatusContext } from "../../../documentRevision/DocumentRevisionsManager.container";
+import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 
 type DispatchProps = AttachmentIconDispatchProps;
 
@@ -53,6 +55,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const isCurrentUserOperator = React.useContext(isOperator);
   const isUserDocumentOwner = React.useContext(isOwnerContext);
   const documentType = React.useContext(documentTypeContext);
+  const documentRevisionStatus = React.useContext(documentRevisionStatusContext);
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
   const downloadAttachment = useActionCreator(attachmentsActions.download);
   const downloadRedLineAttachment = useActionCreator(attachmentsActions.downloadRedLine);
@@ -167,28 +170,22 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
 
   const handleIconClick = (attachment: Attachment) => (evt: React.MouseEvent<HTMLElement>) => {
     evt.preventDefault();
-    setSelectedAttachment(attachment);
-    switch (attachment.lineType) {
-      case LINE_TYPES.RED_LINE:
-        if (checkIfFileIsViewable(attachment.type)) {
-          setPasswordSubmitAction(PasswordSubmitActionType.OPEN_FILE_VIEW);
-          openWarningDialog();
-        } else {
-          setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_FILE);
-        }
-        break;
 
-      case LINE_TYPES.CLEAN_COPY:
-        if (checkIfFileIsViewable(attachment.type)) {
-          openFileView();
-        } else {
-          handleDownload(attachment);
-        }
-        break;
-        
-      default:
-        break;
+    if (documentRevisionStatus === DocumentRevisionStatus.Released && LINE_TYPES.RED_LINE) {
+      if (checkIfFileIsViewable(attachment.type)) {
+        setPasswordSubmitAction(PasswordSubmitActionType.OPEN_FILE_VIEW);
+        openWarningDialog();
+      } else {
+        setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_FILE);
+      }
+    } else {
+      if (checkIfFileIsViewable(attachment.type)) {
+        openFileView();
+      } else {
+        handleDownload(attachment);
+      }
     }
+    setSelectedAttachment(attachment);
   };
 
 
