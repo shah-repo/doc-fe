@@ -1,3 +1,3 @@
 export interface RouteParams {
-  acronym: string;
+  docTypeId: string;
 }

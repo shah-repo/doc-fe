@@ -194,33 +194,38 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const openFileView = () => dialogHandler.open();
 
   const attachmentsRenderer = attachments.map((attachment) => {
-    if (isCurrentUserOperator && (documentType === "LOT" || "EB")) {
-      const isOperatorOwner = attachment.owner?.id === currentEmployeeId;
-      return isOperatorOwner && <PresenterFactory
+    let showAttachment = true;
+    let canDeleteFile = true;
+    if (isCurrentUserOperator && (documentType === "LOT" || documentType === "EB")) {
+      const isOwnerOfFile = attachment.owner?.id === currentEmployeeId;
+      showAttachment = isOwnerOfFile;
+      canDeleteFile = isOwnerOfFile;
+    }
+    if (isUserDocumentOwner) {
+      showAttachment = true;
+      canDeleteFile = true;
+    }
+
+    if (!showAttachment) {
+      return null;
+    }
+
+    return (
+      <PresenterFactory
         {...other}
         key={`attachment-${attachment.id}`}
-        name={name}
-        attachment={attachment}
-        handleRemove={handleRemove}
-        form={form}
-        field={field}
-        handleContextMenu={handleContextMenu}
-        handleIconClick = {handleIconClick}
-        canDeleteFile={false}
-      />;
-    }
-    if (isUserDocumentOwner) { return <PresenterFactory
-      {...other}
-      key={`attachment-${attachment.id}`}
-      name={name}
-      attachment={attachment}
-      handleRemove={handleRemove}
-      form={form}
-      field={field}
-      handleContextMenu={handleContextMenu}
-      handleIconClick = {handleIconClick}
-    />; }
-    return null;
+        {...{
+          name,
+          attachment,
+          handleRemove,
+          form,
+          field,
+          handleContextMenu,
+          handleIconClick,
+          canDeleteFile,
+        }}
+      />
+    );
   });
 
 

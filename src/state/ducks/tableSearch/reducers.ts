@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { USERS_ME_URL } from "../auth/constants";
+import { LOGOUT_USER, USERS_ME_URL } from "../auth/constants";
 import { User } from "../auth/types";
 import { GetEmployeeResponse } from "../userManagement";
 import { EDIT_EMPLOYEE_ACTIVE_STATUS, EDIT_EMPLOYEE_GROUPS, EDIT_EMPLOYEE_USER_INFO, TABLE_CLEAR_ALL, TABLE_DATA_SET, TABLE_FORCE_UPDATE_SET, TABLE_SEARCH_CLEAR, TABLE_SEARCH_SET, TABLE_SORT } from "./constants";
@@ -47,6 +47,7 @@ export const criteria = (
         ...state,
         [action.tableName]: action.payload,
       };
+    case LOGOUT_USER:
     case TABLE_CLEAR_ALL:
       return {};
     default:
@@ -121,6 +122,7 @@ export const data = (
         userManagement: employees,
       };
     }
+    case LOGOUT_USER:
     case TABLE_CLEAR_ALL:
       return {};
     default:

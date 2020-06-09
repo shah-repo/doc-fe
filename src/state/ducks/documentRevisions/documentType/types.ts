@@ -3,7 +3,19 @@ import { Nullable } from "../../common";
 import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST } from "./constants";
 
 export type DocumentGroupType = "FORM" | "OTHER" | "RECORD" | "DAM" | "MPI" | "DYNAMIC_FORM" | "POAM" | "PO" | "WORK_ORDER";
-export type DocumentGroupOptionsType = "FORM" | "DAM" | "BE_OUTPUT" | "HAVE_OUTPUT" | "RECORD" | "ONE_ITEM" | "DYNAMIC_FORM";
+export type DocumentGroupOptionsType =
+  "FORM" |
+  "DAM" |
+  "CAN_BE_OUTPUT" |
+  "MUST_BE_OUTPUT" |
+  "HAVE_OUTPUT" |
+  "RECORD" |
+  "ONE_ITEM" |
+  "DYNAMIC_FORM" |
+  "POAM" |
+  "PO" |
+  "WORK_ORDER" |
+  "WO_PARTS";
 export interface PageDetailsColumn {
   label: string;
   sourcePath: string;
