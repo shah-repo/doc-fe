@@ -189,7 +189,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         />
         <Title
           name="name"
-          label="common.title"
           documentTypeId={documentTypeId}
           disabled={isDisabledInput}
         />

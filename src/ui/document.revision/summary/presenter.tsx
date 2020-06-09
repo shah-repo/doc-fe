@@ -66,7 +66,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const docTypeId = dataProp?.document?.documentType?.id;
   const isTrainingVisible = useTraining(docTypeId);
   const [isDescriptionVisible] = useDescription(docTypeId);
-  const [isTitleVisible] = useTitle(docTypeId);
+  const [isTitleVisible, titleLabel] = useTitle(docTypeId);
   const isCRLinkVisible = useCRLink(docTypeId);
   const docTypeAcronym = dataProp?.document?.documentType?.documentTypeAcronym;
 
@@ -99,10 +99,9 @@ export const Presenter: React.FunctionComponent<Props> = ({
           isCRLinkVisible &&
           <ChangeRequestLink dataProp={dataProp} />
         }
-
         {
           isTitleVisible &&
-          <SummaryField label={`common.title.${docTypeAcronym}`} value={name} />
+          <SummaryField label={titleLabel} value={name} />
         }
         {
           isTrainingVisible &&
