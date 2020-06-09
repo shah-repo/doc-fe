@@ -13,7 +13,7 @@ import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
-import { FBWorkspace, FBWorkspaceMode } from "../../form.builder";
+import { FBSchemaProps, FBWorkspace, FBWorkspaceMode } from "../../form.builder";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import Colors from "../../layout/theme/utils/colors";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
@@ -145,10 +145,11 @@ DocumentRevisionFormContainerProps
 
   // FB config
   const FBContainer = React.useRef(null);
-  const { group: formGroup, schema: formSchema = [] } = cleanInitialValues.document?.documentType || {};
+  const { group: formGroup } = cleanInitialValues.document?.documentType || {};
   const { docId: outputGroup } = cleanInitialValues.formDocument?.document || {};
-  let { schema = [] } = cleanInitialValues?.formTemplate || cleanInitialValues?.formDocument?.formTemplate || {};
-  schema = _.uniqBy(_.union(schema, formSchema), "name");
+  const { schema: originScheme = [] } =
+  cleanInitialValues?.formTemplate || cleanInitialValues?.formDocument?.formTemplate || {};
+  const isOutput =  Boolean(outputGroup && !_.isEmpty(outputGroup));
   const formInput = useMemo(() => cleanInitialValues ? { ...cleanInitialValues.formInput } : {}, [cleanInitialValues]);
   let mode: Partial<FBWorkspaceMode> = "none";
   if (formGroup && formGroup.includes("FORM")) {
@@ -157,13 +158,32 @@ DocumentRevisionFormContainerProps
     mode = "form";
   }
 
+  const GetScheme = (props: FormikProps<DocumentRevisionFormValues>): FBSchemaProps[] => {
+    const { id: documentTypeId = "" } = props.values.document?.documentType || {};
+    const { outputDocumentTypes } = props.values || {};
+    const { schema: docScheme = [] } = documentTypesById?.[documentTypeId] || {};
+    const outputScheme =  useMemo(() => outputDocumentTypes?.reduce((scheme, value: OptionType) => {
+      const { schema: outputScheme = [] } = documentTypesById[value.value] || {};
+      if (!_.isEmpty(outputScheme)) {
+        return _.uniqBy(_.union(scheme, outputScheme), "name");
+      }
+      return scheme;
+    }, [] as FBSchemaProps[]), [outputDocumentTypes]);
+
+    const schema = isOutput
+      ? originScheme
+      : _.uniqBy([ ...originScheme, ...docScheme || [], ...outputScheme || []], "name");
+    return schema;
+  };
+
   const render = (props: FormikProps<DocumentRevisionFormValues>) => (
     <FBWorkspace
       portalContainer={FBContainer}
       document={props.values as unknown as DocumentRevision}
       initialValues={cloneDeep(formInput)}
       autosave={true}
-      {...{ mode, schema  }}
+      schema={GetScheme(props)}
+      {...{ mode  }}
     >
       <DocumentRevisionFormPresenter
         {...props}

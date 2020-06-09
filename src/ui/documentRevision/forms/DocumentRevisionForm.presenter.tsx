@@ -64,6 +64,8 @@ interface FormHeaderContext {
   asyncState: AsyncState;
 }
 export let FormHeaderContext = React.createContext<FormHeaderContext | undefined>(undefined);
+export let isOwnerContext = React.createContext<boolean>(false);
+export let documentTypeContext = React.createContext<string | undefined>(undefined);
 
 export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   classes,
@@ -106,8 +108,11 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   });
   const isCurrentUserOperator = React.useContext(isOperator);
   const email = useSelector(authSelectors.currentUserEmail);
-  const isOwner = documentRevision?.owner.user.email === email;
+  const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const isDisabledInput =  values.id !== undefined && isCurrentUserOperator && !isOwner;
+  const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
+  isOwnerContext = React.createContext(isOwner);
+  documentTypeContext = React.createContext(documentType);
 
   useEffect(() => {
     if (!values.id && !values.document?.documentType?.id && setDocId) {

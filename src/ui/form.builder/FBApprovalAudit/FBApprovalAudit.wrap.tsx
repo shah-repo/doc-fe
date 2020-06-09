@@ -1,0 +1,257 @@
+import { compact, get, groupBy, isEmpty, last, map, range, toNumber } from "lodash";
+import { reaction } from "mobx";
+import { useObserver } from "mobx-react";
+import moment from "moment";
+import React from "react";
+import { FBAuditPOCalculation, FBAuditPOItem } from ".";
+import { FB, FBApprovalAuditProps, FBApprovalAuditState, FBAuditData, FBFieldName } from "..";
+import { TIME_ZONE } from "../../../common/utils/date";
+import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
+import { FBInputType } from "../FBInput";
+import FBStore from "../FBStore/FBStore";
+
+export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
+  Component: React.FunctionComponent<T>
+) => {
+  const Comp = ({
+    approvalAuditState,
+    audits,
+    loading,
+    index,
+    name,
+    type,
+    ...props
+  }: T) => {
+
+    const { workspaceState, formState } = FB.useStores();
+    const { id: documentId, isOutput } = workspaceState || {};
+    approvalAuditState = FB.useRef(FBApprovalAuditState, { documentId, isOutput });
+
+    function underApproval(): string[] | undefined {
+      if (!name) { return; }
+      const { schema } = workspaceState || {};
+      const underApprovalField: string[] = [name];
+      range(0, index).reverse().some((current) => {
+        if (!schema) { return false; }
+        const { type, name = "" } =  schema[current];
+        if (type === "requestapproval" || type === "approval") { return true; }
+        underApprovalField.push(name);
+        return false;
+      });
+      return underApprovalField;
+    }
+
+    function formInputAudit(audits?: FBAuditData[]): FBAuditData[] | undefined {
+      if (!audits || !isApproved()) { return; }
+      const underApprovalFields = underApproval();
+      const grouped = groupBy(audits, (audit) => {
+        const fieldName = audit.field.split(".")[1]?.split("[")[0];
+        const { type, label } = workspaceState?.getSchemaItem(fieldName) || {};
+        if (!type) { return "none"; }
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const isOmitted = FBApprovalAuditState.omitAudit.includes(type);
+        if (!underApprovalFields?.includes(fieldName) || isOmitted) {
+          return "none";
+        }
+        return audit.groupId + "." + fieldName + "." + type + "." + label;
+      });
+
+      const mapped = map(grouped, (v, k) => {
+        if (k === "none") { return; }
+        const fieldName = k.split(".")[1] || "";
+        const type = k.split(".")[2];
+        const label = k.split(".")[3] || "";
+
+        function isSimple() {
+          let prevValue = v[0].previousValue;
+          let nextValue = v[0].nextValue;
+
+          if (nextValue === "[]") { return; } // checkgroup
+          if (prevValue !== "undefined" && prevValue !== "") {
+            if (moment(prevValue, moment.ISO_8601, true).isValid()) {
+              prevValue = moment(prevValue).tz(TIME_ZONE, true).format("D MMM YYYY hh:mm:ss a");
+            }
+            prevValue = " from " + prevValue;
+          } else {
+            prevValue = "";
+          }
+
+          if (moment(nextValue, moment.ISO_8601, true).isValid()) {
+            nextValue = moment(nextValue).tz(TIME_ZONE, true).format("D MMM YYYY hh:mm:ss a");
+          }
+          return "Changed " + label + prevValue + " to " + nextValue;
+        }
+
+        function isCheck() {
+          return "Changed " + label + " value to " + v[0].nextValue;
+        }
+
+        function isPurchaseorder(): string {
+          let desc = "Changed " + label + ": ";
+          let calculation = "";
+          let item = "";
+          let itemIndex = 1;
+          map(v, (p: FBAuditData) => {
+            const { field, previousValue, nextValue } = p;
+            const poKey = last(field.split("."));
+            const poCalcName = FBAuditPOCalculation[poKey as keyof typeof FBAuditPOCalculation];
+            const poItemName = FBAuditPOItem[poKey as keyof typeof FBAuditPOItem];
+            const hasNoChange = (
+              (previousValue === "undefined" || toNumber(previousValue) === 0) &&
+              toNumber(nextValue) === 0
+            );
+
+            if (!field.includes("items") && poCalcName) { // Calculation
+              if (hasNoChange) { return; }
+              calculation += poCalcName;
+              if (previousValue !== "undefined") {
+                calculation += " from " + previousValue;
+              }
+              calculation += " to " + nextValue + ", ";
+            } else if (poItemName) {
+              if (poKey === "index") {
+                itemIndex += toNumber(nextValue);
+              }
+              if (hasNoChange) { return; }
+              item += poItemName;
+              if (previousValue !== "undefined") {
+                item += " from " + previousValue;
+              }
+              item += " to " + nextValue + ", ";
+            }
+          });
+          !isEmpty(item) && (desc += "Item " + itemIndex + ": " + item.slice(0, -2));
+          !isEmpty(item) && !isEmpty(calculation) && (desc += " | ");
+          !isEmpty(calculation) && (desc += "Calculation: " + calculation.slice(0, -2));
+          return desc;
+        }
+
+        function isCheckGroup() {
+          const { previousValue, nextValue } = v[0];
+          if (previousValue === "undefined" && nextValue === "[]") { return; }
+          if (nextValue === "undefined" || nextValue === "false") {
+            return "Unchecked in " + label + ": " + previousValue;
+          }
+          return "Checked in " + label + ": " + nextValue;
+        }
+
+        function isFileupload() {
+          const fields = ["name", "type"];
+          const r = v.reduce((merged, clearValue, index) => {
+            const clearKey: string = last(clearValue.field.split(".")) || "";
+            if (!fields.includes(clearKey) || clearValue.field.includes("company")) {
+              return merged;
+            }
+            merged += clearValue.nextValue + ((index % 2) === 0 ? "." : ", ");
+            return merged;
+          }, "Uploaded ");
+          return r;
+        }
+
+        function isAutocomplete() {
+          const { optionId } = workspaceState?.getSchemaItem(fieldName) || {};
+          if (!optionId) { return; }
+          approvalAuditState?.setAutocompleteOptionId(optionId);
+          const data = FBAutocompleteAsyncStore.data.get(optionId || "");
+          if (!data) { return; }
+          const { labelKey = "text", labelPrefixRoot = "" } =
+              approvalAuditState?.autocompleteApi.optionConfig || {};
+          let prevIds: string[] = [];
+          let nextIds: string[] = [];
+          let desc = "Changed " + label + ": ";
+          v.reduce((desc, audit) => {
+            const { previousValue, nextValue } = audit;
+
+            if (previousValue !== "undefined") {
+              try {
+                prevIds = JSON.parse(previousValue);
+              } catch {
+                prevIds.push(previousValue);
+              }
+            }
+            try {
+              nextIds = JSON.parse(nextValue);
+            } catch {
+              nextIds.push(nextValue);
+            }
+            return desc;
+          }, "");
+          const previousDescription = (prevIds || []).reduce((prevDesc, id) => {
+            const record = data.get(id);
+            prevDesc += get(record, labelPrefixRoot, "") + " " + get(record, labelKey, "");
+            return prevDesc;
+          }, " ");
+          const nextDescription = (nextIds || []).reduce((nextDesc, id) => {
+            const record = data.get(id);
+            nextDesc += get(record, labelPrefixRoot, "") + " " + get(record, labelKey, "");
+            return nextDesc;
+          }, "");
+          !isEmpty(previousDescription.trim()) && (desc += "Removed: " + previousDescription);
+          !isEmpty(previousDescription.trim()) && !isEmpty(nextDescription) && (desc += " | ");
+          !isEmpty(nextDescription) && (desc += "Added: " + nextDescription);
+          return desc;
+        }
+
+        const description: Partial<Record<FBInputType | "default", () => any>> = {
+          purchaseorder: () => isPurchaseorder(),
+          approval: () => "Approved",
+          checkboxgroup: () => isCheckGroup(),
+          textfield: () => isSimple(),
+          texteditor: () => isSimple(),
+          datepicker: () => isSimple(),
+          select: () => isSimple(),
+          radiogroup: () => isSimple(),
+          checkbox: () => isCheck(),
+          radio: () => isCheck(),
+          fileupload: () => isFileupload(),
+          autocomplete: () => isAutocomplete(),
+          autocompleteasync: () => isAutocomplete(),
+          default: () => undefined,
+        };
+
+        const desc = (description[type || ""] || description.default)();
+        if (!desc) { return; }
+        return {
+          ownerName: v[0].owner.user.name,
+          formattedTime: moment(v[0].timestamp).tz(TIME_ZONE, true).format("D MMM YYYY hh:mm:ss a"),
+          description: (description[type || ""] || description.default)(),
+        };
+      });
+      return compact(mapped) as FBAuditData[];
+    }
+
+    function isApproved(): boolean {
+      let hasValue = type === "approval"
+        ? formState?.getFieldValue(name)
+        : formState?.getFieldValue(FBFieldName.RequestApproval + name);
+      hasValue = Boolean(hasValue);
+      return hasValue;
+    }
+
+    useObserver(() => {
+      audits = FBStore.audit.data;
+      audits = formInputAudit(audits);
+      loading = approvalAuditState?.loading;
+    });
+
+    React.useEffect(() => {
+      reaction(
+        () => FBAutocompleteAsyncStore.data,
+        () => approvalAuditState?.refresh()
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    return Component({
+      ...(props as T),
+      approvalAuditState,
+      audits,
+      loading,
+      index,
+      name,
+      type,
+    });
+  };
+
+  return (props: T) => Comp(props);
+};

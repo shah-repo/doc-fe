@@ -9,12 +9,13 @@ const FBApprovalMatrixField: React.FunctionComponent<FBApprovalMatrixFieldProps>
   autosave,
   name,
   mode,
+  workspaceMode,
 }) =>  (
   <FBProvider {...{ approvalMatrixFieldState }}>
     <FBInput {...{ name, disabled, autosave }} type="approvalMatrix">
       <>
         <FBApprovalMatrixRoles {...{ disabled, name }} />
-        <FBApprovalMatrix {...{ disabled, handleAdd, name, mode }} />
+        <FBApprovalMatrix {...{ disabled, handleAdd, name, mode, workspaceMode }} />
       </>
     </FBInput>
   </FBProvider>

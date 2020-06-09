@@ -1,10 +1,13 @@
 import { Grid } from "@material-ui/core";
 import _ from "lodash";
 import React, { useState } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { Attachment, AttachmentDownloadResponse, attachmentsActions, AttachmentType, WatermarkRequest, WatermarkRequestBody } from "../../../../state/ducks/attachments";
+import { authSelectors } from "../../../../state/ducks/auth";
 import { Nullable } from "../../../../state/ducks/common";
 import { ApplicationState } from "../../../../state/reducers";
+import { isOperator } from "../../../documentRevision/DocumentRevisionDisplay.container";
+import { documentTypeContext, isOwnerContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
 import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../../form.builder/stores/ui/FBStore";
 import useActionCreator from "../../../hooks/useActionCreator";
@@ -39,6 +42,11 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const [selectedFile, setSelectedFile] = useState<undefined | Attachment>(undefined);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   SetFile = React.createContext(setSelectedFile);
+  const isCurrentUserOperator = React.useContext(isOperator);
+  const isUserDocumentOwner = React.useContext(isOwnerContext);
+  const documentType = React.useContext(documentTypeContext);
+
+  const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
 
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
@@ -113,20 +121,41 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
 
   const openFileView = () => dialogHandler.open();
 
-  const attachmentsRenderer = attachments.map((attachment) => (
-    <PresenterFactory
-      {...other}
-      key={`attachment-${attachment.id}`}
-      name={name}
-      attachment={attachment}
-      handleRemove={handleRemove}
-      handleDownload={handleDownload}
-      form={form}
-      field={field}
-      handleContextMenu={handleContextMenu}
-      handleViewFile={handleViewFile}
-    />
-  ));
+  const attachmentsRenderer = attachments.map((attachment) => {
+    let showAttachment = true;
+    let canDeleteFile = true;
+    if (isCurrentUserOperator && (documentType === "LOT" || documentType === "EB")) {
+      const isOwnerOfFile = attachment.owner?.id === currentEmployeeId;
+      showAttachment = isOwnerOfFile;
+      canDeleteFile = isOwnerOfFile;
+    }
+    if (isUserDocumentOwner) {
+      showAttachment = true;
+      canDeleteFile = true;
+    }
+
+    if (!showAttachment) {
+      return null;
+    }
+
+    return (
+      <PresenterFactory
+        {...other}
+        key={`attachment-${attachment.id}`}
+        {...{
+          name,
+          attachment,
+          handleRemove,
+          handleDownload,
+          form,
+          field,
+          handleContextMenu,
+          handleViewFile,
+          canDeleteFile,
+        }}
+      />
+    );
+  });
 
   return (
     <Grid container={true} spacing={2}>

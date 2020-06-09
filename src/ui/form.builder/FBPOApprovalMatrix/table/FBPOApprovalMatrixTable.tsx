@@ -77,7 +77,7 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
           {approvalLevels?.map((row: POApprovalMatrixLevel, index) => (
             <TableRow
               key={`${row.name}-${index}`}
-              onClick={handleEdit(index, row)}
+              {...!disabled && { onClick: handleEdit(index, row) }}
               className={classNames({ [classes.editable]: !disabled })}
             >
               <StyledTableCell>{row.name}</StyledTableCell>

@@ -31,12 +31,23 @@ export const withFBApproval = <T extends FBApprovalProps>(
   }: T) => {
 
     const { workspaceState, formState } = FB.useStores();
-    const { id, isOutput } = workspaceState || {};
+    const { id: documentId, isOutput, isReleased } = workspaceState || {};
+    const formValue = formState?.getFieldValue(name) as FBApprovalValue[];
 
-    approvalFieldState = FB.useRef<FBApprovalState>(FBApprovalState, id);
+    approvalFieldState = FB.useRef<FBApprovalState>(FBApprovalState, {
+      value: formValue,
+      documentId,
+      name,
+    });
+
     isApproved = approvalFieldState.isApproved;
     isDefined = !_.isEmpty(approvers) || !_.isEmpty(approverGroups);
-    disabled = (!isOutput || (isOutput && !id) || (reviseDisabled && workspaceState?.isRevised));
+    disabled = (
+      isReleased ||
+      !isOutput ||
+      (isOutput && !documentId) ||
+      (reviseDisabled && workspaceState?.isRevised)
+    );
     const currentUser = store.getState().auth.user;
 
     function isApprover(approver: Employee | GroupRequestBody): boolean {
@@ -89,11 +100,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
     }
 
     function canApprove(id: string): boolean {
-      return (
-        !isApproved &&
-        (id === currentUser?.employeeId || groupCheck(id)) &&
-        approverStatus(id) !== FBApprovalStatus.Approved
-      );
+      return id === currentUser?.employeeId || groupCheck(id);
     }
 
     onApprove = (approver?: Employee | GroupRequestBody) => () => {
@@ -101,16 +108,14 @@ export const withFBApproval = <T extends FBApprovalProps>(
         return;
       }
       approvalFieldState?.addApprover({
-        id: currentUser.id,
+        id: FB.uniqid,
         userId: currentUser.employeeId,
         ...!isApprover(approver) && { groupId: approver.id },
         approvedAt: (new Date()).toISOString(),
       });
 
       // API post
-      if (!name) {
-        return;
-      }
+      if (!name) { return; }
 
       approvalFieldState?.postApi.setBody({
         fieldName: name,
@@ -131,14 +136,6 @@ export const withFBApproval = <T extends FBApprovalProps>(
         canApprove: canApprove(id),
       };
     };
-
-    React.useEffect(() => {
-      if (!name) {
-        return;
-      }
-      const hasApproved = formState?.getFieldValue(name) as FBApprovalValue[] || [];
-      approvalFieldState?.setApprovers(hasApproved);
-    }, []);
 
     useObserver(() => {
       FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.approver) &&

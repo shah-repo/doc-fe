@@ -1,7 +1,8 @@
 import _ from "lodash";
 import { action, computed, observable, set } from "mobx";
-import { FBApprovalApi, FBApprovalData, FBApprovalValue } from ".";
+import { FBApprovalApi, FBApprovalConstructor, FBApprovalData, FBApprovalValue } from ".";
 import { FBAutocompleteAsyncOption } from "..";
+import { Audit } from "../../../state/ducks/audit";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { FBEndpoint } from "../defaults/FBEndpoint";
@@ -11,15 +12,18 @@ import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync
 
 export class FBApprovalState {
   @observable public hasApproved: FBApprovalValue[] = [];
+  @observable public auditData?: Audit[];
   public postApi: FBRequest<any, FBApprovalApi> = new FBRequest();
   public approversApi: FBAutocompleteAsyncState = new FBAutocompleteAsyncState(this.approversId);
   public groupsApi: FBAutocompleteAsyncState = new FBAutocompleteAsyncState(this.groupsId);
+  public auditApi = new FBRequest<Audit[], null>();
 
-  public constructor(documentId?: string) {
+  public constructor({ documentId, name = "", value = [] }: FBApprovalConstructor) {
     if (!documentId) { return; }
-    const urlTpl = _.template(FBEndpoint.PostInlineApprove);
-    const url = urlTpl({ documentId });
-    this.postApi.setUrl(url);
+    this.hasApproved = value;
+
+    // post approval
+    this.postApi.setTemplateUrl(FBEndpoint.PostInlineApprove, { documentId });
   }
 
   @computed public get approversId(): string {
@@ -42,6 +46,10 @@ export class FBApprovalState {
 
   @computed public get isApproved(): boolean {
     return !_.isEmpty(this.hasApproved);
+  }
+
+  @action public setAuditData(data: Audit[]) {
+    set(this, "auditData", data);
   }
 
   @action public approvers(values: string[]): Employee[] | undefined {

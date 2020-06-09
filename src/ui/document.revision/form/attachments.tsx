@@ -14,7 +14,7 @@ const Attachments: React.FunctionComponent<Props> = ({ isDisabled = false }) => 
       dataProp="common.attachments"
     />
     <AttachmentField name="attachments" component="field" disabled={isDisabled}/>
-    {!isDisabled && <AttachmentIconField name="attachments" />}
+    {<AttachmentIconField name="attachments" />}
   </Box>
 );
 

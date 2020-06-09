@@ -1,4 +1,5 @@
 import { FBApprovalMatrixFieldProps, FBDialogState, FBInputProps } from "..";
+import { FBWorkspaceMode } from "../types/workspace";
 
 export type FBApprovalMatrixProps =
 & Pick<FBInputProps, "disabled" | "name" >
@@ -9,4 +10,5 @@ export type FBApprovalMatrixProps =
   handleEdit?: () => any;
   handleFullScreen?: () => any;
   dialogState?: FBDialogState;
+  workspaceMode: FBWorkspaceMode;
 };
