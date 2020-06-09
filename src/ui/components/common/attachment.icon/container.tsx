@@ -26,6 +26,7 @@ import { isOperator } from "../../../documentRevision/DocumentRevisionDisplay.co
 import { isOwnerContext, documentTypeContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { PasswordSubmitActionType } from "./utils/types";
+import { checkIfFileIsViewable } from "../view.file/utils/helpers";
 
 type DispatchProps = AttachmentIconDispatchProps;
 
@@ -83,10 +84,10 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
 
 
   const handleDownload = (attachment: Attachment, type?: AttachmentType, password?: string) => {
-    if (attachment.lineType === LINE_TYPES.CLEAN_COPY) {
-      async.start(downloadAttachment, attachment, async, type);
-    } else if (password) {
+    if (password) {
       async.start(downloadRedLineAttachment, attachment, async, undefined, password);
+    } else {
+      async.start(downloadAttachment, attachment, async, type);
     }
   };
 
@@ -137,10 +138,10 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   };
 
   const passwordSubmit = (values: Password) => {
-    setPassword(values);
     passwordDialogHandler.close();
     switch (PasswordSubmitAction) {
       case PasswordSubmitActionType.OPEN_FILE_VIEW:
+        setPassword(values);
         openFileView();
         break;
 
@@ -167,11 +168,26 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const handleIconClick = (attachment: Attachment) => (evt: React.MouseEvent<HTMLElement>) => {
     evt.preventDefault();
     setSelectedAttachment(attachment);
-    if (attachment.lineType === LINE_TYPES.RED_LINE) {
-      setPasswordSubmitAction(PasswordSubmitActionType.OPEN_FILE_VIEW);
-      openWarningDialog();
-    } else {
-      openFileView();
+    switch (attachment.lineType) {
+      case LINE_TYPES.RED_LINE:
+        if (checkIfFileIsViewable(attachment.type)) {
+          setPasswordSubmitAction(PasswordSubmitActionType.OPEN_FILE_VIEW);
+          openWarningDialog();
+        } else {
+          setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_FILE);
+        }
+        break;
+
+      case LINE_TYPES.CLEAN_COPY:
+        if (checkIfFileIsViewable(attachment.type)) {
+          openFileView();
+        } else {
+          handleDownload(attachment);
+        }
+        break;
+        
+      default:
+        break;
     }
   };
 
