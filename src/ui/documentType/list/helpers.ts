@@ -9,26 +9,22 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
   const searchOptions: Partial<TableSearchFieldProps> = { dataKey: valuePath };
   if (valuePath.startsWith("precalc")) {
     omitSearch = false;
-    searchOptions.dataKey = valuePath.replace("precalc.", "");
-    searchOptions.defaultValue = tableCriteria.queryDict[searchOptions.dataKey];
   }
   if (valuePath === "document.docId") {
     omitSearch = false;
     searchOptions.dataKey = "docId";
-    searchOptions.defaultValue = tableCriteria.queryDict.docId;
   }
   if (valuePath === "owner.user.name") {
     omitSearch = false;
     searchOptions.dataKey = "owner";
-    searchOptions.defaultValue = tableCriteria.queryDict.owner;
   }
   if (valuePath === "status") {
     omitSearch = false;
     searchOptions.dataKey = "status[]";
     searchOptions.searchType = "select";
     searchOptions.selectOptions = documentRevisionStatusOption();
-    searchOptions.defaultValue = tableCriteria.queryDict["status[]"];
   }
+  searchOptions.defaultValue = tableCriteria.queryDict[searchOptions.dataKey as string];
 
   return [omitSearch, searchOptions];
 };
