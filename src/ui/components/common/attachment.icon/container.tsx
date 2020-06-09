@@ -2,7 +2,7 @@ import { Grid } from "@material-ui/core";
 import _ from "lodash";
 import React, { useState } from "react";
 import { connect, useSelector } from "react-redux";
-import { Attachment, attachmentsActions, AttachmentType, WatermarkRequest, WatermarkRequestBody } from "../../../../state/ducks/attachments";
+import { Attachment, attachmentsActions, AttachmentType, WatermarkRequest, WatermarkRequestBody, AttachmentDownloadResponse } from "../../../../state/ducks/attachments";
 import { Nullable } from "../../../../state/ducks/common";
 import { ApplicationState } from "../../../../state/reducers";
 import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
@@ -25,6 +25,7 @@ import { AttachmentRedLineWarningDialog } from "../attachment.redline.warning/di
 import { isOperator } from "../../../documentRevision/DocumentRevisionDisplay.container";
 import { isOwnerContext, documentTypeContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
 import { authSelectors } from "../../../../state/ducks/auth";
+import { PasswordSubmitActionType } from "./utils/types";
 
 type DispatchProps = AttachmentIconDispatchProps;
 
@@ -32,7 +33,6 @@ export let SetFile: React.Context<React.Dispatch<React.SetStateAction<Attachment
 
 export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconContainerProps> = ({
   name = "",
-  download,
   form,
   field,
   value,
@@ -45,13 +45,16 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const passwordDialogHandler = useDialog();
   const redlineWarningDialogHandler = useDialog();
   const attachments = value || field?.value as Attachment[] || [];
-  const [selectedFile, setSelectedFile] = useState<undefined | Attachment>(undefined);
+  const [selectedAttachment, setSelectedAttachment] = useState<undefined | Attachment>(undefined);
   const [password, setPassword] = useState<Password>();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [PasswordSubmitAction, setPasswordSubmitAction] = useState<PasswordSubmitActionType>();
   const isCurrentUserOperator = React.useContext(isOperator);
   const isUserDocumentOwner = React.useContext(isOwnerContext);
   const documentType = React.useContext(documentTypeContext);
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
+  const downloadAttachment = useActionCreator(attachmentsActions.download);
+  const downloadRedLineAttachment = useActionCreator(attachmentsActions.downloadRedLine);
   const passwordState =  {
     status: AsyncStatus.Idle,
     message: "",
@@ -60,9 +63,6 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     status: AsyncStatus.Idle,
     message: "",
   };
-  SetFile = React.createContext(setSelectedFile);
-
-
   const requestWatermarkAction = useActionCreator(attachmentsActions.requestWatermarkedFile);
   const requestWatermarkAsync = useAsync<WatermarkRequest>({
     onSuccess: (data = {} as WatermarkRequest) => {
@@ -72,6 +72,23 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
       setNewWatermarkError(msg);
     },
   });
+  const async = useAsync<AttachmentDownloadResponse>({
+    onSuccess: (downloadInfo) => {
+      window.onbeforeunload = null;
+      downloadInfo && window.open(downloadInfo.url, "_parent");
+    },
+  });
+
+  SetFile = React.createContext(setSelectedAttachment);
+
+
+  const handleDownload = (attachment: Attachment, type?: AttachmentType, password?: string) => {
+    if (attachment.lineType === LINE_TYPES.CLEAN_COPY) {
+      async.start(downloadAttachment, attachment, async, type);
+    } else if (password) {
+      async.start(downloadRedLineAttachment, attachment, async, undefined, password);
+    }
+  };
 
   const handleRemove = (attachment: Attachment) => () => {
     if (!form && !field) { return; }
@@ -96,7 +113,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
 
   const handleContextMenu = (file: Attachment) => (evt: React.MouseEvent<HTMLElement>) => {
     evt.preventDefault();
-    setSelectedFile(file);
+    setSelectedAttachment(file);
     setAnchorEl(evt.currentTarget);
   };
 
@@ -122,7 +139,24 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const passwordSubmit = (values: Password) => {
     setPassword(values);
     passwordDialogHandler.close();
-    openFileView();
+    switch (PasswordSubmitAction) {
+      case PasswordSubmitActionType.OPEN_FILE_VIEW:
+        openFileView();
+        break;
+
+      case PasswordSubmitActionType.DOWNLOAD_FILE:
+        if (selectedAttachment) {
+          handleDownload(
+            selectedAttachment,
+          selectedAttachment?.type === "CLEAN_COPY" ? AttachmentType.CleanCopy : AttachmentType.Attached,
+          values.password,
+          ); }
+        break;
+
+      default:
+        break;
+    }
+
   };
 
   const warningSubmit = () => {
@@ -132,13 +166,15 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
 
   const handleIconClick = (attachment: Attachment) => (evt: React.MouseEvent<HTMLElement>) => {
     evt.preventDefault();
-    setSelectedFile(attachment);
+    setSelectedAttachment(attachment);
     if (attachment.lineType === LINE_TYPES.RED_LINE) {
+      setPasswordSubmitAction(PasswordSubmitActionType.OPEN_FILE_VIEW);
       openWarningDialog();
     } else {
       openFileView();
     }
   };
+
 
   const openPasswordDialog = () => passwordDialogHandler.open();
   const openWarningDialog = () => redlineWarningDialogHandler.open();
@@ -175,7 +211,6 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   });
 
 
-
   return (
     <Grid container={true} spacing={2}>
       <AttachmentRedLineWarningDialog
@@ -196,18 +231,21 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
         handleClose={dialogHandler.close}
         password = {password}
         attachments={attachments}
-        attachment={selectedFile}
+        attachment={selectedAttachment}
       />
       <WatermarkContainer
         newWatermarkRequest={newWatermarkRequest}
         newWatermarkError={newWatermakrError}
       />
       <Menu
+        setSelectedAttachment = {setSelectedAttachment}
         handleClose={closeContextMenu}
         anchorEl={anchorEl}
-        attachment={selectedFile}
+        attachment={selectedAttachment}
         openFileView={openFileView}
-        download= {download}
+        download= {handleDownload}
+        openWarningDialog = {openWarningDialog}
+        setPasswordSubmitAction = {setPasswordSubmitAction}
         handleWatermarkRequest={handleWatermarkRequest}
       />
       {attachmentsRenderer}

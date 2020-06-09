@@ -2,6 +2,11 @@ import { Attachment, attachmentsActions, AttachmentType } from "../../../../../s
 import { RenderSize } from "../../../../../state/ducks/common";
 import { FormikHybridFieldProps } from "../../../hoc/utils/types";
 
+export enum PasswordSubmitActionType {
+  DOWNLOAD_FILE = "DOWNLOAD_FILE",
+  OPEN_FILE_VIEW = "OPEN_FILE_VIEW"
+}
+
 export interface AttachmentIconDispatchProps {
   download: typeof attachmentsActions.download;
 }
@@ -28,11 +33,13 @@ export interface AttachmentIconProps extends AttachmentIconFactoryProps {
 }
 
 export interface AttachmentMenuProps {
-  handleDownload?: (attachment: Attachment, type?: AttachmentType) => () => any;
+  download: (attachment: Attachment, type?: AttachmentType) => void;
   handleClose?: () => void;
   anchorEl?: null | HTMLElement;
   attachment?: Attachment;
   openFileView: () => void;
+  openWarningDialog: () => void;
+  setPasswordSubmitAction: (type: PasswordSubmitActionType) => void;
 }
 
 export interface AttachmentIconStyleProp {

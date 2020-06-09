@@ -1,20 +1,16 @@
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import React, { useMemo } from "react";
-import { Attachment, AttachmentType, AttachmentDownloadResponse } from "../../../../state/ducks/attachments";
+import { Attachment, AttachmentType} from "../../../../state/ducks/attachments";
 import Text from "../../Text";
 import { WATERMARK_FILES } from "../view.file/utils/constants";
 import { checkIfFileIsViewable } from "../view.file/utils/helpers";
-import { AttachmentMenuProps } from "./utils/types";
-import useAsync from "../../../hooks/useAsync";
-import { ApiAction, Handlers } from "../../../../state/types";
+import { AttachmentMenuProps, PasswordSubmitActionType } from "./utils/types";
+import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
 
 interface OwnProps {
   handleWatermarkRequest?: (attachment: Attachment, attachmentType: AttachmentType) => void;
-  download: (attachment: Attachment,
-    handlers: Handlers<AttachmentDownloadResponse, string>,
-    type?: AttachmentType | undefined,
-    password?: string | undefined) => ApiAction<Attachment>;
+  setSelectedAttachment: (attachment: Attachment) => void;
 }
 
 type Props = AttachmentMenuProps & OwnProps;
@@ -25,6 +21,9 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
   attachment,
   openFileView,
   handleWatermarkRequest,
+  openWarningDialog,
+  setPasswordSubmitAction,
+  setSelectedAttachment,
   download,
 }) => {
   const file = useMemo(() => (attachment || {} as Attachment), [attachment]);
@@ -35,26 +34,31 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
     type: fileType,
     s3linkCleanCopy,
   } = file;
-  const async = useAsync<AttachmentDownloadResponse>({
-    onSuccess: (downloadInfo) => {
-      window.onbeforeunload = null;
-      downloadInfo && window.open(downloadInfo.url, "_parent");
-    },
-  });
   const handleClick = (type: AttachmentType) => () => {
     handleClose && handleClose();
     handleDownload && handleDownload(file, type)();
   };
   const handleViewFileClick = () => {
     handleClose && handleClose();
-    openFileView && openFileView();
+    if (file.lineType === LINE_TYPES.RED_LINE) {
+      setPasswordSubmitAction(PasswordSubmitActionType.OPEN_FILE_VIEW);
+      openWarningDialog();
+    } else {
+      openFileView && openFileView();
+    }
   };
   const handleWatermarkClick = (attachmentType: AttachmentType) => () => {
     handleClose && handleClose();
     handleWatermarkRequest && handleWatermarkRequest(file, attachmentType);
   };
   const handleDownload = (attachment: Attachment, type?: AttachmentType) => () => {
-    async.start(download, attachment, async, type);
+    if (attachment.lineType === LINE_TYPES.RED_LINE) {
+      setSelectedAttachment(attachment);
+      setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_FILE);
+      openWarningDialog();
+    } else {
+      download(attachment, type);
+    }
   };
 
   const renderDownloadFile =

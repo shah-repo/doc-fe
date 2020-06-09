@@ -30,9 +30,8 @@ const download = (
   attachment.isLoading = true;
   const queryParams = type ? `?type=${type}` : "";
   return apiActionWithCallbacks<AttachmentDownloadResponse, string>({
-    url: `${ATTACHMENT_ROOT_URL}/${attachment.id}/download`,
+    url: `${ATTACHMENT_ROOT_URL}/${attachment.id}/download${queryParams}`,
     method: "get",
-    params: queryParams,
     onCompleted: () => (attachment.isLoading = false),
     handlers,
   });
@@ -46,10 +45,9 @@ const downloadRedLine = (
 ) => {
   const queryParams = type ? `?type=${type}` : "";
   return apiActionWithCallbacks<AttachmentDownloadResponse, string>({
-    url: `${ATTACHMENT_ROOT_URL}/${attachment.id}/download_red_line`,
+    url: `${ATTACHMENT_ROOT_URL}/${attachment.id}/download_red_line${queryParams}`,
     method: "get",
     password,
-    params: queryParams,
     onCompleted: () => (attachment.isLoading = false),
     handlers,
   });
