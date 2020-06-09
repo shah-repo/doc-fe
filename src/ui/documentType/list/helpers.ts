@@ -1,3 +1,4 @@
+import { isString } from "lodash";
 import { TableSearchFieldProps } from "../../components/table/search/types";
 import { TablePanelStateProps } from "../../components/table/types";
 import { documentRevisionStatusOption } from "../../document.revision/utils/helpers";
@@ -7,8 +8,9 @@ export const shouldShowStaticColumns = (documentTypeName) => documentTypeName !=
 export const columnSearchConfiguration = (valuePath: string, tableCriteria: TablePanelStateProps): [boolean, Partial<TableSearchFieldProps>] => {
   let omitSearch = true;
   const searchOptions: Partial<TableSearchFieldProps> = { dataKey: valuePath };
-  if (valuePath.startsWith("precalc")) {
+  if (valuePath.startsWith("precalc") || valuePath.startsWith("formInput")) {
     omitSearch = false;
+    searchOptions.dataKey = `dynamicParams.${valuePath}`;
   }
   if (valuePath === "document.docId") {
     omitSearch = false;
@@ -18,13 +20,17 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
     omitSearch = false;
     searchOptions.dataKey = "owner";
   }
+  searchOptions.defaultValue = tableCriteria.queryDict[searchOptions.dataKey as string];
+
   if (valuePath === "status") {
     omitSearch = false;
     searchOptions.dataKey = "status[]";
     searchOptions.searchType = "select";
     searchOptions.selectOptions = documentRevisionStatusOption();
+    searchOptions.defaultValue = isString(tableCriteria.queryDict["status[]"])
+      ? tableCriteria.queryDict["status[]"]
+      : undefined;
   }
-  searchOptions.defaultValue = tableCriteria.queryDict[searchOptions.dataKey as string];
 
   return [omitSearch, searchOptions];
 };
