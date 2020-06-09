@@ -64,7 +64,7 @@ export const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
   return (
     <>
       <Button
-        color="secondary"
+        color="primary"
         startIcon={<AttachFileIcon />}
         onClick={openDialog}
         id="ApproveAndRelease-button"

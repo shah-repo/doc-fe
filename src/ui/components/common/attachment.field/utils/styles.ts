@@ -14,7 +14,7 @@ export const styles = makeStyles((theme) => ({
   }),
   button: {
     margin: theme.spacing(1),
-    colorInherit: theme.palette.secondary.light,
+    colorInherit: theme.palette.primary.main,
   },
   input: {
     display: "none",
