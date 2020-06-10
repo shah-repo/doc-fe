@@ -5,11 +5,7 @@ import RadioButton from "../../../components/forms/fields/RadioButton";
 import RadioGroup from "../../../components/forms/fields/RadioGroup";
 import { required, validator } from "../../../components/forms/fields/validators";
 import Text from "../../../components/Text";
-import useAdministrativeChange from "../../../hooks/docCustomization/useAdministrativeChange";
-import useNextRevision from "../../../hooks/docCustomization/useNextRevision";
-import useNextRevisionStage from "../../../hooks/docCustomization/useNextRevisionStage";
-import useObsolete from "../../../hooks/docCustomization/useObsolete";
-import useRevisionSelect from "../../../hooks/docCustomization/useRevisionSelect";
+import { useAdministrativeChange, useNextRevision, useNextRevisionStage, useObsolete, useRevisionSelect } from "../../../hooks/docCustomization/useCustomization";
 
 interface Props {
   documentTypeId?: string;

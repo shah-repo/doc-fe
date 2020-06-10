@@ -8,7 +8,7 @@ import { Owner } from "../../../../state/ducks/common/types";
 import { documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { FormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
-import useApproveAndRelease from "../../../hooks/docCustomization/useApproveAndRelease";
+import { useApproveAndRelease } from "../../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";

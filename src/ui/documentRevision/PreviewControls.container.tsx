@@ -11,7 +11,7 @@ import { toastInfo } from "../components/notifications";
 import Text from "../components/Text";
 import DownloadHTML from "../document.revision/summary/download.html";
 import { documentNewVersionPath, documentOutputPath } from "../document.revision/utils/paths";
-import useReviseDocument from "../hooks/docCustomization/useReviseDocument";
+import { useReviseDocument } from "../hooks/docCustomization/useCustomization";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import { canCreateNewVersion, canCreateOutput, getIsLastVersionObsolete } from "./helpers";

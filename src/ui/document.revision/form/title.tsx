@@ -4,7 +4,7 @@ import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { TextFieldSelect } from "../../components/forms/fields/TextFieldSelect/container";
-import useTitle from "../../hooks/docCustomization/useTitle";
+import { useTitle } from "../../hooks/docCustomization/useCustomization";
 
 interface OwnProps {
   name: string;

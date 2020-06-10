@@ -11,7 +11,7 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../state/reducers";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
 import { FBSchemaProps } from "../../form.builder";
-import useDocumentHistory from "../../hooks/docCustomization/useDocumentHistory";
+import { useDocumentHistory } from "../../hooks/docCustomization/useCustomization";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import AccessPermissionsContainer from "../accessPermissions/AccessPermissions.container";
 import DocumentRevisionListContainer from "../DocumentRevisionList.container";

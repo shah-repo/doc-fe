@@ -2,7 +2,7 @@ import { Chip, Grid, Typography } from "@material-ui/core";
 import classNames from "classnames";
 import React from "react";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
-import useDocumentStatus from "../../../hooks/docCustomization/useDocumentStatus";
+import { useDocumentStatus } from "../../../hooks/docCustomization/useCustomization";
 import Text from "../../Text";
 import { styles } from "./HeaderInfo.styles";
 

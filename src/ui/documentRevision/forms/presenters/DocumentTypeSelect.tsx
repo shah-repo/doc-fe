@@ -10,7 +10,7 @@ import { OptionType } from "../../../components/forms/fields/Autocomplete/types"
 import SelectField, { SelectOption } from "../../../components/forms/fields/Select";
 import { FB } from "../../../form.builder";
 import { FBWorkspaceMode } from "../../../form.builder/types/workspace";
-import useDocumentTypeSelect from "../../../hooks/docCustomization/useDocumentTypeSelect";
+import { useDocumentTypeSelect } from "../../../hooks/docCustomization/useCustomization";
 
 interface Props {
   isdocRevStatusDraft: boolean;

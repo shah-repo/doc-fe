@@ -3,7 +3,7 @@ import { DocumentRevisionDocument } from "../../../../state/ducks/documentRevisi
 import { DocumentTypeByIdState } from "../../../../state/ducks/documentRevisions/documentType";
 import { DocumentProposedIdSetAction } from "../../../../state/ducks/documents";
 import InputField from "../../../components/forms/fields/Input";
-import useDocId from "../../../hooks/docCustomization/useDocId";
+import { useDocId } from "../../../hooks/docCustomization/useCustomization";
 
 interface Props {
   isDisabled: boolean;
