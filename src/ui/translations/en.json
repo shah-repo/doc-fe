@@ -745,5 +745,6 @@
   "CANCELED": "Canceled",
   "CLOSED": "Closed",
   "maintenance.back.soon": "We’ll be back soon!",
-  "maintenance.inconvenience": "Sorry for the inconvenience but we’re performing some maintenance at the moment."
+  "maintenance.inconvenience": "Sorry for the inconvenience but we’re performing some maintenance at the moment.",
+  "Administrative Change": "Administrative Change"
 }

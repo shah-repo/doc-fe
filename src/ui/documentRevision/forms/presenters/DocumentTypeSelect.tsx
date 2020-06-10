@@ -8,9 +8,9 @@ import { documentsActions } from "../../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
 import SelectField, { SelectOption } from "../../../components/forms/fields/Select";
-import { required, validator } from "../../../components/forms/fields/validators";
 import { FB } from "../../../form.builder";
 import { FBWorkspaceMode } from "../../../form.builder/types/workspace";
+import { useDocumentTypeSelect } from "../../../hooks/docCustomization/useCustomization";
 
 interface Props {
   isdocRevStatusDraft: boolean;
@@ -21,6 +21,7 @@ interface Props {
     isQms: boolean;
   }>>;
   isDisabled: boolean;
+  documentTypeId?: string;
 }
 
 const DocumentTypeSelect: React.FunctionComponent<Props> = ({
@@ -29,7 +30,9 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   outputDocumentTypes = [],
   savedocInfo,
   isDisabled = false,
+  documentTypeId,
 }) => {
+  const [isVisible, label, validators] = useDocumentTypeSelect(documentTypeId);
   const { workspaceState } = FB.useStores();
   const formik = useFormikContext();
   const dispatch = useDispatch();
@@ -89,16 +92,20 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
     formik.handleChange(event);
   };
 
+  if (!isVisible) {
+    return null;
+  }
+
   return (
     <SelectField
       name="document.documentType.id"
-      label="document.type"
+      label={label}
       selectProps={{
         inputProps: { id: "documentType", disabled: isDocTypeDisabled },
         onChange: handleTypeChange,
       }}
       options={options}
-      validate={validator(required)}
+      validate={validators}
       includeEmpty={false}
     />
   );
