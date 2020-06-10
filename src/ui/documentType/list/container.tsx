@@ -6,7 +6,6 @@ import { getTableCriteria, getTableData } from "../../../common/utils/selectors"
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { documentTypeActions, DocumentTypeById, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
-import { ApplicationState } from "../../../state/reducers";
 import { HOME_URL } from "../../constants/urls";
 import { documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -22,16 +21,13 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   match, history,
 }) => {
   const dialog = useDialog();
-  const { acronym } = match.params;
+  const { docTypeId } = match.params;
   const [noForm, toggleNoForm] = React.useState(false);
   const [multipleForm, toggleMultipleForm] = React.useState(false);
   const [selectedFormId, saveSelectedFormId] = React.useState("");
   const [docId, setDocId] = React.useState("");
-  const documentType = useSelector(
-    (state: ApplicationState) =>
-      documentTypeSelectors.getDocumentTypeByAcronym(state, acronym),
-  );
-  const TABLE_NAME = `documentsByTypeList-${acronym}`;
+  const documentType = useSelector(documentTypeSelectors.byId)?.[docTypeId];
+  const TABLE_NAME = `documentsByTypeList-${documentType?.documentTypeAcronym}`;
   const dispatch = useDispatch();
   const docRevId = useSelector(documentTypeSelectors.docRevTypeById);
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
@@ -54,7 +50,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [acronym]);
+  }, [docTypeId]);
 
   useEffect(() => {
     dispatch(documentRevisionsActions.loadList());
