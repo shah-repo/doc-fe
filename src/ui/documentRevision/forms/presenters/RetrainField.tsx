@@ -16,7 +16,7 @@ const RetrainField: React.FunctionComponent<Props> = ({
   revisionChangeType,
   isDisabled = false,
 }) => {
-  const isVisible = useTraining(documentTypeId);
+  const [isVisible] = useTraining(documentTypeId);
   const formik = useFormikContext();
   useEffect(() => {
     if (revisionChangeType === RevisionChangeType.AdministrativeChange) {

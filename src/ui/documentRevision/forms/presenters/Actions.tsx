@@ -24,7 +24,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const { workspaceState, formState } = FB.useStores();
   const formik = useFormikContext();
   const isDisabled: boolean = documentRevision?.id !== undefined;
-  const documentTypeId = documentRevision.document?.documentType?.id;
+  const documentTypeId = documentRevision?.document?.documentType?.id;
 
   function setFBValue() {
     switch (workspaceState?.getMode()) {
