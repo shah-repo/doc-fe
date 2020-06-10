@@ -27,7 +27,7 @@ import { isOwnerContext, documentTypeContext } from "../../../documentRevision/f
 import { authSelectors } from "../../../../state/ducks/auth";
 import { PasswordSubmitActionType } from "./utils/types";
 import { checkIfFileIsViewable } from "../view.file/utils/helpers";
-import { documentRevisionStatusContext, documentRevisionIdContext } from "../../../documentRevision/DocumentRevisionsManager.container";
+import { documentRevisionStatusContext } from "../../../documentRevision/DocumentRevisionsManager.container";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 
 type DispatchProps = AttachmentIconDispatchProps;
@@ -41,12 +41,12 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   value,
   ...other
 }) => {
-  const dialogHandler = useDialog();
-  const passwordDialogHandler = useDialog();
-  const redlineWarningDialogHandler = useDialog();
   const { submitForm } = useFormContext();
   const [newWatermarkRequest, setNewWatermarkRequest] = useState<Nullable<WatermarkRequest>>(null);
   const [newWatermakrError, setNewWatermarkError] = useState<string>("");
+  const dialogHandler = useDialog();
+  const passwordDialogHandler = useDialog();
+  const redlineWarningDialogHandler = useDialog();
   const attachments = value || field?.value as Attachment[] || [];
   const [selectedAttachment, setSelectedAttachment] = useState<undefined | Attachment>(undefined);
   const [password, setPassword] = useState<Password>();
@@ -56,7 +56,6 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const isUserDocumentOwner = React.useContext(isOwnerContext);
   const documentType = React.useContext(documentTypeContext);
   const documentRevisionStatus = React.useContext(documentRevisionStatusContext);
-  const documentRevisionid = React.useContext(documentRevisionIdContext);
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
   const downloadAttachment = useActionCreator(attachmentsActions.download);
   const downloadRedLineAttachment = useActionCreator(attachmentsActions.downloadRedLine);
@@ -91,7 +90,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     if (password) {
       async.start(downloadRedLineAttachment, attachment, async, undefined, password);
     } else {
-      async.start(downloadAttachment, attachment, async, type, documentRevisionid);
+      async.start(downloadAttachment, attachment, async, type);
     }
   };
 
@@ -171,7 +170,8 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
 
   const handleIconClick = (attachment: Attachment) => (evt: React.MouseEvent<HTMLElement>) => {
     evt.preventDefault();
-    if (documentRevisionStatus === DocumentRevisionStatus.Released && attachment.lineType === LINE_TYPES.RED_LINE) {
+
+    if (documentRevisionStatus === DocumentRevisionStatus.Released && LINE_TYPES.RED_LINE) {
       if (checkIfFileIsViewable(attachment.type)) {
         setPasswordSubmitAction(PasswordSubmitActionType.OPEN_FILE_VIEW);
         openWarningDialog();

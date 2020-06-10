@@ -26,13 +26,11 @@ const download = (
   attachment: Attachment,
   handlers: Handlers<AttachmentDownloadResponse>,
   type?: AttachmentType,
-  documentRevisionId?: string,
 ): ApiAction => {
   attachment.isLoading = true;
-  const typeQuery = type ? type : "";
-  const params = `?documentRevisionId=${documentRevisionId}&?type=${typeQuery}`;
+  const queryParams = type ? `?type=${type}` : "";
   return apiActionWithCallbacks<AttachmentDownloadResponse, string>({
-    url: `${ATTACHMENT_ROOT_URL}/${attachment.id}/download${params}`,
+    url: `${ATTACHMENT_ROOT_URL}/${attachment.id}/download${queryParams}`,
     method: "get",
     onCompleted: () => (attachment.isLoading = false),
     handlers,
