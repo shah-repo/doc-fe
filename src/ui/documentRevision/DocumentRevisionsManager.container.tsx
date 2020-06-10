@@ -28,6 +28,7 @@ export type DocumentRevisionManagerContainerProps = OwnProps &
 StateProps;
 
 export let documentRevisionStatusContext = React.createContext<DocumentRevisionStatus>(DocumentRevisionStatus.Draft);
+export let documentRevisionIdContext = React.createContext<string>("");
 
 const getDocumentRevisions = documentRevisionsSelectors.makeGetDocumentRevisions();
 const mapStateToProps = (
@@ -60,6 +61,7 @@ DocumentRevisionManagerContainerProps
   const schema = selectedDocument?.formTemplate?.schema || selectedDocument?.formDocument?.formTemplate?.schema || [];
   const documentRevisionStatus = selectedDocument?.status;
   documentRevisionStatusContext = React.createContext(documentRevisionStatus);
+  documentRevisionIdContext = React.createContext(selectedDocument?.id);
   if (shouldRedircetToLatestReleasd(documentRevisions, documentRevisionId)) {
     const docRevIdToRedirect = getDocRevIdToRedirect(documentRevisions, deprecatedAt);
     return (
