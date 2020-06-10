@@ -15,6 +15,8 @@ export const useDocumentHistory = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, DisplayFieldType.VERSIONS, "document.revision.docVersion");
 export const useDocumentStatus = (documentTypeId = "", status: string): UIConfig =>
   useCustomization(documentTypeId, DisplayFieldType[`STATUS_${status}`], status);
+export const useDocumentVersion = (documentTypeId = "", status: string): UIConfig =>
+  useCustomization(documentTypeId, DisplayFieldType[`VERSION_${status}`], status);
 export const useDocumentTypeSelect = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, InputFieldType.DOC_TYPE, "document.type");
 export const useNextRevision = (documentTypeId = ""): UIConfig =>
