@@ -215,9 +215,11 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           ownerName: v[0].owner.user.name,
           formattedTime: moment(v[0].timestamp).tz(TIME_ZONE, true).format("D MMM YYYY hh:mm:ss a"),
           description: (description[type || ""] || description.default)(),
+          timestamp: v[0].timestamp,
         };
       });
-      return compact(mapped) as FBAuditData[];
+      return (compact(mapped) as FBAuditData[])
+        .sort((a, b) => new Date(a.timestamp).valueOf() - new Date(b.timestamp).valueOf());
     }
 
     function isApproved(): boolean {
