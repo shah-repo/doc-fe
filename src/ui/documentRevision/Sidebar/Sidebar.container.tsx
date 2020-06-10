@@ -11,6 +11,7 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../state/reducers";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
 import { FBSchemaProps } from "../../form.builder";
+import useDocumentHistory from "../../hooks/docCustomization/useDocumentHistory";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import AccessPermissionsContainer from "../accessPermissions/AccessPermissions.container";
 import DocumentRevisionListContainer from "../DocumentRevisionList.container";
@@ -43,10 +44,11 @@ SidebarContainerProps
   schema,
 }) => {
   const document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, documentId));
-  const { documentTypeAcronym: acronym } = document?.documentType || {};
   const [indexNumber, setIndex] = useState(0);
   const intl = useIntl();
   const url = useLocation();
+  const documentTypeId = document?.documentType?.id;
+  const [showDocHistory, docHistoryLabel] = useDocumentHistory(documentTypeId);
 
   useScrollIntoView();
 
@@ -57,15 +59,17 @@ SidebarContainerProps
       icon: <NoteIcon />,
       details: {
         title: intl.formatMessage({
-          id: `document.revision.docVersion.${acronym}`,
+          id: docHistoryLabel,
         }),
-        component: <DocumentRevisionListContainer
-          documentRevisions={docRevsWithoutCanceled}
-          documentId={documentId}
-          docId={docId}
-          selectedDocumentRevision={documentRevisionId}
-          documentRevisionId={documentRevisionId}
-        />,
+        component: showDocHistory ?
+          <DocumentRevisionListContainer
+            documentRevisions={docRevsWithoutCanceled}
+            documentId={documentId}
+            docId={docId}
+            selectedDocumentRevision={documentRevisionId}
+            documentRevisionId={documentRevisionId}
+          /> :
+          null,
       },
     },
     {

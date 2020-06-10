@@ -203,6 +203,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           isdocRevStatusDraft={isdocRevStatusDraft}
           savedocInfo={savedocInfo}
           isDisabled={isDisabledInput}
+          documentTypeId={documentTypeId}
         />
         <DocIdInput
           document={values.document}

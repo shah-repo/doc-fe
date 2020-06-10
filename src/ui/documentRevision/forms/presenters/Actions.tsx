@@ -24,6 +24,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const { workspaceState, formState } = FB.useStores();
   const formik = useFormikContext();
   const isDisabled: boolean = documentRevision?.id !== undefined;
+  const documentTypeId = documentRevision.document?.documentType?.id;
 
   function setFBValue() {
     switch (workspaceState?.getMode()) {
@@ -75,6 +76,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         documentName={docInfo.name}
         docRevId={values.id as string}
         owner={documentRevision?.owner}
+        documentTypeId={documentTypeId}
       />
       <HeaderMenu>
         <CancelButton
