@@ -64,10 +64,10 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const FBIsOutput = Boolean(docId && !_.isEmpty(docId));
   const FBIsActive = formInput || formTemplate || formDocument;
   const docTypeId = dataProp?.document?.documentType?.id;
-  const isTrainingVisible = useTraining(docTypeId);
+  const [isTrainingVisible] = useTraining(docTypeId);
   const [isDescriptionVisible] = useDescription(docTypeId);
   const [isTitleVisible, titleLabel] = useTitle(docTypeId);
-  const isCRLinkVisible = useCRLink(docTypeId);
+  const [isCRLinkVisible] = useCRLink(docTypeId);
   const docTypeAcronym = dataProp?.document?.documentType?.documentTypeAcronym;
 
   const outputDocumentTypeName = useSelector((state: ApplicationState) =>

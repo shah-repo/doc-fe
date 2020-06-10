@@ -1,22 +1,14 @@
-import { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { documentTypeSelectors, DynamicUIDocTypes } from "../../../state/ducks/documentRevisions/documentType";
+import { DisplayFieldType, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 
 const useCRLink = (
   documentTypeId = "",
 ) => {
   const documentType = useSelector(documentTypeSelectors.byId)[documentTypeId];
-  return useMemo(() => {
-    switch (documentType?.documentTypeAcronym) {
-      case DynamicUIDocTypes.WO:
-      case DynamicUIDocTypes.RC:
-      case DynamicUIDocTypes.PO:
-      case DynamicUIDocTypes.SUP:
-        return false;
-      default:
-        return true;
-    }
-  }, [documentType]);
+  const config = documentType?.fieldsConfig?.[DisplayFieldType.CR_ID];
+  const isVisible = config?.visible ?? true;
+
+  return [isVisible];
 };
 
 export default useCRLink;

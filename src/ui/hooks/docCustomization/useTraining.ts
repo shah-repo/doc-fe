@@ -1,24 +1,15 @@
-import { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { documentTypeSelectors, DynamicUIDocTypes } from "../../../state/ducks/documentRevisions/documentType";
+import { documentTypeSelectors, InputFieldType } from "../../../state/ducks/documentRevisions/documentType";
+import { UIConfig } from "./types";
 
 const useTraining = (
   documentTypeId = "",
-) => {
+): UIConfig => {
   const documentType = useSelector(documentTypeSelectors.byId)[documentTypeId];
-  const isVisible = useMemo(() => {
-    switch (documentType?.documentTypeAcronym) {
-      case DynamicUIDocTypes.PO:
-      case DynamicUIDocTypes.RC:
-      case DynamicUIDocTypes.WO:
-      case DynamicUIDocTypes.SUP:
-        return false;
-      default:
-        return true;
-    }
-  }, [documentType]);
+  const config = documentType?.fieldsConfig?.[InputFieldType.TRAINING];
+  const isVisible = config?.visible ?? true;
 
-  return isVisible;
+  return [isVisible];
 };
 
 export default useTraining;
