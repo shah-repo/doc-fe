@@ -6,7 +6,7 @@ import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { changeRequestEditPath } from "../../change.request/utils/paths";
 import Text from "../../components/Text";
-import useCRLink from "../../hooks/docCustomization/useCRLink";
+import { useCRLink } from "../../hooks/docCustomization/useCustomization";
 
 export type Props = DataProps<DocumentRevision>;
 

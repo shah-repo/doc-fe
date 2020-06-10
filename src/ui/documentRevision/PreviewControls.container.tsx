@@ -5,13 +5,13 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
 import { Document, DocumentRevision, documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
-import { DynamicUIDocTypes } from "../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import { toastInfo } from "../components/notifications";
 import Text from "../components/Text";
 import DownloadHTML from "../document.revision/summary/download.html";
 import { documentNewVersionPath, documentOutputPath } from "../document.revision/utils/paths";
+import { useReviseDocument } from "../hooks/docCustomization/useCustomization";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import { canCreateNewVersion, canCreateOutput, getIsLastVersionObsolete } from "./helpers";
@@ -37,13 +37,14 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton, hasAccess,
 }) => {
 
-  const acronym = documentRevision.document?.documentType?.documentTypeAcronym;
-  const canReviseDocument = acronym !== DynamicUIDocTypes.WO;
+  const [showRevise, reviseLabel] = useReviseDocument(documentRevision.document?.documentType?.id);
   const intl = useIntl();
   const dispatch = useDispatch();
   const [isEmailSent, toogleEmailSent] = useState<boolean>(false);
   const formDocumentId = documentRevision.formDocument?.document?.id || "";
-  const formDocuments: Document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, formDocumentId));
+  const formDocuments: Document = useSelector((state: ApplicationState) =>
+    documentRevisionsSelectors.getDocument(state, formDocumentId)
+  );
   const isLastVersionObsolete = () => {
     if (selectedDocument.document.documentType.group === "RECORD") {
       return;
@@ -76,10 +77,10 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const canCreate = () => canCreateNewVersion(documentRevision, disableCreateNewVersion, canShowCreateVersionButton);
 
   const renderCloneButton = () => {
-    if (canReviseDocument && hasAccess && canCreate()) {
+    if (hasAccess && canCreate() && showRevise) {
       return (
         <Button color="secondary" variant="outlined" onClick={cloneDocument} id="PreviewControlsContainer-revise" >
-          <Text message={`documentRevision.revise.${acronym}`} />
+          <Text message={reviseLabel} />
         </Button>
       );
     }

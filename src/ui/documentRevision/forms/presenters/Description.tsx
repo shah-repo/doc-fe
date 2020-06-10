@@ -1,7 +1,6 @@
 import { FieldValidator } from "formik";
 import * as React from "react";
-import { useSelector } from "react-redux";
-import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
+import { useIntl } from "react-intl";
 import RichTextEditor from "../../../components/forms/fields/RichTextEditor";
 import useDescription from "../../../hooks/docCustomization/useDescription";
 
@@ -16,8 +15,11 @@ const Description: React.FunctionComponent<Props> = ({
   isQms,
   isDisabled = false,
 }) => {
-  const [isVisible, placeholder, validators] = useDescription(documentTypeId, isQms);
-  const documentType = useSelector(documentTypeSelectors.byId)[documentTypeId];
+  const intl = useIntl();
+  const [isVisible, label, validators] = useDescription(documentTypeId, isQms);
+  const placeholder: string = isQms ?
+    "" :
+    intl.formatMessage({ id: "document.revision.no.qms.message" });
 
   if (!isVisible) {
     return null;
@@ -26,9 +28,9 @@ const Description: React.FunctionComponent<Props> = ({
   return (
     <RichTextEditor
       name="description"
-      label={`common.description.${documentType?.documentTypeAcronym}`}
+      label={label}
       validate={validators as FieldValidator}
-      editorProps={{ placeholder: (placeholder as string), readOnly: isDisabled }}
+      editorProps={{ placeholder, readOnly: isDisabled }}
     />
   );
 };
