@@ -2,6 +2,7 @@ import { Chip, Grid, Typography } from "@material-ui/core";
 import classNames from "classnames";
 import React from "react";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import useDocumentStatus from "../../../hooks/docCustomization/useDocumentStatus";
 import Text from "../../Text";
 import { styles } from "./HeaderInfo.styles";
 
@@ -9,15 +10,16 @@ export interface Props {
   status: string;
   id: string;
   name: string;
-  documentTypeAcronym?: string;
+  documentTypeId?: string;
 }
 
 export const HeaderInfo: React.FunctionComponent<Props> = ({
   status,
   name,
   id,
-  documentTypeAcronym,
+  documentTypeId,
 }) => {
+  const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, status);
   const classes = styles();
   const isStatusReleased = status === DocumentRevisionStatus.Released;
   const statusIcon = () =>
@@ -27,14 +29,17 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
 
   return (
     <Grid container={true} xs={6} alignItems="center">
-      <Chip
-        label={<Text message={`${status}.${documentTypeAcronym}`} />}
-        id="HeaderInfo-status"
-        className={classNames(classes.statusDefault, {
-          [classes.statusReleased]: isStatusReleased,
-        })}
-        icon={statusIcon()}
-      />
+      {
+        isStatusVisible &&
+        <Chip
+          label={<Text message={statusLabel} />}
+          id="HeaderInfo-status"
+          className={classNames(classes.statusDefault, {
+            [classes.statusReleased]: isStatusReleased,
+          })}
+          icon={statusIcon()}
+        />
+      }
       <Typography variant="h6" id="HeaderInfo-docId" className={classes.id} >
         {id}
       </Typography>
