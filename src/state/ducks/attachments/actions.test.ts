@@ -56,7 +56,7 @@ describe("attachemnt actions tests", () => {
     const action = attachmentsActions.download(attachment, handlers);
 
     it("calls GET on ATTACHMENT_ROOT_URL/id/download", () => {
-      expect(action.url).toBe(`${ATTACHMENT_ROOT_URL}/${attachment.id}/download`);
+      expect(action.url).toBe(`${ATTACHMENT_ROOT_URL}/${attachment.id}/download?documentRevisionId=undefined&?type=`);
       expect(action.method).toBe("get");
     });
 
