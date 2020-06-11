@@ -1,12 +1,12 @@
 import { Button, createStyles, Dialog, DialogContent, makeStyles } from "@material-ui/core";
-import { Formik, FieldInputProps, FormikProps } from "formik";
+import AttachFileIcon from "@material-ui/icons/AttachFile";
+import { FieldInputProps, Formik, FormikProps } from "formik";
 import React from "react";
-import { FormContext } from "../../forms/FormContext";
+import { attachmentsActions } from "../../../../state/ducks/attachments";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
-import AttachmentLineTypeForm  from "./AttachmentLineTypeForm";
-import AttachFileIcon from "@material-ui/icons/AttachFile";
-import { attachmentsActions } from "../../../../state/ducks/attachments";
+import { FormContext, useFormContext } from "../../forms/FormContext";
+import AttachmentLineTypeForm from "./AttachmentLineTypeForm";
 
 
 interface Props {
@@ -39,6 +39,7 @@ export const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
   name,
   disabled,
 }) => {
+  const { submitForm } = useFormContext();
   const classes = styles();
   const dialog = useDialog();
   const async = useAsync<any>({ onSuccess: dialog.close });
@@ -50,6 +51,7 @@ export const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
   };
 
   const closeDialog = () => {
+    submitForm();
     dialog.close();
   };
 
