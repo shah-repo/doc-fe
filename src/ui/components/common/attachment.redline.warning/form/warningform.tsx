@@ -3,7 +3,7 @@ import { Form } from "formik";
 import * as React from "react";
 import styles from "./warningform.styles";
 import { AsyncState, AsyncStatus } from "../../../../../state/types";
-import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
+import WarningRoundedIcon from "@material-ui/icons/WarningRounded";
 import SubmitButton from "../../../forms/SubmitButton";
 import Text from "../../../Text";
 
@@ -18,25 +18,25 @@ const RedlineWarningForm: React.FunctionComponent<RedlineWarningFormProps> = ({ 
     <Box className = {classes.Box}>
       <WarningRoundedIcon fontSize="large" className={classes.icon}/>
       <h2 className={classes.h4}>Alert!</h2>
-      <Text message="This is a redline document."/>
-      <Text message="Are you sure you want to download it?"/>
+      <Text translation="common.attachment.redline.warning.download.text1"/>
+      <Text translation="common.attachment.redline.warning.download.text2"/>
       <Box>
-      <SubmitButton
-        id="passwordConfirm"
-        asyncState={asyncState}
-        label="Yes, download it"
-        fullWidth={false}
-        className={classes.submitButton}
-      />
-      <Button
-        variant="text"
-        color="secondary"
-        className={classes.cancelButton}
-        disabled={asyncState.status === AsyncStatus.Active}
-        onClick={cancel}
-      >
-        <Text translation="transition.action.cancel" />
-      </Button>
+        <SubmitButton
+          id="passwordConfirm"
+          asyncState={asyncState}
+          label="common.attachment.redline.warning.download.label"
+          fullWidth={false}
+          className={classes.submitButton}
+        />
+        <Button
+          variant="text"
+          color="secondary"
+          className={classes.cancelButton}
+          disabled={asyncState.status === AsyncStatus.Active}
+          onClick={cancel}
+        >
+          <Text translation="transition.action.cancel" />
+        </Button>
       </Box>
     </Box>
   </Form>

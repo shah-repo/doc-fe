@@ -32,8 +32,8 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
   upload,
   field,
   form,
-  multiple,
-  name,
+  multiple = true,
+  name = "",
   disabled,
 }) => {
   const isField = true;
@@ -44,7 +44,7 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
 
   const async = useAsync<AttachmentModel>({
     onSuccess: (attachment?: AttachmentModel) => {
-      name = name ? name : "";
+      setIsUploading(false);
       if (!attachment && !form && !field) {
         return;
       }
@@ -72,13 +72,14 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
       }
       form.setFieldValue(name, attachments);
       submitForm();
-      setIsUploading(false);
       onCancel();
+    },
+    onError: () => {
+      setIsUploading(false);
     },
   });
 
   const handleUpload = (files: File[], isRedLine, cleanCopRequired) => {
-    setIsUploading(true);
     if (files.length === 0) {
       return;
     }
@@ -87,7 +88,7 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
     if (!file) {
       return;
     }
-
+    setIsUploading(true);
     async.start(upload, file, isRedLine, async, cleanCopRequired);
     handleUpload(files, isRedLine, cleanCopRequired);
   };
@@ -126,7 +127,6 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
     <>
       {!isUploading &&
     <Box className={classes.Box}>
-
       <IconButton
         className={classes.closeRoot}
         onClick={onCancel}
@@ -136,7 +136,7 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
       </IconButton>
       <PublishRoundedIcon fontSize="large"/>
       <h2 className={classes.h4}>Upload a file</h2>
-      <Text message="Select action for the uploading file"/>
+      <Text translation="common.attachment.redline.form.prompt"/>
       <Box style={{ paddingTop: 20 }}>
         <input
           accept="*"
@@ -148,9 +148,12 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
           disabled={disabled}
         />
         <label htmlFor={`${name}-button-file-create-clean-copy`} >
-          <Link component="span" variant="button" className={classes.link} id="AttachmentFieldPresenter-linkButton" >
+          <Link component="span"
+            variant="button"
+            className={classes.link}
+            id="AttachmentFieldPresenter-linkButton-create-clean-copy" >
             <PlaylistAddIcon className={classes.iconCleanCopy} />
-            <Text message="Create a clean copy" />
+            <Text translation="common.attachment.upload.button.createCleanCopy" />
           </Link>
         </label>
       </Box>
@@ -165,9 +168,12 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
           disabled={disabled}
         />
         <label htmlFor={`${name}-button-file-clean-copy`} >
-          <Link component="span" variant="button" className={classes.link} id="AttachmentFieldPresenter-linkButton" >
+          <Link component="span"
+            variant="button"
+            className={classes.link}
+            id="AttachmentFieldPresenter-linkButton-clean-copy" >
             <NotesIcon className={classes.iconCleanCopy} />
-            <Text message="Upload a clean copy" />
+            <Text translation="common.attachment.upload.button.cleanCopy" />
           </Link>
         </label>
       </Box>
@@ -182,9 +188,11 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
           disabled={disabled}
         />
         <label htmlFor={`${name}-button-file-red-line`}>
-          <Link component="span" variant="button" className={classes.link} id="AttachmentFieldPresenter-linkButton" >
+          <Link component="span" variant="button"
+            className={classes.link}
+            id="AttachmentFieldPresenter-linkButton-red-line">
             <NotesIcon className={classes.iconRedline} />
-            <Text message="Upload a redline" />
+            <Text translation="common.attachment.upload.button.redline" />
           </Link>
         </label>
       </Box>

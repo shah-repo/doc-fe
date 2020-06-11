@@ -32,7 +32,7 @@ const download = (
   return apiActionWithCallbacks<AttachmentDownloadResponse, string>({
     url: `${ATTACHMENT_ROOT_URL}/${attachment.id}/download${queryParams}`,
     method: "get",
-    onCompleted: () => (attachment.isLoading = false),
+    onSuccess: () => (attachment.isLoading = false),
     handlers,
   });
 };
@@ -48,7 +48,7 @@ const downloadRedLine = (
     url: `${ATTACHMENT_ROOT_URL}/${attachment.id}/download_red_line${queryParams}`,
     method: "get",
     password,
-    onCompleted: () => (attachment.isLoading = false),
+    onSuccess: () => (attachment.isLoading = false),
     handlers,
   });
 };
