@@ -27,7 +27,7 @@ import { isOwnerContext, documentTypeContext } from "../../../documentRevision/f
 import { authSelectors } from "../../../../state/ducks/auth";
 import { PasswordSubmitActionType } from "./utils/types";
 import { checkIfFileIsViewable } from "../view.file/utils/helpers";
-import { documentRevisionStatusContext } from "../../../documentRevision/DocumentRevisionsManager.container";
+import { documentRevisionStatusContext, documentRevisionVersionContext } from "../../../documentRevision/DocumentRevisionsManager.container";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 
 type DispatchProps = AttachmentIconDispatchProps;
@@ -56,6 +56,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const isUserDocumentOwner = React.useContext(isOwnerContext);
   const documentType = React.useContext(documentTypeContext);
   const documentRevisionStatus = React.useContext(documentRevisionStatusContext);
+  const documentRevisionVersion = React.useContext(documentRevisionVersionContext);
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
   const downloadAttachment = useActionCreator(attachmentsActions.download);
   const downloadRedLineAttachment = useActionCreator(attachmentsActions.downloadRedLine);
@@ -168,22 +169,39 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     openPasswordDialog();
   };
 
-  const handleIconClick = (attachment: Attachment) => (evt: React.MouseEvent<HTMLElement>) => {
-    evt.preventDefault();
 
-    if (documentRevisionStatus === DocumentRevisionStatus.Released && LINE_TYPES.RED_LINE) {
-      if (checkIfFileIsViewable(attachment.type)) {
-        setPasswordSubmitAction(PasswordSubmitActionType.OPEN_FILE_VIEW);
-        openWarningDialog();
-      } else {
-        setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_FILE);
-      }
+  const noNeedPasswordHandler = (attachment: Attachment) => {
+    if (checkIfFileIsViewable(attachment.type)) {
+      openFileView();
+      closeContextMenu();
     } else {
-      if (checkIfFileIsViewable(attachment.type)) {
-        openFileView();
-      } else {
-        handleDownload(attachment);
-      }
+      handleDownload(attachment);
+      closeContextMenu();
+    }
+  };
+
+  const needPasswordHandler = (attachment: Attachment) => {
+    if (checkIfFileIsViewable(attachment.type)) {
+      setPasswordSubmitAction(PasswordSubmitActionType.OPEN_FILE_VIEW);
+      openWarningDialog();
+      closeContextMenu();
+    } else {
+      setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_FILE);
+      closeContextMenu();
+    }
+  };
+
+  const handleClick = (attachment: Attachment) => (evt: React.MouseEvent<HTMLElement>) => {
+    evt.preventDefault();
+    if (documentRevisionStatus === DocumentRevisionStatus.Released
+      && attachment.lineType === LINE_TYPES.RED_LINE) {
+      needPasswordHandler(attachment);
+    } else if (documentRevisionStatus === DocumentRevisionStatus.Draft
+      && attachment.lineType === LINE_TYPES.RED_LINE
+      && documentRevisionVersion >= 2) {
+      needPasswordHandler(attachment);
+    } else {
+      noNeedPasswordHandler(attachment);
     }
     setSelectedAttachment(attachment);
   };
@@ -221,7 +239,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
           form,
           field,
           handleContextMenu,
-          handleIconClick,
+          handleIconClick: handleClick,
           canDeleteFile,
         }}
       />
@@ -256,6 +274,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
         newWatermarkError={newWatermakrError}
       />
       <Menu
+        handleIconClick = {handleClick}
         setSelectedAttachment = {setSelectedAttachment}
         handleClose={closeContextMenu}
         anchorEl={anchorEl}
