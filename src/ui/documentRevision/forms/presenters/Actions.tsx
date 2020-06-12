@@ -88,7 +88,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         />
         {renderChangeOwnership}
         <UpgradeToLatest
-          documentStatus={documentRevision?.formDocument?.status}
+          documentStatus={documentRevision?.status}
           formDocumentId={documentRevision?.formDocument?.document?.id}
           docRevId={documentRevision?.id}
           formDocumentStatus={documentRevision?.formDocument?.status}

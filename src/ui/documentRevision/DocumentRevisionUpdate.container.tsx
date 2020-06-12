@@ -55,6 +55,7 @@ DocumentRevisionUpdateContainerProps
   const isCurrentUserOperator = React.useContext(isOperator);
   const { docId } = documentRevision.document;
   useDocumentTitle(docId);
+  const portal = React.useRef(null);
 
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
   const async = useAsync<DocumentRevision>({
@@ -100,6 +101,7 @@ DocumentRevisionUpdateContainerProps
 
   return (
     <FormContext.Provider value={{ submitOnChange: true }}>
+      <div ref={portal}>Here</div>
       <DocumentRevisionForm
         doNotPrompt={doNotPrompt}
         asyncState={async.asyncState}
