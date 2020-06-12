@@ -1,4 +1,5 @@
 import { useFormikContext } from "formik";
+import _ from "lodash";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GroupTag } from "../../../../state/ducks/auth/types";
@@ -82,10 +83,14 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
     }
 
     // FB mode
+    const { schema = [] } = type;
+    console.log(type);
     const formOption: DocumentGroupOptionsType = "FORM";
     const mode: FBWorkspaceMode = isNewOutput ? "form" :
       type.groupOptions?.includes(formOption) ? "design" : "none";
     workspaceState?.setMode(mode);
+    workspaceState?.setSchema(_.union(schema, workspaceState?.getSchema() || []));
+    console.log(_.union(schema, workspaceState?.getSchema() || []));
     formik.handleChange(event);
   };
 

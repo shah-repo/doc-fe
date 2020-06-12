@@ -37,6 +37,8 @@ export type FBEditorElementType =
   | "timer"
   | "inlineapproval"
   | "outputapproval"
+  | "documentRevisions"
+  | "approvers"
   | "approvalMatrix"
   | "poApprovalMatrix"
   | "instructionsdocument"
