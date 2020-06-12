@@ -1,12 +1,18 @@
+import { Box, Link, Portal } from "@material-ui/core";
+import WarningOutlinedIcon from "@material-ui/icons/WarningOutlined";
 import React from "react";
+import Text from "../../../components/Text";
+import Colors from "../../../layout/theme/utils/colors";
 
 interface Props {
   showShouldUpgrade: boolean;
+  bannerPortal?: React.MutableRefObject<HTMLDivElement | null>;
   onUpgradeClick: () => void;
 }
 
 export const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
   showShouldUpgrade,
+  bannerPortal,
   onUpgradeClick,
 }) => {
   console.log(onUpgradeClick);
@@ -15,7 +21,40 @@ export const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
     <>
       {
         showShouldUpgrade &&
-        <div>Banner</div>
+        <Portal container={bannerPortal?.current}>
+          <Box
+            bgcolor="secondary.main"
+            color={Colors.white}
+            fontWeight="bold"
+            padding="10px"
+            display="flex"
+            alignItems="center"
+          >
+            <WarningOutlinedIcon color="disabled" />
+            <Box component="span" marginLeft="10px" color={Colors.white}>
+              <Text
+                translation="document.revision.upgrade.form.banner"
+                values={{
+                  clickHere: (
+                    <Link
+                      component="button"
+                      color="inherit"
+                      style={{
+                        color: Colors.white,
+                        fontWeight: "bold",
+                        textDecoration: "underline",
+                        fontSize: "inherit",
+                        marginBottom: 4,
+                      }}
+                    >
+                      <Text translation="common.click.here" />
+                    </Link>
+                  ),
+                }}
+              />
+            </Box>
+          </Box>
+        </Portal>
       }
     </>
   );

@@ -14,8 +14,9 @@ interface Props {
   formDocumentId?: string;
   docRevId?: string;
   formDocumentStatus?: DocumentRevisionStatus;
-  setShouldDisplay?: (value: boolean) => void;
   type: DisplayType;
+  bannerPortal?: React.MutableRefObject<HTMLDivElement | null>;
+  setShouldDisplay?: (value: boolean) => void;
 }
 
 export const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
@@ -23,8 +24,9 @@ export const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
   formDocumentId = "",
   docRevId,
   formDocumentStatus,
-  setShouldDisplay,
   type,
+  bannerPortal,
+  setShouldDisplay,
 }) => {
   const dispatch = useDispatch();
   const showShouldUpgrade = useShouldUpgradeToLatest(documentStatus, formDocumentStatus, formDocumentId);
@@ -54,7 +56,7 @@ export const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
       }
       {
         type === "banner" &&
-        <UpgradeToLatestBanner {...{ onUpgradeClick, showShouldUpgrade }} />
+        <UpgradeToLatestBanner {...{ onUpgradeClick, showShouldUpgrade, bannerPortal }} />
       }
     </>
   );

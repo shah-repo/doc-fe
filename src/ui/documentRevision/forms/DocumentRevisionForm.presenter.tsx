@@ -54,6 +54,7 @@ export interface Props
   type?: string;
   handleFBContainerRef?: (instance: HTMLDivElement | null) => any;
   FBContainer?: React.MutableRefObject<HTMLDivElement | null>;
+  bannerPortal?: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 interface FormHeaderContext {
@@ -90,9 +91,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   documentRevision,
   setFieldValue,
   type,
-  handleFBContainerRef,
   FBContainer,
-  setValues,
+  bannerPortal,
 }) => {
 
   useScrollIntoView();
@@ -178,6 +178,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         docRevId={documentRevision?.id}
         documentStatus={documentRevision?.status}
         formDocumentStatus={documentRevision?.formDocument?.status}
+        bannerPortal={bannerPortal}
       />
       <FormHeader/>
       <FormWrapper
