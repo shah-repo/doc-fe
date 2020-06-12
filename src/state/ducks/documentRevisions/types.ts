@@ -8,7 +8,7 @@ import { ChangeRequest } from "../changeRequest";
 import { Id, Owner, User } from "../common";
 import { TrainingRecord } from "../training";
 import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
-import { DocumentType } from "./documentType";
+import { DocumentGroupOptionsType, DocumentType } from "./documentType";
 
 export enum DocumentRevisionStatus {
   Draft = "DRAFT",
@@ -211,6 +211,7 @@ export interface FBDocumentRevisionProps {
 export interface FBOutputDocumentType {
   id: string;
   documentTypeName?: string;
+  groupOptions?: DocumentGroupOptionsType;
 }
 
 
