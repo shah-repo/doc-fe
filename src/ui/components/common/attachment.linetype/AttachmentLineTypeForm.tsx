@@ -1,9 +1,13 @@
-import { Box, IconButton, Link, CircularProgress } from "@material-ui/core";
+import { Box, CircularProgress, IconButton, Link } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import NotesIcon from "@material-ui/icons/Notes";
+import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import PublishRoundedIcon from "@material-ui/icons/PublishRounded";
+import { FieldInputProps, FormikProps } from "formik";
 import _ from "lodash";
 import * as React from "react";
+import { useState } from "react";
+import { useIntl } from "react-intl";
 import { Attachment, Attachment as AttachmentModel, attachmentsActions } from "../../../../state/ducks/attachments";
 import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
 import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
@@ -12,10 +16,6 @@ import useAsync from "../../../hooks/useAsync";
 import { useFormContext } from "../../forms/FormContext";
 import Text from "../../Text";
 import { styles } from "./utils/styles";
-import { FieldInputProps, FormikProps } from "formik";
-import { useIntl } from "react-intl";
-import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
-import { useState } from "react";
 
 interface Props {
   onCancel: () => void;
@@ -130,7 +130,7 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
       <IconButton
         className={classes.closeRoot}
         onClick={onCancel}
-        id="AttachmentIconPresenter-handleRemove"
+        id="AttachmentFieldPresenter-handleRemove"
       >
         <CloseIcon className={classes.closeIcon} />
       </IconButton>
