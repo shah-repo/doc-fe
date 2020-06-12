@@ -115,5 +115,14 @@
     "label": "Official Groups",
     "valueKey": "id",
     "labelKey": "name"
+  },
+  {
+    "id": "15",
+    "path": "/document_revisions?status%5B%5D=DRAFT",
+    "label": "Document Revisions In Draft",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
   }
 ]
