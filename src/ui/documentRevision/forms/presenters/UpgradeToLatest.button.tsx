@@ -1,50 +1,24 @@
 import { Box, Button, Dialog, DialogContent } from "@material-ui/core";
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import Text from "../../../components/Text";
-import useActionCreator from "../../../hooks/useActionCreator";
-import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
-import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
 
 interface Props {
-  documentStatus?: DocumentRevisionStatus;
-  formDocumentId?: string;
-  docRevId?: string;
-  formDocumentStatus?: DocumentRevisionStatus;
-  shouldDisplay: boolean;
-  setShouldDisplay: (value: boolean) => void;
+  showShouldUpgrade: boolean;
+  setShouldDisplay?: (value: boolean) => void;
+  onUpgradeClick: () => void;
 }
 
-export const UpgradeToLatest: React.FunctionComponent<Props> = ({
-  documentStatus,
-  formDocumentId = "",
-  docRevId,
-  formDocumentStatus,
+export const UpgradeToLatestButton: React.FunctionComponent<Props> = ({
   setShouldDisplay,
+  showShouldUpgrade,
+  onUpgradeClick,
 }) => {
-
-  const dispatch = useDispatch();
   const dialog = useDialog();
-  const showShouldUpgrade = useShouldUpgradeToLatest(documentStatus, formDocumentStatus, formDocumentId);
 
   useEffect(() => {
-    if (formDocumentId) {
-      dispatch(documentRevisionsActions.loadDocument(formDocumentId));
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formDocumentId]);
-
-  useEffect(() => {
-    setShouldDisplay(showShouldUpgrade);
+    setShouldDisplay?.(showShouldUpgrade);
   }, [showShouldUpgrade, setShouldDisplay]);
-
-  const async = useAsync();
-  const upgradeAction = useActionCreator(documentRevisionsActions.upgradeToReleasedForm);
-  const onUpgradeClick = () => {
-    async.start(upgradeAction, docRevId, async);
-  };
 
   return (
     <>
@@ -99,4 +73,4 @@ export const UpgradeToLatest: React.FunctionComponent<Props> = ({
   );
 };
 
-export default UpgradeToLatest;
+export default UpgradeToLatestButton;

@@ -34,6 +34,7 @@ import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
 import References from "./presenters/References";
 import RetrainField from "./presenters/RetrainField";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
+import UpgradeToLatestContainer from "./presenters/UpgradeToLatest.container";
 import { DocumentRevisionFormValues } from "./types";
 
 export interface Props
@@ -172,6 +173,12 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       sm={isDisabled ? 12 : 10}
       xs={12}
     >
+      <UpgradeToLatestContainer
+        type="banner"
+        docRevId={documentRevision?.id}
+        documentStatus={documentRevision?.status}
+        formDocumentStatus={documentRevision?.formDocument?.status}
+      />
       <FormHeader/>
       <FormWrapper
         dirty={dirty}
