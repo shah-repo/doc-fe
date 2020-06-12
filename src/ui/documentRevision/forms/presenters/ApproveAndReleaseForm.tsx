@@ -20,6 +20,7 @@ interface Props extends FormikProps<ApproveAndReleaseFormValues>{
   isQms: boolean;
   documentTypeGroups: Group[];
   owner: Owner;
+  templateOptions: any[];
 }
 
 const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
@@ -29,12 +30,33 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   values,
   documentTypeGroups,
   owner,
+  templateOptions,
 }) => {
   const classes = styles();
+  // const uniqTemplates = uniqBy(templateOptions.map((e, index) => e.forms.map((s) => ({ ...s, docTypeId: e.documentType.id, docTypeName: e.documentType.documentTypeName }))).flat(), "id");
+  // const izabraniId = "813cfe96-213d-4819-90a9-2be86ee17b5b";
+  // const docTypeByFormIds = templateOptions.map((e) => e.forms.map((s) => ({ ...e.documentType, formIds: s.id } ))).flat();
+  // const secondData = docTypeByFormIds.filter((e) => e.formIds === izabraniId);
   return (
     <Form className={classes.form}>
       <FormMessage asyncState={asyncState} />
       {isQms && <Approvers owner={owner} withoutCurrentUser={true} values={values} documentTypeGroups={documentTypeGroups} />}
+      {/* <FormControl>
+        <FormLabel component="legend">Select Template</FormLabel>
+        <FormGroup>
+          {uniqTemplates.map((s, index) => <FormControlLabel key={index}
+            control={<Checkbox name="template" />}
+            label={s.name}
+          />)}
+        </FormGroup>
+      </FormControl> */}
+      {/* <RadioGroup name="revisionChangeType">
+        {templates.map((s, index) => <RadioButton key={index}
+          label={<Text message="Select Template" />}
+          value={RevisionChangeType.NextRevision}
+          id="RevisionTypeChange-nextRevision"
+        />)}
+      </RadioGroup> */}
       {isQms && <InputField
         name="password"
         label="transition.action.password"

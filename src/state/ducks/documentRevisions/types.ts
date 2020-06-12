@@ -180,6 +180,8 @@ export type AllIdsState = string[];
 
 export interface ApproveAndReleaseRequest {
   approvers: Id[];
+  documentType: Id[];
+  formDocument: Id[];
 }
 
 export interface CreateAndReleaseRequest {

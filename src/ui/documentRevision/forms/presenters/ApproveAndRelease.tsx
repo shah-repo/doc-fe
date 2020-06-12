@@ -6,6 +6,7 @@ import { getHasPermission } from "../../../../common/utils/selectors";
 import { Group, Permission } from "../../../../state/ducks/auth/types";
 import { Owner } from "../../../../state/ducks/common/types";
 import { documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { documentTypeActions } from "../../../../state/ducks/documentRevisions/documentType";
 import { FormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
@@ -49,6 +50,9 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const async = useAsync<any>({ onSuccess: dialog.close });
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
   const [documentTypeGroups, setDocTypeGroups] = useState<any[]>([]);
+  const getDocTypeByGroupAction = useActionCreator(documentTypeActions.getDocTypeByGroup);
+  const [templateOptions, setTemplateOptions] = useState<DocumentType[]>([]);
+
   const asyncGroups = useAsync({
     onSuccess: (response: Group[] = []) => {
       setDocTypeGroups([
@@ -58,6 +62,12 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   });
 
   const getGroupsByStage = useActionCreator(documentRevisionsActions.loadGroupsByStage);
+
+  const asyncGetDocTypeByGroup = useAsync({
+    onSuccess: (data: DocumentType[] = []) => {
+      setTemplateOptions(data);
+    },
+  });
 
   useEffect(() => {
     if (!docRevId) {
@@ -78,6 +88,10 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
       docRevId,
       asyncGroups,
     );
+    asyncGetDocTypeByGroup.start(
+      getDocTypeByGroupAction,
+      { docTypeGroupOption: "CHANGE_REQUEST" },
+      asyncGetDocTypeByGroup);
     dialog.open();
   };
   const closeDialog = () => {
@@ -88,6 +102,8 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
     const approvers = !values.approvals || values.approvals.length === 0 ?
       undefined :
       values.approvals.map((approver) => ({ id: approver.value }));
+    const documentTypeId = values.documentTypeId;
+    const formDocumentId = values.formDocumentId;
     if (!isQms) {
       async.start(
         releaseNonQmsAction,
@@ -100,7 +116,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
     async.start(
       releaseAction,
       id,
-      { approvers },
+      { approvers, documentTypeId,  formDocumentId },
       values.password,
       async,
     );
@@ -122,6 +138,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
       isQms={isQms}
       documentTypeGroups={transformedDocTypeGroups}
       owner={owner as Owner}
+      templateOptions={templateOptions}
     />
   );
 
