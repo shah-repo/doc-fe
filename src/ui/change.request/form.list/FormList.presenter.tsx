@@ -1,5 +1,6 @@
 import { Button, Dialog, Grid } from "@material-ui/core";
 import React from "react";
+import { DocumentTypeById } from "../../../state/ducks/documentRevisions/documentType/types";
 import Text from "../../components/Text";
 import useDialog from "../../hooks/useDialog";
 import FormListContent from "./dialog/FormListContent";
@@ -7,7 +8,7 @@ import FormListHeader from "./dialog/FormListHeader";
 import { styles } from "./FormList.styles";
 
 interface Props {
-  templateOptions: DocumentType[];
+  templateOptions: DocumentTypeById[];
 }
 
 export const FormListPresenter: React.FunctionComponent<Props> = ({
