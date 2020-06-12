@@ -2,6 +2,11 @@ import { Attachment, attachmentsActions, AttachmentType } from "../../../../../s
 import { RenderSize } from "../../../../../state/ducks/common";
 import { FormikHybridFieldProps } from "../../../hoc/utils/types";
 
+export enum PasswordSubmitActionType {
+  DOWNLOAD_FILE = "DOWNLOAD_FILE",
+  OPEN_FILE_VIEW = "OPEN_FILE_VIEW"
+}
+
 export interface AttachmentIconDispatchProps {
   download: typeof attachmentsActions.download;
 }
@@ -16,21 +21,25 @@ export interface AttachmentIconFactoryProps extends FormikHybridFieldProps {
   handleContextMenu?: (file: Attachment) => (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   handleViewFile?: (attachment: Attachment) => () => any;
   value?: Attachment[];
+  handleIconClick?: (attachment: Attachment) => any;
   canDeleteFile?: boolean;
 }
 
 export interface AttachmentIconProps extends AttachmentIconFactoryProps {
   isUploading?: boolean;
   isLoading?: boolean;
-  handleIconClick?: (attachment: Attachment, type?: AttachmentType) => () => any;
+  isRedLine?: boolean;
+  handleIconClick?: (attachment: Attachment) => any;
 }
 
 export interface AttachmentMenuProps {
-  handleDownload?: (attachment: Attachment, type?: AttachmentType) => () => any;
+  download: (attachment: Attachment, type?: AttachmentType) => void;
   handleClose?: () => void;
   anchorEl?: null | HTMLElement;
   attachment?: Attachment;
   openFileView: () => void;
+  openWarningDialog: () => void;
+  setPasswordSubmitAction: (type: PasswordSubmitActionType) => void;
 }
 
 export interface AttachmentIconStyleProp {
