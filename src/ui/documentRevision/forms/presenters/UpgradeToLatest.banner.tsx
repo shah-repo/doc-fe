@@ -1,4 +1,5 @@
 import { Box, Link, Portal } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
 import WarningOutlinedIcon from "@material-ui/icons/WarningOutlined";
 import React from "react";
 import Text from "../../../components/Text";
@@ -15,12 +16,13 @@ export const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
   bannerPortal,
   onUpgradeClick,
 }) => {
-  console.log(onUpgradeClick);
+  const [showBanner, setShowBanner] = React.useState(true);
+  const hideBanner = () => setShowBanner(false);
 
   return (
     <>
       {
-        showShouldUpgrade &&
+        showShouldUpgrade && showBanner &&
         <Portal container={bannerPortal?.current}>
           <Box
             bgcolor="secondary.main"
@@ -37,6 +39,7 @@ export const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
                 values={{
                   clickHere: (
                     <Link
+                      onClick={onUpgradeClick}
                       component="button"
                       color="inherit"
                       style={{
@@ -53,6 +56,7 @@ export const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
                 }}
               />
             </Box>
+            <CloseIcon onClick={hideBanner} style={{ cursor: "pointer", marginLeft: "auto" }} />
           </Box>
         </Portal>
       }
