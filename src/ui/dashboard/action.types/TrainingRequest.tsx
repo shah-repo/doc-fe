@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import moment from "moment";
+import React, { useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { getFormattedStartOfDayDateString } from "../../../common/utils/date";
 import { TrainingRecord } from "../../../state/ducks/training";
@@ -16,6 +17,7 @@ export const TrainingRequest: React.FunctionComponent<Props> = ({
   index,
   trainingRecord,
 }) => {
+  const isDue = useMemo(() => moment().isAfter(trainingRecord.dueOn), [trainingRecord.dueOn]);
   const intl = useIntl();
   const [title] = useState(intl.formatMessage(
     { id: "dashboard.title.training" },
@@ -32,6 +34,7 @@ export const TrainingRequest: React.FunctionComponent<Props> = ({
       title={title}
       description={description}
       url={documentDetailsPath(trainingRecord.trainingPlan?.document.id || "")}
+      alert={!isDue}
     />
   );
 };
