@@ -1,7 +1,7 @@
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import { isEmpty } from "lodash";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { documentTypeActions, DocumentTypeById, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
@@ -29,6 +29,10 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const [errorMessage, setErrorMessage] = useState<string>();
   const [multipleForm, toggleMultipleForm] = React.useState(false);
   const docRevId = useSelector(documentTypeSelectors.docRevTypeById);
+
+  useEffect(() => {
+    setErrorMessage(undefined);
+  }, [documentTypeId]);
 
   const async = useAsync<DocumentTypeById>({
     onSuccess: () => {

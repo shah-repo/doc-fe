@@ -38,7 +38,9 @@ export const FormListDialog: React.FunctionComponent<FormListDialogProps> = ({
       <DialogContent classes={{ root: classes.dialogContent }} style={{ position: "relative" }}>
         {
           selectedFormId &&
-          <div style={{ position: "absolute", top: "40%", left: "45%" }}>
+          <div
+            style={{ position: "absolute", top: "50%", left: "50%", marginTop: -45, marginLeft: -23 }}
+          >
             <CircularProgress size={45} />
           </div>
         }
