@@ -1,7 +1,7 @@
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import { isEmpty } from "lodash";
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { documentTypeActions, DocumentTypeById, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
@@ -26,10 +26,8 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const classes = styles();
   const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
   const formIds = useSelector(documentTypeSelectors.formIds);
-  const [noForm, toggleNoForm] = React.useState(false);
+  const [errorMessage, setErrorMessage] = useState<string>();
   const [multipleForm, toggleMultipleForm] = React.useState(false);
-  const [selectedFormId, saveSelectedFormId] = React.useState("");
-  const [docId, setDocId] = React.useState("");
   const docRevId = useSelector(documentTypeSelectors.docRevTypeById);
 
   const async = useAsync<DocumentTypeById>({
@@ -39,28 +37,26 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
         return;
       }
       if (isEmpty(formIds)) {
-        toggleNoForm(true);
-        setTimeout(() => toggleNoForm(false), 1000);
+        setErrorMessage("missing.form.error");
         return;
       }
       toggleMultipleForm(true);
       dialog.open();
     },
+    onError: (msg) => setErrorMessage(msg),
   });
 
   const openDocRev = () => {
+    setErrorMessage(undefined);
     async.start(getDocRevByIds, documentTypeId, async);
   };
 
-  const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
-
-  const handleSelection = (event) => {
-    const form = formIds.find((form) => form.id === event.target.value);
-    form && setDocId(form.document.id);
-    saveSelectedFormId(event.target.value);
-  };
-
-  const redirectToForm = () => {
+  const handleSelection = (selectedFormId) => {
+    if (!selectedFormId) {
+      return;
+    }
+    const form = formIds.find((form) => form.id === selectedFormId);
+    const docId = form?.document.id;
     history.push(`/document_revision/${docId}/output_document/${selectedFormId}`);
   };
 
@@ -81,10 +77,10 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
         </Button>
       </Grid>
       {
-        noForm && (
+        errorMessage && (
           <div style={{ color: "red" }} id="DocumentByTypeListPresenter-showError">
             <Text
-              translation="missing.form.error"
+              message={errorMessage}
               values={{ name: documentTypeName }}
             />
           </div>
@@ -94,11 +90,8 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
         multipleForm &&
         <FormListDialog
           dialog={dialog}
-          preventPropagation={preventPropagation}
-          selectedFormId={selectedFormId}
           handleSelection={handleSelection}
           formIds={formIds}
-          redirectToForm={redirectToForm}
         />
       }
     </>
