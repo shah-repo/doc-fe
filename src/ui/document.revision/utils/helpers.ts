@@ -43,7 +43,9 @@ export const documentRevisionStatusOption = () => {
 };
 
 export const documentRevisionQueryStatus = (): DocumentRevisionStatus[] =>
-  Object.values(DocumentRevisionStatus).filter((value) => value !== DocumentRevisionStatus.Deprecated && value !== DocumentRevisionStatus.Canceled);
+  Object
+    .values(DocumentRevisionStatus)
+    .filter((value) => value !== DocumentRevisionStatus.Deprecated && value !== DocumentRevisionStatus.Canceled);
 
 export const documentRevisionReleasedDateOption = () => [
   {
