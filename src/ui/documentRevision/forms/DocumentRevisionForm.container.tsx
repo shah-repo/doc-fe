@@ -186,7 +186,7 @@ DocumentRevisionFormContainerProps
       initialValues={formInput}
       autosave={true}
       schema={GetScheme(props)}
-      {...{ mode  }}
+      {...{ mode }}
     >
       <DocumentRevisionFormPresenter
         {...props}
