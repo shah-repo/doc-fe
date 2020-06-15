@@ -10,7 +10,7 @@ import { FormHeaderContext } from "../DocumentRevisionForm.presenter";
 import { withActionButton } from "./ActionButton.wrap";
 import ApproveAndRelease from "./ApproveAndRelease";
 import CancelButton from "./CancelButton";
-import UpgradeToLatest from "./UpgradeToLatest";
+import UpgradeToLatestContainer from "./UpgradeToLatest.container";
 
 const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const  {
@@ -87,13 +87,13 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           setShouldDisplay={props.setCancelButtonDisplay}
         />
         {renderChangeOwnership}
-        <UpgradeToLatest
-          documentStatus={documentRevision?.formDocument?.status}
+        <UpgradeToLatestContainer
+          documentStatus={documentRevision?.status}
           formDocumentId={documentRevision?.formDocument?.document?.id}
           docRevId={documentRevision?.id}
           formDocumentStatus={documentRevision?.formDocument?.status}
-          shouldDisplay={props.upgradeToLastestDisplay}
           setShouldDisplay={props.setUpgradeToLastestDisplay}
+          type="button"
         />
       </HeaderMenu>
     </Grid>
