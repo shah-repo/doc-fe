@@ -113,5 +113,6 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
     });
   };
 
-  return (props: T) => Comp(props);
+  Comp.displayName = "withFBPOApprovalMatrix";
+  return Comp;
 };

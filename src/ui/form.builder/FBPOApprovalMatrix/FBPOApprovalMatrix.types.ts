@@ -62,6 +62,7 @@ export type FBPOApprovalMatrixTableProps =
   isDocumentReleased: boolean;
   groups?: Map<string, Group>;
   employees?: Map<string, Employee>;
+  isOutput: boolean;
 };
 
 export interface POApprovalMatrix {
