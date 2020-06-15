@@ -32,7 +32,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
     <Box flexGrow="1">
       <Toolbar className={classes.toolbar}>
         <Typography variant="h6" className={classes.toolbarTitle}>
-          <Link to={HOME_URL} className={classes.headerLink}>
+          <Link to={HOME_URL} className={classes.headerLink} data-cy="Navigation.home">
             <Logo />
           </Link>
         </Typography>
@@ -43,6 +43,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
           text="navigation.dashboard"
           Icon={Dashboard}
           currentPath={location.pathname}
+          data-cy={"Navigation.dashboard"}
           childrenUrls={
             [
             // { url: CHANGE_REQUEST_CREATE_URL, text: "navigation.createChangeRequest" },
@@ -52,12 +53,14 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
         <NavigationLinkContainer
           url={DOCUMENT_REVISION_LIST_URL}
           text="navigation.document.list"
+          data-cy={"Navigation.document.list"}
           Icon={Dashboard}
           currentPath={location.pathname}
         />
         <NavigationLinkContainer
           url={CHANGE_REQUEST_LIST_URL}
           text="navigation.change.request.list"
+          data-cy={"Navigation.change.list"}
           Icon={Dashboard}
           currentPath={location.pathname}
         />

@@ -4,7 +4,7 @@
 const runId = new Date().valueOf();
 let createdCompany;
 
-context("Login", () => {
+context.skip("Login", () => {
   it("Creates company", () => {
     cy.apiLogin({
       email: "zoran.kovacevic+admin@codecons.com",
@@ -13,7 +13,7 @@ context("Login", () => {
       cy.createCompany({
         payload: {
           companyAcronym: `T1${runId}`,
-          companyAdminEmail: "zoran.kovacevic+ca@codecons.com",
+          companyAdminEmail: "zoran.kovacevic+admin@codecons.com",
           helloSignIntegrationEnabled: false,
           helloSignTestMode: false,
           importerEmail: `zoran.kovacevic+importer${runId}@codecons.com`,
@@ -36,7 +36,7 @@ context("Login", () => {
 
   it("Logs user in", () => {
     cy.login({
-      email: "zoran.kovacevic+ca@codecons.com",
+      email: "zoran.kovacevic+admin@codecons.com",
       password: "Tester1!",
     });
     console.log({ createdCompany });

@@ -20,6 +20,7 @@ const UserManagementLink: React.FunctionComponent<Props> = ({
     <NavigationLinkContainer
       url={USER_MANAGEMENT_ROOT_URL}
       text="navigation.user.management"
+      data-cy="Navigation.user.management"
       currentPath={pathname}
     />
   );

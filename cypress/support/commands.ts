@@ -112,17 +112,15 @@ Cypress.Commands.add("createCompany", (params: {payload: ICreateCompanyBootstrap
     headers: {
       Authorization: `bearer_admin ${params.sessionId}`,
     },
-  }).then((response) => {
-    console.log(response);
-    return response.body;
-  });
+    timeout: 10 * 1000,
+  }).then((response) => response.body);
 });
 
 Cypress.Commands.add("apiLogin", (params: {email: string; password: string }) => {
   cy.request({
     method: "POST",
     url: `${CONFIG.BE_URL}/api/v1/auth/login`,
-
+    timeout: 10 * 1000,
     body: params,
   }).then((response) =>
     response.body.sessionId
@@ -131,13 +129,13 @@ Cypress.Commands.add("apiLogin", (params: {email: string; password: string }) =>
 
 Cypress.Commands.add("login", (params: {email: string; password: string }) => {
   cy.visit(CONFIG.FE_URL);
-  cy.get("#LoginFormPresenter-email").type(params.email)
+  cy.get("#LoginFormPresenter-email", { timeout: 10 * 1000 }).type(params.email)
     .get("#LoginFormPresenter-password").type(params.password)
     .get("#LoginFormPresenter-submit").click();
 });
 
 Cypress.Commands.add("selectCompany", (params: {name: string }) => {
-  cy.get("#root").contains(params.name).click();
+  cy.get("#root", { timeout: 10 * 1000 }).contains(params.name).click();
 });
 
 

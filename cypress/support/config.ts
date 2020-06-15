@@ -21,6 +21,7 @@ export class ConfigEnv {
     const configEnv: ConfigEnv = plainToClass(ConfigEnv, {
       BE_URL: Cypress.env("BE_URL"),
       FE_URL: Cypress.env("FE_URL"),
+      KONFIG_ENV: Cypress.env("KONFIG_ENV"),
     });
     console.log({ configEnv });
     const errors = validateSync(configEnv, {
@@ -41,6 +42,11 @@ export class ConfigEnv {
   @IsDefined()
   @IsString()
   FE_URL!: string;
+
+
+  @IsDefined()
+  @IsString()
+  KONFIG_ENV!: string;
 }
 
 

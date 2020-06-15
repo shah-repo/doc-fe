@@ -80,12 +80,12 @@ const Field: React.FunctionComponent<FieldProps> = ({
 
   return (
     <FormControl
-      id={`field-${field.name}`}
       variant={variant || "standard"}
       required={required}
       fullWidth={true}
       error={shouldDisplayError}
       className={classes.form}
+      data-cy={`field-${field.name}`}
       {...formControlProps}
     >
       {LabelComponent()}

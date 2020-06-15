@@ -87,6 +87,7 @@ const Autocomplete: React.FunctionComponent<AutocompletePropsWithFormik> = ({
         onChange={onChange}
         styles={selectStyles}
         filterOption={filterOption}
+        data-cy={`select_${fieldProps.field.name}`}
         input={<InputField name={fieldProps.field.name} />}
         isDisabled={isDisabled}
         components={{ MultiValueRemove }}

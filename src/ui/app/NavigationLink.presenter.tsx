@@ -12,12 +12,7 @@ import { ReactComponent as DocumentListICon } from "../../assets/images/document
 import { ReactComponent as GroupManagementIcon } from "../../assets/images/group_management_icon.svg";
 import { ReactComponent as UserManagementIcon } from "../../assets/images/user_management_icon.svg";
 import Text from "../components/Text";
-import {
-  CHANGE_REQUEST_LIST_URL,
-  DOCUMENT_REVISION_LIST_URL,
-  GROUP_MANAGEMENT_ROOT_URL,
-  USER_MANAGEMENT_ROOT_URL,
-} from "../constants/urls";
+import { CHANGE_REQUEST_LIST_URL, DOCUMENT_REVISION_LIST_URL, GROUP_MANAGEMENT_ROOT_URL, USER_MANAGEMENT_ROOT_URL } from "../constants/urls";
 import { LinkDefinition } from "./NavigationLink.container";
 import styles from "./NavigationLink.styles";
 
@@ -46,26 +41,31 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
   text,
   ActionIcon,
   isChild,
-}) => (
-  <NavLink
-    to={url}
-    exact={true}
-    className={classNames(classes.link, { [classes.childLink]: isChild })}
-    activeClassName={classes.activeLink}
-  >
-    <ListItem button={true} className={classes.itemButton}>
-      <ListItemIcon className={classes.itemIcon}>
-        {_.get(iconMapping, url) || <div />}
-      </ListItemIcon>
-      <ListItemText
-        primary={<Text message={text} />}
-        classes={{
-          primary: classes.itemText,
-        }}
-      />
-    </ListItem>
-    {ActionIcon}
-  </NavLink>
-);
+  ...otherProps
+}) => {
+
+  console.log({ otherProps });
+  const dataCy = otherProps["data-cy"] ? { "data-cy": otherProps["data-cy"] } : {};
+  return (
+    <NavLink
+      to={url}
+      exact={true}
+      className={classNames(classes.link, { [classes.childLink]: isChild })}
+      activeClassName={classes.activeLink}
+    >
+      <ListItem button={true} className={classes.itemButton} {...dataCy}>
+        <ListItemIcon className={classes.itemIcon}>
+          {_.get(iconMapping, url) || <div />}
+        </ListItemIcon>
+        <ListItemText
+          primary={<Text message={text} />}
+          classes={{
+            primary: classes.itemText,
+          }}
+        />
+      </ListItem>
+      {ActionIcon}
+    </NavLink>
+  ); };
 
 export default withStyles(styles)(NavigationLinkPresenter);

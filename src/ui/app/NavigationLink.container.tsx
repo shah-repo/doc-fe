@@ -18,9 +18,8 @@ export interface NavigationLinkContainerProps extends LinkDefinition {
 }
 
 const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerProps> =
-  ({ url, text, Icon, childrenUrls = [], currentPath }) => {
+  ({ url, text, Icon, childrenUrls = [], currentPath, ...otherProps }) => {
     const [isOpen, setIsOpen] = useState(false);
-
     useEffect(() => {
       const isChildActive = _.includes(childrenUrls.map((link) => link.url), currentPath);
       setIsOpen(isChildActive);
@@ -44,7 +43,7 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
 
     return (
       <React.Fragment>
-        <NavigationLinkPresenter url={url} text={text} Icon={Icon} ActionIcon={childrenUrls.length ? actionIcon : ""} />
+        <NavigationLinkPresenter url={url} text={text} Icon={Icon} ActionIcon={childrenUrls.length ? actionIcon : ""} {...otherProps}/>
         {childrenList}
       </React.Fragment>
     );
