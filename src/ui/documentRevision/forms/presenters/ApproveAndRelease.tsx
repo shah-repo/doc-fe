@@ -52,6 +52,8 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const [documentTypeGroups, setDocTypeGroups] = useState<any[]>([]);
   const getDocTypeByGroupAction = useActionCreator(documentTypeActions.getDocTypeByGroup);
   const [templateOptions, setTemplateOptions] = useState<DocumentType[]>([]);
+  const [formDocument, setFormDocument] = useState<string>("");
+  const [documentType, setDocumentType] = useState<string>("");
 
   const asyncGroups = useAsync({
     onSuccess: (response: Group[] = []) => {
@@ -102,8 +104,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
     const approvers = !values.approvals || values.approvals.length === 0 ?
       undefined :
       values.approvals.map((approver) => ({ id: approver.value }));
-    const documentTypeId = values.documentTypeId;
-    const formDocumentId = values.formDocumentId;
+
     if (!isQms) {
       async.start(
         releaseNonQmsAction,
@@ -116,7 +117,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
     async.start(
       releaseAction,
       id,
-      { approvers, documentTypeId,  formDocumentId },
+      { approvers, documentType: { id: documentType },  formDocument: { id: formDocument } },
       values.password,
       async,
     );
@@ -139,6 +140,8 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
       documentTypeGroups={transformedDocTypeGroups}
       owner={owner as Owner}
       templateOptions={templateOptions}
+      setFormDocument={setFormDocument}
+      setDocumentType={setDocumentType}
     />
   );
 
@@ -174,7 +177,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
           >
             <FormContext.Provider value={{ submitOnChange: false }}>
               <Formik
-                initialValues={{ password: "", approvals: [] }}
+                initialValues={{ password: "", approvals: [], formDocument: { id: "" }, documentType: { id: "" }  }}
                 onSubmit={onSubmit}
               >
                 {renderForm}

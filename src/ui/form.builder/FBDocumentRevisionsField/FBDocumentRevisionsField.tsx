@@ -44,7 +44,7 @@ const FBDocumentRevisionsField: React.FunctionComponent<FBDocumentRevisionProps>
           variant="outlined"
           style={{ margin: "0px 0px 32px 0px" }}
           {...{ onClick }}
-          // disabled={disabled}
+          disabled={disabled}
         />
       </React.Fragment>
     </div>

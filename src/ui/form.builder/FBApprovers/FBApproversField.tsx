@@ -63,7 +63,7 @@ const FBApproversField: React.FunctionComponent<FBApproversProps> = ({
               components: { MultiValueLabel },
             }}
             options={availableApprovers}
-            // isDisabled={disabled}
+            isDisabled={disabled}
           />
         </AsyncGate>
       </React.Fragment>

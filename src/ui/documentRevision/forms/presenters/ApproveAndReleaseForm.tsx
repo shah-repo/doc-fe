@@ -1,4 +1,4 @@
-import { Button } from "@material-ui/core";
+import { Button, FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
 import { Form, FormikProps } from "formik";
 import * as React from "react";
 import { Group } from "../../../../state/ducks/auth/types";
@@ -21,6 +21,8 @@ interface Props extends FormikProps<ApproveAndReleaseFormValues>{
   documentTypeGroups: Group[];
   owner: Owner;
   templateOptions: any[];
+  setFormDocument: (value: string) => void;
+  setDocumentType: (value: string) => void;
 }
 
 const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
@@ -31,32 +33,32 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   documentTypeGroups,
   owner,
   templateOptions,
+  setFormDocument,
+  setDocumentType,
 }) => {
   const classes = styles();
-  // const uniqTemplates = uniqBy(templateOptions.map((e, index) => e.forms.map((s) => ({ ...s, docTypeId: e.documentType.id, docTypeName: e.documentType.documentTypeName }))).flat(), "id");
-  // const izabraniId = "813cfe96-213d-4819-90a9-2be86ee17b5b";
-  // const docTypeByFormIds = templateOptions.map((e) => e.forms.map((s) => ({ ...e.documentType, formIds: s.id } ))).flat();
-  // const secondData = docTypeByFormIds.filter((e) => e.formIds === izabraniId);
+
   return (
     <Form className={classes.form}>
       <FormMessage asyncState={asyncState} />
       {isQms && <Approvers owner={owner} withoutCurrentUser={true} values={values} documentTypeGroups={documentTypeGroups} />}
-      {/* <FormControl>
-        <FormLabel component="legend">Select Template</FormLabel>
-        <FormGroup>
-          {uniqTemplates.map((s, index) => <FormControlLabel key={index}
-            control={<Checkbox name="template" />}
-            label={s.name}
-          />)}
-        </FormGroup>
-      </FormControl> */}
-      {/* <RadioGroup name="revisionChangeType">
-        {templates.map((s, index) => <RadioButton key={index}
-          label={<Text message="Select Template" />}
-          value={RevisionChangeType.NextRevision}
-          id="RevisionTypeChange-nextRevision"
-        />)}
-      </RadioGroup> */}
+      <RadioGroup
+        aria-label="selectForm"
+        name="formDocument"
+        id="FormList-selectForm"
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) => setFormDocument((event.target as HTMLInputElement).value)}
+      >
+        {templateOptions.map((template) =>
+          template.forms.map((form) =>
+            <FormControlLabel
+              key={form.id}
+              value={form.id}
+              control={<Radio color="primary" />}
+              label={form.name}
+              onChange={() => setDocumentType(template.documentType.id)}
+            />
+          ))}
+      </RadioGroup>
       {isQms && <InputField
         name="password"
         label="transition.action.password"
