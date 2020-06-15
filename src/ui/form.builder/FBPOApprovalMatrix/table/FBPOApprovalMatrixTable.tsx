@@ -48,7 +48,6 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
   name,
   signatureStages,
   groupOptions,
-  isOutput,
 }) => {
   const classes = useStyles();
 
@@ -75,7 +74,7 @@ const FBPOApprovalMatrixTable: React.FunctionComponent<FBPOApprovalMatrixTablePr
           </TableRow>
         </TableHead>
         <TableBody>
-          {isOutput && approvalLevels?.map((row: POApprovalMatrixLevel, index) => (
+          {approvalLevels?.map((row: POApprovalMatrixLevel, index) => (
             <TableRow
               key={`${row.name}-${index}`}
               {...!disabled && { onClick: handleEdit(index, row) }}

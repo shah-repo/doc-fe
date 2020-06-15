@@ -19,9 +19,12 @@ export class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrix, null> {
   public url = FBEndpoint.POApprovalMatrix;
   private formState?: FBFormState;
 
-  public constructor({ formState, approvalLevels, submitForm, outputRevision }: FBPOApprovalMatrixConstructor) {
+  public constructor({ formState, approvalLevels, isOutput, outputRevision }: FBPOApprovalMatrixConstructor) {
     super();
     this.formState = formState;
+    if (!isOutput) {
+      return;
+    }
     if (outputRevision || !approvalLevels || _.isEmpty(approvalLevels)) {
       this.fetch();
       return;

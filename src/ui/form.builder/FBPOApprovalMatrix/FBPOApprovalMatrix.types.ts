@@ -62,7 +62,6 @@ export type FBPOApprovalMatrixTableProps =
   isDocumentReleased: boolean;
   groups?: Map<string, Group>;
   employees?: Map<string, Employee>;
-  isOutput: boolean;
 };
 
 export interface POApprovalMatrix {
@@ -93,6 +92,6 @@ export interface FBPOApprovalMatrixConstructor {
   formState?: FBFormState;
   approvalLevels?: POApprovalMatrixLevel[];
   outputRevision?: boolean;
-  submitForm?: () => void;
+  isOutput?: boolean;
 }
 

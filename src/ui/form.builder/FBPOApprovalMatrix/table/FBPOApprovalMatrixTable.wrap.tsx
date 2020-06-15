@@ -90,7 +90,6 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
       handleEdit,
       signatureStages,
       isDocumentReleased,
-      isOutput: workspaceState?.isOutput,
     });
   };
 
