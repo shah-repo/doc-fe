@@ -83,9 +83,7 @@ context("Test", () => {
     cy.get("[data-cy=\"select.document.documentType.id\"]").click();
     cy.get("[data-cy=\"selectItem.document.documentType.id.Dynamic Form\"]").click();
   });
-  it("adds attachment", () => {
-    cy.get("[data-cy=\"AttachmentFieldPresenter-field\"] > input[type=file]").attachFile("image.jpg");
-  });
+
   it("fills in revision stage", () => {
     cy.get("[data-cy=\"select.revisionStage\"]").click();
     cy.get("[data-cy=\"selectItem.revisionStage.common.Alpha\"]").click();
@@ -110,6 +108,12 @@ context("Test", () => {
     // cy.get("[data-cy=\"field-securityEmployees\"]", { timeout: 10000 }).click();
     // cy.get("[data-cy=\"field-securityEmployees\"] > div:contains('Zoran Second')").click();
 
+  });
+  it("adds attachment", () => {
+    cy.get("[data-cy=\"AttachmentFieldPresenter-field\"] > input[type=file]").attachFile("image.jpg");
+    cy.get("#AttachmentIconPresenter-fileTitle").then(($div) => {
+      expect($div).to.have.text("image.jpg");
+    });
   });
 });
 
