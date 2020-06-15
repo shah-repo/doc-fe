@@ -27,14 +27,27 @@ export const TrainingRequest: React.FunctionComponent<Props> = ({
     { id: "dashboard.assigned.training" },
     { dueDate: getFormattedStartOfDayDateString(trainingRecord.dueOn) },
   ));
+  const [alertMessage] = useState(() => {
+    if (!isDue) {
+      return "";
+    }
+    return ` - ${
+      intl.formatMessage(
+        { id: "common.overdue" },
+      )
+    }`;
+  });
 
   return (
     <DashboardActionTypeBase
-      index={index}
-      title={title}
-      description={description}
       url={documentDetailsPath(trainingRecord.trainingPlan?.document.id || "")}
-      alert={!isDue}
+      alert={isDue}
+      {...{
+        alertMessage,
+        description,
+        index,
+        title,
+      }}
     />
   );
 };

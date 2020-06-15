@@ -1,6 +1,6 @@
 import { Box, Button } from "@material-ui/core";
 import WarningOutlinedIcon from "@material-ui/icons/WarningOutlined";
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Text from "../../components/Text";
 
@@ -10,6 +10,7 @@ interface Props {
   description: string;
   url: string;
   alert?: boolean;
+  alertMessage?: string;
 }
 
 export const DashboardActionTypeBase: React.FunctionComponent<Props> = ({
@@ -18,58 +19,68 @@ export const DashboardActionTypeBase: React.FunctionComponent<Props> = ({
   description,
   url,
   alert,
+  alertMessage,
   children,
-}) => (
-  <Box marginBottom="15px" marginTop="15px" marginLeft="45px">
+}) => {
+  const [isHover, setIsHover] = useState(false);
+  return (
     <Box
-      display="flex"
-      justifyContent="space-between"
-      alignItems="center"
+      marginBottom="15px"
+      marginTop="15px"
+      marginLeft="45px"
+      onMouseEnter={() => setIsHover(true)}
+      onMouseLeave={() => setIsHover(false)}
     >
-      {
-        alert &&
-        <span
-          style={{
-            backgroundColor: "#FCDEDE",
-            borderRadius: 50,
-            position: "absolute",
-            left: 30,
-            width: 35,
-            height: 35,
-            display: "flex",
-            justifyContent: "center",
-            paddingTop: 6,
-          }}
-        >
-          <WarningOutlinedIcon color="error" fontSize="small" />
-        </span>
-      }
-      <Link to={url} style={{ textDecoration: "none", color: "inherit" }}>
-        <Box>
-          <Box
-            color={alert ? "error.main" : "primary.main"}
-            fontWeight="fontWeightBold"
-            marginBottom="5px"
-          >
-            {title}
-          </Box>
-          <Box>
-            {description}
-          </Box>
-        </Box>
-      </Link>
-      <Button
-        variant="contained"
-        target="_blank"
-        href={url}
-        color="secondary"
-        id={`Dashboard-open-${index}`}
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
       >
-        <Text translation="common.open" />
-      </Button>
+        {
+          alert &&
+          <span
+            style={{
+              backgroundColor: isHover ? "#FCDEDE" : "",
+              borderRadius: 50,
+              position: "absolute",
+              left: 30,
+              width: 35,
+              height: 35,
+              display: "flex",
+              justifyContent: "center",
+              paddingTop: 6,
+            }}
+          >
+            <WarningOutlinedIcon color="error" fontSize="small" />
+          </span>
+        }
+        <Link to={url} style={{ textDecoration: "none", color: "inherit" }}>
+          <Box>
+            <Box
+              color={alert ? "error.main" : "primary.main"}
+              fontWeight="fontWeightBold"
+              marginBottom="5px"
+            >
+              {title}{alertMessage}
+            </Box>
+            <Box>
+              {description}
+            </Box>
+          </Box>
+        </Link>
+        <Button
+          variant="contained"
+          target="_blank"
+          href={url}
+          color="secondary"
+          id={`Dashboard-open-${index}`}
+        >
+          <Text translation="common.open" />
+        </Button>
+      </Box>
+      {children}
     </Box>
-    {children}
-  </Box>
-);
+  );
+};
 
 export default DashboardActionTypeBase;
