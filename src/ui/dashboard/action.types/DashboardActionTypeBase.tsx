@@ -3,6 +3,7 @@ import WarningOutlinedIcon from "@material-ui/icons/WarningOutlined";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Text from "../../components/Text";
+import Colors from "../../layout/theme/utils/colors";
 
 interface Props {
   index: number;
@@ -40,7 +41,7 @@ export const DashboardActionTypeBase: React.FunctionComponent<Props> = ({
           alert &&
           <span
             style={{
-              backgroundColor: isHover ? "#FCDEDE" : "",
+              backgroundColor: isHover ? Colors.light_red : "",
               borderRadius: 50,
               position: "absolute",
               left: 30,
