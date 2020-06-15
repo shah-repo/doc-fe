@@ -6,7 +6,7 @@ import { Link as RouterLink } from "react-router-dom";
 // import { ReactComponent as UnlockIcon } from "../../../assets/images/icon_unlock.svg";
 import { stripTagsFromObject } from "../../../common/utils/helpers";
 import { unmaskId } from "../../../state/ducks/common/helpers";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import Date from "../../components/Date";
 import { TableColumnProps } from "../../components/table/column/types";
@@ -142,11 +142,9 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         editDocumentRevision(rowData.id, rowData.document.id),
       searchOptions: {
         dataKey: "status[]",
-        defaultValue: !tableCriteria.queryDict["status[]"]
-          ? DocumentRevisionStatus.Released
-          : _.isString(tableCriteria.queryDict["status[]"])
-            ? tableCriteria.queryDict["status[]"]
-            : undefined,
+        defaultValue: _.isString(tableCriteria.queryDict["status[]"])
+          ? tableCriteria.queryDict["status[]"]
+          : undefined,
         searchType: "select",
         selectOptions: documentRevisionStatusOption(),
       },

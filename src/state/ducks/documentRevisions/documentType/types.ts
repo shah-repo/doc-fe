@@ -76,15 +76,6 @@ export type DocRevByIdState = DocumentTypeById;
 
 export type DocumentTypeAllIdsState = string[];
 
-export enum DynamicUIDocTypes {
-  PO = "PO",
-  RC = "RC",
-  SUP = "SUP",
-  WO = "WO",
-  DAM = "DAM",
-  POAM = "POAM",
-}
-
 export type FieldConfig = { [key in FieldType]?: IFieldConfigItem };
 
 export interface IFieldConfigItem {
