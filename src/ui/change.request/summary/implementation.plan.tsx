@@ -1,4 +1,4 @@
-import { Box, Grid, Typography, WithStyles, withStyles } from "@material-ui/core";
+import { Box, Grid, Typography } from "@material-ui/core";
 import React from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { getFormattedStartOfDayDateString } from "../../../common/utils/date";
@@ -19,10 +19,9 @@ interface OwnProps extends DataProps<Model> {
   crId: string;
 }
 
-export type Props = OwnProps & WithStyles<typeof styles>;
+export type Props = OwnProps;
 
 export const ImplementationPlan: React.FunctionComponent<Props> = ({
-  classes,
   dataProp,
   currentUserEmail,
   crStatus,
@@ -30,6 +29,7 @@ export const ImplementationPlan: React.FunctionComponent<Props> = ({
   crId,
 }) => {
   const { tasks, attachments } = dataProp;
+  const classes = styles();
 
   const attachmentRenderer = () => (
     <AttachmentIconField
@@ -116,4 +116,4 @@ export const ImplementationPlan: React.FunctionComponent<Props> = ({
   );
 };
 
-export default withStyles(styles)(ImplementationPlan);
+export default ImplementationPlan;

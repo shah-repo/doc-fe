@@ -1,12 +1,7 @@
 import { Attachment } from "../attachments";
 import { AuditActionPayload } from "../audit/types";
 import { Approval, Id, Owner, User } from "../common";
-import {
-  CHANGE_REQUEST_AUDIT_SET,
-  CHANGE_REQUEST_LIST,
-  CHANGE_REQUEST_LIST_APPROVERS,
-  CHANGE_REQUEST_SET,
-} from "./constants";
+import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET } from "./constants";
 
 export enum ChangeRequestStatus {
   Draft = "DRAFT",
@@ -116,9 +111,6 @@ export interface ImplementationPlanRequest {
 export interface ChangeRequestEditRequestBody {
   title: string;
   description: string;
-  assessments: Assessment;
-  implementationPlan: ImplementationPlanRequest;
-  justifications: EditRequestBodyNestedObject;
   effectiveDate?: string;
   approvals: Approver[];
   documentRevisions: DocumentRevisionRequestBody[];

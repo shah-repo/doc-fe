@@ -3,7 +3,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core";
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      margin: theme.spacing(0, 4, 0, 2),
+      margin: theme.spacing(0, 0, 0, 2),
     },
     details: {
       overflowY: "auto",

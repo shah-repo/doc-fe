@@ -1,5 +1,5 @@
 import { Box, withStyles, WithStyles } from "@material-ui/core";
-import { Field, FieldProps, FormikProps } from "formik";
+import { FormikProps } from "formik";
 import React, { useEffect } from "react";
 import { toStartOfDay } from "../../../../common/utils/date";
 import { Group } from "../../../../state/ducks/auth/types";
@@ -16,11 +16,8 @@ import ScrollToError from "../../../components/forms/ScrollToError";
 import useDidMount from "../../../hooks/useDidMount";
 import FormHeader from "../../form/assessmentForm/FormHeader";
 import ApproversField from "../approvers";
-import AssessmentsField from "../assessments";
-import JustificationField from "../justification";
 import { ChangeRequestFormValues } from "../types.js";
 import styles from "./AssessmentForm.styles";
-import AssessmentFormImplementationPlan from "./implementationPlan/Container";
 
 interface Props
   extends WithStyles<typeof styles>,
@@ -73,9 +70,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
         inputProps={{ disabled: true, value: changeRequest.crId }}
       />
     );
-  const renderimplementationPlan = (
-    props: FieldProps<ChangeRequestFormValues>,
-  ) => <AssessmentFormImplementationPlan {...props} />;
+
 
   return (
     <div className={classes.container}>
@@ -106,20 +101,17 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
         <Box mb={1}>
           <InputField
             name="title"
-            label="cr.title"
+            label="common.title"
             inputProps={{ id: "title", multiline: true, rows: "2" }}
             validate={validator(required)}
           />
           <TextEditorField
             data-testid="description"
             name="description"
-            label="cr.description"
+            label="common.description"
             validate={validator(required)}
           />
         </Box>
-        <JustificationField />
-        <AssessmentsField />
-        <Field name="implementationPlan">{renderimplementationPlan}</Field>
         <DatePickerField
           name="effectiveDate"
           label="common.target.date"
