@@ -1,9 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import {
-  DocumentType,
-  documentTypeSelectors,
-} from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentType, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { DOCUMENT_BY_TYPE_ROOT_URL } from "../../constants/urls";
 import NavigationLinkContainer from "../NavigationLink.container";
 
@@ -26,7 +23,7 @@ const DocumentByTypeListLinks: React.FunctionComponent<Props> = ({
       {docTypesWithPageDetails.map((docType: DocumentType) => (
         <NavigationLinkContainer
           key={docType.id}
-          url={`${DOCUMENT_BY_TYPE_ROOT_URL}/${docType.documentTypeAcronym.toLowerCase()}`}
+          url={`${DOCUMENT_BY_TYPE_ROOT_URL}/${docType.id}`}
           text={docType.documentTypeName}
           currentPath={pathname}
         />

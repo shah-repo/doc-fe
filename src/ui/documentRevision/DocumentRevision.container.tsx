@@ -9,6 +9,7 @@ import { DOCUMENT_REVISION_DETAILS_URL, DOCUMENT_REVISION_VERSION_URL } from "..
 import DocumentRevisionManagerContainer from "./DocumentRevisionsManager.container";
 import { DocumentRevisionRouteParams } from "./types";
 
+
 interface StateProps {
   loadAsyncState: AsyncState;
   documentRevision: DocumentRevision;

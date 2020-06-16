@@ -1,4 +1,5 @@
 import { IconButton, ListItemIcon, ListItemText, MenuItem } from "@material-ui/core";
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Menu from "@material-ui/core/Menu";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
@@ -34,27 +35,28 @@ export const UserMenuPresenter: React.FunctionComponent<Props> = ({
       <IconButton onClick={handleClick} id="UserMenuButton">
         <ArrowDropDownIcon fontSize="small" />
       </IconButton>
-      <Menu
-        id="UserMenu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-        getContentAnchorEl={null}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-      >
-        <MenuItem onClick={openUserProfile}>
-          <ListItemIcon>
-            <PersonOutlineOutlinedIcon fontSize="small"/>
-          </ListItemIcon>
-          <ListItemText>
-            <Text translation="header.menu.my.profile" />
-          </ListItemText>
-        </MenuItem>
-        {hasMultipleCompanies &&
+      <ClickAwayListener onClickAway={handleClose} mouseEvent="onMouseDown">
+        <Menu
+          id="UserMenu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+          getContentAnchorEl={null}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
+        >
+          <MenuItem onClick={openUserProfile}>
+            <ListItemIcon>
+              <PersonOutlineOutlinedIcon fontSize="small"/>
+            </ListItemIcon>
+            <ListItemText>
+              <Text translation="header.menu.my.profile" />
+            </ListItemText>
+          </MenuItem>
+          {hasMultipleCompanies &&
           <MenuItem>
             <ListItemIcon>
               <SyncAltOutlinedIcon fontSize="small"/>
@@ -63,16 +65,17 @@ export const UserMenuPresenter: React.FunctionComponent<Props> = ({
               <SwitchCompanyButtonContainer location={location}/>
             </ListItemText>
           </MenuItem>
-        }
-        <MenuItem onClick={handleLogout}>
-          <ListItemIcon>
-            <ExitToAppOutlinedIcon fontSize="small"/>
-          </ListItemIcon>
-          <ListItemText>
-            <Text translation="header.logout" />
-          </ListItemText>
-        </MenuItem>
-      </Menu>
+          }
+          <MenuItem onClick={handleLogout}>
+            <ListItemIcon>
+              <ExitToAppOutlinedIcon fontSize="small"/>
+            </ListItemIcon>
+            <ListItemText>
+              <Text translation="header.logout" />
+            </ListItemText>
+          </MenuItem>
+        </Menu>
+      </ClickAwayListener>
     </>
   ); };
 

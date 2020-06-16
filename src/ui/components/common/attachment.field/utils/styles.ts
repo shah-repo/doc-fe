@@ -12,6 +12,10 @@ export const styles = makeStyles((theme) => ({
   link: ({ isField }: AttachmentStyleProps) => ({
     display: isField ? "flex" : "block",
   }),
+  button: {
+    margin: theme.spacing(1),
+    colorInherit: theme.palette.primary.main,
+  },
   input: {
     display: "none",
   },

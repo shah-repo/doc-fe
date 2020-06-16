@@ -13,10 +13,8 @@ import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import { FBSchemaProps, FBWorkspace } from "../../form.builder";
-import useCRLink from "../../hooks/docCustomization/useCRLink";
+import { useCRLink, useTitle, useTraining } from "../../hooks/docCustomization/useCustomization";
 import useDescription from "../../hooks/docCustomization/useDescription";
-import useTitle from "../../hooks/docCustomization/useTitle";
-import useTraining from "../../hooks/docCustomization/useTraining";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import SummaryHeader from "../header/SummaryHeader";
 import Attachment from "./attachment";
@@ -64,10 +62,10 @@ export const Presenter: React.FunctionComponent<Props> = ({
   const FBIsOutput = Boolean(docId && !_.isEmpty(docId));
   const FBIsActive = formInput || formTemplate || formDocument;
   const docTypeId = dataProp?.document?.documentType?.id;
-  const isTrainingVisible = useTraining(docTypeId);
+  const [isTrainingVisible] = useTraining(docTypeId);
   const [isDescriptionVisible] = useDescription(docTypeId);
-  const [isTitleVisible] = useTitle(docTypeId);
-  const isCRLinkVisible = useCRLink(docTypeId);
+  const [isTitleVisible, titleLabel] = useTitle(docTypeId);
+  const [isCRLinkVisible] = useCRLink(docTypeId);
   const docTypeAcronym = dataProp?.document?.documentType?.documentTypeAcronym;
 
   const outputDocumentTypeName = useSelector((state: ApplicationState) =>
@@ -99,10 +97,9 @@ export const Presenter: React.FunctionComponent<Props> = ({
           isCRLinkVisible &&
           <ChangeRequestLink dataProp={dataProp} />
         }
-
         {
           isTitleVisible &&
-          <SummaryField label={`common.title.${docTypeAcronym}`} value={name} />
+          <SummaryField label={titleLabel} value={name} />
         }
         {
           isTrainingVisible &&

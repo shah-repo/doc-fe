@@ -14,11 +14,12 @@ AttachmentIconProps
   attachment,
   size,
   handleRemove,
-  handleIconClick,
   handleContextMenu,
   disabled = false,
   isLoading,
   isUploading,
+  isRedLine,
+  handleIconClick,
   canDeleteFile,
   ...other
 }) => {
@@ -33,6 +34,7 @@ AttachmentIconProps
       <Text translation="common.uploading" />
     </Box>
   );
+
   const deleteButtonRenderer = canDeleteFile && (
     <Box className={classes.closeRoot}>
       <IconButton
@@ -45,7 +47,7 @@ AttachmentIconProps
     </Box>
   );
   return (
-    <Grid key={`cell-${file.id}`} item={true} xs={12} sm={4} md={2}>
+    <Grid key={`cell-${file.id}`} item={true} xs={2} sm={1} md={1}>
       {deleteButtonRenderer}
       <Tooltip title={`${file.name}.${file.type}`}>
         <ButtonBase
@@ -69,6 +71,8 @@ AttachmentIconProps
           title={`${file.name}.${file.type}`}
           id="AttachmentIconPresenter-fileTitle"
         >
+
+          {isRedLine && <hr className={classes.underLine}/>}
           {`${file.name}.${file.type}`}
         </Typography>
       </Box>
