@@ -8,9 +8,9 @@ export class FBDocumentRevisionsState extends FBRequest<DocumentRevisions, null>
   @observable public name = "";
   @observable public documentRevisions?: DocumentRevisionItem[] = [];
 
-  public constructor(data?: DocumentRevisions) {
+  public constructor(data?: DocumentRevisionItem[]) {
     super();
-    this.setDocumentRevisions(data?.documentRevisions || []);
+    this.setDocumentRevisions(data || []);
   }
 
   @action public setDocumentRevisions = (items?: DocumentRevisionItem[]) => {

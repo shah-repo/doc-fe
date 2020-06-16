@@ -1,5 +1,6 @@
 import { Box, Button, createStyles, makeStyles, TextField, Typography } from "@material-ui/core";
 import React, { useState } from "react";
+import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { ReactComponent as RemoveDocument } from "../../../assets/images/circle-delete.svg";
@@ -38,16 +39,17 @@ const ProposedDocument: React.FunctionComponent<Props> = ({
   const docRevById = useSelector(documentRevisionsSelectors.byId);
   const proposedDocumentRevision = docRevById[id];
   const [isMouseInside, setMouseInside] = useState<boolean>(false);
+  const intl = useIntl();
 
   const proposedDocumentRenderer = () => (
     <Box paddingBottom="16px" width="100%">
       <Typography variant="h6">
-        <Text message="Proposed document revision" />
+        <Text translation="form.builder.proposed.document.revision" />
       </Typography>
       <TextField
         variant="outlined"
-        id="ApprovalRoles-groupName"
-        value={`${proposedDocumentRevision.document.docId} - ${proposedDocumentRevision.name}`}
+        id="ProposedDocument-docRev"
+        value={`${proposedDocumentRevision?.document.docId} - ${proposedDocumentRevision?.name}`}
         disabled={true}
         style={{ width: "92%", marginTop: "16px" }}
       />
@@ -61,7 +63,7 @@ const ProposedDocument: React.FunctionComponent<Props> = ({
         }}>
         <Link
           target="_blank"
-          to={`/document_revision/${proposedDocumentRevision.document.id}/version/${proposedDocumentRevision.id}`}
+          to={`/document_revision/${proposedDocumentRevision?.document.id}/version/${proposedDocumentRevision?.id}`}
         >
           <EyeIcon />
         </Link>
@@ -72,11 +74,11 @@ const ProposedDocument: React.FunctionComponent<Props> = ({
   const descriptionOfChangeRender = () => (
     <Box paddingBottom="16px">
       <Typography variant="h6">
-        <Text message="Description of change" />
+        <Text translation="cr.description" />
       </Typography>
       <TextField
         variant="outlined"
-        id="ApprovalRoles-groupName"
+        id="ProposedDocument-description"
         value={description}
         disabled={true}
         rows={3}
@@ -89,11 +91,11 @@ const ProposedDocument: React.FunctionComponent<Props> = ({
   const justificationOfChangeRender = () => (
     <Box paddingBottom="16px">
       <Typography variant="h6">
-        <Text message="Justification of change" />
+        <Text translation="cr.justification" />
       </Typography>
       <TextField
         variant="outlined"
-        id="ApprovalRoles-groupName"
+        id="ProposedDocument-justification"
         value={justification}
         disabled={true}
         multiline
@@ -110,7 +112,9 @@ const ProposedDocument: React.FunctionComponent<Props> = ({
       onMouseEnter={() => setMouseInside(true)}
       onMouseLeave={() => setMouseInside(false)}
     >
-      <FBSection label={`Document #${index}`}>
+      <FBSection label={`${intl.formatMessage({
+        id: "common.document",
+      })} #${index}`}>
         {isMouseInside && <Box display="flex" flexDirection="row-reverse" mt={-3.5}>
           <Button
             style={{ background: Colors.white, margin: 0, minWidth: 40 }}

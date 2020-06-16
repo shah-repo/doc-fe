@@ -1,18 +1,16 @@
+import { Provider } from "mobx-react";
 import React from "react";
-import { FBProvider } from "..";
 import { FBApproversProps } from "./FBApprovers.types";
 import { withFBApprovers } from "./FBApprovers.wrap";
 import FBApproversField from "./FBApproversField";
 
 const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
-  dialogState,
   name,
-  docRevState,
   disabled,
 }) =>   (
-  <FBProvider {...{ dialogState, docRevState }}>
-    <FBApproversField name={name} disabled={disabled} {...{ dialogState, docRevState }} />
-  </FBProvider>
+  <Provider>
+    <FBApproversField name={name} disabled={disabled} />
+  </Provider>
 );
 
 export default withFBApprovers(FBApprovers);

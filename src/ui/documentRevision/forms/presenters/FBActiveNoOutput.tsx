@@ -7,7 +7,6 @@ import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions
 import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
 import { requiredAtLeastOne, validator } from "../../../components/forms/fields/validators";
-import { FB } from "../../../form.builder";
 import useGetHasPermission from "../../../hooks/useGetHasPermission";
 import RenderHtmlField from "./RenderHtmlField";
 
@@ -34,39 +33,8 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   outputDocs,
 }) => {
   const classes = styles();
-  const { workspaceState } = FB.useStores();
   const documentTypes = useSelector(documentTypeSelectors.getDocumentTypeFormOptions);
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
-  if (outputDocs?.filter((doc) => doc.label === "Change Request").length > 0) {
-    workspaceState?.setSchema([{
-      name: "document_revision",
-      type: "documentRevisions",
-      index: 0,
-      applicableOn: ["ON_STATE_TO_IN_REVIEW"],
-    },
-    {
-      name: "target-date-approvers",
-      type: "section",
-      index: 1,
-      applicableOn: ["ON_STATE_TO_IN_REVIEW"],
-      label: "Target Date & Approvers",
-    },
-    {
-      name: "target-date",
-      type: "datepicker",
-      label: "Target Date",
-      index: 2,
-      applicableOn: ["ON_STATE_TO_IN_REVIEW"],
-    },
-    {
-      name: "approvers",
-      type: "approvers",
-      label: "Approvers",
-      index: 3,
-      applicableOn: ["ON_STATE_TO_IN_REVIEW"],
-    },
-    ]);
-  }
   const outputDocumentTypeOptions: OptionType[] = React.useMemo(
     () =>
       documentTypes.reduce((acc: OptionType[], document) => {
