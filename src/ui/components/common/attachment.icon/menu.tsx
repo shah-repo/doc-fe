@@ -12,6 +12,7 @@ import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevision
 import { documentRevisionStatusContextFromCR } from "../../../documentRevision/DocumentRevisionUpdate.container";
 
 interface OwnProps {
+  docRevStatusRequiresPassword: () => boolean;
   handleWatermarkRequest?: (attachment: Attachment, attachmentType: AttachmentType) => void;
   setSelectedAttachment: (attachment: Attachment) => void;
   handleIconClick?: (attachment: Attachment) => any;
@@ -29,6 +30,7 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
   setPasswordSubmitAction,
   setSelectedAttachment,
   download,
+  docRevStatusRequiresPassword,
 }) => {
   const file = useMemo(() => (attachment || {} as Attachment), [attachment]);
   const isFileViewable =  useMemo(() => checkIfFileIsViewable(file.type), [file.type]);
@@ -36,14 +38,6 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
   const documentRevisionStatusFromDocList = React.useContext(documentRevisionStatusContextFromDocList);
   const documentRevisionStatusFromCR = React.useContext(documentRevisionStatusContextFromCR);
 
-  const hasPasswordRequiredStatusFromDocList = (
-    documentRevisionStatusFromDocList === DocumentRevisionStatus.Released ||
-    documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated ||
-    documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete);
-  const hasPasswordRequiredStatusFromCR = (
-    documentRevisionStatusFromCR === DocumentRevisionStatus.Released ||
-      documentRevisionStatusFromCR === DocumentRevisionStatus.Deprecated ||
-      documentRevisionStatusFromCR === DocumentRevisionStatus.Obsolete);
   const {
     name: fileName,
     type: fileType,
@@ -65,7 +59,7 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
        )) {
       download(attachment, type);
     } else if (
-      ( hasPasswordRequiredStatusFromDocList || hasPasswordRequiredStatusFromCR)
+      docRevStatusRequiresPassword()
     && attachment.lineType === LINE_TYPES.RED_LINE) {
       setSelectedAttachment(attachment);
       setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_FILE);

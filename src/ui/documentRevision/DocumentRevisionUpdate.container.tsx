@@ -36,6 +36,7 @@ export type DocumentRevisionUpdateContainerProps = OwnProps &
 DispatchProps &
 StateProps;
 
+// TO-DO Move To Context Folder
 export let documentRevisionStatusContextFromCR = React.createContext< undefined | DocumentRevisionStatus >(undefined);
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({

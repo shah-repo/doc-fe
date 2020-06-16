@@ -27,6 +27,7 @@ interface OwnProps {
 export type DocumentRevisionManagerContainerProps = OwnProps &
 StateProps;
 
+// TO-DO Move To Context Folder
 export let documentRevisionStatusContextFromDocList = React.createContext< undefined | DocumentRevisionStatus >(undefined);
 export let documentRevisionVersionContext = React.createContext<number>(1);
 
