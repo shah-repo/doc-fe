@@ -1,8 +1,8 @@
 import { debounce, isEmpty } from "lodash";
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import { connect } from "react-redux";
 import { authSelectors } from "../../state/ducks/auth";
-import { DocumentRevision, DocumentRevisionEditRequestBody, documentRevisionsActions } from "../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionEditRequestBody, documentRevisionsActions, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { FormContext } from "../components/forms/FormContext";
 import { compareValuesToSubmit } from "../components/forms/helpers";
@@ -36,6 +36,8 @@ export type DocumentRevisionUpdateContainerProps = OwnProps &
 DispatchProps &
 StateProps;
 
+export let documentRevisionStatusContextFromCR = React.createContext< undefined | DocumentRevisionStatus >(undefined);
+
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
 });
@@ -55,6 +57,8 @@ DocumentRevisionUpdateContainerProps
   const isCurrentUserOperator = React.useContext(isOperator);
   const { docId } = documentRevision.document;
   useDocumentTitle(docId);
+  const status = documentRevision ? documentRevision.status : undefined;
+  documentRevisionStatusContextFromCR = React.createContext(status);
 
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
   const async = useAsync<DocumentRevision>({
@@ -62,6 +66,10 @@ DocumentRevisionUpdateContainerProps
       setDoNotPrompt(true);
     },
   });
+
+  useEffect(() => () => {
+    documentRevisionStatusContextFromCR = React.createContext<undefined | DocumentRevisionStatus>(undefined);
+  }, []);
 
   if (!(canEditDocumentRevision(documentRevision, currentUserEmail) || isCurrentUserOperator )) {
     return (
