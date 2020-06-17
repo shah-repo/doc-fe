@@ -7,7 +7,6 @@ import { FB, FBAutocompleteAsyncOption } from "..";
 import { TIME_ZONE } from "../../../common/utils/date";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
-import { store } from "../../../state/store";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBApproval = <T extends FBApprovalProps>(
@@ -31,7 +30,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
   }: T) => {
 
     const { workspaceState, formState } = FB.useStores();
-    const { id: documentId, isOutput, isReleased } = workspaceState || {};
+    const { id: documentId, isOutput, isReleased, currentUser } = workspaceState || {};
     const formValue = formState?.getFieldValue(name) as FBApprovalValue[];
 
     approvalFieldState = FB.useRef<FBApprovalState>(FBApprovalState, {
@@ -48,14 +47,13 @@ export const withFBApproval = <T extends FBApprovalProps>(
       (isOutput && !documentId) ||
       (reviseDisabled && workspaceState?.isRevised)
     );
-    const currentUser = store.getState().auth.user;
 
     function isApprover(approver: Employee | GroupRequestBody): boolean {
       return _.includes(_.keys(approver), "user");
     }
 
     function groupCheck(id: string): boolean {
-      const filteredGroup = _.filter(currentUser.groups, { id });
+      const filteredGroup = _.filter(currentUser?.groups, { id });
       return !_.isEmpty(filteredGroup);
     }
 
@@ -109,7 +107,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
       }
       approvalFieldState?.addApprover({
         id: FB.uniqid,
-        userId: currentUser.employeeId,
+        userId: currentUser?.employeeId,
         ...!isApprover(approver) && { groupId: approver.id },
         approvedAt: (new Date()).toISOString(),
       });

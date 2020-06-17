@@ -1,11 +1,13 @@
 import _ from "lodash";
 import { action, computed, get, observable, set } from "mobx";
-import { FBWorkspaceConstructor, FBWorkspaceMode } from ".";
+import { FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from ".";
 import { FBSchemaState } from "..";
+import { GroupTag, UserState } from "../../../state/ducks/auth/types";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
 
 export class FBWorkspaceState extends FBSchemaState {
   @observable public mode: FBWorkspaceMode = "none";
+  public externalState?: FBWorkspaceExternalState;
   public document?: DocumentRevision;
   public autosave?: boolean;
 
@@ -17,19 +19,32 @@ export class FBWorkspaceState extends FBSchemaState {
     this.document = document;
   }
 
+  public get auth(): FBWorkspaceExternalState["auth"] | undefined {
+    return this.externalState?.auth;
+  }
+
+  public get currentUser(): UserState | undefined {
+    return this.auth?.user;
+  }
+
+  public get userTags(): GroupTag[] | undefined {
+    return this.auth?.groups.tags;
+  }
+
+  public get comapny(): FBWorkspaceExternalState["company"] | undefined {
+    return this.externalState?.company;
+  }
+
   public get id(): string | undefined {
-    const { id } = this.document || {};
-    return id;
+    return this.document?.id;
   }
 
   public get documentId(): string | undefined {
-    const { id } = this.document?.document || {};
-    return id;
+    return this.document?.document?.id;
   }
 
   public get isReleased(): boolean {
-    const { status } = this.document || {};
-    return status === DocumentRevisionStatus.Released;
+    return this.document?.status === DocumentRevisionStatus.Released;
   }
 
   public get isOutput(): boolean {
