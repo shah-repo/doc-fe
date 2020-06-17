@@ -16,6 +16,7 @@ interface Props {
   documentId: string;
   selectedDocumentRevision: Nullable<string>;
   docId: string;
+  documentTypeId?: string;
 }
 
 export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
@@ -23,6 +24,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   documentId,
   selectedDocumentRevision,
   docId,
+  documentTypeId,
 }) => {
   const classes = styles();
   const link = documentVersionPath(
@@ -36,9 +38,8 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     documentRevision.revisionChangeType,
   );
   const isSelected = selectedDocumentRevision === documentRevision.id;
-  const docTypeId = documentRevision.document?.documentType?.id;
   const { status } = documentRevision;
-  const [isStatusVisible, statusLabel] = useDocumentVersion(docTypeId, status);
+  const [isStatusVisible, statusLabel] = useDocumentVersion(documentTypeId, status);
   return (
     <div
       key={documentRevision.id}

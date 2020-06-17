@@ -120,6 +120,7 @@ export enum DisplayFieldType{
   VERSION_PENDING_CHANGE = "P6",
   CR_ID = "R",
   REVISE_BTN = "S",
+  BOOKMARKS = "Q",
 }
 
 export type FieldType = InputFieldType | DisplayFieldType;
