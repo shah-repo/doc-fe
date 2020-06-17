@@ -5,9 +5,6 @@ export const DRAWER_WIDTH = 240;
 export default (theme: Theme) =>
   createStyles({
     link: {
-      "display": "flex",
-      "textDecoration": "none",
-      "flex": 1,
       "color": theme.palette.secondary.contrastText,
       "backgroundColor": theme.palette.secondary.main,
       "&:hover": {
@@ -35,9 +32,6 @@ export default (theme: Theme) =>
         stroke: theme.palette.secondary.main,
       },
     },
-    linkButton: {
-      padding: 0,
-    },
     itemIcon: {
       color: "inherit",
       minWidth: "40px",
@@ -46,10 +40,5 @@ export default (theme: Theme) =>
       color: "inherit",
       letterSpacing: 0,
       fontFamily: "Open Sans",
-    },
-    itemButton: {
-      "&:hover": {
-        backgroundColor: theme.palette.secondary.main,
-      },
     },
   });
