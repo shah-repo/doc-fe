@@ -60,28 +60,28 @@ export class FBControlPickerState {
     };
   }
 
-  private get hasHelloSign(): boolean {
-    return this.workspaceState?.comapny?.companyMine.helloSignIntegrationEnabled || false;
+  private get hasHelloSign(): boolean | undefined {
+    return this.workspaceState?.comapny?.companyMine.helloSignIntegrationEnabled;
   }
 
   private get hasApprovalMatrix(): boolean {
-    return Boolean(find(this.workspaceState?.schema, { type: "approvalMatrix" })) || false;
+    return Boolean(find(this.workspaceState?.schema, { type: "approvalMatrix" }));
   }
 
-  private get hasPurchaseOrder(): boolean {
-    return this.workspaceState?.userTags?.includes(GroupTag.FB_COMPONENT_PURCHASE_ORDER) || false;
+  private get hasPurchaseOrder(): boolean | undefined {
+    return this.workspaceState?.userTags?.includes(GroupTag.FB_COMPONENT_PURCHASE_ORDER);
   }
 
-  private get hasRecPurchaseOrder(): boolean {
-    return this.workspaceState?.userTags?.includes(GroupTag.FB_COMPONENT_RECEIVE_PURCHASE_ORDER) || false;
+  private get hasRecPurchaseOrder(): boolean | undefined {
+    return this.workspaceState?.userTags?.includes(GroupTag.FB_COMPONENT_RECEIVE_PURCHASE_ORDER);
   }
 
-  private get hasApproval(): boolean {
-    return this.workspaceState?.userTags?.includes(GroupTag.FB_COMPONENT_INLINE_APPROVAL) || false;
+  private get hasApproval(): boolean | undefined {
+    return this.workspaceState?.userTags?.includes(GroupTag.FB_COMPONENT_INLINE_APPROVAL);
   }
 
-  private get hasRequestApproval(): boolean {
-    return this.workspaceState?.userTags?.includes(GroupTag.FB_COMPONENT_REQUEST_APPROVAL) || false;
+  private get hasRequestApproval(): boolean | undefined {
+    return this.workspaceState?.userTags?.includes(GroupTag.FB_COMPONENT_REQUEST_APPROVAL);
   }
 }
 
