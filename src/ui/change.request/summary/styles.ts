@@ -1,21 +1,17 @@
-import { createStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import Colors from "../../layout/theme/utils/colors";
 
-export default (theme: Theme) =>
+export default makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      flexGrow: 1,
-    },
     box: {
       "&.MuiGrid-item.MuiGrid-grid-xs-12": {
         padding: theme.spacing(0, 2, 4),
       },
     },
     previewBox: {
-      borderLeft: "1px solid #ccc",
-      borderRight: "1px solid #ccc",
-      padding: theme.spacing(0, 3),
       margin: 0,
       width: "100%",
+      paddingLeft: theme.spacing(3),
     },
     assessments: {
       padding: theme.spacing(4, 3),
@@ -26,13 +22,17 @@ export default (theme: Theme) =>
       borderBottom: "1px solid " + theme.palette.text.hint,
       paddingBottom: theme.spacing(2),
     },
-    submitBox: {
-      textAlign: "right",
-    },
     whiteContainer: {
-      background: "#fff",
-      padding: theme.spacing(3, 0),
-      margin: theme.spacing(5, 0, 0, 1.5),
+      marginTop: theme.spacing(5),
+      margin: 0,
+      height: "100%",
+      transition: theme.transitions.create("all", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+    },
+    backColor: {
+      background: Colors.light_gray,
     },
     summaryContainer: {
       padding: theme.spacing(0, 4),
@@ -53,12 +53,4 @@ export default (theme: Theme) =>
         },
       },
     },
-    sidebar: {
-      "&.MuiGrid-item.MuiGrid-grid-xs-2": {
-        paddingTop: theme.spacing(5),
-      },
-      "&.MuiGrid-item.MuiGrid-grid-xs-3": {
-        paddingTop: theme.spacing(5),
-      },
-    },
-  });
+  }));

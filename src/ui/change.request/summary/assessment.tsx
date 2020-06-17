@@ -1,4 +1,4 @@
-import { Box, Grid, Typography, WithStyles, withStyles } from "@material-ui/core";
+import { Box, Grid, Typography } from "@material-ui/core";
 import React from "react";
 import { Assessment as Model, AssessmentItem, AssessmentType } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
@@ -7,9 +7,11 @@ import AttachmentField from "../../components/common/attachment.icon/container";
 import Text from "../../components/Text";
 import styles from "./styles";
 
-export type Props = DataProps<Model> & WithStyles<typeof styles>;
+export type Props = DataProps<Model>;
 
-export const Assessment: React.FunctionComponent<Props> = ({ classes, dataProp }) => {
+export const Assessment: React.FunctionComponent<Props> = ({ dataProp }) => {
+  const classes = styles();
+
   const attachmentRenderer = (type: AssessmentType) => (
     <AttachmentField name={`assessments.${type}.attachments`} disabled={true} />
   );
@@ -50,4 +52,4 @@ export const Assessment: React.FunctionComponent<Props> = ({ classes, dataProp }
   );
 };
 
-export default withStyles(styles)(Assessment);
+export default Assessment;

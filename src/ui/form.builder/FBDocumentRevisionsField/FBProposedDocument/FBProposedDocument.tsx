@@ -54,7 +54,7 @@ const FBProposedDocument: React.FunctionComponent<FBProposedDocumentProps> = ({
   const descriptionOfChangeRender = () => (
     <Box pb={2} >
       <Typography variant="h6">
-        <Text translation="cr.description" />
+        <Text translation="common.description" />
       </Typography>
       <TextField
         variant="outlined"
