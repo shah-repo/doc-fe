@@ -63,11 +63,14 @@ SidebarContainerProps
         }),
         component: showDocHistory ?
           <DocumentRevisionListContainer
+            {...{
+              documentTypeId,
+              documentRevisionId,
+              docId,
+              documentId,
+            }}
             documentRevisions={docRevsWithoutCanceled}
-            documentId={documentId}
-            docId={docId}
             selectedDocumentRevision={documentRevisionId}
-            documentRevisionId={documentRevisionId}
           /> :
           null,
       },

@@ -12,6 +12,7 @@ interface OwnProps {
   docId: string;
   selectedDocumentRevision: Nullable<string>;
   documentRevisionId: Nullable<string>;
+  documentTypeId?: string;
 }
 
 export type DocumentRevisionListContainerProps = OwnProps;
@@ -25,6 +26,7 @@ DocumentRevisionListContainerProps
   docId,
   selectedDocumentRevision,
   documentRevisionId,
+  documentTypeId,
 }) => {
   const classes = styles();
   const dispatch = useDispatch();
@@ -43,7 +45,7 @@ DocumentRevisionListContainerProps
           documentRevisions.map((documentRevision) => (
             <DocumentRevisionListPresenter
               key={documentRevision.id}
-              {...{ documentRevision, docId, documentId, selectedDocumentRevision }}
+              {...{ documentRevision, docId, documentId, selectedDocumentRevision, documentTypeId }}
             />
           )
           )
