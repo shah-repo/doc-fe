@@ -74,7 +74,7 @@ const ProposedDocument: React.FunctionComponent<Props> = ({
   const descriptionOfChangeRender = () => (
     <Box paddingBottom="16px">
       <Typography variant="h6">
-        <Text translation="cr.description" />
+        <Text translation="common.description" />
       </Typography>
       <TextField
         variant="outlined"
