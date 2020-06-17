@@ -2,22 +2,22 @@ import _ from "lodash";
 import { action, observable, set } from "mobx";
 import * as generateUuid from "uuid/v4";
 import FBRequest from "../FBApi/FBApi.request";
-import { DocumentRevisionItem, DocumentRevisions } from "./FBDocumentRevisions.types";
+import { FBDocumentRevisionItem, FBDocumentRevisions } from "./FBDocumentRevisions.types";
 
-export class FBDocumentRevisionsState extends FBRequest<DocumentRevisions, null> {
+export class FBDocumentRevisionsState extends FBRequest<FBDocumentRevisions, null> {
   @observable public name = "";
-  @observable public documentRevisions?: DocumentRevisionItem[] = [];
+  @observable public documentRevisions?: FBDocumentRevisionItem[] = [];
 
-  public constructor(data?: DocumentRevisionItem[]) {
+  public constructor(data?: FBDocumentRevisionItem[]) {
     super();
     this.setDocumentRevisions(data || []);
   }
 
-  @action public setDocumentRevisions = (items?: DocumentRevisionItem[]) => {
+  @action public setDocumentRevisions = (items?: FBDocumentRevisionItem[]) => {
     set(this, "documentRevisions", items);
   };
 
-  @action public addDocRevItem = (item: DocumentRevisionItem) => {
+  public addDocRevItem = (item: FBDocumentRevisionItem) => {
     item = {
       ...item,
       id: generateUuid(),
@@ -26,7 +26,7 @@ export class FBDocumentRevisionsState extends FBRequest<DocumentRevisions, null>
     this.setDocumentRevisions(documentRevisions);
   };
 
-  @action public removeDocRevItem = (index: number) => {
+  public removeDocRevItem = (index: number) => {
     const documentRevisions = this.documentRevisions?.splice(index, 1);
     this.setDocumentRevisions(documentRevisions);
   };

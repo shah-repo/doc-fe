@@ -1,7 +1,7 @@
 import React from "react";
 import { FBDocumentRevisionActionsProps } from ".";
 import { FB } from "../..";
-import { DocumentRevisionItem } from "../FBDocumentRevisions.types";
+import { FBDocumentRevisionItem } from "../FBDocumentRevisions.types";
 
 export const withFBDocumentRevisionActions = <T extends FBDocumentRevisionActionsProps>(
   Component: React.FunctionComponent<T>
@@ -16,7 +16,7 @@ export const withFBDocumentRevisionActions = <T extends FBDocumentRevisionAction
 
     handleAdd = () => {
       const formValues = formState?.getValues();
-      docRevState?.addDocRevItem(formValues as DocumentRevisionItem);
+      docRevState?.addDocRevItem(formValues as FBDocumentRevisionItem);
       dialogState?.closeDialog();
     };
 

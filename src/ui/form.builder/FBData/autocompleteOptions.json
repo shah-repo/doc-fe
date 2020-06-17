@@ -23,6 +23,7 @@
     "label": "Approvers",
     "valueKey": "id",
     "labelKey": "user.email",
+    "labelPrefixRoot": "user.name",
     "root": "optionalApprovers"
   },
   {
@@ -124,13 +125,5 @@
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
     "root": ""
-  },
-  {
-    "id": "16",
-    "path": "/change_requests/available_approvers",
-    "label": "Approvers",
-    "valueKey": "id",
-    "labelKey": "user.name",
-    "root": "optionalApprovers"
   }
 ]

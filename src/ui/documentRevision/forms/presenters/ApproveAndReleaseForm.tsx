@@ -1,4 +1,4 @@
-import { Button, FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
+import { Box, Button, FormControlLabel, Radio, RadioGroup, Typography } from "@material-ui/core";
 import { Form, FormikProps } from "formik";
 import * as React from "react";
 import { Group } from "../../../../state/ducks/auth/types";
@@ -41,24 +41,31 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   return (
     <Form className={classes.form}>
       <FormMessage asyncState={asyncState} />
-      {isQms && <Approvers owner={owner} withoutCurrentUser={true} values={values} documentTypeGroups={documentTypeGroups} />}
-      <RadioGroup
-        aria-label="selectForm"
-        name="formDocument"
-        id="FormList-selectForm"
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => setFormDocument((event.target as HTMLInputElement).value)}
-      >
-        {templateOptions.map((template) =>
-          template.forms.map((form) =>
-            <FormControlLabel
-              key={form.id}
-              value={form.id}
-              control={<Radio color="primary" />}
-              label={form.name}
-              onChange={() => setDocumentType(template.documentType.id)}
-            />
-          ))}
-      </RadioGroup>
+      {isQms && <Approvers owner={owner} withoutCurrentUser={true} values={values}
+        documentTypeGroups={documentTypeGroups} />}
+      <Box pb={2} >
+        <Typography variant="h6">
+          <Text translation="common.approve.and.release.template" />
+        </Typography>
+        <RadioGroup
+          aria-label="selectForm"
+          name="formDocument"
+          id="FormList-selectForm"
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            setFormDocument((event.target as HTMLInputElement).value)}
+        >
+          {templateOptions.map((template) =>
+            template.forms.map((form) =>
+              <FormControlLabel
+                key={form.id}
+                value={form.id}
+                control={<Radio color="primary" />}
+                label={form.name}
+                onChange={() => setDocumentType(template.documentType.id)}
+              />
+            ))}
+        </RadioGroup>
+      </Box>
       {isQms && <InputField
         name="password"
         label="transition.action.password"

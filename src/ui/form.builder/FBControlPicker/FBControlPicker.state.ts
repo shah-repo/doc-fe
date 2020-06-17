@@ -22,8 +22,6 @@ export class FBControlPickerState {
       "fileupload",
       "quantity",
       "timer",
-      "documentRevisions",
-      "approvers",
       "purchaseorder",
       "poreceive",
       "approvalMatrix",

@@ -38,7 +38,6 @@ export type FBEditorElementType =
   | "inlineapproval"
   | "outputapproval"
   | "documentRevisions"
-  | "approvers"
   | "approvalMatrix"
   | "poApprovalMatrix"
   | "instructionsdocument"

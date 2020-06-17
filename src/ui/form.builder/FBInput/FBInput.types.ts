@@ -45,7 +45,6 @@ export type FBInputType =
   | "quantity"
   | "timer"
   | "requestapproval"
-  | "approvers"
   | "instructionsdocument"
   | "selectdocument"
   | "selectrequirement"

@@ -19,9 +19,18 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionProps>(
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
 
     docRevState = FB.useRef<FBDocumentRevisionsState>(FBDocumentRevisionsState, formValue);
+
     useObserver(() => {
       formState?.setFieldValue(`${name}`, docRevState?.documentRevisions);
     });
+
+    // React.useEffect(() => {
+    //   reaction(
+    //     () => docRevState?.documentRevisions,
+    //     () => formState?.setFieldValue(`${name}`, docRevState?.documentRevisions),
+    //   );
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, []);
 
     const onClick = () => {
       dialogState?.config({

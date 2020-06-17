@@ -101,7 +101,6 @@ export const FBEditorSectionConfig: Dictionary<FBInputType[]> = {
     "purchaseorder",
     "poreceive",
     "documentRevisions",
-    "approvers",
     "approvalMatrix",
     "poApprovalMatrix",
     "instructionsmediaupload",

@@ -1,48 +1,28 @@
-import { Box, Button, createStyles, makeStyles, TextField, Typography } from "@material-ui/core";
-import React, { useState } from "react";
+import { Box, Button, TextField, Typography } from "@material-ui/core";
+import React from "react";
 import { useIntl } from "react-intl";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { ReactComponent as RemoveDocument } from "../../../assets/images/circle-delete.svg";
-import { ReactComponent as EyeIcon } from "../../../assets/images/eye-icon.svg";
-import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
-import Text from "../../components/Text";
-import Colors from "../../layout/theme/utils/colors";
-import { FBSection } from "../FBSection";
+import { ReactComponent as RemoveDocument } from "../../../../assets/images/circle-delete.svg";
+import { ReactComponent as EyeIcon } from "../../../../assets/images/eye-icon.svg";
+import Text from "../../../components/Text";
+import Colors from "../../../layout/theme/utils/colors";
+import { FBSection } from "../../FBSection";
+import { FBProposedDocumentProps } from "../FBDocumentRevisions.types";
+import { withFBProposedDocument } from "./FBProposedDocument.wrap";
 
-export const styles = makeStyles(() =>
-  createStyles({
-    boxWithBorder: {
-      borderBottom: `1px solid ${"#B4C0CA"}`,
-    },
-    boxWithoutBorder: {
-      border: "none",
-    },
-  },
-  ));
-
-export interface Props {
-  id: string;
-  justification: string;
-  description: string;
-  index: number;
-  removeDocument: (index: number) => void;
-}
-
-const ProposedDocument: React.FunctionComponent<Props> = ({
-  id,
+const FBProposedDocument: React.FunctionComponent<FBProposedDocumentProps> = ({
   justification,
   description,
   index,
   removeDocument,
+  proposedDocumentRevision,
+  setMouseInside,
+  isMouseInside,
 }) => {
-  const docRevById = useSelector(documentRevisionsSelectors.byId);
-  const proposedDocumentRevision = docRevById[id];
-  const [isMouseInside, setMouseInside] = useState<boolean>(false);
   const intl = useIntl();
 
   const proposedDocumentRenderer = () => (
-    <Box paddingBottom="16px" width="100%">
+    <Box pb={2} width="100%">
       <Typography variant="h6">
         <Text translation="form.builder.proposed.document.revision" />
       </Typography>
@@ -72,7 +52,7 @@ const ProposedDocument: React.FunctionComponent<Props> = ({
   );
 
   const descriptionOfChangeRender = () => (
-    <Box paddingBottom="16px">
+    <Box pb={2} >
       <Typography variant="h6">
         <Text translation="cr.description" />
       </Typography>
@@ -89,7 +69,7 @@ const ProposedDocument: React.FunctionComponent<Props> = ({
   );
 
   const justificationOfChangeRender = () => (
-    <Box paddingBottom="16px">
+    <Box pb={2} >
       <Typography variant="h6">
         <Text translation="cr.justification" />
       </Typography>
@@ -130,4 +110,4 @@ const ProposedDocument: React.FunctionComponent<Props> = ({
     </Box>
   ); };
 
-export default ProposedDocument;
+export default withFBProposedDocument(FBProposedDocument);

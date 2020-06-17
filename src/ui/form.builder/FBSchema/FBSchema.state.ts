@@ -6,7 +6,6 @@ import { FBAutocompleteAsync, FBCheckboxGroup, FBEditorState, FBInputProps, FBIn
 import { FBActionField } from "../FBActionField";
 import { FBApproval } from "../FBApproval";
 import { FBApprovalMatrixField } from "../FBApprovalMatrixField";
-import FBApprovers from "../FBApprovers/FBApprovers";
 import { FBButton } from "../FBButton";
 import { FBCheckbox } from "../FBCheckbox";
 import { FBDatePicker } from "../FBDatePicker";
@@ -68,7 +67,6 @@ export class FBSchemaState {
     purchaseorder: FBPurchaseOrder,
     poreceive: FBPOReceive,
     documentRevisions: FBDocumentRevisions,
-    approvers: FBApprovers,
     instructionsmediaupload: FBMediaAlbumField,
     evidencemediaupload: FBMediaAlbumField,
     testRequirement: FBTestRequirement,
