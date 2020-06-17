@@ -34,4 +34,6 @@ export enum FBAutocompleteAsyncOption {
   po = "12",
   employees = "13",
   officialGroups = "14",
+  docRevsDraft = "15",
+  approversByName = "16",
 }

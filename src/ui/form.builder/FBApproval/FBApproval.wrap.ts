@@ -31,7 +31,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
   }: T) => {
 
     const { workspaceState, formState } = FB.useStores();
-    const { id: documentId, isOutput } = workspaceState || {};
+    const { id: documentId, isOutput, isReleased } = workspaceState || {};
     const formValue = formState?.getFieldValue(name) as FBApprovalValue[];
 
     approvalFieldState = FB.useRef<FBApprovalState>(FBApprovalState, {
@@ -43,7 +43,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
     isApproved = approvalFieldState.isApproved;
     isDefined = !_.isEmpty(approvers) || !_.isEmpty(approverGroups);
     disabled = (
-      disabled ||
+      isReleased ||
       !isOutput ||
       (isOutput && !documentId) ||
       (reviseDisabled && workspaceState?.isRevised)

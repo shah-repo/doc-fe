@@ -1,5 +1,6 @@
+import { Provider } from "mobx-react";
 import React from "react";
-import { FBProvider, FBSection } from "..";
+import { FBDialog, FBSection } from "..";
 import { FBDocumentRevisionProps } from "./FBDocumentRevisions.types";
 import { withFBDocumentRevisions } from "./FBDocumentRevisions.wrap";
 import FBDocumentRevisionsField from "./FBDocumentRevisionsField";
@@ -9,11 +10,20 @@ const FBDocumentRevisions: React.FunctionComponent<FBDocumentRevisionProps> = ({
   name,
   docRevState,
   disabled,
+  onClick,
+  removeDocument,
 }) =>   (
-  <FBProvider {...{ dialogState, docRevState }}>
-    <FBSection label="Change Request Details" key="ddd" />
-    <FBDocumentRevisionsField name={name} disabled={disabled} {...{ dialogState, docRevState }} />
-  </FBProvider>
+  <Provider {...{ dialogState, docRevState }}>
+    <FBSection label="form.builder.change.request.details" key="changeRequestDetails" />
+    <FBDialog />
+    <FBDocumentRevisionsField
+      name={name}
+      disabled={disabled}
+      {...{ dialogState, docRevState }}
+      onClick={onClick}
+      removeDocument={removeDocument}
+    />
+  </Provider>
 );
 
 export default withFBDocumentRevisions(FBDocumentRevisions);

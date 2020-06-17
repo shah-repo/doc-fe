@@ -3,7 +3,7 @@ import * as React from "react";
 import { useEffect } from "react";
 import { RevisionChangeType } from "../../../../state/ducks/documentRevisions";
 import CheckboxField from "../../../components/forms/fields/Checkbox";
-import useTraining from "../../../hooks/docCustomization/useTraining";
+import { useTraining } from "../../../hooks/docCustomization/useCustomization";
 
 interface Props {
   revisionChangeType?: RevisionChangeType ;
@@ -16,7 +16,7 @@ const RetrainField: React.FunctionComponent<Props> = ({
   revisionChangeType,
   isDisabled = false,
 }) => {
-  const isVisible = useTraining(documentTypeId);
+  const [isVisible] = useTraining(documentTypeId);
   const formik = useFormikContext();
   useEffect(() => {
     if (revisionChangeType === RevisionChangeType.AdministrativeChange) {

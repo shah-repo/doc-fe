@@ -11,8 +11,8 @@ import { TableDataProps, TablePanelStateProps, TableSearchQueryType } from "../.
 import Text from "../../components/Text";
 import { canEditDocumentRevision, documentRevisionQueryStatus, documentRevisionStatusOption } from "../../document.revision/utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
-import { FB } from "../../form.builder";
 import { Translation } from "../../translations/types";
+import { columnSearchConfiguration, shouldShowStaticColumns } from "./helpers";
 import { styles } from "./styles";
 
 export interface Props {
@@ -34,6 +34,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   openDocRev,
   showError,
 }) => {
+  const showStaticColumns = shouldShowStaticColumns(documentType.documentTypeName);
   const classes = styles();
   const canEdit = (data: DocumentRevision) => canEditDocumentRevision(data);
   const queryUrl =
@@ -54,28 +55,25 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
     return documentPreviewPath(rowData.id, rowData.document.id);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const pageDetailColumns = documentType.pageDetails!.columns;
+  const pageDetailColumns = documentType.pageDetails?.columns || [];
   const additionalColumns = pageDetailColumns.map(
-    (column: PageDetailsColumn) => ({
-      key: column.valuePath as keyof DocumentRevision,
-      label: column.label as Translation,
-      cellHref: cellHrefRenderer,
-      omitSearch: true,
-      columnOptions: {
-        cellDataGetter: ({ rowData }) => {
-          const { valuePath } = column;
-          // TODO (2020-05-25 22:17): Should not strip commas from value. Changes "John, Mike" to "John Mike"
-          return FB.stripOption(
-            valuePath,
-            _.get(rowData, valuePath),
-          );
+    (column: PageDetailsColumn) => {
+      const [omitSearch, searchOptions] = columnSearchConfiguration(column.valuePath, tableCriteria);
+
+      return {
+        key: column.valuePath as keyof DocumentRevision,
+        label: column.label as Translation,
+        cellHref: cellHrefRenderer,
+        omitSearch,
+        columnOptions: {
+          cellDataGetter: ({ rowData }) => _.get(rowData, column.valuePath),
         },
-      },
-    }),
+        searchOptions,
+      };
+    },
   );
 
-  const columns: TableColumnProps<DocumentRevision>[] = [
+  const staticColumns: TableColumnProps<DocumentRevision>[] = [
     {
       key: "docId",
       label: `${documentType.documentTypeName} ID` as Translation,
@@ -137,8 +135,10 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
         width: 100,
       },
     },
-    ...additionalColumns,
   ];
+  const columns: TableColumnProps<DocumentRevision>[] = showStaticColumns ?
+    [...staticColumns, ...additionalColumns] :
+    [...additionalColumns];
 
   return (
     <Grid container={true} className={classes.root}>
@@ -171,7 +171,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       {showError && (
         <div style={{ color: "red" }} id="DocumentByTypeListPresenter-showError">
           <Text
-            translation="supplier.form.error"
+            translation="missing.form.error"
             values={{ name: documentType.documentTypeName }}
           />
         </div>

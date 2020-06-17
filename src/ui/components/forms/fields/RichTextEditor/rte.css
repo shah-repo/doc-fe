@@ -30,3 +30,7 @@
 .placeholder-li:hover {
   background: #F1F1F1;
 }
+
+.DraftEditor-editorContainer {
+  position: unset;
+}

@@ -4,7 +4,7 @@ export default () =>
   createStyles({
     box: {
       color: "white",
-      fontSize: "18px",
+      fontSize: "12px",
       fontWeight: "bold",
       textAlign: "center",
       backgroundColor: "red",

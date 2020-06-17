@@ -12,6 +12,7 @@ export interface AttachmentFieldProps extends FormikHybridFieldProps {
   component?: AttachmentComponent;
   disabled?: boolean;
   onChange?: (event: React.FormEvent<HTMLInputElement>) => any;
+  upload?: any;
 }
 
 export interface AttachmentStyleProps {

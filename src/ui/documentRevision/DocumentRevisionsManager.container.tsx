@@ -36,6 +36,9 @@ interface OwnProps {
 export type DocumentRevisionManagerContainerProps = OwnProps &
 StateProps;
 
+export let documentRevisionStatusContext = React.createContext<DocumentRevisionStatus>(DocumentRevisionStatus.Draft);
+export let documentRevisionVersionContext = React.createContext<number>(1);
+
 const getDocumentRevisions = documentRevisionsSelectors.makeGetDocumentRevisions();
 const mapStateToProps = (
   state: ApplicationState,
@@ -122,6 +125,8 @@ DocumentRevisionManagerContainerProps
       },
     },
   ];
+  documentRevisionStatusContext = React.createContext(selectedDocument?.status);
+  documentRevisionVersionContext = React.createContext(selectedDocument?.version);
 
   if (shouldRedircetToLatestReleasd(documentRevisions, documentRevisionId)) {
     const docRevIdToRedirect = getDocRevIdToRedirect(documentRevisions, deprecatedAt);

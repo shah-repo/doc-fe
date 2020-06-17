@@ -67,6 +67,7 @@ export let FormHeaderContext = React.createContext<FormHeaderContext | undefined
 export let isOwnerContext = React.createContext<boolean>(false);
 export let documentTypeContext = React.createContext<string | undefined>(undefined);
 
+
 export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   classes,
   asyncState,
@@ -108,7 +109,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   });
   const isCurrentUserOperator = React.useContext(isOperator);
   const email = useSelector(authSelectors.currentUserEmail);
-  const isOwner = documentRevision?.owner.user.email === email;
+  const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const isDisabledInput =  values.id !== undefined && isCurrentUserOperator && !isOwner;
   const documentType = documentRevision?.document?.documentType?.documentTypeAcronym;
   isOwnerContext = React.createContext(isOwner);
@@ -189,7 +190,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         />
         <Title
           name="name"
-          label="common.title"
           documentTypeId={documentTypeId}
           disabled={isDisabledInput}
         />
@@ -204,6 +204,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           isdocRevStatusDraft={isdocRevStatusDraft}
           savedocInfo={savedocInfo}
           isDisabled={isDisabledInput}
+          documentTypeId={documentTypeId}
         />
         <DocIdInput
           document={values.document}

@@ -1,10 +1,12 @@
 import { Attachment } from "../../../../../state/ducks/attachments";
 import { AsyncState } from "../../../../../state/types";
+import { Password } from "../../../password/types";
 
 export interface ViewFileContainerProps {
   attachments: Attachment[];
   attachment?: Attachment;
   isOpen: boolean;
+  password?: Password;
   handleClose(): void;
 }
 

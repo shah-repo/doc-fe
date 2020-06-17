@@ -7,6 +7,8 @@ export type FBDocumentRevisionProps =
 & {
   dialogState?: FBDialogState;
   docRevState?: FBDocumentRevisionsState;
+  onClick: () => void;
+  removeDocument: (index: number) => void;
 };
 
 export interface DocumentRevisions {

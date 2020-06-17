@@ -3,7 +3,7 @@ import { Translation } from "../../../../translations/types";
 
 export const reactQuillEmptyString = "<p><br></p>";
 
-type Validator = (value: any) => Translation | undefined;
+export type Validator = (value: any) => Translation | undefined;
 
 export const required: Validator = (value) => {
   if (value === undefined || value === null || value === "" || value === reactQuillEmptyString) {

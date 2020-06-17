@@ -115,6 +115,20 @@ export function TablePanel<T extends any>({
     });
   };
 
+  const formatParams = () => {
+    const params: any = {};
+    Object.entries(tableCriteria.queryDict)
+      .forEach(([key, value]) => {
+        if (key.startsWith("dynamicParams")) {
+          _.set(params, key, value);
+        } else {
+          params[key] = value;
+        }
+      });
+    params.dynamicParams = JSON.stringify(params.dynamicParams);
+    return params;
+  };
+
   const queryApi = async () => {
     try {
       if (call) {
@@ -126,7 +140,7 @@ export function TablePanel<T extends any>({
       const requestConfig: AxiosRequestConfig = {
         method: "get",
         url: queryUrl,
-        params: tableCriteria.queryDict,
+        params: formatParams(),
         paramsSerializer: (params) => qs.stringify(params),
         headers: {},
         cancelToken: call.token,
