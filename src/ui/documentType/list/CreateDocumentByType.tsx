@@ -8,6 +8,7 @@ import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks
 import { documentTypeActions, DocumentTypeById, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { DocumentProposedId, documentsActions } from "../../../state/ducks/documents";
 import Text from "../../components/Text";
+import { documentVersionPath } from "../../document.revision/utils/paths";
 import { toDocumentRevisionFormValuesForOutput, toNewVersionRequestBody } from "../../documentRevision/forms/transform";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -31,35 +32,38 @@ export const useHandleCreateDoc = () => {
       createDoc(data?.docId as string);
     }, onError: () => redirect(),
   });
-  const fetchFormDocAction = useActionCreator(documentRevisionsActions.loadWithCallback);
-  const fetchFormDocAsync = useAsync<DocumentRevision>({
-    onSuccess: (data) => {
-      const outputDocumentTypes = data?.formTemplate?.outputDocumentTypes || [];
-      if (outputDocumentTypes.length === 1) {
-        fetchDocIdAsync.start(fetchDocIdAction, (outputDocumentTypes[0] as any)?.id, fetchDocIdAsync);
-        setForm(data);
-        return;
-      }
-      redirect();
-    }, onError: () => redirect(),
+  const createDocAction = useActionCreator(documentRevisionsActions.create);
+  const createDocAsync = useAsync<DocumentRevision>({
+    onSuccess: (documentRevision) => {
+      const path = documentVersionPath(documentRevision?.id || "", documentRevision?.document?.id || "");
+      history.push(path);
+    }, onError: (msg) => redirect(),
   });
-  const fetchFormDoc = (documentId: string, docRevId: string) => {
-    fetchFormDocAsync.start(fetchFormDocAction, docRevId, fetchFormDocAsync);
-  };
   const createDoc = (docId: string) => {
     const formValues = toDocumentRevisionFormValuesForOutput(form as DocumentRevision);
     const data = toNewVersionRequestBody(formValues);
-    console.log(formValues);
-    console.log(data);
+    data.formDocument = { id: formValues?.formDocument?.id };
+    data.document = {
+      ...data.document,
+      docId,
+    };
+    createDocAsync.start(createDocAction, data, createDocAsync);
   };
-  const redirect = () => {
-    history.push(`/document_revision/${documentIdState}/output_document/${docRevIdState}`);
+  const redirect = (documentId = documentIdState, docRevId = docRevIdState) => {
+    history.push(`/document_revision/${documentId}/output_document/${docRevId}`);
   };
 
-  return (documentId: string, docRevId: string) => {
+  return (documentId: string, docRevId: string, selectedForm: DocumentRevision) => {
     setDocumentId(documentId);
     setDocRevId(docRevId);
-    fetchFormDoc(documentId, docRevId);
+
+    const outputDocumentTypes = selectedForm?.formTemplate?.outputDocumentTypes || [];
+    if (outputDocumentTypes.length === 1) {
+      fetchDocIdAsync.start(fetchDocIdAction, (outputDocumentTypes[0] as any)?.id, fetchDocIdAsync);
+      setForm(selectedForm);
+      return;
+    }
+    redirect(documentId, docRevId);
   };
 };
 
@@ -68,7 +72,6 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   documentTypeId,
 }) => {
   const handleCreateDocument = useHandleCreateDoc();
-  // const history = useHistory();
   const dialog = useDialog();
   const classes = styles();
   const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
@@ -84,8 +87,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const async = useAsync<DocumentTypeById>({
     onSuccess: () => {
       if (formIds.length === 1) {
-        handleCreateDocument(formIds[0].document.id, docRevId);
-        // history.push(`/document_revision/${formIds[0].document.id}/output_document/${docRevId}`);
+        handleCreateDocument(formIds[0].document.id, docRevId, formIds[0] as DocumentRevision);
         return;
       }
       if (isEmpty(formIds)) {
@@ -107,10 +109,9 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     if (!docRevId) {
       return;
     }
-    const form = formIds.find((form) => form.id === docRevId);
-    const documentId = form?.document.id || "";
-    handleCreateDocument(documentId, docRevId);
-    // history.push(`/document_revision/${documentId}/output_document/${docRevId}`);
+    const selectedForm = formIds.find((form) => form.id === docRevId);
+    const documentId = selectedForm?.document.id || "";
+    handleCreateDocument(documentId, docRevId, selectedForm as DocumentRevision);
   };
 
   return (
