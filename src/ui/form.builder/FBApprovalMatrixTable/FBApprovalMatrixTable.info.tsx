@@ -5,7 +5,7 @@ import * as generateUuid from "uuid/v4";
 import { FBApprovalMatrixCheck, FBApprovalMatrixItem, FBApprovalMatrixTableInfoHead, FBApprovalMatrixTableProps, FBCheckbox, FBDocTypeGroup, FBMapWrapper, FBSelect, FBTableCell, FBTextField } from "..";
 
 const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTableProps> = ({
-  approvalMatrix = [],
+  approvalData: { approvalMatrix = [] } = {},
   classes,
   mode,
   name,

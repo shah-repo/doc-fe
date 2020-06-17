@@ -92,6 +92,6 @@ export interface FBPOApprovalMatrixConstructor {
   formState?: FBFormState;
   approvalLevels?: POApprovalMatrixLevel[];
   outputRevision?: boolean;
-  submitForm?: () => void;
+  isOutput?: boolean;
 }
 

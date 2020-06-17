@@ -34,6 +34,7 @@ import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
 import References from "./presenters/References";
 import RetrainField from "./presenters/RetrainField";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
+import UpgradeToLatestContainer from "./presenters/UpgradeToLatest.container";
 import { DocumentRevisionFormValues } from "./types";
 
 export interface Props
@@ -53,6 +54,7 @@ export interface Props
   type?: string;
   handleFBContainerRef?: (instance: HTMLDivElement | null) => any;
   FBContainer?: React.MutableRefObject<HTMLDivElement | null>;
+  bannerPortal?: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 interface FormHeaderContext {
@@ -89,9 +91,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   documentRevision,
   setFieldValue,
   type,
-  handleFBContainerRef,
   FBContainer,
-  setValues,
+  bannerPortal,
 }) => {
 
   useScrollIntoView();
@@ -172,6 +173,13 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       sm={isDisabled ? 12 : 10}
       xs={12}
     >
+      <UpgradeToLatestContainer
+        type="banner"
+        docRevId={documentRevision?.id}
+        documentStatus={documentRevision?.status}
+        formDocumentStatus={documentRevision?.formDocument?.status}
+        bannerPortal={bannerPortal}
+      />
       <FormHeader/>
       <FormWrapper
         dirty={dirty}
