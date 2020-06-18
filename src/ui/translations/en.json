@@ -756,5 +756,7 @@
   "CLOSED": "Closed",
   "maintenance.back.soon": "We’ll be back soon!",
   "maintenance.inconvenience": "Sorry for the inconvenience but we’re performing some maintenance at the moment.",
-  "Administrative Change": "Administrative Change"
+  "Administrative Change": "Administrative Change",
+  "document.revision.upgrade.form.banner": "A new version of the form is available. {clickHere} to upgrade to latest version.",
+  "common.click.here": "Click here"
 }

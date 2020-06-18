@@ -1,49 +1,39 @@
 import { Box } from "@material-ui/core";
-import _ from "lodash";
 import React from "react";
-import { useSelector } from "react-redux";
-import { FBControlPickerState } from ".";
-import { FB, FBButton, FBControlPickerDataProps, FBControlPickerProps, FBLabel, FBMapWrapper } from "..";
-import { companySelectors } from "../../../state/ducks/company";
-import { withFBEditorHelper } from "../FBEditor/FBEditor.helper";
+import { FBButton, FBControlPickerDataProps, FBControlPickerProps, FBLabel, FBMapWrapper } from "..";
 import { FBInputType } from "../FBInput";
+import { withFBControlPicker } from "./FBControlPicker.wrap";
 
 const FBControlPicker: React.FunctionComponent<FBControlPickerProps> = ({
+  controlPickerState,
+  pickers = [],
   index = 0,
   openEditor,
-}) => {
-  const helloSignEnabled = useSelector(companySelectors.isHelloSignIntegrationEnabled);
-  const { workspaceState } = FB.useStores();
-  const hasApprovalMatrix = Boolean(_.find(workspaceState?.schema, { type: "approvalMatrix" }));
-  return (
-    <Box px={2}>
-      <FBMapWrapper<FBControlPickerDataProps> collection={FBControlPickerState.pickers}>
-        {(editors, section) => (
-          <Box key={`fb-controlpicker-section-${section}`} mb={4}>
-            <Box mx={1}>
-              <FBLabel label={`form.builder.${section}`} />
-            </Box>
-            <FBMapWrapper<FBInputType> collection={editors}>
-              {(picker, i) => (
-                <React.Fragment key={`fb-controlpicker-editor-${picker}-${i}`}>
-                  {FBControlPickerState.picker(picker, index) && FBControlPickerState.picker(picker, index)}
-                  {!FBControlPickerState.picker(picker, index) && (
-                    <FBButton
-                      label={`form.builder.${picker as string}`}
-                      onClick={openEditor && openEditor({ type: picker, index })}
-                      hidden={(
-                        (picker === "hellosign" && !helloSignEnabled) ||
-                        (picker === "approvalMatrix" && hasApprovalMatrix)
-                      )}
-                    />
-                  )}
-                </React.Fragment>
-              )}
-            </FBMapWrapper>
+}) => (
+  <Box px={2}>
+    <FBMapWrapper<FBControlPickerDataProps> collection={pickers}>
+      {(editors, section) => (
+        <Box key={`fb-controlpicker-section-${section}`} mb={4}>
+          <Box mx={1}>
+            <FBLabel label={`form.builder.${section}`} />
           </Box>
-        )}
-      </FBMapWrapper>
-    </Box>
-  ); };
+          <FBMapWrapper<FBInputType> collection={editors}>
+            {(picker, i) => (
+              <React.Fragment key={`fb-controlpicker-editor-${picker}-${i}`}>
+                {controlPickerState?.picker(picker, index)}
+                {!controlPickerState?.picker(picker, index) && (
+                  <FBButton
+                    label={`form.builder.${picker as string}`}
+                    onClick={openEditor && openEditor({ type: picker, index })}
+                  />
+                )}
+              </React.Fragment>
+            )}
+          </FBMapWrapper>
+        </Box>
+      )}
+    </FBMapWrapper>
+  </Box>
+);
 
-export default withFBEditorHelper(FBControlPicker);
+export default withFBControlPicker(FBControlPicker);

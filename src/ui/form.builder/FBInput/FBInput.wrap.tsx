@@ -40,7 +40,8 @@ export const withFBInput = <T extends FBInputProps>(
     ...props
   }: T) => {
 
-    const { formState } = FB.useStores();
+    const { formState, workspaceState } = FB.useStores();
+    const { isOutput } = workspaceState || {};
     const { submitForm } = useFormContext();
     const intl = useIntl();
     defaultValue = setDefaultValue();
@@ -52,13 +53,15 @@ export const withFBInput = <T extends FBInputProps>(
     // TODO: Autocomplete default set as input
     // then this can be removed and handle through defaultValue
     const validationValue = get(formState?.values, name);
-    (isUndefined(hidden) && formState?.workspaceMode === "form" && validationMode === "visibility") && (hidden =
-      !helperText && (!validationValue || isEmpty(validationValue))
-    );
+    if (isOutput || formState?.workspaceMode === "form") {
+      (isUndefined(hidden) && validationMode === "visibility") && (hidden =
+        !helperText && (!validationValue || isEmpty(validationValue))
+      );
 
-    (!disabled && formState?.workspaceMode === "form" && validationMode === "disabled") && (disabled =
-      !helperText && (!validationValue || isEmpty(validationValue))
-    );
+      (!disabled && validationMode === "disabled") && (disabled =
+        !helperText && (!validationValue || isEmpty(validationValue))
+      );
+    }
 
     function setDefaultValue(): any {
       if (!formState) { return; }

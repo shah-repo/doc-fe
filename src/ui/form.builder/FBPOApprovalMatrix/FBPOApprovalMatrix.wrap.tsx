@@ -25,11 +25,13 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
     const { outputRevision } = document || {};
     const formValue = formState?.getFieldValue(name) as POApprovalMatrix;
     const { approvalLevels = [] } = formValue || {};
+    const isOutput = workspaceState?.isOutput;
 
     poamState = FB.useRef<FBPOApprovalMatrixState>(FBPOApprovalMatrixState, {
       formState,
       approvalLevels,
       outputRevision,
+      isOutput,
     });
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
 
@@ -113,5 +115,6 @@ export const withFBPOApprovalMatrix = <T extends FBPOApprovalMatrixFieldProps>(
     });
   };
 
-  return (props: T) => Comp(props);
+  Comp.displayName = "withFBPOApprovalMatrix";
+  return Comp;
 };

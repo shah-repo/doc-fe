@@ -4,8 +4,7 @@ import React from "react";
 import { FBApprovalMatrixCheck, FBApprovalMatrixItem, FBApprovalMatrixTableProps, FBApprovalMatrixTableRoleHead, FBApprovalRole, FBCheckbox, FBMapWrapper, FBTableCell } from "..";
 
 const FBApprovalMatrixTableStatus: React.FunctionComponent<FBApprovalMatrixTableProps> = ({
-  approvalRoles = [],
-  approvalMatrix = [],
+  approvalData: { approvalRoles = [], approvalMatrix = [] } = {},
   mode,
   classes,
   name,
