@@ -9,8 +9,10 @@ import { AsyncState } from "../../../../state/types";
 import OwnerChangerContainer from "../../../components/common/owner.changer/container";
 import { RequestType } from "../../../components/common/owner.changer/helpers/types";
 import SubmitButton from "../../../components/forms/SubmitButton";
+import { FB } from "../../../form.builder";
 import useGetHasTag from "../../../hooks/useGetHasTag";
 import { canChangeCROwner } from "../../utils/helpers";
+import { CRFormContext } from "./AssessmentForm.presenter";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
 import AssessmentFormVoidContainer from "./Void.container";
 
@@ -23,6 +25,7 @@ const DocRevActions: React.FunctionComponent<Props> = ({
   changeRequest,
   asyncState,
 }) => {
+  const { workspaceState, formState } = FB.useStores();
   const formik = useFormikContext();
   const isCompanyAdmin = useGetHasTag(GroupTag.USER_MANAGEMENT);
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
@@ -32,6 +35,23 @@ const DocRevActions: React.FunctionComponent<Props> = ({
     }
     return canChangeCROwner(changeRequest.state, currentEmployeeId, changeRequest?.owner.id, isCompanyAdmin);
   }, [changeRequest, currentEmployeeId, isCompanyAdmin]);
+  const values  = React.useContext(CRFormContext);
+  function setFBValue() {
+    switch (workspaceState?.getMode()) {
+      case "form":
+        formik.setFieldValue("formDocument", {
+          id: values?.formDocument?.id,
+        });
+        formik.setFieldValue("formInput", formState?.getValues());
+        break;
+      default:
+        formik.setFieldValue("formTemplate", undefined);
+    }
+  }
+  const onFormClick = () => {
+    setFBValue();
+    formik.submitForm();
+  };
 
   return (
     <Grid
@@ -43,7 +63,7 @@ const DocRevActions: React.FunctionComponent<Props> = ({
       <SubmitButton
         id="submit"
         asyncState={asyncState}
-        onClick={formik.submitForm}
+        onClick={onFormClick}
         label={
           changeRequest
             ? "common.save"

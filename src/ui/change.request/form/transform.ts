@@ -1,5 +1,5 @@
-import { getStartOfDayDateString, toStartOfDay } from "../../../common/utils/date";
-import { Approver, ChangeRequest, ChangeRequestEditRequestBody } from "../../../state/ducks/changeRequest";
+import { pick } from "lodash";
+import { ChangeRequest, ChangeRequestEditRequestBody } from "../../../state/ducks/changeRequest";
 import { reactQuillEmptyString } from "../../components/forms/fields/validators";
 import { ChangeRequestFormValues } from "./types";
 
@@ -13,14 +13,10 @@ export const toChangeRequestFormValues = (changeRequest: ChangeRequest): ChangeR
   const values: ChangeRequestFormValues = {
     id: changeRequest.id,
     title: changeRequest.title,
-    approvals: changeRequest.approvals.map((approval) => ({
-      label: approval.approver.user.name, value: approval.approver.id,
-    })),
-    effectiveDate: changeRequest.effectiveDate && toStartOfDay(changeRequest.effectiveDate),
-    documentRevisions: changeRequest.documentRevisions.map((documentRevision) => documentRevision.id ),
     description: changeRequest.description || reactQuillEmptyString,
+    formInput: changeRequest.formInput,
+    formDocument: changeRequest.formDocument,
   };
-
   return values;
 };
 
@@ -43,11 +39,9 @@ export const toUniqGroupOptions = (approvers) => {
 
 export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues): ChangeRequestEditRequestBody => {
   const changeRequestEditRequestBody: ChangeRequestEditRequestBody = {
+    ...pick(values, ["formDocument", "formInput" ]),
     title: values.title,
     description: values.description,
-    approvals: (values.approvals || []).map((approver): Approver => ({ id: approver.value })),
-    effectiveDate: values.effectiveDate && getStartOfDayDateString(values.effectiveDate),
-    documentRevisions: values.documentRevisions.map((documentRevisionId) => ({ id: documentRevisionId })),
   };
 
   return changeRequestEditRequestBody;

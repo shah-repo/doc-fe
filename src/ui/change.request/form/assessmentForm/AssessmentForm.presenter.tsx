@@ -23,6 +23,7 @@ interface Props
   doNotPrompt?: boolean;
   FBContainer?: React.MutableRefObject<HTMLDivElement | null>;
 }
+export let CRFormContext = React.createContext<ChangeRequestFormValues | undefined>(undefined);
 
 const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   asyncState,
@@ -42,13 +43,16 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const formContext = useFormContext();
   const didMount = useDidMount();
-
+  CRFormContext = React.createContext<ChangeRequestFormValues | undefined>(
+    values,
+  );
   useEffect(() => {
     if (didMount) {
       formContext.submitForm();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  console.log(values);
 
   return (
     <div className={classes.container}>

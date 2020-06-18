@@ -114,9 +114,8 @@ export interface ImplementationPlanRequest {
 export interface ChangeRequestEditRequestBody {
   title: string;
   description: string;
-  effectiveDate?: string;
-  approvals: Approver[];
-  documentRevisions: DocumentRevisionRequestBody[];
+  formInput?: Record<string, any>;
+  formDocument?: FBDocumentRevisionProps;
 }
 
 export interface ChangeRequestSetAction {

@@ -1,5 +1,5 @@
 import { Grid } from "@material-ui/core";
-import { Form, Formik, FormikErrors, FormikProps } from "formik";
+import { Form, Formik, FormikProps } from "formik";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
@@ -105,14 +105,6 @@ export const Container: React.FunctionComponent<Props> = ({
     </Form>
   );
 
-  const validate = (values: ChangeRequestFormValues) => {
-    const errors: FormikErrors<any> = {};
-    if (!values.approvals || values.approvals.length === 0) {
-      errors.approvals = "validators.approversRequired";
-    }
-    return errors;
-  };
-
   const summaryFormikRenderer = () => (
     <FormContext.Provider value={{ submitOnChange: false }}>
       <FBWorkspace
@@ -126,7 +118,6 @@ export const Container: React.FunctionComponent<Props> = ({
           initialValues={toChangeRequestFormValues(dataProp)}
           onSubmit={onSubmit}
           enableReinitialize={true}
-          validate={validate}
         >
           {summaryPresenterRenderer}
         </Formik>

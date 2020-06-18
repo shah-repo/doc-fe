@@ -45,13 +45,22 @@ ChangeRequestFormContainerProps
   const [sidebar, openSidebar] = useState<boolean>(true);
 
   const render = (props: FormikProps<ChangeRequestFormValues>) => (
-    <AssessmentFormPresenter
-      {...props}
-      asyncState={asyncState}
-      changeRequest={changeRequest}
-      doNotPrompt={doNotPrompt}
-      {...{ FBContainer }}
-    />
+    <FBWorkspace
+      portalContainer={FBContainer}
+      initialValues={changeRequest?.formInput}
+      autosave={true}
+      schema={schema}
+      mode={"form"}
+    >
+      <AssessmentFormPresenter
+        {...props}
+        asyncState={asyncState}
+        changeRequest={changeRequest}
+        doNotPrompt={doNotPrompt}
+        {...{ FBContainer }}
+      />
+    </FBWorkspace>
+
   );
 
   const sidebarList = [
@@ -79,21 +88,14 @@ ChangeRequestFormContainerProps
   return (
     <Grid container={true} className={classes.whiteContainer} style={{ width: sidebar ? "100%" : "104%" }}>
       <Grid item={true} xs={changeRequest ? (sidebar ? 9 : 11) : 12} className={classes.backColor}>
-        <FBWorkspace
-          portalContainer={FBContainer}
-          initialValues={changeRequest?.formInput}
-          autosave={true}
-          schema={schema}
-          mode={"form"}
+
+        <Formik
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+          enableReinitialize={true}
         >
-          <Formik
-            initialValues={initialValues}
-            onSubmit={onSubmit}
-            enableReinitialize={true}
-          >
-            {render}
-          </Formik>
-        </FBWorkspace>
+          {render}
+        </Formik>
       </Grid>
       {changeRequest && <SidebarContainer {...{ sidebar, openSidebar, sidebarList }}/>}
     </Grid>
