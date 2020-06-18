@@ -6,6 +6,7 @@ import { RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { DocumentType } from "../../../state/ducks/documentRevisions/documentType";
 import { documentPreviewPath } from "../../document.revision/utils/paths";
 import { toNewVersionRequestBody } from "../../documentRevision/forms/transform";
+import { DocumentRevisionFormValues } from "../../documentRevision/forms/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
@@ -58,7 +59,8 @@ export class FBPOReceiveFormState  {
     }
 
     const reqBody = toNewVersionRequestBody({
-      name: `${this.item?.glCode}-${this.item?.description}`,
+      // LOT must not have title
+      // name: `${this.item?.glCode}-${this.item?.description}`,
       description: values.comments ? `<p>${values.comments}</p>` : `<p>${this.item?.description}</p>`,
       attachments: [],
       referenceTo: [{ value: this.documentId, label: "" }],
@@ -72,7 +74,7 @@ export class FBPOReceiveFormState  {
       revisionStage: 1,
       revisionChangeType: RevisionChangeType.NextRevision,
       renderHTML: undefined,
-    });
+    } as unknown as DocumentRevisionFormValues);
 
     poDocumentId && reqBody.referenceTo.push({ id: poDocumentId });
     reqBody.formDocument = {
