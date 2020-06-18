@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { createSelector } from "reselect";
-import { removeLastCharacterIfNotAlphaNumeric } from "../../../../ui/document.revision/utils/helpers";
+import { removeLastCharacterIfNotAlphaNumeric } from "../../../../ui/common/utils/helpers";
 import { ApplicationState } from "../../../reducers";
 import { AsyncState } from "../../../types";
 import { DocumentType } from "./types";
