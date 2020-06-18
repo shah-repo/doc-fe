@@ -22,7 +22,6 @@ interface Props
   changeRequest?: ChangeRequest;
   doNotPrompt?: boolean;
   FBContainer?: React.MutableRefObject<HTMLDivElement | null>;
-
 }
 
 const AssessmentFormPresenter: React.FunctionComponent<Props> = ({

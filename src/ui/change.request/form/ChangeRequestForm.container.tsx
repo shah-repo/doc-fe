@@ -84,7 +84,7 @@ ChangeRequestFormContainerProps
           initialValues={changeRequest?.formInput}
           autosave={true}
           schema={schema}
-          mode="preview"
+          mode={"form"}
         >
           <Formik
             initialValues={initialValues}

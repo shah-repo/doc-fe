@@ -20,6 +20,7 @@ interface OwnProps extends DataProps<ChangeRequest> {
   closeTask: typeof changeRequestsActions.closeTask;
   canChangeOwnerShip: boolean;
   documentTypeGroups: Group[];
+  FBContainer?: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 export type Props = OwnProps & FormikProps<ChangeRequestFormValues>;
@@ -34,6 +35,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
   errors,
   documentTypeGroups,
   values,
+  FBContainer,
 }) => {
   const classes = styles();
 
@@ -64,6 +66,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
           label="common.description"
           value={dataProp.description}
         />
+        <div ref={FBContainer} />
       </Grid>
     </Box>
   );

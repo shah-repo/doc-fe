@@ -14,6 +14,7 @@ import { documentRevisionsActions } from "../../../state/ducks/documentRevisions
 import { FormContext } from "../../components/forms/FormContext";
 import Bookmarks from "../../documentRevision/Sidebar/Bookmarks";
 import SidebarContainer from "../../documentRevision/Sidebar/Sidebar.container";
+import { FBWorkspace } from "../../form.builder";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
@@ -37,6 +38,8 @@ export const Container: React.FunctionComponent<Props> = ({
   dataProp,
   currentUserEmail,
 }) => {
+  const FBContainer = React.useRef(null);
+
   const [summaryDocumentTypeGroups, setSummaryDocTypeGroups] = useState<any[]>([]);
   const [sidebar, openSidebar] = useState<boolean>(true);
   const url = useLocation();
@@ -97,6 +100,7 @@ export const Container: React.FunctionComponent<Props> = ({
         canChangeOwnerShip={canChangeOwnerShip}
         documentTypeGroups={summaryDocumentTypeGroups}
         {...props}
+        {...{ FBContainer }}
       />
     </Form>
   );
@@ -111,14 +115,22 @@ export const Container: React.FunctionComponent<Props> = ({
 
   const summaryFormikRenderer = () => (
     <FormContext.Provider value={{ submitOnChange: false }}>
-      <Formik
-        initialValues={toChangeRequestFormValues(dataProp)}
-        onSubmit={onSubmit}
-        enableReinitialize={true}
-        validate={validate}
+      <FBWorkspace
+        portalContainer={FBContainer}
+        initialValues={dataProp.formInput}
+        autosave={true}
+        schema={schema}
+        mode={"preview"}
       >
-        {summaryPresenterRenderer}
-      </Formik>
+        <Formik
+          initialValues={toChangeRequestFormValues(dataProp)}
+          onSubmit={onSubmit}
+          enableReinitialize={true}
+          validate={validate}
+        >
+          {summaryPresenterRenderer}
+        </Formik>
+      </FBWorkspace>
     </FormContext.Provider>
   );
 
