@@ -2,9 +2,7 @@ import { Button, Grid, WithStyles, withStyles } from "@material-ui/core";
 import _ from "lodash";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
-// import { ReactComponent as LockIcon } from "../../../assets/images/icon_lock.svg";
-// import { ReactComponent as UnlockIcon } from "../../../assets/images/icon_unlock.svg";
-import { stripTagsFromObject } from "../../../common/utils/helpers";
+import { stripTags } from "../../../common/utils/helpers";
 import { unmaskId } from "../../../state/ducks/common/helpers";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
@@ -16,7 +14,7 @@ import { TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import { generateVersionNumber } from "../../documentRevision/helpers";
-import { canEditDocumentRevision, documentRevisionQueryStatus, documentRevisionReleasedDateOption, documentRevisionStatusOption } from "../utils/helpers";
+import { canEditDocumentRevision, documentRevisionQueryStatus, documentRevisionReleasedDateOption, documentRevisionStatusOption, removeLastCharacterIfNotAlphaNumeric } from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
 import styles from "./styles";
@@ -184,7 +182,15 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   ];
 
   const customDataSet = (data: DocumentRevision[]) =>
-    data.map((docRev) => stripTagsFromObject(docRev));
+    data.map((docRev) => {
+      _.set(docRev, "description", stripTags(docRev.description));
+      _.set(
+        docRev,
+        "document.documentType.documentTypeAcronym",
+        removeLastCharacterIfNotAlphaNumeric(docRev.document?.documentType?.documentTypeAcronym)
+      );
+      return docRev;
+    });
 
   return (
     <Grid container={true} className={classes.root}>

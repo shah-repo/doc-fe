@@ -1,5 +1,6 @@
 import _ from "lodash";
 import { createSelector } from "reselect";
+import { removeLastCharacterIfNotAlphaNumeric } from "../../../../ui/document.revision/utils/helpers";
 import { ApplicationState } from "../../../reducers";
 import { AsyncState } from "../../../types";
 import { DocumentType } from "./types";
@@ -50,7 +51,7 @@ const getDocumentTypeOptions = createSelector(
     _.orderBy(
       ids.map((id) => ({
         value: documentTypes[id].id,
-        text: documentTypes[id].documentTypeAcronym,
+        text: removeLastCharacterIfNotAlphaNumeric(documentTypes[id].documentTypeAcronym),
       }))
       , ["text"], ["asc"]),
 );
