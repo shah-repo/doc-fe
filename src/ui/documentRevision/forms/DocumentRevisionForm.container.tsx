@@ -182,7 +182,7 @@ DocumentRevisionFormContainerProps
   const render = (props: FormikProps<DocumentRevisionFormValues>) => (
     <FBWorkspace
       portalContainer={FBContainer}
-      document={props.values as unknown as DocumentRevision}
+      document={documentRevision as unknown as DocumentRevision}
       initialValues={formInput}
       autosave={true}
       schema={GetScheme(props)}
