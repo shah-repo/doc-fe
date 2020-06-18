@@ -3,7 +3,8 @@ import { Form, Formik, FormikErrors, FormikProps } from "formik";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Redirect, useLocation } from "react-router-dom";
+import { ReactComponent as BookmarkIcon } from "../../../assets/images/bookmark.svg";
 import { ReactComponent as TimelineIcon } from "../../../assets/images/history.svg";
 import { authSelectors } from "../../../state/ducks/auth";
 import { Group, GroupTag } from "../../../state/ducks/auth/types";
@@ -11,6 +12,7 @@ import { ChangeRequest, changeRequestsActions } from "../../../state/ducks/chang
 import { DataProps } from "../../../state/ducks/common";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { FormContext } from "../../components/forms/FormContext";
+import Bookmarks from "../../documentRevision/Sidebar/Bookmarks";
 import SidebarContainer from "../../documentRevision/Sidebar/Sidebar.container";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -25,6 +27,7 @@ import Presenter from "./presenter";
 import ChangeRequestSummarySockets from "./sockets";
 import styles from "./styles";
 
+
 interface OwnProps extends DataProps<ChangeRequest> {
   currentUserEmail: string;
 }
@@ -36,6 +39,7 @@ export const Container: React.FunctionComponent<Props> = ({
 }) => {
   const [summaryDocumentTypeGroups, setSummaryDocTypeGroups] = useState<any[]>([]);
   const [sidebar, openSidebar] = useState<boolean>(true);
+  const url = useLocation();
   const classes = styles();
   useDocumentTitle(dataProp.crId);
   const intl = useIntl();
@@ -46,6 +50,7 @@ export const Container: React.FunctionComponent<Props> = ({
   const save = useActionCreator(changeRequestsActions.save);
   const closeTask = useActionCreator(changeRequestsActions.closeTask);
   const loadGroupsByStage = useActionCreator(documentRevisionsActions.loadGroupsByStage);
+  const schema = dataProp.formDocument?.formTemplate?.schema || [];
 
   const asyncGroups = useAsync({
     onSuccess: (response: Group[] = []) => {
@@ -127,9 +132,7 @@ export const Container: React.FunctionComponent<Props> = ({
         component: dataProp ? <ChangeRequestAuditContainer changeRequestId={dataProp.id} />
           : null,
       },
-    },
-    // This should be added after adding schema
-    /*     {
+    }, {
       icon: <BookmarkIcon />,
       details: {
         title: intl.formatMessage({
@@ -137,7 +140,7 @@ export const Container: React.FunctionComponent<Props> = ({
         }),
         component: <Bookmarks location={url} schema={schema} />,
       },
-    }, */
+    },
   ];
 
   return (

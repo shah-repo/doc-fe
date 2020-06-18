@@ -1,7 +1,6 @@
-import { Box, Grid, ListItem } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import { FormikProps } from "formik";
-import { filter } from "lodash";
-import React, { useMemo } from "react";
+import React from "react";
 import { Group } from "../../../state/ducks/auth/types";
 import { ChangeRequest, changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
@@ -10,9 +9,7 @@ import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
-import ApproversField from "../form/approvers";
 import { ChangeRequestFormValues } from "../form/types";
-import ApproversSummary from "./approvers";
 import styles from "./styles";
 import SummaryHeader from "./SummaryHeader";
 
@@ -39,19 +36,6 @@ export const Presenter: React.FunctionComponent<Props> = ({
   values,
 }) => {
   const classes = styles();
-
-  const approvedApprovers = useMemo(
-    () => filter(dataProp.approvals, ["status", "APPROVED"]),
-    [dataProp],
-  );
-
-  const approversFieldRenderer = () => (
-    <Box>
-      <ListItem style={{ display: "inline-block" }}>
-        <ApproversField dataProp={approvedApprovers} documentTypeGroups={documentTypeGroups} values={values} />
-      </ListItem>
-    </Box>
-  );
 
   return (
     <Box>
@@ -80,8 +64,6 @@ export const Presenter: React.FunctionComponent<Props> = ({
           label="common.description"
           value={dataProp.description}
         />
-        {canEdit && approversFieldRenderer()}
-        <ApproversSummary dataProp={dataProp.approvals} />
       </Grid>
     </Box>
   );

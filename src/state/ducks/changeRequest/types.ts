@@ -1,6 +1,7 @@
 import { Attachment } from "../attachments";
 import { AuditActionPayload } from "../audit/types";
 import { Approval, Id, Owner, User } from "../common";
+import { FBDocumentRevisionProps } from "../documentRevisions";
 import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET } from "./constants";
 
 export enum ChangeRequestStatus {
@@ -75,6 +76,8 @@ export interface ChangeRequest {
   owner: Owner;
   documentRevisions: any[];
   closedAt: Date;
+  formInput?: Record<string, any>;
+  formDocument?: FBDocumentRevisionProps;
 }
 
 export interface Approver {

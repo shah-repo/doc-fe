@@ -1,17 +1,19 @@
 import { Button, Grid } from "@material-ui/core";
 import React from "react";
+import { useHistory } from "react-router-dom";
 import Text from "../../../components/Text";
 import { DialogHandler } from "../../../hooks/useDialog";
 import { styles } from "../FormList.styles";
 
 interface Props {
   dialog: DialogHandler;
+  chosenTypeId: string;
 }
-export const FormListActions: React.FunctionComponent<Props> = ({ dialog }) => {
+export const FormListActions: React.FunctionComponent<Props> = ({ dialog, chosenTypeId }) => {
   const classes = styles();
+  const history = useHistory();
 
   return (
-
     <Grid container spacing={1}>
       <Grid item xs={4}>
         <Button
@@ -31,6 +33,7 @@ export const FormListActions: React.FunctionComponent<Props> = ({ dialog }) => {
           className={classes.submitButton}
           fullWidth
           id="FormList-continueButton"
+          onClick={() => history.push(`/change_request/create/${chosenTypeId}`)}
         >
           <Text translation="common.continue" />
         </Button>

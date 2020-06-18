@@ -4,7 +4,7 @@ export const LOGIN_WITH_CODE_URL = "/auth/tokens";
 
 export const DOCUMENT_CREATE_URL = "/document/create";
 
-export const CHANGE_REQUEST_CREATE_URL = "/change_request/create";
+export const CHANGE_REQUEST_CREATE_URL = "/change_request/create/:documentTypeId";
 
 export const CHANGE_REQUEST_LIST_URL = "/change_request";
 export const CHANGE_REQUEST_ROOT_URL = `${CHANGE_REQUEST_LIST_URL}/:changeRequestId`;

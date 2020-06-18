@@ -1,12 +1,6 @@
-import { Grid } from "@material-ui/core";
 import React from "react";
-import { Group } from "../../../state/ducks/auth/types";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { AsyncState } from "../../../state/types";
-import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
-import ChangeRequestAuditContainer from "../audit/Audit.container";
-import DocumentRevisionLoader from "../documentRevision/DocumentRevisionLoader";
-import AssessmentFormContainer from "./assessmentForm/AssessmentForm.container";
 import { ChangeRequestFormValues } from "./types";
 
 interface OwnProps {
@@ -14,11 +8,8 @@ interface OwnProps {
   asyncState: AsyncState;
   changeRequest?: ChangeRequest;
   doNotPrompt?: boolean;
-  selectedDocumentRevision: string | null;
-  documentRevisionsList: string[];
-  onDirtyFlagChange: (dirty: boolean) => void;
   onSubmit: (values: ChangeRequestFormValues) => void;
-  documentTypeGroups: Group[];
+  FBContainer?: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 type ChangeRequestFormPresenterProps = OwnProps;
@@ -30,55 +21,8 @@ ChangeRequestFormPresenterProps
   onSubmit,
   asyncState,
   changeRequest,
-  documentRevisionsList,
   doNotPrompt,
-  onDirtyFlagChange,
-  selectedDocumentRevision,
-  documentTypeGroups,
-}) => {
-  const renderAssessmentForm = (
-    <AssessmentFormContainer
-      initialValues={initialValues}
-      onSubmit={onSubmit}
-      asyncState={asyncState}
-      changeRequest={changeRequest}
-      documentRevisionsList={documentRevisionsList}
-      doNotPrompt={doNotPrompt}
-      onDirtyFlagChange={onDirtyFlagChange}
-      documentTypeGroups={documentTypeGroups}
-      selectedDocumentRevision={selectedDocumentRevision}
-    />
-  );
-
-  const renderDocumentRevisionForm = selectedDocumentRevision && (
-    <DocumentRevisionLoader
-      documentRevisionId={selectedDocumentRevision || ""}
-      onDirtyFlagChange={onDirtyFlagChange}
-    />
-  );
-
-  const renderChangeRequestAudit = changeRequest &&
-      <ChangeRequestAuditContainer changeRequestId={changeRequest.id} />;
-
-  const renderDocumentRevisionAudit = selectedDocumentRevision && (
-    <DocumentRevisionAuditContainer
-      documentRevisionId={selectedDocumentRevision}
-    />
-  );
-
-  return (
-    <>
-      <Grid item={true} xs={12} sm={6} md={7}>
-
-        {!selectedDocumentRevision && renderAssessmentForm}
-        {renderDocumentRevisionForm}
-      </Grid>
-      <Grid item={true} xs={12} sm={3} md={3}>
-        {renderDocumentRevisionAudit}
-        {renderChangeRequestAudit}
-      </Grid>
-    </>
-  );
-};
+  FBContainer,
+}) => null;
 
 export default ChangeRequestFormPresenter;

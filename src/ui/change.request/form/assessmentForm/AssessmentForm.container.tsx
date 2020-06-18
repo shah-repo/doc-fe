@@ -1,6 +1,5 @@
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import React from "react";
-import { Group } from "../../../../state/ducks/auth/types";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest";
 import { AsyncState } from "../../../../state/types";
 import { ChangeRequestFormValues } from "../types";
@@ -11,11 +10,7 @@ interface Props {
   asyncState: AsyncState;
   onSubmit: (values: ChangeRequestFormValues, actions: FormikActions<ChangeRequestFormValues>) => void;
   changeRequest?: ChangeRequest;
-  documentRevisionsList: string[];
   doNotPrompt?: boolean;
-  onDirtyFlagChange?: (dirty: boolean) => void;
-  documentTypeGroups: Group[];
-  selectedDocumentRevision: string | null;
 }
 
 const AssessmentFormContainer: React.FunctionComponent<Props> = ({
@@ -23,22 +18,14 @@ const AssessmentFormContainer: React.FunctionComponent<Props> = ({
   initialValues,
   asyncState,
   changeRequest,
-  documentRevisionsList,
   doNotPrompt,
-  onDirtyFlagChange,
-  documentTypeGroups,
-  selectedDocumentRevision,
 }) => {
   const render = (props: FormikProps<ChangeRequestFormValues>) => (
     <AssessmentFormPresenter
       {...props}
       asyncState={asyncState}
       changeRequest={changeRequest}
-      documentRevisionsList={documentRevisionsList}
       doNotPrompt={doNotPrompt}
-      onDirtyFlagChange={onDirtyFlagChange}
-      documentTypeGroups={documentTypeGroups}
-      selectedDocumentRevision={selectedDocumentRevision}
     />
   );
 

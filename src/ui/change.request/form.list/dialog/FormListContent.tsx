@@ -13,8 +13,7 @@ export const FormListContent: React.FunctionComponent<Props> = ({
   templateOptions,
 }) => {
   const classes = styles();
-  const [chosenForm, setChosenForm] = useState<string>("");
-  console.log(chosenForm);
+  const [chosenTypeId, setchosenTypeId] = useState<string>("");
 
   return (
     <DialogContent classes={{ root: classes.dialogContent }}>
@@ -30,11 +29,11 @@ export const FormListContent: React.FunctionComponent<Props> = ({
               value={form.id}
               control={<Radio color="primary" />}
               label={form.name}
-              onChange={() => setChosenForm(template.documentType.id)}
+              onChange={() => setchosenTypeId(template.documentType.id)}
             />
           ))}
       </RadioGroup>
-      <FormListActions {...{ dialog }}/>
+      <FormListActions {...{ dialog, chosenTypeId }}/>
     </DialogContent>
 
   ); };
