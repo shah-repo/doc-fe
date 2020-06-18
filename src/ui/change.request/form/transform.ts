@@ -38,14 +38,13 @@ export const toUniqGroupOptions = (approvers) => {
 };
 
 export const toChangeRequestEditRequestBody = (id: string | undefined, values: ChangeRequestFormValues): ChangeRequestEditRequestBody => {
-  const changeRequestEditRequestBody: ChangeRequestEditRequestBody = {
+  let changeRequestEditRequestBody: ChangeRequestEditRequestBody = {
     ...pick(values, ["formDocument", "formInput" ]),
     title: values.title,
     description: values.description,
-    documentType: values.documentType,
   };
-  if (id) {
-    changeRequestEditRequestBody.documentType = values.documentType;
+  if (!id) {
+    changeRequestEditRequestBody = { ...changeRequestEditRequestBody, documentType: values.documentType };
   }
   return changeRequestEditRequestBody;
 };

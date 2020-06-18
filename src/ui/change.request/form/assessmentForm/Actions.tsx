@@ -11,6 +11,7 @@ import { RequestType } from "../../../components/common/owner.changer/helpers/ty
 import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
 import useGetHasTag from "../../../hooks/useGetHasTag";
+import { CRCreateIdsContext } from "../../form.list/dialog/FormListContent";
 import { canChangeCROwner } from "../../utils/helpers";
 import { CRFormContext } from "./AssessmentForm.presenter";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
@@ -36,16 +37,16 @@ const DocRevActions: React.FunctionComponent<Props> = ({
     return canChangeCROwner(changeRequest.state, currentEmployeeId, changeRequest?.owner.id, isCompanyAdmin);
   }, [changeRequest, currentEmployeeId, isCompanyAdmin]);
   const values  = React.useContext(CRFormContext);
-  console.log(values);
-  console.log(formState);
+
 
   // const { formDocument, documentType } = React.useContext(CRCreateIdsContext)!;
+  const idContext = React.useContext(CRCreateIdsContext)! || [];
 
   function setFBValue() {
     switch (workspaceState?.getMode()) {
       case "form":
-        formik.setFieldValue("formDocument", values?.formDocument?.id);
-        // formik.setFieldValue("documentType", documentType);
+        formik.setFieldValue("formDocument", idContext?.formDocument || values?.formDocument);
+        formik.setFieldValue("documentType", idContext?.documentType);
         formik.setFieldValue("formInput", formState?.getValues());
         break;
       default:

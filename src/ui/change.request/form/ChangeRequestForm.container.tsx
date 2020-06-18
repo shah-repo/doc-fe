@@ -80,7 +80,7 @@ ChangeRequestFormContainerProps
         title: intl.formatMessage({
           id: "document.revision.bookmarks",
         }),
-        component: <Bookmarks location={url} schema={schema} />,
+        component: <Bookmarks location={url} schema={changeRequest ? changeRequest.formDocument?.formTemplate?.schema : schema} />,
       },
     },
   ];

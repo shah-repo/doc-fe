@@ -52,7 +52,6 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  console.log(values);
 
   return (
     <div className={classes.container}>

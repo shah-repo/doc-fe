@@ -39,7 +39,6 @@ export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequest
     const [doNotPrompt, setDoNotPrompt] = React.useState(false);
     const getDocTypeByGroupAction = useActionCreator(documentTypeActions.getDocTypeByGroup);
     const schema = templateOptions.find((template) => template.documentType.id === documentTypeId)?.documentType.schema;
-    console.log(schema);
 
     const asyncGetDocTypeByGroup = useAsync({
       onSuccess: (data: DocumentTypeById[] = []) => {
@@ -66,8 +65,6 @@ export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequest
     const onSubmitAssessment = (values: ChangeRequestFormValues) => {
       async.start(create, toChangeRequestEditRequestBody(values.id, values), async);
     };
-
-    console.log(match.params);
 
     return (
       <FormContext.Provider value={{ submitOnChange: false }}>

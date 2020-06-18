@@ -55,8 +55,8 @@ const getFormInputDiff = (transformedValues, transformedInitialValues) => {
 };
 
 export const compareValuesToSubmit = (initialValues, values, transformMethod) => {
-  const transformedInitialValues = transformMethod(initialValues);
-  const transformedValues = transformMethod(values);
+  const transformedInitialValues = transformMethod(values.id, initialValues);
+  const transformedValues = transformMethod(values.id, values);
   const diff = getDiff(transformedValues, transformedInitialValues);
   const formInputDiff = getFormInputDiff(transformedValues, transformedInitialValues);
 
