@@ -303,6 +303,7 @@
   "common.unsaved.changes": "You have unsaved changes.",
   "common.assigned.date": "Assigned date",
   "common.copy.link": "Copy link",
+  "common.overdue": "Overdue",
   "output.info": "Form Info",
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",
