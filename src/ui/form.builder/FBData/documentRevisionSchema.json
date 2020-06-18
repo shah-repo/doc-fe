@@ -2,7 +2,7 @@
   {
     "type": "autocompleteasync",
     "label": "Proposed document revision",
-    "name": "documentRevision",
+    "name": "proposedDocumentRevision",
     "placeholder": "Select",
     "optionValueType": "id",
     "optionId": "15",

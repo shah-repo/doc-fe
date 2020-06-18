@@ -49,7 +49,7 @@ ChangeRequestFormContainerProps
       portalContainer={FBContainer}
       initialValues={changeRequest?.formInput}
       autosave={true}
-      schema={schema}
+      schema={changeRequest ? changeRequest.formDocument?.formTemplate?.schema : schema}
       mode={"form"}
     >
       <AssessmentFormPresenter

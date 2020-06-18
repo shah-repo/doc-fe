@@ -38,6 +38,8 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 export const ChangeRequestUpdateContainer: React.FunctionComponent<
 ChangeRequestUpdateContainerProps
 > = ({ save, changeRequest, currentUserEmail, loadAudit }) => {
+  console.log(changeRequest);
+
   const initialValues = useMemo(() => toChangeRequestFormValues(changeRequest), [changeRequest]);
   const async = useAsync<ChangeRequest>({
     onSuccess: () => {

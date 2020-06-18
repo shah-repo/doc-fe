@@ -64,7 +64,7 @@ export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequest
 
 
     const onSubmitAssessment = (values: ChangeRequestFormValues) => {
-      async.start(create, toChangeRequestEditRequestBody(values), async);
+      async.start(create, toChangeRequestEditRequestBody(values.id, values), async);
     };
 
     console.log(match.params);

@@ -24,7 +24,7 @@ const FBDocumentRevisions: React.FunctionComponent<FBDocumentRevisionProps> = ({
         collection={docRevState?.documentRevisions}>
         {(e, index) =>
           <FBProposedDocument
-            id={e.documentRevision.id}
+            id={e.id}
             justification={e.justificationOfChange}
             description={e.descriptionOfChange}
             index={index + 1}

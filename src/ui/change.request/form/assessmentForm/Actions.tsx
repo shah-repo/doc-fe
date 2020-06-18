@@ -36,12 +36,16 @@ const DocRevActions: React.FunctionComponent<Props> = ({
     return canChangeCROwner(changeRequest.state, currentEmployeeId, changeRequest?.owner.id, isCompanyAdmin);
   }, [changeRequest, currentEmployeeId, isCompanyAdmin]);
   const values  = React.useContext(CRFormContext);
+  console.log(values);
+  console.log(formState);
+
+  // const { formDocument, documentType } = React.useContext(CRCreateIdsContext)!;
+
   function setFBValue() {
     switch (workspaceState?.getMode()) {
       case "form":
-        formik.setFieldValue("formDocument", {
-          id: values?.formDocument?.id,
-        });
+        formik.setFieldValue("formDocument", values?.formDocument?.id);
+        // formik.setFieldValue("documentType", documentType);
         formik.setFieldValue("formInput", formState?.getValues());
         break;
       default:

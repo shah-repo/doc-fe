@@ -1,4 +1,5 @@
 import { Attachment as AttachmentInterface } from "../../../state/ducks/attachments";
+import { Id } from "../../../state/ducks/common";
 import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 
@@ -34,6 +35,7 @@ export interface ChangeRequestFormValues {
   description: string;
   formInput?: Record<string, any>;
   formDocument?: FBDocumentRevisionProps;
+  documentType?: Id;
 }
 
 export interface PasswordFormValues {

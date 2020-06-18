@@ -116,6 +116,7 @@ export interface ChangeRequestEditRequestBody {
   description: string;
   formInput?: Record<string, any>;
   formDocument?: FBDocumentRevisionProps;
+  documentType?: Id;
 }
 
 export interface ChangeRequestSetAction {

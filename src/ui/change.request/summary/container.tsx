@@ -82,7 +82,7 @@ export const Container: React.FunctionComponent<Props> = ({
     async.start(
       save,
       dataProp.id,
-      toChangeRequestEditRequestBody(values),
+      toChangeRequestEditRequestBody(values.id, values),
       async,
     );
   };

@@ -29,7 +29,7 @@ export interface FBDocumentRevisions {
 }
 
 export interface FBDocumentRevisionItem {
-  documentRevision: Id;
+  proposedDocumentRevision: Id;
   justificationOfChange: string;
   descriptionOfChange: string;
   id: string;
