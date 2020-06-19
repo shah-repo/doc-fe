@@ -16,6 +16,7 @@ import ChangeRequestLink from "../../document.revision/summary/changeRequestLink
 import { FBSchemaProps, FBWorkspace, FBWorkspaceMode } from "../../form.builder";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import Colors from "../../layout/theme/utils/colors";
+import { DocumentCloneType } from "../Clone.container";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -47,7 +48,7 @@ interface OwnProps {
   proposedDocId?: string;
   loadDocumentProposedId?: typeof documentsActions.loadDocumentProposedId;
   canChangeOwnerShip?: boolean;
-  type?: string;
+  type?: DocumentCloneType;
 }
 
 export type DocumentRevisionFormContainerProps = OwnProps &

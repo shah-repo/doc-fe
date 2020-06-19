@@ -23,8 +23,6 @@ interface Props {
 
 export const useHandleCreateDoc = () => {
   const history = useHistory();
-  const [documentIdState, setDocumentId] = useState("");
-  const [docRevIdState, setDocRevId] = useState("");
   const [form, setForm] = useState<DocumentRevision>();
   const fetchDocIdAction = useActionCreator(documentsActions.loadDocumentProposedIdWithCallback);
   const fetchDocIdAsync = useAsync<DocumentProposedId>({
@@ -49,21 +47,21 @@ export const useHandleCreateDoc = () => {
     };
     createDocAsync.start(createDocAction, data, createDocAsync);
   };
-  const redirect = (documentId = documentIdState, docRevId = docRevIdState) => {
-    history.push(`/document_revision/${documentId}/output_document/${docRevId}`);
+  const redirect = (selectedForm = form) => {
+    history.push({
+      pathname: "/document_revision/create",
+      state: selectedForm,
+    });
   };
 
-  return (documentId: string, docRevId: string, selectedForm: DocumentRevision) => {
-    setDocumentId(documentId);
-    setDocRevId(docRevId);
-
+  return (selectedForm: DocumentRevision) => {
     const outputDocumentTypes = selectedForm?.formTemplate?.outputDocumentTypes || [];
     if (outputDocumentTypes.length === 1) {
       fetchDocIdAsync.start(fetchDocIdAction, (outputDocumentTypes[0] as any)?.id, fetchDocIdAsync);
       setForm(selectedForm);
       return;
     }
-    redirect(documentId, docRevId);
+    redirect(selectedForm);
   };
 };
 
@@ -78,7 +76,6 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const formIds = useSelector(documentTypeSelectors.formIds);
   const [errorMessage, setErrorMessage] = useState<string>();
   const [multipleForm, toggleMultipleForm] = React.useState(false);
-  const docRevId = useSelector(documentTypeSelectors.docRevTypeById);
 
   useEffect(() => {
     setErrorMessage(undefined);
@@ -87,7 +84,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const async = useAsync<DocumentTypeById>({
     onSuccess: () => {
       if (formIds.length === 1) {
-        handleCreateDocument(formIds[0].document.id, docRevId, formIds[0] as DocumentRevision);
+        handleCreateDocument(formIds[0] as DocumentRevision);
         return;
       }
       if (isEmpty(formIds)) {
@@ -110,8 +107,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
       return;
     }
     const selectedForm = formIds.find((form) => form.id === docRevId);
-    const documentId = selectedForm?.document.id || "";
-    handleCreateDocument(documentId, docRevId, selectedForm as DocumentRevision);
+    handleCreateDocument(selectedForm as DocumentRevision);
   };
 
   return (

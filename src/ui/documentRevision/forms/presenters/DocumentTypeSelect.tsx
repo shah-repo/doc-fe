@@ -11,10 +11,11 @@ import SelectField, { SelectOption } from "../../../components/forms/fields/Sele
 import { FB } from "../../../form.builder";
 import { FBWorkspaceMode } from "../../../form.builder/types/workspace";
 import { useDocumentTypeSelect } from "../../../hooks/docCustomization/useCustomization";
+import { DocumentCloneType } from "../../Clone.container";
 
 interface Props {
   isdocRevStatusDraft: boolean;
-  type?: string;
+  type?: DocumentCloneType;
   outputDocumentTypes?: FBOutputDocumentType[];
   savedocInfo: React.Dispatch<React.SetStateAction<{
     name: string;
@@ -92,7 +93,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
     formik.handleChange(event);
   };
 
-  if (!isVisible) {
+  if (!isVisible && type !== "newOutput") {
     return null;
   }
 

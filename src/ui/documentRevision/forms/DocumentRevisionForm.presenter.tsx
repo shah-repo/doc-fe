@@ -22,6 +22,7 @@ import FormHeader from "../../document.revision/header/FormHeader";
 import { documentDetailsPath } from "../../document.revision/utils/paths";
 import { FB } from "../../form.builder";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
+import { DocumentCloneType } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
 import DocumentRevisionOutputInfo from "../formBuilder/DocumentRevisionOutputInfo";
 import styles from "./DocumentRevisionForm.styles";
@@ -51,7 +52,7 @@ export interface Props
   documentTypesById: DocumentTypeByIdState;
   onDirtyFlagChange?: (dirty: boolean) => void;
   canChangeOwnerShip: boolean;
-  type?: string;
+  type?: DocumentCloneType;
   handleFBContainerRef?: (instance: HTMLDivElement | null) => any;
   FBContainer?: React.MutableRefObject<HTMLDivElement | null>;
   bannerPortal?: React.MutableRefObject<HTMLDivElement | null>;
@@ -64,6 +65,7 @@ interface FormHeaderContext {
   docInfo: any;
   isDisabled: boolean;
   asyncState: AsyncState;
+  type?: DocumentCloneType;
 }
 export let FormHeaderContext = React.createContext<FormHeaderContext | undefined>(undefined);
 export let isOwnerContext = React.createContext<boolean>(false);
@@ -107,6 +109,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     docInfo,
     isDisabled,
     asyncState,
+    type,
   });
   const isCurrentUserOperator = React.useContext(isOperator);
   const email = useSelector(authSelectors.currentUserEmail);
@@ -169,8 +172,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     <Grid
       item={true}
       className={classes.container}
-      lg={isDisabled ? 12 : 7}
-      sm={isDisabled ? 12 : 10}
+      lg={type !== "newOutput" && isDisabled ? 12 : 7}
+      sm={type !== "newOutput" && isDisabled ? 12 : 10}
       xs={12}
     >
       <UpgradeToLatestContainer
@@ -216,10 +219,13 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         />
         <DocIdInput
           document={values.document}
-          isDisabled={isDisabled}
-          documentTypesById={documentTypesById}
-          setDocId={setDocId}
-          documentTypeId={documentTypeId}
+          {...{
+            isDisabled,
+            documentTypesById,
+            setDocId,
+            documentTypeId,
+            type,
+          }}
         />
         {renderRevisionStageDropdown}
         <AutocompleteField

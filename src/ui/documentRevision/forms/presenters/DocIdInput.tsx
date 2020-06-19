@@ -4,6 +4,7 @@ import { DocumentTypeByIdState } from "../../../../state/ducks/documentRevisions
 import { DocumentProposedIdSetAction } from "../../../../state/ducks/documents";
 import InputField from "../../../components/forms/fields/Input";
 import { useDocId } from "../../../hooks/docCustomization/useCustomization";
+import { DocumentCloneType } from "../../Clone.container";
 
 interface Props {
   isDisabled: boolean;
@@ -11,6 +12,7 @@ interface Props {
   documentTypesById: DocumentTypeByIdState;
   documentTypeId?: string;
   setDocId: ((docId: string) => DocumentProposedIdSetAction) | undefined;
+  type?: DocumentCloneType;
 }
 
 const DocIdInput: React.FunctionComponent<Props> = ({
@@ -19,6 +21,7 @@ const DocIdInput: React.FunctionComponent<Props> = ({
   document = {},
   documentTypesById,
   setDocId,
+  type,
 }) => {
   const [isVisible, label, validators] = useDocId(documentTypeId);
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,7 +45,7 @@ const DocIdInput: React.FunctionComponent<Props> = ({
     setDocId(value);
   };
 
-  if (!isVisible) {
+  if (!isVisible && type !== "newOutput") {
     return null;
   }
 
