@@ -755,9 +755,10 @@
   "IMPLEMENTATION": "Implementation",
   "CANCELED": "Canceled",
   "CLOSED": "Closed",
-  "maintenance.back.soon": "We’ll be back soon!",
-  "maintenance.inconvenience": "Sorry for the inconvenience but we’re performing some maintenance at the moment.",
+  "maintenance.title": "We're under scheduled maintenance",
+  "maintenance.body": "We are currently upgrading our system to make it more useful for you.\nThank you for your patience.",
   "Administrative Change": "Administrative Change",
   "document.revision.upgrade.form.banner": "A new version of the form is available. {clickHere} to upgrade to latest version.",
-  "common.click.here": "Click here"
+  "common.click.here": "Click here",
+  "return.home": "Return home"
 }
