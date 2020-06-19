@@ -1,6 +1,5 @@
 import { DialogContent, FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
 import React, { useState } from "react";
-import { Id } from "../../../../state/ducks/common";
 import { DocumentTypeById } from "../../../../state/ducks/documentRevisions/documentType";
 import { DialogHandler } from "../../../hooks/useDialog";
 import { styles } from "../FormList.styles";
@@ -11,13 +10,6 @@ interface Props {
   templateOptions: DocumentTypeById[];
 }
 
-interface CRCreateIdsProps {
-  formDocument: Id;
-  documentType: Id;
-}
-
-export let CRCreateIdsContext = React.createContext<CRCreateIdsProps | undefined>(undefined);
-
 export const FormListContent: React.FunctionComponent<Props> = ({
   dialog,
   templateOptions,
@@ -25,11 +17,6 @@ export const FormListContent: React.FunctionComponent<Props> = ({
   const classes = styles();
   const [chosenTypeId, setchosenTypeId] = useState<string>("");
   const [ chosenFormId, setChosenFormId ] = useState<string>("");
-
-  CRCreateIdsContext = React.createContext<CRCreateIdsProps | undefined>({
-    formDocument: { id: chosenFormId },
-    documentType: { id: chosenTypeId },
-  });
 
   return (
     <DialogContent classes={{ root: classes.dialogContent }}>
@@ -52,7 +39,7 @@ export const FormListContent: React.FunctionComponent<Props> = ({
             />
           ))}
       </RadioGroup>
-      <FormListActions {...{ dialog, chosenTypeId }}/>
+      <FormListActions {...{ dialog, chosenFormId, chosenTypeId }}/>
     </DialogContent>
 
   ); };

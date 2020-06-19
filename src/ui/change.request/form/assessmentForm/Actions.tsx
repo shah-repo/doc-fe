@@ -2,6 +2,7 @@ import { Grid } from "@material-ui/core";
 import { useFormikContext } from "formik";
 import * as React from "react";
 import { useSelector } from "react-redux";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { GroupTag } from "../../../../state/ducks/auth/types";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest";
@@ -11,21 +12,25 @@ import { RequestType } from "../../../components/common/owner.changer/helpers/ty
 import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
 import useGetHasTag from "../../../hooks/useGetHasTag";
-import { CRCreateIdsContext } from "../../form.list/dialog/FormListContent";
 import { canChangeCROwner } from "../../utils/helpers";
-import { CRFormContext } from "./AssessmentForm.presenter";
+import { RouteParamsCreate } from "../../utils/types";
+import { formIdContext } from "./AssessmentForm.presenter";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
 import AssessmentFormVoidContainer from "./Void.container";
 
-interface Props {
+interface OwnProps {
   changeRequest?: ChangeRequest;
   asyncState: AsyncState;
 }
+type Props = OwnProps & RouteComponentProps<RouteParamsCreate>;
 
 const DocRevActions: React.FunctionComponent<Props> = ({
   changeRequest,
   asyncState,
+  match,
 }) => {
+  const formDocumentId = React.useContext(formIdContext) || match.params.formId;
+  const documentTypeId = match.params.documentTypeId;
   const { workspaceState, formState } = FB.useStores();
   const formik = useFormikContext();
   const isCompanyAdmin = useGetHasTag(GroupTag.USER_MANAGEMENT);
@@ -36,17 +41,12 @@ const DocRevActions: React.FunctionComponent<Props> = ({
     }
     return canChangeCROwner(changeRequest.state, currentEmployeeId, changeRequest?.owner.id, isCompanyAdmin);
   }, [changeRequest, currentEmployeeId, isCompanyAdmin]);
-  const values  = React.useContext(CRFormContext);
-
-
-  // const { formDocument, documentType } = React.useContext(CRCreateIdsContext)!;
-  const idContext = React.useContext(CRCreateIdsContext)! || [];
 
   function setFBValue() {
     switch (workspaceState?.getMode()) {
       case "form":
-        formik.setFieldValue("formDocument", idContext?.formDocument || values?.formDocument);
-        formik.setFieldValue("documentType", idContext?.documentType);
+        formik.setFieldValue("formDocument", { id: formDocumentId });
+        formik.setFieldValue("documentType", { id: documentTypeId });
         formik.setFieldValue("formInput", formState?.getValues());
         break;
       default:
@@ -84,4 +84,4 @@ const DocRevActions: React.FunctionComponent<Props> = ({
     </Grid>
   ); };
 
-export default DocRevActions;
+export default withRouter(DocRevActions);

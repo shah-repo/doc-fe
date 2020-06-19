@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
 import { ChangeRequest, changeRequestsActions } from "../../state/ducks/changeRequest";
 import { documentTypeActions, DocumentTypeById } from "../../state/ducks/documentRevisions/documentType";
-import { ApplicationState } from "../../state/reducers";
 import { FormContext } from "../components/forms/FormContext";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
@@ -13,28 +11,21 @@ import { ChangeRequestFormValues } from "./form/types";
 import { changeRequestEditPath } from "./utils/paths";
 import { RouteParamsCreate } from "./utils/types";
 
-interface DispatchProps {
-  create: typeof changeRequestsActions.create;
-}
-
 interface OwnProps extends RouteComponentProps {
   changeRequest?: ChangeRequest;
 }
 
-export type ChangeRequestCreateContainerProps = OwnProps & DispatchProps & RouteComponentProps<RouteParamsCreate>;
+export type ChangeRequestCreateContainerProps = OwnProps & RouteComponentProps<RouteParamsCreate>;
 
 export const DEFAULT_INITIAL_VALUES = (): ChangeRequest => ({
   title: "",
   description: "",
-  justifications: { description: "", attachments: [] },
-  implementationPlan: { tasks: [], attachments: [] },
-  approvals: [],
-  documentRevisions: [],
 } as unknown as ChangeRequest);
 
 export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequestCreateContainerProps> =
-  ({ create, history, match }) => {
+  ({ history, match }) => {
     const documentTypeId = match.params.documentTypeId;
+    const create = useActionCreator(changeRequestsActions.create);
     const [templateOptions, setTemplateOptions] = useState<DocumentTypeById[]>([]);
     const [doNotPrompt, setDoNotPrompt] = React.useState(false);
     const getDocTypeByGroupAction = useActionCreator(documentTypeActions.getDocTypeByGroup);
@@ -63,7 +54,7 @@ export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequest
 
 
     const onSubmitAssessment = (values: ChangeRequestFormValues) => {
-      async.start(create, toChangeRequestEditRequestBody(values.id, values), async);
+      async.start(create, toChangeRequestEditRequestBody(values), async);
     };
 
     return (
@@ -79,6 +70,4 @@ export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequest
     );
   };
 
-export default connect<{}, DispatchProps, OwnProps, ApplicationState>(null, {
-  create: changeRequestsActions.create,
-})(ChangeRequestCreateContainer);
+export default ChangeRequestCreateContainer;

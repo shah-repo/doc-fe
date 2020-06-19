@@ -23,7 +23,7 @@ interface Props
   doNotPrompt?: boolean;
   FBContainer?: React.MutableRefObject<HTMLDivElement | null>;
 }
-export let CRFormContext = React.createContext<ChangeRequestFormValues | undefined>(undefined);
+export let formIdContext = React.createContext<string | undefined>(undefined);
 
 const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   asyncState,
@@ -43,9 +43,10 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const formContext = useFormContext();
   const didMount = useDidMount();
-  CRFormContext = React.createContext<ChangeRequestFormValues | undefined>(
-    values,
+  formIdContext = React.createContext<string | undefined>(
+    values.formDocument?.id,
   );
+
   useEffect(() => {
     if (didMount) {
       formContext.submitForm();

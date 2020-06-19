@@ -32,6 +32,8 @@ const Container: React.FunctionComponent<Props> = ({
   currentUserEmail,
 }) => {
   const changeRequestId = match.params.changeRequestId;
+  console.log(match);
+
   const loadAction = () => load(changeRequestId);
   const updateRenderer = () => <ChangeRequestUpdateContainer changeRequest={dataProp} />;
   const summaryRenderer = () => <SummaryContainer dataProp={dataProp} currentUserEmail={currentUserEmail} />;

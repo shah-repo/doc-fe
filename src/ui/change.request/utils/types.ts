@@ -90,6 +90,7 @@ export interface RouteParams {
 
 export interface RouteParamsCreate {
   documentTypeId: string;
+  formId: string;
 }
 
 export interface ActionProps {

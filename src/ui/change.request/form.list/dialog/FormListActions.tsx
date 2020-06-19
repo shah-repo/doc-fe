@@ -8,8 +8,9 @@ import { styles } from "../FormList.styles";
 interface Props {
   dialog: DialogHandler;
   chosenTypeId: string;
+  chosenFormId: string;
 }
-export const FormListActions: React.FunctionComponent<Props> = ({ dialog, chosenTypeId }) => {
+export const FormListActions: React.FunctionComponent<Props> = ({ dialog, chosenFormId, chosenTypeId }) => {
   const classes = styles();
   const history = useHistory();
 
@@ -33,7 +34,7 @@ export const FormListActions: React.FunctionComponent<Props> = ({ dialog, chosen
           className={classes.submitButton}
           fullWidth
           id="FormList-continueButton"
-          onClick={() => history.push(`/change_request/create/${chosenTypeId}`)}
+          onClick={() => history.push(`/change_request/${chosenFormId}/create/${chosenTypeId}`)}
         >
           <Text translation="common.continue" />
         </Button>
