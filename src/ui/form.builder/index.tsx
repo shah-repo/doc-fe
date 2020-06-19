@@ -82,6 +82,7 @@ export { default as FBEditorRequestApproval } from "./FBEditorRequestApproval/FB
 export { default as FBEditorSelectDocument } from "./FBEditorSelectDocument/FBEditorSelectDocument";
 export { default as FBEditorSelectRequirement } from "./FBEditorSelectRequirement/FBEditorSelectRequirement";
 export { default as FBEditorTestRequirement } from "./FBEditorTestRequirement/FBEditorTestRequirement";
+export { default as FBEditorTextEditor } from "./FBEditorTextEditor/FBEditorTextEditor";
 export { default as FBEditorTextField } from "./FBEditorTextField/FBEditorTextField";
 export { default as FBEditorTitle } from "./FBEditorTitle/FBEditorTitle";
 export { default as FBEditorTitleState } from "./FBEditorTitle/FBEditorTitle.state";
@@ -205,6 +206,8 @@ export * from "./FBTabs/FBTabs.types";
 export { default as FBTestRequirement } from "./FBTestRequirement/FBTestRequirement";
 export * from "./FBTestRequirement/FBTestRequirement.types";
 export { default as FBTextEditor } from "./FBTextEditor/FBTextEditor";
+export { default as FBTextEditorState } from "./FBTextEditor/FBTextEditor.state";
+export * from "./FBTextEditor/FBTextEditor.types";
 export { default as FBTextField } from "./FBTextField/FBTextField";
 export * from "./FBTextField/FBTextField.types";
 export { default as FBTimerField } from "./FBTimerField/FBTimerField";

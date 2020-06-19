@@ -17,6 +17,7 @@ import { FBEditorRequestApproval } from "../FBEditorRequestApproval";
 import { FBEditorSelectDocument } from "../FBEditorSelectDocument";
 import { FBEditorSelectRequirement } from "../FBEditorSelectRequirement";
 import { FBEditorTestRequirement } from "../FBEditorTestRequirement";
+import { FBEditorTextEditor } from "../FBEditorTextEditor";
 import { FBEditorTextField } from "../FBEditorTextField";
 
 export class FBEditorState {
@@ -77,7 +78,7 @@ export class FBEditorState {
     checkbox: FBEditorCheckControl,
     checkboxgroup: FBEditorOptionGroup,
     autocomplete: FBEditorAutocomplete,
-    texteditor: FBEditorLabel,
+    texteditor: FBEditorTextEditor,
     datepicker: FBEditorLabel,
     hyperlink: FBEditorHyperlink,
     select: FBEditorOptionGroup,
