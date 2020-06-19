@@ -8,6 +8,8 @@ import { withFBTextEditor } from "./FBTextEditor.wrap";
 const FBTextEditor: React.FunctionComponent<FBTextEditorProps> = ({
   onEditorStateChange,
   editorState,
+  toolbarCustomButtons,
+  toolbar,
   disabled,
   name,
   ...props
@@ -15,8 +17,8 @@ const FBTextEditor: React.FunctionComponent<FBTextEditorProps> = ({
   <FBInput {...props} {...{ name, disabled }} type="texteditor">
     <Box mt={-4}>
       <Editor
-        {...{ editorState, onEditorStateChange }}
-        toolbarClassName="toolbarClassName"
+        {...{ editorState, onEditorStateChange, toolbar, toolbarCustomButtons }}
+        {...disabled && { toolbarStyle: { pointerEvents: "none" } }}
         wrapperClassName="rte-wrapper"
         editorClassName="rte-editor"
         readOnly={disabled}

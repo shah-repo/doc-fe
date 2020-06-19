@@ -71,9 +71,9 @@ export const withFBInput = <T extends FBInputProps>(
           if (isString(options)) {
             return;
           }
-          const value = optionsToString && optionsToString(options);
+          const value = optionsToString?.(options);
           formState?.setFieldValue(name, value);
-          return value || "";
+          return value;
         },
         autocompleteasync() { return; },
         autocomplete() { return; },
@@ -101,7 +101,7 @@ export const withFBInput = <T extends FBInputProps>(
         onChange,
         onBlur,
         ...(type === "textfield" && { error }),
-        ...(type !== "texteditor" && { value }),
+        ...(type === "select" && !defaultValue && placeholder && { value: "" }),
         ...(type !== "datepicker" && type !== "autocomplete" && !isBoolean(defaultValue) && { defaultValue }),
       });
     }
@@ -109,7 +109,6 @@ export const withFBInput = <T extends FBInputProps>(
     React.useEffect(() => {
       if (!formState && !inputState) { return; }
       // Input states
-      formState!.inputState.set(name, inputState!);
       formState!.inputState.set(name, inputState!);
 
       // Validation settings

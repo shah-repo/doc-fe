@@ -3,7 +3,7 @@ import { FBInputProps, FBTextEditorState } from "..";
 
 export type FBTextEditorProps =
 & FBInputProps
-& Pick<EditorProps, "editorState" | "onEditorStateChange">
+& Pick<EditorProps, "editorState" | "onEditorStateChange" | "toolbar" | "toolbarCustomButtons">
 & {
   textEditorState?: FBTextEditorState;
 };
