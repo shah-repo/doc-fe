@@ -1,6 +1,6 @@
 import { Provider } from "mobx-react";
 import React from "react";
-import { FBButton, FBDialog, FBMapWrapper, FBSection } from "..";
+import { FBButton, FBDialog, FBMapWrapper } from "..";
 import { FBDocumentRevisionItem, FBDocumentRevisionProps } from "./FBDocumentRevisions.types";
 import { withFBDocumentRevisions } from "./FBDocumentRevisions.wrap";
 import FBProposedDocument from "./FBProposedDocument/FBProposedDocument";
@@ -17,14 +17,13 @@ const FBDocumentRevisions: React.FunctionComponent<FBDocumentRevisionProps> = ({
   proposedDocumentRevision,
 }) =>   (
   <Provider {...{ dialogState, docRevState }}>
-    <FBSection label="form.builder.change.request.details" />
     <FBDialog />
     <React.Fragment>
       <FBMapWrapper<FBDocumentRevisionItem[] | undefined>
         collection={docRevState?.documentRevisions}>
         {(e, index) =>
           <FBProposedDocument
-            id={e.documentRevision.id}
+            id={e.proposedDocumentRevision.id}
             justification={e.justificationOfChange}
             description={e.descriptionOfChange}
             index={index + 1}

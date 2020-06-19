@@ -4,17 +4,19 @@ import { DocumentTypeById } from "../../../../state/ducks/documentRevisions/docu
 import { DialogHandler } from "../../../hooks/useDialog";
 import { styles } from "../FormList.styles";
 import FormListActions from "./FormListActions";
+
 interface Props {
   dialog: DialogHandler;
   templateOptions: DocumentTypeById[];
 }
+
 export const FormListContent: React.FunctionComponent<Props> = ({
   dialog,
   templateOptions,
 }) => {
   const classes = styles();
-  const [chosenForm, setChosenForm] = useState<string>("");
-  console.log(chosenForm);
+  const [chosenTypeId, setchosenTypeId] = useState<string>("");
+  const [ chosenFormId, setChosenFormId ] = useState<string>("");
 
   return (
     <DialogContent classes={{ root: classes.dialogContent }}>
@@ -30,11 +32,14 @@ export const FormListContent: React.FunctionComponent<Props> = ({
               value={form.id}
               control={<Radio color="primary" />}
               label={form.name}
-              onChange={() => setChosenForm(template.documentType.id)}
+              onChange={() => {
+                setchosenTypeId(template.documentType.id);
+                setChosenFormId(form.id);
+              }}
             />
           ))}
       </RadioGroup>
-      <FormListActions {...{ dialog }}/>
+      <FormListActions {...{ dialog, chosenFormId, chosenTypeId }}/>
     </DialogContent>
 
   ); };

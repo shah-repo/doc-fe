@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
 import { FBProposedDocumentProps } from "../FBDocumentRevisions.types";
 
 export const withFBProposedDocument = <T extends FBProposedDocumentProps>(
@@ -11,9 +11,15 @@ export const withFBProposedDocument = <T extends FBProposedDocumentProps>(
     ...props
   }: T) => {
 
+    const dispatch = useDispatch();
     const docRevById = useSelector(documentRevisionsSelectors.byId);
     const proposedDocumentRevision = docRevById[id];
     const [isMouseInside, setMouseInside] = useState<boolean>(false);
+
+    useEffect(() => {
+      dispatch(documentRevisionsActions.loadList());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return Component({
       ...(props as T),
