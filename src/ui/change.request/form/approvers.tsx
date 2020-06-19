@@ -3,6 +3,8 @@ import { uniqBy } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { components } from "react-select";
+import { ReactComponent as CheckedMark } from "../../../assets/images/check_mark.svg";
+import { ReactComponent as UncheckedMark } from "../../../assets/images/uncheck_mark.svg";
 import { authSelectors } from "../../../state/ducks/auth";
 import { Group } from "../../../state/ducks/auth/types";
 import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
@@ -15,14 +17,13 @@ import Text from "../../components/Text";
 import { ApproveAndReleaseFormValues } from "../../documentRevision/forms/types";
 import useActionCreator from "../../hooks/useActionCreator";
 import { toUniqGroupOptions } from "./transform";
-import { ChangeRequestFormValues } from "./types";
 
 
 interface OwnProps {
   dataProp?: Approval[];
   withoutCurrentUser?: boolean;
   documentTypeGroups?: Group[];
-  values?: ChangeRequestFormValues | ApproveAndReleaseFormValues;
+  values?: ApproveAndReleaseFormValues;
   owner?: Owner;
 }
 
@@ -35,7 +36,9 @@ export const Approvers: React.FunctionComponent<Props> = ({
   values,
   owner,
 }) => {
-
+// We should check if we need all of this
+// Now that approvers are moved to the FB
+// This is now only used for Approve&Release
   const joinedEmployees = (groups: Group[]) => groups.map((group) => group.joinedEmployees.map((employee) =>
     ({ group: group.name, id: employee.id, name: employee.user?.name })
   ));
@@ -61,20 +64,20 @@ export const Approvers: React.FunctionComponent<Props> = ({
 
   const renderGroupApproversResults = () => {
     const uniqGroups = uniqBy(documentTypeGroups, "id");
-    // const selectedEmployees = (values?.formDocument. || []).map((e) => e.value);
+    const selectedEmployees = (values?.approvals || []).map((e) => e.value);
 
     return (
       <Box display="flex" flexWrap="wrap">
         {
           uniqGroups.map((group) =>
             <Box marginRight={6} marginBottom={4} key={group.id} display="inline-flex">
-              {/* {
+              {
                 group
                   .joinedEmployees
                   .some((employee) => (
                     selectedEmployees?.includes(employee.id)) || owner?.id === employee.id) ?
                   <CheckedMark /> : <UncheckedMark />
-              } */}
+              }
               <Box paddingLeft={1} display="initial">
                 <Text message={group.name} />
               </Box></Box>

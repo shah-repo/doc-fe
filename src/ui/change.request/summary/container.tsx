@@ -1,16 +1,15 @@
 import { Grid } from "@material-ui/core";
 import { Form, Formik, FormikProps } from "formik";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { Redirect, useLocation } from "react-router-dom";
 import { ReactComponent as BookmarkIcon } from "../../../assets/images/bookmark.svg";
 import { ReactComponent as TimelineIcon } from "../../../assets/images/history.svg";
 import { authSelectors } from "../../../state/ducks/auth";
-import { Group, GroupTag } from "../../../state/ducks/auth/types";
+import { GroupTag } from "../../../state/ducks/auth/types";
 import { ChangeRequest, changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { DataProps } from "../../../state/ducks/common";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { FormContext } from "../../components/forms/FormContext";
 import Bookmarks from "../../documentRevision/Sidebar/Bookmarks";
 import SidebarContainer from "../../documentRevision/Sidebar/Sidebar.container";
@@ -40,10 +39,10 @@ export const Container: React.FunctionComponent<Props> = ({
 }) => {
   const FBContainer = React.useRef(null);
 
-  const [summaryDocumentTypeGroups, setSummaryDocTypeGroups] = useState<any[]>([]);
-  const [sidebar, openSidebar] = useState<boolean>(true);
+  /*   const [summaryDocumentTypeGroups, setSummaryDocTypeGroups] = useState<any[]>([]);
+ */  const [sidebar, openSidebar] = useState<boolean>(true);
   const url = useLocation();
-  const classes = styles();
+  const classes = styles({ sidebar });
   useDocumentTitle(dataProp.crId);
   const intl = useIntl();
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
@@ -51,27 +50,26 @@ export const Container: React.FunctionComponent<Props> = ({
   const canChangeOwnerShip = canChangeCROwner(dataProp.state, currentEmployeeId, dataProp.owner.id, isCompanyAdmin);
   const canEdit = canEditApprovers({ dataProp, currentUserEmail });
   const save = useActionCreator(changeRequestsActions.save);
-  const closeTask = useActionCreator(changeRequestsActions.closeTask);
-  const loadGroupsByStage = useActionCreator(documentRevisionsActions.loadGroupsByStage);
-  const schema = dataProp.formDocument?.formTemplate?.schema || [];
+  /*   const loadGroupsByStage = useActionCreator(documentRevisionsActions.loadGroupsByStage);
+ */  const schema = dataProp.formDocument?.formTemplate?.schema || [];
 
-  const asyncGroups = useAsync({
+  /*   const asyncGroups = useAsync({
     onSuccess: (response: Group[] = []) => {
       setSummaryDocTypeGroups([
         ...summaryDocumentTypeGroups,
         response,
       ].flat());
     },
-  });
+  }); */
 
-  useEffect(() => {
+  /*   useEffect(() => {
     dataProp.documentRevisions.map((docRev) => asyncGroups.start(
       loadGroupsByStage,
       docRev.id,
       asyncGroups,
     ));
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataProp]);
+  }, [dataProp]); */
 
   const async = useAsync<ChangeRequest>();
   if (canEditChangeRequest({ dataProp, currentUserEmail })) {
@@ -95,10 +93,7 @@ export const Container: React.FunctionComponent<Props> = ({
         dataProp={dataProp}
         asyncState={async.asyncState}
         canEdit={canEdit}
-        currentUserEmail={currentUserEmail}
-        closeTask={closeTask}
         canChangeOwnerShip={canChangeOwnerShip}
-        documentTypeGroups={summaryDocumentTypeGroups}
         {...props}
         {...{ FBContainer }}
       />
@@ -147,7 +142,7 @@ export const Container: React.FunctionComponent<Props> = ({
   ];
 
   return (
-    <Grid container={true} className={classes.whiteContainer} style={{ width: sidebar ? "100%" : "104%" }}>
+    <Grid container={true} className={classes.whiteContainer}>
       <ChangeRequestSummarySockets crId={dataProp.crId} />
       <Grid item={true} xs={sidebar ? 9 : 11} className={classes.backColor}>
         {summaryFormikRenderer()}

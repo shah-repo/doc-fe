@@ -1,4 +1,4 @@
-import { Grid, WithStyles, withStyles } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
@@ -25,13 +25,11 @@ interface OwnProps {
   schema?: FBSchemaProps[];
 }
 
-type ChangeRequestFormContainerProps = OwnProps &
-WithStyles<typeof styles>;
+type ChangeRequestFormContainerProps = OwnProps;
 
 export const ChangeRequestFormContainer: React.FunctionComponent<
 ChangeRequestFormContainerProps
 > = ({
-  classes,
   onSubmit,
   asyncState,
   initialValues,
@@ -43,20 +41,22 @@ ChangeRequestFormContainerProps
   const intl = useIntl();
   const url = useLocation();
   const [sidebar, openSidebar] = useState<boolean>(true);
+  const classes = styles({ sidebar });
+  const schemaData = changeRequest ? changeRequest.formDocument?.formTemplate?.schema : schema;
 
   const render = (props: FormikProps<ChangeRequestFormValues>) => (
     <FBWorkspace
       portalContainer={FBContainer}
       initialValues={changeRequest?.formInput}
       autosave={true}
-      schema={changeRequest ? changeRequest.formDocument?.formTemplate?.schema : schema}
-      mode={"form"}
+      schema={schemaData}
+      mode="form"
     >
       <AssessmentFormPresenter
-        {...props}
         asyncState={asyncState}
         changeRequest={changeRequest}
         doNotPrompt={doNotPrompt}
+        {...props}
         {...{ FBContainer }}
       />
     </FBWorkspace>
@@ -80,15 +80,14 @@ ChangeRequestFormContainerProps
         title: intl.formatMessage({
           id: "document.revision.bookmarks",
         }),
-        component: <Bookmarks location={url} schema={changeRequest ? changeRequest.formDocument?.formTemplate?.schema : schema} />,
+        component: <Bookmarks location={url} schema={schemaData} />,
       },
     },
   ];
 
   return (
-    <Grid container={true} className={classes.whiteContainer} style={{ width: sidebar ? "100%" : "104%" }}>
+    <Grid container={true} className={classes.whiteContainer}>
       <Grid item={true} xs={changeRequest ? (sidebar ? 9 : 11) : 12} className={classes.backColor}>
-
         <Formik
           initialValues={initialValues}
           onSubmit={onSubmit}
@@ -102,4 +101,4 @@ ChangeRequestFormContainerProps
   );
 };
 
-export default withStyles(styles)(ChangeRequestFormContainer);
+export default ChangeRequestFormContainer;
