@@ -1,5 +1,5 @@
 import { Grid } from "@material-ui/core";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { connect, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { DocumentRevision, documentRevisionsSelectors, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
@@ -26,6 +26,10 @@ interface OwnProps {
 
 export type DocumentRevisionManagerContainerProps = OwnProps &
 StateProps;
+
+// TO-DO Move To Context Folder
+export let documentRevisionStatusContextFromDocList = React.createContext< undefined | DocumentRevisionStatus >(undefined);
+export let documentRevisionVersionContext = React.createContext<number>(1);
 
 const getDocumentRevisions = documentRevisionsSelectors.makeGetDocumentRevisions();
 const mapStateToProps = (
@@ -56,6 +60,13 @@ DocumentRevisionManagerContainerProps
   const canAccess = selectedDocument?.document.canAccess;
   const [sidebar, openSidebar] = useState<boolean>(true);
   const schema = selectedDocument?.formTemplate?.schema || selectedDocument?.formDocument?.formTemplate?.schema || [];
+  const status = selectedDocument ? selectedDocument.status : undefined;
+  documentRevisionStatusContextFromDocList = React.createContext(status);
+  documentRevisionVersionContext = React.createContext(selectedDocument?.version);
+
+  useEffect(() => () => {
+    documentRevisionStatusContextFromDocList = React.createContext<undefined | DocumentRevisionStatus>(undefined);
+  }, []);
 
   if (shouldRedircetToLatestReleasd(documentRevisions, documentRevisionId)) {
     const docRevIdToRedirect = getDocRevIdToRedirect(documentRevisions, deprecatedAt);

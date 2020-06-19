@@ -12,7 +12,7 @@ import Text from "../../components/Text";
 import { canEditDocumentRevision, documentRevisionQueryStatus, documentRevisionStatusOption } from "../../document.revision/utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
 import { Translation } from "../../translations/types";
-import { shouldShowStaticColumns } from "./helpers";
+import { columnSearchConfiguration, shouldShowStaticColumns } from "./helpers";
 import { styles } from "./styles";
 
 export interface Props {
@@ -55,18 +55,22 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
     return documentPreviewPath(rowData.id, rowData.document.id);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const pageDetailColumns = documentType.pageDetails!.columns;
+  const pageDetailColumns = documentType.pageDetails?.columns || [];
   const additionalColumns = pageDetailColumns.map(
-    (column: PageDetailsColumn) => ({
-      key: column.valuePath as keyof DocumentRevision,
-      label: column.label as Translation,
-      cellHref: cellHrefRenderer,
-      omitSearch: true,
-      columnOptions: {
-        cellDataGetter: ({ rowData }) => _.get(rowData, column.valuePath),
-      },
-    }),
+    (column: PageDetailsColumn) => {
+      const [omitSearch, searchOptions] = columnSearchConfiguration(column.valuePath, tableCriteria);
+
+      return {
+        key: column.valuePath as keyof DocumentRevision,
+        label: column.label as Translation,
+        cellHref: cellHrefRenderer,
+        omitSearch,
+        columnOptions: {
+          cellDataGetter: ({ rowData }) => _.get(rowData, column.valuePath),
+        },
+        searchOptions,
+      };
+    },
   );
 
   const staticColumns: TableColumnProps<DocumentRevision>[] = [
@@ -167,7 +171,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       {showError && (
         <div style={{ color: "red" }} id="DocumentByTypeListPresenter-showError">
           <Text
-            translation="supplier.form.error"
+            translation="missing.form.error"
             values={{ name: documentType.documentTypeName }}
           />
         </div>

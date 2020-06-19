@@ -8,6 +8,7 @@ import { Owner } from "../../../../state/ducks/common/types";
 import { documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { FormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
+import { useApproveAndRelease } from "../../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
@@ -21,6 +22,7 @@ interface Props {
   documentName: string;
   docRevId: string;
   owner?: Owner;
+  documentTypeId?: string;
 }
 
 const styles = makeStyles(() =>
@@ -41,7 +43,9 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   documentName,
   docRevId,
   owner,
+  documentTypeId,
 }) => {
+  const [isVisible, label] = useApproveAndRelease(documentTypeId);
   const classes = styles();
   const dialog = useDialog();
   const releaseAction = useActionCreator(documentRevisionsActions.approveAndRelease);
@@ -125,6 +129,10 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
     />
   );
 
+  if (!isVisible) {
+    return null;
+  }
+
   return (
     <>
       <Button
@@ -133,7 +141,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
         onClick={openDialog}
         id="ApproveAndRelease-button"
       >
-        <Text translation="common.approve.and.release" />
+        <Text message={label} />
       </Button>
       {
         dialog.isOpen &&

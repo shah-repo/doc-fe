@@ -14,7 +14,7 @@ export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
     ...props
   }: T) => {
 
-    const { approvalMatrixFieldState, formState } = FB.useStores();
+    const { approvalMatrixFieldState } = FB.useStores();
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
 
     onClick = () => {
@@ -27,10 +27,7 @@ export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
     };
 
     useObserver(() => {
-      approvalRoles = approvalMatrixFieldState?.approvalRoles;
-      const approvalMatrix = [...approvalMatrixFieldState?.approvalMatrix || []];
-      formState?.setFieldValue(`${name}.approvalRoles`, approvalRoles);
-      formState?.setFieldValue(`${name}.approvalMatrix`, approvalMatrix);
+      approvalRoles = approvalMatrixFieldState?.data?.approvalRoles;
     });
 
     return Component({

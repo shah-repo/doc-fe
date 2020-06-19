@@ -3,12 +3,14 @@ import MockAdapter from "axios-mock-adapter";
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import apiInstance from "../../../../state/apiClient";
+import { toastError } from "../../../components/notifications";
 import { SUPPLIER_SURVEY_URL } from "../../../constants/urls";
 import render from "../../../tests/helpers/renderWithProviders";
 import SupplierSurveyContainer from "./SupplierSurvey.container";
 import { submitSurveyError, surveyResponse } from "./tests/responses";
 
 const apiMock = new MockAdapter(apiInstance);
+jest.mock("../../../components/notifications");
 
 describe("Supplier survey container test", () => {
   const SURVEY_TOKEN = "SURVEY_TOKEN";
@@ -50,7 +52,7 @@ describe("Supplier survey container test", () => {
         <Route path={SUPPLIER_SURVEY_URL} exact={true} render={(props) => <SupplierSurveyContainer {...props} />} />
       </Switch>
     );
-    const { asFragment, container, getByRole, getByText } = render(
+    const { asFragment, container, getByRole } = render(
       <Routes />,
       { route: `/supplier_survey/${SURVEY_TOKEN}` },
     );
@@ -66,6 +68,7 @@ describe("Supplier survey container test", () => {
 
     await wait();
 
-    expect(getByText("Survey already filled in")).toBeInTheDocument();
+    expect(toastError).toHaveBeenCalledTimes(1);
+    expect(toastError).toHaveBeenLastCalledWith("Survey already filled in");
   });
 });

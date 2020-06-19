@@ -10,6 +10,7 @@ import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync
 import { FBInputType } from "../FBInput";
 import FBStore from "../FBStore/FBStore";
 
+// *NOTE: This needs to be refactored! Wait for the BE changes
 export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
   Component: React.FunctionComponent<T>
 ) => {
@@ -79,7 +80,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           if (moment(nextValue, moment.ISO_8601, true).isValid()) {
             nextValue = moment(nextValue).tz(TIME_ZONE, true).format("D MMM YYYY hh:mm:ss a");
           }
-          return "Changed " + label + prevValue + " to " + nextValue;
+          return ("Changed " + label + prevValue + " to " + nextValue).replace(/(<([^>]+)>)/ig, "");
         }
 
         function isCheck() {
@@ -136,15 +137,26 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
         }
 
         function isFileupload() {
+
+
           const fields = ["name", "type"];
           const r = v.reduce((merged, clearValue, index) => {
+            const { type: auditType = "" } = clearValue;
+            if (index === 0) {
+              merged += auditType.includes("NEW")
+                ? "Uploaded: "
+                : "Removed: ";
+            }
             const clearKey: string = last(clearValue.field.split(".")) || "";
             if (!fields.includes(clearKey) || clearValue.field.includes("company")) {
               return merged;
             }
-            merged += clearValue.nextValue + ((index % 2) === 0 ? "." : ", ");
+            const activeFieldValue = auditType.includes("NEW")
+              ? clearValue.nextValue
+              : clearValue.previousValue;
+            merged += activeFieldValue + ((index % 2) === 0 ? "." : ", ");
             return merged;
-          }, "Uploaded ");
+          }, "");
           return r;
         }
 
@@ -215,9 +227,11 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           ownerName: v[0].owner.user.name,
           formattedTime: moment(v[0].timestamp).tz(TIME_ZONE, true).format("D MMM YYYY hh:mm:ss a"),
           description: (description[type || ""] || description.default)(),
+          timestamp: v[0].timestamp,
         };
       });
-      return compact(mapped) as FBAuditData[];
+      return (compact(mapped) as FBAuditData[])
+        .sort((a, b) => new Date(a.timestamp).valueOf() - new Date(b.timestamp).valueOf());
     }
 
     function isApproved(): boolean {

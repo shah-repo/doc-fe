@@ -34,6 +34,7 @@ import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
 import References from "./presenters/References";
 import RetrainField from "./presenters/RetrainField";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
+import UpgradeToLatestContainer from "./presenters/UpgradeToLatest.container";
 import { DocumentRevisionFormValues } from "./types";
 
 export interface Props
@@ -53,6 +54,7 @@ export interface Props
   type?: string;
   handleFBContainerRef?: (instance: HTMLDivElement | null) => any;
   FBContainer?: React.MutableRefObject<HTMLDivElement | null>;
+  bannerPortal?: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 interface FormHeaderContext {
@@ -66,6 +68,7 @@ interface FormHeaderContext {
 export let FormHeaderContext = React.createContext<FormHeaderContext | undefined>(undefined);
 export let isOwnerContext = React.createContext<boolean>(false);
 export let documentTypeContext = React.createContext<string | undefined>(undefined);
+
 
 export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   classes,
@@ -88,9 +91,8 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   documentRevision,
   setFieldValue,
   type,
-  handleFBContainerRef,
   FBContainer,
-  setValues,
+  bannerPortal,
 }) => {
 
   useScrollIntoView();
@@ -171,6 +173,13 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       sm={isDisabled ? 12 : 10}
       xs={12}
     >
+      <UpgradeToLatestContainer
+        type="banner"
+        docRevId={documentRevision?.id}
+        documentStatus={documentRevision?.status}
+        formDocumentStatus={documentRevision?.formDocument?.status}
+        bannerPortal={bannerPortal}
+      />
       <FormHeader/>
       <FormWrapper
         dirty={dirty}
@@ -189,7 +198,6 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         />
         <Title
           name="name"
-          label="common.title"
           documentTypeId={documentTypeId}
           disabled={isDisabledInput}
         />
@@ -204,6 +212,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           isdocRevStatusDraft={isdocRevStatusDraft}
           savedocInfo={savedocInfo}
           isDisabled={isDisabledInput}
+          documentTypeId={documentTypeId}
         />
         <DocIdInput
           document={values.document}

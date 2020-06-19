@@ -1,14 +1,13 @@
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBApprovalMatrixTableClasses, FBApprovalMatrixTableProps } from ".";
-import { FB } from "..";
+import { FB, FBApprovalMatrixFieldData } from "..";
 
 export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
   Component: React.FunctionComponent<T>
 ) => {
   const Comp = ({
-    approvalRoles,
-    approvalMatrix,
+    approvalData,
     classes,
     mode,
     name,
@@ -19,14 +18,12 @@ export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
     classes = FBApprovalMatrixTableClasses();
 
     useObserver(() => {
-      approvalRoles = approvalMatrixFieldState?.approvalRoles;
-      approvalMatrix = approvalMatrixFieldState?.approvalMatrix;
+      approvalData = approvalMatrixFieldState?.data as FBApprovalMatrixFieldData;
     });
 
     return Component({
       ...(props as T),
-      approvalRoles,
-      approvalMatrix,
+      approvalData,
       classes,
       mode,
       name,

@@ -47,3 +47,8 @@ export interface FBApprovalMatrixFieldData {
 }
 
 export type FBApprovalMatrixFieldMode = "none" | "add" | "edit" | "fullscreen";
+
+export interface FBApprovalMatrixConstructor {
+  formValue?: FBApprovalMatrixFieldData;
+  isOutput?: boolean;
+}

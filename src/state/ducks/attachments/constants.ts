@@ -7,3 +7,7 @@ export const CHECK_WATERMARK_ASYNC = "attachments/CHECK_WATERMARK_ASYNC";
 export const ADD_WATERMARK = "attachments/ADD_WATERMARK";
 export const REMOVE_WATERMARK = "attachments/REMOVE_WATERMARK";
 export const CLEAR_WATERMARKS = "attachments/CLEAR_WATERMARKS";
+export const LINE_TYPES = {
+  CLEAN_COPY: "CLEAN_COPY",
+  RED_LINE: "RED_LINE",
+};

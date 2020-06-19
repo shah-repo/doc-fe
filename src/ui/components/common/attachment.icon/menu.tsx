@@ -5,21 +5,30 @@ import { Attachment, AttachmentType } from "../../../../state/ducks/attachments"
 import Text from "../../Text";
 import { WATERMARK_FILES } from "../view.file/utils/constants";
 import { checkIfFileIsViewable } from "../view.file/utils/helpers";
-import { AttachmentMenuProps } from "./utils/types";
+import { AttachmentMenuProps, PasswordSubmitActionType } from "./utils/types";
 
 interface OwnProps {
+  docRevStatusRequiresPassword: (attachment: Attachment, attachmentType?: AttachmentType) => boolean;
   handleWatermarkRequest?: (attachment: Attachment, attachmentType: AttachmentType) => void;
+  setSelectedAttachment: (attachment: Attachment) => void;
+  handleIconClick?: (attachment: Attachment) => any;
+  setdownloadType: (type: AttachmentType) => any;
 }
 
 type Props = AttachmentMenuProps & OwnProps;
 
 const AttachmentMenu: React.FunctionComponent<Props> = ({
-  handleDownload,
   handleClose,
   anchorEl,
   attachment,
-  openFileView,
+  handleIconClick,
   handleWatermarkRequest,
+  openWarningDialog,
+  setPasswordSubmitAction,
+  setSelectedAttachment,
+  download,
+  docRevStatusRequiresPassword,
+  setdownloadType,
 }) => {
   const file = useMemo(() => (attachment || {} as Attachment), [attachment]);
   const isFileViewable =  useMemo(() => checkIfFileIsViewable(file.type), [file.type]);
@@ -33,13 +42,20 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
     handleClose && handleClose();
     handleDownload && handleDownload(file, type)();
   };
-  const handleViewFileClick = () => {
-    handleClose && handleClose();
-    openFileView && openFileView();
-  };
   const handleWatermarkClick = (attachmentType: AttachmentType) => () => {
     handleClose && handleClose();
     handleWatermarkRequest && handleWatermarkRequest(file, attachmentType);
+  };
+  const handleDownload = (attachment: Attachment, type: AttachmentType) => () => {
+    setdownloadType(type);
+    if (docRevStatusRequiresPassword(attachment, type)) {
+      setSelectedAttachment(attachment);
+      setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_FILE);
+      openWarningDialog();
+    } else {
+      download(attachment, type);
+    }
+
   };
 
   const renderDownloadFile =
@@ -59,7 +75,7 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
       <Text translation="attachment.download.watermark.clean.copy" />
     </MenuItem>;
   const renderPreviewFile = isFileViewable &&
-    <MenuItem onClick={handleViewFileClick}>
+    <MenuItem onClick={handleIconClick && handleIconClick(file)}>
       <Text translation="common.view.file" />
     </MenuItem>;
 

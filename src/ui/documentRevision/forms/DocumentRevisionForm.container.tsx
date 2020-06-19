@@ -94,6 +94,7 @@ DocumentRevisionFormContainerProps
 
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
+  const bannerPortal = React.useRef(null);
 
   const cleanInitialValues = useMemo(() => {
     const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;
@@ -150,7 +151,9 @@ DocumentRevisionFormContainerProps
   const { schema: originScheme = [] } =
   cleanInitialValues?.formTemplate || cleanInitialValues?.formDocument?.formTemplate || {};
   const isOutput =  Boolean(outputGroup && !_.isEmpty(outputGroup));
-  const formInput = useMemo(() => cleanInitialValues ? { ...cleanInitialValues.formInput } : {}, [cleanInitialValues]);
+  const formInput = useMemo(() =>
+    cleanInitialValues ? cloneDeep(cleanInitialValues.formInput) : {}
+  , [cleanInitialValues]);
   let mode: Partial<FBWorkspaceMode> = "none";
   if (formGroup && formGroup.includes("FORM")) {
     mode = "design";
@@ -180,10 +183,10 @@ DocumentRevisionFormContainerProps
     <FBWorkspace
       portalContainer={FBContainer}
       document={props.values as unknown as DocumentRevision}
-      initialValues={cloneDeep(formInput)}
+      initialValues={formInput}
       autosave={true}
       schema={GetScheme(props)}
-      {...{ mode  }}
+      {...{ mode }}
     >
       <DocumentRevisionFormPresenter
         {...props}
@@ -199,7 +202,7 @@ DocumentRevisionFormContainerProps
         documentTypesById={documentTypesById}
         canChangeOwnerShip={canChangeOwnerShip}
         type={type}
-        {...{ FBContainer }}
+        {...{ FBContainer, bannerPortal }}
       />
     </FBWorkspace>
   );
@@ -222,6 +225,7 @@ DocumentRevisionFormContainerProps
       asyncAction={loadAction}
       startActionOnMount={true}
     >
+      <div ref={bannerPortal} />
       <Grid style={{ background: Colors.light_gray }} >
         <Box ml={3}>
           <ChangeRequestLink dataProp={documentRevision} />
