@@ -22,9 +22,11 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
   const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, status);
   const classes = styles();
   const isStatusReleased = status === DocumentRevisionStatus.Released;
-  const statusIcon = () =>
+  const isStatusCanceled = status === DocumentRevisionStatus.Canceled;
+  const statusIcon =
     <div className={classNames(classes.statusIconDefault, {
       [classes.statusIconReleased]: isStatusReleased,
+      [classes.statusIconCanceled]: isStatusCanceled,
     })}/>;
 
   return (
@@ -34,10 +36,8 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
         <Chip
           label={<Text message={statusLabel} />}
           id="HeaderInfo-status"
-          className={classNames(classes.statusDefault, {
-            [classes.statusReleased]: isStatusReleased,
-          })}
-          icon={statusIcon()}
+          className={classNames(classes.statusDefault)}
+          icon={statusIcon}
         />
       }
       <Typography variant="h6" id="HeaderInfo-docId" className={classes.id} >

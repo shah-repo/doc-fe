@@ -11,10 +11,6 @@ export const styles = makeStyles((theme: Theme) =>
       fontWeight: "bold",
       marginRight: theme.spacing(2),
     },
-    statusReleased: {
-      color: Colors.white,
-      background: Colors.light_green,
-    },
     statusIconDefault: {
       background: Colors.gray,
       borderRadius: "50%",
@@ -22,7 +18,10 @@ export const styles = makeStyles((theme: Theme) =>
       height: "8px",
     },
     statusIconReleased: {
-      background: Colors.white,
+      background: Colors.light_green,
+    },
+    statusIconCanceled: {
+      background: Colors.medium_red,
     },
     id: {
       fontWeight: "bold",
