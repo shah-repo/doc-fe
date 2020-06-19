@@ -82,19 +82,3 @@ const AssessmentFormVoidPresenter: React.FunctionComponent<Props> = ({
 };
 
 export default AssessmentFormVoidPresenter;
-
-
-/*
-+    submitButton: {
-+      background: Colors.medium_blue,
-+      color: Colors.white,
-+      boxShadow: "none",
-+      margin: 0,
-+    },
-+    cancelButton: {
-+      background: Colors.light_blue,
-+      color: Colors.medium_blue,
-+      boxShadow: "none",
-+      margin: 0,
-+    },
-*/
