@@ -4,8 +4,8 @@ import Colors from "../../../layout/theme/utils/colors";
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     statusDefault: {
-      color: Colors.gray,
-      background: Colors.light_gray,
+      color: Colors.white,
+      background: Colors.dark_gray,
       padding: "15px 5px",
       borderRadius: "3px",
       fontWeight: "bold",
