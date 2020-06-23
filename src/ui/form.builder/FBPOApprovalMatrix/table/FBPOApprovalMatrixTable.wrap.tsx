@@ -71,7 +71,7 @@ export const withFBPOApprovalMatrixTable = <T extends FBPOApprovalMatrixTablePro
     };
 
     useObserver(() => {
-      approvalLevels = sortBy(poamState?.approvalLevels, ["name"]);
+      approvalLevels = sortBy(poamState?.approvalLevels, ["limit"]);
       formState?.setFieldValue(name + ".approvalLevels", approvalLevels);
       groups = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.officialGroups);
       employees = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.employees);
