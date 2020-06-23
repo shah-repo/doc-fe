@@ -33,7 +33,6 @@ export const Title: React.FunctionComponent<Props> = ({
     return null;
   }
 
-  // TODO: disabled by doc type is needs to be added
   return (
     <CreatableField
       name="name"
