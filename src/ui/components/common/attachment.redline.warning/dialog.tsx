@@ -12,7 +12,6 @@ interface Props {
   isDialogOpen: boolean;
   asyncState: AsyncState;
   dialogTitle?: Translation;
-  copy: any;
 }
 
 export const AttachmentRedLineWarningDialog: React.FunctionComponent<Props> = ({
@@ -20,11 +19,10 @@ export const AttachmentRedLineWarningDialog: React.FunctionComponent<Props> = ({
   closeDialog,
   isDialogOpen,
   onSubmit,
-  copy,
 }) => {
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
   const renderForm = (props: FormikProps<any>) => (
-    <RedlineWarningForm {...props} asyncState={asyncState} cancel={closeDialog} copy={copy}/>
+    <RedlineWarningForm {...props} asyncState={asyncState} cancel={closeDialog} />
   );
 
   return (

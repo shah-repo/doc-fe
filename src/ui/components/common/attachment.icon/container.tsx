@@ -2,16 +2,9 @@ import { Grid } from "@material-ui/core";
 import _ from "lodash";
 import React, { useState } from "react";
 import { connect, useSelector } from "react-redux";
-import { Attachment, AttachmentDownloadResponse, attachmentsActions, AttachmentType, WatermarkRequest, WatermarkRequestBody } from "../../../../state/ducks/attachments";
-import { authSelectors } from "../../../../state/ducks/auth";
+import { Attachment, attachmentsActions, AttachmentType, WatermarkRequest, WatermarkRequestBody, AttachmentDownloadResponse } from "../../../../state/ducks/attachments";
 import { Nullable } from "../../../../state/ducks/common";
-import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../../../state/reducers";
-import { AsyncStatus } from "../../../../state/types";
-import { isOperator } from "../../../documentRevision/DocumentRevisionDisplay.container";
-import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
-import { documentRevisionStatusContextFromCR } from "../../../documentRevision/DocumentRevisionUpdate.container";
-import { documentTypeContext, isOwnerContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
 import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../../form.builder/stores/ui/FBStore";
 import useActionCreator from "../../../hooks/useActionCreator";
@@ -19,16 +12,24 @@ import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
 import { useFormContext } from "../../forms/FormContext";
 import { withFormik } from "../../hoc/formik";
-import PasswordDialog from "../../password/dialog";
-import { Password } from "../../password/types";
-import Text from "../../Text";
-import { AttachmentRedLineWarningDialog } from "../attachment.redline.warning/dialog";
 import ViewFile from "../view.file/container";
-import { checkIfFileIsViewable } from "../view.file/utils/helpers";
 import Menu from "./menu";
 import PresenterFactory from "./presenter.factory";
-import { AttachmentIconContainerProps, AttachmentIconDispatchProps, PasswordSubmitActionType } from "./utils/types";
+import { AttachmentIconContainerProps, AttachmentIconDispatchProps } from "./utils/types";
 import WatermarkContainer from "./watermark/container";
+import PasswordDialog from "../../password/dialog";
+import { AsyncStatus } from "../../../../state/types";
+import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
+import { Password } from "../../password/types";
+import { AttachmentRedLineWarningDialog } from "../attachment.redline.warning/dialog";
+import { isOperator } from "../../../documentRevision/DocumentRevisionDisplay.container";
+import { isOwnerContext, documentTypeContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
+import { authSelectors } from "../../../../state/ducks/auth";
+import { PasswordSubmitActionType } from "./utils/types";
+import { checkIfFileIsViewable } from "../view.file/utils/helpers";
+import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
+import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { documentRevisionStatusContextFromCR } from "../../../documentRevision/DocumentRevisionUpdate.container";
 
 type DispatchProps = AttachmentIconDispatchProps;
 
@@ -95,24 +96,17 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   SetFile = React.createContext(setSelectedAttachment);
 
 
-  const docRevStatusRequiresPassword = (attachment: Attachment, attachmentType?: AttachmentType) => {
-    const isRedline = attachmentType === AttachmentType.Attached && attachment.s3linkCleanCopy;
+  const docRevStatusRequiresPassword = () => {
+    const hasPasswordRequiredStatusFromDocList = (
+      documentRevisionStatusFromDocList === DocumentRevisionStatus.Released ||
+      documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated ||
+      documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete);
+    const hasPasswordRequiredStatusFromCR = (
+      documentRevisionStatusFromCR === DocumentRevisionStatus.Released ||
+      documentRevisionStatusFromCR === DocumentRevisionStatus.Deprecated ||
+      documentRevisionStatusFromCR === DocumentRevisionStatus.Obsolete);
 
-    return !![
-      documentRevisionStatusFromDocList,
-      documentRevisionStatusFromCR,
-    ].find((state) => (
-      !isRedline && [
-        DocumentRevisionStatus.Deprecated,
-        DocumentRevisionStatus.Obsolete,
-      ].includes(state as DocumentRevisionStatus)
-    ) || (
-      isRedline && [
-        DocumentRevisionStatus.Released,
-        DocumentRevisionStatus.Deprecated,
-        DocumentRevisionStatus.Obsolete,
-      ].includes(state as DocumentRevisionStatus)
-    ));
+    return hasPasswordRequiredStatusFromCR || hasPasswordRequiredStatusFromDocList;
   };
 
   const handleDownload = (attachment: Attachment, type?: AttachmentType, password?: string) => {
@@ -165,16 +159,23 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   };
 
   const handleWatermarkRequest = (attachment: Attachment, attachmentType: AttachmentType) => {
+
+    const cleanCopyRequiresPassword = (
+      documentRevisionStatusFromCR === DocumentRevisionStatus.Obsolete ||
+      documentRevisionStatusFromCR === DocumentRevisionStatus.Deprecated ||
+      documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete ||
+      documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated
+    );
     setNewWatermarkError("");
     setNewWatermarkRequest(null);
-    if (docRevStatusRequiresPassword(attachment, attachmentType)) {
+    if (cleanCopyRequiresPassword && attachment.lineType === LINE_TYPES.RED_LINE) {
+      setdownloadType(attachmentType);
       setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_WATER_MARK);
       openWarningDialog();
       closeContextMenu();
     } else {
       startWaterMarkRequest(attachment, attachmentType);
     }
-    setdownloadType(attachmentType);
   };
 
   const passwordSubmit = (values: Password) => {
@@ -190,8 +191,8 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
           setPassword(values);
           handleDownload(
             selectedAttachment,
-            downloadType,
-            values.password,
+          selectedAttachment?.type === "CLEAN_COPY" ? AttachmentType.CleanCopy : AttachmentType.Attached,
+          values.password,
           ); }
         break;
 
@@ -237,12 +238,12 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const handleClick = (attachment: Attachment) => (evt: React.MouseEvent<HTMLElement>) => {
     evt.preventDefault();
     if (
-      docRevStatusRequiresPassword(attachment)) {
+      docRevStatusRequiresPassword() &&
+      attachment.lineType === LINE_TYPES.RED_LINE) {
       needPasswordHandler(attachment);
     } else {
       noNeedPasswordHandler(attachment);
     }
-    setdownloadType(AttachmentType.Attached);
     setSelectedAttachment(attachment);
   };
 
@@ -287,17 +288,6 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
     );
   });
 
-  const isRedline = downloadType === AttachmentType.Attached && selectedAttachment?.s3linkCleanCopy;
-
-  const docRevStatus =
-    documentRevisionStatusFromDocList || documentRevisionStatusFromCR;
-  const copy = isRedline ? (
-    <Text translation="common.attachment.redline.warning.download.redline"/>
-  ) : (
-    (docRevStatus === DocumentRevisionStatus.Obsolete && <Text translation="common.attachment.redline.warning.download.obsoleted"/>) ||
-    (docRevStatus === DocumentRevisionStatus.Deprecated && <Text translation="common.attachment.redline.warning.download.deprecated"/>)
-  );
-
   return (
     <Grid container={true} spacing={2}>
       <AttachmentRedLineWarningDialog
@@ -305,7 +295,6 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
         onSubmit = {warningSubmit}
         closeDialog = {redlineWarningDialogHandler.close}
         asyncState = {warningState}
-        copy={copy}
       />
 
       <PasswordDialog
@@ -337,7 +326,6 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
         setPasswordSubmitAction = {setPasswordSubmitAction}
         handleWatermarkRequest={handleWatermarkRequest}
         docRevStatusRequiresPassword = {docRevStatusRequiresPassword}
-        setdownloadType = {setdownloadType}
       />
       {attachmentsRenderer}
     </Grid>
