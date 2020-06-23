@@ -1,9 +1,8 @@
-import { Field } from "formik";
 import { uniqBy } from "lodash";
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
-import { TextFieldSelect } from "../../components/forms/fields/TextFieldSelect/container";
+import CreatableField from "../../components/forms/fields/Autocomplete/Creatable";
 import { useTitle } from "../../hooks/docCustomization/useCustomization";
 
 interface OwnProps {
@@ -26,7 +25,6 @@ export const Title: React.FunctionComponent<Props> = ({
         .map((document) => ({
           label: document.name,
           value: document.name,
-          isDisabled: true,
         })),
     [documents],
   );
@@ -35,14 +33,13 @@ export const Title: React.FunctionComponent<Props> = ({
     return null;
   }
 
+  // TODO: disabled by doc type is needs to be added
   return (
-    <Field
-      {...props}
-      label={label}
-      options={options}
-      component={TextFieldSelect}
+    <CreatableField
+      name="name"
       validate={validators}
-      id="Title-field"
+      creatableProps={{ id: "Title-field" }}
+      {...{ options, label }}
     />
   );
 };
