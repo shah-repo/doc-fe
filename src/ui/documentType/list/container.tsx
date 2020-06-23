@@ -24,10 +24,11 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const dispatch = useDispatch();
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const tableData = useSelector(getTableData(TABLE_NAME));
+  const isPO = documentType.group === "PO";
 
   useEffect(() => {
-    if (isEmpty(tableCriteria.queryDict) || documentType.group === "PO") {
-      const owner = documentType.group === "PO" ? currentUsersName : undefined;
+    if (isEmpty(tableCriteria.queryDict) || isPO) {
+      const owner = isPO ? currentUsersName : undefined;
       dispatch(
         tableSearchActions.setSearchCriteria(
           {
