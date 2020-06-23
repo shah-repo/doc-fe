@@ -1,12 +1,14 @@
 import { Box, Typography } from "@material-ui/core";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
+import { useState } from "react";
 import { createFilter } from "react-select";
 import { SelectComponentsProps } from "react-select/base";
 import CreatableSelect, { CreatableProps } from "react-select/creatable";
-import { ValueType } from "react-select/src/types";
+import { ActionMeta, ValueType } from "react-select/src/types";
 import { TypographyProps } from "../../../../../state/ducks/common";
 import Text from "../../../../components/Text";
+import { useFormContext } from "../../FormContext";
 import Field, { FieldOwnProps } from "../Field";
 import { selectStyles } from "./Autocomplete";
 import { OptionType } from "./types";
@@ -27,18 +29,35 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   isDisabled = false,
   ...fieldProps
 }) => {
-  // const { submitForm } = useFormContext();
+  const formikValue = fieldProps.field.value;
+  const value = React.useMemo(() => ({ value: formikValue, label: formikValue }), [formikValue]);
+  React.useEffect(() => {
+    if (!formikValue) {
+      setInputValue("");
+    }
+    submitForm();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formikValue]);
+  const [inputValue, setInputValue] = useState(formikValue);
+  const { submitForm } = useFormContext();
   const {
     form: { setFieldValue, setFieldTouched, touched },
     field: { name },
   } = fieldProps;
-  const onChange = (value: ValueType<OptionType>) => {
-    setFieldValue(name, value);
+  const onChange = (value: ValueType<OptionType>, action: ActionMeta) => {
+    if (action.action === "clear") {
+      setInputValue("");
+    }
+    setFieldValue(name, (value as any)?.value);
   };
-  const onInputChange = () => {
+  const onInputChange = (value) => {
+    setInputValue(value);
     if (!touched[name]) {
       setFieldTouched(name, true);
     }
+  };
+  const onFocus = () => {
+    setInputValue(formikValue);
   };
 
   const stringify = (option: OptionType) => option.label;
@@ -52,15 +71,25 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
         </Typography>
       </Box>
       <CreatableSelect
-        styles={selectStyles}
-        isClearable={true}
+        inputValue={inputValue}
+        value={value}
+        styles={{
+          ...selectStyles,
+          input: (base) => ({
+            ...base,
+            input: { opacity: inputValue ? "1 !important" : 0 },
+          }),
+        }}
+        isClearable={Boolean(formikValue)}
         components={{ DropdownIndicator: null }}
         placeholder={null}
         openMenuOnClick={false}
         openMenuOnFocus={false}
         createOptionPosition="first"
         isValidNewOption={() => true}
-        {...{ isDisabled, filterOption, onChange, onInputChange }}
+        blurInputOnSelect
+        controlShouldRenderValue={false}
+        {...{ isDisabled, filterOption, onChange, onInputChange, onFocus }}
         {...creatableProps}
         options={options}
       />
