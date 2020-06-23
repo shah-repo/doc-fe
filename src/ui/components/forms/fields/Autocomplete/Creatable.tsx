@@ -32,9 +32,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   const formikValue = fieldProps.field.value;
   const value = React.useMemo(() => ({ value: formikValue, label: formikValue }), [formikValue]);
   React.useEffect(() => {
-    if (!formikValue) {
-      setInputValue("");
-    }
+    setInputValue(formikValue);
     submitForm();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formikValue]);
@@ -51,13 +49,23 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
     setFieldValue(name, (value as any)?.value);
   };
   const onInputChange = (value) => {
-    setInputValue(value);
     if (!touched[name]) {
       setFieldTouched(name, true);
     }
+    if (value) {
+      setInputValue(value);
+    }
+    if (!value && inputValue?.length === 1) {
+      setInputValue(value);
+    }
   };
   const onFocus = () => {
-    setInputValue(formikValue);
+    setInputValue(formikValue || "");
+  };
+  const onBlur = () => {
+    if (formikValue !== inputValue) {
+      setFieldValue(name, inputValue);
+    }
   };
 
   const stringify = (option: OptionType) => option.label;
@@ -87,9 +95,9 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
         openMenuOnFocus={false}
         createOptionPosition="first"
         isValidNewOption={() => true}
-        blurInputOnSelect
+        blurInputOnSelect={false}
         controlShouldRenderValue={false}
-        {...{ isDisabled, filterOption, onChange, onInputChange, onFocus }}
+        {...{ isDisabled, filterOption, onChange, onInputChange, onFocus, onBlur }}
         {...creatableProps}
         options={options}
       />
