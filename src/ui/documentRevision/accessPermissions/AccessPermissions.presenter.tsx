@@ -31,6 +31,7 @@ interface OwnProps {
   documentRevisionId: string;
   loadGroupsAction: typeof userManagementActions.loadCompanyGroups;
   loadGroupAsyncState: AsyncState;
+  isVisible: boolean;
 }
 
 export type AccessPermissionsPresenterProps = OwnProps;
@@ -47,6 +48,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
   loadApproversAsyncState,
   loadGroupAsyncState,
   loadGroupsAction,
+  isVisible,
 }) => {
   const classes = styles();
 
@@ -250,11 +252,13 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
           />
         </AsyncGate>
       </div>
-      <Typography variant={TypographySize.md}>
-        <Text translation="document.assign.to" />
-      </Typography>
-      <div style={{ width: 240, paddingBottom: 32 }}>
-        {!_.isEmpty(operators) &&
+      {isVisible &&
+      <>
+        <Typography variant={TypographySize.md}>
+          <Text translation="document.assign.to" />
+        </Typography>
+        <div style={{ width: 240, paddingBottom: 32 }}>
+          {!_.isEmpty(operators) &&
                 <List className={operators.length > 3 ? rowStyles.customRows : undefined}>
                   {operators.map((e: Owner, index) => (
                     <div
@@ -268,22 +272,23 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
                     </div>
                   ))}
                 </List>}
-        <AsyncGate
-          asyncState={loadApproversAsyncState}
-          asyncAction={loadAvailableApproversAction}
-          startActionOnMount={true}
-        >
-          <Select
-            options={operatorsSelectOptions}
-            onChange={(e) => saveValueOperator(e)}
-            placeholder={intl.formatMessage({
-              id: "document.revision.invitation",
-            })}
-            components={{ DropdownIndicator }}
-            value={!operator ? null : operator}
-          />
-        </AsyncGate>
-      </div>
+          <AsyncGate
+            asyncState={loadApproversAsyncState}
+            asyncAction={loadAvailableApproversAction}
+            startActionOnMount={true}
+          >
+            <Select
+              options={operatorsSelectOptions}
+              onChange={(e) => saveValueOperator(e)}
+              placeholder={intl.formatMessage({
+                id: "document.revision.invitation",
+              })}
+              components={{ DropdownIndicator }}
+              value={!operator ? null : operator}
+            />
+          </AsyncGate>
+        </div>
+      </>}
     </div>
   );
 };
