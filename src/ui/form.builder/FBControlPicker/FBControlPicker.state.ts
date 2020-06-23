@@ -1,7 +1,8 @@
 import { find } from "lodash";
 import React from "react";
-import { FBControlPickerDataProps, FBInputType, FBWorkspaceState } from "..";
+import { FBControlPickerDataProps, FBInputType, FBWorkspaceExternalState, FBWorkspaceState } from "..";
 import { GroupTag } from "../../../state/ducks/auth/types";
+import { store } from "../../../state/store";
 import { FBEditorCustomControl } from "../FBEditorCustomControl";
 
 export class FBControlPickerState {
@@ -61,7 +62,8 @@ export class FBControlPickerState {
   }
 
   private get hasHelloSign(): boolean | undefined {
-    return this.workspaceState?.comapny?.companyMine.helloSignIntegrationEnabled;
+    const { company } = (store.getState() || {}) as FBWorkspaceExternalState;
+    return company?.companyMine.helloSignIntegrationEnabled;
   }
 
   private get hasApprovalMatrix(): boolean {

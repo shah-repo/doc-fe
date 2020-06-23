@@ -31,7 +31,7 @@ export class FBWorkspaceState extends FBSchemaState {
     return this.auth?.groups.tags;
   }
 
-  public get comapny(): FBWorkspaceExternalState["company"] | undefined {
+  public get company(): FBWorkspaceExternalState["company"] | undefined {
     return this.externalState?.company;
   }
 
