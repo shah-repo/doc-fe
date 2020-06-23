@@ -191,7 +191,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
           setPassword(values);
           handleDownload(
             selectedAttachment,
-          selectedAttachment?.type === "CLEAN_COPY" ? AttachmentType.CleanCopy : AttachmentType.Attached,
+            AttachmentType.Attached,
           values.password,
           ); }
         break;
@@ -201,7 +201,15 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
           startWaterMarkRequest(selectedAttachment, downloadType);
         }
         break;
-
+      case PasswordSubmitActionType.DOWNLOAD_CLEAN_COPY_FILE:
+        if (selectedAttachment) {
+          setPassword(values);
+          handleDownload(
+            selectedAttachment,
+            AttachmentType.CleanCopy,
+          values.password,
+          ); }
+        
       default:
         break;
     }

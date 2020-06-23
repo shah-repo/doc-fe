@@ -60,11 +60,18 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
       download(attachment, type);
     } else if (
       docRevStatusRequiresPassword()
-    && attachment.lineType === LINE_TYPES.RED_LINE) {
+    && attachment.lineType === LINE_TYPES.RED_LINE
+    && type === AttachmentType.CleanCopy) {
+      setSelectedAttachment(attachment);
+      setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_CLEAN_COPY_FILE);
+      openWarningDialog();
+    } else if(docRevStatusRequiresPassword()
+    && attachment.lineType === LINE_TYPES.RED_LINE
+    && type === AttachmentType.Attached){
       setSelectedAttachment(attachment);
       setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_FILE);
       openWarningDialog();
-    } else {
+    }else{
       download(attachment, type);
     }
 
