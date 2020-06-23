@@ -30,6 +30,7 @@ import { checkIfFileIsViewable } from "../view.file/utils/helpers";
 import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { documentRevisionStatusContextFromCR } from "../../../documentRevision/DocumentRevisionUpdate.container";
+import { Translation } from "../../../translations/types";
 
 type DispatchProps = AttachmentIconDispatchProps;
 
@@ -216,6 +217,26 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
 
   };
 
+  const warningPasswordText = (): Translation => {
+
+      if(documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete){
+      return "common.attachment.redline.warning.download.obsoleted";
+      }
+
+      if(documentRevisionStatusFromDocList=== DocumentRevisionStatus.Deprecated){
+      return "common.attachment.redline.warning.download.deprecated";
+      }
+
+      if(documentRevisionStatusFromCR === DocumentRevisionStatus.Obsolete){
+        return "common.attachment.redline.warning.download.obsoleted";
+        }
+
+      if(documentRevisionStatusFromCR === DocumentRevisionStatus.Deprecated){
+        return "common.attachment.redline.warning.download.deprecated";
+        }
+    return "common.attachment.redline.warning.download.redline";
+  }
+  
   const warningSubmit = () => {
     redlineWarningDialogHandler.close();
     openPasswordDialog();
@@ -303,6 +324,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
         onSubmit = {warningSubmit}
         closeDialog = {redlineWarningDialogHandler.close}
         asyncState = {warningState}
+        translationText = {warningPasswordText()} 
       />
 
       <PasswordDialog
