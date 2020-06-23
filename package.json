@@ -76,7 +76,7 @@
     "yup": "0.28.0"
   },
   "engines": {
-    "node": "v12.9.1"
+    "node": "v10.19.0"
   },
   "scripts": {
     "start": "react-scripts start",
