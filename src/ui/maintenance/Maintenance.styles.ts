@@ -38,5 +38,8 @@ export const styles = makeStyles((theme: Theme) =>
       cursor: "pointer",
       textDecoration: "none",
     },
+    image: {
+      maxWidth: "100vw",
+    },
   },
   ));

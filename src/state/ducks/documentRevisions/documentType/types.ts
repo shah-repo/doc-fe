@@ -1,4 +1,5 @@
 import { FBSchemaProps } from "../../../../ui/form.builder";
+import { GroupTag } from "../../auth/types";
 import { Nullable } from "../../common";
 import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST } from "./constants";
 
@@ -41,6 +42,7 @@ export interface DocumentType {
   defaultTraining: boolean;
   schema?: FBSchemaProps[];
   fieldsConfig?: FieldConfig;
+  hiddenForCreationForUsersWithoutTags?: GroupTag[];
 }
 
 export interface DocumentForms {

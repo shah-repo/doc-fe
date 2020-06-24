@@ -1,6 +1,7 @@
 import { useFormikContext } from "formik";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { authSelectors } from "../../../../state/ducks/auth";
 import { GroupTag } from "../../../../state/ducks/auth/types";
 import { FBOutputDocumentType } from "../../../../state/ducks/documentRevisions";
 import { DocumentGroupOptionsType, documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
@@ -33,6 +34,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   isDisabled = false,
   documentTypeId,
 }) => {
+  const currentUserTags = useSelector(authSelectors.currentEmployeeTags);
   const [isVisible, label, validators] = useDocumentTypeSelect(documentTypeId);
   const { workspaceState } = FB.useStores();
   const formik = useFormikContext();
@@ -51,12 +53,19 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
       );
     }
     return documentTypes
-      .filter((doc) =>
-        !doc.groupOptions?.includes("MUST_BE_OUTPUT")
-      ).map((doc) =>
-        ({ value: doc.id, text: doc.documentTypeName })
+      .filter((docType) => {
+        if (docType.groupOptions?.includes("MUST_BE_OUTPUT")) {
+          return false;
+        }
+        if ((docType.hiddenForCreationForUsersWithoutTags?.length ?? 0) === 0) {
+          return true;
+        }
+        return docType.hiddenForCreationForUsersWithoutTags?.some((tag) => currentUserTags.includes(tag));
+      }
+      ).map((docType) =>
+        ({ value: docType.id, text: docType.documentTypeName })
       );
-  }, [documentTypes, outputDocumentTypes, type]);
+  }, [type, outputDocumentTypes, documentTypes, currentUserTags]);
   const handleTypeChange = (
     event: React.ChangeEvent<{ name?: string; value: unknown }>
   ) => {
