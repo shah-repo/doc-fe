@@ -84,7 +84,7 @@
   },
   {
     "id": "11",
-    "path": "/document_revisions?documentTypeAcronym=PRT",
+    "path": "/document_revisions?docTypeGroups%5B%5D=PART",
     "label": "Parts",
     "valueKey": "id",
     "labelKey": "document.docId",
