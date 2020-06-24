@@ -83,6 +83,7 @@
     "start": "react-scripts start",
     "cypress:dev": "yarn env-cmd -e cypress yarn cypress open",
     "cypress:dev:run": "yarn env-cmd -e cypress yarn cypress run --parallel --record --key 9e6e4a3d-c43a-4e60-8984-fa2ae0a90a76",
+    "cypress:dev:report": "yarn mochawesome-merge \"results/*.json\" > results/merged/merged_result.json && yarn marge results/merged/merged_result.json --assetsDir results/merged",
     "build": "react-scripts --max_old_space_size=4096 build",
     "test": "react-scripts --max_old_space_size=500 --expose-gc test --logHeapUsage",
     "eject": "react-scripts eject",
@@ -140,6 +141,10 @@
     "eslint-plugin-react": "^7.18.3",
     "eslint-plugin-react-hooks": "^2.4.0",
     "faker": "4.1.0",
+    "mocha": "^8.0.1",
+    "mochawesome": "^6.1.1",
+    "mochawesome-merge": "^4.1.0",
+    "mochawesome-report-generator": "^5.1.0",
     "redux-mock-store": "1.5.4",
     "serve": "^11.3.2"
   }
