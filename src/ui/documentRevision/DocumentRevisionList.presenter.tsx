@@ -17,6 +17,7 @@ interface Props {
   selectedDocumentRevision: Nullable<string>;
   docId: string;
   documentTypeId?: string;
+  isDocumentPO: boolean;
 }
 
 export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
@@ -25,6 +26,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
   selectedDocumentRevision,
   docId,
   documentTypeId,
+  isDocumentPO,
 }) => {
   const classes = styles();
   const link = documentVersionPath(
@@ -69,7 +71,7 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
         key={documentRevision.id}
         className={classes.linkBody}
       >
-        <SummaryInfo label="common.docId" value={docId} />
+        <SummaryInfo label={isDocumentPO ? undefined : "common.docId"} value={docId} />
         <SummaryInfo
           label="common.title"
           value={documentRevision.name}
