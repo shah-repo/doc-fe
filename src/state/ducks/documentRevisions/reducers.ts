@@ -3,7 +3,7 @@ import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
 import { AuditByCRIdState } from "../audit/types";
 import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
-import { AllIdsState, DocumentByIdState, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionsAllIdsState, DocumentRevisionsByIdState, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentSetAction } from "./types";
+import { AllIdsState, DocumentByIdState, DocumentRevisionAuditSetAction, DocumentRevisionsAllIdsState, DocumentRevisionsByIdState, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentSetAction } from "./types";
 
 type DocumentRevisionActions =
   | DocumentRevisionsListAction
@@ -14,22 +14,10 @@ export const byId = (
   action: DocumentRevisionActions,
 ): DocumentRevisionsByIdState => {
   switch (action.type) {
-    case DOCUMENT_REVISION_LIST:
-      return action.payload.reduce(
-        (acc: DocumentRevisionsByIdState, docRev: DocumentRevision) => ({
-          ...acc,
-          [docRev.id]: {
-            ...state[docRev.id],
-            ...docRev,
-            document: {
-              ...(state[docRev.id] || {}).document,
-              ...docRev.document,
-            },
-          },
-        }),
-        {},
-      );
-    // return { ...(_.keyBy<DocumentRevision>(action.payload, (documentRevision) => documentRevision.id)) };
+    case DOCUMENT_REVISION_LIST: {
+      const payloadById = _.keyBy(action.payload, "id");
+      return _.merge(state, payloadById);
+    }
     case DOCUMENT_REVISION_SET:
       return { ...state, [action.payload.id]: action.payload };
     default:
@@ -44,6 +32,7 @@ export const allIds = (
   switch (action.type) {
     case DOCUMENT_REVISION_LIST:
       return _.uniq([
+        ...state,
         ...action.payload.map((documentRevision) => documentRevision.id),
       ]);
     case DOCUMENT_REVISION_SET:
