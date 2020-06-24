@@ -10,7 +10,7 @@ import { FormHeaderContext } from "../DocumentRevisionForm.presenter";
 import { withActionButton } from "./ActionButton.wrap";
 import ApproveAndRelease from "./ApproveAndRelease";
 import CancelButton from "./CancelButton";
-import UpgradeToLatestContainer from "./UpgradeToLatest.container";
+import UpgradeToLatestContainer from "./upgrade.to.latest/UpgradeToLatest.container";
 
 const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const  {
