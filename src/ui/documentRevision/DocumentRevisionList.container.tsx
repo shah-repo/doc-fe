@@ -1,8 +1,9 @@
 import { List } from "@material-ui/core";
 import React, { useCallback, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Nullable } from "../../state/ducks/common";
 import { DocumentRevision, documentRevisionsActions } from "../../state/ducks/documentRevisions";
+import { documentTypeSelectors } from "../../state/ducks/documentRevisions/documentType";
 import { styles } from "./DocumentRevisionList.container.styles";
 import DocumentRevisionListPresenter from "./DocumentRevisionList.presenter";
 
@@ -12,6 +13,7 @@ interface OwnProps {
   docId: string;
   selectedDocumentRevision: Nullable<string>;
   documentRevisionId: Nullable<string>;
+  documentTypeId?: string;
 }
 
 export type DocumentRevisionListContainerProps = OwnProps;
@@ -25,6 +27,7 @@ DocumentRevisionListContainerProps
   docId,
   selectedDocumentRevision,
   documentRevisionId,
+  documentTypeId,
 }) => {
   const classes = styles();
   const dispatch = useDispatch();
@@ -36,6 +39,9 @@ DocumentRevisionListContainerProps
     loadDocumentAction();
   }, [loadDocumentAction, documentId]);
 
+  const documentTypeGroup = useSelector(documentTypeSelectors.byId)[documentTypeId || ""]?.group;
+  const isDocumentPO = documentTypeGroup === "PO";
+
   return (
     <div className={classes.container}>
       <List>
@@ -43,7 +49,7 @@ DocumentRevisionListContainerProps
           documentRevisions.map((documentRevision) => (
             <DocumentRevisionListPresenter
               key={documentRevision.id}
-              {...{ documentRevision, docId, documentId, selectedDocumentRevision }}
+              {...{ documentRevision, docId, documentId, selectedDocumentRevision, documentTypeId, isDocumentPO }}
             />
           )
           )

@@ -33,7 +33,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     disabled = disabled || Boolean(documentId);
 
     const handleItem = (item?: FBPurchaseOrderItem) => {
-      if (workspaceState?.isReleased) {
+      if (workspaceState?.isReleased || workspaceState?.isRevised) {
         return;
       }
       if (!workspaceState?.documentId) {

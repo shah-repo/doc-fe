@@ -22,6 +22,8 @@ const getProposedDocId = (state: ApplicationState): string => state.documents.pr
 const getLoadAsyncState = (state: ApplicationState): AsyncState => state.documents.loadAsyncInfo;
 const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.documents.loadListAsyncInfo;
 const getLoadReviewListAsyncState = (state: ApplicationState): AsyncState => state.documents.loadReviewListAsyncInfo;
+const getLoadProposedDocIdAsyncState = (state: ApplicationState): AsyncState =>
+  state.documents.loadProposedDocIdAsyncInfo;
 
 export default {
   getDocumentsList,
@@ -30,5 +32,6 @@ export default {
   getLoadAsyncState,
   getLoadReviewListAsyncState,
   getLoadListAsyncState,
+  getLoadProposedDocIdAsyncState,
   getProposedDocId,
 };

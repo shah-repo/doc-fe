@@ -1,27 +1,35 @@
 import React from "react";
 import Text from "../components/Text";
+import { styles } from "./Maintenance.styles";
 
-export const Maintenance: React.FunctionComponent = () => (
-  <>
-    <article style={{ textAlign: "center", padding: 150 }}>
-      <h1 style={{ fontSize: 50 }}>
-        <Text translation="maintenance.back.soon" />
-      </h1>
-      <div
-        style={{
-          font: "20px Helvetica, sans-serif",
-          color: "#333",
-          display: "block",
-          textAlign: "center",
-          margin: "0 auto",
-        }}
-      >
-        <p>
-          <Text translation="maintenance.inconvenience" />
+export const Maintenance: React.FunctionComponent = () => {
+  const classes = styles();
+  return (
+    <div className={classes.container}>
+      <div className={classes.base}>
+        <img
+          src="/logo_enlil_dark.svg"
+          alt="Enlil logo"
+        />
+      </div>
+      <div className={classes.base}>
+        <img src="/maintenance.png" alt="Maintenance" className={classes.image} />
+      </div>
+      <div className={classes.base} style={{ textAlign: "center", whiteSpace: "pre-line" }}>
+        <h1 className={classes.title}>
+          <Text translation="maintenance.title" />
+        </h1>
+        <p className={classes.body}>
+          <Text translation="maintenance.body" />
         </p>
       </div>
-    </article>
-  </>
-);
+      <div className={classes.linkContainer}>
+        <a href="/" className={classes.link}>
+          <Text translation="return.home" />
+        </a>
+      </div>
+    </div>
+  );
+};
 
 export default Maintenance;

@@ -1,6 +1,7 @@
 import { useFormikContext } from "formik";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { authSelectors } from "../../../../state/ducks/auth";
 import { GroupTag } from "../../../../state/ducks/auth/types";
 import { FBOutputDocumentType } from "../../../../state/ducks/documentRevisions";
 import { DocumentGroupOptionsType, documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
@@ -11,10 +12,11 @@ import SelectField, { SelectOption } from "../../../components/forms/fields/Sele
 import { FB } from "../../../form.builder";
 import { FBWorkspaceMode } from "../../../form.builder/types/workspace";
 import { useDocumentTypeSelect } from "../../../hooks/docCustomization/useCustomization";
+import { DocumentCloneType } from "../../Clone.container";
 
 interface Props {
   isdocRevStatusDraft: boolean;
-  type?: string;
+  type?: DocumentCloneType;
   outputDocumentTypes?: FBOutputDocumentType[];
   savedocInfo: React.Dispatch<React.SetStateAction<{
     name: string;
@@ -32,6 +34,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   isDisabled = false,
   documentTypeId,
 }) => {
+  const currentUserTags = useSelector(authSelectors.currentEmployeeTags);
   const [isVisible, label, validators] = useDocumentTypeSelect(documentTypeId);
   const { workspaceState } = FB.useStores();
   const formik = useFormikContext();
@@ -50,12 +53,19 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
       );
     }
     return documentTypes
-      .filter((doc) =>
-        !doc.groupOptions?.includes("MUST_BE_OUTPUT")
-      ).map((doc) =>
-        ({ value: doc.id, text: doc.documentTypeName })
+      .filter((docType) => {
+        if (docType.groupOptions?.includes("MUST_BE_OUTPUT")) {
+          return false;
+        }
+        if ((docType.hiddenForCreationForUsersWithoutTags?.length ?? 0) === 0) {
+          return true;
+        }
+        return docType.hiddenForCreationForUsersWithoutTags?.some((tag) => currentUserTags.includes(tag));
+      }
+      ).map((docType) =>
+        ({ value: docType.id, text: docType.documentTypeName })
       );
-  }, [documentTypes, outputDocumentTypes, type]);
+  }, [type, outputDocumentTypes, documentTypes, currentUserTags]);
   const handleTypeChange = (
     event: React.ChangeEvent<{ name?: string; value: unknown }>
   ) => {
@@ -92,7 +102,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
     formik.handleChange(event);
   };
 
-  if (!isVisible) {
+  if (!isVisible && type !== "newOutput") {
     return null;
   }
 

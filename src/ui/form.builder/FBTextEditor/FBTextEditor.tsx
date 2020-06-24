@@ -1,22 +1,30 @@
+import { Box } from "@material-ui/core";
 import React from "react";
-import ReactQuill from "react-quill";
-import { FBInput, FBInputProps } from "..";
-import { formats, modules } from "../../components/forms/fields/TextEditor/configuration";
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { FBInput, FBTextEditorProps } from "..";
+import { withFBTextEditor } from "./FBTextEditor.wrap";
 
-const FBTextEditor: React.FunctionComponent<FBInputProps> = ({
+const FBTextEditor: React.FunctionComponent<FBTextEditorProps> = ({
+  onEditorStateChange,
+  editorState,
+  toolbarCustomButtons,
+  toolbar,
   disabled,
   name,
   ...props
 }) => (
   <FBInput {...props} {...{ name, disabled }} type="texteditor">
-    <ReactQuill
-      theme="snow"
-      modules={modules}
-      formats={formats}
-      readOnly={disabled}
-      id={`fb-paragraph-field-${name}`}
-    />
+    <Box mt={-4}>
+      <Editor
+        {...{ editorState, onEditorStateChange, toolbar, toolbarCustomButtons }}
+        {...disabled && { toolbarStyle: { pointerEvents: "none" } }}
+        wrapperClassName="rte-wrapper"
+        editorClassName="rte-editor"
+        readOnly={disabled}
+      />
+    </Box>
   </FBInput>
 );
 
-export default FBTextEditor;
+export default withFBTextEditor(FBTextEditor);

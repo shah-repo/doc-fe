@@ -2,8 +2,10 @@ import { Box, Link, Portal } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import WarningOutlinedIcon from "@material-ui/icons/WarningOutlined";
 import React from "react";
-import Text from "../../../components/Text";
-import Colors from "../../../layout/theme/utils/colors";
+import Text from "../../../../components/Text";
+import useDialog from "../../../../hooks/useDialog";
+import Colors from "../../../../layout/theme/utils/colors";
+import { UpgradeToLatestDialog } from "./UpgradeToLatestDialog";
 
 interface Props {
   showShouldUpgrade: boolean;
@@ -18,6 +20,7 @@ export const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
 }) => {
   const [showBanner, setShowBanner] = React.useState(true);
   const hideBanner = () => setShowBanner(false);
+  const dialog = useDialog();
 
   return (
     <>
@@ -39,7 +42,7 @@ export const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
                 values={{
                   clickHere: (
                     <Link
-                      onClick={onUpgradeClick}
+                      onClick={dialog.open}
                       component="button"
                       color="inherit"
                       style={{
@@ -58,6 +61,7 @@ export const UpgradeToLatestBanner: React.FunctionComponent<Props> = ({
             </Box>
             <CloseIcon onClick={hideBanner} style={{ cursor: "pointer", marginLeft: "auto" }} />
           </Box>
+          <UpgradeToLatestDialog {...{ dialog, onUpgradeClick }}/>
         </Portal>
       }
     </>

@@ -1,6 +1,7 @@
 import { Chip, Grid, Typography } from "@material-ui/core";
 import classNames from "classnames";
 import React from "react";
+import { ChangeRequestStatus } from "../../../../state/ducks/changeRequest";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { useDocumentStatus } from "../../../hooks/docCustomization/useCustomization";
 import Text from "../../Text";
@@ -21,10 +22,12 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
 }) => {
   const [isStatusVisible, statusLabel] = useDocumentStatus(documentTypeId, status);
   const classes = styles();
-  const isStatusReleased = status === DocumentRevisionStatus.Released;
-  const statusIcon = () =>
+  const isStatusReleased = status === DocumentRevisionStatus.Released || status === ChangeRequestStatus.Approved;
+  const isStatusCanceled = status === DocumentRevisionStatus.Canceled || status === ChangeRequestStatus.Voided;
+  const statusIcon =
     <div className={classNames(classes.statusIconDefault, {
       [classes.statusIconReleased]: isStatusReleased,
+      [classes.statusIconCanceled]: isStatusCanceled,
     })}/>;
 
   return (
@@ -34,10 +37,8 @@ export const HeaderInfo: React.FunctionComponent<Props> = ({
         <Chip
           label={<Text message={statusLabel} />}
           id="HeaderInfo-status"
-          className={classNames(classes.statusDefault, {
-            [classes.statusReleased]: isStatusReleased,
-          })}
-          icon={statusIcon()}
+          className={classNames(classes.statusDefault)}
+          icon={statusIcon}
         />
       }
       <Typography variant="h6" id="HeaderInfo-docId" className={classes.id} >
