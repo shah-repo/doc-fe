@@ -16,7 +16,9 @@ export type DocumentGroupOptionsType =
   "POAM" |
   "PO" |
   "WORK_ORDER" |
-  "WO_PARTS";
+  "WO_PARTS" |
+  "CHANGE_REQUEST" |
+  "BE_OUTPUT";
 export interface PageDetailsColumn {
   label: string;
   sourcePath: string;

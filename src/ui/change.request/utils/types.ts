@@ -88,6 +88,11 @@ export interface RouteParams {
   changeRequestId: string;
 }
 
+export interface RouteParamsCreate {
+  documentTypeId: string;
+  formId: string;
+}
+
 export interface ActionProps {
   editChangeRequest: (changeRequestId: string) => void;
   previewChangeRequest: (changeRequestId: string) => void;

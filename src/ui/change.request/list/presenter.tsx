@@ -1,6 +1,5 @@
 import { Button, Grid, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
-import { Link as RouterLink } from "react-router-dom";
 import { stripTagsFromObject } from "../../../common/utils/helpers";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { CHANGE_REQUEST_ROOT_URL } from "../../../state/ducks/changeRequest/constants";
@@ -8,7 +7,7 @@ import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
 import Text from "../../components/Text";
-import { CHANGE_REQUEST_CREATE_URL } from "../../constants/urls";
+import FromListContainer from "../form.list/FormList.container";
 import { canEditChangeRequest, changeRequestStatusOption } from "../utils/helpers";
 import { changeRequestEditPath, changeRequestPreviewPath } from "../utils/paths";
 import { ChangeRequestsUserProps } from "../utils/types";
@@ -100,18 +99,8 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         </Button>
         <DocumentInfo numberOfRecords={tableData.length} />
       </Grid>
-      <Grid item={true} xs={6} style={{ textAlign: "right" }}>
-        <RouterLink to={CHANGE_REQUEST_CREATE_URL} className={classes.link}>
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
-            id="ChangeRequest-create"
-          >
-            <Text translation="change.request.create" />
-          </Button>
-        </RouterLink>
-      </Grid>
+
+      <FromListContainer/>
       <Grid item={true} className={classes.item}>
         <TablePanel<ChangeRequest>
           columns={columns}
