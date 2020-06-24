@@ -1,4 +1,4 @@
-import { Button, createStyles, Dialog, DialogContent, makeStyles } from "@material-ui/core";
+import { Button, Dialog, DialogContent, makeStyles, Box, Link } from "@material-ui/core";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
 import { FieldInputProps, Formik, FormikProps } from "formik";
 import React from "react";
@@ -7,6 +7,12 @@ import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
 import { FormContext, useFormContext } from "../../forms/FormContext";
 import AttachmentLineTypeForm from "./AttachmentLineTypeForm";
+import { changeRequestFormOnScreenContext } from "../../../change.request/form/ChangeRequestForm.container";
+import Text from "../../Text";
+import { AttachFile } from "@material-ui/icons";
+import { AttachmentStyleProps } from "../attachment.field/utils/types";
+import Colors from "../../../layout/theme/utils/colors";
+import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
 
 
 interface Props {
@@ -16,33 +22,55 @@ interface Props {
   multiple?: boolean;
   name?: string;
   disabled?: boolean;
+  onChange: (lineType: string, cleanCopyRequired: boolean) => (event: React.FormEvent<HTMLInputElement>) => any;
+  isField: boolean;
+  isUploading: boolean;
 }
-
-const styles = makeStyles(() =>
-  createStyles({
-    dialogPaper: {
-      overflowY: "unset",
-    },
-    dialogContent: {
-      overflowY: "unset",
-      maxWidth: 400,
-    },
+const styles = makeStyles((theme) => ({
+  dialogPaper: {
+    overflowY: "unset",
   },
-  ));
+  dialogContent: {
+    overflowY: "unset",
+    maxWidth: 400,
+  },
+  root: ({ isField }: AttachmentStyleProps) => ({
+    padding: isField ? theme.spacing(2, 1) : 0,
+    backgroundColor: isField ? Colors.white : "transparent",
+    borderRadius: isField ? "4px" : "none",
+    border: isField ? `1px solid ${Colors.medium_gray}` : "none",
+  }),
+  link: ({ isField }: AttachmentStyleProps) => ({
+    display: isField ? "flex" : "block",
+  }),
+  input: {
+    display: "none",
+  },
+  icon: ({ isField }: AttachmentStyleProps) => ({
+    display: isField ? "inherited" : "none",
+    marginRight: theme.spacing(0.5),
+    width: 20,
+    height: 20,
+  }),
+}));
 
 
 export const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
   upload,
   multiple,
+  isField,
   field,
   form,
   name,
   disabled,
+  onChange,
+  isUploading,
 }) => {
   const { submitForm } = useFormContext();
-  const classes = styles();
+  const classes = styles({ isField });
   const dialog = useDialog();
   const async = useAsync<any>({ onSuccess: dialog.close });
+  const isChangeRequestFormOnScreenContext = React.useContext(changeRequestFormOnScreenContext);
 
 
   const openDialog = () => {
@@ -58,13 +86,35 @@ export const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
   const renderForm = () => (
     <AttachmentLineTypeForm
-      {...{ field, upload, form, name, multiple, disabled }}
+      {...{ field, upload, form, name, multiple, disabled, isUploading, onChange }}
       onCancel= {closeDialog}
     />
   );
 
   return (
     <>
+      { isChangeRequestFormOnScreenContext &&
+         <Box mt={1} className={classes.root} id="AttachmentFieldPresenter-field">
+           <input
+             accept="*"
+             className={classes.input}
+             id={`${name}-button-file`}
+             multiple={multiple}
+             type="file"
+             onChange={onChange(LINE_TYPES.CLEAN_COPY, false)}
+             onBlur={onChange(LINE_TYPES.CLEAN_COPY, false)}
+             disabled={disabled}
+           />
+           <label htmlFor={`${name}-button-file`}>
+             <Link component="span" variant="button" className={classes.link} id="AttachmentFieldPresenter-linkButton" >
+               <AttachFile className={classes.icon} />
+               <Text translation="common.upload.files" />
+             </Link>
+           </label>
+         </Box>
+      }
+
+      { !isChangeRequestFormOnScreenContext &&
       <Button
         color="primary"
         startIcon={<AttachFileIcon />}
@@ -73,6 +123,8 @@ export const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
       >
         Upload Files
       </Button>
+      }
+
       {
         dialog.isOpen &&
         <Dialog
