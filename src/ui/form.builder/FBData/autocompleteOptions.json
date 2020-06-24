@@ -1,5 +1,4 @@
-[
-  {
+[{
     "id": "1",
     "path": "/document_revisions",
     "label": "Document revisions",
@@ -35,7 +34,7 @@
   },
   {
     "id": "5",
-    "path": "/document_revisions?documentTypeAcronym=SUP",
+    "path": "/document_revisions?docTypeGroups%5B%5D=SUPPLIER",
     "label": "Supplier list",
     "valueKey": "id",
     "labelKey": "name",
