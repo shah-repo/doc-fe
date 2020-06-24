@@ -15,6 +15,7 @@ interface OwnProps {
   withoutCurrentUser: boolean;
   documentRevisionId: string;
   documentId: string;
+  documentTypeId: string;
 }
 
 export type AccessPermissionsContainerProps = OwnProps;
@@ -23,6 +24,7 @@ export const AccessPermissionsContainer: React.FunctionComponent<AccessPermissio
   withoutCurrentUser = false,
   documentId,
   documentRevisionId,
+  documentTypeId,
 }) => {
   const loadAvailableApproversAction = useActionCreator(changeRequestsActions.loadAvailableApprovers);
 
@@ -43,8 +45,6 @@ export const AccessPermissionsContainer: React.FunctionComponent<AccessPermissio
   const securityEmployees = _.get(selectedDocument, "document.securityEmployees", []);
   const operators = _.get(selectedDocument, "document.operators", []);
 
-  const documentTypeId = useSelector((state: ApplicationState) =>
-    documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId)).document.documentType.id;
   const [isVisible] = useAssignDocument(documentTypeId);
 
   return (
