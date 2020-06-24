@@ -3,7 +3,7 @@ import Text from "../../components/Text";
 import { Translation } from "../../translations/types";
 
 interface OwnProps {
-  label: Translation | undefined;
+  label?: Translation;
   value: string | number | JSX.Element;
 }
 

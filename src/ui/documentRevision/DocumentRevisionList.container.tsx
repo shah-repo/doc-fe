@@ -39,8 +39,8 @@ DocumentRevisionListContainerProps
     loadDocumentAction();
   }, [loadDocumentAction, documentId]);
 
-  const documentType = useSelector(documentTypeSelectors.byId)[documentTypeId || ""]?.group;
-  const isDocumentPO = documentType === "PO";
+  const documentTypeGroup = useSelector(documentTypeSelectors.byId)[documentTypeId || ""]?.group;
+  const isDocumentPO = documentTypeGroup === "PO";
 
   return (
     <div className={classes.container}>
