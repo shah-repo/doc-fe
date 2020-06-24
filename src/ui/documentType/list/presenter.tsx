@@ -12,6 +12,7 @@ import Text from "../../components/Text";
 import { canEditDocumentRevision, documentRevisionQueryStatus, documentRevisionStatusOption } from "../../document.revision/utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
 import { Translation } from "../../translations/types";
+import CreateDocumentByType from "./CreateDocumentByType";
 import { columnSearchConfiguration, shouldShowStaticColumns } from "./helpers";
 import { styles } from "./styles";
 
@@ -21,8 +22,6 @@ export interface Props {
   tableData: TableDataProps<DocumentRevision>;
   clearFilter?: () => void;
   documentType: DocumentType;
-  openDocRev: () => void;
-  showError: boolean;
 }
 
 export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
@@ -31,8 +30,6 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   tableData,
   clearFilter,
   documentType,
-  openDocRev,
-  showError,
 }) => {
   const showStaticColumns = shouldShowStaticColumns(documentType.documentTypeName);
   const classes = styles();
@@ -154,28 +151,10 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
         </Button>
         <DocumentInfo numberOfRecords={tableData.length} />
       </Grid>
-      <Grid item={true} xs={6} style={{ textAlign: "right" }}>
-        <Button
-          variant="contained"
-          color="primary"
-          className={classes.button}
-          onClick={openDocRev}
-          id="DocumentByTypeListPresenter-openDocRev"
-        >
-          <Text
-            translation="supplier.add.new"
-            values={{ name: documentType.documentTypeName }}
-          />
-        </Button>
-      </Grid>
-      {showError && (
-        <div style={{ color: "red" }} id="DocumentByTypeListPresenter-showError">
-          <Text
-            translation="missing.form.error"
-            values={{ name: documentType.documentTypeName }}
-          />
-        </div>
-      )}
+      <CreateDocumentByType
+        documentTypeName={documentType.documentTypeName}
+        documentTypeId={documentType.id}
+      />
       <Grid item={true} className={classes.item}>
         <TablePanel<DocumentRevision>
           columns={columns}

@@ -36,7 +36,7 @@
   },
   {
     "id": "5",
-    "path": "/document_revisions?documentTypeAcronym=SUP",
+    "path": "/document_revisions?docTypeGroups%5B%5D=SUPPLIER",
     "label": "Supplier list",
     "valueKey": "id",
     "labelKey": "name",
@@ -121,6 +121,15 @@
     "id": "15",
     "path": "/document_revisions?status%5B%5D=DRAFT",
     "label": "Document Revisions In Draft",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
+  },
+  {
+    "id": "16",
+    "path": "/document_revisions?docTypeGroups%5B%5D=WO_PARTS",
+    "label": "Part Number in WO",
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",

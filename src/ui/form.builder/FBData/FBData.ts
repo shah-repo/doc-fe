@@ -49,6 +49,11 @@ export class FBData {
     return unitsOptions;
   }
 
+  public static get serviceUnitsOptions(): FBOption[] {
+    const allowedItems = ["hours", "days", "months", "each"];
+    return unitsOptions.filter((item: {[key: string]: string}) => allowedItems.includes(item.value));
+  }
+
   public static get requirementOptions(): FBOption[] {
     return requirementOptions;
   }

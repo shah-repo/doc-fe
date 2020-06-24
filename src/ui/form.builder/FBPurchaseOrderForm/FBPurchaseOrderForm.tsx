@@ -72,7 +72,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
         <FBAutocomplete
           label="form.builder.field.units"
           name="units"
-          options={FBData.unitsOptions}
+          options={type === "service" ? FBData.serviceUnitsOptions : FBData.unitsOptions}
           optionValueKey="value"
           optionLabelKey="text"
         />

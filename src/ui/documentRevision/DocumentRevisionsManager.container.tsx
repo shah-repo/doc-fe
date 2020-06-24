@@ -1,5 +1,5 @@
 import { Grid } from "@material-ui/core";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { connect, useSelector } from "react-redux";
 import { Redirect, useLocation } from "react-router-dom";
@@ -36,7 +36,9 @@ interface OwnProps {
 export type DocumentRevisionManagerContainerProps = OwnProps &
 StateProps;
 
+// TO-DO Move To Context Folder
 export let documentRevisionStatusContext = React.createContext<DocumentRevisionStatus>(DocumentRevisionStatus.Draft);
+export let documentRevisionStatusContextFromDocList = React.createContext< undefined | DocumentRevisionStatus >(undefined);
 export let documentRevisionVersionContext = React.createContext<number>(1);
 
 const getDocumentRevisions = documentRevisionsSelectors.makeGetDocumentRevisions();
@@ -111,6 +113,7 @@ DocumentRevisionManagerContainerProps
           documentRevisionId={documentRevisionId}
           documentId={documentId}
           canAccess={canAccess}
+          documentTypeId={document.documentType.id}
           withoutCurrentUser={true}
         /> : null,
       },
@@ -125,8 +128,15 @@ DocumentRevisionManagerContainerProps
       },
     },
   ];
+
   documentRevisionStatusContext = React.createContext(selectedDocument?.status);
+  const status = selectedDocument ? selectedDocument.status : undefined;
+  documentRevisionStatusContextFromDocList = React.createContext(status);
   documentRevisionVersionContext = React.createContext(selectedDocument?.version);
+
+  useEffect(() => () => {
+    documentRevisionStatusContextFromDocList = React.createContext<undefined | DocumentRevisionStatus>(undefined);
+  }, []);
 
   if (shouldRedircetToLatestReleasd(documentRevisions, documentRevisionId)) {
     const docRevIdToRedirect = getDocRevIdToRedirect(documentRevisions, deprecatedAt);

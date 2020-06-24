@@ -16,6 +16,7 @@ import ChangeRequestLink from "../../document.revision/summary/changeRequestLink
 import { FBSchemaProps, FBWorkspace, FBWorkspaceMode } from "../../form.builder";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import Colors from "../../layout/theme/utils/colors";
+import { DocumentCloneType } from "../Clone.container";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -47,7 +48,7 @@ interface OwnProps {
   proposedDocId?: string;
   loadDocumentProposedId?: typeof documentsActions.loadDocumentProposedId;
   canChangeOwnerShip?: boolean;
-  type?: string;
+  type?: DocumentCloneType;
 }
 
 export type DocumentRevisionFormContainerProps = OwnProps &
@@ -94,6 +95,7 @@ DocumentRevisionFormContainerProps
 
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
+  const bannerPortal = React.useRef(null);
 
   const cleanInitialValues = useMemo(() => {
     const renderHTML = canUpdateHTML ? initialValues.renderHTML : undefined;
@@ -181,11 +183,11 @@ DocumentRevisionFormContainerProps
   const render = (props: FormikProps<DocumentRevisionFormValues>) => (
     <FBWorkspace
       portalContainer={FBContainer}
-      document={props.values as unknown as DocumentRevision}
+      document={documentRevision as unknown as DocumentRevision}
       initialValues={formInput}
       autosave={true}
       schema={GetScheme(props)}
-      {...{ mode  }}
+      {...{ mode }}
     >
       <DocumentRevisionFormPresenter
         {...props}
@@ -201,7 +203,7 @@ DocumentRevisionFormContainerProps
         documentTypesById={documentTypesById}
         canChangeOwnerShip={canChangeOwnerShip}
         type={type}
-        {...{ FBContainer }}
+        {...{ FBContainer, bannerPortal }}
       />
     </FBWorkspace>
   );
@@ -224,6 +226,7 @@ DocumentRevisionFormContainerProps
       asyncAction={loadAction}
       startActionOnMount={true}
     >
+      <div ref={bannerPortal} />
       <Grid style={{ background: Colors.light_gray }} >
         <Box ml={3}>
           <ChangeRequestLink dataProp={documentRevision} />

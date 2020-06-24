@@ -33,6 +33,8 @@ export const useTraining = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, InputFieldType.TRAINING);
 export const useTitle = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, InputFieldType.TITLE, "common.title");
+export const useAssignDocument = (documentTypeId = ""): UIConfig =>
+  useCustomization(documentTypeId, InputFieldType.ASSIGN_DOCUMENT);
 
 const useCustomization = (
   documentTypeId = "",

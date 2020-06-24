@@ -69,7 +69,7 @@ export const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
         color="primary"
         startIcon={<AttachFileIcon />}
         onClick={openDialog}
-        id="ApproveAndRelease-button"
+        id="AttachmentFieldPresenter-linkButton"
       >
         Upload Files
       </Button>
@@ -83,11 +83,11 @@ export const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
           open={dialog.isOpen}
           onSubmit={preventPropagation}
           classes={{ paper: classes.dialogContent }}
-          id="ApproveAndRelease-dialog"
+          id="UploadFile-dialog"
         >
           <DialogContent
             classes={{ root: classes.dialogContent }}
-            id="ApproveAndRelease-content"
+            id="UploadFile-content"
           >
             <FormContext.Provider value={{ submitOnChange: false }}>
               <Formik

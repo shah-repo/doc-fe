@@ -66,17 +66,19 @@ export const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRe
 }) => {
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
   const initialValues = useMemo(() => {
-    switch (type) {
-      case "newVersion":
-        return toDocumentRevisionFormValuesWithRevisionChange(documentRevision);
-      case "newOutput": {
-        return toDocumentRevisionFormValuesForOutput(documentRevision);
-      }
-      default:
-        return DEFAULT_INITIAL_VALUES();
+    if (type === "newVersion") {
+      return toDocumentRevisionFormValuesWithRevisionChange(documentRevision);
     }
+    if (type === "newOutput") {
+      return toDocumentRevisionFormValuesForOutput(documentRevision);
+    }
+    if (history.location.state) {
+      return toDocumentRevisionFormValuesForOutput(history.location.state);
+    }
+    return DEFAULT_INITIAL_VALUES();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [documentRevision?.id, type]);
+  }, [documentRevision?.id, type, history.location.state]);
+  type = history.location.state ?? false ? "newOutput" : type;
 
   const async = useAsync<DocumentRevision>({
     onSuccess: (createdDocumentRevision?) => {

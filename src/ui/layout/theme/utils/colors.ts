@@ -32,6 +32,7 @@ export enum Colors {
   red = "#c40000",
   dark_red = "#a10808",
   light_red = "#FCDEDE",
+  medium_red = "#FF8183",
   // "#d31b1b"
   // purple
   deep_purple = "#29064C",
