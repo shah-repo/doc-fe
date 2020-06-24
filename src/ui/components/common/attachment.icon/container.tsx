@@ -2,35 +2,34 @@ import { Grid } from "@material-ui/core";
 import _ from "lodash";
 import React, { useState } from "react";
 import { connect, useSelector } from "react-redux";
-import { Attachment, attachmentsActions, AttachmentType, WatermarkRequest, WatermarkRequestBody, AttachmentDownloadResponse } from "../../../../state/ducks/attachments";
+import { Attachment, AttachmentDownloadResponse, attachmentsActions, AttachmentType, WatermarkRequest, WatermarkRequestBody } from "../../../../state/ducks/attachments";
+import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
+import { authSelectors } from "../../../../state/ducks/auth";
 import { Nullable } from "../../../../state/ducks/common";
+import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../../../state/reducers";
+import { AsyncStatus } from "../../../../state/types";
+import { isOperator } from "../../../documentRevision/DocumentRevisionDisplay.container";
+import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
+import { documentRevisionStatusContextFromCR } from "../../../documentRevision/DocumentRevisionUpdate.container";
+import { documentTypeContext, isOwnerContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
 import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../../form.builder/stores/ui/FBStore";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
+import { Translation } from "../../../translations/types";
 import { useFormContext } from "../../forms/FormContext";
 import { withFormik } from "../../hoc/formik";
-import ViewFile from "../view.file/container";
-import Menu from "./menu";
-import PresenterFactory from "./presenter.factory";
-import { AttachmentIconContainerProps, AttachmentIconDispatchProps } from "./utils/types";
-import WatermarkContainer from "./watermark/container";
 import PasswordDialog from "../../password/dialog";
-import { AsyncStatus } from "../../../../state/types";
-import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
 import { Password } from "../../password/types";
 import { AttachmentRedLineWarningDialog } from "../attachment.redline.warning/dialog";
-import { isOperator } from "../../../documentRevision/DocumentRevisionDisplay.container";
-import { isOwnerContext, documentTypeContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
-import { authSelectors } from "../../../../state/ducks/auth";
-import { PasswordSubmitActionType } from "./utils/types";
+import ViewFile from "../view.file/container";
 import { checkIfFileIsViewable } from "../view.file/utils/helpers";
-import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
-import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
-import { documentRevisionStatusContextFromCR } from "../../../documentRevision/DocumentRevisionUpdate.container";
-import { Translation } from "../../../translations/types";
+import Menu from "./menu";
+import PresenterFactory from "./presenter.factory";
+import { AttachmentIconContainerProps, AttachmentIconDispatchProps, PasswordSubmitActionType } from "./utils/types";
+import WatermarkContainer from "./watermark/container";
 
 type DispatchProps = AttachmentIconDispatchProps;
 
@@ -193,7 +192,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
           handleDownload(
             selectedAttachment,
             AttachmentType.Attached,
-          values.password,
+            values.password,
           ); }
         break;
 
@@ -208,9 +207,9 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
           handleDownload(
             selectedAttachment,
             AttachmentType.CleanCopy,
-          values.password,
+            values.password,
           ); }
-        
+
       default:
         break;
     }
@@ -219,24 +218,24 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
 
   const warningPasswordText = (): Translation => {
 
-      if(documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete){
+    if (documentRevisionStatusFromDocList === DocumentRevisionStatus.Obsolete) {
       return "common.attachment.redline.warning.download.obsoleted";
-      }
+    }
 
-      if(documentRevisionStatusFromDocList=== DocumentRevisionStatus.Deprecated){
+    if (documentRevisionStatusFromDocList === DocumentRevisionStatus.Deprecated) {
       return "common.attachment.redline.warning.download.deprecated";
-      }
+    }
 
-      if(documentRevisionStatusFromCR === DocumentRevisionStatus.Obsolete){
-        return "common.attachment.redline.warning.download.obsoleted";
-        }
+    if (documentRevisionStatusFromCR === DocumentRevisionStatus.Obsolete) {
+      return "common.attachment.redline.warning.download.obsoleted";
+    }
 
-      if(documentRevisionStatusFromCR === DocumentRevisionStatus.Deprecated){
-        return "common.attachment.redline.warning.download.deprecated";
-        }
+    if (documentRevisionStatusFromCR === DocumentRevisionStatus.Deprecated) {
+      return "common.attachment.redline.warning.download.deprecated";
+    }
     return "common.attachment.redline.warning.download.redline";
-  }
-  
+  };
+
   const warningSubmit = () => {
     redlineWarningDialogHandler.close();
     openPasswordDialog();
@@ -324,7 +323,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
         onSubmit = {warningSubmit}
         closeDialog = {redlineWarningDialogHandler.close}
         asyncState = {warningState}
-        translationText = {warningPasswordText()} 
+        translationText = {warningPasswordText()}
       />
 
       <PasswordDialog

@@ -20,7 +20,7 @@ export const AttachmentRedLineWarningDialog: React.FunctionComponent<Props> = ({
   closeDialog,
   isDialogOpen,
   onSubmit,
-  translationText
+  translationText,
 }) => {
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
   const renderForm = (props: FormikProps<any>) => (

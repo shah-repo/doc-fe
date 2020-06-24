@@ -2,14 +2,14 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import React, { useMemo } from "react";
 import { Attachment, AttachmentType } from "../../../../state/ducks/attachments";
+import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
+import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
+import { documentRevisionStatusContextFromCR } from "../../../documentRevision/DocumentRevisionUpdate.container";
 import Text from "../../Text";
 import { WATERMARK_FILES } from "../view.file/utils/constants";
 import { checkIfFileIsViewable } from "../view.file/utils/helpers";
 import { AttachmentMenuProps, PasswordSubmitActionType } from "./utils/types";
-import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
-import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
-import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
-import { documentRevisionStatusContextFromCR } from "../../../documentRevision/DocumentRevisionUpdate.container";
 
 interface OwnProps {
   docRevStatusRequiresPassword: () => boolean;
@@ -54,24 +54,28 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
   const handleDownload = (attachment: Attachment, type?: AttachmentType) => () => {
     if (
       type === AttachmentType.CleanCopy &&
-       (documentRevisionStatusFromCR === DocumentRevisionStatus.Released ||
+      (
+        documentRevisionStatusFromCR === DocumentRevisionStatus.Released ||
         documentRevisionStatusFromDocList === DocumentRevisionStatus.Released
-       )) {
+      )) {
       download(attachment, type);
     } else if (
-      docRevStatusRequiresPassword()
-    && attachment.lineType === LINE_TYPES.RED_LINE
-    && type === AttachmentType.CleanCopy) {
+      docRevStatusRequiresPassword() &&
+      attachment.lineType === LINE_TYPES.RED_LINE &&
+      type === AttachmentType.CleanCopy
+    ) {
       setSelectedAttachment(attachment);
       setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_CLEAN_COPY_FILE);
       openWarningDialog();
-    } else if(docRevStatusRequiresPassword()
-    && attachment.lineType === LINE_TYPES.RED_LINE
-    && type === AttachmentType.Attached){
+    } else if (
+      docRevStatusRequiresPassword() &&
+      attachment.lineType === LINE_TYPES.RED_LINE &&
+      type === AttachmentType.Attached
+    ) {
       setSelectedAttachment(attachment);
       setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_FILE);
       openWarningDialog();
-    }else{
+    } else {
       download(attachment, type);
     }
 

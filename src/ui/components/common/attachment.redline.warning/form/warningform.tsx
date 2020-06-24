@@ -1,12 +1,12 @@
-import { Button, withStyles, WithStyles, Box } from "@material-ui/core";
+import { Box, Button, withStyles, WithStyles } from "@material-ui/core";
+import WarningRoundedIcon from "@material-ui/icons/WarningRounded";
 import { Form } from "formik";
 import * as React from "react";
-import styles from "./warningform.styles";
 import { AsyncState, AsyncStatus } from "../../../../../state/types";
-import WarningRoundedIcon from "@material-ui/icons/WarningRounded";
+import { Translation } from "../../../../translations/types";
 import SubmitButton from "../../../forms/SubmitButton";
 import Text from "../../../Text";
-import { Translation } from "../../../../translations/types";
+import styles from "./warningform.styles";
 
 interface RedlineWarningFormProps extends WithStyles<typeof styles> {
   asyncState: AsyncState;
@@ -14,8 +14,9 @@ interface RedlineWarningFormProps extends WithStyles<typeof styles> {
   translationText: Translation;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const RedlineWarningForm: React.FunctionComponent<RedlineWarningFormProps> = ({ cancel, classes, asyncState, translationText}) => (
+const RedlineWarningForm: React.FunctionComponent<RedlineWarningFormProps> = ({
+  cancel, classes, asyncState, translationText,
+}) => (
   <Form className={classes.form}>
     <Box className = {classes.Box}>
       <WarningRoundedIcon fontSize="large" className={classes.icon}/>
