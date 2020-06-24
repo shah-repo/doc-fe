@@ -6,14 +6,13 @@ import Text from "../../Text";
 import { WATERMARK_FILES } from "../view.file/utils/constants";
 import { checkIfFileIsViewable } from "../view.file/utils/helpers";
 import { AttachmentMenuProps, PasswordSubmitActionType } from "./utils/types";
-import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
-import { documentRevisionStatusContext, documentRevisionVersionContext } from "../../../documentRevision/DocumentRevisionsManager.container";
-import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 
 interface OwnProps {
+  docRevStatusRequiresPassword: (attachment: Attachment, attachmentType?: AttachmentType) => boolean;
   handleWatermarkRequest?: (attachment: Attachment, attachmentType: AttachmentType) => void;
   setSelectedAttachment: (attachment: Attachment) => void;
   handleIconClick?: (attachment: Attachment) => any;
+  setdownloadType: (type: AttachmentType) => any;
 }
 
 type Props = AttachmentMenuProps & OwnProps;
@@ -28,12 +27,12 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
   setPasswordSubmitAction,
   setSelectedAttachment,
   download,
+  docRevStatusRequiresPassword,
+  setdownloadType,
 }) => {
   const file = useMemo(() => (attachment || {} as Attachment), [attachment]);
   const isFileViewable =  useMemo(() => checkIfFileIsViewable(file.type), [file.type]);
   const canWatermark = useMemo(() => WATERMARK_FILES.includes(file.type), [file.type]);
-  const documentRevisionStatus = React.useContext(documentRevisionStatusContext);
-  const documentRevisionVersion = React.useContext(documentRevisionVersionContext);
   const {
     name: fileName,
     type: fileType,
@@ -47,15 +46,9 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
     handleClose && handleClose();
     handleWatermarkRequest && handleWatermarkRequest(file, attachmentType);
   };
-  const handleDownload = (attachment: Attachment, type?: AttachmentType) => () => {
-    if (documentRevisionStatus === DocumentRevisionStatus.Released
-      && attachment.lineType === LINE_TYPES.RED_LINE) {
-      setSelectedAttachment(attachment);
-      setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_FILE);
-      openWarningDialog();
-    } else if (documentRevisionStatus === DocumentRevisionStatus.Draft
-      && attachment.lineType === LINE_TYPES.RED_LINE
-      && documentRevisionVersion >= 2) {
+  const handleDownload = (attachment: Attachment, type: AttachmentType) => () => {
+    setdownloadType(type);
+    if (docRevStatusRequiresPassword(attachment, type)) {
       setSelectedAttachment(attachment);
       setPasswordSubmitAction(PasswordSubmitActionType.DOWNLOAD_FILE);
       openWarningDialog();
