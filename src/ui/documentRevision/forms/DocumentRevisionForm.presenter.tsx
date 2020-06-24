@@ -250,7 +250,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         {showRevisionTypeChange && <RevisionTypeChange {...{ documentTypeId }} isDisabled={isDisabledInput} />}
         {
           (!values.status || type === "newOutput") &&
-          <DocumentSecurity />
+          <DocumentSecurity documentTypeId={documentTypeId as string} />
         }
         {
           workspaceState?.active && workspaceState.mode === "design" && hasOutput &&

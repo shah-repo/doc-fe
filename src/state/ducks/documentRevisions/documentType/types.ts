@@ -95,7 +95,8 @@ export enum InputFieldType{
   NEXT_REVISION = "I",
   NEXT_REVISION_STAGE = "J",
   OBSOLETE = "K",
-  ADM_CHANGE = "L"
+  ADM_CHANGE = "L",
+  ASSIGN_DOCUMENT = "U"
 }
 
 export enum DisplayFieldType{
