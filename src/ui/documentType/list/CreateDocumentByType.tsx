@@ -56,7 +56,7 @@ export const useHandleCreateDoc = () => {
 
   return (selectedForm: DocumentRevision) => {
     const outputDocumentTypes = selectedForm?.formTemplate?.outputDocumentTypes || [];
-    if (outputDocumentTypes.length === 1) {
+    if (outputDocumentTypes.length === 1 && !(outputDocumentTypes[0] as any)?.documentTypeAcronym?.startsWith("RC")) {
       fetchDocIdAsync.start(fetchDocIdAction, (outputDocumentTypes[0] as any)?.id, fetchDocIdAsync);
       setForm(selectedForm);
       return;

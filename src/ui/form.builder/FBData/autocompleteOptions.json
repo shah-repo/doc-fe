@@ -115,5 +115,14 @@
     "label": "Official Groups",
     "valueKey": "id",
     "labelKey": "name"
+  },
+  {
+    "id": "15",
+    "path": "/document_revisions?docTypeGroups%5B%5D=WO_PARTS",
+    "label": "Part Number in WO",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
   }
 ]

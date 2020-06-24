@@ -97,6 +97,7 @@ SidebarContainerProps
           documentId={documentId}
           canAccess={canAccess}
           withoutCurrentUser={true}
+          documentTypeId={documentTypeId}
         /> : null,
       },
     },

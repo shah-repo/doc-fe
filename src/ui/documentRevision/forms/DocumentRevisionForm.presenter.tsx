@@ -35,7 +35,7 @@ import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
 import References from "./presenters/References";
 import RetrainField from "./presenters/RetrainField";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
-import UpgradeToLatestContainer from "./presenters/UpgradeToLatest.container";
+import UpgradeToLatestContainer from "./presenters/upgrade.to.latest/UpgradeToLatest.container";
 import { DocumentRevisionFormValues } from "./types";
 
 export interface Props
@@ -250,7 +250,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         {showRevisionTypeChange && <RevisionTypeChange {...{ documentTypeId }} isDisabled={isDisabledInput} />}
         {
           (!values.status || type === "newOutput") &&
-          <DocumentSecurity />
+          <DocumentSecurity documentTypeId={documentTypeId as string} />
         }
         {
           workspaceState?.active && workspaceState.mode === "design" && hasOutput &&

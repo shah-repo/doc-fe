@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, RouteComponentProps } from "react-router-dom";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
+import { authSelectors } from "../../../state/ducks/auth";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
@@ -18,19 +19,23 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
 }) => {
   const { docTypeId } = match.params;
   const documentType = useSelector(documentTypeSelectors.byId)?.[docTypeId];
+  const currentUsersName = useSelector(authSelectors.currentUserName);
   const TABLE_NAME = `documentsByTypeList-${documentType?.documentTypeAcronym}`;
   const dispatch = useDispatch();
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const tableData = useSelector(getTableData(TABLE_NAME));
+  const isPO = documentType.group === "PO";
 
   useEffect(() => {
-    if (isEmpty(tableCriteria.queryDict)) {
+    if (isEmpty(tableCriteria.queryDict) || isPO) {
+      const owner = isPO ? currentUsersName : undefined;
       dispatch(
         tableSearchActions.setSearchCriteria(
           {
             ...tableCriteria,
             queryDict: {
               "status[]": documentRevisionQueryStatus(),
+              owner,
             },
           },
           TABLE_NAME,
