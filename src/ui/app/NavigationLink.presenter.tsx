@@ -10,6 +10,9 @@ import { ReactComponent as ChangeRequestListIcon } from "../../assets/images/cha
 import { ReactComponent as DashboardIcon } from "../../assets/images/dashboard_icon.svg";
 import { ReactComponent as DocumentListICon } from "../../assets/images/document_list_icon.svg";
 import { ReactComponent as GroupManagementIcon } from "../../assets/images/group_management_icon.svg";
+import { ReactComponent as PurchaseOrderIcon } from "../../assets/images/purchase_order_icon.svg";
+import { ReactComponent as ReceivableIcon } from "../../assets/images/receivable_icon.svg";
+import { ReactComponent as SuppliersIcon } from "../../assets/images/suppliers_icon.svg";
 import { ReactComponent as UserManagementIcon } from "../../assets/images/user_management_icon.svg";
 import Text from "../components/Text";
 import { CHANGE_REQUEST_LIST_URL, DOCUMENT_REVISION_LIST_URL, GROUP_MANAGEMENT_ROOT_URL, USER_MANAGEMENT_ROOT_URL } from "../constants/urls";
@@ -27,7 +30,7 @@ interface IconObject {
   [key: string]: JSX.Element;
 }
 
-const iconMapping: IconObject = {
+const iconMappingByUrl: IconObject = {
   "/": <DashboardIcon />,
   [DOCUMENT_REVISION_LIST_URL]: <DocumentListICon />,
   [CHANGE_REQUEST_LIST_URL]: <ChangeRequestListIcon />,
@@ -35,6 +38,11 @@ const iconMapping: IconObject = {
   [GROUP_MANAGEMENT_ROOT_URL]: <GroupManagementIcon />,
 };
 
+const iconMappingByText: IconObject = {
+  "Purchase Order": <PurchaseOrderIcon />,
+  "Receivable": <SuppliersIcon/>,
+  "Suppliers": <ReceivableIcon/>,
+};
 const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterProps> = ({
   classes,
   url,
@@ -52,7 +60,7 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
       to={url}
     >
       <ListItemIcon className={classes.itemIcon}>
-        {_.get(iconMapping, url) || <div />}
+        {_.get(iconMappingByUrl, url) || _.get(iconMappingByText, text) || <div />}
       </ListItemIcon>
       <ListItemText
         primary={<Text message={text} />}
