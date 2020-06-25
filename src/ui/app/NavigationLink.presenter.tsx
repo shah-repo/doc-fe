@@ -3,7 +3,6 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
-import _ from "lodash";
 import React, { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 import { ReactComponent as ChangeRequestListIcon } from "../../assets/images/change_request_list_icon.svg";
@@ -43,6 +42,7 @@ const iconMappingByText: IconObject = {
   "Receivable": <SuppliersIcon/>,
   "Suppliers": <ReceivableIcon/>,
 };
+
 const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterProps> = ({
   classes,
   url,
@@ -60,7 +60,7 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
       to={url}
     >
       <ListItemIcon className={classes.itemIcon}>
-        {_.get(iconMappingByUrl, url) || _.get(iconMappingByText, text) || <div />}
+        { iconMappingByUrl[url] || iconMappingByText[text] || <div />}
       </ListItemIcon>
       <ListItemText
         primary={<Text message={text} />}
