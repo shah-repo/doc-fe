@@ -46,6 +46,7 @@ describe("document revisions reducers tests", () => {
     };
 
     const expectedState = {
+      [initialDocumentRevision.id]: initialDocumentRevision,
       [documentRevisionList[0].id]: documentRevisionList[0],
       [documentRevisionList[1].id]: documentRevisionList[1],
     };
@@ -67,6 +68,7 @@ describe("document revisions reducers tests", () => {
     const initialState = [initialDocumentRevision.id];
 
     const expectedState = [
+      initialDocumentRevision.id,
       documentRevisionList[0].id,
       documentRevisionList[1].id,
     ];
