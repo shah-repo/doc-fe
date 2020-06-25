@@ -1,5 +1,6 @@
 import { Box, ButtonBase, CircularProgress, IconButton, Tooltip, Typography } from "@material-ui/core";
 import { CancelOutlined } from "@material-ui/icons";
+import classNames from "classnames";
 import React from "react";
 import { Attachment } from "../../../../state/ducks/attachments";
 import Text from "../../../components/Text";
@@ -35,19 +36,19 @@ AttachmentIconProps
   );
 
   const deleteButtonRenderer = canDeleteFile && (
-    <Box className={classes.closeRoot} style={{ padding: 0, margin: 0, position: "absolute", right: -10, top: -10 }}>
+    <div className={classes.closeRoot}>
       <IconButton
-        className={classes.closeRoot}
+        className={classes.closeIconButton}
         onClick={handleRemove && handleRemove(file)}
         id="AttachmentIconPresenter-handleRemove"
       >
         <CancelOutlined className={classes.closeIcon} />
       </IconButton>
-    </Box>
+    </div>
   );
   return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginRight: "3rem", marginBottom: "1rem" }}>
-      <div style={{ width: "min-content", position: "relative", marginRight: "0.7rem" }}>
+    <div className={classes.attachmentContainer}>
+      <div className={classes.iconContainer}>
         {deleteButtonRenderer}
         <Tooltip title={`${file.name}.${file.type}`}>
           <ButtonBase
@@ -62,9 +63,11 @@ AttachmentIconProps
         </Tooltip>
         {isRedLine && <hr className={classes.underLine}/>}
       </div>
-      <div>
+      <div className={classes.fileNameContainer}>
         <Typography
-          style={{ fontWeight: "bold" }}
+          className={classNames(classes.fileName, {
+            [classes.isUploading]: isUploading,
+          })}
           variant="caption"
           gutterBottom={true}
           align="left"
