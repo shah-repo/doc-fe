@@ -1,4 +1,3 @@
-import { Grid } from "@material-ui/core";
 import _ from "lodash";
 import React, { useState } from "react";
 import { connect, useSelector } from "react-redux";
@@ -317,7 +316,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   });
 
   return (
-    <Grid container={true} spacing={2}>
+    <div style={{ display: "flex", flexWrap: "wrap", marginTop: "2rem" }}>
       <AttachmentRedLineWarningDialog
         isDialogOpen = {redlineWarningDialogHandler.isOpen}
         onSubmit = {warningSubmit}
@@ -357,7 +356,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
         docRevStatusRequiresPassword = {docRevStatusRequiresPassword}
       />
       {attachmentsRenderer}
-    </Grid>
+    </div>
   );
 };
 
