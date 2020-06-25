@@ -8,6 +8,7 @@ import { ChangeRequest, ChangeRequestStatus, ChangeRequestTransition } from "../
 import { Approval, ApprovalStatus } from "../../../../state/ducks/documents";
 import HeaderMenu from "../../../components/common/header/Menu";
 import ChangeRequestTransitionDialogContainer from "../../dialogs/ChangeRequestTransitionDialog.container";
+import { ChangeRequestWithdrawDialog } from "../../dialogs/ChangeRequestWithdrawDialog";
 import TransitionButton from "./TransitionButton";
 
 interface Props {
@@ -23,6 +24,17 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
   if (!changeRequest) {
     return null;
   }
+  const renderAlertDialogButton = (
+    showButton: boolean,
+    transition: ChangeRequestTransition,
+    buttonProps?: ButtonProps,
+  ) => showButton &&
+        <ChangeRequestWithdrawDialog
+          transition={transition}
+          changeRequestId={changeRequest.id}
+          buttonProps={buttonProps}
+          label={`changeRequest.transition.${transition}`}
+        />;
 
   const renderDialogButton = (
     showButton: boolean,
@@ -69,7 +81,7 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
 
   return (
     <HeaderMenu>
-      {renderTransitionButton(canWithdraw, "withdrawn")}
+      {renderAlertDialogButton(canWithdraw, "withdrawn")}
       {renderTransitionButton(canSendToReview, "in_review")}
       {renderDialogButton(canApproveOrReject, "reject", { disabled: formHasErrors })}
       {renderDialogButton(canApproveOrReject, "approve", { disabled: formHasErrors })}
