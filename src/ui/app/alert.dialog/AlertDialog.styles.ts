@@ -1,5 +1,5 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
-import Colors from "../../../layout/theme/utils/colors";
+import Colors from "../../layout/theme/utils/colors";
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
@@ -27,6 +27,10 @@ export const styles = makeStyles((theme: Theme) =>
       display: "flex",
       marginBottom: 10,
     },
+    dialogContent: {
+      color: Colors.dark_gray,
+      opacity: 0.6,
+    },
     iconContainer: {
       "&:before": {
         content: "''",
@@ -37,7 +41,7 @@ export const styles = makeStyles((theme: Theme) =>
         opacity: 0.1,
         color: Colors.light_red,
         transform: "translate(-10px, -6px)",
-        borderRadius: 6,
+        borderRadius: 11,
       },
     },
   }),

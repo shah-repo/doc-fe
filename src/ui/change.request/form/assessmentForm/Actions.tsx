@@ -16,7 +16,7 @@ import { canChangeCROwner } from "../../utils/helpers";
 import { RouteParamsCreate } from "../../utils/types";
 import { formIdContext } from "./AssessmentForm.presenter";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
-import AssessmentFormVoidContainer from "./Void.container";
+import AssessmentFormVoidContainer from "./Void";
 
 interface OwnProps {
   changeRequest?: ChangeRequest;
