@@ -79,21 +79,22 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
   };
 
   const onChange = (lineType: string, cleanCopyRequired: boolean) => (event: React.FormEvent<HTMLInputElement>) => {
-    let isUserAlerted = false;
+    let isUserAlertedNoDocFiles = false;
+    let isUserAlrtedCleanCopyMismatch = false;
     const filteredFiles = Array.from(event.currentTarget.files || []).filter(
       (file) => {
         const type = file.name.split(".").pop();
         if (type === "doc") {
-          !isUserAlerted &&
+          !isUserAlertedNoDocFiles &&
            alert(intl.formatMessage({ id: "common.attachment.form.DOCERROR" }));
-          isUserAlerted = true;
+          isUserAlertedNoDocFiles = true;
           return false;
         }
 
         if (type !== "docx" && cleanCopyRequired) {
-          !isUserAlerted &&
+          !isUserAlrtedCleanCopyMismatch &&
           alert(intl.formatMessage({ id: "common.attachment.form.Create.Clean.Copy.Error" }));
-          isUserAlerted = true;
+          isUserAlrtedCleanCopyMismatch = true;
           return false;
         }
         return true;
