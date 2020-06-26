@@ -1,7 +1,8 @@
-import { Box, ButtonBase, CircularProgress, Grid, IconButton, Tooltip, Typography } from "@material-ui/core";
+import { Box, ButtonBase, CircularProgress, IconButton, Tooltip, Typography } from "@material-ui/core";
 import { CancelOutlined } from "@material-ui/icons";
 import classNames from "classnames";
-import React from "react";
+import React, { useMemo } from "react";
+import { useIntl } from "react-intl";
 import { Attachment } from "../../../../state/ducks/attachments";
 import Text from "../../../components/Text";
 import FileIcon from "./icon";
@@ -28,6 +29,21 @@ AttachmentIconProps
     size: size || "md",
     disabled,
   });
+  const intl = useIntl();
+  const fileSize = useMemo(() => {
+    const size = file.fileSizeS3Link;
+    const i = Math.floor( Math.log(size) / Math.log(1024) );
+    return `${(size / Math.pow(1024, i)).toFixed(2)} ${["B", "kB", "MB", "GB", "TB"][i]}`;
+  }, [file.fileSizeS3Link]);
+  const fileTypeDescription = useMemo(() => {
+    const microsoftFiles = ["XLSX", "XLS", "DOCX", "DOC"];
+    const type = file.type.toUpperCase();
+    if (microsoftFiles.includes(type)) {
+      return intl.formatMessage({ id: `file.type.${type}` });
+    }
+
+    return intl.formatMessage({ id: "file.type" }, { type });
+  }, [file.type, intl]);
 
   const isUploadingRenderer = () => (
     <Box>
@@ -36,48 +52,57 @@ AttachmentIconProps
   );
 
   const deleteButtonRenderer = canDeleteFile && (
-    <Box className={classes.closeRoot}>
+    <div className={classes.closeRoot}>
       <IconButton
-        className={classes.closeRoot}
+        className={classes.closeIconButton}
         onClick={handleRemove && handleRemove(file)}
         id="AttachmentIconPresenter-handleRemove"
       >
         <CancelOutlined className={classes.closeIcon} />
       </IconButton>
-    </Box>
+    </div>
   );
   return (
-    <Grid key={`cell-${file.id}`} item={true} xs={2} sm={1} md={1}>
-      {deleteButtonRenderer}
-      <Tooltip title={`${file.name}.${file.type}`}>
-        <ButtonBase
-          onContextMenu={handleContextMenu && handleContextMenu(file)}
-          key={`icon-${file.id}`}
-          onClick={handleIconClick && handleIconClick(file)}
-          id="AttachmentIconPresenter-handleIconClick"
+    <div className={classes.attachmentContainer}>
+      <div className={classes.iconContainer}>
+        {deleteButtonRenderer}
+        <Tooltip title={`${file.name}.${file.type}`}>
+          <ButtonBase
+            onContextMenu={handleContextMenu && handleContextMenu(file)}
+            key={`icon-${file.id}`}
+            onClick={handleIconClick && handleIconClick(file)}
+            id="AttachmentIconPresenter-handleIconClick"
+          >
+            {isLoading && <CircularProgress className={classes.progress} />}
+            {!isLoading && <FileIcon {...other} extension={file.type} isUploading={isUploading} />}
+          </ButtonBase>
+        </Tooltip>
+        {isRedLine && <hr className={classes.underLine}/>}
+      </div>
+      <div className={classes.fileNameContainer}>
+        <Typography
+          className={classNames(classes.fileName, {
+            [classes.isUploading]: isUploading,
+          })}
+          variant="caption"
+          gutterBottom={true}
+          align="left"
+          title={`${file.name}.${file.type}`}
+          id="AttachmentIconPresenter-fileTitle"
         >
-          {isLoading && <CircularProgress className={classes.progress} />}
-          {!isLoading && <FileIcon {...other} extension={file.type} isUploading={isUploading} />}
-        </ButtonBase>
-      </Tooltip>
-      <Box>
+          {`${file.name}.${file.type}`}
+        </Typography>
         <Typography
           variant="caption"
           gutterBottom={true}
           align="left"
-          className={classNames(classes.fileName, {
-            [classes.isUploading]: isUploading,
-          })}
-          title={`${file.name}.${file.type}`}
-          id="AttachmentIconPresenter-fileTitle"
+          display="block"
         >
-
-          {isRedLine && <hr className={classes.underLine}/>}
-          {`${file.name}.${file.type}`}
+          {`${fileSize} ${fileTypeDescription}`}
         </Typography>
-      </Box>
+      </div>
       {isUploading && isUploadingRenderer()}
-    </Grid>
+    </div>
   );
 };
 

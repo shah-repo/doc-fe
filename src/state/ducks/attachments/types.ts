@@ -12,6 +12,8 @@ export interface Attachment {
   owner?: User;
   lineType: string;
   documentRevision?: DocumentRevision;
+  fileSizeS3Link: number;
+  fileSizeS3LinkCleanCopy: number;
 }
 
 export interface AttachmentDownloadResponse {
