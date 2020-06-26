@@ -117,15 +117,19 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
       {!isUploading &&
       <Box>
         <Presenter
-          upload = {upload}
-          isUploading = {isUploading}
+          {
+            ...{
+              name,
+              isUploading,
+              upload,
+              component,
+              multiple,
+              form,
+              field,
+              onChange,
+            }
+          }
           {...other}
-          name={name}
-          component={component}
-          multiple={multiple}
-          form={form}
-          field={field}
-          onChange={onChange}
         />
       </Box>
       }
