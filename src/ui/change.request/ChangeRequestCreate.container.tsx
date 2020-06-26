@@ -25,11 +25,12 @@ export const DEFAULT_INITIAL_VALUES = (): ChangeRequest => ({
 export const ChangeRequestCreateContainer: React.FunctionComponent<ChangeRequestCreateContainerProps> =
   ({ history, match }) => {
     const documentTypeId = match.params.documentTypeId;
+    const formId = match.params.formId;
     const create = useActionCreator(changeRequestsActions.create);
     const [templateOptions, setTemplateOptions] = useState<DocumentTypeById[]>([]);
     const [doNotPrompt, setDoNotPrompt] = React.useState(false);
     const getDocTypeByGroupAction = useActionCreator(documentTypeActions.getDocTypeByGroup);
-    const schema = templateOptions.find((template) => template.documentType.id === documentTypeId)?.documentType.schema;
+    const schema = templateOptions.find((template) => template.documentType.id === documentTypeId)?.forms.find((form) => form.id === formId)?.formTemplate?.schema;
 
     const asyncGetDocTypeByGroup = useAsync({
       onSuccess: (data: DocumentTypeById[] = []) => {
