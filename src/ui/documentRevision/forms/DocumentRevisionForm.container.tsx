@@ -232,9 +232,12 @@ DocumentRevisionFormContainerProps
     >
       <div ref={bannerPortal} />
       <Grid style={{ background: Colors.light_gray }} >
-        <Box ml={3}>
-          <ChangeRequestLink dataProp={documentRevision} />
-        </Box>
+        {
+          type !== "newOutput" &&
+          <Box ml={3}>
+            <ChangeRequestLink dataProp={documentRevision} />
+          </Box>
+        }
         <Formik
           initialValues={cleanInitialValues}
           onSubmit={(values, helpers) => onSubmit(values, helpers, cleanInitialValues) }
