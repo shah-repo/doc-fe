@@ -1,4 +1,5 @@
-[{
+[
+  {
     "id": "1",
     "path": "/document_revisions",
     "label": "Document revisions",
@@ -93,7 +94,7 @@
   },
   {
     "id": "12",
-    "path": "/document_revisions?documentTypeAcronym=PO&status%5B%5D=RELEASED",
+    "path": "/document_revisions?documentTypeAcronym=PO-&status%5B%5D=RELEASED",
     "label": "Purchase Order list",
     "valueKey": "id",
     "labelKey": "name",
