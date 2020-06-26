@@ -83,7 +83,6 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           documentStatus={documentRevision?.status}
           version={documentRevision?.version}
           docRevId={documentRevision?.id}
-          shouldDisplay={props.cancelButtonDisplay}
           setShouldDisplay={props.setCancelButtonDisplay}
         />
         {renderChangeOwnership}
