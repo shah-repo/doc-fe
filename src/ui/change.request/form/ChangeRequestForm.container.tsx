@@ -20,6 +20,8 @@ interface OwnProps {
   doNotPrompt?: boolean;
 }
 
+export let changeRequestFormOnScreenContext = React.createContext<boolean>(false);
+
 type ChangeRequestFormContainerProps = OwnProps &
 WithStyles<typeof styles>;
 
@@ -51,6 +53,7 @@ ChangeRequestFormContainerProps
     },
   });
   const getGroupsByStage = useActionCreator(documentRevisionsActions.loadGroupsByStage);
+  changeRequestFormOnScreenContext = React.createContext<boolean>(true);
 
   useEffect(() => {
     if (changeRequest && changeRequest.documentRevisions) {
@@ -68,6 +71,10 @@ ChangeRequestFormContainerProps
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [(changeRequest || {}).documentRevisions]);
+
+  useEffect(() => () => {
+    changeRequestFormOnScreenContext = React.createContext<boolean>(false);
+  }, []);
 
   const alertIfFormDirty = () => {
     if (!isFormDirty) {

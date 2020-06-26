@@ -4,16 +4,21 @@ import { styles } from "./utils/styles";
 import { AttachmentFieldProps } from "./utils/types";
 import { AttachmentLineTypeSelector } from "../attachment.linetype/AttachmentLineTypeSelector";
 
+interface Props extends AttachmentFieldProps {
+  onChange: (lineType: string, cleanCopyRequired: boolean) => (event: React.FormEvent<HTMLInputElement>) => any;
+  isUploading: boolean;
+}
+
 export const AttachmentFieldPresenter: React.FunctionComponent<
-AttachmentFieldProps
-> = ({ name, multiple, component = "button", disabled, upload, form, field }) => {
+Props
+> = ({ name, multiple, component = "button", disabled, upload, form, field, onChange, isUploading }) => {
   const isField = component === "field";
   const classes = styles({ isField });
 
   return (
     <Box mt={1} className={classes.root} id="AttachmentFieldPresenter-field">
       <AttachmentLineTypeSelector
-        {...{ field, upload, form, name, multiple, disabled }}
+        {...{ field, upload, form, name, multiple, disabled, onChange, isField, isUploading }}
       />
     </Box>
   );
