@@ -1,4 +1,3 @@
-import { Grid } from "@material-ui/core";
 import { useFormikContext } from "formik";
 import * as React from "react";
 import HeaderMenu from "../../../components/common/header/Menu";
@@ -54,12 +53,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   );
 
   return (
-    <Grid
-      container={true}
-      alignItems="flex-end"
-      justify="flex-end"
-      direction="row"
-    >
+    <div>
       <SubmitButton
         asyncState={asyncState}
         label={isDisabled ?
@@ -96,7 +90,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           type="button"
         />
       </HeaderMenu>
-    </Grid>
+    </div>
   );
 };
 
