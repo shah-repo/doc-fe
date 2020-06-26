@@ -1,7 +1,8 @@
 import { Box, ButtonBase, CircularProgress, IconButton, Tooltip, Typography } from "@material-ui/core";
 import { CancelOutlined } from "@material-ui/icons";
 import classNames from "classnames";
-import React from "react";
+import React, { useMemo } from "react";
+import { useIntl } from "react-intl";
 import { Attachment } from "../../../../state/ducks/attachments";
 import Text from "../../../components/Text";
 import FileIcon from "./icon";
@@ -28,6 +29,21 @@ AttachmentIconProps
     size: size || "md",
     disabled,
   });
+  const intl = useIntl();
+  const fileSize = useMemo(() => {
+    const size = file.fileSizeS3Link;
+    const i = Math.floor( Math.log(size) / Math.log(1024) );
+    return `${(size / Math.pow(1024, i)).toFixed(2)} ${["B", "kB", "MB", "GB", "TB"][i]}`;
+  }, [file.fileSizeS3Link]);
+  const fileTypeDescription = useMemo(() => {
+    const microsoftFiles = ["XLSX", "XLS", "DOCX", "DOC"];
+    const type = file.type.toUpperCase();
+    if (microsoftFiles.includes(type)) {
+      return intl.formatMessage({ id: `file.type.${type}` });
+    }
+
+    return intl.formatMessage({ id: "file.type" }, { type });
+  }, [file.type, intl]);
 
   const isUploadingRenderer = () => (
     <Box>
@@ -82,7 +98,7 @@ AttachmentIconProps
           align="left"
           display="block"
         >
-          Docx
+          {`${fileSize} ${fileTypeDescription}`}
         </Typography>
       </div>
       {isUploading && isUploadingRenderer()}

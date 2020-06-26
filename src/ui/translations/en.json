@@ -770,5 +770,10 @@
   "Administrative Change": "Administrative Change",
   "document.revision.upgrade.form.banner": "A new version of the form is available. {clickHere} to upgrade to latest version.",
   "common.click.here": "Click here",
-  "return.home": "Return home"
+  "return.home": "Return home",
+  "file.type.XLSX": "Microsoft Excel File",
+  "file.type.XLS": "Microsoft Excel File",
+  "file.type.DOCX": "Microsoft Word File",
+  "file.type.DOC": "Microsoft Word File",
+  "file.type": "{type} File"
 }

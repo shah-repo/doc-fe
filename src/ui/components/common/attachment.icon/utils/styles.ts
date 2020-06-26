@@ -29,7 +29,7 @@ export const styles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    marginRight: "3rem",
+    marginRight: "1.5rem",
     marginBottom: "1rem",
   },
   iconContainer: {
@@ -38,7 +38,7 @@ export const styles = makeStyles((theme) => ({
     marginRight: "0.8rem",
   },
   fileNameContainer: {
-    maxWidth: 150,
+    width: 170,
   },
   fileName: {
     overflowWrap: "break-word",
@@ -49,7 +49,6 @@ export const styles = makeStyles((theme) => ({
     display: "block",
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
-    textAlign: "center",
     fontWeight: "bold",
   },
   closeIcon: {
