@@ -100,7 +100,10 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
       asyncGetDocTypeByGroup);
     dialog.open();
   };
+
   const closeDialog = () => {
+    setFormDocument("");
+    setDocumentType("");
     dialog.close();
   };
 
