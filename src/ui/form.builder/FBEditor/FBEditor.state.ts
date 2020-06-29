@@ -6,6 +6,7 @@ import { FBEditorAction } from "../FBEditorAction";
 import { FBEditorApprovalField } from "../FBEditorApprovalField";
 import { FBEditorAutocomplete } from "../FBEditorAutocomplete";
 import { FBEditorCheckControl } from "../FBEditorCheckControl";
+import FBEditorDocumentRevisions from "../FBEditorDocumentRevisions/FBEditorDocumentRevisions";
 import { FBEditorEmpty } from "../FBEditorEmpty";
 import { FBEditorHyperlink } from "../FBEditorHyperlink";
 import { FBEditorInstructionsDocument } from "../FBEditorInstructionsDocument";
@@ -39,6 +40,7 @@ export class FBEditorState {
     "instructionsdocument",
     "selectdocument",
     "selectrequirement",
+    "documentRevisions",
     "checkpoint",
     "createlabel",
     "poreceive",
@@ -104,6 +106,7 @@ export class FBEditorState {
     action: FBEditorAction,
     hellosign: FBEditorLabel,
     approvalMatrix: FBEditorEmpty,
+    documentRevisions: FBEditorDocumentRevisions,
     poApprovalMatrix: FBEditorLabel,
     task: FBEditorEmpty,
   };

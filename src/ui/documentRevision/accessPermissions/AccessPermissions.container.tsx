@@ -6,6 +6,7 @@ import { changeRequestsActions, changeRequestsSelectors } from "../../../state/d
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
+import { useAssignDocument } from "../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../hooks/useActionCreator";
 import AccessPermissionsPresenter from "./AccessPermissions.presenter";
 
@@ -14,6 +15,7 @@ interface OwnProps {
   withoutCurrentUser: boolean;
   documentRevisionId: string;
   documentId: string;
+  documentTypeId: string;
 }
 
 export type AccessPermissionsContainerProps = OwnProps;
@@ -22,6 +24,7 @@ export const AccessPermissionsContainer: React.FunctionComponent<AccessPermissio
   withoutCurrentUser = false,
   documentId,
   documentRevisionId,
+  documentTypeId,
 }) => {
   const loadAvailableApproversAction = useActionCreator(changeRequestsActions.loadAvailableApprovers);
 
@@ -42,19 +45,24 @@ export const AccessPermissionsContainer: React.FunctionComponent<AccessPermissio
   const securityEmployees = _.get(selectedDocument, "document.securityEmployees", []);
   const operators = _.get(selectedDocument, "document.operators", []);
 
+  const [isVisible] = useAssignDocument(documentTypeId);
+
   return (
     <AccessPermissionsPresenter
-      loadAvailableApproversAction={loadAvailableApproversAction}
-      availableApprovers={availableApprovers}
-      loadApproversAsyncState={loadApproversAsyncState}
-      groupOptions={groupOptions}
-      securityGroups={securityGroups}
-      securityEmployees={securityEmployees}
-      operators={operators}
-      documentId={documentId}
-      documentRevisionId={documentRevisionId}
-      loadGroupsAction={loadGroupsAction}
-      loadGroupAsyncState={loadGroupAsyncState}
+      {...{
+        isVisible,
+        loadAvailableApproversAction,
+        availableApprovers,
+        loadApproversAsyncState,
+        groupOptions,
+        securityGroups,
+        securityEmployees,
+        operators,
+        documentId,
+        documentRevisionId,
+        loadGroupsAction,
+        loadGroupAsyncState,
+      }}
     />
   );
 };

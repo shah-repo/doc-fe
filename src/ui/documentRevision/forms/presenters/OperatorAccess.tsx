@@ -5,9 +5,14 @@ import { changeRequestsActions, changeRequestsSelectors } from "../../../../stat
 import { ApplicationState } from "../../../../state/reducers";
 import AsyncGate from "../../../components/AsyncGate";
 import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
+import { useAssignDocument } from "../../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../../hooks/useActionCreator";
 
-const OperatorAccess: React.FunctionComponent = () => {
+interface Props {
+  documentTypeId: string;
+}
+
+const OperatorAccess: React.FunctionComponent<Props> = ({ documentTypeId }) => {
   const loadAvailableApproversAction = useActionCreator(
     changeRequestsActions.loadAvailableApprovers
   );
@@ -21,6 +26,11 @@ const OperatorAccess: React.FunctionComponent = () => {
       currentUserId
     );
   });
+  const [isVisible] = useAssignDocument(documentTypeId);
+
+  if (!isVisible) {
+    return null;
+  }
 
   return (
     <AsyncGate

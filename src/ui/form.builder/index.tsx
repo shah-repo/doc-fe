@@ -53,6 +53,7 @@ export { default as FBDatePicker } from "./FBDatePicker/FBDatePicker";
 export { default as FBDialog } from "./FBDialog/FBDialog";
 export { default as FBDialogState } from "./FBDialog/FBDialog.state";
 export * from "./FBDialog/FBDialog.types";
+export { default as FBDocumentRevisionsState } from "./FBDocumentRevisionsField/FBDocumentRevisions.state";
 export { default as FBEditor } from "./FBEditor/FBEditor";
 export { default as FBEditorState } from "./FBEditor/FBEditor.state";
 export * from "./FBEditor/FBEditor.types";

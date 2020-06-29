@@ -34,13 +34,7 @@ const getDocumentTypeFormOptions = createSelector(
   (ids, documentTypes) =>
     _.orderBy(
       ids.map((id) => ({
-        id: documentTypes[id].id,
-        documentTypeName: documentTypes[id].documentTypeName,
-        documentTypeAcronym: documentTypes[id].documentTypeAcronym,
-        group: documentTypes[id].group,
-        isQms: documentTypes[id].isQms,
-        defaultTraining: documentTypes[id].defaultTraining,
-        groupOptions: documentTypes[id].groupOptions,
+        ...documentTypes[id],
       }))
       , ["documentTypeName"], ["asc"]),
 );

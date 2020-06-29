@@ -7,16 +7,13 @@ export const styles = makeStyles((theme) => ({
     width: size === "lg" ? "90px" : size === "md" ? "70px" : "50px",
     height: size === "lg" ? "90px" : size === "md" ? "70px" : "50px",
   }),
-  closeRoot: ({ size, disabled }: AttachmentIconStyleProp) => ({
-    margin:
-      size === "lg"
-        ? theme.spacing(0, 0, -1.7, 4.5)
-        : size === "md"
-          ? theme.spacing(0, 0, -1.3, 3.7)
-          : theme.spacing(0, 0, -1.4, 3.1),
-    padding: theme.spacing(0.5, 0.5, 0),
-    fontSize: size === "lg" ? "1.3em" : size === "md" ? "1.2em" : "1.1em",
+  closeRoot: ({ disabled }: AttachmentIconStyleProp) => ({
+    padding: "0",
+    margin: "0",
+    right: "-12px",
+    top: "-12px",
     display: disabled ? "none" : "inherit",
+    position: "absolute" as "absolute",
   }),
   progress: ({ size }: AttachmentIconStyleProp) => ({
     "color": theme.palette.secondary.main,
@@ -28,21 +25,39 @@ export const styles = makeStyles((theme) => ({
       margin: theme.spacing(2.5),
     },
   }),
+  attachmentContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: "1.5rem",
+    marginBottom: "1rem",
+  },
+  iconContainer: {
+    width: "min-content",
+    position: "relative",
+    marginRight: "0.8rem",
+  },
+  fileNameContainer: {
+    width: 170,
+  },
   fileName: {
     overflowWrap: "break-word",
     wordWrap: "break-word",
     hyphens: "auto",
-    maxWidth: "4.38rem",
     maxWeight: "1rem",
     overflow: "hidden",
     display: "block",
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
-    textAlign: "center",
+    fontWeight: "bold",
   },
   closeIcon: {
     fontSize: "inherit",
     color: theme.palette.primary.main,
+  },
+  closeIconButton: {
+    fontSize: "1.2rem",
+    padding: 0,
   },
   fileIcon: {
     width: "100%",

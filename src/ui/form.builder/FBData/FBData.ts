@@ -7,6 +7,7 @@ import additionalSchema from "./additionalSchema.json";
 import approvalMatrixRoleSchema from "./approvalMatrixRoleSchema.json";
 import autocompleteOptions from "./autocompleteOptions.json";
 import currencyOptions from "./currencyOptions.json";
+import documentRevisionSchema from "./documentRevisionSchema.json";
 import editorProperties from "./editorProperties.json";
 import editorPropertiesControl from "./editorPropertiesControl.json";
 import requirementOptions from "./requirementOptions.json";
@@ -48,6 +49,11 @@ export class FBData {
     return unitsOptions;
   }
 
+  public static get serviceUnitsOptions(): FBOption[] {
+    const allowedItems = ["hours", "days", "months", "each"];
+    return unitsOptions.filter((item: {[key: string]: string}) => allowedItems.includes(item.value));
+  }
+
   public static get requirementOptions(): FBOption[] {
     return requirementOptions;
   }
@@ -68,6 +74,10 @@ export class FBData {
 
   public static get approvalMatrixRoleSchema(): FBSchemaProps[] {
     return approvalMatrixRoleSchema as FBSchemaProps[];
+  }
+
+  public static get documentRevisionSchema(): FBSchemaProps[] {
+    return documentRevisionSchema as FBSchemaProps[];
   }
 }
 

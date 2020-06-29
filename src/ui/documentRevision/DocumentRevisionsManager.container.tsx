@@ -1,13 +1,22 @@
 import { Grid } from "@material-ui/core";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { useIntl } from "react-intl";
 import { connect, useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Redirect, useLocation } from "react-router-dom";
+import { ReactComponent as BadgeIcon } from "../../assets/images/badge.svg";
+import { ReactComponent as BookmarkIcon } from "../../assets/images/bookmark.svg";
+import { ReactComponent as TimelineIcon } from "../../assets/images/history.svg";
+import { ReactComponent as NoteIcon } from "../../assets/images/note.svg";
 import { DocumentRevision, documentRevisionsSelectors, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import useDocumentTitle from "../hooks/useDocumentTitle";
+import AccessPermissionsContainer from "./accessPermissions/AccessPermissions.container";
+import DocumentRevisionAuditContainer from "./audit/Audit.container";
 import DocumentRevisionDisplayContainer from "./DocumentRevisionDisplay.container";
+import DocumentRevisionListContainer from "./DocumentRevisionList.container";
 import { getDocRevIdToRedirect, shouldRedircetToLatestReleasd } from "./helpers";
+import Bookmarks from "./Sidebar/Bookmarks";
 import { SidebarContainer } from "./Sidebar/Sidebar.container";
 import styles from "./styles";
 
@@ -27,7 +36,9 @@ interface OwnProps {
 export type DocumentRevisionManagerContainerProps = OwnProps &
 StateProps;
 
+// TO-DO Move To Context Folder
 export let documentRevisionStatusContext = React.createContext<DocumentRevisionStatus>(DocumentRevisionStatus.Draft);
+export let documentRevisionStatusContextFromDocList = React.createContext< undefined | DocumentRevisionStatus >(undefined);
 export let documentRevisionVersionContext = React.createContext<number>(1);
 
 const getDocumentRevisions = documentRevisionsSelectors.makeGetDocumentRevisions();
@@ -50,17 +61,82 @@ DocumentRevisionManagerContainerProps
   deprecatedAt,
   docId,
 }) => {
-  const classes = styles();
   useDocumentTitle(docId);
+  const classes = styles();
+  const intl = useIntl();
+  const url = useLocation();
+  const [sidebar, openSidebar] = useState<boolean>(true);
+
   const docRevsWithoutCanceled = useMemo(() => documentRevisions.filter((docrev) =>
     docrev.status !== DocumentRevisionStatus.Canceled), [documentRevisions]);
   const selectedDocument = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId as string));
+  const document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, documentId));
   const canAccess = selectedDocument?.document.canAccess;
-  const [sidebar, openSidebar] = useState<boolean>(true);
   const schema = selectedDocument?.formTemplate?.schema || selectedDocument?.formDocument?.formTemplate?.schema || [];
+  const { documentTypeAcronym: acronym } = document?.documentType || {};
+
+  const sidebarList = [
+    {
+      icon: <NoteIcon />,
+      details: {
+        title: intl.formatMessage({
+          id: `document.revision.docVersion.${acronym}`,
+        }),
+        component: <DocumentRevisionListContainer
+          documentRevisions={docRevsWithoutCanceled}
+          documentId={documentId}
+          docId={docId}
+          selectedDocumentRevision={documentRevisionId}
+          documentRevisionId={documentRevisionId}
+        />,
+      },
+    },
+    {
+      icon: <TimelineIcon />,
+      details: {
+        title: intl.formatMessage({
+          id: "document.revision.history",
+        }),
+        component: documentRevisionId ? <DocumentRevisionAuditContainer
+          documentRevisionId={documentRevisionId}
+        /> : null,
+      },
+    },
+    {
+      icon: <BadgeIcon />,
+      details: {
+        title: intl.formatMessage({
+          id: "document.access.permissions",
+        }),
+        component: documentRevisionId && canAccess && !isNewOutput ? <AccessPermissionsContainer
+          documentRevisionId={documentRevisionId}
+          documentId={documentId}
+          canAccess={canAccess}
+          documentTypeId={document.documentType.id}
+          withoutCurrentUser={true}
+        /> : null,
+      },
+    },
+    {
+      icon: <BookmarkIcon />,
+      details: {
+        title: intl.formatMessage({
+          id: "document.revision.bookmarks",
+        }),
+        component: <Bookmarks location={url} schema={schema} />,
+      },
+    },
+  ];
+
   documentRevisionStatusContext = React.createContext(selectedDocument?.status);
+  const status = selectedDocument ? selectedDocument.status : undefined;
+  documentRevisionStatusContextFromDocList = React.createContext(status);
   documentRevisionVersionContext = React.createContext(selectedDocument?.version);
+
+  useEffect(() => () => {
+    documentRevisionStatusContextFromDocList = React.createContext<undefined | DocumentRevisionStatus>(undefined);
+  }, []);
 
   if (shouldRedircetToLatestReleasd(documentRevisions, documentRevisionId)) {
     const docRevIdToRedirect = getDocRevIdToRedirect(documentRevisions, deprecatedAt);
@@ -89,19 +165,7 @@ DocumentRevisionManagerContainerProps
           />
         </Grid>
       )}
-      <SidebarContainer
-        {...{
-          docRevsWithoutCanceled,
-          documentId,
-          docId,
-          documentRevisionId,
-          canAccess,
-          isNewOutput,
-          sidebar,
-          openSidebar,
-          schema,
-        }}
-      />
+      <SidebarContainer {...{ sidebar, openSidebar, sidebarList }}/>
     </Grid>
   );
 };
