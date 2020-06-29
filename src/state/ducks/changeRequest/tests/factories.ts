@@ -63,12 +63,6 @@ export const getChangeRequestEditRequestBody = (
 ): ChangeRequestEditRequestBody => ({
   title: faker.lorem.sentence(),
   description: faker.lorem.sentence(),
-  assessments: createAssessment(),
-  implementationPlan: createImplementationPlan(),
-  justifications: createNestedObject(),
-  effectiveDate: faker.date.future(undefined, "2019-05-31").toString(),
-  approvals: [],
-  documentRevisions: [],
   ...body,
 });
 

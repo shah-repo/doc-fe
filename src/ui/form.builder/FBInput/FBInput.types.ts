@@ -30,6 +30,7 @@ export type FBInputType =
   | "editoroptions"
   | "schemaselect"
   | "paragraph"
+  | "documentRevisions"
   | "testRequirement"
   | "instructionsmediaupload"
   | "evidencemediaupload"

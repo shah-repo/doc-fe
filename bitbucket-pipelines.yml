@@ -213,7 +213,7 @@ pipelines:
           - step: *BUILD_DEMO
       - step: *DEPLOY_DEMO
 
-    ENC-2434_fb_cr:
+    ENC-2434-FB-to-CR:
       - parallel:
           - step: *RUN_TESTS
           # - step: *RUN_LINTER

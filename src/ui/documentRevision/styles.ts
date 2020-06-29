@@ -6,7 +6,7 @@ export default makeStyles((theme: Theme) =>
     whiteContainer: {
       marginTop: theme.spacing(5),
       margin: 0,
-      height: "100%",
+      height: "auto",
       transition: theme.transitions.create("all", {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,

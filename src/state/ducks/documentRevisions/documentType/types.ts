@@ -1,6 +1,7 @@
 import { FBSchemaProps } from "../../../../ui/form.builder";
 import { GroupTag } from "../../auth/types";
 import { Nullable } from "../../common";
+import { FBFormTemplateProps } from "../types";
 import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST } from "./constants";
 
 export type DocumentGroupType = "FORM" | "OTHER" | "RECORD" | "DAM" | "MPI" | "DYNAMIC_FORM" | "POAM" | "PO" | "WORK_ORDER";
@@ -16,7 +17,9 @@ export type DocumentGroupOptionsType =
   "POAM" |
   "PO" |
   "WORK_ORDER" |
-  "WO_PARTS";
+  "WO_PARTS" |
+  "CHANGE_REQUEST" |
+  "BE_OUTPUT";
 export interface PageDetailsColumn {
   label: string;
   sourcePath: string;
@@ -53,6 +56,7 @@ export interface DocumentTypeByIdForm {
   name: string;
   id: string;
   document: DocumentForms;
+  formTemplate?: FBFormTemplateProps;
 }
 
 export interface DocumentTypeById {
