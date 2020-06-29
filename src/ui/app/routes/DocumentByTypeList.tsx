@@ -23,9 +23,10 @@ const DocumentByTypeListLinks: React.FunctionComponent<Props> = ({
       {docTypesWithPageDetails.map((docType: DocumentType) => (
         <NavigationLinkContainer
           key={docType.id}
-          url={`${DOCUMENT_BY_TYPE_ROOT_URL}/${docType.id}`}
-          text={docType.documentTypeName}
+          link={`${DOCUMENT_BY_TYPE_ROOT_URL}/${docType.id}`}
+          label={docType.documentTypeName}
           currentPath={pathname}
+          type="LINK"
         />
       ))}
     </>

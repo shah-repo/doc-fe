@@ -4,19 +4,49 @@ import List from "@material-ui/core/List";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import { Dashboard } from "@material-ui/icons";
 import React from "react";
 import { Link, RouteComponentProps, withRouter } from "react-router-dom";
 import BottomLogo from "../components/icons/BottomLogo.container";
 import Logo from "../components/icons/Logo.container";
-import { CHANGE_REQUEST_LIST_URL, DOCUMENT_REVISION_LIST_URL, HOME_URL } from "../constants/urls";
+import { HOME_URL } from "../constants/urls";
 import styles from "./Navigation.styles";
-import NavigationLinkContainer from "./NavigationLink.container";
-import DocumentByTypeListLinks from "./routes/DocumentByTypeList";
-import GroupManagementLink from "./routes/GroupManagement";
-import UserManagementLink from "./routes/UserManagement";
+import NavigationLinkContainer, { LinkDefinition } from "./NavigationLink.container";
 
-type NavigationProps =WithStyles<typeof styles> & RouteComponentProps;
+type NavigationProps = WithStyles<typeof styles> & RouteComponentProps;
+
+const links: LinkDefinition[] = [
+  {
+    label: "Dashboard",
+    type: "LINK",
+    link: "/",
+  },
+  {
+    label: "Document List",
+    type: "LINK",
+    link: "/document_revision",
+  },
+  {
+    label: "Change Request List",
+    type: "LINK",
+    link: "/change_request",
+  },
+  {
+    label: "Inventory",
+    type: "MENU",
+    menu: [
+      {
+        label: "Lots",
+        type: "LINK",
+        link: "/document_by_type/d9d308e1-dc62-4201-94fe-effabbdf3e9e",
+      },
+      {
+        label: "Suppliers",
+        type: "LINK",
+        link: "/document_by_type/0ca7da27-f53a-429f-817b-20f9e935cd65",
+      },
+    ],
+  },
+];
 
 const Navigation: React.FunctionComponent<NavigationProps> = ({
   classes,
@@ -38,32 +68,15 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
         </Typography>
       </Toolbar>
       <List>
-        <NavigationLinkContainer
-          url={HOME_URL}
-          text="navigation.dashboard"
-          Icon={Dashboard}
-          currentPath={location.pathname}
-          childrenUrls={
-            [
-            // { url: CHANGE_REQUEST_CREATE_URL, text: "navigation.createChangeRequest" },
-            ]
-          }
-        />
-        <NavigationLinkContainer
-          url={DOCUMENT_REVISION_LIST_URL}
-          text="navigation.document.list"
-          Icon={Dashboard}
-          currentPath={location.pathname}
-        />
-        <NavigationLinkContainer
-          url={CHANGE_REQUEST_LIST_URL}
-          text="navigation.change.request.list"
-          Icon={Dashboard}
-          currentPath={location.pathname}
-        />
-        <UserManagementLink pathname={location.pathname} />
-        <GroupManagementLink pathname={location.pathname} />
-        <DocumentByTypeListLinks pathname={location.pathname} />
+        {
+          links.map((link: LinkDefinition) => (
+            <NavigationLinkContainer
+              key={link.label}
+              currentPath={location.pathname}
+              {...link}
+            />
+          ))
+        }
       </List>
     </Box>
     <Box paddingBottom="20px">

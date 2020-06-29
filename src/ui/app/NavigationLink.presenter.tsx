@@ -18,11 +18,12 @@ import { CHANGE_REQUEST_LIST_URL, DOCUMENT_REVISION_LIST_URL, GROUP_MANAGEMENT_R
 import { LinkDefinition } from "./NavigationLink.container";
 import styles from "./NavigationLink.styles";
 
-interface NavigationLinkPresenterProps
-  extends LinkDefinition,
+interface NavigationLinkPresenterProps extends
+  LinkDefinition,
   WithStyles<typeof styles> {
   ActionIcon?: ReactNode;
   isChild?: boolean;
+  toggleChildren?: (event: React.MouseEvent) => void;
 }
 
 interface IconObject {
@@ -45,31 +46,37 @@ const iconMappingByText: IconObject = {
 
 const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterProps> = ({
   classes,
-  url,
-  text,
+  link,
+  label,
+  type,
   ActionIcon,
   isChild,
+  toggleChildren,
 }) => (
   <>
     <ListItem
-      component={NavLink}
+      component={link ? NavLink : null}
       button
       exact
       className={classNames(classes.link, { [classes.childLink]: isChild })}
       activeClassName={classes.activeLink}
-      to={url}
+      to={link}
     >
-      <ListItemIcon className={classes.itemIcon}>
-        { iconMappingByUrl[url] || iconMappingByText[text] || <div />}
-      </ListItemIcon>
+      {
+        type === "LINK" &&
+        <ListItemIcon className={classes.itemIcon} onClick={toggleChildren}>
+          {(link && iconMappingByUrl[link]) || (label && iconMappingByText[label]) || <div />}
+        </ListItemIcon>
+      }
       <ListItemText
-        primary={<Text message={text} />}
+        primary={<Text message={label} />}
         classes={{
           primary: classes.itemText,
         }}
+        onClick={toggleChildren}
       />
+      {ActionIcon}
     </ListItem>
-    {ActionIcon}
   </>
 );
 

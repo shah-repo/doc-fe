@@ -7,6 +7,8 @@ import NavigationLinkContainer from "../NavigationLink.container";
 interface Props {
   pathname: string;
 }
+
+// TODO: remove this component ones navigation configuration is implemented
 const GroupManagementLink: React.FunctionComponent<Props> = ({
   pathname,
 }) => {
@@ -18,9 +20,10 @@ const GroupManagementLink: React.FunctionComponent<Props> = ({
 
   return (
     <NavigationLinkContainer
-      url={GROUP_MANAGEMENT_ROOT_URL}
-      text="navigation.group.management"
+      link={GROUP_MANAGEMENT_ROOT_URL}
+      label="navigation.group.management"
       currentPath={pathname}
+      type="LINK"
     />
   );
 };
