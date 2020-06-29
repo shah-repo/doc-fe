@@ -47,6 +47,7 @@ export const toParentOptions = (values: Group[]): OptionType[] => values.map((va
   permissions: value.permissions,
   tags: value.tags,
   parents: value.parents,
+  type: value.type,
 }));
 
 export const toGroupOptions = (selectedGroup: LoadCompanyGroup): GroupRequestBody => ({
