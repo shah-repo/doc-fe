@@ -341,7 +341,7 @@
   "document.action.to_review": "Send to review",
   "document.action.withdraw": "Withdraw",
   "document.revision.no.qms.message": "Optional: Title will be used if description not provided.",
-  "document.revision.stage": "Document Revision Stage",
+  "document.revision.stage": "Revision Stage",
   "document.security.warning": "You do not have access to this document.",
   "document.access.permissions": "Access Permissions",
   "document.request.access": "Request access",
