@@ -3,18 +3,10 @@ import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
+import { NavigationItem } from "../../state/ducks/company";
 import NavigationLinkPresenter from "./NavigationLink.presenter";
 
-export type LinkType = "LINK" | "MENU";
-export interface LinkDefinition {
-  label: string;
-  type: LinkType;
-  link?: string;
-  menu?: LinkDefinition[];
-  icon?: string;
-}
-
-export interface NavigationLinkContainerProps extends LinkDefinition {
+export interface NavigationLinkContainerProps extends NavigationItem {
   currentPath: string;
 }
 

@@ -13,12 +13,12 @@ import { ReactComponent as PurchaseOrderIcon } from "../../assets/images/purchas
 import { ReactComponent as ReceivableIcon } from "../../assets/images/receivable_icon.svg";
 import { ReactComponent as SuppliersIcon } from "../../assets/images/suppliers_icon.svg";
 import { ReactComponent as UserManagementIcon } from "../../assets/images/user_management_icon.svg";
+import { NavigationItem } from "../../state/ducks/company";
 import Text from "../components/Text";
-import { LinkDefinition } from "./NavigationLink.container";
 import styles from "./NavigationLink.styles";
 
 interface NavigationLinkPresenterProps extends
-  LinkDefinition,
+  NavigationItem,
   WithStyles<typeof styles> {
   ActionIcon?: ReactNode;
   isChild?: boolean;
