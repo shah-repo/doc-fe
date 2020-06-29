@@ -341,7 +341,7 @@
   "document.action.to_review": "Send to review",
   "document.action.withdraw": "Withdraw",
   "document.revision.no.qms.message": "Optional: Title will be used if description not provided.",
-  "document.revision.stage": "Document Revision Stage",
+  "document.revision.stage": "Revision Stage",
   "document.security.warning": "You do not have access to this document.",
   "document.access.permissions": "Access Permissions",
   "document.request.access": "Request access",
@@ -772,5 +772,10 @@
   "Administrative Change": "Administrative Change",
   "document.revision.upgrade.form.banner": "A new version of the form is available. {clickHere} to upgrade to latest version.",
   "common.click.here": "Click here",
-  "return.home": "Return home"
+  "return.home": "Return home",
+  "file.type.XLSX": "Microsoft Excel File",
+  "file.type.XLS": "Microsoft Excel File",
+  "file.type.DOCX": "Microsoft Word File",
+  "file.type.DOC": "Microsoft Word File",
+  "file.type": "{type} File"
 }

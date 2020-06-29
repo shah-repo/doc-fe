@@ -9,6 +9,7 @@ import { ReactComponent as ChangeRequestListIcon } from "../../assets/images/cha
 import { ReactComponent as DashboardIcon } from "../../assets/images/dashboard_icon.svg";
 import { ReactComponent as DocumentListICon } from "../../assets/images/document_list_icon.svg";
 import { ReactComponent as GroupManagementIcon } from "../../assets/images/group_management_icon.svg";
+import { ReactComponent as LotsIcon } from "../../assets/images/lots_icon.svg";
 import { ReactComponent as PurchaseOrderIcon } from "../../assets/images/purchase_order_icon.svg";
 import { ReactComponent as ReceivableIcon } from "../../assets/images/receivable_icon.svg";
 import { ReactComponent as SuppliersIcon } from "../../assets/images/suppliers_icon.svg";
@@ -34,6 +35,7 @@ const iconMapping = {
   "purchase order": <PurchaseOrderIcon />,
   "receivable": <SuppliersIcon/>,
   "suppliers": <ReceivableIcon/>,
+  "lots": <LotsIcon/>,
 };
 
 const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterProps> = ({
