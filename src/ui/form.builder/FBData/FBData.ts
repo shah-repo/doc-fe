@@ -11,6 +11,7 @@ import documentRevisionSchema from "./documentRevisionSchema.json";
 import editorProperties from "./editorProperties.json";
 import editorPropertiesControl from "./editorPropertiesControl.json";
 import requirementOptions from "./requirementOptions.json";
+import taskSchema from "./taskSchema.json";
 import testStepSchema from "./testStepSchema.json";
 import unitsOptions from "./unitsOptions.json";
 
@@ -78,6 +79,10 @@ export class FBData {
 
   public static get documentRevisionSchema(): FBSchemaProps[] {
     return documentRevisionSchema as FBSchemaProps[];
+  }
+
+  public static get taskSchema(): FBSchemaProps[] {
+    return taskSchema as FBSchemaProps[];
   }
 }
 
