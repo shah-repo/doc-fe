@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions, authSelectors } from "../../state/ducks/auth";
 import { GroupTag } from "../../state/ducks/auth/types";
+import { changeRequestsActions } from "../../state/ducks/changeRequest";
 import { documentTypeActions } from "../../state/ducks/documentRevisions/documentType";
 import { userManagementActions } from "../../state/ducks/userManagement";
 import useGetHasTag from "../hooks/useGetHasTag";
@@ -15,6 +16,8 @@ const DataFetcherContainer: React.FunctionComponent = () => {
     dispatch(documentTypeActions.loadList());
     dispatch(authActions.getSessionDetails(employeeId));
     dispatch(authActions.loadUserGroups());
+    dispatch(userManagementActions.loadCompanyGroups());
+    dispatch(changeRequestsActions.loadAvailableApprovers());
   }, [dispatch, employeeId]);
 
   useEffect(() => {
