@@ -121,7 +121,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
           id="DocumentByTypeListPresenter-openDocRev"
         >
           <Text
-            translation="supplier.add.new"
+            translation="supplier.create.new"
             values={{ name: documentTypeName }}
           />
         </Button>
