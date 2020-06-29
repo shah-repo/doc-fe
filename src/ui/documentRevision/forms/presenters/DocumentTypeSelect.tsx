@@ -7,8 +7,8 @@ import { FBOutputDocumentType } from "../../../../state/ducks/documentRevisions"
 import { DocumentGroupOptionsType, documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { documentsActions } from "../../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
-import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
 import SelectField, { SelectOption } from "../../../components/forms/fields/Select";
+import { filterSecurityGroupsForQms } from "../../../documentType/list/helpers";
 import { FB } from "../../../form.builder";
 import { FBWorkspaceMode } from "../../../form.builder/types/workspace";
 import { useDocumentTypeSelect } from "../../../hooks/docCustomization/useCustomization";
@@ -84,13 +84,8 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
       loadDocumentProposedId(type.id);
     }
 
-    const securityGroups: OptionType[] = [];
     if (type.isQms) {
-      groupOptions.forEach((group) => {
-        if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
-          securityGroups.push({ value: group.value, label: group.label });
-        }
-      });
+      const securityGroups = filterSecurityGroupsForQms(type.isQms, groupOptions);
       formik.setFieldValue("securityGroups", securityGroups);
     }
 

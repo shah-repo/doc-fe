@@ -2,12 +2,11 @@ import _ from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
-import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
+import { changeRequestsSelectors } from "../../../state/ducks/changeRequest";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
-import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
+import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
 import { useAssignDocument } from "../../hooks/docCustomization/useCustomization";
-import useActionCreator from "../../hooks/useActionCreator";
 import AccessPermissionsPresenter from "./AccessPermissions.presenter";
 
 interface OwnProps {
@@ -26,9 +25,6 @@ export const AccessPermissionsContainer: React.FunctionComponent<AccessPermissio
   documentRevisionId,
   documentTypeId,
 }) => {
-  const loadAvailableApproversAction = useActionCreator(changeRequestsActions.loadAvailableApprovers);
-
-  const loadApproversAsyncState = useSelector(changeRequestsSelectors.getLoadApproversAsyncState);
   const availableApprovers = useSelector((state: ApplicationState) => {
     if (withoutCurrentUser) {
       const currentUserId = authSelectors.currentUserId(state);
@@ -37,8 +33,6 @@ export const AccessPermissionsContainer: React.FunctionComponent<AccessPermissio
     return changeRequestsSelectors.getApproversListForAssessmentForm(state);
   });
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
-  const loadGroupsAction = useActionCreator(userManagementActions.loadCompanyGroups);
-  const loadGroupAsyncState = useSelector(userManagementSelectors.getLoadGroupsAsyncState);
   const selectedDocument = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId));
   const securityGroups = _.get(selectedDocument, "document.securityGroups", []);
@@ -51,17 +45,13 @@ export const AccessPermissionsContainer: React.FunctionComponent<AccessPermissio
     <AccessPermissionsPresenter
       {...{
         isVisible,
-        loadAvailableApproversAction,
         availableApprovers,
-        loadApproversAsyncState,
         groupOptions,
         securityGroups,
         securityEmployees,
         operators,
         documentId,
         documentRevisionId,
-        loadGroupsAction,
-        loadGroupAsyncState,
       }}
     />
   );
