@@ -41,4 +41,9 @@ export default (theme: Theme) =>
       letterSpacing: 0,
       fontFamily: "Open Sans",
     },
+    menu: {
+      paddingTop: 4,
+      paddingBottom: 4,
+      marginTop: 5,
+    },
   });

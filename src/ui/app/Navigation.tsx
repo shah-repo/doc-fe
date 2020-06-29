@@ -19,30 +19,35 @@ const links: LinkDefinition[] = [
     label: "Dashboard",
     type: "LINK",
     link: "/",
+    icon: "dashboard",
   },
   {
     label: "Document List",
     type: "LINK",
     link: "/document_revision",
+    icon: "document revision list",
   },
   {
     label: "Change Request List",
     type: "LINK",
     link: "/change_request",
+    icon: "change request list",
   },
   {
     label: "Inventory",
     type: "MENU",
     menu: [
       {
-        label: "Lots",
+        label: "Purchase Order",
         type: "LINK",
         link: "/document_by_type/d9d308e1-dc62-4201-94fe-effabbdf3e9e",
+        icon: "suppliers",
       },
       {
         label: "Suppliers",
         type: "LINK",
         link: "/document_by_type/0ca7da27-f53a-429f-817b-20f9e935cd65",
+        icon: "purchase order",
       },
     ],
   },

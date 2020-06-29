@@ -14,7 +14,6 @@ import { ReactComponent as ReceivableIcon } from "../../assets/images/receivable
 import { ReactComponent as SuppliersIcon } from "../../assets/images/suppliers_icon.svg";
 import { ReactComponent as UserManagementIcon } from "../../assets/images/user_management_icon.svg";
 import Text from "../components/Text";
-import { CHANGE_REQUEST_LIST_URL, DOCUMENT_REVISION_LIST_URL, GROUP_MANAGEMENT_ROOT_URL, USER_MANAGEMENT_ROOT_URL } from "../constants/urls";
 import { LinkDefinition } from "./NavigationLink.container";
 import styles from "./NavigationLink.styles";
 
@@ -26,22 +25,15 @@ interface NavigationLinkPresenterProps extends
   toggleChildren?: (event: React.MouseEvent) => void;
 }
 
-interface IconObject {
-  [key: string]: JSX.Element;
-}
-
-const iconMappingByUrl: IconObject = {
-  "/": <DashboardIcon />,
-  [DOCUMENT_REVISION_LIST_URL]: <DocumentListICon />,
-  [CHANGE_REQUEST_LIST_URL]: <ChangeRequestListIcon />,
-  [USER_MANAGEMENT_ROOT_URL]: <UserManagementIcon />,
-  [GROUP_MANAGEMENT_ROOT_URL]: <GroupManagementIcon />,
-};
-
-const iconMappingByText: IconObject = {
-  "Purchase Order": <PurchaseOrderIcon />,
-  "Receivable": <SuppliersIcon/>,
-  "Suppliers": <ReceivableIcon/>,
+const iconMapping = {
+  "dashboard": <DashboardIcon />,
+  "document revision list": <DocumentListICon />,
+  "change request list": <ChangeRequestListIcon />,
+  "user management": <UserManagementIcon />,
+  "group management": <GroupManagementIcon />,
+  "purchase order": <PurchaseOrderIcon />,
+  "receivable": <SuppliersIcon/>,
+  "suppliers": <ReceivableIcon/>,
 };
 
 const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterProps> = ({
@@ -49,6 +41,7 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
   link,
   label,
   type,
+  icon,
   ActionIcon,
   isChild,
   toggleChildren,
@@ -58,14 +51,18 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
       component={link ? NavLink : null}
       button
       exact
-      className={classNames(classes.link, { [classes.childLink]: isChild })}
+      className={
+        classNames(classes.link, {
+          [classes.childLink]: isChild,
+          [classes.menu]: type === "MENU",
+        })}
       activeClassName={classes.activeLink}
       to={link}
     >
       {
         type === "LINK" &&
         <ListItemIcon className={classes.itemIcon} onClick={toggleChildren}>
-          {(link && iconMappingByUrl[link]) || (label && iconMappingByText[label]) || <div />}
+          {(icon && iconMapping[icon]) || <div />}
         </ListItemIcon>
       }
       <ListItemText
