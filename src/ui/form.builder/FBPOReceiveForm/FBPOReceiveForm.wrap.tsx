@@ -20,8 +20,9 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
 
     const dispatch = useDispatch();
     const intl = useIntl();
-    const lfpoDocType = useGetDocTypeByAcronym("LFPO");
-    const lotDocType = useGetDocTypeByAcronym("LOT");
+    // TODO: find better solution, acronyms will be different per company
+    const lfpoDocType = useGetDocTypeByAcronym("LFPO-");
+    const lotDocType = useGetDocTypeByAcronym("LOT-");
     const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
     const { dialogState, formState, poReceiveState, workspaceState } = FB.useStores();
     const documentId = workspaceState?.documentId;
