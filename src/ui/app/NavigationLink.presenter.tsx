@@ -14,7 +14,7 @@ import { ReactComponent as PurchaseOrderIcon } from "../../assets/images/purchas
 import { ReactComponent as ReceivableIcon } from "../../assets/images/receivable_icon.svg";
 import { ReactComponent as SuppliersIcon } from "../../assets/images/suppliers_icon.svg";
 import { ReactComponent as UserManagementIcon } from "../../assets/images/user_management_icon.svg";
-import { NavigationItem } from "../../state/ducks/company";
+import { NavigationItem, NAVIGATION_ICON } from "../../state/ducks/company";
 import Text from "../components/Text";
 import styles from "./NavigationLink.styles";
 
@@ -27,15 +27,15 @@ interface NavigationLinkPresenterProps extends
 }
 
 const iconMapping = {
-  "dashboard": <DashboardIcon />,
-  "document revision list": <DocumentListICon />,
-  "change request list": <ChangeRequestListIcon />,
-  "user management": <UserManagementIcon />,
-  "group management": <GroupManagementIcon />,
-  "purchase order": <PurchaseOrderIcon />,
-  "receivable": <SuppliersIcon/>,
-  "suppliers": <ReceivableIcon/>,
-  "lots": <LotsIcon/>,
+  [NAVIGATION_ICON.DASHBOARD]: <DashboardIcon />,
+  [NAVIGATION_ICON.DOC_REV_LIST]: <DocumentListICon />,
+  [NAVIGATION_ICON.CR_LIST]: <ChangeRequestListIcon />,
+  [NAVIGATION_ICON.USER_MANAGEMENT]: <UserManagementIcon />,
+  [NAVIGATION_ICON.GROUP_MANAGEMENT]: <GroupManagementIcon />,
+  [NAVIGATION_ICON.PURCHASE_ORDER]: <PurchaseOrderIcon />,
+  [NAVIGATION_ICON.SUPPLIERS]: <SuppliersIcon/>,
+  [NAVIGATION_ICON.RECEIVABLE]: <ReceivableIcon/>,
+  [NAVIGATION_ICON.LOTS]: <LotsIcon/>,
 };
 
 const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterProps> = ({

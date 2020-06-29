@@ -60,12 +60,25 @@ export interface CompanyMineRequest {
 
 export type SelectCompanyState = Company;
 
-export type NavigationItemType = "LINK" | "MENU";
+export type NavigationItemType = "LINK" | "MENU" | "CATEGORY";
+
+export enum NAVIGATION_ICON {
+  DASHBOARD="DASHBOARD",
+  DOC_REV_LIST="DOC_REV_LIST",
+  CR_LIST = "CR_LIST",
+  USER_MANAGEMENT="USER_MANAGEMENT",
+  GROUP_MANAGEMENT = "GROUP_MANAGEMENT",
+  PURCHASE_ORDER = "PURCHASE_ORDER",
+  RECEIVABLE = "RECEIVABLE",
+  SUPPLIERS = "SUPPLIERS",
+  LOTS = "LOTS",
+}
+
 
 export interface NavigationItem {
   label: string;
   type: NavigationItemType;
   link?: string;
   menu?: NavigationItem[];
-  icon?: string;
+  icon?: NAVIGATION_ICON;
 }
