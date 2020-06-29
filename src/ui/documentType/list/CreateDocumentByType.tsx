@@ -4,12 +4,10 @@ import { isEmpty } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { GroupTag } from "../../../state/ducks/auth/types";
 import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DocumentType, documentTypeActions, DocumentTypeById, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { DocumentProposedId, documentsActions } from "../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
-import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import Text from "../../components/Text";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import { toDocumentRevisionFormValuesForOutput, toNewVersionRequestBody } from "../../documentRevision/forms/transform";
@@ -17,6 +15,7 @@ import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
 import FormListDialog from "../FormListDialog/FormListDialog.presenter";
+import { filterSecurityGroupsForQms } from "./helpers";
 import { styles } from "./styles";
 
 interface Props {
@@ -44,16 +43,8 @@ export const useHandleCreateDoc = () => {
   const createDoc = (docId: string) => {
     const formValues = toDocumentRevisionFormValuesForOutput(form as DocumentRevision);
     const outputDocumentTypes = form?.formTemplate?.outputDocumentTypes || [];
-    if ((outputDocumentTypes[0] as unknown as DocumentType)?.isQms) {
-      formValues.securityGroups = groupOptions.reduce((acc, group) => {
-        if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
-          acc.push({ value: group.value, label: group.label });
-        }
-        return acc;
-      }, [] as OptionType[]);
-    } else {
-      formValues.securityGroups = [];
-    }
+    const isQms = (outputDocumentTypes[0] as unknown as DocumentType)?.isQms;
+    formValues.securityGroups = filterSecurityGroupsForQms(isQms, groupOptions);
 
     const data = toNewVersionRequestBody(formValues);
     data.formDocument = { id: formValues?.formDocument?.id };

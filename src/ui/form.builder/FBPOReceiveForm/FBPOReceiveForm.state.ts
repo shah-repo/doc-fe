@@ -1,12 +1,12 @@
 import { template } from "lodash";
 import { action } from "mobx";
 import { FBPOReceiveFormConstructor, FBPurchaseOrderItem } from "..";
-import { GroupTag } from "../../../state/ducks/auth/types";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { DocumentType } from "../../../state/ducks/documentRevisions/documentType";
 import { documentPreviewPath } from "../../document.revision/utils/paths";
 import { toNewVersionRequestBody } from "../../documentRevision/forms/transform";
 import { DocumentRevisionFormValues } from "../../documentRevision/forms/types";
+import { filterSecurityGroupsForQms } from "../../documentType/list/helpers";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
@@ -45,18 +45,10 @@ export class FBPOReceiveFormState  {
   }
 
   public async createLot(docId: string, values: any, poDocumentId?: string) {
-    const securityGroups: any[] = [];
-    if (this.lotDocType?.isQms) {
-      this.groupOptions.forEach((group) => {
-        if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
-          securityGroups.push({ value: group.value, label: group.label });
-        }
-      });
-    }
-
     if (!this.documentId) {
       return;
     }
+    const securityGroups = filterSecurityGroupsForQms(this.lotDocType?.isQms, this.groupOptions);
 
     const reqBody = toNewVersionRequestBody({
       // LOT must not have title
