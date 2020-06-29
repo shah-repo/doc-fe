@@ -310,7 +310,6 @@
   "common.continue": "Continue",
   "common.overdue": "Overdue",
   "common.yes.im.sure": "Yes, I'm sure",
-  "common.create.item": "Create {name}",
   "output.info": "Form Info",
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",
