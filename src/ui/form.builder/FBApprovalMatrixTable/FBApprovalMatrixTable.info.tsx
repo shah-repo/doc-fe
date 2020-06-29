@@ -55,6 +55,20 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                 />
               </FBTableCell>
             )}
+            {mode !== "edit" && (
+              <FBTableCell
+                label={am.docType.needSignature ? "Yes" : "No"}
+                align="center"
+              />
+            )}
+            {mode === "edit" && (
+              <FBTableCell align="center">
+                <FBApprovalMatrixCheck
+                  name={`${name}.approvalMatrix.${index}.docType.needSignature`}
+                  checked={am.docType.needSignature}
+                />
+              </FBTableCell>
+            )}
           </TableRow>
         )}
       </FBMapWrapper>
@@ -73,6 +87,17 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                     <Box display="flex" justifyContent="center" pl={3}>
                       <FBCheckbox
                         name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.defaultTraining`}
+                        gutter={false}
+                        defaultChecked={false}
+                      />
+                    </Box>
+                  </FBTableCell>
+                )}
+                {key === "needSignature" && (
+                  <FBTableCell>
+                    <Box display="flex" justifyContent="center" pl={3}>
+                      <FBCheckbox
+                        name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.needSignature`}
                         gutter={false}
                         defaultChecked={false}
                       />
