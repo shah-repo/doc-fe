@@ -81,7 +81,7 @@ export const withFBInput = <T extends FBInputProps>(
           return inputState && (inputState.value = formState.getFieldValue(name, ""));
         },
         default() {
-          return formState.getFieldValue(name, defaultValue || defaultChecked);
+          return formState.getFieldValue(name, (isUndefined(defaultValue)) ? defaultChecked : defaultValue );
         },
       };
       const transDefault = (value[type || ""] || value.default)();
@@ -100,6 +100,7 @@ export const withFBInput = <T extends FBInputProps>(
         disabled,
         onChange,
         onBlur,
+        value,
         ...(type === "textfield" && { error }),
         ...(type === "select" && !defaultValue && placeholder && { value: "" }),
         ...(type !== "datepicker" && type !== "autocomplete" && !isBoolean(defaultValue) && { defaultValue }),

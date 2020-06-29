@@ -4,9 +4,9 @@ import React from "react";
 import { FBEditorMode, FBEditorModeProps, FBEditorProps, FBInputType } from "..";
 import { FBEditorAction } from "../FBEditorAction";
 import { FBEditorApprovalField } from "../FBEditorApprovalField";
-import { FBEditorApprovalMatrix } from "../FBEditorApprovalMatrix";
 import { FBEditorAutocomplete } from "../FBEditorAutocomplete";
 import { FBEditorCheckControl } from "../FBEditorCheckControl";
+import { FBEditorEmpty } from "../FBEditorEmpty";
 import { FBEditorHyperlink } from "../FBEditorHyperlink";
 import { FBEditorInstructionsDocument } from "../FBEditorInstructionsDocument";
 import { FBEditorLabel } from "../FBEditorLabel";
@@ -46,6 +46,7 @@ export class FBEditorState {
     "hellosign",
     "approvalMatrix",
     "poApprovalMatrix",
+    "task",
   ];
 
   public static pickDefaultValue: FBInputType[] = [
@@ -102,8 +103,9 @@ export class FBEditorState {
     requestapproval: FBEditorRequestApproval,
     action: FBEditorAction,
     hellosign: FBEditorLabel,
-    approvalMatrix: FBEditorApprovalMatrix,
+    approvalMatrix: FBEditorEmpty,
     poApprovalMatrix: FBEditorLabel,
+    task: FBEditorEmpty,
   };
 
   @observable public mode?: FBEditorMode = "config";

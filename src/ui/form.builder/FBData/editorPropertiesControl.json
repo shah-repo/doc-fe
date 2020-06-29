@@ -25,5 +25,6 @@
   "selectdocument": ["reviseDisabled"],
   "instructionsdocument": ["reviseDisabled"],
   "approvalMatrix": ["reviseDisabled"],
-  "poApprovalMatrix": ["reviseDisabled"]
+  "poApprovalMatrix": ["reviseDisabled"],
+  "task": ["reviseDisabled"]
 }

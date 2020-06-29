@@ -30,7 +30,18 @@ const FBDialog: React.FunctionComponent<FBDialogProps> = ({
         <CloseIcon fontSize="large" onClick={handleClose} />
       </Box>
       {_.isString(title) && (
-        <Box fontWeight="fontWeightBold" textAlign="center">
+        <Box
+          fontWeight="fontWeightBold"
+          textAlign="left"
+          border={1}
+          // MUI border color issue
+          borderTop={0}
+          borderLeft={0}
+          borderRight={0}
+          borderColor="#cad2da"
+          mt={-2}
+          mb={2}
+        >
           <Text message={title} />
         </Box>
       )}
