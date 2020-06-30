@@ -10,6 +10,7 @@ import { DocumentProposedId, documentsActions } from "../../../state/ducks/docum
 import Text from "../../components/Text";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import { toDocumentRevisionFormValuesForOutput, toNewVersionRequestBody } from "../../documentRevision/forms/transform";
+import useCreateDocumentTypeButton from "../../hooks/docCustomization/useCreateDocumentTypeButton";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
@@ -76,6 +77,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const formIds = useSelector(documentTypeSelectors.formIds);
   const [errorMessage, setErrorMessage] = useState<string>();
   const [multipleForm, toggleMultipleForm] = React.useState(false);
+  const [isVisible, label] = useCreateDocumentTypeButton(documentTypeId);
 
   useEffect(() => {
     setErrorMessage(undefined);
@@ -110,6 +112,10 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     handleCreateDocument(selectedForm as DocumentRevision);
   };
 
+  if (!isVisible) {
+    return null;
+  }
+
   return (
     <>
       <Grid item={true} xs={6} style={{ textAlign: "right" }}>
@@ -121,7 +127,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
           id="DocumentByTypeListPresenter-openDocRev"
         >
           <Text
-            translation="supplier.create.new"
+            message={label}
             values={{ name: documentTypeName }}
           />
         </Button>

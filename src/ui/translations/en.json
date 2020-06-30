@@ -726,6 +726,7 @@
   "supplier.id": "Supplier ID",
   "supplier.name": "Supplier name",
   "supplier.status": "Supplier status",
+  "supplier.add.new": "Add {name}",
   "supplier.create.new": "Create {name}",
   "missing.form.error": "There is no form. Please create a new {name} through the Document list.",
   "supplier.select.form": "Select a form",
