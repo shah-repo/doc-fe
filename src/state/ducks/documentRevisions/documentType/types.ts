@@ -4,7 +4,19 @@ import { Nullable } from "../../common";
 import { FBFormTemplateProps } from "../types";
 import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST } from "./constants";
 
-export type DocumentGroupType = "FORM" | "OTHER" | "RECORD" | "DAM" | "MPI" | "DYNAMIC_FORM" | "POAM" | "PO" | "WORK_ORDER";
+export type DocumentGroupType =
+  "FORM" |
+  "OTHER" |
+  "RECORD" |
+  "DAM" |
+  "MPI" |
+  "DYNAMIC_FORM" |
+  "POAM" |
+  "PO" |
+  "WORK_ORDER" |
+  "SUPPLIER" |
+  "PART";
+
 export type DocumentGroupOptionsType =
   "FORM" |
   "DAM" |
