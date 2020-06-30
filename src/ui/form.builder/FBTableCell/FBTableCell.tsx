@@ -4,7 +4,6 @@ import React from "react";
 import { FBTableCellProps } from ".";
 import { FBConditionalWrapper, FBTooltip } from "..";
 import Text from "../../components/Text";
-import { Translation } from "../../translations/types";
 
 const FBTableCell: React.FunctionComponent<FBTableCellProps> = ({
   label = "",
@@ -31,7 +30,7 @@ const FBTableCell: React.FunctionComponent<FBTableCellProps> = ({
         )}
       >
         <>
-          {label && <Text message={label} translation={label as Translation}/>}
+          {label && <Text message={label} />}
           {children}
         </>
       </FBConditionalWrapper>
