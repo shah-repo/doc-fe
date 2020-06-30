@@ -31,7 +31,7 @@ export class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldD
 
   @action public setApprovalMatrix = (approvalMatrix?: FBApprovalMatrixItem[]) => {
     set(this, "data", {
-      approvalRoles: this.data?.approvalRoles,
+      approvalRoles: this.data?.approvalRoles || [],
       approvalMatrix,
     });
   };

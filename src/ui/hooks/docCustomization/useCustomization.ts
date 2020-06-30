@@ -35,6 +35,8 @@ export const useTitle = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, InputFieldType.TITLE, "common.title");
 export const useAssignDocument = (documentTypeId = ""): UIConfig =>
   useCustomization(documentTypeId, InputFieldType.ASSIGN_DOCUMENT);
+export const useCreateDocumentTypeButton = (documentTypeId = ""): UIConfig =>
+  useCustomization(documentTypeId, DisplayFieldType.ADD_NEW_BTN, "supplier.add.new");
 
 const useCustomization = (
   documentTypeId = "",

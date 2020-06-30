@@ -4,10 +4,6 @@
     "value": "hours"
   },
   {
-    "text": "form.builder.units.min.short",
-    "value": "minutes"
-  },
-  {
     "text": "form.builder.units.days",
     "value": "days"
   },
@@ -48,24 +44,12 @@
     "value": "packs"
   },
   {
-    "text": "form.builder.units.pails",
-    "value": "pails"
-  },
-  {
     "text": "form.builder.units.units",
     "value": "units"
   },
   {
-    "text": "form.builder.units.bobbins",
-    "value": "bobbins"
-  },
-  {
     "text": "form.builder.units.bottles",
     "value": "bottles"
-  },
-  {
-    "text": "form.builder.units.samples",
-    "value": "samples"
   },
   {
     "text": "form.builder.units.batch",
@@ -94,10 +78,6 @@
   {
     "text": "form.builder.units.sqft.short",
     "value": "sqft"
-  },
-  {
-    "text": "form.builder.units.ar.short",
-    "value": "ar"
   },
   {
     "text": "form.builder.units.gram",

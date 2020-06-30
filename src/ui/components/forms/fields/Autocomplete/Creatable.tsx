@@ -8,6 +8,7 @@ import CreatableSelect, { CreatableProps } from "react-select/creatable";
 import { ActionMeta, ValueType } from "react-select/src/types";
 import { TypographyProps } from "../../../../../state/ducks/common";
 import Text from "../../../../components/Text";
+import Colors from "../../../../layout/theme/utils/colors";
 import { useFormContext } from "../../FormContext";
 import Field, { FieldOwnProps } from "../Field";
 import { selectStyles } from "./Autocomplete";
@@ -33,7 +34,6 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   const value = React.useMemo(() => ({ value: formikValue, label: formikValue }), [formikValue]);
   React.useEffect(() => {
     setInputValue(formikValue);
-    submitForm();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formikValue]);
   const [inputValue, setInputValue] = useState(formikValue);
@@ -47,6 +47,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
       setInputValue("");
     }
     setFieldValue(name, (value as any)?.value);
+    submitForm();
   };
   const onInputChange = (value) => {
     if (!touched[name]) {
@@ -65,6 +66,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   const onBlur = () => {
     if (formikValue !== inputValue) {
       setFieldValue(name, inputValue);
+      submitForm();
     }
   };
 
@@ -85,7 +87,14 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
           ...selectStyles,
           input: (base) => ({
             ...base,
-            input: { opacity: inputValue ? "1 !important" : 0 },
+            input: { opacity: inputValue ? "1 !important" : 0, backgroundColor: "red" },
+          }),
+          control: (base) => ({
+            ...base,
+            backgroundColor: Colors.white,
+            borderColor: Colors.hint_gray,
+            minHeight: "52px",
+            padding: "5px 3px",
           }),
         }}
         isClearable={Boolean(formikValue)}
