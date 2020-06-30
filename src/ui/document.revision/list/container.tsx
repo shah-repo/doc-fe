@@ -46,7 +46,7 @@ export const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
   }, [dispatch]);
   const clearFilter = () => setSearchStatus(documentRevisionQueryStatus());
   const documentTypeOptions = useSelector(
-    documentTypeSelectors.getDocumentTypeOptions,
+    documentTypeSelectors.getDocumentTypeOptionsWithoutRecords,
   );
 
   return (

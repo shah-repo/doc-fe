@@ -3,7 +3,7 @@ import { createSelector } from "reselect";
 import { removeLastCharacterIfNotAlphaNumeric } from "../../../../ui/common/utils/helpers";
 import { ApplicationState } from "../../../reducers";
 import { AsyncState } from "../../../types";
-import { DocumentType } from "./types";
+import { DocumentGroupType, DocumentType } from "./types";
 
 const allIds = (state: ApplicationState) => state.documentType.allIds;
 const byId = (state: ApplicationState) => state.documentType.byId;
@@ -50,6 +50,23 @@ const getDocumentTypeOptions = createSelector(
       , ["text"], ["asc"]),
 );
 
+const getDocumentTypeOptionsWithoutRecords = createSelector(
+  allIds, byId,
+  (ids, documentTypes) =>
+    _.orderBy(
+      ids
+        .filter((id) => {
+          const recordTypes: DocumentGroupType[] = ["PO", "RECORD", "SUPPLIER"];
+
+          return  !recordTypes.includes(documentTypes[id].group);
+        }
+        ).map((id) => ({
+          value: documentTypes[id].id,
+          text: removeLastCharacterIfNotAlphaNumeric(documentTypes[id].documentTypeAcronym),
+        }))
+      , ["text"], ["asc"]),
+);
+
 const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.documentType.loadListAsyncInfo;
 
 const getDocumentTypeByAcronym = createSelector(
@@ -83,6 +100,7 @@ export default {
   getDocumentTypeList,
   getDocumentTypeFormOptions,
   getDocumentTypeOptions,
+  getDocumentTypeOptionsWithoutRecords,
   getLoadListAsyncState,
   getDocumentTypeById,
   getDocumentTypesWithPageDetails,
