@@ -43,7 +43,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
             />
             {mode !== "edit" && (
               <FBTableCell
-                label={am.docType.defaultTraining ? "Yes" : "No"}
+                label={`common.${am.docType.defaultTraining}`}
                 align="center"
               />
             )}
@@ -57,15 +57,15 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
             )}
             {mode !== "edit" && (
               <FBTableCell
-                label={am.docType.needSignature ? "Yes" : "No"}
+                label={`common.${am.docType.needsSignature}`}
                 align="center"
               />
             )}
             {mode === "edit" && (
               <FBTableCell align="center">
                 <FBApprovalMatrixCheck
-                  name={`${name}.approvalMatrix.${index}.docType.needSignature`}
-                  checked={am.docType.needSignature}
+                  name={`${name}.approvalMatrix.${index}.docType.needsSignature`}
+                  checked={am.docType.needsSignature}
                 />
               </FBTableCell>
             )}
@@ -93,11 +93,11 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                     </Box>
                   </FBTableCell>
                 )}
-                {key === "needSignature" && (
+                {key === "needsSignature" && (
                   <FBTableCell>
                     <Box display="flex" justifyContent="center" pl={3}>
                       <FBCheckbox
-                        name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.needSignature`}
+                        name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.needsSignature`}
                         gutter={false}
                         defaultChecked={false}
                       />

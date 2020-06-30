@@ -1,4 +1,5 @@
 import { TableCellProps } from "@material-ui/core";
+import { Translation } from "../../translations/types";
 
 export type FBTableCellProps =
 & Pick<TableCellProps,
@@ -10,7 +11,7 @@ export type FBTableCellProps =
 | "children"
 >
 & {
-  label?: string;
+  label?: string | Translation;
   loading?: boolean;
   tooltipTitle?: string;
 };
