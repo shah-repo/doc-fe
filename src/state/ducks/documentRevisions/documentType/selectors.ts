@@ -3,7 +3,8 @@ import { createSelector } from "reselect";
 import { removeLastCharacterIfNotAlphaNumeric } from "../../../../ui/common/utils/helpers";
 import { ApplicationState } from "../../../reducers";
 import { AsyncState } from "../../../types";
-import { DocumentGroupType, DocumentType } from "./types";
+import { RECORD_GROUP_TYPES } from "./constants";
+import { DocumentType } from "./types";
 
 const allIds = (state: ApplicationState) => state.documentType.allIds;
 const byId = (state: ApplicationState) => state.documentType.byId;
@@ -55,11 +56,7 @@ const getDocumentTypeOptionsWithoutRecords = createSelector(
   (ids, documentTypes) =>
     _.orderBy(
       ids
-        .filter((id) => {
-          const recordTypes: DocumentGroupType[] = ["PO", "RECORD", "SUPPLIER"];
-
-          return  !recordTypes.includes(documentTypes[id].group);
-        }
+        .filter((id) => !RECORD_GROUP_TYPES.includes(documentTypes[id].group)
         ).map((id) => ({
           value: documentTypes[id].id,
           text: removeLastCharacterIfNotAlphaNumeric(documentTypes[id].documentTypeAcronym),
