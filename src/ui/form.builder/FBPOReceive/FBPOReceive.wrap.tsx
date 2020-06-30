@@ -3,6 +3,7 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { useIntl } from "react-intl";
 import { FB, FBPOReceiveForm, FBPOReceiveFormActions, FBPOReceiveItemProps, FBPOReceiveProps, FBPOReceiveState, FBPurchaseOrderItem, FBSchemaProps } from "..";
+import { stripTags } from "../../../common/utils/helpers";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { FBDialogState } from "../FBDialog";
 import { FBInputType } from "../FBInput";
@@ -20,6 +21,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     schema,
     name,
     po,
+    getOptionLabel,
     ...props
   }: T) => {
 
@@ -85,6 +87,8 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
       poReceiveState?.setPOId(value.id);
     };
 
+    getOptionLabel = (option: DocumentRevision) => `${option.document?.docId} ${stripTags(option.description)}`;
+
     useObserver(() => {
       loading = poReceiveState?.loading;
       schema = setSchemaProps(poReceiveState?.getSchema());
@@ -100,6 +104,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
       loading,
       schema,
       name,
+      getOptionLabel,
     });
   };
 
