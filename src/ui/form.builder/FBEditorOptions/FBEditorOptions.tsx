@@ -1,15 +1,17 @@
 import React from "react";
 import { FBTextField, FBTextFieldProps } from "..";
 
-const FBEditorOptions: React.FunctionComponent<FBTextFieldProps> = () => (
+const FBEditorOptions: React.FunctionComponent<FBTextFieldProps> = ({
+  label = "form.builder.options",
+  name = "options",
+  placeholder = "form.builder.options.placeholder",
+  rules = "required",
+}) => (
   <FBTextField
-    label="form.builder.options"
-    name="options"
+    {...{ label, name, placeholder, rules }}
     rows={5}
     multiline
-    rules="required"
     FBProps={{ inputType: "editoroptions" }}
-    placeholder="form.builder.options.placeholder"
   />
 );
 

@@ -1,4 +1,5 @@
 import { FBSchemaProps } from "../../../../ui/form.builder";
+import { GroupTag } from "../../auth/types";
 import { Nullable } from "../../common";
 import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST } from "./constants";
 
@@ -41,6 +42,7 @@ export interface DocumentType {
   defaultTraining: boolean;
   schema?: FBSchemaProps[];
   fieldsConfig?: FieldConfig;
+  hiddenForCreationForUsersWithoutTags?: GroupTag[];
 }
 
 export interface DocumentForms {
@@ -95,7 +97,8 @@ export enum InputFieldType{
   NEXT_REVISION = "I",
   NEXT_REVISION_STAGE = "J",
   OBSOLETE = "K",
-  ADM_CHANGE = "L"
+  ADM_CHANGE = "L",
+  ASSIGN_DOCUMENT = "U"
 }
 
 export enum DisplayFieldType{
@@ -118,6 +121,7 @@ export enum DisplayFieldType{
   VERSION_PENDING_CHANGE = "P6",
   CR_ID = "R",
   REVISE_BTN = "S",
+  BOOKMARKS = "Q",
 }
 
 export type FieldType = InputFieldType | DisplayFieldType;

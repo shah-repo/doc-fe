@@ -6,12 +6,8 @@ import { useIntl } from "react-intl";
 import Select, { components } from "react-select";
 import { ReactComponent as CloseIcon } from "../../../assets/images/circle-remove.svg";
 import { Group } from "../../../state/ducks/auth/types";
-import { changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { Owner, TypographySize } from "../../../state/ducks/common";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { userManagementActions } from "../../../state/ducks/userManagement";
-import { AsyncState } from "../../../state/types";
-import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -21,16 +17,13 @@ import { styles } from "./AccessPermissions.styles";
 
 interface OwnProps {
   availableApprovers: OptionType[];
-  loadApproversAsyncState: AsyncState;
-  loadAvailableApproversAction: typeof changeRequestsActions.loadAvailableApprovers;
   groupOptions: OptionType[];
   securityEmployees: [];
   operators: [];
   securityGroups: [];
   documentId: string;
   documentRevisionId: string;
-  loadGroupsAction: typeof userManagementActions.loadCompanyGroups;
-  loadGroupAsyncState: AsyncState;
+  isVisible: boolean;
 }
 
 export type AccessPermissionsPresenterProps = OwnProps;
@@ -42,11 +35,8 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
   securityEmployees,
   operators,
   documentId,
-  loadAvailableApproversAction,
   documentRevisionId,
-  loadApproversAsyncState,
-  loadGroupAsyncState,
-  loadGroupsAction,
+  isVisible,
 }) => {
   const classes = styles();
 
@@ -186,104 +176,97 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
         <Text translation="document.revision.selected.users" />
       </Typography>
       <div style={{ width: 240, paddingBottom: 32 }}>
-        {!_.isEmpty(securityEmployees) &&
-                <List className={securityGroups.length > 3 ? rowStyles.customRows : undefined}>
-                  {securityEmployees.map((e: Owner, index) => (
-                    <div
-                      key={index}
-                      className={classes.selectContainer}
-                    >
-                      <div style={{ width: 230 }}>{e.user.name}</div>
-                      <button className={classes.accessButton} onClick={() => handleDelete(e.id)} >
-                        <CloseIcon />
-                      </button>
-                    </div>
-                  ))}
-                </List>}
-        <AsyncGate
-          asyncState={loadApproversAsyncState}
-          asyncAction={loadAvailableApproversAction}
-          startActionOnMount={true}
-        >
-          <Select
-            options={employeeSelectOptions}
-            onChange={(e) => saveValue(e)}
-            placeholder={intl.formatMessage({
-              id: "document.revision.invitation",
-            })}
-            components={{ DropdownIndicator }}
-            value={(accessElement.value === "" || isGroup) ? null : accessElement}
-          />
-        </AsyncGate>
+        {
+          !_.isEmpty(securityEmployees) &&
+          <List className={securityGroups.length > 3 ? rowStyles.customRows : undefined}>
+            {securityEmployees.map((e: Owner, index) => (
+              <div
+                key={index}
+                className={classes.selectContainer}
+              >
+                <div style={{ width: 230 }}>{e.user.name}</div>
+                <button className={classes.accessButton} onClick={() => handleDelete(e.id)} >
+                  <CloseIcon />
+                </button>
+              </div>
+            ))}
+          </List>
+        }
+        <Select
+          options={employeeSelectOptions}
+          onChange={(e) => saveValue(e)}
+          placeholder={intl.formatMessage({
+            id: "document.revision.invitation",
+          })}
+          components={{ DropdownIndicator }}
+          value={(accessElement.value === "" || isGroup) ? null : accessElement}
+        />
       </div>
       <Typography variant={TypographySize.md}>
         <Text translation="document.revision.selected.groups" />
       </Typography>
       <div style={{ width: 240, paddingBottom: 32 }}>
-        {!_.isEmpty(securityGroups) &&
-                <List className={securityGroups.length > 3 ? rowStyles.customRows : undefined}>
-                  {securityGroups.map((e: Group, index) => (
-                    <div
-                      key={index}
-                      className={classes.selectContainer}
-                    >
-                      <div style={{ width: 230 }}>{e.name}</div>
-                      <button className={classes.accessButton} onClick={() => handleDelete(e.id)}>
-                        <CloseIcon />
-                      </button>
-                    </div>
-                  ))}
-                </List>}
-        <AsyncGate
-          asyncState={loadGroupAsyncState}
-          asyncAction={loadGroupsAction}
-          startActionOnMount={true}
-        >
-          <Select
-            options={groupSelectOptions}
-            placeholder={intl.formatMessage({
-              id: "document.revision.invitation.group",
-            })}
-            components={{ DropdownIndicator }}
-            onChange={(e) => saveValue(e)}
-            value={(accessElement.value === "" || !isGroup) ? null : accessElement}
-          />
-        </AsyncGate>
+        {
+          !_.isEmpty(securityGroups) &&
+          <List className={securityGroups.length > 3 ? rowStyles.customRows : undefined}>
+            {securityGroups.map((e: Group, index) => (
+              <div
+                key={index}
+                className={classes.selectContainer}
+              >
+                <div style={{ width: 230 }}>{e.name}</div>
+                <button className={classes.accessButton} onClick={() => handleDelete(e.id)}>
+                  <CloseIcon />
+                </button>
+              </div>
+            ))}
+          </List>
+        }
+        <Select
+          options={groupSelectOptions}
+          placeholder={intl.formatMessage({
+            id: "document.revision.invitation.group",
+          })}
+          components={{ DropdownIndicator }}
+          onChange={(e) => saveValue(e)}
+          value={(accessElement.value === "" || !isGroup) ? null : accessElement}
+        />
       </div>
-      <Typography variant={TypographySize.md}>
-        <Text translation="document.assign.to" />
-      </Typography>
-      <div style={{ width: 240, paddingBottom: 32 }}>
-        {!_.isEmpty(operators) &&
-                <List className={operators.length > 3 ? rowStyles.customRows : undefined}>
-                  {operators.map((e: Owner, index) => (
-                    <div
-                      key={index}
-                      className={classes.selectContainer}
-                    >
-                      <div style={{ width: 230 }}>{e.user.name}</div>
-                      <button className={classes.accessButton} onClick={() => handleDeleteOperatorAccess(e.id)} >
-                        <CloseIcon />
-                      </button>
-                    </div>
-                  ))}
-                </List>}
-        <AsyncGate
-          asyncState={loadApproversAsyncState}
-          asyncAction={loadAvailableApproversAction}
-          startActionOnMount={true}
-        >
-          <Select
-            options={operatorsSelectOptions}
-            onChange={(e) => saveValueOperator(e)}
-            placeholder={intl.formatMessage({
-              id: "document.revision.invitation",
-            })}
-            components={{ DropdownIndicator }}
-            value={!operator ? null : operator}
-          />
-        </AsyncGate>
-      </div>
+      {
+        isVisible &&
+        <>
+          <Typography variant={TypographySize.md}>
+            <Text translation="document.assign.to" />
+          </Typography>
+          <div style={{ width: 240, paddingBottom: 32 }}>
+            {
+              !_.isEmpty(operators) &&
+              <List className={operators.length > 3 ? rowStyles.customRows : undefined}>
+                {operators.map((e: Owner, index) => (
+                  <div
+                    key={index}
+                    className={classes.selectContainer}
+                  >
+                    <div style={{ width: 230 }}>{e.user.name}</div>
+                    <button className={classes.accessButton} onClick={() => handleDeleteOperatorAccess(e.id)} >
+                      <CloseIcon />
+                    </button>
+                  </div>
+                ))}
+              </List>
+            }
+            <Select
+              options={operatorsSelectOptions}
+              onChange={(e) => saveValueOperator(e)}
+              placeholder={intl.formatMessage({
+                id: "document.revision.invitation",
+              })}
+              components={{ DropdownIndicator }}
+              value={!operator ? null : operator}
+            />
+          </div>
+        </>
+      }
     </div>
   );
 };

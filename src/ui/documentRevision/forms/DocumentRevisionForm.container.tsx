@@ -16,6 +16,7 @@ import ChangeRequestLink from "../../document.revision/summary/changeRequestLink
 import { FBSchemaProps, FBWorkspace, FBWorkspaceMode } from "../../form.builder";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import Colors from "../../layout/theme/utils/colors";
+import { DocumentCloneType } from "../Clone.container";
 import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
 
@@ -47,7 +48,7 @@ interface OwnProps {
   proposedDocId?: string;
   loadDocumentProposedId?: typeof documentsActions.loadDocumentProposedId;
   canChangeOwnerShip?: boolean;
-  type?: string;
+  type?: DocumentCloneType;
 }
 
 export type DocumentRevisionFormContainerProps = OwnProps &
@@ -182,7 +183,11 @@ DocumentRevisionFormContainerProps
   const render = (props: FormikProps<DocumentRevisionFormValues>) => (
     <FBWorkspace
       portalContainer={FBContainer}
-      document={props.values as unknown as DocumentRevision}
+      // TODO: check if merging both objects would satisfy all our needs
+      document={{
+        ...documentRevision as unknown as DocumentRevision,
+        outputRevision: props.values.outputRevision,
+      }}
       initialValues={formInput}
       autosave={true}
       schema={GetScheme(props)}
@@ -227,9 +232,12 @@ DocumentRevisionFormContainerProps
     >
       <div ref={bannerPortal} />
       <Grid style={{ background: Colors.light_gray }} >
-        <Box ml={3}>
-          <ChangeRequestLink dataProp={documentRevision} />
-        </Box>
+        {
+          type !== "newOutput" &&
+          <Box ml={3}>
+            <ChangeRequestLink dataProp={documentRevision} />
+          </Box>
+        }
         <Formik
           initialValues={cleanInitialValues}
           onSubmit={(values, helpers) => onSubmit(values, helpers, cleanInitialValues) }

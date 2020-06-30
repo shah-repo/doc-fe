@@ -1,4 +1,5 @@
-import { Box, Button, Dialog, DialogContent, DialogTitle, FormControl } from "@material-ui/core";
+import { Box, Button, Dialog, DialogContent, DialogTitle, FormControl, IconButton, Typography } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
 import { Form, Formik } from "formik";
 import React, { Fragment } from "react";
 import { Owner } from "../../../../state/ducks/common";
@@ -63,8 +64,11 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
       onSubmit={preventPropagation}
       onClose={closeDialog}
     >
-      <DialogTitle>
-        <Text translation="change.owner" />
+      <DialogTitle disableTypography style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <Typography variant="h6"><Text translation="change.owner" /></Typography>
+        <IconButton onClick={closeDialog} style={{ padding: 0 }}>
+          <CloseIcon />
+        </IconButton>
       </DialogTitle>
       <DialogContent style={{ width: 500 }}>
         <FormContext.Provider value={{ submitOnChange: false }}>

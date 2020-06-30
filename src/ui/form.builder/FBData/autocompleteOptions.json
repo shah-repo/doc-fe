@@ -35,7 +35,7 @@
   },
   {
     "id": "5",
-    "path": "/document_revisions?documentTypeAcronym=SUP",
+    "path": "/document_revisions?docTypeGroups%5B%5D=SUPPLIER",
     "label": "Supplier list",
     "valueKey": "id",
     "labelKey": "name",
@@ -85,7 +85,7 @@
   },
   {
     "id": "11",
-    "path": "/document_revisions?documentTypeAcronym=PRT",
+    "path": "/document_revisions?docTypeGroups%5B%5D=PART",
     "label": "Parts",
     "valueKey": "id",
     "labelKey": "document.docId",
@@ -94,7 +94,7 @@
   },
   {
     "id": "12",
-    "path": "/document_revisions?documentTypeAcronym=PO&status%5B%5D=RELEASED",
+    "path": "/document_revisions?documentTypeAcronym=PO-&status%5B%5D=RELEASED",
     "label": "Purchase Order list",
     "valueKey": "id",
     "labelKey": "name",
@@ -115,5 +115,14 @@
     "label": "Official Groups",
     "valueKey": "id",
     "labelKey": "name"
+  },
+  {
+    "id": "15",
+    "path": "/document_revisions?docTypeGroups%5B%5D=WO_PARTS",
+    "label": "Part Number in WO",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
   }
 ]

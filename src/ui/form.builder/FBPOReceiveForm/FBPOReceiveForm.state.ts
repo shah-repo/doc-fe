@@ -1,11 +1,12 @@
 import { template } from "lodash";
 import { action } from "mobx";
 import { FBPOReceiveFormConstructor, FBPurchaseOrderItem } from "..";
-import { GroupTag } from "../../../state/ducks/auth/types";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import { DocumentType } from "../../../state/ducks/documentRevisions/documentType";
 import { documentPreviewPath } from "../../document.revision/utils/paths";
 import { toNewVersionRequestBody } from "../../documentRevision/forms/transform";
+import { DocumentRevisionFormValues } from "../../documentRevision/forms/types";
+import { filterSecurityGroupsForQms } from "../../documentType/list/helpers";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
@@ -44,21 +45,14 @@ export class FBPOReceiveFormState  {
   }
 
   public async createLot(docId: string, values: any, poDocumentId?: string) {
-    const securityGroups: any[] = [];
-    if (this.lotDocType?.isQms) {
-      this.groupOptions.forEach((group) => {
-        if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
-          securityGroups.push({ value: group.value, label: group.label });
-        }
-      });
-    }
-
     if (!this.documentId) {
       return;
     }
+    const securityGroups = filterSecurityGroupsForQms(this.lotDocType?.isQms, this.groupOptions);
 
     const reqBody = toNewVersionRequestBody({
-      name: `${this.item?.glCode}-${this.item?.description}`,
+      // LOT must not have title
+      // name: `${this.item?.glCode}-${this.item?.description}`,
       description: values.comments ? `<p>${values.comments}</p>` : `<p>${this.item?.description}</p>`,
       attachments: [],
       referenceTo: [{ value: this.documentId, label: "" }],
@@ -72,7 +66,7 @@ export class FBPOReceiveFormState  {
       revisionStage: 1,
       revisionChangeType: RevisionChangeType.NextRevision,
       renderHTML: undefined,
-    });
+    } as unknown as DocumentRevisionFormValues);
 
     poDocumentId && reqBody.referenceTo.push({ id: poDocumentId });
     reqBody.formDocument = {

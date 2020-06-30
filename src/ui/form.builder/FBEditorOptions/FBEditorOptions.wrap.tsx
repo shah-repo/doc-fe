@@ -42,8 +42,8 @@ export const withFBEditorOptions = <T extends FBEditorOptionsProps>(
       return mergedOptions;
     };
 
-    optionsToString = (options?: FBOption[]): string => {
-      if (!options) { return ""; }
+    optionsToString = (options?: FBOption[]): string | undefined => {
+      if (!options) { return; }
       const editorProps = _.keys(FBData.editorProperties);
       return options.reduce((acc, opt) => {
         !editorProps.includes(opt.value) && (acc += `${opt.text}\n`);

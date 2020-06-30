@@ -1,4 +1,6 @@
 import { isString } from "lodash";
+import { GroupTag } from "../../../state/ducks/auth/types";
+import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { TableSearchFieldProps } from "../../components/table/search/types";
 import { TablePanelStateProps } from "../../components/table/types";
 import { documentRevisionStatusOption } from "../../document.revision/utils/helpers";
@@ -33,4 +35,17 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
   }
 
   return [omitSearch, searchOptions];
+};
+
+
+export const filterSecurityGroupsForQms = (isQms = false, groupOptions) => {
+  if (!isQms) {
+    return [];
+  }
+  return groupOptions.reduce((acc, group) => {
+    if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
+      acc.push({ value: group.value, label: group.label });
+    }
+    return acc;
+  }, [] as OptionType[]);
 };

@@ -32,7 +32,7 @@ export default (theme: Theme) =>
     h4: {
       margin: 5,
     },
-    icon:{
-     
-    }
+    icon: {
+
+    },
   });
