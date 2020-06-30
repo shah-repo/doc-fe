@@ -1,5 +1,4 @@
 
-import { uniqBy } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBWorkspaceProps, FBWorkspaceState } from ".";
@@ -49,7 +48,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       workspaceState.externalState = store.getState();
       if (!props.schema) { return; }
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      workspaceState.schema = uniqBy([...workspaceState.schema || [], ...props.schema!], "name");
+      workspaceState.schema = props.schema!;
     }, [workspaceState, props.schema, document]);
 
 
