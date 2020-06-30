@@ -126,6 +126,7 @@ export enum DisplayFieldType{
   CR_ID = "R",
   REVISE_BTN = "S",
   BOOKMARKS = "Q",
+  ADD_NEW_BTN = "V",
 }
 
 export type FieldType = InputFieldType | DisplayFieldType;
