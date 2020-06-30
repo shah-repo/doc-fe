@@ -4,10 +4,12 @@ Cypress.Screenshot.defaults({
   screenshotOnRunFailure: false,
 });
 
+import path from "path";
+
 const runId = new Date().valueOf();
 let createdCompany;
 
-context("Test", () => {
+context(`Test: ${path.basename(__filename)}`, () => {
   it("Creates company", (done: any) => {
     cy.apiLogin({
       email: "zoran.kovacevic+admin@codecons.com",
@@ -58,16 +60,6 @@ context("Test", () => {
   });
   it("Selects company", () => {
     cy.selectCompany({ name: createdCompany.name });
-    // cy.get("[data-cy=\"Navigation.dashboard\"]").click();
-    // cy.get("[data-cy=\"Navigation.document.list\"]").click();
-    // cy.get("[data-cy=\"Navigation.change.list\"]").click();
-    // cy.get("[data-cy=\"Navigation.user.management\"]").click();
-    // cy.get("[data-cy=\"Navigation.group.management\"]").click();
-    // cy.get("[data-cy=\"Navigation.document_type.Receivable\"]").click();
-    // cy.get("[data-cy=\"Navigation.document_type.Purchase Order\"]").click();
-    // cy.get("[data-cy=\"Navigation.document_type.Suppliers\"]").click();
-
-    // cy.visit('http://localhost:4213/document_revision/create');
   });
 
   it("Opens document list", () => {
@@ -76,45 +68,24 @@ context("Test", () => {
   it("Opens create document page", () => {
     cy.get("[data-cy=\"document.revision.create\"]").click();
   });
-  it("fills in description", () => {
-    cy.get("[data-cy=\"RichTextEditor.description\"]", { timeout: 10000 }).type("Desription");
-  });
-  it("fills in document type", () => {
-    cy.get("[data-cy=\"select.document.documentType.id\"]").click();
-    cy.get("[data-cy=\"selectItem.document.documentType.id.Dynamic Form\"]").click();
-  });
+  // it("fills in description", () => {
+  //   cy.get("[data-cy=\"RichTextEditor.description\"]", { timeout: 10000 }).type("Desription");
+  // });
+  // it("fills in document type", () => {
+  //   cy.get("[data-cy=\"select.document.documentType.id\"]").click();
+  //   cy.get("[data-cy=\"selectItem.document.documentType.id.Dynamic Form\"]").click();
+  // });
 
-  it("fills in revision stage", () => {
-    cy.get("[data-cy=\"select.revisionStage\"]").click();
-    cy.get("[data-cy=\"selectItem.revisionStage.common.Alpha\"]").click();
-    // cy.get("[data-cy=\"Navigation.dashboard\"]").click();
-    // cy.get("[data-cy=\"Navigation.document.list\"]").click();
-    // cy.get("[data-cy=\"Navigation.change.list\"]").click();
-    // cy.get("[data-cy=\"Navigation.user.management\"]").click();
-    // cy.get("[data-cy=\"Navigation.group.management\"]").click();
-    // cy.get("[data-cy=\"Navigation.document_type.Receivable\"]").click();
-    // cy.get("[data-cy=\"Navigation.document_type.Purchase Order\"]").click();
-    // cy.get("[data-cy=\"Navigation.document_type.Suppliers\"]").click();
-
-
-    // cy.get("[data-cy=\"field.name\"]").type("Title");
-
-    // cy.get("[data-cy=\"field.description\"]").type("Description");
-
-    // cy.get("[data-cy=\"field-securityEmployees\"]", { timeout: 10000 }).click();
-    // cy.get("[data-cy=\"field-securityEmployees\"] > div:contains('Zoran Second')").click();
-    // cy.get("[data-cy=\"field-securityEmployees\"]", { timeout: 10000 }).click();
-    // cy.get("[data-cy=\"field-securityEmployees\"] > div:contains('Zoran First')").click();
-    // cy.get("[data-cy=\"field-securityEmployees\"]", { timeout: 10000 }).click();
-    // cy.get("[data-cy=\"field-securityEmployees\"] > div:contains('Zoran Second')").click();
-
-  });
-  it("adds attachment", () => {
-    cy.get("[data-cy=\"AttachmentFieldPresenter-field\"] > input[type=file]").attachFile("image.jpg");
-    cy.get("#AttachmentIconPresenter-fileTitle").then(($div) => {
-      expect($div).to.have.text("image.jpg");
-    });
-  });
+  // it("fills in revision stage", () => {
+  //   cy.get("[data-cy=\"select.revisionStage\"]").click();
+  //   cy.get("[data-cy=\"selectItem.revisionStage.common.Alpha\"]").click();
+  // });
+  // it("adds attachment", () => {
+  //   cy.get("[data-cy=\"AttachmentFieldPresenter-field\"] > input[type=file]").attachFile("image.jpg");
+  //   cy.get("#AttachmentIconPresenter-fileTitle").then(($div) => {
+  //     expect($div).to.have.text("image.jpg");
+  //   });
+  // });
 });
 
 // for TS error "All files must be modules when the '--isolatedModules' flag is provided" uncomment line below

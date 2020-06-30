@@ -10,3 +10,4 @@ export const SM_APP_CONFIG = {
   REACT_APP_HELLOSIGN_CLIENT_ID: process.env.REACT_APP_HELLOSIGN_CLIENT_ID,
   NODE_ENV: process.env.NODE_ENV,
 };
+console.log({ SM_APP_CONFIG });

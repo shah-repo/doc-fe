@@ -1,0 +1,17 @@
+#!/bin/bash
+set -e
+
+if [[ -z "${ENLIL_COMPOSE_PORT_RANGE_START}" ]]; then
+  echo "ENLIL_COMPOSE_PORT_RANGE_START not set, exiting"
+  exit
+fi
+
+export ENLIL_COMPOSE_EXPOSE_BE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+1))"
+export ENLIL_COMPOSE_EXPOSE_FE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+2))"
+
+export CYPRESS_BE_URL="http://localhost:$ENLIL_COMPOSE_EXPOSE_BE_PORT"
+export CYPRESS_FE_URL="http://localhost:$ENLIL_COMPOSE_EXPOSE_FE_PORT"
+export CYPRESS_KONFIG_ENV="development"
+
+
+yarn cypress open

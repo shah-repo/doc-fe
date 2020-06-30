@@ -1,0 +1,33 @@
+#!/bin/bash
+set -e
+
+NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS:-6}
+export ENLIL_COMPOSE_PORT_RANGE_START=${ENLIL_COMPOSE_PORT_RANGE_START:-5600}
+
+# calculate CI build number, has to be unique
+# export CI_BUILD_ID=$(date -R)
+if [[ -z "${CI_BUILD_ID}" ]]; then
+  echo "CI_BUILD_ID not set, exiting"
+  exit
+fi
+
+# make folders for results
+source ./scripts/cypress/make_results_dir.sh
+
+
+echo "NUMBER_OF_WORKERS: $NUMBER_OF_WORKERS"
+echo "ENLIL_COMPOSE_PORT_RANGE_START: $ENLIL_COMPOSE_PORT_RANGE_START"
+echo "CI_BUILD_ID: $CI_BUILD_ID"
+echo " "
+
+for((i=1; i <= $NUMBER_OF_WORKERS; i+=1))
+do
+  echo "Started worker: $i"
+  # ./scripts/cypress/run_node.sh  2>/dev/null || true  &
+  ./scripts/cypress/run_node.sh | grep "Spec Ran" 2>/dev/null || true  &
+  pids[${i}]=$!
+done
+
+for pid in ${pids[*]}; do
+    wait $pid
+done
