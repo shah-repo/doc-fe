@@ -10,7 +10,7 @@ import { DocumentProposedId, documentsActions } from "../../../state/ducks/docum
 import Text from "../../components/Text";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import { toDocumentRevisionFormValuesForOutput, toNewVersionRequestBody } from "../../documentRevision/forms/transform";
-import useCreateDocumentTypeButton from "../../hooks/docCustomization/useCreateDocumentTypeButton";
+import { useCreateDocumentTypeButton } from "../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
