@@ -1,6 +1,6 @@
 import { Grid } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useLocation } from "react-router-dom";
 import { ReactComponent as BookmarkIcon } from "../../../assets/images/bookmark.svg";
@@ -25,6 +25,8 @@ interface OwnProps {
   schema?: FBSchemaProps[];
 }
 
+export let changeRequestFormOnScreenContext = React.createContext<boolean>(false);
+
 type ChangeRequestFormContainerProps = OwnProps;
 
 export const ChangeRequestFormContainer: React.FunctionComponent<
@@ -38,6 +40,11 @@ ChangeRequestFormContainerProps
   schema,
 }) => {
   const FBContainer = React.useRef(null);
+
+  useEffect(() => () => {
+    changeRequestFormOnScreenContext = React.createContext<boolean>(false);
+  }, []);
+
   const intl = useIntl();
   const url = useLocation();
   const [sidebar, openSidebar] = useState<boolean>(true);

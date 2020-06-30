@@ -10,7 +10,8 @@ import { ApplicationState } from "../../state/reducers";
 import { toastInfo } from "../components/notifications";
 import Text from "../components/Text";
 import DownloadHTML from "../document.revision/summary/download.html";
-import { documentNewVersionPath, documentOutputPath } from "../document.revision/utils/paths";
+import { documentNewVersionPath } from "../document.revision/utils/paths";
+import { useHandleCreateDoc } from "../documentType/list/CreateDocumentByType";
 import { useReviseDocument } from "../hooks/docCustomization/useCustomization";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
@@ -36,7 +37,7 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainerProps> = ({
   documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton, hasAccess,
 }) => {
-
+  const handleCreateDocument = useHandleCreateDoc();
   const [showRevise, reviseLabel] = useReviseDocument(documentRevision.document?.documentType?.id);
   const intl = useIntl();
   const dispatch = useDispatch();
@@ -71,7 +72,7 @@ export const PreviewControlsContainer: React.FunctionComponent<PreviewControlsCo
   const cloneDocument = () => history.push(documentNewVersionPath(documentRevision.id, documentRevision.document.id));
 
   const cloneOutputDocument = () => {
-    history.push(documentOutputPath(documentRevision.id, documentRevision.document.id));
+    handleCreateDocument(documentRevision);
   };
 
   const canCreate = () => canCreateNewVersion(documentRevision, disableCreateNewVersion, canShowCreateVersionButton);

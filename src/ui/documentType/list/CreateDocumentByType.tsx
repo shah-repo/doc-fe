@@ -5,8 +5,9 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { documentTypeActions, DocumentTypeById, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentType, documentTypeActions, DocumentTypeById, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { DocumentProposedId, documentsActions } from "../../../state/ducks/documents";
+import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import Text from "../../components/Text";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import { toDocumentRevisionFormValuesForOutput, toNewVersionRequestBody } from "../../documentRevision/forms/transform";
@@ -14,6 +15,7 @@ import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
 import FormListDialog from "../FormListDialog/FormListDialog.presenter";
+import { filterSecurityGroupsForQms } from "./helpers";
 import { styles } from "./styles";
 
 interface Props {
@@ -22,6 +24,7 @@ interface Props {
 }
 
 export const useHandleCreateDoc = () => {
+  const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const history = useHistory();
   const [form, setForm] = useState<DocumentRevision>();
   const fetchDocIdAction = useActionCreator(documentsActions.loadDocumentProposedIdWithCallback);
@@ -39,12 +42,17 @@ export const useHandleCreateDoc = () => {
   });
   const createDoc = (docId: string) => {
     const formValues = toDocumentRevisionFormValuesForOutput(form as DocumentRevision);
+    const outputDocumentTypes = form?.formTemplate?.outputDocumentTypes || [];
+    const isQms = (outputDocumentTypes[0] as unknown as DocumentType)?.isQms;
+    formValues.securityGroups = filterSecurityGroupsForQms(isQms, groupOptions);
+
     const data = toNewVersionRequestBody(formValues);
     data.formDocument = { id: formValues?.formDocument?.id };
     data.document = {
       ...data.document,
       docId,
     };
+
     createDocAsync.start(createDocAction, data, createDocAsync);
   };
   const redirect = (selectedForm = form) => {

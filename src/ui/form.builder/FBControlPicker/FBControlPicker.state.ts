@@ -43,7 +43,7 @@ export class FBControlPickerState {
         "timer",
         ...this.hasPurchaseOrder ? ["purchaseorder"] as FBInputType[] : [],
         ...this.hasRecPurchaseOrder ? ["poreceive"] as FBInputType[] : [],
-        ...this.hasApprovalMatrix ? ["approvalMatrix"] as FBInputType[] : [],
+        ...!this.hasApprovalMatrix ? ["approvalMatrix"] as FBInputType[] : [],
         "poApprovalMatrix",
         "instructionsmediaupload",
         "evidencemediaupload",
