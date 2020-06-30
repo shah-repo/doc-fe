@@ -107,7 +107,7 @@ export class FBEditorState {
     approvalMatrix: FBEditorEmpty,
     documentRevisions: FBEditorEmpty,
     poApprovalMatrix: FBEditorLabel,
-    task: FBEditorEmpty,
+    task: FBEditorLabel,
   };
 
   @observable public mode?: FBEditorMode = "config";

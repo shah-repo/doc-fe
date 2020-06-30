@@ -1,0 +1,6 @@
+[{
+  "type": "texteditor",
+  "name": "closingNoteInput.description",
+  "label": "form.builder.description",
+  "rules": "required"
+}]

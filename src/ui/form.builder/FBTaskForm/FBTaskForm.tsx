@@ -1,19 +1,21 @@
 import React from "react";
-import { FB, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBData, FBDatePicker, FBForm, FBTaskFormProps, FBTextField } from "..";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBData, FBDatePicker, FBForm, FBTaskFormProps } from "..";
 import { FBSchema } from "../FBSchema";
 import { withFBTaskForm } from "./FBTaskForm.wrap";
 
 const FBTaskForm: React.FunctionComponent<FBTaskFormProps> = ({
   formState,
   children,
-  initialValues,
-  index,
 }) => (
   <FBForm {...{ formState }} >
-    <FBTextField name="id" hidden={true} defaultValue={FB.uniqid} />
-    <FBTextField name="index" type="number" hidden={true} defaultValue={index} />
     <FBSchema schema={FBData.taskSchema} />
-    <FBAutocompleteAsync optionId={FBAutocompleteAsyncOption.approver} label="Assigned to" name="assignedTo" />
+    <FBAutocompleteAsync
+      optionId={FBAutocompleteAsyncOption.approver}
+      optionValueType="id"
+      label="Assigned to"
+      name="assigned"
+      rules="required"
+    />
     <FBDatePicker label="Due Date" name="dueDate" rules="required" />
     {children}
   </FBForm>

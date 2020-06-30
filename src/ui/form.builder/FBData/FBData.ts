@@ -6,6 +6,7 @@ import actionOptions from "./actionOptions.json";
 import additionalSchema from "./additionalSchema.json";
 import approvalMatrixRoleSchema from "./approvalMatrixRoleSchema.json";
 import autocompleteOptions from "./autocompleteOptions.json";
+import closingTaskSchema from "./closingTaskSchema.json";
 import currencyOptions from "./currencyOptions.json";
 import documentRevisionSchema from "./documentRevisionSchema.json";
 import editorProperties from "./editorProperties.json";
@@ -83,6 +84,10 @@ export class FBData {
 
   public static get taskSchema(): FBSchemaProps[] {
     return taskSchema as FBSchemaProps[];
+  }
+
+  public static get closingTaskSchema(): FBSchemaProps[] {
+    return closingTaskSchema as FBSchemaProps[];
   }
 }
 

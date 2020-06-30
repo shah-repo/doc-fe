@@ -1,8 +1,7 @@
-import { reaction } from "mobx";
+import { filter } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBDialogState, FBTaskForm, FBTaskProps, FBTaskState } from "..";
-import { Employee } from "../../../state/ducks/company";
 import { FBTaskItem } from "./FBTask.types";
 
 export const withFBTask = <T extends FBTaskProps>(
@@ -10,21 +9,23 @@ export const withFBTask = <T extends FBTaskProps>(
 ) => {
   const Comp = ({
     onClick,
-    getApprover,
     taskState,
     dialogState,
     tasks,
     name,
+    loading,
     ...props
   }: T) => {
 
-    const { formState } = FB.useStores();
-    const formValue: FBTaskItem[] = formState?.getFieldValue(name);
+    const { workspaceState } = FB.useStores();
+    const { document: { tasks: docTasks = [] } = {} } = workspaceState || {};
+    const formValue: FBTaskItem[] = filter(docTasks, (task) =>
+      task.fieldId === name && task.status !== "ABANDONED");
     taskState = FB.useRef(FBTaskState, formValue);
     dialogState = FB.useRef(FBDialogState);
 
-    onClick = (index = taskState?.tasks?.length || 0) => {
-      const initialValues = taskState?.getTask(index);
+    onClick = (id?: string) => {
+      const initialValues = taskState?.getTask(id);
       const title = initialValues ?
         "form.builder.edit.implementation.task" :
         "form.builder.add.implementation.task";
@@ -32,33 +33,31 @@ export const withFBTask = <T extends FBTaskProps>(
       dialogState?.config({
         open: true,
         title,
-        content: <FBTaskForm {...{ index, initialValues }} />,
+        content: <FBTaskForm {...{ initialValues, name }} />,
       });
     };
 
-    getApprover = (id: string): Employee =>
-      taskState?.approversApi.sliceValue(id);
-
-    React.useEffect(() => {
-      reaction(
-        () => taskState?.tasks,
-        (tasks) => formState?.setFieldValue(name, tasks)
-      );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    // React.useEffect(() => {
+    //   reaction(
+    //     () => taskState?.tasks,
+    //     (tasks) => formState?.setFieldValue(name, tasks)
+    //   );
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, []);
 
     useObserver(() => {
       tasks = taskState?.tasks;
+      loading = taskState?.taskApi.loading;
     });
 
     return Component({
       ...(props as T),
       onClick,
-      getApprover,
       taskState,
       dialogState,
       tasks,
       name,
+      loading,
     });
   };
 
