@@ -6,7 +6,7 @@ export default makeStyles((theme: Theme) =>
     whiteContainer: ({ sidebar }) => ({
       marginTop: theme.spacing(5),
       margin: 0,
-      height: "auto",
+      height: "100%",
       width: sidebar ? "100%" : "104%",
       transition: theme.transitions.create("all", {
         easing: theme.transitions.easing.sharp,
