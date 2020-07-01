@@ -2,6 +2,7 @@
 set -e
 
 export ENLIL_COMPOSE_PORT_RANGE_START=${ENLIL_COMPOSE_PORT_RANGE_START:-5600}
+export ENLIL_COMPOSE_EXPOSE_DIRECTOR_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+6))"
 
 # calculate CI build number, has to be unique
 # export CI_BUILD_ID=$(date -R)
@@ -18,6 +19,7 @@ fi
 # make folders for results
 source ./scripts/cypress/make_results_dir.sh
 
+sed -i -e "s|api_url:.*$|api_url: \"http://localhost:$ENLIL_COMPOSE_EXPOSE_DIRECTOR_PORT\"|g" ~/.cache/Cypress/*/Cypress/resources/app/packages/server/config/app.yml
 
 echo "NUMBER_OF_WORKERS: $NUMBER_OF_WORKERS"
 echo "ENLIL_COMPOSE_PORT_RANGE_START: $ENLIL_COMPOSE_PORT_RANGE_START"
