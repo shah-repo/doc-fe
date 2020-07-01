@@ -35,12 +35,11 @@ export const withFBTask = <T extends FBTaskProps>(
       dialogState?.config({
         open: true,
         title,
-        content: <FBTaskFormDescription mode="description" {...{ initialValues, name }} />,
+        content: <FBTaskFormDescription actionMode="description" {...{ initialValues, name }} />,
       });
     };
 
     useObserver(() => {
-      tasks = taskState?.tasks;
       loading = taskState?.taskApi.loading;
     });
 
@@ -49,7 +48,7 @@ export const withFBTask = <T extends FBTaskProps>(
       onClick,
       taskState,
       dialogState,
-      tasks,
+      tasks: taskState?.tasks,
       name,
       loading,
       disabled,

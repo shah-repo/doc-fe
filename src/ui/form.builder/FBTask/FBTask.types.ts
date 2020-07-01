@@ -4,8 +4,8 @@ import { Employee } from "../../../state/ducks/company";
 import { FBTaskFieldState } from "../FBTaskField/FBTaskField.state";
 
 export type FBTaskItemType = "CR_IMPLEMENTATION_PLAN" | "GENERIC";
-
 export type FBTaskItemStatus = "DRAFT" | "PENDING" | "DONE" | "ABANDONED";
+export type FBTaskActionMode = "description" | "note";
 
 export interface FBTaskItem {
   id?: string;
@@ -14,11 +14,11 @@ export interface FBTaskItem {
   closingNoteSchema: FBSchemaProps[];
   closingNoteInput: Record<string, any>;
   assigned: Partial<Employee>;
-  type: FBTaskItemType;
+  type?: FBTaskItemType;
   dueDate: string;
   fieldId: string;
   status?: FBTaskItemStatus;
-  partOf: {
+  partOf?: {
     id: string;
   };
 }
@@ -40,7 +40,7 @@ export type FBTaskFormProps =
 & {
   handleAdd?: () => any;
   handleCancel?: () => any;
-  mode?: "description" | "note";
+  actionMode?: FBTaskActionMode;
 };
 
 export type FBTaskFieldProps =
@@ -53,5 +53,5 @@ export type FBTaskFieldProps =
   taskFieldState?: FBTaskFieldState;
   task: FBTaskItem;
   visibility?: "visible" | "hidden";
-  isInReview?: boolean;
+  canBeDone?: boolean;
 };

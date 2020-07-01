@@ -1,12 +1,12 @@
 // eslint-disable-next-line max-classes-per-file
-import { find } from "lodash";
-import { action, observable, set } from "mobx";
+import { find, omit } from "lodash";
+import { action } from "mobx";
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBTaskApi, FBTaskItem } from "..";
 import { Employee } from "../../../state/ducks/company";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 
 export class FBTaskState {
-  @observable public tasks?: FBTaskItem[];
+  public tasks?: FBTaskItem[];
   public approversApi = new FBAutocompleteAsyncState(FBAutocompleteAsyncOption.approver);
   public taskApi = new FBTaskApi(this);
 
@@ -14,8 +14,8 @@ export class FBTaskState {
     this.tasks = tasks;
   }
 
-  @action public setTasks = (tasks?: FBTaskItem[]) => {
-    set(this, "tasks", tasks);
+  public setTasks = (tasks?: FBTaskItem[]) => {
+    this.tasks = tasks;
   };
 
   @action public setTask = (task?: FBTaskItem) => {
@@ -44,7 +44,7 @@ export class FBTaskState {
 
   private updateTask = (task: FBTaskItem) => {
     this.taskApi.setTemplateUrl(FBEndpoint.Task, { id: task.id });
-    this.taskApi.setBody(task);
+    this.taskApi.setBody({ ...omit(task, ["id", "type", "partOf"]) });
     this.taskApi.patch();
   };
 }

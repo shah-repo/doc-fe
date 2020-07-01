@@ -1,6 +1,6 @@
 import { pick } from "lodash";
 import React from "react";
-import { FB, FBData, FBFormState, FBTaskFormActions, FBTaskFormProps, FBTaskItem } from "..";
+import { FB, FBData, FBFormState, FBTaskActionMode, FBTaskFormActions, FBTaskFormProps, FBTaskItem } from "..";
 import { toastError } from "../../components/notifications";
 
 export const withFBTaskForm = <T extends FBTaskFormProps>(
@@ -9,8 +9,8 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
   const Comp = ({
     formState,
     initialValues,
+    actionMode = "description",
     name,
-    mode,
     ...props
   }: T) => {
 
@@ -24,15 +24,12 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
         toastError("Adding a task is possible only for output document.");
         return handleCancel();
       }
-      switch (mode) {
-        case "description":
-          return handleAddDescription();
-        case "note":
-          return handleAddNote();
-        default: break;
-      }
-
       handleCancel();
+      const post: Record<FBTaskActionMode, () => any> = {
+        description: () => handleAddDescription(),
+        note: () => handleAddNote(),
+      };
+      post[actionMode]();
     }
 
     function handleAddDescription() {
@@ -41,7 +38,6 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
         ...pick(formValue, ["dueDate", "id"]),
         descriptionSchema: FBData.taskSchema,
         closingNoteSchema: FBData.closingTaskSchema,
-        // closingNoteInput: {},
         ...pick(formValue, "descriptionInput"),
         type: "CR_IMPLEMENTATION_PLAN",
         assigned: {
@@ -71,7 +67,7 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
       ...(props as T),
       formState,
       initialValues,
-      mode,
+      actionMode,
     });
   };
 

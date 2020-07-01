@@ -14,14 +14,19 @@ export const withFBTaskField = <T extends FBTaskFieldProps>(
     handleClosingNote,
     taskFieldState,
     visibility,
-    isInReview,
+    canBeDone,
     task,
     ...props
   }: T) => {
 
     const { taskState, workspaceState, dialogState } = FB.useStores();
     taskFieldState = FB.useRef(FBTaskFieldState);
-    isInReview = workspaceState?.documentStatus === "IN_REVIEW";
+    const { documentStatus = "DRAFT", changeRequestStatus = "DRAFT" } = workspaceState || {};
+    canBeDone = (
+      documentStatus === "IN_REVIEW" ||
+      changeRequestStatus === "IN_REVIEW" ||
+      changeRequestStatus === "IMPLEMENTATION"
+    );
 
     onMouseOver = () => taskFieldState?.setVisibility(true);
     onMouseLeave = () => taskFieldState?.setVisibility(false);
@@ -38,7 +43,7 @@ export const withFBTaskField = <T extends FBTaskFieldProps>(
       dialogState?.config({
         open: true,
         title: "Implementation Task Closing Note",
-        content: <FBTaskFormNote mode="note" schema={task.closingNoteSchema} />,
+        content: <FBTaskFormNote actionMode="note" schema={task.closingNoteSchema} />,
       });
     };
 
@@ -56,7 +61,7 @@ export const withFBTaskField = <T extends FBTaskFieldProps>(
       handleClosingNote,
       taskFieldState,
       visibility,
-      isInReview,
+      canBeDone,
       task,
     });
   };

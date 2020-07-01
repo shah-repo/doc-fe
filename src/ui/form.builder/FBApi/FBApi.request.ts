@@ -103,8 +103,8 @@ export default class FBRequest<Data, Body> {
         this.onSuccess();
       })
       .catch((_error) => {
-        this.setLoading(false);
         this.onError(_error);
+        this.setLoading(false);
       });
 
     return promise;

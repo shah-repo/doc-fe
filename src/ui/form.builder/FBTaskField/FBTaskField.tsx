@@ -17,7 +17,7 @@ const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
   onMouseLeave,
   handleClosingNote,
   visibility,
-  isInReview,
+  canBeDone,
   task,
 }) => (
   <Box
@@ -32,7 +32,7 @@ const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
   >
     <FBMapWrapper<FBSchemaProps[]> collection={task.descriptionSchema}>
       {(schemaItem: FBSchemaProps, index) => (
-        <>
+        <Box key={`fb-task-field-${schemaItem.name}-${index}`}>
           {index === 0 && (
             <Box display="flex" mb={-1}>
               <Box
@@ -75,7 +75,7 @@ const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
               {FB.stripTags(get(task, schemaItem.name || ""))}
             </Box>
           )}
-        </>
+        </Box>
       )}
     </FBMapWrapper>
     <Box
@@ -85,9 +85,9 @@ const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
       fontSize="caption.fontSize"
       color={Colors.gray}
     >
-      <Box mr={3}>
-        Assigned to: {getApprover?.(task)}
-      </Box>
+      {/* <Box mr={3}> */}
+      {/* Assigned to: {getApprover?.(task)} */}
+      {/* </Box> */}
       <Box mr={3}>
         Due by: {moment(task.dueDate).tz(TIME_ZONE, true).format("MMMM D, YYYY")}
       </Box>
@@ -95,15 +95,13 @@ const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
         Status: {task.status || "DRAFT"}
       </Box>
     </Box>
-    {isInReview && (
+    {canBeDone && (
       <Box mt={3} display="flex" flexDirection="row-reverse">
         <FBButton
           label="Done"
           onClick={handleClosingNote}
           variant="outlined"
           style={{ margin: 0 }}
-          // endIcon={loading && <CircularProgress size={16} />}
-          // {...{ disabled }}
         />
       </Box>
     )}

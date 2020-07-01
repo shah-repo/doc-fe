@@ -55,6 +55,7 @@ ChangeRequestFormContainerProps
     <FBWorkspace
       portalContainer={FBContainer}
       initialValues={changeRequest?.formInput}
+      changeRequest={changeRequest}
       autosave={true}
       schema={schemaData}
       mode="form"

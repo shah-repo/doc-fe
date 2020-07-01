@@ -11,7 +11,6 @@ export class FBTaskApi extends FBRequest<FBTaskItem, FBTaskItem> {
   }
 
   public onSuccess() {
-    super.onSuccess();
     if (!this.data) { return; }
     switch (this.method) {
       case "post": {
@@ -35,6 +34,7 @@ export class FBTaskApi extends FBRequest<FBTaskItem, FBTaskItem> {
       }
       default: break;
     }
+    super.onSuccess();
   }
 }
 
