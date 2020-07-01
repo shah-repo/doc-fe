@@ -116,7 +116,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
       async.start(
         releaseNonQmsAction,
         id,
-        { approvers },
+        { approvers, documentType: { id: documentType },  formDocument: { id: formDocument } },
         async,
       );
       return;
