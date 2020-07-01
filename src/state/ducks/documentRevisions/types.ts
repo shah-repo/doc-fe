@@ -91,6 +91,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   obsoletedAt?: string;
   releasedAt?: string;
   trainingRecords: TrainingRecord[];
+  effectiveDate?: Date;
   retrain?: boolean;
   grantAccess?: boolean;
   renderHTML?: string;
