@@ -1,7 +1,7 @@
 import { filter } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBDialogState, FBTaskForm, FBTaskProps, FBTaskState } from "..";
+import { FB, FBDialogState, FBTaskFormDescription, FBTaskProps, FBTaskState } from "..";
 import { FBTaskItem } from "./FBTask.types";
 
 export const withFBTask = <T extends FBTaskProps>(
@@ -14,6 +14,7 @@ export const withFBTask = <T extends FBTaskProps>(
     tasks,
     name,
     loading,
+    disabled,
     ...props
   }: T) => {
 
@@ -23,6 +24,7 @@ export const withFBTask = <T extends FBTaskProps>(
       task.fieldId === name && task.status !== "ABANDONED");
     taskState = FB.useRef(FBTaskState, formValue);
     dialogState = FB.useRef(FBDialogState);
+    disabled = loading || disabled;
 
     onClick = (id?: string) => {
       const initialValues = taskState?.getTask(id);
@@ -33,17 +35,9 @@ export const withFBTask = <T extends FBTaskProps>(
       dialogState?.config({
         open: true,
         title,
-        content: <FBTaskForm {...{ initialValues, name }} />,
+        content: <FBTaskFormDescription mode="description" {...{ initialValues, name }} />,
       });
     };
-
-    // React.useEffect(() => {
-    //   reaction(
-    //     () => taskState?.tasks,
-    //     (tasks) => formState?.setFieldValue(name, tasks)
-    //   );
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []);
 
     useObserver(() => {
       tasks = taskState?.tasks;
@@ -58,6 +52,7 @@ export const withFBTask = <T extends FBTaskProps>(
       tasks,
       name,
       loading,
+      disabled,
     });
   };
 

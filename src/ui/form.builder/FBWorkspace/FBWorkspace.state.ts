@@ -43,6 +43,10 @@ export class FBWorkspaceState extends FBSchemaState {
     return this.document?.document?.id;
   }
 
+  public get documentStatus(): DocumentRevisionStatus {
+    return this.document?.status || DocumentRevisionStatus.Draft;
+  }
+
   public get isReleased(): boolean {
     return this.document?.status === DocumentRevisionStatus.Released;
   }

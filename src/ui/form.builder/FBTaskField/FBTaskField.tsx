@@ -4,7 +4,7 @@ import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import { get } from "lodash";
 import moment from "moment";
 import React from "react";
-import { FB, FBMapWrapper, FBSchemaProps, FBTaskFieldProps } from "..";
+import { FB, FBButton, FBMapWrapper, FBSchemaProps, FBTaskFieldProps } from "..";
 import { TIME_ZONE } from "../../../common/utils/date";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBTaskField } from "./FBTaskField.wrap";
@@ -15,7 +15,9 @@ const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
   getApprover,
   onMouseOver,
   onMouseLeave,
+  handleClosingNote,
   visibility,
+  isInReview,
   task,
 }) => (
   <Box
@@ -93,6 +95,18 @@ const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
         Status: {task.status || "DRAFT"}
       </Box>
     </Box>
+    {isInReview && (
+      <Box mt={3} display="flex" flexDirection="row-reverse">
+        <FBButton
+          label="Done"
+          onClick={handleClosingNote}
+          variant="outlined"
+          style={{ margin: 0 }}
+          // endIcon={loading && <CircularProgress size={16} />}
+          // {...{ disabled }}
+        />
+      </Box>
+    )}
   </Box>
 );
 

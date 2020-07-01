@@ -28,7 +28,7 @@ const FBTask: React.FunctionComponent<FBTaskProps> = ({
         variant="outlined"
         style={{ margin: 0 }}
         endIcon={loading && <CircularProgress size={16} />}
-        disabled={loading || disabled}
+        {...{ disabled }}
       />
     </Box>
   </FBProvider>

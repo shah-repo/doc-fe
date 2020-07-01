@@ -3,7 +3,7 @@ import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBData, FBDatePicker, F
 import { FBSchema } from "../FBSchema";
 import { withFBTaskForm } from "./FBTaskForm.wrap";
 
-const FBTaskForm: React.FunctionComponent<FBTaskFormProps> = ({
+const FBTaskFormDescription: React.FunctionComponent<FBTaskFormProps> = ({
   formState,
   children,
 }) => (
@@ -21,4 +21,4 @@ const FBTaskForm: React.FunctionComponent<FBTaskFormProps> = ({
   </FBForm>
 );
 
-export default withFBTaskForm(FBTaskForm);
+export default withFBTaskForm(FBTaskFormDescription);

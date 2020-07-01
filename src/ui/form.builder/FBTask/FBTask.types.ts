@@ -1,5 +1,5 @@
 import { BoxProps } from "@material-ui/core";
-import { FBDialogState, FBFormProps, FBInputProps, FBSchemaProps, FBTaskState } from "..";
+import { FBDialogState, FBFormProps, FBInputProps, FBSchemaComponentProps, FBSchemaProps, FBTaskState } from "..";
 import { Employee } from "../../../state/ducks/company";
 import { FBTaskFieldState } from "../FBTaskField/FBTaskField.state";
 
@@ -36,9 +36,11 @@ export type FBTaskProps =
 export type FBTaskFormProps =
 & Pick<FBInputProps, "name">
 & Pick<FBFormProps, "formState" | "children" | "initialValues">
+& Pick<FBSchemaComponentProps, "schema">
 & {
   handleAdd?: () => any;
   handleCancel?: () => any;
+  mode?: "description" | "note";
 };
 
 export type FBTaskFieldProps =
@@ -47,7 +49,9 @@ export type FBTaskFieldProps =
 & {
   getApprover?: (task?: FBTaskItem) => any;
   handleRemoveTask?: (task?: FBTaskItem) => any;
+  handleClosingNote?: () => any;
   taskFieldState?: FBTaskFieldState;
   task: FBTaskItem;
   visibility?: "visible" | "hidden";
+  isInReview?: boolean;
 };

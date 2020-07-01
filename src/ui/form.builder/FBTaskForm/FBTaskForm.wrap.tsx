@@ -10,6 +10,7 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
     formState,
     initialValues,
     name,
+    mode,
     ...props
   }: T) => {
 
@@ -23,6 +24,18 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
         toastError("Adding a task is possible only for output document.");
         return handleCancel();
       }
+      switch (mode) {
+        case "description":
+          return handleAddDescription();
+        case "note":
+          return handleAddNote();
+        default: break;
+      }
+
+      handleCancel();
+    }
+
+    function handleAddDescription() {
       const formValue = formState?.getValues();
       taskState?.setTask({
         ...pick(formValue, ["dueDate", "id"]),
@@ -37,7 +50,10 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
         fieldId: name,
         partOf: { id },
       } as FBTaskItem);
-      handleCancel();
+    }
+
+    function handleAddNote() {
+      console.log(formState?.getValues());
     }
 
     function handleCancel() {
@@ -45,7 +61,9 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
     }
 
     React.useEffect(() => {
-      dialogState?.setActions(<FBTaskFormActions {...{ handleAdd, handleCancel }} />);
+      dialogState?.setActions(
+        <FBTaskFormActions {...{ handleAdd, handleCancel }} />
+      );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -53,6 +71,7 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
       ...(props as T),
       formState,
       initialValues,
+      mode,
     });
   };
 
