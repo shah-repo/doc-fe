@@ -21,4 +21,14 @@ export default (theme: Theme) =>
       borderBottom: `1px solid ${Colors.medium_gray}`,
       minHeight: "40px",
     },
+    headerButton: {
+      "boxShadow": "none",
+      "textTransform": "none",
+      "padding": 0,
+      "margin": 0,
+      "&:hover": {
+        background: "none",
+        boxShadow: "none",
+      },
+    },
   });
