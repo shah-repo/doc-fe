@@ -213,7 +213,7 @@ pipelines:
           - step: *BUILD_DEMO
       - step: *DEPLOY_DEMO
 
-    ENC-2434_fb_cr:
+    release/20.16.0.1:
       - parallel:
           - step: *RUN_TESTS
           # - step: *RUN_LINTER
