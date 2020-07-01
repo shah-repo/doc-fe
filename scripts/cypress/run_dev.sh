@@ -13,5 +13,5 @@ export CYPRESS_BE_URL="http://localhost:$ENLIL_COMPOSE_EXPOSE_BE_PORT"
 export CYPRESS_FE_URL="http://localhost:$ENLIL_COMPOSE_EXPOSE_FE_PORT"
 export CYPRESS_KONFIG_ENV="development"
 
-
+yarn install --frozen-lockfile
 yarn cypress open

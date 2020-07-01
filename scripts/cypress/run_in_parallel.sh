@@ -16,6 +16,7 @@ start=$(date +%s)
 
 DATE_ISO_DEFAULT=$(date --iso-8601=seconds)
 export CI_BUILD_ID=${CI_BUILD_ID:-$DATE_ISO_DEFAULT}
+export NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS:-4}
 
 if [[ -z "${CI_BUILD_ID}" ]]; then
   echo "CI_BUILD_ID not set, exiting"

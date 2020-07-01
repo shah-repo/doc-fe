@@ -1,13 +1,17 @@
 #!/bin/bash
 set -e
 
-NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS:-6}
 export ENLIL_COMPOSE_PORT_RANGE_START=${ENLIL_COMPOSE_PORT_RANGE_START:-5600}
 
 # calculate CI build number, has to be unique
 # export CI_BUILD_ID=$(date -R)
 if [[ -z "${CI_BUILD_ID}" ]]; then
   echo "CI_BUILD_ID not set, exiting"
+  exit
+fi
+
+if [[ -z "${NUMBER_OF_WORKERS}" ]]; then
+  echo "NUMBER_OF_WORKERS not set, exiting"
   exit
 fi
 

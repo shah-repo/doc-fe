@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-export FE_GIT_COMMIT_HASH=$(git rev-parse HEAD 2> /dev/null |  cut -c1-8)
+export FE_GIT_COMMIT_HASH=$(git rev-parse HEAD |  cut -c1-8)
 
 if [[ -z "${ENLIL_COMPOSE_PORT_RANGE_START}" ]]; then
   echo "ENLIL_COMPOSE_PORT_RANGE_START not set, exiting"
