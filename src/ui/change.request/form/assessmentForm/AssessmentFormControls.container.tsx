@@ -105,7 +105,7 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
         {renderAlertDialogButton(canWithdraw, "withdrawn")}
         {renderDialogButton(canApproveOrReject, "reject", { disabled: formHasErrors })}
         {renderDialogButton(canApproveOrReject, "approve", { disabled: formHasErrors })}
-        {renderTransitionButton(canClose, "closed")}
+        {renderDialogButton(canClose, "closed")}
       </HeaderMenu>
     </>
   );

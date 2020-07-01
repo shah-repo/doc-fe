@@ -139,7 +139,8 @@ export type ChangeRequestTransition =
   "approve" | "reject" | "to_review" | "withdrawn" | "submitted" | "in_review" | "closed";
 
 export interface ChangeRequestTransitionRequestBody {
-  password: string;
+  password?: string;
+  effectiveDate?: string;
 }
 
 export interface ChangeRequestTransitionResponse {

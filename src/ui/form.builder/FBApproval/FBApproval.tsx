@@ -6,6 +6,7 @@ import { FBApprovalAudit, FBApprovalField, FBApprovalProps, FBApprovalSocket } f
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import Text from "../../components/Text";
+import { FBDialogState } from "../FBDialog";
 import { withFBApproval } from "./FBApproval.wrap";
 
 const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
@@ -20,6 +21,8 @@ const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
   name,
   type,
   index,
+  dialogState,
+  onClick,
   ...props
 }) => (
   <Box mb={3}>
@@ -64,6 +67,8 @@ const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
       <FBApprovalField<Employee>
         {...props}
         collection={approvers as Employee[]}
+        dialogState={dialogState as FBDialogState}
+        onClick={onClick as () => void}
         {...{ disabled }}
       />
     )}
@@ -72,6 +77,8 @@ const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
         {...props}
         mt={approvers ? 2 : 0}
         collection={approverGroups as GroupRequestBody[]}
+        dialogState={dialogState as FBDialogState}
+        onClick={onClick as () => void}
         {...{ disabled }}
       />
     )}
