@@ -1,8 +1,7 @@
-import { Dictionary } from "lodash";
+import _, { Dictionary } from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
 import { FB, FBSnackbarState } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { FBDialogState } from "../FBDialog";
 import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 import FBStore from "../stores/ui/FBStore";
@@ -21,10 +20,9 @@ export const withWorkspace = <T extends FBWorkspaceProps>(
     FBStore.documentId = props.documentId || "";
 
     React.useEffect(() => {
-      FBDynamicValidatorStore.registerValidators();
+      // FBDynamicValidatorStore.registerValidators();
       FBDynamicValidatorStore.validate();
       FBStore.docId = props.id || "";
-      FBStore.document = props.document || {} as DocumentRevision;
     }, [props.documentId, props.id, props.document]);
 
     if (props.mode) {
@@ -37,7 +35,7 @@ export const withWorkspace = <T extends FBWorkspaceProps>(
       ...props,
       isStarter,
       mode,
-      schema,
+      schema: _.uniqBy(schema || [], "name"), // OLD: to be removed
       values,
       form: props.form,
       dialogState,

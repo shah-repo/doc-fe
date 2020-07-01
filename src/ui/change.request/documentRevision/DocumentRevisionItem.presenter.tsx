@@ -49,6 +49,7 @@ DocumentRevisionItemPresenterProps
               value={generateVersionNumber(
                 documentRevision.revision,
                 documentRevision.revisionStage,
+                documentRevision.subRevision,
                 documentRevision.revisionChangeType,
               )}
               data-testid="Document-version"

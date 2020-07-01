@@ -25,6 +25,7 @@ export type FBEditorElementType =
   | "action"
   | "hellosign"
   | "purchaseorder"
+  | "poreceive"
   | "paragraph"
   | "stepsection"
   | "instructionsmediaupload"
@@ -35,11 +36,15 @@ export type FBEditorElementType =
   | "quantity"
   | "timer"
   | "inlineapproval"
+  | "outputapproval"
+  | "approvalMatrix"
+  | "poApprovalMatrix"
   | "instructionsdocument"
   | "selectdocument"
   | "teststep"
   | "testRequirement"
-  | "selectrequirement";
+  | "selectrequirement"
+  | "dynamiccontrol";
 
 export type FBEditorModeType = "create" | "update";
 

@@ -14,7 +14,6 @@ export type FBTextFieldProps =
 const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   rows = 1,
   placeholder,
-  error,
   id,
   disabled,
   InputLabelProps,
@@ -22,7 +21,11 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   inputProps,
   ...props
 }) => {
-  const disableEdit = disabled || _.get(props.hellosignFlowProps, "type") === "HS_DEFINED_FIELD" || FBStore.getValue("signatureRequestId");
+  const disableEdit =
+    disabled ||
+    _.get(props.hellosignFlowProps, "type") === "HS_DEFINED_FIELD" ||
+    FBStore.getValue("signatureRequestId");
+
   return (
     <FBInput disabled={disableEdit} {...props} type="textfield">
       <TextField
@@ -30,7 +33,7 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
         variant="outlined"
         label=""
         id="FBTextField-input"
-        {...{ rows, placeholder, error, id, InputLabelProps, InputProps, inputProps }}
+        {...{ rows, placeholder, id, InputLabelProps, InputProps, inputProps }}
       />
     </FBInput>
   );

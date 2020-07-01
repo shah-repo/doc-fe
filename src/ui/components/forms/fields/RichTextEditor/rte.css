@@ -3,6 +3,8 @@
   border: 1px solid #B4C0CA;
   min-height: 200px;
   max-height: 500px;
+  border-radius: 4px;
+  background-color: white;
 }
 
 .rte-wrapper {
@@ -27,4 +29,8 @@
 
 .placeholder-li:hover {
   background: #F1F1F1;
+}
+
+.DraftEditor-editorContainer {
+  position: unset;
 }

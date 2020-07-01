@@ -1,8 +1,7 @@
 import { BoxProps } from "@material-ui/core";
-import { FBApprovalState } from ".";
+import { FBApprovalState, FBInputProps } from "..";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
-import { FBInputProps } from "../types/common";
 
 export interface FBApprovalConfig {
   label?: string;
@@ -12,8 +11,17 @@ export interface FBApprovalConfig {
 }
 
 export type FBApprovalProps =
-& Pick<FBInputProps, "name" | "label" | "type" | "approvers" | "approverGroups" | "disabled" | "approveIsBlocking">
-& {
+& Pick<FBInputProps,
+| "name"
+| "label"
+| "type"
+| "index"
+| "approvers"
+| "approverGroups"
+| "disabled"
+| "approveIsBlocking"
+| "reviseDisabled"
+> & {
   onApprove?: (approver?: Employee | GroupRequestBody) => () => void;
   approvalConfig?: (approver?: Employee | GroupRequestBody) => FBApprovalConfig | undefined;
   approvalFieldState?: FBApprovalState;
@@ -24,7 +32,7 @@ export type FBApprovalProps =
 };
 
 export enum FBApprovalStatus {
-  Pending = "",
+  Pending = "| Pending approval",
   Approved = "| Approved"
 }
 
@@ -56,4 +64,10 @@ export interface FBApprovalSocketMsg {
   data?: {
     message: string;
   };
+}
+
+export interface FBApprovalConstructor {
+  documentId?: string;
+  name?: string;
+  value?: FBApprovalValue[];
 }

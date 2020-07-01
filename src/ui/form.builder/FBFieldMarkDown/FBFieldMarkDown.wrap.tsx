@@ -2,7 +2,7 @@ import Base64 from "Base64";
 import _ from "lodash";
 import React from "react";
 import { FBFieldMarkDownProps } from ".";
-import FBStore from "../stores/ui/FBStore";
+import { FB } from "..";
 
 export const withFBFieldMarkDown = <T extends FBFieldMarkDownProps>(
   Component: React.FunctionComponent<T>,
@@ -12,7 +12,9 @@ export const withFBFieldMarkDown = <T extends FBFieldMarkDownProps>(
     ...props
   }: T) => {
 
-    const schemaItem = FBStore.getSchemaItem(index) || {};
+    const { workspaceState, formState } = FB.useStores();
+    const schemaItem = workspaceState?.getSchemaItemAt(index) || {};
+
     let { customValidator } = schemaItem;
     const { name } = schemaItem;
     customValidator = customValidator ? Base64.atob(customValidator.fn || "") : "";
@@ -28,11 +30,12 @@ export const withFBFieldMarkDown = <T extends FBFieldMarkDownProps>(
     `);
 
     const source = template({
-        ...schemaItem,
-        label: _.get(schemaItem, "label") || "",
-        value: FBStore.getValues()[name || ""],
-        customValidator,
-      });
+      ...schemaItem,
+      label: _.get(schemaItem, "label") || "",
+      rules: _.get(schemaItem, "rules", ""),
+      value: formState?.getFieldValue(name, ""),
+      customValidator,
+    });
 
     return Component({
       ...(props as T),

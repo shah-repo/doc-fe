@@ -11,8 +11,9 @@ import { TableDataProps, TablePanelStateProps, TableSearchQueryType } from "../.
 import Text from "../../components/Text";
 import { canEditDocumentRevision, documentRevisionQueryStatus, documentRevisionStatusOption } from "../../document.revision/utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
-import { FB } from "../../form.builder";
 import { Translation } from "../../translations/types";
+import CreateDocumentByType from "./CreateDocumentByType";
+import { columnSearchConfiguration, shouldShowStaticColumns } from "./helpers";
 import { styles } from "./styles";
 
 export interface Props {
@@ -21,8 +22,6 @@ export interface Props {
   tableData: TableDataProps<DocumentRevision>;
   clearFilter?: () => void;
   documentType: DocumentType;
-  openDocRev: () => void;
-  showError: boolean;
 }
 
 export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
@@ -31,9 +30,8 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   tableData,
   clearFilter,
   documentType,
-  openDocRev,
-  showError,
 }) => {
+  const showStaticColumns = shouldShowStaticColumns(documentType.documentTypeName);
   const classes = styles();
   const canEdit = (data: DocumentRevision) => canEditDocumentRevision(data);
   const queryUrl =
@@ -54,27 +52,25 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
     return documentPreviewPath(rowData.id, rowData.document.id);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const pageDetailColumns = documentType.pageDetails!.columns;
+  const pageDetailColumns = documentType.pageDetails?.columns || [];
   const additionalColumns = pageDetailColumns.map(
-    (column: PageDetailsColumn) => ({
-      key: column.fieldName as keyof DocumentRevision,
-      label: column.label as Translation,
-      cellHref: cellHrefRenderer,
-      omitSearch: true,
-      columnOptions: {
-        cellDataGetter: ({ rowData }) => {
-          const { fieldName } = column;
-          return FB.stripOption(
-            fieldName,
-            _.get(rowData, `formInput.${fieldName}`),
-          );
+    (column: PageDetailsColumn) => {
+      const [omitSearch, searchOptions] = columnSearchConfiguration(column.valuePath, tableCriteria);
+
+      return {
+        key: column.valuePath as keyof DocumentRevision,
+        label: column.label as Translation,
+        cellHref: cellHrefRenderer,
+        omitSearch,
+        columnOptions: {
+          cellDataGetter: ({ rowData }) => _.get(rowData, column.valuePath),
         },
-      },
-    }),
+        searchOptions,
+      };
+    },
   );
 
-  const columns: TableColumnProps<DocumentRevision>[] = [
+  const staticColumns: TableColumnProps<DocumentRevision>[] = [
     {
       key: "docId",
       label: `${documentType.documentTypeName} ID` as Translation,
@@ -136,8 +132,10 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
         width: 100,
       },
     },
-    ...additionalColumns,
   ];
+  const columns: TableColumnProps<DocumentRevision>[] = showStaticColumns ?
+    [...staticColumns, ...additionalColumns] :
+    [...additionalColumns];
 
   return (
     <Grid container={true} className={classes.root}>
@@ -153,28 +151,10 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
         </Button>
         <DocumentInfo numberOfRecords={tableData.length} />
       </Grid>
-      <Grid item={true} xs={6} style={{ textAlign: "right" }}>
-        <Button
-          variant="contained"
-          color="primary"
-          className={classes.button}
-          onClick={openDocRev}
-          id="DocumentByTypeListPresenter-openDocRev"
-        >
-          <Text
-            translation="supplier.add.new"
-            values={{ name: documentType.documentTypeName }}
-          />
-        </Button>
-      </Grid>
-      {showError && (
-        <div style={{ color: "red" }} id="DocumentByTypeListPresenter-showError">
-          <Text
-            translation="supplier.form.error"
-            values={{ name: documentType.documentTypeName }}
-          />
-        </div>
-      )}
+      <CreateDocumentByType
+        documentTypeName={documentType.documentTypeName}
+        documentTypeId={documentType.id}
+      />
       <Grid item={true} className={classes.item}>
         <TablePanel<DocumentRevision>
           columns={columns}

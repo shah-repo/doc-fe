@@ -1,74 +1,91 @@
-import flatten from "flat";
+import { flatten } from "flat";
 import _, { Dictionary } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
-import { FBSchemaProps, FBSchemaState } from "../FBSchema";
+import { FBFormConstructor, FBInputState, FBWorkspaceMode, FBWorkspaceState } from "..";
+import { FBSchemaState } from "../FBSchema";
 
 export class FBFormState extends FBSchemaState {
   public rules: Dictionary<string> = {};
   public validationAttributeNames: Dictionary<string> = {};
   public errorValidation = true;
-  @observable public initialValues: Dictionary<any> = {};
-  @observable public values: Dictionary<any> = {};
-  @observable public errors: Dictionary<string> = {};
-  @observable public helpers = new Map<string, string>();
+  public initialValues: Dictionary<any> = {};
+  public workspaceMode?: FBWorkspaceMode;
+  public values: Dictionary<any> = {};
 
-  public constructor(schema?: FBSchemaProps[]) {
+
+  // TO BBE REMOVED!
+  public workspaceState?: FBWorkspaceState;
+  @observable public errors = new Map<string, string>();
+  @observable public helpers = new Map<string, string>();
+  @observable public inputState = new Map<string, FBInputState>();
+
+  public constructor({ schema, initialValues = {}, workspaceMode, workspaceState }: FBFormConstructor) {
     super();
     this.schema = schema;
+    this.initialValues = initialValues || {};
+    this.values = initialValues || {};
+    this.workspaceMode = workspaceMode;
+    this.workspaceState = workspaceState;
   }
 
-  @computed private get Validator(): any {
+  @computed public get Validator(): any {
     return _.get(window, "EnlilRemoteValidators.validator");
   }
 
-  @action public setInitialValues = (values: Dictionary<any>) => {
-    set(this.initialValues, values);
-    this.setValues(values);
-  };
-
   @action public setValues = (values: Dictionary<any>) => {
-    set(this.values, values);
+    this.values = values;
   };
 
-  @action public getValues = () => get(this, "values");
+  @action public getValues = () => this.values;
+  // TODO: Remove if works
+  //   unflatten(this.values, { overwrite: true })
+  // ;
 
-  @action public getFieldValue = (fieldName: string | undefined, defaultValue: any = undefined): any => {
+  @action public getFieldValue = (
+    fieldName: string | undefined, defaultValue: any = undefined): any => {
     if (!fieldName) {
       return defaultValue;
     }
-    return _.get(this.values, fieldName) || defaultValue;
+    if (_.isUndefined(_.get(this.values, fieldName)) && !_.isUndefined(defaultValue)) {
+      _.set(this.initialValues, fieldName, defaultValue);
+      _.set(this.values, fieldName, defaultValue);
+    }
+    return _.get(this.values, fieldName) || _.get(this.initialValues, fieldName);
   };
 
-  @action public setFieldValue = (fieldName: string | undefined, value: any) => {
+  @action public setFieldValue = (fieldName: string | undefined, value: any, withState = false, forceDefault = false) => {
     if (!fieldName) {
       return;
     }
-    this.setValues(_.set(this.values, fieldName, value));
+    const prevValue = this.getFieldValue(fieldName);
+    _.set(this.values, fieldName, value);
+    if (withState) {
+      this.inputState.get(fieldName)?.setValue(prevValue);
+      this.inputState.get(fieldName)?.setValue(value);
+    }
   };
 
   @action public omitFieldValue = (fieldName?: string) => {
     if (!fieldName) {
       return;
     }
-    this.values = _.omit(this.values, fieldName);
+    this.initialValues = _.omit(this.initialValues, fieldName);
+    this.values = _.omit(this.getValues(), fieldName);
   };
 
-  @action public setRules = (rules: Dictionary<string>) => set(this.rules, rules);
+  @action public setRules = (rules: Dictionary<string>) =>
+    set(this.rules, rules);
 
   @action public getRules = () => this.rules;
 
-  @action public setErrors = (errors: Dictionary<string>) => {
-    set(this.errors, errors);
-  };
+  @action public setErrors = (errors: Dictionary<string>) =>
+    set(this, "errors", errors);
 
-  @action public setFieldError = (fieldName: string, error: string) => {
-    this.setErrors({
-      ...this.errors,
-      [fieldName]: error,
-    });
-  };
+  @action public setFieldError = (fieldName: string, error: string) =>
+    set(this.errors, fieldName, error);
 
-  @action public getFieldError = (fieldName: string): string | undefined => get(this.errors, fieldName);
+  @action public getFieldError = (fieldName: string): string | undefined =>
+    get(this.errors, fieldName);
 
   @action public setHelpers = (helpers: Dictionary<string>) => {
     set(this, "helpers", helpers);
@@ -78,16 +95,14 @@ export class FBFormState extends FBSchemaState {
     set(this.helpers, fieldName, value);
   };
 
-  @action public getFieldHelper = (fieldName: string) => get(this.helpers, fieldName);
+  @action public getFieldHelper = (fieldName: string) =>
+    get(this.helpers, fieldName);
 
   @action public setFieldRules = (fieldName: string, rules: string | undefined) => {
     if (_.isUndefined(rules)) {
       return;
     }
-    this.rules = {
-      ...this.rules,
-      [fieldName]: rules,
-    };
+    _.set(this.rules, fieldName, rules);
   };
 
   @action public setValidationAttributeName = (fieldName: string, attrName: string) => {
@@ -97,28 +112,68 @@ export class FBFormState extends FBSchemaState {
     };
   };
 
-  @action public validate = () => {
+  @action public validate = (callback?: (valid: boolean) => any) => {
     if (_.isUndefined(this.Validator)) {
       return;
     }
 
     const rules = this.getRules();
-    const values = flatten(this.getValues());
-    const validator = new this.Validator(values, rules);
+    // const values = flatten(this.getValues(), { safe: true });
+    const values = this.getValues();
+    // *TODO: unify validators format
+    let validator: any;
+    try {
+      validator = new this.Validator(values, rules);
+    } catch {
+      validator = new this.Validator(flatten(this.getValues()), flatten(this.getRules()));
+    }
+    if (!validator) {
+      return;
+    }
+    this.registerValidator(validator);
     validator.setAttributeNames(this.validationAttributeNames);
 
-    this.helpers.clear();
-    function passes() {
-      // eslint-disable-next-line no-console
-      console.log("Validation passed");
-    }
-
-    validator.checkAsync(passes, () => {
-      const errors = validator.errors.all();
-      _.map(errors, (v, k) => {
-        this.setFieldHelper(k, _.join(v, "\n"));
+    validator.checkAsync(
+      // passes
+      () => {
+        this.errors.clear();
+        callback && callback(true);
+      },
+      // failed
+      () => {
+        this.errors.clear();
+        const errors = validator.errors.all();
+        _.map(errors, (v, k) => this.setFieldError(k, _.join(v, "\n")));
+        callback && callback(false);
       });
+  };
+
+  // *NOTE: remove this after it is set in be script
+  public registerValidator = (validator: any) => {
+    this.Validator.registerAsyncImplicit("required_if_in", function(val: string[], req: string, attribute: string, passes) {
+      const reqs = req.split(",");
+      const reqName = reqs.shift() || "";
+      let inputValue = validator.input[reqName];
+      // Radio group support
+      !_.isArray(inputValue) && (inputValue = [inputValue]);
+      const diff = inputValue && inputValue.filter((val) => reqs.includes(val));
+      if (diff && diff.length > 0 && (!val || _.isEmpty(val))) {
+        const { messages: { attributeNames } } = validator;
+        const reqsAttributes = reqs.map((req) => attributeNames[req]);
+        return passes(
+          false,
+          `The ${attributeNames[attribute]} field is required when ${attributeNames[reqName]} includes ${reqsAttributes.join(", ")}.`);
+      }
+      return passes();
     });
+  };
+
+  public setFieldAutosave = (name?: string) => {
+    if (!name) { return; }
+    const inputState = this.inputState.get(name);
+    if (!inputState) { return; }
+    const formValue = this.getFieldValue(name);
+    inputState.setAutosaveValue(formValue);
   };
 }
 

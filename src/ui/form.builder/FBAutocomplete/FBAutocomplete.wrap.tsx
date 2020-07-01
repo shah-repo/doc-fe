@@ -1,7 +1,9 @@
 import _ from "lodash";
 import React from "react";
+import { useIntl } from "react-intl";
 import { FBAutocompleteProps } from ".";
-import FBStore from "../stores/ui/FBStore";
+import { FB, FBOptionValueType } from "..";
+import { isTranslation } from "../../translations/types";
 
 export const withFBAutocomplete = <T extends FBAutocompleteProps>(
   Component: React.FunctionComponent<T>
@@ -10,25 +12,53 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     optionLabelKey = "text",
     optionValueKey = "value",
     optionValueType = "key",
+    placeholder,
     getOptionLabel,
     multiple,
     name,
     defaultValue,
     options,
+    optionId,
     ...props
   }: T) => {
 
-    const value = FBStore.getValue(name) || defaultValue;
+    const { formState } = FB.useStores();
+    const formValue = formState?.getFieldValue(name) || defaultValue;
+    const intl = useIntl();
 
-    if (options && value && optionValueType === "key") {
-      defaultValue = multiple
-        ? _.filter(options, (o) => _.includes(value, o[optionValueKey]))
-        : _.find(options, { [optionValueKey]: value });
+    function getDefault() {
+      function  sliceValue(value: any) {
+        return multiple
+          ? _.filter(options, (o) => (value || formValue).includes(o[optionValueKey]))
+          : _.find(options, { [optionValueKey]: value || formValue });
+      }
+
+      const objectValue: Record<FBOptionValueType, () => any> = {
+        object: () => formValue,
+        key: () => sliceValue(formValue),
+        id: (value?: any) =>  {
+          const slicedValue = multiple
+            ? _.map(value || formValue, optionValueKey)
+            : _.get(value || formValue, optionValueKey);
+          return sliceValue(slicedValue);
+        },
+      };
+      return objectValue[optionValueType]();
     }
 
-    !getOptionLabel && (getOptionLabel =
-      (option) => optionLabelKey && _.get(option, optionLabelKey)
-    );
+    if (placeholder && isTranslation(placeholder)) {
+      placeholder = intl.formatMessage({ id: placeholder });
+    }
+
+    (!optionId && options && formValue && !_.isEmpty(formValue)) && (defaultValue = getDefault());
+
+    !getOptionLabel && (getOptionLabel = (option) => {
+      let optionText = _.get(option, optionLabelKey);
+      if (isTranslation(optionText)) {
+        optionText = intl.formatMessage({ id: optionText });
+      }
+      return optionText;
+    });
 
     return Component({
       ...(props as T),
@@ -38,7 +68,9 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       optionValueKey,
       optionLabelKey,
       optionValueType,
+      placeholder,
       multiple,
+      optionId,
       name,
     });
   };

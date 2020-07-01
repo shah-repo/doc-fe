@@ -1,4 +1,3 @@
-export { default } from "./FBEditorProperties";
-export * from "./FBEditorProperties.state";
+export { default as FBEditorProperties } from "./FBEditorProperties";
 export * from "./FBEditorProperties.types";
 

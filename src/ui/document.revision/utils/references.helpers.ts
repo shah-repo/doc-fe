@@ -1,8 +1,27 @@
 import { DocumentRevision, DocumentRevisionStatus, Reference } from "../../../state/ducks/documentRevisions";
-import { documentDetailsPathWithDeprecatedDate, documentVersionPath } from "./paths";
+import { documentVersionPath } from "./paths";
 import { ReferenceSummary } from "./types";
 
-const getCorrectDocRev = (documentRevisions?: DocumentRevision[]) => {
+const handleReferenceForDeprecated = (documentRevisions: DocumentRevision[], deprecatedAt: string) => {
+  const docRevDeprecatedAfterThisDocument = documentRevisions.find((docRev) => {
+    if (!docRev.deprecatedAt) {
+      return false;
+    }
+    return new Date(docRev.deprecatedAt).valueOf() - new Date(deprecatedAt).valueOf() >= 0;
+  });
+
+  if (docRevDeprecatedAfterThisDocument) {
+    return docRevDeprecatedAfterThisDocument;
+  }
+
+  return documentRevisions.find((docRev) => docRev.status === DocumentRevisionStatus.Released);
+};
+
+const getCorrectDocRev = (
+  status: DocumentRevisionStatus,
+  deprecatedAt: string,
+  documentRevisions?: DocumentRevision[],
+) => {
   if (!documentRevisions || documentRevisions.length === 0) {
     return null;
   }
@@ -11,38 +30,29 @@ const getCorrectDocRev = (documentRevisions?: DocumentRevision[]) => {
     return documentRevisions[0];
   }
 
-  const released = documentRevisions.find((docRev) => docRev.status === DocumentRevisionStatus.Released);
-  return released;
-};
-
-const getReferenceToUrl = (
-  documentStatus: DocumentRevisionStatus,
-  documentId: string,
-  documentRevisionId: string,
-  deprecatedAt: string,
-): string => {
-  if (documentStatus === DocumentRevisionStatus.Deprecated) {
-    return documentDetailsPathWithDeprecatedDate(documentId, deprecatedAt);
+  if (status === DocumentRevisionStatus.Deprecated || status === DocumentRevisionStatus.Obsolete) {
+    return handleReferenceForDeprecated(documentRevisions, deprecatedAt);
   }
 
-  return documentVersionPath(documentRevisionId, documentId);
+  const released = documentRevisions.find((docRev) => docRev.status === DocumentRevisionStatus.Released);
+  return released;
 };
 
 export const getReferenceToSummary = (dataProp: Reference[], status: DocumentRevisionStatus, deprecatedAt: string) => {
   const summaries: ReferenceSummary[] = [];
 
   dataProp.forEach((ref) => {
-    const docRev = getCorrectDocRev(ref.documentRevisions);
+    const docRev = getCorrectDocRev(status, deprecatedAt, ref.documentRevisions);
 
     if (!docRev) {
       return;
     }
-
     summaries.push(
       {
         id: ref.id,
-        url: getReferenceToUrl(status, ref.id, docRev.id, deprecatedAt),
-        title: `${ref.docId} - ${docRev.name}`,
+        url: documentVersionPath(docRev.id, ref.id),
+        docId: ref.docId,
+        title: docRev.name,
       },
     );
   });
@@ -72,7 +82,8 @@ export const getReferencedBySummary = (dataProp: DocumentRevision[]): ReferenceS
       {
         id: docRev.id,
         url: getReferencedByUrl(docRev),
-        title: `${docRev.document.docId} - ${docRev.name}`,
+        docId: docRev.document.docId,
+        title: docRev.name,
       },
     );
   });

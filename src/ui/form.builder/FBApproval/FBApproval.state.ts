@@ -1,25 +1,29 @@
 import _ from "lodash";
 import { action, computed, observable, set } from "mobx";
-import { FBApprovalApi, FBApprovalData, FBApprovalValue } from ".";
+import { FBApprovalApi, FBApprovalConstructor, FBApprovalData, FBApprovalValue } from ".";
 import { FBAutocompleteAsyncOption } from "..";
+import { Audit } from "../../../state/ducks/audit";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import { FBAutocompleteAsyncState } from "../FBAutocompleteAsync/FBAutocompleteAsync.state";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
-import FBStore from "../stores/ui/FBStore";
 
 export class FBApprovalState {
   @observable public hasApproved: FBApprovalValue[] = [];
+  @observable public auditData?: Audit[];
   public postApi: FBRequest<any, FBApprovalApi> = new FBRequest();
   public approversApi: FBAutocompleteAsyncState = new FBAutocompleteAsyncState(this.approversId);
   public groupsApi: FBAutocompleteAsyncState = new FBAutocompleteAsyncState(this.groupsId);
+  public auditApi = new FBRequest<Audit[], null>();
 
-  public constructor() {
-    const urlTpl = _.template(FBEndpoint.PostInlineApprove);
-    const url = urlTpl({ documentId: FBStore.docId });
-    this.postApi.setUrl(url);
+  public constructor({ documentId, name = "", value = [] }: FBApprovalConstructor) {
+    if (!documentId) { return; }
+    this.hasApproved = value;
+
+    // post approval
+    this.postApi.setTemplateUrl(FBEndpoint.PostInlineApprove, { documentId });
   }
 
   @computed public get approversId(): string {
@@ -42,6 +46,10 @@ export class FBApprovalState {
 
   @computed public get isApproved(): boolean {
     return !_.isEmpty(this.hasApproved);
+  }
+
+  @action public setAuditData(data: Audit[]) {
+    set(this, "auditData", data);
   }
 
   @action public approvers(values: string[]): Employee[] | undefined {

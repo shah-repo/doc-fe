@@ -1,66 +1,18 @@
-import { Dictionary } from "lodash";
-import { FBPurchaseOrderState } from ".";
-import { FBInputProps } from "../types/common";
+import { FBDialogState, FBInputProps, FBPurchaseOrderState } from "..";
 
-export type FBPurchaseOrderBasicProps = Pick<FBInputProps, "name" | "disabled" | "label">;
-
-export type FBPurchaseOrderFieldProps =
-& FBPurchaseOrderBasicProps
+export type FBPurchaseOrderMode = "preview" | "form";
+export type FBPurchaseOrderProps =
+& Pick<FBInputProps, "name" | "label" | "disabled" | "gutter" | "defaultValue" | "autosave">
 & {
-  poState: FBPurchaseOrderState;
+  handleItem?: (item?: FBPurchaseOrderItem) => any;
+  purchaseOrderState?: FBPurchaseOrderState;
+  dialogState?: FBDialogState;
+  mode?: FBPurchaseOrderMode;
 };
 
-export type FBPurchaseOrderDialogProps =
-& FBPurchaseOrderBasicProps
-& {
-  isDialogOpen: boolean;
-  initialValues?: Dictionary<PurchaseOrderItem>;
-  onSubmit: (item: any) => void;
-  closeDialog: () => void;
-  items?: PurchaseOrderItem[];
-};
+export type FBPurchaseOrderItemType = "product" | "service";
 
-export type FBPurchaseOrderFormProps =
-& FBPurchaseOrderBasicProps
-& Pick<FBPurchaseOrderDialogProps, "initialValues" | "onSubmit" | "closeDialog" | "items">
-& {
-  validateForm?: (values: any) => void;
-  handlePartNumberChange?: (setFieldValue: any) => (evt: any, option: any) => void;
-};
-
-export type FBPurchaseOrderAddItemProps =
-& FBPurchaseOrderBasicProps
-& Pick<FBPurchaseOrderDialogProps, "onSubmit" | "closeDialog" | "items" | "isDialogOpen">
-& {
-  openDialog: () => void;
-};
-
-export type FBPurchaseOrderTotalProps =
-& FBPurchaseOrderBasicProps
-& Pick<PurchaseOrder, "shippingCost" | "subTotal" | "tax" | "totalAmount">
-& Pick<FBPurchaseOrderState, "setShippingCost">
-& Pick<FBInputProps, "disabled">;
-
-
-export type FBPurchaseOrderTableProps =
-& FBPurchaseOrderBasicProps
-& Pick<FBPurchaseOrderDialogProps, "onSubmit" | "closeDialog" | "items" | "isDialogOpen" | "initialValues">
-& {
-  items: PurchaseOrderItem[];
-  isDocumentReleased?: boolean;
-  handleEdit: (index: number, item: PurchaseOrderItem) => () => void;
-  handleDelete (index: number): (e: any) => void;
-};
-
-export interface PurchaseOrder {
-  shippingCost: string;
-  tax: string;
-  subTotal: string;
-  totalAmount: string;
-  items: PurchaseOrderItem[];
-}
-
-export interface PurchaseOrderItem {
+export interface FBPurchaseOrderItem {
   id: string;
   index: number;
   order: string;
@@ -78,4 +30,28 @@ export interface PurchaseOrderItem {
   capitalEquipment: boolean;
   tax: boolean;
   received?: number;
+  receivedList?: any[];
+  type: FBPurchaseOrderItemType;
 }
+
+export interface FBPurchaseOrderCalculation {
+  subTotal: string;
+  tax: string;
+  totalAmount: string;
+  shippingCost: string;
+  currency: FBCurrency;
+  exchangeRate: number;
+  totalInUSD: string;
+  dateOfExchangeRate: string;
+}
+
+export type FBPurchaseOrderValue = FBPurchaseOrderCalculation
+& {
+  items?: FBPurchaseOrderItem[];
+};
+
+export type FBPurchaseOrderConstructor = FBPurchaseOrderValue & {
+  documentId?: string;
+};
+
+export type FBCurrency = "USD" | "EUR" | "GBP";

@@ -42,6 +42,7 @@ export type FBLabelProps =
     labelValues?: TextProps["values"];
     fontSize?: "sm" | "md" | "lg";
     loading?: boolean;
+    isFullWidth?: boolean;
   };
 
 export type FBOptionProps =
@@ -114,6 +115,8 @@ export type FBInputProps = Omit<FBFormikFieldProps, "name">
   instructionsDocument?: string;
   testRequirement?: string;
   approved?: boolean;
+  designDisabled?: boolean;
+  reviseDisabled?: boolean;
 };
 
 export type FBFormDefaultProps = FBInputProps &

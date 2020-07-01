@@ -1,8 +1,6 @@
-import { Box, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, List, Typography } from "@material-ui/core";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { Box, List } from "@material-ui/core";
 import React from "react";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
-import { TypographySize } from "../../../state/ducks/common";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
@@ -18,7 +16,6 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   audit,
 }) => {
   const classes = styles();
-  const [expanded, setExpanded] = React.useState<boolean>(false);
 
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId) => {
@@ -43,15 +40,18 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     });
 
   const renderChanges = (audits: Audit[]) => {
-    const references: Audit[] = [];
+    const newReferences: Audit[] = [];
+    const deletedReferences: Audit[] = [];
     const attachments: Audit[] = [];
     const singleFields: JSX.Element[] = [];
 
-    audits.forEach((change, index) => {
+    audits.forEach((change: Audit, index) => {
       if (change.field.includes("attachments")) {
         attachments.push(change);
-      } else if (change.field.includes("referenceTo")) {
-        references.push(change);
+      } else if (change.field.includes("referenceTo") && change.type === "ARRAY_NEW") {
+        newReferences.push(change);
+      } else if (change.field.includes("referenceTo") && change.type === "ARRAY_DELETED") {
+        deletedReferences.push(change);
       } else if (change.field.includes("formInput")) {
         return;
       } else {
@@ -74,7 +74,8 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       <Box>
         {singleFields}
         {attachments.length > 0 && renderGroupChanges(attachments)}
-        {references.length > 0 && renderGroupChanges(references)}
+        {newReferences.length > 0 && renderGroupChanges(newReferences)}
+        {deletedReferences.length > 0 && renderGroupChanges(deletedReferences)}
       </Box>
     );
   };
@@ -100,20 +101,9 @@ export const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     );
   };
 
-  const handleChange = () => () => setExpanded(!expanded);
-
   return (
     <div className={classes.container}>
-      <ExpansionPanel expanded={expanded} onChange={handleChange()}>
-        <ExpansionPanelSummary id="docHistoryButton" expandIcon={<ExpandMoreIcon />}>
-          <Typography variant={TypographySize.md}>
-            <Text translation="documentRevision.audit.docHistory" />
-          </Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails className={classes.details}>
-          <List>{audit && renderAuditGroup()}</List>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
+      <List>{audit && renderAuditGroup()}</List>
     </div>
   );
 };

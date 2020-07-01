@@ -1,21 +1,24 @@
 import { createStyles, Theme } from "@material-ui/core";
-
+import Colors from "../layout/theme/utils/colors";
 import { DRAWER_WIDTH } from "./Navigation.styles";
+
 export default (theme: Theme) =>
   createStyles({
     appBar: {
-      backgroundColor: "white",
-      boxShadow: "none",
-      paddingLeft: DRAWER_WIDTH,
-      color: "rgba(0, 0, 0, 0.87)",
+      backgroundColor: Colors.white,
+      marginLeft: DRAWER_WIDTH,
+      fontSize: "1rem",
     },
     welcomeText: {
-      color: "#29064C",
-      fontSize: "0.8rem",
+      color: Colors.dark_gray,
     },
     name: {
-      margin: theme.spacing(0),
-      padding: theme.spacing(0),
-      textTransform: "none",
+      fontWeight: 600,
+      color: theme.palette.primary.main,
+    },
+    toolbar: {
+      marginLeft: DRAWER_WIDTH,
+      borderBottom: `1px solid ${Colors.medium_gray}`,
+      minHeight: "40px",
     },
   });

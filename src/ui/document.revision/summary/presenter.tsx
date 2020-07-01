@@ -4,22 +4,21 @@ import _ from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { DataProps } from "../../../state/ducks/common";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision, DocumentRevisionStatus, FBOutputDocumentType } from "../../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
 import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
-import OwnerChanger from "../../components/common/owner.changer/container";
-import { RequestType } from "../../components/common/owner.changer/helpers/types";
+import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
-import ControlsContainer from "../../documentRevision/PreviewControls.container";
-import FBWorkspace from "../../form.builder/containers/workspace/FBWorkspace";
-import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
-import FBStore from "../../form.builder/stores/ui/FBStore";
+import { FBSchemaProps, FBWorkspace } from "../../form.builder";
+import { useCRLink, useTitle, useTraining } from "../../hooks/docCustomization/useCustomization";
+import useDescription from "../../hooks/docCustomization/useDescription";
+import { useScrollIntoView } from "../../hooks/useScrollIntoView";
+import SummaryHeader from "../header/SummaryHeader";
 import Attachment from "./attachment";
 import ChangeRequestLink from "./changeRequestLink";
-import DocumentHeader from "./header";
 import ReferencedByContainer from "./referencedBy.container";
 import ReferenceToContainer from "./referenceTo.container";
 import styles from "./styles";
@@ -54,9 +53,24 @@ export const Presenter: React.FunctionComponent<Props> = ({
   canChangeOwnerShip,
   canShowCreateVersionButton,
 }) => {
+
+  useScrollIntoView();
   const onSubmit = () => void 0;
-  FBDRStore.setValues(dataProp);
-  const outputDocumentTypeName = useSelector((state: ApplicationState) => formTemplate ? formTemplate.outputDocumentTypes.map((i) => documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
+  const { formInput } = dataProp || {};
+  const { schema } = formTemplate || formDocument?.formTemplate || {};
+  const { docId } = formDocument?.document || {};
+  const FBIsOutput = Boolean(docId && !_.isEmpty(docId));
+  const FBIsActive = formInput || formTemplate || formDocument;
+  const docTypeId = dataProp?.document?.documentType?.id;
+  const [isTrainingVisible] = useTraining(docTypeId);
+  const [isDescriptionVisible] = useDescription(docTypeId);
+  const [isTitleVisible, titleLabel] = useTitle(docTypeId);
+  const [isCRLinkVisible] = useCRLink(docTypeId);
+  const docTypeAcronym = dataProp?.document?.documentType?.documentTypeAcronym;
+
+  const outputDocumentTypeName = useSelector((state: ApplicationState) =>
+    formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
+      documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
 
   const renderTrainingControl = status === DocumentRevisionStatus.Released && (
     <TrainingControl
@@ -68,25 +82,36 @@ export const Presenter: React.FunctionComponent<Props> = ({
 
   const contentRenderer = () => (
     <Box>
-      <DocumentHeader dataProp={dataProp} />
+      <SummaryHeader
+        documentRevision={dataProp}
+        canChangeOwnerShip={canChangeOwnerShip}
+        canShowCreateVersionButton={canShowCreateVersionButton}
+      />
       <Grid
         container={true}
         className={classes.previewBox}
         spacing={4}
         direction="column"
       >
-        <ChangeRequestLink dataProp={dataProp} />
-        {FBDRStore.isOutput && (
-          <Box ml={2} mt={1}>
-            <DocumentRevisionOutputInfo dataProp={dataProp} />
-          </Box>
-        )}
-        <SummaryField label="document.title" value={name} />
-        <SummaryField
-          label="document.revision.trainingRequired"
-          value={<Text translation={retrain ? "common.yes" : "common.no"} />}
-        />
-        <SummaryFieldWithHtml label="common.description" value={description} />
+        {
+          isCRLinkVisible &&
+          <ChangeRequestLink dataProp={dataProp} />
+        }
+        {
+          isTitleVisible &&
+          <SummaryField label={titleLabel} value={name} />
+        }
+        {
+          isTrainingVisible &&
+          <SummaryField
+            label="document.revision.trainingRequired"
+            value={<Text translation={retrain ? "common.yes" : "common.no"} />}
+          />
+        }
+        {
+          isDescriptionVisible &&
+          <SummaryFieldWithHtml label={`common.description.${docTypeAcronym}`} value={description} />
+        }
         {formTemplate && (
           <SummaryField
             label="document.output.type"
@@ -103,42 +128,36 @@ export const Presenter: React.FunctionComponent<Props> = ({
         {document.referencedBy && (
           <ReferencedByContainer dataProp={document.referencedBy} />
         )}
-        {attachments && <Attachment />}
+        {attachments && <Attachment isAttachmentEmpty={!attachments.length}/>}
         {renderTrainingControl}
       </Grid>
 
-      {FBStore.active && (
-        <Box px={5} id="Presenter-FBWorkspace">
+      {FBIsActive && (
+        <Box px={5} mt={4} id="Presenter-FBWorkspace">
           <FBWorkspace
-            documentId={_.get(formDocument, "document.id") || _.get(document, "id")}
             document={dataProp}
+            initialValues={dataProp.formInput}
+            schema={schema as FBSchemaProps[]}
+            mode="preview"
           />
         </Box>
       )}
-      <Box flexDirection={document.canAccess ? "row-reverse" : "row"} display="flex" px={3}>
-        {canChangeOwnerShip && (
-          <OwnerChanger
-            requestId={id}
-            requestType={RequestType.Document}
-          />
-        )}
-        <ControlsContainer
-          documentRevision={dataProp}
-          canShowCreateVersionButton={canShowCreateVersionButton}
-          hasAccess={document.canAccess}
-        />
-      </Box>
+      {FBIsOutput && (
+        <DocumentRevisionOutputInfo formDocument={dataProp?.formDocument} />
+      )}
     </Box>
   );
 
   return (
-    <Formik
-      initialValues={dataProp}
-      onSubmit={onSubmit}
-      enableReinitialize={true}
-    >
-      {contentRenderer}
-    </Formik>
+    <FormContext.Provider value={{ submitOnChange: false }}>
+      <Formik
+        initialValues={dataProp}
+        onSubmit={onSubmit}
+        enableReinitialize={true}
+      >
+        {contentRenderer}
+      </Formik>
+    </FormContext.Provider>
   );
 };
 

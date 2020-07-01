@@ -1,3 +1,4 @@
+import { SvgIconProps } from "@material-ui/core";
 import { FormControlProps } from "@material-ui/core/FormControl";
 import { ReactNode } from "react";
 import { TextProps } from "../../components/Text";
@@ -7,7 +8,7 @@ export type FBLabelProps =
   & {
     label?: string | ReactNode;
     labelValues?: TextProps["values"];
-    fontSize?: string | "sm" | "md" | "lg";
+    fontSize?: string | SvgIconProps["fontSize"] | "sm" | "md" | "lg";
     loading?: boolean;
   };
 

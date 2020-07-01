@@ -2,42 +2,61 @@ import _ from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBFieldWrapperProps, FBFieldWrapperState } from ".";
-import { FB } from "..";
-import { FBEditorSectionConfig } from "../defaults/editor";
-import FBStore from "../stores/ui/FBStore";
+import { FB, FBSchemaState } from "..";
 
 export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    state,
-    index = 0,
+    fieldWrapperState,
     topBarMargin = 0,
-    bottomBarMargin = 0,
+    grabMargin = 0,
+    toolsVisible,
+    addToolVisible,
+    markDownVisible,
+    inputProps,
     ...props
   }: T) => {
 
-    state = FB.useRef<FBFieldWrapperState>(FBFieldWrapperState);
-    const { label, type } = FBStore.getSchemaItem(index) || {};
+    const { workspaceState } = FB.useStores();
+    const { index = 0, designDisabled = false, reviseDisabled = false } = inputProps || {};
+    fieldWrapperState = FB.useRef<FBFieldWrapperState>(FBFieldWrapperState);
 
-    const isSection: boolean = _.includes(FBEditorSectionConfig.section, type);
+    const { label, type, includeQRScan } = workspaceState?.getSchemaItemAt(index) || {};
 
-    (!isSection && !_.isEmpty(label)) && (topBarMargin = -3);
-    !state.markDownVisible && (bottomBarMargin = -3);
+    if (!_.includes(FBSchemaState.omitLabel, type) && !_.isUndefined(label) && !includeQRScan) {
+      topBarMargin = -3;
+      grabMargin = 3.5;
+    }
 
-    const onMouseOver = () => state?.setToolsActive(true);
-    const onMouseLeave = () => state?.setToolsActive(false);
+    const onMouseOver = () => {
+      fieldWrapperState?.setAddToolActive(true);
+      if (designDisabled || (reviseDisabled && workspaceState?.isRevised)) { return; }
+      fieldWrapperState?.setToolsActive(true);
+    };
+    const onMouseLeave = () => {
+      fieldWrapperState?.setToolsActive(false);
+      fieldWrapperState?.setAddToolActive(false);
+    };
+
+    useObserver(() => {
+      toolsVisible = fieldWrapperState?.toolsVisible;
+      addToolVisible = fieldWrapperState?.addToolVisible;
+      markDownVisible = fieldWrapperState?.markDownVisible;
+    });
 
     return useObserver(() => Component({
       ...(props as T),
       onMouseOver,
       onMouseLeave,
-      toolsVisible: state?.toolsVisible,
-      markDownVisible: state?.markDownVisible,
+      fieldWrapperState,
+      toolsVisible,
+      addToolVisible,
+      markDownVisible,
+      designDisabled,
       topBarMargin,
-      bottomBarMargin,
-      index,
-      state,
+      grabMargin,
+      inputProps,
     }));
   };
 

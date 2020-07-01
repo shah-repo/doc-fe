@@ -6,6 +6,7 @@ import FBAutocompleteAsyncStore from "../../FBAutocompleteAsync/FBAutocompleteAs
 import { FBInputProps } from "../../types/common";
 import { FBTemplateSchema } from "../../types/store";
 import { FBWorkspaceMode } from "../../types/workspace";
+import FBDRStore from "./FBDRStore";
 import editorStore from "./FBEditorStore";
 import FBValidatorStore from "./FBValidatorStore";
 
@@ -35,18 +36,16 @@ export class FormBuilderStore {
   public docId = "";
   public documentId = "";
   public stepSectionReg = /#([1-9][0-9]?|100)$/;
-  public document: DocumentRevision = {} as DocumentRevision;
+  public document: Partial<DocumentRevision> = {};
 
   public clearStores = () => {
     FBAutocompleteAsyncStore.data.clear();
   };
 
-  @action public sectionNumber = (endIndex: number): number => {
-    const sections = _.filter(this.getSchema(), (schemaItem, index) =>
-      endIndex > index && (schemaItem.type === "stepsection" || schemaItem.type === "teststep")
-    );
-    return _.size(sections) + 1;
-  };
+  public get isRevised(): boolean | undefined {
+    const { version = 0, revision = 0, outputRevision } = this.document;
+    return ((version > 1) && (revision > 1)) || outputRevision;
+  }
 
   @action public setMode = (mode: FBWorkspaceMode) => {
     this.mode = mode;
@@ -75,6 +74,13 @@ export class FormBuilderStore {
     return filtered[0];
   };
 
+  @action public getSchemaItemByType = (
+    type: string,
+  ): FBTemplateSchema | undefined => {
+    const filtered = _.filter(this.schema, { type });
+    return filtered[0];
+  };
+
   @action public removeSchemaItem = (index?: number) => {
     if (index === undefined) {
       return;
@@ -95,7 +101,7 @@ export class FormBuilderStore {
     editorStore.editorTypeEdit(schema);
   };
 
-  @action public getSchema = (): FBTemplateSchema[] => this.schema;
+  @action public getSchema = (): FBTemplateSchema[] => _.uniqBy(this.schema || [], "name");
 
   @action public getSectionStepReg = (label: string): string | undefined => {
     const reg = this.stepSectionReg.exec(label);
@@ -103,18 +109,18 @@ export class FormBuilderStore {
   };
 
   @action public setSchema = (newSchema: FBTemplateSchema[]) => {
-    let stepSectionCounter = 1;
+    // let stepSectionCounter = 1;
     newSchema.map((o, i) => {
       o.index = i;
-      if (o.type === "stepsection" || o.type === "teststep") {
-        const orderStr = this.getSectionStepReg(o.label as string);
-        if (orderStr) {
-          o.label = (o.label as string).replace(orderStr, `#${stepSectionCounter}`);
-        } else {
-          o.label += ` #${stepSectionCounter}`;
-        }
-        stepSectionCounter++;
-      }
+      // if (o.type === "stepsection" || o.type === "teststep") {
+      //   const orderStr = this.getSectionStepReg(o.label as string);
+      //   if (orderStr) {
+      //     o.label = (o.label as string).replace(orderStr, `#${stepSectionCounter}`);
+      //   } else {
+      //     o.label += ` #${stepSectionCounter}`;
+      //   }
+      //   stepSectionCounter++;
+      // }
       return o;
     });
     set(this, "schema", newSchema);
@@ -176,7 +182,7 @@ export class FormBuilderStore {
     switch (this.mode) {
       case "none":
       case "design":
-        this.schema = [];
+        this.schema = FBDRStore.docSchema;
         this.values = {};
         break;
       default:

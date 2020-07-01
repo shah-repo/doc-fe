@@ -6,6 +6,7 @@ import { logo } from "../../../common/utils/helpers";
 import { authActions } from "../../../state/ducks/auth";
 import { ApplicationState } from "../../../state/reducers";
 import { emailSchema, passwordSchema } from "../../components/forms/fields/validators";
+import { FormContext } from "../../components/forms/FormContext";
 import useAsync from "../../hooks/useAsync";
 import { Translation } from "../../translations/types";
 import LoginFormPresenter from "../forms/LoginForm.presenter";
@@ -79,14 +80,17 @@ const SignupFormContainer: React.FunctionComponent<SignupFormContainerProps> = (
           logo={logo}
           isForgotPassword={false}
         />}
-      {!signupSuccess &&
-        <Formik
-          initialValues={initialValues}
-          onSubmit={handleVerificationState}
-          validationSchema={SignupSchema}
-        >
-          {render}
-        </Formik>
+      {
+        !signupSuccess &&
+        <FormContext.Provider value={{ submitOnChange: false }}>
+          <Formik
+            initialValues={initialValues}
+            onSubmit={handleVerificationState}
+            validationSchema={SignupSchema}
+          >
+            {render}
+          </Formik>
+        </FormContext.Provider>
       }
     </div>
   );

@@ -1,6 +1,5 @@
 import React from "react";
 import { Attachment } from "../../../../state/ducks/attachments";
-import { VIEWABLE_FILES } from "../view.file/utils/constants";
 import Presenter from "./presenter";
 import { AttachmentIconFactoryProps, AttachmentIconProps } from "./utils/types";
 
@@ -13,14 +12,15 @@ AttachmentIconFactoryProps
   handleRemove,
   handleDownload,
   handleContextMenu,
-  handleViewFile,
   disabled = false,
+  handleIconClick,
+  canDeleteFile = true,
   ...other
 }) => {
   const file = attachment || {} as Attachment;
   const isUploading = file.s3link == null;
   const isLoading = file.isLoading || false;
-  const isFileViewable = VIEWABLE_FILES.includes(file.type);
+  const isRedLine = file.lineType === "RED_LINE";
   const defaultProps = {
     name,
     attachment,
@@ -28,22 +28,18 @@ AttachmentIconFactoryProps
     disabled,
     isUploading,
     isLoading,
+    isRedLine,
     handleRemove,
+    canDeleteFile,
     ...other,
   };
   let props: AttachmentIconProps = {
     ...defaultProps,
-    handleIconClick: handleDownload,
+    handleIconClick,
     handleContextMenu,
+
   };
 
-  if (isFileViewable && !isUploading) {
-    props = {
-      ...defaultProps,
-      handleIconClick: handleViewFile,
-      handleContextMenu,
-    };
-  }
 
   if (isUploading) {
     props = {

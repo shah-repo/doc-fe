@@ -1,3 +1,5 @@
+import { APPROVAL_MATRIX_URL, PO_APPROVAL_MATRIX_URL } from "../../../../ui/form.builder/FBApprovalMatrix/constants";
+import { ApprovalMatrix } from "../../../../ui/form.builder/FBApprovalMatrix/FBApprovalMatrix.types";
 import { apiAction, apiActionWithCallbacks } from "../../../factories";
 import { ApiAction, Handlers } from "../../../types";
 import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_BY_ID_ASYNC, DOCUMENT_TYPE_LIST, DOCUMENT_TYPE_LIST_ASYNC, DOCUMENT_TYPE_ROOT_URL } from "./constants";
@@ -32,7 +34,21 @@ const getDocTypeIds = (id: string, handlers: Handlers): ApiAction<DocumentTypeBy
   handlers,
 });
 
+const getApprovalMatrix = (handlers: Handlers): ApiAction<ApprovalMatrix> => apiActionWithCallbacks({
+  url: APPROVAL_MATRIX_URL,
+  method: "get",
+  handlers,
+});
+
+const getPOApprovalMatrix = (handlers: Handlers): ApiAction<ApprovalMatrix> => apiActionWithCallbacks({
+  url: PO_APPROVAL_MATRIX_URL,
+  method: "get",
+  handlers,
+});
+
 export default {
   loadList,
   getDocTypeIds,
+  getApprovalMatrix,
+  getPOApprovalMatrix,
 };

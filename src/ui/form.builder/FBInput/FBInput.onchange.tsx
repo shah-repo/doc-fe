@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBEditorPropertiesType, FBInputProps, FBInputState } from "..";
+import { FB, FBEditorPropertiesType, FBInputProps, FBInputState, FBOptionValueType } from "..";
 
 export const withFBOnChange = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>
@@ -10,18 +10,27 @@ export const withFBOnChange = <T extends FBInputProps>(
     type,
     name,
     editorProperties,
+    forceDefault,
     inputState,
     ...props
   }: T) => {
 
     inputState = FB.useRef<FBInputState>(FBInputState);
-    const { formState } = FB.useStores();
+    const { formState, schemaState, workspaceState } = FB.useStores();
 
     React.useEffect(() => {
-      const defaultValue = formState?.getFieldValue(name, "");
+      const defaultValue = formState?.getFieldValue(name);
       // Check include context state
       contextValue(defaultValue as string | string[] | boolean);
     }, []);
+
+    function setValue(formValue: any, withState = false, forceDefault = false) {
+      if (!name) { return; }
+      formState?.setFieldValue(name, formValue, withState, forceDefault);
+      if (type && !FBInputState.omitOnChange.includes(type)) {
+        formState?.setFieldAutosave(name);
+      }
+    }
 
     function checkboxGroupValue(ev: React.ChangeEvent<HTMLInputElement>) {
       const [valueName, checked] = _.at(ev.target, ["value", "checked"]);
@@ -31,17 +40,17 @@ export const withFBOnChange = <T extends FBInputProps>(
         : _.remove(checkedValue, (cv) => cv !== valueName);
 
       contextValue(groupValue);
-      formState?.setFieldValue(name, groupValue);
+      setValue(groupValue);
     }
 
     function checkValue(ev: React.ChangeEvent<HTMLInputElement>) {
       const value = _.get(ev.target, "checked");
       contextValue(value);
-      formState?.setFieldValue(name, value);
+      setValue(value);
     }
 
-    function contextValue(value: boolean | string | string[]) {
-      if (!editorProperties) {
+    function contextValue(value: boolean | string | string[] | undefined = "") {
+      if (!editorProperties || _.isEmpty(editorProperties)) {
         return;
       }
 
@@ -50,49 +59,43 @@ export const withFBOnChange = <T extends FBInputProps>(
       }
 
       if (_.isArray(value)) {
-        value = _.difference(editorProperties, value as FBEditorPropertiesType[]);
-        value = _.isEmpty(value);
+        value = value.includes("includeContext");
       }
       inputState?.setIncludeContext(value);
     }
 
     function autocompleteValue(value: any) {
+      const { optionValueType = "key", optionValueKey = "id", multiple } = props;
       if (!value) {
-        return formState?.omitFieldValue(name);
+        return setValue(multiple ? [] : "");
       }
-      const { optionValueType, optionValueKey, multiple } = props;
-      if (optionValueType === "key") {
-        value = multiple
+      const simpleValue: Record<FBOptionValueType, () => any> = {
+        object: () => value,
+        key: () => multiple
           ? _.map(value, (v) => v[optionValueKey])
-          : value[optionValueKey];
-      }
-      formState?.setFieldValue(name, value);
-    }
-
-    function editorOptionsValue(ev: React.ChangeEvent<HTMLInputElement>) {
-      const valueArray = _.get(ev.target, "value").split("\n");
-      const optionsValue = _.map(valueArray, (text: string) => ({
-        value: FB.uniqid(),
-        text,
-      }));
-      formState?.setFieldValue(name, optionsValue);
+          : value[optionValueKey],
+        id: () =>  multiple
+          ? _.map(value, (v) => ({ [optionValueKey]: v[optionValueKey] }))
+          : { [optionValueKey]: value[optionValueKey] },
+      };
+      setValue(simpleValue[optionValueType](), false, forceDefault);
     }
 
     function stringValue(value: string) {
-      formState?.setFieldValue(name, value);
+      setValue(value);
     }
 
     function dateValue(value: string) {
-      stringValue(value);
+      stringValue((value as unknown as Date).toISOString());
       inputState && inputState.setValue(value);
     }
 
     const onChange = ((ev: React.ChangeEvent<any> | any, value: any) => {
-      props.onChange && props.onChange(ev, value);
       if (!formState) {
         return;
       }
-
+      // TODO: Remove this. Check how to handle validator required with without double onchange
+      props.onChange && props.onChange(ev, value, schemaState || formState || workspaceState);
       function isSingleCheck() {
         return checkValue(ev);
       }
@@ -103,16 +106,20 @@ export const withFBOnChange = <T extends FBInputProps>(
       }
 
       function isDefault() {
-        formState?.setFieldValue(name, _.get(ev.target, "value"));
+        const { type } = ev.target;
+        let { value } = ev.target;
+        if (type === "number") {
+          value = _.toNumber(value);
+        }
+        setValue(value);
       }
 
       const changedValue = {
         checkboxgroup() { return checkboxGroupValue(ev); },
         checkbox() { return isSingleCheck(); },
         radio() { return isSingleCheck(); },
-        editoroptions() { return editorOptionsValue(ev); },
         autocomplete() { return autocompleteValue(value); },
-        texteditor() { return stringValue(ev as string); },
+        texteditor() { return; },
         datepicker() { return dateValue(ev as string); },
         radiogroup() { return isGroupCheck(); },
         select() { return isGroupCheck(); },
@@ -120,13 +127,23 @@ export const withFBOnChange = <T extends FBInputProps>(
       };
 
       (changedValue[type || ""] || changedValue.default)();
+      props.onChange && props.onChange(ev, value, schemaState || formState || workspaceState);
       formState.validate();
     });
+
+    const onBlur = (ev) => {
+      props.onBlur && props.onBlur(ev);
+      if (type && FBInputState.omitOnChange.includes(type)) {
+        formState?.setFieldAutosave(name);
+      }
+    };
 
     return useObserver(() => Component({
       ...(props as T),
       onChange,
+      onBlur,
       editorProperties,
+      forceDefault,
       inputState,
       type,
       name,

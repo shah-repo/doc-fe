@@ -1,35 +1,25 @@
-import { Box, Link } from "@material-ui/core";
-import AttachFile from "@material-ui/icons/AttachFile";
+import { Box } from "@material-ui/core";
 import React from "react";
-import Text from "../../Text";
 import { styles } from "./utils/styles";
 import { AttachmentFieldProps } from "./utils/types";
+import { AttachmentLineTypeSelector } from "../attachment.linetype/AttachmentLineTypeSelector";
+
+interface Props extends AttachmentFieldProps {
+  onChange: (lineType: string, cleanCopyRequired: boolean) => (event: React.FormEvent<HTMLInputElement>) => any;
+  isUploading: boolean;
+}
 
 export const AttachmentFieldPresenter: React.FunctionComponent<
-AttachmentFieldProps
-> = ({ name, multiple, component = "button", onChange, disabled }) => {
+Props
+> = ({ name, multiple, component = "button", disabled, upload, form, field, onChange, isUploading }) => {
   const isField = component === "field";
-  const text = isField ? "common.upload.files" : "common.add.attachment";
   const classes = styles({ isField });
 
   return (
-    <Box mt={0.2} className={classes.root} id="AttachmentFieldPresenter-field">
-      <input
-        accept="*"
-        className={classes.input}
-        id={`${name}-button-file`}
-        multiple={multiple}
-        type="file"
-        onChange={onChange}
-        onBlur={onChange}
-        disabled={disabled}
+    <Box mt={1} className={classes.root} id="AttachmentFieldPresenter-field">
+      <AttachmentLineTypeSelector
+        {...{ field, upload, form, name, multiple, disabled, onChange, isField, isUploading }}
       />
-      <label htmlFor={`${name}-button-file`}>
-        <Link component="span" variant="button" className={classes.link} id="AttachmentFieldPresenter-linkButton" >
-          <AttachFile className={classes.icon} />
-          <Text translation={text} />
-        </Link>
-      </label>
     </Box>
   );
 };

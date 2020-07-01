@@ -1,22 +1,10 @@
-import { TextField } from "@material-ui/core";
 import React from "react";
-import { FBQuantityProps } from ".";
-import FBInput from "../components/common/FBInput";
+import { FBInputProps, FBTextField } from "..";
 
-const FBQuantityField: React.FunctionComponent<FBQuantityProps> = ({
-  placeholder,
-  error,
-  id,
+const FBQuantityField: React.FunctionComponent<FBInputProps> = ({
   ...props
 }) => (
-  <FBInput {...props} type="quantity">
-    <TextField
-      type="number"
-      variant="outlined"
-      label=""
-      {...{ placeholder, error, id }}
-    />
-  </FBInput>
+  <FBTextField {...props} type="number" inputProps={{ min: "0" }} />
 );
 
 export default FBQuantityField;

@@ -1,6 +1,13 @@
-import _ from "lodash";
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable react-hooks/exhaustive-deps */
+import { first, get, includes, isBoolean, isEmpty, isEqual, isString, isUndefined } from "lodash";
+import { reaction } from "mobx";
 import React from "react";
+import { useIntl } from "react-intl";
 import { FBOption } from "..";
+import { useFormContext } from "../../components/forms/FormContext";
+import { isTranslation } from "../../translations/types";
+import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
 import { FBInputProps, OmitInputClones } from "../FBInput";
 import { FB } from "../helpers";
 import { withFBOnChange } from "./FBInput.onchange";
@@ -9,8 +16,10 @@ export const withFBInput = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>
 ) => {
   const Comp = ({
+    optionsToString,
     inputState,
     onChange,
+    onBlur,
     name = "",
     children,
     disabled,
@@ -20,71 +29,130 @@ export const withFBInput = <T extends FBInputProps>(
     editorProperties,
     helperText,
     validationMode,
+    includeContext,
+    label,
+    placeholder,
     error,
     hidden,
+    rules,
+    value,
+    autosave = false,
     ...props
   }: T) => {
 
-    const { formState } = FB.useStores();
+    const { formState, workspaceState } = FB.useStores();
+    const { isOutput } = workspaceState || {};
+    const { submitForm } = useFormContext();
+    const intl = useIntl();
     defaultValue = setDefaultValue();
-    helperText =  formState?.helpers.get(name) || helperText;
-    error = !_.isUndefined(formState?.getFieldHelper(name)) && formState?.errorValidation;
+    helperText = formState?.errors.get(name) || helperText;
+    error = !isUndefined(formState?.errors.get(name)) && formState?.errorValidation;
+    value = inputState?.value;
+    includeContext = inputState?.includeContext;
 
-    (_.isUndefined(hidden) && validationMode === "visibility") && (hidden =
-      !helperText && !defaultValue
-    );
+    // TODO: Autocomplete default set as input
+    // then this can be removed and handle through defaultValue
+    const validationValue = get(formState?.values, name);
+    if (isOutput || formState?.workspaceMode === "form") {
+      (isUndefined(hidden) && validationMode === "visibility") && (hidden =
+        !helperText && (!validationValue || isEmpty(validationValue))
+      );
 
-    function editorOptionDefaultValue(): string {
-      const options: FBOption[] | undefined = formState?.getFieldValue(name, defaultValue);
-      return _.join(_.map(options, "text"), "\n") || "";
+      (!disabled && validationMode === "disabled") && (disabled =
+        !helperText && (!validationValue || isEmpty(validationValue))
+      );
     }
 
     function setDefaultValue(): any {
-      if (!formState) {
-        return;
-      }
+      if (!formState) { return; }
       const value = {
         editoroptions() {
-          return editorOptionDefaultValue();
+          const options: FBOption[] | undefined = formState?.getFieldValue(name);
+          if (isString(options)) {
+            return;
+          }
+          const value = optionsToString?.(options);
+          formState?.setFieldValue(name, value);
+          return value;
         },
+        autocompleteasync() { return; },
+        autocomplete() { return; },
         datepicker() {
           return inputState && (inputState.value = formState.getFieldValue(name, ""));
         },
         default() {
-          return formState.getFieldValue(name, defaultValue) || "";
+          return formState.getFieldValue(name, defaultValue || defaultChecked);
         },
       };
-      return (value[type || ""] || value.default)();
+      const transDefault = (value[type || ""] || value.default)();
+      if (isTranslation(transDefault)) {
+        return intl.formatMessage({ id: transDefault });
+      }
+      return transDefault;
     }
 
-    const child = _.first(React.Children.toArray(children));
-    const isClone = !_.includes(OmitInputClones, type) && !_.isUndefined(child);
+    const child = first(React.Children.toArray(children));
+    const isClone = !includes(OmitInputClones, type) && !isUndefined(child);
 
     if (isClone) {
       children = React.cloneElement(child as React.ReactElement, {
+        name,
         disabled,
         onChange,
-        ...(type !== "datepicker" && type !== "autocomplete" && !_.isBoolean(defaultValue) && { defaultValue }),
-        ...(type === "datepicker" && { value: inputState?.value }),
+        onBlur,
+        value,
+        ...(type === "textfield" && { error }),
+        ...(type === "select" && !defaultValue && placeholder && { value: "" }),
+        ...(type !== "datepicker" && type !== "autocomplete" && !isBoolean(defaultValue) && { defaultValue }),
       });
     }
 
+    React.useEffect(() => {
+      if (!formState && !inputState) { return; }
+      // Input states
+      formState!.inputState.set(name, inputState!);
+
+      // Validation settings
+      let attr = (label as string) || placeholder || name;
+      isTranslation(attr) && (attr = intl.formatMessage({ id: attr }));
+      formState?.setValidationAttributeName(name, attr);
+      rules && (formState!.setFieldRules(name, rules));
+    }, [rules]);
+
+    React.useEffect(() => {
+      reaction(
+        () => inputState?.autosaveNextValue,
+        (value) => {
+          if (autosave && !isEqual(inputState?.autosavePrevValue, value)) {
+            submitForm();
+          }
+        }
+      );
+    }, []);
+
     return Component({
       ...(props as T),
-      includeContext: inputState?.includeContext,
+      includeContext,
+      validationMode,
       helperText,
       children,
       disabled,
       defaultValue,
       type,
       onChange,
+      onBlur,
       name,
       error,
       inputState,
       editorProperties,
       hidden,
+      label,
+      placeholder,
+      rules,
+      value,
+      autosave,
     });
   };
 
-  return withFBOnChange((props: T) => Comp(props));
+  return withFBEditorOptions(withFBOnChange((props: T) => Comp(props)));
 };

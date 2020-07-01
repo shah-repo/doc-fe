@@ -5,6 +5,7 @@ export type FBSchemaProps = Pick<FBInputProps,
 | "label"
 | "name"
 | "type"
+| "disabled"
 | "index"
 | "placeholder"
 | "rows"
@@ -22,6 +23,18 @@ export type FBSchemaProps = Pick<FBInputProps,
 | "paragraph"
 | "testRequirement"
 | "isTemplate"
+| "stepIndex"
+| "includeQRScan"
+| "instructionsDocument"
+| "reviseDisabled"
+| "outputDisabled"
+| "customValidator"
+| "defaultValue"
+| "approvers"
+| "approverGroups"
+| "approveIsBlocking"
+| "applicableOn"
+| "actions"
 > & {
   validators?: Dictionary<any>;
 };

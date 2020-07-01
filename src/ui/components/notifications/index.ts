@@ -9,7 +9,7 @@ enum ToastType {
 }
 
 const TOAST_OPTIONS: ToastOptions = {
-  position: "top-right",
+  position: "bottom-right",
   autoClose: 5000,
   hideProgressBar: true,
   closeOnClick: true,

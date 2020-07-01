@@ -1,6 +1,5 @@
 import React from "react";
-import { FBInstructionsDocumentProps } from ".";
-import { FBAutocompleteAsync } from "../FBAutocompleteAsync";
+import { FBAutocompleteAsync, FBInstructionsDocumentProps } from "..";
 
 const FBInstructionsDocument: React.FunctionComponent<FBInstructionsDocumentProps> = ({
   instructionsDocument,

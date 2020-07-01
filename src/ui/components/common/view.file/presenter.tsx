@@ -16,7 +16,8 @@ const ViewFilePresenter: React.FunctionComponent<ViewFilePresenterProps> = ({
   attachments,
   ...props
 }) => {
-  const isPDF = attachment.type === PDF;
+  const type = useMemo(() => attachment.type?.toLowerCase(), [attachment.type]);
+  const isPDF = type === PDF;
   const isImage = useMemo(() => SUPPORTED_IMAGE_FILES.includes(attachment.type), [attachment]);
   const classes = styles({ isPDF });
   return (

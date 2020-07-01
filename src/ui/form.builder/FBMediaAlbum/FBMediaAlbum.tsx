@@ -5,9 +5,8 @@ import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import CropFreeIcon from "@material-ui/icons/CropFree";
 import React from "react";
 import { FBMediaAlbumProps } from ".";
-import { FBMediaGallery, FBProvider } from "..";
+import { FBMediaCarousel, FBMediaGallery, FBProvider, FBTooltip } from "..";
 import Text from "../../components/Text";
-import FBMediaCarousel from "../FBMediaCarousel";
 import { withFBMediaAlbum } from "./FBMediaAlbum.wrap";
 
 const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({
@@ -35,16 +34,16 @@ const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({
     />
     <Box {...props} >
       <Box display="flex" py={0.5}>
-        <Tooltip {...{ title }}>
-          <Box
-            style={{ whiteSpace: "nowrap" }}
-            textOverflow="ellipsis"
-            overflow="hidden"
-            flexGrow={1}
-          >
+        <Box
+          style={{ whiteSpace: "nowrap" }}
+          textOverflow="ellipsis"
+          overflow="hidden"
+          flexGrow={1}
+        >
+          <FBTooltip {...{ title }}>
             {title}
-          </Box>
-        </Tooltip>
+          </FBTooltip>
+        </Box>
         <Box pl={0.3}>
           <IconButton size="small" onClick={setMediaMode}>
             {mode === "carousel" && (

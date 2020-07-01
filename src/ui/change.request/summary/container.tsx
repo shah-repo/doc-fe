@@ -9,8 +9,10 @@ import { ChangeRequest, changeRequestsActions } from "../../../state/ducks/chang
 import { DataProps } from "../../../state/ducks/common";
 import { DocumentRevision, documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../../state/reducers";
+import { FormContext } from "../../components/forms/FormContext";
 import DocumentRevisionAuditContainer from "../../documentRevision/audit/Audit.container";
 import useAsync from "../../hooks/useAsync";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 import ChangeRequestAuditContainer from "../audit/Audit.container";
 import SummaryPresenter from "../documentRevision/DocumentRevisionControlPreview.presenter";
 import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "../form/transform";
@@ -56,6 +58,7 @@ export const Container: React.FunctionComponent<Props> = ({
   currentEmployeeId,
   isCompanyAdmin,
 }) => {
+  useDocumentTitle(dataProp.crId);
   const canChangeOwnerShip = canChangeCROwner(dataProp.state, currentEmployeeId, dataProp.owner.id, isCompanyAdmin);
   const [summaryDocumentTypeGroups, setSummaryDocTypeGroups] = useState<any[]>([]);
   const asyncGroups = useAsync({
@@ -125,14 +128,16 @@ export const Container: React.FunctionComponent<Props> = ({
   };
 
   const summaryFormikRenderer = () => (
-    <Formik
-      initialValues={toChangeRequestFormValues(dataProp)}
-      onSubmit={onSubmit}
-      enableReinitialize={true}
-      validate={validate}
-    >
-      {summaryPresenterRenderer}
-    </Formik>
+    <FormContext.Provider value={{ submitOnChange: false }}>
+      <Formik
+        initialValues={toChangeRequestFormValues(dataProp)}
+        onSubmit={onSubmit}
+        enableReinitialize={true}
+        validate={validate}
+      >
+        {summaryPresenterRenderer}
+      </Formik>
+    </FormContext.Provider>
   );
   return (
     <Grid

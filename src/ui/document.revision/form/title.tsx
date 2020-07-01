@@ -1,21 +1,23 @@
-import { Field } from "formik";
 import { uniqBy } from "lodash";
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
-import { TextFieldSelect } from "../../components/forms/fields/TextFieldSelect/container";
-import { required, validator } from "../../components/forms/fields/validators";
+import CreatableField from "../../components/forms/fields/Autocomplete/Creatable";
+import { useTitle } from "../../hooks/docCustomization/useCustomization";
 
 interface OwnProps {
   name: string;
-  label: string;
+  documentTypeId?: string;
+  disabled?: boolean;
 }
 
 export type Props = OwnProps;
 
 export const Title: React.FunctionComponent<Props> = ({
+  documentTypeId = "",
   ...props
 }) => {
+  const [isVisible, label, validators] = useTitle(documentTypeId);
   const documents = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
   const options = useMemo(
     () =>
@@ -23,20 +25,23 @@ export const Title: React.FunctionComponent<Props> = ({
         .map((document) => ({
           label: document.name,
           value: document.name,
-          isDisabled: true,
         })),
     [documents],
   );
 
+  if (!isVisible) {
+    return null;
+  }
+
   return (
-    <Field
-      {...props}
-      options={options}
-      component={TextFieldSelect}
-      validate={validator(required)}
-      id="Title-field"
+    <CreatableField
+      name="name"
+      validate={validators}
+      creatableProps={{ id: "Title-field" }}
+      isDisabled={props.disabled}
+      {...{ options, label }}
     />
   );
 };
 
-export default Title;
+export default React.memo(Title);

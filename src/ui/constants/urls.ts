@@ -29,6 +29,7 @@ export const SIGNUP_URL = "/signup";
 export const CONFIRM_FORGOT_PASSWORD_URL = "/sign_up/confirm_forgot_password/";
 export const NEW_USER_SET_PASSWORD = "/new_user_set_password/";
 export const STATUS = "/status";
+export const MAINTENANCE = "/maintenance";
 
 export const SUPPLIER_SURVEY_URL = "/supplier_survey/:token";
 
@@ -40,7 +41,7 @@ export const SLACK_COMPANY_URL = `${SLACK_ROOT_URL}/company`;
 export const SLACK_USER_URL = `${SLACK_ROOT_URL}/user`;
 
 export const DOCUMENT_BY_TYPE_ROOT_URL = "/document_by_type";
-export const DOCUMENT_BY_TYPE_LIST_URL = `${DOCUMENT_BY_TYPE_ROOT_URL}/:acronym`;
+export const DOCUMENT_BY_TYPE_LIST_URL = `${DOCUMENT_BY_TYPE_ROOT_URL}/:docTypeId`;
 
 export const GROUP_MANAGEMENT_ROOT_URL = "/group_management";
 

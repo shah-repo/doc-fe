@@ -1,16 +1,14 @@
-import { Grid, withStyles, WithStyles } from "@material-ui/core";
-import _ from "lodash";
-import React from "react";
+import { Grid } from "@material-ui/core";
+import React, { useMemo, useState, useEffect } from "react";
 import { connect, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { DocumentRevision, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
+import { DocumentRevision, documentRevisionsSelectors, DocumentRevisionStatus } from "../../state/ducks/documentRevisions";
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
-import AccessPermissionsContainer from "./accessPermissions/AccessPermissions.container";
-import DocumentRevisionAuditContainer from "./audit/Audit.container";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 import DocumentRevisionDisplayContainer from "./DocumentRevisionDisplay.container";
-import DocumentRevisionListContainer from "./DocumentRevisionList.container";
 import { getDocRevIdToRedirect, shouldRedircetToLatestReleasd } from "./helpers";
+import { SidebarContainer } from "./Sidebar/Sidebar.container";
 import styles from "./styles";
 
 interface StateProps {
@@ -27,8 +25,11 @@ interface OwnProps {
 }
 
 export type DocumentRevisionManagerContainerProps = OwnProps &
-StateProps &
-WithStyles<typeof styles>;
+StateProps;
+
+// TO-DO Move To Context Folder
+export let documentRevisionStatusContextFromDocList = React.createContext< undefined | DocumentRevisionStatus >(undefined);
+export let documentRevisionVersionContext = React.createContext<number>(1);
 
 const getDocumentRevisions = documentRevisionsSelectors.makeGetDocumentRevisions();
 const mapStateToProps = (
@@ -42,7 +43,6 @@ const mapStateToProps = (
 export const DocumentRevisionManagerContainer: React.FunctionComponent<
 DocumentRevisionManagerContainerProps
 > = ({
-  classes,
   isNewVersion,
   isNewOutput,
   documentId,
@@ -51,8 +51,22 @@ DocumentRevisionManagerContainerProps
   deprecatedAt,
   docId,
 }) => {
+  const classes = styles();
+  useDocumentTitle(docId);
+  const docRevsWithoutCanceled = useMemo(() => documentRevisions.filter((docrev) =>
+    docrev.status !== DocumentRevisionStatus.Canceled), [documentRevisions]);
   const selectedDocument = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId as string));
+  const canAccess = selectedDocument?.document.canAccess;
+  const [sidebar, openSidebar] = useState<boolean>(true);
+  const schema = selectedDocument?.formTemplate?.schema || selectedDocument?.formDocument?.formTemplate?.schema || [];
+  const status = selectedDocument ? selectedDocument.status : undefined;
+  documentRevisionStatusContextFromDocList = React.createContext(status);
+  documentRevisionVersionContext = React.createContext(selectedDocument?.version);
+
+  useEffect(() => () => {
+    documentRevisionStatusContextFromDocList = React.createContext<undefined | DocumentRevisionStatus>(undefined);
+  }, []);
 
   if (shouldRedircetToLatestReleasd(documentRevisions, documentRevisionId)) {
     const docRevIdToRedirect = getDocRevIdToRedirect(documentRevisions, deprecatedAt);
@@ -60,21 +74,11 @@ DocumentRevisionManagerContainerProps
       <Redirect to={documentVersionPath(docRevIdToRedirect, documentId)} />
     );
   }
-  const canAccess = _.get(selectedDocument, "document.canAccess", []);
 
   return (
-    <Grid container={true} spacing={2} className={classes.whiteContainer}>
-      <Grid item={true} xs={2} className={classes.sidebar}>
-        <DocumentRevisionListContainer
-          documentRevisions={documentRevisions}
-          documentId={documentId}
-          docId={docId}
-          selectedDocumentRevision={documentRevisionId}
-          documentRevisionId={documentRevisionId}
-        />
-      </Grid>
+    <Grid container={true} className={classes.whiteContainer} style={{ width: sidebar ? "100%" : "104%" }}>
       {documentRevisionId && !isNewOutput && (
-        <Grid item={true} xs={7}>
+        <Grid item={true} xs={sidebar ? 9 : 11} className={classes.backColor}>
           <DocumentRevisionDisplayContainer
             documentRevisionId={documentRevisionId}
             isNewVersion={isNewVersion}
@@ -83,7 +87,7 @@ DocumentRevisionManagerContainerProps
         </Grid>
       )}
       {documentRevisionId && isNewOutput && (
-        <Grid item={true} xs={7}>
+        <Grid item={true} xs={sidebar ? 9 : 11} className={classes.backColor}>
           <DocumentRevisionDisplayContainer
             documentRevisionId={documentRevisionId}
             isNewOutput={isNewOutput}
@@ -91,25 +95,21 @@ DocumentRevisionManagerContainerProps
           />
         </Grid>
       )}
-      <Grid item={true} xs={3} className={classes.sidebar}>
-        {documentRevisionId && (
-          <DocumentRevisionAuditContainer
-            documentRevisionId={documentRevisionId}
-          />
-        )}
-        {documentRevisionId && canAccess && !isNewOutput && (
-          <AccessPermissionsContainer
-            documentRevisionId={documentRevisionId}
-            documentId={documentId}
-            canAccess={canAccess}
-            withoutCurrentUser={true}
-          />
-        )}
-      </Grid>
+      <SidebarContainer
+        {...{
+          docRevsWithoutCanceled,
+          documentId,
+          docId,
+          documentRevisionId,
+          canAccess,
+          isNewOutput,
+          sidebar,
+          openSidebar,
+          schema,
+        }}
+      />
     </Grid>
   );
 };
 
-export default connect<StateProps, {}, OwnProps, ApplicationState>(mapStateToProps)(
-  withStyles(styles)(DocumentRevisionManagerContainer),
-);
+export default connect<StateProps, {}, OwnProps, ApplicationState>(mapStateToProps)(DocumentRevisionManagerContainer);

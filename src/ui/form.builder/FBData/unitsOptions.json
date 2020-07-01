@@ -1,0 +1,102 @@
+[
+  {
+    "text": "form.builder.units.hours.short",
+    "value": "hours"
+  },
+  {
+    "text": "form.builder.units.days",
+    "value": "days"
+  },
+  {
+    "text": "form.builder.units.months",
+    "value": "months"
+  },
+  {
+    "text": "form.builder.units.each",
+    "value": "each"
+  },
+  {
+    "text": "form.builder.units.rolls",
+    "value": "rolls"
+  },
+  {
+    "text": "form.builder.units.spools",
+    "value": "spools"
+  },
+  {
+    "text": "form.builder.units.sets",
+    "value": "sets"
+  },
+  {
+    "text": "form.builder.units.boxes",
+    "value": "boxes"
+  },
+  {
+    "text": "form.builder.units.cases",
+    "value": "cases"
+  },
+  {
+    "text": "form.builder.units.lots",
+    "value": "lots"
+  },
+  {
+    "text": "form.builder.units.packs",
+    "value": "packs"
+  },
+  {
+    "text": "form.builder.units.units",
+    "value": "units"
+  },
+  {
+    "text": "form.builder.units.bottles",
+    "value": "bottles"
+  },
+  {
+    "text": "form.builder.units.batch",
+    "value": "batch"
+  },
+  {
+    "text": "form.builder.units.foot",
+    "value": "foot"
+  },
+  {
+    "text": "form.builder.units.inch",
+    "value": "inch"
+  },
+  {
+    "text": "form.builder.units.mm.short",
+    "value": "mm"
+  },
+  {
+    "text": "form.builder.units.cm.short",
+    "value": "cm"
+  },
+  {
+    "text": "form.builder.units.meters.short",
+    "value": "meters"
+  },
+  {
+    "text": "form.builder.units.sqft.short",
+    "value": "sqft"
+  },
+  {
+    "text": "form.builder.units.gram",
+    "value": "gram"
+  },
+  {
+    "text": "form.builder.units.kilogram",
+    "value": "kilogram"
+  },
+  {
+    "text": "form.builder.units.pounds",
+    "value": "pounds"
+  },
+  {
+    "text": "form.builder.units.ounce",
+    "value": "ounce"
+  },
+  {
+    "text": "form.builder.units.gallon",
+    "value": "gallon"
+  }
+]

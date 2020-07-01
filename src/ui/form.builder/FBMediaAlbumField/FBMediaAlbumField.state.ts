@@ -1,10 +1,8 @@
 import axios from "axios";
 import _ from "lodash";
 import { action, computed, observable, set } from "mobx";
-import { apiClient, FBMediaAlbumFieldConstructor, FBMediaAlbumFieldMode, FBMediaAlbumFieldStore, FBMediaFile, FBMediaProps, FBMediaUrlProps } from "..";
+import { apiClient, FBMediaAlbumFieldConstructor, FBMediaAlbumFieldMode, FBMediaAlbumFieldStore, FBMediaFile, FBMediaProps, FBMediaUrlProps, FBWorkspaceState } from "..";
 import { FBEndpoint } from "../defaults/FBEndpoint";
-import FBDRStore from "../stores/ui/FBDRStore";
-import FBStore from "../stores/ui/FBStore";
 
 export class FBMediaAlbumFieldState {
   @observable public loading = false;
@@ -12,20 +10,30 @@ export class FBMediaAlbumFieldState {
   public filesUploaded: FBMediaProps[] = [];
   public fieldName: string | undefined;
   public isTemplate = false;
+  private workspaceState?: FBWorkspaceState;
 
-  public constructor({ name, isTemplate = false }: FBMediaAlbumFieldConstructor) {
+  public constructor({
+    name,
+    isTemplate = false,
+    workspaceState,
+  }: FBMediaAlbumFieldConstructor) {
+
+    this.workspaceState = workspaceState;
     this.fieldName = name;
     this.isTemplate = isTemplate;
-    if (this.isPreview) {
-      this.setMode("media");
-    }
+    this.isPreview && this.setMode("media");
+    this.downloadCandidates();
+  }
+
+  public get documentId(): string | undefined {
+    return this.workspaceState?.documentId;
   }
 
   @computed public get isPreview() {
     if (this.isTemplate) {
-      return FBStore.mode !== "design";
+      return this.workspaceState?.mode !== "design";
     }
-    return FBStore.mode === "preview" && FBDRStore.isOutput;
+    return this.workspaceState?.mode === "preview" && this.workspaceState?.isOutput;
   }
 
   @computed public get collection(): FBMediaProps[] {
@@ -79,7 +87,7 @@ export class FBMediaAlbumFieldState {
   };
 
   @action public createCandidate = (url: string, file: FBMediaFile) => {
-    if (_.isEmpty(FBStore.documentId)) {
+    if (!this.documentId) {
       return;
     }
     const { promise } = apiClient().post(FBEndpoint.FileUploadCandidates, {
@@ -88,7 +96,7 @@ export class FBMediaAlbumFieldState {
       fieldNameFromSchema: this.fieldName,
       order: file.order,
       document: {
-        id: FBStore.documentId,
+        id: this.documentId,
       },
     });
 
@@ -98,12 +106,12 @@ export class FBMediaAlbumFieldState {
   };
 
   @action public downloadCandidates = () => {
-    if (_.isEmpty(FBStore.documentId)) {
+    if (!this.documentId) {
       return;
     }
     this.setLoading(true);
     const { promise } = apiClient().get(FBEndpoint.FileUploadCandidates, {
-      documentId: FBStore.documentId,
+      documentId: this.documentId,
       status: "AVAILABLE",
     });
 

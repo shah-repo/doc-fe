@@ -1,6 +1,5 @@
 import React from "react";
-import { FBMediaGalleryProps } from ".";
-import { FB } from "..";
+import { FB, FBMediaGalleryProps } from "..";
 
 export const withFBMediaGallery = <T extends FBMediaGalleryProps>(
   Component: React.FunctionComponent<T>

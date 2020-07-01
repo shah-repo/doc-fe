@@ -5,6 +5,7 @@ import Select from "react-select";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { Permission } from "../../../../state/ducks/auth/types";
 import { GroupRequestBody } from "../../../../state/ducks/groupManagement/types";
+import { MultiValueRemove, selectStyles } from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import Text from "../../../components/Text";
 import { toArray, toOptions } from "../../utils/transform";
 
@@ -31,9 +32,11 @@ export const Permissions: React.FunctionComponent<Props> = ({
         isMulti={true}
         options={toOptions(currentEmployeePermissions)}
         value={toOptions(group.permissions)}
+        components={{ MultiValueRemove }}
         onChange={(state: any) =>
           setGroup({ ...group, permissions: toArray(state) })
         }
+        styles={selectStyles}
       />
     </Box>
   );
@@ -46,9 +49,11 @@ export const Permissions: React.FunctionComponent<Props> = ({
       <Select
         id="Group-addTags"
         isMulti={true}
+        components={{ MultiValueRemove }}
         options={toOptions(currentEmployeeTags)}
         onChange={(state: any) => setGroup({ ...group, tags: toArray(state) })}
         value={toOptions(group.tags)}
+        styles={selectStyles}
       />
     </Box>
   );

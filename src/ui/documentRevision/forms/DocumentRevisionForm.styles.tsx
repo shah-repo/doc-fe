@@ -1,4 +1,5 @@
 import { createStyles, Theme } from "@material-ui/core";
+import Colors from "../../layout/theme/utils/colors";
 
 export default (theme: Theme) =>
   createStyles({
@@ -6,15 +7,13 @@ export default (theme: Theme) =>
       margin: "auto",
       width: "100%",
       padding: theme.spacing(2, 5),
-      background: "#fff",
+      background: Colors.light_gray,
+      marginTop: theme.spacing(5),
     },
     reviewButton: {
       marginTop: theme.spacing(3),
       borderTop: `1px solid ${theme.palette.grey[600]}`,
       paddingTop: theme.spacing(3),
       textAlign: "center",
-    },
-    outputGrey: {
-      color: `${theme.palette.text.disabled}`,
     },
   });

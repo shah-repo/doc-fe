@@ -1,6 +1,8 @@
-import { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import _ from "lodash";
 import { Action, Dispatch, Middleware, MiddlewareAPI } from "redux";
+import { redirectTo } from "../../../common/redirectHandler";
+import { MAINTENANCE } from "../../../ui/constants/urls";
 import apiClient from "../../apiClient";
 import apiXClient from "../../apiXClient";
 import { authActions } from "../../ducks/auth";
@@ -56,6 +58,10 @@ const apiMiddleware: Middleware = ({
       requestConfig.headers["Content-Type"] = action.contentType;
     }
 
+    if (action.cancelToken) {
+      requestConfig.cancelToken = action.cancelToken.token;
+    }
+
     if (action.includeAuthorization) {
       const { employeeId, sessionId } = getState().auth.user;
       const authorization = `bearer ${employeeId}:${sessionId}`;
@@ -77,9 +83,15 @@ const apiMiddleware: Middleware = ({
     action.onSuccess(data, dispatch);
     dispatchAsyncStatusAction(dispatch, action.asyncType, AsyncStatus.Success);
   } catch (exception) {
+    if (axios.isCancel(exception)) {
+      return;
+    }
+    const redirectToMaintenance = exception.response.status === 491 && window.location.pathname !== MAINTENANCE;
+    redirectToMaintenance && redirectTo(MAINTENANCE)();
+
     let responseMessage = "";
-    const isUnauthorizedRequest = exception.response.status === 401 && action.includeAuthorization;
-    const isPasswordAction = exception.response.status === 401 && action.password;
+    const isUnauthorizedRequest = exception?.response?.status === 401 && action.includeAuthorization;
+    const isPasswordAction = exception?.response?.status === 401 && action.password;
 
     if (isUnauthorizedRequest && !isPasswordAction) {
       dispatch(authActions.logoutUser());

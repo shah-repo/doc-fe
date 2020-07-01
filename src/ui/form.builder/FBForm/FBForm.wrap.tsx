@@ -9,15 +9,25 @@ export const withFBForm = <T extends FBFormProps>(
     initialValues = {},
     workspaceMode = "form",
     errorValidation = true,
+    initialValidation = false,
     formState,
     schema,
     children,
     ...props
   }: T) => {
 
-    formState = FB.useRef<FBFormState>(FBFormState, schema);
-    formState?.setInitialValues(initialValues);
+    const { workspaceState } = FB.useStores();
+    !formState && (formState = FB.useRef<FBFormState>(FBFormState, {
+      schema,
+      initialValues,
+      workspaceMode,
+      workspaceState,
+    }));
     formState && (formState.errorValidation = errorValidation);
+
+    React.useEffect(() => {
+      initialValidation && formState && workspaceMode !== "design" && formState.validate();
+    }, [initialValidation, formState, workspaceMode]);
 
     return Component({
       ...(props as T),

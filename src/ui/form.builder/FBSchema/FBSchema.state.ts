@@ -2,36 +2,84 @@ import _ from "lodash";
 import { action, get, observable, set } from "mobx";
 import React from "react";
 import { FBSchemaProps } from ".";
-import { FBCheckboxGroup, FBInputProps, FBInputType } from "..";
+import { FBAutocompleteAsync, FBCheckboxGroup, FBEditorState, FBInputProps, FBInputType } from "..";
+import { FBActionField } from "../FBActionField";
+import { FBApproval } from "../FBApproval";
+import { FBApprovalMatrixField } from "../FBApprovalMatrixField";
+import { FBButton } from "../FBButton";
+import { FBCheckbox } from "../FBCheckbox";
+import { FBDatePicker } from "../FBDatePicker";
+import { FBFileUpload } from "../FBFileUpload";
+import { FBHelloSign } from "../FBHelloSign";
+import { FBHyperlink } from "../FBHyperlink";
+import { FBInstructionsDocument } from "../FBInstructionsDocument";
+import { FBMediaAlbumField } from "../FBMediaAlbumField";
 import { FBParagraph } from "../FBParagraph";
+import { FBPOApprovalMatrix } from "../FBPOApprovalMatrix";
+import { FBPOReceive } from "../FBPOReceive";
+import { FBPurchaseOrder } from "../FBPurchaseOrder";
+import { FBQuantityField } from "../FBQuantityField";
+import { FBRadio } from "../FBRadio";
+import { FBRadioGroup } from "../FBRadioGroup";
+import { FBRequestApproval } from "../FBRequestApproval";
+import { FBSchemaSelect } from "../FBSchemaSelect";
 import { FBSection } from "../FBSection";
+import { FBSelect } from "../FBSelect";
+import { FBSelectDocument } from "../FBSelectDocument";
+import { FBSelectRequirement } from "../FBSelectRequirement";
+import { FBSubsection } from "../FBSubsection";
+import { FBTestRequirement } from "../FBTestRequirement";
+import { FBTextEditor } from "../FBTextEditor";
 import { FBTextField } from "../FBTextField";
+import { FBTimerField } from "../FBTimerField";
 
 export class FBSchemaState {
-  public static omitLabel: FBInputType[] = ["section", "subsection"];
+  public static omitLabel: FBInputType[] = [
+    "section",
+    "subsection",
+    "stepsection",
+    "teststep",
+    "purchaseorder",
+  ];
 
   private static control: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
     section: FBSection,
-    // subsection: FBSubsection,
+    subsection: FBSubsection,
+    stepsection: FBSection,
+    teststep: FBSection,
     textfield: FBTextField,
-    // checkbox: FBCheckbox,
+    checkbox: FBCheckbox,
     checkboxgroup: FBCheckboxGroup,
-    // texteditor: FBTextEditor,
-    // datepicker: FBDatePicker,
-    // hyperlink: FBLink,
-    // select: FBSelectField,
-    // radio: FBRadio,
-    // radiogroup: FBRadioGroup,
-    // fileupload: FBFileUpload,
-    // autocomplete: FBAutocomplete,
-    // autocompleteasync: FBAutocompleteAsync,
-    // schemaselect: FBSchemaSelect,
+    autocomplete: FBAutocompleteAsync,
+    autocompleteasync: FBAutocompleteAsync,
+    texteditor: FBTextEditor,
+    datepicker: FBDatePicker,
+    hyperlink: FBHyperlink,
+    select: FBSelect,
+    radio: FBRadio,
+    radiogroup: FBRadioGroup,
+    fileupload: FBFileUpload,
+    schemaselect: FBSchemaSelect,
     paragraph: FBParagraph,
+    quantity: FBQuantityField,
+    timer: FBTimerField,
+    purchaseorder: FBPurchaseOrder,
+    poreceive: FBPOReceive,
+    instructionsmediaupload: FBMediaAlbumField,
+    evidencemediaupload: FBMediaAlbumField,
+    testRequirement: FBTestRequirement,
+    instructionsdocument: FBInstructionsDocument,
+    selectdocument: FBSelectDocument,
+    selectrequirement: FBSelectRequirement,
+    checkpoint: FBButton,
+    createlabel: FBButton,
+    approval: FBApproval,
+    requestapproval: FBRequestApproval,
+    action: FBActionField,
+    hellosign: FBHelloSign,
+    approvalMatrix: FBApprovalMatrixField,
+    poApprovalMatrix: FBPOApprovalMatrix,
   };
-
-  public controlProps: FBInputProps | undefined;
-  public type: FBInputType | undefined;
-  public index: number | undefined;
 
   @observable public schema?: FBSchemaProps[];
 
@@ -53,41 +101,50 @@ export class FBSchemaState {
 
   @action public getSchema = (): FBSchemaProps[] => get(this, "schema");
 
-  @action public getSchemaItem = (name: string): FBSchemaProps | undefined =>
-    _.find(this.getSchema(), { name });
+  @action public getSchemaItem = (name?: string): FBSchemaProps | undefined => {
+    if (!name) {
+      return;
+    }
+    return _.find(this.getSchema(), { name });
+  };
 
   @action public getSchemaItemAt = (index?: number): FBSchemaProps | undefined => {
     if (_.isUndefined(index)) {
       return;
     }
-    return _.get(this.getSchema(), index);
+    return this.schema && this.schema[index];
   };
 
   @action public setSchema = (schema?: FBSchemaProps[]) => {
-    schema && schema.map((o, i) => o.index = i);
+    schema = (schema || []).map((schemaItem: FBSchemaProps, i, ro) => ({
+      ...schemaItem,
+      index: i,
+      ...(_.includes(FBEditorState.pickStepIndex, schemaItem.type)) && {
+        stepIndex: _.size(_.filter(ro.slice(0, i + 1), (step) =>
+          _.includes(FBEditorState.pickStepIndex, step.type))),
+      },
+    }));
     set(this, "schema", schema);
   };
 
   @action public setSchemaItem = (schemaItem: FBSchemaProps) => {
     const schemaItemIndex = _.findIndex(this.getSchema(), { name: schemaItem.name });
-    if (!_.isUndefined(this.getSchemaItemAt(schemaItemIndex))) {
-      this.updateSchemaItem(schemaItem, schemaItemIndex);
-    } else {
+    const schemaAt = this.getSchemaItemAt(schemaItemIndex);
+    if (schemaAt) {
       const schema = _.union(this.schema, [schemaItem]);
       this.setSchema(schema);
+      return;
     }
+    this.updateSchemaItem(schemaItem, schemaItemIndex);
   };
 
-  @action public setSchemaItemAt = (schemaItem: FBSchemaProps, index?: number) => {
-    if (_.isUndefined(index)) {
-      return;
+  @action public setSchemaItemAt = (schemaItem: FBSchemaProps | FBInputProps, index = 0) => {
+    const schemaAt = this.getSchemaItemAt(index);
+    if (schemaAt && schemaItem.name ===  schemaAt.name) {
+      return this.updateSchemaItem(schemaItem, index);
     }
-    const position = index || _.size(this.schema);
-    const newSchema = this.schema?.slice(0);
-    if (!newSchema) {
-      return;
-    }
-    newSchema.splice(position, 0, schemaItem);
+    const newSchema = this.schema?.slice(0) || [];
+    newSchema?.splice(index, 0, schemaItem);
     this.setSchema(newSchema);
   };
 
@@ -97,7 +154,10 @@ export class FBSchemaState {
     this.setSchema(newSchema);
   };
 
-  @action public removeSchemaItem = (schemaItem: FBSchemaProps) => {
+  @action public removeSchemaItem = (schemaItem?: FBSchemaProps) => {
+    if (!schemaItem) {
+      return;
+    }
     const schema = _.filter(this.schema, (item) => item.name !== schemaItem.name);
     this.setSchema(schema);
   };

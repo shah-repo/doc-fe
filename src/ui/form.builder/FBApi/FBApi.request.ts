@@ -10,6 +10,16 @@ export default class FBRequest<Data, Body> {
   public url = "";
   public root = "";
 
+  public constructor(url = "") {
+    this.url = url;
+  }
+
+  @action public setTemplateUrl = (url: string, values: Record<string, any>) => {
+    const urlTpl = _.template(url);
+    const urlStr = urlTpl(values);
+    this.setUrl(urlStr);
+  };
+
   @action public setUrl = (url: string) => {
     set(this, "url", url);
   };
@@ -30,13 +40,9 @@ export default class FBRequest<Data, Body> {
     set(this, "root", root);
   };
 
-  @action public fetch = () => {
-    this.start("get");
-  };
-
-  @action public post = () => {
-    this.start("post");
-  };
+  @action public fetch = () => this.start("get");
+  @action public post = () => this.start("post");
+  @action public patch = () => this.start("patch");
 
   @action public dataFilter = (data: Data): Data | undefined => data;
   @action public onError = (_error) => {
@@ -44,8 +50,9 @@ export default class FBRequest<Data, Body> {
     alert(message);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  protected onSuccess() {}
+  protected onSuccess() {
+    this.setLoading(false);
+  }
 
   @action private start = (method: ApiActionMethod) => {
     this.setLoading(true);
@@ -56,6 +63,9 @@ export default class FBRequest<Data, Body> {
         break;
       case "post":
         promise = apiClient().post(this.url, this.body).promise;
+        break;
+      case "patch":
+        promise = apiClient().patch(this.url, this.body).promise;
         break;
       default:
         return;
@@ -70,12 +80,13 @@ export default class FBRequest<Data, Body> {
         !_.isEmpty(this.root) && (data = _.get(data as Data, this.root));
         data = this.dataFilter(data);
         this.setData(data as Data);
-        this.setLoading(false);
         this.onSuccess();
       })
       .catch((_error) => {
         this.setLoading(false);
         this.onError(_error);
       });
+
+    return promise;
   };
 }

@@ -1,3 +1,4 @@
+import axios from "axios";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import { Audit, AuditActionPayload } from "../audit/types";
@@ -40,6 +41,27 @@ const load = (id: string): ApiAction<DocumentRevision> => apiAction({
   },
 });
 
+const loadWithCallback = (
+  id: string,
+  handlers: Handlers<DocumentRevision>,
+): ApiAction<DocumentRevision> =>
+  apiActionWithCallbacks({
+    url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
+    method: "get",
+    handlers,
+  });
+
+// reload is same as load, but without async type
+// when using load action the AsyncGate component will hide the document and show the spinner
+// this is a silent load
+const reload = (id: string): ApiAction<DocumentRevision> => apiAction({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
+  method: "get",
+  onSuccess: (documentRevision, dispatch) => {
+    dispatch(documentRevisionSet(documentRevision));
+  },
+});
+
 const save = (id: string, body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>):
 ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
@@ -50,6 +72,7 @@ ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCal
     dispatch(documentRevisionSet(documentRevision));
   },
   handlers,
+  cancelToken: axios.CancelToken.source(),
 });
 
 const create = (body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>):
@@ -200,11 +223,20 @@ const loadGroupsByStage = (id: string, handlers: Handlers): ApiAction<Group[]> =
     handlers,
   });
 
+const cancelDraft = (id: string): ApiAction<DocumentRevision> => apiAction({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/cancel/${id}`,
+  method: "patch",
+  onSuccess: (documentRevision, dispatch) => {
+    dispatch(documentRevisionSet(documentRevision));
+  },
+});
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
   loadList,
   load,
+  loadWithCallback,
   save,
   create,
   loadDocument,
@@ -219,4 +251,6 @@ export default {
   upgradeToReleasedForm,
   createAndRelease,
   loadGroupsByStage,
+  cancelDraft,
+  reload,
 };

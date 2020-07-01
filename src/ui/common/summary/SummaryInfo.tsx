@@ -3,7 +3,7 @@ import Text from "../../components/Text";
 import { Translation } from "../../translations/types";
 
 interface OwnProps {
-  label: Translation;
+  label?: Translation;
   value: string | number | JSX.Element;
 }
 
@@ -13,7 +13,11 @@ export const SummaryInfo: React.FunctionComponent<Props> = ({
   label, value,
 }) => (
   <div>
-    <Text translation={label} />:{" "}
+    {label &&
+      <>
+        <Text translation={label} />:{" "}
+      </>
+    }
     {value}
   </div>
 );

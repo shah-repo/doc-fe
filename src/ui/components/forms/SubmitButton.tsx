@@ -5,11 +5,10 @@ import _ from "lodash";
 import * as React from "react";
 import { AsyncState, AsyncStatus } from "../../../state/types";
 import Text from "../../components/Text";
-import { Translation } from "../../translations/types";
 
 export interface SubmitButtonProps extends ButtonProps {
   asyncState: AsyncState;
-  label: Translation;
+  label: string;
   errors?: FormikErrors<any>;
 }
 
@@ -29,7 +28,7 @@ const SubmitButton: React.FunctionComponent<SubmitButtonProps> = ({
       disabled={hasErrors || isActive}
       {...buttonProps}
     >
-      <Text translation={label} />
+      <Text message={label} />
     </Button>
   );
 };

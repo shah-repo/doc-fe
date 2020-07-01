@@ -35,7 +35,7 @@ export const documentRevisionStatusOption = () => {
   Object.keys(DocumentRevisionStatus).forEach((key) => {
     // TODO: Change DocumentRevisionStatus enum into key = value, value = text
     const keyName = DocumentRevisionStatus[key as keyof typeof DocumentRevisionStatus];
-    if (keyName !== DocumentRevisionStatus.Deprecated) {
+    if (keyName !== DocumentRevisionStatus.Deprecated && keyName !== DocumentRevisionStatus.Canceled) {
       options.push({ value: keyName, text: keyName });
     }
   });
@@ -43,7 +43,9 @@ export const documentRevisionStatusOption = () => {
 };
 
 export const documentRevisionQueryStatus = (): DocumentRevisionStatus[] =>
-  Object.values(DocumentRevisionStatus).filter((value) => value !== DocumentRevisionStatus.Deprecated);
+  Object
+    .values(DocumentRevisionStatus)
+    .filter((value) => value !== DocumentRevisionStatus.Deprecated && value !== DocumentRevisionStatus.Canceled);
 
 export const documentRevisionReleasedDateOption = () => [
   {

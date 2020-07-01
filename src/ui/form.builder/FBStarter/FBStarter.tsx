@@ -16,8 +16,9 @@ const FBStarter: React.FunctionComponent<FBStarterProps> = ({
       label="form.builder.add.field"
       color="primary"
       size="medium"
+      variant="text"
       fullWidth={true}
-      {...{onClick}}
+      onClick={() => onClick && onClick(0)}
     />
   </Box>
 );

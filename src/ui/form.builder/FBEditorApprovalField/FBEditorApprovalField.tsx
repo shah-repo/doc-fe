@@ -1,22 +1,27 @@
 import React from "react";
-import { FBAutocompleteAsync, FBEditorApprovalFieldProps } from "..";
-import FBCheckbox from "../components/inputs/FBCheckbox";
-import FBTextField from "../components/inputs/FBTextField";
+import { FBAutocompleteAsync, FBEditor, FBEditorApprovalFieldProps } from "..";
 
 const FBEditorApprovalField: React.FunctionComponent<FBEditorApprovalFieldProps> = ({
   approverGroups,
   approvers,
   includeLabel = true,
+  children,
+  inputProps,
+  includeDefaultValue,
+  standalone = false,
   ...props
 }) => (
-  <>
-    {includeLabel && <FBTextField label="form.builder.label" name="label" {...props} />}
+  <FBEditor {...props} {...{ inputProps }}>
+    {/* {includeLabel && (
+      <FBEditorLabel {...props} {...{ inputProps, includeDefaultValue }} standalone={true} />
+    )} */}
     <FBAutocompleteAsync
       label="common.approvers"
       optionId="3"
       name="approvers"
       multiple={true}
       defaultValue={approvers}
+      rules="required_without:approverGroups"
     />
     <FBAutocompleteAsync
       label="form.builder.approver.groups"
@@ -24,9 +29,10 @@ const FBEditorApprovalField: React.FunctionComponent<FBEditorApprovalFieldProps>
       name="approverGroups"
       multiple={true}
       defaultValue={approverGroups}
+      rules="required_without:approvers"
     />
-    <FBCheckbox name="approveIsBlocking" label="form.builder.blocking" />
-  </>
+    {children}
+  </FBEditor>
 );
 
 export default FBEditorApprovalField;

@@ -1,5 +1,6 @@
 import _ from "lodash";
 import { createSelector } from "reselect";
+import { removeLastCharacterIfNotAlphaNumeric } from "../../../../ui/common/utils/helpers";
 import { ApplicationState } from "../../../reducers";
 import { AsyncState } from "../../../types";
 import { DocumentType } from "./types";
@@ -33,11 +34,7 @@ const getDocumentTypeFormOptions = createSelector(
   (ids, documentTypes) =>
     _.orderBy(
       ids.map((id) => ({
-        id: documentTypes[id].id,
-        documentTypeName: documentTypes[id].documentTypeName,
-        documentTypeAcronym: documentTypes[id].documentTypeAcronym,
-        group: documentTypes[id].group,
-        isQms: documentTypes[id].isQms,
+        ...documentTypes[id],
       }))
       , ["documentTypeName"], ["asc"]),
 );
@@ -48,7 +45,7 @@ const getDocumentTypeOptions = createSelector(
     _.orderBy(
       ids.map((id) => ({
         value: documentTypes[id].id,
-        text: documentTypes[id].documentTypeAcronym,
+        text: removeLastCharacterIfNotAlphaNumeric(documentTypes[id].documentTypeAcronym),
       }))
       , ["text"], ["asc"]),
 );

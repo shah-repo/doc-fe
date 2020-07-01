@@ -16,16 +16,16 @@ export class FB {
     return React.useContext(MobXProviderContext) as FBProviderProps;
   }
 
-  public static uniqid(): string {
+  public static get uniqid(): string {
     const uniqid = require("uniqid");
     return uniqid();
   }
 
   public static stripOption(fielddName: string, optionName?: string): string {
-    if (_.isUndefined(optionName)) {
+    if (!optionName) {
       return "";
     }
-    const striped = optionName.replace(fielddName, "").replace("-<-val->", "");
+    const striped = optionName.toString().replace(fielddName, "").replace("-<-val->", "");
     return _.startCase(striped);
   }
 }

@@ -1,38 +1,8 @@
 import _ from "lodash";
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
-import FBStore from "../../form.builder/stores/ui/FBStore";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
 import { DocumentRevisionFormValues } from "./types";
-
-const toRequestFormBuilder = (values: DocumentRevision) => {
-  switch (FBDRStore.mode) {
-    case "create":
-    case "update":
-      return {
-        ...values,
-        formTemplate: {
-          outputDocumentTypes: _.get(values, "formTemplate.outputDocumentTypes", [])
-            .map((outputDoc) => ({ id: outputDoc.value }) ),
-          schema: FBStore.getSchema(),
-        },
-      };
-    case "outputCreate":
-    case "outputUpdate":
-      return {
-        ...values,
-        formDocument: {
-          id: _.get(values, "formDocument.id"),
-        },
-        formInput: FBStore.getValues(),
-      };
-    default:
-      return {
-        ...values,
-        formTemplate: undefined,
-      };
-  }
-};
 
 export const toDocumentRevisionFormValues = (
   documentRevision: DocumentRevision,
@@ -57,11 +27,13 @@ export const toDocumentRevisionFormValues = (
       .map((employee) => ({ label: employee.name, value: employee.id })),
     securityGroups: _.get(documentRevision, "document.securityList.securityGroups", [])
       .map((group) => ({ label: group.name, value: group.id })),
+    operators: _.get(documentRevision, "document.securityList.operators", [])
+      .map((operator) => ({ label: operator.name, value: operator.id })),
     renderHTML: documentRevision.renderHTML,
   };
   if (documentRevision.formTemplate) {
     values.formTemplate = {
-      schema: FBStore.getSchema(),
+      schema: documentRevision.formTemplate?.schema,
       outputDocumentTypes: _.get(documentRevision, "formTemplate.outputDocumentTypes", [])
         .map((e) => ({ label: e.documentTypeName, value: e.id })),
     };
@@ -74,11 +46,7 @@ export const toDocumentRevisionEditRequestBody = (
   values: DocumentRevisionFormValues,
 ): DocumentRevisionEditRequestBody => {
   const data = {
-    ...toRequestFormBuilder((_.pick(values, [
-      "formTemplate",
-      "formDocument",
-      "formInput",
-    ]) as unknown) as DocumentRevision),
+    ..._.pick(values, ["formTemplate", "formDocument", "formInput" ]),
     description: values.description,
     name: values.name,
     attachments: values.attachments,
@@ -123,6 +91,7 @@ export const toNewVersionRequestBody = (
         securityList: {
           securityEmployees: (values.securityEmployees || []).map((employee) => ({ id: employee.value })),
           securityGroups: (values.securityGroups || []).map((group) => ({ id: group.value })),
+          operators: (values.operators || []).map((operator) => ({ id: operator.value })),
         },
       };
       newValues.document.documentType = { id: _.get(values, "document.documentType.id") };

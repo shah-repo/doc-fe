@@ -10,6 +10,7 @@ import useDebounce from "use-debounce/lib/useDebounce";
 import "../../../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { RenderSize } from "../../../../../state/ducks/common";
 import useDidMount from "../../../../hooks/useDidMount";
+import { useFormContext } from "../../FormContext";
 import Field, { FieldOwnProps } from "../Field";
 import { convertHtmlToDraft } from "./helpers";
 import "./rte.css";
@@ -48,6 +49,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
   toggleToolbar = true,
   ...fieldProps
 }) => {
+  const { submitForm } = useFormContext();
   const didMount = useDidMount();
   const { field, form } = fieldProps;
   const [value, setValue] = useState();
@@ -73,7 +75,7 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
     }
   }, [field.value]);
 
-  const [debouncedUpdate] = useDebounce(value, 300);
+  const [debouncedUpdate] = useDebounce(value, 200);
   useEffect(() => {
     if (!value) {
       return;
@@ -109,6 +111,8 @@ const RichTextEditor: React.FunctionComponent<RichTextEditorPropsWithFormik> = (
     if (!touched[name]) {
       setFieldTouched(name, true);
     }
+
+    submitForm();
   };
 
   const handleFocus = () => {

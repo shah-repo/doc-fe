@@ -1,6 +1,11 @@
 import { BaseTextFieldProps } from "@material-ui/core";
 import { AutocompleteProps } from "@material-ui/lab/Autocomplete";
-import { FBEditorPropertiesType, FBInputState, FBLabelProps, FBOptionProps } from "..";
+import { Dictionary } from "lodash";
+import { FBEditorOptionsProps, FBEditorPropertiesType, FBInputState, FBLabelProps, FBOptionProps, FBSchemaState } from "..";
+import { Employee } from "../../../state/ducks/company";
+import { GroupRequestBody } from "../../../state/ducks/groupManagement";
+import { FBEditorValidationMode } from "../FBEditorValidation";
+import { FBValidatorConfigProps } from "../types/validation/validatorDialog";
 
 export type FBInputType =
   | "url"
@@ -19,7 +24,6 @@ export type FBInputType =
   | "autocompleteasync"
   | "hyperlink"
   | "fileupload"
-  | "schemaSelect"
   | "schemaItem"
   | "action"
   | "summarysection"
@@ -28,13 +32,30 @@ export type FBInputType =
   | "paragraph"
   | "testRequirement"
   | "instructionsmediaupload"
-  | "evidencemediaupload";
-
-export type FBValidationMode = "disabled" | "visibility";
+  | "evidencemediaupload"
+  | "purchaseorder"
+  | "approvalMatrix"
+  | "poreceive"
+  | "stepsection"
+  | "teststep"
+  | "checkpoint"
+  | "approval"
+  | "createlabel"
+  | "quantity"
+  | "timer"
+  | "requestapproval"
+  | "instructionsdocument"
+  | "selectdocument"
+  | "selectrequirement"
+  | "testRequirement"
+  | "hellosign"
+  | "customcontrol"
+  | "poApprovalMatrix";
 
 export type FBInputProps =
 & FBLabelProps
 & FBOptionProps
+& FBEditorOptionsProps
 & Pick<AutocompleteProps, "multiple">
 & Pick<BaseTextFieldProps,
 | "children"
@@ -48,9 +69,11 @@ export type FBInputProps =
 | "defaultChecked"
 | "hidden"
 > & {
-  onChange?: (ev: React.ChangeEvent<any> | any, value: any) => any;
+  onBlur?: (ev: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => any;
+  onChange?: (ev: React.ChangeEvent<any> | any, value: any, context?: FBSchemaState) => any;
   type?: FBInputType;
   index?: number;
+  stepIndex?: number;
   gutter?: boolean;
   linkUrl?: string;
   defaultValue?: any;
@@ -58,11 +81,27 @@ export type FBInputProps =
   editorProperties?: FBEditorPropertiesType[];
   includeContext?: boolean;
   rules?: string;
-  validationMode?: FBValidationMode;
+  validationMode?: FBEditorValidationMode;
   includeSelectedSchema?: boolean;
   paragraph?: string;
   testRequirement?: string;
   isTemplate?: boolean;
+  includeQRScan?: boolean;
+  designDisabled?: boolean;
+  instructionsDocument?: string;
+  reviseDisabled?: boolean;
+  outputDisabled?: boolean;
+  customValidator?: FBValidatorConfigProps;
+  approvers?: string[] | Employee[];
+  approverGroups?: string[] | GroupRequestBody[];
+  approveIsBlocking?: boolean;
+  applicableOn?: any[];
+  actions?: string[];
+  hellosignFlowProps?: any;
+  showErrorMsg?: boolean;
+  validators?: Dictionary<any>;
+  forceDefault?: boolean;
+  autosave?: boolean;
 };
 
 export const OmitInputClones: FBInputType[] = ["fileupload"];

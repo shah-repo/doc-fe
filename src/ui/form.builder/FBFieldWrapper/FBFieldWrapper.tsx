@@ -6,40 +6,37 @@ import { FBFieldBottomBar, FBFieldMarkDown, FBFieldTopBar, FBProvider } from "..
 import { withFBFieldWrapper } from "./FBFieldWrapper.wrap";
 
 const FBFieldWrapper: React.FunctionComponent<FBFieldWrapperProps> = ({
+  fieldWrapperState,
+  inputProps: { index, designDisabled } = {},
   toolsVisible = false,
   markDownVisible = false,
   onMouseOver,
   onMouseLeave,
   topBarMargin,
-  bottomBarMargin,
-  index,
-  state,
+  grabMargin,
+  addToolVisible,
+  inputProps,
   ...props
 }) => (
-  <FBProvider fieldWrapper={state}>
+  <FBProvider {...{ fieldWrapperState }}>
     <Box {...{ onMouseOver, onMouseLeave }}>
-      <FBFieldTopBar
-        visibility={toolsVisible}
-        mb={topBarMargin}
-        index={index}
-      />
+      <FBFieldTopBar visibility={toolsVisible} mb={topBarMargin} {...{ inputProps }} />
       <Box display="flex" flexDirection="row">
         <Box width="100%">{props.children}</Box>
-        <Box
-          display="flex"
-          width="0"
-          alignItems="center"
-          style={{ cursor: "grab" }}
-        >
-          <DragIndicatorIcon />
-        </Box>
+        {!designDisabled && (
+          <Box
+            display="flex"
+            width="0"
+            alignItems="center"
+            style={{ cursor: "grab" }}
+            mt={grabMargin}
+          >
+            <DragIndicatorIcon />
+          </Box>
+        )}
       </Box>
-      {markDownVisible && <FBFieldMarkDown mt={-3.5} {...{ index }} />}
-      <FBFieldBottomBar
-        visibility={toolsVisible}
-        mt={bottomBarMargin}
-        {...{ index }}
-      />
+      {markDownVisible && <FBFieldMarkDown {...{ index }} />}
+      <FBFieldBottomBar visibility={toolsVisible} {...{ index }} />
     </Box>
   </FBProvider>
 );

@@ -34,6 +34,6 @@ export interface OutputDocumentTypes {
 
 export interface FBFormTemplateProps {
   outputDocumentTypes: OutputDocumentTypes[];
-  schema: FBTemplateSchema[] | string;
+  schema: FBTemplateSchema[];
   helloSignTemplateId?: string;
 }

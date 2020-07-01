@@ -68,17 +68,20 @@ const getAlphabetFromNumber = (num: number) => {
 export const generateVersionNumber = (
   revision?: number,
   revisionStage?: number,
+  subRevision?: number,
   revisionChangeType?: RevisionChangeType,
 ) => {
   if (!revision || !revisionStage) {
     return "";
   }
   if (revisionChangeType === RevisionChangeType.Obsolete) {
-    return "OBS";
+    return "Void";
   }
   switch (revisionStage) {
-    case 1:
-      return revision;
+    case 1: {
+      const subRev = (subRevision && subRevision > 0) ? `.${subRevision}` : "";
+      return `${revision}${subRev}`;
+    }
     case 2:
       return `1${getAlphabetFromNumber(revision)}`;
     case 3:

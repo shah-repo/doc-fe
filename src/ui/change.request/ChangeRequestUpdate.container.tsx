@@ -1,13 +1,16 @@
-import React from "react";
+import { isEmpty } from "lodash";
+import React, { useMemo } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { authSelectors } from "../../state/ducks/auth";
-import { ChangeRequest, changeRequestsActions } from "../../state/ducks/changeRequest";
+import { ChangeRequest, ChangeRequestEditRequestBody, changeRequestsActions } from "../../state/ducks/changeRequest";
 import { ApplicationState } from "../../state/reducers";
 import ChangeRequestFormContainer from "../change.request/form/ChangeRequestForm.container";
 import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "../change.request/form/transform";
 import { ChangeRequestFormValues } from "../change.request/form/types";
 import { changeRequestPreviewPath } from "../change.request/utils/paths";
+import { FormContext } from "../components/forms/FormContext";
+import { compareValuesToSubmit } from "../components/forms/helpers";
 import useAsync from "../hooks/useAsync";
 import { canEditChangeRequest } from "./helpers";
 
@@ -35,6 +38,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 export const ChangeRequestUpdateContainer: React.FunctionComponent<
 ChangeRequestUpdateContainerProps
 > = ({ save, changeRequest, currentUserEmail, loadAudit }) => {
+  const initialValues = useMemo(() => toChangeRequestFormValues(changeRequest), [changeRequest]);
   const async = useAsync<ChangeRequest>({
     onSuccess: () => {
       loadAudit(changeRequest.id);
@@ -45,21 +49,31 @@ ChangeRequestUpdateContainerProps
   }
 
   const onSubmit = (values: ChangeRequestFormValues) => {
+    const dataToSubmit = compareValuesToSubmit(initialValues, values, toChangeRequestEditRequestBody);
+
+    if (isEmpty(dataToSubmit)) {
+      return;
+    }
+
+    async.reset();
+
     async.start(
       save,
       changeRequest.id,
-      toChangeRequestEditRequestBody(values),
+      dataToSubmit as unknown as ChangeRequestEditRequestBody,
       async,
     );
   };
 
   return (
-    <ChangeRequestFormContainer
-      asyncState={async.asyncState}
-      onSubmit={onSubmit}
-      initialValues={toChangeRequestFormValues(changeRequest)}
-      changeRequest={changeRequest}
-    />
+    <FormContext.Provider value={{ submitOnChange: true }}>
+      <ChangeRequestFormContainer
+        asyncState={async.asyncState}
+        onSubmit={onSubmit}
+        initialValues={initialValues}
+        changeRequest={changeRequest}
+      />
+    </FormContext.Provider>
   );
 };
 

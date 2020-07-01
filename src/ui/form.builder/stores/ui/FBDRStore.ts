@@ -1,21 +1,25 @@
 import _ from "lodash";
 import { action, computed, observable } from "mobx";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
-import { DocumentGroupType } from "../../../../state/ducks/documentRevisions/documentType";
+import { DocumentGroupOptionsType, DocumentType } from "../../../../state/ducks/documentRevisions/documentType";
 import { canEditDocumentRevision } from "../../../document.revision/utils/helpers";
 import { DocumentRevisionFormValues } from "../../../documentRevision/forms/types";
+import { FBInputProps } from "../../types/common";
 import { FBDocumentRevisionMode, FBDRGroupConfig } from "../../types/store";
 import FBStore from "./FBStore";
 
 export class FBDocumentRevisionStore {
   @observable public mode: FBDocumentRevisionMode = "none";
+  public docSchema: FBInputProps[] = [];
 
   @computed public get isOutput(): boolean {
     return this.mode === "outputCreate" || this.mode === "outputPreview" || this.mode === "outputUpdate";
   }
 
-  @action public setInitialFBMode = (group: DocumentGroupType) => {
-    const docRevMode = group === "FORM" ? "create" : "none";
+  @action public setInitialFBMode = (docType: DocumentType) => {
+    this.docSchema = docType.schema as FBInputProps[] || [];
+    const formOption: DocumentGroupOptionsType = "FORM";
+    const docRevMode = docType.groupOptions?.includes(formOption) ? "create" : "none";
     this.setMode(docRevMode);
   };
 
@@ -24,10 +28,12 @@ export class FBDocumentRevisionStore {
     const outputGroup = _.get(values, "formDocument.document.docId");
     FBStore.documentId = values.formDocument?.document?.id || values.document?.id || "";
     FBStore.docId = values.id || "";
+    this.docSchema = values.document?.documentType?.schema as FBInputProps[] || [];
+    FBStore.document = values as DocumentRevision;
 
     switch (true) {
       // TEMPLATE FORM
-      case fmGroup && fmGroup === "FORM":
+      case fmGroup && _.includes(fmGroup, "FORM"):
         return this.fmConfig(values);
       // OUTPUT FORM
       case outputGroup !== undefined:
@@ -91,7 +97,7 @@ export class FBDocumentRevisionStore {
     formInput,
   }: FBDRGroupConfig) => {
     this.setMode(docRevMode);
-    FBStore.setSchema(schema);
+    FBStore.setSchema(_.union(this.docSchema, schema));
     FBStore.setValues(formInput);
   };
 }

@@ -1,0 +1,59 @@
+import _ from "lodash";
+import { action, observable, set } from "mobx";
+import * as generateUuid from "uuid/v4";
+import { FBApprovalMatrixConstructor, FBApprovalMatrixFieldData, FBApprovalMatrixFieldMode, FBApprovalMatrixItem, FBApprovalRole } from "..";
+import { FBEndpoint } from "../defaults/FBEndpoint";
+import FBRequest from "../FBApi/FBApi.request";
+
+export class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldData, null> {
+  @observable public mode: FBApprovalMatrixFieldMode = "none";
+  public url = FBEndpoint.ApprovalMatrix;
+
+  public constructor({ formValue, isOutput }: FBApprovalMatrixConstructor) {
+    super();
+    if (!formValue || isOutput) {
+      this.fetch();
+      return;
+    }
+    this.data = formValue;
+  }
+
+  @action public setMode = (mode: FBApprovalMatrixFieldMode) => {
+    set(this, "mode", mode);
+  };
+
+  @action public setApprovalRoles = (approvalRoles?: FBApprovalRole[]) => {
+    set(this, "data", {
+      approvalRoles,
+      approvalMatrix: this.data?.approvalMatrix,
+    });
+  };
+
+  @action public setApprovalMatrix = (approvalMatrix?: FBApprovalMatrixItem[]) => {
+    set(this, "data", {
+      approvalRoles: this.data?.approvalRoles || [],
+      approvalMatrix,
+    });
+  };
+
+  @action public addApprovalRole = (role: FBApprovalRole) => {
+    const approvalRoles = _.union(this.data?.approvalRoles || [], [{
+      ...role,
+      id: generateUuid(),
+      index: this.data?.approvalRoles?.length || 0,
+    }]);
+    const approvalMatrix = _.map(this.data?.approvalMatrix, (am) => {
+      _.map(new Array(approvalRoles.length), (_, i) => {
+        am.approvalRoles.stage1[i] = am.approvalRoles.stage1[i] || false;
+        am.approvalRoles.stage2[i] = am.approvalRoles.stage2[i] || false;
+        am.approvalRoles.stage3[i] = am.approvalRoles.stage3[i] || false;
+        am.approvalRoles.admStage[i] = am.approvalRoles.admStage[i] || false;
+      });
+      return am;
+    });
+    set(this, "data", { approvalRoles, approvalMatrix });
+  };
+}
+
+export default FBApprovalMatrixFieldState;
+

@@ -1,7 +1,6 @@
 import _ from "lodash";
 import { action, computed, set } from "mobx";
-import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncOption } from "..";
-import autocompleteOptions from "../../../data/autocompleteOptions.json";
+import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncOption, FBData } from "..";
 import FBRequest from "../FBApi/FBApi.request";
 import FBAutocompleteAsyncStore from "./FBAutocompleteAsync.store";
 
@@ -17,7 +16,7 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     if (!this.optionId) {
       return;
     }
-    return  _.find(autocompleteOptions, { id: this.optionId });
+    return  _.find(FBData.autocompleteOptions, { id: this.optionId });
   }
 
   @computed public get sliceData(): any {
@@ -52,7 +51,9 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     if (!this.optionId) {
       return;
     }
-    if (!FBAutocompleteAsyncStore.data.get(this.optionId) || force) {
+    const isLoading = FBAutocompleteAsyncStore.loading.get(this.optionId);
+    const hasData = Boolean(FBAutocompleteAsyncStore.data.get(this.optionId));
+    if (force || (!hasData && !isLoading)) {
       this.loadInternal();
     }
   };
@@ -72,6 +73,8 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
         return _.map(
           _.groupBy(data, "document.docId"), (recs) => _.last(_.sortBy(recs, "version"))
         );
+      case FBAutocompleteAsyncOption.officialGroups:
+        return _.filter(data, { isOfficial: true });
       default: return data;
     }
   };
@@ -81,6 +84,7 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     if (!this.optionId) {
       return;
     }
+    FBAutocompleteAsyncStore.loading.set(this.optionId, false);
     let data = this.data;
     if (!data) {
       return;
@@ -96,6 +100,8 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     if (!this.optionConfig) {
       return;
     }
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    FBAutocompleteAsyncStore.loading.set(this.optionId!, true);
     const { path: url, root = "" } = this.optionConfig;
     this.setUrl(url);
     this.setRoot(root);

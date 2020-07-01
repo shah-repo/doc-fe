@@ -1,15 +1,13 @@
 import _ from "lodash";
 import { useObserver } from "mobx-react";
+import moment from "moment";
 import React from "react";
 import { FBApprovalConfig, FBApprovalProps, FBApprovalState, FBApprovalStatus, FBApprovalValue } from ".";
 import { FB, FBAutocompleteAsyncOption } from "..";
-import { getStartOfDayDateString } from "../../../common/utils/date";
+import { TIME_ZONE } from "../../../common/utils/date";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
-import { store } from "../../../state/store";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
-import FBDRStore from "../stores/ui/FBDRStore";
-import FBStore from "../stores/ui/FBStore";
 
 export const withFBApproval = <T extends FBApprovalProps>(
   Component: React.FunctionComponent<T>
@@ -26,22 +24,36 @@ export const withFBApproval = <T extends FBApprovalProps>(
     isDefined = false,
     approvers,
     approverGroups,
+    reviseDisabled,
     loading,
     ...props
   }: T) => {
 
-    approvalFieldState = FB.useRef<FBApprovalState>(FBApprovalState);
+    const { workspaceState, formState } = FB.useStores();
+    const { id: documentId, isOutput, isReleased, currentUser } = workspaceState || {};
+    const formValue = formState?.getFieldValue(name) as FBApprovalValue[];
+
+    approvalFieldState = FB.useRef<FBApprovalState>(FBApprovalState, {
+      value: formValue,
+      documentId,
+      name,
+    });
+
     isApproved = approvalFieldState.isApproved;
     isDefined = !_.isEmpty(approvers) || !_.isEmpty(approverGroups);
-    disabled = !FBDRStore.isOutput || (FBDRStore.isOutput && !FBStore.docId);
-    const currentUser = store.getState().auth.user;
+    disabled = (
+      isReleased ||
+      !isOutput ||
+      (isOutput && !documentId) ||
+      (reviseDisabled && workspaceState?.isRevised)
+    );
 
     function isApprover(approver: Employee | GroupRequestBody): boolean {
       return _.includes(_.keys(approver), "user");
     }
 
     function groupCheck(id: string): boolean {
-      const filteredGroup = _.filter(currentUser.groups, { id });
+      const filteredGroup = _.filter(currentUser?.groups, { id });
       return !_.isEmpty(filteredGroup);
     }
 
@@ -65,28 +77,28 @@ export const withFBApproval = <T extends FBApprovalProps>(
     }
 
     function approverName(approver?: Employee | GroupRequestBody): string {
-      return (approver as Employee).user?.email || (approver as GroupRequestBody).name || "";
+      return (approver as Employee)?.user?.email || (approver as GroupRequestBody)?.name || "";
     }
 
     function approverStatusInfo(id: string): string {
       const status = approverStatus(id);
       if (status === FBApprovalStatus.Approved) {
-        const approverValue = findApprover(id);
-        if (!approverValue) {
-          return "";
+        const { userId, groupId, approvedAt } = findApprover(id) || {};
+        if (!approvedAt) { return ""; }
+        let approver = "";
+        if (userId && groupId) {
+          const approverObj = _.first(approvalFieldState?.approvers([userId]));
+          approver = `${approverName(approverObj)},`;
         }
-        const approvedAt = getStartOfDayDateString(approverValue.approvedAt, "LL");
-        return `${status}, ${approvedAt}`;
+
+        const mom = moment(approvedAt).tz(TIME_ZONE, true).format("D MMM YYYY hh:mm a");
+        return `${status}, ${approver} ${mom}`;
       }
       return status;
     }
 
     function canApprove(id: string): boolean {
-      return (
-        !isApproved &&
-        (id === currentUser?.employeeId || groupCheck(id)) &&
-        approverStatus(id) !== FBApprovalStatus.Approved
-      );
+      return id === currentUser?.employeeId || groupCheck(id);
     }
 
     onApprove = (approver?: Employee | GroupRequestBody) => () => {
@@ -94,16 +106,14 @@ export const withFBApproval = <T extends FBApprovalProps>(
         return;
       }
       approvalFieldState?.addApprover({
-        id: currentUser.id,
-        userId: currentUser.employeeId,
+        id: FB.uniqid,
+        userId: currentUser?.employeeId,
         ...!isApprover(approver) && { groupId: approver.id },
         approvedAt: (new Date()).toISOString(),
       });
 
       // API post
-      if (!name) {
-        return;
-      }
+      if (!name) { return; }
 
       approvalFieldState?.postApi.setBody({
         fieldName: name,
@@ -125,20 +135,11 @@ export const withFBApproval = <T extends FBApprovalProps>(
       };
     };
 
-    React.useEffect(() => {
-      if (!name) {
-        return;
-      }
-      const hasApproved = FBStore.getValue(name) as FBApprovalValue[] || [];
-      approvalFieldState?.setApprovers(hasApproved);
-    }, []);
-
     useObserver(() => {
       FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.approver) &&
         (approvers = approvalFieldState?.approvers(approvers as string[]));
       FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.group) &&
         (approverGroups = approvalFieldState?.groups(approverGroups as string[]));
-
       hasApproved = approvalFieldState?.hasApproved;
       loading = approvalFieldState?.approversApi.loading || approvalFieldState?.groupsApi.loading;
     });
@@ -149,6 +150,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
       approvalConfig,
       approvers,
       approverGroups,
+      reviseDisabled,
       hasApproved,
       isApproved,
       isDefined,

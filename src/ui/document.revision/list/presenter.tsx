@@ -2,12 +2,11 @@ import { Button, Grid, WithStyles, withStyles } from "@material-ui/core";
 import _ from "lodash";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
-// import { ReactComponent as LockIcon } from "../../../assets/images/icon_lock.svg";
-// import { ReactComponent as UnlockIcon } from "../../../assets/images/icon_unlock.svg";
-import { stripTagsFromObject } from "../../../common/utils/helpers";
+import { stripTags } from "../../../common/utils/helpers";
 import { unmaskId } from "../../../state/ducks/common/helpers";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
+import { removeLastCharacterIfNotAlphaNumeric } from "../../common/utils/helpers";
 import Date from "../../components/Date";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
@@ -142,11 +141,9 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         editDocumentRevision(rowData.id, rowData.document.id),
       searchOptions: {
         dataKey: "status[]",
-        defaultValue: !tableCriteria.queryDict["status[]"]
-          ? DocumentRevisionStatus.Released
-          : _.isString(tableCriteria.queryDict["status[]"])
-            ? tableCriteria.queryDict["status[]"]
-            : undefined,
+        defaultValue: _.isString(tableCriteria.queryDict["status[]"])
+          ? tableCriteria.queryDict["status[]"]
+          : undefined,
         searchType: "select",
         selectOptions: documentRevisionStatusOption(),
       },
@@ -186,7 +183,15 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   ];
 
   const customDataSet = (data: DocumentRevision[]) =>
-    data.map((docRev) => stripTagsFromObject(docRev));
+    data.map((docRev) => {
+      _.set(docRev, "description", stripTags(docRev.description));
+      _.set(
+        docRev,
+        "document.documentType.documentTypeAcronym",
+        removeLastCharacterIfNotAlphaNumeric(docRev.document?.documentType?.documentTypeAcronym)
+      );
+      return docRev;
+    });
 
   return (
     <Grid container={true} className={classes.root}>

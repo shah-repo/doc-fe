@@ -8,12 +8,13 @@ import { ReactComponent as UncheckedMark } from "../../../assets/images/uncheck_
 import { authSelectors } from "../../../state/ducks/auth";
 import { Group } from "../../../state/ducks/auth/types";
 import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
-import { Approval } from "../../../state/ducks/common";
+import { Approval, Owner } from "../../../state/ducks/common";
 import { ApplicationState } from "../../../state/reducers";
 import AsyncGate from "../../components/AsyncGate";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import Text from "../../components/Text";
+import { ApproveAndReleaseFormValues } from "../../documentRevision/forms/types";
 import useActionCreator from "../../hooks/useActionCreator";
 import { toUniqGroupOptions } from "./transform";
 import { ChangeRequestFormValues } from "./types";
@@ -23,7 +24,8 @@ interface OwnProps {
   dataProp?: Approval[];
   withoutCurrentUser?: boolean;
   documentTypeGroups?: Group[];
-  values?: ChangeRequestFormValues;
+  values?: ChangeRequestFormValues | ApproveAndReleaseFormValues;
+  owner?: Owner;
 }
 
 export type Props = OwnProps;
@@ -33,6 +35,7 @@ export const Approvers: React.FunctionComponent<Props> = ({
   withoutCurrentUser = false,
   documentTypeGroups,
   values,
+  owner,
 }) => {
 
   const joinedEmployees = (groups: Group[]) => groups.map((group) => group.joinedEmployees.map((employee) =>
@@ -60,16 +63,24 @@ export const Approvers: React.FunctionComponent<Props> = ({
 
   const renderGroupApproversResults = () => {
     const uniqGroups = uniqBy(documentTypeGroups, "id");
-    const selectedEmployees = values?.approvals?.map((e) => e.value);
+    const selectedEmployees = (values?.approvals || []).map((e) => e.value);
     return (
       <Box display="flex" flexWrap="wrap">
-        {uniqGroups.map((group) =>
-          <Box marginRight={6} marginBottom={4} key={group.id} display="inline-flex">
-            {group.joinedEmployees.some((employee) => selectedEmployees?.includes(employee.id)) ? <CheckedMark /> : <UncheckedMark />}
-            <Box paddingLeft={1} display="initial">
-              <Text message={group.name} />
-            </Box></Box>
-        )}
+        {
+          uniqGroups.map((group) =>
+            <Box marginRight={6} marginBottom={4} key={group.id} display="inline-flex">
+              {
+                group
+                  .joinedEmployees
+                  .some((employee) => (
+                    selectedEmployees?.includes(employee.id)) || owner?.id === employee.id) ?
+                  <CheckedMark /> : <UncheckedMark />
+              }
+              <Box paddingLeft={1} display="initial">
+                <Text message={group.name} />
+              </Box></Box>
+          )
+        }
       </Box>
     );
   };
@@ -93,7 +104,6 @@ export const Approvers: React.FunctionComponent<Props> = ({
     <Box marginLeft={1}><Text message={data.label}/></Box>
   </components.MultiValueLabel>);
 
-
   return (
     <AsyncGate
       asyncState={loadApproversAsyncState}
@@ -112,7 +122,7 @@ export const Approvers: React.FunctionComponent<Props> = ({
           formatOptionLabel,
           components: { MultiValueLabel },
         }}
-        options={uniqBy(arrayOfOptions, "value") as OptionType[]}
+        options={uniqBy(arrayOfOptions, "value").filter((e: any) => e.value !== owner?.id) as OptionType[]}
       />
       {documentTypeGroups && renderGroupApproversResults()}
     </AsyncGate>

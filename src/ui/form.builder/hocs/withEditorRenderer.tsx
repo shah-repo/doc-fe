@@ -3,7 +3,8 @@ import { FormikProps } from "formik";
 import _, { Dictionary } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
-import { FBTestStepState } from "..";
+import { FB, FBData } from "..";
+import { isTranslation } from "../../translations/types";
 import FBButton from "../components/inputs/FBButton";
 import { FBFieldEditorComponent, omitLabelValidation, pickDefaultLabel } from "../defaults/editor";
 import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
@@ -93,8 +94,15 @@ export const withEditorRenderer =
       // FBValidatorStore.customValidator = undefined;
 
       const removeEl = (mode === "create") ? 0 : 1;
-      let newSchema = FBStore.schema;
+      let newSchema = FBStore.getSchema();
       newSchema.splice(index, removeEl, schema);
+      if (type === "approval" || type === "inlineapproval") {
+        newSchema.splice(index, 0, {
+          type: "section",
+          name: FB.uniqid,
+          label: intl.formatMessage({ id: "form.builder.section" }),
+        });
+      }
       if (type === "inlineapproval") {
         const approvalName: string = (values as FBInputProps).name || "";
         FBStore.setValues({
@@ -105,7 +113,7 @@ export const withEditorRenderer =
       }
 
       if (type === "teststep") {
-        newSchema = _.union(newSchema, new FBTestStepState().schema as FBInputProps[]);
+        newSchema = _.union(newSchema, FBData.testStepSchema as FBInputProps[]);
       }
 
       FBStore.setSchema(newSchema);
@@ -116,12 +124,17 @@ export const withEditorRenderer =
       ? "form.builder.add.field"
       : "common.save";
 
+    const defaulLabel = props.values.label;
+    if (defaulLabel && isTranslation(defaulLabel as string)) {
+      _.set(props, "values.label", intl.formatMessage({ id: defaulLabel as string }));
+    }
+
     return (
       <Box>
         <InputType
           {..._.omit(props.values, "label")}
           {...(_.includes(pickDefaultLabel, type) && { defaultValue: _.get(props, "values.label") })}
-          {...{ index }}
+          {...{ index, type }}
         />
         <Box display="flex" flexDirection="row-reverse" mx={-1}>
           <FBButton label={buttonLabel} onClick={onClick} />

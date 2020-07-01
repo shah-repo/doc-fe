@@ -22,6 +22,7 @@ export const PurchaseOrderApproval: React.FunctionComponent<Props> = ({
   const [version] = useState(generateVersionNumber(
     documentRevision.revision,
     documentRevision.revisionStage,
+    documentRevision.subRevision,
     documentRevision.revisionChangeType,
   ));
   const [title] = useState(intl.formatMessage(
