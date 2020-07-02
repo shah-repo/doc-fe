@@ -1,6 +1,6 @@
-import { pick } from "lodash";
+import { omit, pick } from "lodash";
 import React from "react";
-import { FB, FBData, FBFormState, FBTaskActionMode, FBTaskFormActions, FBTaskFormProps, FBTaskItem } from "..";
+import { FB, FBClosingNoteProps, FBData, FBFormState, FBTaskActionMode, FBTaskFormActions, FBTaskFormProps, FBTaskItem } from "..";
 import { toastError } from "../../components/notifications";
 
 export const withFBTaskForm = <T extends FBTaskFormProps>(
@@ -49,7 +49,12 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
     }
 
     function handleAddNote() {
-      taskState?.taskDone(formState?.getValues() as FBTaskItem);
+      const formValues = formState?.getValues() as FBClosingNoteProps;
+      const task = {
+        id: formValues.id,
+        closingNoteInput: omit(formValues, "id"),
+      };
+      taskState?.taskDone(task);
     }
 
     function handleCancel() {

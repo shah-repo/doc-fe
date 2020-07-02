@@ -41,7 +41,7 @@ export const withFBTaskField = <T extends FBTaskFieldProps>(
       return moment(task.dueDate).tz(TIME_ZONE, true).format("MMMM D, YYYY");
     }
 
-    onMouseOver = () => taskFieldState?.setVisibility(task.status !== "PENDING");
+    onMouseOver = () => taskFieldState?.setVisibility(task.status === "DRAFT");
     onMouseLeave = () => taskFieldState?.setVisibility(false);
     handleRemoveTask = (task?: FBTaskItem) => taskState?.removeTask(task);
 

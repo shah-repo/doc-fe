@@ -1,5 +1,6 @@
 import { BoxProps } from "@material-ui/core";
 import { FBDialogState, FBFormProps, FBInputProps, FBSchemaComponentProps, FBSchemaProps, FBTaskState } from "..";
+import { Attachment } from "../../../state/ducks/attachments";
 import { Employee } from "../../../state/ducks/company";
 import { FBTaskFieldState } from "../FBTaskField/FBTaskField.state";
 
@@ -19,10 +20,13 @@ export interface FBTaskItem {
   dueDate: string;
   fieldId: string;
   status?: FBTaskItemStatus;
+  attachments?: Attachment[];
   partOf?: {
     id: string;
   };
 }
+
+export type FBClosingNoteProps = Pick<FBTaskItem, "id" | "closingNoteInput" | "attachments">;
 
 export type FBTaskProps =
 & Pick<FBInputProps, "name" | "label" | "disabled">

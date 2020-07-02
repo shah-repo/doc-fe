@@ -3,7 +3,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import { get } from "lodash";
 import React from "react";
-import { FB, FBButton, FBMapWrapper, FBSchemaProps, FBTaskFieldProps } from "..";
+import { FB, FBButton, FBFileUpload, FBMapWrapper, FBSchemaProps, FBTaskFieldProps } from "..";
 import Text from "../../components/Text";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBTaskField } from "./FBTaskField.wrap";
@@ -99,10 +99,41 @@ const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
           label="Done"
           onClick={handleClosingNote}
           variant="text"
-          style={{ margin: 0 }}
+          style={{ margin: 0, marginLeft: "-16px" }}
         />
       </Box>
     )}
+    <FBMapWrapper<FBSchemaProps[]> collection={task.closingNoteSchema}>
+      {(schemaItem: FBSchemaProps, index) => (
+        <Box key={`fb-task-field-${schemaItem.name}-${index}`} mt={3}>
+          {index === 0 && (
+            <Box display="flex">
+              <Box
+                fontSize="subtitle2.fontSize"
+                flexGrow={1}
+                fontWeight="fontWeightBold"
+              >
+                {FB.stripTags(get(task, `closingNoteInput.${schemaItem.name}`))}
+              </Box>
+            </Box>
+          )}
+          {index > 0 && (
+            <Box fontSize="body2.fontSize" fontWeight="fontWeightNormal">
+              {FB.stripTags(get(task, `closingNoteInput.${schemaItem.name}`))}
+            </Box>
+          )}
+        </Box>
+      )}
+    </FBMapWrapper>
+    <Box mb={-4}>
+      <FBFileUpload
+        gutter={false}
+        readonly={true}
+        disabled={true}
+        name="attachments"
+        defaultValue={get(task, "closingNoteInput.attachments", [])}
+      />
+    </Box>
   </Box>
 );
 

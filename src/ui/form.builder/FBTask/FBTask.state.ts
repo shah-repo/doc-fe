@@ -1,5 +1,6 @@
 // eslint-disable-next-line max-classes-per-file
 import { find, omit } from "lodash";
+import { FBClosingNoteProps } from ".";
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBTaskApi, FBTaskItem } from "..";
 import { Employee } from "../../../state/ducks/company";
 import { FBEndpoint } from "../defaults/FBEndpoint";
@@ -35,7 +36,7 @@ export class FBTaskState {
     this.taskApi.post();
   };
 
-  public taskDone = (task?: FBTaskItem) => {
+  public taskDone = (task?: FBClosingNoteProps) => {
     if (!task) { return; }
     this.taskApi.setTemplateUrl(FBEndpoint.TaskDone, { id: task.id });
     this.taskApi.setBody(omit(task, "id"));

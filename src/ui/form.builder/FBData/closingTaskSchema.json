@@ -1,6 +1,6 @@
 [{
   "type": "texteditor",
-  "name": "closingNoteInput.description",
+  "name": "description",
   "label": "form.builder.description",
   "rules": "required"
 }]

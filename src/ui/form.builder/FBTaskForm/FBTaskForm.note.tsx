@@ -10,7 +10,7 @@ const FBTaskFormNote: React.FunctionComponent<FBTaskFormProps> = ({
   <FBForm {...{ formState }} >
     <FBTextField name="id" hidden={true} />
     <FBSchema {...{ schema }} />
-    <FBFileUpload name="closingNoteInput.attachments" />
+    <FBFileUpload name="attachments" />
     {children}
   </FBForm>
 );

@@ -1,8 +1,8 @@
 import { cloneDeep, filter, findIndex } from "lodash";
-import { FBTaskItem, FBTaskState } from "..";
+import { FBClosingNoteProps, FBTaskItem, FBTaskState } from "..";
 import FBRequest from "../FBApi/FBApi.request";
 
-export class FBTaskApi extends FBRequest<FBTaskItem, FBTaskItem> {
+export class FBTaskApi extends FBRequest<FBTaskItem, FBTaskItem | FBClosingNoteProps> {
   private taskState?: FBTaskState;
 
   public constructor(taskState?: FBTaskState) {
@@ -19,6 +19,7 @@ export class FBTaskApi extends FBRequest<FBTaskItem, FBTaskItem> {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             filter(this.taskState?.tasks, (t) => t.id !== this.data!.id)
           );
+          super.onSuccess();
           return;
         }
         const tasks = [...this.taskState?.tasks || [], ...[this.data]];
