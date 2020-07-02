@@ -208,9 +208,10 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
             variant="contained"
             color="primary"
             className={classes.button}
+            id="ListPresenter-create"
             data-cy="document.revision.create"
           >
-            <Text translation="document.revision.create"/>
+            <Text translation="document.revision.create" />
           </Button>
         </RouterLink>
       </Grid>

@@ -34,6 +34,7 @@ const SecurityEmployees: React.FunctionComponent = () => {
         name="securityEmployees"
         label="document.revision.selected.users"
         autocompleteProps={{
+          id: "securityEmployees",
           isMulti: true,
           closeMenuOnSelect: false,
           placeholder: intl.formatMessage({
