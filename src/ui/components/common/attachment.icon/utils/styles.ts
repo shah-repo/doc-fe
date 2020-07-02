@@ -11,7 +11,7 @@ export const styles = makeStyles((theme) => ({
     padding: "0",
     margin: "0",
     right: -5,
-    top: -5,
+    top: -6,
     display: disabled ? "none" : "inherit",
     position: "absolute" as "absolute",
     zIndex: 2,
