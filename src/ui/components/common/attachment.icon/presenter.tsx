@@ -1,10 +1,12 @@
 import { Box, ButtonBase, CircularProgress, IconButton, Tooltip, Typography } from "@material-ui/core";
 import { CancelOutlined } from "@material-ui/icons";
+import StarsRoundedIcon from "@material-ui/icons/StarsRounded";
 import classNames from "classnames";
 import React, { useMemo } from "react";
 import { useIntl } from "react-intl";
 import { Attachment } from "../../../../state/ducks/attachments";
 import Text from "../../../components/Text";
+import { FormHeaderContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
 import FileIcon from "./icon";
 import { styles } from "./utils/styles";
 import { AttachmentIconProps } from "./utils/types";
@@ -44,6 +46,8 @@ AttachmentIconProps
 
     return intl.formatMessage({ id: "file.type" }, { type });
   }, [file.type, intl]);
+  const { documentRevision } = React.useContext(FormHeaderContext) || {};
+  const isPrimary = file.id === documentRevision?.primaryAttachment?.id;
 
   const isUploadingRenderer = () => (
     <Box>
@@ -51,6 +55,8 @@ AttachmentIconProps
     </Box>
   );
 
+  const primaryBadgeRender = isPrimary &&
+    <StarsRoundedIcon color="primary" fontSize="small" className={classes.primaryBadge} />;
   const deleteButtonRenderer = canDeleteFile && (
     <div className={classes.closeRoot}>
       <IconButton
@@ -65,12 +71,13 @@ AttachmentIconProps
   return (
     <div className={classes.attachmentContainer}>
       <div className={classes.iconContainer}>
+        {primaryBadgeRender}
         {deleteButtonRenderer}
         <Tooltip title={`${file.name}.${file.type}`}>
           <ButtonBase
-            onContextMenu={handleContextMenu && handleContextMenu(file)}
+            onContextMenu={handleContextMenu?.(file)}
             key={`icon-${file.id}`}
-            onClick={handleIconClick && handleIconClick(file)}
+            onClick={handleIconClick?.(file)}
             id="AttachmentIconPresenter-handleIconClick"
           >
             {isLoading && <CircularProgress className={classes.progress} />}
@@ -79,7 +86,11 @@ AttachmentIconProps
         </Tooltip>
         {isRedLine && <hr className={classes.underLine}/>}
       </div>
-      <div className={classes.fileNameContainer}>
+      <div
+        className={classes.fileNameContainer}
+        onClick={handleIconClick?.(file)}
+        onContextMenu={handleContextMenu?.(file)}
+      >
         <Typography
           className={classNames(classes.fileName, {
             [classes.isUploading]: isUploading,

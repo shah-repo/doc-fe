@@ -9,6 +9,7 @@ import { documentRevisionStatusContextFromCR } from "../../../documentRevision/D
 import Text from "../../Text";
 import { WATERMARK_FILES } from "../view.file/utils/constants";
 import { checkIfFileIsViewable } from "../view.file/utils/helpers";
+import MenuItemSetPrimary from "./menu.setPrimary";
 import { AttachmentMenuProps, PasswordSubmitActionType } from "./utils/types";
 
 interface OwnProps {
@@ -115,6 +116,7 @@ const AttachmentMenu: React.FunctionComponent<Props> = ({
       {renderWatermarkFile}
       {renderWatermarkCleanCopy}
       {renderPreviewFile}
+      <MenuItemSetPrimary attachment={attachment} handleClose={handleClose} />
     </Menu>
   );
 };
