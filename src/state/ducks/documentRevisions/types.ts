@@ -8,7 +8,7 @@ import { ChangeRequest } from "../changeRequest";
 import { Id, Owner, User } from "../common";
 import { TrainingRecord } from "../training";
 import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
-import { DocumentType } from "./documentType";
+import { DocumentGroupOptionsType, DocumentType } from "./documentType";
 
 export enum DocumentRevisionStatus {
   Draft = "DRAFT",
@@ -91,11 +91,13 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   obsoletedAt?: string;
   releasedAt?: string;
   trainingRecords: TrainingRecord[];
+  effectiveDate?: Date;
   retrain?: boolean;
   grantAccess?: boolean;
   renderHTML?: string;
   pdf?: PDF;
   outputRevision?: boolean;
+  primaryAttachment?: Attachment;
 }
 
 export const RevisionStageOptions = [
@@ -180,6 +182,9 @@ export type AllIdsState = string[];
 
 export interface ApproveAndReleaseRequest {
   approvers: Id[];
+  effectiveDate: string;
+  documentType: Id;
+  formDocument: Id;
 }
 
 export interface CreateAndReleaseRequest {
@@ -211,6 +216,7 @@ export interface FBDocumentRevisionProps {
 export interface FBOutputDocumentType {
   id: string;
   documentTypeName?: string;
+  groupOptions?: DocumentGroupOptionsType;
 }
 
 

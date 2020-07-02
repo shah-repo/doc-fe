@@ -30,7 +30,7 @@ export const SidebarPresenter: React.FunctionComponent<Props> = ({
   return (
     <Grid item={true} xs={sidebar ? 3 : 1}
       style={{
-        position: "sticky",
+        position: "inherit",
       }}
       className={classes.transitions}
     >

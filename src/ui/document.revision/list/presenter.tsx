@@ -2,12 +2,11 @@ import { Button, Grid, WithStyles, withStyles } from "@material-ui/core";
 import _ from "lodash";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
-// import { ReactComponent as LockIcon } from "../../../assets/images/icon_lock.svg";
-// import { ReactComponent as UnlockIcon } from "../../../assets/images/icon_unlock.svg";
-import { stripTagsFromObject } from "../../../common/utils/helpers";
+import { stripTags } from "../../../common/utils/helpers";
 import { unmaskId } from "../../../state/ducks/common/helpers";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
+import { removeLastCharacterIfNotAlphaNumeric } from "../../common/utils/helpers";
 import Date from "../../components/Date";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
@@ -15,8 +14,7 @@ import { TablePanel } from "../../components/table/panel";
 import { TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
-import { generateVersionNumber } from "../../documentRevision/helpers";
-import { canEditDocumentRevision, documentRevisionQueryStatus, documentRevisionReleasedDateOption, documentRevisionStatusOption } from "../utils/helpers";
+import { canEditDocumentRevision, documentRevisionEffectiveDateOption, documentRevisionQueryStatus, documentRevisionStatusOption } from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
 import styles from "./styles";
@@ -69,17 +67,16 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       },
     },
     {
-      key: "version",
-      label: "common.version",
+      key: "revision",
+      label: "common.revision",
       searchOptions: {
         searchValueGetter: (value) => unmaskId(value),
-        defaultValue: tableCriteria.queryDict.version,
+        defaultValue: tableCriteria.queryDict.revision,
       },
       cellOptions: { align: "center" },
       cellHref: cellHrefRenderer,
       columnOptions: {
-        cellDataGetter: ({ rowData: { revision, revisionStage, revisionChangeType } }) =>
-          generateVersionNumber(revision, revisionStage, revisionChangeType),
+        cellDataGetter: ({ rowData }) => rowData.revision,
         width: 80,
         flexShrink: 1,
       },
@@ -142,30 +139,28 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
         editDocumentRevision(rowData.id, rowData.document.id),
       searchOptions: {
         dataKey: "status[]",
-        defaultValue: !tableCriteria.queryDict["status[]"]
-          ? DocumentRevisionStatus.Released
-          : _.isString(tableCriteria.queryDict["status[]"])
-            ? tableCriteria.queryDict["status[]"]
-            : undefined,
+        defaultValue: _.isString(tableCriteria.queryDict["status[]"])
+          ? tableCriteria.queryDict["status[]"]
+          : undefined,
         searchType: "select",
         selectOptions: documentRevisionStatusOption(),
       },
     },
     {
-      key: "releasedAt",
-      label: "document.revision.released.date",
+      key: "effectiveDate",
+      label: "common.effective.date",
       cellHref: cellHrefRenderer,
       cellOptions: { align: "center" },
       columnOptions: {
         width: 115,
         // eslint-disable-next-line react/display-name
-        cellDataGetter: ({ rowData }) => <Date value={rowData.releasedAt} />,
+        cellDataGetter: ({ rowData }) => <Date value={rowData.effectiveDate} />,
       },
       searchOptions: {
-        dataKey: "releasedAfter",
+        dataKey: "effectiveDate",
         searchType: "select",
-        selectOptions: documentRevisionReleasedDateOption(),
-        defaultValue: tableCriteria.queryDict.releasedAfter,
+        selectOptions: documentRevisionEffectiveDateOption(),
+        defaultValue: tableCriteria.queryDict.effectiveDate,
       },
     },
     // We will add one more column if will be neccessery
@@ -186,7 +181,15 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   ];
 
   const customDataSet = (data: DocumentRevision[]) =>
-    data.map((docRev) => stripTagsFromObject(docRev));
+    data.map((docRev) => {
+      _.set(docRev, "description", stripTags(docRev.description));
+      _.set(
+        docRev,
+        "document.documentType.documentTypeAcronym",
+        removeLastCharacterIfNotAlphaNumeric(docRev.document?.documentType?.documentTypeAcronym)
+      );
+      return docRev;
+    });
 
   return (
     <Grid container={true} className={classes.root}>

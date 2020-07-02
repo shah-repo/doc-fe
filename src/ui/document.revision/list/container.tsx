@@ -1,10 +1,12 @@
 import _ from "lodash";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions";
+import { DOCUMENT_GROUP_TYPES } from "../../../state/ducks/documentRevisions/documentType/constants";
 import documentTypeSelectors from "../../../state/ducks/documentRevisions/documentType/selectors";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
+import { documentRevisionQueryStatus } from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { ListOwnProps } from "../utils/types";
 import ListPresenter from "./presenter";
@@ -23,23 +25,30 @@ export const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
     history.push(documentPreviewPath(documentRevisionId, documentId));
 
   const dispatch = useDispatch();
-  if (_.isEmpty(tableCriteria.queryDict)) {
+  const setSearchStatus = (status: DocumentRevisionStatus | DocumentRevisionStatus[]) => {
     dispatch(
       tableSearchActions.setSearchCriteria(
         {
           ...tableCriteria,
           queryDict: {
-            "status[]": DocumentRevisionStatus.Released,
+            "status[]": status,
+            "docTypeGroups[]": DOCUMENT_GROUP_TYPES,
           },
         },
         TABLE_NAME,
       ),
     );
-  }
-  const clearFilter = () =>
-    dispatch(tableSearchActions.clearSearchCriteria(TABLE_NAME));
+  };
+
+  useEffect(() => {
+    if (_.isEmpty(tableCriteria.queryDict)) {
+      setSearchStatus(DocumentRevisionStatus.Released);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
+  const clearFilter = () => setSearchStatus(documentRevisionQueryStatus());
   const documentTypeOptions = useSelector(
-    documentTypeSelectors.getDocumentTypeOptions,
+    documentTypeSelectors.getDocumentTypeOptionsWithoutRecords,
   );
 
   return (

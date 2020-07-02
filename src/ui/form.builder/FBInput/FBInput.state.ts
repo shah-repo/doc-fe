@@ -3,7 +3,7 @@ import { action, observable, set } from "mobx";
 import { FBInputType } from ".";
 
 export class FBInputState {
-  public static omitLabel: FBInputType[] = ["checkbox", "radio"];
+  public static omitLabel: FBInputType[] = ["checkbox", "radio", "hyperlink"];
   // Set value on blur
   public static omitOnChange: FBInputType[] = ["textfield", "texteditor"];
   public autosavePrevValue?: any;

@@ -1,0 +1,29 @@
+[
+  {
+    "type": "autocompleteasync",
+    "label": "Proposed document revision",
+    "name": "proposedDocumentRevision",
+    "placeholder": "Select",
+    "optionValueType": "id",
+    "optionId": "15",
+    "rules": "required"
+  },
+  {
+    "type": "textfield",
+    "label": "Description of change",
+    "name": "descriptionOfChange",
+    "rules": "required",
+    "multiline": true,
+    "rows": 3,
+    "placeholder": "Enter text"
+  },
+  {
+    "type": "textfield",
+    "label": "Justification of change",
+    "multiline": true,
+    "rows": 3,
+    "name": "justificationOfChange",
+    "rules": "required",
+    "placeholder": "Enter text"
+  }
+]

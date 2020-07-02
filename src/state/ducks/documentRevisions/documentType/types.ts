@@ -1,8 +1,22 @@
 import { FBSchemaProps } from "../../../../ui/form.builder";
+import { GroupTag } from "../../auth/types";
 import { Nullable } from "../../common";
+import { FBFormTemplateProps } from "../types";
 import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST } from "./constants";
 
-export type DocumentGroupType = "FORM" | "OTHER" | "RECORD" | "DAM" | "MPI" | "DYNAMIC_FORM" | "POAM" | "PO" | "WORK_ORDER";
+export type DocumentGroupType =
+  "FORM" |
+  "OTHER" |
+  "RECORD" |
+  "DAM" |
+  "MPI" |
+  "DYNAMIC_FORM" |
+  "POAM" |
+  "PO" |
+  "WORK_ORDER" |
+  "SUPPLIER" |
+  "PART";
+
 export type DocumentGroupOptionsType =
   "FORM" |
   "DAM" |
@@ -15,7 +29,9 @@ export type DocumentGroupOptionsType =
   "POAM" |
   "PO" |
   "WORK_ORDER" |
-  "WO_PARTS";
+  "WO_PARTS" |
+  "CHANGE_REQUEST" |
+  "BE_OUTPUT";
 export interface PageDetailsColumn {
   label: string;
   sourcePath: string;
@@ -41,6 +57,7 @@ export interface DocumentType {
   defaultTraining: boolean;
   schema?: FBSchemaProps[];
   fieldsConfig?: FieldConfig;
+  hiddenForCreationForUsersWithoutTags?: GroupTag[];
 }
 
 export interface DocumentForms {
@@ -51,6 +68,7 @@ export interface DocumentTypeByIdForm {
   name: string;
   id: string;
   document: DocumentForms;
+  formTemplate?: FBFormTemplateProps;
 }
 
 export interface DocumentTypeById {
@@ -76,15 +94,6 @@ export type DocRevByIdState = DocumentTypeById;
 
 export type DocumentTypeAllIdsState = string[];
 
-export enum DynamicUIDocTypes {
-  PO = "PO",
-  RC = "RC",
-  SUP = "SUP",
-  WO = "WO",
-  DAM = "DAM",
-  POAM = "POAM",
-}
-
 export type FieldConfig = { [key in FieldType]?: IFieldConfigItem };
 
 export interface IFieldConfigItem {
@@ -104,7 +113,8 @@ export enum InputFieldType{
   NEXT_REVISION = "I",
   NEXT_REVISION_STAGE = "J",
   OBSOLETE = "K",
-  ADM_CHANGE = "L"
+  ADM_CHANGE = "L",
+  ASSIGN_DOCUMENT = "U"
 }
 
 export enum DisplayFieldType{
@@ -127,6 +137,8 @@ export enum DisplayFieldType{
   VERSION_PENDING_CHANGE = "P6",
   CR_ID = "R",
   REVISE_BTN = "S",
+  BOOKMARKS = "Q",
+  ADD_NEW_BTN = "V",
 }
 
 export type FieldType = InputFieldType | DisplayFieldType;

@@ -43,9 +43,11 @@ export const documentRevisionStatusOption = () => {
 };
 
 export const documentRevisionQueryStatus = (): DocumentRevisionStatus[] =>
-  Object.values(DocumentRevisionStatus).filter((value) => value !== DocumentRevisionStatus.Deprecated && value !== DocumentRevisionStatus.Canceled);
+  Object
+    .values(DocumentRevisionStatus)
+    .filter((value) => value !== DocumentRevisionStatus.Deprecated && value !== DocumentRevisionStatus.Canceled);
 
-export const documentRevisionReleasedDateOption = () => [
+export const documentRevisionEffectiveDateOption = () => [
   {
     text: ReleasedDateOptions.LAST_WEEK,
     value: moment().subtract(7, "d").startOf("day").toISOString(),

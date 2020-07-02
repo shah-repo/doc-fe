@@ -6,6 +6,7 @@ import { getHasPermission } from "../../../../common/utils/selectors";
 import { Group, Permission } from "../../../../state/ducks/auth/types";
 import { Owner } from "../../../../state/ducks/common/types";
 import { documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
+import { documentTypeActions } from "../../../../state/ducks/documentRevisions/documentType";
 import { FormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
 import { useApproveAndRelease } from "../../../hooks/docCustomization/useCustomization";
@@ -53,6 +54,11 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const async = useAsync<any>({ onSuccess: dialog.close });
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
   const [documentTypeGroups, setDocTypeGroups] = useState<any[]>([]);
+  const getDocTypeByGroupAction = useActionCreator(documentTypeActions.getDocTypeByGroup);
+  const [templateOptions, setTemplateOptions] = useState<DocumentType[]>([]);
+  const [formDocument, setFormDocument] = useState<string>("");
+  const [documentType, setDocumentType] = useState<string>("");
+
   const asyncGroups = useAsync({
     onSuccess: (response: Group[] = []) => {
       setDocTypeGroups([
@@ -62,6 +68,12 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   });
 
   const getGroupsByStage = useActionCreator(documentRevisionsActions.loadGroupsByStage);
+
+  const asyncGetDocTypeByGroup = useAsync({
+    onSuccess: (data: DocumentType[] = []) => {
+      setTemplateOptions(data);
+    },
+  });
 
   useEffect(() => {
     if (!docRevId) {
@@ -82,9 +94,16 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
       docRevId,
       asyncGroups,
     );
+    asyncGetDocTypeByGroup.start(
+      getDocTypeByGroupAction,
+      { docTypeGroupOption: "CHANGE_REQUEST" },
+      asyncGetDocTypeByGroup);
     dialog.open();
   };
+
   const closeDialog = () => {
+    setFormDocument("");
+    setDocumentType("");
     dialog.close();
   };
 
@@ -92,11 +111,18 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
     const approvers = !values.approvals || values.approvals.length === 0 ?
       undefined :
       values.approvals.map((approver) => ({ id: approver.value }));
+    const effectiveDate = values.effectiveDate;
+
     if (!isQms) {
       async.start(
         releaseNonQmsAction,
         id,
-        { approvers },
+        {
+          approvers,
+          effectiveDate,
+          documentType: { id: documentType },
+          formDocument: { id: formDocument },
+        },
         async,
       );
       return;
@@ -104,7 +130,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
     async.start(
       releaseAction,
       id,
-      { approvers },
+      { approvers, effectiveDate, documentType: { id: documentType },  formDocument: { id: formDocument } },
       values.password,
       async,
     );
@@ -115,6 +141,13 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   }
 
   const transformedDocTypeGroups = [].concat(...documentTypeGroups);
+  const initialValues = {
+    password: "",
+    effectiveDate: "",
+    approvals: [],
+    formDocument: { id: "" },
+    documentType: { id: "" },
+  };
 
 
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
@@ -126,6 +159,9 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
       isQms={isQms}
       documentTypeGroups={transformedDocTypeGroups}
       owner={owner as Owner}
+      templateOptions={templateOptions}
+      setFormDocument={setFormDocument}
+      setDocumentType={setDocumentType}
     />
   );
 
@@ -165,7 +201,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
           >
             <FormContext.Provider value={{ submitOnChange: false }}>
               <Formik
-                initialValues={{ password: "", approvals: [] }}
+                initialValues={initialValues}
                 onSubmit={onSubmit}
               >
                 {renderForm}

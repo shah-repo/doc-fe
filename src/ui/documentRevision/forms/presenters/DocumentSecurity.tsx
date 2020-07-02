@@ -3,11 +3,15 @@ import OperatorAccess from "./OperatorAccess";
 import SecurityEmployees from "./SecurityEmployees";
 import SecurityGroups from "./SecurityGroups";
 
-const DocumentSecurity: React.FunctionComponent = () => (
+interface Props {
+  documentTypeId: string;
+}
+
+const DocumentSecurity: React.FunctionComponent<Props> = ({ documentTypeId }) => (
   <>
     <SecurityEmployees />
     <SecurityGroups />
-    <OperatorAccess />
+    <OperatorAccess documentTypeId={documentTypeId} />
   </>
 );
 

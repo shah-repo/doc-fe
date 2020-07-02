@@ -46,7 +46,7 @@ export class FBFormState extends FBSchemaState {
     if (!fieldName) {
       return defaultValue;
     }
-    if (!_.get(this.values, fieldName) && !_.isUndefined(defaultValue)) {
+    if (_.isUndefined(_.get(this.values, fieldName)) && !_.isUndefined(defaultValue)) {
       _.set(this.initialValues, fieldName, defaultValue);
       _.set(this.values, fieldName, defaultValue);
     }

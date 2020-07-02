@@ -7,6 +7,7 @@ import { FBEditorApprovalField } from "../FBEditorApprovalField";
 import { FBEditorApprovalMatrix } from "../FBEditorApprovalMatrix";
 import { FBEditorAutocomplete } from "../FBEditorAutocomplete";
 import { FBEditorCheckControl } from "../FBEditorCheckControl";
+import FBEditorDocumentRevisions from "../FBEditorDocumentRevisions/FBEditorDocumentRevisions";
 import { FBEditorHyperlink } from "../FBEditorHyperlink";
 import { FBEditorInstructionsDocument } from "../FBEditorInstructionsDocument";
 import { FBEditorLabel } from "../FBEditorLabel";
@@ -17,6 +18,7 @@ import { FBEditorRequestApproval } from "../FBEditorRequestApproval";
 import { FBEditorSelectDocument } from "../FBEditorSelectDocument";
 import { FBEditorSelectRequirement } from "../FBEditorSelectRequirement";
 import { FBEditorTestRequirement } from "../FBEditorTestRequirement";
+import { FBEditorTextEditor } from "../FBEditorTextEditor";
 import { FBEditorTextField } from "../FBEditorTextField";
 
 export class FBEditorState {
@@ -38,6 +40,7 @@ export class FBEditorState {
     "instructionsdocument",
     "selectdocument",
     "selectrequirement",
+    "documentRevisions",
     "checkpoint",
     "createlabel",
     "poreceive",
@@ -77,7 +80,7 @@ export class FBEditorState {
     checkbox: FBEditorCheckControl,
     checkboxgroup: FBEditorOptionGroup,
     autocomplete: FBEditorAutocomplete,
-    texteditor: FBEditorLabel,
+    texteditor: FBEditorTextEditor,
     datepicker: FBEditorLabel,
     hyperlink: FBEditorHyperlink,
     select: FBEditorOptionGroup,
@@ -101,6 +104,7 @@ export class FBEditorState {
     requestapproval: FBEditorRequestApproval,
     action: FBEditorAction,
     hellosign: FBEditorLabel,
+    documentRevisions: FBEditorDocumentRevisions,
     approvalMatrix: FBEditorApprovalMatrix,
     poApprovalMatrix: FBEditorLabel,
   };

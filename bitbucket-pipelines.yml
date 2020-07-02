@@ -206,14 +206,14 @@ pipelines:
           - step: *BUILD_SANDBOX
       - step: *DEPLOY_SANDBOX
 
-    release/20.14:
+    release/20.16:
       - parallel:
           - step: *RUN_TESTS
           # - step: *RUN_LINTER
           - step: *BUILD_DEMO
       - step: *DEPLOY_DEMO
 
-    ENC-2434_fb_cr:
+    ENC-2434-FB-to-CR:
       - parallel:
           - step: *RUN_TESTS
           # - step: *RUN_LINTER

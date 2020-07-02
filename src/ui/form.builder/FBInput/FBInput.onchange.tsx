@@ -119,7 +119,7 @@ export const withFBOnChange = <T extends FBInputProps>(
         checkbox() { return isSingleCheck(); },
         radio() { return isSingleCheck(); },
         autocomplete() { return autocompleteValue(value); },
-        texteditor() { return stringValue(ev as string); },
+        texteditor() { return; },
         datepicker() { return dateValue(ev as string); },
         radiogroup() { return isGroupCheck(); },
         select() { return isGroupCheck(); },

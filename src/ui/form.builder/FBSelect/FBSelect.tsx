@@ -1,6 +1,7 @@
-import { Select } from "@material-ui/core";
+import { MenuItem, Select } from "@material-ui/core";
 import React from "react";
 import { FBInput, FBSelectProps } from "..";
+import Text from "../../components/Text";
 import { withFBSelect } from "./FBSelect.wrap";
 
 const FBSelect: React.FunctionComponent<FBSelectProps> = ({
@@ -8,11 +9,17 @@ const FBSelect: React.FunctionComponent<FBSelectProps> = ({
   menuItems,
   SelectDisplayProps,
   variant = "outlined",
+  placeholder,
   style,
   ...props
 }) => (
-  <FBInput {...props} type="select">
-    <Select {...{ defaultValue, style, variant, SelectDisplayProps }}>
+  <FBInput {...props} {...{ placeholder }} type="select">
+    <Select displayEmpty {...{ defaultValue, style, variant, SelectDisplayProps }}>
+      {placeholder && (
+        <MenuItem value="" disabled>
+          <Text message={placeholder} />
+        </MenuItem>
+      )}
       {menuItems}
     </Select>
   </FBInput>

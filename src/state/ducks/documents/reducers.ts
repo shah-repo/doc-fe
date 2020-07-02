@@ -1,25 +1,8 @@
 import _ from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
-import {
-  DOCUMENT_GET_ASYNC,
-  DOCUMENT_PROPOSED_DOC_ID_SET,
-  DOCUMENT_SET,
-  DOCUMENTS_LIST,
-  DOCUMENTS_LIST_ASYNC,
-  DOCUMENTS_TO_REVIEW_LIST,
-  DOCUMENTS_TO_REVIEW_LIST_ASYNC,
-} from "./constants";
-import {
-  Document,
-  DocumentListAction,
-  DocumentProposedIdSetAction,
-  DocumentsAllIdsState,
-  DocumentsByIdState,
-  DocumentSetAction,
-  DocumentsReviewIdsState,
-  DocumentsToReviewListAction,
-} from "./types";
+import { DOCUMENTS_LIST, DOCUMENTS_LIST_ASYNC, DOCUMENTS_TO_REVIEW_LIST, DOCUMENTS_TO_REVIEW_LIST_ASYNC, DOCUMENT_GET_ASYNC, DOCUMENT_PROPOSED_DOC_ID_ASYNC, DOCUMENT_PROPOSED_DOC_ID_SET, DOCUMENT_SET } from "./constants";
+import { Document, DocumentListAction, DocumentProposedIdSetAction, DocumentsAllIdsState, DocumentsByIdState, DocumentSetAction, DocumentsReviewIdsState, DocumentsToReviewListAction } from "./types";
 
 type DocumentActions = DocumentListAction | DocumentSetAction | DocumentsToReviewListAction;
 
@@ -78,6 +61,7 @@ export default combineReducers({
   loadListAsyncInfo: asyncReducer(DOCUMENTS_LIST_ASYNC),
   loadReviewListAsyncInfo: asyncReducer(DOCUMENTS_TO_REVIEW_LIST_ASYNC),
   loadAsyncInfo: asyncReducer(DOCUMENT_GET_ASYNC),
+  loadProposedDocIdAsyncInfo: asyncReducer(DOCUMENT_PROPOSED_DOC_ID_ASYNC),
   byId,
   allIds,
   reviewIds,

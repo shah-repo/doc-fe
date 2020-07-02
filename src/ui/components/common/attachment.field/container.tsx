@@ -1,18 +1,17 @@
-import { Box } from "@material-ui/core";
+import { Box, CircularProgress } from "@material-ui/core";
 import _ from "lodash";
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Attachment, Attachment as AttachmentModel, attachmentsActions } from "../../../../state/ducks/attachments";
+import {  attachmentsActions, Attachment } from "../../../../state/ducks/attachments";
 import { ApplicationState } from "../../../../state/reducers";
-import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
-import FBStore from "../../../form.builder/stores/ui/FBStore";
-import useAsync from "../../../hooks/useAsync";
-import { useFormContext } from "../../forms/FormContext";
-import FormMessage from "../../forms/FormMessage";
-import FormProgress from "../../forms/FormProgress";
 import { withFormik } from "../../hoc/formik";
 import Presenter from "./presenter";
 import { AttachmentContainerProps, AttachmentFieldDispatchProps } from "./utils/types";
+import { useFormContext } from "../../forms/FormContext";
+import useAsync from "../../../hooks/useAsync";
+import FBStore from "../../../form.builder/stores/ui/FBStore";
+import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
+import { useIntl } from "react-intl";
 
 type DispatchProps = AttachmentFieldDispatchProps;
 
@@ -26,22 +25,12 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
   ...other
 }) => {
   const { submitForm } = useFormContext();
-  const handleUpload = (files: File[]) => {
-    if (files.length === 0) {
-      return;
-    }
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const intl = useIntl();
 
-    const file = files.pop();
-    if (!file) {
-      return;
-    }
-
-    async.start(upload, file, async);
-    handleUpload(files);
-  };
-
-  const async = useAsync<AttachmentModel>({
-    onSuccess: (attachment?: AttachmentModel) => {
+  const async = useAsync<Attachment>({
+    onSuccess: (attachment?: Attachment) => {
+      setIsUploading(false);
       if (!attachment && !form && !field) {
         return;
       }
@@ -70,19 +59,42 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
       form.setFieldValue(name, attachments);
       submitForm();
     },
+    onError: () => {
+      setIsUploading(false);
+    },
   });
 
-  const onChange = (event: React.FormEvent<HTMLInputElement>) => {
-    let isUserAlerted = false;
+  const handleUpload = (files: File[], lineType, cleanCopRequired) => {
+    if (files.length === 0) {
+      return;
+    }
+
+    const file = files.pop();
+    if (!file) {
+      return;
+    }
+    setIsUploading(true);
+    async.start(upload, file, lineType, async, cleanCopRequired);
+    handleUpload(files, lineType, cleanCopRequired);
+  };
+
+  const onChange = (lineType: string, cleanCopyRequired: boolean) => (event: React.FormEvent<HTMLInputElement>) => {
+    let isUserAlertedNoDocFiles = false;
+    let isUserAlrtedCleanCopyMismatch = false;
     const filteredFiles = Array.from(event.currentTarget.files || []).filter(
       (file) => {
         const type = file.name.split(".").pop();
-
         if (type === "doc") {
-          // TODO: update react-intl and make use of hooks to translate this message
-          !isUserAlerted &&
-            alert(".doc files are not accepted. Please use .docx");
-          isUserAlerted = true;
+          !isUserAlertedNoDocFiles &&
+           alert(intl.formatMessage({ id: "common.attachment.form.DOCERROR" }));
+          isUserAlertedNoDocFiles = true;
+          return false;
+        }
+
+        if (type !== "docx" && cleanCopyRequired) {
+          !isUserAlrtedCleanCopyMismatch &&
+          alert(intl.formatMessage({ id: "common.attachment.form.Create.Clean.Copy.Error" }));
+          isUserAlrtedCleanCopyMismatch = true;
           return false;
         }
         return true;
@@ -93,23 +105,36 @@ export const AttachmentFieldContainer: React.FunctionComponent<AttachmentContain
       return;
     }
 
-    handleUpload(filteredFiles);
+    handleUpload(filteredFiles, lineType, cleanCopyRequired);
   };
 
   return (
-    <Box>
-      <FormProgress asyncState={async.asyncState} />
-      <FormMessage asyncState={async.asyncState} />
-      <Presenter
-        {...other}
-        name={name}
-        component={component}
-        multiple={multiple}
-        onChange={onChange}
-        form={form}
-        field={field}
-      />
-    </Box>
+    <>
+      {isUploading &&
+      <Box>
+        <CircularProgress color="secondary" />
+      </Box>}
+
+      {!isUploading &&
+      <Box>
+        <Presenter
+          {
+            ...{
+              name,
+              isUploading,
+              upload,
+              component,
+              multiple,
+              form,
+              field,
+              onChange,
+            }
+          }
+          {...other}
+        />
+      </Box>
+      }
+    </>
   );
 };
 

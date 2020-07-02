@@ -1,12 +1,12 @@
-import { FBApprovalMatrixFieldMode, FBApprovalMatrixItem, FBApprovalRole } from "..";
+import { FBApprovalMatrixFieldData, FBApprovalMatrixFieldMode, FBApprovalMatrixFieldProps } from "..";
 
-export interface FBApprovalMatrixTableProps {
-  approvalMatrix?: FBApprovalMatrixItem[];
-  approvalRoles?: FBApprovalRole[];
+export type FBApprovalMatrixTableProps =
+& Pick<FBApprovalMatrixFieldProps, "name">
+& {
+  approvalData?: FBApprovalMatrixFieldData;
   mode?: FBApprovalMatrixFieldMode;
   classes?: Record<"root" | "tableInfo" | "tableStatus", string>;
-  name?: string;
-}
+};
 
 export enum FBApprovalMatrixTableRoleHead {
   stage1 = "form.builder.approvals.numeric",
@@ -19,7 +19,8 @@ export enum FBApprovalMatrixTableInfoHead {
   prefix = "form.builder.prefix",
   internalType = "form.builder.internalType",
   documentType = "form.builder.documentType",
-  trainingReq = "form.builder.trainingReq"
+  trainingReq = "form.builder.trainingReq",
+  needsSignature = "form.builder.needsSignature"
 }
 
 export enum FBDocTypeGroup {

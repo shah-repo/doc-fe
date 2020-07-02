@@ -1,5 +1,5 @@
 import { Dictionary } from "lodash";
-import { Group, GroupTag, Permission } from "../auth/types";
+import { Group, GroupTag, GroupType, Permission } from "../auth/types";
 import { Id, Nullable, User } from "../common";
 import { Company, Employee } from "../company";
 import { COMPANY_GROUPS_LIST } from "./constants";
@@ -31,6 +31,7 @@ export interface LoadCompanyGroup {
   isOfficial: boolean;
   parents: Group[];
   joinedParents: Group[];
+  type?: GroupType;
 }
 
 export interface EmployeeGroupsEditRequestBody {

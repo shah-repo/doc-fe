@@ -1,9 +1,9 @@
 
-import { uniqBy } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBWorkspaceProps, FBWorkspaceState } from ".";
 import { FB, FBSchemaProps, FBSnackbarState } from "..";
+import { store } from "../../../state/store";
 import { FBDialogState } from "../FBDialog";
 
 // Disable missing translation message for the non translation cases.
@@ -45,9 +45,10 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     React.useEffect(() => {
       if (!workspaceState) { return; }
       workspaceState.document = document;
+      workspaceState.externalState = store.getState();
       if (!props.schema) { return; }
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      workspaceState.schema = uniqBy([...workspaceState.schema || [], ...props.schema!], "name");
+      workspaceState.schema = props.schema!;
     }, [workspaceState, props.schema, document]);
 
 

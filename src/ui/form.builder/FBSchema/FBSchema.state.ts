@@ -9,6 +9,7 @@ import { FBApprovalMatrixField } from "../FBApprovalMatrixField";
 import { FBButton } from "../FBButton";
 import { FBCheckbox } from "../FBCheckbox";
 import { FBDatePicker } from "../FBDatePicker";
+import { FBDocumentRevisions } from "../FBDocumentRevisionsField";
 import { FBFileUpload } from "../FBFileUpload";
 import { FBHelloSign } from "../FBHelloSign";
 import { FBHyperlink } from "../FBHyperlink";
@@ -65,6 +66,7 @@ export class FBSchemaState {
     timer: FBTimerField,
     purchaseorder: FBPurchaseOrder,
     poreceive: FBPOReceive,
+    documentRevisions: FBDocumentRevisions,
     instructionsmediaupload: FBMediaAlbumField,
     evidencemediaupload: FBMediaAlbumField,
     testRequirement: FBTestRequirement,

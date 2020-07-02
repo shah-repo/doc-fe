@@ -41,6 +41,16 @@ const load = (id: string): ApiAction<DocumentRevision> => apiAction({
   },
 });
 
+const loadWithCallback = (
+  id: string,
+  handlers: Handlers<DocumentRevision>,
+): ApiAction<DocumentRevision> =>
+  apiActionWithCallbacks({
+    url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
+    method: "get",
+    handlers,
+  });
+
 // reload is same as load, but without async type
 // when using load action the AsyncGate component will hide the document and show the spinner
 // this is a silent load
@@ -221,11 +231,26 @@ const cancelDraft = (id: string): ApiAction<DocumentRevision> => apiAction({
   },
 });
 
+const setPrimaryAttachment = (
+  docRevId: string,
+  attachmentId: string,
+  handlers: Handlers
+): ApiAction<DocumentRevision> =>
+  apiActionWithCallbacks({
+    url: `${DOCUMENT_REVISION_ROOT_URL}/${docRevId}/set_primary/${attachmentId}`,
+    method: "patch",
+    onSuccess: (documentRevision, dispatch) => {
+      dispatch(documentRevisionSet(documentRevision));
+    },
+    handlers,
+  });
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
   loadList,
   load,
+  loadWithCallback,
   save,
   create,
   loadDocument,
@@ -242,4 +267,5 @@ export default {
   loadGroupsByStage,
   cancelDraft,
   reload,
+  setPrimaryAttachment,
 };

@@ -17,7 +17,12 @@ export const withFBForm = <T extends FBFormProps>(
   }: T) => {
 
     const { workspaceState } = FB.useStores();
-    !formState && (formState = FB.useRef<FBFormState>(FBFormState, { schema, initialValues, workspaceMode, workspaceState }));
+    !formState && (formState = FB.useRef<FBFormState>(FBFormState, {
+      schema,
+      initialValues,
+      workspaceMode,
+      workspaceState,
+    }));
     formState && (formState.errorValidation = errorValidation);
 
     React.useEffect(() => {

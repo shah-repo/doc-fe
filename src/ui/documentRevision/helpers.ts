@@ -75,7 +75,7 @@ export const generateVersionNumber = (
     return "";
   }
   if (revisionChangeType === RevisionChangeType.Obsolete) {
-    return "OBS";
+    return "Void";
   }
   switch (revisionStage) {
     case 1: {

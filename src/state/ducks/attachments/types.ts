@@ -10,6 +10,10 @@ export interface Attachment {
   s3linkCleanCopy?: string;
   isLoading?: boolean;
   owner?: User;
+  lineType: string;
+  documentRevision?: DocumentRevision;
+  fileSizeS3Link: number;
+  fileSizeS3LinkCleanCopy: number;
 }
 
 export interface AttachmentDownloadResponse {

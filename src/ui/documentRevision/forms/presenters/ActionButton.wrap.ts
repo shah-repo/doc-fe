@@ -19,5 +19,6 @@ export const withActionButton = <T extends any>(
     });
   };
 
-  return (props: T) => Comp(props);
+  Comp.displayName = "withActionButton";
+  return Comp;
 };

@@ -1,9 +1,13 @@
 import * as React from "react";
+import { useSelector } from "react-redux";
 import { DocumentRevisionDocument } from "../../../../state/ducks/documentRevisions";
 import { DocumentTypeByIdState } from "../../../../state/ducks/documentRevisions/documentType";
-import { DocumentProposedIdSetAction } from "../../../../state/ducks/documents";
+import { DocumentProposedIdSetAction, documentsSelectors } from "../../../../state/ducks/documents";
+import { AsyncStatus } from "../../../../state/types";
 import InputField from "../../../components/forms/fields/Input";
+import { toastError } from "../../../components/notifications";
 import { useDocId } from "../../../hooks/docCustomization/useCustomization";
+import { DocumentCloneType } from "../../Clone.container";
 
 interface Props {
   isDisabled: boolean;
@@ -11,6 +15,7 @@ interface Props {
   documentTypesById: DocumentTypeByIdState;
   documentTypeId?: string;
   setDocId: ((docId: string) => DocumentProposedIdSetAction) | undefined;
+  type?: DocumentCloneType;
 }
 
 const DocIdInput: React.FunctionComponent<Props> = ({
@@ -19,7 +24,14 @@ const DocIdInput: React.FunctionComponent<Props> = ({
   document = {},
   documentTypesById,
   setDocId,
+  type,
 }) => {
+  const loadProposedDocIdState = useSelector(documentsSelectors.getLoadProposedDocIdAsyncState);
+  React.useEffect(() => {
+    if (loadProposedDocIdState.status === AsyncStatus.Error) {
+      toastError(loadProposedDocIdState.message);
+    }
+  }, [loadProposedDocIdState]);
   const [isVisible, label, validators] = useDocId(documentTypeId);
   const handleDocIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -42,7 +54,7 @@ const DocIdInput: React.FunctionComponent<Props> = ({
     setDocId(value);
   };
 
-  if (!isVisible) {
+  if (!isVisible && type !== "newOutput") {
     return null;
   }
 
