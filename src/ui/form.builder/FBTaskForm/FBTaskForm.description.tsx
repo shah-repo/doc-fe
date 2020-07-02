@@ -12,11 +12,11 @@ const FBTaskFormDescription: React.FunctionComponent<FBTaskFormProps> = ({
     <FBAutocompleteAsync
       optionId={FBAutocompleteAsyncOption.approver}
       optionValueType="id"
-      label="Assigned to"
+      label="form.builder.assigned.to"
       name="assigned"
       rules="required"
     />
-    <FBDatePicker label="Due Date" name="dueDate" rules="required" />
+    <FBDatePicker label="form.builder.due.by" name="dueDate" rules="required" />
     {children}
   </FBForm>
 );

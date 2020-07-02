@@ -1,21 +1,21 @@
 import { Box, IconButton } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
-import { get } from "lodash";
+import { get, isEmpty } from "lodash";
+import moment from "moment";
 import React from "react";
-import { FB, FBButton, FBFileUpload, FBMapWrapper, FBSchemaProps, FBTaskFieldProps } from "..";
-import Text from "../../components/Text";
+import { FB, FBButton, FBFileUpload, FBMapWrapper, FBSchemaProps, FBTaskFieldProps, FBText } from "..";
+import { TIME_ZONE } from "../../../common/utils/date";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBTaskField } from "./FBTaskField.wrap";
 
 const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
   onClick,
-  handleRemoveTask,
   onMouseOver,
   onMouseLeave,
+  handleRemoveTask,
   handleClosingNote,
   visibility,
-  canBeDone,
   task,
 }) => (
   <Box
@@ -38,7 +38,7 @@ const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
                 flexGrow={1}
                 fontWeight="fontWeightBold"
               >
-                {FB.stripTags(get(task, schemaItem.name || ""))}
+                {FB.stripTags(get(task, `descriptionInput.${schemaItem.name}`))}
               </Box>
               <Box
                 display="flex"
@@ -70,7 +70,7 @@ const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
           )}
           {index > 0 && (
             <Box fontSize="body2.fontSize" fontWeight="fontWeightNormal">
-              {FB.stripTags(get(task, schemaItem.name || ""))}
+              {FB.stripTags(get(task, `descriptionInput.${schemaItem.name}`))}
             </Box>
           )}
         </Box>
@@ -83,15 +83,21 @@ const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
       fontSize="caption.fontSize"
       color={Colors.gray}
     >
-      <Box mr={3}>
-        <Text message="form.builder.assigned.to" />: {task.assignee}
-      </Box>
-      <Box mr={3}>
-        <Text message="form.builder.due.by" />: {task.dueDate}
-      </Box>
-      <Box mr={3}>
-        <Text message="form.builder.status" />: {task.status || "DRAFT"}
-      </Box>
+      <FBText
+        boxProps={{ mr: 3 }}
+        locale="form.builder.assigned.to"
+        suffix={`: ${task?.assigned.user?.name}`}
+      />
+      <FBText
+        boxProps={{ mr: 3 }}
+        locale="form.builder.due.by"
+        suffix={`: ${moment(task.dueDate).tz(TIME_ZONE, true).format("MMMM D, YYYY")}`}
+      />
+      <FBText
+        boxProps={{ mr: 3 }}
+        locale="form.builder.status"
+        suffix={`: ${task.status || "DRAFT"}`}
+      />
     </Box>
     {task.status === "PENDING" && (
       <Box mt={3}>
@@ -103,37 +109,39 @@ const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
         />
       </Box>
     )}
-    <FBMapWrapper<FBSchemaProps[]> collection={task.closingNoteSchema}>
-      {(schemaItem: FBSchemaProps, index) => (
-        <Box key={`fb-task-field-${schemaItem.name}-${index}`} mt={3}>
-          {index === 0 && (
-            <Box display="flex">
-              <Box
-                fontSize="subtitle2.fontSize"
-                flexGrow={1}
-                fontWeight="fontWeightBold"
-              >
-                {FB.stripTags(get(task, `closingNoteInput.${schemaItem.name}`))}
-              </Box>
+    {!isEmpty(task.closingNoteInput) && (
+      <Box mt={3}>
+        <FBMapWrapper<FBSchemaProps[]> collection={task.closingNoteSchema}>
+          {(schemaItem: FBSchemaProps, index) => (
+            <Box key={`fb-task-field-${schemaItem.name}-${index}`}>
+              {index === 0 && (
+                <Box display="flex">
+                  <Box
+                    fontSize="subtitle2.fontSize"
+                    flexGrow={1}
+                    fontWeight="fontWeightBold"
+                  >
+                    {FB.stripTags(get(task, `closingNoteInput.${schemaItem.name}`))}
+                  </Box>
+                </Box>
+              )}
+              {index > 0 && (
+                <Box fontSize="body2.fontSize" fontWeight="fontWeightNormal">
+                  {FB.stripTags(get(task, `closingNoteInput.${schemaItem.name}`))}
+                </Box>
+              )}
             </Box>
           )}
-          {index > 0 && (
-            <Box fontSize="body2.fontSize" fontWeight="fontWeightNormal">
-              {FB.stripTags(get(task, `closingNoteInput.${schemaItem.name}`))}
-            </Box>
-          )}
-        </Box>
-      )}
-    </FBMapWrapper>
-    <Box mb={-4}>
-      <FBFileUpload
-        gutter={false}
-        readonly={true}
-        disabled={true}
-        name="attachments"
-        defaultValue={get(task, "closingNoteInput.attachments", [])}
-      />
-    </Box>
+        </FBMapWrapper>
+        <FBFileUpload
+          gutter={false}
+          readonly={true}
+          disabled={true}
+          name="attachments"
+          defaultValue={get(task, "closingNoteInput.attachments", [])}
+        />
+      </Box>
+    )}
   </Box>
 );
 

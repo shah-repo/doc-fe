@@ -205,7 +205,6 @@ export * from "./FBTableCell/FBTableCell.types";
 export { default as FBTabs } from "./FBTabs/FBTabs";
 export * from "./FBTabs/FBTabs.types";
 export { default as FBTask } from "./FBTask/FBTask";
-export { default as FBTaskApi } from "./FBTask/FBTask.api";
 export { default as FBTaskState } from "./FBTask/FBTask.state";
 export * from "./FBTask/FBTask.types";
 export { default as FBTaskField } from "./FBTaskField/FBTaskField";
@@ -215,6 +214,8 @@ export { default as FBTaskFormDescription } from "./FBTaskForm/FBTaskForm.descri
 export { default as FBTaskFormNote } from "./FBTaskForm/FBTaskForm.note";
 export { default as FBTestRequirement } from "./FBTestRequirement/FBTestRequirement";
 export * from "./FBTestRequirement/FBTestRequirement.types";
+export { default as FBText } from "./FBText/FBText";
+export * from "./FBText/FBText.types";
 export { default as FBTextEditor } from "./FBTextEditor/FBTextEditor";
 export { default as FBTextEditorState } from "./FBTextEditor/FBTextEditor.state";
 export * from "./FBTextEditor/FBTextEditor.types";

@@ -1,8 +1,6 @@
 import { useObserver } from "mobx-react";
-import moment from "moment";
 import React from "react";
 import { FB, FBTaskFieldProps, FBTaskFieldState, FBTaskFormNote, FBTaskItem } from "..";
-import { TIME_ZONE } from "../../../common/utils/date";
 
 export const withFBTaskField = <T extends FBTaskFieldProps>(
   Component: React.FunctionComponent<T>,
@@ -15,31 +13,12 @@ export const withFBTaskField = <T extends FBTaskFieldProps>(
     handleClosingNote,
     taskFieldState,
     visibility,
-    canBeDone,
     task,
     ...props
   }: T) => {
 
-    const { taskState, workspaceState, dialogState } = FB.useStores();
+    const { taskState, dialogState } = FB.useStores();
     taskFieldState = FB.useRef(FBTaskFieldState);
-    const { documentStatus = "DRAFT", changeRequestStatus = "DRAFT" } = workspaceState || {};
-    canBeDone = (
-      documentStatus === "IN_REVIEW" ||
-      changeRequestStatus === "IN_REVIEW" ||
-      changeRequestStatus === "IMPLEMENTATION"
-    );
-
-    function getApprover(): string {
-      return (
-        task?.assigned.user?.name ||
-        taskState?.approversApi.sliceValue(task?.assigned.id || "") ||
-        ""
-      );
-    }
-
-    function getDueDate(): string {
-      return moment(task.dueDate).tz(TIME_ZONE, true).format("MMMM D, YYYY");
-    }
 
     onMouseOver = () => taskFieldState?.setVisibility(task.status === "DRAFT");
     onMouseLeave = () => taskFieldState?.setVisibility(false);
@@ -48,7 +27,7 @@ export const withFBTaskField = <T extends FBTaskFieldProps>(
     handleClosingNote = () => {
       dialogState?.config({
         open: true,
-        title: "Implementation Task Closing Note",
+        title: "form.builder.closing.note.title",
         content: (
           <FBTaskFormNote
             initialValues={{ id: task.id }}
@@ -72,12 +51,7 @@ export const withFBTaskField = <T extends FBTaskFieldProps>(
       handleClosingNote,
       taskFieldState,
       visibility,
-      canBeDone,
-      task: {
-        ...task,
-        assignee: getApprover(),
-        dueDate: getDueDate(),
-      },
+      task,
     });
   };
 

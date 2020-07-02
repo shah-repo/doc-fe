@@ -1,7 +1,9 @@
 import { BoxProps } from "@material-ui/core";
 import { FBDialogState, FBFormProps, FBInputProps, FBSchemaComponentProps, FBSchemaProps, FBTaskState } from "..";
 import { Attachment } from "../../../state/ducks/attachments";
+import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { Employee } from "../../../state/ducks/company";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { FBTaskFieldState } from "../FBTaskField/FBTaskField.state";
 
 export type FBTaskItemType = "CR_IMPLEMENTATION_PLAN" | "GENERIC";
@@ -15,15 +17,12 @@ export interface FBTaskItem {
   closingNoteSchema: FBSchemaProps[];
   closingNoteInput: Record<string, any>;
   assigned: Partial<Employee>;
-  assignee?: string;
   type?: FBTaskItemType;
   dueDate: string;
   fieldId: string;
   status?: FBTaskItemStatus;
   attachments?: Attachment[];
-  partOf?: {
-    id: string;
-  };
+  partOf?: Partial<DocumentRevision> | Partial<ChangeRequest>;
 }
 
 export type FBClosingNoteProps = Pick<FBTaskItem, "id" | "closingNoteInput" | "attachments">;
@@ -57,5 +56,4 @@ export type FBTaskFieldProps =
   taskFieldState?: FBTaskFieldState;
   task: FBTaskItem;
   visibility?: "visible" | "hidden";
-  canBeDone?: boolean;
 };

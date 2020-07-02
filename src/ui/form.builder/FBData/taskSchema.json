@@ -1,11 +1,11 @@
 [{
   "type": "textfield",
-  "name": "descriptionInput.title",
+  "name": "title",
   "label": "form.builder.title",
   "rules": "required"
 }, {
   "type": "texteditor",
-  "name": "descriptionInput.description",
+  "name": "description",
   "label": "form.builder.description",
   "rules": "required"
 }]

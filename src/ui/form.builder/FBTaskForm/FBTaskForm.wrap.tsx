@@ -15,13 +15,18 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
   }: T) => {
 
     const { dialogState, workspaceState } = FB.useStores();
-    formState = FB.useRef<FBFormState>(FBFormState, { initialValues });
+    formState = FB.useRef<FBFormState>(FBFormState, {
+      initialValues: {
+        ...omit(initialValues, "descriptionInput"),
+        ...initialValues?.descriptionInput,
+      },
+    });
     const { taskState } = FB.useStores();
     const { id } = workspaceState || {};
 
     function handleAdd() {
       if (!id) {
-        toastError("Adding a task is possible only for output document.");
+        toastError("Please save the document first.");
         return handleCancel();
       }
       handleCancel();
@@ -35,10 +40,12 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
     function handleAddDescription() {
       const formValue = formState?.getValues();
       taskState?.setTask({
-        ...pick(formValue, ["dueDate", "id"]),
+        ...pick(formValue, ["id", "dueDate"]),
         descriptionSchema: FBData.taskSchema,
         closingNoteSchema: FBData.closingTaskSchema,
-        ...pick(formValue, "descriptionInput"),
+        descriptionInput: {
+          ...omit(formValue, ["id", "dueDate", "assigned"]),
+        },
         type: "CR_IMPLEMENTATION_PLAN",
         assigned: {
           id: formValue?.assigned.id,
@@ -54,7 +61,7 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
         id: formValues.id,
         closingNoteInput: omit(formValues, "id"),
       };
-      taskState?.taskDone(task);
+      taskState?.finishTask(task);
     }
 
     function handleCancel() {

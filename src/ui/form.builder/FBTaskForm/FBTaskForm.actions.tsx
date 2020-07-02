@@ -5,7 +5,6 @@ import { FBButton, FBSubmitButton, FBTaskFormProps } from "..";
 const FBTaskFormActions: React.FunctionComponent<FBTaskFormProps> = ({
   handleAdd,
   handleCancel,
-  ...props
 }) => (
   <Box display="flex" flexDirection="row-reverse" mx={3}>
     <FBSubmitButton

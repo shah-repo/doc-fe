@@ -48,7 +48,7 @@ export const withFBTask = <T extends FBTaskProps>(
     };
 
     useObserver(() => {
-      loading = taskState?.taskApi.loading;
+      loading = taskState?.loading;
     });
 
     return Component({
