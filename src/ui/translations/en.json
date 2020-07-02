@@ -396,6 +396,7 @@
   "transition.action.cancel": "Cancel",
   "transition.action.title": "Enter password to proceed",
   "transition.action.password": "Password",
+  "transition.action.effective.date": "Effective date",
   "transition.action.approve": "Approve",
   "transition.action.reject": "Reject",
   "transition.action.to_review": "Send to review",
