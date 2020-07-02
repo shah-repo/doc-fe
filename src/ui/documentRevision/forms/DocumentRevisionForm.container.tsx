@@ -183,7 +183,11 @@ DocumentRevisionFormContainerProps
   const render = (props: FormikProps<DocumentRevisionFormValues>) => (
     <FBWorkspace
       portalContainer={FBContainer}
-      document={documentRevision as unknown as DocumentRevision}
+      // TODO: check if merging both objects would satisfy all our needs
+      document={{
+        ...documentRevision as unknown as DocumentRevision,
+        outputRevision: props.values.outputRevision,
+      }}
       initialValues={formInput}
       autosave={true}
       schema={GetScheme(props)}
@@ -228,9 +232,12 @@ DocumentRevisionFormContainerProps
     >
       <div ref={bannerPortal} />
       <Grid style={{ background: Colors.light_gray }} >
-        <Box ml={3}>
-          <ChangeRequestLink dataProp={documentRevision} />
-        </Box>
+        {
+          type !== "newOutput" &&
+          <Box ml={3}>
+            <ChangeRequestLink dataProp={documentRevision} />
+          </Box>
+        }
         <Formik
           initialValues={cleanInitialValues}
           onSubmit={(values, helpers) => onSubmit(values, helpers, cleanInitialValues) }

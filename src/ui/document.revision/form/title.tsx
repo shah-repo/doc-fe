@@ -38,6 +38,7 @@ export const Title: React.FunctionComponent<Props> = ({
       name="name"
       validate={validators}
       creatableProps={{ id: "Title-field" }}
+      isDisabled={props.disabled}
       {...{ options, label }}
     />
   );

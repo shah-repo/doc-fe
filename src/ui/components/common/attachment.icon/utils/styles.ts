@@ -10,10 +10,11 @@ export const styles = makeStyles((theme) => ({
   closeRoot: ({ disabled }: AttachmentIconStyleProp) => ({
     padding: "0",
     margin: "0",
-    right: "-12px",
-    top: "-12px",
+    right: -5,
+    top: -6,
     display: disabled ? "none" : "inherit",
     position: "absolute" as "absolute",
+    zIndex: 2,
   }),
   progress: ({ size }: AttachmentIconStyleProp) => ({
     "color": theme.palette.secondary.main,
@@ -39,6 +40,7 @@ export const styles = makeStyles((theme) => ({
   },
   fileNameContainer: {
     width: 170,
+    cursor: "pointer",
   },
   fileName: {
     overflowWrap: "break-word",
@@ -129,5 +131,11 @@ export const styles = makeStyles((theme) => ({
     border: "2px solid red",
     paddingLeft: "5px",
     paddingRight: "5px",
+  },
+  primaryBadge: {
+    position: "absolute",
+    zIndex: 1,
+    top: -5,
+    left: 2,
   },
 }));

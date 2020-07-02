@@ -5,6 +5,7 @@ import { Group } from "../../../../state/ducks/auth/types";
 import { Owner } from "../../../../state/ducks/common/types";
 import { AsyncState, AsyncStatus } from "../../../../state/types";
 import Approvers from "../../../change.request/form/approvers";
+import DatePickerField from "../../../components/forms/fields/DatePickerField";
 import InputField from "../../../components/forms/fields/Input";
 import { required, validator } from "../../../components/forms/fields/validators";
 import FormMessage from "../../../components/forms/FormMessage";
@@ -66,6 +67,10 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
             ))}
         </RadioGroup>
       </Box>
+      <DatePickerField
+        label="transition.action.effective.date"
+        name="effectiveDate"
+      />
       {isQms && <InputField
         name="password"
         label="transition.action.password"

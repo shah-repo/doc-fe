@@ -3,25 +3,15 @@ import CloseIcon from "@material-ui/icons/Close";
 import NotesIcon from "@material-ui/icons/Notes";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import PublishRoundedIcon from "@material-ui/icons/PublishRounded";
-import { FieldInputProps, FormikProps } from "formik";
-import _ from "lodash";
 import * as React from "react";
-import { useState } from "react";
-import { useIntl } from "react-intl";
-import { Attachment, Attachment as AttachmentModel, attachmentsActions } from "../../../../state/ducks/attachments";
 import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
-import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
-import FBStore from "../../../form.builder/stores/ui/FBStore";
-import useAsync from "../../../hooks/useAsync";
-import { useFormContext } from "../../forms/FormContext";
 import Text from "../../Text";
 import { styles } from "./utils/styles";
 
 interface Props {
   onCancel: () => void;
-  upload: typeof attachmentsActions.upload;
-  field: FieldInputProps<any>;
-  form: FormikProps<any>;
+  onChange: (lineType: string, cleanCopyRequired: boolean) => (event: React.FormEvent<HTMLInputElement>) => any;
+  isUploading: boolean;
   multiple?: boolean;
   name?: string;
   disabled?: boolean;
@@ -29,99 +19,14 @@ interface Props {
 
 const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
   onCancel,
-  upload,
-  field,
-  form,
+  onChange,
   multiple = true,
   name = "",
   disabled,
+  isUploading,
 }) => {
   const isField = true;
   const classes = styles({ isField });
-  const intl = useIntl();
-  const { submitForm } = useFormContext();
-  const [isUploading, setIsUploading] = useState<boolean>(false);
-
-  const async = useAsync<AttachmentModel>({
-    onSuccess: (attachment?: AttachmentModel) => {
-      setIsUploading(false);
-      if (!attachment && !form && !field) {
-        return;
-      }
-      if (!multiple) {
-        return form.setFieldValue(name, attachment);
-      }
-      const attachments: Attachment[] = field.value ? [...field.value] : [];
-      attachment && attachments.push(attachment);
-
-      FBStore.setValues({
-        ...FBStore.values,
-        [name]: _.map(attachments, (attach) =>
-          _.pick(attach, ["id", "name", "s3link", "type"]),
-        ),
-      });
-
-      if (FBStore.mode === "form") {
-        FBStore.setValues({
-          ...FBStore.values,
-          [name]: _.map(attachments, (attach) =>
-            _.pick(attach, ["id", "name", "s3link", "type"]),
-          ),
-        });
-        FBDynamicValidatorStore.validate();
-      }
-      form.setFieldValue(name, attachments);
-      submitForm();
-      onCancel();
-    },
-    onError: () => {
-      setIsUploading(false);
-    },
-  });
-
-  const handleUpload = (files: File[], isRedLine, cleanCopRequired) => {
-    if (files.length === 0) {
-      return;
-    }
-
-    const file = files.pop();
-    if (!file) {
-      return;
-    }
-    setIsUploading(true);
-    async.start(upload, file, isRedLine, async, cleanCopRequired);
-    handleUpload(files, isRedLine, cleanCopRequired);
-  };
-
-  const onChange = (lineType, cleanCopyRequired: boolean) => (event: React.FormEvent<HTMLInputElement>) => {
-    let isUserAlerted = false;
-    const filteredFiles = Array.from(event.currentTarget.files || []).filter(
-      (file) => {
-        const type = file.name.split(".").pop();
-        if (type === "doc") {
-          !isUserAlerted &&
-           alert(intl.formatMessage({ id: "common.attachment.form.DOCERROR" }));
-          isUserAlerted = true;
-          return false;
-        }
-
-        if (type !== "docx" && cleanCopyRequired) {
-          !isUserAlerted &&
-          alert(intl.formatMessage({ id: "common.attachment.form.Create.Clean.Copy.Error" }));
-          isUserAlerted = true;
-          return false;
-        }
-        return true;
-      },
-    );
-
-    if (filteredFiles.length === 0) {
-      return;
-    }
-
-    handleUpload(filteredFiles, lineType, cleanCopyRequired);
-  };
-
 
   return (
     <>
@@ -143,7 +48,7 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
           id={`${name}-button-file-create-clean-copy`}
           multiple={multiple}
           type="file"
-          onChange={onChange(LINE_TYPES.RED_LINE, true)}
+          onChange={onChange(LINE_TYPES.CLEAN_COPY, true)}
           className = {classes.input}
           disabled={disabled}
         />

@@ -41,3 +41,7 @@ export interface ChangeRequestFormValues {
 export interface PasswordFormValues {
   password: string;
 }
+
+export interface EffectiveDateFormValues {
+  effectiveDate: string;
+}

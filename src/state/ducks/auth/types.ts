@@ -67,6 +67,7 @@ export interface Group {
   joinedParents: Group[];
   parents: Group[];
   joinedEmployees: Employee[];
+  type?: GroupType;
 }
 
 export type AuthUserPayload = User;
@@ -198,4 +199,10 @@ export enum GroupTag {
   FB_COMPONENT_INLINE_APPROVAL = "FB_COMPONENT_INLINE_APPROVAL",
   FB_COMPONENT_REQUEST_APPROVAL = "FB_COMPONENT_REQUEST_APPROVAL",
   CREATE_DOCS_OF_RESTRICTED_DOC_TYPES = "CREATE_DOCS_OF_RESTRICTED_DOC_TYPES"
+}
+
+export enum GroupType{
+  MANAGMENT = "MANAGMENT",
+  REVISION_APPROVAL = "REVISION_APPROVAL",
+  PURCHASE_APPROVAL = "PURCHASE_APPROVAL",
 }
