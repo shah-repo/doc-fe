@@ -1,4 +1,4 @@
-import { filter } from "lodash";
+import { filter, union } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBDialogState, FBTaskFormDescription, FBTaskProps, FBTaskState } from "..";
@@ -19,8 +19,11 @@ export const withFBTask = <T extends FBTaskProps>(
   }: T) => {
 
     const { workspaceState } = FB.useStores();
-    const { document: { tasks: docTasks = [] } = {} } = workspaceState || {};
-    const formValue: FBTaskItem[] = filter(docTasks, (task) =>
+    const {
+      changeRequest: { tasks: crTasks = [] } = {},
+      document: { tasks: docTasks = [] } = {},
+    } = workspaceState || {};
+    const formValue: FBTaskItem[] = filter(union(crTasks, docTasks), (task) =>
       task.fieldId === name && task.status !== "ABANDONED");
     taskState = FB.useRef(FBTaskState, formValue);
     dialogState = FB.useRef(FBDialogState);
@@ -35,7 +38,12 @@ export const withFBTask = <T extends FBTaskProps>(
       dialogState?.config({
         open: true,
         title,
-        content: <FBTaskFormDescription actionMode="description" {...{ initialValues, name }} />,
+        content: (
+          <FBTaskFormDescription
+            actionMode="description"
+            {...{ initialValues, name }}
+          />
+        ),
       });
     };
 

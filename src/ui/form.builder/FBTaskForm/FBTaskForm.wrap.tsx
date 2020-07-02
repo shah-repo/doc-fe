@@ -49,7 +49,7 @@ export const withFBTaskForm = <T extends FBTaskFormProps>(
     }
 
     function handleAddNote() {
-      console.log(formState?.getValues());
+      taskState?.taskDone(formState?.getValues() as FBTaskItem);
     }
 
     function handleCancel() {

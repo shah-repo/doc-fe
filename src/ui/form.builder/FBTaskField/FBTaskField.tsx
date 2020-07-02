@@ -2,17 +2,15 @@ import { Box, IconButton } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import { get } from "lodash";
-import moment from "moment";
 import React from "react";
 import { FB, FBButton, FBMapWrapper, FBSchemaProps, FBTaskFieldProps } from "..";
-import { TIME_ZONE } from "../../../common/utils/date";
+import Text from "../../components/Text";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBTaskField } from "./FBTaskField.wrap";
 
 const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
   onClick,
   handleRemoveTask,
-  getApprover,
   onMouseOver,
   onMouseLeave,
   handleClosingNote,
@@ -85,22 +83,22 @@ const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
       fontSize="caption.fontSize"
       color={Colors.gray}
     >
-      {/* <Box mr={3}> */}
-      {/* Assigned to: {getApprover?.(task)} */}
-      {/* </Box> */}
       <Box mr={3}>
-        Due by: {moment(task.dueDate).tz(TIME_ZONE, true).format("MMMM D, YYYY")}
+        <Text message="form.builder.assigned.to" />: {task.assignee}
       </Box>
       <Box mr={3}>
-        Status: {task.status || "DRAFT"}
+        <Text message="form.builder.due.by" />: {task.dueDate}
+      </Box>
+      <Box mr={3}>
+        <Text message="form.builder.status" />: {task.status || "DRAFT"}
       </Box>
     </Box>
-    {canBeDone && (
-      <Box mt={3} display="flex" flexDirection="row-reverse">
+    {task.status === "PENDING" && (
+      <Box mt={3}>
         <FBButton
           label="Done"
           onClick={handleClosingNote}
-          variant="outlined"
+          variant="text"
           style={{ margin: 0 }}
         />
       </Box>

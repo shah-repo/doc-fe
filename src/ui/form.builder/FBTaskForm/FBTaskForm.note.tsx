@@ -1,7 +1,5 @@
 import React from "react";
-import { FBForm, FBTaskFormProps } from "..";
-import { FBFileUpload } from "../FBFileUpload";
-import { FBSchema } from "../FBSchema";
+import { FBFileUpload, FBForm, FBSchema, FBTaskFormProps, FBTextField } from "..";
 import { withFBTaskForm } from "./FBTaskForm.wrap";
 
 const FBTaskFormNote: React.FunctionComponent<FBTaskFormProps> = ({
@@ -10,6 +8,7 @@ const FBTaskFormNote: React.FunctionComponent<FBTaskFormProps> = ({
   schema,
 }) => (
   <FBForm {...{ formState }} >
+    <FBTextField name="id" hidden={true} />
     <FBSchema {...{ schema }} />
     <FBFileUpload name="closingNoteInput.attachments" />
     {children}

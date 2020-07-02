@@ -1,6 +1,8 @@
 import { useObserver } from "mobx-react";
+import moment from "moment";
 import React from "react";
 import { FB, FBTaskFieldProps, FBTaskFieldState, FBTaskFormNote, FBTaskItem } from "..";
+import { TIME_ZONE } from "../../../common/utils/date";
 
 export const withFBTaskField = <T extends FBTaskFieldProps>(
   Component: React.FunctionComponent<T>,
@@ -10,7 +12,6 @@ export const withFBTaskField = <T extends FBTaskFieldProps>(
     handleRemoveTask,
     onMouseOver,
     onMouseLeave,
-    getApprover,
     handleClosingNote,
     taskFieldState,
     visibility,
@@ -28,22 +29,33 @@ export const withFBTaskField = <T extends FBTaskFieldProps>(
       changeRequestStatus === "IMPLEMENTATION"
     );
 
-    onMouseOver = () => taskFieldState?.setVisibility(true);
+    function getApprover(): string {
+      return (
+        task?.assigned.user?.name ||
+        taskState?.approversApi.sliceValue(task?.assigned.id || "") ||
+        ""
+      );
+    }
+
+    function getDueDate(): string {
+      return moment(task.dueDate).tz(TIME_ZONE, true).format("MMMM D, YYYY");
+    }
+
+    onMouseOver = () => taskFieldState?.setVisibility(task.status !== "PENDING");
     onMouseLeave = () => taskFieldState?.setVisibility(false);
-
-    getApprover = (task?: FBTaskItem): string => (
-      task?.assigned.user?.name ||
-      taskState?.approversApi.sliceValue(task?.assigned.id || "") ||
-      ""
-    );
-
     handleRemoveTask = (task?: FBTaskItem) => taskState?.removeTask(task);
 
     handleClosingNote = () => {
       dialogState?.config({
         open: true,
         title: "Implementation Task Closing Note",
-        content: <FBTaskFormNote actionMode="note" schema={task.closingNoteSchema} />,
+        content: (
+          <FBTaskFormNote
+            initialValues={{ id: task.id }}
+            actionMode="note"
+            schema={task.closingNoteSchema}
+          />
+        ),
       });
     };
 
@@ -57,12 +69,15 @@ export const withFBTaskField = <T extends FBTaskFieldProps>(
       handleRemoveTask,
       onMouseOver,
       onMouseLeave,
-      getApprover,
       handleClosingNote,
       taskFieldState,
       visibility,
       canBeDone,
-      task,
+      task: {
+        ...task,
+        assignee: getApprover(),
+        dueDate: getDueDate(),
+      },
     });
   };
 

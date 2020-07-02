@@ -14,6 +14,7 @@ export interface FBTaskItem {
   closingNoteSchema: FBSchemaProps[];
   closingNoteInput: Record<string, any>;
   assigned: Partial<Employee>;
+  assignee?: string;
   type?: FBTaskItemType;
   dueDate: string;
   fieldId: string;
@@ -47,7 +48,6 @@ export type FBTaskFieldProps =
 & Pick<FBTaskProps, "onClick">
 & Pick<BoxProps, "onMouseOver" | "onMouseLeave">
 & {
-  getApprover?: (task?: FBTaskItem) => any;
   handleRemoveTask?: (task?: FBTaskItem) => any;
   handleClosingNote?: () => any;
   taskFieldState?: FBTaskFieldState;

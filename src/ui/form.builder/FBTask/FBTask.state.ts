@@ -1,6 +1,5 @@
 // eslint-disable-next-line max-classes-per-file
 import { find, omit } from "lodash";
-import { action } from "mobx";
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBTaskApi, FBTaskItem } from "..";
 import { Employee } from "../../../state/ducks/company";
 import { FBEndpoint } from "../defaults/FBEndpoint";
@@ -18,7 +17,7 @@ export class FBTaskState {
     this.tasks = tasks;
   };
 
-  @action public setTask = (task?: FBTaskItem) => {
+  public setTask = (task?: FBTaskItem) => {
     if (!task) { return; }
     const stateTask = find(this.tasks, { id: task.id });
     if (stateTask) {
@@ -29,10 +28,17 @@ export class FBTaskState {
     this.taskApi.post();
   };
 
-  @action public removeTask = (task?: FBTaskItem) => {
+  public removeTask = (task?: FBTaskItem) => {
     if (!task) { return; }
-    this.taskApi.setTemplateUrl(FBEndpoint.TaskDel, { id: task.id });
+    this.taskApi.setTemplateUrl(FBEndpoint.TaskAbandon, { id: task.id });
     this.taskApi.setBody(task);
+    this.taskApi.post();
+  };
+
+  public taskDone = (task?: FBTaskItem) => {
+    if (!task) { return; }
+    this.taskApi.setTemplateUrl(FBEndpoint.TaskDone, { id: task.id });
+    this.taskApi.setBody(omit(task, "id"));
     this.taskApi.post();
   };
 

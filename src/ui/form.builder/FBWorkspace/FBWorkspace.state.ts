@@ -37,7 +37,7 @@ export class FBWorkspaceState extends FBSchemaState {
   }
 
   public get id(): string | undefined {
-    return this.document?.id;
+    return this.document?.id || this.changeRequest?.id;
   }
 
   public get documentId(): string | undefined {

@@ -690,6 +690,8 @@
   "form.builder.assigned.to": "Assigned to",
   "form.builder.title": "Title",
   "form.builder.description": "Description",
+  "form.builder.due.by": "Due by",
+  "form.builder.status": "Status",
   "attachment.download.file": "Download attached file {fileName}.{fileType}",
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.watermark": "Download PDF file",
