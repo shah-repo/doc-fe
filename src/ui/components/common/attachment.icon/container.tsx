@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { connect, useSelector } from "react-redux";
 import { Attachment, AttachmentDownloadResponse, attachmentsActions, AttachmentType, WatermarkRequest, WatermarkRequestBody } from "../../../../state/ducks/attachments";
 import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
@@ -11,7 +11,7 @@ import { AsyncStatus } from "../../../../state/types";
 import { isOperator } from "../../../documentRevision/DocumentRevisionDisplay.container";
 import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
 import { documentRevisionStatusContextFromCR } from "../../../documentRevision/DocumentRevisionUpdate.container";
-import { documentTypeContext, isOwnerContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
+import { documentTypeContext, FormHeaderContext, isOwnerContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
 import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../../form.builder/stores/ui/FBStore";
 import useActionCreator from "../../../hooks/useActionCreator";
@@ -62,6 +62,7 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const downloadAttachment = useActionCreator(attachmentsActions.download);
   const downloadAttachmentPassword = useActionCreator(attachmentsActions.downloadRedLine);
   const requestWatermarkAction = useActionCreator(attachmentsActions.requestWatermarkedFile);
+  const { documentRevision } = React.useContext(FormHeaderContext) || {};
 
   const passwordState =  {
     status: AsyncStatus.Idle,
@@ -280,7 +281,10 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const openWarningDialog = () => redlineWarningDialogHandler.open();
   const openFileView = () => dialogHandler.open();
 
-  const attachmentsRenderer = attachments.map((attachment) => {
+  const sortedAttachments = useMemo(() =>
+    attachments.sort((a) => a.id === documentRevision?.primaryAttachment?.id ? -1 : 0)
+  , [attachments, documentRevision]);
+  const attachmentsRenderer = sortedAttachments.map((attachment) => {
     let showAttachment = true;
     let canDeleteFile = true;
     if (isCurrentUserOperator && (documentType === "LOT" || documentType === "EB")) {

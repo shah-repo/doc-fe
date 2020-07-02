@@ -686,6 +686,7 @@
   "attachment.download.clean.copy": "Download generated clean copy of file  {fileName}.{fileType}",
   "attachment.download.watermark": "Download PDF file",
   "attachment.download.watermark.clean.copy": "Download PDF clean copy",
+  "attachment.set.as.primary": "Set attachment as primary",
   "training.completed": "Training completed",
   "training.certify.completion": "Click the button to certify training completion",
   "file.viewer.video.not.supported": "Your browser does not support the video tag",
