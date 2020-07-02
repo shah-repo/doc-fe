@@ -105,14 +105,13 @@ export const withFBApproval = <T extends FBApprovalProps>(
     }
 
     onApprove = (approver?: Employee | GroupRequestBody) => () => {
-      approvalFieldState?.setEffectiveDate(formEffectiveState?.getValues().effectiveDate);
-      if (!approver && approvalFieldState?.effectiveDate) {
+      if (!approver) {
         return;
       }
       approvalFieldState?.addApprover({
         id: FB.uniqid,
         userId: currentUser?.employeeId,
-        ...!isApprover(approver as Employee | GroupRequestBody) && { groupId: approver?.id },
+        ...!isApprover(approver) && { groupId: approver?.id },
         approvedAt: (new Date()).toISOString(),
       });
 
@@ -122,7 +121,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
       approvalFieldState?.postApi.setBody({
         fieldName: name,
         fieldValue: approvalFieldState?.hasApproved,
-        effectiveDate: approvalFieldState?.effectiveDate,
+        effectiveDate: formEffectiveState?.getValues().effectiveDate,
       });
       approvalFieldState?.postApi.post();
       dialogState && dialogState.closeDialog();
@@ -147,7 +146,6 @@ export const withFBApproval = <T extends FBApprovalProps>(
       FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.group) &&
         (approverGroups = approvalFieldState?.groups(approverGroups as string[]));
       hasApproved = approvalFieldState?.hasApproved;
-      effectiveDate = approvalFieldState?.effectiveDate;
       loading = approvalFieldState?.approversApi.loading || approvalFieldState?.groupsApi.loading;
     });
 

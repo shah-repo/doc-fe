@@ -12,7 +12,6 @@ import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync
 
 export class FBApprovalState {
   @observable public hasApproved: FBApprovalValue[] = [];
-  @observable public effectiveDate = "";
   @observable public auditData?: Audit[];
   public postApi: FBRequest<any, FBApprovalApi> = new FBRequest();
   public approversApi: FBAutocompleteAsyncState = new FBAutocompleteAsyncState(this.approversId);
@@ -67,10 +66,6 @@ export class FBApprovalState {
 
   @action public setApprovers = (approvers: FBApprovalValue[]) => {
     set(this, "hasApproved", approvers);
-  };
-
-  @action public setEffectiveDate = (date: string) => {
-    set(this, "effectiveDate", date);
   };
 }
 
