@@ -96,6 +96,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   renderHTML?: string;
   pdf?: PDF;
   outputRevision?: boolean;
+  primaryAttachment?: Attachment;
 }
 
 export const RevisionStageOptions = [
