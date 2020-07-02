@@ -84,7 +84,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     }
 
     onChange = (_ev, value: DocumentRevision) => {
-      poReceiveState?.setPOId(value.id);
+      poReceiveState?.setPOId(value?.id);
     };
 
     getOptionLabel = (option: DocumentRevision) => `${option.document?.docId} ${stripTags(option.description)}`;

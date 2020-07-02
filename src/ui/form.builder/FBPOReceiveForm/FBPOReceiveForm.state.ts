@@ -53,7 +53,9 @@ export class FBPOReceiveFormState  {
     const reqBody = toNewVersionRequestBody({
       // LOT must not have title
       // name: `${this.item?.glCode}-${this.item?.description}`,
-      description: values.comments ? `<p>${values.comments}</p>` : `<p>${this.item?.description}</p>`,
+      description: values.comments ?
+        `<p>${values.comments}</p>` :
+        `<p>${this.item?.partNumberDocId}-${this.item?.partNumberTitle}</p>`,
       attachments: [],
       referenceTo: [{ value: this.documentId, label: "" }],
       securityEmployees: [],
