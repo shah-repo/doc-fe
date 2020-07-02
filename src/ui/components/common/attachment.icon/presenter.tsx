@@ -75,9 +75,9 @@ AttachmentIconProps
         {deleteButtonRenderer}
         <Tooltip title={`${file.name}.${file.type}`}>
           <ButtonBase
-            onContextMenu={handleContextMenu && handleContextMenu(file)}
+            onContextMenu={handleContextMenu?.(file)}
             key={`icon-${file.id}`}
-            onClick={handleIconClick && handleIconClick(file)}
+            onClick={handleIconClick?.(file)}
             id="AttachmentIconPresenter-handleIconClick"
           >
             {isLoading && <CircularProgress className={classes.progress} />}
@@ -86,7 +86,11 @@ AttachmentIconProps
         </Tooltip>
         {isRedLine && <hr className={classes.underLine}/>}
       </div>
-      <div className={classes.fileNameContainer}>
+      <div
+        className={classes.fileNameContainer}
+        onClick={handleIconClick?.(file)}
+        onContextMenu={handleContextMenu?.(file)}
+      >
         <Typography
           className={classNames(classes.fileName, {
             [classes.isUploading]: isUploading,

@@ -40,6 +40,7 @@ export const styles = makeStyles((theme) => ({
   },
   fileNameContainer: {
     width: 170,
+    cursor: "pointer",
   },
   fileName: {
     overflowWrap: "break-word",
