@@ -1,4 +1,5 @@
 import MenuItem from "@material-ui/core/MenuItem";
+import StarsRoundedIcon from "@material-ui/icons/StarsRounded";
 import React from "react";
 import { documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { FormHeaderContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
@@ -47,6 +48,7 @@ const MenuItemSetPrimary: React.FunctionComponent<Props> = ({
 
   return (
     <MenuItem onClick={handleClick}>
+      <StarsRoundedIcon color="primary" fontSize="small" style={{ marginRight: 5 }} />
       <Text translation="attachment.set.as.primary" />
     </MenuItem>
   );
