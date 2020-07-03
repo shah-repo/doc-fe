@@ -1,6 +1,6 @@
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
 import { TableColumnActionType } from "../../../ui/components/table/column/types";
-import { FBSchemaProps } from "../../../ui/form.builder";
+import { FBSchemaProps, FBTaskItem } from "../../../ui/form.builder";
 import { Attachment } from "../attachments";
 import { AuditActionPayload } from "../audit/types";
 import { Group } from "../auth/types";
@@ -211,6 +211,7 @@ export interface FBDocumentRevisionProps {
   releasedAt?: string;
   renderHTML?: string;
   status?: DocumentRevisionStatus;
+  tasks?: FBTaskItem[];
 }
 
 export interface FBOutputDocumentType {

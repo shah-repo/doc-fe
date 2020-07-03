@@ -23,6 +23,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
 
     const { formState } = FB.useStores();
     const formValue = formState?.getFieldValue(name);
+    const emptyHtmlContent = "<p></p>";
     textEditorState = FB.useRef(FBTextEditorState, htmlToEditorState(formValue));
 
     !toolbar && (toolbar = {
@@ -82,8 +83,10 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
         () => textEditorState?.editorState,
         (data) => {
           if (!data) { return; }
-          const htmlContent = draftToHtml(convertToRaw(data.getCurrentContent())).trim();
+          let htmlContent = draftToHtml(convertToRaw(data.getCurrentContent())).trim();
+          (htmlContent === emptyHtmlContent) && (htmlContent = "");
           formState?.setFieldValue(name, htmlContent);
+          formState?.validate();
         }
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
