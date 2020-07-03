@@ -15,8 +15,7 @@ import { TablePanel } from "../../components/table/panel";
 import { TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
-import { generateVersionNumber } from "../../documentRevision/helpers";
-import { canEditDocumentRevision, documentRevisionQueryStatus, documentRevisionReleasedDateOption, documentRevisionStatusOption } from "../utils/helpers";
+import { canEditDocumentRevision, documentRevisionEffectiveDateOption, documentRevisionQueryStatus, documentRevisionStatusOption } from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import { DocumentRevisionsUserProps } from "../utils/types";
 import styles from "./styles";
@@ -69,17 +68,16 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       },
     },
     {
-      key: "version",
-      label: "common.version",
+      key: "revision",
+      label: "common.revision",
       searchOptions: {
         searchValueGetter: (value) => unmaskId(value),
-        defaultValue: tableCriteria.queryDict.version,
+        defaultValue: tableCriteria.queryDict.revision,
       },
       cellOptions: { align: "center" },
       cellHref: cellHrefRenderer,
       columnOptions: {
-        cellDataGetter: ({ rowData: { revision, revisionStage, revisionChangeType } }) =>
-          generateVersionNumber(revision, revisionStage, revisionChangeType),
+        cellDataGetter: ({ rowData }) => rowData.revision,
         width: 80,
         flexShrink: 1,
       },
@@ -150,20 +148,20 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       },
     },
     {
-      key: "releasedAt",
-      label: "document.revision.released.date",
+      key: "effectiveDate",
+      label: "common.effective.date",
       cellHref: cellHrefRenderer,
       cellOptions: { align: "center" },
       columnOptions: {
         width: 115,
         // eslint-disable-next-line react/display-name
-        cellDataGetter: ({ rowData }) => <Date value={rowData.releasedAt} />,
+        cellDataGetter: ({ rowData }) => <Date value={rowData.effectiveDate} />,
       },
       searchOptions: {
-        dataKey: "releasedAfter",
+        dataKey: "effectiveDate",
         searchType: "select",
-        selectOptions: documentRevisionReleasedDateOption(),
-        defaultValue: tableCriteria.queryDict.releasedAfter,
+        selectOptions: documentRevisionEffectiveDateOption(),
+        defaultValue: tableCriteria.queryDict.effectiveDate,
       },
     },
     // We will add one more column if will be neccessery

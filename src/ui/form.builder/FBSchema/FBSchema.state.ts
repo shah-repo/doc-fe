@@ -29,6 +29,7 @@ import { FBSelect } from "../FBSelect";
 import { FBSelectDocument } from "../FBSelectDocument";
 import { FBSelectRequirement } from "../FBSelectRequirement";
 import { FBSubsection } from "../FBSubsection";
+import { FBTask } from "../FBTask";
 import { FBTestRequirement } from "../FBTestRequirement";
 import { FBTextEditor } from "../FBTextEditor";
 import { FBTextField } from "../FBTextField";
@@ -41,6 +42,7 @@ export class FBSchemaState {
     "stepsection",
     "teststep",
     "purchaseorder",
+    "task",
   ];
 
   private static control: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
@@ -81,6 +83,7 @@ export class FBSchemaState {
     hellosign: FBHelloSign,
     approvalMatrix: FBApprovalMatrixField,
     poApprovalMatrix: FBPOApprovalMatrix,
+    task: FBTask,
   };
 
   @observable public schema?: FBSchemaProps[];

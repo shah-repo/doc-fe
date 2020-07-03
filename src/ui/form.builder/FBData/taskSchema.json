@@ -1,0 +1,11 @@
+[{
+  "type": "textfield",
+  "name": "title",
+  "label": "form.builder.title",
+  "rules": "required"
+}, {
+  "type": "texteditor",
+  "name": "description",
+  "label": "form.builder.description",
+  "rules": "required"
+}]

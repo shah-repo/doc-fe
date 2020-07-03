@@ -111,12 +111,18 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
     const approvers = !values.approvals || values.approvals.length === 0 ?
       undefined :
       values.approvals.map((approver) => ({ id: approver.value }));
+    const effectiveDate = values.effectiveDate;
 
     if (!isQms) {
       async.start(
         releaseNonQmsAction,
         id,
-        { approvers, documentType: { id: documentType },  formDocument: { id: formDocument } },
+        {
+          approvers,
+          effectiveDate,
+          documentType: { id: documentType },
+          formDocument: { id: formDocument },
+        },
         async,
       );
       return;
@@ -124,7 +130,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
     async.start(
       releaseAction,
       id,
-      { approvers, documentType: { id: documentType },  formDocument: { id: formDocument } },
+      { approvers, effectiveDate, documentType: { id: documentType },  formDocument: { id: formDocument } },
       values.password,
       async,
     );
@@ -135,6 +141,13 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   }
 
   const transformedDocTypeGroups = [].concat(...documentTypeGroups);
+  const initialValues = {
+    password: "",
+    effectiveDate: "",
+    approvals: [],
+    formDocument: { id: "" },
+    documentType: { id: "" },
+  };
 
 
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
@@ -188,7 +201,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
           >
             <FormContext.Provider value={{ submitOnChange: false }}>
               <Formik
-                initialValues={{ password: "", approvals: [], formDocument: { id: "" }, documentType: { id: "" }  }}
+                initialValues={initialValues}
                 onSubmit={onSubmit}
               >
                 {renderForm}

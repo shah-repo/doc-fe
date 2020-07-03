@@ -80,7 +80,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           if (moment(nextValue, moment.ISO_8601, true).isValid()) {
             nextValue = moment(nextValue).tz(TIME_ZONE, true).format("D MMM YYYY hh:mm:ss a");
           }
-          return ("Changed " + label + prevValue + " to " + nextValue).replace(/(<([^>]+)>)/ig, "");
+          return FB.stripTags("Changed " + label + prevValue + " to " + nextValue);
         }
 
         function isCheck() {

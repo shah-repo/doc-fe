@@ -105,6 +105,7 @@ export const Container: React.FunctionComponent<Props> = ({
       <FBWorkspace
         portalContainer={FBContainer}
         initialValues={dataProp.formInput}
+        changeRequest={dataProp}
         autosave={true}
         schema={schema}
         mode={"preview"}

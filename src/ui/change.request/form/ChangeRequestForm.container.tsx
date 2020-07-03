@@ -1,5 +1,6 @@
 import { Grid } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
+import { cloneDeep } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useLocation } from "react-router-dom";
@@ -54,7 +55,8 @@ ChangeRequestFormContainerProps
   const render = (props: FormikProps<ChangeRequestFormValues>) => (
     <FBWorkspace
       portalContainer={FBContainer}
-      initialValues={changeRequest?.formInput}
+      initialValues={cloneDeep(changeRequest?.formInput)}
+      changeRequest={cloneDeep(changeRequest)}
       autosave={true}
       schema={schemaData}
       mode="form"

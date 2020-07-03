@@ -1,6 +1,6 @@
 import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/types";
 import { TableColumnActionType } from "../../../ui/components/table/column/types";
-import { FBSchemaProps } from "../../../ui/form.builder";
+import { FBSchemaProps, FBTaskItem } from "../../../ui/form.builder";
 import { Attachment } from "../attachments";
 import { AuditActionPayload } from "../audit/types";
 import { Group } from "../auth/types";
@@ -91,11 +91,13 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   obsoletedAt?: string;
   releasedAt?: string;
   trainingRecords: TrainingRecord[];
+  effectiveDate?: Date;
   retrain?: boolean;
   grantAccess?: boolean;
   renderHTML?: string;
   pdf?: PDF;
   outputRevision?: boolean;
+  primaryAttachment?: Attachment;
 }
 
 export const RevisionStageOptions = [
@@ -180,6 +182,7 @@ export type AllIdsState = string[];
 
 export interface ApproveAndReleaseRequest {
   approvers: Id[];
+  effectiveDate: string;
   documentType: Id;
   formDocument: Id;
 }
@@ -208,6 +211,7 @@ export interface FBDocumentRevisionProps {
   releasedAt?: string;
   renderHTML?: string;
   status?: DocumentRevisionStatus;
+  tasks?: FBTaskItem[];
 }
 
 export interface FBOutputDocumentType {

@@ -1,7 +1,7 @@
 import React from "react";
 import { FBEditor, FBEditorProps } from "..";
 
-const FBEditorApprovalMatrix: React.FunctionComponent<FBEditorProps> = ({
+const FBEditorEmpty: React.FunctionComponent<FBEditorProps> = ({
   children,
   inputProps,
   ...props
@@ -11,4 +11,4 @@ const FBEditorApprovalMatrix: React.FunctionComponent<FBEditorProps> = ({
   </FBEditor>
 );
 
-export default FBEditorApprovalMatrix;
+export default FBEditorEmpty;
