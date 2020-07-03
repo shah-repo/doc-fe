@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+
+export ENLIL_COMPOSE_PORT_RANGE_START=${ENLIL_COMPOSE_PORT_RANGE_START:-5600}
+
 if [[ -z "${ENLIL_COMPOSE_PORT_RANGE_START}" ]]; then
   echo "ENLIL_COMPOSE_PORT_RANGE_START not set, exiting"
   exit
