@@ -12,13 +12,16 @@ export const withFBTaskField = <T extends FBTaskFieldProps>(
     onMouseLeave,
     handleClosingNote,
     taskFieldState,
+    canBeDone,
     visibility,
     task,
     ...props
   }: T) => {
 
-    const { taskState, dialogState } = FB.useStores();
+    const { taskState, dialogState, workspaceState } = FB.useStores();
+    const { currentUser } = workspaceState || {};
     taskFieldState = FB.useRef(FBTaskFieldState);
+    canBeDone = currentUser?.id === task.assigned.user?.id && task.status === "PENDING";
 
     onMouseOver = () => taskFieldState?.setVisibility(task.status === "DRAFT");
     onMouseLeave = () => taskFieldState?.setVisibility(false);
@@ -50,6 +53,7 @@ export const withFBTaskField = <T extends FBTaskFieldProps>(
       onMouseLeave,
       handleClosingNote,
       taskFieldState,
+      canBeDone,
       visibility,
       task,
     });

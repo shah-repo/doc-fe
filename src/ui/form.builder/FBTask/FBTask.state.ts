@@ -39,7 +39,8 @@ export class FBTaskState extends FBRequest<FBTaskItem, FBTaskItem | FBClosingNot
     this.post();
   };
 
-  public getTask = (id?: string): FBTaskItem | undefined => find(this.tasks, { id });
+  public getTask = (id?: string): FBTaskItem | undefined =>
+    this.tasks?.find((task) => task.id === id);
 
   public onSuccess() {
     if (!this.data) { return; }
@@ -55,7 +56,7 @@ export class FBTaskState extends FBRequest<FBTaskItem, FBTaskItem | FBClosingNot
           default: () => this.setTasks([...tasks, ...[this.data!]]),
         };
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        (setTasks[status] || setTasks.default)!();
+        (setTasks[status] || setTasks.default)?.();
         break;
       }
       case "patch": {

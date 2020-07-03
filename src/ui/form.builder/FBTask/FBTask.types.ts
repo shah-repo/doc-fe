@@ -56,4 +56,5 @@ export type FBTaskFieldProps =
   taskFieldState?: FBTaskFieldState;
   task: FBTaskItem;
   visibility?: "visible" | "hidden";
+  canBeDone?: boolean;
 };

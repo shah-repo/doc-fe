@@ -5,6 +5,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import _ from "lodash";
 import React from "react";
 import Text from "../../components/Text";
+import Colors from "../../layout/theme/utils/colors";
 import { FBDialogProps } from "./FBDialog.types";
 import { withFBDialog } from "./FBDialog.wrap";
 
@@ -38,7 +39,7 @@ const FBDialog: React.FunctionComponent<FBDialogProps> = ({
           borderTop={0}
           borderLeft={0}
           borderRight={0}
-          borderColor="#cad2da"
+          borderColor={Colors.hint_gray}
           mt={-2}
           mb={2}
         >

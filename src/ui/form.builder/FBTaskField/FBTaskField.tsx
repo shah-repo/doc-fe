@@ -15,6 +15,7 @@ const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
   onMouseLeave,
   handleRemoveTask,
   handleClosingNote,
+  canBeDone,
   visibility,
   task,
 }) => (
@@ -99,7 +100,7 @@ const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
         suffix={`: ${task.status || "DRAFT"}`}
       />
     </Box>
-    {task.status === "PENDING" && (
+    {canBeDone && (
       <Box mt={3}>
         <FBButton
           label="Done"
