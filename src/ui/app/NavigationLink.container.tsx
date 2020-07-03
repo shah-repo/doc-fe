@@ -36,14 +36,14 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
     const childrenList = childrenUrls.length === 0 ? null : (
       <Collapse in={isOpen} timeout="auto" unmountOnExit={true}>
         <List>
-          {childrenUrls.map((ld) => <NavigationLinkPresenter {...ld} key={ld.url} isChild={true} />)}
+          {childrenUrls.map((ld) => <NavigationLinkPresenter {...ld} key={ld.url} isChild={true} {...otherProps} />)}
         </List>
       </Collapse>
     );
 
     return (
       <React.Fragment>
-        <NavigationLinkPresenter url={url} text={text} Icon={Icon} ActionIcon={childrenUrls.length ? actionIcon : ""} {...otherProps}/>
+        <NavigationLinkPresenter url={url} text={text} Icon={Icon} ActionIcon={childrenUrls.length ? actionIcon : ""} {...otherProps} />
         {childrenList}
       </React.Fragment>
     );

@@ -51,7 +51,7 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
   text,
   ActionIcon,
   isChild,
-  otherProps,
+  ...otherProps
 }) => {
   const dataCy = otherProps["data-cy"] ? { "data-cy": otherProps["data-cy"] } : {};
   return (
