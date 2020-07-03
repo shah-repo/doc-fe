@@ -4,16 +4,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import classNames from "classnames";
 import React, { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
-import { ReactComponent as ChangeRequestListIcon } from "../../assets/images/change_request_list_icon.svg";
-import { ReactComponent as DashboardIcon } from "../../assets/images/dashboard_icon.svg";
-import { ReactComponent as DocumentListICon } from "../../assets/images/document_list_icon.svg";
-import { ReactComponent as GroupManagementIcon } from "../../assets/images/group_management_icon.svg";
-import { ReactComponent as LotsIcon } from "../../assets/images/lots_icon.svg";
-import { ReactComponent as PurchaseOrderIcon } from "../../assets/images/purchase_order_icon.svg";
-import { ReactComponent as ReceivableIcon } from "../../assets/images/receivable_icon.svg";
-import { ReactComponent as SuppliersIcon } from "../../assets/images/suppliers_icon.svg";
-import { ReactComponent as UserManagementIcon } from "../../assets/images/user_management_icon.svg";
-import { NavigationItem, NAVIGATION_ICON } from "../../state/ducks/company";
+import { NavigationItem } from "../../state/ducks/company";
 import Text from "../components/Text";
 import styles from "./NavigationLink.styles";
 
@@ -25,42 +16,17 @@ interface NavigationLinkPresenterProps extends
   toggleChildren?: (event: React.MouseEvent) => void;
 }
 
-const iconMapping = {
-  [NAVIGATION_ICON.DASHBOARD]: <DashboardIcon />,
-  [NAVIGATION_ICON.DOC_REV_LIST]: <DocumentListICon />,
-  [NAVIGATION_ICON.CR_LIST]: <ChangeRequestListIcon />,
-  [NAVIGATION_ICON.USER_MANAGEMENT]: <UserManagementIcon />,
-  [NAVIGATION_ICON.GROUP_MANAGEMENT]: <GroupManagementIcon />,
-  [NAVIGATION_ICON.PURCHASE_ORDER]: <PurchaseOrderIcon />,
-  [NAVIGATION_ICON.SUPPLIERS]: <SuppliersIcon/>,
-  [NAVIGATION_ICON.RECEIVABLE]: <ReceivableIcon/>,
-  [NAVIGATION_ICON.LOTS]: <LotsIcon/>,
-};
-
-console.log(iconMapping);
-// <img src={LINK} alt="dashboard" />
-/*
-          <object>
-            <embed src={LINK} />
-          </object>
-
-          <object data={LINK} type="image/svg+xml" className={classes.icon}>
-            <div />
-          </object>
-*/
-// const LINK = "https://img.icons8.com/material-outlined/24/000000/download-2.svg";
-
 const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterProps> = ({
   link,
   label,
   type,
-  icon = "https://img.icons8.com/material-outlined/24/000000/download-2.svg",
+  icon,
   ActionIcon,
   isChild,
   isActive,
   toggleChildren,
 }) => {
-  const classes = styles({ iconLink: "https://img.icons8.com/material-outlined/24/000000/download-2.svg" });
+  const classes = styles({ iconLink: icon });
   return (
     <>
       <ListItem
