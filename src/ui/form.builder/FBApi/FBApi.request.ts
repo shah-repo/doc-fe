@@ -48,10 +48,6 @@ export default class FBRequest<Data, Body> {
   @action public delete = () => this.start("delete");
 
   @action public dataFilter = (data: Data): Data | undefined => data;
-  // public onError = (error) => {
-  //   const { message } = error;
-  //   toastError(message);
-  // };
 
   protected onSuccess() {
     this.setLoading(false);
