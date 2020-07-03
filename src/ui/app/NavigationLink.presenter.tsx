@@ -1,7 +1,6 @@
 import { ListItemIcon } from "@material-ui/core";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import { withStyles, WithStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import React, { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
@@ -19,8 +18,8 @@ import Text from "../components/Text";
 import styles from "./NavigationLink.styles";
 
 interface NavigationLinkPresenterProps extends
-  NavigationItem,
-  WithStyles<typeof styles> {
+  NavigationItem {
+  isActive: boolean;
   ActionIcon?: ReactNode;
   isChild?: boolean;
   toggleChildren?: (event: React.MouseEvent) => void;
@@ -38,45 +37,67 @@ const iconMapping = {
   [NAVIGATION_ICON.LOTS]: <LotsIcon/>,
 };
 
+console.log(iconMapping);
+// <img src={LINK} alt="dashboard" />
+/*
+          <object>
+            <embed src={LINK} />
+          </object>
+
+          <object data={LINK} type="image/svg+xml" className={classes.icon}>
+            <div />
+          </object>
+*/
+// const LINK = "https://img.icons8.com/material-outlined/24/000000/download-2.svg";
+
 const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterProps> = ({
-  classes,
   link,
   label,
   type,
-  icon,
+  icon = "https://img.icons8.com/material-outlined/24/000000/download-2.svg",
   ActionIcon,
   isChild,
+  isActive,
   toggleChildren,
-}) => (
-  <>
-    <ListItem
-      component={link ? NavLink : null}
-      button
-      exact
-      className={
-        classNames(classes.link, {
-          [classes.childLink]: isChild,
-          [classes.menu]: type === "MENU",
-        })}
-      activeClassName={classes.activeLink}
-      to={link}
-    >
-      {
-        type === "LINK" &&
-        <ListItemIcon className={classes.itemIcon} onClick={toggleChildren}>
-          {(icon && iconMapping[icon]) || <div />}
-        </ListItemIcon>
-      }
-      <ListItemText
-        primary={<Text message={label} />}
-        classes={{
-          primary: classes.itemText,
-        }}
-        onClick={toggleChildren}
-      />
-      {ActionIcon}
-    </ListItem>
-  </>
-);
+}) => {
+  const classes = styles({ iconLink: "https://img.icons8.com/material-outlined/24/000000/download-2.svg" });
+  return (
+    <>
+      <ListItem
+        component={link ? NavLink : null}
+        button
+        exact
+        className={
+          classNames(classes.link, {
+            [classes.childLink]: isChild,
+            [classes.menu]: type === "MENU",
+          })}
+        activeClassName={classes.activeLink}
+        to={link}
+      >
+        {
+          type === "LINK" &&
+          <ListItemIcon className={classes.itemIcon} onClick={toggleChildren}>
+            <div
+              className={classNames(
+                classes.icon, {
+                  [classes.iconActive]: isActive,
+                }
+              )}
+            />
+          </ListItemIcon>
+        }
+        <ListItemText
+          primary={<Text message={label} />}
+          classes={{
+            primary: classes.itemText,
+          }}
+          onClick={toggleChildren}
+        />
+        {ActionIcon}
+      </ListItem>
+    </>
+  );
+};
 
-export default withStyles(styles)(NavigationLinkPresenter);
+export default NavigationLinkPresenter;

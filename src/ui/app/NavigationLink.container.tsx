@@ -36,7 +36,7 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
       <List disablePadding>
         {menu?.map((ld) => (
           ld.type === "LINK" &&
-          <NavigationLinkPresenter {...ld} key={ld.link} isChild={true} />
+          <NavigationLinkPresenter {...ld} key={ld.link} isChild={true} isActive={currentPath === ld.link} />
         ))}
       </List>
     </Collapse>
@@ -49,6 +49,7 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
         {...rest}
         ActionIcon={menu?.length ? actionIcon : ""}
         toggleChildren={type === "MENU" ? toggleChildren : undefined}
+        isActive={currentPath === rest.link}
       />
       {childrenList}
     </React.Fragment>
