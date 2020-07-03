@@ -19,7 +19,7 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const isChildActive = _.includes(menu?.map((link) => link.link), currentPath);
+    const isChildActive = _.includes(menu?.map((link) => link.path), currentPath);
     setIsOpen(isChildActive);
   }, [currentPath, menu]);
 
@@ -36,7 +36,7 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
       <List disablePadding>
         {menu?.map((ld) => (
           ld.type === "LINK" &&
-          <NavigationLinkPresenter {...ld} key={ld.link} isChild={true} isActive={currentPath === ld.link} />
+          <NavigationLinkPresenter {...ld} key={ld.path} isChild={true} isActive={currentPath === ld.path} />
         ))}
       </List>
     </Collapse>
@@ -49,7 +49,7 @@ const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerPr
         {...rest}
         ActionIcon={menu?.length ? actionIcon : ""}
         toggleChildren={type === "MENU" ? toggleChildren : undefined}
-        isActive={currentPath === rest.link}
+        isActive={currentPath === rest.path}
       />
       {childrenList}
     </React.Fragment>

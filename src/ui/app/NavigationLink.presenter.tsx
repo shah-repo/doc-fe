@@ -17,7 +17,7 @@ interface NavigationLinkPresenterProps extends
 }
 
 const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterProps> = ({
-  link,
+  path,
   label,
   type,
   icon,
@@ -30,7 +30,7 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
   return (
     <>
       <ListItem
-        component={link ? NavLink : null}
+        component={path ? NavLink : null}
         button
         exact
         className={
@@ -39,7 +39,7 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
             [classes.menu]: type === "MENU",
           })}
         activeClassName={classes.activeLink}
-        to={link}
+        to={path}
       >
         {
           type === "LINK" &&
