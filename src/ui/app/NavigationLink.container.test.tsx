@@ -24,12 +24,12 @@ describe("NavigationLinkContainer component unit tests", () => {
       {
         label: "Child 1",
         type: "LINK",
-        link: "/child1",
+        path: "/child1",
       },
       {
         label: "Child 1",
         type: "LINK",
-        link: "/child2",
+        path: "/child2",
       },
     ],
     currentPath: "/url",
@@ -69,7 +69,7 @@ describe("NavigationLinkContainer component unit tests", () => {
 
   it("renders expand less icon and shows children when child is active", () => {
     const wrapper = getWrapper(getProps({
-      currentPath: defaultProps.menu && defaultProps.menu[0].link,
+      currentPath: defaultProps.menu && defaultProps.menu[0].path,
     }));
 
     expect(wrapper.find(ExpandLess)).toHaveLength(1);
