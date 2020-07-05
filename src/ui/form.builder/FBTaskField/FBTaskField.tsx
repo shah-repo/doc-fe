@@ -25,7 +25,7 @@ const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
     bgcolor="white"
     borderRadius={3}
     border={1}
-    px={2}
+    px={2.5}
     py={1.5}
     my={4}
   >
@@ -78,7 +78,7 @@ const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
       )}
     </FBMapWrapper>
     <Box
-      mt={3}
+      mt={2.5}
       display="flex"
       flexDirection="row"
       fontSize="caption.fontSize"
@@ -101,12 +101,13 @@ const FBTaskField: React.FunctionComponent<FBTaskFieldProps> = ({
       />
     </Box>
     {canBeDone && (
-      <Box mt={3}>
+      <Box mt={2.5}>
         <FBButton
           label="Done"
           onClick={handleClosingNote}
-          variant="text"
-          style={{ margin: 0, marginLeft: "-16px" }}
+          variant="outlined"
+          size="small"
+          style={{ margin: 0 }}
         />
       </Box>
     )}
