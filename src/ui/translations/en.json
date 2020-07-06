@@ -404,6 +404,7 @@
   "transition.action.to_review": "Send to review",
   "transition.action.withdraw": "Withdraw",
   "transition.action.pending_submission": "Pending submission",
+  "transition.action.close.date": "Select effective date",
   "document.revision.list.docId": "DOC ID",
   "document.revision.list.revision": "Revision",
   "document.revision.list.description": "Description",
