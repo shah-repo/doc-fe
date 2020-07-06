@@ -52,7 +52,7 @@ export const companyMine = (
         ...action.payload,
         navigation: action.payload.navigation ?? DEFAULT_NAVIGATION_ITEMS,
         navigationBasedOnUserTagsRestriction:
-          action.payload.navigationBasedOnUserTagsRestriction.length
+          action.payload.navigationBasedOnUserTagsRestriction?.length
             ? action.payload.navigationBasedOnUserTagsRestriction
             : DEFAULT_NAVIGATION_ITEMS,
       };
