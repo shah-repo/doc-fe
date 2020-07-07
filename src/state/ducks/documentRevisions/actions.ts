@@ -155,13 +155,11 @@ const loadAudit = (id: string): ApiAction<Audit[]> => apiAction({
 const approveAndRelease = (
   id: string,
   body: ApproveAndReleaseRequest,
-  password: string,
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/release/${id}`,
   method: "post",
   data: body,
-  password,
   onSuccess: (docRev: DocumentRevision, dispatch) => {
     dispatch(load(id));
     dispatch(loadDocument(docRev.document.id));

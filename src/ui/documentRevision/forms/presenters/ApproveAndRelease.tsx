@@ -131,7 +131,6 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
       releaseAction,
       id,
       { approvers, effectiveDate, documentType: { id: documentType },  formDocument: { id: formDocument } },
-      values.password,
       async,
     );
   };
