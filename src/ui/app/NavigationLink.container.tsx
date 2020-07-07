@@ -1,53 +1,59 @@
 import { Collapse, List } from "@material-ui/core";
-import { SvgIconProps } from "@material-ui/core/SvgIcon";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import _ from "lodash";
-import React, { ComponentType, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
+import { NavigationItem } from "../../state/ducks/company";
 import NavigationLinkPresenter from "./NavigationLink.presenter";
 
-export interface LinkDefinition {
-  url: string;
-  text: string;
-  Icon?: ComponentType<SvgIconProps>;
-}
-
-export interface NavigationLinkContainerProps extends LinkDefinition {
-  childrenUrls?: LinkDefinition[];
+export interface NavigationLinkContainerProps extends NavigationItem {
   currentPath: string;
 }
 
-const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerProps> =
-  ({ url, text, Icon, childrenUrls = [], currentPath }) => {
-    const [isOpen, setIsOpen] = useState(false);
+const NavigationLinkContainer: React.FunctionComponent<NavigationLinkContainerProps> = ({
+  type,
+  currentPath,
+  menu,
+  ...rest
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
 
-    useEffect(() => {
-      const isChildActive = _.includes(childrenUrls.map((link) => link.url), currentPath);
-      setIsOpen(isChildActive);
-    }, [currentPath, childrenUrls]);
+  useEffect(() => {
+    const isChildActive = _.includes(menu?.map((link) => link.path), currentPath);
+    setIsOpen(isChildActive);
+  }, [currentPath, menu]);
 
-    const toggleChildren = (event: React.MouseEvent) => {
-      event.preventDefault();
-      event.stopPropagation();
-      setIsOpen(!isOpen);
-    };
-
-    const actionIcon = isOpen ? <ExpandLess onClick={toggleChildren} /> : <ExpandMore onClick={toggleChildren} />;
-
-    const childrenList = childrenUrls.length === 0 ? null : (
-      <Collapse in={isOpen} timeout="auto" unmountOnExit={true}>
-        <List>
-          {childrenUrls.map((ld) => <NavigationLinkPresenter {...ld} key={ld.url} isChild={true} />)}
-        </List>
-      </Collapse>
-    );
-
-    return (
-      <React.Fragment>
-        <NavigationLinkPresenter url={url} text={text} Icon={Icon} ActionIcon={childrenUrls.length ? actionIcon : ""} />
-        {childrenList}
-      </React.Fragment>
-    );
+  const toggleChildren = (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsOpen(!isOpen);
   };
+
+  const actionIcon = isOpen ? <ExpandLess onClick={toggleChildren} /> : <ExpandMore onClick={toggleChildren} />;
+
+  const childrenList = menu?.length === 0 ? null : (
+    <Collapse in={isOpen} timeout="auto" unmountOnExit={true}>
+      <List disablePadding>
+        {menu?.map((ld) => (
+          ld.type === "LINK" &&
+          <NavigationLinkPresenter {...ld} key={ld.path} isChild={true} isActive={currentPath === ld.path} />
+        ))}
+      </List>
+    </Collapse>
+  );
+
+  return (
+    <React.Fragment>
+      <NavigationLinkPresenter
+        {...{ type }}
+        {...rest}
+        ActionIcon={menu?.length ? actionIcon : ""}
+        toggleChildren={type === "MENU" ? toggleChildren : undefined}
+        isActive={currentPath === rest.path}
+      />
+      {childrenList}
+    </React.Fragment>
+  );
+};
 
 export default NavigationLinkContainer;
