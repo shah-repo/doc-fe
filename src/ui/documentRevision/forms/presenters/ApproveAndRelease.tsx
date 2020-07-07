@@ -1,5 +1,6 @@
 import { Button, createStyles, Dialog, DialogContent, DialogTitle, makeStyles } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getHasPermission } from "../../../../common/utils/selectors";
@@ -143,7 +144,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const transformedDocTypeGroups = [].concat(...documentTypeGroups);
   const initialValues = {
     password: "",
-    effectiveDate: "",
+    effectiveDate: moment().format("MM/DD/YYYY"),
     approvals: [],
     formDocument: { id: "" },
     documentType: { id: "" },
