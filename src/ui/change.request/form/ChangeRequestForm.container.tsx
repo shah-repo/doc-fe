@@ -1,7 +1,6 @@
-import { Grid } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
 import { cloneDeep } from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
 import { useLocation } from "react-router-dom";
 import { ReactComponent as BookmarkIcon } from "../../../assets/images/bookmark.svg";
@@ -9,7 +8,7 @@ import { ReactComponent as TimelineIcon } from "../../../assets/images/history.s
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { AsyncState } from "../../../state/types";
 import Bookmarks from "../../documentRevision/Sidebar/Bookmarks";
-import SidebarContainer from "../../documentRevision/Sidebar/Sidebar.container";
+import { SidebarContainer } from "../../documentRevision/Sidebar/Sidebar.container";
 import { FBSchemaProps, FBWorkspace } from "../../form.builder";
 import ChangeRequestAuditContainer from "../audit/Audit.container";
 import AssessmentFormPresenter from "./assessmentForm/AssessmentForm.presenter";
@@ -48,8 +47,8 @@ ChangeRequestFormContainerProps
 
   const intl = useIntl();
   const url = useLocation();
-  const [sidebar, openSidebar] = useState<boolean>(true);
-  const classes = styles({ sidebar });
+  const [isDrawerOpen, setOpen] = React.useState(false);
+  const classes = styles({ isDrawerOpen });
   const schemaData = changeRequest ? changeRequest.formDocument?.formTemplate?.schema : schema;
 
   const render = (props: FormikProps<ChangeRequestFormValues>) => (
@@ -95,8 +94,8 @@ ChangeRequestFormContainerProps
   ];
 
   return (
-    <Grid container={true} className={classes.whiteContainer}>
-      <Grid item={true} xs={changeRequest ? (sidebar ? 9 : 11) : 12} className={classes.backColor}>
+    <div className={classes.root}>
+      <div className={classes.appFrame}>
         <Formik
           initialValues={initialValues}
           onSubmit={onSubmit}
@@ -104,9 +103,10 @@ ChangeRequestFormContainerProps
         >
           {render}
         </Formik>
-      </Grid>
-      {changeRequest && <SidebarContainer {...{ sidebar, openSidebar, sidebarList }}/>}
-    </Grid>
+      </div>
+
+      {changeRequest && <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }}/>}
+    </div>
   );
 };
 

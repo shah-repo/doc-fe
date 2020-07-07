@@ -1,5 +1,4 @@
-import { Grid } from "@material-ui/core";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { connect, useSelector } from "react-redux";
 import { Redirect, useLocation } from "react-router-dom";
@@ -62,10 +61,10 @@ DocumentRevisionManagerContainerProps
   docId,
 }) => {
   useDocumentTitle(docId);
-  const classes = styles();
+  const [isDrawerOpen, setOpen] = React.useState(false);
+  const classes = styles({ isDrawerOpen });
   const intl = useIntl();
   const url = useLocation();
-  const [sidebar, openSidebar] = useState<boolean>(true);
 
   const docRevsWithoutCanceled = useMemo(() => documentRevisions.filter((docrev) =>
     docrev.status !== DocumentRevisionStatus.Canceled), [documentRevisions]);
@@ -113,7 +112,7 @@ DocumentRevisionManagerContainerProps
           documentRevisionId={documentRevisionId}
           documentId={documentId}
           canAccess={canAccess}
-          documentTypeId={document.documentType?.id}
+          documentTypeId={/* document.documentType.id} */ ""}
           withoutCurrentUser={true}
         /> : null,
       },
@@ -146,27 +145,26 @@ DocumentRevisionManagerContainerProps
   }
 
   return (
-    <Grid container={true} className={classes.whiteContainer} style={{ width: sidebar ? "100%" : "104%" }}>
-      {documentRevisionId && !isNewOutput && (
-        <Grid item={true} xs={sidebar ? 9 : 11} className={classes.backColor}>
+    <div className={classes.root}>
+      <div className={classes.appFrame}>
+        {documentRevisionId && !isNewOutput && (
           <DocumentRevisionDisplayContainer
             documentRevisionId={documentRevisionId}
             isNewVersion={isNewVersion}
             documentId={documentId}
           />
-        </Grid>
-      )}
-      {documentRevisionId && isNewOutput && (
-        <Grid item={true} xs={sidebar ? 9 : 11} className={classes.backColor}>
+        )}
+        {documentRevisionId && isNewOutput && (
           <DocumentRevisionDisplayContainer
             documentRevisionId={documentRevisionId}
             isNewOutput={isNewOutput}
             documentId={documentId}
           />
-        </Grid>
-      )}
-      <SidebarContainer {...{ sidebar, openSidebar, sidebarList }}/>
-    </Grid>
+        )}
+      </div>
+      <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }}/>
+
+    </div>
   );
 };
 
