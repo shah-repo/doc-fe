@@ -1,3 +1,4 @@
+import { GroupTag } from "../auth/types";
 import { User } from "../common";
 import { DocumentType } from "../documentRevisions/documentType";
 import { SELECT_COMPANY, SET_COMPANY_MINE } from "./constants";
@@ -68,4 +69,5 @@ export interface NavigationItem {
   path?: string;
   menu?: NavigationItem[];
   icon?: string;
+  restrictedToUsersWithTags?: GroupTag[];
 }
