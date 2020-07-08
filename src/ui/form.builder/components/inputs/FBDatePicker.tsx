@@ -1,4 +1,4 @@
-import DateFnsUtils from "@date-io/date-fns";
+import MomentUtils from "@date-io/moment";
 import { TextField } from "@material-ui/core";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import React from "react";
@@ -9,7 +9,7 @@ const FBDatePicker: React.FunctionComponent<FBInputProps> = ({
   onChange,
   ...props
 }) => (
-  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+  <MuiPickersUtilsProvider utils={MomentUtils}>
     <FBInput {...props} type="datepicker">
       <KeyboardDatePicker
         fullWidth={true}

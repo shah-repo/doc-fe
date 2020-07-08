@@ -1809,12 +1809,24 @@
   resolved "https://registry.yarnpkg.com/@date-io/core/-/core-2.6.0.tgz#01efa47b225d1a94d3138583588b919442149ee8"
   integrity sha512-GkM3jTlh9r3MfZEuFKV4g1JSbxz1G0Or1CBKkhPcw7UCJRjjsk5mLVYZYtUQEsOY8rCSFUTdCOm63ulWzAC/pw==
 
+"@date-io/core@^2.7.0":
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/@date-io/core/-/core-2.7.0.tgz#81f9c76b0dfeffc5d2b24bcb9e5e852aafd344f1"
+  integrity sha512-ugxpm5nRpBRpF3Q0Jx8dkXb8iCMBxlMQEeYMIe0cGe6t/IFvHkh1AKzt/wyN9CNyYtUuNw3Suup2AbQvILCYmw==
+
 "@date-io/date-fns@^2.6.2":
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/@date-io/date-fns/-/date-fns-2.6.2.tgz#231e075b0ac18beb3654cbd3d4ae09e91846fafa"
   integrity sha512-LJnNxYhGihB1h503yRLj9s36a9bSF/NOyIbHDp7Bev2lmKn8c2zjoX9u0p5i3WV7z2nujBW1oDR/h+VfzjFkvg==
   dependencies:
     "@date-io/core" "^2.6.0"
+
+"@date-io/moment@^2.7.0":
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/@date-io/moment/-/moment-2.7.0.tgz#d5738e0394f05079e01026d7fad1bcc16ca4ef16"
+  integrity sha512-mt9sw9AlBDUEBsh5jd1PoB0GQd6Pcg38Qe1X5yOUBi6jXztc0e5RMF4uCky+r4Vlrbq+GKeyUMKZXeMv/uICyw==
+  dependencies:
+    "@date-io/core" "^2.7.0"
 
 "@emotion/cache@^10.0.17", "@emotion/cache@^10.0.9":
   version "10.0.19"
