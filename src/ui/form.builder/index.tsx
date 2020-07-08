@@ -62,12 +62,12 @@ export { default as FBEditorActions } from "./FBEditorActions/FBEditorActions";
 export * from "./FBEditorActions/FBEditorActions.types";
 export { default as FBEditorApprovalField } from "./FBEditorApprovalField/FBEditorApprovalField";
 export * from "./FBEditorApprovalField/FBEditorApprovalField.types";
-export { default as FBEditorApprovalMatrix } from "./FBEditorApprovalMatrix/FBEditorApprovalMatrix";
 export { default as FBEditorAutocomplete } from "./FBEditorAutocomplete/FBEditorAutocomplete";
 export { default as FBEditorCheckControl } from "./FBEditorCheckControl/FBEditorCheckControl";
 export { default as FBEditorCustomControl } from "./FBEditorCustomControl/FBEditorCustomControl";
 export * from "./FBEditorCustomControl/FBEditorCustomControl.state";
 export * from "./FBEditorCustomControl/FBEditorCustomControl.types";
+export { default as FBEditorEmpty } from "./FBEditorEmpty/FBEditorEmpty";
 export { default as FBEditorHyperlink } from "./FBEditorHyperlink/FBEditorHyperlink";
 export { default as FBEditorInstructionsDocument } from "./FBEditorInstructionsDocument/FBEditorInstructionsDocument";
 export { default as FBEditorLabel } from "./FBEditorLabel/FBEditorLabel";
@@ -204,8 +204,18 @@ export { default as FBTableCell } from "./FBTableCell/FBTableCell";
 export * from "./FBTableCell/FBTableCell.types";
 export { default as FBTabs } from "./FBTabs/FBTabs";
 export * from "./FBTabs/FBTabs.types";
+export { default as FBTask } from "./FBTask/FBTask";
+export { default as FBTaskState } from "./FBTask/FBTask.state";
+export * from "./FBTask/FBTask.types";
+export { default as FBTaskField } from "./FBTaskField/FBTaskField";
+export { default as FBTaskFieldState } from "./FBTaskField/FBTaskField.state";
+export { default as FBTaskFormActions } from "./FBTaskForm/FBTaskForm.actions";
+export { default as FBTaskFormDescription } from "./FBTaskForm/FBTaskForm.description";
+export { default as FBTaskFormNote } from "./FBTaskForm/FBTaskForm.note";
 export { default as FBTestRequirement } from "./FBTestRequirement/FBTestRequirement";
 export * from "./FBTestRequirement/FBTestRequirement.types";
+export { default as FBText } from "./FBText/FBText";
+export * from "./FBText/FBText.types";
 export { default as FBTextEditor } from "./FBTextEditor/FBTextEditor";
 export { default as FBTextEditorState } from "./FBTextEditor/FBTextEditor.state";
 export * from "./FBTextEditor/FBTextEditor.types";
@@ -230,4 +240,5 @@ export { default as FBWorkspaceTplActions } from "./FBWorkspaceTplActions/FBWork
 export * from "./FBWorkspaceTplActions/FBWorkspaceTplActions.types";
 export { default as FB } from "./helpers/FB";
 export * from "./helpers/FBFieldName";
+
 

@@ -7,7 +7,6 @@ import FBProposedDocument from "./FBProposedDocument/FBProposedDocument";
 
 const FBDocumentRevisions: React.FunctionComponent<FBDocumentRevisionProps> = ({
   dialogState,
-  name,
   docRevState,
   disabled,
   onClick,
@@ -27,6 +26,7 @@ const FBDocumentRevisions: React.FunctionComponent<FBDocumentRevisionProps> = ({
             justification={e.justificationOfChange}
             description={e.descriptionOfChange}
             index={index + 1}
+            disabled={disabled}
             {...{ removeDocument, isMouseInside, setMouseInside, proposedDocumentRevision }}
           />
         }

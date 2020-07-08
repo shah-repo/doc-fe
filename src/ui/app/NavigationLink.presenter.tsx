@@ -1,82 +1,69 @@
 import { ListItemIcon } from "@material-ui/core";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import { withStyles, WithStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import React, { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
-import { ReactComponent as ChangeRequestListIcon } from "../../assets/images/change_request_list_icon.svg";
-import { ReactComponent as DashboardIcon } from "../../assets/images/dashboard_icon.svg";
-import { ReactComponent as DocumentListICon } from "../../assets/images/document_list_icon.svg";
-import { ReactComponent as GroupManagementIcon } from "../../assets/images/group_management_icon.svg";
-import { ReactComponent as LotsIcon } from "../../assets/images/lots_icon.svg";
-import { ReactComponent as PurchaseOrderIcon } from "../../assets/images/purchase_order_icon.svg";
-import { ReactComponent as ReceivableIcon } from "../../assets/images/receivable_icon.svg";
-import { ReactComponent as SuppliersIcon } from "../../assets/images/suppliers_icon.svg";
-import { ReactComponent as UserManagementIcon } from "../../assets/images/user_management_icon.svg";
+import { NavigationItem } from "../../state/ducks/company";
 import Text from "../components/Text";
-import { CHANGE_REQUEST_LIST_URL, DOCUMENT_REVISION_LIST_URL, GROUP_MANAGEMENT_ROOT_URL, USER_MANAGEMENT_ROOT_URL } from "../constants/urls";
-import { LinkDefinition } from "./NavigationLink.container";
 import styles from "./NavigationLink.styles";
 
-interface NavigationLinkPresenterProps
-  extends LinkDefinition,
-  WithStyles<typeof styles> {
+interface NavigationLinkPresenterProps extends
+  NavigationItem {
+  isActive: boolean;
   ActionIcon?: ReactNode;
   isChild?: boolean;
+  toggleChildren?: (event: React.MouseEvent) => void;
 }
-
-interface IconObject {
-  [key: string]: JSX.Element;
-}
-
-const iconMappingByUrl: IconObject = {
-  "/": <DashboardIcon />,
-  [DOCUMENT_REVISION_LIST_URL]: <DocumentListICon />,
-  [CHANGE_REQUEST_LIST_URL]: <ChangeRequestListIcon />,
-  [USER_MANAGEMENT_ROOT_URL]: <UserManagementIcon />,
-  [GROUP_MANAGEMENT_ROOT_URL]: <GroupManagementIcon />,
-};
-
-const iconMappingByText: IconObject = {
-  "Purchase Order": <PurchaseOrderIcon />,
-  "Receivable": <SuppliersIcon/>,
-  "Suppliers": <ReceivableIcon/>,
-  "Lots": <LotsIcon/>,
-};
 
 const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterProps> = ({
-  classes,
-  url,
-  text,
+  path,
+  label,
+  type,
+  icon,
   ActionIcon,
   isChild,
-  ...otherProps
+  isActive,
+  toggleChildren,
 }) => {
-  const dataCy = otherProps["data-cy"] ? { "data-cy": otherProps["data-cy"] } : {};
+  const classes = styles({ iconLink: icon });
   return (
     <>
       <ListItem
-        component={NavLink}
+        component={path ? NavLink : null}
         button
         exact
-        className={classNames(classes.link, { [classes.childLink]: isChild })}
+        className={
+          classNames(classes.link, {
+            [classes.childLink]: isChild,
+            [classes.menu]: type === "MENU",
+          })}
         activeClassName={classes.activeLink}
-        to={url}
-        {...dataCy}
+        to={path}
       >
-        <ListItemIcon className={classes.itemIcon}>
-          { iconMappingByUrl[url] || iconMappingByText[text] || <div />}
-        </ListItemIcon>
+        {
+          type === "LINK" &&
+          <ListItemIcon className={classes.itemIcon} onClick={toggleChildren}>
+            <div
+              className={classNames(
+                classes.icon, {
+                  [classes.iconActive]: isActive,
+                }
+              )}
+            />
+          </ListItemIcon>
+        }
         <ListItemText
-          primary={<Text message={text} />}
+          primary={<Text message={label} />}
           classes={{
             primary: classes.itemText,
           }}
+          onClick={toggleChildren}
         />
+        {ActionIcon}
       </ListItem>
-      {ActionIcon}
     </>
-  ); };
+  );
+};
 
-export default withStyles(styles)(NavigationLinkPresenter);
+export default NavigationLinkPresenter;

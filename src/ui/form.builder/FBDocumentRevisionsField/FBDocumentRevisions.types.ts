@@ -22,6 +22,7 @@ export interface FBProposedDocumentProps {
   description: string;
   index: number;
   removeDocument: (index: number) => void;
+  disabled: boolean;
 }
 
 export interface FBDocumentRevisions {

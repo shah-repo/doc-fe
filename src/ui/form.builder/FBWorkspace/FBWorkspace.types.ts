@@ -1,5 +1,6 @@
 import { FBDialogState, FBFormProps, FBSchemaProps, FBSnackbarState, FBWorkspaceState } from "..";
 import { UserGroupsState, UserState } from "../../../state/ducks/auth/types";
+import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { Company } from "../../../state/ducks/company";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 
@@ -19,6 +20,7 @@ export type FBWorkspaceProps =
   active?: boolean;
   includeTransport?: boolean;
   document?: DocumentRevision;
+  changeRequest?: ChangeRequest;
   autosave?: boolean;
 };
 
@@ -33,4 +35,4 @@ export interface FBWorkspaceExternalState {
   };
 }
 
-export type FBWorkspaceConstructor = Pick<FBWorkspaceProps, "schema" | "mode" | "document" | "autosave">;
+export type FBWorkspaceConstructor = Pick<FBWorkspaceProps, "schema" | "mode" | "autosave">;

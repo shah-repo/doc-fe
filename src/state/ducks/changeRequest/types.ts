@@ -1,3 +1,4 @@
+import { FBTaskItem } from "../../../ui/form.builder/FBTask";
 import { Attachment } from "../attachments";
 import { AuditActionPayload } from "../audit/types";
 import { Approval, Id, Owner, User } from "../common";
@@ -78,6 +79,7 @@ export interface ChangeRequest {
   closedAt: Date;
   formInput?: Record<string, any>;
   formDocument?: FBDocumentRevisionProps;
+  tasks?: FBTaskItem[];
 }
 
 export interface Approver {

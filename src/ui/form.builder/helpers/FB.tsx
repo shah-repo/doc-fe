@@ -21,12 +21,9 @@ export class FB {
     return uniqid();
   }
 
-  public static stripOption(fielddName: string, optionName?: string): string {
-    if (!optionName) {
-      return "";
-    }
-    const striped = optionName.toString().replace(fielddName, "").replace("-<-val->", "");
-    return _.startCase(striped);
+  public static stripTags(value?: string): string {
+    if (!value) { return ""; }
+    return value.replace(/(<([^>]+)>)/ig, "");
   }
 }
 

@@ -51,7 +51,8 @@ export type FBInputType =
   | "testRequirement"
   | "hellosign"
   | "customcontrol"
-  | "poApprovalMatrix";
+  | "poApprovalMatrix"
+  | "task";
 
 export type FBInputProps =
 & FBLabelProps
