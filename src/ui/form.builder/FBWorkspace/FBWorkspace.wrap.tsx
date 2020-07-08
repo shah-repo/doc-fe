@@ -40,7 +40,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, { schema: props.schema, mode, autosave });
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
     snackbarState = FB.useRef<FBSnackbarState>(FBSnackbarState);
-
+    workspaceState && (workspaceState.document = document);
 
     // *TODO: find a way to reset constructor props
     React.useEffect(() => {
