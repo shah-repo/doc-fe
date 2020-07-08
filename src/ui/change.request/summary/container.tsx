@@ -40,7 +40,7 @@ export const Container: React.FunctionComponent<Props> = ({
 
   /*   const [summaryDocumentTypeGroups, setSummaryDocTypeGroups] = useState<any[]>([]);
  */
-  const [isDrawerOpen, setOpen] = React.useState(false);
+  const [isDrawerOpen, setOpen] = React.useState(true);
   const url = useLocation();
   const classes = styles({ isDrawerOpen });
   useDocumentTitle(dataProp.crId);

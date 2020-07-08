@@ -47,7 +47,8 @@ ChangeRequestFormContainerProps
 
   const intl = useIntl();
   const url = useLocation();
-  const [isDrawerOpen, setOpen] = React.useState(false);
+  const [isDrawerOpen, setOpen] = React.useState(true);
+  console.log(isDrawerOpen);
   const classes = styles({ isDrawerOpen });
   const schemaData = changeRequest ? changeRequest.formDocument?.formTemplate?.schema : schema;
 

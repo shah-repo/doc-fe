@@ -61,7 +61,7 @@ DocumentRevisionManagerContainerProps
   docId,
 }) => {
   useDocumentTitle(docId);
-  const [isDrawerOpen, setOpen] = React.useState(false);
+  const [isDrawerOpen, setOpen] = React.useState(true);
   const classes = styles({ isDrawerOpen });
   const intl = useIntl();
   const url = useLocation();
