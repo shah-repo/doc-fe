@@ -570,6 +570,7 @@
   "form.builder.prefix": "Prefix",
   "form.builder.internalType": "Internal type",
   "form.builder.needsSignature": "Needs signature",
+  "form.builder.category": "Category",
   "form.builder.documentType": "Document type",
   "form.builder.approvals.alpha": "Approvals Alpha",
   "form.builder.approvals.numeric": "Approvals Numeric",

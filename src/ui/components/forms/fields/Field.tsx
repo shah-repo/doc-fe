@@ -60,7 +60,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
     }
     return (
       label && (
-        <LabelField htmlFor={field.name}>
+        <LabelField htmlFor={field.name} style={{ position: "inherit" }}>
           <Typography
             variant={TypographySize[size]}
             className={classes.typography}

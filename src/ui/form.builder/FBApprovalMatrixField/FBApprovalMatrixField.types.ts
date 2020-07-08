@@ -27,6 +27,7 @@ export interface FBApprovalMatrixDocType {
   defaultTraining: boolean;
   group: string;
   needsSignature: boolean;
+  category: string;
 }
 
 export interface FBApprovalRolesStages {

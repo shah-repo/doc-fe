@@ -7,10 +7,12 @@ import { useLocation } from "react-router-dom";
 import { ReactComponent as BookmarkIcon } from "../../../assets/images/bookmark.svg";
 import { ReactComponent as TimelineIcon } from "../../../assets/images/history.svg";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
+import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions";
 import { AsyncState } from "../../../state/types";
+import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import Bookmarks from "../../documentRevision/Sidebar/Bookmarks";
 import SidebarContainer from "../../documentRevision/Sidebar/Sidebar.container";
-import { FBSchemaProps, FBWorkspace } from "../../form.builder";
+import { FBWorkspace } from "../../form.builder";
 import ChangeRequestAuditContainer from "../audit/Audit.container";
 import AssessmentFormPresenter from "./assessmentForm/AssessmentForm.presenter";
 import styles from "./styles";
@@ -23,7 +25,7 @@ interface OwnProps {
   asyncState: AsyncState;
   changeRequest?: ChangeRequest;
   doNotPrompt?: boolean;
-  schema?: FBSchemaProps[];
+  chosenForm?: FBDocumentRevisionProps;
 }
 
 export let changeRequestFormOnScreenContext = React.createContext<boolean>(false);
@@ -38,7 +40,7 @@ ChangeRequestFormContainerProps
   initialValues,
   changeRequest,
   doNotPrompt,
-  schema,
+  chosenForm,
 }) => {
   const FBContainer = React.useRef(null);
 
@@ -50,7 +52,7 @@ ChangeRequestFormContainerProps
   const url = useLocation();
   const [sidebar, openSidebar] = useState<boolean>(true);
   const classes = styles({ sidebar });
-  const schemaData = changeRequest ? changeRequest.formDocument?.formTemplate?.schema : schema;
+  const schemaData = changeRequest ? changeRequest.formDocument?.formTemplate?.schema : chosenForm?.formTemplate?.schema;
 
   const render = (props: FormikProps<ChangeRequestFormValues>) => (
     <FBWorkspace
@@ -68,6 +70,7 @@ ChangeRequestFormContainerProps
         {...props}
         {...{ FBContainer }}
       />
+      {chosenForm && <DocumentRevisionOutputInfo formDocument={chosenForm}/>}
     </FBWorkspace>
 
   );
