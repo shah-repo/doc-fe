@@ -4,7 +4,7 @@ import { useObserver } from "mobx-react";
 import moment from "moment";
 import React from "react";
 import { FBApprovalConfig, FBApprovalProps, FBApprovalState, FBApprovalStatus, FBApprovalValue } from ".";
-import { FB, FBAutocompleteAsyncOption, FBButton, FBDatePicker, FBForm, FBFormState } from "..";
+import { FB, FBAutocompleteAsyncOption } from "..";
 import { TIME_ZONE } from "../../../common/utils/date";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
@@ -20,14 +20,12 @@ export const withFBApproval = <T extends FBApprovalProps>(
     approvalConfig,
     name,
     hasApproved,
-    effectiveDate,
     disabled,
     isApproved = false,
     isDefined = false,
     approvers,
     approverGroups,
     reviseDisabled,
-    formEffectiveState,
     approveLoading,
     loading,
     ...props
@@ -133,7 +131,6 @@ export const withFBApproval = <T extends FBApprovalProps>(
       approvalFieldState?.postApi.setBody({
         fieldName: name,
         fieldValue: approvalFieldState?.hasApproved,
-        effectiveDate: formEffectiveState?.getValues().effectiveDate,
       });
       approvalFieldState?.postApi.post();
       dialogState && dialogState.closeDialog();
@@ -162,28 +159,6 @@ export const withFBApproval = <T extends FBApprovalProps>(
       approveLoading = approvalFieldState?.postApi.loading;
     });
 
-    formEffectiveState = FB.useRef<FBFormState>(FBFormState, {});
-
-    const onClick = (approver) => {
-    dialogState?.config({
-      open: true,
-      content: (
-        <FBForm formState={formEffectiveState}>
-          <FBDatePicker
-            name="effectiveDate"
-            label="transition.action.effective.date"
-            rules="required"
-          />
-        </FBForm>
-      ),
-      actions: (
-        <FBButton
-          label="common.approve"
-          onClick={onApprove && onApprove(approver)} />
-      ),
-    });
-    };
-
     React.useEffect(() => {
       reaction( // Form sync & autosave
         () => approvalFieldState?.hasApproved,
@@ -196,7 +171,6 @@ export const withFBApproval = <T extends FBApprovalProps>(
       ...(props as T),
       onApprove,
       approvalConfig,
-      onClick,
       approvers,
       approverGroups,
       reviseDisabled,

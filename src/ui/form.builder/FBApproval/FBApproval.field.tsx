@@ -9,7 +9,7 @@ import { FBMapWrapper } from "../FBMapWrapper";
 
 const FBApprovalField = <T extends Employee | GroupRequestBody>({
   approvalConfig,
-  onClick,
+  onApprove,
   collection,
   disabled,
   approveLoading,
@@ -40,7 +40,7 @@ const FBApprovalField = <T extends Employee | GroupRequestBody>({
                   <FBButton
                     label="form.builder.approve"
                     variant="outlined"
-                    onClick={() => onClick(approver)}
+                    onClick={onApprove?.(approver)}
                     size="small"
                     style={{ margin: "5px 0 0 10px" }}
                     {...{ disabled }}
