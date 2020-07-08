@@ -60,7 +60,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
         name="formDocument"
         size="sm"
         label="common.approve.and.release.template"
-        autocompleteProps={{ id: "FormList-selectForm", isClearable: true }}
+        autocompleteProps={{ id: "FormList-selectForm" }}
         options={formTemplateOptions}
         onClick={(option) => {
           setFormDocument(option.value);
