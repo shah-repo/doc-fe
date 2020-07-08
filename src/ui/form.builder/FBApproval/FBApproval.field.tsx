@@ -11,7 +11,7 @@ const FBApprovalField = <T extends Employee | GroupRequestBody>({
   approvalConfig,
   collection,
   disabled,
-  onClick,
+  onApprove,
   mt,
 }: FBApprovalFieldProps<T>) => (
   <Box {...{ mt }}>
@@ -36,7 +36,7 @@ const FBApprovalField = <T extends Employee | GroupRequestBody>({
               <FBButton
                 label="form.builder.approve"
                 variant="outlined"
-                onClick={() => onClick(approver)}
+                onClick={onApprove?.(approver)}
                 size="small"
                 style={{ margin: "5px 0 0 10px" }}
                 {...{ disabled }}

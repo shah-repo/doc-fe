@@ -2,7 +2,6 @@ import { BoxProps } from "@material-ui/core";
 import { FBApprovalState, FBDialogState, FBInputProps } from "..";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
-import { FBFormState } from "../FBForm";
 
 export interface FBApprovalConfig {
   label?: string;
@@ -31,9 +30,6 @@ export type FBApprovalProps =
   isDefined?: boolean;
   loading?: boolean;
   dialogState?: FBDialogState;
-  onClick?: () => void;
-  effectiveDate?: string;
-  formEffectiveState?: FBFormState;
 };
 
 export enum FBApprovalStatus {
@@ -51,7 +47,6 @@ export interface FBApprovalValue {
 export interface FBApprovalApi {
   fieldName: string;
   fieldValue: FBApprovalValue[];
-  effectiveDate: string;
 }
 
 export type FBApprovalFieldProps<T> =
@@ -59,7 +54,6 @@ export type FBApprovalFieldProps<T> =
 & Pick<BoxProps, "mt">
 & {
   collection: T[];
-  onClick: (approver?: Employee | GroupRequestBody) => void;
 };
 
 export interface FBApprovalData {

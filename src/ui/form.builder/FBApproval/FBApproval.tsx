@@ -21,7 +21,6 @@ const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
   type,
   index,
   dialogState,
-  onClick,
   ...props
 }) => (
   <Box mb={3}>
@@ -66,7 +65,6 @@ const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
       <FBApprovalField<Employee>
         {...props}
         collection={approvers as Employee[]}
-        onClick={onClick as () => void}
         {...{ disabled }}
       />
     )}
@@ -75,7 +73,6 @@ const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
         {...props}
         mt={approvers ? 2 : 0}
         collection={approverGroups as GroupRequestBody[]}
-        onClick={onClick as () => void}
         {...{ disabled }}
       />
     )}
