@@ -36,7 +36,18 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
 
     handleSave = () => {
       const formValue: Partial<FBApprovalMatrixFieldData> = formState?.getFieldValue(name);
-      const approvalMatrix = [...formValue.approvalMatrix || []];
+      const approvalMatrixValues = [...formValue.approvalMatrix || []];
+      const approvalMatrix = approvalMatrixValues.map((e) => {
+        const categoryTrim = e.docType.category?.trim();
+        return {
+          ...e,
+          docType: {
+            ...e.docType,
+            category: categoryTrim ?? "",
+          },
+        };
+      });
+
       if (isEmpty(approvalMatrix)) { return; }
       approvalMatrix[approvalMatrix.length - 1] = {
         ...last(approvalMatrix) as FBApprovalMatrixItem,
