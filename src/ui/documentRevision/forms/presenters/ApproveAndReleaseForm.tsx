@@ -6,8 +6,6 @@ import { Owner } from "../../../../state/ducks/common/types";
 import { AsyncState, AsyncStatus } from "../../../../state/types";
 import Approvers from "../../../change.request/form/approvers";
 import DatePickerField from "../../../components/forms/fields/DatePickerField";
-import InputField from "../../../components/forms/fields/Input";
-import { required, validator } from "../../../components/forms/fields/validators";
 import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";
 import SubmitButton from "../../../components/forms/SubmitButton";
@@ -71,12 +69,6 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
         label="transition.action.effective.date"
         name="effectiveDate"
       />
-      {isQms && <InputField
-        name="password"
-        label="transition.action.password"
-        inputProps={{ type: "password" }}
-        validate={validator(required)}
-      />}
       <FormProgress asyncState={asyncState} />
       <SubmitButton
         asyncState={asyncState}
