@@ -26,7 +26,7 @@ export default makeStyles((theme: Theme) =>
     },
     drawerInner: {
       width: SIDEBAR_WIDTH,
-      height: "100%",
+      height: "calc(100% - 105px)",
       display: "flex",
       flexDirection: "column",
     },
@@ -36,6 +36,10 @@ export default makeStyles((theme: Theme) =>
       justifyContent: "flex-end",
       padding: "0 8px",
       minHeight: "10px",
+    },
+    sidebarList: {
+      height: "calc(100% - 60px)",
+      overflowY: "auto",
     },
     menuIcon: {
       "margin": "8px 13px 13px 11px",

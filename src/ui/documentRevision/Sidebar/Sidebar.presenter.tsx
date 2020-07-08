@@ -53,7 +53,7 @@ export const SidebarPresenter: React.FunctionComponent<Props> = ({
         </IconButton>
         <Divider />
         {sidebarList.map((item, index) =>
-          <Box key={item.details.title} >
+          <Box key={item.details.title}>
             <IconButton
               ref={sidebarList[indexNumber].details.title === item.details.title ? inputRef : null}
               onClick={() => handleMenuIconClick(index)}
@@ -69,13 +69,14 @@ export const SidebarPresenter: React.FunctionComponent<Props> = ({
             padding: 0,
             position: "fixed",
             marginLeft: 68,
+            height: "calc(100% - 105px)",
           }}>
           <Box mt={2}>
             <Typography variant="h6">
               <Text message={sidebarList[indexNumber].details.title} />
             </Typography>
           </Box>
-          <Box mt={2.5}>
+          <Box mt={2.5} className={classes.sidebarList}>
             {sidebarList[indexNumber].details.component}
           </Box>
         </div>
