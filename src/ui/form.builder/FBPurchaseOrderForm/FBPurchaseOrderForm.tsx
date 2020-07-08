@@ -12,6 +12,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
   handleTypeChange,
   handlePartDescription,
   type,
+  hasPartNumber,
   children,
 }) => (
   <FormContext.Provider value={{ submitOnChange: false }}>
@@ -44,6 +45,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
           label="form.builder.field.part.description"
           name="partNumberTitle"
           onChange={handlePartDescription}
+          disabled={hasPartNumber}
         />
       </>
     }

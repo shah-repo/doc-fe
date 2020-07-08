@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { useObserver } from "mobx-react";
-import React from "react";
+import React, { useState } from "react";
 import { FB, FBPurchaseOrderFormProps } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { FBPurchaseOrderItem } from "../FBPurchaseOrder/FBPurchaseOrder.types";
@@ -20,8 +20,11 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
   }: T) => {
 
     const { formState, purchaseOrderState } = FB.useStores();
+    const [hasPartNumber, setPartNumber] = useState("");
 
     handlePartTitle = (_ev: any, value?: DocumentRevision) => {
+      const item = formState?.getValues() as FBPurchaseOrderItem;
+      setPartNumber(item.partNumber);
       formState?.setFieldValue("partNumberTitle", value?.name, true);
       formState?.setValues({
         ...formState.getValues(),
@@ -70,6 +73,7 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
       getOptionLabel,
       handleTypeChange,
       handlePartDescription,
+      hasPartNumber,
       type,
     });
   };

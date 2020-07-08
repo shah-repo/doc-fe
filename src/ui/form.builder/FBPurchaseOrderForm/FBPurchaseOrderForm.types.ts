@@ -11,4 +11,5 @@ export type FBPurchaseOrderFormProps =
   handleTypeChange?: FBInputProps["onChange"];
   type?: FBPurchaseOrderItem["type"];
   handlePartDescription?: FBInputProps["onChange"];
+  hasPartNumber?: boolean;
 };
