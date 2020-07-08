@@ -22,5 +22,13 @@ export const styles = makeStyles((theme: Theme) =>
     dialogContent: {
       overflowY: "unset",
     },
+    templateRadioGroup: {
+      maxHeight: "500px",
+      overflowY: "auto",
+      width: "100%",
+      flexWrap: "unset",
+      WebkitFlexWrap: "unset",
+      marginBottom: "10px",
+    },
   }),
 );
