@@ -63,3 +63,44 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+
+
+# Cypress
+
+## Prerequisites
+- None
+
+## First time config
+
+Add exection permission to all scripts in *./scripts*
+```
+chmod -R +x ./scripts
+```
+
+### Run Cypress Test Runner
+Optionally you set ENLIL_COMPOSE_PORT_RANGE_START. Defaults to 5600, same as in BE scripts. 
+```
+./scripts/cypress/run_dev.sh
+```
+or
+
+```
+ENLIL_COMPOSE_PORT_RANGE_START=1234  ./scripts/cypress/run_dev.sh
+```
+
+It will open cypress Test Runner window where you can execute one spec file at the time. https://docs.cypress.io/guides/core-concepts/test-runner.html#Overview
+### Run Cypress in parallel, headless
+Run script:
+```
+./scripts/cypress/run_in_parallel.sh
+```
+Optional environment variables:
+
+*NUMBER_OF_WORKERS* - number of workers :grin: , defaults to 4. Go as high as you can without having (too many?) specs failing due to timeouts or you system becomes unbearably slow.
+*CI_BUILD_ID* - Build ID, defaults to current ISO8601 timestamp. When you want to rerun tests, but only failing ones, you need to define it manually.
+
+Example
+```
+NUMBER_OF_WORKERS=4 CI_BUILD_ID=2020-07-03T14:07:48+02:00 ./scripts/cypress/run_in_parallel.sh
+```

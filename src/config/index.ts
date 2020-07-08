@@ -18,6 +18,7 @@ const DEFAULTS = {
   ENV_NAME: "",
 };
 
+
 type ConfigKey = keyof typeof DEFAULTS;
 
 class Config {

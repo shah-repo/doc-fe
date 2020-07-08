@@ -86,6 +86,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
       fullWidth={true}
       error={shouldDisplayError}
       className={classes.form}
+      data-cy={`field-${field.name}`}
       {...formControlProps}
     >
       {LabelComponent()}
