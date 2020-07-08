@@ -28,7 +28,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
     const {
       id: documentId,
       isOutput,
-      document: { releasedAt = null } = {},
+      document: { releasedAt = null, createdAt = (new Date()).toISOString() } = {},
     } = workspaceState || {};
     approvalAuditState = FB.useRef(FBApprovalAuditState, { documentId, isOutput });
 
@@ -241,7 +241,14 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
         type === "approval" || type === "requestapproval"
       );
 
-      const startDate = last(approvals)?.timestamp || (new Date()).toISOString();
+
+      // TODO: refacoring & sync approveAt with createdAt
+      let startDate = last(approvals)?.timestamp || (new Date()).toISOString();
+      if (moment(startDate).subtract(1, "seconds").isAfter(moment(createdAt)) && approvals[approvals.length - 2]) {
+        startDate = approvals[approvals.length - 2].timestamp;
+      }
+
+
       const endDate = releasedAt ? new Date(releasedAt) : new Date();
 
       const filteredMapped = filter(compactMapped, (cm) => (
