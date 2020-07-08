@@ -1,4 +1,4 @@
-import { compact, get, groupBy, isEmpty, last, map, range, toNumber } from "lodash";
+import { compact, filter, get, groupBy, isEmpty, last, map, range, sortBy, toNumber } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import moment from "moment";
@@ -25,7 +25,11 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
   }: T) => {
 
     const { workspaceState, formState } = FB.useStores();
-    const { id: documentId, isOutput } = workspaceState || {};
+    const {
+      id: documentId,
+      isOutput,
+      document: { releasedAt = null } = {},
+    } = workspaceState || {};
     approvalAuditState = FB.useRef(FBApprovalAuditState, { documentId, isOutput });
 
     function underApproval(): string[] | undefined {
@@ -228,10 +232,24 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
           formattedTime: moment(v[0].timestamp).tz(TIME_ZONE, true).format("D MMM YYYY hh:mm:ss a"),
           description: (description[type || ""] || description.default)(),
           timestamp: v[0].timestamp,
+          type,
         };
       });
-      return (compact(mapped) as FBAuditData[])
-        .sort((a, b) => new Date(a.timestamp).valueOf() - new Date(b.timestamp).valueOf());
+
+      const compactMapped = sortBy(compact(mapped), "timestamp");
+      const approvals = filter(compactMapped,  ({ type, timestamp }) =>
+        type === "approval" || type === "requestapproval"
+      );
+
+      const startDate = last(approvals)?.timestamp || (new Date()).toISOString();
+      const endDate = releasedAt ? new Date(releasedAt) : new Date();
+
+      const filteredMapped = filter(compactMapped, (cm) => (
+        startDate &&
+        new Date(cm.timestamp) >= new Date(startDate) &&
+        new Date(cm.timestamp) <= new Date(endDate)
+      ));
+      return filteredMapped as FBAuditData[];
     }
 
     function isApproved(): boolean {

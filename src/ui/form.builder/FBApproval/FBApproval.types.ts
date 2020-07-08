@@ -30,6 +30,7 @@ export type FBApprovalProps =
   isApproved?: boolean;
   isDefined?: boolean;
   loading?: boolean;
+  approveLoading?: boolean;
   dialogState?: FBDialogState;
   onClick?: () => void;
   effectiveDate?: string;
