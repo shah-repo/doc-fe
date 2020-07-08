@@ -1,4 +1,4 @@
-import DateFnsUtils from "@date-io/date-fns";
+import MomentUtils from "@date-io/moment";
 import { TextField } from "@material-ui/core";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
@@ -24,7 +24,7 @@ const DatePicker: React.FunctionComponent<DatePickerPropsWithFormik> = ({
 
   return (
     <Field label={label} {...fieldProps}>
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <MuiPickersUtilsProvider utils={MomentUtils}>
         <KeyboardDatePicker
           fullWidth={true}
           disableToolbar={true}
