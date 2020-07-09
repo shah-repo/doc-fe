@@ -8,6 +8,10 @@ import path from "path";
 
 const runId = new Date().valueOf();
 let createdCompany;
+let loginResponse;
+let currentEmployee;
+let documentRevision;
+let componentSpecificationDocumentType;
 
 context(`Test: ${path.basename(__filename)}`, () => {
   it("Creates company", (done: any) => {
@@ -15,6 +19,8 @@ context(`Test: ${path.basename(__filename)}`, () => {
       email: "zoran.kovacevic+admin@codecons.com",
       password: "Tester1!",
     }).then((response) => {
+      loginResponse = response;
+      currentEmployee = loginResponse.employees[loginResponse.employees.length-1];          
       cy.createCompany({
         payload: {
           companyAcronym: `T1${runId}`,
@@ -44,53 +50,55 @@ context(`Test: ${path.basename(__filename)}`, () => {
           addresses: ["Address 1"],
           whiteLabeling: null,
           documentTypes: [],
-        }, sessionId: response.sessionId as unknown as string,
+        }, sessionId: loginResponse.sessionId as unknown as string,
       }).then((response) => {
         createdCompany = response;
+        componentSpecificationDocumentType = createdCompany.documentTypes.filter(type => type.documentTypeName==="Component Specification");
         done();
       });
     });
   });
-  it("Creates document revision", (done: any) => {
-    cy.apiLogin({
-      email: "zoran.kovacevic+admin@codecons.com",
-      password: "Tester1!",
-    }).then((employeeId, sessionId) => {
-      cy.createDocumentRevision({
-        payload: {
-          attachments: [],
-          description: "<p>Test Doc Rev Description</p>",
-          document: {
-            docId: "CS-00004",
-            documentType: {
-              id: "daeb0c34-1baf-4c05-8d0f-e51bc790492a",
-            },
-            securityList: {
-              operators: [],
-              securityEmployees: [],
-              securityGroups: [
-                {
-                  id: "039ed5b2-ef7a-4d9d-8541-2afac1114861",
-                },
-              ],
-            },
+    it("Creates document revision", (done: any) => {
+    cy.createDocumentRevision({
+      payload: {
+        attachments: [],
+        description: "<p>Test Doc Rev Description</p>",
+        document: {
+          docId: "CS-00004",
+          documentType: {
+            id: componentSpecificationDocumentType[0].id,
           },
-          name: "Test Doc Rev",
-          referenceTo: [],
-          retrain: false,
-          revisionChangeType: "NEXT_REVISION",
-          revisionStage: 1,
-
+          securityList: {
+            operators: [],
+            securityEmployees: [],
+            securityGroups: [
+              {
+                id: "039ed5b2-ef7a-4d9d-8541-2afac1114861",
+              },
+            ],
+          },
         },
-        employeeId: employeeId as unknown as string,
-        sessionId: sessionId as unknown as string,
-      }).then((response) => {
-        createdCompany = response;
-        done();
-      });
+        name: "Test Doc Rev",
+        referenceTo: [],
+        retrain: false,
+        revisionChangeType: "NEXT_REVISION",
+        revisionStage: 1,
+
+      },
+      employeeId: currentEmployee.id as unknown as string,
+      sessionId: loginResponse.sessionId as unknown as string,
+    }).then((response) => {
+      documentRevision = response;
+      done();
     });
   });
-
+  it("Creates company", () => {
+    cy.getGroupByName({
+      sessionId: loginResponse.sessionId,
+      employeeId: currentEmployee.id,
+      groupName: "Everyone"
+    });
+  });
   it("Logs user in", () => {
     cy.login({
       email: "zoran.kovacevic+admin@codecons.com",

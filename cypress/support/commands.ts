@@ -18,6 +18,7 @@ declare global {
       selectCompany( params: {name: string }): Chainable<Subject>;
       unClick(): Chainable<Subject>;
       createDocumentRevision(params: {payload: IDocumentRevisionEditRequestBody; employeeId:string; sessionId:string;}): Chainable<Subject>;
+      getGroupByName(params: {sessionId: string, employeeId: string,  groupName: string}): Chainable<Subject>;
     }
   }
 }
@@ -208,6 +209,17 @@ Cypress.Commands.add("createCompany", (params: {payload: ICreateCompanyBootstrap
   }).then((response) => response.body);
 });
 
+Cypress.Commands.add("getGroupByName", (params: {sessionId: string, employeeId: string,  groupName: string}) => {
+  cy.request({
+    method: "GET",
+    url: `${CONFIG.BE_URL}/api/v1/groups?groupName=${params.groupName}`,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+    timeout: 10 * 1000,
+  }).then((response) => response);
+});
+
 
 
 Cypress.Commands.add("apiLogin", (params: {email: string; password: string }) => {
@@ -216,9 +228,7 @@ Cypress.Commands.add("apiLogin", (params: {email: string; password: string }) =>
     url: `${CONFIG.BE_URL}/api/v1/auth/login`,
     timeout: 10 * 1000,
     body: params,
-  }).then((response: IUser) =>
-    response.body,
-  );
+  }).then((response) => response.body);
 });
 
 Cypress.Commands.add("login", (params: {email: string; password: string }) => {
