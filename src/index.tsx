@@ -1,12 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Config from "./config";
 import * as serviceWorker from "./serviceWorker";
 import AppContainer from "./ui/app/App.container";
-import EnvStatusBarPresenter from "./ui/app/EnvStatusBar.presenter";
 
 
-ReactDOM.render(<EnvStatusBarPresenter isSandbox={Config.isSandbox} />, document.getElementById("env_banner"));
 ReactDOM.render(<AppContainer />, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
