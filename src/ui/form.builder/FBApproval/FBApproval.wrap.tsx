@@ -1,9 +1,10 @@
-import _ from "lodash";
+import { cloneDeep, filter, findLast, first, includes, isEmpty, keys, sortBy } from "lodash";
+import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import moment from "moment";
 import React from "react";
 import { FBApprovalConfig, FBApprovalProps, FBApprovalState, FBApprovalStatus, FBApprovalValue } from ".";
-import { FB, FBAutocompleteAsyncOption, FBButton, FBDatePicker, FBForm, FBFormState } from "..";
+import { FB, FBAutocompleteAsyncOption } from "..";
 import { TIME_ZONE } from "../../../common/utils/date";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
@@ -19,22 +20,28 @@ export const withFBApproval = <T extends FBApprovalProps>(
     approvalConfig,
     name,
     hasApproved,
-    effectiveDate,
     disabled,
     isApproved = false,
     isDefined = false,
     approvers,
     approverGroups,
     reviseDisabled,
-    formEffectiveState,
+    approveLoading,
     loading,
     ...props
   }: T) => {
 
     const { workspaceState, formState, dialogState } = FB.useStores();
-    const { id: documentId, isOutput, isReleased, currentUser } = workspaceState || {};
+    const {
+      id: documentId,
+      isOutput,
+      isReleased,
+      currentUser,
+      document: { released = new Date() } = { },
+    } = workspaceState || {};
 
-    const formValue = formState?.getFieldValue(name);
+    const formValue = sortBy(formState?.getFieldValue(name), "approvedAt")
+      .filter((value) => new Date(value.approvedAt) <= new Date(released));
 
     approvalFieldState = FB.useRef<FBApprovalState>(FBApprovalState, {
       value: formValue,
@@ -43,7 +50,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
     });
 
     isApproved = approvalFieldState.isApproved;
-    isDefined = !_.isEmpty(approvers) || !_.isEmpty(approverGroups);
+    isDefined = !isEmpty(approvers) || !isEmpty(approverGroups);
     disabled = (
       isReleased ||
       !isOutput ||
@@ -52,30 +59,33 @@ export const withFBApproval = <T extends FBApprovalProps>(
     );
 
     function isApprover(approver: Employee | GroupRequestBody): boolean {
-      return _.includes(_.keys(approver), "user");
+      return includes(keys(approver), "user");
     }
 
     function groupCheck(id: string): boolean {
-      const filteredGroup = _.filter(currentUser?.groups, { id });
-      return !_.isEmpty(filteredGroup);
+      const filteredGroup = filter(currentUser?.groups, { id });
+      return !isEmpty(filteredGroup);
     }
 
     function approverStatus(id: string): string {
       const approverValue = findApprover(id);
-      if (_.isEmpty(approverValue)) {
+      if (isEmpty(approverValue)) {
         return FBApprovalStatus.Pending;
       }
       return FBApprovalStatus.Approved;
     }
 
     function findApprover(id: string): FBApprovalValue | undefined {
-      return _.find(hasApproved, { userId: id }) || _.find(hasApproved, { groupId: id });
+      return (
+        findLast(hasApproved, { userId: id }) ||
+        findLast(hasApproved, { groupId: id })
+      );
     }
 
     function approverIsVisible(id: string): boolean {
       return (
         !isApproved ||
-        (isApproved && !_.isEmpty(findApprover(id)))
+        (isApproved && !isEmpty(findApprover(id)))
       );
     }
 
@@ -90,7 +100,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
         if (!approvedAt) { return ""; }
         let approver = "";
         if (userId && groupId) {
-          const approverObj = _.first(approvalFieldState?.approvers([userId]));
+          const approverObj = first(approvalFieldState?.approvers([userId]));
           approver = `${approverName(approverObj)},`;
         }
 
@@ -121,7 +131,6 @@ export const withFBApproval = <T extends FBApprovalProps>(
       approvalFieldState?.postApi.setBody({
         fieldName: name,
         fieldValue: approvalFieldState?.hasApproved,
-        effectiveDate: formEffectiveState?.getValues().effectiveDate,
       });
       approvalFieldState?.postApi.post();
       dialogState && dialogState.closeDialog();
@@ -147,29 +156,16 @@ export const withFBApproval = <T extends FBApprovalProps>(
         (approverGroups = approvalFieldState?.groups(approverGroups as string[]));
       hasApproved = approvalFieldState?.hasApproved;
       loading = approvalFieldState?.approversApi.loading || approvalFieldState?.groupsApi.loading;
+      approveLoading = approvalFieldState?.postApi.loading;
     });
 
-    formEffectiveState = FB.useRef<FBFormState>(FBFormState, {});
-
-    const onClick = (approver) => {
-    dialogState?.config({
-      open: true,
-      content: (
-        <FBForm formState={formEffectiveState}>
-          <FBDatePicker
-            name="effectiveDate"
-            label="transition.action.effective.date"
-            rules="required"
-          />
-        </FBForm>
-      ),
-      actions: (
-        <FBButton
-          label="common.approve"
-          onClick={onApprove && onApprove(approver)} />
-      ),
-    });
-    };
+    React.useEffect(() => {
+      reaction( // Form sync & autosave
+        () => approvalFieldState?.hasApproved,
+        (data) => formState?.setFieldValue(name, cloneDeep(data))
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return Component({
       ...(props as T),
@@ -185,7 +181,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
       loading,
       name,
       dialogState,
-      onClick,
+      approveLoading,
     });
   };
 

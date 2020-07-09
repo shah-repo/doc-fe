@@ -69,6 +69,10 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                 />
               </FBTableCell>
             )}
+            <FBTableCell
+              label={am.docType.category}
+              align="center"
+            />
           </TableRow>
         )}
       </FBMapWrapper>
@@ -143,6 +147,18 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                         gutter={false} size="small"
                         inputProps={{ style: { padding: "8px" } }}
                         rules="required"
+                        showErrorMsg={false}
+                      />
+                    </Box>
+                  </FBTableCell>
+                )}
+                {(key === "category") && (
+                  <FBTableCell>
+                    <Box display="flex" px={1}>
+                      <FBTextField
+                        name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.category`}
+                        gutter={false} size="small"
+                        inputProps={{ style: { padding: "8px" } }}
                         showErrorMsg={false}
                       />
                     </Box>

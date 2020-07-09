@@ -1,13 +1,13 @@
-import { Box, Button, FormControlLabel, Radio, RadioGroup, Typography } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { Form, FormikProps } from "formik";
+import _ from "lodash";
 import * as React from "react";
 import { Group } from "../../../../state/ducks/auth/types";
 import { Owner } from "../../../../state/ducks/common/types";
 import { AsyncState, AsyncStatus } from "../../../../state/types";
 import Approvers from "../../../change.request/form/approvers";
+import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import DatePickerField from "../../../components/forms/fields/DatePickerField";
-import InputField from "../../../components/forms/fields/Input";
-import { required, validator } from "../../../components/forms/fields/validators";
 import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";
 import SubmitButton from "../../../components/forms/SubmitButton";
@@ -39,44 +39,36 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
 
+  const formTemplateOptions = _.flatten(
+    templateOptions.map((template) =>
+      template.forms.map((form) => ({
+        documentType: template.documentType.id,
+        label: form.name,
+        value: form.id,
+      }))
+    )
+  );
+
   return (
     <Form className={classes.form}>
       <FormMessage asyncState={asyncState} />
       {isQms && <Approvers owner={owner} withoutCurrentUser={true} values={values}
         documentTypeGroups={documentTypeGroups} />}
-      <Box pb={2} >
-        <Typography variant="h6">
-          <Text translation="common.approve.and.release.template" />
-        </Typography>
-        <RadioGroup
-          aria-label="selectForm"
-          name="formDocument"
-          id="FormList-selectForm"
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            setFormDocument((event.target as HTMLInputElement).value)}
-        >
-          {templateOptions.map((template) =>
-            template.forms.map((form) =>
-              <FormControlLabel
-                key={form.id}
-                value={form.id}
-                control={<Radio color="primary" />}
-                label={form.name}
-                onChange={() => setDocumentType(template.documentType.id)}
-              />
-            ))}
-        </RadioGroup>
-      </Box>
+      <AutocompleteField
+        name="formDocument"
+        size="sm"
+        label="common.approve.and.release.template"
+        autocompleteProps={{ id: "FormList-selectForm" }}
+        options={formTemplateOptions}
+        onClick={(option) => {
+          setFormDocument(option.value);
+          setDocumentType(option.documentType);
+        }}
+      />
       <DatePickerField
         label="transition.action.effective.date"
         name="effectiveDate"
       />
-      {isQms && <InputField
-        name="password"
-        label="transition.action.password"
-        inputProps={{ type: "password" }}
-        validate={validator(required)}
-      />}
       <FormProgress asyncState={asyncState} />
       <SubmitButton
         asyncState={asyncState}

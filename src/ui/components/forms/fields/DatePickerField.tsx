@@ -1,19 +1,13 @@
-import DateFnsUtils from "@date-io/date-fns";
+import MomentUtils from "@date-io/moment";
 import { TextField } from "@material-ui/core";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import * as React from "react";
 import { TypographyProps } from "../../../../state/ducks/common";
-import { Translation } from "../../../translations/types";
 import { useFormContext } from "../FormContext";
 import Field, { FieldOwnProps } from "./Field";
 
-interface DatePickerOwnProps extends FieldOwnProps {
-  label: Translation;
-}
-
-type DatePickerPropsWithFormik = DatePickerOwnProps &
-FormikFieldProps &
+type DatePickerPropsWithFormik = FieldOwnProps & FormikFieldProps &
 Partial<TypographyProps>;
 
 const DatePicker: React.FunctionComponent<DatePickerPropsWithFormik> = ({
@@ -30,7 +24,7 @@ const DatePicker: React.FunctionComponent<DatePickerPropsWithFormik> = ({
 
   return (
     <Field label={label} {...fieldProps}>
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <MuiPickersUtilsProvider utils={MomentUtils}>
         <KeyboardDatePicker
           fullWidth={true}
           disableToolbar={true}
@@ -52,8 +46,7 @@ const DatePicker: React.FunctionComponent<DatePickerPropsWithFormik> = ({
   );
 };
 
-type DatePickerFieldProps = DatePickerOwnProps &
-FieldConfig &
+type DatePickerFieldProps = FieldOwnProps & FieldConfig &
 Partial<TypographyProps>;
 
 const DatePickerField: React.FunctionComponent<

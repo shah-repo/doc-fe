@@ -131,7 +131,6 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
       releaseAction,
       id,
       { approvers, effectiveDate, documentType: { id: documentType },  formDocument: { id: formDocument } },
-      values.password,
       async,
     );
   };
@@ -143,7 +142,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const transformedDocTypeGroups = [].concat(...documentTypeGroups);
   const initialValues = {
     password: "",
-    effectiveDate: "",
+    effectiveDate: (new Date()).toISOString(),
     approvals: [],
     formDocument: { id: "" },
     documentType: { id: "" },

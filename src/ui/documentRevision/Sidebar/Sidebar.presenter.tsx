@@ -68,7 +68,7 @@ export const SidebarPresenter: React.FunctionComponent<Props> = ({
             display: isDrawerOpen ? "block" : "none",
             padding: 0,
             position: "fixed",
-            marginLeft: 68,
+            marginLeft: 65,
             height: "calc(100% - 105px)",
           }}>
           <Box mt={2}>

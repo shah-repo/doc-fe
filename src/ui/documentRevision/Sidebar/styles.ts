@@ -40,6 +40,8 @@ export default makeStyles((theme: Theme) =>
     sidebarList: {
       height: "calc(100% - 60px)",
       overflowY: "auto",
+      paddingRight: "17px",
+      minWidth: "100% + 17px",
     },
     menuIcon: {
       "margin": "8px 13px 13px 11px",

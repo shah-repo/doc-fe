@@ -26,5 +26,13 @@ export const styles = makeStyles((theme: Theme) =>
       margin: "0px",
       boxShadow: "none",
     },
+    templateRadioGroup: {
+      maxHeight: "500px",
+      overflowY: "auto",
+      width: "100%",
+      flexWrap: "unset",
+      WebkitFlexWrap: "unset",
+      marginBottom: "10px",
+    },
   }),
 );

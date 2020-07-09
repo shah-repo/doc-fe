@@ -388,12 +388,7 @@ module.exports = {
     "@typescript-eslint/explicit-function-return-type": "off", // should we warn? remove : leave
     "@typescript-eslint/array-type": "error",
     "@typescript-eslint/consistent-type-definitions": "error",
-    "@typescript-eslint/explicit-member-accessibility": [
-      "error",
-      {
-        "accessibility": "explicit"
-      }
-    ],
+    "@typescript-eslint/explicit-member-accessibility": "off",
     "indent": "off",
     "@typescript-eslint/indent": [
       "error",
@@ -422,7 +417,7 @@ module.exports = {
         }
       }
     ],
-    "@typescript-eslint/member-ordering": "error",
+    "@typescript-eslint/member-ordering": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-parameter-properties": "off",
     "@typescript-eslint/no-use-before-define": "off",
