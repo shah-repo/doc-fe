@@ -70,6 +70,7 @@ export const SidebarPresenter: React.FunctionComponent<Props> = ({
             position: "fixed",
             marginLeft: 65,
             height: "calc(100% - 105px)",
+            width: "253px",
           }}>
           <Box mt={2}>
             <Typography variant="h6">

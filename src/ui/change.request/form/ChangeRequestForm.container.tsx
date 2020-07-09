@@ -50,9 +50,10 @@ ChangeRequestFormContainerProps
   const intl = useIntl();
   const url = useLocation();
   const [isDrawerOpen, setOpen] = React.useState(true);
-  console.log(isDrawerOpen);
   const classes = styles({ isDrawerOpen });
-  const schemaData = changeRequest ? changeRequest.formDocument?.formTemplate?.schema : chosenForm?.formTemplate?.schema;
+  const schemaData = changeRequest
+    ? changeRequest.formDocument?.formTemplate?.schema
+    : chosenForm?.formTemplate?.schema;
 
   const render = (props: FormikProps<ChangeRequestFormValues>) => (
     <FBWorkspace
