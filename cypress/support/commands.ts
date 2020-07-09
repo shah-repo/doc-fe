@@ -16,6 +16,8 @@ declare global {
       apiLogin( params: {email: string; password: string }): Chainable<Subject>;
       login( params: {email: string; password: string }): Chainable<Subject>;
       selectCompany( params: {name: string }): Chainable<Subject>;
+      unClick(): Chainable<Subject>;
+      createDocumentRevision(params: {payload: IDocumentRevisionEditRequestBody; employeeId:string; sessionId:string;}): Chainable<Subject>;
     }
   }
 }
@@ -103,7 +105,97 @@ export interface ICreateCompanyBootstrap {
   remoteValidatorBundleName: string;
   acctCodes?: string[];
 }
+//Document Revision Types
 
+export interface Attachment {
+  id: string;
+  name: string;
+  type: string;
+  s3link: string;
+  s3linkCleanCopy?: string;
+  isLoading?: boolean;
+  owner?: IUser;
+  lineType: string;
+  //documentRevision?: DocumentRevision;
+  fileSizeS3Link: number;
+  fileSizeS3LinkCleanCopy: number;
+}
+
+  export interface OptionType {
+    label: string;
+    value: string;
+  }
+export interface IFBOutputDocumentType {
+  id: string;
+  documentTypeName?: string;
+  groupOptions?: string;
+}
+
+export interface IFBFormTemplateProps {
+  outputDocumentTypes: IFBOutputDocumentType[] | OptionType[];
+  schema: string[];
+  helloSignTemplateId?: string;
+}
+export interface SecurityListRequest {
+  securityEmployees: Id[];
+  securityGroups: Id[];
+  operators: Id[];
+}
+
+export interface IDocumentRevisionDocumentRequest {
+  docId?: string;
+  id?: string;
+  //documentType?: Partial<DocumentType>;
+  documentType: Id;
+  securityList: SecurityListRequest;
+}
+export interface Id {
+  id: string;
+}
+export interface IFBDocumentRevisionProps {
+  id?: string;
+  formTemplate?: IFBFormTemplateProps;
+  formDocument?: IFBDocumentRevisionProps;
+  formInput?: Record<string, any>;
+  document?: Partial<IDocumentRevisionDocumentRequest>;
+  revision?: number;
+  subRevision?: number;
+  revisionStage?: number;
+  revisionChangeType?: string;
+  releasedAt?: string;
+  renderHTML?: string;
+  status?: string;
+  //tasks?: FBTaskItem[];
+}
+
+ interface IDocumentRevisionEditRequestBody extends IFBDocumentRevisionProps {
+  name: string;
+  docId?: string;
+  description: string;
+  attachments: Attachment[];
+  type?: string;
+  referenceTo: Id[];
+  document?: Partial<IDocumentRevisionDocumentRequest>;
+  revisionChangeType?: string;
+  revisionStage?: number;
+  retrain?: boolean;
+  renderHTML?: string;
+  status?: string;
+}
+//Document Revision
+Cypress.Commands.add("createDocumentRevision", (params: {payload: IDocumentRevisionEditRequestBody; employeeId:string; sessionId: string}) => {
+  cy.request({
+    method: "POST",
+    url: `${CONFIG.BE_URL}/api/v1/document_revisions`,
+    body: params.payload,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+    timeout: 10 * 1000,
+  }).then((response) => response.body);
+});
+
+//Company
 Cypress.Commands.add("createCompany", (params: {payload: ICreateCompanyBootstrap; sessionId: string}) => {
   cy.request({
     method: "POST",
@@ -116,14 +208,16 @@ Cypress.Commands.add("createCompany", (params: {payload: ICreateCompanyBootstrap
   }).then((response) => response.body);
 });
 
+
+
 Cypress.Commands.add("apiLogin", (params: {email: string; password: string }) => {
   cy.request({
     method: "POST",
     url: `${CONFIG.BE_URL}/api/v1/auth/login`,
     timeout: 10 * 1000,
     body: params,
-  }).then((response) =>
-    response.body.sessionId
+  }).then((response: IUser) =>
+    response.body,
   );
 });
 
@@ -138,7 +232,9 @@ Cypress.Commands.add("selectCompany", (params: {name: string }) => {
   cy.get("#root", { timeout: 10 * 1000 }).contains(params.name).click();
 });
 
-
+/* Cypress.Commands.add("unClick", () => {
+  cy.get("header:nth-child(1)").click();
+}); */
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite

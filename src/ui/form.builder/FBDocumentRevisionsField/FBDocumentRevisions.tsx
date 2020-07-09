@@ -38,6 +38,7 @@ const FBDocumentRevisions: React.FunctionComponent<FBDocumentRevisionProps> = ({
         style={{ margin: "0px 0px 32px 0px" }}
         {...{ onClick }}
         disabled={disabled}
+        data-cy={"fb.add.document"}
       />
     </React.Fragment>
   </Provider>
