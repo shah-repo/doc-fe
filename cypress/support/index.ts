@@ -17,6 +17,9 @@
 import "cypress-file-upload";
 import "cypress-promise/register";
 import "./commands";
-
+import "./commands/auth/commands";
+import "./commands/company/commands";
+import "./commands/document.revision/commands";
+import "./commands/group.management/commands";
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

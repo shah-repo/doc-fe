@@ -20,7 +20,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
       password: "Tester1!",
     }).then((response) => {
       loginResponse = response;
-      currentEmployee = loginResponse.employees[loginResponse.employees.length-1];          
+      currentEmployee = loginResponse.employees[loginResponse.employees.length - 1];
       cy.createCompany({
         payload: {
           companyAcronym: `T1${runId}`,
@@ -53,12 +53,12 @@ context(`Test: ${path.basename(__filename)}`, () => {
         }, sessionId: loginResponse.sessionId as unknown as string,
       }).then((response) => {
         createdCompany = response;
-        componentSpecificationDocumentType = createdCompany.documentTypes.filter(type => type.documentTypeName==="Component Specification");
+        componentSpecificationDocumentType = createdCompany.documentTypes.filter((type) => type.documentTypeName === "Component Specification");
         done();
       });
     });
   });
-    it("Creates document revision", (done: any) => {
+  /* it("Creates document revision", (done: any) => {
     cy.createDocumentRevision({
       payload: {
         attachments: [],
@@ -91,12 +91,12 @@ context(`Test: ${path.basename(__filename)}`, () => {
       documentRevision = response;
       done();
     });
-  });
+  }); */
   it("Creates company", () => {
     cy.getGroupByName({
       sessionId: loginResponse.sessionId,
       employeeId: currentEmployee.id,
-      groupName: "Everyone"
+      groupName: "Everyone",
     });
   });
   it("Logs user in", () => {
