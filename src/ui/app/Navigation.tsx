@@ -7,6 +7,8 @@ import Typography from "@material-ui/core/Typography";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Link, RouteComponentProps, withRouter } from "react-router-dom";
+import { getCurrentUserTags } from "../../common/utils/selectors";
+import { GroupTag } from "../../state/ducks/auth/types";
 import { companySelectors, NavigationItem } from "../../state/ducks/company";
 import BottomLogo from "../components/icons/BottomLogo.container";
 import Logo from "../components/icons/Logo.container";
@@ -20,7 +22,13 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
   classes,
   location,
 }) => {
-  const navigationItems = useSelector(companySelectors.getNavigationBasedOnUserTagsRestriction);
+  const userTags = useSelector(getCurrentUserTags());
+
+  const navigationItems = useSelector(companySelectors.getNavigationItems)
+    .filter((item: NavigationItem) =>
+      !item.restrictedToUsersWithTags
+      || item.restrictedToUsersWithTags.filter((tag: GroupTag) => userTags.includes(tag)).length
+    );
 
   return (
     <Drawer

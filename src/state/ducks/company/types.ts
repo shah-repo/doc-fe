@@ -39,7 +39,6 @@ export interface Company {
   addresses: [];
   acctCodes: [];
   navigation: NavigationItem[];
-  navigationBasedOnUserTagsRestriction: NavigationItem[];
 }
 
 export interface SelectCompanyAction {
