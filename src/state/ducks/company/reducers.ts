@@ -18,7 +18,6 @@ export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
   acctCodes: [],
   helloSignIntegrationEnabled: false,
   navigation: DEFAULT_NAVIGATION_ITEMS,
-  navigationBasedOnUserTagsRestriction: DEFAULT_NAVIGATION_ITEMS,
 };
 
 type CompanyActions = SelectCompanyAction | LogoutUserAction;
@@ -31,9 +30,10 @@ export const selectedCompany = (
     case SELECT_COMPANY:
       return {
         ...action.payload,
-        navigation: action.payload.navigation ?? DEFAULT_NAVIGATION_ITEMS,
-        navigationBasedOnUserTagsRestriction:
-          action.payload.navigationBasedOnUserTagsRestriction ?? DEFAULT_NAVIGATION_ITEMS,
+        navigation:
+          action.payload.navigation?.length
+            ? action.payload.navigation
+            : DEFAULT_NAVIGATION_ITEMS,
       };
     case LOGOUT_USER:
       return { ...COMPANY_DEFAULT_STATE };
@@ -50,10 +50,9 @@ export const companyMine = (
     case SET_COMPANY_MINE:
       return {
         ...action.payload,
-        navigation: action.payload.navigation ?? DEFAULT_NAVIGATION_ITEMS,
-        navigationBasedOnUserTagsRestriction:
-          action.payload.navigationBasedOnUserTagsRestriction?.length
-            ? action.payload.navigationBasedOnUserTagsRestriction
+        navigation:
+          action.payload.navigation?.length
+            ? action.payload.navigation
             : DEFAULT_NAVIGATION_ITEMS,
       };
     default:
