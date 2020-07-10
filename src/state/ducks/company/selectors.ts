@@ -16,8 +16,6 @@ const getWhiteLabeling = createSelector(
 const getCompanyMine = (state: ApplicationState) => state.company.companyMine;
 
 const getNavigationItems = (state: ApplicationState) => state.company.selectedCompany.navigation;
-const getNavigationBasedOnUserTagsRestriction = (state: ApplicationState) =>
-  state.company.companyMine.navigationBasedOnUserTagsRestriction;
 
 export default {
   getWhiteLabeling,
@@ -27,5 +25,4 @@ export default {
   getCompanyMine,
   isHelloSignIntegrationEnabled,
   getNavigationItems,
-  getNavigationBasedOnUserTagsRestriction,
 };
