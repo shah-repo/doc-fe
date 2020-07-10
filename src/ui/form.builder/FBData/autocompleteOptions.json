@@ -11,7 +11,7 @@
   {
     "id": "2",
     "path": "/change_requests",
-    "label": "Change requests",
+    "label": "Approval requests",
     "valueKey": "id",
     "labelKey": "title",
     "labelPrefixRoot": "crId",
