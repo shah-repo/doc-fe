@@ -117,7 +117,7 @@
   "changeRequest.audit.approvals.status.STRING_EDITED": "Approval Status Updated",
   "changeRequest.audit.approvals.status.STRING_NEW": "New Approval Status",
   "changeRequest.audit.status.updated.by": "Set to {status} by {name}",
-  "changeRequest.audit.crHistory": "aR History",
+  "changeRequest.audit.crHistory": "AR History",
   "changeRequest.audit.description.STRING_NEW": "Description of Changes Added",
   "changeRequest.audit.description.STRING_EDITED": "Description of Changes Updated",
   "changeRequest.audit.title.STRING_NEW": "AR Title Added",
