@@ -21,5 +21,6 @@ import "./commands/auth/commands";
 import "./commands/company/commands";
 import "./commands/document.revision/commands";
 import "./commands/group.management/commands";
+import "./commands/change.request/commands";
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

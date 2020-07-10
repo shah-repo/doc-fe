@@ -13,7 +13,6 @@ let currentEmployee;
 let documentRevision;
 let componentSpecificationDocumentType;
 let group;
-let documentTypes;
 
 context(`Test: ${path.basename(__filename)}`, () => {
   it("Creates company", (done: any) => {
@@ -74,15 +73,6 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
   });
 
-  it("Gets document types", () => {
-    cy.getDocumentType({
-      employeeId: currentEmployee.id,
-      sessionId: loginResponse.sessionId,
-    }).then((response) => {
-      documentTypes = response;
-    });
-  });
-
   it("Creates document revision", (done: any) => {
     cy.createDocumentRevision({
       payload: {
@@ -127,72 +117,67 @@ context(`Test: ${path.basename(__filename)}`, () => {
   it("Selects company", () => {
     cy.selectCompany({ name: createdCompany.name });
   });
-  it("Opens document list", () => {
-    cy.get("[data-cy=\"navigation.documentList\"]").click();
+  //Create new form template for change request and release it"
+  it("Navigate to document list", () => {
+    cy.navigateToDocumentList();
   });
-  it("Opens create document page", () => {
-    cy.get("[data-cy=\"document.revision.create\"]").click();
+  it("Click on 'create a document'", () => {
+    cy.clickCreateNewDocument();
   });
   it("Enter title 'New Change request form template'", () => {
-    cy.get("[data-cy=\"field-name\"]").type("New Change request form template");
+    cy.enterDocumentTitle({ name: "New Change request form template" });
   });
   it("Enter description 'New form template for change request'", () => {
-    cy.get("[data-cy=\"field-description\"]").click().type("New form template for change request");
+    cy.enterDocumentDescription({ description: "New form template for change request" });
   });
   it("Click on 'Form' document type", () => {
-    cy.get("[data-cy=\"select.document.documentType.id\"]").click().get("[data-cy=\"selectItem.document.documentType.id.Form\"]").click();
+    cy.selectFormDocumentType();
   });
   it("Click on 'Change request' outputdocument type", () => {
-    cy.get("[id=\"formTemplate.outputDocumentTypes").click().get("[id=\"react-select-6-option-0").click();
+    cy.selectChangeRequestOutputDocType();
   });
-  it("Click on Create Document", () => {
-    cy.get("#DocumentRevisionForm-submit").click();
+  it("Click create document after filling document", () => {
+    cy.clickCreateDocument();
   });
-  it("Click on Approve and Release", () => {
-    cy.get("#ApproveAndRelease-button").click();
+  it("Approve and release document", () => {
+    cy.approveAndReleaseDocument();
   });
-  it("Choose Initial CR Form template", () => {
-    cy.get("#FormList-selectForm").click().get("#FormList-selectForm>div:nth-child(3)>div>div:nth-child(1)").click().get("#ApproveAndRelease-submit").click();
+  //Create change request with newly added form"
+  it("Navigate to change request list", () => {
+    cy.navigateToChangeRequestList();
   });
-  it("Opens Change Request", () => {
-    cy.get("[data-cy=\"navigation.changeRequestList\"]").click();
-  });
-  it("Click Create a Change Request", () => {
-    cy.get("#ChangeRequest-create").click();
+  it("Click Create a Change Request button", () => {
+    cy.clickCreateChangeRequest();
   });
   it("Choose Initial CR Form template", () => {
-    cy.get("[type=\"radio\"]").last().check().get("#FormList-continueButton").click();
+    cy.selectLastAddedCRForm();
   });
   it("Enter title 'CR from New Change request form template'", () => {
-    cy.get("[data-cy=\"field-title\"]").type("CR from New Change request form template");
+    cy.enterChangeRequestTitle({ title: "CR from New Change request form template" });
   });
   it("Enter description 'CR from New form template for change request'", () => {
-    cy.get("[data-cy=\"field-description\"]").type("CR from New form template for change request");
+    cy.enterChangeRequestDescription({ description: "CR from New form template for change request" });
   });
-  it("Open Add documents dialog", () => {
-    cy.get("[data-cy=\"fb.add.document\"]").click().click().wait(200);
+  it("Add created document revision", () => {
+    cy.clickAddDocument();
+    cy.choseProposedDocument();
+    cy.enterDescriptionAddDocumentsDialog({ description: "added document description"});
+    cy.enterJustificationAddDocumentsDialog({ justification: "justification for added document"});
+    cy.clickAddBtnOnAddDocumentsDialog();
   });
-  it("Choose proposed document", () => {
-    cy.get("[role=dialog]>div:nth-child(2)>div>div>div>div>div>div>div>input").click().get("[role=listbox]>li:nth-child(1)").click();
-  });
-  it("Enter description in Add documents dialog", () => {
-    cy.get("[name=\"descriptionOfChange\"]").click().type("Description for proposed document");
-  });
-  it("Enter justification in Add documents dialog", () => {
-    cy.get("[name=\"justificationOfChange\"]").click().type("Justification for proposed document");
-  });
-  it("Click Add button", () => {
-    cy.get("[role=dialog]>div>div>div>button").click();
-  });
-  it("Add Approvers", () => {
-    cy.get("[name=approvers]").click().get("[role=listbox]>li:nth-child(1)").click();
+  it("Add first approver to change request on approver list", () => {
+    cy.addFirstApproverOnChangeRequestApproverList();
   });
   it("Click Create Change Request", () => {
-    cy.get("#submit").click();
+    cy.clickCreateChangeRequestAfterCompletingForm();
+  });
+  it("Add date", () => {
+    cy.addEffectiveDate();
   });
   it("Click Create Change Request", () => {
-    cy.get("#transitionButton").contains("Send to review").click();
+    cy.clickSendToReview();
   });
+  
 });
 // for TS error "All files must be modules when the '--isolatedModules' flag is provided" uncomment line below
 export { };

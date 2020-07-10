@@ -30,6 +30,10 @@ declare global {
     interface Chainable<Subject> {
       createCompany(params: {payload: CreateCompanyBootstrap; sessionId: string}): Chainable<Subject>;
       selectCompany( params: {name: string }): Chainable<Subject>;
+      navigateToDocumentList(): Chainable<Subject>;
+      clickCreateNewDocument(): Chainable<Subject>;
+      navigateToChangeRequestList(): Chainable<Subject>;
+      clickCreateChangeRequest(): Chainable<Subject>;
     }
   }
 }
@@ -48,4 +52,20 @@ Cypress.Commands.add("createCompany", (params: {payload: CreateCompanyBootstrap;
 
 Cypress.Commands.add("selectCompany", (params: {name: string }) => {
   cy.get("#root", { timeout: 10 * 1000 }).contains(params.name).click();
+});
+
+Cypress.Commands.add("navigateToDocumentList", () => {
+  cy.get("[data-cy=\"navigation.documentList\"]").click();
+});
+
+Cypress.Commands.add("navigateToChangeRequestList", () => {
+  cy.get("[data-cy=\"navigation.changeRequestList\"]").click();
+});
+
+Cypress.Commands.add("clickCreateNewDocument", () => {
+  cy.get("[data-cy=\"document.revision.create\"]").click();
+});
+
+Cypress.Commands.add("clickCreateChangeRequest", () => {
+  cy.get("#ChangeRequest-create").click();
 });
