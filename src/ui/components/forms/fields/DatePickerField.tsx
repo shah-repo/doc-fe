@@ -2,6 +2,7 @@ import MomentUtils from "@date-io/moment";
 import { TextField } from "@material-ui/core";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
+import moment from "moment";
 import * as React from "react";
 import { TypographyProps } from "../../../../state/ducks/common";
 import { useFormContext } from "../FormContext";
@@ -24,14 +25,14 @@ const DatePicker: React.FunctionComponent<DatePickerPropsWithFormik> = ({
 
   return (
     <Field label={label} {...fieldProps}>
-      <MuiPickersUtilsProvider utils={MomentUtils}>
+      <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
         <KeyboardDatePicker
           fullWidth={true}
           disableToolbar={true}
           invalidDateMessage=""
           variant="inline"
           inputVariant="outlined"
-          format="MM/dd/yyyy"
+          format="MM/DD/YYYY"
           autoOk={true}
           label=""
           value={fieldProps.field.value}
