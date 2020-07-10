@@ -12,6 +12,8 @@ let loginResponse;
 let currentEmployee;
 let documentRevision;
 let componentSpecificationDocumentType;
+let group;
+let documentTypes;
 
 context(`Test: ${path.basename(__filename)}`, () => {
   it("Creates company", (done: any) => {
@@ -20,7 +22,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
       password: "Tester1!",
     }).then((response) => {
       loginResponse = response;
-      currentEmployee = loginResponse.employees[loginResponse.employees.length - 1];
+
       cy.createCompany({
         payload: {
           companyAcronym: `T1${runId}`,
@@ -53,12 +55,35 @@ context(`Test: ${path.basename(__filename)}`, () => {
         }, sessionId: loginResponse.sessionId as unknown as string,
       }).then((response) => {
         createdCompany = response;
+        currentEmployee = createdCompany.employees[0];
         componentSpecificationDocumentType = createdCompany.documentTypes.filter((type) => type.documentTypeName === "Component Specification");
         done();
       });
     });
   });
-  /* it("Creates document revision", (done: any) => {
+
+  it("Gets group by name", () => {
+    cy.getGroupByName({
+      sessionId: loginResponse.sessionId,
+      employeeId: currentEmployee.id,
+      groupName: "Everyone",
+    }).then((response) => {
+      group = response.body;
+      console.log(group);
+
+    });
+  });
+
+  it("Gets document types", () => {
+    cy.getDocumentType({
+      employeeId: currentEmployee.id,
+      sessionId: loginResponse.sessionId,
+    }).then((response) => {
+      documentTypes = response;
+    });
+  });
+
+  it("Creates document revision", (done: any) => {
     cy.createDocumentRevision({
       payload: {
         attachments: [],
@@ -73,7 +98,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
             securityEmployees: [],
             securityGroups: [
               {
-                id: "039ed5b2-ef7a-4d9d-8541-2afac1114861",
+                id: group[0].id,
               },
             ],
           },
@@ -91,14 +116,8 @@ context(`Test: ${path.basename(__filename)}`, () => {
       documentRevision = response;
       done();
     });
-  }); */
-  it("Creates company", () => {
-    cy.getGroupByName({
-      sessionId: loginResponse.sessionId,
-      employeeId: currentEmployee.id,
-      groupName: "Everyone",
-    });
   });
+
   it("Logs user in", () => {
     cy.login({
       email: "zoran.kovacevic+admin@codecons.com",
@@ -150,10 +169,30 @@ context(`Test: ${path.basename(__filename)}`, () => {
   it("Enter description 'CR from New form template for change request'", () => {
     cy.get("[data-cy=\"field-description\"]").type("CR from New form template for change request");
   });
-  it("Add document to CR Details", () => {
-    cy.get("[data-cy=\"fb.add.document\"]").click();
+  it("Open Add documents dialog", () => {
+    cy.get("[data-cy=\"fb.add.document\"]").click().click().wait(200);
+  });
+  it("Choose proposed document", () => {
+    cy.get("[role=dialog]>div:nth-child(2)>div>div>div>div>div>div>div>input").click().get("[role=listbox]>li:nth-child(1)").click();
+  });
+  it("Enter description in Add documents dialog", () => {
+    cy.get("[name=\"descriptionOfChange\"]").click().type("Description for proposed document");
+  });
+  it("Enter justification in Add documents dialog", () => {
+    cy.get("[name=\"justificationOfChange\"]").click().type("Justification for proposed document");
+  });
+  it("Click Add button", () => {
+    cy.get("[role=dialog]>div>div>div>button").click();
+  });
+  it("Add Approvers", () => {
+    cy.get("[name=approvers]").click().get("[role=listbox]>li:nth-child(1)").click();
+  });
+  it("Click Create Change Request", () => {
+    cy.get("#submit").click();
+  });
+  it("Click Create Change Request", () => {
+    cy.get("#transitionButton").contains("Send to review").click();
   });
 });
-
 // for TS error "All files must be modules when the '--isolatedModules' flag is provided" uncomment line below
 export { };

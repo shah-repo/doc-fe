@@ -10,11 +10,8 @@ export { };
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
-      /**
-       * Custom command to select DOM element by data-cy attribute.
-       * @example cy.dataCy('greeting')
-      */
       createDocumentRevision(params: {payload: DocumentRevisionEditRequestBody; employeeId: string; sessionId: string}): Chainable<Subject>;
+      getDocumentType(params: {employeeId: string; sessionId: string}): Chainable<Subject>;
     }
   }
 }
@@ -33,4 +30,15 @@ Cypress.Commands.add("createDocumentRevision", (params: {
     },
     timeout: 10 * 1000,
   }).then((response) => response.body);
+});
+
+Cypress.Commands.add("getDocumentType", (params: {employeeId: string; sessionId: string}) => {
+  cy.request({
+    method: "GET",
+    url: `${CONFIG.BE_URL}/api/v1/document_type`,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+    timeout: 10 * 1000,
+  }).then((response) => response);
 });
