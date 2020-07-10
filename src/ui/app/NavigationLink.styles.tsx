@@ -37,7 +37,7 @@ export default makeStyles((theme: Theme) =>
       minWidth: "40px",
     },
     itemText: {
-      color: "inherit",
+      color: "inherit !important",
       letterSpacing: 0,
       fontFamily: "Open Sans",
     },
