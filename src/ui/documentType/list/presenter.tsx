@@ -86,7 +86,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
     },
     {
       key: "name",
-      label: "supplier.name",
+      label: "document.title",
       tooltipKey: "name",
       cellHref: cellHrefRenderer,
       searchOptions: {
