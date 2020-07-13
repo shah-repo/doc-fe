@@ -132,7 +132,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                         name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.acronym`}
                         gutter={false}
                         size="small"
-                        inputProps={{ style: { padding: "8px" } }}
+                        inputProps={{ style: { padding: "8px", textTransform: "uppercase" } }}
                         rules="required"
                         showErrorMsg={false}
                       />
