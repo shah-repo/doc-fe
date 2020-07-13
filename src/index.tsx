@@ -11,7 +11,7 @@ import EnvStatusBarPresenter from "./ui/app/EnvStatusBar.presenter";
 datadogRum.init({
   applicationId: SM_APP_CONFIG.DATADOG_APPLICATION_ID,
   clientToken: SM_APP_CONFIG.DATADOG_CLIENT_TOKEN,
-  datacenter: Datacenter.EU,
+  datacenter: Datacenter.US,
   sampleRate: 100,
   trackInteractions: true,
 });
