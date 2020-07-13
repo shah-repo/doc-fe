@@ -70,7 +70,7 @@ ChangeRequestFormContainerProps
         {...props}
         {...{ FBContainer }}
       />
-      {chosenForm && <DocumentRevisionOutputInfo formDocument={chosenForm}/>}
+      <DocumentRevisionOutputInfo formDocument={chosenForm || changeRequest?.formDocument}/>
     </FBWorkspace>
 
   );
