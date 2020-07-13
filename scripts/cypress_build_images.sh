@@ -19,6 +19,8 @@ export BROWSER="none"
 export PORT="4212"
 export REACT_APP_THEME="DEV_THEME"
 export NODE_ENV="production"
+export REACT_APP_DATADOG_APPLICATION_ID="fake"
+export REACT_APP_DATADOG_CLIENT_TOKEN="fake"
 
 docker build \
   -f docker/cypress_web.Dockerfile \
@@ -32,4 +34,6 @@ docker build \
   --build-arg PORT \
   --build-arg REACT_APP_THEME \
   --build-arg NODE_ENV \
+  --build-arg REACT_APP_DATADOG_APPLICATION_ID \
+  --build-arg REACT_APP_DATADOG_CLIENT_TOKEN \
    .

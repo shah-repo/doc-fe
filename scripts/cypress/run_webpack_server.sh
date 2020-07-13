@@ -18,5 +18,7 @@ export BROWSER="none"
 export PORT=$ENLIL_COMPOSE_EXPOSE_FE_PORT
 export REACT_APP_THEME="DEV_THEME"
 export NODE_ENV="production"
+export REACT_APP_DATADOG_APPLICATION_ID="fake"
+export REACT_APP_DATADOG_CLIENT_TOKEN="fake"
 
 yarn start
