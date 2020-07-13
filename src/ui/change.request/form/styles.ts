@@ -1,19 +1,21 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import { SIDEBAR_WIDTH } from "../../documentRevision/Sidebar/styles";
 import Colors from "../../layout/theme/utils/colors";
 
 export default makeStyles((theme: Theme) =>
   createStyles({
-    whiteContainer: ({ sidebar }) => ({
+    root: {
+      background: Colors.light_gray,
+      display: "flex",
       marginTop: theme.spacing(5),
-      margin: 0,
-      height: "auto",
-      width: sidebar ? "100%" : "104%",
-      transition: theme.transitions.create("all", {
+    },
+    appFrame: ({ isDrawerOpen }) => ( {
+      flexGrow: 1,
+      padding: theme.spacing(3, 0, 3, 3),
+      paddingRight: isDrawerOpen ? SIDEBAR_WIDTH : theme.spacing(5),
+      transition: theme.transitions.create("paddingRight", {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
       }),
     }),
-    backColor: {
-      background: Colors.light_gray,
-    },
   }));

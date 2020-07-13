@@ -1,7 +1,12 @@
-import { DialogContent, FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
+import { DialogContent } from "@material-ui/core";
+import { Formik, FormikProps } from "formik";
+import _ from "lodash";
 import React, { useState } from "react";
 import { DocumentTypeById } from "../../../../state/ducks/documentRevisions/documentType";
+import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
+import { FormContext } from "../../../components/forms/FormContext";
 import { DialogHandler } from "../../../hooks/useDialog";
+import { SelectTemplateFormValues } from "../../form/types";
 import { styles } from "../FormList.styles";
 import FormListActions from "./FormListActions";
 
@@ -18,31 +23,46 @@ export const FormListContent: React.FunctionComponent<Props> = ({
   const [chosenTypeId, setchosenTypeId] = useState<string>("");
   const [ chosenFormId, setChosenFormId ] = useState<string>("");
 
-  return (
+  const formTemplateOptions = _.flatten(
+    templateOptions.map((template) =>
+      template.forms.map((form) => ({
+        documentType: template.documentType.id,
+        label: form.name,
+        value: form.id,
+      }))
+    )
+  );
+
+  const renderForm = (props: FormikProps<SelectTemplateFormValues>) => (
     <DialogContent classes={{ root: classes.dialogContent }}>
-      <RadioGroup
+      <AutocompleteField
         aria-label="selectForm"
         name="select-form"
-        id="FormList-selectForm"
-        className={classes.templateRadioGroup}
-      >
-        {templateOptions.map((template) =>
-          template.forms.map((form) =>
-            <FormControlLabel
-              key={form.id}
-              value={form.id}
-              control={<Radio color="primary" />}
-              label={form.name}
-              onChange={() => {
-                setchosenTypeId(template.documentType.id);
-                setChosenFormId(form.id);
-              }}
-            />
-          ))}
-      </RadioGroup>
+        size="sm"
+        label="common.choose.template"
+        autocompleteProps={{ id: "FormList-selectForm" }}
+        options={formTemplateOptions}
+        onClick={(option) => { setFormValues(option); }}
+      />
       <FormListActions {...{ dialog, chosenFormId, chosenTypeId }}/>
     </DialogContent>
+  );
 
-  ); };
+  const setFormValues = (option) => {
+    setchosenTypeId(option.documentType);
+    setChosenFormId(option.value);
+  };
+
+  return (
+    <FormContext.Provider value={{ submitOnChange: false }}>
+      <Formik
+        initialValues={{ chosenFormId: "" }}
+        onSubmit={setFormValues}
+      >
+        {renderForm}
+      </Formik>
+    </FormContext.Provider>
+  );
+};
 
 export default FormListContent;
