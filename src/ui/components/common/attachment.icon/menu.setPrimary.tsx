@@ -1,6 +1,7 @@
 import MenuItem from "@material-ui/core/MenuItem";
 import StarsRoundedIcon from "@material-ui/icons/StarsRounded";
 import React from "react";
+import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
 import { documentRevisionsActions, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions";
 import { FormHeaderContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
 import useActionCreator from "../../../hooks/useActionCreator";
@@ -35,7 +36,7 @@ const MenuItemSetPrimary: React.FunctionComponent<Props> = ({
   const canSetAsPrimary = (
     documentRevision?.status === DocumentRevisionStatus.Draft ||
     documentRevision?.status === DocumentRevisionStatus.PendingChange
-  ) && documentRevision?.document?.canAccess;
+  ) && documentRevision?.document?.canAccess && attachment.lineType !== LINE_TYPES.RED_LINE;
 
   if (!canSetAsPrimary || isNewDocument) {
     return null;

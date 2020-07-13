@@ -18,6 +18,7 @@ const FBProposedDocument: React.FunctionComponent<FBProposedDocumentProps> = ({
   proposedDocumentRevision,
   setMouseInside,
   isMouseInside,
+  disabled,
 }) => {
   const intl = useIntl();
 
@@ -95,7 +96,7 @@ const FBProposedDocument: React.FunctionComponent<FBProposedDocumentProps> = ({
       <FBSection label={`${intl.formatMessage({
         id: "common.document",
       })} #${index}`}>
-        {isMouseInside && <Box display="flex" flexDirection="row-reverse" mt={-3.5}>
+        {isMouseInside && !disabled && <Box display="flex" flexDirection="row-reverse" mt={-3.5}>
           <Button
             style={{ background: Colors.white, margin: 0, minWidth: 40 }}
             onClick={() => removeDocument(index)}

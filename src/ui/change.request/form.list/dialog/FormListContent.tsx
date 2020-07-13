@@ -24,6 +24,7 @@ export const FormListContent: React.FunctionComponent<Props> = ({
         aria-label="selectForm"
         name="select-form"
         id="FormList-selectForm"
+        className={classes.templateRadioGroup}
       >
         {templateOptions.map((template) =>
           template.forms.map((form) =>

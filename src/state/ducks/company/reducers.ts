@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 import { LOGOUT_USER } from "../auth/constants";
 import { LogoutUserAction } from "../auth/types";
-import { SELECT_COMPANY, SET_COMPANY_MINE, WHITE_LABEL_DEFAULT } from "./constants";
+import { DEFAULT_NAVIGATION_ITEMS, SELECT_COMPANY, SET_COMPANY_MINE, WHITE_LABEL_DEFAULT } from "./constants";
 import { CompanyMineAction, SelectCompanyAction, SelectCompanyState } from "./types";
 
 export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
@@ -17,6 +17,7 @@ export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
   addresses: [],
   acctCodes: [],
   helloSignIntegrationEnabled: false,
+  navigation: DEFAULT_NAVIGATION_ITEMS,
 };
 
 type CompanyActions = SelectCompanyAction | LogoutUserAction;
@@ -27,7 +28,13 @@ export const selectedCompany = (
 ): SelectCompanyState => {
   switch (action.type) {
     case SELECT_COMPANY:
-      return { ...action.payload };
+      return {
+        ...action.payload,
+        navigation:
+          action.payload.navigation?.length
+            ? action.payload.navigation
+            : DEFAULT_NAVIGATION_ITEMS,
+      };
     case LOGOUT_USER:
       return { ...COMPANY_DEFAULT_STATE };
     default:
@@ -41,7 +48,13 @@ export const companyMine = (
 ): SelectCompanyState => {
   switch (action.type) {
     case SET_COMPANY_MINE:
-      return { ...action.payload };
+      return {
+        ...action.payload,
+        navigation:
+          action.payload.navigation?.length
+            ? action.payload.navigation
+            : DEFAULT_NAVIGATION_ITEMS,
+      };
     default:
       return state;
   }

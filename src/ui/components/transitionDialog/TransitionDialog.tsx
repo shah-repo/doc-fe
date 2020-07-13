@@ -54,7 +54,7 @@ const TransitionDialog: React.FunctionComponent<Props> =
           onSubmit={preventPropagation}
         >
           <DialogTitle>
-            <Text translation="transition.action.title" />
+            <Text translation={transition === "closed" ? "transition.action.close.date" : "transition.action.title"} />
           </DialogTitle>
           <DialogContent>
             <FormContext.Provider value={{ submitOnChange: false }}>
