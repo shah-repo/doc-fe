@@ -7,11 +7,13 @@ export const withFBOnChange = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>
 ) => {
   const Comp = ({
+    setTranform,
     type,
     name,
     editorProperties,
     forceDefault,
     inputState,
+    transform,
     ...props
   }: T) => {
 
@@ -22,10 +24,22 @@ export const withFBOnChange = <T extends FBInputProps>(
       const defaultValue = formState?.getFieldValue(name);
       // Check include context state
       contextValue(defaultValue as string | string[] | boolean);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    setTranform = (value: string): string => {
+      // In case we want to update transform type
+      switch (transform) {
+        case "upper":
+          return _.upperCase(value);
+        default:
+          return _.lowerCase(value);
+      }
+    };
 
     function setValue(formValue: any, withState = false, forceDefault = false) {
       if (!name) { return; }
+      _.isString(formValue) && transform && (formValue = setTranform?.(formValue));
       formState?.setFieldValue(name, formValue, withState, forceDefault);
       if (type && !FBInputState.omitOnChange.includes(type)) {
         formState?.setFieldAutosave(name);
@@ -142,9 +156,11 @@ export const withFBOnChange = <T extends FBInputProps>(
       ...(props as T),
       onChange,
       onBlur,
+      setTranform,
       editorProperties,
       forceDefault,
       inputState,
+      transform,
       type,
       name,
     }));
