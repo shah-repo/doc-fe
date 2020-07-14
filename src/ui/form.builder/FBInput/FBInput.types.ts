@@ -96,6 +96,10 @@ export type FBInputProps =
   customValidator?: FBValidatorConfigProps;
   approvers?: string[] | Employee[];
   approverGroups?: string[] | GroupRequestBody[];
+  approvalRoles?: string[] | {
+    id: string;
+    name: string;
+  };
   approveIsBlocking?: boolean;
   applicableOn?: any[];
   actions?: string[];

@@ -1,5 +1,4 @@
-[
-  {
+[{
     "id": "1",
     "path": "/document_revisions",
     "label": "Document revisions",
@@ -133,6 +132,15 @@
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
+    "root": ""
+  },
+  {
+    "id": "17",
+    "path": "/groups/approval_roles",
+    "label": "Approval Roles",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "",
     "root": ""
   }
 ]
