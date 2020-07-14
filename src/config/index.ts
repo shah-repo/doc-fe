@@ -16,8 +16,8 @@ const DEFAULTS = {
   HELLOSIGN_TEST_MODE: "",
   HELLOSIGN_CLIENT_ID: "",
   ENV_NAME: "",
-  REACT_APP_DATADOG_APPLICATION_ID: "",
-  REACT_APP_DATADOG_CLIENT_TOKEN: "",
+  DATADOG_APPLICATION_ID: "",
+  DATADOG_CLIENT_TOKEN: "",
 };
 
 
@@ -85,11 +85,11 @@ class Config {
   }
 
   public static get DatadogApplicationId(): string {
-    return this.get("REACT_APP_DATADOG_APPLICATION_ID");
+    return this.get("DATADOG_APPLICATION_ID");
   }
 
   public static get DatadogClientToken(): string {
-    return this.get("REACT_APP_DATADOG_CLIENT_TOKEN");
+    return this.get("DATADOG_CLIENT_TOKEN");
   }
 
   public static get EnvironmentName(): string {
