@@ -32,6 +32,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
     <FBInput {...props} {...{ multiple, disabled, defaultValue, loading }} type="autocomplete">
       <Autocomplete
         {...{ options, multiple, getOptionLabel, defaultValue, getOptionDisabled }}
+        filterSelectedOptions
         renderInput={(params: RenderInputParams) => (
           <Box display="flex">
             <Box width="100%">

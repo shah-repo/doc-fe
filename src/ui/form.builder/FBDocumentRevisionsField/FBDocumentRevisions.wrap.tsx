@@ -1,7 +1,8 @@
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBData, FBDialogState, FBDocumentRevisionsState, FBForm } from "..";
+import { FB, FBDialogState, FBDocumentRevisionsState, FBForm } from "..";
 import FBDocumentRevisionActions from "./FBDocumentRevisionActions/FBDocumentRevisionActions";
+import FBDocumentRevisionForm from "./FBDocumentRevisionForm/FBDocumentRevisionForm";
 import { FBDocumentRevisionProps } from "./FBDocumentRevisions.types";
 
 export const withFBDocumentRevisions = <T extends FBDocumentRevisionProps>(
@@ -36,7 +37,11 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionProps>(
       dialogState?.config({
         open: true,
         title: "Add Document Revision",
-        content: <FBForm schema={FBData.documentRevisionSchema} />,
+        content: (
+          <FBForm>
+            <FBDocumentRevisionForm />
+          </FBForm>
+        ),
         actions: <FBDocumentRevisionActions />,
       });
     };

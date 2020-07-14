@@ -1,4 +1,4 @@
-import { FBDialogState, FBDocumentRevisionsState } from "..";
+import { FBAutocompleteProps, FBDialogState, FBDocumentRevisionsState } from "..";
 import { Id } from "../../../state/ducks/common/types";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { FBInputProps } from "../FBInput/FBInput.types";
@@ -34,4 +34,8 @@ export interface FBDocumentRevisionItem {
   justificationOfChange: string;
   descriptionOfChange: string;
   id: string;
+}
+
+export interface FBDocumentRevisionFormProps {
+  getOptionDisabled?: FBAutocompleteProps["getOptionDisabled"];
 }
