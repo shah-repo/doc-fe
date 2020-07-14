@@ -81,10 +81,10 @@ export const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
           value={documentRevision.owner.user.name}
         />
         <SummaryInfo
-          label="common.released"
+          label="common.effective.date"
           value={
             <Date
-              value={documentRevision.obsoletedAt || documentRevision.releasedAt}
+              value={documentRevision.obsoletedAt || documentRevision.effectiveDate}
             />
           }
         />
