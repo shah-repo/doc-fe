@@ -324,6 +324,7 @@
   "dashboard.title.training": "TRAINING: {docId}",
   "dashboard.noPendingActions": "No pending actions",
   "dashboard.is.due.on": " for doc id: {docId} is due on ",
+  "document.add": "Add {name}",
   "document.type": "Document Type",
   "document.output.type": "Output Document Type",
   "document.assign.to": "Assign Document to",
