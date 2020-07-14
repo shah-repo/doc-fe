@@ -31,7 +31,7 @@ const DashboardPresenter: React.FunctionComponent<DashboardPresenterProps> = ({
               return pendingAction.documentRevision &&
                 <PurchaseOrderApproval key={index} index={index} documentRevision={pendingAction.documentRevision} />;
             case PendingActionType.PENDING_DOC_CONTROL:
-            case PendingActionType.PENDING_IMPL_PLAN_TASK:
+            case PendingActionType.PENDING_TASK:
               return pendingAction.changeReq &&
                 <TaskApproval key={index} index={index} changeRequest={pendingAction.changeReq} />;
             default:
