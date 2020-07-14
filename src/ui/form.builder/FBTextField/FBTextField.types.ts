@@ -18,5 +18,6 @@ export type FBTextFieldProps =
 & {
   FBProps?: {
     inputType?: FBInputType;
+    transform?: Function;
   };
 };
