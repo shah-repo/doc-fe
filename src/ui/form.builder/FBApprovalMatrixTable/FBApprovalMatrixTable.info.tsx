@@ -135,9 +135,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                         inputProps={{ style: { padding: "8px" } }}
                         rules="required"
                         showErrorMsg={false}
-                        FBProps={
-                          { transform: (v: string) => v.toUpperCase() }
-                        }
+                        transform="upper"
                       />
                     </Box>
                   </FBTableCell>

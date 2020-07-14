@@ -1,11 +1,11 @@
 import { TextField } from "@material-ui/core";
-import React, { useState } from "react";
+import React from "react";
 import { FBInput, FBInputType, FBTextFieldProps } from "..";
 import { withFBTextField } from "./FBTextField.wrap";
 
 const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   onBlur,
-  FBProps: { inputType = "textfield", transform } = {},
+  FBProps: { inputType = "textfield" } = {},
   placeholder = "",
   multiline,
   error,
@@ -15,18 +15,14 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   InputProps,
   style,
   ...props
-}) => {
-  const [value, setValue] = useState("");
-  const onInput = (e) =>     setValue((transform && transform(e.target.value)) || e.target.value);
-
-  return <FBInput {...props} {...{ error }} type={inputType as FBInputType}>
+}) => (
+  <FBInput {...props} {...{ error }} type={inputType as FBInputType}>
     <TextField
       label=""
       variant="outlined"
-      onInput={onInput}
-      {...{ type, rows, error, multiline, inputProps, InputProps: { ...(InputProps || {}), value }, style, onBlur, placeholder }}
+      {...{ type, rows, error, multiline, inputProps, InputProps, style, onBlur, placeholder }}
     />
-  </FBInput>;
-};
+  </FBInput>
+);
 
 export default withFBTextField(FBTextField);
