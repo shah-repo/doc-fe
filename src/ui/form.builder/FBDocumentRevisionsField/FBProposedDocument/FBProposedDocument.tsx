@@ -13,24 +13,29 @@ const FBProposedDocument: React.FunctionComponent<FBProposedDocumentProps> = ({
   handleOpen,
   justification,
   description,
-  index,
+  index = 0,
   isMouseInside,
-  disabled,
+  disabled = false,
   id,
 }) => (
   <Box
-    onMouseEnter={() => setMouseInside(true)}
-    onMouseLeave={() => setMouseInside(false)}
+    onMouseEnter={() => setMouseInside?.(!disabled)}
+    onMouseLeave={() => setMouseInside?.(false)}
   >
-    <FBSection label="common.document" stepIndex={index} >
-      {isMouseInside && !disabled && <Box display="flex" flexDirection="row-reverse" mt={-3.5}>
+    <FBSection label="common.document" stepIndex={index + 1} >
+      <Box
+        display="flex"
+        flexDirection="row-reverse"
+        mt={-3.5}
+        visibility={isMouseInside ? "visible" : "hidden"}
+      >
         <Button
           style={{ background: Colors.white, margin: 0, minWidth: 40 }}
-          onClick={() => removeDocument(index)}
+          onClick={() => removeDocument?.(id)}
         >
           <RemoveDocument />
         </Button>
-      </Box>}
+      </Box>
     </FBSection>
     <Box display="flex" alignItems="flex-end" mb={5} >
       <Box flexGrow={1}>
@@ -70,5 +75,6 @@ const FBProposedDocument: React.FunctionComponent<FBProposedDocumentProps> = ({
     />
   </Box>
 );
+
 
 export default withFBProposedDocument(FBProposedDocument);
