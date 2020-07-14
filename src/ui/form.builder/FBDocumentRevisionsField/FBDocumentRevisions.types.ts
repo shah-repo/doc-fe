@@ -14,14 +14,15 @@ export type FBDocumentRevisionProps =
 };
 
 export interface FBProposedDocumentProps {
-  id: string;
-  proposedDocumentRevision: DocumentRevision;
-  isMouseInside: boolean;
   setMouseInside: (isMouseInside: boolean) => void;
+  removeDocument: (index: number) => void;
+  handleOpen?: () => void;
+  id: string;
+  proposedDocumentRevision?: DocumentRevision;
+  isMouseInside: boolean;
   justification: string;
   description: string;
   index: number;
-  removeDocument: (index: number) => void;
   disabled: boolean;
 }
 
