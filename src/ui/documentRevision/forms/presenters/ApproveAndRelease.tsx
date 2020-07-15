@@ -191,7 +191,7 @@ export const ApproveAndRelease: React.FunctionComponent<Props> = ({
           id="ApproveAndRelease-dialog"
         >
           <DialogTitle>
-            {isQms && <Text translation="transition.action.title" />}
+            {isQms && <Text translation="common.approve.and.release" />}
             {!isQms && <Text translation="common.warning.message" values={{ name: documentName }} />}
           </DialogTitle>
           <DialogContent

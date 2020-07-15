@@ -1,16 +1,17 @@
-import { createStyles, Grid, makeStyles } from "@material-ui/core";
+import { createStyles, Grid, makeStyles, Theme } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import React from "react";
 import { DRAWER_WIDTH } from "../../../app/NavigationLink.styles";
 import Colors from "../../../layout/theme/utils/colors";
 
-export const styles = makeStyles(() =>
+export const styles = makeStyles((theme: Theme) =>
   createStyles({
     appbar: {
       backgroundColor: Colors.white,
       position: "fixed",
       top: "45px",
+      zIndex: theme.zIndex.drawer + 1,
     },
     toolbar: {
       marginLeft: DRAWER_WIDTH,

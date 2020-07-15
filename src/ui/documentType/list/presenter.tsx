@@ -1,14 +1,14 @@
-import { Button, Grid } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import _ from "lodash";
 import React from "react";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { DocumentType, PageDetailsColumn } from "../../../state/ducks/documentRevisions/documentType";
+import ClearFilters from "../../components/table/ClearFilters";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
 import { TableDataProps, TablePanelStateProps, TableSearchQueryType } from "../../components/table/types";
-import Text from "../../components/Text";
 import { canEditDocumentRevision, documentRevisionQueryStatus, documentRevisionStatusOption } from "../../document.revision/utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
 import { Translation } from "../../translations/types";
@@ -140,15 +140,7 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   return (
     <Grid container={true} className={classes.root}>
       <Grid item={true} xs={6}>
-        <Button
-          color="primary"
-          variant="outlined"
-          className={classes.clearButton}
-          onClick={clearFilter}
-          id="DocumentByTypeListPresenter-clearButton"
-        >
-          <Text translation="common.clear.filters" />
-        </Button>
+        <ClearFilters {...{ clearFilter }}/>
         <DocumentInfo numberOfRecords={tableData.length} />
       </Grid>
       <CreateDocumentByType

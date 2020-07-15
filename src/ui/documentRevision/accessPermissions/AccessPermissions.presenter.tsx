@@ -175,7 +175,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
       <Typography variant={TypographySize.md}>
         <Text translation="document.revision.selected.users" />
       </Typography>
-      <div style={{ width: 240, paddingBottom: 32 }}>
+      <div style={{ width: 200, paddingBottom: 32 }}>
         {
           !_.isEmpty(securityEmployees) &&
           <List className={securityGroups.length > 3 ? rowStyles.customRows : undefined}>
@@ -205,7 +205,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
       <Typography variant={TypographySize.md}>
         <Text translation="document.revision.selected.groups" />
       </Typography>
-      <div style={{ width: 240, paddingBottom: 32 }}>
+      <div style={{ width: 200, paddingBottom: 32 }}>
         {
           !_.isEmpty(securityGroups) &&
           <List className={securityGroups.length > 3 ? rowStyles.customRows : undefined}>
@@ -214,7 +214,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
                 key={index}
                 className={classes.selectContainer}
               >
-                <div style={{ width: 230 }}>{e.name}</div>
+                <div style={{ width: 200 }}>{e.name}</div>
                 <button className={classes.accessButton} onClick={() => handleDelete(e.id)}>
                   <CloseIcon />
                 </button>
@@ -238,7 +238,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
           <Typography variant={TypographySize.md}>
             <Text translation="document.assign.to" />
           </Typography>
-          <div style={{ width: 240, paddingBottom: 32 }}>
+          <div style={{ width: 200, paddingBottom: 32 }}>
             {
               !_.isEmpty(operators) &&
               <List className={operators.length > 3 ? rowStyles.customRows : undefined}>
@@ -247,7 +247,7 @@ export const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissio
                     key={index}
                     className={classes.selectContainer}
                   >
-                    <div style={{ width: 230 }}>{e.user.name}</div>
+                    <div style={{ width: 200 }}>{e.user.name}</div>
                     <button className={classes.accessButton} onClick={() => handleDeleteOperatorAccess(e.id)} >
                       <CloseIcon />
                     </button>
