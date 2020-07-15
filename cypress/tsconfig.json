@@ -4,7 +4,9 @@
     "support",
     "fixtures",
     "plugins",
-    "integration"
+    "integration",
+    "requirements",
+    "utils"
     // "./../src"
   ],
   "compilerOptions": {
