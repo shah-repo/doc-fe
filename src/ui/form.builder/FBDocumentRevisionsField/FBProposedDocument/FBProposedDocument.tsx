@@ -40,7 +40,7 @@ const FBProposedDocument: React.FunctionComponent<FBProposedDocumentProps> = ({
     <Box display="flex" alignItems="flex-end" mb={5} >
       <Box flexGrow={1}>
         <FBAutocompleteAsync
-          optionId={FBAutocompleteAsyncOption.revision}
+          optionId={FBAutocompleteAsyncOption.allVersionRevisions}
           label="form.builder.proposed.document.revision"
           gutter={false}
           disabled={true}
