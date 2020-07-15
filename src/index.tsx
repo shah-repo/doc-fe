@@ -15,9 +15,6 @@ const dataDogConf = {
 };
 datadogRum.init(dataDogConf);
 
-console.log({ dataDogConf });
-console.log({ "process.env": process.env });
-
 ReactDOM.render(<EnvStatusBarPresenter isSandbox={Config.isSandbox} />, document.getElementById("env_banner"));
 ReactDOM.render(<AppContainer />, document.getElementById("root"));
 
