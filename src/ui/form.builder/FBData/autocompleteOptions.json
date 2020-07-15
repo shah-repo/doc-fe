@@ -1,5 +1,4 @@
-[
-  {
+[{
     "id": "1",
     "path": "/document_revisions",
     "label": "Document revisions",
@@ -130,6 +129,15 @@
     "id": "16",
     "path": "/document_revisions?docTypeGroups%5B%5D=WO_PARTS",
     "label": "Part Number in WO",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
+  },
+  {
+    "id": "17",
+    "path": "/document_revisions",
+    "label": "Document revisions (all versions)",
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
