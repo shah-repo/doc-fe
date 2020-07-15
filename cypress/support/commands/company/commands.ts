@@ -1,5 +1,4 @@
-import { User } from "../../../../src/state/ducks/common/types";
-import { DocumentType } from "../../../../src/state/ducks/documentRevisions/documentType/types";
+import { Company } from "../../../../src/state/ducks/company/types";
 import { CONFIG } from "../../config";
 
 /* eslint-disable max-classes-per-file */
@@ -7,38 +6,20 @@ import { CONFIG } from "../../config";
 
 export { };
 
-export interface CreateCompanyBootstrap {
-  name: string;
-  companyAcronym: string;
-  companyAdminEmail: string;
-  importerEmail: string;
-  slackIntegrationEnabled: boolean;
-  helloSignIntegrationEnabled: boolean;
-  helloSignTestMode: boolean;
-  maxRevisionStages: number;
-  numOfDocDigits: number;
-  users: User[];
-  documentTypes: DocumentType[];
-  whiteLabeling?: any;
-  addresses?: string[];
-  remoteValidatorBundleName: string;
-  acctCodes?: string[];
-}
-
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
-      createCompany(params: {payload: CreateCompanyBootstrap; sessionId: string}): Chainable<Subject>;
-      selectCompany( params: {name: string }): Chainable<Subject>;
-      navigateToDocumentList(): Chainable<Subject>;
-      clickCreateNewDocument(): Chainable<Subject>;
-      navigateToChangeRequestList(): Chainable<Subject>;
-      clickCreateChangeRequest(): Chainable<Subject>;
+      cmpCreateCompany(params: {payload: Company; sessionId: string}): Chainable<Subject>;
+      cmpSelectCompany( params: {name: string }): Chainable<Subject>;
+      cmpNavigateToDocumentList(): Chainable<Subject>;
+      cmpClickCreateNewDocument(): Chainable<Subject>;
+      cmpNavigateToChangeRequestList(): Chainable<Subject>;
+      cmpClickCreateChangeRequest(): Chainable<Subject>;
     }
   }
 }
 
-Cypress.Commands.add("createCompany", (params: {payload: CreateCompanyBootstrap; sessionId: string}) => {
+Cypress.Commands.add("cmpCreateCompany", (params: {payload: Company; sessionId: string}) => {
   cy.request({
     method: "POST",
     url: `${CONFIG.BE_URL}/api/v1/company/bootstrap`,
@@ -46,26 +27,29 @@ Cypress.Commands.add("createCompany", (params: {payload: CreateCompanyBootstrap;
     headers: {
       Authorization: `bearer_admin ${params.sessionId}`,
     },
-    timeout: 10 * 1000,
   }).then((response) => response.body);
 });
 
-Cypress.Commands.add("selectCompany", (params: {name: string }) => {
-  cy.get("#root", { timeout: 10 * 1000 }).contains(params.name).click();
+Cypress.Commands.add("cmpSelectCompany", (params: {name: string }) => {
+  cy.get("#root").contains(params.name).click();
 });
 
-Cypress.Commands.add("navigateToDocumentList", () => {
+Cypress.Commands.add("cmpNavigateToDocumentList", () => {
   cy.get("[data-cy=\"navigation.documentList\"]").click();
 });
 
-Cypress.Commands.add("navigateToChangeRequestList", () => {
+Cypress.Commands.add("cmpNavigateToChangeRequestList", () => {
   cy.get("[data-cy=\"navigation.changeRequestList\"]").click();
 });
 
-Cypress.Commands.add("clickCreateNewDocument", () => {
+Cypress.Commands.add("cmpClickCreateNewDocument", () => {
   cy.get("[data-cy=\"document.revision.create\"]").click();
 });
 
-Cypress.Commands.add("clickCreateChangeRequest", () => {
+Cypress.Commands.add("cmpClickCreateChangeRequest", () => {
   cy.get("#ChangeRequest-create").click();
 });
+
+export function cmpFilterDocumentTypeIdByName(companyResponse: Company, documentTypeName: string) {
+  return companyResponse.documentTypes.filter((type) => type.documentTypeName === documentTypeName);
+}

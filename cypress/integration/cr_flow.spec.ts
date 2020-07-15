@@ -1,28 +1,28 @@
-// eslint-disable-next-line spaced-comment
-/// <reference types="Cypress" />
+/* eslint-disable max-classes-per-file */
+// / <reference types="Cypress" />
 Cypress.Screenshot.defaults({
   screenshotOnRunFailure: false,
 });
-
 import path from "path";
+import { RevisionChangeType } from "../../src/state/ducks/documentRevisions/types";
+import { cmpFilterDocumentTypeIdByName } from "../support/commands/company/commands";
 
 const runId = new Date().valueOf();
 let createdCompany;
 let loginResponse;
 let currentEmployee;
-let documentRevision;
 let componentSpecificationDocumentType;
 let group;
 
 context(`Test: ${path.basename(__filename)}`, () => {
   it("Creates company", (done: any) => {
-    cy.apiLogin({
+    cy.authApiLogin({
       email: "zoran.kovacevic+admin@codecons.com",
       password: "Tester1!",
     }).then((response) => {
       loginResponse = response;
 
-      cy.createCompany({
+      cy.cmpCreateCompany({
         payload: {
           companyAcronym: `T1${runId}`,
           companyAdminEmail: "zoran.kovacevic+admin@codecons.com",
@@ -49,32 +49,27 @@ context(`Test: ${path.basename(__filename)}`, () => {
           }],
           acctCodes: ["code 1"],
           addresses: ["Address 1"],
-          whiteLabeling: null,
           documentTypes: [],
         }, sessionId: loginResponse.sessionId as unknown as string,
       }).then((response) => {
         createdCompany = response;
         currentEmployee = createdCompany.employees[0];
-        componentSpecificationDocumentType = createdCompany.documentTypes.filter((type) => type.documentTypeName === "Component Specification");
+        componentSpecificationDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification");
         done();
       });
     });
   });
 
   it("Gets group by name", () => {
-    cy.getGroupByName({
+    cy.grpGetGroupByName({
       sessionId: loginResponse.sessionId,
       employeeId: currentEmployee.id,
       groupName: "Everyone",
-    }).then((response) => {
-      group = response.body;
-      console.log(group);
-
-    });
+    }).then((response) => group = response);
   });
 
   it("Creates document revision", (done: any) => {
-    cy.createDocumentRevision({
+    cy.drCreateDocumentRevision({
       payload: {
         attachments: [],
         description: "<p>Test Doc Rev Description</p>",
@@ -88,7 +83,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
             securityEmployees: [],
             securityGroups: [
               {
-                id: group[0].id,
+                id: group.body[0].id,
               },
             ],
           },
@@ -96,88 +91,104 @@ context(`Test: ${path.basename(__filename)}`, () => {
         name: "Test Doc Rev",
         referenceTo: [],
         retrain: false,
-        revisionChangeType: "NEXT_REVISION",
+        revisionChangeType: RevisionChangeType.NextRevision,
         revisionStage: 1,
 
       },
       employeeId: currentEmployee.id as unknown as string,
       sessionId: loginResponse.sessionId as unknown as string,
     }).then((response) => {
-      documentRevision = response;
       done();
     });
   });
 
   it("Logs user in", () => {
-    cy.login({
+    cy.authLogin({
       email: "zoran.kovacevic+admin@codecons.com",
       password: "Tester1!",
     });
   });
+
   it("Selects company", () => {
-    cy.selectCompany({ name: createdCompany.name });
+    cy.cmpSelectCompany({ name: createdCompany.name });
   });
-  //Create new form template for change request and release it"
+
   it("Navigate to document list", () => {
-    cy.navigateToDocumentList();
+    cy.cmpNavigateToDocumentList();
   });
+
   it("Click on 'create a document'", () => {
-    cy.clickCreateNewDocument();
+    cy.cmpClickCreateNewDocument();
   });
+
   it("Enter title 'New Change request form template'", () => {
-    cy.enterDocumentTitle({ name: "New Change request form template" });
+    cy.drEnterDocumentTitle({ name: "New Change request form template" });
   });
+
   it("Enter description 'New form template for change request'", () => {
-    cy.enterDocumentDescription({ description: "New form template for change request" });
+    cy.drEnterDocumentDescription({ description: "New form template for change request" });
   });
+
   it("Click on 'Form' document type", () => {
-    cy.selectFormDocumentType();
+    cy.drSelectFormDocumentType();
   });
+
   it("Click on 'Change request' outputdocument type", () => {
-    cy.selectChangeRequestOutputDocType();
+    cy.drSelectChangeRequestOutputDocType();
   });
+
   it("Click create document after filling document", () => {
-    cy.clickCreateDocument();
+    cy.drClickCreateDocument();
   });
+
   it("Approve and release document", () => {
-    cy.approveAndReleaseDocument();
+    cy.drApproveAndReleaseDocument();
   });
-  //Create change request with newly added form"
+
   it("Navigate to change request list", () => {
-    cy.navigateToChangeRequestList();
+    cy.cmpNavigateToChangeRequestList();
   });
+
   it("Click Create a Change Request button", () => {
-    cy.clickCreateChangeRequest();
+    cy.cmpClickCreateChangeRequest();
   });
+
   it("Choose Initial CR Form template", () => {
-    cy.selectLastAddedCRForm();
+    cy.crSelectLastAddedCRForm();
   });
+
   it("Enter title 'CR from New Change request form template'", () => {
-    cy.enterChangeRequestTitle({ title: "CR from New Change request form template" });
+    cy.crEnterChangeRequestTitle({ title: "CR from New Change request form template" });
   });
+
   it("Enter description 'CR from New form template for change request'", () => {
-    cy.enterChangeRequestDescription({ description: "CR from New form template for change request" });
+    cy.crEnterChangeRequestDescription({ description: "CR from New form template for change request" });
   });
+
   it("Add created document revision", () => {
-    cy.clickAddDocument();
-    cy.choseProposedDocument();
-    cy.enterDescriptionAddDocumentsDialog({ description: "added document description"});
-    cy.enterJustificationAddDocumentsDialog({ justification: "justification for added document"});
-    cy.clickAddBtnOnAddDocumentsDialog();
+    cy.crClickAddDocument();
+    cy.crChoseProposedDocument();
+    cy.crEnterDescriptionAddDocumentsDialog({ description: "added document description" });
+    cy.crEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
+    cy.crClickAddBtnOnAddDocumentsDialog();
   });
+
   it("Add first approver to change request on approver list", () => {
-    cy.addFirstApproverOnChangeRequestApproverList();
+    cy.crAddFirstApproverOnChangeRequestApproverList();
   });
-  it("Click Create Change Request", () => {
-    cy.clickCreateChangeRequestAfterCompletingForm();
-  });
+
   it("Add date", () => {
-    cy.addEffectiveDate();
+    cy.crAddEffectiveDate();
   });
+
   it("Click Create Change Request", () => {
-    cy.clickSendToReview();
+    cy.crClickCreateChangeRequestAfterCompletingForm();
   });
-  
+
+  it("Click Create Change Request", () => {
+    cy.crClickSendToReview();
+  });
+
 });
-// for TS error "All files must be modules when the '--isolatedModules' flag is provided" uncomment line below
+
 export { };

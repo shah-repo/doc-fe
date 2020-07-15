@@ -17,7 +17,7 @@ declare global {
 }
 
 Cypress.Commands.add("unClick", () => {
-  cy.get("#root").click();
+  cy.get("#root>div>div>header").click();
 });
 
 // ***********************************************
