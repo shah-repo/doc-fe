@@ -9,6 +9,7 @@ import { FBApprovalMatrixField } from "../FBApprovalMatrixField";
 import { FBButton } from "../FBButton";
 import { FBCheckbox } from "../FBCheckbox";
 import { FBDatePicker } from "../FBDatePicker";
+import { FBDocumentRevisions } from "../FBDocumentRevisionsField";
 import { FBFileUpload } from "../FBFileUpload";
 import { FBHelloSign } from "../FBHelloSign";
 import { FBHyperlink } from "../FBHyperlink";
@@ -28,6 +29,7 @@ import { FBSelect } from "../FBSelect";
 import { FBSelectDocument } from "../FBSelectDocument";
 import { FBSelectRequirement } from "../FBSelectRequirement";
 import { FBSubsection } from "../FBSubsection";
+import { FBTask } from "../FBTask";
 import { FBTestRequirement } from "../FBTestRequirement";
 import { FBTextEditor } from "../FBTextEditor";
 import { FBTextField } from "../FBTextField";
@@ -40,6 +42,7 @@ export class FBSchemaState {
     "stepsection",
     "teststep",
     "purchaseorder",
+    "task",
   ];
 
   private static control: Partial<Record<FBInputType, React.FunctionComponent<any>>> = {
@@ -65,6 +68,7 @@ export class FBSchemaState {
     timer: FBTimerField,
     purchaseorder: FBPurchaseOrder,
     poreceive: FBPOReceive,
+    documentRevisions: FBDocumentRevisions,
     instructionsmediaupload: FBMediaAlbumField,
     evidencemediaupload: FBMediaAlbumField,
     testRequirement: FBTestRequirement,
@@ -79,6 +83,7 @@ export class FBSchemaState {
     hellosign: FBHelloSign,
     approvalMatrix: FBApprovalMatrixField,
     poApprovalMatrix: FBPOApprovalMatrix,
+    task: FBTask,
   };
 
   @observable public schema?: FBSchemaProps[];

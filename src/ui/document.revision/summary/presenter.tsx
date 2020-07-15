@@ -16,6 +16,7 @@ import { FBSchemaProps, FBWorkspace } from "../../form.builder";
 import { useCRLink, useTitle, useTraining } from "../../hooks/docCustomization/useCustomization";
 import useDescription from "../../hooks/docCustomization/useDescription";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
+import { Translation } from "../../translations/types";
 import SummaryHeader from "../header/SummaryHeader";
 import Attachment from "./attachment";
 import ChangeRequestLink from "./changeRequestLink";
@@ -105,7 +106,7 @@ export const Presenter: React.FunctionComponent<Props> = ({
           isTrainingVisible &&
           <SummaryField
             label="document.revision.trainingRequired"
-            value={<Text translation={retrain ? "common.yes" : "common.no"} />}
+            value={<Text translation={`common.${retrain}` as Translation} />}
           />
         }
         {

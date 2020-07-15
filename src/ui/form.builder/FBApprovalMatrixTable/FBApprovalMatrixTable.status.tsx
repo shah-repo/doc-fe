@@ -60,7 +60,7 @@ const FBApprovalMatrixTableStatus: React.FunctionComponent<FBApprovalMatrixTable
                     <React.Fragment key={`fb-approval-matrix-stage-${am.id}-${index}`}>
                       {mode !== "edit" && (
                         <FBTableCell
-                          label={value ? "Y" : ""}
+                          label={`status.${value}`}
                           align="center"
                         />
                       )}

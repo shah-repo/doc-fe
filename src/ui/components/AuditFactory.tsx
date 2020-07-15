@@ -76,7 +76,7 @@ export const AuditFactory: React.FunctionComponent<Props> = ({
           translation="changeRequest.audit.status.updated.by"
           values={{
             status: audit.nextValue as string,
-            name: audit.owner.user.name,
+            name: audit.owner?.user.name,
           }}
         />
       );

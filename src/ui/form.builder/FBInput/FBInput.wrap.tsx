@@ -16,6 +16,7 @@ export const withFBInput = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>
 ) => {
   const Comp = ({
+    setTranform,
     optionsToString,
     inputState,
     onChange,
@@ -37,6 +38,7 @@ export const withFBInput = <T extends FBInputProps>(
     rules,
     value,
     autosave = false,
+    transform,
     ...props
   }: T) => {
 
@@ -81,7 +83,8 @@ export const withFBInput = <T extends FBInputProps>(
           return inputState && (inputState.value = formState.getFieldValue(name, ""));
         },
         default() {
-          return formState.getFieldValue(name, defaultValue || defaultChecked);
+          isString(defaultValue) && transform && (defaultValue = setTranform?.(defaultValue));
+          return formState.getFieldValue(name, (isUndefined(defaultValue)) ? defaultChecked : defaultValue );
         },
       };
       const transDefault = (value[type || ""] || value.default)();
@@ -151,6 +154,7 @@ export const withFBInput = <T extends FBInputProps>(
       rules,
       value,
       autosave,
+      transform,
     });
   };
 

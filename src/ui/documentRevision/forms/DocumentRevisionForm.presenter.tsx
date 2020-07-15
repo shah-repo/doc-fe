@@ -259,6 +259,7 @@ export const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             status={documentRevision?.status}
             version={documentRevision?.version}
             isDisabled={isDisabledInput}
+            outputDocs={values.outputDocumentTypes as OptionType[]}
           />
         }
         {

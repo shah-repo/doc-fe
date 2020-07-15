@@ -1,10 +1,19 @@
-import { createStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import Colors from "../../layout/theme/utils/colors";
 
-export default (theme: Theme) =>
+export default makeStyles((theme: Theme) =>
   createStyles({
-    whiteContainer: {
-      background: "#fff",
-      padding: theme.spacing(0),
-      margin: theme.spacing(6, 0, 0, 1.5),
+    whiteContainer: ({ sidebar }) => ({
+      marginTop: theme.spacing(5),
+      margin: 0,
+      height: "auto",
+      width: sidebar ? "100%" : "104%",
+      transition: theme.transitions.create("all", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+    }),
+    backColor: {
+      background: Colors.light_gray,
     },
-  });
+  }));

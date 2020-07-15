@@ -24,7 +24,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const dispatch = useDispatch();
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const tableData = useSelector(getTableData(TABLE_NAME));
-  const isPO = documentType.group === "PO";
+  const isPO = documentType?.group === "PO";
 
   useEffect(() => {
     if (isEmpty(tableCriteria.queryDict) || isPO) {
@@ -53,7 +53,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const clearFilter = () =>
     dispatch(tableSearchActions.clearSearchCriteria(TABLE_NAME));
 
-  if (!documentType || !documentType.pageDetails) {
+  if (!documentType) {
     return <Redirect to={HOME_URL} />;
   }
 

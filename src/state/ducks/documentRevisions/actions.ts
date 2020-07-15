@@ -155,13 +155,11 @@ const loadAudit = (id: string): ApiAction<Audit[]> => apiAction({
 const approveAndRelease = (
   id: string,
   body: ApproveAndReleaseRequest,
-  password: string,
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/release/${id}`,
   method: "post",
   data: body,
-  password,
   onSuccess: (docRev: DocumentRevision, dispatch) => {
     dispatch(load(id));
     dispatch(loadDocument(docRev.document.id));
@@ -231,6 +229,20 @@ const cancelDraft = (id: string): ApiAction<DocumentRevision> => apiAction({
   },
 });
 
+const setPrimaryAttachment = (
+  docRevId: string,
+  attachmentId: string,
+  handlers: Handlers
+): ApiAction<DocumentRevision> =>
+  apiActionWithCallbacks({
+    url: `${DOCUMENT_REVISION_ROOT_URL}/${docRevId}/set_primary/${attachmentId}`,
+    method: "patch",
+    onSuccess: (documentRevision, dispatch) => {
+      dispatch(documentRevisionSet(documentRevision));
+    },
+    handlers,
+  });
+
 export default {
   documentRevisionsList,
   documentRevisionSet,
@@ -253,4 +265,5 @@ export default {
   loadGroupsByStage,
   cancelDraft,
   reload,
+  setPrimaryAttachment,
 };

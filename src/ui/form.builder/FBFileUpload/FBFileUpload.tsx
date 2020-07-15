@@ -9,11 +9,14 @@ const FBFileUpload: React.FunctionComponent<FBFileUploadProps> = ({
   name,
   fileUploadState,
   filePresenters,
+  readonly = false,
   ...props
 }) => (
   <FBInput {...props} {...{ name }} type="fileupload">
     <FBProvider {...{ fileUploadState }}>
-      <FBFileField key={`fb-attachment-field-${name}`} {...{ name, disabled }} />
+      {!readonly && (
+        <FBFileField key={`fb-attachment-field-${name}`} {...{ name, disabled }} />
+      )}
       {!_.isEmpty(filePresenters) && (
         <Box mt={2} display="flex" flexDirection="row" flexWrap="wrap">
           {filePresenters}

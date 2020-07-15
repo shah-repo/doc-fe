@@ -36,8 +36,8 @@ export const withFBEditorValidation = <T extends FBEditorValidationProps>(
       const value = _.get(ev.target, "checked");
       const { name } = schemaItem;
       if (!value) {
-        formState?.setFieldValue(name + ".value", undefined);
-        formState?.setFieldValue(name + ".name", undefined, true);
+        formState?.omitFieldValue(name + ".value");
+        formState?.omitFieldValue(name + ".name");
       }
       const schemaSelectItem = schemaState?.getSchemaItem(name + ".value");
       schemaSelectItem && schemaState && (schemaState.removeSchemaItem(schemaSelectItem));

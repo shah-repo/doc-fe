@@ -17,14 +17,13 @@ import Text from "../../components/Text";
 import { ApproveAndReleaseFormValues } from "../../documentRevision/forms/types";
 import useActionCreator from "../../hooks/useActionCreator";
 import { toUniqGroupOptions } from "./transform";
-import { ChangeRequestFormValues } from "./types";
 
 
 interface OwnProps {
   dataProp?: Approval[];
   withoutCurrentUser?: boolean;
   documentTypeGroups?: Group[];
-  values?: ChangeRequestFormValues | ApproveAndReleaseFormValues;
+  values?: ApproveAndReleaseFormValues;
   owner?: Owner;
 }
 
@@ -37,7 +36,9 @@ export const Approvers: React.FunctionComponent<Props> = ({
   values,
   owner,
 }) => {
-
+// We should check if we need all of this
+// Now that approvers are moved to the FB
+// This is now only used for Approve&Release
   const joinedEmployees = (groups: Group[]) => groups.map((group) => group.joinedEmployees.map((employee) =>
     ({ group: group.name, id: employee.id, name: employee.user?.name })
   ));
@@ -64,6 +65,7 @@ export const Approvers: React.FunctionComponent<Props> = ({
   const renderGroupApproversResults = () => {
     const uniqGroups = uniqBy(documentTypeGroups, "id");
     const selectedEmployees = (values?.approvals || []).map((e) => e.value);
+
     return (
       <Box display="flex" flexWrap="wrap">
         {

@@ -1,7 +1,6 @@
 import * as React from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { IntlProvider } from "react-intl";
-import "react-quill/dist/quill.snow.css";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import "react-virtualized/styles.css";

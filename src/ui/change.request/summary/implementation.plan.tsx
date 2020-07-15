@@ -1,4 +1,4 @@
-import { Box, Grid, Typography, WithStyles, withStyles } from "@material-ui/core";
+import { Box, Grid, Typography } from "@material-ui/core";
 import React from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { getFormattedStartOfDayDateString } from "../../../common/utils/date";
@@ -10,7 +10,6 @@ import { convertHtmlToDraft } from "../../components/forms/fields/RichTextEditor
 import Text from "../../components/Text";
 import { canCloseTask } from "../utils/helpers";
 import CloseTask from "./close.task";
-import styles from "./styles";
 
 interface OwnProps extends DataProps<Model> {
   currentUserEmail: string;
@@ -19,10 +18,9 @@ interface OwnProps extends DataProps<Model> {
   crId: string;
 }
 
-export type Props = OwnProps & WithStyles<typeof styles>;
+export type Props = OwnProps;
 
 export const ImplementationPlan: React.FunctionComponent<Props> = ({
-  classes,
   dataProp,
   currentUserEmail,
   crStatus,
@@ -50,7 +48,7 @@ export const ImplementationPlan: React.FunctionComponent<Props> = ({
         item={true}
         xs={12}
         key={`${task.id} ${index}`}
-        className={classes.taskContainer}
+
       >
         <Typography variant="h5">
           <Text message={task.title} />
@@ -59,9 +57,8 @@ export const ImplementationPlan: React.FunctionComponent<Props> = ({
           readOnly={true}
           editorState={convertHtmlToDraft(task.description)}
           toolbarHidden={true}
-          editorClassName={classes.taskDescription}
         />
-        <Grid container={true} className={classes.taskBasicInformation}>
+        <Grid container={true} >
           <Grid item={true} xs={4}>
             <Typography variant="body2">
               <Text message="common.due.date" />:{" "}
@@ -106,7 +103,7 @@ export const ImplementationPlan: React.FunctionComponent<Props> = ({
     ));
 
   return (
-    <Grid container={true} xs={12} className={classes.box}>
+    <Grid container={true} xs={12}>
       <Typography variant="h6">
         <Text translation="common.implementation.plan" />
       </Typography>
@@ -116,4 +113,4 @@ export const ImplementationPlan: React.FunctionComponent<Props> = ({
   );
 };
 
-export default withStyles(styles)(ImplementationPlan);
+export default ImplementationPlan;

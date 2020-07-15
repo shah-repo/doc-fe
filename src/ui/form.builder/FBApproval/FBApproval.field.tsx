@@ -1,6 +1,7 @@
-import { Box } from "@material-ui/core";
+import { Box, CircularProgress } from "@material-ui/core";
 import React from "react";
 import { FBApprovalFieldProps } from ".";
+import { FBDialog } from "..";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import FBButton from "../components/inputs/FBButton";
@@ -8,9 +9,10 @@ import { FBMapWrapper } from "../FBMapWrapper";
 
 const FBApprovalField = <T extends Employee | GroupRequestBody>({
   approvalConfig,
+  onApprove,
   collection,
   disabled,
-  onApprove,
+  approveLoading,
   mt,
 }: FBApprovalFieldProps<T>) => (
   <Box {...{ mt }}>
@@ -32,15 +34,21 @@ const FBApprovalField = <T extends Employee | GroupRequestBody>({
               </Box>
             </Box>
             {config?.canApprove && (
-              <FBButton
-                label="form.builder.approve"
-                variant="outlined"
-                onClick={onApprove && onApprove(approver)}
-                size="small"
-                style={{ margin: "5px 0 0 10px" }}
-                {...{ disabled }}
-              />
+              <>
+                {approveLoading && <CircularProgress size={20} />}
+                {!approveLoading && (
+                  <FBButton
+                    label="form.builder.approve"
+                    variant="outlined"
+                    onClick={onApprove?.(approver)}
+                    size="small"
+                    style={{ margin: "5px 0 0 10px" }}
+                    {...{ disabled }}
+                  />
+                )}
+              </>
             )}
+            <FBDialog />
           </Box>
         );
       }}

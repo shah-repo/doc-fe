@@ -3,6 +3,12 @@ import { FBInputProps } from "..";
 
 export type FBAutocompleteProps =
  & FBInputProps
- & Pick<UseAutocompleteProps, "getOptionLabel" | "filterOptions" | "getOptionDisabled"> & {
+ & Pick<UseAutocompleteProps,
+ | "getOptionLabel"
+ | "filterOptions"
+ | "getOptionDisabled"
+ | "freeSolo"
+ | "filterSelectedOptions"
+ > & {
    refresh?: () => any;
  };

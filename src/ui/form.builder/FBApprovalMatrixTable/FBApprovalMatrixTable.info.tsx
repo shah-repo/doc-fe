@@ -43,7 +43,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
             />
             {mode !== "edit" && (
               <FBTableCell
-                label={am.docType.defaultTraining ? "Yes" : "No"}
+                label={`common.${am.docType.defaultTraining}`}
                 align="center"
               />
             )}
@@ -55,6 +55,24 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                 />
               </FBTableCell>
             )}
+            {mode !== "edit" && (
+              <FBTableCell
+                label={`common.${am.docType.needsSignature}`}
+                align="center"
+              />
+            )}
+            {mode === "edit" && (
+              <FBTableCell align="center">
+                <FBApprovalMatrixCheck
+                  name={`${name}.approvalMatrix.${index}.docType.needsSignature`}
+                  checked={am.docType.needsSignature}
+                />
+              </FBTableCell>
+            )}
+            <FBTableCell
+              label={am.docType.category}
+              align="center"
+            />
           </TableRow>
         )}
       </FBMapWrapper>
@@ -73,6 +91,17 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                     <Box display="flex" justifyContent="center" pl={3}>
                       <FBCheckbox
                         name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.defaultTraining`}
+                        gutter={false}
+                        defaultChecked={false}
+                      />
+                    </Box>
+                  </FBTableCell>
+                )}
+                {key === "needsSignature" && (
+                  <FBTableCell>
+                    <Box display="flex" justifyContent="center" pl={3}>
+                      <FBCheckbox
+                        name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.needsSignature`}
                         gutter={false}
                         defaultChecked={false}
                       />
@@ -106,6 +135,7 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                         inputProps={{ style: { padding: "8px" } }}
                         rules="required"
                         showErrorMsg={false}
+                        transform="upper"
                       />
                     </Box>
                   </FBTableCell>
@@ -118,6 +148,18 @@ const FBApprovalMatrixTableInfo: React.FunctionComponent<FBApprovalMatrixTablePr
                         gutter={false} size="small"
                         inputProps={{ style: { padding: "8px" } }}
                         rules="required"
+                        showErrorMsg={false}
+                      />
+                    </Box>
+                  </FBTableCell>
+                )}
+                {(key === "category") && (
+                  <FBTableCell>
+                    <Box display="flex" px={1}>
+                      <FBTextField
+                        name={`${name}.approvalMatrix.${approvalMatrix.length}.docType.category`}
+                        gutter={false} size="small"
+                        inputProps={{ style: { padding: "8px" } }}
                         showErrorMsg={false}
                       />
                     </Box>

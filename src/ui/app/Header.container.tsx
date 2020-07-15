@@ -22,6 +22,13 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
 }) => {
 
   const [showUserProfile, setUserProfile] = useState(false);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const handleOpenMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
   const email = useSelector(authSelectors.currentUserEmail);
   const name = useSelector(authSelectors.currentUserName);
   const dispatch = useDispatch();
@@ -57,6 +64,9 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
         closeUserProfile,
         showUserProfile,
         avatar,
+        handleOpenMenu,
+        handleCloseMenu,
+        anchorEl,
       }}
     />
   );

@@ -86,7 +86,7 @@ const apiMiddleware: Middleware = ({
     if (axios.isCancel(exception)) {
       return;
     }
-    const redirectToMaintenance = exception.response.status === 491 && window.location.pathname !== MAINTENANCE;
+    const redirectToMaintenance = exception?.response?.status === 491 && window.location.pathname !== MAINTENANCE;
     redirectToMaintenance && redirectTo(MAINTENANCE)();
 
     let responseMessage = "";

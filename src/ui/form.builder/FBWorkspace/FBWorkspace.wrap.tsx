@@ -1,5 +1,4 @@
 
-import { uniqBy } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FBWorkspaceProps, FBWorkspaceState } from ".";
@@ -33,24 +32,26 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     isStarter,
     active,
     document,
+    changeRequest,
     autosave,
     ...props
   }: T) => {
     let schema: FBSchemaProps[] = [];
-    workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, { schema: props.schema, mode, autosave, document });
+    workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, { schema: props.schema, mode, autosave });
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
     snackbarState = FB.useRef<FBSnackbarState>(FBSnackbarState);
-
+    workspaceState && (workspaceState.document = document);
 
     // *TODO: find a way to reset constructor props
     React.useEffect(() => {
       if (!workspaceState) { return; }
       workspaceState.document = document;
+      workspaceState.changeRequest = changeRequest;
       workspaceState.externalState = store.getState();
       if (!props.schema) { return; }
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      workspaceState.schema = uniqBy([...workspaceState.schema || [], ...props.schema!], "name");
-    }, [workspaceState, props.schema, document]);
+      workspaceState.schema = props.schema!;
+    }, [workspaceState, props.schema, document, changeRequest]);
 
 
     useObserver(() => {

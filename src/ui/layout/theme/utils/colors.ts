@@ -26,8 +26,8 @@ export enum Colors {
   // "#3572e2"
   // "#C9DFFF"
   light_blue = "#edf4ff",
-  medium_blue = "#5C9DFF",
   blue = "#0066FF",
+  medium_blue= "#5C9DFC",
   // red
   red = "#c40000",
   dark_red = "#a10808",

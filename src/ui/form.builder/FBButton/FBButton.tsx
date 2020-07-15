@@ -21,7 +21,7 @@ const FBButton: React.FunctionComponent<FBButtonProps> = ({
       ...hidden && { display: "none" },
     }}
   >
-    <Text message={label} />
+    {label && <Text message={label} />}
   </Button>
 );
 

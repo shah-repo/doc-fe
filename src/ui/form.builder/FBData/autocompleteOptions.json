@@ -1,5 +1,4 @@
-[
-  {
+[{
     "id": "1",
     "path": "/document_revisions",
     "label": "Document revisions",
@@ -23,6 +22,7 @@
     "label": "Approvers",
     "valueKey": "id",
     "labelKey": "user.email",
+    "labelPrefixRoot": "user.name",
     "root": "optionalApprovers"
   },
   {
@@ -118,8 +118,26 @@
   },
   {
     "id": "15",
+    "path": "/document_revisions?status%5B%5D=DRAFT",
+    "label": "Document Revisions In Draft",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
+  },
+  {
+    "id": "16",
     "path": "/document_revisions?docTypeGroups%5B%5D=WO_PARTS",
     "label": "Part Number in WO",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
+  },
+  {
+    "id": "17",
+    "path": "/document_revisions",
+    "label": "Document revisions (all versions)",
     "valueKey": "id",
     "labelKey": "name",
     "labelPrefixRoot": "document.docId",
