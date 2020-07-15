@@ -56,8 +56,8 @@ const FBProposedDocument: React.FunctionComponent<FBProposedDocumentProps> = ({
         ml={1}
         mb={0.3}
       >
-        <IconButton color="inherit">
-          <VisibilityIcon onClick={handleOpen} />
+        <IconButton color="inherit" onClick={handleOpen} >
+          <VisibilityIcon />
         </IconButton>
       </Box>
     </Box>
