@@ -17,12 +17,12 @@ export const withFBProposedDocument = <T extends FBProposedDocumentProps>(
 
     const { docRevState } = FB.useStores();
     const [isMouseInside, setMouseInside] = useState<boolean>(false);
-    const options = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.revision);
-    if (options) {
-      proposedDocumentRevision = options.get(id);
-    }
 
     handleOpen = () => {
+      const options = FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.allVersionRevisions);
+      if (options) {
+        proposedDocumentRevision = options.get(id);
+      }
       if (!proposedDocumentRevision) {
         return;
       }
