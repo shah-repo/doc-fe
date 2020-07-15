@@ -27,17 +27,17 @@ export class FBApprovalState {
   }
 
   @computed public get approversId(): string {
-    return FBAutocompleteAsyncOption.approver;
+    return FBAutocompleteAsyncOption.availableApprovers;
   }
 
   @computed public get groupsId(): string {
-    return FBAutocompleteAsyncOption.group;
+    return FBAutocompleteAsyncOption.groups;
   }
 
   @computed public get sliceData(): FBApprovalData {
     const data = FBAutocompleteAsyncStore.data;
-    const approvers = data.get(FBAutocompleteAsyncOption.approver);
-    const approverGroups = data.get(FBAutocompleteAsyncOption.group);
+    const approvers = data.get(FBAutocompleteAsyncOption.availableApprovers);
+    const approverGroups = data.get(FBAutocompleteAsyncOption.groups);
     return {
       approvers: approvers && Array.from(approvers.values()),
       approverGroups: approverGroups && Array.from(approverGroups.values()),

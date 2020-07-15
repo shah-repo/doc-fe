@@ -150,9 +150,9 @@ export const withFBApproval = <T extends FBApprovalProps>(
     };
 
     useObserver(() => {
-      FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.approver) &&
+      FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.availableApprovers) &&
         (approvers = approvalFieldState?.approvers(approvers as string[]));
-      FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.group) &&
+      FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.groups) &&
         (approverGroups = approvalFieldState?.groups(approverGroups as string[]));
       hasApproved = approvalFieldState?.hasApproved;
       loading = approvalFieldState?.approversApi.loading || approvalFieldState?.groupsApi.loading;

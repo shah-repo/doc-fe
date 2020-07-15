@@ -20,7 +20,7 @@ const FBPOReceive: React.FunctionComponent<FBPOReceiveProps> = ({
       <FBAutocompleteAsync
         {...props}
         {...{ name }}
-        optionId={FBAutocompleteAsyncOption.po}
+        optionId={FBAutocompleteAsyncOption.POList}
       />
       {loading && (
         <Box display="flex" justifyContent="center">

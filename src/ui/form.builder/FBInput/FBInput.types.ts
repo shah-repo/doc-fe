@@ -1,7 +1,7 @@
 import { BaseTextFieldProps } from "@material-ui/core";
 import { AutocompleteProps } from "@material-ui/lab/Autocomplete";
 import { Dictionary } from "lodash";
-import { FBEditorOptionsProps, FBEditorPropertiesType, FBInputState, FBLabelProps, FBOptionProps, FBSchemaState } from "..";
+import { FBApprovalRoles, FBEditorOptionsProps, FBEditorPropertiesType, FBInputState, FBLabelProps, FBOptionProps, FBSchemaState } from "..";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { FBEditorValidationMode } from "../FBEditorValidation";
@@ -96,10 +96,7 @@ export type FBInputProps =
   customValidator?: FBValidatorConfigProps;
   approvers?: string[] | Employee[];
   approverGroups?: string[] | GroupRequestBody[];
-  approvalRoles?: string[] | {
-    id: string;
-    name: string;
-  };
+  approvalRoles?: string[] | FBApprovalRoles[];
   approveIsBlocking?: boolean;
   applicableOn?: any[];
   actions?: string[];

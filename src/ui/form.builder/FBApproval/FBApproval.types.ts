@@ -73,3 +73,8 @@ export interface FBApprovalConstructor {
   name?: string;
   value?: FBApprovalValue[];
 }
+
+export interface FBApprovalRoles {
+  id: string;
+  name: string;
+}
