@@ -19,6 +19,7 @@ declare global {
       drClickCreateDocument(): Chainable<Subject>;
       drCheckDocumentStatus(params: {status: string }): Chainable<Subject>;
       drCheckIfDocumentIdIsGenerated(): Chainable<Subject>;
+      drFilterDocListByNameAndStatus(params: {title: string; status: string}): Chainable<Subject>;
     }
   }
 }
@@ -83,4 +84,11 @@ Cypress.Commands.add("drCheckDocumentStatus", (params: {status: string }) => {
 
 Cypress.Commands.add("drCheckIfDocumentIdIsGenerated", () => {
   cy.get("[id=\"document.docId\"]").invoke("val").should("not.be.empty");
+});
+
+Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: {title: string; status: string }) => {
+  cy.get("#name").type(params.title);
+  cy.get("[id=\"mui-component-select-status[]\"]").click();
+  cy.get("li[data-value]").contains(params.status).click().wait(300);
+  cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).click();
 });

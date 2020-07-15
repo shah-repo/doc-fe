@@ -92,6 +92,7 @@ const FBProposedDocument: React.FunctionComponent<FBProposedDocumentProps> = ({
       mb={2}
       onMouseEnter={() => setMouseInside(true)}
       onMouseLeave={() => setMouseInside(false)}
+      data-cy = "addedDocuments"
     >
       <FBSection label={`${intl.formatMessage({
         id: "common.document",

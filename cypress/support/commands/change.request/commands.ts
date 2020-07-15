@@ -6,17 +6,21 @@ declare global {
   namespace Cypress {
     interface Chainable<Subject> {
       crSelectLastAddedCRForm(): Chainable<Subject>;
-      crEnterChangeRequestTitle( params: {title: string }): Chainable<Subject>;
-      crEnterChangeRequestDescription( params: {description: string }): Chainable<Subject>;
+      crEnterChangeRequestTitle( params: { title: string }): Chainable<Subject>;
+      crEnterChangeRequestDescription( params: { description: string }): Chainable<Subject>;
       crClickAddDocument(): Chainable<Subject>;
       crChoseProposedDocument(): Chainable<Subject>;
-      crEnterDescriptionAddDocumentsDialog( params: {description: string }): Chainable<Subject>;
-      crEnterJustificationAddDocumentsDialog( params: {justification: string }): Chainable<Subject>;
+      crEnterDescriptionAddDocumentsDialog( params: { description: string }): Chainable<Subject>;
+      crEnterJustificationAddDocumentsDialog( params: { justification: string }): Chainable<Subject>;
       crClickAddBtnOnAddDocumentsDialog(): Chainable<Subject>;
       crAddFirstApproverOnChangeRequestApproverList(): Chainable<Subject>;
       crClickCreateChangeRequestAfterCompletingForm(): Chainable<Subject>;
       crClickSendToReview(): Chainable<Subject>;
       crAddEffectiveDate(): Chainable<Subject>;
+      crVerifyStatus( params: {status: string }): Chainable<Subject>;
+      crClickOnFirstAddedDocument(): Chainable<Subject>;
+      crFilterCRListByNameAndStatus( params: { title: string; status: string }): Chainable<Subject>;
+      crApproveCR(): Chainable<Subject>;
     }
   }
 }
@@ -66,7 +70,7 @@ Cypress.Commands.add("crAddFirstApproverOnChangeRequestApproverList", () => {
 });
 
 Cypress.Commands.add("crClickCreateChangeRequestAfterCompletingForm", () => {
-  cy.get("#submit").click();
+  cy.get("#submit").click().wait(3000);
 });
 
 Cypress.Commands.add("crAddEffectiveDate", () => {
@@ -76,5 +80,27 @@ Cypress.Commands.add("crAddEffectiveDate", () => {
 });
 
 Cypress.Commands.add("crClickSendToReview", () => {
-  cy.get("#transitionButton").contains("Send to review").click();
+  cy.get("#transitionButton").contains("Send to review").click().wait(3000);
+});
+
+Cypress.Commands.add("crVerifyStatus", (params: {status: string }) => {
+  cy.get("#HeaderInfo-status>span").contains(params.status);
+});
+
+Cypress.Commands.add("crClickOnFirstAddedDocument", () => {
+  cy.get("div[data-cy=addedDocuments]>div:nth-child(2)>button>span>a").click();
+});
+
+Cypress.Commands.add("crFilterCRListByNameAndStatus", (params: {title: string; status: string }) => {
+  cy.get("#title").type(params.title);
+  cy.get("[id=\"mui-component-select-state\"]").click();
+  cy.get("li[data-value]").contains(params.status).click().wait(300);
+  cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).click();
+});
+
+Cypress.Commands.add("crApproveCR", () => {
+  cy.get("#HeaderMenuButton").click();
+  cy.get("ul[role=menu]>li").contains("Approve submission").click();
+  cy.get("input[type=password]").type("Tester1!");
+  cy.get("#passwordConfirm").click().wait(8000);
 });

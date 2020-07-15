@@ -9,7 +9,6 @@ import path from "path";
 const runId = new Date().valueOf();
 let createdCompany;
 let loginResponse;
-let currentEmployee;
 
 context(`Test: ${path.basename(__filename)}`, () => {
   it("Creates company", (done: any) => {
@@ -50,7 +49,6 @@ context(`Test: ${path.basename(__filename)}`, () => {
         }, sessionId: loginResponse.sessionId as unknown as string,
       }).then((response) => {
         createdCompany = response;
-        currentEmployee = createdCompany.employees[0];
         done();
       });
     });
