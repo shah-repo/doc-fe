@@ -2,7 +2,7 @@ import { Box } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ErrorIcon from "@material-ui/icons/Error";
 import React from "react";
-import { FBApprovalAudit, FBApprovalField, FBApprovalProps, FBApprovalSocket, FBText } from "..";
+import { FBApprovalAudit, FBApprovalField, FBApprovalProps, FBApprovalRoles, FBApprovalSocket, FBText } from "..";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import Text from "../../components/Text";
@@ -21,6 +21,7 @@ const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
   type,
   index,
   dialogState,
+  approvalRoles,
   ...props
 }) => (
   <Box mb={3}>
@@ -50,14 +51,23 @@ const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
       <FBApprovalField<Employee>
         {...props}
         collection={approvers as Employee[]}
+        mb={2}
         {...{ disabled }}
       />
     )}
     {approverGroups && (
       <FBApprovalField<GroupRequestBody>
         {...props}
-        mt={approvers ? 2 : 0}
+        mb={2}
         collection={approverGroups as GroupRequestBody[]}
+        {...{ disabled }}
+      />
+    )}
+    {approvalRoles && (
+      <FBApprovalField<FBApprovalRoles>
+        {...props}
+        mb={2}
+        collection={approvalRoles as FBApprovalRoles[]}
         {...{ disabled }}
       />
     )}

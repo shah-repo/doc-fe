@@ -10,6 +10,11 @@ export class FBAutocompleteAsyncStore {
       { deep: false }
     ));
   };
+
+  public get = <T>(optionId: string, id: string): T | undefined => {
+    const list = this.data.get(optionId);
+    return list.get(id) as T;
+  }
 }
 
 export default new FBAutocompleteAsyncStore();

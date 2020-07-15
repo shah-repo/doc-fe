@@ -18,6 +18,7 @@ export type FBApprovalProps =
 | "index"
 | "approvers"
 | "approverGroups"
+| "approvalRoles"
 | "disabled"
 | "approveIsBlocking"
 | "reviseDisabled"
@@ -42,6 +43,7 @@ export interface FBApprovalValue {
   id: string;
   userId?: string;
   groupId?: string;
+  approvalRoleId?: string;
   approvedAt: string;
 }
 
@@ -52,7 +54,7 @@ export interface FBApprovalApi {
 
 export type FBApprovalFieldProps<T> =
 & FBApprovalProps
-& Pick<BoxProps, "mt">
+& Pick<BoxProps, "mb">
 & {
   collection: T[];
 };
@@ -70,8 +72,10 @@ export interface FBApprovalSocketMsg {
 
 export interface FBApprovalConstructor {
   documentId?: string;
-  name?: string;
   value?: FBApprovalValue[];
+  approversValue?: string[];
+  groupsValue?: string[];
+  approvalRolesValue?: string[];
 }
 
 export interface FBApprovalRoles {

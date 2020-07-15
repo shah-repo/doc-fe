@@ -1,24 +1,21 @@
 import { Box, CircularProgress } from "@material-ui/core";
 import React from "react";
-import { FBApprovalFieldProps } from ".";
-import { FBDialog } from "..";
+import { FBApprovalFieldProps, FBApprovalRoles, FBButton, FBDialog, FBMapWrapper } from "..";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
-import FBButton from "../components/inputs/FBButton";
-import { FBMapWrapper } from "../FBMapWrapper";
 
-const FBApprovalField = <T extends Employee | GroupRequestBody>({
+const FBApprovalField = <T extends Employee | GroupRequestBody | FBApprovalRoles>({
   approvalConfig,
   onApprove,
   collection,
   disabled,
   approveLoading,
-  mt,
+  mb,
 }: FBApprovalFieldProps<T>) => (
-  <Box {...{ mt }}>
+  <Box {...{ mb }}>
     <FBMapWrapper<T> {...{ collection }}>
       {(approver, index) => {
-        const config = approvalConfig && approvalConfig(approver);
+        const config = approvalConfig?.(approver);
         return (
           <Box
             mb={config?.canApprove ? 1 : 2}
