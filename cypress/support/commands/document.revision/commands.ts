@@ -13,10 +13,12 @@ declare global {
       drGetDocumentType(params: {employeeId: string; sessionId: string}): Chainable<Subject>;
       drEnterDocumentTitle( params: {name: string }): Chainable<Subject>;
       drEnterDocumentDescription( params: {description: string }): Chainable<Subject>;
-      drSelectFormDocumentType(): Chainable<Subject>;
+      drSelectDocumentType(params: {documentType: string }): Chainable<Subject>;
       drSelectChangeRequestOutputDocType(): Chainable<Subject>;
       drApproveAndReleaseDocument(): Chainable<Subject>;
       drClickCreateDocument(): Chainable<Subject>;
+      drCheckDocumentStatus(params: {status: string }): Chainable<Subject>;
+      drCheckIfDocumentIdIsGenerated(): Chainable<Subject>;
     }
   }
 }
@@ -54,13 +56,14 @@ Cypress.Commands.add("drEnterDocumentDescription", (params: {description: string
   cy.get("[data-cy=\"field-description\"]").click().type(params.description);
 });
 
-Cypress.Commands.add("drSelectFormDocumentType", () => {
+Cypress.Commands.add("drSelectDocumentType", (params: {documentType: string }) => {
   cy.get("[data-cy=\"select.document.documentType.id\"]").click();
-  cy.get("[data-cy=\"selectItem.document.documentType.id.Form\"]").click();
+  cy.get(`[data-cy=\"selectItem.document.documentType.id.${params.documentType}\"]`).click();
 });
 
 Cypress.Commands.add("drSelectChangeRequestOutputDocType", () => {
-  cy.get("[id=\"formTemplate.outputDocumentTypes").click().get("[id=\"react-select-6-option-0").click();
+  cy.get("[id=\"formTemplate.outputDocumentTypes").click();
+  cy.get("[id=\"react-select-6-option-0").click();
 });
 
 Cypress.Commands.add("drApproveAndReleaseDocument", () => {
@@ -74,3 +77,10 @@ Cypress.Commands.add("drClickCreateDocument", () => {
   cy.get("#DocumentRevisionForm-submit").click();
 });
 
+Cypress.Commands.add("drCheckDocumentStatus", (params: {status: string }) => {
+  cy.get("[id=HeaderInfo-status]").should("have.text", params.status);
+});
+
+Cypress.Commands.add("drCheckIfDocumentIdIsGenerated", () => {
+  cy.get("[id=\"document.docId\"]").invoke("val").should("not.be.empty");
+});

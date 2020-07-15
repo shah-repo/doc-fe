@@ -130,7 +130,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
   });
 
   it("Click on 'Form' document type", () => {
-    cy.drSelectFormDocumentType();
+    cy.drSelectDocumentType({ documentType: "Form" });
   });
 
   it("Click on 'Change request' outputdocument type", () => {

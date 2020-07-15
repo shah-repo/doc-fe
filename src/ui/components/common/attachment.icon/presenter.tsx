@@ -56,7 +56,12 @@ AttachmentIconProps
   );
 
   const primaryBadgeRender = isPrimary &&
-    <StarsRoundedIcon color="primary" fontSize="small" className={classes.primaryBadge} />;
+    <StarsRoundedIcon
+      data-cy={"primary.attachment.icon"}
+      color="primary"
+      fontSize="small"
+      className={classes.primaryBadge}
+    />;
   const deleteButtonRenderer = canDeleteFile && (
     <div className={classes.closeRoot}>
       <IconButton
