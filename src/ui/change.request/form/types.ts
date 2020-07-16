@@ -45,3 +45,7 @@ export interface PasswordFormValues {
 export interface EffectiveDateFormValues {
   effectiveDate: string;
 }
+
+export interface SelectTemplateFormValues {
+  chosenFormId: string;
+}

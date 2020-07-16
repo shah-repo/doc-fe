@@ -126,7 +126,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <Grid item={true} xs={6} style={{ textAlign: "right" }}>
+      <Grid item={true} xs={6} style={{ textAlign: "right", marginBottom: "16px" }}>
         <Button
           variant="contained"
           color="primary"

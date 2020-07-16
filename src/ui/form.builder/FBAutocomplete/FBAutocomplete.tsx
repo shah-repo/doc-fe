@@ -19,6 +19,8 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   refresh,
   getOptionDisabled,
   loading,
+  freeSolo = false,
+  filterSelectedOptions = false,
   ...props
 }) =>  (
   <>
@@ -31,7 +33,15 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
     )}
     <FBInput {...props} {...{ multiple, disabled, defaultValue, loading }} type="autocomplete">
       <Autocomplete
-        {...{ options, multiple, getOptionLabel, defaultValue, getOptionDisabled }}
+        {...{
+          options,
+          multiple,
+          getOptionLabel,
+          defaultValue,
+          getOptionDisabled,
+          freeSolo,
+          filterSelectedOptions,
+        }}
         renderInput={(params: RenderInputParams) => (
           <Box display="flex">
             <Box width="100%">
@@ -50,7 +60,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                 }}
               />
             </Box>
-            {refresh && (
+            {refresh && !freeSolo && (
               <Box ml={-4} display="flex" alignItems="center">
                 <IconButton size="small" onClick={refresh} {...{ disabled }}>
                   <CachedIcon fontSize="small" />

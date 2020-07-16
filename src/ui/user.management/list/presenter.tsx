@@ -1,15 +1,15 @@
-import { Button, Grid } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import { Group } from "../../../state/ducks/auth/types";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement";
 import { EMPLOYEES_URL } from "../../../state/ducks/userManagement/constants";
 import { SelectOption } from "../../components/forms/fields/Select";
+import ClearFilters from "../../components/table/ClearFilters";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
 import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
-import Text from "../../components/Text";
 import AddEmployeeContainer from "../add.employee/container";
 import AddSlackButtonContainer from "../AddSlackButton/AddSlackButton.container";
 import UserProfileAdminContainer from "../profile/UserProfileAdmin.container";
@@ -124,21 +124,13 @@ export const UserManagementListPresenter: React.FunctionComponent<Props> = ({
   return (
     <Grid container={true} className={classes.root}>
       <Grid item={true} xs={6}>
-        <Button
-          color="primary"
-          variant="outlined"
-          className={classes.clearButton}
-          onClick={clearFilter}
-          id="UserManagementListPresenter-clearButton"
-        >
-          <Text translation="common.clear.filters" />
-        </Button>
+        <ClearFilters {...{ clearFilter }}/>
         <DocumentInfo numberOfRecords={tableData.length} />
       </Grid>
       <Grid
         item={true}
         xs={6}
-        style={{ textAlign: "right" }}
+        style={{ textAlign: "right", marginBottom: "16px" }}
       >
         <AddSlackButtonContainer />
         <AddEmployeeContainer />

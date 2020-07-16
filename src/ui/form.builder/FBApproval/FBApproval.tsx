@@ -20,7 +20,6 @@ const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
   name,
   type,
   index,
-  dialogState,
   ...props
 }) => (
   <Box mb={3}>

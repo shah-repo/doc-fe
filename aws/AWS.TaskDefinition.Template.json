@@ -33,6 +33,14 @@
         {
           "name": "REACT_APP_HELLOSIGN_CLIENT_ID",
           "value": ""
+        },
+        {
+          "name": "REACT_APP_DATADOG_APPLICATION_ID",
+          "value": ""
+        },
+        {
+          "name": "REACT_APP_DATADOG_CLIENT_TOKEN",
+          "value": ""
         }
       ],
       "logConfiguration": {
