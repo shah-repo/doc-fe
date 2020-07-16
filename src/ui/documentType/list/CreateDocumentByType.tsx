@@ -11,7 +11,7 @@ import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import Text from "../../components/Text";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import { toDocumentRevisionFormValuesForOutput, toNewVersionRequestBody } from "../../documentRevision/forms/transform";
-import { useCreateDocumentTypeButton } from "../../hooks/docCustomization/useCustomization";
+import { useCreateDocumentByTypeButton } from "../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
@@ -85,7 +85,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const formIds = useSelector(documentTypeSelectors.formIds);
   const [errorMessage, setErrorMessage] = useState<string>();
   const [multipleForm, toggleMultipleForm] = React.useState(false);
-  const [isVisible, label] = useCreateDocumentTypeButton(documentTypeId);
+  const [isVisible, label] = useCreateDocumentByTypeButton(documentTypeId);
 
   useEffect(() => {
     setErrorMessage(undefined);
