@@ -1,3 +1,1 @@
-export interface RouteParams {
-  docTypeId: string;
-}
+export type RouteParams = {docTypeId: string} | {documentCategory: string};

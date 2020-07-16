@@ -44,7 +44,7 @@ export const DOCUMENT_BY_TYPE_ROOT_URL = "/document_by_type";
 export const DOCUMENT_BY_TYPE_LIST_URL = `${DOCUMENT_BY_TYPE_ROOT_URL}/:docTypeId`;
 
 export const DOCUMENT_BY_CATEGORY_ROOT_URL = "/document_by_category";
-export const DOCUMENT_BY_CATEGORY_LIST_URL = `${DOCUMENT_BY_CATEGORY_ROOT_URL}/:categoryId`;
+export const DOCUMENT_BY_CATEGORY_LIST_URL = `${DOCUMENT_BY_CATEGORY_ROOT_URL}/:documentCategory`;
 
 export const GROUP_MANAGEMENT_ROOT_URL = "/group_management";
 

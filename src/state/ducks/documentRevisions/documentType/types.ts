@@ -1,4 +1,5 @@
 import { FBSchemaProps } from "../../../../ui/form.builder";
+import { Translation } from "../../../../ui/translations/types";
 import { GroupTag } from "../../auth/types";
 import { Nullable } from "../../common";
 import { FBFormTemplateProps } from "../types";
@@ -33,7 +34,7 @@ export type DocumentGroupOptionsType =
   "CHANGE_REQUEST" |
   "BE_OUTPUT";
 export interface PageDetailsColumn {
-  label: string;
+  label: Translation;
   sourcePath: string;
   valuePath: string;
 }
@@ -43,8 +44,9 @@ export interface PageDetailsAddNew {
 }
 
 export interface PageDetails {
-  addNew: PageDetailsAddNew;
+  addNewBtnLabel: PageDetailsAddNew;
   columns: PageDetailsColumn[];
+  category?: string;
 }
 export interface DocumentType {
   id: string;
