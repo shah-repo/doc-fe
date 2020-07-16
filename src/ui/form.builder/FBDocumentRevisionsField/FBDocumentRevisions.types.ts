@@ -1,29 +1,29 @@
-import { FBDialogState, FBDocumentRevisionsState } from "..";
+import { FBAutocompleteProps, FBDialogState, FBDocumentRevisionsState } from "..";
 import { Id } from "../../../state/ducks/common/types";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions";
 import { FBInputProps } from "../FBInput/FBInput.types";
 
 export type FBDocumentRevisionProps =
-& Pick<FBInputProps, "disabled" | "name" >
-& FBProposedDocumentProps
+& Pick<FBInputProps, "disabled" | "name">
 & {
+  handleAdd: () => void;
   dialogState?: FBDialogState;
   docRevState?: FBDocumentRevisionsState;
-  onClick: () => void;
-  removeDocument: (index: number) => void;
+  documentRevisions?: FBDocumentRevisionItem[];
 };
 
-export interface FBProposedDocumentProps {
+export type FBProposedDocumentProps =
+& Pick<FBInputProps, "disabled" | "index">
+& {
+  setMouseInside?: (isMouseInside: boolean) => void;
+  removeDocument?: (id: string) => void;
+  handleOpen?: () => void;
   id: string;
-  proposedDocumentRevision: DocumentRevision;
-  isMouseInside: boolean;
-  setMouseInside: (isMouseInside: boolean) => void;
+  proposedDocumentRevision?: DocumentRevision;
+  isMouseInside?: boolean;
   justification: string;
   description: string;
-  index: number;
-  removeDocument: (index: number) => void;
-  disabled: boolean;
-}
+};
 
 export interface FBDocumentRevisions {
   documentRevisions: FBDocumentRevisionItem[];
@@ -34,4 +34,8 @@ export interface FBDocumentRevisionItem {
   justificationOfChange: string;
   descriptionOfChange: string;
   id: string;
+}
+
+export interface FBDocumentRevisionFormProps {
+  getOptionDisabled?: FBAutocompleteProps["getOptionDisabled"];
 }
