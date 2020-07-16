@@ -64,7 +64,7 @@ export class FBAutocompleteAsyncState extends FBRequest<any, any> {
     }
     // TODO: refactore autocomplete list to reuse doc rev list (check with mobile)
     switch (this.optionId) {
-      case FBAutocompleteAsyncOption.documentRevisions:
+      case FBAutocompleteAsyncOption.activeDocumentRevisions:
       case FBAutocompleteAsyncOption.TLList:
       case FBAutocompleteAsyncOption.CSLList:
       case FBAutocompleteAsyncOption.parts:
