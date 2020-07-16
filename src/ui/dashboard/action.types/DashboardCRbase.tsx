@@ -42,7 +42,6 @@ export const DashboardCRBase: React.FunctionComponent<Props> = ({
           </Box>
         </Box>
       </Link>
-
     </Grid>
     <Grid
       container={true}
@@ -52,12 +51,12 @@ export const DashboardCRBase: React.FunctionComponent<Props> = ({
     >
       <Grid item={true}>
         <ChangeRequestTransitionDialogContainer
-          transition={"reject"}
+          transition="reject"
           changeRequestId={crId}
           label={"transition.action.reject"}
         />
         <ChangeRequestTransitionDialogContainer
-          transition={"approve"}
+          transition="approve"
           changeRequestId={crId}
           label={"transition.action.approve"}
         />
