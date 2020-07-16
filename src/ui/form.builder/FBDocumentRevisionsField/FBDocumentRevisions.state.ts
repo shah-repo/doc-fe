@@ -1,16 +1,14 @@
-import _ from "lodash";
+import { filter, union } from "lodash";
 import { action, observable, set } from "mobx";
 import * as generateUuid from "uuid/v4";
-import FBRequest from "../FBApi/FBApi.request";
-import { FBDocumentRevisionItem, FBDocumentRevisions } from "./FBDocumentRevisions.types";
+import { FBDocumentRevisionItem } from "./FBDocumentRevisions.types";
 
-export class FBDocumentRevisionsState extends FBRequest<FBDocumentRevisions, null> {
+export class FBDocumentRevisionsState {
   @observable public name = "";
   @observable public documentRevisions?: FBDocumentRevisionItem[] = [];
 
   public constructor(data?: FBDocumentRevisionItem[]) {
-    super();
-    this.setDocumentRevisions(data || []);
+    this.documentRevisions = data || [];
   }
 
   @action public setDocumentRevisions = (items?: FBDocumentRevisionItem[]) => {
@@ -22,12 +20,12 @@ export class FBDocumentRevisionsState extends FBRequest<FBDocumentRevisions, nul
       ...item,
       id: generateUuid(),
     };
-    const documentRevisions = _.union(this.documentRevisions || [], [item]);
+    const documentRevisions = union(this.documentRevisions || [], [item]);
     this.setDocumentRevisions(documentRevisions);
   };
 
-  public removeDocRevItem = (index: number) => {
-    const documentRevisions = this.documentRevisions?.splice(index, 1);
+  public removeDocRevItem = (id: string) => {
+    const documentRevisions = filter(this.documentRevisions, (doc) => doc.proposedDocumentRevision.id !== id);
     this.setDocumentRevisions(documentRevisions);
   };
 }

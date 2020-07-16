@@ -43,6 +43,7 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
           ...e,
           docType: {
             ...e.docType,
+            acronym: e.docType.acronym.toUpperCase(),
             category: categoryTrim ?? "",
           },
         };
