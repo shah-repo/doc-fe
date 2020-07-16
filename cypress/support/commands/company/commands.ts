@@ -13,8 +13,8 @@ declare global {
       cmpSelectCompany( params: {name: string }): Chainable<Subject>;
       cmpNavigateToDocumentList(): Chainable<Subject>;
       cmpClickCreateNewDocument(): Chainable<Subject>;
-      cmpNavigateToChangeRequestList(): Chainable<Subject>;
-      cmpClickCreateChangeRequest(): Chainable<Subject>;
+      cmpNavigateToApprovalRequestList(): Chainable<Subject>;
+      cmpClickCreateApprovalRequest(): Chainable<Subject>;
     }
   }
 }
@@ -38,15 +38,15 @@ Cypress.Commands.add("cmpNavigateToDocumentList", () => {
   cy.get("[data-cy=\"navigation.documentList\"]").click();
 });
 
-Cypress.Commands.add("cmpNavigateToChangeRequestList", () => {
-  cy.get("[data-cy=\"navigation.changeRequestList\"]").click();
+Cypress.Commands.add("cmpNavigateToApprovalRequestList", () => {
+  cy.get("[data-cy=\"navigation.approvalRequestList\"]").click();
 });
 
 Cypress.Commands.add("cmpClickCreateNewDocument", () => {
   cy.get("[data-cy=\"document.revision.create\"]").click();
 });
 
-Cypress.Commands.add("cmpClickCreateChangeRequest", () => {
+Cypress.Commands.add("cmpClickCreateApprovalRequest", () => {
   cy.get("#ChangeRequest-create").click();
 });
 

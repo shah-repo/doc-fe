@@ -14,7 +14,7 @@ declare global {
       drEnterDocumentTitle( params: {name: string }): Chainable<Subject>;
       drEnterDocumentDescription( params: {description: string }): Chainable<Subject>;
       drSelectDocumentType(params: {documentType: string }): Chainable<Subject>;
-      drSelectChangeRequestOutputDocType(): Chainable<Subject>;
+      drSelectApprovalRequestOutputDocType(): Chainable<Subject>;
       drApproveAndReleaseDocument(): Chainable<Subject>;
       drClickCreateDocument(): Chainable<Subject>;
       drCheckDocumentStatus(params: {status: string }): Chainable<Subject>;
@@ -62,7 +62,7 @@ Cypress.Commands.add("drSelectDocumentType", (params: {documentType: string }) =
   cy.get(`[data-cy=\"selectItem.document.documentType.id.${params.documentType}\"]`).click();
 });
 
-Cypress.Commands.add("drSelectChangeRequestOutputDocType", () => {
+Cypress.Commands.add("drSelectApprovalRequestOutputDocType", () => {
   cy.get("[id=\"formTemplate.outputDocumentTypes").click();
   cy.get("[id=\"react-select-6-option-0").click();
 });

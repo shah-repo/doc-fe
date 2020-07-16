@@ -14,7 +14,8 @@ let currentEmployee;
 let componentSpecificationDocumentType;
 let group;
 const documentRevisionName = "New document for testing CR";
-const changeRequestTitle = "Change request from newly created form";
+const approvalRequestTitle = "Approval request from newly created form";
+const approvalRequestFormName = "New Approval request form template";
 
 context(`Test: ${path.basename(__filename)}`, () => {
   context("Create company and log in it", () => {
@@ -124,7 +125,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
   });
 
-  context("Create new CR form", () => {
+  context("Create new AR form", () => {
     it("Navigate to document list", () => {
       cy.cmpNavigateToDocumentList();
     });
@@ -133,20 +134,20 @@ context(`Test: ${path.basename(__filename)}`, () => {
       cy.cmpClickCreateNewDocument();
     });
 
-    it("Enter title 'New Change request form template'", () => {
-      cy.drEnterDocumentTitle({ name: "New Change request form template" });
+    it("Enter title 'New Approval request form template'", () => {
+      cy.drEnterDocumentTitle({ name: approvalRequestFormName });
     });
 
-    it("Enter description 'New form template for change request'", () => {
-      cy.drEnterDocumentDescription({ description: "New form template for change request" });
+    it("Enter description 'New form template for approval request'", () => {
+      cy.drEnterDocumentDescription({ description: "New form template for approval request" });
     });
 
     it("Click on 'Form' document type", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
-    it("Click on 'Change request' outputdocument type", () => {
-      cy.drSelectChangeRequestOutputDocType();
+    it("Click on 'Approval request' outputdocument type", () => {
+      cy.drSelectApprovalRequestOutputDocType();
     });
 
     it("Click create document after filling document", () => {
@@ -158,58 +159,58 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
   });
 
-  context("Create change request with newly created form", () => {
-    it("Navigate to change request list", () => {
-      cy.cmpNavigateToChangeRequestList();
+  context("Create approval request with newly created form", () => {
+    it("Navigate to approval request list", () => {
+      cy.cmpNavigateToApprovalRequestList();
     });
 
-    it("Click Create a Change Request button", () => {
-      cy.cmpClickCreateChangeRequest();
+    it("Click Create a Approval Request button", () => {
+      cy.cmpClickCreateApprovalRequest();
     });
 
-    it("Choose Initial CR Form template", () => {
-      cy.crSelectLastAddedCRForm();
+    it("Choose newly AR Form template", () => {
+      cy.arSelectARForm({ formTitle: approvalRequestFormName });
     });
 
-    it("Enter title CR title: " + changeRequestTitle, () => {
-      cy.crEnterChangeRequestTitle({ title: changeRequestTitle });
+    it("Enter title AR title: " + approvalRequestTitle, () => {
+      cy.arEnterApprovalRequestTitle({ title: approvalRequestTitle });
     });
 
-    it("Enter description 'CR from New form template for change request'", () => {
-      cy.crEnterChangeRequestDescription({ description: "CR from New form template for change request" });
+    it("Enter description 'AR from New form template for approval request'", () => {
+      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for approval request" });
     });
 
     it("Add created document revision", () => {
-      cy.crClickAddDocument();
-      cy.crChoseProposedDocument();
-      cy.crEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.crEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.crClickAddBtnOnAddDocumentsDialog();
+      cy.arClickAddDocument();
+      cy.arChoseProposedDocument();
+      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
+      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
+      cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Add first approver to change request on approver list", () => {
-      cy.crAddFirstApproverOnChangeRequestApproverList();
+    it("Add first approver to approval request on approver list", () => {
+      cy.arAddFirstApproverOnApprovalRequestApproverList();
     });
 
     it("Add date", () => {
-      cy.crAddEffectiveDate();
+      cy.arAddEffectiveDate();
     });
 
-    it("Click Create Change Request", () => {
-      cy.crClickCreateChangeRequestAfterCompletingForm();
+    it("Click Create Approval Request", () => {
+      cy.arClickCreateApprovalRequestAfterCompletingForm();
     });
 
     it("Click send to review", () => {
-      cy.crClickSendToReview();
+      cy.arClickSendToReview();
     });
 
-    it("Verify CR status", () => {
-      cy.crVerifyStatus({ status: "In Review" });
+    it("Verify AR status", () => {
+      cy.arVerifyStatus({ status: "In Review" });
     });
   });
 
   context("Check document revision is in review", () => {
-    it("Navigate to added document in CR", () => {
+    it("Navigate to added document in AR", () => {
       cy.cmpNavigateToDocumentList();
     });
 
@@ -222,26 +223,26 @@ context(`Test: ${path.basename(__filename)}`, () => {
     });
   });
 
-  context("Approve created CR", () => {
-    it("Navigate to added document in CR", () => {
-      cy.cmpNavigateToChangeRequestList();
+  context("Approve created AR", () => {
+    it("Navigate to added document in AR", () => {
+      cy.cmpNavigateToApprovalRequestList();
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.crFilterCRListByNameAndStatus({ title: changeRequestTitle, status: "In Review" });
+      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "In Review" });
     });
 
-    it("Approve CR", () => {
-      cy.crApproveCR();
+    it("Approve AR", () => {
+      cy.arApproveAR();
     });
 
-    it("Check change request status is approved", () => {
-      cy.crVerifyStatus({ status: "Approved" });
+    it("Check approval request status is approved", () => {
+      cy.arVerifyStatus({ status: "Approved" });
     });
   });
 
   context("Check document revision is Released", () => {
-    it("Navigate to added document in CR", () => {
+    it("Navigate to added document in AR", () => {
       cy.cmpNavigateToDocumentList();
     });
 
