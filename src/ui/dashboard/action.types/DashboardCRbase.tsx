@@ -31,7 +31,7 @@ export const DashboardCRBase: React.FunctionComponent<Props> = ({
       <Link to={url} style={{ textDecoration: "none", color: "inherit" }}>
         <Box>
           <Box
-            color={"primary.main"}
+            color="primary.main"
             fontWeight="fontWeightBold"
             marginBottom="5px"
           >
@@ -53,12 +53,12 @@ export const DashboardCRBase: React.FunctionComponent<Props> = ({
         <ChangeRequestTransitionDialogContainer
           transition="reject"
           changeRequestId={crId}
-          label={"transition.action.reject"}
+          label="transition.action.reject"
         />
         <ChangeRequestTransitionDialogContainer
           transition="approve"
           changeRequestId={crId}
-          label={"transition.action.approve"}
+          label="transition.action.approve"
         />
       </Grid>
     </Grid>
