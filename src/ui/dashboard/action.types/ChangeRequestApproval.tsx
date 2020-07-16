@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { changeRequestEditPath } from "../../change.request/utils/paths";
-import DashboardActionTypeBase from "./DashboardActionTypeBase";
+import DashboardCRBase from "./DashboardCRbase";
 
 interface Props {
   index: number;
@@ -14,20 +14,16 @@ export const ChangeRequestApproval: React.FunctionComponent<Props> = ({
   changeRequest,
 }) => {
   const intl = useIntl();
-  const [title] = useState(intl.formatMessage(
+  const [crTitle] = useState(intl.formatMessage(
     { id: "dashboard.title.change.request" },
-    { crId: changeRequest.crId },
-  ));
-  const [description] = useState(intl.formatMessage(
-    { id: "dashboard.assigned.change.request" },
-    { name: changeRequest.owner.user.name },
+    { crId: changeRequest.crId, name: changeRequest.owner.user.name },
   ));
 
   return (
-    <DashboardActionTypeBase
-      index={index}
-      title={title}
-      description={description}
+    <DashboardCRBase
+      crId={changeRequest.id}
+      crTitle={crTitle}
+      title={changeRequest.title}
       url={changeRequestEditPath(changeRequest.id)}
     />
   );
