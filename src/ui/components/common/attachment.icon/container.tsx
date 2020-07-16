@@ -282,7 +282,9 @@ export const AttachmentIconContainer: React.FunctionComponent<AttachmentIconCont
   const openFileView = () => dialogHandler.open();
 
   const sortedAttachments = useMemo(() =>
-    attachments.sort((a) => a.id === documentRevision?.primaryAttachment?.id ? -1 : 0)
+    attachments
+      .sort((a) => a.lineType === LINE_TYPES.CLEAN_COPY ? -1 : 0)
+      .sort((a) => a.id === documentRevision?.primaryAttachment?.id ? -1 : 0)
   , [attachments, documentRevision]);
   const attachmentsRenderer = sortedAttachments.map((attachment) => {
     let showAttachment = true;

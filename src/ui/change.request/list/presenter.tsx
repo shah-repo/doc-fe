@@ -1,12 +1,12 @@
-import { Button, Grid, WithStyles, withStyles } from "@material-ui/core";
+import { Grid, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 import { stripTagsFromObject } from "../../../common/utils/helpers";
 import { ChangeRequest } from "../../../state/ducks/changeRequest";
 import { CHANGE_REQUEST_ROOT_URL } from "../../../state/ducks/changeRequest/constants";
+import ClearFilters from "../../components/table/ClearFilters";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
-import Text from "../../components/Text";
 import FromListContainer from "../form.list/FormList.container";
 import { canEditChangeRequest, changeRequestStatusOption } from "../utils/helpers";
 import { changeRequestEditPath, changeRequestPreviewPath } from "../utils/paths";
@@ -88,18 +88,9 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
   return (
     <Grid container={true} className={classes.root}>
       <Grid item={true} xs={6}>
-        <Button
-          color="primary"
-          variant="outlined"
-          className={classes.clearButton}
-          onClick={clearFilter}
-          id="ChangeRequest-clearFilter"
-        >
-          <Text translation="common.clear.filters" />
-        </Button>
+        <ClearFilters {...{ clearFilter }}/>
         <DocumentInfo numberOfRecords={tableData.length} />
       </Grid>
-
       <FromListContainer/>
       <Grid item={true} className={classes.item}>
         <TablePanel<ChangeRequest>

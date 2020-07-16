@@ -9,9 +9,10 @@ export class FBApprovalMatrixFieldState extends FBRequest<FBApprovalMatrixFieldD
   @observable public mode: FBApprovalMatrixFieldMode = "none";
   public url = FBEndpoint.ApprovalMatrix;
 
-  public constructor({ formValue, isOutput }: FBApprovalMatrixConstructor) {
+  public constructor({ formValue, outputRevision, isOutput }: FBApprovalMatrixConstructor) {
     super();
-    if (!formValue || isOutput) {
+    if (!isOutput) { return; }
+    if (!formValue || outputRevision) {
       this.fetch();
       return;
     }

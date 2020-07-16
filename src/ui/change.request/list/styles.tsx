@@ -16,8 +16,4 @@ export default (theme: Theme) => createStyles({
     margin: "0px",
     boxShadow: "none",
   },
-  clearButton: {
-    margin: theme.spacing(0, 2, 0, 0),
-    backgroundColor: theme.palette.common.white,
-  },
 });

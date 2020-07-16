@@ -18,12 +18,13 @@ export const FormListPresenter: React.FunctionComponent<Props> = ({
   const dialog = useDialog();
   return (
     <>
-      <Grid item={true} xs={6} style={{ textAlign: "right" }}>
+      <Grid item={true} xs={6} style={{ textAlign: "right", marginBottom: "16px" }}>
         <Button
           variant="contained"
           color="primary"
           id="ChangeRequest-create"
           onClick={dialog.open}
+          className={classes.createButton}
         >
           <Text translation="change.request.create" />
         </Button>
