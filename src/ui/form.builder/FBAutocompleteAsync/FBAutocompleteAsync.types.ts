@@ -20,7 +20,7 @@ export interface FBAutocompleteAsyncConfig  {
 }
 
 export enum FBAutocompleteAsyncOption {
-  documentRevisions = "1",
+  activeDocumentRevisions = "1",
   changeRequests = "2",
   availableApprovers = "3",
   documentTypes = "4",
@@ -37,4 +37,5 @@ export enum FBAutocompleteAsyncOption {
   DRAFTdocumentRevisions = "15",
   WOParts = "16",
   approvalRoles = "17",
+  documentRevisions = "18"
 }

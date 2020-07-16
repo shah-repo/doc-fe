@@ -10,24 +10,18 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
   const Comp = ({
     workspaceMode,
     schemaState,
+    schema,
     ...props
   }: T) => {
 
-    let schema: FBSchemaProps[] | undefined;
-    !schemaState && (schemaState = FB.useRef<FBSchemaState>(FBSchemaState, props.schema));
+    !schemaState && (schemaState = FB.useRef<FBSchemaState>(FBSchemaState, schema));
     const { workspaceState, formState } = FB.useStores();
     const { isOutput, id, document: { outputRevision = false } = {} } = workspaceState || {};
 
     React.useEffect(() => {
-      FormBuilderDynamicValidatorStore.registerValidators(props.schema, formState?.Validator);
+      FormBuilderDynamicValidatorStore.registerValidators(schema, formState?.Validator);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    React.useEffect(() => {
-      if (!schemaState && !props.schema) { return; }
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      schemaState!.schema = props.schema;
-    }, [schemaState, props.schema]);
 
     function controlRenderer(schemaItem: FBSchemaProps | FBInputProps): React.ReactNode | undefined {
       return FBSchemaState.component(schemaItem);
@@ -39,8 +33,8 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
       let disabled = false;
 
       _.range(0, index).reverse().some((current) => {
-        if (!props.schema) { return disabled; }
-        const item =  props.schema[current];
+        if (!schema) { return disabled; }
+        const item =  schema[current];
         const { type, name } = item;
         if (type === "requestapproval" || type === "approval") {
           const activeConfig = type === "approval" ? item : formState?.getFieldValue(name);
@@ -63,7 +57,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
       if (workspaceMode === "design") {
         return <FBSortable />;
       }
-      return _.map(props.schema, (schemaItem, index) => {
+      return _.map(schema, (schemaItem, index) => {
         const isUnderWorkspace = workspaceState?.getSchemaItem(schemaItem.name);
         const { disabled, reviseDisabled, outputDisabled } = schemaItem || {};
         return controlRenderer({

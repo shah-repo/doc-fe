@@ -33,7 +33,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
     ...props
   }: T) => {
 
-    const { workspaceState, formState, dialogState } = FB.useStores();
+    const { workspaceState, formState } = FB.useStores();
     const {
       id: documentId,
       isOutput,
@@ -152,7 +152,6 @@ export const withFBApproval = <T extends FBApprovalProps>(
         fieldValue: approvalFieldState?.hasApproved,
       });
       approvalFieldState?.postApi.post();
-      dialogState && dialogState.closeDialog();
     };
 
     approvalConfig = (approver?: Employee | GroupRequestBody | FBApprovalRoles): FBApprovalConfig | undefined => {
@@ -203,7 +202,6 @@ export const withFBApproval = <T extends FBApprovalProps>(
       disabled,
       loading,
       name,
-      dialogState,
       approveLoading,
     });
   };

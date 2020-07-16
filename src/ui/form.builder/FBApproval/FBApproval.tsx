@@ -11,6 +11,7 @@ import { withFBApproval } from "./FBApproval.wrap";
 const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
   approvers,
   approverGroups,
+  approvalRoles,
   disabled,
   isApproved,
   isDefined,
@@ -20,8 +21,6 @@ const FBApproval: React.FunctionComponent<FBApprovalProps> = ({
   name,
   type,
   index,
-  dialogState,
-  approvalRoles,
   ...props
 }) => (
   <Box mb={3}>

@@ -142,5 +142,13 @@
     "labelKey": "name",
     "labelPrefixRoot": "",
     "root": ""
+  },
+  {
+    "path": "/document_revisions",
+    "label": "Document revisions (all versions)",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": ""
   }
 ]

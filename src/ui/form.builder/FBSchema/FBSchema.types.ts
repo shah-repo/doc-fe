@@ -36,6 +36,7 @@ export type FBSchemaProps = Pick<FBInputProps,
 | "approveIsBlocking"
 | "applicableOn"
 | "actions"
+| "transform"
 > & {
   validators?: Dictionary<any>;
 };

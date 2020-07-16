@@ -6,40 +6,33 @@ import { withFBDocumentRevisions } from "./FBDocumentRevisions.wrap";
 import FBProposedDocument from "./FBProposedDocument/FBProposedDocument";
 
 const FBDocumentRevisions: React.FunctionComponent<FBDocumentRevisionProps> = ({
+  handleAdd,
   dialogState,
   docRevState,
   disabled,
-  onClick,
-  removeDocument,
-  isMouseInside,
-  setMouseInside,
-  proposedDocumentRevision,
+  documentRevisions = [],
 }) =>   (
   <Provider {...{ dialogState, docRevState }}>
     <FBDialog />
-    <React.Fragment>
-      <FBMapWrapper<FBDocumentRevisionItem[] | undefined>
-        collection={docRevState?.documentRevisions}>
-        {(e, index) =>
-          <FBProposedDocument
-            id={e.proposedDocumentRevision.id}
-            justification={e.justificationOfChange}
-            description={e.descriptionOfChange}
-            index={index + 1}
-            disabled={disabled}
-            {...{ removeDocument, isMouseInside, setMouseInside, proposedDocumentRevision }}
-          />
-        }
-      </FBMapWrapper>
-      <FBButton
-        fullWidth={true}
-        label="Add a document"
-        variant="outlined"
-        style={{ margin: "0px 0px 32px 0px" }}
-        {...{ onClick }}
-        disabled={disabled}
-      />
-    </React.Fragment>
+    <FBMapWrapper<FBDocumentRevisionItem[]> collection={documentRevisions}>
+      {(docRev: FBDocumentRevisionItem, index) => (
+        <FBProposedDocument
+          key={`fb-document-revision-${docRev.id}-${index}`}
+          id={docRev.proposedDocumentRevision.id}
+          justification={docRev.justificationOfChange}
+          description={docRev.descriptionOfChange}
+          {...{ index, disabled }}
+        />
+      )}
+    </FBMapWrapper>
+    <FBButton
+      fullWidth={true}
+      label="Add a document"
+      variant="outlined"
+      style={{ margin: "0px 0px 32px 0px" }}
+      onClick={handleAdd}
+      disabled={disabled}
+    />
   </Provider>
 );
 

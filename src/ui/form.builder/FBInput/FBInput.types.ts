@@ -7,6 +7,8 @@ import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 import { FBEditorValidationMode } from "../FBEditorValidation";
 import { FBValidatorConfigProps } from "../types/validation/validatorDialog";
 
+export type FBInputTransform = "upper" |  "lower";
+
 export type FBInputType =
   | "url"
   | "number"
@@ -73,6 +75,7 @@ export type FBInputProps =
 > & {
   onBlur?: (ev: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => any;
   onChange?: (ev: React.ChangeEvent<any> | any, value: any, context?: FBSchemaState) => any;
+  setTranform?: (value: string) => string;
   type?: FBInputType;
   index?: number;
   stepIndex?: number;
@@ -105,6 +108,7 @@ export type FBInputProps =
   validators?: Dictionary<any>;
   forceDefault?: boolean;
   autosave?: boolean;
+  transform?: FBInputTransform;
 };
 
 export const OmitInputClones: FBInputType[] = ["fileupload"];

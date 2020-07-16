@@ -1,5 +1,5 @@
 import { BoxProps } from "@material-ui/core";
-import { FBApprovalState, FBDialogState, FBInputProps } from "..";
+import { FBApprovalState, FBInputProps } from "..";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 
@@ -31,7 +31,6 @@ export type FBApprovalProps =
   isDefined?: boolean;
   loading?: boolean;
   approveLoading?: boolean;
-  dialogState?: FBDialogState;
 };
 
 export enum FBApprovalStatus {

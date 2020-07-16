@@ -1,6 +1,6 @@
 import { Box, CircularProgress } from "@material-ui/core";
 import React from "react";
-import { FBApprovalFieldProps, FBApprovalRoles, FBButton, FBDialog, FBMapWrapper } from "..";
+import { FBApprovalFieldProps, FBApprovalRoles, FBButton, FBMapWrapper } from "..";
 import { Employee } from "../../../state/ducks/company";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement";
 
@@ -45,7 +45,6 @@ const FBApprovalField = <T extends Employee | GroupRequestBody | FBApprovalRoles
                 )}
               </>
             )}
-            <FBDialog />
           </Box>
         );
       }}
