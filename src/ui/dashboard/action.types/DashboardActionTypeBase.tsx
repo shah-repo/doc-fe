@@ -26,9 +26,7 @@ export const DashboardActionTypeBase: React.FunctionComponent<Props> = ({
   const [isHover, setIsHover] = useState(false);
   return (
     <Box
-      marginBottom="15px"
-      marginTop="15px"
-      marginLeft="45px"
+      m="15px 0 15px 45px"
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
     >
