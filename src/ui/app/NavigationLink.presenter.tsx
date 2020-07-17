@@ -51,8 +51,8 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
             <div
               className={classNames(
                 classes.icon, {
-                  [classes.iconActive]: isActive,
-                }
+                [classes.iconActive]: isActive,
+              }
               )}
             />
           </ListItemIcon>
