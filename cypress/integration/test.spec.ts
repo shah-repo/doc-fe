@@ -10,7 +10,7 @@ const runId = new Date().valueOf();
 let createdCompany;
 
 context(`Test: ${path.basename(__filename)}`, () => {
-  it("Creates company", (done: any) => {
+  /* it("Creates company", (done: any) => {
     cy.apiLogin({
       email: "zoran.kovacevic+admin@codecons.com",
       password: "Tester1!",
@@ -50,7 +50,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
         done();
       });
     });
-  });
+  }); */
 
   it("Logs user in", () => {
     cy.login({
@@ -58,16 +58,37 @@ context(`Test: ${path.basename(__filename)}`, () => {
       password: "Tester1!",
     });
   });
+
   it("Selects company", () => {
-    cy.selectCompany({ name: createdCompany.name });
+    // cy.selectCompany({ name: createdCompany.name });
+    cy.selectCompany({ name: 'Test Company 1594952860030' });
   });
 
   it("Opens document list", () => {
-    cy.get("[data-cy=\"Navigation.document.list\"]", { timeout: 10 * 1000 }).click();
+    cy.get("[data-cy=\"document_list\"]", { timeout: 10 * 1000 }).click();
   });
+
+  it("Check error is shown for no records", () => {
+
+    cy.get('.ReactVirtualized__Grid', { timeout: 1000 }).then($container => {
+      if (!$container.html().includes('ReactVirtualized__Grid__innerScrollContainer')) {
+        cy.get('.ReactVirtualized__Grid .MuiBox-root').contains('No results found');
+      }
+    })
+  });
+
   it("Opens create document page", () => {
     cy.get("[data-cy=\"document.revision.create\"]").click();
   });
+
+  it("Opens approval request list", () => {
+    cy.get("[data-cy=\"approval_request_list\"]", { timeout: 1000 }).click();
+  });
+
+  it("Open create approval request dialogue", () => {
+    cy.get("#ChangeRequest-create").click();
+  });
+
   // it("fills in description", () => {
   //   cy.get("[data-cy=\"RichTextEditor.description\"]", { timeout: 10000 }).type("Desription");
   // });

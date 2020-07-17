@@ -11,6 +11,7 @@ interface InputOwnProps extends FieldOwnProps {
   size?: RenderSize;
   actionsRenderer?: () => any;
   lpignore?: boolean;
+  dataCy?: string;
 }
 
 type InputPropsWithFormik = InputOwnProps & FormikFieldProps;
@@ -20,6 +21,7 @@ const Input: React.FunctionComponent<InputPropsWithFormik> = ({
   size = "md",
   actionsRenderer,
   lpignore = true,
+  dataCy,
   ...fieldProps
 }) => {
   const { submitForm } = useFormContext();
@@ -27,7 +29,7 @@ const Input: React.FunctionComponent<InputPropsWithFormik> = ({
     <Field size={size} actionsRenderer={actionsRenderer} {...fieldProps} inputLabelProps={{ shrink: true }} >
       <MuiInput
         required={false}
-        inputProps={{ "data-lpignore": lpignore }}
+        inputProps={{ "data-lpignore": lpignore, "data-cy": dataCy }}
         {...fieldProps.field}
         {...inputProps}
         onBlur={(evt) => {
