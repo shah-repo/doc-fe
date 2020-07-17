@@ -10,7 +10,7 @@ const FBDocumentRevisionForm: React.FunctionComponent<FBDocumentRevisionFormProp
   <FormContext.Provider value={{ submitOnChange: false }}>
     <FBAutocompleteAsync
       label="Proposed document revision"
-      optionId="15"
+      optionId="16"
       name="proposedDocumentRevision"
       placeholder="Select"
       optionValueType="id"
