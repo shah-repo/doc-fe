@@ -105,9 +105,7 @@ export const auditsAllId = (
 const PAGE_DETAILS_DEFAULT_STATE: PageDetailsState = {
   columns: [],
   category: "",
-  addNewBtnLabel: {
-    label: "",
-  },
+  addNewBtnLabel: "",
 };
 
 export const pageDetails = (

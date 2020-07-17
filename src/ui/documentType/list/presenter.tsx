@@ -19,6 +19,9 @@ export interface Props {
   documentType: DocumentType;
   queryUrl: string;
   columns: TableColumnProps<DocumentRevision>[];
+  isByCategory: boolean;
+  categoryButtonLabel: string;
+  documentCategory: string;
 }
 
 export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
@@ -28,6 +31,9 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   documentType,
   queryUrl,
   columns,
+  isByCategory,
+  categoryButtonLabel,
+  documentCategory,
 }) => {
   const classes = styles();
 
@@ -39,16 +45,23 @@ export const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
     return queryDict;
   };
 
+  const createDocumentProps = isByCategory ? {
+    documentCategory,
+  } : {
+    documentTypeId: documentType.id,
+  };
+
   return (
     <Grid container={true} className={classes.root}>
       <Grid item={true} xs={6}>
         <ClearFilters {...{ clearFilter }}/>
         <DocumentInfo numberOfRecords={tableData.length} />
       </Grid>
-      {documentType && <CreateDocumentByType
-        documentTypeName={documentType.documentTypeName}
-        documentTypeId={documentType.id}
-      />}
+      <CreateDocumentByType
+        {...createDocumentProps}
+        isByCategory={isByCategory}
+        labelName={isByCategory ? categoryButtonLabel : documentType.documentTypeName}
+      />
       <Grid item={true} className={classes.item}>
         <TablePanel<DocumentRevision>
           columns={columns}

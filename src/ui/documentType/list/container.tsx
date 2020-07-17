@@ -14,13 +14,13 @@ import { DOCUMENT_BY_CATEGORY_LIST_URL, HOME_URL } from "../../constants/urls";
 import { canEditDocumentRevision, documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
 import { RouteParams } from "../utils/types";
-import { columnSearchConfiguration } from "./helpers";
+import { columnSearchConfiguration, getStaticColumns } from "./helpers";
 import DocumentByTypeListPresenter from "./presenter";
 
 type Props = RouteComponentProps<RouteParams>;
 
 export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
-  match, history,
+  match,
 }) => {
   const dispatch = useDispatch();
   const { documentCategory, docTypeId } = match.params;
@@ -32,6 +32,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
 
   const documentType = useSelector(documentTypeSelectors.byId)?.[docTypeId];
   const categoryColumns = useSelector(documentRevisionsSelectors.getCategoryColumns);
+  const categoryButtonLabel = useSelector(documentRevisionsSelectors.getCategoryButtonLabel);
 
   const TABLE_NAME = isByCategory
     ? `documentsByCategoryList-${documentCategory}`
@@ -102,6 +103,15 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
     },
   );
 
+  const staticColumns: TableColumnProps<DocumentRevision>[] = getStaticColumns(
+    isByCategory,
+    documentCategory,
+    documentType,
+    cellHrefRenderer,
+    tableCriteria,
+    canEdit,
+  );
+
   if (!documentType && !categoryColumns) {
     return <Redirect to={HOME_URL} />;
   }
@@ -115,7 +125,10 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
         clearFilter={clearFilter}
         documentType={documentType}
         queryUrl={queryUrl}
-        columns={columns}
+        columns={columns.length ? columns : staticColumns}
+        isByCategory={isByCategory}
+        documentCategory={documentCategory}
+        categoryButtonLabel={categoryButtonLabel}
       />
     </div>
   );

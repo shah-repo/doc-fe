@@ -3,7 +3,7 @@ import { Translation } from "../../../../ui/translations/types";
 import { GroupTag } from "../../auth/types";
 import { Nullable } from "../../common";
 import { FBFormTemplateProps } from "../types";
-import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST } from "./constants";
+import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST, SET_DOCUMENT_TYPES_BY_CATEGORY } from "./constants";
 
 export type DocumentGroupType =
   "FORM" |
@@ -44,7 +44,7 @@ export interface PageDetailsAddNew {
 }
 
 export interface PageDetails {
-  addNewBtnLabel: PageDetailsAddNew;
+  addNewBtnLabel: string;
   columns: PageDetailsColumn[];
   category?: string;
 }
@@ -88,6 +88,11 @@ export interface DocumentTypeListAction {
   payload: DocumentType[];
 }
 
+export interface DocumentTypeByCategoryAction {
+  type: typeof SET_DOCUMENT_TYPES_BY_CATEGORY;
+  payload: DocumentType[];
+}
+
 export interface DocumentTypeByIdState {
   [key: string]: DocumentType;
 }
@@ -95,6 +100,8 @@ export interface DocumentTypeByIdState {
 export type DocRevByIdState = DocumentTypeById;
 
 export type DocumentTypeAllIdsState = string[];
+
+export type DocumentTypeByCategoryState = DocumentType[];
 
 export type FieldConfig = { [key in FieldType]?: IFieldConfigItem };
 

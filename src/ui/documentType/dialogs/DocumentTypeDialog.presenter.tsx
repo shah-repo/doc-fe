@@ -1,29 +1,29 @@
 import { Button, CircularProgress, Dialog, DialogContent, DialogTitle, FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { DocumentTypeByIdForm } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentType } from "../../../state/ducks/documentRevisions/documentType";
 import Text from "../../components/Text";
-import { styles } from "./FormListDialog.styles";
+import { styles } from "./FormListDialog/FormListDialog.styles";
 
-export interface FormListDialogProps {
-  formIds: DocumentTypeByIdForm[];
+export interface DocumentTypeDialogProps {
+  documentTypes: DocumentType[];
   dialog: { isOpen: boolean; close: () => void };
   handleSelection: (id: string) => void;
 }
-export const FormListDialog: React.FunctionComponent<FormListDialogProps> = ({
+export const DocumentTypeDialog: React.FunctionComponent<DocumentTypeDialogProps> = ({
   dialog,
-  formIds,
+  documentTypes,
   handleSelection,
 }) => {
-  const [selectedFormId, setSelectedFormId] = useState<string>("");
+  const [selectedDocumentTypeId, setSelectedDocumentTypeId] = useState<string>("");
   const classes = styles();
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
   const handleSelect = (evt) => {
     const id = evt.target.value;
-    setSelectedFormId(id);
+    setSelectedDocumentTypeId(id);
     handleSelection(id);
   };
   useEffect(() => {
-    setSelectedFormId("");
+    setSelectedDocumentTypeId("");
   }, [dialog.isOpen]);
   return (
     <Dialog
@@ -33,11 +33,11 @@ export const FormListDialog: React.FunctionComponent<FormListDialogProps> = ({
       classes={{ paper: classes.dialogPaper }}
     >
       <DialogTitle>
-        <Text translation="supplier.select.form" />
+        <Text translation="supplier.select.type" />
       </DialogTitle>
       <DialogContent classes={{ root: classes.dialogContent }} style={{ position: "relative" }}>
         {
-          selectedFormId &&
+          selectedDocumentTypeId &&
           <div
             style={{ position: "absolute", top: "50%", left: "50%", marginTop: -45, marginLeft: -23 }}
           >
@@ -48,17 +48,17 @@ export const FormListDialog: React.FunctionComponent<FormListDialogProps> = ({
           aria-label="selectForm"
           name="select-form"
           onChange={handleSelect}
-          value={selectedFormId}
+          value={selectedDocumentTypeId}
           id="FormListDialog-selectForm"
-          style={{ visibility: selectedFormId ? "hidden" : "visible" }}
+          style={{ visibility: selectedDocumentTypeId ? "hidden" : "visible" }}
         >
           {
-            formIds.map((form) => (
+            documentTypes.map((type) => (
               <FormControlLabel
-                key={form.id}
-                value={form.id}
+                key={type.id}
+                value={type.id}
                 control={<Radio color="primary" />}
-                label={form.name}
+                label={type.documentTypeName}
               />
             ))
           }
@@ -77,4 +77,4 @@ export const FormListDialog: React.FunctionComponent<FormListDialogProps> = ({
   );
 };
 
-export default FormListDialog;
+export default DocumentTypeDialog;
