@@ -12,10 +12,10 @@ declare global {
        * Custom command to select DOM element by data-cy attribute.
        * @example cy.dataCy('greeting')
       */
-      createCompany(params: {payload: ICreateCompanyBootstrap; sessionId: string}): Chainable<Subject>;
-      apiLogin( params: {email: string; password: string }): Chainable<Subject>;
-      login( params: {email: string; password: string }): Chainable<Subject>;
-      selectCompany( params: {name: string }): Chainable<Subject>;
+      createCompany(params: { payload: ICreateCompanyBootstrap; sessionId: string }): Chainable<Subject>;
+      apiLogin(params: { email: string; password: string }): Chainable<Subject>;
+      login(params: { email: string; password: string }): Chainable<Subject>;
+      selectCompany(params: { name: string }): Chainable<Subject>;
     }
   }
 }
@@ -104,7 +104,7 @@ export interface ICreateCompanyBootstrap {
   acctCodes?: string[];
 }
 
-Cypress.Commands.add("createCompany", (params: {payload: ICreateCompanyBootstrap; sessionId: string}) => {
+Cypress.Commands.add("createCompany", (params: { payload: ICreateCompanyBootstrap; sessionId: string }) => {
   cy.request({
     method: "POST",
     url: `${CONFIG.BE_URL}/api/v1/company/bootstrap`,
@@ -116,7 +116,7 @@ Cypress.Commands.add("createCompany", (params: {payload: ICreateCompanyBootstrap
   }).then((response) => response.body);
 });
 
-Cypress.Commands.add("apiLogin", (params: {email: string; password: string }) => {
+Cypress.Commands.add("apiLogin", (params: { email: string; password: string }) => {
   cy.request({
     method: "POST",
     url: `${CONFIG.BE_URL}/api/v1/auth/login`,
@@ -127,14 +127,14 @@ Cypress.Commands.add("apiLogin", (params: {email: string; password: string }) =>
   );
 });
 
-Cypress.Commands.add("login", (params: {email: string; password: string }) => {
+Cypress.Commands.add("login", (params: { email: string; password: string }) => {
   cy.visit(CONFIG.FE_URL);
-  cy.get("#LoginFormPresenter-email", { timeout: 10 * 1000 }).type(params.email)
-    .get("#LoginFormPresenter-password").type(params.password)
-    .get("#LoginFormPresenter-submit").click();
+  cy.get("[data-cy=\"LoginFormPresenter-email\"]", { timeout: 10 * 1000 }).type(params.email)
+    .get("[data-cy=\"LoginFormPresenter-password\"]").type(params.password)
+    .get("[data-cy=\"LoginFormPresenter-submit\"]").click();
 });
 
-Cypress.Commands.add("selectCompany", (params: {name: string }) => {
+Cypress.Commands.add("selectCompany", (params: { name: string }) => {
   cy.get("#root", { timeout: 10 * 1000 }).contains(params.name).click();
 });
 
