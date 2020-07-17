@@ -30,6 +30,8 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
   toggleChildren,
 }) => {
   const classes = styles({ iconLink: icon });
+  const cypressIdentity = label.toLowerCase().split(' ').join('_');
+
   return (
     <>
       <ListItem
@@ -44,6 +46,7 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
         activeClassName={classes.activeLink}
         data-cy={`navigation.${camelCase(label)}`}
         to={type === "CATEGORY" ? `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${category}` : path}
+        data-cy={cypressIdentity}
       >
         {
           (type === "LINK" || type === "CATEGORY") &&

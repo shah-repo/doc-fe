@@ -136,7 +136,7 @@ Cypress.Commands.add("apiLogin", (params: { email: string; password: string }) =
     timeout: 10 * 1000,
     body: params,
   }).then((response) =>
-    response.body
+    response.body.sessionId
   );
 });
 
