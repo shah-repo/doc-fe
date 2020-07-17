@@ -147,6 +147,7 @@
     "mochawesome-merge": "^4.1.0",
     "mochawesome-report-generator": "^5.1.0",
     "redux-mock-store": "1.5.4",
-    "serve": "^11.3.2"
+    "serve": "^11.3.2",
+    "ts-node": "^8.10.2"
   }
 }
