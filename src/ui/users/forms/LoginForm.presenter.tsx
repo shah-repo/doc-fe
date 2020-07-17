@@ -62,6 +62,7 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({
           label="login.email"
           size="sm"
           gutter={false}
+          dataCy={"LoginFormPresenter-email"}
           inputProps={{ autoComplete: "email", autoFocus: true, id: "LoginFormPresenter-email" }}
           validate={validator(required, email)}
           lpignore={false}
@@ -73,6 +74,7 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({
             label="login.password"
             size="sm"
             gutter={false}
+            dataCy={"LoginFormPresenter-password"}
             inputProps={{ autoComplete: "current-password", id: "LoginFormPresenter-password", type: "password" }}
             validate={validator(required)}
             lpignore={false}
@@ -82,6 +84,7 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({
           asyncState={asyncState}
           label={buttonLabel}
           className={classes.submit}
+          data-cy={"LoginFormPresenter-submit"}
           id="LoginFormPresenter-submit"
         />
         <Typography component="h1" variant="h5" className={classes.navigationText}>
@@ -92,6 +95,7 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({
         </Typography>
       </Form>
     </Paper>
-  ); };
+  );
+};
 
 export default withStyles(styles)(LoginFormPresenter);

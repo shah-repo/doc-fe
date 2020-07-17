@@ -27,6 +27,8 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
   toggleChildren,
 }) => {
   const classes = styles({ iconLink: icon });
+  const cypressIdentity = label.toLowerCase().split(' ').join('_');
+
   return (
     <>
       <ListItem
@@ -40,6 +42,7 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
           })}
         activeClassName={classes.activeLink}
         to={path}
+        data-cy={cypressIdentity}
       >
         {
           type === "LINK" &&
@@ -47,8 +50,8 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
             <div
               className={classNames(
                 classes.icon, {
-                  [classes.iconActive]: isActive,
-                }
+                [classes.iconActive]: isActive,
+              }
               )}
             />
           </ListItemIcon>
