@@ -20,6 +20,7 @@ fi
 source ./scripts/cypress/make_results_dir.sh
 
 ./scripts/cypress/patch_director_port_in_cache.sh
+./scripts/cypress/generate_requirements_json_file.sh
 
 echo "NUMBER_OF_WORKERS: $NUMBER_OF_WORKERS"
 echo "ENLIL_COMPOSE_PORT_RANGE_START: $ENLIL_COMPOSE_PORT_RANGE_START"

@@ -130,6 +130,7 @@
     "axios-mock-adapter": "1.17.0",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.12.2",
+    "csvtojson": "^2.0.10",
     "cypress": "^4.7.0",
     "cypress-file-upload": "^4.0.7",
     "cypress-promise": "^1.1.0",
@@ -147,6 +148,7 @@
     "mochawesome-merge": "^4.1.0",
     "mochawesome-report-generator": "^5.1.0",
     "redux-mock-store": "1.5.4",
-    "serve": "^11.3.2"
+    "serve": "^11.3.2",
+    "ts-node": "^8.10.2"
   }
 }
