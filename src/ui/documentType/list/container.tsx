@@ -40,7 +40,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
 
   const queryUrl = DOCUMENT_REVISION_ROOT_URL + (isByCategory
     ? `?documentTypeCategory=${documentCategory}`
-    : `?documentTypeId=${documentType.id}`);
+    : `?documentTypeId=${documentType?.id}`);
 
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const tableData = useSelector(getTableData(TABLE_NAME));
@@ -84,7 +84,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
     return documentPreviewPath(rowData.id, rowData.document.id);
   };
 
-  const pageDetailColumns = (isByCategory ? categoryColumns : documentType.pageDetails?.columns) || [];
+  const pageDetailColumns = (isByCategory ? categoryColumns : documentType?.pageDetails?.columns) || [];
 
   const columns: TableColumnProps<DocumentRevision>[] = pageDetailColumns.map(
     (column: PageDetailsColumn) => {
@@ -112,7 +112,7 @@ export const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
     canEdit,
   );
 
-  if (!documentType && !categoryColumns) {
+  if (!documentType || (isByCategory && !categoryColumns.length)) {
     return <Redirect to={HOME_URL} />;
   }
 

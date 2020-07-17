@@ -63,7 +63,7 @@ export const getStaticColumns = (
 ): TableColumnProps<DocumentRevision>[] => [
   {
     key: "docId",
-    label: `${isByCategory ? documentCategory : documentType.documentTypeName} ID` as Translation,
+    label: `${isByCategory ? documentCategory : documentType?.documentTypeName} ID` as Translation,
     cellHref: cellHrefRenderer,
     sortable: true,
     columnOptions: {
